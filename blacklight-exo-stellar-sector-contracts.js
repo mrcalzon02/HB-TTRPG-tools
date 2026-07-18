@@ -1,0 +1,22 @@
+(() => {
+  'use strict';
+  const base=globalThis.BlacklightExoStellarSectorData;
+  if(!base?.generate||base.contractVersion)return;
+  const clone=value=>value==null?value:structuredClone(value);
+  const speeds={P2:'8–24 AU/hour',P3:'32–78 AU/hour',P4:'88–138 AU/hour',P5:'144–175 AU/hour'};
+  function normalize(record){
+    const sector=clone(record),worlds=sector.worlds||[],polities=sector.polities||[],fleets=sector.fleetCommands||[],organizations=sector.organizations||[];
+    sector.schemaVersion='1.1.0';sector.generatedAt=null;
+    for(const cluster of sector.clusters||[])cluster.chartedSystemCount=Math.min(Number(cluster.systemCount)||0,Number(cluster.chartedSystemCount)||0);
+    for(const species of sector.species||[])species.technology={...(species.technology||{}),ratedAuHour:species.technology?.ratedAuHour||speeds[species.technology?.principalBand]||'method-specific certified rate'};
+    for(const polity of polities){const controlled=polity.controlledWorldIds||polity.notableControlledWorldIds||worlds.filter(world=>(world.polityId||world.controllingPolityId)===polity.polityId).map(world=>world.worldId);polity.controlledWorldIds=[...new Set(controlled)];polity.controlledPlanetCount=Math.max(Number(polity.controlledPlanetCount)||0,polity.controlledWorldIds.length);polity.capitalWorldId=polity.capitalWorldId||polity.controlledWorldIds[0]||null;}
+    for(const fleet of fleets){if(!Array.isArray(fleet.taskForces)||fleet.taskForces.length<3){const total=(Number(fleet.capitalShips)||0)+(Number(fleet.cruisers)||0)+(Number(fleet.escorts)||0)+(Number(fleet.logisticsHullCount)||0);fleet.taskForces=Array.from({length:4},(_,index)=>({taskForceId:`${fleet.fleetId}-tf-${index+1}`,name:`${fleet.name} Task Force ${index+1}`,mission:['border patrol','fleet reserve','convoy escort','expeditionary operations'][index],readiness:fleet.readiness,assignedHullEstimate:Math.max(1,Math.round(total*[.18,.32,.27,.23][index]))}));}}
+    for(const polity of polities){if(!organizations.some(item=>item.polityId===polity.polityId&&item.organizationType==='scientific')){const speciesId=polity.speciesIds?.[0]||null;organizations.push({organizationId:`org-${polity.polityId}-science`,polityId:polity.polityId,speciesId,name:`${polity.name} Scientific Archive`,organizationType:'scientific',scope:'interstellar',functions:['research','survey','archives','technology assessment']});}}
+    for(const extinct of sector.extinctSpecies||[])extinct.deadWorldIds=extinct.deadWorldIds||worlds.filter(world=>(world.speciesIds||[]).includes(extinct.speciesId)).map(world=>world.worldId);
+    sector.organizations=organizations;
+    sector.summary={...(sector.summary||{}),clusterCount:sector.clusters?.length||0,activeSpeciesCount:sector.species?.length||0,extinctSpeciesCount:sector.extinctSpecies?.length||0,polityCount:polities.length,fleetCommandCount:fleets.length,organizationCount:organizations.length,worldCount:worlds.length,deadWorldCount:worlds.filter(world=>['dead','ruined','forgotten','quarantined','abandoned','dead-ruin'].includes(world.status)).length,bestiaryRecordCount:sector.bestiary?.length||0,relationCount:sector.relations?.length||0};
+    return sector;
+  }
+  function validate(sector){const parent=base.validate?.(sector)||{valid:true,violations:[]},violations=[...(parent.violations||[])],polityIds=new Set((sector.polities||[]).map(item=>item.polityId)),worldIds=new Set((sector.worlds||[]).map(item=>item.worldId));for(const polity of sector.polities||[])if(!polity.controlledWorldIds?.every(id=>worldIds.has(id)))violations.push(`${polity.name} lacks valid controlled-world authority.`);for(const fleet of sector.fleetCommands||[])if(!polityIds.has(fleet.polityId)||fleet.taskForces?.length<3)violations.push(`${fleet.name} lacks complete task-force authority.`);for(const polity of sector.polities||[])for(const type of['military','civilian','commercial','scientific'])if(!(sector.organizations||[]).some(item=>item.polityId===polity.polityId&&item.organizationType===type))violations.push(`${polity.name} lacks a ${type} organization.`);return{valid:!violations.length,violations:[...new Set(violations)]};}
+  globalThis.BlacklightExoStellarSectorData=Object.freeze({...base,contractVersion:1,build:()=>normalize(base.build()),generate:(seed,options)=>normalize(base.generate(seed,options)),validate});
+})();
