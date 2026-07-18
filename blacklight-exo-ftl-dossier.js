@@ -122,9 +122,18 @@
     document.head.append(script);
   }
 
+  function loadStatCharts() {
+    if (globalThis.BlacklightExoStatCharts || document.querySelector('script[src="blacklight-exo-stat-charts.js"]')) return;
+    const script = document.createElement('script');
+    script.src = 'blacklight-exo-stat-charts.js';
+    script.defer = true;
+    document.head.append(script);
+  }
+
   $('exo-ftl-dossier-open-all')?.addEventListener('click', () => setAll(true));
   $('exo-ftl-dossier-close-annexes')?.addEventListener('click', () => setAll(false, true));
   document.addEventListener('blacklight:exo-ftl-generated', () => queueMicrotask(refresh));
   queueMicrotask(refresh);
   loadVesselHandoff();
+  loadStatCharts();
 })();
