@@ -36,10 +36,17 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet recovery, ecology, geology, natural resources, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet recovery, ecology, geology, natural resources, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
+}
+
+tasks.register<JavaExec>("runAssetSetup") {
+    group = "application"
+    description = "Locates a local Barotrauma donor installation and configures donor-first or fallback-only graphical assets."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow")
 }
 
 tasks.register<JavaExec>("runImportApproval") {
