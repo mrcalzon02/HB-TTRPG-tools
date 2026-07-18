@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 2;
+    public static final int DATABASE_SCHEMA_VERSION = 3;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -153,6 +153,21 @@ public final class WorldStorageContracts {
         );
     }
 
+    /** Forward migration from schema 002 to schema 003. */
+    public static List<String> schema003Statements() {
+        return List.of(
+                "ALTER TABLE world_simulation_metadata ADD COLUMN current_tick_sequence INTEGER CHECK(current_tick_sequence >= 0)",
+                "ALTER TABLE world_simulation_metadata ADD COLUMN tick_size_seconds INTEGER CHECK(tick_size_seconds > 0)",
+                "ALTER TABLE world_simulation_metadata ADD COLUMN tick_size_nanos INTEGER NOT NULL DEFAULT 0 CHECK(tick_size_nanos >= 0 AND tick_size_nanos < 1000000000)",
+                "ALTER TABLE world_simulation_metadata ADD COLUMN last_command_id TEXT",
+                "ALTER TABLE world_simulation_metadata ADD COLUMN last_checkpoint_id TEXT",
+                "CREATE TABLE simulation_command_receipt (command_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, execution_sequence INTEGER NOT NULL CHECK(execution_sequence > 0), actor TEXT NOT NULL, command TEXT NOT NULL, submitted_at TEXT NOT NULL, completed_at TEXT NOT NULL, writer_thread_id INTEGER NOT NULL, before_canonical_time TEXT NOT NULL, before_tick_sequence INTEGER NOT NULL CHECK(before_tick_sequence >= 0), before_simulation_enabled INTEGER NOT NULL CHECK(before_simulation_enabled IN (0,1)), before_scheduler_state TEXT NOT NULL CHECK(before_scheduler_state IN ('PAUSED','RUNNING','CATCHING_UP','FAULTED')), after_canonical_time TEXT NOT NULL, after_tick_sequence INTEGER NOT NULL CHECK(after_tick_sequence >= 0), after_simulation_enabled INTEGER NOT NULL CHECK(after_simulation_enabled IN (0,1)), after_scheduler_state TEXT NOT NULL CHECK(after_scheduler_state IN ('PAUSED','RUNNING','CATCHING_UP','FAULTED')), catch_up_applied_ticks INTEGER CHECK(catch_up_applied_ticks >= 0), catch_up_remaining_ticks INTEGER CHECK(catch_up_remaining_ticks >= 0), catch_up_complete INTEGER CHECK(catch_up_complete IN (0,1)), UNIQUE(world_id, execution_sequence), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id))",
+                "CREATE INDEX simulation_command_completed_index ON simulation_command_receipt(world_id, completed_at)",
+                "CREATE TABLE simulation_checkpoint (checkpoint_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, created_at TEXT NOT NULL, reason TEXT NOT NULL, source_command_id TEXT, canonical_time TEXT NOT NULL, real_epoch TEXT NOT NULL, tick_sequence INTEGER NOT NULL CHECK(tick_sequence >= 0), tick_size_seconds INTEGER NOT NULL CHECK(tick_size_seconds > 0), tick_size_nanos INTEGER NOT NULL CHECK(tick_size_nanos >= 0 AND tick_size_nanos < 1000000000), simulation_enabled INTEGER NOT NULL CHECK(simulation_enabled IN (0,1)), scheduler_state TEXT NOT NULL CHECK(scheduler_state IN ('PAUSED','RUNNING','CATCHING_UP','FAULTED')), UNIQUE(world_id, source_command_id), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(source_command_id) REFERENCES simulation_command_receipt(command_id))",
+                "CREATE INDEX simulation_checkpoint_created_index ON simulation_checkpoint(world_id, created_at)"
+        );
+    }
+
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")
@@ -227,9 +242,9 @@ public final class WorldStorageContracts {
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("UNIQUE(vessel_id, snapshot_sha256)")), "Snapshot duplicate constraint is missing.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("one_current_snapshot_per_vessel")), "Current-snapshot constraint is missing.");
             require(initialSchemaStatements().stream().noneMatch(sql -> sql.contains("CREATE TABLE world_location")), "Schema 001 unexpectedly contains schema-002 tables.");
-            require(schema002Statements().stream().anyMatch(sql -> sql.contains("ALTER TABLE world_metadata")), "Schema-001 migration columns are missing.");
             require(schema002Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "World-location migration schema is missing.");
-            require(schema002Statements().stream().anyMatch(sql -> sql.contains("scheduler_state")), "Paused simulation metadata schema is missing.");
+            require(schema003Statements().stream().anyMatch(sql -> sql.contains("simulation_command_receipt")), "Command-receipt schema is missing.");
+            require(schema003Statements().stream().anyMatch(sql -> sql.contains("simulation_checkpoint")), "Checkpoint schema is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
