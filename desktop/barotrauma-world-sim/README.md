@@ -10,10 +10,10 @@ The desktop project now includes:
 - Inspection-first version-22, `.save`, and `.sub` compatibility.
 - Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
 - Atomic vessel imports, campaign mapping, snapshot chronology, rollback, and read-only registries.
-- Sequential SQLite migrations through **schema 012** for fresh and existing desktop worlds.
+- Sequential SQLite migrations through **schema 013** for fresh and existing desktop worlds.
 - A deterministic canonical-time clock, one logical writer, immutable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
 - A live Europa World Map with explicitly controlled **Passive Mode**.
-- Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response, ecology, geology, and natural-resource workloads.
+- Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response, ecology, geology, natural-resource, extraction, depletion, and renewable-recovery workloads.
 - Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Automatic timed cycles while Passive Mode is enabled.
 - Local donor-installation discovery for Barotrauma graphical assets, with packaged binary PNG fallbacks.
@@ -83,7 +83,7 @@ gradle runWorldRegistry
 
 The World Map provides canonical time, locations, stations, NPC voyages, missions, routes, research, encounters, and Passive Mode controls.
 
-Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet, ecological, and geological changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
+Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet, ecological, geological, extraction, and renewable-recovery changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
 
 Only one passive scheduler is created for a world in the application process. The manual clock monitor becomes read-only while that scheduler owns the writer.
 
@@ -124,7 +124,7 @@ If those stocks are absent, progress stalls. After resupply, Passive Mode can co
 
 The current response voyage remains abstracted through operation progress. The next refinement will route the responder and any tow through the shared transit-resolution engine.
 
-## Natural world, ecology, and geology
+## Natural world, extraction, ecology, and geology
 
 ```text
 gradle runNaturalWorld
@@ -153,14 +153,18 @@ Every location also receives geological state:
 
 Hydrothermal eruptions and rockfalls can expose ore veins, rare minerals, and hydrothermal deposits. Geological activity changes richness and accessibility rather than treating resources as a permanently static catalogue.
 
-Natural activity feeds the existing NPC mission queue:
+Natural activity feeds the NPC mission queue:
 
 - Ore veins and rare minerals create `MINING` work.
 - Hydrothermal and bioactive sites create `RESEARCH` work.
 - Algae harvest sites create `SALVAGE` work.
 - Predator feeding-ground expansion creates `FAUNA_CLEARING` work.
 
-The natural-world console exposes ecology, geology, exposed resources, natural events, fleet-response operations, and response logs while Passive Mode runs.
+Schema 013 gives each natural-resource site a finite reserve, carrying capacity, harvesting rate, recovery state, extraction count, and last-harvest evidence. Completed resource missions create one capability-sensitive extraction batch and one typed freight lot. Mineral extraction reduces exposure and increases cave instability; biological harvesting reduces biomass and habitat integrity.
+
+Nonrenewable mineral sites remain depleted at zero reserve. Renewable algae and bioactive sites enter dormancy, recover according to local habitat integrity, and return to the mission queue with a bounded fraction of carrying capacity.
+
+The natural-world console exposes ecology, geology, resource reserves, recovery progress, extraction history, natural events, fleet-response operations, and response logs while Passive Mode runs.
 
 See `NATURAL_WORLD.md` for the detailed subsystem boundary.
 
@@ -172,9 +176,9 @@ gradle runStationLogistics
 
 The logistics console exposes item definitions, production recipes, station inventory, vendor offers, production runs, freight lots, and treasury entries.
 
-Each passive cycle advances the economy, consumes supplies, produces limited raw stock, runs at most one affordable recipe per station, deducts costs, reprices vendors, and creates freight opportunities where shortages and surpluses coexist.
+Each passive cycle consumes supplies, permits ration recovery, runs at most one affordable recipe per station, deducts costs, reprices vendors, and creates freight opportunities where shortages and surpluses coexist. The former rule that granted every functioning station free ore each cycle has been removed.
 
-Completed NPC trade, mining, and salvage work can create freight lots. Player and NPC deliveries update inventory, treasury evidence, station condition, civilization support, and the material base required for fleet recovery.
+Natural extraction delivers Raw Europan Ore, Rare Europan Minerals, Hydrothermal Compounds, Bioactive Compounds, or Algae Biomass through the existing freight pipeline. Player and NPC deliveries update inventory, treasury evidence, station condition, civilization support, and the material base required for fleet recovery.
 
 ## Imported player-vessel transit and freight
 
@@ -220,8 +224,9 @@ These commands cover normalized master-world import, one-vessel approval, campai
 - **Schema 010** — fleet-response operations, ecology, geology, natural events, and exposed renewable or mineral resource sites.
 - **Schema 011** — immediate response assignment, responder reassignment after docking, and material-gated recovery progress.
 - **Schema 012** — responder protection from ordinary missions and natural-resource or predator-driven NPC mission generation.
+- **Schema 013** — finite resource reserves, typed extraction batches, legacy-reward restoration, freight settlement, permanent mineral depletion, and renewable dormancy/regrowth.
 
-A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, fleet responses, ecological and geological changes, resource exposure, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
+A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, fleet responses, ecological and geological changes, resource exposure, extraction batches, depletion or recovery, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
 
 ## Build and verification
 
@@ -234,7 +239,7 @@ The verification chain covers:
 
 - Donor installation validation, saved local pointers, donor-first selection, and fallback-only resolution.
 - Real packaged PNG fallback resources for station, vessel, fauna, and geology roles.
-- Fresh and legacy migration through schema 012.
+- Fresh and legacy migration through schema 013.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
 - Deterministic clock replay, command ordering, checkpoints, and restart recovery.
@@ -248,6 +253,10 @@ The verification chain covers:
 - Ecology and geology initialization for every normalized location.
 - Algal blooms, predator feeding-ground expansion, hydrothermal or rockfall events, and bioactive accumulator sites.
 - Natural-resource and predator events entering the shared NPC mission queue.
+- Finite reserve initialization and bounded capability-sensitive extraction.
+- Exact removal of historical generic mission rewards before real freight settlement.
+- Typed resource delivery into station inventory and site-attributed treasury evidence.
+- Renewable dormancy, recovery, recurring missions, and permanent nonrenewable depletion.
 - A real timed Passive Mode cycle and fault-contained recovery.
 
 The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 and runs this chain for desktop-project changes.
@@ -287,21 +296,22 @@ Completed:
 11. Passive ecological regrowth, food-web movement, predator feeding-ground expansion, biological accumulation, geological activity, and natural-resource exposure.
 12. Natural-resource, predator, and fleet-response integration with the shared NPC mission system.
 13. Donor Barotrauma asset discovery, local pointer storage, binary PNG fallbacks, setup UI, and packaging boundaries.
+14. Finite resource harvesting, depletion, typed freight settlement, environmental impact, renewable dormancy, and recovery.
 
 Next:
 
 1. Route responder vessels and towing operations through the shared transit resolver instead of abstract progress alone.
-2. Connect donor/fallback roles to the World Map, vessel registry, natural-world, and station panels.
+2. Connect donor/fallback roles to the World Map, vessel registry, station, and player-transit panels.
 3. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
-4. Add resource harvesting, depletion, dormancy, and renewable regrowth settlement into station inventory and treasury state.
-5. Add player mission acceptance, reward settlement, and faction consequences.
-6. Add equipment-level cargo manifests and capacity derived from imported submarine data.
-7. Add persistent recent-world reopening, backups, packaging, and release automation.
+4. Add player mission acceptance, reward settlement, and faction consequences.
+5. Add equipment-level cargo manifests and capacity derived from imported submarine data.
+6. Add persistent recent-world reopening, backups, packaging, and release automation.
 
 ## Governing documents
 
 - `../../docs/barotrauma-desktop-baseline.md`
 - `../../docs/barotrauma-desktop-architecture.md`
+- `NATURAL_WORLD.md`
 - `docs/donor-assets.md`
 
 The baseline fixes compatibility and simulation requirements. The architecture document fixes dependency direction, identity boundaries, importer isolation, concurrency rules, and implementation order.
