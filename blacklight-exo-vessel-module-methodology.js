@@ -46,8 +46,9 @@
 
   function edgeRoute(graphName){return({structural:'structural',power:'power',cooling:'cooling',data:'data',atmosphere:'atmosphere',access:'access',magazineFeed:'access',sensorDependency:'data'})[graphName]||null;}
   function apply(seed,input,source,result){
-    if(result.moduleGraph?.modules?.every(module=>module.extensions?.operativeMethodology?.schemaVersion==='1.0.0'))return result;
+    if(result.moduleGraph?.modules?.length&&result.moduleGraph.modules.every(module=>module.extensions?.operativeMethodology?.schemaVersion==='1.0.0'))return result;
     const basis=result.technologyBasis||result.manufacturer?.technologyBasis;if(!basis?.validation?.valid)throw new Error('VESSEL technology basis must be valid before module methodology can be applied.');
+    if(!result.moduleGraph?.modules?.length)throw new Error('VESSEL module methodology requires a generated semantic module graph.');
     let routeInterfaceCount=0;
     for(const module of result.moduleGraph.modules){const methodology=operativeMethodology(module,basis);module.extensions={...(module.extensions||{}),operativeMethodology:methodology};routeInterfaceCount+=methodology.routeInterfaces.length;}
     for(const [graphName,graph] of Object.entries(result.moduleGraph.graphs||{})){
@@ -63,5 +64,6 @@
     return result;
   }
   function generate(seed,input={},source=null){const value=String(seed||input.seed||'vessel');return apply(value,input,source,base.generate(value,input,source));}
-  globalThis.BlacklightExoVessel=Object.freeze({...base,moduleMethodologyVersion:1,moduleMethodologySchemaVersion:'1.0.0',generate});
+  function migrateRecord(record,input={},source=null){const value=String(record?.seed||input.seed||'vessel'),migrated=base.migrateRecord?base.migrateRecord(record,input,source):record;return apply(value,input,source,migrated);}
+  globalThis.BlacklightExoVessel=Object.freeze({...base,moduleMethodologyVersion:1,moduleMethodologySchemaVersion:'1.0.0',generate,migrateRecord});
 })();
