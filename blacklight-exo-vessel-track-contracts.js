@@ -2,6 +2,7 @@
   'use strict';
   const base=globalThis.BlacklightExoVessel,prior=globalThis.BlacklightExoVesselContracts,D=globalThis.BlacklightExoVesselTrackDefinitions;
   if(!base?.trackGeometryVersion||!prior||!D||base.trackContractVersion)return;
+  function phaseVersionAtLeast(value,major,minor){const parts=String(value||'0.0.0').split('.').map(Number);return parts[0]>major||(parts[0]===major&&parts[1]>=minor);}
   function validate(record){
     const inherited=prior.validate(record),violations=[...(inherited.violations||[])],geometry=record?.combatGeometry;
     if(geometry){
@@ -14,7 +15,7 @@
       if(geometry.observerCombatAuthority?.lateralCombatAccelerationMps2>(record.propulsion?.lateralCombatAccelerationMps2||0)+1e-9)violations.push('VESSEL-06 observer acceleration exceeds its engineering authority.');
       if(geometry.observerCombatAuthority?.combatReserveDeltaVMps>(record.propulsion?.combatReserveDeltaVMps||0)+1e-9)violations.push('VESSEL-06 observer combat delta-v exceeds its engineering authority.');
       if(record.contract?.derivedLayers?.find(layer=>layer.key==='combatEnvelope')?.status!=='generated')violations.push('Canonical contract did not mark combatEnvelope as generated for VESSEL-06 geometry.');
-      if(record.contract?.provenance?.generatorVersion!=='3.6.0'||record.contract?.provenance?.trackGeometryVersion!=='1.0.0')violations.push('Canonical provenance does not identify VESSEL-06.');
+      if(!phaseVersionAtLeast(record.contract?.provenance?.generatorVersion,3,6)||record.contract?.provenance?.trackGeometryVersion!=='1.0.0')violations.push('Canonical provenance does not preserve VESSEL-06 authority.');
       if(record.contract?.extensions?.combatGeometrySchema!=='data/schemas/exo-vessel-combat-geometry.schema.json')violations.push('Canonical contract does not expose the combat-geometry schema.');
       const forbidden=JSON.stringify(geometry);for(const marker of ['engagementEnvelope','hitProbability','damageRoll','impactVoxel','projectileVelocityMps','beamDivergence'])if(forbidden.includes(marker))violations.push(`VESSEL-06 prematurely includes deferred field ${marker}.`);
     }
