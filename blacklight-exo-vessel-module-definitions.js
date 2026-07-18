@@ -1,8 +1,18 @@
 (() => {
   'use strict';
-  if (globalThis.BlacklightExoVesselModuleDefinitions) return;
+  if(globalThis.BlacklightExoVesselModuleDefinitions)return;
+  const vesselBase=globalThis.BlacklightExoVessel,G0=9.80665;
+  const finite=(v,f=0)=>Number.isFinite(Number(v))?Number(v):f;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const clone=v=>v==null?v:structuredClone(v);
+  const sum=(rows,key)=>rows.reduce((n,row)=>n+finite(row[key]),0);
+  const fmt=(v,d=3)=>finite(v).toLocaleString(undefined,{maximumFractionDigits:d});
+  function hash(value){let h=2166136261;for(const c of String(value)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+  function massText(t){const v=Math.max(0,finite(t));if(v>=1e9)return`${fmt(v/1e9)} billion tonnes`;if(v>=1e6)return`${fmt(v/1e6)} million tonnes`;if(v>=1e3)return`${fmt(v/1e3)} thousand tonnes`;if(v>=1)return`${fmt(v)} tonnes`;return`${fmt(v*1000)} kg`;}
+  function powerText(w){const v=Math.max(0,finite(w));if(v>=1e15)return`${fmt(v/1e15)} PW`;if(v>=1e12)return`${fmt(v/1e12)} TW`;if(v>=1e9)return`${fmt(v/1e9)} GW`;if(v>=1e6)return`${fmt(v/1e6)} MW`;if(v>=1e3)return`${fmt(v/1e3)} kW`;return`${fmt(v)} W`;}
+  function energyText(j){const v=Math.max(0,finite(j));if(v>=1e18)return`${fmt(v/1e18)} EJ`;if(v>=1e15)return`${fmt(v/1e15)} PJ`;if(v>=1e12)return`${fmt(v/1e12)} TJ`;if(v>=1e9)return`${fmt(v/1e9)} GJ`;return`${fmt(v)} J`;}
 
-  const moduleTypes = {
+  const moduleTypes={
     drive:{semanticType:'DRIVE_APPARATUS',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['FIELD_EVENT','HIGH_ENERGY'],zone:'MACHINERY'},
     'drive-integration':{semanticType:'DRIVE_INTEGRATION',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['FIELD_EVENT'],zone:'STRUCTURE'},
     power:{semanticType:'REACTOR',criticality:'CRITICAL',requires:{power:false,cooling:true,data:true,atmosphere:false,access:true},hazards:['HIGH_ENERGY','RADIATION'],zone:'MACHINERY'},
@@ -19,6 +29,10 @@
     structure:{semanticType:'STRUCTURE',criticality:'CRITICAL',requires:{power:false,cooling:false,data:false,atmosphere:false,access:true},hazards:[],zone:'STRUCTURE'},
     'conventional-engine':{semanticType:'MAIN_ENGINE',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['EXHAUST','HIGH_TEMPERATURE'],zone:'MACHINERY'},
     'conventional-propellant':{semanticType:'PROPELLANT_TANK',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['PROPELLANT','PRESSURE'],zone:'MACHINERY'},
+    'inertial-primary':{semanticType:'INERTIAL_FIELD_PRIMARY',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['FIELD_EVENT','HIGH_ENERGY','ACCELERATION_SHEAR'],zone:'MACHINERY'},
+    'inertial-secondary':{semanticType:'INERTIAL_FIELD_SECONDARY',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['COUNTERPHASE','ACCELERATION_SHEAR'],zone:'MACHINERY'},
+    'inertial-local':{semanticType:'INERTIAL_COMPARTMENT_NODE',criticality:'CRITICAL',requires:{power:true,cooling:true,data:true,atmosphere:true,access:true},hazards:['FIELD_DISCONTINUITY','ACCELERATION_SHEAR'],zone:'HABITAT',crewDependent:true},
+    'inertial-emergency':{semanticType:'INERTIAL_EMERGENCY_RESERVE',criticality:'CRITICAL',requires:{power:false,cooling:true,data:true,atmosphere:false,access:true},hazards:['STORED_ENERGY','AUTOMATIC_THRUST_INHIBIT'],zone:'COMMAND'},
     'weapon-mounts':{semanticType:'WEAPON',criticality:'COMBAT',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['RECOIL','WEAPON'],zone:'COMBAT'},
     'weapon-support':{semanticType:'WEAPON_SUPPORT',criticality:'COMBAT',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['HIGH_ENERGY'],zone:'COMBAT'},
     'weapon-magazines':{semanticType:'MAGAZINE',criticality:'COMBAT',requires:{power:true,cooling:true,data:true,atmosphere:false,access:true},hazards:['AMMUNITION','EXPLOSION'],zone:'MAGAZINE'},
@@ -26,8 +40,7 @@
     countermeasures:{semanticType:'COUNTERMEASURE',criticality:'COMBAT',requires:{power:true,cooling:false,data:true,atmosphere:false,access:true},hazards:['EXPENDABLES'],zone:'COMBAT'},
     margin:{semanticType:'RESERVED_VOLUME',criticality:'RESERVE',requires:{power:false,cooling:false,data:false,atmosphere:false,access:true},hazards:[],zone:'RESERVE'}
   };
-
-  const infrastructure = [
+  const infrastructure=[
     {key:'structural-root',nodeType:'STRUCTURAL_ROOT',label:'Principal vessel structural root',properties:['STRUCTURAL_ROOT','LOAD_PATH_ORIGIN']},
     {key:'thrust-keel',nodeType:'THRUST_KEEL',label:'Continuous conventional-thrust and recoil keel',properties:['STRUCTURAL_LOAD_PATH','THRUST_ALIGNED','RECOIL_PATH']},
     {key:'pressure-vault',nodeType:'PRESSURE_VAULT',label:'Protected pressure-vault attachment manifold',properties:['ATMOSPHERE_MANIFOLD','PRESSURIZED_ACCESS','STRUCTURAL_ATTACHMENT']},
@@ -38,31 +51,45 @@
     {key:'atmosphere-root',nodeType:'ATMOSPHERE_MANIFOLD',label:'Primary atmosphere and environmental manifold',properties:['ATMOSPHERE_SOURCE','ISOLATABLE']},
     {key:'access-root',nodeType:'SERVICE_ACCESS_ROOT',label:'Primary internal and EVA service-access root',properties:['ACCESS_SOURCE','EVACUATION_OR_SERVICE']}
   ];
+  const pressureZoneTemplates={HABITAT:{label:'Primary inhabited pressure zone',inhabited:true,isolated:false,environment:'CREW_ENVIRONMENT'},COMMAND:{label:'Command, navigation, inertial-safety, and control zone',inhabited:true,isolated:true,environment:'CREW_ENVIRONMENT'},SERVICE:{label:'Pressurized maintenance and service zone',inhabited:true,isolated:true,environment:'CREW_ENVIRONMENT'},MACHINERY:{label:'Protected machinery and field-generation zone',inhabited:false,isolated:true,environment:'CONTROLLED_MACHINERY'},CARGO:{label:'Mission cargo and staging zone',inhabited:false,isolated:true,environment:'VARIABLE'},COMBAT:{label:'Combat systems service zone',inhabited:false,isolated:true,environment:'CONTROLLED_MACHINERY'},STRUCTURE:{label:'Structural service and distributed-hardening zone',inhabited:false,isolated:true,environment:'UNPRESSURIZED_OR_BUFFER'},RESERVE:{label:'Reserved integration volume',inhabited:false,isolated:true,environment:'UNASSIGNED'}};
+  const utilityGraphs=['structural','power','cooling','data','atmosphere','access','magazineFeed','sensorDependency'];
+  const weaponFacings=['FORWARD','AFT','PORT','STARBOARD','DORSAL','VENTRAL'];
+  const repairableFaults=['INVALID_FIRST_ATTACHMENT','REMOVE_FIRST_POWER_EDGE','REMOVE_FIRST_COOLING_EDGE','REMOVE_FIRST_DATA_EDGE','REMOVE_FIRST_ACCESS_EDGE','REMOVE_FIRST_MAGAZINE_LINK','BREAK_FIRST_LOAD_PATH'];
 
-  const pressureZoneTemplates = {
-    HABITAT:{label:'Primary inhabited pressure zone',inhabited:true,isolated:false,environment:'CREW_ENVIRONMENT'},
-    COMMAND:{label:'Command, navigation, and control zone',inhabited:true,isolated:true,environment:'CREW_ENVIRONMENT'},
-    SERVICE:{label:'Pressurized maintenance and service zone',inhabited:true,isolated:true,environment:'CREW_ENVIRONMENT'},
-    MACHINERY:{label:'Protected machinery zone',inhabited:false,isolated:true,environment:'CONTROLLED_MACHINERY'},
-    CARGO:{label:'Mission cargo and staging zone',inhabited:false,isolated:true,environment:'VARIABLE'},
-    COMBAT:{label:'Combat systems service zone',inhabited:false,isolated:true,environment:'CONTROLLED_MACHINERY'},
-    STRUCTURE:{label:'Structural service and distributed-hardening zone',inhabited:false,isolated:true,environment:'UNPRESSURIZED_OR_BUFFER'},
-    RESERVE:{label:'Reserved integration volume',inhabited:false,isolated:true,environment:'UNASSIGNED'}
-  };
+  const mechanisms=[
+    ['FRACTIONAL_REFERENCE_DAMPENING','Fractional internal-inertia reference-frame dampening','Decouples a controlled fraction of occupied internal inertia from the hull acceleration tensor while retaining structural load transfer through field anchors.'],
+    ['QUANTUM_Q_LOCK','Quantum Q-lock reference anchoring','Locks inhabited compartments to a synchronized Q-state reference and retunes coupling as the hull changes vector.'],
+    ['GRAVITATIONAL_EFFECT_SUPPRESSION','Gravitational-effect field suppression','Suppresses locally experienced acceleration gradients and transfers unresolved reaction into a distributed gravitic anchor lattice.'],
+    ['METRIC_GEODESIC_CRADLE','Metric geodesic continuity cradle','Maintains a locally continuous geodesic frame through thrust and vector change.'],
+    ['REACTION_TENSOR_COUNTERFIELD','Reaction-tensor counterfield','Measures hull impulse and generates an opposed internal tensor before the acceleration front crosses inhabited compartments.'],
+    ['HYBRID_Q_GRAVITIC_LATTICE','Hybrid Q-locked gravitic lattice','Combines Q-reference anchoring, gravitic suppression, and compartment counterfields to avoid a single theoretical dependency.']
+  ].map(([key,label,principle])=>({key,label,principle}));
+  const residualByRank=[.26,.14,.075,.032,.012,.004,.0015],specificPowerByRank=[2.8e6,2e6,1.35e6,8.5e5,5.2e5,3.1e5,1.8e5];
+  function recalc(result,rows){const mass=sum(rows,'massTonnes'),volume=sum(rows,'volumeM3');result.hull.massBudget=rows.map(row=>({...row,massPercent:row.massTonnes/Math.max(1e-12,mass)*100,massText:massText(row.massTonnes),volumeText:`${fmt(row.volumeM3,1)} m³`}));Object.assign(result.hull,{totalMassTonnes:mass,totalMassText:massText(mass),totalVolumeM3:volume,averageDensityTonnesM3:mass/Math.max(1e-12,volume),massBalanceErrorTonnes:mass-sum(result.hull.massBudget,'massTonnes')});if(result.drive)result.drive.driveFractionPercent=finite(result.drive.integratedDriveMassTonnes)/Math.max(1e-12,mass)*100;}
+  function applyInertial(result){
+    if(result?.inertialControl?.schemaVersion)return result;
+    const rank=clamp(Math.round(finite(result.drive?.pathLevelRank,4)),0,6),p=result.propulsion||{},rows=(result.hull?.massBudget||[]).map(clone),marginIndex=rows.findIndex(row=>row.key==='margin'),margin=rows[marginIndex];
+    const rawG=Math.max(.001,finite(p.rawLongitudinalAccelerationMps2,finite(p.longitudinalAccelerationMps2))/G0),structuralG=Math.max(.01,finite(p.structuralAccelerationLimitG,rawG)),crewG=Math.max(.05,finite(p.crewAccelerationLimitG,2.5));
+    const origin=[result.manufacturer?.speciesId,result.manufacturer?.name,result.identity?.name,result.seed].filter(Boolean).join(':'),implementation=mechanisms[hash(`${origin}:inertial`)%mechanisms.length],quality=clamp(finite(result.manufacturer?.production?.qualityControl,.68),.25,.99),defense=result.identity?.defenseKey||'hardened',redundancy=defense==='naval'?1.28:defense==='hardened'?1.13:1;
+    const idealResidual=clamp(residualByRank[rank]*(1.08-quality*.16),.00035,.32),requiredMass=finite(result.hull?.totalMassTonnes)*clamp((.012+rank*.0028+Math.log10(1+rawG)*.0045)*redundancy,.012,.052),installedMass=margin?Math.min(requiredMass,finite(margin.massTonnes)*.88):requiredMass,completeness=clamp(installedMass/Math.max(1e-12,requiredMass),.15,1),dampening=clamp((1-idealResidual)*completeness,0,.9999),residual=1-dampening;
+    const certifiedExternalG=Math.min(rawG,structuralG,crewG/Math.max(.0001,residual)),internalG=certifiedExternalG*residual,lateralRatio=clamp(finite(p.lateralCombatAccelerationMps2)/Math.max(1e-12,finite(p.longitudinalAccelerationMps2)),.15,.92),volume=Math.min(installedMass/(1.35+rank*.11),margin?finite(margin.volumeM3)*.88:Infinity);
+    const parts=[['inertial-primary','Primary inertial-reference field lattice',.48,'Whole-vessel generators, thrust-keel anchors, reference clocks, and synchronized acceleration-tensor controllers.'],['inertial-secondary','Secondary inertial counterphase lattice',.24,'Independently powered generators providing degraded whole-vessel coverage after primary isolation.'],['inertial-local','Distributed compartment inertial nodes',.19,'Local emitters protecting inhabited zones, command spaces, medical areas, magazines, and critical machinery.'],['inertial-emergency','Emergency inertial reserve and maneuver-abort system',.09,'Dedicated reserve, proof-mass accelerometers, independent clocks, vector clamps, and thrust-inhibit authority.']];
+    if(margin){margin.massTonnes-=installedMass;margin.volumeM3-=volume;margin.note=`${margin.note||''} ${massText(installedMass)} and ${fmt(volume,1)} m³ are committed to inertial-reference control.`.trim();}
+    const inertialRows=parts.map(([key,label,fraction,note])=>({key,label,massTonnes:installedMass*fraction,volumeM3:volume*fraction,note,inertialControlComponent:true,envelope:key==='inertial-local'?'INTERNAL':'HYBRID'}));rows.splice(marginIndex<0?rows.length:marginIndex,0,...inertialRows);recalc(result,rows);
+    const continuousW=result.hull.totalMassTonnes*certifiedExternalG*dampening*specificPowerByRank[rank]*.18,peakW=continuousW*(3.6+redundancy*.7),reserveSeconds=12+rank*9+(defense==='naval'?28:defense==='hardened'?16:6),reserveJ=peakW*reserveSeconds,wasteW=continuousW*(.28-rank*.018),primaryChannels=2+rank+(defense==='naval'?2:0),secondaryChannels=1+Math.floor(rank/2)+(defense==='naval'?1:0),nodes=Math.max(4,Math.round(finite(result.lifeSupport?.zones,1)*3+finite(result.hull?.decks,1)*.75));
+    const tier=(label,factor)=>{const d=dampening*factor,r=1-d;return{label,dampeningFraction:d,residualFraction:r,maximumExternalG:Math.min(rawG,structuralG,crewG/Math.max(.0001,r))};},degraded={nominal:tier('All lattices synchronized',1),primaryChannelLoss:tier('One primary channel isolated',.86),secondaryOnly:tier('Secondary lattice only',.58),compartmentOnly:tier('Local compartment nodes only',.27),fieldOffline:{label:'No active field',dampeningFraction:0,residualFraction:1,maximumExternalG:Math.min(rawG,structuralG,crewG)}};
+    Object.assign(p,{uncompensatedCrewAccelerationLimitG:crewG,preInertialLongitudinalAccelerationMps2:finite(p.longitudinalAccelerationMps2),preInertialLateralAccelerationMps2:finite(p.lateralCombatAccelerationMps2),fieldSupportedCrewAccelerationLimitG:crewG/residual,longitudinalAccelerationMps2:certifiedExternalG*G0,lateralCombatAccelerationMps2:certifiedExternalG*G0*lateralRatio,longitudinalAccelerationG:certifiedExternalG,lateralCombatAccelerationG:certifiedExternalG*lateralRatio,internalResidualAccelerationG:internalG,inertialControlAuthority:'exoVesselInertialReferenceControl'});
+    if(result.power)Object.assign(result.power,{inertialControlContinuousW:continuousW,inertialControlPeakW:peakW,totalModeledContinuousW:finite(result.power.continuousPowerW)+continuousW,inertialControlContinuousText:powerText(continuousW),inertialControlPeakText:powerText(peakW)});
+    if(result.thermal)Object.assign(result.thermal,{inertialControlWasteHeatW:wasteW,totalModeledWasteHeatW:finite(result.thermal.propulsionWasteHeatW)+finite(result.thermal.weaponWasteHeatW)+wasteW});
+    const referenceId=`irc-${hash(`${result.seed}:${implementation.key}:${rank}`).toString(16).padStart(8,'0')}`,violations=[];if(Math.abs(internalG-certifiedExternalG*residual)>1e-9)violations.push('Residual acceleration equation failed.');if(internalG>crewG+1e-9)violations.push('Internal acceleration exceeds biological limit.');if(Math.abs(sum(result.hull.massBudget,'massTonnes')-result.hull.totalMassTonnes)>Math.max(1,result.hull.totalMassTonnes)*1e-9)violations.push('Mass ledger does not close.');
+    result.inertialControl={recordType:'exoVesselInertialReferenceControl',schemaVersion:'1.0.0',referenceId,technologyBand:`P${rank}`,commonFieldEffect:'INTERNAL_REFERENCE_FRAME_CONTINUITY',commonFieldName:'Internal Reference-Frame Continuity Field',discoveryContext:'Most technological species prioritize this field after high-thrust or fractional-light experiments demonstrate that a structurally intact craft can still kill its occupants through differential acceleration.',implementation:{mechanismKey:implementation.key,mechanism:implementation.label,principle:implementation.principle,convergenceRule:'Species may disagree about generators and field ontology; certified systems converge on reduced coupling between hull acceleration and the occupied internal frame.'},performance:{nominalDampeningFraction:dampening,nominalDampeningPercent:dampening*100,residualCouplingFraction:residual,residualCouplingPercent:residual*100,rawEngineAccelerationG:rawG,structuralAccelerationLimitG:structuralG,uncompensatedCrewLimitG:crewG,fieldSupportedCrewLimitG:crewG/residual,certifiedExternalAccelerationG:certifiedExternalG,certifiedInternalResidualAccelerationG:internalG,lateralCombatAccelerationG:certifiedExternalG*lateralRatio,installationCompletenessPercent:completeness*100},installation:{totalMassTonnes:installedMass,totalMassText:massText(installedMass),totalVolumeM3:volume,rows:inertialRows.map(row=>row.key),primaryChannels,secondaryChannels,distributedCompartmentNodes:nodes,independentPowerBuses:defense==='naval'?4:3,independentReferenceClocks:Math.max(3,rank+2)},power:{continuousPowerW:continuousW,continuousPowerText:powerText(continuousW),peakPowerW:peakW,peakPowerText:powerText(peakW),wasteHeatW:wasteW,wasteHeatText:powerText(wasteW),emergencyReserveSeconds:reserveSeconds,emergencyReserveEnergyJ:reserveJ,emergencyReserveEnergyText:energyText(reserveJ)},redundancy:{primaryChannels,secondaryChannels,distributedCompartmentNodes:nodes,degradedPerformance:degraded,crossCheckRule:'Hull accelerometers, proof masses, gravitic sensors, Q-reference clocks, and field-node telemetry must agree before thrust exceeds the uncompensated biological limit.'},emergency:{automaticManeuverInhibit:true,hardVectorClamp:true,independentMechanicalAccelerometers:true,independentReferenceClocks:true,reserveSeconds,abortRule:'Coherence loss, phase drift, power-bus disagreement, or missing node quorum immediately reduces thrust to the surviving field tier.',crewFallback:'Crash couches, restraints, suits, local medical support, and compartment isolation remain mandatory.'},failureModes:['Primary and secondary lattices enter counterphase and amplify differential acceleration.','A compartment node loses phase lock and creates an acceleration discontinuity across an inhabited boundary.','Reference clocks drift from the vessel hull and compensate the wrong vector.','Power interruption collapses coverage before propulsion falls below the surviving biological limit.','Damaged anchors redirect load into a compromised thrust keel or pressure shell.','Interlock bypass permits a hull-survivable maneuver that inflicts fatal tissue shear or destructive molecular-scale differential loading.'],safeguards:['No single controller may authorize both thrust increase and field-safety override.','Emergency reserve is isolated from weapons, FTL banks, and hotel power.','Disconnected compartment nodes default to local protection and thrust inhibition.','Without the field a vessel may drift, but may not conduct high-acceleration or fractional-light vector change.'],validation:{valid:!violations.length,violations}};
+    result.technologyReferences={...(result.technologyReferences||{}),inertialControl:{recordType:'exoVesselTechnologyReference',schemaVersion:'1.0.0',referenceId,technologyClass:'INERTIAL_REFERENCE_CONTROL',technologyBand:`P${rank}`,mechanismKey:implementation.key,fieldEffect:'INTERNAL_REFERENCE_FRAME_CONTINUITY',sourceRecord:'inertialControl'}};
+    if(result.engineeringLedger){result.engineeringLedger.inertialControl=clone(result.inertialControl);Object.assign(result.engineeringLedger.massClosure,{actualLoadedMassTonnes:result.hull.totalMassTonnes,actualVolumeM3:result.hull.totalVolumeM3,massErrorTonnes:result.hull.totalMassTonnes-finite(result.engineeringLedger.massClosure.expectedLoadedMassTonnes,result.hull.totalMassTonnes)});}
+    if(result.manufacturer)result.manufacturer.realizedEngineering={...(result.manufacturer.realizedEngineering||{}),inertialReferenceMechanism:implementation.key,inertialDampeningPercent:dampening*100,certifiedExternalAccelerationG:certifiedExternalG};
+    result.warnings=[...(result.warnings||[]),`The ${implementation.label} suppresses ${(dampening*100).toFixed(3)}% of hull-to-interior acceleration coupling. It does not erase momentum, energy, structural load, or heat.`,`Without active inertial-reference control, thrust is limited to ${fmt(degraded.fieldOffline.maximumExternalG,3)} g. Bypassing that interlock may preserve the hull while killing the crew.`,`Primary, secondary, compartment, and emergency inertial systems are separate mass-ledger and module-graph authorities.`];
+    return result;
+  }
 
-  const utilityGraphs = ['structural','power','cooling','data','atmosphere','access','magazineFeed','sensorDependency'];
-  const weaponFacings = ['FORWARD','AFT','PORT','STARBOARD','DORSAL','VENTRAL'];
-  const repairableFaults = ['INVALID_FIRST_ATTACHMENT','REMOVE_FIRST_POWER_EDGE','REMOVE_FIRST_COOLING_EDGE','REMOVE_FIRST_DATA_EDGE','REMOVE_FIRST_ACCESS_EDGE','REMOVE_FIRST_MAGAZINE_LINK','BREAK_FIRST_LOAD_PATH'];
-
-  globalThis.BlacklightExoVesselModuleDefinitions = Object.freeze({
-    schemaVersion:'1.0.0',
-    graphVersion:1,
-    moduleTypes,
-    forbiddenStandaloneSubsystems:['armor'],
-    infrastructure,
-    pressureZoneTemplates,
-    utilityGraphs,
-    weaponFacings,
-    repairableFaults
-  });
+  globalThis.BlacklightExoVesselModuleDefinitions=Object.freeze({schemaVersion:'1.1.0',graphVersion:1,moduleTypes,forbiddenStandaloneSubsystems:['armor'],infrastructure,pressureZoneTemplates,utilityGraphs,weaponFacings,repairableFaults});
+  if(vesselBase?.engineeringLedgerVersion&&!vesselBase.inertialControlVersion){const generate=(seed,input={},source=null)=>applyInertial(vesselBase.generate(seed,input,source));globalThis.BlacklightExoVessel=Object.freeze({...vesselBase,inertialControlVersion:1,inertialControlSchemaVersion:'1.0.0',generate});}
 })();
