@@ -1,1 +1,10 @@
-__FROM_LOCAL_FILE__
+{
+  "recordType": "blacklightExoStellarSectorSeedManifest",
+  "schemaVersion": "1.0.0",
+  "sectorId": "sector-helios-vale-example",
+  "seed": "EXAMPLE:SECTOR:HELIOS-VALE:001",
+  "dataModule": "blacklight-exo-stellar-sector-data.js",
+  "runtime": "blacklight-exo-stellar-sector.js",
+  "recordStatus": "fixed-deterministic-example",
+  "note": "The complete sector record is generated deterministically by the pinned data module and exported as versioned JSON."
+}
