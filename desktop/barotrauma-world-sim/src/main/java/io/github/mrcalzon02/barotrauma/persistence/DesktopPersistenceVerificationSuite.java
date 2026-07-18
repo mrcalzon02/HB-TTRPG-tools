@@ -15,12 +15,13 @@ public final class DesktopPersistenceVerificationSuite {
         WorldMapRegistry.verifyContract();
         DeterministicSimulationClock.verifyContract();
         SimulationCommandExecutor.verifyContract();
+        SimulationCheckpointStore.verifyContract();
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma desktop persistence, clock, and single-writer command contracts passed.");
+            System.out.println("Complete Barotrauma desktop persistence, clock, command, and checkpoint contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
