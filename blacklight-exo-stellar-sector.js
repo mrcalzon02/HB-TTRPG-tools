@@ -1,129 +1,60 @@
 (() => {
   'use strict';
-  const SNAPSHOT_KEY='blacklight-exo-sector-snapshots-v1';
+  const D=globalThis.BlacklightExoStellarSectorData;
+  if(!D?.generate)return;
+  const SNAPSHOT_KEY='blacklight-exo-sector-snapshots-v2';
   const $=id=>document.getElementById(id);
-  const node=(tag,className='',text='')=>{const n=document.createElement(tag);if(className)n.className=className;if(text!==''&&text!=null)n.textContent=String(text);return n;};
+  const node=(tag,className='',text='')=>{const item=document.createElement(tag);if(className)item.className=className;if(text!==''&&text!=null)item.textContent=String(text);return item;};
   const fmt=(value,digits=2)=>Number(value||0).toLocaleString(undefined,{maximumFractionDigits:digits});
-  const idle=callback=>('requestIdleCallback'in window?requestIdleCallback(callback,{timeout:160}):setTimeout(()=>callback({timeRemaining:()=>8,didTimeout:true}),16));
-  let sector=null,archiveHash='',renderers=[],completed=0;
+  const idle=callback=>('requestIdleCallback'in window?requestIdleCallback(callback,{timeout:180}):setTimeout(()=>callback({timeRemaining:()=>8,didTimeout:true}),16));
+  let sector=null,archiveHash='',renderGeneration=0,observer=null,renderers=[];
 
   function hashText(text){let h=2166136261;for(const c of text){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return(h>>>0).toString(16).padStart(8,'0');}
-  function setStatus(text,progress){$('exo-sector-status').textContent=text;if(progress!=null)$('exo-sector-progress-fill').style.width=`${Math.max(0,Math.min(100,progress))}%`;}
-  function summary(){
-    const s=sector.summary;
-    $('exo-sector-summary-name').textContent=sector.name;
-    $('exo-sector-summary-clusters').textContent=s.clusterCount;
-    $('exo-sector-summary-species').textContent=`${s.activeSpeciesCount} + ${s.extinctSpeciesCount} extinct`;
-    $('exo-sector-summary-polities').textContent=`${s.polityCount} / ${s.fleetCommandCount}`;
-    $('exo-sector-summary-hash').textContent=archiveHash;
-    $('exo-sector-export').disabled=false;$('exo-sector-save').disabled=false;
-  }
-  function dataRows(dl,rows){dl.replaceChildren();for(const[label,value]of rows){dl.append(node('dt','',label),node('dd','',value));}}
-  function clusterById(id){return sector.clusters.find(item=>item.clusterId===id);}
-  function polityById(id){return sector.polities.find(item=>item.polityId===id);}
-  function selectCluster(cluster){
-    if(!cluster)return;
-    $('exo-sector-cluster-name').textContent=cluster.name;
-    $('exo-sector-cluster-summary').textContent=`${cluster.controlState.replaceAll('-',' ')} · ${cluster.strategicValue} strategic value · ${cluster.systemCount} systems.`;
-    dataRows($('exo-sector-cluster-data'),[
-      ['Coordinates',`${cluster.coordinatesLy.x}, ${cluster.coordinatesLy.y}, ${cluster.coordinatesLy.z} ly`],
-      ['Charted systems',`${cluster.chartedSystemCount} / ${cluster.systemCount}`],
-      ['Controlled planets',cluster.controlledPlanetCount],
-      ['Habitable worlds',cluster.habitableWorldCount],
-      ['Industrial worlds',cluster.industrialWorldCount],
-      ['Ruin worlds',cluster.ruinWorldCount],
-      ['Controlling polities',cluster.controllingPolityIds.map(id=>polityById(id)?.name||id).join('; ')||'None']
-    ]);
-    $('exo-sector-cluster-tags').replaceChildren(...[...cluster.navigationHazards,cluster.controlState,cluster.strategicValue].map(text=>node('span','',text)));
-  }
-  function drawMap(){
-    const svg=$('exo-sector-map'),NS='http://www.w3.org/2000/svg';
-    const make=(tag,attrs={})=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
-    svg.replaceChildren();
-    for(let x=100;x<1000;x+=100)svg.append(make('line',{x1:x,y1:20,x2:x,y2:660,class:'exo-sector-map-grid'}));
-    for(let y=80;y<680;y+=80)svg.append(make('line',{x1:20,y1:y,x2:980,y2:y,class:'exo-sector-map-grid'}));
-    const xs=sector.clusters.map(c=>c.coordinatesLy.x),ys=sector.clusters.map(c=>c.coordinatesLy.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-    const pos=c=>({x:55+(c.coordinatesLy.x-minX)/Math.max(1,maxX-minX)*890,y:625-(c.coordinatesLy.y-minY)/Math.max(1,maxY-minY)*570});
-    const sorted=[...sector.clusters].sort((a,b)=>a.coordinatesLy.x-b.coordinatesLy.x);
-    for(let i=1;i<sorted.length;i++){const a=pos(sorted[i-1]),b=pos(sorted[i]);svg.append(make('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:'exo-sector-link'}));}
-    for(const c of sector.clusters){
-      const p=pos(c),g=make('g'),circle=make('circle',{cx:p.x,cy:p.y,r:7,tabindex:0,role:'button',class:'exo-sector-cluster-node','data-control':c.controlState,'aria-label':c.name}),label=make('text',{x:p.x+10,y:p.y-9,class:'exo-sector-map-label'});
-      label.textContent=c.name;circle.addEventListener('click',()=>selectCluster(c));circle.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCluster(c);}});
-      g.append(circle,label);svg.append(g);
-    }
-    selectCluster(sector.clusters[0]);
-  }
-  function card(eyebrow,title,body,stance=''){
-    const article=node('article','exo-sector-card');if(stance)article.dataset.stance=stance;
-    article.append(node('small','',eyebrow),node('h3','',title),node('p','',body));return article;
-  }
-  function addDefinition(article,rows){const dl=node('dl');for(const[label,value]of rows)dl.append(node('dt','',label),node('dd','',value));article.append(dl);}
-  function tags(article,items){const wrap=node('div','tags');wrap.append(...items.map(text=>node('span','',text)));article.append(wrap);}
-  function clusterCard(c){const a=card(c.controlState,c.name,`${c.systemCount} systems; ${c.controlledPlanetCount} controlled planets; ${c.ruinWorldCount} ruin worlds.`);addDefinition(a,[['Strategic value',c.strategicValue],['Controllers',c.controllingPolityIds.length||'none'],['Habitable',c.habitableWorldCount],['Industrial',c.industrialWorldCount]]);tags(a,c.navigationHazards);a.addEventListener('click',()=>{selectCluster(c);$('exo-sector-map-title').scrollIntoView({behavior:'smooth'});});return a;}
-  function speciesCard(s){const a=card(`${s.sectorStance} · ${s.dispositionArchetype}`,s.name,s.behavioralSummary,s.sectorStance);addDefinition(a,[['Biology',`${s.biology.metabolism}; ${s.biology.bodyPlan}`],['Native environment',`${s.biology.nativeGravity}; ${s.biology.nativeEnvironment}`],['Technology',`${s.technology.principalBand} · ${s.technology.transit}`],['Inertial control',s.technology.inertialControl],['Territory',`${s.controlledClusterIds.length} cluster authority records`]]);tags(a,[...s.technology.specialties,...s.bestiaryTags]);const filter=$('exo-sector-stance-filter')?.value||'all';a.hidden=filter!=='all'&&a.dataset.stance!==filter;return a;}
-  function fleetCard(f){const p=polityById(f.polityId),a=card(`${f.readiness} · ${f.technologyBand}`,f.name,`${f.doctrine}.`,p?.sectorStance||'');addDefinition(a,[['Capital ships',f.capitalShips],['Cruisers',f.cruisers],['Escorts',f.escorts],['Logistics hulls',f.logisticsHullCount],['Polity',p?.name||f.polityId]]);tags(a,[...f.loadoutFamilies,...f.operationalLimitations]);return a;}
-  function orgCard(o){const a=card(`${o.organizationType} · ${o.scope}`,o.name,o.functions.join(', '),polityById(o.polityId)?.sectorStance||'');return a;}
-  function extinctCard(s){const c=clusterById(s.lastKnownClusterId),a=card(`${s.archiveConfidence} archive · ${fmt(s.estimatedExtinctionYearsAgo,0)} years ago`,s.name,`Probable cause: ${s.probableCause}. Last known cluster: ${c?.name||s.lastKnownClusterId}.`);addDefinition(a,[['Technology at extinction',s.technologyBandAtExtinction],['Evidence',s.remainingEvidence.join(', ')]]);return a;}
-  function bestiaryCard(b){const c=clusterById(b.nativeClusterId),a=card(`${b.threatClass} · ${b.ecologyClass}`,b.name,`${b.environment}. ${b.notes}. Native record: ${c?.name||b.nativeClusterId}.`);return a;}
-  function polityRow(p){const tr=node('tr');for(const value of[p.name,p.government,p.empireScale,p.controlledClusterIds.length,p.controlledPlanetCount,`${fmt(p.populationBillions)} billion`,p.diplomaticPosture])tr.append(node('td','',value));return tr;}
+  function randomSeed(){if(globalThis.crypto?.getRandomValues){const values=new Uint32Array(2);crypto.getRandomValues(values);return`SECTOR-${values[0].toString(36)}-${values[1].toString(36)}`;}return`SECTOR-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;}
+  function setStatus(text,progress){if($('exo-sector-status'))$('exo-sector-status').textContent=text;if(progress!=null&&$('exo-sector-progress-fill'))$('exo-sector-progress-fill').style.width=`${Math.max(0,Math.min(100,progress))}%`;}
+  function dataRows(dl,rows){dl?.replaceChildren();for(const[label,value]of rows)dl?.append(node('dt','',label),node('dd','',value));}
+  const clusterById=id=>sector?.clusters.find(item=>item.clusterId===id);
+  const polityById=id=>sector?.polities.find(item=>item.polityId===id);
+  const worldPolityId=world=>world.polityId||world.controllingPolityId||null;
+  const worldClass=world=>world.worldClass||world.environment||world.authorityClass||'unclassified world';
+  const worldAssets=world=>world.strategicAssets||[...(world.resources||[]),...(world.installations||[])];
 
-  function progressive(sectionId,items,containerId,renderItem,chunk=6){
-    const section=$(sectionId),container=$(containerId),progress=$(`${sectionId.replace('-section','')}-progress`)||section.querySelector('.bli-section-head p:last-child');
-    let index=0,started=false;
-    section.dataset.renderState='waiting';
-    const run=deadline=>{
-      const start=performance.now();
-      while(index<items.length&&(deadline.timeRemaining()>2||performance.now()-start<8)){
-        const fragment=document.createDocumentFragment();
-        for(let n=0;n<chunk&&index<items.length;n++,index++)fragment.append(renderItem(items[index]));
-        container.append(fragment);
-      }
-      progress.textContent=`Rendered ${index} of ${items.length} records.`;
-      if(index<items.length)idle(run);else{section.dataset.renderState='complete';completed++;updateOverall();}
-    };
-    const begin=()=>{if(started)return;started=true;section.dataset.renderState='rendering';progress.textContent=`Rendering 0 of ${items.length} records…`;idle(run);};
-    renderers.push({section,begin});
-  }
-  function updateOverall(){const total=renderers.length;const pct=25+(completed/Math.max(1,total))*75;setStatus(`Sector authority loaded. ${completed} of ${total} deferred directories complete.`,pct);}
-  function setupLazy(){
-    progressive('exo-sector-clusters-section',sector.clusters,'exo-sector-clusters-grid',clusterCard,4);
-    progressive('exo-sector-species-section',sector.species,'exo-sector-species-grid',speciesCard,4);
-    progressive('exo-sector-polities-section',sector.polities,'exo-sector-polities-body',polityRow,8);
-    progressive('exo-sector-fleets-section',sector.fleetCommands,'exo-sector-fleets-grid',fleetCard,4);
-    progressive('exo-sector-organizations-section',sector.organizations,'exo-sector-organizations-grid',orgCard,8);
-    progressive('exo-sector-extinct-section',sector.extinctSpecies,'exo-sector-extinct-grid',extinctCard,4);
-    progressive('exo-sector-bestiary-section',sector.bestiary,'exo-sector-bestiary-grid',bestiaryCard,4);
-    const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){const r=renderers.find(x=>x.section===entry.target);r?.begin();observer.unobserve(entry.target);}},{rootMargin:'320px'});
-    renderers.forEach(r=>observer.observe(r.section));
-  }
-  function applySpeciesFilter(){
-    const filter=$('exo-sector-stance-filter').value;
-    for(const a of $('exo-sector-species-grid').children)a.hidden=filter!=='all'&&a.dataset.stance!==filter;
-  }
-  function exportSector(){
-    const blob=new Blob([JSON.stringify(sector,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download=`${sector.sectorId}-${sector.schemaVersion}.json`;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);
-  }
+  function summary(){const s=sector.summary||{};$('exo-sector-summary-name').textContent=sector.name;$('exo-sector-summary-mode').textContent=sector.recordStatus;$('exo-sector-summary-clusters').textContent=s.clusterCount||sector.clusters.length;$('exo-sector-summary-species').textContent=`${s.activeSpeciesCount||sector.species.length} / ${s.extinctSpeciesCount||sector.extinctSpecies.length}`;$('exo-sector-summary-worlds').textContent=`${s.worldCount||sector.worlds?.length||0} / ${s.deadWorldCount||0}`;$('exo-sector-summary-polities').textContent=`${s.polityCount||sector.polities.length} / ${s.fleetCommandCount||sector.fleetCommands.length}`;$('exo-sector-summary-hash').textContent=archiveHash;$('exo-sector-export').disabled=false;$('exo-sector-save').disabled=false;}
+
+  function selectCluster(cluster){if(!cluster)return;$('exo-sector-cluster-name').textContent=cluster.name;$('exo-sector-cluster-summary').textContent=`${cluster.controlState.replaceAll('-',' ')} · ${cluster.strategicValue} strategic value · ${cluster.systemCount} systems.`;dataRows($('exo-sector-cluster-data'),[['Coordinates',`${cluster.coordinatesLy.x}, ${cluster.coordinatesLy.y}, ${cluster.coordinatesLy.z} ly`],['Charted systems',`${Math.min(cluster.chartedSystemCount,cluster.systemCount)} / ${cluster.systemCount}`],['Controlled worlds',cluster.controlledPlanetCount],['Habitable worlds',cluster.habitableWorldCount],['Industrial worlds',cluster.industrialWorldCount],['Ruin worlds',cluster.ruinWorldCount],['Controlling polities',(cluster.controllingPolityIds||[]).map(id=>polityById(id)?.name||id).join('; ')||'None']]);$('exo-sector-cluster-tags').replaceChildren(...[...(cluster.navigationHazards||[]),cluster.controlState,cluster.strategicValue].map(text=>node('span','',text)));}
+
+  function drawMap(){const svg=$('exo-sector-map'),NS='http://www.w3.org/2000/svg',make=(tag,attrs={})=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};svg.replaceChildren();for(let x=100;x<1000;x+=100)svg.append(make('line',{x1:x,y1:20,x2:x,y2:660,class:'exo-sector-map-grid'}));for(let y=80;y<680;y+=80)svg.append(make('line',{x1:20,y1:y,x2:980,y2:y,class:'exo-sector-map-grid'}));const xs=sector.clusters.map(c=>c.coordinatesLy.x),ys=sector.clusters.map(c=>c.coordinatesLy.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),pos=c=>({x:55+(c.coordinatesLy.x-minX)/Math.max(1,maxX-minX)*890,y:625-(c.coordinatesLy.y-minY)/Math.max(1,maxY-minY)*570}),sorted=[...sector.clusters].sort((a,b)=>a.coordinatesLy.x-b.coordinatesLy.x);for(let i=1;i<sorted.length;i++){const a=pos(sorted[i-1]),b=pos(sorted[i]);svg.append(make('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:'exo-sector-link'}));}for(const c of sector.clusters){const p=pos(c),g=make('g'),circle=make('circle',{cx:p.x,cy:p.y,r:7,tabindex:0,role:'button',class:'exo-sector-cluster-node','data-control':c.controlState,'aria-label':c.name}),label=make('text',{x:p.x+10,y:p.y-9,class:'exo-sector-map-label'});label.textContent=c.name;circle.addEventListener('click',()=>selectCluster(c));circle.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCluster(c);}});g.append(circle,label);svg.append(g);}selectCluster(sector.clusters[0]);}
+
+  function card(eyebrow,title,body,stance=''){const article=node('article','exo-sector-card');if(stance)article.dataset.stance=stance;article.append(node('small','',eyebrow),node('h3','',title),node('p','',body));return article;}
+  function addDefinition(article,rows){const dl=node('dl');for(const[label,value]of rows)dl.append(node('dt','',label),node('dd','',value));article.append(dl);}
+  function tags(article,items){const wrap=node('div','tags');wrap.append(...items.filter(Boolean).map(text=>node('span','',text)));article.append(wrap);}
+  function clusterCard(c){const a=card(c.controlState,c.name,`${c.systemCount} systems; ${c.controlledPlanetCount} controlled worlds; ${c.ruinWorldCount} ruin worlds.`);addDefinition(a,[['Strategic value',c.strategicValue],['Controllers',c.controllingPolityIds.length||'none'],['Habitable',c.habitableWorldCount],['Industrial',c.industrialWorldCount]]);tags(a,c.navigationHazards||[]);a.addEventListener('click',()=>{selectCluster(c);$('exo-sector-map-title')?.scrollIntoView({behavior:'smooth'});});return a;}
+  function speciesCard(s){const a=card(`${s.sectorStance} · ${s.dispositionArchetype}`,s.name,s.behavioralSummary,s.sectorStance);addDefinition(a,[['Biology',`${s.biology.metabolism}; ${s.biology.bodyPlan}`],['Native environment',`${s.biology.nativeGravity}; ${s.biology.nativeEnvironment}`],['Technology',`${s.technology.principalBand} · ${s.technology.transit}${s.technology.ratedAuHour?` · ${s.technology.ratedAuHour}`:''}`],['Inertial control',s.technology.inertialControl],['Territory',`${s.controlledClusterIds.length} cluster records`]]);tags(a,[...(s.technology.specialties||[]),...(s.bestiaryTags||[])]);const filter=$('exo-sector-stance-filter')?.value||'all';a.hidden=filter!=='all'&&a.dataset.stance!==filter;return a;}
+  function fleetCard(f){const p=polityById(f.polityId),tasks=f.taskForces||[];const a=card(`${f.readiness} · ${f.technologyBand}`,f.name,`${f.doctrine}.`,p?.sectorStance||'');addDefinition(a,[['Capital ships',f.capitalShips],['Cruisers',f.cruisers],['Escorts',f.escorts],['Logistics hulls',f.logisticsHullCount],['Task forces',tasks.length],['Polity',p?.name||f.polityId]]);tags(a,[...(f.loadoutFamilies||[]),...(f.operationalLimitations||[]),...tasks.slice(0,4).map(task=>`${task.name}: ${task.mission}`)]);return a;}
+  function orgCard(o){return card(`${o.organizationType} · ${o.scope}`,o.name,(o.functions||[]).join(', '),polityById(o.polityId)?.sectorStance||'');}
+  function extinctCard(s){const c=clusterById(s.lastKnownClusterId),a=card(`${s.archiveConfidence} archive · ${fmt(s.estimatedExtinctionYearsAgo,0)} years ago`,s.name,`Probable cause: ${s.probableCause}. Last known cluster: ${c?.name||s.lastKnownClusterId}.`);addDefinition(a,[['Technology at extinction',s.technologyBandAtExtinction],['Dead worlds',(s.deadWorldIds||[]).length],['Evidence',(s.remainingEvidence||[]).join(', ')]]);return a;}
+  function bestiaryCard(b){const c=clusterById(b.nativeClusterId);return card(`${b.threatClass} · ${b.ecologyClass}`,b.name,`${b.environment}. ${b.notes}. Native record: ${c?.name||b.nativeClusterId}.`);}
+  function relationCard(r){const a=polityById(r.aPolityId),b=polityById(r.bPolityId),stance=/war|hostile|conflict/.test(r.state)?'war':r.tension>=60?'hostile':r.tension>=40?'wary':'neutral';return card(`${r.state} · tension ${r.tension}/100`,`${a?.name||r.aPolityId} / ${b?.name||r.bPolityId}`,(r.drivers||[]).join('; '),stance);}
+  function polityRow(p){const tr=node('tr');for(const value of[p.name,p.government,p.empireScale,p.controlledClusterIds.length,p.controlledWorldIds?.length||p.controlledPlanetCount,`${fmt(p.populationBillions)} billion`,p.diplomaticPosture])tr.append(node('td','',value));return tr;}
+  function worldRow(w){const tr=node('tr'),polity=polityById(worldPolityId(w)),cluster=clusterById(w.clusterId),population=w.populationMillions?`${fmt(w.populationMillions,3)} million`:'none recorded';for(const value of[w.name,`${cluster?.name||w.clusterId} / ${w.systemName||'unknown system'}`,polity?.name||'unclaimed',w.status,worldClass(w),population,worldAssets(w).join(', ')||'none recorded'])tr.append(node('td','',value));return tr;}
+
+  function clearDirectories(){for(const id of['exo-sector-clusters-grid','exo-sector-worlds-body','exo-sector-species-grid','exo-sector-polities-body','exo-sector-fleets-grid','exo-sector-organizations-grid','exo-sector-relations-grid','exo-sector-extinct-grid','exo-sector-bestiary-grid'])$(id)?.replaceChildren();for(const section of document.querySelectorAll('.exo-sector-lazy'))section.dataset.renderState='waiting';observer?.disconnect();renderers=[];}
+  function progressive(sectionId,items,containerId,renderItem,chunk=6){const section=$(sectionId),container=$(containerId),progress=$(`${sectionId.replace('-section','')}-progress`)||section?.querySelector('.bli-section-head p:last-child'),generation=renderGeneration;let index=0,started=false;const run=deadline=>{if(generation!==renderGeneration)return;const fragment=document.createDocumentFragment();let count=0;while(index<items.length&&count<chunk&&(deadline.timeRemaining()>2||count<2)){fragment.append(renderItem(items[index++]));count++;}container.append(fragment);progress.textContent=`Rendered ${index} of ${items.length} records.`;if(index<items.length)idle(run);else section.dataset.renderState='complete';};const begin=()=>{if(started)return;started=true;section.dataset.renderState='rendering';progress.textContent=`Rendering 0 of ${items.length} records…`;idle(run);};renderers.push({section,begin});}
+  function setupLazy(){progressive('exo-sector-clusters-section',sector.clusters,'exo-sector-clusters-grid',clusterCard,5);progressive('exo-sector-worlds-section',sector.worlds||[],'exo-sector-worlds-body',worldRow,12);progressive('exo-sector-species-section',sector.species,'exo-sector-species-grid',speciesCard,5);progressive('exo-sector-polities-section',sector.polities,'exo-sector-polities-body',polityRow,10);progressive('exo-sector-fleets-section',sector.fleetCommands,'exo-sector-fleets-grid',fleetCard,5);progressive('exo-sector-organizations-section',sector.organizations,'exo-sector-organizations-grid',orgCard,10);progressive('exo-sector-relations-section',sector.relations||[],'exo-sector-relations-grid',relationCard,8);progressive('exo-sector-extinct-section',sector.extinctSpecies,'exo-sector-extinct-grid',extinctCard,5);progressive('exo-sector-bestiary-section',sector.bestiary,'exo-sector-bestiary-grid',bestiaryCard,5);if('IntersectionObserver'in window){observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){const renderer=renderers.find(item=>item.section===entry.target);renderer?.begin();observer.unobserve(entry.target);}},{rootMargin:'360px'});renderers.forEach(renderer=>observer.observe(renderer.section));}else renderers.forEach(renderer=>renderer.begin());}
+
+  function applySpeciesFilter(){const filter=$('exo-sector-stance-filter').value;for(const article of $('exo-sector-species-grid').children)article.hidden=filter!=='all'&&article.dataset.stance!==filter;}
+  function canonical(){return JSON.stringify(sector);}
+  function archiveEnvelope(note=''){return{recordType:'blacklightExoStellarSectorArchive',schemaVersion:'1.0.0',recordedAt:new Date().toISOString(),note,archiveHash,sector};}
+  function exportJson(value,fileName){const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=fileName;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);}
+  function exportSector(){exportJson(archiveEnvelope('complete sector export'),`${sector.sectorId}-${sector.schemaVersion}-${archiveHash}.json`);}
   function snapshots(){try{return JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'[]');}catch(_){return[];}}
-  function saveSnapshot(){
-    const list=snapshots(),entry={snapshotId:`snapshot-${Date.now().toString(36)}`,recordedAt:new Date().toISOString(),note:$('exo-sector-note').value.trim(),sectorId:sector.sectorId,schemaVersion:sector.schemaVersion,archiveHash,record:sector};
-    list.unshift(entry);localStorage.setItem(SNAPSHOT_KEY,JSON.stringify(list.slice(0,5)));$('exo-sector-note').value='';renderSnapshots();
-  }
-  function renderSnapshots(){
-    const list=snapshots(),root=$('exo-sector-snapshot-list');root.replaceChildren();
-    if(!list.length){root.append(node('p','','No local campaign snapshots recorded. The fixed source remains available from the page archive.'));return;}
-    for(const s of list){const row=node('div','exo-sector-snapshot'),label=node('span','',`${new Date(s.recordedAt).toLocaleString()} · ${s.note||'unnamed checkpoint'}`),meta=node('code','',`${s.schemaVersion} · ${s.archiveHash}`);row.append(label,meta);root.append(row);}
-  }
-  async function load(){
-    try{
-      const authority=globalThis.BlacklightExoStellarSectorData;
-      if(!authority?.build)throw new Error('fixed sector data module did not initialize');
-      sector=authority.build();
-      const canonical=JSON.stringify(sector);archiveHash=hashText(canonical);
-      if(sector.recordType!=='blacklightExoStellarSector'||sector.schemaVersion!=='1.0.0')throw new Error('unexpected sector schema');
-      summary();drawMap();setupLazy();renderSnapshots();setStatus('Core sector authority loaded. Deferred directories will render as they approach the viewport.',25);
-    }catch(error){console.error('[Blacklight EXO] Sector archive failed:',error);setStatus(`Sector archive failed to initialize: ${error.message}`,0);}
-  }
-  $('exo-sector-export').addEventListener('click',exportSector);$('exo-sector-save').addEventListener('click',saveSnapshot);$('exo-sector-stance-filter').addEventListener('change',applySpeciesFilter);
-  load();
+  function saveSnapshot(){const list=snapshots(),entry={snapshotId:`snapshot-${Date.now().toString(36)}`,...archiveEnvelope($('exo-sector-note').value.trim())};list.unshift(entry);localStorage.setItem(SNAPSHOT_KEY,JSON.stringify(list.slice(0,8)));$('exo-sector-note').value='';renderSnapshots();}
+  function loadSnapshot(snapshot){sector=structuredClone(snapshot.sector);activate('Loaded recorded archive snapshot.');}
+  function deleteSnapshot(id){localStorage.setItem(SNAPSHOT_KEY,JSON.stringify(snapshots().filter(item=>item.snapshotId!==id)));renderSnapshots();}
+  function renderSnapshots(){const list=snapshots(),root=$('exo-sector-snapshot-list');root.replaceChildren();if(!list.length){root.append(node('p','','No local campaign snapshots recorded. Fixed and seeded source authorities remain replayable from their seeds.'));return;}for(const snapshot of list){const row=node('div','exo-sector-snapshot'),label=node('span','',`${new Date(snapshot.recordedAt).toLocaleString()} · ${snapshot.note||'unnamed checkpoint'}`),meta=node('code','',`${snapshot.sector.schemaVersion} · ${snapshot.archiveHash}`),actions=node('div','exo-sector-snapshot-actions'),load=node('button','bli-action','Load'),download=node('button','bli-action','Export'),remove=node('button','bli-action','Delete');load.type=download.type=remove.type='button';load.addEventListener('click',()=>loadSnapshot(snapshot));download.addEventListener('click',()=>exportJson(snapshot,`${snapshot.snapshotId}.json`));remove.addEventListener('click',()=>deleteSnapshot(snapshot.snapshotId));actions.append(load,download,remove);row.append(label,meta,actions);root.append(row);}}
+
+  function activate(message='Sector authority loaded.'){const validation=D.validate?.(sector)||{valid:true,violations:[]};if(!validation.valid)throw new Error(validation.violations.join(' '));renderGeneration++;archiveHash=hashText(canonical());clearDirectories();summary();drawMap();setupLazy();renderSnapshots();setStatus(`${message} Directories render only when approached.`,25);globalThis.BlacklightExoGetActiveSector=()=>structuredClone(sector);document.dispatchEvent(new CustomEvent('blacklight:exo-sector-generated',{detail:{sector:structuredClone(sector),archiveHash}}));}
+  function generate(example=false,random=false){try{if(random)$('exo-sector-seed').value=randomSeed();if(example)$('exo-sector-seed').value=D.exampleSeed;const seed=$('exo-sector-seed').value.trim()||randomSeed(),options={clusterCount:Number($('exo-sector-cluster-count').value),speciesCount:Number($('exo-sector-species-count').value)};sector=example?D.build():D.generate(seed,options);activate(example?'Fixed Helios Vale campaign authority loaded.':'Seeded procedural sector generated.');}catch(error){console.error('[Blacklight EXO] Sector generation failed:',error);setStatus(`Sector generation failed: ${error.message}`,0);}}
+
+  $('exo-sector-load-example')?.addEventListener('click',()=>generate(true,false));$('exo-sector-generate')?.addEventListener('click',()=>generate(false,false));$('exo-sector-random')?.addEventListener('click',()=>generate(false,true));$('exo-sector-export')?.addEventListener('click',exportSector);$('exo-sector-save')?.addEventListener('click',saveSnapshot);$('exo-sector-stance-filter')?.addEventListener('change',applySpeciesFilter);$('exo-sector-seed')?.addEventListener('keydown',event=>{if(event.key==='Enter')generate(false,false);});generate(true,false);
 })();
