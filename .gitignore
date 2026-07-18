@@ -1,0 +1,24 @@
+# Java and Gradle
+.gradle/
+**/build/
+out/
+*.class
+*.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Local desktop worlds and diagnostics
+desktop/barotrauma-world-sim/worlds/
+desktop/barotrauma-world-sim/logs/
+desktop/barotrauma-world-sim/tmp/
+*.log
+
+# Operating-system files
+.DS_Store
+Thumbs.db
