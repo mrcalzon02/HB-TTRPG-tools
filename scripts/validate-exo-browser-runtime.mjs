@@ -8,6 +8,7 @@ const fail=message=>{throw new Error(message);};
 
 const solarHtml=read('blacklight-exo-solar-system.html');
 const sectorHtml=read('blacklight-exo-stellar-sector.html');
+const vesselHtml=read('blacklight-exo-vessel.html');
 const healthHtml=read('blacklight-exo-deployment-health.html');
 const healthRuntime=read('blacklight-exo-deployment-health.js');
 const healthManifest=JSON.parse(read('artifacts/exo-deployment-health.json'));
@@ -19,15 +20,20 @@ const archiveStore=read('blacklight-exo-sector-archive-store.js');
 const sectorManifest=JSON.parse(read('blacklight-exo-stellar-sector-example.json'));
 const supervisor=read('blacklight-exo-runtime-supervisor.js');
 const sectorSupervision=read('blacklight-exo-stellar-sector-supervision.js');
+const gameplayRuntime=read('blacklight-exo-vessel-gameplay-runtime.js');
+const gameplaySchema=JSON.parse(read('data/schemas/exo-vessel-gameplay.schema.json'));
 
 for(const id of['exo-generate-system','exo-force-populated-hz','exo-generate-cluster','exo-random-cluster','exo-cluster-status','exo-seed-input','exo-orbit-svg','exo-orbital-table-body'])if(!solarHtml.includes(`id="${id}"`))fail(`Solar page is missing browser control ${id}.`);
 for(const id of['exo-sector-load-example','exo-sector-generate','exo-sector-random','exo-sector-export','exo-sector-save','exo-sector-map','exo-sector-worlds-body','exo-sector-relations-grid'])if(!sectorHtml.includes(`id="${id}"`))fail(`Sector page is missing browser control ${id}.`);
+for(const id of['exo-vessel-generate','exo-vessel-export','exo-vessel-role','exo-vessel-mass-body'])if(!vesselHtml.includes(`id="${id}"`))fail(`Vessel page is missing browser control ${id}.`);
 for(const id of['exo-health-run','exo-health-copy','exo-health-commit','exo-health-built','exo-health-result','exo-health-grid','exo-health-log'])if(!healthHtml.includes(`id="${id}"`))fail(`Deployment health page is missing browser control ${id}.`);
 
 const solarOrder=['blacklight-exo-runtime-supervisor.js','blacklight-exo-source-authority.js','blacklight-exo-fixed-system-data.js','blacklight-exo-jpl-moon-catalog-loader.js','blacklight-exo-system-bootstrap.js'];
 for(let index=1;index<solarOrder.length;index++)if(solarHtml.indexOf(solarOrder[index-1])<0||solarHtml.indexOf(solarOrder[index-1])>=solarHtml.indexOf(solarOrder[index]))fail('First-script supervised Solar page order is invalid.');
 const sectorOrder=['blacklight-exo-runtime-supervisor.js','blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-supervision.js','blacklight-exo-stellar-sector.js','blacklight-exo-sector-archive-store.js'];
 for(let index=1;index<sectorOrder.length;index++)if(sectorHtml.indexOf(sectorOrder[index-1])<0||sectorHtml.indexOf(sectorOrder[index-1])>=sectorHtml.indexOf(sectorOrder[index]))fail('Supervised sector and archive script order is invalid.');
+const vesselOrder=['blacklight-exo-vessel-damage-contracts.js','blacklight-exo-vessel-gameplay-definitions.js','blacklight-exo-vessel-gameplay-core.js','blacklight-exo-vessel-gameplay-runtime.js','blacklight-exo-vessel-gameplay-contracts.js','blacklight-exo-vessel-ui.js','blacklight-exo-vessel-damage-ui.js','blacklight-exo-vessel-gameplay-ui.js','blacklight-exo-vessel-contract-ui.js'];
+for(let index=1;index<vesselOrder.length;index++)if(vesselHtml.indexOf(vesselOrder[index-1])<0||vesselHtml.indexOf(vesselOrder[index-1])>=vesselHtml.indexOf(vesselOrder[index]))fail('VESSEL-09 vessel page script order is invalid.');
 
 const dynamicScripts=[...new Set([...bootstrap.matchAll(/['"](blacklight-exo-[^'"]+\.js)['"]/g)].map(match=>match[1]))];
 for(const script of dynamicScripts)if(!exists(script))fail(`Incremental bootstrap references missing script ${script}.`);
@@ -42,10 +48,13 @@ if(!sectorSupervision.includes('blacklight:exo-sector-generated')||!sectorSuperv
 if(!sectorRuntime.includes('requestIdleCallback')||!sectorRuntime.includes('IntersectionObserver')||!sectorRuntime.includes('loadSnapshot'))fail('Sector runtime lacks incremental rendering or archive replay.');
 for(const signature of['indexedDB','FALLBACK_KEY','LEGACY_KEY','validateEnvelope','hash mismatch','Import Sector Archive','Deterministic replay mismatch'])if(!archiveStore.includes(signature))fail(`Durable sector archive store lacks ${signature}.`);
 if(!sectorManifest.modules?.includes('blacklight-exo-sector-archive-store.js')||!sectorManifest.archiveStorage?.includes('IndexedDB'))fail('Sector manifest does not pin durable archive storage.');
+for(const signature of['canonicalWeaponAuthority','canonicalizeSourceLinks','operationalState','weaponFamily','effectiveUnitCount','gameplayDifficulty'])if(!gameplayRuntime.includes(signature))fail(`VESSEL-09 gameplay runtime lacks ${signature}.`);
+if(gameplaySchema.properties?.phase?.const!=='VESSEL-09'||gameplaySchema.properties?.normalization?.properties?.probabilityAuthority?.const!=='SHARED_PERCENTILE')fail('VESSEL-09 gameplay schema identity or probability authority is invalid.');
 
-for(const signature of['artifacts/exo-deployment-health.json','verifySolar','verifySector','BlacklightExoRuntimeSupervisor','BlacklightExoGetActiveSector','BlacklightExoGetActiveSystem'])if(!healthRuntime.includes(signature))fail(`Deployment health runtime lacks ${signature}.`);
+for(const signature of['artifacts/exo-deployment-health.json','verifySolar','verifySector','verifyVessel','BlacklightExoRuntimeSupervisor','BlacklightExoGetActiveSector','BlacklightExoGetActiveSystem','BlacklightExoGetActiveVessel','VESSEL-09','operationalState'])if(!healthRuntime.includes(signature))fail(`Deployment health runtime lacks ${signature}.`);
 if(healthManifest.recordType!=='blacklightExoDeploymentHealth'||healthManifest.schemaVersion!=='1.0.0')fail('Deployment health manifest placeholder has an invalid contract.');
 if(!workflow.includes('Write deployment health manifest')||!workflow.includes('"commit": "${GITHUB_SHA}"')||!workflow.includes('artifacts/exo-deployment-health.json'))fail('Pages workflow does not publish exact deployment identity.');
+for(const validator of['node scripts/validate-exo-vessel-gameplay.mjs','node scripts/validate-exo-vessel-gameplay-weapon-authority.mjs'])if(!workflow.includes(validator))fail(`Pages workflow does not gate ${validator}.`);
 
 const dataContext={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,structuredClone};dataContext.globalThis=dataContext;vm.createContext(dataContext);
 for(const file of['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js'])vm.runInContext(read(file),dataContext,{filename:file});
@@ -62,4 +71,4 @@ const summary=await fallbackContext.BlacklightExoMoonCatalogReady;
 if(summary.status!=='error'||!fixedSystems.error)fail('Offline satellite catalogue did not degrade to the fixed-system fallback.');
 if(!failures.some(item=>item.phase==='satellite-catalogue'))fail('Offline catalogue failure was not reported to the browser supervisor.');
 
-console.log('EXO browser, deployment health, durable archive, and first-script supervision validation passed.');
+console.log('EXO browser, deployment health, durable archive, first-script supervision, and VESSEL-09 runtime validation passed.');
