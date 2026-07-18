@@ -35,6 +35,9 @@ jobs:
       - name: Validate EXO cluster jump calculator
         run: node scripts/validate-exo-jump-calculator.mjs
 
+      - name: Validate EXO FTL Path 5 speed balance
+        run: node scripts/validate-exo-ftl-path5-balance.mjs
+
       - name: Validate EXO vessel engineering and design philosophy
         run: node scripts/validate-exo-vessel-generator-v2.mjs
 
