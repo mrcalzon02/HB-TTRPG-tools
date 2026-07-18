@@ -9,6 +9,7 @@ import io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow;
 import io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
 import io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow;
+import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 
@@ -48,7 +49,7 @@ public final class BarotraumaWorldSimApplication {
         SwingUtilities.invokeLater(() -> {
             try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
             catch (Exception exception) {
-                System.err.println("Could not activate the system look and feel: " + exception.getMessage());
+                System.err.println("Could not activate system look and feel: " + exception.getMessage());
             }
             new MainWindow().setVisible(true);
         });
@@ -158,14 +159,14 @@ public final class BarotraumaWorldSimApplication {
             cardPanel.add(submarines(), "submarines");
             cardPanel.add(placeholder(byId.get("crew")), "crew");
             cardPanel.add(workloadPanel(byId.get("stations-economy"),
-                    "Station ledgers now update in Passive Mode. Supplies, ore, industry, security, integrity, threat, and credits determine whether stations rise, remain stable, become strained, are besieged, or fall."), "stations-economy");
+                    "Station ledgers update in Passive Mode. Supplies, ore, industry, security, integrity, threat, and credits determine whether stations rise, stabilize, strain, become besieged, or fall."), "stations-economy");
             cardPanel.add(workloadPanel(byId.get("routes-jobs"),
-                    "NPC vessels accept deterministic trade, mining, fauna-clearing, defense, research, salvage, and transit missions. Route progress and hazards are visible in the World Map console."), "routes-jobs");
+                    "NPC vessels accept trade, mining, fauna-clearing, defense, research, salvage, and transit missions. Route progress and hazards are visible in the World Map console."), "routes-jobs");
             cardPanel.add(workloadPanel(byId.get("encounters"),
                     "NPC voyages and future player transit call the same deterministic challenge resolver. Every hazard records challenge, roll, effective capability, margin, outcome, damage, delay, and narrative."), "encounters");
             cardPanel.add(placeholder(byId.get("cargo-catalogue")), "cargo-catalogue");
             cardPanel.add(workloadPanel(byId.get("workshop-research"),
-                    "Each simulated station maintains a research project. Progress responds to station supplies and siege state, and completed projects improve local defense against Europan threats."), "workshop-research");
+                    "Each simulated station maintains persistent research. Progress responds to supplies and siege state; completion strengthens local resistance to Europan threats."), "workshop-research");
             cardPanel.add(placeholder(byId.get("factions")), "factions");
             cardPanel.add(placeholder(byId.get("reference-library")), "reference-library");
             cardPanel.add(importCenter(), "import-center");
@@ -178,15 +179,15 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Desktop world operations"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("The Java desktop now supports schema-004 persistence, normalized version-22 worlds, official vessel imports, durable clock commands, and an explicitly enabled automatic Passive Mode for stations and NPC voyages."));
+            panel.add(body("The Java desktop now supports schema-005 persistence, normalized version-22 worlds, official vessel imports, durable clock commands, and explicitly enabled automatic Passive Mode for stations and NPC voyages."));
             panel.add(Box.createVerticalStrut(18));
             JPanel metrics = new JPanel(new GridLayout(2, 3, 12, 12));
             metrics.add(metric("World map", "Live", "Stations, NPC vessels, missions, research, and encounters"));
             metrics.add(metric("Transit", "Shared", "The same deterministic resolver serves players and NPCs"));
             metrics.add(metric("Stations", "Reactive", "Rise, strain, siege, fall, and dispatch responses"));
             metrics.add(metric("Missions", "7 types", "Trade, mining, clearing, defense, research, salvage, transit"));
-            metrics.add(metric("Scheduling", "Passive Mode", "One process-wide scheduler per opened world"));
-            metrics.add(metric("Persistence", "Schema 004", "Atomic clock and workload cycles"));
+            metrics.add(metric("Scheduling", "Passive Mode", "One process-wide scheduler per world"));
+            metrics.add(metric("Persistence", "Schema 005", "Atomic clock and workload cycles"));
             panel.add(metrics);
             panel.add(Box.createVerticalStrut(18));
             panel.add(new JSeparator());
@@ -254,7 +255,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Durable simulation controls"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("Manual clock operations remain available for reviewed stepping and catch-up. Automatic timed scheduling is now enabled through the World Map's explicit Passive Mode, with every cycle serialized and persisted before another begins."));
+            panel.add(body("Manual clock operations remain available for reviewed stepping and catch-up. Automatic timed scheduling is enabled through the World Map's explicit Passive Mode, with every cycle serialized and persisted before another begins."));
             panel.add(Box.createVerticalStrut(16));
             panel.add(metric("Passive scheduler", "Available", "One scheduler per world; disabled or faulted explicitly"));
             panel.add(Box.createVerticalStrut(10));
@@ -341,8 +342,8 @@ public final class BarotraumaWorldSimApplication {
             JPanel status = new JPanel(new BorderLayout(12, 0));
             status.setBorder(new EmptyBorder(10, 6, 2, 6));
             status.add(operationStatus, BorderLayout.WEST);
-            status.add(new JLabel("Java 17 Swing · schema 004 · passive station/NPC simulation available"),
-                    BorderLayout.EAST);
+            status.add(new JLabel("Java 17 Swing · schema " + WorldStorageContracts.DATABASE_SCHEMA_VERSION
+                    + " · passive station/NPC simulation available"), BorderLayout.EAST);
             return status;
         }
 
