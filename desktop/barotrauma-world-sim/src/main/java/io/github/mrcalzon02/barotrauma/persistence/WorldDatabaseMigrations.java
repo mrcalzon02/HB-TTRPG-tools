@@ -18,17 +18,14 @@ import java.util.UUID;
 
 /** Applies forward-only migrations to a world database while its filesystem lock is held. */
 final class WorldDatabaseMigrations {
-
     private WorldDatabaseMigrations() { }
 
     static void migrateExistingDatabase(WorldPaths paths) throws IOException {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException exception) {
+        try { Class.forName("org.sqlite.JDBC"); }
+        catch (ClassNotFoundException exception) {
             if (!Files.exists(paths.database())) return;
             throw new IOException("The SQLite JDBC driver is required to migrate this desktop world.", exception);
         }
-
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
             int version;
@@ -38,32 +35,19 @@ final class WorldDatabaseMigrations {
                 }
                 applyMigration(connection, 1, WorldStorageContracts.initialSchemaStatements(), true);
                 version = 1;
-            } else {
-                version = currentVersion(connection);
-            }
+            } else version = currentVersion(connection);
             if (version > WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
                 throw new SQLException("World database schema " + version + " is newer than supported schema "
                         + WorldStorageContracts.DATABASE_SCHEMA_VERSION + ".");
             }
             while (version < WorldStorageContracts.DATABASE_SCHEMA_VERSION && version > 0) {
-                if (version == 1) {
-                    applyMigration(connection, 2, WorldStorageContracts.schema002Statements(), false);
-                    version = 2;
-                } else if (version == 2) {
-                    applyMigration(connection, 3, WorldStorageContracts.schema003Statements(), false);
-                    version = 3;
-                } else if (version == 3) {
-                    applyMigration(connection, 4, WorldStorageContracts.schema004Statements(), false);
-                    version = 4;
-                } else if (version == 4) {
-                    applyMigration(connection, 5, WorldStorageContracts.schema005Statements(), false);
-                    version = 5;
-                } else if (version == 5) {
-                    applyMigration(connection, 6, WorldStorageContracts.schema006Statements(), false);
-                    version = 6;
-                } else {
-                    throw new SQLException("No forward migration is defined from schema " + version + ".");
-                }
+                if (version == 1) { applyMigration(connection, 2, WorldStorageContracts.schema002Statements(), false); version = 2; }
+                else if (version == 2) { applyMigration(connection, 3, WorldStorageContracts.schema003Statements(), false); version = 3; }
+                else if (version == 3) { applyMigration(connection, 4, WorldStorageContracts.schema004Statements(), false); version = 4; }
+                else if (version == 4) { applyMigration(connection, 5, WorldStorageContracts.schema005Statements(), false); version = 5; }
+                else if (version == 5) { applyMigration(connection, 6, WorldStorageContracts.schema006Statements(), false); version = 6; }
+                else if (version == 6) { applyMigration(connection, 7, WorldStorageContracts.schema007Statements(), false); version = 7; }
+                else throw new SQLException("No forward migration is defined from schema " + version + ".");
             }
         } catch (SQLException exception) {
             throw new IOException("Desktop world database migration failed: " + exception.getMessage(), exception);
@@ -71,8 +55,7 @@ final class WorldDatabaseMigrations {
     }
 
     private static void applyMigration(Connection connection, int targetVersion,
-                                       java.util.List<String> statements, boolean initial)
-            throws SQLException {
+                                       java.util.List<String> statements, boolean initial) throws SQLException {
         boolean originalAutoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         try (Statement statement = connection.createStatement()) {
@@ -92,9 +75,7 @@ final class WorldDatabaseMigrations {
         } catch (SQLException exception) {
             try { connection.rollback(); } catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
             throw exception;
-        } finally {
-            connection.setAutoCommit(originalAutoCommit);
-        }
+        } finally { connection.setAutoCommit(originalAutoCommit); }
     }
 
     private static int currentVersion(Connection connection) throws SQLException {
@@ -109,9 +90,7 @@ final class WorldDatabaseMigrations {
                 "SELECT 1 FROM sqlite_master WHERE type = ? AND name = ?")) {
             statement.setString(1, type);
             statement.setString(2, name);
-            try (ResultSet result = statement.executeQuery()) {
-                return result.next();
-            }
+            try (ResultSet result = statement.executeQuery()) { return result.next(); }
         }
     }
 
@@ -144,23 +123,13 @@ final class WorldDatabaseMigrations {
             WorldPaths fresh = WorldStorageContracts.createWorld(root, "Fresh Europa", freshId);
             try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(fresh)) { }
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + fresh.database())) {
-                require(currentVersion(connection) == 6, "Fresh world did not initialize at schema 006.");
-                require(tableExists(connection, "passive_simulation_config"),
-                        "Fresh world is missing passive simulation schema.");
-                require(objectExists(connection, "index", "station_research_topic_unique"),
-                        "Fresh world is missing passive research uniqueness.");
-                require(objectExists(connection, "trigger", "npc_return_arrival"),
-                        "Fresh world is missing NPC return handling.");
-                require(tableExists(connection, "item_catalogue") && tableExists(connection, "station_inventory"),
-                        "Fresh world is missing catalogue or station inventory tables.");
-                require(tableExists(connection, "freight_lot") && tableExists(connection, "treasury_transaction"),
-                        "Fresh world is missing freight or treasury tables.");
-                require(tableExists(connection, "player_vessel_state")
-                                && tableExists(connection, "player_transit_encounter"),
-                        "Fresh world is missing player transit tables.");
-                require(objectExists(connection, "trigger", "passive_station_logistics_cycle")
-                                && objectExists(connection, "trigger", "station_production_apply"),
-                        "Fresh world is missing passive logistics triggers.");
+                require(currentVersion(connection) == 7, "Fresh world did not initialize at schema 007.");
+                require(tableExists(connection, "passive_simulation_config"), "Fresh world is missing passive simulation schema.");
+                require(objectExists(connection, "index", "station_research_topic_unique"), "Fresh world is missing passive research uniqueness.");
+                require(tableExists(connection, "item_catalogue") && tableExists(connection, "station_inventory"), "Fresh world is missing catalogue or inventory tables.");
+                require(tableExists(connection, "player_vessel_state") && tableExists(connection, "player_transit_encounter"), "Fresh world is missing player transit tables.");
+                require(objectExists(connection, "trigger", "passive_freight_offers"), "Fresh world is missing passive freight offers.");
+                require(objectExists(connection, "trigger", "npc_return_arrival"), "Fresh world is missing integrated NPC return handling.");
             }
 
             UUID worldId = UUID.fromString("93000000-0000-0000-0000-000000000001");
@@ -170,8 +139,7 @@ final class WorldDatabaseMigrations {
                 configure(connection);
                 try (Statement statement = connection.createStatement()) {
                     for (String sql : WorldStorageContracts.initialSchemaStatements()) {
-                        String normalized = sql.trim().toUpperCase();
-                        if (!normalized.startsWith("PRAGMA ")) statement.execute(sql);
+                        if (!sql.trim().toUpperCase().startsWith("PRAGMA ")) statement.execute(sql);
                     }
                 }
                 try (PreparedStatement version = connection.prepareStatement(
@@ -195,49 +163,27 @@ final class WorldDatabaseMigrations {
                     artifact.executeUpdate();
                 }
             }
-
             try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
-
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-                require(currentVersion(connection) == 6, "Legacy world did not advance to schema 006.");
+                require(currentVersion(connection) == 7, "Legacy world did not advance to schema 007.");
                 require(tableExists(connection, "world_location"), "Schema-002 world tables are missing.");
-                require(tableExists(connection, "simulation_command_receipt"),
-                        "Schema-003 command receipt table is missing.");
-                require(tableExists(connection, "simulation_checkpoint"),
-                        "Schema-003 checkpoint table is missing.");
-                require(tableExists(connection, "station_simulation_state"),
-                        "Schema-004 station workload table is missing.");
-                require(tableExists(connection, "npc_vessel") && tableExists(connection, "npc_voyage_log"),
-                        "Schema-004 NPC voyage tables are missing.");
-                require(tableExists(connection, "world_mission") && tableExists(connection, "world_encounter"),
-                        "Schema-004 mission or encounter tables are missing.");
-                require(objectExists(connection, "index", "station_research_topic_unique"),
-                        "Schema-005 research uniqueness is missing.");
-                require(objectExists(connection, "trigger", "npc_return_arrival"),
-                        "Schema-005 NPC return trigger is missing.");
-                require(tableExists(connection, "station_inventory") && tableExists(connection, "station_vendor_offer"),
-                        "Schema-006 station logistics tables are missing.");
-                require(tableExists(connection, "freight_lot") && tableExists(connection, "treasury_transaction"),
-                        "Schema-006 freight or treasury tables are missing.");
-                require(tableExists(connection, "player_vessel_state")
-                                && tableExists(connection, "player_voyage_log"),
-                        "Schema-006 player vessel tables are missing.");
-                require(columnExists(connection, "world_metadata", "source_suite_version"),
-                        "Schema-002 world metadata columns are missing.");
-                require(columnExists(connection, "world_simulation_metadata", "current_tick_sequence"),
-                        "Schema-003 current clock columns are missing.");
+                require(tableExists(connection, "simulation_command_receipt"), "Schema-003 command receipt table is missing.");
+                require(tableExists(connection, "station_simulation_state"), "Schema-004 station workload table is missing.");
+                require(objectExists(connection, "index", "station_research_topic_unique"), "Schema-005 research uniqueness is missing.");
+                require(tableExists(connection, "station_inventory") && tableExists(connection, "station_vendor_offer"), "Schema-006 logistics tables are missing.");
+                require(tableExists(connection, "player_vessel_state") && tableExists(connection, "player_voyage_log"), "Schema-006 player route tables are missing.");
+                require(objectExists(connection, "trigger", "passive_freight_offers"), "Schema-007 freight offer trigger is missing.");
+                require(objectExists(connection, "index", "freight_player_offer_index"), "Schema-007 freight offer index is missing.");
+                require(columnExists(connection, "world_metadata", "source_suite_version"), "Schema-002 world metadata columns are missing.");
                 try (PreparedStatement statement = connection.prepareStatement(
                         "SELECT source_name FROM import_artifact WHERE artifact_id = ?")) {
                     statement.setString(1, artifactId.toString());
                     try (ResultSet result = statement.executeQuery()) {
-                        require(result.next() && result.getString(1).equals("legacy.sub"),
-                                "Schema migration did not preserve schema-001 records.");
+                        require(result.next() && result.getString(1).equals("legacy.sub"), "Migration did not preserve schema-001 records.");
                     }
                 }
             }
-        } finally {
-            deleteTree(root);
-        }
+        } finally { deleteTree(root); }
     }
 
     private static void deleteTree(Path root) throws IOException {
