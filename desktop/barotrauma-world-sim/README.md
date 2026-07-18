@@ -10,10 +10,10 @@ The desktop project now includes:
 - Inspection-first version-22, `.save`, and `.sub` compatibility.
 - Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
 - Atomic vessel imports, campaign mapping, snapshot chronology, rollback, and read-only registries.
-- Sequential SQLite migrations through **schema 013** for fresh and existing desktop worlds.
+- Sequential SQLite migrations through **schema 014** for fresh and existing desktop worlds.
 - A deterministic canonical-time clock, one logical writer, immutable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
 - A live Europa World Map with explicitly controlled **Passive Mode**.
-- Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response, ecology, geology, natural-resource, extraction, depletion, and renewable-recovery workloads.
+- Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response-transit, ecology, geology, natural-resource, extraction, depletion, and renewable-recovery workloads.
 - Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Automatic timed cycles while Passive Mode is enabled.
 - Local donor-installation discovery for Barotrauma graphical assets, with packaged binary PNG fallbacks.
@@ -83,7 +83,7 @@ gradle runWorldRegistry
 
 The World Map provides canonical time, locations, stations, NPC voyages, missions, routes, research, encounters, and Passive Mode controls.
 
-Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet, ecological, geological, extraction, and renewable-recovery changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
+Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet-response transit, ecology, geology, extraction, and renewable-recovery changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
 
 Only one passive scheduler is created for a world in the application process. The manual clock monitor becomes read-only while that scheduler owns the writer.
 
@@ -107,22 +107,25 @@ The civilian frontier uses five states:
 
 Fauna pressure grows when stations are threatened or undersupplied and recedes when security is strong. Deterministic monster attacks can damage integrity, reduce security, increase threat, and force the civilian perimeter inward. Contraction creates defense and fauna-clearing work; recovery and expansion create outward research or transit work.
 
-## Passive fleet recovery
+## Fleet response transit, rescue, and towing
 
 Disabled NPC vessels create durable `RESCUE` or `TOWING` operations. Besieged stations create `REINFORCEMENT` operations. The operation model also supports `REPAIR`, `REFUEL`, and `REARM` categories.
 
 Qualified Salvage, Patrol, and Courier vessels receive response priority. A vessel assigned to an active response is protected from ordinary world-mission assignment.
 
-Response progress is material-gated. The origin station must possess the declared quantities of:
+Every response now follows explicit phases:
 
-- Fabricated steel.
-- Fuel rods.
-- Coilgun ammunition.
-- Medical supplies.
+- `WAITING`
+- `OUTBOUND`
+- `ON_SCENE`
+- `RETURNING`
+- `COMPLETE`
 
-If those stocks are absent, progress stalls. After resupply, Passive Mode can complete the response, consume the materials, restore a disabled vessel to service, or reinforce a besieged station.
+Assignment creates a physical outbound transit leg. The responder uses the same deterministic NPC transit engine as ordinary voyages and can encounter thermal vents, ice shear, mechanical failures, fauna, current reversals, and navigation blackouts. Recovery progress is blocked until the responder reaches the target.
 
-The current response voyage remains abstracted through operation progress. The next refinement will route the responder and any tow through the shared transit-resolution engine.
+On scene, the origin station must possess the declared quantities of fabricated steel, fuel rods, coilgun ammunition, and medical supplies. Those materials are committed once. On-scene completion creates a second return or towing leg rather than teleporting the casualty home.
+
+The casualty remains disabled until the responder survives the return leg and reaches home. If a responder is disabled or lost in either direction, the operation returns to the response queue with its attempt history preserved. Already committed materials are not charged again when a replacement responder completes the return.
 
 ## Natural world, extraction, ecology, and geology
 
@@ -164,7 +167,7 @@ Schema 013 gives each natural-resource site a finite reserve, carrying capacity,
 
 Nonrenewable mineral sites remain depleted at zero reserve. Renewable algae and bioactive sites enter dormancy, recover according to local habitat integrity, and return to the mission queue with a bounded fraction of carrying capacity.
 
-The natural-world console exposes ecology, geology, resource reserves, recovery progress, extraction history, natural events, fleet-response operations, and response logs while Passive Mode runs.
+The natural-world console exposes ecology, geology, resource reserves, recovery progress, extraction history, fleet-response phases, outbound and return legs, response-linked transit hazards, and completion logs while Passive Mode runs.
 
 See `NATURAL_WORLD.md` for the detailed subsystem boundary.
 
@@ -225,8 +228,9 @@ These commands cover normalized master-world import, one-vessel approval, campai
 - **Schema 011** — immediate response assignment, responder reassignment after docking, and material-gated recovery progress.
 - **Schema 012** — responder protection from ordinary missions and natural-resource or predator-driven NPC mission generation.
 - **Schema 013** — finite resource reserves, typed extraction batches, legacy-reward restoration, freight settlement, permanent mineral depletion, and renewable dormancy/regrowth.
+- **Schema 014** — response phases, outbound and return/towing transit legs, response-linked encounters, one-time material commitment, retry attempts, and final recovery after home arrival.
 
-A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, fleet responses, ecological and geological changes, resource exposure, extraction batches, depletion or recovery, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
+A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, response assignment and transit, on-scene recovery, return or towing travel, ecological and geological changes, resource exposure, extraction batches, depletion or recovery, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
 
 ## Build and verification
 
@@ -239,7 +243,7 @@ The verification chain covers:
 
 - Donor installation validation, saved local pointers, donor-first selection, and fallback-only resolution.
 - Real packaged PNG fallback resources for station, vessel, fauna, and geology roles.
-- Fresh and legacy migration through schema 013.
+- Fresh and legacy migration through schema 014.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
 - Deterministic clock replay, command ordering, checkpoints, and restart recovery.
@@ -249,7 +253,11 @@ The verification chain covers:
 - Delivery-driven station recovery and frontier expansion.
 - Monster attacks and defensive NPC responses.
 - Immediate fleet-response assignment and responder reservation.
-- Recovery stalling without required materials and completion after resupply.
+- Outbound response transit before on-scene progress.
+- Response-linked transit encounters and arrival evidence.
+- Material stalling before resupply and one-time material commitment afterward.
+- A second return or towing leg before casualty restoration.
+- Retry-safe reassignment after responder loss without duplicate material consumption.
 - Ecology and geology initialization for every normalized location.
 - Algal blooms, predator feeding-ground expansion, hydrothermal or rockfall events, and bioactive accumulator sites.
 - Natural-resource and predator events entering the shared NPC mission queue.
@@ -297,15 +305,15 @@ Completed:
 12. Natural-resource, predator, and fleet-response integration with the shared NPC mission system.
 13. Donor Barotrauma asset discovery, local pointer storage, binary PNG fallbacks, setup UI, and packaging boundaries.
 14. Finite resource harvesting, depletion, typed freight settlement, environmental impact, renewable dormancy, and recovery.
+15. Fleet responder outbound travel, on-scene gating, return and towing transit, shared hazards, retries, and final home-arrival recovery.
 
 Next:
 
-1. Route responder vessels and towing operations through the shared transit resolver instead of abstract progress alone.
-2. Connect donor/fallback roles to the World Map, vessel registry, station, and player-transit panels.
-3. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
-4. Add player mission acceptance, reward settlement, and faction consequences.
-5. Add equipment-level cargo manifests and capacity derived from imported submarine data.
-6. Add persistent recent-world reopening, backups, packaging, and release automation.
+1. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
+2. Add player mission acceptance, reward settlement, and faction consequences.
+3. Connect donor/fallback roles to the World Map, vessel registry, station, and player-transit panels.
+4. Add equipment-level cargo manifests and capacity derived from imported submarine data.
+5. Add persistent recent-world reopening, backups, packaging, and release automation.
 
 ## Governing documents
 
