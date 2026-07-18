@@ -82,7 +82,9 @@ public final class PassiveWorldSimulationVerification {
                         "Persisted encounter count does not match the passive result.");
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
                         "Mission or research workload persistence failed.");
-                require(schemaVersion(paths) == 5, "Passive fixture was not stored under schema 005.");
+                require(count(paths, "station_inventory") == 32,
+                        "Schema-006 station inventory did not follow the passive cycle.");
+                require(schemaVersion(paths) == 6, "Passive fixture was not stored under schema 006.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
@@ -116,7 +118,7 @@ public final class PassiveWorldSimulationVerification {
 
     private static long count(WorldPaths paths, String table) throws Exception {
         if (!java.util.Set.of("station_simulation_state", "npc_vessel", "npc_voyage_log",
-                "world_encounter", "world_mission", "station_research_project").contains(table)) {
+                "world_encounter", "world_mission", "station_research_project", "station_inventory").contains(table)) {
             throw new IllegalArgumentException("Unsupported passive verification table.");
         }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
