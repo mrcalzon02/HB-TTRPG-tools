@@ -10,10 +10,10 @@ The desktop project now includes:
 - Inspection-first version-22, `.save`, and `.sub` compatibility.
 - Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
 - Atomic vessel imports, campaign mapping, snapshot chronology, rollback, and read-only registries.
-- Sequential SQLite migrations through **schema 009** for fresh and existing desktop worlds.
+- Sequential SQLite migrations through **schema 012** for fresh and existing desktop worlds.
 - A deterministic canonical-time clock, one logical writer, immutable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
 - A live Europa World Map with explicitly controlled **Passive Mode**.
-- Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, and civilization-frontier workloads.
+- Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response, ecology, geology, and natural-resource workloads.
 - Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Automatic timed cycles while Passive Mode is enabled.
 
@@ -44,7 +44,7 @@ gradle runWorldRegistry
 
 The World Map provides canonical time, locations, stations, NPC voyages, missions, routes, research, encounters, and Passive Mode controls.
 
-Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up still processes station consumption and civilization changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
+Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet, ecological, and geological changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
 
 Only one passive scheduler is created for a world in the application process. The manual clock monitor becomes read-only while that scheduler owns the writer.
 
@@ -54,67 +54,76 @@ Only one passive scheduler is created for a world in the application process. Th
 gradle runCivilizationFrontier
 ```
 
-Every active station now consumes supplies on every passive tick. Consumption is deterministic for replay but varies around each station’s local baseline, generally moving through a small baseline-minus-one, baseline, or baseline-plus-one pattern.
+Every active station consumes supplies on every passive tick. Consumption is deterministic for replay but varies around each station’s local baseline. Ration inventory covers demand first; uncovered demand accelerates abstract supply loss. This prevents a station from sustaining itself indefinitely without regular deliveries.
 
-Ration inventory covers demand first. When rations are insufficient, the station pays additional abstract supply cost. Low abstract supplies also count as shortage pressure even when a small ration reserve remains. This prevents a station from maintaining itself indefinitely without regular deliveries.
-
-Shortages are deliberately slow rather than immediately catastrophic:
-
-- The shortage streak rises one tick at a time and falls gradually after normal supply resumes.
-- Integrity begins degrading only after shortage pressure persists.
-- Security and industry decline on slower milestone intervals.
-- Population capacity moves only after long sustained shortage or long stable surplus.
-- Civilization strength and frontier position respond more quickly than population, but still move incrementally.
-- A station becomes contested, contracting, or eventually abandoned only after persistent logistical and fauna pressure.
+Shortages are deliberately slow rather than immediately catastrophic. Integrity, security, industry, population capacity, civilization strength, and frontier position deteriorate at different milestone rates. Deliveries arrest decline and allow later ticks to create recovery and gradual expansion.
 
 The civilian frontier uses five states:
 
-- `EXPANDING` — stable supply and security allow civilization to push outward.
-- `HOLDING` — the station is maintaining its current perimeter.
-- `CONTESTED` — fauna pressure or shortage is challenging the perimeter.
-- `CONTRACTING` — persistent shortage or monster pressure is forcing civilization inward.
-- `ABANDONED` — integrity, population capacity, or frontier position has collapsed.
+- `EXPANDING`
+- `HOLDING`
+- `CONTESTED`
+- `CONTRACTING`
+- `ABANDONED`
 
-The frontier console exposes:
+Fauna pressure grows when stations are threatened or undersupplied and recedes when security is strong. Deterministic monster attacks can damage integrity, reduce security, increase threat, and force the civilian perimeter inward. Contraction creates defense and fauna-clearing work; recovery and expansion create outward research or transit work.
 
-- Current supplies and ration stock.
-- Last and baseline consumption.
-- Shortage and surplus streaks.
-- Population capacity and civilization strength.
-- Fauna pressure and frontier position.
-- Station integrity, security, threat, and industry.
-- Per-tick consumption history.
-- Shortage, recovery, delivery, expansion, contraction, abandonment, and monster-attack events.
-- NPC missions generated in response to contraction or expansion.
+## Passive fleet recovery
 
-## Monster attacks and civilization response
+Disabled NPC vessels create durable `RESCUE` or `TOWING` operations. Besieged stations create `REINFORCEMENT` operations. The operation model also supports `REPAIR`, `REFUEL`, and `REARM` categories.
 
-Fauna pressure grows when stations are threatened or undersupplied and recedes when security is strong and local threat is controlled. At deterministic intervals, sufficiently high fauna pressure can produce a direct monster attack.
+Qualified Salvage, Patrol, and Courier vessels receive response priority. A vessel assigned to an active response is protected from ordinary world-mission assignment.
 
-A successful attack can:
+Response progress is material-gated. The origin station must possess the declared quantities of:
 
-- Damage station integrity.
-- Reduce security.
-- Increase local threat and fauna pressure.
-- Reduce civilization strength.
-- Force the civilian frontier inward.
-- Move the station into contested or contracting condition.
+- Fabricated steel.
+- Fuel rods.
+- Coilgun ammunition.
+- Medical supplies.
 
-When a station becomes contested or contracting, Passive Mode can generate a UUID-safe `DEFENSE` or `FAUNA_CLEARING` mission for NPC assignment. When supply and security stabilize the station, a recovery event is retained. When civilization begins expanding again, the world can generate outward `TRANSIT` or `RESEARCH` work.
+If those stocks are absent, progress stalls. After resupply, Passive Mode can complete the response, consume the materials, restore a disabled vessel to service, or reinforce a besieged station.
 
-This creates a continuing give-and-take: monsters and shortage push the inhabited frontier inward, while deliveries, patrols, clearing missions, research, industry, and security push civilization outward.
+The current response voyage remains abstracted through operation progress. The next refinement will route the responder and any tow through the shared transit-resolution engine.
 
-## Deliveries and recovery
+## Natural world, ecology, and geology
 
-Delivered cargo now has item-specific station consequences in addition to inventory and treasury effects:
+```text
+gradle runNaturalWorld
+```
 
-- **Rations** restore abstract supplies and rapidly reduce accumulated shortage pressure.
-- **Medical supplies** restore supplies and integrity while modestly reducing fauna pressure.
-- **Fuel rods** restore supplies and support industry.
-- **Coilgun ammunition** reinforces security and suppresses fauna pressure.
-- **Fabricated steel** restores integrity and supports industry.
+Every normalized world location receives persistent ecological state:
 
-A delivery does not instantly create population or territory. It arrests decline, reduces shortage pressure, strengthens civilization, and allows later passive ticks to produce recovery and gradual expansion. Regular delivery therefore matters more than one isolated shipment.
+- Primary producers and microbial activity.
+- Algal blooms.
+- Herbivore biomass.
+- Predator biomass and feeding-ground migration pressure.
+- Scavenger biomass.
+- Biological accumulator mass.
+- Nutrient load.
+- Habitat integrity.
+
+Producer and algal growth support herbivore expansion. Herbivore concentrations support predator expansion. Predator migration can increase nearby station threat and generate fauna-clearing work. Scavengers recycle biological material, while sustained biological activity can expose renewable Bioactive Accumulator or Algae Harvest sites.
+
+Every location also receives geological state:
+
+- Tectonic stress.
+- Hydrothermal activity.
+- Mineral exposure.
+- Cave instability.
+- Sediment flux.
+
+Hydrothermal eruptions and rockfalls can expose ore veins, rare minerals, and hydrothermal deposits. Geological activity changes richness and accessibility rather than treating resources as a permanently static catalogue.
+
+Natural activity feeds the existing NPC mission queue:
+
+- Ore veins and rare minerals create `MINING` work.
+- Hydrothermal and bioactive sites create `RESEARCH` work.
+- Algae harvest sites create `SALVAGE` work.
+- Predator feeding-ground expansion creates `FAUNA_CLEARING` work.
+
+The natural-world console exposes ecology, geology, exposed resources, natural events, fleet-response operations, and response logs while Passive Mode runs.
+
+See `NATURAL_WORLD.md` for the detailed subsystem boundary.
 
 ## Station logistics, markets, and freight
 
@@ -124,20 +133,9 @@ gradle runStationLogistics
 
 The logistics console exposes item definitions, production recipes, station inventory, vendor offers, production runs, freight lots, and treasury entries.
 
-The initial catalogue contains Europan ore, fabricated steel, reactor fuel rods, medical supplies, rations, coilgun ammunition, research samples, and luxury goods. Initial recipes smelt steel, assemble fuel rods, prepare medical supplies, and fabricate ammunition.
+Each passive cycle advances the economy, consumes supplies, produces limited raw stock, runs at most one affordable recipe per station, deducts costs, reprices vendors, and creates freight opportunities where shortages and surpluses coexist.
 
-Each passive cycle:
-
-1. Advances station economy and consumes local supplies.
-2. Produces limited raw ore and rations according to station capacity.
-3. Chooses at most one affordable recipe per station and tick so input inventory cannot be spent twice.
-4. Consumes recipe inputs and adds outputs.
-5. Deducts production costs and writes treasury evidence.
-6. Reprices vendor offers according to threat and station condition.
-7. Creates READY freight opportunities where one station has a shortage and another has surplus stock.
-8. Updates civilization and fauna pressure from the resulting supply position.
-
-Completed NPC trade, mining, and salvage work can create freight lots. NPC return docking delivers those lots without recursive SQLite trigger dependence, updates inventory and station credits, and writes treasury and civilization evidence.
+Completed NPC trade, mining, and salvage work can create freight lots. Player and NPC deliveries update inventory, treasury evidence, station condition, civilization support, and the material base required for fleet recovery.
 
 ## Imported player-vessel transit and freight
 
@@ -145,25 +143,9 @@ Completed NPC trade, mining, and salvage work can create freight lots. NPC retur
 gradle runPlayerTransit
 ```
 
-An imported physical vessel can be enrolled at a normalized world location without changing its definition, physical identity, or snapshot chronology.
+An imported physical vessel can be enrolled without changing its definition, physical identity, or snapshot chronology. The player transit console supports enrollment, source loading, route planning, one deterministic transit challenge at a time, docking, and delivery at the declared destination.
 
-The player transit console supports selecting an imported vessel, enrolling it, loading READY freight at its source, planning a destination and mission context, resolving one deterministic transit challenge at a time, accumulating route delay from costly setbacks, docking, and delivering cargo at its declared destination.
-
-Freight loading and delivery update station inventory, vessel cargo, station credits, treasury entries, freight state, player voyage logs, audit history, and—on delivery—the receiving station’s civilization-support state in one transaction.
-
-## Shared transit and encounter resolution
-
-Player and NPC voyages call the same dependency-free deterministic resolver. Given the same world, vessel, route, sequence, mission, and capability inputs, the result is identical.
-
-Current hazards include thermal vent fields, ice shear, ballast failure, reactor instability, hostile fauna, abyssal predators, current reversals, and navigation blackouts. Hazard selection is deterministic but varied across route sequences.
-
-## Passive world behavior
-
-Stations remain `RISING`, `STABLE`, `STRAINED`, `BESIEGED`, or `FALLEN` according to credits, supplies, industry, security, integrity, threat, and civilization-frontier state.
-
-NPC roles include Trader, Miner, Hunter, Patrol, Research, Salvage, and Courier. Their mission set includes Trade, Mining, Fauna Clearing, Station Defense, Research, Salvage, and Transit.
-
-Each NPC retains location, destination, route progress, hull, supplies, cargo, crew quality, navigation, engineering, combat, mining, and research capability. It moves through preparation, outbound transit, work, return, docking, disablement, and loss states while accumulating persistent voyage history.
+Player and NPC voyages call the same dependency-free deterministic transit resolver. Current hazards include thermal vent fields, ice shear, ballast failure, reactor instability, hostile fauna, abyssal predators, current reversals, and navigation blackouts.
 
 ## Manual durable clock monitor
 
@@ -196,10 +178,11 @@ These commands cover normalized master-world import, one-vessel approval, campai
 - **Schema 007** — non-recursive NPC freight delivery and passive READY freight generation from station shortages.
 - **Schema 008** — variable station consumption, shortage history, population/civilization/fauna state, frontier movement, monster attacks, and delivery support.
 - **Schema 009** — UUID-safe contraction missions, recovery evidence, and outward expansion missions.
+- **Schema 010** — fleet-response operations, ecology, geology, natural events, and exposed renewable or mineral resource sites.
+- **Schema 011** — immediate response assignment, responder reassignment after docking, and material-gated recovery progress.
+- **Schema 012** — responder protection from ordinary missions and natural-resource or predator-driven NPC mission generation.
 
-A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, market updates, freight generation, treasury evidence, and audit summary. Any invalid or stale before-state rejects the complete cycle.
-
-Player route and freight actions use the same exclusive world lock but do not advance the passive clock. Each explicit action commits or rolls back independently against the current durable world state.
+A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, fleet responses, ecological and geological changes, resource exposure, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
 
 ## Build and verification
 
@@ -210,20 +193,20 @@ gradle verifyWorldStore
 
 The verification chain covers:
 
-- Fresh and legacy migration through schema 009.
+- Fresh and legacy migration through schema 012.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
 - Deterministic clock replay, command ordering, checkpoints, and restart recovery.
 - Shared player/NPC transit replay and hazard diversity.
-- Station economy, missions, NPC assignment, voyages, encounters, and research.
+- Station economy, consumption, civilization movement, missions, NPC assignment, voyages, encounters, and research.
 - Item catalogue, inventory, vendor offers, production, freight, and treasury entries.
-- Per-tick station consumption with deterministic variation.
-- Slow shortage accumulation, degradation, population capacity, and frontier contraction.
-- Delivery-driven shortage reduction and station recovery.
-- Stable-surplus frontier expansion and outward NPC missions.
-- Deterministic monster attacks and defensive NPC responses.
-- UUID compatibility of frontier-generated missions.
-- Player freight loading, route traversal, docking, delivery, inventory transfer, treasury effects, and civilization support.
+- Delivery-driven station recovery and frontier expansion.
+- Monster attacks and defensive NPC responses.
+- Immediate fleet-response assignment and responder reservation.
+- Recovery stalling without required materials and completion after resupply.
+- Ecology and geology initialization for every normalized location.
+- Algal blooms, predator feeding-ground expansion, hydrothermal or rockfall events, and bioactive accumulator sites.
+- Natural-resource and predator events entering the shared NPC mission queue.
 - A real timed Passive Mode cycle and fault-contained recovery.
 
 The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 and runs this chain for desktop-project changes.
@@ -234,6 +217,7 @@ The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 an
 io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication
 io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow
 io.github.mrcalzon02.barotrauma.desktop.frontier.CivilizationFrontierWindow
+io.github.mrcalzon02.barotrauma.desktop.nature.NaturalWorldAndFleetWindow
 io.github.mrcalzon02.barotrauma.desktop.logistics.StationLogisticsWindow
 io.github.mrcalzon02.barotrauma.desktop.logistics.PlayerVesselTransitWindow
 io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow
@@ -257,14 +241,18 @@ Completed:
 7. Item-level station catalogue, inventory, vendor, production, freight, and treasury state.
 8. Imported player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 9. Variable station consumption, slow shortage degradation, monster pressure, civilization contraction, recovery, and expansion.
+10. Material-gated NPC rescue, towing, repair, refuel, rearm, and station reinforcement operations.
+11. Passive ecological regrowth, food-web movement, predator feeding-ground expansion, biological accumulation, geological activity, and natural-resource exposure.
+12. Natural-resource, predator, and fleet-response integration with the shared NPC mission system.
 
 Next:
 
-1. Add rescue, towing, repair, refuel, rearm, and reinforcement operations for disabled player and NPC vessels.
-2. Add player mission acceptance, reward settlement, and faction consequences.
-3. Add equipment-level cargo manifests and capacity derived from imported submarine data.
-4. Port the remaining faction, campaign journal, reference-library, and workshop authoring tools.
-5. Add persistent recent-world reopening, backups, packaging, and release automation.
+1. Route responder vessels and towing operations through the shared transit resolver instead of abstract progress alone.
+2. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
+3. Add resource harvesting, depletion, dormancy, and renewable regrowth settlement into station inventory and treasury state.
+4. Add player mission acceptance, reward settlement, and faction consequences.
+5. Add equipment-level cargo manifests and capacity derived from imported submarine data.
+6. Add persistent recent-world reopening, backups, packaging, and release automation.
 
 ## Governing documents
 
