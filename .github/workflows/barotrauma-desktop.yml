@@ -37,11 +37,13 @@ jobs:
       - name: Compile desktop application
         run: gradle -p desktop/barotrauma-world-sim clean compileJava --no-daemon
 
-      - name: Verify identity contracts
+      - name: Verify identity and session contracts
         run: |
           gradle -p desktop/barotrauma-world-sim classes --no-daemon
           java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
             io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts
+          java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
+            io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession
 
       - name: Verify compatibility and storage contracts
         run: |
