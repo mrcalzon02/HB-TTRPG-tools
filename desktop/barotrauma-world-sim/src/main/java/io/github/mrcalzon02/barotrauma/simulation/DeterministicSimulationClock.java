@@ -36,8 +36,10 @@ public final class DeterministicSimulationClock {
         this.tickSequence = tickSequence;
         this.simulationEnabled = simulationEnabled;
         this.schedulerState = Objects.requireNonNull(schedulerState, "schedulerState");
-        if (!simulationEnabled && schedulerState != SchedulerState.PAUSED) {
-            throw new IllegalArgumentException("A disabled simulation must remain PAUSED.");
+        if (!simulationEnabled
+                && schedulerState != SchedulerState.PAUSED
+                && schedulerState != SchedulerState.FAULTED) {
+            throw new IllegalArgumentException("A disabled simulation must remain PAUSED or FAULTED.");
         }
     }
 
@@ -315,17 +317,23 @@ public final class DeterministicSimulationClock {
         failure(() -> restored.step(0), "between");
         failure(() -> restored.catchUpTo(canonical.minusSeconds(1), 1), "precede");
         restored.fault();
+        ClockSnapshot faulted = restored.snapshot();
+        require(restore(faulted).snapshot().equals(faulted), "FAULTED checkpoint restore changed state.");
         failure(restored::enable, "FAULTED");
     }
 
     private static void failure(Runnable action, String expected) {
+        RuntimeException failure = null;
         try {
             action.run();
-            throw new IllegalStateException("Expected clock failure containing: " + expected);
         } catch (IllegalArgumentException | IllegalStateException exception) {
-            require(exception.getMessage() != null && exception.getMessage().contains(expected),
-                    "Unexpected clock failure: " + exception.getMessage());
+            failure = exception;
         }
+        if (failure == null) {
+            throw new IllegalStateException("Expected clock failure containing: " + expected);
+        }
+        require(failure.getMessage() != null && failure.getMessage().contains(expected),
+                "Unexpected clock failure: " + failure.getMessage());
     }
 
     private static void require(boolean condition, String message) {
