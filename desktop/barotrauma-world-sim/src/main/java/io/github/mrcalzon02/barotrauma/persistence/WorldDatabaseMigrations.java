@@ -52,6 +52,7 @@ final class WorldDatabaseMigrations {
                 else if (version == 9) { applyMigration(connection, 10, WorldStorageContracts.schema010Statements(), false); version = 10; }
                 else if (version == 10) { applyMigration(connection, 11, WorldStorageContracts.schema011Statements(), false); version = 11; }
                 else if (version == 11) { applyMigration(connection, 12, WorldStorageContracts.schema012Statements(), false); version = 12; }
+                else if (version == 12) { applyMigration(connection, 13, WorldStorageContracts.schema013Statements(), false); version = 13; }
                 else throw new SQLException("No forward migration is defined from schema " + version + ".");
             }
         } catch (SQLException exception) {
@@ -128,7 +129,7 @@ final class WorldDatabaseMigrations {
             WorldPaths fresh = WorldStorageContracts.createWorld(root, "Fresh Europa", freshId);
             try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(fresh)) { }
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + fresh.database())) {
-                require(currentVersion(connection) == 12, "Fresh world did not initialize at schema 012.");
+                require(currentVersion(connection) == 13, "Fresh world did not initialize at schema 013.");
                 require(tableExists(connection, "passive_simulation_config"), "Fresh world is missing passive simulation schema.");
                 require(objectExists(connection, "index", "station_research_topic_unique"), "Fresh world is missing passive research uniqueness.");
                 require(tableExists(connection, "item_catalogue") && tableExists(connection, "station_inventory"), "Fresh world is missing catalogue or inventory tables.");
@@ -165,6 +166,17 @@ final class WorldDatabaseMigrations {
                                 && objectExists(connection, "trigger", "natural_resource_creates_mission")
                                 && objectExists(connection, "trigger", "predator_expansion_creates_mission"),
                         "Fresh world is missing natural mission integration.");
+                require(tableExists(connection, "resource_harvest_mission")
+                                && tableExists(connection, "resource_extraction_batch"),
+                        "Fresh world is missing resource harvesting evidence.");
+                require(columnExists(connection, "natural_resource_site", "remaining_units")
+                                && columnExists(connection, "natural_resource_site", "carrying_capacity")
+                                && columnExists(connection, "natural_resource_site", "recovery_progress"),
+                        "Fresh world is missing finite reserve or recovery columns.");
+                require(objectExists(connection, "trigger", "resource_mission_completed")
+                                && objectExists(connection, "trigger", "passive_resource_recovery")
+                                && objectExists(connection, "trigger", "resource_freight_supports_station"),
+                        "Fresh world is missing harvesting, recovery, or settlement triggers.");
             }
 
             UUID worldId = UUID.fromString("93000000-0000-0000-0000-000000000001");
@@ -200,7 +212,7 @@ final class WorldDatabaseMigrations {
             }
             try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-                require(currentVersion(connection) == 12, "Legacy world did not advance to schema 012.");
+                require(currentVersion(connection) == 13, "Legacy world did not advance to schema 013.");
                 require(tableExists(connection, "world_location"), "Schema-002 world tables are missing.");
                 require(tableExists(connection, "simulation_command_receipt"), "Schema-003 command receipt table is missing.");
                 require(tableExists(connection, "station_simulation_state"), "Schema-004 station workload table is missing.");
@@ -224,6 +236,12 @@ final class WorldDatabaseMigrations {
                 require(objectExists(connection, "trigger", "natural_resource_creates_mission")
                                 && objectExists(connection, "trigger", "predator_expansion_creates_mission"),
                         "Schema-012 natural mission integration is missing.");
+                require(tableExists(connection, "resource_extraction_batch")
+                                && columnExists(connection, "natural_resource_site", "remaining_units"),
+                        "Schema-013 resource harvesting is missing.");
+                require(objectExists(connection, "trigger", "resource_generic_effect_compensation")
+                                && objectExists(connection, "trigger", "nonrenewable_resource_stays_depleted"),
+                        "Schema-013 settlement or depletion hardening is missing.");
                 require(columnExists(connection, "world_metadata", "source_suite_version"), "Schema-002 world metadata columns are missing.");
                 try (PreparedStatement statement = connection.prepareStatement(
                         "SELECT source_name FROM import_artifact WHERE artifact_id = ?")) {
