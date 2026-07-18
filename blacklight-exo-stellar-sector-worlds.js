@@ -44,6 +44,7 @@
   sector.summary.deadOrForgottenWorldCount=worlds.filter(item=>item.authorityClass==='dead-or-forgotten-world').length;
   for(const cluster of sector.clusters)cluster.notableWorldIds=worlds.filter(item=>item.clusterId===cluster.clusterId).map(item=>item.worldId);
   for(const polity of sector.polities)polity.notableControlledWorldIds=worlds.filter(item=>item.controllingPolityId===polity.polityId).map(item=>item.worldId);
+  if(typeof document==='undefined')return;
 
   const $=id=>document.getElementById(id),node=(tag,className='',text='')=>{const item=document.createElement(tag);if(className)item.className=className;if(text)item.textContent=String(text);return item;};
   function createSection(){
