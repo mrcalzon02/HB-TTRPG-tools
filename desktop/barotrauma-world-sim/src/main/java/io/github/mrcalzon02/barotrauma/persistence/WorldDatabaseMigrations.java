@@ -42,6 +42,9 @@ final class WorldDatabaseMigrations {
                 if (version == 1) {
                     applyMigration(connection, 2, WorldStorageContracts.schema002Statements());
                     version = 2;
+                } else if (version == 2) {
+                    applyMigration(connection, 3, WorldStorageContracts.schema003Statements());
+                    version = 3;
                 } else {
                     throw new SQLException("No forward migration is defined from schema " + version + ".");
                 }
@@ -144,14 +147,20 @@ final class WorldDatabaseMigrations {
             }
 
             try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) {
-                // Acquiring the lock performs the forward migration before returning.
+                // Acquiring the lock performs all forward migrations before returning.
             }
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-                require(currentVersion(connection) == 2, "Legacy world did not advance to schema 002.");
+                require(currentVersion(connection) == 3, "Legacy world did not advance to schema 003.");
                 require(tableExists(connection, "world_location"), "Schema-002 world tables are missing.");
+                require(tableExists(connection, "simulation_command_receipt"),
+                        "Schema-003 command receipt table is missing.");
+                require(tableExists(connection, "simulation_checkpoint"),
+                        "Schema-003 checkpoint table is missing.");
                 require(columnExists(connection, "world_metadata", "source_suite_version"),
                         "Schema-002 world metadata columns are missing.");
+                require(columnExists(connection, "world_simulation_metadata", "current_tick_sequence"),
+                        "Schema-003 current clock columns are missing.");
                 try (PreparedStatement statement = connection.prepareStatement(
                         "SELECT source_name FROM import_artifact WHERE artifact_id = ?")) {
                     statement.setString(1, artifactId.toString());
