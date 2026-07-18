@@ -5,6 +5,7 @@ import io.github.mrcalzon02.barotrauma.desktop.imports.ImportInspectionWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.WebWorldImportApprovalWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow;
 import io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow;
+import io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow;
 import io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
@@ -192,8 +193,8 @@ public final class BarotraumaWorldSimApplication {
             panel.add(Box.createVerticalStrut(12));
             JPanel actions = new JPanel();
             actions.add(button("Import Version-22 World", this::openWebWorldImport));
+            actions.add(button("View Normalized World", this::openWorldRegistry));
             actions.add(button("Open Vessel Import", this::openImportApproval));
-            actions.add(button("Map Campaign Archive", this::openCampaignMapper));
             actions.add(button("Open Vessel Registry", this::openVesselRegistry));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -204,7 +205,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(sectionHeading("Normalized Europa world"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Version-22 exports can now establish the desktop world's master-world identity, canonical clock, rings, locations, stations, component versions, and imported scheduler metadata. The scheduler remains paused after import."));
+            panel.add(bodyLabel("Version-22 exports can establish the desktop world's master-world identity, canonical clock, rings, locations, stations, component versions, and imported scheduler metadata. The scheduler remains paused after import."));
             panel.add(Box.createVerticalStrut(16));
             panel.add(metricCard("Master world", "One per world", "Replacement is blocked to prevent silent world-state loss"));
             panel.add(Box.createVerticalStrut(10));
@@ -212,7 +213,10 @@ public final class BarotraumaWorldSimApplication {
             panel.add(Box.createVerticalStrut(10));
             panel.add(metricCard("Simulation", "PAUSED", "Import never starts or advances the continuous writer"));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(button("Open Master-World Import", this::openWebWorldImport));
+            JPanel actions = new JPanel();
+            actions.add(button("Open Master-World Import", this::openWebWorldImport));
+            actions.add(button("Open World Registry", this::openWorldRegistry));
+            panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
         }
@@ -254,6 +258,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel actions = new JPanel();
             actions.add(button("Read-Only Inspection", this::openInspection));
             actions.add(button("Version-22 World Approval", this::openWebWorldImport));
+            actions.add(button("View Normalized World", this::openWorldRegistry));
             actions.add(button("One-Vessel Approval", this::openImportApproval));
             actions.add(button("Campaign Mapping", this::openCampaignMapper));
             panel.add(actions);
@@ -360,6 +365,7 @@ public final class BarotraumaWorldSimApplication {
 
         private void openInspection() { showChild(new ImportInspectionWindow(), "Opened read-only source inspection"); }
         private void openWebWorldImport() { showChild(new WebWorldImportApprovalWindow(), "Opened version-22 world approval"); }
+        private void openWorldRegistry() { showChild(new WorldMapRegistryWindow(), "Opened normalized world registry"); }
         private void openImportApproval() { showChild(new WorldImportApprovalWindow(), "Opened vessel import approval"); }
         private void openCampaignMapper() { showChild(new CampaignVesselMappingWindow(), "Opened campaign vessel mapper"); }
         private void openVesselRegistry() { showChild(new WorldVesselRegistryWindow(), "Opened vessel registry"); }
