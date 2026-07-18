@@ -65,6 +65,9 @@ jobs:
       - name: Validate EXO vessel weapon-family engagement envelopes
         run: node scripts/validate-exo-vessel-weapons.mjs
 
+      - name: Validate EXO vessel local combat resolution
+        run: node scripts/validate-exo-vessel-damage.mjs
+
       - name: Validate phased EXO vessel system roadmap
         run: node scripts/validate-exo-vessel-roadmap.mjs
 
