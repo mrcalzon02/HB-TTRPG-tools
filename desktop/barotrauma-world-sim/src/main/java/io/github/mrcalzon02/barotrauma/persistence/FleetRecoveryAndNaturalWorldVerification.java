@@ -121,8 +121,9 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 require(ecologyValue(paths, locationId, "primary_producers") != ecologyBefore
                                 || count(paths, "natural_world_event") > 0,
                         "Natural ecology did not advance with Passive Mode.");
-                require(geologyValue(paths, locationId, "mineral_exposure") >= geologyBefore,
-                        "Geological activity unexpectedly erased exposed resources.");
+                require(geologyValue(paths, locationId, "mineral_exposure") != geologyBefore
+                                || eventTypeCount(paths, "VENT_ERUPTION") + eventTypeCount(paths, "ROCKFALL") > 0,
+                        "Natural geology neither changed nor produced geological event evidence.");
                 require(count(paths, "natural_resource_site") > 0,
                         "Geological or biological activity did not expose any resource sites.");
                 require(eventTypeCount(paths, "ALGAL_BLOOM") > 0,
