@@ -32,6 +32,9 @@ jobs:
           find . -maxdepth 1 -name 'blacklight-exo-*.js' -print0 | xargs -0 -r -n1 node --check
           find scripts -maxdepth 1 -name 'validate-exo-*.mjs' -print0 | xargs -0 -r -n1 node --check
 
+      - name: Validate EXO stellar sector and incremental system loading
+        run: node scripts/validate-exo-stellar-sector.mjs
+
       - name: Validate EXO cluster jump calculator
         run: node scripts/validate-exo-jump-calculator.mjs
 
