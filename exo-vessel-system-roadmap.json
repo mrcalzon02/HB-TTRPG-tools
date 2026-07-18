@@ -1,13 +1,16 @@
 {
-  "projectId": "blacklight-exo-vessel-design-system",
-  "version": 1,
-  "authority": "Charles",
-  "status": "active",
-  "governingGuide": "EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md",
-  "principles": [
+  "projectId":"blacklight-exo-vessel-design-system",
+  "version":1,
+  "authority":"Charles",
+  "status":"active",
+  "governingGuide":"EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md",
+  "governingSupplements":["EXO_OPERATIVE_TECHNOLOGY_BASIS.md"],
+  "principles":[
     "Every gameplay value must be traceable to a physical, technological, organizational, biological, architectural, or condition input.",
     "The vessel Path level governs the complete technology context; only within-band variation is permitted without explicit exception.",
-    "Species and organizations generate persistent manufacturer profiles.",
+    "Species and organizations generate persistent manufacturer profiles and operative technology bases.",
+    "Structural, usable-energy, cooling, control, atmosphere, and access route end effects remain comparable across species, but their carriers, interfaces, tolerances, actuators, materials, seals, installation environments, and failure modes are not presumed terrestrial.",
+    "Identical end effects do not imply direct compatibility; alien and human equipment require explicit interoperability or conversion boundaries.",
     "Internals-first and EVA-first are tradeoff doctrines rather than quality tiers.",
     "Passive armor is distributed hull thickness, structural reinforcement, citadel protection, and external-system hardening rather than a detachable module class.",
     "Physical protection and active fields retain separate fore, aft, left, right, up, down, citadel, and structural directional maps.",
@@ -17,7 +20,7 @@
     "Incomplete, dismantled, damaged, abandoned, salvaged, wrecked, and destroyed are separate state axes.",
     "A vessel at one hundred percent destruction no longer retains a coherent vessel graph."
   ],
-  "technologyBands": [
+  "technologyBands":[
     {"key":"T-1","rank":-1,"label":"Sub-P0 early twenty-first-century-equivalent technology"},
     {"key":"P0","rank":0,"label":"First experimental transit-era technology"},
     {"key":"P1","rank":1,"label":"Repeatable experimental technology"},
@@ -27,223 +30,77 @@
     {"key":"P5","rank":5,"label":"Compact automated mature technology"},
     {"key":"P6","rank":6,"label":"Adaptive advanced technology"}
   ],
-  "withinBandVariants": [
-    {"key":"LEGACY","offset":-0.3},
-    {"key":"STANDARD","offset":0},
-    {"key":"REFINED","offset":0.12},
-    {"key":"ADVANCED","offset":0.22},
-    {"key":"PROTOTYPE","offset":0.3}
+  "withinBandVariants":[
+    {"key":"LEGACY","offset":-0.3},{"key":"STANDARD","offset":0},{"key":"REFINED","offset":0.12},{"key":"ADVANCED","offset":0.22},{"key":"PROTOTYPE","offset":0.3}
   ],
-  "phases": [
+  "phases":[
     {
-      "id":"VESSEL-00",
-      "order":0,
-      "title":"Governing schemas and technology discipline",
-      "status":"complete",
-      "dependsOn":[],
+      "id":"VESSEL-00","order":0,"title":"Governing schemas and technology discipline","status":"complete","dependsOn":[],
       "deliverables":["Versioned vessel schemas","Technology-band and within-band variant tables","Seed hierarchy","Condition-state axes","Migration policy"],
       "acceptance":["Existing vessel output wraps without data loss","P0-P6 and T-1 are explicit","Subsystem variation remains within policy","Generation remains deterministic outside timestamps"],
-      "completionEvidence":[
-        "data/exo-vessel/vessel-contract-registry.json",
-        "data/exo-vessel/migrations.json",
-        "data/schemas/exo-vessel-record.schema.json",
-        "data/schemas/exo-vessel-manufacturer.schema.json",
-        "data/schemas/exo-vessel-condition.schema.json",
-        "data/schemas/exo-vessel-module.schema.json",
-        "blacklight-exo-vessel-contracts.js",
-        "scripts/validate-exo-vessel-contracts.mjs"
-      ]
+      "completionEvidence":["data/exo-vessel/vessel-contract-registry.json","data/exo-vessel/migrations.json","data/schemas/exo-vessel-record.schema.json","data/schemas/exo-vessel-manufacturer.schema.json","data/schemas/exo-vessel-condition.schema.json","data/schemas/exo-vessel-module.schema.json","blacklight-exo-vessel-contracts.js","scripts/validate-exo-vessel-contracts.mjs"]
     },
     {
-      "id":"VESSEL-01",
-      "order":1,
-      "title":"Species-specific manufacturer generator",
-      "status":"complete",
-      "dependsOn":["VESSEL-00"],
-      "deliverables":["Persistent manufacturer records","Topology weights","Material and repair doctrine","Technology variant distribution","Naming and visual grammar"],
-      "acceptance":["Manufacturers from one species are related but distinct","Ships from one manufacturer remain recognizable","Profiles materially affect engineering and layout"],
-      "completionEvidence":[
-        "blacklight-exo-vessel-manufacturer-definitions.js",
-        "blacklight-exo-vessel-manufacturer-runtime.js",
-        "blacklight-exo-vessel-manufacturer-ui.js",
-        "data/schemas/exo-vessel-manufacturer.schema.json",
-        "scripts/validate-exo-vessel-manufacturers.mjs",
-        "blacklight-exo-vessel-philosophy-runtime.js",
-        "blacklight-exo-vessel-contracts.js",
-        "blacklight-exo-vessel.html"
-      ]
+      "id":"VESSEL-01","order":1,"title":"Species-specific manufacturer generator and operative technology basis","status":"complete","dependsOn":["VESSEL-00"],
+      "deliverables":["Persistent manufacturer records","Species-, environment-, society-, and manufacturer-derived operative technology bases","Invariant route end effects with nonhuman carriers, interfaces, and tolerances","Topology weights","Material, sealing, installation, interoperability, and repair doctrine","Technology variant distribution","Naming and visual grammar"],
+      "acceptance":["Manufacturers from one species are related but distinct","Ships from one manufacturer remain recognizable","Profiles materially affect engineering and layout","Human, aquatic, cryogenic, gas-giant, biological, mineral, and field-mediated bases are representable","Identical route end effects remain comparable without assuming identical componentry or direct compatibility","Alien bases expose conversion requirements rather than silently accepting terrestrial connectors and service practices"],
+      "completionEvidence":["blacklight-exo-vessel-manufacturer-definitions.js","blacklight-exo-vessel-manufacturer-runtime.js","blacklight-exo-vessel-technology-basis-definitions.js","blacklight-exo-vessel-technology-basis-runtime.js","blacklight-exo-vessel-manufacturer-ui.js","blacklight-exo-vessel-technology-basis-ui.js","data/exo-vessel/technology-basis-registry.json","data/schemas/exo-vessel-manufacturer.schema.json","data/schemas/exo-vessel-technology-basis.schema.json","EXO_OPERATIVE_TECHNOLOGY_BASIS.md","scripts/validate-exo-vessel-manufacturers.mjs","scripts/validate-exo-vessel-technology-basis.mjs","blacklight-exo-vessel-philosophy-runtime.js","blacklight-exo-vessel-contracts.js",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-02",
-      "order":2,
-      "title":"Engineering ledger expansion",
-      "status":"complete",
-      "dependsOn":["VESSEL-00","VESSEL-01"],
+      "id":"VESSEL-02","order":2,"title":"Engineering ledger expansion","status":"complete","dependsOn":["VESSEL-00","VESSEL-01"],
       "deliverables":["Conventional propulsion and combat delta-v","Distributed outer-hull, external-system, structural, and citadel hardening","Directional active protection fields","Sensor and fire-control ledger","Weapon support and magazine ledger","Countermeasure ledger","Subsystem technology variants"],
       "acceptance":["Mass and volume close","Passive hardening derives from area and areal density and is distributed without standalone armor modules","Fore, aft, left, right, up, down, citadel, and structural protection are explicit for physical armor and active fields","Weapons include support and cooling","Combat delta-v is separated from strategic delta-v"],
-      "completionEvidence":[
-        "blacklight-exo-vessel-engineering-definitions.js",
-        "blacklight-exo-vessel-engineering-runtime.js",
-        "blacklight-exo-vessel-armor-distribution.js",
-        "blacklight-exo-vessel-engineering-ui.js",
-        "blacklight-exo-vessel-armor-ui.js",
-        "data/exo-vessel/engineering-registry.json",
-        "data/schemas/exo-vessel-engineering-ledger.schema.json",
-        "data/schemas/exo-vessel-manufacturer.schema.json",
-        "blacklight-exo-vessel-contracts.js",
-        "scripts/validate-exo-vessel-engineering.mjs",
-        "blacklight-exo-vessel.html"
-      ]
+      "completionEvidence":["blacklight-exo-vessel-engineering-definitions.js","blacklight-exo-vessel-engineering-runtime.js","blacklight-exo-vessel-armor-distribution.js","blacklight-exo-vessel-engineering-ui.js","blacklight-exo-vessel-armor-ui.js","data/exo-vessel/engineering-registry.json","data/schemas/exo-vessel-engineering-ledger.schema.json","data/schemas/exo-vessel-manufacturer.schema.json","blacklight-exo-vessel-contracts.js","scripts/validate-exo-vessel-engineering.mjs","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-03",
-      "order":3,
-      "title":"Semantic module graph",
-      "status":"complete",
-      "dependsOn":["VESSEL-02"],
-      "deliverables":["Module inventory","Distributed hardening provenance","Attachment graph","Pressure-zone graph","Structural graph","Utility graph","Weapon arcs and sensor requirements"],
-      "acceptance":["INTERNAL modules have valid protected parents","EVA modules have valid vacuum hardpoints","No standalone armor modules are generated","Distributed hardening closes across the actual systems it reinforces","Critical dependencies are connected","Invalid graphs are rejected or visibly repaired"],
-      "completionEvidence":[
-        "blacklight-exo-vessel-module-definitions.js",
-        "blacklight-exo-vessel-module-runtime.js",
-        "blacklight-exo-vessel-module-hardening.js",
-        "blacklight-exo-vessel-module-ui.js",
-        "data/exo-vessel/module-graph-registry.json",
-        "data/schemas/exo-vessel-module.schema.json",
-        "data/schemas/exo-vessel-module-graph.schema.json",
-        "data/schemas/exo-vessel-manufacturer.schema.json",
-        "blacklight-exo-vessel-contracts.js",
-        "scripts/validate-exo-vessel-modules.mjs",
-        "blacklight-exo-vessel.html"
-      ]
+      "id":"VESSEL-03","order":3,"title":"Semantic module graph and native operative methodology","status":"complete","dependsOn":["VESSEL-02"],
+      "deliverables":["Module inventory","Per-module invariant end effects and native operative theories","Native carrier, connector, tolerance, installation, sealing, material, service, and failure records","Utility-edge implementation authority","Pressure-zone atmosphere and boundary methodology","Distributed hardening provenance","Attachment graph","Pressure-zone graph","Structural graph","Utility graph","Weapon arcs and sensor requirements"],
+      "acceptance":["INTERNAL modules have valid protected parents","EVA modules have valid vacuum hardpoints","No standalone armor modules are generated","Distributed hardening closes across the actual systems it reinforces","Critical dependencies are connected","Every module and graph edge inherits the manufacturer technology basis without changing route semantics","Life support uses the species-derived atmosphere-regulation theory","Current closed mass and voxel references remain unchanged until an explicit methodology-aware rebalance","Invalid graphs are rejected or visibly repaired"],
+      "completionEvidence":["blacklight-exo-vessel-module-definitions.js","blacklight-exo-vessel-module-runtime.js","blacklight-exo-vessel-module-methodology.js","blacklight-exo-vessel-module-hardening.js","blacklight-exo-vessel-module-ui.js","blacklight-exo-vessel-technology-basis-ui.js","data/exo-vessel/module-graph-registry.json","data/exo-vessel/technology-basis-registry.json","data/schemas/exo-vessel-module.schema.json","data/schemas/exo-vessel-module-graph.schema.json","data/schemas/exo-vessel-technology-basis.schema.json","data/schemas/exo-vessel-manufacturer.schema.json","blacklight-exo-vessel-contracts.js","scripts/validate-exo-vessel-modules.mjs","scripts/validate-exo-vessel-technology-basis.mjs","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-04",
-      "order":4,
-      "title":"Crude three-dimensional voxel assembler",
-      "status":"complete",
-      "dependsOn":["VESSEL-03"],
+      "id":"VESSEL-04","order":4,"title":"Crude three-dimensional voxel assembler","status":"complete","dependsOn":["VESSEL-03"],
       "deliverables":["Adaptive voxel scale","Monocoque, spine, cluster, ring, and hybrid algorithms","Module packing","Utility routing","Access paths","Six directional hull surfaces plus citadel and structural protection overlays","Directional active-field overlays","External module representation","Basic 3D viewer"],
       "acceptance":["All module volumes fit without treating armor as a module","Load paths and clearances validate","Eight vessel-wide passive and active protection records remain present","Same seed reproduces same layout","Species and manufacturer visibly affect arrangement"],
-      "completionEvidence":[
-        "blacklight-exo-vessel-voxel-definitions.js",
-        "blacklight-exo-vessel-voxel-core.js",
-        "blacklight-exo-vessel-voxel-routing.js",
-        "blacklight-exo-vessel-voxel-runtime.js",
-        "blacklight-exo-vessel-voxel-armor.js",
-        "blacklight-exo-vessel-voxel-contracts.js",
-        "blacklight-exo-vessel-voxel-ui.js",
-        "data/exo-vessel/voxel-layout-registry.json",
-        "data/schemas/exo-vessel-voxel-layout.schema.json",
-        "data/schemas/exo-vessel-module.schema.json",
-        "scripts/validate-exo-vessel-voxels.mjs",
-        "blacklight-exo-vessel.html"
-      ]
+      "completionEvidence":["blacklight-exo-vessel-voxel-definitions.js","blacklight-exo-vessel-voxel-core.js","blacklight-exo-vessel-voxel-routing.js","blacklight-exo-vessel-voxel-runtime.js","blacklight-exo-vessel-voxel-armor.js","blacklight-exo-vessel-voxel-contracts.js","blacklight-exo-vessel-voxel-ui.js","data/exo-vessel/voxel-layout-registry.json","data/schemas/exo-vessel-voxel-layout.schema.json","data/schemas/exo-vessel-module.schema.json","scripts/validate-exo-vessel-voxels.mjs","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-05",
-      "order":5,
-      "title":"Condition, history, salvage, and destruction",
-      "status":"complete",
-      "dependsOn":["VESSEL-04"],
+      "id":"VESSEL-05","order":5,"title":"Condition, history, salvage, and destruction","status":"complete","dependsOn":["VESSEL-04"],
       "deliverables":["Construction completion","Commissioning","Wear","Damage events","Secondary propagation","Teardown and mothballing","Abandonment and salvage","Wreck and total destruction","History log","Surviving graph and statistics recalculation","One condition state per intact voxel placement","Residual voxel field"],
       "acceptance":["Missing, removed, damaged, and salvaged remain distinct","Missing and removed modules are spatially absent while damaged and destroyed material may remain as wreckage","Seventy-five percent destruction leaves coherent wreckage","One hundred percent destruction removes vessel and voxel-field coherence","Statistics recalculate from surviving graphs and voxel occupancy","The intact module and voxel records remain reference authority","Repair mode records deterministic corrections and strict mode rejects invalid histories"],
-      "completionEvidence":[
-        "blacklight-exo-vessel-condition-definitions.js",
-        "blacklight-exo-vessel-condition-core.js",
-        "blacklight-exo-vessel-condition-propagation.js",
-        "blacklight-exo-vessel-condition-voxel.js",
-        "blacklight-exo-vessel-condition-runtime.js",
-        "blacklight-exo-vessel-condition-contracts.js",
-        "blacklight-exo-vessel-condition-ui.js",
-        "data/exo-vessel/condition-history-registry.json",
-        "data/schemas/exo-vessel-condition-history.schema.json",
-        "data/schemas/exo-vessel-condition.schema.json",
-        "data/schemas/exo-vessel-module.schema.json",
-        "scripts/validate-exo-vessel-condition.mjs",
-        ".github/workflows/pages.yml",
-        "blacklight-exo-vessel.html"
-      ]
+      "completionEvidence":["blacklight-exo-vessel-condition-definitions.js","blacklight-exo-vessel-condition-core.js","blacklight-exo-vessel-condition-propagation.js","blacklight-exo-vessel-condition-voxel.js","blacklight-exo-vessel-condition-runtime.js","blacklight-exo-vessel-condition-contracts.js","blacklight-exo-vessel-condition-ui.js","data/exo-vessel/condition-history-registry.json","data/schemas/exo-vessel-condition-history.schema.json","data/schemas/exo-vessel-condition.schema.json","data/schemas/exo-vessel-module.schema.json","scripts/validate-exo-vessel-condition.mjs",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-06",
-      "order":6,
-      "title":"Sensors, tracks, and combat geometry",
-      "status":"complete",
-      "dependsOn":["VESSEL-02","VESSEL-03","VESSEL-05"],
+      "id":"VESSEL-06","order":6,"title":"Sensors, tracks, and combat geometry","status":"complete","dependsOn":["VESSEL-02","VESSEL-03","VESSEL-05"],
       "deliverables":["Exact one-way and closed-loop light-lag calculations","Observation and information age","Position, velocity, and acceleration uncertainty","Target maneuver envelope constrained by acceleration and combat delta-v","Signature, identity, source-agreement, and deception confidence","Competing track hypotheses","Weapon-independent fire-control solution","Observer combat acceleration and delta-v authority","Surviving sensor and fire-control channel application","Combat-geometry export and interface"],
       "acceptance":["Uncertainty grows with observation age and prediction horizon","Target acceleration and available combat delta-v change the possible displacement envelope","Range, signature, target emissions, aperture, baseline, processing, and surviving sensor state affect track quality","Conflicting observations remain representable as competing hypotheses","Fire-control readiness requires surviving channels and coherent VESSEL-05 graph authority","One-way light lag closes exactly against range divided by the speed of light","A destroyed or incoherent observer retains no active track or fire-control solution","Weapon performance, hit probability, projectile behavior, beam divergence, engagement envelopes, and local impacts remain deferred"],
-      "completionEvidence":[
-        "blacklight-exo-vessel-track-definitions.js",
-        "blacklight-exo-vessel-track-core.js",
-        "blacklight-exo-vessel-track-runtime.js",
-        "blacklight-exo-vessel-track-contracts.js",
-        "blacklight-exo-vessel-track-ui.js",
-        "data/exo-vessel/combat-geometry-registry.json",
-        "data/schemas/exo-vessel-combat-geometry.schema.json",
-        "scripts/validate-exo-vessel-tracks.mjs",
-        ".github/workflows/pages.yml",
-        "blacklight-exo-vessel.html"
-      ]
+      "completionEvidence":["blacklight-exo-vessel-track-definitions.js","blacklight-exo-vessel-track-core.js","blacklight-exo-vessel-track-runtime.js","blacklight-exo-vessel-track-contracts.js","blacklight-exo-vessel-track-ui.js","data/exo-vessel/combat-geometry-registry.json","data/schemas/exo-vessel-combat-geometry.schema.json","scripts/validate-exo-vessel-tracks.mjs",".github/workflows/pages.yml","blacklight-exo-vessel.html"]
     },
     {
-      "id":"VESSEL-07",
-      "order":7,
-      "title":"Weapon-family engineering and engagement envelopes",
-      "status":"next",
-      "dependsOn":["VESSEL-02","VESSEL-06"],
+      "id":"VESSEL-07","order":7,"title":"Weapon-family engineering and engagement envelopes","status":"next","dependsOn":["VESSEL-02","VESSEL-06"],
       "deliverables":["Chemical ballistics","Rail guns","Coil guns","Brute mass throwers","Sand guns","Lasers","Particle and C-beams","Fractional-c kinetics","Missiles","Countermeasure missiles"],
       "acceptance":["Every weapon reports point-defense, practical, harassment, and theoretical reach","Unguided weapons degrade with maneuver uncertainty","Beam effect degrades with divergence and dwell","Missiles update in flight and face active defense","Weapons occupy valid modules and arcs"]
     },
     {
-      "id":"VESSEL-08",
-      "order":8,
-      "title":"Local damage and combat resolution",
-      "status":"planned",
-      "dependsOn":["VESSEL-04","VESSEL-05","VESSEL-07"],
+      "id":"VESSEL-08","order":8,"title":"Local damage and combat resolution","status":"planned","dependsOn":["VESSEL-04","VESSEL-05","VESSEL-07"],
       "deliverables":["Intercept resolution","Directional hull, citadel, structural, external-system, field, and thermal effects","Voxel damage","Secondary propagation","Utility severance","Crew and habitat effects","Detachable modules"],
       "acceptance":["Hits affect actual local systems and directional protection rather than fictitious armor modules","Architecture changes damage outcome","Survival depends on connectivity","Destroyed modules leave usable statistics"]
     },
     {
-      "id":"VESSEL-09",
-      "order":9,
-      "title":"RPG statistics and action economy",
-      "status":"planned",
-      "dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
+      "id":"VESSEL-09","order":9,"title":"RPG statistics and action economy","status":"planned","dependsOn":["VESSEL-06","VESSEL-07","VESSEL-08"],
       "deliverables":["Normalized vessel statistics","Navigation actions","Sensor and targeting actions","Offensive and defensive actions","Engineering and damage-control actions","Resource timing model"],
       "acceptance":["Players can operate vessels without reading the full dossier","Every stat links to physical sources","Detailed and simplified resolution remain compatible"]
     },
     {
-      "id":"VESSEL-10",
-      "order":10,
-      "title":"Integrated UI, export, and campaign persistence",
-      "status":"planned",
-      "dependsOn":["VESSEL-09"],
+      "id":"VESSEL-10","order":10,"title":"Integrated UI, export, and campaign persistence","status":"planned","dependsOn":["VESSEL-09"],
       "deliverables":["Manufacturer library","Hull-family library","Voxel viewer","Damage-state editor","Combat stat card","JSON import and export","Campaign persistence","Schema migrations"],
       "acceptance":["Cluster route can germinate a persistent vessel","Exports reload without provenance loss","Earlier vessels migrate without destructive data loss"]
     },
     {
-      "id":"VESSEL-11",
-      "order":11,
-      "title":"Validation and balance matrix",
-      "status":"planned",
-      "dependsOn":["VESSEL-04","VESSEL-05","VESSEL-06","VESSEL-07","VESSEL-08","VESSEL-09","VESSEL-10"],
+      "id":"VESSEL-11","order":11,"title":"Validation and balance matrix","status":"planned","dependsOn":["VESSEL-04","VESSEL-05","VESSEL-06","VESSEL-07","VESSEL-08","VESSEL-09","VESSEL-10"],
       "deliverables":["Cross-product generation matrix","Monte Carlo engagement simulation","Mass and volume closure tests","Graph validation","Weapon-envelope regressions","Damage-state invariants","Balance reports"],
       "acceptance":["All nine FTL families and seven Path levels remain generatable","Every manufacturer and topology produces valid ships","No weapon dominates every range and target state","Condition percentages remain coherent and distinct"]
     }
   ],
-  "immediateImplementationOrder": [
-    "VESSEL-00",
-    "VESSEL-01",
-    "VESSEL-02",
-    "VESSEL-03",
-    "VESSEL-04",
-    "VESSEL-05",
-    "VESSEL-06",
-    "VESSEL-07",
-    "VESSEL-08",
-    "VESSEL-09",
-    "VESSEL-10",
-    "VESSEL-11"
-  ]
+  "immediateImplementationOrder":["VESSEL-00","VESSEL-01","VESSEL-02","VESSEL-03","VESSEL-04","VESSEL-05","VESSEL-06","VESSEL-07","VESSEL-08","VESSEL-09","VESSEL-10","VESSEL-11"]
 }
