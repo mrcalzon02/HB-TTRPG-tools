@@ -16,37 +16,44 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.UUID;
 
-/** Applies forward-only migrations to an existing world database while its filesystem lock is held. */
+/** Applies forward-only migrations to a world database while its filesystem lock is held. */
 final class WorldDatabaseMigrations {
 
     private WorldDatabaseMigrations() { }
 
     static void migrateExistingDatabase(WorldPaths paths) throws IOException {
-        if (!Files.isRegularFile(paths.database())) return;
         try {
-            if (Files.size(paths.database()) == 0L) return;
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException exception) {
+            if (!Files.exists(paths.database())) return;
             throw new IOException("The SQLite JDBC driver is required to migrate this desktop world.", exception);
         }
 
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            if (!tableExists(connection, "schema_migration")) return;
-            int version = currentVersion(connection);
+            int version;
+            if (!tableExists(connection, "schema_migration")) {
+                try (Statement statement = connection.createStatement()) {
+                    statement.execute("CREATE TABLE schema_migration (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)");
+                }
+                applyMigration(connection, 1, WorldStorageContracts.initialSchemaStatements(), true);
+                version = 1;
+            } else {
+                version = currentVersion(connection);
+            }
             if (version > WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
                 throw new SQLException("World database schema " + version + " is newer than supported schema "
                         + WorldStorageContracts.DATABASE_SCHEMA_VERSION + ".");
             }
             while (version < WorldStorageContracts.DATABASE_SCHEMA_VERSION && version > 0) {
                 if (version == 1) {
-                    applyMigration(connection, 2, WorldStorageContracts.schema002Statements());
+                    applyMigration(connection, 2, WorldStorageContracts.schema002Statements(), false);
                     version = 2;
                 } else if (version == 2) {
-                    applyMigration(connection, 3, WorldStorageContracts.schema003Statements());
+                    applyMigration(connection, 3, WorldStorageContracts.schema003Statements(), false);
                     version = 3;
                 } else if (version == 3) {
-                    applyMigration(connection, 4, WorldStorageContracts.schema004Statements());
+                    applyMigration(connection, 4, WorldStorageContracts.schema004Statements(), false);
                     version = 4;
                 } else {
                     throw new SQLException("No forward migration is defined from schema " + version + ".");
@@ -57,12 +64,18 @@ final class WorldDatabaseMigrations {
         }
     }
 
-    private static void applyMigration(Connection connection, int targetVersion, java.util.List<String> statements)
+    private static void applyMigration(Connection connection, int targetVersion,
+                                       java.util.List<String> statements, boolean initial)
             throws SQLException {
         boolean originalAutoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         try (Statement statement = connection.createStatement()) {
-            for (String sql : statements) statement.execute(sql);
+            for (String sql : statements) {
+                String normalized = sql.trim().toUpperCase();
+                if (normalized.startsWith("PRAGMA ")) continue;
+                if (initial && normalized.startsWith("CREATE TABLE SCHEMA_MIGRATION")) continue;
+                statement.execute(sql);
+            }
             try (PreparedStatement insert = connection.prepareStatement(
                     "INSERT INTO schema_migration(version, applied_at) VALUES (?, ?)")) {
                 insert.setInt(1, targetVersion);
@@ -114,8 +127,17 @@ final class WorldDatabaseMigrations {
 
     static void verifyContract() throws Exception {
         Class.forName("org.sqlite.JDBC");
-        Path root = Files.createTempDirectory("barotrauma-schema-001-upgrade-");
+        Path root = Files.createTempDirectory("barotrauma-schema-upgrade-");
         try {
+            UUID freshId = UUID.fromString("92000000-0000-0000-0000-000000000001");
+            WorldPaths fresh = WorldStorageContracts.createWorld(root, "Fresh Europa", freshId);
+            try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(fresh)) { }
+            try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + fresh.database())) {
+                require(currentVersion(connection) == 4, "Fresh world did not initialize at schema 004.");
+                require(tableExists(connection, "passive_simulation_config"),
+                        "Fresh world is missing passive simulation schema.");
+            }
+
             UUID worldId = UUID.fromString("93000000-0000-0000-0000-000000000001");
             WorldPaths paths = WorldStorageContracts.createWorld(root, "Legacy Europa", worldId);
             UUID artifactId = UUID.fromString("93000000-0000-0000-0000-000000000002");
@@ -149,9 +171,7 @@ final class WorldDatabaseMigrations {
                 }
             }
 
-            try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) {
-                // Acquiring the lock performs all forward migrations before returning.
-            }
+            try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
                 require(currentVersion(connection) == 4, "Legacy world did not advance to schema 004.");
