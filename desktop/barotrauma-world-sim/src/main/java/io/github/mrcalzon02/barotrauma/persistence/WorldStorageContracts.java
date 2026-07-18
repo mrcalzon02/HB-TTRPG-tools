@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 13;
+    public static final int DATABASE_SCHEMA_VERSION = 14;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -180,6 +180,7 @@ public final class WorldStorageContracts {
     public static List<String> schema011Statements() { return FleetRecoveryAndNaturalWorldHardening.statements(); }
     public static List<String> schema012Statements() { return NaturalWorldMissionHardening.statements(); }
     public static List<String> schema013Statements() { return NaturalResourceHarvestingSchema.statements(); }
+    public static List<String> schema014Statements() { return FleetResponseTransitSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -278,6 +279,9 @@ public final class WorldStorageContracts {
             require(schema013Statements().stream().anyMatch(sql -> sql.contains("resource_extraction_batch")), "Natural resource extraction evidence is missing.");
             require(schema013Statements().stream().anyMatch(sql -> sql.contains("passive_resource_recovery")), "Renewable resource recovery is missing.");
             require(schema013Statements().stream().anyMatch(sql -> sql.contains("DROP TRIGGER IF EXISTS passive_station_logistics_cycle")), "Unbounded free ore production was not replaced.");
+            require(schema014Statements().stream().anyMatch(sql -> sql.contains("fleet_response_transit_leg")), "Fleet response transit legs are missing.");
+            require(schema014Statements().stream().anyMatch(sql -> sql.contains("fleet_response_requires_scene")), "Fleet response arrival gating is missing.");
+            require(schema014Statements().stream().anyMatch(sql -> sql.contains("fleet_response_responder_returns_home")), "Fleet response return completion is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
