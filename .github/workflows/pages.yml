@@ -144,6 +144,9 @@ jobs:
       - name: Validate EXO vessel semantic module graph
         run: node scripts/validate-exo-vessel-modules.mjs
 
+      - name: Validate EXO alien operative technology bases
+        run: node scripts/validate-exo-vessel-technology-basis.mjs
+
       - name: Validate EXO vessel crude voxel assembler
         run: node scripts/validate-exo-vessel-voxels.mjs
 
