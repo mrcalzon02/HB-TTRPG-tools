@@ -35,6 +35,9 @@ jobs:
       - name: Validate EXO stellar sector and incremental system loading
         run: node scripts/validate-exo-stellar-sector.mjs
 
+      - name: Smoke-test EXO browser runtimes
+        run: node scripts/validate-exo-browser-runtime.mjs
+
       - name: Validate EXO cluster jump calculator
         run: node scripts/validate-exo-jump-calculator.mjs
 
