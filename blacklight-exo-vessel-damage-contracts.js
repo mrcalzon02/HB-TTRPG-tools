@@ -2,6 +2,7 @@
   'use strict';
   const base=globalThis.BlacklightExoVessel,prior=globalThis.BlacklightExoVesselContracts;
   if(!base?.combatResolutionVersion||!prior||base.combatResolutionContractVersion)return;
+  function versionAtLeast(value,major,minor,patch=0){const parts=String(value||'0.0.0').split('.').map(Number);return parts[0]>major||(parts[0]===major&&(parts[1]>minor||parts[1]===minor&&(parts[2]||0)>=patch));}
   function validate(record){
     const inherited=prior.validate(record),violations=[...(inherited.violations||[])],model=record?.combatResolutionModel;
     if(model){
@@ -19,7 +20,7 @@
       if(model.postImpactState?.recalculated?.residualMassTonnes>model.postImpactState?.recalculated?.preImpactResidualMassTonnes+1e-9)violations.push('Post-impact mass exceeds the pre-impact condition state.');
       if(JSON.stringify(record.conditionHistory?.moduleStates||[])!==model.referenceSnapshots?.conditionModuleStatesJson)violations.push('Canonical VESSEL-05 condition history was mutated by combat resolution.');
       if(record.contract?.derivedLayers?.find(layer=>layer.key==='damageTopology')?.source!=='VESSEL-08 local combat resolution')violations.push('Canonical damage topology does not identify VESSEL-08 authority.');
-      if(record.contract?.provenance?.generatorVersion!=='3.8.0'||record.contract?.provenance?.combatResolutionVersion!=='1.0.0')violations.push('Canonical provenance does not identify VESSEL-08 combat resolution.');
+      if(!versionAtLeast(record.contract?.provenance?.generatorVersion,3,8,0)||record.contract?.provenance?.combatResolutionVersion!=='1.0.0')violations.push('Canonical provenance does not preserve VESSEL-08 combat resolution authority.');
       if(record.contract?.extensions?.combatResolutionSchema!=='data/schemas/exo-vessel-combat-resolution.schema.json')violations.push('Canonical contract does not expose the combat-resolution schema.');
       if(model.deferredSystems?.gameplayStatisticsAndActions!=='VESSEL-09')violations.push('VESSEL-08 does not defer gameplay statistics and actions to VESSEL-09.');
     }
