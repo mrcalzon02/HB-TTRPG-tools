@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.UUID;
 
-/** End-to-end schema-007 contract for item logistics, freight, and imported player-vessel transit. */
+/** End-to-end schema-008 contract for item logistics, freight, and imported player-vessel transit. */
 public final class StationLogisticsVerification {
     private StationLogisticsVerification() { }
 
@@ -103,7 +103,7 @@ public final class StationLogisticsVerification {
             require(count(paths, "player_voyage_log") >= 6, "Player voyage and freight history is incomplete.");
             require(freightStatus(paths, freightLotId).equals("DELIVERED"),
                     "Freight lot did not retain delivered state.");
-            require(schemaVersion(paths) == 7, "Logistics fixture was not stored under schema 007.");
+            require(schemaVersion(paths) == 8, "Logistics fixture was not stored under schema 008.");
         } finally {
             try (var stream = Files.walk(root)) {
                 for (Path path : stream.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
@@ -258,6 +258,6 @@ public final class StationLogisticsVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma station logistics, freight, and player transit contracts passed.");
+        System.out.println("Barotrauma station logistics, freight, and player transit contracts passed under schema 008.");
     }
 }
