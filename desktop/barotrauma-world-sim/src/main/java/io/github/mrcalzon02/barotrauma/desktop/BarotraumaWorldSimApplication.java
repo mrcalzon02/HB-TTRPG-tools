@@ -8,6 +8,7 @@ import io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWi
 import io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow;
 import io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
+import io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 
 import javax.swing.BorderFactory;
@@ -73,7 +74,7 @@ public final class BarotraumaWorldSimApplication {
                 new Workspace("reference-library", "Reference Library", "Crewman's Primer, RPG rules, catalogues, and source provenance."),
                 new Workspace("import-center", "Import Center", "Version-22 master-world and official .save/.sub compatibility."),
                 new Workspace("campaign-journal", "Campaign Journal", "Audit history, incidents, voyages, transactions, and decisions."),
-                new Workspace("simulation-monitor", "Simulation Monitor", "Clock, cycles, catch-up, diagnostics, and deterministic streams."),
+                new Workspace("simulation-monitor", "Simulation Monitor", "Clock, durable commands, catch-up, checkpoints, and diagnostics."),
                 new Workspace("settings-backups", "Settings and Backups", "World directories, checkpoints, backups, restore, and packaging data.")
         };
 
@@ -85,7 +86,7 @@ public final class BarotraumaWorldSimApplication {
         private final Map<String, Workspace> workspacesById = new LinkedHashMap<>();
         private final JLabel workspaceTitle = new JLabel("Overview");
         private final JLabel worldStatus = new JLabel("No desktop world open");
-        private final JLabel simulationStatus = new JLabel("Simulation writer disabled");
+        private final JLabel simulationStatus = new JLabel("Manual durable clock available · automatic scheduler disabled");
         private final JLabel operationStatus = new JLabel("Desktop shell ready");
         private AutoCloseable sessionSubscription;
 
@@ -178,15 +179,15 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(sectionHeading("Desktop world operations"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("The Java desktop now supports shared world selection, schema-002 persistence, normalized version-22 master-world import, official vessel imports, explicit campaign mapping, and vessel snapshot chronology."));
+            panel.add(bodyLabel("The Java desktop now supports shared world selection, schema-003 persistence, normalized version-22 master-world import, official vessel imports, durable deterministic clock commands, and reviewed checkpoints."));
             panel.add(Box.createVerticalStrut(18));
             JPanel metrics = new JPanel(new GridLayout(2, 3, 12, 12));
             metrics.add(metricCard("Voyage rings", "48", "Mandatory inward rings"));
             metrics.add(metricCard("Locations", "960", "Normalized master-world nodes"));
             metrics.add(metricCard("Stations", "180", "Normalized station records"));
             metrics.add(metricCard("Web compatibility", "v22", "Explicit normalized import"));
-            metrics.add(metricCard("Official saves", ".save/.sub", "Bounded decoding and canonical identity"));
-            metrics.add(metricCard("Persistence", "Schema 002", "Atomic world and vessel transactions"));
+            metrics.add(metricCard("Simulation", "Durable manual", "Single writer, command receipts, and checkpoints"));
+            metrics.add(metricCard("Persistence", "Schema 003", "Atomic world, vessel, command, and checkpoint transactions"));
             panel.add(metrics);
             panel.add(Box.createVerticalStrut(18));
             panel.add(new JSeparator());
@@ -194,8 +195,8 @@ public final class BarotraumaWorldSimApplication {
             JPanel actions = new JPanel();
             actions.add(button("Import Version-22 World", this::openWebWorldImport));
             actions.add(button("View Normalized World", this::openWorldRegistry));
-            actions.add(button("Open Vessel Import", this::openImportApproval));
             actions.add(button("Open Vessel Registry", this::openVesselRegistry));
+            actions.add(button("Open Simulation Monitor", this::openSimulationMonitor));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
@@ -205,7 +206,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(sectionHeading("Normalized Europa world"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Version-22 exports can establish the desktop world's master-world identity, canonical clock, rings, locations, stations, component versions, and imported scheduler metadata. The scheduler remains paused after import."));
+            panel.add(bodyLabel("Version-22 exports can establish the desktop world's master-world identity, canonical clock, rings, locations, stations, component versions, and imported scheduler metadata. Import leaves the scheduler paused."));
             panel.add(Box.createVerticalStrut(16));
             panel.add(metricCard("Master world", "One per world", "Replacement is blocked to prevent silent world-state loss"));
             panel.add(Box.createVerticalStrut(10));
@@ -216,6 +217,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel actions = new JPanel();
             actions.add(button("Open Master-World Import", this::openWebWorldImport));
             actions.add(button("Open World Registry", this::openWorldRegistry));
+            actions.add(button("Open Durable Clock", this::openSimulationMonitor));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
@@ -268,22 +270,22 @@ public final class BarotraumaWorldSimApplication {
 
         private Component buildSimulationMonitorPanel() {
             JPanel panel = contentPanel();
-            panel.add(sectionHeading("Simulation engine boundary established"));
+            panel.add(sectionHeading("Durable deterministic simulation clock"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(bodyLabel("Imported scheduler metadata is stored for continuity, but the deterministic single-writer simulation process has not yet been activated. UI controls remain disabled until command and checkpoint contracts are complete."));
+            panel.add(bodyLabel("Schema 003 stores immutable command receipts and reviewed checkpoints. Manual enable, disable, step, bounded catch-up, and checkpoint commands are available through a fault-contained single-writer session. Automatic timed Run remains unavailable until workload processors are implemented."));
             panel.add(Box.createVerticalStrut(16));
-            panel.add(metricCard("Current state", "PAUSED", "Schema 002 explicitly stores simulation_enabled = false"));
+            panel.add(metricCard("Current state", "Durable manual", "Every accepted clock command is committed before another begins"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Clock source", "Canonical", "Imported separately from repaint frequency and wall-clock drift"));
+            panel.add(metricCard("Concurrency", "Single writer", "Stale before-state and duplicate execution sequences are rejected"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metricCard("Catch-up", "Next phase", "Elapsed-time cycles with checkpoints and bounded commits"));
+            panel.add(metricCard("Recovery", "Checkpointed", "Reopened sessions continue after the last durable command sequence"));
             panel.add(Box.createVerticalStrut(16));
             JPanel controls = new JPanel();
-            for (String label : new String[]{"Run", "Pause", "Step", "Catch Up", "Checkpoint"}) {
-                JButton button = new JButton(label);
-                button.setEnabled(false);
-                controls.add(button);
-            }
+            controls.add(button("Open Durable Simulation Monitor", this::openSimulationMonitor));
+            JButton automaticRun = new JButton("Automatic Run");
+            automaticRun.setEnabled(false);
+            automaticRun.setToolTipText("Automatic scheduling remains disabled until economy and NPC workload processors are transactional.");
+            controls.add(automaticRun);
             panel.add(controls);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
@@ -349,7 +351,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel statusBar = new JPanel(new BorderLayout(12, 0));
             statusBar.setBorder(new EmptyBorder(10, 6, 2, 6));
             statusBar.add(operationStatus, BorderLayout.WEST);
-            statusBar.add(new JLabel("Java 17 Swing · schema 002 · normalized world · simulation paused"), BorderLayout.EAST);
+            statusBar.add(new JLabel("Java 17 Swing · schema 003 · durable manual simulation · automatic scheduler pending"), BorderLayout.EAST);
             return statusBar;
         }
 
@@ -370,6 +372,7 @@ public final class BarotraumaWorldSimApplication {
         private void openCampaignMapper() { showChild(new CampaignVesselMappingWindow(), "Opened campaign vessel mapper"); }
         private void openVesselRegistry() { showChild(new WorldVesselRegistryWindow(), "Opened vessel registry"); }
         private void openSnapshotApproval() { showChild(new VesselSnapshotApprovalWindow(), "Opened snapshot approval"); }
+        private void openSimulationMonitor() { showChild(new SimulationMonitorWindow(), "Opened durable simulation monitor"); }
 
         private void showChild(Window window, String status) {
             window.setLocationRelativeTo(this);
