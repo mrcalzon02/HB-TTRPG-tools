@@ -1,0 +1,15 @@
+{
+  "projectId":"blacklight-exo-vessel-design-system",
+  "registryType":"exoVesselWeaponEngagementRegistry",
+  "registryVersion":"1.0.0",
+  "phase":"VESSEL-07",
+  "schema":"data/schemas/exo-vessel-weapon-engagement.schema.json",
+  "weaponFamilies":["CHEMICAL_BALLISTIC","RAIL_GUN","COIL_GUN","BRUTE_MASS_THROWER","SAND_GUN","LASER","PARTICLE_BEAM","FRACTIONAL_C","MISSILE"],
+  "countermeasureMissileFamilies":["COUNTERMEASURE_MISSILE"],
+  "engagementBands":["pointDefense","practical","harassment","theoretical"],
+  "performanceModes":["KINETIC_UNGUIDED","KINETIC_GUIDED","PARTICULATE_CLOUD","DIRECTED_ENERGY","GUIDED_MISSILE","GUIDED_INTERCEPTOR"],
+  "referenceAuthorities":["VESSEL-02 installed weapon mass and inventory","VESSEL-03 hardpoints, recoil paths, magazines, support and cooling modules","VESSEL-05 surviving module and utility-graph state","VESSEL-06 light-delayed target track and fire-control geometry","species- and manufacturer-derived operative technology basis"],
+  "principles":["Reach is an engagement-solution envelope rather than a universal fixed range.","Unguided weapons lose solution quality as light delay, flight time, track uncertainty and target maneuver increase.","Directed energy loses concentrated effect through divergence, dwell limits, tracking error and thermal authority.","Guided missiles update in flight but expend acceleration, delta-v, time and terminal correction while facing active defense.","Countermeasure missiles receive their own interception envelopes and do not automatically destroy incoming threats.","VESSEL-07 never resolves an impact voxel, penetration, module damage or destruction result."],
+  "repairableFaults":["NEGATIVE_PRACTICAL_RANGE","BAND_ORDER_INVERSION","MISSING_HARDPOINT_LINK","OFFLINE_WEAPON_READY","ZERO_AMMUNITION_READY","PREMATURE_IMPACT_RESOLUTION"],
+  "deferredSystems":{"localDamageResolution":"VESSEL-08","gameplayActions":"VESSEL-09"}
+}
