@@ -1,0 +1,57 @@
+name: Validate VESSEL-10 Command Deck
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "blacklight-exo-vessel-command-deck.html"
+      - "blacklight-exo-vessel-command-deck.js"
+      - "blacklight-exo-vessel-campaign-*.js"
+      - "blacklight-exo-vessel-campaign-*.css"
+      - "blacklight-exo-vessel-diegetic-*.js"
+      - "blacklight-exo-vessel-diegetic-*.css"
+      - "blacklight-exo-vessel-gameplay-*.js"
+      - "data/schemas/exo-vessel-campaign-*.json"
+      - "scripts/validate-exo-vessel-command-deck.mjs"
+      - ".github/workflows/vessel10-command-deck.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "vessel10-command-deck"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check VESSEL-10 JavaScript and validators
+        shell: bash
+        run: |
+          node --check blacklight-exo-vessel-command-deck.js
+          node --check blacklight-exo-vessel-campaign-store.js
+          node --check blacklight-exo-vessel-campaign-damage-editor.js
+          node --check blacklight-exo-vessel-campaign-voxel-viewer.js
+          node --check blacklight-exo-vessel-campaign-voxel-route-overlay.js
+          node --check blacklight-exo-vessel-diegetic-controls.js
+          node --check blacklight-exo-vessel-diegetic-sync.js
+          node --check scripts/validate-exo-vessel-command-deck.mjs
+
+      - name: Validate integrated VESSEL-10 Command Deck
+        run: node scripts/validate-exo-vessel-command-deck.mjs
+
+      - name: Validate VESSEL-10 campaign archive fallback
+        run: node scripts/validate-exo-vessel-campaign-store.mjs
+
+      - name: Validate VESSEL-10 instrument compatibility
+        run: node scripts/validate-exo-vessel-diegetic-controls.mjs
