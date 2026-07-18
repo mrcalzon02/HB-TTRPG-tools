@@ -36,8 +36,8 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Creates a temporary SQLite world and verifies migration, duplicate, and import-plan contracts."
+    description = "Creates temporary SQLite worlds and verifies planning, duplicate, accepted-import, and rollback contracts."
     classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.SqliteWorldStore")
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.AcceptedImportTransaction")
     args("--verify")
 }
