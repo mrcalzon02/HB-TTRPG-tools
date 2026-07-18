@@ -141,6 +141,20 @@ Initial logical roles are:
 
 The fallback files are real PNG resources in `src/main/resources`. They are independent neutral artwork and are safe to include in toolbox releases.
 
+## Current live integration
+
+The Natural World and Fleet Response console already uses the resolver for:
+
+- its application-window vessel icon;
+- station-oriented summary presentation;
+- fauna and ecology tabs;
+- geology and natural-resource tabs;
+- fleet-response and response-log tabs.
+
+Each role resolves independently. A valid donor installation may provide the fauna icon while the geology role still uses its packaged fallback, for example. The interface also reports whether the active graphical source is a donor installation or packaged fallback artwork.
+
+The next integration pass will apply the same roles to the World Map, station-economy, submarine registry, and player-transit surfaces.
+
 ## Packaging and redistribution boundary
 
 Release archives contain:
