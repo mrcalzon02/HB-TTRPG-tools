@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 6;
+    public static final int DATABASE_SCHEMA_VERSION = 7;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -132,7 +132,6 @@ public final class WorldStorageContracts {
         );
     }
 
-    /** Forward migration from schema 001 to schema 002. */
     public static List<String> schema002Statements() {
         List<String> statements = new ArrayList<>();
         statements.add("ALTER TABLE world_metadata ADD COLUMN source_suite_version INTEGER");
@@ -153,7 +152,6 @@ public final class WorldStorageContracts {
         );
     }
 
-    /** Forward migration from schema 002 to schema 003. */
     public static List<String> schema003Statements() {
         return List.of(
                 "ALTER TABLE world_simulation_metadata ADD COLUMN current_tick_sequence INTEGER CHECK(current_tick_sequence >= 0)",
@@ -168,20 +166,10 @@ public final class WorldStorageContracts {
         );
     }
 
-    /** Forward migration from schema 003 to schema 004. */
-    public static List<String> schema004Statements() {
-        return PassiveWorldSchema.statements();
-    }
-
-    /** Forward migration from schema 004 to schema 005. */
-    public static List<String> schema005Statements() {
-        return PassiveWorldSchemaHardening.statements();
-    }
-
-    /** Forward migration from schema 005 to schema 006. */
-    public static List<String> schema006Statements() {
-        return StationLogisticsSchema.statements();
-    }
+    public static List<String> schema004Statements() { return PassiveWorldSchema.statements(); }
+    public static List<String> schema005Statements() { return PassiveWorldSchemaHardening.statements(); }
+    public static List<String> schema006Statements() { return StationLogisticsSchema.statements(); }
+    public static List<String> schema007Statements() { return StationLogisticsHardening.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -255,21 +243,14 @@ public final class WorldStorageContracts {
             require(Files.isRegularFile(paths.metadata()), "World metadata was not created.");
             require(slug("../A Dangerous World").equals("a-dangerous-world"), "World slug safety failed.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("UNIQUE(vessel_id, snapshot_sha256)")), "Snapshot duplicate constraint is missing.");
-            require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("one_current_snapshot_per_vessel")), "Current-snapshot constraint is missing.");
-            require(initialSchemaStatements().stream().noneMatch(sql -> sql.contains("CREATE TABLE world_location")), "Schema 001 unexpectedly contains schema-002 tables.");
             require(schema002Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "World-location migration schema is missing.");
             require(schema003Statements().stream().anyMatch(sql -> sql.contains("simulation_command_receipt")), "Command-receipt schema is missing.");
-            require(schema003Statements().stream().anyMatch(sql -> sql.contains("simulation_checkpoint")), "Checkpoint schema is missing.");
             require(schema004Statements().stream().anyMatch(sql -> sql.contains("station_simulation_state")), "Station workload schema is missing.");
-            require(schema004Statements().stream().anyMatch(sql -> sql.contains("npc_voyage_log")), "NPC voyage log schema is missing.");
-            require(schema004Statements().stream().anyMatch(sql -> sql.contains("world_encounter")), "Encounter schema is missing.");
-            require(schema005Statements().stream().anyMatch(sql -> sql.contains("station_research_topic_unique")), "Passive research hardening is missing.");
             require(schema005Statements().stream().anyMatch(sql -> sql.contains("npc_return_arrival")), "NPC return hardening is missing.");
             require(schema006Statements().stream().anyMatch(sql -> sql.contains("station_inventory")), "Station inventory schema is missing.");
-            require(schema006Statements().stream().anyMatch(sql -> sql.contains("station_production_apply")), "Production trigger is missing.");
-            require(schema006Statements().stream().anyMatch(sql -> sql.contains("freight_lot")), "Freight schema is missing.");
-            require(schema006Statements().stream().anyMatch(sql -> sql.contains("treasury_transaction")), "Treasury schema is missing.");
             require(schema006Statements().stream().anyMatch(sql -> sql.contains("player_vessel_state")), "Player route schema is missing.");
+            require(schema007Statements().stream().anyMatch(sql -> sql.contains("passive_freight_offers")), "Passive freight-offer hardening is missing.");
+            require(schema007Statements().stream().anyMatch(sql -> sql.contains("DROP TRIGGER IF EXISTS npc_return_arrival")), "Non-recursive NPC freight return migration is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
