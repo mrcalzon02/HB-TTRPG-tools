@@ -51,6 +51,11 @@ public final class StationLogisticsSchema {
                         + "('recipe-medical','item-medical',2),"
                         + "('recipe-ammunition','item-ammunition',3)",
 
+                "INSERT OR IGNORE INTO station_inventory(station_id,item_id,quantity,reserved,reorder_point,last_tick) "
+                        + "SELECT s.station_id,i.item_id,CASE i.item_key WHEN 'ore' THEN s.ore WHEN 'rations' THEN s.supplies WHEN 'research-samples' THEN s.research ELSE 0 END,0,CASE i.category WHEN 'FUEL' THEN 8 WHEN 'MEDICAL' THEN 12 WHEN 'SUPPLY' THEN 30 WHEN 'MUNITIONS' THEN 15 ELSE 5 END,s.last_tick FROM station_simulation_state s CROSS JOIN item_catalogue i",
+                "INSERT OR IGNORE INTO station_vendor_offer(offer_id,station_id,item_id,buy_price,sell_price,stock_limit,active,last_tick) "
+                        + "SELECT s.station_id||':'||i.item_id,s.station_id,i.item_id,MAX(1,i.base_value*70/100),MAX(1,i.base_value*120/100),CASE i.category WHEN 'SUPPLY' THEN 120 WHEN 'RAW' THEN 200 ELSE 60 END,CASE WHEN s.status='FALLEN' THEN 0 ELSE 1 END,s.last_tick FROM station_simulation_state s CROSS JOIN item_catalogue i",
+
                 "CREATE TRIGGER station_logistics_seed AFTER INSERT ON station_simulation_state BEGIN "
                         + "INSERT OR IGNORE INTO station_inventory(station_id,item_id,quantity,reserved,reorder_point,last_tick) "
                         + "SELECT NEW.station_id,i.item_id,CASE i.item_key WHEN 'ore' THEN NEW.ore WHEN 'rations' THEN NEW.supplies WHEN 'research-samples' THEN NEW.research ELSE 0 END,0,CASE i.category WHEN 'FUEL' THEN 8 WHEN 'MEDICAL' THEN 12 WHEN 'SUPPLY' THEN 30 WHEN 'MUNITIONS' THEN 15 ELSE 5 END,NEW.last_tick FROM item_catalogue i; "
