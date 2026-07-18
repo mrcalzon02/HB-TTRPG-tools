@@ -1,5 +1,6 @@
 package io.github.mrcalzon02.barotrauma.desktop;
 
+import io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow;
 import io.github.mrcalzon02.barotrauma.desktop.frontier.CivilizationFrontierWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.CampaignVesselMappingWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.ImportInspectionWindow;
@@ -78,7 +79,7 @@ public final class BarotraumaWorldSimApplication {
                 new Workspace("import-center", "Import Center", "Version-22 master-world and official .save/.sub compatibility."),
                 new Workspace("campaign-journal", "Campaign Journal", "Audit history, incidents, voyages, transactions, and decisions."),
                 new Workspace("simulation-monitor", "Simulation Monitor", "Durable manual clock controls and automatic passive world scheduling."),
-                new Workspace("settings-backups", "Settings and Backups", "World directories, checkpoints, backups, restore, and packaging data.")
+                new Workspace("settings-backups", "Settings and Backups", "Graphical donor assets, world directories, checkpoints, backups, restore, and packaging data.")
         };
 
         private final DesktopWorldSession session = DesktopWorldSession.global();
@@ -179,20 +180,20 @@ public final class BarotraumaWorldSimApplication {
             cardPanel.add(importCenter(), "import-center");
             cardPanel.add(placeholder(byId.get("campaign-journal")), "campaign-journal");
             cardPanel.add(simulation(), "simulation-monitor");
-            cardPanel.add(placeholder(byId.get("settings-backups")), "settings-backups");
+            cardPanel.add(settingsAndBackups(), "settings-backups");
         }
 
         private Component overview() {
             JPanel panel = contentPanel();
             panel.add(heading("Desktop world operations"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("The Java desktop now supports normalized worlds, official vessel imports, automatic Passive Mode, item-level logistics, variable station consumption, player freight, fleet recovery, and a living natural world whose flora, fauna, predators, geology, and resources change with the same durable clock."));
+            panel.add(body("The Java desktop now supports normalized worlds, official vessel imports, automatic Passive Mode, item-level logistics, variable station consumption, player freight, fleet recovery, a living natural world, and local donor-first graphical assets with packaged PNG fallbacks."));
             panel.add(Box.createVerticalStrut(18));
             JPanel metrics = new JPanel(new GridLayout(2, 3, 12, 12));
             metrics.add(metric("World map", "Live", "Stations, NPC vessels, missions, research, encounters, and frontier pressure"));
             metrics.add(metric("Natural world", "Dynamic", "Blooms, herbivores, predators, geology, and resource exposure"));
             metrics.add(metric("Fleet response", "Material-gated", "Rescue, towing, repair, refuel, rearm, and reinforcement"));
-            metrics.add(metric("Player freight", "Operational", "Load at source, transit, dock, and deliver at destination"));
+            metrics.add(metric("Graphical assets", "Donor + fallback", "Local Barotrauma Content pointer with independent packaged PNGs"));
             metrics.add(metric("Scheduling", "Passive Mode", "One process-wide scheduler per world"));
             metrics.add(metric("Persistence", "Schema " + WorldStorageContracts.DATABASE_SCHEMA_VERSION,
                     "Atomic world, ecology, geology, recovery, logistics, route, and evidence records"));
@@ -203,7 +204,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel actions = new JPanel();
             actions.add(button("Open Live World Map", this::openWorldRegistry));
             actions.add(button("Open Natural World and Fleet Response", this::openNaturalWorld));
-            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
+            actions.add(button("Configure Graphical Assets", this::openAssetSetup));
             actions.add(button("Open Station Logistics", this::openStationLogistics));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -307,8 +308,8 @@ public final class BarotraumaWorldSimApplication {
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open Natural World and Fleet Console", this::openNaturalWorld));
+            actions.add(button("Configure Graphical Assets", this::openAssetSetup));
             actions.add(button("Open Live World Map", this::openWorldRegistry));
-            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
             actions.add(button("Open Station Logistics", this::openStationLogistics));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -402,6 +403,26 @@ public final class BarotraumaWorldSimApplication {
             return new JScrollPane(panel);
         }
 
+        private Component settingsAndBackups() {
+            JPanel panel = contentPanel();
+            panel.add(heading("Settings, graphical assets, and backups"));
+            panel.add(Box.createVerticalStrut(8));
+            panel.add(body("Configure whether the desktop uses graphical files from a locally installed copy of Barotrauma or the neutral binary PNG fallbacks packaged with this application. The donor pointer remains local and no parent-game artwork is copied into releases."));
+            panel.add(Box.createVerticalStrut(16));
+            panel.add(metric("Asset discovery", "Automatic or manual", "Steam defaults, custom libraryfolders.vdf entries, BAROTRAUMA_HOME, or a selected folder"));
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(metric("Fallback safety", "Per role", "Station, vessel, fauna, and geology artwork can fall back independently"));
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(metric("Packaging boundary", "Local-only donor", "Release packages contain only original neutral fallback PNGs"));
+            panel.add(Box.createVerticalStrut(16));
+            JPanel actions = new JPanel();
+            actions.add(button("Configure Graphical Assets", this::openAssetSetup));
+            actions.add(button("Open World Map", this::openWorldRegistry));
+            panel.add(actions);
+            panel.add(Box.createVerticalGlue());
+            return new JScrollPane(panel);
+        }
+
         private Component placeholder(Workspace workspace) {
             JPanel panel = contentPanel();
             panel.add(heading(workspace.label()));
@@ -463,7 +484,7 @@ public final class BarotraumaWorldSimApplication {
             status.setBorder(new EmptyBorder(10, 6, 2, 6));
             status.add(operationStatus, BorderLayout.WEST);
             status.add(new JLabel("Java 17 Swing · schema " + WorldStorageContracts.DATABASE_SCHEMA_VERSION
-                    + " · passive ecology, geology, fleet response, civilization, logistics, and transit available"),
+                    + " · donor/fallback graphics, passive ecology, fleet response, logistics, and transit available"),
                     BorderLayout.EAST);
             return status;
         }
@@ -486,6 +507,7 @@ public final class BarotraumaWorldSimApplication {
         private void openStationLogistics() { showChild(new StationLogisticsWindow(), "Opened station logistics and markets"); }
         private void openCivilizationFrontier() { showChild(new CivilizationFrontierWindow(), "Opened civilization and fauna frontier"); }
         private void openNaturalWorld() { showChild(new NaturalWorldAndFleetWindow(), "Opened natural world and fleet response"); }
+        private void openAssetSetup() { showChild(new DonorAssetSetupWindow(), "Opened donor and fallback graphical asset setup"); }
         private void openPlayerTransit() { showChild(new PlayerVesselTransitWindow(), "Opened imported player-vessel transit and freight"); }
         private void openImportApproval() { showChild(new WorldImportApprovalWindow(), "Opened vessel import approval"); }
         private void openCampaignMapper() { showChild(new CampaignVesselMappingWindow(), "Opened campaign vessel mapper"); }
