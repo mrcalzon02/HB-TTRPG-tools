@@ -11,6 +11,7 @@ public final class DesktopPersistenceVerificationSuite {
     private DesktopPersistenceVerificationSuite() { }
 
     public static void verifyContract() throws Exception {
+        RecursiveSqliteDriver.verifyContract();
         WorldStorageContracts.verifyContract();
         WorldDatabaseMigrations.verifyContract();
         AcceptedImportTransaction.verifyContract();
@@ -30,7 +31,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma persistence, passive-world, station consumption, civilization frontier, fleet recovery, ecology, geology, resources, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma persistence, recursive SQLite triggers, passive-world, station consumption, civilization frontier, fleet recovery, ecology, geology, resources, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
