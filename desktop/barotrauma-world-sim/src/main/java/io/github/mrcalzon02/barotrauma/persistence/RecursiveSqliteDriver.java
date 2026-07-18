@@ -102,4 +102,34 @@ public final class RecursiveSqliteDriver implements Driver {
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return delegate.getParentLogger();
     }
+
+    public static void verifyContract() throws Exception {
+        install();
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite::memory:");
+             Statement statement = connection.createStatement()) {
+            try (var result = statement.executeQuery("PRAGMA recursive_triggers")) {
+                if (!result.next() || result.getInt(1) != 1) {
+                    throw new IllegalStateException("Desktop SQLite connections did not enable recursive triggers.");
+                }
+            }
+            statement.execute("CREATE TABLE trigger_a(value INTEGER)");
+            statement.execute("CREATE TABLE trigger_b(value INTEGER)");
+            statement.execute("CREATE TABLE trigger_c(value INTEGER)");
+            statement.execute("CREATE TRIGGER a_to_b AFTER INSERT ON trigger_a BEGIN "
+                    + "INSERT INTO trigger_b(value) VALUES (NEW.value+1); END");
+            statement.execute("CREATE TRIGGER b_to_c AFTER INSERT ON trigger_b BEGIN "
+                    + "INSERT INTO trigger_c(value) VALUES (NEW.value+1); END");
+            statement.execute("INSERT INTO trigger_a(value) VALUES (1)");
+            try (var result = statement.executeQuery("SELECT value FROM trigger_c")) {
+                if (!result.next() || result.getInt(1) != 3) {
+                    throw new IllegalStateException("Desktop SQLite recursive trigger chain did not execute.");
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        verifyContract();
+        System.out.println("Recursive SQLite trigger policy passed.");
+    }
 }
