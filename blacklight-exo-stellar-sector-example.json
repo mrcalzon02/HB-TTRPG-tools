@@ -1,10 +1,16 @@
 {
   "recordType": "blacklightExoStellarSectorSeedManifest",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "sectorId": "sector-helios-vale-example",
   "seed": "EXAMPLE:SECTOR:HELIOS-VALE:001",
-  "dataModule": "blacklight-exo-stellar-sector-data.js",
-  "runtime": "blacklight-exo-stellar-sector.js",
   "recordStatus": "fixed-deterministic-example",
-  "note": "The complete sector record is generated deterministically by the pinned data module and exported as versioned JSON."
+  "modules": [
+    "blacklight-exo-stellar-sector-data.js",
+    "blacklight-exo-stellar-sector-worlds.js",
+    "blacklight-exo-stellar-sector-generator.js",
+    "blacklight-exo-stellar-sector-contracts.js",
+    "blacklight-exo-stellar-sector.js"
+  ],
+  "archiveFormat": "blacklightExoStellarSectorArchive",
+  "note": "The fixed example and seeded procedural sectors are deterministic, validated, incrementally rendered, exportable, and locally recordable."
 }
