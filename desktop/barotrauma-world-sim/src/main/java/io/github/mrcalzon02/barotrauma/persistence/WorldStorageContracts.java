@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 5;
+    public static final int DATABASE_SCHEMA_VERSION = 6;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -178,6 +178,11 @@ public final class WorldStorageContracts {
         return PassiveWorldSchemaHardening.statements();
     }
 
+    /** Forward migration from schema 005 to schema 006. */
+    public static List<String> schema006Statements() {
+        return StationLogisticsSchema.statements();
+    }
+
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")
@@ -260,6 +265,11 @@ public final class WorldStorageContracts {
             require(schema004Statements().stream().anyMatch(sql -> sql.contains("world_encounter")), "Encounter schema is missing.");
             require(schema005Statements().stream().anyMatch(sql -> sql.contains("station_research_topic_unique")), "Passive research hardening is missing.");
             require(schema005Statements().stream().anyMatch(sql -> sql.contains("npc_return_arrival")), "NPC return hardening is missing.");
+            require(schema006Statements().stream().anyMatch(sql -> sql.contains("station_inventory")), "Station inventory schema is missing.");
+            require(schema006Statements().stream().anyMatch(sql -> sql.contains("station_production_apply")), "Production trigger is missing.");
+            require(schema006Statements().stream().anyMatch(sql -> sql.contains("freight_lot")), "Freight schema is missing.");
+            require(schema006Statements().stream().anyMatch(sql -> sql.contains("treasury_transaction")), "Treasury schema is missing.");
+            require(schema006Statements().stream().anyMatch(sql -> sql.contains("player_vessel_state")), "Player route schema is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
