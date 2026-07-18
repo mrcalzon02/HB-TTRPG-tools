@@ -1,0 +1,30 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-combat-resolution.schema.json",
+  "title":"Blacklight EXO Vessel Combat Resolution",
+  "description":"VESSEL-08 deterministic intercept and local damage record derived from VESSEL-04 through VESSEL-07 authority while preserving VESSEL-05 as immutable pre-impact state.",
+  "type":"object",
+  "additionalProperties":true,
+  "required":["recordType","schemaVersion","phase","vesselInstanceId","resolutionSeed","validationMode","referenceAuthority","scenario","interceptResolution","approachFacing","protectionResolution","localEffects","postImpactState","referenceSnapshots","repairLog","deferredSystems","validation"],
+  "properties":{
+    "recordType":{"const":"exoVesselCombatResolution"},
+    "schemaVersion":{"const":"1.0.0"},
+    "phase":{"const":"VESSEL-08"},
+    "vesselInstanceId":{"type":"string","minLength":1},
+    "resolutionSeed":{"type":"string","minLength":1},
+    "validationMode":{"enum":["REPAIR","STRICT"]},
+    "referenceAuthority":{"type":"object","required":["voxelLayout","conditionHistory","combatGeometry","weaponEngagement"]},
+    "scenario":{"type":"object","required":["incomingWeaponFamily","damageBand","impactFacing","salvoCount","attackIntensityPercent","targetEvasionPercent","damageControlPercent"]},
+    "sourceEngagement":{"type":["object","null"]},
+    "interceptResolution":{"type":"object","required":["outcome","resolved","impactProbabilityPercent","rollPercent","defenseRollPercent","reason"],"properties":{"outcome":{"enum":["NO_SOLUTION","INTERCEPTED","MISS","NEAR_MISS","IMPACT"]},"resolved":{"type":"boolean"},"impactProbabilityPercent":{"type":"number","minimum":0,"maximum":100},"rollPercent":{"type":"number","minimum":0,"maximum":100},"defenseRollPercent":{"type":"number","minimum":0,"maximum":100},"reason":{"type":"string","minLength":1}}},
+    "approachFacing":{"enum":["FORE","AFT","LEFT","RIGHT","UP","DOWN"]},
+    "impact":{"type":["object","null"]},
+    "protectionResolution":{"type":"object","required":["facing","incidentEnergyJ","activeField","passive","residualEnergyJ","retainedEnergyPercent","penetrationRatio","effectMix"]},
+    "localEffects":{"type":"object","required":["events","moduleEffects","routeEffects","zoneEffects","crewEffects","detachedModuleIds"]},
+    "postImpactState":{"type":"object","required":["recordType","schemaVersion","phase","stateId","vesselInstanceId","referenceConditionAuthority","moduleStates","voxelStates","zoneStates","routeStates","effectiveGraphs","recalculated","residualVoxelField"],"properties":{"recordType":{"const":"exoVesselPostImpactState"},"schemaVersion":{"const":"1.0.0"},"phase":{"const":"VESSEL-08"},"referenceConditionAuthority":{"const":"VESSEL-05_IMMUTABLE_PRE_IMPACT"}}},
+    "referenceSnapshots":{"type":"object","required":["conditionModuleStatesJson"]},
+    "repairLog":{"type":"array","items":{"type":"object"}},
+    "deferredSystems":{"type":"object","required":["gameplayStatisticsAndActions","campaignPersistence"]},
+    "validation":{"type":"object","required":["valid","violations"],"properties":{"valid":{"type":"boolean"},"violations":{"type":"array","items":{"type":"string"}}}}
+  }
+}
