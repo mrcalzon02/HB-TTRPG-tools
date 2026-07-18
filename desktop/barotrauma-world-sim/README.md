@@ -16,6 +16,7 @@ The desktop project now includes:
 - Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response, ecology, geology, and natural-resource workloads.
 - Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Automatic timed cycles while Passive Mode is enabled.
+- Local donor-installation discovery for Barotrauma graphical assets, with packaged binary PNG fallbacks.
 
 No website behavior has been removed or redirected. The web suite remains the behavioral reference while desktop parity is developed.
 
@@ -25,8 +26,46 @@ A normalized version-22 world imports with simulation disabled and paused. Passi
 
 - JDK 17
 - A locally installed Gradle capable of building a Java 17 project
+- Optional: a locally installed copy of Barotrauma for donor graphical assets
 
 A Gradle wrapper will be added with release automation. Until then, run commands from `desktop/barotrauma-world-sim`.
+
+## Graphical asset setup
+
+```text
+gradle runAssetSetup
+```
+
+The setup window searches common Windows, Linux, Flatpak Steam, and macOS Barotrauma locations. It also reads Steam `libraryfolders.vdf` files so installations on additional disks can be found.
+
+The user may choose:
+
+- **Automatic** — re-scan Steam libraries and use the first validated donor installation.
+- **Manual** — retain an explicitly selected Barotrauma installation, app bundle, executable directory, or `Content` directory.
+- **Fallback only** — never read donor files and use the packaged neutral PNG artwork.
+
+Only the local path and selection mode are stored in:
+
+```text
+~/.barotrauma-world-sim/assets.properties
+```
+
+Official Barotrauma assets are referenced from the user's installation at runtime. They are never copied into this repository or a release package. If the parent game is removed, moved, or unavailable, each unresolved logical role automatically uses its packaged fallback PNG.
+
+Common default locations include:
+
+```text
+C:\Program Files (x86)\Steam\steamapps\common\Barotrauma
+C:\Program Files\Steam\steamapps\common\Barotrauma
+~/.local/share/Steam/steamapps/common/Barotrauma
+~/.steam/steam/steamapps/common/Barotrauma
+~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Barotrauma
+~/Library/Application Support/Steam/steamapps/common/Barotrauma
+```
+
+On macOS, the asset tree normally resolves under `Barotrauma.app/Contents/MacOS/Content`.
+
+See `docs/donor-assets.md` for validation, custom-library, packaging, and redistribution rules.
 
 ## Run the desktop shell
 
@@ -193,6 +232,8 @@ gradle verifyWorldStore
 
 The verification chain covers:
 
+- Donor installation validation, saved local pointers, donor-first selection, and fallback-only resolution.
+- Real packaged PNG fallback resources for station, vessel, fauna, and geology roles.
 - Fresh and legacy migration through schema 012.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
@@ -215,6 +256,7 @@ The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 an
 
 ```text
 io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication
+io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow
 io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow
 io.github.mrcalzon02.barotrauma.desktop.frontier.CivilizationFrontierWindow
 io.github.mrcalzon02.barotrauma.desktop.nature.NaturalWorldAndFleetWindow
@@ -244,23 +286,26 @@ Completed:
 10. Material-gated NPC rescue, towing, repair, refuel, rearm, and station reinforcement operations.
 11. Passive ecological regrowth, food-web movement, predator feeding-ground expansion, biological accumulation, geological activity, and natural-resource exposure.
 12. Natural-resource, predator, and fleet-response integration with the shared NPC mission system.
+13. Donor Barotrauma asset discovery, local pointer storage, binary PNG fallbacks, setup UI, and packaging boundaries.
 
 Next:
 
 1. Route responder vessels and towing operations through the shared transit resolver instead of abstract progress alone.
-2. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
-3. Add resource harvesting, depletion, dormancy, and renewable regrowth settlement into station inventory and treasury state.
-4. Add player mission acceptance, reward settlement, and faction consequences.
-5. Add equipment-level cargo manifests and capacity derived from imported submarine data.
-6. Add persistent recent-world reopening, backups, packaging, and release automation.
+2. Connect donor/fallback roles to the World Map, vessel registry, natural-world, and station panels.
+3. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
+4. Add resource harvesting, depletion, dormancy, and renewable regrowth settlement into station inventory and treasury state.
+5. Add player mission acceptance, reward settlement, and faction consequences.
+6. Add equipment-level cargo manifests and capacity derived from imported submarine data.
+7. Add persistent recent-world reopening, backups, packaging, and release automation.
 
 ## Governing documents
 
 - `../../docs/barotrauma-desktop-baseline.md`
 - `../../docs/barotrauma-desktop-architecture.md`
+- `docs/donor-assets.md`
 
 The baseline fixes compatibility and simulation requirements. The architecture document fixes dependency direction, identity boundaries, importer isolation, concurrency rules, and implementation order.
 
 ## Local files
 
-World databases, logs, imported-source evidence, attachments, backups, and exports belong under local runtime directories and are ignored by Git. Sanitized fixtures must remain separate and must not contain private player information.
+World databases, logs, imported-source evidence, attachments, backups, exports, and donor asset configuration belong under local runtime directories and are ignored by Git. Sanitized fixtures must remain separate and must not contain private player information or copied proprietary game assets.
