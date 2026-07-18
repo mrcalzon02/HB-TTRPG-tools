@@ -27,13 +27,22 @@ import java.util.function.Consumer;
 public final class SimulationCommandExecutor implements AutoCloseable {
     private final DeterministicSimulationClock clock;
     private final ExecutorService executor;
-    private final AtomicLong acceptedSequence = new AtomicLong();
+    private final AtomicLong acceptedSequence;
     private final AtomicBoolean closed = new AtomicBoolean();
     private final CopyOnWriteArrayList<Consumer<ClockSnapshot>> listeners = new CopyOnWriteArrayList<>();
     private volatile long writerThreadId = -1L;
 
     public SimulationCommandExecutor(DeterministicSimulationClock clock, String threadName) {
+        this(clock, threadName, 0L);
+    }
+
+    public SimulationCommandExecutor(DeterministicSimulationClock clock, String threadName,
+                                     long initialExecutionSequence) {
         this.clock = Objects.requireNonNull(clock, "clock");
+        if (initialExecutionSequence < 0) {
+            throw new IllegalArgumentException("Initial execution sequence cannot be negative.");
+        }
+        this.acceptedSequence = new AtomicLong(initialExecutionSequence);
         String effectiveName = threadName == null || threadName.isBlank()
                 ? "barotrauma-simulation-writer" : threadName.trim();
         ThreadFactory factory = runnable -> {
@@ -241,6 +250,16 @@ public final class SimulationCommandExecutor implements AutoCloseable {
             require(expected.getCause() instanceof IllegalStateException
                             && expected.getCause().getMessage().contains("closed"),
                     "Unexpected closed-executor rejection.");
+        }
+
+        DeterministicSimulationClock resumedClock = DeterministicSimulationClock.imported(
+                canonical, Instant.parse("2026-06-20T08:00:00Z"), 40,
+                java.time.Duration.ofMinutes(1));
+        try (SimulationCommandExecutor resumed = new SimulationCommandExecutor(
+                resumedClock, "resumed-contract-writer", 7L)) {
+            CommandReceipt resumedReceipt = resumed.submit(new Enable(), "contract-test").join();
+            require(resumedReceipt.acceptedSequence() == 8L,
+                    "Restarted executor did not continue after the durable sequence.");
         }
     }
 
