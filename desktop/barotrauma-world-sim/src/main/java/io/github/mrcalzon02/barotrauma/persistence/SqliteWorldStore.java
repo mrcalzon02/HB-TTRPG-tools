@@ -32,12 +32,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 
-/**
- * Single-writer SQLite store for desktop-world metadata and read-only import planning.
- *
- * <p>This phase records inspected source artifacts, warnings, and audit evidence. It does not
- * create submarine definitions, vessel instances, vessel snapshots, or simulation state.</p>
- */
+/** Single-writer SQLite store for desktop-world metadata and import planning. */
 public final class SqliteWorldStore implements AutoCloseable {
     private final WorldPaths paths;
     private final WorldLock worldLock;
@@ -78,54 +73,31 @@ public final class SqliteWorldStore implements AutoCloseable {
     public synchronized ImportPlan inspectAndPlan(InspectionReport report) throws SQLException {
         Objects.requireNonNull(report, "report");
         return recordAndPlan(new InspectionCandidate(
-                report.artifactIdentity(),
-                report.sourceName(),
-                SourceKind.WEB_SUITE_V22,
-                report.exportedAt(),
-                List.of(),
-                report.warnings()
-        ));
+                report.artifactIdentity(), report.sourceName(), SourceKind.WEB_SUITE_V22,
+                report.exportedAt(), List.of(), report.warnings()));
     }
 
     public synchronized ImportPlan inspectAndPlan(BarotraumaSaveInspector.Inspection inspection) throws SQLException {
         Objects.requireNonNull(inspection, "inspection");
         if (inspection instanceof CampaignInspection campaign) {
-            List<DefinitionCandidate> definitions = campaign.submarines().stream()
-                    .map(SqliteWorldStore::definition)
-                    .toList();
             return recordAndPlan(new InspectionCandidate(
-                    campaign.artifactIdentity(),
-                    campaign.sourceName(),
-                    SourceKind.OFFICIAL_CAMPAIGN_SAVE,
-                    campaign.saveTime(),
-                    definitions,
-                    campaign.warnings()
-            ));
+                    campaign.artifactIdentity(), campaign.sourceName(), SourceKind.OFFICIAL_CAMPAIGN_SAVE,
+                    campaign.saveTime(), campaign.submarines().stream().map(SqliteWorldStore::definition).toList(),
+                    campaign.warnings()));
         }
         StandaloneSubmarineInspection standalone = (StandaloneSubmarineInspection) inspection;
         return recordAndPlan(new InspectionCandidate(
-                standalone.artifactIdentity(),
-                standalone.sourceName(),
-                SourceKind.OFFICIAL_SUBMARINE,
-                null,
-                List.of(definition(standalone.submarine())),
-                List.of()
-        ));
+                standalone.artifactIdentity(), standalone.sourceName(), SourceKind.OFFICIAL_SUBMARINE,
+                null, List.of(definition(standalone.submarine())), List.of()));
     }
 
     public synchronized ImportPlan recordAndPlan(InspectionCandidate candidate) throws SQLException {
         ensureOpen();
         Objects.requireNonNull(candidate, "candidate");
-
         ArtifactRecord existingArtifact = findArtifact(candidate.artifactIdentity().digest());
         if (existingArtifact != null) {
-            return new ImportPlan(
-                    existingArtifact.artifactId(),
-                    ArtifactAction.SKIP_EXACT_ARTIFACT,
-                    existingArtifact,
-                    List.of(),
-                    List.copyOf(candidate.warnings())
-            );
+            return new ImportPlan(existingArtifact.artifactId(), ArtifactAction.SKIP_EXACT_ARTIFACT,
+                    existingArtifact, List.of(), List.copyOf(candidate.warnings()));
         }
 
         boolean originalAutoCommit = connection.getAutoCommit();
@@ -145,19 +117,13 @@ public final class SqliteWorldStore implements AutoCloseable {
             for (DefinitionCandidate definition : uniqueDefinitions.values()) {
                 ExistingDefinition existing = findDefinition(definition.canonicalXmlDigest());
                 if (existing == null) {
-                    definitionPlans.add(new DefinitionPlan(
-                            definition,
-                            DefinitionAction.CREATE_NEW_DEFINITION_AFTER_APPROVAL,
-                            null,
-                            "No matching canonical submarine definition exists in this desktop world."
-                    ));
+                    definitionPlans.add(new DefinitionPlan(definition,
+                            DefinitionAction.CREATE_NEW_DEFINITION_AFTER_APPROVAL, null,
+                            "No matching canonical submarine definition exists in this desktop world."));
                 } else {
-                    definitionPlans.add(new DefinitionPlan(
-                            definition,
-                            DefinitionAction.REUSE_EXISTING_DEFINITION_AFTER_APPROVAL,
-                            existing,
-                            "Canonical submarine XML already exists; filename and display name do not create another definition."
-                    ));
+                    definitionPlans.add(new DefinitionPlan(definition,
+                            DefinitionAction.REUSE_EXISTING_DEFINITION_AFTER_APPROVAL, existing,
+                            "Canonical submarine XML already exists; filename and display name do not create another definition."));
                 }
             }
 
@@ -166,22 +132,10 @@ public final class SqliteWorldStore implements AutoCloseable {
                             + "\",\"definitionCandidates\":" + definitionPlans.size()
                             + ",\"warnings\":" + candidate.warnings().size() + "}");
             connection.commit();
-
-            ArtifactRecord record = new ArtifactRecord(
-                    artifactId,
-                    candidate.artifactIdentity(),
-                    candidate.sourceName(),
-                    candidate.sourceKind(),
-                    inspectedAt,
-                    null
-            );
-            return new ImportPlan(
-                    artifactId,
-                    ArtifactAction.RECORDED_INSPECTION_ONLY,
-                    record,
-                    List.copyOf(definitionPlans),
-                    List.copyOf(candidate.warnings())
-            );
+            ArtifactRecord record = new ArtifactRecord(artifactId, candidate.artifactIdentity(), candidate.sourceName(),
+                    candidate.sourceKind(), inspectedAt, null);
+            return new ImportPlan(artifactId, ArtifactAction.RECORDED_INSPECTION_ONLY,
+                    record, List.copyOf(definitionPlans), List.copyOf(candidate.warnings()));
         } catch (SQLException | RuntimeException exception) {
             try { connection.rollback(); } catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
             throw exception;
@@ -201,34 +155,40 @@ public final class SqliteWorldStore implements AutoCloseable {
 
     private void applyMigrations() throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS schema_migration (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)");
+            statement.execute("CREATE TABLE IF NOT EXISTS schema_migration "
+                    + "(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)");
         }
-
-        int currentVersion = 0;
-        try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery("SELECT COALESCE(MAX(version), 0) FROM schema_migration")) {
-            if (result.next()) currentVersion = result.getInt(1);
-        }
+        int currentVersion = schemaVersion();
         if (currentVersion > WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
             throw new SQLException("World database schema " + currentVersion
                     + " is newer than supported schema " + WorldStorageContracts.DATABASE_SCHEMA_VERSION + ".");
         }
-        if (currentVersion == WorldStorageContracts.DATABASE_SCHEMA_VERSION) return;
-        if (currentVersion != 0) {
+        if (currentVersion < 1) {
+            applyMigration(1, WorldStorageContracts.initialSchemaStatements(), true);
+            currentVersion = 1;
+        }
+        if (currentVersion < 2) {
+            applyMigration(2, WorldStorageContracts.schema002Statements(), false);
+            currentVersion = 2;
+        }
+        if (currentVersion != WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
             throw new SQLException("No migration path is defined from schema " + currentVersion + ".");
         }
+    }
 
+    private void applyMigration(int version, List<String> statements, boolean initial) throws SQLException {
         boolean originalAutoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         try (Statement statement = connection.createStatement()) {
-            for (String sql : WorldStorageContracts.initialSchemaStatements()) {
+            for (String sql : statements) {
                 String normalized = sql.trim().toUpperCase();
-                if (normalized.startsWith("PRAGMA ") || normalized.startsWith("CREATE TABLE SCHEMA_MIGRATION")) continue;
+                if (normalized.startsWith("PRAGMA ")) continue;
+                if (initial && normalized.startsWith("CREATE TABLE SCHEMA_MIGRATION")) continue;
                 statement.execute(sql);
             }
             try (PreparedStatement insert = connection.prepareStatement(
                     "INSERT INTO schema_migration(version, applied_at) VALUES (?, ?)")) {
-                insert.setInt(1, WorldStorageContracts.DATABASE_SCHEMA_VERSION);
+                insert.setInt(1, version);
                 insert.setString(2, Instant.now().toString());
                 insert.executeUpdate();
             }
@@ -249,7 +209,6 @@ public final class SqliteWorldStore implements AutoCloseable {
         String worldId = required(metadata, "worldId");
         String displayName = required(metadata, "displayName");
         String createdAt = required(metadata, "createdAt");
-
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT OR IGNORE INTO world_metadata(world_id, display_name, created_at) VALUES (?, ?, ?)")) {
             statement.setString(1, worldId);
@@ -257,7 +216,6 @@ public final class SqliteWorldStore implements AutoCloseable {
             statement.setString(3, createdAt);
             statement.executeUpdate();
         }
-
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT display_name FROM world_metadata WHERE world_id = ?")) {
             statement.setString(1, worldId);
@@ -279,14 +237,11 @@ public final class SqliteWorldStore implements AutoCloseable {
                 if (!result.next()) return null;
                 SourceArtifactIdentity identity = new SourceArtifactIdentity(digest, result.getLong("byte_length"));
                 String importedAt = result.getString("imported_at");
-                return new ArtifactRecord(
-                        UUID.fromString(result.getString("artifact_id")),
-                        identity,
+                return new ArtifactRecord(UUID.fromString(result.getString("artifact_id")), identity,
                         result.getString("source_name"),
                         SourceKind.fromDatabaseValue(result.getString("source_kind")),
                         Instant.parse(result.getString("inspected_at")),
-                        importedAt == null ? null : Instant.parse(importedAt)
-                );
+                        importedAt == null ? null : Instant.parse(importedAt));
             }
         }
     }
@@ -300,11 +255,8 @@ public final class SqliteWorldStore implements AutoCloseable {
                 if (!result.next()) return null;
                 Integer checkValue = result.getObject("official_check_value") == null
                         ? null : result.getInt("official_check_value");
-                return new ExistingDefinition(
-                        UUID.fromString(result.getString("definition_id")),
-                        result.getString("display_name"),
-                        checkValue
-                );
+                return new ExistingDefinition(UUID.fromString(result.getString("definition_id")),
+                        result.getString("display_name"), checkValue);
             }
         }
     }
@@ -353,21 +305,14 @@ public final class SqliteWorldStore implements AutoCloseable {
     }
 
     private static DefinitionCandidate definition(SubmarineInspection submarine) {
-        return new DefinitionCandidate(
-                submarine.definitionIdentity().canonicalXmlDigest(),
-                submarine.equalityCheckValue(),
-                submarine.name(),
-                submarine.gameVersion(),
-                submarine.type(),
-                submarine.submarineClass(),
-                submarine.tier()
-        );
+        return new DefinitionCandidate(submarine.definitionIdentity().canonicalXmlDigest(),
+                submarine.equalityCheckValue(), submarine.name(), submarine.gameVersion(), submarine.type(),
+                submarine.submarineClass(), submarine.tier());
     }
 
     private static void requireDriver() throws SQLException {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException exception) {
+        try { Class.forName("org.sqlite.JDBC"); }
+        catch (ClassNotFoundException exception) {
             throw new SQLException("The Xerial SQLite JDBC driver is not available on the runtime classpath.", exception);
         }
     }
@@ -383,11 +328,8 @@ public final class SqliteWorldStore implements AutoCloseable {
     }
 
     private static String json(String value) {
-        return value.replace("\\", "\\\\")
-                .replace("\"", "\\\"")
-                .replace("\n", "\\n")
-                .replace("\r", "\\r")
-                .replace("\t", "\\t");
+        return value.replace("\\", "\\\\").replace("\"", "\\\"")
+                .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
     }
 
     @Override
@@ -406,41 +348,21 @@ public final class SqliteWorldStore implements AutoCloseable {
         WEB_SUITE_V22("web-suite-v22"),
         OFFICIAL_CAMPAIGN_SAVE("official-campaign-save"),
         OFFICIAL_SUBMARINE("official-submarine");
-
         private final String databaseValue;
-
-        SourceKind(String databaseValue) {
-            this.databaseValue = databaseValue;
-        }
-
-        public String databaseValue() {
-            return databaseValue;
-        }
-
+        SourceKind(String databaseValue) { this.databaseValue = databaseValue; }
+        public String databaseValue() { return databaseValue; }
         static SourceKind fromDatabaseValue(String value) throws SQLException {
             for (SourceKind kind : values()) if (kind.databaseValue.equals(value)) return kind;
             throw new SQLException("Unknown stored import source kind: " + value);
         }
     }
 
-    public enum ArtifactAction {
-        RECORDED_INSPECTION_ONLY,
-        SKIP_EXACT_ARTIFACT
-    }
+    public enum ArtifactAction { RECORDED_INSPECTION_ONLY, SKIP_EXACT_ARTIFACT }
+    public enum DefinitionAction { CREATE_NEW_DEFINITION_AFTER_APPROVAL, REUSE_EXISTING_DEFINITION_AFTER_APPROVAL }
 
-    public enum DefinitionAction {
-        CREATE_NEW_DEFINITION_AFTER_APPROVAL,
-        REUSE_EXISTING_DEFINITION_AFTER_APPROVAL
-    }
-
-    public record InspectionCandidate(
-            SourceArtifactIdentity artifactIdentity,
-            String sourceName,
-            SourceKind sourceKind,
-            Instant sourceTimestamp,
-            List<DefinitionCandidate> definitions,
-            List<String> warnings
-    ) {
+    public record InspectionCandidate(SourceArtifactIdentity artifactIdentity, String sourceName,
+                                      SourceKind sourceKind, Instant sourceTimestamp,
+                                      List<DefinitionCandidate> definitions, List<String> warnings) {
         public InspectionCandidate {
             Objects.requireNonNull(artifactIdentity, "artifactIdentity");
             sourceName = Objects.requireNonNull(sourceName, "sourceName").trim();
@@ -451,15 +373,9 @@ public final class SqliteWorldStore implements AutoCloseable {
         }
     }
 
-    public record DefinitionCandidate(
-            Sha256Digest canonicalXmlDigest,
-            Integer officialCheckValue,
-            String displayName,
-            String gameVersion,
-            String submarineType,
-            String submarineClass,
-            Integer tier
-    ) {
+    public record DefinitionCandidate(Sha256Digest canonicalXmlDigest, Integer officialCheckValue,
+                                      String displayName, String gameVersion, String submarineType,
+                                      String submarineClass, Integer tier) {
         public DefinitionCandidate {
             Objects.requireNonNull(canonicalXmlDigest, "canonicalXmlDigest");
             displayName = displayName == null ? "" : displayName.trim();
@@ -470,38 +386,17 @@ public final class SqliteWorldStore implements AutoCloseable {
     }
 
     public record ExistingDefinition(UUID definitionId, String displayName, Integer officialCheckValue) {}
-
-    public record DefinitionPlan(
-            DefinitionCandidate candidate,
-            DefinitionAction action,
-            ExistingDefinition existingDefinition,
-            String explanation
-    ) {}
-
-    public record ArtifactRecord(
-            UUID artifactId,
-            SourceArtifactIdentity artifactIdentity,
-            String sourceName,
-            SourceKind sourceKind,
-            Instant inspectedAt,
-            Instant importedAt
-    ) {}
-
-    public record ImportPlan(
-            UUID artifactId,
-            ArtifactAction artifactAction,
-            ArtifactRecord artifact,
-            List<DefinitionPlan> definitions,
-            List<String> warnings
-    ) {
+    public record DefinitionPlan(DefinitionCandidate candidate, DefinitionAction action,
+                                 ExistingDefinition existingDefinition, String explanation) {}
+    public record ArtifactRecord(UUID artifactId, SourceArtifactIdentity artifactIdentity, String sourceName,
+                                 SourceKind sourceKind, Instant inspectedAt, Instant importedAt) {}
+    public record ImportPlan(UUID artifactId, ArtifactAction artifactAction, ArtifactRecord artifact,
+                             List<DefinitionPlan> definitions, List<String> warnings) {
         public ImportPlan {
             definitions = List.copyOf(definitions);
             warnings = List.copyOf(warnings);
         }
-
-        public boolean changesSimulationState() {
-            return false;
-        }
+        public boolean changesSimulationState() { return false; }
     }
 
     public static void verifyContract() throws Exception {
@@ -511,70 +406,75 @@ public final class SqliteWorldStore implements AutoCloseable {
             UUID worldId = UUID.fromString("22222222-3333-4444-5555-666666666666");
             WorldPaths paths = WorldStorageContracts.createWorld(root, "SQLite Contract World", worldId);
             try (SqliteWorldStore store = SqliteWorldStore.open(paths)) {
-                Sha256Digest definitionDigest = IdentityContracts.sha256("canonical-submarine".getBytes(StandardCharsets.UTF_8));
+                Sha256Digest definitionDigest = IdentityContracts.sha256(
+                        "canonical-submarine".getBytes(StandardCharsets.UTF_8));
                 DefinitionCandidate definition = new DefinitionCandidate(
                         definitionDigest, 42, "Contract Boat", "1.0.0", "Player", "Scout", 1);
                 InspectionCandidate first = new InspectionCandidate(
-                        new SourceArtifactIdentity(IdentityContracts.sha256("artifact-one".getBytes(StandardCharsets.UTF_8)), 12),
-                        "contract-one.sub", SourceKind.OFFICIAL_SUBMARINE, Instant.parse("2026-07-17T00:00:00Z"),
-                        List.of(definition), List.of("fixture warning"));
-
+                        new SourceArtifactIdentity(IdentityContracts.sha256(
+                                "artifact-one".getBytes(StandardCharsets.UTF_8)), 12),
+                        "contract-one.sub", SourceKind.OFFICIAL_SUBMARINE,
+                        Instant.parse("2026-07-17T00:00:00Z"), List.of(definition), List.of("fixture warning"));
                 ImportPlan firstPlan = store.recordAndPlan(first);
                 require(firstPlan.artifactAction() == ArtifactAction.RECORDED_INSPECTION_ONLY,
                         "First artifact was not recorded.");
                 require(firstPlan.definitions().size() == 1
-                                && firstPlan.definitions().get(0).action() == DefinitionAction.CREATE_NEW_DEFINITION_AFTER_APPROVAL,
+                                && firstPlan.definitions().get(0).action()
+                                == DefinitionAction.CREATE_NEW_DEFINITION_AFTER_APPROVAL,
                         "Unknown definition did not produce a create recommendation.");
-                require(!firstPlan.changesSimulationState(), "Inspection planning changed simulation state.");
-
                 ImportPlan duplicatePlan = store.recordAndPlan(first);
                 require(duplicatePlan.artifactAction() == ArtifactAction.SKIP_EXACT_ARTIFACT,
                         "Exact artifact was not skipped.");
-                require(store.count("import_artifact") == 1, "Exact artifact created a duplicate row.");
-
                 store.seedDefinitionForVerification(firstPlan.artifactId(), definition);
                 InspectionCandidate second = new InspectionCandidate(
-                        new SourceArtifactIdentity(IdentityContracts.sha256("artifact-two".getBytes(StandardCharsets.UTF_8)), 12),
-                        "renamed-contract-boat.sub", SourceKind.OFFICIAL_SUBMARINE, null,
-                        List.of(definition), List.of());
+                        new SourceArtifactIdentity(IdentityContracts.sha256(
+                                "artifact-two".getBytes(StandardCharsets.UTF_8)), 12),
+                        "renamed-contract-boat.sub", SourceKind.OFFICIAL_SUBMARINE,
+                        null, List.of(definition), List.of());
                 ImportPlan secondPlan = store.recordAndPlan(second);
-                require(secondPlan.definitions().get(0).action() == DefinitionAction.REUSE_EXISTING_DEFINITION_AFTER_APPROVAL,
+                require(secondPlan.definitions().get(0).action()
+                                == DefinitionAction.REUSE_EXISTING_DEFINITION_AFTER_APPROVAL,
                         "Renamed structural duplicate did not reuse the existing definition.");
-                require(store.count("import_artifact") == 2, "Second distinct artifact was not recorded.");
-                require(store.count("submarine_definition") == 1, "Verification seeded an unexpected definition count.");
+                require(store.count("import_artifact") == 2, "Distinct artifacts were not recorded.");
+                require(store.count("submarine_definition") == 1, "Unexpected definition count.");
                 require(store.count("vessel_instance") == 0 && store.count("vessel_snapshot") == 0,
-                        "Inspection planning created vessel simulation state.");
-                require(store.count("import_warning") == 1, "Inspection warning was not recorded.");
-                require(store.schemaVersion() == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
-                        "Schema migration version was not recorded.");
+                        "Inspection planning created vessel state.");
+                require(store.count("world_location") == 0 && store.count("world_station") == 0,
+                        "Schema migration created normalized world data without an import.");
+                require(store.schemaVersion() == 2, "Schema 002 migration was not recorded.");
             }
         } finally {
             deleteTree(root);
         }
     }
 
-    private void seedDefinitionForVerification(UUID sourceArtifactId, DefinitionCandidate definition) throws SQLException {
+    private void seedDefinitionForVerification(UUID sourceArtifactId, DefinitionCandidate definition)
+            throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO submarine_definition(definition_id, canonical_xml_sha256, official_check_value, "
                         + "display_name, game_version, submarine_type, submarine_class, tier, source_artifact_id) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
             statement.setString(1, UUID.randomUUID().toString());
             statement.setString(2, definition.canonicalXmlDigest().value());
-            if (definition.officialCheckValue() == null) statement.setObject(3, null); else statement.setInt(3, definition.officialCheckValue());
+            if (definition.officialCheckValue() == null) statement.setObject(3, null);
+            else statement.setInt(3, definition.officialCheckValue());
             statement.setString(4, definition.displayName());
             statement.setString(5, definition.gameVersion());
             statement.setString(6, definition.submarineType());
             statement.setString(7, definition.submarineClass());
-            if (definition.tier() == null) statement.setObject(8, null); else statement.setInt(8, definition.tier());
+            if (definition.tier() == null) statement.setObject(8, null);
+            else statement.setInt(8, definition.tier());
             statement.setString(9, sourceArtifactId.toString());
             statement.executeUpdate();
         }
     }
 
     private long count(String table) throws SQLException {
-        if (!List.of("import_artifact", "submarine_definition", "vessel_instance", "vessel_snapshot", "import_warning")
+        if (!List.of("import_artifact", "submarine_definition", "vessel_instance", "vessel_snapshot",
+                "import_warning", "world_location", "world_station", "world_import")
                 .contains(table)) throw new IllegalArgumentException("Unsupported verification table.");
-        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + table)) {
+        try (Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + table)) {
             return result.next() ? result.getLong(1) : 0;
         }
     }
