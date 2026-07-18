@@ -11,6 +11,7 @@
     "Internals-first and EVA-first are tradeoff doctrines rather than quality tiers.",
     "Passive armor is distributed hull thickness, structural reinforcement, citadel protection, and external-system hardening rather than a detachable module class.",
     "Physical protection and active fields retain separate fore, aft, left, right, up, down, citadel, and structural directional maps.",
+    "Sensor and fire-control findings must expose information age, uncertainty, source agreement, and deception risk before weapon performance is considered.",
     "Weapon usefulness is an engagement-solution envelope rather than a fixed physical range.",
     "Damage is local and graph-based.",
     "Incomplete, dismantled, damaged, abandoned, salvaged, wrecked, and destroyed are separate state axes.",
@@ -168,16 +169,28 @@
       "id":"VESSEL-06",
       "order":6,
       "title":"Sensors, tracks, and combat geometry",
-      "status":"next",
+      "status":"complete",
       "dependsOn":["VESSEL-02","VESSEL-03","VESSEL-05"],
-      "deliverables":["Light-lag calculations","Track uncertainty","Target maneuver envelope","Sensor confidence","Fire-control solution","Combat acceleration and delta-v"],
-      "acceptance":["Uncertainty grows with observation age and flight time","Evasion changes intercept through displacement","Range, signature, and emissions affect track quality","Conflicting tracks are representable"]
+      "deliverables":["Exact one-way and closed-loop light-lag calculations","Observation and information age","Position, velocity, and acceleration uncertainty","Target maneuver envelope constrained by acceleration and combat delta-v","Signature, identity, source-agreement, and deception confidence","Competing track hypotheses","Weapon-independent fire-control solution","Observer combat acceleration and delta-v authority","Surviving sensor and fire-control channel application","Combat-geometry export and interface"],
+      "acceptance":["Uncertainty grows with observation age and prediction horizon","Target acceleration and available combat delta-v change the possible displacement envelope","Range, signature, target emissions, aperture, baseline, processing, and surviving sensor state affect track quality","Conflicting observations remain representable as competing hypotheses","Fire-control readiness requires surviving channels and coherent VESSEL-05 graph authority","One-way light lag closes exactly against range divided by the speed of light","A destroyed or incoherent observer retains no active track or fire-control solution","Weapon performance, hit probability, projectile behavior, beam divergence, engagement envelopes, and local impacts remain deferred"],
+      "completionEvidence":[
+        "blacklight-exo-vessel-track-definitions.js",
+        "blacklight-exo-vessel-track-core.js",
+        "blacklight-exo-vessel-track-runtime.js",
+        "blacklight-exo-vessel-track-contracts.js",
+        "blacklight-exo-vessel-track-ui.js",
+        "data/exo-vessel/combat-geometry-registry.json",
+        "data/schemas/exo-vessel-combat-geometry.schema.json",
+        "scripts/validate-exo-vessel-tracks.mjs",
+        ".github/workflows/pages.yml",
+        "blacklight-exo-vessel.html"
+      ]
     },
     {
       "id":"VESSEL-07",
       "order":7,
       "title":"Weapon-family engineering and engagement envelopes",
-      "status":"planned",
+      "status":"next",
       "dependsOn":["VESSEL-02","VESSEL-06"],
       "deliverables":["Chemical ballistics","Rail guns","Coil guns","Brute mass throwers","Sand guns","Lasers","Particle and C-beams","Fractional-c kinetics","Missiles","Countermeasure missiles"],
       "acceptance":["Every weapon reports point-defense, practical, harassment, and theoretical reach","Unguided weapons degrade with maneuver uncertainty","Beam effect degrades with divergence and dwell","Missiles update in flight and face active defense","Weapons occupy valid modules and arcs"]
