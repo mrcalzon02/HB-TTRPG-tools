@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 10;
+    public static final int DATABASE_SCHEMA_VERSION = 11;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -173,6 +173,7 @@ public final class WorldStorageContracts {
     public static List<String> schema008Statements() { return StationConsumptionAndFrontierSchema.statements(); }
     public static List<String> schema009Statements() { return StationFrontierHardening.statements(); }
     public static List<String> schema010Statements() { return FleetRecoveryAndNaturalWorldSchema.statements(); }
+    public static List<String> schema011Statements() { return FleetRecoveryAndNaturalWorldHardening.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -263,6 +264,8 @@ public final class WorldStorageContracts {
             require(schema010Statements().stream().anyMatch(sql -> sql.contains("location_ecology_state")), "Natural ecology state is missing.");
             require(schema010Statements().stream().anyMatch(sql -> sql.contains("location_geology_state")), "Natural geology state is missing.");
             require(schema010Statements().stream().anyMatch(sql -> sql.contains("natural_resource_site")), "Natural resource exposure is missing.");
+            require(schema011Statements().stream().anyMatch(sql -> sql.contains("response_request_immediate_assignment")), "Immediate fleet response assignment is missing.");
+            require(schema011Statements().stream().anyMatch(sql -> sql.contains("fleet_response_requires_supplies")), "Fleet response material gating is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
