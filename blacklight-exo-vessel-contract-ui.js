@@ -22,7 +22,7 @@
     if($('exo-vessel-contract-section'))return;
     const section=node('section','bli-section');section.id='exo-vessel-contract-section';
     const head=node('div','bli-section-head');
-    head.append(node('p','bli-eyebrow','Charles // canonical vessel contract'),node('h2','','Stable identifiers, technology discipline, condition axes, and migration provenance.'),node('p','','This envelope preserves the complete engineering record while giving later manufacturer, module, voxel, combat, and damage phases one versioned source of truth.'));
+    head.append(node('p','bli-eyebrow','Charles // canonical vessel contract'),node('h2','','Stable identifiers, technology discipline, condition axes, and migration provenance.'),node('p','','This envelope preserves the complete engineering record while giving later manufacturer, module, voxel, combat, damage, inertial-control, and gameplay phases one versioned source of truth.'));
     const grid=node('div','exo-vessel-grid');grid.id='exo-vessel-contract-grid';
     const wrap=node('div','exo-vessel-table-wrap');
     const table=node('table','exo-vessel-table');
@@ -36,10 +36,42 @@
     else document.querySelector('main')?.prepend(section);
   }
 
+  function ensureInertialSection(){
+    if($('exo-vessel-inertial-section'))return;
+    const section=node('section','bli-section');section.id='exo-vessel-inertial-section';
+    const head=node('div','bli-section-head');
+    head.append(node('p','bli-eyebrow','Charles // inertial-reference control authority'),node('h2','','How the vessel avoids converting its crew into acceleration trauma.'),node('p','','Species may invent different generators, equations, or field ontologies, but certified vessels converge on the same operational result: the occupied internal reference frame must be partially decoupled from hull acceleration. Primary, secondary, compartment, and emergency systems remain separate damageable authorities.'));
+    const grid=node('div','exo-vessel-grid');grid.id='exo-vessel-inertial-grid';
+    const failures=node('div','exo-vessel-list-grid');failures.innerHTML='<article><h3>Redundancy and safeguards</h3><ul id="exo-vessel-inertial-safeguards"></ul></article><article><h3>Failure modes</h3><ul id="exo-vessel-inertial-failures"></ul></article>';
+    section.append(head,grid,failures);
+    const contract=$('exo-vessel-contract-section');
+    if(contract)contract.insertAdjacentElement('afterend',section);
+    else document.querySelector('.exo-vessel-overview')?.insertAdjacentElement('afterend',section);
+  }
+
   function card(label,title,body){
     const article=node('article','exo-vessel-card');
     article.append(node('small','',label),node('h3','',title),node('p','',body));
     return article;
+  }
+
+  function renderInertial(vessel){
+    const irc=vessel?.inertialControl;if(!irc)return;
+    ensureInertialSection();
+    const p=irc.performance,i=irc.installation,e=irc.emergency,r=irc.redundancy,power=irc.power;
+    $('exo-vessel-inertial-grid')?.replaceChildren(
+      card('Common field effect',irc.commonFieldName,`${irc.implementation.mechanism}. ${irc.implementation.principle}`),
+      card('Nominal coupling suppression',`${fmt(p.nominalDampeningPercent,3)}%`,`${fmt(p.certifiedExternalAccelerationG,4)} g external hull acceleration produces ${fmt(p.certifiedInternalResidualAccelerationG,5)} g inside the protected frame.`),
+      card('Biological acceleration authority',`${fmt(p.uncompensatedCrewLimitG,3)} g unprotected`,`${fmt(p.fieldSupportedCrewLimitG,3)} g mathematical field-supported limit before raw engine and structural limits are applied.`),
+      card('Installed reference system',i.totalMassText,`${fmt(i.totalVolumeM3,1)} m³ before distributed hull hardening; ${i.primaryChannels} primary channels, ${i.secondaryChannels} secondary channels, and ${i.distributedCompartmentNodes} local nodes.`),
+      card('Field power demand',power.continuousPowerText,`${power.peakPowerText} peak; ${power.emergencyReserveEnergyText} isolated reserve supporting ${fmt(power.emergencyReserveSeconds,1)} seconds of abort authority.`),
+      card('Automatic maneuver interlock',e.automaticManeuverInhibit?'Mandatory':'Absent',e.abortRule),
+      card('Technology reference',irc.referenceId,`${irc.technologyBand}; ${irc.implementation.convergenceRule}`),
+      card('Validation',irc.validation.valid?'Valid':'Invalid',irc.validation.valid?'Mass closure, acceleration reconstruction, biological residual limit, and separate reference authority passed.':irc.validation.violations.join(' '))
+    );
+    const safeguards=$('exo-vessel-inertial-safeguards'),failures=$('exo-vessel-inertial-failures');
+    safeguards?.replaceChildren(...[...irc.safeguards,`Fallback tiers: ${Object.values(r.degradedPerformance).map(item=>`${item.label} ${fmt(item.maximumExternalG,3)} g`).join('; ')}.`].map(text=>node('li','',text)));
+    failures?.replaceChildren(...irc.failureModes.map(text=>node('li','',text)));
   }
 
   function render(vessel){
@@ -57,16 +89,19 @@
       card('Derived layers',`${contract.derivedLayers.filter(layer=>layer.status==='generated').length} generated`,`${contract.derivedLayers.filter(layer=>layer.status==='planned').length} later layers are reserved by contract and may not redefine the existing source fields.`),
       card('Contract validation',contract.validation.valid?'Valid':'Invalid',contract.validation.valid?'Identifiers, technology offsets, condition axes, derived layers, and mass closure passed.':contract.validation.violations.join(' '))
     );
-    const body=$('exo-vessel-technology-body');if(!body)return;body.replaceChildren();
-    for(const item of technology.subsystemVariants){
-      const row=node('tr');
-      row.append(node('td','',item.label),node('td','',item.principalBand),node('td','',item.variant),node('td','',`${item.offset>=0?'+':''}${fmt(item.offset,2)}`),node('td','',item.heritageBand),node('td','',item.rationale));
-      body.append(row);
-    }
+    const body=$('exo-vessel-technology-body');if(body){body.replaceChildren();for(const item of technology.subsystemVariants){const row=node('tr');row.append(node('td','',item.label),node('td','',item.principalBand),node('td','',item.variant),node('td','',`${item.offset>=0?'+':''}${fmt(item.offset,2)}`),node('td','',item.heritageBand),node('td','',item.rationale));body.append(row);}}
+    renderInertial(vessel);
+  }
+
+  function loadStatCharts(){
+    if(globalThis.BlacklightExoStatCharts||document.querySelector('script[src="blacklight-exo-stat-charts.js"]'))return;
+    const script=document.createElement('script');script.src='blacklight-exo-stat-charts.js';script.defer=true;document.head.append(script);
   }
 
   ensureConditionControl();
   ensureSection();
+  ensureInertialSection();
   document.addEventListener('blacklight:exo-vessel-generated',event=>render(event.detail?.vessel));
   queueMicrotask(()=>render(globalThis.BlacklightExoGetActiveVessel?.()));
+  loadStatCharts();
 })();
