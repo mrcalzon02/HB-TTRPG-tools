@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs imports, migrations, registries, clock, checkpoints, passive scheduling, station economy, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs imports, migrations, registries, clock, checkpoints, passive scheduling, station logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -61,6 +61,20 @@ tasks.register<JavaExec>("runWorldRegistry") {
     description = "Runs the live Europa world map with passive station, NPC, mission, research, and encounter simulation controls."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow")
+}
+
+tasks.register<JavaExec>("runStationLogistics") {
+    group = "application"
+    description = "Runs the read-only station catalogue, inventory, vendor, production, freight, and treasury console."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.logistics.StationLogisticsWindow")
+}
+
+tasks.register<JavaExec>("runPlayerTransit") {
+    group = "application"
+    description = "Runs imported player-vessel enrollment, route planning, transit resolution, and docking."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.logistics.PlayerVesselTransitWindow")
 }
 
 tasks.register<JavaExec>("runSimulationMonitor") {
