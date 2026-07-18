@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet recovery, ecology, geology, natural resources, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet recovery, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -86,7 +86,7 @@ tasks.register<JavaExec>("runCivilizationFrontier") {
 
 tasks.register<JavaExec>("runNaturalWorld") {
     group = "application"
-    description = "Runs the live ecology, geology, natural resources, and fleet-response console."
+    description = "Runs the live ecology, geology, finite resources, extraction ledger, renewable recovery, and fleet-response console."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.nature.NaturalWorldAndFleetWindow")
 }
