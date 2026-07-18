@@ -143,17 +143,32 @@
       "id":"VESSEL-05",
       "order":5,
       "title":"Condition, history, salvage, and destruction",
-      "status":"next",
+      "status":"complete",
       "dependsOn":["VESSEL-04"],
-      "deliverables":["Construction completion","Commissioning","Wear","Damage events","Secondary propagation","Teardown and mothballing","Abandonment and salvage","Wreck and total destruction","History log"],
-      "acceptance":["Missing, removed, damaged, and salvaged remain distinct","Seventy-five percent destruction leaves coherent wreckage","One hundred percent destruction removes vessel coherence","Statistics recalculate from surviving graphs"]
+      "deliverables":["Construction completion","Commissioning","Wear","Damage events","Secondary propagation","Teardown and mothballing","Abandonment and salvage","Wreck and total destruction","History log","Surviving graph and statistics recalculation"],
+      "acceptance":["Missing, removed, damaged, and salvaged remain distinct","Seventy-five percent destruction leaves coherent wreckage","One hundred percent destruction removes vessel coherence","Statistics recalculate from surviving graphs","The intact module and voxel records remain reference authority","Repair mode records deterministic corrections and strict mode rejects invalid histories"],
+      "completionEvidence":[
+        "blacklight-exo-vessel-condition-definitions.js",
+        "blacklight-exo-vessel-condition-core.js",
+        "blacklight-exo-vessel-condition-propagation.js",
+        "blacklight-exo-vessel-condition-runtime.js",
+        "blacklight-exo-vessel-condition-contracts.js",
+        "blacklight-exo-vessel-condition-ui.js",
+        "data/exo-vessel/condition-history-registry.json",
+        "data/schemas/exo-vessel-condition-history.schema.json",
+        "data/schemas/exo-vessel-condition.schema.json",
+        "data/schemas/exo-vessel-module.schema.json",
+        "scripts/validate-exo-vessel-condition.mjs",
+        ".github/workflows/pages.yml",
+        "blacklight-exo-vessel.html"
+      ]
     },
     {
       "id":"VESSEL-06",
       "order":6,
       "title":"Sensors, tracks, and combat geometry",
-      "status":"planned",
-      "dependsOn":["VESSEL-02","VESSEL-03"],
+      "status":"next",
+      "dependsOn":["VESSEL-02","VESSEL-03","VESSEL-05"],
       "deliverables":["Light-lag calculations","Track uncertainty","Target maneuver envelope","Sensor confidence","Fire-control solution","Combat acceleration and delta-v"],
       "acceptance":["Uncertainty grows with observation age and flight time","Evasion changes intercept through displacement","Range, signature, and emissions affect track quality","Conflicting tracks are representable"]
     },
