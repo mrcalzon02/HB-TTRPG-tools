@@ -1,0 +1,27 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-campaign-archive.schema.json",
+  "title":"Blacklight EXO Vessel Campaign Archive",
+  "description":"VESSEL-10 append-only persistent archive envelope for complete canonical vessel records, manufacturer and hull-family libraries, deterministic provenance, migration, import, export, and campaign reactivation.",
+  "type":"object",
+  "additionalProperties":true,
+  "required":["recordType","schemaVersion","archiveId","campaignId","recordedAt","updatedAt","note","vesselHash","vesselInstanceId","manufacturerId","hullFamilyId","sourceRecordVersion","sourceSchemaVersion","vessel"],
+  "properties":{
+    "recordType":{"const":"blacklightExoVesselCampaignArchive"},
+    "schemaVersion":{"const":"1.0.0"},
+    "archiveId":{"type":"string","pattern":"^vessel-.+"},
+    "campaignId":{"type":"string","minLength":1,"maxLength":160},
+    "recordedAt":{"type":"string","format":"date-time"},
+    "updatedAt":{"type":"string","format":"date-time"},
+    "note":{"type":"string","maxLength":500},
+    "vesselHash":{"type":"string","pattern":"^[0-9a-f]{8}$"},
+    "sourceVesselHash":{"type":["string","null"],"pattern":"^[0-9a-f]{8}$"},
+    "vesselInstanceId":{"type":["string","null"]},
+    "manufacturerId":{"type":["string","null"]},
+    "hullFamilyId":{"type":["string","null"]},
+    "sourceRecordVersion":{"type":"integer","minimum":1},
+    "sourceSchemaVersion":{"type":["string","null"]},
+    "importedFileName":{"type":"string"},
+    "vessel":{"$ref":"exo-vessel-record.schema.json"}
+  }
+}
