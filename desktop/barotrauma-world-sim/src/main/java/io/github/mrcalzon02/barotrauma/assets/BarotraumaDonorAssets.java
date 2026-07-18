@@ -69,7 +69,7 @@ public final class BarotraumaDonorAssets {
     public void saveConfiguration(Mode mode, Path donorRoot) throws IOException {
         Objects.requireNonNull(mode, "mode");
         Path normalized = donorRoot == null ? null : normalizeSelectedPath(donorRoot);
-        if (mode != Mode.FALLBACK) {
+        if (mode == Mode.MANUAL || (mode == Mode.AUTO && normalized != null)) {
             Candidate validation = inspectCandidate(normalized, DiscoverySource.MANUAL_SELECTION);
             if (!validation.valid()) throw new IOException(validation.detail());
             normalized = validation.installationRoot();
@@ -128,7 +128,7 @@ public final class BarotraumaDonorAssets {
             return Candidate.invalid(root, source,
                     "A Content directory was found, but it does not contain enough expected Barotrauma asset folders.");
         }
-        Path canonicalRoot = canonicalInstallationRoot(root, content);
+        Path canonicalRoot = canonicalInstallationRoot(root);
         return new Candidate(canonicalRoot, content.toAbsolutePath().normalize(), source, true,
                 "Validated local Barotrauma donor installation.");
     }
@@ -250,7 +250,7 @@ public final class BarotraumaDonorAssets {
         return Optional.empty();
     }
 
-    private static Path canonicalInstallationRoot(Path selected, Path content) {
+    private static Path canonicalInstallationRoot(Path selected) {
         Path normalized = selected.toAbsolutePath().normalize();
         if (normalized.getFileName() != null && normalized.getFileName().toString().equalsIgnoreCase("Content")) {
             Path parent = normalized.getParent();
@@ -291,6 +291,10 @@ public final class BarotraumaDonorAssets {
             ResolvedAsset donor = assets.resolve(AssetRole.STATION);
             require(donor.source() == AssetSource.DONOR_INSTALLATION && donor.file() != null,
                     "Donor-first asset resolution failed.");
+            assets.saveConfiguration(Mode.AUTO, null);
+            require(assets.loadConfiguration().mode() == Mode.AUTO
+                            && assets.loadConfiguration().donorRoot() == null,
+                    "Automatic discovery could not be configured before donor installation.");
             assets.saveConfiguration(Mode.FALLBACK, null);
             require(assets.resolve(AssetRole.STATION).source() == AssetSource.PACKAGED_FALLBACK,
                     "Fallback-only asset resolution failed.");
