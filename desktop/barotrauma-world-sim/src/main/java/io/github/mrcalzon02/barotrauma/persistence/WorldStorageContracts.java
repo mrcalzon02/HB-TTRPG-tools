@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 11;
+    public static final int DATABASE_SCHEMA_VERSION = 12;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     private WorldStorageContracts() {}
@@ -174,6 +174,7 @@ public final class WorldStorageContracts {
     public static List<String> schema009Statements() { return StationFrontierHardening.statements(); }
     public static List<String> schema010Statements() { return FleetRecoveryAndNaturalWorldSchema.statements(); }
     public static List<String> schema011Statements() { return FleetRecoveryAndNaturalWorldHardening.statements(); }
+    public static List<String> schema012Statements() { return NaturalWorldMissionHardening.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -266,6 +267,9 @@ public final class WorldStorageContracts {
             require(schema010Statements().stream().anyMatch(sql -> sql.contains("natural_resource_site")), "Natural resource exposure is missing.");
             require(schema011Statements().stream().anyMatch(sql -> sql.contains("response_request_immediate_assignment")), "Immediate fleet response assignment is missing.");
             require(schema011Statements().stream().anyMatch(sql -> sql.contains("fleet_response_requires_supplies")), "Fleet response material gating is missing.");
+            require(schema012Statements().stream().anyMatch(sql -> sql.contains("active_response_blocks_world_mission")), "Fleet response mission priority is missing.");
+            require(schema012Statements().stream().anyMatch(sql -> sql.contains("natural_resource_creates_mission")), "Natural resource mission generation is missing.");
+            require(schema012Statements().stream().anyMatch(sql -> sql.contains("predator_expansion_creates_mission")), "Predator-response mission generation is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
