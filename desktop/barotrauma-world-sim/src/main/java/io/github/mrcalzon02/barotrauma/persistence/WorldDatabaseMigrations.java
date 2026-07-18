@@ -45,6 +45,9 @@ final class WorldDatabaseMigrations {
                 } else if (version == 2) {
                     applyMigration(connection, 3, WorldStorageContracts.schema003Statements());
                     version = 3;
+                } else if (version == 3) {
+                    applyMigration(connection, 4, WorldStorageContracts.schema004Statements());
+                    version = 4;
                 } else {
                     throw new SQLException("No forward migration is defined from schema " + version + ".");
                 }
@@ -151,12 +154,18 @@ final class WorldDatabaseMigrations {
             }
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
-                require(currentVersion(connection) == 3, "Legacy world did not advance to schema 003.");
+                require(currentVersion(connection) == 4, "Legacy world did not advance to schema 004.");
                 require(tableExists(connection, "world_location"), "Schema-002 world tables are missing.");
                 require(tableExists(connection, "simulation_command_receipt"),
                         "Schema-003 command receipt table is missing.");
                 require(tableExists(connection, "simulation_checkpoint"),
                         "Schema-003 checkpoint table is missing.");
+                require(tableExists(connection, "station_simulation_state"),
+                        "Schema-004 station workload table is missing.");
+                require(tableExists(connection, "npc_vessel") && tableExists(connection, "npc_voyage_log"),
+                        "Schema-004 NPC voyage tables are missing.");
+                require(tableExists(connection, "world_mission") && tableExists(connection, "world_encounter"),
+                        "Schema-004 mission or encounter tables are missing.");
                 require(columnExists(connection, "world_metadata", "source_suite_version"),
                         "Schema-002 world metadata columns are missing.");
                 require(columnExists(connection, "world_simulation_metadata", "current_tick_sequence"),
