@@ -1,10 +1,12 @@
 package io.github.mrcalzon02.barotrauma.desktop.simulation;
 
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
+import io.github.mrcalzon02.barotrauma.persistence.SimulationCheckpointStore;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock.ClockSnapshot;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock.SchedulerState;
+import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 import io.github.mrcalzon02.barotrauma.simulation.PersistentSimulationSession;
 import io.github.mrcalzon02.barotrauma.simulation.PersistentSimulationSession.DurableCommandResult;
 import io.github.mrcalzon02.barotrauma.simulation.SimulationCommandExecutor;
@@ -59,6 +61,7 @@ public final class SimulationMonitorWindow extends JFrame {
     private ClockSnapshot snapshot;
     private AutoCloseable worldSubscription;
     private boolean busy;
+    private boolean passiveOwned;
 
     public SimulationMonitorWindow() {
         super("Barotrauma Durable Simulation Monitor");
@@ -80,8 +83,8 @@ public final class SimulationMonitorWindow extends JFrame {
         log.setEditable(false);
         log.setLineWrap(false);
         log.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
-        log.setText("Open a normalized desktop world. Automatic Run is intentionally unavailable.\n"
-                + "Every manual command is serialized, written to SQLite, and rejected if its durable before-state is stale.\n");
+        log.setText("Open a normalized desktop world for reviewed manual clock commands.\n"
+                + "When World Map Passive Mode is active, this monitor becomes read-only so only one writer owns the world.\n");
         add(new JScrollPane(log), BorderLayout.CENTER);
 
         JPanel commandRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
@@ -137,6 +140,7 @@ public final class SimulationMonitorWindow extends JFrame {
         closeSimulation();
         world = selectedWorld;
         snapshot = null;
+        passiveOwned = false;
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
             clockStatus.setText("Simulation clock unavailable");
@@ -152,6 +156,32 @@ public final class SimulationMonitorWindow extends JFrame {
     private void openSimulation(WorldPaths selectedWorld) {
         if (selectedWorld == null || busy) return;
         closeSimulation();
+        PassiveWorldSimulationService passive = PassiveWorldSimulationService.active(selectedWorld);
+        if (passive != null && passive.status().running()) {
+            passiveOwned = true;
+            setBusy(true, "Loading read-only clock while Passive Mode owns the writer…");
+            java.util.concurrent.CompletableFuture.supplyAsync(() -> {
+                try {
+                    return SimulationCheckpointStore.load(selectedWorld, DEFAULT_TICK_SIZE).snapshot();
+                } catch (Exception exception) {
+                    throw new CompletionException(exception);
+                }
+            }).whenComplete((state, failure) -> SwingUtilities.invokeLater(() -> {
+                if (!selectedWorld.equals(world)) return;
+                if (failure != null) {
+                    showFailure("Durable clock unavailable", cause(failure));
+                    setBusy(false, "Open the World Map to review Passive Mode");
+                    return;
+                }
+                snapshot = state;
+                catchUpTarget.setText(state.canonicalTime().plus(Duration.ofHours(1)).toString());
+                append("Read-only durable clock loaded; Passive Mode owns the writer", state, null);
+                setBusy(false, "Read-only while Passive Mode is active");
+            }));
+            return;
+        }
+
+        passiveOwned = false;
         setBusy(true, "Loading durable simulation clock…");
         java.util.concurrent.CompletableFuture.supplyAsync(() -> {
             try {
@@ -195,7 +225,7 @@ public final class SimulationMonitorWindow extends JFrame {
 
     private void submit(SimulationCommandExecutor.SimulationCommand command, String checkpointReason) {
         PersistentSimulationSession active = simulation;
-        if (active == null || busy) return;
+        if (active == null || busy || passiveOwned) return;
         setBusy(true, "Executing and persisting " + command.label() + "…");
         active.submit(command, "desktop-user", checkpointReason)
                 .whenComplete((result, failure) -> SwingUtilities.invokeLater(() -> {
@@ -232,7 +262,8 @@ public final class SimulationMonitorWindow extends JFrame {
         log.setCaretPosition(log.getDocument().getLength());
         clockStatus.setText("Canonical " + state.canonicalTime() + " · tick " + state.tickSequence()
                 + " · " + (state.simulationEnabled() ? "enabled" : "disabled")
-                + " · " + state.schedulerState());
+                + " · " + state.schedulerState()
+                + (passiveOwned ? " · PASSIVE WRITER" : ""));
         refreshControls();
     }
 
@@ -243,7 +274,8 @@ public final class SimulationMonitorWindow extends JFrame {
     }
 
     private void refreshControls() {
-        boolean ready = !busy && simulation != null && snapshot != null && !simulation.persistenceFaulted();
+        boolean ready = !busy && !passiveOwned && simulation != null && snapshot != null
+                && !simulation.persistenceFaulted();
         boolean enabled = ready && snapshot.simulationEnabled();
         boolean paused = ready && snapshot.schedulerState() == SchedulerState.PAUSED;
         openWorldButton.setEnabled(!busy);
