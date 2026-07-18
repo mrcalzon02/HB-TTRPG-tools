@@ -1,0 +1,27 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-campaign-state-overlay.schema.json",
+  "title":"Blacklight EXO Vessel Campaign State Overlay",
+  "description":"VESSEL-10 reversible campaign operational overlay. It preserves VESSEL-05 condition history and VESSEL-08 pre-impact authority while recording campaign edits to axes, modules, routes, zones, effective capacity, and the regenerated VESSEL-09 action model.",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["recordType","schemaVersion","phase","overlayId","vesselInstanceId","createdAt","updatedAt","baseAuthority","axisOverrides","moduleOverrides","routeOverrides","zoneOverrides","editorNote","overlayHash","validation"],
+  "properties":{
+    "recordType":{"const":"blacklightExoVesselCampaignStateOverlay"},
+    "schemaVersion":{"const":"1.0.0"},
+    "phase":{"const":"VESSEL-10"},
+    "overlayId":{"type":"string","pattern":"^overlay-.+"},
+    "vesselInstanceId":{"type":"string","minLength":1},
+    "createdAt":{"type":"string","format":"date-time"},
+    "updatedAt":{"type":"string","format":"date-time"},
+    "baseAuthority":{"type":"object","additionalProperties":false,"required":["conditionHistory","combatResolution","conditionHash","combatResolutionHash","immutable"],"properties":{"conditionHistory":{"const":"VESSEL-05_IMMUTABLE_PRE_IMPACT_AND_SURVIVING_GRAPH_AUTHORITY"},"combatResolution":{"const":"VESSEL-08_POST_IMPACT_STATE_AUTHORITY"},"conditionHash":{"type":"string","pattern":"^[0-9a-f]{8}$"},"combatResolutionHash":{"type":"string","pattern":"^[0-9a-f]{8}$"},"immutable":{"const":true}}},
+    "axisOverrides":{"type":"object","additionalProperties":false,"properties":{"constructionCompletionPercent":{"$ref":"#/$defs/percent"},"wearPercent":{"$ref":"#/$defs/percent"},"destructionPercent":{"$ref":"#/$defs/percent"},"crewAvailabilityPercent":{"$ref":"#/$defs/percent"},"atmosphereIntegrityPercent":{"$ref":"#/$defs/percent"},"fuelLoadPercent":{"$ref":"#/$defs/percent"},"coolantLoadPercent":{"$ref":"#/$defs/percent"},"dataIntegrityPercent":{"$ref":"#/$defs/percent"},"maintenanceDebtPercent":{"$ref":"#/$defs/percent"}}},
+    "moduleOverrides":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["moduleId","damagePercent","operational","graphParticipation","installationState"],"properties":{"moduleId":{"type":"string","minLength":1},"damagePercent":{"$ref":"#/$defs/percent"},"operational":{"type":"boolean"},"graphParticipation":{"enum":["FULL","DEGRADED","NONE"]},"installationState":{"enum":["INSTALLED","DAMAGED","DESTROYED","REMOVED","MISSING","SALVAGED"]}}}},
+    "routeOverrides":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["routeId","functional","state"],"properties":{"routeId":{"type":"string","minLength":1},"functional":{"type":"boolean"},"state":{"enum":["ACTIVE","DEGRADED","SEVERED","REMOVED"]}}}},
+    "zoneOverrides":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["zoneId","atmosphereIntegrityPercent","state"],"properties":{"zoneId":{"type":"string","minLength":1},"atmosphereIntegrityPercent":{"$ref":"#/$defs/percent"},"state":{"enum":["ACTIVE","COMPROMISED","EVACUATED","DESTROYED"]}}}},
+    "editorNote":{"type":"string","maxLength":500},
+    "overlayHash":{"type":"string","pattern":"^[0-9a-f]{8}$"},
+    "validation":{"type":"object","additionalProperties":true,"required":["valid","violations","warnings"],"properties":{"valid":{"type":"boolean"},"violations":{"type":"array","items":{"type":"string"}},"warnings":{"type":"array","items":{"type":"string"}}}}
+  },
+  "$defs":{"percent":{"type":"number","minimum":0,"maximum":100}}
+}
