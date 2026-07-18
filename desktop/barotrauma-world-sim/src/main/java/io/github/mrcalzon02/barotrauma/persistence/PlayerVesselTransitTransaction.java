@@ -77,9 +77,7 @@ public final class PlayerVesselTransitTransaction {
             } catch (SQLException | RuntimeException exception) {
                 try { connection.rollback(); } catch (SQLException rollback) { exception.addSuppressed(rollback); }
                 throw exception;
-            } finally {
-                connection.setAutoCommit(original);
-            }
+            } finally { connection.setAutoCommit(original); }
         }
     }
 
@@ -134,9 +132,7 @@ public final class PlayerVesselTransitTransaction {
             } catch (SQLException | RuntimeException exception) {
                 try { connection.rollback(); } catch (SQLException rollback) { exception.addSuppressed(rollback); }
                 throw exception;
-            } finally {
-                connection.setAutoCommit(original);
-            }
+            } finally { connection.setAutoCommit(original); }
         }
     }
 
@@ -171,24 +167,27 @@ public final class PlayerVesselTransitTransaction {
                 int hull = clamp(state.hull() + resolution.hullDelta(), 0, 100);
                 int supplies = Math.max(0, state.supplies() + resolution.suppliesDelta());
                 int progress = state.routeProgress() + 1;
+                int addedDelay = Math.max(0, resolution.delayTicks() - 1);
+                int requiredTicks = Math.addExact(state.routeTicksRequired(), addedDelay);
                 String status = hull == 0 ? "LOST" : hull < 20 ? "DISABLED" : "IN_TRANSIT";
-                boolean arrived = status.equals("IN_TRANSIT")
-                        && progress >= state.routeTicksRequired() + resolution.delayTicks();
+                boolean arrived = status.equals("IN_TRANSIT") && progress >= requiredTicks;
                 if (arrived) status = "ARRIVED";
                 try (PreparedStatement statement = connection.prepareStatement(
-                        "UPDATE player_vessel_state SET hull=?,supplies=?,route_progress=?,route_action_sequence=?,"
-                                + "status=?,current_location_id=CASE WHEN ?=1 THEN destination_location_id ELSE current_location_id END,"
+                        "UPDATE player_vessel_state SET hull=?,supplies=?,route_progress=?,route_ticks_required=?,"
+                                + "route_action_sequence=?,status=?,"
+                                + "current_location_id=CASE WHEN ?=1 THEN destination_location_id ELSE current_location_id END,"
                                 + "destination_location_id=CASE WHEN ?=1 THEN NULL ELSE destination_location_id END,last_tick=? "
                                 + "WHERE vessel_id=?")) {
                     statement.setInt(1, hull);
                     statement.setInt(2, supplies);
                     statement.setInt(3, progress);
-                    statement.setLong(4, actionSequence);
-                    statement.setString(5, status);
-                    statement.setInt(6, arrived ? 1 : 0);
+                    statement.setInt(4, requiredTicks);
+                    statement.setLong(5, actionSequence);
+                    statement.setString(6, status);
                     statement.setInt(7, arrived ? 1 : 0);
-                    statement.setLong(8, world.tickSequence());
-                    statement.setString(9, vesselId.toString());
+                    statement.setInt(8, arrived ? 1 : 0);
+                    statement.setLong(9, world.tickSequence());
+                    statement.setString(10, vesselId.toString());
                     statement.executeUpdate();
                 }
                 UUID encounterId = deterministicId(world.worldId() + ":player-encounter:" + vesselId + ":"
@@ -218,19 +217,18 @@ public final class PlayerVesselTransitTransaction {
                         resolution.narrative(),
                         "Challenge " + resolution.challenge() + ", roll " + resolution.roll()
                                 + ", effective capability " + resolution.effectiveCapability()
-                                + ", margin " + resolution.margin() + ".",
+                                + ", margin " + resolution.margin() + ", added route delay " + addedDelay + ".",
                         updated.status(), resolution.hullDelta(), resolution.suppliesDelta());
                 insertAudit(connection, actor, "player_transit_resolved", vesselId,
                         "{\"encounterId\":\"" + encounterId + "\",\"outcome\":\""
-                                + resolution.outcome().name() + "\",\"arrived\":" + arrived + "}");
+                                + resolution.outcome().name() + "\",\"addedDelay\":" + addedDelay
+                                + ",\"arrived\":" + arrived + "}");
                 connection.commit();
                 return new TransitResult(encounterId, updated, resolution, arrived);
             } catch (SQLException | RuntimeException exception) {
                 try { connection.rollback(); } catch (SQLException rollback) { exception.addSuppressed(rollback); }
                 throw exception;
-            } finally {
-                connection.setAutoCommit(original);
-            }
+            } finally { connection.setAutoCommit(original); }
         }
     }
 
@@ -266,9 +264,7 @@ public final class PlayerVesselTransitTransaction {
             } catch (SQLException | RuntimeException exception) {
                 try { connection.rollback(); } catch (SQLException rollback) { exception.addSuppressed(rollback); }
                 throw exception;
-            } finally {
-                connection.setAutoCommit(original);
-            }
+            } finally { connection.setAutoCommit(original); }
         }
     }
 
