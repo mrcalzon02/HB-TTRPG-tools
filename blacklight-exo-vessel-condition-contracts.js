@@ -2,6 +2,7 @@
   'use strict';
   const base=globalThis.BlacklightExoVessel,prior=globalThis.BlacklightExoVesselContracts;
   if(!base?.conditionHistoryVersion||!prior||base.conditionContractVersion)return;
+  function phaseVersionAtLeast(value,minimum){const current=String(value||'0.0.0').split('.').map(Number),required=String(minimum).split('.').map(Number);for(let index=0;index<3;index+=1){if((current[index]||0)>(required[index]||0))return true;if((current[index]||0)<(required[index]||0))return false;}return true;}
   function validate(record){
     const inherited=prior.validate(record),violations=[...(inherited.violations||[])],history=record?.conditionHistory;
     if(history){
@@ -17,7 +18,7 @@
       if(record.contract?.condition?.applicationStatus!=='APPLIED_TO_MODULE_AND_VOXEL_GRAPHS')violations.push('Canonical condition was not applied to module and voxel graph authority.');
       if(record.contract?.condition?.coherentVesselGraph!==history.coherentVesselGraph)violations.push('Canonical condition coherence disagrees with condition history.');
       if(record.contract?.derivedLayers?.find(layer=>layer.key==='damageTopology')?.status!=='generated')violations.push('Canonical contract did not mark damageTopology as generated.');
-      if(record.contract?.provenance?.generatorVersion!=='3.5.0'||record.contract?.provenance?.conditionHistoryVersion!=='1.0.0')violations.push('Canonical provenance does not identify VESSEL-05.');
+      if(!phaseVersionAtLeast(record.contract?.provenance?.generatorVersion,'3.5.0')||record.contract?.provenance?.conditionHistoryVersion!=='1.0.0')violations.push('Canonical provenance does not preserve VESSEL-05 authority.');
       if(record.contract?.extensions?.conditionHistorySchema!=='data/schemas/exo-vessel-condition-history.schema.json')violations.push('Canonical contract does not expose the condition-history schema.');
       if(history.axes?.destructionPercent===100&&(history.coherentVesselGraph||history.residualVoxelField?.coherentVesselGraph||Object.values(history.effectiveGraphs||{}).some(graph=>graph.nodes?.length||graph.edges?.length)))violations.push('Total destruction retained coherent effective topology.');
       if(history.axes?.destructionPercent>=75&&history.axes?.destructionPercent<100&&!history.coherentVesselGraph)violations.push('A sub-total wreck failed to retain coherent wreckage.');
