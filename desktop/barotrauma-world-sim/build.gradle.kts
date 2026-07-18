@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs the complete vessel, chronology, campaign, migration, normalized-world, and registry contract chain."
+    description = "Runs the complete import, migration, registry, deterministic clock, command, checkpoint, and recovery contract chain."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -61,6 +61,13 @@ tasks.register<JavaExec>("runWorldRegistry") {
     description = "Runs the read-only normalized master-world, location, station, and scheduler registry."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow")
+}
+
+tasks.register<JavaExec>("runSimulationMonitor") {
+    group = "application"
+    description = "Runs the manual durable deterministic simulation clock monitor."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow")
 }
 
 tasks.register<JavaExec>("runCampaignMapping") {
