@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 12;
+    public static final int DATABASE_SCHEMA_VERSION = 13;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -179,6 +179,7 @@ public final class WorldStorageContracts {
     public static List<String> schema010Statements() { return FleetRecoveryAndNaturalWorldSchema.statements(); }
     public static List<String> schema011Statements() { return FleetRecoveryAndNaturalWorldHardening.statements(); }
     public static List<String> schema012Statements() { return NaturalWorldMissionHardening.statements(); }
+    public static List<String> schema013Statements() { return NaturalResourceHarvestingSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -274,6 +275,9 @@ public final class WorldStorageContracts {
             require(schema012Statements().stream().anyMatch(sql -> sql.contains("active_response_blocks_world_mission")), "Fleet response mission priority is missing.");
             require(schema012Statements().stream().anyMatch(sql -> sql.contains("natural_resource_creates_mission")), "Natural resource mission generation is missing.");
             require(schema012Statements().stream().anyMatch(sql -> sql.contains("predator_expansion_creates_mission")), "Predator-response mission generation is missing.");
+            require(schema013Statements().stream().anyMatch(sql -> sql.contains("resource_extraction_batch")), "Natural resource extraction evidence is missing.");
+            require(schema013Statements().stream().anyMatch(sql -> sql.contains("passive_resource_recovery")), "Renewable resource recovery is missing.");
+            require(schema013Statements().stream().anyMatch(sql -> sql.contains("DROP TRIGGER IF EXISTS passive_station_logistics_cycle")), "Unbounded free ore production was not replaced.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
