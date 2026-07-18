@@ -25,9 +25,9 @@
     const anchor=$('exo-vessel-damage-section')||$('exo-vessel-weapon-section')||$('exo-vessel-track-section')||document.querySelector('.exo-vessel-overview');if(anchor)anchor.insertAdjacentElement('afterend',section);else document.querySelector('main')?.append(section);
     exportButton.addEventListener('click',exportGameplay);resolveButton.addEventListener('click',resolveSelected);
   }
-  function loadCampaignLayer(){
-    if(!document.querySelector('link[href="blacklight-exo-vessel-campaign.css"]')){const link=document.createElement('link');link.rel='stylesheet';link.href='blacklight-exo-vessel-campaign.css';document.head.append(link);}
-    if(!document.querySelector('script[src="blacklight-exo-vessel-campaign-store.js"]')){const script=document.createElement('script');script.src='blacklight-exo-vessel-campaign-store.js';script.async=false;document.head.append(script);}
+  function loadVessel10Layers(){
+    for(const href of['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-diegetic-controls.css'])if(!document.querySelector(`link[href="${href}"]`)){const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link);}
+    for(const src of['blacklight-exo-vessel-campaign-store.js','blacklight-exo-vessel-diegetic-controls.js'])if(!document.querySelector(`script[src="${src}"]`)){const script=document.createElement('script');script.src=src;script.async=false;document.head.append(script);}
   }
   function replaceCards(id,rows){$(id)?.replaceChildren(...rows.map(row=>card(...row)));}
   function row(body,values){const tr=node('tr');for(const value of values)tr.append(node('td','',value));body?.append(tr);}
@@ -42,5 +42,5 @@
   }
   function resolveSelected(){if(!active?.gameplayModel)return;const actionId=$('exo-vessel-gameplay-action')?.value;if(!actionId)return;const mode=$('exo-vessel-gameplay-resolution')?.value||'SIMPLIFIED';lastResolution=C.resolveAction(active.gameplayModel,actionId,{mode,difficultyPercent:Number($('exo-vessel-gameplay-resolve-difficulty')?.value||50),oppositionPercent:Number($('exo-vessel-gameplay-opposition')?.value||50),sequence:Number($('exo-vessel-gameplay-sequence')?.value||1)});$('exo-vessel-gameplay-result').textContent=JSON.stringify(lastResolution,null,2);}
   function exportGameplay(){const record=active?.gameplayModel;if(!record)return;const blob=new Blob([JSON.stringify(record,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`${active.seed}-gameplay-model.json`;document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);}
-  addControls();build();document.addEventListener('blacklight:exo-vessel-generated',event=>render(event.detail?.vessel));queueMicrotask(()=>{render(globalThis.BlacklightExoGetActiveVessel?.());loadCampaignLayer();});
+  addControls();build();document.addEventListener('blacklight:exo-vessel-generated',event=>render(event.detail?.vessel));queueMicrotask(()=>{render(globalThis.BlacklightExoGetActiveVessel?.());loadVessel10Layers();});
 })();
