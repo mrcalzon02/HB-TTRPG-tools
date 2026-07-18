@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-module.schema.json",
   "title": "Blacklight EXO Vessel Semantic Module",
-  "description": "Persistent VESSEL-03 physical module identity. VESSEL-04 assigns integer-cell voxel bounds without replacing or renaming the module.",
+  "description": "Persistent VESSEL-03 physical module identity with VESSEL-04 voxel bounds and VESSEL-05 lifecycle, removal, damage, residual-material, and graph-participation state.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -15,7 +15,7 @@
     "vesselInstanceId": {"type": "string", "pattern": "^vessel-[a-z0-9][a-z0-9-]{5,95}$"},
     "subsystemKey": {"type": "string", "minLength": 1},
     "label": {"type": "string", "minLength": 1},
-    "semanticType": {"type": "string", "minLength": 1},
+    "semanticType": {"type": "string", "minLength": 1, "not": {"const": "ARMOR"}},
     "envelope": {"enum": ["INTERNAL", "EVA"]},
     "pressureZoneId": {"type": ["string", "null"]},
     "criticality": {"enum": ["CRITICAL", "PROTECTIVE", "MISSION", "COMBAT", "RESERVE"]},
@@ -60,13 +60,27 @@
     "hazards": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "functions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "state": {
-      "type": "object", "additionalProperties": false, "required": ["constructionPercent", "damagePercent", "salvageRemovalPercent", "operational", "applicationStatus"],
+      "type": "object", "additionalProperties": false,
+      "required": ["constructionPercent", "commissioningPercent", "damagePercent", "salvageRemovalPercent", "maintenanceDebtPercent", "contaminationPercent", "operational", "applicationStatus", "installationState", "serviceState", "disposition", "graphParticipation", "conditionPercent", "residualMassTonnes", "residualVolumeM3", "salvageableMassTonnes", "failureModes", "eventIds"],
       "properties": {
         "constructionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "commissioningPercent": {"type": "number", "minimum": 0, "maximum": 100},
         "damagePercent": {"type": "number", "minimum": 0, "maximum": 100},
         "salvageRemovalPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "maintenanceDebtPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "contaminationPercent": {"type": "number", "minimum": 0, "maximum": 100},
         "operational": {"type": "boolean"},
-        "applicationStatus": {"enum": ["INTACT_REFERENCE", "CONDITION_APPLIED", "DAMAGED", "REMOVED", "DESTROYED"]}
+        "applicationStatus": {"enum": ["INTACT_REFERENCE", "CONDITION_APPLIED", "DAMAGED", "REMOVED", "DESTROYED"]},
+        "installationState": {"enum": ["INSTALLED", "INCOMPLETE", "MISSING", "REMOVED", "DESTROYED"]},
+        "serviceState": {"enum": ["OPERATIONAL", "DEGRADED", "OFFLINE", "ISOLATED", "MOTHBALLED", "ABANDONED", "WRECKAGE"]},
+        "disposition": {"enum": ["NONE", "MISSING_CONSTRUCTION", "TEARDOWN", "SALVAGE", "DAMAGE", "DESTRUCTION"]},
+        "graphParticipation": {"enum": ["ACTIVE", "PHYSICAL_ONLY", "NONE"]},
+        "conditionPercent": {"type": "number", "minimum": 0, "maximum": 100},
+        "residualMassTonnes": {"type": "number", "minimum": 0},
+        "residualVolumeM3": {"type": "number", "minimum": 0},
+        "salvageableMassTonnes": {"type": "number", "minimum": 0},
+        "failureModes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "eventIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
       }
     },
     "voxelBounds": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/voxelBounds"}]},
