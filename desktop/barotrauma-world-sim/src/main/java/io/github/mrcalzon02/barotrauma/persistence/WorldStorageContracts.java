@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -77,12 +78,19 @@ public final class WorldStorageContracts {
             channel.truncate(0);
             channel.write(ByteBuffer.wrap(owner.getBytes(StandardCharsets.UTF_8)));
             channel.force(true);
-            return new WorldLock(channel, lock, paths.lockFile());
+            WorldLock result = new WorldLock(channel, lock, paths.lockFile());
+            try {
+                WorldDatabaseMigrations.migrateExistingDatabase(paths);
+                return result;
+            } catch (IOException | RuntimeException exception) {
+                try { result.close(); } catch (IOException closeFailure) { exception.addSuppressed(closeFailure); }
+                throw exception;
+            }
         } catch (OverlappingFileLockException exception) {
             channel.close();
             throw new IOException("Desktop world is already locked in this process: " + paths.root(), exception);
         } catch (IOException | RuntimeException exception) {
-            channel.close();
+            if (channel.isOpen()) channel.close();
             throw exception;
         }
     }
@@ -107,13 +115,13 @@ public final class WorldStorageContracts {
         }
     }
 
-    /** Schema 001: import ledger and duplicate-safe vessel identity. */
+    /** Complete schema for a new database; schema 001 tables plus the schema 002 world model. */
     public static List<String> initialSchemaStatements() {
-        return List.of(
+        List<String> statements = new ArrayList<>(List.of(
                 "PRAGMA foreign_keys = ON",
                 "PRAGMA journal_mode = WAL",
                 "CREATE TABLE schema_migration (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)",
-                "CREATE TABLE world_metadata (world_id TEXT PRIMARY KEY, display_name TEXT NOT NULL, created_at TEXT NOT NULL, canonical_time TEXT, master_world_id TEXT)",
+                "CREATE TABLE world_metadata (world_id TEXT PRIMARY KEY, display_name TEXT NOT NULL, created_at TEXT NOT NULL, canonical_time TEXT, master_world_id TEXT, source_suite_version INTEGER, source_exported_at TEXT)",
                 "CREATE TABLE import_artifact (artifact_id TEXT PRIMARY KEY, sha256 TEXT NOT NULL UNIQUE, byte_length INTEGER NOT NULL CHECK(byte_length >= 0), source_name TEXT NOT NULL, source_kind TEXT NOT NULL, inspected_at TEXT NOT NULL, imported_at TEXT)",
                 "CREATE TABLE submarine_definition (definition_id TEXT PRIMARY KEY, canonical_xml_sha256 TEXT NOT NULL UNIQUE, official_check_value INTEGER, display_name TEXT NOT NULL, game_version TEXT, submarine_type TEXT, submarine_class TEXT, tier INTEGER, source_artifact_id TEXT, FOREIGN KEY(source_artifact_id) REFERENCES import_artifact(artifact_id))",
                 "CREATE TABLE vessel_instance (vessel_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, definition_id TEXT NOT NULL, display_name TEXT NOT NULL, created_at TEXT NOT NULL, retired_at TEXT, UNIQUE(world_id, vessel_id), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(definition_id) REFERENCES submarine_definition(definition_id))",
@@ -121,14 +129,22 @@ public final class WorldStorageContracts {
                 "CREATE UNIQUE INDEX one_current_snapshot_per_vessel ON vessel_snapshot(vessel_id) WHERE is_current = 1",
                 "CREATE TABLE import_warning (warning_id TEXT PRIMARY KEY, artifact_id TEXT NOT NULL, warning_code TEXT NOT NULL, warning_text TEXT NOT NULL, acknowledged_at TEXT, FOREIGN KEY(artifact_id) REFERENCES import_artifact(artifact_id))",
                 "CREATE TABLE audit_entry (sequence INTEGER PRIMARY KEY AUTOINCREMENT, occurred_at TEXT NOT NULL, actor TEXT NOT NULL, action TEXT NOT NULL, entity_type TEXT, entity_id TEXT, details_json TEXT NOT NULL)"
-        );
+        ));
+        statements.addAll(schema002CreateStatements());
+        return List.copyOf(statements);
     }
 
-    /** Schema 002: normalized browser-suite master-world state. */
+    /** Forward migration from schema 001 to schema 002. */
     public static List<String> schema002Statements() {
+        List<String> statements = new ArrayList<>();
+        statements.add("ALTER TABLE world_metadata ADD COLUMN source_suite_version INTEGER");
+        statements.add("ALTER TABLE world_metadata ADD COLUMN source_exported_at TEXT");
+        statements.addAll(schema002CreateStatements());
+        return List.copyOf(statements);
+    }
+
+    private static List<String> schema002CreateStatements() {
         return List.of(
-                "ALTER TABLE world_metadata ADD COLUMN source_suite_version INTEGER",
-                "ALTER TABLE world_metadata ADD COLUMN source_exported_at TEXT",
                 "CREATE TABLE world_import (import_id TEXT PRIMARY KEY, world_id TEXT NOT NULL UNIQUE, artifact_id TEXT NOT NULL UNIQUE, suite_version INTEGER NOT NULL, master_world_id TEXT NOT NULL, exported_at TEXT, imported_at TEXT NOT NULL, rings INTEGER NOT NULL CHECK(rings >= 0), location_count INTEGER NOT NULL CHECK(location_count >= 0), station_count INTEGER NOT NULL CHECK(station_count >= 0), shell_radius REAL, active_submarine_name TEXT, active_submarine_model TEXT, crew_records INTEGER NOT NULL DEFAULT 0 CHECK(crew_records >= 0), economy_vessels INTEGER NOT NULL DEFAULT 0 CHECK(economy_vessels >= 0), economy_stations INTEGER NOT NULL DEFAULT 0 CHECK(economy_stations >= 0), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(artifact_id) REFERENCES import_artifact(artifact_id))",
                 "CREATE TABLE world_location (location_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, source_location_id TEXT NOT NULL, source_ordinal INTEGER NOT NULL CHECK(source_ordinal >= 0), display_name TEXT NOT NULL, location_type TEXT, ring INTEGER NOT NULL DEFAULT 0 CHECK(ring >= 0), location_level INTEGER NOT NULL DEFAULT 0 CHECK(location_level >= 0), map_x REAL, map_y REAL, biome TEXT, faction TEXT, is_station INTEGER NOT NULL DEFAULT 0 CHECK(is_station IN (0,1)), UNIQUE(world_id, source_location_id), UNIQUE(world_id, source_ordinal), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id))",
                 "CREATE INDEX world_location_ring_index ON world_location(world_id, ring, source_ordinal)",
@@ -212,7 +228,8 @@ public final class WorldStorageContracts {
             require(slug("../A Dangerous World").equals("a-dangerous-world"), "World slug safety failed.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("UNIQUE(vessel_id, snapshot_sha256)")), "Snapshot duplicate constraint is missing.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("one_current_snapshot_per_vessel")), "Current-snapshot constraint is missing.");
-            require(schema002Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "World-location schema is missing.");
+            require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "New-database world-location schema is missing.");
+            require(schema002Statements().stream().anyMatch(sql -> sql.contains("ALTER TABLE world_metadata")), "Schema-001 migration columns are missing.");
             require(schema002Statements().stream().anyMatch(sql -> sql.contains("scheduler_state")), "Paused simulation metadata schema is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
