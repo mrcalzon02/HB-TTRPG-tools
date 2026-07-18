@@ -5,6 +5,7 @@ import io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22WorldDocumen
 import io.github.mrcalzon02.barotrauma.persistence.SqliteWorldStore.ImportPlan;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
+import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 import io.github.mrcalzon02.barotrauma.simulation.SimulationCommandExecutor;
 import io.github.mrcalzon02.barotrauma.simulation.TransitResolutionEngine;
 
@@ -18,6 +19,8 @@ import java.sql.Statement;
 import java.time.Duration;
 import java.util.Comparator;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /** End-to-end contract for passive station, mission, NPC-vessel, research, and encounter workloads. */
 public final class PassiveWorldSimulationVerification {
@@ -81,6 +84,29 @@ public final class PassiveWorldSimulationVerification {
                         "Mission or research workload persistence failed.");
                 require(schemaVersion(paths) == 4, "Passive fixture was not stored under schema 004.");
             }
+
+            long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
+                    .snapshot().tickSequence();
+            CountDownLatch automaticCycle = new CountDownLatch(1);
+            PassiveWorldSimulationService service = PassiveWorldSimulationService.enable(
+                    paths, Duration.ofSeconds(1), 1);
+            try (AutoCloseable ignored = service.addListener(status -> {
+                if (status.lastResult() != null && status.lastResult().tickSequence() > tickBeforeScheduler) {
+                    automaticCycle.countDown();
+                }
+            }, true)) {
+                require(automaticCycle.await(10, TimeUnit.SECONDS),
+                        "Automatic passive scheduler did not commit a timed world cycle.");
+                require(service.status().fault() == null && service.status().lastResult() != null,
+                        "Automatic passive scheduler faulted during its contract cycle.");
+            } finally {
+                PassiveWorldSimulationService.disable(paths);
+            }
+            require(!PassiveWorldSimulationService.configuration(paths).enabled(),
+                    "Disabling Passive Mode did not persist the disabled configuration.");
+            require(SimulationCheckpointStore.load(paths, Duration.ofMinutes(1)).snapshot().tickSequence()
+                            > tickBeforeScheduler,
+                    "Automatic passive cycle did not advance the durable world clock.");
         } finally {
             try (var stream = Files.walk(root)) {
                 for (Path path : stream.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
@@ -114,6 +140,6 @@ public final class PassiveWorldSimulationVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma passive world simulation contracts passed.");
+        System.out.println("Barotrauma passive world simulation and automatic scheduler contracts passed.");
     }
 }
