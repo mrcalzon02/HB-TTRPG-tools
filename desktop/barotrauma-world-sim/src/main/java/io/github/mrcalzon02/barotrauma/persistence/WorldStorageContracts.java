@@ -115,13 +115,13 @@ public final class WorldStorageContracts {
         }
     }
 
-    /** Complete schema for a new database; schema 001 tables plus the schema 002 world model. */
+    /** Schema 001: the import ledger and duplicate-safe vessel identity model. */
     public static List<String> initialSchemaStatements() {
-        List<String> statements = new ArrayList<>(List.of(
+        return List.of(
                 "PRAGMA foreign_keys = ON",
                 "PRAGMA journal_mode = WAL",
                 "CREATE TABLE schema_migration (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)",
-                "CREATE TABLE world_metadata (world_id TEXT PRIMARY KEY, display_name TEXT NOT NULL, created_at TEXT NOT NULL, canonical_time TEXT, master_world_id TEXT, source_suite_version INTEGER, source_exported_at TEXT)",
+                "CREATE TABLE world_metadata (world_id TEXT PRIMARY KEY, display_name TEXT NOT NULL, created_at TEXT NOT NULL, canonical_time TEXT, master_world_id TEXT)",
                 "CREATE TABLE import_artifact (artifact_id TEXT PRIMARY KEY, sha256 TEXT NOT NULL UNIQUE, byte_length INTEGER NOT NULL CHECK(byte_length >= 0), source_name TEXT NOT NULL, source_kind TEXT NOT NULL, inspected_at TEXT NOT NULL, imported_at TEXT)",
                 "CREATE TABLE submarine_definition (definition_id TEXT PRIMARY KEY, canonical_xml_sha256 TEXT NOT NULL UNIQUE, official_check_value INTEGER, display_name TEXT NOT NULL, game_version TEXT, submarine_type TEXT, submarine_class TEXT, tier INTEGER, source_artifact_id TEXT, FOREIGN KEY(source_artifact_id) REFERENCES import_artifact(artifact_id))",
                 "CREATE TABLE vessel_instance (vessel_id TEXT PRIMARY KEY, world_id TEXT NOT NULL, definition_id TEXT NOT NULL, display_name TEXT NOT NULL, created_at TEXT NOT NULL, retired_at TEXT, UNIQUE(world_id, vessel_id), FOREIGN KEY(world_id) REFERENCES world_metadata(world_id), FOREIGN KEY(definition_id) REFERENCES submarine_definition(definition_id))",
@@ -129,9 +129,7 @@ public final class WorldStorageContracts {
                 "CREATE UNIQUE INDEX one_current_snapshot_per_vessel ON vessel_snapshot(vessel_id) WHERE is_current = 1",
                 "CREATE TABLE import_warning (warning_id TEXT PRIMARY KEY, artifact_id TEXT NOT NULL, warning_code TEXT NOT NULL, warning_text TEXT NOT NULL, acknowledged_at TEXT, FOREIGN KEY(artifact_id) REFERENCES import_artifact(artifact_id))",
                 "CREATE TABLE audit_entry (sequence INTEGER PRIMARY KEY AUTOINCREMENT, occurred_at TEXT NOT NULL, actor TEXT NOT NULL, action TEXT NOT NULL, entity_type TEXT, entity_id TEXT, details_json TEXT NOT NULL)"
-        ));
-        statements.addAll(schema002CreateStatements());
-        return List.copyOf(statements);
+        );
     }
 
     /** Forward migration from schema 001 to schema 002. */
@@ -228,8 +226,9 @@ public final class WorldStorageContracts {
             require(slug("../A Dangerous World").equals("a-dangerous-world"), "World slug safety failed.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("UNIQUE(vessel_id, snapshot_sha256)")), "Snapshot duplicate constraint is missing.");
             require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("one_current_snapshot_per_vessel")), "Current-snapshot constraint is missing.");
-            require(initialSchemaStatements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "New-database world-location schema is missing.");
+            require(initialSchemaStatements().stream().noneMatch(sql -> sql.contains("CREATE TABLE world_location")), "Schema 001 unexpectedly contains schema-002 tables.");
             require(schema002Statements().stream().anyMatch(sql -> sql.contains("ALTER TABLE world_metadata")), "Schema-001 migration columns are missing.");
+            require(schema002Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE world_location")), "World-location migration schema is missing.");
             require(schema002Statements().stream().anyMatch(sql -> sql.contains("scheduler_state")), "Paused simulation metadata schema is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
