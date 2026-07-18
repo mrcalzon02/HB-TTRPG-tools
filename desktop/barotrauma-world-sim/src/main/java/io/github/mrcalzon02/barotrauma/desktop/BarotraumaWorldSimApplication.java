@@ -1,5 +1,6 @@
 package io.github.mrcalzon02.barotrauma.desktop;
 
+import io.github.mrcalzon02.barotrauma.desktop.frontier.CivilizationFrontierWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.CampaignVesselMappingWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.ImportInspectionWindow;
 import io.github.mrcalzon02.barotrauma.desktop.imports.WebWorldImportApprovalWindow;
@@ -61,12 +62,13 @@ public final class BarotraumaWorldSimApplication {
         private static final Workspace[] WORKSPACES = {
                 new Workspace("overview", "Overview", "Master-world identity, health, time, and readiness."),
                 new Workspace("active-submarine", "Active Submarine", "Imported player-vessel location, route, freight, transit challenges, systems, and operations."),
-                new Workspace("world-map", "World Map", "Live Europa stations, NPC voyages, routes, missions, research, and encounters."),
+                new Workspace("world-map", "World Map", "Live Europa stations, NPC voyages, routes, missions, research, encounters, and frontier pressure."),
                 new Workspace("submarines", "Submarines", "Official definitions, physical vessel instances, and snapshot chronology."),
                 new Workspace("crew", "Crew", "Characters, submissions, assignments, conditions, inventories, and qualifications."),
-                new Workspace("stations-economy", "Stations and Economy", "Production, inventories, vendors, freight, treasuries, defense pressure, and station health."),
+                new Workspace("stations-economy", "Stations and Economy", "Consumption, production, inventories, vendors, freight, treasuries, defense pressure, and station health."),
+                new Workspace("civilization-frontier", "Civilization Frontier", "Station supply burn, shortages, population capacity, fauna pressure, and expansion or contraction."),
                 new Workspace("routes-jobs", "Routes and Jobs", "Player and NPC voyage planning, contracts, transit, trade, mining, and fauna-clearing missions."),
-                new Workspace("encounters", "Encounters", "Shared player/NPC transit hazards, challenge resolution, and consequences."),
+                new Workspace("encounters", "Encounters", "Shared player/NPC transit hazards, monster attacks, challenge resolution, and consequences."),
                 new Workspace("cargo-catalogue", "Cargo and Catalogue", "Items, production recipes, station inventories, vendor offers, freight lots, and transactions."),
                 new Workspace("workshop-research", "Workshop and R&D", "Station research, production recipes, custom content, validation, and construction."),
                 new Workspace("factions", "Factions", "Organizations, relationships, influence, reputation, and hidden cells."),
@@ -161,13 +163,14 @@ public final class BarotraumaWorldSimApplication {
             cardPanel.add(submarines(), "submarines");
             cardPanel.add(placeholder(byId.get("crew")), "crew");
             cardPanel.add(logisticsPanel(byId.get("stations-economy"),
-                    "Station inventories, production recipes, vendor prices, freight lots, treasury entries, and passive station health now share one schema-backed economy."), "stations-economy");
+                    "Stations now consume a small varying amount every passive tick. Inventories, production, vendor prices, freight, treasury entries, slow shortage degradation, and delivery-driven recovery share one transactional economy."), "stations-economy");
+            cardPanel.add(frontier(), "civilization-frontier");
             cardPanel.add(routePanel(), "routes-jobs");
             cardPanel.add(encounterPanel(), "encounters");
             cardPanel.add(logisticsPanel(byId.get("cargo-catalogue"),
-                    "The current catalogue defines raw materials, industrial products, fuel, medical supplies, rations, ammunition, research samples, and luxury goods with recipe inputs and outputs."), "cargo-catalogue");
+                    "The current catalogue defines raw materials, industrial products, fuel, medical supplies, rations, ammunition, research samples, and luxury goods. Those stocks now directly support station survival and expansion."), "cargo-catalogue");
             cardPanel.add(logisticsPanel(byId.get("workshop-research"),
-                    "Station research remains passive-world state while production recipes consume and produce item-level inventory with durable treasury costs."), "workshop-research");
+                    "Station research remains passive-world state while production recipes consume and produce item-level inventory with durable treasury costs and civilization consequences."), "workshop-research");
             cardPanel.add(placeholder(byId.get("factions")), "factions");
             cardPanel.add(placeholder(byId.get("reference-library")), "reference-library");
             cardPanel.add(importCenter(), "import-center");
@@ -180,24 +183,25 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Desktop world operations"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("The Java desktop now supports schema-007 persistence, normalized version-22 worlds, official vessel imports, automatic Passive Mode, item-level station logistics, player freight, and explicit player-vessel routes using the same deterministic transit system as NPCs."));
+            panel.add(body("The Java desktop now supports normalized worlds, official vessel imports, automatic Passive Mode, item-level logistics, variable station consumption, player freight, and a civilization-versus-fauna frontier that expands or contracts according to supply, security, and monster pressure."));
             panel.add(Box.createVerticalStrut(18));
             JPanel metrics = new JPanel(new GridLayout(2, 3, 12, 12));
-            metrics.add(metric("World map", "Live", "Stations, NPC vessels, missions, research, encounters, freight"));
-            metrics.add(metric("Player transit", "Shared", "Imported vessels use the NPC challenge resolver"));
-            metrics.add(metric("Station logistics", "Item-level", "Inventory, recipes, markets, production, treasury"));
-            metrics.add(metric("Player freight", "Operational", "Load at source, transit, dock, deliver at destination"));
+            metrics.add(metric("World map", "Live", "Stations, NPC vessels, missions, research, encounters, and frontier pressure"));
+            metrics.add(metric("Station consumption", "Continuous", "Small deterministic demand with tick-to-tick variation"));
+            metrics.add(metric("Civilization frontier", "Dynamic", "Expansion, holding, contest, contraction, and abandonment"));
+            metrics.add(metric("Player freight", "Operational", "Load at source, transit, dock, and deliver at destination"));
             metrics.add(metric("Scheduling", "Passive Mode", "One process-wide scheduler per world"));
-            metrics.add(metric("Persistence", "Schema 007", "Atomic world, logistics, route, freight, and evidence records"));
+            metrics.add(metric("Persistence", "Schema " + WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                    "Atomic world, consumption, logistics, frontier, route, and evidence records"));
             panel.add(metrics);
             panel.add(Box.createVerticalStrut(18));
             panel.add(new JSeparator());
             panel.add(Box.createVerticalStrut(12));
             JPanel actions = new JPanel();
             actions.add(button("Open Live World Map", this::openWorldRegistry));
+            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
             actions.add(button("Open Station Logistics", this::openStationLogistics));
             actions.add(button("Open Player Transit", this::openPlayerTransit));
-            actions.add(button("Open Vessel Registry", this::openVesselRegistry));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
             return new JScrollPane(panel);
@@ -207,16 +211,17 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Imported player vessel operations"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("Enroll an imported physical vessel at a normalized world location, load READY freight at its source, plan a route, resolve each transit hazard using the shared player/NPC challenge system, dock after arrival, and deliver cargo at its declared destination."));
+            panel.add(body("Enroll an imported physical vessel at a normalized world location, load READY freight at its source, plan a route, resolve each transit hazard using the shared player/NPC challenge system, dock after arrival, and deliver supplies that can halt contraction or reinforce an expanding frontier."));
             panel.add(Box.createVerticalStrut(16));
             panel.add(metric("Identity", "Physical vessel", "Definition and snapshot history remain unchanged"));
             panel.add(Box.createVerticalStrut(10));
             panel.add(metric("Transit", "Explicit", "One reviewed challenge resolution at a time"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metric("Freight", "Transactional", "Inventory, cargo, treasury, lot state, and logs"));
+            panel.add(metric("Freight", "Consequential", "Deliveries alter inventory, treasury, station health, and civilization pressure"));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open Player Transit and Freight", this::openPlayerTransit));
+            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
             actions.add(button("Open Vessel Registry", this::openVesselRegistry));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -227,16 +232,17 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Live Europa world map"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("Passive Mode advances station conditions, NPC missions, voyages, encounters, research, production, vendor markets, shortage-based freight offers, deliveries, and treasury evidence while the application remains open."));
+            panel.add(body("Passive Mode advances station consumption, shortages, integrity, population capacity, NPC missions, voyages, monster encounters, research, production, markets, freight, treasury evidence, and the boundary between civilization and Europan fauna."));
             panel.add(Box.createVerticalStrut(16));
             panel.add(metric("NPC vessel records", "Clickable", "Pin a vessel and watch its voyage log update"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metric("Station response", "Autonomous", "Threat and shortages create missions and freight"));
+            panel.add(metric("Civilization response", "Autonomous", "Shortage and attacks create supply, defense, and fauna-clearing pressure"));
             panel.add(Box.createVerticalStrut(10));
             panel.add(metric("Automatic scheduling", "Enabled", "Only while Passive Mode is explicitly on"));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open World Map and Passive Console", this::openWorldRegistry));
+            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
             actions.add(button("Open Station Logistics", this::openStationLogistics));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -260,14 +266,36 @@ public final class BarotraumaWorldSimApplication {
             return new JScrollPane(panel);
         }
 
+        private Component frontier() {
+            JPanel panel = contentPanel();
+            panel.add(heading("Civilization versus fauna frontier"));
+            panel.add(Box.createVerticalStrut(8));
+            panel.add(body("Every station consumes a small amount on every passive tick, with deterministic variation around its local baseline. Ration inventory absorbs demand first. Sustained shortages slowly reduce supplies, integrity, security, industry, population capacity, and frontier position. Deliveries and successful defensive pressure allow recovery and eventual outward expansion."));
+            panel.add(Box.createVerticalStrut(16));
+            panel.add(metric("Frontier states", "Five", "Expanding, holding, contested, contracting, or abandoned"));
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(metric("Monster pressure", "Deterministic", "Fauna attacks can damage stations and force the civilian perimeter inward"));
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(metric("NPC response", "Automatic", "Contraction creates defense or clearing work; expansion creates research or transit work"));
+            panel.add(Box.createVerticalStrut(16));
+            JPanel actions = new JPanel();
+            actions.add(button("Open Civilization Frontier Console", this::openCivilizationFrontier));
+            actions.add(button("Open Station Logistics", this::openStationLogistics));
+            actions.add(button("Open Live World Map", this::openWorldRegistry));
+            panel.add(actions);
+            panel.add(Box.createVerticalGlue());
+            return new JScrollPane(panel);
+        }
+
         private Component routePanel() {
             JPanel panel = contentPanel();
             panel.add(heading("Routes and Jobs"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("NPC routes remain automatic under Passive Mode. Imported player vessels can enroll, accept freight, plan explicit routes, choose a mission context, resolve varied deterministic hazards, and retain their own voyage and cargo evidence."));
+            panel.add(body("NPC routes remain automatic under Passive Mode. Stations under pressure generate supply, defense, and fauna-clearing needs; stable expanding stations generate outward research and transit work. Imported player vessels can carry freight through the same living world."));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open Player Transit and Freight", this::openPlayerTransit));
+            actions.add(button("Open Frontier NPC Responses", this::openCivilizationFrontier));
             actions.add(button("Open Live NPC Routes", this::openWorldRegistry));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -276,12 +304,13 @@ public final class BarotraumaWorldSimApplication {
 
         private Component encounterPanel() {
             JPanel panel = contentPanel();
-            panel.add(heading("Shared transit encounters"));
+            panel.add(heading("Shared transit and frontier encounters"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("Player and NPC vessels call the same deterministic resolver for thermal vents, ice shear, ballast failure, reactor instability, fauna, abyssal predators, current reversals, and navigation blackouts. Hazard selection remains reproducible while varying across route sequences."));
+            panel.add(body("Player and NPC vessels call the same deterministic transit resolver. Stations also face deterministic fauna attacks when monster pressure exceeds local security, producing durable damage, contraction evidence, and defensive NPC work."));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Resolve Player Transit", this::openPlayerTransit));
+            actions.add(button("View Frontier Attacks", this::openCivilizationFrontier));
             actions.add(button("View NPC Encounters", this::openWorldRegistry));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -296,6 +325,7 @@ public final class BarotraumaWorldSimApplication {
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open Station Logistics", this::openStationLogistics));
+            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
             actions.add(button("Open Live World Map", this::openWorldRegistry));
             actions.add(button("Open Player Freight", this::openPlayerTransit));
             panel.add(actions);
@@ -307,7 +337,7 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Import Center"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("Sources remain inspection-first and approval-gated. A normalized master world establishes locations and stations; imported physical vessels can then be enrolled into live player routes and freight work."));
+            panel.add(body("Sources remain inspection-first and approval-gated. A normalized master world establishes locations and stations; imported physical vessels can then participate in live routes, freight, and civilization support."));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Read-Only Inspection", this::openInspection));
@@ -323,16 +353,17 @@ public final class BarotraumaWorldSimApplication {
             JPanel panel = contentPanel();
             panel.add(heading("Durable simulation controls"));
             panel.add(Box.createVerticalStrut(8));
-            panel.add(body("Automatic Passive Mode serializes clock, station, NPC, mission, research, encounter, inventory, production, market, freight, and treasury updates. Explicit player route and freight actions share the world lock without advancing the passive clock."));
+            panel.add(body("Automatic Passive Mode serializes clock, station consumption, shortage degradation, civilization and fauna pressure, NPC missions, encounters, production, markets, freight, and treasury updates. Explicit player route and freight actions share the world lock without advancing the passive clock."));
             panel.add(Box.createVerticalStrut(16));
             panel.add(metric("Passive scheduler", "Available", "One scheduler per world; disabled or faulted explicitly"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metric("Cycle scope", "Atomic", "Clock and passive workloads commit together"));
+            panel.add(metric("Cycle scope", "Atomic", "Clock, consumption, frontier, and all passive workloads commit together"));
             panel.add(Box.createVerticalStrut(10));
-            panel.add(metric("Player operations", "Serialized", "Routes and freight share the world lock and resolver"));
+            panel.add(metric("Civilization motion", "Slow", "Shortages contract over time; regular delivery and security support recovery"));
             panel.add(Box.createVerticalStrut(16));
             JPanel actions = new JPanel();
             actions.add(button("Open World Map Passive Mode", this::openWorldRegistry));
+            actions.add(button("Open Civilization Frontier", this::openCivilizationFrontier));
             actions.add(button("Open Manual Simulation Monitor", this::openSimulationMonitor));
             panel.add(actions);
             panel.add(Box.createVerticalGlue());
@@ -400,7 +431,8 @@ public final class BarotraumaWorldSimApplication {
             status.setBorder(new EmptyBorder(10, 6, 2, 6));
             status.add(operationStatus, BorderLayout.WEST);
             status.add(new JLabel("Java 17 Swing · schema " + WorldStorageContracts.DATABASE_SCHEMA_VERSION
-                    + " · passive logistics, player transit, and freight available"), BorderLayout.EAST);
+                    + " · passive consumption, civilization frontier, logistics, transit, and freight available"),
+                    BorderLayout.EAST);
             return status;
         }
 
@@ -413,13 +445,14 @@ public final class BarotraumaWorldSimApplication {
             PassiveWorldSimulationService active = PassiveWorldSimulationService.active(world);
             if (active == null) simulationStatus.setText("Passive Mode off · enable from World Map");
             else if (active.status().fault() != null) simulationStatus.setText("Passive Mode faulted · open World Map");
-            else simulationStatus.setText("Passive Mode on · automatic world and logistics cycles active");
+            else simulationStatus.setText("Passive Mode on · consumption, frontier, and NPC cycles active");
         }
 
         private void openInspection() { showChild(new ImportInspectionWindow(), "Opened read-only source inspection"); }
         private void openWebWorldImport() { showChild(new WebWorldImportApprovalWindow(), "Opened version-22 world approval"); }
         private void openWorldRegistry() { showChild(new WorldMapRegistryWindow(), "Opened live world map and passive console"); }
         private void openStationLogistics() { showChild(new StationLogisticsWindow(), "Opened station logistics and markets"); }
+        private void openCivilizationFrontier() { showChild(new CivilizationFrontierWindow(), "Opened civilization and fauna frontier"); }
         private void openPlayerTransit() { showChild(new PlayerVesselTransitWindow(), "Opened imported player-vessel transit and freight"); }
         private void openImportApproval() { showChild(new WorldImportApprovalWindow(), "Opened vessel import approval"); }
         private void openCampaignMapper() { showChild(new CampaignVesselMappingWindow(), "Opened campaign vessel mapper"); }
