@@ -68,7 +68,7 @@ public final class StationLogisticsWindow extends JFrame {
 
         summary.setEditable(false);
         summary.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
-        summary.setText("Open a schema-006 world to inspect station logistics.\n");
+        summary.setText("Open a schema-007 world to inspect station logistics.\n");
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Summary", new JScrollPane(summary));
@@ -118,7 +118,7 @@ public final class StationLogisticsWindow extends JFrame {
         clear();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
-            summary.setText("Open a schema-006 world to inspect station logistics.\n");
+            summary.setText("Open a schema-007 world to inspect station logistics.\n");
             refreshControls();
             return;
         }
@@ -166,8 +166,8 @@ public final class StationLogisticsWindow extends JFrame {
                 + "Treasury entries: " + s.treasuryEntries() + "\n"
                 + "Player vessels enrolled: " + s.playerVessels() + "\n"
                 + "Player transit encounters: " + s.playerEncounters() + "\n\n"
-                + "Passive cycles update raw stock, execute affordable recipes, revise market prices, "
-                + "and write treasury evidence in the same transaction as the world clock.\n");
+                + "Passive cycles update raw stock, execute one affordable recipe per station, revise market prices, "
+                + "generate READY freight from shortages, and write treasury evidence with the world clock.\n");
         for (var row : snapshot.catalogue()) catalogueModel.addRow(new Object[]{row.category(), row.displayName(), row.itemKey(), row.baseValue(), row.unitMass(), row.itemId()});
         for (var row : snapshot.recipes()) recipeModel.addRow(new Object[]{row.displayName(), row.cycleTicks(), row.creditCost(), row.inputs(), row.outputs(), row.recipeId()});
         for (var row : snapshot.inventories()) inventoryModel.addRow(new Object[]{row.stationName(), row.category(), row.itemName(), row.quantity(), row.reserved(), row.reorderPoint(), row.lastTick(), row.stationId(), row.itemId()});
