@@ -1,0 +1,35 @@
+{
+  "recordType":"blacklightExoStellarSectorStrategicAtlasRegistry",
+  "schemaVersion":"1.0.0",
+  "sectorSchemaVersion":"1.2.0",
+  "authority":"Blacklight Intelligence EXO Sector Archive",
+  "requiredAuthorities":[
+    "territorialRegions",
+    "strategicCorridors",
+    "technologyProfiles",
+    "militaryFormations",
+    "organizationNetworks",
+    "extinctSites"
+  ],
+  "coveragePolicy":{
+    "oneTerritorialRegionPerPolity":true,
+    "oneTechnologyProfilePerExtantSpecies":true,
+    "oneOrganizationNetworkPerOrganization":true,
+    "oneOrMoreFormationsPerFleetCommand":true,
+    "allCorridorsReferenceCanonicalClusters":true,
+    "allExtinctSitesReferenceCanonicalDeadWorlds":true
+  },
+  "determinismPolicy":{
+    "sameSeedSameAtlas":true,
+    "generatedAtExcluded":true,
+    "sourceRecordsPreserved":true,
+    "migrationFromSectorSchema":"1.1.0",
+    "migrationMode":"deterministic non-destructive enrichment"
+  },
+  "archivePolicy":{
+    "completeAtlasInsideSectorArchive":true,
+    "hashAfterMigration":true,
+    "originalSourceHashRetainedWhenMigrated":true,
+    "replayThroughGenerator":true
+  }
+}
