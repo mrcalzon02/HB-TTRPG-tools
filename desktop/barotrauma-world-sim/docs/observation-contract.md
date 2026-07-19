@@ -1,8 +1,8 @@
 # Desktop Observation Contract
 
-This document describes the implemented Milestone 1.1 boundary for passive world observation.
+This document describes the implemented observation vocabulary and the schema-015 foundation that now depends upon it.
 
-The authoritative implementation is:
+The authoritative contract implementation is:
 
 ```text
 src/main/java/io/github/mrcalzon02/barotrauma/observation/ObservationContracts.java
@@ -17,7 +17,9 @@ gradle verifyObservationContract
 
 ## Scope
 
-Milestone 1.1 defines stable vocabulary and invariants before schema 015 stores observation state. It does not yet add database tables, population seeding, new passive simulation behavior, or observation UI.
+Milestone 1.1 defines stable vocabulary and invariants. Milestone 1.2 stores that vocabulary in schema 015, Milestone 1.3 reconstructs it through the query-only Observation Registry, and Milestone 1.4 exposes it through the read-only desktop Observation Foundation window.
+
+The contract itself does not yet define autonomous population growth, mortality, migration decisions, settlement founding, abandonment, or reclamation. Those behaviors begin with Milestone 2 and must preserve this accounting and evidence boundary.
 
 The contract version is:
 
@@ -127,7 +129,7 @@ Observation IDs are generated from:
 
 The input is normalized and passed through Java's name-based UUID generation. Repeating the same input produces the same UUID; changing an ordinal or other identity component produces a different identity.
 
-This mechanism is intended for schema-015 seed rows, observation events, snapshots, metric samples, and later deterministic population flows.
+Schema-015 deterministic seed rows use world identity plus stable source ordinals and population-class codes to avoid duplicate or order-dependent identities.
 
 ## Observation events
 
@@ -146,7 +148,7 @@ An observation event contains:
 
 The contract provides a canonical dependency-free text codec. Text values use Base64URL fields inside a fixed versioned record. Decoding rejects unsupported versions, malformed field counts, invalid UUIDs, invalid numeric fields, invalid cause weights, blank required evidence, and malformed text data.
 
-The canonical codec is an internal fixture and persistence boundary for early development. Milestone 10 may wrap this information in the larger `barotrauma-world-observation-v1` export format without changing the meaning of the underlying event fields.
+The canonical codec is an internal fixture and persistence boundary. Milestone 10 may wrap this information in the larger `barotrauma-world-observation-v1` export format without changing the meaning of the underlying event fields.
 
 ## Snapshot identity
 
@@ -158,7 +160,39 @@ A snapshot identity contains:
 - Optional parent snapshot UUID.
 - Rules-version token.
 
-Ticks cannot be negative, and a snapshot cannot identify itself as its parent. Parent ordering and database existence constraints will be added with schema 015 and historical snapshot work.
+Ticks cannot be negative, and a snapshot cannot identify itself as its parent. Schema 015 enforces the self-parent restriction and stores one deterministic migration root snapshot per world. Parent ordering, retention, and delta reconstruction are part of Milestone 7.
+
+## Schema 015 application
+
+Schema 015 applies the contract through:
+
+- NPC population records derived from station and civilization state.
+- Four initial ecological creature guilds per location.
+- Creature territory state.
+- Faction location presence.
+- Population-flow storage.
+- Causal observation events.
+- Observation snapshots.
+- Metric series.
+- Watch-rule storage.
+- Read-optimized summary views.
+
+Migration seeding is duplicate-safe and does not rewrite the schema-014 civilization or ecology aggregates from which it derives observation state.
+
+## Query-only reconstruction
+
+`ObservationRegistry` enables `PRAGMA query_only=ON` and provides:
+
+- Current world summary.
+- NPC and creature populations.
+- Creature territory evidence.
+- Faction presence.
+- Population flows.
+- Events, snapshots, and metrics.
+- Changed-since-tick queries.
+- Selected-entity event history.
+
+It rejects worlds older than schema 015 and worlds newer than the client supports.
 
 ## Verification
 
@@ -175,8 +209,17 @@ Ticks cannot be negative, and a snapshot cannot identify itself as its parent. P
 - Rejection of unsupported contract versions and invalid cause weights.
 - Snapshot self-parent rejection.
 
-The verifier is included in `verifyWorldStore` and is also available independently through `gradle verifyObservationContract`.
+Additional focused verification is available through:
+
+```text
+gradle verifyObservationFoundation
+gradle verifyObservationRegistry
+```
+
+These verify deterministic schema seeds, source-state preservation, constraints, trigger seeding, foreign-key integrity, root snapshots, query-only reconstruction, changed-since-tick behavior, entity history, and unsupported-schema rejection.
+
+All observation verifiers are included in `verifyWorldStore`.
 
 ## Next implementation slice
 
-Milestone 1.2 will introduce schema 015. Its tables must use this vocabulary and must not redefine equivalent status strings independently. The migration will seed NPC and creature observation rows deterministically from existing schema-014 station, civilization, ecology, and world-location state without modifying those source aggregates.
+Milestone 2.1 will add transactional NPC population accounting. Every per-tick change must record population before and after, gains and losses, capacity inputs, reconciliation with the existing civilization frontier, metric evidence, and a causal observation event. Population movement and settlement lifecycle transitions remain blocked until conservation is established.
