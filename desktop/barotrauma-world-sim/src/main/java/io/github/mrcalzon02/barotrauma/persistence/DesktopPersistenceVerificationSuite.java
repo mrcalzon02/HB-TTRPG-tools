@@ -24,6 +24,7 @@ public final class DesktopPersistenceVerificationSuite {
         WorldStorageContracts.verifyContract();
         WorldDatabaseMigrations.verifyContract();
         ObservationFoundationVerification.verifyContract();
+        NpcPopulationAccountingVerification.verifyContract();
         ObservationRegistryVerification.verifyContract();
         AcceptedImportTransaction.verifyContract();
         VesselSnapshotTransaction.verifyContract();
@@ -43,7 +44,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, procedural and packaged fallbacks, observation vocabulary, schema-015 population and territory foundations, query-only Observation Registry, persistence, recursive SQLite trigger, passive-world, station consumption, civilization frontier, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, procedural and packaged fallbacks, observation vocabulary, schema-015 foundations, schema-016 conserved NPC population accounting, query-only Observation Registry, persistence, recursive SQLite trigger, passive-world, station consumption, civilization frontier, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
