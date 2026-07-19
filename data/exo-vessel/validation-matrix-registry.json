@@ -1,0 +1,47 @@
+{
+  "recordType":"blacklightExoVesselValidationMatrixRegistry",
+  "schemaVersion":"1.0.0",
+  "phase":"VESSEL-11",
+  "registryVersion":"1.0.0",
+  "authority":"Charles",
+  "matrixPolicy":{
+    "primaryCrossProduct":["ftlFamily","pathLevel"],
+    "deterministicRotatingDimensions":["missionRole","biologyProfile","defenseDoctrine","manufacturerDoctrine","conditionTemplate","combatFit","targetClass","targetSignature"],
+    "requiredFamilyCount":9,
+    "requiredPathLevelCount":7,
+    "minimumCanonicalCases":63,
+    "timestampFreeReport":true,
+    "sameSeedReplayRequired":true,
+    "repairModesAllowedForMatrixGeneration":true,
+    "strictFaultRejectionValidatedSeparately":true
+  },
+  "requiredInvariants":[
+    "canonical contract valid",
+    "mass budget closes against loaded vessel mass",
+    "module mass and volume close against the vessel",
+    "every persistent module has one voxel placement",
+    "condition and combat post-impact authorities remain separate",
+    "every gameplay statistic remains normalized and source-linked",
+    "unavailable actions retain zero success probability",
+    "weapon-family envelopes remain inside physical reach",
+    "same seed and input reproduce the same record outside timestamps",
+    "all five topology policies appear in the completed matrix"
+  ],
+  "aggregateReports":[
+    "family and Path coverage",
+    "role, biology, manufacturer, condition, and combat-fit coverage",
+    "topology distribution",
+    "mass and volume closure extrema",
+    "module, route, placement, and zone count ranges",
+    "normalized statistic ranges",
+    "available-action ranges",
+    "weapon practical-range extrema by family",
+    "repair and warning counts",
+    "case-level invariant violations"
+  ],
+  "deferredAnalysis":{
+    "monteCarloEngagementSimulation":"VESSEL-11-ENGAGEMENT",
+    "weaponDominanceReport":"VESSEL-11-BALANCE",
+    "fullManufacturerTopologyCrossProduct":"VESSEL-11-EXPANDED-MATRIX"
+  }
+}
