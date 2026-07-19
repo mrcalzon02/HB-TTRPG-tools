@@ -54,6 +54,9 @@ jobs:
       - name: Validate EXO stellar sector strategic atlas
         run: node scripts/validate-exo-stellar-sector-strategic-atlas.mjs
 
+      - name: Validate EXO stellar sector strategic map
+        run: node scripts/validate-exo-stellar-sector-strategic-map.mjs
+
       - name: Validate EXO durable sector archives
         run: node scripts/validate-exo-sector-archives.mjs
 
