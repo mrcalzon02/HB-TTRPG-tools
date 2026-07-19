@@ -26,15 +26,14 @@
     exportButton.addEventListener('click',exportGameplay);resolveButton.addEventListener('click',resolveSelected);
   }
   function loadVessel10Layers(){
-    const styles=['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-campaign-damage-editor.css','blacklight-exo-vessel-campaign-voxel-viewer.css','blacklight-exo-vessel-campaign-3d-viewer.css'];
+    const styles=['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-campaign-damage-editor.css','blacklight-exo-vessel-campaign-voxel-viewer.css'];
     const scripts=[
       {src:'blacklight-exo-vessel-campaign-store.js',api:'BlacklightExoVesselCampaignStore'},
       {src:'blacklight-exo-vessel-diegetic-controls.js',api:'BlacklightExoVesselDiegeticControls'},
       {src:'blacklight-exo-vessel-diegetic-sync.js',api:'BlacklightExoVesselDiegeticSync'},
       {src:'blacklight-exo-vessel-campaign-damage-editor.js',api:'BlacklightExoVesselCampaignDamageEditor'},
       {src:'blacklight-exo-vessel-campaign-voxel-viewer.js',api:'BlacklightExoVesselCampaignVoxelViewer'},
-      {src:'blacklight-exo-vessel-campaign-voxel-route-overlay.js',api:'BlacklightExoVesselCampaignVoxelRouteOverlay'},
-      {src:'blacklight-exo-vessel-campaign-3d-viewer.js',api:'BlacklightExoVesselCampaign3DViewer'}
+      {src:'blacklight-exo-vessel-campaign-voxel-route-overlay.js',api:'BlacklightExoVesselCampaignVoxelRouteOverlay'}
     ];
     for(const href of styles)if(!document.querySelector(`link[href="${href}"]`)){const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link);}
     const waitForApi=(layer,timeoutMs=5000)=>new Promise((resolve,reject)=>{const started=Date.now();const poll=()=>{if(globalThis[layer.api])resolve();else if(Date.now()-started>=timeoutMs)reject(new Error(`${layer.src} loaded without publishing ${layer.api}.`));else setTimeout(poll,20);};poll();});
