@@ -42,6 +42,13 @@ tasks.register<JavaExec>("verifyWorldStore") {
     args("--verify")
 }
 
+tasks.register<JavaExec>("verifyVisualAssets") {
+    group = "verification"
+    description = "Verifies donor discovery, XML style and atlas cropping, scaling, role coverage, and every procedural fallback without requiring a Barotrauma installation."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue")
+}
+
 tasks.register<JavaExec>("runAssetSetup") {
     group = "application"
     description = "Indexes a local Barotrauma installation for UI atlases, map markers, backgrounds, operation symbols, and independent fallback visuals."
