@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor discovery, atlas-aware visual assets, procedural fallbacks, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -44,9 +44,16 @@ tasks.register<JavaExec>("verifyWorldStore") {
 
 tasks.register<JavaExec>("runAssetSetup") {
     group = "application"
-    description = "Locates a local Barotrauma donor installation and configures donor-first or fallback-only graphical assets."
+    description = "Indexes a local Barotrauma installation for UI atlases, map markers, backgrounds, operation symbols, and independent fallback visuals."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow")
+}
+
+tasks.register<JavaExec>("runGraphicalWorldMap") {
+    group = "application"
+    description = "Runs the graphical Europa map using donor-backed Barotrauma backgrounds and markers or procedural fallbacks."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow")
 }
 
 tasks.register<JavaExec>("runImportApproval") {
@@ -65,7 +72,7 @@ tasks.register<JavaExec>("runWebWorldImport") {
 
 tasks.register<JavaExec>("runWorldRegistry") {
     group = "application"
-    description = "Runs the live Europa world map with passive station, NPC, mission, research, encounter, and response-transit simulation controls."
+    description = "Runs the live Europa world registry with passive station, NPC, mission, research, encounter, and response-transit controls."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow")
 }
