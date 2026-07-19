@@ -15,7 +15,12 @@
     "blacklight-exo-stellar-sector-supervision.js",
     "blacklight-exo-stellar-sector.js",
     "blacklight-exo-stellar-sector-strategic-ui.js",
+    "blacklight-exo-stellar-sector-strategic-map.js",
     "blacklight-exo-sector-archive-store.js"
+  ],
+  "stylesheets":[
+    "blacklight-exo-stellar-sector.css",
+    "blacklight-exo-stellar-sector-strategic-map.css"
   ],
   "schemas":[
     "data/schemas/exo-stellar-sector-strategic-atlas.schema.json"
@@ -25,5 +30,5 @@
   ],
   "archiveFormat":"blacklightExoStellarSectorArchive 1.1.0",
   "archiveStorage":"IndexedDB with localStorage fallback, v2 storage migration, and deterministic sector-schema 1.1.0 to 1.2.0 enrichment",
-  "note":"The fixed example and seeded procedural sectors are deterministic, supervised, validated, statically laid out, incrementally rendered, exportable, hash-verifiable, migratable, importable, and durably recordable with complete territorial, technological, military, institutional, corridor, and extinct-site authority."
+  "note":"The fixed example and seeded procedural sectors are deterministic, supervised, validated, statically laid out, incrementally rendered, strategically mapped, exportable, hash-verifiable, migratable, importable, and durably recordable with complete territorial, technological, military, institutional, corridor, and extinct-site authority."
 }
