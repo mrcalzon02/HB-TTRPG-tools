@@ -1,0 +1,47 @@
+{
+  "recordType":"blacklightExoVesselRoadmapTransition",
+  "schemaVersion":"1.0.0",
+  "projectId":"blacklight-exo-vessel-design-system",
+  "baseRoadmap":"exo-vessel-system-roadmap.json",
+  "baseRoadmapVersion":1,
+  "priorTransition":"data/exo-vessel/roadmap-transition-vessel-10.json",
+  "strategy":"append-only-phase-transition",
+  "completedPhase":"VESSEL-11",
+  "nextPhase":null,
+  "projectStatus":"original-roadmap-complete",
+  "changes":[
+    {
+      "phaseId":"VESSEL-11",
+      "fromStatus":"next",
+      "toStatus":"complete",
+      "completionEvidence":[
+        "data/exo-vessel/validation-matrix-registry.json",
+        "data/exo-vessel/engagement-simulation-registry.json",
+        "data/schemas/exo-vessel-balance-matrix.schema.json",
+        "data/schemas/exo-vessel-engagement-simulation.schema.json",
+        "blacklight-exo-vessel-weapon-priority-override.js",
+        "scripts/validate-exo-vessel-validation-matrix.mjs",
+        "scripts/validate-exo-vessel-weapon-priority-override.mjs",
+        "scripts/run-exo-vessel-balance-matrix.mjs",
+        "scripts/run-exo-vessel-engagement-monte-carlo.mjs",
+        ".github/workflows/pages.yml"
+      ]
+    }
+  ],
+  "acceptanceEvidence":{
+    "allFtlFamiliesAndPathLevels":"The balance matrix hard-requires nine FTL families, seven Path levels, and exactly 63 canonical family–Path cases.",
+    "manufacturerAndTopologyCoverage":"The balance matrix now hard-fails unless all four manufacturer doctrines and all five topology policies appear in valid generated vessels.",
+    "massVolumeAndGraphClosure":"Every case validates canonical contracts, mass and volume closure, module-to-placement parity, graph authority, and source-linked gameplay statistics.",
+    "weaponRegression":"Every weapon family remains inside physical reach and the scoped family-priority override proves canonical generation and restoration.",
+    "damageStateInvariants":"Condition and post-impact authorities remain separate, immutable source records are retained, and invalid local combat or gameplay states fail validation.",
+    "noUniversalWeaponDominance":"The 9,216-trial engagement simulation rejects a weapon family that uniquely dominates every comparable engagement state.",
+    "deterministicReplay":"The matrix repeats one canonical case per FTL family and the engagement simulation requires deterministic replay.",
+    "failureArtifacts":"Pages uploads matrix and engagement reports even when later validation fails so balance evidence remains inspectable."
+  },
+  "validationAuthority":[
+    "scripts/validate-exo-vessel-validation-matrix.mjs",
+    "scripts/run-exo-vessel-balance-matrix.mjs",
+    "scripts/run-exo-vessel-engagement-monte-carlo.mjs",
+    "scripts/validate-exo-vessel-roadmap-v4.mjs"
+  ]
+}
