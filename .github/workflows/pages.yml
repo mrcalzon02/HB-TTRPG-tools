@@ -95,6 +95,12 @@ jobs:
       - name: Validate VESSEL-10 diegetic controls
         run: node scripts/validate-exo-vessel-diegetic-controls.mjs
 
+      - name: Validate VESSEL-10 reversible damage editor
+        run: node scripts/validate-exo-vessel-campaign-damage-editor.mjs
+
+      - name: Validate VESSEL-10 campaign voxel viewer
+        run: node scripts/validate-exo-vessel-campaign-voxel-viewer.mjs
+
       - name: Validate phased EXO vessel system roadmap
         # Legacy guarantees remain executed inside V2: node scripts/validate-exo-vessel-roadmap.mjs
         run: node scripts/validate-exo-vessel-roadmap-v2.mjs
