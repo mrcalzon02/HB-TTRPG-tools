@@ -1,0 +1,488 @@
+(() => {
+  'use strict';
+  if (globalThis.BlacklightExoVesselCampaign3DViewer) return;
+
+  const $ = id => document.getElementById(id);
+  const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const clone = value => value == null ? value : structuredClone(value);
+  const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, finite(value)));
+  const node = (tag, className = '', text = '') => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== '' && text != null) element.textContent = String(text);
+    return element;
+  };
+
+  const FACE_INDEXES = [
+    [0, 1, 2, 3], [4, 7, 6, 5],
+    [0, 4, 5, 1], [3, 2, 6, 7],
+    [0, 3, 7, 4], [1, 5, 6, 2]
+  ];
+  const EDGE_INDEXES = [
+    [0, 1], [1, 2], [2, 3], [3, 0],
+    [4, 5], [5, 6], [6, 7], [7, 4],
+    [0, 4], [1, 5], [2, 6], [3, 7]
+  ];
+  const STATE_COLORS = {
+    intact: [126, 214, 155],
+    damaged: [217, 168, 79],
+    critical: [224, 111, 91],
+    destroyed: [101, 93, 91]
+  };
+  const ROUTE_COLORS = {
+    structural: '#87939b', power: '#d9b44a', cooling: '#62a8d8', data: '#9f86db',
+    atmosphere: '#65b8a2', access: '#c7b7a1', magazineFeed: '#d48662', sensorDependency: '#78b7ca'
+  };
+
+  let current = null;
+  let selectedModuleId = null;
+  let stageHome = null;
+  let frameRequested = false;
+  let hitFaces = [];
+  let lastScene = null;
+  let dragging = null;
+  const camera = { yaw: -0.72, pitch: -0.54, distance: 3.2, explode: 0, sliceAxis: 'z', slicePercent: 100 };
+  const preferences = { filter: 'ALL', mode: 'SOLID', routes: true, labels: false, envelope: true };
+
+  function stateClass(row) {
+    if (['DESTROYED', 'REMOVED', 'MISSING', 'SALVAGED'].includes(String(row.installationState).toUpperCase())) return 'destroyed';
+    if (finite(row.damagePercent) >= 60 || row.operational === false) return 'critical';
+    if (finite(row.damagePercent) > 0 || String(row.graphParticipation).toUpperCase() === 'DEGRADED') return 'damaged';
+    return 'intact';
+  }
+
+  function visible(row, filter = preferences.filter) {
+    if (filter === 'ALL') return true;
+    if (filter === 'INTERNAL' || filter === 'EVA') return String(row.exposure).includes(filter);
+    return stateClass(row).toUpperCase() === filter;
+  }
+
+  function sourceBounds(row) {
+    const bounds = row?.source?.bounds || {};
+    const minimum = bounds.min || {};
+    const maximum = bounds.max || {};
+    const size = bounds.size || {};
+    const width = Math.max(1, finite(size.x, finite(maximum.x) - finite(minimum.x) + 1 || row.width || 1));
+    const height = Math.max(1, finite(size.y, finite(maximum.y) - finite(minimum.y) + 1 || row.height || 1));
+    const depth = Math.max(1, finite(size.z, finite(maximum.z) - finite(minimum.z) + 1 || row.depth || 1));
+    const x = Number.isFinite(Number(minimum.x)) ? finite(minimum.x) + (width - 1) / 2 : finite(row.x);
+    const y = Number.isFinite(Number(minimum.y)) ? finite(minimum.y) + (height - 1) / 2 : finite(row.y);
+    const z = Number.isFinite(Number(minimum.z)) ? finite(minimum.z) + (depth - 1) / 2 : finite(row.z);
+    return { x, y, z, width, height, depth };
+  }
+
+  function sceneRows(vessel) {
+    const authority = globalThis.BlacklightExoVesselCampaignVoxelViewer;
+    const rows = authority?.placementRows ? authority.placementRows(vessel) : [];
+    return rows.map(row => ({ ...clone(row), ...sourceBounds(row), state: stateClass(row) }));
+  }
+
+  function routeStateRows(vessel) {
+    return vessel?.campaignEffectiveState?.routeStates || vessel?.combatResolutionModel?.postImpactState?.routeStates || vessel?.conditionHistory?.routeStates || [];
+  }
+
+  function routePolylines(vessel) {
+    const routes = vessel?.voxelLayout?.utilityRoutes || {};
+    const states = new Map(routeStateRows(vessel).flatMap(row => [[row.routeId, row], [row.sourceEdgeId, row]].filter(entry => entry[0])));
+    const output = [];
+    for (const [graphType, rows] of Object.entries(routes)) {
+      for (const route of rows || []) {
+        const state = states.get(route.routeId) || states.get(route.sourceEdgeId) || {};
+        output.push({
+          routeId: route.routeId || route.sourceEdgeId,
+          sourceEdgeId: route.sourceEdgeId || null,
+          graphType,
+          points: (route.points || []).map(point => ({ x: finite(point.x), y: finite(point.y), z: finite(point.z) })),
+          state: state.state || route.state || 'ACTIVE',
+          functional: state.functional !== false && !['SEVERED', 'REMOVED'].includes(String(state.state || route.state).toUpperCase())
+        });
+      }
+    }
+    return output.filter(route => route.routeId && route.points.length >= 2);
+  }
+
+  function sceneBounds(rows, vessel = current) {
+    const grid = vessel?.voxelLayout?.grid?.size;
+    if (grid) return { min: { x: 0, y: 0, z: 0 }, max: { x: Math.max(1, finite(grid.x) - 1), y: Math.max(1, finite(grid.y) - 1), z: Math.max(1, finite(grid.z) - 1) } };
+    const values = rows.length ? rows : [{ x: 0, y: 0, z: 0, width: 1, height: 1, depth: 1 }];
+    return {
+      min: {
+        x: Math.min(...values.map(row => row.x - row.width / 2)),
+        y: Math.min(...values.map(row => row.y - row.height / 2)),
+        z: Math.min(...values.map(row => row.z - row.depth / 2))
+      },
+      max: {
+        x: Math.max(...values.map(row => row.x + row.width / 2)),
+        y: Math.max(...values.map(row => row.y + row.height / 2)),
+        z: Math.max(...values.map(row => row.z + row.depth / 2))
+      }
+    };
+  }
+
+  function centerOfBounds(bounds) {
+    return { x: (bounds.min.x + bounds.max.x) / 2, y: (bounds.min.y + bounds.max.y) / 2, z: (bounds.min.z + bounds.max.z) / 2 };
+  }
+
+  function applySlice(rows, bounds, axis = camera.sliceAxis, percent = camera.slicePercent) {
+    const threshold = bounds.min[axis] + (bounds.max[axis] - bounds.min[axis]) * clamp(percent, 0, 100) / 100;
+    return rows.filter(row => row[axis] - row[{ x: 'width', y: 'height', z: 'depth' }[axis]] / 2 <= threshold + 1e-9);
+  }
+
+  function explodedPoint(point, center, factor = camera.explode) {
+    const multiplier = 1 + clamp(factor, 0, 200) / 100;
+    return {
+      x: center.x + (point.x - center.x) * multiplier,
+      y: center.y + (point.y - center.y) * multiplier,
+      z: center.z + (point.z - center.z) * multiplier
+    };
+  }
+
+  function cameraCoordinates(point, center, state = camera) {
+    const x = point.x - center.x;
+    const y = point.y - center.y;
+    const z = point.z - center.z;
+    const cy = Math.cos(state.yaw), sy = Math.sin(state.yaw);
+    const cp = Math.cos(state.pitch), sp = Math.sin(state.pitch);
+    const horizontal = cy * x - sy * y;
+    const depthYaw = sy * x + cy * y;
+    return {
+      x: horizontal,
+      y: cp * z - sp * depthYaw,
+      depth: sp * z + cp * depthYaw
+    };
+  }
+
+  function cameraProject(point, scene, width, height, state = camera) {
+    const view = cameraCoordinates(point, scene.center, state);
+    const span = Math.max(scene.span.x, scene.span.y, scene.span.z, 1);
+    const cameraDistance = span * Math.max(1.2, state.distance);
+    const focal = Math.min(width, height) * 1.05;
+    const denominator = Math.max(span * 0.18, cameraDistance + view.depth);
+    const scale = focal / denominator;
+    return { x: width / 2 + view.x * scale, y: height / 2 - view.y * scale, depth: view.depth, scale };
+  }
+
+  function boxCorners(row, center, explode = camera.explode) {
+    const shifted = explodedPoint({ x: row.x, y: row.y, z: row.z }, center, explode);
+    const x0 = shifted.x - row.width / 2, x1 = shifted.x + row.width / 2;
+    const y0 = shifted.y - row.height / 2, y1 = shifted.y + row.height / 2;
+    const z0 = shifted.z - row.depth / 2, z1 = shifted.z + row.depth / 2;
+    return [
+      { x: x0, y: y0, z: z0 }, { x: x1, y: y0, z: z0 }, { x: x1, y: y1, z: z0 }, { x: x0, y: y1, z: z0 },
+      { x: x0, y: y0, z: z1 }, { x: x1, y: y0, z: z1 }, { x: x1, y: y1, z: z1 }, { x: x0, y: y1, z: z1 }
+    ];
+  }
+
+  function boxFaces(row, scene, width, height, state = camera) {
+    const projected = boxCorners(row, scene.center, state.explode).map(point => cameraProject(point, scene, width, height, state));
+    return FACE_INDEXES.map((indexes, faceIndex) => ({
+      row,
+      faceIndex,
+      points: indexes.map(index => projected[index]),
+      depth: indexes.reduce((total, index) => total + projected[index].depth, 0) / indexes.length,
+      shade: [0.78, 0.58, 0.68, 0.88, 0.72, 0.96][faceIndex]
+    }));
+  }
+
+  function pointInPolygon(x, y, points) {
+    let inside = false;
+    for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+      const a = points[i], b = points[j];
+      const intersect = ((a.y > y) !== (b.y > y)) && x < (b.x - a.x) * (y - a.y) / ((b.y - a.y) || 1e-9) + a.x;
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+
+  function rgba(state, shade = 1, alpha = 0.82) {
+    const [r, g, b] = STATE_COLORS[state] || STATE_COLORS.intact;
+    return `rgba(${Math.round(r * shade)},${Math.round(g * shade)},${Math.round(b * shade)},${alpha})`;
+  }
+
+  function resizeCanvas(canvas) {
+    const ratio = Math.min(2, globalThis.devicePixelRatio || 1);
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(320, Math.round(rect.width * ratio));
+    const height = Math.max(280, Math.round(rect.height * ratio));
+    if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
+    return { width, height, ratio };
+  }
+
+  function drawEnvelope(context, scene, width, height) {
+    if (!preferences.envelope) return;
+    const bounds = scene.bounds;
+    const row = {
+      x: scene.center.x, y: scene.center.y, z: scene.center.z,
+      width: bounds.max.x - bounds.min.x, height: bounds.max.y - bounds.min.y, depth: bounds.max.z - bounds.min.z
+    };
+    const projected = boxCorners(row, scene.center, 0).map(point => cameraProject(point, scene, width, height));
+    context.save();
+    context.strokeStyle = 'rgba(120,183,202,.22)';
+    context.lineWidth = Math.max(1, width / 900);
+    context.setLineDash([5, 7]);
+    for (const [a, b] of EDGE_INDEXES) {
+      context.beginPath(); context.moveTo(projected[a].x, projected[a].y); context.lineTo(projected[b].x, projected[b].y); context.stroke();
+    }
+    context.restore();
+  }
+
+  function drawRoutes(context, vessel, scene, width, height) {
+    if (!preferences.routes) return;
+    const threshold = scene.bounds.min[camera.sliceAxis] + (scene.bounds.max[camera.sliceAxis] - scene.bounds.min[camera.sliceAxis]) * camera.slicePercent / 100;
+    context.save();
+    context.lineWidth = Math.max(1.2, width / 760);
+    for (const route of routePolylines(vessel)) {
+      const points = route.points.filter(point => point[camera.sliceAxis] <= threshold + 1e-9).map(point => cameraProject(explodedPoint(point, scene.center, camera.explode), scene, width, height));
+      if (points.length < 2) continue;
+      context.strokeStyle = route.functional ? (ROUTE_COLORS[route.graphType] || '#78b7ca') : '#e06f5b';
+      context.globalAlpha = route.functional ? 0.56 : 0.74;
+      context.setLineDash(route.functional ? [4, 4] : [2, 8]);
+      context.beginPath(); context.moveTo(points[0].x, points[0].y);
+      for (const point of points.slice(1)) context.lineTo(point.x, point.y);
+      context.stroke();
+    }
+    context.restore();
+  }
+
+  function drawLabels(context, rows, scene, width, height) {
+    if (!preferences.labels) return;
+    context.save();
+    context.font = `${Math.max(10, width / 95)}px system-ui, sans-serif`;
+    context.textAlign = 'center';
+    context.textBaseline = 'bottom';
+    for (const row of rows) {
+      const point = cameraProject(explodedPoint({ x: row.x, y: row.y, z: row.z + row.depth / 2 }, scene.center, camera.explode), scene, width, height);
+      context.lineWidth = 3; context.strokeStyle = 'rgba(4,8,12,.9)'; context.fillStyle = '#d7d0c4';
+      context.strokeText(row.label, point.x, point.y - 4); context.fillText(row.label, point.x, point.y - 4);
+    }
+    context.restore();
+  }
+
+  function drawFrame() {
+    frameRequested = false;
+    const canvas = $('exo-vessel-campaign-3d-canvas');
+    if (!canvas || !current) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    const { width, height, ratio } = resizeCanvas(canvas);
+    const rows = sceneRows(current);
+    const bounds = sceneBounds(rows, current);
+    const center = centerOfBounds(bounds);
+    const scene = {
+      bounds, center,
+      span: { x: Math.max(1, bounds.max.x - bounds.min.x), y: Math.max(1, bounds.max.y - bounds.min.y), z: Math.max(1, bounds.max.z - bounds.min.z) }
+    };
+    lastScene = scene;
+    const shown = applySlice(rows.filter(row => visible(row)), bounds);
+    context.clearRect(0, 0, width, height);
+    const gradient = context.createRadialGradient(width * .5, height * .45, 0, width * .5, height * .45, Math.max(width, height) * .7);
+    gradient.addColorStop(0, '#17252c'); gradient.addColorStop(1, '#04080c');
+    context.fillStyle = gradient; context.fillRect(0, 0, width, height);
+    drawEnvelope(context, scene, width, height);
+    drawRoutes(context, current, scene, width, height);
+
+    const faces = shown.flatMap(row => boxFaces(row, scene, width, height)).sort((a, b) => a.depth - b.depth);
+    hitFaces = [];
+    for (const face of faces) {
+      const selected = face.row.moduleId === selectedModuleId;
+      context.beginPath();
+      context.moveTo(face.points[0].x, face.points[0].y);
+      for (const point of face.points.slice(1)) context.lineTo(point.x, point.y);
+      context.closePath();
+      if (preferences.mode !== 'WIREFRAME') {
+        context.fillStyle = rgba(face.row.state, face.shade, preferences.mode === 'XRAY' ? 0.18 : selected ? 0.96 : 0.78);
+        context.fill();
+      }
+      context.lineWidth = selected ? Math.max(2.5, width / 330) : Math.max(.8, width / 1100);
+      context.strokeStyle = selected ? '#ead9a4' : rgba(face.row.state, Math.min(1.15, face.shade + .22), preferences.mode === 'XRAY' ? .55 : .95);
+      context.stroke();
+      hitFaces.push(face);
+    }
+    drawLabels(context, shown, scene, width, height);
+
+    const summary = $('exo-vessel-campaign-3d-summary');
+    if (summary) summary.textContent = `${shown.length} of ${rows.length} placed modules visible · ${routePolylines(current).length} routed graph paths · camera ${Math.round(camera.yaw * 180 / Math.PI)}° / ${Math.round(camera.pitch * 180 / Math.PI)}° · ${Math.round(camera.slicePercent)}% ${camera.sliceAxis.toUpperCase()} slice.`;
+    canvas.setAttribute('aria-label', `Interactive three-dimensional vessel viewer showing ${shown.length} of ${rows.length} placed modules.`);
+    if (ratio !== 1) context.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  function scheduleDraw() {
+    if (frameRequested) return;
+    frameRequested = true;
+    requestAnimationFrame(drawFrame);
+  }
+
+  function renderInspector(row) {
+    const root = $('exo-vessel-campaign-3d-inspector');
+    if (!root) return;
+    root.replaceChildren();
+    if (!row) { root.append(node('p', '', 'Select a three-dimensional module volume.')); return; }
+    root.append(node('small', '', `${row.exposure} · ${row.state}`), node('h3', '', row.label));
+    const dl = node('dl');
+    for (const [label, value] of [
+      ['Module ID', row.moduleId], ['Placement', row.placementId], ['Installation', row.installationState],
+      ['Damage', `${finite(row.damagePercent).toFixed(1)}%`], ['Operational', row.operational],
+      ['Dimensions', `${row.width.toFixed(1)} × ${row.height.toFixed(1)} × ${row.depth.toFixed(1)} cells`],
+      ['Center', `${row.x.toFixed(2)}, ${row.y.toFixed(2)}, ${row.z.toFixed(2)}`]
+    ]) dl.append(node('dt', '', label), node('dd', '', value));
+    root.append(dl);
+    const actions = node('div', 'bli-actions');
+    const edit = node('button', 'bli-action primary', 'Edit Campaign State'); edit.type = 'button';
+    const focus = node('button', 'bli-action', 'Focus Camera'); focus.type = 'button';
+    edit.addEventListener('click', () => {
+      const select = $('exo-vessel-editor-module');
+      if (select) { select.value = row.moduleId; select.dispatchEvent(new Event('change', { bubbles: true })); $('exo-vessel-campaign-damage-editor')?.scrollIntoView({ behavior: 'smooth' }); }
+    });
+    focus.addEventListener('click', () => { selectedModuleId = row.moduleId; camera.distance = 1.65; syncControls(); scheduleDraw(); });
+    actions.append(edit, focus); root.append(actions);
+  }
+
+  function selectAt(event) {
+    const canvas = $('exo-vessel-campaign-3d-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = (event.clientX - rect.left) * canvas.width / Math.max(1, rect.width);
+    const y = (event.clientY - rect.top) * canvas.height / Math.max(1, rect.height);
+    const face = [...hitFaces].reverse().find(item => pointInPolygon(x, y, item.points));
+    if (!face) return;
+    selectedModuleId = face.row.moduleId;
+    renderInspector(face.row);
+    scheduleDraw();
+  }
+
+  function setPreset(name) {
+    const presets = {
+      ISOMETRIC: [-0.72, -0.54], TOP: [0, -Math.PI / 2 + .02], PORT: [Math.PI / 2, 0],
+      STARBOARD: [-Math.PI / 2, 0], FORWARD: [Math.PI, 0], AFT: [0, 0]
+    };
+    const value = presets[name] || presets.ISOMETRIC;
+    camera.yaw = value[0]; camera.pitch = value[1]; scheduleDraw();
+  }
+
+  function syncControls() {
+    if ($('exo-vessel-campaign-3d-explode')) $('exo-vessel-campaign-3d-explode').value = String(camera.explode);
+    if ($('exo-vessel-campaign-3d-slice')) $('exo-vessel-campaign-3d-slice').value = String(camera.slicePercent);
+    if ($('exo-vessel-campaign-3d-slice-axis')) $('exo-vessel-campaign-3d-slice-axis').value = camera.sliceAxis;
+    if ($('exo-vessel-campaign-3d-mode')) $('exo-vessel-campaign-3d-mode').value = preferences.mode;
+    if ($('exo-vessel-campaign-3d-filter')) $('exo-vessel-campaign-3d-filter').value = preferences.filter;
+    for (const [id, checked] of [['exo-vessel-campaign-3d-routes', preferences.routes], ['exo-vessel-campaign-3d-labels', preferences.labels], ['exo-vessel-campaign-3d-envelope', preferences.envelope]]) if ($(id)) $(id).checked = checked;
+  }
+
+  function buildControls() {
+    const controls = node('div', 'exo-vessel-campaign-3d-controls');
+    const selectControl = (labelText, id, options) => {
+      const label = node('label'); label.append(node('span', '', labelText));
+      const select = node('select'); select.id = id;
+      for (const [labelValue, value] of options) select.add(new Option(labelValue, value));
+      label.append(select); controls.append(label); return select;
+    };
+    const rangeControl = (labelText, id, minimum, maximum, value) => {
+      const label = node('label'); label.append(node('span', '', labelText));
+      const input = node('input'); input.type = 'range'; input.id = id; input.min = minimum; input.max = maximum; input.value = value;
+      label.append(input); controls.append(label); return input;
+    };
+    const preset = selectControl('Camera preset', 'exo-vessel-campaign-3d-preset', [['Isometric', 'ISOMETRIC'], ['Top', 'TOP'], ['Port', 'PORT'], ['Starboard', 'STARBOARD'], ['Forward', 'FORWARD'], ['Aft', 'AFT']]);
+    const filter = selectControl('Module filter', 'exo-vessel-campaign-3d-filter', ['ALL', 'INTACT', 'DAMAGED', 'CRITICAL', 'DESTROYED', 'INTERNAL', 'EVA'].map(value => [value.replaceAll('_', ' '), value]));
+    const mode = selectControl('Render mode', 'exo-vessel-campaign-3d-mode', [['Solid', 'SOLID'], ['Wireframe', 'WIREFRAME'], ['X-ray', 'XRAY']]);
+    const axis = selectControl('Slice axis', 'exo-vessel-campaign-3d-slice-axis', [['Forward / aft', 'x'], ['Port / starboard', 'y'], ['Ventral / dorsal', 'z']]);
+    const explode = rangeControl('Exploded separation', 'exo-vessel-campaign-3d-explode', 0, 200, camera.explode);
+    const slice = rangeControl('Visible slice', 'exo-vessel-campaign-3d-slice', 0, 100, camera.slicePercent);
+    preset.addEventListener('change', () => setPreset(preset.value));
+    filter.addEventListener('change', () => { preferences.filter = filter.value; scheduleDraw(); });
+    mode.addEventListener('change', () => { preferences.mode = mode.value; scheduleDraw(); });
+    axis.addEventListener('change', () => { camera.sliceAxis = axis.value; scheduleDraw(); });
+    explode.addEventListener('input', () => { camera.explode = finite(explode.value); scheduleDraw(); });
+    slice.addEventListener('input', () => { camera.slicePercent = finite(slice.value); scheduleDraw(); });
+    const toggles = node('div', 'exo-vessel-campaign-3d-toggles');
+    for (const [labelText, id, key] of [['Utility routes', 'exo-vessel-campaign-3d-routes', 'routes'], ['Module labels', 'exo-vessel-campaign-3d-labels', 'labels'], ['Envelope', 'exo-vessel-campaign-3d-envelope', 'envelope']]) {
+      const label = node('label'); const input = node('input'); input.type = 'checkbox'; input.id = id; input.checked = preferences[key];
+      input.addEventListener('change', () => { preferences[key] = input.checked; scheduleDraw(); });
+      label.append(input, node('span', '', labelText)); toggles.append(label);
+    }
+    controls.append(toggles);
+    return controls;
+  }
+
+  function buildUi() {
+    if ($('exo-vessel-campaign-3d-viewer')) return;
+    const section = node('section', 'bli-section exo-vessel-campaign-3d-viewer'); section.id = 'exo-vessel-campaign-3d-viewer';
+    const head = node('div', 'bli-section-head');
+    head.append(node('p', 'bli-eyebrow', 'Charles // Random vessel volumetric inspection window'), node('h2', '', 'Rotate, slice, and inspect the generated vessel as placed three-dimensional machinery.'), node('p', '', 'Every visible box is a VESSEL-04 placement. Damage colors come from the current campaign-effective state, and routed lines retain their actual three-dimensional utility paths.'));
+    const actions = node('div', 'bli-actions');
+    const expand = node('button', 'bli-action primary', 'Open 3D Viewer Window'); expand.type = 'button'; expand.id = 'exo-vessel-campaign-3d-open';
+    const reset = node('button', 'bli-action', 'Reset Camera'); reset.type = 'button'; reset.id = 'exo-vessel-campaign-3d-reset';
+    actions.append(expand, reset); head.append(actions, buildControls());
+
+    const layout = node('div', 'exo-vessel-campaign-3d-layout');
+    const stage = node('div', 'exo-vessel-campaign-3d-stage'); stage.id = 'exo-vessel-campaign-3d-stage';
+    const canvas = node('canvas'); canvas.id = 'exo-vessel-campaign-3d-canvas'; canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', 'Interactive three-dimensional vessel viewer awaiting generated placement authority.');
+    const hint = node('p', 'exo-vessel-campaign-3d-hint', 'Drag to orbit · wheel to zoom · click a volume to inspect');
+    stage.append(canvas, hint);
+    const inspector = node('aside', 'exo-vessel-campaign-3d-inspector'); inspector.id = 'exo-vessel-campaign-3d-inspector'; inspector.append(node('p', '', 'Select a three-dimensional module volume.'));
+    layout.append(stage, inspector);
+    const summary = node('p', 'exo-vessel-campaign-3d-summary', 'Awaiting generated vessel placement authority.'); summary.id = 'exo-vessel-campaign-3d-summary';
+    section.append(head, layout, summary);
+
+    const dialog = node('dialog', 'exo-vessel-campaign-3d-window'); dialog.id = 'exo-vessel-campaign-3d-window';
+    const windowHead = node('div', 'exo-vessel-campaign-3d-window-head'); windowHead.append(node('strong', '', 'Blacklight EXO Vessel 3D Viewer'));
+    const close = node('button', 'bli-action', 'Close Window'); close.type = 'button'; windowHead.append(close);
+    const windowBody = node('div', 'exo-vessel-campaign-3d-window-body'); dialog.append(windowHead, windowBody); document.body.append(dialog);
+
+    const anchor = $('exo-vessel-campaign-voxel-viewer') || $('exo-vessel-campaign-damage-editor') || $('exo-vessel-campaign-section') || $('exo-vessel-gameplay-section');
+    if (anchor) anchor.insertAdjacentElement('afterend', section); else document.querySelector('main')?.append(section);
+    stageHome = layout;
+
+    expand.addEventListener('click', () => { windowBody.append(stage, inspector); dialog.showModal(); scheduleDraw(); });
+    close.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => { stageHome.append(stage, inspector); scheduleDraw(); });
+    reset.addEventListener('click', () => { Object.assign(camera, { yaw: -0.72, pitch: -0.54, distance: 3.2, explode: 0, sliceAxis: 'z', slicePercent: 100 }); syncControls(); scheduleDraw(); });
+
+    canvas.addEventListener('pointerdown', event => { dragging = { id: event.pointerId, x: event.clientX, y: event.clientY, yaw: camera.yaw, pitch: camera.pitch, moved: false }; canvas.setPointerCapture(event.pointerId); });
+    canvas.addEventListener('pointermove', event => { if (!dragging || dragging.id !== event.pointerId) return; const dx = event.clientX - dragging.x, dy = event.clientY - dragging.y; if (Math.abs(dx) + Math.abs(dy) > 3) dragging.moved = true; camera.yaw = dragging.yaw + dx * .008; camera.pitch = clamp(dragging.pitch + dy * .008, -1.54, 1.54); scheduleDraw(); });
+    canvas.addEventListener('pointerup', event => { if (!dragging || dragging.id !== event.pointerId) return; const wasMoved = dragging.moved; dragging = null; if (!wasMoved) selectAt(event); });
+    canvas.addEventListener('pointercancel', () => { dragging = null; });
+    canvas.addEventListener('wheel', event => { event.preventDefault(); camera.distance = clamp(camera.distance * Math.exp(event.deltaY * .0012), 1.15, 12); scheduleDraw(); }, { passive: false });
+    new ResizeObserver(scheduleDraw).observe(stage);
+    syncControls();
+  }
+
+  function render(vessel = current) {
+    if (!vessel) return;
+    current = clone(vessel);
+    const rows = sceneRows(current);
+    if (selectedModuleId && !rows.some(row => row.moduleId === selectedModuleId)) selectedModuleId = null;
+    if (!selectedModuleId && rows.length) selectedModuleId = rows[0].moduleId;
+    renderInspector(rows.find(row => row.moduleId === selectedModuleId));
+    scheduleDraw();
+  }
+
+  function install() {
+    buildUi();
+    document.addEventListener('blacklight:exo-vessel-generated', event => render(event.detail?.vessel || globalThis.BlacklightExoGetActiveVessel?.()));
+    document.addEventListener('blacklight:exo-vessel-activate', event => render(event.detail?.vessel || globalThis.BlacklightExoGetActiveVessel?.()));
+    render(globalThis.BlacklightExoGetActiveVessel?.());
+  }
+
+  const api = Object.freeze({
+    version: 1,
+    stateClass,
+    visible,
+    sourceBounds,
+    sceneRows,
+    routePolylines,
+    sceneBounds,
+    centerOfBounds,
+    applySlice,
+    explodedPoint,
+    cameraCoordinates,
+    cameraProject,
+    boxCorners,
+    boxFaces,
+    pointInPolygon,
+    render,
+    camera,
+    preferences
+  });
+  globalThis.BlacklightExoVesselCampaign3DViewer = api;
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', install, { once: true }) : install();
+})();
