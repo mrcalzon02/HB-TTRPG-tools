@@ -1,14 +1,16 @@
 {
   "recordType":"blacklightExoVesselValidationMatrixRegistry",
-  "schemaVersion":"1.0.0",
+  "schemaVersion":"1.1.0",
   "phase":"VESSEL-11",
-  "registryVersion":"1.0.0",
+  "registryVersion":"1.1.0",
   "authority":"Charles",
   "matrixPolicy":{
     "primaryCrossProduct":["ftlFamily","pathLevel"],
     "deterministicRotatingDimensions":["missionRole","biologyProfile","defenseDoctrine","manufacturerDoctrine","conditionTemplate","combatFit","targetClass","targetSignature"],
     "requiredFamilyCount":9,
     "requiredPathLevelCount":7,
+    "requiredManufacturerDoctrineCount":4,
+    "requiredTopologyPolicyCount":5,
     "minimumCanonicalCases":63,
     "timestampFreeReport":true,
     "sameSeedReplayRequired":true,
@@ -25,6 +27,7 @@
     "unavailable actions retain zero success probability",
     "weapon-family envelopes remain inside physical reach",
     "same seed and input reproduce the same record outside timestamps",
+    "all four manufacturer doctrines appear in the completed matrix",
     "all five topology policies appear in the completed matrix"
   ],
   "aggregateReports":[
@@ -39,9 +42,12 @@
     "repair and warning counts",
     "case-level invariant violations"
   ],
-  "deferredAnalysis":{
-    "monteCarloEngagementSimulation":"VESSEL-11-ENGAGEMENT",
-    "weaponDominanceReport":"VESSEL-11-BALANCE",
-    "fullManufacturerTopologyCrossProduct":"VESSEL-11-EXPANDED-MATRIX"
+  "completedAnalysis":{
+    "canonicalFamilyPathMatrix":"scripts/run-exo-vessel-balance-matrix.mjs",
+    "manufacturerDoctrineCoverage":"scripts/run-exo-vessel-balance-matrix.mjs",
+    "topologyPolicyCoverage":"scripts/run-exo-vessel-balance-matrix.mjs",
+    "monteCarloEngagementSimulation":"scripts/run-exo-vessel-engagement-monte-carlo.mjs",
+    "weaponDominanceReport":"artifacts/exo-vessel-engagement-simulation.json",
+    "strictScopedWeaponOverride":"scripts/validate-exo-vessel-weapon-priority-override.mjs"
   }
 }
