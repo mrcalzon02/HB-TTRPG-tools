@@ -27,11 +27,20 @@
   }
   function loadVessel10Layers(){
     const styles=['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-campaign-damage-editor.css','blacklight-exo-vessel-campaign-voxel-viewer.css'];
-    const scripts=['blacklight-exo-vessel-campaign-store.js','blacklight-exo-vessel-diegetic-controls.js','blacklight-exo-vessel-diegetic-sync.js','blacklight-exo-vessel-campaign-damage-editor.js','blacklight-exo-vessel-campaign-voxel-viewer.js','blacklight-exo-vessel-campaign-voxel-route-overlay.js'];
+    const scripts=[
+      {src:'blacklight-exo-vessel-campaign-store.js',api:'BlacklightExoVesselCampaignStore'},
+      {src:'blacklight-exo-vessel-diegetic-controls.js',api:'BlacklightExoVesselDiegeticControls'},
+      {src:'blacklight-exo-vessel-diegetic-sync.js',api:'BlacklightExoVesselDiegeticSync'},
+      {src:'blacklight-exo-vessel-campaign-damage-editor.js',api:'BlacklightExoVesselCampaignDamageEditor'},
+      {src:'blacklight-exo-vessel-campaign-voxel-viewer.js',api:'BlacklightExoVesselCampaignVoxelViewer'},
+      {src:'blacklight-exo-vessel-campaign-voxel-route-overlay.js',api:'BlacklightExoVesselCampaignVoxelRouteOverlay'}
+    ];
     for(const href of styles)if(!document.querySelector(`link[href="${href}"]`)){const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link);}
+    const waitForApi=(layer,timeoutMs=5000)=>new Promise((resolve,reject)=>{const started=Date.now();const poll=()=>{if(globalThis[layer.api])resolve();else if(Date.now()-started>=timeoutMs)reject(new Error(`${layer.src} loaded without publishing ${layer.api}.`));else setTimeout(poll,20);};poll();});
+    const loadLayer=layer=>{if(globalThis[layer.api])return Promise.resolve();let script=document.querySelector(`script[src="${layer.src}"]`);if(!script){script=document.createElement('script');script.src=layer.src;script.async=false;document.head.append(script);}return waitForApi(layer);};
     let chain=Promise.resolve();
-    for(const src of scripts)chain=chain.then(()=>new Promise((resolve,reject)=>{const existing=document.querySelector(`script[src="${src}"]`);if(existing){if(existing.dataset.exoLoaded==='true'||existing.readyState==='complete')resolve();else{existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',()=>reject(new Error(`Unable to load ${src}.`)),{once:true});}return;}const script=document.createElement('script');script.src=src;script.async=false;script.addEventListener('load',()=>{script.dataset.exoLoaded='true';resolve();},{once:true});script.addEventListener('error',()=>reject(new Error(`Unable to load ${src}.`)),{once:true});document.head.append(script);}));
-    chain.then(()=>document.dispatchEvent(new CustomEvent('blacklight:exo-vessel-v10-ready',{detail:{styles:[...styles],scripts:[...scripts]}}))).catch(error=>{console.error('[Blacklight EXO] VESSEL-10 layer load failed.',error);globalThis.BlacklightExoRuntimeSupervisor?.fail?.('vessel-10-interface',error);});
+    for(const layer of scripts)chain=chain.then(()=>loadLayer(layer));
+    chain.then(()=>document.dispatchEvent(new CustomEvent('blacklight:exo-vessel-v10-ready',{detail:{styles:[...styles],scripts:scripts.map(layer=>layer.src)}}))).catch(error=>{console.error('[Blacklight EXO] VESSEL-10 layer load failed.',error);globalThis.BlacklightExoRuntimeSupervisor?.fail?.('vessel-10-interface',error);});
     return chain;
   }
   function replaceCards(id,rows){$(id)?.replaceChildren(...rows.map(row=>card(...row)));}
