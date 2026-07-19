@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor discovery, atlas-aware visual assets, procedural fallbacks, observation vocabulary, schema-015 population and territory foundations, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor discovery, atlas-aware visual assets, procedural fallbacks, observation vocabulary, schema-015 population and territory foundations, query-only Observation Registry, imports, migrations, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -63,6 +63,13 @@ tasks.register<JavaExec>("verifyObservationFoundation") {
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.ObservationFoundationVerification")
 }
 
+tasks.register<JavaExec>("verifyObservationRegistry") {
+    group = "verification"
+    description = "Verifies query-only observation summaries, populations, territories, influence, events, metrics, snapshots, changed-since-tick queries, selected-entity history, and schema rejection."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification")
+}
+
 tasks.register<JavaExec>("runAssetSetup") {
     group = "application"
     description = "Indexes a local Barotrauma installation for UI atlases, map markers, backgrounds, operation symbols, and independent fallback visuals."
@@ -75,6 +82,13 @@ tasks.register<JavaExec>("runGraphicalWorldMap") {
     description = "Runs the graphical Europa map using donor-backed Barotrauma backgrounds and markers or procedural fallbacks."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow")
+}
+
+tasks.register<JavaExec>("runObservationFoundation") {
+    group = "application"
+    description = "Runs the read-only schema-015 NPC population, creature territory, faction presence, flow, event, snapshot, and metric observation window."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.observation.ObservationFoundationWindow")
 }
 
 tasks.register<JavaExec>("runImportApproval") {
