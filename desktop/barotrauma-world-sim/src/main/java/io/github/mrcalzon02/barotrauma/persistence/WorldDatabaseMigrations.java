@@ -69,6 +69,7 @@ final class WorldDatabaseMigrations {
             case 13 -> WorldStorageContracts.schema013Statements();
             case 14 -> WorldStorageContracts.schema014Statements();
             case 15 -> WorldStorageContracts.schema015Statements();
+            case 16 -> WorldStorageContracts.schema016Statements();
             default -> throw new SQLException("No forward migration is defined for schema " + targetVersion + ".");
         };
     }
@@ -170,7 +171,7 @@ final class WorldDatabaseMigrations {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 15, "Fresh world did not initialize at schema 015.");
+            require(currentVersion(connection) == 16, "Fresh world did not initialize at schema 016.");
             require(tableExists(connection, "world_location") && tableExists(connection, "simulation_command_receipt"),
                     "Fresh world is missing normalized-world or command-receipt state.");
             require(tableExists(connection, "station_simulation_state") && tableExists(connection, "station_inventory"),
@@ -185,6 +186,7 @@ final class WorldDatabaseMigrations {
                             && objectExists(connection, "trigger", "fleet_response_responder_returns_home"),
                     "Fresh world is missing response transit or towing completion.");
             verifyObservationObjects(connection, "Fresh world");
+            verifyPopulationAccountingObjects(connection, "Fresh world");
             require(foreignKeyViolations(connection) == 0, "Fresh schema contains foreign-key violations.");
         }
     }
@@ -223,7 +225,7 @@ final class WorldDatabaseMigrations {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 15, "Legacy world did not advance to schema 015.");
+            require(currentVersion(connection) == 16, "Legacy world did not advance to schema 016.");
             require(columnExists(connection, "world_metadata", "source_suite_version"),
                     "Legacy world did not receive normalized-world metadata columns.");
             require(tableExists(connection, "station_civilization_state")
@@ -231,6 +233,7 @@ final class WorldDatabaseMigrations {
                             && tableExists(connection, "fleet_response_transit_leg"),
                     "Legacy world did not retain the prior passive-world migration chain.");
             verifyObservationObjects(connection, "Legacy world");
+            verifyPopulationAccountingObjects(connection, "Legacy world");
             try (PreparedStatement statement = connection.prepareStatement(
                     "SELECT source_name FROM import_artifact WHERE artifact_id=?")) {
                 statement.setString(1, artifactId.toString());
@@ -266,6 +269,17 @@ final class WorldDatabaseMigrations {
                         && objectExists(connection, "trigger", "observation_creature_population_seed")
                         && objectExists(connection, "trigger", "observation_creature_territory_seed"),
                 prefix + " is missing observation seed triggers.");
+    }
+
+    private static void verifyPopulationAccountingObjects(Connection connection, String prefix) throws SQLException {
+        require(tableExists(connection, "npc_population_reconciliation")
+                        && tableExists(connection, "npc_population_ledger"),
+                prefix + " is missing population reconciliation or ledger state.");
+        require(objectExists(connection, "view", "npc_population_accounting_observation"),
+                prefix + " is missing the population accounting observation view.");
+        require(objectExists(connection, "trigger", "npc_population_reconciliation_seed")
+                        && objectExists(connection, "trigger", "npc_population_tick_accounting"),
+                prefix + " is missing population accounting triggers.");
     }
 
     private static void deleteTree(Path root) throws IOException {
