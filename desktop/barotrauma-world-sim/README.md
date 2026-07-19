@@ -16,11 +16,24 @@ The desktop project now includes:
 - Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response-transit, ecology, geology, natural-resource, extraction, depletion, and renewable-recovery workloads.
 - Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Automatic timed cycles while Passive Mode is enabled.
-- Local donor-installation discovery for Barotrauma graphical assets, with packaged binary PNG fallbacks.
+- Local donor-installation discovery for Barotrauma graphical assets, with packaged binary PNG and procedural fallbacks.
+- A milestone-backed **Development Plan** for desktop NPC population, settlement expansion and contraction, faction influence, creature populations, observation history, and long-running installed operation.
 
 No website behavior has been removed or redirected. The web suite remains the behavioral reference while desktop parity is developed.
 
 A normalized version-22 world imports with simulation disabled and paused. Passive Mode begins only after the operator explicitly enables it from the World Map. Once enabled, one process-wide scheduler owns that world. Every cycle advances the deterministic clock and commits all passive workload changes together; a failed cycle rolls back and faults closed.
+
+## Development Plan
+
+The governing desktop expansion roadmap is:
+
+```text
+DEVELOPMENT_PLAN.md
+```
+
+The Development Plan divides passive observation work into significant milestones and smaller vertical development slices. Each milestone requires persistence, deterministic behavior, desktop visibility, failure handling, migration coverage, verification, and documentation before it may be marked complete.
+
+The current planned sequence begins with observation vocabulary and schema 015, then adds NPC population and settlement lifecycle behavior, faction influence, persistent creature populations, NPC–creature interaction, a unified Desktop Observation Center, historical replay, watchlists, long-running tray operation, and only later browser snapshot compatibility.
 
 ## Requirements
 
@@ -42,7 +55,7 @@ The user may choose:
 
 - **Automatic** — re-scan Steam libraries and use the first validated donor installation.
 - **Manual** — retain an explicitly selected Barotrauma installation, app bundle, executable directory, or `Content` directory.
-- **Fallback only** — never read donor files and use the packaged neutral PNG artwork.
+- **Fallback only** — never read donor files and use the packaged independent fallback artwork.
 
 Only the local path and selection mode are stored in:
 
@@ -50,7 +63,7 @@ Only the local path and selection mode are stored in:
 ~/.barotrauma-world-sim/assets.properties
 ```
 
-Official Barotrauma assets are referenced from the user's installation at runtime. They are never copied into this repository or a release package. If the parent game is removed, moved, or unavailable, each unresolved logical role automatically uses its packaged fallback PNG.
+Official Barotrauma assets are referenced from the user's installation at runtime. They are never copied into this repository or a release package. If the parent game is removed, moved, or unavailable, each unresolved logical role automatically uses its packaged or procedural fallback.
 
 Common default locations include:
 
@@ -79,9 +92,10 @@ Opening a desktop world in one participating window updates the shared selection
 
 ```text
 gradle runWorldRegistry
+gradle runGraphicalWorldMap
 ```
 
-The World Map provides canonical time, locations, stations, NPC voyages, missions, routes, research, encounters, and Passive Mode controls.
+The World Map registry provides canonical time, locations, stations, NPC voyages, missions, routes, research, encounters, and Passive Mode controls. The graphical map displays locations, active NPC routes, vessel conditions, and donor-backed or fallback map assets.
 
 Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet-response transit, ecology, geology, extraction, and renewable-recovery changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
 
@@ -237,12 +251,13 @@ A passive cycle is one SQLite transaction containing its clock receipt, checkpoi
 ```text
 gradle build
 gradle verifyWorldStore
+gradle verifyVisualAssets
 ```
 
 The verification chain covers:
 
-- Donor installation validation, saved local pointers, donor-first selection, and fallback-only resolution.
-- Real packaged PNG fallback resources for station, vessel, fauna, and geology roles.
+- Donor installation validation, saved local pointers, donor-first selection, atlas cropping, and fallback-only resolution.
+- Packaged PNG and procedural fallback resources for graphical roles.
 - Fresh and legacy migration through schema 014.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
@@ -275,6 +290,7 @@ The workflow `.github/workflows/barotrauma-desktop.yml` compiles with Java 17 an
 io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication
 io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow
 io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow
+io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow
 io.github.mrcalzon02.barotrauma.desktop.frontier.CivilizationFrontierWindow
 io.github.mrcalzon02.barotrauma.desktop.nature.NaturalWorldAndFleetWindow
 io.github.mrcalzon02.barotrauma.desktop.logistics.StationLogisticsWindow
@@ -289,7 +305,7 @@ io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow
 
 ## Current implementation order
 
-Completed:
+Completed baseline:
 
 1. Desktop shell, architecture baseline, stable identities, and safe import inspection.
 2. Official vessel transactions, campaign mapping, snapshot chronology, and registries.
@@ -303,26 +319,30 @@ Completed:
 10. Material-gated NPC rescue, towing, repair, refuel, rearm, and station reinforcement operations.
 11. Passive ecological regrowth, food-web movement, predator feeding-ground expansion, biological accumulation, geological activity, and natural-resource exposure.
 12. Natural-resource, predator, and fleet-response integration with the shared NPC mission system.
-13. Donor Barotrauma asset discovery, local pointer storage, binary PNG fallbacks, setup UI, and packaging boundaries.
+13. Donor Barotrauma asset discovery, local pointer storage, atlas-aware lookup, independent fallbacks, setup UI, and packaging boundaries.
 14. Finite resource harvesting, depletion, typed freight settlement, environmental impact, renewable dormancy, and recovery.
 15. Fleet responder outbound travel, on-scene gating, return and towing transit, shared hazards, retries, and final home-arrival recovery.
+16. Graphical donor-backed world-map rendering and focused visual-asset verification.
 
-Next:
+Active development direction:
 
-1. Add player-directed rescue, towing, repair, refuel, rearm, reinforcement, and natural-resource missions.
-2. Add player mission acceptance, reward settlement, and faction consequences.
-3. Connect donor/fallback roles to the World Map, vessel registry, station, and player-transit panels.
-4. Add equipment-level cargo manifests and capacity derived from imported submarine data.
-5. Add persistent recent-world reopening, backups, packaging, and release automation.
+1. Milestone 1.1 — observation vocabulary and invariants.
+2. Milestone 1.2 — schema 015 population, territory, influence, flow, event, and snapshot foundations.
+3. Milestone 1.3 — read-only ObservationRegistry and changed-since-tick queries.
+4. Milestone 1.4 — initial desktop population and creature observation surfaces.
+5. Milestone 2 — NPC population accounting and settlement lifecycle.
+
+See `DEVELOPMENT_PLAN.md` for all milestone slices, completion gates, verification requirements, and the incremental Development Record.
 
 ## Governing documents
 
+- `DEVELOPMENT_PLAN.md`
 - `../../docs/barotrauma-desktop-baseline.md`
 - `../../docs/barotrauma-desktop-architecture.md`
 - `NATURAL_WORLD.md`
 - `docs/donor-assets.md`
 
-The baseline fixes compatibility and simulation requirements. The architecture document fixes dependency direction, identity boundaries, importer isolation, concurrency rules, and implementation order.
+The Development Plan governs milestone sequencing and incremental progress records. The baseline fixes compatibility and simulation requirements. The architecture document fixes dependency direction, identity boundaries, importer isolation, and concurrency rules. Focused subsystem documents describe the behavior that is already implemented.
 
 ## Local files
 
