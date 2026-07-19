@@ -11,8 +11,8 @@ const loader=await read('blacklight-exo-vessel-gameplay-ui.js');
 const workflow=await read('.github/workflows/pages.yml');
 
 for(const signature of[
-  'sceneRows','routePolylines','sceneBounds','applySlice','explodedPoint','cameraCoordinates','cameraProject','boxCorners','boxFaces','pointInPolygon',
-  'showModal','pointerdown','pointermove','wheel','ResizeObserver','SOLID','WIREFRAME','XRAY','Utility routes','Exploded separation','Visible slice','Edit Campaign State'
+  'sceneRows','routePolylines','sceneBounds','applySlice','explodedPoint','cameraCoordinates','cameraProject','boxCorners','boxFaces','sortFacesForPainter','pointInPolygon',
+  'showModal','pointerdown','pointermove','wheel','keydown','ArrowLeft','ResizeObserver','SOLID','WIREFRAME','XRAY','Utility routes','Exploded separation','Visible slice','Edit Campaign State'
 ])if(!source.includes(signature))fail(`Interactive campaign 3D viewer lacks ${signature}.`);
 for(const signature of[
   'exo-vessel-campaign-3d-stage','exo-vessel-campaign-3d-window','exo-vessel-campaign-3d-window-body','exo-vessel-campaign-3d-controls','exo-vessel-campaign-3d-inspector','touch-action:none'
@@ -47,7 +47,7 @@ vm.createContext(context);
 vm.runInContext(source,context,{filename:'blacklight-exo-vessel-campaign-3d-viewer.js'});
 const api=context.BlacklightExoVesselCampaign3DViewer;
 if(api?.version!==1)fail('Interactive campaign 3D viewer API did not initialize.');
-for(const method of['sceneRows','routePolylines','sceneBounds','applySlice','explodedPoint','cameraCoordinates','cameraProject','boxCorners','boxFaces','pointInPolygon'])if(typeof api[method]!=='function')fail(`Interactive campaign 3D viewer API lacks ${method}.`);
+for(const method of['sceneRows','routePolylines','sceneBounds','applySlice','explodedPoint','cameraCoordinates','cameraProject','boxCorners','boxFaces','sortFacesForPainter','pointInPolygon'])if(typeof api[method]!=='function')fail(`Interactive campaign 3D viewer API lacks ${method}.`);
 
 const vessel={
   moduleGraph:{modules:[
@@ -107,7 +107,9 @@ const corners=api.boxCorners(reactor,center,0);
 if(corners.length!==8||corners[0].x!==1.5||corners[6].z!==2.5)fail('Volumetric box construction does not retain eight exact corners.');
 const faces=api.boxFaces(reactor,scene,1200,700,state);
 if(faces.length!==6||faces.some(face=>face.points.length!==4||!Number.isFinite(face.depth)))fail('Volumetric box did not produce six finite quadrilateral faces.');
+const painter=api.sortFacesForPainter([{depth:-4},{depth:3},{depth:1}]);
+if(JSON.stringify(painter.map(item=>item.depth))!==JSON.stringify([3,1,-4]))fail('Painter ordering does not draw far geometry before near geometry.');
 if(!api.pointInPolygon(5,5,[{x:0,y:0},{x:10,y:0},{x:10,y:10},{x:0,y:10}])||api.pointInPolygon(15,5,[{x:0,y:0},{x:10,y:0},{x:10,y:10},{x:0,y:10}]))fail('Canvas module-face hit testing is invalid.');
 
 console.log('EXO vessel interactive campaign 3D viewer validation passed.');
-console.log('Validated exact VESSEL-04 box volumes, campaign damage colors, routed three-dimensional utilities, scene envelope, clipping, exploded separation, deterministic perspective, six-face construction, picking, canonical loader order, window controls, and Pages gating.');
+console.log('Validated exact VESSEL-04 box volumes, campaign damage colors, routed three-dimensional utilities, scene envelope, clipping, exploded separation, deterministic perspective, far-to-near painter order, six-face construction, picking, pointer and keyboard camera controls, canonical loader order, window controls, and Pages gating.');
