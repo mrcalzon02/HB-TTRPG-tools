@@ -3,6 +3,22 @@ name: Deploy Blacklight EXO and Barotrauma site
 on:
   push:
     branches: ["main"]
+    paths:
+      - ".github/workflows/pages.yml"
+      - "*.html"
+      - "*.css"
+      - "*.js"
+      - "*.json"
+      - "data/**"
+      - "scripts/**"
+      - "artifacts/**"
+      - "assets/**"
+      - "images/**"
+      - "docs/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".nojekyll"
+      - "CNAME"
   workflow_dispatch:
 
 permissions:
