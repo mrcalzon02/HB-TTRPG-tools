@@ -28,6 +28,8 @@ const campaignCss=read('blacklight-exo-vessel-campaign.css');
 const campaignSchema=JSON.parse(read('data/schemas/exo-vessel-campaign-archive.schema.json'));
 const diegeticRuntime=read('blacklight-exo-vessel-diegetic-controls.js');
 const diegeticCss=read('blacklight-exo-vessel-diegetic-controls.css');
+const viewer3dRuntime=read('blacklight-exo-vessel-campaign-3d-viewer.js');
+const viewer3dCss=read('blacklight-exo-vessel-campaign-3d-viewer.css');
 const vesselUi=read('blacklight-exo-vessel-ui.js');
 
 for(const id of['exo-generate-system','exo-force-populated-hz','exo-generate-cluster','exo-random-cluster','exo-cluster-status','exo-seed-input','exo-orbit-svg','exo-orbital-table-body'])if(!solarHtml.includes(`id="${id}"`))fail(`Solar page is missing browser control ${id}.`);
@@ -57,25 +59,27 @@ for(const signature of['indexedDB','FALLBACK_KEY','LEGACY_KEY','validateEnvelope
 if(!sectorManifest.modules?.includes('blacklight-exo-sector-archive-store.js')||!sectorManifest.archiveStorage?.includes('IndexedDB'))fail('Sector manifest does not pin durable archive storage.');
 for(const signature of['canonicalWeaponAuthority','canonicalizeSourceLinks','operationalState','weaponFamily','effectiveUnitCount','gameplayDifficulty'])if(!gameplayRuntime.includes(signature))fail(`VESSEL-09 gameplay runtime lacks ${signature}.`);
 if(gameplaySchema.properties?.phase?.const!=='VESSEL-09'||gameplaySchema.properties?.normalization?.properties?.probabilityAuthority?.const!=='SHARED_PERCENTILE')fail('VESSEL-09 gameplay schema identity or probability authority is invalid.');
-for(const signature of['loadVessel10Layers','blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-campaign-store.js','blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-diegetic-controls.js'])if(!gameplayUi.includes(signature))fail(`VESSEL-09 gameplay UI does not load VESSEL-10 asset ${signature}.`);
+for(const signature of['loadVessel10Layers','blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-campaign-store.js','blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-diegetic-controls.js','blacklight-exo-vessel-campaign-3d-viewer.css','blacklight-exo-vessel-campaign-3d-viewer.js','BlacklightExoVesselCampaign3DViewer'])if(!gameplayUi.includes(signature))fail(`VESSEL-09 gameplay UI does not load VESSEL-10 asset ${signature}.`);
 for(const signature of['indexedDB.open','createObjectStore','validateEnvelope','migrateRecord','blacklight:exo-vessel-activate','Record Campaign Snapshot','Import Vessel JSON','Manufacturer library','Hull-family library'])if(!campaignStore.includes(signature))fail(`VESSEL-10 campaign store lacks ${signature}.`);
 for(const signature of['exo-vessel-campaign-summary','exo-vessel-campaign-stat-card','exo-vessel-campaign-library-grid','exo-vessel-campaign-row'])if(!campaignCss.includes(signature))fail(`VESSEL-10 campaign stylesheet lacks ${signature}.`);
 if(campaignSchema.properties?.recordType?.const!=='blacklightExoVesselCampaignArchive'||campaignSchema.properties?.vessel?.$ref!=='exo-vessel-record.schema.json')fail('VESSEL-10 campaign archive schema is invalid.');
 for(const signature of['enhanceSelect','enhanceNumber','MutationObserver','exo-vessel-native-authority','exo-diegetic-choice-rail','exo-diegetic-slider','allowAutomatic','log-zero'])if(!diegeticRuntime.includes(signature))fail(`VESSEL-10 diegetic runtime lacks ${signature}.`);
 for(const signature of['exo-vessel-native-authority','exo-diegetic-selector','exo-diegetic-number','exo-diegetic-slider','exo-diegetic-choice','exo-diegetic-auto','INSTRUMENT'])if(!diegeticCss.includes(signature))fail(`VESSEL-10 diegetic stylesheet lacks ${signature}.`);
+for(const signature of['BlacklightExoVesselCampaign3DViewer','sceneRows','routePolylines','cameraProject','boxFaces','sortFacesForPainter','showModal','pointerdown','keydown','WIREFRAME','XRAY'])if(!viewer3dRuntime.includes(signature))fail(`Interactive vessel 3D runtime lacks ${signature}.`);
+for(const signature of['exo-vessel-campaign-3d-stage','exo-vessel-campaign-3d-window','exo-vessel-campaign-3d-controls','exo-vessel-campaign-3d-inspector','touch-action:none'])if(!viewer3dCss.includes(signature))fail(`Interactive vessel 3D stylesheet lacks ${signature}.`);
 if(!vesselUi.includes('blacklight:exo-vessel-activate')||!vesselUi.includes("activation:'campaign-archive'"))fail('Base vessel UI does not reactivate exact campaign archives.');
 
-for(const signature of['artifacts/exo-deployment-health.json','verifySolar','verifySector','verifyVessel','BlacklightExoRuntimeSupervisor','BlacklightExoGetActiveSector','BlacklightExoGetActiveSystem','BlacklightExoGetActiveVessel','BlacklightExoVesselCampaignStore','BlacklightExoVesselDiegeticControls','exo-vessel-campaign-section','exo-vessel-campaign-import','exo-diegetic-selector','exo-diegetic-number','VESSEL-09','VESSEL-10','operationalState'])if(!healthRuntime.includes(signature))fail(`Deployment health runtime lacks ${signature}.`);
+for(const signature of['artifacts/exo-deployment-health.json','verifySolar','verifySector','verifyVessel','BlacklightExoRuntimeSupervisor','BlacklightExoGetActiveSector','BlacklightExoGetActiveSystem','BlacklightExoGetActiveVessel','BlacklightExoVesselCampaignStore','BlacklightExoVesselDiegeticControls','BlacklightExoVesselCampaign3DViewer','exo-vessel-campaign-section','exo-vessel-campaign-import','exo-vessel-campaign-3d-window','viewer3dPlacements','viewer3dFaces','exo-diegetic-selector','exo-diegetic-number','VESSEL-09','VESSEL-10','operationalState'])if(!healthRuntime.includes(signature))fail(`Deployment health runtime lacks ${signature}.`);
 if(healthManifest.recordType!=='blacklightExoDeploymentHealth'||healthManifest.schemaVersion!=='1.0.0')fail('Deployment health manifest placeholder has an invalid contract.');
 if(!workflow.includes('Write deployment health manifest')||!workflow.includes('"commit": "${GITHUB_SHA}"')||!workflow.includes('artifacts/exo-deployment-health.json'))fail('Pages workflow does not publish exact deployment identity.');
-for(const validator of['node scripts/validate-exo-vessel-gameplay.mjs','node scripts/validate-exo-vessel-gameplay-weapon-authority.mjs','node scripts/validate-exo-vessel-campaign-store.mjs','node scripts/validate-exo-vessel-diegetic-controls.mjs'])if(!workflow.includes(validator))fail(`Pages workflow does not gate ${validator}.`);
+for(const validator of['node scripts/validate-exo-vessel-gameplay.mjs','node scripts/validate-exo-vessel-gameplay-weapon-authority.mjs','node scripts/validate-exo-vessel-campaign-store.mjs','node scripts/validate-exo-vessel-diegetic-controls.mjs','node scripts/validate-exo-vessel-campaign-3d-viewer.mjs'])if(!workflow.includes(validator))fail(`Pages workflow does not gate ${validator}.`);
 
 const dataContext={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,structuredClone};dataContext.globalThis=dataContext;vm.createContext(dataContext);
 for(const file of['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js'])vm.runInContext(read(file),dataContext,{filename:file});
 const authority=dataContext.BlacklightExoStellarSectorData;
 const fixed=authority.build(),generated=authority.generate('BROWSER:SMOKE:SECTOR',{clusterCount:24,speciesCount:12}),repeat=authority.generate('BROWSER:SMOKE:SECTOR',{clusterCount:24,speciesCount:12});
 if(!authority.validate(fixed).valid||!authority.validate(generated).valid)fail('Fixed or procedural sector fails browser-facing contracts.');
-if(JSON.stringify(generated)!==JSON.stringify(repeat))fail('Procedural sector replay differs for the same browser seed.');
+if(JSON.stringify(generated)!==JSON.stringify(repeat))fail('Procedural browser controls do not map to deterministic sector authority.');
 if(generated.clusters.length!==24||generated.species.length!==12)fail('Procedural browser controls do not map to requested sector scale.');
 
 const failures=[];
@@ -85,4 +89,4 @@ const summary=await fallbackContext.BlacklightExoMoonCatalogReady;
 if(summary.status!=='error'||!fixedSystems.error)fail('Offline satellite catalogue did not degrade to the fixed-system fallback.');
 if(!failures.some(item=>item.phase==='satellite-catalogue'))fail('Offline catalogue failure was not reported to the browser supervisor.');
 
-console.log('EXO browser, deployment health, durable sector and vessel archives, first-script supervision, VESSEL-09 runtime, VESSEL-10 campaign persistence, and diegetic instrument validation passed.');
+console.log('EXO browser, deployment health, durable sector and vessel archives, first-script supervision, VESSEL-09 runtime, complete VESSEL-10 campaign persistence, diegetic instruments, and interactive 3D vessel geometry validation passed.');
