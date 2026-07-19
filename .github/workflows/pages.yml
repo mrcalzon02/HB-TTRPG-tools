@@ -129,6 +129,9 @@ jobs:
       - name: Validate VESSEL-11 matrix and simulation contracts
         run: node scripts/validate-exo-vessel-validation-matrix.mjs
 
+      - name: Validate scoped canonical weapon-family override
+        run: node scripts/validate-exo-vessel-weapon-priority-override.mjs
+
       - name: Run VESSEL-11 cross-product balance matrix
         run: node scripts/run-exo-vessel-balance-matrix.mjs artifacts/exo-vessel-balance-matrix.json
 
