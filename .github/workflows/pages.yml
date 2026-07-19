@@ -120,9 +120,11 @@ jobs:
       - name: Validate canonical VESSEL-10 loader integration
         run: node scripts/validate-exo-vessel-v10-loader.mjs
 
-      - name: Validate phased EXO vessel system roadmap
-        # Legacy guarantees remain executed inside V2: node scripts/validate-exo-vessel-roadmap.mjs
+      - name: Validate phased EXO vessel base roadmap
         run: node scripts/validate-exo-vessel-roadmap-v2.mjs
+
+      - name: Validate effective EXO vessel roadmap through VESSEL-10
+        run: node scripts/validate-exo-vessel-roadmap-v3.mjs
 
       - name: Check Barotrauma JavaScript
         shell: bash
