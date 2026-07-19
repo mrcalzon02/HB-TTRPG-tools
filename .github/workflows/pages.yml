@@ -126,6 +126,18 @@ jobs:
       - name: Validate effective EXO vessel roadmap through VESSEL-10
         run: node scripts/validate-exo-vessel-roadmap-v3.mjs
 
+      - name: Run VESSEL-11 cross-product balance matrix
+        run: node scripts/run-exo-vessel-balance-matrix.mjs artifacts/exo-vessel-balance-matrix.json
+
+      - name: Upload VESSEL-11 balance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exo-vessel-balance-matrix
+          path: artifacts/exo-vessel-balance-matrix.json
+          if-no-files-found: warn
+          retention-days: 30
+
       - name: Check Barotrauma JavaScript
         shell: bash
         run: |
