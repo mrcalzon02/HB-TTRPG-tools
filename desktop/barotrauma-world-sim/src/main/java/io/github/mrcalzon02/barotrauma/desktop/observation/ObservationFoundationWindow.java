@@ -31,7 +31,7 @@ import java.awt.Font;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 
-/** Initial read-only desktop surface for schema-015 passive-world observation evidence. */
+/** Read-only desktop surface for schema-016 passive-world observation and population accounting evidence. */
 public final class ObservationFoundationWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final JLabel worldStatus = new JLabel("No desktop world open");
@@ -44,6 +44,10 @@ public final class ObservationFoundationWindow extends JFrame {
     private final DefaultTableModel npcModel = model("Station", "Total", "Civilians", "Industry", "Logistics",
             "Security", "Medical", "Science", "Temporary", "Refugees", "Housing", "Life Support",
             "Employment", "Morale", "Last Tick", "Population ID");
+    private final DefaultTableModel ledgerModel = model("Tick", "Station", "Before", "Births", "Deaths",
+            "Immigration", "Emigration", "Disaster Losses", "Other Gains", "Other Losses", "After",
+            "Housing", "Life Support", "Employment", "Morale", "Index Before", "Index After", "Cause",
+            "Evidence", "Reconciliation", "Baseline / Index", "Summary", "Ledger ID");
     private final DefaultTableModel creatureModel = model("Location", "Guild", "Class", "Estimate", "Biomass",
             "Health", "Food Stress", "Habitat", "Migration", "Confidence", "Territory", "Pressure", "Nest",
             "Last Tick", "Population ID");
@@ -68,7 +72,7 @@ public final class ObservationFoundationWindow extends JFrame {
         super("Barotrauma Observation Foundation");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(1100, 700));
-        setSize(1600, 920);
+        setSize(1650, 940);
         setLocationByPlatform(true);
         setLayout(new BorderLayout(10, 10));
 
@@ -78,10 +82,11 @@ public final class ObservationFoundationWindow extends JFrame {
         header.add(operationStatus, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
-        summary.setText("Open a schema-015 desktop world to inspect seeded populations and observation evidence.\n");
+        summary.setText("Open a schema-016 desktop world to inspect populations and conserved accounting evidence.\n");
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Summary", new JScrollPane(summary));
         tabs.addTab("NPC Populations", tablePane(npcModel));
+        tabs.addTab("NPC Population Ledger", tablePane(ledgerModel));
         tabs.addTab("Creature Populations", tablePane(creatureModel));
         tabs.addTab("Faction Presence", tablePane(factionModel));
         tabs.addTab("Population Flows", tablePane(flowModel));
@@ -126,7 +131,7 @@ public final class ObservationFoundationWindow extends JFrame {
         clear();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
-            summary.setText("Open a schema-015 desktop world to inspect seeded populations and observation evidence.\n");
+            summary.setText("Open a schema-016 desktop world to inspect populations and conserved accounting evidence.\n");
             refreshControls();
             return;
         }
@@ -174,13 +179,15 @@ public final class ObservationFoundationWindow extends JFrame {
                 + "Changed-after filter: " + snapshot.changedSinceTick() + "\n\n"
                 + "NPC population records: " + worldSummary.npcPopulations() + "\n"
                 + "Estimated NPC population: " + worldSummary.npcPopulationTotal() + "\n"
+                + "Population ledger rows: " + worldSummary.populationLedgerRows() + "\n"
                 + "Creature population records: " + worldSummary.creaturePopulations() + "\n"
                 + "Estimated creature count: " + worldSummary.creatureEstimatedTotal() + "\n"
                 + "Faction presence records: " + worldSummary.factionPresences() + "\n"
                 + "Observation events: " + worldSummary.observationEvents() + "\n\n"
-                + "This window is read-only. Schema 015 seeds explainable observation state from the existing "
-                + "station civilization and location ecology aggregates. Population behavior does not yet advance; "
-                + "Milestone 2 will add reconciled NPC growth, contraction, evacuation, founding, abandonment, and reclamation.\n");
+                + "This window is read-only. Schema 016 now records one conserved NPC population ledger row for "
+                + "each passive station tick. Frontier-index gains and losses are explicit reconciliation terms; "
+                + "future Milestone 2 slices will replace those generic terms with capacity-supported births, deaths, "
+                + "immigration, emigration, and physical migration flows without violating the accounting identity.\n");
         summary.setCaretPosition(0);
 
         for (var row : snapshot.npcPopulations()) npcModel.addRow(new Object[]{row.stationName(), row.totalPopulation(),
@@ -188,6 +195,12 @@ public final class ObservationFoundationWindow extends JFrame {
                 row.medicalPersonnel(), row.scientificPersonnel(), row.temporaryResidents(), row.refugees(),
                 row.housingCapacity(), row.lifeSupportCapacity(), row.employmentCapacity(), row.morale(),
                 row.lastTick(), row.populationId()});
+        for (var row : snapshot.populationLedgers()) ledgerModel.addRow(new Object[]{row.tickSequence(),
+                row.stationName(), row.beforeTotal(), row.births(), row.deaths(), row.immigration(), row.emigration(),
+                row.disasterLosses(), row.otherGains(), row.otherLosses(), row.afterTotal(), row.housingCapacity(),
+                row.lifeSupportCapacity(), row.employmentCapacity(), row.morale(), row.populationIndexBefore(),
+                row.populationIndexAfter(), row.primaryCause(), row.evidenceKey(), row.reconciliationStatus(),
+                row.baselinePopulationPerIndex(), row.summary(), row.ledgerId()});
         for (var row : snapshot.creaturePopulations()) creatureModel.addRow(new Object[]{row.locationName(),
                 row.speciesKey(), row.populationClass(), row.estimatedCount(), row.biomass(), row.health(),
                 row.foodStress(), row.habitatSupport(), row.migrationPressure(), row.confidence(),
@@ -214,8 +227,8 @@ public final class ObservationFoundationWindow extends JFrame {
     }
 
     private void clearTables() {
-        for (DefaultTableModel model : new DefaultTableModel[]{npcModel, creatureModel, factionModel, flowModel,
-                eventModel, snapshotModel, metricModel}) model.setRowCount(0);
+        for (DefaultTableModel model : new DefaultTableModel[]{npcModel, ledgerModel, creatureModel, factionModel,
+                flowModel, eventModel, snapshotModel, metricModel}) model.setRowCount(0);
     }
 
     private void setBusy(boolean value, String message) {
