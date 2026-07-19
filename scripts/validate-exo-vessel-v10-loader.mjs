@@ -14,7 +14,8 @@ const styles=[
   'blacklight-exo-vessel-campaign.css',
   'blacklight-exo-vessel-diegetic-controls.css',
   'blacklight-exo-vessel-campaign-damage-editor.css',
-  'blacklight-exo-vessel-campaign-voxel-viewer.css'
+  'blacklight-exo-vessel-campaign-voxel-viewer.css',
+  'blacklight-exo-vessel-campaign-3d-viewer.css'
 ];
 const scripts=[
   'blacklight-exo-vessel-campaign-store.js',
@@ -22,7 +23,8 @@ const scripts=[
   'blacklight-exo-vessel-diegetic-sync.js',
   'blacklight-exo-vessel-campaign-damage-editor.js',
   'blacklight-exo-vessel-campaign-voxel-viewer.js',
-  'blacklight-exo-vessel-campaign-voxel-route-overlay.js'
+  'blacklight-exo-vessel-campaign-voxel-route-overlay.js',
+  'blacklight-exo-vessel-campaign-3d-viewer.js'
 ];
 
 for(const path of[...styles,...scripts]){
@@ -42,7 +44,8 @@ const requiredSignatures={
   'blacklight-exo-vessel-diegetic-sync.js':['blacklight:exo-vessel-activate','BlacklightExoVesselDiegeticControls'],
   'blacklight-exo-vessel-campaign-damage-editor.js':['BlacklightExoVesselCampaignDamageEditor','campaignEffectiveState','VESSEL-05_IMMUTABLE','VESSEL-08_UNCHANGED','applyOverlay','resetOverlay'],
   'blacklight-exo-vessel-campaign-voxel-viewer.js':['BlacklightExoVesselCampaignVoxelViewer','placementRows','routeRows','Edit This Module','campaignEffectiveState'],
-  'blacklight-exo-vessel-campaign-voxel-route-overlay.js':['BlacklightExoVesselCampaignVoxelRouteOverlay','campaignEffectiveState?.routeStates','data-route-id']
+  'blacklight-exo-vessel-campaign-voxel-route-overlay.js':['BlacklightExoVesselCampaignVoxelRouteOverlay','campaignEffectiveState?.routeStates','data-route-id'],
+  'blacklight-exo-vessel-campaign-3d-viewer.js':['BlacklightExoVesselCampaign3DViewer','boxFaces','cameraProject','routePolylines','showModal','Edit Campaign State']
 };
 for(const[path,signatures]of Object.entries(requiredSignatures)){
   const text=read(path);
@@ -58,6 +61,7 @@ for(const validator of[
   'node scripts/validate-exo-vessel-diegetic-controls.mjs',
   'node scripts/validate-exo-vessel-campaign-damage-editor.mjs',
   'node scripts/validate-exo-vessel-campaign-voxel-viewer.mjs',
+  'node scripts/validate-exo-vessel-campaign-3d-viewer.mjs',
   'node scripts/validate-exo-vessel-v10-loader.mjs'
 ])if(!workflow.includes(validator))fail(`Pages workflow does not gate ${validator}.`);
 
