@@ -12,6 +12,7 @@ const engagementRegistry=await json('data/exo-vessel/engagement-simulation-regis
 const engagementSchema=await json('data/schemas/exo-vessel-engagement-simulation.schema.json');
 const matrixRunner=await read('scripts/run-exo-vessel-balance-matrix.mjs');
 const engagementRunner=await read('scripts/run-exo-vessel-engagement-monte-carlo.mjs');
+const priorityOverride=await read('blacklight-exo-vessel-weapon-priority-override.js');
 const weaponDefinitions=await read('blacklight-exo-vessel-weapon-definitions.js');
 const roadmapTransition=await json('data/exo-vessel/roadmap-transition-vessel-10.json');
 const workflow=await read('.github/workflows/pages.yml');
@@ -32,8 +33,9 @@ if(engagementSchema.$id!=='https://mrcalzon02.github.io/HB-TTRPG-tools/data/sche
 for(const field of ['simulationSeed','registry','matrixReport','dimensions','representatives','states','aggregate','validation'])if(!engagementSchema.required?.includes(field))fail(`VESSEL-11 engagement schema does not require ${field}.`);
 
 for(const signature of ["families.length!==9","pathLevels.length!==7","families.length*pathLevels.length","same seed and input did not reproduce","module/placement mismatch","practical range exceeds physical reach","observedTopologyCount","await fs.writeFile(outputPath","if(violations.length)fail"])if(!matrixRunner.includes(signature))fail(`VESSEL-11 matrix runner lacks ${signature}.`);
-for(const signature of ["weaponFamilies.length!==9","trialsPerState=64","representatives=[],vessels=new Map()","vessels.set(family,vessel)","for(let trial=0;trial<trialsPerState;trial++)","DC.build(vessel","deterministicReplayPassed","dominantWeaponFamily","uniquely dominates every comparable engagement state","await fs.writeFile(outputPath","if(violations.length)fail"])if(!engagementRunner.includes(signature))fail(`VESSEL-11 engagement runner lacks ${signature}.`);
+for(const signature of ["blacklight-exo-vessel-weapon-priority-override.js","weaponFamilies.length!==9","trialsPerState=64","fallbackRepresentative","weaponFamilyPriority:[family]","representatives=[],vessels=new Map()","vessels.set(family,vessel)","for(let trial=0;trial<trialsPerState;trial++)","DC.build(vessel","immutable VESSEL-05 condition authority","states.length!==weaponFamilies.length*bands.length*evasionStates.length","aggregate.trialCount!==9216","deterministicReplayPassed","dominantWeaponFamily","uniquely dominates every comparable engagement state","await fs.writeFile(outputPath","if(violations.length)fail"])if(!engagementRunner.includes(signature))fail(`VESSEL-11 engagement runner lacks ${signature}.`);
 if((engagementRunner.match(/V\.generate\(/g)||[]).length!==1)fail('VESSEL-11 engagement runner regenerates vessels outside the one representative-generation site.');
+for(const signature of ['weaponPriorityOverrideVersion:1','Unknown weapon-family priority override','SINGLE_SYNCHRONOUS_GENERATION','canonicalEngineeringPreserved:true','requiredFamilies','finally{','E.defaultWeaponPriority[role]=originalRole','M.archetypeMatrices[key].weapons=weapons'])if(!priorityOverride.includes(signature))fail(`Canonical weapon priority override lacks ${signature}.`);
 for(const family of ['CHEMICAL_BALLISTIC','RAIL_GUN','COIL_GUN','BRUTE_MASS_THROWER','SAND_GUN','LASER','PARTICLE_BEAM','FRACTIONAL_C','MISSILE'])if(!weaponDefinitions.includes(`${family}:{key:'${family}'`))fail(`Canonical weapon definitions lack ${family}.`);
 for(const band of ['pointDefense','practical','harassment','theoretical'])if(!weaponDefinitions.includes(`'${band}'`))fail(`Canonical weapon definitions lack ${band}.`);
 
@@ -50,4 +52,4 @@ for(const marker of requiredWorkflowMarkers)if(!workflow.includes(marker))fail(`
 if(workflow.indexOf('run-exo-vessel-balance-matrix.mjs')>workflow.indexOf('run-exo-vessel-engagement-monte-carlo.mjs'))fail('VESSEL-11 engagement simulation runs before its matrix authority.');
 
 console.log('EXO vessel VESSEL-11 validation and balance contracts passed.');
-console.log('Validated the 63-case family–Path matrix, closure and graph invariants, cached nine-family engagement simulation, deterministic replay, dominance policy, report schemas, workflow order, and preserved failure artifacts.');
+console.log('Validated the 63-case family–Path matrix, closure and graph invariants, scoped canonical family overrides, complete cached nine-family engagement simulation, immutable source authority, exact state and trial counts, deterministic replay, dominance policy, report schemas, workflow order, and preserved failure artifacts.');
