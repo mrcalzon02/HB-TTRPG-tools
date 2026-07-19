@@ -156,6 +156,9 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+      - name: Validate completed EXO vessel roadmap
+        run: node scripts/validate-exo-vessel-roadmap-v4.mjs
+
       - name: Check Barotrauma JavaScript
         shell: bash
         run: |
