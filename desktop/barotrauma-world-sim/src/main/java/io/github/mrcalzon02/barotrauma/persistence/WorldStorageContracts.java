@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 15;
+    public static final int DATABASE_SCHEMA_VERSION = 16;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -182,6 +182,7 @@ public final class WorldStorageContracts {
     public static List<String> schema013Statements() { return NaturalResourceHarvestingSchema.statements(); }
     public static List<String> schema014Statements() { return FleetResponseTransitSchema.statements(); }
     public static List<String> schema015Statements() { return ObservationFoundationSchema.statements(); }
+    public static List<String> schema016Statements() { return NpcPopulationAccountingSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -287,6 +288,9 @@ public final class WorldStorageContracts {
             require(schema015Statements().stream().anyMatch(sql -> sql.contains("creature_population_state")), "Observation creature populations are missing.");
             require(schema015Statements().stream().anyMatch(sql -> sql.contains("world_observation_event")), "Observation event evidence is missing.");
             require(schema015Statements().stream().anyMatch(sql -> sql.contains("observation_snapshot")), "Observation snapshots are missing.");
+            require(schema016Statements().stream().anyMatch(sql -> sql.contains("npc_population_ledger")), "Conserved NPC population accounting is missing.");
+            require(schema016Statements().stream().anyMatch(sql -> sql.contains("npc_population_tick_accounting")), "Passive NPC population reconciliation is missing.");
+            require(schema016Statements().stream().anyMatch(sql -> sql.contains("after_total=before_total")), "Population conservation constraint is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
