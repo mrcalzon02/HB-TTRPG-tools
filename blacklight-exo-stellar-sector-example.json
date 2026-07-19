@@ -11,6 +11,7 @@
     "blacklight-exo-stellar-sector-generator.js",
     "blacklight-exo-stellar-sector-contracts.js",
     "blacklight-exo-stellar-sector-strategic-atlas.js",
+    "blacklight-exo-stellar-sector-extinct-sites.js",
     "blacklight-exo-stellar-sector-supervision.js",
     "blacklight-exo-stellar-sector.js",
     "blacklight-exo-stellar-sector-strategic-ui.js",
