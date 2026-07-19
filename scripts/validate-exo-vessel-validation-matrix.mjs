@@ -13,6 +13,7 @@ const engagementSchema=await json('data/schemas/exo-vessel-engagement-simulation
 const matrixRunner=await read('scripts/run-exo-vessel-balance-matrix.mjs');
 const engagementRunner=await read('scripts/run-exo-vessel-engagement-monte-carlo.mjs');
 const priorityOverride=await read('blacklight-exo-vessel-weapon-priority-override.js');
+const priorityValidator=await read('scripts/validate-exo-vessel-weapon-priority-override.mjs');
 const weaponDefinitions=await read('blacklight-exo-vessel-weapon-definitions.js');
 const roadmapTransition=await json('data/exo-vessel/roadmap-transition-vessel-10.json');
 const workflow=await read('.github/workflows/pages.yml');
@@ -35,13 +36,15 @@ for(const field of ['simulationSeed','registry','matrixReport','dimensions','rep
 for(const signature of ["families.length!==9","pathLevels.length!==7","families.length*pathLevels.length","same seed and input did not reproduce","module/placement mismatch","practical range exceeds physical reach","observedTopologyCount","await fs.writeFile(outputPath","if(violations.length)fail"])if(!matrixRunner.includes(signature))fail(`VESSEL-11 matrix runner lacks ${signature}.`);
 for(const signature of ["blacklight-exo-vessel-weapon-priority-override.js","weaponFamilies.length!==9","trialsPerState=64","fallbackRepresentative","weaponFamilyPriority:[family]","representatives=[],vessels=new Map()","vessels.set(family,vessel)","for(let trial=0;trial<trialsPerState;trial++)","DC.build(vessel","immutable VESSEL-05 condition authority","states.length!==weaponFamilies.length*bands.length*evasionStates.length","aggregate.trialCount!==9216","deterministicReplayPassed","dominantWeaponFamily","uniquely dominates every comparable engagement state","await fs.writeFile(outputPath","if(violations.length)fail"])if(!engagementRunner.includes(signature))fail(`VESSEL-11 engagement runner lacks ${signature}.`);
 if((engagementRunner.match(/V\.generate\(/g)||[]).length!==1)fail('VESSEL-11 engagement runner regenerates vessels outside the one representative-generation site.');
-for(const signature of ['weaponPriorityOverrideVersion:1','Unknown weapon-family priority override','SINGLE_SYNCHRONOUS_GENERATION','canonicalEngineeringPreserved:true','requiredFamilies','finally{','E.defaultWeaponPriority[role]=originalRole','M.archetypeMatrices[key].weapons=weapons'])if(!priorityOverride.includes(signature))fail(`Canonical weapon priority override lacks ${signature}.`);
+for(const signature of ['weaponPriorityOverrideVersion:1','Unknown weapon-family priority override','preferenceName','preferenceMatches','manufacturerPreferenceAliases','SINGLE_SYNCHRONOUS_GENERATION','canonicalEngineeringPreserved:true','requiredFamilies','finally{','E.defaultWeaponPriority[role]=originalRole','M.archetypeMatrices[key].weapons=weapons'])if(!priorityOverride.includes(signature))fail(`Canonical weapon priority override lacks ${signature}.`);
+for(const signature of ['FRACTIONAL_C','manufacturerPreferenceAliases','canonicalEngineeringPreserved','Unknown weapon-family priority override','pathLevel:\'p4\'','shared preference tables','engineering','moduleGraph','voxelLayout','conditionHistory','combatGeometry','weaponEngagement','combatResolution','gameplay'])if(!priorityValidator.includes(signature))fail(`Executable priority-override validator lacks ${signature}.`);
 for(const family of ['CHEMICAL_BALLISTIC','RAIL_GUN','COIL_GUN','BRUTE_MASS_THROWER','SAND_GUN','LASER','PARTICLE_BEAM','FRACTIONAL_C','MISSILE'])if(!weaponDefinitions.includes(`${family}:{key:'${family}'`))fail(`Canonical weapon definitions lack ${family}.`);
 for(const band of ['pointDefense','practical','harassment','theoretical'])if(!weaponDefinitions.includes(`'${band}'`))fail(`Canonical weapon definitions lack ${band}.`);
 
 if(roadmapTransition.nextPhase!=='VESSEL-11'||roadmapTransition.changes?.find(item=>item.phaseId==='VESSEL-11')?.toStatus!=='next')fail('Effective roadmap does not identify VESSEL-11 as the next phase.');
 const requiredWorkflowMarkers=[
   'node scripts/validate-exo-vessel-validation-matrix.mjs',
+  'node scripts/validate-exo-vessel-weapon-priority-override.mjs',
   'node scripts/run-exo-vessel-balance-matrix.mjs artifacts/exo-vessel-balance-matrix.json',
   'node scripts/run-exo-vessel-engagement-monte-carlo.mjs artifacts/exo-vessel-balance-matrix.json artifacts/exo-vessel-engagement-simulation.json',
   'name: exo-vessel-balance-matrix',
@@ -49,7 +52,8 @@ const requiredWorkflowMarkers=[
   'if: always()'
 ];
 for(const marker of requiredWorkflowMarkers)if(!workflow.includes(marker))fail(`Pages workflow does not gate or retain ${marker}.`);
+if(workflow.indexOf('validate-exo-vessel-weapon-priority-override.mjs')>workflow.indexOf('run-exo-vessel-balance-matrix.mjs'))fail('Scoped weapon-family override validation runs after the balance matrix.');
 if(workflow.indexOf('run-exo-vessel-balance-matrix.mjs')>workflow.indexOf('run-exo-vessel-engagement-monte-carlo.mjs'))fail('VESSEL-11 engagement simulation runs before its matrix authority.');
 
 console.log('EXO vessel VESSEL-11 validation and balance contracts passed.');
-console.log('Validated the 63-case family–Path matrix, closure and graph invariants, scoped canonical family overrides, complete cached nine-family engagement simulation, immutable source authority, exact state and trial counts, deterministic replay, dominance policy, report schemas, workflow order, and preserved failure artifacts.');
+console.log('Validated the 63-case family–Path matrix, closure and graph invariants, alias-correct scoped canonical family overrides with executable restoration and eligibility proof, complete cached nine-family engagement simulation, immutable source authority, exact state and trial counts, deterministic replay, dominance policy, report schemas, workflow order, and preserved failure artifacts.');
