@@ -1,0 +1,40 @@
+{
+  "recordType":"blacklightExoVesselEngagementSimulationRegistry",
+  "schemaVersion":"1.0.0",
+  "phase":"VESSEL-11",
+  "registryVersion":"1.0.0",
+  "authority":"Charles",
+  "sourceAuthorities":[
+    "VESSEL-05 immutable pre-impact condition",
+    "VESSEL-06 target track and maneuver geometry",
+    "VESSEL-07 installed weapon-family engagement envelope",
+    "VESSEL-08 deterministic intercept, impact, protection, and local damage core"
+  ],
+  "simulationPolicy":{
+    "representativeSelection":"First valid VESSEL-11 matrix case containing each installed weapon family",
+    "engagementBands":["pointDefense","practical","harassment","theoretical"],
+    "targetEvasionPercent":[0,25,50,75],
+    "trialsPerState":64,
+    "seedPolicy":"family, band, evasion, and trial index derive every deterministic resolution seed",
+    "fullVesselRegenerationPerTrial":false,
+    "immutableSourceRecord":true,
+    "reportTimestamps":false
+  },
+  "outcomes":["NO_SOLUTION","INTERCEPTED","MISS","NEAR_MISS","IMPACT"],
+  "metrics":[
+    "impact probability and observed impact rate",
+    "interception, miss, and near-miss rate",
+    "residual energy after directional protection",
+    "damaged and detached module counts",
+    "severed route and compromised zone counts",
+    "post-impact readiness loss",
+    "outcome replay determinism",
+    "cross-state weapon dominance"
+  ],
+  "dominancePolicy":{
+    "score":"observed impact rate multiplied by mean retained energy fraction and mean readiness loss",
+    "failure":"One weapon family is the unique highest-scoring family in every comparable engagement state",
+    "tiesDoNotCountAsDominance":true,
+    "unavailableStatesDoNotWin":true
+  }
+}
