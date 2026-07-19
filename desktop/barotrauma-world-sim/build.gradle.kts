@@ -5,38 +5,23 @@ plugins {
 group = "io.github.mrcalzon02"
 version = "0.1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
-dependencies {
-    implementation("org.xerial:sqlite-jdbc:3.53.1.0")
-}
+dependencies { implementation("org.xerial:sqlite-jdbc:3.53.1.0") }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-application {
-    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication")
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
+application { mainClass.set("io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication") }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(17)
 }
 
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = application.mainClass.get()
-    }
-}
+tasks.jar { manifest { attributes["Main-Class"] = application.mainClass.get() } }
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor discovery, atlas-aware visual assets, procedural fallbacks, observation vocabulary, schema-015 population and territory foundations, query-only Observation Registry, imports, migrations, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor assets, observation contracts, schema-015 foundations, schema-016 conserved NPC population accounting, query-only registries, imports, migrations, clock, passive scheduling, station consumption, civilization frontier, fleet response, ecology, geology, finite resources, logistics, player transit, NPC voyages, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -63,9 +48,16 @@ tasks.register<JavaExec>("verifyObservationFoundation") {
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.ObservationFoundationVerification")
 }
 
+tasks.register<JavaExec>("verifyNpcPopulationAccounting") {
+    group = "verification"
+    description = "Verifies schema 016 conserved NPC population growth, stable ticks, contraction, abandonment, cohort reconciliation, per-tick event chronology, metrics, and rejection of invalid ledgers."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.NpcPopulationAccountingVerification")
+}
+
 tasks.register<JavaExec>("verifyObservationRegistry") {
     group = "verification"
-    description = "Verifies query-only observation summaries, populations, territories, influence, events, metrics, snapshots, changed-since-tick queries, selected-entity history, and schema rejection."
+    description = "Verifies query-only observation summaries, conserved population ledgers, territories, influence, events, metrics, snapshots, changed-since-tick queries, selected-entity history, and schema rejection."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification")
 }
@@ -86,7 +78,7 @@ tasks.register<JavaExec>("runGraphicalWorldMap") {
 
 tasks.register<JavaExec>("runObservationFoundation") {
     group = "application"
-    description = "Runs the read-only schema-015 NPC population, creature territory, faction presence, flow, event, snapshot, and metric observation window."
+    description = "Runs the read-only schema-016 NPC population ledger, creature territory, faction presence, flow, event, snapshot, and metric observation window."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.observation.ObservationFoundationWindow")
 }
