@@ -1,0 +1,8 @@
+﻿Barotrauma asset index
+Generated UTC: 2026-07-19T23:50:04.3975916Z
+Source: C:\Program Files (x86)\Steam\steamapps\common\Barotrauma
+Total files: 3189
+Graphical asset candidates: 822
+
+graphical-assets.csv includes PNG, JPG, JPEG, BMP, GIF, TGA, TIF, TIFF, DDS, SVG, and XNB files.
+Paths in RelativePath use forward slashes for later web-tool imports.
