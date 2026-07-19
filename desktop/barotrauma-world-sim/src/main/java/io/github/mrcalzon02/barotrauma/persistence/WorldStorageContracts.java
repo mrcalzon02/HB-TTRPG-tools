@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 14;
+    public static final int DATABASE_SCHEMA_VERSION = 15;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -181,6 +181,7 @@ public final class WorldStorageContracts {
     public static List<String> schema012Statements() { return NaturalWorldMissionHardening.statements(); }
     public static List<String> schema013Statements() { return NaturalResourceHarvestingSchema.statements(); }
     public static List<String> schema014Statements() { return FleetResponseTransitSchema.statements(); }
+    public static List<String> schema015Statements() { return ObservationFoundationSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -282,6 +283,10 @@ public final class WorldStorageContracts {
             require(schema014Statements().stream().anyMatch(sql -> sql.contains("fleet_response_transit_leg")), "Fleet response transit legs are missing.");
             require(schema014Statements().stream().anyMatch(sql -> sql.contains("fleet_response_requires_scene")), "Fleet response arrival gating is missing.");
             require(schema014Statements().stream().anyMatch(sql -> sql.contains("fleet_response_responder_returns_home")), "Fleet response return completion is missing.");
+            require(schema015Statements().stream().anyMatch(sql -> sql.contains("npc_population_state")), "Observation NPC populations are missing.");
+            require(schema015Statements().stream().anyMatch(sql -> sql.contains("creature_population_state")), "Observation creature populations are missing.");
+            require(schema015Statements().stream().anyMatch(sql -> sql.contains("world_observation_event")), "Observation event evidence is missing.");
+            require(schema015Statements().stream().anyMatch(sql -> sql.contains("observation_snapshot")), "Observation snapshots are missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
