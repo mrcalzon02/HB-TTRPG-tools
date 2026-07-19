@@ -26,8 +26,13 @@
     exportButton.addEventListener('click',exportGameplay);resolveButton.addEventListener('click',resolveSelected);
   }
   function loadVessel10Layers(){
-    for(const href of['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-diegetic-controls.css'])if(!document.querySelector(`link[href="${href}"]`)){const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link);}
-    for(const src of['blacklight-exo-vessel-campaign-store.js','blacklight-exo-vessel-diegetic-controls.js'])if(!document.querySelector(`script[src="${src}"]`)){const script=document.createElement('script');script.src=src;script.async=false;document.head.append(script);}
+    const styles=['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-campaign-damage-editor.css','blacklight-exo-vessel-campaign-voxel-viewer.css'];
+    const scripts=['blacklight-exo-vessel-campaign-store.js','blacklight-exo-vessel-diegetic-controls.js','blacklight-exo-vessel-diegetic-sync.js','blacklight-exo-vessel-campaign-damage-editor.js','blacklight-exo-vessel-campaign-voxel-viewer.js','blacklight-exo-vessel-campaign-voxel-route-overlay.js'];
+    for(const href of styles)if(!document.querySelector(`link[href="${href}"]`)){const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link);}
+    let chain=Promise.resolve();
+    for(const src of scripts)chain=chain.then(()=>new Promise((resolve,reject)=>{const existing=document.querySelector(`script[src="${src}"]`);if(existing){if(existing.dataset.exoLoaded==='true'||existing.readyState==='complete')resolve();else{existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',()=>reject(new Error(`Unable to load ${src}.`)),{once:true});}return;}const script=document.createElement('script');script.src=src;script.async=false;script.addEventListener('load',()=>{script.dataset.exoLoaded='true';resolve();},{once:true});script.addEventListener('error',()=>reject(new Error(`Unable to load ${src}.`)),{once:true});document.head.append(script);}));
+    chain.then(()=>document.dispatchEvent(new CustomEvent('blacklight:exo-vessel-v10-ready',{detail:{styles:[...styles],scripts:[...scripts]}}))).catch(error=>{console.error('[Blacklight EXO] VESSEL-10 layer load failed.',error);globalThis.BlacklightExoRuntimeSupervisor?.fail?.('vessel-10-interface',error);});
+    return chain;
   }
   function replaceCards(id,rows){$(id)?.replaceChildren(...rows.map(row=>card(...row)));}
   function row(body,values){const tr=node('tr');for(const value of values)tr.append(node('td','',value));body?.append(tr);}
