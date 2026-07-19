@@ -126,6 +126,9 @@ jobs:
       - name: Validate effective EXO vessel roadmap through VESSEL-10
         run: node scripts/validate-exo-vessel-roadmap-v3.mjs
 
+      - name: Validate VESSEL-11 matrix and simulation contracts
+        run: node scripts/validate-exo-vessel-validation-matrix.mjs
+
       - name: Run VESSEL-11 cross-product balance matrix
         run: node scripts/run-exo-vessel-balance-matrix.mjs artifacts/exo-vessel-balance-matrix.json
 
@@ -135,6 +138,18 @@ jobs:
         with:
           name: exo-vessel-balance-matrix
           path: artifacts/exo-vessel-balance-matrix.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Run VESSEL-11 engagement Monte Carlo
+        run: node scripts/run-exo-vessel-engagement-monte-carlo.mjs artifacts/exo-vessel-balance-matrix.json artifacts/exo-vessel-engagement-simulation.json
+
+      - name: Upload VESSEL-11 engagement report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exo-vessel-engagement-simulation
+          path: artifacts/exo-vessel-engagement-simulation.json
           if-no-files-found: warn
           retention-days: 30
 
