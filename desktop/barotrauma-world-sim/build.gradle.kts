@@ -36,7 +36,7 @@ tasks.jar {
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor discovery, atlas-aware visual assets, procedural fallbacks, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor discovery, atlas-aware visual assets, procedural fallbacks, observation vocabulary and invariants, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
@@ -47,6 +47,13 @@ tasks.register<JavaExec>("verifyVisualAssets") {
     description = "Verifies donor discovery, XML style and atlas cropping, scaling, role coverage, and every procedural fallback without requiring a Barotrauma installation."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue")
+}
+
+tasks.register<JavaExec>("verifyObservationContract") {
+    group = "verification"
+    description = "Verifies the dependency-free passive observation vocabulary, population invariants, deterministic IDs, flow transitions, snapshot identity, and canonical event codec."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.observation.ObservationContractVerification")
 }
 
 tasks.register<JavaExec>("runAssetSetup") {
