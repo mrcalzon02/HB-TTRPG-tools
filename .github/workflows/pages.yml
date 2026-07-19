@@ -117,6 +117,9 @@ jobs:
       - name: Validate VESSEL-10 campaign voxel viewer
         run: node scripts/validate-exo-vessel-campaign-voxel-viewer.mjs
 
+      - name: Validate interactive vessel campaign 3D viewer
+        run: node scripts/validate-exo-vessel-campaign-3d-viewer.mjs
+
       - name: Validate canonical VESSEL-10 loader integration
         run: node scripts/validate-exo-vessel-v10-loader.mjs
 
