@@ -1,0 +1,63 @@
+{
+  "recordType":"blacklightExoVesselRoadmapTransition",
+  "schemaVersion":"1.0.0",
+  "transitionId":"roadmap-transition-vessel-10-complete",
+  "projectId":"blacklight-exo-vessel-design-system",
+  "baseRoadmap":"exo-vessel-system-roadmap.json",
+  "baseRoadmapVersion":1,
+  "authority":"Charles",
+  "strategy":"append-only-phase-transition",
+  "changes":[
+    {
+      "phaseId":"VESSEL-10",
+      "fromStatus":"next",
+      "toStatus":"complete",
+      "completionEvidence":[
+        "blacklight-exo-vessel-campaign-store.js",
+        "blacklight-exo-vessel-campaign.css",
+        "data/schemas/exo-vessel-campaign-archive.schema.json",
+        "blacklight-exo-vessel-diegetic-controls.js",
+        "blacklight-exo-vessel-diegetic-controls.css",
+        "blacklight-exo-vessel-diegetic-sync.js",
+        "blacklight-exo-vessel-campaign-damage-editor.js",
+        "blacklight-exo-vessel-campaign-damage-editor.css",
+        "data/schemas/exo-vessel-campaign-state-overlay.schema.json",
+        "blacklight-exo-vessel-campaign-voxel-viewer.js",
+        "blacklight-exo-vessel-campaign-voxel-viewer.css",
+        "blacklight-exo-vessel-campaign-voxel-route-overlay.js",
+        "blacklight-exo-vessel-command-deck.html",
+        "blacklight-exo-vessel-command-deck.js",
+        "blacklight-exo-vessel-v10.html",
+        "scripts/validate-exo-vessel-campaign-store.mjs",
+        "scripts/validate-exo-vessel-diegetic-controls.mjs",
+        "scripts/validate-exo-vessel-campaign-damage-editor.mjs",
+        "scripts/validate-exo-vessel-campaign-voxel-viewer.mjs",
+        "scripts/validate-exo-vessel-v10-loader.mjs",
+        "scripts/validate-exo-vessel-command-deck.mjs",
+        ".github/workflows/pages.yml",
+        "blacklight-exo-vessel-gameplay-ui.js",
+        "blacklight-exo-deployment-health.js",
+        "blacklight-exo-vessel.html"
+      ]
+    },
+    {
+      "phaseId":"VESSEL-11",
+      "fromStatus":"planned",
+      "toStatus":"next"
+    }
+  ],
+  "acceptanceEvidence":{
+    "persistentRouteDerivedVessel":"Cluster and route handoffs remain canonical inputs to the vessel generator; complete vessel records can be stored and reactivated through the campaign archive.",
+    "losslessReload":"Campaign archives retain the complete canonical vessel, provenance, hash, migration authority, manufacturer identity, and hull-family identity.",
+    "nondestructiveMigration":"Imported records pass through BlacklightExoVessel.migrateRecord and preserve unknown and earlier-phase fields.",
+    "diegeticControls":"Native form fields remain hidden canonical authority while segmented selectors, calibrated sliders, step controls, readouts, and automatic modes provide the visible interface.",
+    "campaignDamage":"Operational edits create a separate campaignEffectiveState and preserve VESSEL-05 and VESSEL-08 byte authority.",
+    "integratedVoxelInterface":"The campaign viewer projects VESSEL-04 placements, VESSEL-03 route geometry, and effective VESSEL-05, VESSEL-08, or VESSEL-10 state with editor handoff."
+  },
+  "validationAuthority":[
+    "scripts/validate-exo-vessel-roadmap-v3.mjs",
+    ".github/workflows/pages.yml",
+    "blacklight-exo-deployment-health.js"
+  ],
+  "nextPhase":"VESSEL-11"
+}
