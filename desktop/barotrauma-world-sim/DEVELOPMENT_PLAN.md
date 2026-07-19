@@ -2,7 +2,7 @@
 
 This document is the governing **Development Plan** for expanding the installed Barotrauma World Simulation Toolbox into a long-running passive observation application focused on NPC civilization, settlement expansion and contraction, creature populations, migration, ecology, and the interaction between human activity and Europa's natural world.
 
-The desktop Java 17 application and its SQLite world database remain the primary implementation target and authoritative simulator. Browser work is deliberately deferred until the desktop observation model, persistence contract, and export format are stable.
+The desktop Java 17 application and its SQLite world database are the primary implementation target and authoritative simulator. Browser work remains deferred until the desktop observation model, persistence contract, history, and export format are stable.
 
 ## Purpose
 
@@ -16,15 +16,15 @@ The finished desktop application should allow an operator to leave a world runni
 - Why every important change happened.
 - What changed between two selected ticks without rewriting the current world.
 
-The application must provide durable evidence rather than unexplained animation. Every substantial change must be recoverable from committed state, causal events, population flows, encounters, and observation history.
+The application must provide durable evidence rather than unexplained animation. Every substantial change must be recoverable from committed state, causal events, population flows, encounters, metrics, and observation history.
 
-## Development rules
+# Development rules
 
-### Desktop-first authority
+## Desktop-first authority
 
 The SQLite desktop world is authoritative. The browser may later display exported or locally streamed observation data, but it must not silently simulate the same authoritative world independently.
 
-### Meaningful development slices
+## Meaningful development slices
 
 A slice is a small vertical implementation that produces observable value and can be independently verified. A slice should normally include:
 
@@ -36,7 +36,7 @@ A slice is a small vertical implementation that produces observable value and ca
 
 Database-only, UI-only, or documentation-only work may be necessary supporting slices, but they do not complete a behavioral milestone by themselves.
 
-### Milestone completion gate
+## Milestone completion gate
 
 A milestone may be marked **Complete** only when:
 
@@ -45,25 +45,25 @@ A milestone may be marked **Complete** only when:
 - Deterministic replay or read-only reconstruction passes where applicable.
 - The desktop UI exposes the implemented behavior.
 - Failure behavior is explicit and fault-contained.
-- Relevant documentation describes the actual committed behavior rather than the intended behavior.
+- Relevant documentation describes committed behavior rather than intended behavior.
 - `verifyWorldStore` includes the milestone contract.
 
-### Documentation discipline
+## Documentation discipline
 
 This file remains the single milestone roadmap. As development proceeds:
 
 - Update the milestone status table.
 - Mark completed slices and record their schema or application boundary.
-- Add a concise entry to the Development Record at the end of this file.
+- Add a concise entry to the Development Record.
 - Update `README.md` when commands, entry points, schema versions, or completed capabilities change.
-- Update focused documents such as `NATURAL_WORLD.md` or `docs/donor-assets.md` when their subsystem boundary changes.
+- Update focused documents such as `NATURAL_WORLD.md`, `docs/donor-assets.md`, or `docs/observation-contract.md` when their subsystem boundary changes.
 - Do not create a replacement roadmap for each milestone.
 
-### Branch and compatibility discipline
+## Branch and compatibility discipline
 
-- Development remains on `main` unless the repository policy is explicitly changed.
-- Existing normalized imports, vessel identities, snapshots, and web-suite compatibility must remain intact.
-- Forward migrations must preserve existing worlds.
+- Development remains on `main` unless repository policy is explicitly changed.
+- Existing normalized imports, vessel identities, snapshots, and web-suite compatibility remain intact.
+- Forward migrations preserve existing worlds.
 - Passive simulation remains single-writer and transactional.
 - Observation queries remain read-only.
 - Donor Barotrauma assets remain local-only and optional.
@@ -75,13 +75,13 @@ This file remains the single milestone roadmap. As development proceeds:
 - **Planned** — scoped but not yet authoritative.
 - **Deferred** — intentionally waiting for a required earlier contract.
 
-## Milestone overview
+# Milestone overview
 
 | Milestone | Name | Status | Primary result |
 |---|---|---|---|
 | 0 | Existing passive-world baseline | Complete | Schema 014 economy, civilization frontier, fleet response transit, ecology, geology, extraction, and graphical mapping |
-| 1 | Observation foundation | Planned | Persistent observation vocabulary, population seeds, event evidence, and read-only registry |
-| 2 | NPC population and settlement lifecycle | Planned | Population accounting, growth, contraction, evacuation, founding, abandonment, and reclamation |
+| 1 | Observation foundation | Complete | Schema 015 vocabulary, deterministic population seeds, event evidence, query-only registry, and desktop evidence window |
+| 2 | NPC population and settlement lifecycle | Active | Population accounting, growth, contraction, migration, evacuation, founding, abandonment, and reclamation |
 | 3 | Faction influence and territorial pressure | Planned | Node and route influence, contested control, political drift, and faction consequences |
 | 4 | Creature population and territory simulation | Planned | Species cohorts, carrying capacity, reproduction, mortality, nests, migration, and competition |
 | 5 | NPC–creature–environment interaction | Planned | Hunting, displacement, habitat pressure, predation, abandoned-site colonization, and mission feedback |
@@ -99,49 +99,60 @@ This file remains the single milestone roadmap. As development proceeds:
 
 **Status: Complete**
 
-The current baseline includes:
+The baseline includes:
 
 - Deterministic canonical time and one logical writer.
 - Automatic Passive Mode scheduling.
 - Station economy, consumption, civilization-frontier states, and monster pressure.
 - NPC missions, vessels, routes, encounters, research, freight, production, and markets.
-- Material-gated rescue, towing, repair, refuel, rearm, and reinforcement response operations.
+- Material-gated rescue, towing, repair, refuel, rearm, and reinforcement operations.
 - Physical outbound and return response transit.
 - Persistent ecology, geology, natural events, finite resources, extraction, depletion, and renewable recovery.
 - Donor-backed or fallback graphical assets and a graphical Europa map.
 
-Milestone 0 is the platform on which the observation expansion is built. Its tables and aggregate ecology values are inputs to later population systems, not disposable prototypes.
+Milestone 0 remains the platform for observation expansion. Its aggregate civilization and ecology values are source evidence, not disposable prototypes.
 
 ---
 
 # Milestone 1 — Observation foundation
 
-**Status: Planned**
+**Status: Complete**
 
 ## Goal
 
-Create the persistence and read-only observation contracts required by every later milestone without yet introducing aggressive new expansion behavior.
+Create the persistence and read-only observation contracts required by later population behavior without introducing unexplained autonomous expansion.
 
 ## Slice 1.1 — Observation vocabulary and invariants
 
-Define shared enums and records for:
+**Status: Complete**
 
-- Observation event categories.
-- Entity types.
-- Causes and contributing factors.
-- Population-change terms.
-- Flow status.
-- Territory status.
-- Visibility and confidence.
-- Snapshot identity and parentage.
+Implemented:
 
-Define invariants for nonnegative population, bounded influence, causal evidence, deterministic IDs, and replay-safe ordering.
+- Stable event categories, entity types, causes, population terms, flow states, territory states, visibility modes, and confidence levels.
+- Nonnegative and conserved population accounting.
+- Legal population-flow transitions.
+- Deterministic observation identities.
+- Snapshot-parent safeguards.
+- Immutable event evidence.
+- Versioned canonical event encoding and decoding.
 
-**Acceptance:** Dependency-free contract tests validate all enum values, required fields, ID rules, and serialization fixtures.
+Verification:
+
+```text
+gradle verifyObservationContract
+```
+
+Focused documentation:
+
+```text
+docs/observation-contract.md
+```
 
 ## Slice 1.2 — Schema 015 observation tables
 
-Add forward-only persistence for:
+**Status: Complete**
+
+Schema 015 adds:
 
 - `npc_population_state`
 - `creature_population_state`
@@ -153,85 +164,157 @@ Add forward-only persistence for:
 - `observation_metric_series`
 - `observer_watch_rule`
 
-Seed NPC population from existing station population capacity, industry, security, civilization strength, and status. Seed initial creature aggregates from ecology, location level, biome, herbivore biomass, predator biomass, scavengers, and the desktop creature registry.
+It also adds read-optimized observation views and deterministic triggers.
 
-**Acceptance:** Fresh and schema-014 worlds migrate to schema 015 with deterministic, duplicate-safe seed rows and no mutation of existing aggregate state.
+NPC populations are seeded from schema-014 station economy and civilization state. Four ecological guild populations—herbivore, predator, scavenger, and bioaccumulator—are seeded per ecological location. Territory, faction, event, metric, and root-snapshot evidence is created without mutating the schema-014 source aggregates.
+
+Verification:
+
+```text
+gradle verifyObservationFoundation
+```
+
+The focused verifier checks deterministic seed identities, duplicate-safe reruns, later-row trigger seeding, source-state preservation, constraints, and foreign-key integrity.
 
 ## Slice 1.3 — ObservationRegistry
 
-Create read-only query services for:
+**Status: Complete**
+
+Implemented a strictly query-only registry providing:
 
 - Current world overview.
-- Location population summary.
-- Species summary.
+- NPC population summaries.
+- Creature population and territory summaries.
 - Faction presence.
-- Recent flows and events.
+- Population flows.
+- Observation events.
+- Snapshots and metrics.
 - Changed-since-tick queries.
-- Selected entity history.
+- Selected-entity event history.
+- Rejection of older or newer unsupported schemas.
 
-**Acceptance:** Registry queries operate under `PRAGMA query_only`, reject unsupported schema versions, and reproduce expected fixture summaries.
+Verification:
 
-## Slice 1.4 — Initial desktop observation tables
+```text
+gradle verifyObservationRegistry
+```
 
-Add read-only population, creature, influence, flow, and event tabs to the desktop registry or a first Observation Center shell.
+## Slice 1.4 — Initial desktop observation surface
 
-**Acceptance:** An operator can inspect all schema-015 seed data without enabling simulation or opening raw SQLite tools.
+**Status: Complete**
+
+The read-only Observation Foundation window exposes:
+
+- World summary.
+- NPC populations and capacities.
+- Creature guilds and territories.
+- Faction presence.
+- Population flows.
+- Observation events.
+- Snapshots.
+- Metric series.
+- Changed-after-tick filtering.
+
+Launch with:
+
+```text
+gradle runObservationFoundation
+```
+
+This is an evidence console, not yet the final graphical Observation Center.
 
 ## Milestone 1 completion gate
 
-- Schema 015 migration and preservation tests pass.
-- Every observed state has a stable identity and last-updated tick.
-- Read-only changed-since-tick querying exists.
-- Desktop UI exposes seeded NPC and creature populations.
-- Observation JSON fixtures are versioned for later export work.
+Satisfied: stable vocabulary, schema migration, deterministic seed state, read-only reconstruction, desktop visibility, focused verification, and documentation are committed. New population behavior may now depend on schema 015.
 
 ---
 
 # Milestone 2 — NPC population and settlement lifecycle
 
-**Status: Planned**
+**Status: Active**
 
 ## Goal
 
-Replace purely abstract civilization strength with an explainable NPC population model that can grow, migrate, contract, evacuate, found settlements, abandon locations, and reclaim them.
+Replace the current abstract population index with conserved, explainable population changes while retaining the existing civilization frontier as a compatible pressure model.
 
-## Slice 2.1 — Population accounting
+## Slice 2.1 — Population accounting and reconciliation
 
-Track civilian, industrial, logistics, security, medical, scientific, temporary, and refugee populations. Add housing, life-support, employment, food, water, medical, and security support.
+**Status: Active — next implementation slice**
 
-Each population cycle must account for:
+Add a transactional per-tick population ledger containing:
 
-`next = current + births + arrivals - deaths - departures - casualties`
+- Population before and after.
+- Births.
+- Deaths.
+- Immigration.
+- Emigration.
+- Disaster casualties.
+- Other explicit gains and losses.
+- Capacity and morale inputs.
+- Cause evidence.
 
-**Acceptance:** Every term is bounded, recorded, and reconciles exactly to the next committed population.
+Reconcile the new detailed population total with the existing `population_index` without allowing either representation to silently overwrite the other.
 
-## Slice 2.2 — Growth and contraction pressure
+**Acceptance:** every NPC population change satisfies the accounting identity, creates event and metric evidence, is deterministic from the same inputs, and rolls back with the passive tick.
 
-Derive growth or contraction pressure from supply history, housing, employment, safety, integrity, faction stability, traffic access, and recent disasters.
+## Slice 2.2 — Capacity, growth, mortality, and morale
 
-Add hysteresis, threshold duration, and cooldowns so settlements do not oscillate between states each tick.
+Add slow bounded behavior driven by:
 
-**Acceptance:** Deterministic fixtures demonstrate stable growth, sustained stagnation, controlled contraction, and recovery without threshold flapping.
+- Housing capacity.
+- Life-support capacity.
+- Employment capacity.
+- Food and supply availability.
+- Medical support.
+- Integrity and security.
+- Threat and fauna pressure.
+- Morale.
 
-## Slice 2.3 — Evacuation and refugee flows
+Growth must be capacity-supported. Mortality must be evidence-backed. Hysteresis prevents stations from alternating rapidly between growth and decline.
 
-Create durable population flows and NPC transport demand when a settlement contracts or enters emergency evacuation.
+## Slice 2.3 — Population migration and evacuation
 
-Flows require origin, destination, quantity, cause, departure, arrival, status, transport requirement, and losses or returns.
+Create durable population flows with:
 
-**Acceptance:** Departure and arrival are atomic; population cannot exist at both endpoints; failed flows record casualties, return, diversion, or stranding.
+- Origin and destination.
+- Quantity.
+- Cause.
+- Preparation, transit, arrival, return, failure, and cancellation state.
+- Transport requirement.
+- Departure and arrival ticks.
+- Explicit casualty accounting.
 
-## Slice 2.4 — Founding, abandonment, and reclamation projects
+Initial flows include ordinary migration, worker transfer, refugee evacuation, and emergency relocation.
 
-Expansion must consume population surplus, materials, supplies, transport capacity, security support, and construction time. Abandonment must leave explicit infrastructure, inventory, salvage, and habitat consequences. Reclamation must be a new project rather than a status reset.
+## Slice 2.4 — Founding, expansion, abandonment, and reclamation projects
 
-**Acceptance:** A fixture can found an outpost, expand it, starve it into evacuation, abandon it, and later reclaim it with complete evidence.
+Settlement transitions require committed projects rather than direct state flips.
 
-## Slice 2.5 — Desktop settlement inspector
+Projects include:
 
-Expose population composition, capacity, limiting factors, lifecycle state, flows, projects, and recent causes.
+- Colony founding.
+- Outpost expansion.
+- Capacity construction.
+- Emergency evacuation.
+- Formal abandonment.
+- Reclamation.
 
-**Acceptance:** Selecting a station answers both “what changed?” and “why?” without consulting logs manually.
+Projects consume transport, construction material, supplies, time, and security support.
+
+## Slice 2.5 — NPC lifecycle desktop evidence
+
+Extend the observation window with:
+
+- Population-ledger history.
+- Capacity pressure.
+- Migration and evacuation progress.
+- Settlement projects.
+- Expansion and contraction causes.
+- Reconciliation state with the civilization frontier.
+
+## Milestone 2 completion gate
+
+NPC population totals change conservatively and deterministically; migration physically moves people; settlement transitions require projects; UI and evidence explain every gain, loss, departure, arrival, abandonment, and reclamation.
 
 ---
 
@@ -239,29 +322,15 @@ Expose population composition, capacity, limiting factors, lifecycle state, flow
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Represent political and operational presence as bounded influence on world nodes and route edges rather than station ownership alone.
+1. Influence production from residents, security, trade, patrols, missions, resources, and allied adjacency.
+2. Route-edge influence and traffic control.
+3. Contested, covert, dominant, minority, neutral, and withdrawn presence transitions.
+4. Political drift, secession, annexation, neutralization, and ownership consequences.
+5. Faction overlays, inspectors, and causal evidence.
 
-## Slice 3.1 — Influence production
-
-Generate influence from resident population, security, trade traffic, patrol activity, allied neighbors, missions, resource control, and successful defense.
-
-## Slice 3.2 — Contested nodes and routes
-
-Model dominant, minority, neutral, contested, collapsing, and covert influence. Route-edge influence affects safety, tariffs, migration, mission generation, and response availability.
-
-## Slice 3.3 — Political transitions
-
-Add secession pressure, annexation, neutralization, faction withdrawal, administrative collapse, and negotiated transfer. Transitions require sustained conditions and event evidence.
-
-## Slice 3.4 — Map influence layers
-
-Display node and edge control, contested routes, recent gains or losses, and confidence. Do not invent geographic polygons for a route-graph world.
-
-## Milestone 3 completion gate
-
-A faction can gain and lose influence through population, trade, patrols, missions, and disasters; contested state affects simulation behavior; every transition is visible and historically reconstructable.
+Territory is represented as node and route control. No invented geographic polygons are required.
 
 ---
 
@@ -269,43 +338,21 @@ A faction can gain and lose influence through population, trade, patrols, missio
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Promote creatures from weighted encounter selections and aggregate predator pressure into persistent species populations with territory and food-web behavior.
+1. Replace guild-only seeds with species-aware aggregated cohorts while retaining guild rollups.
+2. Carrying capacity and habitat support.
+3. Births, natural mortality, starvation, and predation.
+4. Nests, spawning grounds, territory pressure, and migration readiness.
+5. Migration, dispersal, displacement, competition, and population collapse.
+6. Exceptional individual apex entities only where world significance justifies individual simulation.
+7. Creature overlays, inspectors, and evidence.
 
-## Slice 4.1 — Desktop creature registry normalization
+Creature accounting follows:
 
-Import or normalize the creature catalogue into stable desktop species identities with depth range, class, prey, predator, habitat, reproduction, migration, aggression, and special-behavior tags.
-
-Donor graphical assets may provide local creature icons where resolvable; procedural fallbacks remain mandatory.
-
-## Slice 4.2 — Carrying capacity and cohort accounting
-
-Track estimated count or biomass, juvenile/mature/breeding proportions, health, food stress, mortality, recent losses, and observation confidence.
-
-Population accounting follows:
-
-`next = current + births + immigration - natural deaths - starvation - predation - hunting - emigration`
-
-## Slice 4.3 — Nests and territory states
-
-Implement `DORMANT`, `FORAGING`, `NESTING`, `MIGRATING`, `EXPANDING`, `OVERPOPULATED`, `COLLAPSING`, and `DISPLACED` territory states.
-
-## Slice 4.4 — Migration and competition
-
-Creatures migrate through route-adjacent locations in response to prey, habitat, overcrowding, industrial disturbance, hunting, geological events, and predator competition.
-
-## Slice 4.5 — Exceptional entities
-
-Allow named apex creatures or encounter-active groups to exist as individual entities while ordinary populations remain aggregated.
-
-## Slice 4.6 — Desktop species inspector
-
-Expose abundance, biomass, territory, nests, prey support, mortality, migration, confidence, and threat to nearby settlements.
-
-## Milestone 4 completion gate
-
-Species populations reproduce, die, migrate, compete, and establish or lose territory using deterministic bounded rules tied to ecology rather than arbitrary growth rolls.
+```text
+next population = current + births + immigration - deaths - emigration - hunting losses
+```
 
 ---
 
@@ -313,33 +360,16 @@ Species populations reproduce, die, migrate, compete, and establish or lose terr
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Connect settlement growth, vessel traffic, extraction, ecology, creature populations, missions, and station threat into one feedback system.
-
-## Slice 5.1 — Food-web linkage
-
-Map species consumption and support onto producer, algae, herbivore, predator, scavenger, and bioaccumulator state.
-
-## Slice 5.2 — Human disturbance and habitat pressure
-
-Station expansion, route traffic, sonar, mining, harvesting, pollution, abandonment, and restoration alter habitat capacity and migration pressure.
-
-## Slice 5.3 — Hunting and defensive operations
-
-Fauna-clearing, patrol, research, quarantine, and nest-removal missions affect real species populations and territories. Hunting can create prey release or scavenger growth rather than only lowering a generic threat value.
-
-## Slice 5.4 — Creature attacks and settlement consequences
-
-Creature pressure can damage infrastructure, kill or displace population, interrupt trade, trigger evacuation, or create response operations. Abandoned infrastructure can become habitat or nesting territory.
-
-## Slice 5.5 — Causal interaction evidence
-
-Every major interaction records primary cause, contributing factors, before state, after state, magnitude, and linked entities.
-
-## Milestone 5 completion gate
-
-A complete fixture demonstrates a settlement expanding into habitat, disturbing a prey population, attracting or displacing predators, generating missions, suffering consequences, and either stabilizing or contracting with reconciled evidence.
+- Predator expansion affecting station threat and route danger.
+- Hunting and fauna-clearing operations reducing populations with explicit losses.
+- Prey release and ecological rebound after predator removal.
+- Traffic, sonar, pollution, mining, and harvesting affecting habitat and migration.
+- Abandoned stations becoming nests, feeding grounds, or reclamation targets.
+- Refugee, casualty, and carcass consequences feeding scavenger pressure.
+- Habitat restoration, quarantine, infestation, and nest-clearing missions.
+- Bidirectional evidence between population, ecology, missions, and logistics.
 
 ---
 
@@ -347,51 +377,16 @@ A complete fixture demonstrates a settlement expanding into habitat, disturbing 
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Unify the graphical map and evidence registries into a dedicated desktop observation workspace.
+1. Unify the graphical map and observation evidence under one controller.
+2. Add map layers for population, growth, faction influence, migration, creature biomass, selected species, nests, habitat, resources, traffic, and danger.
+3. Add selected station, species, faction, vessel, route, and resource inspectors.
+4. Subscribe to passive-cycle completion and query changed rows rather than reloading the world.
+5. Throttle rendering independently from accelerated simulation.
+6. Preserve detailed evidence tables as an advanced view.
 
-## Slice 6.1 — Observation Center shell
-
-Create one desktop entry point with:
-
-- Top simulation status and canonical time.
-- Center graphical map.
-- Left layer/filter controls.
-- Right selected-entity inspector.
-- Bottom timeline and event stream.
-- Detailed evidence tables as secondary tabs.
-
-## Slice 6.2 — Live delta subscription
-
-Subscribe to completed passive cycles. Query only changes since the last displayed tick and apply bounded UI updates. Simulation cadence and rendering cadence remain separate.
-
-## Slice 6.3 — Observation layers
-
-Add toggles for:
-
-- NPC population density and trend.
-- Settlement lifecycle.
-- Faction influence.
-- Civilian and refugee flows.
-- NPC vessel traffic.
-- Creature biomass and selected species.
-- Nests, territory, and migration.
-- Habitat integrity and productivity.
-- Resource extraction and geology.
-- Route danger and recent attacks.
-
-## Slice 6.4 — Inspectors and linked navigation
-
-Selecting a station, vessel, faction, species, population flow, event, or route should cross-link related evidence and allow direct map focus.
-
-## Slice 6.5 — Performance budget
-
-Support the default 960-location world without blocking the Swing event thread. Use aggregate rendering, cached icons, changed-since-tick reads, spatial filtering, and summarized catch-up updates.
-
-## Milestone 6 completion gate
-
-An operator can leave Passive Mode running and observe meaningful changes live from one workspace without manually refreshing separate windows.
+The initial schema-015 Observation Foundation window remains available until the unified center fully replaces its role.
 
 ---
 
@@ -399,29 +394,17 @@ An operator can leave Passive Mode running and observe meaningful changes live f
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Allow historical observation and comparison without mutating the current world.
+- Periodic complete observation snapshots.
+- Smaller event and metric deltas between snapshots.
+- Retention policy and aggregate rollups.
+- Pause, step, jump, scrub, compare, and return-to-live controls.
+- Non-mutating reconstruction of prior ticks.
+- Event navigation and selected-entity history.
+- Replay verification from snapshots plus deltas.
 
-## Slice 7.1 — Snapshot policy
-
-Create periodic complete observation snapshots plus smaller deltas and event records between snapshots.
-
-## Slice 7.2 — Retention and rollups
-
-Retain detailed recent history, aggregate older metrics into daily or configured rollups, and preserve named checkpoints.
-
-## Slice 7.3 — Timeline controls
-
-Add live, pause, single-step display, scrub, jump-to-event, compare, and return-to-live controls. Replay reads historical state only.
-
-## Slice 7.4 — Tick comparison
-
-Compare populations, settlements, factions, creature territories, resources, habitat, traffic, and causal events between two ticks.
-
-## Milestone 7 completion gate
-
-The Observation Center can reconstruct a selected historical tick and return to current state without changing the authoritative database state.
+Replay must never rewrite current authoritative state.
 
 ---
 
@@ -429,36 +412,15 @@ The Observation Center can reconstruct a selected historical tick and return to 
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Make the simulation understandable and support focused long-term observation.
-
-## Slice 8.1 — Causal summaries
-
-Generate bounded human-readable explanations from committed causes and contributing factors rather than free-form guesses.
-
-## Slice 8.2 — GM and intelligence visibility
-
-Support:
-
-- Omniscient GM view.
-- In-world intelligence view with estimates, confidence, last observation, hidden nests, and delayed reports.
-
-The database stores truth; the presentation policy controls disclosure.
-
-## Slice 8.3 — Watchlists
-
-Allow the operator to watch stations, factions, vessels, species, routes, locations, and resource sites.
-
-## Slice 8.4 — Alert evidence
-
-Create durable alerts for contraction, abandonment, colonization, migration toward a station, nest creation, apex detection, route interruption, resource exhaustion, and contested influence.
+1. Bounded human-readable causal summaries generated from committed causes.
+2. Omniscient GM view.
+3. In-world intelligence view with estimates, confidence, delayed reports, and hidden information.
+4. Watchlists for stations, factions, vessels, species, routes, locations, and resource sites.
+5. Durable observational alerts for contraction, abandonment, colonization, migration, nest creation, apex detection, route interruption, contested influence, and depletion.
 
 Alerts remain observational and do not automatically intervene.
-
-## Milestone 8 completion gate
-
-A user can follow selected entities over time, receive evidence-backed alerts, and understand important changes at both omniscient and in-world information levels.
 
 ---
 
@@ -466,63 +428,33 @@ A user can follow selected entities over time, receive evidence-backed alerts, a
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Make Passive Mode reliable as an installed application that may run for extended periods or recover after downtime.
-
-## Slice 9.1 — Simulation profiles
-
-Add Observation Only, Real-Time Slow, Standard Passive, Accelerated Study, Catch-Up, and Replay profiles.
-
-## Slice 9.2 — Tray and minimized operation
-
-Allow the installed application to continue simulation while minimized to the system tray, with clear running, paused, and faulted states.
-
-## Slice 9.3 — Restart and offline catch-up policy
-
-Allow the user to choose:
-
-- Resume without catch-up.
-- Bounded catch-up.
-- No automatic simulation while closed.
+- Observation Only, Real-Time Slow, Standard Passive, Accelerated Study, Catch-Up, and Replay profiles.
+- Minimized and system-tray operation.
+- Resume without catch-up, bounded catch-up, or no closed-application simulation policies.
 - Optional launch at login.
+- Health reporting for last cycle, duration, queued work, database size, retention, and faults.
+- Verified backups before migration, large catch-up, and according to retention policy.
 
-A full operating-system service is deferred until tray operation and restart recovery are proven.
-
-## Slice 9.4 — Health and fault reporting
-
-Expose last successful cycle, cycle duration, queued catch-up, database size, snapshot retention, active observer count, and fault details.
-
-## Slice 9.5 — Automatic backups
-
-Create verified backups before schema migration, before large catch-up operations, and according to a user-configurable retention policy.
-
-## Milestone 9 completion gate
-
-The installed application can run, pause, close, restart, catch up within configured bounds, fault closed, and recover without duplicate ticks or corrupted observation history.
+A full operating-system service remains deferred until tray operation and restart recovery are proven.
 
 ---
 
 # Milestone 10 — Observation export and browser snapshot viewer
 
-**Status: Deferred until Milestones 1, 6, and 7 are stable**
-
-## Goal
-
-Allow the web browser to display desktop observation state without becoming a second authority.
+**Status: Deferred until Milestones 6 and 7 are stable**
 
 ## Planned slices
 
-- Define `barotrauma-world-observation-v1` export.
-- Export a committed snapshot or selected tick range.
-- Exclude local paths, donor assets, Steam metadata, credentials, and private player data.
-- Add a browser observer page using IndexedDB.
+- Define `barotrauma-world-observation-v1`.
+- Export one committed snapshot or selected tick range.
+- Exclude local paths, donor assets, Steam metadata, credentials, and unselected private player data.
+- Add a browser observer using IndexedDB.
 - Render desktop snapshots, events, timelines, and comparisons read-only.
-- Require cloning to a new world ID before browser sandbox simulation is allowed.
+- Require cloning to a new world ID before browser sandbox simulation.
 
-## Completion gate
-
-The browser reconstructs desktop fixture snapshots exactly and cannot mutate imported authoritative state.
+The browser must reconstruct desktop fixtures exactly and cannot mutate imported authoritative state.
 
 ---
 
@@ -530,13 +462,9 @@ The browser reconstructs desktop fixture snapshots exactly and cannot mutate imp
 
 **Status: Deferred**
 
-## Goal
-
-Provide optional read-only observation of a running local desktop world from the browser.
-
 ## Planned slices
 
-- Loopback-only HTTP service bound to `127.0.0.1`.
+- Loopback-only service bound to `127.0.0.1`.
 - Random expiring pairing token.
 - Read-only status, snapshot, event, and metric endpoints.
 - Explicit browser-origin allowlist.
@@ -551,37 +479,15 @@ No SQL, filesystem, donor asset, or mutation endpoint is permitted.
 
 **Status: Planned**
 
-## Goal
+## Planned slices
 
-Deliver the observation application safely through the local installer and top-level download path.
+1. Installed shortcuts for the shell, Observation Center, asset setup, import, and diagnostics.
+2. Backup-before-migration and unsupported-newer-schema handling.
+3. Installed-runtime, SQLite, fallback-asset, launcher, writable-path, and donor-discovery smoke verification.
+4. Installation, world location, backups, profiles, layers, retention, troubleshooting, and privacy documentation.
+5. Stable top-level installer download and release automation.
 
-## Slice 12.1 — Installed launchers
-
-Add installed shortcuts or menu actions for:
-
-- Main desktop shell.
-- Observation Center.
-- Asset setup.
-- World import.
-- Diagnostics and verification.
-
-## Slice 12.2 — Upgrade and migration safety
-
-Back up worlds before migration, detect unsupported newer schemas, provide recovery instructions, and never overwrite a failed upgrade silently.
-
-## Slice 12.3 — Packaged verification
-
-Verify the installed runtime, SQLite driver, fallback assets, launchers, writable data paths, export paths, and optional donor discovery.
-
-## Slice 12.4 — Release documentation
-
-Document installation, world location, backups, Passive Mode profiles, observation layers, history retention, troubleshooting, and privacy boundaries.
-
-## Milestone 12 completion gate
-
-A release artifact installs, launches, opens or imports a world, runs Passive Mode, displays observation state with fallbacks, backs up and migrates safely, and passes packaged smoke verification.
-
----
+A release must install, launch, open or import a world, run Passive Mode, display observation state with fallbacks, migrate safely, and pass packaged smoke verification.
 
 # Cross-cutting verification requirements
 
@@ -598,26 +504,51 @@ Every simulation milestone must test:
 - Default 960-location performance.
 - Clear fault state rather than silent partial success.
 
-# Initial execution order
+# Active execution order
 
 The next meaningful implementation sequence is:
 
-1. **Milestone 1, Slice 1.1** — observation vocabulary and invariants.
-2. **Milestone 1, Slice 1.2** — schema 015 and deterministic seed rows.
-3. **Milestone 1, Slice 1.3** — read-only ObservationRegistry.
-4. **Milestone 1, Slice 1.4** — desktop population and creature evidence tabs.
-5. Begin **Milestone 2** with NPC population accounting before adding settlement projects.
+1. **Milestone 2, Slice 2.1** — transactional NPC population accounting and reconciliation.
+2. **Milestone 2, Slice 2.2** — capacity-supported growth, mortality, and morale.
+3. **Milestone 2, Slice 2.3** — migration and evacuation flows.
+4. **Milestone 2, Slice 2.4** — founding, abandonment, and reclamation projects.
+5. **Milestone 2, Slice 2.5** — lifecycle evidence in the desktop observation window.
 
-This order creates inspectable data first, then introduces behavior in controlled slices.
+This order establishes conservation and evidence before allowing settlement movement or state transitions.
 
 # Development Record
 
-Append concise entries here as slices are completed. Each entry should identify the milestone and slice, schema or UI boundary, verification performed, and the next intended slice.
-
 ## 2026-07-19 — Development Plan established
 
-- Added this desktop-first milestone roadmap.
+- Established the desktop-first milestone roadmap.
 - Fixed the SQLite desktop world as the authoritative simulation source.
-- Divided passive NPC, settlement, faction, creature, interaction, observation, history, operations, browser compatibility, and installer work into significant milestones and vertical slices.
-- Established completion gates and incremental documentation requirements.
-- Next intended slice: Milestone 1.1, observation vocabulary and invariants.
+- Deferred browser authority until desktop contracts are stable.
+
+## 2026-07-19 — Milestone 1.1 completed
+
+- Added dependency-free observation vocabulary and invariants.
+- Added deterministic IDs, population accounting, flow transitions, snapshot safeguards, and canonical event encoding.
+- Added `verifyObservationContract` and focused contract documentation.
+
+## 2026-07-19 — Milestone 1.2 completed
+
+- Advanced the desktop database to schema 015.
+- Added NPC populations, creature populations and territories, faction presence, flows, events, snapshots, metrics, and watch rules.
+- Added deterministic, duplicate-safe seed rows and source-state preservation checks.
+- Added `verifyObservationFoundation` and fresh/legacy migration coverage.
+
+## 2026-07-19 — Milestone 1.3 completed
+
+- Added the query-only `ObservationRegistry`.
+- Added current, changed-since-tick, and selected-entity history queries.
+- Added unsupported-schema rejection and `verifyObservationRegistry`.
+
+## 2026-07-19 — Milestone 1.4 completed
+
+- Added the read-only Observation Foundation desktop window.
+- Exposed populations, territories, faction presence, flows, events, snapshots, metrics, and tick filtering.
+- Added `runObservationFoundation`.
+
+## Next
+
+Implement Milestone 2.1: transactional NPC population accounting and reconciliation with the existing civilization frontier.
