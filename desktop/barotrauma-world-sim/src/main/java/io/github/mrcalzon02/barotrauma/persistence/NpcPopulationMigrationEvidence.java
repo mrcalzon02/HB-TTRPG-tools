@@ -87,6 +87,7 @@ final class NpcPopulationMigrationEvidence {
 
     static void insertPopulationEvidence(Connection connection, Flow flow, Population population,
                                          long tick, long before, long after, long delta,
+                                         long workforceBefore, long workforceAfter,
                                          String category, String headline) throws SQLException {
         String eventId = NpcPopulationMigrationTransaction.deterministicId(
                 flow.flowId() + ":" + category + ":" + tick);
@@ -97,7 +98,7 @@ final class NpcPopulationMigrationEvidence {
                 + "VALUES(?,?,?,?,?,'POPULATION',2,?,?,'CIVIL_AUTHORITY',?,'MIGRATION',?,?,'OBSERVED',?,"
                 + "COALESCE((SELECT policy_version FROM station_story_policy WHERE active=1),1),?)";
         String populationSql = "INSERT OR IGNORE INTO station_population_event(population_event_id,event_id,"
-                + "population_category,people_before,people_delta,people_after,workforce_delta) VALUES(?,?,?,?,?,?,0)";
+                + "population_category,people_before,people_delta,people_after,workforce_delta) VALUES(?,?,?,?,?,?,?)";
         String changeSql = "INSERT OR IGNORE INTO station_change(change_id,event_id,statistic_key,value_type,"
                 + "previous_value,delta_value,resulting_value,unit,reason_code,affected_type,affected_id) "
                 + "VALUES(?,?,'population.residents','INTEGER',?,?,?,'people',?,'STATION',?)";
@@ -124,6 +125,7 @@ final class NpcPopulationMigrationEvidence {
             populationEvent.setLong(4, before);
             populationEvent.setLong(5, delta);
             populationEvent.setLong(6, after);
+            populationEvent.setLong(7, workforceAfter - workforceBefore);
             populationEvent.executeUpdate();
 
             change.setString(1, eventId + ":residents");
@@ -134,6 +136,22 @@ final class NpcPopulationMigrationEvidence {
             change.setString(6, category);
             change.setString(7, population.stationId());
             change.executeUpdate();
+
+            if (workforceAfter != workforceBefore) {
+                try (PreparedStatement workforceChange = connection.prepareStatement(
+                        "INSERT OR IGNORE INTO station_change(change_id,event_id,statistic_key,value_type,"
+                                + "previous_value,delta_value,resulting_value,unit,reason_code,affected_type,affected_id) "
+                                + "VALUES(?,?,'population.workforce','INTEGER',?,?,?,'people',?,'STATION',?)")) {
+                    workforceChange.setString(1, eventId + ":workforce");
+                    workforceChange.setString(2, eventId);
+                    workforceChange.setLong(3, workforceBefore);
+                    workforceChange.setLong(4, workforceAfter - workforceBefore);
+                    workforceChange.setLong(5, workforceAfter);
+                    workforceChange.setString(6, category);
+                    workforceChange.setString(7, population.stationId());
+                    workforceChange.executeUpdate();
+                }
+            }
         }
     }
 
