@@ -1,0 +1,43 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+game-003	approved	18	18	106	105	game-hud-blank-panel	panel	Blank inventory panel.
+game-004	approved	132	19	112	105	game-hud-grid-panel	panel	Grid inventory panel.
+game-005	approved	235	21	113	101	game-hud-striped-panel	panel	Striped inventory panel.
+game-007	approved	834	20	57	57	game-hud-lower-torso-armor	equipment-icon	Lower torso armor icon.
+game-008	approved	903	20	57	57	game-hud-chest-armor	equipment-icon	Chest armor icon.
+game-009	approved	972	20	57	57	game-hud-vest-armor	equipment-icon	Vest armor icon.
+game-010	approved	1041	20	57	57	game-hud-leg-armor	equipment-icon	Leg armor icon.
+game-011	approved	1109	20	56	57	game-hud-helmet	equipment-icon	Helmet icon.
+game-012	approved	1178	20	56	57	game-hud-boot	equipment-icon	Boot icon.
+game-020	approved	834	92	57	57	game-hud-glove	equipment-icon	Glove icon.
+game-021	approved	903	92	57	57	game-hud-belt	equipment-icon	Belt icon.
+game-022	approved	972	92	57	56	game-hud-backpack	equipment-icon	Backpack icon.
+game-023	approved	1041	92	57	57	game-hud-device-pack	equipment-icon	Device pack icon.
+game-024	approved	1109	92	56	57	game-hud-wrist-guard	equipment-icon	Wrist guard icon.
+game-025	approved	1178	92	56	57	game-hud-handheld-device	equipment-icon	Handheld device icon.
+game-032	approved	582	143	24	28	game-hud-item-screen-empty	inventory-icon	Empty item screen.
+game-033	approved	618	143	25	28	game-hud-item-screen-green-a	inventory-icon	Green item screen variant A.
+game-034	approved	655	143	24	28	game-hud-item-screen-green-b	inventory-icon	Green item screen variant B.
+game-035	approved	690	143	25	29	game-hud-item-screen-green-c	inventory-icon	Green item screen variant C.
+game-036	approved	18	178	118	31	game-hud-quick-slot-bar	inventory-strip	Quick-slot bar.
+game-040	approved	903	164	57	56	game-hud-rifle-a	weapon-icon	Rifle icon variant A.
+game-041	approved	972	164	57	56	game-hud-rifle-b	weapon-icon	Rifle icon variant B.
+game-042	approved	1041	164	57	56	game-hud-rifle-c	weapon-icon	Rifle icon variant C.
+game-043	approved	1108	164	57	56	game-hud-rifle-d	weapon-icon	Rifle icon variant D.
+game-044	approved	1177	164	57	56	game-hud-ammunition	weapon-icon	Ammunition icon.
+game-055	approved	834	239	56	56	game-hud-wrench	tool-icon	Wrench icon.
+game-062	approved	147	272	29	32	game-hud-medical-shield	shield-icon	Medical shield icon.
+game-063	approved	192	273	27	31	game-hud-faction-shield	shield-icon	Faction shield icon.
+game-064	approved	236	272	28	32	game-hud-empty-shield	shield-icon	Empty shield icon.
+game-065	approved	280	272	28	32	game-hud-green-shield	shield-icon	Green shield icon.
+game-066	approved	324	273	28	31	game-hud-dark-shield	shield-icon	Dark shield icon.
+game-069	approved	377	323	171	132	game-hud-item-card	item-card	Item card frame.
+game-070	approved	834	312	56	56	game-hud-respirator	equipment-icon	Respirator icon.
+game-071	approved	903	312	56	56	game-hud-medicine-bottle	item-icon	Medicine bottle icon.
+game-072	approved	972	312	56	56	game-hud-armor-canister	item-icon	Armor canister icon.
+game-073	approved	1041	312	56	56	game-hud-chemical-canister	item-icon	Chemical canister icon.
+game-078	approved	191	328	28	48	game-hud-rank-badge-medical	rank-badge	Medical rank badge.
+game-079	approved	236	328	28	48	game-hud-rank-badge-command	rank-badge	Command rank badge.
+game-080	approved	280	328	28	48	game-hud-rank-badge-green	rank-badge	Green rank badge.
+game-081	approved	324	328	28	48	game-hud-rank-badge-specialist	rank-badge	Specialist rank badge.
+game-082	approved	572	331	183	44	game-hud-vital-waveform	data-strip	Vital waveform strip.
+game-045	approved	204	188	57	8	game-hud-indicator-triplet	indicator	Three-part indicator triplet.
