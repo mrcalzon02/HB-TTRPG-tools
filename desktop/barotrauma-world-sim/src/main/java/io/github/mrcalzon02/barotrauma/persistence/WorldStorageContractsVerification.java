@@ -84,6 +84,12 @@ final class WorldStorageContractsVerification {
             require(schema027Statements().stream().anyMatch(sql -> sql.contains("npc_demographic_tick_plan")), "The authoritative demographic planner is missing.");
             require(schema027Statements().stream().anyMatch(sql -> sql.contains("npc_demographic_finalize_tick")), "Demographic finalization is missing.");
             require(schema027Statements().stream().anyMatch(sql -> sql.contains("DROP TRIGGER IF EXISTS station_population_finalize_tick")), "Competing station demographic finalization was not removed.");
+            require(schema028Statements().stream().anyMatch(sql -> sql.contains("npc_population_flow_cohort")), "Migration cohort conservation is missing.");
+            require(schema028Statements().stream().anyMatch(sql -> sql.contains("npc_population_flow_transition")), "Migration transition history is missing.");
+            require(schema028Statements().stream().anyMatch(sql -> sql.contains("npc_population_flow_status_guard")), "Migration lifecycle transition gating is missing.");
+            require(schema028Statements().stream().anyMatch(sql -> sql.contains("npc_population_flow_conservation_guard")), "Migration physical conservation gating is missing.");
+            require(schema028Statements().stream().anyMatch(sql -> sql.contains("npc_population_flow_observation")), "Migration observation projection is missing.");
+            require(schema028Statements().stream().anyMatch(sql -> sql.contains("npc_population_migration_conservation")), "Migration world conservation view is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {
