@@ -1,0 +1,73 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+retro-002	approved	471	22	221	55	retro-ui-blank-strip	label-strip	Blank horizontal strip.
+retro-003	approved	709	21	42	56	retro-ui-favorite-tab	tab	Favorite tab.
+retro-004	approved	763	21	41	56	retro-ui-bookmark-tab	tab	Bookmark tab.
+retro-006	approved	877	26	46	46	retro-ui-fast-forward-round	button	Round fast-forward button.
+retro-008	approved	1000	26	46	46	retro-ui-left-round	button	Round left button.
+retro-009	approved	1061	26	46	46	retro-ui-right-round	button	Round right button.
+retro-010	approved	1121	26	46	46	retro-ui-up-round	button	Round up button.
+retro-011	approved	1181	26	46	46	retro-ui-down-round	button	Round down button.
+retro-025	approved	1006	137	30	29	retro-ui-expand-button	button	Expand button.
+retro-026	approved	1054	137	29	29	retro-ui-contract-button	button	Contract button.
+retro-027	approved	1101	137	29	29	retro-ui-focus-button	button	Focus button.
+retro-028	approved	1146	137	32	29	retro-ui-link-button	button	Link button.
+retro-034	approved	504	168	27	26	retro-ui-folder-icon	file-icon	Folder icon.
+retro-035	approved	556	168	24	27	retro-ui-document-alert-icon	file-icon	Document alert icon.
+retro-036	approved	606	168	25	26	retro-ui-document-refresh-icon	file-icon	Document refresh icon.
+retro-037	approved	656	168	27	27	retro-ui-edit-icon	file-icon	Edit icon.
+retro-038	approved	707	167	26	28	retro-ui-delete-icon	file-icon	Delete icon.
+retro-039	approved	757	168	28	28	retro-ui-download-icon	file-icon	Download icon.
+retro-040	approved	831	168	27	28	retro-ui-upload-icon	file-icon	Upload icon.
+retro-041	approved	18	185	231	43	retro-ui-crew-factions-tabs	tab-strip	Crew and factions tab strip.
+retro-052	approved	586	219	30	30	retro-ui-number-button-1	button	Round number one button.
+retro-053	approved	629	219	30	30	retro-ui-number-button-2	button	Round number two button.
+retro-054	approved	672	219	30	30	retro-ui-number-button-3	button	Round number three button.
+retro-055	approved	714	219	30	30	retro-ui-number-button-4	button	Round number four button.
+retro-056	approved	757	219	30	30	retro-ui-number-button-5	button	Round number five button.
+retro-057	approved	805	232	87	19	retro-ui-chamfered-strip	label-strip	Chamfered blank strip.
+retro-058	approved	18	245	56	55	retro-ui-power-square	button	Square power button.
+retro-059	approved	89	251	39	39	retro-ui-pause-square	button	Square pause button.
+retro-064	approved	584	266	34	34	retro-ui-diamond-button-1	button	Diamond number one button.
+retro-065	approved	627	267	34	33	retro-ui-diamond-button-2	button	Diamond number two button.
+retro-066	approved	670	266	34	34	retro-ui-diamond-button-3	button	Diamond number three button.
+retro-067	approved	712	266	34	34	retro-ui-diamond-button-4	button	Diamond number four button.
+retro-068	approved	755	267	33	33	retro-ui-diamond-button-5	button	Diamond number five button.
+retro-082	approved	66	328	24	23	retro-ui-confirm-square	button	Square confirmation button.
+retro-107	approved	347	377	90	27	retro-ui-toggle-on	toggle	Enabled toggle.
+retro-114	approved	933	370	62	56	retro-ui-atom-button	button	Atomic science button.
+retro-115	approved	1011	370	62	56	retro-ui-planet-button	button	Planetary operation button.
+retro-116	approved	1088	370	62	56	retro-ui-maintenance-button	button	Maintenance operation button.
+retro-117	approved	18	414	172	230	retro-ui-status-list	status-list	Vertical status list.
+retro-143	approved	838	483	90	61	retro-ui-user-menu-card	control-card	User menu card.
+retro-144	approved	940	485	84	52	retro-ui-refresh-panel	control-panel	Refresh control panel.
+retro-145	approved	1039	487	84	50	retro-ui-medical-panel	control-panel	Medical control panel.
+retro-146	approved	1160	490	73	63	retro-ui-home-button	button	Home button.
+retro-148	approved	276	526	144	93	retro-ui-direction-pad	control-bank	Directional pad.
+retro-150	approved	464	565	207	110	retro-ui-grid-panel	data-panel	Grid data panel.
+retro-151	approved	689	565	117	97	retro-ui-information-panel	data-panel	Information panel.
+retro-152	approved	832	565	83	82	retro-ui-shield-gauge	gauge	Shield percentage gauge.
+retro-153	approved	935	565	83	82	retro-ui-hull-gauge	gauge	Hull percentage gauge.
+retro-154	approved	1039	565	83	82	retro-ui-energy-gauge	gauge	Energy percentage gauge.
+retro-155	approved	1160	562	73	63	retro-ui-user-button	button	User button.
+retro-157	approved	1160	635	73	63	retro-ui-crew-button	button	Crew button.
+retro-158	approved	17	673	150	39	retro-ui-footer-panel	panel-frame	Footer panel.
+retro-169	approved	17	736	317	47	retro-ui-back-strip	label-strip	Back navigation strip.
+retro-173	approved	623	730	44	45	retro-ui-radar-dial	gauge	Radar dial.
+retro-180	approved	822	773	309	27	retro-ui-progress-bar	progress-bar	Segmented progress bar.
+retro-182	approved	1160	779	73	64	retro-ui-flag-button	button	Flag button.
+retro-193	approved	1160	852	73	63	retro-ui-location-button	button	Location marker button.
+retro-194	approved	17	874	317	49	retro-ui-confirm-strip	button-strip	Confirmation strip.
+retro-197	approved	652	908	108	29	retro-ui-dot-matrix	indicator	Dot-matrix indicator.
+retro-201	approved	1160	924	73	64	retro-ui-document-button	button	Document button.
+retro-202	approved	768	938	99	100	retro-ui-compass	navigation-icon	Compass icon.
+retro-218	approved	872	1069	22	33	retro-ui-map-pin-gold	map-marker	Gold map pin.
+retro-219	approved	919	1069	22	33	retro-ui-map-pin-green	map-marker	Green map pin.
+retro-220	approved	966	1069	24	33	retro-ui-map-pin-diamond	map-marker	Diamond map pin.
+retro-222	approved	1062	1069	23	33	retro-ui-map-pin-star	map-marker	Star map pin.
+retro-223	approved	1110	1069	22	33	retro-ui-map-pin-ring	map-marker	Ring map pin.
+retro-226	approved	330	1093	95	110	retro-ui-corner-panel	panel-frame	Corner-cut panel frame.
+retro-227	approved	439	1101	102	101	retro-ui-hex-grid-panel	panel-texture	Hex-grid panel texture.
+retro-013	approved	482	92	269	55	retro-ui-toolbar-strip	toolbar	Four-button toolbar strip.
+retro-015	approved	763	98	93	45	retro-ui-blank-control-panel	panel	Blank control panel.
+retro-175	approved	375	766	22	44	retro-ui-dot-matrix-a	indicator	Dot-matrix indicator variant A.
+retro-176	approved	411	766	22	44	retro-ui-dot-matrix-b	indicator	Dot-matrix indicator variant B.
