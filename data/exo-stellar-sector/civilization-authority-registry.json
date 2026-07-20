@@ -1,0 +1,27 @@
+{
+  "recordType":"blacklightExoStellarSectorCivilizationAuthorityRegistry",
+  "schemaVersion":"1.0.0",
+  "sectorSchemaVersion":"1.3.0",
+  "authorityModule":"blacklight-exo-stellar-sector-civilization-authority.js",
+  "staticRenderer":"blacklight-exo-stellar-sector-civilization-ui.js",
+  "schema":"data/schemas/exo-stellar-sector-civilization-authority.schema.json",
+  "requiredAuthorities":[
+    {"authority":"clusterDossiers","cardinality":"one per cluster"},
+    {"authority":"civilizationMotivations","cardinality":"one per extant species"},
+    {"authority":"governmentAuthorities","cardinality":"one per polity"},
+    {"authority":"fleetDeployments","cardinality":"one per named military formation"}
+  ],
+  "fixedExampleRequirements":{
+    "minimumCuratedClusterDossiers":12,
+    "requiredMotivationArchetypes":["stately-senatorial","peaceful","wise-custodial","neutral-commercial","scientifically-distracted","disinterested","greedy-extractive","conniving","aggressive","warlike","blatantly-declining"],
+    "requiredGovernmentTypes":["senatorial republic","civic compact","archival custodianship","corporate trade dominion","research consensus","isolation mandate","extractive charter empire","oligarchic directorate","military protectorate","war-council hegemony","hereditary remnant court"]
+  },
+  "integrationRules":[
+    "Fixed and seeded sectors use the same deterministic authority derivation.",
+    "Every government references the motivation shaping its agenda.",
+    "Every deployment references a formation, polity, cluster, political authority, and strategic motivation.",
+    "Every cluster dossier references only canonical sector authorities.",
+    "Runtime rendering is limited to statically declared containers.",
+    "Archives through sector schema 1.2.0 are hash-verified before migration to 1.3.0."
+  ]
+}
