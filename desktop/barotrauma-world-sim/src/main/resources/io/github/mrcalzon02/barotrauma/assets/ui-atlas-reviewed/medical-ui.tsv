@@ -1,0 +1,66 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+med-001	approved	12	12	94	93	medical-blank-square-panel	panel	Blank square medical panel frame.
+med-003	approved	238	17	37	37	medical-neutral-status-dial	status-dial	Neutral circular status dial.
+med-004	approved	349	17	38	38	medical-teal-status-dial	status-dial	Teal circular status dial.
+med-005	approved	405	17	39	38	medical-pale-status-dial	status-dial	Pale circular status dial.
+med-007	approved	588	17	25	47	medical-dna-symbol	medical-symbol	DNA helix symbol.
+med-008	approved	655	16	47	48	medical-brain-symbol	medical-symbol	Brain symbol.
+med-009	approved	740	17	50	47	medical-lungs-symbol	medical-symbol	Lungs symbol.
+med-010	approved	830	17	30	47	medical-heart-symbol	medical-symbol	Anatomical heart symbol.
+med-018	approved	350	71	37	36	medical-molecule-symbol	science-symbol	Molecular structure symbol.
+med-022	approved	474	87	33	34	medical-cross-button	medical-button	Medical cross square button.
+med-024	approved	613	85	30	34	medical-kit-symbol	medical-symbol	Medical kit symbol.
+med-042	approved	533	138	40	40	medical-stethoscope-symbol	medical-symbol	Stethoscope symbol.
+med-045	approved	747	138	46	39	medical-atom-symbol	science-symbol	Atomic research symbol.
+med-046	approved	822	140	32	36	medical-lab-flask-symbol	science-symbol	Laboratory flask symbol.
+med-052	approved	121	164	97	49	medical-crew-card	navigation-card	Crew navigation card.
+med-079	approved	15	253	97	57	medical-folder-card	navigation-card	Folder navigation card.
+med-101	approved	121	349	97	58	medical-settings-card	navigation-card	Settings navigation card.
+med-109	approved	15	398	97	50	medical-search-card	navigation-card	Search navigation card.
+med-110	approved	121	398	97	50	medical-observation-card	navigation-card	Observation navigation card.
+med-123	approved	251	534	178	138	medical-subject-data-panel	diagnostic-panel	Subject demographic and stability panel.
+med-124	approved	593	538	162	171	medical-vital-signs-panel	diagnostic-panel	Pulse, temperature, oxygen, and respiration panel.
+med-125	approved	772	555	155	154	medical-radiograph-panel	diagnostic-panel	Torso radiograph panel.
+med-126	approved	452	567	126	142	medical-body-scan-panel	diagnostic-panel	Full-body scan panel.
+med-132	approved	15	608	48	21	medical-message-icon	status-icon	Message bubble icon.
+med-148	approved	244	733	31	31	medical-save-icon	storage-icon	Save disk icon.
+med-149	approved	303	733	31	31	medical-storage-icon-a	storage-icon	First storage disk icon.
+med-150	approved	363	733	28	31	medical-storage-icon-b	storage-icon	Second storage disk icon.
+med-152	approved	479	731	31	33	medical-clipboard-icon	storage-icon	Clipboard icon.
+med-153	approved	536	733	38	32	medical-download-icon	storage-icon	Download-to-tray icon.
+med-154	approved	599	734	37	31	medical-upload-icon	storage-icon	Upload-from-tray icon.
+med-155	approved	664	735	42	28	medical-cloud-icon	storage-icon	Cloud storage icon.
+med-156	approved	732	736	29	29	medical-service-key-icon	utility-icon	Service key icon.
+med-168	approved	213	791	34	33	medical-eye-status-icon	status-icon	Eye status icon.
+med-169	approved	266	791	35	33	medical-target-status-icon	status-icon	Target status icon.
+med-170	approved	322	791	34	33	medical-timer-status-icon	status-icon	Timer status icon.
+med-171	approved	377	791	33	33	medical-analytics-status-icon	status-icon	Analytics status icon.
+med-172	approved	432	791	33	33	medical-lock-status-icon	status-icon	Lock status icon.
+med-173	approved	486	791	34	33	medical-warning-status-icon	status-icon	Warning status icon.
+med-174	approved	541	791	33	33	medical-help-status-icon	status-icon	Help status icon.
+med-175	approved	595	791	33	33	medical-down-status-icon	status-icon	Down navigation status icon.
+med-176	approved	650	791	33	33	medical-confirm-status-icon	status-icon	Confirmation status icon.
+med-177	approved	704	791	34	33	medical-cancel-status-icon	status-icon	Cancellation status icon.
+med-178	approved	758	791	33	33	medical-hazard-status-icon	status-icon	Hazard status icon.
+med-179	approved	812	788	35	35	medical-power-status-icon	status-icon	Circular power status icon.
+med-180	approved	864	787	37	36	medical-power-button	button	Framed power button.
+med-181	approved	927	786	88	34	medical-gold-pill-button	button	Gold pill-shaped button.
+med-183	approved	1048	818	69	30	medical-teal-pill-button	button	Teal pill-shaped button.
+med-187	approved	350	847	186	141	medical-dna-diagnostics-panel	diagnostic-panel	DNA diagnostics panel.
+med-188	approved	548	847	176	141	medical-molecular-network-panel	diagnostic-panel	Molecular network diagnostics panel.
+med-189	approved	740	847	176	141	medical-world-map-panel	diagnostic-panel	World map diagnostics panel.
+med-193	approved	997	904	47	47	medical-minus-button	button	Circular minus button.
+med-195	approved	1122	904	47	47	medical-plus-button	button	Circular plus button.
+med-198	approved	938	967	133	64	medical-equipment-panel	panel	Teal equipment panel.
+med-199	approved	1088	969	147	61	medical-grid-equipment-panel	panel	Grid equipment panel.
+med-200	approved	16	988	135	38	medical-chamfered-strip	strip	Chamfered horizontal strip.
+med-201	approved	165	972	187	185	medical-radar-panel	diagnostic-panel	Circular radar panel.
+med-202	approved	366	1021	200	131	medical-system-status-panel	diagnostic-panel	System status text panel.
+med-203	approved	588	1016	120	135	medical-dot-matrix-indicator	indicator	Teal dot-matrix indicator.
+med-205	approved	16	1045	133	77	medical-gauge	gauge	Instrument gauge.
+med-206	approved	738	1050	172	107	medical-small-chamfered-panel	panel	Small chamfered blank panel.
+med-207	approved	925	1053	126	123	medical-grid-panel	panel	Blank octagonal grid panel.
+med-208	approved	1072	1053	170	118	medical-large-panel	panel	Large blank octagonal panel.
+med-209	approved	16	1175	466	61	medical-green-footer-strip	strip	Green footer strip.
+med-210	approved	493	1176	394	60	medical-white-footer-strip	strip	White footer strip.
+med-211	approved	919	1191	322	48	medical-dark-footer-strip	strip	Dark footer strip.
