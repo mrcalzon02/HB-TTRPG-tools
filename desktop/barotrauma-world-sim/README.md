@@ -10,20 +10,21 @@ The desktop project now includes:
 - Inspection-first version-22, `.save`, and `.sub` compatibility.
 - Duplicate-safe source, submarine-definition, physical-vessel, and snapshot identities.
 - Atomic vessel imports, campaign mapping, snapshot chronology, rollback, and read-only registries.
-- Sequential SQLite migrations through **schema 026** for fresh and existing desktop worlds.
+- Sequential SQLite migrations through **schema 027** for fresh and existing desktop worlds.
 - A deterministic canonical-time clock, one logical writer, immutable command receipts, reviewed checkpoints, stale-state rejection, and restart recovery.
 - A live Europa World Map with explicitly controlled **Passive Mode**.
 - Transactional station, NPC vessel, route, mission, research, encounter, production, freight, market, treasury, consumption, civilization-frontier, fleet-response-transit, ecology, geology, natural-resource, extraction, depletion, and renewable-recovery workloads.
 - Explicit imported-player-vessel enrollment, route planning, shared transit challenges, docking, freight loading, and delivery.
 - Persistent schema-015 NPC populations, creature guild populations and territories, faction presence, population-flow records, observation events, snapshots, metrics, and watch-rule storage.
 - Conserved schema-016 NPC population reconciliation and ledger accounting against the established civilization frontier.
+- Schema-027 capacity-supported births, natural and excess mortality, measured attack casualties, morale, overcrowding states, demographic hysteresis, and one authoritative detailed-cohort population path projected into station causality.
 - A strictly query-only `ObservationRegistry` and read-only desktop Observation Foundation window.
 - Automatic timed cycles while Passive Mode is enabled.
 - Local donor-installation discovery for Barotrauma graphical assets, with packaged binary PNG fallbacks.
 - A retained install inventory and categorized import-candidate index for future local graphics, audio, music, background, UI, map, creature, item, and effects integration.
 - An immutable desktop-side local media catalog with content-root isolation, SHA-256 metadata fingerprints, retained-index parsing, traversal rejection, and available/changed/missing resolution states.
 - A distributable original-audio seed library containing 20 project-owned effects and five project-owned music tracks, kept separate from local-install donor media.
-- Event-backed resident and workforce headcounts, allocation-backed faction defense plans, exact passive-command provenance, and enforced explanation coverage for authoritative population mutations.
+- Event-backed resident and workforce projections, allocation-backed faction defense plans, exact passive-command provenance, and enforced explanation coverage for authoritative population mutations.
 - Time-gated NPC voyage legs whose persisted incident budget comes from the shared player route approximation, with quiet elapsed progress, deterministic auto-resolved incident slots, cumulative delay and revised arrivals, fleet-response links, and live observer progress/incident reports.
 - An accepted economy roadmap in which generated worlds contain 1.5–2.0 million people across a feasible 80–120 principal habitats; imported worlds retain their supplied bounds and may classify surplus source nodes as auxiliary installations. Ownership, demographics, institutions, control, professional labor, essential-service burden, interdependent production, and expansion remain distinct state. The same roadmap specifies replacing crewless NPC bootstrapping with persisted training/build variance, role-valid crew congregation, physical hull provenance and acquisition, capable-yard construction, full-complement NPC commissioning, and an explicit player skeleton-crew exception.
 
@@ -33,7 +34,7 @@ A normalized version-22 world imports with simulation disabled and paused. Passi
 
 ## Development plans
 
-`DEVELOPMENT_PLAN.md` governs the observation and population lifecycle: its Observation Foundation and conserved population-accounting slices are complete. The economy and station continuation is tracked in `docs/development-milestone-ledger.md`; E1 macro-population feasibility and policy profiles are the current implementation slice.
+`DEVELOPMENT_PLAN.md` governs the observation and population lifecycle: its Observation Foundation, conserved population accounting, and capacity-supported demographic lifecycle slices are complete; physical migration and evacuation are next. The economy and station continuation is tracked in `docs/development-milestone-ledger.md`; E1 macro-population feasibility and policy profiles remain a separate implementation program.
 
 Every milestone requires persistence, deterministic behavior, desktop visibility, failure handling, migration coverage, verification, and documentation before it is marked complete.
 
@@ -107,7 +108,7 @@ Opening a desktop world in one participating window updates the shared selection
 toolbox.cmd observation
 ```
 
-The read-only observation window exposes world identity and time; NPC population cohorts; creature guild populations and territories; faction presence; population flows; causal events; snapshots; metric series; and changed-after-tick filtering. Schema 015 seeds this evidence from the established civilization and ecology state. Schema 016 adds conserved NPC population accounting and frontier reconciliation.
+The read-only observation window exposes world identity and time; NPC population cohorts; the conserved population ledger; creature guild populations and territories; faction presence; population flows; causal events; snapshots; metric series; and changed-after-tick filtering. Schema 015 seeds observation state, schema 016 establishes exact population accounting, and schema 027 fills that ledger with capacity-supported births, natural and excess mortality, attack casualties, morale, support, pressure, capacity, and overcrowding evidence.
 
 The registry enables SQLite query-only mode, rejects unsupported schemas, and retrieves selected-entity history without mutating the world. See `docs/observation-contract.md` and `docs/npc-population-accounting.md`.
 
@@ -119,7 +120,7 @@ toolbox.cmd world-map
 
 The World Map provides canonical time, locations, stations, NPC voyages, missions, routes, research, encounters, and Passive Mode controls.
 
-Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, fleet-response transit, ecology, geology, extraction, and renewable-recovery changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
+Passive Mode cadence ranges from one second to one hour and from one to 1,000 canonical ticks per cycle. A multi-tick catch-up processes station, civilization, demographic, fleet-response transit, ecology, geology, extraction, and renewable-recovery changes one canonical tick at a time. Closing the World Map does not stop an enabled process-wide scheduler.
 
 Only one passive scheduler is created for a world in the application process. The manual clock monitor becomes read-only while that scheduler owns the writer.
 
@@ -131,7 +132,7 @@ toolbox.cmd frontier
 
 Every active station consumes supplies on every passive tick. Consumption is deterministic for replay but varies around each station’s local baseline. Ration inventory covers demand first; uncovered demand accelerates abstract supply loss. This prevents a station from sustaining itself indefinitely without regular deliveries.
 
-Shortages are deliberately slow rather than immediately catastrophic. Integrity, security, industry, population capacity, civilization strength, and frontier position deteriorate at different milestone rates. Deliveries arrest decline and allow later ticks to create recovery and gradual expansion.
+Shortages are deliberately slow rather than immediately catastrophic. Integrity, security, industry, population support, civilization strength, and frontier position deteriorate at different milestone rates. Deliveries arrest decline and allow later ticks to create recovery and gradual expansion.
 
 The civilian frontier uses five states:
 
@@ -141,7 +142,7 @@ The civilian frontier uses five states:
 - `CONTRACTING`
 - `ABANDONED`
 
-Fauna pressure grows when stations are threatened or undersupplied and recedes when security is strong. Deterministic monster attacks can damage integrity, reduce security, increase threat, and force the civilian perimeter inward. Contraction creates defense and fauna-clearing work; recovery and expansion create outward research or transit work.
+Fauna pressure grows when stations are threatened or undersupplied and recedes when security is strong. Deterministic monster attacks can damage integrity, reduce security, increase threat, and force the civilian perimeter inward. Schema 027 converts measured attack damage into explicit population disaster losses. Contraction creates defense and fauna-clearing work; recovery and expansion create outward research or transit work.
 
 ## Fleet response transit, rescue, and towing
 
@@ -217,7 +218,7 @@ The logistics console exposes item definitions, production recipes, station inve
 
 Each passive cycle consumes supplies, permits ration recovery, runs at most one affordable recipe per station, deducts costs, reprices vendors, and creates freight opportunities where shortages and surpluses coexist. The former rule that granted every functioning station free ore each cycle has been removed.
 
-Natural extraction delivers Raw Europan Ore, Rare Europan Minerals, Hydrothermal Compounds, Bioactive Compounds, or Algae Biomass through the existing freight pipeline. Player and NPC deliveries update inventory, treasury evidence, station condition, civilization support, and the material base required for fleet recovery.
+Natural extraction delivers Raw Europan Ore, Rare Europan Minerals, Hydrothermal Compounds, Bioactive Compounds, or Algae Biomass through the existing freight pipeline. Player and NPC deliveries update inventory, treasury evidence, station condition, civilization support, demographic support, and the material base required for fleet recovery.
 
 ## Imported player-vessel transit and freight
 
@@ -274,13 +275,14 @@ These commands cover normalized master-world import, one-vessel approval, campai
 - **Schema 019** — durable production outcomes, automatic input and credit shortfalls, deterministic equipment failures and sabotage, one bounded story per attempt, and arithmetic-checked material, credit, and damage changes.
 - **Schema 020** — carrier-neutral player/NPC freight baselines, one story per delivered lot, and typed inventory, credit, station-recovery, shortage, civilization, and fauna changes.
 - **Schema 021** — measured pre/post snapshots for attacks and passive frontier movement, exact threat/damage/civilization arithmetic, direct recovery transitions, transition state evidence, and single-entry abandonment stories.
-- **Schema 022** — explicitly distinguished imported-estimate/generated-allocation baselines followed by event-backed resident/workforce counts, proportional migration, measured attack casualties, direct or passive evacuation, and reconciliation coverage.
+- **Schema 022** — imported-estimate/generated-allocation station population baselines, resident/workforce projection, population events, and coverage contracts later consolidated by schema 027.
 - **Schema 023** — actual-attack-backed faction plans, credit escrow, workforce assignment, ammunition reservation/consumption, defense execution, terminal settlement, and honest unfunded, understaffed, or legacy states.
 - **Schema 024** — receipt-validated transaction-scoped command provenance for passive station stories without false attribution of direct actions.
 - **Schema 025** — versioned explanation policy, complete command-scoped population mutation capture, state-tick diagnostics, and commit enforcement for uncovered or stale-tick resident/workforce changes.
 - **Schema 026** — time-gated NPC transit legs, shared player-equivalent incident budgets, stratified due slots, stable resolver sequences, encounter/log links, cumulative delay, revised arrival, fleet-response linkage, and an active observer projection.
+- **Schema 027** — one detailed-cohort demographic authority with support and pressure scores, effective capacity, bounded births, natural and excess mortality, measured attack casualties, morale, cooldowns, overcrowding hysteresis, immutable tick results, station projection, and causal observation evidence.
 
-A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier changes, response assignment and transit, on-scene recovery, return or towing travel, ecological and geological changes, resource exposure, extraction batches, depletion or recovery, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
+A passive cycle is one SQLite transaction containing its clock receipt, checkpoint, station economy, consumption, frontier and demographic changes, response assignment and transit, on-scene recovery, return or towing travel, ecological and geological changes, resource exposure, extraction batches, depletion or recovery, mission changes, NPC movement, transit encounters, voyage logs, research progress, production, markets, freight, treasury evidence, and audit summary.
 
 ## Build and verification
 
@@ -296,14 +298,15 @@ The verification chain covers:
 
 - Donor installation validation, saved local pointers, donor-first selection, and fallback-only resolution.
 - Real packaged PNG fallback resources for station, vessel, fauna, and geology roles.
-- Observation vocabulary, deterministic population and territory seeds, query-only histories, and conserved NPC population accounting.
-- Fresh, legacy, and pre-renumber local-development migration through schema 026.
+- Observation vocabulary, deterministic population and territory seeds, query-only histories, conserved NPC population accounting, and schema-027 demographic lifecycle behavior.
+- Fresh, legacy, and pre-renumber local-development migration through schema 027.
 - Official vessel imports, rollback, campaign mapping, and snapshot chronology.
 - Version-22 normalization and master-world replacement rejection.
 - Deterministic clock replay, command ordering, checkpoints, and restart recovery.
 - Shared player/NPC route-exposure estimation, deterministic transit replay, and hazard diversity.
 - Quiet NPC progress without manufactured encounters; exactly-once due-slot resolution; slot/encounter/log reconciliation; cumulative-delay and revised-arrival arithmetic; and fleet-response transit integration.
 - Station economy, consumption, civilization movement, missions, NPC assignment, voyages, encounters, and research.
+- Capacity-supported birth hysteresis and cooldown; natural, overcrowding, support-failure, attack, and abandonment losses; bounded morale; exact cohort conservation; station projection; and demographic rollback.
 - Item catalogue, inventory, vendor offers, production, freight, and treasury entries.
 - Delivery-driven station recovery and frontier expansion.
 - Monster attacks and defensive NPC responses.
@@ -325,7 +328,7 @@ The verification chain covers:
 - Complete production-attempt-to-story coverage for success, input shortfall, credit shortfall, equipment failure, and sabotage, including exact input, output, credit, and integrity arithmetic.
 - Player and NPC freight delivery stories with carrier attribution, exact inventory deltas, arithmetic reconciliation, and transaction-baseline cleanup.
 - Measured attack, recovery, expansion, contraction, and abandonment stories with fauna attribution, exact typed deltas, transition evidence, bounded per-tick volume, and baseline cleanup.
-- Event-backed resident/workforce migration, measured attack casualties, complete evacuation, exact population arithmetic, and zero unexplained cumulative headcount drift.
+- Event-backed resident/workforce demographic projection, measured attack casualties, exact population arithmetic, and zero unexplained cumulative headcount drift.
 - Credit/workforce/ammunition-backed faction defense preparation and execution, single consumption, personnel release, consequence stories, and honest legacy/unfunded backing states.
 - Exact passive-command provenance for station stories, no false command link on direct freight delivery, and cleanup of transaction-scoped provenance context.
 - Enforced command-scoped resident/workforce mutation coverage with zero unexplained committed changes.
@@ -381,23 +384,25 @@ Completed:
 24. Schema-019 production causality: success, material and credit shortfalls, equipment failure, sabotage, outcome diagnostics, bounded stories, and typed inventory, credit, and integrity changes.
 25. Schema-020 delivery causality: normalized player/NPC baselines, carrier attribution, bounded freight stories, and typed inventory, trade, recovery, shortage, civilization, and fauna effects.
 26. Schema-021 attack and frontier causality: measured before/after snapshots, exact damage and threat changes, direct recovery transitions, expansion/contraction evidence, and non-repeating abandonment.
-27. Schema-022 authoritative population foundation: an explicit imported estimate, resident/workforce state, proportional immigration/emigration, measured attack casualties, evacuation, and reconciliation.
+27. Schema-022 station population projection foundation: imported/generated baselines, resident/workforce state, population events, and reconciliation coverage.
 28. Schema-023 allocation-backed faction defense: funded preparation, exact credits/personnel/ammunition commitments, next-tick execution, and consequence stories.
 29. Schema-024 command provenance: exact receipt/tick/canonical links for passive stories and honest non-attribution for direct transactions.
 30. Schema-025 enforced mutation explanations for authoritative resident and workforce changes.
 31. Schema-026 time-gated NPC voyages: shared player-equivalent challenge budgets, three-tick-per-challenge elapsed scheduling, quiet progress, persisted deterministic incident slots, shared autoresolution, cumulative delays and shifted due times, dual-gated arrival, fleet-response linkage, bounded voyage reports, and live observer progress/incident/ETA fields.
 32. Original project audio seed library: 20 effects and five music tracks packaged as owned resources for the later opt-in desktop audio service.
+33. Schema-027 demographic lifecycle: one detailed-cohort authority, effective capacity, deterministic support and pressure, bounded births, natural and excess mortality, measured attack casualties, morale, cooldowns, overcrowding hysteresis, station projection, causal evidence, and rollback.
 
 Next:
 
-1. Implement E1: generated/enrichment profiles, feasibility, principal/auxiliary classification, constrained faction shares, explicit `GENERATED_ALLOCATION` versus imported population provenance, versioned NPC complement and vessel/dock staffing budgets, once-sampled training/build variance, opening-fleet provenance, Barsuk fallback deadlines, and industrial-health thresholds.
-2. Implement E2–E3: station archetype and categorical owner/controller/governor domains; normal/fallback hull provenance and normal/scrap-yard capability; conserved resident/presence/workforce/embarked cohorts; professional labor and paired migration; the 35%-of-residents essential-worker target; sampled prerequisite-based 30-to-180-day submariner training; role-valid organic/faction crew formation and congregation travel; full NPC versus player-skeleton billets; and conserved Barsuk child/remainder formation lineage.
-3. Implement E4–E5: the 5% life-support threshold, explained `0.9^n` infrastructure decay/recovery, many-to-many station dependency cascades, model-specific capable-yard construction, Barsuk scrap-assembly inputs and nonproduction evidence, and cargo handling gated by ship and dock labor, equipment, storage, and elapsed time.
-4. Implement E6–E7: cohort-, trained-crew-, and resource-backed station/fleet expansion; physical hull sale, lease, assignment, transfer, refit, construction and certified Barsuk fallback; local/remote acquisition, passenger travel, shipyard waiting, sea trials, full-complement NPC commissioning and crew split; named crew/cargo/subsystem consequences on schema-026 voyages; and strategic faction/organic decisions driven by fallback saturation and other causal evidence.
-5. Implement E8 station/vessel history, ownership, economy, expansion, crew formation/recruitment/travel, sampled training/build forecasts, hull reservations, shipyard queues, commission blockers, watch coverage, dock throughput, paginated voyage replay, incident drill-through, knowledge labels, `Why Barsuk?`, shipyard health, and "Why did this change?" surfaces.
-6. Add player-directed response/resource missions, acceptance, settlement, and faction consequences.
-7. Connect indexed donor/fallback graphics and opt-in local audio roles to the desktop panels.
-8. Add equipment-level cargo manifests, recent-world reopening, backups, packaging, and release automation.
+1. Implement Milestone 2.3 physical migration and evacuation: durable origin/destination flows, transport requirements, preparation, departure, transit, arrival, failure, cancellation, and explicit casualties without duplicating people.
+2. Implement E1: generated/enrichment profiles, feasibility, principal/auxiliary classification, constrained faction shares, explicit `GENERATED_ALLOCATION` versus imported population provenance, versioned NPC complement and vessel/dock staffing budgets, once-sampled training/build variance, opening-fleet provenance, Barsuk fallback deadlines, and industrial-health thresholds.
+3. Implement E2–E3: station archetype and categorical owner/controller/governor domains; normal/fallback hull provenance and normal/scrap-yard capability; conserved resident/presence/workforce/embarked cohorts; professional labor and paired migration; the 35%-of-residents essential-worker target; sampled prerequisite-based 30-to-180-day submariner training; role-valid organic/faction crew formation and congregation travel; full NPC versus player-skeleton billets; and conserved Barsuk child/remainder formation lineage.
+4. Implement E4–E5: the 5% life-support threshold, explained `0.9^n` infrastructure decay/recovery, many-to-many station dependency cascades, model-specific capable-yard construction, Barsuk scrap-assembly inputs and nonproduction evidence, and cargo handling gated by ship and dock labor, equipment, storage, and elapsed time.
+5. Implement E6–E7: cohort-, trained-crew-, and resource-backed station/fleet expansion; physical hull sale, lease, assignment, transfer, refit, construction and certified Barsuk fallback; local/remote acquisition, passenger travel, shipyard waiting, sea trials, full-complement NPC commissioning and crew split; named crew/cargo/subsystem consequences on schema-026 voyages; and strategic faction/organic decisions driven by fallback saturation and other causal evidence.
+6. Implement E8 station/vessel history, ownership, economy, expansion, crew formation/recruitment/travel, sampled training/build forecasts, hull reservations, shipyard queues, commission blockers, watch coverage, dock throughput, paginated voyage replay, incident drill-through, knowledge labels, `Why Barsuk?`, shipyard health, and "Why did this change?" surfaces.
+7. Add player-directed response/resource missions, acceptance, settlement, and faction consequences.
+8. Connect indexed donor/fallback graphics and opt-in local audio roles to the desktop panels.
+9. Add equipment-level cargo manifests, recent-world reopening, backups, packaging, and release automation.
 
 ## Governing documents
 
