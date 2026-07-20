@@ -6,6 +6,7 @@ import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalog;
 import io.github.mrcalzon02.barotrauma.assets.PackagedFallbackAssetVerification;
 import io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex;
 import io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview;
+import io.github.mrcalzon02.barotrauma.assets.UiAtlasSemanticPreview;
 import io.github.mrcalzon02.barotrauma.observation.ObservationContractVerification;
 import io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
@@ -25,6 +26,7 @@ public final class DesktopPersistenceVerificationSuite {
         PackagedFallbackAssetVerification.verifyContract();
         UiAtlasSliceIndex.verifyContract();
         UiAtlasImplementationPreview.verifyContract();
+        UiAtlasSemanticPreview.verifyContract();
         BarotraumaAssetCatalogue.verifyContract();
         ObservationContractVerification.verifyContract();
         RecursiveSqliteDriver.verifyContract();
