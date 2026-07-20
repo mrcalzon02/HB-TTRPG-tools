@@ -1,0 +1,47 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+hdd-002	approved	110	28	38	34	hud-design-hex-emblem	badge	Hexagonal emblem.
+hdd-014	approved	590	22	43	44	hud-design-list-button-neutral	list-control	Neutral list button.
+hdd-015	approved	659	22	43	44	hud-design-list-button-green-a	list-control	Green list button variant A.
+hdd-016	approved	727	22	43	44	hud-design-list-button-green-b	list-control	Green list button variant B.
+hdd-017	approved	794	22	44	44	hud-design-list-button-gold	list-control	Gold list button.
+hdd-018	approved	857	22	42	43	hud-design-number-button-01	button	Number 01 button.
+hdd-019	approved	912	22	42	43	hud-design-number-button-02	button	Number 02 button.
+hdd-020	approved	967	22	42	43	hud-design-number-button-03-a	button	Number 03 button variant A.
+hdd-021	approved	1022	22	41	43	hud-design-number-button-03-b	button	Number 03 button variant B.
+hdd-022	approved	1077	22	42	43	hud-design-number-button-04	button	Number 04 button.
+hdd-023	approved	1132	22	43	44	hud-design-number-button-05	button	Number 05 button.
+hdd-024	approved	1184	22	43	44	hud-design-number-button-06	button	Number 06 button.
+hdd-036	approved	856	86	44	44	hud-design-energy-icon	hazard-icon	Energy icon.
+hdd-037	approved	910	86	45	44	hud-design-liquid-icon	hazard-icon	Liquid icon.
+hdd-038	approved	965	86	44	44	hud-design-fan-icon	hazard-icon	Ventilation fan icon.
+hdd-039	approved	1019	86	45	44	hud-design-fire-icon	hazard-icon	Fire icon.
+hdd-040	approved	1074	86	45	44	hud-design-freeze-icon	hazard-icon	Freeze icon.
+hdd-041	approved	1127	86	46	44	hud-design-radiation-icon	hazard-icon	Radiation icon.
+hdd-042	approved	1183	86	44	44	hud-design-biohazard-icon	hazard-icon	Biohazard icon.
+hdd-043	approved	155	90	25	23	hud-design-fast-forward-a	button	Fast-forward button variant A.
+hdd-044	approved	200	90	23	23	hud-design-fast-forward-b	button	Fast-forward button variant B.
+hdd-046	approved	281	92	19	19	hud-design-next-button	button	Next button.
+hdd-047	approved	321	92	19	19	hud-design-previous-button	button	Previous button.
+hdd-057	approved	324	139	83	85	hud-design-radar-a	gauge	Radar dial variant A.
+hdd-058	approved	427	138	134	128	hud-design-radar-b	gauge	Radar dial variant B.
+hdd-065	approved	856	141	44	45	hud-design-civilian-face	status-icon	Civilian face icon.
+hdd-066	approved	910	142	44	44	hud-design-skull-icon	status-icon	Skull icon.
+hdd-067	approved	965	142	44	44	hud-design-hammer-icon	tool-icon	Hammer icon.
+hdd-068	approved	1019	141	45	45	hud-design-settings-icon	tool-icon	Settings icon.
+hdd-069	approved	1074	141	45	45	hud-design-engineering-icon	tool-icon	Engineering icon.
+hdd-070	approved	1127	141	46	46	hud-design-sync-icon	tool-icon	Synchronization icon.
+hdd-071	approved	1183	142	44	44	hud-design-system-settings-icon	tool-icon	System settings icon.
+hdd-072	approved	593	164	47	48	hud-design-progress-dial-a	gauge	Progress dial variant A.
+hdd-073	approved	658	164	47	48	hud-design-progress-dial-b	gauge	Progress dial variant B.
+hdd-074	approved	721	165	48	47	hud-design-progress-dial-c	gauge	Progress dial variant C.
+hdd-075	approved	787	164	48	48	hud-design-progress-dial-d	gauge	Progress dial variant D.
+hdd-076	approved	858	204	38	51	hud-design-open-hand	interaction-icon	Open-hand interaction icon.
+hdd-077	approved	915	205	34	50	hud-design-point-left	interaction-icon	Point-left interaction icon.
+hdd-078	approved	973	205	35	50	hud-design-point-up	interaction-icon	Point-up interaction icon.
+hdd-079	approved	1040	204	32	51	hud-design-press	interaction-icon	Press interaction icon.
+hdd-080	approved	1097	204	41	59	hud-design-touch	interaction-icon	Touch interaction icon.
+hdd-112	approved	1027	254	136	143	hud-design-planet-panel	data-panel	Planet data panel.
+hdd-114	approved	28	281	283	107	hud-design-rank-panel	data-panel	Rank display panel.
+hdd-115	approved	341	280	142	111	hud-design-table-panel	data-panel	Table data panel.
+hdd-116	approved	849	280	156	114	hud-design-line-chart-panel	data-panel	Line chart panel.
+hdd-117	approved	514	290	134	101	hud-design-status-panel	data-panel	Status panel.
