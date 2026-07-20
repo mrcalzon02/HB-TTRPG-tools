@@ -1,0 +1,66 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+hdel-001	approved	22	20	310	226	hud-elements-world-map-panel	data-panel	World map panel.
+hdel-002	approved	357	18	50	51	hud-elements-globe-gold	navigation-icon	Gold globe icon.
+hdel-003	approved	427	20	50	48	hud-elements-globe-white-a	navigation-icon	White globe icon variant A.
+hdel-004	approved	497	20	49	48	hud-elements-globe-white-b	navigation-icon	White globe icon variant B.
+hdel-005	approved	566	19	49	49	hud-elements-globe-data	navigation-icon	Data globe icon.
+hdel-006	approved	636	20	47	48	hud-elements-satellite-a	navigation-icon	Satellite icon variant A.
+hdel-007	approved	705	20	47	48	hud-elements-satellite-b	navigation-icon	Satellite icon variant B.
+hdel-008	approved	773	20	47	48	hud-elements-satellite-c	navigation-icon	Satellite icon variant C.
+hdel-009	approved	845	19	157	233	hud-elements-status-list	status-list	Status list.
+hdel-010	approved	1025	20	41	41	hud-elements-menu-button	button	Menu button.
+hdel-011	approved	1080	20	41	41	hud-elements-play-button	button	Play button.
+hdel-012	approved	1133	20	42	41	hud-elements-stop-button	button	Stop button.
+hdel-013	approved	1187	20	41	41	hud-elements-pause-button	button	Pause button.
+hdel-014	approved	688	89	31	39	hud-elements-navigation-arrow	navigation-icon	Navigation arrow.
+hdel-015	approved	1025	72	41	41	hud-elements-collapse-button	button	Collapse button.
+hdel-016	approved	1080	72	41	41	hud-elements-close-button	button	Close button.
+hdel-017	approved	1133	72	41	41	hud-elements-crew-status-button	button	Crew status button.
+hdel-018	approved	1187	72	41	41	hud-elements-fast-forward-button	button	Fast-forward button.
+hdel-019	approved	360	90	26	38	hud-elements-map-pin-a	map-marker	Map pin variant A.
+hdel-020	approved	407	90	26	38	hud-elements-map-pin-b	map-marker	Map pin variant B.
+hdel-021	approved	455	90	25	38	hud-elements-map-pin-c	map-marker	Map pin variant C.
+hdel-022	approved	502	90	27	38	hud-elements-map-pin-d	map-marker	Map pin variant D.
+hdel-024	approved	595	90	27	38	hud-elements-folder-icon	file-icon	Folder icon.
+hdel-025	approved	643	90	26	38	hud-elements-folder-download-icon	file-icon	Folder download icon.
+hdel-030	approved	1028	126	82	27	hud-elements-labeled-strip-a	label-strip	Labeled strip variant A.
+hdel-031	approved	352	148	66	68	hud-elements-compass-icon	navigation-icon	Compass icon.
+hdel-032	approved	433	149	57	59	hud-elements-target-icon	targeting-icon	Target icon.
+hdel-033	approved	516	149	40	39	hud-elements-diamond-target	targeting-icon	Diamond target icon.
+hdel-034	approved	571	150	40	38	hud-elements-circle-target	targeting-icon	Circular target icon.
+hdel-036	approved	680	151	35	35	hud-elements-status-ring	status-icon	Status ring icon.
+hdel-037	approved	733	151	34	35	hud-elements-mountain-icon	map-marker	Mountain marker.
+hdel-038	approved	785	151	34	34	hud-elements-close-round	button	Round close button.
+hdel-039	approved	1028	161	82	26	hud-elements-labeled-strip-b	label-strip	Labeled strip variant B.
+hdel-040	approved	1131	172	40	41	hud-elements-handshake-icon	status-icon	Handshake icon.
+hdel-041	approved	1187	172	41	41	hud-elements-selection-star	status-icon	Selection star icon.
+hdel-043	approved	501	200	30	48	hud-elements-touch-icon	interaction-icon	Touch icon.
+hdel-044	approved	552	213	35	34	hud-elements-pinch-gesture	interaction-icon	Pinch gesture icon.
+hdel-045	approved	601	209	35	39	hud-elements-swipe-gesture	interaction-icon	Swipe gesture icon.
+hdel-046	approved	651	208	34	39	hud-elements-rotate-gesture	interaction-icon	Rotate gesture icon.
+hdel-047	approved	705	212	32	35	hud-elements-grab-gesture	interaction-icon	Grab gesture icon.
+hdel-048	approved	756	207	43	42	hud-elements-keypad-grid	control-bank	Keypad grid.
+hdel-049	approved	812	207	15	42	hud-elements-compact-grid	control-bank	Compact control grid.
+hdel-051	approved	388	232	20	21	hud-elements-favorite-icon	status-icon	Favorite icon.
+hdel-052	approved	423	232	20	21	hud-elements-play-status-icon	status-icon	Play status icon.
+hdel-053	approved	457	232	21	21	hud-elements-energy-status-icon	status-icon	Energy status icon.
+hdel-054	approved	1028	232	82	26	hud-elements-favorite-strip	label-strip	Favorite label strip.
+hdel-055	approved	1131	222	41	41	hud-elements-dna-icon	science-icon	DNA icon.
+hdel-056	approved	1187	222	41	41	hud-elements-gear-icon	tool-icon	Gear icon.
+hdel-057	approved	133	268	40	36	hud-elements-shuttle-a	vehicle-icon	Shuttle icon variant A.
+hdel-058	approved	28	272	88	37	hud-elements-shuttle-b	vehicle-icon	Shuttle icon variant B.
+hdel-059	approved	187	273	52	39	hud-elements-shuttle-c	vehicle-icon	Shuttle icon variant C.
+hdel-062	approved	428	277	60	29	hud-elements-submarine	vehicle-icon	Submarine icon.
+hdel-063	approved	511	280	68	26	hud-elements-screen-frame	panel-frame	Screen frame.
+hdel-064	approved	600	278	84	29	hud-elements-status-strip	label-strip	Status strip.
+hdel-065	approved	703	277	97	32	hud-elements-blank-strip	label-strip	Blank strip.
+hdel-066	approved	814	277	35	33	hud-elements-illuminated-button	button	Illuminated button.
+hdel-067	approved	867	277	35	33	hud-elements-dark-button	button	Dark button.
+hdel-068	approved	920	277	35	33	hud-elements-green-button	button	Green button.
+hdel-069	approved	973	277	35	32	hud-elements-white-button	button	White button.
+hdel-070	approved	1028	277	26	33	hud-elements-alert-button	button	Alert button.
+hdel-071	approved	1077	276	36	33	hud-elements-warning-icon	status-icon	Warning icon.
+hdel-072	approved	1137	282	28	21	hud-elements-badge-icon	badge	Badge icon.
+hdel-073	approved	1194	276	27	33	hud-elements-star-badge	badge	Star badge.
+hdel-074	approved	23	327	96	28	hud-elements-vehicle-silhouette-a	vehicle-icon	Vehicle silhouette variant A.
+hdel-075	approved	136	325	94	30	hud-elements-vehicle-silhouette-b	vehicle-icon	Vehicle silhouette variant B.
