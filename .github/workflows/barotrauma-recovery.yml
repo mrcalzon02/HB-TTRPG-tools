@@ -1,12 +1,12 @@
 name: Barotrauma Return Lifecycle Recovery
 
 on:
-  push:
-    paths:
-      - ".github/workflows/barotrauma-recovery.yml"
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: barotrauma-return-lifecycle-recovery
@@ -14,6 +14,7 @@ concurrency:
 
 jobs:
   repair-verify-publish:
+    if: github.event.issue.title == 'Run Barotrauma return lifecycle recovery 2026-07-19'
     runs-on: ubuntu-latest
     steps:
       - name: Check out main
@@ -189,3 +190,12 @@ jobs:
           git diff --cached --check
           git commit -m "Repair NPC return lifecycle verification"
           git push origin HEAD:main
+
+      - name: Close recovery issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh issue close "${{ github.event.issue.number }}" \
+            --repo "${{ github.repository }}" \
+            --comment "The return lifecycle repair passed the complete Gradle-free desktop verification chain and was published to main."
