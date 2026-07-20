@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-stellar-sector-civilization-authority.schema.json",
+  "title":"Blacklight EXO Stellar Sector Civilization Authority",
+  "type":"object",
+  "required":["recordType","schemaVersion","clusterDossiers","civilizationMotivations","governmentAuthorities","fleetDeployments"],
+  "properties":{
+    "recordType":{"const":"blacklightExoStellarSector"},
+    "schemaVersion":{"const":"1.3.0"},
+    "clusterDossiers":{"type":"array","minItems":1,"items":{"type":"object","required":["clusterDossierId","clusterId","name","strategicIdentity","authorityState","controllingPolityIds","residentSpeciesIds","primaryWorldIds","populationMillions","industrialCapacity","securityCondition","commercialCondition","governmentAuthorityIds","motivationIds","fleetDeploymentIds","organizationNetworkIds","extinctSiteIds","bestiaryRecordIds","knownThreats","localTensions","campaignHooks","fixedExampleAuthority"]}},
+    "civilizationMotivations":{"type":"array","minItems":1,"items":{"type":"object","required":["motivationId","speciesId","polityId","archetype","sectorStance","primaryDrive","secondaryDrive","existentialFear","redLine","opportunity","publicNarrative","privatePriority","strategicHorizon","preferredMethods","internalContradiction","currentPressure","relationshipPolicy","declaredObjectives"]}},
+    "governmentAuthorities":{"type":"array","minItems":1,"items":{"type":"object","required":["governmentAuthorityId","polityId","name","governmentType","legitimacyBasis","executiveAuthority","legislativeAuthority","judicialAuthority","administrativeModel","successionMechanism","rightsModel","civilMilitaryRelation","decisionTempo","emergencyPowers","centralizationPercent","stabilityPercent","corruptionPressurePercent","factions","failureModes","currentAgenda","linkedMotivationId"],"properties":{"centralizationPercent":{"type":"number","minimum":0,"maximum":100},"stabilityPercent":{"type":"number","minimum":0,"maximum":100},"corruptionPressurePercent":{"type":"number","minimum":0,"maximum":100},"factions":{"type":"array","minItems":3,"items":{"type":"object","required":["factionId","name","constituency","objective","influencePercent","foreignPolicy","institutionalControl"]}}}}},
+    "fleetDeployments":{"type":"array","minItems":1,"items":{"type":"object","required":["deploymentId","formationId","fleetId","polityId","deployedClusterId","deploymentType","posture","primaryObjective","secondaryObjective","supplyState","rulesOfEngagement","readiness","expectedDurationDays","commanderTitle","politicalAuthority","linkedMotivationId","deploymentReason","riskFactors"],"properties":{"expectedDurationDays":{"type":"integer","minimum":1}}}}
+  }
+}
