@@ -1,0 +1,55 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+hcol-002	approved	210	19	44	44	hud-collage-left-button	button	Left button.
+hcol-003	approved	272	19	44	44	hud-collage-right-button	button	Right button.
+hcol-004	approved	334	19	44	44	hud-collage-play-button	button	Play button.
+hcol-005	approved	396	19	44	44	hud-collage-fast-forward-button	button	Fast-forward button.
+hcol-007	approved	875	35	41	28	hud-collage-battery-icon	status-icon	Battery icon.
+hcol-008	approved	931	34	38	29	hud-collage-wifi-icon	status-icon	Wireless signal icon.
+hcol-009	approved	989	34	28	29	hud-collage-transmitter-icon	status-icon	Transmitter icon.
+hcol-010	approved	1044	34	21	29	hud-collage-skull-icon	status-icon	Skull icon.
+hcol-011	approved	1091	34	23	30	hud-collage-energy-shield-icon	status-icon	Energy shield icon.
+hcol-012	approved	1157	31	72	71	hud-collage-compass-icon	navigation-icon	Compass icon.
+hcol-013	approved	210	77	44	45	hud-collage-up-button	button	Up button.
+hcol-014	approved	272	77	44	45	hud-collage-down-button	button	Down button.
+hcol-015	approved	334	75	44	47	hud-collage-diamond-button	button	Diamond button.
+hcol-016	approved	396	77	45	45	hud-collage-pause-button	button	Pause button.
+hcol-017	approved	474	80	36	35	hud-collage-reticle-a	targeting-icon	Targeting reticle variant A.
+hcol-018	approved	539	79	36	36	hud-collage-reticle-b	targeting-icon	Targeting reticle variant B.
+hcol-019	approved	606	80	35	35	hud-collage-reticle-c	targeting-icon	Targeting reticle variant C.
+hcol-020	approved	671	80	35	35	hud-collage-reticle-d	targeting-icon	Targeting reticle variant D.
+hcol-021	approved	735	79	36	36	hud-collage-reticle-e	targeting-icon	Targeting reticle variant E.
+hcol-022	approved	800	80	35	34	hud-collage-reticle-f	targeting-icon	Targeting reticle variant F.
+hcol-023	approved	883	86	24	28	hud-collage-shield-alert	hazard-icon	Shield alert icon.
+hcol-024	approved	938	85	24	29	hud-collage-fire-icon	hazard-icon	Fire icon.
+hcol-025	approved	989	85	28	30	hud-collage-freeze-icon	hazard-icon	Freeze icon.
+hcol-026	approved	1041	88	27	26	hud-collage-radiation-icon	hazard-icon	Radiation icon.
+hcol-027	approved	1088	85	29	29	hud-collage-biohazard-icon	hazard-icon	Biohazard icon.
+hcol-028	approved	1157	111	72	71	hud-collage-globe-icon	navigation-icon	Globe icon.
+hcol-029	approved	210	136	42	41	hud-collage-tool-button	button	Tool button.
+hcol-030	approved	273	136	42	42	hud-collage-plus-button	button	Plus button.
+hcol-031	approved	336	136	42	42	hud-collage-close-button-a	button	Close button variant A.
+hcol-032	approved	398	136	43	42	hud-collage-close-button-b	button	Close button variant B.
+hcol-033	approved	473	136	112	39	hud-collage-dual-progress	progress-control	Dual progress control.
+hcol-035	approved	670	138	21	20	hud-collage-ring-icon	status-icon	Ring icon.
+hcol-036	approved	706	138	21	20	hud-collage-diamond-icon	status-icon	Diamond icon.
+hcol-037	approved	743	139	19	18	hud-collage-light-square	status-icon	Light square icon.
+hcol-038	approved	779	138	20	20	hud-collage-dark-square	status-icon	Dark square icon.
+hcol-039	approved	816	138	21	20	hud-collage-warning-triangle	hazard-icon	Warning triangle.
+hcol-040	approved	882	134	26	27	hud-collage-hazard-crystal	hazard-icon	Hazard crystal icon.
+hcol-041	approved	937	135	27	26	hud-collage-disabled-tool	status-icon	Disabled tool icon.
+hcol-042	approved	989	135	28	26	hud-collage-disabled-planet	status-icon	Disabled planet icon.
+hcol-043	approved	1045	134	20	29	hud-collage-utility-pouch	item-icon	Utility pouch icon.
+hcol-044	approved	1091	135	23	26	hud-collage-winged-badge	badge	Winged badge.
+hcol-057	approved	473	185	112	46	hud-collage-dual-progress-green	progress-control	Green dual progress control.
+hcol-059	approved	875	183	54	18	hud-collage-toggle-on	toggle	Enabled toggle.
+hcol-060	approved	941	185	109	14	hud-collage-slider	slider	Horizontal slider.
+hcol-061	approved	1066	184	17	17	hud-collage-ring-light	status-icon	Light ring icon.
+hcol-062	approved	1092	184	18	17	hud-collage-ring-dark	status-icon	Dark ring icon.
+hcol-063	approved	1157	191	72	71	hud-collage-cargo-cube	operation-icon	Cargo cube icon.
+hcol-064	approved	473	222	112	20	hud-collage-progress-bar	progress-bar	Progress bar.
+hcol-065	approved	670	220	21	21	hud-collage-starburst-icon	status-icon	Starburst icon.
+hcol-066	approved	706	221	21	20	hud-collage-flower-icon	status-icon	Flower icon.
+hcol-067	approved	742	220	22	21	hud-collage-ring-white	status-icon	White ring icon.
+hcol-068	approved	779	221	21	20	hud-collage-fast-forward-glyph	navigation-icon	Fast-forward glyph.
+hcol-069	approved	816	221	21	20	hud-collage-split-arrow	navigation-icon	Split arrow icon.
+hcol-070	approved	875	220	54	18	hud-collage-toggle-off	toggle	Disabled toggle.
