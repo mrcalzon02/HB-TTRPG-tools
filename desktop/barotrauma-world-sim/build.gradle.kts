@@ -5,48 +5,82 @@ plugins {
 group = "io.github.mrcalzon02"
 version = "0.1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
-dependencies {
-    implementation("org.xerial:sqlite-jdbc:3.53.1.0")
-}
+dependencies { implementation("org.xerial:sqlite-jdbc:3.53.1.0") }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-application {
-    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication")
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
+application { mainClass.set("io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication") }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(17)
 }
 
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = application.mainClass.get()
-    }
-}
+tasks.jar { manifest { attributes["Main-Class"] = application.mainClass.get() } }
 
 tasks.register<JavaExec>("verifyWorldStore") {
     group = "verification"
-    description = "Runs donor assets, imports, migrations, registries, clock, checkpoints, passive scheduling, station consumption, civilization frontier, fleet response transit and towing, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC voyages, routes, missions, research, encounters, and recovery contracts."
+    description = "Runs donor assets, observation contracts, schema-015 foundations, schema-016 conserved NPC population accounting, query-only registries, imports, migrations, clock, passive scheduling, station consumption, civilization frontier, fleet response, ecology, geology, finite resources, logistics, player transit, NPC voyages, missions, research, encounters, and recovery contracts."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite")
     args("--verify")
 }
 
+tasks.register<JavaExec>("verifyVisualAssets") {
+    group = "verification"
+    description = "Verifies donor discovery, XML style and atlas cropping, scaling, role coverage, and every procedural fallback without requiring a Barotrauma installation."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue")
+}
+
+tasks.register<JavaExec>("verifyObservationContract") {
+    group = "verification"
+    description = "Verifies the dependency-free passive observation vocabulary, population invariants, deterministic IDs, flow transitions, snapshot identity, and canonical event codec."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.observation.ObservationContractVerification")
+}
+
+tasks.register<JavaExec>("verifyObservationFoundation") {
+    group = "verification"
+    description = "Verifies schema 015 observation populations, creature territories, faction presence, flows, events, snapshots, metrics, deterministic seeding, preservation, and constraints."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.ObservationFoundationVerification")
+}
+
+tasks.register<JavaExec>("verifyNpcPopulationAccounting") {
+    group = "verification"
+    description = "Verifies schema 016 conserved NPC population growth, stable ticks, contraction, abandonment, cohort reconciliation, per-tick event chronology, metrics, and rejection of invalid ledgers."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.persistence.NpcPopulationAccountingVerification")
+}
+
+tasks.register<JavaExec>("verifyObservationRegistry") {
+    group = "verification"
+    description = "Verifies query-only observation summaries, conserved population ledgers, territories, influence, events, metrics, snapshots, changed-since-tick queries, selected-entity history, and schema rejection."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification")
+}
+
 tasks.register<JavaExec>("runAssetSetup") {
     group = "application"
-    description = "Locates a local Barotrauma donor installation and configures donor-first or fallback-only graphical assets."
+    description = "Indexes a local Barotrauma installation for UI atlases, map markers, backgrounds, operation symbols, and independent fallback visuals."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow")
+}
+
+tasks.register<JavaExec>("runGraphicalWorldMap") {
+    group = "application"
+    description = "Runs the graphical Europa map using donor-backed Barotrauma backgrounds and markers or procedural fallbacks."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow")
+}
+
+tasks.register<JavaExec>("runObservationFoundation") {
+    group = "application"
+    description = "Runs the read-only schema-016 NPC population ledger, creature territory, faction presence, flow, event, snapshot, and metric observation window."
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.mrcalzon02.barotrauma.desktop.observation.ObservationFoundationWindow")
 }
 
 tasks.register<JavaExec>("runImportApproval") {
@@ -65,7 +99,7 @@ tasks.register<JavaExec>("runWebWorldImport") {
 
 tasks.register<JavaExec>("runWorldRegistry") {
     group = "application"
-    description = "Runs the live Europa world map with passive station, NPC, mission, research, encounter, and response-transit simulation controls."
+    description = "Runs the live Europa world registry with passive station, NPC, mission, research, encounter, and response-transit controls."
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow")
 }

@@ -1,7 +1,10 @@
 package io.github.mrcalzon02.barotrauma.persistence;
 
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets;
 import io.github.mrcalzon02.barotrauma.assets.PackagedFallbackAssetVerification;
+import io.github.mrcalzon02.barotrauma.observation.ObservationContractVerification;
+import io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
 import io.github.mrcalzon02.barotrauma.simulation.PersistentSimulationSession;
 import io.github.mrcalzon02.barotrauma.simulation.SimulationCommandExecutor;
@@ -15,9 +18,14 @@ public final class DesktopPersistenceVerificationSuite {
     public static void verifyContract() throws Exception {
         BarotraumaDonorAssets.verifyContract();
         PackagedFallbackAssetVerification.verifyContract();
+        BarotraumaAssetCatalogue.verifyContract();
+        ObservationContractVerification.verifyContract();
         RecursiveSqliteDriver.verifyContract();
         WorldStorageContracts.verifyContract();
         WorldDatabaseMigrations.verifyContract();
+        ObservationFoundationVerification.verifyContract();
+        NpcPopulationAccountingVerification.verifyContract();
+        ObservationRegistryVerification.verifyContract();
         AcceptedImportTransaction.verifyContract();
         VesselSnapshotTransaction.verifyContract();
         WorldMapRegistry.verifyContract();
@@ -36,7 +44,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma donor-asset, decoded fallback PNG, persistence, recursive SQLite trigger, passive-world, station consumption, civilization frontier, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, procedural and packaged fallbacks, observation vocabulary, schema-015 foundations, schema-016 conserved NPC population accounting, query-only Observation Registry, persistence, recursive SQLite trigger, passive-world, station consumption, civilization frontier, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");

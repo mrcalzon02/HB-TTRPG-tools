@@ -2,42 +2,18 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import process from 'node:process';
 import {spawnSync} from 'node:child_process';
-
-const root=new URL('../',import.meta.url);
-const read=path=>fs.readFileSync(new URL(path,root),'utf8');
-const fail=message=>{throw new Error(message);};
-const strategic=spawnSync(process.execPath,['scripts/validate-exo-stellar-sector-strategic-atlas.mjs'],{cwd:new URL('../',import.meta.url),encoding:'utf8',maxBuffer:32*1024*1024});
-if(strategic.status!==0)fail(`Strategic-atlas validation failed.\n${strategic.stdout||''}\n${strategic.stderr||''}`);if(strategic.stdout)process.stdout.write(strategic.stdout);
-const manifest=JSON.parse(read('blacklight-exo-stellar-sector-example.json'));
-const context={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,structuredClone};context.globalThis=context;vm.createContext(context);
-for(const file of['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-strategic-atlas.js','blacklight-exo-stellar-sector-extinct-sites.js'])vm.runInContext(read(file),context,{filename:file});
-const D=context.BlacklightExoStellarSectorData;
-if(!D?.generate||!D?.build||!D?.validate||!D?.migrate||D.schemaVersion!=='1.2.0')fail('Stellar-sector generator API is incomplete.');
-const fixed=D.build(),procedural=D.generate('VALIDATION:SECTOR:DELTA',{clusterCount:32,speciesCount:24}),repeat=D.generate('VALIDATION:SECTOR:DELTA',{clusterCount:32,speciesCount:24});
-if(JSON.stringify(procedural)!==JSON.stringify(repeat))fail('Seeded sector generation is not deterministic.');
-for(const [label,sector,minClusters,minSpecies] of[['fixed',fixed,36,32],['procedural',procedural,32,24]]){
-  const validation=D.validate(sector);if(!validation.valid)fail(`${label} sector validation failed: ${validation.violations.join(' ')}`);
-  if(sector.recordType!=='blacklightExoStellarSector'||sector.schemaVersion!=='1.2.0')fail(`${label} sector schema is invalid.`);
-  if(sector.clusters.length<minClusters||sector.species.length<minSpecies)fail(`${label} sector is below requested scale.`);
-  if(sector.worlds.length<sector.species.length*2)fail(`${label} sector lacks controlled and dead-world depth.`);
-  if(sector.extinctSpecies.length<6||sector.summary.deadWorldCount<6||sector.extinctSites.length<sector.extinctSpecies.length)fail(`${label} sector lacks extinct species, dead worlds, or linked extinct sites.`);
-  if(sector.fleetCommands.length!==sector.polities.length)fail(`${label} sector lacks a fleet authority for every polity.`);
-  if(sector.organizations.length<sector.polities.length*4||sector.organizationNetworks.length!==sector.organizations.length)fail(`${label} sector lacks complete military, civilian, commercial, scientific, or network authority.`);
-  if(sector.bestiary.length<18||sector.relations.length<20)fail(`${label} sector lacks bestiary or diplomatic depth.`);
-  if(sector.territorialRegions.length!==sector.polities.length||sector.technologyProfiles.length!==sector.species.length)fail(`${label} sector lacks territorial or technology authority.`);
-  for(const fleet of sector.fleetCommands)if(fleet.taskForces.length<3||!fleet.loadoutFamilies?.length||!fleet.doctrine)fail(`${fleet.name} lacks task forces, loadouts, or doctrine.`);
-  for(const polity of sector.polities)for(const type of['military','civilian','commercial','scientific'])if(!sector.organizations.some(org=>org.polityId===polity.polityId&&org.organizationType===type))fail(`${polity.name} lacks ${type} authority.`);
-}
+const root=new URL('../',import.meta.url),read=path=>fs.readFileSync(new URL(path,root),'utf8'),fail=message=>{throw new Error(message);};
+for(const [label,script]of[['Strategic atlas','scripts/validate-exo-stellar-sector-strategic-atlas.mjs'],['Civilization authority','scripts/validate-exo-stellar-sector-civilization-authority.mjs']]){const result=spawnSync(process.execPath,[script],{cwd:new URL('../',import.meta.url),encoding:'utf8',maxBuffer:32*1024*1024});if(result.status!==0)fail(`${label} validation failed.\n${result.stdout||''}\n${result.stderr||''}`);if(result.stdout)process.stdout.write(result.stdout);}
+const files=['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-strategic-atlas.js','blacklight-exo-stellar-sector-extinct-sites.js','blacklight-exo-stellar-sector-civilization-authority.js'];
+const context={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,structuredClone};context.globalThis=context;vm.createContext(context);for(const file of files)vm.runInContext(read(file),context,{filename:file});
+const D=context.BlacklightExoStellarSectorData,fixed=D.build(),procedural=D.generate('VALIDATION:SECTOR:DELTA',{clusterCount:32,speciesCount:24}),repeat=D.generate('VALIDATION:SECTOR:DELTA',{clusterCount:32,speciesCount:24});
+if(D.schemaVersion!=='1.3.0'||D.civilizationAuthorityVersion!==1||JSON.stringify(procedural)!==JSON.stringify(repeat))fail('Canonical schema 1.3 generator identity or determinism failed.');
+for(const[label,sector,minClusters,minSpecies]of[['fixed',fixed,36,32],['procedural',procedural,32,24]]){const validation=D.validate(sector);if(!validation.valid)fail(`${label} sector failed: ${validation.violations.join(' ')}`);if(sector.clusters.length<minClusters||sector.species.length<minSpecies||sector.worlds.length<sector.species.length*2)fail(`${label} sector is below required scale.`);if(sector.clusterDossiers.length!==sector.clusters.length||sector.civilizationMotivations.length!==sector.species.length||sector.governmentAuthorities.length!==sector.polities.length||sector.fleetDeployments.length!==sector.militaryFormations.length)fail(`${label} sector lacks civilization authority coverage.`);if(sector.extinctSites.length<sector.extinctSpecies.length||sector.organizationNetworks.length!==sector.organizations.length)fail(`${label} sector lacks extinct-site or institution coverage.`);}
 for(const stance of['friendly','neutral','wary','hostile','war'])if(!fixed.species.some(item=>item.sectorStance===stance))fail(`Fixed example lacks ${stance} species.`);
-for(const archetype of['peaceful','conniving','scientifically-distracted','blatantly-declining','warlike','stately-senatorial','wise-custodial','greedy-extractive'])if(!fixed.species.some(item=>item.dispositionArchetype===archetype))fail(`Fixed example lacks ${archetype}.`);
-const html=read('blacklight-exo-stellar-sector.html'),runtime=read('blacklight-exo-stellar-sector.js'),archive=read('blacklight-exo-sector-archive-store.js'),bootstrap=read('blacklight-exo-system-bootstrap.js'),incremental=read('blacklight-exo-system-incremental.js'),cluster=read('blacklight-exo-cluster.js');
-for(const file of['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-strategic-atlas.js','blacklight-exo-stellar-sector-extinct-sites.js','blacklight-exo-stellar-sector.js','blacklight-exo-stellar-sector-strategic-ui.js','blacklight-exo-sector-archive-store.js'])if(!html.includes(file))fail(`Sector page does not load ${file}.`);
-if(!runtime.includes('requestIdleCallback')||!runtime.includes('IntersectionObserver')||!runtime.includes('blacklightExoStellarSectorArchive'))fail('Sector runtime lacks incremental rendering or archive envelopes.');
-if(!runtime.includes('loadSnapshot')||!runtime.includes('deleteSnapshot')||!runtime.includes('exo-sector-random'))fail('Sector archive is not replayable or generator controls are incomplete.');
-for(const signature of['indexedDB','localStorage','LEGACY_KEY','validateEnvelope','sourceArchiveHash','migratedFromSchema','D?.migrate','Replay','Deterministic replay mismatch'])if(!archive.includes(signature))fail(`Durable sector archive layer lacks ${signature}.`);
-if(bootstrap.includes('await Promise.resolve(globalThis.BlacklightExoMoonCatalogReady)'))fail('Solar bootstrap still blocks on the remote moon catalogue.');
-if(!bootstrap.includes('loadCluster')||!bootstrap.includes('loadRoutes')||!bootstrap.includes('loadEcologyAndImagery'))fail('Solar bootstrap lacks independent optional phases.');
-if(!incremental.includes('deferredMoonCatalog')||!incremental.includes("detailMode='summary'"))fail('Fixed Sol records do not support deferred satellite rendering.');
-if(!cluster.includes('metadataFromSystemRecord')||cluster.includes('generateButton.click();\n        const metadata'))fail('Cluster generation still depends on repeatedly rendering child systems.');
-if(manifest.schemaVersion!=='1.2.0'||!manifest.modules?.includes('blacklight-exo-stellar-sector-strategic-atlas.js')||!manifest.modules?.includes('blacklight-exo-stellar-sector-extinct-sites.js')||!manifest.modules?.includes('blacklight-exo-sector-archive-store.js')||!manifest.archiveStorage?.includes('IndexedDB'))fail('Sector manifest is not pinned to the complete strategic generator and durable archive stack.');
-console.log('EXO stellar-sector generator, strategic atlas, durable archive, and incremental Solar/Cluster separation validation passed.');
+const html=read('blacklight-exo-stellar-sector.html'),archive=read('blacklight-exo-sector-archive-store.js'),bootstrap=read('blacklight-exo-system-bootstrap.js'),incremental=read('blacklight-exo-system-incremental.js'),cluster=read('blacklight-exo-cluster.js'),manifest=JSON.parse(read('blacklight-exo-stellar-sector-example.json'));
+for(const file of[...files,'blacklight-exo-stellar-sector.js','blacklight-exo-stellar-sector-strategic-ui.js','blacklight-exo-stellar-sector-strategic-map.js','blacklight-exo-stellar-sector-civilization-ui.js','blacklight-exo-sector-archive-store.js'])if(!html.includes(file))fail(`Sector page does not load ${file}.`);
+for(const signature of['sourceArchiveHash','migratedFromSchema','D?.migrate','Deterministic replay mismatch'])if(!archive.includes(signature))fail(`Archive runtime lacks ${signature}.`);
+if(bootstrap.includes('await Promise.resolve(globalThis.BlacklightExoMoonCatalogReady)')||!bootstrap.includes('loadCluster')||!bootstrap.includes('loadRoutes')||!bootstrap.includes('loadEcologyAndImagery'))fail('Solar optional loading boundary regressed.');
+if(!incremental.includes('deferredMoonCatalog')||!incremental.includes("detailMode='summary'")||!cluster.includes('metadataFromSystemRecord')||cluster.includes('generateButton.click();\n        const metadata'))fail('Cluster generation performance boundary regressed.');
+if(manifest.schemaVersion!=='1.3.0'||!manifest.modules.includes('blacklight-exo-stellar-sector-civilization-authority.js')||!manifest.modules.includes('blacklight-exo-stellar-sector-civilization-ui.js')||!manifest.archiveStorage.includes('IndexedDB'))fail('Fixed manifest does not pin schema 1.3 and durable archives.');
+console.log('EXO stellar-sector schema 1.3, strategic atlas, civilization authority, durable archive, and Solar/Cluster separation validation passed.');

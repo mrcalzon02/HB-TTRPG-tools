@@ -1,10 +1,13 @@
 package io.github.mrcalzon02.barotrauma.desktop.assets;
 
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.ResolvedGraphic;
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.VisualRole;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets;
-import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.AssetRole;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.Candidate;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.DiscoverySource;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.Mode;
+import io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,6 +24,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -30,22 +34,26 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-/** Installer/settings surface for local donor Barotrauma graphical assets. */
+/** Installer/settings surface for local donor Barotrauma graphical assets and independent fallbacks. */
 public final class DonorAssetSetupWindow extends JFrame {
     private final BarotraumaDonorAssets assets = new BarotraumaDonorAssets();
+    private final BarotraumaAssetCatalogue catalogue = new BarotraumaAssetCatalogue(assets);
     private final javax.swing.DefaultListModel<Candidate> candidatesModel = new javax.swing.DefaultListModel<>();
     private final JList<Candidate> candidates = new JList<>(candidatesModel);
     private final JTextArea details = new JTextArea();
     private final JLabel status = new JLabel("Ready");
-    private final JPanel previews = new JPanel(new GridLayout(2, 2, 12, 12));
+    private final JPanel previews = new JPanel(new GridLayout(0, 4, 10, 10));
+    private boolean previewBusy;
 
     public DonorAssetSetupWindow() {
-        super("Barotrauma Donor Asset Setup");
+        super("Barotrauma Donor Asset Setup and Catalogue");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new Dimension(900, 640));
-        setSize(1150, 760);
+        setMinimumSize(new Dimension(1000, 680));
+        setSize(1450, 900);
         setLocationByPlatform(true);
 
         JPanel root = new JPanel(new BorderLayout(12, 12));
@@ -74,13 +82,13 @@ public final class DonorAssetSetupWindow extends JFrame {
     private JPanel header() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JLabel title = new JLabel("Graphical asset source");
+        JLabel title = new JLabel("Graphical asset source and semantic catalogue");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 22f));
         panel.add(title);
         panel.add(Box.createVerticalStrut(6));
-        panel.add(new JLabel("Use graphical files from a locally installed copy of Barotrauma, or use packaged fallback PNGs."));
+        panel.add(new JLabel("Use UI atlases, map markers, backgrounds, status symbols, and operation icons from a local Barotrauma installation."));
         panel.add(Box.createVerticalStrut(4));
-        panel.add(new JLabel("The toolbox stores only a local folder pointer. Donor assets are not copied into releases or the repository."));
+        panel.add(new JLabel("Atlas source rectangles are read from Barotrauma XML styles. Missing roles use independent Java2D fallbacks; donor files are never copied."));
         return panel;
     }
 
@@ -95,11 +103,13 @@ public final class DonorAssetSetupWindow extends JFrame {
         JButton useSelected = new JButton("Use Selected Donor");
         JButton useAuto = new JButton("Use Automatic Detection");
         JButton fallback = new JButton("Use Fallback Assets Only");
+        JButton graphicalMap = new JButton("Open Graphical World Map");
         buttons.add(rescan);
         buttons.add(browse);
         buttons.add(useSelected);
         buttons.add(useAuto);
         buttons.add(fallback);
+        buttons.add(graphicalMap);
         left.add(buttons, BorderLayout.SOUTH);
 
         rescan.addActionListener(event -> discover());
@@ -107,20 +117,27 @@ public final class DonorAssetSetupWindow extends JFrame {
         useSelected.addActionListener(event -> saveSelected());
         useAuto.addActionListener(event -> saveAutomatic());
         fallback.addActionListener(event -> saveFallback());
+        graphicalMap.addActionListener(event -> {
+            DonorBackedWorldMapWindow window = new DonorBackedWorldMapWindow();
+            window.setLocationRelativeTo(this);
+            window.setVisible(true);
+        });
 
         JPanel right = new JPanel(new BorderLayout(8, 8));
-        right.setBorder(BorderFactory.createTitledBorder("Validation and preview"));
+        right.setBorder(BorderFactory.createTitledBorder("Validation, coverage, and previews"));
         details.setEditable(false);
         details.setLineWrap(true);
         details.setWrapStyleWord(true);
-        details.setRows(8);
+        details.setRows(9);
         right.add(new JScrollPane(details), BorderLayout.NORTH);
         previews.setBorder(new EmptyBorder(8, 8, 8, 8));
-        right.add(previews, BorderLayout.CENTER);
+        JScrollPane previewScroll = new JScrollPane(previews);
+        previewScroll.getVerticalScrollBar().setUnitIncrement(24);
+        right.add(previewScroll, BorderLayout.CENTER);
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
-        split.setDividerLocation(520);
-        split.setResizeWeight(0.45);
+        split.setDividerLocation(500);
+        split.setResizeWeight(0.34);
         return split;
     }
 
@@ -138,7 +155,7 @@ public final class DonorAssetSetupWindow extends JFrame {
         for (Candidate candidate : found) candidatesModel.addElement(candidate);
         if (!found.isEmpty()) candidates.setSelectedIndex(0);
         status.setText(found.isEmpty()
-                ? "No valid donor installation found automatically; fallback assets remain available."
+                ? "No donor installation found automatically; every visual role still has a procedural fallback."
                 : "Found " + found.size() + " valid Barotrauma installation" + (found.size() == 1 ? "." : "s."));
         showConfiguration();
     }
@@ -170,7 +187,8 @@ public final class DonorAssetSetupWindow extends JFrame {
         }
         try {
             assets.saveConfiguration(Mode.MANUAL, selected.installationRoot());
-            status.setText("Manual donor installation saved.");
+            catalogue.clearCache();
+            status.setText("Manual donor installation saved; rebuilding semantic catalogue.");
             refreshPreviews();
             showConfiguration();
         } catch (Exception exception) {
@@ -182,7 +200,8 @@ public final class DonorAssetSetupWindow extends JFrame {
         try {
             assets.saveConfiguration(Mode.AUTO, candidatesModel.isEmpty() ? null
                     : candidatesModel.firstElement().installationRoot());
-            status.setText("Automatic donor discovery enabled.");
+            catalogue.clearCache();
+            status.setText("Automatic donor discovery enabled; rebuilding semantic catalogue.");
             refreshPreviews();
             showConfiguration();
         } catch (Exception exception) {
@@ -193,7 +212,8 @@ public final class DonorAssetSetupWindow extends JFrame {
     private void saveFallback() {
         try {
             assets.saveConfiguration(Mode.FALLBACK, null);
-            status.setText("Fallback-only graphical assets enabled.");
+            catalogue.clearCache();
+            status.setText("Fallback-only visuals enabled; rendering independent replacements.");
             refreshPreviews();
             showConfiguration();
         } catch (Exception exception) {
@@ -207,39 +227,86 @@ public final class DonorAssetSetupWindow extends JFrame {
                 + "\n\nContent root:\n" + candidate.contentRoot()
                 + "\n\nDiscovery source: " + candidate.source()
                 + "\nValidation: " + candidate.detail());
+        appendConfiguration();
         details.setCaretPosition(0);
     }
 
     private void showConfiguration() {
+        if (candidates.getSelectedValue() == null) details.setText("No validated donor installation is selected.");
+        appendConfiguration();
+        details.setCaretPosition(0);
+    }
+
+    private void appendConfiguration() {
         try {
             var configuration = assets.loadConfiguration();
             details.append("\n\nCurrent mode: " + configuration.mode()
                     + "\nSaved donor: " + (configuration.donorRoot() == null ? "none" : configuration.donorRoot())
-                    + "\nUpdated: " + configuration.updatedAt());
+                    + "\nUpdated: " + configuration.updatedAt()
+                    + "\n\nResolution order: preferred file → XML style/atlas sprite → semantic image match → procedural fallback.");
         } catch (Exception exception) {
             details.append("\n\nCould not read saved configuration: " + exception.getMessage());
         }
     }
 
     private void refreshPreviews() {
+        if (previewBusy) return;
+        previewBusy = true;
         previews.removeAll();
-        for (AssetRole role : AssetRole.values()) {
-            JPanel card = new JPanel(new BorderLayout(4, 4));
-            card.setBorder(BorderFactory.createEtchedBorder());
-            JLabel image = new JLabel(role.name(), JLabel.CENTER);
-            try {
-                image.setIcon(assets.loadIcon(role, 128, 128));
-                image.setText("");
-            } catch (Exception exception) {
-                image.setText("Preview unavailable");
-            }
-            JLabel source = new JLabel(role.name() + " · " + assets.resolve(role).source(), JLabel.CENTER);
-            card.add(image, BorderLayout.CENTER);
-            card.add(source, BorderLayout.SOUTH);
-            previews.add(card);
-        }
+        previews.add(new JLabel("Indexing Barotrauma UI and map definitions…", JLabel.CENTER));
         previews.revalidate();
         previews.repaint();
+        new SwingWorker<PreviewSet, Void>() {
+            @Override protected PreviewSet doInBackground() throws Exception {
+                List<Preview> rows = new ArrayList<>();
+                for (VisualRole role : VisualRole.values()) {
+                    ResolvedGraphic resolved = catalogue.resolve(role);
+                    int width = role.category() == BarotraumaAssetCatalogue.Category.BACKGROUND ? 150 : 92;
+                    int height = role.category() == BarotraumaAssetCatalogue.Category.BACKGROUND ? 84 : 72;
+                    rows.add(new Preview(role, resolved, catalogue.loadIcon(role, width, height)));
+                }
+                return new PreviewSet(catalogue.coverage(), List.copyOf(rows));
+            }
+
+            @Override protected void done() {
+                try {
+                    PreviewSet result = get();
+                    previews.removeAll();
+                    for (Preview preview : result.rows()) previews.add(previewCard(preview));
+                    details.append("\n\nCurrent role coverage: " + result.coverage().donorCount()
+                            + " donor-backed, " + result.coverage().fallbackCount() + " procedural fallback.");
+                    status.setText("Visual catalogue ready · " + result.coverage().donorCount() + " donor · "
+                            + result.coverage().fallbackCount() + " fallback");
+                } catch (InterruptedException exception) {
+                    Thread.currentThread().interrupt();
+                    status.setText("Preview indexing interrupted.");
+                } catch (ExecutionException exception) {
+                    showFailure(cause(exception));
+                } finally {
+                    previewBusy = false;
+                    previews.revalidate();
+                    previews.repaint();
+                }
+            }
+        }.execute();
+    }
+
+    private JPanel previewCard(Preview preview) {
+        JPanel card = new JPanel(new BorderLayout(4, 4));
+        card.setBorder(BorderFactory.createEtchedBorder());
+        JLabel image = new JLabel(preview.role().label(), preview.icon(), JLabel.CENTER);
+        image.setHorizontalTextPosition(JLabel.CENTER);
+        image.setVerticalTextPosition(JLabel.BOTTOM);
+        image.setBorder(new EmptyBorder(6, 6, 4, 6));
+        String file = preview.resolved().file() == null ? "generated" : preview.resolved().file().getFileName().toString();
+        String crop = preview.resolved().sourceRectangle() == null ? "" : " · crop "
+                + preview.resolved().sourceRectangle().width() + "×" + preview.resolved().sourceRectangle().height();
+        JLabel source = new JLabel(preview.resolved().source() + " · " + file + crop, JLabel.CENTER);
+        source.setFont(source.getFont().deriveFont(10f));
+        source.setToolTipText(preview.resolved().detail());
+        card.add(image, BorderLayout.CENTER);
+        card.add(source, BorderLayout.SOUTH);
+        return card;
     }
 
     private void showFailure(Exception exception) {
@@ -247,6 +314,14 @@ public final class DonorAssetSetupWindow extends JFrame {
         JOptionPane.showMessageDialog(this, exception.getMessage(), "Asset configuration failed",
                 JOptionPane.ERROR_MESSAGE);
     }
+
+    private static Exception cause(ExecutionException exception) {
+        Throwable cause = exception.getCause();
+        return cause instanceof Exception checked ? checked : exception;
+    }
+
+    private record Preview(VisualRole role, ResolvedGraphic resolved, javax.swing.Icon icon) { }
+    private record PreviewSet(BarotraumaAssetCatalogue.CoverageReport coverage, List<Preview> rows) { }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
