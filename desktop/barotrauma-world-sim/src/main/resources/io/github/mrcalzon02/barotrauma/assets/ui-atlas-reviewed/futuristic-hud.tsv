@@ -1,0 +1,43 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+fhud-011	approved	957	29	217	190	futuristic-hud-navigation-radar-panel	panel	Navigation radar panel.
+fhud-030	approved	16	111	30	28	futuristic-hud-warning-triangle	status-icon	Warning triangle icon.
+fhud-035	approved	209	109	31	31	futuristic-hud-stop-button	button	Square stop button.
+fhud-036	approved	254	109	31	31	futuristic-hud-up-button	button	Up navigation button.
+fhud-037	approved	298	109	32	31	futuristic-hud-diamond-button	button	Diamond selection button.
+fhud-038	approved	343	109	31	31	futuristic-hud-down-button	button	Down navigation button.
+fhud-039	approved	388	109	31	31	futuristic-hud-round-button	button	Circular action button.
+fhud-060	approved	1194	162	39	38	futuristic-hud-targeting-reticle	targeting-icon	Circular targeting reticle.
+fhud-068	approved	165	222	36	58	futuristic-hud-touch-control	interaction-icon	Touch interaction icon.
+fhud-093	approved	398	308	24	24	futuristic-hud-medical-plus	status-icon	Medical plus icon.
+fhud-100	approved	23	372	38	38	futuristic-hud-add-button	button	Gold add button.
+fhud-101	approved	82	372	39	38	futuristic-hud-briefcase-button	button	Briefcase operation button.
+fhud-102	approved	143	372	38	38	futuristic-hud-energy-button	button	Energy operation button.
+fhud-103	approved	202	372	39	38	futuristic-hud-ventilation-button	button	Ventilation operation button.
+fhud-104	approved	260	372	39	38	futuristic-hud-maintenance-button	button	Maintenance operation button.
+fhud-105	approved	334	361	230	152	futuristic-hud-analytics-panel	data-panel	Line-chart analytics panel.
+fhud-106	approved	586	367	217	132	futuristic-hud-planetary-telemetry-panel	data-panel	Planetary telemetry panel.
+fhud-117	approved	961	452	59	58	futuristic-hud-progress-dial-75	gauge	Seventy-five percent progress dial.
+fhud-118	approved	1035	452	58	58	futuristic-hud-progress-dial-50	gauge	Fifty percent progress dial.
+fhud-119	approved	1107	452	57	58	futuristic-hud-progress-dial-25	gauge	Twenty-five percent progress dial.
+fhud-126	approved	586	515	217	68	futuristic-hud-waveform-monitor	data-strip	Waveform monitor strip.
+fhud-133	approved	334	526	230	169	futuristic-hud-radar-panel	data-panel	Large circular radar panel.
+fhud-149	approved	20	798	79	61	futuristic-hud-corner-frame	panel-frame	Corner-bracket panel frame.
+fhud-154	approved	833	824	86	39	futuristic-hud-list-control	list-control	Horizontal list control.
+fhud-183	approved	319	976	51	34	futuristic-hud-user-button	button	User label button.
+fhud-184	approved	398	975	157	36	futuristic-hud-blank-label-strip	label-strip	Blank beveled label strip.
+fhud-185	approved	832	979	38	33	futuristic-hud-winged-eagle-badge	badge	Winged eagle badge.
+fhud-186	approved	891	984	45	24	futuristic-hud-winged-lock-badge	badge	Winged lock badge.
+fhud-188	approved	1017	978	37	33	futuristic-hud-compass-star	navigation-icon	Compass star icon.
+fhud-023	approved	586	59	77	46	futuristic-hud-blank-control-panel	panel	Blank dark control panel.
+fhud-025	approved	702	67	235	14	futuristic-hud-tick-strip	data-strip	Dense tick-mark strip.
+fhud-047	approved	702	129	233	21	futuristic-hud-scale-strip	data-strip	Segmented scale strip.
+fhud-059	approved	702	171	235	15	futuristic-hud-segmented-control-strip	control-strip	Segmented control strip with end control.
+fhud-075	approved	226	245	15	15	futuristic-hud-down-left-arrow	navigation-icon	Down-left navigation arrow.
+fhud-085	approved	51	306	29	38	futuristic-hud-touch-button	interaction-icon	Framed touch button.
+fhud-187	approved	955	977	35	35	futuristic-hud-orbital-globe-icon	navigation-icon	Orbital globe icon.
+fhud-024	rejected	683	69	11	10			Blurred decorative micro-glyph without a stable standalone role.
+fhud-043	rejected	788	125	24	14			Embedded blurred numeric glyph; reject as a standalone sprite.
+fhud-044	rejected	827	125	23	14			Embedded blurred numeric glyph; reject as a standalone sprite.
+fhud-045	rejected	866	125	16	14			Embedded blurred numeric glyph; reject as a standalone sprite.
+fhud-078	rejected	683	239	20	11			Merged glowing circle and neighboring dot; not a clean standalone control.
+fhud-165	rejected	1160	865	13	13			Blurred decorative fragment without a reliable semantic role.
