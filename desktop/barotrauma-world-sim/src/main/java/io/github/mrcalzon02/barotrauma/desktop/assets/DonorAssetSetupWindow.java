@@ -4,6 +4,9 @@ import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.ResolvedGraphic;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.VisualRole;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets;
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalog;
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalog.Catalog;
+import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalog.Category;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.Candidate;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.DiscoverySource;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets.Mode;
@@ -38,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/** Installer/settings surface for local donor Barotrauma graphical assets and independent fallbacks. */
+/** Installer/settings surface for local donor Barotrauma media, semantic graphics, and independent fallbacks. */
 public final class DonorAssetSetupWindow extends JFrame {
     private final BarotraumaDonorAssets assets = new BarotraumaDonorAssets();
     private final BarotraumaAssetCatalogue catalogue = new BarotraumaAssetCatalogue(assets);
@@ -82,13 +85,13 @@ public final class DonorAssetSetupWindow extends JFrame {
     private JPanel header() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JLabel title = new JLabel("Graphical asset source and semantic catalogue");
+        JLabel title = new JLabel("Local Barotrauma media source and semantic catalogue");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 22f));
         panel.add(title);
         panel.add(Box.createVerticalStrut(6));
-        panel.add(new JLabel("Use UI atlases, map markers, backgrounds, status symbols, and operation icons from a local Barotrauma installation."));
+        panel.add(new JLabel("Index graphics, music, ambience, sounds, fonts, and video from a locally installed copy of Barotrauma."));
         panel.add(Box.createVerticalStrut(4));
-        panel.add(new JLabel("Atlas source rectangles are read from Barotrauma XML styles. Missing roles use independent Java2D fallbacks; donor files are never copied."));
+        panel.add(new JLabel("XML atlas regions are resolved semantically; only local metadata is retained and donor files are never copied."));
         return panel;
     }
 
@@ -153,11 +156,15 @@ public final class DonorAssetSetupWindow extends JFrame {
         candidatesModel.clear();
         List<Candidate> found = assets.discoverInstallations();
         for (Candidate candidate : found) candidatesModel.addElement(candidate);
-        if (!found.isEmpty()) candidates.setSelectedIndex(0);
+        if (!found.isEmpty()) {
+            candidates.setSelectedIndex(0);
+        } else {
+            details.setText("No valid donor installation was found automatically.");
+            showConfiguration();
+        }
         status.setText(found.isEmpty()
                 ? "No donor installation found automatically; every visual role still has a procedural fallback."
                 : "Found " + found.size() + " valid Barotrauma installation" + (found.size() == 1 ? "." : "s."));
-        showConfiguration();
     }
 
     private void chooseFolder() {
@@ -175,7 +182,6 @@ public final class DonorAssetSetupWindow extends JFrame {
         }
         candidatesModel.add(0, candidate);
         candidates.setSelectedIndex(0);
-        showCandidate(candidate);
     }
 
     private void saveSelected() {
@@ -228,7 +234,40 @@ public final class DonorAssetSetupWindow extends JFrame {
                 + "\n\nDiscovery source: " + candidate.source()
                 + "\nValidation: " + candidate.detail());
         appendConfiguration();
+        inspectCatalog(candidate);
         details.setCaretPosition(0);
+    }
+
+    private void inspectCatalog(Candidate candidate) {
+        status.setText("Indexing local Barotrauma media in the background…");
+        new SwingWorker<Catalog, Void>() {
+            @Override
+            protected Catalog doInBackground() throws Exception {
+                return BarotraumaAssetCatalog.scan(candidate.installationRoot());
+            }
+
+            @Override
+            protected void done() {
+                Candidate selected = candidates.getSelectedValue();
+                if (selected == null || !selected.installationRoot().equals(candidate.installationRoot())) return;
+                try {
+                    Catalog catalog = get();
+                    StringBuilder summary = new StringBuilder("\n\nLocal media catalog: ")
+                            .append(catalog.entries().size()).append(" candidates")
+                            .append("\nFingerprint: ").append(catalog.fingerprint());
+                    for (Category category : Category.values()) {
+                        long count = catalog.categoryCounts().getOrDefault(category, 0L);
+                        if (count > 0) summary.append("\n  ").append(category.externalName()).append(": ").append(count);
+                    }
+                    if (catalog.truncated()) summary.append("\nWARNING: catalog limit reached; results are incomplete.");
+                    details.append(summary.toString());
+                    status.setText("Indexed " + catalog.entries().size() + " local media candidates without copying files.");
+                } catch (Exception exception) {
+                    details.append("\n\nLocal media catalog failed: " + exception.getMessage());
+                    status.setText("Local media indexing failed; fallback graphics remain available.");
+                }
+            }
+        }.execute();
     }
 
     private void showConfiguration() {
@@ -310,7 +349,7 @@ public final class DonorAssetSetupWindow extends JFrame {
     }
 
     private void showFailure(Exception exception) {
-        status.setText("Asset configuration failed.");
+        status.setText("Media configuration failed.");
         JOptionPane.showMessageDialog(this, exception.getMessage(), "Asset configuration failed",
                 JOptionPane.ERROR_MESSAGE);
     }

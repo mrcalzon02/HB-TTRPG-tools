@@ -1,6 +1,6 @@
 # Fleet Response Transit, Natural World, and Resource Extraction
 
-The desktop Barotrauma world database uses schema 014 for fleet response travel, ecological activity, geological activity, natural-resource exposure, finite extraction, freight settlement, and renewable recovery.
+The desktop Barotrauma world database is now at schema 026. Its natural-world and fleet-response behavior begins in schemas 010 through 014; schemas 015 and 016 add observation state and conserved NPC population accounting; schemas 017 through 025 add measured station causality, authoritative population state, allocation-backed faction defense, exact command provenance, and enforced explanation coverage. Schema 026 separates NPC elapsed travel from incident generation with persisted player-equivalent schedules and observer evidence.
 
 ## Fleet response phase machine
 
@@ -174,7 +174,7 @@ NPC docking and freight delivery use the exclusive world writer and settle inven
 Run the live read-only console with:
 
 ```text
-gradle runNaturalWorld
+toolbox.cmd natural-world
 ```
 
 The console exposes:
@@ -196,7 +196,7 @@ The console shares the process-wide selected desktop world and refreshes while P
 The complete verification task includes schema-014 fleet transit, natural-world activity, and schema-013 harvesting:
 
 ```text
-gradle verifyWorldStore
+toolbox.cmd verify
 ```
 
 The fleet transit contract verifies:
@@ -213,7 +213,7 @@ The fleet transit contract verifies:
 
 The harvesting contract verifies:
 
-- Fresh and legacy migration through schema 014.
+- Fresh, legacy, and pre-renumber local-development migration through schema 026.
 - Removal of passive free-ore generation.
 - Finite reserve initialization.
 - Bounded capability-sensitive extraction.

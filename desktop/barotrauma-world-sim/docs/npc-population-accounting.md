@@ -12,7 +12,7 @@ src/main/java/io/github/mrcalzon02/barotrauma/persistence/NpcPopulationAccountin
 The focused verification command is:
 
 ```text
-gradle verifyNpcPopulationAccounting
+toolbox.cmd verify
 ```
 
 ## Purpose

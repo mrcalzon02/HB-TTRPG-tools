@@ -1,8 +1,24 @@
 ﻿Barotrauma asset index
-Generated UTC: 2026-07-19T23:50:04.3975916Z
+Generated UTC: 2026-07-20T00:00:47.8004381Z
 Source: C:\Program Files (x86)\Steam\steamapps\common\Barotrauma
 Total files: 3189
-Graphical asset candidates: 822
+Graphical asset candidates: 823
+Categorized import candidates: 2003
 
-graphical-assets.csv includes PNG, JPG, JPEG, BMP, GIF, TGA, TIF, TIFF, DDS, SVG, and XNB files.
-Paths in RelativePath use forward slashes for later web-tool imports.
+Import categories:
+  ambience: 16
+  backgrounds: 43
+  creature-audio: 533
+  creature-elements: 167
+  effects: 59
+  item-elements: 341
+  map-elements: 162
+  music: 54
+  other-media: 4
+  sound-effects: 509
+  ui-audio: 16
+  ui-elements: 99
+
+graphical-assets.csv includes common image formats, ICO, and XNB files.
+importable-assets.csv also includes OGG, WAV, MP3, FLAC, TTF, OTF, WEBM, and MP4 files.
+Paths in RelativePath use forward slashes for portable desktop-client resolution.

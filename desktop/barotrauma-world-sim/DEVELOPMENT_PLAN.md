@@ -46,7 +46,7 @@ A milestone may be marked **Complete** only when:
 - Desktop UI exposes the behavior.
 - Failure behavior is explicit and fault-contained.
 - Documentation describes committed behavior.
-- `verifyWorldStore` includes the milestone contract.
+- `toolbox.cmd verify` includes the milestone contract.
 
 ## Documentation discipline
 
@@ -111,7 +111,7 @@ The baseline includes deterministic canonical time, one logical writer, automati
 Implemented stable categories, entities, causes, population terms, flow and territory states, visibility and confidence, deterministic identities, population invariants, snapshot safeguards, and canonical event encoding.
 
 ```text
-gradle verifyObservationContract
+toolbox.cmd verify
 ```
 
 ## Slice 1.2 — Schema 015 observation tables
@@ -121,7 +121,7 @@ gradle verifyObservationContract
 Added NPC and creature populations, creature territories, faction presence, population flows, observation events, snapshots, metrics, watch rules, deterministic seeds, and read-optimized views without changing schema-014 source aggregates.
 
 ```text
-gradle verifyObservationFoundation
+toolbox.cmd verify
 ```
 
 ## Slice 1.3 — ObservationRegistry
@@ -131,7 +131,7 @@ gradle verifyObservationFoundation
 Added query-only current state, changed-since-tick, selected-entity history, and unsupported-schema rejection.
 
 ```text
-gradle verifyObservationRegistry
+toolbox.cmd verify
 ```
 
 ## Slice 1.4 — Initial desktop observation surface
@@ -141,7 +141,7 @@ gradle verifyObservationRegistry
 Added the read-only Observation Foundation window for populations, territories, influence, flows, events, snapshots, and metrics.
 
 ```text
-gradle runObservationFoundation
+toolbox.cmd observation
 ```
 
 Focused documentation:
@@ -186,9 +186,8 @@ Current frontier-index changes are recorded explicitly as reconciliation gains o
 The Observation Registry and desktop window expose the complete ledger with changed-since-tick filtering.
 
 ```text
-gradle verifyNpcPopulationAccounting
-gradle verifyObservationRegistry
-gradle runObservationFoundation
+toolbox.cmd verify
+toolbox.cmd observation
 ```
 
 Focused documentation:
@@ -207,7 +206,7 @@ Satisfied:
 - Invalid accounting is rejected.
 - Events and metrics share the passive transaction.
 - Observation Registry and desktop UI expose the evidence.
-- Fresh and legacy migration now advance through schema 016.
+- At Slice 2.1 completion, fresh and legacy migration advanced through schema 016.
 
 ## Slice 2.2 — Capacity, growth, mortality, and morale
 

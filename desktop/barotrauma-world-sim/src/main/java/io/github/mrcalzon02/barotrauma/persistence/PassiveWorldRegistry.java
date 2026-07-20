@@ -72,12 +72,17 @@ public final class PassiveWorldRegistry {
     private static List<VesselRow> readVessels(Connection connection) throws SQLException {
         List<VesselRow> rows = new ArrayList<>();
         String sql = "SELECT v.npc_vessel_id,v.display_name,v.role,v.status,v.hull,v.supplies,v.cargo,"
-                + "v.crew_quality,v.navigation,v.engineering,v.combat,v.mining,v.research,v.route_progress,"
-                + "v.route_ticks_required,v.last_tick,cl.display_name current_name,dl.display_name destination_name,"
-                + "m.mission_id,m.mission_type,m.status mission_status,m.progress mission_progress "
+                + "v.crew_quality,v.navigation,v.engineering,v.combat,v.mining,v.research,"
+                + "COALESCE(t.route_progress,v.route_progress) route_progress,"
+                + "COALESCE(t.route_ticks_required,v.route_ticks_required) route_ticks_required,"
+                + "v.last_tick,cl.display_name current_name,dl.display_name destination_name,"
+                + "m.mission_id,m.mission_type,m.status mission_status,m.progress mission_progress,"
+                + "t.base_arrival_tick,t.scheduled_arrival_tick,t.player_equivalent_incident_count,"
+                + "t.incidents_resolved,t.next_incident_tick,t.cumulative_delay_ticks "
                 + "FROM npc_vessel v JOIN world_location cl ON cl.location_id=v.current_location_id "
                 + "LEFT JOIN world_location dl ON dl.location_id=v.destination_location_id "
                 + "LEFT JOIN world_mission m ON m.mission_id=v.mission_id "
+                + "LEFT JOIN npc_observable_transit t ON t.npc_vessel_id=v.npc_vessel_id "
                 + "ORDER BY CASE v.status WHEN 'LOST' THEN 0 WHEN 'DISABLED' THEN 1 WHEN 'IN_TRANSIT' THEN 2 "
                 + "WHEN 'RETURNING' THEN 3 WHEN 'WORKING' THEN 4 ELSE 5 END,v.display_name";
         try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
@@ -90,7 +95,11 @@ public final class PassiveWorldRegistry {
                     result.getLong("last_tick"), result.getString("current_name"),
                     result.getString("destination_name"), uuid(result.getString("mission_id")),
                     result.getString("mission_type"), result.getString("mission_status"),
-                    nullableInteger(result, "mission_progress")));
+                    nullableInteger(result, "mission_progress"), nullableLong(result, "base_arrival_tick"),
+                    nullableLong(result, "scheduled_arrival_tick"),
+                    nullableInteger(result, "player_equivalent_incident_count"),
+                    nullableInteger(result, "incidents_resolved"), nullableLong(result, "next_incident_tick"),
+                    nullableInteger(result, "cumulative_delay_ticks")));
         }
         return List.copyOf(rows);
     }
@@ -231,7 +240,9 @@ public final class PassiveWorldRegistry {
                             int cargo, int crewQuality, int navigation, int engineering, int combat, int mining,
                             int research, int routeProgress, int routeTicksRequired, long lastTick,
                             String currentLocation, String destinationLocation, UUID missionId,
-                            String missionType, String missionStatus, Integer missionProgress) { }
+                            String missionType, String missionStatus, Integer missionProgress,
+                            Long baseArrivalTick, Long scheduledArrivalTick, Integer plannedIncidents,
+                            Integer incidentsResolved, Long nextIncidentTick, Integer cumulativeDelayTicks) { }
     public record MissionRow(UUID missionId, String type, String status, String origin, String target,
                              String vessel, int difficulty, int rewardCredits, int cargoUnits, int progress,
                              long createdTick, long updatedTick, Long completedTick) { }

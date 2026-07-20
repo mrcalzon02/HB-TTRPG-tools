@@ -1,0 +1,146 @@
+param(
+    [ValidateSet('setup','build','verify','run','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
+    [string]$Command = 'build'
+)
+
+$ErrorActionPreference = 'Stop'
+$projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$sourceRoot = Join-Path $projectRoot 'src/main/java'
+$resourceRoot = Join-Path $projectRoot 'src/main/resources'
+$buildRoot = Join-Path $projectRoot 'build/no-gradle'
+$classesRoot = Join-Path $buildRoot 'classes'
+$temporaryRoot = Join-Path $buildRoot 'temp'
+$libraryRoot = Join-Path $projectRoot 'lib'
+$applicationJar = Join-Path $buildRoot 'barotrauma-world-sim.jar'
+$sqliteVersion = '3.53.1.0'
+$sqliteSha256 = '28aceecfcc9535645bd19fa988385703c7b89982c1506a6855f5942b4032eca6'
+$sqliteJar = Join-Path $libraryRoot "sqlite-jdbc-$sqliteVersion.jar"
+$mavenRoot = 'https://repo.maven.apache.org/maven2'
+
+function Resolve-JdkTool([string]$name) {
+    $tool = Get-Command $name -ErrorAction SilentlyContinue
+    if ($null -ne $tool) { return $tool.Source }
+
+    $executable = if ($IsWindows -or $env:OS -eq 'Windows_NT') { "$name.exe" } else { $name }
+    $jdkHomes = @()
+    if ($env:JAVA_HOME) { $jdkHomes += $env:JAVA_HOME }
+    if ($env:ProgramFiles) {
+        $javaRoot = Join-Path $env:ProgramFiles 'Java'
+        if (Test-Path -LiteralPath $javaRoot) {
+            $jdkHomes += Get-ChildItem -LiteralPath $javaRoot -Directory |
+                Sort-Object Name -Descending |
+                ForEach-Object FullName
+        }
+    }
+    foreach ($jdkHome in $jdkHomes) {
+        $candidate = Join-Path $jdkHome "bin/$executable"
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+    }
+    throw "$name was not found. Install a JDK 17 or newer and reopen the terminal."
+}
+
+function Download-Verified([string]$url, [string]$destination, [string]$expectedSha256) {
+    if (Test-Path -LiteralPath $destination -PathType Leaf) {
+        $existingHash = (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($existingHash -ne $expectedSha256) {
+            throw "Checksum verification failed for existing dependency $destination"
+        }
+        return
+    }
+    New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+    $temporary = "$destination.download"
+    try {
+        Invoke-WebRequest -UseBasicParsing -Uri $url -OutFile $temporary
+        $actual = (Get-FileHash -LiteralPath $temporary -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($actual -ne $expectedSha256) { throw "Checksum verification failed for $url" }
+        Move-Item -LiteralPath $temporary -Destination $destination -Force
+        Write-Host "Verified dependency: $([IO.Path]::GetFileName($destination))"
+    } finally {
+        if (Test-Path -LiteralPath $temporary) { Remove-Item -LiteralPath $temporary -Force }
+    }
+}
+
+function Ensure-Dependencies {
+    Download-Verified "$mavenRoot/org/xerial/sqlite-jdbc/$sqliteVersion/sqlite-jdbc-$sqliteVersion.jar" `
+        $sqliteJar $sqliteSha256
+}
+
+function Build-Application {
+    $javac = Resolve-JdkTool 'javac'
+    $jarTool = Resolve-JdkTool 'jar'
+    if (Test-Path -LiteralPath $classesRoot) { Remove-Item -LiteralPath $classesRoot -Recurse -Force }
+    New-Item -ItemType Directory -Path $classesRoot -Force | Out-Null
+    $sources = @(Get-ChildItem -LiteralPath $sourceRoot -Recurse -Filter '*.java' | ForEach-Object FullName)
+    if ($sources.Count -eq 0) { throw 'No Java sources were found.' }
+    & $javac -encoding UTF-8 --release 17 -d $classesRoot $sources
+    if ($LASTEXITCODE -ne 0) { throw "Java compilation failed with exit code $LASTEXITCODE." }
+    if (Test-Path -LiteralPath $resourceRoot) {
+        Copy-Item -Path (Join-Path $resourceRoot '*') -Destination $classesRoot -Recurse -Force
+    }
+    New-Item -ItemType Directory -Path $buildRoot -Force | Out-Null
+    & $jarTool --create --file $applicationJar --main-class io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication -C $classesRoot .
+    if ($LASTEXITCODE -ne 0) { throw "JAR packaging failed with exit code $LASTEXITCODE." }
+    Write-Host "Built $applicationJar"
+}
+
+function Runtime-Classpath {
+    return "$applicationJar$([IO.Path]::PathSeparator)$sqliteJar"
+}
+
+function Runtime-JavaOptions {
+    New-Item -ItemType Directory -Path $temporaryRoot -Force | Out-Null
+    return @('--enable-native-access=ALL-UNNAMED', "-Djava.io.tmpdir=$temporaryRoot",
+        "-Dorg.sqlite.tmpdir=$temporaryRoot")
+}
+
+function Run-Class([string]$mainClass, [string[]]$arguments = @()) {
+    $java = Resolve-JdkTool 'java'
+    Ensure-Dependencies
+    Build-Application
+    $javaOptions = Runtime-JavaOptions
+    & $java @javaOptions -cp (Runtime-Classpath) $mainClass @arguments
+    if ($LASTEXITCODE -ne 0) { throw "$mainClass failed with exit code $LASTEXITCODE." }
+}
+
+$entryPoints = @{
+    'run' = 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication'
+    'asset-setup' = 'io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow'
+    'world-map' = 'io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow'
+    'observation' = 'io.github.mrcalzon02.barotrauma.desktop.observation.ObservationFoundationWindow'
+    'frontier' = 'io.github.mrcalzon02.barotrauma.desktop.frontier.CivilizationFrontierWindow'
+    'natural-world' = 'io.github.mrcalzon02.barotrauma.desktop.nature.NaturalWorldAndFleetWindow'
+    'logistics' = 'io.github.mrcalzon02.barotrauma.desktop.logistics.StationLogisticsWindow'
+    'player-transit' = 'io.github.mrcalzon02.barotrauma.desktop.logistics.PlayerVesselTransitWindow'
+    'simulation-monitor' = 'io.github.mrcalzon02.barotrauma.desktop.simulation.SimulationMonitorWindow'
+    'web-import' = 'io.github.mrcalzon02.barotrauma.desktop.imports.WebWorldImportApprovalWindow'
+    'import-approval' = 'io.github.mrcalzon02.barotrauma.desktop.imports.WorldImportApprovalWindow'
+    'campaign-mapping' = 'io.github.mrcalzon02.barotrauma.desktop.imports.CampaignVesselMappingWindow'
+    'vessel-registry' = 'io.github.mrcalzon02.barotrauma.desktop.registry.WorldVesselRegistryWindow'
+    'snapshot-approval' = 'io.github.mrcalzon02.barotrauma.desktop.registry.VesselSnapshotApprovalWindow'
+}
+
+switch ($Command) {
+    'setup' { Ensure-Dependencies }
+    'build' { Build-Application }
+    'verify' {
+        Run-Class 'io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite' @('--verify')
+        $java = Resolve-JdkTool 'java'
+        $javaOptions = Runtime-JavaOptions
+        $classpath = Runtime-Classpath
+        $verifications = @(
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22Inspector'; Arguments=@('--verify') },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.official.BarotraumaSaveInspector'; Arguments=@('--verify') },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts'; Arguments=@() }
+        )
+        foreach ($verification in $verifications) {
+            & $java @javaOptions -cp $classpath $verification.MainClass @($verification.Arguments)
+            if ($LASTEXITCODE -ne 0) {
+                throw "$($verification.MainClass) failed with exit code $LASTEXITCODE."
+            }
+        }
+        Write-Host 'Complete Gradle-free desktop verification passed.'
+    }
+    default { Run-Class $entryPoints[$Command] }
+}

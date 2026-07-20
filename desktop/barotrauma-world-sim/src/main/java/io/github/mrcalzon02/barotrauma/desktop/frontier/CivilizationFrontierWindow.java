@@ -43,7 +43,8 @@ public final class CivilizationFrontierWindow extends JFrame {
     private final JTextArea summary = new JTextArea();
 
     private final DefaultTableModel stationModel = model("Frontier", "Station", "Station Status",
-            "Supplies", "Rations", "Last Use", "Shortage", "Surplus", "Population", "Civilization",
+            "Supplies", "Rations", "Last Use", "Shortage", "Surplus", "Residents", "Workforce",
+            "Population Capacity", "Civilization",
             "Fauna", "Position", "Integrity", "Security", "Threat", "Industry", "Tick", "Station ID");
     private final DefaultTableModel consumptionModel = model("Tick", "Station", "Required", "Rations Used",
             "Supply Delta", "Shortage", "Supplies After", "Rations After", "Consumption ID");
@@ -174,12 +175,14 @@ public final class CivilizationFrontierWindow extends JFrame {
                 + "Monster attacks: " + s.monsterAttacks() + "\n\n"
                 + "Every passive tick consumes a small deterministic amount with variation. Ration stock covers demand first; "
                 + "uncovered consumption deepens shortage pressure. Persistent shortages slowly reduce integrity, security, "
-                + "population capacity, and the civilian perimeter. Deliveries, defensive missions, and successful pressure "
+                + "population capacity, and the civilian perimeter. Resident and workforce headcounts begin as a clearly "
+                + "labeled imported estimate, then move only through recorded population events. Deliveries, defensive missions, and successful pressure "
                 + "against fauna can stabilize or expand civilization again.\n");
 
         for (var row : snapshot.stations()) stationModel.addRow(new Object[]{row.frontierState(), row.stationName(),
                 row.stationStatus(), row.supplies(), row.rationStock(), row.lastConsumption(), row.shortageTicks(),
-                row.surplusTicks(), row.populationIndex(), row.civilizationStrength(), row.faunaPressure(),
+                row.surplusTicks(), row.residentCount(), row.workforceCount(), row.populationIndex(),
+                row.civilizationStrength(), row.faunaPressure(),
                 row.frontierPosition(), row.integrity(), row.security(), row.threat(), row.industry(),
                 row.lastTick(), row.stationId()});
         for (var row : snapshot.consumption()) consumptionModel.addRow(new Object[]{row.tickSequence(),

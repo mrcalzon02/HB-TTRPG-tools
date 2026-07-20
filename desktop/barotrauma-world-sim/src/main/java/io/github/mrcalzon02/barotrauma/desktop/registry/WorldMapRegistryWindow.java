@@ -72,8 +72,8 @@ public final class WorldMapRegistryWindow extends JFrame {
             "Integrity", "Threat", "Research", "Last Tick", "Station ID");
     private final DefaultTableModel vesselModel = model(
             "Status", "Vessel", "Role", "Hull", "Supplies", "Cargo", "Current", "Destination", "Mission",
-            "Mission Status", "Progress", "Route", "Crew", "Nav", "Eng", "Combat", "Mining", "Research",
-            "Last Tick", "Vessel ID");
+            "Mission Status", "Progress", "Route", "Incidents", "Revised ETA", "Next Incident", "Crew", "Nav",
+            "Eng", "Combat", "Mining", "Research", "Last Tick", "Vessel ID");
     private final DefaultTableModel missionModel = model(
             "Status", "Type", "Origin", "Target", "Vessel", "Difficulty", "Reward", "Cargo", "Progress",
             "Created", "Updated", "Completed", "Mission ID");
@@ -381,9 +381,11 @@ public final class WorldMapRegistryWindow extends JFrame {
                     vessel.supplies(), vessel.cargo(), blank(vessel.currentLocation()),
                     blank(vessel.destinationLocation()), blank(vessel.missionType()),
                     blank(vessel.missionStatus()), nullable(vessel.missionProgress()),
-                    vessel.routeProgress() + "/" + vessel.routeTicksRequired(), vessel.crewQuality(),
-                    vessel.navigation(), vessel.engineering(), vessel.combat(), vessel.mining(), vessel.research(),
-                    vessel.lastTick(), vessel.vesselId()});
+                    vessel.routeProgress() + "/" + vessel.routeTicksRequired(), incidentProgress(vessel),
+                    nullable(vessel.scheduledArrivalTick()),
+                    nullable(vessel.nextIncidentTick()), vessel.crewQuality(), vessel.navigation(),
+                    vessel.engineering(), vessel.combat(), vessel.mining(), vessel.research(), vessel.lastTick(),
+                    vessel.vesselId()});
         }
         for (MissionRow mission : passive.missions()) {
             missionModel.addRow(new Object[]{mission.status(), mission.type(), blank(mission.origin()),
@@ -442,6 +444,15 @@ public final class WorldMapRegistryWindow extends JFrame {
                     .append(" · Cargo ").append(vessel.cargo()).append('\n')
                     .append("Current: ").append(blank(vessel.currentLocation()))
                     .append(" · Destination: ").append(blank(vessel.destinationLocation())).append('\n')
+                    .append("Route: ").append(vessel.routeProgress()).append('/')
+                    .append(vessel.routeTicksRequired()).append(" elapsed ticks · ")
+                    .append(Math.max(0, vessel.routeTicksRequired() - vessel.routeProgress()))
+                    .append(" remaining · last update tick ").append(vessel.lastTick()).append('\n')
+                    .append("Incidents: ").append(incidentProgress(vessel))
+                    .append(" · next at tick ").append(nullable(vessel.nextIncidentTick())).append('\n')
+                    .append("Arrival estimate: base ").append(nullable(vessel.baseArrivalTick()))
+                    .append(" · revised ").append(nullable(vessel.scheduledArrivalTick()))
+                    .append(" · accumulated delay ").append(nullable(vessel.cumulativeDelayTicks())).append('\n')
                     .append("Mission: ").append(blank(vessel.missionType())).append(" · ")
                     .append(blank(vessel.missionStatus())).append(" · ")
                     .append(nullable(vessel.missionProgress())).append("%\n\n");
@@ -489,6 +500,11 @@ public final class WorldMapRegistryWindow extends JFrame {
                 + "Stations rise, stabilize, strain, become besieged, or fall according to supplies, industry, "
                 + "security, integrity, and threat. NPC vessels answer with trade, mining, fauna-clearing, "
                 + "defense, research, salvage, and transit missions resolved by the shared player transit engine.\n";
+    }
+
+    private static String incidentProgress(VesselRow vessel) {
+        return vessel.plannedIncidents() == null ? "—"
+                : nullable(vessel.incidentsResolved()) + "/" + vessel.plannedIncidents();
     }
 
     private void setBusy(boolean value, String message) {

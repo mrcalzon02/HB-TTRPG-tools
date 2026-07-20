@@ -28,29 +28,6 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          gradle-version: "9.5.1"
-          cache-provider: basic
-
-      - name: Compile desktop application
-        run: gradle -p desktop/barotrauma-world-sim clean compileJava --no-daemon
-
-      - name: Verify identity and session contracts
-        run: |
-          gradle -p desktop/barotrauma-world-sim classes --no-daemon
-          java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
-            io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts
-          java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
-            io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession
-
-      - name: Verify compatibility and storage contracts
-        run: |
-          gradle -p desktop/barotrauma-world-sim verifyWorldStore --no-daemon
-          java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
-            io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22Inspector --verify
-          java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
-            io.github.mrcalzon02.barotrauma.compatibility.official.BarotraumaSaveInspector --verify
-          java -cp "desktop/barotrauma-world-sim/build/classes/java/main" \
-            io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts
+      - name: Build and verify without Gradle
+        shell: pwsh
+        run: ./desktop/barotrauma-world-sim/toolbox.ps1 verify

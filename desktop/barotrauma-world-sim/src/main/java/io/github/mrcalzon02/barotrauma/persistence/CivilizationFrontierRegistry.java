@@ -57,8 +57,10 @@ public final class CivilizationFrontierRegistry {
         String sql = "SELECT c.station_id,ws.display_name,s.status,s.supplies,COALESCE(inv.quantity,0) ration_stock,"
                 + "s.integrity,s.security,s.threat,s.industry,c.population_index,c.civilization_strength,"
                 + "c.fauna_pressure,c.supply_consumption_base,c.last_consumption,c.shortage_ticks,c.surplus_ticks,"
-                + "c.frontier_position,c.frontier_state,c.last_tick FROM station_civilization_state c "
+                + "c.frontier_position,c.frontier_state,c.last_tick,p.baseline_kind,p.resident_count,p.workforce_count "
+                + "FROM station_civilization_state c "
                 + "JOIN station_simulation_state s ON s.station_id=c.station_id "
+                + "JOIN station_population_state p ON p.station_id=c.station_id "
                 + "JOIN world_station ws ON ws.station_id=c.station_id "
                 + "LEFT JOIN station_inventory inv ON inv.station_id=c.station_id AND inv.item_id='item-rations' "
                 + "ORDER BY CASE c.frontier_state WHEN 'ABANDONED' THEN 0 WHEN 'CONTRACTING' THEN 1 "
@@ -73,7 +75,8 @@ public final class CivilizationFrontierRegistry {
                     result.getInt("supply_consumption_base"), result.getInt("last_consumption"),
                     result.getInt("shortage_ticks"), result.getInt("surplus_ticks"),
                     result.getInt("frontier_position"), result.getString("frontier_state"),
-                    result.getLong("last_tick")));
+                    result.getLong("last_tick"), result.getString("baseline_kind"),
+                    result.getInt("resident_count"), result.getInt("workforce_count")));
         }
         return List.copyOf(rows);
     }
@@ -202,7 +205,8 @@ public final class CivilizationFrontierRegistry {
                              int civilizationStrength, int faunaPressure,
                              int consumptionBase, int lastConsumption, int shortageTicks,
                              int surplusTicks, int frontierPosition, String frontierState,
-                             long lastTick) { }
+                             long lastTick, String populationBaselineKind,
+                             int residentCount, int workforceCount) { }
 
     public record ConsumptionRow(String consumptionId, UUID stationId, String stationName,
                                  long tickSequence, int requiredUnits, int rationUnitsConsumed,

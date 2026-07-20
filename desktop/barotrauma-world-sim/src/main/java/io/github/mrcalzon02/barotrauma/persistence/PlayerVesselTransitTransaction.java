@@ -2,6 +2,7 @@ package io.github.mrcalzon02.barotrauma.persistence;
 
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldLock;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
+import io.github.mrcalzon02.barotrauma.simulation.NpcTransitScheduleEngine;
 import io.github.mrcalzon02.barotrauma.simulation.TransitResolutionEngine;
 import io.github.mrcalzon02.barotrauma.simulation.TransitResolutionEngine.MissionType;
 import io.github.mrcalzon02.barotrauma.simulation.TransitResolutionEngine.Resolution;
@@ -343,7 +344,7 @@ public final class PlayerVesselTransitTransaction {
     private static int routeTicks(Connection connection, UUID from, UUID to) throws SQLException {
         int[] a = coordinates(connection, from);
         int[] b = coordinates(connection, to);
-        return clamp(2 + Math.abs(a[0] - b[0]) / 8 + Math.abs(a[1] - b[1]), 2, 24);
+        return NpcTransitScheduleEngine.playerEquivalentChallengeCount(a[0], a[1], b[0], b[1]);
     }
 
     private static int locationLevel(Connection connection, UUID location) throws SQLException {

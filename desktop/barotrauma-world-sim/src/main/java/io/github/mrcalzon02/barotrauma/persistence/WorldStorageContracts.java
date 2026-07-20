@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 16;
+    public static final int DATABASE_SCHEMA_VERSION = 26;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -183,6 +183,16 @@ public final class WorldStorageContracts {
     public static List<String> schema014Statements() { return FleetResponseTransitSchema.statements(); }
     public static List<String> schema015Statements() { return ObservationFoundationSchema.statements(); }
     public static List<String> schema016Statements() { return NpcPopulationAccountingSchema.statements(); }
+    public static List<String> schema017Statements() { return StationCausalitySchema.statements(); }
+    public static List<String> schema018Statements() { return StationConsumptionCausalitySchema.statements(); }
+    public static List<String> schema019Statements() { return StationProductionCausalitySchema.statements(); }
+    public static List<String> schema020Statements() { return StationDeliveryCausalitySchema.statements(); }
+    public static List<String> schema021Statements() { return StationFrontierCausalitySchema.statements(); }
+    public static List<String> schema022Statements() { return StationPopulationCausalitySchema.statements(); }
+    public static List<String> schema023Statements() { return FactionPlanCausalitySchema.statements(); }
+    public static List<String> schema024Statements() { return StationCommandCausalitySchema.statements(); }
+    public static List<String> schema025Statements() { return StationMutationCoverageSchema.statements(); }
+    public static List<String> schema026Statements() { return NpcTransitObserverSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -291,6 +301,30 @@ public final class WorldStorageContracts {
             require(schema016Statements().stream().anyMatch(sql -> sql.contains("npc_population_ledger")), "Conserved NPC population accounting is missing.");
             require(schema016Statements().stream().anyMatch(sql -> sql.contains("npc_population_tick_accounting")), "Passive NPC population reconciliation is missing.");
             require(schema016Statements().stream().anyMatch(sql -> sql.contains("after_total=before_total")), "Population conservation constraint is missing.");
+            require(schema017Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE station_event ")), "Station causal events are missing.");
+            require(schema017Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE station_change ")), "Typed station changes are missing.");
+            require(schema017Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE station_population_event ")), "Population event evidence is missing.");
+            require(schema017Statements().stream().anyMatch(sql -> sql.contains("CREATE TABLE faction_plan ")), "Faction planning state is missing.");
+            require(schema018Statements().stream().anyMatch(sql -> sql.contains("station_causal_capture_before_tick")), "Consumption baseline capture is missing.");
+            require(schema018Statements().stream().anyMatch(sql -> sql.contains("station_consumption_causal_event")), "Consumption causal collection is missing.");
+            require(schema019Statements().stream().anyMatch(sql -> sql.contains("station_production_outcome")), "Production outcome evidence is missing.");
+            require(schema019Statements().stream().anyMatch(sql -> sql.contains("station_production_outcome_gate")), "Production failure gating is missing.");
+            require(schema019Statements().stream().anyMatch(sql -> sql.contains("station_production_story")), "Production story view is missing.");
+            require(schema020Statements().stream().anyMatch(sql -> sql.contains("station_delivery_capture")), "Delivery baseline capture is missing.");
+            require(schema020Statements().stream().anyMatch(sql -> sql.contains("station_delivery_causal_event")), "Delivery causal collection is missing.");
+            require(schema020Statements().stream().anyMatch(sql -> sql.contains("station_delivery_story")), "Delivery story view is missing.");
+            require(schema021Statements().stream().anyMatch(sql -> sql.contains("station_frontier_finalize_tick")), "Frontier causal collection is missing.");
+            require(schema021Statements().stream().anyMatch(sql -> sql.contains("station_frontier_story")), "Frontier story view is missing.");
+            require(schema022Statements().stream().anyMatch(sql -> sql.contains("station_population_finalize_tick")), "Population causal collection is missing.");
+            require(schema022Statements().stream().anyMatch(sql -> sql.contains("station_population_coverage")), "Population mutation coverage is missing.");
+            require(schema023Statements().stream().anyMatch(sql -> sql.contains("faction_plan_resource_allocation")), "Faction allocation backing is missing.");
+            require(schema023Statements().stream().anyMatch(sql -> sql.contains("station_faction_resource_availability")), "Faction resource availability is missing.");
+            require(schema024Statements().stream().anyMatch(sql -> sql.contains("station_event_links_active_command")), "Station command provenance is missing.");
+            require(schema024Statements().stream().anyMatch(sql -> sql.contains("station_event_command_history")), "Station command history is missing.");
+            require(schema025Statements().stream().anyMatch(sql -> sql.contains("station_mutation_explanation")), "Mutation explanation coverage is missing.");
+            require(schema025Statements().stream().anyMatch(sql -> sql.contains("ENFORCE")), "Enforced station explanation policy is missing.");
+            require(schema026Statements().stream().anyMatch(sql -> sql.contains("npc_transit_incident_schedule")), "NPC transit incident scheduling is missing.");
+            require(schema026Statements().stream().anyMatch(sql -> sql.contains("npc_observable_transit")), "NPC observer transit projection is missing.");
 
             try (WorldLock ignored = acquireExclusiveLock(paths)) {
                 try {

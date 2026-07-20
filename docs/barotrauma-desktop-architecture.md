@@ -44,8 +44,8 @@ The first desktop parity release will not:
 ```text
 desktop/barotrauma-world-sim/
 ├── README.md
-├── settings.gradle.kts
-├── build.gradle.kts
+├── toolbox.cmd
+├── toolbox.ps1
 ├── src/
 │   ├── main/
 │   │   ├── java/io/github/mrcalzon02/barotrauma/
@@ -515,11 +515,11 @@ An application release may update more than one version. Import and migration re
 
 ## Build and packaging
 
-Gradle Kotlin DSL is used for the initial project.
+The desktop project uses a small PowerShell toolbox and the standard JDK 17 tools directly. Gradle is not required.
 
-The initial shell has no external dependencies. SQLite and JSON/XML support libraries will be selected deliberately in later commits and recorded here before use.
+SQLite JDBC is pinned by version, downloaded from Maven Central on first setup, and accepted only after its published SHA-256 checksum matches. JSON and XML inspection remain implemented with the JDK.
 
-The `application` plugin defines the desktop entry point. Packaging scripts will later use `jlink` or `jpackage` through explicit Gradle tasks or documented commands.
+`toolbox.cmd build` compiles and packages the application JAR. Future native packaging may use `jlink` or `jpackage` through this same documented toolchain.
 
 ## Implementation sequence
 

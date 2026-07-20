@@ -47,10 +47,13 @@ public final class StationLogisticsVerification {
                 var enabled = executor.submit(new SimulationCommandExecutor.Enable(), "logistics-test").join();
                 SimulationCheckpointStore.persist(paths, enabled, "Enable logistics contract world");
                 step(paths, executor);
-                require(count(paths, "item_catalogue") == 8, "Item catalogue seed failed.");
+                long catalogueItems = count(paths, "item_catalogue");
+                require(catalogueItems >= 8, "Item catalogue seed failed.");
                 require(count(paths, "production_recipe") == 4, "Production recipe seed failed.");
-                require(count(paths, "station_inventory") == 24, "Station inventory seed failed.");
-                require(count(paths, "station_vendor_offer") == 24, "Vendor offer seed failed.");
+                require(count(paths, "station_inventory") == catalogueItems * 3,
+                        "Station inventory seed failed.");
+                require(count(paths, "station_vendor_offer") == catalogueItems * 3,
+                        "Vendor offer seed failed.");
                 require(count(paths, "station_production_run") > 0, "Passive production did not run.");
                 require(count(paths, "treasury_transaction") > 0, "Production treasury entries are missing.");
                 forceFreightShortage(paths);
@@ -97,6 +100,8 @@ public final class StationLogisticsVerification {
                     "Player voyage and freight history is incomplete.");
             require(freightStatus(paths, lotId).equals("DELIVERED"),
                     "Freight lot did not retain delivered state.");
+            requireDeliveryCausality(paths, lotId, "PLAYER_VESSEL", delivered.quantity());
+            verifyProductionCausality(paths);
             require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
                     "Logistics fixture was not stored under the current database schema.");
         } finally {
@@ -161,6 +166,216 @@ public final class StationLogisticsVerification {
                 if (!result.next()) throw new IllegalStateException("Freight lot disappeared.");
                 return result.getString(1);
             }
+        }
+    }
+
+    private static void requireDeliveryCausality(WorldPaths paths, String lotId, String carrierType,
+                                                  int expectedInventoryDelta) throws Exception {
+        String sql = "SELECT e.actor_type,c.reason_code,c.delta_value FROM station_event e "
+                + "JOIN station_change c ON c.event_id=e.event_id WHERE e.cause_type='FREIGHT_LOT' "
+                + "AND e.cause_id=? AND c.change_id=?";
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, lotId);
+            statement.setString(2, lotId + ":delivery-inventory");
+            try (ResultSet result = statement.executeQuery()) {
+                require(result.next() && carrierType.equals(result.getString("actor_type"))
+                                && "FREIGHT_DELIVERY".equals(result.getString("reason_code"))
+                                && result.getInt("delta_value") == expectedInventoryDelta,
+                        "Player freight delivery did not retain carrier-attributed inventory causality.");
+            }
+            try (PreparedStatement count = connection.prepareStatement(
+                    "SELECT (SELECT COUNT(*) FROM station_event WHERE cause_type='FREIGHT_LOT' AND cause_id=?),"
+                            + "(SELECT COUNT(*) FROM station_change c JOIN station_event e ON e.event_id=c.event_id "
+                            + "WHERE e.cause_type='FREIGHT_LOT' AND e.cause_id=? AND "
+                            + "ABS((c.previous_value+c.delta_value)-c.resulting_value)>=0.000001),"
+                            + "(SELECT COUNT(*) FROM station_delivery_baseline WHERE lot_id=?)")) {
+                count.setString(1, lotId);
+                count.setString(2, lotId);
+                count.setString(3, lotId);
+                try (ResultSet result = count.executeQuery()) {
+                    require(result.next() && result.getInt(1) == 1 && result.getInt(2) == 0
+                                    && result.getInt(3) == 0,
+                            "Delivery story volume, arithmetic, or baseline cleanup failed.");
+                }
+            }
+        }
+    }
+
+    private static void verifyProductionCausality(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
+            UUID stationId = station(connection, "station-c");
+            execute(connection, "UPDATE station_simulation_state SET credits=5000,integrity=90 WHERE station_id=?",
+                    stationId);
+            execute(connection, "UPDATE station_inventory SET quantity=100,reserved=0 WHERE station_id=? "
+                    + "AND item_id IN ('item-ore','item-steel','item-rations','item-research')", stationId);
+
+            long identityOffset = stationId.toString().charAt(0);
+            long successTick = tickAvoiding(identityOffset, 2100, 17, 29);
+            int oreBefore = inventory(paths, "station-c", "item-ore");
+            int steelBefore = inventory(paths, "station-c", "item-steel");
+            int creditsBefore = stationValue(connection, stationId, "credits");
+            insertProductionRun(connection, stationId, successTick, "COMPLETE");
+            require(outcome(connection, stationId, successTick).equals("SUCCESS"),
+                    "Affordable production did not retain a success outcome.");
+            require(inventory(paths, "station-c", "item-ore") == oreBefore - 3
+                            && inventory(paths, "station-c", "item-steel") == steelBefore + 2,
+                    "Successful production did not apply its declared input and output quantities.");
+            require(stationValue(connection, stationId, "credits") == creditsBefore - 120,
+                    "Successful production did not apply its declared credit cost.");
+
+            execute(connection, "UPDATE station_inventory SET quantity=0,reserved=0 WHERE station_id=? "
+                    + "AND item_id='item-ore'", stationId);
+            long inputTick = successTick + 1;
+            int inputCreditsBefore = stationValue(connection, stationId, "credits");
+            insertProductionRun(connection, stationId, inputTick, "FAILED");
+            require(outcome(connection, stationId, inputTick).equals("INPUT_SHORTFALL"),
+                    "Missing materials did not retain an input-shortfall outcome.");
+            require(stationValue(connection, stationId, "credits") == inputCreditsBefore,
+                    "An input shortfall incorrectly spent production credits.");
+
+            execute(connection, "UPDATE station_inventory SET quantity=100,reserved=0 WHERE station_id=? "
+                    + "AND item_id='item-ore'", stationId);
+            execute(connection, "UPDATE station_simulation_state SET credits=0 WHERE station_id=?", stationId);
+            long creditTick = tickAvoiding(identityOffset, inputTick + 1, 17, 29);
+            int creditOreBefore = inventory(paths, "station-c", "item-ore");
+            insertProductionRun(connection, stationId, creditTick, "COMPLETE");
+            require(outcome(connection, stationId, creditTick).equals("CREDIT_SHORTFALL"),
+                    "Insufficient funds did not retain a credit-shortfall outcome.");
+            require(inventory(paths, "station-c", "item-ore") == creditOreBefore,
+                    "A credit shortfall incorrectly consumed production inputs.");
+
+            execute(connection, "UPDATE station_simulation_state SET credits=5000,integrity=90 WHERE station_id=?",
+                    stationId);
+            long failureTick = tickMatching(identityOffset, creditTick + 1, 17, 29);
+            insertProductionRun(connection, stationId, failureTick, "COMPLETE");
+            require(outcome(connection, stationId, failureTick).equals("EQUIPMENT_FAILURE")
+                            && stationValue(connection, stationId, "integrity") == 89,
+                    "Equipment failure did not retain its outcome and one-point integrity loss.");
+
+            long sabotageTick = tickMatching(identityOffset, failureTick + 1, 29, 0);
+            insertProductionRun(connection, stationId, sabotageTick, "COMPLETE");
+            require(outcome(connection, stationId, sabotageTick).equals("SABOTAGE")
+                            && stationValue(connection, stationId, "integrity") == 87,
+                    "Sabotage did not retain its inferred story and two-point integrity loss.");
+
+            require(countProduction(connection, stationId, successTick, sabotageTick,
+                            "station_production_outcome") == 5,
+                    "A production attempt disappeared from the outcome ledger.");
+            require(countProduction(connection, stationId, successTick, sabotageTick,
+                            "station_event") == 5,
+                    "Production did not retain exactly one bounded story per attempt.");
+            require(inconsistentProductionChanges(connection, stationId, successTick, sabotageTick) == 0,
+                    "A production change does not reconcile before + delta with its result.");
+            require(changeReasonCount(connection, stationId, successTick, "PRODUCTION_INPUT") > 0
+                            && changeReasonCount(connection, stationId, successTick, "PRODUCTION_OUTPUT") > 0
+                            && changeReasonCount(connection, stationId, sabotageTick, "SABOTAGE_DAMAGE") == 1,
+                    "Production stories lost their typed input, output, or sabotage changes.");
+        }
+    }
+
+    private static void execute(Connection connection, String sql, UUID stationId) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, stationId.toString());
+            statement.executeUpdate();
+        }
+    }
+
+    private static void insertProductionRun(Connection connection, UUID stationId, long tick, String status)
+            throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT OR IGNORE INTO station_production_run(run_id,station_id,recipe_id,tick_sequence,cycles,status) "
+                        + "VALUES (?,?, 'recipe-steel',?,1,?)")) {
+            statement.setString(1, stationId + ":causal-production:" + tick);
+            statement.setString(2, stationId.toString());
+            statement.setLong(3, tick);
+            statement.setString(4, status);
+            statement.executeUpdate();
+        }
+    }
+
+    private static long tickAvoiding(long offset, long start, int first, int second) {
+        long tick = start;
+        while ((tick + offset) % first == 0 || (tick + offset) % second == 0) tick++;
+        return tick;
+    }
+
+    private static long tickMatching(long offset, long start, int divisor, int avoidDivisor) {
+        long tick = start;
+        while ((tick + offset) % divisor != 0
+                || (avoidDivisor > 0 && (tick + offset) % avoidDivisor == 0)) tick++;
+        return tick;
+    }
+
+    private static String outcome(Connection connection, UUID stationId, long tick) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT o.outcome_type FROM station_production_outcome o JOIN station_production_run p "
+                        + "ON p.run_id=o.run_id WHERE p.station_id=? AND p.tick_sequence=?")) {
+            statement.setString(1, stationId.toString());
+            statement.setLong(2, tick);
+            try (ResultSet result = statement.executeQuery()) {
+                if (!result.next()) throw new IllegalStateException("Production outcome is missing at tick " + tick);
+                return result.getString(1);
+            }
+        }
+    }
+
+    private static int stationValue(Connection connection, UUID stationId, String column) throws Exception {
+        if (!java.util.Set.of("credits", "integrity").contains(column)) {
+            throw new IllegalArgumentException("Unsupported station value.");
+        }
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT " + column + " FROM station_simulation_state WHERE station_id=?")) {
+            statement.setString(1, stationId.toString());
+            try (ResultSet result = statement.executeQuery()) {
+                if (!result.next()) throw new IllegalStateException("Station simulation state is missing.");
+                return result.getInt(1);
+            }
+        }
+    }
+
+    private static long countProduction(Connection connection, UUID stationId, long fromTick, long toTick,
+                                        String table) throws Exception {
+        String sql;
+        if (table.equals("station_production_outcome")) {
+            sql = "SELECT COUNT(*) FROM station_production_outcome o JOIN station_production_run p ON p.run_id=o.run_id ";
+        } else if (table.equals("station_event")) {
+            sql = "SELECT COUNT(*) FROM station_event e JOIN station_production_run p ON p.run_id=e.cause_id "
+                    + "WHERE e.cause_type='PRODUCTION_RUN' AND ";
+        } else throw new IllegalArgumentException("Unsupported production evidence table.");
+        if (table.equals("station_production_outcome")) sql += "WHERE ";
+        sql += "p.station_id=? AND p.tick_sequence BETWEEN ? AND ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, stationId.toString());
+            statement.setLong(2, fromTick);
+            statement.setLong(3, toTick);
+            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getLong(1) : 0; }
+        }
+    }
+
+    private static long inconsistentProductionChanges(Connection connection, UUID stationId,
+                                                      long fromTick, long toTick) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT COUNT(*) FROM station_change c JOIN station_event e ON e.event_id=c.event_id "
+                        + "WHERE e.station_id=? AND e.cause_type='PRODUCTION_RUN' AND e.tick_sequence BETWEEN ? AND ? "
+                        + "AND ABS((c.previous_value+c.delta_value)-c.resulting_value)>=0.000001")) {
+            statement.setString(1, stationId.toString());
+            statement.setLong(2, fromTick);
+            statement.setLong(3, toTick);
+            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getLong(1) : 0; }
+        }
+    }
+
+    private static long changeReasonCount(Connection connection, UUID stationId, long tick, String reason)
+            throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT COUNT(*) FROM station_change c JOIN station_event e ON e.event_id=c.event_id "
+                        + "WHERE e.station_id=? AND e.tick_sequence=? AND e.cause_type='PRODUCTION_RUN' "
+                        + "AND c.reason_code=?")) {
+            statement.setString(1, stationId.toString());
+            statement.setLong(2, tick);
+            statement.setString(3, reason);
+            try (ResultSet result = statement.executeQuery()) { return result.next() ? result.getLong(1) : 0; }
         }
     }
 

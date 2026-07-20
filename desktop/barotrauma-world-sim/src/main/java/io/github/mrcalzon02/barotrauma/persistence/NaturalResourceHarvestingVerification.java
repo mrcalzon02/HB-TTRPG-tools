@@ -51,7 +51,8 @@ public final class NaturalResourceHarvestingVerification {
                 PassiveWorldTickTransaction.commit(paths, firstTick);
             }
 
-            require(schemaVersion(paths) == 13, "Resource-harvesting fixture did not migrate to schema 013.");
+            require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                    "Resource-harvesting fixture did not migrate to the current schema.");
             require(!triggerSql(paths, "passive_station_logistics_cycle").contains("item_id='item-ore'"),
                     "Passive logistics still creates unbounded free ore.");
 
@@ -100,6 +101,7 @@ public final class NaturalResourceHarvestingVerification {
             deliverResourceFreight(paths, minerId, stationId);
             require("DELIVERED".equals(freightText(paths, ORE_SITE, "status")),
                     "Resource freight did not settle on NPC docking.");
+            requireNpcDeliveryCausality(paths, ORE_SITE, quantity);
             require(inventory(paths, stationId, "item-ore") == inventoryBefore + quantity,
                     "Delivered extraction did not enter station inventory.");
             require(stationInt(paths, stationId, "ore") == oreBefore + quantity,
@@ -205,7 +207,7 @@ public final class NaturalResourceHarvestingVerification {
     private static void deliverResourceFreight(WorldPaths paths, UUID vesselId, UUID stationId) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
              PreparedStatement update = connection.prepareStatement(
-                     "UPDATE npc_vessel SET status='DOCKED',home_station_id=?,last_tick=103 WHERE npc_vessel_id=?")) {
+                     "UPDATE npc_vessel SET status='WORKING',home_station_id=?,last_tick=103 WHERE npc_vessel_id=?")) {
             update.setString(1, stationId.toString());
             update.setString(2, vesselId.toString());
             update.executeUpdate();
@@ -290,6 +292,25 @@ public final class NaturalResourceHarvestingVerification {
     private static String freightText(WorldPaths paths, UUID missionId, String column) throws Exception {
         require(column.equals("status"), "Unsupported freight column.");
         return keyedText(paths, "SELECT f." + column + " FROM freight_lot f JOIN resource_extraction_batch b ON b.freight_lot_id=f.lot_id WHERE b.mission_id=?", missionId);
+    }
+
+    private static void requireNpcDeliveryCausality(WorldPaths paths, UUID missionId, int expectedQuantity)
+            throws Exception {
+        String sql = "SELECT e.actor_type,c.delta_value,(SELECT COUNT(*) FROM station_delivery_baseline b "
+                + "WHERE b.lot_id=x.freight_lot_id) baselines FROM resource_extraction_batch x "
+                + "JOIN station_event e ON e.cause_type='FREIGHT_LOT' AND e.cause_id=x.freight_lot_id "
+                + "JOIN station_change c ON c.event_id=e.event_id AND c.change_id=x.freight_lot_id||':delivery-inventory' "
+                + "WHERE x.mission_id=? AND ABS((c.previous_value+c.delta_value)-c.resulting_value)<0.000001";
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, missionId.toString());
+            try (ResultSet result = statement.executeQuery()) {
+                require(result.next() && "NPC_VESSEL".equals(result.getString("actor_type"))
+                                && result.getInt("delta_value") == expectedQuantity
+                                && result.getInt("baselines") == 0,
+                        "NPC resource delivery did not retain exact carrier-attributed causality.");
+            }
+        }
     }
 
     private static int inventory(WorldPaths paths, UUID stationId, String itemId) throws Exception {

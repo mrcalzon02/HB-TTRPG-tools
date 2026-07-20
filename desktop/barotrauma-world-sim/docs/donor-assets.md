@@ -4,18 +4,34 @@ The Barotrauma World Simulation Toolbox can use graphical files from a Barotraum
 
 A donor installation is optional. Every semantic visual role has an independent fallback produced by toolbox code, and the four legacy station, vessel, fauna, and geology roles also retain their packaged fallback PNGs.
 
+## Retained planning index
+
+The repository includes a read-only Windows scanner and a retained metadata snapshot:
+
+```text
+data/barotrauma/tools/index-barotrauma-install.bat
+data/barotrauma/tools/asset-index/all-files.csv
+data/barotrauma/tools/asset-index/graphical-assets.csv
+data/barotrauma/tools/asset-index/importable-assets.csv
+data/barotrauma/tools/asset-index/index-summary.txt
+```
+
+The current snapshot describes 3,189 install files, including 823 graphical candidates and 2,003 categorized media candidates. It identifies music, ambience, creature audio, creature art, sound effects, backgrounds, UI assets, map assets, item art, fonts, video, particles, lighting, and other effects.
+
+The snapshot is development metadata, not packaged donor content. `RelativePath` is the portable lookup key. Any recorded absolute source path is diagnostic evidence from the machine that ran the scan and must never be treated as an install-time path on another computer.
+
 ## Setup and graphical map
 
 Run the asset catalogue and coverage preview with:
 
 ```text
-gradle runAssetSetup
+toolbox.cmd asset-setup
 ```
 
 Run the donor-backed graphical Europa map with:
 
 ```text
-gradle runGraphicalWorldMap
+toolbox.cmd world-map
 ```
 
 The setup window can:
@@ -241,6 +257,8 @@ A missing, moved, unmounted, corrupt, or incompatible donor installation does no
 
 The Natural World and Fleet Response console continues to use legacy donor-backed icons for station, vessel, fauna, and geology surfaces.
 
+The current graphical resolution policy keeps those roles compatible while the broader retained catalog is integrated surface by surface.
+
 The new graphical Europa map uses the semantic catalogue for:
 
 - the map background;
@@ -254,11 +272,19 @@ The setup window previews backgrounds, UI chrome, map markers, statuses, and ope
 
 The complete verification task includes donor discovery, legacy fallback PNG decoding, semantic XML/atlas lookup, source-rectangle cropping, scaling, and procedural fallback rendering:
 
+The categorized scan is broader than these initial runtime roles. Sound, music, backgrounds, UI elements, map elements, creature elements, item art, fonts, and videos remain indexed candidates until a desktop subsystem explicitly maps, validates, and presents them.
+
+The desktop now builds an immutable local media catalog in a background worker. It scans only the validated official `Content` tree, fingerprints portable path/size/time metadata, ignores `LocalMods` and other user-created install-root content, and reports available, changed, or missing files. The retained CSV reader ignores its machine-specific `FullPath` field and resolves only validated relative paths against the current user's installation.
+
+The fallback files are real PNG resources in `src/main/resources`. They are independent neutral artwork and are safe to include in toolbox releases.
+
 ```text
-gradle verifyWorldStore
+toolbox.cmd verify
 ```
 
 The semantic catalogue fixture creates a local two-cell atlas and XML style entries for submarine and outpost markers. Verification requires the correct source rectangle to resolve and crop. It then switches to Fallback-only mode and renders every role without a donor installation.
+
+After those graphical bindings, a separate opt-in audio service will own music, ambience, UI sounds, creature sounds, volume, mute state, playback lifecycle, and missing-donor fallback behavior. UI code must not open donor audio files directly.
 
 ## Packaging and redistribution boundary
 

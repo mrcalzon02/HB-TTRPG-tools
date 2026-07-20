@@ -30,6 +30,7 @@ final class WorldDatabaseMigrations {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
             int version = initializeIfNeeded(connection);
+            version = bridgePreRenumberLocalSchema(connection, version);
             if (version > WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
                 throw new SQLException("World database schema " + version + " is newer than supported schema "
                         + WorldStorageContracts.DATABASE_SCHEMA_VERSION + ".");
@@ -70,7 +71,74 @@ final class WorldDatabaseMigrations {
             case 14 -> WorldStorageContracts.schema014Statements();
             case 15 -> WorldStorageContracts.schema015Statements();
             case 16 -> WorldStorageContracts.schema016Statements();
+            case 17 -> WorldStorageContracts.schema017Statements();
+            case 18 -> WorldStorageContracts.schema018Statements();
+            case 19 -> WorldStorageContracts.schema019Statements();
+            case 20 -> WorldStorageContracts.schema020Statements();
+            case 21 -> WorldStorageContracts.schema021Statements();
+            case 22 -> WorldStorageContracts.schema022Statements();
+            case 23 -> WorldStorageContracts.schema023Statements();
+            case 24 -> WorldStorageContracts.schema024Statements();
+            case 25 -> WorldStorageContracts.schema025Statements();
+            case 26 -> WorldStorageContracts.schema026Statements();
             default -> throw new SQLException("No forward migration is defined for schema " + targetVersion + ".");
+        };
+    }
+
+    private static int bridgePreRenumberLocalSchema(Connection connection, int version) throws SQLException {
+        if (version < 15 || version > 24
+                || !tableExists(connection, "station_event")
+                || tableExists(connection, "npc_population_state")) {
+            return version;
+        }
+
+        int remappedVersion = version + 2;
+        boolean originalAutoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
+        try (Statement statement = connection.createStatement()) {
+            executeStatements(statement, WorldStorageContracts.schema015Statements());
+            executeStatements(statement, WorldStorageContracts.schema016Statements());
+            statement.executeUpdate("DELETE FROM schema_migration WHERE version >= 15");
+            try (PreparedStatement insert = connection.prepareStatement(
+                    "INSERT INTO schema_migration(version,applied_at) VALUES(?,?)")) {
+                String appliedAt = Instant.now().toString();
+                for (int migratedVersion = 15; migratedVersion <= remappedVersion; migratedVersion++) {
+                    insert.setInt(1, migratedVersion);
+                    insert.setString(2, appliedAt);
+                    insert.addBatch();
+                }
+                insert.executeBatch();
+            }
+            connection.commit();
+            return remappedVersion;
+        } catch (SQLException exception) {
+            try { connection.rollback(); }
+            catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+            throw exception;
+        } finally {
+            connection.setAutoCommit(originalAutoCommit);
+        }
+    }
+
+    private static void executeStatements(Statement statement, List<String> statements) throws SQLException {
+        for (String sql : statements) {
+            if (!sql.trim().toUpperCase().startsWith("PRAGMA ")) statement.execute(sql);
+        }
+    }
+
+    private static List<String> preRenumberLocalStatements(int oldVersion) throws SQLException {
+        return switch (oldVersion) {
+            case 15 -> StationCausalitySchema.statements();
+            case 16 -> StationConsumptionCausalitySchema.statements();
+            case 17 -> StationProductionCausalitySchema.statements();
+            case 18 -> StationDeliveryCausalitySchema.statements();
+            case 19 -> StationFrontierCausalitySchema.statements();
+            case 20 -> StationPopulationCausalitySchema.statements();
+            case 21 -> FactionPlanCausalitySchema.statements();
+            case 22 -> StationCommandCausalitySchema.statements();
+            case 23 -> StationMutationCoverageSchema.statements();
+            case 24 -> NpcTransitObserverSchema.statements();
+            default -> throw new SQLException("No pre-renumber local migration is defined for schema " + oldVersion + ".");
         };
     }
 
@@ -160,6 +228,10 @@ final class WorldDatabaseMigrations {
         try {
             verifyFreshWorld(root);
             verifyLegacyWorld(root);
+            verifyPreRenumberLocalWorld(root, 15,
+                    UUID.fromString("94000000-0000-0000-0000-000000000015"));
+            verifyPreRenumberLocalWorld(root, 24,
+                    UUID.fromString("94000000-0000-0000-0000-000000000024"));
         } finally {
             deleteTree(root);
         }
@@ -171,7 +243,7 @@ final class WorldDatabaseMigrations {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 16, "Fresh world did not initialize at schema 016.");
+            require(currentVersion(connection) == 26, "Fresh world did not initialize at schema 026.");
             require(tableExists(connection, "world_location") && tableExists(connection, "simulation_command_receipt"),
                     "Fresh world is missing normalized-world or command-receipt state.");
             require(tableExists(connection, "station_simulation_state") && tableExists(connection, "station_inventory"),
@@ -187,6 +259,7 @@ final class WorldDatabaseMigrations {
                     "Fresh world is missing response transit or towing completion.");
             verifyObservationObjects(connection, "Fresh world");
             verifyPopulationAccountingObjects(connection, "Fresh world");
+            verifyCausalityAndTransitObjects(connection, "Fresh world");
             require(foreignKeyViolations(connection) == 0, "Fresh schema contains foreign-key violations.");
         }
     }
@@ -225,7 +298,7 @@ final class WorldDatabaseMigrations {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 16, "Legacy world did not advance to schema 016.");
+            require(currentVersion(connection) == 26, "Legacy world did not advance to schema 026.");
             require(columnExists(connection, "world_metadata", "source_suite_version"),
                     "Legacy world did not receive normalized-world metadata columns.");
             require(tableExists(connection, "station_civilization_state")
@@ -234,6 +307,7 @@ final class WorldDatabaseMigrations {
                     "Legacy world did not retain the prior passive-world migration chain.");
             verifyObservationObjects(connection, "Legacy world");
             verifyPopulationAccountingObjects(connection, "Legacy world");
+            verifyCausalityAndTransitObjects(connection, "Legacy world");
             try (PreparedStatement statement = connection.prepareStatement(
                     "SELECT source_name FROM import_artifact WHERE artifact_id=?")) {
                 statement.setString(1, artifactId.toString());
@@ -245,6 +319,156 @@ final class WorldDatabaseMigrations {
             require(count(connection, "observation_snapshot") == 1,
                     "Legacy world did not receive one root observation snapshot.");
             require(foreignKeyViolations(connection) == 0, "Legacy schema contains foreign-key violations.");
+        }
+    }
+
+    private static void verifyPreRenumberLocalWorld(Path root, int oldVersion, UUID worldId) throws Exception {
+        WorldPaths paths = WorldStorageContracts.createWorld(root, "Pre-Renumber " + oldVersion, worldId);
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
+            configure(connection);
+            try (Statement statement = connection.createStatement()) {
+                for (String sql : WorldStorageContracts.initialSchemaStatements()) {
+                    if (!sql.trim().toUpperCase().startsWith("PRAGMA ")) statement.execute(sql);
+                }
+            }
+            try (PreparedStatement version = connection.prepareStatement(
+                    "INSERT INTO schema_migration(version,applied_at) VALUES(1,?)")) {
+                version.setString(1, "2026-07-19T00:00:00Z");
+                version.executeUpdate();
+            }
+            try (PreparedStatement world = connection.prepareStatement(
+                    "INSERT INTO world_metadata(world_id,display_name,created_at) VALUES(?,?,?)")) {
+                world.setString(1, worldId.toString());
+                world.setString(2, "Pre-Renumber " + oldVersion);
+                world.setString(3, "2026-07-19T00:00:00Z");
+                world.executeUpdate();
+            }
+            for (int target = 2; target <= 14; target++) {
+                applyMigration(connection, target, statementsFor(target), false);
+            }
+            UUID locationId = UUID.fromString("95000000-0000-0000-0000-000000000001");
+            UUID stationId = UUID.fromString("95000000-0000-0000-0000-000000000002");
+            seedPreRenumberWorld(connection, worldId, locationId, stationId);
+            for (int target = 15; target <= oldVersion; target++) {
+                applyMigration(connection, target, preRenumberLocalStatements(target), false);
+            }
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("INSERT INTO station_event(event_id,world_id,station_id,tick_sequence,"
+                        + "canonical_time,event_type,severity,headline,narrative,cause_type,deterministic_key,"
+                        + "visibility,correlation_id,policy_version,created_at) VALUES ('pre-renumber-event-"
+                        + oldVersion + "','" + worldId + "','" + stationId
+                        + "',42,'2175-01-01T00:42:00Z','ACCIDENT',1,'Preserved development event',"
+                        + "'This causal record must survive schema renumbering.','TEST','pre-renumber:"
+                        + oldVersion + "','OBSERVED','pre-renumber:" + oldVersion
+                        + "',1,'2026-07-19T00:00:00Z')");
+            }
+            require(tableExists(connection, "station_event") && !tableExists(connection, "npc_population_state"),
+                    "Pre-renumber fixture does not represent the old local schema chain.");
+        }
+
+        try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
+            configure(connection);
+            require(currentVersion(connection) == 26,
+                    "Pre-renumber schema " + oldVersion + " did not advance to schema 026.");
+            verifyObservationObjects(connection, "Pre-renumber schema " + oldVersion);
+            verifyPopulationAccountingObjects(connection, "Pre-renumber schema " + oldVersion);
+            verifyCausalityAndTransitObjects(connection, "Pre-renumber schema " + oldVersion);
+            require(count(connection, "station_event") >= 1,
+                    "Pre-renumber schema " + oldVersion + " lost causal station records.");
+            require(count(connection, "npc_population_state") == 1
+                            && count(connection, "npc_population_reconciliation") == 1,
+                    "Pre-renumber schema " + oldVersion
+                            + " did not seed observation population and reconciliation state.");
+            require(count(connection, "station_population_state") == 1,
+                    "Pre-renumber schema " + oldVersion + " did not preserve authoritative station population state.");
+            require(migrationVersionCount(connection, 15, 26) == 12,
+                    "Pre-renumber schema " + oldVersion + " did not receive canonical 015-026 migration history.");
+            require(foreignKeyViolations(connection) == 0,
+                    "Pre-renumber schema " + oldVersion + " created foreign-key violations.");
+        }
+    }
+
+    private static void seedPreRenumberWorld(Connection connection, UUID worldId, UUID locationId, UUID stationId)
+            throws SQLException {
+        try (PreparedStatement artifact = connection.prepareStatement(
+                "INSERT INTO import_artifact(artifact_id,sha256,byte_length,source_name,source_kind,inspected_at) "
+                        + "VALUES('pre-renumber-fixture',?,1,'pre-renumber.save','fixture',?)")) {
+            artifact.setString(1, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            artifact.setString(2, "2026-07-19T00:00:00Z");
+            artifact.executeUpdate();
+        }
+        try (PreparedStatement simulation = connection.prepareStatement(
+                "INSERT INTO world_simulation_metadata(world_id,canonical_time,imported_tick_sequence,imported_at,"
+                        + "source_artifact_id,current_tick_sequence) VALUES(?,?,?,?,?,?)")) {
+            simulation.setString(1, worldId.toString());
+            simulation.setString(2, "2175-01-01T00:42:00Z");
+            simulation.setLong(3, 40);
+            simulation.setString(4, "2026-07-19T00:00:00Z");
+            simulation.setString(5, "pre-renumber-fixture");
+            simulation.setLong(6, 42);
+            simulation.executeUpdate();
+        }
+        try (PreparedStatement location = connection.prepareStatement(
+                "INSERT INTO world_location(location_id,world_id,source_location_id,source_ordinal,display_name,"
+                        + "location_type,ring,location_level,map_x,map_y,biome,faction,is_station) "
+                        + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1)")) {
+            location.setString(1, locationId.toString());
+            location.setString(2, worldId.toString());
+            location.setString(3, "pre-renumber-location");
+            location.setInt(4, 1);
+            location.setString(5, "Preserved Station");
+            location.setString(6, "outpost");
+            location.setInt(7, 1);
+            location.setInt(8, 1);
+            location.setDouble(9, 0);
+            location.setDouble(10, 0);
+            location.setString(11, "cold");
+            location.setString(12, "Coalition");
+            location.executeUpdate();
+        }
+        try (PreparedStatement station = connection.prepareStatement(
+                "INSERT INTO world_station(station_id,world_id,location_id,source_station_id,display_name,"
+                        + "station_type,faction,has_economy) VALUES(?,?,?,?,?,?,?,1)")) {
+            station.setString(1, stationId.toString());
+            station.setString(2, worldId.toString());
+            station.setString(3, locationId.toString());
+            station.setString(4, "pre-renumber-station");
+            station.setString(5, "Preserved Station");
+            station.setString(6, "outpost");
+            station.setString(7, "Coalition");
+            station.executeUpdate();
+        }
+        try (PreparedStatement state = connection.prepareStatement(
+                "INSERT INTO station_simulation_state VALUES(?,?,?,?,?,?,?,?,?,?,?,?)")) {
+            state.setString(1, stationId.toString());
+            state.setString(2, worldId.toString());
+            int[] values = {10_000, 70, 20, 60, 65, 90, 25, 0};
+            for (int index = 0; index < values.length; index++) state.setInt(index + 3, values[index]);
+            state.setString(11, "STABLE");
+            state.setLong(12, 42);
+            state.executeUpdate();
+        }
+        try (PreparedStatement civilization = connection.prepareStatement(
+                "UPDATE station_civilization_state SET population_index=?,civilization_strength=?,"
+                        + "fauna_pressure=?,supply_consumption_base=?,last_consumption=?,shortage_ticks=?,"
+                        + "surplus_ticks=?,frontier_position=?,frontier_state=?,last_tick=? WHERE station_id=?")) {
+            int[] values = {70, 75, 20, 2, 2, 1, 4, 60};
+            for (int index = 0; index < values.length; index++) civilization.setInt(index + 1, values[index]);
+            civilization.setString(9, "HOLDING");
+            civilization.setLong(10, 42);
+            civilization.setString(11, stationId.toString());
+            civilization.executeUpdate();
+        }
+        try (PreparedStatement ecology = connection.prepareStatement(
+                "UPDATE location_ecology_state SET primary_producers=?,algal_bloom=?,herbivore_biomass=?,"
+                        + "predator_biomass=?,scavenger_biomass=?,bioaccumulator_mass=?,nutrient_load=?,"
+                        + "habitat_integrity=?,migration_pressure=?,last_tick=? WHERE location_id=?")) {
+            int[] values = {60, 10, 55, 45, 25, 15, 50, 80, 35};
+            for (int index = 0; index < values.length; index++) ecology.setInt(index + 1, values[index]);
+            ecology.setLong(10, 42);
+            ecology.setString(11, locationId.toString());
+            ecology.executeUpdate();
         }
     }
 
@@ -280,6 +504,54 @@ final class WorldDatabaseMigrations {
         require(objectExists(connection, "trigger", "npc_population_reconciliation_seed")
                         && objectExists(connection, "trigger", "npc_population_tick_accounting"),
                 prefix + " is missing population accounting triggers.");
+    }
+
+    private static long migrationVersionCount(Connection connection, int first, int last) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT COUNT(*) FROM schema_migration WHERE version BETWEEN ? AND ?")) {
+            statement.setInt(1, first);
+            statement.setInt(2, last);
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next() ? result.getLong(1) : 0;
+            }
+        }
+    }
+
+
+    private static void verifyCausalityAndTransitObjects(Connection connection, String prefix) throws SQLException {
+        require(tableExists(connection, "station_event")
+                        && tableExists(connection, "station_change")
+                        && tableExists(connection, "station_population_event")
+                        && tableExists(connection, "faction_plan"),
+                prefix + " is missing schema-017 station causality state.");
+        require(tableExists(connection, "station_causal_tick_baseline")
+                        && objectExists(connection, "trigger", "station_consumption_causal_event"),
+                prefix + " is missing schema-018 consumption causality.");
+        require(tableExists(connection, "station_production_outcome")
+                        && objectExists(connection, "trigger", "station_production_apply"),
+                prefix + " is missing schema-019 production causality.");
+        require(tableExists(connection, "station_delivery_baseline")
+                        && objectExists(connection, "trigger", "station_delivery_causal_event"),
+                prefix + " is missing schema-020 delivery causality.");
+        require(objectExists(connection, "trigger", "station_frontier_finalize_tick")
+                        && objectExists(connection, "view", "station_frontier_story"),
+                prefix + " is missing schema-021 frontier causality.");
+        require(tableExists(connection, "station_population_state")
+                        && objectExists(connection, "view", "station_population_coverage"),
+                prefix + " is missing schema-022 station population causality.");
+        require(tableExists(connection, "faction_plan_resource_allocation")
+                        && objectExists(connection, "view", "station_faction_resource_availability"),
+                prefix + " is missing schema-023 faction-plan backing.");
+        require(tableExists(connection, "simulation_transaction_context")
+                        && objectExists(connection, "view", "station_event_command_history"),
+                prefix + " is missing schema-024 command provenance.");
+        require(tableExists(connection, "station_explanation_policy")
+                        && objectExists(connection, "view", "unexplained_station_mutation"),
+                prefix + " is missing schema-025 mutation explanation coverage.");
+        require(tableExists(connection, "npc_transit_leg")
+                        && tableExists(connection, "npc_transit_incident_schedule")
+                        && objectExists(connection, "view", "npc_observable_transit"),
+                prefix + " is missing schema-026 time-gated NPC transit.");
     }
 
     private static void deleteTree(Path root) throws IOException {

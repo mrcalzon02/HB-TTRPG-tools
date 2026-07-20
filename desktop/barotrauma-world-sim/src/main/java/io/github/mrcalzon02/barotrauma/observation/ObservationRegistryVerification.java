@@ -61,7 +61,7 @@ public final class ObservationRegistryVerification {
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
                  Statement statement = connection.createStatement()) {
-                statement.executeUpdate("INSERT INTO schema_migration(version,applied_at) VALUES(17,'2026-07-19T00:00:00Z')");
+                statement.executeUpdate("INSERT INTO schema_migration(version,applied_at) VALUES(27,'2026-07-19T00:00:00Z')");
             }
             expectFailure(() -> ObservationRegistry.load(paths),
                     "Registry accepted a newer unsupported schema.");

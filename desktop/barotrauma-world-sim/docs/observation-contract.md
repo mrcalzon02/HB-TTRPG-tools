@@ -12,7 +12,7 @@ The dependency-free verification entry point is:
 
 ```text
 src/main/java/io/github/mrcalzon02/barotrauma/observation/ObservationContractVerification.java
-gradle verifyObservationContract
+toolbox.cmd verify
 ```
 
 ## Scope
@@ -192,7 +192,7 @@ Migration seeding is duplicate-safe and does not rewrite the schema-014 civiliza
 - Changed-since-tick queries.
 - Selected-entity event history.
 
-It rejects worlds older than schema 015 and worlds newer than the client supports.
+It rejects worlds older than schema 016 and worlds newer than the client supports.
 
 ## Verification
 
@@ -212,13 +212,12 @@ It rejects worlds older than schema 015 and worlds newer than the client support
 Additional focused verification is available through:
 
 ```text
-gradle verifyObservationFoundation
-gradle verifyObservationRegistry
+toolbox.cmd verify
 ```
 
 These verify deterministic schema seeds, source-state preservation, constraints, trigger seeding, foreign-key integrity, root snapshots, query-only reconstruction, changed-since-tick behavior, entity history, and unsupported-schema rejection.
 
-All observation verifiers are included in `verifyWorldStore`.
+All observation verifiers are included in `toolbox.cmd verify`.
 
 ## Next implementation slice
 
