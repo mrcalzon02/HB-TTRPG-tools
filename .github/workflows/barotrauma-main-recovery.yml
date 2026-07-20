@@ -1,0 +1,314 @@
+name: Recover Barotrauma desktop main
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/barotrauma-main-recovery.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: barotrauma-main-recovery
+  cancel-in-progress: false
+
+jobs:
+  recover-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Repair return transit and regression fixture
+        shell: python
+        run: |
+          from pathlib import Path
+
+          runtime_path = Path("desktop/barotrauma-world-sim/src/main/java/io/github/mrcalzon02/barotrauma/persistence/PassiveWorldTickTransaction.java")
+          verification_path = Path("desktop/barotrauma-world-sim/src/main/java/io/github/mrcalzon02/barotrauma/persistence/FleetRecoveryAndNaturalWorldVerification.java")
+
+          def replace_once(text: str, old: str, new: str, label: str) -> str:
+              count = text.count(old)
+              if count != 1:
+                  raise RuntimeError(f"{label}: expected exactly one match, found {count}")
+              return text.replace(old, new, 1)
+
+          runtime = runtime_path.read_text(encoding="utf-8")
+          runtime = replace_once(runtime, '''        int requiredTicks = Math.addExact(leg.baseDurationTicks(), cumulativeDelay);
+                  String status = hull == 0 ? "LOST" : hull < 20 ? "DISABLED" : vessel.status();
+                  boolean arrived = !status.equals("LOST") && !status.equals("DISABLED")
+                          && progress >= requiredTicks && incidentsResolved == leg.incidentCount();
+                  if (arrived) status = "WORKING";
+                  try (PreparedStatement update = connection.prepareStatement(
+                          "UPDATE npc_vessel SET hull=?, supplies=?, route_progress=?, route_ticks_required=?, status=?, "
+                                  + "current_location_id=CASE WHEN ?=1 THEN destination_location_id ELSE current_location_id END, "
+                                  + "last_tick=? WHERE npc_vessel_id=?")) {
+                      update.setInt(1, hull);
+                      update.setInt(2, supplies);
+                      update.setInt(3, progress);
+                      update.setInt(4, requiredTicks);
+                      update.setString(5, status);
+                      update.setInt(6, arrived ? 1 : 0);
+                      update.setLong(7, tick);
+                      update.setString(8, vessel.id().toString());
+                      update.executeUpdate();
+                  }
+          ''', '''        int requiredTicks = Math.addExact(leg.baseDurationTicks(), cumulativeDelay);
+                  String status = hull == 0 ? "LOST" : hull < 20 ? "DISABLED" : vessel.status();
+                  boolean arrived = !status.equals("LOST") && !status.equals("DISABLED")
+                          && progress >= requiredTicks && incidentsResolved == leg.incidentCount();
+                  boolean ordinaryReturnArrival = arrived && vessel.status().equals("RETURNING")
+                          && activeFleetResponseLeg(connection, vessel.id()) == null;
+                  if (arrived) status = ordinaryReturnArrival ? "DOCKED" : "WORKING";
+                  try (PreparedStatement update = connection.prepareStatement(
+                          "UPDATE npc_vessel SET hull=?, supplies=?, "
+                                  + "route_progress=CASE WHEN ?=1 THEN 0 ELSE ? END, route_ticks_required=?, status=?, "
+                                  + "current_location_id=CASE WHEN ?=1 THEN destination_location_id ELSE current_location_id END, "
+                                  + "mission_id=CASE WHEN ?=1 THEN NULL ELSE mission_id END, "
+                                  + "destination_location_id=CASE WHEN ?=1 THEN NULL ELSE destination_location_id END, "
+                                  + "cargo=CASE WHEN ?=1 THEN 0 ELSE cargo END, last_tick=? WHERE npc_vessel_id=?")) {
+                      update.setInt(1, hull);
+                      update.setInt(2, supplies);
+                      update.setInt(3, ordinaryReturnArrival ? 1 : 0);
+                      update.setInt(4, progress);
+                      update.setInt(5, requiredTicks);
+                      update.setString(6, status);
+                      update.setInt(7, arrived ? 1 : 0);
+                      update.setInt(8, ordinaryReturnArrival ? 1 : 0);
+                      update.setInt(9, ordinaryReturnArrival ? 1 : 0);
+                      update.setInt(10, ordinaryReturnArrival ? 1 : 0);
+                      update.setLong(11, tick);
+                      update.setString(12, vessel.id().toString());
+                      update.executeUpdate();
+                  }
+          ''', "ordinary return arrival settlement")
+          runtime_path.write_text(runtime, encoding="utf-8", newline="\n")
+
+          verification = verification_path.read_text(encoding="utf-8")
+          verification = replace_once(verification, '''                ReturnRegression returnRegression = prepareCompletedMissionReturn(paths);
+                          String completedMission = returnRegression.missionId();
+                          String returnVessel = returnRegression.vesselId();
+                          long completionLogs = missionCompletionLogCount(paths, completedMission);
+                          step(paths, executor);
+                          require("DOCKED".equals(vesselStatus(paths, UUID.fromString(returnVessel)))
+                                          && vesselMission(paths, returnVessel) == null
+                                          && vesselDestination(paths, returnVessel) == null,
+                                  "An ordinary completed return did not dock and clear its voyage linkage.");
+                          require(vesselCargo(paths, returnVessel) == 0
+                                          && "DELIVERED".equals(returnFreightStatus(paths, completedMission))
+                                          && returnTreasuryCount(paths, completedMission) == 1,
+                                  "Ordinary return docking bypassed cargo, freight, or treasury settlement.");
+                          relinkCompletedMissionAsWorking(paths, returnVessel, completedMission);
+                          step(paths, executor);
+                          require(missionCompletionLogCount(paths, completedMission) == completionLogs,
+                                  "A returned vessel replayed an already-complete mission and its rewards.");
+          ''', '''                ReturnRegression returnRegression = prepareCompletedMissionReturn(paths);
+                          String completedMission = returnRegression.missionId();
+                          String returnVessel = returnRegression.vesselId();
+                          long completionLogs = missionCompletionLogCount(paths, completedMission);
+                          step(paths, executor);
+                          require("DOCKED".equals(vesselStatus(paths, UUID.fromString(returnVessel)))
+                                          && vesselMission(paths, returnVessel) == null
+                                          && vesselDestination(paths, returnVessel) == null,
+                                  "An ordinary completed return did not dock and clear its voyage linkage.");
+                          require(vesselCargo(paths, returnVessel) == 0
+                                          && "DELIVERED".equals(returnFreightStatus(paths, completedMission))
+                                          && returnTreasuryCount(paths, completedMission) == 1,
+                                  "Ordinary return docking bypassed cargo, freight, or treasury settlement.");
+                          long settledTreasuryRows = returnTreasuryCount(paths, completedMission);
+                          relinkCompletedMissionAsWorking(paths, returnVessel, completedMission);
+                          step(paths, executor);
+                          require(missionCompletionLogCount(paths, completedMission) == completionLogs
+                                          && returnTreasuryCount(paths, completedMission) == settledTreasuryRows
+                                          && "DOCKED".equals(vesselStatus(paths, UUID.fromString(returnVessel)))
+                                          && vesselMission(paths, returnVessel) == null,
+                                  "A returned vessel replayed an already-complete mission or its settlement.");
+          ''', "return replay assertions")
+
+          verification = replace_once(verification, '''                    "SELECT v.world_id,v.home_station_id,ws.location_id,"
+                                      + "COALESCE(sm.current_tick_sequence,sm.imported_tick_sequence) "
+                                      + "FROM npc_vessel v JOIN world_station ws ON ws.station_id=v.home_station_id "
+                                      + "JOIN world_simulation_metadata sm ON sm.world_id=v.world_id "
+                                      + "WHERE v.role='MINER' ORDER BY v.npc_vessel_id LIMIT 1")) {
+                              try (ResultSet result = select.executeQuery()) {
+                                  if (!result.next()) throw new IllegalStateException("Return regression vessel is missing.");
+                                  vesselId = result.getString(1);
+                                  worldId = result.getString(2);
+                                  homeStationId = result.getString(3);
+                                  homeLocationId = result.getString(4);
+                                  tick = result.getLong(5);
+                              }
+                          }
+          ''', '''                    "SELECT v.npc_vessel_id,v.world_id,v.home_station_id,ws.location_id,"
+                                      + "COALESCE(sm.current_tick_sequence,sm.imported_tick_sequence) "
+                                      + "FROM npc_vessel v JOIN world_station ws ON ws.station_id=v.home_station_id "
+                                      + "JOIN world_simulation_metadata sm ON sm.world_id=v.world_id "
+                                      + "WHERE v.role='MINER' ORDER BY v.npc_vessel_id LIMIT 1")) {
+                              try (ResultSet result = select.executeQuery()) {
+                                  if (!result.next()) throw new IllegalStateException("Return regression vessel is missing.");
+                                  vesselId = result.getString(1);
+                                  worldId = result.getString(2);
+                                  homeStationId = result.getString(3);
+                                  homeLocationId = result.getString(4);
+                                  tick = result.getLong(5);
+                              }
+                          }
+          ''', "return fixture vessel mapping")
+
+          verification = replace_once(verification, '''            try (PreparedStatement mission = connection.prepareStatement(
+                              "INSERT INTO world_mission(mission_id,world_id,mission_type,status,origin_station_id,"
+                                      + "target_location_id,assigned_npc_vessel_id,deterministic_seed,difficulty,"
+                                      + "reward_credits,cargo_units,progress,created_tick,updated_tick,completed_tick) "
+                                      + "VALUES (?,?,'TRANSIT','COMPLETE',?,?,?,1,1,777,0,100,?,?,?)")) {
+                          mission.setString(1, missionId);
+                          mission.setString(2, worldId);
+                          mission.setString(3, homeStationId);
+                          mission.setString(4, homeLocationId);
+                          mission.setString(5, vesselId);
+                          mission.setLong(6, Math.max(0L, tick - 10L));
+                          mission.setLong(7, tick);
+                          mission.setLong(8, tick);
+                          mission.executeUpdate();
+                      }
+          ''', '''            try (PreparedStatement cancelFreight = connection.prepareStatement(
+                              "UPDATE freight_lot SET status='CANCELLED',updated_tick=? "
+                                      + "WHERE assigned_npc_vessel_id=? AND status IN ('READY','LOADED','IN_TRANSIT')")) {
+                          cancelFreight.setLong(1, tick);
+                          cancelFreight.setString(2, vesselId);
+                          cancelFreight.executeUpdate();
+                      }
+                      try (PreparedStatement mission = connection.prepareStatement(
+                              "INSERT INTO world_mission(mission_id,world_id,mission_type,status,origin_station_id,"
+                                      + "target_location_id,assigned_npc_vessel_id,deterministic_seed,difficulty,"
+                                      + "reward_credits,cargo_units,progress,created_tick,updated_tick,completed_tick) "
+                                      + "VALUES (?,?,'MINING','ACTIVE',?,?,?,1,1,777,20,100,?,?,NULL)")) {
+                          mission.setString(1, missionId);
+                          mission.setString(2, worldId);
+                          mission.setString(3, homeStationId);
+                          mission.setString(4, homeLocationId);
+                          mission.setString(5, vesselId);
+                          mission.setLong(6, Math.max(0L, tick - 10L));
+                          mission.setLong(7, Math.max(0L, tick - 1L));
+                          mission.executeUpdate();
+                      }
+                      try (PreparedStatement completeMission = connection.prepareStatement(
+                              "UPDATE world_mission SET status='COMPLETE',updated_tick=?,completed_tick=? "
+                                      + "WHERE mission_id=? AND status='ACTIVE'")) {
+                          completeMission.setLong(1, tick);
+                          completeMission.setLong(2, tick);
+                          completeMission.setString(3, missionId);
+                          if (completeMission.executeUpdate() != 1) {
+                              throw new IllegalStateException("Return regression mission did not complete exactly once.");
+                          }
+                      }
+          ''', "return fixture completed mission and freight")
+
+          verification = replace_once(verification, '''                    "UPDATE npc_vessel SET current_location_id=?,destination_location_id=?,mission_id=?,"
+                                      + "status='RETURNING',hull=100,supplies=100,route_progress=2,"
+                                      + "route_ticks_required=3,last_tick=? WHERE npc_vessel_id=?")) {
+          ''', '''                    "UPDATE npc_vessel SET current_location_id=?,destination_location_id=?,mission_id=?,"
+                                      + "status='RETURNING',hull=100,supplies=100,cargo=20,route_progress=2,"
+                                      + "route_ticks_required=3,last_tick=? WHERE npc_vessel_id=?")) {
+          ''', "return fixture cargo")
+
+          verification = replace_once(verification, '''            connection.commit();
+                  }
+                  return missionId;
+              }
+
+              private static void raiseMaterialRequirementAndStarve''', '''            connection.commit();
+                  }
+                  return new ReturnRegression(missionId, vesselId);
+              }
+
+              private static void raiseMaterialRequirementAndStarve''', "return fixture result")
+
+          verification = replace_once(verification, '''    private static long missionCompletionLogCount(WorldPaths paths, String missionId) throws Exception {
+                  return keyedLong(paths, "SELECT COUNT(*) FROM npc_voyage_log "
+                          + "WHERE mission_id=? AND event_type='MISSION_COMPLETE'", missionId);
+              }
+
+              private static String vesselStatus''', '''    private static long missionCompletionLogCount(WorldPaths paths, String missionId) throws Exception {
+                  return keyedLong(paths, "SELECT COUNT(*) FROM npc_voyage_log "
+                          + "WHERE mission_id=? AND event_type='MISSION_COMPLETE'", missionId);
+              }
+
+              private static int vesselCargo(WorldPaths paths, String vesselId) throws Exception {
+                  try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+                       PreparedStatement statement = connection.prepareStatement(
+                               "SELECT cargo FROM npc_vessel WHERE npc_vessel_id=?")) {
+                      statement.setString(1, vesselId);
+                      try (ResultSet result = statement.executeQuery()) {
+                          if (!result.next()) throw new IllegalStateException("Return regression vessel disappeared.");
+                          return result.getInt(1);
+                      }
+                  }
+              }
+
+              private static String returnFreightStatus(WorldPaths paths, String missionId) throws Exception {
+                  try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+                       PreparedStatement statement = connection.prepareStatement(
+                               "SELECT status FROM freight_lot WHERE mission_id=?")) {
+                      statement.setString(1, missionId);
+                      try (ResultSet result = statement.executeQuery()) {
+                          if (!result.next()) throw new IllegalStateException("Return regression freight disappeared.");
+                          return result.getString(1);
+                      }
+                  }
+              }
+
+              private static long returnTreasuryCount(WorldPaths paths, String missionId) throws Exception {
+                  return keyedLong(paths, "SELECT COUNT(*) FROM treasury_transaction WHERE transaction_id=?",
+                          missionId + ":freight:delivery");
+              }
+
+              private static void relinkCompletedMissionAsWorking(WorldPaths paths, String vesselId,
+                                                                   String missionId) throws Exception {
+                  try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+                       PreparedStatement statement = connection.prepareStatement(
+                               "UPDATE npc_vessel SET mission_id=?,status='WORKING',destination_location_id=NULL,"
+                                       + "route_progress=0,cargo=0 WHERE npc_vessel_id=?")) {
+                      statement.setString(1, missionId);
+                      statement.setString(2, vesselId);
+                      if (statement.executeUpdate() != 1) {
+                          throw new IllegalStateException("Return regression vessel could not be relinked.");
+                      }
+                  }
+              }
+
+              private static String vesselStatus''', "return regression helpers")
+
+          verification = replace_once(verification, '''    private static void require(boolean condition, String message) {
+          ''', '''    private record ReturnRegression(String missionId, String vesselId) { }
+
+              private static void require(boolean condition, String message) {
+          ''', "return regression record")
+
+          verification_path.write_text(verification, encoding="utf-8", newline="\n")
+
+      - name: Verify complete desktop contract chain
+        shell: pwsh
+        run: ./desktop/barotrauma-world-sim/toolbox.ps1 verify
+
+      - name: Publish verified correction and remove recovery workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/barotrauma-main-recovery.yml
+          git add desktop/barotrauma-world-sim/src/main/java/io/github/mrcalzon02/barotrauma/persistence/PassiveWorldTickTransaction.java
+          git add desktop/barotrauma-world-sim/src/main/java/io/github/mrcalzon02/barotrauma/persistence/FleetRecoveryAndNaturalWorldVerification.java
+          git diff --cached --check
+          git commit -m "Fix NPC return transit settlement"
+          git push origin HEAD:main
