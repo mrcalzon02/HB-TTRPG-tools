@@ -4,6 +4,7 @@
   const base = window.HBTTRPGApp;
   if (!base) return;
   let sheetPromise = null;
+  let barotraumaAssetPromise = null;
 
   function loadScript(src) {
     if (document.querySelector(`script[data-hb-core-view="${src}"]`)) return Promise.resolve();
@@ -18,6 +19,15 @@
     });
   }
 
+  function loadStyle(href) {
+    if (document.querySelector(`link[data-hb-core-view-style="${href}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset.hbCoreViewStyle = href;
+    document.head.appendChild(link);
+  }
+
   async function prepareView(viewId) {
     if (viewId === 'utilities') {
       sheetPromise ||= loadScript('character-sheet-view.js');
@@ -25,11 +35,21 @@
       base.initializeSheet();
       return;
     }
+    if (viewId === 'barotrauma') {
+      loadStyle('barotrauma-packaged-assets.css');
+      barotraumaAssetPromise ||= loadScript('barotrauma-packaged-assets.js');
+      await Promise.all([barotraumaAssetPromise, base.prepareView(viewId)]);
+      await window.BarotraumaPackagedAssets?.decorate(document);
+      return;
+    }
     return base.prepareView(viewId);
   }
 
   document.addEventListener('hb:view-activated', event => {
     if (event.detail?.viewId === 'modules') window.initModuleViewer?.();
+    if (event.detail?.viewId === 'barotrauma') {
+      void window.BarotraumaPackagedAssets?.decorate(document);
+    }
   });
 
   window.HBTTRPGApp = Object.freeze({

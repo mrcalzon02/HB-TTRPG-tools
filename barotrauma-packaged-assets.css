@@ -1,0 +1,108 @@
+.barotrauma-atlas-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(155deg, #07151c 0%, #0b2028 55%, #071117 100%);
+  border-color: rgba(100, 201, 202, 0.48) !important;
+  box-shadow: inset 0 0 0 1px rgba(215, 238, 229, 0.04), 0 16px 38px rgba(0, 0, 0, 0.24);
+}
+
+.barotrauma-atlas-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(110deg, rgba(4, 13, 18, 0.93) 0%, rgba(4, 13, 18, 0.72) 48%, rgba(4, 13, 18, 0.32) 100%),
+    repeating-linear-gradient(0deg, rgba(161, 229, 220, 0.025) 0 1px, transparent 1px 5px);
+}
+
+.barotrauma-atlas-surface > :not(.barotrauma-atlas-backdrop):not(.barotrauma-atlas-icon) {
+  position: relative;
+  z-index: 2;
+}
+
+.barotrauma-atlas-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.barotrauma-atlas-icon {
+  position: relative;
+  z-index: 3;
+  display: block;
+  float: right;
+  width: 64px;
+  height: 64px;
+  margin: 0 0 0.8rem 1rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(118, 220, 207, 0.55);
+  border-radius: 10px;
+  background: rgba(2, 10, 14, 0.78);
+  box-shadow: 0 0 22px rgba(53, 189, 188, 0.16), inset 0 0 18px rgba(113, 222, 209, 0.08);
+  pointer-events: none;
+}
+
+.barotrauma-atlas-error .barotrauma-atlas-backdrop,
+.barotrauma-atlas-error .barotrauma-atlas-icon {
+  display: none;
+}
+
+#barotrauma > .hero-card.barotrauma-atlas-surface,
+.workspace-hero.barotrauma-atlas-surface {
+  min-height: 260px;
+}
+
+#barotrauma .module-card.barotrauma-atlas-surface,
+.workspace-tool-card.barotrauma-atlas-surface {
+  min-height: 220px;
+  background-color: rgba(4, 15, 20, 0.94);
+}
+
+#barotrauma .module-card.barotrauma-atlas-surface p,
+.workspace-tool-card.barotrauma-atlas-surface p,
+.workspace-hero.barotrauma-atlas-surface p {
+  color: rgba(226, 239, 233, 0.88);
+}
+
+#barotrauma .module-card.barotrauma-atlas-surface h3,
+.workspace-tool-card.barotrauma-atlas-surface h3,
+.workspace-hero.barotrauma-atlas-surface h1,
+.workspace-hero.barotrauma-atlas-surface h2,
+#barotrauma > .hero-card.barotrauma-atlas-surface h2 {
+  color: #e5f4ef;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72);
+}
+
+#barotrauma .module-card.barotrauma-atlas-surface .badge,
+.workspace-tool-card.barotrauma-atlas-surface .badge {
+  background: rgba(4, 18, 24, 0.82);
+  border-color: rgba(96, 202, 198, 0.42);
+}
+
+@media (max-width: 720px) {
+  .barotrauma-atlas-icon {
+    width: 52px;
+    height: 52px;
+    margin-left: 0.65rem;
+  }
+
+  #barotrauma > .hero-card.barotrauma-atlas-surface,
+  .workspace-hero.barotrauma-atlas-surface {
+    min-height: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barotrauma-atlas-backdrop,
+  .barotrauma-atlas-icon {
+    image-rendering: auto;
+  }
+}
