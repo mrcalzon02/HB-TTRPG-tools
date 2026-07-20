@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Deterministic first-pass sprite index for the ten packaged sci-fi UI atlases.
@@ -133,138 +134,24 @@ public final class UiAtlasSliceIndex {
                     zone("bottom-right-textures-and-cells", 980, 1030, 1254, 1254))
     );
 
-    private static final Map<String, SliceAdjustment> ADJUSTMENTS = adjustments(
-            approve("med-001", 12, 12, 94, 93,
-                    "medical-blank-square-panel", "panel", "Blank square medical panel frame."),
-            approve("med-003", 238, 17, 37, 37,
-                    "medical-neutral-status-dial", "status-dial", "Neutral circular status dial."),
-            approve("med-004", 349, 17, 38, 38,
-                    "medical-teal-status-dial", "status-dial", "Teal circular status dial."),
-            approve("med-005", 405, 17, 39, 38,
-                    "medical-pale-status-dial", "status-dial", "Pale circular status dial."),
-            approve("med-007", 588, 17, 25, 47,
-                    "medical-dna-symbol", "medical-symbol", "DNA helix symbol."),
-            approve("med-008", 655, 16, 47, 48,
-                    "medical-brain-symbol", "medical-symbol", "Brain symbol."),
-            approve("med-009", 740, 17, 50, 47,
-                    "medical-lungs-symbol", "medical-symbol", "Lungs symbol."),
-            approve("med-010", 830, 17, 30, 47,
-                    "medical-heart-symbol", "medical-symbol", "Anatomical heart symbol."),
-            approve("med-018", 350, 71, 37, 36,
-                    "medical-molecule-symbol", "science-symbol", "Molecular structure symbol."),
-            approve("med-022", 474, 87, 33, 34,
-                    "medical-cross-button", "medical-button", "Medical cross square button."),
-            approve("med-024", 613, 85, 30, 34,
-                    "medical-kit-symbol", "medical-symbol", "Medical kit symbol."),
-            approve("med-042", 533, 138, 40, 40,
-                    "medical-stethoscope-symbol", "medical-symbol", "Stethoscope symbol."),
-            approve("med-045", 747, 138, 46, 39,
-                    "medical-atom-symbol", "science-symbol", "Atomic research symbol."),
-            approve("med-046", 822, 140, 32, 36,
-                    "medical-lab-flask-symbol", "science-symbol", "Laboratory flask symbol."),
-            approve("med-052", 121, 164, 97, 49,
-                    "medical-crew-card", "navigation-card", "Crew navigation card."),
-            approve("med-079", 15, 253, 97, 57,
-                    "medical-folder-card", "navigation-card", "Folder navigation card."),
-            approve("med-101", 121, 349, 97, 58,
-                    "medical-settings-card", "navigation-card", "Settings navigation card."),
-            approve("med-109", 15, 398, 97, 50,
-                    "medical-search-card", "navigation-card", "Search navigation card."),
-            approve("med-110", 121, 398, 97, 50,
-                    "medical-observation-card", "navigation-card", "Observation navigation card."),
-            approve("med-123", 251, 534, 178, 138,
-                    "medical-subject-data-panel", "diagnostic-panel", "Subject demographic and stability panel."),
-            approve("med-124", 593, 538, 162, 171,
-                    "medical-vital-signs-panel", "diagnostic-panel", "Pulse, temperature, oxygen, and respiration panel."),
-            approve("med-125", 772, 555, 155, 154,
-                    "medical-radiograph-panel", "diagnostic-panel", "Torso radiograph panel."),
-            approve("med-126", 452, 567, 126, 142,
-                    "medical-body-scan-panel", "diagnostic-panel", "Full-body scan panel."),
-            approve("med-132", 15, 608, 48, 21,
-                    "medical-message-icon", "status-icon", "Message bubble icon."),
-            approve("med-148", 244, 733, 31, 31,
-                    "medical-save-icon", "storage-icon", "Save disk icon."),
-            approve("med-149", 303, 733, 31, 31,
-                    "medical-storage-icon-a", "storage-icon", "First storage disk icon."),
-            approve("med-150", 363, 733, 28, 31,
-                    "medical-storage-icon-b", "storage-icon", "Second storage disk icon."),
-            approve("med-152", 479, 731, 31, 33,
-                    "medical-clipboard-icon", "storage-icon", "Clipboard icon."),
-            approve("med-153", 536, 733, 38, 32,
-                    "medical-download-icon", "storage-icon", "Download-to-tray icon."),
-            approve("med-154", 599, 734, 37, 31,
-                    "medical-upload-icon", "storage-icon", "Upload-from-tray icon."),
-            approve("med-155", 664, 735, 42, 28,
-                    "medical-cloud-icon", "storage-icon", "Cloud storage icon."),
-            approve("med-156", 732, 736, 29, 29,
-                    "medical-service-key-icon", "utility-icon", "Service key icon."),
-            approve("med-168", 213, 791, 34, 33,
-                    "medical-eye-status-icon", "status-icon", "Eye status icon."),
-            approve("med-169", 266, 791, 35, 33,
-                    "medical-target-status-icon", "status-icon", "Target status icon."),
-            approve("med-170", 322, 791, 34, 33,
-                    "medical-timer-status-icon", "status-icon", "Timer status icon."),
-            approve("med-171", 377, 791, 33, 33,
-                    "medical-analytics-status-icon", "status-icon", "Analytics status icon."),
-            approve("med-172", 432, 791, 33, 33,
-                    "medical-lock-status-icon", "status-icon", "Lock status icon."),
-            approve("med-173", 486, 791, 34, 33,
-                    "medical-warning-status-icon", "status-icon", "Warning status icon."),
-            approve("med-174", 541, 791, 33, 33,
-                    "medical-help-status-icon", "status-icon", "Help status icon."),
-            approve("med-175", 595, 791, 33, 33,
-                    "medical-down-status-icon", "status-icon", "Down navigation status icon."),
-            approve("med-176", 650, 791, 33, 33,
-                    "medical-confirm-status-icon", "status-icon", "Confirmation status icon."),
-            approve("med-177", 704, 791, 34, 33,
-                    "medical-cancel-status-icon", "status-icon", "Cancellation status icon."),
-            approve("med-178", 758, 791, 33, 33,
-                    "medical-hazard-status-icon", "status-icon", "Hazard status icon."),
-            approve("med-179", 812, 788, 35, 35,
-                    "medical-power-status-icon", "status-icon", "Circular power status icon."),
-            approve("med-180", 864, 787, 37, 36,
-                    "medical-power-button", "button", "Framed power button."),
-            approve("med-181", 927, 786, 88, 34,
-                    "medical-gold-pill-button", "button", "Gold pill-shaped button."),
-            approve("med-183", 1048, 818, 69, 30,
-                    "medical-teal-pill-button", "button", "Teal pill-shaped button."),
-            approve("med-187", 350, 847, 186, 141,
-                    "medical-dna-diagnostics-panel", "diagnostic-panel", "DNA diagnostics panel."),
-            approve("med-188", 548, 847, 176, 141,
-                    "medical-molecular-network-panel", "diagnostic-panel", "Molecular network diagnostics panel."),
-            approve("med-189", 740, 847, 176, 141,
-                    "medical-world-map-panel", "diagnostic-panel", "World map diagnostics panel."),
-            approve("med-193", 997, 904, 47, 47,
-                    "medical-minus-button", "button", "Circular minus button."),
-            approve("med-195", 1122, 904, 47, 47,
-                    "medical-plus-button", "button", "Circular plus button."),
-            approve("med-198", 938, 967, 133, 64,
-                    "medical-equipment-panel", "panel", "Teal equipment panel."),
-            approve("med-199", 1088, 969, 147, 61,
-                    "medical-grid-equipment-panel", "panel", "Grid equipment panel."),
-            approve("med-200", 16, 988, 135, 38,
-                    "medical-chamfered-strip", "strip", "Chamfered horizontal strip."),
-            approve("med-201", 165, 972, 187, 185,
-                    "medical-radar-panel", "diagnostic-panel", "Circular radar panel."),
-            approve("med-202", 366, 1021, 200, 131,
-                    "medical-system-status-panel", "diagnostic-panel", "System status text panel."),
-            approve("med-203", 588, 1016, 120, 135,
-                    "medical-dot-matrix-indicator", "indicator", "Teal dot-matrix indicator."),
-            approve("med-205", 16, 1045, 133, 77,
-                    "medical-gauge", "gauge", "Instrument gauge."),
-            approve("med-206", 738, 1050, 172, 107,
-                    "medical-small-chamfered-panel", "panel", "Small chamfered blank panel."),
-            approve("med-207", 925, 1053, 126, 123,
-                    "medical-grid-panel", "panel", "Blank octagonal grid panel."),
-            approve("med-208", 1072, 1053, 170, 118,
-                    "medical-large-panel", "panel", "Large blank octagonal panel."),
-            approve("med-209", 16, 1175, 466, 61,
-                    "medical-green-footer-strip", "strip", "Green footer strip."),
-            approve("med-210", 493, 1176, 394, 60,
-                    "medical-white-footer-strip", "strip", "White footer strip."),
-            approve("med-211", 919, 1191, 322, 48,
-                    "medical-dark-footer-strip", "strip", "Dark footer strip.")
+    private static final Map<String, Set<String>> ASSIGNED_REVIEW_IDS = Map.of();
+
+    private static final Map<String, String> ASSIGNED_REVIEW_FINGERPRINTS = Map.of();
+
+    private static final List<String> REVIEW_RESOURCES = List.of(
+            "futuristic-hud.tsv",
+            "medical-ui.tsv",
+            "futuristic-ui-elements.tsv",
+            "retro-futuristic-ui.tsv",
+            "game-hud-icons.tsv",
+            "hud-design.tsv",
+            "hud-elements.tsv",
+            "hud-collage.tsv",
+            "ui-collage.tsv",
+            "tech-interface.tsv"
     );
+
+    private static final Map<String, SliceAdjustment> ADJUSTMENTS = loadAdjustments();
 
     private final Map<String, Sheet> sheets;
     private final Map<String, Slice> slices;
@@ -337,6 +224,30 @@ public final class UiAtlasSliceIndex {
         return slicesFor(sheetId).stream().filter(Slice::approved).toList();
     }
 
+    public List<Slice> assignedSlices() {
+        return slices().stream().filter(Slice::assigned).toList();
+    }
+
+    public List<Slice> assignedSlicesFor(String sheetId) {
+        return slicesFor(sheetId).stream().filter(Slice::assigned).toList();
+    }
+
+    public List<Slice> rejectedSlices() {
+        return slices().stream().filter(Slice::rejected).toList();
+    }
+
+    public List<Slice> rejectedSlicesFor(String sheetId) {
+        return slicesFor(sheetId).stream().filter(Slice::rejected).toList();
+    }
+
+    public List<Slice> reviewedSlices() {
+        return slices().stream().filter(Slice::reviewed).toList();
+    }
+
+    public List<Slice> reviewedSlicesFor(String sheetId) {
+        return slicesFor(sheetId).stream().filter(Slice::reviewed).toList();
+    }
+
     public Optional<Slice> findBySemanticName(String semanticName) {
         return Optional.ofNullable(slicesBySemanticName.get(
                 Objects.requireNonNull(semanticName, "semanticName")));
@@ -387,16 +298,29 @@ public final class UiAtlasSliceIndex {
             graphics.setStroke(new BasicStroke(1f));
             graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 9));
             for (Slice slice : slicesFor(sheetId)) {
-                Color color = slice.approved() ? new Color(84, 255, 160) : switch (slice.confidence()) {
-                    case "high" -> Color.RED;
-                    case "medium" -> Color.ORANGE;
-                    default -> Color.MAGENTA;
-                };
+                Color color;
+                String reviewSuffix = "";
+                if (slice.approved()) {
+                    color = new Color(84, 255, 160);
+                    reviewSuffix = "A";
+                } else if (slice.assigned()) {
+                    color = Color.CYAN;
+                    reviewSuffix = "R";
+                } else if (slice.rejected()) {
+                    color = Color.GRAY;
+                    reviewSuffix = "X";
+                } else {
+                    color = switch (slice.confidence()) {
+                        case "high" -> Color.RED;
+                        case "medium" -> Color.ORANGE;
+                        default -> Color.MAGENTA;
+                    };
+                }
                 graphics.setColor(color);
                 graphics.drawRect(slice.x(), slice.y(), slice.width() - 1, slice.height() - 1);
                 graphics.setColor(Color.YELLOW);
                 String suffix = slice.assetId().substring(slice.assetId().lastIndexOf('-') + 1);
-                graphics.drawString(slice.approved() ? suffix + "A" : suffix,
+                graphics.drawString(suffix + reviewSuffix,
                         slice.x() + 1, Math.min(source.getHeight() - 1, slice.y() + 9));
             }
         } finally {
@@ -426,14 +350,8 @@ public final class UiAtlasSliceIndex {
         Path parent = output.toAbsolutePath().normalize().getParent();
         if (parent != null) Files.createDirectories(parent);
         List<String> lines = new ArrayList<>();
-        lines.add("sheet_id\tasset_id\tsemantic_name\tresource\tx\ty\twidth\theight\tzone\tkind\tconfidence\tstatus\tnotes");
-        for (Slice slice : slicesFor(sheetId)) {
-            lines.add(String.join("\t",
-                    slice.sheetId(), slice.assetId(), slice.semanticName(), slice.resource(),
-                    Integer.toString(slice.x()), Integer.toString(slice.y()),
-                    Integer.toString(slice.width()), Integer.toString(slice.height()),
-                    slice.zone(), slice.kind(), slice.confidence(), slice.status(), slice.notes()));
-        }
+        lines.add(sliceMapHeader());
+        for (Slice slice : slicesFor(sheetId)) lines.add(sliceMapLine(slice));
         Files.write(output, lines, StandardCharsets.UTF_8);
     }
 
@@ -442,6 +360,28 @@ public final class UiAtlasSliceIndex {
         for (Sheet sheet : sheets.values()) {
             writeSliceMap(sheet.sheetId(), outputDirectory.resolve(sheet.sheetId() + ".tsv"));
         }
+    }
+
+    /** Writes the approved and unresolved assigned regions from every sheet into one correction map. */
+    public void writeReviewedMap(Path output) throws IOException {
+        Path parent = output.toAbsolutePath().normalize().getParent();
+        if (parent != null) Files.createDirectories(parent);
+        List<String> lines = new ArrayList<>();
+        lines.add(sliceMapHeader());
+        for (Slice slice : reviewedSlices()) lines.add(sliceMapLine(slice));
+        Files.write(output, lines, StandardCharsets.UTF_8);
+    }
+
+    private static String sliceMapHeader() {
+        return "sheet_id\tasset_id\tsemantic_name\tresource\tx\ty\twidth\theight\tzone\tkind\tconfidence\tstatus\tnotes";
+    }
+
+    private static String sliceMapLine(Slice slice) {
+        return String.join("\t",
+                slice.sheetId(), slice.assetId(), slice.semanticName(), slice.resource(),
+                Integer.toString(slice.x()), Integer.toString(slice.y()),
+                Integer.toString(slice.width()), Integer.toString(slice.height()),
+                slice.zone(), slice.kind(), slice.confidence(), slice.status(), slice.notes());
     }
 
     private BufferedImage source(String sheetId) throws IOException {
@@ -550,7 +490,59 @@ public final class UiAtlasSliceIndex {
             throw new IOException("UI atlas review assignments missing for " + definition.sheetId()
                     + ": expected " + expectedForSheet + " but applied " + applied + ".");
         }
-        return List.copyOf(adjusted);
+        return applyAssignedReview(definition, adjusted);
+    }
+
+    private static List<Slice> applyAssignedReview(SheetDefinition definition, List<Slice> slices)
+            throws IOException {
+        Set<String> assignedIds = ASSIGNED_REVIEW_IDS.getOrDefault(definition.sheetId(), Set.of());
+        if (assignedIds.isEmpty()) return List.copyOf(slices);
+
+        String expectedFingerprint = ASSIGNED_REVIEW_FINGERPRINTS.get(definition.sheetId());
+        String actualFingerprint = reviewFingerprint(slices, assignedIds);
+        if (!Objects.equals(expectedFingerprint, actualFingerprint)) {
+            throw new IOException("Assigned UI atlas review rectangles changed for " + definition.sheetId()
+                    + ": expected fingerprint " + expectedFingerprint + " but found " + actualFingerprint + ".");
+        }
+
+        List<Slice> assigned = new ArrayList<>(slices.size());
+        int applied = 0;
+        for (Slice slice : slices) {
+            if (!assignedIds.contains(slice.assetId())) {
+                assigned.add(slice);
+                continue;
+            }
+            if (slice.approved()) {
+                throw new IOException("Approved UI atlas asset cannot also be assigned: " + slice.assetId());
+            }
+            String assignmentNote = "Complete-looking standalone region selected for unified review; "
+                    + "semantic role pending approval.";
+            String combinedNotes = slice.notes().isBlank() ? assignmentNote
+                    : slice.notes() + "; " + assignmentNote;
+            assigned.add(new Slice(slice.sheetId(), slice.assetId(), "", slice.resource(),
+                    slice.x(), slice.y(), slice.width(), slice.height(),
+                    slice.zone(), slice.kind(), slice.confidence(), "assigned", combinedNotes));
+            applied++;
+        }
+        if (applied != assignedIds.size()) {
+            throw new IOException("Assigned UI atlas ids missing for " + definition.sheetId()
+                    + ": expected " + assignedIds.size() + " but applied " + applied + ".");
+        }
+        return List.copyOf(assigned);
+    }
+
+    private static String reviewFingerprint(List<Slice> slices, Set<String> assignedIds) {
+        long hash = 0xcbf29ce484222325L;
+        for (Slice slice : slices) {
+            if (!assignedIds.contains(slice.assetId())) continue;
+            String value = slice.assetId() + ":" + slice.x() + "," + slice.y() + ","
+                    + slice.width() + "," + slice.height() + ";";
+            for (int index = 0; index < value.length(); index++) {
+                hash ^= value.charAt(index);
+                hash *= 0x100000001b3L;
+            }
+        }
+        return Long.toUnsignedString(hash, 16);
     }
 
     private static boolean[] foregroundMask(BufferedImage source) {
@@ -755,15 +747,34 @@ public final class UiAtlasSliceIndex {
         if (index.slices().size() != 2549) {
             throw new IllegalStateException("Expected 2,549 first-pass UI atlas slice candidates.");
         }
-        if (index.approvedSlices().size() != 65 || index.approvedSlicesFor("medical-ui").size() != 65) {
-            throw new IllegalStateException("Expected the first 65 reviewed medical UI atlas assets.");
+        if (index.approvedSlices().size() != 612 || index.approvedSlicesFor("medical-ui").size() != 65) {
+            throw new IllegalStateException("Expected 612 approved UI atlas assets including 65 medical assets.");
+        }
+        if (!index.assignedSlices().isEmpty()
+                || index.rejectedSlices().size() != 7
+                || index.reviewedSlices().size() != 619) {
+            throw new IllegalStateException("Expected 612 approved assets, 7 rejected regions, and no unresolved assignments.");
         }
         if (index.approvedSlices().stream().anyMatch(slice -> slice.semanticName().isBlank())) {
             throw new IllegalStateException("Approved UI atlas assets require semantic names.");
         }
+        if (index.assignedSlices().stream().anyMatch(slice -> !slice.semanticName().isBlank())) {
+            throw new IllegalStateException("Assigned UI atlas regions must remain unnamed until semantic approval.");
+        }
+        if (index.rejectedSlices().stream().anyMatch(slice -> !slice.semanticName().isBlank())) {
+            throw new IllegalStateException("Rejected UI atlas regions must not expose semantic names.");
+        }
+        for (Sheet sheet : index.sheets()) {
+            if (index.approvedSlicesFor(sheet.sheetId()).isEmpty()) {
+                throw new IllegalStateException("Every UI atlas sheet requires approved semantic assets: " + sheet.sheetId());
+            }
+        }
         if (index.findBySemanticName("medical-large-panel").isEmpty()
-                || index.findBySemanticName("medical-warning-status-icon").isEmpty()) {
-            throw new IllegalStateException("Required medical UI semantic assignments are missing.");
+                || index.findBySemanticName("futuristic-hud-radar-panel").isEmpty()
+                || index.findBySemanticName("communications-send-button").isEmpty()
+                || index.findBySemanticName("tech-interface-database-icon").isEmpty()
+                || index.findBySemanticName("tech-interface-vanguard-label").isEmpty()) {
+            throw new IllegalStateException("Required cross-sheet UI semantic assignments are missing.");
         }
         for (Sheet sheet : index.sheets()) {
             BufferedImage source = index.source(sheet.sheetId());
@@ -803,44 +814,65 @@ public final class UiAtlasSliceIndex {
             System.out.println("Wrote all UI atlas slice maps to " + Path.of(args[1]).toAbsolutePath());
             return;
         }
+        if (args.length == 2 && args[0].equals("--write-reviewed-map")) {
+            index.writeReviewedMap(Path.of(args[1]));
+            System.out.println("Wrote unified reviewed UI atlas map to " + Path.of(args[1]).toAbsolutePath());
+            return;
+        }
         if (args.length == 0 || (args.length == 1 && args[0].equals("--verify"))) {
             verifyContract();
-            System.out.println("Packaged UI atlas detector passed: 10 sheets, 2,549 candidates, and 65 approved medical assets.");
+            System.out.println("Packaged UI atlas detector passed: 10 sheets, 2,549 candidates, 612 approved semantic assets, 7 rejected regions, and no unresolved assignments.");
             return;
         }
         System.err.println("Usage: UiAtlasSliceIndex [--verify | --render-review <sheet-id> <output.png>"
                 + " | --render-review-all <directory> | --write-map <sheet-id> <output.tsv>"
-                + " | --write-map-all <directory>]");
+                + " | --write-map-all <directory> | --write-reviewed-map <output.tsv>]");
         System.exit(2);
     }
 
-    private static Map<String, SliceAdjustment> adjustments(SliceAdjustment... values) {
+    private static Map<String, SliceAdjustment> loadAdjustments() {
         LinkedHashMap<String, SliceAdjustment> result = new LinkedHashMap<>();
-        for (SliceAdjustment value : values) {
-            if (result.putIfAbsent(value.assetId(), value) != null) {
-                throw new IllegalArgumentException("Duplicate UI atlas adjustment: " + value.assetId());
+        for (String filename : REVIEW_RESOURCES) {
+            String resource = "/io/github/mrcalzon02/barotrauma/assets/ui-atlas-reviewed/" + filename;
+            try (InputStream input = UiAtlasSliceIndex.class.getResourceAsStream(resource)) {
+                if (input == null) {
+                    throw new IllegalStateException("Packaged UI atlas review resource is missing: " + resource);
+                }
+                List<String> lines = new String(input.readAllBytes(), StandardCharsets.UTF_8).lines().toList();
+                if (lines.isEmpty() || !lines.get(0).startsWith("asset_id\tstatus\t")) {
+                    throw new IllegalStateException("Invalid UI atlas review resource header: " + resource);
+                }
+                for (int lineNumber = 1; lineNumber < lines.size(); lineNumber++) {
+                    String line = lines.get(lineNumber);
+                    if (line.isBlank()) continue;
+                    String[] fields = line.split("\t", -1);
+                    if (fields.length != 9) {
+                        throw new IllegalStateException("Invalid UI atlas review row " + resource + ":" + (lineNumber + 1));
+                    }
+                    String assetId = fields[0];
+                    String status = fields[1];
+                    int x = Integer.parseInt(fields[2]);
+                    int y = Integer.parseInt(fields[3]);
+                    int width = Integer.parseInt(fields[4]);
+                    int height = Integer.parseInt(fields[5]);
+                    String semanticName = fields[6];
+                    String kind = fields[7];
+                    String notes = fields[8];
+                    if (!status.equals("approved") && !status.equals("rejected")) {
+                        throw new IllegalStateException("Unsupported UI atlas review status for " + assetId + ": " + status);
+                    }
+                    RectangleCandidate rectangle = new RectangleCandidate(x, y, width, height);
+                    SliceAdjustment adjustment = new SliceAdjustment(assetId, rectangle, rectangle,
+                            semanticName, kind, status, notes);
+                    if (result.putIfAbsent(assetId, adjustment) != null) {
+                        throw new IllegalStateException("Duplicate UI atlas review asset id: " + assetId);
+                    }
+                }
+            } catch (IOException | NumberFormatException exception) {
+                throw new IllegalStateException("Unable to load UI atlas review resource: " + resource, exception);
             }
         }
         return Collections.unmodifiableMap(result);
-    }
-
-    private static SliceAdjustment approve(String assetId, int x, int y, int width, int height,
-                                           String semanticName, String kind, String notes) {
-        return new SliceAdjustment(assetId,
-                new RectangleCandidate(x, y, width, height),
-                new RectangleCandidate(x, y, width, height),
-                semanticName, kind, "approved", notes);
-    }
-
-    @SuppressWarnings("unused")
-    private static SliceAdjustment approveAdjusted(String assetId,
-                                                   int expectedX, int expectedY, int expectedWidth, int expectedHeight,
-                                                   int x, int y, int width, int height,
-                                                   String semanticName, String kind, String notes) {
-        return new SliceAdjustment(assetId,
-                new RectangleCandidate(expectedX, expectedY, expectedWidth, expectedHeight),
-                new RectangleCandidate(x, y, width, height),
-                semanticName, kind, "approved", notes);
     }
 
     private static SheetDefinition sheet(String id, String code, String filename, int expectedCandidates,
@@ -862,6 +894,18 @@ public final class UiAtlasSliceIndex {
                         String zone, String kind, String confidence, String status, String notes) {
         public boolean approved() {
             return status.equals("approved");
+        }
+
+        public boolean assigned() {
+            return status.equals("assigned");
+        }
+
+        public boolean rejected() {
+            return status.equals("rejected");
+        }
+
+        public boolean reviewed() {
+            return approved() || assigned() || rejected();
         }
 
         RectangleCandidate rectangle() {
@@ -888,10 +932,12 @@ public final class UiAtlasSliceIndex {
             String combinedNotes = slice.notes().isBlank() ? notes
                     : notes.isBlank() ? slice.notes()
                     : slice.notes() + "; " + notes;
-            return new Slice(slice.sheetId(), slice.assetId(), semanticName, slice.resource(),
+            String appliedKind = kind.isBlank() ? slice.kind() : kind;
+            String appliedSemanticName = semanticName.isBlank() ? slice.semanticName() : semanticName;
+            return new Slice(slice.sheetId(), slice.assetId(), appliedSemanticName, slice.resource(),
                     approvedRectangle.x(), approvedRectangle.y(),
                     approvedRectangle.width(), approvedRectangle.height(),
-                    slice.zone(), kind, slice.confidence(), status, combinedNotes);
+                    slice.zone(), appliedKind, slice.confidence(), status, combinedNotes);
         }
     }
     private record Component(int x, int y, int width, int height, int area) { }
