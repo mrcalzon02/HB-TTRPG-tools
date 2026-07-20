@@ -78,7 +78,7 @@ A milestone may be marked **Complete** only when:
 |---|---|---|---|
 | 0 | Existing passive-world baseline | Complete | Schema 014 economy, civilization frontier, fleet response, ecology, geology, extraction, and mapping |
 | 1 | Observation foundation | Complete | Schema 015 vocabulary, deterministic population seeds, events, query-only registry, and desktop evidence |
-| 2 | NPC population and settlement lifecycle | Active | Schema 016 accounting complete; demographic behavior, migration, and settlement projects remain |
+| 2 | NPC population and settlement lifecycle | Active | Schema 016 accounting and schema 027 demographic lifecycle complete; physical migration and settlement projects remain |
 | 3 | Faction influence and territorial pressure | Planned | Node and route influence, contested control, and political consequences |
 | 4 | Creature population and territory simulation | Planned | Species cohorts, capacity, reproduction, mortality, nests, migration, and competition |
 | 5 | NPC–creature–environment interaction | Planned | Hunting, displacement, habitat pressure, predation, and mission feedback |
@@ -172,7 +172,7 @@ Schema 016 adds:
 - `npc_population_reconciliation_seed`
 - `npc_population_tick_accounting`
 
-Every station population now receives one ledger row for each advanced civilization tick. The ledger stores before and after totals, births, deaths, immigration, emigration, disaster losses, other gains and losses, capacity and morale inputs, frontier index before and after, cause, evidence, and summary.
+Every station population receives one ledger row for each advanced civilization tick. The ledger stores before and after totals, births, deaths, immigration, emigration, disaster losses, other gains and losses, capacity and morale inputs, frontier index before and after, cause, evidence, and summary.
 
 The database enforces:
 
@@ -181,7 +181,7 @@ after = before + births + immigration + other gains
                - deaths - emigration - disaster losses - other losses
 ```
 
-Current frontier-index changes are recorded explicitly as reconciliation gains or losses. Abandonment is separately identified. Stable ticks produce zero-delta ledger rows but no false change events. Detailed cohorts are proportionally reconciled and remain nonnegative. Each tick creates total-population and frontier-index metrics; material changes create causal population events with per-tick canonical time during multi-tick catch-up.
+Schema 016 initially recorded frontier-index differences as explicit reconciliation gains or losses. Abandonment was separately identified. Stable ticks produced zero-delta ledger rows without false change events. Detailed cohorts remained nonnegative and exactly matched the ledger after-total. Each tick created total-population and frontier-index metrics; material changes created causal population events with per-tick canonical time during multi-tick catch-up.
 
 The Observation Registry and desktop window expose the complete ledger with changed-since-tick filtering.
 
@@ -210,35 +210,58 @@ Satisfied:
 
 ## Slice 2.2 — Capacity, growth, mortality, and morale
 
-**Status: Active — next implementation slice**
+**Status: Complete**
 
-Replace generic reconciliation differences with slow bounded demographic terms driven by:
+Schema 027 replaces the generic schema-016 population-index reconciliation and the separate schema-022 passive headcount planner with one authoritative demographic lifecycle derived from the detailed NPC cohorts. It adds:
 
-- Housing capacity.
-- Life-support capacity.
-- Employment capacity.
-- Supplies and ration support.
-- Medical personnel.
-- Integrity and security.
-- Threat and fauna pressure.
-- Morale.
+- `npc_demographic_state`
+- `npc_demographic_tick_baseline`
+- `npc_demographic_tick_result`
+- `npc_demographic_tick_plan`
+- `npc_demographic_capture_before_tick`
+- `npc_demographic_finalize_tick`
 
-Required behavior:
+The planner uses housing, life-support, and employment capacity; station supplies; medical coverage; integrity; security; threat; fauna pressure; morale; shortage history; and measured attack damage. It commits exactly one immutable result and one conserved ledger row for each evaluated population tick.
 
-- Births require sustained surplus capacity and support.
-- Natural deaths remain low under stable conditions.
-- Shortage, failed life support, low medical coverage, damage, and threat create explicit excess mortality.
-- Over-capacity conditions suppress births before causing losses.
-- Morale changes slowly and influences growth or departure pressure.
-- Hysteresis and cooldowns prevent rapid oscillation.
-- Demographic terms reconcile with the frontier index without double-counting.
-- Every cause is deterministic and evidence-backed.
+Implemented behavior:
 
-**Acceptance:** repeated identical inputs produce identical ledger terms; no population exceeds capacity without an explicit overcrowding state; no mortality occurs without committed causes; multi-tick catch-up preserves one ordered ledger per tick.
+- Births require six sustained support ticks, a six-tick birth cooldown, support of at least 70, pressure below 35, and population below 95 percent of effective capacity.
+- Births are bounded by available capacity and by slow proportional growth.
+- Stable natural mortality remains deterministic and infrequent.
+- Over-capacity conditions suppress births immediately, enter an explicit overcrowding state, and create excess mortality only after three overcrowded ticks.
+- Sustained shortage, failed life support, low medical coverage, damage, and threat create explicit support-failure mortality.
+- Measured fauna attack damage creates explicit disaster casualties rather than a second attack-population writer.
+- Morale changes by bounded increments and influences later support or departure pressure.
+- Hysteresis counters decay rather than resetting abruptly, preventing rapid oscillation.
+- Detailed cohorts are the demographic source of truth. `station_population_state` resident and workforce counts are projections of the same committed result, preserving command-level mutation coverage without a competing simulator.
+- The civilization population index is projected from committed detailed population after demographics settle; it no longer independently creates people or removes them.
+- Direct out-of-band status or frontier changes do not mutate population through a separate trigger. Their demographic consequence is committed on the next authoritative passive tick.
+- Observation events, station population stories, typed changes, and six demographic metrics are derived from the immutable tick result.
+
+The existing Observation Foundation ledger tab exposes births, deaths, disaster losses, capacities, morale, cause, evidence, and summary without introducing a second desktop data path.
+
+```text
+toolbox.cmd verify
+toolbox.cmd observation
+```
+
+### Slice 2.2 acceptance
+
+Satisfied:
+
+- Repeated identical inputs produce identical committed demographic signatures.
+- Sustained supported conditions produce bounded births only after hysteresis and cooldown requirements.
+- Overcrowding suppresses births before delayed mortality.
+- Natural, support-failure, overcrowding, attack, and abandonment losses carry committed evidence.
+- One conserved ledger row and one immutable demographic result are written per population and tick.
+- Detailed cohorts, station residents, station workforce, and the frontier population index remain projections of one result.
+- Multi-tick catch-up preserves ordered per-tick evaluation through the existing single transaction writer.
+- Rollback removes the demographic result, ledger, cohorts, station projection, events, changes, and metrics together.
+- Fresh, legacy, and pre-renumber local worlds migrate through schema 027.
 
 ## Slice 2.3 — Population migration and evacuation
 
-**Status: Planned**
+**Status: Active — next implementation slice**
 
 Add durable flows with origin, destination, quantity, cause, transport requirement, preparation, transit, arrival, return, failure, cancellation, and explicit casualties. Initial flows cover ordinary migration, worker transfer, refugee evacuation, and emergency relocation.
 
@@ -385,11 +408,10 @@ Every simulation milestone must test:
 
 # Active execution order
 
-1. **Milestone 2.2** — capacity-supported births, deaths, morale, and demographic hysteresis.
-2. **Milestone 2.3** — physical migration and evacuation flows.
-3. **Milestone 2.4** — founding, abandonment, and reclamation projects.
-4. **Milestone 2.5** — complete lifecycle evidence in the desktop observation UI.
-5. Begin Milestone 3 only after NPC population movement and settlement transitions are conserved.
+1. **Milestone 2.3** — physical migration and evacuation flows.
+2. **Milestone 2.4** — founding, abandonment, and reclamation projects.
+3. **Milestone 2.5** — complete lifecycle evidence in the desktop observation UI.
+4. Begin Milestone 3 only after NPC population movement and settlement transitions are conserved.
 
 # Development Record
 
@@ -416,6 +438,15 @@ Every simulation milestone must test:
 - Exposed the ledger through the query-only registry and desktop observation window.
 - Added focused schema, registry, migration, UI, and documentation coverage.
 
+## 2026-07-20 — Milestone 2.2 completed
+
+- Advanced the desktop database through schema 027.
+- Replaced generic frontier-index reconciliation and the separate station headcount planner with one detailed-cohort demographic authority.
+- Added deterministic capacity support, pressure, morale, birth cooldown, shortage hysteresis, and overcrowding state.
+- Added bounded births, stable natural mortality, delayed overcrowding mortality, support-failure mortality, measured attack casualties, and explicit abandonment losses.
+- Projected station resident/workforce state, station causality, observation events, and metrics from the same immutable tick result.
+- Added fresh, legacy, pre-renumber, deterministic replay, conservation, rollback, and desktop evidence coverage.
+
 ## Next
 
-Implement Milestone 2.2: capacity-supported births, deaths, morale, and demographic hysteresis without violating schema-016 conservation.
+Implement Milestone 2.3: durable physical migration and evacuation flows that move conserved people between station populations through explicit transport.
