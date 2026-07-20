@@ -78,15 +78,19 @@ Seven reviewed regions are intentionally excluded from semantic lookup and runti
 
 ## Review and implementation previews
 
+The review surfaces are split by purpose while sharing the same authoritative index:
+
 ```text
 src/main/java/io/github/mrcalzon02/barotrauma/assets/UiAtlasImplementationPreview.java
+src/main/java/io/github/mrcalzon02/barotrauma/assets/UiAtlasSemanticPreview.java
 ```
 
-The preview renderer loads every crop from `UiAtlasSliceIndex` and generates:
+`UiAtlasImplementationPreview` retains the focused medical composition preview.
+`UiAtlasSemanticPreview` loads every crop from `UiAtlasSliceIndex` and generates:
 
-- the original medical composition preview;
 - a unified semantic slicing gallery showing all 619 reviewed regions;
-- a ten-sheet boundary montage showing each region in source context.
+- a ten-sheet boundary montage showing each region in source context;
+- a rejected-only audit preview.
 
 Green `A` regions are approved semantic assets. Gray `X` regions are rejected fragments. Cyan `R` would indicate
 an unresolved assignment, but none remain. Red, orange, and magenta rectangles remain ordinary detector candidates.
@@ -99,13 +103,13 @@ java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex --verify
 java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex \
   --write-reviewed-map ./review/unified-ui-atlas-semantic-map.tsv
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
-  --render-unified-slices ./review/unified-ui-atlas-semantic-preview.png
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSemanticPreview \
+  --render-slices ./review/unified-ui-atlas-semantic-preview.png
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
-  --render-unified-overlays ./review/unified-ui-atlas-semantic-overlay.png
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSemanticPreview \
+  --render-overlays ./review/unified-ui-atlas-semantic-overlay.png
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSemanticPreview \
   --render-rejected ./review/unified-ui-atlas-rejected-preview.png
 
 java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
@@ -121,7 +125,7 @@ For any region that looks clipped, merged, too loose, or semantically wrong:
 3. Correct the expected and approved rectangles in `UiAtlasSliceIndex`.
 4. Update the semantic name or status in the same authoritative adjustment record.
 5. Regenerate the semantic preview, overlay, and reviewed map.
-6. Run both `UiAtlasSliceIndex --verify` and `UiAtlasImplementationPreview --verify`.
+6. Run `UiAtlasSliceIndex --verify`, `UiAtlasImplementationPreview --verify`, and `UiAtlasSemanticPreview --verify`.
 
 Runtime Swing binding remains deferred until the relevant visual roles are accepted in the implementation preview.
 The intended source order remains donor installation first, approved packaged atlas second, and Java2D emergency
