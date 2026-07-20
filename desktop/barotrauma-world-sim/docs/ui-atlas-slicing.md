@@ -10,6 +10,11 @@ The first indexing pass identifies **2,549 selectable candidate regions across t
 Each candidate receives a stable reading-order asset id, exact `x`, `y`, `width`, and `height`, a semantic
 sheet zone, a probable asset kind, and a confidence level.
 
+The first manual assignment pass now approves **65 complete assets from `medical-ui`**. Every approved
+asset has a stable semantic name such as `medical-large-panel`, `medical-warning-status-icon`, or
+`medical-vital-signs-panel`. The remaining 146 regions on that sheet stay candidates and are not exposed
+as approved semantic assets.
+
 This is deliberately a reviewable draft. Dense generated sprite sheets do not provide authoritative
 sprite metadata, and black spacing is not perfectly regular. A first-pass rectangle may therefore:
 
@@ -19,10 +24,16 @@ sprite metadata, and black spacing is not perfectly regular. A first-pass rectan
 - merge closely spaced controls into one candidate;
 - identify an internal decorative element as a selectable asset.
 
-The detector, semantic zones, crop loader, map exporter, and review-overlay generator live together in
-`UiAtlasSliceIndex`. The application must not work around a bad rectangle with another crop layer,
-ad-hoc offsets, or copied derivative files. Sheet-specific corrections should be incorporated into this
-authoritative indexing implementation before runtime UI roles select the affected asset.
+The detector, semantic zones, crop loader, approval assignments, manual rectangle corrections, map exporter,
+and review-overlay generator live together in `UiAtlasSliceIndex`. The application must not work around a
+bad rectangle with another crop layer, ad-hoc offsets, or copied derivative files. Sheet-specific corrections
+are incorporated into this authoritative indexing implementation before runtime UI roles select the affected
+asset.
+
+Each manual assignment records the detector rectangle that was reviewed. If later detector changes move or
+resize that candidate, verification fails instead of silently applying an old semantic name to a different
+piece of artwork. The same assignment structure supports an explicitly corrected rectangle when visual
+inspection shows clipping or neighboring artwork.
 
 ## Authoritative implementation
 
@@ -35,11 +46,13 @@ The class performs one deterministic pipeline:
 1. Load the untouched packaged PNG.
 2. Separate visible pixels from the black atlas background.
 3. Close tiny internal gaps and join nearby pixels inside one candidate.
-4. Identify connected candidate regions.
+4. identify connected candidate regions.
 5. Tighten each rectangle back to the visible source pixels.
 6. Remove tiny noise regions.
 7. Sort candidates in stable reading order and assign ids.
 8. Classify each candidate by sheet zone, probable kind, confidence, and review notes.
+9. Apply explicit reviewed assignments and any approved boundary corrections.
+10. Expose only approved slices through stable semantic names.
 
 The detector can export per-sheet TSV maps and full-resolution numbered overlays to any development
 directory. Those outputs are review artifacts, not runtime resources, and do not create a second source
@@ -50,9 +63,38 @@ of truth.
 - red rectangle: high-confidence first-pass candidate;
 - orange rectangle: medium-confidence candidate needing closer inspection;
 - magenta rectangle: low-confidence candidate likely to need correction;
-- yellow number: the numeric suffix of the stable asset id.
+- green rectangle: manually reviewed and semantically approved asset;
+- yellow number: the numeric suffix of the stable asset id;
+- yellow number ending in `A`: approved asset.
 
 For example, rectangle `137` on the medical sheet corresponds to `med-137`.
+
+
+## Controlled implementation preview
+
+```text
+src/main/java/io/github/mrcalzon02/barotrauma/assets/UiAtlasImplementationPreview.java
+```
+
+The preview composes approved medical assets into practical desktop interface arrangements: navigation
+cards, panel chrome, diagnostic displays, status controls, storage controls, instrumentation, and footer
+strips. It always loads crops by semantic name from `UiAtlasSliceIndex`; it does not copy, re-export, or
+maintain another rectangle map.
+
+The preview is the controlled proving ground for scaling, black-background behavior, visual density, and
+component compatibility before these assets replace existing application roles. Corrections discovered in
+the preview must be made in `UiAtlasSliceIndex` and then regenerated.
+
+Commands:
+
+```text
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview --verify
+
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
+  --render-medical ./review/medical-ui-implementation-preview.png
+
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview --show-medical
+```
 
 ## Sheet inventory
 
@@ -85,18 +127,15 @@ Commands:
 ```text
 java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex --verify
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex \
-  --render-review medical-ui ./review/medical-ui.png
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --render-review medical-ui ./review/medical-ui.png
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex \
-  --write-map medical-ui ./review/medical-ui.tsv
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --write-map medical-ui ./review/medical-ui.tsv
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex \
-  --render-review-all ./review/overlays
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --render-review-all ./review/overlays
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex \
-  --write-map-all ./review/maps
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --write-map-all ./review/maps
 ```
 
-Runtime UI binding should begin only after the relevant sheet regions are approved. Donor-installed
-Barotrauma graphics remain a separate donor-first source and are not changed by this index.
+The approved medical batch is now available for controlled implementation review. Binding individual
+semantic roles into the main application should proceed only after the preview is accepted or corrected.
+Donor-installed Barotrauma graphics remain a separate donor-first source and are not changed by this index.
