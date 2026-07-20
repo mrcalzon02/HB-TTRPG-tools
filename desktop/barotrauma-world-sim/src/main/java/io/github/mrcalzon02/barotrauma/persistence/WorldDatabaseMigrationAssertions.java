@@ -54,6 +54,16 @@ final class WorldDatabaseMigrationAssertions {
         require(!objectExists(connection, "trigger", "npc_population_tick_accounting")
                         && !objectExists(connection, "trigger", "station_population_finalize_tick"),
                 prefix + " retained a competing demographic mutation pipeline.");
+        require(tableExists(connection, "npc_population_flow_cohort")
+                        && tableExists(connection, "npc_population_flow_transition"),
+                prefix + " is missing conserved population migration state.");
+        require(objectExists(connection, "view", "npc_population_flow_observation")
+                        && objectExists(connection, "view", "npc_population_migration_conservation"),
+                prefix + " is missing population migration observation or conservation views.");
+        require(objectExists(connection, "trigger", "npc_population_flow_status_guard")
+                        && objectExists(connection, "trigger", "npc_population_flow_conservation_guard")
+                        && objectExists(connection, "trigger", "npc_population_flow_terminal_immutable"),
+                prefix + " is missing population migration lifecycle guards.");
     }
 
     static long migrationVersionCount(Connection connection, int first, int last) throws SQLException {
