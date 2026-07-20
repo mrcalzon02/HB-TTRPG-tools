@@ -68,6 +68,9 @@ public final class BarotraumaAssetCatalogue {
             case PACKAGED_ATLAS -> loadPackaged(role);
             case PROCEDURAL_FALLBACK -> null;
         };
+        if (source == null && resolved.source() == GraphicSource.DONOR_INSTALLATION) {
+            source = loadPackaged(role);
+        }
         if (source == null) source = BarotraumaProceduralVisuals.render(role, width, height);
         return scale(source, width, height, role.scaleMode());
     }

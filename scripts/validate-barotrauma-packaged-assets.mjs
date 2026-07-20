@@ -108,7 +108,7 @@ const requiredUi = [
 for (const semantic of requiredScenes) if (!sceneSemantics.has(semantic)) fail(`Missing scene semantic ${semantic}.`);
 for (const semantic of requiredUi) if (!uiSemantics.has(semantic)) fail(`Missing UI semantic ${semantic}.`);
 
-for (const required of ['PACKAGED_ATLAS', 'packagedSceneRoles()', 'packagedUiRoles()', 'loadPackaged(role)']) {
+for (const required of ['PACKAGED_ATLAS', 'packagedSceneRoles()', 'packagedUiRoles()', 'loadPackaged(role)', 'resolved.source() == GraphicSource.DONOR_INSTALLATION']) {
   if (!desktopCatalogue.includes(required)) fail(`Desktop catalogue lacks ${required}.`);
 }
 const donorIndex = desktopCatalogue.indexOf('Optional<Candidate> donor = donors.activeDonor()');
