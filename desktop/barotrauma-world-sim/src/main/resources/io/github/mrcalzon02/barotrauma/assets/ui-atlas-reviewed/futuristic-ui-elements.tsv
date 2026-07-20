@@ -1,0 +1,66 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+fue-001	approved	15	15	136	78	futuristic-ui-generic-panel	panel	Generic dark panel.
+fue-008	approved	1157	17	84	85	futuristic-ui-navigation-dial	navigation-icon	Triangular navigation dial.
+fue-021	approved	14	107	51	42	futuristic-ui-play-button	button	Play button.
+fue-022	approved	56	107	52	42	futuristic-ui-pause-button	button	Pause button.
+fue-023	approved	117	107	43	44	futuristic-ui-stop-button	button	Stop button.
+fue-024	approved	169	107	43	42	futuristic-ui-fast-forward-button	button	Fast-forward button.
+fue-025	approved	221	107	43	44	futuristic-ui-refresh-button	button	Refresh button.
+fue-026	approved	273	107	43	44	futuristic-ui-shuffle-button	button	Shuffle button.
+fue-030	approved	898	119	38	38	futuristic-ui-targeting-reticle	targeting-icon	Targeting reticle.
+fue-047	approved	844	201	38	38	futuristic-ui-settings-icon	status-icon	Settings icon.
+fue-048	approved	892	201	38	38	futuristic-ui-shield-icon	status-icon	Shield icon.
+fue-049	approved	940	201	38	38	futuristic-ui-favorite-icon	status-icon	Favorite star icon.
+fue-050	approved	988	201	38	39	futuristic-ui-skull-icon	status-icon	Skull icon.
+fue-051	approved	1036	201	39	38	futuristic-ui-energy-icon	status-icon	Energy icon.
+fue-053	approved	19	218	30	29	futuristic-ui-power-icon	status-icon	Power icon.
+fue-054	approved	67	218	32	28	futuristic-ui-warning-icon	status-icon	Warning icon.
+fue-055	approved	118	218	29	29	futuristic-ui-alert-icon	status-icon	Alert icon.
+fue-056	approved	167	218	29	29	futuristic-ui-help-icon	status-icon	Help icon.
+fue-057	approved	217	219	28	27	futuristic-ui-information-icon	status-icon	Information icon.
+fue-062	approved	561	244	181	192	futuristic-ui-world-data-panel	data-panel	World data display panel.
+fue-086	approved	67	313	43	41	futuristic-ui-play-square-button	button	Square play button.
+fue-090	approved	297	313	41	43	futuristic-ui-window-layout-button	button	Window layout button.
+fue-092	approved	997	308	25	37	futuristic-ui-unlocked-icon	status-icon	Unlocked status icon.
+fue-093	approved	1035	309	25	36	futuristic-ui-locked-icon	status-icon	Locked status icon.
+fue-100	approved	185	366	42	41	futuristic-ui-plus-button	button	Plus button.
+fue-101	approved	241	366	41	41	futuristic-ui-minus-button	button	Minus button.
+fue-114	approved	15	422	323	65	futuristic-ui-waveform-strip	data-strip	Waveform strip.
+fue-120	approved	589	456	52	62	futuristic-ui-level-meter	meter	Segmented level meter.
+fue-121	approved	661	454	103	64	futuristic-ui-slider-bank	control-bank	Multi-slider control bank.
+fue-122	approved	956	481	196	182	futuristic-ui-menu-list-panel	list-panel	Menu list panel.
+fue-129	approved	783	505	160	68	futuristic-ui-status-panel	data-panel	Wide status panel.
+fue-130	approved	358	525	56	57	futuristic-ui-progress-dial-25	gauge	Twenty-five percent progress dial.
+fue-131	approved	427	529	47	47	futuristic-ui-progress-dial-50	gauge	Fifty percent progress dial.
+fue-132	approved	483	529	48	47	futuristic-ui-progress-dial-75	gauge	Seventy-five percent progress dial.
+fue-133	approved	540	528	48	48	futuristic-ui-progress-dial-100	gauge	Complete progress dial.
+fue-134	approved	19	556	39	38	futuristic-ui-operator-button	button	Operator button.
+fue-135	approved	75	556	38	38	futuristic-ui-command-button	button	Command station button.
+fue-136	approved	130	556	38	38	futuristic-ui-favorite-button	button	Favorite button.
+fue-143	approved	783	585	160	69	futuristic-ui-wide-panel-frame	panel-frame	Wide panel frame.
+fue-165	approved	118	801	19	44	futuristic-ui-empty-battery	battery-icon	Empty battery icon.
+fue-170	approved	269	801	19	44	futuristic-ui-charged-battery-a	battery-icon	Charged battery icon variant A.
+fue-171	approved	299	801	19	44	futuristic-ui-charged-battery-b	battery-icon	Charged battery icon variant B.
+fue-183	approved	751	907	78	78	futuristic-ui-radar-dial	gauge	Circular radar dial.
+fue-184	approved	842	911	77	76	futuristic-ui-atom-icon	science-icon	Atomic science icon.
+fue-203	approved	545	1018	163	97	futuristic-ui-navigation-panel	data-panel	Navigation panel.
+fue-204	approved	724	1018	195	97	futuristic-ui-starfield-panel	data-panel	Starfield panel.
+fue-205	approved	19	1035	149	126	futuristic-ui-graph-panel	data-panel	Graph panel.
+fue-206	approved	182	1040	109	85	futuristic-ui-targeting-panel	data-panel	Targeting panel.
+fue-207	approved	304	1038	213	123	futuristic-ui-world-map-panel	data-panel	World map panel.
+fue-208	approved	942	1050	73	58	futuristic-ui-fast-forward-square	button	Square fast-forward button.
+fue-210	approved	1150	1050	73	58	futuristic-ui-target-square	button	Target action button.
+fue-212	approved	942	1118	64	60	futuristic-ui-image-square	button	Image action button.
+fue-213	approved	1014	1120	73	58	futuristic-ui-clipboard-square	button	Clipboard action button.
+fue-214	approved	1078	1120	81	58	futuristic-ui-download-square	button	Download action button.
+fue-035	approved	21	169	24	24	futuristic-ui-ring-icon	status-icon	White ring icon.
+fue-072	approved	1094	266	28	36	futuristic-ui-system-dial	status-icon	Compact system dial.
+fue-091	approved	756	307	16	31	futuristic-ui-knob-control-a	control	Vertical knob control variant A.
+fue-094	approved	757	329	14	22	futuristic-ui-knob-control-b	control	Vertical knob control variant B.
+fue-149	approved	24	673	16	108	futuristic-ui-slider-rod-a	slider	Vertical slider rod variant A.
+fue-150	approved	62	673	16	108	futuristic-ui-slider-rod-b	slider	Vertical slider rod variant B.
+fue-151	approved	98	673	15	108	futuristic-ui-slider-rod-c	slider	Vertical slider rod variant C.
+fue-152	approved	138	673	15	108	futuristic-ui-slider-rod-d	slider	Vertical slider rod variant D.
+fue-158	approved	223	728	101	32	futuristic-ui-segmented-strip-a	control-strip	Segmented control strip variant A.
+fue-159	approved	234	732	80	25	futuristic-ui-segmented-strip-b	control-strip	Segmented control strip variant B.
+fue-211	approved	544	1129	374	50	futuristic-ui-glowing-footer-strip	label-strip	Glowing footer strip.
