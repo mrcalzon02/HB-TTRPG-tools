@@ -87,6 +87,15 @@ final class NpcPopulationMigrationEvidence {
 
     static void insertPopulationEvidence(Connection connection, Flow flow, Population population,
                                          long tick, long before, long after, long delta,
+                                         String category, String headline) throws SQLException {
+        long workforceBefore = population.workforce();
+        long workforceAfter = projectedWorkforce(connection, population.stationId(), workforceBefore);
+        insertPopulationEvidence(connection, flow, population, tick, before, after, delta,
+                workforceBefore, workforceAfter, category, headline);
+    }
+
+    static void insertPopulationEvidence(Connection connection, Flow flow, Population population,
+                                         long tick, long before, long after, long delta,
                                          long workforceBefore, long workforceAfter,
                                          String category, String headline) throws SQLException {
         String eventId = NpcPopulationMigrationTransaction.deterministicId(
@@ -151,6 +160,17 @@ final class NpcPopulationMigrationEvidence {
                     workforceChange.setString(7, population.stationId());
                     workforceChange.executeUpdate();
                 }
+            }
+        }
+    }
+
+    private static long projectedWorkforce(Connection connection, String stationId, long fallback)
+            throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT workforce_count FROM station_population_state WHERE station_id=?")) {
+            statement.setString(1, stationId);
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next() ? result.getLong(1) : fallback;
             }
         }
     }
