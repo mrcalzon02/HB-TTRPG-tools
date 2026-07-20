@@ -1,141 +1,128 @@
-# Packaged UI Atlas Slicing Index
+# Packaged UI Atlas Slicing and Semantic Review
 
 The ten original sci-fi UI PNGs in `src/main/resources/.../assets/sci_fi_ui_asset_sheets_10_images/`
-are source sprite sheets. They are not treated as whole-window artwork and they are never rewritten,
-resaved, or replaced by extracted derivative sprites.
+remain untouched source sprite sheets. They are never rewritten, resaved, or replaced by extracted derivative
+sprites.
 
 ## Current state
 
-The first indexing pass identifies **2,549 selectable candidate regions across ten 1254×1254 sheets**.
-Each candidate receives a stable reading-order asset id, exact `x`, `y`, `width`, and `height`, a semantic
-sheet zone, a probable asset kind, and a confidence level.
+The deterministic detector identifies **2,549 candidate regions across ten 1254×1254 sheets**. Every candidate
+has a stable reading-order asset id, exact source rectangle, semantic sheet zone, probable kind, confidence,
+review status, and notes.
 
-The first manual assignment pass now approves **65 complete assets from `medical-ui`**. Every approved
-asset has a stable semantic name such as `medical-large-panel`, `medical-warning-status-icon`, or
-`medical-vital-signs-panel`. The remaining 146 regions on that sheet stay candidates and are not exposed
-as approved semantic assets.
+The current review has promoted **612 assets to approved semantic status** and explicitly rejects **7 unusable
+fragments**. No selected region remains unresolved. The reviewed total remains 619; 1,930 detector candidates are
+intentionally unselected.
 
-This is deliberately a reviewable draft. Dense generated sprite sheets do not provide authoritative
-sprite metadata, and black spacing is not perfectly regular. A first-pass rectangle may therefore:
+| State | Count | Runtime semantic lookup |
+|---|---:|---|
+| `approved` | 612 | Yes |
+| `rejected` | 7 | No |
+| `assigned` | 0 | No |
+| `candidate` | 1,930 | No |
+| **Total** | **2,549** | |
 
-- clip a faint antialiased edge;
-- include a narrow strip of a neighboring asset;
-- split one visual control into two candidates;
-- merge closely spaced controls into one candidate;
-- identify an internal decorative element as a selectable asset.
+Only approved assets can be addressed through `UiAtlasSliceIndex.findBySemanticName(...)` and
+`cropBySemanticName(...)`. Rejected regions remain visible in the audit previews but cannot enter runtime use.
 
-The detector, semantic zones, crop loader, approval assignments, manual rectangle corrections, map exporter,
-and review-overlay generator live together in `UiAtlasSliceIndex`. The application must not work around a
-bad rectangle with another crop layer, ad-hoc offsets, or copied derivative files. Sheet-specific corrections
-are incorporated into this authoritative indexing implementation before runtime UI roles select the affected
-asset.
-
-Each manual assignment records the detector rectangle that was reviewed. If later detector changes move or
-resize that candidate, verification fails instead of silently applying an old semantic name to a different
-piece of artwork. The same assignment structure supports an explicitly corrected rectangle when visual
-inspection shows clipping or neighboring artwork.
-
-## Authoritative implementation
+## One authoritative implementation
 
 ```text
 src/main/java/io/github/mrcalzon02/barotrauma/assets/UiAtlasSliceIndex.java
 ```
 
-The class performs one deterministic pipeline:
+`UiAtlasSliceIndex` owns the complete pipeline:
 
-1. Load the untouched packaged PNG.
-2. Separate visible pixels from the black atlas background.
-3. Close tiny internal gaps and join nearby pixels inside one candidate.
-4. identify connected candidate regions.
-5. Tighten each rectangle back to the visible source pixels.
-6. Remove tiny noise regions.
-7. Sort candidates in stable reading order and assign ids.
-8. Classify each candidate by sheet zone, probable kind, confidence, and review notes.
-9. Apply explicit reviewed assignments and any approved boundary corrections.
-10. Expose only approved slices through stable semantic names.
+1. Load each untouched packaged PNG.
+2. Detect visible connected regions against the black atlas background.
+3. Tighten candidate rectangles and assign stable ids.
+4. Apply explicit reviewed boundary corrections.
+5. Apply approved semantic names and kinds.
+6. Record explicit rejections for unusable fragments.
+7. Verify every reviewed rectangle against the detector output.
+8. Provide exact in-memory crops, semantic lookup, maps, and review overlays.
 
-The detector can export per-sheet TSV maps and full-resolution numbered overlays to any development
-directory. Those outputs are review artifacts, not runtime resources, and do not create a second source
-of truth.
+The former separate unified-review manifest and wrapper are obsolete. Assignment status, approval state, rectangle
+verification, semantic lookup, overlays, and map output now come from the same index. Corrections must be made here,
+not hidden behind another crop layer, copied sprite, post-processor, or display offset.
 
-## Review overlay legend
+## Approved counts by sheet
 
-- red rectangle: high-confidence first-pass candidate;
-- orange rectangle: medium-confidence candidate needing closer inspection;
-- magenta rectangle: low-confidence candidate likely to need correction;
-- green rectangle: manually reviewed and semantically approved asset;
-- yellow number: the numeric suffix of the stable asset id;
-- yellow number ending in `A`: approved asset.
+| Sheet | Approved | Rejected | Reviewed |
+|---|---:|---:|---:|
+| `futuristic-hud` | 36 | 6 rejected | 42 |
+| `medical-ui` | 65 | 0 rejected | 65 |
+| `futuristic-ui-elements` | 65 | 0 rejected | 65 |
+| `retro-futuristic-ui` | 72 | 0 rejected | 72 |
+| `game-hud-icons` | 42 | 0 rejected | 42 |
+| `hud-design` | 46 | 0 rejected | 46 |
+| `hud-elements` | 65 | 0 rejected | 65 |
+| `hud-collage` | 54 | 0 rejected | 54 |
+| `ui-collage` | 99 | 1 rejected | 100 |
+| `tech-interface` | 68 | 0 rejected | 68 |
+| **Total** | **612** | **7 rejected** | **619** |
 
-For example, rectangle `137` on the medical sheet corresponds to `med-137`.
+The promoted assets cover navigation controls, communications controls, equipment and inventory symbols, map
+markers, vehicle silhouettes, environmental hazards, gauges, progress controls, data panels, faction emblems,
+status lights, gestures, notification controls, and reusable panel chrome.
 
+## Rejected regions
 
-## Controlled implementation preview
+Seven reviewed regions are intentionally excluded from semantic lookup and runtime use:
+
+- `fhud-024`: blurred decorative micro-glyph without a stable standalone role;
+- `fhud-043`, `fhud-044`, `fhud-045`: embedded blurred numeric glyphs;
+- `fhud-078`: merged glowing circle and neighboring dot;
+- `fhud-165`: blurred decorative fragment;
+- `uic-192`: embedded blurred numeric glyph.
+
+## Review and implementation previews
 
 ```text
 src/main/java/io/github/mrcalzon02/barotrauma/assets/UiAtlasImplementationPreview.java
 ```
 
-The preview composes approved medical assets into practical desktop interface arrangements: navigation
-cards, panel chrome, diagnostic displays, status controls, storage controls, instrumentation, and footer
-strips. It always loads crops by semantic name from `UiAtlasSliceIndex`; it does not copy, re-export, or
-maintain another rectangle map.
+The preview renderer loads every crop from `UiAtlasSliceIndex` and generates:
 
-The preview is the controlled proving ground for scaling, black-background behavior, visual density, and
-component compatibility before these assets replace existing application roles. Corrections discovered in
-the preview must be made in `UiAtlasSliceIndex` and then regenerated.
+- the original medical composition preview;
+- a unified semantic slicing gallery showing all 619 reviewed regions;
+- a ten-sheet boundary montage showing each region in source context.
 
-Commands:
-
-```text
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview --verify
-
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
-  --render-medical ./review/medical-ui-implementation-preview.png
-
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview --show-medical
-```
-
-## Sheet inventory
-
-| Sheet id | Primary content | Candidates |
-|---|---|---:|
-| `futuristic-hud` | radar, telemetry, ship schematics, gauges, controls, badges | 228 |
-| `medical-ui` | physiology, diagnostics, body panels, medical icons, laboratory controls | 211 |
-| `futuristic-ui-elements` | general controls, pointers, progress, panels, textures, maps | 224 |
-| `retro-futuristic-ui` | tabs, modal actions, status rows, gauges, map markers, frames | 268 |
-| `game-hud-icons` | equipment, weapons, tools, inventory slots, rank badges, item cards | 287 |
-| `hud-design` | panels, topographic maps, radar, sliders, toggles, progress bars | 284 |
-| `hud-elements` | world map, location markers, vehicles, missions, gauges, icon rows | 329 |
-| `hud-collage` | navigation, alerts, system controls, gauges, map, footer frames | 272 |
-| `ui-collage` | communications, channels, messages, signal state, waveform, network maps | 214 |
-| `tech-interface` | faction emblems, warnings, maps, networks, alerts, pins, textures | 232 |
-
-## Per-sheet refinement procedure
-
-Review one sheet at a time. For every numbered candidate:
-
-1. Generate its full-resolution review overlay and TSV map.
-2. Compare the rectangle against the untouched source image at 1:1 scale.
-3. Decide whether it is a complete reusable asset, a fragment, a merged group, or decorative noise.
-4. Correct the sheet-specific detector or explicit source rectangle in `UiAtlasSliceIndex`.
-5. Regenerate the overlay and verify that surrounding candidate ids remain stable.
-6. Record the approved semantic purpose before binding the asset to a Swing role.
+Green `A` regions are approved semantic assets. Gray `X` regions are rejected fragments. Cyan `R` would indicate
+an unresolved assignment, but none remain. Red, orange, and magenta rectangles remain ordinary detector candidates.
 
 Commands:
 
 ```text
 java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex --verify
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --render-review medical-ui ./review/medical-ui.png
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex \
+  --write-reviewed-map ./review/unified-ui-atlas-semantic-map.tsv
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --write-map medical-ui ./review/medical-ui.tsv
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
+  --render-unified-slices ./review/unified-ui-atlas-semantic-preview.png
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --render-review-all ./review/overlays
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
+  --render-unified-overlays ./review/unified-ui-atlas-semantic-overlay.png
 
-java io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex   --write-map-all ./review/maps
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
+  --render-rejected ./review/unified-ui-atlas-rejected-preview.png
+
+java io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview \
+  --render-medical ./review/medical-ui-implementation-preview.png
 ```
 
-The approved medical batch is now available for controlled implementation review. Binding individual
-semantic roles into the main application should proceed only after the preview is accepted or corrected.
-Donor-installed Barotrauma graphics remain a separate donor-first source and are not changed by this index.
+## Correction procedure
+
+For any region that looks clipped, merged, too loose, or semantically wrong:
+
+1. Identify its stable asset id in the unified semantic preview.
+2. Confirm the problem in the boundary montage at source-sheet scale.
+3. Correct the expected and approved rectangles in `UiAtlasSliceIndex`.
+4. Update the semantic name or status in the same authoritative adjustment record.
+5. Regenerate the semantic preview, overlay, and reviewed map.
+6. Run both `UiAtlasSliceIndex --verify` and `UiAtlasImplementationPreview --verify`.
+
+Runtime Swing binding remains deferred until the relevant visual roles are accepted in the implementation preview.
+The intended source order remains donor installation first, approved packaged atlas second, and Java2D emergency
+fallback last.
