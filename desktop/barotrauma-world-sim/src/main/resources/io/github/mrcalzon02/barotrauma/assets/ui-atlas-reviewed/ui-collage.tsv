@@ -1,0 +1,101 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+uic-002	approved	222	29	170	61	communications-ellipsis-light-strip	label-strip	Light ellipsis strip.
+uic-004	approved	463	26	50	55	communications-user-pin	communication-icon	User pin icon.
+uic-005	approved	533	26	51	56	communications-message-pin	communication-icon	Message pin icon.
+uic-006	approved	603	24	55	55	communications-mail-icon	communication-icon	Mail icon.
+uic-007	approved	677	25	52	52	communications-archive-icon	communication-icon	Archive icon.
+uic-008	approved	749	25	52	52	communications-medical-case-icon	communication-icon	Medical case icon.
+uic-009	approved	826	25	50	50	communications-signal-dial-a	signal-gauge	Signal dial variant A.
+uic-010	approved	890	26	48	47	communications-signal-dial-b	signal-gauge	Signal dial variant B.
+uic-011	approved	951	25	48	48	communications-signal-dial-c	signal-gauge	Signal dial variant C.
+uic-012	approved	1031	26	196	173	communications-grid-panel	panel	Communications grid panel.
+uic-015	approved	243	100	169	60	communications-ellipsis-dark-strip	label-strip	Dark ellipsis strip.
+uic-016	approved	463	106	42	35	communications-signal-bars	signal-icon	Signal bars icon.
+uic-017	approved	538	106	40	41	communications-transmitter-icon	signal-icon	Transmitter icon.
+uic-018	approved	685	104	36	41	communications-satellite-icon	signal-icon	Satellite icon.
+uic-019	approved	758	107	33	37	communications-signal-bars-alt	signal-icon	Alternate signal bars icon.
+uic-020	approved	826	95	114	19	communications-progress-full	signal-meter	Full signal progress meter.
+uic-022	approved	611	112	37	28	communications-wifi-icon	signal-icon	Wireless signal icon.
+uic-024	approved	826	130	114	19	communications-progress-empty	signal-meter	Empty signal progress meter.
+uic-026	approved	222	169	170	56	communications-ellipsis-light-strip-alt	label-strip	Alternate light ellipsis strip.
+uic-028	approved	826	165	114	19	communications-progress-mid	signal-meter	Partial signal progress meter.
+uic-030	approved	455	182	34	33	communications-status-light-gold-a	status-light	Gold status light variant A.
+uic-031	approved	504	182	34	34	communications-status-light-gold-b	status-light	Gold status light variant B.
+uic-032	approved	553	182	33	33	communications-status-light-green-a	status-light	Green status light variant A.
+uic-033	approved	602	183	32	32	communications-status-light-green-b	status-light	Green status light variant B.
+uic-034	approved	650	183	33	32	communications-status-light-green-c	status-light	Green status light variant C.
+uic-035	approved	698	183	33	32	communications-status-light-green-d	status-light	Green status light variant D.
+uic-038	approved	826	200	114	20	communications-progress-60	signal-meter	Sixty-percent signal meter.
+uic-041	approved	224	251	57	56	communications-mail-square	button	Mail button.
+uic-042	approved	297	251	57	56	communications-chat-square	button	Chat button.
+uic-043	approved	370	250	57	58	communications-transmitter-square	button	Transmitter button.
+uic-044	approved	440	250	56	57	communications-satellite-call-square	button	Satellite call button.
+uic-045	approved	512	251	57	55	communications-phone-square	button	Phone button.
+uic-046	approved	586	251	57	55	communications-video-square	button	Video button.
+uic-047	approved	662	251	56	55	communications-group-square	button	Group button.
+uic-048	approved	733	251	57	55	communications-alert-message-square	button	Alert message button.
+uic-049	approved	826	236	114	19	communications-progress-70	signal-meter	Seventy-percent signal meter.
+uic-057	approved	227	333	46	45	communications-exchange-button	button	Exchange button.
+uic-058	approved	298	333	47	44	communications-download-button	button	Download button.
+uic-059	approved	371	332	47	46	communications-anchor-button	button	Anchor button.
+uic-060	approved	444	333	46	44	communications-delete-button	button	Delete button.
+uic-061	approved	515	333	47	44	communications-favorite-button	button	Favorite button.
+uic-062	approved	586	333	47	44	communications-flag-button	button	Flag button.
+uic-063	approved	660	333	46	42	communications-view-button	button	View button.
+uic-064	approved	732	333	45	42	communications-more-button	button	More button.
+uic-075	approved	392	397	388	74	communications-waveform-strip	data-strip	Communications waveform strip.
+uic-076	approved	831	398	22	29	communications-unlock-icon	security-icon	Unlocked icon.
+uic-077	approved	879	398	21	29	communications-lock-icon	security-icon	Locked icon.
+uic-078	approved	924	399	25	27	communications-key-icon-a	security-icon	Key icon variant A.
+uic-079	approved	970	399	25	27	communications-key-icon-b	security-icon	Key icon variant B.
+uic-080	approved	1011	399	29	29	communications-confirm-icon	status-icon	Confirmation icon.
+uic-081	approved	1053	397	33	34	communications-help-icon	status-icon	Help icon.
+uic-089	approved	827	444	30	29	communications-edit-icon	status-icon	Edit icon.
+uic-090	approved	875	444	30	29	communications-information-icon	status-icon	Information icon.
+uic-091	approved	921	444	29	29	communications-hourglass-icon	status-icon	Hourglass icon.
+uic-092	approved	964	443	33	29	communications-warning-icon-a	hazard-icon	Warning icon variant A.
+uic-093	approved	1009	443	32	29	communications-warning-icon-b	hazard-icon	Warning icon variant B.
+uic-100	approved	280	476	38	9	communications-active-label	status-label	Active status label.
+uic-102	approved	280	493	84	9	communications-authenticated-label	status-label	Authenticated status label.
+uic-104	approved	806	496	317	46	communications-message-input	input-strip	Message input strip.
+uic-105	approved	1132	496	107	46	communications-send-button	button	Send button.
+uic-109	approved	806	555	57	42	communications-rewind-button	button	Rewind button.
+uic-110	approved	871	555	56	42	communications-play-button	button	Play button.
+uic-111	approved	935	556	56	41	communications-pause-button	button	Pause button.
+uic-112	approved	999	556	57	41	communications-stop-button	button	Stop button.
+uic-113	approved	1064	556	56	41	communications-fast-forward-button	button	Fast-forward button.
+uic-114	approved	1129	556	56	41	communications-record-button	button	Record button.
+uic-115	approved	13	562	181	133	communications-orbit-panel	data-panel	Orbital communications panel.
+uic-116	approved	222	563	141	105	communications-priority-panel	data-panel	Priority selection panel.
+uic-145	approved	396	701	36	49	communications-touch-icon	interaction-icon	Touch icon.
+uic-146	approved	13	705	181	124	communications-orbit-map	data-panel	Orbit map panel.
+uic-147	approved	205	705	168	124	communications-network-map	data-panel	Network map panel.
+uic-148	approved	456	703	37	47	communications-point-gesture	interaction-icon	Point gesture icon.
+uic-149	approved	512	704	36	46	communications-touch-press-gesture	interaction-icon	Touch press gesture icon.
+uic-150	approved	566	704	35	46	communications-sparkle-touch-gesture	interaction-icon	Sparkle touch gesture icon.
+uic-151	approved	620	703	44	46	communications-drag-gesture	interaction-icon	Drag gesture icon.
+uic-152	approved	689	703	34	46	communications-tap-gesture	interaction-icon	Tap gesture icon.
+uic-153	approved	737	702	37	47	communications-horizontal-drag-gesture	interaction-icon	Horizontal drag gesture icon.
+uic-168	approved	883	829	59	43	communications-menu-wide	button	Wide menu button.
+uic-169	approved	972	829	46	43	communications-menu-compact	button	Compact menu button.
+uic-170	approved	1118	828	43	45	communications-plus-square	button	Square plus button.
+uic-171	approved	1180	828	45	45	communications-more-square	button	Square more button.
+uic-172	approved	16	850	395	31	communications-status-strip	label-strip	Status strip.
+uic-173	approved	493	894	55	55	communications-number-dial-01	button	Number 01 dial.
+uic-174	approved	562	894	55	55	communications-number-dial-02	button	Number 02 dial.
+uic-175	approved	633	894	55	55	communications-number-dial-03	button	Number 03 dial.
+uic-176	approved	702	894	55	55	communications-number-dial-04	button	Number 04 dial.
+uic-177	approved	15	900	397	68	communications-dark-strip	label-strip	Dark label strip.
+uic-193	approved	860	1047	53	53	communications-bell-icon	notification-icon	Notification bell icon.
+uic-194	approved	938	1047	54	53	communications-operator-icon	communication-icon	Operator icon.
+uic-200	approved	550	1123	21	22	communications-status-ring-a	status-icon	Status ring variant A.
+uic-201	approved	585	1125	19	19	communications-status-ring-b	status-icon	Status ring variant B.
+uic-202	approved	617	1125	19	18	communications-status-ring-c	status-icon	Status ring variant C.
+uic-203	approved	650	1125	18	18	communications-status-ring-d	status-icon	Status ring variant D.
+uic-210	approved	550	1169	57	54	communications-mail-notification	notification-icon	Mail notification icon.
+uic-211	approved	626	1169	55	54	communications-message-notification	notification-icon	Message notification icon.
+uic-212	approved	701	1169	54	54	communications-bell-notification	notification-icon	Bell notification icon.
+uic-213	approved	778	1175	50	49	communications-warning-square	notification-icon	Warning notification icon.
+uic-214	approved	882	1195	337	28	communications-footer-progress	progress-bar	Footer progress bar.
+uic-188	approved	582	981	25	107	communications-vertical-slider	slider	Vertical communications slider.
+uic-192	rejected	860	988	13	9			Embedded blurred numeric glyph; reject as a standalone sprite.
