@@ -1,0 +1,69 @@
+asset_id	status	x	y	width	height	semantic_name	kind	notes
+tech-001	approved	1107	11	56	50	tech-interface-target-reticle-a	targeting-icon	Target reticle variant A.
+tech-002	approved	1184	12	54	47	tech-interface-target-reticle-b	targeting-icon	Target reticle variant B.
+tech-003	approved	20	22	88	93	tech-interface-faction-emblem-a	faction-emblem	Faction emblem variant A.
+tech-004	approved	132	22	79	93	tech-interface-faction-emblem-b	faction-emblem	Faction emblem variant B.
+tech-005	approved	243	22	78	93	tech-interface-faction-emblem-c	faction-emblem	Faction emblem variant C.
+tech-006	approved	351	24	78	91	tech-interface-faction-emblem-d	faction-emblem	Faction emblem variant D.
+tech-007	approved	458	21	79	94	tech-interface-faction-emblem-e	faction-emblem	Faction emblem variant E.
+tech-008	approved	565	22	73	93	tech-interface-faction-emblem-f	faction-emblem	Faction emblem variant F.
+tech-009	approved	664	22	31	30	tech-interface-up-round	button	Round up button.
+tech-010	approved	714	23	29	29	tech-interface-square-outline	status-icon	Square outline icon.
+tech-011	approved	764	23	25	28	tech-interface-diamond-outline	status-icon	Diamond outline icon.
+tech-012	approved	809	21	28	32	tech-interface-right-chevron-outline	navigation-icon	Right chevron outline.
+tech-013	approved	858	22	30	30	tech-interface-nested-diamond	status-icon	Nested diamond icon.
+tech-014	approved	905	20	34	35	tech-interface-split-arrow	navigation-icon	Split arrow icon.
+tech-015	approved	668	76	24	24	tech-interface-circle-fill	status-icon	Filled circle icon.
+tech-016	approved	716	75	24	26	tech-interface-square-frame	status-icon	Square frame icon.
+tech-017	approved	764	76	26	24	tech-interface-ring	status-icon	Ring icon.
+tech-018	approved	811	76	26	25	tech-interface-starburst	status-icon	Starburst icon.
+tech-019	approved	859	75	28	27	tech-interface-target-frame	targeting-icon	Target frame icon.
+tech-020	approved	908	74	27	28	tech-interface-target-dot-frame	targeting-icon	Target dot frame icon.
+tech-021	approved	957	75	25	26	tech-interface-refresh-icon	status-icon	Refresh icon.
+tech-023	approved	1053	76	30	24	tech-interface-dual-bar	status-strip	Dual status bar.
+tech-024	approved	1119	82	37	92	tech-interface-status-bars	status-list	Status bar list.
+tech-025	approved	1191	73	40	42	tech-interface-target-line	targeting-icon	Target line icon.
+tech-026	approved	1053	119	32	38	tech-interface-archive-icon	file-icon	Archive icon.
+tech-033	approved	665	129	29	29	tech-interface-settings-icon	system-icon	Settings icon.
+tech-034	approved	714	133	29	23	tech-interface-menu-icon	system-icon	Menu icon.
+tech-035	approved	763	130	28	27	tech-interface-globe-icon	network-icon	Globe icon.
+tech-036	approved	812	130	30	27	tech-interface-network-icon	network-icon	Network topology icon.
+tech-037	approved	863	130	24	27	tech-interface-database-icon	network-icon	Database icon.
+tech-038	approved	906	131	28	26	tech-interface-signal-bars-icon	network-icon	Signal bars icon.
+tech-039	approved	957	128	25	30	tech-interface-transmitter-icon	network-icon	Transmitter icon.
+tech-040	approved	1004	130	28	27	tech-interface-link-icon	network-icon	Link icon.
+tech-041	approved	1188	135	47	44	tech-interface-radar-icon	network-icon	Radar icon.
+tech-042	approved	21	163	86	87	tech-interface-faction-emblem-g	faction-emblem	Faction emblem variant G.
+tech-043	approved	140	169	73	80	tech-interface-faction-emblem-h	faction-emblem	Faction emblem variant H.
+tech-044	approved	245	162	82	80	tech-interface-faction-emblem-i	faction-emblem	Faction emblem variant I.
+tech-045	approved	353	165	76	85	tech-interface-faction-emblem-j	faction-emblem	Faction emblem variant J.
+tech-046	approved	458	166	79	79	tech-interface-faction-emblem-k	faction-emblem	Faction emblem variant K.
+tech-047	approved	561	167	72	80	tech-interface-faction-emblem-l	faction-emblem	Faction emblem variant L.
+tech-048	approved	665	191	44	43	tech-interface-warning-square-a	hazard-icon	Warning square variant A.
+tech-049	approved	723	191	44	43	tech-interface-warning-square-b	hazard-icon	Warning square variant B.
+tech-050	approved	780	191	42	42	tech-interface-diamond-square	status-icon	Diamond status button.
+tech-052	approved	891	191	42	43	tech-interface-energy-square	hazard-icon	Energy hazard button.
+tech-053	approved	946	191	42	43	tech-interface-fire-square	hazard-icon	Fire hazard button.
+tech-054	approved	1001	191	43	43	tech-interface-biohazard-square	hazard-icon	Biohazard button.
+tech-055	approved	1057	191	43	43	tech-interface-radiation-square	hazard-icon	Radiation button.
+tech-056	approved	1122	198	24	31	tech-interface-flask-icon	science-icon	Laboratory flask icon.
+tech-057	approved	1160	198	33	31	tech-interface-warning-triangle	hazard-icon	Warning triangle icon.
+tech-058	approved	1206	199	22	30	tech-interface-toggle	toggle	Vertical toggle.
+tech-059	approved	1094	251	27	28	tech-interface-diamond-status	status-icon	Diamond status icon.
+tech-060	approved	1187	246	51	40	tech-interface-eye-status	status-icon	Eye status icon.
+tech-061	approved	44	264	37	12	tech-interface-helix-label	faction-label	HELIX faction label.
+tech-062	approved	148	264	53	12	tech-interface-warden-label	faction-label	WARDEN faction label.
+tech-063	approved	254	264	60	12	tech-interface-outland-label	faction-label	OUTLAND faction label.
+tech-064	approved	365	264	53	12	tech-interface-citadel-label	faction-label	CITADEL faction label.
+tech-077	approved	19	302	44	44	tech-interface-fast-forward-square-a	button	Fast-forward button variant A.
+tech-078	approved	75	302	46	44	tech-interface-next-square	button	Next button.
+tech-079	approved	92	305	23	37	tech-interface-next-glyph	navigation-icon	Next glyph.
+tech-080	approved	134	302	44	44	tech-interface-fast-forward-square-b	button	Fast-forward button variant B.
+tech-081	approved	192	302	45	44	tech-interface-stop-square	button	Stop button.
+tech-082	approved	250	302	44	44	tech-interface-refresh-square	button	Refresh button.
+tech-027	approved	31	129	66	11	tech-interface-vanguard-label	faction-label	VANGUARD faction label.
+tech-028	approved	141	128	59	12	tech-interface-sentinel-label	faction-label	SENTINEL faction label.
+tech-029	approved	259	128	43	12	tech-interface-nomad-label	faction-label	NOMAD faction label.
+tech-030	approved	372	129	36	12	tech-interface-aegis-label	faction-label	AEGIS faction label.
+tech-031	approved	466	129	63	11	tech-interface-covenant-label	faction-label	COVENANT faction label.
+tech-032	approved	579	129	46	12	tech-interface-schism-label	faction-label	SCHISM faction label.
