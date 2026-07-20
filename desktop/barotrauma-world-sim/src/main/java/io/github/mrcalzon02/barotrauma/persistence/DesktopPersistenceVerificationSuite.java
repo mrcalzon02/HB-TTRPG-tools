@@ -4,6 +4,7 @@ import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaDonorAssets;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalog;
 import io.github.mrcalzon02.barotrauma.assets.PackagedFallbackAssetVerification;
+import io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex;
 import io.github.mrcalzon02.barotrauma.observation.ObservationContractVerification;
 import io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
@@ -21,6 +22,7 @@ public final class DesktopPersistenceVerificationSuite {
         BarotraumaDonorAssets.verifyContract();
         BarotraumaAssetCatalog.verifyContract();
         PackagedFallbackAssetVerification.verifyContract();
+        UiAtlasSliceIndex.verifyContract();
         BarotraumaAssetCatalogue.verifyContract();
         ObservationContractVerification.verifyContract();
         RecursiveSqliteDriver.verifyContract();
@@ -50,7 +52,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, local media catalog, procedural and packaged fallbacks, observation vocabulary, conserved NPC population accounting, schema-027 capacity-supported births, mortality, morale and demographic hysteresis, query-only Observation Registry, persistence, recursive SQLite trigger, passive-world, station consumption, production, delivery, attack, recovery, frontier, population, allocation-backed faction planning, exact command provenance, enforced mutation explanation, time-gated NPC transit, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, packaged UI atlas slice index, local media catalog, procedural and packaged fallbacks, observation vocabulary, conserved NPC population accounting, schema-027 capacity-supported births, mortality, morale and demographic hysteresis, query-only Observation Registry, persistence, recursive SQLite trigger, passive-world, station consumption, production, delivery, attack, recovery, frontier, population, allocation-backed faction planning, exact command provenance, enforced mutation explanation, time-gated NPC transit, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
