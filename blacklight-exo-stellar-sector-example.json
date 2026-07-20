@@ -1,6 +1,6 @@
 {
   "recordType":"blacklightExoStellarSectorSeedManifest",
-  "schemaVersion":"1.2.0",
+  "schemaVersion":"1.3.0",
   "sectorId":"sector-helios-vale-example",
   "seed":"EXAMPLE:SECTOR:HELIOS-VALE:001",
   "recordStatus":"fixed-deterministic-example",
@@ -12,10 +12,12 @@
     "blacklight-exo-stellar-sector-contracts.js",
     "blacklight-exo-stellar-sector-strategic-atlas.js",
     "blacklight-exo-stellar-sector-extinct-sites.js",
+    "blacklight-exo-stellar-sector-civilization-authority.js",
     "blacklight-exo-stellar-sector-supervision.js",
     "blacklight-exo-stellar-sector.js",
     "blacklight-exo-stellar-sector-strategic-ui.js",
     "blacklight-exo-stellar-sector-strategic-map.js",
+    "blacklight-exo-stellar-sector-civilization-ui.js",
     "blacklight-exo-sector-archive-store.js"
   ],
   "stylesheets":[
@@ -23,12 +25,14 @@
     "blacklight-exo-stellar-sector-strategic-map.css"
   ],
   "schemas":[
-    "data/schemas/exo-stellar-sector-strategic-atlas.schema.json"
+    "data/schemas/exo-stellar-sector-strategic-atlas.schema.json",
+    "data/schemas/exo-stellar-sector-civilization-authority.schema.json"
   ],
   "registries":[
-    "data/exo-stellar-sector/strategic-atlas-registry.json"
+    "data/exo-stellar-sector/strategic-atlas-registry.json",
+    "data/exo-stellar-sector/civilization-authority-registry.json"
   ],
   "archiveFormat":"blacklightExoStellarSectorArchive 1.1.0",
-  "archiveStorage":"IndexedDB with localStorage fallback, v2 storage migration, and deterministic sector-schema 1.1.0 to 1.2.0 enrichment",
-  "note":"The fixed example and seeded procedural sectors are deterministic, supervised, validated, statically laid out, incrementally rendered, strategically mapped, exportable, hash-verifiable, migratable, importable, and durably recordable with complete territorial, technological, military, institutional, corridor, and extinct-site authority."
+  "archiveStorage":"IndexedDB with localStorage fallback, v2 storage migration, and deterministic sector-schema migration through 1.3.0 civilization authority",
+  "note":"The fixed example and seeded procedural sectors are deterministic, supervised, validated, statically laid out, incrementally rendered, strategically mapped, exportable, hash-verifiable, migratable, importable, and durably recordable with cluster dossiers, alien motivations, government institutions and factions, territorial and technological authority, fleet formations and current deployments, organization networks, corridors, bestiary records, and extinct sites."
 }
