@@ -18,92 +18,100 @@ public final class SettlementProjectContributionAuthorityVerification {
             try (Statement statement = connection.createStatement()) {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
             }
-            var project = SettlementProjectTransaction.plan(connection,
-                    new SettlementProjectTransaction.PlanRequest("world-1",
-                            SettlementProjectTransaction.ProjectKind.EXPANSION, "Coalition",
-                            "station-a", "station-b", "location-b", "population-b", "vessel-a",
-                            new SettlementProjectTransaction.Requirements(10, 8, 6, 1, 50, 5),
-                            10, "Expand Beta Station with physical commitments."));
-            SettlementProjectTransaction.prepare(connection, project.projectId(), 11);
-
-            SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
-                    SettlementProjectTransaction.ContributionKind.MATERIALS,
-                    "station-a", "item-steel", 10, 12, "steel-delivery");
-            SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
-                    SettlementProjectTransaction.ContributionKind.SUPPLIES,
-                    "station-a", "item-rations", 8, 12, "ration-delivery");
-            SettlementProjectContributionAuthority.commitTransport(connection, project.projectId(),
-                    "vessel-a", 12, "builder-vessel");
-            SettlementProjectContributionAuthority.commitArrivedPopulation(connection, project.projectId(),
-                    "flow-a", 6, 12, "arrived-workers");
-
-            require(quantity(connection, "item-steel") == 10 && quantity(connection, "item-rations") == 12,
-                    "Physical inventory contributions were not deducted exactly once.");
-            reject(() -> SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
-                    SettlementProjectTransaction.ContributionKind.MATERIALS,
-                    "station-a", "item-steel", 1, 12, "steel-delivery"),
-                    "exceeds the remaining project requirement");
-            require(quantity(connection, "item-steel") == 10,
-                    "Rejected duplicate contribution incorrectly deducted inventory.");
-
-            var founding = SettlementProjectTransaction.plan(connection,
-                    new SettlementProjectTransaction.PlanRequest("world-1",
-                            SettlementProjectTransaction.ProjectKind.FOUNDING, "Coalition",
-                            "station-a", null, "location-c", "population-a", "vessel-a",
-                            new SettlementProjectTransaction.Requirements(0, 0, 4, 0, 0, 3),
-                            15, "Found Gamma with a staged cohort."));
-            SettlementProjectTransaction.prepare(connection, founding.projectId(), 16);
-            try (var insert = connection.prepareStatement(
-                    "INSERT INTO population_flow(flow_id,world_id,entity_type,status,destination_station_id,"
-                            + "destination_location_id,arrived_quantity,destination_mode,settlement_project_id) "
-                            + "VALUES('flow-founding','world-1','NPC_POPULATION','ARRIVED',NULL,'location-c',4,"
-                            + "'FOUNDING_SITE',?)")) {
-                insert.setString(1, founding.projectId());
-                insert.executeUpdate();
-            }
-            var foundedCommitment = SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
-                    founding.projectId(), "flow-founding", 4, 17, "staged-founders");
-            require(foundedCommitment.committedPopulation() == 4,
-                    "Staged founding arrival did not become the project population commitment.");
-            reject(() -> SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
-                    founding.projectId(), "flow-a", 1, 17, "wrong-founding-flow"),
-                    "staged founding arrival linked to the project");
-
-            SettlementProjectTransaction.cancel(connection, project.projectId(), 18,
-                    "Contribution fixture completed and released its target location.");
-            connection.createStatement().executeUpdate(
-                    "UPDATE npc_vessel SET status='IN_TRANSIT' WHERE npc_vessel_id='vessel-a'");
-            var second = SettlementProjectTransaction.plan(connection,
-                    new SettlementProjectTransaction.PlanRequest("world-1",
-                            SettlementProjectTransaction.ProjectKind.RECLAMATION, "Coalition",
-                            "station-a", "station-b", "location-b", "population-b", "vessel-a",
-                            new SettlementProjectTransaction.Requirements(0, 0, 0, 1, 20, 2),
-                            20, "Transport rejection project."));
-            SettlementProjectTransaction.prepare(connection, second.projectId(), 21);
-            reject(() -> SettlementProjectContributionAuthority.commitTransport(connection, second.projectId(),
-                    "vessel-a", 21, "busy-vessel"), "not idle at the origin");
-
             connection.setAutoCommit(false);
-            int steelBeforeRollback = quantity(connection, "item-steel");
             try {
-                var rollback = SettlementProjectTransaction.plan(connection,
+                var project = SettlementProjectTransaction.plan(connection,
                         new SettlementProjectTransaction.PlanRequest("world-1",
-                                SettlementProjectTransaction.ProjectKind.ABANDONMENT, "Coalition",
-                                "station-a", "station-a", "location-a", "population-a", null,
-                                new SettlementProjectTransaction.Requirements(2, 0, 0, 0, 0, 2),
-                                30, "Rollback contribution project."));
-                SettlementProjectTransaction.prepare(connection, rollback.projectId(), 31);
-                SettlementProjectContributionAuthority.commitInventory(connection, rollback.projectId(),
+                                SettlementProjectTransaction.ProjectKind.EXPANSION, "Coalition",
+                                "station-a", "station-b", "location-b", "population-b", "vessel-a",
+                                new SettlementProjectTransaction.Requirements(10, 8, 6, 1, 50, 5),
+                                10, "Expand Beta Station with physical commitments."));
+                SettlementProjectTransaction.prepare(connection, project.projectId(), 11);
+
+                SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
                         SettlementProjectTransaction.ContributionKind.MATERIALS,
-                        "station-a", "item-steel", 2, 31, "rollback-steel");
-                connection.rollback();
+                        "station-a", "item-steel", 10, 12, "steel-delivery");
+                SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
+                        SettlementProjectTransaction.ContributionKind.SUPPLIES,
+                        "station-a", "item-rations", 8, 12, "ration-delivery");
+                SettlementProjectContributionAuthority.commitTransport(connection, project.projectId(),
+                        "vessel-a", 12, "builder-vessel");
+                SettlementProjectContributionAuthority.commitArrivedPopulation(connection, project.projectId(),
+                        "flow-a", 6, 12, "arrived-workers");
+
+                require(quantity(connection, "item-steel") == 10 && quantity(connection, "item-rations") == 12,
+                        "Physical inventory contributions were not deducted exactly once.");
+                reject(() -> SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
+                        SettlementProjectTransaction.ContributionKind.MATERIALS,
+                        "station-a", "item-steel", 1, 12, "steel-delivery"),
+                        "exceeds the remaining project requirement");
+                require(quantity(connection, "item-steel") == 10,
+                        "Rejected duplicate contribution incorrectly deducted inventory.");
+
+                var founding = SettlementProjectTransaction.plan(connection,
+                        new SettlementProjectTransaction.PlanRequest("world-1",
+                                SettlementProjectTransaction.ProjectKind.FOUNDING, "Coalition",
+                                "station-a", null, "location-c", "population-a", "vessel-a",
+                                new SettlementProjectTransaction.Requirements(0, 0, 4, 0, 0, 3),
+                                15, "Found Gamma with a staged cohort."));
+                SettlementProjectTransaction.prepare(connection, founding.projectId(), 16);
+                try (var insert = connection.prepareStatement(
+                        "INSERT INTO population_flow(flow_id,world_id,entity_type,status,destination_station_id,"
+                                + "destination_location_id,arrived_quantity,destination_mode,settlement_project_id) "
+                                + "VALUES('flow-founding','world-1','NPC_POPULATION','ARRIVED',NULL,'location-c',4,"
+                                + "'FOUNDING_SITE',?)")) {
+                    insert.setString(1, founding.projectId());
+                    insert.executeUpdate();
+                }
+                var foundedCommitment = SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
+                        founding.projectId(), "flow-founding", 4, 17, "staged-founders");
+                require(foundedCommitment.committedPopulation() == 4,
+                        "Staged founding arrival did not become the project population commitment.");
+                reject(() -> SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
+                        founding.projectId(), "flow-a", 1, 17, "wrong-founding-flow"),
+                        "staged founding arrival linked to the project");
+
+                SettlementProjectTransaction.cancel(connection, project.projectId(), 18,
+                        "Contribution fixture completed and released its target location.");
+                connection.createStatement().executeUpdate(
+                        "UPDATE npc_vessel SET status='IN_TRANSIT' WHERE npc_vessel_id='vessel-a'");
+                var second = SettlementProjectTransaction.plan(connection,
+                        new SettlementProjectTransaction.PlanRequest("world-1",
+                                SettlementProjectTransaction.ProjectKind.RECLAMATION, "Coalition",
+                                "station-a", "station-b", "location-b", "population-b", "vessel-a",
+                                new SettlementProjectTransaction.Requirements(0, 0, 0, 1, 20, 2),
+                                20, "Transport rejection project."));
+                SettlementProjectTransaction.prepare(connection, second.projectId(), 21);
+                reject(() -> SettlementProjectContributionAuthority.commitTransport(connection, second.projectId(),
+                        "vessel-a", 21, "busy-vessel"), "not idle at the origin");
+                connection.commit();
+
+                int steelBeforeRollback = quantity(connection, "item-steel");
+                try {
+                    var rollback = SettlementProjectTransaction.plan(connection,
+                            new SettlementProjectTransaction.PlanRequest("world-1",
+                                    SettlementProjectTransaction.ProjectKind.ABANDONMENT, "Coalition",
+                                    "station-a", "station-a", "location-a", "population-a", null,
+                                    new SettlementProjectTransaction.Requirements(2, 0, 0, 0, 0, 2),
+                                    30, "Rollback contribution project."));
+                    SettlementProjectTransaction.prepare(connection, rollback.projectId(), 31);
+                    SettlementProjectContributionAuthority.commitInventory(connection, rollback.projectId(),
+                            SettlementProjectTransaction.ContributionKind.MATERIALS,
+                            "station-a", "item-steel", 2, 31, "rollback-steel");
+                    connection.rollback();
+                } catch (SQLException | RuntimeException exception) {
+                    try { connection.rollback(); }
+                    catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+                    throw exception;
+                }
+                require(quantity(connection, "item-steel") == steelBeforeRollback,
+                        "Contribution rollback did not restore physical inventory.");
+                require(foreignKeyViolations(connection) == 0,
+                        "Physical contribution verification left foreign-key violations.");
+                connection.commit();
             } finally {
-                connection.setAutoCommit(true);
+                if (!connection.getAutoCommit()) connection.setAutoCommit(true);
             }
-            require(quantity(connection, "item-steel") == steelBeforeRollback,
-                    "Contribution rollback did not restore physical inventory.");
-            require(foreignKeyViolations(connection) == 0,
-                    "Physical contribution verification left foreign-key violations.");
         }
     }
 
