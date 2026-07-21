@@ -95,6 +95,13 @@ public final class SettlementFoundingMigrationSchemaVerification {
                         "Settled founders remained double-counted in the flow conservation term.");
                 require(count(connection, "settlement_founding_handoff") == 1,
                         "Founding handoff was not recorded exactly once.");
+                require(text(connection, "SELECT baseline_kind FROM station_population_state "
+                                + "WHERE station_id='station-b'").equals("GENERATED_ALLOCATION"),
+                        "Founded station did not receive a generated immutable population baseline.");
+                require(longValue(connection, "SELECT baseline_resident_count*1000000+resident_count*1000+"
+                                + "baseline_workforce_count*10+workforce_count FROM station_population_state "
+                                + "WHERE station_id='station-b'") == 20020099,
+                        "Founded station population baseline does not match exact resident and workforce cohorts.");
                 require(foreignKeys(connection) == 0,
                         "Schema 030 verification left foreign-key violations.");
             }
@@ -122,6 +129,10 @@ public final class SettlementFoundingMigrationSchemaVerification {
                 + "scientific_personnel INTEGER NOT NULL,temporary_residents INTEGER NOT NULL,refugees INTEGER NOT NULL,"
                 + "housing_capacity INTEGER NOT NULL,life_support_capacity INTEGER NOT NULL,employment_capacity INTEGER NOT NULL,"
                 + "morale INTEGER NOT NULL,seed_source TEXT NOT NULL,last_tick INTEGER NOT NULL)");
+        statement.execute("CREATE TABLE station_population_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
+                + "baseline_kind TEXT NOT NULL,baseline_tick INTEGER NOT NULL,baseline_resident_count INTEGER NOT NULL,"
+                + "resident_count INTEGER NOT NULL,baseline_workforce_count INTEGER NOT NULL,workforce_count INTEGER NOT NULL,"
+                + "last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE settlement_project(project_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
                 + "project_kind TEXT NOT NULL,status TEXT NOT NULL,target_location_id TEXT NOT NULL)");
         statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,entity_type TEXT NOT NULL,"
