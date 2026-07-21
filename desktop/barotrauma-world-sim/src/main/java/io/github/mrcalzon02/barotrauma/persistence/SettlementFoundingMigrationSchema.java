@@ -137,6 +137,23 @@ public final class SettlementFoundingMigrationSchema {
                     SELECT RAISE(ABORT,'Founding handoff is not fully conserved.');
                 END
                 """,
+                """
+                CREATE TRIGGER settlement_founding_handoff_population_baseline
+                AFTER INSERT ON settlement_founding_handoff
+                BEGIN
+                    DELETE FROM station_population_state WHERE station_id=NEW.station_id;
+                    INSERT INTO station_population_state(
+                        station_id,world_id,baseline_kind,baseline_tick,baseline_resident_count,resident_count,
+                        baseline_workforce_count,workforce_count,last_tick)
+                    SELECT NEW.station_id,NEW.world_id,'GENERATED_ALLOCATION',NEW.handoff_tick,NEW.settled_quantity,
+                           NEW.settled_quantity,
+                           n.industrial_workers+n.logistics_workers+n.security_personnel+
+                           n.medical_personnel+n.scientific_personnel,
+                           n.industrial_workers+n.logistics_workers+n.security_personnel+
+                           n.medical_personnel+n.scientific_personnel,NEW.handoff_tick
+                    FROM npc_population_state n WHERE n.population_id=NEW.population_id;
+                END
+                """,
                 "DROP VIEW IF EXISTS npc_population_migration_conservation",
                 """
                 CREATE VIEW npc_population_migration_conservation AS
