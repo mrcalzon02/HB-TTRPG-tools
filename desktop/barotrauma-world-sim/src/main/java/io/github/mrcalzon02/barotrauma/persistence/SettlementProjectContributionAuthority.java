@@ -13,6 +13,7 @@ final class SettlementProjectContributionAuthority {
     static SettlementProjectTransaction.ProjectResult commitInventory(
             Connection connection, String projectId, SettlementProjectTransaction.ContributionKind kind,
             String stationId, String itemId, int quantity, long tick, String evidenceKey) throws SQLException {
+        requireTransaction(connection);
         if (kind != SettlementProjectTransaction.ContributionKind.MATERIALS
                 && kind != SettlementProjectTransaction.ContributionKind.SUPPLIES) {
             throw new SQLException("Inventory may support only material or supply settlement contributions.");
@@ -122,6 +123,12 @@ final class SettlementProjectContributionAuthority {
                         SettlementProjectTransaction.ContributionKind.POPULATION, quantity,
                         project.originStationId(), project.relatedPopulationId(), null, flowId, tick, evidenceKey,
                         "Committed " + quantity + " arrived migrants to settlement work."));
+    }
+
+    private static void requireTransaction(Connection connection) throws SQLException {
+        if (connection.getAutoCommit()) {
+            throw new SQLException("Physical settlement inventory commitments require an active transaction.");
+        }
     }
 
     private static Project project(Connection connection, String projectId) throws SQLException {
