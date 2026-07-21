@@ -114,6 +114,10 @@ public final class SettlementProjectContributionAuthorityVerification {
                 require(foreignKeyViolations(connection) == 0,
                         "Physical contribution verification left foreign-key violations.");
                 connection.commit();
+            } catch (SQLException | RuntimeException exception) {
+                try { connection.rollback(); }
+                catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+                throw exception;
             } finally {
                 if (!connection.getAutoCommit()) connection.setAutoCommit(true);
             }
