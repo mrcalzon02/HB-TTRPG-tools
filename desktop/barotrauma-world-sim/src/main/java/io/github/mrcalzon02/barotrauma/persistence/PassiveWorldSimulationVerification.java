@@ -23,8 +23,10 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-/** End-to-end contract for passive station, mission, NPC-vessel, research, and encounter workloads. */
+/** End-to-end contract for passive station, mission, NPC-vessel, migration, research, and encounter workloads. */
 public final class PassiveWorldSimulationVerification {
+    private static final String MIGRATION_VESSEL = "98000000-0000-0000-0000-000000000099";
+
     private PassiveWorldSimulationVerification() { }
 
     public static void verifyContract() throws Exception {
@@ -83,12 +85,19 @@ public final class PassiveWorldSimulationVerification {
                                 && count(paths, "npc_transit_incident_schedule") > count(paths, "npc_transit_leg"),
                         "Departed NPC vessels were not immediately given observable time-gated plans.");
 
+                configureMigrationPressure(paths);
+                long originBeforeDeparture = pressuredOriginPopulation(paths);
                 var second = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
                 PassiveWorldTickTransaction.TickResult secondResult = PassiveWorldTickTransaction.commit(paths, second);
                 require(secondResult.encountersResolved() == 0 && count(paths, "world_encounter") == 0,
                         "A routine elapsed-time progress tick incorrectly manufactured a transit incident.");
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE elapsed_ticks=1") > 0,
                         "Routine NPC travel did not advance elapsed progress before the first incident.");
+                require(queryCount(paths, "SELECT COUNT(*) FROM population_flow WHERE entity_type='NPC_POPULATION' "
+                                + "AND status='PREPARING' AND assigned_npc_vessel_id='" + MIGRATION_VESSEL + "'") == 1,
+                        "A real passive tick did not plan and reserve the pressured population migration.");
+                require(pressuredOriginPopulation(paths) == originBeforeDeparture,
+                        "Passive migration preparation removed people before physical vessel departure.");
                 verifySchedulePlanning(paths);
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
                         "Mission or research workload persistence failed.");
@@ -105,6 +114,14 @@ public final class PassiveWorldSimulationVerification {
                         "The first due player-equivalent incident slots were not auto-resolved.");
                 require(count(paths, "world_encounter") - encountersBeforeDueTick == thirdResult.encountersResolved(),
                         "Due-slot encounter evidence does not match the passive tick result.");
+                require(queryCount(paths, "SELECT COUNT(*) FROM population_flow WHERE entity_type='NPC_POPULATION' "
+                                + "AND status='IN_TRANSIT' AND assigned_npc_vessel_id='" + MIGRATION_VESSEL + "'") == 1,
+                        "The next passive tick did not synchronize physical migration departure.");
+                require(pressuredOriginPopulation(paths) < originBeforeDeparture,
+                        "Physical migration departure did not release its exact cohort from the origin.");
+                require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
+                                + MIGRATION_VESSEL + "' AND leg_type='OUTBOUND' AND status='IN_TRANSIT'") == 1,
+                        "Passive migration departure did not use the authoritative NPC transit leg.");
                 verifyResolvedIncidentEvidence(paths);
                 require(queryCount(paths, "SELECT COUNT(*) FROM world_mission m JOIN npc_vessel v "
                                 + "ON v.npc_vessel_id=m.assigned_npc_vessel_id WHERE "
@@ -145,9 +162,34 @@ public final class PassiveWorldSimulationVerification {
         }
     }
 
+    private static void configureMigrationPressure(WorldPaths paths) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE station_simulation_state SET integrity=20,threat=90,status='BESIEGED',"
+                    + "supplies=20 WHERE station_id=(SELECT station_id FROM npc_population_state ORDER BY population_id LIMIT 1)");
+            statement.executeUpdate("UPDATE npc_population_state SET morale=25 WHERE population_id="
+                    + "(SELECT population_id FROM npc_population_state ORDER BY population_id LIMIT 1)");
+            statement.executeUpdate("UPDATE npc_population_state SET housing_capacity=5000,life_support_capacity=5000,"
+                    + "employment_capacity=5000 WHERE population_id<>(SELECT population_id FROM npc_population_state "
+                    + "ORDER BY population_id LIMIT 1)");
+            statement.executeUpdate("INSERT INTO npc_vessel(npc_vessel_id,world_id,display_name,role,home_station_id,"
+                    + "current_location_id,status,hull,supplies,cargo,crew_quality,navigation,engineering,combat,mining,"
+                    + "research,route_progress,route_ticks_required,deterministic_seed,last_tick) SELECT '"
+                    + MIGRATION_VESSEL + "',p.world_id,'Migration Reserve','COURIER',p.station_id,ws.location_id,"
+                    + "'DOCKED',100,100,0,80,80,80,70,40,40,0,1,980099,13 FROM npc_population_state p "
+                    + "JOIN world_station ws ON ws.station_id=p.station_id ORDER BY p.population_id LIMIT 1");
+        }
+    }
+
+    private static long pressuredOriginPopulation(WorldPaths paths) throws Exception {
+        return queryCount(paths, "SELECT civilians+industrial_workers+logistics_workers+security_personnel+"
+                + "medical_personnel+scientific_personnel+temporary_residents+refugees FROM npc_population_state "
+                + "ORDER BY population_id LIMIT 1");
+    }
+
     private static long count(WorldPaths paths, String table) throws Exception {
         if (!java.util.Set.of("station_simulation_state", "station_civilization_state",
-                "station_consumption_log", "npc_vessel", "npc_voyage_log",
+                "station_consumption_log", "npc_vessel", "npc_voyage_log", "population_flow",
                 "world_encounter", "world_mission", "station_research_project", "station_inventory",
                 "item_catalogue", "npc_transit_leg", "npc_transit_incident_schedule").contains(table)) {
             throw new IllegalArgumentException("Unsupported passive verification table.");
@@ -215,6 +257,6 @@ public final class PassiveWorldSimulationVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma passive world simulation, station consumption, and automatic scheduler contracts passed.");
+        System.out.println("Barotrauma passive world simulation, migration, station consumption, and automatic scheduler contracts passed.");
     }
 }
