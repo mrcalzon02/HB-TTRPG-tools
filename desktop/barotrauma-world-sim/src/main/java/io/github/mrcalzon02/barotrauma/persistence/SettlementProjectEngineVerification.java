@@ -60,6 +60,18 @@ public final class SettlementProjectEngineVerification {
                     "Settlement project did not complete within its deterministic bounded work window.");
             require(progress(connection, project.projectId()) == 24,
                     "Completed settlement project did not stop at exact target progress.");
+            require(scalar(connection, "SELECT industry FROM station_simulation_state WHERE station_id='station-a'") == 60,
+                    "Expansion did not increase canonical station industry exactly once.");
+            require(scalar(connection, "SELECT security FROM station_simulation_state WHERE station_id='station-a'") == 88,
+                    "Expansion did not increase canonical station security exactly once.");
+            require(scalar(connection, "SELECT integrity FROM station_simulation_state WHERE station_id='station-a'") == 82,
+                    "Expansion did not increase canonical station integrity exactly once.");
+            require(scalar(connection, "SELECT supplies FROM station_simulation_state WHERE station_id='station-a'") == 70,
+                    "Expansion did not commit project supplies to the target station.");
+            require(scalar(connection, "SELECT housing_capacity FROM npc_population_state WHERE station_id='station-a'") == 120,
+                    "Expansion did not increase canonical population capacity.");
+            require(scalar(connection, "SELECT frontier_position FROM station_civilization_state WHERE station_id='station-a'") == 58,
+                    "Expansion did not advance the canonical settlement frontier.");
             require(count(connection, "settlement_project_contribution", "contribution_kind='WORK'") == 4,
                     "Passive settlement work evidence count is incorrect.");
             require(count(connection, "settlement_project_transition", "to_status='BLOCKED'") == 1
@@ -82,18 +94,22 @@ public final class SettlementProjectEngineVerification {
     private static void createPrerequisites(Statement statement) throws Exception {
         statement.execute("CREATE TABLE world_metadata(world_id TEXT PRIMARY KEY)");
         statement.execute("CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL,is_station INTEGER NOT NULL DEFAULT 0)");
-        statement.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL)");
-        statement.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL)");
+        statement.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL,has_economy INTEGER NOT NULL DEFAULT 1)");
+        statement.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL,civilians INTEGER NOT NULL,industrial_workers INTEGER NOT NULL,logistics_workers INTEGER NOT NULL,security_personnel INTEGER NOT NULL,medical_personnel INTEGER NOT NULL,scientific_personnel INTEGER NOT NULL,temporary_residents INTEGER NOT NULL,refugees INTEGER NOT NULL,housing_capacity INTEGER NOT NULL,life_support_capacity INTEGER NOT NULL,employment_capacity INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL)");
         statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL)");
         statement.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,reason_family TEXT NOT NULL)");
-        statement.execute("CREATE TABLE station_simulation_state(station_id TEXT PRIMARY KEY,security INTEGER NOT NULL)");
+        statement.execute("CREATE TABLE station_simulation_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,security INTEGER NOT NULL,industry INTEGER NOT NULL,integrity INTEGER NOT NULL,supplies INTEGER NOT NULL,status TEXT NOT NULL,last_tick INTEGER NOT NULL)");
+        statement.execute("CREATE TABLE station_civilization_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,civilization_strength INTEGER NOT NULL,frontier_position INTEGER NOT NULL,frontier_state TEXT NOT NULL,population_index INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
+        statement.execute("CREATE TABLE station_vendor_offer(offer_id TEXT PRIMARY KEY,station_id TEXT NOT NULL,active INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("INSERT INTO world_metadata VALUES('world-1')");
         statement.execute("INSERT INTO world_location VALUES('location-a','world-1','Alpha',1)");
-        statement.execute("INSERT INTO world_station VALUES('station-a','world-1','location-a','Alpha Station')");
-        statement.execute("INSERT INTO npc_population_state VALUES('population-a','world-1','station-a')");
+        statement.execute("INSERT INTO world_station VALUES('station-a','world-1','location-a','Alpha Station',1)");
+        statement.execute("INSERT INTO npc_population_state VALUES('population-a','world-1','station-a',50,20,10,10,5,5,0,0,100,100,100,10)");
         statement.execute("INSERT INTO npc_vessel VALUES('vessel-a','world-1','Builder One')");
-        statement.execute("INSERT INTO station_simulation_state VALUES('station-a',80)");
+        statement.execute("INSERT INTO station_simulation_state VALUES('station-a','world-1',80,50,70,50,'STABLE',10)");
+        statement.execute("INSERT INTO station_civilization_state VALUES('station-a','world-1',50,50,'HOLDING',70,10)");
+        statement.execute("INSERT INTO station_vendor_offer VALUES('offer-a','station-a',1,10)");
     }
 
     private static String status(Connection connection, String projectId) throws Exception {
@@ -117,6 +133,13 @@ public final class SettlementProjectEngineVerification {
         }
     }
 
+    private static long scalar(Connection connection, String sql) throws Exception {
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            if (!result.next()) throw new IllegalStateException("No scalar settlement verification row.");
+            return result.getLong(1);
+        }
+    }
+
     private static long count(Connection connection, String table, String where) throws Exception {
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + where)) {
@@ -130,6 +153,6 @@ public final class SettlementProjectEngineVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Deterministic settlement project progression, blocking, resumption, and completion contracts passed.");
+        System.out.println("Deterministic settlement project progression, blocking, resumption, completion, and canonical expansion contracts passed.");
     }
 }
