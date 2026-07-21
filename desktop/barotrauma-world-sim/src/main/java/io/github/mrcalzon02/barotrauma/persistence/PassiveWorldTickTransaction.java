@@ -78,12 +78,13 @@ public final class PassiveWorldTickTransaction {
                 createMissions(connection, durable.worldId(), tick, counters);
                 assignMissions(connection, durable.worldId(), tick, counters);
                 processVessels(connection, durable.worldId(), tick, canonical, counters);
+                NpcPopulationMigrationEngine.advanceAndPlan(connection, durable.worldId(), tick);
                 processResearch(connection, durable.worldId(), tick, counters);
             }
 
             UUID checkpointId = UUID.randomUUID();
             insertCheckpoint(connection, checkpointId, durable.worldId(), receipt,
-                    "Passive world cycle: station economy, routes, missions, NPC voyages, research, and encounters");
+                    "Passive world cycle: station economy, routes, missions, NPC voyages, population migration, research, and encounters");
             updateClock(connection, durable.worldId(), receipt.after(), receipt.commandId(), checkpointId);
             updatePassiveConfig(connection, durable.worldId(), receipt.after().tickSequence());
             enforceStationMutationCoverage(connection, receipt.commandId());
