@@ -131,6 +131,18 @@ public final class PassiveWorldSimulationVerification {
                         "Third passive tick did not append station consumption history.");
                 require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
                         "Passive fixture was not stored under the current database schema.");
+
+                long destinationBeforeArrival = migrationDestinationPopulation(paths);
+                advanceMigrationToArrival(paths, executor);
+                long arrivedQuantity = queryCount(paths, "SELECT arrived_quantity FROM population_flow WHERE "
+                        + "entity_type='NPC_POPULATION' AND assigned_npc_vessel_id='" + MIGRATION_VESSEL + "'");
+                require(arrivedQuantity > 0, "Terminal passive migration recorded no arrived population.");
+                require(migrationDestinationPopulation(paths) == destinationBeforeArrival + arrivedQuantity,
+                        "Terminal passive migration did not add the exact arrived cohort to the destination.");
+                require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause='IMMIGRATION' "
+                                + "AND related_flow_id=(SELECT flow_id FROM population_flow WHERE "
+                                + "assigned_npc_vessel_id='" + MIGRATION_VESSEL + "')") == 1,
+                        "Terminal passive migration did not write one destination immigration ledger term.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
@@ -181,10 +193,35 @@ public final class PassiveWorldSimulationVerification {
         }
     }
 
+    private static void advanceMigrationToArrival(WorldPaths paths, SimulationCommandExecutor executor)
+            throws Exception {
+        for (int tick = 0; tick < 250 && !"ARRIVED".equals(migrationStatus(paths)); tick++) {
+            String status = migrationStatus(paths);
+            require(!status.equals("FAILED") && !status.equals("CANCELLED"),
+                    "Passive migration terminated before destination settlement: " + status);
+            var step = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
+            PassiveWorldTickTransaction.commit(paths, step);
+        }
+        require("ARRIVED".equals(migrationStatus(paths)),
+                "Passive migration did not reach terminal arrival within the bounded transit window.");
+    }
+
+    private static String migrationStatus(WorldPaths paths) throws Exception {
+        return queryText(paths, "SELECT status FROM population_flow WHERE entity_type='NPC_POPULATION' "
+                + "AND assigned_npc_vessel_id='" + MIGRATION_VESSEL + "'");
+    }
+
     private static long pressuredOriginPopulation(WorldPaths paths) throws Exception {
         return queryCount(paths, "SELECT civilians+industrial_workers+logistics_workers+security_personnel+"
                 + "medical_personnel+scientific_personnel+temporary_residents+refugees FROM npc_population_state "
                 + "ORDER BY population_id LIMIT 1");
+    }
+
+    private static long migrationDestinationPopulation(WorldPaths paths) throws Exception {
+        return queryCount(paths, "SELECT civilians+industrial_workers+logistics_workers+security_personnel+"
+                + "medical_personnel+scientific_personnel+temporary_residents+refugees FROM npc_population_state "
+                + "WHERE population_id=(SELECT destination_population_id FROM population_flow WHERE "
+                + "entity_type='NPC_POPULATION' AND assigned_npc_vessel_id='" + MIGRATION_VESSEL + "')");
     }
 
     private static long count(WorldPaths paths, String table) throws Exception {
@@ -206,6 +243,15 @@ public final class PassiveWorldSimulationVerification {
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)) {
             return result.next() ? result.getLong(1) : 0;
+        }
+    }
+
+    private static String queryText(WorldPaths paths, String sql) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)) {
+            if (!result.next()) throw new IllegalStateException("No row returned: " + sql);
+            return result.getString(1);
         }
     }
 
@@ -257,6 +303,6 @@ public final class PassiveWorldSimulationVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma passive world simulation, migration, station consumption, and automatic scheduler contracts passed.");
+        System.out.println("Barotrauma passive world simulation, migration settlement, station consumption, and automatic scheduler contracts passed.");
     }
 }
