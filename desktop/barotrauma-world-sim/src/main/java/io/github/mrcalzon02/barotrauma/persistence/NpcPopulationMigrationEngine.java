@@ -16,10 +16,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Deterministic schema-028 passive planner and transit synchronizer.
+ * Deterministic passive population-migration planner and transit synchronizer introduced in schema 028.
  *
  * <p>This class does not mutate population or flow lifecycle fields directly. It reads the existing station,
- * demographic, vessel, and transit authorities and invokes {@link NpcPopulationMigrationTransaction} for every
+ * demographic, vessel, transit, and settlement authorities and invokes the canonical migration transactions for every
  * lifecycle mutation.</p>
  */
 final class NpcPopulationMigrationEngine {
@@ -68,14 +68,25 @@ final class NpcPopulationMigrationEngine {
                 case "IN_TRANSIT" -> {
                     if (vessel.status().equals("WORKING")
                             && vessel.currentLocationId().equals(flow.destinationLocationId())) {
-                        Population destination = NpcPopulationMigrationStore.population(
-                                connection, flow.destinationPopulationId());
-                        if (flow.embarkedQuantity() > NpcPopulationMigrationStore.destinationSpare(destination, flow.kind())) {
-                            NpcPopulationMigrationTransaction.beginReturn(connection, flowId, tick,
-                                    "Destination capacity fell below the surviving embarked population.");
+                        long losses = travelLosses(flow, vessel, tick);
+                        if (foundingSite(connection, flowId)) {
+                            if (losses > 0) {
+                                NpcPopulationMigrationTransaction.beginReturn(connection, flowId, tick,
+                                        "The founding project requires its complete committed cohort; "
+                                                + "travel casualties prevented settlement activation.");
+                            } else {
+                                SettlementFoundingMigrationTransaction.stageArrival(connection, flowId, tick, 0);
+                            }
                         } else {
-                            NpcPopulationMigrationTransaction.arrive(connection, flowId, tick,
-                                    travelLosses(flow, vessel, tick));
+                            Population destination = NpcPopulationMigrationStore.population(
+                                    connection, flow.destinationPopulationId());
+                            if (flow.embarkedQuantity()
+                                    > NpcPopulationMigrationStore.destinationSpare(destination, flow.kind())) {
+                                NpcPopulationMigrationTransaction.beginReturn(connection, flowId, tick,
+                                        "Destination capacity fell below the surviving embarked population.");
+                            } else {
+                                NpcPopulationMigrationTransaction.arrive(connection, flowId, tick, losses);
+                            }
                         }
                         synchronizedFlows++;
                     } else if (vessel.status().equals("LOST")) {
@@ -249,6 +260,17 @@ final class NpcPopulationMigrationEngine {
             statement.setLong(2, tick);
             statement.setString(3, flowId);
             statement.executeUpdate();
+        }
+    }
+
+    private static boolean foundingSite(Connection connection, String flowId) throws SQLException {
+        if (!WorldDatabaseMigrations.columnExists(connection, "population_flow", "destination_mode")) return false;
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT destination_mode FROM population_flow WHERE flow_id=?")) {
+            statement.setString(1, flowId);
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next() && "FOUNDING_SITE".equals(result.getString(1));
+            }
         }
     }
 
