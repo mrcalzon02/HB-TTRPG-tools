@@ -128,6 +128,9 @@ public final class SettlementProjectTransaction {
             throw new SQLException("Terminal settlement projects cannot accept contributions.");
         }
         ContributionKind kind = Objects.requireNonNull(request.kind(), "kind");
+        if (kind == ContributionKind.WORK && !project.status().equals("ACTIVE")) {
+            throw new SQLException("Settlement work may be committed only while the project is active.");
+        }
         String evidenceKey = text(request.evidenceKey(), "evidenceKey", 300);
         String summary = text(request.summary(), "summary", 1000);
         validateContributionSource(connection, project.worldId(), request);
@@ -149,12 +152,15 @@ public final class SettlementProjectTransaction {
             case WORK -> "target_progress_units";
         };
         try (PreparedStatement update = connection.prepareStatement(
-                "UPDATE settlement_project SET " + column + "=MIN(" + limitColumn + "," + column
-                        + "+?),updated_tick=? WHERE project_id=?")) {
+                "UPDATE settlement_project SET " + column + "=" + column + "+?,updated_tick=? "
+                        + "WHERE project_id=? AND " + column + "+? <= " + limitColumn)) {
             update.setInt(1, request.quantity());
             update.setLong(2, request.tick());
             update.setString(3, projectId);
-            if (update.executeUpdate() != 1) throw new SQLException("Settlement contribution target disappeared.");
+            update.setInt(4, request.quantity());
+            if (update.executeUpdate() != 1) {
+                throw new SQLException("Settlement contribution exceeds the remaining project requirement.");
+            }
         }
         try (PreparedStatement insert = connection.prepareStatement(
                 "INSERT INTO settlement_project_contribution(contribution_id,project_id,world_id,contribution_kind,"
@@ -206,7 +212,10 @@ public final class SettlementProjectTransaction {
         if (workUnits < 1) throw new SQLException("Settlement work units must be positive.");
         Project project = project(connection, projectId);
         requireStatus(project, "ACTIVE");
-        ContributionRequest contribution = new ContributionRequest(projectId, ContributionKind.WORK, workUnits,
+        int remaining = project.targetProgressUnits() - project.progressUnits();
+        if (remaining < 1) throw new SQLException("Active settlement project has no remaining work.");
+        int acceptedWork = Math.min(workUnits, remaining);
+        ContributionRequest contribution = new ContributionRequest(projectId, ContributionKind.WORK, acceptedWork,
                 null, null, null, null, tick, evidenceKey, summary);
         contribute(connection, contribution);
         Project updated = project(connection, projectId);
