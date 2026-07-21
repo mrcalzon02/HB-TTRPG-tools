@@ -48,7 +48,7 @@ final class SettlementFoundingMigrationTransaction {
             throw new SQLException("Founding migration must use the project-assigned transport.");
         }
         if (existingFlow(connection, project.projectId())) {
-            throw new SQLException("Founding project already has a population flow.");
+            throw new SQLException("Founding project already has an outstanding population flow.");
         }
 
         String flowId = NpcPopulationMigrationTransaction.deterministicId(
@@ -127,8 +127,6 @@ final class SettlementFoundingMigrationTransaction {
         String stationId = NpcPopulationMigrationTransaction.deterministicId(
                 project.worldId() + ":founded-station:" + project.projectId());
         String sourceStationId = "founding:" + project.projectId();
-        String populationId = NpcPopulationMigrationTransaction.deterministicId(
-                project.worldId() + ":founded-population:" + project.projectId());
         String locationName = locationName(connection, project.targetLocationId());
         EnumMap<Cohort, Long> founders = cohorts(connection, arrival.flowId(), "arrived_quantity");
         long founderTotal = founders.values().stream().mapToLong(Long::longValue).sum();
@@ -354,7 +352,7 @@ final class SettlementFoundingMigrationTransaction {
     private static FoundingArrival arrival(Connection connection, Project project) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT flow_id,arrived_quantity,losses FROM population_flow WHERE settlement_project_id=? "
-                        + "AND destination_mode='FOUNDING_SITE' AND status='ARRIVED' "
+                        + "AND destination_mode='FOUNDING_SITE' AND status='ARRIVED' AND arrived_quantity>0 "
                         + "AND NOT EXISTS(SELECT 1 FROM settlement_founding_handoff h WHERE h.flow_id=population_flow.flow_id)")) {
             statement.setString(1, project.projectId());
             try (ResultSet result = statement.executeQuery()) {
@@ -366,7 +364,10 @@ final class SettlementFoundingMigrationTransaction {
 
     private static boolean existingFlow(Connection connection, String projectId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT 1 FROM population_flow WHERE settlement_project_id=?")) {
+                "SELECT 1 FROM population_flow f WHERE f.settlement_project_id=? AND ("
+                        + "f.status IN ('PLANNED','PREPARING','IN_TRANSIT','RETURNING') OR "
+                        + "(f.status='ARRIVED' AND f.arrived_quantity>0 AND f.returned_quantity=0 "
+                        + "AND NOT EXISTS(SELECT 1 FROM settlement_founding_handoff h WHERE h.flow_id=f.flow_id)))")) {
             statement.setString(1, projectId);
             try (ResultSet result = statement.executeQuery()) { return result.next(); }
         }
