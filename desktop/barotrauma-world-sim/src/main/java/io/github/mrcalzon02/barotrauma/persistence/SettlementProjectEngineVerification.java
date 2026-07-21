@@ -22,7 +22,7 @@ public final class SettlementProjectEngineVerification {
                     new SettlementProjectTransaction.PlanRequest(
                             "world-1", SettlementProjectTransaction.ProjectKind.EXPANSION, "Coalition",
                             "station-a", "station-a", "location-a", "population-a", "vessel-a",
-                            new SettlementProjectTransaction.Requirements(20, 20, 20, 1, 60, 25),
+                            new SettlementProjectTransaction.Requirements(20, 20, 20, 1, 60, 24),
                             10, "Expand Alpha Station through committed work."));
             SettlementProjectTransaction.prepare(connection, project.projectId(), 11);
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.MATERIALS, 20, "m");
@@ -58,7 +58,7 @@ public final class SettlementProjectEngineVerification {
             var complete = SettlementProjectEngine.advance(connection, "world-1", 17);
             require(complete.completedProjects() == 1 && status(connection, project.projectId()).equals("COMPLETE"),
                     "Settlement project did not complete within its deterministic bounded work window.");
-            require(progress(connection, project.projectId()) == 25,
+            require(progress(connection, project.projectId()) == 24,
                     "Completed settlement project did not stop at exact target progress.");
             require(count(connection, "settlement_project_contribution", "contribution_kind='WORK'") == 4,
                     "Passive settlement work evidence count is incorrect.");
