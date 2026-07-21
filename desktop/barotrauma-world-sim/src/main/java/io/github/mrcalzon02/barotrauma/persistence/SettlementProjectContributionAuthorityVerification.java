@@ -46,6 +46,29 @@ public final class SettlementProjectContributionAuthorityVerification {
             require(quantity(connection, "item-steel") == 10,
                     "Rejected duplicate contribution incorrectly deducted inventory.");
 
+            var founding = SettlementProjectTransaction.plan(connection,
+                    new SettlementProjectTransaction.PlanRequest("world-1",
+                            SettlementProjectTransaction.ProjectKind.FOUNDING, "Coalition",
+                            "station-a", null, "location-c", "population-a", "vessel-a",
+                            new SettlementProjectTransaction.Requirements(0, 0, 4, 0, 0, 3),
+                            15, "Found Gamma with a staged cohort."));
+            SettlementProjectTransaction.prepare(connection, founding.projectId(), 16);
+            try (var insert = connection.prepareStatement(
+                    "INSERT INTO population_flow(flow_id,world_id,entity_type,status,destination_station_id,"
+                            + "destination_location_id,arrived_quantity,destination_mode,settlement_project_id) "
+                            + "VALUES('flow-founding','world-1','NPC_POPULATION','ARRIVED',NULL,'location-c',4,"
+                            + "'FOUNDING_SITE',?)")) {
+                insert.setString(1, founding.projectId());
+                insert.executeUpdate();
+            }
+            var foundedCommitment = SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
+                    founding.projectId(), "flow-founding", 4, 17, "staged-founders");
+            require(foundedCommitment.committedPopulation() == 4,
+                    "Staged founding arrival did not become the project population commitment.");
+            reject(() -> SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
+                    founding.projectId(), "flow-a", 1, 17, "wrong-founding-flow"),
+                    "staged founding arrival linked to the project");
+
             connection.createStatement().executeUpdate(
                     "UPDATE npc_vessel SET status='IN_TRANSIT' WHERE npc_vessel_id='vessel-a'");
             var second = SettlementProjectTransaction.plan(connection,
@@ -89,16 +112,21 @@ public final class SettlementProjectContributionAuthorityVerification {
             s.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL)");
             s.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL)");
             s.execute("CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL,home_station_id TEXT,current_location_id TEXT,status TEXT,mission_id TEXT)");
-            s.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,entity_type TEXT,status TEXT,destination_station_id TEXT,arrived_quantity INTEGER)");
+            s.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,entity_type TEXT,status TEXT,"
+                    + "destination_station_id TEXT,destination_location_id TEXT,arrived_quantity INTEGER,"
+                    + "destination_mode TEXT NOT NULL DEFAULT 'STATION_POPULATION',settlement_project_id TEXT)");
             s.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,reason_family TEXT NOT NULL)");
             s.execute("CREATE TABLE item_catalogue(item_id TEXT PRIMARY KEY)");
             s.execute("CREATE TABLE station_inventory(station_id TEXT,item_id TEXT,quantity INTEGER,reserved INTEGER,last_tick INTEGER,PRIMARY KEY(station_id,item_id))");
             s.execute("INSERT INTO world_metadata VALUES('world-1')");
-            s.execute("INSERT INTO world_location VALUES('location-a','world-1','Alpha',1),('location-b','world-1','Beta',1)");
+            s.execute("INSERT INTO world_location VALUES('location-a','world-1','Alpha',1),"
+                    + "('location-b','world-1','Beta',1),('location-c','world-1','Gamma',0)");
             s.execute("INSERT INTO world_station VALUES('station-a','world-1','location-a','Alpha'),('station-b','world-1','location-b','Beta')");
             s.execute("INSERT INTO npc_population_state VALUES('population-a','world-1','station-a'),('population-b','world-1','station-b')");
             s.execute("INSERT INTO npc_vessel VALUES('vessel-a','world-1','Builder','station-a','location-a','DOCKED',NULL)");
-            s.execute("INSERT INTO population_flow VALUES('flow-a','world-1','NPC_POPULATION','ARRIVED','station-b',6)");
+            s.execute("INSERT INTO population_flow(flow_id,world_id,entity_type,status,destination_station_id,"
+                    + "destination_location_id,arrived_quantity,destination_mode) VALUES('flow-a','world-1',"
+                    + "'NPC_POPULATION','ARRIVED','station-b','location-b',6,'STATION_POPULATION')");
             s.execute("INSERT INTO item_catalogue VALUES('item-steel'),('item-rations')");
             s.execute("INSERT INTO station_inventory VALUES('station-a','item-steel',20,0,0),('station-a','item-rations',20,0,0)");
         }
