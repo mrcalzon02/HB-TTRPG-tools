@@ -1,6 +1,6 @@
 # Milestone 2.4 — Settlement Lifecycle Projects
 
-**Status:** Active implementation; schema 029, the authoritative transaction, deterministic security-gated progression, query-only registry access, and focused verification exist. Production passive-tick integration, canonical settlement consequences, desktop presentation, migration coverage, and exact-head acceptance remain.
+**Status:** Active implementation; schema 029, the authoritative transaction, deterministic security-gated progression, canonical expansion, abandonment and reclamation consequences, query-only registry access, and focused verification exist. Production passive-tick integration, conserved founding, physical contribution reconciliation, desktop presentation, migration coverage, and exact-head acceptance remain.
 
 Schema 029 establishes the durable project model required before settlements may be founded, expanded, abandoned, or reclaimed. It does not permit direct settlement teleportation and does not introduce another station simulator.
 
@@ -26,16 +26,9 @@ Only one non-terminal project may control a target location at a time. Terminal 
 
 ## Contributions and transitions
 
-`settlement_project_contribution` records durable evidence for:
+`settlement_project_contribution` records durable evidence for materials, supplies, population, transport, security, and work. A contribution may reference its source station, source population, source NPC vessel, and a physical population flow. Evidence keys are unique within a project so the same delivery cannot be counted twice.
 
-- materials;
-- supplies;
-- population;
-- transport;
-- security;
-- work.
-
-A contribution may reference its source station, source population, source NPC vessel, and a physical population flow. Evidence keys are unique within a project so the same delivery cannot be counted twice.
+Contributions are exact rather than silently capped. A contribution that exceeds the remaining requirement is rejected. Work is accepted only while a project is active, and an oversized final work allocation is reduced to the exact remaining progress so its evidence quantity equals the committed state delta.
 
 `settlement_project_transition` records lifecycle changes with tick, progress, evidence, and summary.
 
@@ -45,13 +38,24 @@ A contribution may reference its source station, source population, source NPC v
 
 Implemented operations cover deterministic planning, contribution recording, preparation, activation, work progress, blocking, resumption, completion, failure, and cancellation. The transaction validates world ownership for referenced locations, stations, populations, vessels, and population flows before accepting them.
 
-The focused transaction verification proves supported activation, exact bounded progress, duplicate-evidence rejection, terminal immutability, transition evidence, foreign-key integrity, and rollback of project state.
+The focused transaction verification proves supported activation, exact bounded progress, duplicate-evidence rejection, over-contribution rejection, pre-activation work rejection, terminal immutability, transition evidence, foreign-key integrity, and rollback of project state.
 
 ## Deterministic progression engine
 
 `SettlementProjectEngine` advances only `ACTIVE` and `BLOCKED` projects in deterministic project-id order. It reads current station security through the established station simulation state, synchronizes the committed project security value, blocks work below the required threshold, resumes work after recovery, and commits bounded work through `SettlementProjectTransaction`.
 
-The engine does not plan projects and does not directly mutate station or location lifecycle state. Its focused verification proves deterministic work quantities, security blocking, zero blocked progress, recovery, resumption evidence, exact completion, and bounded work history.
+When work reaches exact completion, the engine invokes `SettlementProjectConsequences` in the same database connection. A failed consequence therefore rolls back final work, completion, transition evidence, and canonical station mutations together when the engine runs inside the passive world transaction.
+
+## Canonical completion consequences
+
+Implemented completion behavior is deliberately conservative:
+
+- `EXPANSION` strengthens the existing canonical station simulation state, civilization frontier, and NPC population capacities exactly once at committed completion.
+- `ABANDONMENT` requires the detailed station population to be zero before it marks the station `FALLEN`, marks the frontier `ABANDONED`, disables the station economy, and disables vendor offers.
+- `RECLAMATION` requires the committed population already to exist at the target station before it restores strained station operation, a holding frontier, the station economy, vendor activity, and committed supplies.
+- `FOUNDING` currently fails closed. The existing station seed triggers would create an NPC population from the frontier index, so station creation is prohibited until an arrived migration cohort can be handed into the new station without creating people from nothing.
+
+`SettlementProjectConsequencesVerification` proves canonical expansion, fully evacuated abandonment, population-backed reclamation, occupied-station abandonment rejection, founding rejection, absence of partial station creation, and foreign-key integrity.
 
 ## Query-only observation
 
@@ -65,10 +69,11 @@ The engine does not plan projects and does not directly mutate station or locati
 
 The complete desktop verification suite now includes:
 
-- `SettlementLifecycleSchemaVerification`;
-- `SettlementProjectTransactionVerification`;
-- `SettlementProjectEngineVerification`;
-- `SettlementObservationRegistryVerification`.
+- `SettlementLifecycleSchemaVerification`
+- `SettlementProjectTransactionVerification`
+- `SettlementProjectEngineVerification`
+- `SettlementProjectConsequencesVerification`
+- `SettlementObservationRegistryVerification`
 
 These contracts are committed but have not been executed in the current environment.
 
@@ -82,16 +87,16 @@ SettlementProjectEngine.advance(connection, durable.worldId().toString(), tick);
 
 inside the authoritative per-tick sequence of `PassiveWorldTickTransaction`, after population migration synchronization and before later per-tick work completes. The exact placement must keep settlement progress in the same rollback boundary as station economy, migration, vessel movement, research, checkpointing, audit evidence, and the durable clock.
 
-After production integration, add canonical completion consequences through the same transaction authority:
+After production integration, the next conserved lifecycle slice must:
 
-1. `FOUNDING` creates or activates the canonical station at its target location only after all committed support and work complete.
-2. `EXPANSION` increases canonical capacity through explicit committed project results.
-3. `ABANDONMENT` records evacuation or accounted population disposition before station shutdown.
-4. `RECLAMATION` restores an abandoned station only after transport, population, materials, security, and work complete.
-5. Failure and cancellation explicitly classify committed support as returned, stranded, consumed, or lost.
-6. Completion, failure, and rollback create causal station changes, observation events, metrics, and audit evidence atomically.
+1. Convert arrived founding population-flow cohorts into the first population of a newly created canonical station without invoking the generic population seed as a second source of people.
+2. Reconcile material and supply contributions with `station_inventory` or physical freight delivery rather than accepting unsupported bookkeeping alone.
+3. Reconcile transport commitment with an idle or completed NPC vessel assignment.
+4. Classify failed or cancelled committed support as returned, stranded, consumed, or lost.
+5. Record completion and failure as causal station changes, observation events, metrics, and audit evidence atomically.
+6. Extend the existing Observation Foundation desktop window with settlement-project evidence.
 
-Then extend the existing Observation Foundation desktop window with settlement-project evidence. Do not create a second registry, project simulator, or UI data store.
+Do not create a second registry, project simulator, or UI data store.
 
 ## Acceptance gate
 
