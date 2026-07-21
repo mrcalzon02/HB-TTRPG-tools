@@ -287,6 +287,9 @@ public final class NpcPopulationMigrationTransaction {
             update.setString(5, flowId);
             if (update.executeUpdate() != 1) throw new SQLException("Population flow failure was not applied.");
         }
+        if (flow.status().equals("PREPARING")) {
+            dockVessel(connection, flow.vesselId(), flow.originLocationId(), tick);
+        }
         insertObservation(connection, flowId + ":failed", flow.worldId(), tick, flow.populationId(),
                 "DISASTER", losses, "Population transport failed: " + reason + "; casualties=" + losses
                         + "; stranded=" + stranded + ".");
