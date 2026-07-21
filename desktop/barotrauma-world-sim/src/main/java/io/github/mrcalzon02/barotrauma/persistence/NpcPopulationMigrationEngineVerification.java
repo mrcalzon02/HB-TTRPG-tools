@@ -68,7 +68,7 @@ public final class NpcPopulationMigrationEngineVerification {
             require(population(connection, POPULATION) == 900,
                     "Physical departure did not remove the exact planned population.");
 
-            arriveTransport(connection, 65);
+            arriveTransport(connection, DESTINATION_LOCATION, "OUTBOUND", 65);
             var arrived = NpcPopulationMigrationEngine.advanceAndPlan(connection, UUID.fromString(WORLD), 65);
             require(arrived.synchronizedFlows() == 1,
                     "An arrived migration vessel did not settle its passengers.");
@@ -80,14 +80,60 @@ public final class NpcPopulationMigrationEngineVerification {
             require(number(connection, "SELECT COUNT(*) FROM npc_population_flow_transition WHERE flow_id='"
                             + planned.plannedFlowId() + "'") == 4,
                     "Automatic planning, preparation, departure, and arrival transitions were not all recorded.");
+
+            dockAtOrigin(connection);
+            var returningPlan = NpcPopulationMigrationEngine.advanceAndPlan(connection, UUID.fromString(WORLD), 66);
+            require(returningPlan.plannedFlows() == 1 && returningPlan.plannedFlowId() != null,
+                    "The pressured origin did not plan a second deterministic relocation flow.");
+            departTransport(connection, returningPlan.plannedFlowId(), 67);
+            var returningDeparture = NpcPopulationMigrationEngine.advanceAndPlan(
+                    connection, UUID.fromString(WORLD), 67);
+            require(returningDeparture.synchronizedFlows() == 1 && population(connection, POPULATION) == 800,
+                    "The capacity-return scenario did not physically depart its exact cohort.");
+
+            execute(connection, "UPDATE npc_population_state SET housing_capacity=550,life_support_capacity=550 "
+                    + "WHERE population_id='" + DESTINATION_POPULATION + "'");
+            arriveTransport(connection, DESTINATION_LOCATION, "OUTBOUND", 71);
+            var rejectedArrival = NpcPopulationMigrationEngine.advanceAndPlan(connection, UUID.fromString(WORLD), 71);
+            require(rejectedArrival.synchronizedFlows() == 1,
+                    "Destination capacity collapse did not synchronize the active flow.");
+            require("RETURNING".equals(text(connection, "SELECT status FROM population_flow WHERE flow_id='"
+                            + returningPlan.plannedFlowId() + "'")),
+                    "Destination capacity collapse did not order a physical return.");
+            require(population(connection, DESTINATION_POPULATION) == 500,
+                    "Rejected passengers were added to a destination without capacity.");
+            require(population(connection, POPULATION) == 800,
+                    "Rejected passengers teleported back before the return leg arrived.");
+
+            departReturnTransport(connection, returningPlan.plannedFlowId(), 72);
+            NpcPopulationMigrationEngine.advanceAndPlan(connection, UUID.fromString(WORLD), 72);
+            arriveTransport(connection, ORIGIN_LOCATION, "RETURN", 76);
+            var completedReturn = NpcPopulationMigrationEngine.advanceAndPlan(
+                    connection, UUID.fromString(WORLD), 76);
+            require(completedReturn.synchronizedFlows() == 1,
+                    "An arrived return leg did not restore its passengers to the origin.");
+            require("ARRIVED".equals(text(connection, "SELECT status FROM population_flow WHERE flow_id='"
+                            + returningPlan.plannedFlowId() + "'")),
+                    "The returned flow did not reach its terminal arrival state.");
+            require(number(connection, "SELECT returned_quantity FROM population_flow WHERE flow_id='"
+                            + returningPlan.plannedFlowId() + "'") == 100,
+                    "The full surviving cohort was not recorded as returned.");
+            require(population(connection, POPULATION) == 900,
+                    "Returned passengers were not restored to the origin population.");
+            require(population(connection, DESTINATION_POPULATION) == 500,
+                    "The rejected return path changed destination population.");
+            require(number(connection, "SELECT COUNT(*) FROM npc_population_flow_transition WHERE flow_id='"
+                            + returningPlan.plannedFlowId() + "'") == 5,
+                    "Plan, preparation, departure, return order, and return completion were not all recorded.");
             require(number(connection, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause IN "
-                            + "('EMIGRATION','IMMIGRATION')") == 2,
-                    "Automatic migration did not produce paired origin and destination ledger terms.");
+                            + "('EMIGRATION','IMMIGRATION','RETURN')") == 4,
+                    "Automatic migration and return did not produce complete paired ledger terms.");
             require(number(connection, "SELECT COUNT(*) FROM pragma_foreign_key_check") == 0,
                     "Passive migration engine produced foreign-key violations.");
 
-            return text(connection, "SELECT flow_id||':'||flow_kind||':'||status||':'||quantity||':'||"
-                    + "embarked_quantity||':'||arrived_quantity||':'||losses FROM population_flow");
+            return text(connection, "SELECT group_concat(flow_id||':'||flow_kind||':'||status||':'||quantity||':'||"
+                    + "embarked_quantity||':'||arrived_quantity||':'||returned_quantity||':'||losses,'|') "
+                    + "FROM (SELECT * FROM population_flow ORDER BY created_tick,flow_id)");
         }
     }
 
@@ -128,13 +174,31 @@ public final class NpcPopulationMigrationEngineVerification {
                         + DESTINATION_LOCATION + "','OUTBOUND','IN_TRANSIT'," + tick + ",4,0)");
     }
 
-    private static void arriveTransport(Connection connection, long tick) throws SQLException {
+    private static void departReturnTransport(Connection connection, String flowId, long tick) throws SQLException {
         execute(connection,
-                "UPDATE npc_vessel SET status='WORKING',current_location_id='" + DESTINATION_LOCATION
-                        + "',destination_location_id='" + DESTINATION_LOCATION + "',last_tick=" + tick
+                "UPDATE npc_transit_leg SET status='CANCELLED' WHERE npc_vessel_id='" + VESSEL
+                        + "' AND status='ARRIVED'",
+                "UPDATE npc_vessel SET status='IN_TRANSIT',destination_location_id='" + ORIGIN_LOCATION
+                        + "',last_tick=" + tick + " WHERE npc_vessel_id='" + VESSEL + "'",
+                "INSERT INTO npc_transit_leg VALUES('" + flowId + ":return','" + VESSEL + "','"
+                        + ORIGIN_LOCATION + "','RETURN','IN_TRANSIT'," + tick + ",4,0)");
+    }
+
+    private static void arriveTransport(Connection connection, String location, String legType, long tick)
+            throws SQLException {
+        execute(connection,
+                "UPDATE npc_vessel SET status='WORKING',current_location_id='" + location
+                        + "',destination_location_id='" + location + "',last_tick=" + tick
                         + " WHERE npc_vessel_id='" + VESSEL + "'",
                 "UPDATE npc_transit_leg SET status='ARRIVED',elapsed_ticks=base_duration_ticks WHERE npc_vessel_id='"
-                        + VESSEL + "' AND status='IN_TRANSIT'");
+                        + VESSEL + "' AND leg_type='" + legType + "' AND status='IN_TRANSIT'");
+    }
+
+    private static void dockAtOrigin(Connection connection) throws SQLException {
+        execute(connection,
+                "UPDATE npc_vessel SET status='DOCKED',current_location_id='" + ORIGIN_LOCATION
+                        + "',destination_location_id=NULL,mission_id=NULL,route_progress=0,route_ticks_required=1 "
+                        + "WHERE npc_vessel_id='" + VESSEL + "'");
     }
 
     private static long population(Connection connection, String populationId) throws SQLException {
@@ -165,6 +229,6 @@ public final class NpcPopulationMigrationEngineVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Passive migration pressure planning, vessel reservation, transit release, arrival settlement, conservation, and deterministic replay passed.");
+        System.out.println("Passive migration pressure planning, vessel reservation, physical departure, arrival settlement, capacity rejection, return transit, origin restoration, conservation, and deterministic replay passed.");
     }
 }
