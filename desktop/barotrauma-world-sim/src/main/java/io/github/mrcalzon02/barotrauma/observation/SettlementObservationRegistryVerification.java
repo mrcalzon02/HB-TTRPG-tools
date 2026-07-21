@@ -74,7 +74,8 @@ public final class SettlementObservationRegistryVerification {
              Statement statement = connection.createStatement()) {
             statement.execute("PRAGMA foreign_keys=ON");
             statement.execute("CREATE TABLE schema_migration(version INTEGER PRIMARY KEY,applied_at TEXT NOT NULL)");
-            statement.execute("INSERT INTO schema_migration VALUES(29,'2026-07-21T00:00:00Z')");
+            statement.execute("INSERT INTO schema_migration VALUES(16,'2026-07-21T00:00:00Z')");
+            statement.execute("INSERT INTO schema_migration VALUES(29,'2026-07-21T00:01:00Z')");
             statement.execute("CREATE TABLE world_metadata(world_id TEXT PRIMARY KEY,display_name TEXT,canonical_time TEXT)");
             statement.execute("CREATE TABLE world_simulation_metadata(world_id TEXT PRIMARY KEY,current_tick_sequence INTEGER,imported_tick_sequence INTEGER)");
             statement.execute("CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL,is_station INTEGER NOT NULL DEFAULT 0)");
