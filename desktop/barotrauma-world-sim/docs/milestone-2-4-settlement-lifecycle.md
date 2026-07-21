@@ -1,6 +1,6 @@
 # Milestone 2.4 — Settlement Lifecycle Projects
 
-**Status:** Active foundation implemented; authoritative project transactions, passive progression, settlement-state mutation, observation registry integration, desktop presentation, and exact-head verification remain.
+**Status:** Active implementation; schema 029, the authoritative transaction, deterministic security-gated progression, query-only registry access, and focused verification exist. Production passive-tick integration, canonical settlement consequences, desktop presentation, migration coverage, and exact-head acceptance remain.
 
 Schema 029 establishes the durable project model required before settlements may be founded, expanded, abandoned, or reclaimed. It does not permit direct settlement teleportation and does not introduce another station simulator.
 
@@ -39,33 +39,68 @@ A contribution may reference its source station, source population, source NPC v
 
 `settlement_project_transition` records lifecycle changes with tick, progress, evidence, and summary.
 
+## Authoritative transaction
+
+`SettlementProjectTransaction` is the sole schema-029 lifecycle mutation service. Public operations acquire the established world writer lock and commit or roll back project, contribution, and transition rows together. Connection-scoped operations let the passive world transaction use the same authority without introducing a second writer.
+
+Implemented operations cover deterministic planning, contribution recording, preparation, activation, work progress, blocking, resumption, completion, failure, and cancellation. The transaction validates world ownership for referenced locations, stations, populations, vessels, and population flows before accepting them.
+
+The focused transaction verification proves supported activation, exact bounded progress, duplicate-evidence rejection, terminal immutability, transition evidence, foreign-key integrity, and rollback of project state.
+
+## Deterministic progression engine
+
+`SettlementProjectEngine` advances only `ACTIVE` and `BLOCKED` projects in deterministic project-id order. It reads current station security through the established station simulation state, synchronizes the committed project security value, blocks work below the required threshold, resumes work after recovery, and commits bounded work through `SettlementProjectTransaction`.
+
+The engine does not plan projects and does not directly mutate station or location lifecycle state. Its focused verification proves deterministic work quantities, security blocking, zero blocked progress, recovery, resumption evidence, exact completion, and bounded work history.
+
 ## Query-only observation
 
-`settlement_project_observation` exposes project identity, kind, status, origin and target names, transport, committed and required support, security, progress, timing, failure, and summary. This is a read-only projection and does not create a second simulation authority.
+`settlement_project_observation` exposes project identity, kind, status, origin and target names, transport, committed and required support, security, progress, timing, failure, and summary.
 
-## Verification foundation
+`ObservationRegistry.settlementProjects(...)` uses the existing query-only connection. It requires schema 029, supports changed-since filtering and bounded limits, and returns nullable preparation, activation, and completion timing without mutating project state.
 
-`SettlementLifecycleSchemaVerification` applies the real schema-029 statements against minimal prerequisite authorities and verifies:
+`SettlementObservationRegistryVerification` proves schema gating, ordering, limits, changed-since behavior, commitment and progress projection, nullable timing fields, and an unchanged durable-state fingerprint after reads.
 
-- all tables and the observation view are created;
-- a fully supported project may prepare, activate, and complete;
-- unsupported activation is rejected;
-- illegal lifecycle transitions are rejected;
-- terminal mutation is rejected;
-- duplicate active projects at one target location are rejected;
-- the schema preserves foreign-key integrity.
+## Registered verification
 
-The focused verification is registered in `DesktopPersistenceVerificationSuite`.
+The complete desktop verification suite now includes:
 
-## Next implementation slice
+- `SettlementLifecycleSchemaVerification`;
+- `SettlementProjectTransactionVerification`;
+- `SettlementProjectEngineVerification`;
+- `SettlementObservationRegistryVerification`.
 
-The next change must add one authoritative `SettlementProjectTransaction` rather than direct SQL mutation from callers. It should:
+These contracts are committed but have not been executed in the current environment.
 
-1. Plan projects deterministically with exact requirements.
-2. Commit contributions through existing inventory, population-flow, NPC-vessel, and station-security authorities.
-3. Progress active work during `PassiveWorldTickTransaction` inside the same rollback boundary.
-4. Apply founding, expansion, abandonment, and reclamation consequences to canonical station and location state only when a project completes.
-5. Record transitions, observations, station changes, and audit evidence atomically.
-6. Contain failure by preserving committed resources and explicitly recording whether they were returned, stranded, consumed, or lost.
+## Remaining implementation work
 
-After that transaction exists, add query-only registry access and extend the existing Observation Foundation window. Do not mark Slice 2.4 complete until fresh and legacy migration, deterministic progression, failure rollback, desktop evidence, and exact-head `toolbox.cmd verify` have passed.
+The next direct production change is:
+
+```java
+SettlementProjectEngine.advance(connection, durable.worldId().toString(), tick);
+```
+
+inside the authoritative per-tick sequence of `PassiveWorldTickTransaction`, after population migration synchronization and before later per-tick work completes. The exact placement must keep settlement progress in the same rollback boundary as station economy, migration, vessel movement, research, checkpointing, audit evidence, and the durable clock.
+
+After production integration, add canonical completion consequences through the same transaction authority:
+
+1. `FOUNDING` creates or activates the canonical station at its target location only after all committed support and work complete.
+2. `EXPANSION` increases canonical capacity through explicit committed project results.
+3. `ABANDONMENT` records evacuation or accounted population disposition before station shutdown.
+4. `RECLAMATION` restores an abandoned station only after transport, population, materials, security, and work complete.
+5. Failure and cancellation explicitly classify committed support as returned, stranded, consumed, or lost.
+6. Completion, failure, and rollback create causal station changes, observation events, metrics, and audit evidence atomically.
+
+Then extend the existing Observation Foundation desktop window with settlement-project evidence. Do not create a second registry, project simulator, or UI data store.
+
+## Acceptance gate
+
+Slice 2.4 remains **Active** until all of the following are true:
+
+1. Production passive ticks invoke `SettlementProjectEngine` directly.
+2. Founding, expansion, abandonment, and reclamation consequences mutate canonical station and location state only at committed completion.
+3. Contributions are physically reconciled with inventory, population-flow, vessel, and security authorities.
+4. Passive-transaction verification proves progress, blocking, completion, consequences, and rollback through the production path.
+5. Fresh and legacy worlds migrate through schema 029.
+6. The existing desktop observation surface displays project lifecycle and causal evidence.
+7. The exact published `main` head compiles under Java 17 and passes `toolbox.cmd verify`.
