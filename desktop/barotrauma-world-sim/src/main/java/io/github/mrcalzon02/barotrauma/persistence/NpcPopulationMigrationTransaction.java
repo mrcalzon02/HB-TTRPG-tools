@@ -21,7 +21,7 @@ import static io.github.mrcalzon02.barotrauma.persistence.NpcPopulationMigration
 import static io.github.mrcalzon02.barotrauma.persistence.NpcPopulationMigrationStore.*;
 
 /**
- * Authoritative schema-028 population-flow transaction.
+ * Authoritative population-flow transaction introduced in schema 028.
  *
  * <p>People stay at the origin through planning and preparation. Departure removes exact cohorts only after the
  * assigned vessel enters {@code npc_transit_leg}. Arrival or return restores survivors at one station; failure must
@@ -361,7 +361,10 @@ public final class NpcPopulationMigrationTransaction {
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT COALESCE(MAX(version),0) FROM schema_migration")) {
             int version = result.next() ? result.getInt(1) : 0;
-            if (version != 28) throw new SQLException("Population migration requires schema 028; found " + version + ".");
+            if (version < 28 || version > WorldStorageContracts.DATABASE_SCHEMA_VERSION) {
+                throw new SQLException("Population migration requires schema 028 through "
+                        + WorldStorageContracts.DATABASE_SCHEMA_VERSION + "; found " + version + ".");
+            }
         }
     }
 
