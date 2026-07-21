@@ -21,141 +21,150 @@ public final class SettlementContributionDispositionTransactionVerification {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
                 for (String sql : SettlementContributionDispositionSchema.statements()) statement.execute(sql);
             }
+            connection.setAutoCommit(false);
+            try {
+                var cancelled = SettlementProjectTransaction.plan(connection,
+                        new SettlementProjectTransaction.PlanRequest("world-1",
+                                SettlementProjectTransaction.ProjectKind.EXPANSION, "Coalition",
+                                "station-a", "station-a", "location-a", "population-a", "vessel-a",
+                                new SettlementProjectTransaction.Requirements(10, 5, 0, 1, 40, 3),
+                                10, "Cancellation disposition project."));
+                SettlementProjectTransaction.prepare(connection, cancelled.projectId(), 11);
+                SettlementProjectContributionAuthority.commitInventory(connection, cancelled.projectId(),
+                        SettlementProjectTransaction.ContributionKind.MATERIALS,
+                        "station-a", "item-steel", 10, 12, "cancel-steel");
+                SettlementProjectContributionAuthority.commitInventory(connection, cancelled.projectId(),
+                        SettlementProjectTransaction.ContributionKind.SUPPLIES,
+                        "station-a", "item-rations", 5, 12, "cancel-rations");
+                SettlementProjectContributionAuthority.commitTransport(connection, cancelled.projectId(),
+                        "vessel-a", 12, "cancel-transport");
+                SettlementProjectTransaction.contribute(connection,
+                        new SettlementProjectTransaction.ContributionRequest(cancelled.projectId(),
+                                SettlementProjectTransaction.ContributionKind.SECURITY, 40,
+                                "station-a", null, null, null, 12,
+                                "cancel-security", "Security assigned to cancellation project."));
+                SettlementProjectTransaction.activate(connection, cancelled.projectId(), 13);
+                SettlementProjectTransaction.advance(connection, cancelled.projectId(), 14, 1,
+                        "cancel-work", "One work unit was consumed before cancellation.");
+                require(inventory(connection, "item-steel") == 10
+                                && inventory(connection, "item-rations") == 15,
+                        "Physical cancellation commitments were not deducted before disposition.");
+                reject(() -> SettlementProjectTransaction.transition(connection, cancelled.projectId(), 15,
+                                "CANCELLED", "bypass-disposition-authority", "Bypass disposition authority."),
+                        "undisposed physical commitments");
 
-            var cancelled = SettlementProjectTransaction.plan(connection,
-                    new SettlementProjectTransaction.PlanRequest("world-1",
-                            SettlementProjectTransaction.ProjectKind.EXPANSION, "Coalition",
-                            "station-a", "station-a", "location-a", "population-a", "vessel-a",
-                            new SettlementProjectTransaction.Requirements(10, 5, 0, 1, 40, 3),
-                            10, "Cancellation disposition project."));
-            SettlementProjectTransaction.prepare(connection, cancelled.projectId(), 11);
-            SettlementProjectContributionAuthority.commitInventory(connection, cancelled.projectId(),
-                    SettlementProjectTransaction.ContributionKind.MATERIALS,
-                    "station-a", "item-steel", 10, 12, "cancel-steel");
-            SettlementProjectContributionAuthority.commitInventory(connection, cancelled.projectId(),
-                    SettlementProjectTransaction.ContributionKind.SUPPLIES,
-                    "station-a", "item-rations", 5, 12, "cancel-rations");
-            SettlementProjectContributionAuthority.commitTransport(connection, cancelled.projectId(),
-                    "vessel-a", 12, "cancel-transport");
-            SettlementProjectTransaction.contribute(connection,
-                    new SettlementProjectTransaction.ContributionRequest(cancelled.projectId(),
-                            SettlementProjectTransaction.ContributionKind.SECURITY, 40,
-                            "station-a", null, null, null, 12,
-                            "cancel-security", "Security assigned to cancellation project."));
-            SettlementProjectTransaction.activate(connection, cancelled.projectId(), 13);
-            SettlementProjectTransaction.advance(connection, cancelled.projectId(), 14, 1,
-                    "cancel-work", "One work unit was consumed before cancellation.");
-            require(inventory(connection, "item-steel") == 10
-                            && inventory(connection, "item-rations") == 15,
-                    "Physical cancellation commitments were not deducted before disposition.");
-            reject(() -> SettlementProjectTransaction.transition(connection, cancelled.projectId(), 15,
-                            "CANCELLED", "bypass-disposition-authority", "Bypass disposition authority."),
-                    "undisposed physical commitments");
+                List<SettlementContributionDispositionTransaction.DispositionPlan> cancellationPlans = new ArrayList<>();
+                cancellationPlans.add(plan(connection, cancelled.projectId(), "MATERIALS",
+                        SettlementContributionDispositionTransaction.Disposition.RETURNED));
+                cancellationPlans.add(plan(connection, cancelled.projectId(), "SUPPLIES",
+                        SettlementContributionDispositionTransaction.Disposition.RETURNED));
+                cancellationPlans.add(plan(connection, cancelled.projectId(), "TRANSPORT",
+                        SettlementContributionDispositionTransaction.Disposition.RETURNED));
+                cancellationPlans.add(plan(connection, cancelled.projectId(), "SECURITY",
+                        SettlementContributionDispositionTransaction.Disposition.RETURNED));
+                cancellationPlans.add(plan(connection, cancelled.projectId(), "WORK",
+                        SettlementContributionDispositionTransaction.Disposition.CONSUMED));
+                var cancelledResult = SettlementContributionDispositionTransaction.terminate(connection,
+                        new SettlementContributionDispositionTransaction.TerminationRequest(
+                                cancelled.projectId(),
+                                SettlementContributionDispositionTransaction.TerminalStatus.CANCELLED,
+                                15, "Project cancelled after all support was classified.", cancellationPlans));
+                require(cancelledResult.status().equals("CANCELLED"),
+                        "Disposition authority did not terminalize the cancelled project.");
+                require(inventory(connection, "item-steel") == 20
+                                && inventory(connection, "item-rations") == 20,
+                        "Returned cancellation inventory was not restored exactly once.");
+                require(count(connection, "settlement_project_contribution_disposition",
+                                "project_id='" + cancelled.projectId() + "'") == 5,
+                        "Cancellation did not classify every contribution exactly once.");
+                require(number(connection, "SELECT pending_count FROM settlement_project_disposition_completeness "
+                                + "WHERE project_id='" + cancelled.projectId() + "'") == 0,
+                        "Cancelled project retained pending contribution dispositions.");
 
-            List<SettlementContributionDispositionTransaction.DispositionPlan> cancellationPlans = new ArrayList<>();
-            cancellationPlans.add(plan(connection, cancelled.projectId(), "MATERIALS",
-                    SettlementContributionDispositionTransaction.Disposition.RETURNED));
-            cancellationPlans.add(plan(connection, cancelled.projectId(), "SUPPLIES",
-                    SettlementContributionDispositionTransaction.Disposition.RETURNED));
-            cancellationPlans.add(plan(connection, cancelled.projectId(), "TRANSPORT",
-                    SettlementContributionDispositionTransaction.Disposition.RETURNED));
-            cancellationPlans.add(plan(connection, cancelled.projectId(), "SECURITY",
-                    SettlementContributionDispositionTransaction.Disposition.RETURNED));
-            cancellationPlans.add(plan(connection, cancelled.projectId(), "WORK",
-                    SettlementContributionDispositionTransaction.Disposition.CONSUMED));
-            var cancelledResult = SettlementContributionDispositionTransaction.terminate(connection,
-                    new SettlementContributionDispositionTransaction.TerminationRequest(
-                            cancelled.projectId(),
-                            SettlementContributionDispositionTransaction.TerminalStatus.CANCELLED,
-                            15, "Project cancelled after all support was classified.", cancellationPlans));
-            require(cancelledResult.status().equals("CANCELLED"),
-                    "Disposition authority did not terminalize the cancelled project.");
-            require(inventory(connection, "item-steel") == 20
-                            && inventory(connection, "item-rations") == 20,
-                    "Returned cancellation inventory was not restored exactly once.");
-            require(count(connection, "settlement_project_contribution_disposition",
-                            "project_id='" + cancelled.projectId() + "'") == 5,
-                    "Cancellation did not classify every contribution exactly once.");
-            require(number(connection, "SELECT pending_count FROM settlement_project_disposition_completeness "
-                            + "WHERE project_id='" + cancelled.projectId() + "'") == 0,
-                    "Cancelled project retained pending contribution dispositions.");
+                var failed = SettlementProjectTransaction.plan(connection,
+                        new SettlementProjectTransaction.PlanRequest("world-1",
+                                SettlementProjectTransaction.ProjectKind.RECLAMATION, "Coalition",
+                                "station-a", "station-b", "location-b", "population-b", "vessel-a",
+                                new SettlementProjectTransaction.Requirements(2, 0, 4, 1, 0, 3),
+                                20, "Failure disposition project."));
+                SettlementProjectTransaction.prepare(connection, failed.projectId(), 21);
+                SettlementProjectContributionAuthority.commitInventory(connection, failed.projectId(),
+                        SettlementProjectTransaction.ContributionKind.MATERIALS,
+                        "station-a", "item-steel", 2, 22, "failure-steel");
+                SettlementProjectContributionAuthority.commitArrivedPopulation(connection, failed.projectId(),
+                        "flow-b", 4, 22, "failure-population");
+                SettlementProjectContributionAuthority.commitTransport(connection, failed.projectId(),
+                        "vessel-a", 22, "failure-transport");
+                SettlementProjectTransaction.activate(connection, failed.projectId(), 23);
+                SettlementProjectTransaction.advance(connection, failed.projectId(), 24, 1,
+                        "failure-work", "One work unit was consumed before failure.");
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate("UPDATE population_flow SET stranded_quantity=4 WHERE flow_id='flow-b'");
+                    statement.executeUpdate("UPDATE npc_vessel SET status='LOST' WHERE npc_vessel_id='vessel-a'");
+                    statement.execute("CREATE TRIGGER settlement_disposition_rollback_probe "
+                            + "BEFORE UPDATE OF status ON settlement_project "
+                            + "WHEN NEW.project_id='" + failed.projectId() + "' AND NEW.status='FAILED' BEGIN "
+                            + "SELECT RAISE(ABORT,'Settlement disposition rollback probe'); END");
+                }
+                List<SettlementContributionDispositionTransaction.DispositionPlan> failurePlans = new ArrayList<>();
+                failurePlans.add(plan(connection, failed.projectId(), "MATERIALS",
+                        SettlementContributionDispositionTransaction.Disposition.RETURNED));
+                failurePlans.add(plan(connection, failed.projectId(), "POPULATION",
+                        SettlementContributionDispositionTransaction.Disposition.STRANDED));
+                failurePlans.add(plan(connection, failed.projectId(), "TRANSPORT",
+                        SettlementContributionDispositionTransaction.Disposition.LOST));
+                failurePlans.add(plan(connection, failed.projectId(), "WORK",
+                        SettlementContributionDispositionTransaction.Disposition.CONSUMED));
+                int steelBeforeFailure = inventory(connection, "item-steel");
+                reject(() -> SettlementContributionDispositionTransaction.terminate(connection,
+                                new SettlementContributionDispositionTransaction.TerminationRequest(
+                                        failed.projectId(),
+                                        SettlementContributionDispositionTransaction.TerminalStatus.FAILED,
+                                        25, "Forced rollback before failure terminalization.", failurePlans)),
+                        "Settlement disposition rollback probe");
+                require(inventory(connection, "item-steel") == steelBeforeFailure,
+                        "Failed terminalization retained a returned inventory mutation.");
+                require(count(connection, "settlement_project_contribution_disposition",
+                                "project_id='" + failed.projectId() + "'") == 0,
+                        "Failed terminalization retained disposition evidence.");
+                require(text(connection, "SELECT status FROM settlement_project WHERE project_id='"
+                                + failed.projectId() + "'").equals("ACTIVE"),
+                        "Failed terminalization retained its lifecycle transition.");
+                try (Statement statement = connection.createStatement()) {
+                    statement.execute("DROP TRIGGER settlement_disposition_rollback_probe");
+                }
 
-            var failed = SettlementProjectTransaction.plan(connection,
-                    new SettlementProjectTransaction.PlanRequest("world-1",
-                            SettlementProjectTransaction.ProjectKind.RECLAMATION, "Coalition",
-                            "station-a", "station-b", "location-b", "population-b", "vessel-a",
-                            new SettlementProjectTransaction.Requirements(2, 0, 4, 1, 0, 3),
-                            20, "Failure disposition project."));
-            SettlementProjectTransaction.prepare(connection, failed.projectId(), 21);
-            SettlementProjectContributionAuthority.commitInventory(connection, failed.projectId(),
-                    SettlementProjectTransaction.ContributionKind.MATERIALS,
-                    "station-a", "item-steel", 2, 22, "failure-steel");
-            SettlementProjectContributionAuthority.commitArrivedPopulation(connection, failed.projectId(),
-                    "flow-b", 4, 22, "failure-population");
-            SettlementProjectContributionAuthority.commitTransport(connection, failed.projectId(),
-                    "vessel-a", 22, "failure-transport");
-            SettlementProjectTransaction.activate(connection, failed.projectId(), 23);
-            SettlementProjectTransaction.advance(connection, failed.projectId(), 24, 1,
-                    "failure-work", "One work unit was consumed before failure.");
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate("UPDATE population_flow SET stranded_quantity=4 WHERE flow_id='flow-b'");
-                statement.executeUpdate("UPDATE npc_vessel SET status='LOST' WHERE npc_vessel_id='vessel-a'");
-                statement.execute("CREATE TRIGGER settlement_disposition_rollback_probe "
-                        + "BEFORE UPDATE OF status ON settlement_project "
-                        + "WHEN NEW.project_id='" + failed.projectId() + "' AND NEW.status='FAILED' BEGIN "
-                        + "SELECT RAISE(ABORT,'Settlement disposition rollback probe'); END");
+                var failedResult = SettlementContributionDispositionTransaction.terminate(connection,
+                        new SettlementContributionDispositionTransaction.TerminationRequest(
+                                failed.projectId(),
+                                SettlementContributionDispositionTransaction.TerminalStatus.FAILED,
+                                25, "Project failed with all support physically classified.", failurePlans));
+                require(failedResult.status().equals("FAILED"),
+                        "Disposition authority did not terminalize the failed project.");
+                require(inventory(connection, "item-steel") == 20,
+                        "Returned failure materials were not restored exactly once.");
+                require(count(connection, "settlement_project_contribution_disposition",
+                                "project_id='" + failed.projectId() + "'") == 4,
+                        "Failure did not classify every contribution exactly once.");
+                require(count(connection, "settlement_project_contribution_disposition",
+                                "project_id='" + failed.projectId() + "' AND disposition='STRANDED'") == 1,
+                        "Stranded population disposition was not recorded.");
+                require(count(connection, "settlement_project_contribution_disposition",
+                                "project_id='" + failed.projectId() + "' AND disposition='LOST'") == 1,
+                        "Lost transport disposition was not recorded.");
+                require(count(connection, "settlement_project_contribution_disposition",
+                                "project_id='" + failed.projectId() + "' AND disposition='CONSUMED'") == 1,
+                        "Consumed work disposition was not recorded.");
+                require(foreignKeys(connection) == 0,
+                        "Settlement disposition transaction verification left foreign-key violations.");
+                connection.commit();
+            } catch (SQLException | RuntimeException exception) {
+                try { connection.rollback(); }
+                catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+                throw exception;
+            } finally {
+                if (!connection.getAutoCommit()) connection.setAutoCommit(true);
             }
-            List<SettlementContributionDispositionTransaction.DispositionPlan> failurePlans = new ArrayList<>();
-            failurePlans.add(plan(connection, failed.projectId(), "MATERIALS",
-                    SettlementContributionDispositionTransaction.Disposition.RETURNED));
-            failurePlans.add(plan(connection, failed.projectId(), "POPULATION",
-                    SettlementContributionDispositionTransaction.Disposition.STRANDED));
-            failurePlans.add(plan(connection, failed.projectId(), "TRANSPORT",
-                    SettlementContributionDispositionTransaction.Disposition.LOST));
-            failurePlans.add(plan(connection, failed.projectId(), "WORK",
-                    SettlementContributionDispositionTransaction.Disposition.CONSUMED));
-            int steelBeforeFailure = inventory(connection, "item-steel");
-            reject(() -> SettlementContributionDispositionTransaction.terminate(connection,
-                            new SettlementContributionDispositionTransaction.TerminationRequest(
-                                    failed.projectId(),
-                                    SettlementContributionDispositionTransaction.TerminalStatus.FAILED,
-                                    25, "Forced rollback before failure terminalization.", failurePlans)),
-                    "Settlement disposition rollback probe");
-            require(inventory(connection, "item-steel") == steelBeforeFailure,
-                    "Failed terminalization retained a returned inventory mutation.");
-            require(count(connection, "settlement_project_contribution_disposition",
-                            "project_id='" + failed.projectId() + "'") == 0,
-                    "Failed terminalization retained disposition evidence.");
-            require(text(connection, "SELECT status FROM settlement_project WHERE project_id='"
-                            + failed.projectId() + "'").equals("ACTIVE"),
-                    "Failed terminalization retained its lifecycle transition.");
-            try (Statement statement = connection.createStatement()) {
-                statement.execute("DROP TRIGGER settlement_disposition_rollback_probe");
-            }
-
-            var failedResult = SettlementContributionDispositionTransaction.terminate(connection,
-                    new SettlementContributionDispositionTransaction.TerminationRequest(
-                            failed.projectId(),
-                            SettlementContributionDispositionTransaction.TerminalStatus.FAILED,
-                            25, "Project failed with all support physically classified.", failurePlans));
-            require(failedResult.status().equals("FAILED"),
-                    "Disposition authority did not terminalize the failed project.");
-            require(inventory(connection, "item-steel") == 20,
-                    "Returned failure materials were not restored exactly once.");
-            require(count(connection, "settlement_project_contribution_disposition",
-                            "project_id='" + failed.projectId() + "'") == 4,
-                    "Failure did not classify every contribution exactly once.");
-            require(count(connection, "settlement_project_contribution_disposition",
-                            "project_id='" + failed.projectId() + "' AND disposition='STRANDED'") == 1,
-                    "Stranded population disposition was not recorded.");
-            require(count(connection, "settlement_project_contribution_disposition",
-                            "project_id='" + failed.projectId() + "' AND disposition='LOST'") == 1,
-                    "Lost transport disposition was not recorded.");
-            require(count(connection, "settlement_project_contribution_disposition",
-                            "project_id='" + failed.projectId() + "' AND disposition='CONSUMED'") == 1,
-                    "Consumed work disposition was not recorded.");
-            require(foreignKeys(connection) == 0,
-                    "Settlement disposition transaction verification left foreign-key violations.");
         }
     }
 
