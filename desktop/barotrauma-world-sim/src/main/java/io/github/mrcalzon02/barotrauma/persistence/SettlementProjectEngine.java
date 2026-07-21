@@ -43,7 +43,10 @@ public final class SettlementProjectEngine {
                     "passive-settlement-work:" + tick,
                     "Committed crews completed " + work + " settlement work units.");
             advanced++;
-            if (result.status().equals("COMPLETE")) completed++;
+            if (result.status().equals("COMPLETE")) {
+                SettlementProjectConsequences.apply(connection, refreshed.projectId(), tick);
+                completed++;
+            }
         }
         return new EngineResult(projects.size(), advanced, blocked, resumed, completed);
     }
