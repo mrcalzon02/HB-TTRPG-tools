@@ -32,9 +32,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/** Read-only desktop surface for passive-world observation, accounting, and schema-028 migration evidence. */
+/** Read-only desktop surface for passive-world, population, migration, and settlement evidence. */
 public final class ObservationFoundationWindow extends JFrame {
-    private static final int MIGRATION_LIMIT = 5_000;
+    private static final int OBSERVATION_LIMIT = 5_000;
 
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final JLabel worldStatus = new JLabel("No desktop world open");
@@ -60,6 +60,15 @@ public final class ObservationFoundationWindow extends JFrame {
             "Quantity", "Reserved", "Embarked", "Arrived", "Returned", "Losses", "Stranded", "Transport",
             "Progress", "Duration", "Preparation", "Departure", "Arrival", "Return", "Updated",
             "Failure", "Summary", "Flow ID");
+    private final DefaultTableModel settlementModel = model("Status", "Kind", "Target", "Origin", "Sponsor",
+            "Materials", "Supplies", "Population", "Transport", "Security", "Progress", "Percent", "Created",
+            "Preparation", "Activated", "Completed", "Updated", "Failure", "Summary", "Project ID");
+    private final DefaultTableModel foundingModel = model("Project Status", "Flow Status", "Origin", "Destination",
+            "Quantity", "Embarked", "Arrived", "Losses", "Stranded", "Transport", "Updated", "Founded Station",
+            "Founded Population", "Settled", "Handoff", "Evidence", "Summary", "Flow ID", "Project ID");
+    private final DefaultTableModel dispositionModel = model("Tick", "Project Status", "Project Kind",
+            "Contribution Kind", "Disposition", "Quantity", "Source Station", "Source Population", "Source Vessel",
+            "Related Flow", "Evidence", "Summary", "Contribution ID", "Disposition ID", "Project ID");
     private final DefaultTableModel eventModel = model("Tick", "Time", "Category", "Entity Type", "Entity ID",
             "Cause", "Evidence", "Magnitude", "Visibility", "Confidence", "Summary", "Event ID");
     private final DefaultTableModel snapshotModel = model("Tick", "Status", "Source", "Rules", "Created",
@@ -77,7 +86,7 @@ public final class ObservationFoundationWindow extends JFrame {
         super("Barotrauma Observation Foundation");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(1100, 700));
-        setSize(1700, 960);
+        setSize(1800, 1000);
         setLocationByPlatform(true);
         setLayout(new BorderLayout(10, 10));
 
@@ -87,12 +96,15 @@ public final class ObservationFoundationWindow extends JFrame {
         header.add(operationStatus, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
-        summary.setText("Open a schema-028 desktop world to inspect conserved population and migration evidence.\n");
+        summary.setText("Open a schema-031 desktop world to inspect conserved population, migration, and settlement evidence.\n");
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Summary", new JScrollPane(summary));
         tabs.addTab("NPC Populations", tablePane(npcModel));
         tabs.addTab("NPC Population Ledger", tablePane(ledgerModel));
         tabs.addTab("NPC Migration", tablePane(migrationModel));
+        tabs.addTab("Settlement Projects", tablePane(settlementModel));
+        tabs.addTab("Founding Migrations", tablePane(foundingModel));
+        tabs.addTab("Contribution Dispositions", tablePane(dispositionModel));
         tabs.addTab("Creature Populations", tablePane(creatureModel));
         tabs.addTab("Faction Presence", tablePane(factionModel));
         tabs.addTab("Observation Events", tablePane(eventModel));
@@ -136,7 +148,7 @@ public final class ObservationFoundationWindow extends JFrame {
         clear();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
-            summary.setText("Open a schema-028 desktop world to inspect conserved population and migration evidence.\n");
+            summary.setText("Open a schema-031 desktop world to inspect conserved population, migration, and settlement evidence.\n");
             refreshControls();
             return;
         }
@@ -154,8 +166,12 @@ public final class ObservationFoundationWindow extends JFrame {
             @Override protected ObservationLoad doInBackground() throws Exception {
                 return new ObservationLoad(
                         ObservationRegistry.loadChangedSince(selectedWorld, since),
-                        ObservationRegistry.migrationFlows(selectedWorld, since, MIGRATION_LIMIT),
-                        ObservationRegistry.migrationConservation(selectedWorld));
+                        ObservationRegistry.migrationFlows(selectedWorld, since, OBSERVATION_LIMIT),
+                        ObservationRegistry.migrationConservation(selectedWorld),
+                        ObservationRegistry.settlementProjects(selectedWorld, since, OBSERVATION_LIMIT),
+                        ObservationRegistry.settlementFoundingMigrations(selectedWorld, since, OBSERVATION_LIMIT),
+                        ObservationRegistry.settlementContributionDispositions(
+                                selectedWorld, since, OBSERVATION_LIMIT));
             }
 
             @Override protected void done() {
@@ -192,6 +208,9 @@ public final class ObservationFoundationWindow extends JFrame {
                 + "Estimated NPC population: " + worldSummary.npcPopulationTotal() + "\n"
                 + "Population ledger rows: " + worldSummary.populationLedgerRows() + "\n"
                 + "Migration rows in this view: " + load.migrations().size() + "\n"
+                + "Settlement projects in this view: " + load.settlements().size() + "\n"
+                + "Founding migrations in this view: " + load.foundings().size() + "\n"
+                + "Contribution dispositions in this view: " + load.dispositions().size() + "\n"
                 + "Population resident at stations: " + conservation.stationPopulation() + "\n"
                 + "Population physically in flows: " + conservation.populationInFlows() + "\n"
                 + "Recorded migration losses: " + conservation.recordedMigrationLosses() + "\n"
@@ -200,9 +219,9 @@ public final class ObservationFoundationWindow extends JFrame {
                 + "Estimated creature count: " + worldSummary.creatureEstimatedTotal() + "\n"
                 + "Faction presence records: " + worldSummary.factionPresences() + "\n"
                 + "Observation events: " + worldSummary.observationEvents() + "\n\n"
-                + "This window is read-only. Schema 028 exposes the same durable migration authority used by "
-                + "passive simulation: exact cohorts remain at the origin through preparation, leave only on "
-                + "physical departure, and are then accounted as arrived, returned, lost, or stranded.\n");
+                + "This window is read-only. Schemas 028 through 031 expose conserved migration, guarded settlement "
+                + "projects, exact founding handoffs, and immutable returned, stranded, consumed, or lost support "
+                + "classification through the same durable authorities used by simulation.\n");
         summary.setCaretPosition(0);
 
         for (var row : snapshot.npcPopulations()) npcModel.addRow(new Object[]{row.stationName(), row.totalPopulation(),
@@ -222,6 +241,27 @@ public final class ObservationFoundationWindow extends JFrame {
                 row.progressTicks(), nullable(row.durationTicks()), nullable(row.preparationTick()),
                 nullable(row.departureTick()), nullable(row.arrivalTick()), nullable(row.returnTick()),
                 row.updatedTick(), blank(row.failureReason()), row.summary(), row.flowId()});
+        for (var row : load.settlements()) settlementModel.addRow(new Object[]{row.status(), row.projectKind(),
+                row.targetLocationName(), row.originStationName(), blank(row.sponsorFaction()),
+                ratio(row.committedMaterials(), row.requiredMaterials()),
+                ratio(row.committedSupplies(), row.requiredSupplies()),
+                ratio(row.committedPopulation(), row.requiredPopulation()),
+                ratio(row.committedTransport(), row.requiredTransport()),
+                ratio(row.currentSecurity(), row.requiredSecurity()),
+                ratio(row.progressUnits(), row.targetProgressUnits()), row.progressPercent(), row.createdTick(),
+                nullable(row.preparationStartedTick()), nullable(row.activatedTick()), nullable(row.completedTick()),
+                row.updatedTick(), blank(row.failureReason()), row.summary(), row.projectId()});
+        for (var row : load.foundings()) foundingModel.addRow(new Object[]{row.projectStatus(), row.flowStatus(),
+                row.originLocationId(), row.destinationLocationId(), row.quantity(), row.embarked(), row.arrived(),
+                row.losses(), row.stranded(), row.assignedVesselId(), row.updatedTick(),
+                blank(row.foundedStationId()), blank(row.foundedPopulationId()), nullable(row.settledQuantity()),
+                nullable(row.handoffTick()), blank(row.evidenceKey()), blank(row.summary()), row.flowId(),
+                row.projectId()});
+        for (var row : load.dispositions()) dispositionModel.addRow(new Object[]{row.tickSequence(),
+                row.projectStatus(), row.projectKind(), row.contributionKind(), row.disposition(), row.quantity(),
+                row.sourceStationName(), blank(row.sourcePopulationId()), row.sourceVesselName(),
+                blank(row.relatedFlowId()), row.evidenceKey(), row.summary(), row.contributionId(),
+                row.dispositionId(), row.projectId()});
         for (var row : snapshot.creaturePopulations()) creatureModel.addRow(new Object[]{row.locationName(),
                 row.speciesKey(), row.populationClass(), row.estimatedCount(), row.biomass(), row.health(),
                 row.foodStress(), row.habitatSupport(), row.migrationPressure(), row.confidence(),
@@ -245,8 +285,9 @@ public final class ObservationFoundationWindow extends JFrame {
     }
 
     private void clearTables() {
-        for (DefaultTableModel model : new DefaultTableModel[]{npcModel, ledgerModel, migrationModel, creatureModel,
-                factionModel, eventModel, snapshotModel, metricModel}) model.setRowCount(0);
+        for (DefaultTableModel model : new DefaultTableModel[]{npcModel, ledgerModel, migrationModel,
+                settlementModel, foundingModel, dispositionModel, creatureModel, factionModel, eventModel,
+                snapshotModel, metricModel}) model.setRowCount(0);
     }
 
     private void setBusy(boolean value, String message) {
@@ -301,13 +342,17 @@ public final class ObservationFoundationWindow extends JFrame {
 
     private static String blank(String value) { return value == null ? "" : value; }
     private static Object nullable(Object value) { return value == null ? "" : value; }
+    private static String ratio(int value, int target) { return value + " / " + target; }
     private static Throwable cause(ExecutionException exception) {
         return exception.getCause() == null ? exception : exception.getCause();
     }
 
     private record ObservationLoad(ObservationRegistry.Snapshot snapshot,
                                    List<ObservationRegistry.MigrationFlowRow> migrations,
-                                   ObservationRegistry.MigrationConservationRow conservation) { }
+                                   ObservationRegistry.MigrationConservationRow conservation,
+                                   List<ObservationRegistry.SettlementProjectRow> settlements,
+                                   List<ObservationRegistry.SettlementFoundingMigrationRow> foundings,
+                                   List<ObservationRegistry.SettlementContributionDispositionRow> dispositions) { }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
