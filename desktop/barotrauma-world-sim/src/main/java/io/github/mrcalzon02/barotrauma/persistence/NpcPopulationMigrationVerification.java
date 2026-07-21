@@ -56,6 +56,7 @@ public final class NpcPopulationMigrationVerification {
             cancelledWorkerTransfer(connection);
             returnedEvacuation(connection);
             failedEmergencyRelocation(connection);
+            failedPreparationReleasesTransport(connection);
 
             require(number(connection, "SELECT COUNT(*) FROM npc_population_flow_cohort WHERE "
                             + "arrived_quantity+returned_quantity+losses+stranded_quantity>embarked_quantity") == 0,
@@ -160,6 +161,30 @@ public final class NpcPopulationMigrationVerification {
                 "Failed emergency relocation did not account for casualties and stranded survivors.");
     }
 
+    private static void failedPreparationReleasesTransport(Connection connection) throws Exception {
+        dockAtOrigin(connection);
+        long before = populationTotal(connection, POPULATION);
+        var flow = NpcPopulationMigrationTransaction.plan(connection,
+                new PlanRequest(FlowKind.ORDINARY_MIGRATION, POPULATION, DESTINATION_POPULATION,
+                        VESSEL, 25, 82, "Preparation was interrupted before physical departure."));
+        NpcPopulationMigrationTransaction.prepare(connection, flow.flowId(), 83);
+        var failed = NpcPopulationMigrationTransaction.fail(connection, flow.flowId(), 84, 0, 0,
+                "Transport preparation failed before departure.");
+        require(failed.status().equals("FAILED") && failed.reserved() == 0 && failed.embarked() == 0,
+                "Pre-departure failure did not clear the reserved migration state.");
+        require(populationTotal(connection, POPULATION) == before,
+                "Pre-departure failure changed population before physical release.");
+        require(text(connection, "SELECT status FROM npc_vessel WHERE npc_vessel_id='" + VESSEL + "'")
+                        .equals("DOCKED"),
+                "Pre-departure failure left its assigned vessel outside the docked pool.");
+        require(text(connection, "SELECT current_location_id FROM npc_vessel WHERE npc_vessel_id='" + VESSEL + "'")
+                        .equals(ORIGIN_LOCATION),
+                "Pre-departure failure did not restore its vessel to the origin.");
+        require(number(connection, "SELECT COUNT(*) FROM npc_vessel WHERE npc_vessel_id='" + VESSEL
+                        + "' AND destination_location_id IS NULL AND mission_id IS NULL") == 1,
+                "Pre-departure failure retained destination or mission assignment on its vessel.");
+    }
+
     private static void createFixture(Connection connection) throws SQLException {
         createSchema026Fixture(connection);
         execute(connection,
@@ -248,6 +273,6 @@ public final class NpcPopulationMigrationVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Schema 028 migration planning, transport preparation, physical departure, arrival, return, cancellation, casualties, stranding, conservation, deterministic replay, and rollback passed.");
+        System.out.println("Schema 028 migration planning, transport preparation, physical departure, arrival, return, cancellation, pre-departure failure release, casualties, stranding, conservation, deterministic replay, and rollback passed.");
     }
 }
