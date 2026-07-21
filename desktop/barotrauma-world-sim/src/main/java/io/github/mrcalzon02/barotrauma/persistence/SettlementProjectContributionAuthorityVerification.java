@@ -18,6 +18,10 @@ public final class SettlementProjectContributionAuthorityVerification {
             try (Statement statement = connection.createStatement()) {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
             }
+            reject(() -> SettlementProjectContributionAuthority.commitInventory(connection, "missing-project",
+                            SettlementProjectTransaction.ContributionKind.MATERIALS,
+                            "station-a", "item-steel", 1, 1, "autocommit-rejection"),
+                    "active transaction");
             connection.setAutoCommit(false);
             try {
                 var project = SettlementProjectTransaction.plan(connection,
