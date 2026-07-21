@@ -15,8 +15,7 @@ final class SettlementProjectConsequences {
             throw new SQLException("Settlement consequences require a complete project at exact target progress.");
         }
         switch (project.kind()) {
-            case "FOUNDING" -> throw new SQLException(
-                    "Settlement founding requires a conserved arrived-population handoff before station creation.");
+            case "FOUNDING" -> SettlementFoundingMigrationTransaction.completeFounding(connection, projectId, tick);
             case "EXPANSION" -> expand(connection, project, tick);
             case "ABANDONMENT" -> abandon(connection, project, tick);
             case "RECLAMATION" -> reclaim(connection, project, tick);
