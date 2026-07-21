@@ -154,7 +154,7 @@ public final class NpcPopulationMigrationEngineVerification {
             for (String sql : SettlementFoundingMigrationSchema.statements()) execute(connection, sql);
             execute(connection,
                     "INSERT INTO world_location VALUES('" + FOUNDING_LOCATION + "','" + WORLD
-                            + "','Founding Shelf',28,4)",
+                            + "',3,'Founding Shelf',28,4)",
                     "UPDATE station_simulation_state SET integrity=90,threat=10,status='STABLE',supplies=100 "
                             + "WHERE station_id='" + STATION + "'",
                     "UPDATE npc_population_state SET morale=80 WHERE population_id='" + POPULATION + "'");
@@ -212,6 +212,32 @@ public final class NpcPopulationMigrationEngineVerification {
                 require("RETURNING".equals(text(connection,
                                 "SELECT status FROM npc_vessel WHERE npc_vessel_id='" + VESSEL + "'")),
                         "Damaged founding transport was not ordered back to the origin.");
+
+                departReturnTransport(connection, flow.flowId(), 86);
+                NpcPopulationMigrationEngine.advanceAndPlan(connection, UUID.fromString(WORLD), 86);
+                arriveTransport(connection, ORIGIN_LOCATION, "RETURN", 90, 100);
+                var completedReturn = NpcPopulationMigrationEngine.advanceAndPlan(
+                        connection, UUID.fromString(WORLD), 90);
+                require(completedReturn.synchronizedFlows() == 1,
+                        "Returned founding cohort was not restored through the canonical engine.");
+                require("ARRIVED".equals(text(connection,
+                                "SELECT status FROM population_flow WHERE flow_id='" + flow.flowId() + "'")),
+                        "Returned founding flow did not reach its terminal arrival state.");
+                require(number(connection, "SELECT returned_quantity FROM population_flow WHERE flow_id='"
+                                + flow.flowId() + "'") == 20,
+                        "Returned founding flow did not account for the complete cohort.");
+                require(population(connection, POPULATION) == 1000,
+                        "Returned founding cohort was not restored to the origin population.");
+                require("DOCKED".equals(text(connection,
+                                "SELECT status FROM npc_vessel WHERE npc_vessel_id='" + VESSEL + "'")),
+                        "Returned founding transport was not released at the origin.");
+
+                var replacement = SettlementFoundingMigrationTransaction.plan(connection,
+                        new SettlementFoundingMigrationTransaction.FoundingPlanRequest(
+                                project.projectId(), POPULATION, VESSEL, 20, 91,
+                                "Assign a replacement founding cohort after complete return."));
+                require(!replacement.flowId().equals(flow.flowId()) && replacement.status().equals("PLANNED"),
+                        "Returned founding flow did not release the project for deterministic replacement planning.");
             }
             require(number(connection, "SELECT COUNT(*) FROM pragma_foreign_key_check") == 0,
                     "Founding migration synchronization produced foreign-key violations.");
@@ -221,12 +247,12 @@ public final class NpcPopulationMigrationEngineVerification {
     private static void createFixture(Connection connection) throws SQLException {
         createSchema026Fixture(connection);
         execute(connection,
-                "CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT,display_name TEXT,ring INTEGER,location_level INTEGER)",
+                "CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT,source_ordinal INTEGER,display_name TEXT,ring INTEGER,location_level INTEGER)",
                 "CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT,display_name TEXT,role TEXT,home_station_id TEXT,current_location_id TEXT,destination_location_id TEXT,mission_id TEXT,status TEXT,hull INTEGER,supplies INTEGER,cargo INTEGER,crew_quality INTEGER,navigation INTEGER,engineering INTEGER,combat INTEGER,mining INTEGER,research INTEGER,route_progress INTEGER,route_ticks_required INTEGER,deterministic_seed INTEGER,last_tick INTEGER)",
                 "CREATE TABLE npc_transit_leg(leg_id TEXT PRIMARY KEY,npc_vessel_id TEXT,destination_location_id TEXT,leg_type TEXT,status TEXT,started_tick INTEGER,base_duration_ticks INTEGER,elapsed_ticks INTEGER)",
                 "CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT,entity_type TEXT,population_id TEXT,origin_location_id TEXT,destination_location_id TEXT,quantity INTEGER,cause TEXT,status TEXT,departure_tick INTEGER,arrival_tick INTEGER,losses INTEGER DEFAULT 0,created_tick INTEGER,updated_tick INTEGER,summary TEXT)",
-                "INSERT INTO world_location VALUES('" + ORIGIN_LOCATION + "','" + WORLD + "','Origin Shelf',48,1)",
-                "INSERT INTO world_location VALUES('" + DESTINATION_LOCATION + "','" + WORLD + "','Destination Shelf',36,3)",
+                "INSERT INTO world_location VALUES('" + ORIGIN_LOCATION + "','" + WORLD + "',1,'Origin Shelf',48,1)",
+                "INSERT INTO world_location VALUES('" + DESTINATION_LOCATION + "','" + WORLD + "',2,'Destination Shelf',36,3)",
                 "INSERT INTO world_station VALUES('" + DESTINATION_STATION + "','" + WORLD + "','"
                         + DESTINATION_LOCATION + "','Destination Station')",
                 "INSERT INTO station_simulation_state VALUES('" + DESTINATION_STATION + "','" + WORLD
@@ -311,6 +337,6 @@ public final class NpcPopulationMigrationEngineVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Passive migration pressure planning, vessel reservation, physical departure, ordinary arrival, founding-site staging, casualty-triggered return, capacity rejection, return transit, origin restoration, conservation, and deterministic replay passed.");
+        System.out.println("Passive migration pressure planning, vessel reservation, physical departure, ordinary arrival, founding-site staging, casualty-triggered return, replacement founding planning, capacity rejection, return transit, origin restoration, conservation, and deterministic replay passed.");
     }
 }
