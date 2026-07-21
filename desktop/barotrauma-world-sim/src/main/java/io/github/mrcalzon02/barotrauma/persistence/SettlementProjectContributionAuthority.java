@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 
 /** Reconciles schema-029 project commitments with canonical inventory, migration, and vessel state. */
 final class SettlementProjectContributionAuthority {
@@ -25,22 +26,34 @@ final class SettlementProjectContributionAuthority {
         if (!requiredItem.equals(itemId)) {
             throw new SQLException(kind + " settlement contribution requires " + requiredItem + ".");
         }
-        try (PreparedStatement update = connection.prepareStatement(
-                "UPDATE station_inventory SET quantity=quantity-?,last_tick=? "
-                        + "WHERE station_id=? AND item_id=? AND quantity-reserved>=?")) {
-            update.setInt(1, quantity);
-            update.setLong(2, tick);
-            update.setString(3, stationId);
-            update.setString(4, itemId);
-            update.setInt(5, quantity);
-            if (update.executeUpdate() != 1) {
-                throw new SQLException("Settlement inventory contribution lacks unreserved stock.");
+
+        Savepoint savepoint = connection.setSavepoint("settlement_inventory_contribution");
+        try {
+            try (PreparedStatement update = connection.prepareStatement(
+                    "UPDATE station_inventory SET quantity=quantity-?,last_tick=? "
+                            + "WHERE station_id=? AND item_id=? AND quantity-reserved>=?")) {
+                update.setInt(1, quantity);
+                update.setLong(2, tick);
+                update.setString(3, stationId);
+                update.setString(4, itemId);
+                update.setInt(5, quantity);
+                if (update.executeUpdate() != 1) {
+                    throw new SQLException("Settlement inventory contribution lacks unreserved stock.");
+                }
             }
+            SettlementProjectTransaction.ProjectResult result = SettlementProjectTransaction.contribute(connection,
+                    new SettlementProjectTransaction.ContributionRequest(projectId, kind, quantity,
+                            stationId, null, null, null, tick, evidenceKey,
+                            "Committed " + quantity + " physical " + itemId + " units to settlement work."));
+            connection.releaseSavepoint(savepoint);
+            return result;
+        } catch (SQLException | RuntimeException exception) {
+            try { connection.rollback(savepoint); }
+            catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+            try { connection.releaseSavepoint(savepoint); }
+            catch (SQLException releaseFailure) { exception.addSuppressed(releaseFailure); }
+            throw exception;
         }
-        return SettlementProjectTransaction.contribute(connection,
-                new SettlementProjectTransaction.ContributionRequest(projectId, kind, quantity,
-                        stationId, null, null, null, tick, evidenceKey,
-                        "Committed " + quantity + " physical " + itemId + " units to settlement work."));
     }
 
     static SettlementProjectTransaction.ProjectResult commitTransport(
