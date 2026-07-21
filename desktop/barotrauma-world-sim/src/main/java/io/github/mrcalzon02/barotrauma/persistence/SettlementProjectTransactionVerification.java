@@ -30,9 +30,15 @@ public final class SettlementProjectTransactionVerification {
             SettlementProjectTransaction.prepare(connection, planned.projectId(), 11);
             reject(() -> SettlementProjectTransaction.activate(connection, planned.projectId(), 12),
                     "Settlement project lacks conserved committed support.");
+            reject(() -> contribute(connection, planned.projectId(),
+                    SettlementProjectTransaction.ContributionKind.WORK, 1, 12, "early-work"),
+                    "only while the project is active");
 
             contribute(connection, planned.projectId(), SettlementProjectTransaction.ContributionKind.MATERIALS,
                     40, 12, "materials-1");
+            reject(() -> contribute(connection, planned.projectId(),
+                    SettlementProjectTransaction.ContributionKind.MATERIALS, 1, 12, "materials-over"),
+                    "exceeds the remaining project requirement");
             contribute(connection, planned.projectId(), SettlementProjectTransaction.ContributionKind.SUPPLIES,
                     30, 12, "supplies-1");
             contribute(connection, planned.projectId(), SettlementProjectTransaction.ContributionKind.POPULATION,
@@ -51,7 +57,7 @@ public final class SettlementProjectTransactionVerification {
                     "work-1", "Initial construction work completed.");
             require(partial.status().equals("ACTIVE") && partial.progressUnits() == 3,
                     "Settlement project work did not advance deterministically.");
-            var complete = SettlementProjectTransaction.advance(connection, planned.projectId(), 15, 5,
+            var complete = SettlementProjectTransaction.advance(connection, planned.projectId(), 15, 20,
                     "work-2", "Founding construction completed.");
             require(complete.status().equals("COMPLETE") && complete.progressUnits() == 8,
                     "Settlement project did not complete at its exact target progress.");
