@@ -1,0 +1,143 @@
+package io.github.mrcalzon02.barotrauma.persistence;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/** Focused contract for physical settlement-project contribution reconciliation. */
+public final class SettlementProjectContributionAuthorityVerification {
+    private SettlementProjectContributionAuthorityVerification() { }
+
+    public static void verifyContract() throws Exception {
+        Class.forName("org.sqlite.JDBC");
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite::memory:")) {
+            connection.createStatement().execute("PRAGMA foreign_keys=ON");
+            createPrerequisites(connection);
+            try (Statement statement = connection.createStatement()) {
+                for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
+            }
+            var project = SettlementProjectTransaction.plan(connection,
+                    new SettlementProjectTransaction.PlanRequest("world-1",
+                            SettlementProjectTransaction.ProjectKind.EXPANSION, "Coalition",
+                            "station-a", "station-b", "location-b", "population-b", "vessel-a",
+                            new SettlementProjectTransaction.Requirements(10, 8, 6, 1, 50, 5),
+                            10, "Expand Beta Station with physical commitments."));
+            SettlementProjectTransaction.prepare(connection, project.projectId(), 11);
+
+            SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
+                    SettlementProjectTransaction.ContributionKind.MATERIALS,
+                    "station-a", "item-steel", 10, 12, "steel-delivery");
+            SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
+                    SettlementProjectTransaction.ContributionKind.SUPPLIES,
+                    "station-a", "item-rations", 8, 12, "ration-delivery");
+            SettlementProjectContributionAuthority.commitTransport(connection, project.projectId(),
+                    "vessel-a", 12, "builder-vessel");
+            SettlementProjectContributionAuthority.commitArrivedPopulation(connection, project.projectId(),
+                    "flow-a", 6, 12, "arrived-workers");
+
+            require(quantity(connection, "item-steel") == 10 && quantity(connection, "item-rations") == 12,
+                    "Physical inventory contributions were not deducted exactly once.");
+            reject(() -> SettlementProjectContributionAuthority.commitInventory(connection, project.projectId(),
+                    SettlementProjectTransaction.ContributionKind.MATERIALS,
+                    "station-a", "item-steel", 1, 12, "steel-delivery"),
+                    "exceeds the remaining project requirement");
+            require(quantity(connection, "item-steel") == 10,
+                    "Rejected duplicate contribution incorrectly deducted inventory.");
+
+            connection.createStatement().executeUpdate(
+                    "UPDATE npc_vessel SET status='IN_TRANSIT' WHERE npc_vessel_id='vessel-a'");
+            var second = SettlementProjectTransaction.plan(connection,
+                    new SettlementProjectTransaction.PlanRequest("world-1",
+                            SettlementProjectTransaction.ProjectKind.RECLAMATION, "Coalition",
+                            "station-a", "station-b", "location-b", "population-b", "vessel-a",
+                            new SettlementProjectTransaction.Requirements(0, 0, 0, 1, 20, 2),
+                            20, "Transport rejection project."));
+            SettlementProjectTransaction.prepare(connection, second.projectId(), 21);
+            reject(() -> SettlementProjectContributionAuthority.commitTransport(connection, second.projectId(),
+                    "vessel-a", 21, "busy-vessel"), "not idle at the origin");
+
+            connection.setAutoCommit(false);
+            int steelBeforeRollback = quantity(connection, "item-steel");
+            try {
+                var rollback = SettlementProjectTransaction.plan(connection,
+                        new SettlementProjectTransaction.PlanRequest("world-1",
+                                SettlementProjectTransaction.ProjectKind.ABANDONMENT, "Coalition",
+                                "station-a", "station-a", "location-a", "population-a", null,
+                                new SettlementProjectTransaction.Requirements(2, 0, 0, 0, 0, 2),
+                                30, "Rollback contribution project."));
+                SettlementProjectTransaction.prepare(connection, rollback.projectId(), 31);
+                SettlementProjectContributionAuthority.commitInventory(connection, rollback.projectId(),
+                        SettlementProjectTransaction.ContributionKind.MATERIALS,
+                        "station-a", "item-steel", 2, 31, "rollback-steel");
+                connection.rollback();
+            } finally {
+                connection.setAutoCommit(true);
+            }
+            require(quantity(connection, "item-steel") == steelBeforeRollback,
+                    "Contribution rollback did not restore physical inventory.");
+            require(foreignKeyViolations(connection) == 0,
+                    "Physical contribution verification left foreign-key violations.");
+        }
+    }
+
+    private static void createPrerequisites(Connection connection) throws SQLException {
+        try (Statement s = connection.createStatement()) {
+            s.execute("CREATE TABLE world_metadata(world_id TEXT PRIMARY KEY)");
+            s.execute("CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL,is_station INTEGER NOT NULL DEFAULT 0)");
+            s.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL)");
+            s.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL)");
+            s.execute("CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL,home_station_id TEXT,current_location_id TEXT,status TEXT,mission_id TEXT)");
+            s.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,entity_type TEXT,status TEXT,destination_station_id TEXT,arrived_quantity INTEGER)");
+            s.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,reason_family TEXT NOT NULL)");
+            s.execute("CREATE TABLE item_catalogue(item_id TEXT PRIMARY KEY)");
+            s.execute("CREATE TABLE station_inventory(station_id TEXT,item_id TEXT,quantity INTEGER,reserved INTEGER,last_tick INTEGER,PRIMARY KEY(station_id,item_id))");
+            s.execute("INSERT INTO world_metadata VALUES('world-1')");
+            s.execute("INSERT INTO world_location VALUES('location-a','world-1','Alpha',1),('location-b','world-1','Beta',1)");
+            s.execute("INSERT INTO world_station VALUES('station-a','world-1','location-a','Alpha'),('station-b','world-1','location-b','Beta')");
+            s.execute("INSERT INTO npc_population_state VALUES('population-a','world-1','station-a'),('population-b','world-1','station-b')");
+            s.execute("INSERT INTO npc_vessel VALUES('vessel-a','world-1','Builder','station-a','location-a','DOCKED',NULL)");
+            s.execute("INSERT INTO population_flow VALUES('flow-a','world-1','NPC_POPULATION','ARRIVED','station-b',6)");
+            s.execute("INSERT INTO item_catalogue VALUES('item-steel'),('item-rations')");
+            s.execute("INSERT INTO station_inventory VALUES('station-a','item-steel',20,0,0),('station-a','item-rations',20,0,0)");
+        }
+    }
+
+    private static int quantity(Connection connection, String itemId) throws SQLException {
+        try (var statement = connection.prepareStatement(
+                "SELECT quantity FROM station_inventory WHERE station_id='station-a' AND item_id=?")) {
+            statement.setString(1, itemId);
+            try (ResultSet result = statement.executeQuery()) {
+                if (!result.next()) throw new SQLException("Missing inventory row.");
+                return result.getInt(1);
+            }
+        }
+    }
+
+    private static long foreignKeyViolations(Connection connection) throws SQLException {
+        try (Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery("PRAGMA foreign_key_check")) {
+            long count = 0; while (result.next()) count++; return count;
+        }
+    }
+
+    private static void reject(SqlWork work, String expected) throws Exception {
+        try { work.run(); throw new IllegalStateException("Expected rejection containing: " + expected); }
+        catch (SQLException exception) {
+            require(exception.getMessage() != null && exception.getMessage().contains(expected),
+                    "Unexpected rejection: " + exception.getMessage());
+        }
+    }
+
+    private static void require(boolean condition, String message) {
+        if (!condition) throw new IllegalStateException(message);
+    }
+
+    @FunctionalInterface private interface SqlWork { void run() throws Exception; }
+
+    public static void main(String[] args) throws Exception {
+        verifyContract();
+        System.out.println("Physical settlement contribution and rollback contracts passed.");
+    }
+}
