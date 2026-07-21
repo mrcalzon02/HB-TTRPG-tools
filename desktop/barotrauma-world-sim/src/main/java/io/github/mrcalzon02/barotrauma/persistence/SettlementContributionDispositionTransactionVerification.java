@@ -21,6 +21,12 @@ public final class SettlementContributionDispositionTransactionVerification {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
                 for (String sql : SettlementContributionDispositionSchema.statements()) statement.execute(sql);
             }
+            reject(() -> SettlementContributionDispositionTransaction.terminate(connection,
+                            new SettlementContributionDispositionTransaction.TerminationRequest(
+                                    "missing-project",
+                                    SettlementContributionDispositionTransaction.TerminalStatus.CANCELLED,
+                                    1, "Reject auto-commit disposition.", List.of())),
+                    "active transaction");
             connection.setAutoCommit(false);
             try {
                 var cancelled = SettlementProjectTransaction.plan(connection,
