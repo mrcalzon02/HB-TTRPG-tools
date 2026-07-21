@@ -85,10 +85,14 @@ public final class NpcPopulationMigrationEngineVerification {
             var returningPlan = NpcPopulationMigrationEngine.advanceAndPlan(connection, UUID.fromString(WORLD), 66);
             require(returningPlan.plannedFlows() == 1 && returningPlan.plannedFlowId() != null,
                     "The pressured origin did not plan a second deterministic relocation flow.");
+            long returningQuantity = number(connection, "SELECT quantity FROM population_flow WHERE flow_id='"
+                    + returningPlan.plannedFlowId() + "'");
+            require(returningQuantity == 90,
+                    "The second emergency relocation did not honor the bounded one-tenth population rule.");
             departTransport(connection, returningPlan.plannedFlowId(), 67);
             var returningDeparture = NpcPopulationMigrationEngine.advanceAndPlan(
                     connection, UUID.fromString(WORLD), 67);
-            require(returningDeparture.synchronizedFlows() == 1 && population(connection, POPULATION) == 800,
+            require(returningDeparture.synchronizedFlows() == 1 && population(connection, POPULATION) == 810,
                     "The capacity-return scenario did not physically depart its exact cohort.");
 
             execute(connection, "UPDATE npc_population_state SET housing_capacity=550,life_support_capacity=550 "
@@ -102,7 +106,7 @@ public final class NpcPopulationMigrationEngineVerification {
                     "Destination capacity collapse did not order a physical return.");
             require(population(connection, DESTINATION_POPULATION) == 500,
                     "Rejected passengers were added to a destination without capacity.");
-            require(population(connection, POPULATION) == 800,
+            require(population(connection, POPULATION) == 810,
                     "Rejected passengers teleported back before the return leg arrived.");
 
             departReturnTransport(connection, returningPlan.plannedFlowId(), 72);
@@ -116,7 +120,7 @@ public final class NpcPopulationMigrationEngineVerification {
                             + returningPlan.plannedFlowId() + "'")),
                     "The returned flow did not reach its terminal arrival state.");
             require(number(connection, "SELECT returned_quantity FROM population_flow WHERE flow_id='"
-                            + returningPlan.plannedFlowId() + "'") == 100,
+                            + returningPlan.plannedFlowId() + "'") == returningQuantity,
                     "The full surviving cohort was not recorded as returned.");
             require(population(connection, POPULATION) == 900,
                     "Returned passengers were not restored to the origin population.");
