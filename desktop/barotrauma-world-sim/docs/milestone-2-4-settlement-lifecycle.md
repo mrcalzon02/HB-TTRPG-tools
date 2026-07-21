@@ -1,6 +1,6 @@
 # Milestone 2.4 — Settlement Lifecycle Projects
 
-**Status:** Active implementation; schema 029 project lifecycle, schema 030 staged founding migration, authoritative project and founding transactions, physical contribution reconciliation, deterministic migration and project progression, all four canonical completion consequences, query-only project observation, and focused rollback verification exist. Production passive-tick integration, founding-specific registry presentation, failure disposition, desktop presentation, migration execution, and exact-head acceptance remain.
+**Status:** Active implementation; schema 029 project lifecycle, schema 030 staged founding migration, authoritative project and founding transactions, physical contribution reconciliation, deterministic migration and project progression, all four canonical completion consequences, query-only project and founding-migration observation, and focused rollback verification exist. Production passive-tick integration, failure disposition, desktop presentation, migration execution, and exact-head acceptance remain.
 
 Schema 029 establishes the durable project model required before settlements may be founded, expanded, abandoned, or reclaimed. Schema 030 extends the conserved NPC migration authority so a founding cohort can arrive at an unoccupied location, remain accounted for in transit staging, and become the first canonical station population only when its project completes.
 
@@ -39,7 +39,9 @@ Inventory deduction and contribution evidence share a local savepoint, so reject
 
 `SettlementFoundingMigrationTransaction` is the schema-030 authority for founding-site movement. It plans the exact required cohort against a `PREPARING` founding project, reuses the canonical migration transaction for preparation and departure, stages a complete arrived cohort without inventing a destination population, and performs the final one-to-one station handoff after project completion.
 
-The ordinary migration public transaction now accepts every supported schema from 028 through the current schema 030 rather than incorrectly requiring schema exactly 028.
+A founding project blocks duplicate active flows and unconsumed staged arrivals. A flow that is cancelled, failed, or fully returned releases the still-preparing project for a deterministic replacement attempt. Returned terminal flows are excluded from final handoff selection.
+
+The ordinary migration public transaction accepts every supported schema from 028 through the current schema 030 rather than incorrectly requiring schema exactly 028.
 
 ## Staged founding migration and conservation
 
@@ -56,10 +58,11 @@ Founding deliberately creates the station in a zero-resident `FALLEN` seed state
 
 ## Deterministic migration and project progression
 
-`NpcPopulationMigrationEngine` remains the single passive migration synchronizer. It now distinguishes founding-site arrivals inside its existing `IN_TRANSIT` branch:
+`NpcPopulationMigrationEngine` remains the single passive migration synchronizer. It distinguishes founding-site arrivals inside its existing `IN_TRANSIT` branch:
 
 - an undamaged founding transport stages the complete cohort as `ARRIVED` without creating a station;
 - deterministic travel casualties cause the complete committed cohort to return rather than accepting a partial founding population;
+- a completed return restores the exact cohort at the origin and releases the project for a distinct replacement flow;
 - ordinary station-bound migration retains its existing destination-capacity and arrival behavior.
 
 `SettlementProjectEngine` advances only `ACTIVE` and `BLOCKED` projects in deterministic project-id order. It reads canonical station security, blocks unsupported work, resumes after recovery, and commits bounded work through `SettlementProjectTransaction`.
@@ -81,7 +84,7 @@ Focused verification includes successful conserved founding and a deliberate han
 
 `ObservationRegistry.settlementProjects(...)` uses the existing query-only connection, requires schema 029 or later, supports changed-since filtering and bounded limits, and returns nullable preparation, activation, and completion timing without mutating project state.
 
-Schema 030 also provides `settlement_founding_migration_observation`, projecting the founding flow, project, staged quantity, losses, station, founded population, handoff timing, and handoff evidence. It still needs to be exposed through the existing `ObservationRegistry` and desktop observation surface; no second registry or UI data store should be created.
+`settlement_founding_migration_observation` projects the founding flow, project, update tick, staged quantity, losses, station, founded population, handoff timing, and handoff evidence. `ObservationRegistry.settlementFoundingMigrations(...)` exposes that view through the same query-only connection with schema-030 gating, changed-since filtering, bounded limits, nullable pre-handoff fields, and no alternate registry or UI data store.
 
 ## Registered verification
 
@@ -95,7 +98,8 @@ The complete desktop verification suite includes:
 - `SettlementProjectConsequencesVerification`
 - `SettlementFoundingMigrationTransactionVerification`
 - `SettlementObservationRegistryVerification`
-- founding-site synchronization coverage inside `NpcPopulationMigrationEngineVerification`
+- `SettlementFoundingObservationRegistryVerification`
+- founding-site staging, casualty return, origin restoration, and replacement-flow coverage inside `NpcPopulationMigrationEngineVerification`
 
 These contracts are committed but have not been executed in the current environment.
 
@@ -111,12 +115,10 @@ inside the authoritative per-tick sequence of `PassiveWorldTickTransaction`, imm
 
 After production integration:
 
-1. allow a founding project to plan a replacement flow after a previous cohort fully returned, failed, or was cancelled, while still blocking duplicate active flows and unconsumed staged arrivals;
-2. classify failed and cancelled committed materials, supplies, population, and transport as returned, stranded, consumed, or lost;
-3. expose `settlement_founding_migration_observation` through the existing query-only registry;
-4. extend the existing Observation Foundation desktop window with project and founding evidence;
-5. prove fresh and legacy migration through schemas 029 and 030;
-6. execute exact-head Java 17 compilation and `toolbox.cmd verify`.
+1. classify failed and cancelled committed materials, supplies, population, and transport as returned, stranded, consumed, or lost;
+2. extend the existing Observation Foundation desktop window with project and founding evidence;
+3. prove fresh and legacy migration through schemas 029 and 030;
+4. execute exact-head Java 17 compilation and `toolbox.cmd verify`.
 
 ## Acceptance gate
 
