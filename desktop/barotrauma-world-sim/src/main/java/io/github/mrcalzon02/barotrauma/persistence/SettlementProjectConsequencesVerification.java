@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/** Focused contract for canonical schema-029 settlement completion consequences. */
+/** Focused contract for canonical schema-030 settlement completion consequences. */
 public final class SettlementProjectConsequencesVerification {
     private SettlementProjectConsequencesVerification() { }
 
@@ -57,7 +57,7 @@ public final class SettlementProjectConsequencesVerification {
             long stationCount = scalar(connection, "SELECT COUNT(*) FROM world_station");
             try {
                 reject(() -> SettlementProjectConsequences.apply(connection, "founding", 40),
-                        "conserved arrived-population handoff");
+                        "lacks an unconsumed staged arrival");
                 connection.rollback();
             } finally {
                 connection.setAutoCommit(true);
@@ -100,7 +100,8 @@ public final class SettlementProjectConsequencesVerification {
         statement.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL,has_economy INTEGER NOT NULL DEFAULT 1)");
         statement.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL,civilians INTEGER NOT NULL,industrial_workers INTEGER NOT NULL,logistics_workers INTEGER NOT NULL,security_personnel INTEGER NOT NULL,medical_personnel INTEGER NOT NULL,scientific_personnel INTEGER NOT NULL,temporary_residents INTEGER NOT NULL,refugees INTEGER NOT NULL,housing_capacity INTEGER NOT NULL,life_support_capacity INTEGER NOT NULL,employment_capacity INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL)");
-        statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL)");
+        statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,settlement_project_id TEXT,destination_mode TEXT,status TEXT)");
+        statement.execute("CREATE TABLE settlement_founding_handoff(flow_id TEXT PRIMARY KEY)");
         statement.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,reason_family TEXT NOT NULL)");
         statement.execute("CREATE TABLE station_simulation_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,security INTEGER NOT NULL,industry INTEGER NOT NULL,integrity INTEGER NOT NULL,supplies INTEGER NOT NULL,status TEXT NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE station_civilization_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,civilization_strength INTEGER NOT NULL,frontier_position INTEGER NOT NULL,frontier_state TEXT NOT NULL,population_index INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
@@ -163,6 +164,6 @@ public final class SettlementProjectConsequencesVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Settlement expansion, abandonment, reclamation, and conserved founding rejection contracts passed.");
+        System.out.println("Settlement expansion, abandonment, reclamation, and founding failure-containment contracts passed.");
     }
 }
