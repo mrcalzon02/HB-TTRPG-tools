@@ -81,6 +81,7 @@ final class WorldDatabaseMigrations {
             case 26 -> WorldStorageContracts.schema026Statements();
             case 27 -> WorldStorageContracts.schema027Statements();
             case 28 -> WorldStorageContracts.schema028Statements();
+            case 29 -> WorldStorageContracts.schema029Statements();
             default -> throw new SQLException("No forward migration is defined for schema " + targetVersion + ".");
         };
     }
