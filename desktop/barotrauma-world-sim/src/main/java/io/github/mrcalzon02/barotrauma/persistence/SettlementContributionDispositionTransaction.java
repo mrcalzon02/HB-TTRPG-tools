@@ -53,6 +53,7 @@ public final class SettlementContributionDispositionTransaction {
             throws SQLException {
         Objects.requireNonNull(connection, "connection");
         Objects.requireNonNull(request, "request");
+        requireTransaction(connection);
         requireTick(request.tick());
         Project project = project(connection, request.projectId());
         validateTerminalStatus(project.status(), request.terminalStatus());
@@ -285,6 +286,12 @@ public final class SettlementContributionDispositionTransaction {
         if (terminal == TerminalStatus.CANCELLED
                 && !List.of("PLANNED", "PREPARING", "ACTIVE", "BLOCKED").contains(current)) {
             throw new SQLException("Settlement project cannot cancel from " + current + ".");
+        }
+    }
+
+    private static void requireTransaction(Connection connection) throws SQLException {
+        if (connection.getAutoCommit()) {
+            throw new SQLException("Settlement contribution disposition requires an active transaction.");
         }
     }
 
