@@ -1,6 +1,6 @@
 # Milestone 2.3 — Conserved Population Migration
 
-**Status:** Active implementation; the migration authority, deterministic engine, observation surface, and focused verification exist, but production passive-tick integration remains incomplete.
+**Status:** Active implementation; the migration authority, deterministic engine, production passive-tick integration, observation surface, and focused verification exist, but passive-transaction integration verification and exact-head full-suite acceptance remain.
 
 Schema 028 establishes the authoritative physical population-movement slice for the desktop world simulator. It extends the existing schema-015 `population_flow` record rather than introducing a competing movement table, retains schema-027 detailed NPC cohorts as population authority, and reuses schema-026 `npc_transit_leg` as the transport timeline.
 
@@ -51,7 +51,7 @@ Migration-reserved vessels are excluded from ordinary mission assignment while a
 
 Planning considers sustained pressure including overcrowding, shortage, low morale, failed support, threat, refugee pressure, and destination workforce or housing capacity. It deterministically selects one eligible origin, one compatible destination, an exact bounded quantity, exact cohorts, and one idle vessel at the origin. It does not create multiple active origin flows for the same population.
 
-When invoked, the engine synchronizes:
+The engine synchronizes:
 
 - prepared flows with physical outbound vessel departure;
 - in-transit flows with arrival, destination-capacity recheck, vessel loss, or vessel disablement;
@@ -60,13 +60,13 @@ When invoked, the engine synchronizes:
 
 Destination-capacity rejection has focused coverage through `IN_TRANSIT → RETURNING → physical RETURN leg → ARRIVED at origin`, and rejected passengers remain outside both station populations until the return leg physically arrives. Delays alone do not invent casualties. Lost and irrecoverably disabled transports must explicitly account for every embarked person.
 
-## Production integration gap
+## Production passive-tick integration
 
-`PassiveWorldTickTransaction` currently advances ordinary NPC vessel movement but does not invoke `NpcPopulationMigrationEngine.advanceAndPlan(...)`. The focused engine verification therefore proves the engine contract in isolation, not that a normal Passive Mode tick currently plans or synchronizes migration.
+`PassiveWorldTickTransaction` now directly invokes `NpcPopulationMigrationEngine.advanceAndPlan(...)` inside its authoritative per-tick sequence immediately after `processVessels(...)` and before research processing.
 
-The required production change is direct and narrow: invoke the existing migration engine inside the authoritative per-tick transaction after `processVessels(...)` and before later per-tick work completes. This placement lets migration observe the vessel state committed for that tick, release prepared cohorts after physical departure, settle arrivals, order returns after destination-capacity rejection, and create new pressure-driven flows inside the same rollback boundary.
+This placement lets migration observe the vessel state committed for the current tick, release prepared cohorts only after physical departure, settle physical arrivals, order returns after destination-capacity rejection, and create one new deterministic pressure-driven flow inside the same transaction and rollback boundary as ordinary vessel movement.
 
-No trigger, wrapper, scheduler, compatibility layer, or second migration authority should be introduced as a substitute. The production tick itself must call the existing engine.
+No trigger, wrapper, scheduler, compatibility layer, or second migration authority was introduced. The production tick directly calls the existing engine.
 
 ## Query-only observation and desktop evidence
 
@@ -90,11 +90,10 @@ The next verification addition must exercise migration through `PassiveWorldTick
 
 ## Remaining acceptance work
 
-Milestone 2.3 remains **Active** until all of the following are true:
+Milestone 2.3 remains **Active** until both of the following are true:
 
-1. `PassiveWorldTickTransaction` directly invokes the migration engine in its authoritative per-tick sequence.
-2. A focused passive-transaction integration verification proves planning, departure, arrival or return, conservation, and rollback through that production path.
-3. The exact published `main` head compiles with Java 17 and passes `toolbox.cmd verify`.
+1. A focused passive-transaction integration verification proves planning, departure, arrival or return, conservation, and rollback through the production path.
+2. The exact published `main` head compiles with Java 17 and passes `toolbox.cmd verify`.
 
 Any discovered failure must be repaired in the authoritative migration, transit, registry, desktop, or passive-tick implementation rather than hidden behind adapters or compatibility mutators.
 
