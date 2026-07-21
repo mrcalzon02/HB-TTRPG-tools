@@ -153,6 +153,9 @@ public final class PassiveWorldSimulationVerification {
                 long rollbackOriginPopulation = pressuredOriginPopulation(paths);
                 long rollbackLegCount = queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
                         + ROLLBACK_VESSEL + "'");
+                long rollbackLedgerCount = queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger");
+                long rollbackClockTick = queryCount(paths,
+                        "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1");
                 installRollbackProbe(paths);
                 var rollbackReceipt = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
                 boolean rollbackBlocked = false;
@@ -174,6 +177,11 @@ public final class PassiveWorldSimulationVerification {
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
                                 + ROLLBACK_VESSEL + "'") == rollbackLegCount,
                         "Failed passive transaction retained a migration transit leg created before rollback.");
+                require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger") == rollbackLedgerCount,
+                        "Failed passive transaction retained migration ledger evidence.");
+                require(queryCount(paths, "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1")
+                                == rollbackClockTick,
+                        "Failed passive transaction advanced the durable world clock.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
