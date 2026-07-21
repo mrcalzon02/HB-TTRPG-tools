@@ -27,6 +27,19 @@ public final class SettlementFoundingMigrationSchemaVerification {
                 require(object(connection, "view", "settlement_founding_migration_observation"),
                         "Schema 030 founding observation view is missing.");
 
+                statement.execute("INSERT INTO world_station(station_id,world_id,location_id,display_name) "
+                        + "VALUES('station-zero','world-1','location-c','Zero Seed')");
+                statement.execute("INSERT INTO station_civilization_state VALUES('station-zero','world-1',0,0,20,2,"
+                        + "0,0,0,0,'ABANDONED',3)");
+                statement.execute("INSERT INTO station_simulation_state VALUES('station-zero','world-1',5000,20,0,20,"
+                        + "40,60,20,0,'FALLEN',3)");
+                require(countWhere(connection, "npc_population_state", "station_id='station-zero'") == 1,
+                        "Founding zero-seed bridge did not create one detailed population authority.");
+                require(longValue(connection, "SELECT civilians+industrial_workers+logistics_workers+security_personnel+"
+                                + "medical_personnel+scientific_personnel+temporary_residents+refugees "
+                                + "FROM npc_population_state WHERE station_id='station-zero'") == 0,
+                        "Founding zero-seed bridge created residents before migration handoff.");
+
                 statement.execute("INSERT INTO population_flow(flow_id,world_id,entity_type,population_id,"
                         + "destination_population_id,origin_location_id,destination_location_id,quantity,cause,status,"
                         + "losses,created_tick,updated_tick,summary,flow_kind,origin_station_id,destination_station_id,"
@@ -59,9 +72,13 @@ public final class SettlementFoundingMigrationSchemaVerification {
                         "Population flow destination mode is inconsistent.");
 
                 statement.execute("UPDATE world_location SET is_station=1 WHERE location_id='location-b'");
-                statement.execute("INSERT INTO world_station VALUES('station-b','world-1','location-b','Beta Station')");
-                statement.execute("INSERT INTO npc_population_state VALUES('founded-pop','world-1','station-b',"
-                        + "8,3,2,2,1,1,2,1)");
+                statement.execute("INSERT INTO world_station(station_id,world_id,location_id,display_name) "
+                        + "VALUES('station-b','world-1','location-b','Beta Station')");
+                statement.execute("INSERT INTO npc_population_state(population_id,world_id,station_id,civilians,"
+                        + "industrial_workers,logistics_workers,security_personnel,medical_personnel,scientific_personnel,"
+                        + "temporary_residents,refugees,housing_capacity,life_support_capacity,employment_capacity,morale,"
+                        + "seed_source,last_tick) VALUES('founded-pop','world-1','station-b',8,3,2,2,1,1,2,1,40,40,40,65,"
+                        + "'founding-test',5)");
                 statement.execute("INSERT INTO settlement_founding_handoff(project_id,flow_id,world_id,station_id,"
                         + "population_id,settled_quantity,handoff_tick,evidence_key,summary) VALUES('project-1',"
                         + "'founding-flow','world-1','station-b','founded-pop',20,5,'founding-handoff','Founders settled.')");
@@ -87,13 +104,24 @@ public final class SettlementFoundingMigrationSchemaVerification {
     private static void prerequisites(Statement statement) throws SQLException {
         statement.execute("CREATE TABLE world_metadata(world_id TEXT PRIMARY KEY)");
         statement.execute("CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
-                + "display_name TEXT NOT NULL,is_station INTEGER NOT NULL DEFAULT 0)");
+                + "source_ordinal INTEGER NOT NULL,display_name TEXT NOT NULL,is_station INTEGER NOT NULL DEFAULT 0)");
         statement.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
                 + "location_id TEXT NOT NULL UNIQUE,display_name TEXT NOT NULL)");
+        statement.execute("CREATE TABLE station_civilization_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
+                + "population_index INTEGER NOT NULL,civilization_strength INTEGER NOT NULL,fauna_pressure INTEGER NOT NULL,"
+                + "supply_consumption_base INTEGER NOT NULL,last_consumption INTEGER NOT NULL,shortage_ticks INTEGER NOT NULL,"
+                + "surplus_ticks INTEGER NOT NULL,frontier_position INTEGER NOT NULL,frontier_state TEXT NOT NULL,"
+                + "last_tick INTEGER NOT NULL)");
+        statement.execute("CREATE TABLE station_simulation_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
+                + "credits INTEGER NOT NULL,supplies INTEGER NOT NULL,ore INTEGER NOT NULL,industry INTEGER NOT NULL,"
+                + "security INTEGER NOT NULL,integrity INTEGER NOT NULL,threat INTEGER NOT NULL,research INTEGER NOT NULL,"
+                + "status TEXT NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
                 + "station_id TEXT NOT NULL UNIQUE,civilians INTEGER NOT NULL,industrial_workers INTEGER NOT NULL,"
                 + "logistics_workers INTEGER NOT NULL,security_personnel INTEGER NOT NULL,medical_personnel INTEGER NOT NULL,"
-                + "scientific_personnel INTEGER NOT NULL,temporary_residents INTEGER NOT NULL,refugees INTEGER NOT NULL)");
+                + "scientific_personnel INTEGER NOT NULL,temporary_residents INTEGER NOT NULL,refugees INTEGER NOT NULL,"
+                + "housing_capacity INTEGER NOT NULL,life_support_capacity INTEGER NOT NULL,employment_capacity INTEGER NOT NULL,"
+                + "morale INTEGER NOT NULL,seed_source TEXT NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE settlement_project(project_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
                 + "project_kind TEXT NOT NULL,status TEXT NOT NULL,target_location_id TEXT NOT NULL)");
         statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,entity_type TEXT NOT NULL,"
@@ -107,11 +135,14 @@ public final class SettlementFoundingMigrationSchemaVerification {
         statement.execute("CREATE TABLE npc_population_flow_cohort(flow_id TEXT NOT NULL,cohort_key TEXT NOT NULL,"
                 + "arrived_quantity INTEGER NOT NULL DEFAULT 0,PRIMARY KEY(flow_id,cohort_key))");
         statement.execute("INSERT INTO world_metadata VALUES('world-1')");
-        statement.execute("INSERT INTO world_location VALUES('location-a','world-1','Alpha',1)");
-        statement.execute("INSERT INTO world_location VALUES('location-b','world-1','Beta',0)");
+        statement.execute("INSERT INTO world_location VALUES('location-a','world-1',1,'Alpha',1)");
+        statement.execute("INSERT INTO world_location VALUES('location-b','world-1',2,'Beta',0)");
+        statement.execute("INSERT INTO world_location VALUES('location-c','world-1',3,'Gamma',0)");
         statement.execute("INSERT INTO world_station VALUES('station-a','world-1','location-a','Alpha Station')");
-        statement.execute("INSERT INTO npc_population_state VALUES('origin-pop','world-1','station-a',"
-                + "50,15,10,8,5,4,5,3)");
+        statement.execute("INSERT INTO npc_population_state(population_id,world_id,station_id,civilians,industrial_workers,"
+                + "logistics_workers,security_personnel,medical_personnel,scientific_personnel,temporary_residents,refugees,"
+                + "housing_capacity,life_support_capacity,employment_capacity,morale,seed_source,last_tick) "
+                + "VALUES('origin-pop','world-1','station-a',50,15,10,8,5,4,5,3,200,200,200,70,'origin',0)");
         statement.execute("INSERT INTO settlement_project VALUES('project-1','world-1','FOUNDING','COMPLETE','location-b')");
         for (String row : new String[]{"CIVILIANS:8","INDUSTRIAL_WORKERS:3","LOGISTICS_WORKERS:2",
                 "SECURITY_PERSONNEL:2","MEDICAL_PERSONNEL:1","SCIENTIFIC_PERSONNEL:1",
@@ -140,17 +171,16 @@ public final class SettlementFoundingMigrationSchemaVerification {
     }
 
     private static long accounted(Connection connection) throws SQLException {
-        try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery("SELECT station_population+population_in_flows+"
-                     + "recorded_migration_losses FROM npc_population_migration_conservation")) {
-            return result.next() ? result.getLong(1) : -1;
-        }
+        return longValue(connection, "SELECT station_population+population_in_flows+recorded_migration_losses "
+                + "FROM npc_population_migration_conservation");
     }
 
     private static long flowPopulation(Connection connection) throws SQLException {
-        try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery(
-                     "SELECT population_in_flows FROM npc_population_migration_conservation")) {
+        return longValue(connection, "SELECT population_in_flows FROM npc_population_migration_conservation");
+    }
+
+    private static long longValue(Connection connection, String sql) throws SQLException {
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
             return result.next() ? result.getLong(1) : -1;
         }
     }
@@ -162,8 +192,12 @@ public final class SettlementFoundingMigrationSchemaVerification {
     }
 
     private static long count(Connection connection, String table) throws SQLException {
+        return countWhere(connection, table, "1=1");
+    }
+
+    private static long countWhere(Connection connection, String table, String where) throws SQLException {
         try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + table)) {
+             ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + where)) {
             return result.next() ? result.getLong(1) : 0;
         }
     }
