@@ -86,17 +86,34 @@ final class SettlementProjectContributionAuthority {
             Connection connection, String projectId, String flowId, int quantity, long tick, String evidenceKey)
             throws SQLException {
         Project project = project(connection, projectId);
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT 1 FROM population_flow f WHERE f.flow_id=? AND f.world_id=? "
-                        + "AND f.entity_type='NPC_POPULATION' AND f.status='ARRIVED' "
-                        + "AND f.destination_station_id=? AND f.arrived_quantity>=?")) {
+        String sql;
+        if (project.projectKind().equals("FOUNDING")) {
+            sql = "SELECT 1 FROM population_flow f WHERE f.flow_id=? AND f.world_id=? "
+                    + "AND f.entity_type='NPC_POPULATION' AND f.status='ARRIVED' "
+                    + "AND f.destination_mode='FOUNDING_SITE' AND f.settlement_project_id=? "
+                    + "AND f.destination_location_id=? AND f.arrived_quantity>=?";
+        } else {
+            sql = "SELECT 1 FROM population_flow f WHERE f.flow_id=? AND f.world_id=? "
+                    + "AND f.entity_type='NPC_POPULATION' AND f.status='ARRIVED' "
+                    + "AND f.destination_mode='STATION_POPULATION' AND f.destination_station_id=? "
+                    + "AND f.arrived_quantity>=?";
+        }
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, flowId);
             statement.setString(2, project.worldId());
-            statement.setString(3, project.targetStationId());
-            statement.setInt(4, quantity);
+            if (project.projectKind().equals("FOUNDING")) {
+                statement.setString(3, projectId);
+                statement.setString(4, project.targetLocationId());
+                statement.setInt(5, quantity);
+            } else {
+                statement.setString(3, project.targetStationId());
+                statement.setInt(4, quantity);
+            }
             try (ResultSet result = statement.executeQuery()) {
                 if (!result.next()) {
-                    throw new SQLException("Settlement population requires an arrived flow at the target station.");
+                    throw new SQLException(project.projectKind().equals("FOUNDING")
+                            ? "Settlement population requires a staged founding arrival linked to the project."
+                            : "Settlement population requires an arrived flow at the target station.");
                 }
             }
         }
@@ -109,17 +126,18 @@ final class SettlementProjectContributionAuthority {
 
     private static Project project(Connection connection, String projectId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT world_id,origin_station_id,target_station_id,related_population_id,assigned_npc_vessel_id "
-                        + "FROM settlement_project WHERE project_id=? AND status IN ('PLANNED','PREPARING')")) {
+                "SELECT world_id,project_kind,origin_station_id,target_station_id,target_location_id,"
+                        + "related_population_id,assigned_npc_vessel_id FROM settlement_project "
+                        + "WHERE project_id=? AND status IN ('PLANNED','PREPARING')")) {
             statement.setString(1, projectId);
             try (ResultSet result = statement.executeQuery()) {
                 if (!result.next()) throw new SQLException("Settlement project is not accepting physical commitments.");
                 return new Project(result.getString(1), result.getString(2), result.getString(3),
-                        result.getString(4), result.getString(5));
+                        result.getString(4), result.getString(5), result.getString(6), result.getString(7));
             }
         }
     }
 
-    private record Project(String worldId, String originStationId, String targetStationId,
-                           String relatedPopulationId, String assignedVesselId) { }
+    private record Project(String worldId, String projectKind, String originStationId, String targetStationId,
+                           String targetLocationId, String relatedPopulationId, String assignedVesselId) { }
 }
