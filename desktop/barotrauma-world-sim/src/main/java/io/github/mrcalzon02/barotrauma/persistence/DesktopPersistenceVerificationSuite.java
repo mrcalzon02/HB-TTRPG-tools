@@ -9,6 +9,7 @@ import io.github.mrcalzon02.barotrauma.assets.SceneAtlasPreview;
 import io.github.mrcalzon02.barotrauma.assets.UiAtlasSliceIndex;
 import io.github.mrcalzon02.barotrauma.assets.UiAtlasImplementationPreview;
 import io.github.mrcalzon02.barotrauma.assets.UiAtlasSemanticPreview;
+import io.github.mrcalzon02.barotrauma.observation.MigrationObservationRegistryVerification;
 import io.github.mrcalzon02.barotrauma.observation.ObservationContractVerification;
 import io.github.mrcalzon02.barotrauma.observation.ObservationRegistryVerification;
 import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock;
@@ -42,6 +43,7 @@ public final class DesktopPersistenceVerificationSuite {
         NpcPopulationMigrationVerification.verifyContract();
         NpcPopulationMigrationEngineVerification.verifyContract();
         ObservationRegistryVerification.verifyContract();
+        MigrationObservationRegistryVerification.verifyContract();
         AcceptedImportTransaction.verifyContract();
         VesselSnapshotTransaction.verifyContract();
         WorldMapRegistry.verifyContract();
@@ -62,7 +64,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, packaged 20-sheet scene atlas index with 120 approved backgrounds, packaged UI atlas slice index, 612 approved semantic UI atlas assets, 7 explicit rejections, and unified correction previews, local media catalog, procedural and packaged fallbacks, observation vocabulary, conserved NPC population accounting, schema-027 capacity-supported births, mortality, morale and demographic hysteresis, schema-028 transport-backed migration and evacuation foundation with deterministic pressure planning and transit synchronization, query-only Observation Registry, persistence, recursive SQLite trigger, passive-world, station consumption, production, delivery, attack, recovery, frontier, population, allocation-backed faction planning, exact command provenance, enforced mutation explanation, time-gated NPC transit, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma donor discovery, atlas-aware semantic asset catalogue, packaged 20-sheet scene atlas index with 120 approved backgrounds, packaged UI atlas slice index, 612 approved semantic UI atlas assets, 7 explicit rejections, and unified correction previews, local media catalog, procedural and packaged fallbacks, observation vocabulary, conserved NPC population accounting, schema-027 capacity-supported births, mortality, morale and demographic hysteresis, schema-028 transport-backed migration and evacuation foundation with deterministic pressure planning and transit synchronization, query-only migration observations and conservation, persistence, recursive SQLite trigger, passive-world, station consumption, production, delivery, attack, recovery, frontier, population, allocation-backed faction planning, exact command provenance, enforced mutation explanation, time-gated NPC transit, fleet response transit, towing return, ecology, geology, finite resource harvesting, renewable recovery, logistics, player transit, NPC, research, encounter, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
