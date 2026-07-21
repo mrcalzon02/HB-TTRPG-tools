@@ -5,14 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/** Applies canonical station consequences immediately before a settlement project becomes terminal. */
+/** Applies canonical station consequences immediately after a settlement project reaches exact completion. */
 final class SettlementProjectConsequences {
     private SettlementProjectConsequences() { }
 
     static void apply(Connection connection, String projectId, long tick) throws SQLException {
         Project project = load(connection, projectId);
-        if (!project.status().equals("ACTIVE") || project.progressUnits() != project.targetProgressUnits()) {
-            throw new SQLException("Settlement consequences require an active project at exact target progress.");
+        if (!project.status().equals("COMPLETE") || project.progressUnits() != project.targetProgressUnits()) {
+            throw new SQLException("Settlement consequences require a complete project at exact target progress.");
         }
         switch (project.kind()) {
             case "FOUNDING" -> throw new SQLException(
