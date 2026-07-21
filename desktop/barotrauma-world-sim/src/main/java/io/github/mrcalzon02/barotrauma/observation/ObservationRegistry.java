@@ -74,6 +74,18 @@ public final class ObservationRegistry {
         }
     }
 
+    public static List<SettlementFoundingMigrationRow> settlementFoundingMigrations(
+            WorldPaths world, long changedSinceTick, int limit) throws Exception {
+        if (changedSinceTick < -1) throw new IllegalArgumentException("changedSinceTick must be -1 or greater.");
+        if (limit < 1 || limit > 5_000) {
+            throw new IllegalArgumentException("Founding-migration limit must be between 1 and 5000.");
+        }
+        try (Connection connection = open(world)) {
+            requireFoundingSettlementSchema(connection);
+            return settlementFoundingMigrations(connection, changedSinceTick, limit);
+        }
+    }
+
     private static Connection open(WorldPaths world) throws Exception {
         Objects.requireNonNull(world, "world");
         Class.forName("org.sqlite.JDBC");
@@ -237,6 +249,31 @@ public final class ObservationRegistry {
         return List.copyOf(rows);
     }
 
+    private static List<SettlementFoundingMigrationRow> settlementFoundingMigrations(
+            Connection c, long since, int limit) throws SQLException {
+        String sql = "SELECT flow_id,world_id,project_id,project_status,flow_status,updated_tick,"
+                + "origin_population_id,origin_station_id,origin_location_id,destination_location_id,"
+                + "assigned_npc_vessel_id,quantity,embarked_quantity,arrived_quantity,losses,stranded_quantity,"
+                + "station_id,founded_population_id,settled_quantity,handoff_tick,evidence_key,summary "
+                + "FROM settlement_founding_migration_observation WHERE (?<0 OR updated_tick>?) "
+                + "ORDER BY updated_tick DESC,flow_id LIMIT ?";
+        List<SettlementFoundingMigrationRow> rows = new ArrayList<>();
+        try (PreparedStatement statement = c.prepareStatement(sql)) {
+            bind(statement, since);
+            statement.setInt(3, limit);
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) rows.add(new SettlementFoundingMigrationRow(
+                        result.getString(1), result.getString(2), result.getString(3), result.getString(4),
+                        result.getString(5), result.getLong(6), result.getString(7), result.getString(8),
+                        result.getString(9), result.getString(10), result.getString(11), result.getLong(12),
+                        result.getLong(13), result.getLong(14), result.getLong(15), result.getLong(16),
+                        result.getString(17), result.getString(18), nullable(result,19), nullable(result,20),
+                        result.getString(21), result.getString(22)));
+            }
+        }
+        return List.copyOf(rows);
+    }
+
     private static List<EventRow> events(Connection c, long since, String type, String id, int limit) throws SQLException {
         String sql = "SELECT event_id,tick_sequence,canonical_time,category,primary_entity_type,primary_entity_id,"
                 + "primary_cause,primary_evidence_key,contributing_factors,magnitude,visibility,confidence,summary "
@@ -300,6 +337,18 @@ public final class ObservationRegistry {
         requireObject(c, "view", "settlement_project_observation");
     }
 
+    private static void requireFoundingSettlementSchema(Connection c) throws SQLException {
+        long version;
+        try (Statement statement = c.createStatement();
+             ResultSet result = statement.executeQuery("SELECT COALESCE(MAX(version),0) FROM schema_migration")) {
+            version = result.next() ? result.getLong(1) : 0;
+        }
+        if (version < 30) {
+            throw new SQLException("Settlement-founding observation requires schema 030; world is schema " + version + ".");
+        }
+        requireObject(c, "view", "settlement_founding_migration_observation");
+    }
+
     private static void requireObject(Connection c,String type,String name)throws SQLException{
         try(PreparedStatement s=c.prepareStatement("SELECT 1 FROM sqlite_master WHERE type=? AND name=?")){s.setString(1,type);s.setString(2,name);try(ResultSet r=s.executeQuery()){if(!r.next())throw new SQLException("Observation schema object is missing: "+name);}}
     }
@@ -345,6 +394,11 @@ public final class ObservationRegistry {
             int committedTransport,int requiredSecurity,int currentSecurity,int progressUnits,int targetProgressUnits,
             int progressPercent,long createdTick,Long preparationStartedTick,Long activatedTick,Long completedTick,
             long updatedTick,String failureReason,String summary){}
+    public record SettlementFoundingMigrationRow(String flowId,String worldId,String projectId,String projectStatus,
+            String flowStatus,long updatedTick,String originPopulationId,String originStationId,String originLocationId,
+            String destinationLocationId,String assignedVesselId,long quantity,long embarked,long arrived,long losses,
+            long stranded,String foundedStationId,String foundedPopulationId,Long settledQuantity,Long handoffTick,
+            String evidenceKey,String summary){}
     public record EventRow(String eventId,long tickSequence,String canonicalTime,String category,String entityType,
             String entityId,String primaryCause,String evidenceKey,String contributingFactors,long magnitude,String visibility,
             int confidence,String summary){}
