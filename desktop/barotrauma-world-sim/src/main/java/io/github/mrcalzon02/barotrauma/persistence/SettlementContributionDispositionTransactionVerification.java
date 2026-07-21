@@ -48,8 +48,8 @@ public final class SettlementContributionDispositionTransactionVerification {
             require(inventory(connection, "item-steel") == 10
                             && inventory(connection, "item-rations") == 15,
                     "Physical cancellation commitments were not deducted before disposition.");
-            reject(() -> SettlementProjectTransaction.cancel(connection, cancelled.projectId(), 15,
-                            "Bypass disposition authority."),
+            reject(() -> SettlementProjectTransaction.transition(connection, cancelled.projectId(), 15,
+                            "CANCELLED", "bypass-disposition-authority", "Bypass disposition authority."),
                     "undisposed physical commitments");
 
             List<SettlementContributionDispositionTransaction.DispositionPlan> cancellationPlans = new ArrayList<>();
