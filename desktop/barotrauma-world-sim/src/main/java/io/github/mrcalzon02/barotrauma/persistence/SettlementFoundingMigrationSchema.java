@@ -125,6 +125,7 @@ public final class SettlementFoundingMigrationSchema {
                       AND p.project_kind='FOUNDING' AND p.status='COMPLETE'
                       AND f.world_id=NEW.world_id AND f.settlement_project_id=p.project_id
                       AND f.destination_mode='FOUNDING_SITE' AND f.status='ARRIVED'
+                      AND f.origin_released=1
                       AND f.destination_location_id=p.target_location_id
                       AND f.arrived_quantity=NEW.settled_quantity
                       AND s.world_id=NEW.world_id AND s.location_id=p.target_location_id
