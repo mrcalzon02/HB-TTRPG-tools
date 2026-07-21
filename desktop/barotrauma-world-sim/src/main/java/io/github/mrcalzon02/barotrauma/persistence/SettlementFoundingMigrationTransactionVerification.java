@@ -26,7 +26,18 @@ public final class SettlementFoundingMigrationTransactionVerification {
             require(accounted(connection) == 100,
                     "Staged founding cohort was not conserved before project completion.");
 
-            var result = SettlementProjectEngine.advance(connection, "world-1", 20);
+            SettlementProjectEngine.EngineResult result;
+            connection.setAutoCommit(false);
+            try {
+                result = SettlementProjectEngine.advance(connection, "world-1", 20);
+                connection.commit();
+            } catch (Exception exception) {
+                try { connection.rollback(); }
+                catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+                throw exception;
+            } finally {
+                connection.setAutoCommit(true);
+            }
             require(result.completedProjects() == 1,
                     "Founding project did not complete through the deterministic engine.");
             require(text(connection, "SELECT status FROM settlement_project WHERE project_id='project-success'")
@@ -215,10 +226,10 @@ public final class SettlementFoundingMigrationTransactionVerification {
                 + "20,20,'ICE','Coalition',0)");
         statement.execute("INSERT INTO world_station VALUES('station-origin','world-1','location-origin','origin-station',"
                 + "'Origin Station','OUTPOST','Coalition',1)");
-        statement.execute("INSERT INTO station_civilization_state VALUES('station-origin','world-1',80,70,10,2,0,0,0,60,"
-                + "'HOLDING',0)");
         statement.execute("INSERT INTO station_simulation_state VALUES('station-origin','world-1',10000,100,25,60,80,90,10,0,"
                 + "'STABLE',0)");
+        statement.execute("INSERT INTO station_civilization_state VALUES('station-origin','world-1',80,70,10,2,0,0,0,60,"
+                + "'HOLDING',0)");
         statement.execute("INSERT INTO npc_population_state VALUES('population-origin','world-1','station-origin',50,10,5,5,3,2,3,2,"
                 + "200,200,200,70,'verification-origin',0)");
         statement.execute("INSERT INTO station_population_state VALUES('station-origin','world-1','IMPORTED_ESTIMATE',0,80,80,25,25,0)");
