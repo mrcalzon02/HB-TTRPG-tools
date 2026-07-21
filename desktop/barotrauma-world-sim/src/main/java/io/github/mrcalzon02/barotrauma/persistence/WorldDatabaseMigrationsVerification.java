@@ -41,7 +41,8 @@ final class WorldDatabaseMigrationsVerification {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 28, "Fresh world did not initialize at schema 028.");
+            require(currentVersion(connection) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                    "Fresh world did not initialize at the current schema.");
             require(tableExists(connection, "world_location") && tableExists(connection, "simulation_command_receipt"),
                     "Fresh world is missing normalized-world or command-receipt state.");
             require(tableExists(connection, "station_simulation_state") && tableExists(connection, "station_inventory"),
@@ -58,6 +59,7 @@ final class WorldDatabaseMigrationsVerification {
             verifyObservationObjects(connection, "Fresh world");
             verifyPopulationAccountingObjects(connection, "Fresh world");
             verifyCausalityAndTransitObjects(connection, "Fresh world");
+            verifySettlementLifecycleObjects(connection, "Fresh world");
             require(foreignKeyViolations(connection) == 0, "Fresh schema contains foreign-key violations.");
         }
     }
@@ -96,7 +98,8 @@ final class WorldDatabaseMigrationsVerification {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 28, "Legacy world did not advance to schema 028.");
+            require(currentVersion(connection) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                    "Legacy world did not advance to the current schema.");
             require(columnExists(connection, "world_metadata", "source_suite_version"),
                     "Legacy world did not receive normalized-world metadata columns.");
             require(tableExists(connection, "station_civilization_state")
@@ -106,6 +109,7 @@ final class WorldDatabaseMigrationsVerification {
             verifyObservationObjects(connection, "Legacy world");
             verifyPopulationAccountingObjects(connection, "Legacy world");
             verifyCausalityAndTransitObjects(connection, "Legacy world");
+            verifySettlementLifecycleObjects(connection, "Legacy world");
             try (PreparedStatement statement = connection.prepareStatement(
                     "SELECT source_name FROM import_artifact WHERE artifact_id=?")) {
                 statement.setString(1, artifactId.toString());
@@ -167,11 +171,12 @@ final class WorldDatabaseMigrationsVerification {
         try (WorldLock ignored = WorldStorageContracts.acquireExclusiveLock(paths)) { }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database())) {
             configure(connection);
-            require(currentVersion(connection) == 28,
-                    "Pre-renumber schema " + oldVersion + " did not advance to schema 028.");
+            require(currentVersion(connection) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
+                    "Pre-renumber schema " + oldVersion + " did not advance to the current schema.");
             verifyObservationObjects(connection, "Pre-renumber schema " + oldVersion);
             verifyPopulationAccountingObjects(connection, "Pre-renumber schema " + oldVersion);
             verifyCausalityAndTransitObjects(connection, "Pre-renumber schema " + oldVersion);
+            verifySettlementLifecycleObjects(connection, "Pre-renumber schema " + oldVersion);
             require(count(connection, "station_event") >= 1,
                     "Pre-renumber schema " + oldVersion + " lost causal station records.");
             require(count(connection, "npc_population_state") == 1
@@ -180,8 +185,9 @@ final class WorldDatabaseMigrationsVerification {
                             + " did not seed observation population and reconciliation state.");
             require(count(connection, "station_population_state") == 1,
                     "Pre-renumber schema " + oldVersion + " did not preserve authoritative station population state.");
-            require(migrationVersionCount(connection, 15, 28) == 14,
-                    "Pre-renumber schema " + oldVersion + " did not receive canonical 015-028 migration history.");
+            require(migrationVersionCount(connection, 15, WorldStorageContracts.DATABASE_SCHEMA_VERSION)
+                            == WorldStorageContracts.DATABASE_SCHEMA_VERSION - 14,
+                    "Pre-renumber schema " + oldVersion + " did not receive complete canonical migration history.");
             require(foreignKeyViolations(connection) == 0,
                     "Pre-renumber schema " + oldVersion + " created foreign-key violations.");
         }
