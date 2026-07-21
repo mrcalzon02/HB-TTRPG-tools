@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Strictly read-only schema-016 observation queries for desktop presentation and later export. */
+/** Strictly read-only observation queries for desktop presentation and later export. */
 public final class ObservationRegistry {
     private ObservationRegistry() { }
 
@@ -36,6 +36,30 @@ public final class ObservationRegistry {
         String type = text(entityType, "entityType");
         String id = text(entityId, "entityId");
         try (Connection connection = open(world)) { return events(connection, -1, type, id, limit); }
+    }
+
+    public static List<MigrationFlowRow> migrationFlows(WorldPaths world, long changedSinceTick, int limit)
+            throws Exception {
+        if (changedSinceTick < -1) throw new IllegalArgumentException("changedSinceTick must be -1 or greater.");
+        if (limit < 1 || limit > 5_000) throw new IllegalArgumentException("Migration-flow limit must be between 1 and 5000.");
+        try (Connection connection = open(world)) {
+            requireMigrationSchema(connection);
+            return migrationFlows(connection, changedSinceTick, limit);
+        }
+    }
+
+    public static MigrationConservationRow migrationConservation(WorldPaths world) throws Exception {
+        try (Connection connection = open(world)) {
+            requireMigrationSchema(connection);
+            try (Statement statement = connection.createStatement();
+                 ResultSet result = statement.executeQuery(
+                         "SELECT world_id,station_population,population_in_flows,recorded_migration_losses "
+                                 + "FROM npc_population_migration_conservation LIMIT 1")) {
+                if (!result.next()) throw new SQLException("Migration conservation projection is empty.");
+                return new MigrationConservationRow(result.getString(1), result.getLong(2),
+                        result.getLong(3), result.getLong(4));
+            }
+        }
     }
 
     private static Connection open(WorldPaths world) throws Exception {
@@ -145,6 +169,32 @@ public final class ObservationRegistry {
         return List.copyOf(rows);
     }
 
+    private static List<MigrationFlowRow> migrationFlows(Connection c, long since, int limit) throws SQLException {
+        String sql = "SELECT flow_id,flow_kind,status,cause,quantity,reserved_quantity,embarked_quantity,"
+                + "arrived_quantity,returned_quantity,losses,stranded_quantity,origin_station_name,"
+                + "destination_station_name,origin_location_name,destination_location_name,assigned_npc_vessel_id,"
+                + "transport_name,transit_leg_id,preparation_started_tick,departure_tick,arrival_tick,return_tick,"
+                + "progress_ticks,duration_ticks,created_tick,updated_tick,failure_reason,summary "
+                + "FROM npc_population_flow_observation WHERE (?<0 OR updated_tick>?) "
+                + "ORDER BY updated_tick DESC,flow_id LIMIT ?";
+        List<MigrationFlowRow> rows = new ArrayList<>();
+        try (PreparedStatement statement = c.prepareStatement(sql)) {
+            bind(statement, since);
+            statement.setInt(3, limit);
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) rows.add(new MigrationFlowRow(result.getString(1), result.getString(2),
+                        result.getString(3), result.getString(4), result.getLong(5), result.getLong(6),
+                        result.getLong(7), result.getLong(8), result.getLong(9), result.getLong(10),
+                        result.getLong(11), result.getString(12), result.getString(13), result.getString(14),
+                        result.getString(15), result.getString(16), result.getString(17), result.getString(18),
+                        nullable(result,19), nullable(result,20), nullable(result,21), nullable(result,22),
+                        result.getLong(23), nullable(result,24), result.getLong(25), result.getLong(26),
+                        result.getString(27), result.getString(28)));
+            }
+        }
+        return List.copyOf(rows);
+    }
+
     private static List<EventRow> events(Connection c, long since, String type, String id, int limit) throws SQLException {
         String sql = "SELECT event_id,tick_sequence,canonical_time,category,primary_entity_type,primary_entity_id,"
                 + "primary_cause,primary_evidence_key,contributing_factors,magnitude,visibility,confidence,summary "
@@ -185,6 +235,17 @@ public final class ObservationRegistry {
         for(String name:List.of("observation_world_summary","npc_population_observation","npc_population_accounting_observation","creature_population_observation")) requireObject(c,"view",name);
     }
 
+    private static void requireMigrationSchema(Connection c) throws SQLException {
+        long version;
+        try (Statement statement = c.createStatement();
+             ResultSet result = statement.executeQuery("SELECT COALESCE(MAX(version),0) FROM schema_migration")) {
+            version = result.next() ? result.getLong(1) : 0;
+        }
+        if (version < 28) throw new SQLException("Migration observation requires schema 028; world is schema " + version + ".");
+        requireObject(c, "view", "npc_population_flow_observation");
+        requireObject(c, "view", "npc_population_migration_conservation");
+    }
+
     private static void requireObject(Connection c,String type,String name)throws SQLException{
         try(PreparedStatement s=c.prepareStatement("SELECT 1 FROM sqlite_master WHERE type=? AND name=?")){s.setString(1,type);s.setString(2,name);try(ResultSet r=s.executeQuery()){if(!r.next())throw new SQLException("Observation schema object is missing: "+name);}}
     }
@@ -211,6 +272,17 @@ public final class ObservationRegistry {
             String presenceState,String seedSource,long lastTick){}
     public record FlowRow(String flowId,String entityType,String populationId,String origin,String destination,long quantity,
             long losses,String cause,String status,Long departureTick,Long arrivalTick,long createdTick,long updatedTick,String summary){}
+    public record MigrationFlowRow(String flowId,String flowKind,String status,String cause,long quantity,long reserved,
+            long embarked,long arrived,long returned,long losses,long stranded,String originStation,String destinationStation,
+            String originLocation,String destinationLocation,String vesselId,String transportName,String transitLegId,
+            Long preparationTick,Long departureTick,Long arrivalTick,Long returnTick,long progressTicks,Long durationTicks,
+            long createdTick,long updatedTick,String failureReason,String summary){}
+    public record MigrationConservationRow(String worldId,long stationPopulation,long populationInFlows,
+                                           long recordedMigrationLosses) {
+        public long accountedPopulation() {
+            return stationPopulation + populationInFlows + recordedMigrationLosses;
+        }
+    }
     public record EventRow(String eventId,long tickSequence,String canonicalTime,String category,String entityType,
             String entityId,String primaryCause,String evidenceKey,String contributingFactors,long magnitude,String visibility,
             int confidence,String summary){}
