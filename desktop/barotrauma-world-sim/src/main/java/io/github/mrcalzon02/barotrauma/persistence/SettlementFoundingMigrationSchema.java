@@ -179,7 +179,7 @@ public final class SettlementFoundingMigrationSchema {
                 """
                 CREATE VIEW settlement_founding_migration_observation AS
                 SELECT f.flow_id,f.world_id,f.settlement_project_id project_id,p.status project_status,
-                       f.status flow_status,f.population_id origin_population_id,f.origin_station_id,
+                       f.status flow_status,f.updated_tick,f.population_id origin_population_id,f.origin_station_id,
                        f.origin_location_id,f.destination_location_id,f.assigned_npc_vessel_id,
                        f.quantity,f.embarked_quantity,f.arrived_quantity,f.losses,f.stranded_quantity,
                        h.station_id,h.population_id founded_population_id,h.settled_quantity,h.handoff_tick,
