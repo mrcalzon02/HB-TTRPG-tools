@@ -1,8 +1,8 @@
 # Milestone 2.4 — Settlement Lifecycle Projects
 
-**Status:** Active implementation; schema 029 project lifecycle, schema 030 staged founding migration, authoritative project and founding transactions, physical contribution reconciliation, deterministic migration and project progression, all four canonical completion consequences, query-only project and founding-migration observation, and focused rollback verification exist. Production passive-tick integration, failure disposition, desktop presentation, migration execution, and exact-head acceptance remain.
+**Status:** Active implementation; schema 029 project lifecycle, schema 030 staged founding migration, schema 031 exact terminal contribution disposition, authoritative project, founding, contribution and termination transactions, deterministic migration and project progression, all four canonical completion consequences, query-only project, founding-migration and disposition observation, fresh and legacy migration contracts, and focused rollback verification exist. Production passive-tick integration, desktop presentation, migration execution, and exact-head acceptance remain.
 
-Schema 029 establishes the durable project model required before settlements may be founded, expanded, abandoned, or reclaimed. Schema 030 extends the conserved NPC migration authority so a founding cohort can arrive at an unoccupied location, remain accounted for in transit staging, and become the first canonical station population only when its project completes.
+Schema 029 establishes the durable project model required before settlements may be founded, expanded, abandoned, or reclaimed. Schema 030 extends the conserved NPC migration authority so a founding cohort can arrive at an unoccupied location, remain accounted for in transit staging, and become the first canonical station population only when its project completes. Schema 031 requires every physical commitment to receive an immutable terminal classification before a contributed project may fail or be cancelled.
 
 ## Implemented project authority
 
@@ -41,7 +41,7 @@ Inventory deduction and contribution evidence share a local savepoint, so reject
 
 A founding project blocks duplicate active flows and unconsumed staged arrivals. A flow that is cancelled, failed, or fully returned releases the still-preparing project for a deterministic replacement attempt. Returned terminal flows are excluded from final handoff selection.
 
-The ordinary migration public transaction accepts every supported schema from 028 through the current schema 030 rather than incorrectly requiring schema exactly 028.
+The ordinary migration public transaction accepts every supported schema from 028 through the current schema 031 rather than incorrectly requiring schema exactly 028.
 
 ## Staged founding migration and conservation
 
@@ -55,6 +55,19 @@ Schema 030 adds two explicit NPC destination modes:
 The migration conservation view counts staged founders in `population_in_flows` until the handoff exists. At handoff, those same people move exactly once into station population without changing total accounted world population.
 
 Founding deliberately creates the station in a zero-resident `FALLEN` seed state. The existing trigger chain initializes logistics, vendors, civilization, observation, demographic, and population authorities without creating residents. The exact arrived cohorts then replace the zero detailed population. A schema-030 handoff trigger replaces the zero aggregate row with an immutable `GENERATED_ALLOCATION` baseline containing the exact founder resident and workforce counts.
+
+## Terminal contribution disposition
+
+Schema 031 adds one immutable disposition row for each contributed support record. Supported classifications are:
+
+- `RETURNED`
+- `STRANDED`
+- `CONSUMED`
+- `LOST`
+
+The database rejects a `FAILED` or `CANCELLED` transition while any contribution lacks a disposition. `SettlementContributionDispositionTransaction` validates one plan per contribution, restores returned steel and rations, validates population outcomes against migration-flow quantities, validates transport outcomes against canonical vessel state, requires released security to be returned, requires performed work to be consumed, records immutable evidence, and only then applies the terminal transition.
+
+Physical returns, classification rows, and lifecycle transition share a savepoint. A failed terminal transition restores inventory and removes all provisional disposition evidence before control returns to the caller.
 
 ## Deterministic migration and project progression
 
@@ -80,11 +93,19 @@ Focused verification includes successful conserved founding and a deliberate han
 
 ## Query-only observation
 
-`settlement_project_observation` exposes project identity, kind, status, origin and target names, transport, committed and required support, security, progress, timing, failure, and summary.
-
-`ObservationRegistry.settlementProjects(...)` uses the existing query-only connection, requires schema 029 or later, supports changed-since filtering and bounded limits, and returns nullable preparation, activation, and completion timing without mutating project state.
+`settlement_project_observation` exposes project identity, kind, status, origin and target names, transport, committed and required support, security, progress, timing, failure, and summary. `ObservationRegistry.settlementProjects(...)` uses the existing query-only connection, requires schema 029 or later, supports changed-since filtering and bounded limits, and returns nullable preparation, activation, and completion timing without mutating project state.
 
 `settlement_founding_migration_observation` projects the founding flow, project, update tick, staged quantity, losses, station, founded population, handoff timing, and handoff evidence. `ObservationRegistry.settlementFoundingMigrations(...)` exposes that view through the same query-only connection with schema-030 gating, changed-since filtering, bounded limits, nullable pre-handoff fields, and no alternate registry or UI data store.
+
+`settlement_contribution_disposition_observation` projects immutable terminal classification, contribution and project identity, physical source station, population, vessel or flow, quantity, tick, evidence key, and summary. `ObservationRegistry.settlementContributionDispositions(...)` exposes it through the same query-only connection with schema-031 gating, changed-since filtering, bounded limits, and durable-state fingerprint verification.
+
+## Migration coverage
+
+`WorldStorageContracts.DATABASE_SCHEMA_VERSION` is 31 and the forward dispatcher routes schemas 029, 030, and 031 directly to their canonical schema classes.
+
+The fresh-world, schema-001 legacy-world, and pre-renumber local-world migration contracts now require the authoritative current schema rather than a hard-coded schema 028. Each path asserts schema-029 project state and guards, schema-030 founding handoff and conservation objects, schema-031 disposition state and guards, complete migration-ledger history, and zero foreign-key violations.
+
+These contracts are committed but have not been executed in the current environment.
 
 ## Registered verification
 
@@ -92,16 +113,18 @@ The complete desktop verification suite includes:
 
 - `SettlementLifecycleSchemaVerification`
 - `SettlementFoundingMigrationSchemaVerification`
+- `SettlementContributionDispositionSchemaVerification`
 - `SettlementProjectTransactionVerification`
 - `SettlementProjectContributionAuthorityVerification`
+- `SettlementContributionDispositionTransactionVerification`
 - `SettlementProjectEngineVerification`
 - `SettlementProjectConsequencesVerification`
 - `SettlementFoundingMigrationTransactionVerification`
 - `SettlementObservationRegistryVerification`
 - `SettlementFoundingObservationRegistryVerification`
+- `SettlementContributionDispositionObservationRegistryVerification`
 - founding-site staging, casualty return, origin restoration, and replacement-flow coverage inside `NpcPopulationMigrationEngineVerification`
-
-These contracts are committed but have not been executed in the current environment.
+- fresh, legacy, and pre-renumber schema-031 coverage inside `WorldDatabaseMigrationsVerification`
 
 ## Remaining implementation work
 
@@ -115,10 +138,9 @@ inside the authoritative per-tick sequence of `PassiveWorldTickTransaction`, imm
 
 After production integration:
 
-1. classify failed and cancelled committed materials, supplies, population, and transport as returned, stranded, consumed, or lost;
-2. extend the existing Observation Foundation desktop window with project and founding evidence;
-3. prove fresh and legacy migration through schemas 029 and 030;
-4. execute exact-head Java 17 compilation and `toolbox.cmd verify`.
+1. extend the existing Observation Foundation desktop window with project, founding, and disposition evidence;
+2. execute fresh, legacy, and pre-renumber migration contracts through schema 031;
+3. execute exact-head Java 17 compilation and `toolbox.cmd verify`.
 
 ## Acceptance gate
 
@@ -126,8 +148,8 @@ Slice 2.4 remains **Active** until all of the following are true:
 
 1. Production passive ticks invoke `SettlementProjectEngine` directly.
 2. Founding, expansion, abandonment, and reclamation mutate canonical station and location state only at committed completion.
-3. Contributions remain physically reconciled with inventory, population-flow, vessel, and security authorities.
+3. Contributions remain physically reconciled with inventory, population-flow, vessel, security, and terminal disposition authorities.
 4. Passive-transaction verification proves migration staging, progress, blocking, completion, consequences, founding handoff, and rollback through the production path.
-5. Fresh and legacy worlds migrate through schemas 029 and 030.
-6. The existing desktop observation surface displays project and founding lifecycle evidence.
+5. Fresh, legacy, and pre-renumber worlds execute successfully through schemas 029, 030, and 031.
+6. The existing desktop observation surface displays project, founding, and disposition lifecycle evidence.
 7. The exact published `main` head compiles under Java 17 and passes `toolbox.cmd verify`.
