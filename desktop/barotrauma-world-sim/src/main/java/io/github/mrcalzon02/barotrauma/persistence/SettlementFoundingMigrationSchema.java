@@ -42,6 +42,37 @@ public final class SettlementFoundingMigrationSchema {
                 )
                 """,
                 """
+                CREATE TRIGGER settlement_founding_population_seed_after_station
+                AFTER INSERT ON station_simulation_state
+                WHEN EXISTS (SELECT 1 FROM station_civilization_state c WHERE c.station_id=NEW.station_id)
+                  AND NOT EXISTS (SELECT 1 FROM npc_population_state p WHERE p.station_id=NEW.station_id)
+                BEGIN
+                    INSERT OR IGNORE INTO npc_population_state(
+                        population_id,world_id,station_id,civilians,industrial_workers,logistics_workers,
+                        security_personnel,medical_personnel,scientific_personnel,temporary_residents,refugees,
+                        housing_capacity,life_support_capacity,employment_capacity,morale,seed_source,last_tick)
+                    SELECT substr(NEW.world_id,1,24)||printf('%012x',(wl.source_ordinal*16+1)%281474976710655),
+                           NEW.world_id,NEW.station_id,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*5 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*NEW.industry/25 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*2 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*NEW.security/30 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index/10 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index/12 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.surplus_ticks END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.shortage_ticks END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*12+NEW.industry*5 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*14+NEW.supplies*2 END,
+                           CASE WHEN c.frontier_state='ABANDONED' THEN 0 ELSE c.population_index*8+NEW.industry*8 END,
+                           MAX(0,MIN(100,c.civilization_strength+NEW.supplies/4-NEW.threat/4)),
+                           'SCHEMA_030_FOUNDING_ZERO_SEED',MAX(c.last_tick,NEW.last_tick)
+                    FROM station_civilization_state c
+                    JOIN world_station ws ON ws.station_id=NEW.station_id
+                    JOIN world_location wl ON wl.location_id=ws.location_id
+                    WHERE c.station_id=NEW.station_id;
+                END
+                """,
+                """
                 CREATE TRIGGER population_flow_destination_mode_insert_guard
                 BEFORE INSERT ON population_flow
                 WHEN NEW.entity_type='NPC_POPULATION' AND (
