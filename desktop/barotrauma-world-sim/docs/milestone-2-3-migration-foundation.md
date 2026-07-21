@@ -1,6 +1,6 @@
 # Milestone 2.3 — Conserved Population Migration
 
-**Status:** Active implementation; the migration authority, deterministic engine, production passive-tick integration, observation surface, focused lifecycle verification, and production-path planning/departure verification exist, but passive-transaction rollback, terminal arrival or return coverage, and exact-head full-suite acceptance remain.
+**Status:** Active implementation complete; exact-head Java 17 compilation and full-suite execution remain required before acceptance.
 
 Schema 028 establishes the authoritative physical population-movement slice for the desktop world simulator. It extends the existing schema-015 `population_flow` record rather than introducing a competing movement table, retains schema-027 detailed NPC cohorts as population authority, and reuses schema-026 `npc_transit_leg` as the transport timeline.
 
@@ -82,20 +82,15 @@ The registered verification chain includes:
 
 - `NpcPopulationMigrationVerification` for all four flow kinds, exact cohort and ledger conservation, cancellation, preparation failure, return, casualties, stranded survivors, invalid transitions, rollback, and foreign-key integrity;
 - `NpcPopulationMigrationEngineVerification` for deterministic automatic planning, outbound synchronization, destination-capacity rejection, physical return transit, and origin restoration;
-- `PassiveWorldSimulationVerification` for real `PassiveWorldTickTransaction` planning, vessel reservation, preparation without premature population removal, physical outbound departure, exact origin release, and reuse of the authoritative `npc_transit_leg`;
+- `PassiveWorldSimulationVerification` for real `PassiveWorldTickTransaction` planning, vessel reservation, preparation without premature population removal, physical outbound departure, exact origin release, authoritative transit reuse, bounded terminal destination arrival, exact destination population settlement, immigration-ledger evidence, and rollback of vessel, flow, population, and transit-leg mutations after a deliberate post-migration transaction failure;
 - `MigrationObservationRegistryVerification` for schema gating, changed-since behavior, limits, transport evidence, conserved quantities, and world-level conservation;
 - fresh, legacy, and pre-renumber migration checks requiring schema 028 objects;
 - complete-suite registration through `DesktopPersistenceVerificationSuite`.
 
-The next verification addition must remain inside the production passive-world contract and prove a terminal arrival or physical return through repeated passive ticks, plus rollback of both vessel and migration mutations when the passive transaction fails.
-
 ## Remaining acceptance work
 
-Milestone 2.3 remains **Active** until both of the following are true:
+Milestone 2.3 remains **Active** until the exact published `main` head compiles with Java 17 and passes `toolbox.cmd verify`.
 
-1. The production-path verification covers terminal arrival or return, conservation, and transaction rollback in addition to planning and departure.
-2. The exact published `main` head compiles with Java 17 and passes `toolbox.cmd verify`.
+The focused production-path verification is committed but has no attached GitHub CI status and has not been executed in the current environment. Any discovered failure must be repaired in the authoritative migration, transit, registry, desktop, or passive-tick implementation rather than hidden behind adapters or compatibility mutators.
 
-Any discovered failure must be repaired in the authoritative migration, transit, registry, desktop, or passive-tick implementation rather than hidden behind adapters or compatibility mutators.
-
-After those gates pass, update `DEVELOPMENT_PLAN.md` and `README.md` to record the accepted schema-028 migration slice. Do not mark Milestone 2 complete: settlement founding, expansion, abandonment, reclamation projects, and the remaining lifecycle desktop evidence still belong to Slices 2.4 and 2.5.
+After exact-head verification passes, update `DEVELOPMENT_PLAN.md` and `README.md` to record the accepted schema-028 migration slice. Do not mark Milestone 2 complete: settlement founding, expansion, abandonment, reclamation projects, and the remaining lifecycle desktop evidence still belong to Slices 2.4 and 2.5.
