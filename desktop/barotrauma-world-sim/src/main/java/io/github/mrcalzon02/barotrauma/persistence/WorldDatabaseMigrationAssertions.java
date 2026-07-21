@@ -66,6 +66,32 @@ final class WorldDatabaseMigrationAssertions {
                 prefix + " is missing population migration lifecycle guards.");
     }
 
+    static void verifySettlementLifecycleObjects(Connection connection, String prefix) throws SQLException {
+        require(tableExists(connection, "settlement_project")
+                        && tableExists(connection, "settlement_project_contribution")
+                        && tableExists(connection, "settlement_project_transition"),
+                prefix + " is missing schema-029 settlement lifecycle state.");
+        require(objectExists(connection, "view", "settlement_project_observation")
+                        && objectExists(connection, "trigger", "settlement_project_status_guard")
+                        && objectExists(connection, "trigger", "settlement_project_terminal_immutable"),
+                prefix + " is missing schema-029 settlement observation or lifecycle guards.");
+        require(tableExists(connection, "settlement_founding_handoff")
+                        && tableExists(connection, "settlement_founding_handoff_cohort"),
+                prefix + " is missing schema-030 founding handoff state.");
+        require(objectExists(connection, "view", "settlement_founding_migration_observation")
+                        && objectExists(connection, "trigger", "settlement_founding_handoff_guard")
+                        && objectExists(connection, "trigger", "settlement_founding_handoff_population_baseline"),
+                prefix + " is missing schema-030 founding observation or conservation guards.");
+        require(tableExists(connection, "settlement_project_contribution_disposition")
+                        && objectExists(connection, "view", "settlement_contribution_disposition_observation")
+                        && objectExists(connection, "view", "settlement_project_disposition_completeness"),
+                prefix + " is missing schema-031 contribution disposition state.");
+        require(objectExists(connection, "trigger", "settlement_project_terminal_disposition_guard")
+                        && objectExists(connection, "trigger", "settlement_contribution_disposition_immutable_update")
+                        && objectExists(connection, "trigger", "settlement_contribution_disposition_immutable_delete"),
+                prefix + " is missing schema-031 disposition completeness or immutability guards.");
+    }
+
     static long migrationVersionCount(Connection connection, int first, int last) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT COUNT(*) FROM schema_migration WHERE version BETWEEN ? AND ?")) {
