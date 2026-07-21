@@ -1,6 +1,6 @@
 # Milestone 2.3 — Conserved Population Migration
 
-**Status:** Active implementation; the migration authority, deterministic engine, production passive-tick integration, observation surface, and focused verification exist, but passive-transaction integration verification and exact-head full-suite acceptance remain.
+**Status:** Active implementation; the migration authority, deterministic engine, production passive-tick integration, observation surface, focused lifecycle verification, and production-path planning/departure verification exist, but passive-transaction rollback, terminal arrival or return coverage, and exact-head full-suite acceptance remain.
 
 Schema 028 establishes the authoritative physical population-movement slice for the desktop world simulator. It extends the existing schema-015 `population_flow` record rather than introducing a competing movement table, retains schema-027 detailed NPC cohorts as population authority, and reuses schema-026 `npc_transit_leg` as the transport timeline.
 
@@ -62,7 +62,7 @@ Destination-capacity rejection has focused coverage through `IN_TRANSIT → RETU
 
 ## Production passive-tick integration
 
-`PassiveWorldTickTransaction` now directly invokes `NpcPopulationMigrationEngine.advanceAndPlan(...)` inside its authoritative per-tick sequence immediately after `processVessels(...)` and before research processing.
+`PassiveWorldTickTransaction` directly invokes `NpcPopulationMigrationEngine.advanceAndPlan(...)` inside its authoritative per-tick sequence immediately after `processVessels(...)` and before research processing.
 
 This placement lets migration observe the vessel state committed for the current tick, release prepared cohorts only after physical departure, settle physical arrivals, order returns after destination-capacity rejection, and create one new deterministic pressure-driven flow inside the same transaction and rollback boundary as ordinary vessel movement.
 
@@ -82,17 +82,18 @@ The registered verification chain includes:
 
 - `NpcPopulationMigrationVerification` for all four flow kinds, exact cohort and ledger conservation, cancellation, preparation failure, return, casualties, stranded survivors, invalid transitions, rollback, and foreign-key integrity;
 - `NpcPopulationMigrationEngineVerification` for deterministic automatic planning, outbound synchronization, destination-capacity rejection, physical return transit, and origin restoration;
+- `PassiveWorldSimulationVerification` for real `PassiveWorldTickTransaction` planning, vessel reservation, preparation without premature population removal, physical outbound departure, exact origin release, and reuse of the authoritative `npc_transit_leg`;
 - `MigrationObservationRegistryVerification` for schema gating, changed-since behavior, limits, transport evidence, conserved quantities, and world-level conservation;
 - fresh, legacy, and pre-renumber migration checks requiring schema 028 objects;
 - complete-suite registration through `DesktopPersistenceVerificationSuite`.
 
-The next verification addition must exercise migration through `PassiveWorldTickTransaction` rather than calling `NpcPopulationMigrationEngine` directly. It must prove that a real passive tick creates or advances flows in the same transaction as vessel movement and that rollback removes both vessel and migration changes together.
+The next verification addition must remain inside the production passive-world contract and prove a terminal arrival or physical return through repeated passive ticks, plus rollback of both vessel and migration mutations when the passive transaction fails.
 
 ## Remaining acceptance work
 
 Milestone 2.3 remains **Active** until both of the following are true:
 
-1. A focused passive-transaction integration verification proves planning, departure, arrival or return, conservation, and rollback through the production path.
+1. The production-path verification covers terminal arrival or return, conservation, and transaction rollback in addition to planning and departure.
 2. The exact published `main` head compiles with Java 17 and passes `toolbox.cmd verify`.
 
 Any discovered failure must be repaired in the authoritative migration, transit, registry, desktop, or passive-tick implementation rather than hidden behind adapters or compatibility mutators.
