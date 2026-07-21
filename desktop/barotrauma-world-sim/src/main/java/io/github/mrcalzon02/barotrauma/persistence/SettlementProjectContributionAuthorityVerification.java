@@ -71,7 +71,8 @@ public final class SettlementProjectContributionAuthorityVerification {
                         founding.projectId(), "flow-a", 1, 17, "wrong-founding-flow"),
                         "staged founding arrival linked to the project");
 
-                SettlementProjectTransaction.cancel(connection, project.projectId(), 18,
+                SettlementProjectTransaction.transition(connection, project.projectId(), 18,
+                        "CANCELLED", "fixture-cancelled",
                         "Contribution fixture completed and released its target location.");
                 connection.createStatement().executeUpdate(
                         "UPDATE npc_vessel SET status='IN_TRANSIT' WHERE npc_vessel_id='vessel-a'");
