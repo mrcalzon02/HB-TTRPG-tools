@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/** Focused end-to-end contract for staged founders becoming one canonical station population. */
+/** Focused schema-032 end-to-end contract for staged founders becoming one canonical station population. */
 public final class SettlementFoundingMigrationTransactionVerification {
     private SettlementFoundingMigrationTransactionVerification() { }
 
@@ -18,6 +18,7 @@ public final class SettlementFoundingMigrationTransactionVerification {
                 prerequisites(statement);
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
                 for (String sql : SettlementFoundingMigrationSchema.statements()) statement.execute(sql);
+                for (String sql : SettlementPhysicalSupportHardeningSchema.statements()) statement.execute(sql);
                 seedWorld(statement);
             }
 
@@ -321,6 +322,6 @@ public final class SettlementFoundingMigrationTransactionVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Conserved founding completion and rollback contracts passed.");
+        System.out.println("Schema-032 conserved founding completion and rollback contracts passed.");
     }
 }
