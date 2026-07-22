@@ -20,7 +20,13 @@ public final class SettlementProjectContributionAuthorityVerification {
             }
             reject(() -> SettlementProjectContributionAuthority.commitInventory(connection, "missing-project",
                             SettlementProjectTransaction.ContributionKind.MATERIALS,
-                            "station-a", "item-steel", 1, 1, "autocommit-rejection"),
+                            "station-a", "item-steel", 1, 1, "autocommit-inventory"),
+                    "active transaction");
+            reject(() -> SettlementProjectContributionAuthority.commitTransport(connection, "missing-project",
+                            "vessel-a", 1, "autocommit-transport"),
+                    "active transaction");
+            reject(() -> SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
+                            "missing-project", "flow-a", 1, 1, "autocommit-population"),
                     "active transaction");
             connection.setAutoCommit(false);
             try {
