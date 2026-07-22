@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(scriptDir, '..');
-const packPath = path.join(root, 'data', 'bestiary', 'archive-pack.json');
+const dataDir = path.join(root, 'data', 'bestiary');
+const indexManifestPath = path.join(dataDir, 'index-manifest.json');
+const mellisandeManifestPath = path.join(dataDir, 'mellisande-manifest.json');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -17,13 +19,17 @@ function decodePayload(payload) {
   return JSON.parse(zlib.gunzipSync(Buffer.from(payload, 'base64')).toString('utf8'));
 }
 
-const pack = JSON.parse(fs.readFileSync(packPath, 'utf8'));
-assert(pack.schemaVersion === '1.0.0', 'Unexpected archive pack schema version.');
-assert(pack.encoding === 'gzip-base64', 'Unexpected archive pack encoding.');
-assert(pack.payloads?.index && pack.payloads?.mellisande, 'Archive pack payloads are incomplete.');
+function readChunkedArchive(manifestPath, label) {
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  assert(manifest.schemaVersion === '1.0.0', `Unexpected ${label} archive schema version.`);
+  assert(manifest.encoding === 'gzip-base64-chunks', `Unexpected ${label} archive encoding.`);
+  assert(Array.isArray(manifest.chunks) && manifest.chunks.length, `${label} archive chunks are missing.`);
+  const payload = manifest.chunks.map(chunkName => fs.readFileSync(path.join(dataDir, chunkName), 'utf8').trim()).join('');
+  return decodePayload(payload);
+}
 
-const index = decodePayload(pack.payloads.index);
-const mellisande = decodePayload(pack.payloads.mellisande);
+const index = readChunkedArchive(indexManifestPath, 'index');
+const mellisande = readChunkedArchive(mellisandeManifestPath, 'Mellisande');
 
 assert(index.schemaVersion === '1.0.0', 'Unexpected bestiary index schema version.');
 assert(Array.isArray(index.entries), 'Bestiary entries must be an array.');
