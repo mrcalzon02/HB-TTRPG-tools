@@ -52,7 +52,7 @@ public final class SettlementPhysicalSupportHardeningSchema {
                             OR (c.contribution_kind='TRANSPORT'
                                 AND c.source_station_id=p.origin_station_id
                                 AND c.source_npc_vessel_id=p.assigned_npc_vessel_id)
-                            OR (c.contribution_kind='WORK' AND p.status='ACTIVE')
+                            OR c.contribution_kind='WORK'
                             OR (c.contribution_kind='POPULATION'
                                 AND c.source_station_id=p.origin_station_id
                                 AND c.source_population_id=p.related_population_id
