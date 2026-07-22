@@ -25,9 +25,44 @@ public final class SettlementProjectTransaction {
         return write(world, connection -> plan(connection, request));
     }
 
+    /** Assigns non-consumable security support. Physical support uses the dedicated commit methods below. */
     public static ProjectResult contribute(WorldPaths world, ContributionRequest request)
             throws IOException, SQLException {
         Objects.requireNonNull(request, "request");
+        requirePublicContributionKind(request.kind());
+        return write(world, connection -> contribute(connection, request));
+    }
+
+    public static ProjectResult commitInventory(WorldPaths world, String projectId, ContributionKind kind,
+                                                String stationId, String itemId, int quantity, long tick,
+                                                String evidenceKey) throws IOException, SQLException {
+        return write(world, connection -> SettlementProjectContributionAuthority.commitInventory(connection,
+                token(projectId, "projectId"), Objects.requireNonNull(kind, "kind"),
+                token(stationId, "stationId"), token(itemId, "itemId"), quantity, tick,
+                text(evidenceKey, "evidenceKey", 300)));
+    }
+
+    public static ProjectResult commitTransport(WorldPaths world, String projectId, String vesselId,
+                                                long tick, String evidenceKey) throws IOException, SQLException {
+        return write(world, connection -> SettlementProjectContributionAuthority.commitTransport(connection,
+                token(projectId, "projectId"), token(vesselId, "vesselId"), tick,
+                text(evidenceKey, "evidenceKey", 300)));
+    }
+
+    public static ProjectResult commitArrivedPopulation(WorldPaths world, String projectId, String flowId,
+                                                        int quantity, long tick, String evidenceKey)
+            throws IOException, SQLException {
+        return write(world, connection -> SettlementProjectContributionAuthority.commitArrivedPopulation(connection,
+                token(projectId, "projectId"), token(flowId, "flowId"), quantity, tick,
+                text(evidenceKey, "evidenceKey", 300)));
+    }
+
+    public static ProjectResult assignSecurity(WorldPaths world, String projectId, String sourceStationId,
+                                               int security, long tick, String evidenceKey, String summary)
+            throws IOException, SQLException {
+        ContributionRequest request = new ContributionRequest(token(projectId, "projectId"),
+                ContributionKind.SECURITY, security, sourceStationId, null, null, null, tick,
+                text(evidenceKey, "evidenceKey", 300), text(summary, "summary", 1000));
         return write(world, connection -> contribute(connection, request));
     }
 
@@ -237,6 +272,13 @@ public final class SettlementProjectTransaction {
         insertTransition(connection, projectId, project.worldId(), project.status(), normalized, tick,
                 project.progressUnits(), evidenceKey, text(summary, "summary", 1000));
         return result(connection, projectId);
+    }
+
+    static void requirePublicContributionKind(ContributionKind kind) throws SQLException {
+        if (Objects.requireNonNull(kind, "kind") != ContributionKind.SECURITY) {
+            throw new SQLException("Public generic settlement contributions accept only SECURITY; "
+                    + "materials, supplies, population, transport, and work require their canonical authorities.");
+        }
     }
 
     private static void updateStatus(Connection connection, String projectId, String status, long tick,
