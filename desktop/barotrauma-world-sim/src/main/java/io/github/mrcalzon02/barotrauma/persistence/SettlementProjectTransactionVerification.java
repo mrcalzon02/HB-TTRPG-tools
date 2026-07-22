@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-/** Focused contract for the authoritative schema-029 settlement project transaction. */
+/** Focused contract for the authoritative schema-032-hardened settlement project transaction. */
 public final class SettlementProjectTransactionVerification {
     private SettlementProjectTransactionVerification() { }
 
@@ -18,6 +18,7 @@ public final class SettlementProjectTransactionVerification {
             createPrerequisites(connection);
             try (Statement statement = connection.createStatement()) {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
+                for (String sql : SettlementPhysicalSupportHardeningSchema.statements()) statement.execute(sql);
             }
 
             for (SettlementProjectTransaction.ContributionKind kind : List.of(
@@ -39,6 +40,7 @@ public final class SettlementProjectTransactionVerification {
                             new SettlementProjectTransaction.Requirements(40, 30, 20, 1, 60, 8),
                             10, "Found a supported frontier settlement."));
             require(planned.status().equals("PLANNED"), "Settlement plan did not begin in PLANNED state.");
+            insertFoundingFlow(connection, planned.projectId());
 
             SettlementProjectTransaction.prepare(connection, planned.projectId(), 11);
             reject(() -> SettlementProjectTransaction.activate(connection, planned.projectId(), 12),
@@ -94,6 +96,10 @@ public final class SettlementProjectTransactionVerification {
                 contribute(connection, rollback.projectId(), SettlementProjectTransaction.ContributionKind.MATERIALS,
                         5, 21, "rollback-materials");
                 connection.rollback();
+            } catch (SQLException | RuntimeException exception) {
+                try { connection.rollback(); }
+                catch (SQLException rollbackFailure) { exception.addSuppressed(rollbackFailure); }
+                throw exception;
             } finally {
                 connection.setAutoCommit(true);
             }
@@ -104,15 +110,31 @@ public final class SettlementProjectTransactionVerification {
         }
     }
 
+    private static void insertFoundingFlow(Connection connection, String projectId) throws SQLException {
+        try (var statement = connection.prepareStatement(
+                "INSERT INTO population_flow(flow_id,world_id,entity_type,status,arrived_quantity,destination_mode,"
+                        + "settlement_project_id,destination_location_id,destination_station_id) "
+                        + "VALUES('flow-project','world-1','NPC_POPULATION','ARRIVED',20,'FOUNDING_SITE',?,"
+                        + "'location-b',NULL)")) {
+            statement.setString(1, projectId);
+            statement.executeUpdate();
+        }
+    }
+
     private static void contribute(Connection connection, String projectId,
                                    SettlementProjectTransaction.ContributionKind kind,
                                    int quantity, long tick, String evidence) throws SQLException {
+        String sourceStation = kind == SettlementProjectTransaction.ContributionKind.WORK ? null : "station-a";
+        String sourcePopulation = kind == SettlementProjectTransaction.ContributionKind.POPULATION
+                ? "population-a" : null;
+        String sourceVessel = kind == SettlementProjectTransaction.ContributionKind.TRANSPORT
+                ? "vessel-a" : null;
+        String relatedFlow = kind == SettlementProjectTransaction.ContributionKind.POPULATION
+                ? "flow-project" : null;
         SettlementProjectTransaction.contribute(connection,
                 new SettlementProjectTransaction.ContributionRequest(projectId, kind, quantity,
-                        "station-a", kind == SettlementProjectTransaction.ContributionKind.POPULATION
-                                ? "population-a" : null,
-                        kind == SettlementProjectTransaction.ContributionKind.TRANSPORT ? "vessel-a" : null,
-                        null, tick, evidence, "Verified " + kind + " contribution."));
+                        sourceStation, sourcePopulation, sourceVessel, relatedFlow,
+                        tick, evidence, "Verified " + kind + " contribution."));
     }
 
     private static void createPrerequisites(Connection connection) throws SQLException {
@@ -122,7 +144,10 @@ public final class SettlementProjectTransactionVerification {
             statement.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL)");
             statement.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL)");
             statement.execute("CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL)");
-            statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL)");
+            statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
+                    + "entity_type TEXT NOT NULL,status TEXT NOT NULL,arrived_quantity INTEGER NOT NULL,"
+                    + "destination_mode TEXT NOT NULL,settlement_project_id TEXT,destination_location_id TEXT,"
+                    + "destination_station_id TEXT)");
             statement.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,reason_family TEXT NOT NULL)");
             statement.execute("INSERT INTO world_metadata VALUES('world-1')");
             statement.execute("INSERT INTO world_location VALUES('location-a','world-1','Alpha',1)");
@@ -168,6 +193,6 @@ public final class SettlementProjectTransactionVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Settlement project transaction lifecycle and rollback contracts passed.");
+        System.out.println("Schema-032-hardened settlement project lifecycle and rollback contracts passed.");
     }
 }
