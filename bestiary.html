@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Bestiary and Caprine Index | Calzon’s TTRPG Foundry</title>
+  <meta name="description" content="Search the custom homebrew bestiary, browse the one thousand Named Young of the Dark Goat, and open complete encounter-grade creature dossiers.">
+  <meta name="keywords" content="custom bestiary, homebrew monsters, Hypertext d20 bestiary, named thousand young, Mellisande of the Better Day, elder beast">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/bestiary.html">
+  <meta property="og:title" content="Custom Bestiary and Caprine Index">
+  <meta property="og:description" content="A searchable homebrew creature archive supporting concise catalogue records and complete encounter-grade dossiers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/bestiary.html">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workspace-landing.css">
+  <link rel="stylesheet" href="bestiary.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Custom Bestiary and Caprine Index",
+    "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/bestiary.html",
+    "description": "A searchable collection of original homebrew creature records and complete bestiary dossiers.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Calzon’s TTRPG Foundry",
+      "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/"
+    }
+  }
+  </script>
+</head>
+<body class="workspace-landing-body bestiary-body">
+  <header class="site-header no-print">
+    <div>
+      <p class="eyebrow">Tools · original creature archive</p>
+      <h1>Custom Bestiary</h1>
+      <p class="subtitle">A searchable homebrew monster library built for both quick catalogue records and complete encounter dossiers.</p>
+    </div>
+    <nav class="top-nav" aria-label="Bestiary navigation">
+      <a class="nav-button" href="index.html#tools">Foundry Tools</a>
+      <a class="nav-button" href="generators.html">Generators</a>
+      <a class="nav-button" href="modules.html">Modules</a>
+      <a class="nav-button" href="site-map.html">Site Map</a>
+    </nav>
+  </header>
+
+  <main class="bestiary-shell">
+    <nav class="workspace-breadcrumbs" aria-label="Breadcrumb">
+      <a href="index.html">Calzon’s TTRPG Foundry</a><span>›</span><a href="index.html#tools">Tools</a><span>›</span><span>Custom Bestiary</span>
+    </nav>
+
+    <section class="bestiary-hero" aria-labelledby="bestiary-title">
+      <div>
+        <p class="eyebrow">The Caprine Index of the Thousand Names</p>
+        <h1 id="bestiary-title">One archive. A thousand recognized names. Room for full monsters to grow.</h1>
+        <p>The archive begins with the Named Young of the Dark Goat. Every recognized child has a stable searchable record, while completed creatures can carry full statistics, lore, lair rules, covenants, tactics, and campaign guidance without being compressed into a card.</p>
+        <div class="bestiary-actions">
+          <a class="link-button primary-action" href="#bestiary-controls">Search the Archive</a>
+          <button id="open-featured-entry" class="link-button" type="button">Open Mellisande</button>
+        </div>
+      </div>
+      <aside class="bestiary-summary" aria-label="Bestiary summary">
+        <div><strong id="bestiary-total">0</strong><span>recognized entries</span></div>
+        <div><strong id="bestiary-full">0</strong><span>complete dossiers</span></div>
+        <div><strong id="bestiary-registers">0</strong><span>thematic registers</span></div>
+        <div><strong>Open d20</strong><span>mechanical presentation</span></div>
+      </aside>
+    </section>
+
+    <section class="bestiary-notice" aria-labelledby="archive-depth-title">
+      <div>
+        <p class="eyebrow">Two record depths</p>
+        <h2 id="archive-depth-title">Catalogue first. Full dossier when the creature is ready.</h2>
+      </div>
+      <p><strong>Capsule records</strong> preserve the recognized name, epithet, register, and defining behavior. <strong>Full dossiers</strong> add encounter statistics and the complete body of lore. This keeps all one thousand names usable immediately without pretending every creature has already received full mechanical development.</p>
+    </section>
+
+    <section id="bestiary-controls" class="bestiary-controls" aria-labelledby="bestiary-search-title">
+      <div class="bestiary-section-head">
+        <p class="eyebrow">Filter the living index</p>
+        <h2 id="bestiary-search-title">Search names, epithets, domains, behaviors, and archive numbers.</h2>
+      </div>
+      <div class="bestiary-filter-grid">
+        <label class="bestiary-search-field">
+          <span>Search</span>
+          <input id="bestiary-search" type="search" placeholder="Try Mellisande, archive, mercy, horn, memory, 233…" autocomplete="off">
+        </label>
+        <label>
+          <span>Register</span>
+          <select id="bestiary-register"><option value="">All registers</option></select>
+        </label>
+        <label>
+          <span>Record depth</span>
+          <select id="bestiary-depth">
+            <option value="">All records</option>
+            <option value="full">Complete dossiers</option>
+            <option value="capsule">Capsule records</option>
+          </select>
+        </label>
+        <label>
+          <span>Sort</span>
+          <select id="bestiary-sort">
+            <option value="archive">Archive number</option>
+            <option value="name">Creature name</option>
+            <option value="register">Register</option>
+          </select>
+        </label>
+        <button id="bestiary-clear" class="link-button" type="button">Clear Filters</button>
+      </div>
+      <p id="bestiary-status" class="bestiary-status" role="status" aria-live="polite">Loading the custom bestiary…</p>
+    </section>
+
+    <section class="bestiary-workspace" aria-label="Bestiary records and selected entry">
+      <div class="bestiary-index-pane">
+        <div class="bestiary-section-head">
+          <p class="eyebrow">Archive records</p>
+          <h2>Recognized Named Young</h2>
+        </div>
+        <div id="bestiary-results" class="bestiary-card-grid"></div>
+        <button id="bestiary-load-more" class="link-button bestiary-load-more" type="button" hidden>Load More Records</button>
+        <noscript>
+          <div class="bestiary-notice">
+            <p>JavaScript is required for searching and opening records. The archive data remains packaged with the page, but JavaScript is required to decode, search, and display it.</p>
+          </div>
+        </noscript>
+      </div>
+
+      <article id="bestiary-detail" class="bestiary-detail-pane" aria-live="polite" aria-label="Selected bestiary entry">
+        <div class="bestiary-detail-empty">
+          <p class="eyebrow">Selected record</p>
+          <h2>Opening the archive…</h2>
+          <p>The complete record will appear here.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer no-print">
+    <p>Calzon’s TTRPG Foundry · Original homebrew bestiary and creature archive.</p>
+  </footer>
+  <script src="bestiary.js"></script>
+</body>
+</html>
