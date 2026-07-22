@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 /** Focused contract for the authoritative schema-029 settlement project transaction. */
 public final class SettlementProjectTransactionVerification {
@@ -18,6 +19,18 @@ public final class SettlementProjectTransactionVerification {
             try (Statement statement = connection.createStatement()) {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
             }
+
+            for (SettlementProjectTransaction.ContributionKind kind : List.of(
+                    SettlementProjectTransaction.ContributionKind.MATERIALS,
+                    SettlementProjectTransaction.ContributionKind.SUPPLIES,
+                    SettlementProjectTransaction.ContributionKind.POPULATION,
+                    SettlementProjectTransaction.ContributionKind.TRANSPORT,
+                    SettlementProjectTransaction.ContributionKind.WORK)) {
+                reject(() -> SettlementProjectTransaction.requirePublicContributionKind(kind),
+                        "canonical authorities");
+            }
+            SettlementProjectTransaction.requirePublicContributionKind(
+                    SettlementProjectTransaction.ContributionKind.SECURITY);
 
             var planned = SettlementProjectTransaction.plan(connection,
                     new SettlementProjectTransaction.PlanRequest(
