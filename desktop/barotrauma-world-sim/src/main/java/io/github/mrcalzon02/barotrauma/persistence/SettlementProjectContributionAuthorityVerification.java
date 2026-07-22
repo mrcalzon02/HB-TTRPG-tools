@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/** Focused contract for physical settlement-project contribution reconciliation. */
+/** Focused schema-032 contract for physical settlement-project contribution reconciliation. */
 public final class SettlementProjectContributionAuthorityVerification {
     private SettlementProjectContributionAuthorityVerification() { }
 
@@ -17,6 +17,7 @@ public final class SettlementProjectContributionAuthorityVerification {
             createPrerequisites(connection);
             try (Statement statement = connection.createStatement()) {
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
+                for (String sql : SettlementPhysicalSupportHardeningSchema.statements()) statement.execute(sql);
             }
             reject(() -> SettlementProjectContributionAuthority.commitInventory(connection, "missing-project",
                             SettlementProjectTransaction.ContributionKind.MATERIALS,
@@ -61,7 +62,7 @@ public final class SettlementProjectContributionAuthorityVerification {
                 var founding = SettlementProjectTransaction.plan(connection,
                         new SettlementProjectTransaction.PlanRequest("world-1",
                                 SettlementProjectTransaction.ProjectKind.FOUNDING, "Coalition",
-                                "station-a", null, "location-c", "population-a", "vessel-a",
+                                "station-a", null, "location-c", "population-a", null,
                                 new SettlementProjectTransaction.Requirements(0, 0, 4, 0, 0, 3),
                                 15, "Found Gamma with a staged cohort."));
                 SettlementProjectTransaction.prepare(connection, founding.projectId(), 16);
@@ -191,6 +192,6 @@ public final class SettlementProjectContributionAuthorityVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Physical settlement contribution and rollback contracts passed.");
+        System.out.println("Schema-032 physical settlement contribution and rollback contracts passed.");
     }
 }
