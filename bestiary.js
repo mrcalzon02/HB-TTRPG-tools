@@ -1,7 +1,8 @@
 (() => {
   'use strict';
 
-  const PACK_URL = 'data/bestiary/archive-pack.json';
+  const INDEX_MANIFEST_URL = 'data/bestiary/index-manifest.json';
+  const MELLISANDE_MANIFEST_URL = 'data/bestiary/mellisande-manifest.json';
   const FEATURED_ID = 'caprine-0233-mellisande';
   const PAGE_SIZE = 120;
 
@@ -368,26 +369,35 @@
 
   async function initialize() {
     try {
-      const packResponse = await fetch(PACK_URL, { cache: 'no-cache' });
-      if (!packResponse.ok) throw new Error(`Bestiary archive request failed: ${packResponse.status}`);
-      const pack = await packResponse.json();
-      if (pack.encoding !== 'gzip-base64' || !pack.payloads) {
-        throw new Error('Bestiary archive uses an unsupported encoding');
-      }
       if (typeof DecompressionStream !== 'function') {
         throw new Error('This browser does not support the compressed bestiary archive');
       }
 
-      const decodePayload = async payload => {
-        const binary = atob(payload);
+      const loadChunkedArchive = async (manifestUrl, label) => {
+        const manifestResponse = await fetch(manifestUrl, { cache: 'no-cache' });
+        if (!manifestResponse.ok) throw new Error(`${label} manifest request failed: ${manifestResponse.status}`);
+        const manifest = await manifestResponse.json();
+        if (manifest.schemaVersion !== '1.0.0' || manifest.encoding !== 'gzip-base64-chunks' || !Array.isArray(manifest.chunks) || !manifest.chunks.length) {
+          throw new Error(`${label} uses an unsupported archive format`);
+        }
+
+        const manifestBase = new URL(manifestUrl, location.href);
+        const payloadParts = await Promise.all(manifest.chunks.map(async chunkName => {
+          const chunkUrl = new URL(chunkName, manifestBase);
+          const response = await fetch(chunkUrl, { cache: 'no-cache' });
+          if (!response.ok) throw new Error(`${label} chunk request failed: ${response.status}`);
+          return response.text();
+        }));
+
+        const binary = atob(payloadParts.join(''));
         const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
         const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
         return JSON.parse(await new Response(stream).text());
       };
 
       [state.index, state.mellisande] = await Promise.all([
-        decodePayload(pack.payloads.index),
-        decodePayload(pack.payloads.mellisande)
+        loadChunkedArchive(INDEX_MANIFEST_URL, 'Bestiary index'),
+        loadChunkedArchive(MELLISANDE_MANIFEST_URL, 'Mellisande dossier')
       ]);
       validateIndex(state.index);
 
