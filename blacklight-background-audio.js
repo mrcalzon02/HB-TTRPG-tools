@@ -12,7 +12,7 @@
   });
   const DEFAULT_VOLUME = 0.75;
   const SAVE_INTERVAL_MS = 1000;
-  const trackUrl = 'https://cdn1.suno.ai/f02fe8ca-e7ea-4608-95c0-1c7d795637b1.mp3';
+  const trackUrl = 'assets/blacklight/Starry%20Cereal.mp3';
 
   function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, value));
