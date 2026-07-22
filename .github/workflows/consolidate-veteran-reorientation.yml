@@ -1,0 +1,56 @@
+name: Consolidate Veteran Reorientation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/consolidate-veteran-reorientation.mjs
+      - .github/workflows/consolidate-veteran-reorientation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Consolidate canonical veteran reorientation data
+        run: node scripts/consolidate-veteran-reorientation.mjs
+
+      - name: Validate repository changes
+        run: |
+          git diff --check
+          test -f data/blacklight-continuum/wiki/veteran-reintroduction.json
+          test ! -f blacklight-veteran-expanded-stage-bodies.js
+          test ! -f blacklight-veteran-charles-dialogue.js
+          test ! -f blacklight-veteran-eva-fiscal-speech.js
+          test ! -f blacklight-veteran-reorientation-options.js
+          ! grep -q 'applyEnhancements' blacklight-veteran-reintroduction.js
+          ! grep -q 'blacklight-veteran-expanded-stage-bodies.js' blacklight-veteran-reintroduction.html
+          ! grep -q 'blacklight-veteran-charles-dialogue.js' blacklight-veteran-reintroduction.html
+          ! grep -q 'blacklight-veteran-eva-fiscal-speech.js' blacklight-veteran-reintroduction.html
+          ! grep -q 'blacklight-veteran-reorientation-options.js' blacklight-veteran-reintroduction.html
+
+      - name: Commit consolidated source
+        run: |
+          if git diff --quiet; then
+            echo 'No consolidation changes were produced.'
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Consolidate veteran reorientation into canonical data source'
+          git push origin HEAD:main
