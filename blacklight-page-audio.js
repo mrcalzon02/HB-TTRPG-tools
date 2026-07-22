@@ -9,12 +9,14 @@
     : pageSpeeches[pageName];
   if (!speechSrc) return;
 
+  const shouldAutoplay = pageName === 'blacklight-corporate.html';
+
   const labels = {
     'blacklight-corporate.html': {
       eyebrow: 'Corporate address',
       title: 'Play Blacklight corporate landing speech',
       button: 'Play Corporate Speech',
-      note: 'Manual playback is required by browser audio policy.'
+      note: 'Speech starts automatically when permitted by your browser. Use Play if autoplay is blocked.'
     },
     'blacklight-personnel.html': {
       eyebrow: 'Personnel address',
@@ -65,8 +67,8 @@
       </div>
       <div class="bli-speech-controls">
         <button class="bli-speech-button" type="button">${copy.button}</button>
-        <audio preload="metadata" controls src="${speechSrc}"></audio>
-        <span class="bli-speech-status" aria-live="polite">Ready</span>
+        <audio preload="${shouldAutoplay ? 'auto' : 'metadata'}"${shouldAutoplay ? ' autoplay' : ''} controls src="${speechSrc}"></audio>
+        <span class="bli-speech-status" aria-live="polite">${shouldAutoplay ? 'Starting' : 'Ready'}</span>
       </div>
     `;
     if (anchor) anchor.insertAdjacentElement('afterend', panel);
@@ -103,6 +105,15 @@
     audio.addEventListener('error', () => {
       status.textContent = 'Audio unavailable';
     });
+
+    if (shouldAutoplay) {
+      const autoplayAttempt = audio.play();
+      if (autoplayAttempt && typeof autoplayAttempt.catch === 'function') {
+        autoplayAttempt.catch(() => {
+          status.textContent = 'Autoplay blocked — press Play';
+        });
+      }
+    }
   }
 
   function initialize() {
