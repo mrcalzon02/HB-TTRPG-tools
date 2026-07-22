@@ -18,6 +18,8 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
                 prerequisites(statement);
                 for (String sql : SettlementPhysicalSupportHardeningSchema.statements()) statement.execute(sql);
 
+                require(object(connection, "index", "settlement_one_nonterminal_vessel_project"),
+                        "Schema 032 nonterminal vessel-ownership index is missing.");
                 require(object(connection, "index", "settlement_contribution_vessel_source_index"),
                         "Schema 032 vessel-source index is missing.");
                 require(object(connection, "index", "settlement_contribution_flow_source_index"),
@@ -28,69 +30,67 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
                         "Schema 032 project-authority guard is missing.");
                 require(object(connection, "trigger", "settlement_contribution_population_flow_single_use"),
                         "Schema 032 single-use population-flow guard is missing.");
-                require(object(connection, "trigger", "settlement_contribution_active_vessel_guard"),
-                        "Schema 032 active-vessel contribution guard is missing.");
 
-                statement.execute("INSERT INTO settlement_project VALUES(" 
+                statement.execute("INSERT INTO settlement_project VALUES("
                         + "'project-a','world-1','EXPANSION','PREPARING','station-origin','station-target',"
                         + "'location-target','population-origin','vessel-a')");
-                reject(() -> statement.execute("INSERT INTO settlement_project VALUES(" 
+                reject(() -> statement.execute("INSERT INTO settlement_project VALUES("
                                 + "'project-duplicate-vessel','world-1','RECLAMATION','PLANNED','station-origin',"
                                 + "'station-target','location-target','population-origin','vessel-a')"),
-                        "already supports a nonterminal settlement project");
-                statement.execute("INSERT INTO settlement_project VALUES(" 
+                        "UNIQUE constraint failed");
+                statement.execute("INSERT INTO settlement_project VALUES("
                         + "'project-b','world-1','RECLAMATION','PREPARING','station-origin','station-target',"
                         + "'location-target','population-origin','vessel-b')");
 
-                statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
                         + "'materials-a','project-a','world-1','MATERIALS',5,'station-origin',NULL,NULL,NULL,1,"
                         + "'materials-a','Valid materials')");
-                statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
                         + "'security-a','project-a','world-1','SECURITY',40,'station-target',NULL,NULL,NULL,1,"
                         + "'security-a','Valid security')");
-                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES("
                                 + "'bad-shape','project-a','world-1','MATERIALS',1,NULL,NULL,NULL,NULL,1,"
                                 + "'bad-shape','Missing source')"),
                         "Settlement contribution");
-                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES("
                                 + "'wrong-origin','project-a','world-1','SUPPLIES',1,'station-target',NULL,NULL,NULL,1,"
                                 + "'wrong-origin','Wrong source station')"),
                         "not authorized by its project and physical source");
 
-                statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
                         + "'transport-a','project-a','world-1','TRANSPORT',1,'station-origin',NULL,'vessel-a',NULL,1,"
                         + "'transport-a','Valid transport')");
                 statement.execute("UPDATE settlement_project SET status='COMPLETE' WHERE project_id='project-a'");
-                statement.execute("INSERT INTO settlement_project VALUES(" 
+                statement.execute("INSERT INTO settlement_project VALUES("
                         + "'project-reuse','world-1','EXPANSION','PREPARING','station-origin','station-target',"
                         + "'location-target','population-origin','vessel-a')");
-                statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
                         + "'transport-reuse','project-reuse','world-1','TRANSPORT',1,'station-origin',NULL,'vessel-a',"
                         + "NULL,2,'transport-reuse','Terminal vessel reuse')");
 
-                statement.execute("INSERT INTO settlement_project VALUES(" 
+                statement.execute("INSERT INTO settlement_project VALUES("
                         + "'project-population-a','world-1','EXPANSION','PREPARING','station-origin','station-target',"
                         + "'location-target','population-origin',NULL)");
-                statement.execute("INSERT INTO settlement_project VALUES(" 
+                statement.execute("INSERT INTO settlement_project VALUES("
                         + "'project-population-b','world-1','EXPANSION','PREPARING','station-origin','station-target',"
                         + "'location-target','population-origin',NULL)");
-                statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
                         + "'population-a','project-population-a','world-1','POPULATION',5,'station-origin',"
                         + "'population-origin',NULL,'flow-arrived',3,'population-a','Valid arrived population')");
-                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES("
                                 + "'population-reuse','project-population-b','world-1','POPULATION',5,'station-origin',"
                                 + "'population-origin',NULL,'flow-arrived',4,'population-reuse','Reused flow')"),
                         "Population flow already supports another settlement project");
-                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                reject(() -> statement.execute("INSERT INTO settlement_project_contribution VALUES("
                                 + "'population-wrong-target','project-population-b','world-1','POPULATION',5,"
                                 + "'station-origin','population-origin',NULL,'flow-wrong-target',4,"
                                 + "'population-wrong-target','Wrong destination')"),
                         "not authorized by its project and physical source");
 
-                statement.execute("INSERT INTO settlement_project VALUES(" 
+                statement.execute("INSERT INTO settlement_project VALUES("
                         + "'project-founding','world-1','FOUNDING','PREPARING','station-origin',NULL,"
                         + "'location-frontier','population-origin',NULL)");
-                statement.execute("INSERT INTO settlement_project_contribution VALUES(" 
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
                         + "'population-founding','project-founding','world-1','POPULATION',4,'station-origin',"
                         + "'population-origin',NULL,'flow-founding',5,'population-founding','Valid founders')");
                 require(foreignKeys(connection) == 0,
@@ -125,17 +125,17 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
         statement.execute("INSERT INTO world_location VALUES('location-frontier','world-1')");
         statement.execute("INSERT INTO world_station VALUES('station-origin','world-1','location-origin')");
         statement.execute("INSERT INTO world_station VALUES('station-target','world-1','location-target')");
-        statement.execute("INSERT INTO npc_population_state VALUES(" 
+        statement.execute("INSERT INTO npc_population_state VALUES("
                 + "'population-origin','world-1','station-origin')");
         statement.execute("INSERT INTO npc_vessel VALUES('vessel-a','world-1')");
         statement.execute("INSERT INTO npc_vessel VALUES('vessel-b','world-1')");
-        statement.execute("INSERT INTO population_flow VALUES(" 
+        statement.execute("INSERT INTO population_flow VALUES("
                 + "'flow-arrived','world-1','NPC_POPULATION','ARRIVED',5,'STATION_POPULATION',NULL,"
                 + "'location-target','station-target')");
-        statement.execute("INSERT INTO population_flow VALUES(" 
+        statement.execute("INSERT INTO population_flow VALUES("
                 + "'flow-wrong-target','world-1','NPC_POPULATION','ARRIVED',5,'STATION_POPULATION',NULL,"
                 + "'location-frontier','station-origin')");
-        statement.execute("INSERT INTO population_flow VALUES(" 
+        statement.execute("INSERT INTO population_flow VALUES("
                 + "'flow-founding','world-1','NPC_POPULATION','ARRIVED',4,'FOUNDING_SITE','project-founding',"
                 + "'location-frontier',NULL)");
     }
