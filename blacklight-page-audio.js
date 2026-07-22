@@ -6,10 +6,17 @@
   const pageName = (window.location.pathname.split('/').pop() || 'blacklight-corporate.html').trim();
   const speechSrc = pageName === 'blacklight-personnel.html'
     ? 'assets/blacklight/speech_4.mp3'
-    : pageSpeeches[pageName];
+    : pageName === 'blacklight-corporate-systems.html'
+      ? 'assets/blacklight/Speech_5.mp3'
+      : pageSpeeches[pageName];
   if (!speechSrc) return;
 
-  const shouldAutoplay = pageName === 'blacklight-corporate.html';
+  const autoplayPages = new Set([
+    'blacklight-corporate.html',
+    'blacklight-personnel.html',
+    'blacklight-corporate-systems.html'
+  ]);
+  const shouldAutoplay = autoplayPages.has(pageName);
 
   const labels = {
     'blacklight-corporate.html': {
@@ -22,7 +29,7 @@
       eyebrow: 'Personnel address',
       title: 'Play Blacklight personnel and board speech',
       button: 'Play Personnel Speech',
-      note: 'Manual playback is required by browser audio policy.'
+      note: 'Speech starts automatically when permitted by your browser. Use Play if autoplay is blocked.'
     }
   };
 
@@ -30,7 +37,7 @@
     eyebrow: 'Blacklight audio',
     title: 'Play Blacklight speech',
     button: 'Play Speech',
-    note: 'Manual playback is required by browser audio policy.'
+    note: 'Speech starts automatically when permitted by your browser. Use the audio controls if autoplay is blocked.'
   };
 
   function injectStyles() {
@@ -46,7 +53,24 @@
     document.head.appendChild(style);
   }
 
+  function attemptAutoplay(audio, status = null) {
+    if (!shouldAutoplay || !audio) return;
+    audio.autoplay = true;
+    audio.preload = 'auto';
+    const autoplayAttempt = audio.play();
+    if (autoplayAttempt && typeof autoplayAttempt.catch === 'function') {
+      autoplayAttempt.catch(() => {
+        if (status) status.textContent = 'Autoplay blocked — press Play';
+      });
+    }
+  }
+
   function installPageSpeech() {
+    if (pageName === 'blacklight-corporate-systems.html') {
+      attemptAutoplay(document.querySelector('.systems-address-audio'));
+      return;
+    }
+
     if (pageName === 'blacklight-personnel.html') {
       const obsoleteStandaloneAddress = document.getElementById('address-04');
       obsoleteStandaloneAddress?.remove();
@@ -106,14 +130,7 @@
       status.textContent = 'Audio unavailable';
     });
 
-    if (shouldAutoplay) {
-      const autoplayAttempt = audio.play();
-      if (autoplayAttempt && typeof autoplayAttempt.catch === 'function') {
-        autoplayAttempt.catch(() => {
-          status.textContent = 'Autoplay blocked — press Play';
-        });
-      }
-    }
+    attemptAutoplay(audio, status);
   }
 
   function initialize() {
