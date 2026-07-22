@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-/** Focused deterministic contract for passive schema-029 project progression. */
+/** Focused deterministic contract for passive schema-029 project lifecycle progression. */
 public final class SettlementProjectEngineVerification {
     private SettlementProjectEngineVerification() { }
 
@@ -24,13 +24,27 @@ public final class SettlementProjectEngineVerification {
                             "station-a", "station-a", "location-a", "population-a", "vessel-a",
                             new SettlementProjectTransaction.Requirements(20, 20, 20, 1, 60, 24),
                             10, "Expand Alpha Station through committed work."));
-            SettlementProjectTransaction.prepare(connection, project.projectId(), 11);
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.MATERIALS, 20, "m");
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.SUPPLIES, 20, "s");
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.POPULATION, 20, "p");
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.TRANSPORT, 1, "t");
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.SECURITY, 60, "g");
-            SettlementProjectTransaction.activate(connection, project.projectId(), 12);
+
+            var prepared = SettlementProjectEngine.advance(connection, "world-1", 11);
+            require(prepared.preparedProjects() == 1 && prepared.activatedProjects() == 0
+                            && prepared.advancedProjects() == 0,
+                    "Planned settlement project did not enter preparation alone on its first passive tick.");
+            require(status(connection, project.projectId()).equals("PREPARING")
+                            && progress(connection, project.projectId()) == 0,
+                    "Settlement preparation incorrectly accumulated work or entered another state.");
+
+            var activated = SettlementProjectEngine.advance(connection, "world-1", 12);
+            require(activated.preparedProjects() == 0 && activated.activatedProjects() == 1
+                            && activated.advancedProjects() == 0,
+                    "Fully supported settlement project did not activate alone on its second passive tick.");
+            require(status(connection, project.projectId()).equals("ACTIVE")
+                            && progress(connection, project.projectId()) == 0,
+                    "Settlement activation incorrectly accumulated work or entered another state.");
 
             var first = SettlementProjectEngine.advance(connection, "world-1", 13);
             require(first.advancedProjects() == 1 && first.completedProjects() == 0,
@@ -74,9 +88,10 @@ public final class SettlementProjectEngineVerification {
                     "Expansion did not advance the canonical settlement frontier.");
             require(count(connection, "settlement_project_contribution", "contribution_kind='WORK'") == 4,
                     "Passive settlement work evidence count is incorrect.");
-            require(count(connection, "settlement_project_transition", "to_status='BLOCKED'") == 1
+            require(count(connection, "settlement_project_transition", "to_status='PREPARING'") == 1
+                            && count(connection, "settlement_project_transition", "to_status='BLOCKED'") == 1
                             && count(connection, "settlement_project_transition", "to_status='ACTIVE'") == 2,
-                    "Settlement security transition evidence is incomplete.");
+                    "Settlement lifecycle transition evidence is incomplete.");
         }
     }
 
@@ -88,7 +103,7 @@ public final class SettlementProjectEngineVerification {
                         "station-a", kind == SettlementProjectTransaction.ContributionKind.POPULATION
                                 ? "population-a" : null,
                         kind == SettlementProjectTransaction.ContributionKind.TRANSPORT ? "vessel-a" : null,
-                        null, 12, evidence, "Committed " + kind + "."));
+                        null, 10, evidence, "Committed " + kind + "."));
     }
 
     private static void createPrerequisites(Statement statement) throws Exception {
@@ -153,6 +168,6 @@ public final class SettlementProjectEngineVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Deterministic settlement project progression, blocking, resumption, completion, and canonical expansion contracts passed.");
+        System.out.println("Deterministic settlement preparation, activation, progression, blocking, resumption, completion, and canonical expansion contracts passed.");
     }
 }
