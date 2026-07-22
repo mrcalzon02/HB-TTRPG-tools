@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-/** Focused deterministic contract for passive schema-029 project lifecycle progression. */
+/** Focused deterministic contract for passive schema-032-hardened project lifecycle progression. */
 public final class SettlementProjectEngineVerification {
     private SettlementProjectEngineVerification() { }
 
@@ -16,6 +16,7 @@ public final class SettlementProjectEngineVerification {
                 statement.execute("PRAGMA foreign_keys=ON");
                 createPrerequisites(statement);
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
+                for (String sql : SettlementPhysicalSupportHardeningSchema.statements()) statement.execute(sql);
             }
 
             var project = SettlementProjectTransaction.plan(connection,
@@ -24,6 +25,7 @@ public final class SettlementProjectEngineVerification {
                             "station-a", "station-a", "location-a", "population-a", "vessel-a",
                             new SettlementProjectTransaction.Requirements(20, 20, 20, 1, 60, 24),
                             10, "Expand Alpha Station through committed work."));
+            insertArrivedPopulationFlow(connection);
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.MATERIALS, 20, "m");
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.SUPPLIES, 20, "s");
             contribute(connection, project.projectId(), SettlementProjectTransaction.ContributionKind.POPULATION, 20, "p");
@@ -95,6 +97,14 @@ public final class SettlementProjectEngineVerification {
         }
     }
 
+    private static void insertArrivedPopulationFlow(Connection connection) throws Exception {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("INSERT INTO population_flow VALUES("
+                    + "'flow-engine','world-1','NPC_POPULATION','ARRIVED',20,'STATION_POPULATION',NULL,"
+                    + "'location-a','station-a')");
+        }
+    }
+
     private static void contribute(Connection connection, String projectId,
                                    SettlementProjectTransaction.ContributionKind kind,
                                    int quantity, String evidence) throws Exception {
@@ -103,7 +113,8 @@ public final class SettlementProjectEngineVerification {
                         "station-a", kind == SettlementProjectTransaction.ContributionKind.POPULATION
                                 ? "population-a" : null,
                         kind == SettlementProjectTransaction.ContributionKind.TRANSPORT ? "vessel-a" : null,
-                        null, 10, evidence, "Committed " + kind + "."));
+                        kind == SettlementProjectTransaction.ContributionKind.POPULATION ? "flow-engine" : null,
+                        10, evidence, "Committed " + kind + "."));
     }
 
     private static void createPrerequisites(Statement statement) throws Exception {
@@ -112,7 +123,10 @@ public final class SettlementProjectEngineVerification {
         statement.execute("CREATE TABLE world_station(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,location_id TEXT NOT NULL,display_name TEXT NOT NULL,has_economy INTEGER NOT NULL DEFAULT 1)");
         statement.execute("CREATE TABLE npc_population_state(population_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,station_id TEXT NOT NULL,civilians INTEGER NOT NULL,industrial_workers INTEGER NOT NULL,logistics_workers INTEGER NOT NULL,security_personnel INTEGER NOT NULL,medical_personnel INTEGER NOT NULL,scientific_personnel INTEGER NOT NULL,temporary_residents INTEGER NOT NULL,refugees INTEGER NOT NULL,housing_capacity INTEGER NOT NULL,life_support_capacity INTEGER NOT NULL,employment_capacity INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE npc_vessel(npc_vessel_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,display_name TEXT NOT NULL)");
-        statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL)");
+        statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
+                + "entity_type TEXT NOT NULL,status TEXT NOT NULL,arrived_quantity INTEGER NOT NULL,"
+                + "destination_mode TEXT NOT NULL,settlement_project_id TEXT,destination_location_id TEXT,"
+                + "destination_station_id TEXT)");
         statement.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,reason_family TEXT NOT NULL)");
         statement.execute("CREATE TABLE station_simulation_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,security INTEGER NOT NULL,industry INTEGER NOT NULL,integrity INTEGER NOT NULL,supplies INTEGER NOT NULL,status TEXT NOT NULL,last_tick INTEGER NOT NULL)");
         statement.execute("CREATE TABLE station_civilization_state(station_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,civilization_strength INTEGER NOT NULL,frontier_position INTEGER NOT NULL,frontier_state TEXT NOT NULL,population_index INTEGER NOT NULL,last_tick INTEGER NOT NULL)");
@@ -168,6 +182,6 @@ public final class SettlementProjectEngineVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Deterministic settlement preparation, activation, progression, blocking, resumption, completion, and canonical expansion contracts passed.");
+        System.out.println("Schema-032-hardened deterministic settlement preparation, activation, progression, blocking, resumption, completion, and canonical expansion contracts passed.");
     }
 }
