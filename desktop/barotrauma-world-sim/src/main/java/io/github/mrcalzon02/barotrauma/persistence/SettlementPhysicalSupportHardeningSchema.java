@@ -8,37 +8,13 @@ public final class SettlementPhysicalSupportHardeningSchema {
 
     public static List<String> statements() {
         return List.of(
+                "CREATE UNIQUE INDEX settlement_one_nonterminal_vessel_project ON "
+                        + "settlement_project(assigned_npc_vessel_id) WHERE assigned_npc_vessel_id IS NOT NULL "
+                        + "AND status IN ('PLANNED','PREPARING','ACTIVE','BLOCKED')",
                 "CREATE INDEX settlement_contribution_vessel_source_index ON "
                         + "settlement_project_contribution(source_npc_vessel_id,contribution_kind,project_id)",
                 "CREATE INDEX settlement_contribution_flow_source_index ON "
                         + "settlement_project_contribution(related_flow_id,contribution_kind,project_id)",
-                """
-                CREATE TRIGGER settlement_project_assigned_vessel_insert_guard
-                BEFORE INSERT ON settlement_project
-                WHEN NEW.assigned_npc_vessel_id IS NOT NULL
-                  AND NEW.status IN ('PLANNED','PREPARING','ACTIVE','BLOCKED')
-                  AND EXISTS (
-                      SELECT 1 FROM settlement_project p
-                      WHERE p.assigned_npc_vessel_id=NEW.assigned_npc_vessel_id
-                        AND p.status IN ('PLANNED','PREPARING','ACTIVE','BLOCKED'))
-                BEGIN
-                    SELECT RAISE(ABORT,'NPC vessel already supports a nonterminal settlement project.');
-                END
-                """,
-                """
-                CREATE TRIGGER settlement_project_assigned_vessel_update_guard
-                BEFORE UPDATE OF assigned_npc_vessel_id,status ON settlement_project
-                WHEN NEW.assigned_npc_vessel_id IS NOT NULL
-                  AND NEW.status IN ('PLANNED','PREPARING','ACTIVE','BLOCKED')
-                  AND EXISTS (
-                      SELECT 1 FROM settlement_project p
-                      WHERE p.project_id<>NEW.project_id
-                        AND p.assigned_npc_vessel_id=NEW.assigned_npc_vessel_id
-                        AND p.status IN ('PLANNED','PREPARING','ACTIVE','BLOCKED'))
-                BEGIN
-                    SELECT RAISE(ABORT,'NPC vessel already supports a nonterminal settlement project.');
-                END
-                """,
                 """
                 CREATE TRIGGER settlement_contribution_source_shape_guard
                 BEFORE INSERT ON settlement_project_contribution
@@ -113,22 +89,6 @@ public final class SettlementPhysicalSupportHardeningSchema {
                         AND c.project_id<>NEW.project_id)
                 BEGIN
                     SELECT RAISE(ABORT,'Population flow already supports another settlement project.');
-                END
-                """,
-                """
-                CREATE TRIGGER settlement_contribution_active_vessel_guard
-                BEFORE INSERT ON settlement_project_contribution
-                WHEN NEW.contribution_kind='TRANSPORT'
-                  AND EXISTS (
-                      SELECT 1
-                      FROM settlement_project_contribution c
-                      JOIN settlement_project p ON p.project_id=c.project_id
-                      WHERE c.contribution_kind='TRANSPORT'
-                        AND c.source_npc_vessel_id=NEW.source_npc_vessel_id
-                        AND c.project_id<>NEW.project_id
-                        AND p.status IN ('PLANNED','PREPARING','ACTIVE','BLOCKED'))
-                BEGIN
-                    SELECT RAISE(ABORT,'NPC vessel already contributes to a nonterminal settlement project.');
                 END
                 """
         );
