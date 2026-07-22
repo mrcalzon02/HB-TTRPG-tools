@@ -13,6 +13,7 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
     public static void verifyContract() throws Exception {
         Class.forName("org.sqlite.JDBC");
         verifyInstalledGuards();
+        verifyCompletedWorkMigration();
         verifyMigrationRejection("invalid_source_shapes=0", statement -> {
             statement.execute("INSERT INTO settlement_project VALUES("
                     + "'invalid-shape-project','world-1','EXPANSION','ACTIVE','station-origin','station-target',"
@@ -141,6 +142,35 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
         }
     }
 
+    private static void verifyCompletedWorkMigration() throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite::memory:")) {
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("PRAGMA foreign_keys=ON");
+                statement.execute("CREATE TABLE schema_migration(version INTEGER PRIMARY KEY,applied_at TEXT NOT NULL)");
+                statement.execute("INSERT INTO schema_migration VALUES(31,'2026-07-21T00:00:00Z')");
+                prerequisites(statement);
+                statement.execute("INSERT INTO settlement_project VALUES("
+                        + "'completed-a','world-1','EXPANSION','COMPLETE','station-origin','station-target',"
+                        + "'location-target','population-origin','vessel-a')");
+                statement.execute("INSERT INTO settlement_project VALUES("
+                        + "'completed-b','world-1','RECLAMATION','FAILED','station-origin','station-target',"
+                        + "'location-target','population-origin','vessel-a')");
+                statement.execute("INSERT INTO settlement_project_contribution VALUES("
+                        + "'completed-work','completed-a','world-1','WORK',5,NULL,NULL,NULL,NULL,20,"
+                        + "'completed-work','Historical completed work')");
+            }
+            WorldDatabaseMigrations.applyMigration(connection, 32,
+                    SettlementPhysicalSupportHardeningSchema.statements(), false);
+            require(WorldDatabaseMigrations.currentVersion(connection) == 32,
+                    "Valid completed settlement history did not migrate to schema 032.");
+            require(object(connection, "index", "settlement_one_nonterminal_vessel_project")
+                            && object(connection, "trigger", "settlement_contribution_project_authority_guard"),
+                    "Successful schema-032 migration did not install its guards.");
+            require(!temporaryObject(connection, "settlement_physical_support_migration_validation"),
+                    "Successful schema-032 migration retained its temporary validation table.");
+        }
+    }
+
     private static void verifyMigrationRejection(String expected, Fixture fixture) throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite::memory:")) {
             try (Statement statement = connection.createStatement()) {
@@ -251,6 +281,6 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Schema-032 physical support ownership, migration validation, and rollback contracts passed.");
+        System.out.println("Schema-032 physical support ownership, migration compatibility, validation, and rollback contracts passed.");
     }
 }
