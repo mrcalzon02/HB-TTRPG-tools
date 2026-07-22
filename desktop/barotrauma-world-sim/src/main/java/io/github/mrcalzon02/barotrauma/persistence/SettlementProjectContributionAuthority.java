@@ -60,6 +60,7 @@ final class SettlementProjectContributionAuthority {
     static SettlementProjectTransaction.ProjectResult commitTransport(
             Connection connection, String projectId, String vesselId, long tick, String evidenceKey)
             throws SQLException {
+        requireTransaction(connection);
         Project project = project(connection, projectId);
         if (project.assignedVesselId() == null || !project.assignedVesselId().equals(vesselId)) {
             throw new SQLException("Settlement transport must use the project-assigned NPC vessel.");
@@ -86,6 +87,7 @@ final class SettlementProjectContributionAuthority {
     static SettlementProjectTransaction.ProjectResult commitArrivedPopulation(
             Connection connection, String projectId, String flowId, int quantity, long tick, String evidenceKey)
             throws SQLException {
+        requireTransaction(connection);
         Project project = project(connection, projectId);
         String sql;
         if (project.projectKind().equals("FOUNDING")) {
@@ -127,7 +129,7 @@ final class SettlementProjectContributionAuthority {
 
     private static void requireTransaction(Connection connection) throws SQLException {
         if (connection.getAutoCommit()) {
-            throw new SQLException("Physical settlement inventory commitments require an active transaction.");
+            throw new SQLException("Physical settlement support requires an active transaction.");
         }
     }
 
