@@ -12,25 +12,7 @@
   });
   const DEFAULT_VOLUME = 0.75;
   const SAVE_INTERVAL_MS = 1000;
-  const scriptUrl = document.currentScript?.src || new URL('blacklight-background-audio.js', window.location.href).href;
-  const TRACK_CHUNK_COUNT = 17;
-  const trackChunkUrls = Array.from({ length: TRACK_CHUNK_COUNT }, (_, index) =>
-    new URL(`assets/blacklight/starry-cereal/chunk-${String(index).padStart(2, '0')}.b64`, scriptUrl).href
-  );
-  let trackObjectUrl = '';
-
-  async function loadTrackUrl() {
-    if (trackObjectUrl) return trackObjectUrl;
-    const responses = await Promise.all(trackChunkUrls.map(url => fetch(url, { cache: 'force-cache' })));
-    const failed = responses.find(response => !response.ok);
-    if (failed) throw new Error(`Background track chunk unavailable: ${failed.status}`);
-    const base64 = (await Promise.all(responses.map(response => response.text()))).join('').replace(/\s+/g, '');
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let offset = 0; offset < binary.length; offset += 1) bytes[offset] = binary.charCodeAt(offset);
-    trackObjectUrl = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
-    return trackObjectUrl;
-  }
+  const trackUrl = 'https://cdn1.suno.ai/f02fe8ca-e7ea-4608-95c0-1c7d795637b1.mp3';
 
   function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, value));
@@ -214,18 +196,10 @@
       bar.dataset.blocked = 'true';
     });
 
+    audio.src = trackUrl;
     document.body.append(audio, bar);
-
-    void loadTrackUrl().then(url => {
-      audio.src = url;
-      audio.load();
-    }).catch(() => {
-      status.textContent = 'Background track unavailable';
-      bar.dataset.blocked = 'true';
-    });
     window.addEventListener('pagehide', () => saveState(true));
     window.addEventListener('beforeunload', () => saveState(true));
-    window.addEventListener('unload', () => { if (trackObjectUrl) URL.revokeObjectURL(trackObjectUrl); }, { once: true });
 
     const resumeOnInteraction = () => {
       if (!userPaused && audio.paused) void requestPlayback();
