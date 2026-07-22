@@ -216,7 +216,7 @@ public final class WorldStorageContracts {
     }
 
     private static void requireChild(Path root, Path child) throws IOException {
-        if (!child.startsWith(root)) throw new IOException("Resolved world path escapes the configured root: " + child);
+        if (!child.startsWith(root)) throw new IOException("Resolved world path escapes the configured root.");
     }
 
     private static String metadata(String displayName, UUID worldId) {
