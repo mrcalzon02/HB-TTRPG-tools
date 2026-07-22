@@ -6,6 +6,36 @@
   const RECORD_KEY = 'hb-ttrpg-tools-blacklight-veteran-reorientation-record-v1';
   const SHEET_KEY = 'hb-ttrpg-tools-blacklight-basic-character-v1';
 
+  const STAGE_ILLUSTRATION_BASE = 'assets/blacklight/veteran-scenes/blacklight_reorientation_generated_images/';
+  const STAGE_ILLUSTRATIONS = Object.freeze({
+    'returning-operative': `${STAGE_ILLUSTRATION_BASE}surveillance_in_a_neon_lit_room.png`,
+    'accelerating-missions': `${STAGE_ILLUSTRATION_BASE}urban_espionage_at_nightfall.png`,
+    'warehouse-convergence': `${STAGE_ILLUSTRATION_BASE}unusual_gathering_in_a_dim_industrial_hall.png`,
+    'charles-embodied': `${STAGE_ILLUSTRATION_BASE}metallic_figure_in_a_shadowed_assembly.png`,
+    'containment-cube': `${STAGE_ILLUSTRATION_BASE}floating_refuge_in_a_stormy_city.png`,
+    'leaving-earth': `${STAGE_ILLUSTRATION_BASE}watching_the_world_from_afar.png`,
+    'lunar-convocation': `${STAGE_ILLUSTRATION_BASE}ceremonial_gathering_under_cosmic_sky.png`,
+    'look-repentant': `${STAGE_ILLUSTRATION_BASE}a_solemn_assembly_in_golden_light.png`,
+    'five-blocs': `${STAGE_ILLUSTRATION_BASE}grand_council_in_a_luminous_arena.png`,
+    'charges-against-charles': `${STAGE_ILLUSTRATION_BASE}ceremonial_tribunal_in_a_cosmic_hall.png`,
+    'return-and-silence': `${STAGE_ILLUSTRATION_BASE}refugees_in_the_industrial_shelter.png`,
+    'interim-days': `${STAGE_ILLUSTRATION_BASE}a_bustling_aid_hub_in_a_warehouse.png`,
+    'company-introduction': `${STAGE_ILLUSTRATION_BASE}industrial_administration_hall_in_dystopian_future.png`,
+    'company-status': `${STAGE_ILLUSTRATION_BASE}strategic_briefing_in_industrial_warehouse.png`,
+    'chain-of-command': `${STAGE_ILLUSTRATION_BASE}tactical_briefing_in_an_industrial_war_room.png`,
+    'mission-consent': `${STAGE_ILLUSTRATION_BASE}tense_strategy_briefing_in_a_glowing_war_room.png`,
+    'information-rights': `${STAGE_ILLUSTRATION_BASE}high_security_debrief_in_dim_archives.png`,
+    'personhood-property': `${STAGE_ILLUSTRATION_BASE}futuristic_briefing_room_under_dim_lights.png`,
+    'support-obligations': `${STAGE_ILLUSTRATION_BASE}humanitarian_aid_and_ethereal_presence.png`,
+    'confidentiality-accountability': `${STAGE_ILLUSTRATION_BASE}industrial_tribunal_in_a_dim_chamber.png`,
+    'watcher-oversight': `${STAGE_ILLUSTRATION_BASE}futuristic_tribunal_in_a_high_tech_chamber.png`,
+    'continuity-conversion': `${STAGE_ILLUSTRATION_BASE}dim_lit_industrial_command_center_meeting.png`,
+    'charles-reckoning': `${STAGE_ILLUSTRATION_BASE}relief_hub_in_industrial_command_center.png`,
+    'new-arrangement': `${STAGE_ILLUSTRATION_BASE}squad_briefing_in_a_futuristic_hangar.png`
+  });
+  const FINAL_SPEECH_AUDIO = 'assets/blacklight/The_speech.mp3';
+  const FINAL_SPEECH_ICON = 'assets/blacklight/sliced_web_asset_icons_25/05_02_speech_bubble.png';
+
   const state = {
     source: null,
     entries: [],
@@ -15,6 +45,8 @@
   };
 
   const ui = {};
+
+  let finalSpeechAutoplayAttempted = false;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -307,6 +339,54 @@
     </section>`;
   }
 
+  function renderStageMedia(entry) {
+    const src = STAGE_ILLUSTRATIONS[entry.id];
+    const stageLabel = String(entry.title || entry.id).replace(/^Reorientation\s+[^:]+:\s*/i, '');
+    const illustration = src ? `<figure class="veteran-scene-figure" data-veteran-stage-illustration="${escapeHtml(entry.id)}"><img class="veteran-scene-image" src="${escapeHtml(src)}" alt="BlackLight veteran reorientation illustration for ${escapeHtml(stageLabel)}" loading="lazy" decoding="async"></figure>` : '';
+    const speech = entry.id === 'new-arrangement' ? `<section class="veteran-speech-panel no-print" data-veteran-final-speech="true"><button class="veteran-speech-button" type="button" data-veteran-speech-toggle aria-label="Play or pause the final reorientation speech"><img src="${escapeHtml(FINAL_SPEECH_ICON)}" alt="" loading="lazy" decoding="async"><span>Play Speech</span></button><div class="veteran-speech-copy"><strong>Final Reorientation Speech</strong><small>The speech attempts to begin when this final screen opens. Browser autoplay rules may require a click; the full player remains available.</small><audio src="${escapeHtml(FINAL_SPEECH_AUDIO)}" controls preload="metadata"></audio></div></section>` : '';
+    return illustration + speech;
+  }
+
+  function syncSpeechButton(panel) {
+    const audio = panel?.querySelector('audio');
+    const label = panel?.querySelector('[data-veteran-speech-toggle] span');
+    if (!audio || !label) return;
+    label.textContent = audio.paused ? (audio.currentTime > 0 && !audio.ended ? 'Resume Speech' : 'Play Speech') : 'Pause Speech';
+  }
+
+  function attachStageMediaListeners() {
+    const figure = ui.entry.querySelector('[data-veteran-stage-illustration]');
+    const image = figure?.querySelector('img');
+    image?.addEventListener('error', () => {
+      figure.innerHTML = `<div class="veteran-scene-fallback">Scene illustration missing: ${escapeHtml(image.getAttribute('src') || '')}</div>`;
+    }, { once: true });
+
+    const panel = ui.entry.querySelector('[data-veteran-final-speech]');
+    const audio = panel?.querySelector('audio');
+    const button = panel?.querySelector('[data-veteran-speech-toggle]');
+    if (!panel || !audio || !button) return;
+    const update = () => syncSpeechButton(panel);
+    audio.addEventListener('play', update);
+    audio.addEventListener('pause', update);
+    audio.addEventListener('ended', update);
+    button.addEventListener('click', () => {
+      if (audio.paused) {
+        if (audio.ended) audio.currentTime = 0;
+        const request = audio.play();
+        if (request?.catch) request.catch(update);
+      } else {
+        audio.pause();
+      }
+      update();
+    });
+    if (!finalSpeechAutoplayAttempted) {
+      finalSpeechAutoplayAttempted = true;
+      const request = audio.play();
+      if (request?.catch) request.catch(update);
+    }
+    update();
+  }
+
   function renderErrors() {
     if (!state.errors.length) return '';
     return `<section class="veteran-errors"><strong>Complete the required continuity fields before continuing.</strong><ul>${state.errors.map(error => `<li>${escapeHtml(error)}</li>`).join('')}</ul></section>`;
@@ -354,6 +434,7 @@
       ${(entry.body || []).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}
       ${renderOrientationExpansion(entry.orientationExpansion)}
       ${renderTables(entry.tables)}
+      ${renderStageMedia(entry)}
       <section class="veteran-builder">
         <header class="veteran-builder-heading"><p class="veteran-meta">Returning operative record</p><h2>Select What Remains True</h2><p>Use the bubbles to record emotions, judgments, boundaries, loyalties, roles, and preferences. Select several whenever the character holds conflicting or overlapping positions. Charles records one response per field; changing the selection replaces that response rather than creating a duplicate.</p></header>
         ${renderErrors()}
@@ -363,6 +444,7 @@
       ${renderFinal()}`;
 
     attachEntryListeners(entry);
+    attachStageMediaListeners();
     ui.previous.disabled = index === 0;
     ui.next.disabled = index === state.entries.length - 1;
     ui.next.textContent = index === state.entries.length - 2 ? 'Save and Open Final Arrangement' : 'Save and Continue';
