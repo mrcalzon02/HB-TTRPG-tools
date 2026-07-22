@@ -12,6 +12,48 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
 
     public static void verifyContract() throws Exception {
         Class.forName("org.sqlite.JDBC");
+        verifyInstalledGuards();
+        verifyMigrationRejection("invalid_source_shapes=0", statement -> {
+            statement.execute("INSERT INTO settlement_project VALUES("
+                    + "'invalid-shape-project','world-1','EXPANSION','ACTIVE','station-origin','station-target',"
+                    + "'location-target','population-origin','vessel-a')");
+            statement.execute("INSERT INTO settlement_project_contribution VALUES("
+                    + "'invalid-shape','invalid-shape-project','world-1','MATERIALS',1,NULL,NULL,NULL,NULL,1,"
+                    + "'invalid-shape','Missing physical source')");
+        });
+        verifyMigrationRejection("unauthorized_sources=0", statement -> {
+            statement.execute("INSERT INTO settlement_project VALUES("
+                    + "'unauthorized-project','world-1','EXPANSION','ACTIVE','station-origin','station-target',"
+                    + "'location-target','population-origin','vessel-a')");
+            statement.execute("INSERT INTO settlement_project_contribution VALUES("
+                    + "'unauthorized-source','unauthorized-project','world-1','MATERIALS',1,'station-target',"
+                    + "NULL,NULL,NULL,1,'unauthorized-source','Wrong source station')");
+        });
+        verifyMigrationRejection("reused_population_flows=0", statement -> {
+            statement.execute("INSERT INTO settlement_project VALUES("
+                    + "'flow-project-a','world-1','EXPANSION','ACTIVE','station-origin','station-target',"
+                    + "'location-target','population-origin',NULL)");
+            statement.execute("INSERT INTO settlement_project VALUES("
+                    + "'flow-project-b','world-1','EXPANSION','ACTIVE','station-origin','station-target',"
+                    + "'location-target','population-origin',NULL)");
+            statement.execute("INSERT INTO settlement_project_contribution VALUES("
+                    + "'flow-contribution-a','flow-project-a','world-1','POPULATION',5,'station-origin',"
+                    + "'population-origin',NULL,'flow-arrived',1,'flow-contribution-a','First flow use')");
+            statement.execute("INSERT INTO settlement_project_contribution VALUES("
+                    + "'flow-contribution-b','flow-project-b','world-1','POPULATION',5,'station-origin',"
+                    + "'population-origin',NULL,'flow-arrived',1,'flow-contribution-b','Second flow use')");
+        });
+        verifyMigrationRejection("reused_nonterminal_vessels=0", statement -> {
+            statement.execute("INSERT INTO settlement_project VALUES("
+                    + "'vessel-project-a','world-1','EXPANSION','ACTIVE','station-origin','station-target',"
+                    + "'location-target','population-origin','vessel-a')");
+            statement.execute("INSERT INTO settlement_project VALUES("
+                    + "'vessel-project-b','world-1','RECLAMATION','PLANNED','station-origin','station-target',"
+                    + "'location-target','population-origin','vessel-a')");
+        });
+    }
+
+    private static void verifyInstalledGuards() throws Exception {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite::memory:")) {
             try (Statement statement = connection.createStatement()) {
                 statement.execute("PRAGMA foreign_keys=ON");
@@ -99,6 +141,27 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
         }
     }
 
+    private static void verifyMigrationRejection(String expected, Fixture fixture) throws Exception {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite::memory:")) {
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("PRAGMA foreign_keys=ON");
+                statement.execute("CREATE TABLE schema_migration(version INTEGER PRIMARY KEY,applied_at TEXT NOT NULL)");
+                statement.execute("INSERT INTO schema_migration VALUES(31,'2026-07-21T00:00:00Z')");
+                prerequisites(statement);
+                fixture.seed(statement);
+            }
+            reject(() -> WorldDatabaseMigrations.applyMigration(connection, 32,
+                    SettlementPhysicalSupportHardeningSchema.statements(), false), expected);
+            require(WorldDatabaseMigrations.currentVersion(connection) == 31,
+                    "Rejected schema-032 migration advanced the durable schema version.");
+            require(!object(connection, "index", "settlement_one_nonterminal_vessel_project")
+                            && !object(connection, "trigger", "settlement_contribution_source_shape_guard"),
+                    "Rejected schema-032 migration retained durable objects.");
+            require(!temporaryObject(connection, "settlement_physical_support_migration_validation"),
+                    "Rejected schema-032 migration retained its temporary validation table.");
+        }
+    }
+
     private static void prerequisites(Statement statement) throws SQLException {
         statement.execute("CREATE TABLE world_metadata(world_id TEXT PRIMARY KEY)");
         statement.execute("CREATE TABLE world_location(location_id TEXT PRIMARY KEY,world_id TEXT NOT NULL)");
@@ -149,6 +212,14 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
         }
     }
 
+    private static boolean temporaryObject(Connection connection, String name) throws SQLException {
+        try (var statement = connection.prepareStatement(
+                "SELECT 1 FROM sqlite_temp_master WHERE name=?")) {
+            statement.setString(1, name);
+            try (ResultSet result = statement.executeQuery()) { return result.next(); }
+        }
+    }
+
     private static long foreignKeys(Connection connection) throws SQLException {
         long count = 0;
         try (Statement statement = connection.createStatement();
@@ -175,8 +246,11 @@ public final class SettlementPhysicalSupportHardeningSchemaVerification {
     @FunctionalInterface
     private interface SqlWork { void run() throws Exception; }
 
+    @FunctionalInterface
+    private interface Fixture { void seed(Statement statement) throws Exception; }
+
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Schema-032 physical support ownership and reuse contracts passed.");
+        System.out.println("Schema-032 physical support ownership, migration validation, and rollback contracts passed.");
     }
 }
