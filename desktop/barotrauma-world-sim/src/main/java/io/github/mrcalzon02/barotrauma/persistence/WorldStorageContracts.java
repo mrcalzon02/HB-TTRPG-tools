@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 31;
+    public static final int DATABASE_SCHEMA_VERSION = 32;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -197,6 +197,7 @@ public final class WorldStorageContracts {
     public static List<String> schema029Statements() { return SettlementLifecycleSchema.statements(); }
     public static List<String> schema030Statements() { return SettlementFoundingMigrationSchema.statements(); }
     public static List<String> schema031Statements() { return SettlementContributionDispositionSchema.statements(); }
+    public static List<String> schema032Statements() { return SettlementPhysicalSupportHardeningSchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
@@ -215,7 +216,7 @@ public final class WorldStorageContracts {
     }
 
     private static void requireChild(Path root, Path child) throws IOException {
-        if (!child.startsWith(root)) throw new IOException("Resolved world path escapes the configured root.");
+        if (!child.startsWith(root)) throw new IOException("Resolved world path escapes the configured root: " + child);
     }
 
     private static String metadata(String displayName, UUID worldId) {
