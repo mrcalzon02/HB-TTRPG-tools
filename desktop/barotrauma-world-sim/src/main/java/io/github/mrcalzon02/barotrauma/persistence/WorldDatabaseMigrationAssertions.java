@@ -90,16 +90,14 @@ final class WorldDatabaseMigrationAssertions {
                         && objectExists(connection, "trigger", "settlement_contribution_disposition_immutable_update")
                         && objectExists(connection, "trigger", "settlement_contribution_disposition_immutable_delete"),
                 prefix + " is missing schema-031 disposition completeness or immutability guards.");
-        require(objectExists(connection, "index", "settlement_contribution_vessel_source_index")
+        require(objectExists(connection, "index", "settlement_one_nonterminal_vessel_project")
+                        && objectExists(connection, "index", "settlement_contribution_vessel_source_index")
                         && objectExists(connection, "index", "settlement_contribution_flow_source_index"),
-                prefix + " is missing schema-032 physical support source indexes.");
-        require(objectExists(connection, "trigger", "settlement_project_assigned_vessel_insert_guard")
-                        && objectExists(connection, "trigger", "settlement_project_assigned_vessel_update_guard")
-                        && objectExists(connection, "trigger", "settlement_contribution_source_shape_guard")
+                prefix + " is missing schema-032 physical support ownership or source indexes.");
+        require(objectExists(connection, "trigger", "settlement_contribution_source_shape_guard")
                         && objectExists(connection, "trigger", "settlement_contribution_project_authority_guard")
-                        && objectExists(connection, "trigger", "settlement_contribution_population_flow_single_use")
-                        && objectExists(connection, "trigger", "settlement_contribution_active_vessel_guard"),
-                prefix + " is missing schema-032 physical support ownership or reuse guards.");
+                        && objectExists(connection, "trigger", "settlement_contribution_population_flow_single_use"),
+                prefix + " is missing schema-032 physical support source or reuse guards.");
     }
 
     static long migrationVersionCount(Connection connection, int first, int last) throws SQLException {
