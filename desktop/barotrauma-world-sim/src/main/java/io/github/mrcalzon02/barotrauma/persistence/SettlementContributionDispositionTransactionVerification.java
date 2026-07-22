@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Focused physical-return, terminal-guard, outcome-validation, and rollback contract for schema 031. */
+/** Focused physical-return, terminal-guard, outcome-validation, and rollback contract under schema 032. */
 public final class SettlementContributionDispositionTransactionVerification {
     private SettlementContributionDispositionTransactionVerification() { }
 
@@ -20,6 +20,7 @@ public final class SettlementContributionDispositionTransactionVerification {
                 prerequisites(statement);
                 for (String sql : SettlementLifecycleSchema.statements()) statement.execute(sql);
                 for (String sql : SettlementContributionDispositionSchema.statements()) statement.execute(sql);
+                for (String sql : SettlementPhysicalSupportHardeningSchema.statements()) statement.execute(sql);
             }
             reject(() -> SettlementContributionDispositionTransaction.terminate(connection,
                             new SettlementContributionDispositionTransaction.TerminationRequest(
@@ -187,7 +188,8 @@ public final class SettlementContributionDispositionTransactionVerification {
         statement.execute("CREATE TABLE population_flow(flow_id TEXT PRIMARY KEY,world_id TEXT NOT NULL,"
                 + "entity_type TEXT NOT NULL,status TEXT,destination_mode TEXT,destination_station_id TEXT,"
                 + "arrived_quantity INTEGER NOT NULL DEFAULT 0,returned_quantity INTEGER NOT NULL DEFAULT 0,"
-                + "stranded_quantity INTEGER NOT NULL DEFAULT 0,losses INTEGER NOT NULL DEFAULT 0)");
+                + "stranded_quantity INTEGER NOT NULL DEFAULT 0,losses INTEGER NOT NULL DEFAULT 0,"
+                + "settlement_project_id TEXT,destination_location_id TEXT)");
         statement.execute("CREATE TABLE station_change_reason(reason_code TEXT PRIMARY KEY,display_name TEXT NOT NULL,"
                 + "reason_family TEXT NOT NULL)");
         statement.execute("CREATE TABLE station_inventory(station_id TEXT NOT NULL,item_id TEXT NOT NULL,"
@@ -203,7 +205,7 @@ public final class SettlementContributionDispositionTransactionVerification {
         statement.execute("INSERT INTO npc_vessel VALUES('vessel-a','world-1','Builder','station-a','location-a',"
                 + "'DOCKED',NULL)");
         statement.execute("INSERT INTO population_flow VALUES('flow-b','world-1','NPC_POPULATION','ARRIVED',"
-                + "'STATION_POPULATION','station-b',4,0,0,0)");
+                + "'STATION_POPULATION','station-b',4,0,0,0,NULL,'location-b')");
         statement.execute("INSERT INTO station_inventory VALUES('station-a','item-steel',20,0,0)");
         statement.execute("INSERT INTO station_inventory VALUES('station-a','item-rations',20,0,0)");
     }
@@ -281,6 +283,6 @@ public final class SettlementContributionDispositionTransactionVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Physical settlement contribution disposition and rollback contracts passed.");
+        System.out.println("Schema-032 physical settlement contribution disposition and rollback contracts passed.");
     }
 }
