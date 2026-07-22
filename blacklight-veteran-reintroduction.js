@@ -105,23 +105,6 @@
     return (prompt.options || []).find(option => optionValue(option) === value) || null;
   }
 
-  function applyEnhancements(source) {
-    const enhancements = globalThis.BLACKLIGHT_VETERAN_REORIENTATION_ENHANCEMENTS;
-    if (!enhancements || typeof enhancements !== 'object') return source;
-    source.interactionSchemaVersion = enhancements.schemaVersion || '2.0.0';
-    source.preservedTextPromptIds = Array.isArray(enhancements.preservedTextPromptIds) ? enhancements.preservedTextPromptIds : [];
-    const promptOverrides = enhancements.promptOverrides || {};
-    const stageExpansions = enhancements.stageExpansions || {};
-    for (const entry of source.entries || []) {
-      if (stageExpansions[entry.id]) entry.orientationExpansion = stageExpansions[entry.id];
-      for (const prompt of entry.prompts || []) {
-        const override = promptOverrides[prompt.id];
-        if (override) Object.assign(prompt, override);
-      }
-    }
-    return source;
-  }
-
   function migrateLegacyAnswers() {
     const preserved = new Set(state.source?.preservedTextPromptIds || []);
     for (const entry of state.entries) {
@@ -605,7 +588,7 @@
     try {
       const response = await fetch(DATA_URL, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Reorientation request failed with status ${response.status}.`);
-      state.source = applyEnhancements(await response.json());
+      state.source = await response.json();
       state.entries = Array.isArray(state.source.entries) ? state.source.entries : [];
       if (!state.entries.length) throw new Error('The reorientation contains no stages.');
       state.draft = mergeDraft(readJson(DRAFT_KEY, null));
