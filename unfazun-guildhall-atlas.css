@@ -1,0 +1,343 @@
+.unfazun-atlas-shell {
+  width: min(1880px, calc(100% - 28px));
+  margin: 0 auto 48px;
+}
+
+.unfazun-atlas-tabs {
+  margin: 0 0 18px;
+}
+
+.unfazun-atlas-note {
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 18px;
+}
+
+.unfazun-atlas-layout {
+  display: grid;
+  grid-template-columns: minmax(210px, 260px) minmax(520px, 1fr) minmax(380px, 520px);
+  gap: 16px;
+  align-items: start;
+}
+
+.unfazun-index,
+.unfazun-reader,
+.unfazun-map-panel {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.unfazun-index,
+.unfazun-map-panel {
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+}
+
+.unfazun-panel-heading {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.unfazun-panel-heading h2,
+.unfazun-panel-heading h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.unfazun-panel-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.45;
+}
+
+.unfazun-chapter-list {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+
+.unfazun-chapter-button {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  padding: 9px 10px;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.unfazun-chapter-button:hover,
+.unfazun-chapter-button.active {
+  border-color: var(--accent);
+  background: rgba(200,138,53,.12);
+}
+
+.unfazun-room-jump {
+  padding: 0 12px 14px;
+}
+
+.unfazun-room-jump label,
+.unfazun-map-controls label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.unfazun-room-jump select,
+.unfazun-map-controls select,
+.unfazun-map-controls input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #10131a;
+  color: var(--ink);
+  padding: 9px 10px;
+}
+
+.unfazun-reader {
+  min-height: 760px;
+}
+
+.unfazun-reader iframe {
+  display: block;
+  width: 100%;
+  height: min(84vh, 1080px);
+  min-height: 760px;
+  border: 0;
+  background: var(--bg);
+}
+
+.unfazun-map-panel {
+  padding-bottom: 14px;
+}
+
+.unfazun-map-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.unfazun-map-controls .wide {
+  grid-column: 1 / -1;
+}
+
+.unfazun-map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  grid-column: 1 / -1;
+}
+
+.unfazun-map-actions button,
+.unfazun-room-action {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  color: var(--ink);
+  padding: 8px 11px;
+}
+
+.unfazun-map-actions button:hover,
+.unfazun-room-action:hover {
+  border-color: var(--accent);
+}
+
+.unfazun-map-wrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  min-height: 560px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(108,169,205,.12), transparent 36%),
+    linear-gradient(180deg, #0c111a, #07090e);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  touch-action: none;
+}
+
+#unfazun-map-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#unfazun-map-canvas.dragging {
+  cursor: grabbing;
+}
+
+.unfazun-map-help {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  max-width: calc(100% - 20px);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  background: rgba(5,7,11,.78);
+  color: #d8d1bf;
+  padding: 7px 9px;
+  font-size: .75rem;
+  pointer-events: none;
+}
+
+.unfazun-room-info {
+  padding: 14px;
+}
+
+.unfazun-room-info h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.unfazun-room-info p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.45;
+}
+
+.unfazun-room-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.unfazun-room-meta div {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 7px 8px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.unfazun-room-meta strong {
+  display: block;
+  color: var(--accent);
+  font-size: .67rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 2px;
+}
+
+.unfazun-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 10px 14px 0;
+  color: var(--muted);
+  font-size: .74rem;
+}
+
+.unfazun-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.unfazun-map-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--legend-color);
+}
+
+.unfazun-map-status {
+  padding: 8px 14px 0;
+  margin: 0;
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 1440px) {
+  .unfazun-atlas-layout {
+    grid-template-columns: minmax(210px, 250px) minmax(500px, 1fr);
+  }
+
+  .unfazun-map-panel {
+    position: relative;
+    top: auto;
+    max-height: none;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(360px, 1.25fr) minmax(300px, .75fr);
+  }
+
+  .unfazun-map-panel .unfazun-panel-heading,
+  .unfazun-map-controls,
+  .unfazun-map-legend,
+  .unfazun-map-status {
+    grid-column: 1 / -1;
+  }
+
+  .unfazun-map-wrap {
+    min-height: 620px;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .unfazun-atlas-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .unfazun-index,
+  .unfazun-map-panel {
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+
+  .unfazun-chapter-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .unfazun-reader iframe {
+    height: 76vh;
+    min-height: 620px;
+  }
+
+  .unfazun-map-panel {
+    display: block;
+  }
+
+  .unfazun-map-wrap {
+    min-height: 560px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 560px) {
+  .unfazun-atlas-shell {
+    width: min(100% - 16px, 1880px);
+  }
+
+  .unfazun-chapter-list,
+  .unfazun-map-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .unfazun-map-controls .wide,
+  .unfazun-map-actions {
+    grid-column: 1;
+  }
+
+  .unfazun-map-wrap {
+    min-height: 500px;
+  }
+}
