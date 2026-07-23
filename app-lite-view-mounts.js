@@ -20,8 +20,7 @@
   }
 
   function loadBarotraumaWorkspace() {
-    barotraumaPromise ||= loadScript('barotrauma-packaged-assets.js?v=3')
-      .then(() => loadScript('barotrauma-entry.js?v=3'));
+    barotraumaPromise ||= loadScript('barotrauma-entry.js?v=4');
     return barotraumaPromise;
   }
 
@@ -34,7 +33,8 @@
     }
     if (viewId === 'barotrauma') {
       await Promise.all([loadBarotraumaWorkspace(), base.prepareView(viewId)]);
-      return window.BarotraumaWorkspace?.initialize();
+      window.BarotraumaWorkspace?.initialize();
+      return;
     }
     return base.prepareView(viewId);
   }
