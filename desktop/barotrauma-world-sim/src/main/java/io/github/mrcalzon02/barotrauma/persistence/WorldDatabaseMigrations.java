@@ -151,11 +151,19 @@ final class WorldDatabaseMigrations {
         boolean originalAutoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         try (Statement statement = connection.createStatement()) {
-            for (String sql : statements) {
+            for (int index = 0; index < statements.size(); index++) {
+                String sql = statements.get(index);
                 String normalized = sql.trim().toUpperCase();
                 if (normalized.startsWith("PRAGMA ")) continue;
                 if (initial && normalized.startsWith("CREATE TABLE SCHEMA_MIGRATION")) continue;
-                statement.execute(sql);
+                try {
+                    statement.execute(sql);
+                } catch (SQLException exception) {
+                    String reason = "Schema " + targetVersion + " statement " + (index + 1) + "/"
+                            + statements.size() + " failed: " + exception.getMessage()
+                            + "; SQL: " + summarizeSql(sql);
+                    throw new SQLException(reason, exception.getSQLState(), exception.getErrorCode(), exception);
+                }
             }
             try (PreparedStatement insert = connection.prepareStatement(
                     "INSERT INTO schema_migration(version, applied_at) VALUES (?, ?)")) {
@@ -171,6 +179,11 @@ final class WorldDatabaseMigrations {
         } finally {
             connection.setAutoCommit(originalAutoCommit);
         }
+    }
+
+    private static String summarizeSql(String sql) {
+        String summary = sql.trim().replaceAll("\\s+", " ");
+        return summary.length() <= 320 ? summary : summary.substring(0, 317) + "...";
     }
 
     static int currentVersion(Connection connection) throws SQLException {
