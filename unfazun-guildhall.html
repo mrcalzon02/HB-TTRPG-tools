@@ -80,6 +80,7 @@
             <button id="unfazun-map-reset" type="button">Reset view</button>
             <button id="unfazun-map-fit" type="button">Fit visible</button>
             <button id="unfazun-map-center" type="button">Center selected</button>
+            <button id="unfazun-map-layer" type="button" title="Display only the district layer containing the selected room">Selected layer only</button>
           </div>
         </div>
 
@@ -100,5 +101,33 @@
   </footer>
 
   <script src="unfazun-guildhall-atlas.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const button = document.getElementById('unfazun-map-layer');
+      const districtFilter = document.getElementById('unfazun-district-filter');
+      const roomJump = document.getElementById('unfazun-room-jump');
+      if (!button || !districtFilter || !roomJump) return;
+
+      function districtForRoom(roomId) {
+        if (roomId >= 1 && roomId <= 10) return '1';
+        if (roomId <= 22) return '2';
+        if (roomId <= 36) return '3';
+        if (roomId <= 50) return '4';
+        if (roomId <= 63) return '5';
+        if (roomId <= 78) return '6';
+        if (roomId <= 82) return '7';
+        return null;
+      }
+
+      button.addEventListener('click', () => {
+        const district = districtForRoom(Number(roomJump.value));
+        if (!district) return;
+        districtFilter.value = district;
+        districtFilter.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    })();
+  </script>
 </body>
 </html>
