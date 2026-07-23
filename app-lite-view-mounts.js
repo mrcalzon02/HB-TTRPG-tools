@@ -19,25 +19,9 @@
     });
   }
 
-  function loadStyle(href) {
-    const existing = document.querySelector(`link[data-hb-core-view-style="${href}"]`);
-    if (existing) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.dataset.hbCoreViewStyle = href;
-      link.onload = resolve;
-      link.onerror = () => reject(new Error(`${href} could not be loaded.`));
-      document.head.appendChild(link);
-    });
-  }
-
   function loadBarotraumaWorkspace() {
-    barotraumaPromise ||= Promise.all([
-      loadStyle('barotrauma-packaged-assets.css?v=3'),
-      loadScript('barotrauma-packaged-assets.js?v=3')
-    ]).then(() => loadScript('barotrauma-entry.js?v=3'));
+    barotraumaPromise ||= loadScript('barotrauma-packaged-assets.js?v=3')
+      .then(() => loadScript('barotrauma-entry.js?v=3'));
     return barotraumaPromise;
   }
 
