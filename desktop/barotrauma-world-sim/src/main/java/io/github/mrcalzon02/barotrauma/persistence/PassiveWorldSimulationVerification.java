@@ -259,17 +259,21 @@ public final class PassiveWorldSimulationVerification {
     private static void configureMigrationPressure(WorldPaths paths, String vesselId) throws Exception {
         String populationTotal = "p.civilians+p.industrial_workers+p.logistics_workers+p.security_personnel+"
                 + "p.medical_personnel+p.scientific_personnel+p.temporary_residents+p.refugees";
-        String originPopulation = "(SELECT p.population_id FROM npc_population_state p ORDER BY "
-                + populationTotal + " DESC,p.population_id LIMIT 1)";
+        String originPopulation = "(SELECT p.population_id FROM npc_population_state p WHERE NOT EXISTS("
+                + "SELECT 1 FROM population_flow f WHERE f.population_id=p.population_id "
+                + "AND f.entity_type='NPC_POPULATION' AND f.status IN ('PLANNED','PREPARING','IN_TRANSIT','RETURNING')) "
+                + "ORDER BY " + populationTotal + " DESC,p.population_id LIMIT 1)";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
              Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE station_simulation_state SET integrity=100,threat=0,status='STABLE',"
+                    + "supplies=150,security=100");
+            statement.executeUpdate("UPDATE npc_population_state SET morale=90,housing_capacity=5000,"
+                    + "life_support_capacity=5000,employment_capacity=5000");
             statement.executeUpdate("UPDATE station_simulation_state SET integrity=20,threat=90,status='BESIEGED',"
                     + "supplies=20 WHERE station_id=(SELECT station_id FROM npc_population_state WHERE population_id="
                     + originPopulation + ")");
             statement.executeUpdate("UPDATE npc_population_state SET morale=25 WHERE population_id="
                     + originPopulation);
-            statement.executeUpdate("UPDATE npc_population_state SET housing_capacity=5000,life_support_capacity=5000,"
-                    + "employment_capacity=5000 WHERE population_id<>" + originPopulation);
             statement.executeUpdate("INSERT INTO npc_vessel(npc_vessel_id,world_id,display_name,role,home_station_id,"
                     + "current_location_id,status,hull,supplies,cargo,crew_quality,navigation,engineering,combat,mining,"
                     + "research,route_progress,route_ticks_required,deterministic_seed,last_tick) SELECT '"
