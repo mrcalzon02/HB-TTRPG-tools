@@ -76,7 +76,8 @@ public final class SettlementProjectTransactionVerification {
                     "work-2", "Founding construction completed.");
             require(complete.status().equals("COMPLETE") && complete.progressUnits() == 8,
                     "Settlement project did not complete at its exact target progress.");
-            reject(() -> SettlementProjectTransaction.cancel(connection, planned.projectId(), 16, "Too late."),
+            reject(() -> SettlementProjectTransaction.transition(connection, planned.projectId(), 16,
+                            "CANCELLED", "too-late-cancel", "Too late."),
                     "Terminal settlement projects are immutable.");
             require(count(connection, "settlement_project_contribution") == 7,
                     "Settlement project contribution evidence count is incorrect.");
