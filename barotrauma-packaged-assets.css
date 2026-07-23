@@ -14,7 +14,7 @@
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(110deg, rgba(4, 13, 18, 0.93) 0%, rgba(4, 13, 18, 0.72) 48%, rgba(4, 13, 18, 0.32) 100%),
+    linear-gradient(110deg, rgba(4, 13, 18, 0.91) 0%, rgba(4, 13, 18, 0.68) 48%, rgba(4, 13, 18, 0.27) 100%),
     repeating-linear-gradient(0deg, rgba(161, 229, 220, 0.025) 0 1px, transparent 1px 5px);
 }
 
@@ -30,7 +30,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  opacity: 0.82;
+  opacity: 0.86;
   pointer-events: none;
 }
 
@@ -50,8 +50,58 @@
   pointer-events: none;
 }
 
+.barotrauma-atlas-control {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.barotrauma-atlas-ui-skin {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.barotrauma-atlas-control > :not(.barotrauma-atlas-ui-skin):not(.barotrauma-atlas-glyph) {
+  position: relative;
+  z-index: 2;
+}
+
+.barotrauma-atlas-glyph-host {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+}
+
+.barotrauma-atlas-glyph {
+  position: relative;
+  z-index: 3;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.badge.barotrauma-atlas-glyph-host {
+  gap: 0.28rem;
+}
+
+.badge .barotrauma-atlas-glyph {
+  width: 14px;
+  height: 14px;
+}
+
 .barotrauma-atlas-error .barotrauma-atlas-backdrop,
-.barotrauma-atlas-error .barotrauma-atlas-icon {
+.barotrauma-atlas-error .barotrauma-atlas-icon,
+.barotrauma-atlas-error .barotrauma-atlas-ui-skin,
+.barotrauma-atlas-error .barotrauma-atlas-glyph {
   display: none;
 }
 
@@ -62,14 +112,14 @@
 
 #barotrauma .module-card.barotrauma-atlas-surface,
 .workspace-tool-card.barotrauma-atlas-surface {
-  min-height: 220px;
+  min-height: 240px;
   background-color: rgba(4, 15, 20, 0.94);
 }
 
 #barotrauma .module-card.barotrauma-atlas-surface p,
 .workspace-tool-card.barotrauma-atlas-surface p,
 .workspace-hero.barotrauma-atlas-surface p {
-  color: rgba(226, 239, 233, 0.88);
+  color: rgba(226, 239, 233, 0.9);
 }
 
 #barotrauma .module-card.barotrauma-atlas-surface h3,
@@ -83,8 +133,87 @@
 
 #barotrauma .module-card.barotrauma-atlas-surface .badge,
 .workspace-tool-card.barotrauma-atlas-surface .badge {
-  background: rgba(4, 18, 24, 0.82);
-  border-color: rgba(96, 202, 198, 0.42);
+  background: rgba(4, 18, 24, 0.84);
+  border-color: rgba(96, 202, 198, 0.46);
+  box-shadow: inset 0 0 10px rgba(89, 214, 204, 0.06);
+}
+
+#barotrauma .registry-controls.barotrauma-atlas-control,
+#barotrauma .registry-status.barotrauma-atlas-control {
+  border-color: rgba(92, 205, 198, 0.48);
+  background:
+    linear-gradient(120deg, rgba(3, 14, 19, 0.96), rgba(8, 31, 37, 0.88)),
+    #061117;
+  box-shadow: inset 0 0 22px rgba(72, 202, 192, 0.06), 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+#barotrauma .registry-controls.barotrauma-atlas-control .barotrauma-atlas-ui-skin {
+  opacity: 0.24;
+}
+
+#barotrauma .registry-status.barotrauma-atlas-control {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.7rem;
+}
+
+#barotrauma .registry-status.barotrauma-atlas-control .barotrauma-atlas-ui-skin {
+  opacity: 0.32;
+}
+
+#barotrauma .registry-controls .control-label.barotrauma-atlas-glyph-host {
+  justify-content: flex-start;
+  color: #bfe3de;
+}
+
+#barotrauma .registry-filter.barotrauma-atlas-control,
+#barotrauma .module-card .link-button.barotrauma-atlas-control,
+#barotrauma .module-card .primary-action.barotrauma-atlas-control,
+#barotrauma > .hero-card .link-button.barotrauma-atlas-control,
+.workspace-hero .link-button.barotrauma-atlas-control {
+  border-color: rgba(101, 214, 205, 0.58);
+  background: rgba(4, 21, 27, 0.9);
+  color: #e8f8f4;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0 0 14px rgba(83, 220, 207, 0.08), 0 5px 14px rgba(0, 0, 0, 0.22);
+}
+
+#barotrauma .registry-filter.barotrauma-atlas-control .barotrauma-atlas-ui-skin {
+  opacity: 0.45;
+}
+
+#barotrauma .registry-filter.barotrauma-atlas-control.active .barotrauma-atlas-ui-skin {
+  opacity: 0.82;
+}
+
+#barotrauma .registry-filter.barotrauma-atlas-control.active {
+  border-color: rgba(225, 170, 73, 0.82);
+  color: #fff2ce;
+  box-shadow: inset 0 0 16px rgba(226, 164, 53, 0.12), 0 6px 18px rgba(0, 0, 0, 0.24);
+}
+
+#barotrauma .module-card .link-button.barotrauma-atlas-control,
+#barotrauma .module-card .primary-action.barotrauma-atlas-control,
+#barotrauma > .hero-card .link-button.barotrauma-atlas-control,
+.workspace-hero .link-button.barotrauma-atlas-control {
+  width: 100%;
+  min-height: 40px;
+  padding-block: 0.55rem;
+}
+
+#barotrauma .module-card .link-button.barotrauma-atlas-control .barotrauma-atlas-ui-skin,
+#barotrauma .module-card .primary-action.barotrauma-atlas-control .barotrauma-atlas-ui-skin,
+#barotrauma > .hero-card .link-button.barotrauma-atlas-control .barotrauma-atlas-ui-skin,
+.workspace-hero .link-button.barotrauma-atlas-control .barotrauma-atlas-ui-skin {
+  opacity: 0.72;
+}
+
+#barotrauma .registry-filter.barotrauma-atlas-control:hover .barotrauma-atlas-ui-skin,
+#barotrauma .module-card .link-button.barotrauma-atlas-control:hover .barotrauma-atlas-ui-skin,
+#barotrauma > .hero-card .link-button.barotrauma-atlas-control:hover .barotrauma-atlas-ui-skin,
+.workspace-hero .link-button.barotrauma-atlas-control:hover .barotrauma-atlas-ui-skin {
+  opacity: 0.92;
 }
 
 @media (max-width: 720px) {
@@ -98,11 +227,17 @@
   .workspace-hero.barotrauma-atlas-surface {
     min-height: 220px;
   }
+
+  #barotrauma .registry-status.barotrauma-atlas-control {
+    align-items: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .barotrauma-atlas-backdrop,
-  .barotrauma-atlas-icon {
+  .barotrauma-atlas-icon,
+  .barotrauma-atlas-ui-skin,
+  .barotrauma-atlas-glyph {
     image-rendering: auto;
   }
 }
