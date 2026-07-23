@@ -132,7 +132,7 @@ public final class SettlementFoundingMigrationSchema {
                       AND n.world_id=NEW.world_id AND n.station_id=s.station_id
                       AND (n.civilians+n.industrial_workers+n.logistics_workers+n.security_personnel+
                            n.medical_personnel+n.scientific_personnel+n.temporary_residents+n.refugees)
-                          =NEW.settled_quantity)
+                          =NEW.settled_quantity
                 )
                 BEGIN
                     SELECT RAISE(ABORT,'Founding handoff is not fully conserved.');
