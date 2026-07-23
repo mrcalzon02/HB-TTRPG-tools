@@ -62,7 +62,15 @@ final class NpcDemographicLifecycleIntegration {
                     INSERT OR IGNORE INTO station_population_state(
                         station_id,world_id,baseline_kind,baseline_tick,baseline_resident_count,resident_count,
                         baseline_workforce_count,workforce_count,last_tick)
-                    VALUES (NEW.station_id,NEW.world_id,'GENERATED_ALLOCATION',NEW.last_tick,
+                    VALUES (NEW.station_id,NEW.world_id,
+                            CASE
+                                WHEN NEW.seed_source='SCHEMA_030_FOUNDING_ZERO_SEED'
+                                    THEN 'GENERATED_ALLOCATION'
+                                WHEN EXISTS (SELECT 1 FROM world_import i WHERE i.world_id=NEW.world_id)
+                                    THEN 'IMPORTED_ESTIMATE'
+                                ELSE 'GENERATED_ALLOCATION'
+                            END,
+                            NEW.last_tick,
                             NEW.civilians+NEW.industrial_workers+NEW.logistics_workers+NEW.security_personnel+
                                 NEW.medical_personnel+NEW.scientific_personnel+NEW.temporary_residents+NEW.refugees,
                             NEW.civilians+NEW.industrial_workers+NEW.logistics_workers+NEW.security_personnel+
