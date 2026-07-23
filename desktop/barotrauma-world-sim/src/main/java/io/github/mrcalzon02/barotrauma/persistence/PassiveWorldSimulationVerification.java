@@ -54,14 +54,7 @@ public final class PassiveWorldSimulationVerification {
                     "lastSimulatedAt":"2175-01-01T00:00:00Z"}},
                     "submarine":{"name":"Observer","model":"Barsuk","crewRoster":[]}}}
                     """;
-            WorldDocument document = WebSuiteV22WorldDocument.inspect(
-                    fixture.getBytes(StandardCharsets.UTF_8), "passive-world.json");
-            ImportPlan plan;
-            try (SqliteWorldStore store = SqliteWorldStore.open(paths)) {
-                plan = store.inspectAndPlan(document.inspection());
-            }
-            WebWorldV22ImportTransaction.commit(paths, new WebWorldV22ImportTransaction.ImportRequest(
-                    plan.artifactId(), plan.artifact().artifactIdentity().digest(), "passive-test", document));
+            importFixture(paths, fixture);
 
             SimulationCheckpointStore.RecoveryState recovery = SimulationCheckpointStore.load(
                     paths, Duration.ofMinutes(1));
@@ -152,49 +145,6 @@ public final class PassiveWorldSimulationVerification {
                         + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence);
                 require(migrationDestinationPopulation(paths, MIGRATION_VESSEL) == destinationAfterArrival,
                         "Destination population does not match the terminal immigration ledger state.");
-
-                configureMigrationPressure(paths, ROLLBACK_VESSEL);
-                var rollbackPlan = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
-                PassiveWorldTickTransaction.commit(paths, rollbackPlan);
-                String rollbackVesselId = queryText(paths,
-                        "SELECT assigned_npc_vessel_id FROM population_flow WHERE entity_type='NPC_POPULATION' "
-                                + "AND status='PREPARING' AND population_id=(SELECT population_id "
-                                + "FROM npc_population_state ORDER BY population_id LIMIT 1) "
-                                + "ORDER BY created_tick DESC,flow_id DESC LIMIT 1");
-                require(flowCount(paths, rollbackVesselId, "PREPARING") == 1,
-                        "Rollback probe migration did not enter preparation.");
-                long rollbackOriginPopulation = pressuredOriginPopulation(paths);
-                long rollbackLegCount = queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
-                        + rollbackVesselId + "'");
-                long rollbackLedgerCount = queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger");
-                long rollbackClockTick = queryCount(paths,
-                        "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1");
-                installRollbackProbe(paths);
-                var rollbackReceipt = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
-                boolean rollbackBlocked = false;
-                try {
-                    PassiveWorldTickTransaction.commit(paths, rollbackReceipt);
-                } catch (SQLException expected) {
-                    rollbackBlocked = expected.getMessage() != null
-                            && expected.getMessage().contains("Passive migration rollback probe");
-                } finally {
-                    removeRollbackProbe(paths);
-                }
-                require(rollbackBlocked, "The deliberate post-migration passive transaction fault was not observed.");
-                require(flowCount(paths, rollbackVesselId, "PREPARING") == 1,
-                        "Failed passive transaction did not restore the migration flow to preparation.");
-                require(vesselStatus(paths, rollbackVesselId).equals("PREPARING"),
-                        "Failed passive transaction did not restore the migration vessel state.");
-                require(pressuredOriginPopulation(paths) == rollbackOriginPopulation,
-                        "Failed passive transaction did not restore the released origin population.");
-                require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
-                                + rollbackVesselId + "'") == rollbackLegCount,
-                        "Failed passive transaction retained a migration transit leg created before rollback.");
-                require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger") == rollbackLedgerCount,
-                        "Failed passive transaction retained migration ledger evidence.");
-                require(queryCount(paths, "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1")
-                                == rollbackClockTick,
-                        "Failed passive transaction advanced the durable world clock.");
             }
 
             long tickBeforeScheduler = SimulationCheckpointStore.load(paths, Duration.ofMinutes(1))
@@ -219,10 +169,80 @@ public final class PassiveWorldSimulationVerification {
             require(SimulationCheckpointStore.load(paths, Duration.ofMinutes(1)).snapshot().tickSequence()
                             > tickBeforeScheduler,
                     "Automatic passive cycle did not advance the durable world clock.");
+
+            verifyMigrationRollback(root.resolve("rollback-world"), fixture);
         } finally {
             try (var stream = Files.walk(root)) {
                 for (Path path : stream.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
             }
+        }
+    }
+
+    private static void importFixture(WorldPaths paths, String fixture) throws Exception {
+        WorldDocument document = WebSuiteV22WorldDocument.inspect(
+                fixture.getBytes(StandardCharsets.UTF_8), "passive-world.json");
+        ImportPlan plan;
+        try (SqliteWorldStore store = SqliteWorldStore.open(paths)) {
+            plan = store.inspectAndPlan(document.inspection());
+        }
+        WebWorldV22ImportTransaction.commit(paths, new WebWorldV22ImportTransaction.ImportRequest(
+                plan.artifactId(), plan.artifact().artifactIdentity().digest(), "passive-test", document));
+    }
+
+    private static void verifyMigrationRollback(Path rollbackRoot, String fixture) throws Exception {
+        WorldPaths paths = WorldStorageContracts.createWorld(rollbackRoot, "Passive Rollback Europa",
+                UUID.fromString("98000000-0000-0000-0000-000000000002"));
+        importFixture(paths, fixture);
+        SimulationCheckpointStore.RecoveryState recovery = SimulationCheckpointStore.load(
+                paths, Duration.ofMinutes(1));
+        try (SimulationCommandExecutor executor = new SimulationCommandExecutor(
+                DeterministicSimulationClock.restore(recovery.snapshot()),
+                "passive-rollback-writer", recovery.lastExecutionSequence())) {
+            var enabled = executor.submit(new SimulationCommandExecutor.Enable(), "passive-rollback-test").join();
+            SimulationCheckpointStore.persist(paths, enabled, "Enable passive rollback contract world");
+            var initialized = executor.submit(new SimulationCommandExecutor.Step(1), "passive-rollback-test").join();
+            PassiveWorldTickTransaction.commit(paths, initialized);
+
+            configureMigrationPressure(paths, ROLLBACK_VESSEL);
+            long originPopulation = pressuredOriginPopulation(paths);
+            var planned = executor.submit(new SimulationCommandExecutor.Step(1), "passive-rollback-test").join();
+            PassiveWorldTickTransaction.commit(paths, planned);
+            require(flowCount(paths, ROLLBACK_VESSEL, "PREPARING") == 1,
+                    "Rollback probe migration did not enter preparation in the isolated world.");
+            require(pressuredOriginPopulation(paths) == originPopulation,
+                    "Rollback probe preparation removed residents before physical departure.");
+
+            long rollbackLegCount = queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
+                    + ROLLBACK_VESSEL + "'");
+            long rollbackLedgerCount = queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger");
+            long rollbackClockTick = queryCount(paths,
+                    "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1");
+            installRollbackProbe(paths);
+            var rollbackReceipt = executor.submit(new SimulationCommandExecutor.Step(1), "passive-rollback-test").join();
+            boolean rollbackBlocked = false;
+            try {
+                PassiveWorldTickTransaction.commit(paths, rollbackReceipt);
+            } catch (SQLException expected) {
+                rollbackBlocked = expected.getMessage() != null
+                        && expected.getMessage().contains("Passive migration rollback probe");
+            } finally {
+                removeRollbackProbe(paths);
+            }
+            require(rollbackBlocked, "The deliberate post-migration passive transaction fault was not observed.");
+            require(flowCount(paths, ROLLBACK_VESSEL, "PREPARING") == 1,
+                    "Failed passive transaction did not restore the migration flow to preparation.");
+            require(vesselStatus(paths, ROLLBACK_VESSEL).equals("PREPARING"),
+                    "Failed passive transaction did not restore the migration vessel state.");
+            require(pressuredOriginPopulation(paths) == originPopulation,
+                    "Failed passive transaction did not restore the released origin population.");
+            require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
+                            + ROLLBACK_VESSEL + "'") == rollbackLegCount,
+                    "Failed passive transaction retained a migration transit leg created before rollback.");
+            require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger") == rollbackLedgerCount,
+                    "Failed passive transaction retained migration ledger evidence.");
+            require(queryCount(paths, "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1")
+                            == rollbackClockTick,
+                    "Failed passive transaction advanced the durable world clock.");
         }
     }
 
