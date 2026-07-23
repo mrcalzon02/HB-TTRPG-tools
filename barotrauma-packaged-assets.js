@@ -49,6 +49,9 @@
     'inner-panel': 'medical-grid-panel',
     button: 'medical-teal-pill-button',
     tab: 'retro-ui-favorite-tab',
+    search: 'medical-search-card',
+    available: 'medical-confirm-status-icon',
+    planned: 'medical-timer-status-icon',
     location: 'retro-ui-map-pin-gold',
     station: 'retro-ui-map-pin-star',
     vessel: 'hud-elements-submarine',
@@ -69,16 +72,41 @@
   });
 
   const MODULE_PRESENTATION = Object.freeze({
-    'barotrauma-crewmans-primer': { scene: 'observation', ui: 'document' },
-    'barotrauma-cult-faction-dossiers': { scene: 'registry', ui: 'crew' },
+    'barotrauma-active-submarine-dashboard': { scene: 'application-shell', ui: 'vessel' },
+    'barotrauma-live-submarine-dashboard': { scene: 'application-shell', ui: 'vessel' },
+    'barotrauma-submarine-management-dashboard': { scene: 'application-shell', ui: 'vessel' },
     'barotrauma-submarine-operations-console': { scene: 'fleet-management', ui: 'tools' },
+    'barotrauma-crewmans-primer': { scene: 'observation', ui: 'document' },
+    'barotrauma-rpg-rules-wiki': { scene: 'logistics', ui: 'document' },
+    'barotrauma-rpg-character-sheet': { scene: 'import-review', ui: 'medical' },
+    'barotrauma-submarine-manager': { scene: 'fleet-management', ui: 'vessel' },
+    'barotrauma-custom-content-workshop': { scene: 'import-review', ui: 'research' },
+    'barotrauma-encounter-planner': { scene: 'simulation', ui: 'mission' },
+    'barotrauma-route-planner': { scene: 'world-map', ui: 'route' },
+    'barotrauma-world-map-generator': { scene: 'world-map', ui: 'location' },
+    'barotrauma-cult-faction-dossiers': { scene: 'registry', ui: 'crew' },
     'barotrauma-crew-roster-generator': { scene: 'registry', ui: 'crew' },
     'barotrauma-mission-contract-generator': { scene: 'simulation', ui: 'mission' },
     'barotrauma-emergency-cascade-generator': { scene: 'recovery', ui: 'warning' },
     'barotrauma-creature-threat-catalogue': { scene: 'recovery', ui: 'warning' },
     'barotrauma-depth-detective': { scene: 'observation', ui: 'observe' },
-    'barotrauma-outpost-wreck-generator': { scene: 'world-map', ui: 'station' },
+    'barotrauma-outpost-wreck-generator': { scene: 'recovery', ui: 'station' },
     'barotrauma-campaign-logbook': { scene: 'logistics', ui: 'document' }
+  });
+
+  const SECTION_PRESENTATION = Object.freeze({
+    reference: { scene: 'observation', ui: 'document' },
+    tools: { scene: 'logistics', ui: 'tools' },
+    generators: { scene: 'simulation', ui: 'research' },
+    campaign: { scene: 'observation', ui: 'mission' }
+  });
+
+  const FILTER_GLYPHS = Object.freeze({
+    all: 'observe',
+    reference: 'document',
+    tools: 'tools',
+    generators: 'research',
+    campaign: 'mission'
   });
 
   const imagePromises = new Map();
@@ -202,7 +230,8 @@
       canvas.dataset.barotraumaAssetReady = 'true';
     } catch (error) {
       canvas.dataset.barotraumaAssetReady = 'false';
-      canvas.closest('.barotrauma-atlas-surface')?.classList.add('barotrauma-atlas-error');
+      canvas.closest('.barotrauma-atlas-surface, .barotrauma-atlas-control, .barotrauma-atlas-glyph-host')
+        ?.classList.add('barotrauma-atlas-error');
       console.error(error);
     }
   }
@@ -246,23 +275,138 @@
     }
   }
 
+  function ensureSkin(target, descriptor) {
+    target.classList.add('barotrauma-atlas-control');
+    let canvas = Array.from(target.children).find(child => child.classList?.contains('barotrauma-atlas-ui-skin'));
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.className = 'barotrauma-atlas-ui-skin';
+      canvas.setAttribute('aria-hidden', 'true');
+      target.prepend(canvas);
+    }
+    if (canvas.dataset.barotraumaSemantic !== descriptor.semanticName) {
+      canvas.dataset.barotraumaSemantic = descriptor.semanticName;
+      attachRenderer(canvas, descriptor, 'stretch');
+    }
+  }
+
+  function ensureGlyph(target, descriptor) {
+    target.classList.add('barotrauma-atlas-glyph-host');
+    let canvas = Array.from(target.children).find(child => child.classList?.contains('barotrauma-atlas-glyph'));
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.className = 'barotrauma-atlas-glyph';
+      canvas.dataset.width = target.matches('.badge') ? '14' : '20';
+      canvas.dataset.height = target.matches('.badge') ? '14' : '20';
+      canvas.setAttribute('aria-hidden', 'true');
+      target.prepend(canvas);
+    }
+    if (canvas.dataset.barotraumaSemantic !== descriptor.semanticName) {
+      canvas.dataset.barotraumaSemantic = descriptor.semanticName;
+      attachRenderer(canvas, descriptor, 'contain');
+    }
+  }
+
+  function inferModulePresentation(card) {
+    const title = card.querySelector('h3')?.textContent?.trim().toLowerCase() || '';
+    if (/active submarine|submarine management dashboard|operations console/.test(title)) {
+      return { scene: 'application-shell', ui: 'vessel' };
+    }
+    if (/character sheet|medical|s\.a\.i\.c/.test(title)) {
+      return { scene: 'import-review', ui: 'medical' };
+    }
+    if (/submarine manager|vessel manager|fleet/.test(title)) {
+      return { scene: 'fleet-management', ui: 'vessel' };
+    }
+    if (/custom content|workshop|r&d|research/.test(title)) {
+      return { scene: 'import-review', ui: 'research' };
+    }
+    if (/world state|europa map|route planner|voyage/.test(title)) {
+      return { scene: 'world-map', ui: /route|voyage/.test(title) ? 'route' : 'location' };
+    }
+    if (/crew|personnel|faction|cult/.test(title)) {
+      return { scene: 'registry', ui: 'crew' };
+    }
+    if (/emergency|failure|creature|threat|wreck|salvage/.test(title)) {
+      return { scene: 'recovery', ui: /wreck|salvage/.test(title) ? 'station' : 'warning' };
+    }
+    if (/detective|case|investigation|evidence/.test(title)) {
+      return { scene: 'observation', ui: 'observe' };
+    }
+    if (/mission|contract|encounter/.test(title)) {
+      return { scene: 'simulation', ui: 'mission' };
+    }
+    if (/primer|rpg|wiki|logbook|ledger/.test(title)) {
+      return { scene: /primer/.test(title) ? 'observation' : 'logistics', ui: 'document' };
+    }
+    return SECTION_PRESENTATION[card.dataset.section] || { scene: 'application-shell', ui: 'tools' };
+  }
+
+  function seedBadgeRoles(card) {
+    card.querySelectorAll('.module-meta .badge').forEach(badge => {
+      const text = badge.textContent?.trim().toLowerCase() || '';
+      if (text.includes('available')) badge.dataset.barotraumaGlyph ||= 'available';
+      else if (text.includes('planned')) badge.dataset.barotraumaGlyph ||= 'planned';
+      else if (text.includes('reference')) badge.dataset.barotraumaGlyph ||= 'document';
+      else if (text.includes('generator')) badge.dataset.barotraumaGlyph ||= 'research';
+      else if (text.includes('campaign')) badge.dataset.barotraumaGlyph ||= 'mission';
+      else if (text.includes('tool')) badge.dataset.barotraumaGlyph ||= 'tools';
+    });
+  }
+
+  function seedModuleCard(card) {
+    const presentation = MODULE_PRESENTATION[card.dataset.moduleId] || inferModulePresentation(card);
+    card.dataset.barotraumaScene ||= presentation.scene;
+    card.dataset.barotraumaUi ||= presentation.ui;
+    seedBadgeRoles(card);
+    card.querySelectorAll('.link-button, .primary-action, .secondary-action, button').forEach((action, index) => {
+      action.dataset.barotraumaUiSkin ||= 'button';
+      action.dataset.barotraumaGlyph ||= index === 0 ? presentation.ui : 'route';
+    });
+  }
+
   function seedAutomaticRoles(root) {
     const liveHero = root.querySelector?.('#barotrauma > .hero-card');
     if (liveHero) {
       liveHero.dataset.barotraumaScene ||= 'application-shell';
       liveHero.dataset.barotraumaUi ||= 'vessel';
+      liveHero.querySelectorAll('.link-button, .primary-action').forEach((action, index) => {
+        action.dataset.barotraumaUiSkin ||= 'button';
+        action.dataset.barotraumaGlyph ||= index === 0 ? 'save' : 'route';
+      });
     }
+
     const landingHero = root.querySelector?.('.workspace-hero[data-workspace-code="EUR"]');
     if (landingHero) {
       landingHero.dataset.barotraumaScene ||= 'application-shell';
       landingHero.dataset.barotraumaUi ||= 'vessel';
+      landingHero.querySelectorAll('.link-button, .primary-action').forEach((action, index) => {
+        action.dataset.barotraumaUiSkin ||= 'button';
+        action.dataset.barotraumaGlyph ||= index === 0 ? 'save' : 'route';
+      });
     }
-    root.querySelectorAll?.('#barotrauma-overview-grid .module-card[data-module-id]').forEach(card => {
-      const presentation = MODULE_PRESENTATION[card.dataset.moduleId];
-      if (!presentation) return;
-      card.dataset.barotraumaScene ||= presentation.scene;
-      card.dataset.barotraumaUi ||= presentation.ui;
+
+    const controls = root.querySelector?.('#barotrauma .registry-controls');
+    if (controls) {
+      controls.dataset.barotraumaUiSkin ||= 'panel';
+      const label = controls.querySelector('.control-label');
+      if (label) label.dataset.barotraumaGlyph ||= 'search';
+    }
+
+    const status = root.querySelector?.('#barotrauma-status');
+    if (status) {
+      status.dataset.barotraumaUiSkin ||= 'inner-panel';
+      status.dataset.barotraumaGlyph ||= 'notification';
+    }
+
+    root.querySelectorAll?.('#barotrauma .registry-filter').forEach(button => {
+      const filter = button.dataset.barotraumaFilter || 'all';
+      button.dataset.barotraumaUiSkin ||= 'tab';
+      button.dataset.barotraumaGlyph ||= FILTER_GLYPHS[filter] || 'observe';
     });
+
+    root.querySelectorAll?.('#barotrauma-overview-grid .module-card, .workspace-tool-card[data-module-id]')
+      .forEach(seedModuleCard);
   }
 
   async function decorate(root = document) {
@@ -280,6 +424,18 @@
       const descriptor = catalog.ui.get(semanticName);
       if (descriptor) ensureIcon(target, descriptor);
     });
+
+    root.querySelectorAll?.('[data-barotrauma-ui-skin]').forEach(target => {
+      const semanticName = UI_ROLES[target.dataset.barotraumaUiSkin] || target.dataset.barotraumaUiSkin;
+      const descriptor = catalog.ui.get(semanticName);
+      if (descriptor) ensureSkin(target, descriptor);
+    });
+
+    root.querySelectorAll?.('[data-barotrauma-glyph]').forEach(target => {
+      const semanticName = UI_ROLES[target.dataset.barotraumaGlyph] || target.dataset.barotraumaGlyph;
+      const descriptor = catalog.ui.get(semanticName);
+      if (descriptor) ensureGlyph(target, descriptor);
+    });
   }
 
   const mutationObserver = new MutationObserver(records => {
@@ -295,7 +451,8 @@
     decorate,
     loadCatalog,
     sceneRoles: SCENE_ROLES,
-    uiRoles: UI_ROLES
+    uiRoles: UI_ROLES,
+    modulePresentation: MODULE_PRESENTATION
   });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
