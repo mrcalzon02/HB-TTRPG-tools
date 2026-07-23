@@ -37,6 +37,13 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: write
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+      title: ${{ steps.release.outputs.title }}
+      version: ${{ steps.release.outputs.version }}
+      asset_name: ${{ steps.release.outputs.asset_name }}
+      checksum_name: ${{ steps.release.outputs.checksum_name }}
+      asset_sha256: ${{ steps.release.outputs.asset_sha256 }}
     steps:
       - name: Checkout verified source
         uses: actions/checkout@v6
@@ -79,11 +86,13 @@ jobs:
             Select-Object -First 1
           if ($null -eq $asset) { throw "Packaged MSI was not found." }
           $checksum = Get-Item "$($asset.FullName).sha256"
+          $assetSha256 = ((Get-Content $checksum.FullName -Raw).Trim() -split '\s+')[0]
           "tag=$($manifest.tag)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "title=$($manifest.title)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "version=$($manifest.version)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "asset_name=$($asset.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "checksum_name=$($checksum.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "asset_sha256=$assetSha256" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Write release notes
         shell: pwsh
@@ -118,15 +127,23 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
           RELEASE_TITLE: ${{ steps.release.outputs.title }}
+          RELEASE_ASSET: ${{ steps.release.outputs.asset_name }}
+          RELEASE_CHECKSUM: ${{ steps.release.outputs.checksum_name }}
         run: |
-          gh release view $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY *> $null
+          $existing = $null
+          gh release view $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY --json tagName,url,assets 2>$null |
+            Tee-Object -Variable releaseJson | Out-Null
           if ($LASTEXITCODE -eq 0) {
-            Write-Host "Release $env:RELEASE_TAG already exists; preserving its immutable assets."
+            $existing = $releaseJson | ConvertFrom-Json
+            $assetNames = @($existing.assets | ForEach-Object name)
+            if ($assetNames -notcontains $env:RELEASE_ASSET -or $assetNames -notcontains $env:RELEASE_CHECKSUM) {
+              throw "Release $env:RELEASE_TAG exists without the required immutable installer assets."
+            }
+            Write-Host "Verified existing immutable release $env:RELEASE_TAG."
             exit 0
           }
-          $asset = Get-ChildItem desktop/barotrauma-world-sim/build/no-gradle/release -Filter '*.msi' -File |
-            Select-Object -First 1
-          $checksum = Get-Item "$($asset.FullName).sha256"
+          $asset = Get-Item "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_ASSET"
+          $checksum = Get-Item "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_CHECKSUM"
           $notes = 'desktop/barotrauma-world-sim/build/no-gradle/release/RELEASE_NOTES.md'
           gh release create $env:RELEASE_TAG $asset.FullName $checksum.FullName `
             --repo $env:GITHUB_REPOSITORY `
@@ -136,40 +153,132 @@ jobs:
             --latest
           if ($LASTEXITCODE -ne 0) { throw "GitHub release publication failed with exit code $LASTEXITCODE." }
 
-      - name: Record published release receipt
+  release-workflow-outcome:
+    if: ${{ always() }}
+    needs: [java-17-verification, windows-installer-release]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Record workflow and release outcome
         shell: pwsh
         env:
-          RELEASE_TAG: ${{ steps.release.outputs.tag }}
-          RELEASE_TITLE: ${{ steps.release.outputs.title }}
-          RELEASE_VERSION: ${{ steps.release.outputs.version }}
-          RELEASE_ASSET: ${{ steps.release.outputs.asset_name }}
+          GH_TOKEN: ${{ github.token }}
+          LINUX_RESULT: ${{ needs.java-17-verification.result }}
+          WINDOWS_RESULT: ${{ needs.windows-installer-release.result }}
+          RELEASE_TAG: ${{ needs.windows-installer-release.outputs.tag }}
+          RELEASE_TITLE: ${{ needs.windows-installer-release.outputs.title }}
+          RELEASE_VERSION: ${{ needs.windows-installer-release.outputs.version }}
+          RELEASE_ASSET: ${{ needs.windows-installer-release.outputs.asset_name }}
+          RELEASE_CHECKSUM: ${{ needs.windows-installer-release.outputs.checksum_name }}
+          RELEASE_SHA256: ${{ needs.windows-installer-release.outputs.asset_sha256 }}
         run: |
-          $checksumPath = "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_ASSET.sha256"
-          $checksum = ((Get-Content $checksumPath -Raw).Trim() -split '\s+')[0]
-          $receipt = [ordered]@{
-            recordType = 'barotraumaDesktopReleaseReceipt'
-            version = $env:RELEASE_VERSION
-            tag = $env:RELEASE_TAG
-            title = $env:RELEASE_TITLE
-            sourceCommit = $env:GITHUB_SHA
-            assetName = $env:RELEASE_ASSET
-            assetSha256 = $checksum
-            packageType = 'windows-x64-msi-bundled-runtime'
-            verification = 'linux-and-windows-toolbox-verify'
-            releaseUrl = "https://github.com/$env:GITHUB_REPOSITORY/releases/tag/$env:RELEASE_TAG"
-            publishedAt = [DateTime]::UtcNow.ToString('o')
+          git fetch origin main
+          git checkout -B main origin/main
+
+          $jobsPayload = gh api "/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/jobs?filter=latest&per_page=100" |
+            ConvertFrom-Json
+          $jobs = @($jobsPayload.jobs | ForEach-Object {
+            [ordered]@{
+              id = $_.id
+              name = $_.name
+              status = $_.status
+              conclusion = $_.conclusion
+              startedAt = $_.started_at
+              completedAt = $_.completed_at
+              htmlUrl = $_.html_url
+              steps = @($_.steps | ForEach-Object {
+                [ordered]@{
+                  number = $_.number
+                  name = $_.name
+                  status = $_.status
+                  conclusion = $_.conclusion
+                }
+              })
+            }
+          })
+
+          $releaseVerified = $false
+          $releaseUrl = $null
+          $releaseAssets = @()
+          $effectiveTag = $env:RELEASE_TAG
+          if ([string]::IsNullOrWhiteSpace($effectiveTag)) {
+            $manifest = ConvertFrom-StringData (Get-Content desktop/barotrauma-world-sim/release.properties -Raw)
+            $effectiveTag = $manifest.tag
           }
+          gh release view $effectiveTag --repo $env:GITHUB_REPOSITORY --json url,assets 2>$null |
+            Tee-Object -Variable releaseJson | Out-Null
+          if ($LASTEXITCODE -eq 0) {
+            $release = $releaseJson | ConvertFrom-Json
+            $releaseUrl = $release.url
+            $releaseAssets = @($release.assets | ForEach-Object name)
+            if (-not [string]::IsNullOrWhiteSpace($env:RELEASE_ASSET) -and
+                -not [string]::IsNullOrWhiteSpace($env:RELEASE_CHECKSUM)) {
+              $releaseVerified = $releaseAssets -contains $env:RELEASE_ASSET -and
+                $releaseAssets -contains $env:RELEASE_CHECKSUM
+            }
+          }
+
+          $outcome = [ordered]@{
+            recordType = 'barotraumaDesktopReleaseWorkflowOutcome'
+            runId = $env:GITHUB_RUN_ID
+            runAttempt = $env:GITHUB_RUN_ATTEMPT
+            sourceCommit = $env:GITHUB_SHA
+            workflow = $env:GITHUB_WORKFLOW
+            event = $env:GITHUB_EVENT_NAME
+            linuxVerification = $env:LINUX_RESULT
+            windowsInstallerRelease = $env:WINDOWS_RESULT
+            releaseTag = $effectiveTag
+            releaseVerified = $releaseVerified
+            releaseUrl = $releaseUrl
+            releaseAssets = $releaseAssets
+            jobs = $jobs
+            recordedAt = [DateTime]::UtcNow.ToString('o')
+          }
+          $outcomePath = 'desktop/barotrauma-world-sim/release-workflow-outcome.json'
+          Set-Content $outcomePath ($outcome | ConvertTo-Json -Depth 8) -Encoding utf8
+
+          $success = $env:LINUX_RESULT -eq 'success' -and
+            $env:WINDOWS_RESULT -eq 'success' -and $releaseVerified
           $receiptPath = 'desktop/barotrauma-world-sim/release-receipt.json'
-          Set-Content $receiptPath ($receipt | ConvertTo-Json -Depth 4) -Encoding utf8
+          if ($success) {
+            $receipt = [ordered]@{
+              recordType = 'barotraumaDesktopReleaseReceipt'
+              version = $env:RELEASE_VERSION
+              tag = $effectiveTag
+              title = $env:RELEASE_TITLE
+              sourceCommit = $env:GITHUB_SHA
+              assetName = $env:RELEASE_ASSET
+              assetSha256 = $env:RELEASE_SHA256
+              packageType = 'windows-x64-msi-bundled-runtime'
+              verification = 'linux-and-windows-toolbox-verify'
+              releaseUrl = $releaseUrl
+              publishedAt = [DateTime]::UtcNow.ToString('o')
+            }
+            Set-Content $receiptPath ($receipt | ConvertTo-Json -Depth 4) -Encoding utf8
+          } elseif (Test-Path -LiteralPath $receiptPath) {
+            Remove-Item -LiteralPath $receiptPath -Force
+          }
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add $receiptPath
+          git add $outcomePath
+          if (Test-Path -LiteralPath $receiptPath) { git add $receiptPath }
+          else { git add --all $receiptPath }
           git diff --cached --quiet
           if ($LASTEXITCODE -eq 0) {
-            Write-Host 'Release receipt is already current.'
+            Write-Host 'Workflow outcome is already current.'
             exit 0
           }
-          git commit -m "Record Barotrauma desktop release $env:RELEASE_TAG [skip ci]"
-          if ($LASTEXITCODE -ne 0) { throw "Release receipt commit failed with exit code $LASTEXITCODE." }
+          git commit -m "Record Barotrauma desktop workflow run $env:GITHUB_RUN_ID [skip ci]"
+          if ($LASTEXITCODE -ne 0) { throw "Workflow outcome commit failed with exit code $LASTEXITCODE." }
+          git pull --rebase origin main
+          if ($LASTEXITCODE -ne 0) { throw "Workflow outcome rebase failed with exit code $LASTEXITCODE." }
           git push origin HEAD:main
-          if ($LASTEXITCODE -ne 0) { throw "Release receipt push failed with exit code $LASTEXITCODE." }
+          if ($LASTEXITCODE -ne 0) { throw "Workflow outcome push failed with exit code $LASTEXITCODE." }
