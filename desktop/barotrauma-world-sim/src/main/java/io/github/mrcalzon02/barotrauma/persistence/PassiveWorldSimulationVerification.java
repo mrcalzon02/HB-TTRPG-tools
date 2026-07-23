@@ -144,10 +144,10 @@ public final class PassiveWorldSimulationVerification {
                 require(queryCount(paths, "SELECT immigration FROM npc_population_ledger WHERE primary_cause='IMMIGRATION' "
                                 + "AND evidence_key=" + arrivalEvidence) == arrivedQuantity,
                         "Terminal passive migration ledger did not credit the exact arrived cohort.");
-                require(queryCount(paths, "SELECT after_total-before_total FROM npc_population_ledger "
-                                + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence)
-                                == arrivedQuantity,
-                        "Terminal passive migration ledger arithmetic does not match the arrived cohort.");
+                require(queryCount(paths, "SELECT after_total-(before_total+births-deaths+immigration-emigration-"
+                                + "disaster_losses+other_gains-other_losses) FROM npc_population_ledger "
+                                + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence) == 0,
+                        "Terminal passive migration ledger does not conserve all same-tick population terms.");
                 long destinationAfterArrival = queryCount(paths, "SELECT after_total FROM npc_population_ledger "
                         + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence);
                 require(migrationDestinationPopulation(paths, MIGRATION_VESSEL) == destinationAfterArrival,
