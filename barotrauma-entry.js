@@ -56,26 +56,14 @@
     const actions = document.createElement('div');
     actions.className = 'module-actions';
 
-    if (module.launchTarget === 'crewmans-primer') {
-      const wiki = document.createElement('button');
-      wiki.type = 'button';
-      wiki.className = 'primary-action barotrauma-action';
-      wiki.append(createActionContent(module.actionLabel || 'Open Crewman’s Primer Wiki', module.presentation.icon));
-      wiki.addEventListener('click', () => void window.BarotraumaPrimer?.open('wiki'));
+    const launchUrl = module.launchTarget === 'crewmans-primer'
+      ? 'barotrauma-primer.html'
+      : module.launchUrl;
+    if (!launchUrl) return null;
 
-      const source = document.createElement('button');
-      source.type = 'button';
-      source.className = 'secondary-action barotrauma-action';
-      source.append(createActionContent(module.sourceActionLabel || 'Open Source Document Viewer', 'document'));
-      source.addEventListener('click', () => void window.BarotraumaPrimer?.open('source'));
-      actions.append(wiki, source);
-      return actions;
-    }
-
-    if (!module.launchUrl) return null;
     const link = document.createElement('a');
     link.className = 'primary-action barotrauma-action';
-    link.href = module.launchUrl;
+    link.href = launchUrl;
     link.append(createActionContent(module.actionLabel || `Open ${module.title}`, module.presentation.icon));
     actions.appendChild(link);
     return actions;
