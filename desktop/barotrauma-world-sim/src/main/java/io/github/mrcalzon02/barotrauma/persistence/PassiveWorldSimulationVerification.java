@@ -88,9 +88,14 @@ public final class PassiveWorldSimulationVerification {
                         "A routine elapsed-time progress tick incorrectly manufactured a transit incident.");
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE elapsed_ticks=1") > 0,
                         "Routine NPC travel did not advance elapsed progress before the first incident.");
-                require(flowCount(paths, MIGRATION_VESSEL, "PREPARING") == 1,
+                String migrationVesselId = queryText(paths,
+                        "SELECT assigned_npc_vessel_id FROM population_flow WHERE entity_type='NPC_POPULATION' "
+                                + "AND status='PREPARING' AND origin_station_id=(SELECT home_station_id "
+                                + "FROM npc_vessel WHERE npc_vessel_id='" + MIGRATION_VESSEL + "') "
+                                + "ORDER BY created_tick DESC,flow_id DESC LIMIT 1");
+                require(flowCount(paths, migrationVesselId, "PREPARING") == 1,
                         "A real passive tick did not plan and reserve the pressured population migration.");
-                require(pressuredOriginPopulation(paths, MIGRATION_VESSEL) == originBeforeDeparture,
+                require(pressuredOriginPopulation(paths, migrationVesselId) == originBeforeDeparture,
                         "Passive migration preparation removed people before physical vessel departure.");
                 verifySchedulePlanning(paths);
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
@@ -108,12 +113,12 @@ public final class PassiveWorldSimulationVerification {
                         "The first due player-equivalent incident slots were not auto-resolved.");
                 require(count(paths, "world_encounter") - encountersBeforeDueTick == thirdResult.encountersResolved(),
                         "Due-slot encounter evidence does not match the passive tick result.");
-                require(flowCount(paths, MIGRATION_VESSEL, "IN_TRANSIT") == 1,
+                require(flowCount(paths, migrationVesselId, "IN_TRANSIT") == 1,
                         "The next passive tick did not synchronize physical migration departure.");
-                require(pressuredOriginPopulation(paths, MIGRATION_VESSEL) < originBeforeDeparture,
+                require(pressuredOriginPopulation(paths, migrationVesselId) < originBeforeDeparture,
                         "Physical migration departure did not release its exact cohort from the origin.");
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
-                                + MIGRATION_VESSEL + "' AND leg_type='OUTBOUND' AND status='IN_TRANSIT'") == 1,
+                                + migrationVesselId + "' AND leg_type='OUTBOUND' AND status='IN_TRANSIT'") == 1,
                         "Passive migration departure did not use the authoritative NPC transit leg.");
                 verifyResolvedIncidentEvidence(paths);
                 require(queryCount(paths, "SELECT COUNT(*) FROM world_mission m JOIN npc_vessel v "
@@ -125,12 +130,12 @@ public final class PassiveWorldSimulationVerification {
                 require(schemaVersion(paths) == WorldStorageContracts.DATABASE_SCHEMA_VERSION,
                         "Passive fixture was not stored under the current database schema.");
 
-                relieveMigrationOriginPressure(paths, MIGRATION_VESSEL);
-                advanceMigrationToArrival(paths, executor, MIGRATION_VESSEL);
-                long arrivedQuantity = flowQuantity(paths, MIGRATION_VESSEL, "arrived_quantity");
+                relieveMigrationOriginPressure(paths, migrationVesselId);
+                advanceMigrationToArrival(paths, executor, migrationVesselId);
+                long arrivedQuantity = flowQuantity(paths, migrationVesselId, "arrived_quantity");
                 require(arrivedQuantity > 0, "Terminal passive migration recorded no arrived population.");
                 String arrivalEvidence = "(SELECT flow_id||':arrival' FROM population_flow WHERE "
-                        + "assigned_npc_vessel_id='" + MIGRATION_VESSEL + "')";
+                        + "assigned_npc_vessel_id='" + migrationVesselId + "')";
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause='IMMIGRATION' "
                                 + "AND evidence_key=" + arrivalEvidence) == 1,
                         "Terminal passive migration did not write one destination immigration ledger term.");
@@ -143,7 +148,7 @@ public final class PassiveWorldSimulationVerification {
                         "Terminal passive migration ledger does not conserve all same-tick population terms.");
                 long destinationAfterArrival = queryCount(paths, "SELECT after_total FROM npc_population_ledger "
                         + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence);
-                require(migrationDestinationPopulation(paths, MIGRATION_VESSEL) == destinationAfterArrival,
+                require(migrationDestinationPopulation(paths, migrationVesselId) == destinationAfterArrival,
                         "Destination population does not match the terminal immigration ledger state.");
             }
 
