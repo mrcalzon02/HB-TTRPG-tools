@@ -132,9 +132,10 @@ public final class NpcPopulationMigrationEngineVerification {
             require(number(connection, "SELECT COUNT(*) FROM npc_population_flow_transition WHERE flow_id='"
                             + returningPlan.plannedFlowId() + "'") == 5,
                     "Plan, preparation, departure, return order, and return completion were not all recorded.");
-            require(number(connection, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause IN "
-                            + "('EMIGRATION','IMMIGRATION','RETURN')") == 4,
-                    "Automatic migration and return did not produce complete paired ledger terms.");
+            require(number(connection, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause='EVACUATION'") == 2
+                            && number(connection, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause='IMMIGRATION'") == 1
+                            && number(connection, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause='RETURN'") == 1,
+                    "Automatic emergency relocation and return did not produce exact paired ledger terms.");
             require(number(connection, "SELECT COUNT(*) FROM pragma_foreign_key_check") == 0,
                     "Passive migration engine produced foreign-key violations.");
 
