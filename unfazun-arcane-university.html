@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Great Arcane University of Unfazun | Calzon’s TTRPG Foundry</title>
+  <meta name="description" content="A static indexed module reference and interactive interpretive 3D map for the eighty-four keyed rooms of Alkroves Ichesnas Arcane Academia Universitalis.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/unfazun-arcane-university.html">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="unfazun-guildhall-atlas.css">
+</head>
+<body>
+  <header class="site-header no-print">
+    <div>
+      <p class="eyebrow">Static adventure module and interpretive atlas</p>
+      <h1>Alkroves Ichesnas</h1>
+      <p class="subtitle">The Great Arcane University of Unfazun</p>
+    </div>
+    <nav class="top-nav" aria-label="Module navigation">
+      <a class="nav-button" href="index.html">Foundry Home</a>
+      <a class="nav-button" href="index.html?view=modules">Interactive Viewer</a>
+      <a class="nav-button" href="unfazun-guildhall.html">Unfazun Guildhall</a>
+      <a class="nav-button active" href="unfazun-arcane-university.html" aria-current="page">Arcane University</a>
+    </nav>
+  </header>
+
+  <main class="unfazun-atlas-shell">
+    <nav class="top-nav unfazun-atlas-tabs no-print" aria-label="Module section tabs">
+      <a class="nav-button" href="modules.html">Module Index</a>
+      <a class="nav-button" href="unfazun-guildhall.html">Indexed Guildhall Atlas</a>
+      <a class="nav-button active" href="unfazun-arcane-university.html" aria-current="page">Indexed University Atlas</a>
+      <a class="nav-button" href="unfazun-arcane-university-source.html">Original Static Text</a>
+    </nav>
+
+    <p class="unfazun-atlas-note no-print">The complete prose remains preserved in a separate static source document. This page places a chapter navigator beside that source and a connectivity-driven three-dimensional interpretation on the right. The geometry is synthesized from each room’s description, architectural form, vertical context, and stated connections; it is an exploratory aid rather than a claim of exact measured plans.</p>
+
+    <div class="unfazun-atlas-layout">
+      <aside class="unfazun-index no-print" aria-labelledby="unfazun-index-title">
+        <div class="unfazun-panel-heading">
+          <p class="eyebrow">Chapter index</p>
+          <h2 id="unfazun-index-title">University Sections</h2>
+          <p>Jump within the preserved module text without rebuilding or rewriting it.</p>
+        </div>
+        <nav id="unfazun-chapter-list" class="unfazun-chapter-list" aria-label="Great Arcane University chapter index"></nav>
+        <div class="unfazun-room-jump">
+          <label for="unfazun-room-jump">Jump to keyed room
+            <select id="unfazun-room-jump"></select>
+          </label>
+        </div>
+      </aside>
+
+      <section class="unfazun-reader" aria-label="Preserved Great Arcane University module text">
+        <iframe id="unfazun-source-frame" src="unfazun-arcane-university-source.html" title="Preserved static text of Alkroves Ichesnas Arcane Academia Universitalis"></iframe>
+      </section>
+
+      <aside class="unfazun-map-panel no-print" aria-labelledby="unfazun-map-title">
+        <div class="unfazun-panel-heading">
+          <p class="eyebrow">Interpretive 3D structure</p>
+          <h2 id="unfazun-map-title">The Collapsed University</h2>
+          <p>Drag to rotate, use the wheel to zoom, and select a room to inspect its connected routes and synthesized spatial form.</p>
+        </div>
+
+        <div class="unfazun-map-controls">
+          <label class="wide" for="unfazun-map-search">Find a room
+            <input id="unfazun-map-search" type="search" placeholder="Room number or name" autocomplete="off">
+          </label>
+          <label for="unfazun-district-filter">University section
+            <select id="unfazun-district-filter">
+              <option value="all">All sections</option>
+            </select>
+          </label>
+          <label for="unfazun-label-mode">Labels
+            <select id="unfazun-label-mode">
+              <option value="selected">Selected room</option>
+              <option value="numbers">Room numbers</option>
+              <option value="all">All room names</option>
+              <option value="none">No labels</option>
+            </select>
+          </label>
+          <div class="unfazun-map-actions">
+            <button id="unfazun-map-reset" type="button">Reset view</button>
+            <button id="unfazun-map-fit" type="button">Fit visible</button>
+            <button id="unfazun-map-center" type="button">Center selected</button>
+          </div>
+        </div>
+
+        <div class="unfazun-map-wrap" id="unfazun-map-wrap">
+          <canvas id="unfazun-map-canvas" aria-label="Interactive three-dimensional diagram of the eighty-four keyed rooms of the Great Arcane University"></canvas>
+          <div class="unfazun-map-help">Drag: rotate · Wheel: zoom · Click: select · Double-click: jump to room text</div>
+        </div>
+
+        <div id="unfazun-room-info" class="unfazun-room-info" aria-live="polite"></div>
+        <div id="unfazun-map-legend" class="unfazun-map-legend" aria-label="University section legend"></div>
+        <p id="unfazun-map-status" class="unfazun-map-status">Preparing the interpretive university network…</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer no-print">
+    <p>Calzon’s TTRPG Foundry · Static Great Arcane University module reference and interpretive atlas.</p>
+  </footer>
+
+  <script src="unfazun-arcane-university-atlas.js"></script>
+</body>
+</html>
