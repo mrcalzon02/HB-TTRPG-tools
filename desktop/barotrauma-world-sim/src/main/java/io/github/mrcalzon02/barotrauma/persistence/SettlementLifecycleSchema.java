@@ -119,7 +119,7 @@ public final class SettlementLifecycleSchema {
                   OR NEW.committed_population>NEW.required_population
                   OR NEW.committed_transport_units>NEW.required_transport_units
                   OR NEW.progress_units>NEW.target_progress_units
-                  OR (NEW.status='ACTIVE' AND (
+                  OR (OLD.status<>'ACTIVE' AND NEW.status='ACTIVE' AND (
                         NEW.committed_material_units<NEW.required_material_units OR
                         NEW.committed_supply_units<NEW.required_supply_units OR
                         NEW.committed_population<NEW.required_population OR
