@@ -4,7 +4,7 @@
   const base = window.HBTTRPGApp;
   if (!base) return;
   let sheetPromise = null;
-  let barotraumaAssetPromise = null;
+  let barotraumaPromise = null;
 
   function loadScript(src) {
     if (document.querySelector(`script[data-hb-core-view="${src}"]`)) return Promise.resolve();
@@ -20,12 +20,25 @@
   }
 
   function loadStyle(href) {
-    if (document.querySelector(`link[data-hb-core-view-style="${href}"]`)) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    link.dataset.hbCoreViewStyle = href;
-    document.head.appendChild(link);
+    const existing = document.querySelector(`link[data-hb-core-view-style="${href}"]`);
+    if (existing) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.dataset.hbCoreViewStyle = href;
+      link.onload = resolve;
+      link.onerror = () => reject(new Error(`${href} could not be loaded.`));
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadBarotraumaWorkspace() {
+    barotraumaPromise ||= Promise.all([
+      loadStyle('barotrauma-packaged-assets.css?v=3'),
+      loadScript('barotrauma-packaged-assets.js?v=3')
+    ]).then(() => loadScript('barotrauma-entry.js?v=3'));
+    return barotraumaPromise;
   }
 
   async function prepareView(viewId) {
@@ -36,20 +49,14 @@
       return;
     }
     if (viewId === 'barotrauma') {
-      loadStyle('barotrauma-packaged-assets.css?v=2');
-      barotraumaAssetPromise ||= loadScript('barotrauma-packaged-assets.js?v=2');
-      await Promise.all([barotraumaAssetPromise, base.prepareView(viewId)]);
-      await window.BarotraumaPackagedAssets?.decorate(document);
-      return;
+      await Promise.all([loadBarotraumaWorkspace(), base.prepareView(viewId)]);
+      return window.BarotraumaWorkspace?.initialize();
     }
     return base.prepareView(viewId);
   }
 
   document.addEventListener('hb:view-activated', event => {
     if (event.detail?.viewId === 'modules') window.initModuleViewer?.();
-    if (event.detail?.viewId === 'barotrauma') {
-      void window.BarotraumaPackagedAssets?.decorate(document);
-    }
   });
 
   window.HBTTRPGApp = Object.freeze({
