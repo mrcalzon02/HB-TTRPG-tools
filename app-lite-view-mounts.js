@@ -36,8 +36,8 @@
       return;
     }
     if (viewId === 'barotrauma') {
-      loadStyle('barotrauma-packaged-assets.css');
-      barotraumaAssetPromise ||= loadScript('barotrauma-packaged-assets.js');
+      loadStyle('barotrauma-packaged-assets.css?v=2');
+      barotraumaAssetPromise ||= loadScript('barotrauma-packaged-assets.js?v=2');
       await Promise.all([barotraumaAssetPromise, base.prepareView(viewId)]);
       await window.BarotraumaPackagedAssets?.decorate(document);
       return;
