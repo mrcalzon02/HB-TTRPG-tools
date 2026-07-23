@@ -259,6 +259,8 @@ public final class PassiveWorldSimulationVerification {
     private static void configureMigrationPressure(WorldPaths paths, String vesselId) throws Exception {
         String populationTotal = "p.civilians+p.industrial_workers+p.logistics_workers+p.security_personnel+"
                 + "p.medical_personnel+p.scientific_personnel+p.temporary_residents+p.refugees";
+        String workforceTotal = "p.industrial_workers+p.logistics_workers+p.security_personnel+"
+                + "p.medical_personnel+p.scientific_personnel";
         String originPopulation = "(SELECT p.population_id FROM npc_population_state p WHERE NOT EXISTS("
                 + "SELECT 1 FROM population_flow f WHERE f.population_id=p.population_id "
                 + "AND f.entity_type='NPC_POPULATION' AND f.status IN ('PLANNED','PREPARING','IN_TRANSIT','RETURNING')) "
@@ -267,8 +269,9 @@ public final class PassiveWorldSimulationVerification {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("UPDATE station_simulation_state SET integrity=100,threat=0,status='STABLE',"
                     + "supplies=150,security=100");
-            statement.executeUpdate("UPDATE npc_population_state SET morale=90,housing_capacity=5000,"
-                    + "life_support_capacity=5000,employment_capacity=5000");
+            statement.executeUpdate("UPDATE npc_population_state p SET morale=90,housing_capacity=("
+                    + populationTotal + ")+1000,life_support_capacity=(" + populationTotal
+                    + ")+1000,employment_capacity=(" + workforceTotal + ")+1000");
             statement.executeUpdate("UPDATE station_simulation_state SET integrity=20,threat=90,status='BESIEGED',"
                     + "supplies=20 WHERE station_id=(SELECT station_id FROM npc_population_state WHERE population_id="
                     + originPopulation + ")");
