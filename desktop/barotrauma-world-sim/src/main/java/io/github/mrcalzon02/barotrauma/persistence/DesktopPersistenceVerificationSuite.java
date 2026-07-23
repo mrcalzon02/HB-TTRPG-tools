@@ -71,6 +71,7 @@ public final class DesktopPersistenceVerificationSuite {
         NpcTransitScheduleEngine.verifyContract();
         PassiveWorldSimulationVerification.verifyContract();
         StationLogisticsVerification.verifyContract();
+        StationPopulationSeedVerification.verifyContract();
         StationCivilizationVerification.verifyContract();
         FleetRecoveryAndNaturalWorldVerification.verifyContract();
         NaturalResourceHarvestingVerification.verifyContract();
