@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="character-sheet-layout.css">
   <link rel="stylesheet" href="medicinal-potions.css" data-potion-formulary-style="medicinal-potions.css">
   <link rel="stylesheet" href="workspace-landing.css">
-  <link rel="stylesheet" href="barotrauma-packaged-assets.css?v=3">
+  <link rel="stylesheet" href="barotrauma-packaged-assets.css?v=4">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -178,25 +178,137 @@
     </section>
 
     <section id="barotrauma" class="view" aria-labelledby="barotrauma-title">
-      <div class="hero-card no-print">
+      <div class="hero-card no-print" data-barotrauma-scene="application-shell">
         <p class="eyebrow">Barotrauma campaign workspace</p>
         <h2 id="barotrauma-title">Europa Operations and Lore Dashboard</h2>
-        <p>A registry-backed foundation for crew lore, submarine operations, missions, investigations, threats, wrecks, and voyage records.</p>
+        <p>A static registry-backed foundation for crew lore, submarine operations, missions, investigations, threats, wrecks, and voyage records.</p>
         <div class="workspace-actions"><a class="link-button primary-action" href="https://github.com/mrcalzon02/HB-TTRPG-tools/releases/latest" target="_blank" rel="noopener">Download Local App Installer</a><a class="link-button" href="barotrauma.html">Open Barotrauma Overview</a></div>
       </div>
       <div class="registry-controls no-print" aria-label="Barotrauma module controls">
         <label class="control-label" for="barotrauma-search">Search Barotrauma modules</label>
         <input id="barotrauma-search" class="tool-input" type="search" placeholder="Search crew, submarines, missions, cults, threats, wrecks, investigations...">
         <div class="segmented-control registry-filter-group" role="group" aria-label="Barotrauma registry filters">
-          <button class="layout-button registry-filter active" data-barotrauma-filter="all">All</button>
-          <button class="layout-button registry-filter" data-barotrauma-filter="reference">Reference</button>
-          <button class="layout-button registry-filter" data-barotrauma-filter="tools">Tools</button>
-          <button class="layout-button registry-filter" data-barotrauma-filter="generators">Generators</button>
-          <button class="layout-button registry-filter" data-barotrauma-filter="campaign">Campaign</button>
+          <button class="layout-button registry-filter active" type="button" aria-pressed="true" data-barotrauma-filter="all">All</button>
+          <button class="layout-button registry-filter" type="button" aria-pressed="false" data-barotrauma-filter="reference">Reference</button>
+          <button class="layout-button registry-filter" type="button" aria-pressed="false" data-barotrauma-filter="tools">Tools</button>
+          <button class="layout-button registry-filter" type="button" aria-pressed="false" data-barotrauma-filter="generators">Generators</button>
+          <button class="layout-button registry-filter" type="button" aria-pressed="false" data-barotrauma-filter="campaign">Campaign</button>
         </div>
       </div>
-      <div id="barotrauma-status" class="registry-status no-print">Barotrauma loads when this workspace is opened.</div>
-      <div id="barotrauma-overview-grid" class="module-grid no-print"></div>
+      <div id="barotrauma-status" class="registry-status no-print" role="status" aria-live="polite">17 of 17 modules shown · foundation registry with source-faithful Markdown wikis and operational RPG tools</div>
+      <div id="barotrauma-overview-grid" class="module-grid no-print">
+        <article class="module-card barotrauma-atlas-surface active-submarine-dashboard-card" data-module-id="barotrauma-active-submarine-dashboard" data-section="tools" data-barotrauma-scene="application-shell" data-barotrauma-icon="vessel">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-tools">Tools</span><span class="badge status-integrated">Integrated Campaign View</span></div>
+          <h3>Active Submarine Management Dashboard</h3>
+          <p>The live-campaign command view for one ID-linked submarine and crew, including station and route states, starting stations, commerce, event cards, casualties, rotating turns, and initiative.</p>
+          <div class="chip-list"><span class="chip">Active Vessel State</span><span class="chip">Crew Turn Order</span><span class="chip">Route Transit</span><span class="chip">Station Commerce</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#dashboard">Open Active Submarine Dashboard</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-crewmans-primer" data-section="reference" data-barotrauma-scene="observation" data-barotrauma-icon="document">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-reference">Reference</span></div>
+          <h3>The Crewman's Primer</h3>
+          <p>A searchable, source-faithful conversion of the Europan Crewman’s Primer with all 198 titled sections retained as separate entries in manuscript order.</p>
+          <div class="chip-list"><span class="chip">Wiki Entry</span><span class="chip">Wiki Heading</span><span class="chip">Wiki Paragraph</span><span class="chip">Wiki List</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-primer.html">Open Crewman's Primer Wiki</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-rpg-rules-wiki" data-section="reference" data-barotrauma-scene="logistics" data-barotrauma-icon="document">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-reference">Reference</span></div>
+          <h3>Barotrauma RPG</h3>
+          <p>A complete exact-source conversion of Barotrauma RPG.docx, preserving all 19 source-defined sections, original order, headings, paragraphs, lists, punctuation, and emphasis.</p>
+          <div class="chip-list"><span class="chip">Wiki Entry</span><span class="chip">Wiki Heading</span><span class="chip">Wiki Paragraph</span><span class="chip">Wiki List</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg.html">Open Barotrauma RPG Wiki</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-rpg-character-sheet" data-section="tools" data-barotrauma-scene="import-review" data-barotrauma-icon="medical">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-tools">Tools</span></div>
+          <h3>Barotrauma RPG Character Sheet</h3>
+          <p>A persistent S.A.I.C. character record with weapons, ammunition, repair tools, consumables, item condition, inventory slots, conditions, task resolution, and portable submissions.</p>
+          <div class="chip-list"><span class="chip">Character Record</span><span class="chip">Stat Block</span><span class="chip">Inventory</span><span class="chip">Task Roll</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#character">Open Character Sheet</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-submarine-manager" data-section="tools" data-barotrauma-scene="fleet-management" data-barotrauma-icon="vessel">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-tools">Tools</span></div>
+          <h3>Submarine Manager</h3>
+          <p>A table-side vessel manager for official and custom submarines, crew rosters, cargo, station stores, vendors, reputation, weapons, upgrades, research, and upkeep.</p>
+          <div class="chip-list"><span class="chip">Vessel State</span><span class="chip">Crew Roster</span><span class="chip">Cargo Manifest</span><span class="chip">Station Market</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#submarine">Open Submarine Manager</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-custom-content-workshop" data-section="tools" data-barotrauma-scene="import-review" data-barotrauma-icon="research">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-tools">Tools</span></div>
+          <h3>Custom Content Workshop and R&amp;D</h3>
+          <p>Create source-anchored weapons, ammunition, systems, power sources, equipment, consumables, stations, and modules with validation and canonical research requirements.</p>
+          <div class="chip-list"><span class="chip">Custom Content</span><span class="chip">Design Validation</span><span class="chip">Research Project</span><span class="chip">Development Schedule</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#workshop">Open Custom Content Workshop</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-encounter-planner" data-section="tools" data-barotrauma-scene="simulation" data-barotrauma-icon="mission">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-tools">Tools</span></div>
+          <h3>Encounter Planner</h3>
+          <p>Draw, customize, sequence, and resolve maintenance failures, hazards, exploration, station, pirate, creature, salvage, navigation, and optional Lost Sanity events.</p>
+          <div class="chip-list"><span class="chip">Encounter Card</span><span class="chip">Location Encounter</span><span class="chip">Event Sequence</span><span class="chip">Failure Consequence</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#encounters">Open Encounter Planner</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-route-planner" data-section="tools" data-barotrauma-scene="world-map" data-barotrauma-icon="route">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-tools">Tools</span></div>
+          <h3>Route Planner and Encounter Tables</h3>
+          <p>Plan station-to-station voyages, combine Job-card event requirements with route distance, apply Navigator abilities, and generate sequential voyage events.</p>
+          <div class="chip-list"><span class="chip">Route Plan</span><span class="chip">Job Card</span><span class="chip">Encounter Table</span><span class="chip">Navigation Modifier</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#route">Open Route Planner</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-world-map-generator" data-section="generators" data-barotrauma-scene="world-map" data-barotrauma-icon="location">
+          <div class="module-meta"><span class="badge status-available">Available</span><span class="badge section-generators">Generators</span></div>
+          <h3>Expanded Europa Public World State</h3>
+          <p>A seeded Europa world with 48 inward voyage rings, 960 locations, 180 stations, eight districts, ten radial levels, faction ownership, routes, saves, and submissions.</p>
+          <div class="chip-list"><span class="chip">World Identity</span><span class="chip">World Map</span><span class="chip">Location Level</span><span class="chip">Station Profile</span></div>
+          <div class="module-actions"><a class="primary-action barotrauma-action" href="barotrauma-rpg-tools.html#world">Open World State</a></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-cult-faction-dossiers" data-section="reference" data-barotrauma-scene="registry" data-barotrauma-icon="crew">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-reference">Reference</span></div>
+          <h3>Cult and Faction Dossiers</h3>
+          <p>Long-form ideology, recruitment, leadership, contradiction, incident, and campaign-hook dossiers for Europan institutions, factions, corporations, cartels, and cults.</p>
+          <div class="chip-list"><span class="chip">Faction Profile</span><span class="chip">Belief Profile</span><span class="chip">Leadership</span><span class="chip">Incident Hook</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-crew-roster-generator" data-section="generators" data-barotrauma-scene="registry" data-barotrauma-icon="crew">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-generators">Generators</span></div>
+          <h3>Crew and Personnel Generator</h3>
+          <p>Create captains, engineers, mechanics, medical staff, security officers, assistants, specialists, passengers, secrets, qualifications, grudges, and liabilities.</p>
+          <div class="chip-list"><span class="chip">Crew Profile</span><span class="chip">Role Profile</span><span class="chip">Qualification</span><span class="chip">Secret Profile</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-mission-contract-generator" data-section="generators" data-barotrauma-scene="simulation" data-barotrauma-icon="mission">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-generators">Generators</span></div>
+          <h3>Mission and Contract Generator</h3>
+          <p>Build transport, salvage, rescue, survey, hunting, escort, recovery, medical, smuggling, and military contracts with hidden clauses and consequences.</p>
+          <div class="chip-list"><span class="chip">Mission Profile</span><span class="chip">Contract Clause</span><span class="chip">Route Pressure</span><span class="chip">Reward Profile</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-emergency-cascade-generator" data-section="generators" data-barotrauma-scene="recovery" data-barotrauma-icon="warning">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-generators">Generators</span></div>
+          <h3>Emergency and Failure Cascade Generator</h3>
+          <p>Produce escalating submarine emergencies in which flooding, fire, electrical loss, reactor damage, oxygen depletion, boarding, panic, and repair mistakes interact.</p>
+          <div class="chip-list"><span class="chip">Emergency Profile</span><span class="chip">Trigger</span><span class="chip">Cascade Step</span><span class="chip">Recovery Condition</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-creature-threat-catalogue" data-section="reference" data-barotrauma-scene="recovery" data-barotrauma-icon="warning">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-reference">Reference</span></div>
+          <h3>Abyssal Creature and Threat Catalogue</h3>
+          <p>A campaign-facing threat index for hostile fauna, parasites, environmental dangers, behavioral signs, attack patterns, evidence, defensive doctrine, and misidentification.</p>
+          <div class="chip-list"><span class="chip">Threat Profile</span><span class="chip">Behavior Pattern</span><span class="chip">Evidence Clue</span><span class="chip">Countermeasure</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-depth-detective" data-section="campaign" data-barotrauma-scene="observation" data-barotrauma-icon="observe">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-campaign">Campaign</span></div>
+          <h3>Depth Detective Case Builder</h3>
+          <p>Construct closed-environment investigations aboard submarines and stations with victims, suspects, motives, testimony, evidence, logs, false leads, and revelation chains.</p>
+          <div class="chip-list"><span class="chip">Case Profile</span><span class="chip">Suspect Profile</span><span class="chip">Evidence Chain</span><span class="chip">Timeline</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-outpost-wreck-generator" data-section="generators" data-barotrauma-scene="recovery" data-barotrauma-icon="station">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-generators">Generators</span></div>
+          <h3>Outpost, Wreck, and Salvage Site Generator</h3>
+          <p>Create inhabited stations, abandoned facilities, broken submarines, sealed compartments, salvage rights, survivors, contamination, hazards, and valuable systems.</p>
+          <div class="chip-list"><span class="chip">Site Profile</span><span class="chip">Compartment</span><span class="chip">Salvage Profile</span><span class="chip">Hazard Profile</span></div>
+        </article>
+        <article class="module-card barotrauma-atlas-surface" data-module-id="barotrauma-campaign-logbook" data-section="tools" data-barotrauma-scene="logistics" data-barotrauma-icon="document">
+          <div class="module-meta"><span class="badge status-planned">Planned</span><span class="badge section-tools">Tools</span></div>
+          <h3>Campaign Logbook and Incident Ledger</h3>
+          <p>Record voyages, contracts, casualties, injuries, repairs, supplies, discipline, faction standing, unresolved evidence, infections, artifacts, and institutional memory.</p>
+          <div class="chip-list"><span class="chip">Voyage Record</span><span class="chip">Incident Record</span><span class="chip">Casualty Ledger</span><span class="chip">Repair Ledger</span></div>
+        </article>
+      </div>
     </section>
 
     <section id="kaysender" class="view" aria-labelledby="kaysender-title">
@@ -250,7 +362,7 @@
   </footer>
 
   <script src="app-lite.js"></script>
-  <script src="app-lite-view-mounts.js?v=3"></script>
+  <script src="app-lite-view-mounts.js?v=4"></script>
   <script src="character-sheet-title.js"></script>
   <script src="medicinal-potions-entry.js"></script>
   <script src="foundry-search.js"></script>
