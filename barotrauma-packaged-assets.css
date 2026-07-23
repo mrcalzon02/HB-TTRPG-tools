@@ -1,9 +1,5 @@
-:root {
-  --barotrauma-asset-root: "desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets";
-}
-
-.barotrauma-atlas-surface,
 #barotrauma > .hero-card,
+.barotrauma-atlas-surface,
 .workspace-hero[data-barotrauma-scene],
 .workspace-tool-card[data-barotrauma-scene] {
   position: relative;
@@ -14,8 +10,8 @@
   box-shadow: inset 0 0 0 1px rgba(215, 238, 229, 0.04), 0 16px 38px rgba(0, 0, 0, 0.24);
 }
 
-.barotrauma-atlas-surface::after,
 #barotrauma > .hero-card::after,
+.barotrauma-atlas-surface::after,
 .workspace-hero[data-barotrauma-scene]::after,
 .workspace-tool-card[data-barotrauma-scene]::after {
   content: "";
@@ -28,73 +24,170 @@
     repeating-linear-gradient(0deg, rgba(161, 229, 220, 0.025) 0 1px, transparent 1px 5px);
 }
 
-.barotrauma-atlas-surface > :not(.barotrauma-atlas-backdrop):not(.barotrauma-atlas-icon),
 #barotrauma > .hero-card > *,
+.barotrauma-atlas-surface > *,
 .workspace-hero[data-barotrauma-scene] > *,
 .workspace-tool-card[data-barotrauma-scene] > * {
   position: relative;
   z-index: 2;
 }
 
-.barotrauma-atlas-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  opacity: 0.88;
-  pointer-events: none;
+[data-barotrauma-scene] {
+  --barotrauma-static-image: none;
+  --barotrauma-static-x: 0%;
+  --barotrauma-static-y: 0%;
+  background-image: var(--barotrauma-static-image);
+  background-repeat: no-repeat;
+  background-size: 303.5% auto;
+  background-position: var(--barotrauma-static-x) var(--barotrauma-static-y);
 }
 
-.barotrauma-atlas-icon {
+[data-barotrauma-scene="application-shell"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png");
+  --barotrauma-static-x: 0%;
+  --barotrauma-static-y: 0%;
+}
+
+[data-barotrauma-scene="observation"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_02.png");
+  --barotrauma-static-x: 50%;
+  --barotrauma-static-y: 0%;
+}
+
+[data-barotrauma-scene="import-review"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_02.png");
+  --barotrauma-static-x: 0%;
+  --barotrauma-static-y: 100%;
+}
+
+[data-barotrauma-scene="logistics"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_06.png");
+  --barotrauma-static-x: 50%;
+  --barotrauma-static-y: 100%;
+}
+
+[data-barotrauma-scene="registry"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png");
+  --barotrauma-static-x: 50%;
+  --barotrauma-static-y: 100%;
+}
+
+[data-barotrauma-scene="world-map"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_dystopia_grid.png");
+  --barotrauma-static-x: 100%;
+  --barotrauma-static-y: 0%;
+}
+
+[data-barotrauma-scene="fleet-management"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_shipyard_collage.png");
+  --barotrauma-static-x: 50%;
+  --barotrauma-static-y: 100%;
+}
+
+[data-barotrauma-scene="simulation"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_megastructure_collage.png");
+  --barotrauma-static-x: 100%;
+  --barotrauma-static-y: 100%;
+}
+
+[data-barotrauma-scene="recovery"] {
+  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/derelict_ships_in_stormy_industrial_wasteland.png");
+  --barotrauma-static-x: 100%;
+  --barotrauma-static-y: 100%;
+}
+
+.barotrauma-atlas-surface[data-barotrauma-icon]::before,
+.workspace-hero[data-barotrauma-ui]::before,
+.workspace-tool-card[data-barotrauma-ui]::before {
+  content: "";
   position: absolute;
   top: 12px;
   right: 12px;
   z-index: 3;
-  display: block;
   width: 58px;
   height: 58px;
-  margin: 0;
-  padding: 0.42rem;
   border: 1px solid rgba(118, 220, 207, 0.55);
   border-radius: 10px;
-  background: rgba(2, 10, 14, 0.82);
+  background-color: rgba(2, 10, 14, 0.84);
+  background-repeat: no-repeat;
   box-shadow: 0 0 22px rgba(53, 189, 188, 0.16), inset 0 0 18px rgba(113, 222, 209, 0.08);
   pointer-events: none;
 }
 
-.barotrauma-atlas-surface .module-meta {
+:is([data-barotrauma-icon="vessel"], [data-barotrauma-ui="vessel"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
+  background-size: 811px 228px;
+  background-position: -261px -155px;
+}
+
+:is([data-barotrauma-icon="document"], [data-barotrauma-ui="document"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 631px 631px;
+  background-position: -561px -443px;
+}
+
+:is([data-barotrauma-icon="medical"], [data-barotrauma-ui="medical"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
+  background-size: 1365px 1365px;
+  background-position: -641px -80px;
+}
+
+:is([data-barotrauma-icon="research"], [data-barotrauma-ui="research"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
+  background-size: 1002px 1002px;
+  background-position: -574px -94px;
+}
+
+:is([data-barotrauma-icon="mission"], [data-barotrauma-ui="mission"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 631px 631px;
+  background-position: -561px -371px;
+}
+
+:is([data-barotrauma-icon="route"], [data-barotrauma-ui="route"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
+  background-size: 1197px 337px;
+  background-position: -629px -72px;
+}
+
+:is([data-barotrauma-icon="location"], [data-barotrauma-ui="location"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 1396px 1396px;
+  background-position: -934px -1155px;
+}
+
+:is([data-barotrauma-icon="station"], [data-barotrauma-ui="station"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 1396px 1396px;
+  background-position: -1142px -1155px;
+}
+
+:is([data-barotrauma-icon="crew"], [data-barotrauma-ui="crew"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 631px 631px;
+  background-position: -561px -299px;
+}
+
+:is([data-barotrauma-icon="warning"], [data-barotrauma-ui="warning"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
+  background-size: 1280px 360px;
+  background-position: -1066px -264px;
+}
+
+:is([data-barotrauma-icon="observe"], [data-barotrauma-ui="observe"])::before {
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
+  background-size: 1355px 1355px;
+  background-position: -214px -827px;
+}
+
+.barotrauma-atlas-surface .module-meta,
+.workspace-hero[data-barotrauma-ui] .workspace-hero-copy,
+.workspace-tool-card[data-barotrauma-ui] {
   padding-right: 72px;
-}
-
-.barotrauma-atlas-glyph {
-  display: inline-block;
-  flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
-  pointer-events: none;
-}
-
-.barotrauma-badge,
-.barotrauma-action {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 0.38rem;
-}
-
-.barotrauma-badge .barotrauma-atlas-glyph {
-  width: 13px;
-  height: 13px;
 }
 
 #barotrauma > .hero-card {
   min-height: 250px;
-  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png");
-  background-repeat: no-repeat;
-  background-size: 303.5% auto;
-  background-position: 0 0;
 }
 
 #barotrauma .module-card.barotrauma-atlas-surface,
@@ -250,80 +343,19 @@
   background-position: -318px -41px;
 }
 
-.workspace-hero[data-barotrauma-scene],
-.workspace-tool-card[data-barotrauma-scene] {
-  --barotrauma-static-image: none;
-  --barotrauma-static-x: 0%;
-  --barotrauma-static-y: 0%;
-  background-image: var(--barotrauma-static-image);
-  background-repeat: no-repeat;
-  background-size: 303.5% auto;
-  background-position: var(--barotrauma-static-x) var(--barotrauma-static-y);
-}
-
-[data-barotrauma-scene="application-shell"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png");
-  --barotrauma-static-x: 0%;
-  --barotrauma-static-y: 0%;
-}
-
-[data-barotrauma-scene="observation"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_02.png");
-  --barotrauma-static-x: 50%;
-  --barotrauma-static-y: 0%;
-}
-
-[data-barotrauma-scene="import-review"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_02.png");
-  --barotrauma-static-x: 0%;
-  --barotrauma-static-y: 100%;
-}
-
-[data-barotrauma-scene="logistics"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_06.png");
-  --barotrauma-static-x: 50%;
-  --barotrauma-static-y: 100%;
-}
-
-[data-barotrauma-scene="registry"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png");
-  --barotrauma-static-x: 50%;
-  --barotrauma-static-y: 100%;
-}
-
-[data-barotrauma-scene="world-map"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_dystopia_grid.png");
-  --barotrauma-static-x: 100%;
-  --barotrauma-static-y: 0%;
-}
-
-[data-barotrauma-scene="fleet-management"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_shipyard_collage.png");
-  --barotrauma-static-x: 50%;
-  --barotrauma-static-y: 100%;
-}
-
-[data-barotrauma-scene="simulation"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_megastructure_collage.png");
-  --barotrauma-static-x: 100%;
-  --barotrauma-static-y: 100%;
-}
-
-[data-barotrauma-scene="recovery"] {
-  --barotrauma-static-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/derelict_ships_in_stormy_industrial_wasteland.png");
-  --barotrauma-static-x: 100%;
-  --barotrauma-static-y: 100%;
-}
-
 @media (max-width: 720px) {
-  .barotrauma-atlas-icon {
+  .barotrauma-atlas-surface[data-barotrauma-icon]::before,
+  .workspace-hero[data-barotrauma-ui]::before,
+  .workspace-tool-card[data-barotrauma-ui]::before {
     top: 10px;
     right: 10px;
     width: 50px;
     height: 50px;
   }
 
-  .barotrauma-atlas-surface .module-meta {
+  .barotrauma-atlas-surface .module-meta,
+  .workspace-hero[data-barotrauma-ui] .workspace-hero-copy,
+  .workspace-tool-card[data-barotrauma-ui] {
     padding-right: 62px;
   }
 
