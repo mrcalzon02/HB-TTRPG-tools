@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('setup','build','verify','run','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
+    [ValidateSet('setup','build','verify','package','run','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
     [string]$Command = 'build'
 )
 
@@ -12,6 +12,9 @@ $classesRoot = Join-Path $buildRoot 'classes'
 $temporaryRoot = Join-Path $buildRoot 'temp'
 $libraryRoot = Join-Path $projectRoot 'lib'
 $applicationJar = Join-Path $buildRoot 'barotrauma-world-sim.jar'
+$releasePropertiesPath = Join-Path $projectRoot 'release.properties'
+$packageInputRoot = Join-Path $buildRoot 'package-input'
+$releaseRoot = Join-Path $buildRoot 'release'
 $sqliteVersion = '3.53.1.0'
 $sqliteSha256 = '28aceecfcc9535645bd19fa988385703c7b89982c1506a6855f5942b4032eca6'
 $sqliteJar = Join-Path $libraryRoot "sqlite-jdbc-$sqliteVersion.jar"
@@ -83,6 +86,76 @@ function Build-Application {
     Write-Host "Built $applicationJar"
 }
 
+function Read-ReleaseProperties {
+    if (-not (Test-Path -LiteralPath $releasePropertiesPath -PathType Leaf)) {
+        throw "Release manifest not found: $releasePropertiesPath"
+    }
+    $values = ConvertFrom-StringData (Get-Content -LiteralPath $releasePropertiesPath -Raw)
+    foreach ($required in @('version','tag','title','assetBaseName')) {
+        if ([string]::IsNullOrWhiteSpace($values[$required])) {
+            throw "Release manifest is missing $required."
+        }
+    }
+    return [pscustomobject]@{
+        Version = $values['version'].Trim()
+        Tag = $values['tag'].Trim()
+        Title = $values['title'].Trim()
+        AssetBaseName = $values['assetBaseName'].Trim()
+    }
+}
+
+function Package-Application {
+    if (-not ($IsWindows -or $env:OS -eq 'Windows_NT')) {
+        throw 'The MSI package command must run on Windows.'
+    }
+    Ensure-Dependencies
+    Build-Application
+    $jpackage = Resolve-JdkTool 'jpackage'
+    $release = Read-ReleaseProperties
+
+    foreach ($path in @($packageInputRoot, $releaseRoot)) {
+        if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Recurse -Force }
+        New-Item -ItemType Directory -Path $path -Force | Out-Null
+    }
+    Copy-Item -LiteralPath $applicationJar -Destination $packageInputRoot -Force
+    Copy-Item -LiteralPath $sqliteJar -Destination $packageInputRoot -Force
+
+    $arguments = @(
+        '--type', 'msi',
+        '--dest', $releaseRoot,
+        '--input', $packageInputRoot,
+        '--name', 'Barotrauma World Simulation Toolbox',
+        '--main-jar', (Split-Path -Leaf $applicationJar),
+        '--main-class', 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication',
+        '--app-version', $release.Version,
+        '--vendor', "Calzon's TTRPG Foundry",
+        '--description', 'Local Java 17 Barotrauma campaign world simulation and observation runtime.',
+        '--java-options', '--enable-native-access=ALL-UNNAMED',
+        '--win-dir-chooser',
+        '--win-menu',
+        '--win-menu-group', "Calzon's TTRPG Foundry",
+        '--win-shortcut',
+        '--win-per-user-install'
+    )
+    & $jpackage @arguments
+    if ($LASTEXITCODE -ne 0) { throw "MSI packaging failed with exit code $LASTEXITCODE." }
+
+    $generated = Get-ChildItem -LiteralPath $releaseRoot -Filter '*.msi' -File |
+        Sort-Object LastWriteTimeUtc -Descending |
+        Select-Object -First 1
+    if ($null -eq $generated) { throw 'jpackage completed without creating an MSI.' }
+    $assetName = "$($release.AssetBaseName)-$($release.Version)-Windows-x64.msi"
+    $assetPath = Join-Path $releaseRoot $assetName
+    if ($generated.FullName -ne $assetPath) {
+        Move-Item -LiteralPath $generated.FullName -Destination $assetPath -Force
+    }
+    $hash = (Get-FileHash -LiteralPath $assetPath -Algorithm SHA256).Hash.ToLowerInvariant()
+    $checksumPath = "$assetPath.sha256"
+    Set-Content -LiteralPath $checksumPath -Value "$hash  $assetName" -Encoding ascii -NoNewline
+    Write-Host "Packaged $assetPath"
+    Write-Host "SHA-256 $hash"
+}
+
 function Runtime-Classpath {
     return "$applicationJar$([IO.Path]::PathSeparator)$sqliteJar"
 }
@@ -122,6 +195,7 @@ $entryPoints = @{
 switch ($Command) {
     'setup' { Ensure-Dependencies }
     'build' { Build-Application }
+    'package' { Package-Application }
     'verify' {
         Run-Class 'io.github.mrcalzon02.barotrauma.persistence.DesktopPersistenceVerificationSuite' @('--verify')
         $java = Resolve-JdkTool 'java'
