@@ -48,19 +48,24 @@
 }
 
 .barotrauma-atlas-icon {
-  position: relative;
+  position: absolute;
+  top: 12px;
+  right: 12px;
   z-index: 3;
   display: block;
-  float: right;
   width: 58px;
   height: 58px;
-  margin: 0 0 0.75rem 1rem;
+  margin: 0;
   padding: 0.42rem;
   border: 1px solid rgba(118, 220, 207, 0.55);
   border-radius: 10px;
   background: rgba(2, 10, 14, 0.82);
   box-shadow: 0 0 22px rgba(53, 189, 188, 0.16), inset 0 0 18px rgba(113, 222, 209, 0.08);
   pointer-events: none;
+}
+
+.barotrauma-atlas-surface .module-meta {
+  padding-right: 72px;
 }
 
 .barotrauma-atlas-glyph {
@@ -312,9 +317,14 @@
 
 @media (max-width: 720px) {
   .barotrauma-atlas-icon {
+    top: 10px;
+    right: 10px;
     width: 50px;
     height: 50px;
-    margin-left: 0.65rem;
+  }
+
+  .barotrauma-atlas-surface .module-meta {
+    padding-right: 62px;
   }
 
   #barotrauma > .hero-card {
