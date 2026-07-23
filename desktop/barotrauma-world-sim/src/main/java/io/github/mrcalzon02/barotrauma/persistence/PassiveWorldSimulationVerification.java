@@ -133,17 +133,25 @@ public final class PassiveWorldSimulationVerification {
                         "Passive fixture was not stored under the current database schema.");
 
                 relieveMigrationOriginPressure(paths);
-                long destinationBeforeArrival = migrationDestinationPopulation(paths, MIGRATION_VESSEL);
                 advanceMigrationToArrival(paths, executor, MIGRATION_VESSEL);
                 long arrivedQuantity = flowQuantity(paths, MIGRATION_VESSEL, "arrived_quantity");
                 require(arrivedQuantity > 0, "Terminal passive migration recorded no arrived population.");
-                require(migrationDestinationPopulation(paths, MIGRATION_VESSEL)
-                                == destinationBeforeArrival + arrivedQuantity,
-                        "Terminal passive migration did not add the exact arrived cohort to the destination.");
+                String arrivalEvidence = "(SELECT flow_id||':arrival' FROM population_flow WHERE "
+                        + "assigned_npc_vessel_id='" + MIGRATION_VESSEL + "')";
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger WHERE primary_cause='IMMIGRATION' "
-                                + "AND evidence_key=(SELECT flow_id||':arrival' FROM population_flow WHERE "
-                                + "assigned_npc_vessel_id='" + MIGRATION_VESSEL + "')") == 1,
+                                + "AND evidence_key=" + arrivalEvidence) == 1,
                         "Terminal passive migration did not write one destination immigration ledger term.");
+                require(queryCount(paths, "SELECT immigration FROM npc_population_ledger WHERE primary_cause='IMMIGRATION' "
+                                + "AND evidence_key=" + arrivalEvidence) == arrivedQuantity,
+                        "Terminal passive migration ledger did not credit the exact arrived cohort.");
+                require(queryCount(paths, "SELECT after_total-before_total FROM npc_population_ledger "
+                                + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence)
+                                == arrivedQuantity,
+                        "Terminal passive migration ledger arithmetic does not match the arrived cohort.");
+                long destinationAfterArrival = queryCount(paths, "SELECT after_total FROM npc_population_ledger "
+                        + "WHERE primary_cause='IMMIGRATION' AND evidence_key=" + arrivalEvidence);
+                require(migrationDestinationPopulation(paths, MIGRATION_VESSEL) == destinationAfterArrival,
+                        "Destination population does not match the terminal immigration ledger state.");
 
                 configureMigrationPressure(paths, ROLLBACK_VESSEL);
                 var rollbackPlan = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
