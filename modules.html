@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Adventure Module Viewer and Dungeon Reference Tools | Calzon’s TTRPG Foundry</title>
-  <meta name="description" content="Browse tabletop adventure modules with searchable room numbers, doors, traps, monsters, treasure, maps, and source-backed notes in a browser-based module viewer.">
-  <meta name="keywords" content="adventure module viewer, dungeon room viewer, TTRPG module tools, traps monsters treasure, game master module reference, campaign map notes">
+  <title>Adventure Modules and Static Dungeon References | Calzon’s TTRPG Foundry</title>
+  <meta name="description" content="Browse tabletop adventure modules through the interactive viewer or open static room-by-room references such as Unfazun, the Guildhall of a Thousand Roads.">
+  <meta name="keywords" content="adventure module viewer, static dungeon module, Unfazun guildhall, dungeon room viewer, TTRPG module tools, game master module reference">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html">
-  <meta property="og:title" content="Adventure Module Viewer | Calzon’s TTRPG Foundry">
-  <meta property="og:description" content="Search rooms, doors, traps, monsters, treasure, and source-backed adventure notes in a browser module viewer.">
+  <meta property="og:title" content="Adventure Modules | Calzon’s TTRPG Foundry">
+  <meta property="og:description" content="Open the interactive module viewer or browse static room-by-room adventure references.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html">
   <link rel="stylesheet" href="styles.css">
@@ -18,17 +18,17 @@
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Adventure Module Viewer",
+    "name": "Adventure Modules",
     "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html",
-    "description": "A browser-based tabletop adventure module viewer for rooms, maps, doors, traps, monsters, treasure, and source notes.",
+    "description": "A browser-based collection of interactive and static tabletop adventure module references.",
     "isPartOf": {"@type": "WebSite", "name": "Calzon’s TTRPG Foundry", "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/"}
   }
   </script>
 </head>
 <body class="workspace-landing-body">
   <header class="site-header no-print">
-    <div><p class="eyebrow">Searchable workspace landing</p><h1>Adventure Module Viewer</h1><p class="subtitle">Room-by-room adventure references for game masters and campaign preparation.</p></div>
-    <nav class="top-nav" aria-label="Module navigation"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button active" href="index.html?view=modules">Open Module Viewer</a><a class="nav-button" href="site-map.html">Site Map</a></nav>
+    <div><p class="eyebrow">Searchable module landing</p><h1>Adventure Modules</h1><p class="subtitle">Interactive extraction tools and stable room-by-room module pages.</p></div>
+    <nav class="top-nav" aria-label="Module navigation"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button" href="index.html?view=modules">Interactive Viewer</a><a class="nav-button active" href="modules.html" aria-current="page">Module Index</a><a class="nav-button" href="unfazun-guildhall.html">Unfazun Guildhall</a><a class="nav-button" href="site-map.html">Site Map</a></nav>
   </header>
 
   <main class="workspace-landing-shell">
@@ -36,24 +36,31 @@
 
     <section class="workspace-hero" data-workspace-code="MOD" aria-labelledby="modules-page-title">
       <div class="workspace-hero-copy">
-        <p class="eyebrow">Adventure extraction and table reference</p>
-        <h1 id="modules-page-title">Find the room before the table finds the trap.</h1>
-        <p>The Module Viewer turns extracted adventure material into a browser reference with clickable rooms, doors, traps, monsters, treasure, and source-backed notes. It is designed to reduce page hunting and keep the game master focused on play.</p>
-        <div class="workspace-actions"><a class="link-button primary-action" href="index.html?view=modules">Open Module Viewer</a><a class="link-button" href="barotrauma.html">Browse Campaign Workspaces</a></div>
+        <p class="eyebrow">Interactive and static references</p>
+        <h1 id="modules-page-title">Choose the module format that remains useful at the table.</h1>
+        <p>The interactive viewer supports extracted maps, clickable rooms, doors, traps, monsters, treasure, and source-backed notes. Static module pages remain completely separate from that runtime and present preserved campaign material without JavaScript transformation.</p>
+        <div class="workspace-actions"><a class="link-button primary-action" href="unfazun-guildhall.html">Open Static Unfazun Module</a><a class="link-button" href="index.html?view=modules">Open Interactive Viewer</a></div>
       </div>
-      <aside class="workspace-summary-panel" aria-label="Module viewer summary">
-        <h2>Reference coverage</h2>
+      <aside class="workspace-summary-panel" aria-label="Module formats summary">
+        <h2>Available formats</h2>
         <div class="workspace-summary-list">
-          <div><strong>Room indexing</strong><span>Jump directly to numbered locations and encounter spaces.</span></div>
-          <div><strong>Interactive details</strong><span>Doors, traps, monsters, treasure, and room notes.</span></div>
+          <div><strong>Static module pages</strong><span>Stable prose references with no renderer or JavaScript mutation.</span></div>
+          <div><strong>Interactive viewer</strong><span>Clickable rooms, doors, traps, maps, and extracted notes.</span></div>
           <div><strong>Source context</strong><span>Preserve links between extracted notes and original material.</span></div>
-          <div><strong>Table speed</strong><span>Reduce page turning during active sessions.</span></div>
+          <div><strong>Table speed</strong><span>Choose the least disruptive format for active play.</span></div>
         </div>
       </aside>
     </section>
 
+    <section class="workspace-section" aria-labelledby="static-modules-title">
+      <div class="workspace-section-head"><p class="eyebrow">Static module library</p><h2 id="static-modules-title">Complete references without a dynamic viewer.</h2><p>These pages are ordinary HTML documents. Their module text is not assembled, rewritten, patched, or reformatted by the module runtime.</p></div>
+      <div class="workspace-card-grid">
+        <article class="workspace-tool-card"><h3>Unfazun, the Guildhall of a Thousand Roads</h3><p>The ancient central mining guildhall of the Seventh Layer, keyed room by room across eighty-two locations, seven districts, the dwarven necromantic civil war, and the sealed royal road below.</p><a class="link-button primary-action" href="unfazun-guildhall.html">Open Static Module</a></article>
+      </div>
+    </section>
+
     <section class="workspace-section" aria-labelledby="module-features-title">
-      <div class="workspace-section-head"><p class="eyebrow">Indexed viewer functions</p><h2 id="module-features-title">Module information organized for live play.</h2><p>The searchable landing page describes the viewer while the interactive workspace loads module data only when opened.</p></div>
+      <div class="workspace-section-head"><p class="eyebrow">Interactive viewer functions</p><h2 id="module-features-title">Extracted module information organized for live play.</h2><p>The interactive workspace remains available for modules that benefit from mapped hotspots and selectable room records.</p></div>
       <div class="workspace-card-grid">
         <article class="workspace-tool-card"><h3>Clickable Room Directory</h3><p>Navigate room numbers and location records without scanning an entire document during play.</p><a class="link-button" href="index.html?view=modules">Open Room Directory</a></article>
         <article class="workspace-tool-card"><h3>Door and Route Notes</h3><p>Review connections, access points, blocked passages, routes, and location transitions.</p><a class="link-button" href="index.html?view=modules">Open Route Notes</a></article>
@@ -64,12 +71,12 @@
       </div>
     </section>
 
-    <section class="workspace-section" aria-labelledby="module-keywords-title"><div class="workspace-section-head"><p class="eyebrow">Search topics</p><h2 id="module-keywords-title">Module viewer keywords and subjects</h2></div><div class="keyword-cloud"><span>adventure module viewer</span><span>dungeon room index</span><span>trap reference</span><span>monster encounter notes</span><span>treasure records</span><span>game master reference</span><span>campaign map notes</span><span>source-backed extraction</span></div></section>
+    <section class="workspace-section" aria-labelledby="module-keywords-title"><div class="workspace-section-head"><p class="eyebrow">Search topics</p><h2 id="module-keywords-title">Module viewer keywords and subjects</h2></div><div class="keyword-cloud"><span>Unfazun guildhall</span><span>static dungeon module</span><span>dwarven necromancy</span><span>adventure module viewer</span><span>dungeon room index</span><span>trap reference</span><span>monster encounter notes</span><span>game master reference</span><span>source-backed extraction</span></div></section>
 
-    <section class="workspace-section"><h2>Related workspaces</h2><div class="workspace-related"><a href="utilities.html">Utilities</a><a href="generators.html">Generators</a><a href="barotrauma.html">Barotrauma</a><a href="site-map.html">Complete Site Map</a></div></section>
+    <section class="workspace-section"><h2>Related workspaces</h2><div class="workspace-related"><a href="unfazun-guildhall.html">Unfazun Guildhall</a><a href="utilities.html">Utilities</a><a href="generators.html">Generators</a><a href="barotrauma.html">Barotrauma</a><a href="site-map.html">Complete Site Map</a></div></section>
   </main>
 
-  <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Searchable adventure module directory.</p></footer>
+  <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Interactive and static adventure module directory.</p></footer>
 
 </body>
 </html>
