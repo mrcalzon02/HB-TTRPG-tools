@@ -4,7 +4,19 @@
   const base = window.HBTTRPGApp;
   if (!base) return;
   let sheetPromise = null;
-  let barotraumaPromise = null;
+
+  const BAROTRAUMA_ASSET_URLS = Object.freeze([
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_02.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_06.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_dystopia_grid.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_shipyard_collage.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_megastructure_collage.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/derelict_ships_in_stormy_industrial_wasteland.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png'
+  ]);
 
   function loadScript(src) {
     if (document.querySelector(`script[data-hb-core-view="${src}"]`)) return Promise.resolve();
@@ -19,10 +31,18 @@
     });
   }
 
-  function loadBarotraumaWorkspace() {
-    barotraumaPromise ||= loadScript('barotrauma-entry.js?v=4');
-    return barotraumaPromise;
+  function preloadStaticImages(urls) {
+    return urls.map((src, index) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.fetchPriority = index === 0 ? 'high' : 'low';
+      image.src = src;
+      return image;
+    });
   }
+
+  const barotraumaImagePreloads = preloadStaticImages(BAROTRAUMA_ASSET_URLS);
+  const barotraumaScriptPromise = loadScript('barotrauma-entry.js?v=5');
 
   async function prepareView(viewId) {
     if (viewId === 'utilities') {
@@ -32,7 +52,7 @@
       return;
     }
     if (viewId === 'barotrauma') {
-      await Promise.all([loadBarotraumaWorkspace(), base.prepareView(viewId)]);
+      await Promise.all([barotraumaScriptPromise, base.prepareView(viewId)]);
       window.BarotraumaWorkspace?.initialize();
       return;
     }
@@ -47,6 +67,8 @@
     ...base,
     prepareView
   });
+
+  void barotraumaImagePreloads;
 
   void loadScript('binary-cube-large-grid-engine.js')
     .then(() => loadScript('binary-cube-omnidirectional-engine.js'))
