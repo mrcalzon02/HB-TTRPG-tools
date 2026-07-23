@@ -15,17 +15,6 @@
     barotrauma: ['barotrauma-entry.js', 'barotrauma-rpg-entry.js'],
     'solanum-umbra': ['solanum-umbra-entry.js'],
     shadowrun: ['shadowrun-entry.js'],
-    generators: [
-      'spell-creator-entry.js',
-      'eccentric-spell-entry.js',
-      'arcane-academic-entry.js',
-      'malefic-academic-entry.js',
-      'magical-library-entry.js',
-      'elemental-realms-entry.js',
-      'npc-profile-generator-entry.js',
-      'kaysender-npc-generator.js',
-      'kaysender-crafting-generator.js'
-    ],
     kaysender: [
       'kaysender-wiki.js',
       'kaysender-editor-kernel.js',
@@ -50,6 +39,63 @@
       'world-of-darkness-spatial-loader.js'
     ]
   });
+
+  const GENERATOR_MODULES = Object.freeze([
+    {
+      id: 'spell-creator',
+      title: 'Spell Creator',
+      description: 'Load the standard Hypertext d20-compatible spell creation workspace.',
+      script: 'spell-creator-entry.js'
+    },
+    {
+      id: 'eccentric-spells',
+      title: 'Eccentric Spell Generator',
+      description: 'Load the eccentric and unusual spell-generation module.',
+      script: 'eccentric-spell-entry.js'
+    },
+    {
+      id: 'arcane-academic',
+      title: 'Arcane Academic Generator',
+      description: 'Load the arcane academic institution and scholar generator.',
+      script: 'arcane-academic-entry.js'
+    },
+    {
+      id: 'malefic-academic',
+      title: 'Malefic Academic Generator',
+      description: 'Load the darker academic institution and practitioner generator.',
+      script: 'malefic-academic-entry.js'
+    },
+    {
+      id: 'magical-library',
+      title: 'Magical Library Generator',
+      description: 'Load the magical archive, collection, and library generator.',
+      script: 'magical-library-entry.js'
+    },
+    {
+      id: 'elemental-realms',
+      title: 'Elemental Realms Generator',
+      description: 'Load the elemental realm and planar environment generator.',
+      script: 'elemental-realms-entry.js'
+    },
+    {
+      id: 'universal-npc',
+      title: 'Universal NPC Profile Generator',
+      description: 'Load the complete role-aware NPC profile workspace only when it is needed.',
+      script: 'npc-profile-generator-entry.js'
+    },
+    {
+      id: 'kaysender-npc',
+      title: 'Kaysender NPC Generator',
+      description: 'Load the Kaysender-specific NPC generation module.',
+      script: 'kaysender-npc-generator.js'
+    },
+    {
+      id: 'kaysender-crafting',
+      title: 'Kaysender Crafting Generator',
+      description: 'Load the Kaysender crafting generation module.',
+      script: 'kaysender-crafting-generator.js'
+    }
+  ]);
 
   const WORKSPACES = [
     {
@@ -160,6 +206,9 @@
       }
     });
     loadedScripts.set(src, promise);
+    promise.catch(() => {
+      if (loadedScripts.get(src) === promise) loadedScripts.delete(src);
+    });
     return promise;
   }
 
@@ -201,6 +250,62 @@
     document.dispatchEvent(new CustomEvent('hb:view-activated', { detail: { viewId } }));
   }
 
+  function generatorCard(module) {
+    const article = document.createElement('article');
+    article.className = 'module-card generator-loader-card';
+    article.dataset.generatorLoader = module.id;
+    article.innerHTML = `
+      <div class="module-meta">
+        <span class="badge section-generators">generator</span>
+        <span class="badge status-active">on demand</span>
+      </div>
+      <h3>${module.title}</h3>
+      <p>${module.description}</p>
+      <button type="button" class="primary-action" data-load-generator="${module.id}">Load ${module.title}</button>
+    `;
+    const button = article.querySelector('[data-load-generator]');
+    button?.addEventListener('click', async () => {
+      if (button.dataset.loaded === 'true') return;
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      setStatus(`Loading ${module.title}…`);
+      try {
+        await loadScript(module.script);
+        button.dataset.loaded = 'true';
+        button.textContent = `${module.title} loaded`;
+        setStatus('');
+      } catch (error) {
+        button.disabled = false;
+        setStatus(`${module.title} failed to load: ${error.message}`, true);
+      } finally {
+        button.removeAttribute('aria-busy');
+      }
+    });
+    return article;
+  }
+
+  function ensureGeneratorLaunchers() {
+    const panel = document.getElementById('generator-library-panel');
+    const registryGrid = document.getElementById('kaysender-generators-grid');
+    if (!panel || !registryGrid || document.getElementById('on-demand-generator-library')) return;
+
+    const section = document.createElement('section');
+    section.id = 'on-demand-generator-library';
+    section.className = 'registry-section no-print';
+    section.setAttribute('aria-labelledby', 'on-demand-generator-library-title');
+    section.innerHTML = `
+      <div class="section-heading">
+        <p class="eyebrow">On-demand generator library</p>
+        <h2 id="on-demand-generator-library-title">Load one generator at a time</h2>
+        <p>Opening the Generator Bench no longer initializes every generator. Select only the generator needed for the current task.</p>
+      </div>
+      <div id="on-demand-generator-grid" class="module-grid"></div>
+    `;
+    const grid = section.querySelector('#on-demand-generator-grid');
+    GENERATOR_MODULES.forEach(module => grid?.appendChild(generatorCard(module)));
+    registryGrid.before(section);
+  }
+
   async function openView(viewId) {
     const safeViewId = window.CSS?.escape ? CSS.escape(viewId) : viewId.replace(/[^a-z0-9_-]/gi, '');
     const controls = [...document.querySelectorAll(`[data-view="${safeViewId}"]`)];
@@ -209,6 +314,7 @@
       control.setAttribute('aria-busy', 'true');
     });
     try {
+      if (viewId === 'generators') ensureGeneratorLaunchers();
       await loadBundle(viewId);
       await window.HBTTRPGApp?.prepareView?.(viewId);
       activateView(viewId);
@@ -293,6 +399,7 @@
   function init() {
     applyTitle();
     ensureWorkspaceLaunchers();
+    ensureGeneratorLaunchers();
     installNavigation();
     const requested = initialView();
     if (requested !== 'tools') void openView(requested);
@@ -301,5 +408,14 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
 
-  window.HBWorkspaceLoader = Object.freeze({ openView, loadBundle, loadedScripts, loadedBundles });
+  window.HBWorkspaceLoader = Object.freeze({
+    openView,
+    loadBundle,
+    loadGenerator: id => {
+      const module = GENERATOR_MODULES.find(candidate => candidate.id === id);
+      return module ? loadScript(module.script) : Promise.reject(new Error(`Unknown generator: ${id}`));
+    },
+    loadedScripts,
+    loadedBundles
+  });
 })();
