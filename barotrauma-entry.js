@@ -3,8 +3,8 @@
 
   const REGISTRY_URL = 'data/barotrauma-tools-registry.json';
   const state = {
-    initialized: false,
     controlsBound: false,
+    initializationPromise: null,
     registry: null,
     activeFilter: 'all'
   };
@@ -160,31 +160,33 @@
     });
   }
 
-  async function initialize() {
-    if (state.initialized) {
+  function initialize() {
+    if (state.registry) {
       render();
-      return state.registry;
+      return Promise.resolve(state.registry);
     }
-    state.initialized = true;
+    if (state.initializationPromise) return state.initializationPromise;
+
     const status = document.getElementById('barotrauma-status');
-    try {
-      const [response] = await Promise.all([
-        fetch(REGISTRY_URL, { cache: 'force-cache' }),
-        assets().preload()
-      ]);
+    if (status) status.textContent = 'Loading Barotrauma registry and packaged atlas assets…';
+    state.initializationPromise = Promise.all([
+      fetch(REGISTRY_URL, { cache: 'force-cache' }),
+      assets().preload()
+    ]).then(async ([response]) => {
       if (!response.ok) throw new Error(`Registry request failed with status ${response.status}.`);
       state.registry = await response.json();
       bindControls();
       render();
       return state.registry;
-    } catch (error) {
-      state.initialized = false;
+    }).catch(error => {
+      state.initializationPromise = null;
       if (status) status.textContent = `The Barotrauma registry could not be loaded: ${error.message}`;
       const grid = document.getElementById('barotrauma-overview-grid');
       if (grid) grid.innerHTML = '<div class="module-empty">Barotrauma module data is currently unavailable.</div>';
       console.error(error);
       throw error;
-    }
+    });
+    return state.initializationPromise;
   }
 
   window.BarotraumaWorkspace = Object.freeze({ initialize, render });
