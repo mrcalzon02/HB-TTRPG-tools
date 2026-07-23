@@ -1,151 +1,41 @@
 (() => {
   'use strict';
 
-  const REGISTRY_URL = 'data/barotrauma-tools-registry.json';
   const state = {
-    controlsBound: false,
-    initializationPromise: null,
-    registry: null,
+    initialized: false,
     activeFilter: 'all'
   };
 
-  function assets() {
-    const value = window.BarotraumaPackagedAssets;
-    if (!value) throw new Error('The static Barotrauma atlas factory is unavailable.');
-    return value;
-  }
-
-  function humanize(value) {
-    return String(value ?? '')
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .replace(/[_-]+/g, ' ')
-      .replace(/^./, character => character.toUpperCase());
-  }
-
-  function moduleSearchText(module) {
-    return [
-      module.title,
-      module.section,
-      module.status,
-      module.description,
-      ...(module.tags || []),
-      ...(module.dataFamilies || [])
-    ].join(' ').toLowerCase();
-  }
-
-  function createBadge(label, className, iconRole) {
-    const badge = document.createElement('span');
-    badge.className = `badge barotrauma-badge ${className}`.trim();
-    badge.append(assets().createIcon(iconRole, 'barotrauma-atlas-glyph'));
-    const text = document.createElement('span');
-    text.textContent = label;
-    badge.appendChild(text);
-    return badge;
-  }
-
-  function createActionContent(label, iconRole) {
-    const fragment = document.createDocumentFragment();
-    fragment.append(assets().createIcon(iconRole, 'barotrauma-atlas-glyph'));
-    const text = document.createElement('span');
-    text.textContent = label;
-    fragment.appendChild(text);
-    return fragment;
-  }
-
-  function createModuleActions(module) {
-    const actions = document.createElement('div');
-    actions.className = 'module-actions';
-
-    const launchUrl = module.launchTarget === 'crewmans-primer'
-      ? 'barotrauma-primer.html'
-      : module.launchUrl;
-    if (!launchUrl) return null;
-
-    const link = document.createElement('a');
-    link.className = 'primary-action barotrauma-action';
-    link.href = launchUrl;
-    link.append(createActionContent(module.actionLabel || `Open ${module.title}`, module.presentation.icon));
-    actions.appendChild(link);
-    return actions;
-  }
-
-  function createModuleCard(module) {
-    if (!module.presentation?.scene || !module.presentation?.icon) {
-      throw new Error(`Barotrauma module ${module.id} has no authoritative presentation record.`);
-    }
-
-    const article = document.createElement('article');
-    article.className = 'module-card barotrauma-atlas-surface';
-    if (module.id === 'barotrauma-active-submarine-dashboard') {
-      article.classList.add('active-submarine-dashboard-card');
-    }
-    article.dataset.moduleId = module.id;
-    article.dataset.section = module.section;
-    article.append(
-      assets().createScene(module.presentation.scene),
-      assets().createIcon(module.presentation.icon)
-    );
-
-    const meta = document.createElement('div');
-    meta.className = 'module-meta';
-    meta.append(
-      createBadge(humanize(module.status), `status-${module.status}`, module.status === 'planned' ? 'planned' : 'available'),
-      createBadge(humanize(module.section), `section-${module.section}`, module.presentation.icon)
-    );
-    if (module.id === 'barotrauma-active-submarine-dashboard') {
-      meta.append(createBadge('Integrated Campaign View', 'status-integrated', 'notification'));
-    }
-
-    const title = document.createElement('h3');
-    title.textContent = module.title;
-    const description = document.createElement('p');
-    description.textContent = module.description;
-    const chips = document.createElement('div');
-    chips.className = 'chip-list';
-    (module.dataFamilies || []).forEach(family => {
-      const chip = document.createElement('span');
-      chip.className = 'chip';
-      chip.textContent = humanize(family);
-      chips.appendChild(chip);
-    });
-
-    article.append(meta, title, description, chips);
-    const actions = createModuleActions(module);
-    if (actions) article.appendChild(actions);
-    return article;
-  }
-
-  function visibleModules() {
-    const query = (document.getElementById('barotrauma-search')?.value || '').trim().toLowerCase();
-    return [...(state.registry?.modules || [])]
-      .sort((left, right) => (left.priority ?? 999) - (right.priority ?? 999) || left.title.localeCompare(right.title))
-      .filter(module => (state.activeFilter === 'all' || module.section === state.activeFilter)
-        && (!query || moduleSearchText(module).includes(query)));
+  function cards() {
+    return [...document.querySelectorAll('#barotrauma-overview-grid > [data-module-id]')];
   }
 
   function render() {
-    const grid = document.getElementById('barotrauma-overview-grid');
-    const status = document.getElementById('barotrauma-status');
-    if (!grid || !status || !state.registry) return;
+    const query = (document.getElementById('barotrauma-search')?.value || '').trim().toLowerCase();
+    const modules = cards();
+    let visible = 0;
 
-    const modules = state.registry.modules || [];
-    const visible = visibleModules();
-    const fragment = document.createDocumentFragment();
-    if (!visible.length) {
-      const empty = document.createElement('div');
-      empty.className = 'module-empty';
-      empty.textContent = 'No Barotrauma modules match the current search and filter.';
-      fragment.appendChild(empty);
-    } else {
-      visible.forEach(module => fragment.appendChild(createModuleCard(module)));
+    modules.forEach(card => {
+      const sectionMatches = state.activeFilter === 'all' || card.dataset.section === state.activeFilter;
+      const searchMatches = !query || card.textContent.toLowerCase().includes(query);
+      const shown = sectionMatches && searchMatches;
+      card.hidden = !shown;
+      if (shown) visible += 1;
+    });
+
+    const status = document.getElementById('barotrauma-status');
+    if (status) {
+      status.textContent = `${visible} of ${modules.length} modules shown · foundation registry with source-faithful Markdown wikis and operational RPG tools`;
     }
-    grid.replaceChildren(fragment);
-    status.textContent = `${visible.length} of ${modules.length} modules shown · ${state.registry.status}`;
   }
 
-  function bindControls() {
-    if (state.controlsBound) return;
-    state.controlsBound = true;
+  function initialize() {
+    if (state.initialized) {
+      render();
+      return;
+    }
+    state.initialized = true;
+
     document.getElementById('barotrauma-search')?.addEventListener('input', render);
     document.querySelectorAll('[data-barotrauma-filter]').forEach(button => {
       button.addEventListener('click', () => {
@@ -158,35 +48,8 @@
         render();
       });
     });
-  }
 
-  function initialize() {
-    if (state.registry) {
-      render();
-      return Promise.resolve(state.registry);
-    }
-    if (state.initializationPromise) return state.initializationPromise;
-
-    const status = document.getElementById('barotrauma-status');
-    if (status) status.textContent = 'Loading Barotrauma registry and packaged atlas assets…';
-    state.initializationPromise = Promise.all([
-      fetch(REGISTRY_URL, { cache: 'force-cache' }),
-      assets().preload()
-    ]).then(async ([response]) => {
-      if (!response.ok) throw new Error(`Registry request failed with status ${response.status}.`);
-      state.registry = await response.json();
-      bindControls();
-      render();
-      return state.registry;
-    }).catch(error => {
-      state.initializationPromise = null;
-      if (status) status.textContent = `The Barotrauma registry could not be loaded: ${error.message}`;
-      const grid = document.getElementById('barotrauma-overview-grid');
-      if (grid) grid.innerHTML = '<div class="module-empty">Barotrauma module data is currently unavailable.</div>';
-      console.error(error);
-      throw error;
-    });
-    return state.initializationPromise;
+    render();
   }
 
   window.BarotraumaWorkspace = Object.freeze({ initialize, render });
