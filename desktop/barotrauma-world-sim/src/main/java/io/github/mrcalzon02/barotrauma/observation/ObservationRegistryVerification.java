@@ -60,8 +60,10 @@ public final class ObservationRegistryVerification {
                     "Registry accepted an invalid event limit.");
 
             try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + paths.database());
-                 Statement statement = connection.createStatement()) {
-                statement.executeUpdate("INSERT INTO schema_migration(version,applied_at) VALUES(29,'2026-07-20T00:00:00Z')");
+                 PreparedStatement statement = connection.prepareStatement(
+                         "INSERT INTO schema_migration(version,applied_at) VALUES(?,'2026-07-20T00:00:00Z')")) {
+                statement.setInt(1, WorldStorageContracts.DATABASE_SCHEMA_VERSION + 1);
+                statement.executeUpdate();
             }
             expectFailure(() -> ObservationRegistry.load(paths),
                     "Registry accepted a newer unsupported schema.");
