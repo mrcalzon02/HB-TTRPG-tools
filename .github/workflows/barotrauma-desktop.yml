@@ -1,4 +1,4 @@
-name: Verify Barotrauma desktop application
+name: Verify and release Barotrauma desktop application
 
 on:
   push:
@@ -31,3 +31,107 @@ jobs:
       - name: Build and verify without Gradle
         shell: pwsh
         run: ./desktop/barotrauma-world-sim/toolbox.ps1 verify
+
+  windows-installer-release:
+    needs: java-17-verification
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout verified source
+        uses: actions/checkout@v6
+
+      - name: Set up Java 17 with jpackage
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Ensure WiX Toolset for MSI packaging
+        shell: pwsh
+        run: |
+          $candle = Get-ChildItem "${env:ProgramFiles(x86)}" -Filter candle.exe -Recurse -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+          if ($null -eq $candle) {
+            choco install wixtoolset --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw "WiX Toolset installation failed with exit code $LASTEXITCODE." }
+            $candle = Get-ChildItem "${env:ProgramFiles(x86)}" -Filter candle.exe -Recurse -ErrorAction SilentlyContinue |
+              Select-Object -First 1
+          }
+          if ($null -eq $candle) { throw "WiX candle.exe was not found after installation." }
+          $candle.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          Write-Host "Using WiX from $($candle.DirectoryName)"
+
+      - name: Verify Windows desktop runtime
+        shell: pwsh
+        run: ./desktop/barotrauma-world-sim/toolbox.ps1 verify
+
+      - name: Package Windows MSI
+        shell: pwsh
+        run: ./desktop/barotrauma-world-sim/toolbox.ps1 package
+
+      - name: Read release manifest
+        id: release
+        shell: pwsh
+        run: |
+          $manifest = ConvertFrom-StringData (Get-Content desktop/barotrauma-world-sim/release.properties -Raw)
+          $asset = Get-ChildItem desktop/barotrauma-world-sim/build/no-gradle/release -Filter '*.msi' -File |
+            Select-Object -First 1
+          if ($null -eq $asset) { throw "Packaged MSI was not found." }
+          $checksum = Get-Item "$($asset.FullName).sha256"
+          "tag=$($manifest.tag)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "title=$($manifest.title)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "version=$($manifest.version)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "asset_name=$($asset.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "checksum_name=$($checksum.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Write release notes
+        shell: pwsh
+        run: |
+          $manifest = ConvertFrom-StringData (Get-Content desktop/barotrauma-world-sim/release.properties -Raw)
+          $notes = @"
+          # $($manifest.title)
+
+          Verified desktop build from commit ``${env:GITHUB_SHA}``.
+
+          - Windows x64 MSI installer with a bundled Java runtime.
+          - Complete Gradle-free Java 17 and SQLite verification passed on Linux and Windows before publication.
+          - Includes the local world simulation, observation, import, map, logistics, migration, settlement, and campaign-operation interfaces present in this commit.
+          - Barotrauma donor media is not redistributed. The installed application can discover a locally owned Barotrauma installation or use packaged project-owned fallback assets.
+          - The adjacent ``.sha256`` asset contains the installer checksum.
+          "@
+          Set-Content desktop/barotrauma-world-sim/build/no-gradle/release/RELEASE_NOTES.md $notes -Encoding utf8
+
+      - name: Upload installer workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: barotrauma-desktop-${{ steps.release.outputs.version }}-windows-x64
+          path: |
+            desktop/barotrauma-world-sim/build/no-gradle/release/*.msi
+            desktop/barotrauma-world-sim/build/no-gradle/release/*.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish immutable GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_TITLE: ${{ steps.release.outputs.title }}
+        run: |
+          gh release view $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $env:RELEASE_TAG already exists; preserving its immutable assets."
+            exit 0
+          }
+          $asset = Get-ChildItem desktop/barotrauma-world-sim/build/no-gradle/release -Filter '*.msi' -File |
+            Select-Object -First 1
+          $checksum = Get-Item "$($asset.FullName).sha256"
+          $notes = 'desktop/barotrauma-world-sim/build/no-gradle/release/RELEASE_NOTES.md'
+          gh release create $env:RELEASE_TAG $asset.FullName $checksum.FullName `
+            --repo $env:GITHUB_REPOSITORY `
+            --target $env:GITHUB_SHA `
+            --title $env:RELEASE_TITLE `
+            --notes-file $notes `
+            --latest
+          if ($LASTEXITCODE -ne 0) { throw "GitHub release publication failed with exit code $LASTEXITCODE." }
