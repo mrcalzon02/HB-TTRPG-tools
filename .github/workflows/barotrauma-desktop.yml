@@ -135,3 +135,41 @@ jobs:
             --notes-file $notes `
             --latest
           if ($LASTEXITCODE -ne 0) { throw "GitHub release publication failed with exit code $LASTEXITCODE." }
+
+      - name: Record published release receipt
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_TITLE: ${{ steps.release.outputs.title }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_ASSET: ${{ steps.release.outputs.asset_name }}
+        run: |
+          $checksumPath = "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_ASSET.sha256"
+          $checksum = ((Get-Content $checksumPath -Raw).Trim() -split '\s+')[0]
+          $receipt = [ordered]@{
+            recordType = 'barotraumaDesktopReleaseReceipt'
+            version = $env:RELEASE_VERSION
+            tag = $env:RELEASE_TAG
+            title = $env:RELEASE_TITLE
+            sourceCommit = $env:GITHUB_SHA
+            assetName = $env:RELEASE_ASSET
+            assetSha256 = $checksum
+            packageType = 'windows-x64-msi-bundled-runtime'
+            verification = 'linux-and-windows-toolbox-verify'
+            releaseUrl = "https://github.com/$env:GITHUB_REPOSITORY/releases/tag/$env:RELEASE_TAG"
+            publishedAt = [DateTime]::UtcNow.ToString('o')
+          }
+          $receiptPath = 'desktop/barotrauma-world-sim/release-receipt.json'
+          Set-Content $receiptPath ($receipt | ConvertTo-Json -Depth 4) -Encoding utf8
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add $receiptPath
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host 'Release receipt is already current.'
+            exit 0
+          }
+          git commit -m "Record Barotrauma desktop release $env:RELEASE_TAG [skip ci]"
+          if ($LASTEXITCODE -ne 0) { throw "Release receipt commit failed with exit code $LASTEXITCODE." }
+          git push origin HEAD:main
+          if ($LASTEXITCODE -ne 0) { throw "Release receipt push failed with exit code $LASTEXITCODE." }
