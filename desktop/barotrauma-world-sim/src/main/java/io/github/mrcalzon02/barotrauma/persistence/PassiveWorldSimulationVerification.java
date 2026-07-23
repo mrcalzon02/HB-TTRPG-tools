@@ -96,7 +96,7 @@ public final class PassiveWorldSimulationVerification {
                 require(flowCount(paths, migrationVesselId, "PREPARING") == 1,
                         "A real passive tick did not plan and reserve the pressured population migration.");
                 require(pressuredOriginPopulation(paths, migrationVesselId) == originBeforeDeparture,
-                        "Passive migration preparation removed people before physical vessel departure.");
+                        "Passive migration preparation removed people before physical departure.");
                 verifySchedulePlanning(paths);
                 require(count(paths, "world_mission") > 0 && count(paths, "station_research_project") == 4,
                         "Mission or research workload persistence failed.");
@@ -269,7 +269,7 @@ public final class PassiveWorldSimulationVerification {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("UPDATE station_simulation_state SET integrity=100,threat=0,status='STABLE',"
                     + "supplies=150,security=100");
-            statement.executeUpdate("UPDATE npc_population_state p SET morale=90,housing_capacity=("
+            statement.executeUpdate("UPDATE npc_population_state AS p SET morale=90,housing_capacity=("
                     + populationTotal + ")+1000,life_support_capacity=(" + populationTotal
                     + ")+1000,employment_capacity=(" + workforceTotal + ")+1000");
             statement.executeUpdate("UPDATE station_simulation_state SET integrity=20,threat=90,status='BESIEGED',"
