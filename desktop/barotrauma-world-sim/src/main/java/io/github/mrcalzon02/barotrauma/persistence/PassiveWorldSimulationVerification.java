@@ -156,11 +156,16 @@ public final class PassiveWorldSimulationVerification {
                 configureMigrationPressure(paths, ROLLBACK_VESSEL);
                 var rollbackPlan = executor.submit(new SimulationCommandExecutor.Step(1), "passive-test").join();
                 PassiveWorldTickTransaction.commit(paths, rollbackPlan);
-                require(flowCount(paths, ROLLBACK_VESSEL, "PREPARING") == 1,
+                String rollbackVesselId = queryText(paths,
+                        "SELECT assigned_npc_vessel_id FROM population_flow WHERE entity_type='NPC_POPULATION' "
+                                + "AND status='PREPARING' AND population_id=(SELECT population_id "
+                                + "FROM npc_population_state ORDER BY population_id LIMIT 1) "
+                                + "ORDER BY created_tick DESC,flow_id DESC LIMIT 1");
+                require(flowCount(paths, rollbackVesselId, "PREPARING") == 1,
                         "Rollback probe migration did not enter preparation.");
                 long rollbackOriginPopulation = pressuredOriginPopulation(paths);
                 long rollbackLegCount = queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
-                        + ROLLBACK_VESSEL + "'");
+                        + rollbackVesselId + "'");
                 long rollbackLedgerCount = queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger");
                 long rollbackClockTick = queryCount(paths,
                         "SELECT current_tick_sequence FROM world_simulation_metadata LIMIT 1");
@@ -176,14 +181,14 @@ public final class PassiveWorldSimulationVerification {
                     removeRollbackProbe(paths);
                 }
                 require(rollbackBlocked, "The deliberate post-migration passive transaction fault was not observed.");
-                require(flowCount(paths, ROLLBACK_VESSEL, "PREPARING") == 1,
+                require(flowCount(paths, rollbackVesselId, "PREPARING") == 1,
                         "Failed passive transaction did not restore the migration flow to preparation.");
-                require(vesselStatus(paths, ROLLBACK_VESSEL).equals("PREPARING"),
+                require(vesselStatus(paths, rollbackVesselId).equals("PREPARING"),
                         "Failed passive transaction did not restore the migration vessel state.");
                 require(pressuredOriginPopulation(paths) == rollbackOriginPopulation,
                         "Failed passive transaction did not restore the released origin population.");
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_transit_leg WHERE npc_vessel_id='"
-                                + ROLLBACK_VESSEL + "'") == rollbackLegCount,
+                                + rollbackVesselId + "'") == rollbackLegCount,
                         "Failed passive transaction retained a migration transit leg created before rollback.");
                 require(queryCount(paths, "SELECT COUNT(*) FROM npc_population_ledger") == rollbackLedgerCount,
                         "Failed passive transaction retained migration ledger evidence.");
