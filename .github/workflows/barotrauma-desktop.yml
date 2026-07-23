@@ -203,6 +203,18 @@ jobs:
               })
             }
           })
+          $failedJobLogs = @($jobsPayload.jobs |
+            Where-Object { $_.conclusion -eq 'failure' } |
+            ForEach-Object {
+              $failedJob = $_
+              $logText = (gh api "/repos/$env:GITHUB_REPOSITORY/actions/jobs/$($failedJob.id)/logs" 2>&1 | Out-String)
+              $logLines = @($logText -split "`r?`n")
+              [ordered]@{
+                id = $failedJob.id
+                name = $failedJob.name
+                tail = @($logLines | Select-Object -Last 180)
+              }
+            })
 
           $releaseVerified = $false
           $releaseUrl = $null
@@ -239,6 +251,7 @@ jobs:
             releaseUrl = $releaseUrl
             releaseAssets = $releaseAssets
             jobs = $jobs
+            failedJobLogs = $failedJobLogs
             recordedAt = [DateTime]::UtcNow.ToString('o')
           }
           $outcomePath = 'desktop/barotrauma-world-sim/release-workflow-outcome.json'
