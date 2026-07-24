@@ -12,7 +12,7 @@ final class NpcDemographicLifecycleFinalizer {
                 BEGIN
                     INSERT OR IGNORE INTO npc_demographic_tick_result(
                         result_id,world_id,population_id,station_id,tick_sequence,before_total,births,deaths,
-                        disaster_losses,other_losses,after_total,workforce_before,workforce_after,
+                        immigration,emigration,disaster_losses,other_losses,after_total,workforce_before,workforce_after,
                         housing_capacity,life_support_capacity,employment_capacity,effective_capacity,
                         morale_before,morale_after,support_score,pressure_score,surplus_support_ticks,
                         shortage_pressure_ticks,overcrowding_ticks,overcrowding_state,
@@ -28,9 +28,13 @@ final class NpcDemographicLifecycleFinalizer {
                         housing_capacity,life_support_capacity,employment_capacity,morale,
                         population_index_before,population_index_after,primary_cause,evidence_key,summary)
                     SELECT population_id||':ledger:'||tick_sequence,world_id,population_id,station_id,tick_sequence,
-                           before_total,births,deaths,0,0,disaster_losses,0,other_losses,after_total,
+                           before_total,births,deaths,immigration,emigration,disaster_losses,0,other_losses,after_total,
                            housing_capacity,life_support_capacity,employment_capacity,morale_before,
-                           population_index_before,population_index_after,primary_cause,evidence_key,summary
+                           population_index_before,population_index_after,
+                           CASE primary_cause WHEN 'IMMIGRATION' THEN 'SUPPLY_RECOVERY'
+                                              WHEN 'EMIGRATION' THEN 'SUPPLY_SHORTAGE'
+                                              ELSE primary_cause END,
+                           evidence_key,summary
                     FROM npc_demographic_tick_result
                     WHERE station_id=NEW.station_id AND tick_sequence=NEW.tick_sequence;
 
@@ -170,10 +174,12 @@ final class NpcDemographicLifecycleFinalizer {
                     SELECT r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,
                            r.world_id,r.station_id,r.tick_sequence,ctx.current_canonical,
                            'POPULATION',CASE r.primary_cause WHEN 'ABANDONMENT' THEN 5 WHEN 'DISASTER' THEN 4
-                               WHEN 'DEATHS' THEN 3 ELSE 2 END,
+                               WHEN 'DEATHS' THEN 3 WHEN 'EMIGRATION' THEN 3 ELSE 2 END,
                            CASE r.primary_cause
                                WHEN 'BIRTHS' THEN 'Sustained support produced population growth'
                                WHEN 'DEATHS' THEN 'Population pressure caused mortality'
+                               WHEN 'IMMIGRATION' THEN 'Recovery drew residents into the station'
+                               WHEN 'EMIGRATION' THEN 'Frontier pressure drove residents from the station'
                                WHEN 'DISASTER' THEN 'A measured fauna attack caused casualties'
                                WHEN 'ABANDONMENT' THEN 'The station population was evacuated'
                                ELSE CASE WHEN residents.delta_value<0
@@ -189,6 +195,8 @@ final class NpcDemographicLifecycleFinalizer {
                                ELSE r.station_id||':population' END,
                            CASE r.primary_cause WHEN 'BIRTHS' THEN 'DEMOGRAPHIC_SUPPORT'
                                WHEN 'DEATHS' THEN 'DEMOGRAPHIC_PRESSURE'
+                               WHEN 'IMMIGRATION' THEN 'DEMOGRAPHIC_MIGRATION'
+                               WHEN 'EMIGRATION' THEN 'DEMOGRAPHIC_MIGRATION'
                                WHEN 'DISASTER' THEN 'MONSTER_ATTACK'
                                WHEN 'ABANDONMENT' THEN 'FRONTIER_TRANSITION'
                                ELSE 'DEMOGRAPHIC_RECONCILIATION' END,
@@ -211,6 +219,8 @@ final class NpcDemographicLifecycleFinalizer {
                            r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,
                            CASE r.primary_cause WHEN 'BIRTHS' THEN 'BIRTHS'
                                WHEN 'DEATHS' THEN 'ORDINARY_DEATHS'
+                               WHEN 'IMMIGRATION' THEN 'IMMIGRATION'
+                               WHEN 'EMIGRATION' THEN 'EMIGRATION'
                                WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES'
                                WHEN 'ABANDONMENT' THEN 'EVACUATION'
                                ELSE CASE WHEN residents.delta_value<0 THEN 'EMIGRATION' ELSE 'IMMIGRATION' END END,
@@ -238,6 +248,7 @@ final class NpcDemographicLifecycleFinalizer {
                            'population.residents','INTEGER',residents.previous_value,residents.delta_value,
                            residents.resulting_value,'people',
                            CASE r.primary_cause WHEN 'BIRTHS' THEN 'BIRTHS' WHEN 'DEATHS' THEN 'DEATHS'
+                               WHEN 'IMMIGRATION' THEN 'IMMIGRATION' WHEN 'EMIGRATION' THEN 'EMIGRATION'
                                WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' WHEN 'ABANDONMENT' THEN 'EVACUATION'
                                ELSE CASE WHEN residents.delta_value<0 THEN 'EMIGRATION' ELSE 'IMMIGRATION' END END,
                            'STATION',r.station_id
@@ -258,6 +269,7 @@ final class NpcDemographicLifecycleFinalizer {
                            'population.workforce','INTEGER',workforce.previous_value,workforce.delta_value,
                            workforce.resulting_value,'people',
                            CASE r.primary_cause WHEN 'BIRTHS' THEN 'BIRTHS' WHEN 'DEATHS' THEN 'DEATHS'
+                               WHEN 'IMMIGRATION' THEN 'IMMIGRATION' WHEN 'EMIGRATION' THEN 'EMIGRATION'
                                WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' WHEN 'ABANDONMENT' THEN 'EVACUATION'
                                ELSE CASE WHEN workforce.delta_value<0 THEN 'EMIGRATION' ELSE 'IMMIGRATION' END END,
                            'STATION',r.station_id
