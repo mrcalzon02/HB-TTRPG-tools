@@ -136,7 +136,7 @@ final class NpcPopulationMigrationEngine {
             if (requested < 1) continue;
             DestinationCandidate destination = destination(connection, worldId, origin, kind, requested, tick);
             if (destination == null) continue;
-            String vesselId = idleVessel(connection, worldId, origin.stationId(), origin.locationId(), kind);
+            String vesselId = idleVessel(connection, worldId, origin.stationId(), origin.locationId(), kind, tick);
             if (vesselId == null) continue;
             String summary = "Passive " + kind.name().toLowerCase().replace('_', ' ')
                     + " planned from " + origin.stationName() + " to " + destination.stationName()
@@ -190,7 +190,7 @@ final class NpcPopulationMigrationEngine {
     }
 
     private static DestinationCandidate destination(Connection connection, String worldId, OriginCandidate origin,
-                                                    FlowKind kind, long quantity, long tick) throws SQLException {
+                                                     FlowKind kind, long quantity, long tick) throws SQLException {
         String capacity = kind == FlowKind.WORKER_TRANSFER
                 ? "MIN(p.housing_capacity,p.life_support_capacity,p.employment_capacity)"
                 : "MIN(p.housing_capacity,p.life_support_capacity)";
@@ -230,9 +230,9 @@ final class NpcPopulationMigrationEngine {
     }
 
     private static String idleVessel(Connection connection, String worldId, String stationId,
-                                     String locationId, FlowKind kind) throws SQLException {
+                                     String locationId, FlowKind kind, long tick) throws SQLException {
         String sql = "SELECT v.npc_vessel_id FROM npc_vessel v WHERE v.world_id=? AND v.home_station_id=? "
-                + "AND v.current_location_id=? AND v.status='DOCKED' AND v.mission_id IS NULL "
+                + "AND v.current_location_id=? AND v.status='DOCKED' AND v.mission_id IS NULL AND v.last_tick<? "
                 + "AND NOT EXISTS(SELECT 1 FROM population_flow f WHERE f.assigned_npc_vessel_id=v.npc_vessel_id "
                 + "AND f.status IN ('PLANNED','PREPARING','IN_TRANSIT','RETURNING')) "
                 + "ORDER BY CASE WHEN ? IN ('REFUGEE_EVACUATION','EMERGENCY_RELOCATION') AND v.role IN ('COURIER','PATROL','TRADER') THEN 0 "
@@ -242,8 +242,9 @@ final class NpcPopulationMigrationEngine {
             statement.setString(1, worldId);
             statement.setString(2, stationId);
             statement.setString(3, locationId);
-            statement.setString(4, kind.name());
+            statement.setLong(4, tick);
             statement.setString(5, kind.name());
+            statement.setString(6, kind.name());
             try (ResultSet result = statement.executeQuery()) {
                 return result.next() ? result.getString(1) : null;
             }
