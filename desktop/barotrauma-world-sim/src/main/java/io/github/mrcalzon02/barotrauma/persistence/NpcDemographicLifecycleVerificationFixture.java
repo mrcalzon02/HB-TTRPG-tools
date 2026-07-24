@@ -50,7 +50,7 @@ final class NpcDemographicLifecycleVerificationFixture {
                 "INSERT INTO world_metadata VALUES('" + WORLD + "','Demographic Europa','2026-07-20T00:00:00Z','2175-01-01T00:42:00Z')",
                 "INSERT INTO world_station VALUES('" + STATION + "','" + WORLD + "','location','Nadir Station')",
                 "INSERT INTO station_simulation_state VALUES('" + STATION + "','" + WORLD + "',10000,100,50,70,90,100,5,0,'STABLE',42)",
-                "INSERT INTO station_civilization_state VALUES('" + STATION + "','" + WORLD + "',70,90,10,1,0,0,10,60,'HOLDING',42)",
+                "INSERT INTO station_civilization_state VALUES('" + STATION + "','" + WORLD + "',70,90,10,1,0,0,0,60,'HOLDING',42)",
                 "INSERT INTO station_inventory VALUES('" + STATION + "','item-rations',1000,42)",
                 "INSERT INTO npc_population_state VALUES('" + POPULATION + "','" + WORLD + "','" + STATION + "',600,120,100,90,40,30,15,5,1200,1300,1100,80,'FIXTURE',42)",
                 "INSERT INTO npc_population_reconciliation VALUES('" + POPULATION + "','" + WORLD + "','" + STATION + "'," + (1000.0 / 70.0) + ",70,'ALIGNED',1000,42)",
