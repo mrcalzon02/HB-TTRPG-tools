@@ -94,7 +94,8 @@ final class NpcDemographicLifecyclePlan {
                                     WHEN before_total>effective_capacity AND next_overcrowding_ticks>=3
                                         THEN MIN(before_total,MAX(1,(before_total-effective_capacity+9)/10))
                                     WHEN next_shortage_pressure_ticks>=3
-                                         AND (supplies<20 OR integrity<50 OR medical_coverage<35 OR pressure_score>=70)
+                                         AND (integrity<50 OR pressure_score>=85
+                                              OR (supplies<10 AND security<40 AND medical_coverage<25))
                                         THEN MIN(before_total,MAX(1,before_total/300))
                                     WHEN support_score>=45 AND pressure_score<45
                                          AND ((tick_sequence+ABS(unicode(substr(population_id,1,1))))%24)=0
