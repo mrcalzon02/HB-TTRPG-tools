@@ -78,7 +78,7 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 require(transitLegCount(paths, "OUTBOUND", "ARRIVED") >= 1,
                         "The outbound response leg did not record arrival.");
                 require("DISABLED".equals(vesselStatus(paths, distressed)),
-                        "The casualty was restored before on-scene work and return transit.");
+                        "The casualty changed state before on-scene work and return transit.");
 
                 int stalledProgress = operationProgress(paths);
                 step(paths, executor);
@@ -175,7 +175,7 @@ public final class FleetRecoveryAndNaturalWorldVerification {
                 vesselId = result.getString(1);
             }
             try (PreparedStatement update = connection.prepareStatement(
-                    "UPDATE npc_vessel SET hull=15,supplies=10,status='DISABLED',last_tick=last_tick+1 WHERE npc_vessel_id=?")) {
+                    "UPDATE npc_vessel SET hull=80,supplies=10,status='DISABLED',last_tick=last_tick+1 WHERE npc_vessel_id=?")) {
                 update.setString(1, vesselId);
                 update.executeUpdate();
             }
