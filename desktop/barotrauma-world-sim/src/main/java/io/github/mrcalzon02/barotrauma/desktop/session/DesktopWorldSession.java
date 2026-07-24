@@ -1,5 +1,6 @@
 package io.github.mrcalzon02.barotrauma.desktop.session;
 
+import io.github.mrcalzon02.barotrauma.desktop.ui.BarotraumaDesktopTheme;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 
 import javax.swing.SwingUtilities;
@@ -14,14 +15,22 @@ import java.util.function.Consumer;
  *
  * <p>The session does not hold the SQLite writer lock. Each transaction continues to acquire the
  * existing short-lived exclusive lock, while read-only views open their own query-only connection.</p>
+ *
+ * <p>The global session is also the desktop bootstrap boundary. It installs the authoritative atlas-backed Swing
+ * defaults before the primary shell constructs its panels, controls, tabs, lists, tables, and child-window actions.</p>
  */
 public final class DesktopWorldSession {
 
-    private static final DesktopWorldSession GLOBAL = new DesktopWorldSession();
+    private static final DesktopWorldSession GLOBAL = createGlobal();
     private final CopyOnWriteArrayList<Consumer<WorldPaths>> listeners = new CopyOnWriteArrayList<>();
     private volatile WorldPaths currentWorld;
 
     private DesktopWorldSession() { }
+
+    private static DesktopWorldSession createGlobal() {
+        BarotraumaDesktopTheme.install();
+        return new DesktopWorldSession();
+    }
 
     public static DesktopWorldSession global() { return GLOBAL; }
     public Optional<WorldPaths> currentWorld() { return Optional.ofNullable(currentWorld); }
@@ -60,6 +69,7 @@ public final class DesktopWorldSession {
     }
 
     public static void verifyContract() throws Exception {
+        BarotraumaDesktopTheme.verifyContract();
         DesktopWorldSession session = new DesktopWorldSession();
         java.nio.file.Path root = java.nio.file.Path.of(".").toAbsolutePath().normalize();
         WorldPaths first = new WorldPaths(root, root.resolve("world.db"), root.resolve("world.properties"),
@@ -79,6 +89,6 @@ public final class DesktopWorldSession {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Barotrauma shared desktop world session contract passed.");
+        System.out.println("Barotrauma shared desktop world session and atlas-backed Swing theme contracts passed.");
     }
 }
