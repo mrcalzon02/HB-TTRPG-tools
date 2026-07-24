@@ -124,6 +124,8 @@ final class NpcDemographicLifecycleStructure {
                     before_total INTEGER NOT NULL CHECK(before_total >= 0),
                     births INTEGER NOT NULL CHECK(births >= 0),
                     deaths INTEGER NOT NULL CHECK(deaths >= 0),
+                    immigration INTEGER NOT NULL CHECK(immigration >= 0),
+                    emigration INTEGER NOT NULL CHECK(emigration >= 0),
                     disaster_losses INTEGER NOT NULL CHECK(disaster_losses >= 0),
                     other_losses INTEGER NOT NULL CHECK(other_losses >= 0),
                     after_total INTEGER NOT NULL CHECK(after_total >= 0),
@@ -144,7 +146,9 @@ final class NpcDemographicLifecycleStructure {
                         CHECK(overcrowding_state IN ('WITHIN_CAPACITY','SUPPRESSED','STRAINED','CRITICAL')),
                     population_index_before INTEGER NOT NULL CHECK(population_index_before BETWEEN 0 AND 100),
                     population_index_after INTEGER NOT NULL CHECK(population_index_after BETWEEN 0 AND 100),
-                    primary_cause TEXT NOT NULL CHECK(primary_cause IN ('BIRTHS','DEATHS','DISASTER','ABANDONMENT','OTHER')),
+                    primary_cause TEXT NOT NULL
+                        CHECK(primary_cause IN ('BIRTHS','DEATHS','IMMIGRATION','EMIGRATION',
+                                                'DISASTER','ABANDONMENT','OTHER')),
                     evidence_key TEXT NOT NULL,
                     summary TEXT NOT NULL,
                     after_civilians INTEGER NOT NULL CHECK(after_civilians >= 0),
@@ -157,7 +161,7 @@ final class NpcDemographicLifecycleStructure {
                     after_refugees INTEGER NOT NULL CHECK(after_refugees >= 0),
                     attack_damage_points INTEGER NOT NULL CHECK(attack_damage_points >= 0),
                     UNIQUE(population_id,tick_sequence),
-                    CHECK(after_total=before_total+births-deaths-disaster_losses-other_losses),
+                    CHECK(after_total=before_total+births+immigration-deaths-emigration-disaster_losses-other_losses),
                     CHECK(after_total=after_civilians+after_industrial_workers+after_logistics_workers
                                       +after_security_personnel+after_medical_personnel+after_scientific_personnel
                                       +after_temporary_residents+after_refugees),
