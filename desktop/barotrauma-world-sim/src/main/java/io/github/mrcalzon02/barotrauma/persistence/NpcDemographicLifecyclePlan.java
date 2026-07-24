@@ -98,6 +98,7 @@ final class NpcDemographicLifecyclePlan {
                                               OR (supplies<10 AND security<40 AND medical_coverage<25))
                                         THEN MIN(before_total,MAX(1,before_total/300))
                                     WHEN support_score>=45 AND pressure_score<45
+                                         AND surplus_ticks<15
                                          AND ((tick_sequence+ABS(unicode(substr(population_id,1,1))))%24)=0
                                         THEN MIN(before_total,MAX(1,before_total/2500))
                                     ELSE 0 END
