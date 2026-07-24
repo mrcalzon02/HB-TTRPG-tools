@@ -2,7 +2,7 @@ package io.github.mrcalzon02.barotrauma.persistence;
 
 import java.util.List;
 
-/** Schema-027 migration alignment and passive-tick baseline capture. */
+/** Schema-027 migration alignment, direct evacuation, and passive-tick baseline capture. */
 final class NpcDemographicLifecycleIntegration {
     private NpcDemographicLifecycleIntegration() { }
 
@@ -85,6 +85,27 @@ final class NpcDemographicLifecycleIntegration {
                 END
                 """);
 
+        statements.add(directEvacuationTrigger(
+                "npc_demographic_direct_frontier_evacuation",
+                "station_civilization_state",
+                "frontier_state",
+                "OLD.frontier_state<>'ABANDONED' AND NEW.frontier_state='ABANDONED'",
+                "frontier",
+                "The station population evacuated after direct frontier abandonment",
+                "the civilian frontier was explicitly changed from '||OLD.frontier_state||' to ABANDONED",
+                "FRONTIER_TRANSITION",
+                "NEW.station_id||':frontier-transition:'||NEW.last_tick||':'||OLD.frontier_state||':'||NEW.frontier_state"));
+        statements.add(directEvacuationTrigger(
+                "npc_demographic_direct_fallen_evacuation",
+                "station_simulation_state",
+                "status",
+                "OLD.status<>'FALLEN' AND NEW.status='FALLEN'",
+                "fallen",
+                "The station population evacuated after the station fell",
+                "the station status was explicitly changed from '||OLD.status||' to FALLEN",
+                "STATION_STATUS_TRANSITION",
+                "NEW.station_id||':status-transition:'||NEW.last_tick||':'||OLD.status||':'||NEW.status"));
+
         statements.add("""
                 CREATE TRIGGER npc_demographic_capture_before_tick
                 BEFORE UPDATE OF last_tick ON station_simulation_state
@@ -106,5 +127,58 @@ final class NpcDemographicLifecycleIntegration {
                     WHERE p.station_id=NEW.station_id;
                 END
                 """);
+    }
+
+    private static String directEvacuationTrigger(String triggerName, String tableName, String updatedColumn,
+                                                   String transitionPredicate, String route,
+                                                   String headline, String narrativeCause,
+                                                   String causeType, String causeIdExpression) {
+        String eventId = "NEW.station_id||':population:evacuation:direct-" + route + ":'||NEW.last_tick";
+        return "CREATE TRIGGER " + triggerName + " AFTER UPDATE OF " + updatedColumn + " ON " + tableName
+                + " WHEN " + transitionPredicate
+                + " AND EXISTS (SELECT 1 FROM station_population_state p WHERE p.station_id=NEW.station_id"
+                + " AND p.resident_count>0)"
+                + " AND NOT EXISTS (SELECT 1 FROM npc_demographic_tick_baseline b"
+                + " WHERE b.station_id=NEW.station_id AND b.tick_sequence=NEW.last_tick) BEGIN "
+                + "INSERT OR IGNORE INTO station_event(event_id,world_id,station_id,tick_sequence,canonical_time,"
+                + "event_type,severity,headline,narrative,actor_type,actor_id,cause_type,cause_id,"
+                + "deterministic_key,visibility,correlation_id,policy_version,created_at) SELECT "
+                + eventId + ",NEW.world_id,NEW.station_id,NEW.last_tick,NULL,'POPULATION',5,'"
+                + headline + "',CAST(p.resident_count AS TEXT)||' residents and '"
+                + "||CAST(p.workforce_count AS TEXT)||' workers evacuated because " + narrativeCause + ".',"
+                + "'CIVIL_AUTHORITY',NEW.station_id||':population','" + causeType + "'," + causeIdExpression
+                + ",'population:evacuation:direct-" + route + ":'||NEW.last_tick,'OBSERVED',"
+                + "NEW.world_id||':tick:'||NEW.last_tick,"
+                + "(SELECT policy_version FROM station_story_policy WHERE active=1),'tick:'||NEW.last_tick "
+                + "FROM station_population_state p WHERE p.station_id=NEW.station_id; "
+                + "INSERT OR IGNORE INTO station_population_event(population_event_id,event_id,"
+                + "population_category,people_before,people_delta,people_after,workforce_delta) SELECT "
+                + "NEW.station_id||':population-evidence:evacuation:direct-" + route + ":'||NEW.last_tick,"
+                + eventId + ",'EVACUATION',p.resident_count,-p.resident_count,0,-p.workforce_count "
+                + "FROM station_population_state p WHERE p.station_id=NEW.station_id; "
+                + directEvacuationChange(eventId, route, "residents", "resident_count")
+                + directEvacuationChange(eventId, route, "workforce", "workforce_count")
+                + "UPDATE npc_population_state SET civilians=0,industrial_workers=0,logistics_workers=0,"
+                + "security_personnel=0,medical_personnel=0,scientific_personnel=0,temporary_residents=0,"
+                + "refugees=0,last_tick=MAX(last_tick,NEW.last_tick) WHERE station_id=NEW.station_id; "
+                + "UPDATE npc_population_reconciliation SET last_population_index=0,"
+                + "reconciliation_status='ABANDONED',last_detailed_population=0,"
+                + "last_tick=MAX(last_tick,NEW.last_tick) WHERE station_id=NEW.station_id; "
+                + "UPDATE npc_demographic_state SET surplus_support_ticks=0,shortage_pressure_ticks=0,"
+                + "overcrowding_ticks=0,overcrowding_state='WITHIN_CAPACITY',last_support_score=0,"
+                + "last_pressure_score=100,last_tick=MAX(last_tick,NEW.last_tick) WHERE station_id=NEW.station_id; "
+                + "UPDATE station_population_state SET resident_count=0,workforce_count=0,"
+                + "last_tick=MAX(last_tick,NEW.last_tick) WHERE station_id=NEW.station_id; "
+                + "UPDATE station_civilization_state SET population_index=0,frontier_state='ABANDONED',"
+                + "last_tick=MAX(last_tick,NEW.last_tick) WHERE station_id=NEW.station_id; END";
+    }
+
+    private static String directEvacuationChange(String eventId, String route, String suffix, String column) {
+        return "INSERT OR IGNORE INTO station_change(change_id,event_id,statistic_key,value_type,previous_value,"
+                + "delta_value,resulting_value,unit,reason_code,affected_type,affected_id) SELECT "
+                + "NEW.station_id||':population:evacuation:direct-" + route + ":'||NEW.last_tick||':" + suffix
+                + "'," + eventId + ",'population." + suffix + "','INTEGER',p." + column + ",-p." + column
+                + ",0,'people','EVACUATION','STATION',NEW.station_id FROM station_population_state p "
+                + "WHERE p.station_id=NEW.station_id AND p." + column + ">0; ";
     }
 }
