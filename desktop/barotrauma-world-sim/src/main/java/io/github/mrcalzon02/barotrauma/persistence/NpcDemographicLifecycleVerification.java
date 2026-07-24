@@ -107,7 +107,7 @@ public final class NpcDemographicLifecycleVerification {
                     + "before_total+births+immigration+other_gains-deaths-emigration-disaster_losses-other_losses") == 0,
                     "A demographic ledger row violates conservation.");
             require(number(connection, "SELECT COUNT(*) FROM npc_demographic_tick_result WHERE after_total<>"
-                    + "before_total+births-deaths-disaster_losses-other_losses") == 0,
+                    + "before_total+births+immigration-deaths-emigration-disaster_losses-other_losses") == 0,
                     "A demographic result violates conservation.");
             require(number(connection, "SELECT COUNT(*) FROM npc_demographic_tick_result WHERE after_total<>"
                     + "after_civilians+after_industrial_workers+after_logistics_workers+after_security_personnel+"
@@ -134,13 +134,14 @@ public final class NpcDemographicLifecycleVerification {
                     "Schema 027 created foreign-key violations.");
 
             return text(connection, "SELECT group_concat(tick_sequence||':'||births||':'||deaths||':'||"
-                    + "disaster_losses||':'||other_losses||':'||after_total||':'||support_score||':'||pressure_score,'|') "
+                    + "immigration||':'||emigration||':'||disaster_losses||':'||other_losses||':'||after_total||':'||"
+                    + "support_score||':'||pressure_score,'|') "
                     + "FROM (SELECT * FROM npc_demographic_tick_result ORDER BY tick_sequence)");
         }
     }
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Schema 027 deterministic capacity-supported births, mortality, morale, overcrowding hysteresis, station projection, evidence, conservation, and rollback passed.");
+        System.out.println("Schema 027 deterministic capacity-supported births, mortality, migration, morale, overcrowding hysteresis, station projection, evidence, conservation, and rollback passed.");
     }
 }
