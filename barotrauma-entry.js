@@ -1,6 +1,9 @@
 (() => {
   'use strict';
 
+  const ownerScript = document.currentScript;
+  if (ownerScript) ownerScript.dataset.hbLoaded = 'true';
+
   const state = {
     initialized: false,
     activeFilter: 'all'
