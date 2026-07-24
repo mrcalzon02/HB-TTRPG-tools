@@ -107,6 +107,7 @@ final class NpcDemographicLifecyclePlan {
                                       AND effective_capacity>0
                                       AND before_total*100<effective_capacity*95
                                       AND support_score>=70 AND pressure_score<35
+                                      AND surplus_ticks<15
                                       AND next_surplus_support_ticks>=6
                                       AND tick_sequence-COALESCE(last_birth_tick,-1000000)>=6
                                 THEN MIN(effective_capacity-before_total,MAX(1,before_total/500))
