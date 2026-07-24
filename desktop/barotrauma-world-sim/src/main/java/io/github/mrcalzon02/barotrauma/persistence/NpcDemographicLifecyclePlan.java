@@ -124,6 +124,9 @@ final class NpcDemographicLifecyclePlan {
                 ), projected AS (
                     SELECT totals.*,
                            CASE WHEN after_total=0 THEN 0
+                                WHEN next_shortage_pressure_ticks>0 OR pressure_score>=45 OR shortage_ticks>=3
+                                THEN MIN(population_index_before,
+                                         MAX(1,MIN(100,CAST(ROUND(after_total/baseline_population_per_index) AS INTEGER))))
                                 ELSE MAX(1,MIN(100,CAST(ROUND(after_total/baseline_population_per_index) AS INTEGER)))
                                 END projected_population_index,
                            CASE WHEN before_total<=0 THEN 0
@@ -184,5 +187,4 @@ final class NpcDemographicLifecyclePlan {
                 FROM projected
                 """;
     }
-
 }
