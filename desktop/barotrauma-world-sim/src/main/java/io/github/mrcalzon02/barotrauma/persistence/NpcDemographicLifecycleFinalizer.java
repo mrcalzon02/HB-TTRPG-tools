@@ -167,71 +167,110 @@ final class NpcDemographicLifecycleFinalizer {
                         event_id,world_id,station_id,tick_sequence,canonical_time,event_type,severity,
                         headline,narrative,actor_type,actor_id,cause_type,cause_id,deterministic_key,
                         visibility,correlation_id,policy_version,created_at)
-                    SELECT station_id||':demographic:'||lower(primary_cause)||':'||tick_sequence,
-                           world_id,station_id,tick_sequence,
-                           (SELECT current_canonical FROM simulation_transaction_context WHERE world_id=r.world_id),
-                           'POPULATION',CASE primary_cause WHEN 'ABANDONMENT' THEN 5 WHEN 'DISASTER' THEN 4
+                    SELECT r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,
+                           r.world_id,r.station_id,r.tick_sequence,ctx.current_canonical,
+                           'POPULATION',CASE r.primary_cause WHEN 'ABANDONMENT' THEN 5 WHEN 'DISASTER' THEN 4
                                WHEN 'DEATHS' THEN 3 ELSE 2 END,
-                           CASE primary_cause WHEN 'BIRTHS' THEN 'Sustained support produced population growth'
+                           CASE r.primary_cause
+                               WHEN 'BIRTHS' THEN 'Sustained support produced population growth'
                                WHEN 'DEATHS' THEN 'Population pressure caused mortality'
                                WHEN 'DISASTER' THEN 'A measured fauna attack caused casualties'
-                               ELSE 'The station population was lost during abandonment' END,
-                           summary,
-                           CASE primary_cause WHEN 'DISASTER' THEN 'FAUNA'
+                               WHEN 'ABANDONMENT' THEN 'The station population was evacuated'
+                               ELSE CASE WHEN residents.delta_value<0
+                                   THEN 'Aggregate station population reconciled downward'
+                                   ELSE 'Aggregate station population reconciled upward' END END,
+                           CASE r.primary_cause WHEN 'OTHER' THEN
+                               CAST(ABS(CAST(residents.delta_value AS INTEGER)) AS TEXT)
+                               ||' residents were reconciled to the authoritative detailed population total.'
+                               ELSE r.summary END,
+                           CASE r.primary_cause WHEN 'DISASTER' THEN 'FAUNA'
                                WHEN 'ABANDONMENT' THEN 'CIVIL_AUTHORITY' ELSE 'CIVILIANS' END,
-                           CASE primary_cause WHEN 'DISASTER' THEN 'europan-fauna-pressure'
-                               ELSE station_id||':population' END,
-                           CASE primary_cause WHEN 'BIRTHS' THEN 'DEMOGRAPHIC_SUPPORT'
+                           CASE r.primary_cause WHEN 'DISASTER' THEN 'europan-fauna-pressure'
+                               ELSE r.station_id||':population' END,
+                           CASE r.primary_cause WHEN 'BIRTHS' THEN 'DEMOGRAPHIC_SUPPORT'
                                WHEN 'DEATHS' THEN 'DEMOGRAPHIC_PRESSURE'
-                               WHEN 'DISASTER' THEN 'MONSTER_ATTACK' ELSE 'FRONTIER_TRANSITION' END,
-                           evidence_key,'demographic:'||lower(primary_cause)||':'||tick_sequence,'OBSERVED',
-                           world_id||':tick:'||tick_sequence,
-                           (SELECT policy_version FROM station_story_policy WHERE active=1),
-                           COALESCE((SELECT current_canonical FROM simulation_transaction_context
-                                     WHERE world_id=r.world_id),'tick:'||tick_sequence)
+                               WHEN 'DISASTER' THEN 'MONSTER_ATTACK'
+                               WHEN 'ABANDONMENT' THEN 'FRONTIER_TRANSITION'
+                               ELSE 'DEMOGRAPHIC_RECONCILIATION' END,
+                           r.evidence_key,'demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,'OBSERVED',
+                           r.world_id||':tick:'||r.tick_sequence,
+                           (SELECT policy_version FROM station_story_policy WHERE active=1),ctx.current_canonical
                     FROM npc_demographic_tick_result r
-                    WHERE station_id=NEW.station_id AND tick_sequence=NEW.tick_sequence
-                      AND after_total<>before_total;
+                    JOIN simulation_transaction_context ctx ON ctx.world_id=r.world_id
+                    JOIN station_mutation_coverage residents
+                      ON residents.command_id=ctx.command_id AND residents.station_id=r.station_id
+                     AND residents.tick_sequence=r.tick_sequence
+                     AND residents.statistic_key='population.residents'
+                    WHERE r.station_id=NEW.station_id AND r.tick_sequence=NEW.tick_sequence
+                      AND residents.delta_value<>0;
 
                     INSERT OR IGNORE INTO station_population_event(
                         population_event_id,event_id,population_category,people_before,people_delta,
                         people_after,workforce_delta)
-                    SELECT station_id||':demographic-evidence:'||lower(primary_cause)||':'||tick_sequence,
-                           station_id||':demographic:'||lower(primary_cause)||':'||tick_sequence,
-                           CASE primary_cause WHEN 'BIRTHS' THEN 'BIRTHS'
+                    SELECT r.station_id||':demographic-evidence:'||lower(r.primary_cause)||':'||r.tick_sequence,
+                           r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,
+                           CASE r.primary_cause WHEN 'BIRTHS' THEN 'BIRTHS'
                                WHEN 'DEATHS' THEN 'ORDINARY_DEATHS'
-                               WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' ELSE 'EVACUATION' END,
-                           before_total,after_total-before_total,after_total,workforce_after-workforce_before
-                    FROM npc_demographic_tick_result
-                    WHERE station_id=NEW.station_id AND tick_sequence=NEW.tick_sequence
-                      AND after_total<>before_total;
+                               WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES'
+                               WHEN 'ABANDONMENT' THEN 'EVACUATION'
+                               ELSE CASE WHEN residents.delta_value<0 THEN 'EMIGRATION' ELSE 'IMMIGRATION' END END,
+                           CAST(residents.previous_value AS INTEGER),CAST(residents.delta_value AS INTEGER),
+                           CAST(residents.resulting_value AS INTEGER),
+                           CAST(COALESCE(workforce.delta_value,r.workforce_after-r.workforce_before) AS INTEGER)
+                    FROM npc_demographic_tick_result r
+                    JOIN simulation_transaction_context ctx ON ctx.world_id=r.world_id
+                    JOIN station_mutation_coverage residents
+                      ON residents.command_id=ctx.command_id AND residents.station_id=r.station_id
+                     AND residents.tick_sequence=r.tick_sequence
+                     AND residents.statistic_key='population.residents'
+                    LEFT JOIN station_mutation_coverage workforce
+                      ON workforce.command_id=ctx.command_id AND workforce.station_id=r.station_id
+                     AND workforce.tick_sequence=r.tick_sequence
+                     AND workforce.statistic_key='population.workforce'
+                    WHERE r.station_id=NEW.station_id AND r.tick_sequence=NEW.tick_sequence
+                      AND residents.delta_value<>0;
 
                     INSERT OR IGNORE INTO station_change(
                         change_id,event_id,statistic_key,value_type,previous_value,delta_value,resulting_value,
                         unit,reason_code,affected_type,affected_id)
-                    SELECT station_id||':demographic:'||lower(primary_cause)||':'||tick_sequence||':residents',
-                           station_id||':demographic:'||lower(primary_cause)||':'||tick_sequence,
-                           'population.residents','INTEGER',before_total,after_total-before_total,after_total,'people',
-                           CASE primary_cause WHEN 'BIRTHS' THEN 'BIRTHS' WHEN 'DEATHS' THEN 'DEATHS'
-                               WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' ELSE 'EVACUATION' END,
-                           'STATION',station_id
-                    FROM npc_demographic_tick_result
-                    WHERE station_id=NEW.station_id AND tick_sequence=NEW.tick_sequence
-                      AND after_total<>before_total;
+                    SELECT r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence||':residents',
+                           r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,
+                           'population.residents','INTEGER',residents.previous_value,residents.delta_value,
+                           residents.resulting_value,'people',
+                           CASE r.primary_cause WHEN 'BIRTHS' THEN 'BIRTHS' WHEN 'DEATHS' THEN 'DEATHS'
+                               WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' WHEN 'ABANDONMENT' THEN 'EVACUATION'
+                               ELSE CASE WHEN residents.delta_value<0 THEN 'EMIGRATION' ELSE 'IMMIGRATION' END END,
+                           'STATION',r.station_id
+                    FROM npc_demographic_tick_result r
+                    JOIN simulation_transaction_context ctx ON ctx.world_id=r.world_id
+                    JOIN station_mutation_coverage residents
+                      ON residents.command_id=ctx.command_id AND residents.station_id=r.station_id
+                     AND residents.tick_sequence=r.tick_sequence
+                     AND residents.statistic_key='population.residents'
+                    WHERE r.station_id=NEW.station_id AND r.tick_sequence=NEW.tick_sequence
+                      AND residents.delta_value<>0;
 
                     INSERT OR IGNORE INTO station_change(
                         change_id,event_id,statistic_key,value_type,previous_value,delta_value,resulting_value,
                         unit,reason_code,affected_type,affected_id)
-                    SELECT station_id||':demographic:'||lower(primary_cause)||':'||tick_sequence||':workforce',
-                           station_id||':demographic:'||lower(primary_cause)||':'||tick_sequence,
-                           'population.workforce','INTEGER',workforce_before,workforce_after-workforce_before,
-                           workforce_after,'people',
-                           CASE primary_cause WHEN 'BIRTHS' THEN 'BIRTHS' WHEN 'DEATHS' THEN 'DEATHS'
-                               WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' ELSE 'EVACUATION' END,
-                           'STATION',station_id
-                    FROM npc_demographic_tick_result
-                    WHERE station_id=NEW.station_id AND tick_sequence=NEW.tick_sequence
-                      AND workforce_after<>workforce_before;
+                    SELECT r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence||':workforce',
+                           r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence,
+                           'population.workforce','INTEGER',workforce.previous_value,workforce.delta_value,
+                           workforce.resulting_value,'people',
+                           CASE r.primary_cause WHEN 'BIRTHS' THEN 'BIRTHS' WHEN 'DEATHS' THEN 'DEATHS'
+                               WHEN 'DISASTER' THEN 'ATTACK_CASUALTIES' WHEN 'ABANDONMENT' THEN 'EVACUATION'
+                               ELSE CASE WHEN workforce.delta_value<0 THEN 'EMIGRATION' ELSE 'IMMIGRATION' END END,
+                           'STATION',r.station_id
+                    FROM npc_demographic_tick_result r
+                    JOIN simulation_transaction_context ctx ON ctx.world_id=r.world_id
+                    JOIN station_mutation_coverage workforce
+                      ON workforce.command_id=ctx.command_id AND workforce.station_id=r.station_id
+                     AND workforce.tick_sequence=r.tick_sequence
+                     AND workforce.statistic_key='population.workforce'
+                    WHERE r.station_id=NEW.station_id AND r.tick_sequence=NEW.tick_sequence
+                      AND workforce.delta_value<>0
+                      AND EXISTS (SELECT 1 FROM station_event e
+                                  WHERE e.event_id=r.station_id||':demographic:'||lower(r.primary_cause)||':'||r.tick_sequence);
 
                     DELETE FROM npc_demographic_tick_baseline WHERE station_id=NEW.station_id;
                 END
