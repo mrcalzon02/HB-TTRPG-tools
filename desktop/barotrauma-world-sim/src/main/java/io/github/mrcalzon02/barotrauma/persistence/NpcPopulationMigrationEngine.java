@@ -232,9 +232,12 @@ final class NpcPopulationMigrationEngine {
     private static String idleVessel(Connection connection, String worldId, String stationId,
                                      String locationId, FlowKind kind, long tick) throws SQLException {
         String sql = "SELECT v.npc_vessel_id FROM npc_vessel v WHERE v.world_id=? AND v.home_station_id=? "
-                + "AND v.current_location_id=? AND v.status='DOCKED' AND v.mission_id IS NULL AND v.last_tick<? "
+                + "AND v.current_location_id=? AND v.status='DOCKED' AND v.mission_id IS NULL "
                 + "AND NOT EXISTS(SELECT 1 FROM population_flow f WHERE f.assigned_npc_vessel_id=v.npc_vessel_id "
                 + "AND f.status IN ('PLANNED','PREPARING','IN_TRANSIT','RETURNING')) "
+                + "AND NOT EXISTS(SELECT 1 FROM fleet_response_operation o "
+                + "WHERE o.assigned_npc_vessel_id=v.npc_vessel_id "
+                + "AND (o.status='ACTIVE' OR COALESCE(o.responder_returned_tick,-1)=?)) "
                 + "ORDER BY CASE WHEN ? IN ('REFUGEE_EVACUATION','EMERGENCY_RELOCATION') AND v.role IN ('COURIER','PATROL','TRADER') THEN 0 "
                 + "WHEN ?='WORKER_TRANSFER' AND v.role IN ('TRADER','COURIER') THEN 0 ELSE 1 END,"
                 + "v.hull DESC,v.supplies DESC,v.npc_vessel_id LIMIT 1";
