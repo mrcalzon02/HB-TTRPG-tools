@@ -77,6 +77,16 @@ final class NpcDemographicLifecyclePlan {
                                       AND attack_damage_points>0
                                 THEN MIN(before_total,MAX(1,attack_damage_points*2)) ELSE 0 END candidate_disaster_losses,
                            CASE WHEN status<>'FALLEN' AND frontier_state<>'ABANDONED'
+                                      AND population_index<population_index_before
+                                THEN MIN(before_total,MAX(1,CAST(ROUND(
+                                     (population_index_before-population_index)*baseline_population_per_index)
+                                     AS INTEGER))) ELSE 0 END candidate_emigration,
+                           CASE WHEN status<>'FALLEN' AND frontier_state<>'ABANDONED'
+                                      AND population_index>population_index_before AND effective_capacity>before_total
+                                THEN MIN(effective_capacity-before_total,MAX(1,CAST(ROUND(
+                                     (population_index-population_index_before)*baseline_population_per_index)
+                                     AS INTEGER))) ELSE 0 END candidate_immigration,
+                           CASE WHEN status<>'FALLEN' AND frontier_state<>'ABANDONED'
                                       AND attack_damage_points=0 AND before_total>0
                                 THEN CASE
                                     WHEN integrity<=0 OR life_support_capacity<=0
@@ -106,14 +116,21 @@ final class NpcDemographicLifecyclePlan {
                            candidate_other_losses other_losses,
                            CASE WHEN candidate_other_losses>0 THEN 0 ELSE candidate_disaster_losses END disaster_losses,
                            CASE WHEN candidate_other_losses>0 OR candidate_disaster_losses>0
+                                THEN 0 ELSE candidate_emigration END emigration,
+                           CASE WHEN candidate_other_losses>0 OR candidate_disaster_losses>0
+                                      OR candidate_emigration>0
+                                THEN 0 ELSE candidate_immigration END immigration,
+                           CASE WHEN candidate_other_losses>0 OR candidate_disaster_losses>0
+                                      OR candidate_emigration>0 OR candidate_immigration>0
                                 THEN 0 ELSE candidate_deaths END deaths,
-                           CASE WHEN candidate_other_losses>0 OR candidate_disaster_losses>0 OR candidate_deaths>0
+                           CASE WHEN candidate_other_losses>0 OR candidate_disaster_losses>0
+                                      OR candidate_emigration>0 OR candidate_immigration>0 OR candidate_deaths>0
                                 THEN 0 ELSE candidate_births END births
                     FROM candidates
                 ), totals AS (
                     SELECT terms.*,
-                           before_total-deaths-disaster_losses-other_losses surviving_total,
-                           before_total+births-deaths-disaster_losses-other_losses after_total,
+                           before_total-deaths-emigration-disaster_losses-other_losses surviving_total,
+                           before_total+births+immigration-deaths-emigration-disaster_losses-other_losses after_total,
                            CASE WHEN other_losses>0 THEN 0
                                 WHEN pressure_score>=70 THEN MAX(0,morale_before-2)
                                 WHEN pressure_score>=45 THEN MAX(0,morale_before-1)
@@ -124,6 +141,7 @@ final class NpcDemographicLifecyclePlan {
                 ), projected AS (
                     SELECT totals.*,
                            CASE WHEN after_total=0 THEN 0
+                                WHEN immigration>0 OR emigration>0 THEN population_index
                                 WHEN next_shortage_pressure_ticks>0 OR pressure_score>=45 OR shortage_ticks>=3
                                 THEN MIN(population_index_before,
                                          MAX(1,MIN(100,CAST(ROUND(after_total/baseline_population_per_index) AS INTEGER))))
@@ -146,8 +164,8 @@ final class NpcDemographicLifecyclePlan {
                     FROM totals
                 )
                 SELECT population_id||':demographic:'||tick_sequence result_id,world_id,population_id,station_id,
-                       tick_sequence,before_total,births,deaths,disaster_losses,other_losses,after_total,
-                       workforce_before,
+                       tick_sequence,before_total,births,deaths,immigration,emigration,disaster_losses,other_losses,
+                       after_total,workforce_before,
                        after_industrial_workers+after_logistics_workers+after_security_personnel+
                            after_medical_personnel+after_scientific_personnel workforce_after,
                        housing_capacity,life_support_capacity,employment_capacity,effective_capacity,
@@ -159,10 +177,14 @@ final class NpcDemographicLifecyclePlan {
                        population_index_before,projected_population_index population_index_after,
                        CASE WHEN other_losses>0 THEN 'ABANDONMENT'
                             WHEN disaster_losses>0 THEN 'DISASTER'
+                            WHEN emigration>0 THEN 'EMIGRATION'
+                            WHEN immigration>0 THEN 'IMMIGRATION'
                             WHEN deaths>0 THEN 'DEATHS'
                             WHEN births>0 THEN 'BIRTHS' ELSE 'OTHER' END primary_cause,
                        CASE WHEN other_losses>0 THEN 'frontier-abandonment-demographic-closure'
                             WHEN disaster_losses>0 THEN 'measured-fauna-attack-casualties'
+                            WHEN emigration>0 THEN 'frontier-population-index-emigration'
+                            WHEN immigration>0 THEN 'frontier-population-index-immigration'
                             WHEN deaths>0 AND before_total>effective_capacity AND next_overcrowding_ticks>=3
                                 THEN 'overcrowding-excess-mortality'
                             WHEN deaths>0 AND pressure_score>=45 THEN 'support-failure-excess-mortality'
@@ -175,6 +197,8 @@ final class NpcDemographicLifecyclePlan {
                            CASE WHEN other_losses>0 THEN 'WITHIN_CAPACITY' ELSE next_overcrowding_state END
                            ||CASE WHEN births>0 THEN '; births='||births
                                  WHEN deaths>0 THEN '; deaths='||deaths
+                                 WHEN immigration>0 THEN '; immigration='||immigration
+                                 WHEN emigration>0 THEN '; emigration='||emigration
                                  WHEN disaster_losses>0 THEN '; disaster losses='||disaster_losses
                                  WHEN other_losses>0 THEN '; abandonment losses='||other_losses
                                  ELSE '; population held' END||'.' summary,
