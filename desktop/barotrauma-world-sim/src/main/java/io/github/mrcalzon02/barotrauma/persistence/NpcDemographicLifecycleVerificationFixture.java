@@ -40,9 +40,12 @@ final class NpcDemographicLifecycleVerificationFixture {
                 "CREATE TABLE station_change(change_id TEXT PRIMARY KEY,event_id TEXT,statistic_key TEXT,value_type TEXT,previous_value REAL,delta_value REAL,resulting_value REAL,unit TEXT,reason_code TEXT,affected_type TEXT,affected_id TEXT)",
                 "CREATE TABLE world_observation_event(event_id TEXT PRIMARY KEY,world_id TEXT,tick_sequence INTEGER,canonical_time TEXT,category TEXT,primary_entity_type TEXT,primary_entity_id TEXT,primary_cause TEXT,primary_evidence_key TEXT,contributing_factors TEXT,magnitude INTEGER,visibility TEXT,confidence INTEGER,summary TEXT)",
                 "CREATE TABLE observation_metric_series(metric_id TEXT PRIMARY KEY,world_id TEXT,entity_type TEXT,entity_id TEXT,metric_key TEXT,tick_sequence INTEGER,numeric_value REAL,unit TEXT,snapshot_id TEXT,UNIQUE(world_id,entity_type,entity_id,metric_key,tick_sequence))",
-                "CREATE TABLE simulation_transaction_context(world_id TEXT PRIMARY KEY,current_canonical TEXT)",
+                "CREATE TABLE simulation_transaction_context(world_id TEXT PRIMARY KEY,command_id TEXT NOT NULL DEFAULT 'fixture-command',current_tick INTEGER,current_canonical TEXT)",
+                "CREATE TABLE station_mutation_coverage(command_id TEXT NOT NULL,station_id TEXT NOT NULL,tick_sequence INTEGER NOT NULL,statistic_key TEXT NOT NULL,previous_value REAL NOT NULL,delta_value REAL NOT NULL,resulting_value REAL NOT NULL,PRIMARY KEY(command_id,station_id,tick_sequence,statistic_key))",
+                fixtureCoverageTrigger("residents", "resident_count", "population.residents"),
+                fixtureCoverageTrigger("workforce", "workforce_count", "population.workforce"),
                 "INSERT INTO station_event_type VALUES('POPULATION','Population change',1)",
-                "INSERT INTO station_change_reason VALUES('BIRTHS','Births','POPULATION'),('DEATHS','Deaths','POPULATION'),('ATTACK_CASUALTIES','Attack casualties','POPULATION'),('EVACUATION','Evacuation','POPULATION')",
+                "INSERT INTO station_change_reason VALUES('BIRTHS','Births','POPULATION'),('DEATHS','Deaths','POPULATION'),('ATTACK_CASUALTIES','Attack casualties','POPULATION'),('EVACUATION','Evacuation','POPULATION'),('EMIGRATION','Emigration','POPULATION'),('IMMIGRATION','Immigration','POPULATION')",
                 "INSERT INTO station_story_policy VALUES(1,1)",
                 "INSERT INTO world_metadata VALUES('" + WORLD + "','Demographic Europa','2026-07-20T00:00:00Z','2175-01-01T00:42:00Z')",
                 "INSERT INTO world_station VALUES('" + STATION + "','" + WORLD + "','location','Nadir Station')",
@@ -54,10 +57,24 @@ final class NpcDemographicLifecycleVerificationFixture {
                 "INSERT INTO station_population_state VALUES('" + STATION + "','" + WORLD + "','IMPORTED_ESTIMATE',42,7000,7000,3850,3850,42)");
     }
 
+    private static String fixtureCoverageTrigger(String suffix, String column, String statisticKey) {
+        return "CREATE TRIGGER fixture_station_population_" + suffix + "_coverage AFTER UPDATE OF " + column
+                + " ON station_population_state WHEN NEW." + column + "<>OLD." + column
+                + " AND EXISTS(SELECT 1 FROM simulation_transaction_context c WHERE c.world_id=NEW.world_id) BEGIN "
+                + "INSERT INTO station_mutation_coverage(command_id,station_id,tick_sequence,statistic_key,"
+                + "previous_value,delta_value,resulting_value) SELECT c.command_id,NEW.station_id,"
+                + "COALESCE(c.current_tick,NEW.last_tick),'" + statisticKey + "',OLD." + column + ",NEW." + column
+                + "-OLD." + column + ",NEW." + column + " FROM simulation_transaction_context c "
+                + "WHERE c.world_id=NEW.world_id ON CONFLICT(command_id,station_id,tick_sequence,statistic_key) "
+                + "DO UPDATE SET delta_value=station_mutation_coverage.delta_value+excluded.delta_value,"
+                + "resulting_value=excluded.resulting_value; END";
+    }
+
     static void advance(Connection c, long tick) throws SQLException {
         execute(c,
-                "INSERT OR REPLACE INTO simulation_transaction_context(world_id,current_canonical) VALUES('"
-                        + WORLD + "','2175-01-01T00:" + String.format("%02d", tick) + ":00Z')",
+                "INSERT OR REPLACE INTO simulation_transaction_context(world_id,command_id,current_tick,current_canonical) VALUES('"
+                        + WORLD + "','fixture-command-" + tick + "'," + tick + ",'2175-01-01T00:"
+                        + String.format("%02d", tick) + ":00Z')",
                 "UPDATE station_simulation_state SET last_tick=" + tick + " WHERE station_id='" + STATION + "'",
                 "DELETE FROM simulation_transaction_context WHERE world_id='" + WORLD + "'");
     }
