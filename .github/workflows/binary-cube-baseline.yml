@@ -1,0 +1,51 @@
+name: Validate Binary Cube baseline
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-baseline.yml"
+      - "shadowrun-binary-cube-engine.js"
+      - "binary-cube-large-grid-engine.js"
+      - "binary-cube-omnidirectional-engine.js"
+      - "shadowrun-binary-cube-encryption.js"
+      - "shadowrun-binary-cube-editor.js"
+      - "shadowrun-binary-cube-auth.js"
+      - "shadowrun-binary-cube-auth-ui.js"
+      - "shadowrun-binary-cube-secure-export.js"
+      - "scripts/validate-binary-cube-baseline.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "binary-cube-baseline-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check Binary Cube JavaScript
+        run: |
+          node --check shadowrun-binary-cube-engine.js
+          node --check binary-cube-large-grid-engine.js
+          node --check binary-cube-omnidirectional-engine.js
+          node --check shadowrun-binary-cube-encryption.js
+          node --check shadowrun-binary-cube-editor.js
+          node --check shadowrun-binary-cube-auth.js
+          node --check shadowrun-binary-cube-auth-ui.js
+          node --check shadowrun-binary-cube-secure-export.js
+          node --check scripts/validate-binary-cube-baseline.mjs
+
+      - name: Validate Binary Cube V0 golden evidence
+        run: node scripts/validate-binary-cube-baseline.mjs
