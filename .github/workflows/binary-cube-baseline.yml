@@ -1,5 +1,5 @@
-# V5 milestone gate: canonical engine, golden evidence, immutable traces, selectable faces, manual phase stepping, real WebGL inspection, and desktop smoke.
-name: Validate Binary Cube V5 manual step visualizer
+# V6 milestone gate: canonical evidence, immutable traces, preserved face/step boundaries, deterministic animation, real WebGL playback, and desktop smoke.
+name: Validate Binary Cube V6 animated bit flow
 
 on:
   push:
@@ -25,6 +25,8 @@ on:
       - "scripts/validate-binary-cube-visualizer-browser.mjs"
       - "scripts/validate-binary-cube-visualizer-step.mjs"
       - "scripts/validate-binary-cube-visualizer-step-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-animation.mjs"
+      - "scripts/validate-binary-cube-visualizer-animation-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -66,21 +68,29 @@ jobs:
           node --check scripts/validate-binary-cube-visualizer-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-step.mjs
           node --check scripts/validate-binary-cube-visualizer-step-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-animation.mjs
+          node --check scripts/validate-binary-cube-visualizer-animation-browser.mjs
 
-      - name: Validate Binary Cube V0 golden evidence against V5
+      - name: Validate Binary Cube V0 golden evidence against V6
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
         run: node scripts/validate-binary-cube-trace.mjs
 
-      - name: Validate Binary Cube V5 exact manual-step mappings
-        run: node scripts/validate-binary-cube-visualizer-step.mjs
-
       - name: Preserve Binary Cube V4 WebGL face-picking runtime
         run: node scripts/validate-binary-cube-visualizer-browser.mjs
 
-      - name: Validate Binary Cube V5 WebGL manual stepping and point inspection
+      - name: Preserve Binary Cube V5 exact manual-step mappings
+        run: node scripts/validate-binary-cube-visualizer-step.mjs
+
+      - name: Preserve Binary Cube V5 WebGL stepping and inspection
         run: node scripts/validate-binary-cube-visualizer-step-browser.mjs
+
+      - name: Validate Binary Cube V6 deterministic trace interpolation
+        run: node scripts/validate-binary-cube-visualizer-animation.mjs
+
+      - name: Validate Binary Cube V6 WebGL playback and reverse scrubbing
+        run: node scripts/validate-binary-cube-visualizer-animation-browser.mjs
 
       - name: Validate Binary Cube desktop runtime contract
         run: node desktop/binary-cube/tests/smoke.cjs
