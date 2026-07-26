@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260711-2';
+  const ASSET_VERSION = '20260725-1';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -132,9 +132,7 @@
     }
     if (cubeToolPromise) return cubeToolPromise;
     cubeToolPromise = (async () => {
-      await loadScript('shadowrun-binary-cube-engine.js', () => Boolean(window.ShadowrunBinaryCubeEngine));
-      await loadScript('binary-cube-large-grid-engine.js', () => window.ShadowrunBinaryCubeEngine?.constants?.MAX_GRID_SIZE === 1024);
-      await loadScript('binary-cube-omnidirectional-engine.js', canonicalCubeEngineReady);
+      await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
       await loadScript('binary-cube-large-grid-ui.js', () => Boolean(window.BinaryCubeLargeGridUI));
       await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));
       await loadScript('shadowrun-binary-cube-encryption.js', () => Boolean(window.ShadowrunBinaryCubeEncryption));
