@@ -1,0 +1,105 @@
+name: Stabilize Binary Cube V9 Chromium cleanup
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v9-cleanup-patch.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Patch deterministic browser cleanup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate-binary-cube-visualizer-performance-browser.mjs')
+          source = path.read_text(encoding='utf-8')
+          old_helpers = """function terminate(handle) {
+            if (handle && !handle.killed) {
+              try { handle.kill('SIGTERM'); } catch (_) { /* Best-effort cleanup. */ }
+            }
+          }
+          """
+          new_helpers = """function terminate(handle) {
+            if (handle && !handle.killed) {
+              try { handle.kill('SIGTERM'); } catch (_) { /* Best-effort cleanup. */ }
+            }
+          }
+          function waitForExit(handle, timeoutMilliseconds = 3000) {
+            if (!handle || handle.exitCode !== null || handle.signalCode !== null) return Promise.resolve();
+            return new Promise(resolve => {
+              let settled = false;
+              let timer = null;
+              const finish = () => {
+                if (settled) return;
+                settled = true;
+                if (timer) clearTimeout(timer);
+                resolve();
+              };
+              timer = setTimeout(finish, timeoutMilliseconds);
+              handle.once('exit', finish);
+            });
+          }
+          async function removeDirectoryWithRetries(directory, attempts = 20) {
+            let lastError;
+            for (let attempt = 0; attempt < attempts; attempt += 1) {
+              try {
+                fs.rmSync(directory, { recursive: true, force: true });
+                return;
+              } catch (error) {
+                lastError = error;
+                if (!['ENOTEMPTY', 'EBUSY', 'EPERM'].includes(error?.code)) throw error;
+                await delay(100);
+              }
+            }
+            throw lastError;
+          }
+          """
+          old_finally = """} finally {
+            cdp?.close();
+            terminate(browserProcess);
+            terminate(xvfbProcess);
+            await new Promise(resolve => webServer.close(resolve));
+            fs.rmSync(profileDirectory, { recursive: true, force: true });
+          }
+          """
+          new_finally = """} finally {
+            cdp?.close();
+            terminate(browserProcess);
+            terminate(xvfbProcess);
+            await Promise.all([waitForExit(browserProcess), waitForExit(xvfbProcess)]);
+            await new Promise(resolve => webServer.close(resolve));
+            await removeDirectoryWithRetries(profileDirectory);
+          }
+          """
+          for old, new, label in [(old_helpers, new_helpers, 'cleanup helpers'), (old_finally, new_finally, 'cleanup finally block')]:
+              count = source.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one target, found {count}')
+              source = source.replace(old, new, 1)
+          path.write_text(source, encoding='utf-8')
+          PY
+      - name: Validate cleanup and V9 browser receipt
+        run: |
+          node --check scripts/validate-binary-cube-visualizer-performance-browser.mjs
+          node scripts/validate-binary-cube-visualizer-performance-browser.mjs
+          git diff --check
+      - name: Commit cleanup stabilization
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/validate-binary-cube-visualizer-performance-browser.mjs
+          git commit -m 'test: stabilize Binary Cube V9 Chromium cleanup [skip ci]'
+          git push origin HEAD:main
