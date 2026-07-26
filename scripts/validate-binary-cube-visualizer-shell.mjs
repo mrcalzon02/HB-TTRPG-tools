@@ -19,8 +19,9 @@ const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visua
 
 assert.equal(typeof Renderer.createRenderer, 'function');
 assert.equal(typeof Renderer.normalizePointCoordinates, 'function');
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.4.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.5.0');
 assert.equal(typeof Renderer.rayBoxFace, 'function');
+assert.equal(typeof Renderer.resolveRenderPlan, 'function');
 
 const gridSizes = [4, 12, 64];
 const receipts = [];
@@ -50,7 +51,11 @@ for (const gridSize of gridSizes) {
     assert.equal(point.id, pointId);
     assert.equal(point.z, Engine.pointDepth(key, point.x, point.y));
   }
-  receipts.push(Object.freeze({ gridSize, keyId: key.keyId, pointCount: points.length }));
+  const renderPlan = Renderer.resolveRenderPlan(gridSize, 'auto');
+  assert.equal(renderPlan.totalPointCount, points.length);
+  assert.equal(renderPlan.renderedPointCount, points.length);
+  assert.equal(renderPlan.fullRepresentation, true);
+  receipts.push(Object.freeze({ gridSize, keyId: key.keyId, pointCount: points.length, renderTier: renderPlan.tier }));
 }
 
 for (const [origin, direction, expectedFace] of [
@@ -73,14 +78,14 @@ for (const preset of ['front','back','left','right','top','bottom','perspective'
 
 assert.match(controllerSource, /Engine\.validateKey/);
 assert.match(controllerSource, /Engine\.createKey/);
-assert.match(controllerSource, /Engine\.buildPoints/);
+assert.match(controllerSource, /Engine\.buildPointsById/);
 assert.match(controllerSource, /renderer\.setScene/);
 assert.match(controllerSource, /Engine\.encryptBinary/);
 assert.match(controllerSource, /Engine\.validatePackage/);
 assert.match(controllerSource, /Engine\.decryptBinary/);
 assert.equal(controllerSource.includes('Engine.transformBlock'), false, 'The controller must delegate transformations to the canonical engine.');
-assert.match(controllerSource, /MAX_STATIC_GRID_SIZE = 64/);
-assert.match(controllerSource, /Camera movement changes only the view/);
+assert.match(controllerSource, /MAX_STATIC_GRID_SIZE = 1024/);
+assert.match(controllerSource, /encoding remains exact/i);
 assert.match(controllerSource, /Engine\.legalOutputFaces/);
 assert.match(controllerSource, /onFaceClick/);
 assert.match(controllerSource, /Generate Canonical Draft Key/);
@@ -98,18 +103,20 @@ assert.match(styleSource, /touch-action:none/);
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v4-shell-validation-receipt',
-  schemaVersion: '0.2.0',
+  schemaVersion: '0.3.0',
   rendererVersion: Renderer.constants.RENDERER_VERSION,
   rendererAuthority: 'binary-cube-visualizer-renderer.js',
   controllerAuthority: 'shadowrun-binary-cube-visualizer.js',
-  detailedGridLimit: 64,
+  v4ExactGridMaximumTested: 64,
+  controllerGridMaximum: 1024,
   testedScenes: receipts,
   exactCanonicalPoints: true,
+  exactV4RepresentationPreserved: true,
   rendererAlgorithmIsolation: true,
   cameraPresets: 7,
   responsiveFallbackPresent: true,
   directionalArrowsPresent: true,
   directFacePickingPresent: true,
   legalPairEnforcementPresent: true,
-  v4BoundaryPreservedUnderV7: true
+  v4BoundaryPreservedUnderV9: true
 }, null, 2));
