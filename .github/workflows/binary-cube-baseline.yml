@@ -1,5 +1,5 @@
-# V8 milestone gate: canonical evidence, immutable traces, preserved 3D/step/animation/package boundaries, exhaustive multi-block mapping, Chromium sequencing, and desktop smoke.
-name: Validate Binary Cube V8 multi-block sequencing
+# V9 milestone gate: canonical evidence, immutable traces, preserved V4-V8 behavior, measured rendering tiers, cancellation and stale-result guards, Chromium scale validation, and desktop smoke.
+name: Validate Binary Cube V9 rendering performance
 
 on:
   push:
@@ -32,6 +32,9 @@ on:
       - "scripts/validate-binary-cube-visualizer-encoder-browser.mjs"
       - "scripts/validate-binary-cube-visualizer-sequencing.mjs"
       - "scripts/validate-binary-cube-visualizer-sequencing-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-performance.mjs"
+      - "scripts/measure-binary-cube-visualizer-performance.mjs"
+      - "scripts/validate-binary-cube-visualizer-performance-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -52,8 +55,8 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=pending \
-            -f context='binary-cube/v8-multi-block-sequencing' \
-            -f description='Binary Cube V8 validation is running.' \
+            -f context='binary-cube/v9-rendering-performance' \
+            -f description='Binary Cube V9 validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Checkout
@@ -91,9 +94,12 @@ jobs:
           node --check scripts/validate-binary-cube-visualizer-encoder-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-sequencing.mjs
           node --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-performance.mjs
+          node --check scripts/measure-binary-cube-visualizer-performance.mjs
+          node --check scripts/validate-binary-cube-visualizer-performance-browser.mjs
           mkdir -p binary-cube-gate-logs
 
-      - name: Validate Binary Cube V0 golden evidence against V8
+      - name: Validate Binary Cube V0 golden evidence against V9
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
@@ -151,19 +157,40 @@ jobs:
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-encoder-browser.mjs 2>&1 | tee binary-cube-gate-logs/v7-browser.log
 
-      - name: Validate Binary Cube V8 exhaustive multi-block mapping
+      - name: Preserve Binary Cube V8 exhaustive multi-block mapping
         id: v8_static
         continue-on-error: true
         run: |
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-sequencing.mjs 2>&1 | tee binary-cube-gate-logs/v8-static.log
 
-      - name: Validate Binary Cube V8 Chromium block sequencing and inspection
+      - name: Preserve Binary Cube V8 Chromium block sequencing and inspection
         id: v8_browser
         continue-on-error: true
         run: |
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-sequencing-browser.mjs 2>&1 | tee binary-cube-gate-logs/v8-browser.log
+
+      - name: Validate Binary Cube V9 rendering-tier policy and isolation
+        id: v9_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-performance.mjs 2>&1 | tee binary-cube-gate-logs/v9-static.log
+
+      - name: Measure Binary Cube V9 scene and trace preparation
+        id: v9_measurements
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/measure-binary-cube-visualizer-performance.mjs 2>&1 | tee binary-cube-gate-logs/v9-measurements.log
+
+      - name: Validate Binary Cube V9 Chromium scale, quality, and cancellation
+        id: v9_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-performance-browser.mjs 2>&1 | tee binary-cube-gate-logs/v9-browser.log
 
       - name: Validate Binary Cube desktop runtime contract
         id: desktop
@@ -176,7 +203,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: binary-cube-v8-gate-logs
+          name: binary-cube-v9-gate-logs
           path: binary-cube-gate-logs
           if-no-files-found: error
           retention-days: 3
@@ -194,6 +221,9 @@ jobs:
           [ '${{ steps.v7_browser.outcome }}' = 'success' ] || failures="$failures v7-browser"
           [ '${{ steps.v8_static.outcome }}' = 'success' ] || failures="$failures v8-static"
           [ '${{ steps.v8_browser.outcome }}' = 'success' ] || failures="$failures v8-browser"
+          [ '${{ steps.v9_static.outcome }}' = 'success' ] || failures="$failures v9-static"
+          [ '${{ steps.v9_measurements.outcome }}' = 'success' ] || failures="$failures v9-measurements"
+          [ '${{ steps.v9_browser.outcome }}' = 'success' ] || failures="$failures v9-browser"
           [ '${{ steps.desktop.outcome }}' = 'success' ] || failures="$failures desktop"
           if [ -n "$failures" ]; then
             echo "Binary Cube gate failures:$failures"
@@ -207,8 +237,8 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
-            -f context='binary-cube/v8-multi-block-sequencing' \
-            -f description='Binary Cube V8 multi-block sequencing gate passed.' \
+            -f context='binary-cube/v9-rendering-performance' \
+            -f description='Binary Cube V9 rendering performance gate passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Record milestone failure
@@ -218,6 +248,6 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
-            -f context='binary-cube/v8-multi-block-sequencing' \
-            -f description='Binary Cube V8 multi-block sequencing gate failed.' \
+            -f context='binary-cube/v9-rendering-performance' \
+            -f description='Binary Cube V9 rendering performance gate failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
