@@ -87,6 +87,7 @@ jobs:
           node --check scripts/validate-binary-cube-visualizer-animation-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-encoder.mjs
           node --check scripts/validate-binary-cube-visualizer-encoder-browser.mjs
+          mkdir -p binary-cube-gate-logs
 
       - name: Validate Binary Cube V0 golden evidence against V7
         run: node scripts/validate-binary-cube-baseline.mjs
@@ -98,39 +99,86 @@ jobs:
         run: node scripts/validate-binary-cube-visualizer-shell.mjs
 
       - name: Preserve Binary Cube V4 WebGL face-picking runtime
+        id: v4_browser
+        continue-on-error: true
         run: |
           set -o pipefail
-          node scripts/validate-binary-cube-visualizer-browser.mjs 2>&1 | tee binary-cube-v4-browser.log
+          node scripts/validate-binary-cube-visualizer-browser.mjs 2>&1 | tee binary-cube-gate-logs/v4-browser.log
 
-      - name: Retain V4 browser failure log
-        if: ${{ failure() }}
+      - name: Preserve Binary Cube V5 exact manual-step mappings
+        id: v5_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-step.mjs 2>&1 | tee binary-cube-gate-logs/v5-static.log
+
+      - name: Preserve Binary Cube V5 WebGL stepping and inspection
+        id: v5_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-step-browser.mjs 2>&1 | tee binary-cube-gate-logs/v5-browser.log
+
+      - name: Preserve Binary Cube V6 deterministic trace interpolation
+        id: v6_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-animation.mjs 2>&1 | tee binary-cube-gate-logs/v6-static.log
+
+      - name: Preserve Binary Cube V6 WebGL playback and reverse scrubbing
+        id: v6_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-animation-browser.mjs 2>&1 | tee binary-cube-gate-logs/v6-browser.log
+
+      - name: Validate Binary Cube V7 exact package and trace parity
+        id: v7_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-encoder.mjs 2>&1 | tee binary-cube-gate-logs/v7-static.log
+
+      - name: Validate Binary Cube V7 WebGL encoder and laboratory handoff
+        id: v7_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-encoder-browser.mjs 2>&1 | tee binary-cube-gate-logs/v7-browser.log
+
+      - name: Validate Binary Cube desktop runtime contract
+        id: desktop
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node desktop/binary-cube/tests/smoke.cjs 2>&1 | tee binary-cube-gate-logs/desktop.log
+
+      - name: Retain complete milestone logs
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: binary-cube-v4-browser-failure
-          path: binary-cube-v4-browser.log
+          name: binary-cube-v7-gate-logs
+          path: binary-cube-gate-logs
           if-no-files-found: error
           retention-days: 3
 
-      - name: Preserve Binary Cube V5 exact manual-step mappings
-        run: node scripts/validate-binary-cube-visualizer-step.mjs
-
-      - name: Preserve Binary Cube V5 WebGL stepping and inspection
-        run: node scripts/validate-binary-cube-visualizer-step-browser.mjs
-
-      - name: Preserve Binary Cube V6 deterministic trace interpolation
-        run: node scripts/validate-binary-cube-visualizer-animation.mjs
-
-      - name: Preserve Binary Cube V6 WebGL playback and reverse scrubbing
-        run: node scripts/validate-binary-cube-visualizer-animation-browser.mjs
-
-      - name: Validate Binary Cube V7 exact package and trace parity
-        run: node scripts/validate-binary-cube-visualizer-encoder.mjs
-
-      - name: Validate Binary Cube V7 WebGL encoder and laboratory handoff
-        run: node scripts/validate-binary-cube-visualizer-encoder-browser.mjs
-
-      - name: Validate Binary Cube desktop runtime contract
-        run: node desktop/binary-cube/tests/smoke.cjs
+      - name: Enforce complete milestone result
+        if: ${{ always() }}
+        run: |
+          failures=''
+          [ '${{ steps.v4_browser.outcome }}' = 'success' ] || failures="$failures v4-browser"
+          [ '${{ steps.v5_static.outcome }}' = 'success' ] || failures="$failures v5-static"
+          [ '${{ steps.v5_browser.outcome }}' = 'success' ] || failures="$failures v5-browser"
+          [ '${{ steps.v6_static.outcome }}' = 'success' ] || failures="$failures v6-static"
+          [ '${{ steps.v6_browser.outcome }}' = 'success' ] || failures="$failures v6-browser"
+          [ '${{ steps.v7_static.outcome }}' = 'success' ] || failures="$failures v7-static"
+          [ '${{ steps.v7_browser.outcome }}' = 'success' ] || failures="$failures v7-browser"
+          [ '${{ steps.desktop.outcome }}' = 'success' ] || failures="$failures desktop"
+          if [ -n "$failures" ]; then
+            echo "Binary Cube gate failures:$failures"
+            exit 1
+          fi
 
       - name: Record milestone success
         if: ${{ success() }}
