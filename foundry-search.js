@@ -9,6 +9,14 @@
   const INDEX_URL = 'search-index.json';
   const BUILT_IN_ENTRIES = [
     {
+      id: 'world-hooks-generator',
+      title: 'World Hooks and Setting Foundations',
+      workspace: 'Generators',
+      description: 'Generate campaign-scale world premises with a central mystery, theme, conflict, opening mystery, fantasy twist, unusual limitation, recurring structure, settlement complication, environmental pressure, hidden truth, and long-term stakes.',
+      keywords: ['world hooks generator', 'campaign setting generator', 'worldbuilding randomizer', 'central mystery', 'campaign theme', 'fantasy setting twist', 'dwarven migration', 'snowy mountain caravan', 'sunless world', 'bioluminescent world', 'fungal world'],
+      url: 'index.html?view=generators&generator=world-hooks'
+    },
+    {
       id: 'high-fantasy-potion-generator',
       title: 'Generic High Fantasy Potion Generator',
       workspace: 'Generators',
