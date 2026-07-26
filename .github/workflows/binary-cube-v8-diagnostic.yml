@@ -1,4 +1,4 @@
-name: Capture Binary Cube V8 implementation failure
+name: Capture guarded Binary Cube V8 patch failure
 
 on:
   push:
@@ -18,11 +18,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Capture latest implementation failure
+      - name: Capture latest guarded patch failure
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          run_id="$(gh run list --repo "${{ github.repository }}" --workflow binary-cube-v8-implementation.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
+          run_id="$(gh run list --repo "${{ github.repository }}" --workflow binary-cube-v8-patch-runner.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
           test -n "$run_id"
           mkdir -p docs/diagnostics
           {
@@ -30,11 +30,11 @@ jobs:
             gh run view "$run_id" --repo "${{ github.repository }}" --json status,conclusion,url,headSha,workflowName
             echo
             gh run view "$run_id" --repo "${{ github.repository }}" --log-failed
-          } > docs/diagnostics/binary-cube-v8-implementation-failure.txt
+          } > docs/diagnostics/binary-cube-v8-patch-failure.txt
       - name: Commit diagnostic
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/diagnostics/binary-cube-v8-implementation-failure.txt
-          git commit -m 'chore: capture Binary Cube V8 implementation failure [skip ci]'
+          git add docs/diagnostics/binary-cube-v8-patch-failure.txt
+          git commit -m 'chore: capture guarded Binary Cube V8 patch failure [skip ci]'
           git push origin HEAD:main
