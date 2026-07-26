@@ -1,0 +1,11 @@
+patch	Apply direct V9 patches	﻿2026-07-26T14:47:59.4325468Z ##[group]Run base64 -d scripts/.temporary-v9-engine-renderer.py.gz.b64 | gzip -d > /tmp/v9-engine-renderer.py
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4326319Z ^[[36;1mbase64 -d scripts/.temporary-v9-engine-renderer.py.gz.b64 | gzip -d > /tmp/v9-engine-renderer.py^[[0m
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4327037Z ^[[36;1mbase64 -d scripts/.temporary-v9-controller.py.gz.b64 | gzip -d > /tmp/v9-controller.py^[[0m
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4327651Z ^[[36;1mbase64 -d scripts/.temporary-v9-css.py.gz.b64 | gzip -d > /tmp/v9-css.py^[[0m
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4328096Z ^[[36;1mpython /tmp/v9-engine-renderer.py^[[0m
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4328392Z ^[[36;1mpython /tmp/v9-controller.py^[[0m
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4328661Z ^[[36;1mpython /tmp/v9-css.py^[[0m
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4384658Z shell: /usr/bin/bash -e {0}
+patch	Apply direct V9 patches	2026-07-26T14:47:59.4384928Z ##[endgroup]
+patch	Apply direct V9 patches	2026-07-26T14:47:59.5017793Z controller fallback version: expected exactly one target, found 0
+patch	Apply direct V9 patches	2026-07-26T14:47:59.5062165Z ##[error]Process completed with exit code 1.
