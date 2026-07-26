@@ -1,4 +1,4 @@
-# Guarded V8 patch with hosted-browser timing and reverse-sequence diagnostics.
+# Guarded V8 patch with stable browser timing and direction-aware sequence boundaries.
 name: Run guarded Binary Cube V8 patch
 
 on:
@@ -38,6 +38,7 @@ jobs:
       - name: Apply direct V8 patch
         run: |
           python scripts/apply-binary-cube-v8-temporary.py
+          python scripts/apply-binary-cube-v8-directional-boundary-temporary.py
           python scripts/apply-binary-cube-v8-browser-timing-temporary.py
 
       - name: Validate direct V8 implementation
