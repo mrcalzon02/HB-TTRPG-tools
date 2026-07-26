@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260726-1';
+  const ASSET_VERSION = '20260726-2';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -24,7 +24,7 @@
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
     ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
     ['tools','Binary Cube Encryption Laboratory','Develop and test a full-depth, omnidirectionally collision-free binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
-    ['tools','Binary Cube Encoder Visualizer','Encrypt exact canonical packages while inspecting detailed, batched, sampled, or aggregate 3D representations, verified block traces, performance metrics, and reversible multi-block playback.','shadowrun-binary-cube-visualizer','prototype','Open Visualizer'],
+    ['tools','Binary Cube Encoder Visualizer','Encrypt exact canonical packages through accessible 3D or 2D representations with keyboard controls, reduced-motion phases, non-color state markers, trace transcripts, verified mappings, and reversible multi-block playback.','shadowrun-binary-cube-visualizer','prototype','Open Visualizer'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
 

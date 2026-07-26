@@ -18,6 +18,21 @@
   const OVERVIEW_BLOCK_DURATION_MS = 1800;
   const MASK_MODES = Object.freeze(['1', '0.75', '0.5', 'custom']);
   const RENDER_QUALITIES = Object.freeze(['auto', 'exact', 'sampled', 'aggregate']);
+  const DISPLAY_MODES = Object.freeze(['auto', '3d', '2d']);
+  const TRACE_PHASE_DESCRIPTIONS = Object.freeze({
+    'source-ready': 'Source bits are ready before block framing.',
+    'block-framed': 'Source bits and deterministic filler form one complete cube block.',
+    'mask-applied': 'Payload and filler are identified by the canonical key mask.',
+    'input-face-staged': 'The framed block occupies the selected input face cells.',
+    'point-assignment': 'Each input cell maps to one stable canonical point identity.',
+    'point-field-loaded': 'Bits occupy their keyed three-dimensional point coordinates.',
+    'output-projection-selected': 'The selected output face determines canonical read order.',
+    'output-face-staged': 'The same point identities appear in output face-cell order.',
+    'encrypted-block-emitted': 'The exact encrypted block leaves the selected output face.',
+    'block-complete': 'The emitted block matches its canonical package ciphertext slice.'
+  });
+  const KEYBOARD_FACE_KEYS = Object.freeze({ Digit1:'top', Digit2:'bottom', Digit3:'front', Digit4:'back', Digit5:'left', Digit6:'right' });
+  const KEYBOARD_CAMERA_KEYS = Object.freeze({ Digit1:'perspective', Digit2:'front', Digit3:'back', Digit4:'left', Digit5:'right', Digit6:'top', Digit7:'bottom' });
   const Engine = root?.ShadowrunBinaryCubeEngine;
   const RendererApi = root?.BinaryCubeVisualizerRenderer;
   const FACES = Engine?.constants?.FACES || Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
@@ -57,6 +72,11 @@
   let sceneBuildReceipt = null;
   let traceBuildReceipt = null;
   let encodingMilliseconds = 0;
+  let reducedMotion = Boolean(root?.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
+  let displayMode = 'auto';
+  let rendererAvailable = false;
+  let cameraPreset = 'perspective';
+  let lastAnnouncedPhaseKey = '';
 
   function fail(message) { throw new Error(message); }
   function title(value) { return String(value).replace(/^./, character => character.toUpperCase()); }
@@ -85,6 +105,69 @@
   }
   function cloneJson(value) {
     return value == null ? null : JSON.parse(JSON.stringify(value));
+  }
+
+  function resolvePresentedTraceTime(value, phaseCountValue, reduce = reducedMotion) {
+    const phaseCount = Math.max(1, Number(phaseCountValue) || 1);
+    const normalized = clamp(Number(value) || 0, 0, 1);
+    if (!reduce || phaseCount <= 1) return normalized;
+    const phaseIndex = Math.floor(normalized * (phaseCount - 1) + 1e-9);
+    return phaseIndex / Math.max(1, phaseCount - 1);
+  }
+
+  function traceTranscriptEntries(trace, pointIdValue, phaseIndexValue) {
+    if (!trace) return Object.freeze([]);
+    const pointId = clamp(Math.round(Number(pointIdValue) || 0), 0, trace.cellCount - 1);
+    const phaseIndex = clamp(Math.round(Number(phaseIndexValue) || 0), 0, trace.phases.length - 1);
+    const sourceBitIndex = trace.sourceBitIndexByPoint[pointId];
+    const selectedSummary = `Selected point P${pointId} maps ${sourceBitIndex >= 0 ? `source bit ${sourceBitIndex}` : 'deterministic filler'} through input cell ${trace.inputCellIndexByPoint[pointId]} to output cell ${trace.outputCellIndexByPoint[pointId]} and package ciphertext index ${trace.blockIndex * trace.cellCount + trace.outputCellIndexByPoint[pointId]}.`;
+    return Object.freeze(trace.phases.map((phase, index) => Object.freeze({
+      index,
+      id: phase.id,
+      state: index < phaseIndex ? 'complete' : index === phaseIndex ? 'active' : 'pending',
+      description: TRACE_PHASE_DESCRIPTIONS[phase.id] || phase.id.replaceAll('-', ' '),
+      selectedSummary
+    })));
+  }
+
+  function twoDimensionalTraceMap(trace, pointIdValue) {
+    if (!trace) return null;
+    const selectedPoint = clamp(Math.round(Number(pointIdValue) || 0), 0, trace.cellCount - 1);
+    const mapCell = (pointId, cellIndex, bit, role) => Object.freeze({
+      pointId,
+      cellIndex,
+      bit,
+      role,
+      kind: trace.cellKindByPoint[pointId],
+      sourceBitIndex: trace.sourceBitIndexByPoint[pointId],
+      selected: pointId === selectedPoint
+    });
+    const inputCells = Object.freeze(Array.from({ length: trace.cellCount }, (_, cellIndex) => {
+      const pointId = trace.inputProjectionPointIds[cellIndex];
+      return mapCell(pointId, cellIndex, trace.framedBlock[cellIndex], 'input');
+    }));
+    const outputCells = Object.freeze(Array.from({ length: trace.cellCount }, (_, cellIndex) => {
+      const pointId = trace.outputProjectionPointIds[cellIndex];
+      return mapCell(pointId, cellIndex, trace.outputBlock[cellIndex], 'output');
+    }));
+    const point = trace.pointField[selectedPoint];
+    return Object.freeze({
+      gridSize: trace.gridSize,
+      inputFace: trace.inputFace,
+      outputFace: trace.outputFace,
+      inputCells,
+      outputCells,
+      selected: Object.freeze({
+        pointId: selectedPoint,
+        coordinate: Object.freeze([point.x, point.y, point.z]),
+        sourceBitIndex: trace.sourceBitIndexByPoint[selectedPoint],
+        inputCellIndex: trace.inputCellIndexByPoint[selectedPoint],
+        outputCellIndex: trace.outputCellIndexByPoint[selectedPoint],
+        packageOutputIndex: trace.blockIndex * trace.cellCount + trace.outputCellIndexByPoint[selectedPoint],
+        bit: trace.bitByPoint[selectedPoint],
+        kind: trace.cellKindByPoint[selectedPoint]
+      })
+    });
   }
 
   function nowMilliseconds() {
@@ -142,12 +225,55 @@
     }
   }
 
+  function announce(panel, message, assertive = false) {
+    const node = panel?.querySelector('[data-cube-accessibility-live]');
+    if (!node || !message) return;
+    node.setAttribute('aria-live', assertive ? 'assertive' : 'polite');
+    node.dataset.sequence = String((Number(node.dataset.sequence) || 0) + 1);
+    node.textContent = message;
+  }
+
   function setStatus(panel, message, type = '') {
     const node = panel?.querySelector('[data-cube-visualizer-status]');
     if (!node) return;
     node.textContent = message;
     node.classList.toggle('success', type === 'success');
     node.classList.toggle('error', type === 'error');
+    announce(panel, message, type === 'error');
+  }
+
+  function effectiveDisplayMode() {
+    if (displayMode === '2d') return '2d';
+    if (displayMode === '3d') return rendererAvailable ? '3d' : '2d';
+    return rendererAvailable ? '3d' : '2d';
+  }
+
+  function updateDisplayMode(panel) {
+    if (!panel) return;
+    const effective = effectiveDisplayMode();
+    const scene = panel.querySelector('[data-cube-visualizer-scene-shell]');
+    const fallback = panel.querySelector('[data-cube-visualizer-2d]');
+    const select = panel.querySelector('[data-cube-visualizer-display-mode]');
+    if (scene) scene.hidden = effective !== '3d';
+    if (fallback) fallback.hidden = effective !== '2d';
+    if (select) {
+      select.value = displayMode;
+      select.dataset.effectiveMode = effective;
+    }
+    panel.dataset.cubeDisplayMode = effective;
+    renderTwoDimensionalFallback(panel);
+  }
+
+  function setReducedMotion(panel, enabled, options = {}) {
+    reducedMotion = Boolean(enabled);
+    const input = panel?.querySelector('[data-cube-visualizer-reduced-motion]');
+    if (input) input.checked = reducedMotion;
+    panel?.classList.toggle('cube-reduced-motion', reducedMotion);
+    if (activeTrace && reducedMotion) traceTime = resolvePresentedTraceTime(traceTime, activeTrace.phases.length, true);
+    lastAnnouncedPhaseKey = '';
+    if (activeTrace) updateTimelineDisplay(panel);
+    if (options.announce !== false) setStatus(panel, `Reduced motion ${reducedMotion ? 'enabled; trace movement now advances by discrete canonical phases' : 'disabled; deterministic interpolation is available'}.`, 'success');
+    return reducedMotion;
   }
 
   function parseJsonText(value, label) {
@@ -415,13 +541,15 @@
     if (cancelButton) cancelButton.disabled = !(scenePreparing || tracePreparing);
     if (notice) {
       const plan = rendererPerformance?.renderPlan || sceneBuildReceipt?.renderPlan;
-      notice.textContent = plan?.disclosure || 'No render representation is active.';
-      notice.dataset.tier = plan?.tier || 'none';
+      notice.textContent = rendererAvailable
+        ? plan?.disclosure || 'No render representation is active.'
+        : 'WebGL 3D is unavailable. The exact 2D face maps, point inspector, trace transcript, package generation, and validation remain active.';
+      notice.dataset.tier = rendererAvailable ? plan?.tier || 'none' : '2d-fallback';
     }
     if (metrics) {
-      const rendered = rendererPerformance?.renderedPointCount ?? sceneBuildReceipt?.renderedPointCount ?? 0;
-      const total = rendererPerformance?.totalPointCount ?? sceneBuildReceipt?.totalPointCount ?? 0;
-      metrics.innerHTML = `<span>Scene ${sceneBuildReceipt ? `${sceneBuildReceipt.milliseconds.toFixed(2)} ms` : '—'}</span><span>Trace ${traceBuildReceipt ? `${traceBuildReceipt.milliseconds.toFixed(2)} ms` : '—'}</span><span>Encode ${encodingMilliseconds ? `${encodingMilliseconds.toFixed(2)} ms` : '—'}</span><span>Visible ${rendered.toLocaleString()} / ${total.toLocaleString()}</span><span>Buffer ${rendererPerformance ? Math.round(rendererPerformance.bufferBytes / 1024).toLocaleString() : 0} KiB</span><span>Stale results ${staleSceneResultsDiscarded + staleTraceResultsDiscarded}</span>`;
+      const rendered = rendererAvailable ? rendererPerformance?.renderedPointCount ?? sceneBuildReceipt?.renderedPointCount ?? 0 : 0;
+      const total = rendererPerformance?.totalPointCount ?? sceneBuildReceipt?.totalPointCount ?? activeKey?.gridSize * activeKey?.gridSize ?? 0;
+      metrics.innerHTML = `<span>Scene ${sceneBuildReceipt ? `${sceneBuildReceipt.milliseconds.toFixed(2)} ms` : '—'}</span><span>Trace ${traceBuildReceipt ? `${traceBuildReceipt.milliseconds.toFixed(2)} ms` : '—'}</span><span>Encode ${encodingMilliseconds ? `${encodingMilliseconds.toFixed(2)} ms` : '—'}</span><span>Visible ${rendered.toLocaleString()} / ${Number(total || 0).toLocaleString()}</span><span>Buffer ${rendererAvailable && rendererPerformance ? Math.round(rendererPerformance.bufferBytes / 1024).toLocaleString() : 0} KiB</span><span>Stale results ${staleSceneResultsDiscarded + staleTraceResultsDiscarded}</span>`;
     }
   }
 
@@ -435,19 +563,22 @@
       sceneBuildHandle = null;
       const started = nowMilliseconds();
       const renderPlan = RendererApi.resolveRenderPlan(key.gridSize, qualityValue);
-      const points = Engine.buildPointsById(key, renderPlan.pointIds);
+      const points = rendererAvailable ? Engine.buildPointsById(key, renderPlan.pointIds) : [];
       if (token !== sceneBuildGeneration || activeKey?.keyId !== key.keyId) {
         staleSceneResultsDiscarded += 1;
         scenePreparing = false;
         updatePerformancePanel(panel);
         return null;
       }
-      renderer.setScene({ gridSize: key.gridSize, totalPointCount: key.gridSize * key.gridSize, pointIds: renderPlan.pointIds, points, renderPlan });
+      renderer?.setScene({ gridSize: key.gridSize, totalPointCount: key.gridSize * key.gridSize, pointIds: renderPlan.pointIds, points, renderPlan });
       scenePreparing = false;
       sceneBuildReceipt = Object.freeze({ milliseconds: nowMilliseconds() - started, renderedPointCount: points.length, totalPointCount: key.gridSize * key.gridSize, renderPlan });
-      panel.querySelector('[data-cube-visualizer-summary]').textContent = `Key ${key.keyId} · ${key.gridSize} × ${key.gridSize} · ${(key.gridSize * key.gridSize).toLocaleString()} exact keyed points · ${points.length.toLocaleString()} rendered · ${key.mask.filter(Boolean).length.toLocaleString()} payload cells`;
+      panel.querySelector('[data-cube-visualizer-summary]').textContent = rendererAvailable
+        ? `Key ${key.keyId} · ${key.gridSize} × ${key.gridSize} · ${(key.gridSize * key.gridSize).toLocaleString()} exact keyed points · ${points.length.toLocaleString()} rendered · ${key.mask.filter(Boolean).length.toLocaleString()} payload cells`
+        : `Key ${key.keyId} · ${key.gridSize} × ${key.gridSize} · ${(key.gridSize * key.gridSize).toLocaleString()} exact keyed points · 2D diagnostic fallback active · ${key.mask.filter(Boolean).length.toLocaleString()} payload cells`;
       updatePerformancePanel(panel);
-      renderer.setDirectionState(rendererDirectionState());
+      renderer?.setDirectionState(rendererDirectionState());
+      updateDisplayMode(panel);
       if (activeTrace && activeTrace.gridSize === key.gridSize) updateTimelineDisplay(panel);
       return sceneBuildReceipt;
     };
@@ -457,7 +588,47 @@
   }
 
   function traceCellButton(bit, pointId, label, kind, extra = '') {
-    return `<button type="button" class="cube-trace-cell ${escapeHtml(kind)} ${escapeHtml(extra)}" data-cube-trace-point="${pointId}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${bit}</span><small>P${pointId}</small></button>`;
+    const token = kind === 'payload' ? 'D' : 'F';
+    return `<button type="button" class="cube-trace-cell ${escapeHtml(kind)} ${escapeHtml(extra)}" data-cube-trace-point="${pointId}" data-state-symbol="${token}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${bit}</span><small>${token} · P${pointId}</small></button>`;
+  }
+
+  function twoDimensionalCell(cell) {
+    const token = cell.kind === 'payload' ? 'D' : 'F';
+    return `<button type="button" class="cube-2d-cell ${escapeHtml(cell.kind)} ${cell.selected ? 'selected' : ''}" data-cube-trace-point="${cell.pointId}" data-role="${cell.role}" data-state-symbol="${token}" aria-label="${title(cell.role)} face cell ${cell.cellIndex}, ${cell.kind}, bit ${cell.bit}, point ${cell.pointId}${cell.sourceBitIndex >= 0 ? `, source bit ${cell.sourceBitIndex}` : ', deterministic filler'}"><span>${cell.bit}</span><small>${token} · P${cell.pointId}</small></button>`;
+  }
+
+  function renderTraceTranscript(panel) {
+    const list = panel?.querySelector('[data-cube-trace-transcript]');
+    const selected = panel?.querySelector('[data-cube-trace-selected-transcript]');
+    if (!list || !selected) return;
+    if (!activeTrace) {
+      list.replaceChildren();
+      selected.textContent = activePackage ? `Package ${activePackage.checksum} remains exact; select an available trace block to read its ten-phase transcript.` : 'Encrypt or import a package to create a trace transcript.';
+      return;
+    }
+    const state = timelineState();
+    const entries = traceTranscriptEntries(activeTrace, selectedPointId, state.phaseIndex);
+    list.innerHTML = entries.map(entry => `<li class="${entry.state}" ${entry.state === 'active' ? 'aria-current="step"' : ''}><strong>${entry.index + 1}. ${escapeHtml(entry.id.replaceAll('-', ' '))}</strong><span>${escapeHtml(entry.description)}</span><small>${entry.state.toUpperCase()}</small></li>`).join('');
+    selected.textContent = entries[state.phaseIndex]?.selectedSummary || '';
+  }
+
+  function renderTwoDimensionalFallback(panel) {
+    const target = panel?.querySelector('[data-cube-visualizer-2d-content]');
+    if (!target) return;
+    if (!activeTrace) {
+      target.innerHTML = activePackage && activeKey
+        ? `<p>Package ${escapeHtml(activePackage.checksum)} is valid for key ${escapeHtml(activeKey.keyId)}. Select a trace-capable block to display exact 2D input and output mappings.</p>`
+        : '<p>Generate a key and encrypt input to display the exact 2D face and point mapping.</p>';
+      return;
+    }
+    const map = twoDimensionalTraceMap(activeTrace, selectedPointId);
+    const selected = map.selected;
+    const mapping = `<dl class="cube-2d-selected-map"><div><dt>Selected point</dt><dd>P${selected.pointId}</dd></div><div><dt>Coordinate</dt><dd>(${selected.coordinate.join(', ')})</dd></div><div><dt>Type</dt><dd>${title(selected.kind)} (${selected.kind === 'payload' ? 'D' : 'F'})</dd></div><div><dt>Source</dt><dd>${selected.sourceBitIndex >= 0 ? `bit ${selected.sourceBitIndex}` : 'deterministic filler'}</dd></div><div><dt>Input cell</dt><dd>${selected.inputCellIndex}</dd></div><div><dt>Output cell</dt><dd>${selected.outputCellIndex}</dd></div><div><dt>Package output</dt><dd>${selected.packageOutputIndex}</dd></div><div><dt>Bit</dt><dd>${selected.bit}</dd></div></dl>`;
+    if (map.gridSize <= MAX_MANUAL_TRACE_GRID_SIZE) {
+      target.innerHTML = `<p class="cube-2d-direction"><strong>IN ${title(map.inputFace)}</strong> → keyed point identity → <strong>OUT ${title(map.outputFace)}</strong></p><div class="cube-2d-legend" aria-label="Non-color state legend"><span><b>D</b> payload</span><span><b>F</b> filler</span><span><b>★</b> selected</span><span><b>IN</b> input face</span><span><b>OUT</b> output face</span></div><div class="cube-2d-face-layout"><section><h4>IN · ${title(map.inputFace)} face</h4><div class="cube-2d-grid" style="--cube-grid-size:${map.gridSize}">${map.inputCells.map(twoDimensionalCell).join('')}</div></section><section><h4>OUT · ${title(map.outputFace)} face</h4><div class="cube-2d-grid" style="--cube-grid-size:${map.gridSize}">${map.outputCells.map(twoDimensionalCell).join('')}</div></section></div>${mapping}`;
+    } else {
+      target.innerHTML = `<p class="cube-2d-direction"><strong>IN ${title(map.inputFace)}</strong> → ${activeTrace.cellCount.toLocaleString()} exact canonical point mappings → <strong>OUT ${title(map.outputFace)}</strong></p><p>Per-cell fallback grids are limited to ${MAX_MANUAL_TRACE_GRID_SIZE} × ${MAX_MANUAL_TRACE_GRID_SIZE} to prevent DOM expansion. Exact selected-point mapping and the complete text transcript remain available.</p>${mapping}`;
+    }
   }
 
   function clearTraceCollections(panel) {
@@ -536,7 +707,7 @@
   }
 
   function timelineState() {
-    return activeTrace ? RendererApi.resolveTraceTimeline(traceTime, activeTrace.phases.length) : null;
+    return activeTrace ? RendererApi.resolveTraceTimeline(resolvePresentedTraceTime(traceTime, activeTrace.phases.length, reducedMotion), activeTrace.phases.length) : null;
   }
 
   function updateInspector(panel) {
@@ -567,7 +738,10 @@
       </dl>`;
     panel.querySelectorAll('[data-cube-trace-point]').forEach(button => {
       const pointId = Number(button.dataset.cubeTracePoint);
-      button.classList.toggle('selected', pointId === details.pointId);
+      const selected = pointId === details.pointId;
+      button.classList.toggle('selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
+      button.dataset.selectedSymbol = selected ? '★' : '';
       const pointInputIndex = activeTrace.inputCellIndexByPoint[pointId];
       const sameRow = Math.floor(pointInputIndex / activeTrace.gridSize) === details.inputRow;
       button.classList.toggle('cohort', visibleMode === 'row' && sameRow);
@@ -620,7 +794,8 @@
     panel.querySelector('[data-cube-trace-reverse-play]').classList.toggle('active', playbackDirection < 0);
     const timeline = panel.querySelector('[data-cube-trace-timeline]');
     timeline.value = String(Math.round(state.traceTime * 1000));
-    panel.querySelector('[data-cube-trace-timeline-readout]').textContent = `${(state.traceTime * 100).toFixed(1)}% · segment ${(state.segmentProgress * 100).toFixed(1)}%`;
+    timeline.setAttribute('aria-valuetext', `Phase ${state.phaseIndex + 1} of ${activeTrace.phases.length}, ${(state.traceTime * 100).toFixed(1)} percent${reducedMotion ? ', reduced motion discrete phase' : ''}`);
+    panel.querySelector('[data-cube-trace-timeline-readout]').textContent = `${(state.traceTime * 100).toFixed(1)}% · segment ${(state.segmentProgress * 100).toFixed(1)}%${reducedMotion ? ' · discrete' : ''}`;
   }
 
   function updateTimelineDisplay(panel) {
@@ -642,6 +817,13 @@
     updatePlaybackControls(panel, state);
     updateCounters(panel);
     updateInspector(panel);
+    renderTraceTranscript(panel);
+    renderTwoDimensionalFallback(panel);
+    const phaseKey = `${activeTrace.blockIndex}:${state.phaseIndex}`;
+    if (phaseKey !== lastAnnouncedPhaseKey) {
+      lastAnnouncedPhaseKey = phaseKey;
+      announce(panel, `Block ${activeTrace.blockIndex + 1} of ${activeTraces.length}, phase ${state.phaseIndex + 1} of ${activeTrace.phases.length}: ${currentPhase.id.replaceAll('-', ' ')}. ${TRACE_PHASE_DESCRIPTIONS[currentPhase.id] || ''}`);
+    }
   }
 
   function requestFrame(callback) {
@@ -760,6 +942,9 @@
     panel.querySelector('[data-cube-trace-workspace]').hidden = true;
     panel.querySelector('[data-cube-trace-unavailable]').hidden = false;
     panel.querySelector('[data-cube-trace-unavailable]').textContent = message || 'Encrypt or import a package to select a block for animation.';
+    lastAnnouncedPhaseKey = '';
+    renderTraceTranscript(panel);
+    renderTwoDimensionalFallback(panel);
   }
 
   function clearPackage(panel, message = '') {
@@ -921,11 +1106,15 @@
     const representationNotice = panel.querySelector('[data-cube-trace-representation-notice]');
     if (activeKey.gridSize <= MAX_MANUAL_TRACE_GRID_SIZE) {
       renderTraceCollections(panel);
-      representationNotice.textContent = 'Detailed trace: every source, face, point, and output cell is represented in the document and 3D scene.';
+      representationNotice.textContent = rendererAvailable
+        ? 'Detailed trace: every source, face, point, and output cell is represented in the document and 3D scene.'
+        : 'Detailed 2D fallback: every source, face, point, and output cell remains exact without WebGL.';
     } else {
       clearTraceCollections(panel);
       const plan = renderer?.getPerformanceState?.().renderPlan;
-      representationNotice.textContent = `Sampled trace: exact ${trace.cellCount.toLocaleString()}-point canonical state with ${plan?.renderedPointCount?.toLocaleString() || 'a deterministic cohort'} rendered in 3D. Cell grids are suppressed to prevent DOM expansion.`;
+      representationNotice.textContent = rendererAvailable
+        ? `Sampled trace: exact ${trace.cellCount.toLocaleString()}-point canonical state with ${plan?.renderedPointCount?.toLocaleString() || 'a deterministic cohort'} rendered in 3D. Cell grids are suppressed to prevent DOM expansion.`
+        : `Exact ${trace.cellCount.toLocaleString()}-point canonical trace with selected-point 2D mapping and transcript. Per-cell grids are suppressed to prevent DOM expansion.`;
     }
     renderPhaseMarkers(panel);
     panel.querySelector('[data-cube-trace-workspace]').hidden = false;
@@ -1102,8 +1291,59 @@
     applyDraftState(panel, `${title(face)} selected as the draft output face. The loaded canonical key remains unchanged until you generate a new key.`);
   }
 
+  function keyboardTargetIsEditable(target) {
+    if (!target) return false;
+    const tag = target.tagName?.toLowerCase();
+    return tag === 'input' || tag === 'textarea' || tag === 'select' || target.isContentEditable;
+  }
+
+  function handleKeyboardShortcut(panel, event) {
+    if (panel.hidden) return;
+    const editable = keyboardTargetIsEditable(event.target);
+    if (editable && event.target?.dataset?.cubeTraceTimeline === undefined) return;
+    let handled = true;
+    try {
+      if (event.ctrlKey && KEYBOARD_CAMERA_KEYS[event.code]) {
+        cameraPreset = KEYBOARD_CAMERA_KEYS[event.code];
+        if (cameraPreset === 'perspective') renderer?.resetCamera();
+        else renderer?.setCameraPreset(cameraPreset);
+        setStatus(panel, `Camera preset changed to ${cameraPreset}.`, 'success');
+      } else if (!event.ctrlKey && KEYBOARD_FACE_KEYS[event.code]) {
+        handleFaceClick(panel, KEYBOARD_FACE_KEYS[event.code]);
+      } else {
+        switch (event.code) {
+          case 'KeyI': setPickRole(panel, 'input'); setStatus(panel, 'Keyboard face selection now targets the input face.', 'success'); break;
+          case 'KeyO': setPickRole(panel, 'output'); setStatus(panel, 'Keyboard face selection now targets the output face.', 'success'); break;
+          case 'Space':
+            if (!activeTrace) fail('Select a package block before keyboard playback.');
+            if (playbackDirection === 0) startPlayback(panel, 1);
+            else pausePlayback(panel, true);
+            break;
+          case 'ArrowLeft': stepPhase(panel, -1); break;
+          case 'ArrowRight': stepPhase(panel, 1); break;
+          case 'Home': setPhase(panel, 0); break;
+          case 'End': setPhase(panel, activeTrace ? activeTrace.phases.length - 1 : 0); break;
+          case 'PageUp': selectAdjacentBlock(panel, -1); break;
+          case 'PageDown': selectAdjacentBlock(panel, 1); break;
+          case 'BracketLeft': selectPoint(panel, Math.max(0, selectedPointId - 1)); break;
+          case 'BracketRight': selectPoint(panel, Math.min((activeTrace?.cellCount || 1) - 1, selectedPointId + 1)); break;
+          case 'KeyR': setReducedMotion(panel, !reducedMotion); break;
+          case 'KeyD':
+            displayMode = effectiveDisplayMode() === '3d' ? '2d' : rendererAvailable ? '3d' : '2d';
+            updateDisplayMode(panel);
+            setStatus(panel, `Display changed to ${effectiveDisplayMode().toUpperCase()} mode.`, 'success');
+            break;
+          default: handled = false;
+        }
+      }
+    } catch (error) {
+      setStatus(panel, error.message, 'error');
+    }
+    if (handled) event.preventDefault();
+  }
+
   function installRenderer(panel) {
-    if (renderer) return;
+    if (renderer || rendererAvailable) return;
     const fallback = panel.querySelector('[data-cube-visualizer-fallback]');
     try {
       renderer = RendererApi.createRenderer({
@@ -1111,13 +1351,16 @@
         labelLayer: panel.querySelector('[data-cube-visualizer-label-layer]'),
         onFaceClick: face => handleFaceClick(panel, face)
       });
+      rendererAvailable = true;
       fallback.hidden = true;
     } catch (error) {
+      renderer = null;
+      rendererAvailable = false;
       fallback.hidden = false;
-      fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V9 scene.`;
-      setStatus(panel, error.message, 'error');
-      throw error;
+      fallback.textContent = `${error.message} WebGL 3D is unavailable, so the exact V10 2D face maps, trace transcript, keyboard controls, encoder, and package validation remain active.`;
+      setStatus(panel, `${error.message} Switched to the exact 2D accessibility fallback.`, 'error');
     }
+    updateDisplayMode(panel);
   }
 
   async function importPlainFile(panel, file) {
@@ -1159,8 +1402,20 @@
     panel.querySelector('[data-cube-visualizer-output-face]').addEventListener('change', () => markDraftChanged(panel, 'Output face draft changed.'));
     panel.querySelector('[data-cube-visualizer-input-turns]').addEventListener('change', () => markDraftChanged(panel, 'Input orientation draft changed.'));
     panel.querySelector('[data-cube-visualizer-output-turns]').addEventListener('change', () => markDraftChanged(panel, 'Output orientation draft changed.'));
-    panel.querySelector('[data-cube-visualizer-reset-camera]').addEventListener('click', () => renderer?.resetCamera());
-    panel.querySelectorAll('[data-cube-visualizer-camera]').forEach(button => button.addEventListener('click', () => renderer?.setCameraPreset(button.dataset.cubeVisualizerCamera)));
+    panel.querySelector('[data-cube-visualizer-reset-camera]').addEventListener('click', () => { cameraPreset = 'perspective'; renderer?.resetCamera(); setStatus(panel, 'Camera preset changed to perspective.', 'success'); });
+    panel.querySelectorAll('[data-cube-visualizer-camera]').forEach(button => button.addEventListener('click', () => { cameraPreset = button.dataset.cubeVisualizerCamera; renderer?.setCameraPreset(cameraPreset); setStatus(panel, `Camera preset changed to ${cameraPreset}.`, 'success'); }));
+    panel.querySelector('[data-cube-visualizer-reduced-motion]').addEventListener('change', event => setReducedMotion(panel, event.target.checked));
+    panel.querySelector('[data-cube-visualizer-display-mode]').addEventListener('change', event => {
+      if (!DISPLAY_MODES.includes(event.target.value)) return;
+      displayMode = event.target.value;
+      updateDisplayMode(panel);
+      setStatus(panel, `Display preference changed to ${displayMode}; effective mode is ${effectiveDisplayMode()}.`, 'success');
+    });
+    panel.querySelector('[data-cube-visualizer-2d]').addEventListener('click', event => {
+      const button = event.target.closest('[data-cube-trace-point]');
+      if (!button) return;
+      try { selectPoint(panel, button.dataset.cubeTracePoint); } catch (error) { setStatus(panel, error.message, 'error'); }
+    });
     panel.querySelector('[data-cube-visualizer-render-quality]').addEventListener('change', event => {
       const quality = event.target.value;
       if (!RENDER_QUALITIES.includes(quality)) return;
@@ -1252,6 +1507,7 @@
       if (!button) return;
       try { selectPoint(panel, button.dataset.cubeTracePoint); } catch (error) { setStatus(panel, error.message, 'error'); }
     });
+    panel.addEventListener('keydown', event => handleKeyboardShortcut(panel, event));
     root?.document?.addEventListener('visibilitychange', () => {
       if (root.document.hidden && playbackDirection !== 0) pausePlayback(panel, false);
     });
@@ -1271,8 +1527,8 @@
     panel.id = PANEL_ID;
     panel.className = 'cube-visualizer-panel';
     panel.innerHTML = `
-      <div class="cube-visualizer-header"><div><p class="eyebrow">V9 rendering scale · deterministic performance tiers</p><h2>Binary Cube Encoder Visualizer</h2><p>Encode at full canonical resolution while the WebGL scene selects a measured exact, sampled, or aggregate representation appropriate to the grid size.</p></div><button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button></div>
-      <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. V9 rendering tiers never modify keys, masks, traces, ciphertext, checksums, or recovered plaintext.</p>
+      <div class="cube-visualizer-header"><div><p class="eyebrow">V10 accessibility · reduced motion · exact 2D fallback</p><h2>Binary Cube Encoder Visualizer</h2><p>Follow and control the canonical transformation through WebGL or exact 2D face maps, with keyboard operation, discrete reduced-motion phases, non-color state markers, live announcements, and a complete trace transcript.</p></div><button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button></div>
+      <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. Accessibility and display preferences never modify keys, masks, traces, ciphertext, checksums, or recovered plaintext.</p>
       <div class="cube-visualizer-layout">
         <aside class="cube-visualizer-controls">
           <div class="cube-visualizer-field"><label for="cube-visualizer-seed">Key seed</label><input id="cube-visualizer-seed" type="text" value="${DEFAULT_SEED}" spellcheck="false" data-cube-visualizer-seed></div>
@@ -1289,11 +1545,13 @@
           <div class="cube-visualizer-field"><label for="cube-visualizer-key">Canonical key JSON</label><textarea id="cube-visualizer-key" spellcheck="false" data-cube-visualizer-key></textarea></div>
           <div class="cube-visualizer-actions"><button type="button" class="layout-button" data-cube-encoder-copy-key>Copy Key</button><button type="button" class="layout-button" data-cube-encoder-download-key>Download Key</button><button type="button" class="layout-button" data-cube-encoder-handoff-lab>Open Package in Laboratory</button></div>
           <div><strong>Camera presets</strong><div class="cube-visualizer-camera-controls"><button type="button" class="layout-button" data-cube-visualizer-reset-camera>Perspective</button>${FACES.map(face => `<button type="button" class="layout-button" data-cube-visualizer-camera="${face}">${title(face)}</button>`).join('')}</div></div>
+          <section class="cube-accessibility-panel" aria-labelledby="cube-accessibility-heading"><h3 id="cube-accessibility-heading">Accessibility and fallback</h3><label class="cube-accessibility-toggle"><input type="checkbox" data-cube-visualizer-reduced-motion> Reduced motion: discrete phases only</label><div class="cube-visualizer-field"><label for="cube-visualizer-display-mode">Primary visualization</label><select id="cube-visualizer-display-mode" data-cube-visualizer-display-mode><option value="auto">Automatic 3D or 2D fallback</option><option value="3d">Three-dimensional scene</option><option value="2d">Exact two-dimensional maps</option></select></div><div class="cube-2d-legend" aria-label="Non-color state legend"><span><b>D</b> payload</span><span><b>F</b> filler</span><span><b>★</b> selected</span><span><b>IN</b> input</span><span><b>OUT</b> output</span></div><details class="cube-keyboard-help"><summary>Keyboard controls</summary><p><kbd>I</kbd>/<kbd>O</kbd> choose input or output face role; <kbd>1</kbd>–<kbd>6</kbd> choose a face; <kbd>Ctrl</kbd>+<kbd>1</kbd>–<kbd>7</kbd> choose camera presets; <kbd>←</kbd>/<kbd>→</kbd> step phases; <kbd>Space</kbd> play or pause; <kbd>Home</kbd>/<kbd>End</kbd> jump first or last; <kbd>Page Up</kbd>/<kbd>Page Down</kbd> change blocks; <kbd>[</kbd>/<kbd>]</kbd> inspect adjacent points; <kbd>R</kbd> toggles reduced motion; <kbd>D</kbd> toggles 3D/2D.</p></details><div class="cube-sr-only" role="status" aria-live="polite" aria-atomic="true" data-sequence="0" data-cube-accessibility-live></div></section>
           <section class="cube-performance-panel"><div class="cube-visualizer-field"><label for="cube-visualizer-render-quality">Rendering quality</label><select id="cube-visualizer-render-quality" data-cube-visualizer-render-quality><option value="auto" selected>Automatic measured tier</option><option value="exact">Exact points where safe</option><option value="sampled">Deterministic 8,192-point sample</option><option value="aggregate">Deterministic 2,048-point aggregate</option></select></div><p class="cube-representation-notice" data-tier="none" data-cube-visualizer-representation-notice>No render representation is active.</p><div class="cube-performance-metrics" data-cube-visualizer-performance-metrics></div><button type="button" class="layout-button" disabled data-cube-visualizer-cancel-preparation>Cancel Pending Preparation</button></section>
-          <div class="cube-visualizer-status" role="status" aria-live="polite" data-cube-visualizer-status>Preparing the canonical demonstration key and package.</div>
+          <div class="cube-visualizer-status" role="status" aria-live="polite" aria-atomic="true" data-cube-visualizer-status>Preparing the canonical demonstration key and package.</div>
         </aside>
         <div class="cube-visualizer-main-column">
-          <div class="cube-visualizer-scene-shell"><canvas class="cube-visualizer-canvas" aria-label="Manipulatable three-dimensional Binary Cube selected-block animation" data-cube-visualizer-canvas></canvas><div class="cube-visualizer-label-layer" aria-hidden="true" data-cube-visualizer-label-layer></div><div class="cube-visualizer-fallback" hidden data-cube-visualizer-fallback></div><div class="cube-visualizer-scene-overlay"><div class="cube-visualizer-summary" data-cube-visualizer-summary>No key loaded.</div><div class="cube-visualizer-help">Click a face to select · Drag to orbit · Shift-drag or right-drag to pan · Wheel to zoom</div></div></div>
+          <div class="cube-visualizer-scene-shell" data-cube-visualizer-scene-shell><canvas class="cube-visualizer-canvas" tabindex="0" aria-label="Manipulatable three-dimensional Binary Cube selected-block animation. Keyboard shortcuts are listed in Accessibility and fallback." data-cube-visualizer-canvas></canvas><div class="cube-visualizer-label-layer" aria-hidden="true" data-cube-visualizer-label-layer></div><div class="cube-visualizer-fallback" hidden data-cube-visualizer-fallback></div><div class="cube-visualizer-scene-overlay"><div class="cube-visualizer-summary" data-cube-visualizer-summary>No key loaded.</div><div class="cube-visualizer-help">Click or keyboard-select a face · Drag to orbit · Shift-drag or right-drag to pan · Wheel to zoom</div></div></div>
+          <section class="cube-visualizer-2d" hidden aria-labelledby="cube-2d-heading" data-cube-visualizer-2d><div class="cube-visualizer-2d-header"><div><p class="eyebrow">Exact non-WebGL diagnostic</p><h3 id="cube-2d-heading">Two-Dimensional Face and Point Mapping</h3></div><p>Every displayed mapping comes from the active immutable canonical trace. This view never reconstructs encryption.</p></div><div data-cube-visualizer-2d-content></div></section>
           <section class="cube-encoder-panel">
             <div class="cube-encoder-header"><div><p class="eyebrow">Canonical package input and output</p><h3>Complete Encoder</h3></div><div class="cube-visualizer-field cube-trace-bits-field"><label for="cube-trace-bits">Manual binary or imported file bits</label><textarea id="cube-trace-bits" spellcheck="false" data-cube-trace-bits>${DEFAULT_BITS}</textarea></div><div class="cube-encoder-file-column"><label class="layout-button cube-visualizer-file-button">Choose Unencrypted File<input type="file" data-cube-encoder-file></label><small data-cube-encoder-file-note>No file loaded; using manual bits.</small><button type="button" class="link-button" data-cube-trace-build>Encrypt Complete Package</button></div></div>
             <div class="cube-encoder-actions"><button type="button" class="link-button" data-cube-encoder-decrypt>Decrypt and Verify Package</button><button type="button" class="layout-button" data-cube-encoder-validate>Validate Key, Package, and Traces</button><label class="layout-button cube-visualizer-file-button">Import Package File<input type="file" accept="application/json,.json" data-cube-encoder-import-package></label><button type="button" class="layout-button" data-cube-encoder-copy-package>Copy Package</button><button type="button" class="layout-button" data-cube-encoder-download-package>Download Package</button><button type="button" class="layout-button" data-cube-encoder-download-recovered>Download Recovered File</button></div>
@@ -1316,6 +1574,7 @@
               <div class="cube-trace-playback-options"><label>Speed<select data-cube-trace-speed>${PLAYBACK_SPEEDS.map(speed => `<option value="${speed}"${speed === 1 ? ' selected' : ''}>${speed}×</option>`).join('')}</select></label><label>Package scope<select data-cube-trace-scope><option value="selected-bit">Selected bit</option><option value="selected-row">Selected row</option><option value="selected-block" selected>Selected block</option><option value="all-blocks">All blocks</option><option value="overview-only">Overview only</option></select></label><label>Motion cohort<select data-cube-trace-mode><option value="all">All bits</option><option value="selected">Selected bit only</option><option value="row">Selected input row</option></select></label></div>
               <div class="cube-trace-timeline"><input type="range" min="0" max="1000" step="1" value="0" aria-label="Binary Cube selected-block trace timeline" data-cube-trace-timeline><output data-cube-trace-timeline-readout>0.0% · segment 0.0%</output></div>
               <div class="cube-trace-markers" aria-label="Trace phase markers" data-cube-trace-markers></div>
+              <section class="cube-trace-transcript-panel" aria-labelledby="cube-trace-transcript-heading"><h4 id="cube-trace-transcript-heading">Active Trace Transcript</h4><ol class="cube-trace-transcript" data-cube-trace-transcript></ol><p class="cube-trace-selected-transcript" data-cube-trace-selected-transcript></p></section>
               <div class="cube-trace-counters">${counterCard('source','Source bits in block')}${counterCard('payload','Payload capacity')}${counterCard('filler','Filler cells')}${counterCard('block','Selected block')}${counterCard('point','Selected point')}${counterCard('input','Input face index')}${counterCard('output','Output face index')}${counterCard('final','Package output index')}${counterCard('time','Trace time')}${counterCard('progress','Segment progress')}</div>
               <div class="cube-trace-inspection-layout"><div class="cube-trace-stages">
                 ${traceStage(0,'Source strip','<div class="cube-trace-strip" data-cube-trace-source-strip></div>')}
@@ -1334,9 +1593,12 @@
         </div>
       </div>`;
     host.appendChild(panel);
+    panel.tabIndex = -1;
     rebuildOutputOptions(panel, 'front');
     bind(panel);
     installRenderer(panel);
+    setReducedMotion(panel, reducedMotion, { announce: false });
+    updateDisplayMode(panel);
     setPickRole(panel, 'input');
     generateKey(panel);
     return panel;
@@ -1345,8 +1607,9 @@
   function openPanel() {
     const panel = buildPanel();
     panel.hidden = false;
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    panel.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     renderer?.render();
+    updateDisplayMode(panel);
     return panel;
   }
 
@@ -1403,6 +1666,11 @@
       legalOutputFaces: Object.freeze([...direction.legalOutputFaces]),
       pickRole,
       rendererVersion: RendererApi?.constants?.RENDERER_VERSION || null,
+      rendererAvailable,
+      displayMode,
+      effectiveDisplayMode: effectiveDisplayMode(),
+      reducedMotion,
+      cameraPreset,
       renderQuality,
       renderTier: rendererPerformance?.renderPlan?.tier || null,
       renderEffectiveQuality: rendererPerformance?.renderPlan?.effectiveQuality || null,
@@ -1432,6 +1700,7 @@
       roundTripValid,
       sourceFileName,
       traceReady: Boolean(activeTrace),
+      traceRawTime: activeTrace ? traceTime : null,
       traceTime: state?.traceTime ?? null,
       tracePhaseIndex: state?.phaseIndex ?? null,
       traceNextPhaseIndex: state?.nextPhaseIndex ?? null,
@@ -1464,7 +1733,10 @@
       selectedFinalBit: details?.finalBit ?? null,
       selectedAnimatedPosition: rendered?.selectedPosition ? Object.freeze([...rendered.selectedPosition]) : null,
       traceRenderedPointCount: rendered?.renderedPointCount ?? null,
-      traceExactPointCount: rendered?.totalPointCount ?? null
+      traceExactPointCount: rendered?.totalPointCount ?? null,
+      traceTranscriptEntryCount: document.querySelectorAll(`#${PANEL_ID} [data-cube-trace-transcript] li`).length,
+      twoDimensionalFallbackReady: Boolean(document.querySelector(`#${PANEL_ID} [data-cube-visualizer-2d-content]`)?.textContent?.trim()),
+      liveAnnouncement: document.querySelector(`#${PANEL_ID} [data-cube-accessibility-live]`)?.textContent || ''
     });
   }
 
@@ -1473,7 +1745,7 @@
     loadArtifacts,
     currentArtifacts,
     currentState,
-    utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask, describeTraceBlock, describePackageBlock, buildPackageBlockDescriptors, locateSourceBit, locateCiphertextBit, sequenceBlockIndex, effectivePlaybackMode }),
-    constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, MAX_SAMPLED_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, OVERVIEW_BLOCK_DURATION_MS, PLAYBACK_SPEEDS, PLAYBACK_SCOPES, MASK_MODES, RENDER_QUALITIES })
+    utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask, describeTraceBlock, describePackageBlock, buildPackageBlockDescriptors, locateSourceBit, locateCiphertextBit, sequenceBlockIndex, effectivePlaybackMode, resolvePresentedTraceTime, traceTranscriptEntries, twoDimensionalTraceMap }),
+    constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, MAX_SAMPLED_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, OVERVIEW_BLOCK_DURATION_MS, PLAYBACK_SPEEDS, PLAYBACK_SCOPES, MASK_MODES, RENDER_QUALITIES, DISPLAY_MODES })
   });
 });

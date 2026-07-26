@@ -79,7 +79,7 @@ for (const preset of ['front','back','left','right','top','bottom','perspective'
 assert.match(controllerSource, /Engine\.validateKey/);
 assert.match(controllerSource, /Engine\.createKey/);
 assert.match(controllerSource, /Engine\.buildPointsById/);
-assert.match(controllerSource, /renderer\.setScene/);
+assert.match(controllerSource, /renderer\?\.setScene/);
 assert.match(controllerSource, /Engine\.encryptBinary/);
 assert.match(controllerSource, /Engine\.validatePackage/);
 assert.match(controllerSource, /Engine\.decryptBinary/);
