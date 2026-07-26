@@ -97,8 +97,9 @@
 }
 
 /*
- * Runtime roles use the approved TSV rectangles directly. No generic square,
- * synthetic frame, or second crop is applied around the selected sprite.
+ * Reviewed UI sheets are 1254 x 1254 pixels. The HUD-elements sheet is
+ * 1254 x 353 pixels. Runtime crops use those real packaged dimensions and
+ * the exact approved TSV rectangles; no 1280-based approximation remains.
  */
 .barotrauma-atlas-surface[data-barotrauma-icon]::before,
 .workspace-hero[data-barotrauma-ui]::before,
@@ -126,23 +127,23 @@
   width: 58px;
   height: 28.033px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 1237.333px 348px;
+  background-size: 1212.2px 341.233px;
   background-position: -413.733px -267.767px;
 }
 
 :is([data-barotrauma-icon="document"], [data-barotrauma-ui="document"])::before {
-  width: 51.556px;
-  height: 58px;
+  width: 58px;
+  height: 50.849px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
-  background-size: 2749.63px 2749.63px;
-  background-position: -1194.37px -360.889px;
+  background-size: 996.329px 996.329px;
+  background-position: -921.644px -734.137px;
 }
 
 :is([data-barotrauma-icon="medical"], [data-barotrauma-ui="medical"])::before {
   width: 51.176px;
   height: 58px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 2183.529px 2183.529px;
+  background-size: 2139.176px 2139.176px;
   background-position: -1045.706px -145px;
 }
 
@@ -150,23 +151,23 @@
   width: 58px;
   height: 49.174px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 1613.913px 1613.913px;
+  background-size: 1581.13px 1581.13px;
   background-position: -941.87px -174px;
 }
 
 :is([data-barotrauma-icon="mission"], [data-barotrauma-ui="mission"])::before {
-  width: 47.455px;
-  height: 58px;
-  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 2249.697px 632.727px;
-  background-position: -2098.545px -485.091px;
+  width: 58px;
+  height: 50.849px;
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 996.329px 996.329px;
+  background-position: -921.644px -618.932px;
 }
 
 :is([data-barotrauma-icon="route"], [data-barotrauma-ui="route"])::before {
   width: 46.103px;
   height: 58px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 1903.59px 535.385px;
+  background-size: 1864.923px 524.974px;
   background-position: -1023.179px -132.359px;
 }
 
@@ -174,7 +175,7 @@
   width: 38.667px;
   height: 58px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
-  background-size: 2249.697px 2249.697px;
+  background-size: 2204px 2204px;
   background-position: -1532.606px -1878.848px;
 }
 
@@ -182,23 +183,23 @@
   width: 40.424px;
   height: 58px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
-  background-size: 2249.697px 2249.697px;
+  background-size: 2204px 2204px;
   background-position: -1866.545px -1878.848px;
 }
 
 :is([data-barotrauma-icon="crew"], [data-barotrauma-ui="crew"])::before {
-  width: 56.792px;
-  height: 58px;
-  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 1546.667px 1546.667px;
-  background-position: -791.458px -19.333px;
+  width: 58px;
+  height: 50.055px;
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 996.329px 996.329px;
+  background-position: -921.644px -504.521px;
 }
 
 :is([data-barotrauma-icon="warning"], [data-barotrauma-ui="warning"])::before {
   width: 58px;
   height: 53.167px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 2062.222px 580px;
+  background-size: 2020.333px 568.722px;
   background-position: -1735.167px -444.667px;
 }
 
@@ -206,7 +207,7 @@
   width: 58px;
   height: 56.294px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 2183.529px 2183.529px;
+  background-size: 2139.176px 2139.176px;
   background-position: -363.353px -1349.353px;
 }
 
@@ -214,7 +215,7 @@
   width: 58px;
   height: 58px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 1810.732px 509.268px;
+  background-size: 1773.951px 499.366px;
   background-position: -1679.171px -314.049px;
 }
 
@@ -286,7 +287,7 @@
   width: 20px;
   height: 8.75px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 533.333px 533.333px;
+  background-size: 522.5px 522.5px;
   background-position: -6.25px -253.333px;
 }
 
@@ -298,11 +299,11 @@
 }
 
 #barotrauma .registry-controls .control-label::before {
-  width: 15.458px;
+  width: 16px;
   height: 16px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 347.119px 97.627px;
-  background-position: -117.424px -40.407px;
+  background-size: 489.366px 137.756px;
+  background-position: -463.22px -86.634px;
 }
 
 #barotrauma .registry-filter {
@@ -319,7 +320,7 @@
   width: 16px;
   height: 15.529px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 602.353px 602.353px;
+  background-size: 590.118px 590.118px;
   background-position: -100.235px -372.235px;
 }
 
@@ -327,7 +328,7 @@
   width: 14.222px;
   height: 16px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
-  background-size: 758.519px 758.519px;
+  background-size: 743.111px 743.111px;
   background-position: -329.481px -99.556px;
 }
 
@@ -335,7 +336,7 @@
   width: 16px;
   height: 16px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 499.512px 140.488px;
+  background-size: 489.366px 137.756px;
   background-position: -463.22px -86.634px;
 }
 
@@ -343,16 +344,16 @@
   width: 16px;
   height: 13.565px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 445.217px 445.217px;
+  background-size: 436.174px 436.174px;
   background-position: -259.826px -48px;
 }
 
 #barotrauma .registry-filter[data-barotrauma-filter="campaign"]::before {
   width: 13.091px;
   height: 16px;
-  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 620.606px 174.545px;
-  background-position: -578.909px -133.818px;
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 313.5px 313.5px;
+  background-position: -290px -194.75px;
 }
 
 #barotrauma .registry-filter.active {
@@ -384,7 +385,7 @@
   width: 18px;
   height: 15.158px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 606.316px 606.316px;
+  background-size: 594px 594px;
   background-position: -253.895px -347.211px;
 }
 
@@ -392,7 +393,7 @@
   width: 16px;
   height: 15.529px;
   background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png");
-  background-size: 602.353px 602.353px;
+  background-size: 590.118px 590.118px;
   background-position: -100.235px -372.235px;
 }
 
