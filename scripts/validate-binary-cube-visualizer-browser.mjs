@@ -195,13 +195,13 @@ try {
     if (generated.keyOrigin !== 'generated' || generated.keyId === initial.keyId) throw new Error('Canonical draft-key generation failed.');
     if (generated.activeInputFace !== 'front' || generated.activeOutputFace !== 'right' || generated.activeInputQuarterTurns !== 2) throw new Error('Generated key did not adopt the explicit directional draft.');
     if (JSON.stringify(generated.legalOutputFaces) !== JSON.stringify(['top', 'bottom', 'left', 'right'])) throw new Error('Legal output-face enforcement changed.');
+    const generatedStatus = panel.querySelector('[data-cube-visualizer-status]').textContent;
+    if (!/Generated canonical key/.test(generatedStatus) || !/encoding remains exact/i.test(generatedStatus)) throw new Error('The generated canonical-key acceptance and exact-encoding status was not reported.');
 
     for (const preset of ['front', 'back', 'left', 'right', 'top', 'bottom']) {
       panel.querySelector('[data-cube-visualizer-camera="' + preset + '"]').click();
     }
     panel.querySelector('[data-cube-visualizer-reset-camera]').click();
-    const status = panel.querySelector('[data-cube-visualizer-status]').textContent;
-    if (!/Generated canonical key/.test(status)) throw new Error('The generated directional scene status was not reported.');
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v4-browser-validation-receipt',
       schemaVersion: '0.1.0',
