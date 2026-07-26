@@ -73,6 +73,35 @@ function terminate(handle) {
     try { handle.kill('SIGTERM'); } catch (_) { /* Best-effort cleanup. */ }
   }
 }
+function waitForExit(handle, timeoutMilliseconds = 3000) {
+  if (!handle || handle.exitCode !== null || handle.signalCode !== null) return Promise.resolve();
+  return new Promise(resolve => {
+    let settled = false;
+    let timer = null;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      if (timer) clearTimeout(timer);
+      resolve();
+    };
+    timer = setTimeout(finish, timeoutMilliseconds);
+    handle.once('exit', finish);
+  });
+}
+async function removeDirectoryWithRetries(directory, attempts = 20) {
+  let lastError;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      fs.rmSync(directory, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      lastError = error;
+      if (!['ENOTEMPTY', 'EBUSY', 'EPERM'].includes(error?.code)) throw error;
+      await delay(100);
+    }
+  }
+  throw lastError;
+}
 
 const browser = findCommand(browserCandidates);
 const xvfb = findCommand(['Xvfb']);
@@ -234,6 +263,7 @@ try {
   cdp?.close();
   terminate(browserProcess);
   terminate(xvfbProcess);
+  await Promise.all([waitForExit(browserProcess), waitForExit(xvfbProcess)]);
   await new Promise(resolve => webServer.close(resolve));
-  fs.rmSync(profileDirectory, { recursive: true, force: true });
+  await removeDirectoryWithRetries(profileDirectory);
 }
