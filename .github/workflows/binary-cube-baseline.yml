@@ -1,5 +1,5 @@
-# V2 milestone gate: canonical engine, golden evidence, immutable traces, and desktop smoke.
-name: Validate Binary Cube V2 transformation traces
+# V3 milestone gate: canonical engine, golden evidence, immutable traces, static 3D shell, and desktop smoke.
+name: Validate Binary Cube V3 visualizer shell
 
 on:
   push:
@@ -13,12 +13,16 @@ on:
       - "shadowrun-binary-cube-auth.js"
       - "shadowrun-binary-cube-auth-ui.js"
       - "shadowrun-binary-cube-secure-export.js"
+      - "binary-cube-visualizer-renderer.js"
+      - "shadowrun-binary-cube-visualizer.js"
+      - "binary-cube-visualizer.css"
       - "shadowrun-entry.js"
       - "app-lite-view-mounts.js"
       - "blacklight-binary-cube-encryption.html"
       - "desktop/binary-cube/**"
       - "scripts/validate-binary-cube-baseline.mjs"
       - "scripts/validate-binary-cube-trace.mjs"
+      - "scripts/validate-binary-cube-visualizer-shell.mjs"
   workflow_dispatch:
 
 permissions:
@@ -49,18 +53,24 @@ jobs:
           node --check shadowrun-binary-cube-auth.js
           node --check shadowrun-binary-cube-auth-ui.js
           node --check shadowrun-binary-cube-secure-export.js
+          node --check binary-cube-visualizer-renderer.js
+          node --check shadowrun-binary-cube-visualizer.js
           node --check shadowrun-entry.js
           node --check app-lite-view-mounts.js
           node --check desktop/binary-cube/tests/smoke.cjs
           node --check desktop/binary-cube/scripts/prepare-app.mjs
           node --check scripts/validate-binary-cube-baseline.mjs
           node --check scripts/validate-binary-cube-trace.mjs
+          node --check scripts/validate-binary-cube-visualizer-shell.mjs
 
-      - name: Validate Binary Cube V0 golden evidence against V2
+      - name: Validate Binary Cube V0 golden evidence against V3
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
         run: node scripts/validate-binary-cube-trace.mjs
+
+      - name: Validate Binary Cube V3 static visualizer shell
+        run: node scripts/validate-binary-cube-visualizer-shell.mjs
 
       - name: Validate Binary Cube desktop runtime contract
         run: node desktop/binary-cube/tests/smoke.cjs
