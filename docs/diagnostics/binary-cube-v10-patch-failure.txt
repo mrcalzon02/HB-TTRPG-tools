@@ -1,1 +1,180 @@
-V10 patch log was unavailable.
+    '  const TRACE_PHASE_DESCRIPTIONS = Object.freeze({\n' +
+    "    'source-ready': 'Source bits are ready before block framing.',\n" +
+    "    'block-framed': 'Source bits and deterministic filler form one complete cube block.',\n" +
+    "    'mask-applied': 'Payload and filler are identified by the canonical key mask.',\n" +
+    "    'input-face-staged': 'The framed block occupies the selected input face cells.',\n" +
+    "    'point-assignment': 'Each input cell maps to one stable canonical point identity.',\n" +
+    "    'point-field-loaded': 'Bits occupy their keyed three-dimensional point coordinates.',\n" +
+    "    'output-projection-selected': 'The selected output face determines canonical read order.',\n" +
+    "    'output-face-staged': 'The same point identities appear in output face-cell order.',\n" +
+    "    'encrypted-block-emitted': 'The exact encrypted block leaves the selected output face.',\n" +
+    "    'block-complete': 'The emitted block matches its canonical package ciphertext slice.'\n" +
+    '  });\n' +
+    "  const KEYBOARD_FACE_KEYS = Object.freeze({ Digit1:'top', Digit2:'bottom', Digit3:'front', Digit4:'back', Digit5:'left', Digit6:'right' });\n" +
+    "  const KEYBOARD_CAMERA_KEYS = Object.freeze({ Digit1:'perspective', Digit2:'front', Digit3:'back', Digit4:'left', Digit5:'right', Digit6:'top', Digit7:'bottom' });\n" +
+    '  const Engine = root?.ShadowrunBinaryCubeEngine;\n' +
+    '  const RendererApi = root?.BinaryCubeVisualizerRenderer;\n' +
+    "  const FACES = Engine?.constants?.FACES || Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);\n" +
+    '\n' +
+    '  let renderer = null;\n' +
+    '  let activeKey = null;\n' +
+    '  let activeKeyOrigin = null;\n' +
+    '  let activePackage = null;\n' +
+    '  let activeTraces = [];\n' +
+    '  let selectedBlockIndex = 0;\n' +
+    "  let recoveredBits = '';\n" +
+    '  let roundTripValid = false;\n' +
+    "  let sourceFileName = 'binary-cube-input.bin';\n" +
+    "  let pickRole = 'input';\n" +
+    "  let draftDirection = { inputFace: 'top', outputFace: 'front', inputQuarterTurns: 0, outputQuarterTurns: 0 };\n" +
+    '  let activeTrace = null;\n' +
+    '  let traceTime = 0;\n' +
+    '  let selectedPointId = 0;\n' +
+    '  let playbackDirection = 0;\n' +
+    '  let playbackSpeed = 1;\n' +
+    "  let playbackMode = 'all';\n" +
+    "  let playbackScope = 'selected-block';\n" +
+    '  let playbackFrame = null;\n' +
+    '  let playbackLastTimestamp = null;\n' +
+    "  let renderQuality = 'auto';\n" +
+    "  let activeSourceBits = '';\n" +
+    '  let activeBlockDescriptors = [];\n' +
+    '  let sceneBuildGeneration = 0;\n' +
+    '  let traceBuildGeneration = 0;\n' +
+    '  let sceneBuildHandle = null;\n' +
+    '  let traceBuildHandle = null;\n' +
+    '  let scenePreparing = false;\n' +
+    '  let tracePreparing = false;\n' +
+    '  let staleSceneResultsDiscarded = 0;\n' +
+    '  let staleTraceResultsDiscarded = 0;\n' +
+    '  let cancelledPreparations = 0;\n' +
+    '  let sceneBuildReceipt = null;\n' +
+    '  let traceBuildReceipt = null;\n' +
+    '  let encodingMilliseconds = 0;\n' +
+    "  let reducedMotion = Boolean(root?.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);\n" +
+    "  let displayMode = 'auto';\n" +
+    '  let rendererAvailable = false;\n' +
+    "  let cameraPreset = 'perspective';\n" +
+    "  let lastAnnouncedPhaseKey = '';\n" +
+    '\n' +
+    '  function fail(message) { throw new Error(message); }\n' +
+    '  function title(value) { return String(value).replace(/^./, character => character.toUpperCase()); }\n' +
+    '  function clamp(value, minimum, maximum) { return Math.max(minimum, Math.min(maximum, value)); }\n' +
+    '  function normalizeQuarterTurns(value) { return ((Number(value) || 0) % 4 + 4) % 4; }\n' +
+    "  function normalizeBits(value, label = 'Binary input') {\n" +
+    "    const bits = String(value ?? '').replace(/\\s+/g, '');\n" +
+    '    if (!bits) fail(`${label} must contain at least one binary digit.`);\n' +
+    '    if (/[^01]/.test(bits)) fail(`${label} may contain only 0, 1, and whitespace.`);\n' +
+    '    return bits;\n' +
+    '  }\n' +
+    '  function bytesToBits(bytes) {\n' +
+    "    return Array.from(bytes, byte => Number(byte).toString(2).padStart(8, '0')).join('');\n" +
+    '  }\n' +
+    '  function bitsToBytes(bits) {\n' +
+    "    const normalized = normalizeBits(bits, 'Recovered binary');\n" +
+    "    if (normalized.length % 8 !== 0) fail('Recovered binary is not byte-aligned and cannot be downloaded as a normal file.');\n" +
+    '    return new Uint8Array(Array.from({ length: normalized.length / 8 }, (_, index) => Number.parseInt(normalized.slice(index * 8, index * 8 + 8), 2)));\n' +
+    '  }\n' +
+    "  function safeFileName(value, fallback = 'binary-cube-output.bin') {\n" +
+    `    const cleaned = String(value || '').replace(/[<>:"/\\\\|?*\\u0000-\\u001f]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 120);\n` +
+    '    return cleaned || fallback;\n' +
+    '  }\n' +
+    '  function escapeHtml(value) {\n' +
+    `    return String(value ?? '').replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[character]));\n` +
+    '  }\n' +
+    '  function cloneJson(value) {\n' +
+    '    return value == null ? null : JSON.parse(JSON.stringify(value));\n' +
+    '  }\n' +
+    '\n' +
+    '  function resolvePresentedTraceTime(value, phaseCountValue, reduce = reducedMotion) {\n' +
+    '    const phaseCount = Math.max(1, Number(phaseCountValue) || 1);\n' +
+    '    const normalized = clamp(Number(value) || 0, 0, 1);\n' +
+    '    if (!reduce || phaseCount <= 1) return normalized;\n' +
+    '    const phaseIndex = Math.floor(normalized * (phaseCount - 1) + 1e-9);\n' +
+    '    return phaseIndex / Math.max(1, phaseCount - 1);\n' +
+    '  }\n' +
+    '\n' +
+    '  function traceTranscriptEntries(trace, pointIdValue, phaseIndexValue) {\n' +
+    '    if (!trace) return Object.freeze([]);\n' +
+    '    const pointId = clamp(Math.round(Number(pointIdValue) || 0), 0, trace.cellCount - 1);\n' +
+    '    const phaseIndex = clamp(Math.round(Number(phaseIndexValue) || 0), 0, trace.phases.length - 1);\n' +
+    '    const sourceBitIndex = trace.sourceBitIndexByPoint[pointId];\n' +
+    "    const selectedSummary = `Selected point P${pointId} maps ${sourceBitIndex >= 0 ? `source bit ${sourceBitIndex}` : 'deterministic filler'} through input cell ${trace.inputCellIndexByPoint[pointId]} to output cell ${trace.outputCellIndexByPoint[pointId]} and package ciphertext index ${trace.blockIndex * trace.cellCount + trace.outputCellIndexByPoint[pointId]}.`;\n" +
+    '    return Object.freeze(trace.phases.map((phase, index) => Object.freeze({\n' +
+    '      index,\n' +
+    '      id: phase.id,\n' +
+    "      state: index < phaseIndex ? 'complete' : index === phaseIndex ? 'active' : 'pending',\n" +
+    "      description: TRACE_PHASE_DESCRIPTIONS[phase.id] || phase.id.replaceAll('-', ' '),\n" +
+    '      selectedSummary\n' +
+    '    })));\n' +
+    '  }\n' +
+    '\n' +
+    '  function twoDimensionalTraceMap(trace, pointIdValue) {\n' +
+    '    if (!trace) return null;\n' +
+    '    const selectedPoint = clamp(Math.round(Number(pointIdValue) || 0), 0, trace.cellCount - 1);\n' +
+    '    const mapCell = (pointId, cellIndex, bit, role) => Object.freeze({\n' +
+    '      pointId,\n' +
+    '      cellIndex,\n' +
+    '      bit,\n' +
+    '      role,\n' +
+    '      kind: trace.cellKindByPoint[pointId],\n' +
+    '      sourceBitIndex: trace.sourceBitIndexByPoint[pointId],\n' +
+    '      selected: pointId === selectedPoint\n' +
+    '    });\n' +
+    '    const inputCells = Object.freeze(Array.from({ length: trace.cellCount }, (_, cellIndex) => {\n' +
+    '      const pointId = trace.inputProjectionPointIds[cellIndex];\n' +
+    "      return mapCell(pointId, cellIndex, trace.framedBlock[cellIndex], 'input');\n" +
+    '    }));\n' +
+    '    const outputCells = Object.freeze(Array.from({ length: trace.cellCount }, (_, cellIndex) => {\n' +
+    '      const pointId = trace.outputProjectionPointIds[cellIndex];\n' +
+    "      return mapCell(pointId, cellIndex, trace.outputBlock[cellIndex], 'output');\n" +
+    '    }));\n' +
+    '    const point = trace.pointField[selectedPoint];\n' +
+    '    return Object.freeze({\n' +
+    '      gridSize: trace.gridSize,\n' +
+    '      inputFace: trace.inputFace,\n' +
+    '      outputFace: trace.outputFace,\n' +
+    '      inputCells,\n' +
+    '      outputCells,\n' +
+    '      selected: Object.freeze({\n' +
+    '        pointId: selectedPoint,\n' +
+    '        coordinate: Object.freeze([point.x, point.y, point.z]),\n' +
+    '        sourceBitIndex: trace.sourceBitIndexByPoint[selectedPoint],\n' +
+    '        inputCellIndex: trace.inputCellIndexByPoint[selectedPoint],\n' +
+    '        outputCellIndex: trace.outputCellIndexByPoint[selectedPoint],\n' +
+    '        packageOutputIndex: trace.blockIndex * trace.cellCount + trace.outputCellIndexByPoint[selectedPoint],\n' +
+    '        bit: trace.bitByPoint[selectedPoint],\n' +
+    '        kind: trace.cellKindByPoint[selectedPoint]\n' +
+    '      })\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  function nowMilliseconds() {\n' +
+    "    return typeof performance !== 'undefined' && typeof performance.now === 'function' ? performance.now() : Date.now();\n" +
+    '  }\n' +
+    '\n' +
+    '  function scheduleTask(callback) {\n' +
+    "    return typeof root?.setTimeout === 'function' ? root.setTimeout(callback, 0) : setTimeout(callback, 0);\n" +
+    '  }\n' +
+    '\n' +
+    '  function cancelTask(handle) {\n' +
+    '    if (handle == null) return;\n' +
+    "    if (typeof root?.clearTimeout === 'function') root.clearTimeout(handle);\n" +
+    '    else clearTimeout(handle);\n' +
+    '  }\n' +
+    '\n' +
+    '  function describePackageBlock(packageObject, key, blockIndexValue) {\n' +
+    '    const blockIndex = Number(blockIndexValue);\n' +
+    "    if (!packageObject || !key || !Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= packageObject.blockCount) fail('A valid package block is required.');\n" +
+    '    const cellCount = key.gridSize * key.gridSize;\n' +
+    '    const sourceStart = blockIndex * packageObject.payloadCapacity;\n' +
+    '    const sourceEndExclusive = Math.min(packageObject.originalBitLength, sourceStart + packageObject.payloadCapacity);\n' +
+    '    const sourceBitsConsumed = Math.max(0, sourceEndExclusive - sourceStart);\n' +
+    '    const ciphertextStart = blockIndex * cellCount;\n' +
+    '    const ciphertextEndExclusive'... 112291 more characters,
+  expected: /renderer\.setScene/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v22.23.1
