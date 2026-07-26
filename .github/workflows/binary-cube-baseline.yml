@@ -6,13 +6,16 @@ on:
     paths:
       - ".github/workflows/binary-cube-baseline.yml"
       - "shadowrun-binary-cube-engine.js"
-      - "binary-cube-large-grid-engine.js"
-      - "binary-cube-omnidirectional-engine.js"
+      - "binary-cube-large-grid-ui.js"
       - "shadowrun-binary-cube-encryption.js"
       - "shadowrun-binary-cube-editor.js"
       - "shadowrun-binary-cube-auth.js"
       - "shadowrun-binary-cube-auth-ui.js"
       - "shadowrun-binary-cube-secure-export.js"
+      - "shadowrun-entry.js"
+      - "app-lite-view-mounts.js"
+      - "blacklight-binary-cube-encryption.html"
+      - "desktop/binary-cube/**"
       - "scripts/validate-binary-cube-baseline.mjs"
   workflow_dispatch:
 
@@ -38,14 +41,20 @@ jobs:
       - name: Check Binary Cube JavaScript
         run: |
           node --check shadowrun-binary-cube-engine.js
-          node --check binary-cube-large-grid-engine.js
-          node --check binary-cube-omnidirectional-engine.js
+          node --check binary-cube-large-grid-ui.js
           node --check shadowrun-binary-cube-encryption.js
           node --check shadowrun-binary-cube-editor.js
           node --check shadowrun-binary-cube-auth.js
           node --check shadowrun-binary-cube-auth-ui.js
           node --check shadowrun-binary-cube-secure-export.js
+          node --check shadowrun-entry.js
+          node --check app-lite-view-mounts.js
+          node --check desktop/binary-cube/tests/smoke.cjs
+          node --check desktop/binary-cube/scripts/prepare-app.mjs
           node --check scripts/validate-binary-cube-baseline.mjs
 
-      - name: Validate Binary Cube V0 golden evidence
+      - name: Validate Binary Cube V0 golden evidence against V1
         run: node scripts/validate-binary-cube-baseline.mjs
+
+      - name: Validate Binary Cube desktop runtime contract
+        run: node desktop/binary-cube/tests/smoke.cjs
