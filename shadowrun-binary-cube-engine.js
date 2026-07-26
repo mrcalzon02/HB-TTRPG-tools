@@ -207,9 +207,24 @@
     };
   }
 
-  function pointDepth(key, x, y) {
+  function pointDepthForKey(key, x, y) {
     const latinValue = (key.rowPermutation[x] + key.columnPermutation[y]) % key.gridSize;
     return key.depthPermutation[latinValue];
+  }
+
+  function validateCoordinate(value, size, label) {
+    const coordinate = Number(value);
+    if (!Number.isInteger(coordinate) || coordinate < 0 || coordinate >= size) {
+      fail(`${label} must be an integer from 0 through ${size - 1}.`);
+    }
+    return coordinate;
+  }
+
+  function pointDepth(rawKey, xValue, yValue) {
+    const key = validateKey(rawKey);
+    const x = validateCoordinate(xValue, key.gridSize, 'X coordinate');
+    const y = validateCoordinate(yValue, key.gridSize, 'Y coordinate');
+    return pointDepthForKey(key, x, y);
   }
 
   function rotateCell(row, column, size, quarterTurns) {
@@ -244,7 +259,7 @@
     for (let x = 0; x < size; x += 1) {
       for (let y = 0; y < size; y += 1) {
         const id = x * size + y;
-        const point = { x, y, z: pointDepth(key, x, y) };
+        const point = { x, y, z: pointDepthForKey(key, x, y) };
         const [row, column] = faceCell(point, face, size, quarterTurns);
         const index = row * size + column;
         if (order[index] !== -1) fail(`Point-field collision detected on the ${face} face at row ${row}, column ${column}.`);
@@ -252,6 +267,10 @@
       }
     }
     return order;
+  }
+
+  function projectionOrder(rawKey, face, quarterTurns = 0) {
+    return projectionOrderForKey(validateKey(rawKey), face, quarterTurns);
   }
 
   function projectionDiagnosticsForKey(key) {
@@ -345,7 +364,7 @@
     for (let x = 0; x < size; x += 1) {
       for (let y = 0; y < size; y += 1) {
         const id = x * size + y;
-        points[id] = { id, x, y, z: pointDepth(key, x, y) };
+        points[id] = { id, x, y, z: pointDepthForKey(key, x, y) };
       }
     }
     return points;
@@ -398,9 +417,19 @@
     return transformBlockWithKey(block, validateKey(rawKey), fromFace, fromTurns, toFace, toTurns);
   }
 
-  function deterministicFiller(key, blockIndex, cellCount) {
+  function deterministicFillerForKey(key, blockIndex, cellCount) {
     const random = mulberry32(fnv1a32(`${key.seed}|${key.keyId}|padding|${blockIndex}`));
     return Array.from({ length: cellCount }, () => random() >= 0.5 ? '1' : '0');
+  }
+
+  function deterministicFiller(rawKey, blockIndexValue, cellCountValue) {
+    const key = validateKey(rawKey);
+    const blockIndex = Number(blockIndexValue);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0) fail('Block index must be a non-negative integer.');
+    const defaultCellCount = key.gridSize * key.gridSize;
+    const cellCount = cellCountValue === undefined ? defaultCellCount : Number(cellCountValue);
+    if (!Number.isInteger(cellCount) || cellCount < 1) fail('Filler cell count must be a positive integer.');
+    return deterministicFillerForKey(key, blockIndex, cellCount);
   }
 
   function checksumMaterial(payload) {
@@ -437,7 +466,7 @@
     let cursor = 0;
     const encryptedBlocks = new Array(blockCount);
     for (let blockIndex = 0; blockIndex < blockCount; blockIndex += 1) {
-      const cells = deterministicFiller(key, blockIndex, cellCount);
+      const cells = deterministicFillerForKey(key, blockIndex, cellCount);
       for (const cellIndex of payloadIndexes) {
         if (cursor < bits.length) cells[cellIndex] = bits[cursor++];
       }
@@ -555,9 +584,12 @@
     validateKey,
     validatePackage,
     buildPoints,
+    pointDepth,
     faceCell,
     faceOrder,
+    projectionOrder,
     transformBlock,
+    deterministicFiller,
     projectionDiagnostics,
     assertProjectionUniqueness,
     encryptBinary,
