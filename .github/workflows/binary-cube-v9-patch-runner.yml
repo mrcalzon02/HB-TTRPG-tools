@@ -61,10 +61,10 @@ jobs:
           from pathlib import Path
           path = Path('shadowrun-binary-cube-visualizer.js')
           source = path.read_text(encoding='utf-8')
-          old = '    activeTraces = traces;'
-          new = '    activeTraces = [...traces];'
+          old = '    if (activeKey.gridSize <= MAX_MANUAL_TRACE_GRID_SIZE) activeTraces = buildTraceCollection(sourceBits, activeKey, packageObject);'
+          new = '    if (activeKey.gridSize <= MAX_MANUAL_TRACE_GRID_SIZE) activeTraces = [...buildTraceCollection(sourceBits, activeKey, packageObject)];'
           if source.count(old) != 1:
-              raise SystemExit(f'Expected one eager trace-cache assignment, found {source.count(old)}.')
+              raise SystemExit(f'Expected one eager trace-cache branch, found {source.count(old)}.')
           path.write_text(source.replace(old, new, 1), encoding='utf-8')
           PY
 
