@@ -19,7 +19,8 @@ const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visua
 
 assert.equal(typeof Renderer.createRenderer, 'function');
 assert.equal(typeof Renderer.normalizePointCoordinates, 'function');
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.1.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.2.0');
+assert.equal(typeof Renderer.rayBoxFace, 'function');
 
 const gridSizes = [4, 12, 64];
 const receipts = [];
@@ -56,6 +57,19 @@ for (const gridSize of gridSizes) {
   receipts.push(Object.freeze({ gridSize, keyId: key.keyId, pointCount: points.length }));
 }
 
+const faceRays = [
+  [[0, 0, 4], [0, 0, -1], 'front'],
+  [[0, 0, -4], [0, 0, 1], 'back'],
+  [[4, 0, 0], [-1, 0, 0], 'right'],
+  [[-4, 0, 0], [1, 0, 0], 'left'],
+  [[0, 4, 0], [0, -1, 0], 'top'],
+  [[0, -4, 0], [0, 1, 0], 'bottom']
+];
+for (const [origin, direction, expectedFace] of faceRays) {
+  assert.equal(Renderer.rayBoxFace(origin, direction), expectedFace, `${expectedFace} face picking changed.`);
+}
+assert.equal(Renderer.rayBoxFace([4, 4, 4], [1, 0, 0]), null, 'A ray pointing away from the cube must miss.');
+
 for (const forbidden of ['ShadowrunBinaryCubeEngine', 'encryptBinary', 'decryptBinary', 'traceEncryptBlock', 'transformBlock']) {
   assert.equal(rendererSource.includes(forbidden), false, `Renderer must not contain canonical engine operation ${forbidden}.`);
 }
@@ -65,6 +79,9 @@ assert.match(rendererSource, /gl\.drawArrays\(gl\.LINES/);
 assert.match(rendererSource, /ResizeObserver/);
 assert.match(rendererSource, /pointerdown/);
 assert.match(rendererSource, /wheel/);
+assert.match(rendererSource, /setDirectionState/);
+assert.match(rendererSource, /pickFaceAt/);
+assert.match(rendererSource, /gl\.drawArrays\(gl\.TRIANGLES/);
 for (const preset of ['front', 'back', 'left', 'right', 'top', 'bottom', 'perspective']) {
   assert.match(rendererSource, new RegExp(`${preset}:`), `Renderer is missing the ${preset} camera preset.`);
 }
@@ -78,6 +95,10 @@ assert.equal(controllerSource.includes('Engine.transformBlock'), false, 'V3 cont
 assert.match(controllerSource, /MAX_STATIC_GRID_SIZE = 64/);
 assert.match(controllerSource, /WebGL renderer/);
 assert.match(controllerSource, /Camera movement changes only the view/);
+assert.match(controllerSource, /Engine\.legalOutputFaces/);
+assert.match(controllerSource, /onFaceClick/);
+assert.match(controllerSource, /Generate Canonical Draft Key/);
+assert.match(controllerSource, /imported key is never silently mutated/i);
 
 for (const asset of ['binary-cube-visualizer.css', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js']) {
   assert.match(entrySource, new RegExp(asset.replaceAll('.', '\\.')));
@@ -87,14 +108,14 @@ assert.match(entrySource, /Open Visualizer/);
 assert.match(entrySource, /loadCubeVisualizer/);
 assert.match(entrySource, /loadStyle/);
 
-for (const selector of ['cube-visualizer-canvas', 'cube-visualizer-label-layer', 'cube-visualizer-face-label', 'cube-visualizer-fallback']) {
+for (const selector of ['cube-visualizer-canvas', 'cube-visualizer-label-layer', 'cube-visualizer-face-label', 'cube-visualizer-direction-label', 'cube-visualizer-fallback']) {
   assert.match(styleSource, new RegExp(`\\.${selector}`));
 }
 assert.match(styleSource, /@media \(max-width:900px\)/);
 assert.match(styleSource, /touch-action:none/);
 
 console.log(JSON.stringify({
-  format: 'hb-ttrpg-shadowrun-binary-cube-v3-shell-validation-receipt',
+  format: 'hb-ttrpg-shadowrun-binary-cube-v4-shell-validation-receipt',
   schemaVersion: '0.1.0',
   rendererVersion: Renderer.constants.RENDERER_VERSION,
   rendererAuthority: 'binary-cube-visualizer-renderer.js',
@@ -105,5 +126,8 @@ console.log(JSON.stringify({
   rendererAlgorithmIsolation: true,
   cameraPresets: 7,
   responsiveFallbackPresent: true,
+  directionalArrowsPresent: true,
+  directFacePickingPresent: true,
+  legalPairEnforcementPresent: true,
   animationPresent: false
 }, null, 2));
