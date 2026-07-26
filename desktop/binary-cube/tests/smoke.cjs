@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 
 const repositoryRoot = path.resolve(__dirname, '..', '..', '..');
-const Engine = require(path.join(repositoryRoot, 'binary-cube-omnidirectional-engine.js'));
+const Engine = require(path.join(repositoryRoot, 'shadowrun-binary-cube-engine.js'));
 const SecureExport = require(path.join(repositoryRoot, 'shadowrun-binary-cube-secure-export.js'));
 
 function bytesToBits(bytes) {
