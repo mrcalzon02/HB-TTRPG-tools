@@ -35,20 +35,9 @@ jobs:
           fetch-depth: 0
 
       - name: Apply direct V8 patch
-        run: python scripts/apply-binary-cube-v8-temporary.py
-
-      - name: Expose selected-block validation state
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('scripts/validate-binary-cube-visualizer-sequencing-browser.mjs')
-          source = path.read_text(encoding='utf-8')
-          old = "throw new Error('Selected-block scope crossed a block boundary.');"
-          new = "throw new Error('Selected-block scope crossed a block boundary: ' + JSON.stringify(selectedBlockOnly));"
-          if source.count(old) != 1:
-              raise SystemExit('Selected-block diagnostic target was not found exactly once.')
-          path.write_text(source.replace(old, new, 1), encoding='utf-8')
-          PY
+          python scripts/apply-binary-cube-v8-temporary.py
+          python scripts/apply-binary-cube-v8-browser-timing-temporary.py
 
       - name: Validate direct V8 implementation
         run: |
@@ -64,7 +53,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css
+          git add shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
           git commit -m 'feat: add Binary Cube V8 multi-block sequencing [skip ci]'
           git push origin HEAD:main
 
