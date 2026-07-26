@@ -135,7 +135,7 @@
         </div>
         <button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button>
       </div>
-      <p class="cube-visualizer-warning"><strong>Truthful geometry:</strong> the points are the exact `(x, y, z)` identities returned by the canonical engine. Orbit, pan, zoom, and camera presets alter only the view—not the key, face orientation, package, or transformation trace.</p>
+      <p class="cube-visualizer-warning"><strong>Truthful geometry:</strong> the points are the exact <code>(x, y, z)</code> identities returned by the canonical engine. Orbit, pan, zoom, and camera presets alter only the view—not the key, face orientation, package, or transformation trace.</p>
       <div class="cube-visualizer-layout">
         <aside class="cube-visualizer-controls">
           <div class="cube-visualizer-field">
