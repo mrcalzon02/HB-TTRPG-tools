@@ -9,11 +9,25 @@ on:
 
 permissions:
   contents: write
+  statuses: write
+
+concurrency:
+  group: binary-cube-v10-v4-status-alignment
+  cancel-in-progress: true
 
 jobs:
   align:
     runs-on: ubuntu-latest
     steps:
+      - name: Record alignment pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v10-v4-status-alignment' \
+            -f description='Aligning the V4 status validator with V10 announcements.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -46,3 +60,23 @@ jobs:
           git add scripts/validate-binary-cube-visualizer-browser.mjs
           git commit -m 'test: preserve Binary Cube V4 status boundary under V10'
           git push origin HEAD:main
+      - name: Record alignment success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v10-v4-status-alignment' \
+            -f description='The V4 browser status validator passed under V10.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record alignment failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v10-v4-status-alignment' \
+            -f description='The V4 browser status validator alignment failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
