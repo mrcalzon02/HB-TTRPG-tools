@@ -1,4 +1,4 @@
-# V3 milestone gate: canonical engine, golden evidence, immutable traces, static 3D shell, and desktop smoke.
+# V3 milestone gate: canonical engine, golden evidence, immutable traces, static 3D shell, real WebGL browser execution, and desktop smoke.
 name: Validate Binary Cube V3 visualizer shell
 
 on:
@@ -23,6 +23,7 @@ on:
       - "scripts/validate-binary-cube-baseline.mjs"
       - "scripts/validate-binary-cube-trace.mjs"
       - "scripts/validate-binary-cube-visualizer-shell.mjs"
+      - "scripts/validate-binary-cube-visualizer-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -42,7 +43,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Check Binary Cube JavaScript
         run: |
@@ -62,6 +63,7 @@ jobs:
           node --check scripts/validate-binary-cube-baseline.mjs
           node --check scripts/validate-binary-cube-trace.mjs
           node --check scripts/validate-binary-cube-visualizer-shell.mjs
+          node --check scripts/validate-binary-cube-visualizer-browser.mjs
 
       - name: Validate Binary Cube V0 golden evidence against V3
         run: node scripts/validate-binary-cube-baseline.mjs
@@ -71,6 +73,9 @@ jobs:
 
       - name: Validate Binary Cube V3 static visualizer shell
         run: node scripts/validate-binary-cube-visualizer-shell.mjs
+
+      - name: Validate Binary Cube V3 WebGL browser runtime
+        run: node scripts/validate-binary-cube-visualizer-browser.mjs
 
       - name: Validate Binary Cube desktop runtime contract
         run: node desktop/binary-cube/tests/smoke.cjs
