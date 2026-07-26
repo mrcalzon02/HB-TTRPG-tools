@@ -7,8 +7,9 @@
   'use strict';
 
   const PANEL_ID = 'shadowrun-binary-cube-visualizer';
-  const MAX_STATIC_GRID_SIZE = 64;
+  const MAX_STATIC_GRID_SIZE = 1024;
   const MAX_MANUAL_TRACE_GRID_SIZE = 12;
+  const MAX_SAMPLED_TRACE_GRID_SIZE = 256;
   const DEFAULT_SEED = 'binary-cube-visualizer-static-demo';
   const DEFAULT_BITS = '01001100110100110100110011010011';
   const PLAYBACK_DURATION_MS = 18000;
@@ -16,6 +17,7 @@
   const PLAYBACK_SCOPES = Object.freeze(['selected-bit', 'selected-row', 'selected-block', 'all-blocks', 'overview-only']);
   const OVERVIEW_BLOCK_DURATION_MS = 1800;
   const MASK_MODES = Object.freeze(['1', '0.75', '0.5', 'custom']);
+  const RENDER_QUALITIES = Object.freeze(['auto', 'exact', 'sampled', 'aggregate']);
   const Engine = root?.ShadowrunBinaryCubeEngine;
   const RendererApi = root?.BinaryCubeVisualizerRenderer;
   const FACES = Engine?.constants?.FACES || Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
@@ -40,6 +42,21 @@
   let playbackScope = 'selected-block';
   let playbackFrame = null;
   let playbackLastTimestamp = null;
+  let renderQuality = 'auto';
+  let activeSourceBits = '';
+  let activeBlockDescriptors = [];
+  let sceneBuildGeneration = 0;
+  let traceBuildGeneration = 0;
+  let sceneBuildHandle = null;
+  let traceBuildHandle = null;
+  let scenePreparing = false;
+  let tracePreparing = false;
+  let staleSceneResultsDiscarded = 0;
+  let staleTraceResultsDiscarded = 0;
+  let cancelledPreparations = 0;
+  let sceneBuildReceipt = null;
+  let traceBuildReceipt = null;
+  let encodingMilliseconds = 0;
 
   function fail(message) { throw new Error(message); }
   function title(value) { return String(value).replace(/^./, character => character.toUpperCase()); }
@@ -70,11 +87,57 @@
     return value == null ? null : JSON.parse(JSON.stringify(value));
   }
 
+  function nowMilliseconds() {
+    return typeof performance !== 'undefined' && typeof performance.now === 'function' ? performance.now() : Date.now();
+  }
+
+  function scheduleTask(callback) {
+    return typeof root?.setTimeout === 'function' ? root.setTimeout(callback, 0) : setTimeout(callback, 0);
+  }
+
+  function cancelTask(handle) {
+    if (handle == null) return;
+    if (typeof root?.clearTimeout === 'function') root.clearTimeout(handle);
+    else clearTimeout(handle);
+  }
+
+  function describePackageBlock(packageObject, key, blockIndexValue) {
+    const blockIndex = Number(blockIndexValue);
+    if (!packageObject || !key || !Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= packageObject.blockCount) fail('A valid package block is required.');
+    const cellCount = key.gridSize * key.gridSize;
+    const sourceStart = blockIndex * packageObject.payloadCapacity;
+    const sourceEndExclusive = Math.min(packageObject.originalBitLength, sourceStart + packageObject.payloadCapacity);
+    const sourceBitsConsumed = Math.max(0, sourceEndExclusive - sourceStart);
+    const ciphertextStart = blockIndex * cellCount;
+    const ciphertextEndExclusive = ciphertextStart + cellCount;
+    const partialPayloadFillerCells = packageObject.payloadCapacity - sourceBitsConsumed;
+    const maskFillerCells = cellCount - packageObject.payloadCapacity;
+    return Object.freeze({
+      blockIndex,
+      sourceStart,
+      sourceEndExclusive,
+      sourceBitsConsumed,
+      ciphertextStart,
+      ciphertextEndExclusive,
+      payloadCapacity: packageObject.payloadCapacity,
+      partialPayloadFillerCells,
+      maskFillerCells,
+      totalFillerCells: cellCount - sourceBitsConsumed,
+      finalPartialBlock: blockIndex === packageObject.blockCount - 1 && partialPayloadFillerCells > 0,
+      validated: true
+    });
+  }
+
+  function buildPackageBlockDescriptors(packageObject, key) {
+    return Object.freeze(Array.from({ length: packageObject.blockCount }, (_, blockIndex) => describePackageBlock(packageObject, key, blockIndex)));
+  }
+
   function requireDependencies() {
     if (!Engine) fail('The canonical Binary Cube engine must load before the visualizer.');
     if (!RendererApi?.createRenderer) fail('The Binary Cube WebGL renderer must load before the visualizer.');
     if (typeof RendererApi.resolveTraceTimeline !== 'function' || typeof RendererApi.tracePointPosition !== 'function') fail('The Binary Cube V6 trace-time renderer API is unavailable.');
-    for (const operation of ['createKey', 'validateKey', 'encryptBinary', 'validatePackage', 'decryptBinary', 'traceEncryptBlock', 'validateTransformationTrace']) {
+    if (typeof RendererApi.resolveRenderPlan !== 'function') fail('The Binary Cube V9 rendering-tier API is unavailable.');
+    for (const operation of ['createKey', 'validateKey', 'encryptBinary', 'validatePackage', 'decryptBinary', 'traceEncryptBlock', 'validateTransformationTrace', 'buildPointsById']) {
       if (typeof Engine[operation] !== 'function') fail(`The canonical Binary Cube engine operation ${operation} is unavailable.`);
     }
   }
@@ -327,8 +390,78 @@
     return scopeValue === 'all-blocks' || scopeValue === 'overview-only';
   }
 
+  function cancelPendingPreparation(panel, message = '') {
+    const hadPending = scenePreparing || tracePreparing || sceneBuildHandle != null || traceBuildHandle != null;
+    sceneBuildGeneration += 1;
+    traceBuildGeneration += 1;
+    cancelTask(sceneBuildHandle);
+    cancelTask(traceBuildHandle);
+    sceneBuildHandle = null;
+    traceBuildHandle = null;
+    scenePreparing = false;
+    tracePreparing = false;
+    if (hadPending) cancelledPreparations += 1;
+    updatePerformancePanel(panel);
+    if (message && hadPending) setStatus(panel, message, 'success');
+    return hadPending;
+  }
+
+  function updatePerformancePanel(panel) {
+    if (!panel) return;
+    const rendererPerformance = renderer?.getPerformanceState?.();
+    const notice = panel.querySelector('[data-cube-visualizer-representation-notice]');
+    const metrics = panel.querySelector('[data-cube-visualizer-performance-metrics]');
+    const cancelButton = panel.querySelector('[data-cube-visualizer-cancel-preparation]');
+    if (cancelButton) cancelButton.disabled = !(scenePreparing || tracePreparing);
+    if (notice) {
+      const plan = rendererPerformance?.renderPlan || sceneBuildReceipt?.renderPlan;
+      notice.textContent = plan?.disclosure || 'No render representation is active.';
+      notice.dataset.tier = plan?.tier || 'none';
+    }
+    if (metrics) {
+      const rendered = rendererPerformance?.renderedPointCount ?? sceneBuildReceipt?.renderedPointCount ?? 0;
+      const total = rendererPerformance?.totalPointCount ?? sceneBuildReceipt?.totalPointCount ?? 0;
+      metrics.innerHTML = `<span>Scene ${sceneBuildReceipt ? `${sceneBuildReceipt.milliseconds.toFixed(2)} ms` : '—'}</span><span>Trace ${traceBuildReceipt ? `${traceBuildReceipt.milliseconds.toFixed(2)} ms` : '—'}</span><span>Encode ${encodingMilliseconds ? `${encodingMilliseconds.toFixed(2)} ms` : '—'}</span><span>Visible ${rendered.toLocaleString()} / ${total.toLocaleString()}</span><span>Buffer ${rendererPerformance ? Math.round(rendererPerformance.bufferBytes / 1024).toLocaleString() : 0} KiB</span><span>Stale results ${staleSceneResultsDiscarded + staleTraceResultsDiscarded}</span>`;
+    }
+  }
+
+  function buildSceneRepresentation(panel, key, qualityValue = renderQuality, options = {}) {
+    const token = ++sceneBuildGeneration;
+    cancelTask(sceneBuildHandle);
+    sceneBuildHandle = null;
+    scenePreparing = true;
+    updatePerformancePanel(panel);
+    const perform = () => {
+      sceneBuildHandle = null;
+      const started = nowMilliseconds();
+      const renderPlan = RendererApi.resolveRenderPlan(key.gridSize, qualityValue);
+      const points = Engine.buildPointsById(key, renderPlan.pointIds);
+      if (token !== sceneBuildGeneration || activeKey?.keyId !== key.keyId) {
+        staleSceneResultsDiscarded += 1;
+        scenePreparing = false;
+        updatePerformancePanel(panel);
+        return null;
+      }
+      renderer.setScene({ gridSize: key.gridSize, totalPointCount: key.gridSize * key.gridSize, pointIds: renderPlan.pointIds, points, renderPlan });
+      scenePreparing = false;
+      sceneBuildReceipt = Object.freeze({ milliseconds: nowMilliseconds() - started, renderedPointCount: points.length, totalPointCount: key.gridSize * key.gridSize, renderPlan });
+      panel.querySelector('[data-cube-visualizer-summary]').textContent = `Key ${key.keyId} · ${key.gridSize} × ${key.gridSize} · ${(key.gridSize * key.gridSize).toLocaleString()} exact keyed points · ${points.length.toLocaleString()} rendered · ${key.mask.filter(Boolean).length.toLocaleString()} payload cells`;
+      updatePerformancePanel(panel);
+      renderer.setDirectionState(rendererDirectionState());
+      if (activeTrace && activeTrace.gridSize === key.gridSize) updateTimelineDisplay(panel);
+      return sceneBuildReceipt;
+    };
+    if (key.gridSize <= RendererApi.constants.RENDER_TIER_POLICY.batchedMaximum && options.defer !== true) return perform();
+    sceneBuildHandle = scheduleTask(perform);
+    return null;
+  }
+
   function traceCellButton(bit, pointId, label, kind, extra = '') {
     return `<button type="button" class="cube-trace-cell ${escapeHtml(kind)} ${escapeHtml(extra)}" data-cube-trace-point="${pointId}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${bit}</span><small>P${pointId}</small></button>`;
+  }
+
+  function clearTraceCollections(panel) {
+    for (const selector of ['[data-cube-trace-source-strip]', '[data-cube-trace-framed-grid]', '[data-cube-trace-input-grid]', '[data-cube-trace-point-grid]', '[data-cube-trace-output-grid]', '[data-cube-trace-output-strip]']) panel.querySelector(selector)?.replaceChildren();
   }
 
   function renderTraceCollections(panel) {
@@ -632,9 +765,15 @@
   function clearPackage(panel, message = '') {
     activePackage = null;
     activeTraces = [];
+    activeBlockDescriptors = [];
+    activeSourceBits = '';
     selectedBlockIndex = 0;
     recoveredBits = '';
     roundTripValid = false;
+    traceBuildGeneration += 1;
+    cancelTask(traceBuildHandle);
+    traceBuildHandle = null;
+    tracePreparing = false;
     panel.querySelector('[data-cube-encoder-package]').value = '';
     panel.querySelector('[data-cube-encoder-recovered]').value = '';
     panel.querySelector('[data-cube-encoder-block]').replaceChildren();
@@ -665,14 +804,24 @@
     return Object.freeze(traces);
   }
 
+  function buildValidatedTraceBlock(bits, key, packageObject, blockIndex) {
+    const started = nowMilliseconds();
+    const trace = Engine.traceEncryptBlock(bits, key, blockIndex);
+    Engine.validateTransformationTrace(trace, key);
+    const cellCount = key.gridSize * key.gridSize;
+    const expectedBlock = packageObject.ciphertext.slice(blockIndex * cellCount, (blockIndex + 1) * cellCount);
+    if (trace.outputBlock !== expectedBlock) fail(`Trace block ${blockIndex} does not match the canonical package ciphertext.`);
+    traceBuildReceipt = Object.freeze({ milliseconds: nowMilliseconds() - started, blockIndex, pointCount: trace.cellCount });
+    return trace;
+  }
+
   function populateBlockSelector(panel) {
     const select = panel.querySelector('[data-cube-encoder-block]');
-    select.replaceChildren(...activeTraces.map(trace => {
+    select.replaceChildren(...activeBlockDescriptors.map(descriptor => {
       const option = document.createElement('option');
-      option.value = String(trace.blockIndex);
-      const descriptor = describeTraceBlock(trace, activePackage);
-      option.textContent = `Block ${trace.blockIndex + 1} · source ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1} · ciphertext ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}${descriptor.finalPartialBlock ? ' · FINAL PARTIAL' : ''}`;
-      option.selected = trace.blockIndex === selectedBlockIndex;
+      option.value = String(descriptor.blockIndex);
+      option.textContent = `Block ${descriptor.blockIndex + 1} · source ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1} · ciphertext ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}${descriptor.finalPartialBlock ? ' · FINAL PARTIAL' : ''}`;
+      option.selected = descriptor.blockIndex === selectedBlockIndex;
       return option;
     }));
     panel.querySelector('[data-cube-encoder-source-index]').max = String(Math.max(0, activePackage.originalBitLength - 1));
@@ -683,10 +832,9 @@
   function renderBlockTimeline(panel) {
     const target = panel.querySelector('[data-cube-encoder-block-timeline]');
     if (!target) return;
-    target.innerHTML = activeTraces.map(trace => {
-      const descriptor = describeTraceBlock(trace, activePackage);
+    target.innerHTML = activeBlockDescriptors.map(descriptor => {
       const classes = ['cube-block-marker', descriptor.finalPartialBlock ? 'partial' : '', descriptor.validated ? 'validated' : 'invalid'].filter(Boolean).join(' ');
-      return `<button type="button" class="${classes}" data-cube-encoder-block-marker="${trace.blockIndex}" title="Source ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1}; ciphertext ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}; ${descriptor.totalFillerCells} filler cells"><strong>${trace.blockIndex + 1}</strong><span>S ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1}</span><span>C ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}</span><small>${descriptor.finalPartialBlock ? 'FINAL PARTIAL' : 'VALID'}</small></button>`;
+      return `<button type="button" class="${classes}" data-cube-encoder-block-marker="${descriptor.blockIndex}" title="Source ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1}; ciphertext ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}; ${descriptor.totalFillerCells} filler cells"><strong>${descriptor.blockIndex + 1}</strong><span>S ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1}</span><span>C ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}</span><small>${descriptor.finalPartialBlock ? 'FINAL PARTIAL' : 'VALID'}</small></button>`;
     }).join('');
     updateBlockTimeline(panel);
   }
@@ -702,7 +850,7 @@
   function renderBlockRangeInspector(panel) {
     const target = panel.querySelector('[data-cube-encoder-range-inspector]');
     if (!target || !activePackage || !activeTraces.length) return;
-    const descriptor = describeTraceBlock(activeTraces[selectedBlockIndex], activePackage);
+    const descriptor = activeBlockDescriptors[selectedBlockIndex];
     target.innerHTML = `<strong>Block ${descriptor.blockIndex + 1} of ${activeTraces.length}${descriptor.finalPartialBlock ? ' · final partial block' : ''}</strong><span>Source bits ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1} (${descriptor.sourceBitsConsumed} consumed)</span><span>Ciphertext bits ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}</span><span>${descriptor.partialPayloadFillerCells} partial payload filler · ${descriptor.maskFillerCells} mask filler · ${descriptor.totalFillerCells} total deterministic filler</span><span>${descriptor.validated ? 'Trace output validated against the exact package slice.' : 'Trace validation failed.'}</span>`;
     panel.querySelector('[data-cube-encoder-previous-block]').disabled = selectedBlockIndex <= 0;
     panel.querySelector('[data-cube-encoder-next-block]').disabled = selectedBlockIndex >= activeTraces.length - 1;
@@ -715,15 +863,34 @@
   }
 
   function jumpToSourceBit(panel, sourceBitIndexValue) {
-    const location = locateSourceBit(activeTraces, sourceBitIndexValue);
-    loadSelectedBlock(panel, location.blockIndex, { quiet: true, pointId: location.pointId, traceTime: 0 });
+    const sourceBitIndex = Number(sourceBitIndexValue);
+    if (!Number.isInteger(sourceBitIndex) || sourceBitIndex < 0 || sourceBitIndex >= activePackage.originalBitLength) fail('Source bit index is outside the active package.');
+    const blockIndex = Math.floor(sourceBitIndex / activePackage.payloadCapacity);
+    loadSelectedBlock(panel, blockIndex, { quiet: true, sourceBitIndex, traceTime: 0 });
+    if (!activeTrace) {
+      setStatus(panel, `Source bit ${sourceBitIndex} is in block ${blockIndex + 1}. Exact point inspection is disabled above ${MAX_SAMPLED_TRACE_GRID_SIZE} × ${MAX_SAMPLED_TRACE_GRID_SIZE}, but package ranges remain exact.`, 'success');
+      return Object.freeze({ sourceBitIndex, blockIndex, pointId: null });
+    }
+    const location = locateSourceBit([activeTrace], sourceBitIndex);
+    selectPoint(panel, location.pointId);
     setStatus(panel, `Source bit ${location.sourceBitIndex} is block ${location.blockIndex + 1}, point P${location.pointId}, input cell ${location.inputCellIndex}, and ciphertext index ${location.ciphertextIndex}.`, 'success');
     return location;
   }
 
   function jumpToCiphertextBit(panel, ciphertextIndexValue) {
-    const location = locateCiphertextBit(activeTraces, ciphertextIndexValue);
-    loadSelectedBlock(panel, location.blockIndex, { quiet: true, pointId: location.pointId, traceTime: 8 / 9 });
+    const ciphertextIndex = Number(ciphertextIndexValue);
+    if (!Number.isInteger(ciphertextIndex) || ciphertextIndex < 0 || ciphertextIndex >= activePackage.ciphertext.length) fail('Ciphertext bit index is outside the active package.');
+    const cellCount = activeKey.gridSize * activeKey.gridSize;
+    const blockIndex = Math.floor(ciphertextIndex / cellCount);
+    loadSelectedBlock(panel, blockIndex, { quiet: true, ciphertextIndex, traceTime: 8 / 9 });
+    if (!activeTrace) {
+      setStatus(panel, `Ciphertext bit ${ciphertextIndex} is in block ${blockIndex + 1}. Exact point inspection is disabled above ${MAX_SAMPLED_TRACE_GRID_SIZE} × ${MAX_SAMPLED_TRACE_GRID_SIZE}, but ciphertext indexing remains exact.`, 'success');
+      return Object.freeze({ ciphertextIndex, blockIndex, pointId: null });
+    }
+    const outputCellIndex = ciphertextIndex % activeTrace.cellCount;
+    const pointId = activeTrace.outputProjectionPointIds[outputCellIndex];
+    const location = Object.freeze({ ciphertextIndex, blockIndex, pointId, inputCellIndex: activeTrace.inputCellIndexByPoint[pointId], outputCellIndex, sourceBitIndex: activeTrace.sourceBitIndexByPoint[pointId], bit: activeTrace.outputBlock[outputCellIndex], kind: activeTrace.cellKindByPoint[pointId] });
+    selectPoint(panel, location.pointId);
     setStatus(panel, `Ciphertext bit ${location.ciphertextIndex} is block ${location.blockIndex + 1}, output cell ${location.outputCellIndex}, point P${location.pointId}, and ${location.sourceBitIndex >= 0 ? `source bit ${location.sourceBitIndex}` : 'deterministic filler'}.`, 'success');
     return location;
   }
@@ -743,30 +910,81 @@
     roundTripNode.dataset.state = roundTripValid ? 'valid' : 'idle';
   }
 
+  function applyPreparedTrace(panel, trace, blockIndex, options = {}) {
+    activeTraces[blockIndex] = trace;
+    activeTrace = trace;
+    traceTime = options.traceTime == null ? 0 : clamp(Number(options.traceTime) || 0, 0, 1);
+    let requestedPoint = Number(options.pointId);
+    if (Number.isInteger(options.sourceBitIndex)) requestedPoint = trace.sourceBitIndexByPoint.indexOf(Number(options.sourceBitIndex));
+    if (Number.isInteger(options.ciphertextIndex)) requestedPoint = trace.outputProjectionPointIds[Number(options.ciphertextIndex) % trace.cellCount];
+    selectedPointId = Number.isInteger(requestedPoint) && requestedPoint >= 0 && requestedPoint < trace.cellCount ? requestedPoint : firstPayloadPoint(trace);
+    const representationNotice = panel.querySelector('[data-cube-trace-representation-notice]');
+    if (activeKey.gridSize <= MAX_MANUAL_TRACE_GRID_SIZE) {
+      renderTraceCollections(panel);
+      representationNotice.textContent = 'Detailed trace: every source, face, point, and output cell is represented in the document and 3D scene.';
+    } else {
+      clearTraceCollections(panel);
+      const plan = renderer?.getPerformanceState?.().renderPlan;
+      representationNotice.textContent = `Sampled trace: exact ${trace.cellCount.toLocaleString()}-point canonical state with ${plan?.renderedPointCount?.toLocaleString() || 'a deterministic cohort'} rendered in 3D. Cell grids are suppressed to prevent DOM expansion.`;
+    }
+    renderPhaseMarkers(panel);
+    panel.querySelector('[data-cube-trace-workspace]').hidden = false;
+    panel.querySelector('[data-cube-trace-unavailable]').hidden = true;
+    updateTimelineDisplay(panel);
+    tracePreparing = false;
+    updatePerformancePanel(panel);
+  }
+
   function loadSelectedBlock(panel, blockIndexValue, options = {}) {
-    if (!activePackage || !activeTraces.length) fail('Encrypt or import a package before selecting a block.');
+    if (!activePackage || !activeBlockDescriptors.length) fail('Encrypt or import a package before selecting a block.');
     const blockIndex = Number(blockIndexValue);
-    if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= activeTraces.length) fail(`Block index must be from 0 through ${activeTraces.length - 1}.`);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= activeBlockDescriptors.length) fail(`Block index must be from 0 through ${activeBlockDescriptors.length - 1}.`);
     if (!options.keepPlaying) pausePlayback(panel, false);
     selectedBlockIndex = blockIndex;
     panel.querySelector('[data-cube-encoder-block]').value = String(blockIndex);
     renderPackageSummary(panel);
     updateBlockTimeline(panel);
     renderBlockRangeInspector(panel);
-    if (activeKey.gridSize > MAX_MANUAL_TRACE_GRID_SIZE) {
-      clearTrace(panel, `Package block ${blockIndex + 1} is valid, but V8 detailed animation supports grids through ${MAX_MANUAL_TRACE_GRID_SIZE} × ${MAX_MANUAL_TRACE_GRID_SIZE}. The complete ${activeKey.gridSize} × ${activeKey.gridSize} point field remains visible.`);
+    traceBuildGeneration += 1;
+    cancelTask(traceBuildHandle);
+    traceBuildHandle = null;
+    tracePreparing = false;
+    if (activeKey.gridSize > MAX_SAMPLED_TRACE_GRID_SIZE) {
+      activeTrace = null;
+      clearTrace(panel, `Block ${blockIndex + 1} is exact and package-valid. V9 aggregate rendering does not allocate a ${(activeKey.gridSize * activeKey.gridSize).toLocaleString()}-point trace above ${MAX_SAMPLED_TRACE_GRID_SIZE} × ${MAX_SAMPLED_TRACE_GRID_SIZE}; source and ciphertext ranges remain fully inspectable.`);
+      updatePerformancePanel(panel);
       return;
     }
-    activeTrace = activeTraces[blockIndex];
-    traceTime = options.traceTime == null ? 0 : clamp(Number(options.traceTime) || 0, 0, 1);
-    const requestedPoint = Number(options.pointId);
-    selectedPointId = Number.isInteger(requestedPoint) && requestedPoint >= 0 && requestedPoint < activeTrace.cellCount ? requestedPoint : firstPayloadPoint(activeTrace);
-    renderTraceCollections(panel);
-    renderPhaseMarkers(panel);
-    panel.querySelector('[data-cube-trace-workspace]').hidden = false;
-    panel.querySelector('[data-cube-trace-unavailable]').hidden = true;
-    updateTimelineDisplay(panel);
-    if (!options.quiet) setStatus(panel, `Package block ${blockIndex + 1} selected. Its trace output exactly matches ciphertext indexes ${blockIndex * activeTrace.cellCount} through ${(blockIndex + 1) * activeTrace.cellCount - 1}.`, 'success');
+    const cached = activeTraces[blockIndex];
+    if (cached) {
+      applyPreparedTrace(panel, cached, blockIndex, options);
+      if (!options.quiet) setStatus(panel, `Package block ${blockIndex + 1} selected from the validated trace cache.`, 'success');
+      return;
+    }
+    activeTrace = null;
+    renderer?.clearTraceState();
+    const token = traceBuildGeneration;
+    const prepare = () => {
+      traceBuildHandle = null;
+      const trace = buildValidatedTraceBlock(activeSourceBits, activeKey, activePackage, blockIndex);
+      if (token !== traceBuildGeneration || activePackage?.checksum == null || selectedBlockIndex !== blockIndex) {
+        staleTraceResultsDiscarded += 1;
+        tracePreparing = false;
+        updatePerformancePanel(panel);
+        return;
+      }
+      applyPreparedTrace(panel, trace, blockIndex, options);
+      if (!options.quiet) setStatus(panel, `Package block ${blockIndex + 1} prepared as a validated ${activeKey.gridSize > MAX_MANUAL_TRACE_GRID_SIZE ? 'sampled' : 'detailed'} trace.`, 'success');
+    };
+    if (activeKey.gridSize <= RendererApi.constants.RENDER_TIER_POLICY.batchedMaximum) prepare();
+    else {
+      tracePreparing = true;
+      panel.querySelector('[data-cube-trace-workspace]').hidden = true;
+      panel.querySelector('[data-cube-trace-unavailable]').hidden = false;
+      panel.querySelector('[data-cube-trace-unavailable]').textContent = `Preparing canonical block ${blockIndex + 1} trace. A newer key or block selection will invalidate this result.`;
+      updatePerformancePanel(panel);
+      traceBuildHandle = scheduleTask(prepare);
+    }
   }
 
   function applyPackage(panel, packageObjectValue, sourceBitsValue, options = {}) {
@@ -774,27 +992,31 @@
     const packageObject = Engine.validatePackage(packageObjectValue, activeKey);
     const sourceBits = normalizeBits(sourceBitsValue, 'Recovered package plaintext');
     if (sourceBits.length !== packageObject.originalBitLength) fail('Recovered plaintext length does not match the package framing metadata.');
-    const traces = buildTraceCollection(sourceBits, activeKey, packageObject);
     const decrypted = Engine.decryptBinary(packageObject, activeKey);
     const reencrypted = Engine.encryptBinary(decrypted, activeKey);
     const exactPackage = JSON.stringify(reencrypted) === JSON.stringify(packageObject);
     activePackage = packageObject;
-    activeTraces = traces;
+    activeSourceBits = sourceBits;
+    activeBlockDescriptors = buildPackageBlockDescriptors(packageObject, activeKey);
+    selectedBlockIndex = clamp(Number(options.selectedBlockIndex) || 0, 0, packageObject.blockCount - 1);
+    if (activeKey.gridSize <= MAX_MANUAL_TRACE_GRID_SIZE) activeTraces = [...buildTraceCollection(sourceBits, activeKey, packageObject)];
+    else activeTraces = new Array(packageObject.blockCount).fill(null);
     recoveredBits = decrypted;
     roundTripValid = decrypted === sourceBits && exactPackage;
-    selectedBlockIndex = clamp(Number(options.selectedBlockIndex) || 0, 0, traces.length - 1);
     panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);
     panel.querySelector('[data-cube-encoder-recovered]').value = decrypted;
     populateBlockSelector(panel);
     renderPackageSummary(panel);
     loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });
-    return Object.freeze({ key: activeKey, packageObject, traces, recoveredBits: decrypted, roundTripValid });
+    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid });
   }
 
   function encryptCurrentInput(panel, options = {}) {
     if (!activeKey) fail('Generate or import a canonical key before encryption.');
     const bits = normalizeBits(panel.querySelector('[data-cube-trace-bits]').value);
+    const started = nowMilliseconds();
     const packageObject = Engine.encryptBinary(bits, activeKey);
+    encodingMilliseconds = nowMilliseconds() - started;
     const result = applyPackage(panel, packageObject, bits, { selectedBlockIndex: options.selectedBlockIndex ?? 0 });
     if (!result.roundTripValid) fail('Round-trip validation failed after canonical encryption.');
     if (!options.quiet) setStatus(panel, `${packageObject.originalBitLength} bits encrypted into ${packageObject.blockCount} canonical package block${packageObject.blockCount === 1 ? '' : 's'}; block ${selectedBlockIndex + 1} is ready for animation.`, 'success');
@@ -836,24 +1058,22 @@
 
   function renderKey(panel, key, origin = 'generated', options = {}) {
     const validated = Engine.validateKey(key);
-    if (validated.gridSize > MAX_STATIC_GRID_SIZE) fail(`The detailed point renderer accepts grids through ${MAX_STATIC_GRID_SIZE} × ${MAX_STATIC_GRID_SIZE}. Full-resolution encoding remains available in the laboratory; larger rendering tiers are scheduled for V9.`);
+    if (validated.gridSize > MAX_STATIC_GRID_SIZE) fail(`The Binary Cube visualizer accepts grids through ${MAX_STATIC_GRID_SIZE} × ${MAX_STATIC_GRID_SIZE}.`);
     pausePlayback(panel, false);
-    const points = Engine.buildPoints(validated);
-    renderer.setScene({ gridSize: validated.gridSize, points });
+    cancelPendingPreparation(panel);
     activeKey = validated;
     activeKeyOrigin = origin;
     syncControlsFromKey(panel, validated, options.maskMode || 'custom');
-    renderer.setDirectionState(rendererDirectionState());
     panel.querySelector('[data-cube-visualizer-key]').value = JSON.stringify(validated, null, 2);
-    panel.querySelector('[data-cube-visualizer-summary]').textContent = `Key ${validated.keyId} · ${validated.gridSize} × ${validated.gridSize} · ${points.length.toLocaleString()} exact keyed points · ${validated.mask.filter(Boolean).length.toLocaleString()} payload cells`;
+    panel.querySelector('[data-cube-visualizer-summary]').textContent = `Preparing ${validated.gridSize} × ${validated.gridSize} representation for ${(validated.gridSize * validated.gridSize).toLocaleString()} exact keyed points.`;
     updateDirectionSummary(panel);
     clearPackage(panel, 'Canonical key loaded. Encrypt manual or file-derived bits to generate a complete package.');
-    if (options.autoEncrypt !== false && panel.querySelector('[data-cube-trace-bits]').value.trim()) {
-      encryptCurrentInput(panel, { quiet: true });
-    }
+    buildSceneRepresentation(panel, validated, renderQuality);
+    if (options.autoEncrypt !== false && panel.querySelector('[data-cube-trace-bits]').value.trim()) encryptCurrentInput(panel, { quiet: true });
     const originText = origin === 'generated' ? 'Generated canonical key' : origin === 'handoff' ? 'Handoff key' : 'Imported canonical key';
     const packageText = activePackage ? ` Package ${activePackage.checksum} is ready with ${activePackage.blockCount} block${activePackage.blockCount === 1 ? '' : 's'}.` : '';
-    setStatus(panel, `${originText} ${validated.keyId} rendered.${packageText} Camera movement changes only the view.`, 'success');
+    setStatus(panel, `${originText} ${validated.keyId} accepted.${packageText} The renderer may use a disclosed sampled representation; encoding remains exact.`, 'success');
+    updatePerformancePanel(panel);
     return validated;
   }
 
@@ -894,7 +1114,7 @@
       fallback.hidden = true;
     } catch (error) {
       fallback.hidden = false;
-      fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V7 scene.`;
+      fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V9 scene.`;
       setStatus(panel, error.message, 'error');
       throw error;
     }
@@ -941,6 +1161,18 @@
     panel.querySelector('[data-cube-visualizer-output-turns]').addEventListener('change', () => markDraftChanged(panel, 'Output orientation draft changed.'));
     panel.querySelector('[data-cube-visualizer-reset-camera]').addEventListener('click', () => renderer?.resetCamera());
     panel.querySelectorAll('[data-cube-visualizer-camera]').forEach(button => button.addEventListener('click', () => renderer?.setCameraPreset(button.dataset.cubeVisualizerCamera)));
+    panel.querySelector('[data-cube-visualizer-render-quality]').addEventListener('change', event => {
+      const quality = event.target.value;
+      if (!RENDER_QUALITIES.includes(quality)) return;
+      renderQuality = quality;
+      if (activeKey) {
+        cancelPendingPreparation(panel);
+        buildSceneRepresentation(panel, activeKey, renderQuality, { defer: activeKey.gridSize > RendererApi.constants.RENDER_TIER_POLICY.batchedMaximum });
+        if (activeTrace) updateTimelineDisplay(panel);
+      }
+      setStatus(panel, `Rendering quality changed to ${quality}. Canonical package and encoding quality were not changed.`, 'success');
+    });
+    panel.querySelector('[data-cube-visualizer-cancel-preparation]').addEventListener('click', () => cancelPendingPreparation(panel, 'Pending scene or trace preparation cancelled. Existing canonical package state was retained.'));
 
     panel.querySelector('[data-cube-encoder-file]').addEventListener('change', async event => {
       try { await importPlainFile(panel, event.target.files?.[0]); }
@@ -1039,12 +1271,12 @@
     panel.id = PANEL_ID;
     panel.className = 'cube-visualizer-panel';
     panel.innerHTML = `
-      <div class="cube-visualizer-header"><div><p class="eyebrow">V8 multi-block sequencing · exact source and ciphertext inspection</p><h2>Binary Cube Encoder Visualizer</h2><p>Encrypt complete packages, navigate every verified block, jump directly to source or ciphertext bits, and play selected or package-wide trace scopes without changing canonical output.</p></div><button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button></div>
-      <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. V8 sequencing reads validated trace collections and never substitutes for canonical encryption or decryption.</p>
+      <div class="cube-visualizer-header"><div><p class="eyebrow">V9 rendering scale · deterministic performance tiers</p><h2>Binary Cube Encoder Visualizer</h2><p>Encode at full canonical resolution while the WebGL scene selects a measured exact, sampled, or aggregate representation appropriate to the grid size.</p></div><button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button></div>
+      <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. V9 rendering tiers never modify keys, masks, traces, ciphertext, checksums, or recovered plaintext.</p>
       <div class="cube-visualizer-layout">
         <aside class="cube-visualizer-controls">
           <div class="cube-visualizer-field"><label for="cube-visualizer-seed">Key seed</label><input id="cube-visualizer-seed" type="text" value="${DEFAULT_SEED}" spellcheck="false" data-cube-visualizer-seed></div>
-          <div class="cube-visualizer-field"><label for="cube-visualizer-size">Grid size</label><select id="cube-visualizer-size" data-cube-visualizer-size><option value="4">4 × 4</option><option value="12">12 × 12</option><option value="20">20 × 20</option><option value="28">28 × 28</option><option value="36">36 × 36</option><option value="44">44 × 44</option><option value="52">52 × 52</option><option value="60">60 × 60</option><option value="64">64 × 64</option></select></div>
+          <div class="cube-visualizer-field"><label for="cube-visualizer-size">Grid size</label><select id="cube-visualizer-size" data-cube-visualizer-size><option value="4">4 × 4</option><option value="12">12 × 12</option><option value="20">20 × 20</option><option value="28">28 × 28</option><option value="36">36 × 36</option><option value="44">44 × 44</option><option value="52">52 × 52</option><option value="60">60 × 60</option><option value="64">64 × 64</option><option value="96">96 × 96</option><option value="128">128 × 128</option><option value="192">192 × 192</option><option value="256">256 × 256</option><option value="384">384 × 384</option><option value="512">512 × 512</option><option value="768">768 × 768</option><option value="1024">1024 × 1024</option></select></div>
           <div class="cube-visualizer-field"><label for="cube-visualizer-mask-mode">Data-entry mask</label><select id="cube-visualizer-mask-mode" data-cube-visualizer-mask-mode><option value="1">Full face · 100% payload</option><option value="0.75">Sparse · 75% payload</option><option value="0.5">Sparse · 50% payload</option><option value="custom">Custom exact mask</option></select></div>
           <div class="cube-visualizer-field cube-custom-mask-field" hidden data-cube-visualizer-custom-mask-field><label for="cube-visualizer-custom-mask">Custom mask bits</label><textarea id="cube-visualizer-custom-mask" spellcheck="false" data-cube-visualizer-custom-mask></textarea><small>Use one digit per face cell: 1 accepts payload; 0 receives deterministic filler.</small></div>
           <fieldset class="cube-visualizer-direction-controls"><legend>Encoding direction draft</legend>
@@ -1057,6 +1289,7 @@
           <div class="cube-visualizer-field"><label for="cube-visualizer-key">Canonical key JSON</label><textarea id="cube-visualizer-key" spellcheck="false" data-cube-visualizer-key></textarea></div>
           <div class="cube-visualizer-actions"><button type="button" class="layout-button" data-cube-encoder-copy-key>Copy Key</button><button type="button" class="layout-button" data-cube-encoder-download-key>Download Key</button><button type="button" class="layout-button" data-cube-encoder-handoff-lab>Open Package in Laboratory</button></div>
           <div><strong>Camera presets</strong><div class="cube-visualizer-camera-controls"><button type="button" class="layout-button" data-cube-visualizer-reset-camera>Perspective</button>${FACES.map(face => `<button type="button" class="layout-button" data-cube-visualizer-camera="${face}">${title(face)}</button>`).join('')}</div></div>
+          <section class="cube-performance-panel"><div class="cube-visualizer-field"><label for="cube-visualizer-render-quality">Rendering quality</label><select id="cube-visualizer-render-quality" data-cube-visualizer-render-quality><option value="auto" selected>Automatic measured tier</option><option value="exact">Exact points where safe</option><option value="sampled">Deterministic 8,192-point sample</option><option value="aggregate">Deterministic 2,048-point aggregate</option></select></div><p class="cube-representation-notice" data-tier="none" data-cube-visualizer-representation-notice>No render representation is active.</p><div class="cube-performance-metrics" data-cube-visualizer-performance-metrics></div><button type="button" class="layout-button" disabled data-cube-visualizer-cancel-preparation>Cancel Pending Preparation</button></section>
           <div class="cube-visualizer-status" role="status" aria-live="polite" data-cube-visualizer-status>Preparing the canonical demonstration key and package.</div>
         </aside>
         <div class="cube-visualizer-main-column">
@@ -1078,6 +1311,7 @@
             <div class="cube-bit-jump-controls"><label>Source bit index<input type="number" min="0" step="1" value="0" data-cube-encoder-source-index></label><button type="button" class="layout-button" data-cube-encoder-source-jump>Jump to Source Bit</button><label>Ciphertext bit index<input type="number" min="0" step="1" value="0" data-cube-encoder-ciphertext-index></label><button type="button" class="layout-button" data-cube-encoder-ciphertext-jump>Jump to Ciphertext Bit</button></div>
             <p class="cube-trace-unavailable" data-cube-trace-unavailable>Encrypt or import a package to select a block for animation.</p>
             <div hidden data-cube-trace-workspace>
+              <p class="cube-trace-representation-notice" data-cube-trace-representation-notice>Detailed trace representation.</p>
               <div class="cube-trace-phase-bar"><strong data-cube-trace-phase-name>Block 1 · phase 1</strong><div class="cube-trace-controls"><button type="button" class="layout-button" data-cube-trace-first>First</button><button type="button" class="layout-button" data-cube-trace-previous>Previous Phase</button><button type="button" class="layout-button" data-cube-trace-reverse-play>Reverse</button><button type="button" class="layout-button" data-cube-trace-pause>Pause</button><button type="button" class="link-button" data-cube-trace-play>Play</button><button type="button" class="layout-button" data-cube-trace-next>Next Phase</button><button type="button" class="layout-button" data-cube-trace-last>Last</button><button type="button" class="layout-button" data-cube-trace-restart>Restart</button></div></div>
               <div class="cube-trace-playback-options"><label>Speed<select data-cube-trace-speed>${PLAYBACK_SPEEDS.map(speed => `<option value="${speed}"${speed === 1 ? ' selected' : ''}>${speed}×</option>`).join('')}</select></label><label>Package scope<select data-cube-trace-scope><option value="selected-bit">Selected bit</option><option value="selected-row">Selected row</option><option value="selected-block" selected>Selected block</option><option value="all-blocks">All blocks</option><option value="overview-only">Overview only</option></select></label><label>Motion cohort<select data-cube-trace-mode><option value="all">All bits</option><option value="selected">Selected bit only</option><option value="row">Selected input row</option></select></label></div>
               <div class="cube-trace-timeline"><input type="range" min="0" max="1000" step="1" value="0" aria-label="Binary Cube selected-block trace timeline" data-cube-trace-timeline><output data-cube-trace-timeline-readout>0.0% · segment 0.0%</output></div>
@@ -1149,6 +1383,8 @@
     const details = selectedTraceDetails();
     const state = timelineState();
     const rendered = renderer?.getTraceState?.();
+    const rendererPerformance = renderer?.getPerformanceState?.();
+    const selectedDescriptor = activePackage ? activeBlockDescriptors[selectedBlockIndex] : null;
     return Object.freeze({
       panelOpen: Boolean(document.getElementById(PANEL_ID) && !document.getElementById(PANEL_ID).hidden),
       keyId: activeKey?.keyId || null,
@@ -1167,14 +1403,31 @@
       legalOutputFaces: Object.freeze([...direction.legalOutputFaces]),
       pickRole,
       rendererVersion: RendererApi?.constants?.RENDERER_VERSION || null,
+      renderQuality,
+      renderTier: rendererPerformance?.renderPlan?.tier || null,
+      renderEffectiveQuality: rendererPerformance?.renderPlan?.effectiveQuality || null,
+      renderFallback: rendererPerformance?.renderPlan?.fallback || false,
+      renderedPointCount: rendererPerformance?.renderedPointCount || 0,
+      exactPointCount: activeKey ? activeKey.gridSize * activeKey.gridSize : 0,
+      scenePreparing,
+      tracePreparing,
+      sceneBuildMilliseconds: sceneBuildReceipt?.milliseconds ?? null,
+      traceBuildMilliseconds: traceBuildReceipt?.milliseconds ?? null,
+      encodingMilliseconds,
+      renderMilliseconds: rendererPerformance?.renderMilliseconds ?? null,
+      pointBufferBytes: rendererPerformance?.bufferBytes ?? 0,
+      staleSceneResultsDiscarded,
+      staleTraceResultsDiscarded,
+      cancelledPreparations,
       packageReady: Boolean(activePackage),
       packageChecksum: activePackage?.checksum || null,
       packageBlockCount: activePackage?.blockCount || 0,
       packageCiphertext: activePackage?.ciphertext || null,
       packageOriginalBitLength: activePackage?.originalBitLength ?? null,
-      traceCollectionCount: activeTraces.length,
+      traceCollectionCount: activeTraces.filter(Boolean).length,
+      traceSlotCount: activeTraces.length,
       selectedBlockIndex: activePackage ? selectedBlockIndex : null,
-      blockDescriptors: activePackage ? Object.freeze(activeTraces.map(trace => describeTraceBlock(trace, activePackage))) : Object.freeze([]),
+      blockDescriptors: activePackage ? Object.freeze(activeBlockDescriptors) : Object.freeze([]),
       recoveredBits,
       roundTripValid,
       sourceFileName,
@@ -1194,22 +1447,24 @@
       tracePlaybackMode: playbackMode,
       tracePlaybackScope: playbackScope,
       packageSequenceActive: playbackDirection !== 0 && isPackagePlaybackScope(),
-      selectedBlockSourceStart: activeTrace?.sourceBitRange.start ?? null,
-      selectedBlockSourceEndExclusive: activeTrace?.sourceBitRange.endExclusive ?? null,
-      selectedBlockSourceBitsConsumed: activeTrace?.sourceBitRange.consumed ?? null,
-      selectedBlockCiphertextStart: activeTrace ? activeTrace.blockIndex * activeTrace.cellCount : null,
-      selectedBlockCiphertextEndExclusive: activeTrace ? (activeTrace.blockIndex + 1) * activeTrace.cellCount : null,
-      selectedBlockFinalPartial: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).finalPartialBlock : false,
-      selectedBlockPartialPayloadFillerCells: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).partialPayloadFillerCells : null,
-      selectedBlockMaskFillerCells: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).maskFillerCells : null,
-      selectedBlockTotalFillerCells: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).totalFillerCells : null,
+      selectedBlockSourceStart: selectedDescriptor?.sourceStart ?? null,
+      selectedBlockSourceEndExclusive: selectedDescriptor?.sourceEndExclusive ?? null,
+      selectedBlockSourceBitsConsumed: selectedDescriptor?.sourceBitsConsumed ?? null,
+      selectedBlockCiphertextStart: selectedDescriptor?.ciphertextStart ?? null,
+      selectedBlockCiphertextEndExclusive: selectedDescriptor?.ciphertextEndExclusive ?? null,
+      selectedBlockFinalPartial: selectedDescriptor?.finalPartialBlock || false,
+      selectedBlockPartialPayloadFillerCells: selectedDescriptor?.partialPayloadFillerCells ?? null,
+      selectedBlockMaskFillerCells: selectedDescriptor?.maskFillerCells ?? null,
+      selectedBlockTotalFillerCells: selectedDescriptor?.totalFillerCells ?? null,
       selectedPointId: details?.pointId ?? null,
       selectedSourceBitIndex: details?.sourceBitIndex ?? null,
       selectedInputCellIndex: details?.inputCellIndex ?? null,
       selectedOutputCellIndex: details?.outputCellIndex ?? null,
       selectedFinalOutputIndex: details?.finalOutputIndex ?? null,
       selectedFinalBit: details?.finalBit ?? null,
-      selectedAnimatedPosition: rendered?.selectedPosition ? Object.freeze([...rendered.selectedPosition]) : null
+      selectedAnimatedPosition: rendered?.selectedPosition ? Object.freeze([...rendered.selectedPosition]) : null,
+      traceRenderedPointCount: rendered?.renderedPointCount ?? null,
+      traceExactPointCount: rendered?.totalPointCount ?? null
     });
   }
 
@@ -1218,7 +1473,7 @@
     loadArtifacts,
     currentArtifacts,
     currentState,
-    utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask, describeTraceBlock, locateSourceBit, locateCiphertextBit, sequenceBlockIndex, effectivePlaybackMode }),
-    constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, OVERVIEW_BLOCK_DURATION_MS, PLAYBACK_SPEEDS, PLAYBACK_SCOPES, MASK_MODES })
+    utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask, describeTraceBlock, describePackageBlock, buildPackageBlockDescriptors, locateSourceBit, locateCiphertextBit, sequenceBlockIndex, effectivePlaybackMode }),
+    constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, MAX_SAMPLED_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, OVERVIEW_BLOCK_DURATION_MS, PLAYBACK_SPEEDS, PLAYBACK_SCOPES, MASK_MODES, RENDER_QUALITIES })
   });
 });

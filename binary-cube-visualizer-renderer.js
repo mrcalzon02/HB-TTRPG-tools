@@ -6,9 +6,18 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeVisualizerRendererApi() {
   'use strict';
 
-  const RENDERER_VERSION = '0.4.0';
+  const RENDERER_VERSION = '0.5.0';
   const FACES = Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
   const PLAYBACK_MODES = Object.freeze(['all', 'selected', 'row']);
+  const RENDER_QUALITIES = Object.freeze(['auto', 'exact', 'sampled', 'aggregate']);
+  const RENDER_TIER_POLICY = Object.freeze({
+    detailedMaximum: 12,
+    batchedMaximum: 64,
+    sampledMaximum: 256,
+    exactPointMaximum: 65536,
+    sampledPointBudget: 8192,
+    aggregatePointBudget: 2048
+  });
   const FACE_GEOMETRY = Object.freeze({
     top: Object.freeze({ center: Object.freeze([0, 1, 0]), normal: Object.freeze([0, 1, 0]), u: Object.freeze([1, 0, 0]), v: Object.freeze([0, 0, 1]) }),
     bottom: Object.freeze({ center: Object.freeze([0, -1, 0]), normal: Object.freeze([0, -1, 0]), u: Object.freeze([1, 0, 0]), v: Object.freeze([0, 0, -1]) }),
@@ -57,6 +66,103 @@
   function smoothstep(progress) {
     const value = clamp(Number(progress) || 0, 0, 1);
     return value * value * (3 - 2 * value);
+  }
+
+  function nowMilliseconds() {
+    return typeof performance !== 'undefined' && typeof performance.now === 'function' ? performance.now() : Date.now();
+  }
+
+  function normalizeRenderQuality(value) {
+    return RENDER_QUALITIES.includes(value) ? value : 'auto';
+  }
+
+  function deterministicSamplePointIds(gridSizeValue, budgetValue, options = {}) {
+    const gridSize = Number(gridSizeValue);
+    const totalPointCount = gridSize * gridSize;
+    const budget = clamp(Math.floor(Number(budgetValue) || totalPointCount), 1, totalPointCount);
+    if (!Number.isInteger(gridSize) || gridSize < 2) fail('A valid grid size is required for deterministic point sampling.');
+    if (budget >= totalPointCount) return Object.freeze(Array.from({ length: totalPointCount }, (_, pointId) => pointId));
+    const selectedPointId = Number(options.selectedPointId);
+    const selectedRow = Number(options.selectedRow);
+    const ids = new Set();
+    const side = Math.max(2, Math.floor(Math.sqrt(budget)));
+    for (let xIndex = 0; xIndex < side; xIndex += 1) {
+      const x = Math.round(xIndex * (gridSize - 1) / Math.max(1, side - 1));
+      for (let yIndex = 0; yIndex < side && ids.size < budget; yIndex += 1) {
+        const y = Math.round(yIndex * (gridSize - 1) / Math.max(1, side - 1));
+        ids.add(x * gridSize + y);
+      }
+    }
+    if (Number.isInteger(selectedRow) && selectedRow >= 0 && selectedRow < gridSize) {
+      for (let columnIndex = 0; columnIndex < side && ids.size < budget; columnIndex += 1) {
+        const column = Math.round(columnIndex * (gridSize - 1) / Math.max(1, side - 1));
+        ids.add(selectedRow * gridSize + column);
+      }
+    }
+    const stride = Math.max(1, Math.floor(totalPointCount / budget));
+    for (let pointId = 0; ids.size < budget && pointId < totalPointCount; pointId += stride) ids.add(pointId);
+    if (Number.isInteger(selectedPointId) && selectedPointId >= 0 && selectedPointId < totalPointCount && !ids.has(selectedPointId)) {
+      if (ids.size >= budget) ids.delete(Array.from(ids).at(-1));
+      ids.add(selectedPointId);
+    }
+    if (!ids.has(0)) { if (ids.size >= budget) ids.delete(Array.from(ids).at(-1)); ids.add(0); }
+    if (!ids.has(totalPointCount - 1)) { if (ids.size >= budget) ids.delete(Array.from(ids).at(-1)); ids.add(totalPointCount - 1); }
+    return Object.freeze(Array.from(ids).sort((left, right) => left - right));
+  }
+
+  function resolveRenderPlan(gridSizeValue, qualityValue = 'auto', options = {}) {
+    const gridSize = Number(gridSizeValue);
+    if (!Number.isInteger(gridSize) || gridSize < 2) fail('A valid grid size is required for a renderer performance plan.');
+    const totalPointCount = gridSize * gridSize;
+    const requestedQuality = normalizeRenderQuality(qualityValue);
+    let tier;
+    let effectiveQuality;
+    let budget;
+    let fallback = false;
+    if (requestedQuality === 'auto') {
+      if (gridSize <= RENDER_TIER_POLICY.detailedMaximum) { tier = 'detailed'; effectiveQuality = 'exact'; budget = totalPointCount; }
+      else if (gridSize <= RENDER_TIER_POLICY.batchedMaximum) { tier = 'batched'; effectiveQuality = 'exact'; budget = totalPointCount; }
+      else if (gridSize <= RENDER_TIER_POLICY.sampledMaximum) { tier = 'sampled'; effectiveQuality = 'sampled'; budget = RENDER_TIER_POLICY.sampledPointBudget; }
+      else { tier = 'aggregate'; effectiveQuality = 'aggregate'; budget = RENDER_TIER_POLICY.aggregatePointBudget; }
+    } else if (requestedQuality === 'exact') {
+      if (totalPointCount <= RENDER_TIER_POLICY.exactPointMaximum) {
+        tier = gridSize <= RENDER_TIER_POLICY.detailedMaximum ? 'detailed' : 'batched';
+        effectiveQuality = 'exact';
+        budget = totalPointCount;
+      } else {
+        tier = 'sampled'; effectiveQuality = 'sampled'; budget = RENDER_TIER_POLICY.sampledPointBudget; fallback = true;
+      }
+    } else if (requestedQuality === 'sampled') {
+      tier = 'sampled'; effectiveQuality = 'sampled'; budget = RENDER_TIER_POLICY.sampledPointBudget;
+    } else {
+      tier = 'aggregate'; effectiveQuality = 'aggregate'; budget = RENDER_TIER_POLICY.aggregatePointBudget;
+    }
+    const pointIds = deterministicSamplePointIds(gridSize, Math.min(totalPointCount, budget), options);
+    return Object.freeze({
+      gridSize,
+      totalPointCount,
+      requestedQuality,
+      effectiveQuality,
+      tier,
+      fallback,
+      renderedPointCount: pointIds.length,
+      omittedPointCount: totalPointCount - pointIds.length,
+      pointIds,
+      fullRepresentation: pointIds.length === totalPointCount,
+      disclosure: pointIds.length === totalPointCount
+        ? `Exact ${pointIds.length.toLocaleString()}-point representation.`
+        : `${tier === 'aggregate' ? 'Aggregate' : 'Sampled'} representation: ${pointIds.length.toLocaleString()} of ${totalPointCount.toLocaleString()} exact points. Encoding remains full resolution.`
+    });
+  }
+
+  function resolveTraceRenderPointIds(traceValue, planValue, selectedPointIdValue, playbackModeValue) {
+    const trace = validateTraceShape(traceValue);
+    const selectedPointId = clamp(Number(selectedPointIdValue) || 0, 0, trace.pointField.length - 1);
+    const playbackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
+    const plan = planValue?.gridSize === trace.gridSize ? planValue : resolveRenderPlan(trace.gridSize, 'auto');
+    const selectedInputIndex = trace.inputCellIndexByPoint[selectedPointId];
+    const selectedRow = playbackMode === 'row' ? Math.floor(selectedInputIndex / trace.gridSize) : null;
+    return deterministicSamplePointIds(trace.gridSize, plan.renderedPointCount, { selectedPointId, selectedRow });
   }
 
   function normalizePointCoordinates(point, gridSize) {
@@ -384,9 +490,13 @@
       this.selectedPointCount = 0;
       this.selectedPathCount = 0;
       this.gridSize = 0;
+      this.totalPointCount = 0;
+      this.scenePointIds = [];
       this.scenePoints = [];
+      this.renderPlan = resolveRenderPlan(4, 'auto');
       this.directionState = null;
       this.traceState = null;
+      this.performanceState = Object.freeze({ sceneBuildMilliseconds: 0, uploadMilliseconds: 0, renderMilliseconds: 0, renderedPointCount: 0, totalPointCount: 0, bufferBytes: 0, tier: 'detailed', requestedQuality: 'auto', effectiveQuality: 'exact' });
       this.directionLabelPositions = {};
       this.camera = { ...CAMERA_PRESETS.perspective, panX: 0, panY: 0, panZ: 0 };
       this.pointer = null;
@@ -485,27 +595,44 @@
     }
 
     uploadPointVertices(positions, colors) {
+      const started = nowMilliseconds();
       const vertices = new Float32Array(positions.length * 6);
       for (let index = 0; index < positions.length; index += 1) {
         const offset = index * 6;
-        vertices.set([...positions[index], ...colors[index]], offset);
+        vertices[offset] = positions[index][0];
+        vertices[offset + 1] = positions[index][1];
+        vertices[offset + 2] = positions[index][2];
+        vertices[offset + 3] = colors[index][0];
+        vertices[offset + 4] = colors[index][1];
+        vertices[offset + 5] = colors[index][2];
       }
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER,this.pointBuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER,vertices,this.gl.DYNAMIC_DRAW);
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.pointBuffer);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, vertices, this.gl.DYNAMIC_DRAW);
       this.pointCount = positions.length;
+      this.performanceState = Object.freeze({ ...this.performanceState, uploadMilliseconds: nowMilliseconds() - started, renderedPointCount: positions.length, bufferBytes: vertices.byteLength });
     }
 
     setScene(scene) {
+      const started = nowMilliseconds();
       const gridSize = Number(scene?.gridSize);
       const points = scene?.points;
+      const pointIds = Array.from(scene?.pointIds || points?.map(point => point.id) || []);
+      const totalPointCount = Number(scene?.totalPointCount ?? gridSize * gridSize);
+      const renderPlan = scene?.renderPlan || resolveRenderPlan(gridSize, scene?.quality || 'auto');
       if (!Number.isInteger(gridSize) || gridSize < 2) fail('The Binary Cube scene requires a valid grid size.');
-      if (!Array.isArray(points) || points.length !== gridSize*gridSize) fail('The Binary Cube scene point field is incomplete.');
+      if (!Number.isInteger(totalPointCount) || totalPointCount !== gridSize * gridSize) fail('The Binary Cube scene exact point count is invalid.');
+      if (!Array.isArray(points) || points.length !== pointIds.length || points.length !== renderPlan.renderedPointCount) fail('The Binary Cube scene sampled point field is incomplete.');
       this.gridSize = gridSize;
-      this.scenePoints = points.map((point,index) => {
-        if (!point || point.id !== index) fail(`Binary Cube scene point ${index} is invalid.`);
-        return normalizePointCoordinates(point,gridSize);
+      this.totalPointCount = totalPointCount;
+      this.scenePointIds = pointIds;
+      this.scenePoints = points.map((point, index) => {
+        if (!point || point.id !== pointIds[index]) fail(`Binary Cube sampled scene point ${index} is invalid.`);
+        return normalizePointCoordinates(point, gridSize);
       });
+      this.renderPlan = renderPlan;
+      this.performanceState = Object.freeze({ ...this.performanceState, sceneBuildMilliseconds: nowMilliseconds() - started, renderedPointCount: points.length, totalPointCount, tier: renderPlan.tier, requestedQuality: renderPlan.requestedQuality, effectiveQuality: renderPlan.effectiveQuality });
       this.clearTraceState();
+      return this.getPerformanceState();
     }
 
     setDirectionState(rawState) {
@@ -550,9 +677,9 @@
 
     clearTraceState() {
       this.traceState = null;
-      const colors = this.scenePoints.map((_,index) => {
-        const depthRatio = this.gridSize <= 1 ? 0 : index % this.gridSize / (this.gridSize-1);
-        return [0.38+depthRatio*0.22,0.66+depthRatio*0.18,0.82-depthRatio*0.12];
+      const colors = this.scenePointIds.map(pointId => {
+        const depthRatio = this.gridSize <= 1 ? 0 : pointId % this.gridSize / (this.gridSize - 1);
+        return [0.38 + depthRatio * 0.22, 0.66 + depthRatio * 0.18, 0.82 - depthRatio * 0.12];
       });
       this.uploadPointVertices(this.scenePoints, colors);
       this.selectedPointCount = 0;
@@ -564,22 +691,23 @@
 
     setTraceTimelineState(traceValue, traceTimeValue, selectedPointIdValue, playbackModeValue = 'all') {
       const trace = validateTraceShape(traceValue);
-      if (trace.pointField.length !== this.scenePoints.length) fail('Trace point count does not match the visible point field.');
-      const selectedPointId = clamp(Number(selectedPointIdValue)||0,0,trace.pointField.length-1);
+      if (trace.pointField.length !== this.totalPointCount) fail('Trace point count does not match the exact scene point count.');
+      const selectedPointId = clamp(Number(selectedPointIdValue) || 0, 0, trace.pointField.length - 1);
       const playbackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
       const timeline = resolveTraceTimeline(traceTimeValue, trace.phases.length);
-      const positions = trace.pointField.map((_,pointId) => tracePointPosition(trace,pointId,timeline.traceTime,selectedPointId,playbackMode));
-      const colors = trace.pointField.map((_,pointId) => tracePointColor(trace,pointId,timeline,selectedPointId,playbackMode));
+      const renderedPointIds = resolveTraceRenderPointIds(trace, this.renderPlan, selectedPointId, playbackMode);
+      const positions = renderedPointIds.map(pointId => tracePointPosition(trace, pointId, timeline.traceTime, selectedPointId, playbackMode));
+      const colors = renderedPointIds.map(pointId => tracePointColor(trace, pointId, timeline, selectedPointId, playbackMode));
       this.uploadPointVertices(positions, colors);
 
-      const selectedPosition = positions[selectedPointId];
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER,this.selectedPointBuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER,new Float32Array([...selectedPosition,...COLORS.selected]),this.gl.DYNAMIC_DRAW);
+      const selectedPosition = tracePointPosition(trace, selectedPointId, timeline.traceTime, selectedPointId, playbackMode);
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.selectedPointBuffer);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([...selectedPosition, ...COLORS.selected]), this.gl.DYNAMIC_DRAW);
       this.selectedPointCount = 1;
 
       const pathVertices = selectedPathVertices(trace, selectedPointId);
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER,this.selectedPathBuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER,pathVertices,this.gl.DYNAMIC_DRAW);
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.selectedPathBuffer);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, pathVertices, this.gl.DYNAMIC_DRAW);
       this.selectedPathCount = pathVertices.length / 6;
 
       this.traceState = Object.freeze({
@@ -592,11 +720,14 @@
         easedProgress: timeline.easedProgress,
         selectedPointId,
         playbackMode,
+        renderedPointCount: renderedPointIds.length,
+        totalPointCount: trace.pointField.length,
+        renderTier: this.renderPlan.tier,
         selectedPosition: Object.freeze([...selectedPosition])
       });
       const label = this.labels.get('trace-phase');
       const transition = timeline.phaseIndex === timeline.nextPhaseIndex ? trace.phases[timeline.phaseIndex].id : `${trace.phases[timeline.phaseIndex].id} → ${trace.phases[timeline.nextPhaseIndex].id}`;
-      label.textContent = `TRACE ${(timeline.traceTime*100).toFixed(1)}% · ${transition.replaceAll('-',' ').toUpperCase()} · POINT ${selectedPointId}`;
+      label.textContent = `TRACE ${(timeline.traceTime * 100).toFixed(1)}% · ${transition.replaceAll('-', ' ').toUpperCase()} · POINT ${selectedPointId} · ${renderedPointIds.length.toLocaleString()}/${trace.pointField.length.toLocaleString()} VISIBLE`;
       label.hidden = false;
       this.render();
       return this.traceState;
@@ -609,6 +740,7 @@
     }
 
     getTraceState() { return this.traceState; }
+    getPerformanceState() { return Object.freeze({ ...this.performanceState, renderPlan: this.renderPlan }); }
     resetCamera() { this.camera = {...CAMERA_PRESETS.perspective,panX:0,panY:0,panZ:0}; this.render(); }
     setCameraPreset(name) { const preset = CAMERA_PRESETS[name]; if (!preset) fail(`Unknown Binary Cube camera preset: ${name}`); this.camera = {...preset,panX:0,panY:0,panZ:0}; this.render(); }
 
@@ -677,6 +809,7 @@
 
     render() {
       if (this.disposed) return;
+      const started = nowMilliseconds();
       this.resizeCanvas();
       const gl = this.gl;
       const {viewProjection} = this.cameraFrame();
@@ -691,11 +824,12 @@
       this.draw(this.lineBuffer,gl.LINES,this.lineVertexCount);
       this.draw(this.selectionLineBuffer,gl.LINES,this.selectionLineVertexCount);
       this.draw(this.selectedPathBuffer,gl.LINE_STRIP,this.selectedPathCount);
-      const pointSize = (this.gridSize<=12?7:this.gridSize<=32?4.5:2.5)*Math.min(2,window.devicePixelRatio||1);
+      const pointSize = (this.renderPlan.tier === 'detailed' ? 7 : this.renderPlan.tier === 'batched' ? 4.5 : this.renderPlan.tier === 'sampled' ? 3.4 : 2.8) * Math.min(2, window.devicePixelRatio || 1);
       this.draw(this.pointBuffer,gl.POINTS,this.pointCount,pointSize,true);
       this.draw(this.selectedPointBuffer,gl.POINTS,this.selectedPointCount,Math.max(12,pointSize*1.8),true);
       this.draw(this.arrowBuffer,gl.TRIANGLES,this.arrowVertexCount);
       this.positionLabels(viewProjection);
+      this.performanceState = Object.freeze({ ...this.performanceState, renderMilliseconds: nowMilliseconds() - started });
     }
 
     dispose() {
@@ -716,7 +850,10 @@
     resolveTraceTimeline,
     pointAnchorPosition,
     tracePointPosition,
+    deterministicSamplePointIds,
+    resolveRenderPlan,
+    resolveTraceRenderPointIds,
     rayBoxFace,
-    constants:Object.freeze({RENDERER_VERSION,FACES,FACE_GEOMETRY,CAMERA_PRESETS,PLAYBACK_MODES})
+    constants:Object.freeze({RENDERER_VERSION,FACES,FACE_GEOMETRY,CAMERA_PRESETS,PLAYBACK_MODES,RENDER_QUALITIES,RENDER_TIER_POLICY})
   });
 });

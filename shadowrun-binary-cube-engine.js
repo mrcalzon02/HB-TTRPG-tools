@@ -372,6 +372,23 @@
     return points;
   }
 
+  function buildPointsById(rawKey, pointIdsValue) {
+    const key = validateKey(rawKey);
+    const size = key.gridSize;
+    const pointCount = size * size;
+    const pointIds = Array.from(pointIdsValue || []);
+    const seen = new Uint8Array(pointCount);
+    return pointIds.map((pointIdValue, index) => {
+      const pointId = Number(pointIdValue);
+      if (!Number.isInteger(pointId) || pointId < 0 || pointId >= pointCount) fail(`Point ID at sample index ${index} must be an integer from 0 through ${pointCount - 1}.`);
+      if (seen[pointId]) fail(`Point ID ${pointId} appears more than once in the sampled point request.`);
+      seen[pointId] = 1;
+      const x = Math.floor(pointId / size);
+      const y = pointId % size;
+      return { id: pointId, x, y, z: pointDepthForKey(key, x, y) };
+    });
+  }
+
   function faceOrder(points, face, size, quarterTurns = 0) {
     if (!FACES.includes(face)) fail(`Unknown cube face: ${face}`);
     const order = new Array(size * size);
@@ -841,6 +858,7 @@
     validateKey,
     validatePackage,
     buildPoints,
+    buildPointsById,
     pointDepth,
     faceCell,
     faceOrder,

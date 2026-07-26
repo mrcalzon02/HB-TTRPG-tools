@@ -278,7 +278,7 @@ try {
   })()`, 'Binary Cube V8 browser sequencing');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.4.0');
+  assert.equal(receipt.rendererVersion, '0.5.0');
   assert.equal(receipt.blockCount, 5);
   assert.equal(receipt.timelineMarkerCount, 5);
   assert.equal(receipt.directSourceJump, true);
