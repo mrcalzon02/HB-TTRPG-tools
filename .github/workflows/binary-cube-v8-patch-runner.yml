@@ -1,3 +1,4 @@
+# Guarded V8 patch with hosted-browser timing and reverse-sequence diagnostics.
 name: Run guarded Binary Cube V8 patch
 
 on:
