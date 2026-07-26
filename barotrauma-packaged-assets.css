@@ -97,9 +97,9 @@
 }
 
 /*
- * Reviewed UI sheets are 1254 x 1254 pixels. The HUD-elements sheet is
- * 1254 x 353 pixels. Runtime crops use those real packaged dimensions and
- * the exact approved TSV rectangles; no 1280-based approximation remains.
+ * Runtime card roles use approved rectangles from the reviewed 1254 x 1254
+ * square atlases. The visually unreliable wide HUD-sheet bindings are not
+ * used for card-level vessel or route icons.
  */
 .barotrauma-atlas-surface[data-barotrauma-icon]::before,
 .workspace-hero[data-barotrauma-ui]::before,
@@ -125,10 +125,10 @@
 
 :is([data-barotrauma-icon="vessel"], [data-barotrauma-ui="vessel"])::before {
   width: 58px;
-  height: 28.033px;
-  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 1212.2px 341.233px;
-  background-position: -413.733px -267.767px;
+  height: 57.301px;
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 876.289px 876.289px;
+  background-position: -653.373px -394.819px;
 }
 
 :is([data-barotrauma-icon="document"], [data-barotrauma-ui="document"])::before {
@@ -164,11 +164,11 @@
 }
 
 :is([data-barotrauma-icon="route"], [data-barotrauma-ui="route"])::before {
-  width: 46.103px;
+  width: 57.42px;
   height: 58px;
-  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/sci_fi_hud_elements_and_icons_sheet.png");
-  background-size: 1864.923px 524.974px;
-  background-position: -1023.179px -132.359px;
+  background-image: url("desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/retro_futuristic_ui_assets_sprite_sheet.png");
+  background-size: 727.32px 727.32px;
+  background-position: -445.44px -544.04px;
 }
 
 :is([data-barotrauma-icon="location"], [data-barotrauma-ui="location"])::before {
