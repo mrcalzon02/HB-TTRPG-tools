@@ -1,5 +1,5 @@
-# V7 final acceptance gate after stale-trace lifecycle and localhost browser-origin corrections: canonical evidence, immutable traces, preserved 3D/step/animation boundaries, exact package encoding, browser round trips, handoff, and desktop smoke.
-name: Validate Binary Cube V7 complete encoder
+# V8 milestone gate: canonical evidence, immutable traces, preserved 3D/step/animation/package boundaries, exhaustive multi-block mapping, Chromium sequencing, and desktop smoke.
+name: Validate Binary Cube V8 multi-block sequencing
 
 on:
   push:
@@ -30,6 +30,8 @@ on:
       - "scripts/validate-binary-cube-visualizer-animation-browser.mjs"
       - "scripts/validate-binary-cube-visualizer-encoder.mjs"
       - "scripts/validate-binary-cube-visualizer-encoder-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-sequencing.mjs"
+      - "scripts/validate-binary-cube-visualizer-sequencing-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -50,8 +52,8 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=pending \
-            -f context='binary-cube/v7-complete-encoder' \
-            -f description='Binary Cube V7 validation is running.' \
+            -f context='binary-cube/v8-multi-block-sequencing' \
+            -f description='Binary Cube V8 validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Checkout
@@ -87,9 +89,11 @@ jobs:
           node --check scripts/validate-binary-cube-visualizer-animation-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-encoder.mjs
           node --check scripts/validate-binary-cube-visualizer-encoder-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-sequencing.mjs
+          node --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
           mkdir -p binary-cube-gate-logs
 
-      - name: Validate Binary Cube V0 golden evidence against V7
+      - name: Validate Binary Cube V0 golden evidence against V8
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
@@ -133,19 +137,33 @@ jobs:
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-animation-browser.mjs 2>&1 | tee binary-cube-gate-logs/v6-browser.log
 
-      - name: Validate Binary Cube V7 exact package and trace parity
+      - name: Preserve Binary Cube V7 exact package and trace parity
         id: v7_static
         continue-on-error: true
         run: |
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-encoder.mjs 2>&1 | tee binary-cube-gate-logs/v7-static.log
 
-      - name: Validate Binary Cube V7 WebGL encoder and laboratory handoff
+      - name: Preserve Binary Cube V7 WebGL encoder and laboratory handoff
         id: v7_browser
         continue-on-error: true
         run: |
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-encoder-browser.mjs 2>&1 | tee binary-cube-gate-logs/v7-browser.log
+
+      - name: Validate Binary Cube V8 exhaustive multi-block mapping
+        id: v8_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-sequencing.mjs 2>&1 | tee binary-cube-gate-logs/v8-static.log
+
+      - name: Validate Binary Cube V8 Chromium block sequencing and inspection
+        id: v8_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-sequencing-browser.mjs 2>&1 | tee binary-cube-gate-logs/v8-browser.log
 
       - name: Validate Binary Cube desktop runtime contract
         id: desktop
@@ -158,7 +176,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: binary-cube-v7-gate-logs
+          name: binary-cube-v8-gate-logs
           path: binary-cube-gate-logs
           if-no-files-found: error
           retention-days: 3
@@ -174,6 +192,8 @@ jobs:
           [ '${{ steps.v6_browser.outcome }}' = 'success' ] || failures="$failures v6-browser"
           [ '${{ steps.v7_static.outcome }}' = 'success' ] || failures="$failures v7-static"
           [ '${{ steps.v7_browser.outcome }}' = 'success' ] || failures="$failures v7-browser"
+          [ '${{ steps.v8_static.outcome }}' = 'success' ] || failures="$failures v8-static"
+          [ '${{ steps.v8_browser.outcome }}' = 'success' ] || failures="$failures v8-browser"
           [ '${{ steps.desktop.outcome }}' = 'success' ] || failures="$failures desktop"
           if [ -n "$failures" ]; then
             echo "Binary Cube gate failures:$failures"
@@ -187,8 +207,8 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
-            -f context='binary-cube/v7-complete-encoder' \
-            -f description='Binary Cube V7 complete encoder gate passed.' \
+            -f context='binary-cube/v8-multi-block-sequencing' \
+            -f description='Binary Cube V8 multi-block sequencing gate passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Record milestone failure
@@ -198,6 +218,6 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
-            -f context='binary-cube/v7-complete-encoder' \
-            -f description='Binary Cube V7 complete encoder gate failed.' \
+            -f context='binary-cube/v8-multi-block-sequencing' \
+            -f description='Binary Cube V8 multi-block sequencing gate failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
