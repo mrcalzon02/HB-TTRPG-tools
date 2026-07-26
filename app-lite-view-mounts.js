@@ -5,6 +5,7 @@
   if (!base) return;
 
   let sheetPromise = null;
+  let barotraumaEntryPromise = null;
   let barotraumaImagePreloads = null;
   const loadedScripts = new Map();
 
@@ -21,20 +22,19 @@
     'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/sci_fi_ui_asset_sheets_10_images/futuristic_sci_fi_medical_ui_kit.png'
   ]);
 
-  function normalizedScriptSource(value) {
-    return String(value || '').split('?')[0].replace(/^\.\//, '');
+  function resolvedScriptSource(value) {
+    if (!value) return '';
+    return new URL(String(value), document.baseURI).href;
   }
 
   function existingScript(src) {
-    const normalized = normalizedScriptSource(src);
-    return [...document.scripts].find(script => {
-      const value = normalizedScriptSource(script.getAttribute('src'));
-      return value === normalized || value.endsWith(`/${normalized}`);
-    });
+    const resolved = resolvedScriptSource(src);
+    return [...document.scripts].find(script => resolvedScriptSource(script.getAttribute('src')) === resolved);
   }
 
   function loadScript(src) {
-    if (loadedScripts.has(src)) return loadedScripts.get(src);
+    const resolved = resolvedScriptSource(src);
+    if (loadedScripts.has(resolved)) return loadedScripts.get(resolved);
 
     const existing = existingScript(src);
     if (existing?.dataset.hbLoaded === 'true') return Promise.resolve();
@@ -64,9 +64,9 @@
       }
     });
 
-    loadedScripts.set(src, promise);
+    loadedScripts.set(resolved, promise);
     promise.catch(() => {
-      if (loadedScripts.get(src) === promise) loadedScripts.delete(src);
+      if (loadedScripts.get(resolved) === promise) loadedScripts.delete(resolved);
     });
     return promise;
   }
@@ -95,8 +95,9 @@
     }
     if (viewId === 'barotrauma') {
       preloadBarotraumaImages();
-      await base.prepareView(viewId);
-      await window.BarotraumaWorkspace?.initialize?.();
+      barotraumaEntryPromise ||= loadScript('barotrauma-entry.js?v=9');
+      await Promise.all([barotraumaEntryPromise, base.prepareView(viewId)]);
+      window.BarotraumaWorkspace?.initialize?.();
       return;
     }
     return base.prepareView(viewId);
