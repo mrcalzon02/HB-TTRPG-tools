@@ -1,4 +1,5 @@
-name: Validate Binary Cube baseline
+# V1 milestone gate: canonical engine, loaders, golden evidence, and desktop smoke.
+name: Validate Binary Cube V1 canonical engine
 
 on:
   push:
