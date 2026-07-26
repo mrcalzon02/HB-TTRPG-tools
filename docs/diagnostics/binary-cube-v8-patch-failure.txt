@@ -1,135 +1,135 @@
-run_id=30190857092
-{"conclusion":"failure","headSha":"9e2a5913a52d47e26b5d1f919cbdbd5cee709801","status":"completed","url":"https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30190857092","workflowName":"Run guarded Binary Cube V8 patch"}
+run_id=30190934592
+{"conclusion":"failure","headSha":"dd684421fbd28f9e674ad7356d88b080d323abc0","status":"completed","url":"https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30190934592","workflowName":"Run guarded Binary Cube V8 patch"}
 
-patch	Validate direct V8 implementation	﻿2026-07-26T06:19:54.1128349Z ##[group]Run node --check shadowrun-binary-cube-visualizer.js
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1128852Z ^[[36;1mnode --check shadowrun-binary-cube-visualizer.js^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1129342Z ^[[36;1mnode --check scripts/validate-binary-cube-visualizer-sequencing.mjs^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1129966Z ^[[36;1mnode --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1130568Z ^[[36;1mnode scripts/validate-binary-cube-visualizer-encoder.mjs^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1131049Z ^[[36;1mnode scripts/validate-binary-cube-visualizer-sequencing.mjs^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1131583Z ^[[36;1mnode scripts/validate-binary-cube-visualizer-sequencing-browser.mjs^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1132010Z ^[[36;1mgit diff --check^[[0m
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1176437Z shell: /usr/bin/bash -e {0}
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.1176798Z ##[endgroup]
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6262459Z {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6263155Z   "format": "hb-ttrpg-shadowrun-binary-cube-v7-encoder-validation-receipt",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6263793Z   "schemaVersion": "0.1.0",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6264243Z   "packageSchemaVersion": "0.2.0",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6264616Z   "testedPackages": [
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6264903Z     {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6265342Z       "id": "v7-full-4-multiblock",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6265702Z       "keyId": "c00f9da4",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6266011Z       "gridSize": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6266310Z       "payloadCapacity": 16,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6266667Z       "originalBitLength": 48,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6266997Z       "blockCount": 3,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6267307Z       "ciphertextBitLength": 48,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6267654Z       "checksum": "92467ab5",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6267971Z       "traceCount": 3,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6268268Z       "exactRoundTrip": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6268575Z     },
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6268806Z     {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6269052Z       "id": "v7-sparse-4",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6269356Z       "keyId": "194375d1",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6269654Z       "gridSize": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6269942Z       "payloadCapacity": 8,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6270275Z       "originalBitLength": 27,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6270614Z       "blockCount": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6270927Z       "ciphertextBitLength": 64,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6271273Z       "checksum": "48a639cd",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6271591Z       "traceCount": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6271888Z       "exactRoundTrip": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6272196Z     },
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6272729Z     {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6272978Z       "id": "v7-custom-4",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6273284Z       "keyId": "11c089d6",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6273585Z       "gridSize": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6273874Z       "payloadCapacity": 8,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6274210Z       "originalBitLength": 20,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6274536Z       "blockCount": 3,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6274889Z       "ciphertextBitLength": 48,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6275505Z       "checksum": "93017e12",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6275823Z       "traceCount": 3,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6276123Z       "exactRoundTrip": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6276430Z     },
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6276671Z     {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6276920Z       "id": "v7-file-derived",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6277239Z       "keyId": "0b56f800",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6277551Z       "gridSize": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6277856Z       "payloadCapacity": 12,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6278187Z       "originalBitLength": 40,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6278464Z       "blockCount": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6278677Z       "ciphertextBitLength": 64,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6278944Z       "checksum": "f12cedd7",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6279168Z       "traceCount": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6279379Z       "exactRoundTrip": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6279596Z     },
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6279759Z     {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6279937Z       "id": "v7-standard-12",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6280162Z       "keyId": "2f750e0a",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6280373Z       "gridSize": 12,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6280583Z       "payloadCapacity": 144,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6280819Z       "originalBitLength": 239,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6281052Z       "blockCount": 2,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6281267Z       "ciphertextBitLength": 288,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6281753Z       "checksum": "f1fa619e",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6281973Z       "traceCount": 2,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6282181Z       "exactRoundTrip": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6282392Z     }
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6282570Z   ],
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6282808Z   "exactPackageParity": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6283063Z   "exactChecksumParity": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6283344Z   "allBlockTracesMatchCiphertext": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6283646Z   "exactDecryptReencryptRoundTrip": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6283940Z   "manualInputSupported": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6284206Z   "fileByteConversionSupported": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6284511Z   "generatedAndImportedKeysSupported": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6284825Z   "densityAndCustomMasksSupported": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6285708Z   "selectedBlockAnimationBoundaryPresent": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6286115Z   "bidirectionalLaboratoryHandoffPresent": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6286464Z   "visualizerAlgorithmReconstruction": false
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.6286798Z }
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9507601Z {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9508364Z   "format": "hb-ttrpg-shadowrun-binary-cube-v8-sequencing-validation-receipt",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9509142Z   "schemaVersion": "0.1.0",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9509532Z   "keyId": "4b7c58bb",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9509968Z   "sourceBitLength": 37,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9510417Z   "payloadCapacity": 8,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9510927Z   "blockCount": 5,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9511408Z   "ciphertextBitLength": 80,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9511991Z   "finalPartialBlock": {
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9512545Z     "blockIndex": 4,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9513053Z     "sourceStart": 32,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9513664Z     "sourceEndExclusive": 37,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9514356Z     "sourceBitsConsumed": 5,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9515250Z     "ciphertextStart": 64,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9516011Z     "ciphertextEndExclusive": 80,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9516697Z     "payloadCapacity": 8,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9517422Z     "partialPayloadFillerCells": 3,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9518267Z     "maskFillerCells": 8,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9518934Z     "totalFillerCells": 11,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9519550Z     "finalPartialBlock": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9520132Z     "validated": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9520590Z   },
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9521039Z   "sourceBitsUniquelyLocated": 37,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9521685Z   "ciphertextBitsInspected": 80,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9522720Z   "playbackScopes": [
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9523214Z     "selected-bit",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9523735Z     "selected-row",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9524255Z     "selected-block",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9524667Z     "all-blocks",
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9525342Z     "overview-only"
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9525701Z   ],
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9526048Z   "exactPackageStatePreserved": true,
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9526610Z   "rendererAlgorithmIsolationPreserved": true
-patch	Validate direct V8 implementation	2026-07-26T06:19:54.9527145Z }
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3718070Z file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:68
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3719414Z   if (result.exceptionDetails) throw new Error(`${label} failed: ${result.result?.description || result.exceptionDetails.text || 'unknown browser exception'}`);
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3720113Z                                      ^
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3720290Z 
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3734362Z Error: Binary Cube V8 browser sequencing failed: Uncaught (in promise) Error: Selected-block scope crossed a block boundary: {"panelOpen":true,"keyId":"afeddea4","keyOrigin":"generated","gridSize":4,"activeInputFace":"top","activeOutputFace":"front","activeInputQuarterTurns":0,"activeOutputQuarterTurns":0,"activeMask":[true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false],"payloadCapacity":8,"draftInputFace":"top","draftOutputFace":"front","draftInputQuarterTurns":0,"draftOutputQuarterTurns":0,"legalOutputFaces":["front","back","left","right"],"pickRole":"input","rendererVersion":"0.4.0","packageReady":true,"packageChecksum":"2d269b5d","packageBlockCount":5,"packageCiphertext":"00010010100101111111010011100100011111010000110001011110010001111001011011011100","packageOriginalBitLength":37,"traceCollectionCount":5,"selectedBlockIndex":0,"blockDescriptors":[{"blockIndex":0,"sourceStart":0,"sourceEndExclusive":8,"sourceBitsConsumed":8,"ciphertextStart":0,"ciphertextEndExclusive":16,"payloadCapacity":8,"partialPayloadFillerCells":0,"maskFillerCells":8,"totalFillerCells":8,"finalPartialBlock":false,"validated":true},{"blockIndex":1,"sourceStart":8,"sourceEndExclusive":16,"sourceBitsConsumed":8,"ciphertextStart":16,"ciphertextEndExclusive":32,"payloadCapacity":8,"partialPayloadFillerCells":0,"maskFillerCells":8,"totalFillerCells":8,"finalPartialBlock":false,"validated":true},{"blockIndex":2,"sourceStart":16,"sourceEndExclusive":24,"sourceBitsConsumed":8,"ciphertextStart":32,"ciphertextEndExclusive":48,"payloadCapacity":8,"partialPayloadFillerCells":0,"maskFillerCells":8,"totalFillerCells":8,"finalPartialBlock":false,"validated":true},{"blockIndex":3,"sourceStart":24,"sourceEndExclusive":32,"sourceBitsConsumed":8,"ciphertextStart":48,"ciphertextEndExclusive":64,"payloadCapacity":8,"partialPayloadFillerCells":0,"maskFillerCells":8,"totalFillerCells":8,"finalPartialBlock":false,"validated":true},{"blockIndex":4,"sourceStart":32,"sourceEndExclusive":37,"sourceBitsConsumed":5,"ciphertextStart":64,"ciphertextEndExclusive":80,"payloadCapacity":8,"partialPayloadFillerCells":3,"maskFillerCells":8,"totalFillerCells":11,"finalPartialBlock":true,"validated":true}],"recoveredBits":"0100110010011001001100100110010011001","roundTripValid":true,"sourceFileName":"binary-cube-input.bin","traceReady":true,"traceTime":0.999,"tracePhaseIndex":8,"traceNextPhaseIndex":9,"tracePhaseProgress":0.9909999999999997,"tracePhaseId":"encrypted-block-emitted","traceNextPhaseId":"block-complete","tracePhaseCount":10,"traceBlockIndex":0,"traceOutputBlock":"0001001010010111","tracePlaying":true,"tracePlaybackDirection":1,"tracePlaybackSpeed":2,"tracePlaybackMode":"all","tracePlaybackScope":"selected-block","packageSequenceActive":false,"selectedBlockSourceStart":0,"selectedBlockSourceEndExclusive":8,"selectedBlockSourceBitsConsumed":8,"selectedBlockCiphertextStart":0,"selectedBlockCiphertextEndExclusive":16,"selectedBlockFinalPartial":false,"selectedBlockPartialPayloadFillerCells":0,"selectedBlockMaskFillerCells":8,"selectedBlockTotalFillerCells":8,"selectedPointId":0,"selectedSourceBitIndex":0,"selectedInputCellIndex":0,"selectedOutputCellIndex":0,"selectedFinalOutputIndex":0,"selectedFinalBit":"0","selectedAnimatedPosition":[-0.7800096616800001,0.7800096616800001,2.1999275374000002]}
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3749069Z     at evaluate (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:68:38)
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3750805Z     at async file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:144:19
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3751759Z 
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3751888Z Node.js v22.23.1
-patch	Validate direct V8 implementation	2026-07-26T06:20:02.3796520Z ##[error]Process completed with exit code 1.
+patch	Validate direct V8 implementation	﻿2026-07-26T06:22:32.0990161Z ##[group]Run node --check shadowrun-binary-cube-visualizer.js
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0990978Z ^[[36;1mnode --check shadowrun-binary-cube-visualizer.js^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0991487Z ^[[36;1mnode --check scripts/validate-binary-cube-visualizer-sequencing.mjs^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0992076Z ^[[36;1mnode --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0992664Z ^[[36;1mnode scripts/validate-binary-cube-visualizer-encoder.mjs^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0993151Z ^[[36;1mnode scripts/validate-binary-cube-visualizer-sequencing.mjs^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0993701Z ^[[36;1mnode scripts/validate-binary-cube-visualizer-sequencing-browser.mjs^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.0994130Z ^[[36;1mgit diff --check^[[0m
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.1039145Z shell: /usr/bin/bash -e {0}
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.1039413Z ##[endgroup]
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6749105Z {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6749935Z   "format": "hb-ttrpg-shadowrun-binary-cube-v7-encoder-validation-receipt",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6751012Z   "schemaVersion": "0.1.0",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6751591Z   "packageSchemaVersion": "0.2.0",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6752081Z   "testedPackages": [
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6752465Z     {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6752852Z       "id": "v7-full-4-multiblock",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6753197Z       "keyId": "c00f9da4",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6753445Z       "gridSize": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6753696Z       "payloadCapacity": 16,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6753958Z       "originalBitLength": 48,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6754197Z       "blockCount": 3,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6754428Z       "ciphertextBitLength": 48,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6754677Z       "checksum": "92467ab5",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6754903Z       "traceCount": 3,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6755120Z       "exactRoundTrip": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6755342Z     },
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6755516Z     {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6755696Z       "id": "v7-sparse-4",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6755916Z       "keyId": "194375d1",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6756124Z       "gridSize": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6756343Z       "payloadCapacity": 8,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6756587Z       "originalBitLength": 27,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6756820Z       "blockCount": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6757037Z       "ciphertextBitLength": 64,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6757279Z       "checksum": "48a639cd",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6757503Z       "traceCount": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6757709Z       "exactRoundTrip": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6758002Z     },
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6758305Z     {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6758615Z       "id": "v7-custom-4",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6759013Z       "keyId": "11c089d6",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6759496Z       "gridSize": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6759732Z       "payloadCapacity": 8,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6760001Z       "originalBitLength": 20,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6760231Z       "blockCount": 3,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6760448Z       "ciphertextBitLength": 48,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6760970Z       "checksum": "93017e12",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6761198Z       "traceCount": 3,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6761410Z       "exactRoundTrip": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6761701Z     },
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6761913Z     {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6762097Z       "id": "v7-file-derived",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6762447Z       "keyId": "0b56f800",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6762736Z       "gridSize": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6762957Z       "payloadCapacity": 12,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6763197Z       "originalBitLength": 40,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6763426Z       "blockCount": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6764001Z       "ciphertextBitLength": 64,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6764252Z       "checksum": "f12cedd7",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6764484Z       "traceCount": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6764698Z       "exactRoundTrip": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6764915Z     },
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6765089Z     {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6765273Z       "id": "v7-standard-12",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6765502Z       "keyId": "2f750e0a",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6765717Z       "gridSize": 12,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6766108Z       "payloadCapacity": 144,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6766548Z       "originalBitLength": 239,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6766836Z       "blockCount": 2,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6767057Z       "ciphertextBitLength": 288,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6767564Z       "checksum": "f1fa619e",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6767786Z       "traceCount": 2,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6767997Z       "exactRoundTrip": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6768212Z     }
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6768375Z   ],
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6768558Z   "exactPackageParity": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6768803Z   "exactChecksumParity": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6769067Z   "allBlockTracesMatchCiphertext": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6769411Z   "exactDecryptReencryptRoundTrip": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6769911Z   "manualInputSupported": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6770268Z   "fileByteConversionSupported": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6771024Z   "generatedAndImportedKeysSupported": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6771679Z   "densityAndCustomMasksSupported": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6772300Z   "selectedBlockAnimationBoundaryPresent": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6772968Z   "bidirectionalLaboratoryHandoffPresent": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6773599Z   "visualizerAlgorithmReconstruction": false
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.6774201Z }
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7548001Z {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7548750Z   "format": "hb-ttrpg-shadowrun-binary-cube-v8-sequencing-validation-receipt",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7549310Z   "schemaVersion": "0.1.0",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7549589Z   "keyId": "4b7c58bb",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7549852Z   "sourceBitLength": 37,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7550159Z   "payloadCapacity": 8,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7550416Z   "blockCount": 5,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7550902Z   "ciphertextBitLength": 80,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7551206Z   "finalPartialBlock": {
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7551469Z     "blockIndex": 4,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7551714Z     "sourceStart": 32,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7551974Z     "sourceEndExclusive": 37,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7552332Z     "sourceBitsConsumed": 5,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7552657Z     "ciphertextStart": 64,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7553008Z     "ciphertextEndExclusive": 80,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7553362Z     "payloadCapacity": 8,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7553681Z     "partialPayloadFillerCells": 3,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7554066Z     "maskFillerCells": 8,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7554368Z     "totalFillerCells": 11,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7554712Z     "finalPartialBlock": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7555037Z     "validated": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7555295Z   },
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7555554Z   "sourceBitsUniquelyLocated": 37,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7555965Z   "ciphertextBitsInspected": 80,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7556287Z   "playbackScopes": [
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7556559Z     "selected-bit",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7556833Z     "selected-row",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7557090Z     "selected-block",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7557367Z     "all-blocks",
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7557618Z     "overview-only"
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7557864Z   ],
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7558123Z   "exactPackageStatePreserved": true,
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7558539Z   "rendererAlgorithmIsolationPreserved": true
+patch	Validate direct V8 implementation	2026-07-26T06:22:32.7558931Z }
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5467406Z file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:68
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5468632Z   if (result.exceptionDetails) throw new Error(`${label} failed: ${result.result?.description || result.exceptionDetails.text || 'unknown browser exception'}`);
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5469334Z                                      ^
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5469512Z 
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5469875Z Error: Binary Cube V8 browser sequencing failed: Uncaught (in promise) Error: Automatic reverse block sequencing failed.
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5471717Z     at evaluate (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:68:38)
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5473582Z     at async file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:144:19
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5474615Z 
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5474761Z Node.js v22.23.1
+patch	Validate direct V8 implementation	2026-07-26T06:22:47.5545268Z ##[error]Process completed with exit code 1.
