@@ -1,4 +1,4 @@
-# V7 final acceptance gate after stale-trace lifecycle correction: canonical evidence, immutable traces, preserved 3D/step/animation boundaries, exact package encoding, browser round trips, handoff, and desktop smoke.
+# V7 final acceptance gate after stale-trace lifecycle and localhost browser-origin corrections: canonical evidence, immutable traces, preserved 3D/step/animation boundaries, exact package encoding, browser round trips, handoff, and desktop smoke.
 name: Validate Binary Cube V7 complete encoder
 
 on:
