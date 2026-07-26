@@ -1,3 +1,4 @@
+# V1 milestone gate: native packages must pass the canonical engine golden contract.
 name: Binary Cube Desktop Builds
 
 on:
@@ -10,6 +11,7 @@ on:
     paths:
       - 'shadowrun-binary-cube-*.js'
       - 'binary-cube-*.js'
+      - 'scripts/validate-binary-cube-baseline.mjs'
       - 'styles.css'
       - 'desktop/binary-cube/**'
       - 'binary-cube-desktop.html'
@@ -47,6 +49,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Validate canonical Binary Cube golden evidence
+        run: node ../../scripts/validate-binary-cube-baseline.mjs
 
       - name: Install desktop build dependencies
         run: npm install --no-audit --no-fund
