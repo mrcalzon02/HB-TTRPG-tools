@@ -498,8 +498,8 @@
   }
 
   function clearTrace(panel, message = '') {
-    pausePlayback(panel, false);
     activeTrace = null;
+    pausePlayback(panel, false);
     traceTime = 0;
     selectedPointId = 0;
     renderer?.clearTraceState();
