@@ -1,5 +1,5 @@
-# V6 milestone gate: canonical evidence, immutable traces, preserved face/step boundaries, deterministic animation, real WebGL playback, and desktop smoke.
-name: Validate Binary Cube V6 animated bit flow
+# V7 milestone gate: canonical evidence, immutable traces, preserved 3D/step/animation boundaries, exact package encoding, browser round trips, handoff, and desktop smoke.
+name: Validate Binary Cube V7 complete encoder
 
 on:
   push:
@@ -22,11 +22,14 @@ on:
       - "desktop/binary-cube/**"
       - "scripts/validate-binary-cube-baseline.mjs"
       - "scripts/validate-binary-cube-trace.mjs"
+      - "scripts/validate-binary-cube-visualizer-shell.mjs"
       - "scripts/validate-binary-cube-visualizer-browser.mjs"
       - "scripts/validate-binary-cube-visualizer-step.mjs"
       - "scripts/validate-binary-cube-visualizer-step-browser.mjs"
       - "scripts/validate-binary-cube-visualizer-animation.mjs"
       - "scripts/validate-binary-cube-visualizer-animation-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-encoder.mjs"
+      - "scripts/validate-binary-cube-visualizer-encoder-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -65,17 +68,23 @@ jobs:
           node --check desktop/binary-cube/scripts/prepare-app.mjs
           node --check scripts/validate-binary-cube-baseline.mjs
           node --check scripts/validate-binary-cube-trace.mjs
+          node --check scripts/validate-binary-cube-visualizer-shell.mjs
           node --check scripts/validate-binary-cube-visualizer-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-step.mjs
           node --check scripts/validate-binary-cube-visualizer-step-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-animation.mjs
           node --check scripts/validate-binary-cube-visualizer-animation-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-encoder.mjs
+          node --check scripts/validate-binary-cube-visualizer-encoder-browser.mjs
 
-      - name: Validate Binary Cube V0 golden evidence against V6
+      - name: Validate Binary Cube V0 golden evidence against V7
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
         run: node scripts/validate-binary-cube-trace.mjs
+
+      - name: Preserve Binary Cube V4 static shell and renderer isolation
+        run: node scripts/validate-binary-cube-visualizer-shell.mjs
 
       - name: Preserve Binary Cube V4 WebGL face-picking runtime
         run: node scripts/validate-binary-cube-visualizer-browser.mjs
@@ -86,11 +95,17 @@ jobs:
       - name: Preserve Binary Cube V5 WebGL stepping and inspection
         run: node scripts/validate-binary-cube-visualizer-step-browser.mjs
 
-      - name: Validate Binary Cube V6 deterministic trace interpolation
+      - name: Preserve Binary Cube V6 deterministic trace interpolation
         run: node scripts/validate-binary-cube-visualizer-animation.mjs
 
-      - name: Validate Binary Cube V6 WebGL playback and reverse scrubbing
+      - name: Preserve Binary Cube V6 WebGL playback and reverse scrubbing
         run: node scripts/validate-binary-cube-visualizer-animation-browser.mjs
+
+      - name: Validate Binary Cube V7 exact package and trace parity
+        run: node scripts/validate-binary-cube-visualizer-encoder.mjs
+
+      - name: Validate Binary Cube V7 WebGL encoder and laboratory handoff
+        run: node scripts/validate-binary-cube-visualizer-encoder-browser.mjs
 
       - name: Validate Binary Cube desktop runtime contract
         run: node desktop/binary-cube/tests/smoke.cjs
