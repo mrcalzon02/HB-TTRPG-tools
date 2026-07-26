@@ -204,7 +204,7 @@ try {
     timeline.value = '999';
     timeline.dispatchEvent(new Event('input', { bubbles: true }));
     panel.querySelector('[data-cube-trace-play]').click();
-    await new Promise(resolve => setTimeout(resolve, 140));
+    await new Promise(resolve => setTimeout(resolve, 500));
     const allBlocks = Visualizer.currentState();
     if (allBlocks.selectedBlockIndex !== 1 || !allBlocks.tracePlaying || allBlocks.tracePlaybackScope !== 'all-blocks') throw new Error('Automatic forward block sequencing failed.');
     panel.querySelector('[data-cube-trace-pause]').click();
@@ -216,7 +216,7 @@ try {
     timeline.value = '999';
     timeline.dispatchEvent(new Event('input', { bubbles: true }));
     panel.querySelector('[data-cube-trace-play]').click();
-    await new Promise(resolve => setTimeout(resolve, 140));
+    await new Promise(resolve => setTimeout(resolve, 500));
     const selectedBlockOnly = Visualizer.currentState();
     if (selectedBlockOnly.selectedBlockIndex !== 0 || selectedBlockOnly.tracePlaying || selectedBlockOnly.traceTime !== 1) throw new Error('Selected-block scope crossed a block boundary.');
 
@@ -227,7 +227,7 @@ try {
     timeline.value = '999';
     timeline.dispatchEvent(new Event('input', { bubbles: true }));
     panel.querySelector('[data-cube-trace-play]').click();
-    await new Promise(resolve => setTimeout(resolve, 140));
+    await new Promise(resolve => setTimeout(resolve, 500));
     const overview = Visualizer.currentState();
     if (overview.selectedBlockIndex !== 1 || overview.tracePlaybackScope !== 'overview-only' || !overview.tracePlaying) throw new Error('Overview-only block sequencing failed.');
     panel.querySelector('[data-cube-trace-pause]').click();
@@ -239,9 +239,9 @@ try {
     timeline.value = '0';
     timeline.dispatchEvent(new Event('input', { bubbles: true }));
     panel.querySelector('[data-cube-trace-reverse-play]').click();
-    await new Promise(resolve => setTimeout(resolve, 140));
+    await new Promise(resolve => setTimeout(resolve, 500));
     const reverse = Visualizer.currentState();
-    if (reverse.selectedBlockIndex !== 0 || !reverse.tracePlaying || reverse.tracePlaybackDirection !== -1) throw new Error('Automatic reverse block sequencing failed.');
+    if (reverse.selectedBlockIndex !== 0 || !reverse.tracePlaying || reverse.tracePlaybackDirection !== -1) throw new Error('Automatic reverse block sequencing failed: ' + JSON.stringify(reverse));
     panel.querySelector('[data-cube-trace-pause]').click();
 
     blockSelect.value = '4';

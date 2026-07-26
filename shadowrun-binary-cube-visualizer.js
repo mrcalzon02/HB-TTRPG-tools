@@ -13,6 +13,8 @@
   const DEFAULT_BITS = '01001100110100110100110011010011';
   const PLAYBACK_DURATION_MS = 18000;
   const PLAYBACK_SPEEDS = Object.freeze([0.25, 0.5, 1, 2]);
+  const PLAYBACK_SCOPES = Object.freeze(['selected-bit', 'selected-row', 'selected-block', 'all-blocks', 'overview-only']);
+  const OVERVIEW_BLOCK_DURATION_MS = 1800;
   const MASK_MODES = Object.freeze(['1', '0.75', '0.5', 'custom']);
   const Engine = root?.ShadowrunBinaryCubeEngine;
   const RendererApi = root?.BinaryCubeVisualizerRenderer;
@@ -35,6 +37,7 @@
   let playbackDirection = 0;
   let playbackSpeed = 1;
   let playbackMode = 'all';
+  let playbackScope = 'selected-block';
   let playbackFrame = null;
   let playbackLastTimestamp = null;
 
@@ -233,6 +236,97 @@
     return 0;
   }
 
+  function describeTraceBlock(trace, packageObject) {
+    if (!trace || !packageObject) fail('A canonical trace and package are required for block inspection.');
+    const sourceBitsConsumed = trace.sourceBitRange.consumed;
+    const partialPayloadFillerCells = Math.max(0, packageObject.payloadCapacity - sourceBitsConsumed);
+    const maskFillerCells = trace.cellCount - packageObject.payloadCapacity;
+    const ciphertextStart = trace.blockIndex * trace.cellCount;
+    const ciphertextEndExclusive = ciphertextStart + trace.cellCount;
+    return Object.freeze({
+      blockIndex: trace.blockIndex,
+      sourceStart: trace.sourceBitRange.start,
+      sourceEndExclusive: trace.sourceBitRange.endExclusive,
+      sourceBitsConsumed,
+      ciphertextStart,
+      ciphertextEndExclusive,
+      payloadCapacity: packageObject.payloadCapacity,
+      partialPayloadFillerCells,
+      maskFillerCells,
+      totalFillerCells: trace.cellCount - sourceBitsConsumed,
+      finalPartialBlock: trace.blockIndex === packageObject.blockCount - 1 && partialPayloadFillerCells > 0,
+      validated: trace.outputBlock === packageObject.ciphertext.slice(ciphertextStart, ciphertextEndExclusive)
+    });
+  }
+
+  function locateSourceBit(traces, sourceBitIndexValue) {
+    const sourceBitIndex = Number(sourceBitIndexValue);
+    if (!Number.isInteger(sourceBitIndex) || sourceBitIndex < 0) fail('Source bit index must be a non-negative integer.');
+    for (const trace of traces || []) {
+      if (sourceBitIndex < trace.sourceBitRange.start || sourceBitIndex >= trace.sourceBitRange.endExclusive) continue;
+      const pointId = trace.sourceBitIndexByPoint.indexOf(sourceBitIndex);
+      if (pointId < 0) fail(`Source bit ${sourceBitIndex} is inside block ${trace.blockIndex} but has no point identity.`);
+      const inputCellIndex = trace.inputCellIndexByPoint[pointId];
+      const outputCellIndex = trace.outputCellIndexByPoint[pointId];
+      return Object.freeze({
+        sourceBitIndex,
+        blockIndex: trace.blockIndex,
+        pointId,
+        inputCellIndex,
+        outputCellIndex,
+        ciphertextIndex: trace.blockIndex * trace.cellCount + outputCellIndex,
+        bit: trace.bitByPoint[pointId]
+      });
+    }
+    fail(`Source bit index ${sourceBitIndex} is outside the active package.`);
+  }
+
+  function locateCiphertextBit(traces, ciphertextIndexValue) {
+    const ciphertextIndex = Number(ciphertextIndexValue);
+    if (!Number.isInteger(ciphertextIndex) || ciphertextIndex < 0) fail('Ciphertext bit index must be a non-negative integer.');
+    const collection = traces || [];
+    if (!collection.length) fail('A trace collection is required for ciphertext inspection.');
+    const cellCount = collection[0].cellCount;
+    const blockIndex = Math.floor(ciphertextIndex / cellCount);
+    if (blockIndex < 0 || blockIndex >= collection.length) fail(`Ciphertext bit index ${ciphertextIndex} is outside the active package.`);
+    const trace = collection[blockIndex];
+    const outputCellIndex = ciphertextIndex % cellCount;
+    const pointId = trace.outputProjectionPointIds[outputCellIndex];
+    return Object.freeze({
+      ciphertextIndex,
+      blockIndex,
+      pointId,
+      inputCellIndex: trace.inputCellIndexByPoint[pointId],
+      outputCellIndex,
+      sourceBitIndex: trace.sourceBitIndexByPoint[pointId],
+      bit: trace.outputBlock[outputCellIndex],
+      kind: trace.cellKindByPoint[pointId]
+    });
+  }
+
+  function sequenceBlockIndex(currentIndexValue, directionValue, blockCountValue, wrap = false) {
+    const currentIndex = Number(currentIndexValue);
+    const direction = Math.sign(Number(directionValue));
+    const blockCount = Number(blockCountValue);
+    if (!Number.isInteger(currentIndex) || !Number.isInteger(blockCount) || blockCount < 1 || currentIndex < 0 || currentIndex >= blockCount || !direction) return null;
+    const target = currentIndex + direction;
+    if (target >= 0 && target < blockCount) return target;
+    if (!wrap) return null;
+    return direction > 0 ? 0 : blockCount - 1;
+  }
+
+  function effectivePlaybackMode(scopeValue, cohortValue) {
+    const scope = PLAYBACK_SCOPES.includes(scopeValue) ? scopeValue : 'selected-block';
+    if (scope === 'selected-bit') return 'selected';
+    if (scope === 'selected-row') return 'row';
+    if (scope === 'overview-only') return 'all';
+    return RendererApi?.constants?.PLAYBACK_MODES?.includes(cohortValue) ? cohortValue : 'all';
+  }
+
+  function isPackagePlaybackScope(scopeValue = playbackScope) {
+    return scopeValue === 'all-blocks' || scopeValue === 'overview-only';
+  }
+
   function traceCellButton(bit, pointId, label, kind, extra = '') {
     return `<button type="button" class="cube-trace-cell ${escapeHtml(kind)} ${escapeHtml(extra)}" data-cube-trace-point="${pointId}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${bit}</span><small>P${pointId}</small></button>`;
   }
@@ -240,6 +334,7 @@
   function renderTraceCollections(panel) {
     const trace = activeTrace;
     if (!trace) return;
+    const payloadCells = new Set(trace.payloadCellIndexes);
     const sourceButtons = [];
     for (let localIndex = 0; localIndex < trace.sourceBits.length; localIndex += 1) {
       const sourceIndex = trace.sourceBitRange.start + localIndex;
@@ -255,15 +350,18 @@
       const kind = trace.cellKindByPoint[pointId];
       const bit = trace.framedBlock[inputCellIndex];
       const sourceIndex = trace.sourceBitIndexByInputCell[inputCellIndex];
-      framedButtons.push(traceCellButton(bit, pointId, `Framed input cell ${inputCellIndex}, ${kind}, source ${sourceIndex >= 0 ? sourceIndex : 'filler'}, point ${pointId}`, kind));
-      inputButtons.push(traceCellButton(bit, pointId, `Input face cell ${inputCellIndex}, point ${pointId}`, kind, 'input-face'));
+      const partialFiller = sourceIndex < 0 && payloadCells.has(inputCellIndex) ? 'partial-filler' : '';
+      framedButtons.push(traceCellButton(bit, pointId, `Framed input cell ${inputCellIndex}, ${kind}, source ${sourceIndex >= 0 ? sourceIndex : 'filler'}, point ${pointId}`, kind, partialFiller));
+      inputButtons.push(traceCellButton(bit, pointId, `Input face cell ${inputCellIndex}, point ${pointId}`, kind, `${partialFiller} input-face`));
     }
     panel.querySelector('[data-cube-trace-framed-grid]').innerHTML = framedButtons.join('');
     panel.querySelector('[data-cube-trace-input-grid]').innerHTML = inputButtons.join('');
 
     panel.querySelector('[data-cube-trace-point-grid]').innerHTML = trace.pointField.map(point => {
       const kind = trace.cellKindByPoint[point.id];
-      return traceCellButton(trace.bitByPoint[point.id], point.id, `Point ${point.id} at (${point.x}, ${point.y}, ${point.z}), ${kind}`, kind, 'point-field');
+      const inputCellIndex = trace.inputCellIndexByPoint[point.id];
+      const partialFiller = trace.sourceBitIndexByPoint[point.id] < 0 && payloadCells.has(inputCellIndex) ? 'partial-filler' : '';
+      return traceCellButton(trace.bitByPoint[point.id], point.id, `Point ${point.id} at (${point.x}, ${point.y}, ${point.z}), ${kind}`, kind, `${partialFiller} point-field`);
     }).join('');
 
     const outputButtons = [];
@@ -273,8 +371,9 @@
       const bit = trace.outputBlock[outputIndex];
       const kind = trace.cellKindByPoint[pointId];
       const packageOutputIndex = trace.blockIndex * trace.cellCount + outputIndex;
-      outputButtons.push(traceCellButton(bit, pointId, `Output face cell ${outputIndex}, package ciphertext index ${packageOutputIndex}, point ${pointId}`, kind, 'output-face'));
-      outputStrip.push(traceCellButton(bit, pointId, `Encrypted package index ${packageOutputIndex}, point ${pointId}`, kind, 'encrypted-output'));
+      const partialFiller = trace.sourceBitIndexByPoint[pointId] < 0 && payloadCells.has(trace.inputCellIndexByPoint[pointId]) ? 'partial-filler' : '';
+      outputButtons.push(traceCellButton(bit, pointId, `Output face cell ${outputIndex}, package ciphertext index ${packageOutputIndex}, point ${pointId}`, kind, `${partialFiller} output-face`));
+      outputStrip.push(traceCellButton(bit, pointId, `Encrypted package index ${packageOutputIndex}, point ${pointId}`, kind, `${partialFiller} encrypted-output`));
     }
     panel.querySelector('[data-cube-trace-output-grid]').innerHTML = outputButtons.join('');
     panel.querySelector('[data-cube-trace-output-strip]').innerHTML = outputStrip.join('');
@@ -314,7 +413,8 @@
       return;
     }
     const rendered = renderer?.getTraceState?.();
-    const animatedPosition = rendered?.selectedPosition || RendererApi.tracePointPosition(activeTrace, details.pointId, traceTime, details.pointId, playbackMode);
+    const visibleMode = effectivePlaybackMode(playbackScope, playbackMode);
+    const animatedPosition = rendered?.selectedPosition || RendererApi.tracePointPosition(activeTrace, details.pointId, traceTime, details.pointId, visibleMode);
     panel.querySelector('[data-cube-trace-point-id]').value = String(details.pointId);
     panel.querySelector('[data-cube-trace-point-id]').max = String(activeTrace.cellCount - 1);
     panel.querySelector('[data-cube-trace-inspector]').innerHTML = `
@@ -337,8 +437,8 @@
       button.classList.toggle('selected', pointId === details.pointId);
       const pointInputIndex = activeTrace.inputCellIndexByPoint[pointId];
       const sameRow = Math.floor(pointInputIndex / activeTrace.gridSize) === details.inputRow;
-      button.classList.toggle('cohort', playbackMode === 'row' && sameRow);
-      button.classList.toggle('motion-muted', playbackMode === 'selected' && pointId !== details.pointId);
+      button.classList.toggle('cohort', visibleMode === 'row' && sameRow);
+      button.classList.toggle('motion-muted', visibleMode === 'selected' && pointId !== details.pointId);
     });
   }
 
@@ -348,7 +448,7 @@
     const values = {
       source: activeTrace?.sourceBitRange.consumed ?? 0,
       payload: activeTrace?.payloadCellIndexes.length ?? 0,
-      filler: activeTrace ? activeTrace.cellCount - activeTrace.payloadCellIndexes.length : 0,
+      filler: activeTrace ? activeTrace.cellCount - activeTrace.sourceBitRange.consumed : 0,
       block: activeTrace ? `${activeTrace.blockIndex + 1}/${activeTraces.length}` : '—',
       point: details?.pointId ?? '—',
       input: details?.inputCellIndex ?? '—',
@@ -373,8 +473,9 @@
   }
 
   function updatePlaybackControls(panel, state) {
-    const atStart = state.traceTime <= 0;
-    const atEnd = state.traceTime >= 1;
+    const packageScope = isPackagePlaybackScope();
+    const atStart = state.traceTime <= 0 && (!packageScope || selectedBlockIndex === 0);
+    const atEnd = state.traceTime >= 1 && (!packageScope || selectedBlockIndex === activeTraces.length - 1);
     panel.querySelector('[data-cube-trace-first]').disabled = atStart;
     panel.querySelector('[data-cube-trace-previous]').disabled = atStart;
     panel.querySelector('[data-cube-trace-reverse-play]').disabled = atStart && playbackDirection >= 0;
@@ -401,7 +502,9 @@
       stage.hidden = stageIndex > state.nextPhaseIndex;
       stage.classList.toggle('active', stageIndex === state.phaseIndex || (state.segmentProgress > 0 && stageIndex === state.nextPhaseIndex));
     });
-    renderer?.setTraceTimelineState(activeTrace, state.traceTime, selectedPointId, playbackMode);
+    const rendererTime = playbackScope === 'overview-only' ? 5 / Math.max(1, activeTrace.phases.length - 1) : state.traceTime;
+    renderer?.setTraceTimelineState(activeTrace, rendererTime, selectedPointId, effectivePlaybackMode(playbackScope, playbackMode));
+    updateBlockTimeline(panel);
     updatePhaseMarkers(panel, state);
     updatePlaybackControls(panel, state);
     updateCounters(panel);
@@ -463,14 +566,27 @@
     if (playbackLastTimestamp == null) playbackLastTimestamp = timestamp;
     const elapsed = Math.min(100, Math.max(0, timestamp - playbackLastTimestamp));
     playbackLastTimestamp = timestamp;
-    const nextTime = traceTime + playbackDirection * elapsed * playbackSpeed / PLAYBACK_DURATION_MS;
-    const reachedBoundary = nextTime <= 0 || nextTime >= 1;
+    const duration = playbackScope === 'overview-only' ? OVERVIEW_BLOCK_DURATION_MS : PLAYBACK_DURATION_MS;
+    const nextTime = traceTime + playbackDirection * elapsed * playbackSpeed / duration;
+    const reachedBoundary = playbackDirection > 0 ? nextTime >= 1 : nextTime <= 0;
     traceTime = clamp(nextTime, 0, 1);
     updateTimelineDisplay(panel);
+    if (reachedBoundary && isPackagePlaybackScope()) {
+      const targetBlock = sequenceBlockIndex(selectedBlockIndex, playbackDirection, activeTraces.length, false);
+      if (targetBlock !== null) {
+        const direction = playbackDirection;
+        loadSelectedBlock(panel, targetBlock, { quiet: true, keepPlaying: true, traceTime: direction > 0 ? 0 : 1 });
+        playbackDirection = direction;
+        playbackLastTimestamp = timestamp;
+        setStatus(panel, `${direction > 0 ? 'Advanced to' : 'Returned to'} package block ${targetBlock + 1} of ${activeTraces.length}. Package ciphertext is unchanged.`, 'success');
+        playbackFrame = requestFrame(nextTimestamp => playbackTick(panel, nextTimestamp));
+        return;
+      }
+    }
     if (reachedBoundary) {
       const directionText = playbackDirection > 0 ? 'completed' : 'returned to the beginning';
       pausePlayback(panel, false);
-      setStatus(panel, `Selected block animation ${directionText}. Package state and ciphertext were unchanged.`, 'success');
+      setStatus(panel, `${playbackScope.replaceAll('-', ' ')} playback ${directionText}. Package state and ciphertext were unchanged.`, 'success');
       return;
     }
     playbackFrame = requestFrame(nextTimestamp => playbackTick(panel, nextTimestamp));
@@ -480,13 +596,18 @@
     if (!activeTrace) fail('Select a package block before playback.');
     if (direction !== 1 && direction !== -1) fail('Playback direction must be forward or reverse.');
     pausePlayback(panel, false);
-    if (direction > 0 && traceTime >= 1) traceTime = 0;
-    if (direction < 0 && traceTime <= 0) traceTime = 1;
+    if (isPackagePlaybackScope()) {
+      if (direction > 0 && traceTime >= 1) loadSelectedBlock(panel, sequenceBlockIndex(selectedBlockIndex, 1, activeTraces.length, true), { quiet: true, keepPlaying: true, traceTime: 0 });
+      if (direction < 0 && traceTime <= 0) loadSelectedBlock(panel, sequenceBlockIndex(selectedBlockIndex, -1, activeTraces.length, true), { quiet: true, keepPlaying: true, traceTime: 1 });
+    } else {
+      if (direction > 0 && traceTime >= 1) traceTime = 0;
+      if (direction < 0 && traceTime <= 0) traceTime = 1;
+    }
     playbackDirection = direction;
     playbackLastTimestamp = null;
     updateTimelineDisplay(panel);
     playbackFrame = requestFrame(timestamp => playbackTick(panel, timestamp));
-    setStatus(panel, `${direction > 0 ? 'Forward' : 'Reverse'} playback started for package block ${selectedBlockIndex + 1} at ${playbackSpeed}× in ${playbackMode} mode.`, 'success');
+    setStatus(panel, `${direction > 0 ? 'Forward' : 'Reverse'} playback started for ${playbackScope.replaceAll('-', ' ')} at ${playbackSpeed}×.`, 'success');
   }
 
   function selectPoint(panel, pointIdValue) {
@@ -517,6 +638,8 @@
     panel.querySelector('[data-cube-encoder-package]').value = '';
     panel.querySelector('[data-cube-encoder-recovered]').value = '';
     panel.querySelector('[data-cube-encoder-block]').replaceChildren();
+    panel.querySelector('[data-cube-encoder-block-timeline]').replaceChildren();
+    panel.querySelector('[data-cube-encoder-range-inspector]').textContent = 'No package block is selected.';
     panel.querySelector('[data-cube-encoder-package-summary]').textContent = message || 'No encrypted package is active.';
     panel.querySelector('[data-cube-encoder-roundtrip]').textContent = 'Round trip not yet validated.';
     panel.querySelector('[data-cube-encoder-roundtrip]').dataset.state = 'idle';
@@ -547,12 +670,62 @@
     select.replaceChildren(...activeTraces.map(trace => {
       const option = document.createElement('option');
       option.value = String(trace.blockIndex);
-      const outputStart = trace.blockIndex * trace.cellCount;
-      const outputEnd = outputStart + trace.cellCount - 1;
-      option.textContent = `Block ${trace.blockIndex + 1} · source ${trace.sourceBitRange.start}-${trace.sourceBitRange.endExclusive - 1} · ciphertext ${outputStart}-${outputEnd}`;
+      const descriptor = describeTraceBlock(trace, activePackage);
+      option.textContent = `Block ${trace.blockIndex + 1} · source ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1} · ciphertext ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}${descriptor.finalPartialBlock ? ' · FINAL PARTIAL' : ''}`;
       option.selected = trace.blockIndex === selectedBlockIndex;
       return option;
     }));
+    panel.querySelector('[data-cube-encoder-source-index]').max = String(Math.max(0, activePackage.originalBitLength - 1));
+    panel.querySelector('[data-cube-encoder-ciphertext-index]').max = String(Math.max(0, activePackage.ciphertext.length - 1));
+    renderBlockTimeline(panel);
+  }
+
+  function renderBlockTimeline(panel) {
+    const target = panel.querySelector('[data-cube-encoder-block-timeline]');
+    if (!target) return;
+    target.innerHTML = activeTraces.map(trace => {
+      const descriptor = describeTraceBlock(trace, activePackage);
+      const classes = ['cube-block-marker', descriptor.finalPartialBlock ? 'partial' : '', descriptor.validated ? 'validated' : 'invalid'].filter(Boolean).join(' ');
+      return `<button type="button" class="${classes}" data-cube-encoder-block-marker="${trace.blockIndex}" title="Source ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1}; ciphertext ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}; ${descriptor.totalFillerCells} filler cells"><strong>${trace.blockIndex + 1}</strong><span>S ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1}</span><span>C ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}</span><small>${descriptor.finalPartialBlock ? 'FINAL PARTIAL' : 'VALID'}</small></button>`;
+    }).join('');
+    updateBlockTimeline(panel);
+  }
+
+  function updateBlockTimeline(panel) {
+    panel.querySelectorAll('[data-cube-encoder-block-marker]').forEach(button => {
+      const blockIndex = Number(button.dataset.cubeEncoderBlockMarker);
+      button.classList.toggle('active', blockIndex === selectedBlockIndex);
+      button.setAttribute('aria-current', blockIndex === selectedBlockIndex ? 'step' : 'false');
+    });
+  }
+
+  function renderBlockRangeInspector(panel) {
+    const target = panel.querySelector('[data-cube-encoder-range-inspector]');
+    if (!target || !activePackage || !activeTraces.length) return;
+    const descriptor = describeTraceBlock(activeTraces[selectedBlockIndex], activePackage);
+    target.innerHTML = `<strong>Block ${descriptor.blockIndex + 1} of ${activeTraces.length}${descriptor.finalPartialBlock ? ' · final partial block' : ''}</strong><span>Source bits ${descriptor.sourceStart}-${descriptor.sourceEndExclusive - 1} (${descriptor.sourceBitsConsumed} consumed)</span><span>Ciphertext bits ${descriptor.ciphertextStart}-${descriptor.ciphertextEndExclusive - 1}</span><span>${descriptor.partialPayloadFillerCells} partial payload filler · ${descriptor.maskFillerCells} mask filler · ${descriptor.totalFillerCells} total deterministic filler</span><span>${descriptor.validated ? 'Trace output validated against the exact package slice.' : 'Trace validation failed.'}</span>`;
+    panel.querySelector('[data-cube-encoder-previous-block]').disabled = selectedBlockIndex <= 0;
+    panel.querySelector('[data-cube-encoder-next-block]').disabled = selectedBlockIndex >= activeTraces.length - 1;
+  }
+
+  function selectAdjacentBlock(panel, direction) {
+    const target = sequenceBlockIndex(selectedBlockIndex, direction, activeTraces.length, false);
+    if (target === null) return;
+    loadSelectedBlock(panel, target);
+  }
+
+  function jumpToSourceBit(panel, sourceBitIndexValue) {
+    const location = locateSourceBit(activeTraces, sourceBitIndexValue);
+    loadSelectedBlock(panel, location.blockIndex, { quiet: true, pointId: location.pointId, traceTime: 0 });
+    setStatus(panel, `Source bit ${location.sourceBitIndex} is block ${location.blockIndex + 1}, point P${location.pointId}, input cell ${location.inputCellIndex}, and ciphertext index ${location.ciphertextIndex}.`, 'success');
+    return location;
+  }
+
+  function jumpToCiphertextBit(panel, ciphertextIndexValue) {
+    const location = locateCiphertextBit(activeTraces, ciphertextIndexValue);
+    loadSelectedBlock(panel, location.blockIndex, { quiet: true, pointId: location.pointId, traceTime: 8 / 9 });
+    setStatus(panel, `Ciphertext bit ${location.ciphertextIndex} is block ${location.blockIndex + 1}, output cell ${location.outputCellIndex}, point P${location.pointId}, and ${location.sourceBitIndex >= 0 ? `source bit ${location.sourceBitIndex}` : 'deterministic filler'}.`, 'success');
+    return location;
   }
 
   function renderPackageSummary(panel) {
@@ -574,17 +747,20 @@
     if (!activePackage || !activeTraces.length) fail('Encrypt or import a package before selecting a block.');
     const blockIndex = Number(blockIndexValue);
     if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= activeTraces.length) fail(`Block index must be from 0 through ${activeTraces.length - 1}.`);
-    pausePlayback(panel, false);
+    if (!options.keepPlaying) pausePlayback(panel, false);
     selectedBlockIndex = blockIndex;
     panel.querySelector('[data-cube-encoder-block]').value = String(blockIndex);
     renderPackageSummary(panel);
+    updateBlockTimeline(panel);
+    renderBlockRangeInspector(panel);
     if (activeKey.gridSize > MAX_MANUAL_TRACE_GRID_SIZE) {
-      clearTrace(panel, `Package block ${blockIndex + 1} is valid, but V7 detailed animation supports grids through ${MAX_MANUAL_TRACE_GRID_SIZE} × ${MAX_MANUAL_TRACE_GRID_SIZE}. The complete ${activeKey.gridSize} × ${activeKey.gridSize} point field remains visible.`);
+      clearTrace(panel, `Package block ${blockIndex + 1} is valid, but V8 detailed animation supports grids through ${MAX_MANUAL_TRACE_GRID_SIZE} × ${MAX_MANUAL_TRACE_GRID_SIZE}. The complete ${activeKey.gridSize} × ${activeKey.gridSize} point field remains visible.`);
       return;
     }
     activeTrace = activeTraces[blockIndex];
-    traceTime = 0;
-    selectedPointId = firstPayloadPoint(activeTrace);
+    traceTime = options.traceTime == null ? 0 : clamp(Number(options.traceTime) || 0, 0, 1);
+    const requestedPoint = Number(options.pointId);
+    selectedPointId = Number.isInteger(requestedPoint) && requestedPoint >= 0 && requestedPoint < activeTrace.cellCount ? requestedPoint : firstPayloadPoint(activeTrace);
     renderTraceCollections(panel);
     renderPhaseMarkers(panel);
     panel.querySelector('[data-cube-trace-workspace]').hidden = false;
@@ -790,6 +966,11 @@
     panel.querySelector('[data-cube-encoder-decrypt]').addEventListener('click', () => { try { loadPackageFromText(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-encoder-validate]').addEventListener('click', () => { try { validateCurrentPair(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-encoder-block]').addEventListener('change', event => { try { loadSelectedBlock(panel, event.target.value); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-encoder-previous-block]').addEventListener('click', () => { try { selectAdjacentBlock(panel, -1); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-encoder-next-block]').addEventListener('click', () => { try { selectAdjacentBlock(panel, 1); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-encoder-block-timeline]').addEventListener('click', event => { const button = event.target.closest('[data-cube-encoder-block-marker]'); if (button) { try { loadSelectedBlock(panel, button.dataset.cubeEncoderBlockMarker); } catch (error) { setStatus(panel, error.message, 'error'); } } });
+    panel.querySelector('[data-cube-encoder-source-jump]').addEventListener('click', () => { try { jumpToSourceBit(panel, panel.querySelector('[data-cube-encoder-source-index]').value); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-encoder-ciphertext-jump]').addEventListener('click', () => { try { jumpToCiphertextBit(panel, panel.querySelector('[data-cube-encoder-ciphertext-index]').value); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-trace-bits]').addEventListener('input', () => clearPackage(panel, 'Manual input changed. Encrypt again to rebuild the canonical package and traces.'));
     panel.querySelector('[data-cube-encoder-copy-package]').addEventListener('click', async () => { try { await copyText(panel.querySelector('[data-cube-encoder-package]').value); setStatus(panel, 'Package JSON copied.', 'success'); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-encoder-copy-key]').addEventListener('click', async () => { try { await copyText(panel.querySelector('[data-cube-visualizer-key]').value); setStatus(panel, 'Key JSON copied.', 'success'); } catch (error) { setStatus(panel, error.message, 'error'); } });
@@ -817,6 +998,14 @@
       if (!RendererApi.constants.PLAYBACK_MODES.includes(mode)) return;
       playbackMode = mode;
       if (activeTrace) updateTimelineDisplay(panel);
+    });
+    panel.querySelector('[data-cube-trace-scope]').addEventListener('change', event => {
+      const scope = event.target.value;
+      if (!PLAYBACK_SCOPES.includes(scope)) return;
+      pausePlayback(panel, false);
+      playbackScope = scope;
+      if (activeTrace) updateTimelineDisplay(panel);
+      setStatus(panel, `Playback scope changed to ${scope.replaceAll('-', ' ')}.`, 'success');
     });
     panel.querySelector('[data-cube-trace-timeline]').addEventListener('input', event => {
       try { setTraceTime(panel, Number(event.target.value) / 1000); } catch (error) { setStatus(panel, error.message, 'error'); }
@@ -850,8 +1039,8 @@
     panel.id = PANEL_ID;
     panel.className = 'cube-visualizer-panel';
     panel.innerHTML = `
-      <div class="cube-visualizer-header"><div><p class="eyebrow">V7 complete package encoder · selected-block animation</p><h2>Binary Cube Encoder Visualizer</h2><p>Encrypt manual bits or file bytes into the real canonical package, verify every block trace against its ciphertext, decrypt the result, and animate any selected block.</p></div><button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button></div>
-      <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. V7 animation is a verified view of canonical engine output; it never substitutes for package encryption or decryption.</p>
+      <div class="cube-visualizer-header"><div><p class="eyebrow">V8 multi-block sequencing · exact source and ciphertext inspection</p><h2>Binary Cube Encoder Visualizer</h2><p>Encrypt complete packages, navigate every verified block, jump directly to source or ciphertext bits, and play selected or package-wide trace scopes without changing canonical output.</p></div><button type="button" class="layout-button" data-cube-visualizer-close>Close Visualizer</button></div>
+      <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. V8 sequencing reads validated trace collections and never substitutes for canonical encryption or decryption.</p>
       <div class="cube-visualizer-layout">
         <aside class="cube-visualizer-controls">
           <div class="cube-visualizer-field"><label for="cube-visualizer-seed">Key seed</label><input id="cube-visualizer-seed" type="text" value="${DEFAULT_SEED}" spellcheck="false" data-cube-visualizer-seed></div>
@@ -883,11 +1072,14 @@
             <p class="cube-encoder-roundtrip" data-state="idle" data-cube-encoder-roundtrip>Round trip not yet validated.</p>
           </section>
           <section class="cube-trace-panel">
-            <div class="cube-trace-header"><div><p class="eyebrow">Verified selected package block</p><h3>Animated Bit Flow</h3></div><div class="cube-visualizer-field cube-encoder-block-field"><label for="cube-encoder-block">Package block</label><select id="cube-encoder-block" data-cube-encoder-block></select></div></div>
+            <div class="cube-trace-header"><div><p class="eyebrow">Verified package sequencing and selected-block trace</p><h3>Multi-Block Animated Bit Flow</h3></div><div class="cube-block-navigation"><button type="button" class="layout-button" data-cube-encoder-previous-block>Previous Block</button><div class="cube-visualizer-field cube-encoder-block-field"><label for="cube-encoder-block">Package block</label><select id="cube-encoder-block" data-cube-encoder-block></select></div><button type="button" class="layout-button" data-cube-encoder-next-block>Next Block</button></div></div>
+            <div class="cube-block-timeline" aria-label="Validated package block timeline" data-cube-encoder-block-timeline></div>
+            <div class="cube-block-range-inspector" data-cube-encoder-range-inspector>No package block is selected.</div>
+            <div class="cube-bit-jump-controls"><label>Source bit index<input type="number" min="0" step="1" value="0" data-cube-encoder-source-index></label><button type="button" class="layout-button" data-cube-encoder-source-jump>Jump to Source Bit</button><label>Ciphertext bit index<input type="number" min="0" step="1" value="0" data-cube-encoder-ciphertext-index></label><button type="button" class="layout-button" data-cube-encoder-ciphertext-jump>Jump to Ciphertext Bit</button></div>
             <p class="cube-trace-unavailable" data-cube-trace-unavailable>Encrypt or import a package to select a block for animation.</p>
             <div hidden data-cube-trace-workspace>
               <div class="cube-trace-phase-bar"><strong data-cube-trace-phase-name>Block 1 · phase 1</strong><div class="cube-trace-controls"><button type="button" class="layout-button" data-cube-trace-first>First</button><button type="button" class="layout-button" data-cube-trace-previous>Previous Phase</button><button type="button" class="layout-button" data-cube-trace-reverse-play>Reverse</button><button type="button" class="layout-button" data-cube-trace-pause>Pause</button><button type="button" class="link-button" data-cube-trace-play>Play</button><button type="button" class="layout-button" data-cube-trace-next>Next Phase</button><button type="button" class="layout-button" data-cube-trace-last>Last</button><button type="button" class="layout-button" data-cube-trace-restart>Restart</button></div></div>
-              <div class="cube-trace-playback-options"><label>Speed<select data-cube-trace-speed>${PLAYBACK_SPEEDS.map(speed => `<option value="${speed}"${speed === 1 ? ' selected' : ''}>${speed}×</option>`).join('')}</select></label><label>Motion cohort<select data-cube-trace-mode><option value="all">All bits</option><option value="selected">Selected bit only</option><option value="row">Selected input row</option></select></label></div>
+              <div class="cube-trace-playback-options"><label>Speed<select data-cube-trace-speed>${PLAYBACK_SPEEDS.map(speed => `<option value="${speed}"${speed === 1 ? ' selected' : ''}>${speed}×</option>`).join('')}</select></label><label>Package scope<select data-cube-trace-scope><option value="selected-bit">Selected bit</option><option value="selected-row">Selected row</option><option value="selected-block" selected>Selected block</option><option value="all-blocks">All blocks</option><option value="overview-only">Overview only</option></select></label><label>Motion cohort<select data-cube-trace-mode><option value="all">All bits</option><option value="selected">Selected bit only</option><option value="row">Selected input row</option></select></label></div>
               <div class="cube-trace-timeline"><input type="range" min="0" max="1000" step="1" value="0" aria-label="Binary Cube selected-block trace timeline" data-cube-trace-timeline><output data-cube-trace-timeline-readout>0.0% · segment 0.0%</output></div>
               <div class="cube-trace-markers" aria-label="Trace phase markers" data-cube-trace-markers></div>
               <div class="cube-trace-counters">${counterCard('source','Source bits in block')}${counterCard('payload','Payload capacity')}${counterCard('filler','Filler cells')}${counterCard('block','Selected block')}${counterCard('point','Selected point')}${counterCard('input','Input face index')}${counterCard('output','Output face index')}${counterCard('final','Package output index')}${counterCard('time','Trace time')}${counterCard('progress','Segment progress')}</div>
@@ -981,7 +1173,8 @@
       packageCiphertext: activePackage?.ciphertext || null,
       packageOriginalBitLength: activePackage?.originalBitLength ?? null,
       traceCollectionCount: activeTraces.length,
-      selectedBlockIndex: activeTrace?.blockIndex ?? null,
+      selectedBlockIndex: activePackage ? selectedBlockIndex : null,
+      blockDescriptors: activePackage ? Object.freeze(activeTraces.map(trace => describeTraceBlock(trace, activePackage))) : Object.freeze([]),
       recoveredBits,
       roundTripValid,
       sourceFileName,
@@ -999,6 +1192,17 @@
       tracePlaybackDirection: playbackDirection,
       tracePlaybackSpeed: playbackSpeed,
       tracePlaybackMode: playbackMode,
+      tracePlaybackScope: playbackScope,
+      packageSequenceActive: playbackDirection !== 0 && isPackagePlaybackScope(),
+      selectedBlockSourceStart: activeTrace?.sourceBitRange.start ?? null,
+      selectedBlockSourceEndExclusive: activeTrace?.sourceBitRange.endExclusive ?? null,
+      selectedBlockSourceBitsConsumed: activeTrace?.sourceBitRange.consumed ?? null,
+      selectedBlockCiphertextStart: activeTrace ? activeTrace.blockIndex * activeTrace.cellCount : null,
+      selectedBlockCiphertextEndExclusive: activeTrace ? (activeTrace.blockIndex + 1) * activeTrace.cellCount : null,
+      selectedBlockFinalPartial: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).finalPartialBlock : false,
+      selectedBlockPartialPayloadFillerCells: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).partialPayloadFillerCells : null,
+      selectedBlockMaskFillerCells: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).maskFillerCells : null,
+      selectedBlockTotalFillerCells: activeTrace && activePackage ? describeTraceBlock(activeTrace, activePackage).totalFillerCells : null,
       selectedPointId: details?.pointId ?? null,
       selectedSourceBitIndex: details?.sourceBitIndex ?? null,
       selectedInputCellIndex: details?.inputCellIndex ?? null,
@@ -1014,7 +1218,7 @@
     loadArtifacts,
     currentArtifacts,
     currentState,
-    utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask }),
-    constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, PLAYBACK_SPEEDS, MASK_MODES })
+    utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask, describeTraceBlock, locateSourceBit, locateCiphertextBit, sequenceBlockIndex, effectivePlaybackMode }),
+    constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, OVERVIEW_BLOCK_DURATION_MS, PLAYBACK_SPEEDS, PLAYBACK_SCOPES, MASK_MODES })
   });
 });
