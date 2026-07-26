@@ -1,0 +1,33 @@
+name: Capture Binary Cube V9 patch failure
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v9-diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Capture failed patch tail
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p docs/diagnostics
+          gh run view 30206828013 --repo "${{ github.repository }}" --log-failed | tail -n 80 > docs/diagnostics/binary-cube-v9-patch-failure.txt
+      - name: Commit diagnostic
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/diagnostics/binary-cube-v9-patch-failure.txt
+          git commit -m 'chore: capture Binary Cube V9 patch failure [skip ci]'
+          git push origin HEAD:main
