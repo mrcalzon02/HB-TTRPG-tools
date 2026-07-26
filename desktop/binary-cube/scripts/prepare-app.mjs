@@ -10,8 +10,6 @@ const vendorDirectory = path.join(desktopDirectory, 'app', 'vendor');
 const sharedAssets = [
   'styles.css',
   'shadowrun-binary-cube-engine.js',
-  'binary-cube-large-grid-engine.js',
-  'binary-cube-omnidirectional-engine.js',
   'binary-cube-large-grid-ui.js',
   'shadowrun-binary-cube-auth.js',
   'shadowrun-binary-cube-encryption.js',
