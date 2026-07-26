@@ -1,0 +1,140 @@
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.4867800Z   "staleResultGuardsPresent": true,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.4868389Z   "cancellationBoundaryPresent": true,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.4868782Z   "rendererAlgorithmIsolationPreserved": true,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.4869360Z   "encodingResolutionIndependentFromRendering": true
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.4869688Z }
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9318897Z {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9319826Z   "format": "hb-ttrpg-shadowrun-binary-cube-v9-performance-measurement-receipt",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9320757Z   "schemaVersion": "0.1.0",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9321216Z   "nodeVersion": "v22.23.1",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9321650Z   "rendererVersion": "0.5.0",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9321907Z   "policy": {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9322162Z     "detailedMaximum": 12,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9322409Z     "batchedMaximum": 64,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9322643Z     "sampledMaximum": 256,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9322906Z     "exactPointMaximum": 65536,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9323181Z     "sampledPointBudget": 8192,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9323474Z     "aggregatePointBudget": 2048
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9323721Z   },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9323925Z   "sceneMeasurements": [
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9324157Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9324363Z       "gridSize": 4,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9324587Z       "totalPointCount": 16,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9324829Z       "tier": "detailed",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9325082Z       "renderedPointCount": 16,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9325332Z       "omittedPointCount": 0,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9325615Z       "keyMilliseconds": 0.7345659999999938,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9325929Z       "planMilliseconds": 13.536144,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9326300Z       "sampledPointBuildMilliseconds": 0.35228999999999644,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9326692Z       "estimatedInterleavedBufferBytes": 384
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9326980Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9327160Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9327700Z       "gridSize": 64,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9327969Z       "totalPointCount": 4096,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9328225Z       "tier": "batched",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9328488Z       "renderedPointCount": 4096,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9328760Z       "omittedPointCount": 0,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9329042Z       "keyMilliseconds": 4.458744999999993,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9329734Z       "planMilliseconds": 0.4805909999999969,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9330100Z       "sampledPointBuildMilliseconds": 1.930367000000004,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9330491Z       "estimatedInterleavedBufferBytes": 98304
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9330771Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9330947Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9331131Z       "gridSize": 128,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9331371Z       "totalPointCount": 16384,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9331615Z       "tier": "sampled",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9331862Z       "renderedPointCount": 8192,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9332153Z       "omittedPointCount": 8192,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9332592Z       "keyMilliseconds": 2.686745000000002,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9332900Z       "planMilliseconds": 2.223456000000013,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9333250Z       "sampledPointBuildMilliseconds": 1.566155000000009,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9333622Z       "estimatedInterleavedBufferBytes": 196608
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9333908Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9334078Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9334255Z       "gridSize": 256,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9334498Z       "totalPointCount": 65536,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9334736Z       "tier": "sampled",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9335172Z       "renderedPointCount": 8192,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9335676Z       "omittedPointCount": 57344,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9336237Z       "keyMilliseconds": 9.813539000000006,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9336762Z       "planMilliseconds": 2.4908180000000044,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9337594Z       "sampledPointBuildMilliseconds": 4.727047999999996,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9338234Z       "estimatedInterleavedBufferBytes": 196608
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9338710Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9339042Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9339358Z       "gridSize": 512,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9339735Z       "totalPointCount": 262144,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9340113Z       "tier": "aggregate",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9340581Z       "renderedPointCount": 2048,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9341107Z       "omittedPointCount": 260096,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9341635Z       "keyMilliseconds": 44.892210000000006,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9342240Z       "planMilliseconds": 0.5314950000000067,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9342887Z       "sampledPointBuildMilliseconds": 20.278208000000006,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9343608Z       "estimatedInterleavedBufferBytes": 49152
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9344130Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9344458Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9344798Z       "gridSize": 1024,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9345254Z       "totalPointCount": 1048576,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9345708Z       "tier": "aggregate",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9346173Z       "renderedPointCount": 2048,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9346682Z       "omittedPointCount": 1046528,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9347246Z       "keyMilliseconds": 141.851855,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9348144Z       "planMilliseconds": 0.40339599999998654,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9348849Z       "sampledPointBuildMilliseconds": 68.85502499999996,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9349572Z       "estimatedInterleavedBufferBytes": 49152
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9350155Z     }
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9350486Z   ],
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9350849Z   "traceMeasurements": [
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9351275Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9351590Z       "gridSize": 4,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9351984Z       "pointCount": 16,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9352442Z       "renderedTracePointCount": 16,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9353010Z       "encryptionMilliseconds": 0.963766000000021,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9353605Z       "traceMilliseconds": 0.6070169999999848,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9354277Z       "traceValidationMilliseconds": 0.5251639999999611,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9355096Z       "traceSampleResolutionMilliseconds": 0.13201700000001892
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9355673Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9355964Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9356254Z       "gridSize": 12,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9356604Z       "pointCount": 144,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9357045Z       "renderedTracePointCount": 144,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9357836Z       "encryptionMilliseconds": 0.28722800000002735,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9358453Z       "traceMilliseconds": 0.4192660000000501,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9359079Z       "traceValidationMilliseconds": 0.5055080000000203,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9360106Z       "traceSampleResolutionMilliseconds": 0.01735299999995732
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9360675Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9360969Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9361310Z       "gridSize": 64,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9361695Z       "pointCount": 4096,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9362154Z       "renderedTracePointCount": 4096,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9362722Z       "encryptionMilliseconds": 7.645797000000016,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9363276Z       "traceMilliseconds": 5.517549000000031,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9363902Z       "traceValidationMilliseconds": 3.9829039999999623,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9364813Z       "traceSampleResolutionMilliseconds": 0.20724799999999277
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9365376Z     },
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9365653Z     {
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9393650Z       "gridSize": 128,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9394286Z       "pointCount": 16384,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9394823Z       "renderedTracePointCount": 8192,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9395475Z       "encryptionMilliseconds": 6.674726999999962,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9396114Z       "traceMilliseconds": 17.78831200000002,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9396860Z       "traceValidationMilliseconds": 20.77396699999997,
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9397820Z       "traceSampleResolutionMilliseconds": 1.444547
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9398414Z     }
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9398743Z   ],
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9399075Z   "notes": [
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9399728Z     "Measurements are observational and are not hard timing thresholds.",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9400649Z     "Canonical key and package work remains full resolution.",
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9401645Z     "Rendered point budgets cap WebGL upload size independently from encoding size."
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9402426Z   ]
+patch	Validate direct V9 implementation	2026-07-26T14:53:08.9402764Z }
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3399524Z file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:68
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3402391Z   if (result.exceptionDetails) throw new Error(`${label} failed: ${result.result?.description || result.exceptionDetails.text || 'unknown browser exception'}`);
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3403905Z                                      ^
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3404333Z 
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3405201Z Error: Binary Cube V8 browser sequencing failed: Uncaught (in promise) TypeError: Cannot assign to read only property '0' of object '[object Array]'
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3406791Z     at evaluate (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:68:38)
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3408726Z     at async file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-sequencing-browser.mjs:144:19
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3409555Z 
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3409685Z Node.js v22.23.1
+patch	Validate direct V9 implementation	2026-07-26T14:53:30.3473611Z ##[error]Process completed with exit code 1.
