@@ -1,4 +1,4 @@
-name: Capture Binary Cube V9 validation failure
+name: Inspect Binary Cube V9 trace cache assignments
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
   workflow_dispatch:
 
 permissions:
-  actions: read
   contents: write
 
 jobs:
@@ -18,16 +17,36 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Capture validation failure tail
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Apply candidate and capture cache assignments
         run: |
           mkdir -p docs/diagnostics
-          gh run view 30207005758 --repo "${{ github.repository }}" --log-failed | tail -n 140 > docs/diagnostics/binary-cube-v9-validation-failure.txt
+          base64 -d scripts/.temporary-v9-engine-renderer.py.gz.b64 | gzip -d > /tmp/v9-engine-renderer.py
+          base64 -d scripts/.temporary-v9-controller.py.gz.b64 | gzip -d > /tmp/v9-controller.py
+          base64 -d scripts/.temporary-v9-css.py.gz.b64 | gzip -d > /tmp/v9-css.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('/tmp/v9-controller.py')
+          source = path.read_text(encoding='utf-8')
+          old = '        fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V'
+          new = '      fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V'
+          if source.count(old) != 2:
+              raise SystemExit(f'Expected two fallback patch literals, found {source.count(old)}.')
+          path.write_text(source.replace(old, new), encoding='utf-8')
+          PY
+          python /tmp/v9-engine-renderer.py
+          python /tmp/v9-controller.py
+          python /tmp/v9-css.py
+          {
+            echo 'ACTIVE TRACE ASSIGNMENTS'
+            grep -n -B 4 -A 6 'activeTraces[[:space:]]*=' shadowrun-binary-cube-visualizer.js || true
+            echo
+            echo 'INDEXED TRACE WRITES'
+            grep -n -B 4 -A 6 'activeTraces\[' shadowrun-binary-cube-visualizer.js || true
+          } > docs/diagnostics/binary-cube-v9-trace-cache.txt
       - name: Commit diagnostic
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/diagnostics/binary-cube-v9-validation-failure.txt
-          git commit -m 'chore: capture Binary Cube V9 validation failure [skip ci]'
+          git add docs/diagnostics/binary-cube-v9-trace-cache.txt
+          git commit -m 'chore: inspect Binary Cube V9 trace cache assignments [skip ci]'
           git push origin HEAD:main
