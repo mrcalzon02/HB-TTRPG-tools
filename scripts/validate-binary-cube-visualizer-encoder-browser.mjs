@@ -2,6 +2,7 @@
 
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { createServer } from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
@@ -82,6 +83,20 @@ assert.equal(typeof WebSocket, 'function', 'Node.js 22 or newer is required.');
 const port = 9900 + (process.pid % 90);
 const display = `:${630 + (process.pid % 80)}`;
 const profileDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'binary-cube-v7-browser-'));
+const webServer = createServer((request, response) => {
+  response.writeHead(200, {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': 'no-store'
+  });
+  response.end('<!doctype html><html><head><meta charset="utf-8"><title>Binary Cube V7 Browser Validation</title></head><body><main><section id="shadowrun"></section></main></body></html>');
+});
+await new Promise((resolve, reject) => {
+  webServer.once('error', reject);
+  webServer.listen(0, '127.0.0.1', resolve);
+});
+const webAddress = webServer.address();
+assert.ok(webAddress && typeof webAddress === 'object', 'The V7 browser validation server did not expose a localhost address.');
+const pageUrl = `http://127.0.0.1:${webAddress.port}/`;
 const xvfbProcess = spawn(xvfb, [display, '-screen', '0', '1280x900x24', '-nolisten', 'tcp'], { stdio: ['ignore', 'ignore', 'pipe'] });
 let browserProcess;
 let cdp;
@@ -104,7 +119,7 @@ try {
     '--disable-default-apps',
     '--disable-extensions',
     '--no-first-run',
-    'about:blank'
+    pageUrl
   ], { env: { ...process.env, DISPLAY: display }, stdio: ['ignore', 'ignore', 'pipe'] });
 
   const pages = await waitForJson(`http://127.0.0.1:${port}/json/list`);
@@ -112,12 +127,16 @@ try {
   assert.ok(page?.webSocketDebuggerUrl);
   cdp = await connectCdp(page.webSocketDebuggerUrl);
   await cdp.call('Runtime.enable');
+  await cdp.call('Page.enable');
+  await cdp.call('Page.navigate', { url: pageUrl });
+  await delay(100);
 
   await evaluate(cdp, `(() => {
     document.body.innerHTML = '<main><section id="shadowrun"></section></main>';
     const styleNode = document.createElement('style');
     styleNode.textContent = 'body{margin:0;background:#050b13;color:white}.cube-visualizer-scene-shell{position:relative;width:800px;height:600px}.cube-visualizer-canvas{display:block;width:800px;height:600px}.cube-visualizer-label-layer{position:absolute;inset:0}.cube-visualizer-face-label,.cube-visualizer-axis-label,.cube-visualizer-direction-label,.cube-visualizer-phase-label{position:absolute}.cube-trace-stage[hidden],.cube-custom-mask-field[hidden]{display:none}';
     document.head.appendChild(styleNode);
+    localStorage.clear();
   })()`, 'Prepare V7 document');
 
   for (const filename of ['shadowrun-binary-cube-engine.js', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js', 'shadowrun-binary-cube-encryption.js']) {
@@ -229,7 +248,7 @@ try {
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v7-browser-validation-receipt',
-      schemaVersion: '0.2.0',
+      schemaVersion: '0.3.0',
       pass: true,
       rendererVersion: returnedState.rendererVersion,
       webglVersion: gl.getParameter(gl.VERSION),
@@ -247,7 +266,8 @@ try {
       packageFileImport: true,
       visualizerToLaboratoryHandoff: true,
       laboratoryToVisualizerHandoff: true,
-      largeGridPackageBoundary: true
+      largeGridPackageBoundary: true,
+      storageCapableLocalhostOrigin: true
     };
   })()`, 'Binary Cube V7 browser encoder');
 
@@ -268,12 +288,14 @@ try {
   assert.equal(receipt.visualizerToLaboratoryHandoff, true);
   assert.equal(receipt.laboratoryToVisualizerHandoff, true);
   assert.equal(receipt.largeGridPackageBoundary, true);
+  assert.equal(receipt.storageCapableLocalhostOrigin, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
   cdp?.close();
   terminate(browserProcess);
   terminate(xvfbProcess);
+  await new Promise(resolve => webServer.close(resolve));
   await delay(200);
   fs.rmSync(profileDirectory, { recursive: true, force: true });
 }
