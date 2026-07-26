@@ -98,22 +98,18 @@ jobs:
         run: node scripts/validate-binary-cube-visualizer-shell.mjs
 
       - name: Preserve Binary Cube V4 WebGL face-picking runtime
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
-          set +e
-          output="$(node scripts/validate-binary-cube-visualizer-browser.mjs 2>&1)"
-          code=$?
-          printf '%s\n' "$output"
-          if [ "$code" -ne 0 ]; then
-            detail="$(printf '%s\n' "$output" | tail -n 6 | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g' | cut -c1-140)"
-            gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
-              -f state=failure \
-              -f context='binary-cube/v7-v4-browser-diagnostic' \
-              -f description="$detail" \
-              -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            exit "$code"
-          fi
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-browser.mjs 2>&1 | tee binary-cube-v4-browser.log
+
+      - name: Retain V4 browser failure log
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-cube-v4-browser-failure
+          path: binary-cube-v4-browser.log
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Preserve Binary Cube V5 exact manual-step mappings
         run: node scripts/validate-binary-cube-visualizer-step.mjs
