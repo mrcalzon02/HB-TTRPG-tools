@@ -118,7 +118,6 @@ try {
     const styleNode = document.createElement('style');
     styleNode.textContent = 'body{margin:0;background:#050b13;color:white}.cube-visualizer-scene-shell{position:relative;width:800px;height:600px}.cube-visualizer-canvas{display:block;width:800px;height:600px}.cube-visualizer-label-layer{position:absolute;inset:0}.cube-visualizer-face-label,.cube-visualizer-axis-label,.cube-visualizer-direction-label,.cube-visualizer-phase-label{position:absolute}.cube-trace-stage[hidden],.cube-custom-mask-field[hidden]{display:none}';
     document.head.appendChild(styleNode);
-    localStorage.clear();
   })()`, 'Prepare V7 document');
 
   for (const filename of ['shadowrun-binary-cube-engine.js', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js', 'shadowrun-binary-cube-encryption.js']) {
@@ -220,9 +219,17 @@ try {
     await new Promise(resolve => setTimeout(resolve, 40));
     if (!Visualizer.currentState().roundTripValid) throw new Error('Package-file import did not retain exact round-trip validity.');
 
+    maskMode.value = '1';
+    maskMode.dispatchEvent(new Event('change', { bubbles: true }));
+    const sizeSelect = panel.querySelector('[data-cube-visualizer-size]');
+    sizeSelect.value = '20';
+    panel.querySelector('[data-cube-visualizer-generate]').click();
+    const largeState = Visualizer.currentState();
+    if (largeState.gridSize !== 20 || !largeState.packageReady || !largeState.roundTripValid || largeState.traceReady || largeState.traceCollectionCount !== largeState.packageBlockCount) throw new Error('The V7 large-grid package/static-scene boundary failed: ' + JSON.stringify(largeState));
+
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v7-browser-validation-receipt',
-      schemaVersion: '0.1.0',
+      schemaVersion: '0.2.0',
       pass: true,
       rendererVersion: returnedState.rendererVersion,
       webglVersion: gl.getParameter(gl.VERSION),
@@ -239,7 +246,8 @@ try {
       fileByteConversion: true,
       packageFileImport: true,
       visualizerToLaboratoryHandoff: true,
-      laboratoryToVisualizerHandoff: true
+      laboratoryToVisualizerHandoff: true,
+      largeGridPackageBoundary: true
     };
   })()`, 'Binary Cube V7 browser encoder');
 
@@ -259,6 +267,7 @@ try {
   assert.equal(receipt.packageFileImport, true);
   assert.equal(receipt.visualizerToLaboratoryHandoff, true);
   assert.equal(receipt.laboratoryToVisualizerHandoff, true);
+  assert.equal(receipt.largeGridPackageBoundary, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
