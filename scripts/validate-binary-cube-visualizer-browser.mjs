@@ -101,14 +101,14 @@ function terminate(processHandle) {
 
 const browser = findCommand(browserCandidates);
 const xvfb = findCommand(['Xvfb']);
-assert.ok(browser, 'A Chromium-compatible browser is required for the V3 WebGL smoke test.');
-assert.ok(xvfb, 'Xvfb is required for the V3 WebGL smoke test.');
+assert.ok(browser, 'A Chromium-compatible browser is required for the V4 WebGL smoke test.');
+assert.ok(xvfb, 'Xvfb is required for the V4 WebGL smoke test.');
 assert.equal(typeof WebSocket, 'function', 'Node.js 22 or newer is required for the browser validator.');
 
 const port = 9300 + (process.pid % 300);
 const displayNumber = 130 + (process.pid % 200);
 const display = `:${displayNumber}`;
-const profileDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'binary-cube-v3-browser-'));
+const profileDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'binary-cube-v4-browser-'));
 const xvfbProcess = spawn(xvfb, [display, '-screen', '0', '1280x900x24', '-nolisten', 'tcp'], {
   stdio: ['ignore', 'ignore', 'pipe']
 });
@@ -157,40 +157,87 @@ try {
   const receipt = await evaluate(cdp, `(() => {
     document.body.innerHTML = '<main><section id="shadowrun"></section></main>';
     const styleNode = document.createElement('style');
-    styleNode.textContent = 'body{margin:0;background:#050b13;color:white}.cube-visualizer-scene-shell{position:relative;width:800px;height:600px}.cube-visualizer-canvas{display:block;width:800px;height:600px}.cube-visualizer-label-layer{position:absolute;inset:0}.cube-visualizer-face-label,.cube-visualizer-axis-label{position:absolute}';
+    styleNode.textContent = 'body{margin:0;background:#050b13;color:white}.cube-visualizer-scene-shell{position:relative;width:800px;height:600px}.cube-visualizer-canvas{display:block;width:800px;height:600px}.cube-visualizer-label-layer{position:absolute;inset:0}.cube-visualizer-face-label,.cube-visualizer-axis-label,.cube-visualizer-direction-label{position:absolute}';
     document.head.appendChild(styleNode);
     const panel = window.ShadowrunBinaryCubeVisualizer.openPanel();
     const canvas = panel.querySelector('[data-cube-visualizer-canvas]');
     const gl = canvas.getContext('webgl2');
     if (!gl) throw new Error('WebGL2 is unavailable.');
-    const state = window.ShadowrunBinaryCubeVisualizer.currentState();
-    if (state.gridSize !== 4 || !state.keyId) throw new Error('The canonical default scene did not load.');
+    const initial = window.ShadowrunBinaryCubeVisualizer.currentState();
+    if (initial.gridSize !== 4 || !initial.keyId || initial.draftInputFace !== 'top' || initial.draftOutputFace !== 'front') throw new Error('The canonical default directional scene did not load.');
+    const originalKeyJson = panel.querySelector('[data-cube-visualizer-key]').value;
+    panel.querySelector('[data-cube-visualizer-load]').click();
+    const imported = window.ShadowrunBinaryCubeVisualizer.currentState();
+    if (imported.keyOrigin !== 'imported' || imported.keyId !== initial.keyId) throw new Error('The canonical key import boundary failed.');
+
+    panel.querySelector('[data-cube-visualizer-camera="front"]').click();
+    panel.querySelector('[data-cube-visualizer-pick-role="input"]').click();
+    let rect = canvas.getBoundingClientRect();
+    canvas.dispatchEvent(new MouseEvent('click', { bubbles: true, button: 0, clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 }));
+    const inputPicked = window.ShadowrunBinaryCubeVisualizer.currentState();
+    if (inputPicked.draftInputFace !== 'front' || inputPicked.pickRole !== 'output') throw new Error('Direct input-face picking failed.');
+
+    panel.querySelector('[data-cube-visualizer-camera="right"]').click();
+    rect = canvas.getBoundingClientRect();
+    canvas.dispatchEvent(new MouseEvent('click', { bubbles: true, button: 0, clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 }));
+    const outputPicked = window.ShadowrunBinaryCubeVisualizer.currentState();
+    if (outputPicked.draftOutputFace !== 'right') throw new Error('Direct output-face picking failed.');
+    if (panel.querySelector('[data-cube-visualizer-key]').value !== originalKeyJson) throw new Error('Directional drafting silently mutated the imported canonical key JSON.');
+    if (outputPicked.keyId !== initial.keyId || outputPicked.activeInputFace !== 'top' || outputPicked.activeOutputFace !== 'front') throw new Error('Directional drafting silently mutated the imported canonical key.');
+
+    const inputTurns = panel.querySelector('[data-cube-visualizer-input-turns]');
+    inputTurns.value = '2';
+    inputTurns.dispatchEvent(new Event('change', { bubbles: true }));
+    const turnedDraft = window.ShadowrunBinaryCubeVisualizer.currentState();
+    if (turnedDraft.draftInputQuarterTurns !== 2) throw new Error('Input quarter-turn drafting failed.');
+    panel.querySelector('[data-cube-visualizer-generate]').click();
+    const generated = window.ShadowrunBinaryCubeVisualizer.currentState();
+    if (generated.keyOrigin !== 'generated' || generated.keyId === initial.keyId) throw new Error('Canonical draft-key generation failed.');
+    if (generated.activeInputFace !== 'front' || generated.activeOutputFace !== 'right' || generated.activeInputQuarterTurns !== 2) throw new Error('Generated key did not adopt the explicit directional draft.');
+    if (JSON.stringify(generated.legalOutputFaces) !== JSON.stringify(['top', 'bottom', 'left', 'right'])) throw new Error('Legal output-face enforcement changed.');
+
     for (const preset of ['front', 'back', 'left', 'right', 'top', 'bottom']) {
       panel.querySelector('[data-cube-visualizer-camera="' + preset + '"]').click();
     }
     panel.querySelector('[data-cube-visualizer-reset-camera]').click();
     const status = panel.querySelector('[data-cube-visualizer-status]').textContent;
-    if (!/Rendered the complete keyed point field/.test(status)) throw new Error('The canonical scene status was not reported.');
+    if (!/Generated canonical key/.test(status)) throw new Error('The generated directional scene status was not reported.');
     return {
-      format: 'hb-ttrpg-shadowrun-binary-cube-v3-browser-validation-receipt',
+      format: 'hb-ttrpg-shadowrun-binary-cube-v4-browser-validation-receipt',
       schemaVersion: '0.1.0',
       pass: true,
-      keyId: state.keyId,
-      gridSize: state.gridSize,
-      rendererVersion: state.rendererVersion,
+      initialKeyId: initial.keyId,
+      generatedKeyId: generated.keyId,
+      gridSize: generated.gridSize,
+      rendererVersion: generated.rendererVersion,
       webglVersion: gl.getParameter(gl.VERSION),
       canvasWidth: canvas.width,
       canvasHeight: canvas.height,
       faceLabelCount: panel.querySelectorAll('.cube-visualizer-face-label').length,
+      directionLabelCount: panel.querySelectorAll('.cube-visualizer-direction-label').length,
+      inputFace: generated.activeInputFace,
+      outputFace: generated.activeOutputFace,
+      inputQuarterTurns: generated.activeInputQuarterTurns,
+      legalOutputFaceCount: generated.legalOutputFaces.length,
+      importedKeyImmutable: true,
+      directFacePicking: true,
       cameraPresetCount: 7
     };
-  })()`, 'Binary Cube V3 browser smoke');
+  })()`, 'Binary Cube V4 browser smoke');
 
   assert.equal(receipt.pass, true);
   assert.equal(receipt.gridSize, 4);
+  assert.notEqual(receipt.generatedKeyId, receipt.initialKeyId);
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.faceLabelCount, 6);
+  assert.equal(receipt.directionLabelCount, 2);
+  assert.equal(receipt.inputFace, 'front');
+  assert.equal(receipt.outputFace, 'right');
+  assert.equal(receipt.inputQuarterTurns, 2);
+  assert.equal(receipt.legalOutputFaceCount, 4);
+  assert.equal(receipt.importedKeyImmutable, true);
+  assert.equal(receipt.directFacePicking, true);
   assert.equal(receipt.cameraPresetCount, 7);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
