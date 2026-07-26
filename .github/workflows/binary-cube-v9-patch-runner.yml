@@ -66,6 +66,14 @@ jobs:
           if source.count(old) != 1:
               raise SystemExit(f'Expected one eager trace-cache branch, found {source.count(old)}.')
           path.write_text(source.replace(old, new, 1), encoding='utf-8')
+
+          test_path = Path('scripts/validate-binary-cube-visualizer-sequencing-browser.mjs')
+          test_source = test_path.read_text(encoding='utf-8')
+          test_old = "  assert.equal(receipt.rendererVersion, '0.4.0');"
+          test_new = "  assert.equal(receipt.rendererVersion, '0.5.0');"
+          if test_source.count(test_old) != 1:
+              raise SystemExit(f'Expected one V8 renderer compatibility assertion, found {test_source.count(test_old)}.')
+          test_path.write_text(test_source.replace(test_old, test_new, 1), encoding='utf-8')
           PY
 
       - name: Validate direct V9 implementation
@@ -74,6 +82,7 @@ jobs:
           node --check shadowrun-binary-cube-engine.js
           node --check binary-cube-visualizer-renderer.js
           node --check shadowrun-binary-cube-visualizer.js
+          node --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-performance.mjs
           node --check scripts/measure-binary-cube-visualizer-performance.mjs
           node --check scripts/validate-binary-cube-visualizer-performance-browser.mjs
@@ -91,7 +100,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add shadowrun-binary-cube-engine.js binary-cube-visualizer-renderer.js shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css
+          git add shadowrun-binary-cube-engine.js binary-cube-visualizer-renderer.js shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
           git commit -m 'feat: add Binary Cube V9 rendering performance tiers [skip ci]'
           git push origin HEAD:main
 
