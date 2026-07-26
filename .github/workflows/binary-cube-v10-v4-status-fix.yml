@@ -36,12 +36,13 @@ jobs:
           node-version: "22"
       - name: Align and validate V4 browser status assertion
         run: |
+          set -o pipefail
           python - <<'PY'
           from pathlib import Path
           path = Path('scripts/validate-binary-cube-visualizer-browser.mjs')
           source = path.read_text(encoding='utf-8')
           anchor = "    if (JSON.stringify(generated.legalOutputFaces) !== JSON.stringify(['top', 'bottom', 'left', 'right'])) throw new Error('Legal output-face enforcement changed.');"
-          replacement = anchor + "\n    const generatedStatus = panel.querySelector('[data-cube-visualizer-status]').textContent;\n    if (!/Generated canonical key/.test(generatedStatus) || !/encoding remains exact/i.test(generatedStatus)) throw new Error('The generated canonical-key acceptance and exact-encoding status was not reported.');"
+          replacement = anchor + "\n    const generatedStatus = panel.querySelector('[data-cube-visualizer-status]').textContent;\n    if (!/Generated canonical key/.test(generatedStatus) || !/encoding remains exact/i.test(generatedStatus)) throw new Error('The generated canonical-key acceptance and exact-encoding status was not reported: ' + generatedStatus);"
           if source.count(anchor) != 1:
               raise SystemExit(f'Expected one generated-key status anchor, found {source.count(anchor)}.')
           source = source.replace(anchor, replacement, 1)
@@ -51,7 +52,7 @@ jobs:
           path.write_text(source.replace(obsolete, '', 1), encoding='utf-8')
           PY
           node --check scripts/validate-binary-cube-visualizer-browser.mjs
-          node scripts/validate-binary-cube-visualizer-browser.mjs
+          node scripts/validate-binary-cube-visualizer-browser.mjs 2>&1 | tee /tmp/binary-cube-v10-v4-status.log
           git diff --check
       - name: Commit aligned validator
         run: |
@@ -70,6 +71,15 @@ jobs:
             -f context='binary-cube/v10-v4-status-alignment' \
             -f description='The V4 browser status validator passed under V10.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Commit alignment diagnostic
+        if: ${{ failure() }}
+        run: |
+          mkdir -p docs/diagnostics
+          if [ -f /tmp/binary-cube-v10-v4-status.log ]; then tail -n 100 /tmp/binary-cube-v10-v4-status.log > docs/diagnostics/binary-cube-v10-v4-status-failure.txt; else printf 'V4 status alignment failed before browser execution.\n' > docs/diagnostics/binary-cube-v10-v4-status-failure.txt; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/diagnostics/binary-cube-v10-v4-status-failure.txt
+          if ! git diff --cached --quiet; then git commit -m 'chore: capture Binary Cube V4 status alignment failure [skip ci]' && git push origin HEAD:main; fi
       - name: Record alignment failure
         if: ${{ failure() }}
         env:
