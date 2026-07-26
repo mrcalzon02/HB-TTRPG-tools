@@ -16,7 +16,18 @@
   });
 
   const tones = Object.freeze({
-    any: 'Any tone', hopeful: 'Hopeful', grim: 'Grim', mythic: 'Mythic', weird: 'Weird', grounded: 'Grounded'
+    any: 'Random style and tone',
+    bubblegum: 'Bubble-gum fantasy',
+    cartoon: 'Saturday-morning cartoon',
+    storybook: 'Storybook whimsy',
+    heroic: 'Heroic high fantasy',
+    mythic: 'Mythic epic',
+    grounded: 'Grounded adventure',
+    noir: 'Fantasy noir',
+    gritty: 'Gritty low fantasy',
+    ultraRealistic: 'Ultra-realistic survival',
+    grimdark: 'Grimdark',
+    weird: 'Surreal weird fantasy'
   });
 
   const premises = Object.freeze([
