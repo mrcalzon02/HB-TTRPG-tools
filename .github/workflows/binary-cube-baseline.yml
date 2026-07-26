@@ -1,5 +1,5 @@
-# V1 milestone gate: canonical engine, loaders, golden evidence, and desktop smoke.
-name: Validate Binary Cube V1 canonical engine
+# V2 milestone gate: canonical engine, golden evidence, immutable traces, and desktop smoke.
+name: Validate Binary Cube V2 transformation traces
 
 on:
   push:
@@ -18,6 +18,7 @@ on:
       - "blacklight-binary-cube-encryption.html"
       - "desktop/binary-cube/**"
       - "scripts/validate-binary-cube-baseline.mjs"
+      - "scripts/validate-binary-cube-trace.mjs"
   workflow_dispatch:
 
 permissions:
@@ -53,9 +54,13 @@ jobs:
           node --check desktop/binary-cube/tests/smoke.cjs
           node --check desktop/binary-cube/scripts/prepare-app.mjs
           node --check scripts/validate-binary-cube-baseline.mjs
+          node --check scripts/validate-binary-cube-trace.mjs
 
-      - name: Validate Binary Cube V0 golden evidence against V1
+      - name: Validate Binary Cube V0 golden evidence against V2
         run: node scripts/validate-binary-cube-baseline.mjs
+
+      - name: Validate Binary Cube V2 immutable transformation traces
+        run: node scripts/validate-binary-cube-trace.mjs
 
       - name: Validate Binary Cube desktop runtime contract
         run: node desktop/binary-cube/tests/smoke.cjs
