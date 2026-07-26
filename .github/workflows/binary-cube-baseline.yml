@@ -1,4 +1,4 @@
-# V9 final acceptance gate after aligning all V4-V8 compatibility validators: canonical evidence, immutable traces, measured rendering tiers, cancellation and stale-result guards, Chromium scale validation, and desktop smoke.
+# V9 final acceptance gate after V4-V8 compatibility alignment and deterministic Chromium teardown: canonical evidence, immutable traces, measured rendering tiers, cancellation and stale-result guards, Chromium scale validation, and desktop smoke.
 name: Validate Binary Cube V9 rendering performance
 
 on:
