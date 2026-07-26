@@ -39,11 +39,30 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Apply direct V10 patch
+      - name: Reconstruct verified V10 payload
         run: |
           set -o pipefail
           mkdir -p /tmp/binary-cube-v10
-          base64 -d scripts/.temporary-v10-accessibility-payload.tar.gz.b64 | tar -xz -C /tmp/binary-cube-v10
+          cat \
+            scripts/.temporary-v10-accessibility-payload.part-00 \
+            scripts/.temporary-v10-accessibility-payload.part-01 \
+            scripts/.temporary-v10-accessibility-payload.part-02a \
+            scripts/.temporary-v10-accessibility-payload.part-02b \
+            scripts/.temporary-v10-accessibility-payload.part-03a \
+            scripts/.temporary-v10-accessibility-payload.part-03b \
+            > /tmp/binary-cube-v10-payload.b64
+          test "$(wc -c < /tmp/binary-cube-v10-payload.b64)" -eq 26201
+          base64 -d /tmp/binary-cube-v10-payload.b64 > /tmp/binary-cube-v10-payload.tar.gz
+          echo '4ae8b9b59f8d202d45d9d9b387d897945cef1a61d3221145684096e6fbfa0bc5  /tmp/binary-cube-v10-payload.tar.gz' | sha256sum -c -
+          tar -xzf /tmp/binary-cube-v10-payload.tar.gz -C /tmp/binary-cube-v10
+          test -f /tmp/binary-cube-v10/v10_patch.py
+          test -f /tmp/binary-cube-v10/scripts/validate-binary-cube-visualizer-accessibility.mjs
+          test -f /tmp/binary-cube-v10/scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+          test -f /tmp/binary-cube-v10/docs/binary-cube-v10-accessibility-checklist.md
+
+      - name: Apply direct V10 patch
+        run: |
+          set -o pipefail
           cp /tmp/binary-cube-v10/scripts/validate-binary-cube-visualizer-accessibility.mjs scripts/
           cp /tmp/binary-cube-v10/scripts/validate-binary-cube-visualizer-accessibility-browser.mjs scripts/
           cp /tmp/binary-cube-v10/docs/binary-cube-v10-accessibility-checklist.md docs/
@@ -52,27 +71,29 @@ jobs:
       - name: Validate direct V10 implementation
         run: |
           set -o pipefail
-          node --check shadowrun-binary-cube-engine.js
-          node --check binary-cube-visualizer-renderer.js
-          node --check shadowrun-binary-cube-visualizer.js
-          node --check shadowrun-entry.js
-          node --check scripts/validate-binary-cube-visualizer-accessibility.mjs
-          node --check scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
-          node scripts/validate-binary-cube-baseline.mjs
-          node scripts/validate-binary-cube-trace.mjs
-          node scripts/validate-binary-cube-visualizer-shell.mjs
-          node scripts/validate-binary-cube-visualizer-step.mjs
-          node scripts/validate-binary-cube-visualizer-animation.mjs
-          node scripts/validate-binary-cube-visualizer-encoder.mjs
-          node scripts/validate-binary-cube-visualizer-sequencing.mjs
-          node scripts/validate-binary-cube-visualizer-performance.mjs
-          node scripts/measure-binary-cube-visualizer-performance.mjs
-          node scripts/validate-binary-cube-visualizer-accessibility.mjs
-          node scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
-          node scripts/validate-binary-cube-visualizer-performance-browser.mjs
-          node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
-          node desktop/binary-cube/tests/smoke.cjs
-          git diff --check
+          {
+            node --check shadowrun-binary-cube-engine.js
+            node --check binary-cube-visualizer-renderer.js
+            node --check shadowrun-binary-cube-visualizer.js
+            node --check shadowrun-entry.js
+            node --check scripts/validate-binary-cube-visualizer-accessibility.mjs
+            node --check scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+            node scripts/validate-binary-cube-baseline.mjs
+            node scripts/validate-binary-cube-trace.mjs
+            node scripts/validate-binary-cube-visualizer-shell.mjs
+            node scripts/validate-binary-cube-visualizer-step.mjs
+            node scripts/validate-binary-cube-visualizer-animation.mjs
+            node scripts/validate-binary-cube-visualizer-encoder.mjs
+            node scripts/validate-binary-cube-visualizer-sequencing.mjs
+            node scripts/validate-binary-cube-visualizer-performance.mjs
+            node scripts/measure-binary-cube-visualizer-performance.mjs
+            node scripts/validate-binary-cube-visualizer-accessibility.mjs
+            node scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
+            node scripts/validate-binary-cube-visualizer-performance-browser.mjs
+            node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+            node desktop/binary-cube/tests/smoke.cjs
+            git diff --check
+          } 2>&1 | tee /tmp/binary-cube-v10-validation.log
 
       - name: Commit V10 implementation
         run: |
@@ -93,11 +114,17 @@ jobs:
             -f description='Direct V10 accessibility edits validated and committed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      - name: Commit patch diagnostic
+      - name: Commit failure diagnostic
         if: ${{ failure() }}
         run: |
           mkdir -p docs/diagnostics
-          if [ -f /tmp/binary-cube-v10-patch.log ]; then tail -n 120 /tmp/binary-cube-v10-patch.log > docs/diagnostics/binary-cube-v10-patch-failure.txt; else printf 'V10 patch log was unavailable.\n' > docs/diagnostics/binary-cube-v10-patch-failure.txt; fi
+          if [ -f /tmp/binary-cube-v10-validation.log ]; then
+            tail -n 180 /tmp/binary-cube-v10-validation.log > docs/diagnostics/binary-cube-v10-patch-failure.txt
+          elif [ -f /tmp/binary-cube-v10-patch.log ]; then
+            tail -n 180 /tmp/binary-cube-v10-patch.log > docs/diagnostics/binary-cube-v10-patch-failure.txt
+          else
+            printf 'V10 payload reconstruction failed before patch execution.\n' > docs/diagnostics/binary-cube-v10-patch-failure.txt
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/diagnostics/binary-cube-v10-patch-failure.txt
