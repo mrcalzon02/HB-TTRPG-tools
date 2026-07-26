@@ -269,6 +269,44 @@ function validateGoldenEvidence(evidence) {
   assert.equal(sha256(evidence), GOLDEN.completeEvidence, 'Complete Binary Cube evidence drifted.');
 }
 
+function validateGeometryContracts(evidence) {
+  assert.equal(typeof Engine.pointDepth, 'function');
+  assert.equal(typeof Engine.projectionOrder, 'function');
+  assert.equal(typeof Engine.deterministicFiller, 'function');
+
+  const source = evidence.vectors[0];
+  const key = Engine.validateKey(source.key);
+  const points = Engine.buildPoints(key);
+  for (const point of points) {
+    assert.equal(Engine.pointDepth(key, point.x, point.y), point.z, `Point ${point.id} depth changed.`);
+  }
+
+  for (const face of FACES) {
+    for (let quarterTurns = 0; quarterTurns < 4; quarterTurns += 1) {
+      const typedOrder = Engine.projectionOrder(key, face, quarterTurns);
+      const objectOrder = Engine.faceOrder(points, face, key.gridSize, quarterTurns).map(point => point.id);
+      assert.equal(typedOrder instanceof Int32Array, true, `${face} projection must use a compact Int32Array.`);
+      assert.equal(typedOrder.length, key.gridSize * key.gridSize, `${face} projection length changed.`);
+      assert.deepEqual([...typedOrder], objectOrder, `${face} projection order changed at ${quarterTurns} quarter turns.`);
+      assert.equal(new Set(typedOrder).size, typedOrder.length, `${face} projection contains duplicate point IDs.`);
+    }
+  }
+
+  const fillerA = Engine.deterministicFiller(key, 0);
+  const fillerB = Engine.deterministicFiller(key, 0);
+  const fillerC = Engine.deterministicFiller(key, 1);
+  assert.equal(fillerA.length, key.gridSize * key.gridSize);
+  assert.deepEqual(fillerA, fillerB, 'Deterministic filler changed between identical calls.');
+  assert.notDeepEqual(fillerA, fillerC, 'Different block indexes unexpectedly produced identical filler.');
+  assert.equal(fillerA.every(bit => bit === '0' || bit === '1'), true, 'Filler contains non-binary values.');
+
+  assertThrows(() => Engine.pointDepth(key, -1, 0), /X coordinate/i, 'Negative X-coordinate validation');
+  assertThrows(() => Engine.pointDepth(key, 0, key.gridSize), /Y coordinate/i, 'Out-of-range Y-coordinate validation');
+  assertThrows(() => Engine.projectionOrder(key, 'invalid-face', 0), /Unknown cube face/i, 'Projection face validation');
+  assertThrows(() => Engine.deterministicFiller(key, -1), /Block index/i, 'Negative filler-block validation');
+  assertThrows(() => Engine.deterministicFiller(key, 0, 0), /Filler cell count/i, 'Filler-length validation');
+}
+
 function writeExpandedEvidence(evidence, outputPath) {
   const resolved = path.resolve(repositoryRoot, outputPath);
   fs.mkdirSync(path.dirname(resolved), { recursive: true });
@@ -280,10 +318,14 @@ function main() {
   assert.equal(Engine.constants.MAX_GRID_SIZE, 1024);
   assert.equal(typeof Engine.assertOmnidirectionalNonConflict, 'function');
   assert.equal(typeof Engine.algebraicInvariant, 'function');
+  assert.equal(typeof Engine.pointDepth, 'function');
+  assert.equal(typeof Engine.projectionOrder, 'function');
+  assert.equal(typeof Engine.deterministicFiller, 'function');
 
   const evidence = buildEvidence();
   validateNegativeCases(evidence);
   validateGoldenEvidence(evidence);
+  validateGeometryContracts(evidence);
 
   const expandedIndex = process.argv.indexOf('--write-expanded');
   if (expandedIndex >= 0) {
@@ -307,7 +349,8 @@ function main() {
     completeEvidenceSha256: sha256(evidence),
     roundTripValid: true,
     collisionFree: true,
-    negativeValidationCasesPassed: 4
+    publicGeometryContractsPassed: true,
+    negativeValidationCasesPassed: 9
   }, null, 2));
 }
 
