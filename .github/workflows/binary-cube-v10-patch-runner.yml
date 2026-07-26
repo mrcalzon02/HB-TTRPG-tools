@@ -67,6 +67,16 @@ jobs:
           cp /tmp/binary-cube-v10/scripts/validate-binary-cube-visualizer-accessibility-browser.mjs scripts/
           cp /tmp/binary-cube-v10/docs/binary-cube-v10-accessibility-checklist.md docs/
           python /tmp/binary-cube-v10/v10_patch.py 2>&1 | tee /tmp/binary-cube-v10-patch.log
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate-binary-cube-visualizer-shell.mjs')
+          source = path.read_text(encoding='utf-8')
+          old = "assert.match(controllerSource, /renderer\\.setScene/);"
+          new = "assert.match(controllerSource, /renderer\\?\\.setScene/);"
+          if source.count(old) != 1:
+              raise SystemExit(f'Expected one V4 renderer scene assertion, found {source.count(old)}.')
+          path.write_text(source.replace(old, new, 1), encoding='utf-8')
+          PY
 
       - name: Validate direct V10 implementation
         run: |
@@ -99,7 +109,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css shadowrun-entry.js scripts/validate-binary-cube-visualizer-encoder.mjs scripts/validate-binary-cube-visualizer-accessibility.mjs scripts/validate-binary-cube-visualizer-accessibility-browser.mjs docs/binary-cube-v10-accessibility-checklist.md
+          git add shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css shadowrun-entry.js scripts/validate-binary-cube-visualizer-shell.mjs scripts/validate-binary-cube-visualizer-encoder.mjs scripts/validate-binary-cube-visualizer-accessibility.mjs scripts/validate-binary-cube-visualizer-accessibility-browser.mjs docs/binary-cube-v10-accessibility-checklist.md
           git commit -m 'feat: add Binary Cube V10 accessible control and fallback [skip ci]'
           git push origin HEAD:main
 
@@ -128,8 +138,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/diagnostics/binary-cube-v10-patch-failure.txt
-          git commit -m 'chore: capture Binary Cube V10 patch failure [skip ci]'
-          git push origin HEAD:main
+          if ! git diff --cached --quiet; then git commit -m 'chore: capture Binary Cube V10 patch failure [skip ci]' && git push origin HEAD:main; fi
 
       - name: Record patch failure
         if: ${{ failure() }}
