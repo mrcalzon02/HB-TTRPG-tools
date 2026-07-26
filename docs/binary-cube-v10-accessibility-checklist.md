@@ -67,6 +67,9 @@ This checklist records the V10 acceptance boundary for the Binary Cube Encoder V
   - Live phase announcements
   - Exact 4×4 2D fallback
   - Forced WebGL initialization failure with preserved canonical package and trace behavior
+- `.github/workflows/binary-cube-baseline.yml`
+  - Re-runs every retained V0–V9 static and browser contract before publishing the V10 milestone result.
+  - Enforces the V10 static, Chromium accessibility, forced renderer-failure, and desktop runtime receipts as one acceptance gate.
 
 ## Exit gate
 
