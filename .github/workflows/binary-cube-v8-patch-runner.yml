@@ -1,0 +1,78 @@
+name: Run guarded Binary Cube V8 patch
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v8-patch-runner.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  statuses: write
+
+concurrency:
+  group: binary-cube-v8-patch-runner
+  cancel-in-progress: true
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record patch pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v8-patch' \
+            -f description='Applying and validating direct V8 sequencing edits.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply direct V8 patch
+        run: python scripts/apply-binary-cube-v8-temporary.py
+
+      - name: Validate direct V8 implementation
+        run: |
+          node --check shadowrun-binary-cube-visualizer.js
+          node --check scripts/validate-binary-cube-visualizer-sequencing.mjs
+          node --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
+          node scripts/validate-binary-cube-visualizer-encoder.mjs
+          node scripts/validate-binary-cube-visualizer-sequencing.mjs
+          node scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
+          git diff --check
+
+      - name: Commit V8 implementation
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add shadowrun-binary-cube-visualizer.js binary-cube-visualizer.css
+          git commit -m 'feat: add Binary Cube V8 multi-block sequencing [skip ci]'
+          git push origin HEAD:main
+
+      - name: Record patch success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v8-patch' \
+            -f description='Direct V8 sequencing edits validated and committed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record patch failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v8-patch' \
+            -f description='Direct V8 sequencing patch failed validation.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
