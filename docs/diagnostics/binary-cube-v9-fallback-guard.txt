@@ -1,0 +1,27 @@
+PATCH CONTEXT
+402-    const originText = origin === 'generated' ? 'Generated canonical key' : origin === 'handoff' ? 'Handoff key' : 'Imported canonical key';
+403-    const packageText = activePackage ? ` Package ${activePackage.checksum} is ready with ${activePackage.blockCount} block${activePackage.blockCount === 1 ? '' : 's'}.` : '';
+404-    setStatus(panel, `${originText} ${validated.keyId} accepted.${packageText} The renderer may use a disclosed sampled representation; encoding remains exact.`, 'success');
+405-    updatePerformancePanel(panel);
+406-    return validated;
+407-  }
+408-
+409-  function generateKey""", 'controller render key')
+410:controller = replace_once(controller, """        fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V7 scene.`;""", """        fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V9 scene.`;""", 'controller fallback version')
+411-# Bind quality/cancel after camera controls.
+412-controller = replace_once(controller, """    panel.querySelectorAll('[data-cube-visualizer-camera]').forEach(button => button.addEventListener('click', () => renderer?.setCameraPreset(button.dataset.cubeVisualizerCamera)));
+413-
+414-    panel.querySelector('[data-cube-encoder-file]')""", """    panel.querySelectorAll('[data-cube-visualizer-camera]').forEach(button => button.addEventListener('click', () => renderer?.setCameraPreset(button.dataset.cubeVisualizerCamera)));
+415-    panel.querySelector('[data-cube-visualizer-render-quality]').addEventListener('change', event => {
+416-      const quality = event.target.value;
+417-      if (!RENDER_QUALITIES.includes(quality)) return;
+418-      renderQuality = quality;
+
+CURRENT CONTROLLER CONTEXT
+894-      fallback.hidden = true;
+895-    } catch (error) {
+896-      fallback.hidden = false;
+897:      fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V7 scene.`;
+898-      setStatus(panel, error.message, 'error');
+899-      throw error;
+900-    }
