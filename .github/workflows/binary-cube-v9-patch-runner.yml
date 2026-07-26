@@ -44,6 +44,16 @@ jobs:
           base64 -d scripts/.temporary-v9-engine-renderer.py.gz.b64 | gzip -d > /tmp/v9-engine-renderer.py
           base64 -d scripts/.temporary-v9-controller.py.gz.b64 | gzip -d > /tmp/v9-controller.py
           base64 -d scripts/.temporary-v9-css.py.gz.b64 | gzip -d > /tmp/v9-css.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('/tmp/v9-controller.py')
+          source = path.read_text(encoding='utf-8')
+          old = '        fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V'
+          new = '      fallback.textContent = `${error.message} The canonical key and package remain available as text, but this browser cannot display the V'
+          if source.count(old) != 2:
+              raise SystemExit(f'Expected two fallback patch literals, found {source.count(old)}.')
+          path.write_text(source.replace(old, new), encoding='utf-8')
+          PY
           python /tmp/v9-engine-renderer.py
           python /tmp/v9-controller.py
           python /tmp/v9-css.py
