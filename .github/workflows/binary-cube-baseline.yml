@@ -34,6 +34,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 concurrency:
   group: "binary-cube-baseline-${{ github.ref }}"
@@ -43,6 +44,16 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+      - name: Record milestone pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v7-complete-encoder' \
+            -f description='Binary Cube V7 validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -109,3 +120,25 @@ jobs:
 
       - name: Validate Binary Cube desktop runtime contract
         run: node desktop/binary-cube/tests/smoke.cjs
+
+      - name: Record milestone success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v7-complete-encoder' \
+            -f description='Binary Cube V7 complete encoder gate passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record milestone failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v7-complete-encoder' \
+            -f description='Binary Cube V7 complete encoder gate failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
