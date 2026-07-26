@@ -1,5 +1,5 @@
-# V3 milestone gate: canonical engine, golden evidence, immutable traces, static 3D shell, real WebGL browser execution, and desktop smoke.
-name: Validate Binary Cube V3 visualizer shell
+# V4 milestone gate: canonical engine, golden evidence, immutable traces, selectable faces, directional arrows, real WebGL interaction, and desktop smoke.
+name: Validate Binary Cube V4 directional visualizer
 
 on:
   push:
@@ -65,16 +65,16 @@ jobs:
           node --check scripts/validate-binary-cube-visualizer-shell.mjs
           node --check scripts/validate-binary-cube-visualizer-browser.mjs
 
-      - name: Validate Binary Cube V0 golden evidence against V3
+      - name: Validate Binary Cube V0 golden evidence against V4
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
         run: node scripts/validate-binary-cube-trace.mjs
 
-      - name: Validate Binary Cube V3 static visualizer shell
+      - name: Validate Binary Cube V4 selectable-face visualizer shell
         run: node scripts/validate-binary-cube-visualizer-shell.mjs
 
-      - name: Validate Binary Cube V3 WebGL browser runtime
+      - name: Validate Binary Cube V4 WebGL face-picking runtime
         run: node scripts/validate-binary-cube-visualizer-browser.mjs
 
       - name: Validate Binary Cube desktop runtime contract
