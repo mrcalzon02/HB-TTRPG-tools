@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260725-3';
+  const ASSET_VERSION = '20260725-4';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -24,7 +24,7 @@
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
     ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
     ['tools','Binary Cube Encryption Laboratory','Develop and test a full-depth, omnidirectionally collision-free binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
-    ['tools','Binary Cube Encoder Visualizer','Step through a real canonical binary block in a manipulatable 3D point field with selectable faces, exact source-to-point-to-output inspection, deterministic phases, and no decorative algorithm reconstruction.','shadowrun-binary-cube-visualizer','prototype','Open Visualizer'],
+    ['tools','Binary Cube Encoder Visualizer','Encrypt manual bits or file bytes into a complete canonical package, validate every block trace, decrypt and verify the round trip, and animate any selected block in the real 3D point field.','shadowrun-binary-cube-visualizer','prototype','Open Visualizer'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
 
@@ -33,6 +33,7 @@
   let cubeVisualizerPromise = null;
   let sprawlToolPromise = null;
   let midmarketToolPromise = null;
+  let cubeHandoffsBound = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
@@ -82,7 +83,6 @@
   function normalizedAsset(value) {
     return String(value || '').split('?')[0].replace(/^\.\//, '');
   }
-
   function existingScript(src) {
     const normalized = normalizedAsset(src);
     return [...document.scripts].find(script => {
@@ -90,7 +90,6 @@
       return value === normalized || value.endsWith(`/${normalized}`);
     });
   }
-
   function existingStyle(href) {
     const normalized = normalizedAsset(href);
     return [...document.querySelectorAll('link[rel="stylesheet"]')].find(link => {
@@ -124,9 +123,7 @@
         link.href = `${href}?v=${ASSET_VERSION}`;
         link.dataset.shadowrunToolStyle = 'true';
         document.head.appendChild(link);
-      } else if (link.sheet) {
-        finish();
-      }
+      } else if (link.sheet) finish();
     });
     stylePromises.set(href, promise);
     promise.catch(() => stylePromises.delete(href));
@@ -162,9 +159,7 @@
         script.async = false;
         script.dataset.shadowrunTool = 'true';
         document.body.appendChild(script);
-      } else if (ready()) {
-        finish();
-      }
+      } else if (ready()) finish();
     });
     scriptPromises.set(src, promise);
     promise.catch(() => scriptPromises.delete(src));
@@ -181,9 +176,7 @@
   }
 
   function loadCubeTool() {
-    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) {
-      return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
-    }
+    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
     if (cubeToolPromise) return cubeToolPromise;
     cubeToolPromise = (async () => {
       await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
@@ -199,9 +192,7 @@
   }
 
   function loadCubeVisualizer() {
-    if (canonicalCubeEngineReady() && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer) {
-      return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
-    }
+    if (canonicalCubeEngineReady() && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer) return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
     if (cubeVisualizerPromise) return cubeVisualizerPromise;
     cubeVisualizerPromise = (async () => {
       await loadStyle('binary-cube-visualizer.css');
@@ -240,13 +231,31 @@
     return midmarketToolPromise;
   }
 
+  function bindCubeHandoffs() {
+    if (cubeHandoffsBound) return;
+    cubeHandoffsBound = true;
+    window.addEventListener('shadowrun-binary-cube-open-laboratory', async event => {
+      try {
+        const api = await loadCubeTool();
+        if (typeof api?.loadArtifacts !== 'function') throw new Error('The Binary Cube laboratory does not expose artifact loading.');
+        api.loadArtifacts(event.detail || {});
+      } catch (error) { alert(error.message); }
+    });
+    window.addEventListener('shadowrun-binary-cube-open-visualizer', async event => {
+      try {
+        const api = await loadCubeVisualizer();
+        if (typeof api?.loadArtifacts !== 'function') throw new Error('The Binary Cube visualizer does not expose artifact loading.');
+        api.loadArtifacts(event.detail || {});
+      } catch (error) { alert(error.message); }
+    });
+  }
+
   function toolLabel(toolId) {
     if (toolId === 'shadowrun-sprawl-discovery') return 'Discovery';
     if (toolId === 'shadowrun-midmarket-company-generator') return 'Generator';
     if (toolId === 'shadowrun-binary-cube-visualizer') return 'Visualizer';
     return 'Laboratory';
   }
-
   function loadTool(toolId) {
     if (toolId === 'shadowrun-sprawl-discovery') return loadSprawlTool();
     if (toolId === 'shadowrun-binary-cube-encryption') return loadCubeTool();
@@ -254,7 +263,6 @@
     if (toolId === 'shadowrun-midmarket-company-generator') return loadMidmarketCompanyTool();
     return Promise.reject(new Error(`No loader is registered for ${toolId}.`));
   }
-
   async function openTool(button) {
     const toolId = button.dataset.shadowrunOpen;
     button.disabled = true;
@@ -265,9 +273,8 @@
       const api = await loadTool(toolId);
       if (!api?.openPanel) throw new Error(`${toolLabel(toolId)} loaded without an open-panel interface.`);
       api.openPanel();
-    } catch (error) {
-      alert(error.message);
-    } finally {
+    } catch (error) { alert(error.message); }
+    finally {
       button.disabled = false;
       button.removeAttribute('aria-busy');
       button.textContent = original;
@@ -287,11 +294,8 @@
       const button = event.target.closest('[data-shadowrun-open]');
       if (button) void openTool(button);
     });
-    tabs();
-    render();
-    bind();
+    tabs(); render(); bind();
   }
-
   function tabs() {
     const target = document.getElementById('shadowrun-tabs');
     if (!target) return;
@@ -305,7 +309,6 @@
       target.appendChild(button);
     });
   }
-
   function render() {
     const grid = document.getElementById('shadowrun-grid');
     if (!grid) return;
@@ -320,10 +323,7 @@
   }
 
   function init() {
-    style();
-    navigation();
-    build();
-    navigation();
+    style(); navigation(); build(); navigation(); bindCubeHandoffs();
   }
 
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
