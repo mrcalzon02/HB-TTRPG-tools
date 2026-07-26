@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260725-1';
+  const ASSET_VERSION = '20260725-2';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -24,14 +24,17 @@
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
     ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
     ['tools','Binary Cube Encryption Laboratory','Develop and test a full-depth, omnidirectionally collision-free binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','prototype','Open Laboratory'],
+    ['tools','Binary Cube Encoder Visualizer','Inspect a real canonical keyed point field in a manipulatable 3D environment with exact point coordinates, six labeled faces, orbit, pan, zoom, and camera presets.','shadowrun-binary-cube-visualizer','prototype','Open Visualizer'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
 
   let active = 'all';
   let cubeToolPromise = null;
+  let cubeVisualizerPromise = null;
   let sprawlToolPromise = null;
   let midmarketToolPromise = null;
   const scriptPromises = new Map();
+  const stylePromises = new Map();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
 
@@ -76,8 +79,58 @@
     bind();
   }
 
+  function normalizedAsset(value) {
+    return String(value || '').split('?')[0].replace(/^\.\//, '');
+  }
+
   function existingScript(src) {
-    return [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src));
+    const normalized = normalizedAsset(src);
+    return [...document.scripts].find(script => {
+      const value = normalizedAsset(script.getAttribute('src'));
+      return value === normalized || value.endsWith(`/${normalized}`);
+    });
+  }
+
+  function existingStyle(href) {
+    const normalized = normalizedAsset(href);
+    return [...document.querySelectorAll('link[rel="stylesheet"]')].find(link => {
+      const value = normalizedAsset(link.getAttribute('href'));
+      return value === normalized || value.endsWith(`/${normalized}`);
+    });
+  }
+
+  function loadStyle(href) {
+    if (stylePromises.has(href)) return stylePromises.get(href);
+    const existing = existingStyle(href);
+    if (existing?.dataset.shadowrunStyleLoaded === 'true') return Promise.resolve();
+    const promise = new Promise((resolve, reject) => {
+      const link = existing || document.createElement('link');
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        link.dataset.shadowrunStyleLoaded = 'true';
+        resolve();
+      };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        reject(new Error(`${href} could not be loaded.`));
+      };
+      link.addEventListener('load', finish, { once: true });
+      link.addEventListener('error', fail, { once: true });
+      if (!existing) {
+        link.rel = 'stylesheet';
+        link.href = `${href}?v=${ASSET_VERSION}`;
+        link.dataset.shadowrunToolStyle = 'true';
+        document.head.appendChild(link);
+      } else if (link.sheet) {
+        finish();
+      }
+    });
+    stylePromises.set(href, promise);
+    promise.catch(() => stylePromises.delete(href));
+    return promise;
   }
 
   function loadScript(src, ready = () => false) {
@@ -123,6 +176,7 @@
       window.ShadowrunBinaryCubeEngine
       && window.ShadowrunBinaryCubeEngine.constants?.MAX_GRID_SIZE === 1024
       && typeof window.ShadowrunBinaryCubeEngine.assertOmnidirectionalNonConflict === 'function'
+      && typeof window.ShadowrunBinaryCubeEngine.traceEncryptBlock === 'function'
     );
   }
 
@@ -142,6 +196,22 @@
     })();
     cubeToolPromise.catch(() => { cubeToolPromise = null; });
     return cubeToolPromise;
+  }
+
+  function loadCubeVisualizer() {
+    if (canonicalCubeEngineReady() && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer) {
+      return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
+    }
+    if (cubeVisualizerPromise) return cubeVisualizerPromise;
+    cubeVisualizerPromise = (async () => {
+      await loadStyle('binary-cube-visualizer.css');
+      await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
+      await loadScript('binary-cube-visualizer-renderer.js', () => Boolean(window.BinaryCubeVisualizerRenderer));
+      await loadScript('shadowrun-binary-cube-visualizer.js', () => Boolean(window.ShadowrunBinaryCubeVisualizer));
+      return window.ShadowrunBinaryCubeVisualizer;
+    })();
+    cubeVisualizerPromise.catch(() => { cubeVisualizerPromise = null; });
+    return cubeVisualizerPromise;
   }
 
   function loadSprawlTool() {
@@ -173,12 +243,14 @@
   function toolLabel(toolId) {
     if (toolId === 'shadowrun-sprawl-discovery') return 'Discovery';
     if (toolId === 'shadowrun-midmarket-company-generator') return 'Generator';
+    if (toolId === 'shadowrun-binary-cube-visualizer') return 'Visualizer';
     return 'Laboratory';
   }
 
   function loadTool(toolId) {
     if (toolId === 'shadowrun-sprawl-discovery') return loadSprawlTool();
     if (toolId === 'shadowrun-binary-cube-encryption') return loadCubeTool();
+    if (toolId === 'shadowrun-binary-cube-visualizer') return loadCubeVisualizer();
     if (toolId === 'shadowrun-midmarket-company-generator') return loadMidmarketCompanyTool();
     return Promise.reject(new Error(`No loader is registered for ${toolId}.`));
   }
