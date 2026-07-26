@@ -244,7 +244,8 @@ try {
     sizeSelect.value = '20';
     panel.querySelector('[data-cube-visualizer-generate]').click();
     const largeState = Visualizer.currentState();
-    if (largeState.gridSize !== 20 || !largeState.packageReady || !largeState.roundTripValid || largeState.traceReady || largeState.traceCollectionCount !== largeState.packageBlockCount) throw new Error('The V7 large-grid package/static-scene boundary failed: ' + JSON.stringify(largeState));
+    if (largeState.gridSize !== 20 || !largeState.packageReady || !largeState.roundTripValid || !largeState.traceReady || largeState.traceCollectionCount !== largeState.packageBlockCount || largeState.renderTier !== 'batched' || largeState.exactPointCount !== 400 || largeState.renderedPointCount !== 400 || largeState.traceExactPointCount !== 400 || largeState.traceRenderedPointCount !== 400) throw new Error('The V7 large-grid package/exact-batched boundary failed: ' + JSON.stringify(largeState));
+    if (panel.querySelectorAll('.cube-trace-cell').length !== 0) throw new Error('The 20 × 20 package trace expanded one document cell per point.');
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v7-browser-validation-receipt',
@@ -266,13 +267,13 @@ try {
       packageFileImport: true,
       visualizerToLaboratoryHandoff: true,
       laboratoryToVisualizerHandoff: true,
-      largeGridPackageBoundary: true,
+      exactBatchedLargeGridTrace: true,
       storageCapableLocalhostOrigin: true
     };
   })()`, 'Binary Cube V7 browser encoder');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.4.0');
+  assert.equal(receipt.rendererVersion, '0.5.0');
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.defaultBlockCount, 2);
@@ -287,7 +288,7 @@ try {
   assert.equal(receipt.packageFileImport, true);
   assert.equal(receipt.visualizerToLaboratoryHandoff, true);
   assert.equal(receipt.laboratoryToVisualizerHandoff, true);
-  assert.equal(receipt.largeGridPackageBoundary, true);
+  assert.equal(receipt.exactBatchedLargeGridTrace, true);
   assert.equal(receipt.storageCapableLocalhostOrigin, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));

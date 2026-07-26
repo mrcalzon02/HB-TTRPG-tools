@@ -16,7 +16,7 @@ const rendererSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-vi
 const controllerSource = fs.readFileSync(path.join(repositoryRoot, 'shadowrun-binary-cube-visualizer.js'), 'utf8');
 const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visualizer.css'), 'utf8');
 
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.4.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.5.0');
 assert.equal(typeof Engine.traceEncryptBlock, 'function');
 assert.equal(typeof Engine.validateTransformationTrace, 'function');
 assert.equal(typeof Renderer.resolveTraceTimeline, 'function');

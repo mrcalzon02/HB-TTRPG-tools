@@ -142,7 +142,7 @@ try {
 
     const initial = window.ShadowrunBinaryCubeVisualizer.currentState();
     if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.tracePhaseId !== 'source-ready' || initial.tracePhaseCount !== 10) throw new Error('The canonical V6 timeline did not initialize at zero.');
-    if (initial.rendererVersion !== '0.4.0') throw new Error('The V6 renderer version is incorrect.');
+    if (initial.rendererVersion !== '0.5.0') throw new Error('The V6 renderer version is incorrect under V9.');
     if (panel.querySelectorAll('[data-cube-trace-marker]').length !== 10) throw new Error('The ten trace phase markers were not created.');
 
     const key = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);
@@ -218,8 +218,9 @@ try {
     sizeSelect.value = '20';
     panel.querySelector('[data-cube-visualizer-generate]').click();
     const largeScene = window.ShadowrunBinaryCubeVisualizer.currentState();
-    if (largeScene.gridSize !== 20 || largeScene.traceReady) throw new Error('The V6 detailed animation limit did not preserve the larger static scene.');
-    if (!/12 × 12/.test(panel.querySelector('[data-cube-trace-unavailable]').textContent)) throw new Error('The V6 detailed animation limit notice is missing.');
+    if (largeScene.gridSize !== 20 || !largeScene.traceReady || largeScene.renderTier !== 'batched' || largeScene.exactPointCount !== 400 || largeScene.renderedPointCount !== 400 || largeScene.traceExactPointCount !== 400 || largeScene.traceRenderedPointCount !== 400) throw new Error('The V6 boundary did not advance to an exact V9 batched animation: ' + JSON.stringify(largeScene));
+    if (panel.querySelectorAll('.cube-trace-cell').length !== 0) throw new Error('The 20 × 20 animated trace expanded one document cell per point.');
+    if (!/exact 400-point canonical state/i.test(panel.querySelector('[data-cube-trace-representation-notice]').textContent)) throw new Error('The V9 exact batched trace disclosure is missing.');
 
     sizeSelect.value = '4';
     panel.querySelector('[data-cube-visualizer-generate]').click();
@@ -247,13 +248,13 @@ try {
       playbackModes: 3,
       playbackSpeeds: 4,
       selectedBitTraceable: true,
-      largeStaticScenePreserved: true,
-      detailedAnimationGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE
+      exactBatchedTraceAt20: true,
+      domDetailedTraceGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE
     };
   })()`, 'Binary Cube V6 browser animation');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.4.0');
+  assert.equal(receipt.rendererVersion, '0.5.0');
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.phaseCount, 10);
@@ -266,8 +267,8 @@ try {
   assert.equal(receipt.playbackModes, 3);
   assert.equal(receipt.playbackSpeeds, 4);
   assert.equal(receipt.selectedBitTraceable, true);
-  assert.equal(receipt.largeStaticScenePreserved, true);
-  assert.equal(receipt.detailedAnimationGridLimit, 12);
+  assert.equal(receipt.exactBatchedTraceAt20, true);
+  assert.equal(receipt.domDetailedTraceGridLimit, 12);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {

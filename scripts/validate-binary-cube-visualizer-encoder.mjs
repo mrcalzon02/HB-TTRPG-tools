@@ -128,7 +128,7 @@ assert.match(laboratorySource, /data-cube-open-visualizer/);
 assert.match(laboratorySource, /Engine\.encryptBinary/);
 assert.match(laboratorySource, /Engine\.decryptBinary/);
 
-assert.match(entrySource, /ASSET_VERSION = '20260725-4'/);
+assert.match(entrySource, /ASSET_VERSION = '20260726-1'/);
 assert.match(entrySource, /shadowrun-binary-cube-open-laboratory/);
 assert.match(entrySource, /shadowrun-binary-cube-open-visualizer/);
 assert.match(entrySource, /api\.loadArtifacts/);

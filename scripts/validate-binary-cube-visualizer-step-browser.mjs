@@ -123,7 +123,7 @@ try {
     const gl = canvas.getContext('webgl2');
     if (!gl) throw new Error('WebGL2 unavailable.');
     const initial = window.ShadowrunBinaryCubeVisualizer.currentState();
-    if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.rendererVersion !== '0.4.0') throw new Error('V5 boundary did not initialize under V6.');
+    if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.rendererVersion !== '0.5.0') throw new Error('V5 boundary did not initialize under V9.');
     const key = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);
     const bits = panel.querySelector('[data-cube-trace-bits]').value.replace(/\\s+/g, '');
     const trace = window.ShadowrunBinaryCubeEngine.traceEncryptBlock(bits, key, 0);
@@ -158,7 +158,8 @@ try {
     sizeSelect.value = '20';
     panel.querySelector('[data-cube-visualizer-generate]').click();
     const largeScene = window.ShadowrunBinaryCubeVisualizer.currentState();
-    if (largeScene.gridSize !== 20 || largeScene.traceReady) throw new Error('Large static boundary changed.');
+    if (largeScene.gridSize !== 20 || !largeScene.traceReady || largeScene.renderTier !== 'batched' || largeScene.exactPointCount !== 400 || largeScene.renderedPointCount !== 400 || largeScene.traceExactPointCount !== 400 || largeScene.traceRenderedPointCount !== 400) throw new Error('The V5 boundary did not advance to an exact V9 batched trace: ' + JSON.stringify(largeScene));
+    if (panel.querySelectorAll('.cube-trace-cell').length !== 0) throw new Error('The 20 × 20 trace expanded one document cell per point.');
     sizeSelect.value = '4';
     panel.querySelector('[data-cube-visualizer-generate]').click();
     const rebuilt = window.ShadowrunBinaryCubeVisualizer.currentState();
@@ -177,14 +178,14 @@ try {
       sourcePointOutputTraceable: true,
       directPointInspection: true,
       firstPreviousNextLastRestart: true,
-      largeStaticScenePreserved: true,
-      detailedTraceGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE,
-      v5BoundaryPreservedUnderV6: true
+      exactBatchedTraceAt20: true,
+      domDetailedTraceGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE,
+      v5BoundaryPreservedUnderV9: true
     };
   })()`, 'Binary Cube V5 boundary browser test');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.4.0');
+  assert.equal(receipt.rendererVersion, '0.5.0');
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.phaseCount, 10);
@@ -192,9 +193,9 @@ try {
   assert.equal(receipt.sourcePointOutputTraceable, true);
   assert.equal(receipt.directPointInspection, true);
   assert.equal(receipt.firstPreviousNextLastRestart, true);
-  assert.equal(receipt.largeStaticScenePreserved, true);
-  assert.equal(receipt.detailedTraceGridLimit, 12);
-  assert.equal(receipt.v5BoundaryPreservedUnderV6, true);
+  assert.equal(receipt.exactBatchedTraceAt20, true);
+  assert.equal(receipt.domDetailedTraceGridLimit, 12);
+  assert.equal(receipt.v5BoundaryPreservedUnderV9, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {

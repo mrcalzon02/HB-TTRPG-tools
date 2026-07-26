@@ -29,7 +29,7 @@ const PHASES = Object.freeze([
   'block-complete'
 ]);
 
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.4.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.5.0');
 assert.deepEqual(Renderer.constants.PLAYBACK_MODES, ['all', 'selected', 'row']);
 assert.equal(typeof Renderer.resolveTraceTimeline, 'function');
 assert.equal(typeof Renderer.pointAnchorPosition, 'function');
