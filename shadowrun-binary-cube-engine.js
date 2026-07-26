@@ -12,6 +12,8 @@
   const ALGORITHM = 'latin-cube-face-permutation';
   const SECURITY_CLASSIFICATION = 'experimental-ttrpg-obfuscation-not-production-cryptography';
   const CHECKSUM_TYPE = 'fnv1a32-corruption-detection-only';
+  const TRACE_FORMAT = 'hb-ttrpg-shadowrun-binary-cube-transformation-trace';
+  const TRACE_SCHEMA_VERSION = '0.1.0';
   const MIN_GRID_SIZE = 3;
   const DEMONSTRATION_GRID_SIZE = 4;
   const STANDARD_TEST_GRID_SIZE = 16;
@@ -401,16 +403,37 @@
     return true;
   }
 
-  function transformBlockWithKey(block, key, fromFace, fromTurns, toFace, toTurns) {
+  function computeBlockTransformation(block, key, fromFace, fromTurns, toFace, toTurns) {
     const cellCount = key.gridSize * key.gridSize;
     if (typeof block !== 'string' || block.length !== cellCount || /[^01]/.test(block)) fail('A cube block must contain exactly gridSize squared binary digits.');
     const inputOrder = projectionOrderForKey(key, fromFace, fromTurns);
     const outputOrder = projectionOrderForKey(key, toFace, toTurns);
     const bitsByPoint = new Array(cellCount);
-    for (let index = 0; index < cellCount; index += 1) bitsByPoint[inputOrder[index]] = block[index];
+    const inputCellIndexByPoint = new Int32Array(cellCount);
+    const outputCellIndexByPoint = new Int32Array(cellCount);
+    for (let inputCellIndex = 0; inputCellIndex < cellCount; inputCellIndex += 1) {
+      const pointId = inputOrder[inputCellIndex];
+      bitsByPoint[pointId] = block[inputCellIndex];
+      inputCellIndexByPoint[pointId] = inputCellIndex;
+    }
     const output = new Array(cellCount);
-    for (let index = 0; index < cellCount; index += 1) output[index] = bitsByPoint[outputOrder[index]];
-    return output.join('');
+    for (let outputCellIndex = 0; outputCellIndex < cellCount; outputCellIndex += 1) {
+      const pointId = outputOrder[outputCellIndex];
+      output[outputCellIndex] = bitsByPoint[pointId];
+      outputCellIndexByPoint[pointId] = outputCellIndex;
+    }
+    return {
+      inputOrder,
+      outputOrder,
+      bitsByPoint,
+      inputCellIndexByPoint,
+      outputCellIndexByPoint,
+      outputBlock: output.join('')
+    };
+  }
+
+  function transformBlockWithKey(block, key, fromFace, fromTurns, toFace, toTurns) {
+    return computeBlockTransformation(block, key, fromFace, fromTurns, toFace, toTurns).outputBlock;
   }
 
   function transformBlock(block, rawKey, fromFace, fromTurns, toFace, toTurns) {
@@ -430,6 +453,244 @@
     const cellCount = cellCountValue === undefined ? defaultCellCount : Number(cellCountValue);
     if (!Number.isInteger(cellCount) || cellCount < 1) fail('Filler cell count must be a positive integer.');
     return deterministicFillerForKey(key, blockIndex, cellCount);
+  }
+
+  function payloadIndexesForKey(key) {
+    const indexes = [];
+    for (let index = 0; index < key.mask.length; index += 1) if (key.mask[index]) indexes.push(index);
+    return indexes;
+  }
+
+  function framePayloadBlockForKey(bits, key, blockIndex, sourceOffset) {
+    const cellCount = key.gridSize * key.gridSize;
+    const payloadIndexes = payloadIndexesForKey(key);
+    const deterministicFillerBits = deterministicFillerForKey(key, blockIndex, cellCount);
+    const cells = [...deterministicFillerBits];
+    const sourceBitIndexByInputCell = new Int32Array(cellCount);
+    sourceBitIndexByInputCell.fill(-1);
+    let cursor = sourceOffset;
+    for (const cellIndex of payloadIndexes) {
+      if (cursor >= bits.length) break;
+      cells[cellIndex] = bits[cursor];
+      sourceBitIndexByInputCell[cellIndex] = cursor;
+      cursor += 1;
+    }
+    return {
+      blockIndex,
+      sourceOffset,
+      nextSourceOffset: cursor,
+      payloadIndexes,
+      deterministicFillerBits,
+      sourceBitIndexByInputCell,
+      framedBlock: cells.join('')
+    };
+  }
+
+  function frozenArray(values) {
+    return Object.freeze(Array.from(values));
+  }
+
+  function frozenPointField(key) {
+    const points = new Array(key.gridSize * key.gridSize);
+    for (let x = 0; x < key.gridSize; x += 1) {
+      for (let y = 0; y < key.gridSize; y += 1) {
+        const id = x * key.gridSize + y;
+        points[id] = Object.freeze({ id, x, y, z: pointDepthForKey(key, x, y) });
+      }
+    }
+    return Object.freeze(points);
+  }
+
+  function tracePhases(frame, key, transformation) {
+    return Object.freeze([
+      Object.freeze({ id: 'source-ready', sourceStart: frame.sourceOffset, sourceEndExclusive: frame.nextSourceOffset }),
+      Object.freeze({ id: 'block-framed', cellCount: key.gridSize * key.gridSize, blockIndex: frame.blockIndex }),
+      Object.freeze({ id: 'mask-applied', payloadCellCount: frame.payloadIndexes.length }),
+      Object.freeze({ id: 'input-face-staged', face: key.inputFace, quarterTurns: key.inputQuarterTurns }),
+      Object.freeze({ id: 'point-assignment', pointCount: transformation.bitsByPoint.length }),
+      Object.freeze({ id: 'point-field-loaded', pointCount: transformation.bitsByPoint.length }),
+      Object.freeze({ id: 'output-projection-selected', face: key.outputFace, quarterTurns: key.outputQuarterTurns }),
+      Object.freeze({ id: 'output-face-staged', cellCount: transformation.outputBlock.length }),
+      Object.freeze({ id: 'encrypted-block-emitted', bitLength: transformation.outputBlock.length }),
+      Object.freeze({ id: 'block-complete', blockIndex: frame.blockIndex })
+    ]);
+  }
+
+  function buildEncryptionTrace(bits, key, frame, transformation) {
+    const cellCount = key.gridSize * key.gridSize;
+    const sourceBitIndexByPoint = new Int32Array(cellCount);
+    sourceBitIndexByPoint.fill(-1);
+    const cellKindByPoint = new Array(cellCount);
+    for (let pointId = 0; pointId < cellCount; pointId += 1) {
+      const inputCellIndex = transformation.inputCellIndexByPoint[pointId];
+      const sourceBitIndex = frame.sourceBitIndexByInputCell[inputCellIndex];
+      sourceBitIndexByPoint[pointId] = sourceBitIndex;
+      cellKindByPoint[pointId] = sourceBitIndex >= 0 ? 'payload' : 'filler';
+    }
+    return Object.freeze({
+      format: TRACE_FORMAT,
+      schemaVersion: TRACE_SCHEMA_VERSION,
+      algorithm: ALGORITHM,
+      keyId: key.keyId,
+      gridSize: key.gridSize,
+      blockIndex: frame.blockIndex,
+      sourceBitRange: Object.freeze({
+        start: frame.sourceOffset,
+        endExclusive: frame.nextSourceOffset,
+        consumed: frame.nextSourceOffset - frame.sourceOffset
+      }),
+      sourceBits: bits.slice(frame.sourceOffset, frame.nextSourceOffset),
+      inputFace: key.inputFace,
+      outputFace: key.outputFace,
+      inputQuarterTurns: key.inputQuarterTurns,
+      outputQuarterTurns: key.outputQuarterTurns,
+      cellCount,
+      payloadCapacity: frame.payloadIndexes.length,
+      mask: frozenArray(key.mask),
+      payloadCellIndexes: frozenArray(frame.payloadIndexes),
+      deterministicFillerBits: frozenArray(frame.deterministicFillerBits),
+      sourceBitIndexByInputCell: frozenArray(frame.sourceBitIndexByInputCell),
+      framedBlock: frame.framedBlock,
+      pointField: frozenPointField(key),
+      inputProjectionPointIds: frozenArray(transformation.inputOrder),
+      outputProjectionPointIds: frozenArray(transformation.outputOrder),
+      inputCellIndexByPoint: frozenArray(transformation.inputCellIndexByPoint),
+      outputCellIndexByPoint: frozenArray(transformation.outputCellIndexByPoint),
+      bitByPoint: frozenArray(transformation.bitsByPoint),
+      sourceBitIndexByPoint: frozenArray(sourceBitIndexByPoint),
+      cellKindByPoint: frozenArray(cellKindByPoint),
+      outputBlock: transformation.outputBlock,
+      phases: tracePhases(frame, key, transformation),
+      validation: Object.freeze({ collisionFree: true, canonicalEngine: true })
+    });
+  }
+
+  function traceEncryptBlock(binary, rawKey, blockIndexValue = 0, sourceOffsetValue) {
+    const bits = normalizeBits(binary);
+    const key = validateKey(rawKey);
+    const blockIndex = Number(blockIndexValue);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0) fail('Trace block index must be a non-negative integer.');
+    const payloadCapacity = key.mask.filter(Boolean).length;
+    const defaultSourceOffset = blockIndex * payloadCapacity;
+    const sourceOffset = sourceOffsetValue === undefined ? defaultSourceOffset : Number(sourceOffsetValue);
+    if (!Number.isInteger(sourceOffset) || sourceOffset < 0 || sourceOffset >= bits.length) fail('Trace source offset must identify an existing source bit.');
+    const frame = framePayloadBlockForKey(bits, key, blockIndex, sourceOffset);
+    const transformation = computeBlockTransformation(
+      frame.framedBlock,
+      key,
+      key.inputFace,
+      key.inputQuarterTurns,
+      key.outputFace,
+      key.outputQuarterTurns
+    );
+    return buildEncryptionTrace(bits, key, frame, transformation);
+  }
+
+  function validateTransformationTrace(rawTrace, rawKey) {
+    let trace;
+    try {
+      trace = typeof rawTrace === 'string' ? JSON.parse(rawTrace) : rawTrace;
+    } catch (error) {
+      fail(`Transformation trace JSON is invalid: ${error.message}`);
+    }
+    const key = validateKey(rawKey);
+    if (!trace || typeof trace !== 'object' || Array.isArray(trace)) fail('A transformation trace object is required.');
+    if (trace.format !== TRACE_FORMAT) fail('The transformation trace format is not recognized.');
+    if (trace.schemaVersion !== TRACE_SCHEMA_VERSION) fail(`Unsupported transformation trace schema: ${trace.schemaVersion || 'missing'}.`);
+    if (trace.algorithm !== ALGORITHM) fail('The transformation trace algorithm is not supported.');
+    if (trace.keyId !== key.keyId) fail('The transformation trace requires a different key.');
+    if (Number(trace.gridSize) !== key.gridSize) fail('Trace and key grid sizes do not match.');
+    if (trace.inputFace !== key.inputFace || trace.outputFace !== key.outputFace) fail('Trace and key face selections do not match.');
+    if (normalizeQuarterTurns(trace.inputQuarterTurns) !== key.inputQuarterTurns || normalizeQuarterTurns(trace.outputQuarterTurns) !== key.outputQuarterTurns) fail('Trace and key orientations do not match.');
+    const blockIndex = Number(trace.blockIndex);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0) fail('The transformation trace block index is invalid.');
+    const cellCount = key.gridSize * key.gridSize;
+    if (Number(trace.cellCount) !== cellCount) fail('The transformation trace cell count is invalid.');
+    const expectedPayloadIndexes = payloadIndexesForKey(key);
+    if (Number(trace.payloadCapacity) !== expectedPayloadIndexes.length) fail('The transformation trace payload capacity does not match the key mask.');
+    const requiredArrays = [
+      'mask',
+      'payloadCellIndexes',
+      'deterministicFillerBits',
+      'sourceBitIndexByInputCell',
+      'pointField',
+      'inputProjectionPointIds',
+      'outputProjectionPointIds',
+      'inputCellIndexByPoint',
+      'outputCellIndexByPoint',
+      'bitByPoint',
+      'sourceBitIndexByPoint',
+      'cellKindByPoint',
+      'phases'
+    ];
+    for (const field of requiredArrays) if (!Array.isArray(trace[field])) fail(`The transformation trace ${field} field is invalid.`);
+    for (const field of ['mask', 'deterministicFillerBits', 'sourceBitIndexByInputCell', 'pointField', 'inputProjectionPointIds', 'outputProjectionPointIds', 'inputCellIndexByPoint', 'outputCellIndexByPoint', 'bitByPoint', 'sourceBitIndexByPoint', 'cellKindByPoint']) {
+      if (trace[field].length !== cellCount) fail(`The transformation trace ${field} length does not match the cube grid.`);
+    }
+    if (JSON.stringify(trace.payloadCellIndexes) !== JSON.stringify(expectedPayloadIndexes)) fail('The transformation trace payload-cell order does not match the key mask.');
+    if (trace.framedBlock.length !== cellCount || /[^01]/.test(trace.framedBlock)) fail('The transformation trace framed block is invalid.');
+    if (trace.outputBlock.length !== cellCount || /[^01]/.test(trace.outputBlock)) fail('The transformation trace output block is invalid.');
+    if (typeof trace.sourceBits !== 'string' || !trace.sourceBits || /[^01]/.test(trace.sourceBits)) fail('The transformation trace source bits are invalid.');
+    const sourceStart = Number(trace.sourceBitRange?.start);
+    const sourceEndExclusive = Number(trace.sourceBitRange?.endExclusive);
+    const sourceConsumed = Number(trace.sourceBitRange?.consumed);
+    if (!Number.isInteger(sourceStart) || sourceStart < 0 || !Number.isInteger(sourceEndExclusive) || sourceEndExclusive <= sourceStart) fail('The transformation trace source range is invalid.');
+    if (sourceEndExclusive - sourceStart !== sourceConsumed || sourceConsumed !== trace.sourceBits.length) fail('The transformation trace source range does not match its source bits.');
+    if (JSON.stringify(trace.mask.map(Boolean)) !== JSON.stringify(key.mask)) fail('The transformation trace mask does not match the key.');
+    const expectedFiller = deterministicFillerForKey(key, blockIndex, cellCount);
+    if (JSON.stringify(trace.deterministicFillerBits) !== JSON.stringify(expectedFiller)) fail('The transformation trace filler does not match the canonical block filler.');
+
+    const reconstructedInput = [...expectedFiller];
+    for (let inputCellIndex = 0; inputCellIndex < cellCount; inputCellIndex += 1) {
+      const sourceBitIndex = Number(trace.sourceBitIndexByInputCell[inputCellIndex]);
+      if (!Number.isInteger(sourceBitIndex) || sourceBitIndex < -1) fail('The transformation trace contains an invalid source-bit index.');
+      if (sourceBitIndex >= 0) {
+        if (sourceBitIndex < sourceStart || sourceBitIndex >= sourceEndExclusive) fail('The transformation trace source-bit index falls outside its source range.');
+        if (!key.mask[inputCellIndex]) fail('The transformation trace assigns source data to an inactive mask cell.');
+        reconstructedInput[inputCellIndex] = trace.sourceBits[sourceBitIndex - sourceStart];
+      }
+    }
+    if (reconstructedInput.join('') !== trace.framedBlock) fail('The transformation trace source mapping does not reconstruct its framed block.');
+
+    const transformation = computeBlockTransformation(
+      trace.framedBlock,
+      key,
+      key.inputFace,
+      key.inputQuarterTurns,
+      key.outputFace,
+      key.outputQuarterTurns
+    );
+    if (trace.outputBlock !== transformation.outputBlock) fail('The transformation trace output does not match the canonical block transformation.');
+    if (JSON.stringify(trace.inputProjectionPointIds) !== JSON.stringify(Array.from(transformation.inputOrder))) fail('The trace input projection order is invalid.');
+    if (JSON.stringify(trace.outputProjectionPointIds) !== JSON.stringify(Array.from(transformation.outputOrder))) fail('The trace output projection order is invalid.');
+    if (JSON.stringify(trace.inputCellIndexByPoint) !== JSON.stringify(Array.from(transformation.inputCellIndexByPoint))) fail('The trace input-cell point mapping is invalid.');
+    if (JSON.stringify(trace.outputCellIndexByPoint) !== JSON.stringify(Array.from(transformation.outputCellIndexByPoint))) fail('The trace output-cell point mapping is invalid.');
+    if (JSON.stringify(trace.bitByPoint) !== JSON.stringify(transformation.bitsByPoint)) fail('The trace point-bit assignment is invalid.');
+
+    for (let pointId = 0; pointId < cellCount; pointId += 1) {
+      const point = trace.pointField[pointId];
+      const x = Math.floor(pointId / key.gridSize);
+      const y = pointId % key.gridSize;
+      if (!point || point.id !== pointId || point.x !== x || point.y !== y || point.z !== pointDepthForKey(key, x, y)) fail(`The transformation trace point field is invalid at point ${pointId}.`);
+      const inputCellIndex = transformation.inputCellIndexByPoint[pointId];
+      const expectedSourceBitIndex = Number(trace.sourceBitIndexByInputCell[inputCellIndex]);
+      if (Number(trace.sourceBitIndexByPoint[pointId]) !== expectedSourceBitIndex) fail(`The transformation trace source mapping is invalid at point ${pointId}.`);
+      const expectedKind = expectedSourceBitIndex >= 0 ? 'payload' : 'filler';
+      if (trace.cellKindByPoint[pointId] !== expectedKind) fail(`The transformation trace cell kind is invalid at point ${pointId}.`);
+    }
+
+    const phaseIds = trace.phases.map(phase => phase?.id);
+    const expectedPhaseIds = ['source-ready', 'block-framed', 'mask-applied', 'input-face-staged', 'point-assignment', 'point-field-loaded', 'output-projection-selected', 'output-face-staged', 'encrypted-block-emitted', 'block-complete'];
+    if (JSON.stringify(phaseIds) !== JSON.stringify(expectedPhaseIds)) fail('The transformation trace phase sequence is invalid.');
+    return Object.freeze({
+      valid: true,
+      keyId: key.keyId,
+      blockIndex,
+      cellCount,
+      sourceBitCount: sourceConsumed,
+      outputBlock: trace.outputBlock,
+      phaseCount: expectedPhaseIds.length
+    });
   }
 
   function checksumMaterial(payload) {
@@ -459,18 +720,14 @@
     const bits = normalizeBits(binary);
     const key = validateKey(rawKey);
     const cellCount = key.gridSize * key.gridSize;
-    const payloadIndexes = [];
-    for (let index = 0; index < key.mask.length; index += 1) if (key.mask[index]) payloadIndexes.push(index);
-    const payloadCapacity = payloadIndexes.length;
+    const payloadCapacity = payloadIndexesForKey(key).length;
     const blockCount = Math.ceil(bits.length / payloadCapacity);
     let cursor = 0;
     const encryptedBlocks = new Array(blockCount);
     for (let blockIndex = 0; blockIndex < blockCount; blockIndex += 1) {
-      const cells = deterministicFillerForKey(key, blockIndex, cellCount);
-      for (const cellIndex of payloadIndexes) {
-        if (cursor < bits.length) cells[cellIndex] = bits[cursor++];
-      }
-      encryptedBlocks[blockIndex] = transformBlockWithKey(cells.join(''), key, key.inputFace, key.inputQuarterTurns, key.outputFace, key.outputQuarterTurns);
+      const frame = framePayloadBlockForKey(bits, key, blockIndex, cursor);
+      cursor = frame.nextSourceOffset;
+      encryptedBlocks[blockIndex] = transformBlockWithKey(frame.framedBlock, key, key.inputFace, key.inputQuarterTurns, key.outputFace, key.outputQuarterTurns);
     }
     const payload = {
       format: PACKAGE_FORMAT,
@@ -590,6 +847,8 @@
     projectionOrder,
     transformBlock,
     deterministicFiller,
+    traceEncryptBlock,
+    validateTransformationTrace,
     projectionDiagnostics,
     assertProjectionUniqueness,
     encryptBinary,
@@ -606,6 +865,8 @@
       ALGORITHM,
       SECURITY_CLASSIFICATION,
       CHECKSUM_TYPE,
+      TRACE_FORMAT,
+      TRACE_SCHEMA_VERSION,
       MIN_GRID_SIZE,
       DEMONSTRATION_GRID_SIZE,
       STANDARD_TEST_GRID_SIZE,
