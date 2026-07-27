@@ -97,7 +97,7 @@ jobs:
           path = Path('scripts/validate-binary-cube-visualizer-encoder-browser.mjs')
           source = path.read_text()
           old = "    if (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input.');"
-          new = "    const fileImportState = Visualizer.currentState();\n    if (sourceField.value !== fileBits || fileImportState.sourceFileName !== 'sample.bin') throw new Error(`File bytes were not converted into exact binary input: field=${JSON.stringify(sourceField.value)} filename=${JSON.stringify(fileImportState.sourceFileName)} note=${JSON.stringify(panel.querySelector('[data-cube-encoder-file-note]')?.textContent || '')}.`);"
+          new = "    const fileImportState = Visualizer.currentState();\n    if (sourceField.value !== fileBits || fileImportState.sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input: field=' + JSON.stringify(sourceField.value) + ' filename=' + JSON.stringify(fileImportState.sourceFileName) + ' note=' + JSON.stringify(panel.querySelector('[data-cube-encoder-file-note]')?.textContent || '') + '.');"
           if source.count(old) != 1:
               raise SystemExit(f'V7 file assertion count was {source.count(old)}, expected 1')
           path.write_text(source.replace(old, new))
