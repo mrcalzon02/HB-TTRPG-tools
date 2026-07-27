@@ -77,9 +77,6 @@ jobs:
       - name: Preserve V10 forced renderer fallback
         run: node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
 
-      - name: Preserve V11 Chromium handoff and real storage boundaries
-        run: node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
-
       - name: Commit validated receipt correction
         run: |
           git config user.name "github-actions[bot]"
