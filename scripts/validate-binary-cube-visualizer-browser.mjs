@@ -144,6 +144,7 @@ try {
   assert.ok(page?.webSocketDebuggerUrl, 'Chromium did not expose a page DevTools endpoint.');
   cdp = await connectCdp(page.webSocketDebuggerUrl);
   await cdp.call('Runtime.enable');
+  await evaluate(cdp, `Object.defineProperty(window, 'localStorage', { configurable: true, value: (() => { const values = new Map(); return { getItem(key) { const normalized = String(key); return values.has(normalized) ? values.get(normalized) : null; }, setItem(key, value) { values.set(String(key), String(value)); }, removeItem(key) { values.delete(String(key)); }, clear() { values.clear(); } }; })() });`, 'Install synthetic V4 storage');
 
   for (const filename of [
     'shadowrun-binary-cube-engine.js',
@@ -221,7 +222,8 @@ try {
       legalOutputFaceCount: generated.legalOutputFaces.length,
       importedKeyImmutable: true,
       directFacePicking: true,
-      cameraPresetCount: 7
+      cameraPresetCount: 7,
+      syntheticStorageOnly: true
     };
   })()`, 'Binary Cube V4 browser smoke');
 
@@ -239,6 +241,7 @@ try {
   assert.equal(receipt.importedKeyImmutable, true);
   assert.equal(receipt.directFacePicking, true);
   assert.equal(receipt.cameraPresetCount, 7);
+  assert.equal(receipt.syntheticStorageOnly, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
