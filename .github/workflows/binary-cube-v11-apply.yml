@@ -112,22 +112,61 @@ jobs:
         run: node scripts/validate-binary-cube-visualizer-encoder.mjs
 
       - name: Preserve V7 Chromium encoder and laboratory handoff
-        run: node scripts/validate-binary-cube-visualizer-encoder-browser.mjs
+        id: v7_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-encoder-browser.mjs 2>&1 | tee /tmp/binary-cube-v11-v7-browser.log
 
       - name: Preserve V10 accessibility and exact fallback contract
-        run: node scripts/validate-binary-cube-visualizer-accessibility.mjs
+        id: v10_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-accessibility.mjs 2>&1 | tee /tmp/binary-cube-v11-v10-static.log
 
       - name: Preserve V10 Chromium accessibility and renderer fallback
-        run: node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+        id: v10_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs 2>&1 | tee /tmp/binary-cube-v11-v10-browser.log
 
       - name: Validate V11 tool-family compatibility contract
-        run: node scripts/validate-binary-cube-visualizer-compatibility.mjs
+        id: v11_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-compatibility.mjs 2>&1 | tee /tmp/binary-cube-v11-v11-static.log
 
       - name: Validate V11 Chromium handoff, storage, and security boundaries
-        run: node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
+        id: v11_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs 2>&1 | tee /tmp/binary-cube-v11-v11-browser.log
 
       - name: Validate desktop runtime contract
-        run: node desktop/binary-cube/tests/smoke.cjs
+        id: desktop
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node desktop/binary-cube/tests/smoke.cjs 2>&1 | tee /tmp/binary-cube-v11-desktop.log
+
+      - name: Enforce guarded compatibility result
+        id: enforce
+        run: |
+          failures=''
+          [ '${{ steps.v7_browser.outcome }}' = 'success' ] || failures="$failures v7-browser"
+          [ '${{ steps.v10_static.outcome }}' = 'success' ] || failures="$failures v10-static"
+          [ '${{ steps.v10_browser.outcome }}' = 'success' ] || failures="$failures v10-browser"
+          [ '${{ steps.v11_static.outcome }}' = 'success' ] || failures="$failures v11-static"
+          [ '${{ steps.v11_browser.outcome }}' = 'success' ] || failures="$failures v11-browser"
+          [ '${{ steps.desktop.outcome }}' = 'success' ] || failures="$failures desktop"
+          if [ -n "$failures" ]; then
+            echo "Binary Cube V11 guarded failures:$failures"
+            exit 1
+          fi
 
       - name: Commit validated V11 implementation
         run: |
@@ -153,19 +192,19 @@ jobs:
           git commit -m "feat: integrate Binary Cube V11 tool compatibility"
           git push origin HEAD:main
 
-      - name: Capture patch failure without runtime edits
+      - name: Capture guarded failure without runtime edits
         if: ${{ failure() }}
         run: |
           git reset --hard HEAD
           git clean -fd
           mkdir -p scripts
           {
-            echo '=== narrow log ==='
-            if [ -s /tmp/binary-cube-v11-narrow.log ]; then cat /tmp/binary-cube-v11-narrow.log; else echo 'No narrowing log was created.'; fi
-            echo
-            echo '=== apply log ==='
-            if [ -s /tmp/binary-cube-v11-apply.log ]; then tail -n 120 /tmp/binary-cube-v11-apply.log; else echo 'The V11 patch failed before an apply log was created.'; fi
-            echo
+            for file in /tmp/binary-cube-v11-*.log; do
+              [ -f "$file" ] || continue
+              echo "=== $(basename "$file") ==="
+              tail -n 120 "$file"
+              echo
+            done
             echo '=== duplicate patch labels ==='
             grep -n -B 20 -A 30 -E 'visualizer apply transport|auth seal provenance|entry lab await' /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py || true
           } > scripts/.binary-cube-v11-apply-failure.txt
@@ -173,7 +212,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/.binary-cube-v11-apply-failure.txt
           if ! git diff --cached --quiet; then
-            git commit -m "chore: capture Binary Cube V11 patch failure [skip ci]"
+            git commit -m "chore: capture Binary Cube V11 guarded failure [skip ci]"
             git push origin HEAD:main
           fi
 
