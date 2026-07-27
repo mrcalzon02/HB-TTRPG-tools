@@ -90,17 +90,22 @@ jobs:
           cp /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility-browser.mjs scripts/
           cp /tmp/binary-cube-v11/docs/binary-cube-v11-compatibility-report.md docs/
 
-      - name: Expose exact V7 file-import state on failure
+      - name: Stabilize V7 asynchronous file-import receipt
         run: |
           python3 - <<'PY'
           from pathlib import Path
           path = Path('scripts/validate-binary-cube-visualizer-encoder-browser.mjs')
           source = path.read_text()
-          old = "    if (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input.');"
-          new = "    const fileImportState = Visualizer.currentState();\n    if (sourceField.value !== fileBits || fileImportState.sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input: field=' + JSON.stringify(sourceField.value) + ' filename=' + JSON.stringify(fileImportState.sourceFileName) + ' note=' + JSON.stringify(panel.querySelector('[data-cube-encoder-file-note]')?.textContent || '') + '.');"
-          if source.count(old) != 1:
-              raise SystemExit(f'V7 file assertion count was {source.count(old)}, expected 1')
-          path.write_text(source.replace(old, new))
+          wait_old = "    await new Promise(resolve => setTimeout(resolve, 40));\n    const fileBits = '000000001111111101000001';"
+          wait_new = "    const fileBits = '000000001111111101000001';\n    for (let attempt = 0; attempt < 40 && (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin'); attempt += 1) await new Promise(resolve => setTimeout(resolve, 25));"
+          if source.count(wait_old) != 1:
+              raise SystemExit(f'V7 file wait block count was {source.count(wait_old)}, expected 1')
+          source = source.replace(wait_old, wait_new)
+          assertion_old = "    if (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input.');"
+          assertion_new = "    const fileImportState = Visualizer.currentState();\n    if (sourceField.value !== fileBits || fileImportState.sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input: field=' + JSON.stringify(sourceField.value) + ' filename=' + JSON.stringify(fileImportState.sourceFileName) + ' note=' + JSON.stringify(panel.querySelector('[data-cube-encoder-file-note]')?.textContent || '') + '.');"
+          if source.count(assertion_old) != 1:
+              raise SystemExit(f'V7 file assertion count was {source.count(assertion_old)}, expected 1')
+          path.write_text(source.replace(assertion_old, assertion_new))
           PY
 
       - name: Check candidate syntax
