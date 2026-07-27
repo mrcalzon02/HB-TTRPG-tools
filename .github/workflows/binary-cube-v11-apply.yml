@@ -55,7 +55,8 @@ jobs:
 
       - name: Apply direct authoritative V11 edits
         run: |
-          python3 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py
+          set -o pipefail
+          python3 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py 2>&1 | tee /tmp/binary-cube-v11-apply.log
           cp /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility.mjs scripts/
           cp /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility-browser.mjs scripts/
           cp /tmp/binary-cube-v11/docs/binary-cube-v11-compatibility-report.md docs/
@@ -121,6 +122,23 @@ jobs:
             scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
           git diff --cached --quiet && { echo "No validated V11 changes were staged." >&2; exit 1; }
           git commit -m "feat: integrate Binary Cube V11 tool compatibility"
+          git push origin HEAD:main
+
+      - name: Capture patch failure without runtime edits
+        if: ${{ failure() }}
+        run: |
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p scripts
+          if [ -s /tmp/binary-cube-v11-apply.log ]; then
+            tail -n 120 /tmp/binary-cube-v11-apply.log > scripts/.binary-cube-v11-apply-failure.txt
+          else
+            printf '%s\n' 'The V11 patch failed before an apply log was created.' > scripts/.binary-cube-v11-apply-failure.txt
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/.binary-cube-v11-apply-failure.txt
+          git commit -m "chore: capture Binary Cube V11 patch failure [skip ci]"
           git push origin HEAD:main
 
       - name: Record guarded patch success
