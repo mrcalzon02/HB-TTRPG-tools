@@ -10,7 +10,7 @@ No narrowing log was created.
   old = '''    return Object.freeze({
 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:595: SyntaxWarning: invalid escape sequence '\s'
   new = '''    const transport = transportArtifact(panel);
-entry lab await: expected exactly one match, found 2
+Applied Binary Cube V11 compatibility patch.
 
 === duplicate patch labels ===
 1-#!/usr/bin/env python3
@@ -30,7 +30,7 @@ entry lab await: expected exactly one match, found 2
 15-
 16-def replace_once(text, old, new, label):
 17-    count = text.count(old)
-18:    if label == 'auth seal provenance' and count == 2:
+18:    if label in {'auth seal provenance', 'entry lab await'} and count == 2:
 19-        return text.replace(old, new, 1)
 20-    if count != 1:
 21-        raise SystemExit(f"{label}: expected exactly one match, found {count}")
@@ -165,3 +165,55 @@ entry lab await: expected exactly one match, found 2
 700-    persistEnvelope(section);
 701-    setStatus(panel, 'Authenticated envelope loaded. Enter its passphrase to open it; no passphrase was stored.', 'success');
 702-    return clone(envelope);
+--
+721-    "        const secureDocument = imported;\n        imported = expandSecureExport(imported, JSON.parse(keyText), engine());\n        setTransportArtifact(targetPanel, 'secure-export', secureDocument);\n        setStatus(targetPanel, 'Secure encrypted package imported, reconstructed from the supplied key, and validated.', 'success');\n",
+722-    'secure import provenance')
+723-text = replace_once(text,
+724-    "      const expanded = expandSecureExport(value, keyFromPanel(targetPanel), engine());\n      replacePackageField(targetPanel, expanded);\n",
+725-    "      const expanded = expandSecureExport(value, keyFromPanel(targetPanel), engine());\n      replacePackageField(targetPanel, expanded);\n      setTransportArtifact(targetPanel, 'secure-export', value);\n",
+726-    'secure deferred provenance')
+727-write(path, text)
+728-
+729-# Entry loader
+730-path = 'shadowrun-entry.js'
+731-text = read(path)
+732-text = replace_once(text, "  const ASSET_VERSION = '20260726-2';\n", "  const ASSET_VERSION = '20260726-3';\n", 'entry version')
+733-text = replace_once(text,
+734-    "      await loadScript('shadowrun-binary-cube-auth-ui.js', () => Boolean(window.ShadowrunBinaryCubeAuthUI));\n      return window.ShadowrunBinaryCubeEncryption;\n",
+735-    "      await loadScript('shadowrun-binary-cube-auth-ui.js', () => Boolean(window.ShadowrunBinaryCubeAuthUI));\n      await loadScript('shadowrun-binary-cube-secure-export.js', () => Boolean(window.ShadowrunBinaryCubeSecureExport));\n      return window.ShadowrunBinaryCubeEncryption;\n",
+736-    'entry lab secure')
+737-text = replace_once(text,
+738-    "      await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);\n      await loadScript('binary-cube-visualizer-renderer.js', () => Boolean(window.BinaryCubeVisualizerRenderer));\n",
+739-    "      await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);\n      await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));\n      await loadScript('shadowrun-binary-cube-secure-export.js', () => Boolean(window.ShadowrunBinaryCubeSecureExport));\n      await loadScript('binary-cube-visualizer-renderer.js', () => Boolean(window.BinaryCubeVisualizerRenderer));\n",
+740-    'entry visualizer deps')
+741:text = replace_once(text, "        api.loadArtifacts(event.detail || {});\n", "        await Promise.resolve(api.loadArtifacts(event.detail || {}));\n", 'entry lab await')
+742-text = replace_once(text, "        api.loadArtifacts(event.detail || {});\n", "        await Promise.resolve(api.loadArtifacts(event.detail || {}));\n", 'entry visualizer await')
+743-write(path, text)
+744-
+745-# Desktop packaging and handoff
+746-path = 'desktop/binary-cube/scripts/prepare-app.mjs'
+747-text = read(path)
+748-text = replace_once(text,
+749-    "  'shadowrun-binary-cube-secure-export.js'\n",
+750-    "  'shadowrun-binary-cube-secure-export.js',\n  'binary-cube-visualizer.css',\n  'binary-cube-visualizer-renderer.js',\n  'shadowrun-binary-cube-visualizer.js'\n",
+751-    'desktop assets')
+752-write(path, text)
+753-
+754-path = 'desktop/binary-cube/app/index.html'
+755-text = read(path)
+756-text = replace_once(text, '  <link rel="stylesheet" href="desktop.css">\n', '  <link rel="stylesheet" href="desktop.css">\n  <link rel="stylesheet" href="vendor/binary-cube-visualizer.css">\n', 'desktop css')
+757-text = replace_once(text,
+758-    '  <script src="vendor/shadowrun-binary-cube-secure-export.js"></script>\n  <script src="desktop.js"></script>\n',
+759-    '  <script src="vendor/shadowrun-binary-cube-secure-export.js"></script>\n  <script src="vendor/binary-cube-visualizer-renderer.js"></script>\n  <script src="vendor/shadowrun-binary-cube-visualizer.js"></script>\n  <script src="desktop.js"></script>\n',
+760-    'desktop scripts')
+761-write(path, text)
+762-
+763-path = 'desktop/binary-cube/app/desktop.js'
+764-text = read(path)
+765-helper = r'''
+766-  function bindArtifactHandoffs() {
+767-    if (document.body.dataset.binaryCubeDesktopHandoffs === 'true') return;
+768-    document.body.dataset.binaryCubeDesktopHandoffs = 'true';
+769-    window.addEventListener('shadowrun-binary-cube-open-visualizer', async event => {
+770-      try {
+771-        await Promise.resolve(window.ShadowrunBinaryCubeVisualizer?.loadArtifacts(event.detail || {}));
