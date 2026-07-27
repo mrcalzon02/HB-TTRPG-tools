@@ -1,0 +1,9 @@
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:376: SyntaxWarning: invalid escape sequence '\s'
+  old = '''  function currentArtifacts() {
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:404: SyntaxWarning: invalid escape sequence '\s'
+  new = '''  function currentArtifacts() {
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:582: SyntaxWarning: invalid escape sequence '\s'
+  old = '''    return Object.freeze({
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:591: SyntaxWarning: invalid escape sequence '\s'
+  new = '''    const transport = transportArtifact(panel);
+visualizer apply transport: expected exactly one match, found 2
