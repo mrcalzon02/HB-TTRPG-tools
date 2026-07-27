@@ -53,6 +53,27 @@ jobs:
           test -s /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
           test -s /tmp/binary-cube-v11/docs/binary-cube-v11-compatibility-report.md
 
+      - name: Narrow the duplicated transport assignment anchor
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py')
+          source = path.read_text()
+          old = '''text = replace_once(text,
+              "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n",
+              "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n",
+              'visualizer apply transport')'''
+          new = '''transport_old = "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n"
+          transport_new = "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n"
+          transport_count = text.count(transport_old)
+          if transport_count != 2:
+              raise SystemExit(f'visualizer apply transport: expected exactly two source assignments before narrowing, found {transport_count}')
+          text = text.replace(transport_old, transport_new, 1)'''
+          if source.count(old) != 1:
+              raise SystemExit(f'guarded patch source block count was {source.count(old)}, expected 1')
+          path.write_text(source.replace(old, new))
+          PY
+
       - name: Apply direct authoritative V11 edits
         run: |
           set -o pipefail
@@ -140,8 +161,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/.binary-cube-v11-apply-failure.txt
-          git commit -m "chore: capture Binary Cube V11 patch failure [skip ci]"
-          git push origin HEAD:main
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: capture Binary Cube V11 patch failure [skip ci]"
+            git push origin HEAD:main
+          fi
 
       - name: Record guarded patch success
         if: ${{ success() }}
