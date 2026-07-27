@@ -1,5 +1,5 @@
-# V10 milestone gate: canonical evidence, preserved V4-V9 behavior, keyboard-only control, reduced-motion phase snapping, accessible trace transcripts, non-color distinctions, exact 2D fallback, Chromium validation, and desktop smoke.
-name: Validate Binary Cube V10 accessibility and fallback
+# V11 milestone gate: canonical evidence, preserved V4-V10 behavior, validated editor drafts, provenance-safe laboratory handoff, authenticated envelopes, metadata-minimized secure export, scoped storage migration, desktop exchange, Chromium validation, and desktop smoke.
+name: Validate Binary Cube V11 tool-family compatibility
 
 on:
   push:
@@ -21,6 +21,7 @@ on:
       - "blacklight-binary-cube-encryption.html"
       - "desktop/binary-cube/**"
       - "docs/binary-cube-v10-accessibility-checklist.md"
+      - "docs/binary-cube-v11-compatibility-report.md"
       - "scripts/validate-binary-cube-baseline.mjs"
       - "scripts/validate-binary-cube-trace.mjs"
       - "scripts/validate-binary-cube-visualizer-shell.mjs"
@@ -38,6 +39,8 @@ on:
       - "scripts/validate-binary-cube-visualizer-performance-browser.mjs"
       - "scripts/validate-binary-cube-visualizer-accessibility.mjs"
       - "scripts/validate-binary-cube-visualizer-accessibility-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-compatibility.mjs"
+      - "scripts/validate-binary-cube-visualizer-compatibility-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -58,8 +61,8 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=pending \
-            -f context='binary-cube/v10-accessibility-fallback' \
-            -f description='Binary Cube V10 validation is running.' \
+            -f context='binary-cube/v11-tool-family-compatibility' \
+            -f description='Binary Cube V11 compatibility validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Checkout
@@ -70,7 +73,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check Binary Cube JavaScript and V10 evidence
+      - name: Check Binary Cube JavaScript and V11 evidence
         run: |
           node --check shadowrun-binary-cube-engine.js
           node --check binary-cube-large-grid-ui.js
@@ -83,6 +86,7 @@ jobs:
           node --check shadowrun-binary-cube-visualizer.js
           node --check shadowrun-entry.js
           node --check app-lite-view-mounts.js
+          node --check desktop/binary-cube/app/desktop.js
           node --check desktop/binary-cube/tests/smoke.cjs
           node --check desktop/binary-cube/scripts/prepare-app.mjs
           node --check scripts/validate-binary-cube-baseline.mjs
@@ -102,10 +106,13 @@ jobs:
           node --check scripts/validate-binary-cube-visualizer-performance-browser.mjs
           node --check scripts/validate-binary-cube-visualizer-accessibility.mjs
           node --check scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-compatibility.mjs
+          node --check scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
           test -s docs/binary-cube-v10-accessibility-checklist.md
+          test -s docs/binary-cube-v11-compatibility-report.md
           mkdir -p binary-cube-gate-logs
 
-      - name: Validate Binary Cube V0 golden evidence against V10
+      - name: Validate Binary Cube V0 golden evidence against V11
         run: node scripts/validate-binary-cube-baseline.mjs
 
       - name: Validate Binary Cube V2 immutable transformation traces
@@ -198,19 +205,33 @@ jobs:
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-performance-browser.mjs 2>&1 | tee binary-cube-gate-logs/v9-browser.log
 
-      - name: Validate Binary Cube V10 keyboard, transcript, reduced motion, and exact fallback contract
+      - name: Preserve Binary Cube V10 keyboard, transcript, reduced motion, and exact fallback
         id: v10_static
         continue-on-error: true
         run: |
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-accessibility.mjs 2>&1 | tee binary-cube-gate-logs/v10-static.log
 
-      - name: Validate Binary Cube V10 Chromium accessibility and forced renderer fallback
+      - name: Preserve Binary Cube V10 Chromium accessibility and forced renderer fallback
         id: v10_browser
         continue-on-error: true
         run: |
           set -o pipefail
           node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs 2>&1 | tee binary-cube-gate-logs/v10-browser.log
+
+      - name: Validate Binary Cube V11 editor, auth, secure-export, storage, and desktop contracts
+        id: v11_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-compatibility.mjs 2>&1 | tee binary-cube-gate-logs/v11-static.log
+
+      - name: Validate Binary Cube V11 Chromium handoff and security boundaries
+        id: v11_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs 2>&1 | tee binary-cube-gate-logs/v11-browser.log
 
       - name: Validate Binary Cube desktop runtime contract
         id: desktop
@@ -223,7 +244,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: binary-cube-v10-gate-logs
+          name: binary-cube-v11-gate-logs
           path: binary-cube-gate-logs
           if-no-files-found: error
           retention-days: 3
@@ -246,6 +267,8 @@ jobs:
           [ '${{ steps.v9_browser.outcome }}' = 'success' ] || failures="$failures v9-browser"
           [ '${{ steps.v10_static.outcome }}' = 'success' ] || failures="$failures v10-static"
           [ '${{ steps.v10_browser.outcome }}' = 'success' ] || failures="$failures v10-browser"
+          [ '${{ steps.v11_static.outcome }}' = 'success' ] || failures="$failures v11-static"
+          [ '${{ steps.v11_browser.outcome }}' = 'success' ] || failures="$failures v11-browser"
           [ '${{ steps.desktop.outcome }}' = 'success' ] || failures="$failures desktop"
           if [ -n "$failures" ]; then
             echo "Binary Cube gate failures:$failures"
@@ -259,8 +282,8 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
-            -f context='binary-cube/v10-accessibility-fallback' \
-            -f description='Binary Cube V10 accessibility and fallback gate passed.' \
+            -f context='binary-cube/v11-tool-family-compatibility' \
+            -f description='Binary Cube V11 tool-family compatibility gate passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Record milestone failure
@@ -270,6 +293,6 @@ jobs:
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
-            -f context='binary-cube/v10-accessibility-fallback' \
-            -f description='Binary Cube V10 accessibility and fallback gate failed.' \
+            -f context='binary-cube/v11-tool-family-compatibility' \
+            -f description='Binary Cube V11 tool-family compatibility gate failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
