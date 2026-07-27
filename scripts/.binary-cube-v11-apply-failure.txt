@@ -1,7 +1,4 @@
-=== narrow log ===
-No narrowing log was created.
-
-=== apply log ===
+=== binary-cube-v11-apply.log ===
 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:380: SyntaxWarning: invalid escape sequence '\s'
   old = '''  function currentArtifacts() {
 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:408: SyntaxWarning: invalid escape sequence '\s'
@@ -11,6 +8,113 @@ No narrowing log was created.
 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:595: SyntaxWarning: invalid escape sequence '\s'
   new = '''    const transport = transportArtifact(panel);
 Applied Binary Cube V11 compatibility patch.
+
+=== binary-cube-v11-desktop.log ===
+Binary Cube expanded-grid, full-depth, omnidirectional, secure-export, and round-trip smoke tests passed.
+
+=== binary-cube-v11-narrow.log ===
+
+=== binary-cube-v11-v10-browser.log ===
+{
+  "normal": {
+    "format": "hb-ttrpg-shadowrun-binary-cube-v10-accessibility-browser-receipt",
+    "schemaVersion": "0.1.0",
+    "pass": true,
+    "rendererVersion": "0.5.0",
+    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "keyboardFaceSelection": true,
+    "keyboardCameraPresets": true,
+    "keyboardPlaybackAndStepping": true,
+    "keyboardBlockAndPointInspection": true,
+    "reducedMotionDiscretePhases": true,
+    "transcriptPhaseCount": 10,
+    "liveAnnouncements": true,
+    "nonColorMarkers": true,
+    "exactTwoDimensionalCells": 32,
+    "exactTwoDimensionalMapping": true
+  },
+  "forcedFallback": {
+    "pass": true,
+    "rendererAvailable": false,
+    "effectiveDisplayMode": "2d",
+    "packageReady": true,
+    "roundTripValid": true,
+    "traceReady": true,
+    "transcriptPhaseCount": 10,
+    "exactTwoDimensionalCells": 32,
+    "keyboardWithoutWebgl": true
+  }
+}
+
+=== binary-cube-v11-v10-static.log ===
+{
+  "format": "hb-ttrpg-shadowrun-binary-cube-v10-accessibility-validation-receipt",
+  "schemaVersion": "0.1.0",
+  "rendererVersion": "0.5.0",
+  "displayModes": [
+    "auto",
+    "3d",
+    "2d"
+  ],
+  "transcriptPhases": 10,
+  "exactTwoDimensionalInputCells": 16,
+  "exactTwoDimensionalOutputCells": 16,
+  "reducedMotionDiscretePhase": true,
+  "fullKeyboardSurfacePresent": true,
+  "nonColorMarkersPresent": true,
+  "liveRegionPresent": true,
+  "rendererFailureIsNonFatal": true,
+  "canonicalPackageParity": true,
+  "rendererAlgorithmIsolation": true
+}
+
+=== binary-cube-v11-v11-browser.log ===
+{
+  "format": "hb-ttrpg-shadowrun-binary-cube-v11-browser-compatibility-receipt",
+  "schemaVersion": "0.1.0",
+  "pass": true,
+  "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+  "internalHandoff": true,
+  "validatedEditorHandoff": true,
+  "invalidEditorDraftRejected": true,
+  "secureExportMetadataMinimized": true,
+  "secureExportReturnHandoff": true,
+  "authenticatedEnvelopeOpened": true,
+  "authenticatedEnvelopeReturnHandoff": true,
+  "passphrasePersisted": false,
+  "scopedStorageKeysDistinct": true,
+  "visualizerStorageSchema": "0.1.0",
+  "laboratoryStorageSchema": "0.3.0",
+  "recoveredBitsMatch": true
+}
+
+=== binary-cube-v11-v11-static.log ===
+{
+  "format": "hb-ttrpg-shadowrun-binary-cube-v11-compatibility-validation-receipt",
+  "schemaVersion": "0.1.0",
+  "pass": true,
+  "editorDraftValidation": true,
+  "secureExportMetadataMinimized": true,
+  "secureExportRoundTrip": true,
+  "authenticatedEnvelopeRoundTrip": true,
+  "wrongPassphraseRejected": true,
+  "visualizerStorageMigration": true,
+  "passphrasePersistence": false,
+  "laboratoryTransportProvenance": true,
+  "desktopBidirectionalHandoff": true,
+  "assetVersion": "20260726-3"
+}
+
+=== binary-cube-v11-v7-browser.log ===
+file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-encoder-browser.mjs:68
+  if (result.exceptionDetails) throw new Error(`${label} failed: ${result.result?.description || result.exceptionDetails.text || 'unknown browser exception'}`);
+                                     ^
+
+Error: Binary Cube V7 browser encoder failed: Uncaught (in promise) Error: File bytes were not converted into exact binary input.
+    at evaluate (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-encoder-browser.mjs:68:38)
+    at async file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-encoder-browser.mjs:147:19
+
+Node.js v22.23.1
 
 === duplicate patch labels ===
 1-#!/usr/bin/env python3
