@@ -108,6 +108,7 @@ try {
   assert.ok(page?.webSocketDebuggerUrl);
   cdp = await connectCdp(page.webSocketDebuggerUrl);
   await cdp.call('Runtime.enable');
+  await evaluate(cdp, `Object.defineProperty(window, 'localStorage', { configurable: true, value: (() => { const values = new Map(); return { getItem(key) { const normalized = String(key); return values.has(normalized) ? values.get(normalized) : null; }, setItem(key, value) { values.set(String(key), String(value)); }, removeItem(key) { values.delete(String(key)); }, clear() { values.clear(); } }; })() });`, 'Install synthetic V5 storage');
   for (const filename of ['shadowrun-binary-cube-engine.js', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js']) {
     const source = fs.readFileSync(path.join(repositoryRoot, filename), 'utf8');
     await evaluate(cdp, `${source}\n//# sourceURL=${filename}`, filename);
@@ -125,7 +126,7 @@ try {
     const initial = window.ShadowrunBinaryCubeVisualizer.currentState();
     if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.rendererVersion !== '0.5.0') throw new Error('V5 boundary did not initialize under V9.');
     const key = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);
-    const bits = panel.querySelector('[data-cube-trace-bits]').value.replace(/\\s+/g, '');
+    const bits = panel.querySelector('[data-cube-trace-bits]').value.replace(/\s+/g, '');
     const trace = window.ShadowrunBinaryCubeEngine.traceEncryptBlock(bits, key, 0);
     if (initial.traceOutputBlock !== trace.outputBlock) throw new Error('Canonical output changed.');
 
@@ -180,7 +181,8 @@ try {
       firstPreviousNextLastRestart: true,
       exactBatchedTraceAt20: true,
       domDetailedTraceGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE,
-      v5BoundaryPreservedUnderV9: true
+      v5BoundaryPreservedUnderV9: true,
+      syntheticStorageOnly: true
     };
   })()`, 'Binary Cube V5 boundary browser test');
 
@@ -196,6 +198,7 @@ try {
   assert.equal(receipt.exactBatchedTraceAt20, true);
   assert.equal(receipt.domDetailedTraceGridLimit, 12);
   assert.equal(receipt.v5BoundaryPreservedUnderV9, true);
+  assert.equal(receipt.syntheticStorageOnly, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
