@@ -90,6 +90,19 @@ jobs:
           cp /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility-browser.mjs scripts/
           cp /tmp/binary-cube-v11/docs/binary-cube-v11-compatibility-report.md docs/
 
+      - name: Expose exact V7 file-import state on failure
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate-binary-cube-visualizer-encoder-browser.mjs')
+          source = path.read_text()
+          old = "    if (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input.');"
+          new = "    const fileImportState = Visualizer.currentState();\n    if (sourceField.value !== fileBits || fileImportState.sourceFileName !== 'sample.bin') throw new Error(`File bytes were not converted into exact binary input: field=${JSON.stringify(sourceField.value)} filename=${JSON.stringify(fileImportState.sourceFileName)} note=${JSON.stringify(panel.querySelector('[data-cube-encoder-file-note]')?.textContent || '')}.`);"
+          if source.count(old) != 1:
+              raise SystemExit(f'V7 file assertion count was {source.count(old)}, expected 1')
+          path.write_text(source.replace(old, new))
+          PY
+
       - name: Check candidate syntax
         run: |
           node --check shadowrun-binary-cube-encryption.js
@@ -101,6 +114,7 @@ jobs:
           node --check desktop/binary-cube/scripts/prepare-app.mjs
           node --check scripts/validate-binary-cube-visualizer-compatibility.mjs
           node --check scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-encoder-browser.mjs
 
       - name: Validate unchanged V0 golden evidence
         run: node scripts/validate-binary-cube-baseline.mjs
@@ -154,7 +168,6 @@ jobs:
           node desktop/binary-cube/tests/smoke.cjs 2>&1 | tee /tmp/binary-cube-v11-desktop.log
 
       - name: Enforce guarded compatibility result
-        id: enforce
         run: |
           failures=''
           [ '${{ steps.v7_browser.outcome }}' = 'success' ] || failures="$failures v7-browser"
@@ -195,9 +208,6 @@ jobs:
       - name: Capture guarded failure without runtime edits
         if: ${{ failure() }}
         run: |
-          git reset --hard HEAD
-          git clean -fd
-          mkdir -p scripts
           {
             for file in /tmp/binary-cube-v11-*.log; do
               [ -f "$file" ] || continue
@@ -205,9 +215,15 @@ jobs:
               tail -n 120 "$file"
               echo
             done
+            echo '=== candidate import and persistence context ==='
+            grep -n -B 8 -A 35 -E 'async function importPlainFile|function saveVisualizerState|function restoreVisualizerState' shadowrun-binary-cube-visualizer.js || true
+            echo
             echo '=== duplicate patch labels ==='
             grep -n -B 20 -A 30 -E 'visualizer apply transport|auth seal provenance|entry lab await' /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py || true
-          } > scripts/.binary-cube-v11-apply-failure.txt
+          } > /tmp/binary-cube-v11-diagnostic.txt
+          git reset --hard HEAD
+          git clean -fd
+          cp /tmp/binary-cube-v11-diagnostic.txt scripts/.binary-cube-v11-apply-failure.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/.binary-cube-v11-apply-failure.txt
