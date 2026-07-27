@@ -123,6 +123,7 @@ try {
   assert.ok(page?.webSocketDebuggerUrl, 'Chromium did not expose a page DevTools endpoint.');
   cdp = await connectCdp(page.webSocketDebuggerUrl);
   await cdp.call('Runtime.enable');
+  await evaluate(cdp, `Object.defineProperty(window, 'localStorage', { configurable: true, value: (() => { const values = new Map(); return { getItem(key) { const normalized = String(key); return values.has(normalized) ? values.get(normalized) : null; }, setItem(key, value) { values.set(String(key), String(value)); }, removeItem(key) { values.delete(String(key)); }, clear() { values.clear(); } }; })() });`, 'Install synthetic V6 storage');
 
   for (const filename of ['shadowrun-binary-cube-engine.js', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js']) {
     const source = fs.readFileSync(path.join(repositoryRoot, filename), 'utf8');
@@ -146,7 +147,7 @@ try {
     if (panel.querySelectorAll('[data-cube-trace-marker]').length !== 10) throw new Error('The ten trace phase markers were not created.');
 
     const key = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);
-    const bits = panel.querySelector('[data-cube-trace-bits]').value.replace(/\\s+/g, '');
+    const bits = panel.querySelector('[data-cube-trace-bits]').value.replace(/\s+/g, '');
     const canonicalTrace = window.ShadowrunBinaryCubeEngine.traceEncryptBlock(bits, key, 0);
     window.ShadowrunBinaryCubeEngine.validateTransformationTrace(canonicalTrace, key);
     if (initial.traceOutputBlock !== canonicalTrace.outputBlock) throw new Error('The animated trace output does not match the canonical engine trace.');
@@ -249,7 +250,8 @@ try {
       playbackSpeeds: 4,
       selectedBitTraceable: true,
       exactBatchedTraceAt20: true,
-      domDetailedTraceGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE
+      domDetailedTraceGridLimit: window.ShadowrunBinaryCubeVisualizer.constants.MAX_MANUAL_TRACE_GRID_SIZE,
+      syntheticStorageOnly: true
     };
   })()`, 'Binary Cube V6 browser animation');
 
@@ -269,6 +271,7 @@ try {
   assert.equal(receipt.selectedBitTraceable, true);
   assert.equal(receipt.exactBatchedTraceAt20, true);
   assert.equal(receipt.domDetailedTraceGridLimit, 12);
+  assert.equal(receipt.syntheticStorageOnly, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
