@@ -55,15 +55,16 @@ jobs:
 
       - name: Narrow the duplicated transport assignment anchor
         run: |
-          python3 - <<'PY'
+          set -o pipefail
+          python3 - <<'PY' 2>&1 | tee /tmp/binary-cube-v11-narrow.log
           from pathlib import Path
           path = Path('/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py')
           source = path.read_text()
-          old = '''text = replace_once(text,
+          old = r'''text = replace_once(text,
               "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n",
               "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n",
               'visualizer apply transport')'''
-          new = '''transport_old = "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n"
+          new = r'''transport_old = "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n"
           transport_new = "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n"
           transport_count = text.count(transport_old)
           if transport_count != 2:
@@ -152,6 +153,9 @@ jobs:
           git clean -fd
           mkdir -p scripts
           {
+            echo '=== narrow log ==='
+            if [ -s /tmp/binary-cube-v11-narrow.log ]; then cat /tmp/binary-cube-v11-narrow.log; else echo 'No narrowing log was created.'; fi
+            echo
             echo '=== apply log ==='
             if [ -s /tmp/binary-cube-v11-apply.log ]; then tail -n 120 /tmp/binary-cube-v11-apply.log; else echo 'The V11 patch failed before an apply log was created.'; fi
             echo
