@@ -9,112 +9,143 @@
   new = '''    const transport = transportArtifact(panel);
 Applied Binary Cube V11 compatibility patch.
 
-=== binary-cube-v11-desktop.log ===
-Binary Cube expanded-grid, full-depth, omnidirectional, secure-export, and round-trip smoke tests passed.
-
 === binary-cube-v11-narrow.log ===
 
-=== binary-cube-v11-v10-browser.log ===
-{
-  "normal": {
-    "format": "hb-ttrpg-shadowrun-binary-cube-v10-accessibility-browser-receipt",
-    "schemaVersion": "0.1.0",
-    "pass": true,
-    "rendererVersion": "0.5.0",
-    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
-    "keyboardFaceSelection": true,
-    "keyboardCameraPresets": true,
-    "keyboardPlaybackAndStepping": true,
-    "keyboardBlockAndPointInspection": true,
-    "reducedMotionDiscretePhases": true,
-    "transcriptPhaseCount": 10,
-    "liveAnnouncements": true,
-    "nonColorMarkers": true,
-    "exactTwoDimensionalCells": 32,
-    "exactTwoDimensionalMapping": true
-  },
-  "forcedFallback": {
-    "pass": true,
-    "rendererAvailable": false,
-    "effectiveDisplayMode": "2d",
-    "packageReady": true,
-    "roundTripValid": true,
-    "traceReady": true,
-    "transcriptPhaseCount": 10,
-    "exactTwoDimensionalCells": 32,
-    "keyboardWithoutWebgl": true
-  }
-}
-
-=== binary-cube-v11-v10-static.log ===
-{
-  "format": "hb-ttrpg-shadowrun-binary-cube-v10-accessibility-validation-receipt",
-  "schemaVersion": "0.1.0",
-  "rendererVersion": "0.5.0",
-  "displayModes": [
-    "auto",
-    "3d",
-    "2d"
-  ],
-  "transcriptPhases": 10,
-  "exactTwoDimensionalInputCells": 16,
-  "exactTwoDimensionalOutputCells": 16,
-  "reducedMotionDiscretePhase": true,
-  "fullKeyboardSurfacePresent": true,
-  "nonColorMarkersPresent": true,
-  "liveRegionPresent": true,
-  "rendererFailureIsNonFatal": true,
-  "canonicalPackageParity": true,
-  "rendererAlgorithmIsolation": true
-}
-
-=== binary-cube-v11-v11-browser.log ===
-{
-  "format": "hb-ttrpg-shadowrun-binary-cube-v11-browser-compatibility-receipt",
-  "schemaVersion": "0.1.0",
-  "pass": true,
-  "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
-  "internalHandoff": true,
-  "validatedEditorHandoff": true,
-  "invalidEditorDraftRejected": true,
-  "secureExportMetadataMinimized": true,
-  "secureExportReturnHandoff": true,
-  "authenticatedEnvelopeOpened": true,
-  "authenticatedEnvelopeReturnHandoff": true,
-  "passphrasePersisted": false,
-  "scopedStorageKeysDistinct": true,
-  "visualizerStorageSchema": "0.1.0",
-  "laboratoryStorageSchema": "0.3.0",
-  "recoveredBitsMatch": true
-}
-
-=== binary-cube-v11-v11-static.log ===
-{
-  "format": "hb-ttrpg-shadowrun-binary-cube-v11-compatibility-validation-receipt",
-  "schemaVersion": "0.1.0",
-  "pass": true,
-  "editorDraftValidation": true,
-  "secureExportMetadataMinimized": true,
-  "secureExportRoundTrip": true,
-  "authenticatedEnvelopeRoundTrip": true,
-  "wrongPassphraseRejected": true,
-  "visualizerStorageMigration": true,
-  "passphrasePersistence": false,
-  "laboratoryTransportProvenance": true,
-  "desktopBidirectionalHandoff": true,
-  "assetVersion": "20260726-3"
-}
-
-=== binary-cube-v11-v7-browser.log ===
-file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-encoder-browser.mjs:68
-  if (result.exceptionDetails) throw new Error(`${label} failed: ${result.result?.description || result.exceptionDetails.text || 'unknown browser exception'}`);
-                                     ^
-
-Error: Binary Cube V7 browser encoder failed: Uncaught (in promise) Error: File bytes were not converted into exact binary input.
-    at evaluate (file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-encoder-browser.mjs:68:38)
-    at async file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-binary-cube-visualizer-encoder-browser.mjs:147:19
-
-Node.js v22.23.1
+=== candidate import and persistence context ===
+188-
+189-  function syncPackageDocument(panel) {
+190-    const field = panel?.querySelector('[data-cube-encoder-package]');
+191-    const documentObject = packageDocumentForDisplay();
+192-    if (field) field.value = documentObject ? JSON.stringify(documentObject, null, 2) : '';
+193-    panel?.setAttribute('data-cube-transport-kind', activeTransportKind);
+194-  }
+195-
+196:  function saveVisualizerState(panel) {
+197-    if (restoringStoredState || !panel || !root?.localStorage) return false;
+198-    try {
+199-      const state = {
+200-        format: VISUALIZER_STATE_FORMAT,
+201-        schemaVersion: VISUALIZER_STATE_SCHEMA_VERSION,
+202-        key: cloneJson(activeKey),
+203-        bits: panel.querySelector('[data-cube-trace-bits]')?.value?.replace(/\s+/g, '') || '',
+204-        sourceFileName,
+205-        transportKind: activeTransportKind,
+206-        transportDocument: packageDocumentForDisplay(),
+207-        preferences: { reducedMotion, displayMode, renderQuality, playbackSpeed, playbackScope }
+208-      };
+209-      root.localStorage.setItem(visualizerStorageKey(), JSON.stringify(state));
+210-      return true;
+211-    } catch (_) {
+212-      return false;
+213-    }
+214-  }
+215-
+216-  function readStoredVisualizerState() {
+217-    if (!root?.localStorage) return null;
+218-    const currentKey = visualizerStorageKey();
+219-    let parsed = null;
+220-    let migratedFrom = null;
+221-    try {
+222-      const current = root.localStorage.getItem(currentKey);
+223-      if (current) parsed = JSON.parse(current);
+224-      if (!parsed) {
+225-        for (const legacyKey of LEGACY_VISUALIZER_STORAGE_KEYS) {
+226-          const legacy = root.localStorage.getItem(legacyKey);
+227-          if (!legacy) continue;
+228-          parsed = JSON.parse(legacy);
+229-          migratedFrom = legacyKey;
+230-          break;
+231-        }
+--
+236-      if (migratedFrom) root.localStorage.removeItem(migratedFrom);
+237-      return migrated;
+238-    } catch (_) {
+239-      root.localStorage.removeItem(currentKey);
+240-      return null;
+241-    }
+242-  }
+243-
+244:  function restoreVisualizerState(panel) {
+245-    const state = readStoredVisualizerState();
+246-    if (!state) return false;
+247-    restoringStoredState = true;
+248-    try {
+249-      reducedMotion = state.preferences.reducedMotion;
+250-      displayMode = state.preferences.displayMode;
+251-      renderQuality = state.preferences.renderQuality;
+252-      playbackSpeed = state.preferences.playbackSpeed;
+253-      playbackScope = state.preferences.playbackScope;
+254-      sourceFileName = state.sourceFileName;
+255-      panel.querySelector('[data-cube-trace-bits]').value = state.bits || DEFAULT_BITS;
+256-      panel.querySelector('[data-cube-visualizer-display-mode]').value = displayMode;
+257-      panel.querySelector('[data-cube-visualizer-render-quality]').value = renderQuality;
+258-      panel.querySelector('[data-cube-trace-speed]').value = String(playbackSpeed);
+259-      panel.querySelector('[data-cube-trace-scope]').value = playbackScope;
+260-      if (state.key) renderKey(panel, state.key, 'restored', { autoEncrypt: false, maskMode: 'custom' });
+261-      if (state.transportDocument && activeKey) {
+262-        const kind = normalizeTransportKind(state.transportKind);
+263-        if (kind === 'authenticated-envelope') {
+264-          setActiveTransport(kind, state.transportDocument);
+265-          syncPackageDocument(panel);
+266-          setStatus(panel, 'Restored an authenticated envelope. Enter its passphrase and open it to recover the internal package.', 'success');
+267-        } else {
+268-          const packageObject = kind === 'secure-export'
+269-            ? SecureExport.expandSecureExport(state.transportDocument, activeKey, Engine)
+270-            : Engine.validatePackage(state.transportDocument, activeKey);
+271-          const plaintext = Engine.decryptBinary(packageObject, activeKey);
+272-          applyPackage(panel, packageObject, plaintext, { transportKind: kind, transportDocument: state.transportDocument });
+273-        }
+274-      }
+275-      return Boolean(activeKey || state.transportDocument || state.bits);
+276-    } catch (_) {
+277-      try { root.localStorage.removeItem(visualizerStorageKey()); } catch (_) { /* Optional storage. */ }
+278-      return false;
+279-    } finally {
+--
+1603-      rendererAvailable = false;
+1604-      fallback.hidden = false;
+1605-      fallback.textContent = `${error.message} WebGL 3D is unavailable, so the exact V10 2D face maps, trace transcript, keyboard controls, encoder, and package validation remain active.`;
+1606-      setStatus(panel, `${error.message} Switched to the exact 2D accessibility fallback.`, 'error');
+1607-    }
+1608-    updateDisplayMode(panel);
+1609-  }
+1610-
+1611:  async function importPlainFile(panel, file) {
+1612-    if (!file) fail('Choose an unencrypted file first.');
+1613-    const bytes = new Uint8Array(await file.arrayBuffer());
+1614-    if (!bytes.length) fail('The selected unencrypted file is empty.');
+1615-    sourceFileName = file.name || 'binary-cube-input.bin';
+1616-    panel.querySelector('[data-cube-trace-bits]').value = bytesToBits(bytes);
+1617-    panel.querySelector('[data-cube-encoder-file-note]').textContent = `${sourceFileName} · ${bytes.length.toLocaleString()} bytes · ${(bytes.length * 8).toLocaleString()} bits`;
+1618-    clearPackage(panel, 'File input changed. Encrypt the loaded bytes to create a canonical package.');
+1619-    setStatus(panel, `${sourceFileName} converted to ${bytes.length * 8} binary digits.`, 'success');
+1620-  }
+1621-
+1622-  async function importJsonFile(file, label) {
+1623-    if (!file) fail(`Choose a ${label.toLowerCase()} first.`);
+1624-    return parseJsonText(await file.text(), label);
+1625-  }
+1626-
+1627-  function handoffToLaboratory() {
+1628-    if (!root?.dispatchEvent || typeof root.CustomEvent !== 'function') fail('This runtime cannot dispatch a laboratory handoff.');
+1629-    root.dispatchEvent(new root.CustomEvent('shadowrun-binary-cube-open-laboratory', { detail: currentArtifacts() }));
+1630-  }
+1631-
+1632-  function bind(panel) {
+1633-    if (panel.dataset.cubeVisualizerBound === 'true') return;
+1634-    panel.dataset.cubeVisualizerBound = 'true';
+1635-    panel.querySelector('[data-cube-visualizer-close]').addEventListener('click', () => { pausePlayback(panel, false); panel.hidden = true; });
+1636-    panel.querySelector('[data-cube-visualizer-generate]').addEventListener('click', () => { try { generateKey(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
+1637-    panel.querySelector('[data-cube-visualizer-load]').addEventListener('click', () => { try { renderKey(panel, parseKey(panel), 'imported', { autoEncrypt: false, maskMode: 'custom' }); } catch (error) { setStatus(panel, error.message, 'error'); } });
+1638-    panel.querySelector('[data-cube-visualizer-mask-mode]').addEventListener('change', () => {
+1639-      syncCustomMaskVisibility(panel);
+1640-      applyDraftState(panel, 'Mask draft changed. The loaded canonical key remains unchanged until a new key is generated.');
+1641-    });
+1642-    panel.querySelector('[data-cube-visualizer-custom-mask]').addEventListener('input', () => {
+1643-      if (panel.querySelector('[data-cube-visualizer-mask-mode]').value === 'custom') applyDraftState(panel, 'Custom mask draft changed. Generate a new canonical key before encryption.');
+1644-    });
+1645-    panel.querySelectorAll('[data-cube-visualizer-pick-role]').forEach(button => button.addEventListener('click', () => setPickRole(panel, button.dataset.cubeVisualizerPickRole)));
+1646-    panel.querySelector('[data-cube-visualizer-input-face]').addEventListener('change', () => markDraftChanged(panel, 'Input face draft changed.'));
 
 === duplicate patch labels ===
 1-#!/usr/bin/env python3
