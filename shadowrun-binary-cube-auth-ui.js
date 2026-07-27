@@ -12,6 +12,12 @@
     return;
   }
 
+  function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
+
+  function setTransportArtifact(panel, envelope) {
+    panel.__cubeTransportArtifact = Object.freeze({ kind: 'authenticated-envelope', document: clone(envelope) });
+  }
+
   function fail(message) {
     throw new Error(message);
   }
@@ -157,6 +163,7 @@
         const packageObject = Engine.validatePackage(parseJsonField(panel, '#cube-package', 'Encrypted package JSON'), key);
         const envelope = await Auth.sealPackage(packageObject, passphrase());
         envelopeField.value = JSON.stringify(envelope, null, 2);
+        setTransportArtifact(panel, envelope);
         renderSummary(section, envelope);
         persistEnvelope(section);
         setStatus(panel, `Package for key ${key.keyId} sealed in an authenticated AES-GCM envelope. The passphrase was not stored.`, 'success');
@@ -176,6 +183,7 @@
         const envelope = parseJsonField(panel, '#cube-auth-envelope', 'Authenticated envelope JSON');
         const packageObject = await Auth.openEnvelope(envelope, passphrase());
         panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
+        setTransportArtifact(panel, envelope);
         panel.querySelector('#cube-package').dispatchEvent(new Event('input', { bubbles: true }));
         renderSummary(section, envelope);
         const keyText = panel.querySelector('#cube-key').value.trim();
@@ -230,6 +238,7 @@
         const envelope = await readJsonFile(event.target.files?.[0], 'Authenticated envelope file');
         Auth.validateEnvelope(envelope);
         envelopeField.value = JSON.stringify(envelope, null, 2);
+        setTransportArtifact(panel, envelope);
         renderSummary(section, envelope);
         persistEnvelope(section);
         setStatus(panel, 'Authenticated envelope imported and structurally validated. Enter its passphrase to open it.', 'success');
@@ -259,6 +268,29 @@
     });
   }
 
+
+  function currentEnvelopeArtifact() {
+    const section = document.getElementById(AUTH_ID);
+    const raw = section?.querySelector('#cube-auth-envelope')?.value.trim();
+    if (!raw) return null;
+    return clone(Auth.validateEnvelope(JSON.parse(raw)));
+  }
+
+  function loadEnvelopeArtifact(rawEnvelope) {
+    build();
+    const panel = document.getElementById(PANEL_ID);
+    const section = document.getElementById(AUTH_ID);
+    if (!panel || !section) fail('The authenticated-envelope interface is unavailable.');
+    const envelope = Auth.validateEnvelope(rawEnvelope);
+    section.querySelector('#cube-auth-envelope').value = JSON.stringify(envelope, null, 2);
+    section.querySelector('#cube-auth-passphrase').value = '';
+    setTransportArtifact(panel, envelope);
+    renderSummary(section, envelope);
+    persistEnvelope(section);
+    setStatus(panel, 'Authenticated envelope loaded. Enter its passphrase to open it; no passphrase was stored.', 'success');
+    return clone(envelope);
+  }
+
   function init() {
     build();
     if (!document.getElementById(PANEL_ID)) {
@@ -271,6 +303,6 @@
     }
   }
 
-  window.ShadowrunBinaryCubeAuthUI = Object.freeze({ mount: build, auth: Auth });
+  window.ShadowrunBinaryCubeAuthUI = Object.freeze({ mount: build, auth: Auth, currentEnvelopeArtifact, loadEnvelopeArtifact });
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
 })();

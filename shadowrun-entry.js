@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260726-2';
+  const ASSET_VERSION = '20260726-3';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -185,6 +185,7 @@
       await loadScript('shadowrun-binary-cube-encryption.js', () => Boolean(window.ShadowrunBinaryCubeEncryption));
       await loadScript('shadowrun-binary-cube-editor.js', () => Boolean(window.ShadowrunBinaryCubeEditor));
       await loadScript('shadowrun-binary-cube-auth-ui.js', () => Boolean(window.ShadowrunBinaryCubeAuthUI));
+      await loadScript('shadowrun-binary-cube-secure-export.js', () => Boolean(window.ShadowrunBinaryCubeSecureExport));
       return window.ShadowrunBinaryCubeEncryption;
     })();
     cubeToolPromise.catch(() => { cubeToolPromise = null; });
@@ -197,6 +198,8 @@
     cubeVisualizerPromise = (async () => {
       await loadStyle('binary-cube-visualizer.css');
       await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
+      await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));
+      await loadScript('shadowrun-binary-cube-secure-export.js', () => Boolean(window.ShadowrunBinaryCubeSecureExport));
       await loadScript('binary-cube-visualizer-renderer.js', () => Boolean(window.BinaryCubeVisualizerRenderer));
       await loadScript('shadowrun-binary-cube-visualizer.js', () => Boolean(window.ShadowrunBinaryCubeVisualizer));
       return window.ShadowrunBinaryCubeVisualizer;
@@ -238,14 +241,14 @@
       try {
         const api = await loadCubeTool();
         if (typeof api?.loadArtifacts !== 'function') throw new Error('The Binary Cube laboratory does not expose artifact loading.');
-        api.loadArtifacts(event.detail || {});
+        await Promise.resolve(api.loadArtifacts(event.detail || {}));
       } catch (error) { alert(error.message); }
     });
     window.addEventListener('shadowrun-binary-cube-open-visualizer', async event => {
       try {
         const api = await loadCubeVisualizer();
         if (typeof api?.loadArtifacts !== 'function') throw new Error('The Binary Cube visualizer does not expose artifact loading.');
-        api.loadArtifacts(event.detail || {});
+        await Promise.resolve(api.loadArtifacts(event.detail || {}));
       } catch (error) { alert(error.message); }
     });
   }

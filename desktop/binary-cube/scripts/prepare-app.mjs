@@ -15,7 +15,10 @@ const sharedAssets = [
   'shadowrun-binary-cube-encryption.js',
   'shadowrun-binary-cube-editor.js',
   'shadowrun-binary-cube-auth-ui.js',
-  'shadowrun-binary-cube-secure-export.js'
+  'shadowrun-binary-cube-secure-export.js',
+  'binary-cube-visualizer.css',
+  'binary-cube-visualizer-renderer.js',
+  'shadowrun-binary-cube-visualizer.js'
 ];
 
 await mkdir(vendorDirectory, { recursive: true });

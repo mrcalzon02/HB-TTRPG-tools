@@ -202,9 +202,10 @@ try {
     transfer.items.add(new File([new Uint8Array([0, 255, 65])], 'sample.bin', { type: 'application/octet-stream' }));
     Object.defineProperty(fileInput, 'files', { configurable: true, value: transfer.files });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-    await new Promise(resolve => setTimeout(resolve, 40));
     const fileBits = '000000001111111101000001';
-    if (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input.');
+    for (let attempt = 0; attempt < 40 && (sourceField.value !== fileBits || Visualizer.currentState().sourceFileName !== 'sample.bin'); attempt += 1) await new Promise(resolve => setTimeout(resolve, 25));
+    const fileImportState = Visualizer.currentState();
+    if (sourceField.value !== fileBits || fileImportState.sourceFileName !== 'sample.bin') throw new Error('File bytes were not converted into exact binary input: field=' + JSON.stringify(sourceField.value) + ' filename=' + JSON.stringify(fileImportState.sourceFileName) + ' note=' + JSON.stringify(panel.querySelector('[data-cube-encoder-file-note]')?.textContent || '') + '.');
     panel.querySelector('[data-cube-trace-build]').click();
     const fileState = Visualizer.currentState();
     const fileKey = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);

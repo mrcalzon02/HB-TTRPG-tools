@@ -34,7 +34,28 @@
     return true;
   }
 
+
+  function bindArtifactHandoffs() {
+    if (document.body.dataset.binaryCubeDesktopHandoffs === 'true') return;
+    document.body.dataset.binaryCubeDesktopHandoffs = 'true';
+    window.addEventListener('shadowrun-binary-cube-open-visualizer', async event => {
+      try {
+        await Promise.resolve(window.ShadowrunBinaryCubeVisualizer?.loadArtifacts(event.detail || {}));
+      } catch (error) {
+        window.alert(error.message);
+      }
+    });
+    window.addEventListener('shadowrun-binary-cube-open-laboratory', async event => {
+      try {
+        await Promise.resolve(window.ShadowrunBinaryCubeEncryption?.loadArtifacts(event.detail || {}));
+      } catch (error) {
+        window.alert(error.message);
+      }
+    });
+  }
+
   function initialize() {
+    bindArtifactHandoffs();
     window.ShadowrunBinaryCubeEncryption?.openPanel();
     applyDesktopPresentation();
 

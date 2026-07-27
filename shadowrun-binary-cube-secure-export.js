@@ -198,6 +198,10 @@
     return Engine.validateKey(parseField(targetPanel, '#cube-key', 'Key JSON'));
   }
 
+  function setTransportArtifact(targetPanel, kind, documentObject) {
+    targetPanel.__cubeTransportArtifact = Object.freeze({ kind, document: JSON.parse(JSON.stringify(documentObject)) });
+  }
+
   function replacePackageField(targetPanel, value) {
     const field = targetPanel.querySelector('#cube-package');
     field.value = JSON.stringify(value, null, 2);
@@ -276,7 +280,9 @@
     if (isSecureExport(imported)) {
       const keyText = targetPanel.querySelector('#cube-key').value.trim();
       if (keyText) {
+        const secureDocument = imported;
         imported = expandSecureExport(imported, JSON.parse(keyText), engine());
+        setTransportArtifact(targetPanel, 'secure-export', secureDocument);
         setStatus(targetPanel, 'Secure encrypted package imported, reconstructed from the supplied key, and validated.', 'success');
       } else {
         imported = validateSecureExport(imported);
@@ -298,6 +304,7 @@
       if (!isSecureExport(value)) return;
       const expanded = expandSecureExport(value, keyFromPanel(targetPanel), engine());
       replacePackageField(targetPanel, expanded);
+      setTransportArtifact(targetPanel, 'secure-export', value);
       setStatus(targetPanel, 'Secure package reconstructed and validated with the imported key.', 'success');
     } catch (_) {
       // Partial key edits and unmatched keys remain visible until the user validates or decrypts.
