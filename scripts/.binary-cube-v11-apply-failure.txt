@@ -2,90 +2,166 @@
 No narrowing log was created.
 
 === apply log ===
-/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:378: SyntaxWarning: invalid escape sequence '\s'
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:380: SyntaxWarning: invalid escape sequence '\s'
   old = '''  function currentArtifacts() {
-/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:406: SyntaxWarning: invalid escape sequence '\s'
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:408: SyntaxWarning: invalid escape sequence '\s'
   new = '''  function currentArtifacts() {
-/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:584: SyntaxWarning: invalid escape sequence '\s'
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:586: SyntaxWarning: invalid escape sequence '\s'
   old = '''    return Object.freeze({
-/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:593: SyntaxWarning: invalid escape sequence '\s'
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:595: SyntaxWarning: invalid escape sequence '\s'
   new = '''    const transport = transportArtifact(panel);
-auth seal provenance: expected exactly one match, found 2
+entry lab await: expected exactly one match, found 2
 
-=== visualizer apply transport patch context ===
-206-    } catch (_) {
-207-      try { root.localStorage.removeItem(visualizerStorageKey()); } catch (_) { /* Optional storage. */ }
-208-      return false;
-209-    } finally {
-210-      restoringStoredState = false;
-211-    }
-212-  }
-213-
-214-  function resolveSynchronousPackageDocument(documentObject, key) {
-215-    const kind = detectTransportKind(documentObject);
-216-    if (kind === 'authenticated-envelope') fail('Authenticated envelopes must be opened with the dedicated passphrase action.');
-217-    const packageObject = kind === 'secure-export'
-218-      ? SecureExport?.expandSecureExport?.(documentObject, key, Engine)
-219-      : Engine.validatePackage(documentObject, key);
-220-    if (!packageObject) fail('Secure export compatibility is unavailable in this runtime.');
-221-    return { kind, packageObject };
-222-  }
-223-'''
-224-text = replace_once(text,
-225-    "  function cloneJson(value) {\n    return value == null ? null : JSON.parse(JSON.stringify(value));\n  }\n",
-226-    "  function cloneJson(value) {\n    return value == null ? null : JSON.parse(JSON.stringify(value));\n  }\n" + helpers,
-227-    'visualizer helpers')
-228-text = replace_once(text,
-229-    "    activePackage = null;\n    activeTraces = [];\n",
-230-    "    activePackage = null;\n    setActiveTransport('internal-package', null);\n    activeTraces = [];\n",
-231-    'visualizer clear transport')
-232-transport_old = "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n"
-233-transport_new = "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n"
-234-transport_count = text.count(transport_old)
-235-if transport_count != 2:
-236:    raise SystemExit(f'visualizer apply transport: expected exactly two source assignments before narrowing, found {transport_count}')
-237-text = text.replace(transport_old, transport_new, 1)
-238-text = replace_once(text,
-239-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid });\n",
-240-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    saveVisualizerState(panel);\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid, transportKind: activeTransportKind });\n",
-241-    'visualizer apply save')
-242-old = '''  function loadPackageFromText(panel, options = {}) {
-243-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
-244-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
-245-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
-246-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
-247-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex: options.selectedBlockIndex ?? 0 });
-248-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
-249-    if (!options.quiet) setStatus(panel, `Imported package ${packageObject.checksum} decrypted and verified against key ${activeKey.keyId}.`, 'success');
-250-    return result;
-251-  }
-252-'''
-253-new = '''  function loadPackageFromText(panel, options = {}) {
-254-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
-255-    const documentObject = parsePackage(panel);
-256-    const resolved = resolveSynchronousPackageDocument(documentObject, activeKey);
-257-    const plaintext = Engine.decryptBinary(resolved.packageObject, activeKey);
-258-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
-259-    const result = applyPackage(panel, resolved.packageObject, plaintext, {
-260-      selectedBlockIndex: options.selectedBlockIndex ?? 0,
-261-      transportKind: resolved.kind,
-262-      transportDocument: documentObject
-263-    });
-264-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
-265-    if (!options.quiet) setStatus(panel, `${title(resolved.kind.replaceAll('-', ' '))} ${resolved.packageObject.checksum} opened and verified against key ${activeKey.keyId}.`, 'success');
-266-    return result;
-267-  }
-268-'''
-269-text = replace_once(text, old, new, 'visualizer load package')
-270-old = '''  function validateCurrentPair(panel) {
-271-    if (!activeKey) fail('Generate or import the matching key first.');
-272-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
-273-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
-274-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex });
-275-    if (!result.roundTripValid) fail('The key and package are structurally valid but failed exact round-trip comparison.');
-276-    setStatus(panel, `Key ${activeKey.keyId}, checksum ${packageObject.checksum}, ${packageObject.blockCount} traces, and recovered plaintext all validated.`, 'success');
-277-    return result;
-278-  }
-279-'''
-280-new = '''  function validateCurrentPair(panel) {
-281-    if (!activeKey) fail('Generate or import the matching key first.');
+=== duplicate patch labels ===
+1-#!/usr/bin/env python3
+2-from pathlib import Path
+3-import re
+4-
+5-ROOT = Path(__file__).resolve().parents[1] if 'scripts' in Path(__file__).parts else Path.cwd()
+6-
+7-
+8-def read(path):
+9-    return (ROOT / path).read_text(encoding='utf-8')
+10-
+11-
+12-def write(path, text):
+13-    (ROOT / path).write_text(text, encoding='utf-8')
+14-
+15-
+16-def replace_once(text, old, new, label):
+17-    count = text.count(old)
+18:    if label == 'auth seal provenance' and count == 2:
+19-        return text.replace(old, new, 1)
+20-    if count != 1:
+21-        raise SystemExit(f"{label}: expected exactly one match, found {count}")
+22-    return text.replace(old, new, 1)
+23-
+24-
+25-# Visualizer
+26-path = 'shadowrun-binary-cube-visualizer.js'
+27-text = read(path)
+28-text = replace_once(text,
+29-    "  const DISPLAY_MODES = Object.freeze(['auto', '3d', '2d']);\n",
+30-    "  const DISPLAY_MODES = Object.freeze(['auto', '3d', '2d']);\n"
+31-    "  const TRANSPORT_KINDS = Object.freeze(['internal-package', 'secure-export', 'authenticated-envelope']);\n"
+32-    "  const VISUALIZER_STATE_FORMAT = 'hb-ttrpg-shadowrun-binary-cube-visualizer-state';\n"
+33-    "  const VISUALIZER_STATE_SCHEMA_VERSION = '0.1.0';\n"
+34-    "  const LEGACY_VISUALIZER_STORAGE_KEYS = Object.freeze(['hb-ttrpg-shadowrun-binary-cube-visualizer']);\n",
+35-    'visualizer constants')
+36-text = replace_once(text,
+37-    "  const RendererApi = root?.BinaryCubeVisualizerRenderer;\n",
+38-    "  const RendererApi = root?.BinaryCubeVisualizerRenderer;\n"
+39-    "  const Auth = root?.ShadowrunBinaryCubeAuth;\n"
+40-    "  const SecureExport = root?.ShadowrunBinaryCubeSecureExport;\n",
+41-    'visualizer dependencies')
+42-text = replace_once(text,
+43-    "  let lastAnnouncedPhaseKey = '';\n",
+44-    "  let lastAnnouncedPhaseKey = '';\n"
+45-    "  let activeTransportKind = 'internal-package';\n"
+46-    "  let activeTransportDocument = null;\n"
+47-    "  let restoringStoredState = false;\n",
+48-    'visualizer transport state')
+--
+218-    if (kind === 'authenticated-envelope') fail('Authenticated envelopes must be opened with the dedicated passphrase action.');
+219-    const packageObject = kind === 'secure-export'
+220-      ? SecureExport?.expandSecureExport?.(documentObject, key, Engine)
+221-      : Engine.validatePackage(documentObject, key);
+222-    if (!packageObject) fail('Secure export compatibility is unavailable in this runtime.');
+223-    return { kind, packageObject };
+224-  }
+225-'''
+226-text = replace_once(text,
+227-    "  function cloneJson(value) {\n    return value == null ? null : JSON.parse(JSON.stringify(value));\n  }\n",
+228-    "  function cloneJson(value) {\n    return value == null ? null : JSON.parse(JSON.stringify(value));\n  }\n" + helpers,
+229-    'visualizer helpers')
+230-text = replace_once(text,
+231-    "    activePackage = null;\n    activeTraces = [];\n",
+232-    "    activePackage = null;\n    setActiveTransport('internal-package', null);\n    activeTraces = [];\n",
+233-    'visualizer clear transport')
+234-transport_old = "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n"
+235-transport_new = "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n"
+236-transport_count = text.count(transport_old)
+237-if transport_count != 2:
+238:    raise SystemExit(f'visualizer apply transport: expected exactly two source assignments before narrowing, found {transport_count}')
+239-text = text.replace(transport_old, transport_new, 1)
+240-text = replace_once(text,
+241-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid });\n",
+242-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    saveVisualizerState(panel);\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid, transportKind: activeTransportKind });\n",
+243-    'visualizer apply save')
+244-old = '''  function loadPackageFromText(panel, options = {}) {
+245-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
+246-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
+247-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
+248-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
+249-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex: options.selectedBlockIndex ?? 0 });
+250-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
+251-    if (!options.quiet) setStatus(panel, `Imported package ${packageObject.checksum} decrypted and verified against key ${activeKey.keyId}.`, 'success');
+252-    return result;
+253-  }
+254-'''
+255-new = '''  function loadPackageFromText(panel, options = {}) {
+256-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
+257-    const documentObject = parsePackage(panel);
+258-    const resolved = resolveSynchronousPackageDocument(documentObject, activeKey);
+259-    const plaintext = Engine.decryptBinary(resolved.packageObject, activeKey);
+260-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
+261-    const result = applyPackage(panel, resolved.packageObject, plaintext, {
+262-      selectedBlockIndex: options.selectedBlockIndex ?? 0,
+263-      transportKind: resolved.kind,
+264-      transportDocument: documentObject
+265-    });
+266-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
+267-    if (!options.quiet) setStatus(panel, `${title(resolved.kind.replaceAll('-', ' '))} ${resolved.packageObject.checksum} opened and verified against key ${activeKey.keyId}.`, 'success');
+268-    return result;
+--
+652-text = replace_once(text,
+653-    "      localStorage.removeItem(STORAGE_KEY);\n",
+654-    "      localStorage.removeItem(laboratoryStorageKey());\n      for (const legacyKey of LEGACY_STORAGE_KEYS) localStorage.removeItem(legacyKey);\n",
+655-    'lab reset storage')
+656-text = replace_once(text,
+657-    "    utilities: Object.freeze({ bytesToBits, bitsToBytes }),\n    engine: Engine\n",
+658-    "    utilities: Object.freeze({ bytesToBits, bitsToBytes, laboratoryStorageKey, migrateLaboratoryState }),\n    constants: Object.freeze({ LAB_STATE_FORMAT, LAB_STATE_SCHEMA_VERSION }),\n    engine: Engine\n",
+659-    'lab public API')
+660-write(path, text)
+661-
+662-# Auth UI
+663-path = 'shadowrun-binary-cube-auth-ui.js'
+664-text = read(path)
+665-text = replace_once(text,
+666-    "  function fail(message) {\n",
+667-    "  function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }\n\n  function setTransportArtifact(panel, envelope) {\n    panel.__cubeTransportArtifact = Object.freeze({ kind: 'authenticated-envelope', document: clone(envelope) });\n  }\n\n  function fail(message) {\n",
+668-    'auth helpers')
+669-text = replace_once(text,
+670-    "        envelopeField.value = JSON.stringify(envelope, null, 2);\n        renderSummary(section, envelope);\n",
+671-    "        envelopeField.value = JSON.stringify(envelope, null, 2);\n        setTransportArtifact(panel, envelope);\n        renderSummary(section, envelope);\n",
+672:    'auth seal provenance')
+673-text = replace_once(text,
+674-    "        panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);\n        panel.querySelector('#cube-package').dispatchEvent(new Event('input', { bubbles: true }));\n",
+675-    "        panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);\n        setTransportArtifact(panel, envelope);\n        panel.querySelector('#cube-package').dispatchEvent(new Event('input', { bubbles: true }));\n",
+676-    'auth open provenance')
+677-# The import block has the same two-line sequence as seal after the first replacement. Replace the next remaining occurrence.
+678-text = replace_once(text,
+679-    "        envelopeField.value = JSON.stringify(envelope, null, 2);\n        renderSummary(section, envelope);\n        persistEnvelope(section);\n",
+680-    "        envelopeField.value = JSON.stringify(envelope, null, 2);\n        setTransportArtifact(panel, envelope);\n        renderSummary(section, envelope);\n        persistEnvelope(section);\n",
+681-    'auth import provenance')
+682-api = r'''
+683-  function currentEnvelopeArtifact() {
+684-    const section = document.getElementById(AUTH_ID);
+685-    const raw = section?.querySelector('#cube-auth-envelope')?.value.trim();
+686-    if (!raw) return null;
+687-    return clone(Auth.validateEnvelope(JSON.parse(raw)));
+688-  }
+689-
+690-  function loadEnvelopeArtifact(rawEnvelope) {
+691-    build();
+692-    const panel = document.getElementById(PANEL_ID);
+693-    const section = document.getElementById(AUTH_ID);
+694-    if (!panel || !section) fail('The authenticated-envelope interface is unavailable.');
+695-    const envelope = Auth.validateEnvelope(rawEnvelope);
+696-    section.querySelector('#cube-auth-envelope').value = JSON.stringify(envelope, null, 2);
+697-    section.querySelector('#cube-auth-passphrase').value = '';
+698-    setTransportArtifact(panel, envelope);
+699-    renderSummary(section, envelope);
+700-    persistEnvelope(section);
+701-    setStatus(panel, 'Authenticated envelope loaded. Enter its passphrase to open it; no passphrase was stored.', 'success');
+702-    return clone(envelope);
