@@ -1,8 +1,18 @@
+=== narrow log ===
+No narrowing log was created.
+
 === apply log ===
-The V11 patch failed before an apply log was created.
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:378: SyntaxWarning: invalid escape sequence '\s'
+  old = '''  function currentArtifacts() {
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:406: SyntaxWarning: invalid escape sequence '\s'
+  new = '''  function currentArtifacts() {
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:584: SyntaxWarning: invalid escape sequence '\s'
+  old = '''    return Object.freeze({
+/tmp/binary-cube-v11/apply_binary_cube_v11_patch.py:593: SyntaxWarning: invalid escape sequence '\s'
+  new = '''    const transport = transportArtifact(panel);
+auth seal provenance: expected exactly one match, found 2
 
 === visualizer apply transport patch context ===
-205-      return Boolean(activeKey || state.transportDocument || state.bits);
 206-    } catch (_) {
 207-      try { root.localStorage.removeItem(visualizerStorageKey()); } catch (_) { /* Optional storage. */ }
 208-      return false;
@@ -29,52 +39,53 @@ The V11 patch failed before an apply log was created.
 229-    "    activePackage = null;\n    activeTraces = [];\n",
 230-    "    activePackage = null;\n    setActiveTransport('internal-package', null);\n    activeTraces = [];\n",
 231-    'visualizer clear transport')
-232-text = replace_once(text,
-233-    "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n",
-234-    "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n",
-235:    'visualizer apply transport')
-236-text = replace_once(text,
-237-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid });\n",
-238-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    saveVisualizerState(panel);\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid, transportKind: activeTransportKind });\n",
-239-    'visualizer apply save')
-240-old = '''  function loadPackageFromText(panel, options = {}) {
-241-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
-242-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
-243-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
-244-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
-245-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex: options.selectedBlockIndex ?? 0 });
-246-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
-247-    if (!options.quiet) setStatus(panel, `Imported package ${packageObject.checksum} decrypted and verified against key ${activeKey.keyId}.`, 'success');
-248-    return result;
-249-  }
-250-'''
-251-new = '''  function loadPackageFromText(panel, options = {}) {
-252-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
-253-    const documentObject = parsePackage(panel);
-254-    const resolved = resolveSynchronousPackageDocument(documentObject, activeKey);
-255-    const plaintext = Engine.decryptBinary(resolved.packageObject, activeKey);
-256-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
-257-    const result = applyPackage(panel, resolved.packageObject, plaintext, {
-258-      selectedBlockIndex: options.selectedBlockIndex ?? 0,
-259-      transportKind: resolved.kind,
-260-      transportDocument: documentObject
-261-    });
-262-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
-263-    if (!options.quiet) setStatus(panel, `${title(resolved.kind.replaceAll('-', ' '))} ${resolved.packageObject.checksum} opened and verified against key ${activeKey.keyId}.`, 'success');
-264-    return result;
-265-  }
-266-'''
-267-text = replace_once(text, old, new, 'visualizer load package')
-268-old = '''  function validateCurrentPair(panel) {
-269-    if (!activeKey) fail('Generate or import the matching key first.');
-270-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
-271-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
-272-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex });
-273-    if (!result.roundTripValid) fail('The key and package are structurally valid but failed exact round-trip comparison.');
-274-    setStatus(panel, `Key ${activeKey.keyId}, checksum ${packageObject.checksum}, ${packageObject.blockCount} traces, and recovered plaintext all validated.`, 'success');
-275-    return result;
-276-  }
-277-'''
-278-new = '''  function validateCurrentPair(panel) {
-279-    if (!activeKey) fail('Generate or import the matching key first.');
-280-    let packageObject = activePackage;
+232-transport_old = "    panel.querySelector('[data-cube-encoder-package]').value = JSON.stringify(packageObject, null, 2);\n"
+233-transport_new = "    setActiveTransport(options.transportKind || 'internal-package', options.transportDocument || packageObject);\n    syncPackageDocument(panel);\n"
+234-transport_count = text.count(transport_old)
+235-if transport_count != 2:
+236:    raise SystemExit(f'visualizer apply transport: expected exactly two source assignments before narrowing, found {transport_count}')
+237-text = text.replace(transport_old, transport_new, 1)
+238-text = replace_once(text,
+239-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid });\n",
+240-    "    loadSelectedBlock(panel, selectedBlockIndex, { quiet: true });\n    saveVisualizerState(panel);\n    return Object.freeze({ key: activeKey, packageObject, traces: Object.freeze(activeTraces.filter(Boolean)), recoveredBits: decrypted, roundTripValid, transportKind: activeTransportKind });\n",
+241-    'visualizer apply save')
+242-old = '''  function loadPackageFromText(panel, options = {}) {
+243-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
+244-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
+245-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
+246-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
+247-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex: options.selectedBlockIndex ?? 0 });
+248-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
+249-    if (!options.quiet) setStatus(panel, `Imported package ${packageObject.checksum} decrypted and verified against key ${activeKey.keyId}.`, 'success');
+250-    return result;
+251-  }
+252-'''
+253-new = '''  function loadPackageFromText(panel, options = {}) {
+254-    if (!activeKey) fail('Generate or import the matching key before loading a package.');
+255-    const documentObject = parsePackage(panel);
+256-    const resolved = resolveSynchronousPackageDocument(documentObject, activeKey);
+257-    const plaintext = Engine.decryptBinary(resolved.packageObject, activeKey);
+258-    if (options.populateInput !== false) panel.querySelector('[data-cube-trace-bits]').value = plaintext;
+259-    const result = applyPackage(panel, resolved.packageObject, plaintext, {
+260-      selectedBlockIndex: options.selectedBlockIndex ?? 0,
+261-      transportKind: resolved.kind,
+262-      transportDocument: documentObject
+263-    });
+264-    if (!result.roundTripValid) fail('Imported package failed exact decrypt/re-encrypt validation.');
+265-    if (!options.quiet) setStatus(panel, `${title(resolved.kind.replaceAll('-', ' '))} ${resolved.packageObject.checksum} opened and verified against key ${activeKey.keyId}.`, 'success');
+266-    return result;
+267-  }
+268-'''
+269-text = replace_once(text, old, new, 'visualizer load package')
+270-old = '''  function validateCurrentPair(panel) {
+271-    if (!activeKey) fail('Generate or import the matching key first.');
+272-    const packageObject = Engine.validatePackage(parsePackage(panel), activeKey);
+273-    const plaintext = Engine.decryptBinary(packageObject, activeKey);
+274-    const result = applyPackage(panel, packageObject, plaintext, { selectedBlockIndex });
+275-    if (!result.roundTripValid) fail('The key and package are structurally valid but failed exact round-trip comparison.');
+276-    setStatus(panel, `Key ${activeKey.keyId}, checksum ${packageObject.checksum}, ${packageObject.blockCount} traces, and recovered plaintext all validated.`, 'success');
+277-    return result;
+278-  }
+279-'''
+280-new = '''  function validateCurrentPair(panel) {
+281-    if (!activeKey) fail('Generate or import the matching key first.');
