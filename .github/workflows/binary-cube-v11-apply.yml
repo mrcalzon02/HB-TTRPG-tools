@@ -1,0 +1,146 @@
+name: Apply guarded Binary Cube V11 compatibility integration
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v11-apply.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  statuses: write
+
+concurrency:
+  group: "binary-cube-v11-apply-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  apply-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record guarded patch pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v11-compatibility-patch' \
+            -f description='Binary Cube V11 guarded compatibility integration is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout authoritative main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Reconstruct and verify V11 payload
+        run: |
+          cat scripts/.binary-cube-v11-payload.part00 scripts/.binary-cube-v11-payload.part01 > /tmp/binary-cube-v11.b64
+          test "$(wc -c < /tmp/binary-cube-v11.b64 | tr -d ' ')" = "21300"
+          base64 --decode /tmp/binary-cube-v11.b64 > /tmp/binary-cube-v11.tar.gz
+          echo "eef754368e8461feb7c092a65d2b5ccc59d42b27a2d69cd32b58e0387fafd26d  /tmp/binary-cube-v11.tar.gz" | sha256sum --check --strict
+          mkdir -p /tmp/binary-cube-v11
+          tar -xzf /tmp/binary-cube-v11.tar.gz -C /tmp/binary-cube-v11
+          test -s /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py
+          test -s /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility.mjs
+          test -s /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
+          test -s /tmp/binary-cube-v11/docs/binary-cube-v11-compatibility-report.md
+
+      - name: Apply direct authoritative V11 edits
+        run: |
+          python3 /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py
+          cp /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility.mjs scripts/
+          cp /tmp/binary-cube-v11/scripts/validate-binary-cube-visualizer-compatibility-browser.mjs scripts/
+          cp /tmp/binary-cube-v11/docs/binary-cube-v11-compatibility-report.md docs/
+
+      - name: Check candidate syntax
+        run: |
+          node --check shadowrun-binary-cube-encryption.js
+          node --check shadowrun-binary-cube-auth-ui.js
+          node --check shadowrun-binary-cube-secure-export.js
+          node --check shadowrun-binary-cube-visualizer.js
+          node --check shadowrun-entry.js
+          node --check desktop/binary-cube/app/desktop.js
+          node --check desktop/binary-cube/scripts/prepare-app.mjs
+          node --check scripts/validate-binary-cube-visualizer-compatibility.mjs
+          node --check scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
+
+      - name: Validate unchanged V0 golden evidence
+        run: node scripts/validate-binary-cube-baseline.mjs
+
+      - name: Validate unchanged V2 immutable traces
+        run: node scripts/validate-binary-cube-trace.mjs
+
+      - name: Preserve V7 complete encoder parity
+        run: node scripts/validate-binary-cube-visualizer-encoder.mjs
+
+      - name: Preserve V7 Chromium encoder and laboratory handoff
+        run: node scripts/validate-binary-cube-visualizer-encoder-browser.mjs
+
+      - name: Preserve V10 accessibility and exact fallback contract
+        run: node scripts/validate-binary-cube-visualizer-accessibility.mjs
+
+      - name: Preserve V10 Chromium accessibility and renderer fallback
+        run: node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+
+      - name: Validate V11 tool-family compatibility contract
+        run: node scripts/validate-binary-cube-visualizer-compatibility.mjs
+
+      - name: Validate V11 Chromium handoff, storage, and security boundaries
+        run: node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
+
+      - name: Validate desktop runtime contract
+        run: node desktop/binary-cube/tests/smoke.cjs
+
+      - name: Commit validated V11 implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            shadowrun-binary-cube-visualizer.js \
+            shadowrun-binary-cube-encryption.js \
+            shadowrun-binary-cube-auth-ui.js \
+            shadowrun-binary-cube-secure-export.js \
+            shadowrun-entry.js \
+            desktop/binary-cube/scripts/prepare-app.mjs \
+            desktop/binary-cube/app/index.html \
+            desktop/binary-cube/app/desktop.js \
+            scripts/validate-binary-cube-visualizer-compatibility.mjs \
+            scripts/validate-binary-cube-visualizer-compatibility-browser.mjs \
+            docs/binary-cube-v11-compatibility-report.md \
+            scripts/validate-binary-cube-visualizer-encoder.mjs \
+            scripts/validate-binary-cube-visualizer-encoder-browser.mjs \
+            scripts/validate-binary-cube-visualizer-accessibility.mjs \
+            scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+          git diff --cached --quiet && { echo "No validated V11 changes were staged." >&2; exit 1; }
+          git commit -m "feat: integrate Binary Cube V11 tool compatibility"
+          git push origin HEAD:main
+
+      - name: Record guarded patch success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v11-compatibility-patch' \
+            -f description='Binary Cube V11 guarded compatibility integration passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record guarded patch failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v11-compatibility-patch' \
+            -f description='Binary Cube V11 guarded compatibility integration failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
