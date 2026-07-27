@@ -1,219 +1,298 @@
-# Temporary guarded repair on the established Binary Cube workflow path.
-name: Guard Binary Cube V11 optional-storage repair
+# V11 milestone gate: canonical evidence, preserved V4-V10 behavior, validated editor drafts, provenance-safe laboratory handoff, authenticated envelopes, metadata-minimized secure export, scoped storage migration, desktop exchange, Chromium validation, and desktop smoke.
+name: Validate Binary Cube V11 tool-family compatibility
 
 on:
   push:
     branches: ["main"]
     paths:
       - ".github/workflows/binary-cube-baseline.yml"
+      - "shadowrun-binary-cube-engine.js"
+      - "binary-cube-large-grid-ui.js"
+      - "shadowrun-binary-cube-encryption.js"
+      - "shadowrun-binary-cube-editor.js"
+      - "shadowrun-binary-cube-auth.js"
+      - "shadowrun-binary-cube-auth-ui.js"
+      - "shadowrun-binary-cube-secure-export.js"
+      - "binary-cube-visualizer-renderer.js"
+      - "shadowrun-binary-cube-visualizer.js"
+      - "binary-cube-visualizer.css"
+      - "shadowrun-entry.js"
+      - "app-lite-view-mounts.js"
+      - "blacklight-binary-cube-encryption.html"
+      - "desktop/binary-cube/**"
+      - "docs/binary-cube-v10-accessibility-checklist.md"
+      - "docs/binary-cube-v11-compatibility-report.md"
+      - "scripts/validate-binary-cube-baseline.mjs"
+      - "scripts/validate-binary-cube-trace.mjs"
+      - "scripts/validate-binary-cube-visualizer-shell.mjs"
+      - "scripts/validate-binary-cube-visualizer-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-step.mjs"
+      - "scripts/validate-binary-cube-visualizer-step-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-animation.mjs"
+      - "scripts/validate-binary-cube-visualizer-animation-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-encoder.mjs"
+      - "scripts/validate-binary-cube-visualizer-encoder-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-sequencing.mjs"
+      - "scripts/validate-binary-cube-visualizer-sequencing-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-performance.mjs"
+      - "scripts/measure-binary-cube-visualizer-performance.mjs"
+      - "scripts/validate-binary-cube-visualizer-performance-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-accessibility.mjs"
+      - "scripts/validate-binary-cube-visualizer-accessibility-browser.mjs"
+      - "scripts/validate-binary-cube-visualizer-compatibility.mjs"
+      - "scripts/validate-binary-cube-visualizer-compatibility-browser.mjs"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   statuses: write
 
 concurrency:
-  group: "binary-cube-v11-storage-repair-${{ github.ref }}"
+  group: "binary-cube-baseline-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
-  repair-and-validate:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Record repair pending
+      - name: Record milestone pending
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=pending \
-            -f context='binary-cube/v11-optional-storage-repair' \
-            -f description='Binary Cube V11 optional-storage repair is running.' \
+            -f context='binary-cube/v11-tool-family-compatibility' \
+            -f description='Binary Cube V11 compatibility validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      - name: Checkout authoritative main
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Repair optional visualizer storage access directly
+      - name: Check Binary Cube JavaScript and V11 evidence
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path('shadowrun-binary-cube-visualizer.js')
-          source = path.read_text()
-          old = '''  function saveVisualizerState(panel) {
-            if (restoringStoredState || !panel || !root?.localStorage) return false;
-            try {
-              const state = {
-                format: VISUALIZER_STATE_FORMAT,
-                schemaVersion: VISUALIZER_STATE_SCHEMA_VERSION,
-                key: cloneJson(activeKey),
-                bits: panel.querySelector('[data-cube-trace-bits]')?.value?.replace(/\\s+/g, '') || '',
-                sourceFileName,
-                transportKind: activeTransportKind,
-                transportDocument: packageDocumentForDisplay(),
-                preferences: { reducedMotion, displayMode, renderQuality, playbackSpeed, playbackScope }
-              };
-              root.localStorage.setItem(visualizerStorageKey(), JSON.stringify(state));
-              return true;
-            } catch (_) {
-              return false;
-            }
-          }
+          node --check shadowrun-binary-cube-engine.js
+          node --check binary-cube-large-grid-ui.js
+          node --check shadowrun-binary-cube-encryption.js
+          node --check shadowrun-binary-cube-editor.js
+          node --check shadowrun-binary-cube-auth.js
+          node --check shadowrun-binary-cube-auth-ui.js
+          node --check shadowrun-binary-cube-secure-export.js
+          node --check binary-cube-visualizer-renderer.js
+          node --check shadowrun-binary-cube-visualizer.js
+          node --check shadowrun-entry.js
+          node --check app-lite-view-mounts.js
+          node --check desktop/binary-cube/app/desktop.js
+          node --check desktop/binary-cube/tests/smoke.cjs
+          node --check desktop/binary-cube/scripts/prepare-app.mjs
+          node --check scripts/validate-binary-cube-baseline.mjs
+          node --check scripts/validate-binary-cube-trace.mjs
+          node --check scripts/validate-binary-cube-visualizer-shell.mjs
+          node --check scripts/validate-binary-cube-visualizer-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-step.mjs
+          node --check scripts/validate-binary-cube-visualizer-step-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-animation.mjs
+          node --check scripts/validate-binary-cube-visualizer-animation-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-encoder.mjs
+          node --check scripts/validate-binary-cube-visualizer-encoder-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-sequencing.mjs
+          node --check scripts/validate-binary-cube-visualizer-sequencing-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-performance.mjs
+          node --check scripts/measure-binary-cube-visualizer-performance.mjs
+          node --check scripts/validate-binary-cube-visualizer-performance-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-accessibility.mjs
+          node --check scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
+          node --check scripts/validate-binary-cube-visualizer-compatibility.mjs
+          node --check scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
+          test -s docs/binary-cube-v10-accessibility-checklist.md
+          test -s docs/binary-cube-v11-compatibility-report.md
+          mkdir -p binary-cube-gate-logs
 
-          function readStoredVisualizerState() {
-            if (!root?.localStorage) return null;
-            const currentKey = visualizerStorageKey();
-            let parsed = null;
-            let migratedFrom = null;
-            try {
-              const current = root.localStorage.getItem(currentKey);
-              if (current) parsed = JSON.parse(current);
-              if (!parsed) {
-                for (const legacyKey of LEGACY_VISUALIZER_STORAGE_KEYS) {
-                  const legacy = root.localStorage.getItem(legacyKey);
-                  if (!legacy) continue;
-                  parsed = JSON.parse(legacy);
-                  migratedFrom = legacyKey;
-                  break;
-                }
-              }
-              const migrated = migrateVisualizerState(parsed);
-              if (!migrated) return null;
-              root.localStorage.setItem(currentKey, JSON.stringify(migrated));
-              if (migratedFrom) root.localStorage.removeItem(migratedFrom);
-              return migrated;
-            } catch (_) {
-              root.localStorage.removeItem(currentKey);
-              return null;
-            }
-          }
-'''
-          new = '''  function optionalVisualizerStorage() {
-            try { return root?.localStorage || null; }
-            catch (_) { return null; }
-          }
-
-          function saveVisualizerState(panel) {
-            const storage = optionalVisualizerStorage();
-            if (restoringStoredState || !panel || !storage) return false;
-            try {
-              const state = {
-                format: VISUALIZER_STATE_FORMAT,
-                schemaVersion: VISUALIZER_STATE_SCHEMA_VERSION,
-                key: cloneJson(activeKey),
-                bits: panel.querySelector('[data-cube-trace-bits]')?.value?.replace(/\\s+/g, '') || '',
-                sourceFileName,
-                transportKind: activeTransportKind,
-                transportDocument: packageDocumentForDisplay(),
-                preferences: { reducedMotion, displayMode, renderQuality, playbackSpeed, playbackScope }
-              };
-              storage.setItem(visualizerStorageKey(), JSON.stringify(state));
-              return true;
-            } catch (_) {
-              return false;
-            }
-          }
-
-          function readStoredVisualizerState() {
-            const storage = optionalVisualizerStorage();
-            if (!storage) return null;
-            const currentKey = visualizerStorageKey();
-            let parsed = null;
-            let migratedFrom = null;
-            try {
-              const current = storage.getItem(currentKey);
-              if (current) parsed = JSON.parse(current);
-              if (!parsed) {
-                for (const legacyKey of LEGACY_VISUALIZER_STORAGE_KEYS) {
-                  const legacy = storage.getItem(legacyKey);
-                  if (!legacy) continue;
-                  parsed = JSON.parse(legacy);
-                  migratedFrom = legacyKey;
-                  break;
-                }
-              }
-              const migrated = migrateVisualizerState(parsed);
-              if (!migrated) return null;
-              storage.setItem(currentKey, JSON.stringify(migrated));
-              if (migratedFrom) storage.removeItem(migratedFrom);
-              return migrated;
-            } catch (_) {
-              try { storage.removeItem(currentKey); } catch (_) { /* Optional storage. */ }
-              return null;
-            }
-          }
-'''
-          if source.count(old) != 1:
-              raise SystemExit(f'optional storage source block count was {source.count(old)}, expected 1')
-          source = source.replace(old, new)
-          catch_old = "    } catch (_) {\n      try { root.localStorage.removeItem(visualizerStorageKey()); } catch (_) { /* Optional storage. */ }\n      return false;\n"
-          catch_new = "    } catch (_) {\n      try { optionalVisualizerStorage()?.removeItem(visualizerStorageKey()); } catch (_) { /* Optional storage. */ }\n      return false;\n"
-          if source.count(catch_old) != 1:
-              raise SystemExit(f'restore storage cleanup count was {source.count(catch_old)}, expected 1')
-          path.write_text(source.replace(catch_old, catch_new))
-          PY
-
-      - name: Check repaired controller syntax
-        run: node --check shadowrun-binary-cube-visualizer.js
-
-      - name: Preserve V0 golden evidence
+      - name: Validate Binary Cube V0 golden evidence against V11
         run: node scripts/validate-binary-cube-baseline.mjs
 
-      - name: Validate V4 opaque-origin WebGL runtime
-        run: node scripts/validate-binary-cube-visualizer-browser.mjs
+      - name: Validate Binary Cube V2 immutable transformation traces
+        run: node scripts/validate-binary-cube-trace.mjs
 
-      - name: Validate V5 opaque-origin stepping runtime
-        run: node scripts/validate-binary-cube-visualizer-step-browser.mjs
+      - name: Preserve Binary Cube V4 static shell and renderer isolation
+        run: node scripts/validate-binary-cube-visualizer-shell.mjs
 
-      - name: Validate V6 opaque-origin animation runtime
-        run: node scripts/validate-binary-cube-visualizer-animation-browser.mjs
-
-      - name: Preserve V10 forced fallback runtime
-        run: node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs
-
-      - name: Preserve V11 static compatibility contract
-        run: node scripts/validate-binary-cube-visualizer-compatibility.mjs
-
-      - name: Preserve V11 Chromium security and storage contract
-        run: node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs
-
-      - name: Preserve desktop runtime contract
-        run: node desktop/binary-cube/tests/smoke.cjs
-
-      - name: Commit validated optional-storage repair
+      - name: Preserve Binary Cube V4 WebGL face-picking runtime
+        id: v4_browser
+        continue-on-error: true
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add shadowrun-binary-cube-visualizer.js
-          git diff --cached --quiet && { echo "No optional-storage repair was staged." >&2; exit 1; }
-          git commit -m "fix: guard Binary Cube optional storage access"
-          git push origin HEAD:main
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-browser.mjs 2>&1 | tee binary-cube-gate-logs/v4-browser.log
 
-      - name: Record repair success
+      - name: Preserve Binary Cube V5 exact manual-step mappings
+        id: v5_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-step.mjs 2>&1 | tee binary-cube-gate-logs/v5-static.log
+
+      - name: Preserve Binary Cube V5 WebGL stepping and inspection
+        id: v5_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-step-browser.mjs 2>&1 | tee binary-cube-gate-logs/v5-browser.log
+
+      - name: Preserve Binary Cube V6 deterministic trace interpolation
+        id: v6_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-animation.mjs 2>&1 | tee binary-cube-gate-logs/v6-static.log
+
+      - name: Preserve Binary Cube V6 WebGL playback and reverse scrubbing
+        id: v6_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-animation-browser.mjs 2>&1 | tee binary-cube-gate-logs/v6-browser.log
+
+      - name: Preserve Binary Cube V7 exact package and trace parity
+        id: v7_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-encoder.mjs 2>&1 | tee binary-cube-gate-logs/v7-static.log
+
+      - name: Preserve Binary Cube V7 WebGL encoder and laboratory handoff
+        id: v7_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-encoder-browser.mjs 2>&1 | tee binary-cube-gate-logs/v7-browser.log
+
+      - name: Preserve Binary Cube V8 exhaustive multi-block mapping
+        id: v8_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-sequencing.mjs 2>&1 | tee binary-cube-gate-logs/v8-static.log
+
+      - name: Preserve Binary Cube V8 Chromium block sequencing and inspection
+        id: v8_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-sequencing-browser.mjs 2>&1 | tee binary-cube-gate-logs/v8-browser.log
+
+      - name: Preserve Binary Cube V9 rendering-tier policy and isolation
+        id: v9_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-performance.mjs 2>&1 | tee binary-cube-gate-logs/v9-static.log
+
+      - name: Preserve Binary Cube V9 scene and trace measurements
+        id: v9_measurements
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/measure-binary-cube-visualizer-performance.mjs 2>&1 | tee binary-cube-gate-logs/v9-measurements.log
+
+      - name: Preserve Binary Cube V9 Chromium scale, quality, and cancellation
+        id: v9_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-performance-browser.mjs 2>&1 | tee binary-cube-gate-logs/v9-browser.log
+
+      - name: Preserve Binary Cube V10 keyboard, transcript, reduced motion, and exact fallback
+        id: v10_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-accessibility.mjs 2>&1 | tee binary-cube-gate-logs/v10-static.log
+
+      - name: Preserve Binary Cube V10 Chromium accessibility and forced renderer fallback
+        id: v10_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs 2>&1 | tee binary-cube-gate-logs/v10-browser.log
+
+      - name: Validate Binary Cube V11 editor, auth, secure-export, storage, and desktop contracts
+        id: v11_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-compatibility.mjs 2>&1 | tee binary-cube-gate-logs/v11-static.log
+
+      - name: Validate Binary Cube V11 Chromium handoff and security boundaries
+        id: v11_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs 2>&1 | tee binary-cube-gate-logs/v11-browser.log
+
+      - name: Validate Binary Cube desktop runtime contract
+        id: desktop
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node desktop/binary-cube/tests/smoke.cjs 2>&1 | tee binary-cube-gate-logs/desktop.log
+
+      - name: Retain complete milestone logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-cube-v11-gate-logs
+          path: binary-cube-gate-logs
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Enforce complete milestone result
+        if: ${{ always() }}
+        run: |
+          failures=''
+          [ '${{ steps.v4_browser.outcome }}' = 'success' ] || failures="$failures v4-browser"
+          [ '${{ steps.v5_static.outcome }}' = 'success' ] || failures="$failures v5-static"
+          [ '${{ steps.v5_browser.outcome }}' = 'success' ] || failures="$failures v5-browser"
+          [ '${{ steps.v6_static.outcome }}' = 'success' ] || failures="$failures v6-static"
+          [ '${{ steps.v6_browser.outcome }}' = 'success' ] || failures="$failures v6-browser"
+          [ '${{ steps.v7_static.outcome }}' = 'success' ] || failures="$failures v7-static"
+          [ '${{ steps.v7_browser.outcome }}' = 'success' ] || failures="$failures v7-browser"
+          [ '${{ steps.v8_static.outcome }}' = 'success' ] || failures="$failures v8-static"
+          [ '${{ steps.v8_browser.outcome }}' = 'success' ] || failures="$failures v8-browser"
+          [ '${{ steps.v9_static.outcome }}' = 'success' ] || failures="$failures v9-static"
+          [ '${{ steps.v9_measurements.outcome }}' = 'success' ] || failures="$failures v9-measurements"
+          [ '${{ steps.v9_browser.outcome }}' = 'success' ] || failures="$failures v9-browser"
+          [ '${{ steps.v10_static.outcome }}' = 'success' ] || failures="$failures v10-static"
+          [ '${{ steps.v10_browser.outcome }}' = 'success' ] || failures="$failures v10-browser"
+          [ '${{ steps.v11_static.outcome }}' = 'success' ] || failures="$failures v11-static"
+          [ '${{ steps.v11_browser.outcome }}' = 'success' ] || failures="$failures v11-browser"
+          [ '${{ steps.desktop.outcome }}' = 'success' ] || failures="$failures desktop"
+          if [ -n "$failures" ]; then
+            echo "Binary Cube gate failures:$failures"
+            exit 1
+          fi
+
+      - name: Record milestone success
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
-            -f context='binary-cube/v11-optional-storage-repair' \
-            -f description='Binary Cube V11 optional-storage repair passed.' \
+            -f context='binary-cube/v11-tool-family-compatibility' \
+            -f description='Binary Cube V11 tool-family compatibility gate passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      - name: Record repair failure
+      - name: Record milestone failure
         if: ${{ failure() }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
-            -f context='binary-cube/v11-optional-storage-repair' \
-            -f description='Binary Cube V11 optional-storage repair failed.' \
+            -f context='binary-cube/v11-tool-family-compatibility' \
+            -f description='Binary Cube V11 tool-family compatibility gate failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
