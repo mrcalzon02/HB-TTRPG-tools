@@ -75,7 +75,7 @@ jobs:
               raise SystemExit(f'guarded visualizer patch source block count was {source.count(old)}, expected 1')
           source = source.replace(old, new)
           helper_pattern = r"(def replace_once\(text, old, new, label\):\n    count = text\.count\(old\)\n)"
-          helper_insertion = "\\1    if label == 'auth seal provenance' and count == 2:\n        return text.replace(old, new, 1)\n"
+          helper_insertion = "\\1    if label in {'auth seal provenance', 'entry lab await'} and count == 2:\n        return text.replace(old, new, 1)\n"
           source, helper_count = re.subn(helper_pattern, helper_insertion, source, count=1)
           if helper_count != 1:
               raise SystemExit(f'replace_once helper count was {helper_count}, expected 1')
@@ -167,7 +167,7 @@ jobs:
             if [ -s /tmp/binary-cube-v11-apply.log ]; then tail -n 120 /tmp/binary-cube-v11-apply.log; else echo 'The V11 patch failed before an apply log was created.'; fi
             echo
             echo '=== duplicate patch labels ==='
-            grep -n -B 20 -A 30 -E 'visualizer apply transport|auth seal provenance' /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py || true
+            grep -n -B 20 -A 30 -E 'visualizer apply transport|auth seal provenance|entry lab await' /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py || true
           } > scripts/.binary-cube-v11-apply-failure.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
