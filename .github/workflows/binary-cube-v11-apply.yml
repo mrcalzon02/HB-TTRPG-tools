@@ -130,11 +130,13 @@ jobs:
           git reset --hard HEAD
           git clean -fd
           mkdir -p scripts
-          if [ -s /tmp/binary-cube-v11-apply.log ]; then
-            tail -n 120 /tmp/binary-cube-v11-apply.log > scripts/.binary-cube-v11-apply-failure.txt
-          else
-            printf '%s\n' 'The V11 patch failed before an apply log was created.' > scripts/.binary-cube-v11-apply-failure.txt
-          fi
+          {
+            echo '=== apply log ==='
+            if [ -s /tmp/binary-cube-v11-apply.log ]; then tail -n 120 /tmp/binary-cube-v11-apply.log; else echo 'The V11 patch failed before an apply log was created.'; fi
+            echo
+            echo '=== visualizer apply transport patch context ==='
+            grep -n -B 30 -A 45 'visualizer apply transport' /tmp/binary-cube-v11/apply_binary_cube_v11_patch.py || true
+          } > scripts/.binary-cube-v11-apply-failure.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scripts/.binary-cube-v11-apply-failure.txt
