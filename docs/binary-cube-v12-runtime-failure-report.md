@@ -4,16 +4,17 @@
 
 - Milestone: `V12 — Regression, Runtime, and Failure Testing`
 - State: in progress
-- Accepted slice: lifecycle source contracts, repeated Chromium open/close execution, explicit renderer disposal, and forced renderer-failure recovery
+- Accepted slice: lifecycle source contracts, repeated Chromium open/close execution, explicit renderer disposal, forced renderer-failure recovery, and re-entrant stale-work rejection
 - Static validation: `node scripts/validate-binary-cube-visualizer-lifecycle.mjs`
 - Lifecycle browser validation: `node scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs`
 - Fallback browser validation: `node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs`
+- Stale-work browser validation: `node scripts/validate-binary-cube-visualizer-stale-work-browser.mjs`
 - Permanent workflow: `.github/workflows/binary-cube-v12-lifecycle.yml`
-- Latest accepted combined workflow run: `30575922358`
+- Latest accepted combined workflow run: `30576852561`
 
 ## Scope of this slice
 
-This V12 slice protects the repeated open/close, renderer-cleanup, and renderer-initialization failure boundaries that are most likely to create long-session or degraded-runtime regressions in the GitHub Pages workspace.
+This V12 slice protects repeated open/close, renderer cleanup, renderer-initialization failure, and rapid asynchronous replacement boundaries that are most likely to create long-session, degraded-runtime, or stale-state regressions in the GitHub Pages workspace.
 
 The source contract gate verifies that:
 
@@ -23,6 +24,8 @@ The source contract gate verifies that:
 - renderer installation is single-instance for the mounted panel;
 - animation-frame state is cancelled and cleared;
 - deferred scene and trace preparation handles are cancelled;
+- scene preparation uses a generation token and discards superseded key or quality results;
+- trace preparation uses a generation token and discards superseded package or block results;
 - renderer disposal is idempotent;
 - resize observation is disconnected;
 - canvas event handlers are removed;
@@ -49,6 +52,15 @@ The forced renderer-failure gate proves that:
 - the renderer failure reason is disclosed;
 - keyboard phase stepping and point inspection remain usable without WebGL.
 
+The stale-work gate forces re-entrant state changes from inside the expensive engine calls rather than merely cancelling queued timers. It proves that:
+
+- a `128 × 128` scene result is rejected after a newer key replaces its active key and package;
+- the replacement scene result is rejected after render quality changes from automatic sampling to aggregate rendering;
+- the final aggregate scene retains the replacement package checksum and exact round-trip validity;
+- a two-block package rejects block 0 trace output after block 1 is selected during trace construction;
+- block 1 becomes the active validated trace;
+- discarding the stale trace does not change package checksum or ciphertext.
+
 ## Accepted runtime receipt
 
 The green lifecycle receipt recorded:
@@ -62,18 +74,29 @@ The green lifecycle receipt recorded:
 - `0` active animation frames after every close and after the final reopen;
 - `12` generated labels before disposal and `0` after disposal.
 
+The green stale-work receipt recorded:
+
+- superseded key `7938423c` and accepted replacement key `72c366fe`;
+- superseded package checksum `e878a22a` and accepted replacement checksum `f3f8f9a4`;
+- final `aggregate` rendering with `2,048` visible points;
+- `2` stale scene results discarded;
+- `1` stale trace result discarded;
+- `2` package blocks with block index `1` accepted as the active trace;
+- exact round-trip validity after all replacements;
+- package checksum preservation across the quality race;
+- package checksum and ciphertext preservation across the trace race.
+
 The combined accepted workflow run is available at:
 
-`https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30575922358`
+`https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30576852561`
 
 ## Remaining V12 work
 
 The following evidence is still required before V12 can be accepted:
 
-1. Exercise rapid key, package, quality, and trace changes while proving stale work is discarded.
-2. Add wrong-key, corrupted-package, secure-export, editor-handoff, and local-state recovery regression coverage.
-3. Validate narrow-screen behavior and the deployed GitHub Pages path.
-4. Run the V12 lifecycle and failure evidence together with the complete V0–V11 compatibility suite in one enforced milestone result.
+1. Add wrong-key, corrupted-package, secure-export, editor-handoff, and local-state recovery regression coverage.
+2. Validate narrow-screen behavior and the deployed GitHub Pages path.
+3. Run the V12 lifecycle and failure evidence together with the complete V0–V11 compatibility suite in one enforced milestone result.
 
 ## Acceptance note
 
