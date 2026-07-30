@@ -152,7 +152,18 @@ try {
     launcher.click();
     return true;
   })()`, 'Activate deployed Shadowrun workspace');
-  await waitForEvaluation(cdp, `Boolean(window.ShadowrunBinaryCubeVisualizer?.openPanel && document.getElementById('shadowrun'))`, 'deployed Binary Cube visualizer assets');
+  await waitForEvaluation(
+    cdp,
+    `Boolean(document.getElementById('shadowrun') && document.querySelector('[data-shadowrun-open="shadowrun-binary-cube-visualizer"]'))`,
+    'deployed Shadowrun workspace and visualizer launcher'
+  );
+  await evaluate(cdp, `(() => {
+    const launcher = document.querySelector('[data-shadowrun-open="shadowrun-binary-cube-visualizer"]');
+    if (!launcher) throw new Error('The deployed Shadowrun workspace is missing its Binary Cube visualizer launcher.');
+    launcher.click();
+    return true;
+  })()`, 'Open deployed Binary Cube visualizer');
+  await waitForEvaluation(cdp, `Boolean(window.ShadowrunBinaryCubeVisualizer?.openPanel)`, 'deployed Binary Cube visualizer assets');
 
   const receipt = await evaluate(cdp, `(async () => {
     const Visualizer = window.ShadowrunBinaryCubeVisualizer;
