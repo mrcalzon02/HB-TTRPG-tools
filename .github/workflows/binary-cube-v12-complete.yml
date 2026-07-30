@@ -1,0 +1,88 @@
+# Complete V12 milestone gate: all accepted V0-V11 evidence plus V12 lifecycle, failure-path, fallback, stale-work, and desktop validation.
+name: Validate Binary Cube V12 complete milestone
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v12-complete.yml"
+      - "shadowrun-binary-cube-*.js"
+      - "binary-cube-*.js"
+      - "binary-cube-*.css"
+      - "shadowrun-entry.js"
+      - "app-lite-view-mounts.js"
+      - "blacklight-binary-cube-encryption.html"
+      - "scripts/validate-binary-cube-*.mjs"
+      - "scripts/measure-binary-cube-*.mjs"
+      - "desktop/binary-cube/**"
+      - "docs/binary-cube-v*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "binary-cube-v12-complete-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record complete milestone pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v12-complete' \
+            -f description='Binary Cube V12 complete milestone validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check complete milestone runner
+        run: |
+          node --check scripts/validate-binary-cube-v12-complete.mjs
+          mkdir -p binary-cube-v12-complete-logs
+
+      - name: Run complete V0-V12 milestone evidence
+        run: node scripts/validate-binary-cube-v12-complete.mjs
+
+      - name: Retain complete milestone logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-cube-v12-complete-logs
+          path: binary-cube-v12-complete-logs
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Record complete milestone success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v12-complete' \
+            -f description='Binary Cube V12 complete milestone gate passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record complete milestone failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v12-complete' \
+            -f description='Binary Cube V12 complete milestone gate failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
