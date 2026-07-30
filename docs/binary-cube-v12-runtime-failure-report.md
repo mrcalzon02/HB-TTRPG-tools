@@ -3,8 +3,8 @@
 ## Status
 
 - Milestone: `V12 — Regression, Runtime, and Failure Testing`
-- State: in progress
-- Accepted slice: lifecycle source contracts, repeated Chromium open/close execution, explicit renderer disposal, forced renderer-failure recovery, re-entrant stale-work rejection, protected failure paths, compatibility handoffs, and complete V0–V12 aggregation
+- State: accepted
+- Accepted evidence: lifecycle source contracts, repeated Chromium open/close execution, explicit renderer disposal, forced renderer-failure recovery, re-entrant stale-work rejection, protected failure paths, compatibility handoffs, complete V0–V12 aggregation, narrow-screen behavior, and the live GitHub Pages deployment path
 - Static validation: `node scripts/validate-binary-cube-visualizer-lifecycle.mjs`
 - Failure-path validation: `node scripts/validate-binary-cube-visualizer-failure-paths.mjs`
 - Lifecycle browser validation: `node scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs`
@@ -12,14 +12,16 @@
 - Stale-work browser validation: `node scripts/validate-binary-cube-visualizer-stale-work-browser.mjs`
 - Compatibility browser validation: `node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs`
 - Complete milestone validation: `node scripts/validate-binary-cube-v12-complete.mjs`
+- Live Pages validation: `node scripts/validate-binary-cube-v12-pages-browser.mjs`
 - Runtime workflow: `.github/workflows/binary-cube-v12-lifecycle.yml`
 - Complete workflow: `.github/workflows/binary-cube-v12-complete.yml`
-- Latest accepted runtime workflow run: `30577201392`
-- First accepted complete V0–V12 workflow run: `30577380346`
+- Pages workflow: `.github/workflows/binary-cube-v12-pages.yml`
+- Accepted complete V0–V12 workflow run: `30578802967`
+- Accepted live Pages mobile workflow run: `30578616107`
 
 ## Scope of accepted evidence
 
-This V12 evidence protects repeated open/close, renderer cleanup, renderer-initialization failure, rapid asynchronous replacement, invalid protected inputs, cross-tool handoffs, storage recovery, and historical regression boundaries in the GitHub Pages workspace.
+This V12 evidence protects repeated open/close, renderer cleanup, renderer-initialization failure, rapid asynchronous replacement, invalid protected inputs, cross-tool handoffs, storage recovery, historical regression boundaries, narrow-screen layout, lazy workspace loading, and the public GitHub Pages route.
 
 The source contract gate verifies that:
 
@@ -78,6 +80,19 @@ The protected failure and compatibility gates prove that:
 - legacy storage records migrate to current schemas;
 - malformed stored JSON is removed and restoration falls back to a fresh canonical state.
 
+The live Pages gate proves that:
+
+- `/HB-TTRPG-tools/#shadowrun` activates the Shadowrun workspace through the public landing page;
+- the landing-page loader lazy-loads `shadowrun-entry.js` and supports direct hash activation;
+- the deployed Shadowrun visualizer launcher loads the canonical engine, renderer, controller, and stylesheet under the repository subpath;
+- the default package, round trip, and trace settle successfully on the public site;
+- the exact 2D fallback remains available at a `390 × 844` mobile viewport;
+- all core visualizer controls are present;
+- controls and main content stack without overlap;
+- the document width is exactly `390` pixels and the visualizer panel is `358` pixels wide;
+- the exact fallback exposes `32` input/output cells;
+- no visible visualizer element overflows the viewport horizontally.
+
 ## Accepted runtime receipts
 
 The green lifecycle receipt recorded:
@@ -103,26 +118,34 @@ The green stale-work receipt recorded:
 - package checksum preservation across the quality race;
 - package checksum and ciphertext preservation across the trace race.
 
-The first complete aggregate receipt recorded:
+The final complete aggregate receipt recorded:
 
 - format `hb-ttrpg-shadowrun-binary-cube-v12-complete-milestone-receipt`;
 - `24` checks executed;
 - `24` checks passed;
 - `0` checks failed;
-- total aggregate runtime of `45,231` milliseconds;
+- `0` browser checks required a retry;
+- total aggregate runtime of `50,705` milliseconds;
 - individual retained logs for every V0–V12 and desktop check.
+
+The live Pages receipt recorded:
+
+- format `hb-ttrpg-shadowrun-binary-cube-v12-pages-browser-receipt`;
+- path `/HB-TTRPG-tools/` and hash `#shadowrun`;
+- viewport `390 × 844`;
+- document width `390` and panel width `358`;
+- renderer version `0.5.0` initialized successfully;
+- canonical package, round trip, and trace all valid;
+- exact 2D mode active with `32` cells;
+- all core controls present;
+- `0` overflow elements.
 
 Accepted workflow runs:
 
 - Runtime and failure gate: `https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30577201392`
-- Complete V0–V12 gate: `https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30577380346`
+- Complete V0–V12 gate: `https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30578802967`
+- Live GitHub Pages mobile gate: `https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30578616107`
 
-## Remaining V12 work
+## Acceptance
 
-The following evidence is still required before V12 can be accepted:
-
-1. Validate narrow-screen behavior and the GitHub Pages deployment path.
-
-## Acceptance note
-
-This document records milestone progress, not V12 completion. V12 remains open until narrow-screen and deployment-path evidence is accepted without unresolved high-severity correctness or resource-leak defects.
+V12 is accepted. No unresolved high-severity correctness or resource-leak defect remains in the accepted evidence. The next active stage is `V13 — Shadowrun Workspace Launch and Documentation`.
