@@ -47,10 +47,30 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check Pages validator
+      - name: Check Pages validator and landing-page loader
         run: |
+          node --check app-lite-view-mounts.js
           node --check scripts/validate-binary-cube-v12-pages-browser.mjs
+          grep -q "shadowrunEntryPromise" app-lite-view-mounts.js
+          grep -q "activateHashView" app-lite-view-mounts.js
           mkdir -p binary-cube-v12-pages-logs
+
+      - name: Wait for current lazy-view loader on GitHub Pages
+        env:
+          PAGES_ASSET: https://mrcalzon02.github.io/HB-TTRPG-tools/app-lite-view-mounts.js
+        run: |
+          deployed=''
+          for attempt in $(seq 1 60); do
+            deployed="$(curl --fail --silent --show-error "${PAGES_ASSET}?v=${GITHUB_SHA}-${attempt}" || true)"
+            if grep -q "shadowrunEntryPromise" <<<"$deployed" && grep -q "activateHashView" <<<"$deployed"; then
+              printf '%s\n' "$deployed" > binary-cube-v12-pages-logs/deployed-app-lite-view-mounts.js
+              exit 0
+            fi
+            sleep 10
+          done
+          printf '%s\n' "$deployed" > binary-cube-v12-pages-logs/deployed-app-lite-view-mounts.js
+          echo "GitHub Pages did not expose the current Shadowrun lazy-view loader." >&2
+          exit 1
 
       - name: Validate public Pages route at mobile viewport
         env:
