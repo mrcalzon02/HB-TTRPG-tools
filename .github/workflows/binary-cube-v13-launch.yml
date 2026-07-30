@@ -1,0 +1,166 @@
+# V13 promotion gate: available Shadowrun cards, complete user and developer documentation, preserved V0-V12 evidence, and live public launch behavior.
+name: Validate Binary Cube V13 launch
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v13-launch.yml"
+      - "shadowrun-entry.js"
+      - "app-lite-view-mounts.js"
+      - "shadowrun-binary-cube-visualizer.js"
+      - "binary-cube-visualizer-renderer.js"
+      - "binary-cube-visualizer.css"
+      - "docs/binary-cube-v12-runtime-failure-report.md"
+      - "docs/binary-cube-v13-launch-report.md"
+      - "docs/binary-cube-visualizer-user-guide.md"
+      - "docs/binary-cube-visualizer-architecture.md"
+      - "scripts/validate-binary-cube-v12-complete.mjs"
+      - "scripts/validate-binary-cube-v12-pages-browser.mjs"
+      - "scripts/validate-binary-cube-v13-launch.mjs"
+      - "scripts/validate-binary-cube-v13-pages-browser.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "binary-cube-v13-launch-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record V13 launch pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v13-launch' \
+            -f description='Binary Cube V13 launch validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check launch sources and documentation
+        run: |
+          node --check shadowrun-entry.js
+          node --check app-lite-view-mounts.js
+          node --check scripts/validate-binary-cube-v12-complete.mjs
+          node --check scripts/validate-binary-cube-v12-pages-browser.mjs
+          node --check scripts/validate-binary-cube-v13-launch.mjs
+          node --check scripts/validate-binary-cube-v13-pages-browser.mjs
+          test -s docs/binary-cube-v12-runtime-failure-report.md
+          test -s docs/binary-cube-v13-launch-report.md
+          test -s docs/binary-cube-visualizer-user-guide.md
+          test -s docs/binary-cube-visualizer-architecture.md
+          mkdir -p binary-cube-v13-launch-logs
+
+      - name: Validate V13 promotion contracts
+        id: launch_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-v13-launch.mjs 2>&1 | tee binary-cube-v13-launch-logs/launch-static.log
+
+      - name: Preserve complete V0-V12 evidence after promotion
+        id: complete_v12
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-v12-complete.mjs 2>&1 | tee binary-cube-v13-launch-logs/complete-v12.log
+
+      - name: Wait for promoted Shadowrun entry on GitHub Pages
+        id: deployed_entry
+        continue-on-error: true
+        env:
+          PAGES_ENTRY: https://mrcalzon02.github.io/HB-TTRPG-tools/shadowrun-entry.js
+        run: |
+          deployed=''
+          for attempt in $(seq 1 60); do
+            deployed="$(curl --fail --silent --show-error "${PAGES_ENTRY}?v=${GITHUB_SHA}-${attempt}" || true)"
+            if grep -q "20260730-v13" <<<"$deployed" \
+              && grep -q "shadowrun-binary-cube-encryption','available'" <<<"$deployed" \
+              && grep -q "shadowrun-binary-cube-visualizer','available'" <<<"$deployed"; then
+              printf '%s\n' "$deployed" > binary-cube-v13-launch-logs/deployed-shadowrun-entry.js
+              exit 0
+            fi
+            sleep 10
+          done
+          printf '%s\n' "$deployed" > binary-cube-v13-launch-logs/deployed-shadowrun-entry.js
+          echo "GitHub Pages did not expose the promoted V13 Shadowrun entry." >&2
+          exit 1
+
+      - name: Preserve V12 public mobile and fallback evidence
+        id: pages_v12
+        continue-on-error: true
+        env:
+          BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-v12-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-v12.log
+
+      - name: Validate promoted cards and public visualizer launch
+        id: pages_v13
+        continue-on-error: true
+        env:
+          BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-v13-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-v13.log
+
+      - name: Retain V13 launch logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-cube-v13-launch-logs
+          path: |
+            binary-cube-v13-launch-logs
+            binary-cube-v12-complete-logs
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Enforce V13 launch result
+        if: ${{ always() }}
+        run: |
+          failures=''
+          [ '${{ steps.launch_static.outcome }}' = 'success' ] || failures="$failures launch-static"
+          [ '${{ steps.complete_v12.outcome }}' = 'success' ] || failures="$failures complete-v12"
+          [ '${{ steps.deployed_entry.outcome }}' = 'success' ] || failures="$failures deployed-entry"
+          [ '${{ steps.pages_v12.outcome }}' = 'success' ] || failures="$failures pages-v12"
+          [ '${{ steps.pages_v13.outcome }}' = 'success' ] || failures="$failures pages-v13"
+          if [ -n "$failures" ]; then
+            echo "Binary Cube V13 launch failures:$failures"
+            exit 1
+          fi
+
+      - name: Record V13 launch success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v13-launch' \
+            -f description='Binary Cube V13 launch gate passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record V13 launch failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v13-launch' \
+            -f description='Binary Cube V13 launch gate failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
