@@ -51,6 +51,18 @@ requireContract(
   'scene and trace preparation handles must both be cancelled.'
 );
 requireContract(
+  'Scene work rejects superseded results',
+  visualizer,
+  /function buildSceneRepresentation\(panel,[\s\S]*?const token = \+\+sceneBuildGeneration;[\s\S]*?if \(token !== sceneBuildGeneration \|\| activeKey\?\.keyId !== key\.keyId\)[\s\S]*?staleSceneResultsDiscarded \+= 1;/,
+  'scene preparation must use a generation token and record discarded results when a newer key or quality request supersedes it.'
+);
+requireContract(
+  'Trace work rejects superseded results',
+  visualizer,
+  /function loadSelectedBlock\(panel,[\s\S]*?traceBuildGeneration \+= 1;[\s\S]*?const token = traceBuildGeneration;[\s\S]*?if \(token !== traceBuildGeneration \|\| activePackage\?\.checksum == null \|\| selectedBlockIndex !== blockIndex\)[\s\S]*?staleTraceResultsDiscarded \+= 1;/,
+  'trace preparation must use a generation token and record discarded results when a newer package or block selection supersedes it.'
+);
+requireContract(
   'Renderer disposal is idempotent',
   renderer,
   /dispose\(\)\s*\{\s*if \(this\.disposed\) return;\s*this\.disposed = true;/,
