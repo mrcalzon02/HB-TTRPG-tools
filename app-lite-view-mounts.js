@@ -6,6 +6,7 @@
 
   let sheetPromise = null;
   let barotraumaEntryPromise = null;
+  let shadowrunEntryPromise = null;
   let barotraumaImagePreloads = null;
   const loadedScripts = new Map();
 
@@ -61,7 +62,7 @@
         script.async = false;
         script.dataset.hbCoreView = src;
         document.body.appendChild(script);
-      }
+      } else if (script.dataset.hbLoaded === 'true') finish();
     });
 
     loadedScripts.set(resolved, promise);
@@ -100,8 +101,45 @@
       window.BarotraumaWorkspace?.initialize?.();
       return;
     }
+    if (viewId === 'shadowrun') {
+      shadowrunEntryPromise ||= loadScript('shadowrun-entry.js');
+      await Promise.all([shadowrunEntryPromise, base.prepareView(viewId)]);
+      return;
+    }
     return base.prepareView(viewId);
   }
+
+  function setActiveView(viewId) {
+    const view = document.getElementById(viewId);
+    if (!view?.classList.contains('view')) throw new Error(`The ${viewId} workspace did not create an activatable view.`);
+    document.querySelectorAll('.view').forEach(candidate => candidate.classList.toggle('active', candidate === view));
+    document.querySelectorAll('[data-view]').forEach(control => control.classList.toggle('active', control.dataset.view === viewId));
+    if (location.hash !== `#${viewId}`) history.replaceState(null, '', `#${viewId}`);
+    document.dispatchEvent(new CustomEvent('hb:view-activated', { detail: { viewId } }));
+    return view;
+  }
+
+  async function activateView(viewId) {
+    const normalized = String(viewId || '').trim();
+    if (!normalized) return null;
+    await prepareView(normalized);
+    return setActiveView(normalized);
+  }
+
+  function reportActivationFailure(viewId, error) {
+    console.error(`${viewId} workspace could not be activated.`, error);
+    const status = document.querySelector('[role="status"]');
+    if (status) status.textContent = `${viewId} workspace could not be loaded: ${error.message}`;
+  }
+
+  document.addEventListener('click', event => {
+    const control = event.target.closest('[data-view]');
+    if (!control) return;
+    const viewId = control.dataset.view;
+    if (!viewId) return;
+    event.preventDefault();
+    void activateView(viewId).catch(error => reportActivationFailure(viewId, error));
+  });
 
   document.addEventListener('hb:view-activated', event => {
     if (event.detail?.viewId === 'modules') window.initModuleViewer?.();
@@ -109,8 +147,18 @@
 
   window.HBTTRPGApp = Object.freeze({
     ...base,
-    prepareView
+    prepareView,
+    activateView
   });
+
+  const activateHashView = () => {
+    const viewId = location.hash.replace(/^#/, '');
+    if (!viewId || !document.querySelector(`[data-view="${CSS.escape(viewId)}"]`)) return;
+    void activateView(viewId).catch(error => reportActivationFailure(viewId, error));
+  };
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', activateHashView, { once: true })
+    : activateHashView();
 
   void loadScript('shadowrun-binary-cube-engine.js')
     .then(() => loadScript('binary-cube-large-grid-ui.js'))
