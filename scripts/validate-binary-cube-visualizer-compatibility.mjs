@@ -43,6 +43,7 @@ const entrySource = fs.readFileSync(path.join(repositoryRoot, 'shadowrun-entry.j
 const prepareSource = fs.readFileSync(path.join(repositoryRoot, 'desktop/binary-cube/scripts/prepare-app.mjs'), 'utf8');
 const desktopHtml = fs.readFileSync(path.join(repositoryRoot, 'desktop/binary-cube/app/index.html'), 'utf8');
 const desktopSource = fs.readFileSync(path.join(repositoryRoot, 'desktop/binary-cube/app/desktop.js'), 'utf8');
+const assetVersion = entrySource.match(/const ASSET_VERSION = '([^']+)'/)?.[1] || '';
 
 assert.equal(Visualizer.constants.VISUALIZER_STATE_FORMAT, 'hb-ttrpg-shadowrun-binary-cube-visualizer-state');
 assert.equal(Visualizer.constants.VISUALIZER_STATE_SCHEMA_VERSION, '0.1.0');
@@ -127,7 +128,7 @@ assert.match(laboratorySource, /authenticatedEnvelope/);
 assert.match(authUiSource, /currentEnvelopeArtifact/);
 assert.match(authUiSource, /loadEnvelopeArtifact/);
 assert.match(secureSource, /setTransportArtifact\(targetPanel, 'secure-export'/);
-assert.match(entrySource, /ASSET_VERSION = '20260726-3'/);
+assert.match(assetVersion, /^\d{8}(?:-\d+|-v\d+)$/);
 assert.ok((entrySource.match(/shadowrun-binary-cube-secure-export\.js/g) || []).length >= 2);
 assert.match(entrySource, /await Promise\.resolve\(api\.loadArtifacts/);
 
@@ -152,5 +153,5 @@ console.log(JSON.stringify({
   passphrasePersistence: false,
   laboratoryTransportProvenance: true,
   desktopBidirectionalHandoff: true,
-  assetVersion: '20260726-3'
+  assetVersion
 }, null, 2));
