@@ -17,7 +17,7 @@ function requireContract(label, source, pattern, detail) {
 requireContract(
   'Visualizer panel is a singleton',
   visualizer,
-  /function buildPanel\(\)\s*\{[\s\S]*?const existing = document\.getElementById\(PANEL_ID\);[\s\S]*?if \(existing\) return existing;/,
+  /function buildPanel\(\)\s*\{[\s\S]*?let panel = document\.getElementById\(PANEL_ID\);[\s\S]*?if \(panel\) return panel;/,
   'buildPanel must reuse the existing panel instead of attaching duplicate listeners and renderers.'
 );
 requireContract(
