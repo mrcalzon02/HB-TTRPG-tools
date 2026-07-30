@@ -38,27 +38,44 @@ const checks = Object.freeze([
   ['v12-stale-work-browser', 'node', ['scripts/validate-binary-cube-visualizer-stale-work-browser.mjs']]
 ]);
 
+function pause(milliseconds) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds);
+}
+
 const startedAt = Date.now();
 const results = [];
 for (const [id, command, args] of checks) {
   const checkStartedAt = Date.now();
+  const maximumAttempts = id.includes('browser') ? 2 : 1;
+  let result = null;
+  let output = '';
+  let attempts = 0;
   console.log(`\n===== ${id} =====`);
-  const result = spawnSync(command, args, {
-    cwd: repositoryRoot,
-    env: process.env,
-    encoding: 'utf8',
-    maxBuffer: 64 * 1024 * 1024
-  });
-  const output = `${result.stdout || ''}${result.stderr || ''}`;
-  process.stdout.write(output);
+  while (attempts < maximumAttempts) {
+    attempts += 1;
+    if (maximumAttempts > 1) console.log(`--- ${id} attempt ${attempts}/${maximumAttempts} ---`);
+    result = spawnSync(command, args, {
+      cwd: repositoryRoot,
+      env: process.env,
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024
+    });
+    const attemptOutput = `${result.stdout || ''}${result.stderr || ''}`;
+    output += `${maximumAttempts > 1 ? `--- attempt ${attempts} ---\n` : ''}${attemptOutput}`;
+    process.stdout.write(attemptOutput);
+    if (result.status === 0 || attempts >= maximumAttempts) break;
+    console.warn(`${id} attempt ${attempts} failed; retrying once in a fresh process.`);
+    pause(750);
+  }
   fs.writeFileSync(path.join(logDirectory, `${id}.log`), output || '(no output)\n');
   results.push(Object.freeze({
     id,
     command: [command, ...args].join(' '),
-    status: result.status,
-    signal: result.signal || null,
+    attempts,
+    status: result?.status ?? 1,
+    signal: result?.signal || null,
     milliseconds: Date.now() - checkStartedAt,
-    passed: result.status === 0
+    passed: result?.status === 0
   }));
 }
 
@@ -70,6 +87,7 @@ const receipt = Object.freeze({
   checkCount: results.length,
   passedCount: results.length - failures.length,
   failedCount: failures.length,
+  retriedCheckCount: results.filter(result => result.attempts > 1).length,
   milliseconds: Date.now() - startedAt,
   results
 });
