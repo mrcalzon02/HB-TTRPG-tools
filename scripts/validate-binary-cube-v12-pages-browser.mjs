@@ -146,6 +146,12 @@ try {
   await cdp.call('Page.navigate', { url: target.href });
 
   await waitForEvaluation(cdp, `document.readyState === 'complete'`, 'GitHub Pages document readiness');
+  await evaluate(cdp, `(() => {
+    const launcher = document.querySelector('[data-view="shadowrun"]');
+    if (!launcher) throw new Error('The deployed landing page is missing its Shadowrun launcher.');
+    launcher.click();
+    return true;
+  })()`, 'Activate deployed Shadowrun workspace');
   await waitForEvaluation(cdp, `Boolean(window.ShadowrunBinaryCubeVisualizer?.openPanel && document.getElementById('shadowrun'))`, 'deployed Binary Cube visualizer assets');
 
   const receipt = await evaluate(cdp, `(async () => {
