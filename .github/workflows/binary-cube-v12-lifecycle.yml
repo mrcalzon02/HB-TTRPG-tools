@@ -1,0 +1,110 @@
+# V12 lifecycle slice: repeated open/close execution, animation-frame cancellation, listener and observer stability, WebGL resource stability, and explicit renderer disposal.
+name: Validate Binary Cube V12 lifecycle
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v12-lifecycle.yml"
+      - "shadowrun-binary-cube-engine.js"
+      - "binary-cube-visualizer-renderer.js"
+      - "shadowrun-binary-cube-visualizer.js"
+      - "scripts/validate-binary-cube-visualizer-lifecycle.mjs"
+      - "scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs"
+      - "docs/binary-cube-v12-runtime-failure-report.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "binary-cube-v12-lifecycle-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record lifecycle validation pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v12-lifecycle' \
+            -f description='Binary Cube V12 lifecycle validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check lifecycle gate syntax and evidence
+        run: |
+          node --check binary-cube-visualizer-renderer.js
+          node --check shadowrun-binary-cube-visualizer.js
+          node --check scripts/validate-binary-cube-visualizer-lifecycle.mjs
+          node --check scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs
+          test -s docs/binary-cube-v12-runtime-failure-report.md
+          mkdir -p binary-cube-v12-lifecycle-logs
+
+      - name: Validate lifecycle source contracts
+        id: lifecycle_static
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-lifecycle.mjs 2>&1 | tee binary-cube-v12-lifecycle-logs/static.log
+
+      - name: Validate Chromium open, close, and disposal lifecycle
+        id: lifecycle_browser
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs 2>&1 | tee binary-cube-v12-lifecycle-logs/browser.log
+
+      - name: Retain lifecycle logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-cube-v12-lifecycle-logs
+          path: binary-cube-v12-lifecycle-logs
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Enforce lifecycle result
+        if: ${{ always() }}
+        run: |
+          failures=''
+          [ '${{ steps.lifecycle_static.outcome }}' = 'success' ] || failures="$failures static"
+          [ '${{ steps.lifecycle_browser.outcome }}' = 'success' ] || failures="$failures browser"
+          if [ -n "$failures" ]; then
+            echo "Binary Cube V12 lifecycle failures:$failures"
+            exit 1
+          fi
+
+      - name: Record lifecycle validation success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v12-lifecycle' \
+            -f description='Binary Cube V12 lifecycle gate passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record lifecycle validation failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v12-lifecycle' \
+            -f description='Binary Cube V12 lifecycle gate failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
