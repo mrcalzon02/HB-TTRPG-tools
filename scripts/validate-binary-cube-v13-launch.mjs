@@ -126,17 +126,19 @@ checks.push(requireMatch(
   'the promoted tool must continue to disclose its security boundary.'
 ));
 checks.push(requireIncludes(
-  'Launch report records promotion and evidence',
+  'Launch report records accepted promotion evidence',
   launchReport,
   [
     'V13 — Shadowrun Workspace Launch and Documentation',
+    '- State: accepted',
     'Both cards are promoted from `prototype` to `available`',
     'docs/binary-cube-visualizer-user-guide.md',
     'docs/binary-cube-visualizer-architecture.md',
-    '24 of 24 V0–V12 checks pass',
-    '390 × 844'
+    'the complete 24-check V0–V12 aggregate',
+    'the promoted mobile launch remains within the viewport',
+    'V13 is accepted.'
   ],
-  'the promotion report must identify artifacts and prerequisite runtime evidence.'
+  'the accepted promotion report must identify artifacts, complete regression evidence, public mobile evidence, and final acceptance.'
 ));
 
 console.log(JSON.stringify({
