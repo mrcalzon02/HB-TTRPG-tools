@@ -4,17 +4,22 @@
 
 - Milestone: `V12 — Regression, Runtime, and Failure Testing`
 - State: in progress
-- Accepted slice: lifecycle source contracts, repeated Chromium open/close execution, explicit renderer disposal, forced renderer-failure recovery, and re-entrant stale-work rejection
+- Accepted slice: lifecycle source contracts, repeated Chromium open/close execution, explicit renderer disposal, forced renderer-failure recovery, re-entrant stale-work rejection, protected failure paths, compatibility handoffs, and complete V0–V12 aggregation
 - Static validation: `node scripts/validate-binary-cube-visualizer-lifecycle.mjs`
+- Failure-path validation: `node scripts/validate-binary-cube-visualizer-failure-paths.mjs`
 - Lifecycle browser validation: `node scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs`
 - Fallback browser validation: `node scripts/validate-binary-cube-visualizer-accessibility-browser.mjs`
 - Stale-work browser validation: `node scripts/validate-binary-cube-visualizer-stale-work-browser.mjs`
-- Permanent workflow: `.github/workflows/binary-cube-v12-lifecycle.yml`
-- Latest accepted combined workflow run: `30576852561`
+- Compatibility browser validation: `node scripts/validate-binary-cube-visualizer-compatibility-browser.mjs`
+- Complete milestone validation: `node scripts/validate-binary-cube-v12-complete.mjs`
+- Runtime workflow: `.github/workflows/binary-cube-v12-lifecycle.yml`
+- Complete workflow: `.github/workflows/binary-cube-v12-complete.yml`
+- Latest accepted runtime workflow run: `30577201392`
+- First accepted complete V0–V12 workflow run: `30577380346`
 
-## Scope of this slice
+## Scope of accepted evidence
 
-This V12 slice protects repeated open/close, renderer cleanup, renderer-initialization failure, and rapid asynchronous replacement boundaries that are most likely to create long-session, degraded-runtime, or stale-state regressions in the GitHub Pages workspace.
+This V12 evidence protects repeated open/close, renderer cleanup, renderer-initialization failure, rapid asynchronous replacement, invalid protected inputs, cross-tool handoffs, storage recovery, and historical regression boundaries in the GitHub Pages workspace.
 
 The source contract gate verifies that:
 
@@ -52,7 +57,7 @@ The forced renderer-failure gate proves that:
 - the renderer failure reason is disclosed;
 - keyboard phase stepping and point inspection remain usable without WebGL.
 
-The stale-work gate forces re-entrant state changes from inside the expensive engine calls rather than merely cancelling queued timers. It proves that:
+The stale-work gate forces re-entrant state changes from inside expensive engine calls rather than merely cancelling queued timers. It proves that:
 
 - a `128 × 128` scene result is rejected after a newer key replaces its active key and package;
 - the replacement scene result is rejected after render quality changes from automatic sampling to aggregate rendering;
@@ -61,7 +66,19 @@ The stale-work gate forces re-entrant state changes from inside the expensive en
 - block 1 becomes the active validated trace;
 - discarding the stale trace does not change package checksum or ciphertext.
 
-## Accepted runtime receipt
+The protected failure and compatibility gates prove that:
+
+- packages are rejected under the wrong key;
+- ciphertext mutations are rejected;
+- secure exports reconstruct only with the correct key and remain metadata-minimized;
+- validated editor drafts are accepted and invalid permutations are rejected;
+- laboratory and visualizer internal-package handoff preserves exact package identity;
+- secure-export and authenticated-envelope provenance remain protected during return handoff;
+- passphrases are not persisted;
+- legacy storage records migrate to current schemas;
+- malformed stored JSON is removed and restoration falls back to a fresh canonical state.
+
+## Accepted runtime receipts
 
 The green lifecycle receipt recorded:
 
@@ -86,18 +103,26 @@ The green stale-work receipt recorded:
 - package checksum preservation across the quality race;
 - package checksum and ciphertext preservation across the trace race.
 
-The combined accepted workflow run is available at:
+The first complete aggregate receipt recorded:
 
-`https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30576852561`
+- format `hb-ttrpg-shadowrun-binary-cube-v12-complete-milestone-receipt`;
+- `24` checks executed;
+- `24` checks passed;
+- `0` checks failed;
+- total aggregate runtime of `45,231` milliseconds;
+- individual retained logs for every V0–V12 and desktop check.
+
+Accepted workflow runs:
+
+- Runtime and failure gate: `https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30577201392`
+- Complete V0–V12 gate: `https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30577380346`
 
 ## Remaining V12 work
 
 The following evidence is still required before V12 can be accepted:
 
-1. Add wrong-key, corrupted-package, secure-export, editor-handoff, and local-state recovery regression coverage.
-2. Validate narrow-screen behavior and the deployed GitHub Pages path.
-3. Run the V12 lifecycle and failure evidence together with the complete V0–V11 compatibility suite in one enforced milestone result.
+1. Validate narrow-screen behavior and the GitHub Pages deployment path.
 
 ## Acceptance note
 
-This document records milestone progress, not V12 completion. V12 remains open until the remaining failure paths and combined regression evidence are accepted without unresolved high-severity correctness or resource-leak defects.
+This document records milestone progress, not V12 completion. V12 remains open until narrow-screen and deployment-path evidence is accepted without unresolved high-severity correctness or resource-leak defects.
