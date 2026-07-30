@@ -3,9 +3,10 @@
 ## Status
 
 - Milestone: `V13 — Shadowrun Workspace Launch and Documentation`
-- State: in progress
+- State: accepted
 - Prerequisite: V12 accepted
 - Public route: `https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun`
+- Permanent gate: `.github/workflows/binary-cube-v13-launch.yml`
 
 ## Promotion changes
 
@@ -13,7 +14,8 @@
 - The **Binary Cube Encoder Visualizer** remains a separate dedicated card.
 - Both cards are promoted from `prototype` to `available`.
 - The Shadowrun asset version is advanced to `20260730-v13` so the public workspace receives the promoted card metadata and current assets.
-- The landing-page lazy-view loader supports both explicit activation and direct `#shadowrun` navigation.
+- The landing-page lazy-view loader supports explicit activation and direct `#shadowrun` navigation.
+- Historical V7, V10, and V11 gates accept forward-moving dated asset versions while continuing to enforce their original encoder, accessibility, transport, storage, and desktop contracts.
 
 ## User documentation
 
@@ -52,40 +54,49 @@
 - no-build GitHub Pages deployment;
 - permanent validation workflows and future change rules.
 
-## Accepted prerequisite evidence
+## Accepted launch evidence
 
-V12 accepted evidence is recorded in `docs/binary-cube-v12-runtime-failure-report.md`.
+The V13 source contract proves:
 
-The accepted complete workflow proves:
+- V12 is accepted before promotion;
+- both Binary Cube cards are separate and marked `available`;
+- the V13 asset version is active;
+- the visualizer loader preserves the canonical engine, authentication, secure-export, renderer, controller, and stylesheet chain;
+- direct-hash and explicit Shadowrun activation remain available;
+- the user and architecture guides contain every required V13 concept;
+- the ten canonical phases and experimental-obfuscation warning remain in the promoted tool.
 
-- 24 of 24 V0–V12 checks pass;
-- no check fails;
-- the final accepted run required no browser retry;
-- historical engine, trace, shell, renderer, animation, encoder, sequencing, performance, accessibility, compatibility, desktop, lifecycle, failure, and stale-work contracts remain green.
+The public V13 browser receipt proves:
 
-The accepted live Pages workflow proves:
+- the live Shadowrun route displays **Binary Cube Encryption Laboratory** with **Available** and **Open Laboratory**;
+- the live route displays **Binary Cube Encoder Visualizer** with **Available** and **Open Visualizer**;
+- both cards retain distinct launch identifiers;
+- the promoted visualizer opens through its real public workspace card;
+- renderer version `0.5.0` initializes;
+- the canonical package, exact round trip, and selected-block trace settle successfully;
+- the active transport remains an internal package;
+- only one visualizer panel exists;
+- the promoted mobile launch remains within the viewport.
 
-- the `/HB-TTRPG-tools/#shadowrun` route works;
-- the Shadowrun entry and visualizer lazy-load through the public repository subpath;
-- the visualizer opens and produces a valid package, round trip, and trace;
-- exact 2D mode remains complete;
-- all core controls remain present;
-- the `390 × 844` layout stacks correctly;
-- no visible visualizer element causes horizontal overflow.
+The post-promotion regression evidence proves:
 
-## V13 exit evidence to add
+- all V0–V11 compatibility and desktop steps remain green with asset version `20260730-v13`;
+- the complete V0–V12 aggregate remains the permanent regression prerequisite;
+- the V12 public mobile and exact-fallback gate remains part of V13 enforcement;
+- the V13 workflow waits for the promoted public entry before evaluating the live cards.
 
-V13 will be accepted when permanent source and live-browser checks prove:
+## Permanent V13 enforcement
 
-1. both promoted cards exist and are marked available;
-2. the laboratory and visualizer remain separate launch targets;
-3. the visualizer loader includes the canonical engine, auth, secure export, renderer, controller, and stylesheet;
-4. the user guide covers the required concepts and warning;
-5. the architecture guide covers authority, lifecycle, transport, storage, desktop, and deployment boundaries;
-6. V12 is accepted before promotion;
-7. the public Shadowrun route displays both available cards and opens the visualizer;
-8. the complete V0–V12 and live Pages gates remain green after promotion.
+`.github/workflows/binary-cube-v13-launch.yml` fails unless all of the following pass together:
 
-## Acceptance note
+1. V13 source and documentation contracts;
+2. the complete 24-check V0–V12 aggregate;
+3. public deployment synchronization for the promoted `shadowrun-entry.js`;
+4. the V12 live mobile and exact-fallback browser gate;
+5. the V13 live promoted-card and visualizer-launch browser gate.
 
-This report establishes the V13 promotion scope. V13 remains in progress until the permanent launch gate and post-promotion public evidence pass.
+Logs for the V13 gate and the nested complete V0–V12 receipt are retained as workflow artifacts.
+
+## Acceptance
+
+V13 is accepted. The Binary Cube Encoder Visualizer is a documented, publicly launched Shadowrun companion tool with preserved laboratory access, accepted historical regression evidence, live GitHub Pages evidence, and permanent promotion enforcement.
