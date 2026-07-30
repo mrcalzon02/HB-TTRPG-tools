@@ -4,14 +4,17 @@
 
 - Milestone: `V12 — Regression, Runtime, and Failure Testing`
 - State: in progress
-- First accepted slice: lifecycle and cleanup contract gate
-- Validation command: `node scripts/validate-binary-cube-visualizer-lifecycle.mjs`
+- Accepted slice: lifecycle source contracts, repeated Chromium open/close execution, and explicit renderer disposal
+- Static validation: `node scripts/validate-binary-cube-visualizer-lifecycle.mjs`
+- Browser validation: `node scripts/validate-binary-cube-visualizer-lifecycle-browser.mjs`
+- Permanent workflow: `.github/workflows/binary-cube-v12-lifecycle.yml`
+- First accepted workflow run: `30575771837`
 
 ## Scope of this slice
 
-This first V12 slice protects the repeated open/close and renderer-cleanup boundaries that are most likely to create long-session regressions in the GitHub Pages workspace.
+This V12 slice protects the repeated open/close and renderer-cleanup boundaries that are most likely to create long-session regressions in the GitHub Pages workspace.
 
-The gate verifies that:
+The source contract gate verifies that:
 
 - the visualizer panel is reused instead of rebuilt on every open;
 - event binding is guarded against duplicate attachment;
@@ -25,25 +28,44 @@ The gate verifies that:
 - owned WebGL buffers and programs are deleted;
 - generated label nodes are cleared.
 
-## Current evidence
+The Chromium gate executes 24 complete open, play, close, and reopen cycles while collecting live runtime counters. It proves that:
 
-The permanent dependency-free validator is stored at:
+- exactly one panel and one renderer remain mounted across all cycles;
+- the ResizeObserver count remains stable;
+- the seven renderer canvas listeners do not multiply;
+- the six WebGL buffers and one WebGL program do not multiply;
+- each close cancels playback and leaves no active animation frame;
+- the generated label count remains stable;
+- calling renderer disposal twice is safe;
+- disposal disconnects the observer, removes all canvas listeners, deletes all owned WebGL resources, and clears generated labels.
 
-`./scripts/validate-binary-cube-visualizer-lifecycle.mjs`
+## Accepted runtime receipt
 
-It reads the authoritative visualizer controller and renderer sources directly and fails when any required lifecycle contract is removed or renamed without an equivalent update to the gate.
+The first green Chromium receipt recorded:
+
+- `24` lifecycle cycles;
+- `1` renderer construction;
+- `1` active ResizeObserver before disposal and `0` after disposal;
+- `7` canvas listeners before disposal and `0` after disposal;
+- `6` live WebGL buffers before disposal and `0` after disposal;
+- `1` live WebGL program before disposal and `0` after disposal;
+- `0` active animation frames after every close and after the final reopen;
+- `12` generated labels before disposal and `0` after disposal.
+
+The accepted workflow run is available at:
+
+`https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/30575771837`
 
 ## Remaining V12 work
 
 The following evidence is still required before V12 can be accepted:
 
-1. Chromium repeated open/close execution with listener, animation-frame, observer, and WebGL resource counters.
-2. Renderer-initialization failure injection proving the exact 2D fallback remains usable.
-3. Rapid key, package, quality, and trace changes proving stale work is discarded.
-4. Wrong-key, corrupted-package, secure-export, editor-handoff, and local-state recovery regression coverage.
-5. Narrow-screen and deployed GitHub Pages path validation.
-6. A permanent workflow step that runs the lifecycle gate together with the complete V0–V11 compatibility suite.
+1. Promote the existing forced renderer-initialization failure and exact 2D fallback regression into the V12 combined gate.
+2. Exercise rapid key, package, quality, and trace changes while proving stale work is discarded.
+3. Add wrong-key, corrupted-package, secure-export, editor-handoff, and local-state recovery regression coverage.
+4. Validate narrow-screen behavior and the deployed GitHub Pages path.
+5. Run the V12 lifecycle evidence together with the complete V0–V11 compatibility suite in one enforced milestone result.
 
 ## Acceptance note
 
-This document records milestone progress, not V12 completion. V12 remains open until browser runtime evidence and the remaining failure paths are accepted without unresolved high-severity correctness or resource-leak defects.
+This document records milestone progress, not V12 completion. V12 remains open until the remaining failure paths and combined regression evidence are accepted without unresolved high-severity correctness or resource-leak defects.
