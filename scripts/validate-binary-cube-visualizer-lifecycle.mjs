@@ -41,8 +41,8 @@ requireContract(
 requireContract(
   'Playback cancellation releases animation frames',
   visualizer,
-  /function pausePlayback\(panel,[\s\S]*?cancelAnimationFrame\(playbackFrame\)[\s\S]*?playbackFrame = null;/,
-  'pausePlayback must cancel and clear the active animation frame.'
+  /function pausePlayback\(panel,[\s\S]*?cancelFrame\(playbackFrame\);[\s\S]*?playbackFrame = null;/,
+  'pausePlayback must cancel and clear the active animation frame through the runtime wrapper.'
 );
 requireContract(
   'Preparation cancellation releases deferred work',
