@@ -1,0 +1,91 @@
+# V12 deployment-path gate: public GitHub Pages route, narrow-screen stacking, exact 2D fallback, core controls, package state, and horizontal-overflow protection.
+name: Validate Binary Cube V12 Pages mobile path
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/binary-cube-v12-pages.yml"
+      - "scripts/validate-binary-cube-v12-pages-browser.mjs"
+      - "index.html"
+      - "styles.css"
+      - "binary-cube-visualizer.css"
+      - "binary-cube-visualizer-renderer.js"
+      - "shadowrun-binary-cube-visualizer.js"
+      - "shadowrun-binary-cube-engine.js"
+      - "shadowrun-entry.js"
+      - "app-lite-view-mounts.js"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "binary-cube-v12-pages-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record Pages validation pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/v12-pages' \
+            -f description='Binary Cube V12 GitHub Pages mobile validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Pages validator
+        run: |
+          node --check scripts/validate-binary-cube-v12-pages-browser.mjs
+          mkdir -p binary-cube-v12-pages-logs
+
+      - name: Validate public Pages route at mobile viewport
+        env:
+          BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-v12-pages-browser.mjs 2>&1 | tee binary-cube-v12-pages-logs/pages-mobile.log
+
+      - name: Retain Pages logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-cube-v12-pages-logs
+          path: binary-cube-v12-pages-logs
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Record Pages validation success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/v12-pages' \
+            -f description='Binary Cube V12 GitHub Pages mobile gate passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record Pages validation failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/v12-pages' \
+            -f description='Binary Cube V12 GitHub Pages mobile gate failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
