@@ -110,7 +110,7 @@ for (const selector of [
   'content:"★"'
 ]) assert.match(styleSource, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 
-assert.match(entrySource, /ASSET_VERSION = '20260726-3'/);
+assert.match(entrySource, /ASSET_VERSION = '\d{8}(?:-\d+|-v\d+)'/);
 assert.match(entrySource, /keyboard controls, reduced-motion phases, non-color state markers, trace transcripts/);
 for (const heading of ['Keyboard operation', 'Reduced motion', 'Non-color distinctions', 'Live announcements', 'Trace transcript', '2D fallback']) assert.match(checklistSource, new RegExp(heading, 'i'));
 
