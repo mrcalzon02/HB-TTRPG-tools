@@ -302,7 +302,7 @@
       groups.regions.visible = visibility.regions;
       groups.hazards.visible = visibility.hazards;
       ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => {
-        groups[name].visible = visibility[name];
+        groups[name].visible = visibility[name] && !passive;
       });
       labelLayer.hidden = !visibility.labels && !passive;
       leaderLayer.hidden = !visibility.labels && !passive;
