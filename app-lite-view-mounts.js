@@ -8,6 +8,7 @@
   let barotraumaEntryPromise = null;
   let shadowrunEntryPromise = null;
   let warhammerLorePromise = null;
+  let warhammerWorkspacePromise = null;
   let barotraumaImagePreloads = null;
   const loadedScripts = new Map();
 
@@ -108,7 +109,7 @@
       const title = document.createElement('h3');
       title.textContent = 'Warhammer 40,000 Lore Archive';
       const copy = document.createElement('p');
-      copy.textContent = 'Search the Cafarron Corridor campaign archive by world, system, region, conflict, Imperial force, alias, and source story.';
+      copy.textContent = 'Enter the diegetic Cafarron Corridor archive and its interactive three-dimensional Navis sector survey.';
       const button = document.createElement('button');
       button.className = 'link-button';
       button.type = 'button';
@@ -124,32 +125,11 @@
       view.id = 'warhammer-40k';
       view.className = 'view';
       view.setAttribute('aria-labelledby', 'warhammer-40k-title');
-
-      const hero = document.createElement('div');
-      hero.className = 'hero-card no-print';
-      const eyebrow = document.createElement('p');
-      eyebrow.className = 'eyebrow';
-      eyebrow.textContent = 'Warhammer 40,000 campaign lore';
       const title = document.createElement('h2');
       title.id = 'warhammer-40k-title';
-      title.textContent = 'Cafarron Corridor Archive';
-      const copy = document.createElement('p');
-      copy.textContent = 'A searchable, exportable wiki of confirmed worlds, systems, regional references, Imperial formations, conflicts, aliases, and unresolved locations from the Emperor Protects story corpus.';
-      const actions = document.createElement('div');
-      actions.className = 'workspace-actions';
-      const source = document.createElement('a');
-      source.className = 'link-button';
-      source.href = 'https://www.reddit.com/r/EmperorProtects/';
-      source.target = '_blank';
-      source.rel = 'noopener';
-      source.textContent = 'Open Source Stories';
-      actions.appendChild(source);
-      hero.append(eyebrow, title, copy, actions);
-
-      const root = document.createElement('div');
-      root.id = 'warhammer-lore-root';
-      root.innerHTML = '<div class="module-empty">Open the Warhammer 40K Lore tab to load the Cafarron Corridor archive.</div>';
-      view.append(hero, root);
+      title.className = 'module-empty';
+      title.textContent = 'Opening Cafarron Corridor archive…';
+      view.appendChild(title);
       document.querySelector('main')?.appendChild(view);
     }
     return view;
@@ -176,9 +156,11 @@
     }
     if (viewId === 'warhammer-40k') {
       ensureWarhammerLoreView();
-      warhammerLorePromise ||= loadScript('warhammer-40k-wiki.js');
-      await Promise.all([warhammerLorePromise, base.prepareView(viewId)]);
-      window.Warhammer40KLore?.initialize?.();
+      warhammerLorePromise ||= loadScript('warhammer-40k-wiki.js?v=2');
+      await warhammerLorePromise;
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace.js?v=1');
+      await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
+      window.Warhammer40KWorkspace?.initialize?.();
       return;
     }
     return base.prepareView(viewId);
