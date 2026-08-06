@@ -7,6 +7,7 @@
   let sheetPromise = null;
   let barotraumaEntryPromise = null;
   let shadowrunEntryPromise = null;
+  let warhammerLorePromise = null;
   let barotraumaImagePreloads = null;
   const loadedScripts = new Map();
 
@@ -87,6 +88,73 @@
     return barotraumaImagePreloads;
   }
 
+  function ensureWarhammerLoreView() {
+    const primaryNav = document.querySelector('.top-nav[aria-label="Primary"]');
+    if (primaryNav && !primaryNav.querySelector('[data-view="warhammer-40k"]')) {
+      const button = document.createElement('button');
+      button.className = 'nav-button';
+      button.type = 'button';
+      button.dataset.view = 'warhammer-40k';
+      button.textContent = 'Warhammer 40K Lore';
+      const searchLink = primaryNav.querySelector('a[href="#foundry-search"]');
+      primaryNav.insertBefore(button, searchLink || null);
+    }
+
+    const menuGrid = document.querySelector('#tools .menu-grid');
+    if (menuGrid && !menuGrid.querySelector('[data-warhammer-40k-card="true"]')) {
+      const card = document.createElement('article');
+      card.className = 'menu-card';
+      card.dataset.warhammer40kCard = 'true';
+      const title = document.createElement('h3');
+      title.textContent = 'Warhammer 40,000 Lore Archive';
+      const copy = document.createElement('p');
+      copy.textContent = 'Search the Cafarron Corridor campaign archive by world, system, region, conflict, Imperial force, alias, and source story.';
+      const button = document.createElement('button');
+      button.className = 'link-button';
+      button.type = 'button';
+      button.dataset.view = 'warhammer-40k';
+      button.textContent = 'Open Lore Archive';
+      card.append(title, copy, button);
+      menuGrid.appendChild(card);
+    }
+
+    let view = document.getElementById('warhammer-40k');
+    if (!view) {
+      view = document.createElement('section');
+      view.id = 'warhammer-40k';
+      view.className = 'view';
+      view.setAttribute('aria-labelledby', 'warhammer-40k-title');
+
+      const hero = document.createElement('div');
+      hero.className = 'hero-card no-print';
+      const eyebrow = document.createElement('p');
+      eyebrow.className = 'eyebrow';
+      eyebrow.textContent = 'Warhammer 40,000 campaign lore';
+      const title = document.createElement('h2');
+      title.id = 'warhammer-40k-title';
+      title.textContent = 'Cafarron Corridor Archive';
+      const copy = document.createElement('p');
+      copy.textContent = 'A searchable, exportable wiki of confirmed worlds, systems, regional references, Imperial formations, conflicts, aliases, and unresolved locations from the Emperor Protects story corpus.';
+      const actions = document.createElement('div');
+      actions.className = 'workspace-actions';
+      const source = document.createElement('a');
+      source.className = 'link-button';
+      source.href = 'https://www.reddit.com/r/EmperorProtects/';
+      source.target = '_blank';
+      source.rel = 'noopener';
+      source.textContent = 'Open Source Stories';
+      actions.appendChild(source);
+      hero.append(eyebrow, title, copy, actions);
+
+      const root = document.createElement('div');
+      root.id = 'warhammer-lore-root';
+      root.innerHTML = '<div class="module-empty">Open the Warhammer 40K Lore tab to load the Cafarron Corridor archive.</div>';
+      view.append(hero, root);
+      document.querySelector('main')?.appendChild(view);
+    }
+    return view;
+  }
+
   async function prepareView(viewId) {
     if (viewId === 'utilities') {
       sheetPromise ||= loadScript('character-sheet-view.js');
@@ -104,6 +172,13 @@
     if (viewId === 'shadowrun') {
       shadowrunEntryPromise ||= loadScript('shadowrun-entry.js');
       await Promise.all([shadowrunEntryPromise, base.prepareView(viewId)]);
+      return;
+    }
+    if (viewId === 'warhammer-40k') {
+      ensureWarhammerLoreView();
+      warhammerLorePromise ||= loadScript('warhammer-40k-wiki.js');
+      await Promise.all([warhammerLorePromise, base.prepareView(viewId)]);
+      window.Warhammer40KLore?.initialize?.();
       return;
     }
     return base.prepareView(viewId);
@@ -131,6 +206,8 @@
     const status = document.querySelector('[role="status"]');
     if (status) status.textContent = `${viewId} workspace could not be loaded: ${error.message}`;
   }
+
+  ensureWarhammerLoreView();
 
   document.addEventListener('click', event => {
     const control = event.target.closest('[data-view]');
