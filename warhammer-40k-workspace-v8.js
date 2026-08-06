@@ -6,7 +6,8 @@
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
   const ASSAY_PATH = 'warhammer-40k-survey-assay-v8.js?v=8';
-  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=12';
+  const ORRERY_PATH = 'warhammer-40k-system-orrery-v1.js?v=1';
+  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=13';
   const loadedScripts = new Map();
 
   const state = {
@@ -19,6 +20,7 @@
     ui: null,
     map: null,
     mapPromise: null,
+    orrery: null,
     activeTab: 'archive',
     mapMode: 'orbit',
     vigilActive: false,
@@ -55,7 +57,7 @@
     if (docket) docket.textContent = state.selectedRecordId ? 'Attached docket ready' : 'No docket locked';
     if (rite) {
       rite.textContent = state.vigilActive
-        ? 'Navis Vigil engaged · route traces sealed'
+        ? 'Navis Vigil engaged · designation leaders sealed'
         : state.activeTab === 'map'
           ? `${mapRites[state.mapMode] || mapRites.orbit} active`
           : state.activeTab === 'seals'
@@ -160,6 +162,38 @@
       }
     }
     panel.append(section, routeLegend());
+  }
+
+  function mountSystemOrrery(node, records) {
+    const panel = document.getElementById('wh-map-details');
+    if (!panel || !window.CafarronSystemOrreryV1) return;
+    state.orrery?.dispose?.();
+
+    const section = document.createElement('section');
+    section.className = 'wh-system-orrery';
+    section.setAttribute('aria-label', `${node.name} local system orrery`);
+    section.style.cssText = 'display:grid;gap:.45rem;padding:.7rem;border:1px solid rgba(198,171,104,.32);background:linear-gradient(160deg,rgba(36,31,21,.72),rgba(3,5,5,.94));';
+
+    const heading = document.createElement('div');
+    heading.style.cssText = 'display:flex;flex-wrap:wrap;justify-content:space-between;gap:.35rem;align-items:baseline;';
+    const title = document.createElement('h4');
+    title.textContent = 'Local System Orrery';
+    const seal = document.createElement('span');
+    seal.textContent = 'Registered contact highlighted';
+    seal.style.cssText = 'color:#cdbb8b;font:700 .6rem/1.3 ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;';
+    heading.append(title, seal);
+
+    const host = document.createElement('div');
+    host.className = 'wh-system-orrery-host';
+    host.style.cssText = 'position:relative;width:100%;height:14rem;overflow:hidden;border:1px solid rgba(224,199,127,.22);background:#020404;';
+    const note = document.createElement('p');
+    note.className = 'wh-small';
+    note.textContent = 'Cartographica reconstruction · primary star, registered orbital bodies, and attached satellites.';
+    note.style.margin = '0';
+
+    section.append(heading, host, note);
+    panel.insertBefore(section, panel.children[2] || null);
+    state.orrery = window.CafarronSystemOrreryV1.mount({ host, node, records });
   }
 
   function vigilElements() {
@@ -466,7 +500,7 @@
     }
     if (state.mapPromise) return state.mapPromise;
     state.mapPromise = (async () => {
-      await Promise.all([loadScript(ASSAY_PATH), loadScript(MAP_PATH)]);
+      await Promise.all([loadScript(ASSAY_PATH), loadScript(ORRERY_PATH), loadScript(MAP_PATH)]);
       const loading = document.getElementById('wh-map-loading');
       try {
         state.map = await window.CafarronSectorMapV8.mount({
@@ -482,6 +516,7 @@
             state.selectedNodeName = node.name;
             state.selectedRecordId = records[0]?.id || '';
             state.ui.renderMapDetails(node, records);
+            mountSystemOrrery(node, records);
             appendConnectedRoutes(routes);
             const register = document.getElementById('wh-node-select');
             if (register) {
