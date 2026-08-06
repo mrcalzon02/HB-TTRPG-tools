@@ -26,8 +26,18 @@
 
   function classifyTemplate(text) {
     const value = String(text || '').toLowerCase();
+    if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
     if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
     return 'unsealed';
+  }
+
+  function canvasTexture(THREE, canvas) {
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.anisotropy = 4;
+    texture.needsUpdate = true;
+    return texture;
   }
 
   function desertTexture(THREE, seed) {
@@ -86,16 +96,132 @@
       image.data[index + 2] = clamp(image.data[index + 2] + grain, 0, 255);
     }
     context.putImageData(image, 0, 0);
+    return canvasTexture(THREE, canvas);
+  }
 
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.anisotropy = 4;
-    texture.needsUpdate = true;
-    return texture;
+  function forgeTextureSet(THREE, seed) {
+    const width = 512;
+    const height = 256;
+    const surface = document.createElement('canvas');
+    const emissive = document.createElement('canvas');
+    surface.width = emissive.width = width;
+    surface.height = emissive.height = height;
+    const context = surface.getContext('2d', { alpha: false });
+    const glow = emissive.getContext('2d', { alpha: false });
+    const roll = random(seed ^ 0x4f524745);
+
+    const base = context.createLinearGradient(0, 0, 0, height);
+    base.addColorStop(0, '#383632');
+    base.addColorStop(0.28, '#5d4435');
+    base.addColorStop(0.52, '#262b2b');
+    base.addColorStop(0.74, '#6a3226');
+    base.addColorStop(1, '#242624');
+    context.fillStyle = base;
+    context.fillRect(0, 0, width, height);
+    glow.fillStyle = '#030303';
+    glow.fillRect(0, 0, width, height);
+
+    context.globalCompositeOperation = 'screen';
+    for (let plate = 0; plate < 120; plate += 1) {
+      const x = roll() * width;
+      const y = roll() * height;
+      const w = 8 + roll() * 48;
+      const h = 3 + roll() * 20;
+      context.fillStyle = `rgba(${45 + Math.floor(roll() * 55)},${38 + Math.floor(roll() * 45)},${34 + Math.floor(roll() * 35)},${0.08 + roll() * 0.14})`;
+      context.fillRect(x, y, w, h);
+      context.strokeStyle = `rgba(12,14,14,${0.18 + roll() * 0.3})`;
+      context.lineWidth = 1;
+      context.strokeRect(x, y, w, h);
+    }
+
+    context.globalCompositeOperation = 'multiply';
+    for (let trench = 0; trench < 46; trench += 1) {
+      const y = roll() * height;
+      context.beginPath();
+      context.moveTo(0, y);
+      for (let x = 0; x <= width; x += 10) {
+        context.lineTo(x, y + Math.sin(x * (0.012 + roll() * 0.014) + trench) * (2 + roll() * 8));
+      }
+      context.strokeStyle = `rgba(4,6,6,${0.14 + roll() * 0.22})`;
+      context.lineWidth = 1 + roll() * 5;
+      context.stroke();
+    }
+
+    context.globalCompositeOperation = 'source-over';
+    glow.globalCompositeOperation = 'screen';
+    for (let furnace = 0; furnace < 95; furnace += 1) {
+      const x = roll() * width;
+      const y = roll() * height;
+      const radius = 0.8 + roll() * 4.8;
+      const halo = context.createRadialGradient(x, y, 0, x, y, radius * 3.5);
+      halo.addColorStop(0, 'rgba(255,198,84,.9)');
+      halo.addColorStop(0.3, 'rgba(232,77,28,.48)');
+      halo.addColorStop(1, 'rgba(80,15,5,0)');
+      context.fillStyle = halo;
+      context.fillRect(x - radius * 4, y - radius * 4, radius * 8, radius * 8);
+
+      const emission = glow.createRadialGradient(x, y, 0, x, y, radius * 4.5);
+      emission.addColorStop(0, 'rgba(255,232,164,1)');
+      emission.addColorStop(0.22, 'rgba(255,101,28,.92)');
+      emission.addColorStop(1, 'rgba(0,0,0,0)');
+      glow.fillStyle = emission;
+      glow.fillRect(x - radius * 5, y - radius * 5, radius * 10, radius * 10);
+    }
+
+    context.globalCompositeOperation = 'screen';
+    glow.globalCompositeOperation = 'screen';
+    for (let network = 0; network < 34; network += 1) {
+      const y = roll() * height;
+      const start = roll() * width;
+      const length = 35 + roll() * 150;
+      context.strokeStyle = `rgba(155,92,49,${0.12 + roll() * 0.17})`;
+      glow.strokeStyle = `rgba(255,78,18,${0.32 + roll() * 0.36})`;
+      context.lineWidth = 0.5 + roll() * 1.4;
+      glow.lineWidth = 0.6 + roll() * 1.8;
+      context.beginPath();
+      glow.beginPath();
+      context.moveTo(start, y);
+      glow.moveTo(start, y);
+      for (let step = 0; step < 6; step += 1) {
+        const x = start + length * (step / 5);
+        const offset = (roll() - 0.5) * 16;
+        context.lineTo(x, y + offset);
+        glow.lineTo(x, y + offset);
+      }
+      context.stroke();
+      glow.stroke();
+    }
+
+    const image = context.getImageData(0, 0, width, height);
+    for (let index = 0; index < image.data.length; index += 4) {
+      const grime = Math.floor((roll() - 0.57) * 26);
+      image.data[index] = clamp(image.data[index] + grime, 0, 255);
+      image.data[index + 1] = clamp(image.data[index + 1] + grime, 0, 255);
+      image.data[index + 2] = clamp(image.data[index + 2] + grime, 0, 255);
+    }
+    context.putImageData(image, 0, 0);
+
+    return {
+      map: canvasTexture(THREE, surface),
+      emissiveMap: canvasTexture(THREE, emissive)
+    };
   }
 
   function registeredMaterial(THREE, template, seed, fallbackColor) {
+    if (template === 'forge') {
+      const textures = forgeTextureSet(THREE, seed);
+      return new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        map: textures.map,
+        bumpMap: textures.map,
+        bumpScale: 0.026,
+        emissive: 0xff4b19,
+        emissiveMap: textures.emissiveMap,
+        emissiveIntensity: 1.15,
+        roughness: 0.68,
+        metalness: 0.46
+      });
+    }
     if (template === 'desert') {
       const map = desertTexture(THREE, seed);
       return new THREE.MeshStandardMaterial({
@@ -154,8 +280,13 @@
 
   function disposeMaterial(material) {
     if (!material) return;
+    const disposed = new Set();
     for (const key of ['map', 'bumpMap', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'alphaMap']) {
-      material[key]?.dispose?.();
+      const texture = material[key];
+      if (texture && !disposed.has(texture)) {
+        disposed.add(texture);
+        texture.dispose?.();
+      }
     }
     material.dispose?.();
   }
@@ -228,13 +359,15 @@
       const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 28, 20), material);
       planet.position.x = body.radius;
       if (index === system.registeredIndex) {
+        const shellColor = system.template === 'forge' ? 0x8a3a22 : system.template === 'desert' ? 0xd49a53 : 0xe0c77f;
+        const shellOpacity = system.template === 'forge' ? 0.13 : system.template === 'desert' ? 0.09 : 0.17;
         planet.add(new THREE.Mesh(
           new THREE.SphereGeometry(body.scale * 1.24, 20, 14),
           new THREE.MeshBasicMaterial({
-            color: system.template === 'desert' ? 0xd49a53 : 0xe0c77f,
+            color: shellColor,
             transparent: true,
-            opacity: system.template === 'desert' ? 0.09 : 0.17,
-            wireframe: system.template !== 'desert'
+            opacity: shellOpacity,
+            wireframe: system.template === 'unsealed'
           })
         ));
       }
@@ -293,6 +426,6 @@
   window.CafarronSystemOrreryV1 = Object.freeze({
     mount,
     dispose,
-    templates: Object.freeze(['desert'])
+    templates: Object.freeze(['desert', 'forge'])
   });
 })();
