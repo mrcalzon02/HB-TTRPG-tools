@@ -40,6 +40,26 @@
     return window.THREE;
   }
 
+  function hash(value) {
+    let result = 2166136261;
+    for (const character of String(value || '')) {
+      result ^= character.charCodeAt(0);
+      result = Math.imul(result, 16777619);
+    }
+    return result >>> 0;
+  }
+
+  function random(seed) {
+    let value = seed >>> 0;
+    return () => {
+      value += 0x6d2b79f5;
+      let next = value;
+      next = Math.imul(next ^ (next >>> 15), next | 1);
+      next ^= next + Math.imul(next ^ (next >>> 7), next | 61);
+      return ((next ^ (next >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
   function routeStyle(layer) {
     return {
       'major-warp': [0xd8b35e, 0.82, false, 0, 0],
@@ -73,19 +93,58 @@
     return group;
   }
 
+  function systemProfile(node, records) {
+    const text = [node.id, node.name, ...records.flatMap(record => [record.name, record.objectType, record.classification, record.environment])].join('|');
+    const roll = random(hash(text));
+    const recordText = text.toLowerCase();
+    const starColors = [0xffd88a, 0xffb56b, 0xfff0c4, 0xc9ddff, 0xff8b58];
+    const bodyColors = recordText.includes('forge')
+      ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39]
+      : recordText.includes('desert')
+        ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933]
+        : recordText.includes('ice')
+          ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8]
+          : recordText.includes('dead') || recordText.includes('tomb')
+            ? [0x77756f, 0x4f5352, 0x999589, 0x343838]
+            : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
+    const count = clamp(3 + Math.floor(roll() * 5), 3, 7);
+    const registeredIndex = Math.min(count - 1, 1 + Math.floor(roll() * Math.max(1, count - 1)));
+    return {
+      seed: hash(text),
+      starColor: starColors[Math.floor(roll() * starColors.length)],
+      starScale: 0.62 + roll() * 0.32,
+      registeredIndex,
+      bodies: Array.from({ length: count }, (_, index) => ({
+        radius: 1.55 + index * 1.05 + roll() * 0.22,
+        scale: 0.12 + roll() * 0.18 + (index === registeredIndex ? 0.1 : 0),
+        color: bodyColors[Math.floor(roll() * bodyColors.length)],
+        inclination: (roll() - 0.5) * 0.18,
+        phase: roll() * Math.PI * 2,
+        speed: 0.00018 / Math.sqrt(index + 1),
+        moons: index === registeredIndex ? Math.floor(roll() * 3) : (roll() > 0.82 ? 1 : 0)
+      }))
+    };
+  }
+
+  function disposeObject(root) {
+    if (!root) return;
+    root.traverse(object => {
+      object.geometry?.dispose?.();
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      materials.filter(Boolean).forEach(material => {
+        const disposed = new Set();
+        ['map', 'bumpMap', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'alphaMap'].forEach(key => {
+          const texture = material[key];
+          if (texture && !disposed.has(texture)) { disposed.add(texture); texture.dispose?.(); }
+        });
+        material.dispose?.();
+      });
+    });
+    root.removeFromParent();
+  }
+
   async function mount(options) {
-    const {
-      data,
-      chart,
-      stage,
-      labelLayer,
-      leaderLayer,
-      status,
-      initialMode = 'orbit',
-      onSelect,
-      onPassiveNode,
-      onPassiveChange
-    } = options;
+    const { data, chart, stage, labelLayer, leaderLayer, status, initialMode = 'orbit', onSelect, onPassiveNode, onPassiveChange } = options;
     const THREE = await three();
     const labelsEngine = window.CafarronMapLabelsV7;
     if (!labelsEngine) throw new Error('Cartographic label servitors failed to answer.');
@@ -110,15 +169,8 @@
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     Object.assign(controls, {
-      enableDamping: true,
-      dampingFactor: 0.022,
-      rotateSpeed: 0.12,
-      panSpeed: 0.135,
-      zoomSpeed: 0.15,
-      keyPanSpeed: 2,
-      screenSpacePanning: true,
-      minDistance: 18,
-      maxDistance: 360
+      enableDamping: true, dampingFactor: 0.022, rotateSpeed: 0.12, panSpeed: 0.135, zoomSpeed: 0.15,
+      keyPanSpeed: 2, screenSpacePanning: true, minDistance: 7, maxDistance: 360
     });
     controls.target.copy(homeTarget);
     controls.update();
@@ -129,9 +181,7 @@
     scene.add(key);
 
     const starData = [];
-    for (let index = 0; index < 1000; index += 1) {
-      starData.push((Math.random() - 0.5) * 440, (Math.random() - 0.5) * 240, (Math.random() - 0.5) * 280);
-    }
+    for (let index = 0; index < 1000; index += 1) starData.push((Math.random() - 0.5) * 440, (Math.random() - 0.5) * 240, (Math.random() - 0.5) * 280);
     const starGeometry = new THREE.BufferGeometry();
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starData, 3));
     scene.add(new THREE.Points(starGeometry, new THREE.PointsMaterial({ color: 0xbcc5bf, size: 0.28, transparent: true, opacity: 0.46 })));
@@ -142,25 +192,13 @@
     grid.material.opacity = 0.22;
     scene.add(grid);
 
-    const groups = Object.fromEntries([
-      'nodes', 'regions', 'hazards', 'route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'
-    ].map(name => [name, new THREE.Group()]));
+    const groups = Object.fromEntries(['nodes', 'systems', 'regions', 'hazards', 'route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].map(name => [name, new THREE.Group()]));
     Object.values(groups).forEach(group => scene.add(group));
 
     const visibility = {
-      primary: true,
-      supporting: true,
-      'guard-origin': true,
-      provisional: false,
-      unnamed: false,
-      exploratory: true,
-      regions: false,
-      hazards: false,
-      labels: true,
-      'route-major-warp': true,
-      'route-trade': true,
-      'route-local-navigation': false,
-      'route-exploratory': false
+      primary: true, supporting: true, 'guard-origin': true, provisional: false, unnamed: false, exploratory: true,
+      regions: false, hazards: false, labels: true, 'route-major-warp': true, 'route-trade': true,
+      'route-local-navigation': false, 'route-exploratory': false
     };
 
     let mode = MODES.has(initialMode) ? initialMode : 'orbit';
@@ -179,6 +217,7 @@
     let surveyTheatre = false;
     let contactDocketOpen = false;
     let fullAuspex = false;
+    let expandedSystem = null;
 
     const meshes = new Map();
     const pickables = [];
@@ -197,15 +236,12 @@
     const fullAuspexToggle = stage.querySelector('#wh-full-auspex-toggle');
     const docketToggle = stage.querySelector('#wh-contact-docket-toggle');
     const vigilPanel = stage.querySelector('.wh-vigil-panel');
-    if (!viewportConsole || !theatreToggle || !fullAuspexToggle || !docketToggle) {
-      throw new Error('Navis survey helm presentation controls are absent from the authoritative viewport.');
-    }
+    if (!viewportConsole || !theatreToggle || !fullAuspexToggle || !docketToggle) throw new Error('Navis survey helm presentation controls are absent from the authoritative viewport.');
 
     const threatColor = node => data.threatStates[node.threat]?.color || data.threatStates.unsurveyed.color;
     const visibleNode = node => visibility[node.layer] !== false && (threat === 'all' || node.threat === threat);
     const canonical = node => ['primary', 'supporting', 'guard-origin'].includes(node.layer);
-    const showLabel = node => visibleNode(node)
-      && (passive ? node.id === selected : visibility.labels && (canonical(node) || node.id === selected));
+    const showLabel = node => visibleNode(node) && (passive ? node.id === selected : visibility.labels && (canonical(node) || node.id === selected));
 
     for (const node of mapNodes) {
       const scale = Math.max(0.42, Number(node.scale || 0.8));
@@ -214,15 +250,7 @@
       const guard = node.layer === 'guard-origin';
       const mesh = new THREE.Mesh(
         new THREE.SphereGeometry(scale, 18, 14),
-        new THREE.MeshStandardMaterial({
-          color,
-          emissive: color,
-          emissiveIntensity: exploratory ? 0.11 : guard ? 0.25 : 0.3,
-          roughness: 0.5,
-          metalness: 0.2,
-          transparent: exploratory || guard,
-          opacity: exploratory ? 0.58 : guard ? 0.92 : 1
-        })
+        new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: exploratory ? 0.11 : guard ? 0.25 : 0.3, roughness: 0.5, metalness: 0.2, transparent: exploratory || guard, opacity: exploratory ? 0.58 : guard ? 0.92 : 1 })
       );
       mesh.position.set(...node.position);
       mesh.userData.nodeId = node.id;
@@ -245,24 +273,15 @@
       labelLayer.appendChild(label);
 
       const leader = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      leader.setAttribute('stroke', data.threatStates[node.threat]?.css || '#f1f1ec');
-      leader.setAttribute('stroke-width', guard ? '0.9' : exploratory ? '0.7' : '1');
-      leader.setAttribute('stroke-opacity', guard ? '0.56' : exploratory ? '0.34' : '0.66');
       leader.hidden = true;
       leaderLayer.appendChild(leader);
       labelRecords.set(node.id, { node, mesh, label, leader });
     }
 
-    routes.forEach(route => {
-      const group = groups[`route-${route.layer}`];
-      if (group) group.add(routeGroup(THREE, route, nodeById));
-    });
+    routes.forEach(route => { const group = groups[`route-${route.layer}`]; if (group) group.add(routeGroup(THREE, route, nodeById)); });
 
     function addVolume(record, group, opacity) {
-      const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 18, 12),
-        new THREE.MeshBasicMaterial({ color: data.threatStates[record.threat]?.color || 0xb49142, wireframe: true, transparent: true, opacity })
-      );
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), new THREE.MeshBasicMaterial({ color: data.threatStates[record.threat]?.color || 0xb49142, wireframe: true, transparent: true, opacity }));
       mesh.position.set(...record.center);
       mesh.scale.set(...record.radii);
       group.add(mesh);
@@ -270,40 +289,75 @@
     data.regions.forEach(record => addVolume(record, groups.regions, 0.05));
     data.hazards.forEach(record => addVolume(record, groups.hazards, 0.11));
 
-    function description() {
-      if (passive) return 'Passive Navis vigil is rotating through sanctioned contacts.';
-      return {
-        select: 'Auspex selection rite active.',
-        orbit: 'Orbital rotation rite active under graduated resistance.',
-        pan: 'Chart translation rite active under graduated resistance.',
-        zoom: 'Magnification rite active under graduated resistance.'
-      }[mode];
+    function recordsFor(node) { return (node.recordIds || []).map(id => recordById.get(id)).filter(Boolean); }
+
+    function clearExpandedSystem() {
+      if (!expandedSystem) return;
+      disposeObject(expandedSystem.group);
+      expandedSystem = null;
     }
 
-    function updateStatus() {
-      status.textContent = `${mapNodes.length} charted contacts · ${description()} Explorator designations remain sealed until selected.`;
+    function expandSystem(node, records) {
+      if (expandedSystem?.nodeId === node.id) return;
+      clearExpandedSystem();
+      const profile = systemProfile(node, records);
+      const group = new THREE.Group();
+      group.position.set(...node.position);
+      group.userData.nodeId = node.id;
+      const star = new THREE.Mesh(new THREE.SphereGeometry(profile.starScale, 24, 18), new THREE.MeshBasicMaterial({ color: profile.starColor }));
+      star.add(new THREE.Mesh(new THREE.SphereGeometry(profile.starScale * 1.18, 18, 12), new THREE.MeshBasicMaterial({ color: profile.starColor, transparent: true, opacity: 0.12, wireframe: true })));
+      group.add(star);
+      const moving = [];
+      profile.bodies.forEach((body, index) => {
+        const orbit = new THREE.Mesh(new THREE.RingGeometry(body.radius - 0.012, body.radius + 0.012, 72), new THREE.MeshBasicMaterial({ color: index === profile.registeredIndex ? 0xd9bc69 : 0x59645e, transparent: true, opacity: index === profile.registeredIndex ? 0.62 : 0.32, side: THREE.DoubleSide }));
+        orbit.rotation.x = Math.PI / 2 + body.inclination;
+        group.add(orbit);
+        const pivot = new THREE.Group();
+        pivot.rotation.y = body.phase;
+        pivot.rotation.z = body.inclination;
+        const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 18, 12), new THREE.MeshStandardMaterial({ color: body.color, emissive: index === profile.registeredIndex ? body.color : 0x000000, emissiveIntensity: index === profile.registeredIndex ? 0.18 : 0, roughness: 0.76, metalness: 0.08 }));
+        planet.position.x = body.radius;
+        if (index === profile.registeredIndex) planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 14, 10), new THREE.MeshBasicMaterial({ color: 0xe0c77f, transparent: true, opacity: 0.13, wireframe: true })));
+        pivot.add(planet);
+        for (let moonIndex = 0; moonIndex < body.moons; moonIndex += 1) {
+          const moonPivot = new THREE.Group();
+          moonPivot.position.copy(planet.position);
+          moonPivot.rotation.y = moonIndex * Math.PI + profile.seed * 0.0001;
+          const moon = new THREE.Mesh(new THREE.SphereGeometry(Math.max(0.035, body.scale * 0.18), 10, 8), new THREE.MeshStandardMaterial({ color: 0xb7b5aa, roughness: 0.9 }));
+          moon.position.x = body.scale * (1.7 + moonIndex * 0.7);
+          moonPivot.add(moon);
+          pivot.add(moonPivot);
+        }
+        group.add(pivot);
+        moving.push({ pivot, planet, speed: body.speed, moonSpeed: 0.00055 + index * 0.00008 });
+      });
+      groups.systems.add(group);
+      expandedSystem = { nodeId: node.id, group, star, moving, radius: profile.bodies.at(-1)?.radius || 6 };
+      updateVisibility();
     }
+
+    function description() {
+      if (passive) return 'Passive Navis vigil is rotating through sanctioned contacts.';
+      return { select: 'Auspex selection rite active.', orbit: 'Orbital rotation rite active under graduated resistance.', pan: 'Chart translation rite active under graduated resistance.', zoom: 'Magnification rite active under graduated resistance.' }[mode];
+    }
+
+    function updateStatus() { status.textContent = `${mapNodes.length} charted contacts · ${description()} Double-select a contact for close system inspection.`; }
 
     function applyMode() {
       stage.dataset.mapMode = passive ? 'passive' : mode;
       controls.enabled = !passive && mode !== 'select' && !transition;
-      const map = {
-        orbit: [THREE.MOUSE.ROTATE, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.ROTATE],
-        pan: [THREE.MOUSE.PAN, THREE.MOUSE.DOLLY, THREE.MOUSE.ROTATE, THREE.TOUCH.PAN],
-        zoom: [THREE.MOUSE.DOLLY, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.PAN]
-      }[mode] || [THREE.MOUSE.ROTATE, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.ROTATE];
+      const map = { orbit: [THREE.MOUSE.ROTATE, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.ROTATE], pan: [THREE.MOUSE.PAN, THREE.MOUSE.DOLLY, THREE.MOUSE.ROTATE, THREE.TOUCH.PAN], zoom: [THREE.MOUSE.DOLLY, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.PAN] }[mode] || [THREE.MOUSE.ROTATE, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.ROTATE];
       [controls.mouseButtons.LEFT, controls.mouseButtons.MIDDLE, controls.mouseButtons.RIGHT, controls.touches.ONE] = map;
       controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
       updateStatus();
     }
 
     function updateVisibility() {
-      meshes.forEach((mesh, id) => { mesh.visible = visibleNode(nodeById.get(id)); });
+      meshes.forEach((mesh, id) => { mesh.visible = visibleNode(nodeById.get(id)) && expandedSystem?.nodeId !== id; });
+      if (expandedSystem) expandedSystem.group.visible = visibleNode(nodeById.get(expandedSystem.nodeId));
       groups.regions.visible = visibility.regions;
       groups.hazards.visible = visibility.hazards;
-      ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => {
-        groups[name].visible = visibility[name];
-      });
+      ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => { groups[name].visible = visibility[name]; });
       labelLayer.hidden = !visibility.labels && !passive;
       leaderLayer.hidden = true;
       dirtyLabels = true;
@@ -321,43 +375,23 @@
       const topInset = Math.max(10, (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0) + 12);
       const canonicalItems = [];
       let selectedItem = null;
-
       labelRecords.forEach(record => {
-        if (!showLabel(record.node)) {
-          record.label.hidden = true;
-          record.leader.hidden = true;
-          return;
-        }
+        if (!showLabel(record.node)) { record.label.hidden = true; record.leader.hidden = true; return; }
         const point = project(record.node);
         const activeVigilTarget = passive && record.node.id === selected;
         const beyondSurvey = point.z < -1 || point.z > 1 || point.x < -80 || point.x > stageBox.width + 80 || point.y < -80 || point.y > stageBox.height + 80;
-        if (beyondSurvey && !activeVigilTarget) {
-          record.label.hidden = true;
-          record.leader.hidden = true;
-          return;
-        }
-        if (activeVigilTarget) {
-          point.x = clamp(point.x, 12, stageBox.width - 12);
-          point.y = clamp(point.y, topInset + 12, stageBox.height - 12);
-        }
+        if (beyondSurvey && !activeVigilTarget) { record.label.hidden = true; record.leader.hidden = true; return; }
+        if (activeVigilTarget) { point.x = clamp(point.x, 12, stageBox.width - 12); point.y = clamp(point.y, topInset + 12, stageBox.height - 12); }
         record.label.hidden = false;
         record.label.style.visibility = 'hidden';
         record.label.style.left = '0px';
         record.label.style.top = '0px';
-        const item = {
-          ...record,
-          ...point,
-          labelWidth: Math.min(Math.max(record.label.offsetWidth || record.node.name.length * 7 + 18, 72), 220),
-          labelHeight: Math.max(record.label.offsetHeight || 25, 24)
-        };
+        const item = { ...record, ...point, labelWidth: Math.min(Math.max(record.label.offsetWidth || record.node.name.length * 7 + 18, 72), 220), labelHeight: Math.max(record.label.offsetHeight || 25, 24) };
         if (record.node.id === selected && (passive || !canonical(record.node))) selectedItem = item;
         else if (canonical(record.node)) canonicalItems.push(item);
         else if (record.node.id === selected) selectedItem = item;
       });
-
-      const leftItems = canonicalItems.filter(item => item.x <= stageBox.width / 2);
-      const rightItems = canonicalItems.filter(item => item.x > stageBox.width / 2);
-      const placed = labelsEngine.place(leftItems, rightItems, selectedItem, stageBox.width, stageBox.height, topInset);
+      const placed = labelsEngine.place(canonicalItems.filter(item => item.x <= stageBox.width / 2), canonicalItems.filter(item => item.x > stageBox.width / 2), selectedItem, stageBox.width, stageBox.height, topInset);
       placed.forEach(item => {
         item.label.hidden = false;
         item.label.style.visibility = 'visible';
@@ -370,9 +404,7 @@
       dirtyLabels = false;
     }
 
-    function connectedRoutes(nodeId) {
-      return routes.filter(route => route.nodeIds.includes(nodeId));
-    }
+    function connectedRoutes(nodeId) { return routes.filter(route => route.nodeIds.includes(nodeId)); }
 
     function stopPassive(reason = 'manual') {
       if (!passive) return;
@@ -386,32 +418,28 @@
       onPassiveChange?.(false, reason);
     }
 
-    function selectNode(nodeId, focus = false, preservePassive = false) {
+    function moveTo(position, target, duration = 1650) {
+      transition = { start: performance.now(), duration, fromPosition: camera.position.clone(), fromTarget: controls.target.clone(), position: position.clone(), target: target.clone() };
+      controls.enabled = false;
+    }
+
+    function focusNode(node, close = false) {
+      const target = new THREE.Vector3(...node.position);
+      const direction = camera.position.clone().sub(controls.target).normalize();
+      const distance = close ? clamp((expandedSystem?.radius || 6) * 2.25, 12, 24) : clamp(camera.position.distanceTo(controls.target) * 0.52, 28, 72);
+      moveTo(target.clone().add(direction.multiplyScalar(distance)), target, close ? 1200 : 1650);
+    }
+
+    function selectNode(nodeId, focus = false, preservePassive = false, close = false) {
       const node = nodeById.get(nodeId);
       if (!node) return;
       if (passive && !preservePassive) stopPassive('selection');
       selected = nodeId;
-      meshes.forEach((mesh, id) => mesh.scale.setScalar(id === nodeId ? 1.75 : 1));
-      const records = (node.recordIds || []).map(id => recordById.get(id)).filter(Boolean);
+      const records = recordsFor(node);
+      expandSystem(node, records);
       onSelect?.(node, records, connectedRoutes(nodeId));
       dirtyLabels = true;
-      if (focus) focusNode(node);
-    }
-
-    function moveTo(position, target, duration = 1650) {
-      transition = {
-        start: performance.now(), duration,
-        fromPosition: camera.position.clone(),
-        fromTarget: controls.target.clone(),
-        position: position.clone(), target: target.clone()
-      };
-      controls.enabled = false;
-    }
-
-    function focusNode(node) {
-      const target = new THREE.Vector3(...node.position);
-      const direction = camera.position.clone().sub(controls.target).normalize();
-      moveTo(target.clone().add(direction.multiplyScalar(clamp(camera.position.distanceTo(controls.target) * 0.52, 28, 72))), target);
+      if (focus) focusNode(node, close);
     }
 
     function passiveEligibleNodes() {
@@ -421,13 +449,8 @@
 
     function rebuildPassiveSequence() {
       passiveSequence = [...passiveEligibleNodes()];
-      for (let index = passiveSequence.length - 1; index > 0; index -= 1) {
-        const swap = Math.floor(Math.random() * (index + 1));
-        [passiveSequence[index], passiveSequence[swap]] = [passiveSequence[swap], passiveSequence[index]];
-      }
-      if (selected && passiveSequence.length > 1 && passiveSequence[0]?.id === selected) {
-        [passiveSequence[0], passiveSequence[1]] = [passiveSequence[1], passiveSequence[0]];
-      }
+      for (let index = passiveSequence.length - 1; index > 0; index -= 1) { const swap = Math.floor(Math.random() * (index + 1)); [passiveSequence[index], passiveSequence[swap]] = [passiveSequence[swap], passiveSequence[index]]; }
+      if (selected && passiveSequence.length > 1 && passiveSequence[0]?.id === selected) [passiveSequence[0], passiveSequence[1]] = [passiveSequence[1], passiveSequence[0]];
       passiveIndex = -1;
     }
 
@@ -437,14 +460,7 @@
       const azimuth = Math.random() * Math.PI * 2;
       const elevation = 0.22 + Math.random() * 0.42;
       const horizontal = Math.cos(elevation) * radius;
-      return {
-        target,
-        position: new THREE.Vector3(
-          target.x + Math.cos(azimuth) * horizontal,
-          target.y + Math.sin(elevation) * radius,
-          target.z + Math.sin(azimuth) * horizontal
-        )
-      };
+      return { target, position: new THREE.Vector3(target.x + Math.cos(azimuth) * horizontal, target.y + Math.sin(elevation) * radius, target.z + Math.sin(azimuth) * horizontal) };
     }
 
     function advancePassive(now = performance.now()) {
@@ -453,7 +469,7 @@
       passiveIndex += 1;
       const node = passiveSequence[passiveIndex];
       if (!node) return;
-      const records = (node.recordIds || []).map(id => recordById.get(id)).filter(Boolean);
+      const records = recordsFor(node);
       selectNode(node.id, false, true);
       const destination = passivePosition(node);
       moveTo(destination.position, destination.target, 2600);
@@ -479,14 +495,8 @@
 
     function updatePassive(now) {
       if (!passive) return;
-      if (now >= passiveDeadline && !transition) {
-        advancePassive(now);
-        return;
-      }
-      if (transition) {
-        passiveLastFrame = now;
-        return;
-      }
+      if (now >= passiveDeadline && !transition) { advancePassive(now); return; }
+      if (transition) { passiveLastFrame = now; return; }
       const elapsed = clamp(now - (passiveLastFrame || now), 0, 80);
       passiveLastFrame = now;
       const offset = camera.position.clone().sub(controls.target);
@@ -507,13 +517,13 @@
       if (p === 1) { transition = null; applyMode(); }
     }
 
-    function pick(event) {
+    function pickNode(event) {
       const box = renderer.domElement.getBoundingClientRect();
       pointer.x = ((event.clientX - box.left) / box.width) * 2 - 1;
       pointer.y = -((event.clientY - box.top) / box.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
       const hit = raycaster.intersectObjects(pickables.filter(mesh => mesh.visible), false)[0];
-      if (hit?.object?.userData?.nodeId) selectNode(hit.object.userData.nodeId, false);
+      return hit?.object?.userData?.nodeId || '';
     }
 
     renderer.domElement.addEventListener('pointerdown', event => {
@@ -525,8 +535,14 @@
       stage.dataset.dragging = 'false';
       if (!pointerStart) return;
       const distance = Math.hypot(event.clientX - pointerStart[0], event.clientY - pointerStart[1]);
-      if (distance < 5 && performance.now() - pointerStart[2] < 650) pick(event);
+      if (distance < 5 && performance.now() - pointerStart[2] < 650) { const id = pickNode(event); if (id) selectNode(id, false); }
       pointerStart = null;
+    });
+    renderer.domElement.addEventListener('dblclick', event => {
+      event.preventDefault();
+      if (passive) stopPassive('interaction');
+      const id = pickNode(event);
+      if (id) selectNode(id, true, false, true);
     });
     renderer.domElement.addEventListener('pointercancel', () => { pointerStart = null; stage.dataset.dragging = 'false'; });
     controls.addEventListener('change', () => { dirtyLabels = true; });
@@ -537,15 +553,8 @@
       const consoleBottom = (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0);
       const available = Math.max(150, stageBox.height - consoleBottom - 28);
       vigilPanel.style.maxHeight = `${Math.min(stageBox.height * 0.55, available)}px`;
-      if (stageBox.width < 720) {
-        vigilPanel.style.left = '.7rem';
-        vigilPanel.style.right = '.7rem';
-        vigilPanel.style.width = 'auto';
-      } else {
-        vigilPanel.style.left = '';
-        vigilPanel.style.right = '';
-        vigilPanel.style.width = '';
-      }
+      if (stageBox.width < 720) { vigilPanel.style.left = '.7rem'; vigilPanel.style.right = '.7rem'; vigilPanel.style.width = 'auto'; }
+      else { vigilPanel.style.left = ''; vigilPanel.style.right = ''; vigilPanel.style.width = ''; }
     }
 
     function resize() {
@@ -562,25 +571,12 @@
 
     function refreshLayout() {
       resize();
-      requestAnimationFrame(() => {
-        resize();
-        requestAnimationFrame(() => {
-          resize();
-          if (running) layoutLabels();
-        });
-      });
+      requestAnimationFrame(() => { resize(); requestAnimationFrame(() => { resize(); if (running) layoutLabels(); }); });
     }
 
-    theatreToggle.textContent = 'Widen Survey Theatre';
-    theatreToggle.disabled = false;
-    theatreToggle.setAttribute('aria-pressed', 'false');
-    fullAuspexToggle.textContent = 'Invoke Full Auspex';
-    fullAuspexToggle.disabled = false;
-    fullAuspexToggle.setAttribute('aria-pressed', 'false');
-    docketToggle.textContent = 'Unseal Contact Docket';
-    docketToggle.disabled = false;
-    docketToggle.hidden = true;
-    docketToggle.setAttribute('aria-pressed', 'false');
+    theatreToggle.textContent = 'Widen Survey Theatre'; theatreToggle.disabled = false; theatreToggle.setAttribute('aria-pressed', 'false');
+    fullAuspexToggle.textContent = 'Invoke Full Auspex'; fullAuspexToggle.disabled = false; fullAuspexToggle.setAttribute('aria-pressed', 'false');
+    docketToggle.textContent = 'Unseal Contact Docket'; docketToggle.disabled = false; docketToggle.hidden = true; docketToggle.setAttribute('aria-pressed', 'false');
 
     function setTheatreState(active) {
       surveyTheatre = Boolean(active);
@@ -592,10 +588,7 @@
       if (mapPanel) mapPanel.dataset.surveyTheatre = String(surveyTheatre);
       if (mapLayout) mapLayout.dataset.surveyTheatre = String(surveyTheatre);
       stage.dataset.surveyTheatre = String(surveyTheatre);
-      if (shell) {
-        shell.style.width = surveyTheatre ? '100%' : '';
-        shell.style.maxWidth = surveyTheatre ? 'none' : '';
-      }
+      if (shell) { shell.style.width = surveyTheatre ? '100%' : ''; shell.style.maxWidth = surveyTheatre ? 'none' : ''; }
       if (mapLayout) mapLayout.style.gridTemplateColumns = surveyTheatre ? 'minmax(0,1fr)' : '';
       if (mapCard) mapCard.style.width = surveyTheatre ? '100%' : '';
       if (details) details.hidden = surveyTheatre && !contactDocketOpen;
@@ -621,13 +614,8 @@
     async function toggleFullAuspex() {
       try {
         if (document.fullscreenElement === stage) await document.exitFullscreen();
-        else {
-          if (document.fullscreenElement) await document.exitFullscreen();
-          await stage.requestFullscreen();
-        }
-      } catch (error) {
-        status.textContent = `Full Auspex invocation denied by the host cogitator: ${error.message}`;
-      }
+        else { if (document.fullscreenElement) await document.exitFullscreen(); await stage.requestFullscreen(); }
+      } catch (error) { status.textContent = `Full Auspex invocation denied by the host cogitator: ${error.message}`; }
     }
 
     function syncFullAuspexState() {
@@ -660,6 +648,15 @@
       raf = requestAnimationFrame(animate);
       updateMove(now);
       updatePassive(now);
+      if (expandedSystem) {
+        expandedSystem.star.rotation.y = now * 0.00008;
+        expandedSystem.moving.forEach((body, index) => {
+          body.pivot.rotation.y += body.speed * Math.min(80, Math.max(1, now - (body.last || now)));
+          body.last = now;
+          body.planet.rotation.y += 0.0016 + index * 0.0002;
+          body.pivot.children.slice(1).forEach(moonPivot => { moonPivot.rotation.y += body.moonSpeed; });
+        });
+      }
       if (!transition && !passive) controls.update();
       renderer.render(scene, camera);
       if (dirtyLabels) layoutLabels();
@@ -668,69 +665,28 @@
     function pause() { running = false; cancelAnimationFrame(raf); }
     function resume() { if (!running) { running = true; dirtyLabels = true; passiveLastFrame = performance.now(); raf = requestAnimationFrame(animate); } }
     function setMode(value) { if (MODES.has(value)) { if (passive) stopPassive('mode'); mode = value; applyMode(); } }
-    function setLayer(layer, value) {
-      if (layer in visibility) {
-        visibility[layer] = Boolean(value);
-        updateVisibility();
-        if (passive) rebuildPassiveSequence();
-      }
-    }
-    function setThreat(value) {
-      threat = value || 'all';
-      updateVisibility();
-      if (passive) rebuildPassiveSequence();
-    }
+    function setLayer(layer, value) { if (layer in visibility) { visibility[layer] = Boolean(value); updateVisibility(); if (passive) rebuildPassiveSequence(); } }
+    function setThreat(value) { threat = value || 'all'; updateVisibility(); if (passive) rebuildPassiveSequence(); }
     function reset() { if (passive) stopPassive('reset'); moveTo(homePosition, homeTarget, 1900); }
     function top() { if (passive) stopPassive('projection'); const target = controls.target.clone(); moveTo(new THREE.Vector3(target.x, 210, target.z + 0.01), target, 1900); }
     function dispose() {
-      stopPassive('dispose');
-      pause();
-      observer.disconnect();
+      stopPassive('dispose'); pause(); observer.disconnect(); clearExpandedSystem();
       theatreToggle.removeEventListener('click', handleTheatreToggle);
       docketToggle.removeEventListener('click', toggleContactDocket);
       fullAuspexToggle.removeEventListener('click', handleFullAuspexToggle);
       document.removeEventListener('fullscreenchange', syncFullAuspexState);
       if (document.fullscreenElement === stage) void document.exitFullscreen();
-      controls.dispose();
-      renderer.dispose();
-      labelLayer.replaceChildren();
-      leaderLayer.replaceChildren();
-      renderer.domElement.remove();
+      controls.dispose(); renderer.dispose(); labelLayer.replaceChildren(); leaderLayer.replaceChildren(); renderer.domElement.remove();
     }
 
-    stage.dataset.surveyTheatre = 'false';
-    stage.dataset.fullAuspex = 'false';
-    if (workspace) {
-      workspace.dataset.surveyTheatre = 'false';
-      workspace.dataset.fullAuspex = 'false';
-    }
-    if (mapLayout) {
-      mapLayout.dataset.surveyTheatre = 'false';
-      mapLayout.dataset.contactDocket = 'sealed';
-    }
-    applyMode();
-    updateVisibility();
-    raf = requestAnimationFrame(animate);
+    stage.dataset.surveyTheatre = 'false'; stage.dataset.fullAuspex = 'false';
+    if (workspace) { workspace.dataset.surveyTheatre = 'false'; workspace.dataset.fullAuspex = 'false'; }
+    if (mapLayout) { mapLayout.dataset.surveyTheatre = 'false'; mapLayout.dataset.contactDocket = 'sealed'; }
+    applyMode(); updateVisibility(); raf = requestAnimationFrame(animate);
     return Object.freeze({
-      mapNodes,
-      routes,
-      selectNode,
-      setMode,
-      setLayer,
-      setThreat,
-      reset,
-      top,
-      pause,
-      resume,
-      dispose,
-      refreshLayout,
-      startPassive,
-      stopPassive,
-      nextPassive: () => advancePassive(performance.now()),
-      passiveActive: () => passive,
-      passiveDwell: PASSIVE_DWELL,
-      surveyTheatreActive: () => surveyTheatre,
-      fullAuspexActive: () => fullAuspex
+      mapNodes, routes, selectNode, setMode, setLayer, setThreat, reset, top, pause, resume, dispose, refreshLayout,
+      startPassive, stopPassive, nextPassive: () => advancePassive(performance.now()), passiveActive: () => passive,
+      passiveDwell: PASSIVE_DWELL, surveyTheatreActive: () => surveyTheatre, fullAuspexActive: () => fullAuspex
     });
   }
 
