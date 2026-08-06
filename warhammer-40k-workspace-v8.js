@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const STYLE_PATH = 'warhammer-40k-workspace-v8.css?v=9';
+  const STYLE_PATH = 'warhammer-40k-workspace-v8.css?v=10';
   const UI_PATH = 'warhammer-40k-archive-ui-v6.js?v=7';
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
@@ -24,8 +24,51 @@
     vigilActive: false,
     vigilProfile: null,
     vigilCycle: 0,
-    vigilTimer: 0
+    vigilTimer: 0,
+    selectedNodeId: '',
+    selectedNodeName: '',
+    selectedRecordId: '',
+    preambleSealed: false
   };
+
+  function updateCommandLitany() {
+    const register = document.getElementById('wh-command-register');
+    const contact = document.getElementById('wh-command-contact');
+    const rite = document.getElementById('wh-command-rite');
+    const docket = document.getElementById('wh-command-docket');
+    const preambleToggle = document.getElementById('wh-command-preamble-toggle');
+    const recall = document.getElementById('wh-command-recall');
+    const unseal = document.getElementById('wh-command-unseal-docket');
+    const registerNames = {
+      archive: 'Administratum Index',
+      map: 'Navis Cartographica',
+      seals: 'Archivum Seals'
+    };
+    const mapRites = {
+      select: 'Auspex selection rite',
+      orbit: 'Orbital rotation rite',
+      pan: 'Chart translation rite',
+      zoom: 'Magnification rite'
+    };
+    if (register) register.textContent = registerNames[state.activeTab] || 'Cafarron Corridor';
+    if (contact) contact.textContent = state.selectedNodeName || 'No contact locked';
+    if (docket) docket.textContent = state.selectedRecordId ? 'Attached docket ready' : 'No docket locked';
+    if (rite) {
+      rite.textContent = state.vigilActive
+        ? 'Navis Vigil engaged · route traces sealed'
+        : state.activeTab === 'map'
+          ? `${mapRites[state.mapMode] || mapRites.orbit} active`
+          : state.activeTab === 'seals'
+            ? 'Archivum ordinances unsealed'
+            : 'Administratum query channels open';
+    }
+    if (preambleToggle) {
+      preambleToggle.textContent = state.preambleSealed ? 'Unseal Command Preamble' : 'Seal Command Preamble';
+      preambleToggle.setAttribute('aria-pressed', state.preambleSealed ? 'true' : 'false');
+    }
+    if (recall) recall.disabled = !state.selectedNodeId;
+    if (unseal) unseal.disabled = !state.selectedRecordId;
+  }
 
   function loadScript(src) {
     const resolved = new URL(src, document.baseURI).href;
@@ -196,6 +239,7 @@
       state.vigilProfile = null;
       if (panel) panel.hidden = true;
     }
+    updateCommandLitany();
   }
 
   function buildVigilPanel() {
@@ -385,6 +429,7 @@
       };
       if (readout) readout.textContent = readouts[mode] || readouts.orbit;
       state.map?.setMode(mode);
+      updateCommandLitany();
     }
 
     modebar.addEventListener('click', event => {
@@ -433,6 +478,9 @@
           status: document.getElementById('wh-map-status'),
           initialMode: state.mapMode,
           onSelect: (node, records, routes) => {
+            state.selectedNodeId = node.id;
+            state.selectedNodeName = node.name;
+            state.selectedRecordId = records[0]?.id || '';
             state.ui.renderMapDetails(node, records);
             appendConnectedRoutes(routes);
             const register = document.getElementById('wh-node-select');
@@ -441,6 +489,7 @@
               const focus = document.querySelector('.wh-viewport-actions button');
               if (focus) focus.disabled = false;
             }
+            updateCommandLitany();
           },
           onPassiveNode: showVigilNode,
           onPassiveChange: active => setVigilState(active)
@@ -470,6 +519,7 @@
     });
     if (tab === 'map') void initializeMap();
     else state.map?.pause();
+    updateCommandLitany();
   }
 
   function buildWorkspace(view) {
@@ -508,8 +558,39 @@
       tabs.append(tab);
     });
 
+    const commandRibbon = el('section', 'wh-command-ribbon');
+    commandRibbon.setAttribute('aria-label', 'Cafarron command litany');
+    const commandReadouts = el('div', 'wh-command-readouts');
+    const commandFields = [
+      ['Active Register', 'wh-command-register', 'Administratum Index'],
+      ['Navis Lock', 'wh-command-contact', 'No contact locked'],
+      ['Machine Rite', 'wh-command-rite', 'Administratum query channels open'],
+      ['Docket Seal', 'wh-command-docket', 'No docket locked']
+    ];
+    commandFields.forEach(([label, id, value]) => {
+      const field = el('div', 'wh-command-readout');
+      const heading = el('span', 'wh-command-readout-label', label);
+      const output = el('strong', 'wh-command-readout-value', value);
+      output.id = id;
+      field.append(heading, output);
+      commandReadouts.append(field);
+    });
+    const commandRites = el('div', 'wh-command-rites');
+    const preambleToggle = button('Seal Command Preamble', 'wh-button');
+    preambleToggle.id = 'wh-command-preamble-toggle';
+    preambleToggle.setAttribute('aria-pressed', 'false');
+    const recallLock = button('Recall Navis Lock', 'wh-button');
+    recallLock.id = 'wh-command-recall';
+    recallLock.disabled = true;
+    const unsealDocket = button('Unseal Selected Docket', 'wh-button');
+    unsealDocket.id = 'wh-command-unseal-docket';
+    unsealDocket.disabled = true;
+    commandRites.append(preambleToggle, recallLock, unsealDocket);
+    commandRibbon.append(commandReadouts, commandRites);
+
     const shell = el('section', 'wh-shell');
     const hero = el('section', 'wh-hero');
+    hero.id = 'wh-command-preamble';
     const copy = el('article', 'wh-panelbox');
     copy.append(
       el('p', 'wh-kicker', 'Segmentum Command Access · Cafarron Corridor'),
@@ -532,11 +613,27 @@
     docket.append(dl);
     hero.append(copy, docket);
 
+    preambleToggle.addEventListener('click', () => {
+      state.preambleSealed = !state.preambleSealed;
+      hero.hidden = state.preambleSealed;
+      workspace.dataset.preambleSeal = state.preambleSealed ? 'sealed' : 'unsealed';
+      updateCommandLitany();
+    });
+    recallLock.addEventListener('click', () => {
+      if (!state.selectedNodeId) return;
+      setActiveTab('map');
+      void initializeMap().then(map => map.selectNode(state.selectedNodeId, true));
+    });
+    unsealDocket.addEventListener('click', () => {
+      if (state.selectedRecordId) state.ui.openEntry(state.selectedRecordId);
+    });
+
     const archivePanel = state.ui.archivePanel();
     const mapPanel = buildMapPanel();
     const sealsPanel = state.ui.sealsPanel();
     shell.append(hero, archivePanel, mapPanel, sealsPanel);
-    workspace.append(header, tabs, shell);
+    workspace.dataset.preambleSeal = 'unsealed';
+    workspace.append(header, tabs, commandRibbon, shell);
     view.append(workspace);
 
     tabs.addEventListener('click', event => {
@@ -554,6 +651,7 @@
       setActiveTab(next.dataset.tab);
     });
     state.ui.renderArchive();
+    updateCommandLitany();
   }
 
   async function initialize() {
