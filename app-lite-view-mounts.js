@@ -156,9 +156,9 @@
     }
     if (viewId === 'warhammer-40k') {
       ensureWarhammerLoreView();
-      warhammerLorePromise ||= loadScript('warhammer-40k-wiki.js?v=2');
+      warhammerLorePromise ||= loadScript('warhammer-40k-wiki.js?v=4');
       await warhammerLorePromise;
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace.js?v=2');
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace.js?v=4');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       window.Warhammer40KWorkspace?.initialize?.();
       return;
