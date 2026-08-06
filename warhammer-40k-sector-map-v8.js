@@ -302,10 +302,10 @@
       groups.regions.visible = visibility.regions;
       groups.hazards.visible = visibility.hazards;
       ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => {
-        groups[name].visible = visibility[name] && !passive;
+        groups[name].visible = visibility[name];
       });
       labelLayer.hidden = !visibility.labels && !passive;
-      leaderLayer.hidden = !visibility.labels && !passive;
+      leaderLayer.hidden = true;
       dirtyLabels = true;
     }
 
@@ -365,12 +365,7 @@
         item.label.style.top = `${item.cy}px`;
         item.label.dataset.placement = item.placement;
         item.label.setAttribute('aria-current', item.node.id === selected ? 'true' : 'false');
-        const end = labelsEngine.nearest(item.x, item.y, item.rect);
-        item.leader.hidden = false;
-        item.leader.setAttribute('x1', String(item.x));
-        item.leader.setAttribute('y1', String(item.y));
-        item.leader.setAttribute('x2', String(end.x));
-        item.leader.setAttribute('y2', String(end.y));
+        item.leader.hidden = true;
       });
       dirtyLabels = false;
     }
