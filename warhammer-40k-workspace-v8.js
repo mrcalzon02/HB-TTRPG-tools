@@ -1,12 +1,12 @@
 (() => {
   'use strict';
 
-  const STYLE_PATH = 'warhammer-40k-workspace-v8.css?v=8';
-  const UI_PATH = 'warhammer-40k-archive-ui-v6.js?v=6';
+  const STYLE_PATH = 'warhammer-40k-workspace-v8.css?v=9';
+  const UI_PATH = 'warhammer-40k-archive-ui-v6.js?v=7';
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
   const ASSAY_PATH = 'warhammer-40k-survey-assay-v8.js?v=8';
-  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=8';
+  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=9';
   const loadedScripts = new Map();
 
   const state = {
