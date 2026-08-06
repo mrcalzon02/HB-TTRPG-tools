@@ -541,7 +541,7 @@
     renderer.domElement.addEventListener('dblclick', event => {
       event.preventDefault();
       if (passive) stopPassive('interaction');
-      const id = pickNode(event);
+      const id = pickNode(event) || selected;
       if (id) selectNode(id, true, false, true);
     });
     renderer.domElement.addEventListener('pointercancel', () => { pointerStart = null; stage.dataset.dragging = 'false'; });
@@ -667,7 +667,7 @@
     function setMode(value) { if (MODES.has(value)) { if (passive) stopPassive('mode'); mode = value; applyMode(); } }
     function setLayer(layer, value) { if (layer in visibility) { visibility[layer] = Boolean(value); updateVisibility(); if (passive) rebuildPassiveSequence(); } }
     function setThreat(value) { threat = value || 'all'; updateVisibility(); if (passive) rebuildPassiveSequence(); }
-    function reset() { if (passive) stopPassive('reset'); moveTo(homePosition, homeTarget, 1900); }
+    function reset() { if (passive) stopPassive('reset'); clearExpandedSystem(); updateVisibility(); moveTo(homePosition, homeTarget, 1900); }
     function top() { if (passive) stopPassive('projection'); const target = controls.target.clone(); moveTo(new THREE.Vector3(target.x, 210, target.z + 0.01), target, 1900); }
     function dispose() {
       stopPassive('dispose'); pause(); observer.disconnect(); clearExpandedSystem();
