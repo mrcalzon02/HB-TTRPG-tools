@@ -6,7 +6,7 @@
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
   const ASSAY_PATH = 'warhammer-40k-survey-assay-v8.js?v=8';
-  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=9';
+  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=10';
   const loadedScripts = new Map();
 
   const state = {
@@ -331,7 +331,20 @@
     const nextVigil = button('Advance Vigil', 'wh-viewport-button');
     nextVigil.id = 'wh-vigil-next';
     nextVigil.disabled = true;
-    viewActions.append(focus, reset, top, vigil, nextVigil);
+    const theatreToggle = button('Widen Survey Theatre', 'wh-viewport-button');
+    theatreToggle.id = 'wh-survey-theatre-toggle';
+    theatreToggle.disabled = true;
+    theatreToggle.setAttribute('aria-pressed', 'false');
+    const fullAuspexToggle = button('Invoke Full Auspex', 'wh-viewport-button');
+    fullAuspexToggle.id = 'wh-full-auspex-toggle';
+    fullAuspexToggle.disabled = true;
+    fullAuspexToggle.setAttribute('aria-pressed', 'false');
+    const docketToggle = button('Unseal Contact Docket', 'wh-viewport-button');
+    docketToggle.id = 'wh-contact-docket-toggle';
+    docketToggle.disabled = true;
+    docketToggle.hidden = true;
+    docketToggle.setAttribute('aria-pressed', 'false');
+    viewActions.append(focus, reset, top, vigil, nextVigil, theatreToggle, fullAuspexToggle, docketToggle);
     viewportConsole.append(navigationHead, modebar, viewActions);
 
     const leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
