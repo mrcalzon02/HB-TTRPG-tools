@@ -117,9 +117,40 @@
     return `${integer(random, -18, 38)}°C mean habitable-zone register`;
   }
 
+  function sealText(value) {
+    return String(value || '')
+      .replace(/inferred|implied/gi, 'entered under Munitorum writ')
+      .replace(/suspected/gi, 'marked for Ordo scrutiny')
+      .replace(/probable|likely/gi, 'designated')
+      .replace(/provisional/gi, 'held under temporary Navis charter')
+      .replace(/candidate/gi, 'holding designation')
+      .replace(/unresolved|unknown|uncertain/gi, 'held under restricted seal')
+      .replace(/pending/gi, 'under temporary seal')
+      .replace(/not established|not proven/gi, 'not entered under the present seal')
+      .replace(/not explicit/gi, 'held beyond this access tier')
+      .replace(/formal name|proper name/gi, 'Munitorum designation')
+      .replace(/source/gi, 'chronicle')
+      .replace(/story/gi, 'chronicle')
+      .replace(/confidence|evidence/gi, 'seal authority')
+      .replace(/provenance/gi, 'record lineage')
+      .replace(/story-grounded/gi, 'chronicle-sealed')
+      .replace(/user-established/gi, 'entered by sector writ')
+      .replace(/map-ready/gi, 'entered in the Navis register')
+      .replace(/not recovered/gi, 'not attached under the present seal')
+      .replace(/unrecorded/gi, 'sealed from this access tier')
+      .replace(/incompletely indexed/gi, 'held under restricted index')
+      .replace(/no current battle confirmed/gi, 'no active battle seal is entered')
+      .replace(/current recovery status undefined/gi, 'recovery writ remains sealed')
+      .replace(/environment unrecorded|no environment supplied/gi, 'environmental register sealed')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
   function classification(node, records) {
     const record = records.find(item => item.objectType || item.classification);
-    return record?.objectType || record?.classification || node.kind || 'Navis chart contact';
+    const raw = record?.objectType || record?.classification || node.kind || 'Navis chart contact';
+    if (/unclassified|candidate|unresolved/i.test(raw)) return 'Restricted Cartographica designation';
+    return sealText(raw);
   }
 
   function profile(node, records = []) {
@@ -163,15 +194,15 @@
       { group: 'Navigation', label: 'Warp translation margin', value: `${decimal(random, 0.8, 7.2, 1)} million kilometres from the inner-system exclusion line` },
       { group: 'Navigation', label: 'Mandeville approach', value: `${integer(random, 2, 11)} sanctioned ingress vectors · ${integer(random, 1, 6)} convoy holding spheres` },
       { group: 'Navigation', label: 'Beacon authority', value: pick(random, ['Navis Cartographica', 'Battlefleet Prathus', 'Adeptus Mechanicus', 'Departmento Munitorum', 'Adeptus Administratum']) },
-      { group: 'Strategic Register', label: 'Strategic threat seal', value: node.threatNote || dataThreatFallback(node) },
+      { group: 'Strategic Register', label: 'Strategic threat seal', value: sealText(node.threatNote || dataThreatFallback(node)) },
       { group: 'Strategic Register', label: 'Registered classification', value: classification(node, records) },
-      { group: 'Strategic Register', label: 'Principal chronicle notation', value: primaryRecord.keyStory || primaryRecord.summary || 'No public chronicle leaf attached under this access seal' }
+      { group: 'Strategic Register', label: 'Principal chronicle notation', value: sealText(primaryRecord.keyStory || 'No public chronicle leaf attached under this access seal') }
     ];
 
     const environment = records.map(record => record.environment).find(Boolean);
-    if (environment) facts.push({ group: 'Strategic Register', label: 'Environmental writ', value: environment });
+    if (environment) facts.push({ group: 'Strategic Register', label: 'Environmental writ', value: sealText(environment) });
     const relationships = records.flatMap(record => record.relationships || []).filter(Boolean).slice(0, 3);
-    if (relationships.length) facts.push({ group: 'Strategic Register', label: 'Registered associations', value: relationships.join(' · ') });
+    if (relationships.length) facts.push({ group: 'Strategic Register', label: 'Registered associations', value: sealText(relationships.join(' · ')) });
 
     return Object.freeze({
       id: node.id,
@@ -198,7 +229,9 @@
       [pool[index], pool[swap]] = [pool[swap], pool[index]];
     }
     const required = ['Atmospheric assay', 'Average population register', 'First sanctioned survey'];
+    const founding = profileValue.facts.find(item => FOUNDING_LABELS.includes(item.label));
     const selected = [];
+    if (founding) selected.push(founding);
     for (const label of required) {
       const fact = profileValue.facts.find(item => item.label === label);
       if (fact) selected.push(fact);
