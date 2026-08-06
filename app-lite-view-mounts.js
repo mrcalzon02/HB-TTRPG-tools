@@ -158,7 +158,7 @@
       ensureWarhammerLoreView();
       warhammerLorePromise ||= loadScript('warhammer-40k-wiki.js?v=2');
       await warhammerLorePromise;
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace.js?v=1');
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace.js?v=2');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       window.Warhammer40KWorkspace?.initialize?.();
       return;
