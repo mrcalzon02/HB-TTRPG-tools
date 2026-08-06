@@ -193,8 +193,13 @@
     const mapCard = stage.closest('.wh-map-card');
     const details = mapLayout?.querySelector('.wh-map-details');
     const viewportConsole = stage.querySelector('.wh-viewport-console');
-    const viewportActions = viewportConsole?.querySelector('.wh-viewport-actions');
+    const theatreToggle = stage.querySelector('#wh-survey-theatre-toggle');
+    const fullAuspexToggle = stage.querySelector('#wh-full-auspex-toggle');
+    const docketToggle = stage.querySelector('#wh-contact-docket-toggle');
     const vigilPanel = stage.querySelector('.wh-vigil-panel');
+    if (!viewportConsole || !theatreToggle || !fullAuspexToggle || !docketToggle) {
+      throw new Error('Navis survey helm presentation controls are absent from the authoritative viewport.');
+    }
 
     const threatColor = node => data.threatStates[node.threat]?.color || data.threatStates.unsurveyed.color;
     const visibleNode = node => visibility[node.layer] !== false && (threat === 'all' || node.threat === threat);
@@ -571,23 +576,16 @@
       });
     }
 
-    function makeHelmControl(id, text) {
-      const control = document.createElement('button');
-      control.id = id;
-      control.type = 'button';
-      control.className = 'wh-viewport-button';
-      control.textContent = text;
-      return control;
-    }
-
-    const theatreToggle = makeHelmControl('wh-survey-theatre-toggle', 'Widen Survey Theatre');
+    theatreToggle.textContent = 'Widen Survey Theatre';
+    theatreToggle.disabled = false;
     theatreToggle.setAttribute('aria-pressed', 'false');
-    const fullAuspexToggle = makeHelmControl('wh-full-auspex-toggle', 'Invoke Full Auspex');
+    fullAuspexToggle.textContent = 'Invoke Full Auspex';
+    fullAuspexToggle.disabled = false;
     fullAuspexToggle.setAttribute('aria-pressed', 'false');
-    const docketToggle = makeHelmControl('wh-contact-docket-toggle', 'Unseal Contact Docket');
-    docketToggle.setAttribute('aria-pressed', 'false');
+    docketToggle.textContent = 'Unseal Contact Docket';
+    docketToggle.disabled = false;
     docketToggle.hidden = true;
-    viewportActions?.append(theatreToggle, fullAuspexToggle, docketToggle);
+    docketToggle.setAttribute('aria-pressed', 'false');
 
     function setTheatreState(active) {
       surveyTheatre = Boolean(active);
@@ -651,9 +649,11 @@
       refreshLayout();
     }
 
-    theatreToggle.addEventListener('click', () => setTheatreState(!surveyTheatre));
+    const handleTheatreToggle = () => setTheatreState(!surveyTheatre);
+    const handleFullAuspexToggle = () => { void toggleFullAuspex(); };
+    theatreToggle.addEventListener('click', handleTheatreToggle);
     docketToggle.addEventListener('click', toggleContactDocket);
-    fullAuspexToggle.addEventListener('click', () => { void toggleFullAuspex(); });
+    fullAuspexToggle.addEventListener('click', handleFullAuspexToggle);
     document.addEventListener('fullscreenchange', syncFullAuspexState);
 
     const observer = new ResizeObserver(resize);
@@ -691,6 +691,9 @@
       stopPassive('dispose');
       pause();
       observer.disconnect();
+      theatreToggle.removeEventListener('click', handleTheatreToggle);
+      docketToggle.removeEventListener('click', toggleContactDocket);
+      fullAuspexToggle.removeEventListener('click', handleFullAuspexToggle);
       document.removeEventListener('fullscreenchange', syncFullAuspexState);
       if (document.fullscreenElement === stage) void document.exitFullscreen();
       controls.dispose();
