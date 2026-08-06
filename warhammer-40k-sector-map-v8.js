@@ -176,6 +176,9 @@
     let passiveLastFrame = 0;
     let passiveSequence = [];
     let passiveIndex = -1;
+    let surveyTheatre = false;
+    let contactDocketOpen = false;
+    let fullAuspex = false;
 
     const meshes = new Map();
     const pickables = [];
@@ -183,11 +186,21 @@
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const verticalAxis = new THREE.Vector3(0, 1, 0);
+    const workspace = stage.closest('.wh-workspace');
+    const shell = stage.closest('.wh-shell');
+    const mapPanel = stage.closest('[data-panel="map"]');
+    const mapLayout = stage.closest('.wh-map-layout');
+    const mapCard = stage.closest('.wh-map-card');
+    const details = mapLayout?.querySelector('.wh-map-details');
+    const viewportConsole = stage.querySelector('.wh-viewport-console');
+    const viewportActions = viewportConsole?.querySelector('.wh-viewport-actions');
+    const vigilPanel = stage.querySelector('.wh-vigil-panel');
 
     const threatColor = node => data.threatStates[node.threat]?.color || data.threatStates.unsurveyed.color;
     const visibleNode = node => visibility[node.layer] !== false && (threat === 'all' || node.threat === threat);
     const canonical = node => ['primary', 'supporting', 'guard-origin'].includes(node.layer);
-    const showLabel = node => visibleNode(node) && visibility.labels && (canonical(node) || node.id === selected);
+    const showLabel = node => visibleNode(node)
+      && (passive ? node.id === selected : visibility.labels && (canonical(node) || node.id === selected));
 
     for (const node of mapNodes) {
       const scale = Math.max(0.42, Number(node.scale || 0.8));
@@ -286,8 +299,8 @@
       ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => {
         groups[name].visible = visibility[name];
       });
-      labelLayer.hidden = !visibility.labels;
-      leaderLayer.hidden = !visibility.labels;
+      labelLayer.hidden = !visibility.labels && !passive;
+      leaderLayer.hidden = !visibility.labels && !passive;
       dirtyLabels = true;
     }
 
@@ -299,9 +312,8 @@
 
     function layoutLabels() {
       const stageBox = stage.getBoundingClientRect();
-      if (!stageBox.width || !stageBox.height || !visibility.labels) return;
-      const consoleElement = stage.querySelector('.wh-viewport-console');
-      const topInset = Math.max(10, (consoleElement?.offsetTop || 0) + (consoleElement?.offsetHeight || 0) + 12);
+      if (!stageBox.width || !stageBox.height || (!visibility.labels && !passive)) return;
+      const topInset = Math.max(10, (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0) + 12);
       const canonicalItems = [];
       let selectedItem = null;
 
@@ -312,10 +324,16 @@
           return;
         }
         const point = project(record.node);
-        if (point.z < -1 || point.z > 1 || point.x < -80 || point.x > stageBox.width + 80 || point.y < -80 || point.y > stageBox.height + 80) {
+        const activeVigilTarget = passive && record.node.id === selected;
+        const beyondSurvey = point.z < -1 || point.z > 1 || point.x < -80 || point.x > stageBox.width + 80 || point.y < -80 || point.y > stageBox.height + 80;
+        if (beyondSurvey && !activeVigilTarget) {
           record.label.hidden = true;
           record.leader.hidden = true;
           return;
+        }
+        if (activeVigilTarget) {
+          point.x = clamp(point.x, 12, stageBox.width - 12);
+          point.y = clamp(point.y, topInset + 12, stageBox.height - 12);
         }
         record.label.hidden = false;
         record.label.style.visibility = 'hidden';
@@ -327,7 +345,8 @@
           labelWidth: Math.min(Math.max(record.label.offsetWidth || record.node.name.length * 7 + 18, 72), 220),
           labelHeight: Math.max(record.label.offsetHeight || 25, 24)
         };
-        if (canonical(record.node)) canonicalItems.push(item);
+        if (record.node.id === selected && (passive || !canonical(record.node))) selectedItem = item;
+        else if (canonical(record.node)) canonicalItems.push(item);
         else if (record.node.id === selected) selectedItem = item;
       });
 
@@ -361,6 +380,8 @@
       passiveDeadline = 0;
       passiveLastFrame = 0;
       stage.dataset.passive = 'false';
+      dirtyLabels = true;
+      updateVisibility();
       applyMode();
       onPassiveChange?.(false, reason);
     }
@@ -439,6 +460,7 @@
       passiveDeadline = now + PASSIVE_DWELL;
       passiveLastFrame = now;
       onPassiveNode?.(node, records, PASSIVE_DWELL);
+      refreshLayout();
       updateStatus();
     }
 
@@ -448,6 +470,8 @@
       stage.dataset.passive = 'true';
       mode = 'orbit';
       rebuildPassiveSequence();
+      dirtyLabels = true;
+      updateVisibility();
       applyMode();
       onPassiveChange?.(true, 'engaged');
       advancePassive(performance.now());
@@ -507,6 +531,23 @@
     renderer.domElement.addEventListener('pointercancel', () => { pointerStart = null; stage.dataset.dragging = 'false'; });
     controls.addEventListener('change', () => { dirtyLabels = true; });
 
+    function reserveViewportSpace() {
+      if (!vigilPanel || vigilPanel.hidden) return;
+      const stageBox = stage.getBoundingClientRect();
+      const consoleBottom = (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0);
+      const available = Math.max(150, stageBox.height - consoleBottom - 28);
+      vigilPanel.style.maxHeight = `${Math.min(stageBox.height * 0.55, available)}px`;
+      if (stageBox.width < 720) {
+        vigilPanel.style.left = '.7rem';
+        vigilPanel.style.right = '.7rem';
+        vigilPanel.style.width = 'auto';
+      } else {
+        vigilPanel.style.left = '';
+        vigilPanel.style.right = '';
+        vigilPanel.style.width = '';
+      }
+    }
+
     function resize() {
       const box = stage.getBoundingClientRect();
       const width = Math.max(1, box.width);
@@ -515,8 +556,105 @@
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       leaderLayer.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      reserveViewportSpace();
       dirtyLabels = true;
     }
+
+    function refreshLayout() {
+      resize();
+      requestAnimationFrame(() => {
+        resize();
+        requestAnimationFrame(() => {
+          resize();
+          if (running) layoutLabels();
+        });
+      });
+    }
+
+    function makeHelmControl(id, text) {
+      const control = document.createElement('button');
+      control.id = id;
+      control.type = 'button';
+      control.className = 'wh-viewport-button';
+      control.textContent = text;
+      return control;
+    }
+
+    const theatreToggle = makeHelmControl('wh-survey-theatre-toggle', 'Widen Survey Theatre');
+    theatreToggle.setAttribute('aria-pressed', 'false');
+    const fullAuspexToggle = makeHelmControl('wh-full-auspex-toggle', 'Invoke Full Auspex');
+    fullAuspexToggle.setAttribute('aria-pressed', 'false');
+    const docketToggle = makeHelmControl('wh-contact-docket-toggle', 'Unseal Contact Docket');
+    docketToggle.setAttribute('aria-pressed', 'false');
+    docketToggle.hidden = true;
+    viewportActions?.append(theatreToggle, fullAuspexToggle, docketToggle);
+
+    function setTheatreState(active) {
+      surveyTheatre = Boolean(active);
+      if (!surveyTheatre) contactDocketOpen = false;
+      workspace?.classList.toggle('wh-survey-theatre-active', surveyTheatre);
+      mapPanel?.classList.toggle('wh-survey-theatre-active', surveyTheatre);
+      stage.classList.toggle('wh-survey-theatre-active', surveyTheatre);
+      if (workspace) workspace.dataset.surveyTheatre = String(surveyTheatre);
+      if (mapPanel) mapPanel.dataset.surveyTheatre = String(surveyTheatre);
+      if (mapLayout) mapLayout.dataset.surveyTheatre = String(surveyTheatre);
+      stage.dataset.surveyTheatre = String(surveyTheatre);
+      if (shell) {
+        shell.style.width = surveyTheatre ? '100%' : '';
+        shell.style.maxWidth = surveyTheatre ? 'none' : '';
+      }
+      if (mapLayout) mapLayout.style.gridTemplateColumns = surveyTheatre ? 'minmax(0,1fr)' : '';
+      if (mapCard) mapCard.style.width = surveyTheatre ? '100%' : '';
+      if (details) details.hidden = surveyTheatre && !contactDocketOpen;
+      theatreToggle.textContent = surveyTheatre ? 'Restore Standard Survey' : 'Widen Survey Theatre';
+      theatreToggle.setAttribute('aria-pressed', surveyTheatre ? 'true' : 'false');
+      docketToggle.hidden = !surveyTheatre;
+      docketToggle.textContent = contactDocketOpen ? 'Reseal Contact Docket' : 'Unseal Contact Docket';
+      docketToggle.setAttribute('aria-pressed', contactDocketOpen ? 'true' : 'false');
+      refreshLayout();
+    }
+
+    function toggleContactDocket() {
+      if (!surveyTheatre || !details) return;
+      contactDocketOpen = !contactDocketOpen;
+      details.hidden = !contactDocketOpen;
+      mapLayout.dataset.contactDocket = contactDocketOpen ? 'unsealed' : 'sealed';
+      stage.dataset.contactDocket = contactDocketOpen ? 'unsealed' : 'sealed';
+      docketToggle.textContent = contactDocketOpen ? 'Reseal Contact Docket' : 'Unseal Contact Docket';
+      docketToggle.setAttribute('aria-pressed', contactDocketOpen ? 'true' : 'false');
+      refreshLayout();
+    }
+
+    async function toggleFullAuspex() {
+      try {
+        if (document.fullscreenElement === stage) await document.exitFullscreen();
+        else {
+          if (document.fullscreenElement) await document.exitFullscreen();
+          await stage.requestFullscreen();
+        }
+      } catch (error) {
+        status.textContent = `Full Auspex invocation denied by the host cogitator: ${error.message}`;
+      }
+    }
+
+    function syncFullAuspexState() {
+      fullAuspex = document.fullscreenElement === stage;
+      stage.classList.toggle('wh-full-auspex-active', fullAuspex);
+      workspace?.classList.toggle('wh-full-auspex-active', fullAuspex);
+      stage.dataset.fullAuspex = String(fullAuspex);
+      if (workspace) workspace.dataset.fullAuspex = String(fullAuspex);
+      stage.style.width = fullAuspex ? '100vw' : '';
+      stage.style.height = fullAuspex ? '100vh' : '';
+      stage.style.minHeight = fullAuspex ? '100vh' : '';
+      fullAuspexToggle.textContent = fullAuspex ? 'Stand Down Full Auspex' : 'Invoke Full Auspex';
+      fullAuspexToggle.setAttribute('aria-pressed', fullAuspex ? 'true' : 'false');
+      refreshLayout();
+    }
+
+    theatreToggle.addEventListener('click', () => setTheatreState(!surveyTheatre));
+    docketToggle.addEventListener('click', toggleContactDocket);
+    fullAuspexToggle.addEventListener('click', () => { void toggleFullAuspex(); });
+    document.addEventListener('fullscreenchange', syncFullAuspexState);
 
     const observer = new ResizeObserver(resize);
     observer.observe(stage);
@@ -553,6 +691,8 @@
       stopPassive('dispose');
       pause();
       observer.disconnect();
+      document.removeEventListener('fullscreenchange', syncFullAuspexState);
+      if (document.fullscreenElement === stage) void document.exitFullscreen();
       controls.dispose();
       renderer.dispose();
       labelLayer.replaceChildren();
@@ -560,6 +700,16 @@
       renderer.domElement.remove();
     }
 
+    stage.dataset.surveyTheatre = 'false';
+    stage.dataset.fullAuspex = 'false';
+    if (workspace) {
+      workspace.dataset.surveyTheatre = 'false';
+      workspace.dataset.fullAuspex = 'false';
+    }
+    if (mapLayout) {
+      mapLayout.dataset.surveyTheatre = 'false';
+      mapLayout.dataset.contactDocket = 'sealed';
+    }
     applyMode();
     updateVisibility();
     raf = requestAnimationFrame(animate);
@@ -575,11 +725,14 @@
       pause,
       resume,
       dispose,
+      refreshLayout,
       startPassive,
       stopPassive,
       nextPassive: () => advancePassive(performance.now()),
       passiveActive: () => passive,
-      passiveDwell: PASSIVE_DWELL
+      passiveDwell: PASSIVE_DWELL,
+      surveyTheatreActive: () => surveyTheatre,
+      fullAuspexActive: () => fullAuspex
     });
   }
 
