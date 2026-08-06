@@ -24,6 +24,100 @@
     };
   }
 
+  function classifyTemplate(text) {
+    const value = String(text || '').toLowerCase();
+    if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
+    return 'unsealed';
+  }
+
+  function desertTexture(THREE, seed) {
+    const width = 512;
+    const height = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d', { alpha: false });
+    const roll = random(seed ^ 0x7a51d39b);
+
+    const gradient = context.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, '#cda76a');
+    gradient.addColorStop(0.28, '#b77c43');
+    gradient.addColorStop(0.52, '#d1aa68');
+    gradient.addColorStop(0.74, '#91532f');
+    gradient.addColorStop(1, '#c59050');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, width, height);
+
+    context.globalCompositeOperation = 'multiply';
+    for (let band = 0; band < 34; band += 1) {
+      const y = roll() * height;
+      const amplitude = 2 + roll() * 12;
+      const frequency = 0.008 + roll() * 0.025;
+      context.beginPath();
+      context.moveTo(0, y);
+      for (let x = 0; x <= width; x += 8) {
+        const ridge = Math.sin(x * frequency + roll() * 0.4) * amplitude;
+        context.lineTo(x, y + ridge);
+      }
+      context.strokeStyle = `rgba(${70 + Math.floor(roll() * 55)},${42 + Math.floor(roll() * 35)},${24 + Math.floor(roll() * 22)},${0.05 + roll() * 0.11})`;
+      context.lineWidth = 1 + roll() * 4;
+      context.stroke();
+    }
+
+    for (let crater = 0; crater < 58; crater += 1) {
+      const x = roll() * width;
+      const y = roll() * height;
+      const radius = 1.2 + roll() * 8;
+      const craterGradient = context.createRadialGradient(x - radius * 0.25, y - radius * 0.2, radius * 0.12, x, y, radius);
+      craterGradient.addColorStop(0, 'rgba(247,214,148,.18)');
+      craterGradient.addColorStop(0.56, 'rgba(83,45,25,.16)');
+      craterGradient.addColorStop(1, 'rgba(63,34,22,0)');
+      context.fillStyle = craterGradient;
+      context.beginPath();
+      context.ellipse(x, y, radius, radius * (0.45 + roll() * 0.4), roll() * Math.PI, 0, Math.PI * 2);
+      context.fill();
+    }
+
+    const image = context.getImageData(0, 0, width, height);
+    for (let index = 0; index < image.data.length; index += 4) {
+      const grain = Math.floor((roll() - 0.5) * 24);
+      image.data[index] = clamp(image.data[index] + grain, 0, 255);
+      image.data[index + 1] = clamp(image.data[index + 1] + grain, 0, 255);
+      image.data[index + 2] = clamp(image.data[index + 2] + grain, 0, 255);
+    }
+    context.putImageData(image, 0, 0);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.anisotropy = 4;
+    texture.needsUpdate = true;
+    return texture;
+  }
+
+  function registeredMaterial(THREE, template, seed, fallbackColor) {
+    if (template === 'desert') {
+      const map = desertTexture(THREE, seed);
+      return new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        map,
+        bumpMap: map,
+        bumpScale: 0.035,
+        roughness: 0.93,
+        metalness: 0.015,
+        emissive: 0x251208,
+        emissiveIntensity: 0.08
+      });
+    }
+    return new THREE.MeshStandardMaterial({
+      color: fallbackColor,
+      emissive: fallbackColor,
+      emissiveIntensity: 0.22,
+      roughness: 0.74,
+      metalness: 0.08
+    });
+  }
+
   function profile(node, records) {
     const text = [node.id, node.name, ...records.flatMap(record => [record.name, record.objectType, record.classification, record.environment])].join('|');
     const roll = random(hash(text));
@@ -42,6 +136,7 @@
     const registeredIndex = Math.min(bodies - 1, 1 + Math.floor(roll() * Math.max(1, bodies - 1)));
     return {
       seed: hash(text),
+      template: classifyTemplate(text),
       starColor: starColors[Math.floor(roll() * starColors.length)],
       starScale: 1.45 + roll() * 0.75,
       registeredIndex,
@@ -57,6 +152,14 @@
     };
   }
 
+  function disposeMaterial(material) {
+    if (!material) return;
+    for (const key of ['map', 'bumpMap', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'alphaMap']) {
+      material[key]?.dispose?.();
+    }
+    material.dispose?.();
+  }
+
   function dispose(host) {
     const instance = active.get(host);
     if (!instance) return;
@@ -64,8 +167,8 @@
     instance.observer.disconnect();
     instance.scene.traverse(object => {
       object.geometry?.dispose?.();
-      if (Array.isArray(object.material)) object.material.forEach(material => material.dispose?.());
-      else object.material?.dispose?.();
+      if (Array.isArray(object.material)) object.material.forEach(disposeMaterial);
+      else disposeMaterial(object.material);
     });
     instance.renderer.dispose();
     instance.renderer.domElement.remove();
@@ -119,21 +222,20 @@
       const pivot = new THREE.Group();
       pivot.rotation.y = body.phase;
       pivot.rotation.z = body.inclination;
-      const planet = new THREE.Mesh(
-        new THREE.SphereGeometry(body.scale, 20, 14),
-        new THREE.MeshStandardMaterial({
-          color: body.color,
-          emissive: index === system.registeredIndex ? body.color : 0x000000,
-          emissiveIntensity: index === system.registeredIndex ? 0.22 : 0,
-          roughness: 0.74,
-          metalness: 0.08
-        })
-      );
+      const material = index === system.registeredIndex
+        ? registeredMaterial(THREE, system.template, system.seed ^ index, body.color)
+        : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.74, metalness: 0.08 });
+      const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 28, 20), material);
       planet.position.x = body.radius;
       if (index === system.registeredIndex) {
         planet.add(new THREE.Mesh(
-          new THREE.SphereGeometry(body.scale * 1.24, 16, 12),
-          new THREE.MeshBasicMaterial({ color: 0xe0c77f, transparent: true, opacity: 0.17, wireframe: true })
+          new THREE.SphereGeometry(body.scale * 1.24, 20, 14),
+          new THREE.MeshBasicMaterial({
+            color: system.template === 'desert' ? 0xd49a53 : 0xe0c77f,
+            transparent: true,
+            opacity: system.template === 'desert' ? 0.09 : 0.17,
+            wireframe: system.template !== 'desert'
+          })
         ));
       }
       pivot.add(planet);
@@ -188,5 +290,9 @@
     });
   }
 
-  window.CafarronSystemOrreryV1 = Object.freeze({ mount, dispose });
+  window.CafarronSystemOrreryV1 = Object.freeze({
+    mount,
+    dispose,
+    templates: Object.freeze(['desert'])
+  });
 })();
