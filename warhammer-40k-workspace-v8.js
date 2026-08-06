@@ -6,8 +6,7 @@
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
   const ASSAY_PATH = 'warhammer-40k-survey-assay-v8.js?v=8';
-  const ORRERY_PATH = 'warhammer-40k-system-orrery-v1.js?v=2';
-  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=13';
+  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=14';
   const loadedScripts = new Map();
 
   const state = {
@@ -20,7 +19,6 @@
     ui: null,
     map: null,
     mapPromise: null,
-    orrery: null,
     activeTab: 'archive',
     mapMode: 'orbit',
     vigilActive: false,
@@ -33,45 +31,6 @@
     preambleSealed: false
   };
 
-  function updateCommandLitany() {
-    const register = document.getElementById('wh-command-register');
-    const contact = document.getElementById('wh-command-contact');
-    const rite = document.getElementById('wh-command-rite');
-    const docket = document.getElementById('wh-command-docket');
-    const preambleToggle = document.getElementById('wh-command-preamble-toggle');
-    const recall = document.getElementById('wh-command-recall');
-    const unseal = document.getElementById('wh-command-unseal-docket');
-    const registerNames = {
-      archive: 'Administratum Index',
-      map: 'Navis Cartographica',
-      seals: 'Archivum Seals'
-    };
-    const mapRites = {
-      select: 'Auspex selection rite',
-      orbit: 'Orbital rotation rite',
-      pan: 'Chart translation rite',
-      zoom: 'Magnification rite'
-    };
-    if (register) register.textContent = registerNames[state.activeTab] || 'Cafarron Corridor';
-    if (contact) contact.textContent = state.selectedNodeName || 'No contact locked';
-    if (docket) docket.textContent = state.selectedRecordId ? 'Attached docket ready' : 'No docket locked';
-    if (rite) {
-      rite.textContent = state.vigilActive
-        ? 'Navis Vigil engaged · designation leaders sealed'
-        : state.activeTab === 'map'
-          ? `${mapRites[state.mapMode] || mapRites.orbit} active`
-          : state.activeTab === 'seals'
-            ? 'Archivum ordinances unsealed'
-            : 'Administratum query channels open';
-    }
-    if (preambleToggle) {
-      preambleToggle.textContent = state.preambleSealed ? 'Unseal Command Preamble' : 'Seal Command Preamble';
-      preambleToggle.setAttribute('aria-pressed', state.preambleSealed ? 'true' : 'false');
-    }
-    if (recall) recall.disabled = !state.selectedNodeId;
-    if (unseal) unseal.disabled = !state.selectedRecordId;
-  }
-
   function loadScript(src) {
     const resolved = new URL(src, document.baseURI).href;
     if (loadedScripts.has(resolved)) return loadedScripts.get(resolved);
@@ -80,24 +39,11 @@
     const promise = new Promise((resolve, reject) => {
       const script = existing || document.createElement('script');
       let settled = false;
-      const done = () => {
-        if (settled) return;
-        settled = true;
-        script.dataset.cafarronWorkspaceLoaded = 'true';
-        resolve();
-      };
-      const fail = () => {
-        if (settled) return;
-        settled = true;
-        reject(new Error(`${src} could not be loaded.`));
-      };
+      const done = () => { if (!settled) { settled = true; script.dataset.cafarronWorkspaceLoaded = 'true'; resolve(); } };
+      const fail = () => { if (!settled) { settled = true; reject(new Error(`${src} could not be loaded.`)); } };
       script.addEventListener('load', done, { once: true });
       script.addEventListener('error', fail, { once: true });
-      if (!existing) {
-        script.src = src;
-        script.async = false;
-        document.body.appendChild(script);
-      }
+      if (!existing) { script.src = src; script.async = false; document.body.appendChild(script); }
     });
     loadedScripts.set(resolved, promise);
     promise.catch(() => loadedScripts.delete(resolved));
@@ -122,21 +68,48 @@
     select.append(group);
   }
 
+  function updateCommandLitany() {
+    const register = document.getElementById('wh-command-register');
+    const contact = document.getElementById('wh-command-contact');
+    const rite = document.getElementById('wh-command-rite');
+    const docket = document.getElementById('wh-command-docket');
+    const preambleToggle = document.getElementById('wh-command-preamble-toggle');
+    const recall = document.getElementById('wh-command-recall');
+    const unseal = document.getElementById('wh-command-unseal-docket');
+    const registerNames = { archive: 'Administratum Index', map: 'Navis Cartographica', seals: 'Archivum Seals' };
+    const mapRites = { select: 'Auspex selection rite', orbit: 'Orbital rotation rite', pan: 'Chart translation rite', zoom: 'Magnification rite' };
+    if (register) register.textContent = registerNames[state.activeTab] || 'Cafarron Corridor';
+    if (contact) contact.textContent = state.selectedNodeName || 'No contact locked';
+    if (docket) docket.textContent = state.selectedRecordId ? 'Attached docket ready' : 'No docket locked';
+    if (rite) rite.textContent = state.vigilActive
+      ? 'Navis Vigil engaged · designation leaders sealed'
+      : state.activeTab === 'map'
+        ? `${mapRites[state.mapMode] || mapRites.orbit} active`
+        : state.activeTab === 'seals'
+          ? 'Archivum ordinances unsealed'
+          : 'Administratum query channels open';
+    if (preambleToggle) {
+      preambleToggle.textContent = state.preambleSealed ? 'Unseal Command Preamble' : 'Seal Command Preamble';
+      preambleToggle.setAttribute('aria-pressed', state.preambleSealed ? 'true' : 'false');
+    }
+    if (recall) recall.disabled = !state.selectedNodeId;
+    if (unseal) unseal.disabled = !state.selectedRecordId;
+  }
+
   function routeLegend() {
     const { el } = state.ui;
     const legend = el('section', 'wh-route-legend');
     legend.append(el('h4', '', 'Navis and Munitorum Route Seals'));
-    const items = [
+    [
       ['major-warp', 'Primary warp corridor', 'Gold solid arc — principal translation route.'],
       ['trade', 'Munitorum trade lane', 'Teal dashed arc — tithe, fuel, food, troops, or war matériel.'],
       ['local-navigation', 'Local approach chart', 'Blue dashed arc — orbital or system approach relationship.'],
       ['exploratory', 'Explorator approach', 'White faint arc — unratified frontier contact.']
-    ];
-    for (const [kind, title, text] of items) {
+    ].forEach(([kind, title, text]) => {
       const item = el('div', 'wh-route-legend-item');
       item.append(el('span', `wh-route-sample ${kind}`), el('span', '', `${title} — ${text}`));
       legend.append(item);
-    }
+    });
     return legend;
   }
 
@@ -146,54 +119,19 @@
     if (!panel) return;
     const section = el('section', 'wh-linked');
     section.append(el('h4', '', 'Sanctioned Connections'));
-    if (!routes.length) {
-      section.append(el('p', 'wh-pending', 'No sanctioned corridor is entered for this contact under the present Navis seal.'));
-    } else {
-      for (const route of routes) {
-        const article = el('article', 'wh-route-docket');
-        article.append(el('h5', '', route.name));
-        const details = el('dl', 'wh-definition');
-        addDef(details, 'Route order', diegeticText(route.kind));
-        addDef(details, 'Issuing authority', diegeticText(route.authority));
-        addDef(details, 'Licensed traffic', diegeticText(route.traffic));
-        addDef(details, 'Present standing', diegeticText(route.status));
-        article.append(details);
-        section.append(article);
-      }
-    }
+    if (!routes.length) section.append(el('p', 'wh-pending', 'No sanctioned corridor is entered for this contact under the present Navis seal.'));
+    else routes.forEach(route => {
+      const article = el('article', 'wh-route-docket');
+      article.append(el('h5', '', route.name));
+      const details = el('dl', 'wh-definition');
+      addDef(details, 'Route order', diegeticText(route.kind));
+      addDef(details, 'Issuing authority', diegeticText(route.authority));
+      addDef(details, 'Licensed traffic', diegeticText(route.traffic));
+      addDef(details, 'Present standing', diegeticText(route.status));
+      article.append(details);
+      section.append(article);
+    });
     panel.append(section, routeLegend());
-  }
-
-  function mountSystemOrrery(node, records) {
-    const panel = document.getElementById('wh-map-details');
-    if (!panel || !window.CafarronSystemOrreryV1) return;
-    state.orrery?.dispose?.();
-
-    const section = document.createElement('section');
-    section.className = 'wh-system-orrery';
-    section.setAttribute('aria-label', `${node.name} local system orrery`);
-    section.style.cssText = 'display:grid;gap:.45rem;padding:.7rem;border:1px solid rgba(198,171,104,.32);background:linear-gradient(160deg,rgba(36,31,21,.72),rgba(3,5,5,.94));';
-
-    const heading = document.createElement('div');
-    heading.style.cssText = 'display:flex;flex-wrap:wrap;justify-content:space-between;gap:.35rem;align-items:baseline;';
-    const title = document.createElement('h4');
-    title.textContent = 'Local System Orrery';
-    const seal = document.createElement('span');
-    seal.textContent = 'Registered contact highlighted';
-    seal.style.cssText = 'color:#cdbb8b;font:700 .6rem/1.3 ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;';
-    heading.append(title, seal);
-
-    const host = document.createElement('div');
-    host.className = 'wh-system-orrery-host';
-    host.style.cssText = 'position:relative;width:100%;height:14rem;overflow:hidden;border:1px solid rgba(224,199,127,.22);background:#020404;';
-    const note = document.createElement('p');
-    note.className = 'wh-small';
-    note.textContent = 'Cartographica reconstruction · primary star, registered orbital bodies, and attached satellites.';
-    note.style.margin = '0';
-
-    section.append(heading, host, note);
-    panel.insertBefore(section, panel.children[2] || null);
-    state.orrery = window.CafarronSystemOrreryV1.mount({ host, node, records });
   }
 
   function vigilElements() {
@@ -212,18 +150,17 @@
     const assay = window.CafarronSurveyAssayV8;
     const { facts } = vigilElements();
     if (!facts || !assay) return;
-    const selection = assay.factSet(state.vigilProfile, state.vigilCycle, 7);
     const fragment = document.createDocumentFragment();
-    for (const fact of selection) {
+    assay.factSet(state.vigilProfile, state.vigilCycle, 7).forEach(fact => {
       const row = document.createElement('div');
       row.className = 'wh-vigil-fact';
       const dt = document.createElement('dt');
-      dt.textContent = fact.label;
       const dd = document.createElement('dd');
+      dt.textContent = fact.label;
       dd.textContent = fact.value;
       row.append(dt, dd);
       fragment.append(row);
-    }
+    });
     facts.replaceChildren(fragment);
   }
 
@@ -282,11 +219,7 @@
     panel.id = 'wh-vigil-panel';
     panel.hidden = true;
     panel.setAttribute('aria-live', 'polite');
-    panel.append(
-      el('p', 'wh-kicker', 'Navis Cartographica Passive Vigil'),
-      el('h3', '', 'Awaiting Contact'),
-      el('p', 'wh-vigil-class', 'Survey classification sealed')
-    );
+    panel.append(el('p', 'wh-kicker', 'Navis Cartographica Passive Vigil'), el('h3', '', 'Awaiting Contact'), el('p', 'wh-vigil-class', 'Survey classification sealed'));
     panel.querySelector('h3').id = 'wh-vigil-title';
     panel.querySelector('.wh-vigil-class').id = 'wh-vigil-class';
     const seal = el('div', 'wh-vigil-seal', 'Strategic seal attached');
@@ -307,7 +240,6 @@
     const panel = el('section');
     panel.dataset.panel = 'map';
     panel.hidden = true;
-
     const layout = el('div', 'wh-map-layout');
     const card = el('section', 'wh-map-card');
     const controls = el('div', 'wh-map-controls');
@@ -317,44 +249,29 @@
     register.id = 'wh-node-select';
     register.append(new Option('Choose a charted contact…', ''));
     const layerNames = {
-      primary: 'Primary Imperial worlds and systems',
-      supporting: 'Supporting navigation sites',
-      'guard-origin': 'Astra Militarum origin systems',
-      provisional: 'Restricted holding designations',
-      unnamed: 'Unnumbered celestial bodies',
-      exploratory: 'Explorator contacts'
+      primary: 'Primary Imperial worlds and systems', supporting: 'Supporting navigation sites',
+      'guard-origin': 'Astra Militarum origin systems', provisional: 'Restricted holding designations',
+      unnamed: 'Unnumbered celestial bodies', exploratory: 'Explorator contacts'
     };
-    Object.entries(layerNames).forEach(([layer, label]) => {
-      createOptionGroup(register, label, state.mapNodes.filter(node => node.layer === layer));
-    });
+    Object.entries(layerNames).forEach(([layer, label]) => createOptionGroup(register, label, state.mapNodes.filter(node => node.layer === layer)));
     registerLabel.append(register);
-
     const threatLabel = el('label', '', 'Strategic threat seal');
     const threatSelect = document.createElement('select');
     threatSelect.id = 'wh-threat-select';
     threatSelect.append(new Option('All strategic seals', 'all'));
-    Object.entries(state.data.threatStates).forEach(([key, threat]) => {
-      if (key !== 'unassigned') threatSelect.append(new Option(threat.label, key));
-    });
+    Object.entries(state.data.threatStates).forEach(([key, threat]) => { if (key !== 'unassigned') threatSelect.append(new Option(threat.label, key)); });
     threatLabel.append(threatSelect);
     registerRow.append(registerLabel, threatLabel);
 
     const layers = el('div', 'wh-layers');
-    const layerSpecs = [
-      ['supporting', 'Supporting sites', true],
-      ['guard-origin', 'Astra Militarum origin systems', true],
-      ['provisional', 'Restricted designations', false],
-      ['unnamed', 'Unnumbered bodies', false],
-      ['exploratory', 'Explorator contacts', true],
-      ['route-major-warp', 'Primary warp corridors', true],
-      ['route-trade', 'Munitorum trade lanes', true],
-      ['route-local-navigation', 'Local approach charts', false],
-      ['route-exploratory', 'Explorator approaches', false],
-      ['regions', 'Sector volumes', false],
-      ['hazards', 'Threat volumes', false],
-      ['labels', 'Floating system designations', true]
-    ];
-    layerSpecs.forEach(([layer, text, checked]) => {
+    [
+      ['supporting', 'Supporting sites', true], ['guard-origin', 'Astra Militarum origin systems', true],
+      ['provisional', 'Restricted designations', false], ['unnamed', 'Unnumbered bodies', false],
+      ['exploratory', 'Explorator contacts', true], ['route-major-warp', 'Primary warp corridors', true],
+      ['route-trade', 'Munitorum trade lanes', true], ['route-local-navigation', 'Local approach charts', false],
+      ['route-exploratory', 'Explorator approaches', false], ['regions', 'Sector volumes', false],
+      ['hazards', 'Threat volumes', false], ['labels', 'Floating system designations', true]
+    ].forEach(([layer, text, checked]) => {
       const label = document.createElement('label');
       const input = document.createElement('input');
       input.type = 'checkbox';
@@ -363,7 +280,6 @@
       label.append(input, document.createTextNode(text));
       layers.append(label);
     });
-
     const status = el('div', 'wh-status', 'Awaiting the Navis survey cogitator…');
     status.id = 'wh-map-status';
     status.setAttribute('role', 'status');
@@ -374,30 +290,21 @@
     stage.id = 'wh-map-stage';
     stage.tabIndex = 0;
     stage.dataset.mapMode = state.mapMode;
-    stage.setAttribute('aria-label', 'Interactive three-dimensional Cafarron Corridor Navis survey. Helm controls remain fixed within the viewport.');
-
+    stage.setAttribute('aria-label', 'Interactive three-dimensional Cafarron Corridor Navis survey. Select a contact to expand its local system; double-select for close inspection.');
     const viewportConsole = el('section', 'wh-viewport-console');
     viewportConsole.setAttribute('aria-label', 'Navis survey helm');
     const navigationHead = el('div', 'wh-navigation-head');
     navigationHead.append(el('p', 'wh-kicker', 'Navis Survey Helm'), el('span', 'wh-mode-readout', 'Orbital rotation rite · graduated resistance active'));
-
     const modebar = el('div', 'wh-modebar');
     modebar.setAttribute('role', 'toolbar');
     modebar.setAttribute('aria-label', 'Auspex interaction rites');
-    const modeSpecs = [
-      ['select', 'Auspex Select', 'Select contacts without moving the survey.'],
-      ['orbit', 'Orbital Rotation', 'Rotate slowly around the three-dimensional sector.'],
-      ['pan', 'Chart Translation', 'Move the survey laterally under graduated resistance.'],
-      ['zoom', 'Magnification', 'Adjust survey depth under graduated resistance.']
-    ];
-    modeSpecs.forEach(([mode, label, title]) => {
+    [['select', 'Auspex Select', 'Select contacts without moving the survey.'], ['orbit', 'Orbital Rotation', 'Rotate slowly around the three-dimensional sector.'], ['pan', 'Chart Translation', 'Move the survey laterally under graduated resistance.'], ['zoom', 'Magnification', 'Adjust survey depth under graduated resistance.']].forEach(([mode, label, title]) => {
       const control = button(label, 'wh-mode-button');
       control.dataset.mapMode = mode;
       control.title = title;
       control.setAttribute('aria-pressed', mode === state.mapMode ? 'true' : 'false');
       modebar.append(control);
     });
-
     const viewActions = el('div', 'wh-viewport-actions');
     const focus = button('Center Auspex', 'wh-viewport-button');
     focus.disabled = true;
@@ -424,7 +331,6 @@
     docketToggle.setAttribute('aria-pressed', 'false');
     viewActions.append(focus, reset, top, vigil, nextVigil, theatreToggle, fullAuspexToggle, docketToggle);
     viewportConsole.append(navigationHead, modebar, viewActions);
-
     const leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     leaders.id = 'wh-leader-layer';
     leaders.classList.add('wh-leader-layer');
@@ -435,72 +341,39 @@
     loading.id = 'wh-map-loading';
     stage.append(leaders, labels, loading, viewportConsole, buildVigilPanel());
     card.append(controls, stage);
-
     const details = el('aside', 'wh-map-details');
     details.id = 'wh-map-details';
     details.setAttribute('aria-live', 'polite');
-    details.append(
-      el('p', 'wh-kicker', 'Navis Cartographica Auspex Lock'),
-      el('h3', '', 'No contact selected'),
-      el('p', '', 'Select a system contact to consult its attached dockets, threat seal, sanctioned connections, and survey assays.'),
-      threatLegend(),
-      routeLegend()
-    );
+    details.append(el('p', 'wh-kicker', 'Navis Cartographica Auspex Lock'), el('h3', '', 'No contact selected'), el('p', '', 'Select a system contact to consult its attached dockets, threat seal, sanctioned connections, and survey assays.'), threatLegend(), routeLegend());
     layout.append(card, details);
     panel.append(layout);
 
     function setMode(mode) {
       state.mapMode = mode;
-      modebar.querySelectorAll('[data-map-mode]').forEach(control => {
-        control.setAttribute('aria-pressed', control.dataset.mapMode === mode ? 'true' : 'false');
-      });
+      modebar.querySelectorAll('[data-map-mode]').forEach(control => control.setAttribute('aria-pressed', control.dataset.mapMode === mode ? 'true' : 'false'));
       const readout = viewportConsole.querySelector('.wh-mode-readout');
-      const readouts = {
-        select: 'Auspex selection rite · survey movement sealed',
-        orbit: 'Orbital rotation rite · graduated resistance active',
-        pan: 'Chart translation rite · graduated resistance active',
-        zoom: 'Magnification rite · graduated resistance active'
-      };
+      const readouts = { select: 'Auspex selection rite · survey movement sealed', orbit: 'Orbital rotation rite · graduated resistance active', pan: 'Chart translation rite · graduated resistance active', zoom: 'Magnification rite · graduated resistance active' };
       if (readout) readout.textContent = readouts[mode] || readouts.orbit;
       state.map?.setMode(mode);
       updateCommandLitany();
     }
-
-    modebar.addEventListener('click', event => {
-      const control = event.target.closest('[data-map-mode]');
-      if (control) setMode(control.dataset.mapMode);
-    });
-    register.addEventListener('change', () => {
-      focus.disabled = !register.value;
-      if (register.value && state.map) state.map.selectNode(register.value, false);
-    });
-    focus.addEventListener('click', () => {
-      if (register.value && state.map) state.map.selectNode(register.value, true);
-    });
+    modebar.addEventListener('click', event => { const control = event.target.closest('[data-map-mode]'); if (control) setMode(control.dataset.mapMode); });
+    register.addEventListener('change', () => { focus.disabled = !register.value; if (register.value && state.map) state.map.selectNode(register.value, false); });
+    focus.addEventListener('click', () => { if (register.value && state.map) state.map.selectNode(register.value, true); });
     reset.addEventListener('click', () => state.map?.reset());
     top.addEventListener('click', () => state.map?.top());
-    vigil.addEventListener('click', async () => {
-      const map = await initializeMap();
-      if (map.passiveActive()) map.stopPassive('helm');
-      else map.startPassive();
-    });
+    vigil.addEventListener('click', async () => { const map = await initializeMap(); if (map.passiveActive()) map.stopPassive('helm'); else map.startPassive(); });
     nextVigil.addEventListener('click', () => state.map?.nextPassive());
     threatSelect.addEventListener('change', () => state.map?.setThreat(threatSelect.value));
-    layers.addEventListener('change', event => {
-      const input = event.target.closest('[data-map-layer]');
-      if (input) state.map?.setLayer(input.dataset.mapLayer, input.checked);
-    });
+    layers.addEventListener('change', event => { const input = event.target.closest('[data-map-layer]'); if (input) state.map?.setLayer(input.dataset.mapLayer, input.checked); });
     return panel;
   }
 
   async function initializeMap() {
-    if (state.map) {
-      state.map.resume();
-      return state.map;
-    }
+    if (state.map) { state.map.resume(); return state.map; }
     if (state.mapPromise) return state.mapPromise;
     state.mapPromise = (async () => {
-      await Promise.all([loadScript(ASSAY_PATH), loadScript(ORRERY_PATH), loadScript(MAP_PATH)]);
+      await Promise.all([loadScript(ASSAY_PATH), loadScript(MAP_PATH)]);
       const loading = document.getElementById('wh-map-loading');
       try {
         state.map = await window.CafarronSectorMapV8.mount({
@@ -516,7 +389,6 @@
             state.selectedNodeName = node.name;
             state.selectedRecordId = records[0]?.id || '';
             state.ui.renderMapDetails(node, records);
-            mountSystemOrrery(node, records);
             appendConnectedRoutes(routes);
             const register = document.getElementById('wh-node-select');
             if (register) {
@@ -549,11 +421,8 @@
       control.setAttribute('aria-selected', active ? 'true' : 'false');
       control.tabIndex = active ? 0 : -1;
     });
-    document.querySelectorAll('#warhammer-40k [data-panel]').forEach(panel => {
-      panel.hidden = panel.dataset.panel !== tab;
-    });
-    if (tab === 'map') void initializeMap();
-    else state.map?.pause();
+    document.querySelectorAll('#warhammer-40k [data-panel]').forEach(panel => { panel.hidden = panel.dataset.panel !== tab; });
+    if (tab === 'map') void initializeMap(); else state.map?.pause();
     updateCommandLitany();
   }
 
@@ -567,12 +436,8 @@
     const sigil = el('div', 'wh-sigil', 'I');
     sigil.setAttribute('aria-hidden', 'true');
     const brandCopy = document.createElement('div');
-    brandCopy.append(
-      el('p', '', 'Adeptus Administratum · Navis Cartographica Annex'),
-      el('h1', '', 'Cafarron Corridor Strategic Archive')
-    );
+    brandCopy.append(el('p', '', 'Adeptus Administratum · Navis Cartographica Annex'), el('h1', '', 'Cafarron Corridor Strategic Archive'));
     brand.append(sigil, brandCopy);
-
     const actions = el('div', 'wh-actions');
     const back = button('Return to Master Cogitator', 'wh-button primary');
     back.addEventListener('click', () => window.HBTTRPGApp?.activateView?.('tools'));
@@ -580,7 +445,6 @@
     exportButton.addEventListener('click', () => window.Warhammer40KLore.exportArchive());
     actions.append(back, exportButton);
     header.append(brand, actions);
-
     const tabs = el('nav', 'wh-tabs');
     tabs.setAttribute('role', 'tablist');
     tabs.setAttribute('aria-label', 'Cafarron Corridor cogitator registers');
@@ -592,17 +456,10 @@
       tab.tabIndex = index === 0 ? 0 : -1;
       tabs.append(tab);
     });
-
     const commandRibbon = el('section', 'wh-command-ribbon');
     commandRibbon.setAttribute('aria-label', 'Cafarron command litany');
     const commandReadouts = el('div', 'wh-command-readouts');
-    const commandFields = [
-      ['Active Register', 'wh-command-register', 'Administratum Index'],
-      ['Navis Lock', 'wh-command-contact', 'No contact locked'],
-      ['Machine Rite', 'wh-command-rite', 'Administratum query channels open'],
-      ['Docket Seal', 'wh-command-docket', 'No docket locked']
-    ];
-    commandFields.forEach(([label, id, value]) => {
+    [['Active Register', 'wh-command-register', 'Administratum Index'], ['Navis Lock', 'wh-command-contact', 'No contact locked'], ['Machine Rite', 'wh-command-rite', 'Administratum query channels open'], ['Docket Seal', 'wh-command-docket', 'No docket locked']].forEach(([label, id, value]) => {
       const field = el('div', 'wh-command-readout');
       const heading = el('span', 'wh-command-readout-label', label);
       const output = el('strong', 'wh-command-readout-value', value);
@@ -622,18 +479,11 @@
     unsealDocket.disabled = true;
     commandRites.append(preambleToggle, recallLock, unsealDocket);
     commandRibbon.append(commandReadouts, commandRites);
-
     const shell = el('section', 'wh-shell');
     const hero = el('section', 'wh-hero');
     hero.id = 'wh-command-preamble';
     const copy = el('article', 'wh-panelbox');
-    copy.append(
-      el('p', 'wh-kicker', 'Segmentum Command Access · Cafarron Corridor'),
-      el('h2', '', 'By Writ of the Sector Archive'),
-      el('p', '', 'This cogitator contains the registered worlds, moons, systems, military formations, navigation contacts, threat seals, and sanctioned routes of the Cafarron Corridor.'),
-      el('p', 'wh-note', 'The Navis Cartographica vigil may be engaged within the three-dimensional survey. It will passively inspect sanctioned contacts, orbit each selected body, and recite rotating stellar, planetary, census, and navigation assays.'),
-      el('p', 'wh-small', 'Explorator contacts remain under temporary Cartographica designations until the Sector Chronicler issues permanent names.')
-    );
+    copy.append(el('p', 'wh-kicker', 'Segmentum Command Access · Cafarron Corridor'), el('h2', '', 'By Writ of the Sector Archive'), el('p', '', 'This cogitator contains the registered worlds, moons, systems, military formations, navigation contacts, threat seals, and sanctioned routes of the Cafarron Corridor.'), el('p', 'wh-note', 'Select a charted contact to replace its survey marker with a local system reconstruction. Double-select the contact for close inspection.'), el('p', 'wh-small', 'Explorator contacts remain under temporary Cartographica designations until the Sector Chronicler issues permanent names.'));
     const docket = el('aside', 'wh-panelbox');
     docket.append(el('p', 'wh-kicker', 'Cogitator Census'));
     const dl = el('dl', 'wh-dl');
@@ -647,22 +497,9 @@
     addDef(dl, 'Passive vigil', 'Available through the Navis survey helm');
     docket.append(dl);
     hero.append(copy, docket);
-
-    preambleToggle.addEventListener('click', () => {
-      state.preambleSealed = !state.preambleSealed;
-      hero.hidden = state.preambleSealed;
-      workspace.dataset.preambleSeal = state.preambleSealed ? 'sealed' : 'unsealed';
-      updateCommandLitany();
-    });
-    recallLock.addEventListener('click', () => {
-      if (!state.selectedNodeId) return;
-      setActiveTab('map');
-      void initializeMap().then(map => map.selectNode(state.selectedNodeId, true));
-    });
-    unsealDocket.addEventListener('click', () => {
-      if (state.selectedRecordId) state.ui.openEntry(state.selectedRecordId);
-    });
-
+    preambleToggle.addEventListener('click', () => { state.preambleSealed = !state.preambleSealed; hero.hidden = state.preambleSealed; workspace.dataset.preambleSeal = state.preambleSealed ? 'sealed' : 'unsealed'; updateCommandLitany(); });
+    recallLock.addEventListener('click', () => { if (!state.selectedNodeId) return; setActiveTab('map'); void initializeMap().then(map => map.selectNode(state.selectedNodeId, true)); });
+    unsealDocket.addEventListener('click', () => { if (state.selectedRecordId) state.ui.openEntry(state.selectedRecordId); });
     const archivePanel = state.ui.archivePanel();
     const mapPanel = buildMapPanel();
     const sealsPanel = state.ui.sealsPanel();
@@ -670,11 +507,7 @@
     workspace.dataset.preambleSeal = 'unsealed';
     workspace.append(header, tabs, commandRibbon, shell);
     view.append(workspace);
-
-    tabs.addEventListener('click', event => {
-      const tab = event.target.closest('[data-tab]');
-      if (tab) setActiveTab(tab.dataset.tab);
-    });
+    tabs.addEventListener('click', event => { const tab = event.target.closest('[data-tab]'); if (tab) setActiveTab(tab.dataset.tab); });
     tabs.addEventListener('keydown', event => {
       if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
       const controls = [...tabs.querySelectorAll('[data-tab]')];
@@ -714,10 +547,7 @@
         mapNodes: state.mapNodes,
         routes: state.routes,
         exportArchive: () => window.Warhammer40KLore.exportArchive(),
-        locate: nodeId => {
-          setActiveTab('map');
-          void initializeMap().then(map => map.selectNode(nodeId, true));
-        }
+        locate: nodeId => { setActiveTab('map'); void initializeMap().then(map => map.selectNode(nodeId, true)); }
       });
       buildWorkspace(view);
       state.initialized = true;
@@ -740,8 +570,7 @@
   document.addEventListener('hb:view-activated', event => {
     const active = event.detail?.viewId === 'warhammer-40k';
     document.body.classList.toggle('warhammer-archive-active', active);
-    if (!active) state.map?.pause();
-    else if (state.activeTab === 'map') state.map?.resume();
+    if (!active) state.map?.pause(); else if (state.activeTab === 'map') state.map?.resume();
   });
 
   window.Warhammer40KWorkspace = Object.freeze({ initialize });
