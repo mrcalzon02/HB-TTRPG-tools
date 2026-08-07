@@ -64,6 +64,7 @@
     const value = String(text || '').toLowerCase();
     if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
     if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
+    if (/ice world|ice-bound|icebound|glacial|frozen world|frost world|cryogenic|polar world|tundra/.test(value)) return 'ice';
     return 'unsealed';
   }
 
@@ -77,11 +78,9 @@
   }
 
   function desertTexture(THREE, seed) {
-    const width = 512;
-    const height = 256;
+    const width = 512, height = 256;
     const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = width; canvas.height = height;
     const context = canvas.getContext('2d', { alpha: false });
     const roll = random(seed ^ 0x44534552);
     const gradient = context.createLinearGradient(0, 0, 0, height);
@@ -107,9 +106,7 @@
     }
     context.globalCompositeOperation = 'screen';
     for (let crater = 0; crater < 52; crater += 1) {
-      const x = roll() * width;
-      const y = roll() * height;
-      const radius = 1 + roll() * 8;
+      const x = roll() * width, y = roll() * height, radius = 1 + roll() * 8;
       context.beginPath();
       context.ellipse(x, y, radius, radius * (0.35 + roll() * 0.4), roll() * Math.PI, 0, Math.PI * 2);
       context.strokeStyle = `rgba(242,211,145,${0.08 + roll() * 0.16})`;
@@ -128,8 +125,7 @@
   }
 
   function forgeTextureSet(THREE, seed) {
-    const width = 512;
-    const height = 256;
+    const width = 512, height = 256;
     const surface = document.createElement('canvas');
     const emissive = document.createElement('canvas');
     surface.width = emissive.width = width;
@@ -149,14 +145,10 @@
     glow.fillRect(0, 0, width, height);
     context.globalCompositeOperation = 'screen';
     for (let plate = 0; plate < 120; plate += 1) {
-      const x = roll() * width;
-      const y = roll() * height;
-      const w = 8 + roll() * 48;
-      const h = 3 + roll() * 20;
+      const x = roll() * width, y = roll() * height, w = 8 + roll() * 48, h = 3 + roll() * 20;
       context.fillStyle = `rgba(${45 + Math.floor(roll() * 55)},${38 + Math.floor(roll() * 45)},${34 + Math.floor(roll() * 35)},${0.08 + roll() * 0.14})`;
       context.fillRect(x, y, w, h);
       context.strokeStyle = `rgba(12,14,14,${0.18 + roll() * 0.3})`;
-      context.lineWidth = 1;
       context.strokeRect(x, y, w, h);
     }
     context.globalCompositeOperation = 'multiply';
@@ -172,9 +164,7 @@
     context.globalCompositeOperation = 'source-over';
     glow.globalCompositeOperation = 'screen';
     for (let furnace = 0; furnace < 95; furnace += 1) {
-      const x = roll() * width;
-      const y = roll() * height;
-      const radius = 0.8 + roll() * 4.8;
+      const x = roll() * width, y = roll() * height, radius = 0.8 + roll() * 4.8;
       const halo = context.createRadialGradient(x, y, 0, x, y, radius * 3.5);
       halo.addColorStop(0, 'rgba(255,198,84,.9)');
       halo.addColorStop(0.3, 'rgba(232,77,28,.48)');
@@ -189,25 +179,77 @@
       glow.fillRect(x - radius * 5, y - radius * 5, radius * 10, radius * 10);
     }
     for (let network = 0; network < 34; network += 1) {
-      const y = roll() * height;
-      const start = roll() * width;
-      const length = 35 + roll() * 150;
+      const y = roll() * height, start = roll() * width, length = 35 + roll() * 150;
       context.strokeStyle = `rgba(155,92,49,${0.12 + roll() * 0.17})`;
       glow.strokeStyle = `rgba(255,78,18,${0.32 + roll() * 0.36})`;
       context.lineWidth = 0.5 + roll() * 1.4;
       glow.lineWidth = 0.6 + roll() * 1.8;
-      context.beginPath();
-      glow.beginPath();
-      context.moveTo(start, y);
-      glow.moveTo(start, y);
+      context.beginPath(); glow.beginPath();
+      context.moveTo(start, y); glow.moveTo(start, y);
       for (let step = 0; step < 6; step += 1) {
-        const x = start + length * (step / 5);
-        const offset = (roll() - 0.5) * 16;
-        context.lineTo(x, y + offset);
-        glow.lineTo(x, y + offset);
+        const x = start + length * (step / 5), offset = (roll() - 0.5) * 16;
+        context.lineTo(x, y + offset); glow.lineTo(x, y + offset);
       }
+      context.stroke(); glow.stroke();
+    }
+    return { map: canvasTexture(THREE, surface), emissiveMap: canvasTexture(THREE, emissive) };
+  }
+
+  function iceTextureSet(THREE, seed) {
+    const width = 512, height = 256;
+    const surface = document.createElement('canvas');
+    const emissive = document.createElement('canvas');
+    surface.width = emissive.width = width;
+    surface.height = emissive.height = height;
+    const context = surface.getContext('2d', { alpha: false });
+    const glow = emissive.getContext('2d', { alpha: false });
+    const roll = random(seed ^ 0x49434557);
+    const base = context.createLinearGradient(0, 0, 0, height);
+    base.addColorStop(0, '#f2fbff');
+    base.addColorStop(0.18, '#b8d8e8');
+    base.addColorStop(0.48, '#6f9fbd');
+    base.addColorStop(0.72, '#d7eef5');
+    base.addColorStop(1, '#edf7fb');
+    context.fillStyle = base;
+    context.fillRect(0, 0, width, height);
+    glow.fillStyle = '#03070a';
+    glow.fillRect(0, 0, width, height);
+    context.globalCompositeOperation = 'screen';
+    for (let shelf = 0; shelf < 95; shelf += 1) {
+      const y = roll() * height;
+      context.beginPath();
+      context.moveTo(0, y);
+      for (let x = 0; x <= width; x += 6) context.lineTo(x, y + Math.sin(x * (0.016 + roll() * 0.026) + shelf) * (1 + roll() * 7));
+      context.strokeStyle = `rgba(${190 + Math.floor(roll() * 60)},${220 + Math.floor(roll() * 35)},255,${0.06 + roll() * 0.17})`;
+      context.lineWidth = 1 + roll() * 4;
       context.stroke();
+    }
+    context.globalCompositeOperation = 'multiply';
+    for (let fissure = 0; fissure < 68; fissure += 1) {
+      let x = roll() * width, y = roll() * height;
+      context.beginPath(); context.moveTo(x, y);
+      glow.beginPath(); glow.moveTo(x, y);
+      for (let step = 0; step < 10; step += 1) {
+        x += (roll() - 0.5) * 28;
+        y += 6 + roll() * 14;
+        context.lineTo(x, y); glow.lineTo(x, y);
+      }
+      context.strokeStyle = `rgba(23,67,92,${0.12 + roll() * 0.26})`;
+      context.lineWidth = 0.7 + roll() * 2.2;
+      context.stroke();
+      glow.strokeStyle = `rgba(99,210,255,${0.18 + roll() * 0.28})`;
+      glow.lineWidth = 0.5 + roll() * 1.4;
       glow.stroke();
+    }
+    context.globalCompositeOperation = 'source-over';
+    for (let basin = 0; basin < 42; basin += 1) {
+      const x = roll() * width, y = roll() * height, rx = 4 + roll() * 18, ry = rx * (0.25 + roll() * 0.35);
+      context.beginPath();
+      context.ellipse(x, y, rx, ry, roll() * Math.PI, 0, Math.PI * 2);
+      context.fillStyle = `rgba(65,113,142,${0.04 + roll() * 0.12})`;
+      context.fill();
+      context.strokeStyle = `rgba(232,250,255,${0.1 + roll() * 0.18})`;
+      context.stroke();
     }
     return { map: canvasTexture(THREE, surface), emissiveMap: canvasTexture(THREE, emissive) };
   }
@@ -221,6 +263,10 @@
       const map = desertTexture(THREE, seed);
       return new THREE.MeshStandardMaterial({ color: 0xffffff, map, bumpMap: map, bumpScale: 0.038, emissive: 0x6f3417, emissiveIntensity: 0.08, roughness: 0.93, metalness: 0.01 });
     }
+    if (template === 'ice') {
+      const textures = iceTextureSet(THREE, seed);
+      return new THREE.MeshStandardMaterial({ color: 0xffffff, map: textures.map, bumpMap: textures.map, bumpScale: 0.024, emissive: 0x56b8e8, emissiveMap: textures.emissiveMap, emissiveIntensity: 0.32, roughness: 0.54, metalness: 0.04 });
+    }
     return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.18, roughness: 0.76, metalness: 0.08 });
   }
 
@@ -233,9 +279,9 @@
     }[layer] || [0x817963, 0.4, true, 1.2, 1.2];
   }
 
-  function routeGroup(THREE, route, nodes) {
-    const group = new THREE.Group();
+  function routeCurves(THREE, route, nodes) {
     const points = route.nodeIds.map(id => nodes.get(id)).filter(Boolean);
+    const curves = [];
     for (let index = 0; index < points.length - 1; index += 1) {
       const start = new THREE.Vector3(...points[index].position);
       const end = new THREE.Vector3(...points[index + 1].position);
@@ -243,13 +289,21 @@
       const middle = start.clone().add(end).multiplyScalar(0.5);
       middle.y += clamp(distance * 0.065, 2.2, 9.5);
       middle.z += (index % 2 ? -1 : 1) * clamp(distance * 0.03, 0.9, 4.8);
-      const geometry = new THREE.BufferGeometry().setFromPoints(new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(clamp(Math.round(distance * 1.4), 18, 72)));
+      curves.push(new THREE.QuadraticBezierCurve3(start, middle, end));
+    }
+    return curves;
+  }
+
+  function routeGroup(THREE, route, nodes) {
+    const group = new THREE.Group();
+    routeCurves(THREE, route, nodes).forEach(curve => {
+      const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(48));
       const [color, opacity, dashed, dashSize, gapSize] = routeStyle(route.layer);
       const material = dashed ? new THREE.LineDashedMaterial({ color, transparent: true, opacity, dashSize, gapSize }) : new THREE.LineBasicMaterial({ color, transparent: true, opacity });
       const line = new THREE.Line(geometry, material);
       if (dashed) line.computeLineDistances();
       group.add(line);
-    }
+    });
     return group;
   }
 
@@ -258,7 +312,7 @@
     const roll = random(hash(text));
     const recordText = text.toLowerCase();
     const starColors = [0xffd88a, 0xffb56b, 0xfff0c4, 0xc9ddff, 0xff8b58];
-    const bodyColors = recordText.includes('forge') ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39] : recordText.includes('desert') ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933] : recordText.includes('ice') ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8] : recordText.includes('dead') || recordText.includes('tomb') ? [0x77756f, 0x4f5352, 0x999589, 0x343838] : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
+    const bodyColors = recordText.includes('forge') ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39] : recordText.includes('desert') ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933] : recordText.includes('ice') || recordText.includes('frozen') ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8] : recordText.includes('dead') || recordText.includes('tomb') ? [0x77756f, 0x4f5352, 0x999589, 0x343838] : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
     const template = classifyWorldTemplate(recordText);
     const count = clamp(3 + Math.floor(roll() * 5), 3, 7);
     const registeredIndex = Math.min(count - 1, 1 + Math.floor(roll() * Math.max(1, count - 1)));
@@ -290,6 +344,7 @@
     const THREE = await three();
     const labelsEngine = window.CafarronMapLabelsV7;
     if (!labelsEngine) throw new Error('Cartographic label servitors failed to answer.');
+
     const mapNodes = chart.nodes(data);
     const routes = chart.routes(data);
     const nodeById = new Map(mapNodes.map(node => [node.id, node]));
@@ -323,32 +378,19 @@
     grid.material.transparent = true;
     grid.material.opacity = 0.22;
     scene.add(grid);
-    const groups = Object.fromEntries(['nodes', 'systems', 'regions', 'hazards', 'route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].map(name => [name, new THREE.Group()]));
+    const groups = Object.fromEntries(['nodes', 'systems', 'ambient-traffic', 'regions', 'hazards', 'route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].map(name => [name, new THREE.Group()]));
     Object.values(groups).forEach(group => scene.add(group));
     const visibility = { primary: true, supporting: true, 'guard-origin': true, provisional: false, unnamed: false, exploratory: true, regions: false, hazards: false, labels: true, 'route-major-warp': true, 'route-trade': true, 'route-local-navigation': false, 'route-exploratory': false };
     let mode = MODES.has(initialMode) ? initialMode : 'orbit';
-    let threat = 'all';
-    let selected = '';
-    let running = true;
-    let raf = 0;
-    let dirtyLabels = true;
-    let transition = null;
-    let pointerStart = null;
-    let passive = false;
-    let passiveDeadline = 0;
-    let passiveLastFrame = 0;
-    let passiveSequence = [];
-    let passiveIndex = -1;
-    let surveyTheatre = false;
-    let contactDocketOpen = false;
-    let fullAuspex = false;
-    let expandedSystem = null;
+    let threat = 'all', selected = '', running = true, raf = 0, dirtyLabels = true, transition = null, pointerStart = null, passive = false, passiveDeadline = 0, passiveLastFrame = 0, passiveSequence = [], passiveIndex = -1, surveyTheatre = false, contactDocketOpen = false, fullAuspex = false, expandedSystem = null;
     const meshes = new Map();
     const pickables = [];
     const labelRecords = new Map();
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const verticalAxis = new THREE.Vector3(0, 1, 0);
+    const ambientTraffic = [];
+    const envelopeEffects = [];
     const workspace = stage.closest('.wh-workspace');
     const shell = stage.closest('.wh-shell');
     const mapPanel = stage.closest('[data-panel="map"]');
@@ -365,11 +407,9 @@
     const visibleNode = node => visibility[node.layer] !== false && (threat === 'all' || node.threat === threat);
     const canonical = node => ['primary', 'supporting', 'guard-origin'].includes(node.layer);
     const showLabel = node => visibleNode(node) && (passive ? node.id === selected : visibility.labels && (canonical(node) || node.id === selected));
+
     for (const node of mapNodes) {
-      const scale = Math.max(0.42, Number(node.scale || 0.8));
-      const color = threatColor(node);
-      const exploratory = node.layer === 'exploratory';
-      const guard = node.layer === 'guard-origin';
+      const scale = Math.max(0.42, Number(node.scale || 0.8)), color = threatColor(node), exploratory = node.layer === 'exploratory', guard = node.layer === 'guard-origin';
       const mesh = new THREE.Mesh(new THREE.SphereGeometry(scale, 18, 14), new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: exploratory ? 0.11 : guard ? 0.25 : 0.3, roughness: 0.5, metalness: 0.2, transparent: exploratory || guard, opacity: exploratory ? 0.58 : guard ? 0.92 : 1 }));
       mesh.position.set(...node.position);
       mesh.userData.nodeId = node.id;
@@ -391,17 +431,50 @@
       leaderLayer.appendChild(leader);
       labelRecords.set(node.id, { node, mesh, label, leader });
     }
-    routes.forEach(route => { const group = groups[`route-${route.layer}`]; if (group) group.add(routeGroup(THREE, route, nodeById)); });
-    function addVolume(record, group, opacity) {
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), new THREE.MeshBasicMaterial({ color: data.threatStates[record.threat]?.color || 0xb49142, wireframe: true, transparent: true, opacity }));
+
+    routes.forEach(route => {
+      const group = groups[`route-${route.layer}`];
+      if (group) group.add(routeGroup(THREE, route, nodeById));
+      const curves = routeCurves(THREE, route, nodeById);
+      const trafficCount = route.layer === 'major-warp' ? 3 : route.layer === 'trade' ? 2 : 1;
+      curves.forEach((curve, curveIndex) => {
+        for (let index = 0; index < trafficCount; index += 1) {
+          const color = route.layer === 'major-warp' ? 0xe7c979 : route.layer === 'trade' ? 0x68bbb9 : route.layer === 'local-navigation' ? 0x91a9d0 : 0xd6dcd7;
+          const craft = new THREE.Mesh(new THREE.SphereGeometry(route.layer === 'major-warp' ? 0.12 : 0.085, 8, 6), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: route.layer === 'exploratory' ? 0.42 : 0.72 }));
+          groups['ambient-traffic'].add(craft);
+          ambientTraffic.push({ craft, curve, layer: `route-${route.layer}`, phase: (index / trafficCount + curveIndex * 0.21 + hash(route.id || route.name) * 0.000001) % 1, speed: (route.layer === 'major-warp' ? 0.000012 : route.layer === 'trade' ? 0.000008 : 0.000005) * (index % 2 ? -1 : 1) });
+        }
+      });
+    });
+
+    function addVolume(record, group, opacity, kind) {
+      const color = data.threatStates[record.threat]?.color || 0xb49142;
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity }));
       mesh.position.set(...record.center);
       mesh.scale.set(...record.radii);
       group.add(mesh);
+      const pulse = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: opacity * 0.72 }));
+      pulse.position.copy(mesh.position);
+      pulse.scale.copy(mesh.scale).multiplyScalar(0.72);
+      group.add(pulse);
+      const knotCount = kind === 'hazard' ? 9 : 5;
+      const knots = [];
+      const roll = random(hash(record.id || record.name || JSON.stringify(record.center)));
+      for (let index = 0; index < knotCount; index += 1) {
+        const knot = new THREE.Mesh(new THREE.SphereGeometry(kind === 'hazard' ? 0.22 : 0.14, 8, 6), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: kind === 'hazard' ? 0.38 : 0.18 }));
+        knot.position.set(record.center[0] + (roll() - 0.5) * record.radii[0] * 1.4, record.center[1] + (roll() - 0.5) * record.radii[1] * 1.4, record.center[2] + (roll() - 0.5) * record.radii[2] * 1.4);
+        group.add(knot);
+        knots.push({ knot, phase: roll() * Math.PI * 2, speed: 0.00015 + roll() * 0.0002, amplitude: 0.08 + roll() * 0.2 });
+      }
+      envelopeEffects.push({ mesh, pulse, knots, kind, baseOpacity: opacity, phase: roll() * Math.PI * 2 });
     }
-    data.regions.forEach(record => addVolume(record, groups.regions, 0.05));
-    data.hazards.forEach(record => addVolume(record, groups.hazards, 0.11));
+
+    data.regions.forEach(record => addVolume(record, groups.regions, 0.05, 'region'));
+    data.hazards.forEach(record => addVolume(record, groups.hazards, 0.11, 'hazard'));
+
     function recordsFor(node) { return (node.recordIds || []).map(id => recordById.get(id)).filter(Boolean); }
     function clearExpandedSystem() { if (!expandedSystem) return; disposeObject(expandedSystem.group); expandedSystem = null; }
+
     function expandSystem(node, records) {
       if (expandedSystem?.nodeId === node.id) return;
       clearExpandedSystem();
@@ -424,8 +497,8 @@
         const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 22, 16), material);
         planet.position.x = body.radius;
         if (index === profile.registeredIndex) {
-          const shellColor = profile.template === 'forge' ? 0x8a3a22 : profile.template === 'desert' ? 0xd49a53 : 0xe0c77f;
-          const shellOpacity = profile.template === 'forge' ? 0.13 : profile.template === 'desert' ? 0.09 : 0.13;
+          const shellColor = profile.template === 'forge' ? 0x8a3a22 : profile.template === 'desert' ? 0xd49a53 : profile.template === 'ice' ? 0x9adcf4 : 0xe0c77f;
+          const shellOpacity = profile.template === 'forge' ? 0.13 : profile.template === 'desert' ? 0.09 : profile.template === 'ice' ? 0.14 : 0.13;
           planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 16, 12), new THREE.MeshBasicMaterial({ color: shellColor, transparent: true, opacity: shellOpacity, wireframe: profile.template === 'unsealed' })));
         }
         pivot.add(planet);
@@ -442,13 +515,14 @@
         moving.push({ pivot, planet, speed: body.speed, moonSpeed: 0.00055 + index * 0.00008 });
       });
       const traffic = [];
-      const trafficCount = profile.template === 'forge' ? 8 : profile.template === 'desert' ? 4 : 3;
+      const trafficCount = profile.template === 'forge' ? 8 : profile.template === 'desert' ? 4 : profile.template === 'ice' ? 5 : 3;
       for (let index = 0; index < trafficCount; index += 1) {
         const laneRadius = 1.1 + (index % 4) * 0.72 + (index >= 4 ? 0.22 : 0);
         const pivot = new THREE.Group();
         pivot.rotation.y = profile.seed * 0.00001 + index * (Math.PI * 2 / trafficCount);
         pivot.rotation.z = (index % 2 ? -1 : 1) * 0.06;
-        const craft = new THREE.Mesh(new THREE.ConeGeometry(profile.template === 'forge' ? 0.035 : 0.026, profile.template === 'forge' ? 0.16 : 0.12, 5), new THREE.MeshBasicMaterial({ color: profile.template === 'forge' ? 0xff7a35 : profile.template === 'desert' ? 0xf0c36a : 0x9ed4d1 }));
+        const craftColor = profile.template === 'forge' ? 0xff7a35 : profile.template === 'desert' ? 0xf0c36a : profile.template === 'ice' ? 0xb9ecff : 0x9ed4d1;
+        const craft = new THREE.Mesh(new THREE.ConeGeometry(profile.template === 'forge' ? 0.035 : 0.026, profile.template === 'forge' ? 0.16 : 0.12, 5), new THREE.MeshBasicMaterial({ color: craftColor }));
         craft.rotation.z = -Math.PI / 2;
         craft.position.x = laneRadius;
         pivot.add(craft);
@@ -459,6 +533,7 @@
       expandedSystem = { nodeId: node.id, group, star, moving, traffic, template: profile.template, radius: profile.bodies.at(-1)?.radius || 6 };
       updateVisibility();
     }
+
     function description() { if (passive) return 'Passive Navis vigil is rotating through sanctioned contacts.'; return { select: 'Auspex selection rite active.', orbit: 'Orbital rotation rite active under graduated resistance.', pan: 'Chart translation rite active under graduated resistance.', zoom: 'Magnification rite active under graduated resistance.' }[mode]; }
     function updateStatus() { status.textContent = `${mapNodes.length} charted contacts · ${description()} Double-select a contact for close system inspection.`; }
     function applyMode() {
@@ -475,11 +550,12 @@
       groups.regions.visible = visibility.regions;
       groups.hazards.visible = visibility.hazards;
       ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => { groups[name].visible = visibility[name]; });
+      ambientTraffic.forEach(entry => { entry.craft.visible = visibility[entry.layer]; });
       labelLayer.hidden = !visibility.labels && !passive;
       leaderLayer.hidden = true;
       dirtyLabels = true;
     }
-    function project(node) { const vector = new THREE.Vector3(...node.position).project(camera); const box = stage.getBoundingClientRect(); return { x: (vector.x * 0.5 + 0.5) * box.width, y: (-vector.y * 0.5 + 0.5) * box.height, z: vector.z }; }
+    function project(node) { const vector = new THREE.Vector3(...node.position).project(camera), box = stage.getBoundingClientRect(); return { x: (vector.x * 0.5 + 0.5) * box.width, y: (-vector.y * 0.5 + 0.5) * box.height, z: vector.z }; }
     function layoutLabels() {
       const stageBox = stage.getBoundingClientRect();
       if (!stageBox.width || !stageBox.height || (!visibility.labels && !passive)) return;
@@ -488,8 +564,7 @@
       let selectedItem = null;
       labelRecords.forEach(record => {
         if (!showLabel(record.node)) { record.label.hidden = true; record.leader.hidden = true; return; }
-        const point = project(record.node);
-        const activeVigilTarget = passive && record.node.id === selected;
+        const point = project(record.node), activeVigilTarget = passive && record.node.id === selected;
         const beyondSurvey = point.z < -1 || point.z > 1 || point.x < -80 || point.x > stageBox.width + 80 || point.y < -80 || point.y > stageBox.height + 80;
         if (beyondSurvey && !activeVigilTarget) { record.label.hidden = true; record.leader.hidden = true; return; }
         if (activeVigilTarget) { point.x = clamp(point.x, 12, stageBox.width - 12); point.y = clamp(point.y, topInset + 12, stageBox.height - 12); }
@@ -517,23 +592,23 @@
     function connectedRoutes(nodeId) { return routes.filter(route => route.nodeIds.includes(nodeId)); }
     function stopPassive(reason = 'manual') { if (!passive) return; passive = false; passiveDeadline = 0; passiveLastFrame = 0; stage.dataset.passive = 'false'; dirtyLabels = true; updateVisibility(); applyMode(); onPassiveChange?.(false, reason); }
     function moveTo(position, target, duration = 1650) { transition = { start: performance.now(), duration, fromPosition: camera.position.clone(), fromTarget: controls.target.clone(), position: position.clone(), target: target.clone() }; controls.enabled = false; }
-    function focusNode(node, close = false) { const target = new THREE.Vector3(...node.position); const direction = camera.position.clone().sub(controls.target).normalize(); const distance = close ? clamp((expandedSystem?.radius || 6) * 2.25, 12, 24) : clamp(camera.position.distanceTo(controls.target) * 0.52, 28, 72); moveTo(target.clone().add(direction.multiplyScalar(distance)), target, close ? 1200 : 1650); }
+    function focusNode(node, close = false) { const target = new THREE.Vector3(...node.position), direction = camera.position.clone().sub(controls.target).normalize(); const distance = close ? clamp((expandedSystem?.radius || 6) * 2.25, 12, 24) : clamp(camera.position.distanceTo(controls.target) * 0.52, 28, 72); moveTo(target.clone().add(direction.multiplyScalar(distance)), target, close ? 1200 : 1650); }
     function selectNode(nodeId, focus = false, preservePassive = false, close = false) { const node = nodeById.get(nodeId); if (!node) return; if (passive && !preservePassive) stopPassive('selection'); selected = nodeId; const records = recordsFor(node); expandSystem(node, records); onSelect?.(node, records, connectedRoutes(nodeId)); dirtyLabels = true; if (focus) focusNode(node, close); }
     function passiveEligibleNodes() { const preferred = mapNodes.filter(node => visibleNode(node) && ['primary', 'guard-origin', 'supporting'].includes(node.layer)); return preferred.length ? preferred : mapNodes.filter(visibleNode); }
     function rebuildPassiveSequence() { passiveSequence = [...passiveEligibleNodes()]; for (let index = passiveSequence.length - 1; index > 0; index -= 1) { const swap = Math.floor(Math.random() * (index + 1)); [passiveSequence[index], passiveSequence[swap]] = [passiveSequence[swap], passiveSequence[index]]; } if (selected && passiveSequence.length > 1 && passiveSequence[0]?.id === selected) [passiveSequence[0], passiveSequence[1]] = [passiveSequence[1], passiveSequence[0]]; passiveIndex = -1; }
-    function passivePosition(node) { const target = new THREE.Vector3(...node.position); const radius = 34 + Math.random() * 34; const azimuth = Math.random() * Math.PI * 2; const elevation = 0.22 + Math.random() * 0.42; const horizontal = Math.cos(elevation) * radius; return { target, position: new THREE.Vector3(target.x + Math.cos(azimuth) * horizontal, target.y + Math.sin(elevation) * radius, target.z + Math.sin(azimuth) * horizontal) }; }
+    function passivePosition(node) { const target = new THREE.Vector3(...node.position), radius = 34 + Math.random() * 34, azimuth = Math.random() * Math.PI * 2, elevation = 0.22 + Math.random() * 0.42, horizontal = Math.cos(elevation) * radius; return { target, position: new THREE.Vector3(target.x + Math.cos(azimuth) * horizontal, target.y + Math.sin(elevation) * radius, target.z + Math.sin(azimuth) * horizontal) }; }
     function advancePassive(now = performance.now()) { if (!passive) return; if (!passiveSequence.length || passiveIndex >= passiveSequence.length - 1) rebuildPassiveSequence(); passiveIndex += 1; const node = passiveSequence[passiveIndex]; if (!node) return; const records = recordsFor(node); selectNode(node.id, false, true); const destination = passivePosition(node); moveTo(destination.position, destination.target, 2600); passiveDeadline = now + PASSIVE_DWELL; passiveLastFrame = now; onPassiveNode?.(node, records, PASSIVE_DWELL); refreshLayout(); updateStatus(); }
     function startPassive() { if (passive) return; passive = true; stage.dataset.passive = 'true'; mode = 'orbit'; rebuildPassiveSequence(); dirtyLabels = true; updateVisibility(); applyMode(); onPassiveChange?.(true, 'engaged'); advancePassive(performance.now()); }
     function updatePassive(now) { if (!passive) return; if (now >= passiveDeadline && !transition) { advancePassive(now); return; } if (transition) { passiveLastFrame = now; return; } const elapsed = clamp(now - (passiveLastFrame || now), 0, 80); passiveLastFrame = now; const offset = camera.position.clone().sub(controls.target); offset.applyAxisAngle(verticalAxis, elapsed * PASSIVE_ORBIT_SPEED); camera.position.copy(controls.target).add(offset); camera.lookAt(controls.target); dirtyLabels = true; }
-    function updateMove(now) { if (!transition) return; const p = clamp((now - transition.start) / transition.duration, 0, 1); const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; camera.position.lerpVectors(transition.fromPosition, transition.position, e); controls.target.lerpVectors(transition.fromTarget, transition.target, e); controls.update(); dirtyLabels = true; if (p === 1) { transition = null; applyMode(); } }
+    function updateMove(now) { if (!transition) return; const p = clamp((now - transition.start) / transition.duration, 0, 1), e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; camera.position.lerpVectors(transition.fromPosition, transition.position, e); controls.target.lerpVectors(transition.fromTarget, transition.target, e); controls.update(); dirtyLabels = true; if (p === 1) { transition = null; applyMode(); } }
     function pickNode(event) { const box = renderer.domElement.getBoundingClientRect(); pointer.x = ((event.clientX - box.left) / box.width) * 2 - 1; pointer.y = -((event.clientY - box.top) / box.height) * 2 + 1; raycaster.setFromCamera(pointer, camera); const hit = raycaster.intersectObjects(pickables.filter(mesh => mesh.visible), false)[0]; return hit?.object?.userData?.nodeId || ''; }
     renderer.domElement.addEventListener('pointerdown', event => { if (passive) stopPassive('interaction'); pointerStart = [event.clientX, event.clientY, performance.now()]; stage.dataset.dragging = 'true'; });
     renderer.domElement.addEventListener('pointerup', event => { stage.dataset.dragging = 'false'; if (!pointerStart) return; const distance = Math.hypot(event.clientX - pointerStart[0], event.clientY - pointerStart[1]); if (distance < 5 && performance.now() - pointerStart[2] < 650) { const id = pickNode(event); if (id) selectNode(id, false); } pointerStart = null; });
     renderer.domElement.addEventListener('dblclick', event => { event.preventDefault(); if (passive) stopPassive('interaction'); const id = pickNode(event) || selected; if (id) selectNode(id, true, false, true); });
     renderer.domElement.addEventListener('pointercancel', () => { pointerStart = null; stage.dataset.dragging = 'false'; });
     controls.addEventListener('change', () => { dirtyLabels = true; });
-    function reserveViewportSpace() { if (!vigilPanel || vigilPanel.hidden) return; const stageBox = stage.getBoundingClientRect(); const consoleBottom = (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0); const available = Math.max(150, stageBox.height - consoleBottom - 28); vigilPanel.style.maxHeight = `${Math.min(stageBox.height * 0.55, available)}px`; if (stageBox.width < 720) { vigilPanel.style.left = '.7rem'; vigilPanel.style.right = '.7rem'; vigilPanel.style.width = 'auto'; } else { vigilPanel.style.left = ''; vigilPanel.style.right = ''; vigilPanel.style.width = ''; } }
-    function resize() { const box = stage.getBoundingClientRect(); const width = Math.max(1, box.width); const height = Math.max(1, box.height); renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); leaderLayer.setAttribute('viewBox', `0 0 ${width} ${height}`); reserveViewportSpace(); dirtyLabels = true; }
+    function reserveViewportSpace() { if (!vigilPanel || vigilPanel.hidden) return; const stageBox = stage.getBoundingClientRect(), consoleBottom = (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0), available = Math.max(150, stageBox.height - consoleBottom - 28); vigilPanel.style.maxHeight = `${Math.min(stageBox.height * 0.55, available)}px`; if (stageBox.width < 720) { vigilPanel.style.left = '.7rem'; vigilPanel.style.right = '.7rem'; vigilPanel.style.width = 'auto'; } else { vigilPanel.style.left = ''; vigilPanel.style.right = ''; vigilPanel.style.width = ''; } }
+    function resize() { const box = stage.getBoundingClientRect(), width = Math.max(1, box.width), height = Math.max(1, box.height); renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); leaderLayer.setAttribute('viewBox', `0 0 ${width} ${height}`); reserveViewportSpace(); dirtyLabels = true; }
     function refreshLayout() { resize(); requestAnimationFrame(() => { resize(); requestAnimationFrame(() => { resize(); if (running) layoutLabels(); }); }); }
     theatreToggle.textContent = 'Widen Survey Theatre'; theatreToggle.disabled = false; theatreToggle.setAttribute('aria-pressed', 'false');
     fullAuspexToggle.textContent = 'Invoke Full Auspex'; fullAuspexToggle.disabled = false; fullAuspexToggle.setAttribute('aria-pressed', 'false');
@@ -561,6 +636,15 @@
         expandedSystem.moving.forEach((body, index) => { body.pivot.rotation.y += body.speed * Math.min(80, Math.max(1, now - (body.last || now))); body.last = now; body.planet.rotation.y += 0.0016 + index * 0.0002; body.pivot.children.slice(1).forEach(moonPivot => { moonPivot.rotation.y += body.moonSpeed; }); });
         expandedSystem.traffic.forEach(craft => { craft.pivot.rotation.y += craft.speed; });
       }
+      ambientTraffic.forEach(entry => { entry.phase = (entry.phase + entry.speed * 16 + 1) % 1; entry.craft.position.copy(entry.curve.getPoint(entry.phase)); });
+      envelopeEffects.forEach(effect => {
+        const visible = effect.kind === 'hazard' ? visibility.hazards : visibility.regions;
+        if (!visible) return;
+        const pulse = 0.5 + 0.5 * Math.sin(now * (effect.kind === 'hazard' ? 0.0011 : 0.00055) + effect.phase);
+        effect.pulse.scale.copy(effect.mesh.scale).multiplyScalar(0.68 + pulse * 0.16);
+        effect.pulse.material.opacity = effect.baseOpacity * (0.35 + pulse * 0.7);
+        effect.knots.forEach(item => { const drift = Math.sin(now * item.speed + item.phase) * item.amplitude; item.knot.position.y += drift * 0.004; item.knot.material.opacity = (effect.kind === 'hazard' ? 0.18 : 0.07) + pulse * (effect.kind === 'hazard' ? 0.28 : 0.12); });
+      });
       if (!transition && !passive) controls.update();
       renderer.render(scene, camera);
       if (dirtyLabels) layoutLabels();
