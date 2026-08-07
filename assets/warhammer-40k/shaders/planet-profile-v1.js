@@ -4,7 +4,8 @@
   const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
   const lerp = (a, b, t) => a + (b - a) * t;
   const smoothstep = (edge0, edge1, x) => {
-    const t = clamp((x - edge0) / Math.max(1e-9, edge1 - edge0));
+    if (edge0 === edge1) return x < edge0 ? 0 : 1;
+    const t = clamp((x - edge0) / (edge1 - edge0));
     return t * t * (3 - 2 * t);
   };
 
