@@ -187,6 +187,8 @@
         const offset = (y * width + x) * 4;
         const point = profileEngine.spherePoint(u, v);
         let sample = null, r = 0, g = 0, b = 0, gas = null;
+        let scarMask = 0, ruinMask = 0, anomalyMask = 0, biosphereMask = 0;
+        const accentRgb = hslToRgb(profile.accentHue || 0, 0.58, 0.54);
 
         if (atmosphericBands) {
           gas = gasBandSample(profileEngine, profile, u, v);
@@ -221,6 +223,31 @@
           for (const [target, weight] of biomeWeights) [r, g, b] = blendBiome(r, g, b, target, weight);
           const coastMix = sample.coast * sample.land * 0.42;
           r = mix(r, 194, coastMix); g = mix(g, 167, coastMix); b = mix(b, 118, coastMix);
+
+          const scarring = clamp(profile.surfaceScarring || 0);
+          const ruins = clamp(profile.ruinDensity || 0);
+          const anomaly = clamp(profile.anomalyDensity || 0);
+          const biosphere = clamp(profile.biosphereStrength || 0);
+          if (scarring > 0) {
+            const scarField = profileEngine.sphereFbm(u, v, profile.seed ^ 0x6a09e667, 12.6, 4);
+            scarMask = sample.land * scarring * smoothstep(0.54, 0.84, scarField) * (0.34 + sample.ridge * 0.66);
+            [r, g, b] = blendBiome(r, g, b, [54, 46, 41], scarMask * 0.72);
+          }
+          if (ruins > 0) {
+            const ruinField = profileEngine.sphereFbm(u, v, profile.seed ^ 0xbb67ae85, 24.8, 3);
+            ruinMask = sample.land * ruins * smoothstep(0.66, 0.86, ruinField) * (1 - sample.mountain * 0.55);
+            [r, g, b] = blendBiome(r, g, b, [91, 96, 94], ruinMask * 0.58);
+          }
+          if (biosphere > 0) {
+            const biosphereField = profileEngine.sphereFbm(u, v, profile.seed ^ 0x3c6ef372, 6.4, 4);
+            biosphereMask = sample.land * biosphere * smoothstep(0.40, 0.72, biosphereField) * (1 - sample.ice) * (1 - sample.mountain * 0.48);
+            [r, g, b] = blendBiome(r, g, b, accentRgb, biosphereMask * 0.26);
+          }
+          if (anomaly > 0) {
+            const anomalyField = profileEngine.sphereFbm(u, v, profile.seed ^ 0xa54ff53a, 9.8, 4);
+            anomalyMask = anomaly * smoothstep(0.58, 0.84, anomalyField) * (0.24 + sample.land * 0.76) * (0.40 + sample.ridge * 0.60);
+            [r, g, b] = blendBiome(r, g, b, accentRgb, anomalyMask * 0.46);
+          }
         }
 
         surface.data[offset] = clamp(r, 0, 255);
@@ -230,25 +257,30 @@
 
         const heightValue = atmosphericBands
           ? clamp(116 + gas.band * 18 + gas.fineBand * 9 + gas.stormCell * 14, 0, 255)
-          : clamp(72 + sample.elevation * 128 + sample.mountain * 52 - sample.ocean * 38, 0, 255);
+          : clamp(72 + sample.elevation * 128 + sample.mountain * 52 - sample.ocean * 38 + scarMask * 22 + ruinMask * 14, 0, 255);
         bump.data[offset] = bump.data[offset + 1] = bump.data[offset + 2] = heightValue;
         bump.data[offset + 3] = 255;
 
         const civilization = clamp(profile.civilization || 0);
         const industrialization = clamp(profile.industrialization || 0);
         const emissiveDensity = clamp(profile.emissiveDensity || 0);
-        let glow = 0;
+        let glow = 0, anomalyGlow = 0;
         if (!atmosphericBands) {
           const urbanNoise = profileEngine.sphereFbm(u, v, profile.seed ^ 0x27d4eb2d, 19.5, 3);
           const cityThreshold = 0.76 - civilization * 0.24;
           const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.14, urbanNoise);
           const city = sample.land * civilization * emissiveDensity * urbanMask * (1 - sample.mountain);
           const thermal = sample.land * industrialization * emissiveDensity * smoothstep(0.30, 0.68, sample.ridge) * smoothstep(0.34, 0.78, profile.temperature) * 0.82;
-          glow = clamp(city + thermal);
+          anomalyGlow = anomalyMask * clamp(profile.anomalyDensity || 0) * 0.92;
+          glow = clamp(city + thermal + anomalyGlow);
         }
-        emissive.data[offset] = Math.min(255, 255 * glow);
-        emissive.data[offset + 1] = Math.min(255, mix(188, 92, industrialization) * glow);
-        emissive.data[offset + 2] = Math.min(255, mix(92, 28, industrialization) * glow);
+        const anomalyShare = glow > 1e-6 ? clamp(anomalyGlow / glow) : 0;
+        const emissiveR = mix(255, accentRgb[0], anomalyShare * 0.92);
+        const emissiveG = mix(mix(188, 92, industrialization), accentRgb[1], anomalyShare * 0.92);
+        const emissiveB = mix(mix(92, 28, industrialization), accentRgb[2], anomalyShare * 0.92);
+        emissive.data[offset] = Math.min(255, emissiveR * glow);
+        emissive.data[offset + 1] = Math.min(255, emissiveG * glow);
+        emissive.data[offset + 2] = Math.min(255, emissiveB * glow);
         emissive.data[offset + 3] = 255;
 
         const coverage = clamp(profile.cloudCoverage || 0);
@@ -266,7 +298,10 @@
           const cloudSoftness = 0.10 + coverage * 0.10;
           const latitude = Math.abs(v * 2 - 1);
           const polarCloud = smoothstep(0.68, 1, latitude) * clamp(profile.moisture || 0) * 0.16;
-          cloudMask = clamp((smoothstep(cloudThreshold - cloudSoftness, cloudThreshold + cloudSoftness, cloudField) + polarCloud) * atmosphere);
+          const haze = clamp(profile.hazeDensity || 0);
+          const hazeField = haze > 0 ? profileEngine.sphereFbm(u, v, profile.seed ^ 0x510e527f, 3.7, 3) : 0;
+          const hazeMask = haze * smoothstep(0.30, 0.74, hazeField) * 0.42;
+          cloudMask = clamp((smoothstep(cloudThreshold - cloudSoftness, cloudThreshold + cloudSoftness, cloudField) + polarCloud + hazeMask) * atmosphere);
         }
         const cloudValue = Math.round(cloudMask * 255);
         cloud.data[offset] = cloud.data[offset + 1] = cloud.data[offset + 2] = cloudValue;
@@ -315,6 +350,9 @@
     const temperature = clamp(profile.temperature || 0);
     const moisture = clamp(profile.moisture || 0);
     const industrialization = clamp(profile.industrialization || 0);
+    const haze = clamp(profile.hazeDensity || 0);
+    const anomaly = clamp(profile.anomalyDensity || 0);
+    const accent = hslToRgb(profile.accentHue || 0, 0.52, 0.54).map(value => value / 255);
     const cold = [0.55, 0.80, 0.96], temperate = [0.38, 0.66, 0.88], warm = [0.86, 0.62, 0.38], industrial = [0.72, 0.42, 0.26];
     const temperateBlend = smoothstep(0.08, 0.52, temperature);
     const warmBlend = smoothstep(0.42, 0.92, temperature);
@@ -322,6 +360,8 @@
     target = target.map((value, index) => mix(value, warm[index], warmBlend));
     target = target.map((value, index) => mix(value, industrial[index], industrialization * 0.46));
     target = target.map((value, index) => mix(value, [0.72, 0.82, 0.90][index], moisture * 0.18));
+    const accentWeight = clamp(haze * 0.16 + anomaly * 0.34);
+    target = target.map((value, index) => mix(value, accent[index], accentWeight));
     return new THREE.Color(target[0], target[1], target[2]);
   }
 
