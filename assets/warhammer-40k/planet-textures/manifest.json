@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "basePool": [
+    "base/alpha.png",
+    "base/beta.png",
+    "base/charlie.png",
+    "base/delta.png",
+    "base/epsilon.png",
+    "base/foxtrot.png",
+    "base/golf.png",
+    "base/hotel.png",
+    "base/india.png",
+    "base/juliet.png",
+    "base/kilo.png",
+    "base/lima.png"
+  ],
+  "biomes": {
+    "grassland": "biome/grassland-placeholder.svg",
+    "jungle": "biome/jungle-placeholder.svg",
+    "ocean": "biome/ocean-placeholder.svg",
+    "iceCap": "biome/ice-cap-placeholder.svg"
+  },
+  "clouds": "clouds/cloud-cover-placeholder.svg",
+  "emissive": {
+    "cityLights": "emissive/night-city-lights-placeholder.svg",
+    "lava": "emissive/lava-fissure-placeholder.svg"
+  },
+  "normal": "normal/neutral-normal-placeholder.svg",
+  "roughness": "roughness/neutral-roughness-placeholder.svg",
+  "masks": {
+    "continent": "masks/continent-mask-placeholder.svg",
+    "coastline": "masks/coastline-mask-placeholder.svg",
+    "river": "masks/river-mask-placeholder.svg"
+  }
+}
