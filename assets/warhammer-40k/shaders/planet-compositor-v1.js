@@ -119,14 +119,17 @@
     const surfaceCanvas = document.createElement('canvas');
     const bumpCanvas = document.createElement('canvas');
     const emissiveCanvas = document.createElement('canvas');
-    surfaceCanvas.width = bumpCanvas.width = emissiveCanvas.width = width;
-    surfaceCanvas.height = bumpCanvas.height = emissiveCanvas.height = height;
+    const cloudCanvas = document.createElement('canvas');
+    surfaceCanvas.width = bumpCanvas.width = emissiveCanvas.width = cloudCanvas.width = width;
+    surfaceCanvas.height = bumpCanvas.height = emissiveCanvas.height = cloudCanvas.height = height;
     const surfaceContext = surfaceCanvas.getContext('2d', { alpha: false });
     const bumpContext = bumpCanvas.getContext('2d', { alpha: false });
     const emissiveContext = emissiveCanvas.getContext('2d', { alpha: false });
+    const cloudContext = cloudCanvas.getContext('2d', { alpha: false });
     const surface = surfaceContext.createImageData(width, height);
     const bump = bumpContext.createImageData(width, height);
     const emissive = emissiveContext.createImageData(width, height);
+    const cloud = cloudContext.createImageData(width, height);
 
     for (let y = 0; y < height; y += 1) {
       const v = (y + 0.5) / height;
@@ -176,47 +179,105 @@
         bump.data[offset + 3] = 255;
 
         const civilization = clamp(profile.civilization || 0);
+        const industrialization = clamp(profile.industrialization || 0);
+        const emissiveDensity = clamp(profile.emissiveDensity || 0);
         const urbanNoise = profileEngine.fbm2(u * 22 + profile.seed * 0.00007, v * 18, profile.seed ^ 0x27d4eb2d, 3);
-        const cityThreshold = 0.73 - civilization * 0.2;
-        const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.12, urbanNoise);
-        const city = sample.land * civilization * urbanMask * (1 - sample.mountain);
-        const lava = profile.template === 'forge'
-          ? sample.land * smoothstep(0.28, 0.62, sample.ridge) * 0.75
-          : 0;
-        const glow = clamp(city + lava);
+        const cityThreshold = 0.76 - civilization * 0.24;
+        const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.14, urbanNoise);
+        const city = sample.land * civilization * emissiveDensity * urbanMask * (1 - sample.mountain);
+        const thermal = sample.land * industrialization * emissiveDensity * smoothstep(0.30, 0.68, sample.ridge) * smoothstep(0.34, 0.78, profile.temperature) * 0.82;
+        const glow = clamp(city + thermal);
         emissive.data[offset] = Math.min(255, 255 * glow);
-        emissive.data[offset + 1] = Math.min(255, (profile.template === 'forge' ? 92 : 188) * glow);
-        emissive.data[offset + 2] = Math.min(255, (profile.template === 'forge' ? 28 : 92) * glow);
+        emissive.data[offset + 1] = Math.min(255, mix(188, 92, industrialization) * glow);
+        emissive.data[offset + 2] = Math.min(255, mix(92, 28, industrialization) * glow);
         emissive.data[offset + 3] = 255;
+
+        const coverage = clamp(profile.cloudCoverage || 0);
+        const atmosphere = clamp(profile.atmosphere || 0);
+        const cloudNoise = profileEngine.fbm2(u * (4.8 + profile.moisture * 2.4) + profile.seed * 0.000019, v * (4.1 + profile.moisture * 1.8), profile.seed ^ 0x165667b1, 5);
+        const cloudWarp = profileEngine.fbm2(u * 11.7 + 7.1, v * 8.9 + profile.seed * 0.000011, profile.seed ^ 0xd3a2646c, 3);
+        const cloudField = cloudNoise * 0.78 + cloudWarp * 0.22;
+        const cloudThreshold = mix(0.80, 0.40, coverage);
+        const cloudSoftness = 0.10 + coverage * 0.10;
+        const latitude = Math.abs(v * 2 - 1);
+        const polarCloud = smoothstep(0.68, 1, latitude) * clamp(profile.moisture || 0) * 0.16;
+        const cloudMask = clamp((smoothstep(cloudThreshold - cloudSoftness, cloudThreshold + cloudSoftness, cloudField) + polarCloud) * atmosphere);
+        const cloudValue = Math.round(cloudMask * 255);
+        cloud.data[offset] = cloud.data[offset + 1] = cloud.data[offset + 2] = cloudValue;
+        cloud.data[offset + 3] = 255;
       }
     }
 
     surfaceContext.putImageData(surface, 0, 0);
     bumpContext.putImageData(bump, 0, 0);
     emissiveContext.putImageData(emissive, 0, 0);
+    cloudContext.putImageData(cloud, 0, 0);
     return Object.freeze({
       map: canvasTexture(THREE, surfaceCanvas, true),
       bumpMap: canvasTexture(THREE, bumpCanvas, false),
       emissiveMap: canvasTexture(THREE, emissiveCanvas, false),
+      cloudMap: canvasTexture(THREE, cloudCanvas, false),
       profile
     });
   }
 
   function materialFromTextures(THREE, textures, fallbackColor = 0x8c8c82) {
-    const template = textures.profile.template;
+    const profile = textures.profile;
+    const industrialization = clamp(profile.industrialization || 0);
+    const temperature = clamp(profile.temperature || 0);
+    const emissiveDensity = clamp(profile.emissiveDensity || 0);
     return new THREE.MeshStandardMaterial({
       color: 0xffffff,
       map: textures.map,
       bumpMap: textures.bumpMap,
-      bumpScale: template === 'ice' ? 0.018 : template === 'forge' ? 0.032 : 0.026,
-      roughness: template === 'ice' ? 0.48 : template === 'forge' ? 0.66 : 0.82,
-      metalness: template === 'forge' ? 0.34 : 0.03,
-      emissive: template === 'forge' ? 0xff5828 : 0xffc36d,
+      bumpScale: mix(0.018, 0.034, clamp(profile.ridgeStrength || 0.4)),
+      roughness: clamp(0.92 - industrialization * 0.28 - (1 - temperature) * 0.16, 0.42, 0.94),
+      metalness: clamp(0.02 + industrialization * 0.38, 0.02, 0.42),
+      emissive: 0xffffff,
       emissiveMap: textures.emissiveMap,
-      emissiveIntensity: template === 'forge' ? 1.15 : 0.38,
+      emissiveIntensity: 0.22 + emissiveDensity * 1.02,
       userData: { fallbackColor }
     });
   }
 
-  window.CafarronPlanetCompositorV1 = Object.freeze({ loadImage, compose, materialFromTextures });
+  function atmosphereColor(THREE, profile) {
+    const temperature = clamp(profile.temperature || 0);
+    const moisture = clamp(profile.moisture || 0);
+    const industrialization = clamp(profile.industrialization || 0);
+    const cold = [0.55, 0.80, 0.96], temperate = [0.38, 0.66, 0.88], warm = [0.86, 0.62, 0.38], industrial = [0.72, 0.42, 0.26];
+    const temperateBlend = smoothstep(0.08, 0.52, temperature);
+    const warmBlend = smoothstep(0.42, 0.92, temperature);
+    let target = cold.map((value, index) => mix(value, temperate[index], temperateBlend));
+    target = target.map((value, index) => mix(value, warm[index], warmBlend));
+    target = target.map((value, index) => mix(value, industrial[index], industrialization * 0.46));
+    target = target.map((value, index) => mix(value, [0.72, 0.82, 0.90][index], moisture * 0.18));
+    return new THREE.Color(target[0], target[1], target[2]);
+  }
+
+  function layerMaterialsFromTextures(THREE, textures) {
+    const profile = textures.profile;
+    const atmosphere = clamp(profile.atmosphere || 0);
+    const coverage = clamp(profile.cloudCoverage || 0);
+    return Object.freeze({
+      cloudMaterial: new THREE.MeshStandardMaterial({
+        color: 0xf0eee5,
+        alphaMap: textures.cloudMap,
+        transparent: true,
+        opacity: atmosphere * (0.24 + coverage * 0.48),
+        depthWrite: false,
+        roughness: 1,
+        metalness: 0
+      }),
+      atmosphereMaterial: new THREE.MeshBasicMaterial({
+        color: atmosphereColor(THREE, profile),
+        transparent: true,
+        opacity: atmosphere * 0.13,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      })
+    });
+  }
+
+  window.CafarronPlanetCompositorV1 = Object.freeze({ loadImage, compose, materialFromTextures, layerMaterialsFromTextures });
 })();

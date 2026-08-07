@@ -71,10 +71,10 @@
   });
 
   const TEMPLATE_RANGES = Object.freeze({
-    desert: { geologyTags: ['desert','arid','badlands'], seaLevel: [0.58,0.76], temperature: [0.68,0.94], moisture: [0.04,0.28], polarExtent: [0,0.08], cloudCoverage: [0.02,0.18], civilization: [0.04,0.32] },
-    forge: { geologyTags: ['forge','industrial','basalt','volcanic'], seaLevel: [0.52,0.74], temperature: [0.46,0.82], moisture: [0.12,0.44], polarExtent: [0,0.10], cloudCoverage: [0.25,0.64], civilization: [0.82,1] },
-    ice: { geologyTags: ['ice','glacial','rock'], seaLevel: [0.48,0.66], temperature: [0.02,0.24], moisture: [0.28,0.72], polarExtent: [0.48,0.88], cloudCoverage: [0.22,0.58], civilization: [0.02,0.28] },
-    temperate: { geologyTags: ['rock','soil','highland'], seaLevel: [0.44,0.62], temperature: [0.42,0.68], moisture: [0.42,0.72], polarExtent: [0.08,0.22], cloudCoverage: [0.22,0.55], civilization: [0.14,0.68] }
+    desert: { geologyTags: ['desert','arid','badlands'], seaLevel: [0.58,0.76], temperature: [0.68,0.94], moisture: [0.04,0.28], polarExtent: [0,0.08], cloudCoverage: [0.02,0.18], civilization: [0.04,0.32], industrialization: [0.02,0.28], atmosphere: [0.42,0.86], emissiveDensity: [0.01,0.18] },
+    forge: { geologyTags: ['forge','industrial','basalt','volcanic'], seaLevel: [0.52,0.74], temperature: [0.46,0.82], moisture: [0.12,0.44], polarExtent: [0,0.10], cloudCoverage: [0.25,0.64], civilization: [0.82,1], industrialization: [0.86,1], atmosphere: [0.58,0.96], emissiveDensity: [0.72,1] },
+    ice: { geologyTags: ['ice','glacial','rock'], seaLevel: [0.48,0.66], temperature: [0.02,0.24], moisture: [0.28,0.72], polarExtent: [0.48,0.88], cloudCoverage: [0.22,0.58], civilization: [0.02,0.28], industrialization: [0.01,0.22], atmosphere: [0.34,0.82], emissiveDensity: [0.01,0.15] },
+    temperate: { geologyTags: ['rock','soil','highland'], seaLevel: [0.44,0.62], temperature: [0.42,0.68], moisture: [0.42,0.72], polarExtent: [0.08,0.22], cloudCoverage: [0.22,0.55], civilization: [0.14,0.68], industrialization: [0.08,0.62], atmosphere: [0.68,1], emissiveDensity: [0.06,0.52] }
   });
 
   function materialCandidates(tags) {
@@ -119,6 +119,9 @@
       polarExtent: between(ranges.polarExtent, roll),
       cloudCoverage: between(ranges.cloudCoverage, roll),
       civilization: between(ranges.civilization, roll),
+      industrialization: between(ranges.industrialization, roll),
+      atmosphere: between(ranges.atmosphere, roll),
+      emissiveDensity: between(ranges.emissiveDensity, roll),
       ridgeStrength: lerp(0.18, 0.72, roll()),
       mountainThreshold: lerp(0.64, 0.82, roll()),
       biomeWarp: lerp(0.7, 2.1, roll())

@@ -3,8 +3,8 @@
 
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
-  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=2';
-  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=2';
+  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=3';
+  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=3';
   const MODES = new Set(['select', 'orbit', 'pan', 'zoom']);
   const PASSIVE_DWELL = 26000;
   const PASSIVE_ORBIT_SPEED = 0.000035;
@@ -49,7 +49,7 @@
         if (!window.CafarronPlanetProfileV1) await loadScript(PLANET_PROFILE_URL);
         if (!window.CafarronPlanetCompositorV1) await loadScript(PLANET_COMPOSITOR_URL);
         const profileEngine = window.CafarronPlanetProfileV1, compositor = window.CafarronPlanetCompositorV1;
-        if (!profileEngine?.createProfile || !compositor?.compose || !compositor?.materialFromTextures) throw new Error('Planetary composition cogitators failed to answer.');
+        if (!profileEngine?.createProfile || !compositor?.compose || !compositor?.materialFromTextures || !compositor?.layerMaterialsFromTextures) throw new Error('Planetary composition cogitators failed to answer.');
         return { profileEngine, compositor };
       })();
       planetCompositorPromise.catch(() => { planetCompositorPromise = null; });
@@ -85,47 +85,8 @@
     return 'unsealed';
   }
 
-  function canvasTexture(THREE, canvas) {
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.anisotropy = 4;
-    texture.needsUpdate = true;
-    return texture;
-  }
-
-  function forgeTextureSet(THREE, seed) {
-    const width = 512, height = 256, surface = document.createElement('canvas'), emissive = document.createElement('canvas');
-    surface.width = emissive.width = width; surface.height = emissive.height = height;
-    const context = surface.getContext('2d', { alpha: false }), glow = emissive.getContext('2d', { alpha: false }), roll = random(seed ^ 0x464f5247), base = context.createLinearGradient(0, 0, 0, height);
-    base.addColorStop(0, '#353431'); base.addColorStop(0.28, '#604434'); base.addColorStop(0.52, '#252a2a'); base.addColorStop(0.74, '#6c3024'); base.addColorStop(1, '#222523');
-    context.fillStyle = base; context.fillRect(0, 0, width, height); glow.fillStyle = '#020202'; glow.fillRect(0, 0, width, height); context.globalCompositeOperation = 'screen';
-    for (let plate = 0; plate < 120; plate += 1) { const x = roll() * width, y = roll() * height, w = 8 + roll() * 48, h = 3 + roll() * 20; context.fillStyle = `rgba(${45 + Math.floor(roll() * 55)},${38 + Math.floor(roll() * 45)},${34 + Math.floor(roll() * 35)},${0.08 + roll() * 0.14})`; context.fillRect(x, y, w, h); context.strokeStyle = `rgba(12,14,14,${0.18 + roll() * 0.3})`; context.strokeRect(x, y, w, h); }
-    context.globalCompositeOperation = 'multiply';
-    for (let trench = 0; trench < 46; trench += 1) { const y = roll() * height; context.beginPath(); context.moveTo(0, y); for (let x = 0; x <= width; x += 10) context.lineTo(x, y + Math.sin(x * (0.012 + roll() * 0.014) + trench) * (2 + roll() * 8)); context.strokeStyle = `rgba(4,6,6,${0.14 + roll() * 0.22})`; context.lineWidth = 1 + roll() * 5; context.stroke(); }
-    context.globalCompositeOperation = 'source-over'; glow.globalCompositeOperation = 'screen';
-    for (let furnace = 0; furnace < 95; furnace += 1) { const x = roll() * width, y = roll() * height, radius = 0.8 + roll() * 4.8, halo = context.createRadialGradient(x, y, 0, x, y, radius * 3.5); halo.addColorStop(0, 'rgba(255,198,84,.9)'); halo.addColorStop(0.3, 'rgba(232,77,28,.48)'); halo.addColorStop(1, 'rgba(80,15,5,0)'); context.fillStyle = halo; context.fillRect(x - radius * 4, y - radius * 4, radius * 8, radius * 8); const emission = glow.createRadialGradient(x, y, 0, x, y, radius * 4.5); emission.addColorStop(0, 'rgba(255,232,164,1)'); emission.addColorStop(0.22, 'rgba(255,101,28,.92)'); emission.addColorStop(1, 'rgba(0,0,0,0)'); glow.fillStyle = emission; glow.fillRect(x - radius * 5, y - radius * 5, radius * 10, radius * 10); }
-    for (let network = 0; network < 34; network += 1) { const y = roll() * height, start = roll() * width, length = 35 + roll() * 150; context.strokeStyle = `rgba(155,92,49,${0.12 + roll() * 0.17})`; glow.strokeStyle = `rgba(255,78,18,${0.32 + roll() * 0.36})`; context.lineWidth = 0.5 + roll() * 1.4; glow.lineWidth = 0.6 + roll() * 1.8; context.beginPath(); glow.beginPath(); context.moveTo(start, y); glow.moveTo(start, y); for (let step = 0; step < 6; step += 1) { const x = start + length * (step / 5), offset = (roll() - 0.5) * 16; context.lineTo(x, y + offset); glow.lineTo(x, y + offset); } context.stroke(); glow.stroke(); }
-    return { map: canvasTexture(THREE, surface), emissiveMap: canvasTexture(THREE, emissive) };
-  }
-
-  function iceTextureSet(THREE, seed) {
-    const width = 512, height = 256, surface = document.createElement('canvas'), emissive = document.createElement('canvas');
-    surface.width = emissive.width = width; surface.height = emissive.height = height;
-    const context = surface.getContext('2d', { alpha: false }), glow = emissive.getContext('2d', { alpha: false }), roll = random(seed ^ 0x49434557), base = context.createLinearGradient(0, 0, 0, height);
-    base.addColorStop(0, '#f2fbff'); base.addColorStop(0.18, '#b8d8e8'); base.addColorStop(0.48, '#6f9fbd'); base.addColorStop(0.72, '#d7eef5'); base.addColorStop(1, '#edf7fb'); context.fillStyle = base; context.fillRect(0, 0, width, height); glow.fillStyle = '#03070a'; glow.fillRect(0, 0, width, height); context.globalCompositeOperation = 'screen';
-    for (let shelf = 0; shelf < 95; shelf += 1) { const y = roll() * height; context.beginPath(); context.moveTo(0, y); for (let x = 0; x <= width; x += 6) context.lineTo(x, y + Math.sin(x * (0.016 + roll() * 0.026) + shelf) * (1 + roll() * 7)); context.strokeStyle = `rgba(${190 + Math.floor(roll() * 60)},${220 + Math.floor(roll() * 35)},255,${0.06 + roll() * 0.17})`; context.lineWidth = 1 + roll() * 4; context.stroke(); }
-    context.globalCompositeOperation = 'multiply';
-    for (let fissure = 0; fissure < 68; fissure += 1) { let x = roll() * width, y = roll() * height; context.beginPath(); context.moveTo(x, y); glow.beginPath(); glow.moveTo(x, y); for (let step = 0; step < 10; step += 1) { x += (roll() - 0.5) * 28; y += 6 + roll() * 14; context.lineTo(x, y); glow.lineTo(x, y); } context.strokeStyle = `rgba(23,67,92,${0.12 + roll() * 0.26})`; context.lineWidth = 0.7 + roll() * 2.2; context.stroke(); glow.strokeStyle = `rgba(99,210,255,${0.18 + roll() * 0.28})`; glow.lineWidth = 0.5 + roll() * 1.4; glow.stroke(); }
-    context.globalCompositeOperation = 'source-over';
-    for (let basin = 0; basin < 42; basin += 1) { const x = roll() * width, y = roll() * height, rx = 4 + roll() * 18, ry = rx * (0.25 + roll() * 0.35); context.beginPath(); context.ellipse(x, y, rx, ry, roll() * Math.PI, 0, Math.PI * 2); context.fillStyle = `rgba(65,113,142,${0.04 + roll() * 0.12})`; context.fill(); context.strokeStyle = `rgba(232,250,255,${0.1 + roll() * 0.18})`; context.stroke(); }
-    return { map: canvasTexture(THREE, surface), emissiveMap: canvasTexture(THREE, emissive) };
-  }
-
-  function registeredPlanetMaterial(THREE, template, seed, fallbackColor) {
-    if (template === 'forge') { const textures = forgeTextureSet(THREE, seed); return new THREE.MeshStandardMaterial({ color: 0xffffff, map: textures.map, bumpMap: textures.map, bumpScale: 0.026, emissive: 0xff4b19, emissiveMap: textures.emissiveMap, emissiveIntensity: 1.15, roughness: 0.68, metalness: 0.46 }); }
-    if (template === 'ice') { const textures = iceTextureSet(THREE, seed); return new THREE.MeshStandardMaterial({ color: 0xffffff, map: textures.map, bumpMap: textures.map, bumpScale: 0.024, emissive: 0x56b8e8, emissiveMap: textures.emissiveMap, emissiveIntensity: 0.32, roughness: 0.54, metalness: 0.04 }); }
-    return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.18, roughness: 0.76, metalness: 0.08 });
+  function registeredPlanetFallbackMaterial(THREE, fallbackColor) {
+    return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.12, roughness: 0.78, metalness: 0.06 });
   }
 
   function routeStyle(layer) { return { 'major-warp': [0xd8b35e, 0.82, false, 0, 0], trade: [0x4fa3a5, 0.72, true, 2.8, 1.25], 'local-navigation': [0x7390bd, 0.52, true, 1.35, 1.25], exploratory: [0xe2e5df, 0.19, true, 0.7, 1.45] }[layer] || [0x817963, 0.4, true, 1.2, 1.2]; }
@@ -176,18 +137,31 @@
   }
   function disposeObject(root) { if (!root) return; root.traverse(object => { object.geometry?.dispose?.(); const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.filter(Boolean).forEach(disposeMaterial); }); root.removeFromParent(); }
 
-  async function composeDesertPlanet(THREE, planet, systemGroup, node, records, seed, fallbackColor) {
+  async function composeRegisteredPlanet(THREE, planet, systemGroup, node, records, seed, fallbackColor, template) {
     try {
       const { profileEngine, compositor } = await planetaryCompositor();
-      const profile = profileEngine.createProfile(`${node.id}|registered-world|${seed}`, systemIdentityText(node, records), 'desert');
+      const profile = profileEngine.createProfile(`${node.id}|registered-world|${seed}`, systemIdentityText(node, records), template);
       const textures = await compositor.compose(THREE, profile, { width: 256, height: 128 });
       const material = compositor.materialFromTextures(THREE, textures, fallbackColor);
-      if (!planet.parent || !systemGroup.parent) { disposeMaterial(material); return; }
+      const { cloudMaterial, atmosphereMaterial } = compositor.layerMaterialsFromTextures(THREE, textures);
+      const radius = Number(planet.geometry?.parameters?.radius || 0.25);
+      const cloudLayer = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.026, 24, 18), cloudMaterial);
+      const atmosphereLayer = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.10, 24, 18), atmosphereMaterial);
+      cloudLayer.userData.planetLayer = 'clouds';
+      atmosphereLayer.userData.planetLayer = 'atmosphere';
+      if (!planet.parent || !systemGroup.parent) {
+        disposeMaterial(material); disposeMaterial(cloudMaterial); disposeMaterial(atmosphereMaterial);
+        cloudLayer.geometry.dispose(); atmosphereLayer.geometry.dispose();
+        return;
+      }
       const previous = planet.material;
       planet.material = material;
+      planet.add(cloudLayer, atmosphereLayer);
+      planet.userData.cloudLayer = cloudLayer;
+      planet.userData.planetProfile = profile;
       disposeMaterial(previous);
     } catch (error) {
-      console.warn(`Desert world composition rite failed for ${node.name || node.id}; retaining geological fallback.`, error);
+      console.warn(`${template} world composition rite failed for ${node.name || node.id}; retaining geological fallback.`, error);
     }
   }
 
@@ -268,11 +242,11 @@
         const orbit = new THREE.Mesh(new THREE.RingGeometry(body.radius - 0.012, body.radius + 0.012, 72), new THREE.MeshBasicMaterial({ color: index === profile.registeredIndex ? 0xd9bc69 : 0x59645e, transparent: true, opacity: index === profile.registeredIndex ? 0.62 : 0.32, side: THREE.DoubleSide }));
         orbit.rotation.x = Math.PI / 2 + body.inclination; group.add(orbit);
         const pivot = new THREE.Group(); pivot.rotation.y = body.phase; pivot.rotation.z = body.inclination;
-        const material = index === profile.registeredIndex ? registeredPlanetMaterial(THREE, profile.template, profile.seed ^ index, body.color) : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.76, metalness: 0.08 });
+        const material = index === profile.registeredIndex ? registeredPlanetFallbackMaterial(THREE, body.color) : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.76, metalness: 0.08 });
         const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 22, 16), material); planet.position.x = body.radius;
-        if (index === profile.registeredIndex) { const shellColor = profile.template === 'forge' ? 0x8a3a22 : profile.template === 'desert' ? 0xd49a53 : profile.template === 'ice' ? 0x9adcf4 : 0xe0c77f, shellOpacity = profile.template === 'forge' ? 0.13 : profile.template === 'desert' ? 0.09 : profile.template === 'ice' ? 0.14 : 0.13; planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 16, 12), new THREE.MeshBasicMaterial({ color: shellColor, transparent: true, opacity: shellOpacity, wireframe: profile.template === 'unsealed' }))); }
+        if (index === profile.registeredIndex && profile.template === 'unsealed') planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 16, 12), new THREE.MeshBasicMaterial({ color: 0xe0c77f, transparent: true, opacity: 0.13, wireframe: true })));
         pivot.add(planet);
-        if (index === profile.registeredIndex && profile.template === 'desert') void composeDesertPlanet(THREE, planet, group, node, records, profile.seed ^ index, body.color);
+        if (index === profile.registeredIndex && ['desert', 'forge', 'ice'].includes(profile.template)) void composeRegisteredPlanet(THREE, planet, group, node, records, profile.seed ^ index, body.color, profile.template);
         localObjects.push({ object: planet, name: body.name, kind: 'planet', priority: index === profile.registeredIndex ? 90 : 70 - index });
         for (let moonIndex = 0; moonIndex < body.moons; moonIndex += 1) {
           const moonPivot = new THREE.Group(); moonPivot.position.copy(planet.position); moonPivot.rotation.y = moonIndex * Math.PI + profile.seed * 0.0001;
@@ -399,7 +373,7 @@
     function syncFullAuspexState() { fullAuspex = document.fullscreenElement === stage; stage.classList.toggle('wh-full-auspex-active', fullAuspex); workspace?.classList.toggle('wh-full-auspex-active', fullAuspex); stage.dataset.fullAuspex = String(fullAuspex); if (workspace) workspace.dataset.fullAuspex = String(fullAuspex); stage.style.width = fullAuspex ? '100vw' : ''; stage.style.height = fullAuspex ? '100vh' : ''; stage.style.minHeight = fullAuspex ? '100vh' : ''; fullAuspexToggle.textContent = fullAuspex ? 'Stand Down Full Auspex' : 'Invoke Full Auspex'; fullAuspexToggle.setAttribute('aria-pressed', fullAuspex ? 'true' : 'false'); refreshLayout(); }
     const handleTheatreToggle = () => setTheatreState(!surveyTheatre), handleFullAuspexToggle = () => { void toggleFullAuspex(); }; theatreToggle.addEventListener('click', handleTheatreToggle); docketToggle.addEventListener('click', toggleContactDocket); fullAuspexToggle.addEventListener('click', handleFullAuspexToggle); document.addEventListener('fullscreenchange', syncFullAuspexState); const observer = new ResizeObserver(resize); observer.observe(stage); resize();
 
-    function animate(now) { if (!running) return; raf = requestAnimationFrame(animate); updateMove(now); updatePassive(now); if (expandedSystem) { expandedSystem.star.rotation.y = now * 0.00008; expandedSystem.moving.forEach((body, index) => { body.pivot.rotation.y += body.speed * Math.min(80, Math.max(1, now - (body.last || now))); body.last = now; body.planet.rotation.y += 0.0016 + index * 0.0002; body.pivot.children.slice(1).forEach(moonPivot => { moonPivot.rotation.y += body.moonSpeed; }); }); expandedSystem.traffic.forEach(craft => { craft.pivot.rotation.y += craft.speed; }); dirtyLabels = true; } ambientTraffic.forEach(entry => { entry.phase = (entry.phase + entry.speed * 16 + 1) % 1; entry.craft.position.copy(entry.curve.getPoint(entry.phase)); }); envelopeEffects.forEach(effect => { const visible = effect.kind === 'hazard' ? visibility.hazards : visibility.regions; if (!visible) return; const pulse = 0.5 + 0.5 * Math.sin(now * (effect.kind === 'hazard' ? 0.0011 : 0.00055) + effect.phase); effect.pulse.scale.copy(effect.mesh.scale).multiplyScalar(0.68 + pulse * 0.16); effect.pulse.material.opacity = effect.baseOpacity * (0.35 + pulse * 0.7); effect.knots.forEach(item => { const drift = Math.sin(now * item.speed + item.phase) * item.amplitude; item.knot.position.y += drift * 0.004; item.knot.material.opacity = (effect.kind === 'hazard' ? 0.18 : 0.07) + pulse * (effect.kind === 'hazard' ? 0.28 : 0.12); }); }); if (!transition && !passive) controls.update(); renderer.render(scene, camera); if (dirtyLabels) layoutLabels(); }
+    function animate(now) { if (!running) return; raf = requestAnimationFrame(animate); updateMove(now); updatePassive(now); if (expandedSystem) { expandedSystem.star.rotation.y = now * 0.00008; expandedSystem.moving.forEach((body, index) => { body.pivot.rotation.y += body.speed * Math.min(80, Math.max(1, now - (body.last || now))); body.last = now; body.planet.rotation.y += 0.0016 + index * 0.0002; if (body.planet.userData.cloudLayer) body.planet.userData.cloudLayer.rotation.y += 0.00032 + index * 0.00003; body.pivot.children.slice(1).forEach(moonPivot => { moonPivot.rotation.y += body.moonSpeed; }); }); expandedSystem.traffic.forEach(craft => { craft.pivot.rotation.y += craft.speed; }); dirtyLabels = true; } ambientTraffic.forEach(entry => { entry.phase = (entry.phase + entry.speed * 16 + 1) % 1; entry.craft.position.copy(entry.curve.getPoint(entry.phase)); }); envelopeEffects.forEach(effect => { const visible = effect.kind === 'hazard' ? visibility.hazards : visibility.regions; if (!visible) return; const pulse = 0.5 + 0.5 * Math.sin(now * (effect.kind === 'hazard' ? 0.0011 : 0.00055) + effect.phase); effect.pulse.scale.copy(effect.mesh.scale).multiplyScalar(0.68 + pulse * 0.16); effect.pulse.material.opacity = effect.baseOpacity * (0.35 + pulse * 0.7); effect.knots.forEach(item => { const drift = Math.sin(now * item.speed + item.phase) * item.amplitude; item.knot.position.y += drift * 0.004; item.knot.material.opacity = (effect.kind === 'hazard' ? 0.18 : 0.07) + pulse * (effect.kind === 'hazard' ? 0.28 : 0.12); }); }); if (!transition && !passive) controls.update(); renderer.render(scene, camera); if (dirtyLabels) layoutLabels(); }
     function pause() { running = false; cancelAnimationFrame(raf); }
     function resume() { if (!running) { running = true; dirtyLabels = true; passiveLastFrame = performance.now(); raf = requestAnimationFrame(animate); } }
     function setMode(value) { if (MODES.has(value)) { if (passive) stopPassive('mode'); mode = value; applyMode(); } }
