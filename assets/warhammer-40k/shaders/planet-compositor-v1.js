@@ -67,15 +67,9 @@
       const nr = (0.213 + cosA * 0.787 - sinA * 0.213) * rr + (0.715 - cosA * 0.715 - sinA * 0.715) * gg + (0.072 - cosA * 0.072 + sinA * 0.928) * bb;
       const ng = (0.213 - cosA * 0.213 + sinA * 0.143) * rr + (0.715 + cosA * 0.285 + sinA * 0.140) * gg + (0.072 - cosA * 0.072 - sinA * 0.283) * bb;
       const nb = (0.213 - cosA * 0.213 - sinA * 0.787) * rr + (0.715 - cosA * 0.715 + sinA * 0.715) * gg + (0.072 + cosA * 0.928 + sinA * 0.072) * bb;
-      rr = nr;
-      gg = ng;
-      bb = nb;
+      rr = nr; gg = ng; bb = nb;
     }
-    return [
-      Math.max(0, Math.min(255, rr)),
-      Math.max(0, Math.min(255, gg)),
-      Math.max(0, Math.min(255, bb))
-    ];
+    return [clamp(rr, 0, 255), clamp(gg, 0, 255), clamp(bb, 0, 255)];
   }
 
   function canvasTexture(THREE, canvas, srgb = true) {
@@ -88,16 +82,45 @@
     return texture;
   }
 
-  function blendChannel(value, target, weight) {
-    return mix(value, target, clamp(weight));
+  function blendChannel(value, target, weight) { return mix(value, target, clamp(weight)); }
+  function blendBiome(r, g, b, target, weight) {
+    return [blendChannel(r, target[0], weight), blendChannel(g, target[1], weight), blendChannel(b, target[2], weight)];
   }
 
-  function blendBiome(r, g, b, target, weight) {
-    return [
-      blendChannel(r, target[0], weight),
-      blendChannel(g, target[1], weight),
-      blendChannel(b, target[2], weight)
-    ];
+  function wrap01(value) {
+    const wrapped = value % 1;
+    return wrapped < 0 ? wrapped + 1 : wrapped;
+  }
+
+  function wrappedDelta(value, center) {
+    let delta = wrap01(value) - wrap01(center);
+    if (delta > 0.5) delta -= 1;
+    if (delta < -0.5) delta += 1;
+    return delta;
+  }
+
+  function capCenter(seed, north) {
+    const mixed = north
+      ? Math.imul((seed ^ 0x9e3779b9) >>> 0, 0x85ebca6b)
+      : Math.imul((seed ^ 0xc2b2ae35) >>> 0, 0x27d4eb2d);
+    return (mixed >>> 0) / 4294967296;
+  }
+
+  function polarCoordinates(u, v, seed) {
+    const pole = Math.abs(v * 2 - 1);
+    const blend = smoothstep(0.54, 0.97, pole);
+    if (blend <= 0) return { u: wrap01(u), v, blend: 0 };
+    const latitude = (v - 0.5) * Math.PI;
+    const circumference = Math.max(0.035, Math.cos(latitude));
+    const center = capCenter(seed, v < 0.5);
+    const longitudeScale = mix(1, circumference, blend);
+    return { u: wrap01(center + wrappedDelta(u, center) * longitudeScale), v, blend };
+  }
+
+  function imageOffset(imageData, width, height, u, v) {
+    const x = Math.min(width - 1, Math.max(0, Math.floor(wrap01(u) * width)));
+    const y = Math.min(height - 1, Math.max(0, Math.floor(clamp(v) * height)));
+    return (y * width + x) * 4;
   }
 
   async function compose(THREE, profile, options = {}) {
@@ -136,8 +159,11 @@
       for (let x = 0; x < width; x += 1) {
         const u = (x + 0.5) / width;
         const offset = (y * width + x) * 4;
-        const sample = profileEngine.sample(profile, u, v);
-        const tinted = tintPixel(geology.data[offset], geology.data[offset + 1], geology.data[offset + 2], profile);
+        const mapped = polarCoordinates(u, v, profile.seed);
+        const sourceOffset = imageOffset(geology, width, height, mapped.u, mapped.v);
+        const grassOffset = grass ? imageOffset(grass, width, height, mapped.u, mapped.v) : 0;
+        const sample = profileEngine.sample(profile, mapped.u, mapped.v);
+        const tinted = tintPixel(geology.data[sourceOffset], geology.data[sourceOffset + 1], geology.data[sourceOffset + 2], profile);
         let r = tinted[0], g = tinted[1], b = tinted[2];
 
         const deep = clamp((profile.seaLevel - sample.elevation + 0.10) * 4.0);
@@ -148,9 +174,9 @@
 
         if (grass) {
           const vegetation = sample.grassland * sample.land;
-          r = mix(r, grass.data[offset], vegetation * 0.58);
-          g = mix(g, grass.data[offset + 1], vegetation * 0.68);
-          b = mix(b, grass.data[offset + 2], vegetation * 0.54);
+          r = mix(r, grass.data[grassOffset], vegetation * 0.58);
+          g = mix(g, grass.data[grassOffset + 1], vegetation * 0.68);
+          b = mix(b, grass.data[grassOffset + 2], vegetation * 0.54);
         }
 
         const biomeWeights = [
@@ -160,28 +186,23 @@
           [[102, 99, 91], sample.mountain * sample.land * 0.54],
           [[210, 235, 244], sample.ice * sample.land * 0.72]
         ];
-        for (const [target, weight] of biomeWeights) {
-          [r, g, b] = blendBiome(r, g, b, target, weight);
-        }
+        for (const [target, weight] of biomeWeights) [r, g, b] = blendBiome(r, g, b, target, weight);
 
         const coastMix = sample.coast * sample.land * 0.42;
-        r = mix(r, 194, coastMix);
-        g = mix(g, 167, coastMix);
-        b = mix(b, 118, coastMix);
-
-        surface.data[offset] = Math.max(0, Math.min(255, r));
-        surface.data[offset + 1] = Math.max(0, Math.min(255, g));
-        surface.data[offset + 2] = Math.max(0, Math.min(255, b));
+        r = mix(r, 194, coastMix); g = mix(g, 167, coastMix); b = mix(b, 118, coastMix);
+        surface.data[offset] = clamp(r, 0, 255);
+        surface.data[offset + 1] = clamp(g, 0, 255);
+        surface.data[offset + 2] = clamp(b, 0, 255);
         surface.data[offset + 3] = 255;
 
-        const heightValue = Math.max(0, Math.min(255, 72 + sample.elevation * 128 + sample.mountain * 52 - sample.ocean * 38));
+        const heightValue = clamp(72 + sample.elevation * 128 + sample.mountain * 52 - sample.ocean * 38, 0, 255);
         bump.data[offset] = bump.data[offset + 1] = bump.data[offset + 2] = heightValue;
         bump.data[offset + 3] = 255;
 
         const civilization = clamp(profile.civilization || 0);
         const industrialization = clamp(profile.industrialization || 0);
         const emissiveDensity = clamp(profile.emissiveDensity || 0);
-        const urbanNoise = profileEngine.fbm2(u * 22 + profile.seed * 0.00007, v * 18, profile.seed ^ 0x27d4eb2d, 3);
+        const urbanNoise = profileEngine.fbm2(mapped.u * 22 + profile.seed * 0.00007, mapped.v * 18, profile.seed ^ 0x27d4eb2d, 3);
         const cityThreshold = 0.76 - civilization * 0.24;
         const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.14, urbanNoise);
         const city = sample.land * civilization * emissiveDensity * urbanMask * (1 - sample.mountain);
@@ -194,8 +215,8 @@
 
         const coverage = clamp(profile.cloudCoverage || 0);
         const atmosphere = clamp(profile.atmosphere || 0);
-        const cloudNoise = profileEngine.fbm2(u * (4.8 + profile.moisture * 2.4) + profile.seed * 0.000019, v * (4.1 + profile.moisture * 1.8), profile.seed ^ 0x165667b1, 5);
-        const cloudWarp = profileEngine.fbm2(u * 11.7 + 7.1, v * 8.9 + profile.seed * 0.000011, profile.seed ^ 0xd3a2646c, 3);
+        const cloudNoise = profileEngine.fbm2(mapped.u * (4.8 + profile.moisture * 2.4) + profile.seed * 0.000019, mapped.v * (4.1 + profile.moisture * 1.8), profile.seed ^ 0x165667b1, 5);
+        const cloudWarp = profileEngine.fbm2(mapped.u * 11.7 + 7.1, mapped.v * 8.9 + profile.seed * 0.000011, profile.seed ^ 0xd3a2646c, 3);
         const cloudField = cloudNoise * 0.78 + cloudWarp * 0.22;
         const cloudThreshold = mix(0.80, 0.40, coverage);
         const cloudSoftness = 0.10 + coverage * 0.10;
