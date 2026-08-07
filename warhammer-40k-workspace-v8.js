@@ -6,7 +6,7 @@
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
   const ASSAY_PATH = 'warhammer-40k-survey-assay-v8.js?v=8';
-  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=14';
+  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=15';
   const loadedScripts = new Map();
 
   const state = {
