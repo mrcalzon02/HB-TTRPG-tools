@@ -123,6 +123,22 @@
     return (y * width + x) * 4;
   }
 
+  function featherHorizontalSeam(imageData, width, height, fraction = 0.035) {
+    const band = Math.max(2, Math.min(Math.floor(width * 0.08), Math.round(width * fraction)));
+    for (let y = 0; y < height; y += 1) {
+      for (let offset = 0; offset < band; offset += 1) {
+        const left = (y * width + offset) * 4;
+        const right = (y * width + (width - 1 - offset)) * 4;
+        const blend = smoothstep(0, Math.max(1, band - 1), offset);
+        for (let channel = 0; channel < 3; channel += 1) {
+          const midpoint = (imageData.data[left + channel] + imageData.data[right + channel]) * 0.5;
+          imageData.data[left + channel] = mix(midpoint, imageData.data[left + channel], blend);
+          imageData.data[right + channel] = mix(midpoint, imageData.data[right + channel], blend);
+        }
+      }
+    }
+  }
+
   async function compose(THREE, profile, options = {}) {
     const profileEngine = window.CafarronPlanetProfileV1;
     if (!profileEngine?.sample) throw new Error('Planet profile engine has not answered the Cartographica compositor.');
@@ -229,6 +245,10 @@
       }
     }
 
+    featherHorizontalSeam(surface, width, height);
+    featherHorizontalSeam(bump, width, height);
+    featherHorizontalSeam(emissive, width, height);
+    featherHorizontalSeam(cloud, width, height);
     surfaceContext.putImageData(surface, 0, 0);
     bumpContext.putImageData(bump, 0, 0);
     emissiveContext.putImageData(emissive, 0, 0);
