@@ -4,7 +4,7 @@
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
   const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=5';
-  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=3';
+  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=4';
   const MODES = new Set(['select', 'orbit', 'pan', 'zoom']);
   const PASSIVE_DWELL = 26000;
   const PASSIVE_ORBIT_SPEED = 0.000035;
@@ -78,7 +78,7 @@
   }
 
   function registeredPlanetFallbackMaterial(THREE, fallbackColor) {
-    return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.12, roughness: 0.78, metalness: 0.06 });
+    return new THREE.MeshStandardMaterial({ color: fallbackColor, roughness: 0.78, metalness: 0.06 });
   }
 
   function routeStyle(layer) { return { 'major-warp': [0xd8b35e, 0.82, false, 0, 0], trade: [0x4fa3a5, 0.72, true, 2.8, 1.25], 'local-navigation': [0x7390bd, 0.52, true, 1.35, 1.25], exploratory: [0xe2e5df, 0.19, true, 0.7, 1.45] }[layer] || [0x817963, 0.4, true, 1.2, 1.2]; }
@@ -151,6 +151,7 @@
       const cloudLayer = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.026, 24, 18), cloudMaterial);
       const atmosphereLayer = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.10, 24, 18), atmosphereMaterial);
       cloudLayer.userData.planetLayer = 'clouds';
+      cloudLayer.receiveShadow = true;
       atmosphereLayer.userData.planetLayer = 'atmosphere';
       if (!planet.parent || !systemGroup.parent) {
         disposeMaterial(material); disposeMaterial(cloudMaterial); disposeMaterial(atmosphereMaterial);
@@ -177,9 +178,9 @@
     const mapNodes = chart.nodes(data), routes = chart.routes(data), nodeById = new Map(mapNodes.map(node => [node.id, node])), recordById = new Map(data.records.map(record => [record.id, record])), scene = new THREE.Scene();
     scene.background = new THREE.Color(0x030505); scene.fog = new THREE.FogExp2(0x030505, 0.0021);
     const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 1200), homeTarget = new THREE.Vector3(18, 0, 0), homePosition = new THREE.Vector3(38, 78, 182); camera.position.copy(homePosition);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.outputEncoding = THREE.sRGBEncoding; stage.insertBefore(renderer.domElement, leaderLayer);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.outputEncoding = THREE.sRGBEncoding; renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; stage.insertBefore(renderer.domElement, leaderLayer);
     const controls = new THREE.OrbitControls(camera, renderer.domElement); Object.assign(controls, { enableDamping: true, dampingFactor: 0.022, rotateSpeed: 0.12, panSpeed: 0.135, zoomSpeed: 0.15, keyPanSpeed: 2, screenSpacePanning: true, minDistance: 7, maxDistance: 360 }); controls.target.copy(homeTarget); controls.update();
-    scene.add(new THREE.AmbientLight(0xb8aa85, 0.72)); const key = new THREE.DirectionalLight(0xffdfa0, 1.05); key.position.set(35, 55, 70); scene.add(key);
+    const ambient = new THREE.AmbientLight(0xb8aa85, 0.72), key = new THREE.DirectionalLight(0xffdfa0, 1.05); key.position.set(35, 55, 70); scene.add(ambient, key);
     const starData = []; for (let index = 0; index < 1000; index += 1) starData.push((Math.random() - 0.5) * 440, (Math.random() - 0.5) * 240, (Math.random() - 0.5) * 280); const starGeometry = new THREE.BufferGeometry(); starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starData, 3)); scene.add(new THREE.Points(starGeometry, new THREE.PointsMaterial({ color: 0xbcc5bf, size: 0.28, transparent: true, opacity: 0.46 })));
     const grid = new THREE.GridHelper(280, 28, 0x5b5139, 0x282923); grid.position.y = -38; grid.material.transparent = true; grid.material.opacity = 0.22; scene.add(grid);
     const groups = Object.fromEntries(['nodes', 'systems', 'ambient-traffic', 'regions', 'hazards', 'route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].map(name => [name, new THREE.Group()])); Object.values(groups).forEach(group => scene.add(group));
@@ -227,6 +228,7 @@
     function clearExpandedSystem() {
       if (!expandedSystem) return;
       expandedSystem.labels.forEach(record => { record.label.remove(); record.leader.remove(); });
+      expandedSystem.starLight?.shadow?.map?.dispose?.();
       disposeObject(expandedSystem.group);
       expandedSystem = null;
       stage.dataset.viewContext = 'sector';
@@ -236,10 +238,18 @@
       if (expandedSystem?.nodeId === node.id) return;
       clearExpandedSystem();
       const profile = systemProfile(THREE, node, records, profileEngine), group = new THREE.Group(), localObjects = [];
+      const systemRadius = Math.max((profile.bodies.at(-1)?.radius || 6) + (profile.anchorageCount ? 1.5 : 0), 6);
       group.position.set(...node.position); group.userData.nodeId = node.id;
       const star = new THREE.Mesh(new THREE.SphereGeometry(profile.starScale, 24, 18), new THREE.MeshBasicMaterial({ color: profile.starColor }));
       star.add(new THREE.Mesh(new THREE.SphereGeometry(profile.starScale * 1.18, 18, 12), new THREE.MeshBasicMaterial({ color: profile.starColor, transparent: true, opacity: 0.12, wireframe: true })));
-      group.add(star);
+      const starLight = new THREE.PointLight(profile.starColor, 2.8, Math.max(24, systemRadius * 4), 1.35);
+      starLight.castShadow = true;
+      starLight.shadow.mapSize.set(512, 512);
+      starLight.shadow.camera.near = 0.1;
+      starLight.shadow.camera.far = Math.max(28, systemRadius * 4.2);
+      starLight.shadow.bias = -0.0002;
+      starLight.shadow.normalBias = 0.018;
+      group.add(star, starLight);
       localObjects.push({ object: star, name: `${profile.baseName} Primary`, kind: 'star', priority: 100 });
 
       const moving = [];
@@ -249,13 +259,13 @@
         const pivot = new THREE.Group(); pivot.rotation.y = body.phase; pivot.rotation.z = body.inclination;
         const registered = index === profile.registeredIndex;
         const material = registered ? registeredPlanetFallbackMaterial(THREE, body.color) : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.76, metalness: 0.08 });
-        const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 22, 16), material); planet.position.x = body.radius;
+        const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 32, 24), material); planet.position.x = body.radius; planet.castShadow = true; planet.receiveShadow = true;
         pivot.add(planet);
         void composePlanet(THREE, planet, group, node, records, body, index, profile.bodies.length, registered);
         localObjects.push({ object: planet, name: body.name, kind: 'planet', priority: index === profile.registeredIndex ? 90 : 70 - index });
         for (let moonIndex = 0; moonIndex < body.moons; moonIndex += 1) {
           const moonPivot = new THREE.Group(); moonPivot.position.copy(planet.position); moonPivot.rotation.y = moonIndex * Math.PI + profile.seed * 0.0001;
-          const moon = new THREE.Mesh(new THREE.SphereGeometry(Math.max(0.035, body.scale * 0.18), 10, 8), new THREE.MeshStandardMaterial({ color: 0xb7b5aa, roughness: 0.9 }));
+          const moon = new THREE.Mesh(new THREE.SphereGeometry(Math.max(0.035, body.scale * 0.18), 14, 10), new THREE.MeshStandardMaterial({ color: 0xb7b5aa, roughness: 0.9 })); moon.castShadow = true; moon.receiveShadow = true;
           moon.position.x = body.scale * (1.7 + moonIndex * 0.7); moonPivot.add(moon); pivot.add(moonPivot);
           localObjects.push({ object: moon, name: `${body.name} · Moon ${roman(moonIndex + 1)}`, kind: 'moon', priority: 42 - moonIndex });
         }
@@ -294,17 +304,18 @@
       for (let index = 0; index < trafficCount; index += 1) { const laneRadius = 1.1 + (index % 4) * 0.72 + (index >= 4 ? 0.22 : 0), pivot = new THREE.Group(); pivot.rotation.y = profile.seed * 0.00001 + index * (Math.PI * 2 / trafficCount); pivot.rotation.z = (index % 2 ? -1 : 1) * 0.06; const craft = new THREE.Mesh(new THREE.ConeGeometry(craftScale, 0.12 + activity.industrialization * 0.04, 5), new THREE.MeshBasicMaterial({ color: craftColor })); craft.rotation.z = -Math.PI / 2; craft.position.x = laneRadius; pivot.add(craft); group.add(pivot); traffic.push({ pivot, speed: (0.00024 + index * 0.000018) * (index % 2 ? -1 : 1) }); }
 
       groups.systems.add(group);
-      const radius = Math.max((profile.bodies.at(-1)?.radius || 6) + (profile.anchorageCount ? 1.5 : 0), 6);
-      expandedSystem = { nodeId: node.id, group, star, moving, traffic, template: profile.template, radius, labels: localObjects.map(item => makeSystemLabel(item.object, item.name, item.kind, item.priority)) };
+      expandedSystem = { nodeId: node.id, group, star, starLight, moving, traffic, template: profile.template, radius: systemRadius, labels: localObjects.map(item => makeSystemLabel(item.object, item.name, item.kind, item.priority)) };
       stage.dataset.viewContext = 'system';
       updateVisibility();
     }
 
+    function applyLightingContext(inspecting) { ambient.intensity = inspecting ? 0.045 : 0.72; key.intensity = inspecting ? 0 : 1.05; }
     function description() { if (passive) return 'Passive Navis vigil is rotating through sanctioned contacts.'; if (expandedSystem) return 'Local-system inspection rite active.'; return { select: 'Auspex selection rite active.', orbit: 'Orbital rotation rite active under graduated resistance.', pan: 'Chart translation rite active under graduated resistance.', zoom: 'Magnification rite active under graduated resistance.' }[mode]; }
     function updateStatus() { status.textContent = expandedSystem ? `${nodeById.get(expandedSystem.nodeId)?.name || 'Inspected system'} · ${description()} Double-select empty survey space or invoke Restore Survey to return to the sector.` : `${mapNodes.length} charted contacts · ${description()} Double-select a contact for close system inspection.`; }
     function applyMode() { stage.dataset.mapMode = passive ? 'passive' : mode; controls.enabled = !passive && mode !== 'select' && !transition; const map = { orbit: [THREE.MOUSE.ROTATE, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.ROTATE], pan: [THREE.MOUSE.PAN, THREE.MOUSE.DOLLY, THREE.MOUSE.ROTATE, THREE.TOUCH.PAN], zoom: [THREE.MOUSE.DOLLY, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.PAN] }[mode] || [THREE.MOUSE.ROTATE, THREE.MOUSE.DOLLY, THREE.MOUSE.PAN, THREE.TOUCH.ROTATE]; [controls.mouseButtons.LEFT, controls.mouseButtons.MIDDLE, controls.mouseButtons.RIGHT, controls.touches.ONE] = map; controls.touches.TWO = THREE.TOUCH.DOLLY_PAN; updateStatus(); }
     function updateVisibility() {
       const inspecting = Boolean(expandedSystem);
+      applyLightingContext(inspecting);
       meshes.forEach((mesh, id) => { mesh.visible = !inspecting && visibleNode(nodeById.get(id)); });
       if (expandedSystem) expandedSystem.group.visible = true;
       grid.visible = !inspecting;
@@ -359,8 +370,7 @@
     function restoreSurvey(reason = 'restore') { if (passive) stopPassive(reason); selected = ''; pointerStart = null; transition = null; clearExpandedSystem(); updateVisibility(); dirtyLabels = true; onClear?.(reason); moveTo(homePosition, homeTarget, 1900); }
     function passiveEligibleNodes() { const preferred = mapNodes.filter(node => visibleNode(node) && ['primary', 'guard-origin', 'supporting'].includes(node.layer)); return preferred.length ? preferred : mapNodes.filter(visibleNode); }
     function rebuildPassiveSequence() { passiveSequence = [...passiveEligibleNodes()]; for (let index = passiveSequence.length - 1; index > 0; index -= 1) { const swap = Math.floor(Math.random() * (index + 1)); [passiveSequence[index], passiveSequence[swap]] = [passiveSequence[swap], passiveSequence[index]]; } if (selected && passiveSequence.length > 1 && passiveSequence[0]?.id === selected) [passiveSequence[0], passiveSequence[1]] = [passiveSequence[1], passiveSequence[0]]; passiveIndex = -1; }
-    function passivePosition(node) { const target = new THREE.Vector3(...node.position), radius = 34 + Math.random() * 34, azimuth = Math.random() * Math.PI * 2, elevation = 0.22 + Math.random() * 0.42, horizontal = Math.cos(elevation) * radius; return { target, position: new THREE.Vector3(target.x + Math.cos(azimuth) * horizontal, target.y + Math.sin(elevation) * radius, target.z + Math.sin(azimuth) * horizontal) }; }
-    function advancePassive(now = performance.now()) { if (!passive) return; if (!passiveSequence.length || passiveIndex >= passiveSequence.length - 1) rebuildPassiveSequence(); passiveIndex += 1; const node = passiveSequence[passiveIndex]; if (!node) return; const records = recordsFor(node); selectNode(node.id, false, true); const destination = passivePosition(node); moveTo(destination.position, destination.target, 2600); passiveDeadline = now + PASSIVE_DWELL; passiveLastFrame = now; onPassiveNode?.(node, records, PASSIVE_DWELL); refreshLayout(); updateStatus(); }
+    function advancePassive(now = performance.now()) { if (!passive) return; if (!passiveSequence.length || passiveIndex >= passiveSequence.length - 1) rebuildPassiveSequence(); passiveIndex += 1; const node = passiveSequence[passiveIndex]; if (!node) return; const records = recordsFor(node); selectNode(node.id, true, true, true); passiveDeadline = now + PASSIVE_DWELL; passiveLastFrame = now; onPassiveNode?.(node, records, PASSIVE_DWELL); refreshLayout(); updateStatus(); }
     function startPassive() { if (passive) return; if (expandedSystem) restoreSurvey('vigil'); passive = true; stage.dataset.passive = 'true'; mode = 'orbit'; rebuildPassiveSequence(); dirtyLabels = true; updateVisibility(); applyMode(); onPassiveChange?.(true, 'engaged'); advancePassive(performance.now()); }
     function updatePassive(now) { if (!passive) return; if (now >= passiveDeadline && !transition) { advancePassive(now); return; } if (transition) { passiveLastFrame = now; return; } const elapsed = clamp(now - (passiveLastFrame || now), 0, 80); passiveLastFrame = now; const offset = camera.position.clone().sub(controls.target); offset.applyAxisAngle(verticalAxis, elapsed * PASSIVE_ORBIT_SPEED); camera.position.copy(controls.target).add(offset); camera.lookAt(controls.target); dirtyLabels = true; }
     function updateMove(now) { if (!transition) return; const p = clamp((now - transition.start) / transition.duration, 0, 1), e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; camera.position.lerpVectors(transition.fromPosition, transition.position, e); controls.target.lerpVectors(transition.fromTarget, transition.target, e); controls.update(); dirtyLabels = true; if (p === 1) { transition = null; applyMode(); } }
