@@ -4,7 +4,7 @@
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
   const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=5';
-  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=4';
+  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=5';
   const MODES = new Set(['select', 'orbit', 'pan', 'zoom']);
   const PASSIVE_DWELL = 26000;
   const PASSIVE_ORBIT_SPEED = 0.000035;
@@ -316,13 +316,13 @@
     function updateVisibility() {
       const inspecting = Boolean(expandedSystem);
       applyLightingContext(inspecting);
-      meshes.forEach((mesh, id) => { mesh.visible = !inspecting && visibleNode(nodeById.get(id)); });
+      meshes.forEach((mesh, id) => { mesh.visible = visibleNode(nodeById.get(id)) && (!inspecting || id !== expandedSystem.nodeId); });
       if (expandedSystem) expandedSystem.group.visible = true;
-      grid.visible = !inspecting;
-      groups.regions.visible = !inspecting && visibility.regions;
-      groups.hazards.visible = !inspecting && visibility.hazards;
-      ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => { groups[name].visible = !inspecting && visibility[name]; });
-      ambientTraffic.forEach(entry => { entry.craft.visible = !inspecting && visibility[entry.layer]; });
+      grid.visible = true;
+      groups.regions.visible = visibility.regions;
+      groups.hazards.visible = visibility.hazards;
+      ['route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].forEach(name => { groups[name].visible = visibility[name]; });
+      ambientTraffic.forEach(entry => { entry.craft.visible = visibility[entry.layer]; });
       labelLayer.hidden = inspecting ? false : (!visibility.labels && !passive);
       leaderLayer.hidden = !inspecting;
       if (inspecting) labelRecords.forEach(record => { record.label.hidden = true; record.leader.hidden = true; });
