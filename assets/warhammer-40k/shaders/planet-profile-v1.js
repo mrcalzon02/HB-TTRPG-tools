@@ -97,7 +97,7 @@
     return matches.length ? matches : Object.entries(MATERIALS).filter(([, entry]) => entry.role === 'geology');
   }
   function between(range, roll) { return lerp(range[0], range[1], roll()); }
-  function templateFromText(text) {
+  function classifyTemplate(text) {
     const value = String(text || '').toLowerCase();
     if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
     if (/hive world|hive-world|ecumenopolis|hive city|hive cities/.test(value)) return 'hive';
@@ -116,7 +116,22 @@
     if (/feudal world|feudal-world|medieval world/.test(value)) return 'feudal';
     if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
     if (/ice world|ice-bound|icebound|glacial|frozen world|frost world|cryogenic|polar world|tundra/.test(value)) return 'ice';
-    return 'temperate';
+    if (/civilized world|civilised world|temperate world/.test(value)) return 'temperate';
+    return '';
+  }
+  function templateFromText(text) { return classifyTemplate(text) || 'temperate'; }
+
+  function templateForBody(identity, text = '', index = 0, count = 1, registered = false) {
+    if (registered) return templateFromText(text);
+    const explicit = classifyTemplate(text);
+    if (explicit) return explicit;
+    const orbital = count > 1 ? clamp(index / (count - 1)) : 0.5;
+    const inner = ['volcanic','barren','desert','mining','toxic','forge','fortress','hive'];
+    const middle = ['temperate','agri','paradise','feudal','jungle','ocean','feral','shrine','hive','fortress','death','toxic','mining'];
+    const outer = ['ice','barren','mining','fortress','death','temperate','ocean','toxic'];
+    const pool = orbital < 0.30 ? inner : orbital > 0.72 ? outer : middle;
+    const roll = random(hash(`${identity}|body-template|${index}|${count}`));
+    return pool[Math.floor(roll() * pool.length) % pool.length];
   }
 
   function createProfile(identity, text = '', templateOverride = '') {
@@ -180,5 +195,5 @@
     return Object.freeze({ elevation, land, ocean: 1 - land, coast, moisture, temperature, mountain, ridge, ice, jungle, grassland, desert, rock });
   }
 
-  window.CafarronPlanetProfileV1 = Object.freeze({ MATERIALS, TEMPLATE_RANGES, hash, random, fade, perlin2, fbm2, templateFromText, createProfile, sample });
+  window.CafarronPlanetProfileV1 = Object.freeze({ MATERIALS, TEMPLATE_RANGES, hash, random, fade, perlin2, fbm2, classifyTemplate, templateFromText, templateForBody, createProfile, sample });
 })();
