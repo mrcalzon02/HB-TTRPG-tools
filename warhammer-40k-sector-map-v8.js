@@ -3,7 +3,7 @@
 
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
-  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=4';
+  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=5';
   const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=3';
   const MODES = new Set(['select', 'orbit', 'pan', 'zoom']);
   const PASSIVE_DWELL = 26000;
@@ -77,14 +77,6 @@
     };
   }
 
-  function classifyWorldTemplate(text) {
-    const value = String(text || '').toLowerCase();
-    if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
-    if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
-    if (/ice world|ice-bound|icebound|glacial|frozen world|frost world|cryogenic|polar world|tundra/.test(value)) return 'ice';
-    return 'unsealed';
-  }
-
   function registeredPlanetFallbackMaterial(THREE, fallbackColor) {
     return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.12, roughness: 0.78, metalness: 0.06 });
   }
@@ -100,11 +92,18 @@
 
   function systemIdentityText(node, records) { return [node.id, node.name, ...records.flatMap(record => [record.name, record.objectType, record.classification, record.environment])].join('|'); }
 
-  function systemProfile(node, records) {
+  function systemProfile(THREE, node, records, profileEngine) {
     const text = systemIdentityText(node, records), roll = random(hash(text)), recordText = text.toLowerCase();
     const starColors = [0xffd88a, 0xffb56b, 0xfff0c4, 0xc9ddff, 0xff8b58];
-    const bodyColors = recordText.includes('forge') ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39] : recordText.includes('desert') ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933] : recordText.includes('ice') || recordText.includes('frozen') ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8] : recordText.includes('dead') || recordText.includes('tomb') ? [0x77756f, 0x4f5352, 0x999589, 0x343838] : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
-    const template = classifyWorldTemplate(recordText), count = clamp(3 + Math.floor(roll() * 5), 3, 7), registeredIndex = Math.min(count - 1, 1 + Math.floor(roll() * Math.max(1, count - 1)));
+    const template = profileEngine.templateFromText(recordText), registeredProfile = profileEngine.createProfile(`${node.id}|system-registered-summary`, text, template);
+    const heat = registeredProfile.temperature, industry = registeredProfile.industrialization, moisture = registeredProfile.moisture;
+    const bodyColors = [
+      new THREE.Color().setHSL(0.08 + moisture * 0.22, 0.24 + (1 - industry) * 0.16, 0.30 + heat * 0.16).getHex(),
+      new THREE.Color().setHSL(0.52 - heat * 0.18, 0.18 + moisture * 0.20, 0.34 + moisture * 0.12).getHex(),
+      new THREE.Color().setHSL(0.03 + industry * 0.06, 0.14 + industry * 0.22, 0.28 + heat * 0.14).getHex(),
+      new THREE.Color().setHSL(0.62 - moisture * 0.32, 0.16 + (1 - heat) * 0.18, 0.38 + moisture * 0.10).getHex()
+    ];
+    const count = clamp(3 + Math.floor(roll() * 5), 3, 7), registeredIndex = Math.min(count - 1, 1 + Math.floor(roll() * Math.max(1, count - 1)));
     const baseName = String(node.name || 'Surveyed System').replace(/\s+System$/i, '').trim() || 'Surveyed';
     const namedWorlds = records.filter(record => record.category === 'world' && record.name && !/\bsystem\b/i.test(record.name)).map(record => record.name);
     const namedStations = records.filter(record => record.category === 'station' && record.name).map(record => record.name);
@@ -112,7 +111,7 @@
     const anchorageCount = /fleet|navy|anchorage|battlefleet|militarum|guard/.test(recordText) || node.layer === 'guard-origin' ? 1 : (roll() > 0.84 ? 1 : 0);
     const beltCount = 1 + (roll() > 0.72 ? 1 : 0);
     return {
-      seed: hash(text), template, baseName,
+      seed: hash(text), template, activityProfile: registeredProfile, baseName,
       starColor: starColors[Math.floor(roll() * starColors.length)],
       starScale: 0.62 + roll() * 0.32,
       registeredIndex, beltCount, stationCount, anchorageCount, namedStations,
@@ -173,6 +172,7 @@
   async function mount(options) {
     const { data, chart, stage, labelLayer, leaderLayer, status, initialMode = 'orbit', onSelect, onClear, onPassiveNode, onPassiveChange } = options;
     const THREE = await three(), labelsEngine = window.CafarronMapLabelsV7;
+    const { profileEngine } = await planetaryCompositor();
     if (!labelsEngine?.placeLocal) throw new Error('Cartographic label servitors failed to answer the local-system placement rite.');
     const mapNodes = chart.nodes(data), routes = chart.routes(data), nodeById = new Map(mapNodes.map(node => [node.id, node])), recordById = new Map(data.records.map(record => [record.id, record])), scene = new THREE.Scene();
     scene.background = new THREE.Color(0x030505); scene.fog = new THREE.FogExp2(0x030505, 0.0021);
@@ -235,7 +235,7 @@
     function expandSystem(node, records) {
       if (expandedSystem?.nodeId === node.id) return;
       clearExpandedSystem();
-      const profile = systemProfile(node, records), group = new THREE.Group(), localObjects = [];
+      const profile = systemProfile(THREE, node, records, profileEngine), group = new THREE.Group(), localObjects = [];
       group.position.set(...node.position); group.userData.nodeId = node.id;
       const star = new THREE.Mesh(new THREE.SphereGeometry(profile.starScale, 24, 18), new THREE.MeshBasicMaterial({ color: profile.starColor }));
       star.add(new THREE.Mesh(new THREE.SphereGeometry(profile.starScale * 1.18, 18, 12), new THREE.MeshBasicMaterial({ color: profile.starColor, transparent: true, opacity: 0.12, wireframe: true })));
@@ -288,8 +288,10 @@
         localObjects.push({ object: anchorage, name: `Fleet Anchorage ${roman(anchorageIndex + 1)}`, kind: 'fleet-anchorage', priority: 52 - anchorageIndex });
       }
 
-      const traffic = [], trafficCount = profile.template === 'forge' ? 8 : profile.template === 'desert' ? 4 : profile.template === 'ice' ? 5 : 3;
-      for (let index = 0; index < trafficCount; index += 1) { const laneRadius = 1.1 + (index % 4) * 0.72 + (index >= 4 ? 0.22 : 0), pivot = new THREE.Group(); pivot.rotation.y = profile.seed * 0.00001 + index * (Math.PI * 2 / trafficCount); pivot.rotation.z = (index % 2 ? -1 : 1) * 0.06; const craftColor = profile.template === 'forge' ? 0xff7a35 : profile.template === 'desert' ? 0xf0c36a : profile.template === 'ice' ? 0xb9ecff : 0x9ed4d1, craft = new THREE.Mesh(new THREE.ConeGeometry(profile.template === 'forge' ? 0.035 : 0.026, profile.template === 'forge' ? 0.16 : 0.12, 5), new THREE.MeshBasicMaterial({ color: craftColor })); craft.rotation.z = -Math.PI / 2; craft.position.x = laneRadius; pivot.add(craft); group.add(pivot); traffic.push({ pivot, speed: (0.00024 + index * 0.000018) * (index % 2 ? -1 : 1) }); }
+      const activity = profile.activityProfile, trafficCount = clamp(Math.round(2 + activity.civilization * 3 + activity.industrialization * 3), 3, 8), traffic = [];
+      const craftColor = new THREE.Color().setHSL(0.52 - activity.temperature * 0.34, 0.48 + activity.industrialization * 0.28, 0.58 + activity.emissiveDensity * 0.18).getHex();
+      const craftScale = 0.026 + activity.industrialization * 0.009;
+      for (let index = 0; index < trafficCount; index += 1) { const laneRadius = 1.1 + (index % 4) * 0.72 + (index >= 4 ? 0.22 : 0), pivot = new THREE.Group(); pivot.rotation.y = profile.seed * 0.00001 + index * (Math.PI * 2 / trafficCount); pivot.rotation.z = (index % 2 ? -1 : 1) * 0.06; const craft = new THREE.Mesh(new THREE.ConeGeometry(craftScale, 0.12 + activity.industrialization * 0.04, 5), new THREE.MeshBasicMaterial({ color: craftColor })); craft.rotation.z = -Math.PI / 2; craft.position.x = laneRadius; pivot.add(craft); group.add(pivot); traffic.push({ pivot, speed: (0.00024 + index * 0.000018) * (index % 2 ? -1 : 1) }); }
 
       groups.systems.add(group);
       const radius = Math.max((profile.bodies.at(-1)?.radius || 6) + (profile.anchorageCount ? 1.5 : 0), 6);
