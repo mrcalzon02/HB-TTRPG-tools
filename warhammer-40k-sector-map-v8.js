@@ -60,6 +60,170 @@
     };
   }
 
+  function classifyWorldTemplate(text) {
+    const value = String(text || '').toLowerCase();
+    if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
+    if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
+    return 'unsealed';
+  }
+
+  function canvasTexture(THREE, canvas) {
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.anisotropy = 4;
+    texture.needsUpdate = true;
+    return texture;
+  }
+
+  function desertTexture(THREE, seed) {
+    const width = 512;
+    const height = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d', { alpha: false });
+    const roll = random(seed ^ 0x44534552);
+    const gradient = context.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, '#d7bd7c');
+    gradient.addColorStop(0.24, '#b77c45');
+    gradient.addColorStop(0.52, '#d2a45e');
+    gradient.addColorStop(0.76, '#8e5135');
+    gradient.addColorStop(1, '#c29458');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, width, height);
+    context.globalCompositeOperation = 'multiply';
+    for (let band = 0; band < 72; band += 1) {
+      const y = roll() * height;
+      context.beginPath();
+      context.moveTo(0, y);
+      for (let x = 0; x <= width; x += 8) {
+        const amplitude = 2 + roll() * 11;
+        context.lineTo(x, y + Math.sin(x * (0.012 + roll() * 0.016) + band) * amplitude);
+      }
+      context.strokeStyle = `rgba(${80 + Math.floor(roll() * 45)},${42 + Math.floor(roll() * 34)},${24 + Math.floor(roll() * 24)},${0.05 + roll() * 0.13})`;
+      context.lineWidth = 1 + roll() * 5;
+      context.stroke();
+    }
+    context.globalCompositeOperation = 'screen';
+    for (let crater = 0; crater < 52; crater += 1) {
+      const x = roll() * width;
+      const y = roll() * height;
+      const radius = 1 + roll() * 8;
+      context.beginPath();
+      context.ellipse(x, y, radius, radius * (0.35 + roll() * 0.4), roll() * Math.PI, 0, Math.PI * 2);
+      context.strokeStyle = `rgba(242,211,145,${0.08 + roll() * 0.16})`;
+      context.lineWidth = 0.8 + roll() * 2.2;
+      context.stroke();
+    }
+    const image = context.getImageData(0, 0, width, height);
+    for (let index = 0; index < image.data.length; index += 4) {
+      const grain = Math.floor((roll() - 0.5) * 18);
+      image.data[index] = clamp(image.data[index] + grain, 0, 255);
+      image.data[index + 1] = clamp(image.data[index + 1] + grain, 0, 255);
+      image.data[index + 2] = clamp(image.data[index + 2] + grain, 0, 255);
+    }
+    context.putImageData(image, 0, 0);
+    return canvasTexture(THREE, canvas);
+  }
+
+  function forgeTextureSet(THREE, seed) {
+    const width = 512;
+    const height = 256;
+    const surface = document.createElement('canvas');
+    const emissive = document.createElement('canvas');
+    surface.width = emissive.width = width;
+    surface.height = emissive.height = height;
+    const context = surface.getContext('2d', { alpha: false });
+    const glow = emissive.getContext('2d', { alpha: false });
+    const roll = random(seed ^ 0x464f5247);
+    const base = context.createLinearGradient(0, 0, 0, height);
+    base.addColorStop(0, '#353431');
+    base.addColorStop(0.28, '#604434');
+    base.addColorStop(0.52, '#252a2a');
+    base.addColorStop(0.74, '#6c3024');
+    base.addColorStop(1, '#222523');
+    context.fillStyle = base;
+    context.fillRect(0, 0, width, height);
+    glow.fillStyle = '#020202';
+    glow.fillRect(0, 0, width, height);
+    context.globalCompositeOperation = 'screen';
+    for (let plate = 0; plate < 120; plate += 1) {
+      const x = roll() * width;
+      const y = roll() * height;
+      const w = 8 + roll() * 48;
+      const h = 3 + roll() * 20;
+      context.fillStyle = `rgba(${45 + Math.floor(roll() * 55)},${38 + Math.floor(roll() * 45)},${34 + Math.floor(roll() * 35)},${0.08 + roll() * 0.14})`;
+      context.fillRect(x, y, w, h);
+      context.strokeStyle = `rgba(12,14,14,${0.18 + roll() * 0.3})`;
+      context.lineWidth = 1;
+      context.strokeRect(x, y, w, h);
+    }
+    context.globalCompositeOperation = 'multiply';
+    for (let trench = 0; trench < 46; trench += 1) {
+      const y = roll() * height;
+      context.beginPath();
+      context.moveTo(0, y);
+      for (let x = 0; x <= width; x += 10) context.lineTo(x, y + Math.sin(x * (0.012 + roll() * 0.014) + trench) * (2 + roll() * 8));
+      context.strokeStyle = `rgba(4,6,6,${0.14 + roll() * 0.22})`;
+      context.lineWidth = 1 + roll() * 5;
+      context.stroke();
+    }
+    context.globalCompositeOperation = 'source-over';
+    glow.globalCompositeOperation = 'screen';
+    for (let furnace = 0; furnace < 95; furnace += 1) {
+      const x = roll() * width;
+      const y = roll() * height;
+      const radius = 0.8 + roll() * 4.8;
+      const halo = context.createRadialGradient(x, y, 0, x, y, radius * 3.5);
+      halo.addColorStop(0, 'rgba(255,198,84,.9)');
+      halo.addColorStop(0.3, 'rgba(232,77,28,.48)');
+      halo.addColorStop(1, 'rgba(80,15,5,0)');
+      context.fillStyle = halo;
+      context.fillRect(x - radius * 4, y - radius * 4, radius * 8, radius * 8);
+      const emission = glow.createRadialGradient(x, y, 0, x, y, radius * 4.5);
+      emission.addColorStop(0, 'rgba(255,232,164,1)');
+      emission.addColorStop(0.22, 'rgba(255,101,28,.92)');
+      emission.addColorStop(1, 'rgba(0,0,0,0)');
+      glow.fillStyle = emission;
+      glow.fillRect(x - radius * 5, y - radius * 5, radius * 10, radius * 10);
+    }
+    for (let network = 0; network < 34; network += 1) {
+      const y = roll() * height;
+      const start = roll() * width;
+      const length = 35 + roll() * 150;
+      context.strokeStyle = `rgba(155,92,49,${0.12 + roll() * 0.17})`;
+      glow.strokeStyle = `rgba(255,78,18,${0.32 + roll() * 0.36})`;
+      context.lineWidth = 0.5 + roll() * 1.4;
+      glow.lineWidth = 0.6 + roll() * 1.8;
+      context.beginPath();
+      glow.beginPath();
+      context.moveTo(start, y);
+      glow.moveTo(start, y);
+      for (let step = 0; step < 6; step += 1) {
+        const x = start + length * (step / 5);
+        const offset = (roll() - 0.5) * 16;
+        context.lineTo(x, y + offset);
+        glow.lineTo(x, y + offset);
+      }
+      context.stroke();
+      glow.stroke();
+    }
+    return { map: canvasTexture(THREE, surface), emissiveMap: canvasTexture(THREE, emissive) };
+  }
+
+  function registeredPlanetMaterial(THREE, template, seed, fallbackColor) {
+    if (template === 'forge') {
+      const textures = forgeTextureSet(THREE, seed);
+      return new THREE.MeshStandardMaterial({ color: 0xffffff, map: textures.map, bumpMap: textures.map, bumpScale: 0.026, emissive: 0xff4b19, emissiveMap: textures.emissiveMap, emissiveIntensity: 1.15, roughness: 0.68, metalness: 0.46 });
+    }
+    if (template === 'desert') {
+      const map = desertTexture(THREE, seed);
+      return new THREE.MeshStandardMaterial({ color: 0xffffff, map, bumpMap: map, bumpScale: 0.038, emissive: 0x6f3417, emissiveIntensity: 0.08, roughness: 0.93, metalness: 0.01 });
+    }
+    return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.18, roughness: 0.76, metalness: 0.08 });
+  }
+
   function routeStyle(layer) {
     return {
       'major-warp': [0xd8b35e, 0.82, false, 0, 0],
@@ -79,13 +243,9 @@
       const middle = start.clone().add(end).multiplyScalar(0.5);
       middle.y += clamp(distance * 0.065, 2.2, 9.5);
       middle.z += (index % 2 ? -1 : 1) * clamp(distance * 0.03, 0.9, 4.8);
-      const geometry = new THREE.BufferGeometry().setFromPoints(
-        new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(clamp(Math.round(distance * 1.4), 18, 72))
-      );
+      const geometry = new THREE.BufferGeometry().setFromPoints(new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(clamp(Math.round(distance * 1.4), 18, 72)));
       const [color, opacity, dashed, dashSize, gapSize] = routeStyle(route.layer);
-      const material = dashed
-        ? new THREE.LineDashedMaterial({ color, transparent: true, opacity, dashSize, gapSize })
-        : new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+      const material = dashed ? new THREE.LineDashedMaterial({ color, transparent: true, opacity, dashSize, gapSize }) : new THREE.LineBasicMaterial({ color, transparent: true, opacity });
       const line = new THREE.Line(geometry, material);
       if (dashed) line.computeLineDistances();
       group.add(line);
@@ -98,31 +258,13 @@
     const roll = random(hash(text));
     const recordText = text.toLowerCase();
     const starColors = [0xffd88a, 0xffb56b, 0xfff0c4, 0xc9ddff, 0xff8b58];
-    const bodyColors = recordText.includes('forge')
-      ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39]
-      : recordText.includes('desert')
-        ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933]
-        : recordText.includes('ice')
-          ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8]
-          : recordText.includes('dead') || recordText.includes('tomb')
-            ? [0x77756f, 0x4f5352, 0x999589, 0x343838]
-            : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
+    const bodyColors = recordText.includes('forge') ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39] : recordText.includes('desert') ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933] : recordText.includes('ice') ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8] : recordText.includes('dead') || recordText.includes('tomb') ? [0x77756f, 0x4f5352, 0x999589, 0x343838] : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
+    const template = classifyWorldTemplate(recordText);
     const count = clamp(3 + Math.floor(roll() * 5), 3, 7);
     const registeredIndex = Math.min(count - 1, 1 + Math.floor(roll() * Math.max(1, count - 1)));
     return {
-      seed: hash(text),
-      starColor: starColors[Math.floor(roll() * starColors.length)],
-      starScale: 0.62 + roll() * 0.32,
-      registeredIndex,
-      bodies: Array.from({ length: count }, (_, index) => ({
-        radius: 1.55 + index * 1.05 + roll() * 0.22,
-        scale: 0.12 + roll() * 0.18 + (index === registeredIndex ? 0.1 : 0),
-        color: bodyColors[Math.floor(roll() * bodyColors.length)],
-        inclination: (roll() - 0.5) * 0.18,
-        phase: roll() * Math.PI * 2,
-        speed: 0.00018 / Math.sqrt(index + 1),
-        moons: index === registeredIndex ? Math.floor(roll() * 3) : (roll() > 0.82 ? 1 : 0)
-      }))
+      seed: hash(text), template, starColor: starColors[Math.floor(roll() * starColors.length)], starScale: 0.62 + roll() * 0.32, registeredIndex,
+      bodies: Array.from({ length: count }, (_, index) => ({ radius: 1.55 + index * 1.05 + roll() * 0.22, scale: 0.12 + roll() * 0.18 + (index === registeredIndex ? 0.1 : 0), color: bodyColors[Math.floor(roll() * bodyColors.length)], inclination: (roll() - 0.5) * 0.18, phase: roll() * Math.PI * 2, speed: 0.00018 / Math.sqrt(index + 1), moons: index === registeredIndex ? Math.floor(roll() * 3) : (roll() > 0.82 ? 1 : 0) }))
     };
   }
 
@@ -148,7 +290,6 @@
     const THREE = await three();
     const labelsEngine = window.CafarronMapLabelsV7;
     if (!labelsEngine) throw new Error('Cartographic label servitors failed to answer.');
-
     const mapNodes = chart.nodes(data);
     const routes = chart.routes(data);
     const nodeById = new Map(mapNodes.map(node => [node.id, node]));
@@ -156,51 +297,35 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x030505);
     scene.fog = new THREE.FogExp2(0x030505, 0.0021);
-
     const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 1200);
     const homeTarget = new THREE.Vector3(18, 0, 0);
     const homePosition = new THREE.Vector3(38, 78, 182);
     camera.position.copy(homePosition);
-
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
     stage.insertBefore(renderer.domElement, leaderLayer);
-
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    Object.assign(controls, {
-      enableDamping: true, dampingFactor: 0.022, rotateSpeed: 0.12, panSpeed: 0.135, zoomSpeed: 0.15,
-      keyPanSpeed: 2, screenSpacePanning: true, minDistance: 7, maxDistance: 360
-    });
+    Object.assign(controls, { enableDamping: true, dampingFactor: 0.022, rotateSpeed: 0.12, panSpeed: 0.135, zoomSpeed: 0.15, keyPanSpeed: 2, screenSpacePanning: true, minDistance: 7, maxDistance: 360 });
     controls.target.copy(homeTarget);
     controls.update();
-
     scene.add(new THREE.AmbientLight(0xb8aa85, 0.72));
     const key = new THREE.DirectionalLight(0xffdfa0, 1.05);
     key.position.set(35, 55, 70);
     scene.add(key);
-
     const starData = [];
     for (let index = 0; index < 1000; index += 1) starData.push((Math.random() - 0.5) * 440, (Math.random() - 0.5) * 240, (Math.random() - 0.5) * 280);
     const starGeometry = new THREE.BufferGeometry();
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starData, 3));
     scene.add(new THREE.Points(starGeometry, new THREE.PointsMaterial({ color: 0xbcc5bf, size: 0.28, transparent: true, opacity: 0.46 })));
-
     const grid = new THREE.GridHelper(280, 28, 0x5b5139, 0x282923);
     grid.position.y = -38;
     grid.material.transparent = true;
     grid.material.opacity = 0.22;
     scene.add(grid);
-
     const groups = Object.fromEntries(['nodes', 'systems', 'regions', 'hazards', 'route-major-warp', 'route-trade', 'route-local-navigation', 'route-exploratory'].map(name => [name, new THREE.Group()]));
     Object.values(groups).forEach(group => scene.add(group));
-
-    const visibility = {
-      primary: true, supporting: true, 'guard-origin': true, provisional: false, unnamed: false, exploratory: true,
-      regions: false, hazards: false, labels: true, 'route-major-warp': true, 'route-trade': true,
-      'route-local-navigation': false, 'route-exploratory': false
-    };
-
+    const visibility = { primary: true, supporting: true, 'guard-origin': true, provisional: false, unnamed: false, exploratory: true, regions: false, hazards: false, labels: true, 'route-major-warp': true, 'route-trade': true, 'route-local-navigation': false, 'route-exploratory': false };
     let mode = MODES.has(initialMode) ? initialMode : 'orbit';
     let threat = 'all';
     let selected = '';
@@ -218,7 +343,6 @@
     let contactDocketOpen = false;
     let fullAuspex = false;
     let expandedSystem = null;
-
     const meshes = new Map();
     const pickables = [];
     const labelRecords = new Map();
@@ -237,31 +361,22 @@
     const docketToggle = stage.querySelector('#wh-contact-docket-toggle');
     const vigilPanel = stage.querySelector('.wh-vigil-panel');
     if (!viewportConsole || !theatreToggle || !fullAuspexToggle || !docketToggle) throw new Error('Navis survey helm presentation controls are absent from the authoritative viewport.');
-
     const threatColor = node => data.threatStates[node.threat]?.color || data.threatStates.unsurveyed.color;
     const visibleNode = node => visibility[node.layer] !== false && (threat === 'all' || node.threat === threat);
     const canonical = node => ['primary', 'supporting', 'guard-origin'].includes(node.layer);
     const showLabel = node => visibleNode(node) && (passive ? node.id === selected : visibility.labels && (canonical(node) || node.id === selected));
-
     for (const node of mapNodes) {
       const scale = Math.max(0.42, Number(node.scale || 0.8));
       const color = threatColor(node);
       const exploratory = node.layer === 'exploratory';
       const guard = node.layer === 'guard-origin';
-      const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(scale, 18, 14),
-        new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: exploratory ? 0.11 : guard ? 0.25 : 0.3, roughness: 0.5, metalness: 0.2, transparent: exploratory || guard, opacity: exploratory ? 0.58 : guard ? 0.92 : 1 })
-      );
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(scale, 18, 14), new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: exploratory ? 0.11 : guard ? 0.25 : 0.3, roughness: 0.5, metalness: 0.2, transparent: exploratory || guard, opacity: exploratory ? 0.58 : guard ? 0.92 : 1 }));
       mesh.position.set(...node.position);
       mesh.userData.nodeId = node.id;
       groups.nodes.add(mesh);
       meshes.set(node.id, mesh);
       pickables.push(mesh);
-      mesh.add(new THREE.Mesh(
-        new THREE.SphereGeometry(scale * 1.62, 14, 10),
-        new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: exploratory ? 0.07 : guard ? 0.15 : 0.16 })
-      ));
-
+      mesh.add(new THREE.Mesh(new THREE.SphereGeometry(scale * 1.62, 14, 10), new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: exploratory ? 0.07 : guard ? 0.15 : 0.16 })));
       const label = document.createElement('button');
       label.type = 'button';
       label.className = 'wh-map-label';
@@ -271,15 +386,12 @@
       label.hidden = true;
       label.addEventListener('click', () => selectNode(node.id, false));
       labelLayer.appendChild(label);
-
       const leader = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       leader.hidden = true;
       leaderLayer.appendChild(leader);
       labelRecords.set(node.id, { node, mesh, label, leader });
     }
-
     routes.forEach(route => { const group = groups[`route-${route.layer}`]; if (group) group.add(routeGroup(THREE, route, nodeById)); });
-
     function addVolume(record, group, opacity) {
       const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), new THREE.MeshBasicMaterial({ color: data.threatStates[record.threat]?.color || 0xb49142, wireframe: true, transparent: true, opacity }));
       mesh.position.set(...record.center);
@@ -288,15 +400,8 @@
     }
     data.regions.forEach(record => addVolume(record, groups.regions, 0.05));
     data.hazards.forEach(record => addVolume(record, groups.hazards, 0.11));
-
     function recordsFor(node) { return (node.recordIds || []).map(id => recordById.get(id)).filter(Boolean); }
-
-    function clearExpandedSystem() {
-      if (!expandedSystem) return;
-      disposeObject(expandedSystem.group);
-      expandedSystem = null;
-    }
-
+    function clearExpandedSystem() { if (!expandedSystem) return; disposeObject(expandedSystem.group); expandedSystem = null; }
     function expandSystem(node, records) {
       if (expandedSystem?.nodeId === node.id) return;
       clearExpandedSystem();
@@ -315,9 +420,14 @@
         const pivot = new THREE.Group();
         pivot.rotation.y = body.phase;
         pivot.rotation.z = body.inclination;
-        const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 18, 12), new THREE.MeshStandardMaterial({ color: body.color, emissive: index === profile.registeredIndex ? body.color : 0x000000, emissiveIntensity: index === profile.registeredIndex ? 0.18 : 0, roughness: 0.76, metalness: 0.08 }));
+        const material = index === profile.registeredIndex ? registeredPlanetMaterial(THREE, profile.template, profile.seed ^ index, body.color) : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.76, metalness: 0.08 });
+        const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 22, 16), material);
         planet.position.x = body.radius;
-        if (index === profile.registeredIndex) planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 14, 10), new THREE.MeshBasicMaterial({ color: 0xe0c77f, transparent: true, opacity: 0.13, wireframe: true })));
+        if (index === profile.registeredIndex) {
+          const shellColor = profile.template === 'forge' ? 0x8a3a22 : profile.template === 'desert' ? 0xd49a53 : 0xe0c77f;
+          const shellOpacity = profile.template === 'forge' ? 0.13 : profile.template === 'desert' ? 0.09 : 0.13;
+          planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 16, 12), new THREE.MeshBasicMaterial({ color: shellColor, transparent: true, opacity: shellOpacity, wireframe: profile.template === 'unsealed' })));
+        }
         pivot.add(planet);
         for (let moonIndex = 0; moonIndex < body.moons; moonIndex += 1) {
           const moonPivot = new THREE.Group();
@@ -331,18 +441,26 @@
         group.add(pivot);
         moving.push({ pivot, planet, speed: body.speed, moonSpeed: 0.00055 + index * 0.00008 });
       });
+      const traffic = [];
+      const trafficCount = profile.template === 'forge' ? 8 : profile.template === 'desert' ? 4 : 3;
+      for (let index = 0; index < trafficCount; index += 1) {
+        const laneRadius = 1.1 + (index % 4) * 0.72 + (index >= 4 ? 0.22 : 0);
+        const pivot = new THREE.Group();
+        pivot.rotation.y = profile.seed * 0.00001 + index * (Math.PI * 2 / trafficCount);
+        pivot.rotation.z = (index % 2 ? -1 : 1) * 0.06;
+        const craft = new THREE.Mesh(new THREE.ConeGeometry(profile.template === 'forge' ? 0.035 : 0.026, profile.template === 'forge' ? 0.16 : 0.12, 5), new THREE.MeshBasicMaterial({ color: profile.template === 'forge' ? 0xff7a35 : profile.template === 'desert' ? 0xf0c36a : 0x9ed4d1 }));
+        craft.rotation.z = -Math.PI / 2;
+        craft.position.x = laneRadius;
+        pivot.add(craft);
+        group.add(pivot);
+        traffic.push({ pivot, speed: (0.00024 + index * 0.000018) * (index % 2 ? -1 : 1) });
+      }
       groups.systems.add(group);
-      expandedSystem = { nodeId: node.id, group, star, moving, radius: profile.bodies.at(-1)?.radius || 6 };
+      expandedSystem = { nodeId: node.id, group, star, moving, traffic, template: profile.template, radius: profile.bodies.at(-1)?.radius || 6 };
       updateVisibility();
     }
-
-    function description() {
-      if (passive) return 'Passive Navis vigil is rotating through sanctioned contacts.';
-      return { select: 'Auspex selection rite active.', orbit: 'Orbital rotation rite active under graduated resistance.', pan: 'Chart translation rite active under graduated resistance.', zoom: 'Magnification rite active under graduated resistance.' }[mode];
-    }
-
+    function description() { if (passive) return 'Passive Navis vigil is rotating through sanctioned contacts.'; return { select: 'Auspex selection rite active.', orbit: 'Orbital rotation rite active under graduated resistance.', pan: 'Chart translation rite active under graduated resistance.', zoom: 'Magnification rite active under graduated resistance.' }[mode]; }
     function updateStatus() { status.textContent = `${mapNodes.length} charted contacts · ${description()} Double-select a contact for close system inspection.`; }
-
     function applyMode() {
       stage.dataset.mapMode = passive ? 'passive' : mode;
       controls.enabled = !passive && mode !== 'select' && !transition;
@@ -351,7 +469,6 @@
       controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
       updateStatus();
     }
-
     function updateVisibility() {
       meshes.forEach((mesh, id) => { mesh.visible = visibleNode(nodeById.get(id)) && expandedSystem?.nodeId !== id; });
       if (expandedSystem) expandedSystem.group.visible = visibleNode(nodeById.get(expandedSystem.nodeId));
@@ -362,13 +479,7 @@
       leaderLayer.hidden = true;
       dirtyLabels = true;
     }
-
-    function project(node) {
-      const vector = new THREE.Vector3(...node.position).project(camera);
-      const box = stage.getBoundingClientRect();
-      return { x: (vector.x * 0.5 + 0.5) * box.width, y: (-vector.y * 0.5 + 0.5) * box.height, z: vector.z };
-    }
-
+    function project(node) { const vector = new THREE.Vector3(...node.position).project(camera); const box = stage.getBoundingClientRect(); return { x: (vector.x * 0.5 + 0.5) * box.width, y: (-vector.y * 0.5 + 0.5) * box.height, z: vector.z }; }
     function layoutLabels() {
       const stageBox = stage.getBoundingClientRect();
       if (!stageBox.width || !stageBox.height || (!visibility.labels && !passive)) return;
@@ -403,246 +514,43 @@
       });
       dirtyLabels = false;
     }
-
     function connectedRoutes(nodeId) { return routes.filter(route => route.nodeIds.includes(nodeId)); }
-
-    function stopPassive(reason = 'manual') {
-      if (!passive) return;
-      passive = false;
-      passiveDeadline = 0;
-      passiveLastFrame = 0;
-      stage.dataset.passive = 'false';
-      dirtyLabels = true;
-      updateVisibility();
-      applyMode();
-      onPassiveChange?.(false, reason);
-    }
-
-    function moveTo(position, target, duration = 1650) {
-      transition = { start: performance.now(), duration, fromPosition: camera.position.clone(), fromTarget: controls.target.clone(), position: position.clone(), target: target.clone() };
-      controls.enabled = false;
-    }
-
-    function focusNode(node, close = false) {
-      const target = new THREE.Vector3(...node.position);
-      const direction = camera.position.clone().sub(controls.target).normalize();
-      const distance = close ? clamp((expandedSystem?.radius || 6) * 2.25, 12, 24) : clamp(camera.position.distanceTo(controls.target) * 0.52, 28, 72);
-      moveTo(target.clone().add(direction.multiplyScalar(distance)), target, close ? 1200 : 1650);
-    }
-
-    function selectNode(nodeId, focus = false, preservePassive = false, close = false) {
-      const node = nodeById.get(nodeId);
-      if (!node) return;
-      if (passive && !preservePassive) stopPassive('selection');
-      selected = nodeId;
-      const records = recordsFor(node);
-      expandSystem(node, records);
-      onSelect?.(node, records, connectedRoutes(nodeId));
-      dirtyLabels = true;
-      if (focus) focusNode(node, close);
-    }
-
-    function passiveEligibleNodes() {
-      const preferred = mapNodes.filter(node => visibleNode(node) && ['primary', 'guard-origin', 'supporting'].includes(node.layer));
-      return preferred.length ? preferred : mapNodes.filter(visibleNode);
-    }
-
-    function rebuildPassiveSequence() {
-      passiveSequence = [...passiveEligibleNodes()];
-      for (let index = passiveSequence.length - 1; index > 0; index -= 1) { const swap = Math.floor(Math.random() * (index + 1)); [passiveSequence[index], passiveSequence[swap]] = [passiveSequence[swap], passiveSequence[index]]; }
-      if (selected && passiveSequence.length > 1 && passiveSequence[0]?.id === selected) [passiveSequence[0], passiveSequence[1]] = [passiveSequence[1], passiveSequence[0]];
-      passiveIndex = -1;
-    }
-
-    function passivePosition(node) {
-      const target = new THREE.Vector3(...node.position);
-      const radius = 34 + Math.random() * 34;
-      const azimuth = Math.random() * Math.PI * 2;
-      const elevation = 0.22 + Math.random() * 0.42;
-      const horizontal = Math.cos(elevation) * radius;
-      return { target, position: new THREE.Vector3(target.x + Math.cos(azimuth) * horizontal, target.y + Math.sin(elevation) * radius, target.z + Math.sin(azimuth) * horizontal) };
-    }
-
-    function advancePassive(now = performance.now()) {
-      if (!passive) return;
-      if (!passiveSequence.length || passiveIndex >= passiveSequence.length - 1) rebuildPassiveSequence();
-      passiveIndex += 1;
-      const node = passiveSequence[passiveIndex];
-      if (!node) return;
-      const records = recordsFor(node);
-      selectNode(node.id, false, true);
-      const destination = passivePosition(node);
-      moveTo(destination.position, destination.target, 2600);
-      passiveDeadline = now + PASSIVE_DWELL;
-      passiveLastFrame = now;
-      onPassiveNode?.(node, records, PASSIVE_DWELL);
-      refreshLayout();
-      updateStatus();
-    }
-
-    function startPassive() {
-      if (passive) return;
-      passive = true;
-      stage.dataset.passive = 'true';
-      mode = 'orbit';
-      rebuildPassiveSequence();
-      dirtyLabels = true;
-      updateVisibility();
-      applyMode();
-      onPassiveChange?.(true, 'engaged');
-      advancePassive(performance.now());
-    }
-
-    function updatePassive(now) {
-      if (!passive) return;
-      if (now >= passiveDeadline && !transition) { advancePassive(now); return; }
-      if (transition) { passiveLastFrame = now; return; }
-      const elapsed = clamp(now - (passiveLastFrame || now), 0, 80);
-      passiveLastFrame = now;
-      const offset = camera.position.clone().sub(controls.target);
-      offset.applyAxisAngle(verticalAxis, elapsed * PASSIVE_ORBIT_SPEED);
-      camera.position.copy(controls.target).add(offset);
-      camera.lookAt(controls.target);
-      dirtyLabels = true;
-    }
-
-    function updateMove(now) {
-      if (!transition) return;
-      const p = clamp((now - transition.start) / transition.duration, 0, 1);
-      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-      camera.position.lerpVectors(transition.fromPosition, transition.position, e);
-      controls.target.lerpVectors(transition.fromTarget, transition.target, e);
-      controls.update();
-      dirtyLabels = true;
-      if (p === 1) { transition = null; applyMode(); }
-    }
-
-    function pickNode(event) {
-      const box = renderer.domElement.getBoundingClientRect();
-      pointer.x = ((event.clientX - box.left) / box.width) * 2 - 1;
-      pointer.y = -((event.clientY - box.top) / box.height) * 2 + 1;
-      raycaster.setFromCamera(pointer, camera);
-      const hit = raycaster.intersectObjects(pickables.filter(mesh => mesh.visible), false)[0];
-      return hit?.object?.userData?.nodeId || '';
-    }
-
-    renderer.domElement.addEventListener('pointerdown', event => {
-      if (passive) stopPassive('interaction');
-      pointerStart = [event.clientX, event.clientY, performance.now()];
-      stage.dataset.dragging = 'true';
-    });
-    renderer.domElement.addEventListener('pointerup', event => {
-      stage.dataset.dragging = 'false';
-      if (!pointerStart) return;
-      const distance = Math.hypot(event.clientX - pointerStart[0], event.clientY - pointerStart[1]);
-      if (distance < 5 && performance.now() - pointerStart[2] < 650) { const id = pickNode(event); if (id) selectNode(id, false); }
-      pointerStart = null;
-    });
-    renderer.domElement.addEventListener('dblclick', event => {
-      event.preventDefault();
-      if (passive) stopPassive('interaction');
-      const id = pickNode(event) || selected;
-      if (id) selectNode(id, true, false, true);
-    });
+    function stopPassive(reason = 'manual') { if (!passive) return; passive = false; passiveDeadline = 0; passiveLastFrame = 0; stage.dataset.passive = 'false'; dirtyLabels = true; updateVisibility(); applyMode(); onPassiveChange?.(false, reason); }
+    function moveTo(position, target, duration = 1650) { transition = { start: performance.now(), duration, fromPosition: camera.position.clone(), fromTarget: controls.target.clone(), position: position.clone(), target: target.clone() }; controls.enabled = false; }
+    function focusNode(node, close = false) { const target = new THREE.Vector3(...node.position); const direction = camera.position.clone().sub(controls.target).normalize(); const distance = close ? clamp((expandedSystem?.radius || 6) * 2.25, 12, 24) : clamp(camera.position.distanceTo(controls.target) * 0.52, 28, 72); moveTo(target.clone().add(direction.multiplyScalar(distance)), target, close ? 1200 : 1650); }
+    function selectNode(nodeId, focus = false, preservePassive = false, close = false) { const node = nodeById.get(nodeId); if (!node) return; if (passive && !preservePassive) stopPassive('selection'); selected = nodeId; const records = recordsFor(node); expandSystem(node, records); onSelect?.(node, records, connectedRoutes(nodeId)); dirtyLabels = true; if (focus) focusNode(node, close); }
+    function passiveEligibleNodes() { const preferred = mapNodes.filter(node => visibleNode(node) && ['primary', 'guard-origin', 'supporting'].includes(node.layer)); return preferred.length ? preferred : mapNodes.filter(visibleNode); }
+    function rebuildPassiveSequence() { passiveSequence = [...passiveEligibleNodes()]; for (let index = passiveSequence.length - 1; index > 0; index -= 1) { const swap = Math.floor(Math.random() * (index + 1)); [passiveSequence[index], passiveSequence[swap]] = [passiveSequence[swap], passiveSequence[index]]; } if (selected && passiveSequence.length > 1 && passiveSequence[0]?.id === selected) [passiveSequence[0], passiveSequence[1]] = [passiveSequence[1], passiveSequence[0]]; passiveIndex = -1; }
+    function passivePosition(node) { const target = new THREE.Vector3(...node.position); const radius = 34 + Math.random() * 34; const azimuth = Math.random() * Math.PI * 2; const elevation = 0.22 + Math.random() * 0.42; const horizontal = Math.cos(elevation) * radius; return { target, position: new THREE.Vector3(target.x + Math.cos(azimuth) * horizontal, target.y + Math.sin(elevation) * radius, target.z + Math.sin(azimuth) * horizontal) }; }
+    function advancePassive(now = performance.now()) { if (!passive) return; if (!passiveSequence.length || passiveIndex >= passiveSequence.length - 1) rebuildPassiveSequence(); passiveIndex += 1; const node = passiveSequence[passiveIndex]; if (!node) return; const records = recordsFor(node); selectNode(node.id, false, true); const destination = passivePosition(node); moveTo(destination.position, destination.target, 2600); passiveDeadline = now + PASSIVE_DWELL; passiveLastFrame = now; onPassiveNode?.(node, records, PASSIVE_DWELL); refreshLayout(); updateStatus(); }
+    function startPassive() { if (passive) return; passive = true; stage.dataset.passive = 'true'; mode = 'orbit'; rebuildPassiveSequence(); dirtyLabels = true; updateVisibility(); applyMode(); onPassiveChange?.(true, 'engaged'); advancePassive(performance.now()); }
+    function updatePassive(now) { if (!passive) return; if (now >= passiveDeadline && !transition) { advancePassive(now); return; } if (transition) { passiveLastFrame = now; return; } const elapsed = clamp(now - (passiveLastFrame || now), 0, 80); passiveLastFrame = now; const offset = camera.position.clone().sub(controls.target); offset.applyAxisAngle(verticalAxis, elapsed * PASSIVE_ORBIT_SPEED); camera.position.copy(controls.target).add(offset); camera.lookAt(controls.target); dirtyLabels = true; }
+    function updateMove(now) { if (!transition) return; const p = clamp((now - transition.start) / transition.duration, 0, 1); const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; camera.position.lerpVectors(transition.fromPosition, transition.position, e); controls.target.lerpVectors(transition.fromTarget, transition.target, e); controls.update(); dirtyLabels = true; if (p === 1) { transition = null; applyMode(); } }
+    function pickNode(event) { const box = renderer.domElement.getBoundingClientRect(); pointer.x = ((event.clientX - box.left) / box.width) * 2 - 1; pointer.y = -((event.clientY - box.top) / box.height) * 2 + 1; raycaster.setFromCamera(pointer, camera); const hit = raycaster.intersectObjects(pickables.filter(mesh => mesh.visible), false)[0]; return hit?.object?.userData?.nodeId || ''; }
+    renderer.domElement.addEventListener('pointerdown', event => { if (passive) stopPassive('interaction'); pointerStart = [event.clientX, event.clientY, performance.now()]; stage.dataset.dragging = 'true'; });
+    renderer.domElement.addEventListener('pointerup', event => { stage.dataset.dragging = 'false'; if (!pointerStart) return; const distance = Math.hypot(event.clientX - pointerStart[0], event.clientY - pointerStart[1]); if (distance < 5 && performance.now() - pointerStart[2] < 650) { const id = pickNode(event); if (id) selectNode(id, false); } pointerStart = null; });
+    renderer.domElement.addEventListener('dblclick', event => { event.preventDefault(); if (passive) stopPassive('interaction'); const id = pickNode(event) || selected; if (id) selectNode(id, true, false, true); });
     renderer.domElement.addEventListener('pointercancel', () => { pointerStart = null; stage.dataset.dragging = 'false'; });
     controls.addEventListener('change', () => { dirtyLabels = true; });
-
-    function reserveViewportSpace() {
-      if (!vigilPanel || vigilPanel.hidden) return;
-      const stageBox = stage.getBoundingClientRect();
-      const consoleBottom = (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0);
-      const available = Math.max(150, stageBox.height - consoleBottom - 28);
-      vigilPanel.style.maxHeight = `${Math.min(stageBox.height * 0.55, available)}px`;
-      if (stageBox.width < 720) { vigilPanel.style.left = '.7rem'; vigilPanel.style.right = '.7rem'; vigilPanel.style.width = 'auto'; }
-      else { vigilPanel.style.left = ''; vigilPanel.style.right = ''; vigilPanel.style.width = ''; }
-    }
-
-    function resize() {
-      const box = stage.getBoundingClientRect();
-      const width = Math.max(1, box.width);
-      const height = Math.max(1, box.height);
-      renderer.setSize(width, height, false);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      leaderLayer.setAttribute('viewBox', `0 0 ${width} ${height}`);
-      reserveViewportSpace();
-      dirtyLabels = true;
-    }
-
-    function refreshLayout() {
-      resize();
-      requestAnimationFrame(() => { resize(); requestAnimationFrame(() => { resize(); if (running) layoutLabels(); }); });
-    }
-
+    function reserveViewportSpace() { if (!vigilPanel || vigilPanel.hidden) return; const stageBox = stage.getBoundingClientRect(); const consoleBottom = (viewportConsole?.offsetTop || 0) + (viewportConsole?.offsetHeight || 0); const available = Math.max(150, stageBox.height - consoleBottom - 28); vigilPanel.style.maxHeight = `${Math.min(stageBox.height * 0.55, available)}px`; if (stageBox.width < 720) { vigilPanel.style.left = '.7rem'; vigilPanel.style.right = '.7rem'; vigilPanel.style.width = 'auto'; } else { vigilPanel.style.left = ''; vigilPanel.style.right = ''; vigilPanel.style.width = ''; } }
+    function resize() { const box = stage.getBoundingClientRect(); const width = Math.max(1, box.width); const height = Math.max(1, box.height); renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); leaderLayer.setAttribute('viewBox', `0 0 ${width} ${height}`); reserveViewportSpace(); dirtyLabels = true; }
+    function refreshLayout() { resize(); requestAnimationFrame(() => { resize(); requestAnimationFrame(() => { resize(); if (running) layoutLabels(); }); }); }
     theatreToggle.textContent = 'Widen Survey Theatre'; theatreToggle.disabled = false; theatreToggle.setAttribute('aria-pressed', 'false');
     fullAuspexToggle.textContent = 'Invoke Full Auspex'; fullAuspexToggle.disabled = false; fullAuspexToggle.setAttribute('aria-pressed', 'false');
     docketToggle.textContent = 'Unseal Contact Docket'; docketToggle.disabled = false; docketToggle.hidden = true; docketToggle.setAttribute('aria-pressed', 'false');
-
-    function setTheatreState(active) {
-      surveyTheatre = Boolean(active);
-      if (!surveyTheatre) contactDocketOpen = false;
-      workspace?.classList.toggle('wh-survey-theatre-active', surveyTheatre);
-      mapPanel?.classList.toggle('wh-survey-theatre-active', surveyTheatre);
-      stage.classList.toggle('wh-survey-theatre-active', surveyTheatre);
-      if (workspace) workspace.dataset.surveyTheatre = String(surveyTheatre);
-      if (mapPanel) mapPanel.dataset.surveyTheatre = String(surveyTheatre);
-      if (mapLayout) mapLayout.dataset.surveyTheatre = String(surveyTheatre);
-      stage.dataset.surveyTheatre = String(surveyTheatre);
-      if (shell) { shell.style.width = surveyTheatre ? '100%' : ''; shell.style.maxWidth = surveyTheatre ? 'none' : ''; }
-      if (mapLayout) mapLayout.style.gridTemplateColumns = surveyTheatre ? 'minmax(0,1fr)' : '';
-      if (mapCard) mapCard.style.width = surveyTheatre ? '100%' : '';
-      if (details) details.hidden = surveyTheatre && !contactDocketOpen;
-      theatreToggle.textContent = surveyTheatre ? 'Restore Standard Survey' : 'Widen Survey Theatre';
-      theatreToggle.setAttribute('aria-pressed', surveyTheatre ? 'true' : 'false');
-      docketToggle.hidden = !surveyTheatre;
-      docketToggle.textContent = contactDocketOpen ? 'Reseal Contact Docket' : 'Unseal Contact Docket';
-      docketToggle.setAttribute('aria-pressed', contactDocketOpen ? 'true' : 'false');
-      refreshLayout();
-    }
-
-    function toggleContactDocket() {
-      if (!surveyTheatre || !details) return;
-      contactDocketOpen = !contactDocketOpen;
-      details.hidden = !contactDocketOpen;
-      mapLayout.dataset.contactDocket = contactDocketOpen ? 'unsealed' : 'sealed';
-      stage.dataset.contactDocket = contactDocketOpen ? 'unsealed' : 'sealed';
-      docketToggle.textContent = contactDocketOpen ? 'Reseal Contact Docket' : 'Unseal Contact Docket';
-      docketToggle.setAttribute('aria-pressed', contactDocketOpen ? 'true' : 'false');
-      refreshLayout();
-    }
-
-    async function toggleFullAuspex() {
-      try {
-        if (document.fullscreenElement === stage) await document.exitFullscreen();
-        else { if (document.fullscreenElement) await document.exitFullscreen(); await stage.requestFullscreen(); }
-      } catch (error) { status.textContent = `Full Auspex invocation denied by the host cogitator: ${error.message}`; }
-    }
-
-    function syncFullAuspexState() {
-      fullAuspex = document.fullscreenElement === stage;
-      stage.classList.toggle('wh-full-auspex-active', fullAuspex);
-      workspace?.classList.toggle('wh-full-auspex-active', fullAuspex);
-      stage.dataset.fullAuspex = String(fullAuspex);
-      if (workspace) workspace.dataset.fullAuspex = String(fullAuspex);
-      stage.style.width = fullAuspex ? '100vw' : '';
-      stage.style.height = fullAuspex ? '100vh' : '';
-      stage.style.minHeight = fullAuspex ? '100vh' : '';
-      fullAuspexToggle.textContent = fullAuspex ? 'Stand Down Full Auspex' : 'Invoke Full Auspex';
-      fullAuspexToggle.setAttribute('aria-pressed', fullAuspex ? 'true' : 'false');
-      refreshLayout();
-    }
-
+    function setTheatreState(active) { surveyTheatre = Boolean(active); if (!surveyTheatre) contactDocketOpen = false; workspace?.classList.toggle('wh-survey-theatre-active', surveyTheatre); mapPanel?.classList.toggle('wh-survey-theatre-active', surveyTheatre); stage.classList.toggle('wh-survey-theatre-active', surveyTheatre); if (workspace) workspace.dataset.surveyTheatre = String(surveyTheatre); if (mapPanel) mapPanel.dataset.surveyTheatre = String(surveyTheatre); if (mapLayout) mapLayout.dataset.surveyTheatre = String(surveyTheatre); stage.dataset.surveyTheatre = String(surveyTheatre); if (shell) { shell.style.width = surveyTheatre ? '100%' : ''; shell.style.maxWidth = surveyTheatre ? 'none' : ''; } if (mapLayout) mapLayout.style.gridTemplateColumns = surveyTheatre ? 'minmax(0,1fr)' : ''; if (mapCard) mapCard.style.width = surveyTheatre ? '100%' : ''; if (details) details.hidden = surveyTheatre && !contactDocketOpen; theatreToggle.textContent = surveyTheatre ? 'Restore Standard Survey' : 'Widen Survey Theatre'; theatreToggle.setAttribute('aria-pressed', surveyTheatre ? 'true' : 'false'); docketToggle.hidden = !surveyTheatre; docketToggle.textContent = contactDocketOpen ? 'Reseal Contact Docket' : 'Unseal Contact Docket'; docketToggle.setAttribute('aria-pressed', contactDocketOpen ? 'true' : 'false'); refreshLayout(); }
+    function toggleContactDocket() { if (!surveyTheatre || !details) return; contactDocketOpen = !contactDocketOpen; details.hidden = !contactDocketOpen; mapLayout.dataset.contactDocket = contactDocketOpen ? 'unsealed' : 'sealed'; stage.dataset.contactDocket = contactDocketOpen ? 'unsealed' : 'sealed'; docketToggle.textContent = contactDocketOpen ? 'Reseal Contact Docket' : 'Unseal Contact Docket'; docketToggle.setAttribute('aria-pressed', contactDocketOpen ? 'true' : 'false'); refreshLayout(); }
+    async function toggleFullAuspex() { try { if (document.fullscreenElement === stage) await document.exitFullscreen(); else { if (document.fullscreenElement) await document.exitFullscreen(); await stage.requestFullscreen(); } } catch (error) { status.textContent = `Full Auspex invocation denied by the host cogitator: ${error.message}`; } }
+    function syncFullAuspexState() { fullAuspex = document.fullscreenElement === stage; stage.classList.toggle('wh-full-auspex-active', fullAuspex); workspace?.classList.toggle('wh-full-auspex-active', fullAuspex); stage.dataset.fullAuspex = String(fullAuspex); if (workspace) workspace.dataset.fullAuspex = String(fullAuspex); stage.style.width = fullAuspex ? '100vw' : ''; stage.style.height = fullAuspex ? '100vh' : ''; stage.style.minHeight = fullAuspex ? '100vh' : ''; fullAuspexToggle.textContent = fullAuspex ? 'Stand Down Full Auspex' : 'Invoke Full Auspex'; fullAuspexToggle.setAttribute('aria-pressed', fullAuspex ? 'true' : 'false'); refreshLayout(); }
     const handleTheatreToggle = () => setTheatreState(!surveyTheatre);
     const handleFullAuspexToggle = () => { void toggleFullAuspex(); };
     theatreToggle.addEventListener('click', handleTheatreToggle);
     docketToggle.addEventListener('click', toggleContactDocket);
     fullAuspexToggle.addEventListener('click', handleFullAuspexToggle);
     document.addEventListener('fullscreenchange', syncFullAuspexState);
-
     const observer = new ResizeObserver(resize);
     observer.observe(stage);
     resize();
-
     function animate(now) {
       if (!running) return;
       raf = requestAnimationFrame(animate);
@@ -650,18 +558,13 @@
       updatePassive(now);
       if (expandedSystem) {
         expandedSystem.star.rotation.y = now * 0.00008;
-        expandedSystem.moving.forEach((body, index) => {
-          body.pivot.rotation.y += body.speed * Math.min(80, Math.max(1, now - (body.last || now)));
-          body.last = now;
-          body.planet.rotation.y += 0.0016 + index * 0.0002;
-          body.pivot.children.slice(1).forEach(moonPivot => { moonPivot.rotation.y += body.moonSpeed; });
-        });
+        expandedSystem.moving.forEach((body, index) => { body.pivot.rotation.y += body.speed * Math.min(80, Math.max(1, now - (body.last || now))); body.last = now; body.planet.rotation.y += 0.0016 + index * 0.0002; body.pivot.children.slice(1).forEach(moonPivot => { moonPivot.rotation.y += body.moonSpeed; }); });
+        expandedSystem.traffic.forEach(craft => { craft.pivot.rotation.y += craft.speed; });
       }
       if (!transition && !passive) controls.update();
       renderer.render(scene, camera);
       if (dirtyLabels) layoutLabels();
     }
-
     function pause() { running = false; cancelAnimationFrame(raf); }
     function resume() { if (!running) { running = true; dirtyLabels = true; passiveLastFrame = performance.now(); raf = requestAnimationFrame(animate); } }
     function setMode(value) { if (MODES.has(value)) { if (passive) stopPassive('mode'); mode = value; applyMode(); } }
@@ -669,25 +572,12 @@
     function setThreat(value) { threat = value || 'all'; updateVisibility(); if (passive) rebuildPassiveSequence(); }
     function reset() { if (passive) stopPassive('reset'); clearExpandedSystem(); updateVisibility(); moveTo(homePosition, homeTarget, 1900); }
     function top() { if (passive) stopPassive('projection'); const target = controls.target.clone(); moveTo(new THREE.Vector3(target.x, 210, target.z + 0.01), target, 1900); }
-    function dispose() {
-      stopPassive('dispose'); pause(); observer.disconnect(); clearExpandedSystem();
-      theatreToggle.removeEventListener('click', handleTheatreToggle);
-      docketToggle.removeEventListener('click', toggleContactDocket);
-      fullAuspexToggle.removeEventListener('click', handleFullAuspexToggle);
-      document.removeEventListener('fullscreenchange', syncFullAuspexState);
-      if (document.fullscreenElement === stage) void document.exitFullscreen();
-      controls.dispose(); renderer.dispose(); labelLayer.replaceChildren(); leaderLayer.replaceChildren(); renderer.domElement.remove();
-    }
-
+    function dispose() { stopPassive('dispose'); pause(); observer.disconnect(); clearExpandedSystem(); theatreToggle.removeEventListener('click', handleTheatreToggle); docketToggle.removeEventListener('click', toggleContactDocket); fullAuspexToggle.removeEventListener('click', handleFullAuspexToggle); document.removeEventListener('fullscreenchange', syncFullAuspexState); if (document.fullscreenElement === stage) void document.exitFullscreen(); controls.dispose(); renderer.dispose(); labelLayer.replaceChildren(); leaderLayer.replaceChildren(); renderer.domElement.remove(); }
     stage.dataset.surveyTheatre = 'false'; stage.dataset.fullAuspex = 'false';
     if (workspace) { workspace.dataset.surveyTheatre = 'false'; workspace.dataset.fullAuspex = 'false'; }
     if (mapLayout) { mapLayout.dataset.surveyTheatre = 'false'; mapLayout.dataset.contactDocket = 'sealed'; }
     applyMode(); updateVisibility(); raf = requestAnimationFrame(animate);
-    return Object.freeze({
-      mapNodes, routes, selectNode, setMode, setLayer, setThreat, reset, top, pause, resume, dispose, refreshLayout,
-      startPassive, stopPassive, nextPassive: () => advancePassive(performance.now()), passiveActive: () => passive,
-      passiveDwell: PASSIVE_DWELL, surveyTheatreActive: () => surveyTheatre, fullAuspexActive: () => fullAuspex
-    });
+    return Object.freeze({ mapNodes, routes, selectNode, setMode, setLayer, setThreat, reset, top, pause, resume, dispose, refreshLayout, startPassive, stopPassive, nextPassive: () => advancePassive(performance.now()), passiveActive: () => passive, passiveDwell: PASSIVE_DWELL, surveyTheatreActive: () => surveyTheatre, fullAuspexActive: () => fullAuspex });
   }
 
   window.CafarronSectorMapV8 = Object.freeze({ mount });
