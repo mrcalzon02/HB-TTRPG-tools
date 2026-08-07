@@ -4,6 +4,11 @@
   const imageCache = new Map();
   const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
   const mix = (a, b, t) => a + (b - a) * clamp(t);
+  const smoothstep = (edge0, edge1, value) => {
+    if (edge0 === edge1) return value < edge0 ? 0 : 1;
+    const t = clamp((value - edge0) / (edge1 - edge0));
+    return t * t * (3 - 2 * t);
+  };
   const ASSET_ROOT = 'assets/warhammer-40k/planet-textures/';
 
   function loadImage(path) {
@@ -36,7 +41,9 @@
     const offsetX = -((profile.uvOffset?.[0] || 0) * drawWidth) % drawWidth;
     const offsetY = -((profile.uvOffset?.[1] || 0) * drawHeight) % drawHeight;
     for (let y = offsetY - drawHeight; y < height + drawHeight; y += drawHeight) {
-      for (let x = offsetX - drawWidth; x < width + drawWidth; x += drawWidth) context.drawImage(image, x, y, drawWidth, drawHeight);
+      for (let x = offsetX - drawWidth; x < width + drawWidth; x += drawWidth) {
+        context.drawImage(image, x, y, drawWidth, drawHeight);
+      }
     }
     context.restore();
     return context.getImageData(0, 0, width, height);
@@ -56,9 +63,15 @@
       const nr = (0.213 + cosA * 0.787 - sinA * 0.213) * rr + (0.715 - cosA * 0.715 - sinA * 0.715) * gg + (0.072 - cosA * 0.072 + sinA * 0.928) * bb;
       const ng = (0.213 - cosA * 0.213 + sinA * 0.143) * rr + (0.715 + cosA * 0.285 + sinA * 0.140) * gg + (0.072 - cosA * 0.072 - sinA * 0.283) * bb;
       const nb = (0.213 - cosA * 0.213 - sinA * 0.787) * rr + (0.715 - cosA * 0.715 + sinA * 0.715) * gg + (0.072 + cosA * 0.928 + sinA * 0.072) * bb;
-      rr = nr; gg = ng; bb = nb;
+      rr = nr;
+      gg = ng;
+      bb = nb;
     }
-    return [Math.max(0, Math.min(255, rr)), Math.max(0, Math.min(255, gg)), Math.max(0, Math.min(255, bb))];
+    return [
+      Math.max(0, Math.min(255, rr)),
+      Math.max(0, Math.min(255, gg)),
+      Math.max(0, Math.min(255, bb))
+    ];
   }
 
   function canvasTexture(THREE, canvas, srgb = true) {
@@ -71,13 +84,16 @@
     return texture;
   }
 
-  function biomeColor(sample) {
-    if (sample.ice > 0.5) return [210, 235, 244];
-    if (sample.jungle > 0.45) return [35, 73, 38];
-    if (sample.grassland > 0.40) return [92, 111, 55];
-    if (sample.desert > 0.40) return [176, 135, 79];
-    if (sample.mountain > 0.52) return [102, 99, 91];
-    return null;
+  function blendChannel(value, target, weight) {
+    return mix(value, target, clamp(weight));
+  }
+
+  function blendBiome(r, g, b, target, weight) {
+    return [
+      blendChannel(r, target[0], weight),
+      blendChannel(g, target[1], weight),
+      blendChannel(b, target[2], weight)
+    ];
   }
 
   async function compose(THREE, profile, options = {}) {
@@ -91,7 +107,11 @@
       loadImage(`${ASSET_ROOT}base/alpha.png`).catch(() => null)
     ]);
     const geology = sampleImage(geologyImage, width, height, profile);
-    const grass = grassImage ? sampleImage(grassImage, width, height, { ...profile, uvScale: (profile.uvScale || 1) * 0.72, uvRotation: (profile.uvRotation || 0) * -0.43 }) : null;
+    const grass = grassImage ? sampleImage(grassImage, width, height, {
+      ...profile,
+      uvScale: (profile.uvScale || 1) * 0.72,
+      uvRotation: (profile.uvRotation || 0) * -0.43
+    }) : null;
     const surfaceCanvas = document.createElement('canvas');
     const bumpCanvas = document.createElement('canvas');
     const emissiveCanvas = document.createElement('canvas');
@@ -113,35 +133,34 @@
         const tinted = tintPixel(geology.data[offset], geology.data[offset + 1], geology.data[offset + 2], profile);
         let r = tinted[0], g = tinted[1], b = tinted[2];
 
-        if (sample.ocean > 0.02) {
-          const deep = clamp((profile.seaLevel - sample.elevation + 0.10) * 4.0);
-          const coast = sample.coast;
-          const or = mix(30, 14, deep), og = mix(79, 43, deep), ob = mix(105, 78, deep);
-          r = mix(r, or, sample.ocean * (1 - coast * 0.28));
-          g = mix(g, og, sample.ocean * (1 - coast * 0.28));
-          b = mix(b, ob, sample.ocean * (1 - coast * 0.28));
+        const deep = clamp((profile.seaLevel - sample.elevation + 0.10) * 4.0);
+        const oceanStrength = sample.ocean * (1 - sample.coast * 0.28);
+        r = mix(r, mix(30, 14, deep), oceanStrength);
+        g = mix(g, mix(79, 43, deep), oceanStrength);
+        b = mix(b, mix(105, 78, deep), oceanStrength);
+
+        if (grass) {
+          const vegetation = sample.grassland * sample.land;
+          r = mix(r, grass.data[offset], vegetation * 0.58);
+          g = mix(g, grass.data[offset + 1], vegetation * 0.68);
+          b = mix(b, grass.data[offset + 2], vegetation * 0.54);
         }
 
-        const biome = biomeColor(sample);
-        if (biome && sample.land > 0.02) {
-          let strength = Math.max(sample.ice, sample.jungle, sample.grassland, sample.desert, sample.mountain) * sample.land;
-          if (sample.grassland > 0.34 && grass) {
-            const gr = grass.data[offset], gg = grass.data[offset + 1], gb = grass.data[offset + 2];
-            const vegetation = sample.grassland * sample.land;
-            r = mix(r, gr, vegetation * 0.58);
-            g = mix(g, gg, vegetation * 0.68);
-            b = mix(b, gb, vegetation * 0.54);
-            strength *= 0.55;
-          }
-          r = mix(r, biome[0], strength * 0.48);
-          g = mix(g, biome[1], strength * 0.48);
-          b = mix(b, biome[2], strength * 0.48);
+        const biomeWeights = [
+          [[176, 135, 79], sample.desert * sample.land * 0.52],
+          [[92, 111, 55], sample.grassland * sample.land * 0.42],
+          [[35, 73, 38], sample.jungle * sample.land * 0.58],
+          [[102, 99, 91], sample.mountain * sample.land * 0.54],
+          [[210, 235, 244], sample.ice * sample.land * 0.72]
+        ];
+        for (const [target, weight] of biomeWeights) {
+          [r, g, b] = blendBiome(r, g, b, target, weight);
         }
 
-        if (sample.coast > 0.02 && sample.land > 0.1) {
-          const coastMix = sample.coast * sample.land * 0.42;
-          r = mix(r, 194, coastMix); g = mix(g, 167, coastMix); b = mix(b, 118, coastMix);
-        }
+        const coastMix = sample.coast * sample.land * 0.42;
+        r = mix(r, 194, coastMix);
+        g = mix(g, 167, coastMix);
+        b = mix(b, 118, coastMix);
 
         surface.data[offset] = Math.max(0, Math.min(255, r));
         surface.data[offset + 1] = Math.max(0, Math.min(255, g));
@@ -154,8 +173,12 @@
 
         const civilization = clamp(profile.civilization || 0);
         const urbanNoise = profileEngine.fbm2(u * 22 + profile.seed * 0.00007, v * 18, profile.seed ^ 0x27d4eb2d, 3);
-        const city = sample.land * civilization * Math.max(0, urbanNoise - (0.73 - civilization * 0.2)) * 3.8 * (1 - sample.mountain);
-        const lava = profile.template === 'forge' ? sample.land * Math.max(0, sample.ridge - 0.34) * 0.75 : 0;
+        const cityThreshold = 0.73 - civilization * 0.2;
+        const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.12, urbanNoise);
+        const city = sample.land * civilization * urbanMask * (1 - sample.mountain);
+        const lava = profile.template === 'forge'
+          ? sample.land * smoothstep(0.28, 0.62, sample.ridge) * 0.75
+          : 0;
         const glow = clamp(city + lava);
         emissive.data[offset] = Math.min(255, 255 * glow);
         emissive.data[offset + 1] = Math.min(255, (profile.template === 'forge' ? 92 : 188) * glow);
