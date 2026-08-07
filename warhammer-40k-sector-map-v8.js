@@ -3,10 +3,13 @@
 
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=2';
+  const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=2';
   const MODES = new Set(['select', 'orbit', 'pan', 'zoom']);
   const PASSIVE_DWELL = 26000;
   const PASSIVE_ORBIT_SPEED = 0.000035;
   const loads = new Map();
+  let planetCompositorPromise = null;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
   function loadScript(src) {
@@ -38,6 +41,20 @@
     }
     if (!window.THREE?.OrbitControls) throw new Error('Navis survey controls failed to answer the invocation rite.');
     return window.THREE;
+  }
+
+  async function planetaryCompositor() {
+    if (!planetCompositorPromise) {
+      planetCompositorPromise = (async () => {
+        if (!window.CafarronPlanetProfileV1) await loadScript(PLANET_PROFILE_URL);
+        if (!window.CafarronPlanetCompositorV1) await loadScript(PLANET_COMPOSITOR_URL);
+        const profileEngine = window.CafarronPlanetProfileV1, compositor = window.CafarronPlanetCompositorV1;
+        if (!profileEngine?.createProfile || !compositor?.compose || !compositor?.materialFromTextures) throw new Error('Planetary composition cogitators failed to answer.');
+        return { profileEngine, compositor };
+      })();
+      planetCompositorPromise.catch(() => { planetCompositorPromise = null; });
+    }
+    return planetCompositorPromise;
   }
 
   function hash(value) {
@@ -77,24 +94,6 @@
     return texture;
   }
 
-  function desertTexture(THREE, seed) {
-    const width = 512, height = 256;
-    const canvas = document.createElement('canvas');
-    canvas.width = width; canvas.height = height;
-    const context = canvas.getContext('2d', { alpha: false });
-    const roll = random(seed ^ 0x44534552);
-    const gradient = context.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, '#d7bd7c'); gradient.addColorStop(0.24, '#b77c45'); gradient.addColorStop(0.52, '#d2a45e'); gradient.addColorStop(0.76, '#8e5135'); gradient.addColorStop(1, '#c29458');
-    context.fillStyle = gradient; context.fillRect(0, 0, width, height); context.globalCompositeOperation = 'multiply';
-    for (let band = 0; band < 72; band += 1) { const y = roll() * height; context.beginPath(); context.moveTo(0, y); for (let x = 0; x <= width; x += 8) { const amplitude = 2 + roll() * 11; context.lineTo(x, y + Math.sin(x * (0.012 + roll() * 0.016) + band) * amplitude); } context.strokeStyle = `rgba(${80 + Math.floor(roll() * 45)},${42 + Math.floor(roll() * 34)},${24 + Math.floor(roll() * 24)},${0.05 + roll() * 0.13})`; context.lineWidth = 1 + roll() * 5; context.stroke(); }
-    context.globalCompositeOperation = 'screen';
-    for (let crater = 0; crater < 52; crater += 1) { const x = roll() * width, y = roll() * height, radius = 1 + roll() * 8; context.beginPath(); context.ellipse(x, y, radius, radius * (0.35 + roll() * 0.4), roll() * Math.PI, 0, Math.PI * 2); context.strokeStyle = `rgba(242,211,145,${0.08 + roll() * 0.16})`; context.lineWidth = 0.8 + roll() * 2.2; context.stroke(); }
-    const image = context.getImageData(0, 0, width, height);
-    for (let index = 0; index < image.data.length; index += 4) { const grain = Math.floor((roll() - 0.5) * 18); image.data[index] = clamp(image.data[index] + grain, 0, 255); image.data[index + 1] = clamp(image.data[index + 1] + grain, 0, 255); image.data[index + 2] = clamp(image.data[index + 2] + grain, 0, 255); }
-    context.putImageData(image, 0, 0);
-    return canvasTexture(THREE, canvas);
-  }
-
   function forgeTextureSet(THREE, seed) {
     const width = 512, height = 256, surface = document.createElement('canvas'), emissive = document.createElement('canvas');
     surface.width = emissive.width = width; surface.height = emissive.height = height;
@@ -125,7 +124,6 @@
 
   function registeredPlanetMaterial(THREE, template, seed, fallbackColor) {
     if (template === 'forge') { const textures = forgeTextureSet(THREE, seed); return new THREE.MeshStandardMaterial({ color: 0xffffff, map: textures.map, bumpMap: textures.map, bumpScale: 0.026, emissive: 0xff4b19, emissiveMap: textures.emissiveMap, emissiveIntensity: 1.15, roughness: 0.68, metalness: 0.46 }); }
-    if (template === 'desert') { const map = desertTexture(THREE, seed); return new THREE.MeshStandardMaterial({ color: 0xffffff, map, bumpMap: map, bumpScale: 0.038, emissive: 0x6f3417, emissiveIntensity: 0.08, roughness: 0.93, metalness: 0.01 }); }
     if (template === 'ice') { const textures = iceTextureSet(THREE, seed); return new THREE.MeshStandardMaterial({ color: 0xffffff, map: textures.map, bumpMap: textures.map, bumpScale: 0.024, emissive: 0x56b8e8, emissiveMap: textures.emissiveMap, emissiveIntensity: 0.32, roughness: 0.54, metalness: 0.04 }); }
     return new THREE.MeshStandardMaterial({ color: fallbackColor, emissive: fallbackColor, emissiveIntensity: 0.18, roughness: 0.76, metalness: 0.08 });
   }
@@ -139,8 +137,10 @@
     return numerals[value - 1] || String(value);
   }
 
+  function systemIdentityText(node, records) { return [node.id, node.name, ...records.flatMap(record => [record.name, record.objectType, record.classification, record.environment])].join('|'); }
+
   function systemProfile(node, records) {
-    const text = [node.id, node.name, ...records.flatMap(record => [record.name, record.objectType, record.classification, record.environment])].join('|'), roll = random(hash(text)), recordText = text.toLowerCase();
+    const text = systemIdentityText(node, records), roll = random(hash(text)), recordText = text.toLowerCase();
     const starColors = [0xffd88a, 0xffb56b, 0xfff0c4, 0xc9ddff, 0xff8b58];
     const bodyColors = recordText.includes('forge') ? [0x8c3926, 0xc65a30, 0x4f5455, 0xd28a39] : recordText.includes('desert') ? [0xc79b5c, 0x9b5737, 0xd6bd7a, 0x6d4933] : recordText.includes('ice') || recordText.includes('frozen') ? [0xd9f3ff, 0x91bed0, 0xe9f6f4, 0x718da8] : recordText.includes('dead') || recordText.includes('tomb') ? [0x77756f, 0x4f5352, 0x999589, 0x343838] : [0x5d9f83, 0xc59a58, 0x738da8, 0x8c6651, 0xb8b36e];
     const template = classifyWorldTemplate(recordText), count = clamp(3 + Math.floor(roll() * 5), 3, 7), registeredIndex = Math.min(count - 1, 1 + Math.floor(roll() * Math.max(1, count - 1)));
@@ -168,7 +168,28 @@
     };
   }
 
-  function disposeObject(root) { if (!root) return; root.traverse(object => { object.geometry?.dispose?.(); const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.filter(Boolean).forEach(material => { const disposed = new Set(); ['map', 'bumpMap', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'alphaMap'].forEach(key => { const texture = material[key]; if (texture && !disposed.has(texture)) { disposed.add(texture); texture.dispose?.(); } }); material.dispose?.(); }); }); root.removeFromParent(); }
+  function disposeMaterial(material) {
+    if (!material) return;
+    const disposed = new Set();
+    ['map', 'bumpMap', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'alphaMap'].forEach(key => { const texture = material[key]; if (texture && !disposed.has(texture)) { disposed.add(texture); texture.dispose?.(); } });
+    material.dispose?.();
+  }
+  function disposeObject(root) { if (!root) return; root.traverse(object => { object.geometry?.dispose?.(); const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.filter(Boolean).forEach(disposeMaterial); }); root.removeFromParent(); }
+
+  async function composeDesertPlanet(THREE, planet, systemGroup, node, records, seed, fallbackColor) {
+    try {
+      const { profileEngine, compositor } = await planetaryCompositor();
+      const profile = profileEngine.createProfile(`${node.id}|registered-world|${seed}`, systemIdentityText(node, records), 'desert');
+      const textures = await compositor.compose(THREE, profile, { width: 256, height: 128 });
+      const material = compositor.materialFromTextures(THREE, textures, fallbackColor);
+      if (!planet.parent || !systemGroup.parent) { disposeMaterial(material); return; }
+      const previous = planet.material;
+      planet.material = material;
+      disposeMaterial(previous);
+    } catch (error) {
+      console.warn(`Desert world composition rite failed for ${node.name || node.id}; retaining geological fallback.`, error);
+    }
+  }
 
   async function mount(options) {
     const { data, chart, stage, labelLayer, leaderLayer, status, initialMode = 'orbit', onSelect, onClear, onPassiveNode, onPassiveChange } = options;
@@ -251,6 +272,7 @@
         const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 22, 16), material); planet.position.x = body.radius;
         if (index === profile.registeredIndex) { const shellColor = profile.template === 'forge' ? 0x8a3a22 : profile.template === 'desert' ? 0xd49a53 : profile.template === 'ice' ? 0x9adcf4 : 0xe0c77f, shellOpacity = profile.template === 'forge' ? 0.13 : profile.template === 'desert' ? 0.09 : profile.template === 'ice' ? 0.14 : 0.13; planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 16, 12), new THREE.MeshBasicMaterial({ color: shellColor, transparent: true, opacity: shellOpacity, wireframe: profile.template === 'unsealed' }))); }
         pivot.add(planet);
+        if (index === profile.registeredIndex && profile.template === 'desert') void composeDesertPlanet(THREE, planet, group, node, records, profile.seed ^ index, body.color);
         localObjects.push({ object: planet, name: body.name, kind: 'planet', priority: index === profile.registeredIndex ? 90 : 70 - index });
         for (let moonIndex = 0; moonIndex < body.moons; moonIndex += 1) {
           const moonPivot = new THREE.Group(); moonPivot.position.copy(planet.position); moonPivot.rotation.y = moonIndex * Math.PI + profile.seed * 0.0001;
