@@ -52,11 +52,15 @@
   function tintPixel(r, g, b, profile) {
     const brightness = profile.tintBrightness || 1;
     const saturation = profile.tintSaturation || 1;
+    const contrast = profile.tintContrast || 1;
     const hue = profile.tintHue || 0;
     const grey = (r + g + b) / 3;
-    let rr = mix(grey, r, saturation) * brightness;
-    let gg = mix(grey, g, saturation) * brightness;
-    let bb = mix(grey, b, saturation) * brightness;
+    let rr = (grey + (r - grey) * saturation) * brightness;
+    let gg = (grey + (g - grey) * saturation) * brightness;
+    let bb = (grey + (b - grey) * saturation) * brightness;
+    rr = (rr - 127.5) * contrast + 127.5;
+    gg = (gg - 127.5) * contrast + 127.5;
+    bb = (bb - 127.5) * contrast + 127.5;
     if (hue !== 0) {
       const angle = hue * Math.PI * 2;
       const cosA = Math.cos(angle), sinA = Math.sin(angle);
