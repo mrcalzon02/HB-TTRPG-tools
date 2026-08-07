@@ -6,7 +6,7 @@
   const CHART_PATH = 'warhammer-40k-sector-chart-v7.js?v=7';
   const LABELS_PATH = 'warhammer-40k-map-labels-v7.js?v=7';
   const ASSAY_PATH = 'warhammer-40k-survey-assay-v8.js?v=8';
-  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=16';
+  const MAP_PATH = 'warhammer-40k-sector-map-v8.js?v=17';
   const loadedScripts = new Map();
 
   const state = { initialized: false, initPromise: null, data: null, chart: null, mapNodes: [], routes: [], ui: null, map: null, mapPromise: null, activeTab: 'archive', mapMode: 'orbit', vigilActive: false, vigilProfile: null, vigilCycle: 0, vigilTimer: 0, selectedNodeId: '', selectedNodeName: '', selectedRecordId: '', preambleSealed: false };
