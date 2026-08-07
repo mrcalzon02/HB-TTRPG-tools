@@ -112,6 +112,44 @@
     return edgeGroup([item], side, width, height, topInset)[0] || null;
   }
 
+  function localLabel(item, occupied, width, height, topInset) {
+    const radii = [20, 28, 38, 50, 64, 80];
+    const angles = [-28, 28, -62, 62, -118, 118, -152, 152, -90, 90, 0, 180];
+    for (const radius of radii) {
+      for (const degrees of angles) {
+        const angle = degrees * Math.PI / 180;
+        const centerX = item.x + Math.cos(angle) * (radius + Math.min(24, item.labelWidth * 0.12));
+        const centerY = item.y + Math.sin(angle) * (radius + Math.min(12, item.labelHeight * 0.1));
+        const rect = rectangle(centerX, centerY, item.labelWidth, item.labelHeight);
+        const inside = rect.left >= 7 &&
+          rect.right <= width - 7 &&
+          rect.top >= topInset &&
+          rect.bottom <= height - 7;
+        if (!inside) continue;
+        if (occupied.some(existing => overlaps(padded(rect, 4), existing))) continue;
+        return { ...item, cx: centerX, cy: centerY, rect, placement: 'local-system' };
+      }
+    }
+    return null;
+  }
+
+  function placeLocal(items, width, height, topInset) {
+    const placed = [];
+    const occupied = [];
+    const ordered = [...items].sort((first, second) =>
+      (Number(second.priority || 0) - Number(first.priority || 0)) ||
+      (first.y - second.y) ||
+      (first.x - second.x)
+    );
+    for (const item of ordered) {
+      const placement = localLabel(item, occupied, width, height, topInset);
+      if (!placement) continue;
+      placed.push(placement);
+      occupied.push(padded(placement.rect, 4));
+    }
+    return placed;
+  }
+
   function place(left, right, selected, width, height, topInset) {
     const placed = [
       ...edgeGroup(left, 'left', width, height, topInset),
@@ -125,5 +163,5 @@
     return placed;
   }
 
-  window.CafarronMapLabelsV7 = Object.freeze({ place, nearest });
+  window.CafarronMapLabelsV7 = Object.freeze({ place, placeLocal, nearest });
 })();
