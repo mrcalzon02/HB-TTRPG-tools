@@ -88,7 +88,12 @@
     barren: { geologyTags: ['barren','regolith','cratered','rock'], seaLevel: [0.78,0.94], temperature: [0.12,0.82], moisture: [0,0.08], polarExtent: [0,0.28], cloudCoverage: [0,0.08], civilization: [0,0.10], industrialization: [0,0.10], atmosphere: [0.02,0.28], emissiveDensity: [0,0.05] },
     toxic: { geologyTags: ['toxic','basalt','volcanic','dark-rock-soil'], seaLevel: [0.46,0.72], temperature: [0.46,0.88], moisture: [0.20,0.72], polarExtent: [0,0.12], cloudCoverage: [0.52,0.92], civilization: [0,0.18], industrialization: [0.02,0.26], atmosphere: [0.82,1], emissiveDensity: [0.02,0.18] },
     paradise: { geologyTags: ['paradise','soil','highland','rock'], seaLevel: [0.36,0.54], temperature: [0.48,0.70], moisture: [0.52,0.78], polarExtent: [0.06,0.16], cloudCoverage: [0.20,0.48], civilization: [0.10,0.52], industrialization: [0.02,0.26], atmosphere: [0.88,1], emissiveDensity: [0.02,0.24] },
-    feudal: { geologyTags: ['feudal','soil','highland','sandstone'], seaLevel: [0.42,0.62], temperature: [0.34,0.72], moisture: [0.30,0.70], polarExtent: [0.06,0.24], cloudCoverage: [0.18,0.54], civilization: [0.08,0.32], industrialization: [0,0.10], atmosphere: [0.68,0.98], emissiveDensity: [0,0.08] }
+    feudal: { geologyTags: ['feudal','soil','highland','sandstone'], seaLevel: [0.42,0.62], temperature: [0.34,0.72], moisture: [0.30,0.70], polarExtent: [0.06,0.24], cloudCoverage: [0.18,0.54], civilization: [0.08,0.32], industrialization: [0,0.10], atmosphere: [0.68,0.98], emissiveDensity: [0,0.08] },
+    urban: { geologyTags: ['hive','industrial','metal','rock'], seaLevel: [0.50,0.72], temperature: [0.40,0.74], moisture: [0.12,0.46], polarExtent: [0.02,0.16], cloudCoverage: [0.28,0.68], civilization: [0.78,0.98], industrialization: [0.62,0.90], atmosphere: [0.58,0.94], emissiveDensity: [0.58,0.90] },
+    forest: { geologyTags: ['feral','soil','highland','rock'], seaLevel: [0.38,0.58], temperature: [0.38,0.72], moisture: [0.62,0.92], polarExtent: [0.04,0.20], cloudCoverage: [0.34,0.70], civilization: [0.02,0.30], industrialization: [0,0.16], atmosphere: [0.78,1], emissiveDensity: [0,0.12] },
+    battlefield: { geologyTags: ['death-world','badlands','rock','industrial'], seaLevel: [0.56,0.80], temperature: [0.26,0.78], moisture: [0.08,0.48], polarExtent: [0.02,0.24], cloudCoverage: [0.16,0.54], civilization: [0.10,0.46], industrialization: [0.28,0.68], atmosphere: [0.44,0.88], emissiveDensity: [0.22,0.58] },
+    schola: { geologyTags: ['shrine','highland','rock','fortress'], seaLevel: [0.46,0.66], temperature: [0.34,0.68], moisture: [0.24,0.62], polarExtent: [0.06,0.22], cloudCoverage: [0.18,0.50], civilization: [0.52,0.84], industrialization: [0.18,0.48], atmosphere: [0.66,0.96], emissiveDensity: [0.24,0.58] },
+    dead: { geologyTags: ['dead-world','regolith','basalt','cratered'], seaLevel: [0.72,0.94], temperature: [0.08,0.72], moisture: [0,0.12], polarExtent: [0,0.30], cloudCoverage: [0,0.14], civilization: [0,0.05], industrialization: [0,0.08], atmosphere: [0.02,0.34], emissiveDensity: [0,0.04] }
   });
 
   function materialCandidates(tags) {
@@ -99,8 +104,9 @@
   function between(range, roll) { return lerp(range[0], range[1], roll()); }
   function classifyTemplate(text) {
     const value = String(text || '').toLowerCase();
-    if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
+    if (/urban-industrial|urban world|spire world|spire sites|smog|ash-choked/.test(value)) return 'urban';
     if (/hive world|hive-world|ecumenopolis|hive city|hive cities/.test(value)) return 'hive';
+    if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
     if (/agri world|agri-world|agricultural world|farm world|breadbasket/.test(value)) return 'agri';
     if (/shrine world|shrine-world|pilgrimage world|ecclesiarch/.test(value)) return 'shrine';
     if (/fortress world|fortress-world|bastion world|garrison world/.test(value)) return 'fortress';
@@ -108,12 +114,16 @@
     if (/death world|death-world|lethal biosphere|hostile biosphere/.test(value)) return 'death';
     if (/feral world|feral-world|primitive world|tribal world/.test(value)) return 'feral';
     if (/jungle world|jungle-world|rainforest world|verdant world/.test(value)) return 'jungle';
+    if (/forest world|forest-world|lush forest|mountain-forest|mountain forest|wilderness world/.test(value)) return 'forest';
     if (/ocean world|ocean-world|water world|pelagic world|aquatic world/.test(value)) return 'ocean';
     if (/volcanic world|volcanic-world|lava world|igneous world|magma world/.test(value)) return 'volcanic';
-    if (/barren world|barren-world|dead world|dead-world|airless world|cratered world/.test(value)) return 'barren';
+    if (/dead world|dead-world|lifeless|terminal world|rendered lifeless|ruined beyond normal habitation/.test(value)) return 'dead';
+    if (/barren world|barren-world|airless world|cratered world|abandoned bodies/.test(value)) return 'barren';
     if (/toxic world|toxic-world|poison world|corrosive atmosphere/.test(value)) return 'toxic';
     if (/paradise world|paradise-world|garden world|pleasure world/.test(value)) return 'paradise';
-    if (/feudal world|feudal-world|medieval world/.test(value)) return 'feudal';
+    if (/battlefield world|battlefield-world|war world|battle-world|battle world/.test(value)) return 'battlefield';
+    if (/schola world|schola-world|scholastica|hosts a schola/.test(value)) return 'schola';
+    if (/feudal world|feudal-world|feudal civilization|medieval world|castles|horse-level transport/.test(value)) return 'feudal';
     if (/desert|arid|dune|sand world|dust world|wasteland/.test(value)) return 'desert';
     if (/ice world|ice-bound|icebound|glacial|frozen world|frost world|cryogenic|polar world|tundra/.test(value)) return 'ice';
     if (/civilized world|civilised world|temperate world/.test(value)) return 'temperate';
@@ -126,9 +136,9 @@
     const explicit = classifyTemplate(text);
     if (explicit) return explicit;
     const orbital = count > 1 ? clamp(index / (count - 1)) : 0.5;
-    const inner = ['volcanic','barren','desert','mining','toxic','forge','fortress','hive'];
-    const middle = ['temperate','agri','paradise','feudal','jungle','ocean','feral','shrine','hive','fortress','death','toxic','mining'];
-    const outer = ['ice','barren','mining','fortress','death','temperate','ocean','toxic'];
+    const inner = ['volcanic','barren','dead','desert','mining','toxic','forge','fortress','battlefield','urban','hive'];
+    const middle = ['temperate','agri','paradise','feudal','forest','jungle','ocean','feral','shrine','schola','urban','hive','fortress','battlefield','death','toxic','mining'];
+    const outer = ['ice','barren','dead','mining','fortress','battlefield','death','temperate','ocean','toxic'];
     const pool = orbital < 0.30 ? inner : orbital > 0.72 ? outer : middle;
     const roll = random(hash(`${identity}|body-template|${index}|${count}`));
     return pool[Math.floor(roll() * pool.length) % pool.length];
