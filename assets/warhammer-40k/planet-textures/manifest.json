@@ -1,21 +1,22 @@
 {
-  "version": 1,
-  "basePool": [
-    "base/alpha.png",
-    "base/beta.png",
-    "base/charlie.png",
-    "base/delta.png",
-    "base/epsilon.png",
-    "base/foxtrot.png",
-    "base/golf.png",
-    "base/hotel.png",
-    "base/india.png",
-    "base/juliet.png",
-    "base/kilo.png",
-    "base/lima.png"
-  ],
-  "biomes": {
-    "grassland": "biome/grassland-placeholder.svg",
+  "version": 2,
+  "materials": {
+    "alpha": {"path":"base/alpha.png","role":"biome","material":"temperate-grassland","tags":["grassland","temperate","scrub","vegetation"]},
+    "beta": {"path":"base/beta.png","role":"geology","material":"dark-rock-soil","tags":["ash","rock","soil","death-world"]},
+    "charlie": {"path":"base/charlie.png","role":"geology","material":"glacial-ice","tags":["ice","glacial","frozen"]},
+    "delta": {"path":"base/delta.png","role":"geology","material":"sandstone-desert","tags":["desert","sand","arid"]},
+    "epsilon": {"path":"base/epsilon.png","role":"geology","material":"weathered-sandstone","tags":["desert","sandstone","arid"]},
+    "foxtrot": {"path":"base/foxtrot.png","role":"geology","material":"dry-badlands","tags":["badlands","dry","cracked","arid"]},
+    "golf": {"path":"base/golf.png","role":"geology","material":"industrial-plating","tags":["forge","industrial","manufactorum","metal"]},
+    "hotel": {"path":"base/hotel.png","role":"geology","material":"weathered-grey-rock","tags":["rock","mountain","highland"]},
+    "india": {"path":"base/india.png","role":"geology","material":"dark-basalt","tags":["basalt","volcanic","dead-world"]},
+    "juliet": {"path":"base/juliet.png","role":"geology","material":"ochre-highlands","tags":["highland","ochre","arid","rock"]},
+    "kilo": {"path":"base/kilo.png","role":"geology","material":"oxidized-volcanic","tags":["volcanic","lava","oxidized","igneous"]},
+    "lima": {"path":"base/lima.png","role":"geology","material":"cratered-regolith","tags":["regolith","airless","moon","barren","cratered"]}
+  },
+  "geologyPool": ["beta","charlie","delta","epsilon","foxtrot","golf","hotel","india","juliet","kilo","lima"],
+  "biomeMaterials": {
+    "grassland": "alpha",
     "jungle": "biome/jungle-placeholder.svg",
     "ocean": "biome/ocean-placeholder.svg",
     "iceCap": "biome/ice-cap-placeholder.svg"
@@ -31,5 +32,11 @@
     "continent": "masks/continent-mask-placeholder.svg",
     "coastline": "masks/coastline-mask-placeholder.svg",
     "river": "masks/river-mask-placeholder.svg"
+  },
+  "templateProfiles": {
+    "desert": {"geologyTags":["desert","arid","badlands"],"seaLevel":[0.58,0.76],"temperature":[0.68,0.94],"moisture":[0.04,0.28],"polarExtent":[0.00,0.08],"cloudCoverage":[0.02,0.18]},
+    "forge": {"geologyTags":["forge","industrial","basalt","volcanic"],"seaLevel":[0.52,0.74],"temperature":[0.46,0.82],"moisture":[0.12,0.44],"polarExtent":[0.00,0.10],"cloudCoverage":[0.25,0.64],"civilization":[0.82,1.0]},
+    "ice": {"geologyTags":["ice","glacial","rock"],"seaLevel":[0.48,0.66],"temperature":[0.02,0.24],"moisture":[0.28,0.72],"polarExtent":[0.48,0.88],"cloudCoverage":[0.22,0.58]},
+    "temperate": {"geologyTags":["rock","soil","highland"],"seaLevel":[0.44,0.62],"temperature":[0.42,0.68],"moisture":[0.42,0.72],"polarExtent":[0.08,0.22],"cloudCoverage":[0.22,0.55]}
   }
 }
