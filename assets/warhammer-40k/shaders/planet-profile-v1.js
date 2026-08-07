@@ -55,6 +55,26 @@
     return value / Math.max(total, 1e-9);
   }
 
+  function spherePoint(u, v) {
+    const longitude = u * Math.PI * 2;
+    const latitude = (0.5 - v) * Math.PI;
+    const circumference = Math.cos(latitude);
+    return Object.freeze({
+      x: circumference * Math.cos(longitude),
+      y: Math.sin(latitude),
+      z: circumference * Math.sin(longitude)
+    });
+  }
+
+  function sphereFbm(u, v, seed, scale = 1, octaves = 5) {
+    const point = spherePoint(u, v);
+    const sx = point.x * scale, sy = point.y * scale, sz = point.z * scale;
+    const first = fbm2(sx + 17.31, sy - 9.17, seed, octaves);
+    const second = fbm2(sz - 4.83, sy + 23.41, seed ^ 0x9e3779b9, octaves);
+    const third = fbm2(sx * 0.73 + sz * 0.61 + 31.7, sz * 0.79 - sx * 0.57 - 18.2, seed ^ 0x85ebca6b, octaves);
+    return clamp(first * 0.38 + second * 0.37 + third * 0.25);
+  }
+
   const MATERIALS = Object.freeze({
     alpha: { path: 'assets/warhammer-40k/planet-textures/base/alpha.png', role: 'biome', material: 'temperate-grassland', tags: ['grassland','temperate','scrub','vegetation','agri','paradise','feral','jungle'] },
     beta: { path: 'assets/warhammer-40k/planet-textures/base/beta.png', role: 'geology', material: 'dark-rock-soil', tags: ['ash','rock','soil','death-world','toxic','hive','fortress'] },
@@ -67,7 +87,7 @@
     india: { path: 'assets/warhammer-40k/planet-textures/base/india.png', role: 'geology', material: 'dark-basalt', tags: ['basalt','volcanic','dead-world','toxic','death-world'] },
     juliet: { path: 'assets/warhammer-40k/planet-textures/base/juliet.png', role: 'geology', material: 'ochre-highlands', tags: ['highland','ochre','arid','rock','agri','feral'] },
     kilo: { path: 'assets/warhammer-40k/planet-textures/base/kilo.png', role: 'geology', material: 'oxidized-volcanic', tags: ['volcanic','lava','oxidized','igneous','mining','toxic'] },
-    lima: { path: 'assets/warhammer-40k/planet-textures/base/lima.png', role: 'geology', material: 'cratered-regolith', tags: ['regolith','airless','moon','barren','cratered','dead-world'] }
+    lima: { path: 'assets/warhammer-40k/planet-textures/base/lima.png', role: 'geology', material: 'cratered-regolith', tags: ['regolith','airless','moon','barren','cratered','dead-world','archaeology'] }
   });
 
   const TEMPLATE_RANGES = Object.freeze({
@@ -93,7 +113,13 @@
     forest: { geologyTags: ['feral','soil','highland','rock'], seaLevel: [0.38,0.58], temperature: [0.38,0.72], moisture: [0.62,0.92], polarExtent: [0.04,0.20], cloudCoverage: [0.34,0.70], civilization: [0.02,0.30], industrialization: [0,0.16], atmosphere: [0.78,1], emissiveDensity: [0,0.12] },
     battlefield: { geologyTags: ['death-world','badlands','rock','industrial'], seaLevel: [0.56,0.80], temperature: [0.26,0.78], moisture: [0.08,0.48], polarExtent: [0.02,0.24], cloudCoverage: [0.16,0.54], civilization: [0.10,0.46], industrialization: [0.28,0.68], atmosphere: [0.44,0.88], emissiveDensity: [0.22,0.58] },
     schola: { geologyTags: ['shrine','highland','rock','fortress'], seaLevel: [0.46,0.66], temperature: [0.34,0.68], moisture: [0.24,0.62], polarExtent: [0.06,0.22], cloudCoverage: [0.18,0.50], civilization: [0.52,0.84], industrialization: [0.18,0.48], atmosphere: [0.66,0.96], emissiveDensity: [0.24,0.58] },
-    dead: { geologyTags: ['dead-world','regolith','basalt','cratered'], seaLevel: [0.72,0.94], temperature: [0.08,0.72], moisture: [0,0.12], polarExtent: [0,0.30], cloudCoverage: [0,0.14], civilization: [0,0.05], industrialization: [0,0.08], atmosphere: [0.02,0.34], emissiveDensity: [0,0.04] }
+    dead: { geologyTags: ['dead-world','regolith','basalt','cratered'], seaLevel: [0.72,0.94], temperature: [0.08,0.72], moisture: [0,0.12], polarExtent: [0,0.30], cloudCoverage: [0,0.14], civilization: [0,0.05], industrialization: [0,0.08], atmosphere: [0.02,0.34], emissiveDensity: [0,0.04] },
+    'gas-giant': { geologyTags: ['highland','rock'], surfaceMode: 'bands', bodyKind: 'gas', seaLevel: [0,0], temperature: [0.38,0.82], moisture: [0.62,0.98], polarExtent: [0,0.06], cloudCoverage: [0.88,1], civilization: [0,0.02], industrialization: [0,0.02], atmosphere: [0.98,1], emissiveDensity: [0,0.01], bandStrength: [0.72,1], stormStrength: [0.38,0.96], ringChance: [0.28,0.68], gasHue: [0.04,0.14], gasSaturation: [0.38,0.72], gasBrightness: [0.52,0.76] },
+    'ice-giant': { geologyTags: ['ice','glacial','rock'], surfaceMode: 'bands', bodyKind: 'gas', seaLevel: [0,0], temperature: [0.08,0.38], moisture: [0.52,0.92], polarExtent: [0.04,0.18], cloudCoverage: [0.72,0.96], civilization: [0,0.01], industrialization: [0,0.01], atmosphere: [0.98,1], emissiveDensity: [0,0.01], bandStrength: [0.42,0.78], stormStrength: [0.18,0.62], ringChance: [0.42,0.82], gasHue: [0.48,0.62], gasSaturation: [0.34,0.66], gasBrightness: [0.46,0.72] },
+    'moon-barren': { geologyTags: ['regolith','cratered','rock','barren'], bodyKind: 'moon', seaLevel: [0.86,0.98], temperature: [0.08,0.78], moisture: [0,0.01], polarExtent: [0,0.26], cloudCoverage: [0,0], civilization: [0,0.01], industrialization: [0,0.02], atmosphere: [0,0.04], emissiveDensity: [0,0.01] },
+    'moon-dead': { geologyTags: ['dead-world','regolith','basalt','cratered'], bodyKind: 'moon', seaLevel: [0.84,0.98], temperature: [0.06,0.74], moisture: [0,0.01], polarExtent: [0,0.28], cloudCoverage: [0,0], civilization: [0,0.01], industrialization: [0,0.02], atmosphere: [0,0.06], emissiveDensity: [0,0.01] },
+    'moon-mining': { geologyTags: ['regolith','cratered','rock','mining'], bodyKind: 'moon', seaLevel: [0.82,0.96], temperature: [0.10,0.76], moisture: [0,0.03], polarExtent: [0,0.24], cloudCoverage: [0,0.02], civilization: [0.04,0.18], industrialization: [0.18,0.48], atmosphere: [0,0.10], emissiveDensity: [0.06,0.24] },
+    'moon-archaeology': { geologyTags: ['regolith','cratered','dead-world','archaeology'], bodyKind: 'moon', seaLevel: [0.82,0.97], temperature: [0.08,0.72], moisture: [0,0.02], polarExtent: [0,0.26], cloudCoverage: [0,0.01], civilization: [0.01,0.08], industrialization: [0.01,0.12], atmosphere: [0,0.08], emissiveDensity: [0.01,0.10] }
   });
 
   function materialCandidates(tags) {
@@ -104,6 +130,12 @@
   function between(range, roll) { return lerp(range[0], range[1], roll()); }
   function classifyTemplate(text) {
     const value = String(text || '').toLowerCase();
+    if (/ice giant|ice-giant|neptune-like|uranus-like/.test(value)) return 'ice-giant';
+    if (/gas giant|gas-giant|jovian|jupiter-like/.test(value)) return 'gas-giant';
+    if (/lunar mining|moon mining|mining outpost/.test(value)) return 'moon-mining';
+    if (/airless moon|barren moon|cratered moon/.test(value)) return 'moon-barren';
+    if (/dead moon|lifeless moon/.test(value)) return 'moon-dead';
+    if (/archaeological moon|archaeology site|xenoarchaeology|ruin moon/.test(value)) return 'moon-archaeology';
     if (/urban-industrial|urban world|spire world|spire sites|smog|ash-choked/.test(value)) return 'urban';
     if (/hive world|hive-world|ecumenopolis|hive city|hive cities/.test(value)) return 'hive';
     if (/forge world|forge-world|mechanicus|adeptus mechanicus|manufactorum|industrial world|industrial complex|foundry world/.test(value)) return 'forge';
@@ -136,12 +168,26 @@
     const explicit = classifyTemplate(text);
     if (explicit) return explicit;
     const orbital = count > 1 ? clamp(index / (count - 1)) : 0.5;
+    const roll = random(hash(`${identity}|body-template|${index}|${count}`));
+    const giantRoll = roll();
+    if (orbital > 0.70 && giantRoll < 0.52) return roll() < 0.38 ? 'ice-giant' : 'gas-giant';
+    if (orbital > 0.42 && giantRoll < 0.20) return 'gas-giant';
     const inner = ['volcanic','barren','dead','desert','mining','toxic','forge','fortress','battlefield','urban','hive'];
     const middle = ['temperate','agri','paradise','feudal','forest','jungle','ocean','feral','shrine','schola','urban','hive','fortress','battlefield','death','toxic','mining'];
-    const outer = ['ice','barren','dead','mining','fortress','battlefield','death','temperate','ocean','toxic'];
+    const outer = ['ice','barren','dead','mining','fortress','battlefield','death','temperate','ocean','toxic','gas-giant','ice-giant'];
     const pool = orbital < 0.30 ? inner : orbital > 0.72 ? outer : middle;
-    const roll = random(hash(`${identity}|body-template|${index}|${count}`));
     return pool[Math.floor(roll() * pool.length) % pool.length];
+  }
+
+  function templateForMoon(identity, text = '') {
+    const explicit = classifyTemplate(text);
+    if (['moon-barren','moon-dead','moon-mining','moon-archaeology'].includes(explicit)) return explicit;
+    const roll = random(hash(`${identity}|moon-template`));
+    const choice = roll();
+    if (choice < 0.68) return 'moon-barren';
+    if (choice < 0.84) return 'moon-dead';
+    if (choice < 0.94) return 'moon-mining';
+    return 'moon-archaeology';
   }
 
   function createProfile(identity, text = '', templateOverride = '') {
@@ -151,9 +197,12 @@
     const ranges = TEMPLATE_RANGES[template];
     const candidates = materialCandidates(ranges.geologyTags);
     const [geologyId, geology] = candidates[Math.floor(roll() * candidates.length) % candidates.length];
+    const surfaceMode = ranges.surfaceMode || 'terrain';
     return Object.freeze({
       seed,
       template,
+      bodyKind: ranges.bodyKind || 'terrestrial',
+      surfaceMode,
       geologyId,
       geologyPath: geology.path,
       geologyMaterial: geology.material,
@@ -177,24 +226,28 @@
       emissiveDensity: between(ranges.emissiveDensity, roll),
       ridgeStrength: lerp(0.18, 0.72, roll()),
       mountainThreshold: lerp(0.64, 0.82, roll()),
-      biomeWarp: lerp(0.7, 2.1, roll())
+      biomeWarp: lerp(0.7, 2.1, roll()),
+      bandStrength: ranges.bandStrength ? between(ranges.bandStrength, roll) : 0,
+      stormStrength: ranges.stormStrength ? between(ranges.stormStrength, roll) : 0,
+      ringChance: ranges.ringChance ? between(ranges.ringChance, roll) : 0,
+      gasHue: ranges.gasHue ? between(ranges.gasHue, roll) : 0,
+      gasSaturation: ranges.gasSaturation ? between(ranges.gasSaturation, roll) : 0,
+      gasBrightness: ranges.gasBrightness ? between(ranges.gasBrightness, roll) : 0
     });
   }
 
   function sample(profile, u, v) {
     const seed = profile.seed;
-    const x = u * profile.continentScale + seed * 0.000013;
-    const y = v * profile.continentScale * 0.66 + seed * 0.000021;
-    const broad = fbm2(x, y, seed, 5);
-    const detail = fbm2(x * 2.6 + 11, y * 2.6 + 11, seed ^ 0x9e3779b9, 4) * 0.22;
+    const broad = sphereFbm(u, v, seed, profile.continentScale, 5);
+    const detail = sphereFbm(u, v, seed ^ 0x9e3779b9, profile.continentScale * 2.6, 4) * 0.22;
     const elevation = clamp(broad + detail);
     const land = smoothstep(profile.seaLevel - profile.coastlineSoftness, profile.seaLevel + profile.coastlineSoftness, elevation);
     const coast = 1 - smoothstep(0, profile.coastlineSoftness * 1.6, Math.abs(elevation - profile.seaLevel));
     const latitude = Math.abs(v * 2 - 1);
-    const moistureNoise = fbm2(u * 5.3 + seed * 0.000031, v * 5.3 + seed * 0.000017, seed ^ 0x85ebca6b, 4);
+    const moistureNoise = sphereFbm(u, v, seed ^ 0x85ebca6b, 5.3, 4);
     const moisture = clamp(profile.moisture * 0.62 + moistureNoise * 0.52 - latitude * 0.12);
     const temperature = clamp(profile.temperature * 1.18 - latitude * (0.78 + profile.polarExtent * 0.22) - Math.max(0, elevation - 0.64) * 0.34);
-    const ridgeNoise = Math.abs(fbm2(u * 8.2, v * 8.2, seed ^ 0xc2b2ae35, 4) * 2 - 1);
+    const ridgeNoise = Math.abs(sphereFbm(u, v, seed ^ 0xc2b2ae35, 8.2, 4) * 2 - 1);
     const ridge = clamp((1 - ridgeNoise) * profile.ridgeStrength * land);
     const mountain = smoothstep(profile.mountainThreshold, 1, clamp(elevation + ridge * 0.42));
     const ice = clamp(smoothstep(0.28, 0.05, temperature) * land + smoothstep(1 - profile.polarExtent, 1, latitude));
@@ -205,5 +258,5 @@
     return Object.freeze({ elevation, land, ocean: 1 - land, coast, moisture, temperature, mountain, ridge, ice, jungle, grassland, desert, rock });
   }
 
-  window.CafarronPlanetProfileV1 = Object.freeze({ MATERIALS, TEMPLATE_RANGES, hash, random, fade, perlin2, fbm2, classifyTemplate, templateFromText, templateForBody, createProfile, sample });
+  window.CafarronPlanetProfileV1 = Object.freeze({ MATERIALS, TEMPLATE_RANGES, hash, random, fade, perlin2, fbm2, spherePoint, sphereFbm, classifyTemplate, templateFromText, templateForBody, templateForMoon, createProfile, sample });
 })();

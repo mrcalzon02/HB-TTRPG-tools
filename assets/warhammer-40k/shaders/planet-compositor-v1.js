@@ -26,26 +26,12 @@
     return promise;
   }
 
-  function sampleImage(image, width, height, profile) {
+  function imageDataFromSource(image, width, height) {
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const context = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
-    const scale = Math.max(0.35, Math.min(3.5, profile.uvScale || 1));
-    const drawWidth = width * scale;
-    const drawHeight = height * scale;
-    context.save();
-    context.translate(width * 0.5, height * 0.5);
-    context.rotate(profile.uvRotation || 0);
-    context.translate(-width * 0.5, -height * 0.5);
-    const offsetX = -((profile.uvOffset?.[0] || 0) * drawWidth) % drawWidth;
-    const offsetY = -((profile.uvOffset?.[1] || 0) * drawHeight) % drawHeight;
-    for (let y = offsetY - drawHeight; y < height + drawHeight; y += drawHeight) {
-      for (let x = offsetX - drawWidth; x < width + drawWidth; x += drawWidth) {
-        context.drawImage(image, x, y, drawWidth, drawHeight);
-      }
-    }
-    context.restore();
+    context.drawImage(image, 0, 0, width, height);
     return context.getImageData(0, 0, width, height);
   }
 
@@ -86,75 +72,99 @@
   function blendBiome(r, g, b, target, weight) {
     return [blendChannel(r, target[0], weight), blendChannel(g, target[1], weight), blendChannel(b, target[2], weight)];
   }
-
-  function wrap01(value) {
-    const wrapped = value % 1;
-    return wrapped < 0 ? wrapped + 1 : wrapped;
-  }
-
-  function wrappedDelta(value, center) {
-    let delta = wrap01(value) - wrap01(center);
-    if (delta > 0.5) delta -= 1;
-    if (delta < -0.5) delta += 1;
-    return delta;
-  }
-
-  function capCenter(seed, north) {
-    const mixed = north
-      ? Math.imul((seed ^ 0x9e3779b9) >>> 0, 0x85ebca6b)
-      : Math.imul((seed ^ 0xc2b2ae35) >>> 0, 0x27d4eb2d);
-    return (mixed >>> 0) / 4294967296;
-  }
-
-  function polarCoordinates(u, v, seed) {
-    const pole = Math.abs(v * 2 - 1);
-    const blend = smoothstep(0.54, 0.97, pole);
-    if (blend <= 0) return { u: wrap01(u), v, blend: 0 };
-    const latitude = (v - 0.5) * Math.PI;
-    const circumference = Math.max(0.035, Math.cos(latitude));
-    const center = capCenter(seed, v < 0.5);
-    const longitudeScale = mix(1, circumference, blend);
-    return { u: wrap01(center + wrappedDelta(u, center) * longitudeScale), v, blend };
-  }
+  function wrap01(value) { const wrapped = value % 1; return wrapped < 0 ? wrapped + 1 : wrapped; }
 
   function imageOffset(imageData, width, height, u, v) {
     const x = Math.min(width - 1, Math.max(0, Math.floor(wrap01(u) * width)));
-    const y = Math.min(height - 1, Math.max(0, Math.floor(clamp(v) * height)));
+    const y = Math.min(height - 1, Math.max(0, Math.floor(wrap01(v) * height)));
     return (y * width + x) * 4;
   }
 
-  function featherHorizontalSeam(imageData, width, height, fraction = 0.035) {
-    const band = Math.max(2, Math.min(Math.floor(width * 0.08), Math.round(width * fraction)));
-    for (let y = 0; y < height; y += 1) {
-      for (let offset = 0; offset < band; offset += 1) {
-        const left = (y * width + offset) * 4;
-        const right = (y * width + (width - 1 - offset)) * 4;
-        const blend = smoothstep(0, Math.max(1, band - 1), offset);
-        for (let channel = 0; channel < 3; channel += 1) {
-          const midpoint = (imageData.data[left + channel] + imageData.data[right + channel]) * 0.5;
-          imageData.data[left + channel] = mix(midpoint, imageData.data[left + channel], blend);
-          imageData.data[right + channel] = mix(midpoint, imageData.data[right + channel], blend);
-        }
-      }
+  function rotatedSpherePoint(point, rotation) {
+    const cosine = Math.cos(rotation || 0), sine = Math.sin(rotation || 0);
+    return {
+      x: point.x * cosine - point.z * sine,
+      y: point.y,
+      z: point.x * sine + point.z * cosine
+    };
+  }
+
+  function triplanarPixel(imageData, width, height, point, profile, scaleMultiplier = 1, phase = 0) {
+    const rotated = rotatedSpherePoint(point, profile.uvRotation || 0);
+    const scale = clamp(profile.uvScale || 1, 0.35, 5.5) * scaleMultiplier;
+    const offsetX = profile.uvOffset?.[0] || 0, offsetY = profile.uvOffset?.[1] || 0;
+    const power = 4;
+    let wx = Math.pow(Math.abs(rotated.x), power);
+    let wy = Math.pow(Math.abs(rotated.y), power);
+    let wz = Math.pow(Math.abs(rotated.z), power);
+    const total = Math.max(1e-9, wx + wy + wz);
+    wx /= total; wy /= total; wz /= total;
+    const projections = [
+      [0.5 + rotated.z * scale * 0.5 + offsetX + phase, 0.5 + rotated.y * scale * 0.5 + offsetY, wx],
+      [0.5 + rotated.x * scale * 0.5 + offsetX + phase * 0.37, 0.5 + rotated.z * scale * 0.5 + offsetY + 0.31, wy],
+      [0.5 + rotated.x * scale * 0.5 + offsetX + phase * 0.71, 0.5 + rotated.y * scale * 0.5 + offsetY + 0.63, wz]
+    ];
+    let r = 0, g = 0, b = 0;
+    for (const [u, v, weight] of projections) {
+      const offset = imageOffset(imageData, width, height, u, v);
+      r += imageData.data[offset] * weight;
+      g += imageData.data[offset + 1] * weight;
+      b += imageData.data[offset + 2] * weight;
     }
+    return [r, g, b];
+  }
+
+  function hue2rgb(p, q, t) {
+    let value = t;
+    if (value < 0) value += 1;
+    if (value > 1) value -= 1;
+    if (value < 1 / 6) return p + (q - p) * 6 * value;
+    if (value < 1 / 2) return q;
+    if (value < 2 / 3) return p + (q - p) * (2 / 3 - value) * 6;
+    return p;
+  }
+
+  function hslToRgb(h, s, l) {
+    const hue = wrap01(h), saturation = clamp(s), lightness = clamp(l);
+    if (saturation === 0) return [lightness * 255, lightness * 255, lightness * 255];
+    const q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+    const p = 2 * lightness - q;
+    return [hue2rgb(p, q, hue + 1 / 3) * 255, hue2rgb(p, q, hue) * 255, hue2rgb(p, q, hue - 1 / 3) * 255];
+  }
+
+  function gasBandSample(profileEngine, profile, u, v) {
+    const latitude = v * 2 - 1;
+    const broad = profileEngine.sphereFbm(u, v, profile.seed ^ 0x7f4a7c15, 3.2, 4);
+    const storm = profileEngine.sphereFbm(u, v, profile.seed ^ 0x4cf5ad43, 7.8, 4);
+    const fine = profileEngine.sphereFbm(u, v, profile.seed ^ 0x165667b1, 13.6, 3);
+    const bandFrequency = 9 + profile.bandStrength * 17;
+    const warpedLatitude = latitude + (broad - 0.5) * (0.035 + profile.stormStrength * 0.055);
+    const band = 0.5 + 0.5 * Math.sin(warpedLatitude * Math.PI * bandFrequency + (broad - 0.5) * 2.4);
+    const fineBand = 0.5 + 0.5 * Math.sin(warpedLatitude * Math.PI * bandFrequency * 2.35 + fine * 3.1);
+    const stormCell = smoothstep(0.69, 0.91, storm) * profile.stormStrength * Math.pow(1 - Math.abs(latitude), 0.42);
+    const hue = profile.gasHue + (band - 0.5) * (0.045 + profile.bandStrength * 0.025) + (storm - 0.5) * 0.025;
+    const saturation = clamp(profile.gasSaturation * (0.78 + fineBand * 0.26) - stormCell * 0.12);
+    const lightness = clamp(profile.gasBrightness * (0.74 + band * 0.32) + (fineBand - 0.5) * 0.07 + stormCell * 0.12);
+    return { rgb: hslToRgb(hue, saturation, lightness), band, fineBand, stormCell, storm };
   }
 
   async function compose(THREE, profile, options = {}) {
     const profileEngine = window.CafarronPlanetProfileV1;
-    if (!profileEngine?.sample) throw new Error('Planet profile engine has not answered the Cartographica compositor.');
+    if (!profileEngine?.sample || !profileEngine?.spherePoint || !profileEngine?.sphereFbm) throw new Error('Planet profile engine has not answered the Cartographica compositor.');
     const width = Math.max(64, Math.min(512, options.width || 256));
     const height = Math.max(32, Math.min(256, options.height || 128));
-    const geologyPath = profile.geologyPath || `${ASSET_ROOT}base/hotel.png`;
-    const [geologyImage, grassImage] = await Promise.all([
-      loadImage(geologyPath),
-      loadImage(`${ASSET_ROOT}base/alpha.png`).catch(() => null)
-    ]);
-    const geology = sampleImage(geologyImage, width, height, profile);
-    const grass = grassImage ? sampleImage(grassImage, width, height, {
-      ...profile,
-      uvScale: (profile.uvScale || 1) * 0.72,
-      uvRotation: (profile.uvRotation || 0) * -0.43
-    }) : null;
+    const atmosphericBands = profile.surfaceMode === 'bands';
+    let geology = null, grass = null;
+    if (!atmosphericBands) {
+      const geologyPath = profile.geologyPath || `${ASSET_ROOT}base/hotel.png`;
+      const [geologyImage, grassImage] = await Promise.all([
+        loadImage(geologyPath),
+        loadImage(`${ASSET_ROOT}base/alpha.png`).catch(() => null)
+      ]);
+      geology = imageDataFromSource(geologyImage, width, height);
+      grass = grassImage ? imageDataFromSource(grassImage, width, height) : null;
+    }
+
     const surfaceCanvas = document.createElement('canvas');
     const bumpCanvas = document.createElement('canvas');
     const emissiveCanvas = document.createElement('canvas');
@@ -171,59 +181,71 @@
     const cloud = cloudContext.createImageData(width, height);
 
     for (let y = 0; y < height; y += 1) {
-      const v = (y + 0.5) / height;
+      const v = height > 1 ? y / (height - 1) : 0;
       for (let x = 0; x < width; x += 1) {
-        const u = (x + 0.5) / width;
+        const u = width > 1 ? x / (width - 1) : 0;
         const offset = (y * width + x) * 4;
-        const mapped = polarCoordinates(u, v, profile.seed);
-        const sourceOffset = imageOffset(geology, width, height, mapped.u, mapped.v);
-        const grassOffset = grass ? imageOffset(grass, width, height, mapped.u, mapped.v) : 0;
-        const sample = profileEngine.sample(profile, mapped.u, mapped.v);
-        const tinted = tintPixel(geology.data[sourceOffset], geology.data[sourceOffset + 1], geology.data[sourceOffset + 2], profile);
-        let r = tinted[0], g = tinted[1], b = tinted[2];
+        const point = profileEngine.spherePoint(u, v);
+        let sample = null, r = 0, g = 0, b = 0, gas = null;
 
-        const deep = clamp((profile.seaLevel - sample.elevation + 0.10) * 4.0);
-        const oceanStrength = sample.ocean * (1 - sample.coast * 0.28);
-        r = mix(r, mix(30, 14, deep), oceanStrength);
-        g = mix(g, mix(79, 43, deep), oceanStrength);
-        b = mix(b, mix(105, 78, deep), oceanStrength);
+        if (atmosphericBands) {
+          gas = gasBandSample(profileEngine, profile, u, v);
+          [r, g, b] = gas.rgb;
+        } else {
+          sample = profileEngine.sample(profile, u, v);
+          const base = triplanarPixel(geology, width, height, point, profile);
+          const tinted = tintPixel(base[0], base[1], base[2], profile);
+          r = tinted[0]; g = tinted[1]; b = tinted[2];
 
-        if (grass) {
-          const vegetation = sample.grassland * sample.land;
-          r = mix(r, grass.data[grassOffset], vegetation * 0.58);
-          g = mix(g, grass.data[grassOffset + 1], vegetation * 0.68);
-          b = mix(b, grass.data[grassOffset + 2], vegetation * 0.54);
+          const deep = clamp((profile.seaLevel - sample.elevation + 0.10) * 4.0);
+          const oceanStrength = sample.ocean * (1 - sample.coast * 0.28);
+          r = mix(r, mix(30, 14, deep), oceanStrength);
+          g = mix(g, mix(79, 43, deep), oceanStrength);
+          b = mix(b, mix(105, 78, deep), oceanStrength);
+
+          if (grass) {
+            const vegetation = sample.grassland * sample.land;
+            const vegetationPixel = triplanarPixel(grass, width, height, point, profile, 0.72, 0.17);
+            r = mix(r, vegetationPixel[0], vegetation * 0.58);
+            g = mix(g, vegetationPixel[1], vegetation * 0.68);
+            b = mix(b, vegetationPixel[2], vegetation * 0.54);
+          }
+
+          const biomeWeights = [
+            [[176, 135, 79], sample.desert * sample.land * 0.52],
+            [[92, 111, 55], sample.grassland * sample.land * 0.42],
+            [[35, 73, 38], sample.jungle * sample.land * 0.58],
+            [[102, 99, 91], sample.mountain * sample.land * 0.54],
+            [[210, 235, 244], sample.ice * sample.land * 0.72]
+          ];
+          for (const [target, weight] of biomeWeights) [r, g, b] = blendBiome(r, g, b, target, weight);
+          const coastMix = sample.coast * sample.land * 0.42;
+          r = mix(r, 194, coastMix); g = mix(g, 167, coastMix); b = mix(b, 118, coastMix);
         }
 
-        const biomeWeights = [
-          [[176, 135, 79], sample.desert * sample.land * 0.52],
-          [[92, 111, 55], sample.grassland * sample.land * 0.42],
-          [[35, 73, 38], sample.jungle * sample.land * 0.58],
-          [[102, 99, 91], sample.mountain * sample.land * 0.54],
-          [[210, 235, 244], sample.ice * sample.land * 0.72]
-        ];
-        for (const [target, weight] of biomeWeights) [r, g, b] = blendBiome(r, g, b, target, weight);
-
-        const coastMix = sample.coast * sample.land * 0.42;
-        r = mix(r, 194, coastMix); g = mix(g, 167, coastMix); b = mix(b, 118, coastMix);
         surface.data[offset] = clamp(r, 0, 255);
         surface.data[offset + 1] = clamp(g, 0, 255);
         surface.data[offset + 2] = clamp(b, 0, 255);
         surface.data[offset + 3] = 255;
 
-        const heightValue = clamp(72 + sample.elevation * 128 + sample.mountain * 52 - sample.ocean * 38, 0, 255);
+        const heightValue = atmosphericBands
+          ? clamp(116 + gas.band * 18 + gas.fineBand * 9 + gas.stormCell * 14, 0, 255)
+          : clamp(72 + sample.elevation * 128 + sample.mountain * 52 - sample.ocean * 38, 0, 255);
         bump.data[offset] = bump.data[offset + 1] = bump.data[offset + 2] = heightValue;
         bump.data[offset + 3] = 255;
 
         const civilization = clamp(profile.civilization || 0);
         const industrialization = clamp(profile.industrialization || 0);
         const emissiveDensity = clamp(profile.emissiveDensity || 0);
-        const urbanNoise = profileEngine.fbm2(mapped.u * 22 + profile.seed * 0.00007, mapped.v * 18, profile.seed ^ 0x27d4eb2d, 3);
-        const cityThreshold = 0.76 - civilization * 0.24;
-        const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.14, urbanNoise);
-        const city = sample.land * civilization * emissiveDensity * urbanMask * (1 - sample.mountain);
-        const thermal = sample.land * industrialization * emissiveDensity * smoothstep(0.30, 0.68, sample.ridge) * smoothstep(0.34, 0.78, profile.temperature) * 0.82;
-        const glow = clamp(city + thermal);
+        let glow = 0;
+        if (!atmosphericBands) {
+          const urbanNoise = profileEngine.sphereFbm(u, v, profile.seed ^ 0x27d4eb2d, 19.5, 3);
+          const cityThreshold = 0.76 - civilization * 0.24;
+          const urbanMask = smoothstep(cityThreshold, cityThreshold + 0.14, urbanNoise);
+          const city = sample.land * civilization * emissiveDensity * urbanMask * (1 - sample.mountain);
+          const thermal = sample.land * industrialization * emissiveDensity * smoothstep(0.30, 0.68, sample.ridge) * smoothstep(0.34, 0.78, profile.temperature) * 0.82;
+          glow = clamp(city + thermal);
+        }
         emissive.data[offset] = Math.min(255, 255 * glow);
         emissive.data[offset + 1] = Math.min(255, mix(188, 92, industrialization) * glow);
         emissive.data[offset + 2] = Math.min(255, mix(92, 28, industrialization) * glow);
@@ -231,24 +253,27 @@
 
         const coverage = clamp(profile.cloudCoverage || 0);
         const atmosphere = clamp(profile.atmosphere || 0);
-        const cloudNoise = profileEngine.fbm2(mapped.u * (4.8 + profile.moisture * 2.4) + profile.seed * 0.000019, mapped.v * (4.1 + profile.moisture * 1.8), profile.seed ^ 0x165667b1, 5);
-        const cloudWarp = profileEngine.fbm2(mapped.u * 11.7 + 7.1, mapped.v * 8.9 + profile.seed * 0.000011, profile.seed ^ 0xd3a2646c, 3);
-        const cloudField = cloudNoise * 0.78 + cloudWarp * 0.22;
-        const cloudThreshold = mix(0.80, 0.40, coverage);
-        const cloudSoftness = 0.10 + coverage * 0.10;
-        const latitude = Math.abs(v * 2 - 1);
-        const polarCloud = smoothstep(0.68, 1, latitude) * clamp(profile.moisture || 0) * 0.16;
-        const cloudMask = clamp((smoothstep(cloudThreshold - cloudSoftness, cloudThreshold + cloudSoftness, cloudField) + polarCloud) * atmosphere);
+        let cloudMask;
+        if (atmosphericBands) {
+          const highCloud = profileEngine.sphereFbm(u, v, profile.seed ^ 0xd3a2646c, 10.8, 4);
+          const threshold = mix(0.70, 0.46, coverage);
+          cloudMask = clamp((smoothstep(threshold - 0.12, threshold + 0.12, highCloud) * 0.42 + gas.band * 0.22 + gas.stormCell * 0.55) * atmosphere);
+        } else {
+          const cloudNoise = profileEngine.sphereFbm(u, v, profile.seed ^ 0x165667b1, 5.2 + profile.moisture * 2.1, 5);
+          const cloudWarp = profileEngine.sphereFbm(u, v, profile.seed ^ 0xd3a2646c, 10.7, 3);
+          const cloudField = cloudNoise * 0.78 + cloudWarp * 0.22;
+          const cloudThreshold = mix(0.80, 0.40, coverage);
+          const cloudSoftness = 0.10 + coverage * 0.10;
+          const latitude = Math.abs(v * 2 - 1);
+          const polarCloud = smoothstep(0.68, 1, latitude) * clamp(profile.moisture || 0) * 0.16;
+          cloudMask = clamp((smoothstep(cloudThreshold - cloudSoftness, cloudThreshold + cloudSoftness, cloudField) + polarCloud) * atmosphere);
+        }
         const cloudValue = Math.round(cloudMask * 255);
         cloud.data[offset] = cloud.data[offset + 1] = cloud.data[offset + 2] = cloudValue;
         cloud.data[offset + 3] = 255;
       }
     }
 
-    featherHorizontalSeam(surface, width, height);
-    featherHorizontalSeam(bump, width, height);
-    featherHorizontalSeam(emissive, width, height);
-    featherHorizontalSeam(cloud, width, height);
     surfaceContext.putImageData(surface, 0, 0);
     bumpContext.putImageData(bump, 0, 0);
     emissiveContext.putImageData(emissive, 0, 0);
@@ -267,21 +292,26 @@
     const industrialization = clamp(profile.industrialization || 0);
     const temperature = clamp(profile.temperature || 0);
     const emissiveDensity = clamp(profile.emissiveDensity || 0);
+    const atmosphericBands = profile.surfaceMode === 'bands';
     return new THREE.MeshStandardMaterial({
       color: 0xffffff,
       map: textures.map,
       bumpMap: textures.bumpMap,
-      bumpScale: mix(0.018, 0.034, clamp(profile.ridgeStrength || 0.4)),
-      roughness: clamp(0.92 - industrialization * 0.28 - (1 - temperature) * 0.16, 0.42, 0.94),
-      metalness: clamp(0.02 + industrialization * 0.38, 0.02, 0.42),
+      bumpScale: atmosphericBands ? 0.004 + profile.bandStrength * 0.004 : mix(0.018, 0.034, clamp(profile.ridgeStrength || 0.4)),
+      roughness: atmosphericBands ? 0.86 : clamp(0.92 - industrialization * 0.28 - (1 - temperature) * 0.16, 0.42, 0.94),
+      metalness: atmosphericBands ? 0 : clamp(0.02 + industrialization * 0.38, 0.02, 0.42),
       emissive: 0xffffff,
       emissiveMap: textures.emissiveMap,
-      emissiveIntensity: 0.22 + emissiveDensity * 1.02,
+      emissiveIntensity: atmosphericBands ? 0 : 0.22 + emissiveDensity * 1.02,
       userData: { fallbackColor }
     });
   }
 
   function atmosphereColor(THREE, profile) {
+    if (profile.surfaceMode === 'bands') {
+      const rgb = hslToRgb(profile.gasHue, profile.gasSaturation * 0.72, clamp(profile.gasBrightness + 0.08));
+      return new THREE.Color(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255);
+    }
     const temperature = clamp(profile.temperature || 0);
     const moisture = clamp(profile.moisture || 0);
     const industrialization = clamp(profile.industrialization || 0);
@@ -299,12 +329,13 @@
     const profile = textures.profile;
     const atmosphere = clamp(profile.atmosphere || 0);
     const coverage = clamp(profile.cloudCoverage || 0);
+    const atmosphericBands = profile.surfaceMode === 'bands';
     return Object.freeze({
       cloudMaterial: new THREE.MeshStandardMaterial({
-        color: 0xf0eee5,
+        color: atmosphericBands ? atmosphereColor(THREE, profile) : 0xf0eee5,
         alphaMap: textures.cloudMap,
         transparent: true,
-        opacity: atmosphere * (0.24 + coverage * 0.48),
+        opacity: atmosphericBands ? atmosphere * (0.08 + coverage * 0.24) : atmosphere * (0.24 + coverage * 0.48),
         depthWrite: false,
         roughness: 1,
         metalness: 0
@@ -312,7 +343,7 @@
       atmosphereMaterial: new THREE.MeshBasicMaterial({
         color: atmosphereColor(THREE, profile),
         transparent: true,
-        opacity: atmosphere * 0.13,
+        opacity: atmosphericBands ? atmosphere * 0.17 : atmosphere * 0.13,
         side: THREE.BackSide,
         depthWrite: false,
         blending: THREE.AdditiveBlending
