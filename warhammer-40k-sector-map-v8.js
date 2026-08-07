@@ -3,7 +3,7 @@
 
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
   const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
-  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=3';
+  const PLANET_PROFILE_URL = 'assets/warhammer-40k/shaders/planet-profile-v1.js?v=4';
   const PLANET_COMPOSITOR_URL = 'assets/warhammer-40k/shaders/planet-compositor-v1.js?v=3';
   const MODES = new Set(['select', 'orbit', 'pan', 'zoom']);
   const PASSIVE_DWELL = 26000;
@@ -49,7 +49,7 @@
         if (!window.CafarronPlanetProfileV1) await loadScript(PLANET_PROFILE_URL);
         if (!window.CafarronPlanetCompositorV1) await loadScript(PLANET_COMPOSITOR_URL);
         const profileEngine = window.CafarronPlanetProfileV1, compositor = window.CafarronPlanetCompositorV1;
-        if (!profileEngine?.createProfile || !compositor?.compose || !compositor?.materialFromTextures || !compositor?.layerMaterialsFromTextures) throw new Error('Planetary composition cogitators failed to answer.');
+        if (!profileEngine?.createProfile || !profileEngine?.templateForBody || !compositor?.compose || !compositor?.materialFromTextures || !compositor?.layerMaterialsFromTextures) throw new Error('Planetary composition cogitators failed to answer.');
         return { profileEngine, compositor };
       })();
       planetCompositorPromise.catch(() => { planetCompositorPromise = null; });
@@ -137,12 +137,16 @@
   }
   function disposeObject(root) { if (!root) return; root.traverse(object => { object.geometry?.dispose?.(); const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.filter(Boolean).forEach(disposeMaterial); }); root.removeFromParent(); }
 
-  async function composeRegisteredPlanet(THREE, planet, systemGroup, node, records, seed, fallbackColor, template) {
+  async function composePlanet(THREE, planet, systemGroup, node, records, body, index, count, registered) {
     try {
       const { profileEngine, compositor } = await planetaryCompositor();
-      const profile = profileEngine.createProfile(`${node.id}|registered-world|${seed}`, systemIdentityText(node, records), template);
-      const textures = await compositor.compose(THREE, profile, { width: 256, height: 128 });
-      const material = compositor.materialFromTextures(THREE, textures, fallbackColor);
+      const identity = `${node.id}|planet|${index}|${body.name}`;
+      const text = registered ? systemIdentityText(node, records) : body.name;
+      const template = profileEngine.templateForBody(identity, text, index, count, registered);
+      const profile = profileEngine.createProfile(identity, text, template);
+      const resolution = registered ? { width: 256, height: 128 } : { width: 128, height: 64 };
+      const textures = await compositor.compose(THREE, profile, resolution);
+      const material = compositor.materialFromTextures(THREE, textures, body.color);
       const { cloudMaterial, atmosphereMaterial } = compositor.layerMaterialsFromTextures(THREE, textures);
       const radius = Number(planet.geometry?.parameters?.radius || 0.25);
       const cloudLayer = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.026, 24, 18), cloudMaterial);
@@ -159,9 +163,10 @@
       planet.add(cloudLayer, atmosphereLayer);
       planet.userData.cloudLayer = cloudLayer;
       planet.userData.planetProfile = profile;
+      planet.userData.planetTemplate = template;
       disposeMaterial(previous);
     } catch (error) {
-      console.warn(`${template} world composition rite failed for ${node.name || node.id}; retaining geological fallback.`, error);
+      console.warn(`Planet composition rite failed for ${body.name || node.name || node.id}; retaining geological fallback.`, error);
     }
   }
 
@@ -242,11 +247,11 @@
         const orbit = new THREE.Mesh(new THREE.RingGeometry(body.radius - 0.012, body.radius + 0.012, 72), new THREE.MeshBasicMaterial({ color: index === profile.registeredIndex ? 0xd9bc69 : 0x59645e, transparent: true, opacity: index === profile.registeredIndex ? 0.62 : 0.32, side: THREE.DoubleSide }));
         orbit.rotation.x = Math.PI / 2 + body.inclination; group.add(orbit);
         const pivot = new THREE.Group(); pivot.rotation.y = body.phase; pivot.rotation.z = body.inclination;
-        const material = index === profile.registeredIndex ? registeredPlanetFallbackMaterial(THREE, body.color) : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.76, metalness: 0.08 });
+        const registered = index === profile.registeredIndex;
+        const material = registered ? registeredPlanetFallbackMaterial(THREE, body.color) : new THREE.MeshStandardMaterial({ color: body.color, roughness: 0.76, metalness: 0.08 });
         const planet = new THREE.Mesh(new THREE.SphereGeometry(body.scale, 22, 16), material); planet.position.x = body.radius;
-        if (index === profile.registeredIndex && profile.template === 'unsealed') planet.add(new THREE.Mesh(new THREE.SphereGeometry(body.scale * 1.22, 16, 12), new THREE.MeshBasicMaterial({ color: 0xe0c77f, transparent: true, opacity: 0.13, wireframe: true })));
         pivot.add(planet);
-        if (index === profile.registeredIndex && ['desert', 'forge', 'ice'].includes(profile.template)) void composeRegisteredPlanet(THREE, planet, group, node, records, profile.seed ^ index, body.color, profile.template);
+        void composePlanet(THREE, planet, group, node, records, body, index, profile.bodies.length, registered);
         localObjects.push({ object: planet, name: body.name, kind: 'planet', priority: index === profile.registeredIndex ? 90 : 70 - index });
         for (let moonIndex = 0; moonIndex < body.moons; moonIndex += 1) {
           const moonPivot = new THREE.Group(); moonPivot.position.copy(planet.position); moonPivot.rotation.y = moonIndex * Math.PI + profile.seed * 0.0001;
