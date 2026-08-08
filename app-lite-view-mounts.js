@@ -245,18 +245,21 @@
     if (status) status.textContent = `${viewId} workspace could not be loaded: ${error.message}`;
   }
 
-  async function activateLocationView() {
+  async function activateHashView() {
     const params = new URLSearchParams(location.search);
     const requestedView = String(params.get('view') || '').trim();
     const requestedTab = String(params.get('tab') || '').trim().toLowerCase();
-    const hashView = location.hash.replace(/^#/, '');
-    const viewId = requestedView || hashView;
+    const rawHash = location.hash.replace(/^#/, '');
+    const mapHashRoute = rawHash === 'warhammer-40k-map';
+    const viewId = requestedView || (mapHashRoute ? 'warhammer-40k' : rawHash);
+    const tabId = requestedTab || (mapHashRoute ? 'map' : '');
     if (!viewId || !document.querySelector(`[data-view="${CSS.escape(viewId)}"]`)) return;
     await activateView(viewId);
-    if (viewId === 'warhammer-40k' && requestedTab === 'map') {
+    if (viewId === 'warhammer-40k' && tabId === 'map') {
       const mapTab = document.querySelector('#warhammer-40k [data-tab="map"]');
       if (!mapTab) throw new Error('The Navis Cartographica register did not initialize.');
       mapTab.click();
+      if (mapHashRoute && location.hash !== '#warhammer-40k-map') history.replaceState(null, '', '#warhammer-40k-map');
     }
   }
 
@@ -280,9 +283,9 @@
 
   document.readyState === 'loading'
     ? document.addEventListener('DOMContentLoaded', () => {
-        void activateLocationView().catch(error => reportActivationFailure('route', error));
+        void activateHashView().catch(error => reportActivationFailure('route', error));
       }, { once: true })
-    : void activateLocationView().catch(error => reportActivationFailure('route', error));
+    : void activateHashView().catch(error => reportActivationFailure('route', error));
 
   void loadScript('shadowrun-binary-cube-engine.js')
     .then(() => loadScript('binary-cube-large-grid-ui.js'))
