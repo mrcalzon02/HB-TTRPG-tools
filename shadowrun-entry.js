@@ -23,9 +23,8 @@
     ['campaign','Campaign Clocks and Consequence Dashboard','Track corporate retaliation, police heat, gang hostility, contact strain, media exposure, magical fallout, and team debt.'],
     ['reference','Edition and House-Rule Profile','Record selected edition, terminology, dice assumptions, Matrix model, magic options, availability rules, and house conversions.'],
     ['campaign','Run Archive and After-Action Report','Store objectives, timeline, evidence, expenditures, injuries, payments, betrayals, unresolved threads, and reputation changes.'],
-    ['science','Binary Cube Encryption Laboratory','Develop and test the Binary Cube encoding and traversal system independently from the extracted Shadow/ISM collision simulator.','shadowrun-binary-cube-encryption','available','Open Laboratory'],
-    ['science','Binary Cube Encoder Visualizer','Visualize canonical Binary Cube packages, mappings, traces, keyboard controls, reduced-motion phases, non-color state markers, trace transcripts, and reversible multi-block playback without owning the extracted Shadow/ISM simulation.','shadowrun-binary-cube-visualizer','available','Open Visualizer'],
-    ['science','Interstellar Media Collisions Lab','Cast phase-light vectors through literal 1:1 interstellar-medium particles, apply physically bounded Λ scaling, add a deterministic secondary Shadow Key reflectivity layer, and chart all five non-input faces concurrently.','interstellar-media-collisions-lab','available','Open Collisions Lab'],
+    ['tools','Binary Cube Encryption Laboratory','Develop and test a full-depth, omnidirectionally collision-free binary face-projection permutation using a keyed 3D point field, reversible cube orientation, padding, data-entry masks, diagnostics, and exportable key packages.','shadowrun-binary-cube-encryption','available','Open Laboratory'],
+    ['tools','Binary Cube Encoder Visualizer','Encrypt exact canonical packages through the accepted 3D or exact 2D representations with keyboard controls, reduced-motion phases, non-color state markers, trace transcripts, verified mappings, reversible multi-block playback, and protected laboratory handoff.','shadowrun-binary-cube-visualizer','available','Open Visualizer'],
     ['tools','Polyaminal Fold Ladder Compression Research','Investigate recursive anchor/swing folding, stage-gated codecs, deterministic binary packing, measurable compression behavior, and eventual handoff into the Binary Cube pipeline.',null,'research']
   ];
 
@@ -34,7 +33,6 @@
   let cubeVisualizerPromise = null;
   let sprawlToolPromise = null;
   let midmarketToolPromise = null;
-  let interstellarLabPromise = null;
   let cubeHandoffsBound = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
@@ -76,13 +74,15 @@
       const card = document.createElement('article');
       card.className = 'menu-card';
       card.dataset.shadowrunCard = 'true';
-      card.innerHTML = '<h3>Shadowrun Workspace</h3><p>Sprawls, runs, Johnsons, contacts, Matrix hosts, facilities, magic, equipment, heat, downtime, campaign consequences, and scientific tools.</p><button class="link-button" data-view="shadowrun">Open Shadowrun</button>';
+      card.innerHTML = '<h3>Shadowrun Workspace</h3><p>Sprawls, runs, Johnsons, contacts, Matrix hosts, facilities, magic, equipment, heat, downtime, and campaign consequences.</p><button class="link-button" data-view="shadowrun">Open Shadowrun</button>';
       menu.appendChild(card);
     }
     bind();
   }
 
-  function normalizedAsset(value) { return String(value || '').split('?')[0].replace(/^\.\//, ''); }
+  function normalizedAsset(value) {
+    return String(value || '').split('?')[0].replace(/^\.\//, '');
+  }
   function existingScript(src) {
     const normalized = normalizedAsset(src);
     return [...document.scripts].find(script => {
@@ -105,8 +105,17 @@
     const promise = new Promise((resolve, reject) => {
       const link = existing || document.createElement('link');
       let settled = false;
-      const finish = () => { if (settled) return; settled = true; link.dataset.shadowrunStyleLoaded = 'true'; resolve(); };
-      const fail = () => { if (settled) return; settled = true; reject(new Error(`${href} could not be loaded.`)); };
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        link.dataset.shadowrunStyleLoaded = 'true';
+        resolve();
+      };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        reject(new Error(`${href} could not be loaded.`));
+      };
       link.addEventListener('load', finish, { once: true });
       link.addEventListener('error', fail, { once: true });
       if (!existing) {
@@ -136,7 +145,12 @@
         script.dataset.shadowrunToolLoaded = 'true';
         resolve();
       };
-      const fail = () => { if (settled) return; settled = true; window.clearTimeout(timeout); reject(new Error(`${src} could not be loaded.`)); };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        reject(new Error(`${src} could not be loaded.`));
+      };
       const timeout = window.setTimeout(() => ready() ? finish() : fail(), 10000);
       script.addEventListener('load', finish, { once: true });
       script.addEventListener('error', fail, { once: true });
@@ -153,10 +167,12 @@
   }
 
   function canonicalCubeEngineReady() {
-    return Boolean(window.ShadowrunBinaryCubeEngine
+    return Boolean(
+      window.ShadowrunBinaryCubeEngine
       && window.ShadowrunBinaryCubeEngine.constants?.MAX_GRID_SIZE === 1024
       && typeof window.ShadowrunBinaryCubeEngine.assertOmnidirectionalNonConflict === 'function'
-      && typeof window.ShadowrunBinaryCubeEngine.traceEncryptBlock === 'function');
+      && typeof window.ShadowrunBinaryCubeEngine.traceEncryptBlock === 'function'
+    );
   }
 
   function loadCubeTool() {
@@ -210,17 +226,12 @@
   function loadMidmarketCompanyTool() {
     if (window.ShadowrunMidmarketCompanyGenerator) return Promise.resolve(window.ShadowrunMidmarketCompanyGenerator);
     if (midmarketToolPromise) return midmarketToolPromise;
-    midmarketToolPromise = loadScript('shadowrun-midmarket-company-generator.js', () => Boolean(window.ShadowrunMidmarketCompanyGenerator)).then(() => window.ShadowrunMidmarketCompanyGenerator);
+    midmarketToolPromise = (async () => {
+      await loadScript('shadowrun-midmarket-company-generator.js', () => Boolean(window.ShadowrunMidmarketCompanyGenerator));
+      return window.ShadowrunMidmarketCompanyGenerator;
+    })();
     midmarketToolPromise.catch(() => { midmarketToolPromise = null; });
     return midmarketToolPromise;
-  }
-
-  function loadInterstellarMediaLab() {
-    if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
-    if (interstellarLabPromise) return interstellarLabPromise;
-    interstellarLabPromise = loadScript('interstellar-media-collisions-lab.js', () => Boolean(window.InterstellarMediaCollisionsLab)).then(() => window.InterstellarMediaCollisionsLab);
-    interstellarLabPromise.catch(() => { interstellarLabPromise = null; });
-    return interstellarLabPromise;
   }
 
   function bindCubeHandoffs() {
@@ -246,19 +257,15 @@
     if (toolId === 'shadowrun-sprawl-discovery') return 'Discovery';
     if (toolId === 'shadowrun-midmarket-company-generator') return 'Generator';
     if (toolId === 'shadowrun-binary-cube-visualizer') return 'Visualizer';
-    if (toolId === 'interstellar-media-collisions-lab') return 'Collisions Lab';
     return 'Laboratory';
   }
-
   function loadTool(toolId) {
     if (toolId === 'shadowrun-sprawl-discovery') return loadSprawlTool();
     if (toolId === 'shadowrun-binary-cube-encryption') return loadCubeTool();
     if (toolId === 'shadowrun-binary-cube-visualizer') return loadCubeVisualizer();
     if (toolId === 'shadowrun-midmarket-company-generator') return loadMidmarketCompanyTool();
-    if (toolId === 'interstellar-media-collisions-lab') return loadInterstellarMediaLab();
     return Promise.reject(new Error(`No loader is registered for ${toolId}.`));
   }
-
   async function openTool(button) {
     const toolId = button.dataset.shadowrunOpen;
     button.disabled = true;
@@ -268,8 +275,7 @@
       button.textContent = `Loading ${toolLabel(toolId)}…`;
       const api = await loadTool(toolId);
       if (!api?.openPanel) throw new Error(`${toolLabel(toolId)} loaded without an open-panel interface.`);
-      if (toolId === 'interstellar-media-collisions-lab') api.openPanel({ setting: 'shadowrun' });
-      else api.openPanel();
+      api.openPanel();
     } catch (error) { alert(error.message); }
     finally {
       button.disabled = false;
@@ -284,7 +290,7 @@
     const section = document.createElement('section');
     section.id = VIEW_ID;
     section.className = 'view';
-    section.innerHTML = '<div class="hero-card no-print"><p class="eyebrow">Shadowrun campaign workspace</p><h2>Sprawl Operations and Run Planning Dashboard</h2><p>An edition-flexible predictive-support registry for locations, missions, contacts, corporations, security, the Matrix, magic, gear, pursuits, downtime, long-term consequences, and isolated scientific experiments.</p><p class="helper-note">Unofficial fan planning workspace; not affiliated with or endorsed by the rights holders.</p></div><div class="setting-workspace-controls no-print"><label class="control-label">Search Shadowrun modules</label><input id="shadowrun-search" class="tool-input" type="search"><div id="shadowrun-tabs" class="setting-tab-row"></div></div><p id="shadowrun-count" class="setting-module-count no-print"></p><div id="shadowrun-grid" class="module-grid no-print"></div>';
+    section.innerHTML = '<div class="hero-card no-print"><p class="eyebrow">Shadowrun campaign workspace</p><h2>Sprawl Operations and Run Planning Dashboard</h2><p>An edition-flexible predictive-support registry for locations, missions, contacts, corporations, security, the Matrix, magic, gear, pursuits, downtime, and long-term consequences.</p><p class="helper-note">Unofficial fan planning workspace; not affiliated with or endorsed by the rights holders.</p></div><div class="setting-workspace-controls no-print"><label class="control-label">Search Shadowrun modules</label><input id="shadowrun-search" class="tool-input" type="search"><div id="shadowrun-tabs" class="setting-tab-row"></div></div><p id="shadowrun-count" class="setting-module-count no-print"></p><div id="shadowrun-grid" class="module-grid no-print"></div>';
     main.appendChild(section);
     section.querySelector('#shadowrun-search').addEventListener('input', render);
     section.querySelector('#shadowrun-grid').addEventListener('click', event => {
@@ -293,12 +299,11 @@
     });
     tabs(); render(); bind();
   }
-
   function tabs() {
     const target = document.getElementById('shadowrun-tabs');
     if (!target) return;
     target.innerHTML = '';
-    [['all','All Modules'],['generators','Generators'],['tools','Tools'],['science','Scientific Tools'],['campaign','Campaign'],['reference','Reference']].forEach(([id,label]) => {
+    [['all','All Modules'],['generators','Generators'],['tools','Tools'],['campaign','Campaign'],['reference','Reference']].forEach(([id,label]) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = `setting-tab ${active === id ? 'active' : ''}`;
@@ -307,7 +312,6 @@
       target.appendChild(button);
     });
   }
-
   function render() {
     const grid = document.getElementById('shadowrun-grid');
     if (!grid) return;
@@ -316,7 +320,7 @@
     grid.innerHTML = visible.map((module,index) => {
       const status = module[4] || 'planned';
       const action = module[3] ? `<button type="button" class="link-button shadowrun-module-action" data-shadowrun-open="${esc(module[3])}">${esc(module[5] || 'Open Tool')}</button>` : '';
-      return `<article class="module-card"${module[3] ? ` data-shadowrun-module="${esc(module[3])}"` : ''}><div class="module-meta"><span class="badge section-${esc(module[0])}">${esc(title(module[0] === 'science' ? 'Scientific Tools' : module[0]))}</span><span class="badge status-${esc(status)}">${esc(title(status))}</span><span class="badge">priority ${index + 1}</span></div><h3>${esc(module[1])}</h3><p>${esc(module[2])}</p>${action}</article>`;
+      return `<article class="module-card"${module[3] ? ` data-shadowrun-module="${esc(module[3])}"` : ''}><div class="module-meta"><span class="badge section-${esc(module[0])}">${esc(title(module[0]))}</span><span class="badge status-${esc(status)}">${esc(title(status))}</span><span class="badge">priority ${index + 1}</span></div><h3>${esc(module[1])}</h3><p>${esc(module[2])}</p>${action}</article>`;
     }).join('') || '<div class="module-empty">No Shadowrun modules match the current filter.</div>';
     document.getElementById('shadowrun-count').textContent = `${visible.length} of ${modules.length} modules shown.`;
   }
