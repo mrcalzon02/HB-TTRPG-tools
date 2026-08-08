@@ -5,6 +5,8 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/scientific-tools-extraction.yml"
+      - "app-lite-view-mounts.js"
+      - "scientific-tools-entry.js"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -32,7 +34,7 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=pending \
             -f context='scientific-tools/extraction' \
-            -f description='Scientific Tools extraction validation is running.' \
+            -f description='Scientific Tools placement validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Checkout
@@ -45,6 +47,8 @@ jobs:
 
       - name: Check authoritative sources
         run: |
+          node --check app-lite-view-mounts.js
+          node --check scientific-tools-entry.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
@@ -52,7 +56,7 @@ jobs:
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s interstellar-media-collisions-lab.css
 
-      - name: Validate extraction contract
+      - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
 
       - name: Preserve accepted Binary Cube launch contract
@@ -66,7 +70,7 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
             -f context='scientific-tools/extraction' \
-            -f description='Scientific Tools extraction gate passed.' \
+            -f description='Scientific Tools main-menu placement gate passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Record extraction failure
@@ -77,5 +81,5 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
             -f context='scientific-tools/extraction' \
-            -f description='Scientific Tools extraction gate failed.' \
+            -f description='Scientific Tools main-menu placement gate failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
