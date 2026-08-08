@@ -33,22 +33,28 @@ checks.push(requireMatch(
   'V13 promotion must not precede V12 acceptance.'
 ));
 checks.push(requireMatch(
-  'V13 asset version is promoted',
+  'V13 asset version remains accepted',
   entry,
   /const ASSET_VERSION = '20260730-v13';/,
-  'the Shadowrun entry must publish the V13 asset version.'
+  'the Scientific Tools migration must preserve the accepted Binary Cube V13 asset contract.'
 ));
 checks.push(requireMatch(
-  'Laboratory card remains available',
+  'Laboratory remains available under Scientific Tools',
   entry,
-  /\['tools','Binary Cube Encryption Laboratory',[\s\S]*?'shadowrun-binary-cube-encryption','available','Open Laboratory'\]/,
-  'the laboratory must remain a separate available launch target.'
+  /\['science','Binary Cube Encryption Laboratory',[\s\S]*?'shadowrun-binary-cube-encryption','available','Open Laboratory'\]/,
+  'the laboratory must remain a separate available launch target after the category migration.'
 ));
 checks.push(requireMatch(
-  'Visualizer card is available',
+  'Visualizer remains available under Scientific Tools',
   entry,
-  /\['tools','Binary Cube Encoder Visualizer',[\s\S]*?'shadowrun-binary-cube-visualizer','available','Open Visualizer'\]/,
-  'the visualizer must be promoted as a separate available launch target.'
+  /\['science','Binary Cube Encoder Visualizer',[\s\S]*?'shadowrun-binary-cube-visualizer','available','Open Visualizer'\]/,
+  'the visualizer must remain a separate available launch target after the category migration.'
+));
+checks.push(requireMatch(
+  'Scientific Tools tab owns the Binary Cube category',
+  entry,
+  /\['science','Scientific Tools'\]/,
+  'the migrated Binary Cube launch targets must remain reachable through the Scientific Tools tab.'
 ));
 checks.push(requireMatch(
   'Visualizer loader preserves the complete dependency chain',
@@ -143,7 +149,7 @@ checks.push(requireIncludes(
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v13-launch-contract-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   pass: true,
   checkCount: checks.length,
   checks
