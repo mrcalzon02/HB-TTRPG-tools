@@ -24,7 +24,9 @@
 
   function morphologyFor(profile) {
     if (profile.surfaceMode === 'bands') return 'bands';
-    return MORPHOLOGY[String(profile.template || '').toLowerCase()] || 'continental';
+    const template = String(profile.template || '').toLowerCase();
+    if (template.startsWith('moon-')) return 'cratered';
+    return MORPHOLOGY[template] || 'continental';
   }
 
   function loadImage(path) {
@@ -230,31 +232,33 @@
 
   function gasBandSample(profileEngine, profile, u, v) {
     const latitude = v * 2 - 1;
-    const broad = profileEngine.sphereFbm(u, v, profile.seed ^ 0x7f4a7c15, 2.8, 4);
-    const shear = profileEngine.sphereFbm(u, v, profile.seed ^ 0x243f6a88, 5.1, 4);
-    const storm = profileEngine.sphereFbm(u, v, profile.seed ^ 0x4cf5ad43, 8.6, 4);
-    const fine = profileEngine.sphereFbm(u, v, profile.seed ^ 0x165667b1, 15.2, 3);
-    const bandFrequency = 8 + profile.bandStrength * 18;
-    const warpedLatitude = latitude + (broad - 0.5) * (0.04 + profile.stormStrength * 0.07) + (shear - 0.5) * 0.018;
-    const phaseShear = (shear - 0.5) * (2.1 + profile.bandStrength * 1.8);
+    const iceGiant = profile.template === 'ice-giant';
+    const broad = profileEngine.sphereFbm(u, v, profile.seed ^ 0x7f4a7c15, iceGiant ? 2.1 : 2.8, 4);
+    const shear = profileEngine.sphereFbm(u, v, profile.seed ^ 0x243f6a88, iceGiant ? 3.8 : 5.1, 4);
+    const storm = profileEngine.sphereFbm(u, v, profile.seed ^ 0x4cf5ad43, iceGiant ? 6.4 : 8.6, 4);
+    const fine = profileEngine.sphereFbm(u, v, profile.seed ^ 0x165667b1, iceGiant ? 11.6 : 15.2, 3);
+    const bandFrequency = iceGiant ? 5 + profile.bandStrength * 11 : 8 + profile.bandStrength * 18;
+    const warpedLatitude = latitude + (broad - 0.5) * (iceGiant ? 0.026 : 0.04 + profile.stormStrength * 0.07) + (shear - 0.5) * (iceGiant ? 0.010 : 0.018);
+    const phaseShear = (shear - 0.5) * (iceGiant ? 1.1 : 2.1 + profile.bandStrength * 1.8);
     const band = 0.5 + 0.5 * Math.sin(warpedLatitude * Math.PI * bandFrequency + phaseShear);
-    const fineBand = 0.5 + 0.5 * Math.sin(warpedLatitude * Math.PI * bandFrequency * 2.45 + fine * 3.7 + phaseShear * 1.6);
+    const fineBand = 0.5 + 0.5 * Math.sin(warpedLatitude * Math.PI * bandFrequency * (iceGiant ? 1.72 : 2.45) + fine * (iceGiant ? 2.2 : 3.7) + phaseShear * 1.6);
 
     const stormU = seedUnit(profile.seed, 0x6a09e667);
     const stormV = 0.34 + seedUnit(profile.seed, 0xbb67ae85) * 0.32;
-    const du = wrappedDelta(u, stormU) / (0.055 + profile.stormStrength * 0.06);
-    const dv = (v - stormV) / (0.026 + profile.stormStrength * 0.035);
+    const du = wrappedDelta(u, stormU) / ((iceGiant ? 0.040 : 0.055) + profile.stormStrength * (iceGiant ? 0.045 : 0.06));
+    const dv = (v - stormV) / ((iceGiant ? 0.020 : 0.026) + profile.stormStrength * (iceGiant ? 0.024 : 0.035));
     const oval = Math.exp(-(du * du + dv * dv));
     const secondaryU = wrap01(stormU + 0.37);
-    const du2 = wrappedDelta(u, secondaryU) / 0.045;
-    const dv2 = (v - (1 - stormV)) / 0.024;
-    const secondary = Math.exp(-(du2 * du2 + dv2 * dv2)) * profile.stormStrength * 0.34;
-    const stormCell = clamp((smoothstep(0.66, 0.90, storm) * 0.55 + oval * 0.92 + secondary) * profile.stormStrength * Math.pow(1 - Math.abs(latitude), 0.34));
+    const du2 = wrappedDelta(u, secondaryU) / (iceGiant ? 0.034 : 0.045);
+    const dv2 = (v - (1 - stormV)) / (iceGiant ? 0.018 : 0.024);
+    const secondary = Math.exp(-(du2 * du2 + dv2 * dv2)) * profile.stormStrength * (iceGiant ? 0.22 : 0.34);
+    const stormCell = clamp((smoothstep(iceGiant ? 0.72 : 0.66, 0.90, storm) * (iceGiant ? 0.36 : 0.55) + oval * (iceGiant ? 0.58 : 0.92) + secondary) * profile.stormStrength * Math.pow(1 - Math.abs(latitude), 0.34));
+    const polarHood = smoothstep(iceGiant ? 0.54 : 0.72, 1, Math.abs(latitude));
 
-    const hue = profile.gasHue + (band - 0.5) * (0.05 + profile.bandStrength * 0.03) + (storm - 0.5) * 0.026 + oval * 0.018;
-    const saturation = clamp(profile.gasSaturation * (0.76 + fineBand * 0.30) - stormCell * 0.10);
-    const lightness = clamp(profile.gasBrightness * (0.70 + band * 0.36) + (fineBand - 0.5) * 0.08 + stormCell * 0.15);
-    return { rgb: hslToRgb(hue, saturation, lightness), band, fineBand, stormCell, storm, oval };
+    const hue = profile.gasHue + (band - 0.5) * (iceGiant ? 0.022 : 0.05 + profile.bandStrength * 0.03) + (storm - 0.5) * (iceGiant ? 0.012 : 0.026) + oval * (iceGiant ? -0.012 : 0.018);
+    const saturation = clamp(profile.gasSaturation * (iceGiant ? 0.90 + fineBand * 0.12 : 0.76 + fineBand * 0.30) - stormCell * 0.10 - polarHood * (iceGiant ? 0.08 : 0.02));
+    const lightness = clamp(profile.gasBrightness * (iceGiant ? 0.88 + band * 0.14 : 0.70 + band * 0.36) + (fineBand - 0.5) * (iceGiant ? 0.035 : 0.08) + stormCell * (iceGiant ? 0.08 : 0.15) + polarHood * (iceGiant ? 0.08 : 0.025));
+    return { rgb: hslToRgb(hue, saturation, lightness), band, fineBand, stormCell, storm, oval, polarHood, iceGiant };
   }
 
   async function compose(THREE, profile, options = {}) {
@@ -377,7 +381,7 @@
         surface.data[offset + 3] = 255;
 
         const heightValue = atmosphericBands
-          ? clamp(112 + gas.band * 20 + gas.fineBand * 10 + gas.stormCell * 18 + gas.oval * 9, 0, 255)
+          ? clamp(112 + gas.band * (gas.iceGiant ? 10 : 20) + gas.fineBand * (gas.iceGiant ? 6 : 10) + gas.stormCell * (gas.iceGiant ? 11 : 18) + gas.oval * (gas.iceGiant ? 5 : 9) + gas.polarHood * (gas.iceGiant ? 8 : 2), 0, 255)
           : clamp(72 + (sample.elevation + morphologyData.heightDelta) * 128 + sample.mountain * 52 - sample.ocean * 38 + scarMask * 22 + ruinMask * 14, 0, 255);
         bump.data[offset] = bump.data[offset + 1] = bump.data[offset + 2] = heightValue;
         bump.data[offset + 3] = 255;
@@ -410,7 +414,7 @@
         if (atmosphericBands) {
           const highCloud = profileEngine.sphereFbm(u, v, profile.seed ^ 0xd3a2646c, 10.8, 4);
           const threshold = mix(0.70, 0.46, coverage);
-          cloudMask = clamp((smoothstep(threshold - 0.12, threshold + 0.12, highCloud) * 0.40 + gas.band * 0.20 + gas.stormCell * 0.62 + gas.oval * 0.24) * atmosphere);
+          cloudMask = clamp((smoothstep(threshold - 0.12, threshold + 0.12, highCloud) * (gas.iceGiant ? 0.28 : 0.40) + gas.band * (gas.iceGiant ? 0.10 : 0.20) + gas.stormCell * (gas.iceGiant ? 0.40 : 0.62) + gas.oval * (gas.iceGiant ? 0.12 : 0.24) + gas.polarHood * (gas.iceGiant ? 0.18 : 0.04)) * atmosphere);
         } else {
           const cloudNoise = profileEngine.sphereFbm(u, v, profile.seed ^ 0x165667b1, 5.2 + profile.moisture * 2.1, 5);
           const cloudWarp = profileEngine.sphereFbm(u, v, profile.seed ^ 0xd3a2646c, 10.7, 3);
