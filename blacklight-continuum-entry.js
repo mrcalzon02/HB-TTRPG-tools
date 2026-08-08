@@ -3,7 +3,6 @@
 
   const VIEW_ID = 'blacklight-continuum';
   const INDEX_URL = 'data/blacklight-continuum/wiki/wiki-index.json';
-  const SCIENCE_ASSET_VERSION = '20260808-science-1';
   const EXTRA_PACK_URLS = [
     'data/blacklight-continuum/wiki/blacklight-facility-scene-modes.json',
     'data/blacklight-continuum/wiki/blacklight-facility-layout-guide.json',
@@ -14,8 +13,6 @@
   ];
   let wikiData = null;
   let activeCategory = 'all';
-  let activeSystemsView = 'records';
-  let interstellarLabPromise = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -67,11 +64,6 @@
       #blacklight-continuum .module-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
       #blacklight-continuum .badge{display:inline-flex;align-items:center;min-height:24px;border:1px solid rgba(217,168,79,.42);border-radius:999px;padding:4px 8px;background:rgba(217,168,79,.11);color:#f4d296;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em}
       #blacklight-continuum .blacklight-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-      #blacklight-continuum .blacklight-system-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
-      #blacklight-continuum .blacklight-system-tab{border:1px solid rgba(217,168,79,.35);border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.035);color:var(--bli-muted);font-weight:850;cursor:pointer}
-      #blacklight-continuum .blacklight-system-tab.active,#blacklight-continuum .blacklight-system-tab:hover{border-color:var(--bli-gold);color:var(--bli-ink);background:rgba(217,168,79,.10)}
-      #blacklight-continuum [data-blacklight-systems-panel][hidden]{display:none}
-      #blacklight-continuum .blacklight-science-boundary{margin-top:12px;padding:10px 12px;border-left:3px solid var(--bli-gold);background:rgba(217,168,79,.07);color:var(--bli-muted);font-size:.82rem;line-height:1.5}
       .blacklight-browser{border:1px solid rgba(217,168,79,.32);border-radius:22px;padding:20px;background:rgba(0,0,0,.22);margin-top:32px}
       .blacklight-controls{display:grid;grid-template-columns:minmax(240px,1fr) auto;gap:10px;margin-bottom:14px}
       .blacklight-controls input{background:#10131a;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 12px}
@@ -96,62 +88,6 @@
       @media(max-width:900px){#blacklight-continuum .bli-topbar,.blacklight-layout,.blacklight-controls{grid-template-columns:1fr}.blacklight-list{max-height:none}}
     `;
     document.head.appendChild(style);
-  }
-
-  function loadScript(src, ready = () => false) {
-    if (ready()) return Promise.resolve();
-    const normalized = String(src).split('?')[0];
-    const existing = [...document.scripts].find(script => String(script.getAttribute('src') || '').split('?')[0].endsWith(normalized));
-    return new Promise((resolve, reject) => {
-      const script = existing || document.createElement('script');
-      let settled = false;
-      const finish = () => {
-        if (settled) return;
-        settled = true;
-        if (!ready()) return reject(new Error(`${src} loaded without exposing its expected API.`));
-        resolve();
-      };
-      const fail = () => { if (settled) return; settled = true; reject(new Error(`${src} could not be loaded.`)); };
-      script.addEventListener('load', finish, { once: true });
-      script.addEventListener('error', fail, { once: true });
-      if (!existing) {
-        script.src = `${src}?v=${SCIENCE_ASSET_VERSION}`;
-        script.async = false;
-        document.body.appendChild(script);
-      } else if (ready()) finish();
-    });
-  }
-
-  function loadInterstellarMediaLab() {
-    if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
-    if (interstellarLabPromise) return interstellarLabPromise;
-    interstellarLabPromise = loadScript('interstellar-media-collisions-lab.js', () => Boolean(window.InterstellarMediaCollisionsLab)).then(() => window.InterstellarMediaCollisionsLab);
-    interstellarLabPromise.catch(() => { interstellarLabPromise = null; });
-    return interstellarLabPromise;
-  }
-
-  async function openInterstellarMediaLab(button) {
-    if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
-    try {
-      const api = await loadInterstellarMediaLab();
-      api.openPanel({ setting: 'blacklight-continuum' });
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
-    }
-  }
-
-  function setSystemsView(view) {
-    activeSystemsView = view === 'science' ? 'science' : 'records';
-    document.querySelectorAll('#blacklight-continuum [data-blacklight-systems-tab]').forEach(button => {
-      const active = button.dataset.blacklightSystemsTab === activeSystemsView;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-    document.querySelectorAll('#blacklight-continuum [data-blacklight-systems-panel]').forEach(panel => {
-      panel.hidden = panel.dataset.blacklightSystemsPanel !== activeSystemsView;
-    });
   }
 
   async function fetchJson(url) {
@@ -244,34 +180,13 @@
 
       <div class="bli-shell no-print">
         <section id="blacklight-corporate-systems" class="bli-section">
-          <div class="bli-section-head"><p class="bli-eyebrow">Authorized systems directory</p><h2>Operational records, support interfaces, and scientific tools.</h2><p>Cleared personnel can reach Blacklight archive records and separately isolated scientific experiments from this directory.</p></div>
-          <div class="blacklight-system-tabs" role="tablist" aria-label="Blacklight systems sections">
-            <button type="button" class="blacklight-system-tab active" data-blacklight-systems-tab="records" role="tab" aria-selected="true">Operational Records</button>
-            <button type="button" class="blacklight-system-tab" data-blacklight-systems-tab="science" role="tab" aria-selected="false">Scientific Tools</button>
-          </div>
-          <div data-blacklight-systems-panel="records">
-            <div class="module-grid" data-blacklight-entry-card-grid>
-              <article class="module-card" data-blacklight-internal-archive-card="true">
-                <div class="module-meta"><span class="badge status-active">archive</span><span class="badge">records</span><span class="badge">searchable</span></div>
-                <h3>Blacklight Continuum Internal Archive</h3>
-                <p>Search corporate operations, personnel references, facility systems, continuity records, capabilities, entities, equipment, and restricted terminology.</p>
-                <div class="blacklight-actions"><button id="blacklight-open-archive-card" class="primary-action" type="button">Open Internal Archive</button></div>
-              </article>
-            </div>
-          </div>
-          <div class="module-grid" data-blacklight-systems-panel="science" hidden>
-            <article class="module-card">
-              <div class="module-meta"><span class="badge">scientific tools</span><span class="badge">binary cube</span><span class="badge">migration</span></div>
-              <h3>Binary Cube Laboratory</h3>
-              <p>The Binary Cube system now has a dedicated Scientific Tools entry for Black Light Continuum. Its notation adapter remains isolated from the Shadowrun-coupled implementation until that adapter is extracted and verified rather than cross-wiring the two setting namespaces.</p>
-              <div class="blacklight-science-boundary">Migration boundary: listed here as its own scientific system, but not falsely wired to the Shadowrun Binary Cube runtime.</div>
-            </article>
-            <article class="module-card">
-              <div class="module-meta"><span class="badge status-active">scientific tools</span><span class="badge">phase light</span><span class="badge">shadow key</span></div>
-              <h3>Interstellar Media Collisions Lab</h3>
-              <p>Cast a phase-light beam through literal 1:1 interstellar-medium particles, preserve the physically bounded Λ term, apply keyed impact-reflectivity randomness, and chart every non-input cube face concurrently.</p>
-              <div class="blacklight-actions"><button id="blacklight-open-interstellar-lab" class="primary-action" type="button">Open Collisions Lab</button></div>
-              <div class="blacklight-science-boundary">Physical particle coordinates and Λ scaling remain separate from the deliberate Shadow-key scattering operator.</div>
+          <div class="bli-section-head"><p class="bli-eyebrow">Authorized systems directory</p><h2>Operational records and support interfaces.</h2><p>Cleared personnel can reach Blacklight archive records, operative sheets, induction systems, assignment tools, field catalogs, training examples, and support references from this corporate directory.</p></div>
+          <div class="module-grid" data-blacklight-entry-card-grid>
+            <article class="module-card" data-blacklight-internal-archive-card="true">
+              <div class="module-meta"><span class="badge status-active">archive</span><span class="badge">records</span><span class="badge">searchable</span></div>
+              <h3>Blacklight Continuum Internal Archive</h3>
+              <p>Search corporate operations, personnel references, facility systems, continuity records, capabilities, entities, equipment, and restricted terminology.</p>
+              <div class="blacklight-actions"><button id="blacklight-open-archive-card" class="primary-action" type="button">Open Internal Archive</button></div>
             </article>
           </div>
         </section>
@@ -313,11 +228,6 @@
     section.querySelector('#blacklight-open-wiki')?.addEventListener('click', () => openBrowser());
     section.querySelector('#blacklight-open-archive-card')?.addEventListener('click', () => openBrowser());
     section.querySelector('#blacklight-open-facility')?.addEventListener('click', () => openBrowser('foyer-art-subspace-attunement-fork'));
-    section.querySelector('#blacklight-open-interstellar-lab')?.addEventListener('click', event => void openInterstellarMediaLab(event.currentTarget));
-    section.querySelectorAll('[data-blacklight-systems-tab]').forEach(button => {
-      button.addEventListener('click', () => setSystemsView(button.dataset.blacklightSystemsTab));
-    });
-    setSystemsView(activeSystemsView);
   }
 
   async function openBrowser(preferredEntryId = '', initialSearch = '') {
@@ -487,5 +397,5 @@
   }
 
   initialize();
-  window.BlacklightContinuumWorkspace = Object.freeze({ loadWiki, openBrowser, setSystemsView, openInterstellarMediaLab });
+  window.BlacklightContinuumWorkspace = Object.freeze({ loadWiki, openBrowser });
 })();
