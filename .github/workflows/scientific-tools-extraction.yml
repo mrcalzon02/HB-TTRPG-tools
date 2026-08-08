@@ -1,0 +1,81 @@
+name: Validate Scientific Tools extraction
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/scientific-tools-extraction.yml"
+      - "shadowrun-entry.js"
+      - "blacklight-continuum-entry.js"
+      - "interstellar-media-collisions-lab.js"
+      - "interstellar-media-collisions-lab.css"
+      - "scripts/validate-scientific-tools-extraction.mjs"
+      - "scripts/validate-binary-cube-v13-launch.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "scientific-tools-extraction-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record extraction pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='scientific-tools/extraction' \
+            -f description='Scientific Tools extraction validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check authoritative sources
+        run: |
+          node --check shadowrun-entry.js
+          node --check blacklight-continuum-entry.js
+          node --check interstellar-media-collisions-lab.js
+          node --check scripts/validate-scientific-tools-extraction.mjs
+          node --check scripts/validate-binary-cube-v13-launch.mjs
+          test -s interstellar-media-collisions-lab.css
+
+      - name: Validate extraction contract
+        run: node scripts/validate-scientific-tools-extraction.mjs
+
+      - name: Preserve accepted Binary Cube launch contract
+        run: node scripts/validate-binary-cube-v13-launch.mjs
+
+      - name: Record extraction success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='scientific-tools/extraction' \
+            -f description='Scientific Tools extraction gate passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record extraction failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='scientific-tools/extraction' \
+            -f description='Scientific Tools extraction gate failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
