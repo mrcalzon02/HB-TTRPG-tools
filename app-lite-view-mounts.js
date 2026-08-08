@@ -216,7 +216,7 @@
       await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise]);
       warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=25');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
-      window.Warhammer40KWorkspace?.initialize?.();
+      await window.Warhammer40KWorkspace?.initialize?.();
       return;
     }
     return base.prepareView(viewId);
@@ -245,6 +245,21 @@
     if (status) status.textContent = `${viewId} workspace could not be loaded: ${error.message}`;
   }
 
+  async function activateLocationView() {
+    const params = new URLSearchParams(location.search);
+    const requestedView = String(params.get('view') || '').trim();
+    const requestedTab = String(params.get('tab') || '').trim().toLowerCase();
+    const hashView = location.hash.replace(/^#/, '');
+    const viewId = requestedView || hashView;
+    if (!viewId || !document.querySelector(`[data-view="${CSS.escape(viewId)}"]`)) return;
+    await activateView(viewId);
+    if (viewId === 'warhammer-40k' && requestedTab === 'map') {
+      const mapTab = document.querySelector('#warhammer-40k [data-tab="map"]');
+      if (!mapTab) throw new Error('The Navis Cartographica register did not initialize.');
+      mapTab.click();
+    }
+  }
+
   ensureScientificToolsView();
   ensureWarhammerLoreView();
 
@@ -263,15 +278,11 @@
 
   window.HBTTRPGApp = Object.freeze({ ...base, prepareView, activateView });
 
-  const activateHashView = () => {
-    const viewId = location.hash.replace(/^#/, '');
-    if (!viewId || !document.querySelector(`[data-view="${CSS.escape(viewId)}"]`)) return;
-    void activateView(viewId).catch(error => reportActivationFailure(viewId, error));
-  };
-
   document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', activateHashView, { once: true })
-    : activateHashView();
+    ? document.addEventListener('DOMContentLoaded', () => {
+        void activateLocationView().catch(error => reportActivationFailure('route', error));
+      }, { once: true })
+    : void activateLocationView().catch(error => reportActivationFailure('route', error));
 
   void loadScript('shadowrun-binary-cube-engine.js')
     .then(() => loadScript('binary-cube-large-grid-ui.js'))
