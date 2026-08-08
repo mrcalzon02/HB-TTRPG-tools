@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Navis Cartographica | Cafarron Corridor Sector Map</title>
+  <meta name="description" content="Standalone interactive three-dimensional Navis Cartographica survey of the Cafarron Corridor Warhammer 40,000 fan-campaign sector.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/warhammer-40k-map.html">
+  <meta property="og:title" content="Navis Cartographica | Cafarron Corridor Sector Map">
+  <meta property="og:description" content="Interactive three-dimensional Cafarron Corridor sector survey with charted systems, routes, threat seals, local-system inspection, and Passive Vigil.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/warhammer-40k-map.html">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <section id="warhammer-40k" class="view active" aria-labelledby="warhammer-40k-map-loading-title">
+      <div class="module-empty">
+        <h1 id="warhammer-40k-map-loading-title">Invoking Navis Cartographica…</h1>
+        <p>Opening the Cafarron Corridor three-dimensional sector survey.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.HBTTRPGApp = Object.freeze({
+      activateView(viewId) {
+        if (viewId === 'tools') window.location.href = 'index.html';
+      }
+    });
+  </script>
+  <script src="warhammer-40k-wiki-v6.js?v=6"></script>
+  <script src="assets/warhammer-40k/shaders/planet-profile-v1.js?v=8"></script>
+  <script src="assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10"></script>
+  <script src="warhammer-40k-workspace-v8.js?v=25"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      async function openMap() {
+        const workspace = window.Warhammer40KWorkspace;
+        if (!workspace?.initialize) throw new Error('The Cafarron Corridor workspace did not answer the invocation rite.');
+        await workspace.initialize();
+        const mapTab = document.querySelector('#warhammer-40k [data-tab="map"]');
+        if (!mapTab) throw new Error('The Navis Cartographica register is unavailable.');
+        mapTab.click();
+        document.title = 'Navis Cartographica | Cafarron Corridor Sector Map';
+      }
+
+      openMap().catch(error => {
+        console.error('Standalone Navis Cartographica could not be opened.', error);
+        const view = document.getElementById('warhammer-40k');
+        if (!view) return;
+        const failure = document.createElement('div');
+        failure.className = 'module-empty';
+        failure.textContent = `Navis Cartographica could not be opened: ${error.message}`;
+        view.replaceChildren(failure);
+      });
+    })();
+  </script>
+</body>
+</html>
