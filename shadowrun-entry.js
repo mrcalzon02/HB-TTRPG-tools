@@ -38,7 +38,7 @@
   let cubeHandoffsBound = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
-  const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[character]));
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const title = value => String(value).replace(/^./, character => character.toUpperCase());
 
   function style() {
