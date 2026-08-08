@@ -1,0 +1,214 @@
+CONTINUATION PROMPT — WARHAMMER 40K NAVIS CARTOGRAPHICA / PLANETARY DEVELOPMENT
+Created: 2026-08-08
+Repository: mrcalzon02/HB-TTRPG-tools
+Branch: main ONLY
+
+Continue direct development on the existing Warhammer 40K Navis Cartographica and planetary-generation implementation. Do not create a feature branch or PR. Inspect current main FIRST because this repository is being worked on concurrently and may have advanced beyond the commit recorded below.
+
+CURRENT REPOSITORY STATE AT PROMPT CREATION
+
+Current main head when this prompt was created:
+a4b578a438d2b6e7303d1c3f6bb0c2acc7829fe3 — feat: expand deterministic moon profile library
+
+Important: there was unrelated concurrent Scientific Tools / Binary Cube / ISM work on main after the planetary commits in this conversation. Do not overwrite, revert, or casually reformat those newer changes. Re-read the authoritative files before modifying anything.
+
+HARD IMPLEMENTATION RULES
+
+1. main branch only. Do not create feature branches.
+2. Modify the authoritative implementation directly.
+3. No monkey patches, runtime correction layers, stacked mutators, duplicate renderers, overlay replacement systems, alternate authoritative implementations, or parallel transformation pipelines.
+4. The Navis Cartographica remains ONE Three.js scene, ONE camera, ONE renderer, transitioning continuously between sector/system/local-object inspection.
+5. Detailed system inspection is not a separate viewer. The surrounding sector remains part of the same scene.
+6. Existing features must be preserved when adding new ones. In particular, do not remove system labels, the system dossier/detail panel, Passive Vigil behavior, Full Auspex behavior, routes, local-object selection, or the current local-label system.
+7. Planetary generation must remain one shared profile/compositor architecture. Do not create a renderer per planet type.
+8. Stellar generation must remain one shared stellar profile/compositor architecture.
+9. Run `node --check` on every changed JavaScript file before committing.
+10. Do not claim browser/WebGL verification, CI success, deployment propagation, or exact blob identity unless actually verified.
+11. Conserve GitHub Actions quota; prefer local/source-level validation unless a milestone specifically needs Actions.
+12. Treat the Rule Integrity Check as an evidentiary claim only; do not print decorative claims of direct modification or verification.
+
+AUTHORITATIVE NAVIS / PLANETARY FILES
+
+Primary files to inspect before changes:
+- warhammer-40k-sector-map-v8.js
+- warhammer-40k-workspace-v8.js
+- warhammer-40k-workspace-v8.css
+- app-lite-view-mounts.js
+- assets/warhammer-40k/shaders/planet-profile-v1.js
+- assets/warhammer-40k/shaders/planet-compositor-v1.js
+- assets/warhammer-40k/shaders/stellar-profile-v1.js
+- assets/warhammer-40k/shaders/stellar-compositor-v1.js
+
+Also preserve integration with:
+- warhammer-40k-survey-assay-v8.js
+- warhammer-40k-sector-chart-v7.js
+- warhammer-40k-map-labels-v7.js
+- warhammer-40k-archive-ui-v6.js
+
+RECENT IMPLEMENTED NAVIS FEATURES THAT MUST REMAIN
+
+System inspection / interaction:
+- Commence Vigil and direct system selection use the same detailed system expansion path.
+- Local star, planets, moons, orbital stations, and fleet anchorages are selectable.
+- Local selection adds object-specific detail to the standing system dossier; it does NOT replace the dossier.
+- Full Auspex moves the same authoritative system-detail DOM panel into the fullscreen stage and returns the same node afterward. Do not duplicate the panel.
+- System labels remain visible throughout detailed system inspection unless the user explicitly chooses Hide System Labels.
+- Hide/Show System Labels is controlled authoritatively from the active map-stage state.
+- Inter-system transit routes entering an expanded system are anchored to a local planetary endpoint rather than terminating inside the stellar primary.
+- Planetary axial rotation is elapsed-time based and much slower, with generated real-time-scale periods instead of frame-by-frame toy-orbit rotation.
+
+Stellar generation:
+- The supplied SOLAR TEMPLATE.jpg is the BASE photosphere source.
+- It must NOT be replaced by pure Perlin/fBM noise.
+- The square source image depicts a circular solar disk; the stellar compositor treats it as a disk-projected photosphere source, reconstructs/projection-samples it appropriately for a sphere, then layers procedural stellar activity over it.
+- Moving sphere-safe activity/emission fields modulate both visible stellar texture and the actual local PointLight intensity.
+- Stellar families include brown dwarfs, O/B/A/F/G/K/M main-sequence stars, giants/supergiants, white dwarfs, neutron stars, pulsars, magnetars, etc.
+
+Planetary profile architecture:
+- Planet profiles use deterministic seeded sphere-native 3D gradient noise / fBM rather than simple 2D longitude-latitude Perlin.
+- Independent deterministic field seeds exist for continental shape, shelves, terrain detail, moisture, temperature, ridges, tectonics, etc.
+- Domain warping was added specifically to reduce the previous “lumpy but uniformly lumpy” look.
+- Longitude seam and polar continuity must remain protected.
+- The world-template registry has grown substantially beyond the original terrestrial list and includes many Imperial/xenos/environmental families, gas giants, ice giants, and expanded moon types.
+- Current main also includes the later commit `a4b578a...` expanding the deterministic moon profile library. Inspect exactly what that commit added before editing moon generation.
+
+IMPORTANT PLANETARY COMMITS FROM THIS DEVELOPMENT THREAD
+
+3c1b91ce970931cd06eddc5cadff9c4e78e40e68
+  feat: deepen system interaction and planetary generation
+  Added local-object selection, local route anchoring, slow elapsed-time rotation, deeper sphere-native terrain/profile generation, and broader world taxonomy.
+
+10aa40f299b82563003ba100c8e336c86f73fa92
+  fix: restore Solar Template as stellar surface base
+  Restored the uploaded Solar Template as the underlying stellar photosphere and placed activity noise on top of it.
+
+54df028ea5aa255011ebe46ff8b654ca978b4d49
+  feat: differentiate moons and giant planets
+  Made moon templates route toward cratered/regolith morphology by default and made gas giants vs ice giants structurally different rather than mere hue swaps.
+
+79540c96bf151a8548bb4d6041b858885fa82bdd
+  feat: add planetary oceans aurora and material variation
+  Added the next physical-surface layer in the shared compositor: deeper ocean/shelf behavior, sea/polar-ice differentiation, per-pixel roughness path, tectonic/lava variation, and deterministic polar aurora contributing to emissive/night-side appearance.
+
+f2c3444c14fc9fdfaf01edc1172bfd4f9b61950b
+  chore: advance planetary compositor cache seal
+  Advanced the Warhammer planetary preload to compositor v9.
+
+At prompt creation the current main is newer than all of those because of concurrent work; inspect before editing.
+
+CURRENT PLANETARY COMPOSITOR DIRECTION
+
+Continue making planet classes VISIBLY and PHYSICALLY distinct, not merely differently named or tinted.
+
+Already-established morphology families in the shared compositor include or should preserve:
+- dunes / eroded badlands
+- tectonic rifts / lava / scarred volcanic terrain
+- cratered/regolith surfaces
+- glacial/fissured surfaces
+- archipelago / shallow-sea / ocean morphology
+- megacity / hive / forge industrial morphology
+- cultivated/agricultural patterns
+- dense biosphere morphology
+- distinct atmospheric-band rendering for giant planets
+
+Gas giants and ice giants should remain clearly different:
+- gas giants: stronger band density, jet shear, large oval storms, richer band contrast
+- ice giants: broader/smoother bands, reduced small-scale contrast, distinct polar hoods, subtler storms/cloud relief
+
+Moons:
+- Most moons should remain airless/lifeless cratered rocks by default.
+- Occasional mining, archaeology/relic, volcanic, icy, captured-body, or otherwise special moon profiles are appropriate.
+- Do not turn every moon into a richly habitable mini-planet.
+
+UNFINISHED WEATHER / INDUSTRIAL MATERIAL SLICE
+
+Immediately before this continuation prompt request, the next compositor revision had been implemented and locally validated but NOT attached to main.
+
+Unreferenced validated Git blob:
+77097c76f7e998fe6a046737baa9bfc44bb1fc3d
+
+An uncommitted tree object was also created during that work:
+645d8fe4af7513bdfe0937d0968ce5f82766f3e0
+
+DO NOT blindly fast-forward or attach that tree because main has since advanced substantially.
+
+The intended changes in that uncommitted compositor revision were:
+- per-pixel/localized METALNESS for forge/hive/urban/armoury/naval/industrial terrain instead of only whole-material metalness
+- industrial terrain catching stellar light materially differently from ordinary rock/soil
+- deterministic seeded cyclonic/storm cloud structures for sufficiently wet terrestrial atmospheres
+- recognizable large-scale weather on ocean/jungle/temperate/wet worlds rather than only generic cloud fBM
+- preserve seam-safe U=0/U=1 cloud behavior
+- preserve gas/ice giant seam continuity
+- preserve cratered moon morphology
+
+Recommended first action in the next session:
+1. Inspect current main and fetch the current planet compositor/profile/app loader.
+2. Compare current `assets/warhammer-40k/shaders/planet-compositor-v1.js` against the parent state used by blob `77097...`.
+3. If no conflicting compositor work has landed, either attach/port the validated changes from `77097...` into the current authoritative compositor.
+4. If the compositor HAS changed, manually merge the intended metalness/weather behavior into current main rather than replacing newer work.
+5. Run `node --check` and the seam/morphology behavioral checks before commit.
+6. Advance the planetary compositor cache/preload version after the actual compositor commit.
+
+PLANETARY DEVELOPMENT AFTER THAT SLICE
+
+Continue the database and renderer toward more physically recognizable worlds. Useful next areas, all inside the same profile/compositor pipeline:
+
+- atmospheric regimes: thin, standard, dense, corrosive/toxic, dusty/ash-heavy, greenhouse, near-airless
+- hydrosphere states: dry, scattered seas, continental oceans, ocean world, ice-covered ocean, brine/toxic seas
+- tectonic regimes: dead/stagnant, fractured, active plate-like, volcanic hotspot, extreme/chthonic
+- biosphere states: sterile, microbial/low, sparse, mature, hyper-dense/death-world, alien/xenos
+- magnetic activity: deterministic magnetosphere strength influencing auroral probability/intensity
+- snow lines, sea ice, glacier extent and mountain snow based on generated climate rather than generic whiteness
+- better continental shelf coloring/depth gradients
+- atmospheric haze coloration driven by chemistry/class rather than one universal haze treatment
+- stronger night-side civilization signatures for hive/urban/forge/administratum/naval worlds without turning all civilization into uniform glowing noise
+- visibly distinct ruined/relic/tomb/crone/cemetery worlds
+- more convincing volcanic emissive networks tied to tectonic/rift fields
+- class-aware roughness/metalness rather than whole-world constants
+- gas-giant storm-family variation and ring-system diversity
+- expanded moon database while maintaining the “mostly desolate rock” default
+
+USER’S VISUAL COMPLAINT TO KEEP IN MIND
+
+The user specifically observed a planet that looked “lumpy but fairly uniform.” Do not solve that by merely increasing noise amplitude or adding more octaves of the same field. The goal is multi-scale structural variation: broad continents/basins, regional terrain provinces, independent ridges/tectonics, local detail, erosion/dune/glacial/crater morphology, and climate/biome fields with independent seeds and scales.
+
+TEXTURE / SPHERE SAFETY
+
+Previous bugs included:
+- visible U=0/U=1 vertical planet texture seams
+- polar pinching/tearing from equirectangular generation
+- mistaking a texture seam for a lighting terminator
+
+Do not reintroduce those.
+
+Use sphere-space/sphere-native procedural sampling where possible. If generating equirectangular CanvasTextures, opposite longitude edges must be mathematically continuous. Do not “fix” a texture discontinuity by altering star lighting. Lighting and texture continuity are separate concerns.
+
+SYSTEM UI PRESERVATION
+
+Do not regress the user-visible detail mode again.
+Detailed system view must keep:
+- system labels and leader lines, unless Hide System Labels is explicitly active
+- system dossier/detail information, including in Full Auspex
+- object selection drill-down
+- existing system context while an object is selected
+- one scene/camera/renderer
+- Restore Survey and empty-space double-click behavior
+- Commence Vigil and direct-selection detailed inspection behavior
+
+CACHE / DEPLOYMENT DISCIPLINE
+
+The app loader has been used to preload the authoritative planetary profile/compositor before the Warhammer workspace mounts. Inspect current `app-lite-view-mounts.js` because concurrent work may have changed its cache tokens.
+
+When a compositor/profile version is advanced:
+- update only the authoritative dependency reference
+- run `node --check` on changed JS
+- verify the exact stored Git blob if connector transport changes whitespace/minification
+- do not claim the browser definitely received the new version until the cache chain is actually advanced
+
+OUTER HTML NOTE
+
+Historically `index.html` referenced `app-lite-view-mounts.js?v=14`. Inspect current `index.html`; do not assume that token is still current. If the outer cache seal needs advancing, do it only from the exact current file and do not reconstruct/replace unrelated HTML.
+
+CONTINUATION COMMAND
+
+Proceed with direct implementation. Start by inspecting the current main branch and authoritative planetary files, reconcile the current moon-profile expansion with the uncommitted weather/industrial compositor intent above, then continue planetary development in meaningful tested slices. Commit directly to main. Preserve all existing Navis features and do not create stacked/parallel systems.
