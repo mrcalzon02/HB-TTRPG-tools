@@ -65,8 +65,8 @@ checks.push(requireMatch(
 checks.push(requireMatch(
   'Landing page lazy-loads Shadowrun',
   mounts,
-  /if \(viewId === 'shadowrun'\)[\s\S]*?loadScript\('shadowrun-entry\.js'\)[\s\S]*?activateHashView/,
-  'explicit and direct-hash activation must both reach the Shadowrun workspace.'
+  /if\s*\(\s*viewId\s*===\s*'shadowrun'\s*\)[\s\S]*?loadScript\('shadowrun-entry\.js'\)[\s\S]*?activateHashView/,
+  'explicit and direct-hash activation must both reach the Shadowrun workspace regardless of source formatting.'
 ));
 checks.push(requireIncludes(
   'User guide covers the transformation and controls',
@@ -149,7 +149,7 @@ checks.push(requireIncludes(
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v13-launch-contract-receipt',
-  schemaVersion: '0.2.0',
+  schemaVersion: '0.2.1',
   pass: true,
   checkCount: checks.length,
   checks
