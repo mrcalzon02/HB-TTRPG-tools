@@ -10,6 +10,10 @@
     const t = clamp((x - a) / (b - a));
     return t * t * (3 - 2 * t);
   };
+  const wrap01 = value => {
+    const wrapped = value % 1;
+    return wrapped < 0 ? wrapped + 1 : wrapped;
+  };
 
   function loadImage(path = TEMPLATE_PATH) {
     const resolved = new URL(path, document.baseURI).href;
@@ -48,7 +52,7 @@
     const angle = profile.activityPhase * 0.17;
     const cosine = Math.cos(angle), sine = Math.sin(angle);
     const rotated = { x: point.x * cosine - point.z * sine, y: point.y, z: point.x * sine + point.z * cosine };
-    const power = 4;
+    const power = profile.family === 'supergiant' ? 3 : 4;
     let wx = Math.pow(Math.abs(rotated.x), power), wy = Math.pow(Math.abs(rotated.y), power), wz = Math.pow(Math.abs(rotated.z), power);
     const total = Math.max(1e-9, wx + wy + wz); wx /= total; wy /= total; wz /= total;
     const toDisk = (a, b, phase = 0) => {
@@ -99,6 +103,67 @@
     return texture;
   }
 
+  function createActivityController(profile, context, image, basePixels, fields, texture) {
+    const interval = Math.max(48, Number(profile.activityIntervalMs || 180));
+    const amplitude = clamp(profile.activityAmplitude || 0, 0, 0.8);
+    const flareStrength = clamp(profile.flareStrength || 0, 0, 0.8);
+    const pulseStrength = clamp(profile.pulseStrength || 0, 0, 0.9);
+    const pulseRate = Math.max(0, Number(profile.pulseRate || 0));
+    const activityRate = Math.max(0.002, Number(profile.activityRate || 0.05));
+    let lastUpdate = -Infinity;
+    let baselineEmission = null;
+    let lastSnapshot = Object.freeze({ lightScale: 1, coronaScale: 1, emission: 0.5, updated: false });
+
+    function update(now = performance.now()) {
+      if (now - lastUpdate < interval) return lastSnapshot;
+      lastUpdate = now;
+      const phase = wrap01(now * 0.001 * activityRate + profile.activityPhase / (Math.PI * 2));
+      const cursor = phase * fields.length;
+      const leftIndex = Math.floor(cursor) % fields.length;
+      const rightIndex = (leftIndex + 1) % fields.length;
+      const blend = smoothstep(0, 1, cursor - Math.floor(cursor));
+      const left = fields[leftIndex], right = fields[rightIndex];
+      let emissionSum = 0;
+      let flareSum = 0;
+      const pixelCount = left.length;
+
+      for (let index = 0; index < pixelCount; index += 1) {
+        const field = mix(left[index], right[index], blend);
+        const emission = smoothstep(0.28, 0.82, field);
+        const hotField = smoothstep(0.72, 0.96, field) * flareStrength;
+        const coolField = smoothstep(0.20, 0.42, 1 - field) * amplitude;
+        const localScale = clamp(1 + (emission - 0.5) * amplitude * 1.18 + hotField * 0.74 - coolField * 0.22, 0.42, 1.86);
+        const offset = index * 4;
+        image.data[offset] = clamp(basePixels[offset] * localScale, 0, 255);
+        image.data[offset + 1] = clamp(basePixels[offset + 1] * localScale, 0, 255);
+        image.data[offset + 2] = clamp(basePixels[offset + 2] * localScale, 0, 255);
+        image.data[offset + 3] = 255;
+        emissionSum += emission;
+        flareSum += hotField;
+      }
+
+      const meanEmission = emissionSum / Math.max(1, pixelCount);
+      const meanFlare = flareSum / Math.max(1, pixelCount);
+      if (baselineEmission === null) baselineEmission = meanEmission;
+      const emissionDelta = meanEmission - baselineEmission;
+      let pulseScale = 1;
+      if (pulseStrength > 0 && pulseRate > 0) {
+        const pulseWave = 0.5 + 0.5 * Math.sin(now * 0.001 * pulseRate * Math.PI * 2 + profile.activityPhase);
+        const spike = Math.pow(pulseWave, profile.family === 'neutron-star' ? 10 : 5);
+        pulseScale = clamp(1 - pulseStrength * 0.18 + spike * pulseStrength * 1.18, 0.34, 2.0);
+      }
+      const fieldScale = clamp(1 + emissionDelta * (5.4 + amplitude * 8.6) + meanFlare * (1.4 + flareStrength * 2.2), 0.52, 1.68);
+      const lightScale = clamp(fieldScale * pulseScale, 0.28, 2.25);
+      const coronaScale = clamp(0.92 + meanEmission * 0.16 + meanFlare * 0.42 + (pulseScale - 1) * 0.22, 0.72, 1.46);
+      context.putImageData(image, 0, 0);
+      texture.needsUpdate = true;
+      lastSnapshot = Object.freeze({ lightScale, coronaScale, emission: meanEmission, flare: meanFlare, pulseScale, updated: true });
+      return lastSnapshot;
+    }
+
+    return Object.freeze({ update, interval });
+  }
+
   async function compose(THREE, profile, options = {}) {
     const planetary = window.CafarronPlanetProfileV1;
     if (!planetary?.spherePoint || !planetary?.sphereFbm) throw new Error('Sphere-space procedural primitives are unavailable to the stellar compositor.');
@@ -111,6 +176,8 @@
     canvas.width = width; canvas.height = height;
     const context = canvas.getContext('2d', { alpha: false });
     const image = context.createImageData(width, height);
+    const pixelCount = width * height;
+    const activityFields = [new Float32Array(pixelCount), new Float32Array(pixelCount), new Float32Array(pixelCount)];
 
     for (let y = 0; y < height; y += 1) {
       const v = height > 1 ? y / (height - 1) : 0;
@@ -127,10 +194,10 @@
         const spot = smoothstep(spotThreshold, Math.min(0.98, spotThreshold + 0.12), spotField) * clamp(profile.spotDensity * 4.0);
         const faculaField = planetary.sphereFbm(u, v, profile.seed ^ 0xa4093822, profile.granulationScale * 1.42, 3);
         const facula = smoothstep(0.64, 0.88, faculaField) * profile.faculaStrength;
-        const textureDetail = (luminance - 0.5) * 0.34;
+        const textureDetail = (luminance - 0.5) * (profile.family === 'brown-dwarf' ? 0.26 : 0.34);
         const procedural = (broad - 0.5) * profile.surfaceContrast * 0.66 + (granule - 0.5) * profile.surfaceContrast + (fine - 0.5) * 0.08;
-        const energy = clamp(0.58 + textureDetail + procedural + facula * 0.16 - spot * 0.46, 0.14, 1);
-        const lightness = clamp(profile.surfaceLightness * (0.66 + energy * 0.48));
+        const energy = clamp(0.58 + textureDetail + procedural + facula * 0.16 - spot * 0.46, 0.10, 1);
+        const lightness = clamp(profile.surfaceLightness * (0.62 + energy * 0.52));
         const saturation = clamp(profile.surfaceSaturation * (0.90 + (granule - 0.5) * 0.18));
         const hue = profile.surfaceHue + (broad - 0.5) * 0.012 + facula * 0.004;
         const rgb = hslToRgb(hue, saturation, lightness);
@@ -139,14 +206,26 @@
         image.data[offset + 1] = clamp(rgb[1], 0, 255);
         image.data[offset + 2] = clamp(rgb[2], 0, 255);
         image.data[offset + 3] = 255;
+
+        const activityIndex = y * width + x;
+        const activityScale = Math.max(1.2, profile.activityFieldScale || profile.granulationScale);
+        activityFields[0][activityIndex] = planetary.sphereFbm(u, v, profile.seed ^ 0x6a09e667, activityScale, 4);
+        activityFields[1][activityIndex] = planetary.sphereFbm(wrap01(u + 1 / 3), v, profile.seed ^ 0x6a09e667, activityScale, 4);
+        activityFields[2][activityIndex] = planetary.sphereFbm(wrap01(u + 2 / 3), v, profile.seed ^ 0x6a09e667, activityScale, 4);
       }
     }
     context.putImageData(image, 0, 0);
-    return Object.freeze({ map: canvasTexture(THREE, canvas), profile });
+    const basePixels = new Uint8ClampedArray(image.data);
+    const texture = canvasTexture(THREE, canvas);
+    const activity = createActivityController(profile, context, image, basePixels, activityFields, texture);
+    return Object.freeze({ map: texture, profile, activity });
   }
 
   function materialFromTextures(THREE, textures) {
-    return new THREE.MeshBasicMaterial({ color: 0xffffff, map: textures.map, toneMapped: false });
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff, map: textures.map, toneMapped: false });
+    material.userData.stellarActivity = textures.activity;
+    material.userData.stellarProfile = textures.profile;
+    return material;
   }
 
   function coronaMaterials(THREE, profile) {
