@@ -12,7 +12,7 @@
     local: { label: 'Local interstellar neutral H · 0.127 / cm³', perM3: 1.27e5 }
   });
 
-  let activeSetting = 'shadowrun';
+  let activeSetting = 'scientific-tools';
   let lastRun = null;
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -61,7 +61,7 @@
     const link = document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'interstellar-media-collisions-lab.css?v=20260808-shadow-extract-1';
+    link.href = 'interstellar-media-collisions-lab.css?v=20260808-ism-main-menu-1';
     document.head.appendChild(link);
   }
 
@@ -86,7 +86,7 @@
 
         <div class="ism-lab-layout">
           <aside class="ism-lab-controls">
-            <div class="ism-lab-setting"><span>Notation context</span><strong id="ism-setting-label">Shadowrun</strong></div>
+            <div class="ism-lab-setting"><span>Workspace context</span><strong id="ism-setting-label">Scientific Tools</strong></div>
 
             <label>Phase light beam seed
               <input id="ism-beam-seed" type="text" value="phase-light-01" autocomplete="off">
@@ -373,17 +373,12 @@
     }
   }
 
-  function settingLabel(setting) {
-    if (setting === 'blacklight-continuum') return 'Black Light Continuum';
-    return 'Shadowrun';
-  }
-
-  function openPanel(options = {}) {
+  function openPanel() {
     ensureStyle();
     const panel = buildPanel();
-    activeSetting = options.setting === 'blacklight-continuum' ? 'blacklight-continuum' : 'shadowrun';
+    activeSetting = 'scientific-tools';
     const label = panel.querySelector('#ism-setting-label');
-    if (label) label.textContent = settingLabel(activeSetting);
+    if (label) label.textContent = 'Scientific Tools';
     panel.hidden = false;
     document.documentElement.classList.add('ism-lab-open');
     run();
