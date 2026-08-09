@@ -16,9 +16,10 @@ const LocalMedia = require(path.join(root, 'scientific-tools-local-media.js'));
 
 assert.equal(Registry.version, '0.1.0');
 assert.equal(Baseline.version, '20260809-ground-truth-1');
-assert.equal(Baseline.sourcePipelineVersion, '0.2.0');
+assert.equal(Baseline.sourcePipelineVersion, '0.2.0', 'The committed calibration baseline is a historical 0.2.0 measurement and must not be relabeled without a new measured baseline.');
 assert.equal(Baseline.sourceRegistryVersion, '0.1.0');
-assert.equal(Pipeline.version, '0.2.0');
+assert.equal(Pipeline.version, '0.3.0');
+assert.equal(Pipeline.constants.REPORT_SCHEMA_VERSION, '0.3.0');
 assert.equal(LocalMedia.version, '0.1.0');
 assert.equal(Baseline.receipts.length, 9);
 assert.equal(Baseline.observedPassCount, 8);
@@ -26,6 +27,7 @@ assert.equal(Baseline.observedFailureCount, 1);
 assert.ok(Registry.detector('audio-signal-forensics'));
 assert.ok(Registry.detector('cubic-decryptor-search')?.registeredForFutureRouting, 'Cubic Decryptor must be represented in the calibration registry before automatic exhaustive routing is enabled.');
 assert.ok(Pipeline.constants.DETECTOR_DEFINITIONS.some(item => item.id === 'audio-signal-forensics'));
+assert.ok(Pipeline.constants.RASTER_UNRESOLVED_FLAG_WEIGHTS?.['nonzero-below-legacy-threshold'] > 0, 'Pipeline 0.3 must expose an unresolved-risk contribution for the measured below-threshold raster condition.');
 
 const retainedMiss = Baseline.receipts.find(item => item.fixtureId === 'rgb-lsb' && item.detectorId === 'raster-steganalysis');
 assert.ok(retainedMiss, 'Measured RGB-LSB raster receipt is missing from the committed baseline.');
@@ -55,6 +57,7 @@ assert.equal(pngSynthetic.calibrationStatus, 'sparse');
 const calibrationOutput = execFileSync(process.execPath, ['scripts/calibrate-scientific-diagnostic-pipeline.mjs'], { cwd: root, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
 const calibration = JSON.parse(calibrationOutput);
 assert.equal(calibration.format, 'hb-ttrpg-scientific-diagnostic-calibration-run');
+assert.equal(calibration.pipelineVersion, '0.3.0');
 assert.equal(calibration.expectationCount, 9);
 assert.equal(calibration.snapshot.receipts.length, 9);
 assert.ok(calibration.snapshot.receipts.every(receipt => receipt.completed), 'Every selected ground-truth calibration detector must execute on its controlled fixture.');
@@ -65,38 +68,51 @@ const postIend = calibration.snapshot.receipts.find(item => item.fixtureId === '
 assert.equal(postIend?.pass, true, 'Post-IEND positive control must remain visible to PNG structural inspection.');
 const cleanPng = calibration.snapshot.receipts.find(item => item.fixtureId === 'clean-control' && item.detectorId === 'png-structure');
 assert.equal(cleanPng?.pass, true, 'Clean PNG negative control must not be called structurally concealed by the PNG detector.');
+const freshRasterMiss = calibration.snapshot.receipts.find(item => item.fixtureId === 'rgb-lsb' && item.detectorId === 'raster-steganalysis');
+assert.ok(freshRasterMiss, 'Fresh Pipeline 0.3 calibration omitted the RGB-LSB raster control.');
+assert.equal(freshRasterMiss.expected, 'positive');
+assert.equal(freshRasterMiss.observedPositive, false, 'Pipeline 0.3 must preserve the measured RGB-LSB false negative until the Presence detector is scientifically recalibrated.');
+assert.equal(freshRasterMiss.pass, false);
+assert.ok(Number(freshRasterMiss.metrics?.missRiskEvidence || 0) > 0, 'Pipeline 0.3 must retain below-threshold RGB-LSB structure as unresolved miss-risk evidence.');
+assert.ok(Array.isArray(freshRasterMiss.metrics?.diagnosticFlags) && freshRasterMiss.metrics.diagnosticFlags.some(flag => flag.id === 'nonzero-below-legacy-threshold'), 'Fresh RGB-LSB calibration must preserve the nonzero-below-legacy-threshold diagnostic flag.');
+const freshCleanRaster = calibration.snapshot.receipts.find(item => item.fixtureId === 'clean-control' && item.detectorId === 'raster-steganalysis');
+assert.equal(Number(freshCleanRaster?.metrics?.missRiskEvidence || 0), 0, 'The clean raster control must not inherit unresolved RGB-LSB miss-risk evidence.');
 
 const baselineByKey = new Map(Baseline.receipts.map(receipt => [`${receipt.fixtureId}:${receipt.detectorId}`, receipt]));
 for (const measured of calibration.snapshot.receipts) {
   const baseline = baselineByKey.get(`${measured.fixtureId}:${measured.detectorId}`);
   assert.ok(baseline, `Fresh calibration emitted unversioned expectation ${measured.fixtureId}:${measured.detectorId}. Bump the committed baseline version before changing the corpus contract.`);
   assert.equal(measured.expected, baseline.expected, `Ground-truth expectation changed for ${measured.fixtureId}:${measured.detectorId}; version the calibration baseline explicitly.`);
-  assert.equal(measured.observedPositive, baseline.observedPositive, `Detector outcome drifted for ${measured.fixtureId}:${measured.detectorId}. Review the scientific change and intentionally refresh the baseline if correct.`);
-  assert.equal(measured.pass, baseline.pass, `Calibration pass/fail drifted for ${measured.fixtureId}:${measured.detectorId}.`);
+  assert.equal(measured.observedPositive, baseline.observedPositive, `Detector Presence outcome drifted for ${measured.fixtureId}:${measured.detectorId}. Review the scientific change and intentionally refresh the baseline if correct.`);
+  assert.equal(measured.pass, baseline.pass, `Calibration Presence pass/fail drifted for ${measured.fixtureId}:${measured.detectorId}.`);
 }
-assert.equal(calibration.passCount, Baseline.observedPassCount, 'Fresh calibration pass count drifted from committed baseline.');
-assert.equal(calibration.failCount, Baseline.observedFailureCount, 'Fresh calibration failure count drifted from committed baseline.');
+assert.equal(calibration.passCount, Baseline.observedPassCount, 'Fresh calibration Presence pass count drifted from committed baseline.');
+assert.equal(calibration.failCount, Baseline.observedFailureCount, 'Fresh calibration Presence failure count drifted from committed baseline.');
 
 const registrySource = fs.readFileSync(path.join(root, 'binary-cube-diagnostic-calibration-registry.js'), 'utf8');
 for (const required of ['SHRINKAGE_CASES', 'balancedAccuracy', 'effectiveReliability', 'effectiveWeight', 'blindSpots', 'Calibration measurements describe detector behavior on the tested corpus only']) assert.ok(registrySource.includes(required), `Calibration registry missing ${required}.`);
 const baselineSource = fs.readFileSync(path.join(root, 'binary-cube-diagnostic-calibration-baseline.js'), 'utf8');
-for (const required of ["20260809-ground-truth-1", 'Measured false negative retained', 'observedPositive: false', 'Registry.buildSnapshot(']) assert.ok(baselineSource.includes(required), `Calibration baseline missing ${required}.`);
+for (const required of ["20260809-ground-truth-1", "SOURCE_PIPELINE_VERSION = '0.2.0'", 'Measured false negative retained', 'observedPositive: false', 'Registry.buildSnapshot(']) assert.ok(baselineSource.includes(required), `Calibration baseline missing ${required}.`);
 const pipelineSource = fs.readFileSync(path.join(root, 'binary-cube-diagnostic-pipeline.js'), 'utf8');
-for (const required of ['resolveCalibrationSnapshot', 'calibrationStatus', 'calibrationCases', 'calibrationIndex', 'audio-signal-forensics', 'decodeBinaryFsk', 'decodeDtmf']) assert.ok(pipelineSource.includes(required), `Diagnostic pipeline missing calibrated routing token ${required}.`);
+for (const required of ['resolveCalibrationSnapshot', 'calibrationStatus', 'calibrationCases', 'calibrationIndex', 'missRiskEvidence', 'unresolvedEvidenceIndex', 'RASTER_UNRESOLVED_FLAG_WEIGHTS', 'audio-signal-forensics', 'decodeBinaryFsk', 'decodeDtmf']) assert.ok(pipelineSource.includes(required), `Diagnostic pipeline missing calibrated routing token ${required}.`);
 const localRunner = fs.readFileSync(path.join(root, 'scripts/run-scientific-diagnostic-local.mjs'), 'utf8');
 assert.ok(localRunner.includes("require(path.join(root, 'scientific-tools-local-media.js'))"));
 assert.ok(!localRunner.includes("import zlib from 'node:zlib'"), 'Local PNG decoding must have one shared implementation.');
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-scientific-diagnostic-calibration-validation-receipt',
-  schemaVersion: '0.2.0',
+  schemaVersion: '0.3.0',
   registryVersion: Registry.version,
   baselineVersion: Baseline.version,
+  baselineSourcePipelineVersion: Baseline.sourcePipelineVersion,
   pipelineVersion: Pipeline.version,
   corpusVersion: calibration.corpusVersion,
   expectationCount: calibration.expectationCount,
   observedPasses: calibration.passCount,
   observedFailuresRetained: calibration.failCount,
   retainedRasterFalseNegative: true,
+  unresolvedRasterMissRiskRetained: true,
+  cleanRasterMissRiskEvidence: Number(freshCleanRaster?.metrics?.missRiskEvidence || 0),
+  rgbLsbMissRiskEvidence: Number(freshRasterMiss.metrics?.missRiskEvidence || 0),
   calibratedDetectors: calibration.snapshot.detectors.filter(item => item.matrix.cases > 0).map(item => ({ id: item.detectorId, cases: item.matrix.cases, status: item.calibrationStatus, balancedAccuracy: item.balancedAccuracy, effectiveReliability: item.effectiveReliability }))
 }, null, 2));
