@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-information-analysis-1';
+  const ASSET_VERSION = '20260809-communication-capacity-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
@@ -10,6 +10,7 @@
   let cubeLaboratoryPromise = null;
   let decryptionDashboardPromise = null;
   let informationAnalysisPromise = null;
+  let communicationCapacityPromise = null;
   let initialized = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
@@ -193,6 +194,19 @@
     return informationAnalysisPromise;
   }
 
+  function loadCommunicationCapacityAnalyzer() {
+    if (window.BinaryCubeCommunicationCapacityAnalyzer) return Promise.resolve(window.BinaryCubeCommunicationCapacityAnalyzer);
+    if (communicationCapacityPromise) return communicationCapacityPromise;
+    communicationCapacityPromise = (async () => {
+      await loadCooperativeRunner();
+      await loadStyle('binary-cube-communication-capacity-analyzer.css');
+      await loadScript('binary-cube-communication-capacity-analyzer.js', () => Boolean(window.BinaryCubeCommunicationCapacityAnalyzer));
+      return window.BinaryCubeCommunicationCapacityAnalyzer;
+    })();
+    communicationCapacityPromise.catch(() => { communicationCapacityPromise = null; });
+    return communicationCapacityPromise;
+  }
+
   function loadIsmLab() {
     if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
     if (ismPromise) return ismPromise;
@@ -272,6 +286,14 @@
     });
   }
 
+  function openCommunicationCapacityAnalyzer(button = null, options = null) {
+    return withLoadingButton(button, 'Loading Communication Analyzer…', async () => {
+      const api = await loadCommunicationCapacityAnalyzer();
+      if (!api?.openPanel) throw new Error('The Communication Capacity Analyzer loaded without an open-panel interface.');
+      return api.openPanel(options || {});
+    });
+  }
+
   function openIsmSimulation(button = null) {
     return withLoadingButton(button, 'Loading Simulation…', async () => {
       const api = await loadIsmLab();
@@ -329,13 +351,14 @@
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="decryption-dashboard" hidden>
         <p class="eyebrow">Binary Cube cryptanalysis, information recovery, and adversarial testing</p>
         <h3>Decryption Dashboard</h3>
-        <p>Use the Cube-specific dashboard for fast attacks on Binary Cube output, or open the deeper Information & Deobfuscation Analysis Suite for broad statistical evidence, compression-distance tests, randomness diagnostics, string carving, recursive encoding recovery, transpositions, bit planes, endian transforms, XOR inference, and ranked data-recovery hypotheses.</p>
+        <p>Use the Cube-specific dashboard for direct Binary Cube attacks, the Information & Deobfuscation Suite for broad recovery work, and the Communication Capacity Analyzer for McCowan–Hanser–Doyle-style tests of whether an unknown symbolic stream exhibits communication-like statistical organization.</p>
         <div class="scientific-tools-actions">
           <button id="scientific-tools-open-decryption-dashboard" type="button" class="primary-action">Open Decryption Dashboard</button>
           <button id="scientific-tools-open-information-analysis" type="button" class="secondary-action">Open Information & Deobfuscation Suite</button>
+          <button id="scientific-tools-open-communication-capacity" type="button" class="secondary-action">Open Communication Capacity Analyzer</button>
         </div>
-        <div class="scientific-tools-runtime"><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> supplied-key Binary Cube verification remains delegated to ShadowrunBinaryCubeEngine.decryptBinary</span></div>
-        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> compression affinity, entropy, randomness tests, language-likeness, and candidate scores are independent evidence signals. They may establish recoverable structure or similarity, but they do not by themselves prove semantic meaning; encrypted or already-compressed intelligible material can remain statistically random-like.</div>
+        <div class="scientific-tools-runtime"><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>1999 communication-capacity test:</strong> McCowan–Hanser–Doyle Zipf slope, zero/first/higher-order conditional entropy, entropy-order slope, lag mutual information, shuffled-surrogate comparisons, and explicit sampling-sufficiency warnings across multiple possible symbolizations</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> supplied-key Binary Cube verification remains delegated to ShadowrunBinaryCubeEngine.decryptBinary</span></div>
+        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> a Zipf slope near −1, higher-order entropy structure, compression affinity, randomness statistics, language-likeness, and candidate scores are independent evidence signals. They can support recoverable or communication-like organization, but none alone proves semantics, intelligence, or successful decryption.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
         <p class="eyebrow">Interstellar medium collision model</p>
@@ -357,6 +380,7 @@
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
     view.querySelector('#scientific-tools-open-decryption-dashboard')?.addEventListener('click', event => void openDecryptionDashboard(event.currentTarget));
     view.querySelector('#scientific-tools-open-information-analysis')?.addEventListener('click', event => void openInformationAnalysisSuite(event.currentTarget));
+    view.querySelector('#scientific-tools-open-communication-capacity')?.addEventListener('click', event => void openCommunicationCapacityAnalyzer(event.currentTarget));
     view.querySelector('#scientific-tools-open-ism')?.addEventListener('click', event => void openIsmSimulation(event.currentTarget));
     view.querySelector('#scientific-tools-open-double-slit')?.addEventListener('click', event => void openDoubleSlitLab(event.currentTarget));
     selectTab('binary-cube');
@@ -382,10 +406,12 @@
     loadBinaryCubeLaboratory,
     loadDecryptionDashboard,
     loadInformationAnalysisSuite,
+    loadCommunicationCapacityAnalyzer,
     openBinaryCubeVisualizer,
     openBinaryCubeLaboratory,
     openDecryptionDashboard,
     openInformationAnalysisSuite,
+    openCommunicationCapacityAnalyzer,
     loadIsmLab,
     openIsmSimulation,
     loadDoubleSlitLab,
