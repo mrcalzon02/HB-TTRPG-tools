@@ -111,7 +111,7 @@
       const title = document.createElement('h3');
       title.textContent = 'Scientific Tools';
       const copy = document.createElement('p');
-      copy.textContent = 'Setting-neutral experimental systems, including the shared Binary Cube Laboratory, Encoder Visualizer, Decryption Dashboard, ISM Media Simulation, and quantum experiment tools.';
+      copy.textContent = 'Setting-neutral experimental systems, including the shared Binary Cube Laboratory, Encoder Visualizer, Decryption Dashboard, Information & Deobfuscation Analysis Suite, ISM Media Simulation, and quantum experiment tools.';
       const button = document.createElement('button');
       button.className = 'link-button';
       button.type = 'button';
@@ -204,7 +204,7 @@
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-decryption-dashboard-1');
+      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-information-analysis-1');
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;
