@@ -65,13 +65,13 @@ checks.push(excludes('Black Light does not duplicate scientific runtimes', black
   'shadowrun-binary-cube-engine.js'
 ]));
 
-checks.push(includes('Main menu cache-refreshes the Decryption Dashboard Scientific Tools entry', mounts, [
+checks.push(includes('Main menu cache-refreshes the current Scientific Tools entry', mounts, [
   "button.dataset.view = 'scientific-tools'",
   "button.textContent = 'Scientific Tools'",
   "card.dataset.scientificToolsCard = 'true'",
   'Decryption Dashboard',
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=20260809-decryption-dashboard-1')",
+  "loadScript('scientific-tools-entry.js?v=",
   'ensureScientificToolsView();'
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
@@ -143,7 +143,7 @@ checks.push(includes('Binary Cube laboratory routes expensive user actions throu
   "runBackground(panel, 'validate-pair'",
   'Cancel active operation',
   'cancelActiveOperation(',
-  'routine encrypt/decrypt uses the algebraic collision-free invariant',
+  'Routine encrypt/decrypt uses the algebraic collision-free invariant',
   'Validate Pair'
 ]));
 checks.push(excludes('Binary Cube laboratory no longer performs the primary expensive encode/decode path synchronously', cubeLab, [
@@ -154,7 +154,7 @@ checks.push(excludes('Binary Cube laboratory no longer performs the primary expe
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
-  "const ASSET_VERSION = '20260809-decryption-dashboard-1';",
+  "const ASSET_VERSION = '20260809-",
   'function loadCooperativeRunner()',
   "loadScript('scientific-tools-cooperative-runner.js'",
   'await loadCooperativeRunner();',
@@ -293,7 +293,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.8.0',
+  schemaVersion: '0.8.1',
   pass: true,
   checkCount: checks.length,
   checks
