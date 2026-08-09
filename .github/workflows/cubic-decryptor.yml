@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   statuses: write
 
 concurrency:
@@ -36,8 +36,6 @@ jobs:
             -f description='Cubic Decryptor validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -50,39 +48,6 @@ jobs:
           test -s binary-cube-cubic-decryptor.css
       - name: Recover all current cubic key-generator families
         run: node scripts/validate-binary-cube-cubic-decryptor.mjs
-      - name: Repair stale Scientific Tools local-media ownership assertion
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('scripts/validate-scientific-tools-extraction.mjs')
-          text = path.read_text()
-          old = """checks.push(includes('Diagnostic local runner shares the routed model', diagnosticLocal, [
-  \"import zlib from 'node:zlib'\",
-  'fileURLToPath(import.meta.url)',
-  'function decodePngRgba(',
-  'Pipeline.runPipeline(',
-  '--profile=triage|thorough|exhaustive'
-]));"""
-          new = """checks.push(includes('Diagnostic local runner shares the routed model and centralized local-media decoder', diagnosticLocal, [
-  \"scientific-tools-local-media.js\",
-  'fileURLToPath(import.meta.url)',
-  'LocalMedia.decodePngRgba',
-  'Pipeline.runPipeline(',
-  '--profile=triage|thorough|exhaustive'
-]));"""
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected exactly one stale diagnostic-local assertion, found {text.count(old)}')
-          path.write_text(text.replace(old, new, 1))
-          PY
-          node --check scripts/validate-scientific-tools-extraction.mjs
-          node scripts/validate-scientific-tools-extraction.mjs
-      - name: Commit ownership assertion repair
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/validate-scientific-tools-extraction.mjs
-          git commit -m "fix: align Scientific Tools ownership with shared local media"
-          git push origin HEAD:main
       - name: Record success
         if: ${{ success() }}
         env:
@@ -101,5 +66,5 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
             -f context='binary-cube/cubic-decryptor' \
-            -f description='Cubic Decryptor regression or ownership repair failed.' \
+            -f description='Cubic Decryptor regression failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
