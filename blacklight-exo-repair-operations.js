@@ -238,7 +238,7 @@
   }
 
   function escapeXml(value) {
-    return String(value).replace(/[<>&'\"]/g, ch => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '\"': "&quot;" }[ch]));
+    return String(value).replace(/[<>&'"]/g, ch => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[ch]));
   }
 
   function renderSelection() {
@@ -358,7 +358,9 @@
     if (!state.fault) return "No active fault ticket.";
     if (!target) return "Select a component or wire run first.";
     const hit = target.id === state.fault.targetId;
+    const repairedHit = hit && state.fault.repaired;
     if (action === "inspect") {
+      if (repairedHit) return "Repair area is seated, secured and shows no remaining visible defect in the simulated service model.";
       if (!hit) return "No visible heat damage, looseness, contamination or displaced hardware.";
       if (state.fault.typeId === "loose-connector") return "Connector shell movement and contact fretting observed; seating is not secure.";
       if (state.fault.typeId === "relay-failure") return "Relay housing shows abnormal heat discoloration; mechanical pickup is suspect.";
@@ -366,6 +368,7 @@
       return "No conclusive external damage; electrical testing is required.";
     }
     if (action === "continuity-test") {
+      if (repairedHit) return target.kind === "wire run" ? "Post-repair continuity nominal across selected conductor." : "Post-repair continuity / contact path within expected range.";
       if (!hit) return target.kind === "wire run" ? "Continuity nominal across selected conductor." : "Continuity / contact path within expected range.";
       if (["blown-fuse", "open-conductor"].includes(state.fault.typeId)) return "OPEN CIRCUIT / no continuity measured.";
       if (state.fault.typeId === "loose-connector") return "Intermittent high resistance; reading changes with connector movement.";
@@ -373,6 +376,7 @@
       if (state.fault.typeId === "ground-short") return "Very low branch resistance; continuity alone cannot distinguish load from chassis fault. Perform insulation test.";
     }
     if (action === "ground-test") {
+      if (repairedHit) return "Post-repair insulation resistance nominal; no significant leakage to chassis ground.";
       if (hit && state.fault.typeId === "ground-short") return "INSULATION FAILURE: low resistance to chassis ground on selected branch.";
       return "Insulation resistance nominal; no significant leakage to chassis ground.";
     }
