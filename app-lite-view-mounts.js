@@ -12,6 +12,7 @@
   let warhammerWorkspacePromise = null;
   let warhammerPlanetProfilePromise = null;
   let warhammerPlanetCompositorPromise = null;
+  let warhammerLogisticsPromise = null;
   let barotraumaImagePreloads = null;
   const loadedScripts = new Map();
 
@@ -213,7 +214,8 @@
       warhammerLorePromise ||= loadScript('warhammer-40k-wiki-v6.js?v=6');
       warhammerPlanetProfilePromise ||= loadScript('assets/warhammer-40k/shaders/planet-profile-v1.js?v=8');
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
-      await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise]);
+      warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
+      await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise]);
       warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=26');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
