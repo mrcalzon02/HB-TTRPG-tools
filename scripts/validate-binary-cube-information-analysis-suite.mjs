@@ -51,8 +51,8 @@ assert.equal(bcl.method, 'Benedetto–Caglioti–Loreto compression-relative-ent
 
 const hex = U.bytesToHex(U.textToBytes('recoverable information layer'));
 const base64 = Buffer.from(hex, 'utf8').toString('base64');
-const peeled = await Suite.recursivePeel(U.textToBytes(base64));
-assert.ok(peeled.chain.length >= 2);
+const peeled = await Suite.recursivePeel(U.textToBytes(base64), 2);
+assert.equal(peeled.chain.length, 2);
 assert.match(U.bytesToText(peeled.bytes), /recoverable information layer/);
 
 const endianSource = Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -92,7 +92,7 @@ assert.ok(candidates.some(candidate => /hello world/i.test(candidate.preview)));
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-information-analysis-suite-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.1.1',
   pass: true,
   paperMethod: `${Suite.constants.PAPER_AUTHORS} · ${Suite.constants.PAPER_TITLE} (${Suite.constants.PAPER_YEAR})`,
   maurerUniversalStatistic: true,
@@ -100,6 +100,7 @@ console.log(JSON.stringify({
   compressionDistance: true,
   referenceAffinity: true,
   recursiveEncodingPeeling: true,
+  recursivePeelDepthIsExplicitlyBounded: true,
   fileSignatureCarving: true,
   stringCarving: true,
   bitPlaneAndEndianTransforms: true,
