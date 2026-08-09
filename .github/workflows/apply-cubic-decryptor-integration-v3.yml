@@ -1,4 +1,4 @@
-name: Apply Cubic Decryptor runtime integration
+name: Repair Scientific Tools local-media ownership assertion
 
 on:
   push:
@@ -11,42 +11,62 @@ permissions:
   statuses: write
 
 jobs:
-  apply:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - name: Record pending
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=pending -f context='binary-cube/cubic-runtime-integration' -f description='Applying validated Cubic Decryptor runtime integration.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=pending -f context='scientific-tools/local-media-ownership-repair' -f description='Repairing stale local-media ownership assertion.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Build exact integration
-        run: python scripts/build-cubic-decryptor-integration-artifact.py
-      - name: Validate integration
+      - name: Replace stale ownership assertion
         run: |
-          node --check scientific-tools-entry.js
-          node --check binary-cube-cubic-decryptor.js
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate-scientific-tools-extraction.mjs')
+          text = path.read_text()
+          old = """checks.push(includes('Diagnostic local runner shares the routed model', diagnosticLocal, [
+  \"import zlib from 'node:zlib'\",
+  'fileURLToPath(import.meta.url)',
+  'function decodePngRgba(',
+  'Pipeline.runPipeline(',
+  '--profile=triage|thorough|exhaustive'
+]));"""
+          new = """checks.push(includes('Diagnostic local runner shares the routed model and centralized local-media decoder', diagnosticLocal, [
+  \"scientific-tools-local-media.js\",
+  'fileURLToPath(import.meta.url)',
+  'LocalMedia.decodePngRgba',
+  'Pipeline.runPipeline(',
+  '--profile=triage|thorough|exhaustive'
+]));"""
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one stale diagnostic-local assertion, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1))
+          PY
+      - name: Validate repaired ownership and Cubic recovery
+        run: |
           node --check scripts/validate-scientific-tools-extraction.mjs
-          node scripts/validate-binary-cube-cubic-decryptor.mjs
           node scripts/validate-scientific-tools-extraction.mjs
-      - name: Commit runtime and ownership integration
+          node scripts/validate-binary-cube-cubic-decryptor.mjs
+      - name: Commit validator repair
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scientific-tools-entry.js binary-cube-cubic-decryptor.js scripts/validate-scientific-tools-extraction.mjs
-          git commit -m "feat: integrate Cubic Decryptor runtime"
+          git add scripts/validate-scientific-tools-extraction.mjs
+          git commit -m "fix: align Scientific Tools ownership with shared local media"
           git push origin HEAD:main
       - name: Record success
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=success -f context='binary-cube/cubic-runtime-integration' -f description='Cubic Decryptor runtime integrated.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=success -f context='scientific-tools/local-media-ownership-repair' -f description='Scientific Tools local-media ownership assertion repaired.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - name: Record failure
         if: ${{ failure() }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=failure -f context='binary-cube/cubic-runtime-integration' -f description='Cubic Decryptor runtime integration failed.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=failure -f context='scientific-tools/local-media-ownership-repair' -f description='Scientific Tools local-media ownership assertion repair failed.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
