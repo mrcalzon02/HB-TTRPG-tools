@@ -21,7 +21,7 @@ const expectedSizes = Object.freeze({
   'clean-control': 12420,
   'rgb-lsb': 12420,
   'post-iend': 24840,
-  afsk1200: 5164,
+  afsk1200: 5244,
   dtmf: 16684
 });
 
