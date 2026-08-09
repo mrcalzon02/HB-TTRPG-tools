@@ -1,4 +1,4 @@
-# Combined-head gate for centralized Scientific Tools, cryptanalysis, media-forensics, steganalysis, signals research, and routed diagnostic runtimes.
+# Combined-head gate for centralized Scientific Tools, cryptanalysis, media-forensics, steganalysis, signals simulation/live research, and routed diagnostic runtimes.
 name: Validate Scientific Tools extraction
 
 on:
@@ -14,6 +14,8 @@ on:
       - "scientific-tools-help.css"
       - "signals-laboratory.js"
       - "signals-laboratory.css"
+      - "live-signals-laboratory.js"
+      - "live-signals-laboratory.css"
       - "shadowrun-binary-cube-engine.js"
       - "shadowrun-binary-cube-worker.js"
       - "binary-cube-worker-client.js"
@@ -59,6 +61,7 @@ on:
       - "double-slit-lab.js"
       - "double-slit-lab.css"
       - "scripts/validate-signals-laboratory.mjs"
+      - "scripts/validate-live-signals-laboratory.mjs"
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-scientific-tools-help.mjs"
       - "scripts/validate-scientific-diagnostic-pipeline.mjs"
@@ -123,6 +126,7 @@ jobs:
           node --check scripts/validate-scientific-tools-help.mjs
           test -s scientific-tools-help.css
           node --check signals-laboratory.js
+          node --check live-signals-laboratory.js
           node --check shadowrun-binary-cube-engine.js
           node --check shadowrun-binary-cube-worker.js
           node --check binary-cube-worker-client.js
@@ -156,6 +160,7 @@ jobs:
           node --check interstellar-media-collisions-lab.js
           node --check double-slit-lab.js
           node --check scripts/validate-signals-laboratory.mjs
+          node --check scripts/validate-live-signals-laboratory.mjs
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-scientific-diagnostic-pipeline.mjs
           node --check scripts/calibrate-scientific-diagnostic-pipeline.mjs
@@ -178,6 +183,7 @@ jobs:
           node --check scripts/validate-binary-cube-steganalysis-lab.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s signals-laboratory.css
+          test -s live-signals-laboratory.css
           test -s binary-cube-key-generation-visualizer.css
           test -s binary-cube-decryption-dashboard.css
           test -s binary-cube-cryptanalytic-test-lab.css
@@ -195,6 +201,9 @@ jobs:
 
       - name: Validate Signals Laboratory
         run: node scripts/validate-signals-laboratory.mjs
+
+      - name: Validate Live Signals Laboratory
+        run: node scripts/validate-live-signals-laboratory.mjs
 
       - name: Validate Steganography Signal and Media Demonstration Corpus
         run: node scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
