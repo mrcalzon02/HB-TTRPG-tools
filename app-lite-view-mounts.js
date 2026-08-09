@@ -110,7 +110,7 @@
       const title = document.createElement('h3');
       title.textContent = 'Scientific Tools';
       const copy = document.createElement('p');
-      copy.textContent = 'Setting-neutral experimental simulations and scientific research interfaces, including the ISM Media Simulation.';
+      copy.textContent = 'Setting-neutral experimental systems, including the shared Binary Cube Laboratory and Encoder Visualizer plus the ISM Media Simulation.';
       const button = document.createElement('button');
       button.className = 'link-button';
       button.type = 'button';
@@ -197,13 +197,13 @@
       return;
     }
     if (viewId === 'shadowrun') {
-      shadowrunEntryPromise ||= loadScript('shadowrun-entry.js');
+      shadowrunEntryPromise ||= loadScript('shadowrun-entry.js?v=20260809-binary-cube-unified');
       await Promise.all([shadowrunEntryPromise, base.prepareView(viewId)]);
       return;
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=1');
+      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-binary-cube-unified');
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;
