@@ -169,7 +169,6 @@
       button.dataset.view = 'warhammer-40k';
       button.textContent = 'Enter Restricted Archive';
       card.append(title, copy, button);
-      menuGrid.appendChild(card);
     }
 
     let view = document.getElementById('warhammer-40k');
@@ -220,13 +219,13 @@
       warhammerPlanetProfilePromise ||= loadScript('assets/warhammer-40k/shaders/planet-profile-v1.js?v=8');
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
-      warhammerVesselHistoryPromise ||= loadScript('assets/warhammer-40k/imperial-vessel-history-v1.js?v=5');
-      warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=4');
-      warhammerSectorEventsPromise ||= loadScript('assets/warhammer-40k/imperial-sector-events-v1.js?v=3');
+      warhammerVesselHistoryPromise ||= loadScript('assets/warhammer-40k/imperial-vessel-history-v1.js?v=6');
+      warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=5');
+      warhammerSectorEventsPromise ||= loadScript('assets/warhammer-40k/imperial-sector-events-v1.js?v=4');
       warhammerMedicaeCatalogPromise ||= loadScript('assets/warhammer-40k/imperial-medicae-catalog-v1.js?v=1');
-      warhammerMedicaePromise ||= warhammerMedicaeCatalogPromise.then(() => loadScript('assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=2'));
+      warhammerMedicaePromise ||= warhammerMedicaeCatalogPromise.then(() => loadScript('assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=3'));
       await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise, warhammerMedicaePromise]);
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=29');
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=30');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
       return;
