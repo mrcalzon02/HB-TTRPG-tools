@@ -55,15 +55,20 @@ self.addEventListener('message', event => {
     const resumeCursor = Math.max(0, Math.floor(Number(message.resumeCursor) || 0));
     if (resumeCursor > plan.totalAttempts) throw new Error('Resume cursor is beyond the deterministic search plan.');
 
-    const resultLimit = Math.max(1, Math.min(100, Math.floor(Number(options.resultLimit) || Cubic.constants.DEFAULT_RESULT_LIMIT)));
+    const resultLimit = Math.max(1, Math.min(100, Math.floor(Number(options.resultLimit) || Cubic.constants.DEFAULT_RESULT_LIMIT));
     const threshold = Math.max(0, Math.min(100, Number(options.scoreThreshold) || Cubic.constants.DEFAULT_SCORE_THRESHOLD));
     const progressEvery = Math.max(1, Math.floor(Number(options.progressEvery) || 256));
+    const requestedBudget = Number(options.maxAttemptsThisRun);
+    const maxAttemptsThisRun = Number.isFinite(requestedBudget) && requestedBudget > 0
+      ? Math.max(1, Math.floor(requestedBudget))
+      : Number.POSITIVE_INFINITY;
     const candidates = [];
     const errors = [];
     let cursor = 0;
     let attemptsThisRun = 0;
     let exactMatch = null;
     let stoppedEarly = false;
+    let stopReason = null;
     let activeStageId = null;
     const startedAt = Date.now();
 
@@ -98,7 +103,11 @@ self.addEventListener('message', event => {
                   if (candidate.exactFingerprintMatch) {
                     exactMatch = candidate;
                     self.postMessage({ id, type: 'candidate', candidate, cursor, stageId: stage.id });
-                    if (options.stopOnFingerprint !== false) { stoppedEarly = true; break outer; }
+                    if (options.stopOnFingerprint !== false) {
+                      stoppedEarly = true;
+                      stopReason = 'fingerprint-match';
+                      break outer;
+                    }
                   } else self.postMessage({ id, type: 'candidate', candidate, cursor, stageId: stage.id });
                 }
               } catch (error) {
@@ -117,6 +126,11 @@ self.addEventListener('message', event => {
                   planId: plan.planId,
                   checkpoint: Cubic.makeCheckpoint(plan, cursor, attemptsThisRun, stage.id)
                 });
+              }
+              if (attemptsThisRun >= maxAttemptsThisRun) {
+                stoppedEarly = true;
+                stopReason = 'attempt-budget';
+                break outer;
               }
             }
           }
@@ -138,6 +152,7 @@ self.addEventListener('message', event => {
         attemptsThisRun,
         exhausted,
         stoppedEarly,
+        stopReason,
         exactMatch,
         candidates,
         errors,
