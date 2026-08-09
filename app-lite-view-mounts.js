@@ -219,7 +219,7 @@
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
       warhammerVesselHistoryPromise ||= loadScript('assets/warhammer-40k/imperial-vessel-history-v1.js?v=5');
-      warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=2');
+      warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=3');
       warhammerSectorEventsPromise ||= loadScript('assets/warhammer-40k/imperial-sector-events-v1.js?v=3');
       await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise]);
       warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=27');
