@@ -18,6 +18,8 @@ const cubeWorkerClient = read('binary-cube-worker-client.js');
 const cubeLab = read('shadowrun-binary-cube-encryption.js');
 const decryption = read('binary-cube-decryption-dashboard.js');
 const decryptionCss = read('binary-cube-decryption-dashboard.css');
+const informationSuite = read('binary-cube-information-analysis-suite.js');
+const informationSuiteCss = read('binary-cube-information-analysis-suite.css');
 const ism = read('interstellar-media-collisions-lab.js');
 const ismCss = read('interstellar-media-collisions-lab.css');
 const doubleSlit = read('double-slit-lab.js');
@@ -43,12 +45,14 @@ checks.push(includes('Shadowrun retains the definitive Binary Cube launch target
   "loadScript('shadowrun-binary-cube-engine.js'",
   "loadScript('shadowrun-binary-cube-visualizer.js'"
 ]));
-checks.push(excludes('Scientific simulation implementations are not embedded inside Shadowrun', shadowrun, [
+checks.push(excludes('Scientific simulation and cryptanalysis implementations are not embedded inside Shadowrun', shadowrun, [
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js',
   'binary-cube-decryption-dashboard.js',
+  'binary-cube-information-analysis-suite.js',
   'DoubleSlitExperimentLab',
-  'BinaryCubeDecryptionDashboard'
+  'BinaryCubeDecryptionDashboard',
+  'BinaryCubeInformationAnalysisSuite'
 ]));
 
 checks.push(includes('Black Light delegates to the shared Scientific Tools workspace', blacklight, [
@@ -58,10 +62,11 @@ checks.push(includes('Black Light delegates to the shared Scientific Tools works
   "openSharedScientificTool('openBinaryCubeLaboratory'",
   "openSharedScientificTool('openIsmSimulation'"
 ]));
-checks.push(excludes('Black Light does not duplicate scientific runtimes', blacklight, [
+checks.push(excludes('Black Light does not duplicate scientific or cryptanalysis runtimes', blacklight, [
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js',
   'binary-cube-decryption-dashboard.js',
+  'binary-cube-information-analysis-suite.js',
   'shadowrun-binary-cube-engine.js'
 ]));
 
@@ -70,8 +75,9 @@ checks.push(includes('Main menu cache-refreshes the current Scientific Tools ent
   "button.textContent = 'Scientific Tools'",
   "card.dataset.scientificToolsCard = 'true'",
   'Decryption Dashboard',
+  'Information & Deobfuscation Analysis Suite',
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=",
+  "loadScript('scientific-tools-entry.js?v=20260809-information-analysis-1')",
   'ensureScientificToolsView();'
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
@@ -97,7 +103,8 @@ checks.push(excludes('Cooperative runner does not own scientific model logic', c
   'LAMBDA_COEFFICIENT',
   'DoubleSlitExperimentLab',
   'ShadowrunBinaryCubeEngine',
-  'BinaryCubeDecryptionDashboard'
+  'BinaryCubeDecryptionDashboard',
+  'BinaryCubeInformationAnalysisSuite'
 ]));
 
 checks.push(includes('Binary Cube worker delegates all heavy mathematics to the canonical engine', cubeWorker, [
@@ -154,11 +161,12 @@ checks.push(excludes('Binary Cube laboratory no longer performs the primary expe
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
-  "const ASSET_VERSION = '20260809-",
+  "const ASSET_VERSION = '20260809-information-analysis-1';",
   'function loadCooperativeRunner()',
   "loadScript('scientific-tools-cooperative-runner.js'",
   'await loadCooperativeRunner();',
   "loadScript('binary-cube-decryption-dashboard.js'",
+  "loadScript('binary-cube-information-analysis-suite.js'",
   "loadScript('interstellar-media-collisions-lab.js'",
   "loadScript('double-slit-lab.js'",
   'ScientificToolsCooperativeRunner loads before Scientific Tools runtimes',
@@ -174,10 +182,13 @@ checks.push(includes('Scientific Tools owns one Binary Cube, Decryption Dashboar
   'id="scientific-tools-open-binary-cube-visualizer"',
   'id="scientific-tools-open-binary-cube-laboratory"',
   'id="scientific-tools-open-decryption-dashboard"',
+  'id="scientific-tools-open-information-analysis"',
   'id="scientific-tools-open-ism"',
   'id="scientific-tools-open-double-slit"',
   'loadDecryptionDashboard',
   'openDecryptionDashboard',
+  'loadInformationAnalysisSuite',
+  'openInformationAnalysisSuite',
   'loadDoubleSlitLab',
   'openDoubleSlitLab'
 ]));
@@ -221,6 +232,46 @@ assert.ok(decryptionCss.includes('.bdd-results'), 'Decryption Dashboard styleshe
 assert.ok(decryptionCss.includes('.bdd-metric-grid'), 'Decryption Dashboard stylesheet must retain diagnostics styling.');
 checks.push('Decryption Dashboard stylesheet remains authoritative');
 
+checks.push(includes('Information analysis suite combines paper-grounded and broad deobfuscation evidence', informationSuite, [
+  'BinaryCubeInformationAnalysisSuite',
+  "const PAPER_TITLE = 'Language Trees and Zipping';",
+  'const PAPER_YEAR = 2002;',
+  "const MAURER_TITLE = 'A Universal Statistical Test for Random Bit Generators';",
+  'function shannonEntropy(',
+  'function minEntropy(',
+  'function ngramEntropy(',
+  'function mutualInformationLag(',
+  'function slidingEntropy(',
+  'function maurerUniversal(',
+  'async function normalizedCompressionDistance(',
+  'async function bclRelativeEntropy(',
+  'Benedetto–Caglioti–Loreto compression-relative-entropy estimator',
+  'function stringCarve(',
+  'function fileSignatures(',
+  'async function recursivePeel(',
+  'function repeatingXorCandidate(',
+  'function likelyRepeatingXorLengths(',
+  'function bitPlane(',
+  'function swapWordEndian(',
+  'function columnarTranspose(',
+  'function strideExtract(',
+  'async function rankDeobfuscationCandidates(',
+  'cannot prove semantic meaning'
+]));
+checks.push(excludes('Information analysis suite remains independent from canonical encryption and unrelated science models', informationSuite, [
+  'ShadowrunBinaryCubeEngine.encryptBinary',
+  'Engine.encryptBinary(',
+  'Engine.transformBlock(',
+  'InterstellarMediaCollisionsLab',
+  'DoubleSlitExperimentLab',
+  'PLANCK_LENGTH',
+  'LAMBDA_COEFFICIENT'
+]));
+assert.ok(informationSuiteCss.includes('.bias-panel'), 'Information Analysis Suite stylesheet must retain authoritative panel styling.');
+assert.ok(informationSuiteCss.includes('.bias-candidate'), 'Information Analysis Suite stylesheet must retain candidate styling.');
+assert.ok(informationSuiteCss.includes('.bias-metric-grid'), 'Information Analysis Suite stylesheet must retain evidence metrics.');
+checks.push('Information Analysis Suite stylesheet remains authoritative');
+
 checks.push(includes('ISM preserves physical, foam, and Shadow model boundaries', ism, [
   'const LAMBDA = 1.097e-52;',
   'const PLANCK_LENGTH = 1.616255e-35;',
@@ -245,9 +296,10 @@ checks.push(includes('ISM heavy setup is cooperatively incremental and cancellab
   "cooperativeToken?.cancel?.('laboratory closed')",
   "['Execution', 'deterministic cooperative slices']"
 ]));
-checks.push(excludes('ISM remains independent of Double Slit, Decryption Dashboard, and Binary Cube implementations', ism, [
+checks.push(excludes('ISM remains independent of Double Slit, cryptanalysis, and Binary Cube implementations', ism, [
   'DoubleSlitExperimentLab',
   'BinaryCubeDecryptionDashboard',
+  'BinaryCubeInformationAnalysisSuite',
   'ShadowrunBinaryCubeEngine',
   'ShadowrunBinaryCubeEncryption'
 ]));
@@ -275,9 +327,10 @@ checks.push(includes('Double Slit heavy setup and detector updates are cooperati
   "refreshToken?.cancel?.('laboratory closed')",
   'deterministic cooperative slices'
 ]));
-checks.push(excludes('Double Slit does not absorb ISM, Decryption Dashboard, or Binary Cube model logic', doubleSlit, [
+checks.push(excludes('Double Slit does not absorb ISM, cryptanalysis, or Binary Cube model logic', doubleSlit, [
   'InterstellarMediaCollisionsLab',
   'BinaryCubeDecryptionDashboard',
+  'BinaryCubeInformationAnalysisSuite',
   'ShadowrunBinaryCubeEngine',
   'PLANCK_LENGTH',
   'LAMBDA_COEFFICIENT'
@@ -293,7 +346,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.8.1',
+  schemaVersion: '0.9.0',
   pass: true,
   checkCount: checks.length,
   checks
