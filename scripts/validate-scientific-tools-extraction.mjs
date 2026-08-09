@@ -82,22 +82,27 @@ checks.push(includes('Main menu cache-refreshes the current Scientific Tools ent
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
   "loadScript('shadowrun-binary-cube-engine.js')",
-  "loadScript('binary-cube-worker-client.js?v=20260809-v14-binary-cube-worker')",
+  "loadScript('binary-cube-worker-client.js?v=20260809-v15-binary-cube-worker-liveness')",
   "loadScript('shadowrun-binary-cube-encryption.js?v=20260809-v14-binary-cube-worker')",
   "loadScript('binary-cube-large-grid-ui.js')"
 ]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'The main menu must own exactly one Scientific Tools card.');
 checks.push('Main menu owns one Scientific Tools destination');
 
-checks.push(includes('Shared cooperative runner provides deterministic yielding and cancellation', cooperative, [
+checks.push(includes('Shared cooperative runner provides deterministic time-budget yielding and cancellation', cooperative, [
   'ScientificToolsCooperativeRunner',
+  'const DEFAULT_MAX_SLICE_MS = 8;',
   'class CooperativeCancelledError extends Error',
   'function createToken(',
   'function assertActive(',
   'function yieldControl()',
+  'function normalizedSliceBudget(',
   'async function forRange(',
-  'chunkSize',
-  'await yieldControl()'
+  'const maxSliceMs = normalizedSliceBudget(options.maxSliceMs);',
+  'now() - sliceStartedAt >= maxSliceMs',
+  'assertActive(token);',
+  'await yieldControl()',
+  'DEFAULT_MAX_SLICE_MS'
 ]));
 checks.push(excludes('Cooperative runner does not own scientific model logic', cooperative, [
   'LAMBDA_COEFFICIENT',
@@ -130,10 +135,13 @@ checks.push(excludes('Binary Cube worker does not duplicate the canonical cube t
   'rowPermutation[x] + key.columnPermutation[y]'
 ]));
 
-checks.push(includes('Binary Cube worker client keeps heavy work off the browser main thread and can terminate it', cubeWorkerClient, [
+checks.push(includes('Binary Cube worker client keeps heavy work off the browser main thread, reports liveness, and can terminate it', cubeWorkerClient, [
   'new Worker(',
   'pending = new Map()',
+  'const HEARTBEAT_INTERVAL_MS = 1000;',
   "message.type === 'progress'",
+  'elapsedMilliseconds:',
+  'still working',
   'worker.terminate()',
   'function cancelAll(',
   'function isBusy()',
@@ -346,7 +354,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.9.0',
+  schemaVersion: '0.9.1',
   pass: true,
   checkCount: checks.length,
   checks
