@@ -1,3 +1,4 @@
+# One-shot repair runner; remove after permanent compatibility validation passes.
 name: Apply Binary Cube checksum compatibility
 
 on:
