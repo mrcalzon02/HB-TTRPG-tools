@@ -226,7 +226,7 @@
       warhammerMedicaeCatalogPromise ||= loadScript('assets/warhammer-40k/imperial-medicae-catalog-v1.js?v=1');
       warhammerMedicaePromise ||= warhammerMedicaeCatalogPromise.then(() => loadScript('assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=2'));
       await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise, warhammerMedicaePromise]);
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=28');
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=29');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
       return;
