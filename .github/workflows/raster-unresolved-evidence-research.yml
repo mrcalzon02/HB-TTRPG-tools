@@ -1,0 +1,84 @@
+name: Research Raster Unresolved Evidence Corpus
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/raster-unresolved-evidence-research.yml"
+      - "binary-cube-diagnostic-pipeline.js"
+      - "binary-cube-steganalysis-engine.js"
+      - "binary-cube-steganalysis-evidence-profile.js"
+      - "binary-cube-media-forensics-demo-corpus.js"
+      - "scientific-tools-local-media.js"
+      - "docs/raster-unresolved-evidence-priors.md"
+      - "scripts/research-raster-unresolved-evidence-corpus.mjs"
+      - "scripts/validate-raster-unresolved-evidence-corpus.mjs"
+      - "scripts/validate-raster-unresolved-evidence-provenance.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "raster-unresolved-evidence-research-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record research pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='scientific-tools/raster-unresolved-research' \
+            -f description='Raster unresolved-evidence corpus research is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check research sources
+        run: |
+          node --check binary-cube-diagnostic-pipeline.js
+          node --check binary-cube-steganalysis-engine.js
+          node --check binary-cube-steganalysis-evidence-profile.js
+          node --check scripts/research-raster-unresolved-evidence-corpus.mjs
+          node --check scripts/validate-raster-unresolved-evidence-corpus.mjs
+          node --check scripts/validate-raster-unresolved-evidence-provenance.mjs
+
+      - name: Validate provisional-prior provenance
+        run: node scripts/validate-raster-unresolved-evidence-provenance.mjs
+
+      - name: Characterize unresolved evidence across controlled carriers
+        run: node scripts/validate-raster-unresolved-evidence-corpus.mjs
+
+      - name: Record research success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='scientific-tools/raster-unresolved-research' \
+            -f description='Raster unresolved-evidence corpus research passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record research failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='scientific-tools/raster-unresolved-research' \
+            -f description='Raster unresolved-evidence corpus research failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
