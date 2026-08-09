@@ -90,7 +90,24 @@ const known = await routed('rgb-lsb');
 
 assert.equal(Pipeline.version, '0.3.0', 'Diagnostic Pipeline version must advance with the evidence-ledger schema.');
 assert.equal(Pipeline.constants.REPORT_SCHEMA_VERSION, '0.3.0', 'Diagnostic report schema must expose miss-risk evidence explicitly.');
-assert.deepEqual(Array.from(Pipeline.constants.MAGIC.find(item => item.id === 'gif')?.bytes || []), [0x47, 0x49, 0x46, 0x38], 'Existing GIF magic classification must not regress while raster routing is edited.');
+
+const expectedMagic = Object.freeze({
+  png: Object.freeze([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]),
+  jpeg: Object.freeze([0xff,0xd8,0xff]),
+  gif: Object.freeze([0x47,0x49,0x46,0x38]),
+  riff: Object.freeze([0x52,0x49,0x46,0x46]),
+  pdf: Object.freeze([0x25,0x50,0x44,0x46]),
+  zip: Object.freeze([0x50,0x4b,0x03,0x04]),
+  gzip: Object.freeze([0x1f,0x8b]),
+  '7zip': Object.freeze([0x37,0x7a,0xbc,0xaf,0x27,0x1c]),
+  rar: Object.freeze([0x52,0x61,0x72,0x21,0x1a,0x07]),
+  elf: Object.freeze([0x7f,0x45,0x4c,0x46]),
+  pe: Object.freeze([0x4d,0x5a])
+});
+assert.equal(Pipeline.constants.MAGIC.length, Object.keys(expectedMagic).length, 'Diagnostic format classifier signature inventory changed unexpectedly.');
+for (const [id, bytes] of Object.entries(expectedMagic)) {
+  assert.deepEqual(Array.from(Pipeline.constants.MAGIC.find(item => item.id === id)?.bytes || []), Array.from(bytes), `Existing ${id} magic classification must not regress while raster routing is edited.`);
+}
 
 for (const row of [clean, known]) {
   const legacy = row.reference.selected.global.legacyPayloadMagnitudeEvidence;
@@ -128,6 +145,7 @@ const receipt = Object.freeze({
   pass: true,
   pipelineVersion: Pipeline.version,
   reportSchemaVersion: Pipeline.constants.REPORT_SCHEMA_VERSION,
+  formatSignatureCount: Pipeline.constants.MAGIC.length,
   clean: Object.freeze({
     status: clean.rasterFinding.status,
     positiveEvidence: clean.rasterFinding.positiveEvidence,
