@@ -8,6 +8,8 @@
 
   const PANEL_ID = 'binary-cube-communication-capacity-analyzer';
   const STYLE_ID = 'binary-cube-communication-capacity-analyzer-style';
+  const WORKER_URL = 'binary-cube-communication-capacity-worker.js?v=20260809-communication-capacity-2';
+  const WORKER_HEARTBEAT_MS = 1000;
   const PAPER_TITLE = 'Quantitative tools for comparing animal communication systems: information theory applied to bottlenose dolphin whistle repertoires';
   const PAPER_YEAR = 1999;
   const PAPER_AUTHORS = 'Brenda McCowan, Sean F. Hanser, Laurance R. Doyle';
@@ -25,10 +27,41 @@
   let activeName = '';
   let activeToken = null;
   let lastReport = null;
+  let activeWorker = null;
+  let activeWorkerReject = null;
+  let activeWorkerRequestId = 0;
+  let workerHeartbeat = 0;
 
   const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
   function fail(message) { throw new Error(message); }
+
+  function clearWorkerHeartbeat() {
+    if (!workerHeartbeat) return;
+    root?.clearInterval?.(workerHeartbeat);
+    workerHeartbeat = 0;
+  }
+
+  function cleanupAnalysisWorker() {
+    clearWorkerHeartbeat();
+    if (activeWorker) activeWorker.terminate();
+    activeWorker = null;
+    activeWorkerReject = null;
+  }
+
+  function cancelActiveAnalysis(reason = 'analysis cancelled') {
+    activeToken?.cancel?.(reason);
+    const reject = activeWorkerReject;
+    clearWorkerHeartbeat();
+    if (activeWorker) activeWorker.terminate();
+    activeWorker = null;
+    activeWorkerReject = null;
+    if (reject) {
+      const error = new Error(reason);
+      error.name = 'AbortError';
+      reject(error);
+    }
+  }
 
   function asBytes(value) {
     if (value instanceof Uint8Array) return value;
@@ -406,12 +439,76 @@
     });
   }
 
+  function analyzeCommunicationCapacityAsync(bytesValue, options = {}, hooks = {}) {
+    const bytes = asBytes(bytesValue);
+    if (!bytes.length) return Promise.reject(new Error('Load data before communication-capacity analysis.'));
+    if (bytes.length > MAX_INPUT_BYTES) return Promise.reject(new Error(`Input exceeds ${MAX_INPUT_BYTES.toLocaleString()} bytes.`));
+    if (typeof root?.Worker !== 'function') {
+      return Promise.reject(new Error('This browser does not support Web Workers required for freeze-safe communication-capacity analysis.'));
+    }
+
+    cancelActiveAnalysis('superseded by newer background communication analysis');
+    const requestId = ++activeWorkerRequestId;
+    const startedAt = Date.now();
+    const onProgress = typeof hooks.onProgress === 'function' ? hooks.onProgress : null;
+    const worker = new root.Worker(new URL(WORKER_URL, root.document?.baseURI || root.location?.href || '').href);
+    activeWorker = worker;
+
+    return new Promise((resolve, reject) => {
+      activeWorkerReject = reject;
+      let lastStage = 'Starting background communication analysis';
+      let lastFraction = 0;
+      const emitProgress = (heartbeat = false) => onProgress?.(Object.freeze({
+        stage: heartbeat ? `${lastStage} · still working` : lastStage,
+        fraction: lastFraction,
+        heartbeat,
+        elapsedMilliseconds: Date.now() - startedAt
+      }));
+
+      workerHeartbeat = root.setInterval?.(() => emitProgress(true), WORKER_HEARTBEAT_MS) || 0;
+      emitProgress(false);
+
+      worker.addEventListener('message', event => {
+        const message = event.data || {};
+        if (message.id !== requestId || worker !== activeWorker) return;
+        if (message.type === 'progress') {
+          lastStage = String(message.stage || 'Working');
+          lastFraction = clamp(Number(message.fraction) || 0, 0, 1);
+          emitProgress(false);
+          return;
+        }
+        clearWorkerHeartbeat();
+        activeWorkerReject = null;
+        activeWorker = null;
+        worker.terminate();
+        if (message.type === 'result') {
+          resolve(message.report);
+          return;
+        }
+        const error = new Error(message.error?.message || 'Communication-capacity worker failed.');
+        error.name = message.error?.name || 'Error';
+        if (message.error?.stack) error.stack = message.error.stack;
+        reject(error);
+      });
+      worker.addEventListener('error', event => {
+        if (worker !== activeWorker) return;
+        clearWorkerHeartbeat();
+        activeWorkerReject = null;
+        activeWorker = null;
+        worker.terminate();
+        reject(new Error(event.message || 'Communication-capacity worker crashed.'));
+      });
+
+      worker.postMessage({ id: requestId, bytes, options });
+    });
+  }
+
   function ensureStyle() {
     if (!root?.document || root.document.getElementById(STYLE_ID)) return;
     const link = root.document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'binary-cube-communication-capacity-analyzer.css?v=20260809-communication-capacity-1';
+    link.href = 'binary-cube-communication-capacity-analyzer.css?v=20260809-communication-capacity-2';
     root.document.head.appendChild(link);
   }
 
@@ -456,29 +553,35 @@
 
   async function executeAnalysis() {
     if (!activeBytes?.length) fail('Load data first.');
-    activeToken?.cancel?.('superseded by newer communication analysis');
+    cancelActiveAnalysis('superseded by newer communication analysis');
     const runner = root?.ScientificToolsCooperativeRunner;
     activeToken = runner?.createToken?.('Communication-capacity analysis') || { cancelled: false, cancel(reason) { this.cancelled = true; this.reason = reason; } };
     const button = panel.querySelector('[data-bcca-run]');
     const cancel = panel.querySelector('[data-bcca-cancel]');
     button.disabled = true;
     cancel.disabled = false;
-    setStatus('Analyzing symbol organizations…');
+    setStatus('Starting background communication analysis…');
     try {
-      if (runner?.yieldControl) await runner.yieldControl();
       const selected = [...panel.querySelectorAll('[data-bcca-mode]:checked')].map(input => input.value);
-      const report = analyzeCommunicationCapacity(activeBytes, {
+      const report = await analyzeCommunicationCapacityAsync(activeBytes, {
         modes: selected,
         maximumOrder: panel.querySelector('#bcca-order').value,
         shuffleReplicates: panel.querySelector('#bcca-shuffles').value
+      }, {
+        onProgress(update) {
+          const percent = Math.round((Number(update.fraction) || 0) * 100);
+          const elapsed = Math.max(0, Number(update.elapsedMilliseconds) || 0) / 1000;
+          setStatus(`${update.stage} · ${percent}% · ${elapsed.toFixed(1)} s`);
+        }
       });
       if (activeToken.cancelled) fail(activeToken.reason || 'Analysis cancelled.');
       renderReport(report);
       setStatus(`Complete · ${report.reports.length} symbolizations analyzed.`, 'success');
     } catch (error) {
-      if (activeToken?.cancelled) setStatus(`Cancelled${activeToken.reason ? ` · ${activeToken.reason}` : ''}.`, 'warning');
+      if (activeToken?.cancelled || error?.name === 'AbortError') setStatus(`Cancelled${activeToken?.reason ? ` · ${activeToken.reason}` : ''}.`, 'warning');
       else { setStatus(error.message, 'error'); throw error; }
     } finally {
+      cleanupAnalysisWorker();
       button.disabled = !activeBytes?.length;
       cancel.disabled = true;
       activeToken = null;
@@ -495,7 +598,7 @@
     panel.className = 'bcca-shell';
     panel.hidden = true;
     panel.setAttribute('aria-labelledby', 'bcca-title');
-    panel.innerHTML = `<div class="bcca-backdrop" data-bcca-close></div><div class="bcca-panel" role="dialog" aria-modal="true" aria-labelledby="bcca-title"><header class="bcca-header"><div><p class="bcca-eyebrow">Scientific Tools · Decryption Dashboard</p><h2 id="bcca-title">Communication Capacity Analyzer</h2><p>McCowan–Hanser–Doyle-style first- and higher-order information analysis for unknown symbolic streams. Tests whether multiple possible symbolizations show Zipf-like balance, sequential dependence, entropy-order structure, and organization beyond shuffled surrogates.</p></div><button type="button" class="bcca-close" data-bcca-close aria-label="Close Communication Capacity Analyzer">×</button></header><div class="bcca-body"><aside class="bcca-controls"><section class="bcca-card"><h3>Acquire material</h3><label>Upload file<input id="bcca-file" type="file"></label><label>Paste format<select id="bcca-mode"><option value="auto">Auto detect</option><option value="text">Literal text</option><option value="hex">Hex</option><option value="base64">Base64</option><option value="binary">Binary bits</option></select></label><label>Paste material<textarea id="bcca-input" rows="8" spellcheck="false"></textarea></label><div class="bcca-actions"><button type="button" class="primary-action" data-bcca-load>Load input</button><button type="button" data-bcca-clear>Clear</button></div><div class="bcca-source" data-bcca-source><span>No source</span><strong>0 bytes</strong></div></section><section class="bcca-card"><h3>Symbol hypotheses</h3><div class="bcca-checks"><label><input type="checkbox" value="bytes" data-bcca-mode checked> Bytes</label><label><input type="checkbox" value="nibbles" data-bcca-mode checked> Nibbles</label><label><input type="checkbox" value="2bit" data-bcca-mode checked> 2-bit symbols</label><label><input type="checkbox" value="bits" data-bcca-mode> Individual bits</label><label><input type="checkbox" value="characters" data-bcca-mode checked> UTF-8 characters</label><label><input type="checkbox" value="words" data-bcca-mode checked> Text-like word/punctuation tokens</label></div><label>Maximum entropy order<input id="bcca-order" type="number" min="2" max="5" value="4"></label><label>Shuffle surrogate replicates<input id="bcca-shuffles" type="number" min="4" max="64" value="16"></label><div class="bcca-actions"><button type="button" class="primary-action" data-bcca-run disabled>Run communication analysis</button><button type="button" data-bcca-cancel disabled>Cancel</button></div></section><section class="bcca-boundary"><strong>Interpretation boundary:</strong> the 1999 dolphin work compared statistical organization, not decoded semantics. A slope near −1 or a strong entropy-order drop can support the hypothesis of structured communication, but cannot establish what a message means or even that it is language.</section></aside><main class="bcca-results"><div class="bcca-status" data-bcca-status role="status" aria-live="polite">Load material to begin.</div><section class="bcca-card"><h3>${esc(PAPER_TITLE)}</h3><p>${esc(PAPER_AUTHORS)} · ${PAPER_YEAR}. Adult dolphin whistles in that study produced a Zipf slope near −0.95 compared with approximately −1.00 for the human-language reference; the authors explicitly treated the higher-order dolphin entropy sample as preliminary/undersampled.</p></section><div data-bcca-report><p class="bcca-muted">No communication-capacity report yet.</p></div></main></div></div>`;
+    panel.innerHTML = `<div class="bcca-backdrop" data-bcca-close></div><div class="bcca-panel" role="dialog" aria-modal="true" aria-labelledby="bcca-title"><header class="bcca-header"><div><p class="bcca-eyebrow">Scientific Tools · Decryption Dashboard</p><h2 id="bcca-title">Communication Capacity Analyzer</h2><p>McCowan–Hanser–Doyle-style first- and higher-order information analysis for unknown symbolic streams. Tests whether multiple possible symbolizations show Zipf-like balance, sequential dependence, entropy-order structure, and organization beyond shuffled surrogates.</p></div><button type="button" class="bcca-close" data-bcca-close aria-label="Close Communication Capacity Analyzer">×</button></header><div class="bcca-body"><aside class="bcca-controls"><section class="bcca-card"><h3>Acquire material</h3><label>Upload file<input id="bcca-file" type="file"></label><label>Paste format<select id="bcca-mode"><option value="auto">Auto detect</option><option value="text">Literal text</option><option value="hex">Hex</option><option value="base64">Base64</option><option value="binary">Binary bits</option></select></label><label>Paste material<textarea id="bcca-input" rows="8" spellcheck="false"></textarea></label><div class="bcca-actions"><button type="button" class="primary-action" data-bcca-load>Load input</button><button type="button" data-bcca-clear>Clear</button></div><div class="bcca-source" data-bcca-source><span>No source</span><strong>0 bytes</strong></div></section><section class="bcca-card"><h3>Symbol hypotheses</h3><div class="bcca-checks"><label><input type="checkbox" value="bytes" data-bcca-mode checked> Bytes</label><label><input type="checkbox" value="nibbles" data-bcca-mode checked> Nibbles</label><label><input type="checkbox" value="2bit" data-bcca-mode checked> 2-bit symbols</label><label><input type="checkbox" value="bits" data-bcca-mode> Individual bits</label><label><input type="checkbox" value="characters" data-bcca-mode checked> UTF-8 characters</label><label><input type="checkbox" value="words" data-bcca-mode checked> Text-like word/punctuation tokens</label></div><label>Maximum entropy order<input id="bcca-order" type="number" min="2" max="5" value="4"></label><label>Shuffle surrogate replicates<input id="bcca-shuffles" type="number" min="4" max="64" value="16"></label><div class="bcca-actions"><button type="button" class="primary-action" data-bcca-run disabled>Run communication analysis</button><button type="button" data-bcca-cancel disabled>Cancel</button></div></section><section class="bcca-boundary"><strong>Execution boundary:</strong> full sequence, surrogate-shuffle, entropy-order, and lag analysis runs in a dedicated background worker. Slow hardware may take longer, but the page remains interactive, reports liveness every second, and cancellation terminates the active worker. Deterministic calculations remain owned by this authoritative analyzer.</section><section class="bcca-boundary"><strong>Interpretation boundary:</strong> the 1999 dolphin work compared statistical organization, not decoded semantics. A slope near −1 or a strong entropy-order drop can support the hypothesis of structured communication, but cannot establish what a message means or even that it is language.</section></aside><main class="bcca-results"><div class="bcca-status" data-bcca-status role="status" aria-live="polite">Load material to begin.</div><section class="bcca-card"><h3>${esc(PAPER_TITLE)}</h3><p>${esc(PAPER_AUTHORS)} · ${PAPER_YEAR}. Adult dolphin whistles in that study produced a Zipf slope near −0.95 compared with approximately −1.00 for the human-language reference; the authors explicitly treated the higher-order dolphin entropy sample as preliminary/undersampled.</p></section><div data-bcca-report><p class="bcca-muted">No communication-capacity report yet.</p></div></main></div></div>`;
     root.document.body.appendChild(panel);
     bindPanel(panel);
     return panel;
@@ -513,9 +616,9 @@
       void file.arrayBuffer().then(buffer => loadBytes(new Uint8Array(buffer), file.name)).catch(error => setStatus(error.message, 'error'));
     });
     target.querySelector('[data-bcca-run]').addEventListener('click', () => void executeAnalysis().catch(error => console.error(error)));
-    target.querySelector('[data-bcca-cancel]').addEventListener('click', () => activeToken?.cancel?.('cancel requested by user'));
+    target.querySelector('[data-bcca-cancel]').addEventListener('click', () => cancelActiveAnalysis('cancel requested by user'));
     target.querySelector('[data-bcca-clear]').addEventListener('click', () => {
-      activeToken?.cancel?.('session cleared');
+      cancelActiveAnalysis('session cleared');
       activeBytes = null;
       activeName = '';
       lastReport = null;
@@ -538,13 +641,13 @@
   }
 
   function closePanel() {
-    activeToken?.cancel?.('communication analyzer closed');
+    cancelActiveAnalysis('communication analyzer closed');
     if (panel) panel.hidden = true;
     root?.document?.body?.classList.remove('bcca-open');
   }
 
   function currentState() {
-    return Object.freeze({ panelOpen: Boolean(panel && !panel.hidden), sourceLoaded: Boolean(activeBytes?.length), sourceBytes: activeBytes?.length || 0, reportReady: Boolean(lastReport) });
+    return Object.freeze({ panelOpen: Boolean(panel && !panel.hidden), sourceLoaded: Boolean(activeBytes?.length), sourceBytes: activeBytes?.length || 0, reportReady: Boolean(lastReport), workerActive: Boolean(activeWorker) });
   }
 
   return Object.freeze({
@@ -563,7 +666,9 @@
     lagMutualInformation,
     analyzeMode,
     analyzeCommunicationCapacity,
-    constants: Object.freeze({ PANEL_ID, PAPER_TITLE, PAPER_YEAR, PAPER_AUTHORS, HUMAN_ZIPF_REFERENCE, ADULT_DOLPHIN_ZIPF_REFERENCE, INFANT_DOLPHIN_ZIPF_REFERENCE, RANDOM_ZIPF_REFERENCE, MAX_INPUT_BYTES, MAX_SYMBOLS_FOR_SEQUENCE_ANALYSIS, MAX_ENTROPY_ORDER, SHUFFLE_REPLICATES }),
+    analyzeCommunicationCapacityAsync,
+    cancelActiveAnalysis,
+    constants: Object.freeze({ PANEL_ID, WORKER_URL, WORKER_HEARTBEAT_MS, PAPER_TITLE, PAPER_YEAR, PAPER_AUTHORS, HUMAN_ZIPF_REFERENCE, ADULT_DOLPHIN_ZIPF_REFERENCE, INFANT_DOLPHIN_ZIPF_REFERENCE, RANDOM_ZIPF_REFERENCE, MAX_INPUT_BYTES, MAX_SYMBOLS_FOR_SEQUENCE_ANALYSIS, MAX_ENTROPY_ORDER, SHUFFLE_REPLICATES }),
     utilities: Object.freeze({ asBytes, textToBytes, bytesToText, bytesFromHex, bytesFromBase64, bytesFromBits, symbolsFromBitGroups, linearRegression, entropyOfSymbols, deterministicShuffle })
   });
 });
