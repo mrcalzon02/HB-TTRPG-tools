@@ -71,7 +71,7 @@ checks.push(excludes('Black Light does not duplicate centralized runtimes', sour
 ]));
 
 checks.push(includes('Main menu owns one cache-refreshed Scientific Tools destination', sources.mounts, [
-  "button.dataset.view = 'scientific-tools'", "card.dataset.scientificToolsCard = 'true'", 'routed Diagnostic Evaluation Pipeline', "loadScript('scientific-tools-entry.js?v=20260809-cubic-decryptor-hardening-4')", 'ensureScientificToolsView();'
+  "button.dataset.view = 'scientific-tools'", "card.dataset.scientificToolsCard = 'true'", 'routed Diagnostic Evaluation Pipeline', "loadScript('scientific-tools-entry.js?v=20260809-cubic-decryptor-hardening-5')", 'ensureScientificToolsView();'
 ]));
 assert.equal(count(sources.mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'Scientific Tools must have exactly one main-menu card.');
 checks.push('Main menu Scientific Tools ownership is singular');
@@ -136,7 +136,7 @@ checks.push(includes('Shared local media helper owns Node PNG decode', sources.l
 checks.push(includes('Diagnostic plan records staged local/offline architecture', sources.diagnosticPlan, ['# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pipeline', 'absence of positive evidence', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Undetected / Miss-Risk Index', 'local Node.js runtime', 'Phase 6 — Resumable long-run jobs']));
 
 checks.push(includes('Scientific Tools centrally loads raster evidence and calibration before routed pipeline', sources.workspace, [
-  "const ASSET_VERSION = '20260809-cubic-decryptor-hardening-4';", 'function loadDiagnosticPipeline()', "loadScript('binary-cube-key-generation-research.js'", "loadScript('binary-cube-cubic-decryptor-engine.js'", "loadScript('binary-cube-steganalysis-evidence-profile.js'", "loadScript('binary-cube-steganalysis-worker-client.js'", "loadScript('binary-cube-diagnostic-calibration-registry.js'", "loadScript('binary-cube-diagnostic-calibration-baseline.js'", "loadScript('binary-cube-diagnostic-pipeline.js'", "loadScript('binary-cube-diagnostic-pipeline-panel.js'", 'Measured calibration:', 'RGB-LSB false negative', 'function loadCubicDecryptor()', 'id="scientific-tools-open-diagnostic-pipeline"', 'id="scientific-tools-open-cubic-decryptor"', 'absence of positive evidence is not evidence of absence'
+  "const ASSET_VERSION = '20260809-cubic-decryptor-hardening-5';", 'function loadDiagnosticPipeline()', "loadScript('binary-cube-key-generation-research.js'", "loadScript('binary-cube-cubic-decryptor-engine.js'", "loadScript('binary-cube-steganalysis-evidence-profile.js'", "loadScript('binary-cube-steganalysis-worker-client.js'", "loadScript('binary-cube-diagnostic-calibration-registry.js'", "loadScript('binary-cube-diagnostic-calibration-baseline.js'", "loadScript('binary-cube-diagnostic-pipeline.js'", "loadScript('binary-cube-diagnostic-pipeline-panel.js'", 'Measured calibration:', 'RGB-LSB false negative', 'function loadCubicDecryptor()', 'id="scientific-tools-open-diagnostic-pipeline"', 'id="scientific-tools-open-cubic-decryptor"', 'absence of positive evidence is not evidence of absence'
 ]));
 checks.push(includes('Scientific Tools preserves established destinations', sources.workspace, ['data-scientific-tools-tab="binary-cube"', 'data-scientific-tools-tab="decryption-dashboard"', 'data-scientific-tools-tab="ism-media-simulation"', 'data-scientific-tools-tab="double-slit"', 'id="scientific-tools-open-binary-cube-visualizer"', 'id="scientific-tools-open-binary-cube-laboratory"', 'id="scientific-tools-open-media-forensics-demos"', 'id="scientific-tools-open-ism"', 'id="scientific-tools-open-double-slit"', 'loadMediaForensicsDemoCorpus', 'openMediaForensicsDemoCorpus']));
 for (const tab of ['binary-cube', 'decryption-dashboard', 'ism-media-simulation', 'double-slit']) assert.equal(count(sources.workspace, `data-scientific-tools-tab="${tab}"`), 1, `${tab} must have one owner.`);
@@ -153,7 +153,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.21.0',
+  schemaVersion: '0.22.0',
   pass: true,
   checkCount: checks.length,
   checks

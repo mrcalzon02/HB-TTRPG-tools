@@ -3,6 +3,11 @@
 
   const PANEL_ID = 'binary-cube-cubic-decryptor';
   const WORKER_URL = 'binary-cube-cubic-decryptor-worker.js?v=20260809-cubic-decryptor-1';
+  const AUTOSAVE_DB_NAME = 'hb-ttrpg-cubic-decryptor';
+  const AUTOSAVE_STORE = 'sessions';
+  const AUTOSAVE_FORMAT = 'hb-ttrpg-cubic-decryptor-autosave';
+  const AUTOSAVE_VERSION = '0.1.0';
+  const AUTOSAVE_MAX_PLAINTEXT_BITS = 65536;
   const Cubic = window.BinaryCubeCubicDecryptorEngine;
   const Dashboard = window.BinaryCubeDecryptionDashboard;
   const Engine = window.ShadowrunBinaryCubeEngine;
@@ -23,6 +28,9 @@
   let candidates = [];
   let running = false;
   let measuredAttemptsPerSecond = 0;
+  let activeSourceId = null;
+  let autosaveTimer = 0;
+  let autosaveDbPromise = null;
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
   const pct = value => Number.isFinite(Number(value)) ? `${(Number(value) * 100).toFixed(2)}%` : '—';
@@ -41,6 +49,64 @@
   }
   function fail(message) { throw new Error(message); }
   function setStatus(message, kind = '') { const node = panel?.querySelector('[data-bccd-status]'); if (node) { node.textContent = message; node.dataset.kind = kind; } }
+  function setAutosaveStatus(message) { const node = panel?.querySelector('[data-bccd-autosave-status]'); if (node) node.textContent = message; }
+
+  function sourceIdentity(source) {
+    const bits = String(source?.bits || '');
+    const sampleSize = Math.min(65536, bits.length);
+    const middleStart = Math.max(0, Math.floor((bits.length - sampleSize) / 2));
+    const lastStart = Math.max(0, bits.length - sampleSize);
+    const material = [
+      'hb-ttrpg-cubic-source-identity-v1',
+      bits.length,
+      source?.kind || 'raw',
+      source?.package?.keyDigest || '',
+      source?.package?.keyId || '',
+      source?.package?.checksum || '',
+      bits.slice(0, sampleSize),
+      bits.slice(middleStart, middleStart + sampleSize),
+      bits.slice(lastStart)
+    ].join('|');
+    return `sha256-sampled-source-v1:${Engine.sha256Hex(material)}`;
+  }
+
+  function openAutosaveDb() {
+    if (!('indexedDB' in window)) return Promise.resolve(null);
+    if (autosaveDbPromise) return autosaveDbPromise;
+    autosaveDbPromise = new Promise((resolve, reject) => {
+      const request = indexedDB.open(AUTOSAVE_DB_NAME, 1);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(AUTOSAVE_STORE)) db.createObjectStore(AUTOSAVE_STORE, { keyPath: 'sourceId' });
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('IndexedDB could not open Cubic Decryptor autosave storage.'));
+      request.onblocked = () => reject(new Error('IndexedDB Cubic Decryptor autosave upgrade is blocked by another open page.'));
+    });
+    return autosaveDbPromise;
+  }
+
+  async function autosaveStore(mode, operation) {
+    const db = await openAutosaveDb();
+    if (!db) return null;
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(AUTOSAVE_STORE, mode);
+      const store = transaction.objectStore(AUTOSAVE_STORE);
+      let request;
+      try { request = operation(store); } catch (error) { reject(error); return; }
+      if (request) {
+        request.onsuccess = () => resolve(request.result ?? true);
+        request.onerror = () => reject(request.error || transaction.error || new Error('IndexedDB Cubic Decryptor autosave request failed.'));
+      } else {
+        transaction.oncomplete = () => resolve(true);
+        transaction.onerror = () => reject(transaction.error || new Error('IndexedDB Cubic Decryptor autosave transaction failed.'));
+      }
+    });
+  }
+
+  const readAutosave = sourceId => autosaveStore('readonly', store => store.get(sourceId));
+  const writeAutosave = record => autosaveStore('readwrite', store => store.put(record));
+  const deleteAutosave = sourceId => autosaveStore('readwrite', store => store.delete(sourceId));
 
   function stopHeartbeat() { if (heartbeat) window.clearInterval(heartbeat); heartbeat = 0; }
   function terminateWorker(reason = 'cancelled') {
@@ -99,6 +165,112 @@
     };
   }
 
+  function applyPersistedOptions(options = {}) {
+    const profiles = new Set(Array.isArray(options.profiles) ? options.profiles : []);
+    panel.querySelectorAll('[data-bccd-profile]').forEach(input => { input.checked = profiles.size ? profiles.has(input.value) : input.checked; });
+    const setValue = (selector, value) => { const node = panel.querySelector(selector); if (node && value != null) node.value = value; };
+    const setChecked = (selector, value) => { const node = panel.querySelector(selector); if (node && value != null) node.checked = Boolean(value); };
+    setChecked('#bccd-legacy', options.includeLegacyProfiles);
+    setChecked('#bccd-use-metadata', options.usePackageMetadata);
+    setValue('#bccd-max-grid', options.maxGridSize);
+    setValue('#bccd-seed-start', options.seedStart);
+    setValue('#bccd-seed-end', options.seedEnd);
+    if (Array.isArray(options.seedTemplates)) setValue('#bccd-seed-templates', options.seedTemplates.join('\n'));
+    setChecked('#bccd-fixed-seeds', options.includeFixedSeeds);
+    setValue('#bccd-orientation-mode', options.orientationMode);
+    setValue('#bccd-capacity-mode', options.capacityMode);
+    setValue('#bccd-input-face', options.inputFace);
+    setValue('#bccd-output-face', options.outputFace);
+    setValue('#bccd-input-turns', options.inputQuarterTurns);
+    setValue('#bccd-output-turns', options.outputQuarterTurns);
+    setValue('#bccd-payload-capacity', options.payloadCapacity || '');
+    setValue('#bccd-original-length', options.originalBitLength || '');
+    setChecked('#bccd-stop-exact', options.stopOnFingerprint);
+    setValue('#bccd-result-limit', options.resultLimit);
+    setValue('#bccd-score-threshold', options.scoreThreshold);
+    setValue('#bccd-sample-blocks', options.sampleBlocks);
+    setValue('#bccd-crib-mode', options.cribMode);
+    setValue('#bccd-crib-value', options.cribValue);
+    setValue('#bccd-crib-signature', options.cribSignature);
+    setValue('#bccd-crib-offset', options.cribOffsetBytes);
+    setValue('#bccd-attempt-budget', options.maxAttemptsThisRun);
+  }
+
+  function candidateAutosaveSnapshot(candidate) {
+    const plaintextBits = String(candidate?.plaintextBits || '');
+    const truncated = plaintextBits.length > AUTOSAVE_MAX_PLAINTEXT_BITS;
+    return {
+      ...candidate,
+      plaintextBits: plaintextBits.slice(0, AUTOSAVE_MAX_PLAINTEXT_BITS),
+      fullRecovery: truncated ? false : Boolean(candidate?.fullRecovery),
+      autosavePlaintextTruncated: truncated,
+      autosaveOriginalPlaintextBits: plaintextBits.length
+    };
+  }
+
+  function autosaveEnabled() { return Boolean(panel?.querySelector('#bccd-autosave')?.checked); }
+
+  async function saveAutosaveNow() {
+    if (!autosaveEnabled() || !activeSourceId || !latestPlan) return false;
+    const options = optionsFromControls();
+    delete options.progressEvery;
+    const record = {
+      format: AUTOSAVE_FORMAT,
+      version: AUTOSAVE_VERSION,
+      sourceId: activeSourceId,
+      sourceName: activeSourceName,
+      savedAt: new Date().toISOString(),
+      planId: latestPlan.planId,
+      options,
+      checkpoint: latestCheckpoint ? { ...latestCheckpoint } : null,
+      measuredAttemptsPerSecond,
+      candidates: candidates.map(candidateAutosaveSnapshot)
+    };
+    await writeAutosave(record);
+    setAutosaveStatus(`Saved locally ${new Date(record.savedAt).toLocaleTimeString()} · cursor ${Number(record.checkpoint?.cursor || 0).toLocaleString()} · ${record.candidates.length} candidate${record.candidates.length === 1 ? '' : 's'}.`);
+    return true;
+  }
+
+  function scheduleAutosave(delay = 700) {
+    if (!autosaveEnabled() || !activeSourceId || !latestPlan) return;
+    if (autosaveTimer) window.clearTimeout(autosaveTimer);
+    autosaveTimer = window.setTimeout(() => { autosaveTimer = 0; void saveAutosaveNow().catch(error => setAutosaveStatus(`Local autosave unavailable · ${error.message}`)); }, Math.max(0, delay));
+  }
+
+  async function clearSavedSession() {
+    if (!activeSourceId) { setAutosaveStatus('Load ciphertext before clearing a saved session.'); return false; }
+    await deleteAutosave(activeSourceId);
+    setAutosaveStatus('Saved local session cleared for this ciphertext.');
+    return true;
+  }
+
+  async function restoreAutosaveForSource() {
+    if (!activeSourceId) return false;
+    let record;
+    try { record = await readAutosave(activeSourceId); }
+    catch (error) { setAutosaveStatus(`Local resume unavailable · ${error.message}`); return false; }
+    if (!record || record.format !== AUTOSAVE_FORMAT || record.version !== AUTOSAVE_VERSION) return false;
+    try {
+      applyPersistedOptions(record.options || {});
+      const plan = buildPlan();
+      if (record.planId !== plan.planId) throw new Error('Saved Plan ID no longer matches the rebuilt deterministic search plan.');
+      latestCheckpoint = record.checkpoint ? Cubic.validateCheckpoint(record.checkpoint, plan) : null;
+      candidates = Array.isArray(record.candidates) ? record.candidates : [];
+      measuredAttemptsPerSecond = Math.max(0, Number(record.measuredAttemptsPerSecond) || 0);
+      sortCandidates();
+      renderPlan(plan); renderCheckpoint(); renderCandidates(); updatePlanRuntimeEstimates();
+      setAutosaveStatus(`Restored local session saved ${new Date(record.savedAt).toLocaleString()} · cursor ${Number(latestCheckpoint?.cursor || 0).toLocaleString()} · ${candidates.length} candidate${candidates.length === 1 ? '' : 's'}.`);
+      setStatus(`Restored interrupted Cubic search at deterministic cursor ${Number(latestCheckpoint?.cursor || 0).toLocaleString()}.`, 'success');
+      return true;
+    } catch (error) {
+      await deleteAutosave(activeSourceId).catch(() => {});
+      setAutosaveStatus(`Discarded incompatible saved session · ${error.message}`);
+      latestPlan = null; latestCheckpoint = null; candidates = []; measuredAttemptsPerSecond = 0;
+      renderPlan(null); renderCheckpoint(); renderCandidates();
+      return false;
+    }
+  }
+
   function sourceForWorker() {
     if (!activeSource) fail('Load a Binary Cube package or raw ciphertext first.');
     if (activeSource.kind === 'package') return { kind: 'package', package: activeSource.package };
@@ -128,28 +300,33 @@
     } else target.innerHTML = `<div><span>Source</span><strong>${esc(activeSourceName)}</strong></div><div><span>Type</span><strong>Raw ciphertext</strong></div><div><span>Ciphertext</span><strong>${source.bits.length.toLocaleString()} bits</strong></div><div><span>Framing</span><strong>Manual / deterministic sweep controls</strong></div>`;
   }
 
-  function loadParsedSource(parsed, sourceName = 'input') {
+  async function loadParsedSource(parsed, sourceName = 'input') {
     terminateWorker('source replaced');
+    if (autosaveTimer) { window.clearTimeout(autosaveTimer); autosaveTimer = 0; }
     activeSourceName = String(sourceName || 'input');
     activeSource = normalizeParsedSource(parsed, activeSourceName);
+    activeSourceId = sourceIdentity(activeSource);
     latestPlan = null; latestCheckpoint = null; candidates = []; measuredAttemptsPerSecond = 0;
     populateMetadata(activeSource);
     renderPlan(null); renderCandidates(); renderCheckpoint();
+    panel.querySelector('[data-bccd-start]').disabled = true;
+    setAutosaveStatus('Checking this ciphertext for a compatible local interrupted-search session…');
+    const restored = await restoreAutosaveForSource();
     panel.querySelector('[data-bccd-start]').disabled = false;
-    setStatus(`Loaded ${activeSourceName}. Build the staged search plan to inspect the deterministic search size.`, 'success');
+    if (!restored) setStatus(`Loaded ${activeSourceName}. Build the staged search plan to inspect the deterministic search size.`, 'success');
   }
 
   async function loadFile(file) {
     const bytes = new Uint8Array(await file.arrayBuffer());
     const parsed = Dashboard.parseSourceBytes(bytes, file.name);
-    loadParsedSource(parsed, file.name);
+    await loadParsedSource(parsed, file.name);
   }
 
-  function loadPaste() {
+  async function loadPaste() {
     const mode = panel.querySelector('#bccd-input-mode').value;
     const value = panel.querySelector('#bccd-input').value;
     const parsed = Dashboard.parseSourceText(value, mode, 'pasted-input');
-    loadParsedSource(parsed, 'pasted-input');
+    await loadParsedSource(parsed, 'pasted-input');
   }
 
   function renderPlan(plan) {
@@ -177,6 +354,7 @@
     if (!plan.stages.length) fail('No candidate stages apply. For raw input, increase max grid size or verify that ciphertext length is divisible by a candidate cube face size.');
     if (latestCheckpoint && latestCheckpoint.planId !== plan.planId) latestCheckpoint = null;
     latestPlan = plan; renderPlan(plan); renderCheckpoint();
+    scheduleAutosave();
     setStatus(`Deterministic plan ${plan.planId} contains ${plan.totalAttempts.toLocaleString()} candidate keys.`, 'success');
     return plan;
   }
@@ -217,6 +395,7 @@
     const limit = Number(panel.querySelector('#bccd-result-limit').value) || 24;
     if (candidates.length > limit) candidates.length = limit;
     renderCandidates();
+    scheduleAutosave();
   }
 
   async function informationCorroborator() {
@@ -272,6 +451,7 @@
     }
     sortCandidates();
     renderCandidates();
+    scheduleAutosave();
     setStatus(`Stage B specialist corroboration complete for ${updated.length} retained candidate${updated.length === 1 ? '' : 's'}.`, 'success');
     return updated;
   }
@@ -328,6 +508,7 @@
     const index = candidates.findIndex(item => candidateIdentity(item) === candidateIdentity(candidate));
     if (index >= 0) candidates.splice(index, 1, updated);
     renderCandidates();
+    scheduleAutosave();
     setStatus(`Recovered full plaintext with ${updated.profileLabel} / seed ${updated.seed}.`, 'success');
     return updated;
   }
@@ -358,7 +539,7 @@
     const remaining = Math.max(0, totalAttempts - cursor);
     const eta = measuredAttemptsPerSecond > 0 ? remaining / measuredAttemptsPerSecond : NaN;
     panel.querySelector('[data-bccd-runtime]').innerHTML = `<span>Cursor <strong>${cursor.toLocaleString()}</strong></span><span>Attempts this run <strong>${attemptsThisRun.toLocaleString()}</strong></span><span>Candidates <strong>${Number(message.candidates ?? candidates.length).toLocaleString()}</strong></span><span>Elapsed <strong>${formatDuration(elapsedMilliseconds / 1000)}</strong></span><span>Attempts / second <strong>${measuredAttemptsPerSecond > 0 ? Math.round(measuredAttemptsPerSecond).toLocaleString() : '—'}</strong></span><span>Estimated remaining <strong>${formatDuration(eta)}</strong></span>`;
-    if (message.checkpoint) { latestCheckpoint = message.checkpoint; renderCheckpoint(); }
+    if (message.checkpoint) { latestCheckpoint = message.checkpoint; renderCheckpoint(); scheduleAutosave(); }
   }
 
   function runSearch() {
@@ -383,6 +564,7 @@
         if (message.type === 'result') {
           const result = message.result; latestPlan = result.plan; latestCheckpoint = result.checkpoint; candidates = result.candidates || candidates; renderPlan(latestPlan); renderCheckpoint(); renderCandidates(); updateProgress({ stage: result.exactMatch ? 'Exact key identity found' : result.exhausted ? 'Search exhausted' : result.stopReason === 'attempt-budget' ? 'Run attempt budget reached' : 'Search stopped', fraction: latestPlan.totalAttempts ? result.cursor / latestPlan.totalAttempts : 1, cursor: result.cursor, attemptsThisRun: result.attemptsThisRun, candidates: candidates.length, checkpoint: result.checkpoint, elapsedMilliseconds: result.elapsedMilliseconds, attemptsPerSecond: result.attemptsPerSecond, totalAttempts: latestPlan.totalAttempts });
           setStatus(result.exactMatch ? `Stopped on package key identity match after ${result.attemptsThisRun.toLocaleString()} attempts.` : result.exhausted ? `Search exhausted after ${result.attemptsThisRun.toLocaleString()} attempts in this run.` : result.stopReason === 'attempt-budget' ? `Run budget reached at deterministic cursor ${result.cursor.toLocaleString()}. Run again to resume without replaying completed attempts.` : 'Search stopped.', result.exactMatch ? 'success' : 'warning');
+          void saveAutosaveNow().catch(error => setAutosaveStatus(`Local autosave unavailable · ${error.message}`));
           if ((!result.exactMatch || !result.exactMatch.exactDigestMatch) && candidates.length) void corroborateRetainedCandidates().catch(error => setStatus(`Stage B corroboration unavailable · ${error.message}`, 'warning'));
           resolve(result);
         } else { const error = new Error(message.error?.message || 'Cubic Decryptor worker failed.'); error.name = message.error?.name || 'Error'; setStatus(error.message, 'error'); reject(error); }
@@ -395,11 +577,12 @@
   function pauseSearch() {
     if (!running) return;
     terminateWorker('search paused');
+    void saveAutosaveNow().catch(error => setAutosaveStatus(`Local autosave unavailable · ${error.message}`));
     setStatus(`Paused at deterministic cursor ${Number(latestCheckpoint?.cursor || 0).toLocaleString()}. Run again to resume.`, 'warning');
   }
 
   function resetCursor() {
-    terminateWorker('search reset'); latestCheckpoint = null; candidates = []; measuredAttemptsPerSecond = 0; renderCheckpoint(); renderCandidates(); panel.querySelector('[data-bccd-progress]').value = 0; panel.querySelector('[data-bccd-progress-label]').textContent = 'Idle'; setStatus('Search cursor, measured throughput, and retained candidates reset.');
+    terminateWorker('search reset'); latestCheckpoint = null; candidates = []; measuredAttemptsPerSecond = 0; renderCheckpoint(); renderCandidates(); panel.querySelector('[data-bccd-progress]').value = 0; panel.querySelector('[data-bccd-progress-label]').textContent = 'Idle'; void clearSavedSession().catch(error => setAutosaveStatus(`Could not clear saved session · ${error.message}`)); setStatus('Search cursor, measured throughput, retained candidates, and local autosave reset.');
   }
 
   function exportCheckpoint() {
@@ -411,6 +594,7 @@
     const value = JSON.parse(await file.text());
     const plan = buildPlan();
     latestCheckpoint = Cubic.validateCheckpoint(value, plan); renderCheckpoint();
+    scheduleAutosave();
     setStatus(`Checkpoint restored at cursor ${latestCheckpoint.cursor.toLocaleString()}.`, 'success');
   }
 
@@ -421,19 +605,21 @@
       const definition = window.BinaryCubeKeyGenerationResearch.constants.PROFILE_DEFINITIONS.find(item => item.id === profile);
       return `<label class="bccd-check"><input type="checkbox" data-bccd-profile value="${profile}" checked><span><strong>${index + 1}. ${esc(definition?.label || profile)}</strong><small>${esc(definition?.note || '')}</small></span></label>`;
     }).join('');
-    panel.innerHTML = `<div class="bccd-backdrop" data-bccd-close></div><div class="bccd-panel" role="dialog" aria-modal="true" aria-labelledby="bccd-title"><header class="bccd-header"><div><p class="bccd-eyebrow">Scientific Tools · Decryption Dashboard</p><h2 id="bccd-title">Cubic Decryptor Tool</h2><p>Deterministic staged brute-force search for the Binary Cube key-generation families. Search begins with the canonical direct-permutation family and the smallest compatible cubes, then expands through iterative, walk, and nested key engines while preserving a reproducible candidate order.</p></div><button type="button" class="bccd-close" data-bccd-close aria-label="Close Cubic Decryptor Tool">×</button></header><div class="bccd-body"><aside class="bccd-controls"><section class="bccd-card"><h3>1 · Acquire ciphertext</h3><label>Upload package / ciphertext<input id="bccd-file" type="file"></label><label>Paste mode<select id="bccd-input-mode"><option value="auto">Auto</option><option value="json">Binary Cube package JSON</option><option value="binary">Raw binary</option><option value="hex">Raw hex</option><option value="base64">Raw Base64</option></select></label><textarea id="bccd-input" rows="6" spellcheck="false"></textarea><button type="button" data-bccd-load>Load pasted source</button><div class="bccd-source" data-bccd-source><p>No source loaded.</p></div></section><section class="bccd-card"><h3>2 · Generator stages</h3>${profileRows}<label class="bccd-check"><input id="bccd-legacy" type="checkbox"><span><strong>Legacy / rejected research generators</strong><small>Also test local-adjacent walk and nested hierarchy counterexamples.</small></span></label><label>Maximum cube size<input id="bccd-max-grid" type="number" min="3" max="1024" value="64"></label><label class="bccd-inline"><input id="bccd-use-metadata" type="checkbox" checked> Constrain geometry/capacity/grid from package metadata</label></section><section class="bccd-card"><h3>3 · Deterministic seed domain</h3><div class="bccd-grid"><label>Start<input id="bccd-seed-start" type="number" min="0" value="0"></label><label>End<input id="bccd-seed-end" type="number" min="0" value="65535"></label></div><label>Seed templates<textarea id="bccd-seed-templates" rows="4">{n}</textarea></label><p class="bccd-muted">Supported placeholders: {n}, {n8}, {hex}, {hex8}. Templates run in the entered order for every counter value.</p><label class="bccd-inline"><input id="bccd-fixed-seeds" type="checkbox" checked> Probe known fixed/default seeds before numeric templates</label></section><section class="bccd-card"><h3>4 · Raw framing expansion</h3><label>Orientation search<select id="bccd-orientation-mode"><option value="manual">Manual geometry</option><option value="all">All valid face/rotation combinations</option></select></label><div class="bccd-grid"><label>Input face<select id="bccd-input-face">${Engine.constants.FACES.map(face => `<option>${face}</option>`).join('')}</select></label><label>Output face<select id="bccd-output-face">${Engine.constants.FACES.map(face => `<option ${face === 'front' ? 'selected' : ''}>${face}</option>`).join('')}</select></label><label>Input turns<input id="bccd-input-turns" type="number" min="0" max="3" value="0"></label><label>Output turns<input id="bccd-output-turns" type="number" min="0" max="3" value="0"></label><label>Payload capacity<input id="bccd-payload-capacity" type="number" min="1" placeholder="auto/common"></label><label>Original bit length<input id="bccd-original-length" type="number" min="1" placeholder="max if unknown"></label></div><label>Mask-capacity search<select id="bccd-capacity-mode"><option value="manual">Manual or common 100/75/50/25%</option><option value="exhaustive">Exhaust every legal capacity</option></select></label><p class="bccd-muted">Canonical package mode normally bypasses this expansion because the package already records grid, faces, rotations, original length, and payload capacity.</p></section><section class="bccd-card"><h3>5 · Known plaintext / crib pruning</h3><label>Crib mode<select id="bccd-crib-mode"><option value="none">Disabled</option><option value="text">UTF-8 text at exact byte offset</option><option value="hex">Hex bytes at exact byte offset</option><option value="signature">Known file signature at exact byte offset</option></select></label><div class="bccd-grid"><label>Byte offset<input id="bccd-crib-offset" type="number" min="0" value="0"></label><label>Known signature<select id="bccd-crib-signature">${Cubic.constants.FILE_SIGNATURES.map(item => `<option value="${esc(item.label)}">${esc(item.label)}</option>`).join('')}</select></label></div><label>Known text / hex bytes<textarea id="bccd-crib-value" rows="3" spellcheck="false" placeholder="Text: expected prefix or fragment at the exact offset · Hex: 89504e470d0a1a0a"></textarea></label><p class="bccd-muted">For raw ciphertext, mismatching candidates are rejected before Stage A scoring. The decryptor automatically samples enough blocks to reach the crib. Because the crib changes search semantics, its mode, bytes, and offset are part of the deterministic Plan ID and therefore invalidate incompatible checkpoints.</p></section><section class="bccd-card"><h3>6 · Retention / stopping</h3><div class="bccd-grid"><label>Raw score threshold<input id="bccd-score-threshold" type="number" min="0" max="100" value="32"></label><label>Top candidates<input id="bccd-result-limit" type="number" min="1" max="100" value="24"></label><label>Raw sample blocks<input id="bccd-sample-blocks" type="number" min="1" max="16" value="1"></label><label>Attempt budget / run<input id="bccd-attempt-budget" type="number" min="0" step="1000" value="250000"></label></div><p class="bccd-muted">The attempt budget limits one worker session; 0 means unlimited. Reaching the budget produces a normal deterministic checkpoint so the next run resumes without changing the Plan ID.</p><label class="bccd-inline"><input id="bccd-stop-exact" type="checkbox" checked> Stop when package key identity matches</label></section><section class="bccd-boundary"><strong>Search boundary:</strong> new canonical packages carry a SHA-256 digest of canonical key material in addition to the legacy 32-bit FNV-1a keyId. SHA-256 matches are strong key-identity evidence; legacy packages fall back to FNV matching. A known-plaintext crib is conditional on the user's assumption: it can prune raw candidates aggressively but cannot prove that the assumption itself is correct. Raw Stage A/Stage B scores remain triage evidence.</section></aside><main class="bccd-results"><div class="bccd-status" data-bccd-status role="status" aria-live="polite">Load ciphertext to begin.</div><section class="bccd-card"><h3>Staged program sequence</h3><div class="bccd-actions"><button type="button" data-bccd-plan>Build staged plan</button><button type="button" class="primary-action" data-bccd-start disabled>Run / resume decryptor</button><button type="button" data-bccd-pause disabled>Pause</button><button type="button" data-bccd-reset>Reset cursor</button></div><progress data-bccd-progress max="1" value="0"></progress><div data-bccd-progress-label class="bccd-progress-label">Idle</div><div data-bccd-runtime class="bccd-runtime"><span>Cursor <strong>0</strong></span><span>Attempts this run <strong>0</strong></span><span>Candidates <strong>0</strong></span><span>Elapsed <strong>0 s</strong></span><span>Attempts / second <strong>—</strong></span><span>Estimated remaining <strong>—</strong></span></div><div data-bccd-plan><p class="bccd-muted">No plan built yet.</p></div></section><section class="bccd-card"><h3>Checkpoint / deterministic resume</h3><div class="bccd-actions"><button type="button" data-bccd-export-checkpoint>Export checkpoint</button><label class="bccd-file-button">Import checkpoint<input id="bccd-checkpoint-file" type="file" accept="application/json"></label></div><div data-bccd-checkpoint class="bccd-checkpoint"><span>No checkpoint.</span></div></section><section class="bccd-card"><h3>Recovered / promising candidates</h3><div class="bccd-actions"><button type="button" data-bccd-corroborate>Corroborate retained candidates</button></div><p class="bccd-muted">Stage A is the inexpensive inner-loop Cubic score. Stage B runs only on retained candidates and delegates structure/language/signature analysis to the existing Information & Deobfuscation Suite.</p><div data-bccd-results><p class="bccd-muted">No candidate plaintexts retained yet.</p></div></section></main></div></div>`;
+    panel.innerHTML = `<div class="bccd-backdrop" data-bccd-close></div><div class="bccd-panel" role="dialog" aria-modal="true" aria-labelledby="bccd-title"><header class="bccd-header"><div><p class="bccd-eyebrow">Scientific Tools · Decryption Dashboard</p><h2 id="bccd-title">Cubic Decryptor Tool</h2><p>Deterministic staged brute-force search for the Binary Cube key-generation families. Search begins with the canonical direct-permutation family and the smallest compatible cubes, then expands through iterative, walk, and nested key engines while preserving a reproducible candidate order.</p></div><button type="button" class="bccd-close" data-bccd-close aria-label="Close Cubic Decryptor Tool">×</button></header><div class="bccd-body"><aside class="bccd-controls"><section class="bccd-card"><h3>1 · Acquire ciphertext</h3><label>Upload package / ciphertext<input id="bccd-file" type="file"></label><label>Paste mode<select id="bccd-input-mode"><option value="auto">Auto</option><option value="json">Binary Cube package JSON</option><option value="binary">Raw binary</option><option value="hex">Raw hex</option><option value="base64">Raw Base64</option></select></label><textarea id="bccd-input" rows="6" spellcheck="false"></textarea><button type="button" data-bccd-load>Load pasted source</button><div class="bccd-source" data-bccd-source><p>No source loaded.</p></div></section><section class="bccd-card"><h3>2 · Generator stages</h3>${profileRows}<label class="bccd-check"><input id="bccd-legacy" type="checkbox"><span><strong>Legacy / rejected research generators</strong><small>Also test local-adjacent walk and nested hierarchy counterexamples.</small></span></label><label>Maximum cube size<input id="bccd-max-grid" type="number" min="3" max="1024" value="64"></label><label class="bccd-inline"><input id="bccd-use-metadata" type="checkbox" checked> Constrain geometry/capacity/grid from package metadata</label></section><section class="bccd-card"><h3>3 · Deterministic seed domain</h3><div class="bccd-grid"><label>Start<input id="bccd-seed-start" type="number" min="0" value="0"></label><label>End<input id="bccd-seed-end" type="number" min="0" value="65535"></label></div><label>Seed templates<textarea id="bccd-seed-templates" rows="4">{n}</textarea></label><p class="bccd-muted">Supported placeholders: {n}, {n8}, {hex}, {hex8}. Templates run in the entered order for every counter value.</p><label class="bccd-inline"><input id="bccd-fixed-seeds" type="checkbox" checked> Probe known fixed/default seeds before numeric templates</label></section><section class="bccd-card"><h3>4 · Raw framing expansion</h3><label>Orientation search<select id="bccd-orientation-mode"><option value="manual">Manual geometry</option><option value="all">All valid face/rotation combinations</option></select></label><div class="bccd-grid"><label>Input face<select id="bccd-input-face">${Engine.constants.FACES.map(face => `<option>${face}</option>`).join('')}</select></label><label>Output face<select id="bccd-output-face">${Engine.constants.FACES.map(face => `<option ${face === 'front' ? 'selected' : ''}>${face}</option>`).join('')}</select></label><label>Input turns<input id="bccd-input-turns" type="number" min="0" max="3" value="0"></label><label>Output turns<input id="bccd-output-turns" type="number" min="0" max="3" value="0"></label><label>Payload capacity<input id="bccd-payload-capacity" type="number" min="1" placeholder="auto/common"></label><label>Original bit length<input id="bccd-original-length" type="number" min="1" placeholder="max if unknown"></label></div><label>Mask-capacity search<select id="bccd-capacity-mode"><option value="manual">Manual or common 100/75/50/25%</option><option value="exhaustive">Exhaust every legal capacity</option></select></label><p class="bccd-muted">Canonical package mode normally bypasses this expansion because the package already records grid, faces, rotations, original length, and payload capacity.</p></section><section class="bccd-card"><h3>5 · Known plaintext / crib pruning</h3><label>Crib mode<select id="bccd-crib-mode"><option value="none">Disabled</option><option value="text">UTF-8 text at exact byte offset</option><option value="hex">Hex bytes at exact byte offset</option><option value="signature">Known file signature at exact byte offset</option></select></label><div class="bccd-grid"><label>Byte offset<input id="bccd-crib-offset" type="number" min="0" value="0"></label><label>Known signature<select id="bccd-crib-signature">${Cubic.constants.FILE_SIGNATURES.map(item => `<option value="${esc(item.label)}">${esc(item.label)}</option>`).join('')}</select></label></div><label>Known text / hex bytes<textarea id="bccd-crib-value" rows="3" spellcheck="false" placeholder="Text: expected prefix or fragment at the exact offset · Hex: 89504e470d0a1a0a"></textarea></label><p class="bccd-muted">For raw ciphertext, mismatching candidates are rejected before Stage A scoring. The decryptor automatically samples enough blocks to reach the crib. Because the crib changes search semantics, its mode, bytes, and offset are part of the deterministic Plan ID and therefore invalidate incompatible checkpoints.</p></section><section class="bccd-card"><h3>6 · Retention / stopping</h3><div class="bccd-grid"><label>Raw score threshold<input id="bccd-score-threshold" type="number" min="0" max="100" value="32"></label><label>Top candidates<input id="bccd-result-limit" type="number" min="1" max="100" value="24"></label><label>Raw sample blocks<input id="bccd-sample-blocks" type="number" min="1" max="16" value="1"></label><label>Attempt budget / run<input id="bccd-attempt-budget" type="number" min="0" step="1000" value="250000"></label></div><p class="bccd-muted">The attempt budget limits one worker session; 0 means unlimited. Reaching the budget produces a normal deterministic checkpoint so the next run resumes without changing the Plan ID.</p><label class="bccd-inline"><input id="bccd-stop-exact" type="checkbox" checked> Stop when package key identity matches</label></section><section class="bccd-boundary"><strong>Search boundary:</strong> new canonical packages carry a SHA-256 digest of canonical key material in addition to the legacy 32-bit FNV-1a keyId. SHA-256 matches are strong key-identity evidence; legacy packages fall back to FNV matching. A known-plaintext crib is conditional on the user's assumption: it can prune raw candidates aggressively but cannot prove that the assumption itself is correct. Raw Stage A/Stage B scores remain triage evidence.</section></aside><main class="bccd-results"><div class="bccd-status" data-bccd-status role="status" aria-live="polite">Load ciphertext to begin.</div><section class="bccd-card"><h3>Staged program sequence</h3><div class="bccd-actions"><button type="button" data-bccd-plan>Build staged plan</button><button type="button" class="primary-action" data-bccd-start disabled>Run / resume decryptor</button><button type="button" data-bccd-pause disabled>Pause</button><button type="button" data-bccd-reset>Reset cursor</button></div><progress data-bccd-progress max="1" value="0"></progress><div data-bccd-progress-label class="bccd-progress-label">Idle</div><div data-bccd-runtime class="bccd-runtime"><span>Cursor <strong>0</strong></span><span>Attempts this run <strong>0</strong></span><span>Candidates <strong>0</strong></span><span>Elapsed <strong>0 s</strong></span><span>Attempts / second <strong>—</strong></span><span>Estimated remaining <strong>—</strong></span></div><div data-bccd-plan><p class="bccd-muted">No plan built yet.</p></div></section><section class="bccd-card"><h3>Checkpoint / deterministic resume</h3><div class="bccd-actions"><button type="button" data-bccd-export-checkpoint>Export checkpoint</button><label class="bccd-file-button">Import checkpoint<input id="bccd-checkpoint-file" type="file" accept="application/json"></label><button type="button" data-bccd-clear-autosave>Clear saved local session</button></div><label class="bccd-inline"><input id="bccd-autosave" type="checkbox" checked> Autosave interrupted search to this browser</label><p class="bccd-muted">Autosave uses IndexedDB on this site origin only. It stores controls, checkpoint/cursor, throughput, and retained candidate samples; it does not upload data and does not persist the source ciphertext itself. Reload the same ciphertext to restore. Persisted plaintext samples are capped at 65,536 bits per candidate.</p><div data-bccd-autosave-status class="bccd-muted">No local session loaded.</div><div data-bccd-checkpoint class="bccd-checkpoint"><span>No checkpoint.</span></div></section><section class="bccd-card"><h3>Recovered / promising candidates</h3><div class="bccd-actions"><button type="button" data-bccd-corroborate>Corroborate retained candidates</button></div><p class="bccd-muted">Stage A is the inexpensive inner-loop Cubic score. Stage B runs only on retained candidates and delegates structure/language/signature analysis to the existing Information & Deobfuscation Suite.</p><div data-bccd-results><p class="bccd-muted">No candidate plaintexts retained yet.</p></div></section></main></div></div>`;
     document.body.appendChild(panel); bindPanel(panel); return panel;
   }
 
   function bindPanel(target) {
     target.querySelectorAll('[data-bccd-close]').forEach(button => button.addEventListener('click', closePanel));
     target.querySelector('#bccd-file').addEventListener('change', event => { const file = event.target.files?.[0]; if (file) void loadFile(file).catch(error => setStatus(error.message, 'error')); });
-    target.querySelector('[data-bccd-load]').addEventListener('click', () => { try { loadPaste(); } catch (error) { setStatus(error.message, 'error'); } });
+    target.querySelector('[data-bccd-load]').addEventListener('click', () => void loadPaste().catch(error => setStatus(error.message, 'error')));
     target.querySelector('[data-bccd-plan]').addEventListener('click', () => { try { buildPlan(); } catch (error) { setStatus(error.message, 'error'); } });
     target.querySelector('[data-bccd-start]').addEventListener('click', () => void runSearch().catch(error => { if (error?.name !== 'AbortError') console.error(error); }));
     target.querySelector('[data-bccd-pause]').addEventListener('click', pauseSearch);
     target.querySelector('[data-bccd-reset]').addEventListener('click', resetCursor);
     target.querySelector('[data-bccd-corroborate]').addEventListener('click', () => void corroborateRetainedCandidates().catch(error => setStatus(error.message, 'error')));
+    target.querySelector('[data-bccd-clear-autosave]').addEventListener('click', () => void clearSavedSession().catch(error => setAutosaveStatus(`Could not clear saved session · ${error.message}`)));
+    target.querySelector('#bccd-autosave').addEventListener('change', event => { if (event.target.checked) { setAutosaveStatus('Local autosave enabled for this browser.'); scheduleAutosave(0); } else setAutosaveStatus('Local autosave disabled. Existing saved session remains until cleared.'); });
     target.querySelector('[data-bccd-export-checkpoint]').addEventListener('click', () => { try { exportCheckpoint(); } catch (error) { setStatus(error.message, 'error'); } });
     target.querySelector('#bccd-checkpoint-file').addEventListener('change', event => { const file = event.target.files?.[0]; if (file) void importCheckpoint(file).catch(error => setStatus(error.message, 'error')); });
     target.querySelector('[data-bccd-results]').addEventListener('click', event => {
@@ -454,13 +640,13 @@
 
   function openPanel(options = {}) {
     const target = buildPanel(); target.hidden = false; document.body.classList.add('bccd-open');
-    if (options.package) loadParsedSource({ artifact: options.package, bits: options.package.ciphertext }, options.sourceName || 'handoff-package');
-    else if (options.bits) loadParsedSource({ artifact: null, bits: options.bits }, options.sourceName || 'handoff-bits');
+    if (options.package) void loadParsedSource({ artifact: options.package, bits: options.package.ciphertext }, options.sourceName || 'handoff-package').catch(error => setStatus(error.message, 'error'));
+    else if (options.bits) void loadParsedSource({ artifact: null, bits: options.bits }, options.sourceName || 'handoff-bits').catch(error => setStatus(error.message, 'error'));
     return target;
   }
 
-  function closePanel() { terminateWorker('Cubic Decryptor Tool closed'); if (panel) panel.hidden = true; document.body.classList.remove('bccd-open'); }
-  function currentState() { return Object.freeze({ panelOpen: Boolean(panel && !panel.hidden), sourceKind: activeSource?.kind || null, running, planId: latestPlan?.planId || null, checkpointCursor: latestCheckpoint?.cursor || 0, candidateCount: candidates.length }); }
+  function closePanel() { void saveAutosaveNow().catch(() => {}); terminateWorker('Cubic Decryptor Tool closed'); if (panel) panel.hidden = true; document.body.classList.remove('bccd-open'); }
+  function currentState() { return Object.freeze({ panelOpen: Boolean(panel && !panel.hidden), sourceKind: activeSource?.kind || null, sourceId: activeSourceId, running, planId: latestPlan?.planId || null, checkpointCursor: latestCheckpoint?.cursor || 0, candidateCount: candidates.length, autosaveEnabled: autosaveEnabled() }); }
 
   window.BinaryCubeCubicDecryptor = Object.freeze({ openPanel, closePanel, currentState, buildPlan, runSearch, pauseSearch });
 })();

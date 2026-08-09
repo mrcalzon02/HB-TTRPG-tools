@@ -306,8 +306,18 @@ for (const required of [
   'Known plaintext / crib pruning',
   'bccd-crib-mode',
   'bccd-crib-offset',
-  'KNOWN-PLAINTEXT CRIB MATCH'
+  'KNOWN-PLAINTEXT CRIB MATCH',
+  'indexedDB.open',
+  'hb-ttrpg-cubic-decryptor-autosave',
+  'sourceIdentity(',
+  'restoreAutosaveForSource',
+  'candidateAutosaveSnapshot',
+  'Clear saved local session',
+  'Autosave interrupted search to this browser',
+  'does not persist the source ciphertext itself',
+  'AUTOSAVE_MAX_PLAINTEXT_BITS = 65536'
 ]) assert.ok(ui.includes(required), `UI is missing ${JSON.stringify(required)}`);
+assert.ok(!ui.includes('localStorage'), 'Cubic long-run autosave must use IndexedDB rather than localStorage.');
 for (const required of [
   "importScripts(",
   "'binary-cube-key-generation-research.js'",
@@ -325,7 +335,7 @@ assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty')
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.5.0',
+  schema: '0.6.0',
   pass: true,
   recovered,
   rawRoundTrip: true,
