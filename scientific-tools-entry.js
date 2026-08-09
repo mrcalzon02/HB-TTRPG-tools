@@ -2,7 +2,8 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-double-slit-3d-1';
+  const ASSET_VERSION = '20260809-cooperative-science-1';
+  let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
   let cubeVisualizerPromise = null;
@@ -105,6 +106,15 @@
     return promise;
   }
 
+  function loadCooperativeRunner() {
+    if (window.ScientificToolsCooperativeRunner) return Promise.resolve(window.ScientificToolsCooperativeRunner);
+    if (cooperativeRunnerPromise) return cooperativeRunnerPromise;
+    cooperativeRunnerPromise = loadScript('scientific-tools-cooperative-runner.js', () => Boolean(window.ScientificToolsCooperativeRunner))
+      .then(() => window.ScientificToolsCooperativeRunner);
+    cooperativeRunnerPromise.catch(() => { cooperativeRunnerPromise = null; });
+    return cooperativeRunnerPromise;
+  }
+
   function canonicalCubeEngineReady() {
     return Boolean(
       window.ShadowrunBinaryCubeEngine
@@ -120,6 +130,7 @@
     }
     if (cubeVisualizerPromise) return cubeVisualizerPromise;
     cubeVisualizerPromise = (async () => {
+      await loadCooperativeRunner();
       await loadStyle('binary-cube-visualizer.css');
       await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
       await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));
@@ -138,6 +149,7 @@
     }
     if (cubeLaboratoryPromise) return cubeLaboratoryPromise;
     cubeLaboratoryPromise = (async () => {
+      await loadCooperativeRunner();
       await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
       await loadScript('binary-cube-large-grid-ui.js', () => Boolean(window.BinaryCubeLargeGridUI));
       await loadScript('shadowrun-binary-cube-auth.js', () => Boolean(window.ShadowrunBinaryCubeAuth));
@@ -154,8 +166,11 @@
   function loadIsmLab() {
     if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
     if (ismPromise) return ismPromise;
-    ismPromise = loadScript('interstellar-media-collisions-lab.js', () => Boolean(window.InterstellarMediaCollisionsLab))
-      .then(() => window.InterstellarMediaCollisionsLab);
+    ismPromise = (async () => {
+      await loadCooperativeRunner();
+      await loadScript('interstellar-media-collisions-lab.js', () => Boolean(window.InterstellarMediaCollisionsLab));
+      return window.InterstellarMediaCollisionsLab;
+    })();
     ismPromise.catch(() => { ismPromise = null; });
     return ismPromise;
   }
@@ -164,7 +179,7 @@
     if (window.DoubleSlitExperimentLab) return Promise.resolve(window.DoubleSlitExperimentLab);
     if (doubleSlitPromise) return doubleSlitPromise;
     doubleSlitPromise = (async () => {
-      await loadStyle('double-slit-lab.css');
+      await loadCooperativeRunner();
       await loadScript('double-slit-lab.js', () => Boolean(window.DoubleSlitExperimentLab));
       return window.DoubleSlitExperimentLab;
     })();
@@ -220,10 +235,10 @@
   }
 
   function openDoubleSlitLab(button = null) {
-    return withLoadingButton(button, 'Loading Double Slit Lab…', async () => {
+    return withLoadingButton(button, 'Loading Experiment…', async () => {
       const api = await loadDoubleSlitLab();
       if (!api?.openPanel) throw new Error('The Double Slit Experiment Visualizer loaded without an open-panel interface.');
-      return api.openPanel({ setting: 'scientific-tools' });
+      return api.openPanel();
     });
   }
 
@@ -246,7 +261,7 @@
       <div class="hero-card no-print">
         <p class="eyebrow">Scientific Tools</p>
         <h2 id="scientific-tools-title">Scientific Simulation Workspace</h2>
-        <p>Setting-neutral experimental systems live here as shared runtimes. Campaign workspaces may link into them, but they do not carry duplicate implementations.</p>
+        <p>Setting-neutral experimental systems live here as shared runtimes. Long calculations are required to preserve deterministic operation order while yielding between bounded work slices so slower hardware can continue making progress without locking the page.</p>
       </div>
       <div class="scientific-tools-tabs no-print" role="tablist" aria-label="Scientific Tools systems">
         <button type="button" class="scientific-tools-tab active" data-scientific-tools-tab="binary-cube" role="tab" aria-selected="true">Binary Cube</button>
@@ -261,32 +276,25 @@
           <button id="scientific-tools-open-binary-cube-visualizer" type="button" class="primary-action">Open Binary Cube Visualizer</button>
           <button id="scientific-tools-open-binary-cube-laboratory" type="button" class="secondary-action">Open Binary Cube Laboratory</button>
         </div>
-        <div class="scientific-tools-runtime"><span><strong>Canonical engine:</strong> ShadowrunBinaryCubeEngine</span><span><strong>Authenticated transport:</strong> ShadowrunBinaryCubeAuth + secure export</span><span><strong>Visualizer:</strong> one shared ShadowrunBinaryCubeVisualizer instance</span></div>
+        <div class="scientific-tools-runtime"><span><strong>Canonical engine:</strong> ShadowrunBinaryCubeEngine</span><span><strong>Shared scheduling contract:</strong> ScientificToolsCooperativeRunner loads before Scientific Tools runtimes</span><span><strong>Visualizer:</strong> one shared ShadowrunBinaryCubeVisualizer instance</span></div>
         <div class="scientific-tools-boundary"><strong>Runtime boundary:</strong> setting launchers may provide context or artifacts, but encoding, keys, masks, traces, ciphertext, validation, rendering, and authentication remain owned by the single canonical Binary Cube implementation.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
         <p class="eyebrow">Interstellar medium collision model</p>
         <h3>ISM Media Simulation</h3>
         <p>Cast phase-light vectors through literal 1:1 interstellar-medium particles, retain the physically bounded cosmological-constant term, resolve charged-proton magnetic response, optionally apply a separately labeled quantum-foam sensitivity model, retain the deterministic Shadow-key scattering operator, and collect all non-input cube faces concurrently.</p>
-        <div class="scientific-tools-actions">
-          <button id="scientific-tools-open-ism" type="button" class="primary-action">Open ISM Media Simulation</button>
-        </div>
-        <div class="scientific-tools-boundary"><strong>Model boundary:</strong> particle density, physical cube scale, light transit, Λ, and Lorentz-force calculations remain physical-model quantities. Quantum-foam angular jitter is a phenomenological hypothesis/sensitivity layer, while Shadow-key coupling remains a separately keyed experimental scattering/obfuscation layer.</div>
+        <div class="scientific-tools-actions"><button id="scientific-tools-open-ism" type="button" class="primary-action">Open ISM Media Simulation</button></div>
+        <div class="scientific-tools-boundary"><strong>Model boundary:</strong> physical and hypothesis layers remain explicitly separated. Computationally expensive stages must be resumable/cooperative rather than monopolizing the browser main thread.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="double-slit" hidden>
         <p class="eyebrow">Quantum interference baseline and hypothesis framework</p>
         <h3>Double Slit Experiment Visualizer</h3>
-        <p>Explore a three-dimensional source, two-slit barrier, and detector using classical geometric particles, continuous Fraunhofer interference, or discrete quantum-event accumulation. Slit geometry, source wavelength, coherence, relative phase, which-path availability, detector response, and playback are independently controllable.</p>
-        <div class="scientific-tools-actions">
-          <button id="scientific-tools-open-double-slit" type="button" class="primary-action">Open Double Slit Experiment</button>
-        </div>
-        <div class="scientific-tools-runtime"><span><strong>Baseline:</strong> two-slit Fraunhofer intensity with single-slit envelope</span><span><strong>Quantum accumulation:</strong> discrete hits sampled from the baseline probability distribution</span><span><strong>3D viewport:</strong> orbit, zoom, pan, camera presets, animated emissions and amplitude-field slice</span></div>
-        <div class="scientific-tools-boundary"><strong>Interpretation boundary:</strong> quantum mode does not draw a definite post-barrier trajectory. Classical paths are confined to the explicitly classical comparator. Optional hypothesis layers register through a separate interface and do not silently replace the accepted baseline.</div>
+        <p>Compare coherent-wave intensity, discrete quantum detections, and an explicitly separate classical comparator in an interactive 3D apparatus. Optional hypothesis layers remain isolated from the accepted baseline.</p>
+        <div class="scientific-tools-actions"><button id="scientific-tools-open-double-slit" type="button" class="primary-action">Open Double Slit Experiment</button></div>
+        <div class="scientific-tools-boundary"><strong>Execution boundary:</strong> distribution building, detector preparation, field sampling, and future higher-resolution propagation must advance in deterministic bounded chunks and visibly report progress instead of freezing the page.</div>
       </section>`;
 
-    view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => {
-      button.addEventListener('click', () => selectTab(button.dataset.scientificToolsTab));
-    });
+    view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => button.addEventListener('click', () => selectTab(button.dataset.scientificToolsTab)));
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
     view.querySelector('#scientific-tools-open-ism')?.addEventListener('click', event => void openIsmSimulation(event.currentTarget));
@@ -297,6 +305,7 @@
 
   function initialize() {
     injectStyle();
+    void loadCooperativeRunner().catch(error => console.error('Scientific Tools cooperative runner could not be preloaded.', error));
     if (!initialized) {
       buildWorkspace();
       initialized = true;
@@ -308,6 +317,7 @@
   window.ScientificToolsWorkspace = Object.freeze({
     initialize,
     selectTab,
+    loadCooperativeRunner,
     loadBinaryCubeVisualizer,
     loadBinaryCubeLaboratory,
     openBinaryCubeVisualizer,
