@@ -13,6 +13,7 @@ on:
       - "binary-cube-cubic-decryptor.css"
       - "scripts/validate-binary-cube-cubic-decryptor.mjs"
       - "scripts/apply-cubic-strong-key-identity.py"
+      - "scripts/fix-cubic-strong-identity-migration-anchor.py"
   workflow_dispatch:
 
 permissions:
@@ -47,6 +48,7 @@ jobs:
           git fetch origin main
           git checkout main
           git reset --hard origin/main
+          python scripts/fix-cubic-strong-identity-migration-anchor.py
           python scripts/apply-cubic-strong-key-identity.py
           node --check shadowrun-binary-cube-engine.js
           node --check binary-cube-cubic-decryptor-engine.js
