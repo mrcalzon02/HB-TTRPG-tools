@@ -1,0 +1,69 @@
+name: Build Cubic Decryptor integration v2
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/build-cubic-decryptor-integration-v2.yml"
+      - "scripts/build-cubic-decryptor-integration-artifact.py"
+
+permissions:
+  contents: read
+  statuses: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record integration artifact pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/cubic-integration-artifact' \
+            -f description='Building SHA-checked Cubic Decryptor integration files.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build patched authoritative copies
+        run: python scripts/build-cubic-decryptor-integration-artifact.py
+      - name: Validate patched copies
+        run: |
+          node --check scientific-tools-entry.js
+          node --check binary-cube-cubic-decryptor.js
+          node --check scripts/validate-scientific-tools-extraction.mjs
+          node scripts/validate-binary-cube-cubic-decryptor.mjs
+          node scripts/validate-scientific-tools-extraction.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cubic-decryptor-integration-v2
+          path: |
+            scientific-tools-entry.js
+            binary-cube-cubic-decryptor.js
+            .github/workflows/scientific-tools-extraction.yml
+            scripts/validate-scientific-tools-extraction.mjs
+            cubic-integration-manifest.txt
+          if-no-files-found: error
+      - name: Record integration artifact success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/cubic-integration-artifact' \
+            -f description='Cubic Decryptor integration files validated and uploaded.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record integration artifact failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/cubic-integration-artifact' \
+            -f description='Cubic Decryptor integration artifact failed validation.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
