@@ -18,6 +18,7 @@ on:
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard.mjs"
+      - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
   workflow_dispatch:
 
@@ -63,6 +64,7 @@ jobs:
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard.mjs
+          node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s binary-cube-decryption-dashboard.css
           test -s interstellar-media-collisions-lab.css
@@ -73,6 +75,9 @@ jobs:
 
       - name: Validate Binary Cube Decryption Dashboard
         run: node scripts/validate-binary-cube-decryption-dashboard.mjs
+
+      - name: Exercise Binary Cube Decryption Dashboard in Chromium
+        run: node scripts/validate-binary-cube-decryption-dashboard-browser.mjs
 
       - name: Preserve accepted Binary Cube launch contract
         run: node scripts/validate-binary-cube-v13-launch.mjs
