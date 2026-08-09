@@ -12,6 +12,12 @@
 .wh-personnel-outcome::before{content:'';position:absolute;left:-.94rem;top:.9rem;width:.48rem;height:.48rem;border:1px solid rgba(31,224,106,.58);background:#06110c;transform:rotate(45deg);box-shadow:0 0 8px rgba(31,224,106,.22)}
 .wh-personnel-outcome-stamp{font-size:.72rem;letter-spacing:.09em;color:var(--crt-text-dim,#58c97d);white-space:nowrap}.wh-personnel-outcome-copy{display:grid;gap:.22rem}.wh-personnel-outcome-copy h5{margin:0;color:var(--crt-text-strong,#b8ffca)}
 .wh-personnel-outcome.is-commendation{border-color:rgba(184,255,202,.34);box-shadow:inset 0 0 15px rgba(31,224,106,.035)}.wh-personnel-outcome.is-wounding{border-color:rgba(216,181,86,.32)}.wh-personnel-outcome.is-censure,.wh-personnel-outcome.is-relief,.wh-personnel-outcome.is-disgrace{border-color:rgba(150,59,52,.45)}.wh-personnel-outcome.is-killed,.wh-personnel-outcome.is-missing,.wh-personnel-outcome.is-terminal{box-shadow:inset 0 0 19px rgba(114,26,24,.11);border-color:rgba(178,62,52,.46)}
+.wh-personnel-outcome.is-prolong-treatment{border-color:rgba(109,214,255,.34);background:linear-gradient(180deg,rgba(4,24,20,.76),rgba(3,15,8,.66));box-shadow:inset 0 0 18px rgba(80,191,214,.05)}
+.wh-personnel-outcome.is-prolong-treatment::before{border-color:rgba(120,232,255,.68);box-shadow:0 0 9px rgba(80,191,214,.28)}
+.wh-personnel-outcome.is-augmentation{border-color:rgba(193,160,255,.34);background:linear-gradient(180deg,rgba(15,13,27,.74),rgba(3,15,8,.66));box-shadow:inset 0 0 18px rgba(162,123,223,.05)}
+.wh-personnel-outcome.is-augmentation::before{border-color:rgba(206,181,255,.64);box-shadow:0 0 9px rgba(162,123,223,.24)}
+.wh-personnel-medicae-authorization{margin:.2rem 0;padding:.38rem .48rem;border-left:2px solid rgba(109,214,255,.34);font-size:.82rem;color:var(--crt-text-dim,#58c97d);background:rgba(72,174,192,.035)}
+.wh-personnel-medicae-standard{margin:.2rem 0 .35rem;padding:.55rem .65rem;border:1px solid rgba(109,214,255,.18);background:linear-gradient(90deg,rgba(62,170,196,.045),rgba(31,224,106,.025));letter-spacing:.015em}
 .wh-personnel-event-consequence{margin-top:.5rem;padding:.52rem .62rem;border-left:2px solid rgba(184,255,202,.42);background:rgba(31,224,106,.035)}
 .wh-personnel-command-list{display:grid;gap:.48rem;padding:.65rem}.wh-personnel-command-tenure{padding:.55rem .65rem;border:1px solid rgba(31,224,106,.16);background:rgba(3,15,8,.48)}
 @media(max-width:680px){.wh-personnel-outcome{grid-template-columns:1fr}.wh-personnel-outcome-stamp{white-space:normal}.wh-personnel-outcome-list{padding-left:.75rem}}
