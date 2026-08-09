@@ -18,6 +18,13 @@
   let frameHandle = 0;
   let phase = 0;
   let current = null;
+  const view3D = {
+    field: { yawDeg:-46, pitchDeg:28, zoom:1 },
+    antenna: { yawDeg:-38, pitchDeg:24, zoom:1 },
+    environment: { yawDeg:-42, pitchDeg:32, zoom:1 },
+    mixer: { yawDeg:-18, pitchDeg:25, zoom:1 }
+  };
+  let pointer3D = null;
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const finite = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fallback;
@@ -39,7 +46,7 @@
     const link = root.document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'signals-laboratory.css?v=20260809-signals-lab-2';
+    link.href = 'signals-laboratory.css?v=20260809-signals-lab-3d-1';
     root.document.head.appendChild(link);
   }
 
@@ -321,6 +328,118 @@
   }
   function fitCanvas(canvas) { const rect=canvas.getBoundingClientRect(),dpr=root.devicePixelRatio||1,w=Math.max(320,Math.floor(rect.width*dpr)),h=Math.max(200,Math.floor(rect.height*dpr)); if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;} return {w,h,dpr}; }
   function grid(ctx,w,h){ctx.strokeStyle='rgba(150,180,200,.12)';ctx.lineWidth=1;const step=Math.max(34,Math.floor(w/14));for(let x=0;x<w;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=0;y<h;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}}
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function project3DPoint(point, view = {}) {
+    const yaw = degToRad(view.yawDeg ?? -42);
+    const pitch = degToRad(view.pitchDeg ?? 28);
+    const scale = finite(view.scale, 100);
+    const originX = finite(view.originX, 0);
+    const originY = finite(view.originY, 0);
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const x1 = point.x * cy - point.y * sy;
+    const y1 = point.x * sy + point.y * cy;
+    const z1 = point.z;
+    const y2 = y1 * cp - z1 * sp;
+    const z2 = y1 * sp + z1 * cp;
+    return Object.freeze({ x: originX + x1 * scale, y: originY - y2 * scale, depth: z2 });
+  }
+  function buildFieldVolumeSamples(config, phaseValue = 0) {
+    const cycles = clamp(2 + Math.log10(Math.max(1, finite(config?.sourceHz, 145.8e6) / 1e3)), 2, 10);
+    const response = clamp(finite(config?.response?.voltageTransfer, 0.4), 0.05, 1);
+    const rows = [];
+    const count = 32;
+    for (let index = 0; index < count; index += 1) {
+      const t = index / (count - 1);
+      const x = lerp(-1, 1, t);
+      const phaseSample = t * cycles * Math.PI * 2 - phaseValue;
+      const e = Math.sin(phaseSample) * 0.6 * response;
+      const h = Math.sin(phaseSample + Math.PI / 2) * 0.42 * response;
+      rows.push(Object.freeze({
+        t, x,
+        e, h,
+        pointE: Object.freeze({ x, y: e, z: 0 }),
+        pointH: Object.freeze({ x, y: 0, z: h })
+      }));
+    }
+    return Object.freeze(rows);
+  }
+  function buildAntennaLobeSamples(source, tuningResponse = 1) {
+    const rings = [];
+    const type = String(source?.antennaType || 'dipole').toLowerCase();
+    const axis = antennaAxis(source?.azimuthDeg, source?.elevationDeg);
+    const tune = clamp(finite(tuningResponse, 1), 0.02, 1);
+    for (let elevationIndex = 0; elevationIndex <= 12; elevationIndex += 1) {
+      const phi = -Math.PI / 2 + elevationIndex / 12 * Math.PI;
+      const ring = [];
+      for (let azimuthIndex = 0; azimuthIndex <= 36; azimuthIndex += 1) {
+        const az = azimuthIndex / 36 * Math.PI * 2;
+        const direction = { x: Math.cos(phi) * Math.cos(az), y: Math.cos(phi) * Math.sin(az), z: Math.sin(phi) };
+        const dot = clamp(Math.abs(axis.x * direction.x + axis.y * direction.y + axis.z * direction.z), 0, 1);
+        const theta = Math.acos(dot);
+        const pattern = type === 'isotropic' ? 1 : (type === 'monopole' ? monopolePowerPattern(theta) : halfWaveDipolePowerPattern(theta));
+        const radius = (0.08 + 0.92 * Math.sqrt(Math.max(0, pattern))) * (0.25 + 0.75 * tune);
+        ring.push(Object.freeze({ x: direction.x * radius, y: direction.y * radius, z: direction.z * radius, power: pattern, tuning: tune }));
+      }
+      rings.push(Object.freeze(ring));
+    }
+    return Object.freeze(rings);
+  }
+  function buildEnvironmentSurfaceMesh(environment) {
+    const vertices = [];
+    const rx = environment.resolutionX || 1;
+    const ry = environment.resolutionY || 1;
+    const min = finite(environment.minimumDbm);
+    const span = Math.max(1e-9, finite(environment.maximumDbm) - min);
+    for (let yi = 0; yi < ry; yi += 1) {
+      for (let xi = 0; xi < rx; xi += 1) {
+        const value = environment.values[yi * rx + xi];
+        vertices.push(Object.freeze({
+          xi, yi, value,
+          x: (xi / Math.max(1, rx - 1) - 0.5) * 2,
+          y: (yi / Math.max(1, ry - 1) - 0.5) * 2,
+          z: ((value - min) / span - 0.5) * 1.6
+        }));
+      }
+    }
+    return Object.freeze({ resolutionX: rx, resolutionY: ry, vertices: Object.freeze(vertices) });
+  }
+  function buildMixerProductScene(analysis) {
+    const rows = [
+      Object.freeze({ label: 'RF', frequencyHz: analysis.heterodyne.signalHz, order: 1, amplitude: 1 }),
+      Object.freeze({ label: 'LO', frequencyHz: analysis.heterodyne.localOscillatorHz, order: 1, amplitude: 0.92 }),
+      Object.freeze({ label: '|RF−LO|', frequencyHz: analysis.heterodyne.differenceHz, order: 2, amplitude: clamp(analysis.probe.modulationIndex * 16, 0.08, 0.85) }),
+      Object.freeze({ label: 'RF+LO', frequencyHz: analysis.heterodyne.sumHz, order: 2, amplitude: clamp(analysis.probe.modulationIndex * 12, 0.06, 0.7) })
+    ];
+    for (const product of analysis.probe.products.slice(0, 10)) {
+      rows.push(Object.freeze({
+        label: product.expression,
+        frequencyHz: product.frequencyHz,
+        order: product.order,
+        amplitude: clamp((analysis.probe.modulationIndex || 0.01) * (4 / Math.max(1, product.order)), 0.03, 0.55),
+        inReceiverBand: product.inReceiverBand
+      }));
+    }
+    return Object.freeze(rows.sort((a, b) => a.frequencyHz - b.frequencyHz));
+  }
+  function draw3DAxes(ctx, view, labels = ['x','y','z']) {
+    const origin = project3DPoint({ x: -1.05, y: -1.05, z: -0.82 }, view);
+    const axes = [
+      { end: project3DPoint({ x: 1.1, y: -1.05, z: -0.82 }, view), color: 'rgba(255,120,120,.8)', label: labels[0] },
+      { end: project3DPoint({ x: -1.05, y: 1.1, z: -0.82 }, view), color: 'rgba(120,220,255,.8)', label: labels[1] },
+      { end: project3DPoint({ x: -1.05, y: -1.05, z: 1.05 }, view), color: 'rgba(255,210,120,.8)', label: labels[2] }
+    ];
+    ctx.lineWidth = 1.5;
+    for (const axis of axes) {
+      ctx.strokeStyle = axis.color;
+      ctx.beginPath();
+      ctx.moveTo(origin.x, origin.y);
+      ctx.lineTo(axis.end.x, axis.end.y);
+      ctx.stroke();
+      ctx.fillStyle = axis.color;
+      ctx.fillText(axis.label, axis.end.x + 4, axis.end.y - 4);
+    }
+  }
   function drawField(state) {
     const canvas=panel?.querySelector('#sl-field-canvas'); if(!canvas||!state)return; const {w,h,dpr}=fitCanvas(canvas),ctx=canvas.getContext('2d'); ctx.clearRect(0,0,w,h); grid(ctx,w,h);
     const cycles=clamp(2+Math.log10(Math.max(1,state.config.sourceHz/1e3)),2,10),amp=h*.18*clamp(state.analysis.direct.response.voltageTransfer*2+.08,.08,1); const center=h*.5;
@@ -336,6 +455,88 @@
     const hue = 250 - 250 * t;
     return `hsl(${hue} 86% ${38 + 20 * t}%)`;
   }
+
+  function current3DView(key, baseScale, w, h) {
+    const state = view3D[key] || view3D.field;
+    const autoOrbit = Boolean(panel?.querySelector('#sl-auto-orbit')?.checked);
+    return {
+      originX: w * 0.5,
+      originY: h * 0.62,
+      scale: Math.min(w, h) * baseScale * clamp(state.zoom, .55, 2.4),
+      yawDeg: state.yawDeg + (autoOrbit ? phase * 2.5 : 0),
+      pitchDeg: state.pitchDeg
+    };
+  }
+  function setup3DInteraction(canvas, key) {
+    if (!canvas || canvas.dataset.sl3dReady === '1') return;
+    canvas.dataset.sl3dReady = '1';
+    canvas.tabIndex = 0;
+    canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', `${key} 3D demonstration. Drag to orbit. Use mouse wheel to zoom.`);
+    canvas.addEventListener('pointerdown', event => {
+      pointer3D = { key, pointerId:event.pointerId, x:event.clientX, y:event.clientY };
+      canvas.setPointerCapture?.(event.pointerId);
+    });
+    canvas.addEventListener('pointermove', event => {
+      if (!pointer3D || pointer3D.pointerId !== event.pointerId || pointer3D.key !== key) return;
+      const view = view3D[key];
+      view.yawDeg += (event.clientX - pointer3D.x) * .45;
+      view.pitchDeg = clamp(view.pitchDeg - (event.clientY - pointer3D.y) * .35, -75, 75);
+      pointer3D.x = event.clientX; pointer3D.y = event.clientY;
+      drawAll3D(current);
+    });
+    const release = event => { if (pointer3D?.pointerId === event.pointerId) pointer3D = null; };
+    canvas.addEventListener('pointerup', release);
+    canvas.addEventListener('pointercancel', release);
+    canvas.addEventListener('wheel', event => {
+      event.preventDefault();
+      view3D[key].zoom = clamp(view3D[key].zoom * (event.deltaY > 0 ? .92 : 1.08), .55, 2.4);
+      drawAll3D(current);
+    }, { passive:false });
+    canvas.addEventListener('keydown', event => {
+      const view = view3D[key];
+      if (event.key === 'ArrowLeft') view.yawDeg -= 5;
+      else if (event.key === 'ArrowRight') view.yawDeg += 5;
+      else if (event.key === 'ArrowUp') view.pitchDeg = clamp(view.pitchDeg + 5, -75, 75);
+      else if (event.key === 'ArrowDown') view.pitchDeg = clamp(view.pitchDeg - 5, -75, 75);
+      else if (event.key === '+' || event.key === '=') view.zoom = clamp(view.zoom * 1.08, .55, 2.4);
+      else if (event.key === '-') view.zoom = clamp(view.zoom * .92, .55, 2.4);
+      else return;
+      event.preventDefault(); drawAll3D(current);
+    });
+  }
+  function setupAll3DInteractions() {
+    setup3DInteraction(panel?.querySelector('#sl-field-3d-canvas'), 'field');
+    setup3DInteraction(panel?.querySelector('#sl-antenna-3d-canvas'), 'antenna');
+    setup3DInteraction(panel?.querySelector('#sl-environment-3d-canvas'), 'environment');
+    setup3DInteraction(panel?.querySelector('#sl-mixer-3d-canvas'), 'mixer');
+  }
+  function drawField3D(state) {
+    const canvas = panel?.querySelector('#sl-field-3d-canvas'); if (!canvas || !state) return;
+    const { w, h, dpr } = fitCanvas(canvas), ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    grid(ctx, w, h);
+    ctx.font = `${11 * dpr}px sans-serif`;
+    const view = current3DView('field', .23, w, h);
+    draw3DAxes(ctx, view, ['propagation', 'E', 'H']);
+    const samples = buildFieldVolumeSamples({ sourceHz: state.config.sourceHz, response: state.analysis.direct.response }, phase);
+    ctx.strokeStyle = 'rgba(114,213,255,.92)'; ctx.lineWidth = 2 * dpr; ctx.beginPath();
+    samples.forEach((sample, index) => { const p = project3DPoint(sample.pointE, view); if (!index) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,184,108,.92)'; ctx.beginPath();
+    samples.forEach((sample, index) => { const p = project3DPoint(sample.pointH, view); if (!index) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+    ctx.stroke();
+    for (const sample of samples.filter((_, index) => index % 2 === 0)) {
+      const origin = project3DPoint({ x: sample.x, y: 0, z: 0 }, view);
+      const ep = project3DPoint(sample.pointE, view);
+      const hp = project3DPoint(sample.pointH, view);
+      ctx.strokeStyle = 'rgba(114,213,255,.35)'; ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(ep.x, ep.y); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,184,108,.35)'; ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(hp.x, hp.y); ctx.stroke();
+    }
+    ctx.fillStyle = '#dfe8ee';
+    ctx.fillText('3D field volume demonstration', 12 * dpr, 18 * dpr);
+    ctx.fillText(`orthogonal E/H oscillation · λ ${eng(wavelength(state.config.sourceHz), 'm')}`, 12 * dpr, 34 * dpr);
+  }
   function drawEnvironment(state) {
     const canvas=panel?.querySelector('#sl-environment-canvas'); if(!canvas||!state)return;
     const {w,h,dpr}=fitCanvas(canvas),ctx=canvas.getContext('2d'),map=state.analysis.environment,env=state.config.environment;
@@ -347,15 +548,268 @@
     for(const reflector of env.reflectors){ctx.beginPath();if(reflector.axis==='x'){ctx.moveTo(px(reflector.coordinateM),0);ctx.lineTo(px(reflector.coordinateM),h);}else{ctx.moveTo(0,py(reflector.coordinateM));ctx.lineTo(w,py(reflector.coordinateM));}ctx.stroke();}
     ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px(env.source.x),py(env.source.y),5*dpr,0,Math.PI*2);ctx.fill();ctx.font=`${11*dpr}px sans-serif`;ctx.fillText(`${env.source.antennaType} · ${hz(env.source.frequencyHz)}`,10*dpr,18*dpr);
   }
+
+  function drawAntenna3D(state) {
+    const canvas = panel?.querySelector('#sl-antenna-3d-canvas'); if (!canvas || !state) return;
+    const { w, h, dpr } = fitCanvas(canvas), ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h); grid(ctx, w, h); ctx.font = `${11 * dpr}px sans-serif`;
+    const view = current3DView('antenna', .22, w, h);
+    draw3DAxes(ctx, view, ['X', 'Y', 'Z']);
+    const source = state.config.environment.source;
+    const tuning = state.analysis.direct.response.voltageTransfer;
+    const rings = buildAntennaLobeSamples(source, tuning);
+    rings.forEach((ring, ringIndex) => {
+      ctx.beginPath();
+      ring.forEach((vertex, index) => {
+        const p = project3DPoint(vertex, view);
+        if (!index) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      });
+      ctx.strokeStyle = `rgba(114,213,255,${0.18 + 0.62 * ringIndex / Math.max(1, rings.length - 1)})`;
+      ctx.lineWidth = 1.25 * dpr; ctx.stroke();
+    });
+    for (let azIndex = 0; azIndex <= 36; azIndex += 4) {
+      ctx.beginPath();
+      rings.forEach((ring, ringIndex) => {
+        const vertex = ring[azIndex]; const p = project3DPoint(vertex, view);
+        if (!ringIndex) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      });
+      ctx.strokeStyle = 'rgba(255,184,108,.25)'; ctx.stroke();
+    }
+    const axis = antennaAxis(source.azimuthDeg, source.elevationDeg);
+    const a = project3DPoint({ x:-axis.x, y:-axis.y, z:-axis.z }, view);
+    const b = project3DPoint(axis, view);
+    ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 3 * dpr; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    ctx.fillStyle = '#dfe8ee';
+    ctx.fillText('3D antenna pattern / tuning demonstration', 12 * dpr, 18 * dpr);
+    ctx.fillText(`${source.antennaType} · electrical response ${state.analysis.direct.response.responseDb.toFixed(2)} dB`, 12 * dpr, 34 * dpr);
+  }
+  function drawEnvironment3D(state) {
+    const canvas = panel?.querySelector('#sl-environment-3d-canvas'); if (!canvas || !state) return;
+    const { w, h, dpr } = fitCanvas(canvas), ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h); grid(ctx, w, h);
+    ctx.font = `${11 * dpr}px sans-serif`;
+    const map = state.analysis.environment;
+    const mesh = buildEnvironmentSurfaceMesh(map);
+    const view = current3DView('environment', .17, w, h); view.originY = h * .74;
+    draw3DAxes(ctx, view, ['X', 'Y', 'power']);
+    const rx = mesh.resolutionX, ry = mesh.resolutionY;
+    for (let yi = 0; yi < ry; yi += 1) {
+      ctx.beginPath();
+      for (let xi = 0; xi < rx; xi += 1) {
+        const vertex = mesh.vertices[yi * rx + xi];
+        const p = project3DPoint(vertex, view);
+        if (!xi) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      }
+      ctx.strokeStyle = `rgba(130,200,255,${0.25 + 0.45 * yi / Math.max(1, ry - 1)})`;
+      ctx.lineWidth = 1 * dpr;
+      ctx.stroke();
+    }
+    for (let xi = 0; xi < rx; xi += 2) {
+      ctx.beginPath();
+      for (let yi = 0; yi < ry; yi += 1) {
+        const vertex = mesh.vertices[yi * rx + xi];
+        const p = project3DPoint(vertex, view);
+        if (!yi) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      }
+      ctx.strokeStyle = 'rgba(255,210,120,.18)';
+      ctx.stroke();
+    }
+    const src = state.config.environment.source;
+    const srcPoint = project3DPoint({ x: (src.x / Math.max(1e-6, map.widthM / 2)), y: (src.y / Math.max(1e-6, map.heightM / 2)), z: 1.02 }, view);
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(srcPoint.x, srcPoint.y, 4.5 * dpr, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#dfe8ee';
+    ctx.fillText('3D RF environment topology', 12 * dpr, 18 * dpr);
+    ctx.fillText(`fade depth ${map.fadeDepthDb.toFixed(2)} dB · coherence ${(state.config.environment.coherence * 100).toFixed(0)}%`, 12 * dpr, 34 * dpr);
+  }
+  function drawMixer3D(state) {
+    const canvas = panel?.querySelector('#sl-mixer-3d-canvas'); if (!canvas || !state) return;
+    const { w, h, dpr } = fitCanvas(canvas), ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h); grid(ctx, w, h);
+    ctx.font = `${11 * dpr}px sans-serif`;
+    const scene = buildMixerProductScene(state.analysis);
+    const minF = Math.min(...scene.map(row => row.frequencyHz));
+    const maxF = Math.max(...scene.map(row => row.frequencyHz));
+    const spanF = Math.max(1e-9, maxF - minF);
+    const maxOrder = Math.max(...scene.map(row => row.order));
+    const view = current3DView('mixer', .20, w, h); view.originX = w * .17; view.originY = h * .82;
+    draw3DAxes(ctx, view, ['frequency', 'order', 'amplitude']);
+    scene.forEach((row, index) => {
+      const x = ((row.frequencyHz - minF) / spanF) * 2;
+      const y = ((row.order - 1) / Math.max(1, maxOrder - 1)) * 1.7;
+      const z = Math.max(0.05, row.amplitude) * 1.25;
+      const a = project3DPoint({ x, y, z: 0 }, view);
+      const b = project3DPoint({ x, y, z }, view);
+      ctx.strokeStyle = row.inReceiverBand ? 'rgba(156,255,156,.94)' : index < 4 ? 'rgba(255,184,108,.9)' : 'rgba(215,168,255,.8)';
+      ctx.lineWidth = 3 * dpr;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      ctx.fillStyle = ctx.strokeStyle; ctx.beginPath(); ctx.arc(b.x, b.y, 2.5 * dpr, 0, Math.PI * 2); ctx.fill();
+      if (index < 8) ctx.fillText(row.label, b.x + 4, b.y - 4);
+    });
+    ctx.fillStyle = '#dfe8ee';
+    ctx.fillText('3D mixer / intermodulation demonstration', 12 * dpr, 18 * dpr);
+    ctx.fillText(`difference ${hz(state.analysis.heterodyne.differenceHz)} · beat ${hz(state.analysis.probe.beatHz)}`, 12 * dpr, 34 * dpr);
+  }
+  function drawAll3D(state) { if(!state)return; drawField3D(state); drawAntenna3D(state); drawEnvironment3D(state); drawMixer3D(state); }
   function render(state) {
     const target=panel.querySelector('[data-sl-results]'),a=state.analysis,c=state.config,z=seriesRlcImpedance(c.sourceHz,c.antenna.resistanceOhm,c.antenna.inductanceH,c.antenna.capacitanceF),m=a.environment;
     const candidates=a.inference.map(row=>`<tr><td>${esc(hz(row.frequencyHz))}</td><td>${esc(row.mechanism)}</td><td><code>${esc(row.equation)}</code></td></tr>`).join('')||'<tr><td colspan="3">No candidates.</td></tr>';
     const products=a.probe.products.slice(0,14).map(row=>`<tr><td>${esc(hz(row.frequencyHz))}</td><td>${row.order}</td><td>${esc(row.expression)}</td><td>${row.inReceiverBand?'IN BAND':'outside'}</td></tr>`).join('');
     const ranges=a.ranges.map(row=>`<tr><td>${row.txPowerDbm} dBm</td><td>${eng(row.distanceM,'m')}</td><td>${row.allowedPathLossDb.toFixed(2)} dB</td></tr>`).join('');
-    target.innerHTML=`<section class="sl-card"><h3>Environment map summary</h3><div class="sl-metrics"><div><span>Map frequency</span><strong>${hz(c.environment.source.frequencyHz)}</strong></div><div><span>Source geometry</span><strong>${esc(c.environment.source.antennaType)}</strong></div><div><span>Resolution</span><strong>${m.resolutionX} × ${m.resolutionY}</strong></div><div><span>Strongest cell</span><strong>${m.maximumDbm.toFixed(2)} dBm</strong></div><div><span>Weakest cell</span><strong>${m.minimumDbm.toFixed(2)} dBm</strong></div><div><span>Mean map level</span><strong>${m.meanDbm.toFixed(2)} dBm</strong></div><div><span>Multipath fade span</span><strong>${m.fadeDepthDb.toFixed(2)} dB</strong></div><div><span>Coherence</span><strong>${(c.environment.coherence*100).toFixed(1)}%</strong></div></div><p>Wi‑Fi presets are convenience source profiles only. The mapper uses one generalized radiating-source contract, so the same solver can be applied to other RF frequencies, powers, antenna orientations and reflector configurations within the model's far-field approximation.</p></section><section class="sl-card"><h3>Measurement snapshot</h3><div class="sl-metrics"><div><span>Antenna resonance</span><strong>${hz(a.direct.response.resonantHz)}</strong></div><div><span>Source wavelength</span><strong>${eng(wavelength(c.sourceHz),'m')}</strong></div><div><span>Antenna response</span><strong>${a.direct.response.responseDb.toFixed(2)} dB</strong></div><div><span>Impedance</span><strong>${z.magnitude.toFixed(2)} Ω ∠ ${z.phaseDeg.toFixed(1)}°</strong></div><div><span>Path loss</span><strong>${a.direct.fsplDb.toFixed(2)} dB</strong></div><div><span>Receiver input</span><strong>${a.direct.receiverInputDbm.toFixed(2)} dBm</strong></div><div><span>Noise floor</span><strong>${a.direct.noiseFloorDbm.toFixed(2)} dBm</strong></div><div><span>Model SNR</span><strong>${a.direct.snrDb.toFixed(2)} dB</strong></div><div><span>Direct receiver band</span><strong>${a.direct.inReceiverBand?'yes':'no'}</strong></div><div><span>Source field</span><strong>${eng(a.sourceFieldVPerM,'V/m')}</strong></div></div></section><section class="sl-card"><h3>Heterodyne & adjacent-carrier effects</h3><p>The mixer can translate energy that actually couples into the front end; it does not create a signal that produced no physical or correlated effect at the receiver.</p><div class="sl-metrics"><div><span>|RF − LO|</span><strong>${hz(a.heterodyne.differenceHz)}</strong></div><div><span>RF + LO</span><strong>${hz(a.heterodyne.sumHz)}</strong></div><div><span>Carrier beat</span><strong>${hz(a.probe.beatHz)}</strong></div><div><span>Carrier perturbation</span><strong>${(a.probe.modulationIndex*100).toFixed(6)}%</strong></div></div><div class="sl-table"><table><thead><tr><th>Product</th><th>Order</th><th>Expression</th><th>Receiver</th></tr></thead><tbody>${products}</tbody></table></div></section><section class="sl-card"><h3>Frequency inference candidates</h3><p>Mirror/image solutions are kept rather than silently choosing one.</p><div class="sl-table"><table><thead><tr><th>Candidate</th><th>Mechanism</th><th>Equation</th></tr></thead><tbody>${candidates}</tbody></table></div></section><section class="sl-card"><h3>Range scenarios</h3><p>Amplitude does not uniquely determine range without transmitter power, gains, polarization, propagation, and loss assumptions.</p><div class="sl-table"><table><thead><tr><th>Assumed TX</th><th>Implied range</th><th>Allowed loss</th></tr></thead><tbody>${ranges}</tbody></table></div></section><section class="sl-boundary"><strong>Physical boundary:</strong> the RF environment map is a deterministic research model using free-space loss, idealized monopole/dipole patterns, infinite-plane single-bounce reflections, configurable wall penetration, and coherent/incoherent path combination. It is not a full-wave Maxwell/FDTD solver. Out-of-band inference still requires a real coupling, leakage, beat, impedance/loading change, sideband, or nonlinear mixing mechanism above noise and calibration error. Mathematical processing alone cannot reconstruct arbitrary RF energy that never reaches or perturbs the antenna/front end.</section>`;
+    target.innerHTML=`<section class="sl-card">
+<h3>Environment map summary</h3>
+<div class="sl-metrics">
+<div>
+<span>Map frequency</span>
+<strong>${hz(c.environment.source.frequencyHz)}</strong>
+</div>
+<div>
+<span>Source geometry</span>
+<strong>${esc(c.environment.source.antennaType)}</strong>
+</div>
+<div>
+<span>Resolution</span>
+<strong>${m.resolutionX} × ${m.resolutionY}</strong>
+</div>
+<div>
+<span>Strongest cell</span>
+<strong>${m.maximumDbm.toFixed(2)} dBm</strong>
+</div>
+<div>
+<span>Weakest cell</span>
+<strong>${m.minimumDbm.toFixed(2)} dBm</strong>
+</div>
+<div>
+<span>Mean map level</span>
+<strong>${m.meanDbm.toFixed(2)} dBm</strong>
+</div>
+<div>
+<span>Multipath fade span</span>
+<strong>${m.fadeDepthDb.toFixed(2)} dB</strong>
+</div>
+<div>
+<span>Coherence</span>
+<strong>${(c.environment.coherence*100).toFixed(1)}%</strong>
+</div>
+</div>
+<p>Wi‑Fi presets are convenience source profiles only. The paired 3D demonstration panels visualize field propagation, RF-topology shape, and mixer/product generation for the same configuration. The mapper uses one generalized radiating-source contract, so the same solver can be applied to other RF frequencies, powers, antenna orientations and reflector configurations within the model's far-field approximation.</p>
+</section>
+<section class="sl-card">
+<h3>Measurement snapshot</h3>
+<div class="sl-metrics">
+<div>
+<span>Antenna resonance</span>
+<strong>${hz(a.direct.response.resonantHz)}</strong>
+</div>
+<div>
+<span>Source wavelength</span>
+<strong>${eng(wavelength(c.sourceHz),'m')}</strong>
+</div>
+<div>
+<span>Antenna response</span>
+<strong>${a.direct.response.responseDb.toFixed(2)} dB</strong>
+</div>
+<div>
+<span>Impedance</span>
+<strong>${z.magnitude.toFixed(2)} Ω ∠ ${z.phaseDeg.toFixed(1)}°</strong>
+</div>
+<div>
+<span>Path loss</span>
+<strong>${a.direct.fsplDb.toFixed(2)} dB</strong>
+</div>
+<div>
+<span>Receiver input</span>
+<strong>${a.direct.receiverInputDbm.toFixed(2)} dBm</strong>
+</div>
+<div>
+<span>Noise floor</span>
+<strong>${a.direct.noiseFloorDbm.toFixed(2)} dBm</strong>
+</div>
+<div>
+<span>Model SNR</span>
+<strong>${a.direct.snrDb.toFixed(2)} dB</strong>
+</div>
+<div>
+<span>Direct receiver band</span>
+<strong>${a.direct.inReceiverBand?'yes':'no'}</strong>
+</div>
+<div>
+<span>Source field</span>
+<strong>${eng(a.sourceFieldVPerM,'V/m')}</strong>
+</div>
+</div>
+</section>
+<section class="sl-card">
+<h3>Heterodyne & adjacent-carrier effects</h3>
+<p>The mixer can translate energy that actually couples into the front end; it does not create a signal that produced no physical or correlated effect at the receiver.</p>
+<div class="sl-metrics">
+<div>
+<span>|RF − LO|</span>
+<strong>${hz(a.heterodyne.differenceHz)}</strong>
+</div>
+<div>
+<span>RF + LO</span>
+<strong>${hz(a.heterodyne.sumHz)}</strong>
+</div>
+<div>
+<span>Carrier beat</span>
+<strong>${hz(a.probe.beatHz)}</strong>
+</div>
+<div>
+<span>Carrier perturbation</span>
+<strong>${(a.probe.modulationIndex*100).toFixed(6)}%</strong>
+</div>
+</div>
+<div class="sl-table">
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Order</th>
+<th>Expression</th>
+<th>Receiver</th>
+</tr>
+</thead>
+<tbody>${products}</tbody>
+</table>
+</div>
+</section>
+<section class="sl-card">
+<h3>Frequency inference candidates</h3>
+<p>Mirror/image solutions are kept rather than silently choosing one.</p>
+<div class="sl-table">
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Mechanism</th>
+<th>Equation</th>
+</tr>
+</thead>
+<tbody>${candidates}</tbody>
+</table>
+</div>
+</section>
+<section class="sl-card">
+<h3>Range scenarios</h3>
+<p>Amplitude does not uniquely determine range without transmitter power, gains, polarization, propagation, and loss assumptions.</p>
+<div class="sl-table">
+<table>
+<thead>
+<tr>
+<th>Assumed TX</th>
+<th>Implied range</th>
+<th>Allowed loss</th>
+</tr>
+</thead>
+<tbody>${ranges}</tbody>
+</table>
+</div>
+</section>
+<section class="sl-boundary">
+<strong>Physical boundary:</strong> the RF environment map is a deterministic research model using free-space loss, idealized monopole/dipole patterns, infinite-plane single-bounce reflections, configurable wall penetration, and coherent/incoherent path combination. It is not a full-wave Maxwell/FDTD solver. Out-of-band inference still requires a real coupling, leakage, beat, impedance/loading change, sideband, or nonlinear mixing mechanism above noise and calibration error. Mathematical processing alone cannot reconstruct arbitrary RF energy that never reaches or perturbs the antenna/front end.</section>`;
   }
-  function update() { const config=readConfig(),analysis=analyzeConfiguration(config);current=Object.freeze({config,analysis});render(current);drawField(current);drawSweep(current);drawEnvironment(current);const s=panel.querySelector('[data-sl-status]');s.textContent='Model updated.';s.dataset.kind='success';return current; }
-  function animate(){if(!panel||panel.hidden){frameHandle=0;return;}if(panel.querySelector('#sl-animate')?.checked&&current){phase+=.055;drawField(current);}frameHandle=root.requestAnimationFrame?.(animate)||0;}
+  function update() { const config=readConfig(),analysis=analyzeConfiguration(config);current=Object.freeze({config,analysis});render(current);drawField(current);drawSweep(current);drawEnvironment(current);drawAll3D(current);const s=panel.querySelector('[data-sl-status]');s.textContent='Model updated.';s.dataset.kind='success';return current; }
+  function animate(){if(!panel||panel.hidden){frameHandle=0;return;}if(panel.querySelector('#sl-animate')?.checked&&current){phase+=.055;drawField(current);drawAll3D(current);}frameHandle=root.requestAnimationFrame?.(animate)||0;}
   function applyMapPreset() {
     if (!panel) return;
     const name=panel.querySelector('#sl-map-preset')?.value||'wifi-2.4',preset=wifiPreset(name),frequency=panel.querySelector('#sl-map-frequency-mhz');
@@ -364,8 +818,201 @@
   function buildPanel() {
     if (!root?.document) fail('Signals Laboratory requires a browser document.');
     const existing=root.document.getElementById(PANEL_ID); if(existing){panel=existing;return panel;} ensureStyle(); panel=root.document.createElement('section');panel.id=PANEL_ID;panel.className='sl-shell';panel.hidden=true;
-    panel.innerHTML=`<div class="sl-backdrop" data-sl-close></div><div class="sl-panel" role="dialog" aria-modal="true" aria-labelledby="sl-title"><header class="sl-header"><div><p class="sl-eyebrow">Scientific Tools · Electromagnetic Signal Research</p><h2 id="sl-title">Signals Laboratory</h2><p>RF field visualization, antenna attenuation/tuning and impedance response, heterodyne translation, adjacent-carrier perturbation, nonlinear mixing, plus monopole/dipole RF environment mapping with coherent reflection and progressive spatial resolution.</p></div><button class="sl-close" data-sl-close aria-label="Close Signals Laboratory">×</button></header><div class="sl-body"><aside class="sl-controls"><section class="sl-card"><h3>RF environment mapper</h3><label>Source preset<select id="sl-map-preset"><option value="wifi-2.4">Wi‑Fi 2.4 GHz example</option><option value="wifi-5">Wi‑Fi 5 GHz example</option><option value="wifi-6">Wi‑Fi 6 GHz example</option><option value="custom">Custom RF source</option></select></label><label>Map frequency (MHz)<input id="sl-map-frequency-mhz" type="number" value="2437" disabled></label><label>Source power (dBm)<input id="sl-map-tx-dbm" type="number" value="20"></label><label>Radiator<select id="sl-map-antenna"><option value="dipole">Half-wave dipole</option><option value="monopole">Quarter-wave monopole / ideal ground plane</option><option value="isotropic">Isotropic reference</option></select></label><label>Antenna azimuth (deg)<input id="sl-map-azimuth" type="number" value="0"></label><label>Antenna elevation (deg)<input id="sl-map-elevation" type="number" value="90"></label><label>Source X (m)<input id="sl-map-source-x" type="number" value="0"></label><label>Source Y (m)<input id="sl-map-source-y" type="number" value="0"></label><label>Source height (m)<input id="sl-map-source-z" type="number" value="1.8"></label><label>Map width (m)<input id="sl-map-width" type="number" value="24"></label><label>Map height (m)<input id="sl-map-height" type="number" value="18"></label><label>Sample height (m)<input id="sl-map-sample-height" type="number" value="1.2"></label><label>Spatial resolution<input id="sl-map-resolution" type="range" min="${MIN_MAP_RESOLUTION}" max="${MAX_MAP_RESOLUTION}" step="4" value="48"></label><label>Field coherence 0–1<input id="sl-map-coherence" type="number" min="0" max="1" step=".05" value=".85"></label><label>Vertical wall X (m)<input id="sl-map-wall-x" type="number" value="6"></label><label>Horizontal wall Y (m)<input id="sl-map-wall-y" type="number" value="-4"></label><label>Wall reflectivity 0–1<input id="sl-map-reflectivity" type="number" min="0" max=".99" step=".05" value=".45"></label><label>Wall penetration loss (dB)<input id="sl-map-penetration-loss" type="number" min="0" value="5"></label><label>Reflection phase (deg)<input id="sl-map-reflection-phase" type="number" value="180"></label><p class="sl-hint">Increase resolution gradually to inspect fine multipath structure without changing the propagation model.</p></section><section class="sl-card"><h3>Source & receiver</h3><label>Source frequency (MHz)<input id="sl-source-mhz" type="number" value="145.8"></label><label>TX power (dBm)<input id="sl-tx-dbm" type="number" value="30"></label><label>TX gain (dB)<input id="sl-tx-gain" type="number" value="2.15"></label><label>RX gain (dB)<input id="sl-rx-gain" type="number" value="0"></label><label>Distance (m)<input id="sl-distance-m" type="number" min=".001" value="1000"></label><label>Extra loss (dB)<input id="sl-extra-loss" type="number" min="0" value="0"></label><label>Receiver center (MHz)<input id="sl-rx-center-mhz" type="number" value="10.7"></label><label>Receiver bandwidth (kHz)<input id="sl-rx-bandwidth-khz" type="number" value="25"></label><label>Noise figure (dB)<input id="sl-noise-figure" type="number" value="6"></label></section><section class="sl-card"><h3>Antenna & impedance</h3><label>Resistance (Ω)<input id="sl-resistance-ohm" type="number" value="50"></label><label>Inductance (µH)<input id="sl-inductance-uh" type="number" value=".120"></label><label>Capacitance (pF)<input id="sl-capacitance-pf" type="number" value="10"></label><label>Quality factor Q<input id="sl-q" type="number" value="8"></label><label>Feed impedance (Ω)<input id="sl-feed-ohm" type="number" value="50"></label></section><section class="sl-card"><h3>Heterodyne / carrier probe</h3><label>Local oscillator (MHz)<input id="sl-lo-mhz" type="number" value="135.1"></label><label>Known carrier (MHz)<input id="sl-carrier-mhz" type="number" value="145"></label><label>Carrier amplitude<input id="sl-carrier-amplitude" type="number" value="1"></label><label>Unknown/source amplitude<input id="sl-source-amplitude" type="number" value=".1"></label><label>Field coupling 0–1<input id="sl-coupling" type="number" min="0" max="1" value=".05"></label><label>Front-end nonlinearity<input id="sl-nonlinearity" type="number" min="0" value=".03"></label><label>Observed IF / beat (kHz)<input id="sl-observed-khz" type="number" value="800"></label></section><section class="sl-card"><h3>Sweep</h3><label>Sweep min (MHz)<input id="sl-sweep-min-mhz" type="number" value="1"></label><label>Sweep max (MHz)<input id="sl-sweep-max-mhz" type="number" value="6500"></label><label>Sweep samples<input id="sl-sweep-points" type="number" min="16" max="${MAX_SWEEP_POINTS}" value="256"></label><label class="sl-check"><input id="sl-animate" type="checkbox" checked> Animate E/H field</label><button class="sl-primary" data-sl-run>Update laboratory</button><div class="sl-status" data-sl-status>Ready.</div></section></aside><main class="sl-workspace"><section class="sl-card sl-map-card"><div class="sl-section-head"><h3>RF environment / Wi‑Fi-scale field map</h3><span>direct + single-bounce multipath</span></div><canvas id="sl-environment-canvas" class="sl-canvas sl-environment"></canvas></section><section class="sl-card"><div class="sl-section-head"><h3>Electromagnetic field visualization</h3><span>orthogonal E/H field</span></div><canvas id="sl-field-canvas" class="sl-canvas"></canvas></section><section class="sl-card"><div class="sl-section-head"><h3>Antenna attenuation / tuning sweep</h3><span>log-frequency response</span></div><canvas id="sl-spectrum-canvas" class="sl-canvas sl-spectrum"></canvas></section><div data-sl-results></div></main></div></div>`;
-    root.document.body.appendChild(panel); panel.querySelectorAll('[data-sl-close]').forEach(node=>node.addEventListener('click',closePanel)); panel.querySelector('[data-sl-run]').addEventListener('click',()=>{try{update();}catch(error){const s=panel.querySelector('[data-sl-status]');s.textContent=error.message;s.dataset.kind='error';}}); panel.querySelector('#sl-map-preset')?.addEventListener('change',()=>{applyMapPreset();}); return panel;
+    panel.innerHTML=`<div class="sl-backdrop" data-sl-close>
+</div>
+<div class="sl-panel" role="dialog" aria-modal="true" aria-labelledby="sl-title">
+<header class="sl-header">
+<div>
+<p class="sl-eyebrow">Scientific Tools · Electromagnetic Signal Research</p>
+<h2 id="sl-title">Signals Laboratory</h2>
+<p>RF field visualization, antenna attenuation/tuning and impedance response, heterodyne translation, adjacent-carrier perturbation, nonlinear mixing, plus monopole/dipole RF environment mapping with coherent reflection, progressive spatial resolution, and fully 3D visualized demonstration animation panels for the major workbenches, with drag-to-orbit camera control.</p>
+</div>
+<button class="sl-close" data-sl-close aria-label="Close Signals Laboratory">×</button>
+</header>
+<div class="sl-body">
+<aside class="sl-controls">
+<section class="sl-card">
+<h3>RF environment mapper</h3>
+<label>Source preset<select id="sl-map-preset">
+<option value="wifi-2.4">Wi‑Fi 2.4 GHz example</option>
+<option value="wifi-5">Wi‑Fi 5 GHz example</option>
+<option value="wifi-6">Wi‑Fi 6 GHz example</option>
+<option value="custom">Custom RF source</option>
+</select>
+</label>
+<label>Map frequency (MHz)<input id="sl-map-frequency-mhz" type="number" value="2437" disabled>
+</label>
+<label>Source power (dBm)<input id="sl-map-tx-dbm" type="number" value="20">
+</label>
+<label>Radiator<select id="sl-map-antenna">
+<option value="dipole">Half-wave dipole</option>
+<option value="monopole">Quarter-wave monopole / ideal ground plane</option>
+<option value="isotropic">Isotropic reference</option>
+</select>
+</label>
+<label>Antenna azimuth (deg)<input id="sl-map-azimuth" type="number" value="0">
+</label>
+<label>Antenna elevation (deg)<input id="sl-map-elevation" type="number" value="90">
+</label>
+<label>Source X (m)<input id="sl-map-source-x" type="number" value="0">
+</label>
+<label>Source Y (m)<input id="sl-map-source-y" type="number" value="0">
+</label>
+<label>Source height (m)<input id="sl-map-source-z" type="number" value="1.8">
+</label>
+<label>Map width (m)<input id="sl-map-width" type="number" value="24">
+</label>
+<label>Map height (m)<input id="sl-map-height" type="number" value="18">
+</label>
+<label>Sample height (m)<input id="sl-map-sample-height" type="number" value="1.2">
+</label>
+<label>Spatial resolution<input id="sl-map-resolution" type="range" min="${MIN_MAP_RESOLUTION}" max="${MAX_MAP_RESOLUTION}" step="4" value="48">
+</label>
+<label>Field coherence 0–1<input id="sl-map-coherence" type="number" min="0" max="1" step=".05" value=".85">
+</label>
+<label>Vertical wall X (m)<input id="sl-map-wall-x" type="number" value="6">
+</label>
+<label>Horizontal wall Y (m)<input id="sl-map-wall-y" type="number" value="-4">
+</label>
+<label>Wall reflectivity 0–1<input id="sl-map-reflectivity" type="number" min="0" max=".99" step=".05" value=".45">
+</label>
+<label>Wall penetration loss (dB)<input id="sl-map-penetration-loss" type="number" min="0" value="5">
+</label>
+<label>Reflection phase (deg)<input id="sl-map-reflection-phase" type="number" value="180">
+</label>
+<p class="sl-hint">Increase resolution gradually to inspect fine multipath structure without changing the propagation model.</p>
+</section>
+<section class="sl-card">
+<h3>Source & receiver</h3>
+<label>Source frequency (MHz)<input id="sl-source-mhz" type="number" value="145.8">
+</label>
+<label>TX power (dBm)<input id="sl-tx-dbm" type="number" value="30">
+</label>
+<label>TX gain (dB)<input id="sl-tx-gain" type="number" value="2.15">
+</label>
+<label>RX gain (dB)<input id="sl-rx-gain" type="number" value="0">
+</label>
+<label>Distance (m)<input id="sl-distance-m" type="number" min=".001" value="1000">
+</label>
+<label>Extra loss (dB)<input id="sl-extra-loss" type="number" min="0" value="0">
+</label>
+<label>Receiver center (MHz)<input id="sl-rx-center-mhz" type="number" value="10.7">
+</label>
+<label>Receiver bandwidth (kHz)<input id="sl-rx-bandwidth-khz" type="number" value="25">
+</label>
+<label>Noise figure (dB)<input id="sl-noise-figure" type="number" value="6">
+</label>
+</section>
+<section class="sl-card">
+<h3>Antenna & impedance</h3>
+<label>Resistance (Ω)<input id="sl-resistance-ohm" type="number" value="50">
+</label>
+<label>Inductance (µH)<input id="sl-inductance-uh" type="number" value=".120">
+</label>
+<label>Capacitance (pF)<input id="sl-capacitance-pf" type="number" value="10">
+</label>
+<label>Quality factor Q<input id="sl-q" type="number" value="8">
+</label>
+<label>Feed impedance (Ω)<input id="sl-feed-ohm" type="number" value="50">
+</label>
+</section>
+<section class="sl-card">
+<h3>Heterodyne / carrier probe</h3>
+<label>Local oscillator (MHz)<input id="sl-lo-mhz" type="number" value="135.1">
+</label>
+<label>Known carrier (MHz)<input id="sl-carrier-mhz" type="number" value="145">
+</label>
+<label>Carrier amplitude<input id="sl-carrier-amplitude" type="number" value="1">
+</label>
+<label>Unknown/source amplitude<input id="sl-source-amplitude" type="number" value=".1">
+</label>
+<label>Field coupling 0–1<input id="sl-coupling" type="number" min="0" max="1" value=".05">
+</label>
+<label>Front-end nonlinearity<input id="sl-nonlinearity" type="number" min="0" value=".03">
+</label>
+<label>Observed IF / beat (kHz)<input id="sl-observed-khz" type="number" value="800">
+</label>
+</section>
+<section class="sl-card">
+<h3>Sweep</h3>
+<label>Sweep min (MHz)<input id="sl-sweep-min-mhz" type="number" value="1">
+</label>
+<label>Sweep max (MHz)<input id="sl-sweep-max-mhz" type="number" value="6500">
+</label>
+<label>Sweep samples<input id="sl-sweep-points" type="number" min="16" max="${MAX_SWEEP_POINTS}" value="256">
+</label>
+<label class="sl-check">
+<input id="sl-animate" type="checkbox" checked> Animate demonstrations</label>
+<label class="sl-check">
+<input id="sl-auto-orbit" type="checkbox" checked> Auto-orbit 3D scenes</label>
+<p class="sl-hint">3D panels: drag to orbit, wheel or +/- to zoom, arrow keys to rotate.</p>
+<button class="sl-primary" data-sl-run>Update laboratory</button>
+<div class="sl-status" data-sl-status>Ready.</div>
+</section>
+</aside>
+<main class="sl-workspace">
+<section class="sl-card sl-map-card">
+<div class="sl-section-head">
+<h3>3D RF environment demonstration</h3>
+<span>animated topology and direct/reflected propagation surface</span>
+</div>
+<canvas id="sl-environment-3d-canvas" class="sl-canvas sl-three-d">
+</canvas>
+</section>
+<section class="sl-card">
+<div class="sl-section-head">
+<h3>3D electromagnetic field demonstration</h3>
+<span>orthogonal E/H field volume</span>
+</div>
+<canvas id="sl-field-3d-canvas" class="sl-canvas sl-three-d">
+</canvas>
+</section>
+<section class="sl-card">
+<div class="sl-section-head">
+<h3>3D antenna radiation / tuning demonstration</h3>
+<span>monopole, dipole, orientation, and electrical response</span>
+</div>
+<canvas id="sl-antenna-3d-canvas" class="sl-canvas sl-three-d">
+</canvas>
+</section>
+<section class="sl-card">
+<div class="sl-section-head">
+<h3>3D mixer / intermodulation demonstration</h3>
+<span>heterodyne, beat, and product space</span>
+</div>
+<canvas id="sl-mixer-3d-canvas" class="sl-canvas sl-three-d">
+</canvas>
+</section>
+<section class="sl-card sl-map-card">
+<div class="sl-section-head">
+<h3>RF environment / Wi‑Fi-scale field map</h3>
+<span>direct + single-bounce multipath</span>
+</div>
+<canvas id="sl-environment-canvas" class="sl-canvas sl-environment">
+</canvas>
+</section>
+<section class="sl-card">
+<div class="sl-section-head">
+<h3>Electromagnetic field visualization</h3>
+<span>orthogonal E/H field</span>
+</div>
+<canvas id="sl-field-canvas" class="sl-canvas">
+</canvas>
+</section>
+<section class="sl-card">
+<div class="sl-section-head">
+<h3>Antenna attenuation / tuning sweep</h3>
+<span>log-frequency response</span>
+</div>
+<canvas id="sl-spectrum-canvas" class="sl-canvas sl-spectrum">
+</canvas>
+</section>
+<div data-sl-results>
+</div>
+</main>
+</div>
+</div>`;
+    root.document.body.appendChild(panel); if(root.matchMedia?.('(prefers-reduced-motion: reduce)').matches){const animateBox=panel.querySelector('#sl-animate');const orbitBox=panel.querySelector('#sl-auto-orbit');if(animateBox)animateBox.checked=false;if(orbitBox)orbitBox.checked=false;} setupAll3DInteractions(); panel.querySelectorAll('[data-sl-close]').forEach(node=>node.addEventListener('click',closePanel)); panel.querySelector('[data-sl-run]').addEventListener('click',()=>{try{update();}catch(error){const s=panel.querySelector('[data-sl-status]');s.textContent=error.message;s.dataset.kind='error';}}); panel.querySelector('#sl-map-preset')?.addEventListener('change',()=>{applyMapPreset();}); panel.querySelector('#sl-auto-orbit')?.addEventListener('change',()=>drawAll3D(current)); return panel;
   }
   function openPanel(options={}) { const target=buildPanel();target.hidden=false;root.document.body.classList.add('sl-open');if(options.sourceMHz!==undefined)target.querySelector('#sl-source-mhz').value=String(options.sourceMHz);if(options.mapPreset){target.querySelector('#sl-map-preset').value=String(options.mapPreset);applyMapPreset();}update();if(!frameHandle&&root.requestAnimationFrame)frameHandle=root.requestAnimationFrame(animate);return target; }
   function closePanel(){if(!panel)return;panel.hidden=true;root?.document?.body?.classList.remove('sl-open');if(frameHandle&&root.cancelAnimationFrame)root.cancelAnimationFrame(frameHandle);frameHandle=0;}
@@ -373,7 +1020,7 @@
 
   return Object.freeze({
     openPanel, closePanel, currentState, analyzeConfiguration,
-    utilities:Object.freeze({ wavelength,resonantFrequency,seriesRlcImpedance,mismatch,resonanceTransfer,antennaResponse,freeSpacePathLossDb,planeWaveFieldVPerM,thermalNoiseFloorDbm,directReception,heterodyneProducts,intermodulationProducts,adjacentCarrierProbe,inferSourceCandidates,estimateRangeScenarios,logarithmicSweep,sweepAntenna,antennaAxis,halfWaveDipolePowerPattern,monopolePowerPattern,sourceDirectionalGainDb,mirrorPointAcrossPlane,crossesPlane,pathPowerDbm,reflectedPath,environmentPoint,buildEnvironmentMap,progressiveEnvironmentMaps,wifiPreset }),
+    utilities:Object.freeze({ wavelength,resonantFrequency,seriesRlcImpedance,mismatch,resonanceTransfer,antennaResponse,freeSpacePathLossDb,planeWaveFieldVPerM,thermalNoiseFloorDbm,directReception,heterodyneProducts,intermodulationProducts,adjacentCarrierProbe,inferSourceCandidates,estimateRangeScenarios,logarithmicSweep,sweepAntenna,antennaAxis,halfWaveDipolePowerPattern,monopolePowerPattern,sourceDirectionalGainDb,mirrorPointAcrossPlane,crossesPlane,pathPowerDbm,reflectedPath,environmentPoint,buildEnvironmentMap,progressiveEnvironmentMaps,wifiPreset,project3DPoint,buildFieldVolumeSamples,buildAntennaLobeSamples,buildEnvironmentSurfaceMesh,buildMixerProductScene }),
     constants:Object.freeze({ PANEL_ID,C,K_B,DEFAULT_TEMPERATURE_K,MAX_SWEEP_POINTS,MAX_MAP_RESOLUTION,MIN_MAP_RESOLUTION })
   });
 });
