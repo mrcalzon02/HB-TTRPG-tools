@@ -209,7 +209,7 @@ checks.push('Scientific Tools tab ownership is singular');
 checks.push(includes('Media demonstration corpus remains launchable', mediaDemos, [
   'BinaryCubeMediaForensicsDemoCorpus',
   'openPanel',
-  'openInForensics'
+  'openInAppropriateTool'
 ]));
 checks.push(includes('ISM remains cooperatively executed and model-bounded', ism, [
   'const LAMBDA = 1.097e-52;',
