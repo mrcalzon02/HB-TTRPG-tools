@@ -19,9 +19,12 @@ const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visua
 
 assert.equal(typeof Renderer.createRenderer, 'function');
 assert.equal(typeof Renderer.normalizePointCoordinates, 'function');
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.5.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.6.0');
 assert.equal(typeof Renderer.rayBoxFace, 'function');
 assert.equal(typeof Renderer.resolveRenderPlan, 'function');
+assert.equal(typeof Renderer.orthographic, 'function');
+assert.equal(typeof Renderer.textToBits, 'function');
+assert.ok(Renderer.constants.VIEW_MODES.includes('isometric'));
 
 const gridSizes = [4, 12, 64];
 const receipts = [];
@@ -74,7 +77,12 @@ assert.match(rendererSource, /pointerdown/);
 assert.match(rendererSource, /wheel/);
 assert.match(rendererSource, /setDirectionState/);
 assert.match(rendererSource, /pickFaceAt/);
-for (const preset of ['front','back','left','right','top','bottom','perspective']) assert.match(rendererSource, new RegExp(`${preset}:`));
+assert.match(rendererSource, /toggleIsometricView/);
+assert.match(rendererSource, /orthographic/);
+assert.match(rendererSource, /Play Encoding/);
+assert.match(rendererSource, /data-cube-trace-build/);
+assert.match(rendererSource, /data-cube-trace-play/);
+for (const preset of ['front','back','left','right','top','bottom','perspective','isometric']) assert.match(rendererSource, new RegExp(`${preset}:`));
 
 assert.match(controllerSource, /Engine\.validateKey/);
 assert.match(controllerSource, /Engine\.createKey/);
@@ -103,7 +111,7 @@ assert.match(styleSource, /touch-action:none/);
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v4-shell-validation-receipt',
-  schemaVersion: '0.3.0',
+  schemaVersion: '0.4.0',
   rendererVersion: Renderer.constants.RENDERER_VERSION,
   rendererAuthority: 'binary-cube-visualizer-renderer.js',
   controllerAuthority: 'shadowrun-binary-cube-visualizer.js',
@@ -113,10 +121,12 @@ console.log(JSON.stringify({
   exactCanonicalPoints: true,
   exactV4RepresentationPreserved: true,
   rendererAlgorithmIsolation: true,
-  cameraPresets: 7,
+  isometricProjectionPresent: true,
+  canonicalViewportPlaybackDelegationPresent: true,
+  cameraPresets: 8,
   responsiveFallbackPresent: true,
   directionalArrowsPresent: true,
   directFacePickingPresent: true,
   legalPairEnforcementPresent: true,
-  v4BoundaryPreservedUnderV9: true
+  pass: true
 }, null, 2));
