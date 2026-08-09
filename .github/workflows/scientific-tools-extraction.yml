@@ -9,6 +9,7 @@ on:
       - "app-lite-view-mounts.js"
       - "scientific-tools-entry.js"
       - "scientific-tools-cooperative-runner.js"
+      - "scientific-tools-local-media.js"
       - "shadowrun-binary-cube-worker.js"
       - "binary-cube-worker-client.js"
       - "shadowrun-binary-cube-encryption.js"
@@ -34,6 +35,8 @@ on:
       - "binary-cube-steganalysis-worker.js"
       - "binary-cube-steganalysis-lab.js"
       - "binary-cube-steganalysis-lab.css"
+      - "binary-cube-diagnostic-calibration-registry.js"
+      - "binary-cube-diagnostic-calibration-baseline.js"
       - "binary-cube-diagnostic-pipeline.js"
       - "binary-cube-diagnostic-pipeline-panel.js"
       - "binary-cube-diagnostic-pipeline.css"
@@ -50,6 +53,8 @@ on:
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-scientific-diagnostic-pipeline.mjs"
+      - "scripts/calibrate-scientific-diagnostic-pipeline.mjs"
+      - "scripts/validate-scientific-diagnostic-calibration.mjs"
       - "scripts/validate-binary-cube-cubic-decryptor.mjs"
       - "scripts/run-scientific-diagnostic-local.mjs"
       - "scripts/validate-cooperative-slice-budget.mjs"
@@ -102,6 +107,7 @@ jobs:
           node --check app-lite-view-mounts.js
           node --check scientific-tools-entry.js
           node --check scientific-tools-cooperative-runner.js
+          node --check scientific-tools-local-media.js
           node --check shadowrun-binary-cube-worker.js
           node --check binary-cube-worker-client.js
           node --check shadowrun-binary-cube-encryption.js
@@ -120,6 +126,7 @@ jobs:
           node --check binary-cube-steganalysis-engine.js
           node --check binary-cube-steganalysis-worker.js
           node --check binary-cube-steganalysis-lab.js
+          node --check binary-cube-diagnostic-calibration-registry.js
           node --check binary-cube-diagnostic-pipeline.js
           node --check binary-cube-diagnostic-pipeline-panel.js
           node --check binary-cube-cubic-decryptor-engine.js
@@ -131,6 +138,8 @@ jobs:
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-scientific-diagnostic-pipeline.mjs
+          node --check scripts/calibrate-scientific-diagnostic-pipeline.mjs
+          node --check scripts/validate-scientific-diagnostic-calibration.mjs
           node --check scripts/validate-binary-cube-cubic-decryptor.mjs
           node --check scripts/run-scientific-diagnostic-local.mjs
           node --check scripts/validate-cooperative-slice-budget.mjs
@@ -167,6 +176,14 @@ jobs:
 
       - name: Validate routed Diagnostic Evaluation Pipeline
         run: node scripts/validate-scientific-diagnostic-pipeline.mjs
+
+      - name: Measure diagnostic detector calibration corpus
+        run: |
+          node scripts/calibrate-scientific-diagnostic-pipeline.mjs --json=/tmp/hb-diagnostic-calibration.json > /tmp/hb-diagnostic-calibration.stdout.json
+          cat /tmp/hb-diagnostic-calibration.json
+
+      - name: Validate diagnostic detector calibration
+        run: node scripts/validate-scientific-diagnostic-calibration.mjs
 
       - name: Exercise local Diagnostic Evaluation Pipeline
         run: |
