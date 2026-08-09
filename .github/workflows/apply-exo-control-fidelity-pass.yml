@@ -1,0 +1,31 @@
+name: Apply EXO control fidelity pass
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-exo-control-fidelity-pass.yml'
+      - 'scripts/apply-exo-control-fidelity-pass.py'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply authoritative EXO changes
+        run: python scripts/apply-exo-control-fidelity-pass.py
+      - name: Verify Crew Operations JavaScript
+        run: node --check blacklight-exo-crew-operations.js
+      - name: Commit authoritative files and remove apply tooling
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Enhance EXO station fidelity, state annunciation, and control SFX"
+          git push origin main
