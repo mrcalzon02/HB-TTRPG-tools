@@ -92,8 +92,8 @@ assert.ok(!source.includes('Steganography Probability'));
 
 for (const required of ['Diagnostic Evaluation Pipeline', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Undetected / Miss-Risk Index', 'Specialist handoff', 'Export JSON Report']) assert.ok(panel.includes(required), `Pipeline panel missing ${JSON.stringify(required)}.`);
 assert.ok(css.includes('.bcdp-index-grid'));
-assert.ok(cli.includes("import zlib from 'node:zlib'"));
-assert.ok(cli.includes('decodePngRgba'));
+assert.ok(cli.includes("scientific-tools-local-media.js"));
+assert.ok(cli.includes('LocalMedia.decodePngRgba'));
 assert.ok(cli.includes('Pipeline.runPipeline'));
 assert.ok(cli.includes('fileURLToPath(import.meta.url)'));
 assert.ok(plan.startsWith('# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pipeline'));
