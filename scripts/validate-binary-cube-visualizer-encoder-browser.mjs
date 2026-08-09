@@ -274,7 +274,7 @@ try {
   })()`, 'Binary Cube V7 browser encoder');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.5.0');
+  assert.equal(receipt.rendererVersion, '0.6.0');
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.defaultBlockCount, 2);
