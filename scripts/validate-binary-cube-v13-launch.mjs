@@ -11,6 +11,8 @@ const read = relativePath => fs.readFileSync(path.join(root, relativePath), 'utf
 const entry = read('shadowrun-entry.js');
 const mounts = read('app-lite-view-mounts.js');
 const visualizer = read('shadowrun-binary-cube-visualizer.js');
+const scientificTools = read('scientific-tools-entry.js');
+const blacklight = read('blacklight-continuum-entry.js');
 const v12 = read('docs/binary-cube-v12-runtime-failure-report.md');
 const userGuide = read('docs/binary-cube-visualizer-user-guide.md');
 const architecture = read('docs/binary-cube-visualizer-architecture.md');
@@ -24,6 +26,9 @@ function requireIncludes(label, source, values, detail) {
   for (const value of values) assert.ok(source.includes(value), `${label}: missing ${JSON.stringify(value)}. ${detail}`);
   return label;
 }
+
+assert.doesNotThrow(() => new Function(scientificTools), 'Scientific Tools entry must remain valid JavaScript.');
+assert.doesNotThrow(() => new Function(blacklight), 'Black Light Continuum entry must remain valid JavaScript.');
 
 const checks = [];
 checks.push(requireMatch(
@@ -57,10 +62,45 @@ checks.push(requireMatch(
   'the promoted launcher must retain canonical engine, protected transport, renderer, controller, and stylesheet loading.'
 ));
 checks.push(requireMatch(
-  'Landing page lazy-loads Shadowrun',
+  'Landing page lazy-loads refreshed Shadowrun entry',
   mounts,
-  /if\s*\(\s*viewId\s*===\s*'shadowrun'\s*\)[\s\S]*?loadScript\('shadowrun-entry\.js'\)[\s\S]*?activateHashView/,
-  'explicit and direct-hash activation must both reach the Shadowrun workspace regardless of source formatting.'
+  /if\s*\(\s*viewId\s*===\s*'shadowrun'\s*\)[\s\S]*?loadScript\('shadowrun-entry\.js(?:\?v=[^']+)?'\)[\s\S]*?activateHashView/,
+  'explicit and direct-hash activation must both reach the Shadowrun workspace with the current cache-busting entry URL.'
+));
+checks.push(requireIncludes(
+  'Scientific Tools owns the shared Binary Cube launch surface',
+  scientificTools,
+  [
+    'loadBinaryCubeVisualizer',
+    'loadBinaryCubeLaboratory',
+    'openBinaryCubeVisualizer',
+    'openBinaryCubeLaboratory',
+    'shadowrun-binary-cube-engine.js',
+    'shadowrun-binary-cube-auth.js',
+    'shadowrun-binary-cube-secure-export.js',
+    'binary-cube-visualizer-renderer.js',
+    'shadowrun-binary-cube-visualizer.js',
+    'one shared ShadowrunBinaryCubeVisualizer instance'
+  ],
+  'Scientific Tools must launch the accepted Shadowrun implementation rather than introducing another encoder or renderer.'
+));
+checks.push(requireIncludes(
+  'Black Light delegates to centralized Scientific Tools',
+  blacklight,
+  [
+    'data-blacklight-systems-tab="science"',
+    'Binary Cube Encoder Visualizer',
+    "prepareView('scientific-tools')",
+    "openSharedScientificTool('openBinaryCubeVisualizer'",
+    "openSharedScientificTool('openBinaryCubeLaboratory'"
+  ],
+  'Black Light must be a shared launcher and may not maintain a separate Binary Cube implementation.'
+));
+checks.push(requireMatch(
+  'Scientific Tools entry is cache-refreshed',
+  mounts,
+  /loadScript\('scientific-tools-entry\.js\?v=20260809-binary-cube-unified'\)/,
+  'the centralized launch surface must not be masked by a stale browser cache.'
 ));
 checks.push(requireIncludes(
   'User guide covers the transformation and controls',
@@ -143,7 +183,7 @@ checks.push(requireIncludes(
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v13-launch-contract-receipt',
-  schemaVersion: '0.1.2',
+  schemaVersion: '0.2.0',
   pass: true,
   checkCount: checks.length,
   checks
