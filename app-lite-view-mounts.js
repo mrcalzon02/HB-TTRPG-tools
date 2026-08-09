@@ -13,6 +13,7 @@
   let warhammerPlanetProfilePromise = null;
   let warhammerPlanetCompositorPromise = null;
   let warhammerChronologyPromise = null;
+  let warhammerDramatisPromise = null;
   let warhammerLogisticsPromise = null;
   let warhammerMercaturaPromise = null;
   let warhammerComponentLineagePromise = null;
@@ -222,6 +223,7 @@
       warhammerPlanetProfilePromise ||= loadScript('assets/warhammer-40k/shaders/planet-profile-v1.js?v=8');
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       warhammerChronologyPromise ||= loadScript('assets/warhammer-40k/imperial-chronology-v1.js?v=1');
+      warhammerDramatisPromise ||= warhammerChronologyPromise.then(() => loadScript('assets/warhammer-40k/imperial-dramatis-personae-v1.js?v=2'));
       warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
       warhammerMercaturaPromise ||= Promise.all([warhammerLogisticsPromise, warhammerChronologyPromise]).then(() => loadScript('assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js?v=2'));
       warhammerComponentLineagePromise ||= loadScript('assets/warhammer-40k/imperial-component-lineage-v1.js?v=2');
@@ -230,8 +232,8 @@
       warhammerSectorEventsPromise ||= loadScript('assets/warhammer-40k/imperial-sector-events-v1.js?v=5');
       warhammerMedicaeCatalogPromise ||= loadScript('assets/warhammer-40k/imperial-medicae-catalog-v1.js?v=1');
       warhammerMedicaePromise ||= warhammerMedicaeCatalogPromise.then(() => loadScript('assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=3'));
-      await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerChronologyPromise, warhammerLogisticsPromise, warhammerMercaturaPromise, warhammerComponentLineagePromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise, warhammerMedicaePromise]);
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=31');
+      await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerChronologyPromise, warhammerDramatisPromise, warhammerLogisticsPromise, warhammerMercaturaPromise, warhammerComponentLineagePromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise, warhammerMedicaePromise]);
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=32');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
       return;
