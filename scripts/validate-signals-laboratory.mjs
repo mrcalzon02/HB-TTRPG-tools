@@ -112,7 +112,7 @@ assert.match(entry, /function loadSignalsLaboratory\(/);
 assert.match(entry, /function openSignalsLaboratory\(/);
 assert.match(entry, /loadStyle\('signals-laboratory\.css'\)/);
 assert.match(entry, /loadScript\('signals-laboratory\.js'/);
-assert.match(entry, /out-of-band inference requires a real coupling/i);
+assert.match(entry, /signal processing can exploit a weak field or correlated perturbation/i);
 
 const source = await readFile(new URL('../signals-laboratory.js', import.meta.url), 'utf8');
 assert.match(source, /Physical boundary:/);
