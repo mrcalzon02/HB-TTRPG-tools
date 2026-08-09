@@ -15,7 +15,9 @@ on:
       - "scientific-tools-local-media.js"
       - "scientific-tools-entry.js"
       - "app-lite-view-mounts.js"
+      - "docs/raster-unresolved-evidence-priors.md"
       - "scripts/validate-diagnostic-raster-evidence-routing.mjs"
+      - "scripts/validate-raster-unresolved-evidence-provenance.mjs"
   workflow_dispatch:
 
 permissions:
@@ -57,9 +59,13 @@ jobs:
           node --check binary-cube-steganalysis-worker.js
           node --check binary-cube-steganalysis-worker-client.js
           node --check scripts/validate-diagnostic-raster-evidence-routing.mjs
+          node --check scripts/validate-raster-unresolved-evidence-provenance.mjs
 
       - name: Validate evidence separation and miss-risk routing
         run: node scripts/validate-diagnostic-raster-evidence-routing.mjs
+
+      - name: Validate unresolved evidence prior provenance
+        run: node scripts/validate-raster-unresolved-evidence-provenance.mjs
 
       - name: Validate browser dependency and presentation routing
         run: |
@@ -70,6 +76,7 @@ jobs:
           grep -q "missRiskEvidence" binary-cube-diagnostic-pipeline.js
           grep -q "Unresolved Evidence Index" binary-cube-diagnostic-pipeline-panel.js
           grep -q "unresolved / miss-risk" binary-cube-diagnostic-pipeline-panel.js
+          grep -q "provisional-prior" docs/raster-unresolved-evidence-priors.md
 
       - name: Record routing success
         if: ${{ success() }}
