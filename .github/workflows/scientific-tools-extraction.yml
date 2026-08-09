@@ -32,6 +32,7 @@ on:
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-cooperative-slice-budget.mjs"
+      - "scripts/validate-binary-cube-reseed.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
       - "scripts/validate-binary-cube-cryptanalytic-test-lab.mjs"
@@ -92,6 +93,7 @@ jobs:
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-cooperative-slice-budget.mjs
+          node --check scripts/validate-binary-cube-reseed.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
           node --check scripts/validate-binary-cube-cryptanalytic-test-lab.mjs
@@ -112,6 +114,9 @@ jobs:
 
       - name: Validate cooperative time-slice budget
         run: node scripts/validate-cooperative-slice-budget.mjs
+
+      - name: Validate Binary Cube reseed semantics
+        run: node scripts/validate-binary-cube-reseed.mjs
 
       - name: Validate Binary Cube Decryption Dashboard
         run: node scripts/validate-binary-cube-decryption-dashboard.mjs
