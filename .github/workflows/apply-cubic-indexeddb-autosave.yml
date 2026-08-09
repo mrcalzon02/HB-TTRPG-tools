@@ -7,6 +7,7 @@ on:
       - ".github/workflows/apply-cubic-indexeddb-autosave.yml"
       - "scripts/apply-cubic-indexeddb-autosave.py"
       - "scripts/fix-cubic-autosave-migration-anchor.py"
+      - "scripts/fix-cubic-autosave-migration-escapes.py"
 
 permissions:
   contents: write
@@ -37,6 +38,7 @@ jobs:
           git checkout main
           git reset --hard origin/main
           python scripts/fix-cubic-autosave-migration-anchor.py
+          python scripts/fix-cubic-autosave-migration-escapes.py
           python scripts/apply-cubic-indexeddb-autosave.py
           node --check binary-cube-cubic-decryptor.js
           node --check scripts/validate-binary-cube-cubic-decryptor.mjs
