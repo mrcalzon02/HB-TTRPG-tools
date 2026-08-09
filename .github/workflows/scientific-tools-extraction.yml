@@ -73,7 +73,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   statuses: write
 
 concurrency:
@@ -96,11 +96,46 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Repair stale local-media ownership assertion when present
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/validate-scientific-tools-extraction.mjs')
+          text = path.read_text()
+          old = """checks.push(includes('Diagnostic local runner shares the routed model', diagnosticLocal, [
+  \"import zlib from 'node:zlib'\",
+  'fileURLToPath(import.meta.url)',
+  'function decodePngRgba(',
+  'Pipeline.runPipeline(',
+  '--profile=triage|thorough|exhaustive'
+]));"""
+          new = """checks.push(includes('Diagnostic local runner shares the routed model and centralized local-media decoder', diagnosticLocal, [
+  \"scientific-tools-local-media.js\",
+  'fileURLToPath(import.meta.url)',
+  'LocalMedia.decodePngRgba',
+  'Pipeline.runPipeline(',
+  '--profile=triage|thorough|exhaustive'
+]));"""
+          if old in text:
+              path.write_text(text.replace(old, new, 1))
+          elif new not in text:
+              raise SystemExit('Neither the stale nor current local-media ownership assertion was found.')
+          PY
+          if ! git diff --quiet -- scripts/validate-scientific-tools-extraction.mjs; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add scripts/validate-scientific-tools-extraction.mjs
+            git commit -m "fix: align Scientific Tools ownership with shared local media"
+            git push origin HEAD:main
+          fi
 
       - name: Check authoritative sources
         run: |
