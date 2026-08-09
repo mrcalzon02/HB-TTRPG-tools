@@ -10,8 +10,8 @@ const root = process.cwd();
 const require = createRequire(import.meta.url);
 const Pipeline = require(path.join(root, 'binary-cube-diagnostic-pipeline.js'));
 
-assert.equal(Pipeline.version, '0.2.0');
-assert.equal(Pipeline.constants.REPORT_SCHEMA_VERSION, '0.2.0');
+assert.equal(Pipeline.version, '0.3.0');
+assert.equal(Pipeline.constants.REPORT_SCHEMA_VERSION, '0.3.0');
 assert.deepEqual(Object.keys(Pipeline.constants.PROFILES), ['triage', 'thorough', 'exhaustive']);
 
 const text = new TextEncoder().encode('Ordinary control text with repeated language structure and no intentional hidden payload. '.repeat(24));
@@ -90,4 +90,4 @@ assert.ok(plan.startsWith('# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pi
 assert.match(plan, /absence of positive evidence/i);
 assert.match(plan, /local Node\.js runtime/i);
 
-console.log(JSON.stringify({ format: 'hb-ttrpg-scientific-diagnostic-pipeline-validation-receipt', schemaVersion: '0.2.0', pass: true, profiles: Object.keys(Pipeline.constants.PROFILES), deterministicStageOrder: true, concurrentWithinStage: true, automaticRouting: true, calibratedDetectorLedger: true, audioSignalRouting: true, evidenceIndicesAreNotProbabilities: true, unresolvedMethodsIncreaseMissRisk: true, localNodeRunner: true, sharedLocalPngPixelDecoder: true, findings: textReport.findings.length }, null, 2));
+console.log(JSON.stringify({ format: 'hb-ttrpg-scientific-diagnostic-pipeline-validation-receipt', schemaVersion: '0.3.0', pass: true, profiles: Object.keys(Pipeline.constants.PROFILES), deterministicStageOrder: true, concurrentWithinStage: true, automaticRouting: true, calibratedDetectorLedger: true, audioSignalRouting: true, evidenceIndicesAreNotProbabilities: true, unresolvedMethodsIncreaseMissRisk: true, localNodeRunner: true, sharedLocalPngPixelDecoder: true, findings: textReport.findings.length }, null, 2));
