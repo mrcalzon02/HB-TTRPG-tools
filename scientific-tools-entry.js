@@ -2,12 +2,13 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-media-forensics-1';
+  const ASSET_VERSION = '20260809-key-profile-visualizer-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
   let cubeVisualizerPromise = null;
   let cubeLaboratoryPromise = null;
+  let keyGenerationVisualizerPromise = null;
   let decryptionDashboardPromise = null;
   let cryptanalyticTestLabPromise = null;
   let informationAnalysisPromise = null;
@@ -169,6 +170,22 @@
     return cubeLaboratoryPromise;
   }
 
+  function loadKeyGenerationVisualizer() {
+    if (window.BinaryCubeKeyGenerationResearch && window.BinaryCubeKeyGenerationVisualizer) return Promise.resolve(window.BinaryCubeKeyGenerationVisualizer);
+    if (keyGenerationVisualizerPromise) return keyGenerationVisualizerPromise;
+    keyGenerationVisualizerPromise = (async () => {
+      await loadCooperativeRunner();
+      await loadStyle('binary-cube-key-generation-visualizer.css');
+      await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
+      await loadScript('binary-cube-worker-client.js', () => Boolean(window.ShadowrunBinaryCubeWorkerClient));
+      await loadScript('binary-cube-key-generation-research.js', () => Boolean(window.BinaryCubeKeyGenerationResearch));
+      await loadScript('binary-cube-key-generation-visualizer.js', () => Boolean(window.BinaryCubeKeyGenerationVisualizer));
+      return window.BinaryCubeKeyGenerationVisualizer;
+    })();
+    keyGenerationVisualizerPromise.catch(() => { keyGenerationVisualizerPromise = null; });
+    return keyGenerationVisualizerPromise;
+  }
+
   function loadDecryptionDashboard() {
     if (window.BinaryCubeDecryptionDashboard) return Promise.resolve(window.BinaryCubeDecryptionDashboard);
     if (decryptionDashboardPromise) return decryptionDashboardPromise;
@@ -312,6 +329,14 @@
     });
   }
 
+  function openKeyGenerationVisualizer(button = null, options = null) {
+    return withLoadingButton(button, 'Loading Key Comparison…', async () => {
+      const api = await loadKeyGenerationVisualizer();
+      if (!api?.openPanel) throw new Error('The Binary Cube Key Generation Structure Visualizer loaded without an open-panel interface.');
+      return api.openPanel(options || {});
+    });
+  }
+
   function openDecryptionDashboard(button = null, options = null) {
     return withLoadingButton(button, 'Loading Dashboard…', async () => {
       const api = await loadDecryptionDashboard();
@@ -410,9 +435,10 @@
         <div class="scientific-tools-actions">
           <button id="scientific-tools-open-binary-cube-visualizer" type="button" class="primary-action">Open Binary Cube Visualizer</button>
           <button id="scientific-tools-open-binary-cube-laboratory" type="button" class="secondary-action">Open Binary Cube Laboratory</button>
+          <button id="scientific-tools-open-key-generation-visualizer" type="button" class="secondary-action">Compare Key Generators in 3D</button>
         </div>
-        <div class="scientific-tools-runtime"><span><strong>Canonical engine:</strong> ShadowrunBinaryCubeEngine</span><span><strong>Shared scheduling contract:</strong> ScientificToolsCooperativeRunner loads before Scientific Tools runtimes</span><span><strong>Visualizer:</strong> one shared ShadowrunBinaryCubeVisualizer instance</span></div>
-        <div class="scientific-tools-boundary"><strong>Runtime boundary:</strong> setting launchers may provide context or artifacts, but encoding, keys, masks, traces, ciphertext, validation, rendering, and authentication remain owned by the single canonical Binary Cube implementation.</div>
+        <div class="scientific-tools-runtime"><span><strong>Canonical engine:</strong> ShadowrunBinaryCubeEngine</span><span><strong>Shared scheduling contract:</strong> ScientificToolsCooperativeRunner loads before Scientific Tools runtimes</span><span><strong>Visualizer:</strong> one shared ShadowrunBinaryCubeVisualizer instance</span><span><strong>Generation research:</strong> same-seed 3D point-field snapshots compare direct, iterative, global/local walk, and nested candidate procedures without promoting them into the production key format</span></div>
+        <div class="scientific-tools-boundary"><strong>Runtime boundary:</strong> setting launchers may provide context or artifacts, but encoding, keys, masks, traces, ciphertext, validation, rendering, and authentication remain owned by the single canonical Binary Cube implementation. Key-generation research treats adjacency as one diagnostic rather than an automatic failure and separately measures axis leakage, regional predictability, fixed-position concentration, displacement, and 3D point-field structure.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="decryption-dashboard" hidden>
         <p class="eyebrow">Binary Cube cryptanalysis, information recovery, steganography, and adversarial testing</p>
@@ -447,6 +473,7 @@
     view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => button.addEventListener('click', () => selectTab(button.dataset.scientificToolsTab)));
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
+    view.querySelector('#scientific-tools-open-key-generation-visualizer')?.addEventListener('click', event => void openKeyGenerationVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-decryption-dashboard')?.addEventListener('click', event => void openDecryptionDashboard(event.currentTarget));
     view.querySelector('#scientific-tools-open-cryptanalytic-test-lab')?.addEventListener('click', event => void openCryptanalyticTestLab(event.currentTarget));
     view.querySelector('#scientific-tools-open-information-analysis')?.addEventListener('click', event => void openInformationAnalysisSuite(event.currentTarget));
@@ -476,6 +503,7 @@
     loadCooperativeRunner,
     loadBinaryCubeVisualizer,
     loadBinaryCubeLaboratory,
+    loadKeyGenerationVisualizer,
     loadDecryptionDashboard,
     loadCryptanalyticTestLab,
     loadInformationAnalysisSuite,
@@ -484,6 +512,7 @@
     loadMediaForensicsDemoCorpus,
     openBinaryCubeVisualizer,
     openBinaryCubeLaboratory,
+    openKeyGenerationVisualizer,
     openDecryptionDashboard,
     openCryptanalyticTestLab,
     openInformationAnalysisSuite,
