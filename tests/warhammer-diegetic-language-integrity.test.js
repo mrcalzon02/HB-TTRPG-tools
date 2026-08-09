@@ -9,6 +9,7 @@ const files = Object.freeze({
   workspace: 'warhammer-40k-workspace-v8.js',
   survey: 'assets/warhammer-40k/system-survey-v1.js',
   assay: 'warhammer-40k-survey-assay-v8.js',
+  chronology: 'assets/warhammer-40k/imperial-chronology-v1.js',
   vessel: 'assets/warhammer-40k/imperial-vessel-history-v1.js',
   components: 'assets/warhammer-40k/imperial-component-lineage-v1.js',
   personnel: 'assets/warhammer-40k/imperial-personnel-lineage-v1.js',
@@ -68,6 +69,13 @@ const required = Object.freeze({
     'sealed Cartographica writ',
     'Xenobiologis vitality index'
   ],
+  chronology: [
+    'End of the Plague Wars',
+    'ca. 012.M42',
+    'Cafarron First Cicatrix Maledictum',
+    'Cafarron Corridor Archivum Chronometric Concordance',
+    'Terran dates are approximate concordance values'
+  ],
   vessel: [
     'Registered Hulls & Service Lineages',
     'Authenticated lineage span',
@@ -99,7 +107,8 @@ const required = Object.freeze({
     'Unseal active carriage writs',
     'Unseal bonded suppliers & counterparties',
     'Unseal major organizational upheavals',
-    'Current Mercantile Pressures'
+    'Current Mercantile Pressures',
+    'Chronometric concordance'
   ]
 });
 
@@ -123,5 +132,6 @@ console.log(JSON.stringify({
   forbiddenPhrases: forbiddenPlayerFacingPhrases.length,
   requiredPhrases: Object.values(required).reduce((total, list) => total + list.length, 0),
   navisContactDossierUnified: true,
+  chronologyAuthoritySealed: true,
   diegeticArchiveLanguage: true
 }, null, 2));
