@@ -88,7 +88,7 @@ jobs:
           deployed=''
           for attempt in $(seq 1 60); do
             deployed="$(curl --fail --silent --show-error "${PAGES_ENTRY}?v=${GITHUB_SHA}-${attempt}" || true)"
-            if grep -q "20260730-v13" <<<"$deployed" \
+            if grep -q "20260809-v13-binary-cube-unified" <<<"$deployed" \
               && grep -q "shadowrun-binary-cube-encryption','available'" <<<"$deployed" \
               && grep -q "shadowrun-binary-cube-visualizer','available'" <<<"$deployed"; then
               printf '%s\n' "$deployed" > binary-cube-v13-launch-logs/deployed-shadowrun-entry.js
@@ -97,7 +97,7 @@ jobs:
             sleep 10
           done
           printf '%s\n' "$deployed" > binary-cube-v13-launch-logs/deployed-shadowrun-entry.js
-          echo "GitHub Pages did not expose the promoted V13 Shadowrun entry." >&2
+          echo "GitHub Pages did not expose the current unified V13 Shadowrun entry." >&2
           exit 1
 
       - name: Preserve V12 public mobile and fallback evidence
