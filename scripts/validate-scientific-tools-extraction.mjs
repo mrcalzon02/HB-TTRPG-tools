@@ -23,6 +23,9 @@ const informationSuiteCss = read('binary-cube-information-analysis-suite.css');
 const communicationCapacity = read('binary-cube-communication-capacity-analyzer.js');
 const communicationCapacityCss = read('binary-cube-communication-capacity-analyzer.css');
 const communicationCapacityWorker = read('binary-cube-communication-capacity-worker.js');
+const mediaForensics = read('binary-cube-media-forensics-suite.js');
+const mediaForensicsCss = read('binary-cube-media-forensics-suite.css');
+const mediaForensicsWorker = read('binary-cube-media-forensics-worker.js');
 const ism = read('interstellar-media-collisions-lab.js');
 const ismCss = read('interstellar-media-collisions-lab.css');
 const doubleSlit = read('double-slit-lab.js');
@@ -54,10 +57,12 @@ checks.push(excludes('Scientific simulation and cryptanalysis implementations ar
   'binary-cube-decryption-dashboard.js',
   'binary-cube-information-analysis-suite.js',
   'binary-cube-communication-capacity-analyzer.js',
+  'binary-cube-media-forensics-suite.js',
   'DoubleSlitExperimentLab',
   'BinaryCubeDecryptionDashboard',
   'BinaryCubeInformationAnalysisSuite',
-  'BinaryCubeCommunicationCapacityAnalyzer'
+  'BinaryCubeCommunicationCapacityAnalyzer',
+  'BinaryCubeMediaForensicsSuite'
 ]));
 
 checks.push(includes('Black Light delegates to the shared Scientific Tools workspace', blacklight, [
@@ -73,6 +78,7 @@ checks.push(excludes('Black Light does not duplicate scientific or cryptanalysis
   'binary-cube-decryption-dashboard.js',
   'binary-cube-information-analysis-suite.js',
   'binary-cube-communication-capacity-analyzer.js',
+  'binary-cube-media-forensics-suite.js',
   'shadowrun-binary-cube-engine.js'
 ]));
 
@@ -83,8 +89,9 @@ checks.push(includes('Main menu cache-refreshes the current Scientific Tools ent
   'Decryption Dashboard',
   'Information & Deobfuscation Analysis Suite',
   'Communication Capacity Analyzer',
+  'Steganography, Signal & Media Forensics Suite',
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=20260809-communication-capacity-2')",
+  "loadScript('scientific-tools-entry.js?v=20260809-media-forensics-1')",
   'ensureScientificToolsView();'
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
@@ -117,7 +124,8 @@ checks.push(excludes('Cooperative runner does not own scientific model logic', c
   'ShadowrunBinaryCubeEngine',
   'BinaryCubeDecryptionDashboard',
   'BinaryCubeInformationAnalysisSuite',
-  'BinaryCubeCommunicationCapacityAnalyzer'
+  'BinaryCubeCommunicationCapacityAnalyzer',
+  'BinaryCubeMediaForensicsSuite'
 ]));
 
 checks.push(includes('Binary Cube worker delegates all heavy mathematics to the canonical engine', cubeWorker, [
@@ -177,13 +185,14 @@ checks.push(excludes('Binary Cube laboratory no longer performs the primary expe
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
-  "const ASSET_VERSION = '20260809-communication-capacity-2';",
+  "const ASSET_VERSION = '20260809-media-forensics-1';",
   'function loadCooperativeRunner()',
   "loadScript('scientific-tools-cooperative-runner.js'",
   'await loadCooperativeRunner();',
   "loadScript('binary-cube-decryption-dashboard.js'",
   "loadScript('binary-cube-information-analysis-suite.js'",
   "loadScript('binary-cube-communication-capacity-analyzer.js'",
+  "loadScript('binary-cube-media-forensics-suite.js'",
   "loadScript('interstellar-media-collisions-lab.js'",
   "loadScript('double-slit-lab.js'",
   'ScientificToolsCooperativeRunner loads before Scientific Tools runtimes',
@@ -201,6 +210,7 @@ checks.push(includes('Scientific Tools owns one Binary Cube, Decryption Dashboar
   'id="scientific-tools-open-decryption-dashboard"',
   'id="scientific-tools-open-information-analysis"',
   'id="scientific-tools-open-communication-capacity"',
+  'id="scientific-tools-open-media-forensics"',
   'id="scientific-tools-open-ism"',
   'id="scientific-tools-open-double-slit"',
   'loadDecryptionDashboard',
@@ -209,6 +219,8 @@ checks.push(includes('Scientific Tools owns one Binary Cube, Decryption Dashboar
   'openInformationAnalysisSuite',
   'loadCommunicationCapacityAnalyzer',
   'openCommunicationCapacityAnalyzer',
+  'loadMediaForensicsSuite',
+  'openMediaForensicsSuite',
   'loadDoubleSlitLab',
   'openDoubleSlitLab'
 ]));
@@ -343,6 +355,71 @@ assert.ok(communicationCapacityCss.includes('.bcca-metrics'), 'Communication Cap
 assert.ok(communicationCapacityCss.includes('.bcca-table'), 'Communication Capacity Analyzer stylesheet must retain table styling.');
 checks.push('Communication Capacity Analyzer stylesheet remains authoritative');
 
+checks.push(includes('Media Forensics Suite covers steganography, convolution, raster, audio, and container recovery', mediaForensics, [
+  'BinaryCubeMediaForensicsSuite',
+  'Steganography, Signal & Media Forensics Suite',
+  'function extractByteBitPlane(',
+  'function extractSelectedBits(',
+  'function bitPlaneDiagnostics(',
+  'function lsbPairChiSquare(',
+  'function bitAutocorrelation(',
+  'function parseKernelMatrix(',
+  'function convolve1d(',
+  'function crossCorrelate1d(',
+  'function convolve2d(',
+  'function extractRasterLsb(',
+  'function rasterBitPlaneImage(',
+  'function convolveRasterChannel(',
+  'function parseWav(',
+  'function decodeWavChannels(',
+  'function extractPcmSampleBitPlane(',
+  'function extractPcmDeltaBitPlane(',
+  'function fftReal(',
+  'function spectralSummary(',
+  'function goertzelPower(',
+  'function decodeDtmf(',
+  'function decodeBinaryFsk(',
+  'function decodeOnOffKeying(',
+  'function parsePngChunks(',
+  'function parseJpegSegments(',
+  'function parseId3v2(',
+  'function scanContainer(',
+  'function fullForensicSweep(',
+  'function fullForensicSweepAsync(',
+  'new root.Worker(',
+  'WORKER_HEARTBEAT_MS',
+  'not proof of intentional hiding'
+]));
+checks.push(excludes('Media Forensics Suite remains independent from encryption and unrelated scientific models', mediaForensics, [
+  'ShadowrunBinaryCubeEngine.encryptBinary',
+  'Engine.encryptBinary(',
+  'Engine.transformBlock(',
+  'InterstellarMediaCollisionsLab',
+  'DoubleSlitExperimentLab',
+  'PLANCK_LENGTH',
+  'LAMBDA_COEFFICIENT'
+]));
+checks.push(includes('Media Forensics worker delegates its model to the authoritative suite', mediaForensicsWorker, [
+  "importScripts('binary-cube-media-forensics-suite.js?v=20260809-media-forensics-1')",
+  'const Suite = self.BinaryCubeMediaForensicsSuite;',
+  'Suite.fullForensicSweep(bytes)',
+  "operation !== 'full-sweep'",
+  "type: 'progress'",
+  "type: 'result'"
+]));
+checks.push(excludes('Media Forensics worker does not duplicate steganography, convolution, or audio mathematics', mediaForensicsWorker, [
+  'function extractByteBitPlane(',
+  'function convolve1d(',
+  'function convolve2d(',
+  'function decodeDtmf(',
+  'function decodeBinaryFsk(',
+  'function parseWav('
+]));
+assert.ok(mediaForensicsCss.includes('.bmfs-panel'), 'Media Forensics stylesheet must retain authoritative panel styling.');
+assert.ok(mediaForensicsCss.includes('.bmfs-tab-strip'), 'Media Forensics stylesheet must retain internal tool navigation.');
+assert.ok(mediaForensicsCss.includes('.bmfs-metrics'), 'Media Forensics stylesheet must retain forensic metric styling.');
+checks.push('Media Forensics Suite stylesheet remains authoritative');
+
 checks.push(includes('ISM preserves physical, foam, and Shadow model boundaries', ism, [
   'const LAMBDA = 1.097e-52;',
   'const PLANCK_LENGTH = 1.616255e-35;',
@@ -372,6 +449,7 @@ checks.push(excludes('ISM remains independent of Double Slit, cryptanalysis, and
   'BinaryCubeDecryptionDashboard',
   'BinaryCubeInformationAnalysisSuite',
   'BinaryCubeCommunicationCapacityAnalyzer',
+  'BinaryCubeMediaForensicsSuite',
   'ShadowrunBinaryCubeEngine',
   'ShadowrunBinaryCubeEncryption'
 ]));
@@ -404,6 +482,7 @@ checks.push(excludes('Double Slit does not absorb ISM, cryptanalysis, or Binary 
   'BinaryCubeDecryptionDashboard',
   'BinaryCubeInformationAnalysisSuite',
   'BinaryCubeCommunicationCapacityAnalyzer',
+  'BinaryCubeMediaForensicsSuite',
   'ShadowrunBinaryCubeEngine',
   'PLANCK_LENGTH',
   'LAMBDA_COEFFICIENT'
@@ -419,7 +498,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.10.1',
+  schemaVersion: '0.11.0',
   pass: true,
   checkCount: checks.length,
   checks
