@@ -1,3 +1,4 @@
+/* Shared, setting-neutral contextual help presentation for cryptography, cryptanalysis, steganography, and signal-analysis panels. */
 .sth-tool-guide{margin:14px 18px;border:1px solid color-mix(in srgb,var(--accent,#7dd3fc) 40%,transparent);border-radius:14px;background:color-mix(in srgb,var(--panel,#111827) 88%,transparent);overflow:visible;position:relative;z-index:4}
 .sth-tool-guide>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;cursor:pointer;list-style:none;font-weight:800;user-select:none}
 .sth-tool-guide>summary::-webkit-details-marker{display:none}
