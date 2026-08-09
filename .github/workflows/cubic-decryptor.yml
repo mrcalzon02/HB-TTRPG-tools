@@ -1,4 +1,4 @@
-# Validates deterministic single/pooled search and resume, IndexedDB interrupted-search persistence, generator coverage, legacy compatibility, additive SHA-256 key identity, and routed Scientific Tools integration.
+# Validates deterministic single/pooled search and resume, IndexedDB interrupted-search persistence, generator coverage, legacy compatibility, additive SHA-256 key identity, parity-gated WebGPU Stage A acceleration, and routed Scientific Tools integration.
 name: Validate Cubic Decryptor Tool
 
 on:
@@ -9,6 +9,7 @@ on:
       - "shadowrun-binary-cube-engine.js"
       - "binary-cube-key-generation-research.js"
       - "binary-cube-cubic-decryptor-engine.js"
+      - "binary-cube-cubic-decryptor-webgpu.js"
       - "binary-cube-cubic-decryptor-worker-pool.js"
       - "binary-cube-cubic-decryptor-worker.js"
       - "binary-cube-cubic-decryptor.js"
@@ -51,6 +52,7 @@ jobs:
         run: |
           node --check shadowrun-binary-cube-engine.js
           node --check binary-cube-cubic-decryptor-engine.js
+          node --check binary-cube-cubic-decryptor-webgpu.js
           node --check binary-cube-cubic-decryptor-worker-pool.js
           node --check binary-cube-cubic-decryptor-worker.js
           node --check binary-cube-cubic-decryptor.js
@@ -62,7 +64,7 @@ jobs:
           node --check scripts/validate-scientific-diagnostic-pipeline.mjs
           node --check scripts/validate-scientific-tools-extraction.mjs
           test -s binary-cube-cubic-decryptor.css
-      - name: Recover all current cubic key-generator families
+      - name: Recover all current cubic key-generator families and validate WebGPU parity boundary
         run: node scripts/validate-binary-cube-cubic-decryptor.mjs
       - name: Validate routed Cubic diagnostic contract
         run: node scripts/validate-scientific-diagnostic-pipeline.mjs
@@ -76,7 +78,7 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
             -f context='binary-cube/cubic-decryptor' \
-            -f description='Cubic Decryptor and Scientific Tools integration regression passed.' \
+            -f description='Cubic Decryptor, WebGPU parity boundary, and Scientific Tools regression passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - name: Record failure
         if: ${{ failure() }}
@@ -86,5 +88,5 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
             -f context='binary-cube/cubic-decryptor' \
-            -f description='Cubic Decryptor or Scientific Tools integration regression failed.' \
+            -f description='Cubic Decryptor, WebGPU parity boundary, or Scientific Tools regression failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
