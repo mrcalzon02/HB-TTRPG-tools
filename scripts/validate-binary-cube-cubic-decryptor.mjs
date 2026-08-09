@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -11,8 +12,61 @@ const Engine = require(path.join(root, 'shadowrun-binary-cube-engine.js'));
 const Research = require(path.join(root, 'binary-cube-key-generation-research.js'));
 const Cubic = require(path.join(root, 'binary-cube-cubic-decryptor-engine.js'));
 const ui = fs.readFileSync(path.join(root, 'binary-cube-cubic-decryptor.js'), 'utf8');
-const worker = fs.readFileSync(path.join(root, 'binary-cube-cubic-decryptor-worker.js'), 'utf8');
+const workerPath = path.join(root, 'binary-cube-cubic-decryptor-worker.js');
+const worker = fs.readFileSync(workerPath, 'utf8');
 const css = fs.readFileSync(path.join(root, 'binary-cube-cubic-decryptor.css'), 'utf8');
+
+function utf8Bits(value) {
+  return Array.from(Buffer.from(String(value), 'utf8'), byte => byte.toString(2).padStart(8, '0')).join('');
+}
+
+function createWorkerHarness() {
+  const messages = [];
+  let messageListener = null;
+  const sandbox = {
+    console,
+    TextDecoder,
+    TextEncoder,
+    Uint8Array,
+    Uint16Array,
+    Uint32Array,
+    Int8Array,
+    Int16Array,
+    Int32Array,
+    Float32Array,
+    Float64Array,
+    ArrayBuffer,
+    DataView
+  };
+  const context = vm.createContext(sandbox);
+  context.self = context;
+  context.postMessage = message => messages.push(message);
+  context.addEventListener = (type, listener) => {
+    if (type === 'message') messageListener = listener;
+  };
+  context.importScripts = (...urls) => {
+    for (const url of urls) {
+      const clean = String(url).split('?')[0];
+      const filename = path.join(root, clean);
+      vm.runInContext(fs.readFileSync(filename, 'utf8'), context, { filename });
+    }
+  };
+  vm.runInContext(worker, context, { filename: workerPath });
+  assert.equal(typeof messageListener, 'function', 'Cubic worker must register a message listener');
+  return Object.freeze({
+    run(message) {
+      messages.length = 0;
+      messageListener({ data: message });
+      return [...messages];
+    }
+  });
+}
+
+function resultMessage(messages, label) {
+  const row = [...messages].reverse().find(message => message?.type === 'result');
+  assert.ok(row, `${label} did not emit a result message`);
+  return row.result;
+}
 
 assert.equal(Cubic.constants.VERSION, '0.1.0');
 assert.deepEqual(Cubic.constants.PROFILE_ORDER, [
@@ -22,6 +76,14 @@ assert.deepEqual(Cubic.constants.PROFILE_ORDER, [
   'nested-permutation',
   'nested-interleaved'
 ]);
+const searchableResearchProfiles = Research.constants.PROFILE_DEFINITIONS
+  .filter(profile => profile.disposition !== 'rejected')
+  .map(profile => profile.id);
+assert.deepEqual(
+  Cubic.constants.PROFILE_ORDER,
+  searchableResearchProfiles,
+  'Every non-rejected Binary Cube key-generation profile must be searchable by the Cubic Decryptor or explicitly rejected in the research registry.'
+);
 assert.equal(Cubic.renderSeed('seed-{n8}-{hex8}', 42), 'seed-00000042-0000002a');
 assert.throws(() => Cubic.normalizeTemplates(['no-counter']), /counter placeholder/);
 
@@ -95,6 +157,69 @@ assert.equal(Cubic.validateCheckpoint(checkpoint, broadPlan).cursor, 12);
 const otherPlan = Cubic.buildSearchPlan(rawSource, { ...broadPlan, seedEnd: 4, profiles: ['direct-permutation'], seedTemplates: ['{n}'], includeFixedSeeds: false, maxGridSize: 16, usePackageMetadata: false, payloadCapacity: directPackage.payloadCapacity, inputFace: 'top', outputFace: 'front' });
 assert.throws(() => Cubic.validateCheckpoint(checkpoint, otherPlan), /different deterministic search plan/);
 
+// True worker-level deterministic brute force: the correct key is deliberately beyond the first run budget.
+const workerSeed = '437';
+const workerPlaintext = utf8Bits('Cubic worker resume fixture · deterministic brute force');
+const workerBaseOptions = { inputFace: 'top', outputFace: 'front', inputQuarterTurns: 0, outputQuarterTurns: 0, maskDensity: 0.75 };
+const workerKey = Research.generateResearchKey('iterative-chain', workerSeed, 4, workerBaseOptions);
+const workerPackage = Engine.encryptBinary(workerPlaintext, workerKey);
+const workerSearchOptions = {
+  profiles: ['iterative-chain'],
+  usePackageMetadata: true,
+  maxGridSize: 8,
+  seedStart: 0,
+  seedEnd: 500,
+  seedTemplates: ['{n}'],
+  includeFixedSeeds: false,
+  orientationMode: 'manual',
+  capacityMode: 'manual',
+  stopOnFingerprint: true,
+  resultLimit: 8,
+  scoreThreshold: 100,
+  sampleBlocks: 1,
+  progressEvery: 25,
+  maxAttemptsThisRun: 200
+};
+
+const firstHarness = createWorkerHarness();
+const firstMessages = firstHarness.run({
+  id: 1001,
+  operation: 'search',
+  source: { kind: 'package', package: workerPackage },
+  options: workerSearchOptions,
+  resumeCursor: 0
+});
+const firstWorkerResult = resultMessage(firstMessages, 'First bounded worker run');
+assert.equal(firstWorkerResult.plan.totalAttempts, 501, 'Worker fixture should enumerate seeds 0 through 500 exactly once');
+assert.equal(firstWorkerResult.cursor, 200, 'First bounded worker run must stop at the exact deterministic cursor budget');
+assert.equal(firstWorkerResult.attemptsThisRun, 200, 'First bounded worker run must execute exactly its attempt budget');
+assert.equal(firstWorkerResult.stoppedEarly, true);
+assert.equal(firstWorkerResult.stopReason, 'attempt-budget');
+assert.equal(firstWorkerResult.exactMatch, null, 'Late worker fixture key must not be found before resume');
+const restoredCheckpoint = Cubic.validateCheckpoint(firstWorkerResult.checkpoint, firstWorkerResult.plan);
+assert.equal(restoredCheckpoint.cursor, 200);
+
+// Destroy the first harness, create a fresh worker context, and resume only from the serialized deterministic cursor.
+const resumedHarness = createWorkerHarness();
+const resumedMessages = resumedHarness.run({
+  id: 1002,
+  operation: 'search',
+  source: { kind: 'package', package: workerPackage },
+  options: { ...workerSearchOptions, maxAttemptsThisRun: 300 },
+  resumeCursor: restoredCheckpoint.cursor
+});
+const resumedWorkerResult = resultMessage(resumedMessages, 'Resumed worker run');
+assert.equal(resumedWorkerResult.planId, firstWorkerResult.planId, 'Attempt budget must not alter deterministic Plan ID');
+assert.equal(resumedWorkerResult.stopReason, 'fingerprint-match');
+assert.equal(resumedWorkerResult.stoppedEarly, true);
+assert.ok(resumedWorkerResult.exactMatch, 'Fresh worker must recover the late key after checkpoint resume');
+assert.equal(resumedWorkerResult.exactMatch.seed, workerSeed);
+assert.equal(resumedWorkerResult.exactMatch.keyId, workerKey.keyId);
+assert.equal(resumedWorkerResult.exactMatch.plaintextBits, workerPlaintext);
+assert.equal(resumedWorkerResult.cursor, 438, 'Resume must continue from cursor 200 and stop immediately after seed 437');
+assert.equal(resumedWorkerResult.attemptsThisRun, 238, 'Resumed worker must not replay the first 200 candidate attempts');
+assert.equal(Cubic.validateCheckpoint(resumedWorkerResult.checkpoint, resumedWorkerResult.plan).cursor, 438);
+
 for (const required of [
   'Cubic Decryptor Tool',
   'Build staged plan',
@@ -111,16 +236,29 @@ for (const required of [
   "'binary-cube-cubic-decryptor-engine.js'",
   "operation !== 'search'",
   'Cubic.attemptCandidate',
-  'Cubic.makeCheckpoint'
+  'Cubic.makeCheckpoint',
+  'maxAttemptsThisRun',
+  "stopReason = 'attempt-budget'"
 ]) assert.ok(worker.includes(required), `Worker is missing ${JSON.stringify(required)}`);
 assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty');
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.1.0',
+  schema: '0.2.0',
   pass: true,
   recovered,
   rawRoundTrip: true,
+  generatorCompatibilityContract: searchableResearchProfiles,
   deterministicPlanId: broadPlan.planId,
-  broadStageCount: broadPlan.stages.length
+  broadStageCount: broadPlan.stages.length,
+  workerEnumeration: {
+    planId: firstWorkerResult.planId,
+    totalAttempts: firstWorkerResult.plan.totalAttempts,
+    firstRunCursor: firstWorkerResult.cursor,
+    resumedCursor: resumedWorkerResult.cursor,
+    resumedAttempts: resumedWorkerResult.attemptsThisRun,
+    recoveredSeed: resumedWorkerResult.exactMatch.seed,
+    recoveredKeyId: resumedWorkerResult.exactMatch.keyId,
+    exactPlaintextRecovery: resumedWorkerResult.exactMatch.plaintextBits === workerPlaintext
+  }
 }, null, 2));
