@@ -142,6 +142,11 @@
       .replace(/no current battle confirmed/gi, 'no active battle seal is entered')
       .replace(/current recovery status undefined/gi, 'recovery writ remains sealed')
       .replace(/environment unrecorded|no environment supplied/gi, 'environmental register sealed')
+      .replace(/\bgenerated\b/gi, 'entered under cogitator writ')
+      .replace(/\bdeterministic\b/gi, 'sealed')
+      .replace(/\bcross-indexed\b/gi, 'concordance-linked')
+      .replace(/\bunified\b/gi, 'sector-sealed')
+      .replace(/\bexternal\b/gi, 'off-vault')
       .replace(/\s{2,}/g, ' ')
       .trim();
   }
@@ -196,7 +201,7 @@
       { group: 'Navigation', label: 'Beacon authority', value: pick(random, ['Navis Cartographica', 'Battlefleet Prathus', 'Adeptus Mechanicus', 'Departmento Munitorum', 'Adeptus Administratum']) },
       { group: 'Strategic Register', label: 'Strategic threat seal', value: sealText(node.threatNote || dataThreatFallback(node)) },
       { group: 'Strategic Register', label: 'Registered classification', value: classification(node, records) },
-      { group: 'Strategic Register', label: 'Principal chronicle notation', value: sealText(primaryRecord.keyStory || 'No public chronicle leaf attached under this access seal') }
+      { group: 'Strategic Register', label: 'Principal chronicle notation', value: sealText(primaryRecord.keyStory || 'No chronicle leaf is attached beneath the present access seal') }
     ];
 
     const environment = records.map(record => record.environment).find(Boolean);
