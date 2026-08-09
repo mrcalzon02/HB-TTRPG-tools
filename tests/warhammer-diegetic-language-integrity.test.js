@@ -13,7 +13,8 @@ const files = Object.freeze({
   components: 'assets/warhammer-40k/imperial-component-lineage-v1.js',
   personnel: 'assets/warhammer-40k/imperial-personnel-lineage-v1.js',
   events: 'assets/warhammer-40k/imperial-sector-events-v1.js',
-  medicae: 'assets/warhammer-40k/imperial-medicae-institutions-v1.js'
+  medicae: 'assets/warhammer-40k/imperial-medicae-institutions-v1.js',
+  mercatura: 'assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js'
 });
 
 const source = Object.fromEntries(Object.entries(files).map(([key, file]) => [
@@ -53,7 +54,9 @@ const required = Object.freeze({
     'Imperial Void, Dockyard, Medicae, Chronicle & Mercatura Index',
     'Archivum concordance',
     'Concordant Dockets',
-    'Imperial Archive Seal Withheld'
+    'Imperial Archive Seal Withheld',
+    'Active carriage writs',
+    'Renewals within one standard year'
   ],
   workspace: [
     'Navis Contact Dossier',
@@ -89,6 +92,14 @@ const required = Object.freeze({
     'Medicae treatment lineage',
     'Treatment lineage seal',
     'retained-personnel treatment ledger'
+  ],
+  mercatura: [
+    'Navis Mercatura · Chartered House Continuity Roll',
+    'Commercial Writs & Factorate Standing',
+    'Unseal active carriage writs',
+    'Unseal bonded suppliers & counterparties',
+    'Unseal major organizational upheavals',
+    'Current Mercantile Pressures'
   ]
 });
 
