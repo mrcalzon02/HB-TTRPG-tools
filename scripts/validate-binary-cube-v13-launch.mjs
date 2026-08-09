@@ -33,10 +33,10 @@ checks.push(requireMatch(
   'V13 promotion must not precede V12 acceptance.'
 ));
 checks.push(requireMatch(
-  'V13 asset version is promoted',
+  'V13 asset token is refreshed for the unified Binary Cube renderer',
   entry,
-  /const ASSET_VERSION = '20260730-v13';/,
-  'the Shadowrun entry must publish the V13 asset version.'
+  /const ASSET_VERSION = '20260809-v13-binary-cube-unified';/,
+  'the Shadowrun entry must force browsers to request the current unified Binary Cube renderer while retaining the accepted V13 launcher.'
 ));
 checks.push(requireMatch(
   'Laboratory card remains available',
@@ -143,7 +143,7 @@ checks.push(requireIncludes(
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v13-launch-contract-receipt',
-  schemaVersion: '0.1.1',
+  schemaVersion: '0.1.2',
   pass: true,
   checkCount: checks.length,
   checks
