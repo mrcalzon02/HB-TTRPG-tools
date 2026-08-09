@@ -185,10 +185,25 @@ try {
   await waitForEvaluation(cdp, `Boolean(window.ShadowrunBinaryCubeVisualizer?.openPanel)`, 'promoted visualizer API');
   const runtime = await evaluate(cdp, `(async () => {
     const Visualizer = window.ShadowrunBinaryCubeVisualizer;
+    const Renderer = window.BinaryCubeVisualizerRenderer;
     const panel = Visualizer.openPanel();
     for (let attempt = 0; attempt < 240; attempt += 1) {
       const state = Visualizer.currentState();
       if (state.packageReady && state.roundTripValid && state.traceReady) {
+        const play = panel.querySelector('.cube-visualizer-viewport-play');
+        const view = panel.querySelector('.cube-visualizer-viewport-view');
+        if (!play || !view) throw new Error('The unified viewport controls are missing.');
+        if (!/Play Encoding/.test(play.textContent)) throw new Error('The viewport playback control is not labeled Play Encoding.');
+        if (!/Isometric/.test(view.textContent) || view.getAttribute('aria-pressed') !== 'false') throw new Error('The viewport isometric control did not initialize in perspective mode.');
+        view.click();
+        if (view.getAttribute('aria-pressed') !== 'true' || !/Perspective/.test(view.textContent)) throw new Error('The viewport eye control did not enter isometric mode.');
+        view.click();
+        if (view.getAttribute('aria-pressed') !== 'false' || !/Isometric/.test(view.textContent)) throw new Error('The viewport eye control did not return to perspective mode.');
+        play.click();
+        for (let playbackAttempt = 0; playbackAttempt < 80 && !Visualizer.currentState().tracePlaying; playbackAttempt += 1) await new Promise(resolve => setTimeout(resolve, 25));
+        const playing = Visualizer.currentState();
+        if (!playing.tracePlaying) throw new Error('The viewport Play Encoding control did not start canonical trace playback.');
+        panel.querySelector('[data-cube-trace-pause]')?.click();
         return {
           panelOpen: state.panelOpen,
           rendererVersion: state.rendererVersion,
@@ -199,7 +214,11 @@ try {
           panelCount: document.querySelectorAll('#' + Visualizer.constants.PANEL_ID).length,
           viewportWidth: innerWidth,
           documentScrollWidth: document.documentElement.scrollWidth,
-          panelWidth: Math.round(panel.getBoundingClientRect().width)
+          panelWidth: Math.round(panel.getBoundingClientRect().width),
+          viewportPlayEncoding: true,
+          viewportIsometricToggle: true,
+          orthographicHelper: typeof Renderer?.orthographic === 'function',
+          loremFallback: Renderer?.constants?.DEFAULT_LOREM_TEXT || ''
         };
       }
       await new Promise(resolve => setTimeout(resolve, 25));
@@ -208,18 +227,22 @@ try {
   })()`, 'Validate promoted visualizer runtime');
 
   assert.equal(runtime.panelOpen, true);
-  assert.equal(runtime.rendererVersion, '0.5.0');
+  assert.equal(runtime.rendererVersion, '0.6.0');
   assert.equal(runtime.packageReady, true);
   assert.equal(runtime.roundTripValid, true);
   assert.equal(runtime.traceReady, true);
   assert.equal(runtime.transportKind, 'internal-package');
   assert.equal(runtime.panelCount, 1);
+  assert.equal(runtime.viewportPlayEncoding, true);
+  assert.equal(runtime.viewportIsometricToggle, true);
+  assert.equal(runtime.orthographicHelper, true);
+  assert.match(runtime.loremFallback, /^Lorem ipsum dolor sit amet/);
   assert.ok(runtime.documentScrollWidth <= runtime.viewportWidth + 2);
   assert.ok(runtime.panelWidth <= runtime.viewportWidth + 2);
 
   console.log(JSON.stringify({
     format: 'hb-ttrpg-shadowrun-binary-cube-v13-pages-launch-receipt',
-    schemaVersion: '0.1.0',
+    schemaVersion: '0.2.0',
     pass: true,
     pathname: new URL(pagesUrl).pathname,
     hash: '#shadowrun',
