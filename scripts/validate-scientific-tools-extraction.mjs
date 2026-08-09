@@ -60,7 +60,7 @@ function nonEmpty(relativePath) {
 const checks = [];
 
 checks.push(includes('Shadowrun retains definitive Binary Cube launch targets', sources.shadowrun, [
-  "['tools','Binary Cube Encryption Laboratory'", "['tools','Binary Cube Encoder Visualizer'", 'function loadCubeTool()', 'function loadCubeVisualizer()', "loadScript('shadowrun-binary-cube-engine.js'"
+  "['tools','Binary Cube Encryption Laboratory'", "['tools','Binary Cube Encoder Visualizer'", 'function loadCubeTool()', 'function loadCubeVisualizer()', 'function loadContextualHelp()', "loadScript('scientific-tools-help.js'", "loadStyle('scientific-tools-help.css'", "loadScript('shadowrun-binary-cube-engine.js'"
 ]));
 checks.push(excludes('Shadowrun does not absorb setting-neutral Scientific Tools', sources.shadowrun, [
   'binary-cube-key-generation-research.js', 'binary-cube-diagnostic-pipeline.js', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-cubic-decryptor-engine.js', 'binary-cube-steganalysis-lab.js', 'interstellar-media-collisions-lab.js', 'double-slit-lab.js'
@@ -161,7 +161,7 @@ checks.push('Scientific Tools styles, raster evidence routing, calibration data,
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.25.0',
+  schemaVersion: '0.26.0',
   pass: true,
   checkCount: checks.length,
   checks

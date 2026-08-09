@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'shadowrun';
-  const ASSET_VERSION = '20260809-v16-binary-cube-reseed';
+  const ASSET_VERSION = '20260809-v17-contextual-help';
   const modules = [
     ['generators','Street View Sprawl Discovery','Generate nearby Shadowrun-ready sites from a real-world origin with deterministic coordinates, Street View links, world-seeded run hooks, danger scaling, security posture, Matrix surfaces, magical texture, local saves, and global registry submission.','shadowrun-sprawl-discovery','prototype','Open Discovery'],
     ['generators','Shadowrun Mission and Complication Generator','Build a complete run with employer, objective, target, opposition, hidden truth, legwork routes, complications, payment, and fallout.'],
@@ -31,6 +31,7 @@
   let active = 'all';
   let cubeToolPromise = null;
   let cubeVisualizerPromise = null;
+  let contextualHelpPromise = null;
   let sprawlToolPromise = null;
   let midmarketToolPromise = null;
   let cubeHandoffsBound = false;
@@ -166,6 +167,18 @@
     return promise;
   }
 
+  function loadContextualHelp() {
+    if (window.ScientificToolsHelp) return Promise.resolve(window.ScientificToolsHelp);
+    if (contextualHelpPromise) return contextualHelpPromise;
+    contextualHelpPromise = (async () => {
+      await loadStyle('scientific-tools-help.css');
+      await loadScript('scientific-tools-help.js', () => Boolean(window.ScientificToolsHelp));
+      return window.ScientificToolsHelp;
+    })();
+    contextualHelpPromise.catch(() => { contextualHelpPromise = null; });
+    return contextualHelpPromise;
+  }
+
   function canonicalCubeEngineReady() {
     return Boolean(
       window.ShadowrunBinaryCubeEngine
@@ -176,9 +189,10 @@
   }
 
   function loadCubeTool() {
-    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeWorkerClient && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
+    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeWorkerClient && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI && window.ScientificToolsHelp) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
     if (cubeToolPromise) return cubeToolPromise;
     cubeToolPromise = (async () => {
+      await loadContextualHelp();
       await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
       await loadScript('binary-cube-worker-client.js', () => Boolean(window.ShadowrunBinaryCubeWorkerClient));
       await loadScript('binary-cube-large-grid-ui.js', () => Boolean(window.BinaryCubeLargeGridUI));
@@ -194,9 +208,10 @@
   }
 
   function loadCubeVisualizer() {
-    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeWorkerClient && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer) return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
+    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeWorkerClient && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer && window.ScientificToolsHelp) return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
     if (cubeVisualizerPromise) return cubeVisualizerPromise;
     cubeVisualizerPromise = (async () => {
+      await loadContextualHelp();
       await loadStyle('binary-cube-visualizer.css');
       await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
       await loadScript('binary-cube-worker-client.js', () => Boolean(window.ShadowrunBinaryCubeWorkerClient));

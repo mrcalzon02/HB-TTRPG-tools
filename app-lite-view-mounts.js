@@ -205,7 +205,7 @@
       return;
     }
     if (viewId === 'shadowrun') {
-      shadowrunEntryPromise ||= loadScript('shadowrun-entry.js?v=20260809-v16-binary-cube-reseed');
+      shadowrunEntryPromise ||= loadScript('shadowrun-entry.js?v=20260809-v17-contextual-help');
       await Promise.all([shadowrunEntryPromise, base.prepareView(viewId)]);
       return;
     }
