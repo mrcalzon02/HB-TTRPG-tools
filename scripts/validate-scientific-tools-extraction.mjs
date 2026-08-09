@@ -13,6 +13,9 @@ const blacklight = read('blacklight-continuum-entry.js');
 const mounts = read('app-lite-view-mounts.js');
 const workspace = read('scientific-tools-entry.js');
 const cooperative = read('scientific-tools-cooperative-runner.js');
+const cubeWorker = read('shadowrun-binary-cube-worker.js');
+const cubeWorkerClient = read('binary-cube-worker-client.js');
+const cubeLab = read('shadowrun-binary-cube-encryption.js');
 const decryption = read('binary-cube-decryption-dashboard.js');
 const decryptionCss = read('binary-cube-decryption-dashboard.css');
 const ism = read('interstellar-media-collisions-lab.js');
@@ -71,6 +74,12 @@ checks.push(includes('Main menu cache-refreshes the Decryption Dashboard Scienti
   "loadScript('scientific-tools-entry.js?v=20260809-decryption-dashboard-1')",
   'ensureScientificToolsView();'
 ]));
+checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
+  "loadScript('shadowrun-binary-cube-engine.js')",
+  "loadScript('binary-cube-worker-client.js?v=20260809-v14-binary-cube-worker')",
+  "loadScript('shadowrun-binary-cube-encryption.js?v=20260809-v14-binary-cube-worker')",
+  "loadScript('binary-cube-large-grid-ui.js')"
+]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'The main menu must own exactly one Scientific Tools card.');
 checks.push('Main menu owns one Scientific Tools destination');
 
@@ -89,6 +98,59 @@ checks.push(excludes('Cooperative runner does not own scientific model logic', c
   'DoubleSlitExperimentLab',
   'ShadowrunBinaryCubeEngine',
   'BinaryCubeDecryptionDashboard'
+]));
+
+checks.push(includes('Binary Cube worker delegates all heavy mathematics to the canonical engine', cubeWorker, [
+  "importScripts('shadowrun-binary-cube-engine.js?v=20260809-v14-binary-cube-worker')",
+  'const Engine = self.ShadowrunBinaryCubeEngine;',
+  "case 'create-key':",
+  'Engine.createKey(',
+  'Engine.assertProjectionUniqueness(key)',
+  "case 'encrypt':",
+  'Engine.encryptBinary(',
+  "case 'decrypt':",
+  'Engine.decryptBinary(',
+  "case 'validate-pair':",
+  'Engine.validatePackage(',
+  'Engine.algebraicInvariant(key)',
+  "type: 'progress'"
+]));
+checks.push(excludes('Binary Cube worker does not duplicate the canonical cube transform', cubeWorker, [
+  'function pointDepthForKey(',
+  'function computeBlockTransformation(',
+  'function transformBlockWithKey(',
+  'latinValue =',
+  'rowPermutation[x] + key.columnPermutation[y]'
+]));
+
+checks.push(includes('Binary Cube worker client keeps heavy work off the browser main thread and can terminate it', cubeWorkerClient, [
+  'new Worker(',
+  'pending = new Map()',
+  "message.type === 'progress'",
+  'worker.terminate()',
+  'function cancelAll(',
+  'function isBusy()',
+  'ShadowrunBinaryCubeWorkerClient'
+]));
+
+checks.push(includes('Binary Cube laboratory routes expensive user actions through the background worker', cubeLab, [
+  'const Executor = window.ShadowrunBinaryCubeWorkerClient;',
+  'Slow-hardware execution:',
+  'async function runBackground(',
+  "runBackground(panel, 'create-key'",
+  "runBackground(panel, 'encrypt'",
+  "runBackground(panel, 'decrypt'",
+  "runBackground(panel, 'validate-pair'",
+  'Cancel active operation',
+  'cancelActiveOperation(',
+  'routine encrypt/decrypt uses the algebraic collision-free invariant',
+  'Validate Pair'
+]));
+checks.push(excludes('Binary Cube laboratory no longer performs the primary expensive encode/decode path synchronously', cubeLab, [
+  'Engine.encryptBinary(panel.querySelector',
+  'Engine.decryptBinary(packageObject, key)',
+  'Engine.diagnosePackage(packageObject, keyObject)',
+  'Engine.assertProjectionUniqueness(key);'
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
@@ -231,7 +293,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.7.0',
+  schemaVersion: '0.8.0',
   pass: true,
   checkCount: checks.length,
   checks
