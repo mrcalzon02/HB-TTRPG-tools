@@ -1,0 +1,75 @@
+name: Apply Scientific Tools Cubic cache seal
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/apply-scientific-tools-cubic-cache-seal.yml"
+      - "scripts/apply-scientific-tools-cubic-cache-seal.py"
+
+permissions:
+  contents: write
+  statuses: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='scientific-tools/cubic-cache-seal' \
+            -f description='Applying Cubic Decryptor Scientific Tools cache seal.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Apply exact cache and ownership edits
+        run: |
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+          python scripts/apply-scientific-tools-cubic-cache-seal.py
+          node --check app-lite-view-mounts.js
+          node --check scientific-tools-entry.js
+          node --check scripts/validate-scientific-tools-extraction.mjs
+          node scripts/validate-binary-cube-cubic-decryptor.mjs
+          node scripts/validate-scientific-diagnostic-pipeline.mjs
+          node scripts/validate-scientific-tools-extraction.mjs
+      - name: Commit validated cache seal
+        run: |
+          if git diff --quiet -- app-lite-view-mounts.js scientific-tools-entry.js scripts/validate-scientific-tools-extraction.mjs; then
+            echo "Cache seal already present."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app-lite-view-mounts.js scientific-tools-entry.js scripts/validate-scientific-tools-extraction.mjs
+          git commit -m "chore: advance Scientific Tools Cubic cache seal"
+          git push origin HEAD:main
+      - name: Record success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='scientific-tools/cubic-cache-seal' \
+            -f description='Scientific Tools Cubic cache seal validated and applied.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='scientific-tools/cubic-cache-seal' \
+            -f description='Scientific Tools Cubic cache seal failed closed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
