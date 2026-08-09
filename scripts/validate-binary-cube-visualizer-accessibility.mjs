@@ -21,7 +21,7 @@ const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visua
 const entrySource = fs.readFileSync(path.join(repositoryRoot, 'shadowrun-entry.js'), 'utf8');
 const checklistSource = fs.readFileSync(path.join(repositoryRoot, 'docs/binary-cube-v10-accessibility-checklist.md'), 'utf8');
 
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.5.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.6.0');
 assert.deepEqual(Visualizer.constants.DISPLAY_MODES, ['auto', '3d', '2d']);
 assert.equal(typeof Visualizer.utilities.resolvePresentedTraceTime, 'function');
 assert.equal(typeof Visualizer.utilities.traceTranscriptEntries, 'function');
@@ -110,13 +110,13 @@ for (const selector of [
   'content:"★"'
 ]) assert.match(styleSource, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 
-assert.match(entrySource, /ASSET_VERSION = '\d{8}(?:-\d+|-v\d+)'/);
+assert.match(entrySource, /ASSET_VERSION = '\d{8}(?:-\d+|-v\d+(?:-[a-z0-9-]+)?)'/i);
 assert.match(entrySource, /keyboard controls, reduced-motion phases, non-color state markers, trace transcripts/);
 for (const heading of ['Keyboard operation', 'Reduced motion', 'Non-color distinctions', 'Live announcements', 'Trace transcript', '2D fallback']) assert.match(checklistSource, new RegExp(heading, 'i'));
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v10-accessibility-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   rendererVersion: Renderer.constants.RENDERER_VERSION,
   displayModes: Visualizer.constants.DISPLAY_MODES,
   transcriptPhases: transcript.length,
