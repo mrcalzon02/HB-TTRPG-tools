@@ -221,6 +221,7 @@ const firstWorkerResult = resultMessage(firstMessages, 'First bounded worker run
 assert.equal(firstWorkerResult.plan.totalAttempts, 501, 'Worker fixture should enumerate seeds 0 through 500 exactly once');
 assert.equal(firstWorkerResult.cursor, 200, 'First bounded worker run must stop at the exact deterministic cursor budget');
 assert.equal(firstWorkerResult.attemptsThisRun, 200, 'First bounded worker run must execute exactly its attempt budget');
+assert.ok(Number.isFinite(firstWorkerResult.attemptsPerSecond) && firstWorkerResult.attemptsPerSecond >= 0, 'Bounded worker result must expose measured attempts/second.');
 assert.equal(firstWorkerResult.stoppedEarly, true);
 assert.equal(firstWorkerResult.stopReason, 'attempt-budget');
 assert.equal(firstWorkerResult.exactMatch, null, 'Late worker fixture key must not be found before resume');
@@ -264,7 +265,12 @@ for (const required of [
   'Corroborate retained candidates',
   'Stage B specialist corroboration',
   'Information.utilities.candidateScore',
-  'Information.analyzeInformation'
+  'Information.analyzeInformation',
+  'bccd-attempt-budget',
+  'Attempts / second',
+  'Estimated remaining',
+  'formatDuration(',
+  'updatePlanRuntimeEstimates('
 ]) assert.ok(ui.includes(required), `UI is missing ${JSON.stringify(required)}`);
 for (const required of [
   "importScripts(",
@@ -274,13 +280,14 @@ for (const required of [
   'Cubic.attemptCandidate',
   'Cubic.makeCheckpoint',
   'maxAttemptsThisRun',
+  'attemptsPerSecond',
   "stopReason = 'attempt-budget'"
 ]) assert.ok(worker.includes(required), `Worker is missing ${JSON.stringify(required)}`);
 assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty');
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.3.0',
+  schema: '0.4.0',
   pass: true,
   recovered,
   rawRoundTrip: true,

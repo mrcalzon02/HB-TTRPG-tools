@@ -114,6 +114,7 @@ self.addEventListener('message', event => {
                 if (errors.length < 12) errors.push({ stageId: stage.id, gridSize, seed: seedRow.seed, message: error.message });
               }
               if (attemptsThisRun === 1 || attemptsThisRun % progressEvery === 0) {
+                const elapsedMilliseconds = Date.now() - startedAt;
                 postProgress(id, {
                   stage: `${stage.profileLabel} · ${stage.tierLabel} · ${gridSize}³ candidate space`,
                   stageId: stage.id,
@@ -122,7 +123,8 @@ self.addEventListener('message', event => {
                   attemptsThisRun,
                   totalAttempts: plan.totalAttempts,
                   candidates: candidates.length,
-                  elapsedMilliseconds: Date.now() - startedAt,
+                  elapsedMilliseconds,
+                  attemptsPerSecond: elapsedMilliseconds > 0 ? attemptsThisRun * 1000 / elapsedMilliseconds : 0,
                   planId: plan.planId,
                   checkpoint: Cubic.makeCheckpoint(plan, cursor, attemptsThisRun, stage.id)
                 });
@@ -140,6 +142,7 @@ self.addEventListener('message', event => {
 
     const exhausted = !stoppedEarly && cursor >= plan.totalAttempts;
     const checkpoint = Cubic.makeCheckpoint(plan, cursor, attemptsThisRun, activeStageId);
+    const elapsedMilliseconds = Date.now() - startedAt;
     self.postMessage({
       id,
       type: 'result',
@@ -156,7 +159,8 @@ self.addEventListener('message', event => {
         exactMatch,
         candidates,
         errors,
-        elapsedMilliseconds: Date.now() - startedAt,
+        elapsedMilliseconds,
+        attemptsPerSecond: elapsedMilliseconds > 0 ? attemptsThisRun * 1000 / elapsedMilliseconds : 0,
         checkpoint,
         caveat: source.kind === 'package'
           ? 'A matching package key fingerprint is strong reproducibility evidence for this deterministic generator search, but the package fingerprint is 32-bit FNV-1a corruption metadata rather than a collision-resistant cryptographic identifier.'
