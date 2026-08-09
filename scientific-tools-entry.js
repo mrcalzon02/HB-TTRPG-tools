@@ -2,12 +2,13 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-cooperative-science-1';
+  const ASSET_VERSION = '20260809-decryption-dashboard-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
   let cubeVisualizerPromise = null;
   let cubeLaboratoryPromise = null;
+  let decryptionDashboardPromise = null;
   let initialized = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
@@ -163,6 +164,21 @@
     return cubeLaboratoryPromise;
   }
 
+  function loadDecryptionDashboard() {
+    if (window.BinaryCubeDecryptionDashboard) return Promise.resolve(window.BinaryCubeDecryptionDashboard);
+    if (decryptionDashboardPromise) return decryptionDashboardPromise;
+    decryptionDashboardPromise = (async () => {
+      await loadCooperativeRunner();
+      await loadStyle('binary-cube-decryption-dashboard.css');
+      await loadScript('shadowrun-binary-cube-engine.js', canonicalCubeEngineReady);
+      await loadScript('shadowrun-binary-cube-secure-export.js', () => Boolean(window.ShadowrunBinaryCubeSecureExport));
+      await loadScript('binary-cube-decryption-dashboard.js', () => Boolean(window.BinaryCubeDecryptionDashboard));
+      return window.BinaryCubeDecryptionDashboard;
+    })();
+    decryptionDashboardPromise.catch(() => { decryptionDashboardPromise = null; });
+    return decryptionDashboardPromise;
+  }
+
   function loadIsmLab() {
     if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
     if (ismPromise) return ismPromise;
@@ -226,6 +242,14 @@
     });
   }
 
+  function openDecryptionDashboard(button = null, options = null) {
+    return withLoadingButton(button, 'Loading Dashboard…', async () => {
+      const api = await loadDecryptionDashboard();
+      if (!api?.openPanel) throw new Error('The Binary Cube Decryption Dashboard loaded without an open-panel interface.');
+      return api.openPanel(options || {});
+    });
+  }
+
   function openIsmSimulation(button = null) {
     return withLoadingButton(button, 'Loading Simulation…', async () => {
       const api = await loadIsmLab();
@@ -265,6 +289,7 @@
       </div>
       <div class="scientific-tools-tabs no-print" role="tablist" aria-label="Scientific Tools systems">
         <button type="button" class="scientific-tools-tab active" data-scientific-tools-tab="binary-cube" role="tab" aria-selected="true">Binary Cube</button>
+        <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="decryption-dashboard" role="tab" aria-selected="false">Decryption Dashboard</button>
         <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="ism-media-simulation" role="tab" aria-selected="false">ISM Media Simulation</button>
         <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="double-slit" role="tab" aria-selected="false">Double Slit Experiment</button>
       </div>
@@ -278,6 +303,14 @@
         </div>
         <div class="scientific-tools-runtime"><span><strong>Canonical engine:</strong> ShadowrunBinaryCubeEngine</span><span><strong>Shared scheduling contract:</strong> ScientificToolsCooperativeRunner loads before Scientific Tools runtimes</span><span><strong>Visualizer:</strong> one shared ShadowrunBinaryCubeVisualizer instance</span></div>
         <div class="scientific-tools-boundary"><strong>Runtime boundary:</strong> setting launchers may provide context or artifacts, but encoding, keys, masks, traces, ciphertext, validation, rendering, and authentication remain owned by the single canonical Binary Cube implementation.</div>
+      </section>
+      <section class="scientific-tools-panel no-print" data-scientific-tools-panel="decryption-dashboard" hidden>
+        <p class="eyebrow">Binary Cube cryptanalysis and adversarial testing</p>
+        <h3>Decryption Dashboard</h3>
+        <p>Load or paste Binary Cube output and attack it as an unknown ciphertext. The dashboard measures entropy, bit bias, autocorrelation, likely cube-block divisors and exposed package metadata, then ranks reversible structural manipulations, square-block rotations/reflections, byte transforms, and bounded single-byte XOR candidates. A second sample can be compared for repeated-key or known-plaintext experiments.</p>
+        <div class="scientific-tools-actions"><button id="scientific-tools-open-decryption-dashboard" type="button" class="primary-action">Open Decryption Dashboard</button></div>
+        <div class="scientific-tools-runtime"><span><strong>Input:</strong> file upload, Binary Cube package/secure export, raw bits, hex, Base64, or text bytes</span><span><strong>Attack suite:</strong> structural permutations, cube-block geometry, byte transforms, XOR ranking, crib scoring, and differential comparison</span><span><strong>Authority:</strong> supplied-key verification delegates to ShadowrunBinaryCubeEngine.decryptBinary</span></div>
+        <div class="scientific-tools-boundary"><strong>Cryptanalysis boundary:</strong> the Decryption Dashboard is deliberately separate from the encoder. It may inspect and manipulate ciphertext but does not reproduce the canonical Binary Cube transformation or claim that a high-scoring candidate is proven plaintext.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
         <p class="eyebrow">Interstellar medium collision model</p>
@@ -297,6 +330,7 @@
     view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => button.addEventListener('click', () => selectTab(button.dataset.scientificToolsTab)));
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
+    view.querySelector('#scientific-tools-open-decryption-dashboard')?.addEventListener('click', event => void openDecryptionDashboard(event.currentTarget));
     view.querySelector('#scientific-tools-open-ism')?.addEventListener('click', event => void openIsmSimulation(event.currentTarget));
     view.querySelector('#scientific-tools-open-double-slit')?.addEventListener('click', event => void openDoubleSlitLab(event.currentTarget));
     selectTab('binary-cube');
@@ -320,8 +354,10 @@
     loadCooperativeRunner,
     loadBinaryCubeVisualizer,
     loadBinaryCubeLaboratory,
+    loadDecryptionDashboard,
     openBinaryCubeVisualizer,
     openBinaryCubeLaboratory,
+    openDecryptionDashboard,
     loadIsmLab,
     openIsmSimulation,
     loadDoubleSlitLab,
