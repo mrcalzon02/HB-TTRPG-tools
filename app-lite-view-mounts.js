@@ -221,7 +221,7 @@
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
       warhammerVesselHistoryPromise ||= loadScript('assets/warhammer-40k/imperial-vessel-history-v1.js?v=5');
-      warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=3');
+      warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=4');
       warhammerSectorEventsPromise ||= loadScript('assets/warhammer-40k/imperial-sector-events-v1.js?v=3');
       warhammerMedicaeCatalogPromise ||= loadScript('assets/warhammer-40k/imperial-medicae-catalog-v1.js?v=1');
       warhammerMedicaePromise ||= warhammerMedicaeCatalogPromise.then(() => loadScript('assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=2'));
