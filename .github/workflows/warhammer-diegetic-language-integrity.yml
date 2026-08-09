@@ -15,6 +15,7 @@ on:
       - 'assets/warhammer-40k/imperial-personnel-lineage-v1.js'
       - 'assets/warhammer-40k/imperial-sector-events-v1.js'
       - 'assets/warhammer-40k/imperial-medicae-institutions-v1.js'
+      - 'assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js'
       - 'tests/warhammer-diegetic-language-integrity.test.js'
       - '.github/workflows/warhammer-diegetic-language-integrity.yml'
   workflow_dispatch:
@@ -44,7 +45,10 @@ jobs:
           node --check assets/warhammer-40k/imperial-personnel-lineage-v1.js
           node --check assets/warhammer-40k/imperial-sector-events-v1.js
           node --check assets/warhammer-40k/imperial-medicae-institutions-v1.js
+          node --check assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js
       - name: Enforce diegetic archive language
         run: node tests/warhammer-diegetic-language-integrity.test.js
       - name: Revalidate personnel, biography and Medicae registers
         run: node tests/warhammer-personnel-biography-integrity.test.js
+      - name: Revalidate Mercatura house continuity rolls
+        run: node tests/warhammer-mercatura-house-integrity.test.js
