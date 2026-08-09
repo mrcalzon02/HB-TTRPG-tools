@@ -27,6 +27,9 @@ function keepCandidate(candidates, candidate, limit) {
     if (left.exactFingerprintMatch !== right.exactFingerprintMatch) return left.exactFingerprintMatch ? -1 : 1;
     if (left.cribMatch !== right.cribMatch) return left.cribMatch ? -1 : 1;
     if (right.score !== left.score) return right.score - left.score;
+    const leftOrdinal = Number.isInteger(left.ordinal) ? left.ordinal : Number.MAX_SAFE_INTEGER;
+    const rightOrdinal = Number.isInteger(right.ordinal) ? right.ordinal : Number.MAX_SAFE_INTEGER;
+    if (leftOrdinal !== rightOrdinal) return leftOrdinal - rightOrdinal;
     if (left.gridSize !== right.gridSize) return left.gridSize - right.gridSize;
     if (left.profile !== right.profile) return left.profile.localeCompare(right.profile);
     return left.seed.localeCompare(right.seed);
@@ -101,17 +104,18 @@ self.addEventListener('message', event => {
                   seed: seedRow.seed,
                   seedSource: seedRow.seedSource
                 }, attemptOptions);
-                if (candidate && (candidate.exactFingerprintMatch || candidate.cribMatch || candidate.score >= threshold)) {
-                  keepCandidate(candidates, candidate, resultLimit);
-                  if (candidate.exactFingerprintMatch) {
-                    exactMatch = candidate;
-                    self.postMessage({ id, type: 'candidate', candidate, cursor, stageId: stage.id });
+                const rankedCandidate = candidate ? Object.freeze({ ...candidate, ordinal }) : null;
+                if (rankedCandidate && (rankedCandidate.exactFingerprintMatch || rankedCandidate.cribMatch || rankedCandidate.score >= threshold)) {
+                  keepCandidate(candidates, rankedCandidate, resultLimit);
+                  if (rankedCandidate.exactFingerprintMatch) {
+                    exactMatch = rankedCandidate;
+                    self.postMessage({ id, type: 'candidate', candidate: rankedCandidate, cursor, stageId: stage.id });
                     if (options.stopOnFingerprint !== false) {
                       stoppedEarly = true;
                       stopReason = 'fingerprint-match';
                       break outer;
                     }
-                  } else self.postMessage({ id, type: 'candidate', candidate, cursor, stageId: stage.id });
+                  } else self.postMessage({ id, type: 'candidate', candidate: rankedCandidate, cursor, stageId: stage.id });
                 }
               } catch (error) {
                 if (errors.length < 12) errors.push({ stageId: stage.id, gridSize, seed: seedRow.seed, message: error.message });

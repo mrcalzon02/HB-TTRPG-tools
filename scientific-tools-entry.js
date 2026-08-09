@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-cubic-decryptor-hardening-5';
+  const ASSET_VERSION = '20260809-cubic-decryptor-hardening-6';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
@@ -311,6 +311,7 @@
       await loadStyle('binary-cube-cubic-decryptor.css');
       await loadScript('binary-cube-key-generation-research.js', () => Boolean(window.BinaryCubeKeyGenerationResearch));
       await loadScript('binary-cube-cubic-decryptor-engine.js', () => Boolean(window.BinaryCubeCubicDecryptorEngine));
+      await loadScript('binary-cube-cubic-decryptor-worker-pool.js', () => Boolean(window.BinaryCubeCubicDecryptorWorkerPool));
       await loadScript('binary-cube-cubic-decryptor.js', () => Boolean(window.BinaryCubeCubicDecryptor));
       return window.BinaryCubeCubicDecryptor;
     })();

@@ -12,6 +12,7 @@ const root = process.cwd();
 const Engine = require(path.join(root, 'shadowrun-binary-cube-engine.js'));
 const Research = require(path.join(root, 'binary-cube-key-generation-research.js'));
 const Cubic = require(path.join(root, 'binary-cube-cubic-decryptor-engine.js'));
+const Pool = require(path.join(root, 'binary-cube-cubic-decryptor-worker-pool.js'));
 const Information = require(path.join(root, 'binary-cube-information-analysis-suite.js'));
 const ui = fs.readFileSync(path.join(root, 'binary-cube-cubic-decryptor.js'), 'utf8');
 const workerPath = path.join(root, 'binary-cube-cubic-decryptor-worker.js');
@@ -64,6 +65,30 @@ function createWorkerHarness() {
   });
 }
 
+function createWorkerAdapter() {
+  const harness = createWorkerHarness();
+  const listeners = { message: [], error: [] };
+  let terminated = false;
+  return {
+    addEventListener(type, listener) { if (listeners[type]) listeners[type].push(listener); },
+    postMessage(message) {
+      queueMicrotask(() => {
+        if (terminated) return;
+        try {
+          const rows = harness.run(message);
+          for (const row of rows) {
+            if (terminated) break;
+            for (const listener of listeners.message) listener({ data: row });
+          }
+        } catch (error) {
+          if (!terminated) for (const listener of listeners.error) listener({ message: error.message, error });
+        }
+      });
+    },
+    terminate() { terminated = true; }
+  };
+}
+
 function resultMessage(messages, label) {
   const row = [...messages].reverse().find(message => message?.type === 'result');
   assert.ok(row, `${label} did not emit a result message`);
@@ -71,6 +96,12 @@ function resultMessage(messages, label) {
 }
 
 assert.equal(Cubic.constants.VERSION, '0.2.0');
+assert.equal(Pool.constants.VERSION, '0.1.0');
+assert.equal(Pool.resolveWorkerCount(0, 8), 4);
+assert.equal(Pool.resolveWorkerCount(6, 8), 6);
+const partitionProbe = Pool.partitionRun(501, 200, 238, 4);
+assert.deepEqual(partitionProbe.map(row => [row.startCursor, row.endCursorExclusive]), [[200,260],[260,320],[320,379],[379,438]]);
+assert.equal(partitionProbe.reduce((sum, row) => sum + row.attemptLimit, 0), 238);
 assert.equal(Engine.constants.KEY_DIGEST_TYPE, 'sha256-canonical-key-material-v1');
 assert.equal(Engine.sha256Hex('abc'), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
 assert.deepEqual(Cubic.constants.PROFILE_ORDER, [
@@ -261,6 +292,53 @@ assert.equal(resumedWorkerResult.cursor, 438, 'Resume must continue from cursor 
 assert.equal(resumedWorkerResult.attemptsThisRun, 238, 'Resumed worker must not replay the first 200 candidate attempts');
 assert.equal(Cubic.validateCheckpoint(resumedWorkerResult.checkpoint, resumedWorkerResult.plan).cursor, 438);
 
+// Four-worker deterministic pool: bounded prefix then fresh pooled resume must preserve the same global cursor semantics.
+const poolPlan = Cubic.buildSearchPlan(Cubic.parsePackage(workerPackage), workerSearchOptions);
+const singleWorkerPlanId = poolPlan.planId;
+const poolPlanDifferentWorkerHint = Cubic.buildSearchPlan(Cubic.parsePackage(workerPackage), { ...workerSearchOptions, workerCount: 8 });
+assert.equal(poolPlanDifferentWorkerHint.planId, singleWorkerPlanId, 'Worker count must never enter the deterministic Cubic Plan ID.');
+const firstPoolSearch = Pool.startSearch({
+  plan: poolPlan,
+  source: { kind: 'package', package: workerPackage },
+  options: { ...workerSearchOptions, maxAttemptsThisRun: 200 },
+  resumeCursor: 0,
+  workerCount: 4,
+  hardwareConcurrency: 8,
+  requestId: 'pool-first',
+  workerFactory: () => createWorkerAdapter()
+});
+const firstPoolResult = await firstPoolSearch.promise;
+assert.equal(firstPoolResult.workerCount, 4);
+assert.equal(firstPoolResult.cursor, 200);
+assert.equal(firstPoolResult.attemptsThisRun, 200);
+assert.equal(firstPoolResult.stopReason, 'attempt-budget');
+assert.equal(firstPoolResult.exactMatch, null);
+assert.deepEqual(firstPoolResult.shards.map(row => row.startCursor), [0,50,100,150]);
+assert.deepEqual(firstPoolResult.shards.map(row => row.endCursorExclusive), [50,100,150,200]);
+assert.equal(Cubic.validateCheckpoint(firstPoolResult.checkpoint, poolPlan).cursor, 200);
+
+const resumedPoolSearch = Pool.startSearch({
+  plan: poolPlan,
+  source: { kind: 'package', package: workerPackage },
+  options: { ...workerSearchOptions, maxAttemptsThisRun: 300 },
+  resumeCursor: firstPoolResult.checkpoint.cursor,
+  workerCount: 4,
+  hardwareConcurrency: 8,
+  requestId: 'pool-resume',
+  workerFactory: () => createWorkerAdapter()
+});
+const resumedPoolResult = await resumedPoolSearch.promise;
+assert.equal(resumedPoolResult.planId, singleWorkerPlanId);
+assert.equal(resumedPoolResult.workerCount, 4);
+assert.equal(resumedPoolResult.stopReason, 'fingerprint-match');
+assert.ok(resumedPoolResult.exactMatch);
+assert.equal(resumedPoolResult.exactMatch.seed, workerSeed);
+assert.equal(resumedPoolResult.exactMatch.ordinal, 437);
+assert.equal(resumedPoolResult.exactMatch.keyDigest, workerKey.keyDigest);
+assert.equal(resumedPoolResult.cursor, 438, 'Parallel exact-match resolution must commit only the contiguous searched prefix through the earliest exact ordinal.');
+assert.equal(resumedPoolResult.attemptsThisRun, 238, 'Four-worker resume must search each ordinal in the committed prefix exactly once for this fixture.');
+assert.equal(Cubic.validateCheckpoint(resumedPoolResult.checkpoint, poolPlan).cursor, 438);
+
 // Raw-ciphertext known-plaintext search: high score threshold cannot hide a correct crib match, and sample depth expands automatically.
 const cribSeed = '23';
 const cribText = 'KNOWN-PLAINTEXT-CRIB::opaque binary tail 0123456789';
@@ -315,7 +393,12 @@ for (const required of [
   'Clear saved local session',
   'Autosave interrupted search to this browser',
   'does not persist the source ciphertext itself',
-  'AUTOSAVE_MAX_PLAINTEXT_BITS = 65536'
+  'AUTOSAVE_MAX_PLAINTEXT_BITS = 65536',
+  'BinaryCubeCubicDecryptorWorkerPool',
+  'bccd-worker-count',
+  'Parallel workers',
+  'Pool.startSearch',
+  'deterministic shard'
 ]) assert.ok(ui.includes(required), `UI is missing ${JSON.stringify(required)}`);
 assert.ok(!ui.includes('localStorage'), 'Cubic long-run autosave must use IndexedDB rather than localStorage.');
 for (const required of [
@@ -328,14 +411,15 @@ for (const required of [
   'maxAttemptsThisRun',
   'attemptsPerSecond',
   'Cubic.normalizeCrib',
-  'candidate.cribMatch',
+  'rankedCandidate.cribMatch',
+  'ordinal',
   "stopReason = 'attempt-budget'"
 ]) assert.ok(worker.includes(required), `Worker is missing ${JSON.stringify(required)}`);
 assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty');
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.6.0',
+  schema: '0.7.0',
   pass: true,
   recovered,
   rawRoundTrip: true,
@@ -353,6 +437,7 @@ console.log(JSON.stringify({
     recoveredKeyDigest: resumedWorkerResult.exactMatch.keyDigest,
     strongIdentityMatch: resumedWorkerResult.exactMatch.exactDigestMatch,
     exactPlaintextRecovery: resumedWorkerResult.exactMatch.plaintextBits === workerPlaintext,
-    cribSearch: { planId: cribPlanA.planId, recoveredSeed: cribCandidate.seed, matched: cribCandidate.cribMatch, sampleExpanded: cribCandidate.plaintextBits.length >= Buffer.byteLength('KNOWN-PLAINTEXT-CRIB') * 8 }
+    cribSearch: { planId: cribPlanA.planId, recoveredSeed: cribCandidate.seed, matched: cribCandidate.cribMatch, sampleExpanded: cribCandidate.plaintextBits.length >= Buffer.byteLength('KNOWN-PLAINTEXT-CRIB') * 8 },
+    workerPool: { workerCount: resumedPoolResult.workerCount, firstRunCursor: firstPoolResult.cursor, resumedCursor: resumedPoolResult.cursor, recoveredOrdinal: resumedPoolResult.exactMatch.ordinal, deterministicPlanId: resumedPoolResult.planId === singleWorkerPlanId }
   }
 }, null, 2));
