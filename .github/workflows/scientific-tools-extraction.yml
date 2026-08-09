@@ -12,6 +12,7 @@ on:
       - "shadowrun-binary-cube-worker.js"
       - "binary-cube-worker-client.js"
       - "shadowrun-binary-cube-encryption.js"
+      - "shadowrun-binary-cube-visualizer.js"
       - "binary-cube-decryption-dashboard.js"
       - "binary-cube-decryption-dashboard.css"
       - "binary-cube-cryptanalytic-test-lab.js"
@@ -33,6 +34,7 @@ on:
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-cooperative-slice-budget.mjs"
       - "scripts/validate-binary-cube-reseed.mjs"
+      - "scripts/research-binary-cube-key-generation-profiles.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
       - "scripts/validate-binary-cube-cryptanalytic-test-lab.mjs"
@@ -80,6 +82,7 @@ jobs:
           node --check shadowrun-binary-cube-worker.js
           node --check binary-cube-worker-client.js
           node --check shadowrun-binary-cube-encryption.js
+          node --check shadowrun-binary-cube-visualizer.js
           node --check binary-cube-decryption-dashboard.js
           node --check binary-cube-cryptanalytic-test-lab.js
           node --check binary-cube-information-analysis-suite.js
@@ -94,6 +97,7 @@ jobs:
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-cooperative-slice-budget.mjs
           node --check scripts/validate-binary-cube-reseed.mjs
+          node --check scripts/research-binary-cube-key-generation-profiles.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
           node --check scripts/validate-binary-cube-cryptanalytic-test-lab.mjs
@@ -117,6 +121,9 @@ jobs:
 
       - name: Validate Binary Cube reseed semantics
         run: node scripts/validate-binary-cube-reseed.mjs
+
+      - name: Research Binary Cube key-generation profiles
+        run: node scripts/research-binary-cube-key-generation-profiles.mjs
 
       - name: Validate Binary Cube Decryption Dashboard
         run: node scripts/validate-binary-cube-decryption-dashboard.mjs
