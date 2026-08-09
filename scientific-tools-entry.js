@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-ism-3d-magnetic-1';
+  const ASSET_VERSION = '20260809-ism-quantum-foam-1';
   let ismPromise = null;
   let cubeVisualizerPromise = null;
   let cubeLaboratoryPromise = null;
@@ -245,11 +245,11 @@
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
         <p class="eyebrow">Interstellar medium collision model</p>
         <h3>ISM Media Simulation</h3>
-        <p>Cast phase-light vectors through literal 1:1 interstellar-medium particles, retain the physically bounded cosmological-constant term, apply the separate deterministic Shadow-key scattering operator, and collect all non-input cube faces concurrently.</p>
+        <p>Cast phase-light vectors through literal 1:1 interstellar-medium particles, retain the physically bounded cosmological-constant term, resolve charged-proton magnetic response, optionally apply a separately labeled quantum-foam sensitivity model, retain the deterministic Shadow-key scattering operator, and collect all non-input cube faces concurrently.</p>
         <div class="scientific-tools-actions">
           <button id="scientific-tools-open-ism" type="button" class="primary-action">Open ISM Media Simulation</button>
         </div>
-        <div class="scientific-tools-boundary"><strong>Model boundary:</strong> particle density, physical cube scale, light transit, and Λ calculations remain physical-model quantities. Shadow-key coupling remains an explicitly separate experimental scattering/obfuscation layer.</div>
+        <div class="scientific-tools-boundary"><strong>Model boundary:</strong> particle density, physical cube scale, light transit, Λ, and Lorentz-force calculations remain physical-model quantities. Quantum-foam angular jitter is a phenomenological hypothesis/sensitivity layer, while Shadow-key coupling remains a separately keyed experimental scattering/obfuscation layer.</div>
       </section>`;
 
     view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => {
