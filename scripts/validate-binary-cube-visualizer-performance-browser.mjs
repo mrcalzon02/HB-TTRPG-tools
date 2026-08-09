@@ -186,7 +186,7 @@ try {
     };
 
     const initial = Visualizer.currentState();
-    if (initial.rendererVersion !== '0.5.0' || initial.renderTier !== 'detailed' || initial.renderedPointCount !== 16 || initial.exactPointCount !== 16) throw new Error('The detailed V9 tier did not initialize.');
+    if (initial.rendererVersion !== '0.6.0' || initial.renderTier !== 'detailed' || initial.renderedPointCount !== 16 || initial.exactPointCount !== 16) throw new Error('The detailed V9 tier did not initialize.');
 
     const size = panel.querySelector('[data-cube-visualizer-size]');
     size.value = '128';
@@ -222,7 +222,7 @@ try {
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v9-browser-validation-receipt',
-      schemaVersion: '0.1.0',
+      schemaVersion: '0.2.0',
       pass: true,
       rendererVersion: aggregate.rendererVersion,
       webglVersion: gl.getParameter(gl.VERSION),
@@ -243,7 +243,7 @@ try {
   })()`, 'Binary Cube V9 browser performance');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.5.0');
+  assert.equal(receipt.rendererVersion, '0.6.0');
   assert.equal(receipt.sampledGridSize, 128);
   assert.equal(receipt.sampledExactPointCount, 16384);
   assert.equal(receipt.sampledRenderedPointCount, 8192);
