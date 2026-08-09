@@ -6,10 +6,17 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeDiagnosticPipeline(root) {
   'use strict';
 
-  const VERSION = '0.2.0';
+  const VERSION = '0.3.0';
   const REPORT_FORMAT = 'hb-ttrpg-scientific-diagnostic-pipeline-report';
-  const REPORT_SCHEMA_VERSION = '0.2.0';
+  const REPORT_SCHEMA_VERSION = '0.3.0';
   const MAX_INPUT_BYTES = 64 * 1024 * 1024;
+  const RASTER_UNRESOLVED_FLAG_WEIGHTS = Object.freeze({
+    'single-valid-estimator': 0.22,
+    'estimator-disagreement': 0.18,
+    'nonzero-below-legacy-threshold': 0.28,
+    'localized-global-divergence': 0.04,
+    'cross-channel-payload-divergence': 0.12
+  });
   const PROFILES = Object.freeze({
     triage: Object.freeze({ id: 'triage', label: 'Triage', deep: false, exhaustive: false, concurrency: 2, candidateLimit: 12 }),
     thorough: Object.freeze({ id: 'thorough', label: 'Thorough', deep: true, exhaustive: false, concurrency: 2, candidateLimit: 40 }),
@@ -19,7 +26,7 @@
   const MAGIC = Object.freeze([
     Object.freeze({ id: 'png', label: 'PNG image', bytes: Object.freeze([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]), classId: 'raster-image', mime: 'image/png' }),
     Object.freeze({ id: 'jpeg', label: 'JPEG image', bytes: Object.freeze([0xff,0xd8,0xff]), classId: 'raster-image', mime: 'image/jpeg' }),
-    Object.freeze({ id: 'gif', label: 'GIF image', bytes: Object.freeze([0x47,0x49,0x46,0x38]), classId: 'raster-image', mime: 'image/gif' }),
+    Object.freeze({ id: 'gif', label: 'GIF image', bytes: Object.freeze([0x47,0x49,0x38]), classId: 'raster-image', mime: 'image/gif' }),
     Object.freeze({ id: 'riff', label: 'RIFF container', bytes: Object.freeze([0x52,0x49,0x46,0x46]), classId: 'media-container', mime: 'application/riff' }),
     Object.freeze({ id: 'pdf', label: 'PDF document', bytes: Object.freeze([0x25,0x50,0x44,0x46]), classId: 'document', mime: 'application/pdf' }),
     Object.freeze({ id: 'zip', label: 'ZIP-family archive', bytes: Object.freeze([0x50,0x4b,0x03,0x04]), classId: 'archive', mime: 'application/zip' }),
@@ -58,6 +65,8 @@
       information: root?.BinaryCubeInformationAnalysisSuite || optionalRequire('./binary-cube-information-analysis-suite.js'),
       media: root?.BinaryCubeMediaForensicsSuite || optionalRequire('./binary-cube-media-forensics-suite.js'),
       steganalysis: root?.BinaryCubeSteganalysisEngine || optionalRequire('./binary-cube-steganalysis-engine.js'),
+      steganalysisEvidence: root?.BinaryCubeSteganalysisEvidenceProfile || optionalRequire('./binary-cube-steganalysis-evidence-profile.js'),
+      steganalysisWorker: root?.BinaryCubeSteganalysisWorkerClient || null,
       cubeDashboard: root?.BinaryCubeDecryptionDashboard || optionalRequire('./binary-cube-decryption-dashboard.js'),
       calibration: root?.BinaryCubeDiagnosticCalibrationRegistry || optionalRequire('./binary-cube-diagnostic-calibration-registry.js'),
       calibrationBaseline: root?.BinaryCubeDiagnosticCalibrationBaseline || optionalRequire('./binary-cube-diagnostic-calibration-baseline.js'),
@@ -170,7 +179,7 @@
         const ready = Boolean(utils?.parseWav && utils?.decodeWavChannels && utils?.decodeDtmf && utils?.decodeBinaryFsk);
         return Object.freeze({ applicable: classification.classId === 'audio' && ready, weight: 1.05, reason: classification.classId !== 'audio' ? 'Not an audio asset.' : ready ? 'WAVE/PCM can be decoded through the existing media signal tools and tested for DTMF and common 1200/2200 Hz AFSK carriers.' : 'Decoded audio signal tools are unavailable.' });
       }
-      case 'raster-steganalysis': return Object.freeze({ applicable: classification.classId === 'raster-image', weight: 1.2, reason: options.raster ? 'Decoded pixel raster supplied; RS/SPA/localized pixel tests can run.' : 'Raster image detected, but decoded pixels are not available in this runtime.' });
+      case 'raster-steganalysis': return Object.freeze({ applicable: classification.classId === 'raster-image', weight: 1.2, reason: options.raster ? 'Decoded pixel raster supplied; R/G/B/luma RS/SPA/localized evidence profiling can run.' : 'Raster image detected, but decoded pixels are not available in this runtime.' });
       case 'deobfuscation-sweep': return Object.freeze({ applicable: Boolean(deps.information?.rankDeobfuscationCandidates), weight: 1.1, reason: deps.information?.rankDeobfuscationCandidates ? 'Thorough profile tests reversible encodings and obfuscation hypotheses.' : 'Deobfuscation engine unavailable.' });
       case 'binary-cube-attack-suite': return Object.freeze({ applicable: classification.classId === 'binary-cube-artifact' && Boolean(deps.cubeDashboard?.runAttackSuite), weight: 1.2, reason: classification.classId === 'binary-cube-artifact' ? 'Exhaustive profile runs bounded Binary Cube cryptanalytic attacks.' : 'Not a Binary Cube artifact.' });
       default: return Object.freeze({ applicable: false, weight: 0, reason: 'Unknown detector.' });
@@ -212,6 +221,7 @@
       status: values.status || 'informational',
       positiveEvidence: clamp(values.positiveEvidence || 0),
       negativeEvidence: clamp(values.negativeEvidence || 0),
+      missRiskEvidence: clamp(values.missRiskEvidence || 0),
       reliability,
       runtimeReliability: rawReliability,
       calibrationStatus: calibration?.calibrationStatus || 'prior-only',
@@ -226,9 +236,22 @@
 
   function sampleSufficiency(bytesLength, target = 4096) { return clamp(Math.log2(Math.max(2, bytesLength)) / Math.log2(Math.max(4, target))); }
 
+  function rasterMissRiskEvidence(profileValue) {
+    const ids = new Set(Array.from(profileValue?.diagnosticFlags || [], flag => String(flag?.id || '')).filter(Boolean));
+    let unresolvedRemainder = 1;
+    for (const id of ids) unresolvedRemainder *= 1 - clamp(RASTER_UNRESOLVED_FLAG_WEIGHTS[id] || 0);
+    return clamp(1 - unresolvedRemainder);
+  }
+
+  function abortError(context, fallback = 'Diagnostic pipeline cancelled.') {
+    const error = new Error(context?.token?.reason || fallback);
+    error.name = 'AbortError';
+    return error;
+  }
+
   async function executeDetector(definition, context) {
     const { bytes, classification, options, deps, sourceName } = context;
-    if (context.token?.cancelled) { const error = new Error(context.token.reason || 'Diagnostic pipeline cancelled.'); error.name = 'AbortError'; throw error; }
+    if (context.token?.cancelled) throw abortError(context);
     if (definition.id === 'acquisition-profile') {
       return finding(definition, { status: 'informational', reliability: 1, sampleSufficiency: 1, metrics: { sourceName, byteLength: bytes.length, classId: classification.classId, subtype: classification.subtype, classifierConfidence: classification.confidence, entropy: byteEntropy(bytes), printableFraction: printableFraction(bytes), bitOneFraction: bitOneFraction(bytes), uniqueByteFraction: uniqueByteFraction(bytes) }, notes: classification.reasons, sensitivity: ['format-signature','text-likeness','basic-byte-profile'] });
     }
@@ -294,13 +317,69 @@
     if (definition.id === 'raster-steganalysis') {
       if (!options.raster) return finding(definition, { status: 'inconclusive', reliability: 0.1, sampleSufficiency: 0, notes: ['Pixel-domain detectors were applicable but could not run because this runtime did not provide decoded pixels.'], sensitivity: ['lsb-replacement','localized-pixel-anomalies'] });
       const raster = options.raster;
-      const report = deps.steganalysis.localizedRasterAnalysis(raster.rgba, raster.width, raster.height, { tileSize: options.tileSize || 64, channel: options.rasterChannel || 'luma' });
-      const rs = report.global?.rs; const spa = report.global?.spa;
-      const estimates = [rs?.valid ? rs.estimatedPayloadRate : null, spa?.valid ? spa.estimatedPayloadRate : null].filter(value => Number.isFinite(value));
-      const consensus = estimates.length ? estimates.reduce((sum, value) => sum + value, 0) / estimates.length : 0;
-      const agreement = estimates.length >= 2 ? 1 - Math.min(1, Math.abs(estimates[0] - estimates[1])) : 0.35;
-      const positive = clamp(consensus * agreement);
-      return finding(definition, { status: estimates.length ? (positive >= 0.35 ? 'positive' : positive >= 0.12 ? 'mixed' : 'negative') : 'inconclusive', positiveEvidence: positive, negativeEvidence: estimates.length && positive < 0.12 ? 0.35 : 0, reliability: clamp(0.45 + agreement * 0.4), sampleSufficiency: sampleSufficiency(raster.width * raster.height, 65536), metrics: { width: raster.width, height: raster.height, rsEstimate: rs?.estimatedPayloadRate ?? null, spaEstimate: spa?.estimatedPayloadRate ?? null, detectorAgreement: agreement, consensusPayloadEstimate: consensus, tileCount: report.tiles?.length || 0 }, notes: ['RS/SPA payload estimates apply to specific randomized LSB-replacement assumptions and are not universal steganography probabilities.'], sensitivity: ['randomized-lsb-replacement','localized-pixel-anomalies','residual-roughness'], raw: report });
+      const legacyChannel = String(options.rasterChannel || 'luma').toLowerCase();
+      const channels = Array.from(options.rasterChannels || ['r','g','b','luma'], value => String(value || '').toLowerCase()).filter((value, index, array) => value && array.indexOf(value) === index);
+      if (!channels.includes(legacyChannel)) channels.push(legacyChannel);
+      let profileReport = null;
+      if (deps.steganalysisWorker?.profileRaster) {
+        profileReport = await deps.steganalysisWorker.profileRaster(raster.rgba, raster.width, raster.height, {
+          tileSize: options.tileSize || 64,
+          channels,
+          onProgress(update) {
+            if (context.token?.cancelled) {
+              deps.steganalysisWorker.cancelAll?.(context.token.reason || 'diagnostic pipeline cancelled');
+              return;
+            }
+            context.emitSubprogress?.(definition, Number(update.fraction) || 0, update.stage || 'Raster evidence profile');
+          }
+        });
+        if (context.token?.cancelled) throw abortError(context);
+      } else if (deps.steganalysisEvidence?.profileRaster) {
+        context.emitSubprogress?.(definition, 0.12, 'Running R/G/B/luma raster evidence profile');
+        profileReport = deps.steganalysisEvidence.profileRaster(raster.rgba, raster.width, raster.height, { tileSize: options.tileSize || 64, channels });
+      }
+      if (!profileReport) {
+        const report = deps.steganalysis.localizedRasterAnalysis(raster.rgba, raster.width, raster.height, { tileSize: options.tileSize || 64, channel: legacyChannel });
+        const rs = report.global?.rs; const spa = report.global?.spa;
+        const estimates = [rs?.valid ? rs.estimatedPayloadRate : null, spa?.valid ? spa.estimatedPayloadRate : null].filter(value => Number.isFinite(value));
+        const consensus = estimates.length ? estimates.reduce((sum, value) => sum + value, 0) / estimates.length : 0;
+        const agreement = estimates.length >= 2 ? 1 - Math.min(1, Math.abs(estimates[0] - estimates[1])) : 0.35;
+        const positive = clamp(consensus * agreement);
+        return finding(definition, { status: estimates.length ? (positive >= 0.35 ? 'positive' : positive >= 0.12 ? 'mixed' : 'negative') : 'inconclusive', positiveEvidence: positive, negativeEvidence: estimates.length && positive < 0.12 ? 0.35 : 0, missRiskEvidence: 0, reliability: clamp(0.45 + agreement * 0.4), sampleSufficiency: sampleSufficiency(raster.width * raster.height, 65536), metrics: { width: raster.width, height: raster.height, legacyChannel, rsEstimate: rs?.estimatedPayloadRate ?? null, spaEstimate: spa?.estimatedPayloadRate ?? null, detectorAgreement: agreement, consensusPayloadEstimate: consensus, tileCount: report.tiles?.length || 0, evidenceProfileAvailable: false }, notes: ['RS/SPA payload estimates apply to specific randomized LSB-replacement assumptions and are not universal steganography probabilities.', 'Cross-channel evidence profiling was unavailable, so this run retained the legacy selected-channel detector behavior without adding unresolved-risk evidence.'], sensitivity: ['randomized-lsb-replacement','localized-pixel-anomalies','residual-roughness'], raw: report });
+      }
+      const selected = profileReport.channels?.find(record => record.channel === legacyChannel) || profileReport.channels?.find(record => record.channel === 'luma') || profileReport.channels?.[0] || null;
+      const global = selected?.global || null;
+      const estimatorCount = Number(global?.validEstimatorCount || 0);
+      const agreement = Number.isFinite(Number(global?.estimatorAgreement)) ? clamp(global.estimatorAgreement) : 0.35;
+      const positive = clamp(global?.legacyPayloadMagnitudeEvidence || 0);
+      const status = global?.legacyStatus || (estimatorCount ? (positive >= 0.35 ? 'positive' : positive >= 0.12 ? 'mixed' : 'negative') : 'inconclusive');
+      const missRiskEvidence = rasterMissRiskEvidence(profileReport);
+      return finding(definition, {
+        status,
+        positiveEvidence: positive,
+        negativeEvidence: estimatorCount && positive < 0.12 ? 0.35 : 0,
+        missRiskEvidence,
+        reliability: clamp(0.45 + agreement * 0.4),
+        sampleSufficiency: sampleSufficiency(raster.width * raster.height, 65536),
+        metrics: {
+          width: raster.width,
+          height: raster.height,
+          legacyChannel: selected?.channel || legacyChannel,
+          rsEstimate: global?.rs?.payloadEstimate ?? null,
+          spaEstimate: global?.spa?.payloadEstimate ?? null,
+          detectorAgreement: agreement,
+          consensusPayloadEstimate: global?.payloadEstimateConsensus ?? null,
+          legacyPayloadMagnitudeEvidence: positive,
+          tileCount: selected?.localization?.count || 0,
+          evidenceProfileVersion: profileReport.schemaVersion || null,
+          crossChannel: profileReport.crossChannel || null,
+          diagnosticFlags: profileReport.diagnosticFlags || [],
+          missRiskEvidence
+        },
+        notes: ['RS/SPA payload estimates apply to specific randomized LSB-replacement assumptions and are not universal steganography probabilities.', 'R/G/B/luma evidence is retained separately. Diagnostic flags contribute only to Miss-Risk; they do not increase Asset Presence or relax the legacy selected-channel detection thresholds.'],
+        sensitivity: ['randomized-lsb-replacement','localized-pixel-anomalies','residual-roughness','cross-channel-lsb-structure'],
+        raw: profileReport
+      });
     }
     if (definition.id === 'deobfuscation-sweep') {
       const candidates = await deps.information.rankDeobfuscationCandidates(bytes, { token: context.token, limit: options.profile.candidateLimit, singleByteXor: true, repeatingXor: true, onProgress: update => context.emitSubprogress?.(definition, update.fraction || 0, update.label || 'Deobfuscation sweep') });
@@ -322,13 +401,14 @@
     const completedIds = new Set(findings.filter(item => item.status !== 'error' && item.sampleSufficiency > 0).map(item => item.detectorId));
     const completedWeight = planned.filter(item => completedIds.has(item.id)).reduce((sum, item) => sum + item.weight, 0);
     const coverageIndex = clamp(completedWeight / plannedWeight);
-    let positiveWeight = 0; let negativeWeight = 0; let evidenceWeight = 0; let sufficiencyWeight = 0; let inconclusiveWeight = 0;
+    let positiveWeight = 0; let negativeWeight = 0; let evidenceWeight = 0; let sufficiencyWeight = 0; let inconclusiveWeight = 0; let unresolvedEvidenceIndex = 0;
     const groups = new Set();
     for (const item of findings) {
       const planItem = planned.find(candidate => candidate.id === item.detectorId);
       const weight = (planItem?.weight || 0.5) * item.reliability * item.sampleSufficiency;
       evidenceWeight += weight; positiveWeight += weight * item.positiveEvidence; negativeWeight += weight * item.negativeEvidence;
       sufficiencyWeight += (planItem?.weight || 0.5) * item.sampleSufficiency;
+      unresolvedEvidenceIndex = Math.max(unresolvedEvidenceIndex, clamp(item.missRiskEvidence) * item.sampleSufficiency);
       if (item.status === 'inconclusive' || item.status === 'error') inconclusiveWeight += planItem?.weight || 0.5;
       if (item.independenceGroup && (item.positiveEvidence > 0.15 || item.negativeEvidence > 0.15)) groups.add(item.independenceGroup);
     }
@@ -345,13 +425,13 @@
     const randomLike = findings.some(item => item.detectorId === 'information-structure' && String(item.metrics?.evidenceClass || '').includes('random-like'));
     const inconclusiveIndex = clamp(inconclusiveWeight / plannedWeight);
     const errorIndex = clamp(errors.length / Math.max(1, planned.length));
-    const missRiskIndex = clamp((1 - coverageIndex) * 0.39 + inconclusiveIndex * 0.26 + (randomLike ? 0.18 : 0) + errorIndex * 0.22 + (1 - calibrationIndex) * 0.08 + (presenceIndex > 0.35 && certaintyIndex < 0.55 ? 0.12 : 0));
+    const missRiskIndex = clamp((1 - coverageIndex) * 0.39 + inconclusiveIndex * 0.26 + (randomLike ? 0.18 : 0) + errorIndex * 0.22 + (1 - calibrationIndex) * 0.08 + (presenceIndex > 0.35 && certaintyIndex < 0.55 ? 0.12 : 0) + unresolvedEvidenceIndex * 0.24);
     let classification = 'no-positive-evidence-under-tested-methods';
     if (presenceIndex >= 0.72 && certaintyIndex >= 0.55) classification = 'strong-positive-evidence';
     else if (presenceIndex >= 0.5) classification = 'moderate-or-mixed-positive-evidence';
     else if (missRiskIndex >= 0.55) classification = 'inconclusive-with-material-miss-risk';
     else if (certaintyIndex < 0.35) classification = 'low-certainty-inconclusive';
-    return Object.freeze({ presenceIndex, certaintyIndex, coverageIndex, missRiskIndex, sampleIndex, independenceIndex, calibrationIndex, calibrationCases, classification, boundary: 'These are evidence indices, not posterior probabilities. Empirical calibration is corpus-bounded and shrunk toward declared priors when controls are sparse. A low presence index means the selected methods produced little positive evidence; it does not prove absence.' });
+    return Object.freeze({ presenceIndex, certaintyIndex, coverageIndex, missRiskIndex, unresolvedEvidenceIndex, sampleIndex, independenceIndex, calibrationIndex, calibrationCases, classification, boundary: 'These are evidence indices, not posterior probabilities. Empirical calibration is corpus-bounded and shrunk toward declared priors when controls are sparse. A low presence index means the selected methods produced little positive evidence; it does not prove absence. Unresolved detector structure may raise Miss-Risk without increasing Asset Presence.' });
   }
 
   async function runConcurrent(taskItems, concurrency, worker) {
@@ -374,7 +454,7 @@
     const emit = (definition, fraction = 0, label = '') => { const currentWeight = definition?.weight || 0; onProgress?.(Object.freeze({ stage: definition?.stage ?? 0, detectorId: definition?.id || null, label: label || definition?.id || 'Diagnostic pipeline', fraction: clamp((completedWeight + currentWeight * clamp(fraction)) / totalWeight), completedWeight, totalWeight })); };
     const context = { bytes, classification, options, deps, sourceName, token, emitSubprogress: emit };
     for (const stage of plan.stages) {
-      if (token.cancelled) { const error = new Error(token.reason || 'Diagnostic pipeline cancelled.'); error.name = 'AbortError'; throw error; }
+      if (token.cancelled) throw abortError(context);
       const stageItems = applicable.filter(item => item.stage === stage).sort((a,b) => a.order - b.order);
       const stageResults = await runConcurrent(stageItems, profile.concurrency, async definition => {
         emit(definition, 0, `Starting ${definition.id}`);
@@ -402,7 +482,7 @@
 
   return Object.freeze({
     version: VERSION, runPipeline, buildPlan, classifyAsset, aggregateEvidence,
-    utilities: Object.freeze({ asBytes, decodeText, printableFraction, byteEntropy, bitOneFraction, uniqueByteFraction, parseKnownArtifact, resolveCalibrationSnapshot }),
-    constants: Object.freeze({ VERSION, REPORT_FORMAT, REPORT_SCHEMA_VERSION, MAX_INPUT_BYTES, PROFILES, MAGIC, DETECTOR_DEFINITIONS })
+    utilities: Object.freeze({ asBytes, decodeText, printableFraction, byteEntropy, bitOneFraction, uniqueByteFraction, parseKnownArtifact, resolveCalibrationSnapshot, rasterMissRiskEvidence }),
+    constants: Object.freeze({ VERSION, REPORT_FORMAT, REPORT_SCHEMA_VERSION, MAX_INPUT_BYTES, PROFILES, MAGIC, DETECTOR_DEFINITIONS, RASTER_UNRESOLVED_FLAG_WEIGHTS })
   });
 });
