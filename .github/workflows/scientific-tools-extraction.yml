@@ -12,6 +12,7 @@ on:
       - "scientific-tools-local-media.js"
       - "signals-laboratory.js"
       - "signals-laboratory.css"
+      - "shadowrun-binary-cube-engine.js"
       - "shadowrun-binary-cube-worker.js"
       - "binary-cube-worker-client.js"
       - "shadowrun-binary-cube-encryption.js"
@@ -114,6 +115,7 @@ jobs:
           node --check scientific-tools-cooperative-runner.js
           node --check scientific-tools-local-media.js
           node --check signals-laboratory.js
+          node --check shadowrun-binary-cube-engine.js
           node --check shadowrun-binary-cube-worker.js
           node --check binary-cube-worker-client.js
           node --check shadowrun-binary-cube-encryption.js
