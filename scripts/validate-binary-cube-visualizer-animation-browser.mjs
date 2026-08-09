@@ -143,7 +143,7 @@ try {
 
     const initial = window.ShadowrunBinaryCubeVisualizer.currentState();
     if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.tracePhaseId !== 'source-ready' || initial.tracePhaseCount !== 10) throw new Error('The canonical V6 timeline did not initialize at zero.');
-    if (initial.rendererVersion !== '0.5.0') throw new Error('The V6 renderer version is incorrect under V9.');
+    if (initial.rendererVersion !== '0.6.0') throw new Error('The V6 renderer version is incorrect under the current renderer.');
     if (panel.querySelectorAll('[data-cube-trace-marker]').length !== 10) throw new Error('The ten trace phase markers were not created.');
 
     const key = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);
@@ -256,7 +256,7 @@ try {
   })()`, 'Binary Cube V6 browser animation');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.5.0');
+  assert.equal(receipt.rendererVersion, '0.6.0');
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.phaseCount, 10);
