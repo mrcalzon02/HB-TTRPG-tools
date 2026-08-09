@@ -290,8 +290,8 @@
     : void activateHashView().catch(error => reportActivationFailure('route', error));
 
   void loadScript('shadowrun-binary-cube-engine.js')
-    .then(() => loadScript('binary-cube-worker-client.js?v=20260809-v15-binary-cube-worker-liveness'))
-    .then(() => loadScript('shadowrun-binary-cube-encryption.js?v=20260809-v14-binary-cube-worker'))
+    .then(() => loadScript('binary-cube-worker-client.js?v=20260809-v16-binary-cube-reseed'))
+    .then(() => loadScript('shadowrun-binary-cube-encryption.js?v=20260809-v16-binary-cube-reseed'))
     .then(() => loadScript('binary-cube-large-grid-ui.js'))
     .catch(error => { console.error('Canonical Binary Cube engine, background executor, laboratory, or expanded-grid interface support could not be loaded.', error); });
   void loadScript('binary-cube-desktop-link.js')
