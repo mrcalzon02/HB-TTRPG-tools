@@ -13,12 +13,15 @@ on:
       - "docs/raster-unresolved-evidence-priors.md"
       - "docs/raster-unresolved-evidence-corpus-20260809.md"
       - "docs/raster-unresolved-evidence-matched-pairs-20260809.md"
+      - "docs/raster-unresolved-evidence-independent-carriers-20260809.md"
       - "scripts/research-raster-unresolved-evidence-corpus.mjs"
       - "scripts/analyze-raster-unresolved-matched-pairs.mjs"
       - "scripts/research-raster-unresolved-independent-carriers.mjs"
+      - "scripts/analyze-raster-carrier-conditioning.mjs"
       - "scripts/validate-raster-unresolved-evidence-corpus.mjs"
       - "scripts/validate-raster-unresolved-matched-pairs.mjs"
       - "scripts/validate-raster-unresolved-independent-carriers.mjs"
+      - "scripts/validate-raster-carrier-conditioning.mjs"
       - "scripts/validate-raster-unresolved-evidence-provenance.mjs"
   workflow_dispatch:
 
@@ -60,9 +63,11 @@ jobs:
           node --check scripts/research-raster-unresolved-evidence-corpus.mjs
           node --check scripts/analyze-raster-unresolved-matched-pairs.mjs
           node --check scripts/research-raster-unresolved-independent-carriers.mjs
+          node --check scripts/analyze-raster-carrier-conditioning.mjs
           node --check scripts/validate-raster-unresolved-evidence-corpus.mjs
           node --check scripts/validate-raster-unresolved-matched-pairs.mjs
           node --check scripts/validate-raster-unresolved-independent-carriers.mjs
+          node --check scripts/validate-raster-carrier-conditioning.mjs
           node --check scripts/validate-raster-unresolved-evidence-provenance.mjs
 
       - name: Validate provisional-prior provenance
@@ -77,11 +82,22 @@ jobs:
       - name: Test independent carriers and untouched holdout
         run: node scripts/validate-raster-unresolved-independent-carriers.mjs | tee independent-carriers.json
 
+      - name: Analyze carrier conditioning on untouched holdout
+        run: node scripts/validate-raster-carrier-conditioning.mjs | tee carrier-conditioning.json
+
       - name: Publish independent-carrier holdout receipt
         uses: actions/upload-artifact@v4
         with:
           name: raster-independent-carrier-holdout
           path: independent-carriers.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish carrier-conditioning receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: raster-carrier-conditioning
+          path: carrier-conditioning.json
           if-no-files-found: error
           retention-days: 30
 
