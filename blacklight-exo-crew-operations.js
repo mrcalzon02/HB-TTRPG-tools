@@ -117,6 +117,8 @@
   let state = initialState();
   let activeStation = "helm";
   let timer = null;
+  let manualOpen = false;
+  let manualQuery = "";
 
   const powerTotal = () => Object.values(state.power).reduce((a,b)=>a+b,0);
   const powerFactor = key => clamp(state.power[key]/BASE_POWER[key]*100);
@@ -204,6 +206,88 @@
 
   const sliderText=v=>v<0?"LOW":v>0?"HIGH":"NOMINAL";
 
+  function manualStepLabel(token,def){
+    const fixed={
+      "auth-key-insert":"Insert the station authorization key into the execution lock.",
+      "auth-key-arm":"Rotate the authorization key clockwise to ARM.",
+      "auth-shield-open":"Flip the locked protective execution shield fully UP.",
+      "execute":`Press the recessed ${def.labels.execute} button.`
+    };
+    if(fixed[token])return fixed[token];
+    if(token==="guard-open")return `Lift / open ${def.labels.guard}.`;
+    if(token==="guard-close")return `Close ${def.labels.guard}.`;
+    if(token.startsWith("mode-"))return `Rotate ${def.labels.mode} to position ${token.slice(-1)}.`;
+    if(token==="bus-primary")return `Set ${def.labels.bus} to PRIMARY.`;
+    if(token==="bus-aux")return `Set ${def.labels.bus} to AUXILIARY.`;
+    if(token==="bus-isolate")return `Set ${def.labels.bus} to ISOLATE.`;
+    if(token==="dial-left")return `Turn ${def.labels.dial} one detent counterclockwise.`;
+    if(token==="dial-center")return `Return ${def.labels.dial} to zero / center.`;
+    if(token==="dial-right")return `Turn ${def.labels.dial} one detent clockwise.`;
+    if(token==="slider-low")return `Set ${def.labels.slider} to LOW.`;
+    if(token==="slider-mid")return `Set ${def.labels.slider} to NOMINAL.`;
+    if(token==="slider-high")return `Set ${def.labels.slider} to HIGH.`;
+    if(token==="lever-forward")return `Move ${def.labels.lever} to FORWARD.`;
+    if(token==="lever-center")return `Move ${def.labels.lever} to CENTER.`;
+    if(token==="lever-aft")return `Move ${def.labels.lever} to AFT.`;
+    if(token==="confirm-a")return `Press ${def.labels.confirmA}.`;
+    if(token==="confirm-b")return `Press ${def.labels.confirmB}.`;
+    return token;
+  }
+
+  function manualOverlay(def){
+    const query=manualQuery.trim().toLowerCase();
+    const stationCode=activeStation.slice(0,3).toUpperCase();
+    const entries=def.procedures.map((proc,index)=>{
+      const steps=proc.sequence.map(token=>manualStepLabel(token,def));
+      const haystack=[proc.name,proc.cue,...steps].join(" ").toLowerCase();
+      const hidden=query&&!haystack.includes(query)?" hidden":"";
+      return `<article class="exo-manual-entry" data-manual-search="${haystack.replace(/"/g,'&quot;')}"${hidden}>
+        <header><span>${stationCode}-${String(index+1).padStart(2,"0")}</span><strong>${proc.name}</strong><b>${proc.sequence.length} steps</b></header>
+        <p>${proc.cue}</p>
+        <h4>Correct operating sequence</h4>
+        <ol>${steps.map((step,i)=>`<li><b>${i+1}</b><span>${step}</span></li>`).join("")}</ol>
+      </article>`;
+    }).join("");
+    const visibleCount=def.procedures.filter(proc=>{
+      if(!query)return true;
+      const steps=proc.sequence.map(token=>manualStepLabel(token,def));
+      return [proc.name,proc.cue,...steps].join(" ").toLowerCase().includes(query);
+    }).length;
+    return `<section class="exo-manual-overlay" aria-label="${def.label} operations manual">
+      <div class="exo-manual-sheet">
+        <header class="exo-manual-header">
+          <div class="exo-manual-mark"><span></span><b>BLV-071</b></div>
+          <div><small>CREW STATION OPERATIONS MANUAL · HUMAN STANDARD</small><h3>${def.label}</h3><p>Authorized operating procedures · Rev. 7C</p></div>
+          <button type="button" class="exo-manual-close" data-manual-close aria-label="Close station manual">×</button>
+        </header>
+        <div class="exo-manual-searchbar">
+          <label for="exo-manual-search">Search this station manual</label>
+          <div><input id="exo-manual-search" data-manual-search-input type="search" value="${manualQuery.replace(/"/g,'&quot;')}" placeholder="Search actions, controls, steps…" autocomplete="off"><span data-manual-count>${visibleCount} / ${def.procedures.length} entries</span></div>
+        </div>
+        <aside class="exo-manual-note"><strong>Operator reference:</strong> Entries below show the canonical action sequence. Every operation terminates with the standard keyed execution assembly: key insertion, key ARM, shield UP, recessed execution.</aside>
+        <div class="exo-manual-results">${entries}</div>
+        <div class="exo-manual-empty" ${visibleCount?"hidden":""} data-manual-empty>No matching procedure in this station manual.</div>
+      </div>
+    </section>`;
+  }
+
+  function filterManualResults(){
+    const panel=$("station-panel");
+    if(!panel)return;
+    const q=manualQuery.trim().toLowerCase();
+    const entries=[...panel.querySelectorAll(".exo-manual-entry")];
+    let visible=0;
+    entries.forEach(entry=>{
+      const match=!q||(entry.dataset.manualSearch||"").includes(q);
+      entry.hidden=!match;
+      if(match)visible+=1;
+    });
+    const count=panel.querySelector("[data-manual-count]");
+    if(count)count.textContent=`${visible} / ${entries.length} entries`;
+    const empty=panel.querySelector("[data-manual-empty]");
+    if(empty)empty.hidden=visible!==0;
+  }
+
   function authorizationAssembly(def,controls,active){
     const disabled=active?"":"disabled";
     const keyInserted=controls.authKey!=="out";
@@ -276,7 +360,9 @@
     const def=STATIONS[activeStation];
     $("station-panel").innerHTML=`<div class="exo-station-head"><div class="exo-station-title"><span class="exo-kicker">${state.profile.name} procedural watchstation</span><h2>${def.label}</h2><p>${def.description}</p></div>
       <div class="exo-station-readout">${def.readouts(state).map(([l,v])=>`<div class="exo-readout-chip"><span>${l}</span><strong>${v}</strong></div>`).join("")}</div></div>
-      <div class="exo-station-body"><div class="exo-control-bank exo-procedure-bank">${procedureControls(def)}</div>${tacticalDisplay(def.display)}</div>`;
+      <div class="exo-station-body"><div class="exo-control-bank exo-procedure-bank">${procedureControls(def)}</div>${tacticalDisplay(def.display)}</div>
+      <button type="button" class="exo-manual-launch" data-manual-open aria-label="Open ${def.label} operations manual"><span class="exo-manual-book-icon" aria-hidden="true"><i></i></span><b>OPS MANUAL</b><small>${def.procedures.length} ENTRIES</small></button>
+      ${manualOpen?manualOverlay(def):""}`;
   }
 
   function renderDependencies(){
@@ -427,6 +513,15 @@
   }
 
   function handleStationClick(event){
+    const manualOpenButton=event.target.closest("[data-manual-open]");
+    if(manualOpenButton){
+      manualOpen=true; manualQuery=""; renderStation();
+      requestAnimationFrame(()=>$('exo-manual-search')?.focus());
+      return;
+    }
+    const manualCloseButton=event.target.closest("[data-manual-close]");
+    if(manualCloseButton){ manualOpen=false; manualQuery=""; renderStation(); return; }
+    if(manualOpen)return;
     const begin=event.target.closest("[data-procedure-begin]");
     if(begin){beginProcedure();return;}
     const abort=event.target.closest("[data-procedure-abort]");
@@ -435,7 +530,15 @@
     if(input)recordProcedureInput(input.dataset.procInput,input.dataset.procLabel||input.textContent.trim());
   }
 
+  function handleStationInput(event){
+    const search=event.target.closest("[data-manual-search-input]");
+    if(!search)return;
+    manualQuery=search.value;
+    filterManualResults();
+  }
+
   function handleStationChange(event){
+    if(manualOpen)return;
     const slider=event.target.closest("[data-proc-slider]");
     if(slider){
       const value=Number(slider.value), token=value<0?"slider-low":value>0?"slider-high":"slider-mid";
@@ -463,7 +566,7 @@
   }
 
   function reset(){
-    state=initialState(); activeStation="helm";
+    state=initialState(); activeStation="helm"; manualOpen=false; manualQuery="";
     addLog("System","Human procedural bridge initialized: three operations per console, 7–9-input procedures, four-step keyed execution assembly, WoD-derived d10 difficulty relay.");
     renderAll();
   }
@@ -491,12 +594,13 @@
     state.simTime+=1; if(!state.contact.present)return;
     state.targetRange=Math.max(50,state.targetRange+state.targetClosure*2); state.targetBearing=(state.targetBearing+.025)%360;
     state.contact.x=clamp(50+Math.cos(state.targetBearing*Math.PI/180)*34,8,92); state.contact.y=clamp(50+Math.sin(state.targetBearing*Math.PI/180)*34,8,92);
-    if(state.simTime%4===0)renderStation();
+    if(state.simTime%4===0&&!manualOpen)renderStation();
   }
 
   function bindEvents(){
-    $("station-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-station]");if(!b)return;activeStation=b.dataset.station;renderTabs();renderStation();});
+    $("station-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-station]");if(!b)return;activeStation=b.dataset.station;manualQuery="";renderTabs();renderStation();});
     $("station-panel").addEventListener("click",handleStationClick);
+    $("station-panel").addEventListener("input",handleStationInput);
     $("station-panel").addEventListener("change",handleStationChange);
     $("power-controls").addEventListener("input",handlePowerInput);
     $("power-controls").addEventListener("change",commitPower);
@@ -505,6 +609,7 @@
     $("crew-scenario-damage").addEventListener("click",injectFault);
     $("crew-scenario-battle").addEventListener("click",combatDrill);
     $("log-clear").addEventListener("click",()=>{state.log=[];renderLog();});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&manualOpen){manualOpen=false;manualQuery="";renderStation();}});
   }
 
   document.addEventListener("DOMContentLoaded",()=>{
