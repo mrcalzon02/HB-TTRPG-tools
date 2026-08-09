@@ -1,0 +1,8 @@
+.wh-medicae-provider,.wh-medicae-person-index{display:grid;gap:.65rem;margin:.7rem 0;padding:.75rem .85rem;border:1px solid rgba(109,214,255,.24);border-radius:.55rem;background:linear-gradient(180deg,rgba(4,24,20,.76),rgba(2,10,7,.91));box-shadow:inset 0 0 22px rgba(80,191,214,.035)}
+.wh-medicae-provider h3{margin:.05rem 0;color:var(--crt-text-strong,#b8ffca);text-shadow:0 0 8px rgba(109,214,255,.16)}
+.wh-medicae-history,.wh-medicae-case-index,.wh-medicae-provenance,.wh-medicae-provenance-index{margin:.45rem 0;border:1px solid rgba(109,214,255,.18);background:rgba(3,15,10,.58)}
+.wh-medicae-history>summary,.wh-medicae-case-index>summary,.wh-medicae-provenance>summary,.wh-medicae-provenance-index>summary{cursor:pointer;padding:.6rem .7rem;font-weight:700;letter-spacing:.045em;color:var(--crt-text,#8dffb3)}
+.wh-medicae-history-list,.wh-medicae-case-list,.wh-medicae-provenance-list{display:grid;gap:.45rem;padding:.65rem}
+.wh-medicae-history-row,.wh-medicae-case,.wh-medicae-provenance-card{padding:.55rem .65rem;border-left:2px solid rgba(109,214,255,.32);background:rgba(72,174,192,.035)}
+.wh-medicae-history-row strong,.wh-medicae-case strong,.wh-medicae-provenance-card strong{color:var(--crt-text-strong,#b8ffca)}
+.wh-medicae-provenance .wh-entry-ledger{margin:.55rem .65rem}.wh-medicae-provenance>p{margin:.5rem .7rem}
