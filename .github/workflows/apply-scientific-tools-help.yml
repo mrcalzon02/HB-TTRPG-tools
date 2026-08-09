@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/apply-scientific-tools-help.yml"
       - "scripts/apply-scientific-tools-help.py"
+      - "scripts/fix-scientific-tools-help-validator-cache.py"
       - "scientific-tools-help.js"
       - "scientific-tools-help.css"
       - "scripts/validate-scientific-tools-help.mjs"
@@ -40,6 +41,7 @@ jobs:
           git checkout main
           git reset --hard origin/main
           python scripts/apply-scientific-tools-help.py
+          python scripts/fix-scientific-tools-help-validator-cache.py
           node --check scientific-tools-help.js
           node --check scientific-tools-entry.js
           node --check app-lite-view-mounts.js
