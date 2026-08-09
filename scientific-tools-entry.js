@@ -2,13 +2,14 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-decryption-dashboard-1';
+  const ASSET_VERSION = '20260809-information-analysis-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
   let cubeVisualizerPromise = null;
   let cubeLaboratoryPromise = null;
   let decryptionDashboardPromise = null;
+  let informationAnalysisPromise = null;
   let initialized = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
@@ -179,6 +180,19 @@
     return decryptionDashboardPromise;
   }
 
+  function loadInformationAnalysisSuite() {
+    if (window.BinaryCubeInformationAnalysisSuite) return Promise.resolve(window.BinaryCubeInformationAnalysisSuite);
+    if (informationAnalysisPromise) return informationAnalysisPromise;
+    informationAnalysisPromise = (async () => {
+      await loadCooperativeRunner();
+      await loadStyle('binary-cube-information-analysis-suite.css');
+      await loadScript('binary-cube-information-analysis-suite.js', () => Boolean(window.BinaryCubeInformationAnalysisSuite));
+      return window.BinaryCubeInformationAnalysisSuite;
+    })();
+    informationAnalysisPromise.catch(() => { informationAnalysisPromise = null; });
+    return informationAnalysisPromise;
+  }
+
   function loadIsmLab() {
     if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
     if (ismPromise) return ismPromise;
@@ -250,6 +264,14 @@
     });
   }
 
+  function openInformationAnalysisSuite(button = null, options = null) {
+    return withLoadingButton(button, 'Loading Analysis Suite…', async () => {
+      const api = await loadInformationAnalysisSuite();
+      if (!api?.openPanel) throw new Error('The Information & Deobfuscation Analysis Suite loaded without an open-panel interface.');
+      return api.openPanel(options || {});
+    });
+  }
+
   function openIsmSimulation(button = null) {
     return withLoadingButton(button, 'Loading Simulation…', async () => {
       const api = await loadIsmLab();
@@ -305,12 +327,15 @@
         <div class="scientific-tools-boundary"><strong>Runtime boundary:</strong> setting launchers may provide context or artifacts, but encoding, keys, masks, traces, ciphertext, validation, rendering, and authentication remain owned by the single canonical Binary Cube implementation.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="decryption-dashboard" hidden>
-        <p class="eyebrow">Binary Cube cryptanalysis and adversarial testing</p>
+        <p class="eyebrow">Binary Cube cryptanalysis, information recovery, and adversarial testing</p>
         <h3>Decryption Dashboard</h3>
-        <p>Load or paste Binary Cube output and attack it as an unknown ciphertext. The dashboard measures entropy, bit bias, autocorrelation, likely cube-block divisors and exposed package metadata, then ranks reversible structural manipulations, square-block rotations/reflections, byte transforms, and bounded single-byte XOR candidates. A second sample can be compared for repeated-key or known-plaintext experiments.</p>
-        <div class="scientific-tools-actions"><button id="scientific-tools-open-decryption-dashboard" type="button" class="primary-action">Open Decryption Dashboard</button></div>
-        <div class="scientific-tools-runtime"><span><strong>Input:</strong> file upload, Binary Cube package/secure export, raw bits, hex, Base64, or text bytes</span><span><strong>Attack suite:</strong> structural permutations, cube-block geometry, byte transforms, XOR ranking, crib scoring, and differential comparison</span><span><strong>Authority:</strong> supplied-key verification delegates to ShadowrunBinaryCubeEngine.decryptBinary</span></div>
-        <div class="scientific-tools-boundary"><strong>Cryptanalysis boundary:</strong> the Decryption Dashboard is deliberately separate from the encoder. It may inspect and manipulate ciphertext but does not reproduce the canonical Binary Cube transformation or claim that a high-scoring candidate is proven plaintext.</div>
+        <p>Use the Cube-specific dashboard for fast attacks on Binary Cube output, or open the deeper Information & Deobfuscation Analysis Suite for broad statistical evidence, compression-distance tests, randomness diagnostics, string carving, recursive encoding recovery, transpositions, bit planes, endian transforms, XOR inference, and ranked data-recovery hypotheses.</p>
+        <div class="scientific-tools-actions">
+          <button id="scientific-tools-open-decryption-dashboard" type="button" class="primary-action">Open Decryption Dashboard</button>
+          <button id="scientific-tools-open-information-analysis" type="button" class="secondary-action">Open Information & Deobfuscation Suite</button>
+        </div>
+        <div class="scientific-tools-runtime"><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> supplied-key Binary Cube verification remains delegated to ShadowrunBinaryCubeEngine.decryptBinary</span></div>
+        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> compression affinity, entropy, randomness tests, language-likeness, and candidate scores are independent evidence signals. They may establish recoverable structure or similarity, but they do not by themselves prove semantic meaning; encrypted or already-compressed intelligible material can remain statistically random-like.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
         <p class="eyebrow">Interstellar medium collision model</p>
@@ -331,6 +356,7 @@
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
     view.querySelector('#scientific-tools-open-decryption-dashboard')?.addEventListener('click', event => void openDecryptionDashboard(event.currentTarget));
+    view.querySelector('#scientific-tools-open-information-analysis')?.addEventListener('click', event => void openInformationAnalysisSuite(event.currentTarget));
     view.querySelector('#scientific-tools-open-ism')?.addEventListener('click', event => void openIsmSimulation(event.currentTarget));
     view.querySelector('#scientific-tools-open-double-slit')?.addEventListener('click', event => void openDoubleSlitLab(event.currentTarget));
     selectTab('binary-cube');
@@ -355,9 +381,11 @@
     loadBinaryCubeVisualizer,
     loadBinaryCubeLaboratory,
     loadDecryptionDashboard,
+    loadInformationAnalysisSuite,
     openBinaryCubeVisualizer,
     openBinaryCubeLaboratory,
     openDecryptionDashboard,
+    openInformationAnalysisSuite,
     loadIsmLab,
     openIsmSimulation,
     loadDoubleSlitLab,
