@@ -257,7 +257,7 @@ try {
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v8-browser-validation-receipt',
-      schemaVersion: '0.1.0',
+      schemaVersion: '0.2.0',
       pass: true,
       rendererVersion: finalState.rendererVersion,
       webglVersion: gl.getParameter(gl.VERSION),
@@ -278,7 +278,7 @@ try {
   })()`, 'Binary Cube V8 browser sequencing');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.5.0');
+  assert.equal(receipt.rendererVersion, '0.6.0');
   assert.equal(receipt.blockCount, 5);
   assert.equal(receipt.timelineMarkerCount, 5);
   assert.equal(receipt.directSourceJump, true);
