@@ -41,6 +41,7 @@
   const RendererApi = root?.BinaryCubeVisualizerRenderer;
   const Auth = root?.ShadowrunBinaryCubeAuth;
   const SecureExport = root?.ShadowrunBinaryCubeSecureExport;
+  const SeedSource = root?.ShadowrunBinaryCubeWorkerClient;
   const FACES = Engine?.constants?.FACES || Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
 
   let renderer = null;
@@ -1516,6 +1517,19 @@
     return renderKey(panel, key, 'generated', { maskMode });
   }
 
+  function reseedDraftKey(panel) {
+    if (!SeedSource?.freshSeed) fail('Secure Binary Cube reseeding is unavailable. Reload the page so the current Binary Cube worker client can initialize.');
+    pausePlayback(panel, false);
+    cancelPendingPreparation(panel);
+    const freshSeed = SeedSource.freshSeed('binary-cube');
+    panel.querySelector('[data-cube-visualizer-seed]').value = freshSeed;
+    clearPackage(panel, 'Current package invalidated by key reseed.');
+    const key = generateKey(panel);
+    setStatus(panel, `Fresh seed ${freshSeed} generated canonical key ${key.keyId}.`, 'success');
+    saveVisualizerState(panel);
+    return key;
+  }
+
   function handleFaceClick(panel, face) {
     if (!FACES.includes(face)) return;
     if (pickRole === 'input') {
@@ -1634,6 +1648,7 @@
     panel.dataset.cubeVisualizerBound = 'true';
     panel.querySelector('[data-cube-visualizer-close]').addEventListener('click', () => { pausePlayback(panel, false); panel.hidden = true; });
     panel.querySelector('[data-cube-visualizer-generate]').addEventListener('click', () => { try { generateKey(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-visualizer-reseed]').addEventListener('click', () => { try { reseedDraftKey(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-visualizer-load]').addEventListener('click', () => { try { renderKey(panel, parseKey(panel), 'imported', { autoEncrypt: false, maskMode: 'custom' }); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-visualizer-mask-mode]').addEventListener('change', () => {
       syncCustomMaskVisibility(panel);
@@ -1780,7 +1795,7 @@
       <p class="cube-visualizer-warning"><strong>Experimental obfuscation research:</strong> package checksums detect corruption but are not cryptographic authentication. Accessibility and display preferences never modify keys, masks, traces, ciphertext, checksums, or recovered plaintext.</p>
       <div class="cube-visualizer-layout">
         <aside class="cube-visualizer-controls">
-          <div class="cube-visualizer-field"><label for="cube-visualizer-seed">Key seed</label><input id="cube-visualizer-seed" type="text" value="${DEFAULT_SEED}" spellcheck="false" data-cube-visualizer-seed></div>
+          <div class="cube-visualizer-field"><label for="cube-visualizer-seed">Key seed</label><input id="cube-visualizer-seed" type="text" value="${DEFAULT_SEED}" spellcheck="false" data-cube-visualizer-seed><small>Generate reproduces this seed exactly. Reseed Key replaces it with 128 bits of browser cryptographic randomness and generates a new canonical key.</small></div>
           <div class="cube-visualizer-field"><label for="cube-visualizer-size">Grid size</label><select id="cube-visualizer-size" data-cube-visualizer-size><option value="4">4 × 4</option><option value="12">12 × 12</option><option value="20">20 × 20</option><option value="28">28 × 28</option><option value="36">36 × 36</option><option value="44">44 × 44</option><option value="52">52 × 52</option><option value="60">60 × 60</option><option value="64">64 × 64</option><option value="96">96 × 96</option><option value="128">128 × 128</option><option value="192">192 × 192</option><option value="256">256 × 256</option><option value="384">384 × 384</option><option value="512">512 × 512</option><option value="768">768 × 768</option><option value="1024">1024 × 1024</option></select></div>
           <div class="cube-visualizer-field"><label for="cube-visualizer-mask-mode">Data-entry mask</label><select id="cube-visualizer-mask-mode" data-cube-visualizer-mask-mode><option value="1">Full face · 100% payload</option><option value="0.75">Sparse · 75% payload</option><option value="0.5">Sparse · 50% payload</option><option value="custom">Custom exact mask</option></select></div>
           <div class="cube-visualizer-field cube-custom-mask-field" hidden data-cube-visualizer-custom-mask-field><label for="cube-visualizer-custom-mask">Custom mask bits</label><textarea id="cube-visualizer-custom-mask" spellcheck="false" data-cube-visualizer-custom-mask></textarea><small>Use one digit per face cell: 1 accepts payload; 0 receives deterministic filler.</small></div>
@@ -1790,7 +1805,7 @@
             <div class="cube-visualizer-pick-controls" role="group" aria-label="Cube face click mode"><button type="button" class="layout-button active" aria-pressed="true" data-cube-visualizer-pick-role="input">Pick Input Face</button><button type="button" class="layout-button" aria-pressed="false" data-cube-visualizer-pick-role="output">Pick Output Face</button></div>
             <small data-cube-visualizer-pick-instruction>Cube clicks now select the input face.</small><p class="cube-visualizer-direction-summary" data-cube-visualizer-direction-summary></p>
           </fieldset>
-          <div class="cube-visualizer-actions"><button type="button" class="link-button" data-cube-visualizer-generate>Generate Canonical Draft Key</button><button type="button" class="layout-button" data-cube-visualizer-load>Load Key JSON</button><label class="layout-button cube-visualizer-file-button">Import Key File<input type="file" accept="application/json,.json" data-cube-encoder-import-key></label></div>
+          <div class="cube-visualizer-actions"><button type="button" class="link-button" data-cube-visualizer-generate>Generate Canonical Draft Key</button><button type="button" class="link-button" data-cube-visualizer-reseed>Reseed Key</button><button type="button" class="layout-button" data-cube-visualizer-load>Load Key JSON</button><label class="layout-button cube-visualizer-file-button">Import Key File<input type="file" accept="application/json,.json" data-cube-encoder-import-key></label></div>
           <div class="cube-visualizer-field"><label for="cube-visualizer-key">Canonical key JSON</label><textarea id="cube-visualizer-key" spellcheck="false" data-cube-visualizer-key></textarea></div>
           <div class="cube-visualizer-actions"><button type="button" class="layout-button" data-cube-encoder-copy-key>Copy Key</button><button type="button" class="layout-button" data-cube-encoder-download-key>Download Key</button><button type="button" class="layout-button" data-cube-encoder-handoff-lab>Open Package in Laboratory</button></div>
           <div><strong>Camera presets</strong><div class="cube-visualizer-camera-controls"><button type="button" class="layout-button" data-cube-visualizer-reset-camera>Perspective</button>${FACES.map(face => `<button type="button" class="layout-button" data-cube-visualizer-camera="${face}">${title(face)}</button>`).join('')}</div></div>
@@ -1914,6 +1929,8 @@
     return Object.freeze({
       panelOpen: Boolean(document.getElementById(PANEL_ID) && !document.getElementById(PANEL_ID).hidden),
       keyId: activeKey?.keyId || null,
+      keySeed: activeKey?.seed || null,
+      reseedAvailable: Boolean(SeedSource?.freshSeed),
       keyOrigin: activeKeyOrigin,
       gridSize: activeKey?.gridSize || null,
       activeInputFace: activeKey?.inputFace || null,
@@ -2014,6 +2031,7 @@
     loadArtifacts,
     currentArtifacts,
     currentState,
+    reseedKey: () => reseedDraftKey(buildPanel()),
     utilities: Object.freeze({ normalizeBits, bytesToBits, bitsToBytes, normalizeCustomMask, describeTraceBlock, describePackageBlock, buildPackageBlockDescriptors, locateSourceBit, locateCiphertextBit, sequenceBlockIndex, effectivePlaybackMode, resolvePresentedTraceTime, traceTranscriptEntries, twoDimensionalTraceMap, detectTransportKind, migrateVisualizerState, visualizerStorageKey }),
     constants: Object.freeze({ PANEL_ID, MAX_STATIC_GRID_SIZE, MAX_MANUAL_TRACE_GRID_SIZE, MAX_SAMPLED_TRACE_GRID_SIZE, PLAYBACK_DURATION_MS, OVERVIEW_BLOCK_DURATION_MS, PLAYBACK_SPEEDS, PLAYBACK_SCOPES, MASK_MODES, RENDER_QUALITIES, DISPLAY_MODES, TRANSPORT_KINDS, VISUALIZER_STATE_FORMAT, VISUALIZER_STATE_SCHEMA_VERSION })
   });
