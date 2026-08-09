@@ -1,3 +1,4 @@
+# Validates deterministic search/resume, generator coverage, legacy compatibility, and additive SHA-256 key identity.
 name: Validate Cubic Decryptor Tool
 
 on:
