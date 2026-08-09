@@ -1,0 +1,29 @@
+name: Warhammer Navis System Reference
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'warhammer-40k-workspace-v8.js'
+      - 'app-lite-view-mounts.js'
+      - 'warhammer-40k-map.html'
+      - 'tests/warhammer-navis-system-reference.test.js'
+      - '.github/workflows/warhammer-navis-system-reference.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check authoritative workspace syntax
+        run: node --check warhammer-40k-workspace-v8.js
+      - name: Validate unified system-detail reference
+        run: node tests/warhammer-navis-system-reference.test.js
