@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-steganalysis-1';
+  const ASSET_VERSION = '20260809-diagnostic-pipeline-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
@@ -16,6 +16,7 @@
   let mediaForensicsPromise = null;
   let mediaForensicsDemoCorpusPromise = null;
   let steganalysisLabPromise = null;
+  let diagnosticPipelinePromise = null;
   let initialized = false;
   const scriptPromises = new Map();
   const stylePromises = new Map();
@@ -282,6 +283,26 @@
     return steganalysisLabPromise;
   }
 
+  function loadDiagnosticPipeline() {
+    if (window.BinaryCubeDiagnosticPipelinePanel) return Promise.resolve(window.BinaryCubeDiagnosticPipelinePanel);
+    if (diagnosticPipelinePromise) return diagnosticPipelinePromise;
+    diagnosticPipelinePromise = (async () => {
+      await loadCooperativeRunner();
+      await Promise.all([
+        loadDecryptionDashboard(),
+        loadInformationAnalysisSuite(),
+        loadMediaForensicsSuite(),
+        loadSteganalysisLab()
+      ]);
+      await loadStyle('binary-cube-diagnostic-pipeline.css');
+      await loadScript('binary-cube-diagnostic-pipeline.js', () => Boolean(window.BinaryCubeDiagnosticPipeline));
+      await loadScript('binary-cube-diagnostic-pipeline-panel.js', () => Boolean(window.BinaryCubeDiagnosticPipelinePanel));
+      return window.BinaryCubeDiagnosticPipelinePanel;
+    })();
+    diagnosticPipelinePromise.catch(() => { diagnosticPipelinePromise = null; });
+    return diagnosticPipelinePromise;
+  }
+
   function loadIsmLab() {
     if (window.InterstellarMediaCollisionsLab) return Promise.resolve(window.InterstellarMediaCollisionsLab);
     if (ismPromise) return ismPromise;
@@ -409,6 +430,14 @@
     });
   }
 
+  function openDiagnosticPipeline(button = null, options = null) {
+    return withLoadingButton(button, 'Loading Diagnostic Pipeline…', async () => {
+      const api = await loadDiagnosticPipeline();
+      if (!api?.openPanel) throw new Error('The Diagnostic Evaluation Pipeline loaded without an open-panel interface.');
+      return api.openPanel(options || {});
+    });
+  }
+
   function openIsmSimulation(button = null) {
     return withLoadingButton(button, 'Loading Simulation…', async () => {
       const api = await loadIsmLab();
@@ -467,9 +496,10 @@
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="decryption-dashboard" hidden>
         <p class="eyebrow">Binary Cube cryptanalysis, information recovery, steganography, and adversarial testing</p>
         <h3>Decryption Dashboard</h3>
-        <p>Use the Cube-specific dashboard for direct ciphertext attacks, the Cryptanalytic Test Lab for controlled known/chosen-plaintext and key-sensitivity experiments, the Information & Deobfuscation Suite for broad recovery work, the Communication Capacity Analyzer for information-theory tests, the Steganography, Signal & Media Forensics Suite for extraction and signal work, and the Advanced Steganalysis Laboratory for quantitative detection, localization, parity, and detector evaluation.</p>
+        <p>Start with the Diagnostic Evaluation Pipeline when the file type or concealment method is not yet known. It classifies the asset, routes applicable specialist detectors automatically, runs independent methods concurrently inside deterministic stages, and preserves an evidence ledger. The manual workbenches remain available for direct follow-up and controlled experiments.</p>
         <div class="scientific-tools-actions">
-          <button id="scientific-tools-open-decryption-dashboard" type="button" class="primary-action">Open Decryption Dashboard</button>
+          <button id="scientific-tools-open-diagnostic-pipeline" type="button" class="primary-action">Run Diagnostic Evaluation Pipeline</button>
+          <button id="scientific-tools-open-decryption-dashboard" type="button" class="secondary-action">Open Decryption Dashboard</button>
           <button id="scientific-tools-open-cryptanalytic-test-lab" type="button" class="secondary-action">Open Cryptanalytic Test Lab</button>
           <button id="scientific-tools-open-information-analysis" type="button" class="secondary-action">Open Information & Deobfuscation Suite</button>
           <button id="scientific-tools-open-communication-capacity" type="button" class="secondary-action">Open Communication Capacity Analyzer</button>
@@ -477,8 +507,8 @@
           <button id="scientific-tools-open-steganalysis" type="button" class="secondary-action">Open Advanced Steganalysis Laboratory</button>
           <button id="scientific-tools-open-media-forensics-demos" type="button" class="secondary-action">Open Steganography & Signal Demonstrations</button>
         </div>
-        <div class="scientific-tools-runtime"><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Controlled cryptanalysis:</strong> avalanche/diffusion, single-bit differential probes, known plaintext, chosen plaintext, key-difference sensitivity, traversal inference, affine-equivalence/collapse tests, and projection permutation/cycle analysis</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>1999 communication-capacity test:</strong> McCowan–Hanser–Doyle Zipf slope, zero/first/higher-order conditional entropy, entropy-order slope, lag mutual information, shuffled-surrogate comparisons, and sampling-sufficiency warnings across multiple symbolizations</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>Steganography extraction:</strong> arbitrary byte LSB/MSB planes, selected-bit packing, per-plane entropy/transitions, pair-equalization χ² clues, offsets/strides, decoded RGB/RGBA channel extraction, raster bit-plane previews, PCM sample and sample-delta bit planes</span><span><strong>Quantitative steganalysis:</strong> RS regular/singular groups, Sample Pair Analysis payload estimation, localized tiled detector maps, residual co-occurrence features, exact known-cover modification maps, bit-plane Hamming counts, MSE/PSNR/SSIM, baseline JPEG quantized-DCT populations, PNG/JPEG metadata structure, Unicode hiding diagnostics, batch corpus comparison, ROC AUC, TPR/FPR, balanced accuracy, MCC, F1, payload-estimation MAE/RMSE, and recovered-bit error metrics</span><span><strong>Convolution and correlation:</strong> custom 1-D FIR and 2-D matrices plus identity, blur, Gaussian, sharpen, Laplacian, high-pass, Sobel, Prewitt, emboss, and cross-correlation tools</span><span><strong>Spectral analysis:</strong> FFT spectral peaks, Goertzel tone probes, DTMF, configurable binary FSK/AFSK, OOK/tone-envelope extraction, stereo difference and channel correlation</span><span><strong>Container forensics:</strong> RIFF/WAVE chunks, PNG chunks and post-IEND data, JPEG segment/EOI boundaries, ID3v2 boundaries, signatures and appended-payload carving</span><span><strong>Known-ground-truth demonstrations:</strong> clean PNG control, RGB-LSB positive control, post-IEND trailing PNG, 1200/2200 Hz AFSK WAV, and DTMF WAV can be previewed, saved, and opened with the matching forensic controls preselected</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> encryption/decryption controls remain delegated to ShadowrunBinaryCubeEngine; testing modules do not replace the canonical implementation</span></div>
-        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> avalanche behavior, affine consistency, traversal recovery, Zipf slopes, higher-order entropy structure, compression affinity, RS/SPA estimates, LSB equalization, residual features, JPEG coefficient populations, metadata anomalies, convolution residuals, spectral peaks, decoded characters, language-likeness, and candidate scores are independent evidence signals. No single signal proves semantics, intelligence, intentional steganography, successful decryption, or general cryptographic security.</div>
+        <div class="scientific-tools-runtime"><span><strong>Automatic routed evaluation:</strong> file classification → broad information/media baselines → type-specific steganalysis or Binary Cube diagnostics → deep reversible/cryptanalytic search according to Triage, Thorough, or Exhaustive depth</span><span><strong>Top-line evidence indices:</strong> Asset Presence, Certainty, Coverage, and Undetected / Miss-Risk remain separate normalized evidence indices rather than an opaque probability claim</span><span><strong>Concurrent execution:</strong> stage ordering is deterministic while independent detectors inside a stage may proceed concurrently; specialist workers and the cooperative scheduler retain responsibility for expensive inner loops</span><span><strong>Local execution:</strong> <code>node scripts/run-scientific-diagnostic-local.mjs &lt;file&gt; --profile=thorough</code> runs the same routing/report contract without the hosted browser UI</span><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Controlled cryptanalysis:</strong> avalanche/diffusion, single-bit differential probes, known plaintext, chosen plaintext, key-difference sensitivity, traversal inference, affine-equivalence/collapse tests, and projection permutation/cycle analysis</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>1999 communication-capacity test:</strong> McCowan–Hanser–Doyle Zipf slope, zero/first/higher-order conditional entropy, entropy-order slope, lag mutual information, shuffled-surrogate comparisons, and sampling-sufficiency warnings across multiple symbolizations</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>Steganography extraction:</strong> arbitrary byte LSB/MSB planes, selected-bit packing, per-plane entropy/transitions, pair-equalization χ² clues, offsets/strides, decoded RGB/RGBA channel extraction, raster bit-plane previews, PCM sample and sample-delta bit planes</span><span><strong>Quantitative steganalysis:</strong> RS regular/singular groups, Sample Pair Analysis payload estimation, localized tiled detector maps, residual co-occurrence features, exact known-cover modification maps, bit-plane Hamming counts, MSE/PSNR/SSIM, baseline JPEG quantized-DCT populations, PNG/JPEG metadata structure, Unicode hiding diagnostics, batch corpus comparison, ROC AUC, TPR/FPR, balanced accuracy, MCC, F1, payload-estimation MAE/RMSE, and recovered-bit error metrics</span><span><strong>Convolution and correlation:</strong> custom 1-D FIR and 2-D matrices plus identity, blur, Gaussian, sharpen, Laplacian, high-pass, Sobel, Prewitt, emboss, and cross-correlation tools</span><span><strong>Spectral analysis:</strong> FFT spectral peaks, Goertzel tone probes, DTMF, configurable binary FSK/AFSK, OOK/tone-envelope extraction, stereo difference and channel correlation</span><span><strong>Container forensics:</strong> RIFF/WAVE chunks, PNG chunks and post-IEND data, JPEG segment/EOI boundaries, ID3v2 boundaries, signatures and appended-payload carving</span><span><strong>Known-ground-truth demonstrations:</strong> clean PNG control, RGB-LSB positive control, post-IEND trailing PNG, 1200/2200 Hz AFSK WAV, and DTMF WAV can be previewed, saved, and opened with the matching forensic controls preselected</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> the routing pipeline delegates to existing specialist modules; encryption/decryption controls remain delegated to ShadowrunBinaryCubeEngine and no analysis orchestrator replaces the canonical implementations</span></div>
+        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> absence of positive evidence is not evidence of absence. Asset Presence, Certainty, Coverage, and Miss-Risk are evidence indices, not posterior probabilities. Avalanche behavior, affine consistency, traversal recovery, Zipf slopes, higher-order entropy structure, compression affinity, RS/SPA estimates, LSB equalization, residual features, JPEG coefficient populations, metadata anomalies, convolution residuals, spectral peaks, decoded characters, language-likeness, and candidate scores remain distinct evidence signals. No single signal proves semantics, intelligence, intentional steganography, successful decryption, or general cryptographic security.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
         <p class="eyebrow">Interstellar medium collision model</p>
@@ -499,6 +529,7 @@
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
     view.querySelector('#scientific-tools-open-key-generation-visualizer')?.addEventListener('click', event => void openKeyGenerationVisualizer(event.currentTarget));
+    view.querySelector('#scientific-tools-open-diagnostic-pipeline')?.addEventListener('click', event => void openDiagnosticPipeline(event.currentTarget));
     view.querySelector('#scientific-tools-open-decryption-dashboard')?.addEventListener('click', event => void openDecryptionDashboard(event.currentTarget));
     view.querySelector('#scientific-tools-open-cryptanalytic-test-lab')?.addEventListener('click', event => void openCryptanalyticTestLab(event.currentTarget));
     view.querySelector('#scientific-tools-open-information-analysis')?.addEventListener('click', event => void openInformationAnalysisSuite(event.currentTarget));
@@ -537,9 +568,11 @@
     loadMediaForensicsSuite,
     loadMediaForensicsDemoCorpus,
     loadSteganalysisLab,
+    loadDiagnosticPipeline,
     openBinaryCubeVisualizer,
     openBinaryCubeLaboratory,
     openKeyGenerationVisualizer,
+    openDiagnosticPipeline,
     openDecryptionDashboard,
     openCryptanalyticTestLab,
     openInformationAnalysisSuite,
