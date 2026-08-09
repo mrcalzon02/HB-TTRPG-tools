@@ -216,7 +216,7 @@
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
       await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise]);
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=26');
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=27');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
       return;
