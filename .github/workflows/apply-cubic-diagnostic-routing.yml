@@ -15,6 +15,15 @@ jobs:
   apply:
     runs-on: ubuntu-latest
     steps:
+      - name: Record pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='scientific-tools/cubic-diagnostic-routing' \
+            -f description='Applying validated Cubic diagnostic routing.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -45,3 +54,23 @@ jobs:
           git add binary-cube-diagnostic-pipeline.js binary-cube-diagnostic-pipeline-panel.js scientific-tools-entry.js scripts/validate-scientific-diagnostic-pipeline.mjs
           git commit -m "feat: route canonical cube diagnostics to Cubic Decryptor"
           git push origin HEAD:main
+      - name: Record success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='scientific-tools/cubic-diagnostic-routing' \
+            -f description='Cubic diagnostic routing integrated and validated.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='scientific-tools/cubic-diagnostic-routing' \
+            -f description='Cubic diagnostic routing migration failed closed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
