@@ -2,8 +2,9 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-ism-quantum-foam-1';
+  const ASSET_VERSION = '20260809-double-slit-3d-1';
   let ismPromise = null;
+  let doubleSlitPromise = null;
   let cubeVisualizerPromise = null;
   let cubeLaboratoryPromise = null;
   let initialized = false;
@@ -159,6 +160,18 @@
     return ismPromise;
   }
 
+  function loadDoubleSlitLab() {
+    if (window.DoubleSlitExperimentLab) return Promise.resolve(window.DoubleSlitExperimentLab);
+    if (doubleSlitPromise) return doubleSlitPromise;
+    doubleSlitPromise = (async () => {
+      await loadStyle('double-slit-lab.css');
+      await loadScript('double-slit-lab.js', () => Boolean(window.DoubleSlitExperimentLab));
+      return window.DoubleSlitExperimentLab;
+    })();
+    doubleSlitPromise.catch(() => { doubleSlitPromise = null; });
+    return doubleSlitPromise;
+  }
+
   async function withLoadingButton(button, loadingLabel, action) {
     const original = button?.textContent || '';
     if (button) {
@@ -206,6 +219,14 @@
     });
   }
 
+  function openDoubleSlitLab(button = null) {
+    return withLoadingButton(button, 'Loading Double Slit Lab…', async () => {
+      const api = await loadDoubleSlitLab();
+      if (!api?.openPanel) throw new Error('The Double Slit Experiment Visualizer loaded without an open-panel interface.');
+      return api.openPanel({ setting: 'scientific-tools' });
+    });
+  }
+
   function selectTab(tabId) {
     document.querySelectorAll('#scientific-tools [data-scientific-tools-tab]').forEach(button => {
       const active = button.dataset.scientificToolsTab === tabId;
@@ -230,6 +251,7 @@
       <div class="scientific-tools-tabs no-print" role="tablist" aria-label="Scientific Tools systems">
         <button type="button" class="scientific-tools-tab active" data-scientific-tools-tab="binary-cube" role="tab" aria-selected="true">Binary Cube</button>
         <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="ism-media-simulation" role="tab" aria-selected="false">ISM Media Simulation</button>
+        <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="double-slit" role="tab" aria-selected="false">Double Slit Experiment</button>
       </div>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="binary-cube">
         <p class="eyebrow">Canonical encoding and traversal system</p>
@@ -250,6 +272,16 @@
           <button id="scientific-tools-open-ism" type="button" class="primary-action">Open ISM Media Simulation</button>
         </div>
         <div class="scientific-tools-boundary"><strong>Model boundary:</strong> particle density, physical cube scale, light transit, Λ, and Lorentz-force calculations remain physical-model quantities. Quantum-foam angular jitter is a phenomenological hypothesis/sensitivity layer, while Shadow-key coupling remains a separately keyed experimental scattering/obfuscation layer.</div>
+      </section>
+      <section class="scientific-tools-panel no-print" data-scientific-tools-panel="double-slit" hidden>
+        <p class="eyebrow">Quantum interference baseline and hypothesis framework</p>
+        <h3>Double Slit Experiment Visualizer</h3>
+        <p>Explore a three-dimensional source, two-slit barrier, and detector using classical geometric particles, continuous Fraunhofer interference, or discrete quantum-event accumulation. Slit geometry, source wavelength, coherence, relative phase, which-path availability, detector response, and playback are independently controllable.</p>
+        <div class="scientific-tools-actions">
+          <button id="scientific-tools-open-double-slit" type="button" class="primary-action">Open Double Slit Experiment</button>
+        </div>
+        <div class="scientific-tools-runtime"><span><strong>Baseline:</strong> two-slit Fraunhofer intensity with single-slit envelope</span><span><strong>Quantum accumulation:</strong> discrete hits sampled from the baseline probability distribution</span><span><strong>3D viewport:</strong> orbit, zoom, pan, camera presets, animated emissions and amplitude-field slice</span></div>
+        <div class="scientific-tools-boundary"><strong>Interpretation boundary:</strong> quantum mode does not draw a definite post-barrier trajectory. Classical paths are confined to the explicitly classical comparator. Optional hypothesis layers register through a separate interface and do not silently replace the accepted baseline.</div>
       </section>`;
 
     view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => {
@@ -258,6 +290,7 @@
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
     view.querySelector('#scientific-tools-open-binary-cube-laboratory')?.addEventListener('click', event => void openBinaryCubeLaboratory(event.currentTarget));
     view.querySelector('#scientific-tools-open-ism')?.addEventListener('click', event => void openIsmSimulation(event.currentTarget));
+    view.querySelector('#scientific-tools-open-double-slit')?.addEventListener('click', event => void openDoubleSlitLab(event.currentTarget));
     selectTab('binary-cube');
     return view;
   }
@@ -280,6 +313,8 @@
     openBinaryCubeVisualizer,
     openBinaryCubeLaboratory,
     loadIsmLab,
-    openIsmSimulation
+    openIsmSimulation,
+    loadDoubleSlitLab,
+    openDoubleSlitLab
   });
 })();
