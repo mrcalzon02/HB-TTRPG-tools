@@ -7,6 +7,7 @@ on:
       - ".github/workflows/scientific-tools-extraction.yml"
       - "app-lite-view-mounts.js"
       - "scientific-tools-entry.js"
+      - "scientific-tools-cooperative-runner.js"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -51,6 +52,7 @@ jobs:
         run: |
           node --check app-lite-view-mounts.js
           node --check scientific-tools-entry.js
+          node --check scientific-tools-cooperative-runner.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
