@@ -127,6 +127,9 @@ jobs:
           test -s interstellar-media-collisions-lab.css
           test -s double-slit-lab.css
 
+      - name: Validate Steganography Signal and Media Demonstration Corpus
+        run: node scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
+
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
 
@@ -159,9 +162,6 @@ jobs:
 
       - name: Validate Steganography Signal and Media Forensics Suite
         run: node scripts/validate-binary-cube-media-forensics-suite.mjs
-
-      - name: Validate Steganography Signal and Media Demonstration Corpus
-        run: node scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
 
       - name: Preserve accepted Binary Cube launch contract
         run: node scripts/validate-binary-cube-v13-launch.mjs
