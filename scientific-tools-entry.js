@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-binary-cube-unified-1';
+  const ASSET_VERSION = '20260809-ism-3d-magnetic-1';
   let ismPromise = null;
   let cubeVisualizerPromise = null;
   let cubeLaboratoryPromise = null;
