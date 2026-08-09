@@ -810,6 +810,30 @@
   }
 
   function checksumMaterial(payload) {
+    // V0/V1 package checksum contract. SHA-256 key identity is intentionally
+    // validated separately so additive identity metadata does not invalidate
+    // accepted historical packages or secure exports.
+    return JSON.stringify({
+      format: payload.format,
+      schemaVersion: payload.schemaVersion,
+      algorithm: payload.algorithm,
+      securityClassification: payload.securityClassification,
+      keyId: payload.keyId,
+      gridSize: payload.gridSize,
+      inputFace: payload.inputFace,
+      outputFace: payload.outputFace,
+      inputQuarterTurns: payload.inputQuarterTurns,
+      outputQuarterTurns: payload.outputQuarterTurns,
+      originalBitLength: payload.originalBitLength,
+      payloadCapacity: payload.payloadCapacity,
+      blockCount: payload.blockCount,
+      ciphertext: payload.ciphertext
+    });
+  }
+
+  function digestAwareChecksumMaterial(payload) {
+    // Compatibility reader for the short-lived additive-key-identity checksum
+    // profile emitted before the V0 checksum boundary was restored.
     return JSON.stringify({
       format: payload.format,
       schemaVersion: payload.schemaVersion,
@@ -832,6 +856,10 @@
 
   function packageChecksum(payload) {
     return hex32(checksumMaterial(payload));
+  }
+
+  function digestAwarePackageChecksum(payload) {
+    return hex32(digestAwareChecksumMaterial(payload));
   }
 
   function encryptBinary(binary, rawKey) {
@@ -915,8 +943,11 @@
       ciphertext
     };
     const expectedChecksum = packageChecksum(normalized);
-    if (payload.checksum !== expectedChecksum) fail('Package checksum validation failed. The ciphertext or framing metadata may be corrupted.');
-    normalized.checksum = expectedChecksum;
+    const digestAwareChecksum = digestAwarePackageChecksum(normalized);
+    if (payload.checksum !== expectedChecksum && payload.checksum !== digestAwareChecksum) fail('Package checksum validation failed. The ciphertext or framing metadata may be corrupted.');
+    // Preserve the accepted input checksum on validation. New packages emit the
+    // stable V0 checksum; the digest-aware value remains import-only compatibility.
+    normalized.checksum = String(payload.checksum);
     return normalized;
   }
 

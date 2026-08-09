@@ -86,6 +86,8 @@
       algorithm: Engine.constants.ALGORITHM,
       securityClassification: Engine.constants.SECURITY_CLASSIFICATION,
       keyId: key.keyId,
+      keyDigestType: key.keyDigestType,
+      keyDigest: key.keyDigest,
       gridSize: key.gridSize,
       inputFace: key.inputFace,
       outputFace: key.outputFace,

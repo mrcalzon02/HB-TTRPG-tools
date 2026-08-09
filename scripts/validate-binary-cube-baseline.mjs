@@ -85,6 +85,13 @@ function optionsFrom(definition) {
   };
 }
 
+function legacyIdentityProjection(value) {
+  const projected = JSON.parse(JSON.stringify(value));
+  delete projected.keyDigestType;
+  delete projected.keyDigest;
+  return projected;
+}
+
 function diagnosticSummary(key) {
   const diagnostics = Engine.projectionDiagnostics(key);
   const invariant = diagnostics.invariant || Engine.algebraicInvariant(key);
@@ -125,6 +132,10 @@ function buildVector(definition) {
   const packageObject = Engine.encryptBinary(definition.bits, key);
   const recoveredBits = Engine.decryptBinary(packageObject, key);
   assert.equal(recoveredBits, definition.bits, `${definition.id} failed its round trip.`);
+  assert.equal(key.keyDigestType, Engine.constants.KEY_DIGEST_TYPE, `${definition.id} is missing the current SHA-256 key identity type.`);
+  assert.match(key.keyDigest, /^[0-9a-f]{64}$/, `${definition.id} is missing the current SHA-256 key identity.`);
+  assert.equal(packageObject.keyDigestType, key.keyDigestType, `${definition.id} package key identity type drifted.`);
+  assert.equal(packageObject.keyDigest, key.keyDigest, `${definition.id} package key identity drifted.`);
 
   const pointCoordinates = Engine.buildPoints(key);
   const inputProjection = Engine.faceOrder(pointCoordinates, key.inputFace, key.gridSize, key.inputQuarterTurns);
@@ -150,13 +161,13 @@ function buildVector(definition) {
     id: definition.id,
     options,
     inputBits: definition.bits,
-    key,
+    key: legacyIdentityProjection(key),
     pointCoordinates,
     inputProjectionPointIds: inputProjection.map(point => point.id),
     outputProjectionPointIds: outputProjection.map(point => point.id),
     framedInputBlocks,
     encryptedBlocks,
-    package: packageObject,
+    package: legacyIdentityProjection(packageObject),
     recoveredBits,
     diagnostics: diagnosticSummary(key)
   };
@@ -216,6 +227,47 @@ function assertThrows(action, pattern, label) {
     assert.match(error.message, pattern, `${label} rejected for an unexpected reason.`);
     return true;
   }, label);
+}
+
+function fnv1a32Text(value) {
+  let hash = 0x811c9dc5;
+  const text = String(value ?? '');
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+function transientDigestAwareChecksum(payload) {
+  return fnv1a32Text(JSON.stringify({
+    format: payload.format,
+    schemaVersion: payload.schemaVersion,
+    algorithm: payload.algorithm,
+    securityClassification: payload.securityClassification,
+    keyId: payload.keyId,
+    keyDigestType: payload.keyDigestType,
+    keyDigest: payload.keyDigest,
+    gridSize: payload.gridSize,
+    inputFace: payload.inputFace,
+    outputFace: payload.outputFace,
+    inputQuarterTurns: payload.inputQuarterTurns,
+    outputQuarterTurns: payload.outputQuarterTurns,
+    originalBitLength: payload.originalBitLength,
+    payloadCapacity: payload.payloadCapacity,
+    blockCount: payload.blockCount,
+    ciphertext: payload.ciphertext
+  }));
+}
+
+function validateChecksumCompatibility() {
+  const definition = DEFINITIONS[0];
+  const key = Engine.createKey(optionsFrom(definition));
+  const stablePackage = Engine.encryptBinary(definition.bits, key);
+  assert.equal(stablePackage.checksum, GOLDEN.vectors[definition.id].checksum, 'New packages must retain the accepted V0 corruption checksum.');
+  const transientPackage = { ...stablePackage, checksum: transientDigestAwareChecksum(stablePackage) };
+  assert.notEqual(transientPackage.checksum, stablePackage.checksum, 'Compatibility fixture must exercise the transient digest-aware checksum profile.');
+  assert.equal(Engine.decryptBinary(transientPackage, key), definition.bits, 'Transient digest-aware packages must remain import-compatible.');
 }
 
 function validateNegativeCases(evidence) {
@@ -325,6 +377,7 @@ function main() {
   const evidence = buildEvidence();
   validateNegativeCases(evidence);
   validateGoldenEvidence(evidence);
+  validateChecksumCompatibility();
   validateGeometryContracts(evidence);
 
   const expandedIndex = process.argv.indexOf('--write-expanded');
