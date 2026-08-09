@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/diagnostic-raster-evidence-routing.yml"
       - "binary-cube-diagnostic-pipeline.js"
+      - "binary-cube-diagnostic-pipeline-panel.js"
       - "binary-cube-steganalysis-engine.js"
       - "binary-cube-steganalysis-evidence-profile.js"
       - "binary-cube-steganalysis-worker.js"
@@ -50,6 +51,7 @@ jobs:
       - name: Check routed sources
         run: |
           node --check binary-cube-diagnostic-pipeline.js
+          node --check binary-cube-diagnostic-pipeline-panel.js
           node --check binary-cube-steganalysis-engine.js
           node --check binary-cube-steganalysis-evidence-profile.js
           node --check binary-cube-steganalysis-worker.js
@@ -59,13 +61,15 @@ jobs:
       - name: Validate evidence separation and miss-risk routing
         run: node scripts/validate-diagnostic-raster-evidence-routing.mjs
 
-      - name: Validate browser dependency routing
+      - name: Validate browser dependency and presentation routing
         run: |
           grep -q "binary-cube-steganalysis-evidence-profile.js" scientific-tools-entry.js
           grep -q "binary-cube-steganalysis-worker-client.js" scientific-tools-entry.js
           grep -q "scientific-tools-entry.js?v=20260809-diagnostic-raster-evidence-1" app-lite-view-mounts.js
           grep -q "steganalysisWorker?.profileRaster" binary-cube-diagnostic-pipeline.js
           grep -q "missRiskEvidence" binary-cube-diagnostic-pipeline.js
+          grep -q "Unresolved Evidence Index" binary-cube-diagnostic-pipeline-panel.js
+          grep -q "unresolved / miss-risk" binary-cube-diagnostic-pipeline-panel.js
 
       - name: Record routing success
         if: ${{ success() }}
