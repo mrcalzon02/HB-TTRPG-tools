@@ -10,6 +10,8 @@ on:
       - "scientific-tools-entry.js"
       - "scientific-tools-cooperative-runner.js"
       - "scientific-tools-local-media.js"
+      - "scientific-tools-help.js"
+      - "scientific-tools-help.css"
       - "signals-laboratory.js"
       - "signals-laboratory.css"
       - "shadowrun-binary-cube-engine.js"
@@ -57,6 +59,7 @@ on:
       - "double-slit-lab.css"
       - "scripts/validate-signals-laboratory.mjs"
       - "scripts/validate-scientific-tools-extraction.mjs"
+      - "scripts/validate-scientific-tools-help.mjs"
       - "scripts/validate-scientific-diagnostic-pipeline.mjs"
       - "scripts/calibrate-scientific-diagnostic-pipeline.mjs"
       - "scripts/validate-scientific-diagnostic-calibration.mjs"
@@ -115,6 +118,9 @@ jobs:
           node --check scientific-tools-entry.js
           node --check scientific-tools-cooperative-runner.js
           node --check scientific-tools-local-media.js
+          node --check scientific-tools-help.js
+          node --check scripts/validate-scientific-tools-help.mjs
+          test -s scientific-tools-help.css
           node --check signals-laboratory.js
           node --check shadowrun-binary-cube-engine.js
           node --check shadowrun-binary-cube-worker.js
@@ -217,6 +223,9 @@ jobs:
 
       - name: Validate Cubic Decryptor Tool
         run: node scripts/validate-binary-cube-cubic-decryptor.mjs
+
+      - name: Validate shared cryptography and steganography help
+        run: node scripts/validate-scientific-tools-help.mjs
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
