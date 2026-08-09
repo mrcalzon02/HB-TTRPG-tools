@@ -10,12 +10,19 @@
   const ELECTRON_MASS = 9.1093837139e-31;
   const EV_TO_JOULE = 1.602176634e-19;
   const TWO_PI = Math.PI * 2;
+  const MAX_ACTIVE_EVENT_VISUALS = 64;
+  const DISTRIBUTION_CHUNK = 64;
+  const DETECTOR_COLUMN_CHUNK = 16;
+  const FIELD_SAMPLE_CHUNK = 128;
 
   let panel = null;
   let viewportState = null;
   let animationRaf = 0;
   let simulationState = null;
   let experimentSeedRevision = 0;
+  let refreshToken = null;
+  let refreshTimer = 0;
+  let uiRefreshTimer = 0;
   const scriptPromises = new Map();
   const hypothesisLayers = new Map();
 
@@ -23,6 +30,16 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[character]));
+
+  function runner() {
+    const api = window.ScientificToolsCooperativeRunner;
+    if (!api) throw new Error('Scientific Tools cooperative runner must load before the Double Slit laboratory.');
+    return api;
+  }
+
+  function isCancellation(error) {
+    return error?.name === 'CooperativeCancelledError';
+  }
 
   function hash32(text) {
     let hash = 2166136261 >>> 0;
@@ -121,7 +138,7 @@
     const link = document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'double-slit-lab.css?v=20260809-double-slit-3d-1';
+    link.href = 'double-slit-lab.css?v=20260809-cooperative-science-1';
     document.head.appendChild(link);
   }
 
@@ -166,7 +183,7 @@
           <div>
             <p class="dsl-eyebrow">Scientific Tools · Quantum Interference</p>
             <h2 id="dsl-title">Double Slit Experiment Visualizer</h2>
-            <p class="dsl-subtitle">Interactive three-dimensional comparison of classical geometric particles, coherent wave interference, and single-event quantum accumulation. The accepted baseline remains separate from optional apparatus and hypothesis layers.</p>
+            <p class="dsl-subtitle">Interactive three-dimensional comparison of classical geometric particles, coherent wave interference, and single-event quantum accumulation. Expensive setup work is performed in deterministic bounded slices so slow hardware keeps responding.</p>
           </div>
           <button type="button" class="dsl-close" data-dsl-close aria-label="Close Double Slit Experiment Visualizer">×</button>
         </header>
@@ -256,7 +273,7 @@
               </div>
             </div>
 
-            <p class="dsl-note"><strong>Baseline boundary:</strong> coherent-wave and quantum-hit modes use the same two-slit Fraunhofer intensity law, including the single-slit envelope. Quantum mode samples discrete detector events from that probability distribution; it does not draw a definite post-barrier particle trajectory. Which-path availability suppresses the interference cross-term. Classical mode is an explicitly separate geometric comparator.</p>
+            <p class="dsl-note"><strong>Execution rule:</strong> model resolution changes how long setup takes, not whether the page remains usable. Distribution, detector, and field sampling preserve fixed index order and yield between bounded chunks. Quantum mode samples discrete detector events from the same baseline probability distribution and does not invent a definite post-barrier trajectory.</p>
           </aside>
 
           <main class="dsl-stage">
@@ -299,6 +316,17 @@
     });
   }
 
+  function requestRefresh() {
+    void refreshExperiment().catch(error => {
+      if (!isCancellation(error)) console.error('Double Slit experiment refresh failed.', error);
+    });
+  }
+
+  function scheduleRefresh() {
+    window.clearTimeout(refreshTimer);
+    refreshTimer = window.setTimeout(requestRefresh, 45);
+  }
+
   function wirePanelEvents() {
     panel.querySelectorAll('[data-dsl-close]').forEach(button => button.addEventListener('click', closePanel));
     bindRangeOutput('dsl-photon-wavelength', 'dsl-photon-wavelength-value', value => `${value.toFixed(0)} nm`);
@@ -319,7 +347,7 @@
       'dsl-phase', 'dsl-which-path', 'dsl-show-expected', 'dsl-show-field', 'dsl-hypothesis',
       'dsl-detector-exponent', 'dsl-seed'
     ];
-    experimentControls.forEach(id => document.getElementById(id)?.addEventListener('change', refreshExperiment));
+    experimentControls.forEach(id => document.getElementById(id)?.addEventListener('change', requestRefresh));
     ['dsl-photon-wavelength', 'dsl-electron-energy', 'dsl-matter-wavelength', 'dsl-slit-width', 'dsl-slit-separation',
       'dsl-screen-distance', 'dsl-screen-width', 'dsl-coherence', 'dsl-phase', 'dsl-detector-exponent']
       .forEach(id => document.getElementById(id)?.addEventListener('input', scheduleRefresh));
@@ -341,12 +369,6 @@
     });
     document.getElementById('dsl-hypothesis')?.addEventListener('change', updateHypothesisNote);
     panel.addEventListener('keydown', event => { if (event.key === 'Escape') closePanel(); });
-  }
-
-  let refreshTimer = 0;
-  function scheduleRefresh() {
-    window.clearTimeout(refreshTimer);
-    refreshTimer = window.setTimeout(refreshExperiment, 45);
   }
 
   function electronWavelength(kineticEv) {
@@ -461,6 +483,59 @@
     return { xs, values, cdf, maximum, total };
   }
 
+  async function buildDistributionAsync(config, physics, sampleCount = 1200, options = {}) {
+    const taskRunner = runner();
+    const halfWidth = physics.screenWidth * 0.5;
+    const xs = new Float64Array(sampleCount);
+    const values = new Float64Array(sampleCount);
+    const cdf = new Float64Array(sampleCount);
+    let maximum = 0;
+    let total = 0;
+
+    await taskRunner.forRange({
+      start: 0,
+      end: sampleCount,
+      chunkSize: DISTRIBUTION_CHUNK,
+      token: options.token,
+      label: 'Detector distribution',
+      onProgress: options.onProgress,
+      step: index => {
+        const x = -halfWidth + physics.screenWidth * index / (sampleCount - 1);
+        const value = intensityAtX(x, physics, config);
+        xs[index] = x;
+        values[index] = value;
+        maximum = Math.max(maximum, value);
+        total += value;
+        cdf[index] = total;
+      }
+    });
+
+    if (!(total > 0)) {
+      total = sampleCount;
+      maximum = 1;
+      await taskRunner.forRange({
+        start: 0,
+        end: sampleCount,
+        chunkSize: DISTRIBUTION_CHUNK,
+        token: options.token,
+        label: 'Fallback distribution',
+        onProgress: options.onProgress,
+        step: index => { cdf[index] = index + 1; }
+      });
+    }
+
+    await taskRunner.forRange({
+      start: 0,
+      end: sampleCount,
+      chunkSize: DISTRIBUTION_CHUNK,
+      token: options.token,
+      label: 'Normalize detector distribution',
+      onProgress: options.onProgress,
+      step: index => { cdf[index] /= total; }
+    });
+    return { xs, values, cdf, maximum, total };
+  }
+
   function sampleDistribution(distribution, random) {
     const target = random();
     let low = 0;
@@ -483,15 +558,18 @@
     return canvas;
   }
 
-  function createSimulationState(config, physics) {
+  function createSimulationState(config, physics, distribution) {
     const detectorCanvas = createDetectorCanvas();
+    const hitBins = new Uint32Array(120);
     return {
       config,
       physics,
-      distribution: buildDistribution(config, physics),
+      distribution,
       detectorCanvas,
       detectorContext: detectorCanvas.getContext('2d'),
       hits: [],
+      hitBins,
+      hitBinMaximum: 1,
       running: false,
       emitted: 0,
       lastFrameTime: performance.now(),
@@ -529,19 +607,38 @@
       ['Slit Fresnel number', formatScientific(physics.slitFresnelNumber)],
       ['Separation Fresnel number', formatScientific(physics.separationFresnelNumber)],
       ['Approximation regime', regime],
-      ['Detected events', simulationState.emitted.toLocaleString()]
+      ['Detected events', simulationState.emitted.toLocaleString()],
+      ['Execution', 'deterministic cooperative slices']
     ].map(([label, value]) => `<div class="dsl-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
   }
 
-  function paintDetector() {
+  function setProgressStatus(progress, stagePrefix = '') {
+    const target = document.getElementById('dsl-status');
+    if (!target) return;
+    const percent = Math.round((progress?.fraction ?? 0) * 100);
+    target.innerHTML = `<span>Preparing: <strong>${esc(stagePrefix || progress?.label || 'experiment')}</strong></span><span>Progress: <strong>${percent}%</strong></span><span>Execution: <strong>cooperative / page remains interruptible</strong></span>`;
+  }
+
+  async function paintDetectorBaseAsync(token) {
     if (!simulationState) return;
-    const { detectorCanvas: canvas, detectorContext: context, distribution, config, physics, hits } = simulationState;
+    const taskRunner = runner();
+    const { detectorCanvas: canvas, detectorContext: context, distribution, config } = simulationState;
     context.fillStyle = '#061019';
     context.fillRect(0, 0, canvas.width, canvas.height);
+    if (!(config.mode === 'wave' || config.showExpected)) {
+      viewportState?.detectorTexture && (viewportState.detectorTexture.needsUpdate = true);
+      return;
+    }
 
-    if (config.mode === 'wave' || config.showExpected) {
-      const image = context.createImageData(canvas.width, canvas.height);
-      for (let px = 0; px < canvas.width; px += 1) {
+    const image = context.createImageData(canvas.width, canvas.height);
+    await taskRunner.forRange({
+      start: 0,
+      end: canvas.width,
+      chunkSize: DETECTOR_COLUMN_CHUNK,
+      token,
+      label: 'Detector texture',
+      onProgress: progress => setProgressStatus(progress),
+      step: px => {
         const index = Math.round(px / Math.max(1, canvas.width - 1) * (distribution.values.length - 1));
         const normalized = distribution.maximum > 0 ? distribution.values[index] / distribution.maximum : 0;
         const brightness = Math.round(20 + normalized * 190);
@@ -553,36 +650,37 @@
           image.data[offset + 3] = config.mode === 'wave' ? 235 : 80;
         }
       }
-      context.putImageData(image, 0, 0);
-    }
+    });
+    taskRunner.assertActive(token);
+    context.putImageData(image, 0, 0);
+    if (viewportState?.detectorTexture) viewportState.detectorTexture.needsUpdate = true;
+  }
 
+  function drawHitToDetector(hit) {
+    if (!simulationState) return;
+    const { detectorCanvas: canvas, detectorContext: context, physics } = simulationState;
+    const px = (hit.x / physics.screenWidth + 0.5) * canvas.width;
+    const py = (0.5 - hit.y) * canvas.height;
+    const radius = 2.2;
     context.save();
     context.globalCompositeOperation = 'lighter';
-    for (const hit of hits) {
-      const px = (hit.x / physics.screenWidth + 0.5) * canvas.width;
-      const py = (0.5 - hit.y) * canvas.height;
-      const radius = 2.2;
-      const gradient = context.createRadialGradient(px, py, 0, px, py, radius * 2.8);
-      gradient.addColorStop(0, 'rgba(255,245,210,0.95)');
-      gradient.addColorStop(0.35, 'rgba(130,215,255,0.7)');
-      gradient.addColorStop(1, 'rgba(80,160,255,0)');
-      context.fillStyle = gradient;
-      context.beginPath();
-      context.arc(px, py, radius * 2.8, 0, TWO_PI);
-      context.fill();
-    }
+    const gradient = context.createRadialGradient(px, py, 0, px, py, radius * 2.8);
+    gradient.addColorStop(0, 'rgba(255,245,210,0.95)');
+    gradient.addColorStop(0.35, 'rgba(130,215,255,0.7)');
+    gradient.addColorStop(1, 'rgba(80,160,255,0)');
+    context.fillStyle = gradient;
+    context.beginPath();
+    context.arc(px, py, radius * 2.8, 0, TWO_PI);
+    context.fill();
     context.restore();
-
-    if (viewportState?.detectorTexture) {
-      viewportState.detectorTexture.needsUpdate = true;
-    }
+    if (viewportState?.detectorTexture) viewportState.detectorTexture.needsUpdate = true;
   }
 
   function renderChart() {
     const canvas = document.getElementById('dsl-chart');
     if (!canvas || !simulationState) return;
     const context = canvas.getContext('2d');
-    const { distribution, hits, physics } = simulationState;
+    const { distribution, hitBins, hitBinMaximum, physics } = simulationState;
     const width = canvas.width;
     const height = canvas.height;
     const padLeft = 58;
@@ -614,21 +712,13 @@
     }
     context.stroke();
 
-    if (hits.length) {
-      const bins = new Uint32Array(120);
-      let maximum = 1;
-      hits.forEach(hit => {
-        const normalized = clamp(hit.x / physics.screenWidth + 0.5, 0, 0.999999);
-        const index = Math.floor(normalized * bins.length);
-        bins[index] += 1;
-        maximum = Math.max(maximum, bins[index]);
-      });
+    if (simulationState.emitted > 0) {
       context.strokeStyle = 'rgba(240,190,105,.95)';
       context.lineWidth = 1.5;
       context.beginPath();
-      for (let index = 0; index < bins.length; index += 1) {
-        const x = padLeft + graphWidth * index / (bins.length - 1);
-        const y = padTop + graphHeight * (1 - bins[index] / maximum);
+      for (let index = 0; index < hitBins.length; index += 1) {
+        const x = padLeft + graphWidth * index / (hitBins.length - 1);
+        const y = padTop + graphHeight * (1 - hitBins[index] / Math.max(1, hitBinMaximum));
         if (index === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
@@ -655,8 +745,19 @@
       `<span>Events: <strong>${simulationState.emitted.toLocaleString()}</strong></span>`,
       `<span>Which-path: <strong>${config.whichPath ? 'available · cross-term suppressed' : 'not available'}</strong></span>`,
       `<span>Layer: <strong>${esc(layer.label)}</strong></span>`,
-      `<span>Fringe spacing: <strong>${esc(formatLength(physics.fringeSpacing))}</strong></span>`
+      `<span>Fringe spacing: <strong>${esc(formatLength(physics.fringeSpacing))}</strong></span>`,
+      `<span>Scheduler: <strong>incremental deterministic</strong></span>`
     ].join('');
+  }
+
+  function scheduleUiRefresh() {
+    if (uiRefreshTimer) return;
+    uiRefreshTimer = window.setTimeout(() => {
+      uiRefreshTimer = 0;
+      renderChart();
+      renderMetrics();
+      renderStatus();
+    }, 100);
   }
 
   function disposeMaterial(material) {
@@ -767,7 +868,7 @@
     controls.update();
   }
 
-  function addBarrierVisual(config, physics) {
+  function addBarrierVisual(physics) {
     const { THREE, apparatusGroup } = viewportState;
     const material = new THREE.MeshStandardMaterial({ color: 0x446174, roughness: 0.62, metalness: 0.28 });
     const width = 1.65;
@@ -855,24 +956,35 @@
     scene.add(ambient, key);
   }
 
-  function addAmplitudeField() {
+  async function addAmplitudeFieldAsync(token) {
     const { THREE, fieldGroup } = viewportState;
     clearGroup(fieldGroup);
     if (!simulationState.config.showField || simulationState.config.mode === 'classical') return;
+    const taskRunner = runner();
     const config = simulationState.config;
     const physics = simulationState.physics;
     const positions = [];
     const colors = [];
     const samplesX = 84;
     const samplesZ = 48;
+    const total = samplesX * samplesZ;
     const halfPhysical = physics.screenWidth * 0.5;
     const slitHalf = physics.slitSeparation * 0.5;
-    for (let zi = 1; zi <= samplesZ; zi += 1) {
-      const zFraction = zi / samplesZ;
-      const physicalZ = Math.max(1e-9, physics.screenDistance * zFraction);
-      const sceneZ = zFraction * 2.05;
-      const physicalSpan = halfPhysical * (0.18 + 0.82 * zFraction);
-      for (let xi = 0; xi < samplesX; xi += 1) {
+
+    await taskRunner.forRange({
+      start: 0,
+      end: total,
+      chunkSize: FIELD_SAMPLE_CHUNK,
+      token,
+      label: 'Probability-amplitude field',
+      onProgress: progress => setProgressStatus(progress),
+      step: flatIndex => {
+        const zi = Math.floor(flatIndex / samplesX) + 1;
+        const xi = flatIndex % samplesX;
+        const zFraction = zi / samplesZ;
+        const physicalZ = Math.max(1e-9, physics.screenDistance * zFraction);
+        const sceneZ = zFraction * 2.05;
+        const physicalSpan = halfPhysical * (0.18 + 0.82 * zFraction);
         const normalized = xi / (samplesX - 1) * 2 - 1;
         const physicalX = normalized * physicalSpan;
         const r1 = Math.hypot(physicalZ, physicalX - slitHalf);
@@ -887,7 +999,9 @@
         const color = new THREE.Color().setHSL(0.53 + intensity * 0.08, 0.68, 0.30 + intensity * 0.40);
         colors.push(color.r, color.g, color.b);
       }
-    }
+    });
+
+    taskRunner.assertActive(token);
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
@@ -909,8 +1023,10 @@
     viewportState.wavePulse = pulse;
   }
 
-  function rebuildScene() {
+  async function rebuildSceneAsync(token) {
     if (!viewportState || !simulationState) return;
+    const taskRunner = runner();
+    taskRunner.assertActive(token);
     clearGroup(viewportState.apparatusGroup);
     clearGroup(viewportState.eventGroup);
     clearGroup(viewportState.fieldGroup);
@@ -919,11 +1035,13 @@
     viewportState.wavePulse = null;
     addLighting();
     addSourceVisual();
-    addBarrierVisual(simulationState.config, simulationState.physics);
+    addBarrierVisual(simulationState.physics);
     addDetectorVisual();
-    addAmplitudeField();
     addWavePulse();
-    paintDetector();
+    await taskRunner.yieldControl();
+    taskRunner.assertActive(token);
+    await paintDetectorBaseAsync(token);
+    await addAmplitudeFieldAsync(token);
   }
 
   function createEventVisual(hit) {
@@ -949,10 +1067,12 @@
     simulationState.hits.push(event.hit);
     if (simulationState.hits.length > 12000) simulationState.hits.splice(0, simulationState.hits.length - 12000);
     simulationState.emitted += 1;
-    paintDetector();
-    renderChart();
-    renderMetrics();
-    renderStatus();
+    const normalized = clamp(event.hit.x / simulationState.physics.screenWidth + 0.5, 0, 0.999999);
+    const binIndex = Math.floor(normalized * simulationState.hitBins.length);
+    simulationState.hitBins[binIndex] += 1;
+    simulationState.hitBinMaximum = Math.max(simulationState.hitBinMaximum, simulationState.hitBins[binIndex]);
+    drawHitToDetector(event.hit);
+    scheduleUiRefresh();
   }
 
   function advanceEventVisuals(now) {
@@ -996,10 +1116,12 @@
   }
 
   function emitSingleEvent() {
-    if (!simulationState || simulationState.config.mode === 'wave') return;
-    if (simulationState.activeEvents.length > 220) return;
+    if (!simulationState || simulationState.config.mode === 'wave') return false;
+    if (simulationState.activeEvents.length >= MAX_ACTIVE_EVENT_VISUALS) return false;
     const event = createEventVisual(sampleHit());
-    if (event) simulationState.activeEvents.push(event);
+    if (!event) return false;
+    simulationState.activeEvents.push(event);
+    return true;
   }
 
   function toggleRunning() {
@@ -1010,28 +1132,41 @@
   }
 
   function resetExperiment() {
-    if (!simulationState) return;
-    const wasRunning = simulationState.running;
-    refreshExperiment();
-    simulationState.running = wasRunning;
-    const button = document.getElementById('dsl-run');
-    if (button) button.textContent = wasRunning ? 'Pause' : 'Run';
+    const wasRunning = simulationState?.running || false;
+    void refreshExperiment().then(() => {
+      if (!simulationState) return;
+      simulationState.running = wasRunning;
+      const button = document.getElementById('dsl-run');
+      if (button) button.textContent = wasRunning ? 'Pause' : 'Run';
+    }).catch(error => { if (!isCancellation(error)) console.error(error); });
   }
 
   async function refreshExperiment() {
+    refreshToken?.cancel?.('superseded by newer experiment settings');
+    const token = runner().createToken('Double Slit setup');
+    refreshToken = token;
     updateHypothesisNote();
     const config = readConfig();
     const physics = buildPhysics(config);
     const wasRunning = simulationState?.running || false;
-    simulationState = createSimulationState(config, physics);
+    setProgressStatus({ fraction: 0, label: 'Detector distribution' });
+    const distribution = await buildDistributionAsync(config, physics, 1200, {
+      token,
+      onProgress: progress => setProgressStatus(progress)
+    });
+    runner().assertActive(token);
+    simulationState = createSimulationState(config, physics, distribution);
     simulationState.running = wasRunning;
     await ensureViewport();
-    rebuildScene();
+    runner().assertActive(token);
+    await rebuildSceneAsync(token);
+    runner().assertActive(token);
     renderMetrics();
     renderChart();
     renderStatus();
     const step = document.getElementById('dsl-step');
     if (step) step.disabled = config.mode === 'wave';
+    if (refreshToken === token) refreshToken = null;
   }
 
   function animationFrame(now) {
@@ -1059,9 +1194,12 @@
 
     if (simulationState.running && simulationState.config.mode !== 'wave') {
       simulationState.emissionAccumulator += elapsed * simulationState.config.emissionRate;
-      const toEmit = Math.min(12, Math.floor(simulationState.emissionAccumulator));
-      if (toEmit > 0) simulationState.emissionAccumulator -= toEmit;
-      for (let index = 0; index < toEmit; index += 1) emitSingleEvent();
+      const capacity = Math.max(0, MAX_ACTIVE_EVENT_VISUALS - simulationState.activeEvents.length);
+      const toEmit = Math.min(4, capacity, Math.floor(simulationState.emissionAccumulator));
+      let emittedNow = 0;
+      for (let index = 0; index < toEmit; index += 1) if (emitSingleEvent()) emittedNow += 1;
+      simulationState.emissionAccumulator = Math.max(0, simulationState.emissionAccumulator - emittedNow);
+      simulationState.emissionAccumulator = Math.min(simulationState.emissionAccumulator, simulationState.config.emissionRate * 2);
     }
 
     advanceEventVisuals(now);
@@ -1070,7 +1208,7 @@
   }
 
   function startAnimation() {
-    if (animationRaf || !viewportState) return;
+    if (animationRaf || !viewportState || !simulationState) return;
     simulationState.lastFrameTime = performance.now();
     animationRaf = requestAnimationFrame(animationFrame);
   }
@@ -1083,6 +1221,7 @@
 
   async function openPanel() {
     ensureStyle();
+    runner();
     const target = buildPanel();
     target.hidden = false;
     document.documentElement.classList.add('dsl-open');
@@ -1093,6 +1232,8 @@
   }
 
   function closePanel() {
+    refreshToken?.cancel?.('laboratory closed');
+    refreshToken = null;
     if (panel) panel.hidden = true;
     document.documentElement.classList.remove('dsl-open');
     if (simulationState) simulationState.running = false;
@@ -1130,6 +1271,7 @@
     closePanel,
     buildPhysics,
     buildDistribution,
+    buildDistributionAsync,
     electronWavelength,
     registerHypothesisLayer,
     unregisterHypothesisLayer,
