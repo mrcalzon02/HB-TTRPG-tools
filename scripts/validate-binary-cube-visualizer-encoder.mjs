@@ -128,7 +128,7 @@ assert.match(laboratorySource, /data-cube-open-visualizer/);
 assert.match(laboratorySource, /Engine\.encryptBinary/);
 assert.match(laboratorySource, /Engine\.decryptBinary/);
 
-assert.match(entrySource, /ASSET_VERSION = '\d{8}(?:-\d+|-v\d+)'/);
+assert.match(entrySource, /ASSET_VERSION = '\d{8}(?:-\d+|-v\d+(?:-[a-z0-9-]+)?)'/i);
 assert.match(entrySource, /shadowrun-binary-cube-open-laboratory/);
 assert.match(entrySource, /shadowrun-binary-cube-open-visualizer/);
 assert.match(entrySource, /api\.loadArtifacts/);
