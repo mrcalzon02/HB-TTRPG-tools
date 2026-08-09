@@ -1,0 +1,30 @@
+name: Warhammer Mercatura House Integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/warhammer-40k/imperial-logistics-v1.js'
+      - 'assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js'
+      - 'tests/warhammer-mercatura-house-integrity.test.js'
+      - '.github/workflows/warhammer-mercatura-house-integrity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Mercatura ledger syntax
+        run: node --check assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js
+      - name: Validate all trade-house continuity ledgers
+        run: node tests/warhammer-mercatura-house-integrity.test.js
