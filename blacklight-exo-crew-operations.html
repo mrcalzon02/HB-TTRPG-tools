@@ -27,9 +27,9 @@
 
   <section class="bli-hero exo-crew-hero" aria-labelledby="crew-title">
     <div>
-      <p class="bli-eyebrow">Black compartment · live vessel watchstanding simulation</p>
+      <p class="bli-eyebrow">Black compartment · procedural bridge role-play visualization</p>
       <h1 id="crew-title">Crew Operations Simulator.</h1>
-      <p class="bli-lede">A cooperative bridge-and-engineering control baseline for human-derived vessels. Helm, Navigation, Gunnery, Engineering, Science / Scanning, and Communications share one vessel state. Each station can improve or degrade another station's work, so the ship performs best when a crew actually coordinates rather than when one operator clicks through six unrelated panels.</p>
+      <p class="bli-lede">A cooperative bridge-and-engineering role-play console for human-derived vessels. This is currently a placeholder visualization layer inside a World of Darkness-derived d10 game system: players perform deliberately involved control procedures, the console judges the order and completeness of those inputs, and the resulting suggested difficulty is relayed to the DM for the character's actual dice roll. The console itself never decides success or failure.</p>
       <div class="bli-actions">
         <button id="crew-scenario-reset" class="bli-action primary" type="button">Reset Human Baseline</button>
         <button id="crew-scenario-contact" class="bli-action" type="button">Inject Unknown Contact</button>
@@ -42,8 +42,9 @@
       <div class="bli-directory-list" role="list">
         <div class="bli-directory-item" role="listitem"><strong>Technology basis</strong><span id="crew-profile-name" class="bli-arrow">Human Standard</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Vessel</strong><span class="bli-arrow">BLV-071 Wayfarer</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Readiness</strong><span id="crew-summary-readiness" class="bli-arrow">nominal</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Crew efficiency</strong><span id="crew-summary-efficiency" class="bli-arrow">100%</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Rules basis</strong><span id="crew-summary-rules" class="bli-arrow">WoD-derived d10</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Resolution</strong><span id="crew-summary-resolution" class="bli-arrow">DM adjudicated</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Last relay</strong><span id="crew-summary-difficulty" class="bli-arrow">pending</span></div>
       </div>
     </aside>
   </section>
@@ -51,31 +52,55 @@
   <main class="bli-shell exo-crew-shell">
     <section class="bli-section exo-crew-brief">
       <div class="exo-crew-notice">
-        <strong>Human baseline authority:</strong> this layout assumes human-derived display conventions, manual confirmation, conventional electric power distribution, reaction-control and main-drive thrust, active/passive electromagnetic sensing, datalink/radio/laser communications, and turret or spinal weapon control. Alien profiles will be allowed to replace assumptions, workflows, sensor models, command semantics, and station topology while continuing to use the same vessel-state contract.
+        <strong>Placeholder / visualization boundary:</strong> this human baseline is not an authoritative ship-physics simulator and it does not replace the campaign's normal dice rules. It supplies tactile bridge-role-play: selectors, guarded switches, repeated confirmations, rotary inputs, lever positions, and deliberately order-sensitive procedures. When the player commits an attempted action, the console produces a suggested <strong>World of Darkness-derived d10 difficulty</strong> for relay to the DM. The DM builds the character's dice pool, calls the roll, interprets successes, and decides every narrative consequence. Future alien profiles may replace the entire control grammar while preserving that same DM-relay contract.
       </div>
     </section>
 
     <section class="bli-section exo-crew-command" aria-labelledby="command-state-title">
       <div class="bli-section-head">
-        <p class="bli-eyebrow">Shared vessel state</p>
-        <h2 id="command-state-title">Every console is looking at the same ship.</h2>
-        <p>Power allocation, maneuvering, track quality, firing solutions, thermal load, communications, and faults are propagated through one simulation state. Station actions below therefore have visible consequences elsewhere.</p>
+        <p class="bli-eyebrow">Immersive vessel picture · visual context only</p>
+        <h2 id="command-state-title">Every console is looking at the same fictional ship state.</h2>
+        <p>These values exist to give players something convincing to watch and react to. They can influence the console's situational modifier, but they are not authoritative physics and they do not resolve an action. The rules-facing output is the DM Relay produced after a player commits a procedural attempt.</p>
       </div>
 
       <div class="exo-crew-state-grid">
-        <article class="exo-state-card"><span>Velocity</span><strong id="state-velocity">12.4 km/s</strong><div class="exo-meter"><i id="meter-velocity"></i></div></article>
-        <article class="exo-state-card"><span>Reactor output</span><strong id="state-reactor">68%</strong><div class="exo-meter"><i id="meter-reactor"></i></div></article>
-        <article class="exo-state-card"><span>Thermal load</span><strong id="state-thermal">31%</strong><div class="exo-meter"><i id="meter-thermal"></i></div></article>
-        <article class="exo-state-card"><span>Hull integrity</span><strong id="state-hull">100%</strong><div class="exo-meter"><i id="meter-hull"></i></div></article>
-        <article class="exo-state-card"><span>Track quality</span><strong id="state-track">42%</strong><div class="exo-meter"><i id="meter-track"></i></div></article>
-        <article class="exo-state-card"><span>Comms link</span><strong id="state-comms">88%</strong><div class="exo-meter"><i id="meter-comms"></i></div></article>
-        <article class="exo-state-card"><span>Navigation solution</span><strong id="state-nav">74%</strong><div class="exo-meter"><i id="meter-nav"></i></div></article>
-        <article class="exo-state-card"><span>Weapons readiness</span><strong id="state-weapons">61%</strong><div class="exo-meter"><i id="meter-weapons"></i></div></article>
+        <article class="exo-state-card">
+          <span>Velocity</span><strong id="state-velocity">12.4 km/s</strong>
+          <div class="exo-meter"><i id="meter-velocity"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Reactor output</span><strong id="state-reactor">68%</strong>
+          <div class="exo-meter"><i id="meter-reactor"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Thermal load</span><strong id="state-thermal">31%</strong>
+          <div class="exo-meter"><i id="meter-thermal"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Hull integrity</span><strong id="state-hull">100%</strong>
+          <div class="exo-meter"><i id="meter-hull"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Track quality</span><strong id="state-track">42%</strong>
+          <div class="exo-meter"><i id="meter-track"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Comms link</span><strong id="state-comms">88%</strong>
+          <div class="exo-meter"><i id="meter-comms"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Navigation solution</span><strong id="state-nav">74%</strong>
+          <div class="exo-meter"><i id="meter-nav"></i></div>
+        </article>
+        <article class="exo-state-card">
+          <span>Weapons readiness</span><strong id="state-weapons">61%</strong>
+          <div class="exo-meter"><i id="meter-weapons"></i></div>
+        </article>
       </div>
 
       <div class="exo-power-bus" aria-label="Engineering power distribution">
         <div class="exo-power-head">
-          <div><span class="exo-kicker">Main distribution bus</span><strong>Engineering power allocation</strong></div>
+          <div><span class="exo-kicker">Main distribution bus · visual setup</span><strong>Engineering power allocation</strong></div>
           <span id="power-total" class="exo-power-total">100 / 100 points allocated</span>
         </div>
         <div id="power-controls" class="exo-power-grid"></div>
@@ -84,32 +109,62 @@
 
     <section class="bli-section exo-stations" aria-labelledby="stations-title">
       <div class="bli-section-head">
-        <p class="bli-eyebrow">Human bridge / CIC / engineering baseline</p>
-        <h2 id="stations-title">Six crew stations, one operating picture.</h2>
-        <p>Select a station to take that watch. Its controls remain station-specific, but its outputs are immediately available to the rest of the crew.</p>
+        <p class="bli-eyebrow">Human bridge / CIC / engineering procedural baseline</p>
+        <h2 id="stations-title">Six crew stations, each with an operating procedure.</h2>
+        <p>Select a station and intended action, begin the procedure, then manipulate the controls in the order the player believes is correct. Repeated button presses and dial turns are recorded individually. Pressing the final EXECUTE control commits whatever sequence has actually been entered—even if it is incomplete or badly ordered.</p>
       </div>
+
       <div id="station-tabs" class="exo-station-tabs" role="tablist" aria-label="Crew stations"></div>
       <div id="station-panel" class="exo-station-panel" role="tabpanel" tabindex="0"></div>
     </section>
 
+    <section class="bli-section exo-dm-relay-section" aria-labelledby="dm-relay-title">
+      <div class="exo-console-card exo-dm-relay-card">
+        <div class="exo-console-head">
+          <div><span class="exo-kicker">World of Darkness-derived d10 handoff</span><h2 id="dm-relay-title">DM Relay</h2></div>
+          <span id="dm-relay-status" class="exo-template-badge">Awaiting executed procedure</span>
+        </div>
+        <div class="exo-dm-relay-layout">
+          <div class="exo-difficulty-display" aria-label="Suggested difficulty">
+            <span>Suggested difficulty</span>
+            <strong id="dm-relay-difficulty">—</strong>
+            <div id="dm-relay-pips" class="exo-difficulty-pips" aria-label="Difficulty pips"></div>
+          </div>
+          <div id="dm-relay-detail" class="exo-relay-detail"></div>
+        </div>
+        <div class="exo-relay-sequence"><span class="exo-kicker">Recorded player inputs</span><p id="dm-relay-sequence">No procedure has been committed.</p></div>
+        <p id="dm-relay-call" class="exo-dm-call">The console does not roll for the character and does not determine success or failure.</p>
+      </div>
+    </section>
+
     <section class="bli-section exo-crew-lower" aria-label="Crew coordination displays">
       <article class="exo-console-card">
-        <div class="exo-console-head"><div><span class="exo-kicker">Coordination model</span><h2>Station dependencies</h2></div><span id="coordination-score" class="exo-score">100%</span></div>
+        <div class="exo-console-head">
+          <div><span class="exo-kicker">Situational visualization</span><h2>Station context</h2></div>
+          <span id="coordination-score" class="exo-score">100%</span>
+        </div>
         <div id="dependency-grid" class="exo-dependency-grid"></div>
       </article>
+
       <article class="exo-console-card">
-        <div class="exo-console-head"><div><span class="exo-kicker">Shipwide event bus</span><h2>Operations log</h2></div><button id="log-clear" class="exo-mini-button" type="button">Clear</button></div>
+        <div class="exo-console-head">
+          <div><span class="exo-kicker">Role-play event record</span><h2>Operations log</h2></div>
+          <button id="log-clear" class="exo-mini-button" type="button">Clear</button>
+        </div>
         <ol id="operations-log" class="exo-operations-log" aria-live="polite"></ol>
       </article>
     </section>
 
     <section class="bli-section">
       <div class="exo-console-card exo-alien-template">
-        <div class="exo-console-head"><div><span class="exo-kicker">Expansion contract</span><h2>Commandeered alien technology profiles</h2></div><span class="exo-template-badge">profile-driven</span></div>
-        <p>The current simulator intentionally separates <strong>vessel state</strong> from <strong>human console presentation</strong>. Future alien profiles can redefine which stations exist, how many crew are needed, what a control means, whether actions require consensus or biological compatibility, how information is represented, and what kinds of power, heat, sensors, weapons, or communications are even available.</p>
+        <div class="exo-console-head">
+          <div><span class="exo-kicker">Expansion contract</span><h2>Commandeered alien technology profiles</h2></div>
+          <span class="exo-template-badge">profile-driven</span>
+        </div>
+        <p>The human console now establishes a reusable <strong>procedural grammar</strong>: hidden action sequences, repeated inputs, physical-state controls, visual context, and a DM-facing d10 difficulty relay. Future alien profiles can redefine which stations exist, how many crew are needed, what a control means, whether actions require consensus or biological compatibility, how information is represented, and—most importantly—what sequence logic a human boarding crew must learn or improvise to operate commandeered technology.</p>
         <div class="exo-alien-grid">
           <div><strong>Layout</strong><span>station names, grouping, hierarchy, display topology</span></div>
-          <div><strong>Interaction</strong><span>buttons, gestures, neural/biological links, ritualized sequences</span></div>
+          <div><strong>Interaction</strong><span>buttons, levers, repeated confirmations, gestures, neural/biological links, ritualized sequences</span></div>
           <div><strong>Semantics</strong><span>alien units, threat concepts, targeting logic, navigation assumptions</span></div>
           <div><strong>Compatibility</strong><span>human adaptation penalties, translation layers, bypasses, jury-rigging</span></div>
         </div>
@@ -117,7 +172,7 @@
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO crew operations baseline · human-derived watchstanding architecture.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO crew role-play console placeholder · human procedural baseline · DM-adjudicated WoD-derived d10 resolution.</footer>
   <script src="blacklight-background-audio.js"></script>
 </body>
 </html>
