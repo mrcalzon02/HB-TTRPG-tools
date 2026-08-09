@@ -28,7 +28,7 @@
     <div>
       <p class="bli-eyebrow">Black compartment · field maintenance role-play console</p>
       <h1 id="repair-title">Console Repair Bay.</h1>
-      <p class="bli-lede">A separate maintenance minigame for damaged crew stations. Select a human console, inject a randomized internal fault, trace the generated service schematic, test components and conductors, perform a repair sequence, then hand the resulting suggested World of Darkness-derived d10 difficulty to the DM. The tool never decides whether the character actually repairs the system.</p>
+      <p class="bli-lede">A separate maintenance minigame for damaged crew stations. Select a human console, inject randomized internal damage, read the visible faceplate symptoms, trace the generated service schematic, test components and conductors, perform a repair sequence, then hand the resulting suggested World of Darkness-derived d10 difficulty to the DM. The tool never decides whether the character actually repairs the system.</p>
       <div class="bli-actions">
         <button id="repair-new-fault" class="bli-action primary" type="button">Inject Random Damage</button>
         <button id="repair-reset" class="bli-action" type="button">Reset Repair Bay</button>
@@ -50,7 +50,7 @@
   <main class="bli-shell exo-repair-shell">
     <section class="bli-section">
       <div class="exo-repair-notice">
-        <strong>Maintenance boundary:</strong> this is a role-play troubleshooting and repair aid, not an electrical-engineering simulator. Service diagrams use physically recognizable power, signal, interlock, relay, fuse, connector and conductor relationships derived from the placement and role of the human console controls. Fault location, testing order and repair discipline affect the suggested roll difficulty, but the DM remains authoritative for success, time, consequences and whether a temporary repair holds.
+        <strong>Maintenance boundary:</strong> this is a role-play troubleshooting and repair aid, not an electrical-engineering simulator. Service diagrams use physically recognizable power, signal, interlock, relay, fuse, connector and conductor relationships derived from the placement and role of the human console controls. Some faults create visible faceplate or internal damage; others remain electrically hidden until the correct test exposes them. Fault location, testing order and repair discipline affect the suggested roll difficulty, but the DM remains authoritative for success, time, consequences and whether a temporary repair holds.
       </div>
     </section>
 
@@ -58,25 +58,34 @@
       <div class="bli-section-head">
         <p class="bli-eyebrow">Generated internal service topology</p>
         <h2 id="repair-station-title">Crew-station wiring and repair.</h2>
-        <p>Choose the station whose faceplate is being serviced. The diagram below is generated from a structured component graph laid out to mirror the console's physical control groups. Component blocks and wire runs are selectable test targets.</p>
+        <p>Choose the station whose faceplate is being serviced. The upper condition view shows what an operator can actually see from the front. The service drawing below is generated from the same structured component graph. Component blocks and individual conductor runs are selectable test targets.</p>
       </div>
       <div id="repair-station-tabs" class="exo-repair-tabs" role="tablist" aria-label="Repairable crew stations"></div>
 
       <div class="exo-repair-grid">
         <article class="exo-repair-card exo-schematic-card">
           <header>
-            <div><span class="exo-kicker">Service schematic</span><h3 id="schematic-title">Engineering internal control panel</h3></div>
+            <div><span class="exo-kicker">Service schematic + faceplate condition</span><h3 id="schematic-title">Engineering internal control panel</h3></div>
             <div class="exo-schematic-tools">
               <button id="repair-fit" class="exo-repair-mini" type="button">Fit Diagram</button>
               <button id="repair-training-overlay" class="exo-repair-mini" type="button" aria-pressed="false">Training Fault Overlay</button>
             </div>
           </header>
+
+          <div id="repair-faceplate" class="exo-faceplate-host" aria-label="Visible operator-side console condition"></div>
+
+          <div class="exo-schematic-headerline">
+            <span>INTERNAL SERVICE DRAWING · SELECT A DEVICE OR WIRE RUN</span>
+            <span id="schematic-power-banner">LIVE CONTROL POWER</span>
+          </div>
           <div id="repair-schematic" class="exo-schematic-host" aria-label="Interactive station wiring schematic"></div>
           <div class="exo-schematic-legend">
             <span><i class="power"></i>Power</span>
             <span><i class="signal"></i>Control signal</span>
             <span><i class="safety"></i>Safety / execution interlock</span>
             <span><i class="return"></i>Feedback / return</span>
+            <span><i class="damage"></i>Visible / diagnosed damage</span>
+            <span><i class="repair"></i>Repair applied</span>
           </div>
         </article>
 
@@ -84,9 +93,11 @@
           <header><div><span class="exo-kicker">Operator complaint / symptom</span><h3>Fault ticket</h3></div><span id="fault-severity" class="exo-repair-badge">No fault</span></header>
           <p id="fault-symptom" class="exo-fault-symptom">Inject randomized damage to begin a repair attempt.</p>
           <div class="exo-diagnostic-readouts">
+            <div><span>Visible condition</span><strong id="visible-condition">No visible damage</strong></div>
             <div><span>Selected target</span><strong id="selected-target">None</strong></div>
             <div><span>Target type</span><strong id="selected-kind">—</strong></div>
-            <div><span>Instrument result</span><strong id="instrument-result">No test performed</strong></div>
+            <div><span>Target condition</span><strong id="target-condition">Unknown</strong></div>
+            <div class="instrument"><span>Instrument result</span><strong id="instrument-result">No test performed</strong></div>
           </div>
 
           <div class="exo-repair-actions">
@@ -104,7 +115,9 @@
 
           <div class="exo-service-state">
             <div><span>Service power</span><strong id="service-power-state">ENERGIZED</strong></div>
+            <div><span>Electrical hazard</span><strong id="repair-hazard-state">LIVE PANEL</strong></div>
             <div><span>Attempt state</span><strong id="repair-attempt-state">Awaiting fault</strong></div>
+            <div><span>Fault visibility</span><strong id="fault-visibility-state">—</strong></div>
           </div>
         </aside>
       </div>
@@ -134,7 +147,7 @@
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO console repair role-play system · generated service schematics · DM-adjudicated WoD-derived d10 resolution.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO console repair role-play system · generated service schematics · visible damage states · DM-adjudicated WoD-derived d10 resolution.</footer>
   <script src="blacklight-background-audio.js"></script>
 </body>
 </html>
