@@ -190,9 +190,12 @@ checks.push(includes('Cubic decryptor UI exposes staged recovery, resume, full r
 
 '''
 replace_once('scripts/validate-scientific-tools-extraction.mjs', "checks.push(includes('Advanced steganalysis engine owns quantitative and parity math', steganalysisEngine, [\n", cubic_checks + "checks.push(includes('Advanced steganalysis engine owns quantitative and parity math', steganalysisEngine, [\n", 'validator cubic checks')
-replace_once('scripts/validate-scientific-tools-extraction.mjs', '  \'id="scientific-tools-open-decryption-dashboard"\',\n', '  \'id="scientific-tools-open-decryption-dashboard"\',\n  \'id="scientific-tools-open-cubic-decryptor"\',\n', 'validator button')
-replace_once('scripts/validate-scientific-tools-extraction.mjs', "  'loadDiagnosticPipeline',\n", "  'loadDiagnosticPipeline',\n  'loadCubicDecryptor',\n", 'validator loader')
-replace_once('scripts/validate-scientific-tools-extraction.mjs', "  'openDiagnosticPipeline'\n", "  'openDiagnosticPipeline',\n  'openCubicDecryptor'\n", 'validator opener')
+replace_once(
+    'scripts/validate-scientific-tools-extraction.mjs',
+    "  'Run Diagnostic Evaluation Pipeline',\n  'absence of positive evidence is not evidence of absence'\n",
+    "  'Run Diagnostic Evaluation Pipeline',\n  'function loadCubicDecryptor()',\n  \"loadStyle('binary-cube-cubic-decryptor.css')\",\n  \"loadScript('binary-cube-cubic-decryptor-engine.js'\",\n  \"loadScript('binary-cube-cubic-decryptor.js'\",\n  'function openCubicDecryptor(',\n  'id=\"scientific-tools-open-cubic-decryptor\"',\n  'Open Cubic Decryptor Tool',\n  'absence of positive evidence is not evidence of absence'\n",
+    'validator workspace cubic ownership')
+replace_once('scripts/validate-scientific-tools-extraction.mjs', '  \'id="scientific-tools-open-decryption-dashboard"\',\n', '  \'id="scientific-tools-open-decryption-dashboard"\',\n  \'id="scientific-tools-open-cubic-decryptor"\',\n', 'validator established cubic button')
 replace_once('scripts/validate-scientific-tools-extraction.mjs', "  'binary-cube-diagnostic-pipeline.css',\n", "  'binary-cube-diagnostic-pipeline.css',\n  'binary-cube-cubic-decryptor.css',\n  'scripts/validate-binary-cube-cubic-decryptor.mjs',\n", 'validator nonempty')
 
 paths = [
