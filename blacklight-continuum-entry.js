@@ -108,15 +108,19 @@
     });
   }
 
-  function sharedScientificTools() {
-    const api = window.ScientificToolsWorkspace;
+  async function sharedScientificTools() {
+    let api = window.ScientificToolsWorkspace;
+    if (!api && typeof window.HBTTRPGApp?.prepareView === 'function') {
+      await window.HBTTRPGApp.prepareView('scientific-tools');
+      api = window.ScientificToolsWorkspace;
+    }
     if (!api) throw new Error('The centralized Scientific Tools workspace is unavailable. Reload the page before opening a shared scientific tool.');
     return api;
   }
 
   async function openSharedScientificTool(method, button) {
     try {
-      const api = sharedScientificTools();
+      const api = await sharedScientificTools();
       if (typeof api[method] !== 'function') throw new Error(`Scientific Tools does not expose ${method}.`);
       return await api[method](button);
     } catch (error) {
