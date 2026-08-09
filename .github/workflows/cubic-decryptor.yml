@@ -1,4 +1,4 @@
-# Validates deterministic search/resume, generator coverage, legacy compatibility, additive SHA-256 key identity, and routed Scientific Tools integration.
+# Validates deterministic search/resume, IndexedDB interrupted-search persistence contract, generator coverage, legacy compatibility, additive SHA-256 key identity, and routed Scientific Tools integration.
 name: Validate Cubic Decryptor Tool
 
 on:
