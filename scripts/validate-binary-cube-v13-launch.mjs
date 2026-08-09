@@ -99,8 +99,8 @@ checks.push(requireIncludes(
 checks.push(requireMatch(
   'Scientific Tools entry is cache-refreshed',
   mounts,
-  /loadScript\('scientific-tools-entry\.js\?v=20260809-binary-cube-unified'\)/,
-  'the centralized launch surface must not be masked by a stale browser cache.'
+  /loadScript\('scientific-tools-entry\.js\?v=\d{8}-[a-z0-9-]+'\)/i,
+  'the centralized launch surface must use an explicit current cache-busting token without constraining unrelated Scientific Tools evolution.'
 ));
 checks.push(requireIncludes(
   'User guide covers the transformation and controls',
@@ -183,7 +183,7 @@ checks.push(requireIncludes(
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v13-launch-contract-receipt',
-  schemaVersion: '0.2.0',
+  schemaVersion: '0.2.1',
   pass: true,
   checkCount: checks.length,
   checks
