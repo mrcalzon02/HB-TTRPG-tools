@@ -22,6 +22,10 @@ const mediaDemos = read('binary-cube-media-forensics-demo-corpus.js');
 const steganalysisEngine = read('binary-cube-steganalysis-engine.js');
 const steganalysisWorker = read('binary-cube-steganalysis-worker.js');
 const steganalysisLab = read('binary-cube-steganalysis-lab.js');
+const diagnosticPipeline = read('binary-cube-diagnostic-pipeline.js');
+const diagnosticPanel = read('binary-cube-diagnostic-pipeline-panel.js');
+const diagnosticLocal = read('scripts/run-scientific-diagnostic-local.mjs');
+const diagnosticPlan = read('docs/scientific-diagnostic-pipeline-plan.md');
 const ism = read('interstellar-media-collisions-lab.js');
 const doubleSlit = read('double-slit-lab.js');
 
@@ -58,6 +62,7 @@ checks.push(excludes('Shadowrun does not absorb setting-neutral research/simulat
   'binary-cube-media-forensics-suite.js',
   'binary-cube-steganalysis-engine.js',
   'binary-cube-steganalysis-lab.js',
+  'binary-cube-diagnostic-pipeline.js',
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js'
 ]));
@@ -75,6 +80,7 @@ checks.push(excludes('Black Light does not duplicate centralized runtimes', blac
   'shadowrun-binary-cube-engine.js',
   'binary-cube-steganalysis-engine.js',
   'binary-cube-steganalysis-lab.js',
+  'binary-cube-diagnostic-pipeline.js',
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js'
 ]));
@@ -83,8 +89,9 @@ checks.push(includes('Main menu owns and cache-refreshes Scientific Tools', moun
   "button.dataset.view = 'scientific-tools'",
   "card.dataset.scientificToolsCard = 'true'",
   'key-generation structure comparison',
+  'routed Diagnostic Evaluation Pipeline',
   'Advanced Steganalysis Laboratory',
-  "loadScript('scientific-tools-entry.js?v=20260809-steganalysis-1')",
+  "loadScript('scientific-tools-entry.js?v=20260809-diagnostic-pipeline-1')",
   'ensureScientificToolsView();'
 ]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'Scientific Tools must have exactly one main-menu card.');
@@ -103,6 +110,7 @@ checks.push(excludes('Scheduler remains model-neutral', cooperative, [
   'ShadowrunBinaryCubeEngine',
   'BinaryCubeKeyGenerationResearch',
   'BinaryCubeSteganalysisEngine',
+  'BinaryCubeDiagnosticPipeline',
   'DoubleSlitExperimentLab',
   'LAMBDA_COEFFICIENT'
 ]));
@@ -241,8 +249,65 @@ checks.push(excludes('Steganalysis UI does not invent a single opaque probabilit
   'Steganography Probability'
 ]));
 
-checks.push(includes('Scientific Tools owns one launch for the key-generation visualizer and steganalysis lab', workspace, [
-  "const ASSET_VERSION = '20260809-steganalysis-1';",
+checks.push(includes('Diagnostic pipeline owns routing and evidence aggregation without absorbing specialist algorithms', diagnosticPipeline, [
+  'BinaryCubeDiagnosticPipeline',
+  "id: 'information-structure'",
+  "id: 'media-forensic-sweep'",
+  "id: 'text-unicode-steganalysis'",
+  "id: 'png-structure'",
+  "id: 'jpeg-coefficients'",
+  "id: 'raster-steganalysis'",
+  "id: 'deobfuscation-sweep'",
+  "id: 'binary-cube-attack-suite'",
+  'async function runConcurrent(',
+  'for (const stage of plan.stages)',
+  'presenceIndex',
+  'certaintyIndex',
+  'coverageIndex',
+  'missRiskIndex',
+  'not posterior probabilities'
+]));
+checks.push(excludes('Diagnostic orchestrator does not duplicate specialist detector math', diagnosticPipeline, [
+  'function rsAnalysis(',
+  'function samplePairAnalysis(',
+  'function convolve2d(',
+  'function decodeBinaryFsk(',
+  'function encryptBinary(',
+  'function decryptBinary('
+]));
+checks.push(includes('Diagnostic panel exposes routed evidence and specialist handoff', diagnosticPanel, [
+  'Diagnostic Evaluation Pipeline',
+  'Asset Presence Index',
+  'Certainty Index',
+  'Coverage Index',
+  'Undetected / Miss-Risk Index',
+  'Specialist handoff',
+  'Export JSON Report',
+  'workspace?.openMediaForensicsSuite',
+  'workspace?.openInformationAnalysisSuite',
+  'workspace?.openSteganalysisLab',
+  'workspace?.openDecryptionDashboard'
+]));
+checks.push(includes('Diagnostic local runner shares the routed model', diagnosticLocal, [
+  "import zlib from 'node:zlib'",
+  'fileURLToPath(import.meta.url)',
+  'function decodePngRgba(',
+  'Pipeline.runPipeline(',
+  '--profile=triage|thorough|exhaustive'
+]));
+checks.push(includes('Diagnostic plan records staged local/offline architecture', diagnosticPlan, [
+  '# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pipeline',
+  'absence of positive evidence',
+  'Asset Presence Index',
+  'Certainty Index',
+  'Coverage Index',
+  'Undetected / Miss-Risk Index',
+  'local Node.js runtime',
+  'Phase 6 — Resumable long-run jobs'
+]));
+
+checks.push(includes('Scientific Tools owns one launch for key research, steganalysis, and the routed diagnostic pipeline', workspace, [
+  "const ASSET_VERSION = '20260809-diagnostic-pipeline-1';",
   'function loadKeyGenerationVisualizer()',
   "loadStyle('binary-cube-key-generation-visualizer.css')",
   "loadScript('binary-cube-key-generation-research.js'",
@@ -257,7 +322,15 @@ checks.push(includes('Scientific Tools owns one launch for the key-generation vi
   "loadScript('binary-cube-steganalysis-lab.js'",
   'function openSteganalysisLab(',
   'id="scientific-tools-open-steganalysis"',
-  'Open Advanced Steganalysis Laboratory'
+  'Open Advanced Steganalysis Laboratory',
+  'function loadDiagnosticPipeline()',
+  "loadStyle('binary-cube-diagnostic-pipeline.css')",
+  "loadScript('binary-cube-diagnostic-pipeline.js'",
+  "loadScript('binary-cube-diagnostic-pipeline-panel.js'",
+  'function openDiagnosticPipeline(',
+  'id="scientific-tools-open-diagnostic-pipeline"',
+  'Run Diagnostic Evaluation Pipeline',
+  'absence of positive evidence is not evidence of absence'
 ]));
 checks.push(includes('Scientific Tools preserves its established destinations and demo corpus', workspace, [
   'data-scientific-tools-tab="binary-cube"',
@@ -308,14 +381,18 @@ for (const relativePath of [
   'binary-cube-media-forensics-suite.css',
   'binary-cube-steganalysis-lab.css',
   'scripts/validate-binary-cube-steganalysis-lab.mjs',
+  'binary-cube-diagnostic-pipeline.css',
+  'scripts/validate-scientific-diagnostic-pipeline.mjs',
+  'scripts/run-scientific-diagnostic-local.mjs',
+  'docs/scientific-diagnostic-pipeline-plan.md',
   'interstellar-media-collisions-lab.css',
   'double-slit-lab.css'
 ]) nonEmpty(relativePath);
-checks.push('Scientific Tools styles and specialized validators are present');
+checks.push('Scientific Tools styles, local runner, plan, and specialized validators are present');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.14.0',
+  schemaVersion: '0.15.0',
   pass: true,
   checkCount: checks.length,
   checks
