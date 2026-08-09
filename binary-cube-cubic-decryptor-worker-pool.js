@@ -79,6 +79,7 @@
     if (!plan || plan.format !== Cubic.constants.PLAN_FORMAT) fail('Cubic worker pool requires a deterministic Cubic search plan.');
     if (typeof config.workerFactory !== 'function') fail('Cubic worker pool requires a workerFactory function.');
     const options = { ...(config.options || {}) };
+    const stopOnFingerprint = options.stopOnFingerprint !== false;
     const resumeCursor = clampInteger(config.resumeCursor, 0, plan.totalAttempts);
     const workerCount = resolveWorkerCount(config.workerCount, config.hardwareConcurrency);
     const shards = partitionRun(plan.totalAttempts, resumeCursor, options.maxAttemptsThisRun, workerCount);
@@ -165,7 +166,7 @@
       let exhausted;
       let stoppedEarly;
       let stopReason;
-      if (exactMatch) {
+      if (exactMatch && stopOnFingerprint) {
         cursor = contiguousCursor();
         exhausted = false;
         stoppedEarly = true;
@@ -195,15 +196,17 @@
         workerCount: shards.length,
         shards,
         checkpoint: Cubic.makeCheckpoint(plan, cursor, attempts, lastCompleted?.result?.checkpoint?.stageId || exactMatch?.stageId || null),
-        caveat: exactMatch
+        caveat: exactMatch && stopOnFingerprint
           ? 'Parallel workers searched disjoint global ordinal ranges. The result is resolved only after every lower ordinal shard is complete, so the retained exact key is the earliest exact identity match in the searched prefix.'
-          : 'Parallel workers searched one deterministic, contiguous bounded cursor interval. Worker count changes elapsed time only; the Plan ID and resulting checkpoint cursor are independent of shard count.'
+          : exactMatch
+            ? 'An exact key identity was observed, but stop-on-identity was disabled. The pool completed the entire assigned deterministic interval before checkpointing.'
+            : 'Parallel workers searched one deterministic, contiguous bounded cursor interval. Worker count changes elapsed time only; the Plan ID and resulting checkpoint cursor are independent of shard count.'
       });
     }
 
     function maybeFinish() {
       if (settled) return;
-      if (exactMatch) {
+      if (exactMatch && stopOnFingerprint) {
         const required = requiredStatesForExact();
         if (!required.every(state => Boolean(state.result))) return;
         for (const state of states) if (state.shard.startCursor > exactOrdinal) terminateState(state);
@@ -260,7 +263,7 @@
       state.worker = worker;
       const id = `${config.requestId || 'pool'}:${state.shard.index}`;
       worker.addEventListener('message', event => {
-        if (settled && !exactMatch) return;
+        if (settled) return;
         const message = event.data || {};
         if (message.id !== id) return;
         if (message.type === 'progress') {
@@ -281,7 +284,7 @@
           for (const candidate of message.result?.candidates || []) mergeCandidate(candidates, candidate, resultLimit);
           for (const row of message.result?.errors || []) if (errors.length < 24) errors.push({ ...row, shardIndex: state.shard.index });
           lowestExactCandidate(message.result?.exactMatch || null);
-          if (exactMatch) {
+          if (exactMatch && stopOnFingerprint) {
             for (const higher of states) if (higher.shard.startCursor > exactOrdinal && !higher.result) terminateState(higher);
           }
           emitProgress(message.result?.exactMatch ? `Exact key identity reported by worker ${state.shard.index + 1}` : `Worker ${state.shard.index + 1}/${shards.length} completed`);
