@@ -207,7 +207,7 @@
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-diagnostic-pipeline-1');
+      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-diagnostic-calibration-1');
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;
