@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-diagnostic-calibration-1';
+  const ASSET_VERSION = '20260809-diagnostic-raster-evidence-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
@@ -288,6 +288,8 @@
       await loadCooperativeRunner();
       await Promise.all([loadDecryptionDashboard(), loadInformationAnalysisSuite(), loadMediaForensicsSuite(), loadSteganalysisLab()]);
       await loadStyle('binary-cube-diagnostic-pipeline.css');
+      await loadScript('binary-cube-steganalysis-evidence-profile.js', () => Boolean(window.BinaryCubeSteganalysisEvidenceProfile));
+      await loadScript('binary-cube-steganalysis-worker-client.js', () => Boolean(window.BinaryCubeSteganalysisWorkerClient));
       await loadScript('binary-cube-diagnostic-calibration-registry.js', () => Boolean(window.BinaryCubeDiagnosticCalibrationRegistry));
       await loadScript('binary-cube-diagnostic-calibration-baseline.js', () => Boolean(window.BinaryCubeDiagnosticCalibrationBaseline));
       await loadScript('binary-cube-diagnostic-pipeline.js', () => Boolean(window.BinaryCubeDiagnosticPipeline));
