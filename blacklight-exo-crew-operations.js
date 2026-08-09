@@ -332,8 +332,6 @@
       <select data-procedure-select aria-label="Select ${def.label} procedure">${options}</select></div>
       <div class="exo-procedure-actions"><button type="button" class="exo-control-button primary" data-procedure-begin>${active?"Restart procedure":"Begin procedure"}</button>
       <button type="button" class="exo-control-button" data-procedure-abort ${active?"":"disabled"}>Abort / clear inputs</button></div></div>
-      <div class="exo-procedure-cue"><strong>Operator cue strip</strong><span>${proc.cue}</span>
-      <small>Normal station work is followed by the standard four-step locked authorization assembly. Exact station-control order remains hidden.</small></div>
       <div class="exo-physical-controls" data-active="${active}">
         <div class="exo-device-block"><span class="exo-device-label">${def.labels.guard}</span><strong>${controls.guard.toUpperCase()}</strong>
           <div class="exo-control-row"><button type="button" data-proc-input="guard-open" data-proc-label="Guard OPEN" ${disabled}>Lift / open</button><button type="button" data-proc-input="guard-close" data-proc-label="Guard CLOSE" ${disabled}>Close</button></div></div>
