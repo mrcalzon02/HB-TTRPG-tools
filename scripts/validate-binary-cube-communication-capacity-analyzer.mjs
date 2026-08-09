@@ -1,10 +1,16 @@
 #!/usr/bin/env node
 
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const Analyzer = require('../binary-cube-communication-capacity-analyzer.js');
+const root = process.cwd();
+const analyzerSource = fs.readFileSync(path.join(root, 'binary-cube-communication-capacity-analyzer.js'), 'utf8');
+const workerSource = fs.readFileSync(path.join(root, 'binary-cube-communication-capacity-worker.js'), 'utf8');
 
 assert.equal(Analyzer.constants.PAPER_YEAR, 1999);
 assert.match(Analyzer.constants.PAPER_TITLE, /bottlenose dolphin whistle repertoires/i);
@@ -12,6 +18,38 @@ assert.equal(Analyzer.constants.HUMAN_ZIPF_REFERENCE, -1.00);
 assert.equal(Analyzer.constants.ADULT_DOLPHIN_ZIPF_REFERENCE, -0.95);
 assert.equal(Analyzer.constants.INFANT_DOLPHIN_ZIPF_REFERENCE, -0.82);
 assert.equal(Analyzer.constants.RANDOM_ZIPF_REFERENCE, -0.09);
+assert.equal(Analyzer.constants.WORKER_HEARTBEAT_MS, 1000);
+assert.match(Analyzer.constants.WORKER_URL, /binary-cube-communication-capacity-worker\.js/);
+assert.equal(typeof Analyzer.analyzeCommunicationCapacityAsync, 'function');
+assert.equal(typeof Analyzer.cancelActiveAnalysis, 'function');
+
+for (const needle of [
+  'function replaceAnalysisWorker(',
+  "replaceAnalysisWorker('superseded by newer background communication analysis')",
+  'new root.Worker(',
+  'WORKER_HEARTBEAT_MS',
+  'still working',
+  'elapsedMilliseconds:',
+  'worker.terminate()',
+  'await analyzeCommunicationCapacityAsync(activeBytes',
+  'full sequence, surrogate-shuffle, entropy-order, and lag analysis runs in a dedicated background worker'
+]) assert.ok(analyzerSource.includes(needle), `Analyzer missing freeze-safety contract ${JSON.stringify(needle)}`);
+assert.ok(!analyzerSource.includes("cancelActiveAnalysis('superseded by newer background communication analysis');\n    const requestId"), 'Launching the replacement worker must not cancel the newly-created UI token.');
+
+for (const needle of [
+  "importScripts('binary-cube-communication-capacity-analyzer.js?v=20260809-communication-capacity-2')",
+  'const Analyzer = self.BinaryCubeCommunicationCapacityAnalyzer;',
+  'Analyzer.analyzeCommunicationCapacity(bytes, request.options || {})',
+  "type: 'progress'",
+  "type: 'result'"
+]) assert.ok(workerSource.includes(needle), `Worker missing authoritative delegation ${JSON.stringify(needle)}`);
+for (const forbidden of [
+  'function conditionalEntropy(',
+  'function entropyOrderProfile(',
+  'function surrogateSequenceTest(',
+  'function lagMutualInformation(',
+  'function analyzeMode('
+]) assert.ok(!workerSource.includes(forbidden), `Worker must not duplicate analyzer mathematics: ${forbidden}`);
 
 const syntheticZipf = [];
 for (let rank = 1; rank <= 40; rank += 1) {
@@ -70,7 +108,7 @@ assert.match(wordReport.caveat, /not proof/i);
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-communication-capacity-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   pass: true,
   paperGrounding: `${Analyzer.constants.PAPER_AUTHORS} · ${Analyzer.constants.PAPER_YEAR}`,
   zipfSlope: true,
@@ -82,5 +120,9 @@ console.log(JSON.stringify({
   lagMutualInformation: true,
   sampleSufficiencyWarnings: true,
   multipleSymbolizations: true,
+  dedicatedBackgroundWorker: true,
+  workerHeartbeat: true,
+  workerCancellation: true,
+  workerDelegatesAuthoritativeModel: true,
   semanticMeaningClaimed: false
 }, null, 2));
