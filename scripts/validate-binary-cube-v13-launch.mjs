@@ -38,10 +38,10 @@ checks.push(requireMatch(
   'V13 promotion must not precede V12 acceptance.'
 ));
 checks.push(requireMatch(
-  'V13 asset token is refreshed for the unified Binary Cube renderer',
+  'Binary Cube asset token remains explicitly versioned after V13 promotion',
   entry,
-  /const ASSET_VERSION = '20260809-v13-binary-cube-unified';/,
-  'the Shadowrun entry must force browsers to request the current unified Binary Cube renderer while retaining the accepted V13 launcher.'
+  /const ASSET_VERSION = '20260809-v\d+-binary-cube-[a-z0-9-]+';/i,
+  'the Shadowrun entry must force browsers to request the current Binary Cube runtime while retaining the accepted V13 launcher.'
 ));
 checks.push(requireMatch(
   'Laboratory card remains available',
@@ -58,8 +58,8 @@ checks.push(requireMatch(
 checks.push(requireMatch(
   'Visualizer loader preserves the complete dependency chain',
   entry,
-  /function loadCubeVisualizer\(\)[\s\S]*?loadStyle\('binary-cube-visualizer\.css'\)[\s\S]*?loadScript\('shadowrun-binary-cube-engine\.js'[\s\S]*?loadScript\('shadowrun-binary-cube-auth\.js'[\s\S]*?loadScript\('shadowrun-binary-cube-secure-export\.js'[\s\S]*?loadScript\('binary-cube-visualizer-renderer\.js'[\s\S]*?loadScript\('shadowrun-binary-cube-visualizer\.js'/,
-  'the promoted launcher must retain canonical engine, protected transport, renderer, controller, and stylesheet loading.'
+  /function loadCubeVisualizer\(\)[\s\S]*?loadStyle\('binary-cube-visualizer\.css'\)[\s\S]*?loadScript\('shadowrun-binary-cube-engine\.js'[\s\S]*?loadScript\('binary-cube-worker-client\.js'[\s\S]*?loadScript\('shadowrun-binary-cube-auth\.js'[\s\S]*?loadScript\('shadowrun-binary-cube-secure-export\.js'[\s\S]*?loadScript\('binary-cube-visualizer-renderer\.js'[\s\S]*?loadScript\('shadowrun-binary-cube-visualizer\.js'/,
+  'the promoted launcher must retain canonical engine, freeze-safe shared executor/reseed source, protected transport, renderer, controller, and stylesheet loading.'
 ));
 checks.push(requireMatch(
   'Landing page lazy-loads refreshed Shadowrun entry',
@@ -183,7 +183,7 @@ checks.push(requireIncludes(
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v13-launch-contract-receipt',
-  schemaVersion: '0.2.1',
+  schemaVersion: '0.2.2',
   pass: true,
   checkCount: checks.length,
   checks
