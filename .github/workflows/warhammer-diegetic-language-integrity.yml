@@ -1,0 +1,50 @@
+name: Warhammer Diegetic Archive Language
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'warhammer-40k-archive-ui-v6.js'
+      - 'warhammer-40k-workspace-v8.js'
+      - 'warhammer-40k-survey-assay-v8.js'
+      - 'warhammer-40k-map.html'
+      - 'app-lite-view-mounts.js'
+      - 'assets/warhammer-40k/system-survey-v1.js'
+      - 'assets/warhammer-40k/imperial-vessel-history-v1.js'
+      - 'assets/warhammer-40k/imperial-component-lineage-v1.js'
+      - 'assets/warhammer-40k/imperial-personnel-lineage-v1.js'
+      - 'assets/warhammer-40k/imperial-sector-events-v1.js'
+      - 'assets/warhammer-40k/imperial-medicae-institutions-v1.js'
+      - 'tests/warhammer-diegetic-language-integrity.test.js'
+      - '.github/workflows/warhammer-diegetic-language-integrity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check authoritative Warhammer JavaScript syntax
+        run: |
+          node --check warhammer-40k-archive-ui-v6.js
+          node --check warhammer-40k-workspace-v8.js
+          node --check warhammer-40k-survey-assay-v8.js
+          node --check assets/warhammer-40k/system-survey-v1.js
+          node --check assets/warhammer-40k/imperial-vessel-history-v1.js
+          node --check assets/warhammer-40k/imperial-component-lineage-v1.js
+          node --check assets/warhammer-40k/imperial-personnel-lineage-v1.js
+          node --check assets/warhammer-40k/imperial-sector-events-v1.js
+          node --check assets/warhammer-40k/imperial-medicae-institutions-v1.js
+      - name: Enforce diegetic archive language
+        run: node tests/warhammer-diegetic-language-integrity.test.js
+      - name: Revalidate personnel, biography and Medicae registers
+        run: node tests/warhammer-personnel-biography-integrity.test.js
