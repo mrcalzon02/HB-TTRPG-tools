@@ -1,0 +1,29 @@
+name: Warhammer Cafarron Chronology Integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/warhammer-40k/imperial-chronology-v1.js'
+      - 'tests/warhammer-chronology-integrity.test.js'
+      - '.github/workflows/warhammer-chronology-integrity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check chronology syntax
+        run: node --check assets/warhammer-40k/imperial-chronology-v1.js
+      - name: Validate Terran, cluster and local chronology
+        run: node tests/warhammer-chronology-integrity.test.js
