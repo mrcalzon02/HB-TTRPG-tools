@@ -8,6 +8,7 @@ on:
       - "scripts/apply-cubic-worker-benchmark.py"
       - "scripts/fix-cubic-worker-benchmark-contract.py"
       - "scripts/fix-cubic-worker-benchmark-nonstop-fixture.py"
+      - "scripts/fix-cubic-worker-benchmark-bindings-anchor.py"
 
 permissions:
   contents: write
@@ -40,6 +41,7 @@ jobs:
           git reset --hard origin/main
           python scripts/fix-cubic-worker-benchmark-contract.py
           python scripts/fix-cubic-worker-benchmark-nonstop-fixture.py
+          python scripts/fix-cubic-worker-benchmark-bindings-anchor.py
           python scripts/apply-cubic-worker-benchmark.py
           node --check binary-cube-cubic-decryptor-worker-pool.js
           node --check binary-cube-cubic-decryptor.js
