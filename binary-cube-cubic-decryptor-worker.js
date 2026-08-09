@@ -25,6 +25,7 @@ function keepCandidate(candidates, candidate, limit) {
   candidates.push(candidate);
   candidates.sort((left, right) => {
     if (left.exactFingerprintMatch !== right.exactFingerprintMatch) return left.exactFingerprintMatch ? -1 : 1;
+    if (left.cribMatch !== right.cribMatch) return left.cribMatch ? -1 : 1;
     if (right.score !== left.score) return right.score - left.score;
     if (left.gridSize !== right.gridSize) return left.gridSize - right.gridSize;
     if (left.profile !== right.profile) return left.profile.localeCompare(right.profile);
@@ -51,6 +52,8 @@ self.addEventListener('message', event => {
   try {
     const source = normalizeSource(message.source);
     const options = message.options || {};
+    const cribSpec = Cubic.normalizeCrib(options);
+    const attemptOptions = cribSpec.enabled ? { ...options, cribSpec } : options;
     const plan = Cubic.buildSearchPlan(source, options);
     const resumeCursor = Math.max(0, Math.floor(Number(message.resumeCursor) || 0));
     if (resumeCursor > plan.totalAttempts) throw new Error('Resume cursor is beyond the deterministic search plan.');
@@ -97,8 +100,8 @@ self.addEventListener('message', event => {
                   payloadCapacity,
                   seed: seedRow.seed,
                   seedSource: seedRow.seedSource
-                }, options);
-                if (candidate && (candidate.exactFingerprintMatch || candidate.score >= threshold)) {
+                }, attemptOptions);
+                if (candidate && (candidate.exactFingerprintMatch || candidate.cribMatch || candidate.score >= threshold)) {
                   keepCandidate(candidates, candidate, resultLimit);
                   if (candidate.exactFingerprintMatch) {
                     exactMatch = candidate;
@@ -164,7 +167,9 @@ self.addEventListener('message', event => {
         checkpoint,
         caveat: source.kind === 'package'
           ? 'A matching package key fingerprint is strong reproducibility evidence for this deterministic generator search, but the package fingerprint is 32-bit FNV-1a corruption metadata rather than a collision-resistant cryptographic identifier.'
-          : 'Raw-ciphertext candidates are ranked by lightweight structure heuristics. Use the Information & Deobfuscation Suite and known-plaintext checks before treating a candidate as a successful decryption.'
+          : cribSpec.enabled
+            ? 'Raw-ciphertext candidates that fail the configured known-plaintext crib are rejected before Stage A scoring. A crib match is strong hypothesis evidence but remains conditional on the supplied plaintext assumption.'
+            : 'Raw-ciphertext candidates are ranked by lightweight structure heuristics. Use the Information & Deobfuscation Suite and known-plaintext checks before treating a candidate as a successful decryption.'
       }
     });
   } catch (error) {

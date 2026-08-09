@@ -209,7 +209,7 @@
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-cubic-decryptor-hardening-3');
+      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-cubic-decryptor-hardening-4');
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;

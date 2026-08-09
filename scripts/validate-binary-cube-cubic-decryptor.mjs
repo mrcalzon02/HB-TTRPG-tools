@@ -70,7 +70,7 @@ function resultMessage(messages, label) {
   return row.result;
 }
 
-assert.equal(Cubic.constants.VERSION, '0.1.0');
+assert.equal(Cubic.constants.VERSION, '0.2.0');
 assert.equal(Engine.constants.KEY_DIGEST_TYPE, 'sha256-canonical-key-material-v1');
 assert.equal(Engine.sha256Hex('abc'), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
 assert.deepEqual(Cubic.constants.PROFILE_ORDER, [
@@ -93,6 +93,12 @@ assert.throws(() => Cubic.normalizeTemplates(['no-counter']), /counter placehold
 const informationProbe = Information.utilities.candidateScore(Uint8Array.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a,0,0,0,0]));
 assert.ok(informationProbe.signatures.some(item => item.label === 'PNG'), 'Stage B authority must recognize a canonical PNG signature.');
 assert.ok(Number.isFinite(informationProbe.score));
+const textCrib = Cubic.normalizeCrib({ cribMode: 'text', cribValue: 'KNOWN', cribOffsetBytes: 3 });
+assert.equal(textCrib.enabled, true);
+assert.equal(textCrib.offsetBytes, 3);
+assert.equal(textCrib.hex, Buffer.from('KNOWN', 'utf8').toString('hex'));
+assert.equal(Cubic.normalizeCrib({ cribMode: 'signature', cribSignature: 'PNG' }).hex, '89504e470d0a1a0a');
+assert.throws(() => Cubic.normalizeCrib({ cribMode: 'hex', cribValue: 'abc' }), /complete hexadecimal bytes/);
 
 const plaintext = '01001000011001010110110001101100011011110010000001000011011101010110001001100101'; // Hello Cube
 const recovered = [];
@@ -184,6 +190,9 @@ const checkpoint = Cubic.makeCheckpoint(broadPlan, 12, 12, broadPlan.stages[0].i
 assert.equal(Cubic.validateCheckpoint(checkpoint, broadPlan).cursor, 12);
 const otherPlan = Cubic.buildSearchPlan(rawSource, { ...broadPlan, seedEnd: 4, profiles: ['direct-permutation'], seedTemplates: ['{n}'], includeFixedSeeds: false, maxGridSize: 16, usePackageMetadata: false, payloadCapacity: directPackage.payloadCapacity, inputFace: 'top', outputFace: 'front' });
 assert.throws(() => Cubic.validateCheckpoint(checkpoint, otherPlan), /different deterministic search plan/);
+const cribPlan = Cubic.buildSearchPlan(rawSource, { profiles: ['direct-permutation'], usePackageMetadata: false, maxGridSize: 4, seedStart: 0, seedEnd: 3, seedTemplates: ['{n}'], includeFixedSeeds: false, orientationMode: 'manual', capacityMode: 'manual', payloadCapacity: directPackage.payloadCapacity, inputFace: 'top', outputFace: 'front', cribMode: 'text', cribValue: 'H', cribOffsetBytes: 0 });
+assert.notEqual(cribPlan.planId, broadPlan.planId, 'Known-plaintext assumptions must be part of the deterministic Plan ID.');
+assert.throws(() => Cubic.validateCheckpoint(checkpoint, cribPlan), /different deterministic search plan/, 'A checkpoint created under different crib assumptions must be rejected.');
 
 // True worker-level deterministic brute force: the correct key is deliberately beyond the first run budget.
 const workerSeed = '437';
@@ -252,6 +261,29 @@ assert.equal(resumedWorkerResult.cursor, 438, 'Resume must continue from cursor 
 assert.equal(resumedWorkerResult.attemptsThisRun, 238, 'Resumed worker must not replay the first 200 candidate attempts');
 assert.equal(Cubic.validateCheckpoint(resumedWorkerResult.checkpoint, resumedWorkerResult.plan).cursor, 438);
 
+// Raw-ciphertext known-plaintext search: high score threshold cannot hide a correct crib match, and sample depth expands automatically.
+const cribSeed = '23';
+const cribText = 'KNOWN-PLAINTEXT-CRIB::opaque binary tail 0123456789';
+const cribPlaintext = utf8Bits(cribText);
+const cribKey = Research.generateResearchKey('iterative-chain', cribSeed, 4, workerBaseOptions);
+const cribPackage = Engine.encryptBinary(cribPlaintext, cribKey);
+const cribRawSource = Cubic.sourceFromRaw(cribPackage.ciphertext, { inputFace: 'top', outputFace: 'front', inputQuarterTurns: 0, outputQuarterTurns: 0, payloadCapacity: cribPackage.payloadCapacity, originalBitLength: cribPlaintext.length });
+const cribSearchOptions = { profiles: ['iterative-chain'], usePackageMetadata: false, maxGridSize: 4, seedStart: 0, seedEnd: 40, seedTemplates: ['{n}'], includeFixedSeeds: false, orientationMode: 'manual', capacityMode: 'manual', inputFace: 'top', outputFace: 'front', payloadCapacity: cribPackage.payloadCapacity, originalBitLength: cribPlaintext.length, scoreThreshold: 100, resultLimit: 8, sampleBlocks: 1, cribMode: 'text', cribValue: 'KNOWN-PLAINTEXT-CRIB', cribOffsetBytes: 0, maxAttemptsThisRun: 0, progressEvery: 10 };
+const cribPlanA = Cubic.buildSearchPlan(cribRawSource, cribSearchOptions);
+const cribPlanB = Cubic.buildSearchPlan(cribRawSource, { ...cribSearchOptions, cribValue: 'WRONG-PLAINTEXT-CRIB' });
+assert.notEqual(cribPlanA.planId, cribPlanB.planId, 'Changing crib bytes must change the deterministic Plan ID.');
+const cribHarness = createWorkerHarness();
+const cribResult = resultMessage(cribHarness.run({ id: 1003, operation: 'search', source: { kind: 'raw', bits: cribRawSource.bits, framing: cribRawSource.framing }, options: cribSearchOptions, resumeCursor: 0 }), 'Crib-assisted raw worker run');
+assert.equal(cribResult.exhausted, true);
+const cribCandidate = cribResult.candidates.find(candidate => candidate.seed === cribSeed);
+assert.ok(cribCandidate, 'Known-plaintext crib must retain the correct raw candidate even when Stage A threshold is 100.');
+assert.equal(cribCandidate.cribMatch, true);
+assert.equal(cribCandidate.exactFingerprintMatch, false);
+assert.equal(cribCandidate.identityStrength, 'known-plaintext-crib');
+assert.ok(cribCandidate.plaintextBits.length >= Buffer.byteLength('KNOWN-PLAINTEXT-CRIB') * 8, 'Crib matching must automatically decrypt enough blocks to reach the known plaintext.');
+const wrongCribCandidate = Cubic.attemptCandidate(cribRawSource, { stageId: 'iterative-chain:small', profile: 'iterative-chain', gridSize: 4, orientation: { inputFace: 'top', outputFace: 'front', inputQuarterTurns: 0, outputQuarterTurns: 0 }, payloadCapacity: cribPackage.payloadCapacity, seed: cribSeed, seedSource: '{n}' }, { ...cribSearchOptions, cribValue: 'DEFINITELY-WRONG-CRIB' });
+assert.equal(wrongCribCandidate, null, 'A raw candidate that contradicts the configured crib must be pruned before scoring.');
+
 for (const required of [
   'Cubic Decryptor Tool',
   'Build staged plan',
@@ -270,7 +302,11 @@ for (const required of [
   'Attempts / second',
   'Estimated remaining',
   'formatDuration(',
-  'updatePlanRuntimeEstimates('
+  'updatePlanRuntimeEstimates(',
+  'Known plaintext / crib pruning',
+  'bccd-crib-mode',
+  'bccd-crib-offset',
+  'KNOWN-PLAINTEXT CRIB MATCH'
 ]) assert.ok(ui.includes(required), `UI is missing ${JSON.stringify(required)}`);
 for (const required of [
   "importScripts(",
@@ -281,13 +317,15 @@ for (const required of [
   'Cubic.makeCheckpoint',
   'maxAttemptsThisRun',
   'attemptsPerSecond',
+  'Cubic.normalizeCrib',
+  'candidate.cribMatch',
   "stopReason = 'attempt-budget'"
 ]) assert.ok(worker.includes(required), `Worker is missing ${JSON.stringify(required)}`);
 assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty');
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.4.0',
+  schema: '0.5.0',
   pass: true,
   recovered,
   rawRoundTrip: true,
@@ -304,6 +342,7 @@ console.log(JSON.stringify({
     recoveredKeyId: resumedWorkerResult.exactMatch.keyId,
     recoveredKeyDigest: resumedWorkerResult.exactMatch.keyDigest,
     strongIdentityMatch: resumedWorkerResult.exactMatch.exactDigestMatch,
-    exactPlaintextRecovery: resumedWorkerResult.exactMatch.plaintextBits === workerPlaintext
+    exactPlaintextRecovery: resumedWorkerResult.exactMatch.plaintextBits === workerPlaintext,
+    cribSearch: { planId: cribPlanA.planId, recoveredSeed: cribCandidate.seed, matched: cribCandidate.cribMatch, sampleExpanded: cribCandidate.plaintextBits.length >= Buffer.byteLength('KNOWN-PLAINTEXT-CRIB') * 8 }
   }
 }, null, 2));

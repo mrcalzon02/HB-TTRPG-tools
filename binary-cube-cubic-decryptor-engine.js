@@ -13,7 +13,7 @@
   if (!Engine) throw new Error('Cubic Decryptor requires ShadowrunBinaryCubeEngine.');
   if (!Research) throw new Error('Cubic Decryptor requires BinaryCubeKeyGenerationResearch.');
 
-  const VERSION = '0.1.0';
+  const VERSION = '0.2.0';
   const PLAN_FORMAT = 'hb-ttrpg-cubic-decryptor-search-plan';
   const CHECKPOINT_FORMAT = 'hb-ttrpg-cubic-decryptor-checkpoint';
   const RESULT_FORMAT = 'hb-ttrpg-cubic-decryptor-result';
@@ -84,6 +84,22 @@
     return bytes;
   }
 
+  function textToBytes(value) {
+    const text = String(value ?? '');
+    if (typeof TextEncoder !== 'undefined') return new TextEncoder().encode(text);
+    if (typeof Buffer !== 'undefined') return Uint8Array.from(Buffer.from(text, 'utf8'));
+    const encoded = unescape(encodeURIComponent(text));
+    return Uint8Array.from(encoded, character => character.charCodeAt(0));
+  }
+
+  function bytesFromHex(value) {
+    const compact = String(value ?? '').replace(/0x/gi, '').replace(/[\s:_-]+/g, '');
+    if (!compact || compact.length % 2 || /[^0-9a-f]/i.test(compact)) fail('Crib hex must contain complete hexadecimal bytes.');
+    const bytes = new Uint8Array(compact.length / 2);
+    for (let index = 0; index < bytes.length; index += 1) bytes[index] = parseInt(compact.slice(index * 2, index * 2 + 2), 16);
+    return bytes;
+  }
+
   function bytesToHex(bytesValue, limit = 160) {
     return Array.from(Uint8Array.from(bytesValue || []).slice(0, limit), byte => byte.toString(16).padStart(2, '0')).join(' ');
   }
@@ -146,6 +162,56 @@
       hexPreview: bytesToHex(bytes),
       byteLength: bytes.length
     });
+  }
+
+  function normalizeCrib(options = {}) {
+    const supplied = options?.cribSpec;
+    if (supplied && typeof supplied === 'object' && Object.prototype.hasOwnProperty.call(supplied, 'enabled')) {
+      if (!supplied.enabled) return Object.freeze({ enabled: false, mode: 'none', offsetBytes: 0, bytes: Object.freeze([]), hex: '', label: 'none' });
+      const bytes = Uint8Array.from(supplied.bytes || []);
+      invariant(bytes.length > 0, 'Enabled crib must contain at least one byte.');
+      return Object.freeze({ enabled: true, mode: String(supplied.mode || 'hex'), offsetBytes: Math.max(0, Math.floor(Number(supplied.offsetBytes) || 0)), bytes: Object.freeze(Array.from(bytes)), hex: bytesToHex(bytes, bytes.length).replaceAll(' ', ''), label: String(supplied.label || 'known plaintext') });
+    }
+    const mode = String(options.cribMode || 'none').toLowerCase();
+    if (!mode || mode === 'none' || mode === 'off') return Object.freeze({ enabled: false, mode: 'none', offsetBytes: 0, bytes: Object.freeze([]), hex: '', label: 'none' });
+    const offsetBytes = Math.max(0, Math.floor(Number(options.cribOffsetBytes) || 0));
+    let bytes;
+    let label;
+    if (mode === 'text') {
+      const text = String(options.cribValue ?? '');
+      if (!text.length) fail('Text crib is empty.');
+      bytes = textToBytes(text);
+      label = `UTF-8 text ${JSON.stringify(text.length > 48 ? `${text.slice(0, 48)}…` : text)}`;
+    } else if (mode === 'hex') {
+      bytes = bytesFromHex(options.cribValue);
+      label = `hex ${bytesToHex(bytes, Math.min(bytes.length, 24))}${bytes.length > 24 ? ' …' : ''}`;
+    } else if (mode === 'signature') {
+      const requested = String(options.cribSignature || 'PNG');
+      const found = FILE_SIGNATURES.find(item => item.label === requested);
+      if (!found) fail(`Unknown file-signature crib: ${requested}`);
+      bytes = Uint8Array.from(found.bytes);
+      label = `${found.label} signature`;
+    } else fail(`Unsupported crib mode: ${mode}`);
+    invariant(bytes.length > 0, 'Enabled crib must contain at least one byte.');
+    return Object.freeze({ enabled: true, mode, offsetBytes, bytes: Object.freeze(Array.from(bytes)), hex: bytesToHex(bytes, bytes.length).replaceAll(' ', ''), label });
+  }
+
+  function cribRequiredSampleBlocks(cribValue, payloadCapacity) {
+    const crib = cribValue?.enabled !== undefined ? cribValue : normalizeCrib(cribValue || {});
+    if (!crib.enabled) return 0;
+    invariant(Number.isInteger(payloadCapacity) && payloadCapacity > 0, 'Crib sample calculation requires a positive payload capacity.');
+    return Math.max(1, Math.ceil(((crib.offsetBytes + crib.bytes.length) * 8) / payloadCapacity));
+  }
+
+  function evaluateCrib(plaintextBitsValue, cribValue) {
+    const crib = cribValue?.enabled !== undefined ? cribValue : normalizeCrib(cribValue || {});
+    if (!crib.enabled) return Object.freeze({ enabled: false, matched: null, offsetBytes: 0, comparedBytes: 0, requiredBytes: 0, label: 'none' });
+    const plaintext = bitsToBytes(plaintextBitsValue);
+    const expected = Uint8Array.from(crib.bytes);
+    const available = Math.max(0, Math.min(expected.length, plaintext.length - crib.offsetBytes));
+    let matched = available === expected.length;
+    if (matched) for (let index = 0; index < expected.length; index += 1) if (plaintext[crib.offsetBytes + index] !== expected[index]) { matched = false; break; }
+    return Object.freeze({ enabled: true, matched, offsetBytes: crib.offsetBytes, comparedBytes: available, requiredBytes: expected.length, label: crib.label, expectedHex: crib.hex });
   }
 
   function parsePackage(value) {
@@ -263,6 +329,7 @@
   function buildSearchPlan(sourceValue, options = {}) {
     const source = sourceValue?.kind ? sourceValue : (parsePackage(sourceValue) || sourceFromRaw(sourceValue, options));
     const seeds = seedCandidates(options);
+    const crib = normalizeCrib(options);
     const profiles = PROFILE_ORDER.filter(profile => options.profiles == null || options.profiles.includes(profile));
     if (options.includeLegacyProfiles) profiles.push(...LEGACY_PROFILES.filter(profile => !profiles.includes(profile)));
     const stages = [];
@@ -303,6 +370,7 @@
       seedTemplates: [...seeds.templates],
       fixedSeeds: [...seeds.fixed],
       includeLegacyProfiles: Boolean(options.includeLegacyProfiles),
+      crib: crib.enabled ? { mode: crib.mode, offsetBytes: crib.offsetBytes, hex: crib.hex, label: crib.label } : null,
       stages: stages.map(stage => ({ id: stage.id, profile: stage.profile, tier: stage.tier, gridSizes: [...stage.gridSizes], attempts: stage.attempts })),
       totalAttempts
     };
@@ -370,6 +438,7 @@
     if (targetKeyDigestType && targetKeyDigestType !== Engine.constants.KEY_DIGEST_TYPE) return null;
     if (targetKeyDigest && key.keyDigest !== targetKeyDigest) return null;
 
+    const crib = options.cribSpec?.enabled !== undefined ? normalizeCrib({ cribSpec: options.cribSpec }) : normalizeCrib(options);
     let plaintext;
     let exactFingerprintMatch = false;
     let exactDigestMatch = false;
@@ -379,10 +448,15 @@
       plaintext = Engine.decryptBinary(source.package, key);
     } else {
       const cellCount = candidate.gridSize * candidate.gridSize;
-      const sampleCiphertext = source.bits.slice(0, Math.min(source.bits.length, cellCount * Math.max(1, Number(options.sampleBlocks) || 1)));
+      const requestedSampleBlocks = Math.max(1, Number(options.sampleBlocks) || 1);
+      const cribSampleBlocks = cribRequiredSampleBlocks(crib, candidate.payloadCapacity);
+      const sampleBlocks = Math.max(requestedSampleBlocks, cribSampleBlocks);
+      const sampleCiphertext = source.bits.slice(0, Math.min(source.bits.length, cellCount * sampleBlocks));
       const samplePackage = syntheticPackage(source, key, candidate.payloadCapacity, sampleCiphertext, Math.min(candidate.payloadCapacity * (sampleCiphertext.length / cellCount), Number(source.framing?.originalBitLength) || Number.MAX_SAFE_INTEGER));
       plaintext = Engine.decryptBinary(samplePackage, key);
     }
+    const cribEvidence = evaluateCrib(plaintext, crib);
+    if (cribEvidence.enabled && !cribEvidence.matched && !exactFingerprintMatch) return null;
     const evidence = scorePlaintext(plaintext);
     return Object.freeze({
       profile: candidate.profile,
@@ -401,7 +475,9 @@
       keyDigest: key.keyDigest,
       exactFingerprintMatch,
       exactDigestMatch,
-      identityStrength: exactDigestMatch ? 'sha256' : exactFingerprintMatch ? 'legacy-fnv1a32' : 'heuristic-raw',
+      identityStrength: exactDigestMatch ? 'sha256' : exactFingerprintMatch ? 'legacy-fnv1a32' : cribEvidence.matched ? 'known-plaintext-crib' : 'heuristic-raw',
+      crib: cribEvidence,
+      cribMatch: cribEvidence.enabled ? cribEvidence.matched : null,
       plaintextBits: plaintext,
       ...evidence,
       caveat: exactDigestMatch
@@ -427,17 +503,22 @@
     constants: Object.freeze({
       VERSION, PLAN_FORMAT, CHECKPOINT_FORMAT, RESULT_FORMAT, PACKAGE_FORMAT,
       DEFAULT_SEED_START, DEFAULT_SEED_END, DEFAULT_RESULT_LIMIT, DEFAULT_SCORE_THRESHOLD,
-      DEFAULT_SEED_TEMPLATES, FIXED_SEEDS, PROFILE_ORDER, LEGACY_PROFILES, GRID_TIERS
+      DEFAULT_SEED_TEMPLATES, FIXED_SEEDS, PROFILE_ORDER, LEGACY_PROFILES, GRID_TIERS, FILE_SIGNATURES
     }),
     fnv1a32,
     asBits,
     bitsToBytes,
+    textToBytes,
+    bytesFromHex,
     bytesToHex,
     bytesToText,
     entropy,
     printableFraction,
     signature,
     scorePlaintext,
+    normalizeCrib,
+    cribRequiredSampleBlocks,
+    evaluateCrib,
     parsePackage,
     sourceFromRaw,
     normalizeTemplates,
