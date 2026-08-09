@@ -3,12 +3,23 @@
 
   const WORKER_URL = 'shadowrun-binary-cube-worker.js?v=20260809-v14-binary-cube-worker';
   const HEARTBEAT_INTERVAL_MS = 1000;
+  const RESEED_BYTES = 16;
   let worker = null;
   let nextRequestId = 1;
   const pending = new Map();
 
   function now() {
     return globalThis.performance?.now?.() ?? Date.now();
+  }
+
+  function freshSeed(prefix = 'binary-cube') {
+    const cryptoApi = globalThis.crypto;
+    if (!cryptoApi?.getRandomValues) throw new Error('Secure Binary Cube reseeding requires crypto.getRandomValues().');
+    const bytes = new Uint8Array(RESEED_BYTES);
+    cryptoApi.getRandomValues(bytes);
+    const label = String(prefix || 'binary-cube').replace(/[^A-Za-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 32) || 'binary-cube';
+    const hex = Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+    return `${label}-${hex}`;
   }
 
   function stopHeartbeat(request) {
@@ -120,7 +131,9 @@
     run,
     cancelAll,
     isBusy,
+    freshSeed,
     workerUrl: WORKER_URL,
-    heartbeatIntervalMs: HEARTBEAT_INTERVAL_MS
+    heartbeatIntervalMs: HEARTBEAT_INTERVAL_MS,
+    reseedBytes: RESEED_BYTES
   });
 })();
