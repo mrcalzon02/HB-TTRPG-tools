@@ -9,7 +9,7 @@ const require = createRequire(import.meta.url);
 const EvidenceProfile = require(path.join(root, 'binary-cube-steganalysis-evidence-profile.js'));
 const Pipeline = require(path.join(root, 'binary-cube-diagnostic-pipeline.js'));
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const WIDTH = 64;
 const HEIGHT = 64;
 const TILE_SIZE = 32;
@@ -170,18 +170,41 @@ function embedRandomLsb(raster, spec, seed) {
   return Object.freeze({ rgba, width: raster.width, height: raster.height, changedSamples: changed, overwrittenSamples: overwriteCount });
 }
 
+function finiteNumber(value) {
+  return Number.isFinite(Number(value)) ? Number(value) : null;
+}
+
 function measure(raster) {
   const profile = EvidenceProfile.profileRaster(raster.rgba, raster.width, raster.height, { channels: ['r', 'g', 'b', 'luma'], tileSize: TILE_SIZE });
   const luma = profile.channels.find(row => row.channel === 'luma')?.global || null;
+  const flags = [...new Set((profile.diagnosticFlags || []).map(flag => String(flag.id || '')).filter(Boolean))].sort();
   return Object.freeze({
-    flags: Object.freeze([...new Set((profile.diagnosticFlags || []).map(flag => String(flag.id || '')).filter(Boolean))].sort()),
+    flags: Object.freeze(flags),
+    flagCount: flags.length,
     missRiskEvidence: Pipeline.utilities.rasterMissRiskEvidence(profile),
     lumaLegacyStatus: luma?.legacyStatus || 'inconclusive',
     lumaLegacyScalar: Number(luma?.legacyPayloadMagnitudeEvidence || 0),
     lumaPayloadEstimate: luma?.payloadEstimateConsensus ?? null,
     maximumPayloadEstimate: profile.crossChannel?.maximumPayloadEstimate ?? null,
     maximumPayloadChannel: profile.crossChannel?.maximumPayloadChannel || null,
-    crossChannelPayloadRange: profile.crossChannel?.payloadEstimateRange ?? null
+    crossChannelPayloadRange: profile.crossChannel?.payloadEstimateRange ?? null,
+    carrierContext: Object.freeze({
+      lumaResidualRoughness: finiteNumber(luma?.residual?.roughness),
+      lumaResidualCooccurrenceEntropy: finiteNumber(luma?.residual?.cooccurrenceEntropy),
+      lumaResidualDiagonalFraction: finiteNumber(luma?.residual?.diagonalFraction),
+      lumaResidualSymmetryError: finiteNumber(luma?.residual?.symmetryError),
+      lumaLsbEntropy: finiteNumber(luma?.lsb?.entropy),
+      lumaLsbOneFraction: finiteNumber(luma?.lsb?.oneFraction),
+      lumaLsbTransitionFraction: finiteNumber(luma?.lsb?.transitionFraction),
+      lumaPairChiSquare: finiteNumber(luma?.pairEqualization?.normalizedChiSquare),
+      lumaEstimatorAgreement: finiteNumber(luma?.estimatorAgreement),
+      lumaEstimatorSpread: finiteNumber(luma?.estimatorSpread),
+      crossChannelPayloadRange: finiteNumber(profile.crossChannel?.payloadEstimateRange),
+      crossChannelEstimatorAgreementRange: finiteNumber(profile.crossChannel?.estimatorAgreementRange),
+      crossChannelLsbEntropyRange: finiteNumber(profile.crossChannel?.lsbEntropyRange),
+      crossChannelPairChiSquareRange: finiteNumber(profile.crossChannel?.pairChiSquareRange),
+      crossChannelResidualRoughnessRange: finiteNumber(profile.crossChannel?.residualRoughnessRange)
+    })
   });
 }
 
@@ -303,7 +326,8 @@ const report = Object.freeze({
     embeddedPartnersPerCarrier: EMBEDDING_SPECS.length,
     totalRasterCount: carriers.length * (1 + EMBEDDING_SPECS.length),
     embeddingSpecs: EMBEDDING_SPECS,
-    splitRule: 'Instances 1-12 of every family are development; instances 13-16 are holdout. All derivatives remain in the same split as their clean carrier.'
+    splitRule: 'Instances 1-12 of every family are development; instances 13-16 are holdout. All derivatives remain in the same split as their clean carrier.',
+    retainedCarrierContext: Object.freeze(['lumaResidualRoughness','lumaResidualCooccurrenceEntropy','lumaResidualDiagonalFraction','lumaResidualSymmetryError','lumaLsbEntropy','lumaLsbOneFraction','lumaLsbTransitionFraction','lumaPairChiSquare','lumaEstimatorAgreement','lumaEstimatorSpread','crossChannelPayloadRange','crossChannelEstimatorAgreementRange','crossChannelLsbEntropyRange','crossChannelPairChiSquareRange','crossChannelResidualRoughnessRange'])
   }),
   currentPrior: Object.freeze({ status: 'provisional-prior', fittedCases: 0, weights: Pipeline.constants.RASTER_UNRESOLVED_FLAG_WEIGHTS, aggregateMissRiskMultiplier: 0.24 }),
   development: summarizeCarrierRows(development),
@@ -312,7 +336,7 @@ const report = Object.freeze({
   holdoutByEmbedding: summarizeByEmbedding(holdout),
   byFamily: Object.freeze(byFamily),
   carriers: Object.freeze(carriers),
-  interpretationBoundary: 'Carrier instances are the unit of independence and holdout assignment occurs before considering embedded derivatives. This experiment evaluates robustness of the existing evidence profile and provisional prior; it does not fit candidate weights, does not change production behavior, and does not establish real-world prevalence or universal steganography sensitivity.'
+  interpretationBoundary: 'Carrier instances are the unit of independence and holdout assignment occurs before considering embedded derivatives. Existing evidence-profile context measurements are retained for carrier-conditioning research without introducing new detector math. This experiment evaluates robustness of the existing evidence profile and provisional prior; it does not fit candidate weights, does not change production behavior, and does not establish real-world prevalence or universal steganography sensitivity.'
 });
 
 console.log(JSON.stringify(report, null, 2));
