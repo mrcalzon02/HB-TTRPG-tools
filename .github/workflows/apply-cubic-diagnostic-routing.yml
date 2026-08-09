@@ -1,0 +1,47 @@
+name: Apply Cubic diagnostic routing migration
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/apply-cubic-diagnostic-routing.yml"
+      - "scripts/apply-cubic-diagnostic-routing.py"
+
+permissions:
+  contents: write
+  statuses: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Apply exact authoritative routing edits
+        run: |
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+          python scripts/apply-cubic-diagnostic-routing.py
+          node --check binary-cube-diagnostic-pipeline.js
+          node --check binary-cube-diagnostic-pipeline-panel.js
+          node --check scientific-tools-entry.js
+          node --check scripts/validate-scientific-diagnostic-pipeline.mjs
+          node scripts/validate-scientific-diagnostic-pipeline.mjs
+          node scripts/validate-binary-cube-cubic-decryptor.mjs
+          node scripts/validate-scientific-tools-extraction.mjs
+      - name: Commit validated routing changes
+        run: |
+          if git diff --quiet -- binary-cube-diagnostic-pipeline.js binary-cube-diagnostic-pipeline-panel.js scientific-tools-entry.js scripts/validate-scientific-diagnostic-pipeline.mjs; then
+            echo "Routing changes are already present."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add binary-cube-diagnostic-pipeline.js binary-cube-diagnostic-pipeline-panel.js scientific-tools-entry.js scripts/validate-scientific-diagnostic-pipeline.mjs
+          git commit -m "feat: route canonical cube diagnostics to Cubic Decryptor"
+          git push origin HEAD:main
