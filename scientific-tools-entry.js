@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-diagnostic-pipeline-1';
+  const ASSET_VERSION = '20260809-diagnostic-calibration-1';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
@@ -135,9 +135,7 @@
   }
 
   function loadBinaryCubeVisualizer() {
-    if (canonicalCubeEngineReady() && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer) {
-      return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
-    }
+    if (canonicalCubeEngineReady() && window.BinaryCubeVisualizerRenderer && window.ShadowrunBinaryCubeVisualizer) return Promise.resolve(window.ShadowrunBinaryCubeVisualizer);
     if (cubeVisualizerPromise) return cubeVisualizerPromise;
     cubeVisualizerPromise = (async () => {
       await loadCooperativeRunner();
@@ -154,9 +152,7 @@
   }
 
   function loadBinaryCubeLaboratory() {
-    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) {
-      return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
-    }
+    if (canonicalCubeEngineReady() && window.ShadowrunBinaryCubeAuth && window.ShadowrunBinaryCubeEncryption && window.ShadowrunBinaryCubeEditor && window.ShadowrunBinaryCubeAuthUI) return Promise.resolve(window.ShadowrunBinaryCubeEncryption);
     if (cubeLaboratoryPromise) return cubeLaboratoryPromise;
     cubeLaboratoryPromise = (async () => {
       await loadCooperativeRunner();
@@ -289,13 +285,10 @@
     if (diagnosticPipelinePromise) return diagnosticPipelinePromise;
     diagnosticPipelinePromise = (async () => {
       await loadCooperativeRunner();
-      await Promise.all([
-        loadDecryptionDashboard(),
-        loadInformationAnalysisSuite(),
-        loadMediaForensicsSuite(),
-        loadSteganalysisLab()
-      ]);
+      await Promise.all([loadDecryptionDashboard(), loadInformationAnalysisSuite(), loadMediaForensicsSuite(), loadSteganalysisLab()]);
       await loadStyle('binary-cube-diagnostic-pipeline.css');
+      await loadScript('binary-cube-diagnostic-calibration-registry.js', () => Boolean(window.BinaryCubeDiagnosticCalibrationRegistry));
+      await loadScript('binary-cube-diagnostic-calibration-baseline.js', () => Boolean(window.BinaryCubeDiagnosticCalibrationBaseline));
       await loadScript('binary-cube-diagnostic-pipeline.js', () => Boolean(window.BinaryCubeDiagnosticPipeline));
       await loadScript('binary-cube-diagnostic-pipeline-panel.js', () => Boolean(window.BinaryCubeDiagnosticPipelinePanel));
       return window.BinaryCubeDiagnosticPipelinePanel;
@@ -304,17 +297,12 @@
     return diagnosticPipelinePromise;
   }
 
-
   function loadCubicDecryptor() {
     if (window.BinaryCubeCubicDecryptor) return Promise.resolve(window.BinaryCubeCubicDecryptor);
     if (cubicDecryptorPromise) return cubicDecryptorPromise;
     cubicDecryptorPromise = (async () => {
       await loadCooperativeRunner();
-      await Promise.all([
-        loadDecryptionDashboard(),
-        loadInformationAnalysisSuite(),
-        loadMediaForensicsSuite()
-      ]);
+      await Promise.all([loadDecryptionDashboard(), loadInformationAnalysisSuite(), loadMediaForensicsSuite()]);
       await loadStyle('binary-cube-cubic-decryptor.css');
       await loadScript('binary-cube-key-generation-research.js', () => Boolean(window.BinaryCubeKeyGenerationResearch));
       await loadScript('binary-cube-cubic-decryptor-engine.js', () => Boolean(window.BinaryCubeCubicDecryptorEngine));
@@ -351,23 +339,10 @@
 
   async function withLoadingButton(button, loadingLabel, action) {
     const original = button?.textContent || '';
-    if (button) {
-      button.disabled = true;
-      button.setAttribute('aria-busy', 'true');
-      button.textContent = loadingLabel;
-    }
-    try {
-      return await action();
-    } catch (error) {
-      alert(error.message);
-      return null;
-    } finally {
-      if (button) {
-        button.disabled = false;
-        button.removeAttribute('aria-busy');
-        button.textContent = original;
-      }
-    }
+    if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); button.textContent = loadingLabel; }
+    try { return await action(); }
+    catch (error) { alert(error.message); return null; }
+    finally { if (button) { button.disabled = false; button.removeAttribute('aria-busy'); button.textContent = original; } }
   }
 
   function openBinaryCubeVisualizer(button = null, artifacts = null) {
@@ -378,7 +353,6 @@
       return api.openPanel();
     });
   }
-
   function openBinaryCubeLaboratory(button = null, artifacts = null) {
     return withLoadingButton(button, 'Loading Laboratory…', async () => {
       const api = await loadBinaryCubeLaboratory();
@@ -387,113 +361,22 @@
       return api.openPanel();
     });
   }
-
-  function openKeyGenerationVisualizer(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Key Comparison…', async () => {
-      const api = await loadKeyGenerationVisualizer();
-      if (!api?.openPanel) throw new Error('The Binary Cube Key Generation Structure Visualizer loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openDecryptionDashboard(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Dashboard…', async () => {
-      const api = await loadDecryptionDashboard();
-      if (!api?.openPanel) throw new Error('The Binary Cube Decryption Dashboard loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openCryptanalyticTestLab(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Test Lab…', async () => {
-      const api = await loadCryptanalyticTestLab();
-      if (!api?.openPanel) throw new Error('The Binary Cube Cryptanalytic Test Lab loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openInformationAnalysisSuite(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Analysis Suite…', async () => {
-      const api = await loadInformationAnalysisSuite();
-      if (!api?.openPanel) throw new Error('The Information & Deobfuscation Analysis Suite loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openCommunicationCapacityAnalyzer(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Communication Analyzer…', async () => {
-      const api = await loadCommunicationCapacityAnalyzer();
-      if (!api?.openPanel) throw new Error('The Communication Capacity Analyzer loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openMediaForensicsSuite(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Media Forensics…', async () => {
-      const api = await loadMediaForensicsSuite();
-      if (!api?.openPanel) throw new Error('The Steganography, Signal & Media Forensics Suite loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openMediaForensicsDemoCorpus(button = null) {
-    return withLoadingButton(button, 'Loading Demonstrations…', async () => {
-      const api = await loadMediaForensicsDemoCorpus();
-      if (!api?.openPanel) throw new Error('The Steganography & Signal Demonstration Files loaded without an open-panel interface.');
-      return api.openPanel();
-    });
-  }
-
-  function openSteganalysisLab(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Steganalysis…', async () => {
-      const api = await loadSteganalysisLab();
-      if (!api?.openPanel) throw new Error('The Advanced Steganalysis Laboratory loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openDiagnosticPipeline(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Diagnostic Pipeline…', async () => {
-      const api = await loadDiagnosticPipeline();
-      if (!api?.openPanel) throw new Error('The Diagnostic Evaluation Pipeline loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-
-  function openCubicDecryptor(button = null, options = null) {
-    return withLoadingButton(button, 'Loading Cubic Decryptor…', async () => {
-      const api = await loadCubicDecryptor();
-      if (!api?.openPanel) throw new Error('The Cubic Decryptor Tool loaded without an open-panel interface.');
-      return api.openPanel(options || {});
-    });
-  }
-
-  function openIsmSimulation(button = null) {
-    return withLoadingButton(button, 'Loading Simulation…', async () => {
-      const api = await loadIsmLab();
-      if (!api?.openPanel) throw new Error('The ISM Media Simulation loaded without an open-panel interface.');
-      return api.openPanel({ setting: 'scientific-tools' });
-    });
-  }
-
-  function openDoubleSlitLab(button = null) {
-    return withLoadingButton(button, 'Loading Experiment…', async () => {
-      const api = await loadDoubleSlitLab();
-      if (!api?.openPanel) throw new Error('The Double Slit Experiment Visualizer loaded without an open-panel interface.');
-      return api.openPanel();
-    });
-  }
+  function openKeyGenerationVisualizer(button = null, options = null) { return withLoadingButton(button, 'Loading Key Comparison…', async () => { const api = await loadKeyGenerationVisualizer(); if (!api?.openPanel) throw new Error('The Binary Cube Key Generation Structure Visualizer loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openDecryptionDashboard(button = null, options = null) { return withLoadingButton(button, 'Loading Dashboard…', async () => { const api = await loadDecryptionDashboard(); if (!api?.openPanel) throw new Error('The Binary Cube Decryption Dashboard loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openCryptanalyticTestLab(button = null, options = null) { return withLoadingButton(button, 'Loading Test Lab…', async () => { const api = await loadCryptanalyticTestLab(); if (!api?.openPanel) throw new Error('The Binary Cube Cryptanalytic Test Lab loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openInformationAnalysisSuite(button = null, options = null) { return withLoadingButton(button, 'Loading Analysis Suite…', async () => { const api = await loadInformationAnalysisSuite(); if (!api?.openPanel) throw new Error('The Information & Deobfuscation Analysis Suite loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openCommunicationCapacityAnalyzer(button = null, options = null) { return withLoadingButton(button, 'Loading Communication Analyzer…', async () => { const api = await loadCommunicationCapacityAnalyzer(); if (!api?.openPanel) throw new Error('The Communication Capacity Analyzer loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openMediaForensicsSuite(button = null, options = null) { return withLoadingButton(button, 'Loading Media Forensics…', async () => { const api = await loadMediaForensicsSuite(); if (!api?.openPanel) throw new Error('The Steganography, Signal & Media Forensics Suite loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openMediaForensicsDemoCorpus(button = null) { return withLoadingButton(button, 'Loading Demonstrations…', async () => { const api = await loadMediaForensicsDemoCorpus(); if (!api?.openPanel) throw new Error('The Steganography & Signal Demonstration Files loaded without an open-panel interface.'); return api.openPanel(); }); }
+  function openSteganalysisLab(button = null, options = null) { return withLoadingButton(button, 'Loading Steganalysis…', async () => { const api = await loadSteganalysisLab(); if (!api?.openPanel) throw new Error('The Advanced Steganalysis Laboratory loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openDiagnosticPipeline(button = null, options = null) { return withLoadingButton(button, 'Loading Diagnostic Pipeline…', async () => { const api = await loadDiagnosticPipeline(); if (!api?.openPanel) throw new Error('The Diagnostic Evaluation Pipeline loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openCubicDecryptor(button = null, options = null) { return withLoadingButton(button, 'Loading Cubic Decryptor…', async () => { const api = await loadCubicDecryptor(); if (!api?.openPanel) throw new Error('The Cubic Decryptor Tool loaded without an open-panel interface.'); return api.openPanel(options || {}); }); }
+  function openIsmSimulation(button = null) { return withLoadingButton(button, 'Loading Simulation…', async () => { const api = await loadIsmLab(); if (!api?.openPanel) throw new Error('The ISM Media Simulation loaded without an open-panel interface.'); return api.openPanel({ setting: 'scientific-tools' }); }); }
+  function openDoubleSlitLab(button = null) { return withLoadingButton(button, 'Loading Experiment…', async () => { const api = await loadDoubleSlitLab(); if (!api?.openPanel) throw new Error('The Double Slit Experiment Visualizer loaded without an open-panel interface.'); return api.openPanel(); }); }
 
   function selectTab(tabId) {
-    document.querySelectorAll('#scientific-tools [data-scientific-tools-tab]').forEach(button => {
-      const active = button.dataset.scientificToolsTab === tabId;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-    document.querySelectorAll('#scientific-tools [data-scientific-tools-panel]').forEach(panel => {
-      panel.hidden = panel.dataset.scientificToolsPanel !== tabId;
-    });
+    document.querySelectorAll('#scientific-tools [data-scientific-tools-tab]').forEach(button => { const active = button.dataset.scientificToolsTab === tabId; button.classList.toggle('active', active); button.setAttribute('aria-selected', active ? 'true' : 'false'); });
+    document.querySelectorAll('#scientific-tools [data-scientific-tools-panel]').forEach(panel => { panel.hidden = panel.dataset.scientificToolsPanel !== tabId; });
   }
 
   function buildWorkspace() {
@@ -501,11 +384,7 @@
     if (!view) return null;
     view.setAttribute('aria-labelledby', 'scientific-tools-title');
     view.innerHTML = `
-      <div class="hero-card no-print">
-        <p class="eyebrow">Scientific Tools</p>
-        <h2 id="scientific-tools-title">Scientific Simulation Workspace</h2>
-        <p>Setting-neutral experimental systems live here as shared runtimes. Long calculations are required to preserve deterministic operation order while yielding between bounded work slices so slower hardware can continue making progress without locking the page.</p>
-      </div>
+      <div class="hero-card no-print"><p class="eyebrow">Scientific Tools</p><h2 id="scientific-tools-title">Scientific Simulation Workspace</h2><p>Setting-neutral experimental systems live here as shared runtimes. Long calculations are required to preserve deterministic operation order while yielding between bounded work slices so slower hardware can continue making progress without locking the page.</p></div>
       <div class="scientific-tools-tabs no-print" role="tablist" aria-label="Scientific Tools systems">
         <button type="button" class="scientific-tools-tab active" data-scientific-tools-tab="binary-cube" role="tab" aria-selected="true">Binary Cube</button>
         <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="decryption-dashboard" role="tab" aria-selected="false">Decryption Dashboard</button>
@@ -513,49 +392,19 @@
         <button type="button" class="scientific-tools-tab" data-scientific-tools-tab="double-slit" role="tab" aria-selected="false">Double Slit Experiment</button>
       </div>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="binary-cube">
-        <p class="eyebrow">Canonical encoding and traversal system</p>
-        <h3>Binary Cube Laboratory and Encoder Visualizer</h3>
-        <p>The accepted Shadowrun Binary Cube engine, authenticated transport support, and visualizer are the definitive implementation. Scientific Tools, Shadowrun, and Black Light Continuum all open this same browser runtime rather than maintaining setting-specific copies.</p>
-        <div class="scientific-tools-actions">
-          <button id="scientific-tools-open-binary-cube-visualizer" type="button" class="primary-action">Open Binary Cube Visualizer</button>
-          <button id="scientific-tools-open-binary-cube-laboratory" type="button" class="secondary-action">Open Binary Cube Laboratory</button>
-          <button id="scientific-tools-open-key-generation-visualizer" type="button" class="secondary-action">Compare Key Generators in 3D</button>
-        </div>
+        <p class="eyebrow">Canonical encoding and traversal system</p><h3>Binary Cube Laboratory and Encoder Visualizer</h3><p>The accepted Shadowrun Binary Cube engine, authenticated transport support, and visualizer are the definitive implementation. Scientific Tools, Shadowrun, and Black Light Continuum all open this same browser runtime rather than maintaining setting-specific copies.</p>
+        <div class="scientific-tools-actions"><button id="scientific-tools-open-binary-cube-visualizer" type="button" class="primary-action">Open Binary Cube Visualizer</button><button id="scientific-tools-open-binary-cube-laboratory" type="button" class="secondary-action">Open Binary Cube Laboratory</button><button id="scientific-tools-open-key-generation-visualizer" type="button" class="secondary-action">Compare Key Generators in 3D</button></div>
         <div class="scientific-tools-runtime"><span><strong>Canonical engine:</strong> ShadowrunBinaryCubeEngine</span><span><strong>Shared scheduling contract:</strong> ScientificToolsCooperativeRunner loads before Scientific Tools runtimes</span><span><strong>Visualizer:</strong> one shared ShadowrunBinaryCubeVisualizer instance</span><span><strong>Generation research:</strong> same-seed 3D point-field snapshots compare direct, iterative, global/local walk, and nested candidate procedures without promoting them into the production key format</span></div>
         <div class="scientific-tools-boundary"><strong>Runtime boundary:</strong> setting launchers may provide context or artifacts, but encoding, keys, masks, traces, ciphertext, validation, rendering, and authentication remain owned by the single canonical Binary Cube implementation. Key-generation research treats adjacency as one diagnostic rather than an automatic failure and separately measures axis leakage, regional predictability, fixed-position concentration, displacement, and 3D point-field structure.</div>
       </section>
       <section class="scientific-tools-panel no-print" data-scientific-tools-panel="decryption-dashboard" hidden>
-        <p class="eyebrow">Binary Cube cryptanalysis, information recovery, steganography, and adversarial testing</p>
-        <h3>Decryption Dashboard</h3>
-        <p>Start with the Diagnostic Evaluation Pipeline when the file type or concealment method is not yet known. It classifies the asset, routes applicable specialist detectors automatically, runs independent methods concurrently inside deterministic stages, and preserves an evidence ledger. The manual workbenches remain available for direct follow-up and controlled experiments.</p>
-        <div class="scientific-tools-actions">
-          <button id="scientific-tools-open-diagnostic-pipeline" type="button" class="primary-action">Run Diagnostic Evaluation Pipeline</button>
-          <button id="scientific-tools-open-decryption-dashboard" type="button" class="secondary-action">Open Decryption Dashboard</button>
-          <button id="scientific-tools-open-cubic-decryptor" type="button" class="secondary-action">Open Cubic Decryptor Tool</button>
-          <button id="scientific-tools-open-cryptanalytic-test-lab" type="button" class="secondary-action">Open Cryptanalytic Test Lab</button>
-          <button id="scientific-tools-open-information-analysis" type="button" class="secondary-action">Open Information & Deobfuscation Suite</button>
-          <button id="scientific-tools-open-communication-capacity" type="button" class="secondary-action">Open Communication Capacity Analyzer</button>
-          <button id="scientific-tools-open-media-forensics" type="button" class="secondary-action">Open Steganography, Signal & Media Forensics</button>
-          <button id="scientific-tools-open-steganalysis" type="button" class="secondary-action">Open Advanced Steganalysis Laboratory</button>
-          <button id="scientific-tools-open-media-forensics-demos" type="button" class="secondary-action">Open Steganography & Signal Demonstrations</button>
-        </div>
-        <div class="scientific-tools-runtime"><span><strong>Automatic routed evaluation:</strong> file classification → broad information/media baselines → type-specific steganalysis or Binary Cube diagnostics → deep reversible/cryptanalytic search according to Triage, Thorough, or Exhaustive depth</span><span><strong>Top-line evidence indices:</strong> Asset Presence, Certainty, Coverage, and Undetected / Miss-Risk remain separate normalized evidence indices rather than an opaque probability claim</span><span><strong>Concurrent execution:</strong> stage ordering is deterministic while independent detectors inside a stage may proceed concurrently; specialist workers and the cooperative scheduler retain responsibility for expensive inner loops</span><span><strong>Local execution:</strong> <code>node scripts/run-scientific-diagnostic-local.mjs &lt;file&gt; --profile=thorough</code> runs the same routing/report contract without the hosted browser UI</span><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Cubic decryptor:</strong> deterministic staged brute-force search moves from the smallest compatible direct-permutation cubes through iterative-chain, global transposition-walk, nested-permutation, and nested-interleaved key generators, with metadata-constrained package search, raw framing expansion, reproducible seed templates, worker execution, pause/resume checkpoints, full-candidate recovery, and specialist handoff</span><span><strong>Controlled cryptanalysis:</strong> avalanche/diffusion, single-bit differential probes, known plaintext, chosen plaintext, key-difference sensitivity, traversal inference, affine-equivalence/collapse tests, and projection permutation/cycle analysis</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>1999 communication-capacity test:</strong> McCowan–Hanser–Doyle Zipf slope, zero/first/higher-order conditional entropy, entropy-order slope, lag mutual information, shuffled-surrogate comparisons, and sampling-sufficiency warnings across multiple symbolizations</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>Steganography extraction:</strong> arbitrary byte LSB/MSB planes, selected-bit packing, per-plane entropy/transitions, pair-equalization χ² clues, offsets/strides, decoded RGB/RGBA channel extraction, raster bit-plane previews, PCM sample and sample-delta bit planes</span><span><strong>Quantitative steganalysis:</strong> RS regular/singular groups, Sample Pair Analysis payload estimation, localized tiled detector maps, residual co-occurrence features, exact known-cover modification maps, bit-plane Hamming counts, MSE/PSNR/SSIM, baseline JPEG quantized-DCT populations, PNG/JPEG metadata structure, Unicode hiding diagnostics, batch corpus comparison, ROC AUC, TPR/FPR, balanced accuracy, MCC, F1, payload-estimation MAE/RMSE, and recovered-bit error metrics</span><span><strong>Convolution and correlation:</strong> custom 1-D FIR and 2-D matrices plus identity, blur, Gaussian, sharpen, Laplacian, high-pass, Sobel, Prewitt, emboss, and cross-correlation tools</span><span><strong>Spectral analysis:</strong> FFT spectral peaks, Goertzel tone probes, DTMF, configurable binary FSK/AFSK, OOK/tone-envelope extraction, stereo difference and channel correlation</span><span><strong>Container forensics:</strong> RIFF/WAVE chunks, PNG chunks and post-IEND data, JPEG segment/EOI boundaries, ID3v2 boundaries, signatures and appended-payload carving</span><span><strong>Known-ground-truth demonstrations:</strong> clean PNG control, RGB-LSB positive control, post-IEND trailing PNG, 1200/2200 Hz AFSK WAV, and DTMF WAV can be previewed, saved, and opened with the matching forensic controls preselected</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> the routing pipeline delegates to existing specialist modules; encryption/decryption controls remain delegated to ShadowrunBinaryCubeEngine and no analysis orchestrator replaces the canonical implementations</span></div>
-        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> absence of positive evidence is not evidence of absence. Asset Presence, Certainty, Coverage, and Miss-Risk are evidence indices, not posterior probabilities. Avalanche behavior, affine consistency, traversal recovery, Zipf slopes, higher-order entropy structure, compression affinity, RS/SPA estimates, LSB equalization, residual features, JPEG coefficient populations, metadata anomalies, convolution residuals, spectral peaks, decoded characters, language-likeness, and candidate scores remain distinct evidence signals. No single signal proves semantics, intelligence, intentional steganography, successful decryption, or general cryptographic security.</div>
+        <p class="eyebrow">Binary Cube cryptanalysis, information recovery, steganography, and adversarial testing</p><h3>Decryption Dashboard</h3><p>Start with the Diagnostic Evaluation Pipeline when the file type or concealment method is not yet known. It classifies the asset, routes applicable specialist detectors automatically, runs independent methods concurrently inside deterministic stages, and preserves an evidence ledger. The manual workbenches remain available for direct follow-up and controlled experiments.</p>
+        <div class="scientific-tools-actions"><button id="scientific-tools-open-diagnostic-pipeline" type="button" class="primary-action">Run Diagnostic Evaluation Pipeline</button><button id="scientific-tools-open-decryption-dashboard" type="button" class="secondary-action">Open Decryption Dashboard</button><button id="scientific-tools-open-cubic-decryptor" type="button" class="secondary-action">Open Cubic Decryptor Tool</button><button id="scientific-tools-open-cryptanalytic-test-lab" type="button" class="secondary-action">Open Cryptanalytic Test Lab</button><button id="scientific-tools-open-information-analysis" type="button" class="secondary-action">Open Information & Deobfuscation Suite</button><button id="scientific-tools-open-communication-capacity" type="button" class="secondary-action">Open Communication Capacity Analyzer</button><button id="scientific-tools-open-media-forensics" type="button" class="secondary-action">Open Steganography, Signal & Media Forensics</button><button id="scientific-tools-open-steganalysis" type="button" class="secondary-action">Open Advanced Steganalysis Laboratory</button><button id="scientific-tools-open-media-forensics-demos" type="button" class="secondary-action">Open Steganography & Signal Demonstrations</button></div>
+        <div class="scientific-tools-runtime"><span><strong>Automatic routed evaluation:</strong> file classification → broad information/media baselines → type-specific steganalysis or Binary Cube diagnostics → deep reversible/cryptanalytic search according to Triage, Thorough, or Exhaustive depth</span><span><strong>Measured calibration:</strong> detector priors are adjusted only through a versioned, corpus-bounded calibration registry. The first measured baseline intentionally retains the RGB-LSB false negative rather than inflating detector certainty.</span><span><strong>Top-line evidence indices:</strong> Asset Presence, Certainty, Coverage, and Undetected / Miss-Risk remain separate normalized evidence indices rather than an opaque probability claim</span><span><strong>Concurrent execution:</strong> stage ordering is deterministic while independent detectors inside a stage may proceed concurrently; specialist workers and the cooperative scheduler retain responsibility for expensive inner loops</span><span><strong>Local execution:</strong> <code>node scripts/run-scientific-diagnostic-local.mjs &lt;file&gt; --profile=thorough</code> runs the same routing/report contract without the hosted browser UI</span><span><strong>Cube attack input:</strong> package/secure export, raw bits, hex, Base64, files, and comparative ciphertexts</span><span><strong>Cubic decryptor:</strong> deterministic staged brute-force search moves from the smallest compatible direct-permutation cubes through iterative-chain, global transposition-walk, nested-permutation, and nested-interleaved key generators, with metadata-constrained package search, raw framing expansion, reproducible seed templates, worker execution, pause/resume checkpoints, full-candidate recovery, and specialist handoff</span><span><strong>Controlled cryptanalysis:</strong> avalanche/diffusion, single-bit differential probes, known plaintext, chosen plaintext, key-difference sensitivity, traversal inference, affine-equivalence/collapse tests, and projection permutation/cycle analysis</span><span><strong>Information evidence:</strong> Shannon/min entropy, n-grams, runs, autocorrelation, mutual information, Maurer-style return-distance analysis, compression ratio, and sliding entropy</span><span><strong>1999 communication-capacity test:</strong> McCowan–Hanser–Doyle Zipf slope, zero/first/higher-order conditional entropy, entropy-order slope, lag mutual information, shuffled-surrogate comparisons, and sampling-sufficiency warnings across multiple symbolizations</span><span><strong>2002 compression test:</strong> Benedetto–Caglioti–Loreto relative-entropy and compression-distance comparisons against built-in or supplied reference corpora</span><span><strong>Steganography extraction:</strong> arbitrary byte LSB/MSB planes, selected-bit packing, per-plane entropy/transitions, pair-equalization χ² clues, offsets/strides, decoded RGB/RGBA channel extraction, raster bit-plane previews, PCM sample and sample-delta bit planes</span><span><strong>Quantitative steganalysis:</strong> RS regular/singular groups, Sample Pair Analysis payload estimation, localized tiled detector maps, residual co-occurrence features, exact known-cover modification maps, bit-plane Hamming counts, MSE/PSNR/SSIM, baseline JPEG quantized-DCT populations, PNG/JPEG metadata structure, Unicode hiding diagnostics, batch corpus comparison, ROC AUC, TPR/FPR, balanced accuracy, MCC, F1, payload-estimation MAE/RMSE, and recovered-bit error metrics</span><span><strong>Convolution and correlation:</strong> custom 1-D FIR and 2-D matrices plus identity, blur, Gaussian, sharpen, Laplacian, high-pass, Sobel, Prewitt, emboss, and cross-correlation tools</span><span><strong>Spectral analysis:</strong> FFT spectral peaks, Goertzel tone probes, DTMF, configurable binary FSK/AFSK, OOK/tone-envelope extraction, stereo difference and channel correlation</span><span><strong>Container forensics:</strong> RIFF/WAVE chunks, PNG chunks and post-IEND data, JPEG segment/EOI boundaries, ID3v2 boundaries, signatures and appended-payload carving</span><span><strong>Known-ground-truth demonstrations:</strong> clean PNG control, RGB-LSB positive control, post-IEND trailing PNG, 1200/2200 Hz AFSK WAV, and DTMF WAV can be previewed, saved, and opened with the matching forensic controls preselected</span><span><strong>De-obfuscation:</strong> recursive codec peeling, Base32/64/hex, escapes, Caesar/Atbash/ROT47, endian swaps, bit planes, interleaving, columnar/stride probes, delta/XOR transforms, and repeating-XOR inference</span><span><strong>Authority:</strong> the routing pipeline delegates to existing specialist modules; encryption/decryption controls remain delegated to ShadowrunBinaryCubeEngine and no analysis orchestrator replaces the canonical implementations</span></div>
+        <div class="scientific-tools-boundary"><strong>Evidence boundary:</strong> absence of positive evidence is not evidence of absence. Asset Presence, Certainty, Coverage, and Miss-Risk are evidence indices, not posterior probabilities. Calibration measurements describe only the tested corpus and sparse controls are shrunk toward declared priors. No single signal proves semantics, intelligence, intentional steganography, successful decryption, or general cryptographic security.</div>
       </section>
-      <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden>
-        <p class="eyebrow">Interstellar medium collision model</p>
-        <h3>ISM Media Simulation</h3>
-        <p>Cast phase-light vectors through literal 1:1 interstellar-medium particles, retain the physically bounded cosmological-constant term, resolve charged-proton magnetic response, optionally apply a separately labeled quantum-foam sensitivity model, retain the deterministic Shadow-key scattering operator, and collect all non-input cube faces concurrently.</p>
-        <div class="scientific-tools-actions"><button id="scientific-tools-open-ism" type="button" class="primary-action">Open ISM Media Simulation</button></div>
-        <div class="scientific-tools-boundary"><strong>Model boundary:</strong> physical and hypothesis layers remain explicitly separated. Computationally expensive stages must be resumable/cooperative rather than monopolizing the browser main thread.</div>
-      </section>
-      <section class="scientific-tools-panel no-print" data-scientific-tools-panel="double-slit" hidden>
-        <p class="eyebrow">Quantum interference baseline and hypothesis framework</p>
-        <h3>Double Slit Experiment Visualizer</h3>
-        <p>Compare coherent-wave intensity, discrete quantum detections, and an explicitly separate classical comparator in an interactive 3D apparatus. Optional hypothesis layers remain isolated from the accepted baseline.</p>
-        <div class="scientific-tools-actions"><button id="scientific-tools-open-double-slit" type="button" class="primary-action">Open Double Slit Experiment</button></div>
-        <div class="scientific-tools-boundary"><strong>Execution boundary:</strong> distribution building, detector preparation, field sampling, and future higher-resolution propagation must advance in deterministic bounded chunks and visibly report progress instead of freezing the page.</div>
-      </section>`;
+      <section class="scientific-tools-panel no-print" data-scientific-tools-panel="ism-media-simulation" hidden><p class="eyebrow">Interstellar medium collision model</p><h3>ISM Media Simulation</h3><p>Cast phase-light vectors through literal 1:1 interstellar-medium particles, retain the physically bounded cosmological-constant term, resolve charged-proton magnetic response, optionally apply a separately labeled quantum-foam sensitivity model, retain the deterministic Shadow-key scattering operator, and collect all non-input cube faces concurrently.</p><div class="scientific-tools-actions"><button id="scientific-tools-open-ism" type="button" class="primary-action">Open ISM Media Simulation</button></div><div class="scientific-tools-boundary"><strong>Model boundary:</strong> physical and hypothesis layers remain explicitly separated. Computationally expensive stages must be resumable/cooperative rather than monopolizing the browser main thread.</div></section>
+      <section class="scientific-tools-panel no-print" data-scientific-tools-panel="double-slit" hidden><p class="eyebrow">Quantum interference baseline and hypothesis framework</p><h3>Double Slit Experiment Visualizer</h3><p>Compare coherent-wave intensity, discrete quantum detections, and an explicitly separate classical comparator in an interactive 3D apparatus. Optional hypothesis layers remain isolated from the accepted baseline.</p><div class="scientific-tools-actions"><button id="scientific-tools-open-double-slit" type="button" class="primary-action">Open Double Slit Experiment</button></div><div class="scientific-tools-boundary"><strong>Execution boundary:</strong> distribution building, detector preparation, field sampling, and future higher-resolution propagation must advance in deterministic bounded chunks and visibly report progress instead of freezing the page.</div></section>`;
 
     view.querySelectorAll('[data-scientific-tools-tab]').forEach(button => button.addEventListener('click', () => selectTab(button.dataset.scientificToolsTab)));
     view.querySelector('#scientific-tools-open-binary-cube-visualizer')?.addEventListener('click', event => void openBinaryCubeVisualizer(event.currentTarget));
@@ -579,45 +428,12 @@
   function initialize() {
     injectStyle();
     void loadCooperativeRunner().catch(error => console.error('Scientific Tools cooperative runner could not be preloaded.', error));
-    if (!initialized) {
-      buildWorkspace();
-      initialized = true;
-    }
+    if (!initialized) { buildWorkspace(); initialized = true; }
     return document.getElementById(VIEW_ID);
   }
 
   initialize();
   window.ScientificToolsWorkspace = Object.freeze({
-    initialize,
-    selectTab,
-    loadCooperativeRunner,
-    loadBinaryCubeVisualizer,
-    loadBinaryCubeLaboratory,
-    loadKeyGenerationVisualizer,
-    loadDecryptionDashboard,
-    loadCryptanalyticTestLab,
-    loadInformationAnalysisSuite,
-    loadCommunicationCapacityAnalyzer,
-    loadMediaForensicsSuite,
-    loadMediaForensicsDemoCorpus,
-    loadSteganalysisLab,
-    loadDiagnosticPipeline,
-    loadCubicDecryptor,
-    openBinaryCubeVisualizer,
-    openBinaryCubeLaboratory,
-    openKeyGenerationVisualizer,
-    openDiagnosticPipeline,
-    openDecryptionDashboard,
-    openCubicDecryptor,
-    openCryptanalyticTestLab,
-    openInformationAnalysisSuite,
-    openCommunicationCapacityAnalyzer,
-    openMediaForensicsSuite,
-    openMediaForensicsDemoCorpus,
-    openSteganalysisLab,
-    loadIsmLab,
-    openIsmSimulation,
-    loadDoubleSlitLab,
-    openDoubleSlitLab
+    initialize, selectTab, loadCooperativeRunner, loadBinaryCubeVisualizer, loadBinaryCubeLaboratory, loadKeyGenerationVisualizer, loadDecryptionDashboard, loadCryptanalyticTestLab, loadInformationAnalysisSuite, loadCommunicationCapacityAnalyzer, loadMediaForensicsSuite, loadMediaForensicsDemoCorpus, loadSteganalysisLab, loadDiagnosticPipeline, loadCubicDecryptor, openBinaryCubeVisualizer, openBinaryCubeLaboratory, openKeyGenerationVisualizer, openDiagnosticPipeline, openDecryptionDashboard, openCubicDecryptor, openCryptanalyticTestLab, openInformationAnalysisSuite, openCommunicationCapacityAnalyzer, openMediaForensicsSuite, openMediaForensicsDemoCorpus, openSteganalysisLab, loadIsmLab, openIsmSimulation, loadDoubleSlitLab, openDoubleSlitLab
   });
 })();
