@@ -214,7 +214,7 @@
       warhammerPlanetProfilePromise ||= loadScript('assets/warhammer-40k/shaders/planet-profile-v1.js?v=8');
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise]);
-      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=25');
+      warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=26');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
       return;
