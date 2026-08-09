@@ -26,7 +26,7 @@
   const MAGIC = Object.freeze([
     Object.freeze({ id: 'png', label: 'PNG image', bytes: Object.freeze([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]), classId: 'raster-image', mime: 'image/png' }),
     Object.freeze({ id: 'jpeg', label: 'JPEG image', bytes: Object.freeze([0xff,0xd8,0xff]), classId: 'raster-image', mime: 'image/jpeg' }),
-    Object.freeze({ id: 'gif', label: 'GIF image', bytes: Object.freeze([0x47,0x49,0x38]), classId: 'raster-image', mime: 'image/gif' }),
+    Object.freeze({ id: 'gif', label: 'GIF image', bytes: Object.freeze([0x47,0x49,0x46,0x38]), classId: 'raster-image', mime: 'image/gif' }),
     Object.freeze({ id: 'riff', label: 'RIFF container', bytes: Object.freeze([0x52,0x49,0x46,0x46]), classId: 'media-container', mime: 'application/riff' }),
     Object.freeze({ id: 'pdf', label: 'PDF document', bytes: Object.freeze([0x25,0x50,0x44,0x46]), classId: 'document', mime: 'application/pdf' }),
     Object.freeze({ id: 'zip', label: 'ZIP-family archive', bytes: Object.freeze([0x50,0x4b,0x03,0x04]), classId: 'archive', mime: 'application/zip' }),
