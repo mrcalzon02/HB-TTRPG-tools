@@ -11,8 +11,11 @@ on:
       - "binary-cube-media-forensics-demo-corpus.js"
       - "scientific-tools-local-media.js"
       - "docs/raster-unresolved-evidence-priors.md"
+      - "docs/raster-unresolved-evidence-corpus-20260809.md"
       - "scripts/research-raster-unresolved-evidence-corpus.mjs"
+      - "scripts/analyze-raster-unresolved-matched-pairs.mjs"
       - "scripts/validate-raster-unresolved-evidence-corpus.mjs"
+      - "scripts/validate-raster-unresolved-matched-pairs.mjs"
       - "scripts/validate-raster-unresolved-evidence-provenance.mjs"
   workflow_dispatch:
 
@@ -52,7 +55,9 @@ jobs:
           node --check binary-cube-steganalysis-engine.js
           node --check binary-cube-steganalysis-evidence-profile.js
           node --check scripts/research-raster-unresolved-evidence-corpus.mjs
+          node --check scripts/analyze-raster-unresolved-matched-pairs.mjs
           node --check scripts/validate-raster-unresolved-evidence-corpus.mjs
+          node --check scripts/validate-raster-unresolved-matched-pairs.mjs
           node --check scripts/validate-raster-unresolved-evidence-provenance.mjs
 
       - name: Validate provisional-prior provenance
@@ -60,6 +65,9 @@ jobs:
 
       - name: Characterize unresolved evidence across controlled carriers
         run: node scripts/validate-raster-unresolved-evidence-corpus.mjs
+
+      - name: Analyze clean-to-embedded matched pairs
+        run: node scripts/validate-raster-unresolved-matched-pairs.mjs
 
       - name: Record research success
         if: ${{ success() }}
