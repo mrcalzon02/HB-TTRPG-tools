@@ -11,11 +11,20 @@
   const PROTON_CHARGE = 1.602176634e-19;
   const PROTON_MASS = 1.67262192369e-27;
   const EV_TO_JOULE = 1.602176634e-19;
+  const PLANCK_LENGTH = 1.616255e-35;
   const FACE_ORDER = ['+Z', '+X', '-X', '+Y', '-Y'];
   const DENSITY_PRESETS = Object.freeze({
     galactic: { label: 'Galactic average · 1 H-equivalent / cm³', perM3: 1e6 },
     local: { label: 'Local interstellar neutral H · 0.127 / cm³', perM3: 1.27e5 }
   });
+  const FOAM_MODELS = Object.freeze({
+    off: { label: 'Off', alpha: null },
+    constrained: { label: 'Constraint-scale benchmark · α = 0.72', alpha: 0.72 },
+    holographic: { label: 'Holographic benchmark · α = 2/3', alpha: 2 / 3 },
+    randomWalk: { label: 'Random-walk benchmark · α = 1/2', alpha: 0.5 },
+    custom: { label: 'Custom α', alpha: null }
+  });
+  const FOAM_PROPAGATION_CAP_RADIANS = 0.35;
 
   let activeSetting = 'scientific-tools';
   let lastRun = null;
@@ -26,7 +35,6 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[character]));
-
   const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 
   function hash32(text) {
@@ -47,6 +55,12 @@
       state ^= state << 5;
       return (state >>> 0) / 4294967296;
     };
+  }
+
+  function gaussian(random) {
+    const u1 = Math.max(Number.MIN_VALUE, random());
+    const u2 = random();
+    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(Math.PI * 2 * u2);
   }
 
   function physicalSideMeters(particleCount, densityPerM3) {
@@ -124,7 +138,7 @@
     const link = document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'interstellar-media-collisions-lab.css?v=20260809-ism-3d-magnetic-1';
+    link.href = 'interstellar-media-collisions-lab.css?v=20260809-ism-quantum-foam-1';
     document.head.appendChild(link);
   }
 
@@ -142,7 +156,7 @@
           <div>
             <p class="ism-lab-eyebrow">Scientific Tools · Interstellar Media Collisions</p>
             <h2 id="ism-lab-title">Vectorized Shadow Casting Laboratory</h2>
-            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with a physically bounded Λ term, a charged-proton Lorentz-response layer, and a separately keyed Shadow-scattering layer.</p>
+            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with a physically bounded Λ term, a charged-proton Lorentz-response layer, an explicit quantum-foam hypothesis layer, and a separately keyed Shadow-scattering layer.</p>
           </div>
           <button type="button" class="ism-lab-close" data-ism-close aria-label="Close Interstellar Media Collisions Lab">×</button>
         </header>
@@ -205,6 +219,29 @@
               </label>
             </div>
 
+            <div class="ism-control-group">
+              <p class="ism-control-group-title">Quantum-foam hypothesis layer</p>
+              <label>Foam accumulation model
+                <select id="ism-foam-model">
+                  <option value="off">Off</option>
+                  <option value="constrained" selected>Constraint-scale benchmark · α = 0.72</option>
+                  <option value="holographic">Holographic benchmark · α = 2/3</option>
+                  <option value="randomWalk">Random-walk benchmark · α = 1/2</option>
+                  <option value="custom">Custom α</option>
+                </select>
+              </label>
+              <label>Quantum foam seed
+                <input id="ism-foam-seed" type="text" value="foam-seed-01" autocomplete="off">
+              </label>
+              <label>Custom accumulation exponent α <output id="ism-foam-alpha-value">0.720</output>
+                <input id="ism-foam-alpha" type="range" min="0.5" max="1" step="0.005" value="0.72">
+              </label>
+              <label>Exploratory foam gain <output id="ism-foam-gain-value">10^0 · physical baseline</output>
+                <input id="ism-foam-gain" type="range" min="0" max="24" step="1" value="0">
+              </label>
+              <p class="ism-lab-note"><strong>Hypothesis boundary:</strong> spacetime foam has no established proton-force law. This laboratory maps the α-model path-length uncertainty δℓ ≈ ℓ^(1−α)ℓP^α into a zero-mean stochastic angular-jitter proxy. Gain above 10^0 is a numerical sensitivity test, not a physical prediction.</p>
+            </div>
+
             <label>Shadow impact reflectivity randomness <output id="ism-reflectivity-value">28%</output>
               <input id="ism-reflectivity" type="range" min="0" max="100" step="1" value="28">
             </label>
@@ -213,7 +250,7 @@
             </label>
 
             <button id="ism-run" type="button" class="ism-lab-run">Cast Phase Beam</button>
-            <p class="ism-lab-note"><strong>Physics boundary:</strong> the magnetic term is the Lorentz response of a proton test trajectory in a uniform ISM field. A real photon is not classically bent by that field. Λ and magnetic quantities are physical-model terms; Shadow coupling remains a separate deterministic experimental operator.</p>
+            <p class="ism-lab-note"><strong>Physics boundary:</strong> the magnetic term is the Lorentz response of a proton test trajectory in a uniform ISM field. A real photon is not classically bent by that field. Λ and magnetic quantities are physical-model terms; the foam layer is an explicitly labeled phenomenological hypothesis; Shadow coupling remains a separate deterministic experimental operator. The foam density output is only the geometric sensitivity n ∝ L⁻³, not evidence that dark energy couples to baryonic density.</p>
           </aside>
 
           <main class="ism-lab-stage">
@@ -224,8 +261,8 @@
                 <button id="ism-reset-view" type="button">Reset view</button>
                 <button id="ism-auto-orbit" type="button" aria-pressed="false">Auto orbit</button>
               </div>
-              <div id="ism-viewport" class="ism-lab-viewport" role="img" aria-label="Interactive three-dimensional interstellar-medium cube, magnetic field vector, particles, and phase trajectories"></div>
-              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— magnetized proton-response trajectory</span><span>➜ ISM magnetic field</span><span>× keyed Shadow impact</span></div>
+              <div id="ism-viewport" class="ism-lab-viewport" role="img" aria-label="Interactive three-dimensional interstellar-medium cube, magnetic field vector, particles, quantum-foam hypothesis perturbations, and phase trajectories"></div>
+              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— magnetized proton-response trajectory</span><span>➜ ISM magnetic field</span><span>◆ visible foam-jitter sample</span><span>× keyed Shadow impact</span></div>
             </div>
             <section class="ism-output-section">
               <div class="ism-output-heading"><div><p class="ism-lab-eyebrow">Concurrent detector array</p><h3>All non-input faces</h3></div><p>Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously; backscatter to −Z and retained rays are reported separately. During a cast, detector counts advance in the same order as the displayed trajectories.</p></div>
@@ -262,6 +299,8 @@
     bindRangeOutput('ism-field-strength', 'ism-field-strength-value', value => `${value.toFixed(2)} nT · ${(value * 10).toFixed(1)} μG`);
     bindRangeOutput('ism-field-azimuth', 'ism-field-azimuth-value', value => `${value.toFixed(0)}°`);
     bindRangeOutput('ism-field-elevation', 'ism-field-elevation-value', value => `${value.toFixed(0)}°`);
+    bindRangeOutput('ism-foam-alpha', 'ism-foam-alpha-value', value => value.toFixed(3));
+    bindRangeOutput('ism-foam-gain', 'ism-foam-gain-value', value => value === 0 ? '10^0 · physical baseline' : `10^${value} · exploratory`);
 
     panel.addEventListener('keydown', event => {
       if (event.key === 'Escape') closePanel();
@@ -344,6 +383,94 @@
       : Infinity;
     const magneticAcceleration90 = proton.speed * gyroAngularFrequency;
     return { ...proton, bTesla, direction, gyroAngularFrequency, gyroRadius90, magneticAcceleration90 };
+  }
+
+  function foamAlpha(config) {
+    if (config.foamModel === 'off') return null;
+    if (config.foamModel === 'custom') return clamp(config.foamAlpha, 0.5, 1);
+    return FOAM_MODELS[config.foamModel]?.alpha ?? 0.72;
+  }
+
+  function quantumFoamPhysics(config, side, density) {
+    const alpha = foamAlpha(config);
+    if (alpha == null) {
+      return {
+        enabled: false,
+        model: 'off',
+        alpha: null,
+        gain: 1,
+        baselineDistanceRms: 0,
+        baselineFractionRms: 0,
+        appliedDistanceRms: 0,
+        sigmaAngle: 0,
+        propagationSigma: 0,
+        propagationCapped: false,
+        transverseShiftRms: 0,
+        baselineDensityFractionRms: 0,
+        appliedDensityFractionRms: 0,
+        baselineDensityDeltaRms: 0,
+        appliedDensityDeltaRms: 0
+      };
+    }
+
+    const gain = Math.pow(10, clamp(config.foamGainDecades, 0, 24));
+    const baselineDistanceRms = Math.pow(side, 1 - alpha) * Math.pow(PLANCK_LENGTH, alpha);
+    const baselineFractionRms = baselineDistanceRms / side;
+    const appliedDistanceRms = baselineDistanceRms * gain;
+    const sigmaAngle = appliedDistanceRms / side;
+    const propagationSigma = Math.min(sigmaAngle, FOAM_PROPAGATION_CAP_RADIANS);
+    const baselineDensityFractionRms = 3 * baselineFractionRms;
+    const appliedDensityFractionRms = baselineDensityFractionRms * gain;
+
+    return {
+      enabled: true,
+      model: config.foamModel,
+      alpha,
+      gain,
+      baselineDistanceRms,
+      baselineFractionRms,
+      appliedDistanceRms,
+      sigmaAngle,
+      propagationSigma,
+      propagationCapped: sigmaAngle > FOAM_PROPAGATION_CAP_RADIANS,
+      transverseShiftRms: side * sigmaAngle,
+      baselineDensityFractionRms,
+      appliedDensityFractionRms,
+      baselineDensityDeltaRms: density * baselineDensityFractionRms,
+      appliedDensityDeltaRms: density * appliedDensityFractionRms
+    };
+  }
+
+  function tangentBasis(direction) {
+    const reference = Math.abs(direction.z) < 0.82
+      ? { x: 0, y: 0, z: 1 }
+      : { x: 0, y: 1, z: 0 };
+    const first = vectorNormalize(vectorCross(direction, reference));
+    const second = vectorNormalize(vectorCross(direction, first));
+    return { first, second };
+  }
+
+  function applyFoamKick(direction, random, rmsAngle) {
+    if (!(rmsAngle > 0)) return { direction, angle: 0 };
+    const axisSigma = rmsAngle / Math.sqrt(2);
+    const firstAngle = gaussian(random) * axisSigma;
+    const secondAngle = gaussian(random) * axisSigma;
+    const angle = Math.hypot(firstAngle, secondAngle);
+    if (!(angle > 1e-15)) return { direction, angle };
+
+    const { first, second } = tangentBasis(direction);
+    const tangent = vectorNormalize(vectorAdd(
+      vectorScale(first, firstAngle),
+      vectorScale(second, secondAngle)
+    ));
+    const boundedAngle = Math.min(angle, FOAM_PROPAGATION_CAP_RADIANS);
+    return {
+      direction: vectorNormalize(vectorAdd(
+        vectorScale(direction, Math.cos(boundedAngle)),
+        vectorScale(tangent, Math.sin(boundedAngle))
+      )),
+      angle
+    };
   }
 
   function nextBoundary(position, direction, side) {
@@ -439,9 +566,13 @@
     const aperture = side * 0.16;
     const reflectivity = config.reflectivity / 100;
     const magnetics = magneticPhysics(config);
+    const foam = quantumFoamPhysics(config, side, density);
+    const foamKickCount = Math.max(1, config.events + 1);
+    const foamKickSigma = foam.propagationSigma / Math.sqrt(foamKickCount);
 
     for (let rayIndex = 0; rayIndex < config.rayCount; rayIndex += 1) {
       const phase = ((rayIndex / Math.max(1, config.rayCount)) * Math.PI * 2 + beamRandom() * 0.12) % (Math.PI * 2);
+      const foamRandom = rngFrom(`${config.foamSeed}|foam|${config.foamModel}|${foam.alpha}|${config.foamGainDecades}|${rayIndex}`);
       let position = {
         x: clamp(center + (beamRandom() - 0.5) * aperture, 0, side),
         y: clamp(center + (beamRandom() - 0.5) * aperture, 0, side),
@@ -450,6 +581,13 @@
       let direction = vectorNormalize({ x: Math.cos(phase) * 0.012, y: Math.sin(phase) * 0.012, z: 1 });
       const path = [{ ...position }];
       const impacts = [];
+      const foamEvents = [];
+      let foamKickSquares = 0;
+
+      const initialFoam = applyFoamKick(direction, foamRandom, foamKickSigma);
+      direction = initialFoam.direction;
+      foamKickSquares += initialFoam.angle * initialFoam.angle;
+      foamEvents.push({ position: { ...position }, angle: initialFoam.angle });
 
       for (let eventIndex = 0; eventIndex < config.events; eventIndex += 1) {
         const remaining = nextBoundary(position, direction, side);
@@ -467,6 +605,11 @@
         const keyedImpact = shadowRandom() < reflectivity;
         impacts.push({ position: { ...position }, particleIndex, keyedImpact, particle });
         if (keyedImpact) direction = reflectDirection(direction, shadowRandom, reflectivity, phase + eventIndex * 0.37);
+
+        const foamKick = applyFoamKick(direction, foamRandom, foamKickSigma);
+        direction = foamKick.direction;
+        foamKickSquares += foamKick.angle * foamKick.angle;
+        foamEvents.push({ position: { ...position }, angle: foamKick.angle });
       }
 
       const boundary = nextBoundary(position, direction, side);
@@ -480,7 +623,14 @@
         if (!advanced.samples.length) path.push({ ...position });
         outputs[boundary.face] = (outputs[boundary.face] || 0) + 1;
       }
-      rays.push({ phase, path, impacts, exitFace: boundary.face || 'retained' });
+      rays.push({
+        phase,
+        path,
+        impacts,
+        foamEvents,
+        foamAppliedRmsAngle: Math.sqrt(foamKickSquares),
+        exitFace: boundary.face || 'retained'
+      });
     }
 
     const lambdaAcceleration = LAMBDA_COEFFICIENT * side;
@@ -492,6 +642,9 @@
     const magneticToLambdaAcceleration = lambdaAcceleration > 0
       ? magnetics.magneticAcceleration90 / lambdaAcceleration
       : Infinity;
+    const magneticToFoamShift = foam.transverseShiftRms > 0
+      ? magneticDeflectionAcrossCube / foam.transverseShiftRms
+      : Infinity;
 
     return {
       ...config,
@@ -501,11 +654,13 @@
       rays,
       outputs,
       magnetics,
+      foam,
       lambdaAcceleration,
       lightTransit,
       lambdaDisplacementAcrossTransit,
       magneticDeflectionAcrossCube,
-      magneticToLambdaAcceleration
+      magneticToLambdaAcceleration,
+      magneticToFoamShift
     };
   }
 
@@ -712,6 +867,23 @@
     );
     rayGroup.add(line);
 
+    if (result.foam.enabled && result.foam.propagationSigma > 1e-8) {
+      const foamPositions = [];
+      ray.foamEvents.forEach(event => {
+        if (!(event.angle > 1e-8)) return;
+        const point = toScenePoint(event.position, result.side, THREE);
+        foamPositions.push(point.x, point.y, point.z);
+      });
+      if (foamPositions.length) {
+        const foamGeometry = new THREE.BufferGeometry();
+        foamGeometry.setAttribute('position', new THREE.Float32BufferAttribute(foamPositions, 3));
+        rayGroup.add(new THREE.Points(
+          foamGeometry,
+          new THREE.PointsMaterial({ color: 0xb98cff, size: 0.021, transparent: true, opacity: 0.88, sizeAttenuation: true })
+        ));
+      }
+    }
+
     const keyed = ray.impacts.filter(impact => impact.keyedImpact);
     if (keyed.length) {
       const impactPositions = [];
@@ -735,6 +907,10 @@
       ? `${(result.protonEnergyEv / 1e6).toFixed(result.protonEnergyEv >= 1e8 ? 0 : 1)} MeV`
       : `${(result.protonEnergyEv / 1e3).toFixed(0)} keV`;
     const bMicrogauss = result.fieldStrengthNt * 10;
+    const foamLabel = result.foam.enabled
+      ? `${FOAM_MODELS[result.foam.model]?.label || 'Custom'}${result.foam.model === 'custom' ? ` · α = ${result.foam.alpha.toFixed(3)}` : ''}`
+      : 'Off';
+    const foamRatio = Number.isFinite(result.magneticToFoamShift) ? formatScientific(result.magneticToFoamShift) : '∞';
     target.innerHTML = [
       ['Literal particles', result.particleCount.toLocaleString()],
       ['Physical cube edge', formatLength(result.side)],
@@ -747,7 +923,15 @@
       ['Magnetic acceleration', `${formatScientific(result.magnetics.magneticAcceleration90)} m/s²`],
       ['aB / aΛ @ edge', Number.isFinite(result.magneticToLambdaAcceleration) ? formatScientific(result.magneticToLambdaAcceleration) : '∞'],
       ['Λ acceleration @ edge', `${formatScientific(result.lambdaAcceleration)} m/s²`],
-      ['Λ displacement / transit', `${formatScientific(result.lambdaDisplacementAcrossTransit)} m`]
+      ['Λ displacement / transit', `${formatScientific(result.lambdaDisplacementAcrossTransit)} m`],
+      ['Quantum foam model', foamLabel],
+      ['Baseline foam δℓ', formatLength(result.foam.baselineDistanceRms)],
+      ['Applied foam θ RMS', `${formatScientific(result.foam.sigmaAngle)} rad`],
+      ['Foam transverse shift', formatLength(result.foam.transverseShiftRms)],
+      ['Magnetic / foam shift', foamRatio],
+      ['Baseline |Δn| proxy', `${formatScientific(result.foam.baselineDensityDeltaRms)} m⁻³`],
+      ['Applied |Δn| / n proxy', formatScientific(result.foam.appliedDensityFractionRms)],
+      ['Foam gain', `10^${result.foamGainDecades}${result.foam.propagationCapped ? ' · propagation capped' : ''}`]
     ].map(([label, value]) => `<div class="ism-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
   }
 
@@ -769,7 +953,7 @@
     }).join('');
     const backscatter = outputs['-Z'] || 0;
     const retained = outputs.retained || 0;
-    secondary.innerHTML = `<span>Backscatter to input −Z: <strong>${backscatter}</strong></span><span>Retained/in-cube: <strong>${retained}</strong></span><span>Cast progress: <strong>${clampedVisible}/${result.rayCount}</strong></span><span>Physical light transit: <strong>${esc(formatScientific(result.lightTransit))} s</strong></span>`;
+    secondary.innerHTML = `<span>Backscatter to input −Z: <strong>${backscatter}</strong></span><span>Retained/in-cube: <strong>${retained}</strong></span><span>Cast progress: <strong>${clampedVisible}/${result.rayCount}</strong></span><span>Physical light transit: <strong>${esc(formatScientific(result.lightTransit))} s</strong></span><span>Foam θ RMS: <strong>${esc(formatScientific(result.foam.sigmaAngle))} rad</strong></span>`;
   }
 
   function readConfig() {
@@ -783,6 +967,10 @@
       fieldAzimuthDeg: Number(document.getElementById('ism-field-azimuth')?.value || 125),
       fieldElevationDeg: Number(document.getElementById('ism-field-elevation')?.value || 37),
       protonEnergyEv: Number(document.getElementById('ism-proton-energy')?.value || 1e6),
+      foamModel: document.getElementById('ism-foam-model')?.value || 'constrained',
+      foamSeed: document.getElementById('ism-foam-seed')?.value || 'foam-seed-01',
+      foamAlpha: Number(document.getElementById('ism-foam-alpha')?.value || 0.72),
+      foamGainDecades: Number(document.getElementById('ism-foam-gain')?.value || 0),
       beamSeed: document.getElementById('ism-beam-seed')?.value || 'phase-light-01',
       shadowKey: document.getElementById('ism-shadow-key')?.value || 'shadow-key-01',
       setting: activeSetting
@@ -879,7 +1067,9 @@
       LAMBDA_COEFFICIENT,
       DENSITY_PRESETS,
       PROTON_CHARGE,
-      PROTON_MASS
+      PROTON_MASS,
+      PLANCK_LENGTH,
+      FOAM_MODELS
     }),
     openPanel,
     closePanel,
