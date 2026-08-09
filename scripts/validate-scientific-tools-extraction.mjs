@@ -84,7 +84,7 @@ checks.push(includes('Main menu cache-refreshes the current Scientific Tools ent
   'Information & Deobfuscation Analysis Suite',
   'Communication Capacity Analyzer',
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=20260809-communication-capacity-1')",
+  "loadScript('scientific-tools-entry.js?v=20260809-communication-capacity-2')",
   'ensureScientificToolsView();'
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
@@ -177,7 +177,7 @@ checks.push(excludes('Binary Cube laboratory no longer performs the primary expe
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
-  "const ASSET_VERSION = '20260809-communication-capacity-1';",
+  "const ASSET_VERSION = '20260809-communication-capacity-2';",
   'function loadCooperativeRunner()',
   "loadScript('scientific-tools-cooperative-runner.js'",
   'await loadCooperativeRunner();',
@@ -306,6 +306,11 @@ checks.push(includes('Communication Capacity Analyzer implements the McCowan-Han
   'function sampleSufficiency(',
   'function lagMutualInformation(',
   'function analyzeCommunicationCapacity(',
+  'function analyzeCommunicationCapacityAsync(',
+  'function cancelActiveAnalysis(',
+  'new root.Worker(',
+  'WORKER_HEARTBEAT_MS',
+  'still working',
   'Adult dolphin whistles',
   'undersampled',
   'not proof of language'
@@ -414,7 +419,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.10.0',
+  schemaVersion: '0.10.1',
   pass: true,
   checkCount: checks.length,
   checks
