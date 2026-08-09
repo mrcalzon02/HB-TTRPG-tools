@@ -1,0 +1,30 @@
+/* Cafarron Corridor — subordinate Imperial vessel history register */
+.wh-vessel-history-register{margin-top:1rem;border-top:1px solid rgba(54,255,115,.22);padding-top:.85rem}
+.wh-vessel-history-register-head{margin-bottom:.75rem;padding:.7rem .8rem;border:1px solid rgba(54,255,115,.16);background:linear-gradient(90deg,rgba(15,255,85,.045),transparent 65%),rgba(0,12,5,.44);box-shadow:inset 0 0 18px rgba(26,255,100,.025)}
+.wh-vessel-history-register-head h3{margin:.1rem 0 .3rem;color:var(--crt-text-strong,#b8ffca);text-shadow:0 0 7px rgba(31,224,106,.16)}
+.wh-vessel-history-file{position:relative;margin:.55rem 0;border:1px solid rgba(55,225,108,.22);background:repeating-linear-gradient(180deg,rgba(130,255,168,.018) 0 1px,transparent 1px 4px),linear-gradient(180deg,rgba(18,105,48,.08),rgba(1,12,5,.62));box-shadow:inset 0 0 16px rgba(32,220,96,.025),0 0 9px rgba(10,150,55,.025)}
+.wh-vessel-history-file[open]{border-color:rgba(85,255,139,.36);box-shadow:inset 0 0 22px rgba(32,220,96,.04),0 0 13px rgba(10,180,65,.055)}
+.wh-vessel-history-summary{display:grid;grid-template-columns:2.1rem minmax(0,1fr);grid-template-areas:"mark head" "mark meta";gap:.12rem .55rem;align-items:center;min-height:3rem;padding:.55rem .72rem;cursor:pointer;list-style:none;user-select:none}
+.wh-vessel-history-summary::-webkit-details-marker{display:none}
+.wh-vessel-history-summary::after{content:"UNSEAL";position:absolute;right:.6rem;top:.48rem;color:rgba(132,255,170,.42);font:600 .56rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em}
+.wh-vessel-history-file[open]>.wh-vessel-history-summary::after{content:"RESEAL"}
+.wh-vessel-history-mark{grid-area:mark;display:grid;place-items:center;width:1.8rem;height:1.8rem;border:1px solid rgba(84,255,140,.34);color:#aaffc4;background:radial-gradient(circle,rgba(48,255,110,.10),rgba(0,0,0,.1));text-shadow:0 0 8px rgba(70,255,125,.28)}
+.wh-vessel-history-head{grid-area:head;padding-right:4rem;color:var(--crt-text-strong,#b8ffca);font-weight:700;letter-spacing:.035em}
+.wh-vessel-history-meta{grid-area:meta;color:rgba(127,235,157,.67);font:600 .67rem/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.035em}
+.wh-vessel-history-body{border-top:1px solid rgba(55,225,108,.16);padding:.75rem}
+.wh-vessel-history-ledger{margin:0 0 .8rem}
+.wh-vessel-history-timeline{position:relative;display:grid;gap:.55rem;margin-top:.5rem;padding-left:.55rem}
+.wh-vessel-history-timeline::before{content:"";position:absolute;left:4.58rem;top:.15rem;bottom:.15rem;width:1px;background:linear-gradient(180deg,rgba(125,255,163,.08),rgba(125,255,163,.42),rgba(125,255,163,.08));box-shadow:0 0 6px rgba(45,255,105,.11)}
+.wh-vessel-history-event{position:relative;display:grid;grid-template-columns:3.45rem minmax(0,1fr);gap:1rem;padding:.45rem .55rem .5rem 0;background:linear-gradient(90deg,transparent,rgba(33,220,92,.018))}
+.wh-vessel-history-event::before{content:"";position:absolute;left:3.76rem;top:.92rem;width:.45rem;height:.45rem;border:1px solid rgba(96,255,145,.48);background:#07140b;transform:rotate(45deg);box-shadow:0 0 6px rgba(47,255,105,.17)}
+.wh-vessel-history-event.is-combat::before{box-shadow:0 0 8px rgba(255,105,65,.28)}
+.wh-vessel-history-event.is-damage::before{box-shadow:0 0 8px rgba(255,188,70,.25)}
+.wh-vessel-history-event.is-recovery::before{box-shadow:0 0 8px rgba(98,195,255,.24)}
+.wh-vessel-history-event.is-current::before{background:rgba(65,255,121,.23);box-shadow:0 0 10px rgba(65,255,121,.38)}
+.wh-vessel-history-stamp{align-self:start;padding-top:.45rem;color:rgba(150,255,181,.55);text-align:right;font:700 .58rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em}
+.wh-vessel-history-event-body{min-width:0;padding-left:.25rem}
+.wh-vessel-history-event-body h5{margin:0 0 .14rem;color:var(--crt-text-strong,#b8ffca);font-size:.86rem;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 0 5px rgba(41,235,102,.13)}
+.wh-vessel-history-event-body p{margin:.14rem 0;line-height:1.38}
+.wh-vessel-history-event-body .wh-small{color:rgba(110,225,145,.5);font-size:.67rem;text-transform:uppercase;letter-spacing:.07em}
+@media(max-width:650px){.wh-vessel-history-head{padding-right:0}.wh-vessel-history-summary::after{display:none}.wh-vessel-history-event{grid-template-columns:3rem minmax(0,1fr);gap:.75rem}.wh-vessel-history-timeline::before{left:4rem}.wh-vessel-history-event::before{left:3.2rem}}
+@media(prefers-reduced-motion:reduce){.wh-vessel-history-file,.wh-vessel-history-file *{transition:none!important;animation:none!important}}
