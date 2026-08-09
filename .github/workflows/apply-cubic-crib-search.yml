@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/apply-cubic-crib-search.yml"
       - "scripts/apply-cubic-crib-search.py"
+      - "scripts/fix-cubic-crib-migration-hex.py"
 
 permissions:
   contents: write
@@ -35,6 +36,7 @@ jobs:
           git fetch origin main
           git checkout main
           git reset --hard origin/main
+          python scripts/fix-cubic-crib-migration-hex.py
           python scripts/apply-cubic-crib-search.py
           node --check binary-cube-cubic-decryptor-engine.js
           node --check binary-cube-cubic-decryptor-worker.js
