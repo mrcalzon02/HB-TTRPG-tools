@@ -75,7 +75,15 @@ jobs:
         run: node scripts/validate-raster-unresolved-matched-pairs.mjs
 
       - name: Test independent carriers and untouched holdout
-        run: node scripts/validate-raster-unresolved-independent-carriers.mjs
+        run: node scripts/validate-raster-unresolved-independent-carriers.mjs | tee independent-carriers.json
+
+      - name: Publish independent-carrier holdout receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: raster-independent-carrier-holdout
+          path: independent-carriers.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Record research success
         if: ${{ success() }}
