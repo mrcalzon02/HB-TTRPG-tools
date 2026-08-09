@@ -16,13 +16,15 @@
   let warhammerVesselHistoryPromise = null;
   let warhammerPersonnelPromise = null;
   let warhammerSectorEventsPromise = null;
+  let warhammerMedicaeCatalogPromise = null;
+  let warhammerMedicaePromise = null;
   let barotraumaImagePreloads = null;
   const loadedScripts = new Map();
 
   const BAROTRAUMA_ASSET_URLS = Object.freeze([
     'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_04.png',
-    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_02.png',
-    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_10_images/retro_futurist_interior_atlas_06.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_02.png',
+    'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/retro_futurist_interior_atlas_06.png',
     'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_dystopia_grid.png',
     'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_shipyard_collage.png',
     'desktop/barotrauma-world-sim/src/main/resources/io/github/mrcalzon02/barotrauma/assets/composite_atlas_images/futuristic_industrial_megastructure_collage.png',
@@ -221,7 +223,9 @@
       warhammerVesselHistoryPromise ||= loadScript('assets/warhammer-40k/imperial-vessel-history-v1.js?v=5');
       warhammerPersonnelPromise ||= loadScript('assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=3');
       warhammerSectorEventsPromise ||= loadScript('assets/warhammer-40k/imperial-sector-events-v1.js?v=3');
-      await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise]);
+      warhammerMedicaeCatalogPromise ||= loadScript('assets/warhammer-40k/imperial-medicae-catalog-v1.js?v=1');
+      warhammerMedicaePromise ||= warhammerMedicaeCatalogPromise.then(() => loadScript('assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=1'));
+      await Promise.all([warhammerLorePromise, warhammerPlanetCompositorPromise, warhammerLogisticsPromise, warhammerVesselHistoryPromise, warhammerPersonnelPromise, warhammerSectorEventsPromise, warhammerMedicaePromise]);
       warhammerWorkspacePromise ||= loadScript('warhammer-40k-workspace-v8.js?v=27');
       await Promise.all([warhammerWorkspacePromise, base.prepareView(viewId)]);
       await window.Warhammer40KWorkspace?.initialize?.();
