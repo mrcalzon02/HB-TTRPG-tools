@@ -14,10 +14,12 @@ on:
       - 'assets/warhammer-40k/imperial-vessel-history-v1.js'
       - 'assets/warhammer-40k/imperial-component-lineage-v1.js'
       - 'assets/warhammer-40k/imperial-personnel-lineage-v1.js'
+      - 'assets/warhammer-40k/imperial-dramatis-personae-v1.js'
       - 'assets/warhammer-40k/imperial-sector-events-v1.js'
       - 'assets/warhammer-40k/imperial-medicae-institutions-v1.js'
       - 'assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js'
       - 'tests/warhammer-chronology-integrity.test.js'
+      - 'tests/warhammer-dramatis-personae-integrity.test.js'
       - 'tests/warhammer-diegetic-language-integrity.test.js'
       - '.github/workflows/warhammer-diegetic-language-integrity.yml'
   workflow_dispatch:
@@ -46,11 +48,14 @@ jobs:
           node --check assets/warhammer-40k/imperial-vessel-history-v1.js
           node --check assets/warhammer-40k/imperial-component-lineage-v1.js
           node --check assets/warhammer-40k/imperial-personnel-lineage-v1.js
+          node --check assets/warhammer-40k/imperial-dramatis-personae-v1.js
           node --check assets/warhammer-40k/imperial-sector-events-v1.js
           node --check assets/warhammer-40k/imperial-medicae-institutions-v1.js
           node --check assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js
       - name: Validate Cafarron chronology authority
         run: node tests/warhammer-chronology-integrity.test.js
+      - name: Validate chronicle Dramatis Personae
+        run: node tests/warhammer-dramatis-personae-integrity.test.js
       - name: Enforce diegetic archive language
         run: node tests/warhammer-diegetic-language-integrity.test.js
       - name: Revalidate personnel, biography and Medicae registers
