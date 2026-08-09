@@ -1,97 +1,847 @@
-body.warhammer-archive-active{--wh-ink:#e8dcc0;--wh-muted:#aaa08a;--wh-brass:#b49142;--wh-bright:#e0c77f;--wh-red:#8f2d2d;--wh-line:rgba(198,171,104,.42);--wh-panel:rgba(15,18,17,.96);background:radial-gradient(circle at 50% -20%,rgba(114,87,39,.24),transparent 44rem),#070909;color:var(--wh-ink)}
-body.warhammer-archive-active>.site-header,body.warhammer-archive-active>.site-footer{display:none!important}
+body.warhammer-archive-active{
+  --wh-ink:#9cffb5;
+  --wh-muted:#58a96f;
+  --wh-brass:#2bcf63;
+  --wh-bright:#c1ffd0;
+  --wh-red:#c1473f;
+  --wh-line:rgba(61,231,112,.34);
+  --wh-panel:rgba(3,17,10,.86);
+  --wh-panel-deep:rgba(1,10,6,.94);
+  --wh-glow:rgba(42,255,107,.18);
+  --wh-glow-strong:rgba(96,255,143,.34);
+  --wh-phosphor:#4dff83;
+  --wh-phosphor-hot:#d2ffdc;
+  --wh-screen:#020806;
+  --wh-grid:rgba(39,185,87,.08);
+  background:
+    radial-gradient(ellipse at 50% -12%,rgba(21,154,62,.17),transparent 46rem),
+    radial-gradient(ellipse at 14% 30%,rgba(32,255,99,.035),transparent 33rem),
+    #010504;
+  color:var(--wh-ink);
+}
+body.warhammer-archive-active>.site-header,
+body.warhammer-archive-active>.site-footer{display:none!important}
 body.warhammer-archive-active main{max-width:none;margin:0;padding:0}
 body.warhammer-archive-active #warhammer-40k{min-height:100vh;padding:0}
-#warhammer-40k *{box-sizing:border-box}#warhammer-40k [hidden]{display:none!important}
-#warhammer-40k .wh-workspace{min-height:100vh;color:var(--wh-ink);font-family:Georgia,"Times New Roman",serif;background:repeating-linear-gradient(0deg,rgba(216,185,105,.025) 0 1px,transparent 1px 4px),radial-gradient(circle at 70% 0,rgba(125,92,37,.12),transparent 35rem),linear-gradient(rgba(8,10,10,.9),rgba(5,7,7,.98))}
-#warhammer-40k h1,#warhammer-40k h2,#warhammer-40k h3,#warhammer-40k h4,#warhammer-40k h5,#warhammer-40k p{margin-top:0}
-#warhammer-40k .wh-command{position:sticky;top:0;z-index:60;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:center;padding:.8rem clamp(.75rem,2vw,2rem);border-bottom:1px solid var(--wh-line);background:linear-gradient(180deg,rgba(31,33,29,.99),rgba(10,13,12,.99));box-shadow:0 .7rem 1.8rem rgba(0,0,0,.48)}
+
+#warhammer-40k *{box-sizing:border-box}
+#warhammer-40k [hidden]{display:none!important}
+#warhammer-40k button,
+#warhammer-40k input,
+#warhammer-40k select{font-family:inherit}
+
+#warhammer-40k .wh-workspace{
+  position:relative;
+  isolation:isolate;
+  min-height:100vh;
+  overflow:hidden;
+  color:var(--wh-ink);
+  font-family:Georgia,"Times New Roman",serif;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.28),transparent 8%,transparent 92%,rgba(0,0,0,.32)),
+    radial-gradient(ellipse at 50% 0,rgba(46,255,105,.075),transparent 54rem),
+    repeating-linear-gradient(90deg,transparent 0 79px,rgba(42,255,107,.012) 80px),
+    repeating-linear-gradient(0deg,rgba(76,255,128,.016) 0 1px,transparent 1px 4px),
+    linear-gradient(180deg,rgba(5,18,11,.97),rgba(1,7,4,.99));
+  text-shadow:
+    0 0 .45px rgba(218,255,225,.72),
+    0 0 5px rgba(53,255,108,.14);
+}
+#warhammer-40k .wh-workspace::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:90;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(125,255,157,.032) 0,
+      rgba(125,255,157,.032) 1px,
+      rgba(0,0,0,.018) 1px,
+      rgba(0,0,0,.018) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  mix-blend-mode:screen;
+  opacity:.56;
+  animation:wh-crt-flicker 7.8s steps(1,end) infinite;
+}
+#warhammer-40k .wh-workspace::after{
+  content:"";
+  position:fixed;
+  inset:-4%;
+  z-index:91;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,transparent 0 38%,rgba(76,255,129,.025) 46%,rgba(178,255,197,.055) 50%,rgba(40,183,83,.018) 54%,transparent 62%),
+    radial-gradient(ellipse at center,transparent 42%,rgba(0,18,8,.20) 73%,rgba(0,0,0,.74) 108%);
+  opacity:.82;
+  transform:translateY(-22%);
+  animation:wh-crt-roll 12s linear infinite;
+}
+
+#warhammer-40k h1,
+#warhammer-40k h2,
+#warhammer-40k h3,
+#warhammer-40k h4,
+#warhammer-40k h5,
+#warhammer-40k p{margin-top:0}
+
+#warhammer-40k h1,
+#warhammer-40k h2,
+#warhammer-40k h3{
+  text-shadow:
+    0 0 1px rgba(224,255,231,.9),
+    0 0 7px rgba(55,255,111,.22),
+    1px 0 0 rgba(34,173,73,.18),
+    -1px 0 0 rgba(34,173,73,.11);
+}
+
+#warhammer-40k .wh-command{
+  position:sticky;
+  top:0;
+  z-index:60;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:1rem;
+  align-items:center;
+  padding:.8rem clamp(.75rem,2vw,2rem);
+  border-bottom:1px solid rgba(74,255,127,.40);
+  background:
+    linear-gradient(180deg,rgba(5,25,13,.98),rgba(1,10,6,.985)),
+    repeating-linear-gradient(90deg,transparent 0 46px,rgba(67,255,119,.025) 47px);
+  box-shadow:
+    0 .75rem 2rem rgba(0,0,0,.64),
+    inset 0 -1px rgba(99,255,145,.10),
+    0 0 18px rgba(39,242,94,.06);
+  backdrop-filter:blur(5px) saturate(1.15);
+}
+#warhammer-40k .wh-command::after{
+  content:"ARCHIVE LINK // COGITATOR CHANNEL STABLE";
+  position:absolute;
+  right:1rem;
+  bottom:.16rem;
+  color:rgba(101,255,143,.28);
+  font:700 .48rem/1 ui-monospace,monospace;
+  letter-spacing:.16em;
+  pointer-events:none;
+}
+
 #warhammer-40k .wh-brand{display:flex;align-items:center;gap:.85rem;min-width:0}
-#warhammer-40k .wh-sigil{display:grid;place-items:center;width:3rem;height:3rem;flex:none;border:1px solid var(--wh-brass);clip-path:polygon(50% 0,88% 20%,100% 65%,72% 100%,28% 100%,0 65%,12% 20%);background:radial-gradient(circle,rgba(215,187,115,.22),rgba(143,45,45,.2));color:var(--wh-bright);font:900 1.05rem/1 ui-monospace,monospace}
-#warhammer-40k .wh-brand p{margin:0;color:var(--wh-bright);font:700 .68rem/1.25 ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase}
-#warhammer-40k .wh-brand h1{margin:.15rem 0 0;font-size:clamp(1rem,2.2vw,1.6rem);letter-spacing:.045em;text-transform:uppercase}
-#warhammer-40k .wh-actions,#warhammer-40k .wh-tabs,#warhammer-40k .wh-filters,#warhammer-40k .wh-layers,#warhammer-40k .wh-meta,#warhammer-40k .wh-entry-card-actions,#warhammer-40k .wh-modebar,#warhammer-40k .wh-viewport-actions{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-#warhammer-40k .wh-button,#warhammer-40k .wh-tab,#warhammer-40k .wh-filter,#warhammer-40k .wh-mode-button,#warhammer-40k .wh-viewport-button{appearance:none;min-height:2.65rem;border:1px solid var(--wh-line);border-radius:.14rem;padding:.58rem .78rem;background:linear-gradient(180deg,#292a24,#121513);color:var(--wh-ink);font:800 .73rem/1.2 ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;text-decoration:none}
-#warhammer-40k .wh-button:hover,#warhammer-40k .wh-tab:hover,#warhammer-40k .wh-filter:hover,#warhammer-40k .wh-mode-button:hover,#warhammer-40k .wh-viewport-button:hover{border-color:var(--wh-bright)}
-#warhammer-40k .wh-button:focus-visible,#warhammer-40k .wh-tab:focus-visible,#warhammer-40k .wh-filter:focus-visible,#warhammer-40k .wh-mode-button:focus-visible,#warhammer-40k .wh-viewport-button:focus-visible,#warhammer-40k input:focus-visible,#warhammer-40k select:focus-visible{outline:2px solid var(--wh-bright);outline-offset:2px}
-#warhammer-40k .wh-button.primary{border-color:rgba(220,194,123,.72);background:linear-gradient(180deg,#7c3430,#3d1515)}
-#warhammer-40k .wh-tab[aria-selected=true],#warhammer-40k .wh-filter[aria-pressed=true],#warhammer-40k .wh-mode-button[aria-pressed=true],#warhammer-40k .wh-vigil-toggle[aria-pressed=true]{border-color:var(--wh-bright);background:linear-gradient(180deg,#80672f,#392f19);color:#fff5d6}
-#warhammer-40k .wh-button:disabled,#warhammer-40k .wh-viewport-button:disabled{cursor:not-allowed;opacity:.44}
-#warhammer-40k .wh-tabs{padding:.7rem clamp(.75rem,2vw,2rem);border-bottom:1px solid var(--wh-line);background:rgba(14,17,16,.95)}
-#warhammer-40k .wh-command-ribbon{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.75rem;align-items:center;padding:.65rem clamp(.75rem,2vw,2rem);border-bottom:1px solid var(--wh-line);background:linear-gradient(90deg,rgba(55,46,27,.96),rgba(9,12,11,.98) 32%,rgba(13,16,14,.98));box-shadow:inset 0 -1px rgba(255,255,255,.025)}
-#warhammer-40k .wh-command-readouts{display:grid;grid-template-columns:repeat(4,minmax(9rem,1fr));gap:.45rem;min-width:0}
-#warhammer-40k .wh-command-readout{display:grid;gap:.16rem;min-width:0;border-left:.18rem solid rgba(224,199,127,.46);padding:.35rem .5rem;background:rgba(0,0,0,.18)}
-#warhammer-40k .wh-command-readout-label{color:var(--wh-bright);font:800 .58rem/1.2 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
-#warhammer-40k .wh-command-readout-value{overflow:hidden;color:#eee2c3;font:800 .68rem/1.3 ui-monospace,monospace;text-overflow:ellipsis;white-space:nowrap}
+#warhammer-40k .wh-sigil{
+  display:grid;
+  place-items:center;
+  width:3rem;
+  height:3rem;
+  flex:none;
+  border:1px solid rgba(91,255,138,.66);
+  clip-path:polygon(50% 0,88% 20%,100% 65%,72% 100%,28% 100%,0 65%,12% 20%);
+  background:
+    radial-gradient(circle,rgba(92,255,137,.18),rgba(4,22,11,.84) 68%),
+    #031008;
+  color:var(--wh-phosphor-hot);
+  font:900 1.05rem/1 ui-monospace,monospace;
+  box-shadow:
+    inset 0 0 13px rgba(65,255,119,.18),
+    0 0 16px rgba(52,255,105,.12);
+  text-shadow:0 0 8px rgba(72,255,125,.38);
+}
+#warhammer-40k .wh-brand p{
+  margin:0;
+  color:var(--wh-bright);
+  font:700 .68rem/1.25 ui-monospace,monospace;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-brand h1{
+  margin:.15rem 0 0;
+  color:#d6ffdf;
+  font-size:clamp(1rem,2.2vw,1.6rem);
+  letter-spacing:.045em;
+  text-transform:uppercase;
+}
+
+#warhammer-40k .wh-actions,
+#warhammer-40k .wh-tabs,
+#warhammer-40k .wh-filters,
+#warhammer-40k .wh-layers,
+#warhammer-40k .wh-meta,
+#warhammer-40k .wh-entry-card-actions,
+#warhammer-40k .wh-modebar,
+#warhammer-40k .wh-viewport-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  align-items:center;
+}
+
+#warhammer-40k .wh-button,
+#warhammer-40k .wh-tab,
+#warhammer-40k .wh-filter,
+#warhammer-40k .wh-mode-button,
+#warhammer-40k .wh-viewport-button{
+  appearance:none;
+  min-height:2.65rem;
+  border:1px solid rgba(66,234,113,.34);
+  border-radius:.08rem;
+  padding:.58rem .78rem;
+  background:
+    linear-gradient(180deg,rgba(20,70,38,.36),rgba(2,17,9,.82)),
+    linear-gradient(90deg,rgba(75,255,128,.035),transparent 60%);
+  color:#aaffbd;
+  font:800 .73rem/1.2 ui-monospace,monospace;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+  cursor:pointer;
+  text-decoration:none;
+  box-shadow:
+    inset 0 0 9px rgba(55,255,111,.045),
+    0 0 7px rgba(39,218,89,.035);
+  text-shadow:0 0 5px rgba(63,255,118,.20);
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease,
+    transform 120ms ease;
+}
+#warhammer-40k .wh-button:hover,
+#warhammer-40k .wh-tab:hover,
+#warhammer-40k .wh-filter:hover,
+#warhammer-40k .wh-mode-button:hover,
+#warhammer-40k .wh-viewport-button:hover{
+  border-color:rgba(137,255,171,.78);
+  color:#dbffe4;
+  background:linear-gradient(180deg,rgba(37,113,61,.48),rgba(3,24,13,.86));
+  box-shadow:
+    inset 0 0 12px rgba(75,255,127,.10),
+    0 0 14px rgba(56,255,111,.12);
+  transform:translateY(-1px);
+}
+#warhammer-40k .wh-button:focus-visible,
+#warhammer-40k .wh-tab:focus-visible,
+#warhammer-40k .wh-filter:focus-visible,
+#warhammer-40k .wh-mode-button:focus-visible,
+#warhammer-40k .wh-viewport-button:focus-visible,
+#warhammer-40k input:focus-visible,
+#warhammer-40k select:focus-visible{
+  outline:1px solid #a6ffbb;
+  outline-offset:2px;
+  box-shadow:0 0 0 2px rgba(58,255,111,.12),0 0 16px rgba(58,255,111,.16);
+}
+#warhammer-40k .wh-button.primary{
+  border-color:rgba(255,103,88,.56);
+  background:
+    linear-gradient(180deg,rgba(122,42,33,.64),rgba(38,9,9,.82)),
+    linear-gradient(90deg,rgba(77,255,126,.05),transparent);
+  color:#ccffd7;
+  box-shadow:inset 0 0 10px rgba(255,76,63,.05),0 0 8px rgba(255,80,70,.04);
+}
+#warhammer-40k .wh-tab[aria-selected=true],
+#warhammer-40k .wh-filter[aria-pressed=true],
+#warhammer-40k .wh-mode-button[aria-pressed=true],
+#warhammer-40k .wh-vigil-toggle[aria-pressed=true]{
+  border-color:rgba(144,255,174,.78);
+  background:
+    linear-gradient(180deg,rgba(42,132,70,.54),rgba(4,29,15,.84)),
+    repeating-linear-gradient(90deg,transparent 0 18px,rgba(133,255,166,.035) 19px);
+  color:#e1ffe7;
+  box-shadow:
+    inset .18rem 0 rgba(112,255,149,.72),
+    inset 0 0 12px rgba(72,255,126,.08),
+    0 0 12px rgba(50,255,104,.10);
+}
+#warhammer-40k .wh-button:disabled,
+#warhammer-40k .wh-viewport-button:disabled{cursor:not-allowed;opacity:.34;transform:none}
+
+#warhammer-40k .wh-tabs{
+  padding:.7rem clamp(.75rem,2vw,2rem);
+  border-bottom:1px solid rgba(61,231,112,.27);
+  background:rgba(2,14,8,.94);
+  box-shadow:inset 0 -8px 18px rgba(16,96,41,.035);
+}
+#warhammer-40k .wh-command-ribbon{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:.75rem;
+  align-items:center;
+  padding:.65rem clamp(.75rem,2vw,2rem);
+  border-bottom:1px solid rgba(61,231,112,.28);
+  background:
+    linear-gradient(90deg,rgba(16,72,34,.48),rgba(2,14,8,.97) 28%,rgba(3,18,10,.97));
+  box-shadow:inset 0 -1px rgba(129,255,164,.035);
+}
+#warhammer-40k .wh-command-readouts{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(9rem,1fr));
+  gap:.45rem;
+  min-width:0;
+}
+#warhammer-40k .wh-command-readout{
+  display:grid;
+  gap:.16rem;
+  min-width:0;
+  border-left:.18rem solid rgba(86,255,134,.48);
+  padding:.35rem .5rem;
+  background:rgba(0,9,4,.38);
+  box-shadow:inset 0 0 12px rgba(51,255,106,.025);
+}
+#warhammer-40k .wh-command-readout-label{
+  color:#82ff9e;
+  font:800 .58rem/1.2 ui-monospace,monospace;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-command-readout-value{
+  overflow:hidden;
+  color:#bdffcb;
+  font:800 .68rem/1.3 ui-monospace,monospace;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-shadow:0 0 5px rgba(65,255,119,.20);
+}
 #warhammer-40k .wh-command-rites{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.45rem}
 #warhammer-40k .wh-command-rites .wh-button{min-height:2.2rem;padding:.4rem .58rem;font-size:.61rem}
-#warhammer-40k .wh-workspace[data-preamble-seal=sealed] .wh-command-ribbon{border-bottom-color:rgba(224,199,127,.62)}
+#warhammer-40k .wh-workspace[data-preamble-seal=sealed] .wh-command-ribbon{
+  border-bottom-color:rgba(124,255,160,.50);
+  box-shadow:inset 0 -1px rgba(119,255,155,.12),0 0 10px rgba(55,255,110,.04);
+}
+
 #warhammer-40k .wh-shell{width:min(100%,118rem);margin:0 auto;padding:clamp(.8rem,2vw,1.6rem)}
-#warhammer-40k .wh-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(17rem,.55fr);gap:1rem;margin-bottom:1rem}
-#warhammer-40k .wh-panelbox,#warhammer-40k .wh-controls,#warhammer-40k .wh-record,#warhammer-40k .wh-map-card,#warhammer-40k .wh-map-details,#warhammer-40k .wh-docket-card{border:1px solid var(--wh-line);background:var(--wh-panel);box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)}
-#warhammer-40k .wh-panelbox,#warhammer-40k .wh-docket-card{padding:1rem}
-#warhammer-40k .wh-kicker{margin:0 0 .35rem;color:var(--wh-bright);font:800 .7rem/1.35 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase}
-#warhammer-40k .wh-hero h2{margin-bottom:.45rem;font-size:clamp(1.55rem,3vw,2.55rem);letter-spacing:.04em;text-transform:uppercase}
-#warhammer-40k .wh-note{border-left:.3rem solid var(--wh-brass);padding:.75rem;background:rgba(180,145,66,.08);color:#d8cba9}
-#warhammer-40k .wh-dl,#warhammer-40k .wh-definition{display:grid;grid-template-columns:minmax(8rem,.42fr) minmax(0,1fr);gap:.35rem .65rem;margin:0}
-#warhammer-40k dt{color:var(--wh-bright);font-weight:800}#warhammer-40k dd{margin:0;overflow-wrap:anywhere}
-#warhammer-40k .wh-controls{display:grid;gap:.75rem;padding:.9rem;margin-bottom:1rem}
-#warhammer-40k .wh-searchrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.7rem;align-items:end}
-#warhammer-40k label{display:grid;gap:.34rem;font-weight:800}
-#warhammer-40k input[type=search],#warhammer-40k select{width:100%;min-height:2.8rem;border:1px solid var(--wh-line);border-radius:.12rem;padding:.65rem .72rem;background:#090c0c;color:var(--wh-ink);font-size:1rem}
-#warhammer-40k .wh-status,#warhammer-40k .wh-small{color:var(--wh-muted);font:700 .76rem/1.45 ui-monospace,monospace}
-#warhammer-40k .wh-record-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,23rem),1fr));gap:.9rem}
-#warhammer-40k .wh-record{display:grid;align-content:start;gap:.65rem;padding:.95rem}#warhammer-40k .wh-record h3{margin:0;font-size:1.2rem}
-#warhammer-40k .wh-badge{display:inline-flex;align-items:center;min-height:1.65rem;padding:.2rem .45rem;border:1px solid var(--wh-line);background:rgba(180,145,66,.08);color:var(--wh-bright);font:800 .65rem/1 ui-monospace,monospace;letter-spacing:.035em;text-transform:uppercase}
-#warhammer-40k .wh-threat-badge{border-color:var(--badge-color);box-shadow:inset .22rem 0 var(--badge-color)}
-#warhammer-40k .wh-source{padding-top:.65rem;border-top:1px solid rgba(198,171,104,.22)}
-#warhammer-40k .wh-source a,#warhammer-40k .wh-docket-card a{color:#e2c77e;overflow-wrap:anywhere}
-#warhammer-40k .wh-pending{color:#f0ae8e;font-style:italic}
-#warhammer-40k .wh-empty{padding:2rem;border:1px dashed var(--wh-line);text-align:center}
+#warhammer-40k .wh-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(17rem,.55fr);
+  gap:1rem;
+  margin-bottom:1rem;
+}
+
+#warhammer-40k .wh-panelbox,
+#warhammer-40k .wh-controls,
+#warhammer-40k .wh-record,
+#warhammer-40k .wh-map-card,
+#warhammer-40k .wh-map-details,
+#warhammer-40k .wh-docket-card{
+  position:relative;
+  border:1px solid rgba(61,231,112,.29);
+  background:
+    linear-gradient(180deg,rgba(52,255,112,.035),rgba(0,0,0,0) 24%),
+    repeating-linear-gradient(0deg,rgba(77,255,128,.011) 0 1px,transparent 1px 4px),
+    var(--wh-panel);
+  box-shadow:
+    inset 0 0 0 1px rgba(134,255,166,.025),
+    inset 0 0 22px rgba(34,206,81,.025),
+    0 6px 20px rgba(0,0,0,.38);
+  backdrop-filter:blur(1.4px) saturate(1.12);
+}
+#warhammer-40k .wh-panelbox::after,
+#warhammer-40k .wh-controls::after,
+#warhammer-40k .wh-record::after,
+#warhammer-40k .wh-map-details::after,
+#warhammer-40k .wh-docket-card::after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(83,255,130,.055);
+  pointer-events:none;
+}
+#warhammer-40k .wh-panelbox,
+#warhammer-40k .wh-docket-card{padding:1rem}
+#warhammer-40k .wh-kicker{
+  margin:0 0 .35rem;
+  color:#68ef89;
+  font:800 .7rem/1.35 ui-monospace,monospace;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-shadow:0 0 6px rgba(56,255,111,.20);
+}
+#warhammer-40k .wh-hero h2{
+  margin-bottom:.45rem;
+  color:#d5ffdf;
+  font-size:clamp(1.55rem,3vw,2.55rem);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-note{
+  border-left:.3rem solid rgba(102,255,145,.72);
+  padding:.75rem;
+  background:
+    linear-gradient(90deg,rgba(67,255,119,.085),rgba(20,92,43,.025) 64%,transparent);
+  color:#aef7be;
+  box-shadow:inset 0 0 14px rgba(40,216,88,.025);
+}
+#warhammer-40k .wh-dl,
+#warhammer-40k .wh-definition{
+  display:grid;
+  grid-template-columns:minmax(8rem,.42fr) minmax(0,1fr);
+  gap:.35rem .65rem;
+  margin:0;
+}
+#warhammer-40k dt{color:#8effa8;font-weight:800}
+#warhammer-40k dd{margin:0;overflow-wrap:anywhere;color:#a7dab2}
+
+#warhammer-40k .wh-controls{
+  display:grid;
+  gap:.75rem;
+  padding:.9rem;
+  margin-bottom:1rem;
+}
+#warhammer-40k .wh-controls::before{
+  content:"QUERY CHANNEL // DATA-SLATE INDEX";
+  color:rgba(112,255,148,.46);
+  font:800 .58rem/1.2 ui-monospace,monospace;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-searchrow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:.7rem;
+  align-items:end;
+}
+#warhammer-40k label{display:grid;gap:.34rem;color:#76dd8d;font-weight:800}
+#warhammer-40k input[type=search],
+#warhammer-40k select{
+  width:100%;
+  min-height:2.8rem;
+  border:1px solid rgba(65,230,111,.31);
+  border-radius:.05rem;
+  padding:.65rem .72rem;
+  background:
+    repeating-linear-gradient(0deg,rgba(75,255,126,.012) 0 1px,transparent 1px 4px),
+    rgba(0,9,4,.90);
+  color:#caffd5;
+  font:700 .95rem/1.2 ui-monospace,monospace;
+  text-shadow:0 0 5px rgba(62,255,116,.16);
+  box-shadow:inset 0 0 12px rgba(48,255,103,.035);
+}
+#warhammer-40k input[type=search]::placeholder{color:rgba(113,214,137,.50)}
+#warhammer-40k .wh-status,
+#warhammer-40k .wh-small{
+  color:#5caa70;
+  font:700 .76rem/1.45 ui-monospace,monospace;
+  text-shadow:0 0 4px rgba(48,255,102,.10);
+}
+
+#warhammer-40k .wh-record-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,23rem),1fr));
+  gap:.9rem;
+}
+#warhammer-40k .wh-record{
+  display:grid;
+  align-content:start;
+  gap:.65rem;
+  padding:.95rem;
+  overflow:hidden;
+  transition:border-color 140ms ease,box-shadow 140ms ease,background 140ms ease,transform 140ms ease;
+}
+#warhammer-40k .wh-record::before{
+  content:"DOSSIER";
+  position:absolute;
+  top:.28rem;
+  right:.46rem;
+  color:rgba(94,255,138,.22);
+  font:800 .48rem/1 ui-monospace,monospace;
+  letter-spacing:.16em;
+  pointer-events:none;
+}
+#warhammer-40k .wh-record:hover{
+  border-color:rgba(102,255,146,.50);
+  background:
+    linear-gradient(180deg,rgba(62,255,120,.055),rgba(0,0,0,0) 30%),
+    rgba(3,19,10,.90);
+  box-shadow:
+    inset 0 0 0 1px rgba(137,255,167,.04),
+    inset 0 0 24px rgba(50,255,108,.035),
+    0 8px 24px rgba(0,0,0,.42),
+    0 0 14px rgba(44,255,103,.06);
+  transform:translateY(-1px);
+}
+#warhammer-40k .wh-record h3{
+  margin:0;
+  color:#cdffd8;
+  font-size:1.2rem;
+  text-transform:none;
+}
+#warhammer-40k .wh-record>p{color:#b3dfbd;line-height:1.42}
+
+#warhammer-40k .wh-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:1.65rem;
+  padding:.2rem .45rem;
+  border:1px solid rgba(66,232,113,.30);
+  background:rgba(29,126,58,.09);
+  color:#86fca0;
+  font:800 .65rem/1 ui-monospace,monospace;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  text-shadow:0 0 5px rgba(55,255,111,.18);
+  box-shadow:inset 0 0 7px rgba(55,255,111,.03);
+}
+#warhammer-40k .wh-threat-badge{
+  border-color:color-mix(in srgb,var(--badge-color) 68%,#40ff78 32%);
+  box-shadow:
+    inset .22rem 0 var(--badge-color),
+    0 0 7px color-mix(in srgb,var(--badge-color) 28%,transparent);
+}
+#warhammer-40k .wh-source{
+  padding-top:.65rem;
+  border-top:1px solid rgba(61,231,112,.18);
+}
+#warhammer-40k .wh-source h4{
+  color:#6ee98b;
+  font:800 .66rem/1.3 ui-monospace,monospace;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-source a,
+#warhammer-40k .wh-docket-card a{color:#8effa8;overflow-wrap:anywhere}
+#warhammer-40k .wh-pending{color:#ff9c7b;font-style:italic;text-shadow:0 0 4px rgba(255,74,53,.12)}
+#warhammer-40k .wh-empty{
+  padding:2rem;
+  border:1px dashed rgba(61,231,112,.34);
+  background:rgba(1,12,6,.66);
+  color:#78d38d;
+  text-align:center;
+  font:800 .78rem/1.5 ui-monospace,monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
 #warhammer-40k .wh-chronicle-index{display:grid;gap:.45rem;max-height:32rem;overflow:auto}
-#warhammer-40k .wh-docket-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:.9rem}
-#warhammer-40k .wh-docket-card ol{margin:0;padding-left:1.35rem;line-height:1.55}#warhammer-40k .wh-docket-card li+li{margin-top:.45rem}
-#warhammer-40k .wh-map-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(20rem,27rem);gap:1rem;align-items:start}
+#warhammer-40k .wh-docket-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));
+  gap:.9rem;
+}
+#warhammer-40k .wh-docket-card ol{margin:0;padding-left:1.35rem;line-height:1.55}
+#warhammer-40k .wh-docket-card li+li{margin-top:.45rem}
+
+#warhammer-40k .wh-map-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(20rem,27rem);
+  gap:1rem;
+  align-items:start;
+}
 #warhammer-40k .wh-map-card{min-width:0;overflow:hidden}
-#warhammer-40k .wh-map-controls{display:grid;gap:.65rem;padding:.75rem;border-bottom:1px solid var(--wh-line);background:linear-gradient(180deg,rgba(22,25,22,.995),rgba(11,14,13,.985))}
-#warhammer-40k .wh-map-control-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(13rem,.42fr);gap:.65rem;align-items:end}
-#warhammer-40k .wh-layers label{display:inline-flex;flex-direction:row;align-items:center;gap:.35rem;min-height:2.25rem;font:800 .7rem/1.2 ui-monospace,monospace;letter-spacing:.035em;text-transform:uppercase}
-#warhammer-40k .wh-layers input{width:1.05rem;height:1.05rem;accent-color:var(--wh-brass)}
-#warhammer-40k .wh-map-stage{position:relative;min-height:48rem;overflow:hidden;touch-action:none;background:radial-gradient(circle at center,rgba(51,62,56,.2),transparent 62%),#030505;cursor:grab}
-#warhammer-40k .wh-map-stage[data-map-mode=select]{cursor:crosshair}#warhammer-40k .wh-map-stage[data-map-mode=orbit]{cursor:grab}#warhammer-40k .wh-map-stage[data-map-mode=orbit][data-dragging=true]{cursor:grabbing}#warhammer-40k .wh-map-stage[data-map-mode=pan]{cursor:move}#warhammer-40k .wh-map-stage[data-map-mode=zoom]{cursor:ns-resize}#warhammer-40k .wh-map-stage[data-map-mode=passive]{cursor:default}
+#warhammer-40k .wh-map-controls{
+  display:grid;
+  gap:.65rem;
+  padding:.75rem;
+  border-bottom:1px solid rgba(61,231,112,.25);
+  background:
+    linear-gradient(180deg,rgba(4,24,12,.985),rgba(1,12,6,.985)),
+    repeating-linear-gradient(90deg,transparent 0 40px,rgba(63,255,117,.018) 41px);
+}
+#warhammer-40k .wh-map-control-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(13rem,.42fr);
+  gap:.65rem;
+  align-items:end;
+}
+#warhammer-40k .wh-layers label{
+  display:inline-flex;
+  flex-direction:row;
+  align-items:center;
+  gap:.35rem;
+  min-height:2.25rem;
+  color:#72c885;
+  font:800 .7rem/1.2 ui-monospace,monospace;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-layers input{
+  width:1.05rem;
+  height:1.05rem;
+  accent-color:#43ec73;
+}
+#warhammer-40k .wh-map-stage{
+  position:relative;
+  min-height:48rem;
+  overflow:hidden;
+  touch-action:none;
+  background:
+    repeating-linear-gradient(0deg,rgba(57,255,111,.014) 0 1px,transparent 1px 4px),
+    radial-gradient(circle at center,rgba(37,103,59,.23),transparent 62%),
+    #010504;
+  cursor:grab;
+  box-shadow:inset 0 0 60px rgba(0,0,0,.72),inset 0 0 22px rgba(54,255,109,.025);
+}
+#warhammer-40k .wh-map-stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:20;
+  pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.32) 100%);
+}
+#warhammer-40k .wh-map-stage[data-map-mode=select]{cursor:crosshair}
+#warhammer-40k .wh-map-stage[data-map-mode=orbit]{cursor:grab}
+#warhammer-40k .wh-map-stage[data-map-mode=orbit][data-dragging=true]{cursor:grabbing}
+#warhammer-40k .wh-map-stage[data-map-mode=pan]{cursor:move}
+#warhammer-40k .wh-map-stage[data-map-mode=zoom]{cursor:ns-resize}
+#warhammer-40k .wh-map-stage[data-map-mode=passive]{cursor:default}
 #warhammer-40k .wh-map-stage canvas{display:block;width:100%;height:100%}
-#warhammer-40k .wh-label-layer,#warhammer-40k .wh-leader-layer{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
-#warhammer-40k .wh-leader-layer{z-index:3}#warhammer-40k .wh-label-layer{z-index:4}
-#warhammer-40k .wh-map-label{position:absolute;transform:translate(-50%,-50%);max-width:13rem;min-height:1.8rem;border:1px solid rgba(220,194,123,.55);border-radius:.12rem;padding:.28rem .42rem;background:rgba(6,8,8,.92);color:#f0e3bf;font:700 .68rem/1.2 ui-monospace,monospace;text-align:center;pointer-events:auto;cursor:pointer;white-space:normal}
-#warhammer-40k .wh-map-label[data-layer=guard-origin]{border-color:rgba(93,168,94,.72);box-shadow:inset .18rem 0 rgba(93,168,94,.65)}
-#warhammer-40k .wh-map-label[data-layer=exploratory]{border-style:dashed;background:rgba(20,22,22,.8);color:#f1f1ec;font-size:.62rem}
-#warhammer-40k .wh-map-label[aria-current=true]{border-color:#fff2b1;color:#fff;box-shadow:0 0 .85rem rgba(225,189,97,.45)}
-#warhammer-40k .wh-map-loading{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:2rem;background:rgba(3,5,5,.9);color:var(--wh-bright);font:800 .8rem/1.5 ui-monospace,monospace;letter-spacing:.08em;text-align:center;text-transform:uppercase}
-#warhammer-40k .wh-viewport-console{position:absolute;top:.55rem;left:.55rem;right:.55rem;z-index:24;display:grid;grid-template-columns:minmax(12rem,.8fr) minmax(18rem,1.25fr) minmax(18rem,1.2fr);gap:.5rem;align-items:center;padding:.48rem .55rem;border:1px solid rgba(224,199,127,.58);background:linear-gradient(90deg,rgba(104,82,35,.94),rgba(10,12,11,.96) 36%,rgba(8,10,9,.94));box-shadow:0 .55rem 1.25rem rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.025);backdrop-filter:blur(5px);pointer-events:auto}
-#warhammer-40k .wh-navigation-head{display:grid;gap:.12rem;min-width:0}#warhammer-40k .wh-navigation-head .wh-kicker{margin:0}
-#warhammer-40k .wh-mode-readout{color:#d6c8a2;font:700 .64rem/1.3 ui-monospace,monospace;letter-spacing:.025em}
-#warhammer-40k .wh-mode-button,#warhammer-40k .wh-viewport-button{min-height:2.28rem;padding:.42rem .55rem;font-size:.62rem}
-#warhammer-40k .wh-vigil-toggle{border-color:rgba(224,199,127,.68)}
-#warhammer-40k .wh-vigil-panel{position:absolute;right:.7rem;bottom:.7rem;z-index:22;width:min(31rem,calc(100% - 1.4rem));max-height:55%;overflow:auto;padding:.9rem;border:1px solid rgba(224,199,127,.66);background:linear-gradient(160deg,rgba(40,35,24,.96),rgba(7,10,9,.94) 42%,rgba(5,7,7,.96));box-shadow:0 1rem 2.2rem rgba(0,0,0,.68),inset 0 0 0 1px rgba(255,255,255,.025);pointer-events:none}
-#warhammer-40k .wh-vigil-panel h3{margin:0 0 .2rem;color:#f1e4bf;font-size:1.35rem;letter-spacing:.04em;text-transform:uppercase}
-#warhammer-40k .wh-vigil-class{margin:0 0 .55rem;color:#c6b993;font:700 .68rem/1.35 ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase}
-#warhammer-40k .wh-vigil-seal{margin-bottom:.65rem;border-left:.3rem solid var(--vigil-color,#d7b35f);padding:.5rem .65rem;background:rgba(255,255,255,.03);color:#e8dcc0;font:800 .67rem/1.35 ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase}
+#warhammer-40k .wh-label-layer,
+#warhammer-40k .wh-leader-layer{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  pointer-events:none;
+}
+#warhammer-40k .wh-leader-layer{z-index:3}
+#warhammer-40k .wh-label-layer{z-index:4}
+#warhammer-40k .wh-map-label{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  max-width:13rem;
+  min-height:1.8rem;
+  border:1px solid rgba(88,255,135,.46);
+  border-radius:.05rem;
+  padding:.28rem .42rem;
+  background:rgba(1,11,6,.87);
+  color:#bfffcf;
+  font:700 .68rem/1.2 ui-monospace,monospace;
+  text-align:center;
+  pointer-events:auto;
+  cursor:pointer;
+  white-space:normal;
+  text-shadow:0 0 5px rgba(55,255,111,.18);
+  box-shadow:0 0 8px rgba(48,255,103,.04),inset 0 0 8px rgba(48,255,103,.025);
+}
+#warhammer-40k .wh-map-label[data-layer=guard-origin]{
+  border-color:rgba(93,255,117,.68);
+  box-shadow:inset .18rem 0 rgba(93,255,117,.58),0 0 9px rgba(93,255,117,.06);
+}
+#warhammer-40k .wh-map-label[data-layer=exploratory]{
+  border-style:dashed;
+  background:rgba(8,20,13,.76);
+  color:#bbefc8;
+  font-size:.62rem;
+}
+#warhammer-40k .wh-map-label[aria-current=true]{
+  border-color:#c9ffd5;
+  color:#f1fff4;
+  box-shadow:0 0 1rem rgba(83,255,132,.28),inset 0 0 10px rgba(83,255,132,.08);
+}
+#warhammer-40k .wh-map-loading{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  display:grid;
+  place-items:center;
+  padding:2rem;
+  background:rgba(0,8,4,.92);
+  color:#8effa8;
+  font:800 .8rem/1.5 ui-monospace,monospace;
+  letter-spacing:.08em;
+  text-align:center;
+  text-transform:uppercase;
+  text-shadow:0 0 8px rgba(68,255,121,.30);
+}
+
+#warhammer-40k .wh-viewport-console{
+  position:absolute;
+  top:.55rem;
+  left:.55rem;
+  right:.55rem;
+  z-index:24;
+  display:grid;
+  grid-template-columns:minmax(12rem,.8fr) minmax(18rem,1.25fr) minmax(18rem,1.2fr);
+  gap:.5rem;
+  align-items:center;
+  padding:.48rem .55rem;
+  border:1px solid rgba(77,255,128,.45);
+  background:
+    linear-gradient(90deg,rgba(15,71,33,.72),rgba(1,13,7,.93) 36%,rgba(1,10,5,.91)),
+    repeating-linear-gradient(0deg,rgba(64,255,118,.015) 0 1px,transparent 1px 4px);
+  box-shadow:
+    0 .55rem 1.25rem rgba(0,0,0,.64),
+    inset 0 0 0 1px rgba(126,255,159,.025),
+    0 0 12px rgba(49,255,104,.06);
+  backdrop-filter:blur(5px) saturate(1.14);
+  pointer-events:auto;
+}
+#warhammer-40k .wh-navigation-head{display:grid;gap:.12rem;min-width:0}
+#warhammer-40k .wh-navigation-head .wh-kicker{margin:0}
+#warhammer-40k .wh-mode-readout{
+  color:#78bc89;
+  font:700 .64rem/1.3 ui-monospace,monospace;
+  letter-spacing:.025em;
+}
+#warhammer-40k .wh-mode-button,
+#warhammer-40k .wh-viewport-button{min-height:2.28rem;padding:.42rem .55rem;font-size:.62rem}
+#warhammer-40k .wh-vigil-toggle{border-color:rgba(110,255,150,.58)}
+
+#warhammer-40k .wh-vigil-panel{
+  position:absolute;
+  right:.7rem;
+  bottom:.7rem;
+  z-index:22;
+  width:min(31rem,calc(100% - 1.4rem));
+  max-height:55%;
+  overflow:auto;
+  padding:.9rem;
+  border:1px solid rgba(78,255,129,.50);
+  background:
+    linear-gradient(160deg,rgba(14,62,30,.80),rgba(1,12,6,.92) 42%,rgba(1,8,4,.95)),
+    repeating-linear-gradient(0deg,rgba(64,255,118,.018) 0 1px,transparent 1px 4px);
+  box-shadow:
+    0 1rem 2.2rem rgba(0,0,0,.70),
+    inset 0 0 0 1px rgba(125,255,159,.025),
+    inset 0 0 18px rgba(41,255,100,.03);
+  pointer-events:none;
+}
+#warhammer-40k .wh-vigil-panel h3{
+  margin:0 0 .2rem;
+  color:#d2ffdc;
+  font-size:1.35rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-vigil-class{
+  margin:0 0 .55rem;
+  color:#72b983;
+  font:700 .68rem/1.35 ui-monospace,monospace;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-vigil-seal{
+  margin-bottom:.65rem;
+  border-left:.3rem solid var(--vigil-color,#4dff83);
+  padding:.5rem .65rem;
+  background:rgba(62,255,118,.035);
+  color:#aaffbd;
+  font:800 .67rem/1.35 ui-monospace,monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
 #warhammer-40k .wh-vigil-facts{display:grid;gap:.36rem;margin:0}
-#warhammer-40k .wh-vigil-fact{display:grid;grid-template-columns:minmax(8.5rem,.43fr) minmax(0,1fr);gap:.55rem;padding:.36rem .42rem;border-bottom:1px solid rgba(198,171,104,.16);background:rgba(0,0,0,.14)}
-#warhammer-40k .wh-vigil-fact dt{font:800 .64rem/1.35 ui-monospace,monospace;letter-spacing:.035em;text-transform:uppercase}
-#warhammer-40k .wh-vigil-fact dd{color:#dcd0b2;font-size:.8rem;line-height:1.42}
-#warhammer-40k .wh-vigil-meter{height:.22rem;margin-top:.7rem;overflow:hidden;background:rgba(255,255,255,.08)}
-#warhammer-40k .wh-vigil-progress{display:block;width:100%;height:100%;transform-origin:left;background:linear-gradient(90deg,#8f2d2d,#e0c77f)}
+#warhammer-40k .wh-vigil-fact{
+  display:grid;
+  grid-template-columns:minmax(8.5rem,.43fr) minmax(0,1fr);
+  gap:.55rem;
+  padding:.36rem .42rem;
+  border-bottom:1px solid rgba(61,231,112,.13);
+  background:rgba(0,8,4,.24);
+}
+#warhammer-40k .wh-vigil-fact dt{
+  font:800 .64rem/1.35 ui-monospace,monospace;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+}
+#warhammer-40k .wh-vigil-fact dd{color:#a4d9af;font-size:.8rem;line-height:1.42}
+#warhammer-40k .wh-vigil-meter{height:.22rem;margin-top:.7rem;overflow:hidden;background:rgba(77,255,128,.07)}
+#warhammer-40k .wh-vigil-progress{
+  display:block;
+  width:100%;
+  height:100%;
+  transform-origin:left;
+  background:linear-gradient(90deg,#bb4740,#58ff88);
+  box-shadow:0 0 8px rgba(71,255,126,.22);
+}
 #warhammer-40k .wh-vigil-progress.active{animation:wh-vigil-countdown var(--vigil-dwell,26000ms) linear forwards}
+
+#warhammer-40k .wh-map-details{
+  position:sticky;
+  top:5.7rem;
+  display:grid;
+  gap:.75rem;
+  max-height:calc(100vh - 7rem);
+  overflow:auto;
+  padding:1rem;
+  scrollbar-color:rgba(67,234,113,.45) rgba(0,8,4,.64);
+}
+#warhammer-40k .wh-map-details h3,
+#warhammer-40k .wh-map-details h4,
+#warhammer-40k .wh-map-details h5{margin:0}
+#warhammer-40k .wh-linked{
+  padding-top:.7rem;
+  border-top:1px solid rgba(61,231,112,.18);
+}
+#warhammer-40k .wh-route-docket+.wh-route-docket{margin-top:.7rem}
+#warhammer-40k .wh-legend,
+#warhammer-40k .wh-route-legend{display:grid;gap:.42rem}
+#warhammer-40k .wh-legend-item,
+#warhammer-40k .wh-route-legend-item{
+  display:grid;
+  grid-template-columns:1rem minmax(0,1fr);
+  gap:.55rem;
+  align-items:start;
+}
+#warhammer-40k .wh-swatch{
+  width:.85rem;
+  height:.85rem;
+  margin-top:.12rem;
+  border:1px solid rgba(139,255,170,.28);
+  box-shadow:0 0 6px rgba(50,255,105,.08);
+}
+#warhammer-40k .wh-route-sample{width:1rem;height:0;margin-top:.55rem;border-top:2px solid #8cff9f}
+#warhammer-40k .wh-route-sample.trade{border-top:2px dashed #57d5a2}
+#warhammer-40k .wh-route-sample.local-navigation{border-top:2px dashed #6eb2c6}
+#warhammer-40k .wh-route-sample.exploratory{border-top:1px dashed #c7f1d1;opacity:.6}
+
 @keyframes wh-vigil-countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}
-#warhammer-40k .wh-map-details{position:sticky;top:5.7rem;display:grid;gap:.75rem;max-height:calc(100vh - 7rem);overflow:auto;padding:1rem}
-#warhammer-40k .wh-map-details h3,#warhammer-40k .wh-map-details h4,#warhammer-40k .wh-map-details h5{margin:0}
-#warhammer-40k .wh-linked{padding-top:.7rem;border-top:1px solid rgba(198,171,104,.25)}#warhammer-40k .wh-route-docket+.wh-route-docket{margin-top:.7rem}
-#warhammer-40k .wh-legend,#warhammer-40k .wh-route-legend{display:grid;gap:.42rem}
-#warhammer-40k .wh-legend-item,#warhammer-40k .wh-route-legend-item{display:grid;grid-template-columns:1rem minmax(0,1fr);gap:.55rem;align-items:start}
-#warhammer-40k .wh-swatch{width:.85rem;height:.85rem;margin-top:.12rem;border:1px solid rgba(255,255,255,.35)}
-#warhammer-40k .wh-route-sample{width:1rem;height:0;margin-top:.55rem;border-top:2px solid #d8b35e}#warhammer-40k .wh-route-sample.trade{border-top:2px dashed #4fa3a5}#warhammer-40k .wh-route-sample.local-navigation{border-top:2px dashed #7390bd}#warhammer-40k .wh-route-sample.exploratory{border-top:1px dashed #e2e5df;opacity:.6}
-@media(max-width:1250px){#warhammer-40k .wh-command-ribbon{grid-template-columns:1fr}#warhammer-40k .wh-command-rites{justify-content:flex-start}#warhammer-40k .wh-viewport-console{grid-template-columns:1fr 1fr}#warhammer-40k .wh-viewport-actions{grid-column:1/-1}}
-@media(max-width:1100px){#warhammer-40k .wh-viewport-console{grid-template-columns:1fr;left:.4rem;right:.4rem}#warhammer-40k .wh-map-stage{min-height:58rem}#warhammer-40k .wh-viewport-actions{grid-column:auto}}
-@media(max-width:900px){#warhammer-40k .wh-command-readouts{grid-template-columns:repeat(2,minmax(0,1fr))}#warhammer-40k .wh-command,#warhammer-40k .wh-hero,#warhammer-40k .wh-map-layout{grid-template-columns:1fr}#warhammer-40k .wh-map-details{position:static;max-height:none}}
-@media(max-width:640px){#warhammer-40k .wh-command-readouts{grid-template-columns:1fr}#warhammer-40k .wh-command-rites .wh-button{width:100%}#warhammer-40k .wh-searchrow,#warhammer-40k .wh-map-control-grid,#warhammer-40k .wh-definition,#warhammer-40k .wh-dl,#warhammer-40k .wh-vigil-fact{grid-template-columns:1fr}#warhammer-40k .wh-map-stage{min-height:58rem}#warhammer-40k .wh-actions .wh-button{width:100%}#warhammer-40k .wh-vigil-panel{max-height:48%;font-size:.9rem}}
+@keyframes wh-crt-flicker{
+  0%,100%{opacity:.54}
+  7%{opacity:.58}
+  7.4%{opacity:.46}
+  7.8%{opacity:.57}
+  43%{opacity:.55}
+  43.2%{opacity:.48}
+  43.5%{opacity:.56}
+  79%{opacity:.58}
+  79.15%{opacity:.50}
+  79.4%{opacity:.57}
+}
+@keyframes wh-crt-roll{
+  from{transform:translateY(-55%)}
+  to{transform:translateY(55%)}
+}
+@keyframes wh-phosphor-breathe{
+  0%,100%{text-shadow:0 0 1px rgba(224,255,231,.8),0 0 5px rgba(52,255,109,.15)}
+  50%{text-shadow:0 0 1px rgba(237,255,241,.95),0 0 8px rgba(58,255,114,.23)}
+}
+
+@media(max-width:1250px){
+  #warhammer-40k .wh-command-ribbon{grid-template-columns:1fr}
+  #warhammer-40k .wh-command-rites{justify-content:flex-start}
+  #warhammer-40k .wh-viewport-console{grid-template-columns:1fr 1fr}
+  #warhammer-40k .wh-viewport-actions{grid-column:1/-1}
+}
+@media(max-width:1100px){
+  #warhammer-40k .wh-viewport-console{grid-template-columns:1fr;left:.4rem;right:.4rem}
+  #warhammer-40k .wh-map-stage{min-height:58rem}
+  #warhammer-40k .wh-viewport-actions{grid-column:auto}
+}
+@media(max-width:900px){
+  #warhammer-40k .wh-command-readouts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #warhammer-40k .wh-command,
+  #warhammer-40k .wh-hero,
+  #warhammer-40k .wh-map-layout{grid-template-columns:1fr}
+  #warhammer-40k .wh-map-details{position:static;max-height:none}
+}
+@media(max-width:640px){
+  #warhammer-40k .wh-command-readouts{grid-template-columns:1fr}
+  #warhammer-40k .wh-command-rites .wh-button{width:100%}
+  #warhammer-40k .wh-searchrow,
+  #warhammer-40k .wh-map-control-grid,
+  #warhammer-40k .wh-definition,
+  #warhammer-40k .wh-dl,
+  #warhammer-40k .wh-vigil-fact{grid-template-columns:1fr}
+  #warhammer-40k .wh-map-stage{min-height:58rem}
+  #warhammer-40k .wh-actions .wh-button{width:100%}
+  #warhammer-40k .wh-vigil-panel{max-height:48%;font-size:.9rem}
+}
+@media(prefers-reduced-motion:reduce){
+  #warhammer-40k .wh-workspace::before,
+  #warhammer-40k .wh-workspace::after,
+  #warhammer-40k .wh-vigil-progress.active{animation:none!important}
+  #warhammer-40k .wh-button,
+  #warhammer-40k .wh-tab,
+  #warhammer-40k .wh-filter,
+  #warhammer-40k .wh-record{transition:none!important}
+}
