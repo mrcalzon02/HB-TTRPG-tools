@@ -1,0 +1,70 @@
+name: Validate Cubic Decryptor Tool
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/cubic-decryptor.yml"
+      - "shadowrun-binary-cube-engine.js"
+      - "binary-cube-key-generation-research.js"
+      - "binary-cube-cubic-decryptor-engine.js"
+      - "binary-cube-cubic-decryptor-worker.js"
+      - "binary-cube-cubic-decryptor.js"
+      - "binary-cube-cubic-decryptor.css"
+      - "scripts/validate-binary-cube-cubic-decryptor.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "cubic-decryptor-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='binary-cube/cubic-decryptor' \
+            -f description='Cubic Decryptor validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check Cubic Decryptor sources
+        run: |
+          node --check binary-cube-cubic-decryptor-engine.js
+          node --check binary-cube-cubic-decryptor-worker.js
+          node --check binary-cube-cubic-decryptor.js
+          node --check scripts/validate-binary-cube-cubic-decryptor.mjs
+          test -s binary-cube-cubic-decryptor.css
+      - name: Recover all current cubic key-generator families
+        run: node scripts/validate-binary-cube-cubic-decryptor.mjs
+      - name: Record success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='binary-cube/cubic-decryptor' \
+            -f description='Cubic Decryptor regression passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='binary-cube/cubic-decryptor' \
+            -f description='Cubic Decryptor regression failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
