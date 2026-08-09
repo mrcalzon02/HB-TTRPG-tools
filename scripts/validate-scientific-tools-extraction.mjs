@@ -27,21 +27,35 @@ function count(source, needle) { return source.split(needle).length - 1; }
 
 const checks = [];
 
-checks.push(includes('Shadowrun is restored to its setting-owned tool layout', shadowrun, [
+checks.push(includes('Shadowrun retains the definitive Binary Cube launch targets', shadowrun, [
   "['tools','Binary Cube Encryption Laboratory'",
   "['tools','Binary Cube Encoder Visualizer'",
-  "const ASSET_VERSION = '20260730-v13';"
+  "const ASSET_VERSION = '20260809-v13-binary-cube-unified';",
+  'function loadCubeTool()',
+  'function loadCubeVisualizer()',
+  "loadScript('shadowrun-binary-cube-engine.js'",
+  "loadScript('shadowrun-binary-cube-visualizer.js'"
 ]));
-checks.push(excludes('ISM is not mounted inside Shadowrun', shadowrun, [
+checks.push(excludes('ISM is not implemented inside Shadowrun', shadowrun, [
   'Interstellar Media Collisions Lab',
   'interstellar-media-collisions-lab.js',
   "['science','Scientific Tools']"
 ]));
 
-checks.push(excludes('ISM is not mounted inside Blacklight', blacklight, [
+checks.push(includes('Black Light exposes Scientific Tools through shared launchers', blacklight, [
+  'data-blacklight-systems-tab="science"',
+  'Binary Cube Encoder Visualizer',
   'Interstellar Media Collisions Lab',
+  "prepareView('scientific-tools')",
+  "openSharedScientificTool('openBinaryCubeVisualizer'",
+  "openSharedScientificTool('openBinaryCubeLaboratory'",
+  "openSharedScientificTool('openIsmSimulation'"
+]));
+checks.push(excludes('Black Light does not implement its own Binary Cube or ISM runtime', blacklight, [
   'interstellar-media-collisions-lab.js',
-  'data-blacklight-systems-tab="science"'
+  'shadowrun-binary-cube-engine.js',
+  'binary-cube-visualizer-renderer.js',
+  'shadowrun-binary-cube-visualizer.js'
 ]));
 
 checks.push(includes('Main menu exposes Scientific Tools as a top-level view', mounts, [
@@ -50,11 +64,29 @@ checks.push(includes('Main menu exposes Scientific Tools as a top-level view', m
   "card.dataset.scientificToolsCard = 'true'",
   "button.textContent = 'Open Scientific Tools'",
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=1')",
+  "loadScript('scientific-tools-entry.js?v=20260809-binary-cube-unified')",
+  "loadScript('shadowrun-entry.js?v=20260809-binary-cube-unified')",
   'ensureScientificToolsView();'
 ]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'The main menu must own exactly one Scientific Tools card.');
 checks.push('Main menu owns one Scientific Tools destination');
+
+checks.push(includes('Scientific Tools owns the shared Binary Cube launch surface', workspace, [
+  'data-scientific-tools-tab="binary-cube"',
+  'Binary Cube Laboratory and Encoder Visualizer',
+  'id="scientific-tools-open-binary-cube-visualizer"',
+  'id="scientific-tools-open-binary-cube-laboratory"',
+  'loadBinaryCubeVisualizer',
+  'loadBinaryCubeLaboratory',
+  'openBinaryCubeVisualizer',
+  'openBinaryCubeLaboratory',
+  "loadScript('shadowrun-binary-cube-engine.js'",
+  "loadScript('binary-cube-visualizer-renderer.js'",
+  "loadScript('shadowrun-binary-cube-visualizer.js'",
+  'one shared ShadowrunBinaryCubeVisualizer instance'
+]));
+assert.equal(count(workspace, 'data-scientific-tools-tab="binary-cube"'), 1, 'Scientific Tools must expose exactly one Binary Cube setting tab.');
+checks.push('Binary Cube is a Scientific Tools setting tab backed by the definitive Shadowrun runtime');
 
 checks.push(includes('Scientific Tools owns the ISM setting tab', workspace, [
   'Scientific Simulation Workspace',
@@ -79,7 +111,7 @@ checks.push(includes('Shared ISM simulation preserves the physical/scattering co
   'Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously',
   'window.InterstellarMediaCollisionsLab = Object.freeze'
 ]));
-checks.push(excludes('Shared ISM runtime remains independent of setting workspaces', lab, [
+checks.push(excludes('Shared ISM runtime remains independent of setting workspaces and Binary Cube implementation', lab, [
   'ShadowrunBinaryCubeEngine',
   'ShadowrunBinaryCubeEncryption',
   'ShadowrunBinaryCubeVisualizer',
@@ -92,7 +124,7 @@ checks.push('ISM stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.2.0',
+  schemaVersion: '0.3.0',
   pass: true,
   checkCount: checks.length,
   checks
