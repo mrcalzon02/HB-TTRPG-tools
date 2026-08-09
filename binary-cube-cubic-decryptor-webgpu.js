@@ -1,3 +1,4 @@
+// Optional Stage A accelerator only: canonical CPU key generation, decryption, final scoring, and deterministic search order remain authoritative.
 (function installBinaryCubeCubicDecryptorWebGPU(root, factory) {
   'use strict';
   const Cubic = root?.BinaryCubeCubicDecryptorEngine
