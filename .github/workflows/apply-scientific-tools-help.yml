@@ -49,15 +49,15 @@ jobs:
           node --check scripts/validate-scientific-tools-extraction.mjs
           node scripts/validate-scientific-tools-help.mjs
           node scripts/validate-scientific-tools-extraction.mjs
-      - name: Commit validated help integration
+      - name: Commit validated non-workflow integration
         run: |
-          if git diff --quiet -- scientific-tools-entry.js app-lite-view-mounts.js scripts/validate-scientific-tools-extraction.mjs .github/workflows/scientific-tools-extraction.yml; then
-            echo "Shared help integration already present."
+          if git diff --quiet -- scientific-tools-entry.js app-lite-view-mounts.js scripts/validate-scientific-tools-extraction.mjs; then
+            echo "Shared help runtime integration already present."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scientific-tools-entry.js app-lite-view-mounts.js scripts/validate-scientific-tools-extraction.mjs .github/workflows/scientific-tools-extraction.yml
+          git add scientific-tools-entry.js app-lite-view-mounts.js scripts/validate-scientific-tools-extraction.mjs
           git commit -m "feat: integrate contextual help across cryptography and steganography tools"
           git push origin HEAD:main
       - name: Record success
@@ -68,7 +68,7 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
             -f context='scientific-tools/contextual-help' \
-            -f description='Shared cryptography/steganography help integrated.' \
+            -f description='Shared cryptography/steganography help runtime integrated.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - name: Record failure
         if: ${{ failure() }}
