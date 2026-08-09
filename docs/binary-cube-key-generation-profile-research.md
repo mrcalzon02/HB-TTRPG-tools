@@ -2,7 +2,7 @@
 
 Status: active research record  
 Canonical engine at time of test: `shadowrun-binary-cube-engine.js` schema `0.2.0`  
-Research harness: `scripts/research-binary-cube-key-generation-profiles.mjs` schema `research-0.2.0`
+Research harness: `scripts/research-binary-cube-key-generation-profiles.mjs` schema `research-0.3.0`
 
 ## Purpose
 
@@ -24,7 +24,11 @@ Starts from identity and repeatedly derives deterministic state from the precedi
 
 ### Random transposition walk
 
-Starts from identity and performs a long deterministic seeded random walk through permutation space by repeated transpositions.
+Starts from identity and performs a long deterministic seeded walk through permutation space using globally selected transpositions. This is a global-mixing walk rather than a spatially local one.
+
+### Local adjacent walk
+
+A deliberately more literal random walk. One walker moves between neighboring permutation positions and swaps only with the adjacent position it enters. This tests whether a spatially local walk retains detectable neighborhood structure even after many steps.
 
 ### Nested permutation composition
 
@@ -36,9 +40,13 @@ A critical mathematical boundary is that composition of permutations is itself j
 
 A more literal recursive candidate. The index domain is repeatedly divided into child regions, leaf regions are permuted, and child branches are deterministically swapped. This was included specifically to see whether nested/local construction leaks recognizable locality.
 
+### Nested interleaved hierarchy
+
+A revised recursive candidate. It keeps the recursive child derivation, but at every branch the independently derived child outputs are deterministically interleaved instead of simply concatenated or swapped. This tests whether a nested construction can retain hierarchical derivation while disrupting obvious local blocks.
+
 ## Test matrix
 
-Five profiles were evaluated on 12×12, 64×64, and 128×128 grids using sixteen deterministic seed samples at each grid size, for 240 primary generated keys. Every primary key was regenerated from the same seed to verify exact determinism. Every primary key passed the canonical algebraic collision-free invariant; 12×12 samples also received exhaustive six-face validation. Every sample produced a unique canonical key fingerprint within its profile/grid batch.
+Seven profiles were evaluated on 12×12, 64×64, and 128×128 grids using sixteen deterministic seed samples at each grid size, for 336 primary generated keys. Every primary key was regenerated from the same seed to verify exact determinism. Every primary key passed the canonical algebraic collision-free invariant; 12×12 samples also received exhaustive six-face validation. Every sample produced a unique canonical key fingerprint within its profile/grid batch.
 
 The same deterministic payload was encrypted under the original and one-character-mutated seeds to measure actual ciphertext bit change. Permutation metrics were evaluated separately from mask change so a 50% ciphertext difference could not conceal structural weaknesses in the generated permutations.
 
@@ -46,34 +54,42 @@ The same deterministic payload was encrypted under the original and one-characte
 
 | Profile | Permutation change after seed mutation | Ciphertext bit change | Adjacent-preservation / random expectation | Mean absolute inter-axis correlation | Mean generation time |
 |---|---:|---:|---:|---:|---:|
-| Direct permutation | 96.47% | 49.87% | 1.012× | 0.126 | 0.95 ms |
-| Iterative chain | 96.28% | 49.99% | 1.022× | 0.141 | 2.51 ms |
-| Random transposition walk | 96.14% | 49.98% | 0.990× | 0.146 | 1.69 ms |
-| Nested permutation composition | 96.65% | 49.94% | 0.950× | 0.132 | 1.49 ms |
-| Nested hierarchy | 96.70% | 49.83% | **13.474×** | **0.763** | 1.23 ms |
+| Direct permutation | 96.47% | 49.87% | 1.012× | 0.126 | 0.98 ms |
+| Iterative chain | 96.28% | 49.99% | 1.022× | 0.141 | 2.72 ms |
+| Random transposition walk | 96.14% | 49.98% | 0.990× | 0.146 | 1.70 ms |
+| **Local adjacent walk** | 93.09% | 49.80% | **18.598×** | **0.921** | 2.60 ms |
+| Nested permutation composition | 96.65% | 49.94% | 0.950× | 0.132 | 1.52 ms |
+| **Nested hierarchy** | 96.70% | 49.83% | **13.467×** | **0.763** | 1.25 ms |
+| Nested interleaved hierarchy | 96.31% | 49.94% | **1.612×** | 0.157 | 1.35 ms |
 
 Additional observations:
 
-- All five profiles exhibit roughly 50% ciphertext-bit change after a one-character seed mutation.
-- The first four profiles keep adjacency preservation close to the random-permutation expectation and keep the three axis permutations only weakly correlated.
-- The nested-hierarchy candidate is radically different: adjacent values remain adjacent about 13.5 times more often than the random expectation, while row/column/depth permutations show very high inter-axis correlation.
-- The nested-hierarchy candidate therefore demonstrates why ciphertext avalanche alone is not a sufficient acceptance test. It can produce approximately 50% output-bit change while still embedding conspicuous structural regularity in the key-generation process.
-- Nested permutation composition behaves broadly like another well-mixed permutation, but this test found no empirical reason to claim that its extra stages are stronger than the direct generator.
-- Iterative chain and random walk are viable experimental diversity candidates, but both cost additional generation time and neither demonstrated a decisive quality advantage over the direct baseline in this sample.
+- All seven profiles exhibit roughly 50% ciphertext-bit change after a one-character seed mutation.
+- Direct, iterative-chain, global random-transposition walk, and nested permutation composition remain close to random-permutation adjacency expectations and keep the three axis permutations only weakly correlated.
+- The literal **local adjacent walk** is a strong negative result. Its values remain adjacent about **18.6 times** more often than the random expectation, and its row/column/depth permutations have a mean absolute inter-axis correlation of about **0.92**. Its normalized displacement is also markedly lower than the well-mixed profiles. Yet its ciphertext still changes by almost exactly 50% under a seed mutation.
+- The original nested hierarchy remains a strong negative result: about **13.5×** expected adjacency retention and about **0.76** mean absolute inter-axis correlation.
+- Interleaving the recursive child regions dramatically improves the nested hierarchy. Inter-axis correlation falls to approximately **0.16**, close to the well-mixed candidates. However, adjacency preservation is still about **1.61×** the random expectation, leaving measurable locality that the direct, iterative, global-walk, and nested-composition candidates do not show.
+- These results reinforce that ciphertext avalanche alone is not a sufficient key-generator acceptance test. Both of the clearly structured candidates still produce approximately 50% output-bit change.
+- Nested permutation composition behaves broadly like another well-mixed permutation, but this test still finds no empirical reason to claim that its extra stages are stronger than direct generation.
+- Iterative chain and global random-transposition walk remain viable experimental diversity candidates, but neither has demonstrated a decisive quality advantage over the direct baseline.
 
 ## Provisional disposition
 
 ### Direct permutation — retain as default and compatibility profile
 
-It is the simplest tested construction, the fastest aggregate candidate in this run, reproduces existing keys exactly, and already sits near the random-permutation baselines measured here.
+It is the simplest tested construction, among the fastest candidates, reproduces existing keys exactly, and already sits near the random-permutation baselines measured here.
 
 ### Iterative chain — acceptable experimental candidate
 
-No obvious structural penalty appeared in this test. It should only become selectable if the key document records an explicit generation-profile identifier and version so the seed remains exactly reproducible.
+No obvious structural penalty appeared in these tests. It should only become selectable if the key document records an explicit generation-profile identifier and version so the seed remains exactly reproducible.
 
 ### Random transposition walk — acceptable experimental candidate
 
-No obvious structural penalty appeared. As with iterative generation, it should be treated as an alternate deterministic construction rather than advertised as a stronger cipher.
+The globally mixing transposition walk shows no obvious structural penalty. It should be treated as an alternate deterministic construction rather than advertised as a stronger cipher.
+
+### Local adjacent walk — reject in current form
+
+A literal nearest-neighbor walk preserves far too much local order and produces extremely high axis-to-axis correlation. Increasing the number of local steps could eventually mix the permutation more thoroughly, but doing so would substantially increase generation cost and must be demonstrated empirically before reconsideration.
 
 ### Nested permutation composition — acceptable research candidate, low priority for promotion
 
@@ -82,6 +98,10 @@ It remained well mixed, but composing complete permutations ultimately collapses
 ### Nested hierarchy — reject in current form
 
 Do not promote this candidate into canonical key generation. Its strong locality preservation and inter-axis correlation are exactly the kinds of generator structure this research is intended to catch.
+
+### Nested interleaved hierarchy — continue research, not yet promotable
+
+Interleaving solves most of the severe correlation problem and greatly reduces locality, making this a much more credible interpretation of a nested generator. It still retains approximately 61% more adjacent relationships than the random-permutation expectation across this test matrix, so it should remain research-only while additional mixing strategies are explored.
 
 ## Acceptance criteria for future generation profiles
 
@@ -98,6 +118,8 @@ A candidate generation profile should not enter the canonical Binary Cube key fo
 9. Practical generation cost and freeze-safe execution on slow hardware.
 10. Explicit versioning and backward compatibility: existing schema-0.2.0 direct keys must continue to validate and reproduce exactly.
 
+For experimental promotion, a useful provisional structural gate is adjacency preservation close to 1.0× the random expectation and mean absolute inter-axis correlation below roughly 0.25. These are research thresholds rather than cryptographic security proofs, but they are strong enough to reject the obvious locality failures found here.
+
 ## Canonical integration boundary
 
 The next engine change, if alternate profiles are promoted, should add a **generation-profile metadata contract**, not a second encryption implementation. `generationProfile` describes how the canonical row/column/depth permutations were derived. Encryption, decryption, face projection, masks, package framing, checksums, trace semantics, and collision validation remain owned by the one authoritative Binary Cube engine.
@@ -106,4 +128,4 @@ Legacy direct keys should remain byte-for-byte/fingerprint compatible. New non-d
 
 ## Current conclusion
 
-The experiment supports keeping Direct Permutation as the default while continuing controlled work on Iterative Chain and Random Transposition Walk. Nested Composition is mathematically valid but has not demonstrated a reason for promotion. The literal recursive Nested Hierarchy candidate is a useful negative result and should remain excluded until a substantially different nested design can eliminate the measured locality and inter-axis correlation.
+The expanded experiment supports keeping Direct Permutation as the default while continuing controlled work on **Iterative Chain** and the **global Random Transposition Walk**. Nested Composition is mathematically valid but has not demonstrated a reason for promotion. The literal Local Adjacent Walk and block-preserving Nested Hierarchy are rejected because they preserve strong measurable structure. The new Nested Interleaved Hierarchy is a meaningful improvement and is worth further experimentation, but its remaining adjacency excess means it is not ready to become a canonical key-generation option.
