@@ -55,7 +55,7 @@ self.addEventListener('message', event => {
     const resumeCursor = Math.max(0, Math.floor(Number(message.resumeCursor) || 0));
     if (resumeCursor > plan.totalAttempts) throw new Error('Resume cursor is beyond the deterministic search plan.');
 
-    const resultLimit = Math.max(1, Math.min(100, Math.floor(Number(options.resultLimit) || Cubic.constants.DEFAULT_RESULT_LIMIT));
+    const resultLimit = Math.max(1, Math.min(100, Math.floor(Number(options.resultLimit) || Cubic.constants.DEFAULT_RESULT_LIMIT)));
     const threshold = Math.max(0, Math.min(100, Number(options.scoreThreshold) || Cubic.constants.DEFAULT_SCORE_THRESHOLD));
     const progressEvery = Math.max(1, Math.floor(Number(options.progressEvery) || 256));
     const requestedBudget = Number(options.maxAttemptsThisRun);
