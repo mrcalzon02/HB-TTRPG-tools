@@ -19,6 +19,9 @@ const keyResearch = read('binary-cube-key-generation-research.js');
 const keyResearchWorker = read('binary-cube-key-generation-research-worker.js');
 const keyVisualizer = read('binary-cube-key-generation-visualizer.js');
 const mediaDemos = read('binary-cube-media-forensics-demo-corpus.js');
+const steganalysisEngine = read('binary-cube-steganalysis-engine.js');
+const steganalysisWorker = read('binary-cube-steganalysis-worker.js');
+const steganalysisLab = read('binary-cube-steganalysis-lab.js');
 const ism = read('interstellar-media-collisions-lab.js');
 const doubleSlit = read('double-slit-lab.js');
 
@@ -53,6 +56,8 @@ checks.push(excludes('Shadowrun does not absorb setting-neutral research/simulat
   'binary-cube-information-analysis-suite.js',
   'binary-cube-communication-capacity-analyzer.js',
   'binary-cube-media-forensics-suite.js',
+  'binary-cube-steganalysis-engine.js',
+  'binary-cube-steganalysis-lab.js',
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js'
 ]));
@@ -68,6 +73,8 @@ checks.push(excludes('Black Light does not duplicate centralized runtimes', blac
   'binary-cube-key-generation-research.js',
   'binary-cube-key-generation-visualizer.js',
   'shadowrun-binary-cube-engine.js',
+  'binary-cube-steganalysis-engine.js',
+  'binary-cube-steganalysis-lab.js',
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js'
 ]));
@@ -76,7 +83,8 @@ checks.push(includes('Main menu owns and cache-refreshes Scientific Tools', moun
   "button.dataset.view = 'scientific-tools'",
   "card.dataset.scientificToolsCard = 'true'",
   'key-generation structure comparison',
-  "loadScript('scientific-tools-entry.js?v=20260809-key-profile-visualizer-1')",
+  'Advanced Steganalysis Laboratory',
+  "loadScript('scientific-tools-entry.js?v=20260809-steganalysis-1')",
   'ensureScientificToolsView();'
 ]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'Scientific Tools must have exactly one main-menu card.');
@@ -94,6 +102,7 @@ checks.push(includes('Shared cooperative runner owns bounded deterministic sched
 checks.push(excludes('Scheduler remains model-neutral', cooperative, [
   'ShadowrunBinaryCubeEngine',
   'BinaryCubeKeyGenerationResearch',
+  'BinaryCubeSteganalysisEngine',
   'DoubleSlitExperimentLab',
   'LAMBDA_COEFFICIENT'
 ]));
@@ -176,8 +185,64 @@ checks.push(includes('3D key-generation visualizer exposes same-seed structural 
   'BinaryCubeKeyGenerationVisualizer = Object.freeze'
 ]));
 
-checks.push(includes('Scientific Tools owns one launch for the key-generation visualizer', workspace, [
-  "const ASSET_VERSION = '20260809-key-profile-visualizer-1';",
+checks.push(includes('Advanced steganalysis engine owns quantitative and parity math', steganalysisEngine, [
+  'BinaryCubeSteganalysisEngine',
+  'function rsAnalysis(',
+  'function samplePairAnalysisFromPairs(',
+  'function localizedRasterAnalysis(',
+  'function residualCooccurrence(',
+  'function compareRasters(',
+  'function inspectJpegCoefficients(',
+  'function analyzeTextSteganography(',
+  'function confusionMetrics(',
+  'function rocCurve(',
+  'function regressionMetrics(',
+  'function recoveredBitMetrics('
+]));
+checks.push(excludes('Steganalysis engine does not become a second media decoder or Binary Cube cipher', steganalysisEngine, [
+  'createImageBitmap(',
+  'decodeAudioData(',
+  'function encryptBinary(',
+  'function decryptBinary(',
+  'ShadowrunBinaryCubeEngine'
+]));
+checks.push(includes('Steganalysis worker delegates heavy analysis to one engine', steganalysisWorker, [
+  "importScripts('binary-cube-steganalysis-engine.js?v=20260809-steganalysis-1')",
+  'const Engine = self.BinaryCubeSteganalysisEngine;',
+  'Engine.localizedRasterAnalysis(',
+  'Engine.compareRasters(',
+  'Engine.inspectJpegCoefficients(',
+  'Engine.analyzeRasterRegion('
+]));
+checks.push(excludes('Steganalysis worker does not duplicate detector implementations', steganalysisWorker, [
+  'function rsAnalysis(',
+  'function samplePairAnalysis(',
+  'function compareRasters(',
+  'function inspectJpegCoefficients('
+]));
+checks.push(includes('Steganalysis lab reuses shared media decoding and worker-backed detector execution', steganalysisLab, [
+  'Advanced Steganalysis Laboratory',
+  'const Engine = window.BinaryCubeSteganalysisEngine;',
+  'const Media = window.BinaryCubeMediaForensicsSuite;',
+  'Media.decodeBrowserRaster(',
+  'new Worker(new URL(WORKER_URL, document.baseURI).href)',
+  "runWorker('localized-raster'",
+  "runWorker('compare-raster'",
+  "runWorker('jpeg-coefficients'",
+  'Raster RS / SPA',
+  'Known-cover parity',
+  'JPEG DCT',
+  'Text / Unicode',
+  'Batch / Evaluation',
+  'ROC AUC',
+  'Measurements remain separate evidence channels'
+]));
+checks.push(excludes('Steganalysis UI does not invent a single opaque probability', steganalysisLab, [
+  'Steganography Probability'
+]));
+
+checks.push(includes('Scientific Tools owns one launch for the key-generation visualizer and steganalysis lab', workspace, [
+  "const ASSET_VERSION = '20260809-steganalysis-1';",
   'function loadKeyGenerationVisualizer()',
   "loadStyle('binary-cube-key-generation-visualizer.css')",
   "loadScript('binary-cube-key-generation-research.js'",
@@ -185,7 +250,14 @@ checks.push(includes('Scientific Tools owns one launch for the key-generation vi
   'function openKeyGenerationVisualizer(',
   'id="scientific-tools-open-key-generation-visualizer"',
   'Compare Key Generators in 3D',
-  'adjacency as one diagnostic rather than an automatic failure'
+  'adjacency as one diagnostic rather than an automatic failure',
+  'function loadSteganalysisLab()',
+  "loadStyle('binary-cube-steganalysis-lab.css')",
+  "loadScript('binary-cube-steganalysis-engine.js'",
+  "loadScript('binary-cube-steganalysis-lab.js'",
+  'function openSteganalysisLab(',
+  'id="scientific-tools-open-steganalysis"',
+  'Open Advanced Steganalysis Laboratory'
 ]));
 checks.push(includes('Scientific Tools preserves its established destinations and demo corpus', workspace, [
   'data-scientific-tools-tab="binary-cube"',
@@ -234,6 +306,8 @@ for (const relativePath of [
   'binary-cube-information-analysis-suite.css',
   'binary-cube-communication-capacity-analyzer.css',
   'binary-cube-media-forensics-suite.css',
+  'binary-cube-steganalysis-lab.css',
+  'scripts/validate-binary-cube-steganalysis-lab.mjs',
   'interstellar-media-collisions-lab.css',
   'double-slit-lab.css'
 ]) nonEmpty(relativePath);
@@ -241,7 +315,7 @@ checks.push('Scientific Tools styles and specialized validators are present');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.13.2',
+  schemaVersion: '0.14.0',
   pass: true,
   checkCount: checks.length,
   checks
