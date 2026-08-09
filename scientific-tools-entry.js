@@ -2,8 +2,9 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-cubic-decryptor-hardening-7';
+  const ASSET_VERSION = '20260809-scientific-help-1';
   let cooperativeRunnerPromise = null;
+  let helpSystemPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;
   let cubeVisualizerPromise = null;
@@ -124,6 +125,18 @@
       .then(() => window.ScientificToolsCooperativeRunner);
     cooperativeRunnerPromise.catch(() => { cooperativeRunnerPromise = null; });
     return cooperativeRunnerPromise;
+  }
+
+  function loadHelpSystem() {
+    if (window.ScientificToolsHelp) return Promise.resolve(window.ScientificToolsHelp);
+    if (helpSystemPromise) return helpSystemPromise;
+    helpSystemPromise = (async () => {
+      await loadStyle('scientific-tools-help.css');
+      await loadScript('scientific-tools-help.js', () => Boolean(window.ScientificToolsHelp));
+      return window.ScientificToolsHelp;
+    })();
+    helpSystemPromise.catch(() => { helpSystemPromise = null; });
+    return helpSystemPromise;
   }
 
   function canonicalCubeEngineReady() {
@@ -450,13 +463,13 @@
 
   function initialize() {
     injectStyle();
-    void loadCooperativeRunner().catch(error => console.error('Scientific Tools cooperative runner could not be preloaded.', error));
+    void Promise.all([loadCooperativeRunner(), loadHelpSystem()]).catch(error => console.error('Scientific Tools shared runtime could not be preloaded.', error));
     if (!initialized) { buildWorkspace(); initialized = true; }
     return document.getElementById(VIEW_ID);
   }
 
   initialize();
   window.ScientificToolsWorkspace = Object.freeze({
-    initialize, selectTab, loadCooperativeRunner, loadBinaryCubeVisualizer, loadBinaryCubeLaboratory, loadKeyGenerationVisualizer, loadDecryptionDashboard, loadCryptanalyticTestLab, loadInformationAnalysisSuite, loadCommunicationCapacityAnalyzer, loadMediaForensicsSuite, loadMediaForensicsDemoCorpus, loadSteganalysisLab, loadDiagnosticPipeline, loadCubicDecryptor, loadSignalsLaboratory, openBinaryCubeVisualizer, openBinaryCubeLaboratory, openKeyGenerationVisualizer, openDiagnosticPipeline, openDecryptionDashboard, openCubicDecryptor, openCryptanalyticTestLab, openInformationAnalysisSuite, openCommunicationCapacityAnalyzer, openMediaForensicsSuite, openMediaForensicsDemoCorpus, openSteganalysisLab, openSignalsLaboratory, loadIsmLab, openIsmSimulation, loadDoubleSlitLab, openDoubleSlitLab
+    initialize, selectTab, loadCooperativeRunner, loadHelpSystem, loadBinaryCubeVisualizer, loadBinaryCubeLaboratory, loadKeyGenerationVisualizer, loadDecryptionDashboard, loadCryptanalyticTestLab, loadInformationAnalysisSuite, loadCommunicationCapacityAnalyzer, loadMediaForensicsSuite, loadMediaForensicsDemoCorpus, loadSteganalysisLab, loadDiagnosticPipeline, loadCubicDecryptor, loadSignalsLaboratory, openBinaryCubeVisualizer, openBinaryCubeLaboratory, openKeyGenerationVisualizer, openDiagnosticPipeline, openDecryptionDashboard, openCubicDecryptor, openCryptanalyticTestLab, openInformationAnalysisSuite, openCommunicationCapacityAnalyzer, openMediaForensicsSuite, openMediaForensicsDemoCorpus, openSteganalysisLab, openSignalsLaboratory, loadIsmLab, openIsmSimulation, loadDoubleSlitLab, openDoubleSlitLab
   });
 })();
