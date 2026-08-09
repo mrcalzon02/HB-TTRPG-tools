@@ -3,9 +3,14 @@
 
   const PANEL_ID = 'interstellar-media-collisions-lab';
   const STYLE_ID = 'interstellar-media-collisions-lab-style';
+  const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
+  const ORBIT_CONTROLS_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
   const LAMBDA = 1.097e-52;
   const C = 299792458;
   const LAMBDA_COEFFICIENT = LAMBDA * C * C / 3;
+  const PROTON_CHARGE = 1.602176634e-19;
+  const PROTON_MASS = 1.67262192369e-27;
+  const EV_TO_JOULE = 1.602176634e-19;
   const FACE_ORDER = ['+Z', '+X', '-X', '+Y', '-Y'];
   const DENSITY_PRESETS = Object.freeze({
     galactic: { label: 'Galactic average · 1 H-equivalent / cm³', perM3: 1e6 },
@@ -14,10 +19,15 @@
 
   let activeSetting = 'scientific-tools';
   let lastRun = null;
+  let castToken = 0;
+  let viewportState = null;
+  const scriptPromises = new Map();
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[character]));
+
+  const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 
   function hash32(text) {
     let hash = 2166136261 >>> 0;
@@ -44,9 +54,13 @@
   }
 
   function formatLength(meters) {
-    if (meters >= 1) return `${meters.toFixed(4)} m`;
-    if (meters >= 0.01) return `${(meters * 100).toFixed(3)} cm`;
-    if (meters >= 0.001) return `${(meters * 1000).toFixed(3)} mm`;
+    const absolute = Math.abs(meters);
+    if (!Number.isFinite(meters)) return '—';
+    if (absolute >= 1.495978707e10) return `${(meters / 1.495978707e11).toFixed(4)} AU`;
+    if (absolute >= 1000) return `${(meters / 1000).toFixed(3)} km`;
+    if (absolute >= 1) return `${meters.toFixed(4)} m`;
+    if (absolute >= 0.01) return `${(meters * 100).toFixed(3)} cm`;
+    if (absolute >= 0.001) return `${(meters * 1000).toFixed(3)} mm`;
     return `${meters.toExponential(3)} m`;
   }
 
@@ -56,12 +70,61 @@
     return value.toExponential(digits);
   }
 
+  function normalizedScriptUrl(value) {
+    return new URL(String(value || ''), document.baseURI).href;
+  }
+
+  function loadExternalScript(src) {
+    const resolved = normalizedScriptUrl(src);
+    if (scriptPromises.has(resolved)) return scriptPromises.get(resolved);
+    const existing = [...document.scripts].find(script => script.src === resolved);
+    if (existing?.dataset.ismLoaded === 'true') return Promise.resolve();
+
+    const promise = new Promise((resolve, reject) => {
+      const script = existing || document.createElement('script');
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        script.dataset.ismLoaded = 'true';
+        resolve();
+      };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        reject(new Error(`${src} could not be loaded.`));
+      };
+      script.addEventListener('load', finish, { once: true });
+      script.addEventListener('error', fail, { once: true });
+      if (!existing) {
+        script.src = src;
+        script.async = false;
+        script.crossOrigin = 'anonymous';
+        script.dataset.ismAsset = 'true';
+        document.head.appendChild(script);
+      } else if (window.THREE) {
+        finish();
+      }
+    });
+
+    scriptPromises.set(resolved, promise);
+    promise.catch(() => scriptPromises.delete(resolved));
+    return promise;
+  }
+
+  async function ensureThree() {
+    if (!window.THREE) await loadExternalScript(THREE_URL);
+    if (!window.THREE?.OrbitControls) await loadExternalScript(ORBIT_CONTROLS_URL);
+    if (!window.THREE?.OrbitControls) throw new Error('Three-dimensional ISM viewport controls could not be loaded.');
+    return window.THREE;
+  }
+
   function ensureStyle() {
     if (document.getElementById(STYLE_ID)) return;
     const link = document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'interstellar-media-collisions-lab.css?v=20260808-ism-main-menu-1';
+    link.href = 'interstellar-media-collisions-lab.css?v=20260809-ism-3d-magnetic-1';
     document.head.appendChild(link);
   }
 
@@ -79,7 +142,7 @@
           <div>
             <p class="ism-lab-eyebrow">Scientific Tools · Interstellar Media Collisions</p>
             <h2 id="ism-lab-title">Vectorized Shadow Casting Laboratory</h2>
-            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with a physically bounded Λ term and a separately keyed Shadow-scattering layer.</p>
+            <p class="ism-lab-subtitle">Phase-light input through literal 1:1 interstellar-medium particles with a physically bounded Λ term, a charged-proton Lorentz-response layer, and a separately keyed Shadow-scattering layer.</p>
           </div>
           <button type="button" class="ism-lab-close" data-ism-close aria-label="Close Interstellar Media Collisions Lab">×</button>
         </header>
@@ -118,6 +181,30 @@
                 <option value="512">512</option>
               </select>
             </label>
+
+            <div class="ism-control-group">
+              <p class="ism-control-group-title">Charged-particle magnetic response</p>
+              <label>Interstellar magnetic field <output id="ism-field-strength-value">0.38 nT · 3.8 μG</output>
+                <input id="ism-field-strength" type="range" min="0" max="2" step="0.01" value="0.38">
+              </label>
+              <label>Field azimuth, cube frame <output id="ism-field-azimuth-value">125°</output>
+                <input id="ism-field-azimuth" type="range" min="0" max="360" step="1" value="125">
+              </label>
+              <label>Field elevation, cube frame <output id="ism-field-elevation-value">37°</output>
+                <input id="ism-field-elevation" type="range" min="-90" max="90" step="1" value="37">
+              </label>
+              <label>Proton kinetic energy
+                <select id="ism-proton-energy">
+                  <option value="1000">1 keV</option>
+                  <option value="10000">10 keV</option>
+                  <option value="100000">100 keV</option>
+                  <option value="1000000" selected>1 MeV</option>
+                  <option value="10000000">10 MeV</option>
+                  <option value="100000000">100 MeV</option>
+                </select>
+              </label>
+            </div>
+
             <label>Shadow impact reflectivity randomness <output id="ism-reflectivity-value">28%</output>
               <input id="ism-reflectivity" type="range" min="0" max="100" step="1" value="28">
             </label>
@@ -126,17 +213,22 @@
             </label>
 
             <button id="ism-run" type="button" class="ism-lab-run">Cast Phase Beam</button>
-            <p class="ism-lab-note"><strong>Physics boundary:</strong> literal particle coordinates and Λ scaling are physical-model quantities. Shadow coupling and keyed reflectivity are deliberate encryption/obfuscation operators and are charted separately.</p>
+            <p class="ism-lab-note"><strong>Physics boundary:</strong> the magnetic term is the Lorentz response of a proton test trajectory in a uniform ISM field. A real photon is not classically bent by that field. Λ and magnetic quantities are physical-model terms; Shadow coupling remains a separate deterministic experimental operator.</p>
           </aside>
 
           <main class="ism-lab-stage">
             <div class="ism-lab-metrics" id="ism-metrics"></div>
             <div class="ism-lab-canvas-wrap">
-              <canvas id="ism-canvas" width="900" height="560" aria-label="Projected interstellar-medium cube and phase-light trajectories"></canvas>
-              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— phase ray</span><span>× keyed Shadow impact</span></div>
+              <div class="ism-viewport-toolbar" aria-label="Three-dimensional viewport controls">
+                <span>Drag: orbit · Wheel: zoom · Right-drag: pan</span>
+                <button id="ism-reset-view" type="button">Reset view</button>
+                <button id="ism-auto-orbit" type="button" aria-pressed="false">Auto orbit</button>
+              </div>
+              <div id="ism-viewport" class="ism-lab-viewport" role="img" aria-label="Interactive three-dimensional interstellar-medium cube, magnetic field vector, particles, and phase trajectories"></div>
+              <div class="ism-lab-legend"><span>● literal H-equivalent particle</span><span>— magnetized proton-response trajectory</span><span>➜ ISM magnetic field</span><span>× keyed Shadow impact</span></div>
             </div>
             <section class="ism-output-section">
-              <div class="ism-output-heading"><div><p class="ism-lab-eyebrow">Concurrent detector array</p><h3>All non-input faces</h3></div><p>Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously; backscatter to −Z and retained rays are reported separately.</p></div>
+              <div class="ism-output-heading"><div><p class="ism-lab-eyebrow">Concurrent detector array</p><h3>All non-input faces</h3></div><p>Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously; backscatter to −Z and retained rays are reported separately. During a cast, detector counts advance in the same order as the displayed trajectories.</p></div>
               <div id="ism-face-chart" class="ism-face-chart"></div>
               <div id="ism-secondary-output" class="ism-secondary-output"></div>
             </section>
@@ -146,13 +238,31 @@
     document.body.appendChild(panel);
 
     panel.querySelectorAll('[data-ism-close]').forEach(button => button.addEventListener('click', closePanel));
-    panel.querySelector('#ism-run')?.addEventListener('click', run);
-    panel.querySelector('#ism-reflectivity')?.addEventListener('input', event => {
-      panel.querySelector('#ism-reflectivity-value').textContent = `${event.target.value}%`;
+    panel.querySelector('#ism-run')?.addEventListener('click', () => void run());
+    panel.querySelector('#ism-reset-view')?.addEventListener('click', resetCamera);
+    panel.querySelector('#ism-auto-orbit')?.addEventListener('click', event => {
+      if (!viewportState?.controls) return;
+      const enabled = !viewportState.controls.autoRotate;
+      viewportState.controls.autoRotate = enabled;
+      viewportState.controls.autoRotateSpeed = 0.8;
+      event.currentTarget.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+      event.currentTarget.textContent = enabled ? 'Stop orbit' : 'Auto orbit';
+      startRenderLoop();
     });
-    panel.querySelector('#ism-events')?.addEventListener('input', event => {
-      panel.querySelector('#ism-events-value').textContent = event.target.value;
-    });
+
+    const bindRangeOutput = (inputId, outputId, formatter) => {
+      const input = panel.querySelector(`#${inputId}`);
+      const output = panel.querySelector(`#${outputId}`);
+      input?.addEventListener('input', event => {
+        if (output) output.textContent = formatter(Number(event.target.value));
+      });
+    };
+    bindRangeOutput('ism-reflectivity', 'ism-reflectivity-value', value => `${value}%`);
+    bindRangeOutput('ism-events', 'ism-events-value', value => String(value));
+    bindRangeOutput('ism-field-strength', 'ism-field-strength-value', value => `${value.toFixed(2)} nT · ${(value * 10).toFixed(1)} μG`);
+    bindRangeOutput('ism-field-azimuth', 'ism-field-azimuth-value', value => `${value.toFixed(0)}°`);
+    bindRangeOutput('ism-field-elevation', 'ism-field-elevation-value', value => `${value.toFixed(0)}°`);
+
     panel.addEventListener('keydown', event => {
       if (event.key === 'Escape') closePanel();
     });
@@ -162,6 +272,78 @@
   function vectorNormalize(vector) {
     const length = Math.hypot(vector.x, vector.y, vector.z) || 1;
     return { x: vector.x / length, y: vector.y / length, z: vector.z / length };
+  }
+
+  function vectorDot(left, right) {
+    return left.x * right.x + left.y * right.y + left.z * right.z;
+  }
+
+  function vectorCross(left, right) {
+    return {
+      x: left.y * right.z - left.z * right.y,
+      y: left.z * right.x - left.x * right.z,
+      z: left.x * right.y - left.y * right.x
+    };
+  }
+
+  function vectorScale(vector, scalar) {
+    return { x: vector.x * scalar, y: vector.y * scalar, z: vector.z * scalar };
+  }
+
+  function vectorAdd(...vectors) {
+    return vectors.reduce((result, vector) => ({
+      x: result.x + vector.x,
+      y: result.y + vector.y,
+      z: result.z + vector.z
+    }), { x: 0, y: 0, z: 0 });
+  }
+
+  function rotateAroundAxis(vector, axis, angle) {
+    const cosine = Math.cos(angle);
+    const sine = Math.sin(angle);
+    const dot = vectorDot(axis, vector);
+    const cross = vectorCross(axis, vector);
+    return vectorNormalize({
+      x: vector.x * cosine + cross.x * sine + axis.x * dot * (1 - cosine),
+      y: vector.y * cosine + cross.y * sine + axis.y * dot * (1 - cosine),
+      z: vector.z * cosine + cross.z * sine + axis.z * dot * (1 - cosine)
+    });
+  }
+
+  function fieldDirection(azimuthDegrees, elevationDegrees) {
+    const azimuth = azimuthDegrees * Math.PI / 180;
+    const elevation = elevationDegrees * Math.PI / 180;
+    const planar = Math.cos(elevation);
+    return vectorNormalize({
+      x: Math.cos(azimuth) * planar,
+      y: Math.sin(elevation),
+      z: Math.sin(azimuth) * planar
+    });
+  }
+
+  function protonKinematics(energyEv) {
+    const kineticJoules = Math.max(0, energyEv) * EV_TO_JOULE;
+    const restEnergy = PROTON_MASS * C * C;
+    const gamma = 1 + kineticJoules / restEnergy;
+    const betaSquared = Math.max(0, 1 - 1 / (gamma * gamma));
+    return {
+      energyEv,
+      kineticJoules,
+      gamma,
+      speed: C * Math.sqrt(betaSquared)
+    };
+  }
+
+  function magneticPhysics(config) {
+    const proton = protonKinematics(config.protonEnergyEv);
+    const bTesla = Math.max(0, config.fieldStrengthNt) * 1e-9;
+    const direction = fieldDirection(config.fieldAzimuthDeg, config.fieldElevationDeg);
+    const gyroAngularFrequency = bTesla > 0 ? PROTON_CHARGE * bTesla / (proton.gamma * PROTON_MASS) : 0;
+    const gyroRadius90 = bTesla > 0 && proton.speed > 0
+      ? proton.gamma * PROTON_MASS * proton.speed / (PROTON_CHARGE * bTesla)
+      : Infinity;
+    const magneticAcceleration90 = proton.speed * gyroAngularFrequency;
+    return { ...proton, bTesla, direction, gyroAngularFrequency, gyroRadius90, magneticAcceleration90 };
   }
 
   function nextBoundary(position, direction, side) {
@@ -188,10 +370,62 @@
     return vectorNormalize({ x: direction.x + kick.x, y: direction.y + kick.y, z: direction.z + kick.z });
   }
 
+  function advanceMagnetic(position, direction, pathLength, physics) {
+    if (!(pathLength > 0) || !(physics.speed > 0) || !(physics.gyroAngularFrequency > 0)) {
+      return {
+        position: {
+          x: position.x + direction.x * pathLength,
+          y: position.y + direction.y * pathLength,
+          z: position.z + direction.z * pathLength
+        },
+        direction,
+        samples: []
+      };
+    }
+
+    const totalTime = pathLength / physics.speed;
+    const totalTheta = physics.gyroAngularFrequency * totalTime;
+    const steps = clamp(Math.ceil(Math.abs(totalTheta) / 0.04), 1, 12);
+    const stepLength = pathLength / steps;
+    const stepTime = totalTime / steps;
+    let currentPosition = { ...position };
+    let currentDirection = { ...direction };
+    const samples = [];
+
+    for (let index = 0; index < steps; index += 1) {
+      const theta = physics.gyroAngularFrequency * stepTime;
+      if (Math.abs(theta) < 1e-6) {
+        currentPosition = {
+          x: currentPosition.x + currentDirection.x * stepLength,
+          y: currentPosition.y + currentDirection.y * stepLength,
+          z: currentPosition.z + currentDirection.z * stepLength
+        };
+        currentDirection = rotateAroundAxis(currentDirection, physics.direction, -theta);
+      } else {
+        const parallelScale = vectorDot(currentDirection, physics.direction);
+        const parallel = vectorScale(physics.direction, parallelScale);
+        const perpendicular = vectorAdd(currentDirection, vectorScale(parallel, -1));
+        const fieldCrossPerpendicular = vectorCross(physics.direction, perpendicular);
+        const sinFactor = Math.sin(theta) / physics.gyroAngularFrequency;
+        const curveFactor = (1 - Math.cos(theta)) / physics.gyroAngularFrequency;
+        const displacement = vectorScale(vectorAdd(
+          vectorScale(parallel, stepTime),
+          vectorScale(perpendicular, sinFactor),
+          vectorScale(fieldCrossPerpendicular, -curveFactor)
+        ), physics.speed);
+        currentPosition = vectorAdd(currentPosition, displacement);
+        currentDirection = rotateAroundAxis(currentDirection, physics.direction, -theta);
+      }
+      samples.push({ ...currentPosition });
+    }
+
+    return { position: currentPosition, direction: currentDirection, samples };
+  }
+
   function simulate(config) {
     const density = DENSITY_PRESETS[config.density].perM3;
     const side = physicalSideMeters(config.particleCount, density);
-    const randomParticles = rngFrom(`${config.shadowKey}|particles|${config.density}|${config.particleCount}`);
+    const randomParticles = rngFrom(`ism-physical-particles|${config.density}|${config.particleCount}`);
     const particles = new Array(config.particleCount);
     for (let index = 0; index < config.particleCount; index += 1) {
       particles[index] = { x: randomParticles() * side, y: randomParticles() * side, z: randomParticles() * side };
@@ -204,12 +438,13 @@
     const center = side / 2;
     const aperture = side * 0.16;
     const reflectivity = config.reflectivity / 100;
+    const magnetics = magneticPhysics(config);
 
     for (let rayIndex = 0; rayIndex < config.rayCount; rayIndex += 1) {
       const phase = ((rayIndex / Math.max(1, config.rayCount)) * Math.PI * 2 + beamRandom() * 0.12) % (Math.PI * 2);
       let position = {
-        x: Math.max(0, Math.min(side, center + (beamRandom() - 0.5) * aperture)),
-        y: Math.max(0, Math.min(side, center + (beamRandom() - 0.5) * aperture)),
+        x: clamp(center + (beamRandom() - 0.5) * aperture, 0, side),
+        y: clamp(center + (beamRandom() - 0.5) * aperture, 0, side),
         z: 0
       };
       let direction = vectorNormalize({ x: Math.cos(phase) * 0.012, y: Math.sin(phase) * 0.012, z: 1 });
@@ -221,12 +456,11 @@
         if (!remaining.t) break;
         const progress = 0.12 + shadowRandom() * 0.62;
         const travel = remaining.t * progress;
-        position = {
-          x: position.x + direction.x * travel,
-          y: position.y + direction.y * travel,
-          z: position.z + direction.z * travel
-        };
-        path.push({ ...position });
+        const advanced = advanceMagnetic(position, direction, travel, magnetics);
+        position = advanced.position;
+        direction = advanced.direction;
+        advanced.samples.forEach(sample => path.push(sample));
+        if (!advanced.samples.length) path.push({ ...position });
 
         const particleIndex = Math.floor(shadowRandom() * particles.length);
         const particle = particles[particleIndex];
@@ -239,12 +473,11 @@
       if (!boundary.t) {
         outputs.retained += 1;
       } else {
-        const exit = {
-          x: position.x + direction.x * boundary.t,
-          y: position.y + direction.y * boundary.t,
-          z: position.z + direction.z * boundary.t
-        };
-        path.push(exit);
+        const advanced = advanceMagnetic(position, direction, boundary.t, magnetics);
+        position = advanced.position;
+        direction = advanced.direction;
+        advanced.samples.forEach(sample => path.push(sample));
+        if (!advanced.samples.length) path.push({ ...position });
         outputs[boundary.face] = (outputs[boundary.face] || 0) + 1;
       }
       rays.push({ phase, path, impacts, exitFace: boundary.face || 'retained' });
@@ -253,98 +486,290 @@
     const lambdaAcceleration = LAMBDA_COEFFICIENT * side;
     const lightTransit = side / C;
     const lambdaDisplacementAcrossTransit = 0.5 * lambdaAcceleration * lightTransit * lightTransit;
+    const magneticDeflectionAcrossCube = Number.isFinite(magnetics.gyroRadius90)
+      ? side * side / (2 * magnetics.gyroRadius90)
+      : 0;
+    const magneticToLambdaAcceleration = lambdaAcceleration > 0
+      ? magnetics.magneticAcceleration90 / lambdaAcceleration
+      : Infinity;
 
-    return { ...config, density, side, particles, rays, outputs, lambdaAcceleration, lightTransit, lambdaDisplacementAcrossTransit };
-  }
-
-  function projection(point, side, width, height) {
-    const nx = point.x / side - 0.5;
-    const ny = point.y / side - 0.5;
-    const nz = point.z / side - 0.5;
     return {
-      x: width * 0.5 + nx * width * 0.62 + nz * width * 0.22,
-      y: height * 0.54 - ny * height * 0.66 - nz * height * 0.20
+      ...config,
+      density,
+      side,
+      particles,
+      rays,
+      outputs,
+      magnetics,
+      lambdaAcceleration,
+      lightTransit,
+      lambdaDisplacementAcrossTransit,
+      magneticDeflectionAcrossCube,
+      magneticToLambdaAcceleration
     };
   }
 
-  function draw(result) {
-    const canvas = document.getElementById('ism-canvas');
-    if (!canvas) return;
-    const context = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    context.clearRect(0, 0, width, height);
-    context.fillStyle = '#071019';
-    context.fillRect(0, 0, width, height);
+  function toScenePoint(point, side, THREE) {
+    return new THREE.Vector3(
+      point.x / side - 0.5,
+      point.y / side - 0.5,
+      point.z / side - 0.5
+    );
+  }
 
-    const corners = [
-      {x:0,y:0,z:0},{x:result.side,y:0,z:0},{x:result.side,y:result.side,z:0},{x:0,y:result.side,z:0},
-      {x:0,y:0,z:result.side},{x:result.side,y:0,z:result.side},{x:result.side,y:result.side,z:result.side},{x:0,y:result.side,z:result.side}
-    ].map(point => projection(point, result.side, width, height));
-    const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
-    context.strokeStyle = 'rgba(126,184,215,.42)';
-    context.lineWidth = 1.2;
-    edges.forEach(([a,b]) => {
-      context.beginPath(); context.moveTo(corners[a].x,corners[a].y); context.lineTo(corners[b].x,corners[b].y); context.stroke();
+  function disposeMaterial(material) {
+    if (!material) return;
+    if (Array.isArray(material)) material.forEach(disposeMaterial);
+    else material.dispose?.();
+  }
+
+  function disposeObject(object) {
+    object?.traverse?.(node => {
+      node.geometry?.dispose?.();
+      disposeMaterial(node.material);
     });
+  }
 
-    const particleStride = Math.max(1, Math.floor(result.particles.length / 7000));
-    context.fillStyle = 'rgba(219,235,245,.42)';
-    for (let index = 0; index < result.particles.length; index += particleStride) {
-      const point = projection(result.particles[index], result.side, width, height);
-      context.fillRect(point.x, point.y, 1.2, 1.2);
+  function clearGroup(group) {
+    if (!group) return;
+    while (group.children.length) {
+      const child = group.children.pop();
+      disposeObject(child);
+    }
+  }
+
+  function resizeViewport() {
+    if (!viewportState) return;
+    const { host, renderer, camera } = viewportState;
+    const width = Math.max(1, host.clientWidth);
+    const height = Math.max(320, host.clientHeight);
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.render(viewportState.scene, camera);
+  }
+
+  function resetCamera() {
+    if (!viewportState) return;
+    viewportState.camera.position.set(1.35, 0.95, 1.55);
+    viewportState.controls.target.set(0, 0, 0);
+    viewportState.controls.update();
+    viewportState.renderer.render(viewportState.scene, viewportState.camera);
+  }
+
+  function renderLoopFrame() {
+    if (!viewportState) return;
+    const panel = document.getElementById(PANEL_ID);
+    if (!panel || panel.hidden) {
+      viewportState.renderRaf = 0;
+      return;
+    }
+    viewportState.controls.update();
+    viewportState.renderer.render(viewportState.scene, viewportState.camera);
+    viewportState.renderRaf = requestAnimationFrame(renderLoopFrame);
+  }
+
+  function startRenderLoop() {
+    if (!viewportState || viewportState.renderRaf) return;
+    viewportState.renderRaf = requestAnimationFrame(renderLoopFrame);
+  }
+
+  function stopRenderLoop() {
+    if (!viewportState?.renderRaf) return;
+    cancelAnimationFrame(viewportState.renderRaf);
+    viewportState.renderRaf = 0;
+  }
+
+  async function ensureViewport() {
+    const THREE = await ensureThree();
+    const host = document.getElementById('ism-viewport');
+    if (!host) return null;
+    if (viewportState?.host === host) {
+      resizeViewport();
+      startRenderLoop();
+      return viewportState;
     }
 
-    result.rays.forEach((ray, rayIndex) => {
-      context.strokeStyle = `hsla(${185 + (rayIndex % 38)}, 78%, 68%, .34)`;
-      context.lineWidth = 1;
-      context.beginPath();
-      ray.path.forEach((point, index) => {
-        const projected = projection(point, result.side, width, height);
-        if (!index) context.moveTo(projected.x, projected.y); else context.lineTo(projected.x, projected.y);
-      });
-      context.stroke();
-      ray.impacts.filter(impact => impact.keyedImpact).forEach(impact => {
-        const projected = projection(impact.position, result.side, width, height);
-        context.strokeStyle = 'rgba(255,190,92,.78)';
-        context.beginPath();
-        context.moveTo(projected.x - 2.5, projected.y - 2.5);
-        context.lineTo(projected.x + 2.5, projected.y + 2.5);
-        context.moveTo(projected.x + 2.5, projected.y - 2.5);
-        context.lineTo(projected.x - 2.5, projected.y + 2.5);
-        context.stroke();
-      });
+    if (viewportState) {
+      stopRenderLoop();
+      viewportState.resizeObserver?.disconnect?.();
+      viewportState.controls?.dispose?.();
+      viewportState.renderer?.dispose?.();
+    }
+
+    host.replaceChildren();
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x071019);
+    scene.fog = new THREE.FogExp2(0x071019, 0.24);
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.01, 20);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    host.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    Object.assign(controls, {
+      enableDamping: true,
+      dampingFactor: 0.06,
+      rotateSpeed: 0.55,
+      panSpeed: 0.5,
+      zoomSpeed: 0.75,
+      minDistance: 0.75,
+      maxDistance: 5,
+      screenSpacePanning: true
     });
+
+    const worldGroup = new THREE.Group();
+    const rayGroup = new THREE.Group();
+    worldGroup.add(rayGroup);
+    scene.add(worldGroup);
+
+    viewportState = {
+      THREE,
+      host,
+      scene,
+      camera,
+      renderer,
+      controls,
+      worldGroup,
+      rayGroup,
+      renderRaf: 0,
+      resizeObserver: null
+    };
+    resetCamera();
+
+    if (window.ResizeObserver) {
+      viewportState.resizeObserver = new ResizeObserver(resizeViewport);
+      viewportState.resizeObserver.observe(host);
+    } else {
+      window.addEventListener('resize', resizeViewport);
+    }
+    resizeViewport();
+    startRenderLoop();
+    return viewportState;
+  }
+
+  function addFieldGuide(result) {
+    if (!viewportState) return;
+    const { THREE, worldGroup } = viewportState;
+    const direction = new THREE.Vector3(
+      result.magnetics.direction.x,
+      result.magnetics.direction.y,
+      result.magnetics.direction.z
+    ).normalize();
+    const origin = new THREE.Vector3(-0.38, -0.38, -0.38);
+    const arrow = new THREE.ArrowHelper(direction, origin, 0.72, 0xd6a85f, 0.09, 0.045);
+    arrow.userData.ismKind = 'field-guide';
+    worldGroup.add(arrow);
+  }
+
+  function prepareScene(result) {
+    if (!viewportState) return;
+    const { THREE, worldGroup } = viewportState;
+    clearGroup(worldGroup);
+
+    const rayGroup = new THREE.Group();
+    viewportState.rayGroup = rayGroup;
+    worldGroup.add(rayGroup);
+
+    const box = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)),
+      new THREE.LineBasicMaterial({ color: 0x5d8da8, transparent: true, opacity: 0.72 })
+    );
+    worldGroup.add(box);
+
+    const axes = new THREE.AxesHelper(0.36);
+    axes.position.set(-0.5, -0.5, -0.5);
+    worldGroup.add(axes);
+
+    const particleStride = Math.max(1, Math.floor(result.particles.length / 24000));
+    const particlePositions = [];
+    for (let index = 0; index < result.particles.length; index += particleStride) {
+      const point = toScenePoint(result.particles[index], result.side, THREE);
+      particlePositions.push(point.x, point.y, point.z);
+    }
+    const particleGeometry = new THREE.BufferGeometry();
+    particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
+    const particles = new THREE.Points(
+      particleGeometry,
+      new THREE.PointsMaterial({ color: 0xdbeaf2, size: 0.006, transparent: true, opacity: 0.52, sizeAttenuation: true })
+    );
+    worldGroup.add(particles);
+
+    addFieldGuide(result);
+    viewportState.renderer.render(viewportState.scene, viewportState.camera);
+  }
+
+  function addRayVisual(result, ray, rayIndex) {
+    if (!viewportState) return;
+    const { THREE, rayGroup } = viewportState;
+    const points = ray.path.map(point => toScenePoint(point, result.side, THREE));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const color = new THREE.Color().setHSL((0.50 + (rayIndex % 38) / 210) % 1, 0.72, 0.66);
+    const line = new THREE.Line(
+      geometry,
+      new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.66 })
+    );
+    rayGroup.add(line);
+
+    const keyed = ray.impacts.filter(impact => impact.keyedImpact);
+    if (keyed.length) {
+      const impactPositions = [];
+      keyed.forEach(impact => {
+        const point = toScenePoint(impact.position, result.side, THREE);
+        impactPositions.push(point.x, point.y, point.z);
+      });
+      const impactGeometry = new THREE.BufferGeometry();
+      impactGeometry.setAttribute('position', new THREE.Float32BufferAttribute(impactPositions, 3));
+      rayGroup.add(new THREE.Points(
+        impactGeometry,
+        new THREE.PointsMaterial({ color: 0xffbd5c, size: 0.025, transparent: true, opacity: 0.92, sizeAttenuation: true })
+      ));
+    }
   }
 
   function renderMetrics(result) {
     const target = document.getElementById('ism-metrics');
     if (!target) return;
+    const energyLabel = result.protonEnergyEv >= 1e6
+      ? `${(result.protonEnergyEv / 1e6).toFixed(result.protonEnergyEv >= 1e8 ? 0 : 1)} MeV`
+      : `${(result.protonEnergyEv / 1e3).toFixed(0)} keV`;
+    const bMicrogauss = result.fieldStrengthNt * 10;
     target.innerHTML = [
       ['Literal particles', result.particleCount.toLocaleString()],
       ['Physical cube edge', formatLength(result.side)],
       ['Number density', `${formatScientific(result.density)} m⁻³`],
-      ['Λ coefficient', `${formatScientific(LAMBDA_COEFFICIENT)} s⁻²`],
+      ['ISM magnetic field', `${result.fieldStrengthNt.toFixed(2)} nT · ${bMicrogauss.toFixed(1)} μG`],
+      ['Proton kinetic energy', energyLabel],
+      ['Proton speed', `${formatScientific(result.magnetics.speed)} m/s`],
+      ['90° proton gyroradius', Number.isFinite(result.magnetics.gyroRadius90) ? formatLength(result.magnetics.gyroRadius90) : '∞'],
+      ['Magnetic shift / cube', formatLength(result.magneticDeflectionAcrossCube)],
+      ['Magnetic acceleration', `${formatScientific(result.magnetics.magneticAcceleration90)} m/s²`],
+      ['aB / aΛ @ edge', Number.isFinite(result.magneticToLambdaAcceleration) ? formatScientific(result.magneticToLambdaAcceleration) : '∞'],
       ['Λ acceleration @ edge', `${formatScientific(result.lambdaAcceleration)} m/s²`],
-      ['Light transit time', `${formatScientific(result.lightTransit)} s`],
-      ['Λ displacement / transit', `${formatScientific(result.lambdaDisplacementAcrossTransit)} m`],
-      ['Shadow reflectivity', `${result.reflectivity}%`]
-    ].map(([label,value]) => `<div class="ism-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
+      ['Λ displacement / transit', `${formatScientific(result.lambdaDisplacementAcrossTransit)} m`]
+    ].map(([label, value]) => `<div class="ism-metric"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
   }
 
-  function renderOutputs(result) {
+  function renderOutputs(result, visibleRayCount = result.rayCount) {
     const chart = document.getElementById('ism-face-chart');
     const secondary = document.getElementById('ism-secondary-output');
     if (!chart || !secondary) return;
-    const denominator = Math.max(1, result.rayCount);
+    const clampedVisible = clamp(visibleRayCount, 0, result.rayCount);
+    const outputs = { '+Z': 0, '+X': 0, '-X': 0, '+Y': 0, '-Y': 0, '-Z': 0, retained: 0 };
+    for (let index = 0; index < clampedVisible; index += 1) {
+      const face = result.rays[index]?.exitFace || 'retained';
+      outputs[face] = (outputs[face] || 0) + 1;
+    }
+    const denominator = Math.max(1, clampedVisible);
     chart.innerHTML = FACE_ORDER.map(face => {
-      const count = result.outputs[face] || 0;
+      const count = outputs[face] || 0;
       const percentage = count / denominator * 100;
       return `<div class="ism-face-row"><span class="ism-face-label">${face}</span><div class="ism-face-track"><span style="width:${percentage.toFixed(3)}%"></span></div><strong>${count} · ${percentage.toFixed(2)}%</strong></div>`;
     }).join('');
-    const backscatter = result.outputs['-Z'] || 0;
-    const retained = result.outputs.retained || 0;
-    secondary.innerHTML = `<span>Backscatter to input −Z: <strong>${backscatter}</strong></span><span>Retained/in-cube: <strong>${retained}</strong></span><span>Total rays: <strong>${result.rayCount}</strong></span>`;
+    const backscatter = outputs['-Z'] || 0;
+    const retained = outputs.retained || 0;
+    secondary.innerHTML = `<span>Backscatter to input −Z: <strong>${backscatter}</strong></span><span>Retained/in-cube: <strong>${retained}</strong></span><span>Cast progress: <strong>${clampedVisible}/${result.rayCount}</strong></span><span>Physical light transit: <strong>${esc(formatScientific(result.lightTransit))} s</strong></span>`;
   }
 
   function readConfig() {
@@ -354,26 +779,75 @@
       rayCount: Number(document.getElementById('ism-rays')?.value || 128),
       reflectivity: Number(document.getElementById('ism-reflectivity')?.value || 28),
       events: Number(document.getElementById('ism-events')?.value || 6),
+      fieldStrengthNt: Number(document.getElementById('ism-field-strength')?.value || 0.38),
+      fieldAzimuthDeg: Number(document.getElementById('ism-field-azimuth')?.value || 125),
+      fieldElevationDeg: Number(document.getElementById('ism-field-elevation')?.value || 37),
+      protonEnergyEv: Number(document.getElementById('ism-proton-energy')?.value || 1e6),
       beamSeed: document.getElementById('ism-beam-seed')?.value || 'phase-light-01',
       shadowKey: document.getElementById('ism-shadow-key')?.value || 'shadow-key-01',
       setting: activeSetting
     };
   }
 
-  function run() {
+  function animateCast(result, token) {
     const button = document.getElementById('ism-run');
-    if (button) { button.disabled = true; button.textContent = 'Casting…'; }
+    const start = performance.now();
+    const duration = 1250;
+    let visible = 0;
+
+    renderOutputs(result, 0);
+
+    return new Promise(resolve => {
+      const frame = now => {
+        if (token !== castToken) return resolve(false);
+        const elapsed = now - start;
+        const targetVisible = Math.min(result.rayCount, Math.floor((elapsed / duration) * result.rayCount) + 1);
+        while (visible < targetVisible) {
+          addRayVisual(result, result.rays[visible], visible);
+          visible += 1;
+        }
+        renderOutputs(result, visible);
+        if (button) button.textContent = `Casting ${visible}/${result.rayCount}`;
+
+        if (visible < result.rayCount) {
+          requestAnimationFrame(frame);
+          return;
+        }
+        resolve(true);
+      };
+      requestAnimationFrame(frame);
+    });
+  }
+
+  async function run() {
+    const button = document.getElementById('ism-run');
+    const token = ++castToken;
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Preparing 3D cast…';
+    }
+
     try {
+      await ensureViewport();
+      if (token !== castToken) return;
       lastRun = simulate(readConfig());
       renderMetrics(lastRun);
-      renderOutputs(lastRun);
-      draw(lastRun);
+      prepareScene(lastRun);
+      const completed = await animateCast(lastRun, token);
+      if (!completed || token !== castToken) return;
+    } catch (error) {
+      console.error('ISM phase-beam cast failed.', error);
+      const secondary = document.getElementById('ism-secondary-output');
+      if (secondary) secondary.innerHTML = `<span class="ism-error">Cast failed: ${esc(error.message)}</span>`;
     } finally {
-      if (button) { button.disabled = false; button.textContent = 'Cast Phase Beam'; }
+      if (token === castToken && button) {
+        button.disabled = false;
+        button.textContent = 'Cast Phase Beam';
+      }
     }
   }
 
-  function openPanel() {
+  async function openPanel() {
     ensureStyle();
     const panel = buildPanel();
     activeSetting = 'scientific-tools';
@@ -381,18 +855,32 @@
     if (label) label.textContent = 'Scientific Tools';
     panel.hidden = false;
     document.documentElement.classList.add('ism-lab-open');
-    run();
+    try {
+      await ensureViewport();
+      await run();
+    } catch (error) {
+      console.error('ISM laboratory could not initialize its 3D viewport.', error);
+    }
     panel.querySelector('#ism-beam-seed')?.focus();
+    return panel;
   }
 
   function closePanel() {
+    castToken += 1;
     const panel = document.getElementById(PANEL_ID);
     if (panel) panel.hidden = true;
     document.documentElement.classList.remove('ism-lab-open');
+    stopRenderLoop();
   }
 
   window.InterstellarMediaCollisionsLab = Object.freeze({
-    constants: Object.freeze({ LAMBDA, LAMBDA_COEFFICIENT, DENSITY_PRESETS }),
+    constants: Object.freeze({
+      LAMBDA,
+      LAMBDA_COEFFICIENT,
+      DENSITY_PRESETS,
+      PROTON_CHARGE,
+      PROTON_MASS
+    }),
     openPanel,
     closePanel,
     simulate,
