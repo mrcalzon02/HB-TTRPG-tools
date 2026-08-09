@@ -8,11 +8,13 @@ on:
       - "binary-cube-steganalysis-engine.js"
       - "binary-cube-steganalysis-evidence-profile.js"
       - "binary-cube-steganalysis-worker.js"
+      - "binary-cube-steganalysis-worker-client.js"
       - "binary-cube-media-forensics-demo-corpus.js"
       - "scientific-tools-local-media.js"
       - "scripts/research-rgb-lsb-steganalysis-blindspot.mjs"
       - "scripts/validate-rgb-lsb-steganalysis-blindspot.mjs"
       - "scripts/validate-binary-cube-steganalysis-evidence-profile.mjs"
+      - "scripts/validate-binary-cube-steganalysis-worker-client.mjs"
   workflow_dispatch:
 
 permissions:
@@ -50,11 +52,13 @@ jobs:
           node --check binary-cube-steganalysis-engine.js
           node --check binary-cube-steganalysis-evidence-profile.js
           node --check binary-cube-steganalysis-worker.js
+          node --check binary-cube-steganalysis-worker-client.js
           node --check binary-cube-media-forensics-demo-corpus.js
           node --check scientific-tools-local-media.js
           node --check scripts/research-rgb-lsb-steganalysis-blindspot.mjs
           node --check scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
           node --check scripts/validate-binary-cube-steganalysis-evidence-profile.mjs
+          node --check scripts/validate-binary-cube-steganalysis-worker-client.mjs
           grep -q "importScripts('binary-cube-steganalysis-evidence-profile.js?v=20260809-raster-evidence-profile-1')" binary-cube-steganalysis-worker.js
           grep -q "operation === 'raster-evidence-profile'" binary-cube-steganalysis-worker.js
           grep -q "EvidenceProfile.profileRaster" binary-cube-steganalysis-worker.js
@@ -63,6 +67,9 @@ jobs:
 
       - name: Validate evidence-vector separation
         run: node scripts/validate-binary-cube-steganalysis-evidence-profile.mjs
+
+      - name: Validate shared freeze-safe worker client
+        run: node scripts/validate-binary-cube-steganalysis-worker-client.mjs
 
       - name: Preserve measured RGB-LSB blind spot
         run: node scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
