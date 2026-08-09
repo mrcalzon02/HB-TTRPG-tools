@@ -22,6 +22,7 @@ on:
       - "double-slit-lab.js"
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
+      - "scripts/validate-cooperative-slice-budget.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
       - "scripts/validate-binary-cube-information-analysis-suite.mjs"
@@ -73,6 +74,7 @@ jobs:
           node --check interstellar-media-collisions-lab.js
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
+          node --check scripts/validate-cooperative-slice-budget.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
           node --check scripts/validate-binary-cube-information-analysis-suite.mjs
@@ -84,6 +86,9 @@ jobs:
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
+
+      - name: Validate cooperative time-slice budget
+        run: node scripts/validate-cooperative-slice-budget.mjs
 
       - name: Validate Binary Cube Decryption Dashboard
         run: node scripts/validate-binary-cube-decryption-dashboard.mjs
