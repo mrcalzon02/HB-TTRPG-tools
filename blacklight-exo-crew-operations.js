@@ -25,79 +25,242 @@
   const STATIONS = Object.freeze({
     helm: {
       label: "Helm",
-      description: "Human-derived flight-control station. The display is immersive role-play state; the procedure attempt produces a suggested d10 difficulty for the DM.",
+      description: "Human flight-control station built around inertial attitude control, reaction-control thrusters and a commanded main-drive thrust vector. The display is role-play state; the procedure produces a suggested d10 difficulty for the DM.",
       display: "maneuver",
-      labels: { guard: "Flight interlock", mode: "Maneuver mode", bus: "Thrust bus", dial: "Vector trim", lever: "Thrust gate", confirmA: "Flight confirm", confirmB: "Pilot acknowledge", execute: "EXECUTE BURN" },
+      labels: {
+        guard: "Flight inhibit guard",
+        mode: "Flight-mode rotary",
+        bus: "Thruster manifold",
+        dial: "Attitude trim knob",
+        slider: "Translation demand",
+        lever: "Thrust gate lever",
+        confirmA: "Vector confirm",
+        confirmB: "Pilot acknowledge",
+        execute: "COMMIT THRUST"
+      },
       readouts: state => [["Heading", `${round(state.heading)}°`], ["Velocity", `${round(state.velocity, 1)} km/s`], ["Throttle", `${round(state.throttle)}%`], ["Drive", `${round(state.driveHealth)}%`]],
       procedures: [
-        { id: "course-burn", name: "Execute course burn", cue: "Release the flight interlock, establish the commanded maneuver mode and thrust bus, trim the vector, confirm the command, set the thrust gate, then execute.", sequence: ["guard-open","mode-2","bus-primary","dial-right","dial-right","confirm-a","lever-forward","confirm-a","execute"] },
-        { id: "evasive-burn", name: "Evasive maneuver", cue: "Release the interlock, move to evasive authority, shift the thrust feed, acknowledge the maneuver, cross-trim the vector, gate thrust, double-confirm, then execute.", sequence: ["guard-open","mode-3","bus-aux","confirm-b","dial-right","dial-left","lever-forward","confirm-b","confirm-b","execute"] },
-        { id: "docking-correction", name: "Docking correction", cue: "Release the interlock, select precision maneuvering, establish the primary feed, trim down twice, confirm, center the gate, trim back once, confirm, then execute.", sequence: ["guard-open","mode-1","bus-primary","dial-left","dial-left","confirm-a","lever-center","dial-right","confirm-a","execute"] }
+        {
+          id: "planned-burn",
+          name: "Execute planned translation burn",
+          cue: "Use the planned-burn channel, the normal thruster manifold and a positive translation command. Verify the vector before committing thrust.",
+          sequence: ["guard-open", "mode-2", "bus-primary", "slider-high", "confirm-a", "lever-forward", "execute"]
+        },
+        {
+          id: "attitude-slew",
+          name: "Perform attitude slew",
+          cue: "Use attitude-control authority and trim the commanded orientation before handing the maneuver to the thruster gate.",
+          sequence: ["guard-open", "mode-1", "dial-right", "dial-right", "confirm-a", "execute"]
+        },
+        {
+          id: "docking-trim",
+          name: "Docking / proximity correction",
+          cue: "Use precision control, the auxiliary maneuvering manifold and restrained translation. Small trim corrections should be verified before execution.",
+          sequence: ["guard-open", "mode-3", "bus-aux", "slider-mid", "dial-left", "lever-center", "confirm-a", "execute"]
+        }
       ]
     },
+
     navigation: {
       label: "Navigation",
-      description: "Human-derived astrogation station. Procedure order matters; the console does not decide whether the character succeeds.",
+      description: "Human astrogation station using inertial reference, timebase, ephemeris data and finite-burn transfer solutions. Procedure order affects the suggested difficulty; the console does not resolve the character's roll.",
       display: "plot",
-      labels: { guard: "Solution guard", mode: "Ephemeris mode", bus: "Reference source", dial: "Solution index", lever: "Commit gate", confirmA: "Vector confirm", confirmB: "Reference lock", execute: "COMMIT SOLUTION" },
+      labels: {
+        guard: "Solution inhibit guard",
+        mode: "Solution-mode rotary",
+        bus: "Reference source",
+        dial: "Transfer index knob",
+        slider: "Δv bias slider",
+        lever: "Solution gate lever",
+        confirmA: "Vector confirm",
+        confirmB: "Timebase lock",
+        execute: "COMMIT SOLUTION"
+      },
       readouts: state => [["Solution", `${round(state.nav)}%`], ["Destination", state.navDestination], ["Δv plan", `${round(state.navBurnDeltaV, 2)} km/s`], ["Committed", state.courseCommitted ? "yes" : "no"]],
       procedures: [
-        { id: "transfer-solve", name: "Compute transfer solution", cue: "Open the solution guard, choose the transfer ephemeris, lock a reference source, advance the solution index repeatedly, confirm, open the commit gate, confirm again, then commit.", sequence: ["guard-open","mode-1","bus-primary","dial-right","dial-right","dial-right","confirm-a","lever-forward","confirm-a","execute"] },
-        { id: "course-commit", name: "Commit course to Helm", cue: "Open the guard, choose helm-transfer mode, keep the primary reference, verify both vector and reference, open the commit gate, reconfirm the vector, then commit.", sequence: ["guard-open","mode-2","bus-primary","confirm-a","confirm-b","lever-forward","confirm-a","execute"] },
-        { id: "emergency-egress", name: "Emergency egress solution", cue: "Open the guard, enter emergency ephemeris, move to the auxiliary reference, back the solution index once, lock the reference, open the commit gate, double-lock, then commit.", sequence: ["guard-open","mode-3","bus-aux","dial-left","confirm-b","lever-forward","confirm-b","confirm-b","execute"] }
+        {
+          id: "transfer-solve",
+          name: "Compute transfer solution",
+          cue: "Establish the normal inertial reference, solve a transfer trajectory, bias the required delta-v and verify the resulting vector before committing it.",
+          sequence: ["guard-open", "mode-1", "bus-primary", "dial-right", "slider-mid", "confirm-a", "execute"]
+        },
+        {
+          id: "collision-vector",
+          name: "Generate collision-avoidance vector",
+          cue: "Use the rapid-update reference path and a stronger delta-v bias. Confirm the timebase before handing the vector to Helm.",
+          sequence: ["guard-open", "mode-2", "bus-aux", "slider-high", "confirm-b", "lever-forward", "execute"]
+        },
+        {
+          id: "emergency-egress",
+          name: "Emergency egress solution",
+          cue: "Select the emergency solver, preserve a valid inertial reference, open the solution gate and verify timebase before committing the escape vector.",
+          sequence: ["guard-open", "mode-3", "bus-primary", "lever-forward", "confirm-b", "execute"]
+        }
       ]
     },
+
     gunnery: {
       label: "Gunnery",
-      description: "Human fire-control station. Arming and firing are represented as procedural inputs; actual hit or damage resolution remains entirely with the DM and player roll.",
+      description: "Human fire-control station using sensor tracks, range/range-rate gating, stored weapon energy and explicit arming interlocks. It generates roll difficulty only; hit and damage remain DM adjudication.",
       display: "target",
-      labels: { guard: "Weapon interlock", mode: "Fire-control mode", bus: "Weapon feed", dial: "Range gate", lever: "Arm lever", confirmA: "Track confirm", confirmB: "Weapons acknowledge", execute: "FIRE / RELAY" },
+      labels: {
+        guard: "Weapon arm guard",
+        mode: "Fire-control rotary",
+        bus: "Track / weapon feed",
+        dial: "Range-rate gate knob",
+        slider: "Capacitor demand",
+        lever: "Weapon arm lever",
+        confirmA: "Track confirm",
+        confirmB: "Weapons acknowledge",
+        execute: "FIRE / RELAY"
+      },
       readouts: state => [["Weapon group", state.weaponGroup], ["Capacitors", `${round(state.capacitors)}%`], ["Track", `${round(state.track)}%`], ["Mode", state.weaponMode]],
       procedures: [
-        { id: "fire-solution", name: "Build firing solution", cue: "Release the weapon interlock, establish tracking mode and primary feed, walk the range gate forward twice, confirm the track, hold the arm lever centered, acknowledge weapons, then relay.", sequence: ["guard-open","mode-1","bus-primary","dial-right","dial-right","confirm-a","lever-center","confirm-b","execute"] },
-        { id: "arm-engage", name: "Arm and engage target", cue: "Release the interlock, select engagement mode and primary feed, double-acknowledge weapons, pull the arm lever forward, advance the range gate, confirm the track, then fire.", sequence: ["guard-open","mode-2","bus-primary","confirm-b","confirm-b","lever-forward","dial-right","confirm-a","execute"] },
-        { id: "point-defense", name: "Point-defense burst", cue: "Release the interlock, enter defensive mode, move to auxiliary feed, back then advance the range gate, confirm track, pull the arm lever, double-confirm track, then fire.", sequence: ["guard-open","mode-3","bus-aux","dial-left","dial-right","confirm-a","lever-forward","confirm-a","confirm-a","execute"] }
+        {
+          id: "fire-solution",
+          name: "Build direct-fire solution",
+          cue: "Use the primary fire-control track, gate range-rate, request moderate stored energy and verify the track before relaying the solution.",
+          sequence: ["guard-open", "mode-1", "bus-primary", "dial-right", "slider-mid", "confirm-a", "execute"]
+        },
+        {
+          id: "point-defense",
+          name: "Point-defense burst",
+          cue: "Use defensive fire control, the auxiliary close-track feed and high instantaneous weapon demand. Arm only after selecting the defensive channel.",
+          sequence: ["guard-open", "mode-3", "bus-aux", "slider-high", "lever-forward", "execute"]
+        },
+        {
+          id: "missile-launch",
+          name: "Authorize guided-weapon launch",
+          cue: "Use guided-weapon control, verify weapon-system acknowledgement, request launch power, arm the selected cells and reconfirm the track before launch.",
+          sequence: ["guard-open", "mode-2", "bus-primary", "confirm-b", "slider-high", "lever-forward", "confirm-a", "execute"]
+        }
       ]
     },
+
     engineering: {
       label: "Engineering",
-      description: "Human plant and distribution station. The power diagram is role-play context; complex procedures generate difficulty rather than automatically repairing or damaging the ship.",
+      description: "Human plant-and-distribution station modeled around generator loading, electrical buses, coolant loops and hard safety interlocks. The schematic is atmospheric; procedures set suggested difficulty rather than automatically repairing the ship.",
       display: "systems",
-      labels: { guard: "Plant interlock", mode: "Plant mode", bus: "Distribution bus", dial: "Load trim", lever: "Bus tie lever", confirmA: "Plant confirm", confirmB: "Engineering acknowledge", execute: "APPLY CONFIGURATION" },
+      labels: {
+        guard: "Plant safety guard",
+        mode: "Plant-mode rotary",
+        bus: "Distribution source",
+        dial: "Load-share trim knob",
+        slider: "Coolant / load command",
+        lever: "Bus-tie lever",
+        confirmA: "Plant confirm",
+        confirmB: "Casualty acknowledge",
+        execute: "APPLY CONFIGURATION"
+      },
       readouts: state => [["Reactor", `${round(state.reactor)}%`], ["Thermal", `${round(state.thermal)}%`], ["Cooling", `${round(state.coolingHealth)}%`], ["Fault", state.engineeringFault || "none"]],
       procedures: [
-        { id: "rebalance", name: "Rebalance power distribution", cue: "Release the plant interlock, select distribution mode and primary bus, trim load up then down, confirm plant state, center the bus tie, acknowledge engineering, then apply.", sequence: ["guard-open","mode-1","bus-primary","dial-right","dial-left","confirm-a","lever-center","confirm-b","execute"] },
-        { id: "coolant-isolation", name: "Isolate coolant fault", cue: "Release the plant interlock, enter casualty mode, move to auxiliary distribution, acknowledge the fault, back load trim twice, pull the bus tie aft, double-confirm plant state, then apply.", sequence: ["guard-open","mode-2","bus-aux","confirm-b","dial-left","dial-left","lever-aft","confirm-a","confirm-a","execute"] },
-        { id: "scram", name: "Emergency reactor SCRAM", cue: "Release the interlock, enter emergency plant mode, isolate distribution, double-acknowledge the casualty, pull the bus tie aft, acknowledge again, then apply the SCRAM configuration.", sequence: ["guard-open","mode-3","bus-isolate","confirm-b","confirm-b","lever-aft","confirm-b","execute"] }
+        {
+          id: "load-rebalance",
+          name: "Rebalance electrical load",
+          cue: "Use normal distribution control, retain the primary source, bring load demand toward nominal and leave the bus tie in its normal position before applying.",
+          sequence: ["guard-open", "mode-1", "bus-primary", "slider-mid", "lever-center", "execute"]
+        },
+        {
+          id: "coolant-isolation",
+          name: "Isolate coolant-loop fault",
+          cue: "Enter casualty control, shift supply away from the affected path, reduce the commanded load, acknowledge the casualty and isolate through the tie.",
+          sequence: ["guard-open", "mode-2", "bus-aux", "slider-low", "confirm-b", "lever-aft", "execute"]
+        },
+        {
+          id: "scram",
+          name: "Emergency reactor SCRAM",
+          cue: "Use the emergency plant channel, isolate distribution and drive the shutdown lever to its safe position. This is intentionally a short emergency procedure.",
+          sequence: ["guard-open", "mode-3", "bus-isolate", "lever-aft", "execute"]
+        }
       ]
     },
+
     science: {
       label: "Science / Scanning",
-      description: "Human sensor-analysis station. The sensor picture is atmospheric visualization; procedure quality becomes a DM-facing difficulty suggestion.",
+      description: "Human sensor station grounded in passive electromagnetic collection, active ranging and spectral analysis. Receiver gain, integration time and emitter state are separated because real sensing trades sensitivity, time and detectability.",
       display: "sensor",
-      labels: { guard: "Sensor guard", mode: "Scan mode", bus: "Aperture feed", dial: "Gain trim", lever: "Emitter gate", confirmA: "Track confirm", confirmB: "Analyst acknowledge", execute: "ACQUIRE / RELAY" },
+      labels: {
+        guard: "Emitter inhibit guard",
+        mode: "Sensor-mode rotary",
+        bus: "Aperture / receiver chain",
+        dial: "Receiver-gain knob",
+        slider: "Integration-time slider",
+        lever: "Emitter gate lever",
+        confirmA: "Track confirm",
+        confirmB: "Analyst acknowledge",
+        execute: "ACQUIRE / RELAY"
+      },
       readouts: state => [["Track", `${round(state.track)}%`], ["Class", state.targetClass], ["Range", state.contact.present ? `${Math.round(state.targetRange).toLocaleString()} km` : "no contact"], ["Emissions", `${round(state.emissions)}%`]],
       procedures: [
-        { id: "active-scan", name: "Active contact scan", cue: "Release the sensor guard, select active acquisition, keep the primary aperture feed, advance gain twice, confirm the track, open the emitter gate, reconfirm, then acquire.", sequence: ["guard-open","mode-2","bus-primary","dial-right","dial-right","confirm-a","lever-forward","confirm-a","execute"] },
-        { id: "spectral-survey", name: "Deep spectral survey", cue: "Release the guard, enter survey mode, use the auxiliary aperture feed, back gain once then advance twice, acknowledge analysis, center the emitter gate, confirm track, then acquire.", sequence: ["guard-open","mode-1","bus-aux","dial-left","dial-right","dial-right","confirm-b","lever-center","confirm-a","execute"] },
-        { id: "classify-anomaly", name: "Classify anomaly", cue: "Release the guard, select anomaly mode and primary feed, confirm the track, advance then back gain, acknowledge analysis, center the emitter gate, confirm once more, then acquire.", sequence: ["guard-open","mode-3","bus-primary","confirm-a","dial-right","dial-left","confirm-b","lever-center","confirm-a","execute"] }
+        {
+          id: "passive-track",
+          name: "Establish passive track",
+          cue: "Keep the emitter inhibited, use the primary receiver chain, increase integration time and trim receiver gain before relaying the passive track.",
+          sequence: ["mode-1", "bus-primary", "slider-high", "dial-right", "confirm-a", "execute"]
+        },
+        {
+          id: "active-range",
+          name: "Active range / velocity pulse",
+          cue: "Release the emitter inhibit, select active ranging, use the primary aperture and a short integration window before opening the emitter gate.",
+          sequence: ["guard-open", "mode-2", "bus-primary", "slider-low", "lever-forward", "execute"]
+        },
+        {
+          id: "spectral-classify",
+          name: "Spectral classification",
+          cue: "Use analysis mode and the secondary receiver chain, adjust gain for spectral detail, extend integration time and acknowledge the analysis before relaying classification.",
+          sequence: ["guard-open", "mode-3", "bus-aux", "dial-left", "slider-high", "confirm-b", "execute"]
+        }
       ]
     },
+
     comms: {
       label: "Comms",
-      description: "Human communications and authentication station. The console supplies a difficulty setting; message success, interception, and narrative consequences remain DM adjudication.",
+      description: "Human communications station using address selection, carrier-path choice, frequency vernier, transmit power / beamwidth control and cryptographic authorization. The DM still adjudicates reception, interception and consequences.",
       display: "link",
-      labels: { guard: "Crypto guard", mode: "Link mode", bus: "Carrier path", dial: "Frequency trim", lever: "Transmit gate", confirmA: "Address confirm", confirmB: "Crypto acknowledge", execute: "TRANSMIT / RELAY" },
+      labels: {
+        guard: "Transmit inhibit guard",
+        mode: "Link-mode rotary",
+        bus: "Carrier path",
+        dial: "Frequency vernier knob",
+        slider: "Power / beamwidth slider",
+        lever: "Transmit key lever",
+        confirmA: "Address confirm",
+        confirmB: "Crypto acknowledge",
+        execute: "TRANSMIT / RELAY"
+      },
       readouts: state => [["Link", `${round(state.comms)}%`], ["Channel", state.commsChannel], ["Encryption", state.commsEncryption ? "enabled" : "open"], ["IFF", state.targetIFF]],
       procedures: [
-        { id: "authenticate-hail", name: "Authenticate and hail", cue: "Release the crypto guard, select hail mode and primary carrier, advance frequency trim, confirm the address twice, open the transmit gate, acknowledge crypto, then transmit.", sequence: ["guard-open","mode-1","bus-primary","dial-right","confirm-a","confirm-a","lever-forward","confirm-b","execute"] },
-        { id: "encrypted-burst", name: "Encrypted tightbeam burst", cue: "Release the guard, select secure-burst mode, shift to auxiliary carrier, acknowledge crypto, advance frequency twice, open the transmit gate, acknowledge crypto again, confirm the address, then transmit.", sequence: ["guard-open","mode-2","bus-aux","confirm-b","dial-right","dial-right","lever-forward","confirm-b","confirm-a","execute"] },
-        { id: "distress", name: "Emergency distress broadcast", cue: "Release the guard, enter emergency link mode, isolate the carrier path, double-acknowledge crypto bypass, open the transmit gate, acknowledge once more, then transmit.", sequence: ["guard-open","mode-3","bus-isolate","confirm-b","confirm-b","lever-forward","confirm-b","execute"] }
+        {
+          id: "authenticated-hail",
+          name: "Authenticated hail",
+          cue: "Use the normal carrier path, tune the frequency, verify the addressed contact and release transmit inhibition before sending the hail.",
+          sequence: ["guard-open", "mode-1", "bus-primary", "dial-right", "confirm-a", "execute"]
+        },
+        {
+          id: "tightbeam-burst",
+          name: "Encrypted tightbeam burst",
+          cue: "Select the secure narrowbeam path, use the auxiliary carrier chain, narrow the beam / raise directed power, acknowledge crypto and key the transmitter.",
+          sequence: ["guard-open", "mode-2", "bus-aux", "slider-high", "confirm-b", "lever-forward", "execute"]
+        },
+        {
+          id: "distress",
+          name: "Emergency distress broadcast",
+          cue: "Use the emergency link channel, primary broad-area carrier and maximum broadcast demand. This is deliberately short so a distressed crew can transmit quickly.",
+          sequence: ["guard-open", "mode-3", "bus-primary", "slider-high", "execute"]
+        }
       ]
     }
   });
 
-  const initialControlState = () => ({ guard: "closed", mode: "1", bus: "primary", dial: 0, lever: "center" });
+  const initialControlState = () => ({
+    guard: "closed",
+    mode: "1",
+    bus: "primary",
+    dial: 0,
+    slider: 0,
+    lever: "center"
+  });
+
   const initialState = () => ({
     profile: HUMAN_PROFILE,
     simTime: 0,
@@ -135,7 +298,14 @@
     power: { ...BASE_POWER },
     stationOnline: { helm: true, navigation: true, gunnery: true, engineering: true, science: true, comms: true },
     contact: { present: false, friendly: false, x: 76, y: 31 },
-    selectedProcedure: { helm: "course-burn", navigation: "transfer-solve", gunnery: "fire-solution", engineering: "rebalance", science: "active-scan", comms: "authenticate-hail" },
+    selectedProcedure: {
+      helm: "planned-burn",
+      navigation: "transfer-solve",
+      gunnery: "fire-solution",
+      engineering: "load-rebalance",
+      science: "passive-track",
+      comms: "authenticated-hail"
+    },
     procedure: null,
     relay: null,
     log: []
@@ -184,8 +354,14 @@
 
   function renderTopState() {
     const fields = {
-      velocity: `${round(state.velocity, 1)} km/s`, reactor: `${round(state.reactor)}%`, thermal: `${round(state.thermal)}%`, hull: `${round(state.hull)}%`,
-      track: `${round(state.track)}%`, comms: `${round(state.comms)}%`, nav: `${round(state.nav)}%`, weapons: `${round(state.weapons)}%`
+      velocity: `${round(state.velocity, 1)} km/s`,
+      reactor: `${round(state.reactor)}%`,
+      thermal: `${round(state.thermal)}%`,
+      hull: `${round(state.hull)}%`,
+      track: `${round(state.track)}%`,
+      comms: `${round(state.comms)}%`,
+      nav: `${round(state.nav)}%`,
+      weapons: `${round(state.weapons)}%`
     };
     Object.entries(fields).forEach(([key, value]) => {
       const target = el(`state-${key}`);
@@ -215,7 +391,7 @@
   function renderTabs() {
     el("station-tabs").innerHTML = Object.entries(STATIONS).map(([key, def]) => `
       <button class="exo-station-tab" type="button" role="tab" data-station="${key}" aria-selected="${activeStation === key}">
-        ${def.label}<span class="tab-state">human console</span>
+        ${def.label}<span class="tab-state">3 operations</span>
       </button>`).join("");
   }
 
@@ -232,9 +408,17 @@
 
   function inputHistory() {
     const session = state.procedure;
-    if (!session || session.station !== activeStation || !session.active) return `<span class="exo-procedure-empty">No active attempt. Select an action and begin the procedure.</span>`;
-    if (!session.inputs.length) return `<span class="exo-procedure-empty">Procedure armed. No controls manipulated yet.</span>`;
+    if (!session || session.station !== activeStation || !session.active) {
+      return `<span class="exo-procedure-empty">No active attempt. Select an action and begin the procedure.</span>`;
+    }
+    if (!session.inputs.length) {
+      return `<span class="exo-procedure-empty">Procedure armed. No controls manipulated yet.</span>`;
+    }
     return session.inputs.map((item, index) => `<span class="exo-input-token"><b>${index + 1}</b>${item.label}</span>`).join("");
+  }
+
+  function sliderText(value) {
+    return value < 0 ? "LOW" : value > 0 ? "HIGH" : "NOMINAL";
   }
 
   function procedureControls(def) {
@@ -243,12 +427,13 @@
     const active = Boolean(session && session.active && session.station === activeStation && session.operationId === proc.id);
     const controls = active ? session.controls : initialControlState();
     const disabled = active ? "" : "disabled";
-    const options = def.procedures.map(item => `<option value="${item.id}" ${item.id === proc.id ? "selected" : ""}>${item.name}</option>`).join("");
+    const options = def.procedures.map(item => `<option value="${item.id}" ${item.id === proc.id ? "selected" : ""}>${item.name} · ${item.sequence.length} inputs</option>`).join("");
+
     return `
       <div class="exo-procedure-console">
         <div class="exo-procedure-setup">
           <div>
-            <span class="exo-kicker">Attempted ship action</span>
+            <span class="exo-kicker">Attempted ship action · three human baseline operations</span>
             <select data-procedure-select aria-label="Select ${def.label} procedure">${options}</select>
           </div>
           <div class="exo-procedure-actions">
@@ -256,38 +441,92 @@
             <button type="button" class="exo-control-button" data-procedure-abort ${active ? "" : "disabled"}>Abort / clear inputs</button>
           </div>
         </div>
-        <div class="exo-procedure-cue"><strong>Operator cue strip</strong><span>${proc.cue}</span><small>The exact switch order and repeated input count are intentionally not displayed.</small></div>
+
+        <div class="exo-procedure-cue">
+          <strong>Operator cue strip</strong>
+          <span>${proc.cue}</span>
+          <small>Controls are physically plausible abstractions. Exact order, repeated inputs and unnecessary manipulations are intentionally not shown.</small>
+        </div>
+
         <div class="exo-physical-controls" data-active="${active}">
           <div class="exo-device-block">
-            <span class="exo-device-label">${def.labels.guard}</span><strong>${controls.guard.toUpperCase()}</strong>
-            <div class="exo-control-row"><button type="button" data-proc-input="guard-open" data-proc-label="Guard OPEN" ${disabled}>Open</button><button type="button" data-proc-input="guard-close" data-proc-label="Guard CLOSE" ${disabled}>Close</button></div>
+            <span class="exo-device-label">${def.labels.guard}</span>
+            <strong>${controls.guard.toUpperCase()}</strong>
+            <div class="exo-control-row">
+              <button type="button" data-proc-input="guard-open" data-proc-label="Guard OPEN" ${disabled}>Lift / open</button>
+              <button type="button" data-proc-input="guard-close" data-proc-label="Guard CLOSE" ${disabled}>Close</button>
+            </div>
           </div>
+
           <div class="exo-device-block">
-            <span class="exo-device-label">${def.labels.mode}</span><strong>MODE ${controls.mode}</strong>
-            <div class="exo-control-row"><button type="button" data-proc-input="mode-1" data-proc-label="Mode 1" ${disabled}>1</button><button type="button" data-proc-input="mode-2" data-proc-label="Mode 2" ${disabled}>2</button><button type="button" data-proc-input="mode-3" data-proc-label="Mode 3" ${disabled}>3</button></div>
+            <span class="exo-device-label">${def.labels.mode}</span>
+            <strong>POSITION ${controls.mode}</strong>
+            <div class="exo-control-row">
+              <button type="button" data-proc-input="mode-1" data-proc-label="Rotary 1" ${disabled}>1</button>
+              <button type="button" data-proc-input="mode-2" data-proc-label="Rotary 2" ${disabled}>2</button>
+              <button type="button" data-proc-input="mode-3" data-proc-label="Rotary 3" ${disabled}>3</button>
+            </div>
           </div>
+
           <div class="exo-device-block">
-            <span class="exo-device-label">${def.labels.bus}</span><strong>${controls.bus.toUpperCase()}</strong>
-            <div class="exo-control-row"><button type="button" data-proc-input="bus-primary" data-proc-label="Bus PRIMARY" ${disabled}>Primary</button><button type="button" data-proc-input="bus-aux" data-proc-label="Bus AUX" ${disabled}>Aux</button><button type="button" data-proc-input="bus-isolate" data-proc-label="Bus ISOLATE" ${disabled}>Isolate</button></div>
+            <span class="exo-device-label">${def.labels.bus}</span>
+            <strong>${controls.bus.toUpperCase()}</strong>
+            <div class="exo-control-row">
+              <button type="button" data-proc-input="bus-primary" data-proc-label="Feed PRIMARY" ${disabled}>Primary</button>
+              <button type="button" data-proc-input="bus-aux" data-proc-label="Feed AUX" ${disabled}>Aux</button>
+              <button type="button" data-proc-input="bus-isolate" data-proc-label="Feed ISOLATE" ${disabled}>Isolate</button>
+            </div>
           </div>
+
           <div class="exo-device-block exo-dial-block">
-            <span class="exo-device-label">${def.labels.dial}</span><strong>${controls.dial >= 0 ? "+" : ""}${controls.dial}</strong>
-            <div class="exo-control-row"><button type="button" data-proc-input="dial-left" data-proc-label="Dial ◀" ${disabled}>◀ Twist</button><button type="button" data-proc-input="dial-right" data-proc-label="Dial ▶" ${disabled}>Twist ▶</button></div>
+            <span class="exo-device-label">${def.labels.dial}</span>
+            <strong>TRIM ${controls.dial >= 0 ? "+" : ""}${controls.dial}</strong>
+            <div class="exo-control-row">
+              <button type="button" data-proc-input="dial-left" data-proc-label="${def.labels.dial} CCW" ${disabled}>↶ CCW</button>
+              <button type="button" data-proc-input="dial-center" data-proc-label="${def.labels.dial} ZERO" ${disabled}>Zero</button>
+              <button type="button" data-proc-input="dial-right" data-proc-label="${def.labels.dial} CW" ${disabled}>CW ↷</button>
+            </div>
           </div>
+
           <div class="exo-device-block">
-            <span class="exo-device-label">${def.labels.lever}</span><strong>${controls.lever.toUpperCase()}</strong>
-            <div class="exo-lever-row"><button type="button" data-proc-input="lever-forward" data-proc-label="Lever FORWARD" ${disabled}>Forward</button><button type="button" data-proc-input="lever-center" data-proc-label="Lever CENTER" ${disabled}>Center</button><button type="button" data-proc-input="lever-aft" data-proc-label="Lever AFT" ${disabled}>Aft</button></div>
+            <span class="exo-device-label">${def.labels.slider}</span>
+            <strong>${sliderText(controls.slider)}</strong>
+            <input data-proc-slider type="range" min="-1" max="1" step="1" value="${controls.slider}" aria-label="${def.labels.slider}" ${disabled} style="width:100%;accent-color:#d9a84f">
+            <div class="exo-slider-scale" aria-hidden="true" style="display:flex;justify-content:space-between;color:#777269;font-size:.58rem;text-transform:uppercase;margin-top:4px">
+              <span>Low</span><span>Nom</span><span>High</span>
+            </div>
           </div>
+
+          <div class="exo-device-block">
+            <span class="exo-device-label">${def.labels.lever}</span>
+            <strong>${controls.lever.toUpperCase()}</strong>
+            <div class="exo-lever-row">
+              <button type="button" data-proc-input="lever-forward" data-proc-label="${def.labels.lever} FORWARD" ${disabled}>Forward</button>
+              <button type="button" data-proc-input="lever-center" data-proc-label="${def.labels.lever} CENTER" ${disabled}>Center</button>
+              <button type="button" data-proc-input="lever-aft" data-proc-label="${def.labels.lever} AFT" ${disabled}>Aft</button>
+            </div>
+          </div>
+
           <div class="exo-device-block exo-confirm-block">
-            <span class="exo-device-label">Confirmations</span><strong>REPEAT AS REQUIRED</strong>
-            <div class="exo-control-row"><button type="button" data-proc-input="confirm-a" data-proc-label="${def.labels.confirmA}" ${disabled}>${def.labels.confirmA}</button><button type="button" data-proc-input="confirm-b" data-proc-label="${def.labels.confirmB}" ${disabled}>${def.labels.confirmB}</button></div>
+            <span class="exo-device-label">Momentary pushbuttons</span>
+            <strong>PRESS AS PROCEDURE REQUIRES</strong>
+            <div class="exo-control-row">
+              <button type="button" data-proc-input="confirm-a" data-proc-label="${def.labels.confirmA}" ${disabled}>${def.labels.confirmA}</button>
+              <button type="button" data-proc-input="confirm-b" data-proc-label="${def.labels.confirmB}" ${disabled}>${def.labels.confirmB}</button>
+            </div>
           </div>
+
           <div class="exo-device-block exo-execute-block">
-            <span class="exo-device-label">Final control</span><strong>COMMITS CURRENT INPUTS</strong>
+            <span class="exo-device-label">Final guarded action</span>
+            <strong>COMMITS CURRENT INPUTS</strong>
             <button type="button" class="exo-execute-button" data-proc-input="execute" data-proc-label="${def.labels.execute}" ${disabled}>${def.labels.execute}</button>
           </div>
         </div>
-        <div class="exo-sequence-recorder"><span class="exo-kicker">Input recorder</span><div class="exo-sequence-strip">${inputHistory()}</div></div>
+
+        <div class="exo-sequence-recorder">
+          <span class="exo-kicker">Input recorder</span>
+          <div class="exo-sequence-strip">${inputHistory()}</div>
+        </div>
       </div>`;
   }
 
@@ -295,8 +534,14 @@
     const def = STATIONS[activeStation];
     el("station-panel").innerHTML = `
       <div class="exo-station-head">
-        <div class="exo-station-title"><span class="exo-kicker">${state.profile.name} procedural watchstation</span><h2>${def.label}</h2><p>${def.description}</p></div>
-        <div class="exo-station-readout">${def.readouts(state).map(([label, value]) => `<div class="exo-readout-chip"><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
+        <div class="exo-station-title">
+          <span class="exo-kicker">${state.profile.name} procedural watchstation</span>
+          <h2>${def.label}</h2>
+          <p>${def.description}</p>
+        </div>
+        <div class="exo-station-readout">
+          ${def.readouts(state).map(([label, value]) => `<div class="exo-readout-chip"><span>${label}</span><strong>${value}</strong></div>`).join("")}
+        </div>
       </div>
       <div class="exo-station-body">
         <div class="exo-control-bank exo-procedure-bank">${procedureControls(def)}</div>
@@ -306,9 +551,9 @@
 
   function renderDependencies() {
     const descriptions = {
-      helm: "Visual maneuver context: Helm power, Navigation picture, drive condition.",
-      navigation: "Visual astrogation context: Science picture, Comms link, Navigation power.",
-      gunnery: "Visual fire-control context: track picture, weapon power, hardware and thermal state.",
+      helm: "Visual maneuver context: Helm power, Navigation picture and drive condition.",
+      navigation: "Visual astrogation context: sensor picture, communications timebase and Navigation power.",
+      gunnery: "Visual fire-control context: track picture, weapon power, hardware state and thermal margin.",
       engineering: "Visual plant context: Engineering power, drive/cooling/hull condition.",
       science: "Visual sensor context: Science power, sensor condition and thermal state.",
       comms: "Visual link context: Comms power and communications hardware."
@@ -323,14 +568,19 @@
 
   function renderLog() {
     const host = el("operations-log");
-    host.innerHTML = state.log.length ? state.log.map(item => `<li><time>${timeString(item.time)}</time><strong>${item.station}</strong><span>${item.message}</span></li>`).join("") : `<li><time>00:00</time><strong>System</strong><span>No events logged.</span></li>`;
+    host.innerHTML = state.log.length
+      ? state.log.map(item => `<li><time>${timeString(item.time)}</time><strong>${item.station}</strong><span>${item.message}</span></li>`).join("")
+      : `<li><time>00:00</time><strong>System</strong><span>No events logged.</span></li>`;
   }
 
   function renderRelay() {
     const relay = state.relay;
     const difficulty = relay?.difficulty ?? 0;
     el("dm-relay-difficulty").textContent = relay ? difficulty : "—";
-    el("dm-relay-pips").innerHTML = Array.from({ length: 10 }, (_, index) => `<i class="${relay && index < difficulty ? "active" : ""}" title="Pip ${index + 1}">${index + 1}</i>`).join("");
+    el("dm-relay-pips").innerHTML = Array.from({ length: 10 }, (_, index) =>
+      `<i class="${relay && index < difficulty ? "active" : ""}" title="Pip ${index + 1}">${index + 1}</i>`
+    ).join("");
+
     if (!relay) {
       el("dm-relay-status").textContent = "Awaiting executed procedure";
       el("dm-relay-detail").innerHTML = `<div><span>Station</span><strong>—</strong></div><div><span>Action</span><strong>—</strong></div><div><span>Procedure</span><strong>—</strong></div><div><span>Random d10</span><strong>—</strong></div><div><span>Visual context</span><strong>—</strong></div><div><span>Inputs</span><strong>—</strong></div>`;
@@ -338,6 +588,7 @@
       el("dm-relay-call").textContent = "The console does not roll for the character and does not determine success or failure.";
       return;
     }
+
     el("dm-relay-status").textContent = `${relay.classification} · suggested difficulty`;
     el("dm-relay-detail").innerHTML = `
       <div><span>Station</span><strong>${relay.station}</strong></div>
@@ -369,7 +620,11 @@
     for (let i = 1; i < rows; i += 1) {
       for (let j = 1; j < cols; j += 1) {
         const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-        matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost);
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j - 1] + cost
+        );
       }
     }
     return matrix[a.length][b.length];
@@ -430,6 +685,10 @@
     else if (token.startsWith("bus-")) session.controls.bus = token.slice(4);
     else if (token === "dial-left") session.controls.dial -= 1;
     else if (token === "dial-right") session.controls.dial += 1;
+    else if (token === "dial-center") session.controls.dial = 0;
+    else if (token === "slider-low") session.controls.slider = -1;
+    else if (token === "slider-mid") session.controls.slider = 0;
+    else if (token === "slider-high") session.controls.slider = 1;
     else if (token.startsWith("lever-")) session.controls.lever = token.slice(6);
   }
 
@@ -441,7 +700,8 @@
     }
     applyControlToken(token);
     session.inputs.push({ token, label });
-    if (session.inputs.length > 28) session.inputs.shift();
+    if (session.inputs.length > 24) session.inputs.shift();
+
     if (token === "execute") {
       evaluateProcedure();
       return;
@@ -462,7 +722,7 @@
     const contextShift = context >= 82 ? -1 : context >= 58 ? 0 : context >= 38 ? 1 : 2;
     const randomD10 = d10();
     const randomShift = randomD10 <= 2 ? -1 : randomD10 >= 9 ? 1 : 0;
-    const overrunShift = actual.length > proc.sequence.length + 3 ? 1 : 0;
+    const overrunShift = actual.length > proc.sequence.length + 2 ? 1 : 0;
     const difficulty = clamp(baseDifficultyForQuality(quality) + contextShift + randomShift + overrunShift, 2, 10);
 
     state.relay = {
@@ -480,6 +740,7 @@
       expectedCount: proc.sequence.length,
       sequenceLabels: session.inputs.map(item => item.label)
     };
+
     session.active = false;
     addLog(def.label, `${proc.name} committed to DM relay: procedure ${quality}% (${classification}), suggested Difficulty ${difficulty}. No success resolved.`);
     renderAll({ skipPower: true });
@@ -487,11 +748,36 @@
 
   function handleStationClick(event) {
     const begin = event.target.closest("[data-procedure-begin]");
-    if (begin) { beginProcedure(); return; }
+    if (begin) {
+      beginProcedure();
+      return;
+    }
     const abort = event.target.closest("[data-procedure-abort]");
-    if (abort) { abortProcedure(); return; }
+    if (abort) {
+      abortProcedure();
+      return;
+    }
     const input = event.target.closest("[data-proc-input]");
-    if (input) recordProcedureInput(input.dataset.procInput, input.dataset.procLabel || input.textContent.trim());
+    if (input) {
+      recordProcedureInput(input.dataset.procInput, input.dataset.procLabel || input.textContent.trim());
+    }
+  }
+
+  function handleStationChange(event) {
+    const slider = event.target.closest("[data-proc-slider]");
+    if (slider) {
+      const value = Number(slider.value);
+      const token = value < 0 ? "slider-low" : value > 0 ? "slider-high" : "slider-mid";
+      const label = `${STATIONS[activeStation].labels.slider} ${sliderText(value)}`;
+      recordProcedureInput(token, label);
+      return;
+    }
+
+    const select = event.target.closest("[data-procedure-select]");
+    if (!select) return;
+    state.selectedProcedure[activeStation] = select.value;
+    if (state.procedure?.active && state.procedure.station === activeStation) state.procedure = null;
+    renderStation();
   }
 
   function handlePowerInput(event) {
@@ -514,7 +800,7 @@
   function reset() {
     state = initialState();
     activeStation = "helm";
-    addLog("System", "Human procedural bridge placeholder initialized. Console outputs suggested WoD-derived d10 difficulties only; DM retains resolution authority.");
+    addLog("System", "Human procedural bridge initialized: three operations per console, short physical-control procedures, WoD-derived d10 difficulty relay, DM resolution authority.");
     renderAll();
   }
 
@@ -533,8 +819,11 @@
 
   function injectFault() {
     const faults = [
-      ["primary coolant loop oscillation", "coolingHealth", 18], ["drive power-conditioning fault", "driveHealth", 16], ["sensor mast timing fault", "sensorHealth", 20],
-      ["fire-control bus dropout", "weaponHealth", 19], ["high-gain comms amplifier fault", "commsHealth", 22]
+      ["primary coolant loop oscillation", "coolingHealth", 18],
+      ["drive power-conditioning fault", "driveHealth", 16],
+      ["sensor mast timing fault", "sensorHealth", 20],
+      ["fire-control bus dropout", "weaponHealth", 19],
+      ["high-gain comms amplifier fault", "commsHealth", 22]
     ];
     const [name, key, loss] = faults[Math.floor(Math.random() * faults.length)];
     state.engineeringFault = name;
@@ -578,20 +867,17 @@
       renderStation();
     });
     el("station-panel").addEventListener("click", handleStationClick);
-    el("station-panel").addEventListener("change", event => {
-      const select = event.target.closest("[data-procedure-select]");
-      if (!select) return;
-      state.selectedProcedure[activeStation] = select.value;
-      if (state.procedure?.active && state.procedure.station === activeStation) state.procedure = null;
-      renderStation();
-    });
+    el("station-panel").addEventListener("change", handleStationChange);
     el("power-controls").addEventListener("input", handlePowerInput);
     el("power-controls").addEventListener("change", commitPower);
     el("crew-scenario-reset").addEventListener("click", reset);
     el("crew-scenario-contact").addEventListener("click", injectContact);
     el("crew-scenario-damage").addEventListener("click", injectFault);
     el("crew-scenario-battle").addEventListener("click", combatDrill);
-    el("log-clear").addEventListener("click", () => { state.log = []; renderLog(); });
+    el("log-clear").addEventListener("click", () => {
+      state.log = [];
+      renderLog();
+    });
   }
 
   document.addEventListener("DOMContentLoaded", () => {
