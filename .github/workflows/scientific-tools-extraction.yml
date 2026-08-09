@@ -25,6 +25,7 @@ on:
       - "binary-cube-media-forensics-suite.js"
       - "binary-cube-media-forensics-suite.css"
       - "binary-cube-media-forensics-worker.js"
+      - "binary-cube-media-forensics-demo-corpus.js"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -41,6 +42,7 @@ on:
       - "scripts/validate-binary-cube-information-analysis-suite.mjs"
       - "scripts/validate-binary-cube-communication-capacity-analyzer.mjs"
       - "scripts/validate-binary-cube-media-forensics-suite.mjs"
+      - "scripts/validate-binary-cube-media-forensics-demo-corpus.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
   workflow_dispatch:
 
@@ -90,6 +92,7 @@ jobs:
           node --check binary-cube-communication-capacity-worker.js
           node --check binary-cube-media-forensics-suite.js
           node --check binary-cube-media-forensics-worker.js
+          node --check binary-cube-media-forensics-demo-corpus.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
@@ -104,6 +107,7 @@ jobs:
           node --check scripts/validate-binary-cube-information-analysis-suite.mjs
           node --check scripts/validate-binary-cube-communication-capacity-analyzer.mjs
           node --check scripts/validate-binary-cube-media-forensics-suite.mjs
+          node --check scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s binary-cube-decryption-dashboard.css
           test -s binary-cube-cryptanalytic-test-lab.css
@@ -142,6 +146,9 @@ jobs:
 
       - name: Validate Steganography Signal and Media Forensics Suite
         run: node scripts/validate-binary-cube-media-forensics-suite.mjs
+
+      - name: Validate Steganography Signal and Media Demonstration Corpus
+        run: node scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
 
       - name: Preserve accepted Binary Cube launch contract
         run: node scripts/validate-binary-cube-v13-launch.mjs
