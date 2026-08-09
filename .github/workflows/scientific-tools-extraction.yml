@@ -58,6 +58,8 @@ on:
       - "scripts/validate-scientific-diagnostic-pipeline.mjs"
       - "scripts/calibrate-scientific-diagnostic-pipeline.mjs"
       - "scripts/validate-scientific-diagnostic-calibration.mjs"
+      - "scripts/research-rgb-lsb-steganalysis-blindspot.mjs"
+      - "scripts/validate-rgb-lsb-steganalysis-blindspot.mjs"
       - "scripts/validate-binary-cube-cubic-decryptor.mjs"
       - "scripts/run-scientific-diagnostic-local.mjs"
       - "scripts/validate-cooperative-slice-budget.mjs"
@@ -146,6 +148,8 @@ jobs:
           node --check scripts/validate-scientific-diagnostic-pipeline.mjs
           node --check scripts/calibrate-scientific-diagnostic-pipeline.mjs
           node --check scripts/validate-scientific-diagnostic-calibration.mjs
+          node --check scripts/research-rgb-lsb-steganalysis-blindspot.mjs
+          node --check scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
           node --check scripts/validate-binary-cube-cubic-decryptor.mjs
           node --check scripts/run-scientific-diagnostic-local.mjs
           node --check scripts/validate-cooperative-slice-budget.mjs
@@ -185,6 +189,9 @@ jobs:
 
       - name: Validate Advanced Steganalysis Laboratory
         run: node scripts/validate-binary-cube-steganalysis-lab.mjs
+
+      - name: Characterize RGB LSB steganalysis blind spot
+        run: node scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
 
       - name: Validate routed Diagnostic Evaluation Pipeline
         run: node scripts/validate-scientific-diagnostic-pipeline.mjs
