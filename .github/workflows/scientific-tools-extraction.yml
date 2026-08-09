@@ -13,6 +13,10 @@ on:
       - "binary-cube-worker-client.js"
       - "shadowrun-binary-cube-encryption.js"
       - "shadowrun-binary-cube-visualizer.js"
+      - "binary-cube-key-generation-research.js"
+      - "binary-cube-key-generation-research-worker.js"
+      - "binary-cube-key-generation-visualizer.js"
+      - "binary-cube-key-generation-visualizer.css"
       - "binary-cube-decryption-dashboard.js"
       - "binary-cube-decryption-dashboard.css"
       - "binary-cube-cryptanalytic-test-lab.js"
@@ -36,6 +40,7 @@ on:
       - "scripts/validate-cooperative-slice-budget.mjs"
       - "scripts/validate-binary-cube-reseed.mjs"
       - "scripts/research-binary-cube-key-generation-profiles.mjs"
+      - "scripts/validate-binary-cube-key-generation-visualizer.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
       - "scripts/validate-binary-cube-cryptanalytic-test-lab.mjs"
@@ -85,6 +90,9 @@ jobs:
           node --check binary-cube-worker-client.js
           node --check shadowrun-binary-cube-encryption.js
           node --check shadowrun-binary-cube-visualizer.js
+          node --check binary-cube-key-generation-research.js
+          node --check binary-cube-key-generation-research-worker.js
+          node --check binary-cube-key-generation-visualizer.js
           node --check binary-cube-decryption-dashboard.js
           node --check binary-cube-cryptanalytic-test-lab.js
           node --check binary-cube-information-analysis-suite.js
@@ -101,6 +109,7 @@ jobs:
           node --check scripts/validate-cooperative-slice-budget.mjs
           node --check scripts/validate-binary-cube-reseed.mjs
           node --check scripts/research-binary-cube-key-generation-profiles.mjs
+          node --check scripts/validate-binary-cube-key-generation-visualizer.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
           node --check scripts/validate-binary-cube-cryptanalytic-test-lab.mjs
@@ -109,6 +118,7 @@ jobs:
           node --check scripts/validate-binary-cube-media-forensics-suite.mjs
           node --check scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
+          test -s binary-cube-key-generation-visualizer.css
           test -s binary-cube-decryption-dashboard.css
           test -s binary-cube-cryptanalytic-test-lab.css
           test -s binary-cube-information-analysis-suite.css
@@ -128,6 +138,9 @@ jobs:
 
       - name: Research Binary Cube key-generation profiles
         run: node scripts/research-binary-cube-key-generation-profiles.mjs
+
+      - name: Validate Binary Cube key-generation structure visualizer
+        run: node scripts/validate-binary-cube-key-generation-visualizer.mjs
 
       - name: Validate Binary Cube Decryption Dashboard
         run: node scripts/validate-binary-cube-decryption-dashboard.mjs
