@@ -12,12 +12,10 @@ on:
       - "binary-cube-cubic-decryptor.js"
       - "binary-cube-cubic-decryptor.css"
       - "scripts/validate-binary-cube-cubic-decryptor.mjs"
-      - "scripts/apply-cubic-strong-key-identity.py"
-      - "scripts/fix-cubic-strong-identity-migration-anchor.py"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   statuses: write
 
 concurrency:
@@ -38,30 +36,9 @@ jobs:
             -f description='Cubic Decryptor validation is running.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Apply additive SHA-256 key identity migration
-        run: |
-          git fetch origin main
-          git checkout main
-          git reset --hard origin/main
-          python scripts/fix-cubic-strong-identity-migration-anchor.py
-          python scripts/apply-cubic-strong-key-identity.py
-          node --check shadowrun-binary-cube-engine.js
-          node --check binary-cube-cubic-decryptor-engine.js
-          node --check binary-cube-cubic-decryptor.js
-          node --check scripts/validate-binary-cube-cubic-decryptor.mjs
-          node scripts/validate-binary-cube-cubic-decryptor.mjs
-          if ! git diff --quiet -- shadowrun-binary-cube-engine.js binary-cube-cubic-decryptor-engine.js binary-cube-cubic-decryptor.js scripts/validate-binary-cube-cubic-decryptor.mjs; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add shadowrun-binary-cube-engine.js binary-cube-cubic-decryptor-engine.js binary-cube-cubic-decryptor.js scripts/validate-binary-cube-cubic-decryptor.mjs
-            git commit -m "feat: add SHA-256 Binary Cube key identity"
-            git push origin HEAD:main
-          fi
       - name: Check Cubic Decryptor sources
         run: |
           node --check binary-cube-cubic-decryptor-engine.js
