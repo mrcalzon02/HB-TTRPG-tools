@@ -106,6 +106,7 @@ const debugPort = 9850 + (process.pid % 100);
 const pagePort = 11850 + (process.pid % 100);
 const display = `:${650 + (process.pid % 100)}`;
 const profileDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'binary-cube-v11-browser-'));
+const pageUrl = `http://127.0.0.1:${pagePort}/`;
 const server = http.createServer((request, response) => {
   response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
   response.end('<!doctype html><html><head><meta charset="utf-8"></head><body data-binary-cube-storage-scope="compatibility-test"><main><section id="shadowrun"></section></main></body></html>');
@@ -133,7 +134,7 @@ try {
     '--disable-default-apps',
     '--disable-extensions',
     '--no-first-run',
-    `http://127.0.0.1:${pagePort}/`
+    pageUrl
   ], { env: { ...process.env, DISPLAY: display }, stdio: ['ignore', 'ignore', 'pipe'] });
 
   const pages = await waitForJson(`http://127.0.0.1:${debugPort}/json/list`);
@@ -141,6 +142,9 @@ try {
   assert.ok(page?.webSocketDebuggerUrl, 'Chromium did not expose a page endpoint.');
   cdp = await connectCdp(page.webSocketDebuggerUrl);
   await cdp.call('Runtime.enable');
+  await cdp.call('Page.enable');
+  await cdp.call('Page.navigate', { url: pageUrl });
+  await delay(120);
   await evaluate(cdp, `localStorage.clear(); window.alert = () => {}; document.body.dataset.binaryCubeStorageScope = 'compatibility-test';`, 'browser setup');
 
   const styleNode = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visualizer.css'), 'utf8');
@@ -243,7 +247,7 @@ try {
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v11-browser-compatibility-receipt',
-      schemaVersion: '0.1.0',
+      schemaVersion: '0.2.0',
       pass: true,
       webglVersion: document.querySelector('[data-cube-visualizer-canvas]').getContext('webgl2')?.getParameter(0x1F02) || '2D fallback',
       internalHandoff: true,
