@@ -120,11 +120,16 @@ for (const required of [
 ]) assert.match(visualizerSource, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 
 assert.equal(/passphrase\s*[:=].*localStorage/i.test(visualizerSource), false, 'Visualizer persistence must never store a passphrase.');
-assert.match(laboratorySource, /LAB_STATE_SCHEMA_VERSION = '0\.3\.0'/);
+assert.match(laboratorySource, /LAB_STATE_SCHEMA_VERSION = '0\.4\.0'/);
 assert.match(laboratorySource, /laboratoryStorageKey/);
 assert.match(laboratorySource, /transportKind/);
 assert.match(laboratorySource, /secureExport/);
 assert.match(laboratorySource, /authenticatedEnvelope/);
+assert.match(laboratorySource, /ShadowrunBinaryCubeWorkerClient/);
+assert.match(laboratorySource, /runBackground\(panel, 'encrypt'/);
+assert.match(laboratorySource, /runBackground\(panel, 'decrypt'/);
+assert.equal(laboratorySource.includes('Engine.encryptBinary(panel.querySelector'), false, 'V11 compatibility requires the laboratory primary encrypt path to remain worker-backed.');
+assert.equal(laboratorySource.includes('Engine.decryptBinary(packageObject, key)'), false, 'V11 compatibility requires the laboratory primary decrypt path to remain worker-backed.');
 assert.match(authUiSource, /currentEnvelopeArtifact/);
 assert.match(authUiSource, /loadEnvelopeArtifact/);
 assert.match(secureSource, /setTransportArtifact\(targetPanel, 'secure-export'/);
@@ -142,7 +147,7 @@ assert.match(desktopSource, /Promise\.resolve\(window\.ShadowrunBinaryCubeVisual
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v11-compatibility-validation-receipt',
-  schemaVersion: '0.2.0',
+  schemaVersion: '0.2.1',
   pass: true,
   editorDraftValidation: true,
   secureExportMetadataMinimized: true,
@@ -152,6 +157,7 @@ console.log(JSON.stringify({
   visualizerStorageMigration: true,
   passphrasePersistence: false,
   laboratoryTransportProvenance: true,
+  laboratoryWorkerDelegation: true,
   desktopBidirectionalHandoff: true,
   assetVersion
 }, null, 2));
