@@ -196,10 +196,12 @@
     const baud = 1200;
     const samplesPerSymbol = sampleRate / baud;
     const bits = bytesToBits(textBytes(AFSK_PAYLOAD));
-    const samples = new Float32Array(bits.length * samplesPerSymbol);
+    // One repeated tail symbol keeps phase-search decoders from losing the final payload bit.
+    const samples = new Float32Array((bits.length + 1) * samplesPerSymbol);
     let phase = 0;
-    for (let symbol = 0; symbol < bits.length; symbol += 1) {
-      const frequency = bits[symbol] ? 1200 : 2200;
+    for (let symbol = 0; symbol <= bits.length; symbol += 1) {
+      const bit = bits[Math.min(symbol, bits.length - 1)];
+      const frequency = bit ? 1200 : 2200;
       const increment = 2 * Math.PI * frequency / sampleRate;
       for (let index = 0; index < samplesPerSymbol; index += 1) {
         samples[symbol * samplesPerSymbol + index] = Math.sin(phase) * 0.72;
