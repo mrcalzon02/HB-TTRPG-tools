@@ -22,6 +22,23 @@ const CONTEXT_FEATURES = Object.freeze([
   'crossChannelPairChiSquareRange',
   'crossChannelResidualRoughnessRange'
 ]);
+const FEATURE_CLASSIFICATION = Object.freeze({
+  lumaResidualRoughness: 'carrier-context',
+  lumaResidualCooccurrenceEntropy: 'carrier-context',
+  lumaResidualDiagonalFraction: 'carrier-context',
+  lumaResidualSymmetryError: 'carrier-context',
+  lumaLsbEntropy: 'carrier-context',
+  lumaLsbOneFraction: 'carrier-context',
+  lumaLsbTransitionFraction: 'carrier-context',
+  lumaPairChiSquare: 'carrier-context',
+  lumaEstimatorAgreement: 'detector-derived',
+  lumaEstimatorSpread: 'detector-derived',
+  crossChannelPayloadRange: 'detector-derived',
+  crossChannelEstimatorAgreementRange: 'detector-derived',
+  crossChannelLsbEntropyRange: 'carrier-context',
+  crossChannelPairChiSquareRange: 'carrier-context',
+  crossChannelResidualRoughnessRange: 'carrier-context'
+});
 
 function finite(value) {
   return Number.isFinite(Number(value));
@@ -148,6 +165,34 @@ function replicatedSaturationScore(development, holdout) {
   });
 }
 
+function familyCorrelations(rows, feature) {
+  const familyIds = [...new Set(rows.map(row => row.familyId))].sort();
+  return Object.freeze(familyIds.map(familyId => Object.freeze({
+    familyId,
+    correlation: correlationSummary(rows.filter(row => row.familyId === familyId), feature)
+  })));
+}
+
+function familyDirectionalReplication(developmentFamilies, holdoutFamilies) {
+  const holdoutByFamily = new Map(holdoutFamilies.map(row => [row.familyId, row.correlation]));
+  const rows = developmentFamilies.map(row => {
+    const development = row.correlation;
+    const holdout = holdoutByFamily.get(row.familyId) || null;
+    const developmentDirection = Number(development?.spearmanCleanRisk || 0) > 0 && Number(development?.spearmanMeanPartnerDelta || 0) < 0;
+    const holdoutDirection = Number(holdout?.spearmanCleanRisk || 0) > 0 && Number(holdout?.spearmanMeanPartnerDelta || 0) < 0;
+    return Object.freeze({ familyId: row.familyId, development: developmentDirection, holdout: holdoutDirection, replicated: developmentDirection && holdoutDirection, developmentCorrelation: development, holdoutCorrelation: holdout });
+  });
+  const replicatedFamilies = rows.filter(row => row.replicated).map(row => row.familyId);
+  return Object.freeze({
+    testedFamilies: rows.length,
+    replicatedFamilyCount: replicatedFamilies.length,
+    replicatedFamilyRate: rows.length ? replicatedFamilies.length / rows.length : 0,
+    replicatedFamilies: Object.freeze(replicatedFamilies),
+    families: Object.freeze(rows),
+    boundary: 'Within-family holdout contains only four carriers per family. Directional replication is descriptive evidence against pure between-family confounding, not a stable per-family calibration estimate.'
+  });
+}
+
 const output = execFileSync(process.execPath, ['scripts/research-raster-unresolved-independent-carriers.mjs'], {
   cwd: root,
   encoding: 'utf8',
@@ -163,20 +208,26 @@ const features = CONTEXT_FEATURES.map(feature => {
   const threshold = median(developmentValues);
   const developmentCorrelation = correlationSummary(developmentRows, feature);
   const holdoutCorrelation = correlationSummary(holdoutRows, feature);
+  const developmentFamilies = familyCorrelations(developmentRows, feature);
+  const holdoutFamilies = familyCorrelations(holdoutRows, feature);
   return Object.freeze({
     feature,
+    classification: FEATURE_CLASSIFICATION[feature],
     developmentMedianThreshold: threshold,
-    development: Object.freeze({ correlation: developmentCorrelation, split: medianSplit(developmentRows, feature, threshold) }),
-    holdout: Object.freeze({ correlation: holdoutCorrelation, split: medianSplit(holdoutRows, feature, threshold) }),
-    replicatedSaturation: replicatedSaturationScore(developmentCorrelation, holdoutCorrelation)
+    development: Object.freeze({ correlation: developmentCorrelation, split: medianSplit(developmentRows, feature, threshold), byFamily: developmentFamilies }),
+    holdout: Object.freeze({ correlation: holdoutCorrelation, split: medianSplit(holdoutRows, feature, threshold), byFamily: holdoutFamilies }),
+    replicatedSaturation: replicatedSaturationScore(developmentCorrelation, holdoutCorrelation),
+    familyDirectionalReplication: familyDirectionalReplication(developmentFamilies, holdoutFamilies)
   });
 });
 
 const ranked = [...features].sort((a, b) => b.replicatedSaturation.score - a.replicatedSaturation.score || a.feature.localeCompare(b.feature));
+const nonCircularRanked = ranked.filter(row => row.classification === 'carrier-context');
+const detectorDerivedRanked = ranked.filter(row => row.classification === 'detector-derived');
 
 const report = Object.freeze({
   receipt: 'hb-ttrpg-raster-carrier-conditioning-research-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   sourceCorpusSchemaVersion: corpus.schemaVersion,
   pipelineVersion: corpus.pipelineVersion,
   evidenceProfileVersion: corpus.evidenceProfileVersion,
@@ -186,14 +237,18 @@ const report = Object.freeze({
     developmentCarriers: developmentRows.length,
     holdoutCarriers: holdoutRows.length,
     contextFeatures: CONTEXT_FEATURES,
+    featureClassification: FEATURE_CLASSIFICATION,
     thresholdRule: 'Median threshold is computed from development clean carriers only and applied unchanged to holdout clean carriers.',
-    targetSignals: Object.freeze(['high clean unresolved baseline', 'suppressed embedded-minus-clean risk delta'])
+    targetSignals: Object.freeze(['high clean unresolved baseline', 'suppressed embedded-minus-clean risk delta']),
+    candidateRule: 'Only carrier-context features are eligible for the non-circular candidate ranking. Detector-derived payload/estimator features remain diagnostic evidence and cannot be promoted as independent carrier normalization context.'
   }),
   developmentOverall: groupSummary(developmentRows),
   holdoutOverall: groupSummary(holdoutRows),
   features: Object.freeze(features),
-  rankedReplicatedSaturation: Object.freeze(ranked.map(row => Object.freeze({ feature: row.feature, ...row.replicatedSaturation }))),
-  boundary: 'This analysis evaluates whether existing evidence-profile measurements can identify carrier regimes where the provisional unresolved score is naturally high or insensitive to embedding. Development medians define descriptive strata and are applied unchanged to holdout. The ranking is not a fitted detector, no production weight or threshold changes are made, and family-correlated context features may still be proxies rather than causal normalization variables.'
+  rankedReplicatedSaturation: Object.freeze(ranked.map(row => Object.freeze({ feature: row.feature, classification: row.classification, ...row.replicatedSaturation }))),
+  rankedNonCircularCarrierContext: Object.freeze(nonCircularRanked.map(row => Object.freeze({ feature: row.feature, classification: row.classification, ...row.replicatedSaturation, familyDirectionalReplication: Object.freeze({ testedFamilies: row.familyDirectionalReplication.testedFamilies, replicatedFamilyCount: row.familyDirectionalReplication.replicatedFamilyCount, replicatedFamilyRate: row.familyDirectionalReplication.replicatedFamilyRate, replicatedFamilies: row.familyDirectionalReplication.replicatedFamilies }) }))),
+  rankedDetectorDerived: Object.freeze(detectorDerivedRanked.map(row => Object.freeze({ feature: row.feature, classification: row.classification, ...row.replicatedSaturation }))),
+  boundary: 'This analysis evaluates whether existing evidence-profile measurements can identify carrier regimes where the provisional unresolved score is naturally high or insensitive to embedding. Development medians define descriptive strata and are applied unchanged to holdout. Detector-derived payload and estimator measurements are explicitly excluded from the non-circular carrier-context candidate ranking. Within-family direction checks reduce but do not eliminate family confounding. The ranking is not a fitted detector, no production weight or threshold changes are made, and family-correlated context features may still be proxies rather than causal normalization variables.'
 });
 
 console.log(JSON.stringify(report, null, 2));
