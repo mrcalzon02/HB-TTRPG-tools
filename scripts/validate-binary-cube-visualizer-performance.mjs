@@ -19,7 +19,7 @@ const rendererSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-vi
 const controllerSource = fs.readFileSync(path.join(repositoryRoot, 'shadowrun-binary-cube-visualizer.js'), 'utf8');
 const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visualizer.css'), 'utf8');
 
-assert.equal(Renderer.constants.RENDERER_VERSION, '0.5.0');
+assert.equal(Renderer.constants.RENDERER_VERSION, '0.6.0');
 assert.deepEqual(Renderer.constants.RENDER_QUALITIES, ['auto', 'exact', 'sampled', 'aggregate']);
 assert.deepEqual(Visualizer.constants.RENDER_QUALITIES, ['auto', 'exact', 'sampled', 'aggregate']);
 assert.equal(Visualizer.constants.MAX_STATIC_GRID_SIZE, 1024);
