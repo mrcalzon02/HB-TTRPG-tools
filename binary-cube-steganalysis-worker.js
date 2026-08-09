@@ -1,8 +1,11 @@
 'use strict';
 
 importScripts('binary-cube-steganalysis-engine.js?v=20260809-steganalysis-1');
+importScripts('binary-cube-steganalysis-evidence-profile.js?v=20260809-raster-evidence-profile-1');
 const Engine = self.BinaryCubeSteganalysisEngine;
+const EvidenceProfile = self.BinaryCubeSteganalysisEvidenceProfile;
 if (!Engine) throw new Error('BinaryCubeSteganalysisEngine failed to initialize in worker.');
+if (!EvidenceProfile) throw new Error('BinaryCubeSteganalysisEvidenceProfile failed to initialize in worker.');
 
 function transferableBytes(value) {
   if (value instanceof Uint8Array || value instanceof Uint8ClampedArray) return value;
@@ -22,6 +25,10 @@ self.addEventListener('message', event => {
       const rgba = new Uint8ClampedArray(message.rgba);
       self.postMessage({ id, type: 'progress', stage: 'Running localized RS / SPA / residual analysis', fraction: 0.25 });
       result = Engine.localizedRasterAnalysis(rgba, message.width, message.height, { tileSize: message.tileSize, channel: message.channel });
+    } else if (operation === 'raster-evidence-profile') {
+      const rgba = new Uint8ClampedArray(message.rgba);
+      self.postMessage({ id, type: 'progress', stage: 'Running R / G / B / luma evidence-vector profiling', fraction: 0.2 });
+      result = EvidenceProfile.profileRaster(rgba, message.width, message.height, { tileSize: message.tileSize, channels: message.channels });
     } else if (operation === 'compare-raster') {
       const cover = new Uint8ClampedArray(message.cover);
       const suspect = new Uint8ClampedArray(message.suspect);
