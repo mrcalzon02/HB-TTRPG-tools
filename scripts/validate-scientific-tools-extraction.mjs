@@ -95,7 +95,9 @@ checks.push(includes('Scientific Tools owns the ISM setting tab', workspace, [
   'data-scientific-tools-panel="ism-media-simulation"',
   'id="scientific-tools-open-ism"',
   "loadScript('interstellar-media-collisions-lab.js'",
-  "api.openPanel({ setting: 'scientific-tools' })"
+  "api.openPanel({ setting: 'scientific-tools' })",
+  'quantum-foam sensitivity model',
+  'Quantum-foam angular jitter is a phenomenological hypothesis/sensitivity layer'
 ]));
 assert.equal(count(workspace, 'data-scientific-tools-tab="ism-media-simulation"'), 1, 'Scientific Tools must expose exactly one ISM Media Simulation setting tab.');
 checks.push('ISM Media Simulation is a Scientific Tools setting tab');
@@ -111,6 +113,18 @@ checks.push(includes('Shared ISM simulation preserves the physical/scattering co
   'Input face: −Z. +Z, ±X, and ±Y are accumulated simultaneously',
   'window.InterstellarMediaCollisionsLab = Object.freeze'
 ]));
+checks.push(includes('Quantum foam remains an explicit hypothesis layer with a separate deterministic seed', lab, [
+  'const PLANCK_LENGTH = 1.616255e-35;',
+  'const FOAM_MODELS = Object.freeze({',
+  'Quantum-foam hypothesis layer',
+  'spacetime foam has no established proton-force law',
+  'δℓ ≈ ℓ^(1−α)ℓP^α',
+  'function quantumFoamPhysics(config, side, density)',
+  'function applyFoamKick(direction, random, rmsAngle)',
+  'foamSeed:',
+  'baselineDensityDeltaRms',
+  'not evidence that dark energy couples to baryonic density'
+]));
 checks.push(excludes('Shared ISM runtime remains independent of setting workspaces and Binary Cube implementation', lab, [
   'ShadowrunBinaryCubeEngine',
   'ShadowrunBinaryCubeEncryption',
@@ -124,7 +138,7 @@ checks.push('ISM stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.3.0',
+  schemaVersion: '0.4.0',
   pass: true,
   checkCount: checks.length,
   checks
