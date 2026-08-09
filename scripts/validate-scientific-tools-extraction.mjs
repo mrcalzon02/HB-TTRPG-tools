@@ -13,6 +13,8 @@ const blacklight = read('blacklight-continuum-entry.js');
 const mounts = read('app-lite-view-mounts.js');
 const workspace = read('scientific-tools-entry.js');
 const cooperative = read('scientific-tools-cooperative-runner.js');
+const decryption = read('binary-cube-decryption-dashboard.js');
+const decryptionCss = read('binary-cube-decryption-dashboard.css');
 const ism = read('interstellar-media-collisions-lab.js');
 const ismCss = read('interstellar-media-collisions-lab.css');
 const doubleSlit = read('double-slit-lab.js');
@@ -41,7 +43,9 @@ checks.push(includes('Shadowrun retains the definitive Binary Cube launch target
 checks.push(excludes('Scientific simulation implementations are not embedded inside Shadowrun', shadowrun, [
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js',
-  'DoubleSlitExperimentLab'
+  'binary-cube-decryption-dashboard.js',
+  'DoubleSlitExperimentLab',
+  'BinaryCubeDecryptionDashboard'
 ]));
 
 checks.push(includes('Black Light delegates to the shared Scientific Tools workspace', blacklight, [
@@ -54,15 +58,17 @@ checks.push(includes('Black Light delegates to the shared Scientific Tools works
 checks.push(excludes('Black Light does not duplicate scientific runtimes', blacklight, [
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js',
+  'binary-cube-decryption-dashboard.js',
   'shadowrun-binary-cube-engine.js'
 ]));
 
-checks.push(includes('Main menu cache-refreshes the cooperative Scientific Tools entry', mounts, [
+checks.push(includes('Main menu cache-refreshes the Decryption Dashboard Scientific Tools entry', mounts, [
   "button.dataset.view = 'scientific-tools'",
   "button.textContent = 'Scientific Tools'",
   "card.dataset.scientificToolsCard = 'true'",
+  'Decryption Dashboard',
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=20260809-cooperative-science-1')",
+  "loadScript('scientific-tools-entry.js?v=20260809-decryption-dashboard-1')",
   'ensureScientificToolsView();'
 ]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'The main menu must own exactly one Scientific Tools card.');
@@ -81,14 +87,16 @@ checks.push(includes('Shared cooperative runner provides deterministic yielding 
 checks.push(excludes('Cooperative runner does not own scientific model logic', cooperative, [
   'LAMBDA_COEFFICIENT',
   'DoubleSlitExperimentLab',
-  'ShadowrunBinaryCubeEngine'
+  'ShadowrunBinaryCubeEngine',
+  'BinaryCubeDecryptionDashboard'
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
-  "const ASSET_VERSION = '20260809-cooperative-science-1';",
+  "const ASSET_VERSION = '20260809-decryption-dashboard-1';",
   'function loadCooperativeRunner()',
   "loadScript('scientific-tools-cooperative-runner.js'",
   'await loadCooperativeRunner();',
+  "loadScript('binary-cube-decryption-dashboard.js'",
   "loadScript('interstellar-media-collisions-lab.js'",
   "loadScript('double-slit-lab.js'",
   'ScientificToolsCooperativeRunner loads before Scientific Tools runtimes',
@@ -96,21 +104,60 @@ checks.push(includes('Scientific Tools loads the cooperative scheduler before sc
   'bounded work slices'
 ]));
 
-checks.push(includes('Scientific Tools owns one Binary Cube, ISM, and Double Slit destination', workspace, [
+checks.push(includes('Scientific Tools owns one Binary Cube, Decryption Dashboard, ISM, and Double Slit destination', workspace, [
   'data-scientific-tools-tab="binary-cube"',
+  'data-scientific-tools-tab="decryption-dashboard"',
   'data-scientific-tools-tab="ism-media-simulation"',
   'data-scientific-tools-tab="double-slit"',
   'id="scientific-tools-open-binary-cube-visualizer"',
   'id="scientific-tools-open-binary-cube-laboratory"',
+  'id="scientific-tools-open-decryption-dashboard"',
   'id="scientific-tools-open-ism"',
   'id="scientific-tools-open-double-slit"',
+  'loadDecryptionDashboard',
+  'openDecryptionDashboard',
   'loadDoubleSlitLab',
   'openDoubleSlitLab'
 ]));
 assert.equal(count(workspace, 'data-scientific-tools-tab="binary-cube"'), 1);
+assert.equal(count(workspace, 'data-scientific-tools-tab="decryption-dashboard"'), 1);
 assert.equal(count(workspace, 'data-scientific-tools-tab="ism-media-simulation"'), 1);
 assert.equal(count(workspace, 'data-scientific-tools-tab="double-slit"'), 1);
 checks.push('Scientific Tools tab ownership is singular');
+
+checks.push(includes('Decryption Dashboard exposes bounded Binary Cube cryptanalysis tools', decryption, [
+  'BinaryCubeDecryptionDashboard',
+  'Decryption Dashboard',
+  'Binary Cube Cryptanalysis',
+  'ScientificToolsCooperativeRunner',
+  'function candidateGridSizes(',
+  'function autocorrelation(',
+  'function transformSquareBlock(',
+  'async function runAttackSuite(',
+  'function compareSources(',
+  'function knownKeyDecrypt(',
+  'single-byte XOR',
+  'Research boundary:'
+]));
+checks.push(includes('Decryption Dashboard delegates authoritative known-key decryption to the canonical engine', decryption, [
+  'const Engine = canonicalEngine();',
+  'Engine.validateKey(keyValue)',
+  'Engine.decryptBinary(packageObject, key)',
+  'ShadowrunBinaryCubeSecureExport',
+  'expandSecureExport'
+]));
+checks.push(excludes('Decryption Dashboard does not reconstruct the encoder or absorb unrelated scientific models', decryption, [
+  'ShadowrunBinaryCubeEngine.encryptBinary',
+  'Engine.transformBlock',
+  'InterstellarMediaCollisionsLab',
+  'DoubleSlitExperimentLab',
+  'PLANCK_LENGTH',
+  'LAMBDA_COEFFICIENT'
+]));
+assert.ok(decryptionCss.includes('.bdd-panel'), 'Decryption Dashboard stylesheet must retain authoritative panel styling.');
+assert.ok(decryptionCss.includes('.bdd-results'), 'Decryption Dashboard stylesheet must retain ranked-result styling.');
+assert.ok(decryptionCss.includes('.bdd-metric-grid'), 'Decryption Dashboard stylesheet must retain diagnostics styling.');
+checks.push('Decryption Dashboard stylesheet remains authoritative');
 
 checks.push(includes('ISM preserves physical, foam, and Shadow model boundaries', ism, [
   'const LAMBDA = 1.097e-52;',
@@ -136,8 +183,9 @@ checks.push(includes('ISM heavy setup is cooperatively incremental and cancellab
   "cooperativeToken?.cancel?.('laboratory closed')",
   "['Execution', 'deterministic cooperative slices']"
 ]));
-checks.push(excludes('ISM remains independent of Double Slit and Binary Cube implementations', ism, [
+checks.push(excludes('ISM remains independent of Double Slit, Decryption Dashboard, and Binary Cube implementations', ism, [
   'DoubleSlitExperimentLab',
+  'BinaryCubeDecryptionDashboard',
   'ShadowrunBinaryCubeEngine',
   'ShadowrunBinaryCubeEncryption'
 ]));
@@ -165,8 +213,9 @@ checks.push(includes('Double Slit heavy setup and detector updates are cooperati
   "refreshToken?.cancel?.('laboratory closed')",
   'deterministic cooperative slices'
 ]));
-checks.push(excludes('Double Slit does not absorb ISM or Binary Cube model logic', doubleSlit, [
+checks.push(excludes('Double Slit does not absorb ISM, Decryption Dashboard, or Binary Cube model logic', doubleSlit, [
   'InterstellarMediaCollisionsLab',
+  'BinaryCubeDecryptionDashboard',
   'ShadowrunBinaryCubeEngine',
   'PLANCK_LENGTH',
   'LAMBDA_COEFFICIENT'
@@ -182,7 +231,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.6.0',
+  schemaVersion: '0.7.0',
   pass: true,
   checkCount: checks.length,
   checks
