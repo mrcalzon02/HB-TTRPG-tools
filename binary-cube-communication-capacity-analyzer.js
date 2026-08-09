@@ -49,8 +49,7 @@
     activeWorkerReject = null;
   }
 
-  function cancelActiveAnalysis(reason = 'analysis cancelled') {
-    activeToken?.cancel?.(reason);
+  function replaceAnalysisWorker(reason = 'superseded by newer background communication analysis') {
     const reject = activeWorkerReject;
     clearWorkerHeartbeat();
     if (activeWorker) activeWorker.terminate();
@@ -61,6 +60,11 @@
       error.name = 'AbortError';
       reject(error);
     }
+  }
+
+  function cancelActiveAnalysis(reason = 'analysis cancelled') {
+    activeToken?.cancel?.(reason);
+    replaceAnalysisWorker(reason);
   }
 
   function asBytes(value) {
@@ -447,7 +451,7 @@
       return Promise.reject(new Error('This browser does not support Web Workers required for freeze-safe communication-capacity analysis.'));
     }
 
-    cancelActiveAnalysis('superseded by newer background communication analysis');
+    replaceAnalysisWorker('superseded by newer background communication analysis');
     const requestId = ++activeWorkerRequestId;
     const startedAt = Date.now();
     const onProgress = typeof hooks.onProgress === 'function' ? hooks.onProgress : null;
