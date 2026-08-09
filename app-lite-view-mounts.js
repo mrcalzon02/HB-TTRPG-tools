@@ -223,7 +223,7 @@
       warhammerPlanetProfilePromise ||= loadScript('assets/warhammer-40k/shaders/planet-profile-v1.js?v=8');
       warhammerPlanetCompositorPromise ||= warhammerPlanetProfilePromise.then(() => loadScript('assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10'));
       warhammerChronologyPromise ||= loadScript('assets/warhammer-40k/imperial-chronology-v1.js?v=1');
-      warhammerDramatisPromise ||= warhammerChronologyPromise.then(() => loadScript('assets/warhammer-40k/imperial-dramatis-personae-v1.js?v=3'));
+      warhammerDramatisPromise ||= warhammerChronologyPromise.then(() => loadScript('assets/warhammer-40k/imperial-dramatis-personae-v1.js?v=4'));
       warhammerLogisticsPromise ||= loadScript('assets/warhammer-40k/imperial-logistics-v1.js?v=2');
       warhammerMercaturaPromise ||= Promise.all([warhammerLogisticsPromise, warhammerChronologyPromise]).then(() => loadScript('assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js?v=2'));
       warhammerComponentLineagePromise ||= loadScript('assets/warhammer-40k/imperial-component-lineage-v1.js?v=2');
