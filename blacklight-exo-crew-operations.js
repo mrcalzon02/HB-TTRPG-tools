@@ -1,151 +1,603 @@
 (() => {
   "use strict";
 
-  const PROFILE = Object.freeze({
-    id:"human-standard", name:"Human Standard",
-    assumptions:{commandModel:"distributed watchstations",powerCarrier:"electrical bus",sensorModel:"passive + active electromagnetic",commsModel:"radio + laser datalink",maneuverModel:"RCS + conventional main drive",weaponModel:"human fire-control authorization"}
+  const HUMAN_PROFILE = Object.freeze({
+    id: "human-standard",
+    name: "Human Standard",
+    rulesBasis: "World of Darkness-derived d10",
+    purpose: "role-play visualization placeholder",
+    assumptions: {
+      commandModel: "distributed watchstations",
+      powerCarrier: "electrical bus",
+      sensorModel: "passive + active electromagnetic",
+      commsModel: "radio + laser datalink",
+      maneuverModel: "RCS + conventional main drive",
+      weaponModel: "human fire-control authorization"
+    }
   });
-  const $ = id => document.getElementById(id);
-  const clamp = (v,a=0,b=100) => Math.min(b,Math.max(a,v));
-  const round = (v,d=0) => Number(v.toFixed(d));
-  const initial = () => ({
-    profile:PROFILE,simTime:0,readiness:"nominal",efficiency:100,velocity:12.4,heading:37,throttle:22,reactor:68,thermal:31,hull:100,track:42,comms:88,nav:74,weapons:61,
-    driveHealth:100,sensorHealth:100,commsHealth:100,weaponHealth:100,coolingHealth:100,targetRange:42000,targetBearing:74,targetClosure:-1.7,targetClass:"unresolved",targetIFF:"unknown",activeScan:false,emissions:18,firingSolution:0,courseCommitted:false,navDestination:"Rendezvous Alpha",navBurnDeltaV:2.1,commsChannel:"Fleet tactical",commsEncryption:true,distress:false,weaponGroup:"Coil battery A",weaponMode:"safe",capacitors:54,engineeringFault:null,
-    power:{helm:16,navigation:14,gunnery:17,engineering:23,science:17,comms:13},stationOnline:{helm:true,navigation:true,gunnery:true,engineering:true,science:true,comms:true},contact:{present:false,friendly:false,x:76,y:31},log:[]
+
+  const BASE_POWER = Object.freeze({ helm: 16, navigation: 14, gunnery: 17, engineering: 23, science: 17, comms: 13 });
+  const clamp = (value, min = 0, max = 100) => Math.min(max, Math.max(min, value));
+  const round = (value, digits = 0) => Number(value.toFixed(digits));
+  const el = (id) => document.getElementById(id);
+  const d10 = () => Math.floor(Math.random() * 10) + 1;
+
+  const STATIONS = Object.freeze({
+    helm: {
+      label: "Helm",
+      description: "Human-derived flight-control station. The display is immersive role-play state; the procedure attempt produces a suggested d10 difficulty for the DM.",
+      display: "maneuver",
+      labels: { guard: "Flight interlock", mode: "Maneuver mode", bus: "Thrust bus", dial: "Vector trim", lever: "Thrust gate", confirmA: "Flight confirm", confirmB: "Pilot acknowledge", execute: "EXECUTE BURN" },
+      readouts: state => [["Heading", `${round(state.heading)}°`], ["Velocity", `${round(state.velocity, 1)} km/s`], ["Throttle", `${round(state.throttle)}%`], ["Drive", `${round(state.driveHealth)}%`]],
+      procedures: [
+        { id: "course-burn", name: "Execute course burn", cue: "Release the flight interlock, establish the commanded maneuver mode and thrust bus, trim the vector, confirm the command, set the thrust gate, then execute.", sequence: ["guard-open","mode-2","bus-primary","dial-right","dial-right","confirm-a","lever-forward","confirm-a","execute"] },
+        { id: "evasive-burn", name: "Evasive maneuver", cue: "Release the interlock, move to evasive authority, shift the thrust feed, acknowledge the maneuver, cross-trim the vector, gate thrust, double-confirm, then execute.", sequence: ["guard-open","mode-3","bus-aux","confirm-b","dial-right","dial-left","lever-forward","confirm-b","confirm-b","execute"] },
+        { id: "docking-correction", name: "Docking correction", cue: "Release the interlock, select precision maneuvering, establish the primary feed, trim down twice, confirm, center the gate, trim back once, confirm, then execute.", sequence: ["guard-open","mode-1","bus-primary","dial-left","dial-left","confirm-a","lever-center","dial-right","confirm-a","execute"] }
+      ]
+    },
+    navigation: {
+      label: "Navigation",
+      description: "Human-derived astrogation station. Procedure order matters; the console does not decide whether the character succeeds.",
+      display: "plot",
+      labels: { guard: "Solution guard", mode: "Ephemeris mode", bus: "Reference source", dial: "Solution index", lever: "Commit gate", confirmA: "Vector confirm", confirmB: "Reference lock", execute: "COMMIT SOLUTION" },
+      readouts: state => [["Solution", `${round(state.nav)}%`], ["Destination", state.navDestination], ["Δv plan", `${round(state.navBurnDeltaV, 2)} km/s`], ["Committed", state.courseCommitted ? "yes" : "no"]],
+      procedures: [
+        { id: "transfer-solve", name: "Compute transfer solution", cue: "Open the solution guard, choose the transfer ephemeris, lock a reference source, advance the solution index repeatedly, confirm, open the commit gate, confirm again, then commit.", sequence: ["guard-open","mode-1","bus-primary","dial-right","dial-right","dial-right","confirm-a","lever-forward","confirm-a","execute"] },
+        { id: "course-commit", name: "Commit course to Helm", cue: "Open the guard, choose helm-transfer mode, keep the primary reference, verify both vector and reference, open the commit gate, reconfirm the vector, then commit.", sequence: ["guard-open","mode-2","bus-primary","confirm-a","confirm-b","lever-forward","confirm-a","execute"] },
+        { id: "emergency-egress", name: "Emergency egress solution", cue: "Open the guard, enter emergency ephemeris, move to the auxiliary reference, back the solution index once, lock the reference, open the commit gate, double-lock, then commit.", sequence: ["guard-open","mode-3","bus-aux","dial-left","confirm-b","lever-forward","confirm-b","confirm-b","execute"] }
+      ]
+    },
+    gunnery: {
+      label: "Gunnery",
+      description: "Human fire-control station. Arming and firing are represented as procedural inputs; actual hit or damage resolution remains entirely with the DM and player roll.",
+      display: "target",
+      labels: { guard: "Weapon interlock", mode: "Fire-control mode", bus: "Weapon feed", dial: "Range gate", lever: "Arm lever", confirmA: "Track confirm", confirmB: "Weapons acknowledge", execute: "FIRE / RELAY" },
+      readouts: state => [["Weapon group", state.weaponGroup], ["Capacitors", `${round(state.capacitors)}%`], ["Track", `${round(state.track)}%`], ["Mode", state.weaponMode]],
+      procedures: [
+        { id: "fire-solution", name: "Build firing solution", cue: "Release the weapon interlock, establish tracking mode and primary feed, walk the range gate forward twice, confirm the track, hold the arm lever centered, acknowledge weapons, then relay.", sequence: ["guard-open","mode-1","bus-primary","dial-right","dial-right","confirm-a","lever-center","confirm-b","execute"] },
+        { id: "arm-engage", name: "Arm and engage target", cue: "Release the interlock, select engagement mode and primary feed, double-acknowledge weapons, pull the arm lever forward, advance the range gate, confirm the track, then fire.", sequence: ["guard-open","mode-2","bus-primary","confirm-b","confirm-b","lever-forward","dial-right","confirm-a","execute"] },
+        { id: "point-defense", name: "Point-defense burst", cue: "Release the interlock, enter defensive mode, move to auxiliary feed, back then advance the range gate, confirm track, pull the arm lever, double-confirm track, then fire.", sequence: ["guard-open","mode-3","bus-aux","dial-left","dial-right","confirm-a","lever-forward","confirm-a","confirm-a","execute"] }
+      ]
+    },
+    engineering: {
+      label: "Engineering",
+      description: "Human plant and distribution station. The power diagram is role-play context; complex procedures generate difficulty rather than automatically repairing or damaging the ship.",
+      display: "systems",
+      labels: { guard: "Plant interlock", mode: "Plant mode", bus: "Distribution bus", dial: "Load trim", lever: "Bus tie lever", confirmA: "Plant confirm", confirmB: "Engineering acknowledge", execute: "APPLY CONFIGURATION" },
+      readouts: state => [["Reactor", `${round(state.reactor)}%`], ["Thermal", `${round(state.thermal)}%`], ["Cooling", `${round(state.coolingHealth)}%`], ["Fault", state.engineeringFault || "none"]],
+      procedures: [
+        { id: "rebalance", name: "Rebalance power distribution", cue: "Release the plant interlock, select distribution mode and primary bus, trim load up then down, confirm plant state, center the bus tie, acknowledge engineering, then apply.", sequence: ["guard-open","mode-1","bus-primary","dial-right","dial-left","confirm-a","lever-center","confirm-b","execute"] },
+        { id: "coolant-isolation", name: "Isolate coolant fault", cue: "Release the plant interlock, enter casualty mode, move to auxiliary distribution, acknowledge the fault, back load trim twice, pull the bus tie aft, double-confirm plant state, then apply.", sequence: ["guard-open","mode-2","bus-aux","confirm-b","dial-left","dial-left","lever-aft","confirm-a","confirm-a","execute"] },
+        { id: "scram", name: "Emergency reactor SCRAM", cue: "Release the interlock, enter emergency plant mode, isolate distribution, double-acknowledge the casualty, pull the bus tie aft, acknowledge again, then apply the SCRAM configuration.", sequence: ["guard-open","mode-3","bus-isolate","confirm-b","confirm-b","lever-aft","confirm-b","execute"] }
+      ]
+    },
+    science: {
+      label: "Science / Scanning",
+      description: "Human sensor-analysis station. The sensor picture is atmospheric visualization; procedure quality becomes a DM-facing difficulty suggestion.",
+      display: "sensor",
+      labels: { guard: "Sensor guard", mode: "Scan mode", bus: "Aperture feed", dial: "Gain trim", lever: "Emitter gate", confirmA: "Track confirm", confirmB: "Analyst acknowledge", execute: "ACQUIRE / RELAY" },
+      readouts: state => [["Track", `${round(state.track)}%`], ["Class", state.targetClass], ["Range", state.contact.present ? `${Math.round(state.targetRange).toLocaleString()} km` : "no contact"], ["Emissions", `${round(state.emissions)}%`]],
+      procedures: [
+        { id: "active-scan", name: "Active contact scan", cue: "Release the sensor guard, select active acquisition, keep the primary aperture feed, advance gain twice, confirm the track, open the emitter gate, reconfirm, then acquire.", sequence: ["guard-open","mode-2","bus-primary","dial-right","dial-right","confirm-a","lever-forward","confirm-a","execute"] },
+        { id: "spectral-survey", name: "Deep spectral survey", cue: "Release the guard, enter survey mode, use the auxiliary aperture feed, back gain once then advance twice, acknowledge analysis, center the emitter gate, confirm track, then acquire.", sequence: ["guard-open","mode-1","bus-aux","dial-left","dial-right","dial-right","confirm-b","lever-center","confirm-a","execute"] },
+        { id: "classify-anomaly", name: "Classify anomaly", cue: "Release the guard, select anomaly mode and primary feed, confirm the track, advance then back gain, acknowledge analysis, center the emitter gate, confirm once more, then acquire.", sequence: ["guard-open","mode-3","bus-primary","confirm-a","dial-right","dial-left","confirm-b","lever-center","confirm-a","execute"] }
+      ]
+    },
+    comms: {
+      label: "Comms",
+      description: "Human communications and authentication station. The console supplies a difficulty setting; message success, interception, and narrative consequences remain DM adjudication.",
+      display: "link",
+      labels: { guard: "Crypto guard", mode: "Link mode", bus: "Carrier path", dial: "Frequency trim", lever: "Transmit gate", confirmA: "Address confirm", confirmB: "Crypto acknowledge", execute: "TRANSMIT / RELAY" },
+      readouts: state => [["Link", `${round(state.comms)}%`], ["Channel", state.commsChannel], ["Encryption", state.commsEncryption ? "enabled" : "open"], ["IFF", state.targetIFF]],
+      procedures: [
+        { id: "authenticate-hail", name: "Authenticate and hail", cue: "Release the crypto guard, select hail mode and primary carrier, advance frequency trim, confirm the address twice, open the transmit gate, acknowledge crypto, then transmit.", sequence: ["guard-open","mode-1","bus-primary","dial-right","confirm-a","confirm-a","lever-forward","confirm-b","execute"] },
+        { id: "encrypted-burst", name: "Encrypted tightbeam burst", cue: "Release the guard, select secure-burst mode, shift to auxiliary carrier, acknowledge crypto, advance frequency twice, open the transmit gate, acknowledge crypto again, confirm the address, then transmit.", sequence: ["guard-open","mode-2","bus-aux","confirm-b","dial-right","dial-right","lever-forward","confirm-b","confirm-a","execute"] },
+        { id: "distress", name: "Emergency distress broadcast", cue: "Release the guard, enter emergency link mode, isolate the carrier path, double-acknowledge crypto bypass, open the transmit gate, acknowledge once more, then transmit.", sequence: ["guard-open","mode-3","bus-isolate","confirm-b","confirm-b","lever-forward","confirm-b","execute"] }
+      ]
+    }
   });
-  let state=initial(), activeStation="helm", timer=null;
-  const basePower={helm:16,navigation:14,gunnery:17,engineering:23,science:17,comms:13};
-  const powerTotal=()=>Object.values(state.power).reduce((a,b)=>a+b,0);
-  const powerFactor=k=>clamp(state.power[k]/basePower[k]*100);
-  const engQuality=()=> (state.driveHealth+state.coolingHealth+state.hull)/3;
 
-  const stations={
-    helm:{label:"Helm",description:"Controls attitude, throttle, maneuvering, and immediate collision avoidance. Helm quality depends on Engineering power and Navigation solution quality.",readouts:()=>[["Heading",`${round(state.heading)}°`],["Velocity",`${round(state.velocity,1)} km/s`],["Throttle",`${round(state.throttle)}%`],["Drive",`${round(state.driveHealth)}%`]],display:"maneuver",controls:()=>`
-      <div class="exo-control"><span class="exo-control-title">Main-drive throttle</span><input data-control="helm-throttle" type="range" min="0" max="100" value="${round(state.throttle)}"><div class="exo-control-row"><button data-action="helm-apply" class="exo-control-button primary">Apply thrust</button><button data-action="helm-idle" class="exo-control-button">Idle drive</button></div></div>
-      <div class="exo-control"><label>Command heading</label><input data-control="helm-heading" type="number" min="0" max="359" value="${round(state.heading)}"><div class="exo-control-row"><button data-action="helm-turn" class="exo-control-button primary">Execute turn</button><button data-action="helm-evade" class="exo-control-button danger">Evasive burn</button></div></div>
-      <div class="exo-control wide"><span class="exo-control-title">Flight authority</span><div class="exo-control-row"><button data-action="helm-hold" class="exo-control-button">Hold attitude</button><button data-action="helm-nav" class="exo-control-button ${state.courseCommitted?"primary":""}">Fly nav solution</button><button data-action="helm-brake" class="exo-control-button">Retrograde braking</button></div></div>`},
-    navigation:{label:"Navigation",description:"Builds course solutions, predicts burns, and hands executable vectors to Helm. Better Science tracks and stable Communications improve route confidence.",readouts:()=>[["Solution",`${round(state.nav)}%`],["Destination",state.navDestination],["Δv plan",`${round(state.navBurnDeltaV,2)} km/s`],["Committed",state.courseCommitted?"yes":"no"]],display:"plot",controls:()=>`
-      <div class="exo-control"><label>Destination / waypoint</label><select data-control="nav-destination"><option ${state.navDestination==="Rendezvous Alpha"?"selected":""}>Rendezvous Alpha</option><option ${state.navDestination==="L4 Survey Marker"?"selected":""}>L4 Survey Marker</option><option ${state.navDestination==="Deep-space hold"?"selected":""}>Deep-space hold</option><option ${state.navDestination==="Emergency egress"?"selected":""}>Emergency egress</option></select></div>
-      <div class="exo-control"><label>Planned delta-v (km/s)</label><input data-control="nav-dv" type="number" min="0" max="20" step=".1" value="${round(state.navBurnDeltaV,1)}"><div class="exo-control-row"><button data-action="nav-solve" class="exo-control-button primary">Recalculate</button></div></div>
-      <div class="exo-control wide"><span class="exo-control-title">Course workflow</span><div class="exo-control-row"><button data-action="nav-refine" class="exo-control-button">Refine with sensor track</button><button data-action="nav-commit" class="exo-control-button primary">Commit to Helm</button><button data-action="nav-clear" class="exo-control-button">Clear course</button></div></div>`},
-    gunnery:{label:"Gunnery",description:"Turns Science tracks into firing solutions, charges weapon groups, and authorizes fire. Weapons are limited by track quality, power, thermal headroom, and Engineering health.",readouts:()=>[["Weapon group",state.weaponGroup],["Capacitors",`${round(state.capacitors)}%`],["Solution",`${round(state.firingSolution)}%`],["Mode",state.weaponMode]],display:"target",controls:()=>`
-      <div class="exo-control"><label>Weapon group</label><select data-control="gun-group"><option ${state.weaponGroup==="Coil battery A"?"selected":""}>Coil battery A</option><option ${state.weaponGroup==="Point defense"?"selected":""}>Point defense</option><option ${state.weaponGroup==="Missile cells"?"selected":""}>Missile cells</option><option ${state.weaponGroup==="Spinal accelerator"?"selected":""}>Spinal accelerator</option></select></div>
-      <div class="exo-control"><span class="exo-control-title">Fire-control mode</span><div class="exo-control-row"><button data-action="gun-safe" class="exo-control-button">Safe</button><button data-action="gun-track" class="exo-control-button">Track</button><button data-action="gun-arm" class="exo-control-button danger">Arm</button></div></div>
-      <div class="exo-control wide"><span class="exo-control-title">Engagement sequence</span><div class="exo-control-row"><button data-action="gun-charge" class="exo-control-button">Charge capacitors</button><button data-action="gun-solution" class="exo-control-button primary">Build firing solution</button><button data-action="gun-fire" class="exo-control-button danger" ${state.weaponMode!=="armed"||state.firingSolution<60?"disabled":""}>Fire selected group</button></div></div>`},
-    engineering:{label:"Engineering",description:"Owns reactor output, cooling, damage control, and the shipwide power bus. Engineering decisions directly cap what every other station can accomplish.",readouts:()=>[["Reactor",`${round(state.reactor)}%`],["Thermal",`${round(state.thermal)}%`],["Cooling",`${round(state.coolingHealth)}%`],["Fault",state.engineeringFault||"none"]],display:"systems",controls:()=>`
-      <div class="exo-control"><span class="exo-control-title">Reactor demand</span><input data-control="eng-reactor" type="range" min="20" max="100" value="${round(state.reactor)}"><div class="exo-control-row"><button data-action="eng-reactor" class="exo-control-button primary">Set output</button></div></div>
-      <div class="exo-control"><span class="exo-control-title">Thermal management</span><div class="exo-control-row"><button data-action="eng-cool" class="exo-control-button">Increase cooling</button><button data-action="eng-radiators" class="exo-control-button">Extend radiators</button></div></div>
-      <div class="exo-control wide"><span class="exo-control-title">Damage control</span><div class="exo-control-row"><button data-action="eng-diagnose" class="exo-control-button">Run diagnostics</button><button data-action="eng-repair" class="exo-control-button primary" ${!state.engineeringFault?"disabled":""}>Dispatch repair team</button><button data-action="eng-scram" class="exo-control-button danger">Emergency SCRAM</button></div></div>`},
-    science:{label:"Science / Scanning",description:"Detects, classifies, and refines contacts. Track quality feeds Navigation and Gunnery while active scans improve data at the cost of emissions.",readouts:()=>[["Track",`${round(state.track)}%`],["Class",state.targetClass],["Range",state.contact.present?`${Math.round(state.targetRange).toLocaleString()} km`:"no contact"],["Emissions",`${round(state.emissions)}%`]],display:"sensor",controls:()=>`
-      <div class="exo-control"><span class="exo-control-title">Sensor posture</span><div class="exo-control-row"><button data-action="sci-passive" class="exo-control-button">Passive sweep</button><button data-action="sci-active" class="exo-control-button primary">Active scan</button><button data-action="sci-focus" class="exo-control-button">Focus track</button></div></div>
-      <div class="exo-control"><label>Sensor band</label><select><option>Multi-spectrum</option><option>Thermal / infrared</option><option>Radar / lidar</option><option>Gravimetric derived</option></select></div>
-      <div class="exo-control wide"><span class="exo-control-title">Analysis pipeline</span><div class="exo-control-row"><button data-action="sci-classify" class="exo-control-button">Classify contact</button><button data-action="sci-share" class="exo-control-button primary">Publish track shipwide</button></div></div>`},
-    comms:{label:"Comms",description:"Maintains ship, fleet, and remote links; authenticates contacts; and distributes external data. Link quality contributes to navigation confidence and cooperative targeting.",readouts:()=>[["Link",`${round(state.comms)}%`],["Channel",state.commsChannel],["Encryption",state.commsEncryption?"enabled":"open"],["IFF",state.targetIFF]],display:"link",controls:()=>`
-      <div class="exo-control"><label>Primary channel</label><select data-control="comms-channel"><option ${state.commsChannel==="Fleet tactical"?"selected":""}>Fleet tactical</option><option ${state.commsChannel==="Civil navigation"?"selected":""}>Civil navigation</option><option ${state.commsChannel==="Tightbeam laser"?"selected":""}>Tightbeam laser</option><option ${state.commsChannel==="Emergency broadwave"?"selected":""}>Emergency broadwave</option></select></div>
-      <div class="exo-control"><span class="exo-control-title">Link security</span><div class="exo-control-row"><button data-action="comms-encrypt" class="exo-control-button ${state.commsEncryption?"primary":""}">Toggle encryption</button><button data-action="comms-handshake" class="exo-control-button">Authenticate contact</button></div></div>
-      <div class="exo-control wide"><span class="exo-control-title">Transmit</span><div class="exo-control-row"><button data-action="comms-hail" class="exo-control-button primary">Hail contact</button><button data-action="comms-data" class="exo-control-button">Send nav / track data</button><button data-action="comms-distress" class="exo-control-button danger">Distress burst</button></div></div>`}
-  };
+  const initialControlState = () => ({ guard: "closed", mode: "1", bus: "primary", dial: 0, lever: "center" });
+  const initialState = () => ({
+    profile: HUMAN_PROFILE,
+    simTime: 0,
+    velocity: 12.4,
+    heading: 37,
+    throttle: 22,
+    reactor: 68,
+    thermal: 31,
+    hull: 100,
+    track: 42,
+    comms: 88,
+    nav: 74,
+    weapons: 61,
+    driveHealth: 100,
+    sensorHealth: 100,
+    commsHealth: 100,
+    weaponHealth: 100,
+    coolingHealth: 100,
+    targetRange: 42000,
+    targetBearing: 74,
+    targetClosure: -1.7,
+    targetClass: "unresolved",
+    targetIFF: "unknown",
+    emissions: 18,
+    firingSolution: 0,
+    courseCommitted: false,
+    navDestination: "Rendezvous Alpha",
+    navBurnDeltaV: 2.1,
+    commsChannel: "Fleet tactical",
+    commsEncryption: true,
+    weaponGroup: "Coil battery A",
+    weaponMode: "safe",
+    capacitors: 54,
+    engineeringFault: null,
+    power: { ...BASE_POWER },
+    stationOnline: { helm: true, navigation: true, gunnery: true, engineering: true, science: true, comms: true },
+    contact: { present: false, friendly: false, x: 76, y: 31 },
+    selectedProcedure: { helm: "course-burn", navigation: "transfer-solve", gunnery: "fire-solution", engineering: "rebalance", science: "active-scan", comms: "authenticate-hail" },
+    procedure: null,
+    relay: null,
+    log: []
+  });
 
-  const dependencies=[
-    ["Helm","Engineering power + Navigation solution determine maneuver precision.",()=>Math.min(powerFactor("helm"),state.nav)],
-    ["Navigation","Science track + Comms link improve route and rendezvous confidence.",()=>state.track*.55+state.comms*.45],
-    ["Gunnery","Science track + Engineering power + thermal headroom cap firing quality.",()=>Math.min(state.track,powerFactor("gunnery"),100-Math.max(0,state.thermal-45))],
-    ["Engineering","Reactor, cooling and repair status provide the operational ceiling for all stations.",()=>engQuality()],
-    ["Science","Engineering power and sensor health determine collection rate.",()=>Math.min(powerFactor("science"),state.sensorHealth)],
-    ["Comms","Engineering power and comms hardware determine usable link quality.",()=>Math.min(powerFactor("comms"),state.commsHealth)]
-  ];
+  let state = initialState();
+  let activeStation = "helm";
+  let timer = null;
 
-  function calculate(){
-    const over=Math.max(0,powerTotal()-100), eq=engQuality();
-    const avg=Object.keys(state.stationOnline).reduce((sum,k)=>sum+(state.stationOnline[k]?Math.min(powerFactor(k),100):0),0)/6;
-    state.weapons=clamp(state.weaponHealth*.35+powerFactor("gunnery")*.25+state.capacitors*.2+state.track*.2-over*2.2);
-    state.comms=clamp(state.commsHealth*.52+powerFactor("comms")*.33+(state.commsEncryption?5:0)-over*1.3);
-    state.nav=clamp(powerFactor("navigation")*.35+state.track*.24+state.comms*.18+eq*.23-(state.courseCommitted?0:4));
-    state.efficiency=clamp(avg*.42+eq*.28+state.nav*.12+state.track*.1+state.comms*.08-over*1.7);
-    if(state.hull<40||state.reactor>94||state.thermal>88) state.readiness="critical";
-    else if(state.engineeringFault||state.hull<75||state.thermal>70||state.efficiency<70) state.readiness="degraded";
-    else if(state.contact.present&&state.weaponMode==="armed") state.readiness="action stations";
-    else state.readiness="nominal";
-  }
-  function log(station,message){state.log.unshift({time:state.simTime,station,message});state.log=state.log.slice(0,80);renderLog();}
-  function time(s){const m=String(Math.floor(s/60)).padStart(2,"0"),x=String(Math.floor(s%60)).padStart(2,"0");return `${m}:${x}`;}
-  function renderTop(){
-    calculate();
-    const values={velocity:`${round(state.velocity,1)} km/s`,reactor:`${round(state.reactor)}%`,thermal:`${round(state.thermal)}%`,hull:`${round(state.hull)}%`,track:`${round(state.track)}%`,comms:`${round(state.comms)}%`,nav:`${round(state.nav)}%`,weapons:`${round(state.weapons)}%`};
-    Object.entries(values).forEach(([k,v])=>{const t=$(`state-${k}`),m=$(`meter-${k}`);if(t)t.textContent=v;if(m)m.style.width=`${clamp(k==="velocity"?state.velocity*4:state[k])}%`;});
-    $("crew-summary-readiness").textContent=state.readiness;$("crew-summary-efficiency").textContent=`${round(state.efficiency)}%`;$("crew-profile-name").textContent=state.profile.name;
-  }
-  function renderPower(){
-    $("power-controls").innerHTML=Object.keys(state.power).map(k=>`<div class="exo-power-control"><label><span>${stations[k].label}</span><b>${state.power[k]}</b></label><input data-power="${k}" type="range" min="4" max="30" value="${state.power[k]}"></div>`).join("");
-    const total=powerTotal(), badge=$("power-total");badge.textContent=`${total} / 100 points allocated`;badge.dataset.over=total>100?"true":"false";
-  }
-  function renderTabs(){$("station-tabs").innerHTML=Object.entries(stations).map(([k,d])=>`<button class="exo-station-tab" type="button" role="tab" data-station="${k}" aria-selected="${activeStation===k}">${d.label}<span class="tab-state">${state.stationOnline[k]?"station online":"station offline"}</span></button>`).join("");}
-  function tactical(kind){const c=state.contact;return `<div class="exo-tactical-display" aria-label="${kind} display"><div class="exo-tactical-ring"></div><div class="exo-ownship" title="Own ship"></div><div class="exo-contact ${c.friendly?"friend":""}" style="left:${c.x}%;top:${c.y}%;opacity:${c.present?1:0}" title="${state.targetClass}"></div><span class="exo-display-caption">${kind} // ${c.present?`${round(state.targetBearing)}° · ${Math.round(state.targetRange).toLocaleString()} km`:"no remote track"}</span></div>`;}
-  function renderStation(){const d=stations[activeStation];$("station-panel").innerHTML=`<div class="exo-station-head"><div class="exo-station-title"><span class="exo-kicker">${state.profile.name} watchstation</span><h2>${d.label}</h2><p>${d.description}</p></div><div class="exo-station-readout">${d.readouts().map(([a,b])=>`<div class="exo-readout-chip"><span>${a}</span><strong>${b}</strong></div>`).join("")}</div></div><div class="exo-station-body"><div class="exo-control-bank">${d.controls()}</div>${tactical(d.display)}</div>`;}
-  function renderDeps(){$("dependency-grid").innerHTML=dependencies.map(([a,b,get])=>{const v=clamp(get()),c=v<45?"bad":v<72?"warn":"";return `<div class="exo-dependency"><strong>${a}</strong><span>${b}</span><b class="${c}">${round(v)}%</b></div>`;}).join("");$("coordination-score").textContent=`${round(state.efficiency)}%`;}
-  function renderLog(){const h=$("operations-log");h.innerHTML=state.log.length?state.log.map(i=>`<li><time>${time(i.time)}</time><strong>${i.station}</strong><span>${i.message}</span></li>`).join(""):`<li><time>00:00</time><strong>System</strong><span>No events logged.</span></li>`;}
-  function renderAll(skipPower=false){renderTop();if(!skipPower)renderPower();renderTabs();renderStation();renderDeps();renderLog();}
+  const powerTotal = () => Object.values(state.power).reduce((a, b) => a + b, 0);
+  const powerFactor = station => clamp((state.power[station] / BASE_POWER[station]) * 100);
+  const engineeringQuality = () => (state.driveHealth + state.coolingHealth + state.hull) / 3;
 
-  function act(name){
-    const q=s=>document.querySelector(s), num=(s,f)=>Number(q(s)?.value??f);
-    const A={
-      "helm-apply":()=>{state.throttle=clamp(num('[data-control="helm-throttle"]',state.throttle));state.velocity+=state.throttle*.015*powerFactor("helm")*state.driveHealth/10000;state.thermal=clamp(state.thermal+state.throttle*.035);log("Helm",`Applied ${round(state.throttle)}% thrust; velocity ${round(state.velocity,1)} km/s.`);},
-      "helm-idle":()=>{state.throttle=0;log("Helm","Main drive returned to idle thrust.");},
-      "helm-turn":()=>{state.heading=((num('[data-control="helm-heading"]',state.heading)%360)+360)%360;state.thermal=clamp(state.thermal+1.4);log("Helm",`Executed attitude change to ${round(state.heading)}°.`);},
-      "helm-evade":()=>{state.heading=(state.heading+37+Math.random()*52)%360;state.velocity+=.45;state.thermal=clamp(state.thermal+9);state.nav=clamp(state.nav-12);state.firingSolution=clamp(state.firingSolution-28);log("Helm","Evasive burn disturbed Navigation and Gunnery solutions.");},
-      "helm-hold":()=>log("Helm",`Attitude hold engaged at ${round(state.heading)}°.`),
-      "helm-nav":()=>state.courseCommitted?log("Helm",`Accepted Navigation course for ${state.navDestination}.`):log("Helm","No committed Navigation course available."),
-      "helm-brake":()=>{state.velocity=Math.max(0,state.velocity-.8);state.thermal=clamp(state.thermal+5);log("Helm",`Retrograde burn; velocity ${round(state.velocity,1)} km/s.`);},
-      "nav-solve":()=>{state.navDestination=q('[data-control="nav-destination"]')?.value||state.navDestination;state.navBurnDeltaV=clamp(num('[data-control="nav-dv"]',0),0,20);state.nav=clamp(state.nav+6*powerFactor("navigation")/100);log("Navigation",`Recalculated ${state.navDestination} at Δv ${round(state.navBurnDeltaV,1)} km/s.`);},
-      "nav-refine":()=>{const g=state.track*.13;state.nav=clamp(state.nav+g);log("Navigation",`Refined course using Science track (+${round(g)}).`);},
-      "nav-commit":()=>{state.courseCommitted=true;log("Navigation",`Committed ${state.navDestination} solution to Helm.`);},
-      "nav-clear":()=>{state.courseCommitted=false;state.nav=clamp(state.nav-8);log("Navigation","Cleared committed flight solution.");},
-      "gun-safe":()=>{state.weaponMode="safe";log("Gunnery","Selected weapons safed.");},
-      "gun-track":()=>{state.weaponMode="tracking";log("Gunnery","Fire-control tracking enabled.");},
-      "gun-arm":()=>{state.weaponMode="armed";state.thermal=clamp(state.thermal+2);log("Gunnery",`${state.weaponGroup} armed.`);},
-      "gun-charge":()=>{const g=Math.max(3,powerFactor("gunnery")*.12);state.capacitors=clamp(state.capacitors+g);state.thermal=clamp(state.thermal+g*.18);log("Gunnery",`Capacitors charged to ${round(state.capacitors)}%.`);},
-      "gun-solution":()=>{state.firingSolution=clamp(Math.min(state.track,state.weapons,state.nav+10));log("Gunnery",`Firing solution ${round(state.firingSolution)}%.`);},
-      "gun-fire":()=>{if(state.weaponMode!=="armed"||state.firingSolution<60){log("Gunnery","Fire rejected: arm weapon and build ≥60% solution.");return;}const e=state.weaponGroup==="Point defense"?12:state.weaponGroup==="Missile cells"?8:28;state.capacitors=clamp(state.capacitors-e);state.thermal=clamp(state.thermal+e*.7);state.firingSolution=clamp(state.firingSolution-18);const hit=state.contact.present&&Math.random()<state.track/115;if(hit)state.contact.present=Math.random()>.65;log("Gunnery",`${state.weaponGroup} fired; ${hit?"probable effect":"no confirmed effect"}.`);},
-      "eng-reactor":()=>{state.reactor=clamp(num('[data-control="eng-reactor"]',state.reactor),20,100);state.thermal=clamp(state.thermal+Math.max(0,state.reactor-70)*.08);log("Engineering",`Reactor output set to ${round(state.reactor)}%.`);},
-      "eng-cool":()=>{state.thermal=clamp(state.thermal-9*state.coolingHealth/100);log("Engineering","Coolant flow increased.");},
-      "eng-radiators":()=>{state.thermal=clamp(state.thermal-14*state.coolingHealth/100);state.emissions=clamp(state.emissions+12);log("Engineering","Radiators extended; heat reduced, emissions increased.");},
-      "eng-diagnose":()=>log("Engineering",state.engineeringFault?`Diagnostics isolate: ${state.engineeringFault}.`:"Diagnostics complete: no active fault."),
-      "eng-repair":()=>{if(!state.engineeringFault)return;const f=state.engineeringFault;state.engineeringFault=null;["driveHealth","coolingHealth"].forEach(k=>state[k]=clamp(state[k]+18));["sensorHealth","commsHealth","weaponHealth"].forEach(k=>state[k]=clamp(state[k]+8));log("Engineering",`Repair team cleared ${f}.`);},
-      "eng-scram":()=>{state.reactor=20;state.thermal=clamp(state.thermal-8);state.power={helm:10,navigation:8,gunnery:4,engineering:50,science:12,comms:16};log("Engineering","Emergency SCRAM; survival bus priority engaged.");},
-      "sci-passive":()=>{state.activeScan=false;state.emissions=clamp(state.emissions-7);state.track=clamp(state.track+(state.contact.present?3.5*powerFactor("science")/100:.8));log("Science",`Passive sweep; track ${round(state.track)}%.`);},
-      "sci-active":()=>{state.activeScan=true;state.emissions=clamp(state.emissions+18);if(!state.contact.present&&Math.random()>.2)state.contact.present=true;state.track=clamp(state.track+12*powerFactor("science")/100*state.sensorHealth/100);log("Science",`Active pulse; track ${round(state.track)}%.`);},
-      "sci-focus":()=>{if(!state.contact.present){log("Science","Focus rejected: no contact selected.");return;}state.track=clamp(state.track+8);state.emissions=clamp(state.emissions+5);log("Science","Sensor apertures focused on contact.");},
-      "sci-classify":()=>{if(!state.contact.present){log("Science","Classification unavailable: no contact.");return;}state.targetClass=state.track>78?"medium transit vessel":state.track>50?"powered vessel":"unresolved contact";log("Science",`Classification: ${state.targetClass}.`);},
-      "sci-share":()=>{state.nav=clamp(state.nav+state.track*.06);state.firingSolution=clamp(state.firingSolution+state.track*.05);log("Science","Published track to Navigation and Gunnery.");},
-      "comms-encrypt":()=>{state.commsEncryption=!state.commsEncryption;log("Comms",`Encryption ${state.commsEncryption?"enabled":"disabled"}.`);},
-      "comms-handshake":()=>{if(!state.contact.present){log("Comms","Authentication has no selected contact.");return;}state.targetIFF=state.track>65?(Math.random()>.55?"authenticated neutral":"unverified"):"unverified";log("Comms",`IFF result: ${state.targetIFF}.`);},
-      "comms-hail":()=>{state.commsChannel=q('[data-control="comms-channel"]')?.value||state.commsChannel;log("Comms",`Hail transmitted on ${state.commsChannel}.`);},
-      "comms-data":()=>{state.nav=clamp(state.nav+4);state.track=clamp(state.track+2);log("Comms","Shared Navigation / Science data packet.");},
-      "comms-distress":()=>{state.distress=true;state.commsChannel="Emergency broadwave";state.emissions=100;log("Comms","Emergency distress burst at maximum power.");}
+  function stationContext(station) {
+    const values = {
+      helm: () => Math.min(powerFactor("helm"), state.nav, state.driveHealth),
+      navigation: () => state.track * .45 + state.comms * .35 + powerFactor("navigation") * .20,
+      gunnery: () => Math.min(state.track, powerFactor("gunnery"), state.weaponHealth, 100 - Math.max(0, state.thermal - 55)),
+      engineering: () => Math.min(powerFactor("engineering"), engineeringQuality()),
+      science: () => Math.min(powerFactor("science"), state.sensorHealth, 100 - Math.max(0, state.thermal - 70)),
+      comms: () => Math.min(powerFactor("comms"), state.commsHealth)
     };
-    if(name.startsWith("gun-")&&q('[data-control="gun-group"]'))state.weaponGroup=q('[data-control="gun-group"]').value;
-    if(A[name]){A[name]();renderAll();}
+    return clamp(values[station]?.() ?? 60);
   }
 
-  function tick(){
-    state.simTime++;state.velocity=Math.max(0,state.velocity+state.throttle*.0022*(state.reactor/100));state.thermal=clamp(state.thermal+(state.reactor-55)*.005+state.throttle*.004-state.coolingHealth*.0027);
-    if(state.thermal>82){state.driveHealth=clamp(state.driveHealth-.045);state.weaponHealth=clamp(state.weaponHealth-.025);}
-    if(state.contact.present){state.targetRange=Math.max(50,state.targetRange+state.targetClosure*10);state.targetBearing=(state.targetBearing+.08)%360;state.contact.x=clamp(50+Math.cos(state.targetBearing*Math.PI/180)*34,8,92);state.contact.y=clamp(50+Math.sin(state.targetBearing*Math.PI/180)*34,8,92);if(!state.activeScan)state.track=clamp(state.track-.025);}else state.track=clamp(state.track-.012);
-    state.emissions=clamp(state.emissions-.035);state.capacitors=clamp(state.capacitors+powerFactor("gunnery")*.004);calculate();renderTop();renderDeps();if(state.simTime%2===0)renderStation();
+  function coordinationScore() {
+    const total = Object.keys(STATIONS).reduce((sum, station) => sum + stationContext(station), 0) / Object.keys(STATIONS).length;
+    return clamp(total - Math.max(0, powerTotal() - 100) * 1.5);
   }
-  function reset(){state=initial();activeStation="helm";log("System","Human-derived BLV-071 Wayfarer watch initialized. All six stations online.");renderAll();}
-  function contact(){state.contact.present=true;state.contact.friendly=false;state.targetRange=38000+Math.random()*22000;state.targetBearing=Math.round(Math.random()*359);state.targetClosure=-.8-Math.random()*2.5;state.track=22+Math.random()*18;state.targetClass="unresolved";state.targetIFF="unknown";log("Science",`New contact at ${state.targetBearing}°, ${Math.round(state.targetRange).toLocaleString()} km.`);renderAll();}
-  function fault(){const f=[["primary coolant loop oscillation","coolingHealth",18],["drive power-conditioning fault","driveHealth",16],["sensor mast timing fault","sensorHealth",20],["fire-control bus dropout","weaponHealth",19],["high-gain comms amplifier fault","commsHealth",22]],x=f[Math.floor(Math.random()*f.length)];state.engineeringFault=x[0];state[x[1]]=clamp(state[x[1]]-x[2]);state.thermal=clamp(state.thermal+8);log("Engineering",`FAULT: ${x[0]}; ${x[1]} degraded ${x[2]} points.`);renderAll();}
-  function combat(){state.contact.present=true;state.contact.friendly=false;state.targetRange=26000;state.targetBearing=52;state.targetClosure=-3.1;state.track=48;state.weaponMode="tracking";state.firingSolution=32;state.nav=clamp(state.nav-8);state.reactor=82;state.thermal=clamp(state.thermal+11);log("System","COMBAT DRILL: hostile-behavior contact injected. Coordinate all six stations.");renderAll();}
 
-  document.addEventListener("DOMContentLoaded",()=>{
+  function addLog(station, message) {
+    state.log.unshift({ time: state.simTime, station, message });
+    state.log = state.log.slice(0, 100);
+    renderLog();
+  }
+
+  function timeString(seconds) {
+    const s = Math.max(0, Math.floor(seconds));
+    return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+  }
+
+  function selectedProcedure(station = activeStation) {
+    const def = STATIONS[station];
+    return def.procedures.find(item => item.id === state.selectedProcedure[station]) || def.procedures[0];
+  }
+
+  function renderTopState() {
+    const fields = {
+      velocity: `${round(state.velocity, 1)} km/s`, reactor: `${round(state.reactor)}%`, thermal: `${round(state.thermal)}%`, hull: `${round(state.hull)}%`,
+      track: `${round(state.track)}%`, comms: `${round(state.comms)}%`, nav: `${round(state.nav)}%`, weapons: `${round(state.weapons)}%`
+    };
+    Object.entries(fields).forEach(([key, value]) => {
+      const target = el(`state-${key}`);
+      if (target) target.textContent = value;
+      const meter = el(`meter-${key}`);
+      if (meter) meter.style.width = `${clamp(key === "velocity" ? state.velocity * 4 : state[key])}%`;
+    });
+    el("crew-profile-name").textContent = state.profile.name;
+    el("crew-summary-rules").textContent = "WoD-derived d10";
+    el("crew-summary-resolution").textContent = "DM adjudicated";
+    el("crew-summary-difficulty").textContent = state.relay ? `Difficulty ${state.relay.difficulty}` : "pending";
+  }
+
+  function renderPowerControls() {
+    const host = el("power-controls");
+    host.innerHTML = Object.keys(state.power).map(key => `
+      <div class="exo-power-control">
+        <label><span>${STATIONS[key].label}</span><b>${state.power[key]}</b></label>
+        <input data-power="${key}" type="range" min="4" max="30" value="${state.power[key]}" aria-label="${STATIONS[key].label} visual power allocation">
+      </div>`).join("");
+    const total = powerTotal();
+    const badge = el("power-total");
+    badge.textContent = `${total} / 100 visual points allocated`;
+    badge.dataset.over = total > 100 ? "true" : "false";
+  }
+
+  function renderTabs() {
+    el("station-tabs").innerHTML = Object.entries(STATIONS).map(([key, def]) => `
+      <button class="exo-station-tab" type="button" role="tab" data-station="${key}" aria-selected="${activeStation === key}">
+        ${def.label}<span class="tab-state">human console</span>
+      </button>`).join("");
+  }
+
+  function tacticalDisplay(kind) {
+    const hasContact = state.contact.present;
+    const contactStyle = `left:${state.contact.x}%;top:${state.contact.y}%;opacity:${hasContact ? 1 : 0}`;
+    return `<div class="exo-tactical-display" aria-label="${kind} role-play visualization">
+      <div class="exo-tactical-ring"></div>
+      <div class="exo-ownship" title="Own ship"></div>
+      <div class="exo-contact ${state.contact.friendly ? "friend" : ""}" style="${contactStyle}" title="${state.targetClass}"></div>
+      <span class="exo-display-caption">VISUAL ONLY // ${kind} // ${hasContact ? `${round(state.targetBearing)}° · ${Math.round(state.targetRange).toLocaleString()} km` : "no remote track"}</span>
+    </div>`;
+  }
+
+  function inputHistory() {
+    const session = state.procedure;
+    if (!session || session.station !== activeStation || !session.active) return `<span class="exo-procedure-empty">No active attempt. Select an action and begin the procedure.</span>`;
+    if (!session.inputs.length) return `<span class="exo-procedure-empty">Procedure armed. No controls manipulated yet.</span>`;
+    return session.inputs.map((item, index) => `<span class="exo-input-token"><b>${index + 1}</b>${item.label}</span>`).join("");
+  }
+
+  function procedureControls(def) {
+    const proc = selectedProcedure();
+    const session = state.procedure;
+    const active = Boolean(session && session.active && session.station === activeStation && session.operationId === proc.id);
+    const controls = active ? session.controls : initialControlState();
+    const disabled = active ? "" : "disabled";
+    const options = def.procedures.map(item => `<option value="${item.id}" ${item.id === proc.id ? "selected" : ""}>${item.name}</option>`).join("");
+    return `
+      <div class="exo-procedure-console">
+        <div class="exo-procedure-setup">
+          <div>
+            <span class="exo-kicker">Attempted ship action</span>
+            <select data-procedure-select aria-label="Select ${def.label} procedure">${options}</select>
+          </div>
+          <div class="exo-procedure-actions">
+            <button type="button" class="exo-control-button primary" data-procedure-begin>${active ? "Restart procedure" : "Begin procedure"}</button>
+            <button type="button" class="exo-control-button" data-procedure-abort ${active ? "" : "disabled"}>Abort / clear inputs</button>
+          </div>
+        </div>
+        <div class="exo-procedure-cue"><strong>Operator cue strip</strong><span>${proc.cue}</span><small>The exact switch order and repeated input count are intentionally not displayed.</small></div>
+        <div class="exo-physical-controls" data-active="${active}">
+          <div class="exo-device-block">
+            <span class="exo-device-label">${def.labels.guard}</span><strong>${controls.guard.toUpperCase()}</strong>
+            <div class="exo-control-row"><button type="button" data-proc-input="guard-open" data-proc-label="Guard OPEN" ${disabled}>Open</button><button type="button" data-proc-input="guard-close" data-proc-label="Guard CLOSE" ${disabled}>Close</button></div>
+          </div>
+          <div class="exo-device-block">
+            <span class="exo-device-label">${def.labels.mode}</span><strong>MODE ${controls.mode}</strong>
+            <div class="exo-control-row"><button type="button" data-proc-input="mode-1" data-proc-label="Mode 1" ${disabled}>1</button><button type="button" data-proc-input="mode-2" data-proc-label="Mode 2" ${disabled}>2</button><button type="button" data-proc-input="mode-3" data-proc-label="Mode 3" ${disabled}>3</button></div>
+          </div>
+          <div class="exo-device-block">
+            <span class="exo-device-label">${def.labels.bus}</span><strong>${controls.bus.toUpperCase()}</strong>
+            <div class="exo-control-row"><button type="button" data-proc-input="bus-primary" data-proc-label="Bus PRIMARY" ${disabled}>Primary</button><button type="button" data-proc-input="bus-aux" data-proc-label="Bus AUX" ${disabled}>Aux</button><button type="button" data-proc-input="bus-isolate" data-proc-label="Bus ISOLATE" ${disabled}>Isolate</button></div>
+          </div>
+          <div class="exo-device-block exo-dial-block">
+            <span class="exo-device-label">${def.labels.dial}</span><strong>${controls.dial >= 0 ? "+" : ""}${controls.dial}</strong>
+            <div class="exo-control-row"><button type="button" data-proc-input="dial-left" data-proc-label="Dial ◀" ${disabled}>◀ Twist</button><button type="button" data-proc-input="dial-right" data-proc-label="Dial ▶" ${disabled}>Twist ▶</button></div>
+          </div>
+          <div class="exo-device-block">
+            <span class="exo-device-label">${def.labels.lever}</span><strong>${controls.lever.toUpperCase()}</strong>
+            <div class="exo-lever-row"><button type="button" data-proc-input="lever-forward" data-proc-label="Lever FORWARD" ${disabled}>Forward</button><button type="button" data-proc-input="lever-center" data-proc-label="Lever CENTER" ${disabled}>Center</button><button type="button" data-proc-input="lever-aft" data-proc-label="Lever AFT" ${disabled}>Aft</button></div>
+          </div>
+          <div class="exo-device-block exo-confirm-block">
+            <span class="exo-device-label">Confirmations</span><strong>REPEAT AS REQUIRED</strong>
+            <div class="exo-control-row"><button type="button" data-proc-input="confirm-a" data-proc-label="${def.labels.confirmA}" ${disabled}>${def.labels.confirmA}</button><button type="button" data-proc-input="confirm-b" data-proc-label="${def.labels.confirmB}" ${disabled}>${def.labels.confirmB}</button></div>
+          </div>
+          <div class="exo-device-block exo-execute-block">
+            <span class="exo-device-label">Final control</span><strong>COMMITS CURRENT INPUTS</strong>
+            <button type="button" class="exo-execute-button" data-proc-input="execute" data-proc-label="${def.labels.execute}" ${disabled}>${def.labels.execute}</button>
+          </div>
+        </div>
+        <div class="exo-sequence-recorder"><span class="exo-kicker">Input recorder</span><div class="exo-sequence-strip">${inputHistory()}</div></div>
+      </div>`;
+  }
+
+  function renderStation() {
+    const def = STATIONS[activeStation];
+    el("station-panel").innerHTML = `
+      <div class="exo-station-head">
+        <div class="exo-station-title"><span class="exo-kicker">${state.profile.name} procedural watchstation</span><h2>${def.label}</h2><p>${def.description}</p></div>
+        <div class="exo-station-readout">${def.readouts(state).map(([label, value]) => `<div class="exo-readout-chip"><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
+      </div>
+      <div class="exo-station-body">
+        <div class="exo-control-bank exo-procedure-bank">${procedureControls(def)}</div>
+        ${tacticalDisplay(def.display)}
+      </div>`;
+  }
+
+  function renderDependencies() {
+    const descriptions = {
+      helm: "Visual maneuver context: Helm power, Navigation picture, drive condition.",
+      navigation: "Visual astrogation context: Science picture, Comms link, Navigation power.",
+      gunnery: "Visual fire-control context: track picture, weapon power, hardware and thermal state.",
+      engineering: "Visual plant context: Engineering power, drive/cooling/hull condition.",
+      science: "Visual sensor context: Science power, sensor condition and thermal state.",
+      comms: "Visual link context: Comms power and communications hardware."
+    };
+    el("dependency-grid").innerHTML = Object.entries(STATIONS).map(([key, def]) => {
+      const value = stationContext(key);
+      const cls = value < 45 ? "bad" : value < 72 ? "warn" : "";
+      return `<div class="exo-dependency"><strong>${def.label}</strong><span>${descriptions[key]}</span><b class="${cls}">${round(value)}%</b></div>`;
+    }).join("");
+    el("coordination-score").textContent = `${round(coordinationScore())}% visual`;
+  }
+
+  function renderLog() {
+    const host = el("operations-log");
+    host.innerHTML = state.log.length ? state.log.map(item => `<li><time>${timeString(item.time)}</time><strong>${item.station}</strong><span>${item.message}</span></li>`).join("") : `<li><time>00:00</time><strong>System</strong><span>No events logged.</span></li>`;
+  }
+
+  function renderRelay() {
+    const relay = state.relay;
+    const difficulty = relay?.difficulty ?? 0;
+    el("dm-relay-difficulty").textContent = relay ? difficulty : "—";
+    el("dm-relay-pips").innerHTML = Array.from({ length: 10 }, (_, index) => `<i class="${relay && index < difficulty ? "active" : ""}" title="Pip ${index + 1}">${index + 1}</i>`).join("");
+    if (!relay) {
+      el("dm-relay-status").textContent = "Awaiting executed procedure";
+      el("dm-relay-detail").innerHTML = `<div><span>Station</span><strong>—</strong></div><div><span>Action</span><strong>—</strong></div><div><span>Procedure</span><strong>—</strong></div><div><span>Random d10</span><strong>—</strong></div><div><span>Visual context</span><strong>—</strong></div><div><span>Inputs</span><strong>—</strong></div>`;
+      el("dm-relay-sequence").textContent = "No procedure has been committed.";
+      el("dm-relay-call").textContent = "The console does not roll for the character and does not determine success or failure.";
+      return;
+    }
+    el("dm-relay-status").textContent = `${relay.classification} · suggested difficulty`;
+    el("dm-relay-detail").innerHTML = `
+      <div><span>Station</span><strong>${relay.station}</strong></div>
+      <div><span>Action</span><strong>${relay.operation}</strong></div>
+      <div><span>Procedure</span><strong>${relay.quality}% · ${relay.classification}</strong></div>
+      <div><span>Random d10</span><strong>${relay.randomD10} (${relay.randomShift >= 0 ? "+" : ""}${relay.randomShift})</strong></div>
+      <div><span>Visual context</span><strong>${relay.context}% (${relay.contextShift >= 0 ? "+" : ""}${relay.contextShift})</strong></div>
+      <div><span>Inputs</span><strong>${relay.inputCount} / ${relay.expectedCount} expected</strong></div>`;
+    el("dm-relay-sequence").textContent = relay.sequenceLabels.join(" → ");
+    el("dm-relay-call").textContent = `DM RELAY: call for the character's normal World of Darkness-derived d10 pool against Difficulty ${relay.difficulty}. The DM remains authoritative for pool construction, success thresholds, specialties, consequences, and edition/house-rule interpretation.`;
+  }
+
+  function renderAll(options = {}) {
+    renderTopState();
+    if (!options.skipPower) renderPowerControls();
+    renderTabs();
+    renderStation();
+    renderDependencies();
+    renderLog();
+    renderRelay();
+  }
+
+  function editDistance(a, b) {
+    const rows = a.length + 1;
+    const cols = b.length + 1;
+    const matrix = Array.from({ length: rows }, () => Array(cols).fill(0));
+    for (let i = 0; i < rows; i += 1) matrix[i][0] = i;
+    for (let j = 0; j < cols; j += 1) matrix[0][j] = j;
+    for (let i = 1; i < rows; i += 1) {
+      for (let j = 1; j < cols; j += 1) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost);
+      }
+    }
+    return matrix[a.length][b.length];
+  }
+
+  function procedureQuality(actual, expected) {
+    if (!actual.length) return 0;
+    const maxLength = Math.max(actual.length, expected.length, 1);
+    const similarity = clamp(1 - editDistance(actual, expected) / maxLength, 0, 1);
+    const aligned = expected.reduce((count, token, index) => count + (actual[index] === token ? 1 : 0), 0) / Math.max(expected.length, 1);
+    return clamp(Math.round((similarity * .72 + aligned * .28) * 100));
+  }
+
+  function classifyQuality(quality) {
+    if (quality >= 95) return "by-the-book";
+    if (quality >= 82) return "minor deviation";
+    if (quality >= 65) return "workable sequence";
+    if (quality >= 45) return "poor sequence";
+    return "incorrect / hazardous sequence";
+  }
+
+  function baseDifficultyForQuality(quality) {
+    if (quality >= 95) return 5;
+    if (quality >= 82) return 6;
+    if (quality >= 65) return 7;
+    if (quality >= 45) return 8;
+    return 9;
+  }
+
+  function beginProcedure() {
+    const proc = selectedProcedure();
+    state.procedure = {
+      active: true,
+      station: activeStation,
+      operationId: proc.id,
+      controls: initialControlState(),
+      inputs: [],
+      startedAt: state.simTime
+    };
+    addLog(STATIONS[activeStation].label, `Procedure started: ${proc.name}.`);
+    renderStation();
+  }
+
+  function abortProcedure() {
+    if (!state.procedure?.active) return;
+    const station = STATIONS[state.procedure.station].label;
+    state.procedure = null;
+    addLog(station, "Procedure aborted; recorded inputs cleared before execution.");
+    renderStation();
+  }
+
+  function applyControlToken(token) {
+    const session = state.procedure;
+    if (!session?.active || session.station !== activeStation) return;
+    if (token === "guard-open") session.controls.guard = "open";
+    else if (token === "guard-close") session.controls.guard = "closed";
+    else if (token.startsWith("mode-")) session.controls.mode = token.slice(-1);
+    else if (token.startsWith("bus-")) session.controls.bus = token.slice(4);
+    else if (token === "dial-left") session.controls.dial -= 1;
+    else if (token === "dial-right") session.controls.dial += 1;
+    else if (token.startsWith("lever-")) session.controls.lever = token.slice(6);
+  }
+
+  function recordProcedureInput(token, label) {
+    const session = state.procedure;
+    if (!session?.active || session.station !== activeStation) {
+      addLog(STATIONS[activeStation].label, "Control ignored: begin a procedure before manipulating the station.");
+      return;
+    }
+    applyControlToken(token);
+    session.inputs.push({ token, label });
+    if (session.inputs.length > 28) session.inputs.shift();
+    if (token === "execute") {
+      evaluateProcedure();
+      return;
+    }
+    renderStation();
+  }
+
+  function evaluateProcedure() {
+    const session = state.procedure;
+    if (!session?.active) return;
+    const stationKey = session.station;
+    const def = STATIONS[stationKey];
+    const proc = def.procedures.find(item => item.id === session.operationId) || def.procedures[0];
+    const actual = session.inputs.map(item => item.token);
+    const quality = procedureQuality(actual, proc.sequence);
+    const classification = classifyQuality(quality);
+    const context = round(stationContext(stationKey));
+    const contextShift = context >= 82 ? -1 : context >= 58 ? 0 : context >= 38 ? 1 : 2;
+    const randomD10 = d10();
+    const randomShift = randomD10 <= 2 ? -1 : randomD10 >= 9 ? 1 : 0;
+    const overrunShift = actual.length > proc.sequence.length + 3 ? 1 : 0;
+    const difficulty = clamp(baseDifficultyForQuality(quality) + contextShift + randomShift + overrunShift, 2, 10);
+
+    state.relay = {
+      station: def.label,
+      operation: proc.name,
+      quality,
+      classification,
+      context,
+      contextShift,
+      randomD10,
+      randomShift,
+      overrunShift,
+      difficulty,
+      inputCount: actual.length,
+      expectedCount: proc.sequence.length,
+      sequenceLabels: session.inputs.map(item => item.label)
+    };
+    session.active = false;
+    addLog(def.label, `${proc.name} committed to DM relay: procedure ${quality}% (${classification}), suggested Difficulty ${difficulty}. No success resolved.`);
+    renderAll({ skipPower: true });
+  }
+
+  function handleStationClick(event) {
+    const begin = event.target.closest("[data-procedure-begin]");
+    if (begin) { beginProcedure(); return; }
+    const abort = event.target.closest("[data-procedure-abort]");
+    if (abort) { abortProcedure(); return; }
+    const input = event.target.closest("[data-proc-input]");
+    if (input) recordProcedureInput(input.dataset.procInput, input.dataset.procLabel || input.textContent.trim());
+  }
+
+  function handlePowerInput(event) {
+    const input = event.target.closest("[data-power]");
+    if (!input) return;
+    state.power[input.dataset.power] = Number(input.value);
+    input.previousElementSibling.querySelector("b").textContent = input.value;
+    const total = powerTotal();
+    el("power-total").textContent = `${total} / 100 visual points allocated`;
+    el("power-total").dataset.over = total > 100 ? "true" : "false";
+    renderDependencies();
+  }
+
+  function commitPower(event) {
+    const input = event.target.closest("[data-power]");
+    if (!input) return;
+    addLog("Engineering", `${STATIONS[input.dataset.power].label} visual power allocation set to ${input.value} points.`);
+  }
+
+  function reset() {
+    state = initialState();
+    activeStation = "helm";
+    addLog("System", "Human procedural bridge placeholder initialized. Console outputs suggested WoD-derived d10 difficulties only; DM retains resolution authority.");
+    renderAll();
+  }
+
+  function injectContact() {
+    state.contact.present = true;
+    state.contact.friendly = false;
+    state.targetRange = 38000 + Math.random() * 22000;
+    state.targetBearing = Math.round(Math.random() * 359);
+    state.targetClosure = -0.8 - Math.random() * 2.5;
+    state.track = clamp(22 + Math.random() * 18);
+    state.targetClass = "unresolved";
+    state.targetIFF = "unknown";
+    addLog("Science", `ROLE-PLAY CONTACT: bearing ${state.targetBearing}°, range ${Math.round(state.targetRange).toLocaleString()} km. Await crew procedure and DM adjudication.`);
+    renderAll();
+  }
+
+  function injectFault() {
+    const faults = [
+      ["primary coolant loop oscillation", "coolingHealth", 18], ["drive power-conditioning fault", "driveHealth", 16], ["sensor mast timing fault", "sensorHealth", 20],
+      ["fire-control bus dropout", "weaponHealth", 19], ["high-gain comms amplifier fault", "commsHealth", 22]
+    ];
+    const [name, key, loss] = faults[Math.floor(Math.random() * faults.length)];
+    state.engineeringFault = name;
+    state[key] = clamp(state[key] - loss);
+    state.thermal = clamp(state.thermal + 8);
+    addLog("Engineering", `ROLE-PLAY FAULT: ${name}. Visual ${key} reduced by ${loss} points; no game outcome resolved.`);
+    renderAll();
+  }
+
+  function combatDrill() {
+    state.contact.present = true;
+    state.contact.friendly = false;
+    state.targetRange = 26000;
+    state.targetBearing = 52;
+    state.targetClosure = -3.1;
+    state.track = 48;
+    state.weaponMode = "tracking";
+    state.nav = clamp(state.nav - 8);
+    state.reactor = 82;
+    state.thermal = clamp(state.thermal + 11);
+    addLog("System", "ROLE-PLAY COMBAT DRILL loaded. Coordinate station procedures; every executed action produces a DM-facing difficulty rather than an automatic result.");
+    renderAll();
+  }
+
+  function tick() {
+    state.simTime += 1;
+    if (!state.contact.present) return;
+    state.targetRange = Math.max(50, state.targetRange + state.targetClosure * 2);
+    state.targetBearing = (state.targetBearing + .025) % 360;
+    state.contact.x = clamp(50 + Math.cos(state.targetBearing * Math.PI / 180) * 34, 8, 92);
+    state.contact.y = clamp(50 + Math.sin(state.targetBearing * Math.PI / 180) * 34, 8, 92);
+    if (state.simTime % 4 === 0) renderStation();
+  }
+
+  function bindEvents() {
+    el("station-tabs").addEventListener("click", event => {
+      const button = event.target.closest("[data-station]");
+      if (!button) return;
+      activeStation = button.dataset.station;
+      renderTabs();
+      renderStation();
+    });
+    el("station-panel").addEventListener("click", handleStationClick);
+    el("station-panel").addEventListener("change", event => {
+      const select = event.target.closest("[data-procedure-select]");
+      if (!select) return;
+      state.selectedProcedure[activeStation] = select.value;
+      if (state.procedure?.active && state.procedure.station === activeStation) state.procedure = null;
+      renderStation();
+    });
+    el("power-controls").addEventListener("input", handlePowerInput);
+    el("power-controls").addEventListener("change", commitPower);
+    el("crew-scenario-reset").addEventListener("click", reset);
+    el("crew-scenario-contact").addEventListener("click", injectContact);
+    el("crew-scenario-damage").addEventListener("click", injectFault);
+    el("crew-scenario-battle").addEventListener("click", combatDrill);
+    el("log-clear").addEventListener("click", () => { state.log = []; renderLog(); });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
     reset();
-    $("station-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-station]");if(!b)return;activeStation=b.dataset.station;renderTabs();renderStation();});
-    $("station-panel").addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(b)act(b.dataset.action);});
-    $("station-panel").addEventListener("change",e=>{if(e.target.matches('[data-control="gun-group"]'))state.weaponGroup=e.target.value;if(e.target.matches('[data-control="nav-destination"]'))state.navDestination=e.target.value;if(e.target.matches('[data-control="comms-channel"]'))state.commsChannel=e.target.value;});
-    $("power-controls").addEventListener("input",e=>{const i=e.target.closest("[data-power]");if(!i)return;state.power[i.dataset.power]=Number(i.value);i.previousElementSibling.querySelector("b").textContent=i.value;const t=powerTotal(),b=$("power-total");b.textContent=`${t} / 100 points allocated`;b.dataset.over=t>100?"true":"false";renderTop();renderDeps();});
-    $("power-controls").addEventListener("change",e=>{const i=e.target.closest("[data-power]");if(i){log("Engineering",`${stations[i.dataset.power].label} power allocation set to ${i.value} points.`);renderStation();}});
-    $("crew-scenario-reset").addEventListener("click",reset);$("crew-scenario-contact").addEventListener("click",contact);$("crew-scenario-damage").addEventListener("click",fault);$("crew-scenario-battle").addEventListener("click",combat);$("log-clear").addEventListener("click",()=>{state.log=[];renderLog();});
-    timer=window.setInterval(tick,1000);window.addEventListener("beforeunload",()=>window.clearInterval(timer),{once:true});
+    bindEvents();
+    timer = window.setInterval(tick, 1000);
+    window.addEventListener("beforeunload", () => window.clearInterval(timer), { once: true });
   });
 })();
