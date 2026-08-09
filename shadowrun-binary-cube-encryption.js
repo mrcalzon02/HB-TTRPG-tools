@@ -2,6 +2,7 @@
   'use strict';
 
   const Engine = window.ShadowrunBinaryCubeEngine;
+  const Executor = window.ShadowrunBinaryCubeWorkerClient;
   if (!Engine) {
     console.error('Shadowrun Binary Cube Engine must load before the laboratory interface.');
     return;
@@ -10,10 +11,11 @@
   const TOOL_ID = 'shadowrun-binary-cube-encryption';
   const PANEL_ID = 'shadowrun-binary-cube-lab';
   const LAB_STATE_FORMAT = 'hb-ttrpg-shadowrun-binary-cube-laboratory-state';
-  const LAB_STATE_SCHEMA_VERSION = '0.3.0';
+  const LAB_STATE_SCHEMA_VERSION = '0.4.0';
   const LEGACY_STORAGE_KEYS = Object.freeze(['hb-ttrpg-shadowrun-binary-cube-v2']);
   const { FACES, RECOMMENDED_GRID_SIZES, SCHEMA_VERSION } = Engine.constants;
   let lastPlainFileName = 'binary-cube-output.bin';
+  let operationGeneration = 0;
 
   function fail(message) { throw new Error(message); }
   function clone(value) { return value == null ? null : JSON.parse(JSON.stringify(value)); }
@@ -58,9 +60,6 @@
     try { return JSON.parse(raw); }
     catch (error) { fail(`${label} is not valid JSON: ${error.message}`); }
   }
-  function parseJsonField(panel, selector, label) {
-    return parseJson(panel.querySelector(selector)?.value, label);
-  }
   function bytesToBits(bytes) {
     return Array.from(bytes, byte => Number(byte).toString(2).padStart(8, '0')).join('');
   }
@@ -82,11 +81,11 @@
     node.textContent = `
       #${PANEL_ID}{margin:24px 0;padding:20px;border:1px solid var(--line);border-radius:16px;background:#0e1219}
       #${PANEL_ID}[hidden]{display:none}.cube-lab-header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
-      .cube-lab-warning{padding:12px 14px;border-left:4px solid #c88b2b;background:#c88b2b18;color:var(--ink);border-radius:6px}
+      .cube-lab-warning{padding:12px 14px;border-left:4px solid #c88b2b;background:#c88b2b18;color:var(--ink);border-radius:6px}.cube-lab-runtime{padding:10px 12px;border-left:4px solid #5eb6ff;background:#5eb6ff12;border-radius:6px;color:var(--muted);line-height:1.45}
       .cube-transfer-lanes{display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:14px;margin:18px 0}.cube-transfer-lane{display:grid;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#111923}.cube-transfer-lane.encrypt{border-left:6px solid #5eb6ff}.cube-transfer-lane.decrypt{border-left:6px solid #b993ff}.cube-transfer-lane h3,.cube-transfer-lane p{margin:0}.cube-transfer-lane p{color:var(--muted);line-height:1.4}
       .cube-transfer-flow{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.cube-transfer-box{min-height:92px;padding:11px;border:1px dashed var(--line);border-radius:11px;background:#0c1118;display:grid;gap:7px;align-content:start}.cube-transfer-arrow{font-weight:900;color:var(--accent)}.cube-transfer-box .layout-button,.cube-transfer-box .link-button{width:100%;min-width:0}
       .cube-file-note{font:700 .75rem ui-monospace,monospace;color:#d7e7ff;word-break:break-word}.cube-lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}.cube-lab-field{display:grid;gap:6px}.cube-lab-field label{font-weight:700}.cube-lab-field small{color:var(--muted)}.cube-lab-field textarea{min-height:120px;resize:vertical}.cube-lab-field input,.cube-lab-field select,.cube-lab-field textarea{width:100%;box-sizing:border-box}
-      .cube-lab-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.cube-lab-actions button,.cube-lab-actions label{min-width:130px}.cube-file-button{position:relative;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.cube-file-button input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+      .cube-lab-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.cube-lab-actions button,.cube-lab-actions label{min-width:130px}.cube-file-button{position:relative;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.cube-file-button input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}.cube-cancel-operation{border-color:#b65d5d;color:#ffd1d1}
       .cube-lab-output{display:grid;gap:14px}.cube-lab-status{min-height:1.4em;color:var(--muted)}.cube-lab-status.error{color:#ffb3b3}.cube-lab-status.success{color:#b8efc0}.cube-preview-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;align-items:start}.cube-preview{margin:0;display:grid;gap:8px}.cube-preview figcaption{font-weight:700}.cube-bit-grid{display:grid;grid-template-columns:repeat(var(--cube-grid-size),minmax(16px,24px));gap:2px;max-width:100%;overflow:auto}.cube-bit{display:grid;place-items:center;aspect-ratio:1;border:1px solid #ffffff22;border-radius:3px;font:700 .75rem ui-monospace,monospace}.cube-bit-1{background:#7fc8ff33}.cube-bit-0{background:#ffffff08}.cube-preview-summary,.cube-diagnostics{display:grid;gap:5px;padding:10px;border:1px dashed var(--line);border-radius:8px;color:var(--muted)}.cube-diagnostics strong{color:var(--ink)}
       @media(max-width:900px){.cube-transfer-lanes,.cube-transfer-flow{grid-template-columns:1fr}.cube-transfer-arrow{text-align:center}}
     `;
@@ -99,7 +98,7 @@
 
   function gridMarkup(bits, size, label) {
     if (!bits) return '';
-    if (size > 12) return `<div class="cube-preview-summary"><strong>${escapeHtml(label)}</strong><span>${size} × ${size} projection available in diagnostics but omitted from the visual grid.</span></div>`;
+    if (size > 12 || bits === 'large-grid-projection-available') return `<div class="cube-preview-summary"><strong>${escapeHtml(label)}</strong><span>${size} × ${size} projection remains available through explicit exhaustive validation but is omitted from the DOM grid.</span></div>`;
     const cells = [...bits].map(bit => `<span class="cube-bit cube-bit-${bit}">${bit}</span>`).join('');
     return `<figure class="cube-preview"><figcaption>${escapeHtml(label)}</figcaption><div class="cube-bit-grid" style="--cube-grid-size:${size}">${cells}</div></figure>`;
   }
@@ -115,6 +114,7 @@
     panel.innerHTML = `
       <div class="cube-lab-header"><div><p class="eyebrow">Experimental Matrix utility · engine ${SCHEMA_VERSION}</p><h2>Binary Cube Encryption Laboratory</h2><p>Generate, validate, export, inspect, and exchange canonical Binary Cube keys and packages.</p></div><button type="button" class="layout-button" data-cube-close>Close Laboratory</button></div>
       <p class="cube-lab-warning"><strong>Research and game-use warning:</strong> this is experimental permutation and obfuscation research. The checksum detects accidental changes but is not a cryptographic authenticator. Do not use this system to protect real credentials, financial records, private messages, or sensitive data.</p>
+      <p class="cube-lab-runtime"><strong>Slow-hardware execution:</strong> expensive key, projection, encryption, decryption, and validation calls run in a dedicated Web Worker using the same canonical engine. The page remains interactive while slower systems work. Routine encrypt/decrypt uses the algebraic collision-free invariant; <em>Validate Pair</em> performs the deliberately slower exhaustive six-face projection check.</p>
       <div class="cube-transfer-lanes" aria-label="Binary Cube file transfer lanes">
         <section class="cube-transfer-lane encrypt"><h3>Unencrypted File In → Encrypted Package Out</h3><div class="cube-transfer-flow"><div class="cube-transfer-box"><strong>Unencrypted file</strong><label class="layout-button cube-file-button">Choose Unencrypted File<input id="cube-import-plain-file" type="file"></label><span id="cube-plain-file-note" class="cube-file-note">No unencrypted file loaded.</span></div><span class="cube-transfer-arrow">→</span><div class="cube-transfer-box"><strong>Canonical package</strong><button type="button" class="link-button" data-cube-encrypt-file>Encrypt Loaded File</button><button type="button" class="layout-button" data-cube-download-encrypted-file>Download Encrypted File</button></div></div><p>File bytes are converted to binary and encrypted through the canonical engine.</p></section>
         <section class="cube-transfer-lane decrypt"><h3>Encrypted Package In → Unencrypted File Out</h3><div class="cube-transfer-flow"><div class="cube-transfer-box"><strong>Encrypted package</strong><label class="layout-button cube-file-button">Choose Encrypted File<input id="cube-import-encrypted-file" type="file" accept="application/json,.json"></label><span id="cube-encrypted-file-note" class="cube-file-note">No encrypted package loaded.</span></div><span class="cube-transfer-arrow">→</span><div class="cube-transfer-box"><strong>Recovered file</strong><button type="button" class="link-button" data-cube-decrypt-file>Decrypt Loaded File</button><button type="button" class="layout-button" data-cube-download-plain-file>Download Unencrypted File</button></div></div><p>The matching key remains separate and is required for validation and recovery.</p></section>
@@ -129,7 +129,7 @@
         ${field('Output orientation', '<select id="cube-output-turns"><option value="0">0°</option><option value="1">90°</option><option value="2">180°</option><option value="3">270°</option></select>')}
         ${field('Data-entry mask', '<select id="cube-mask-density"><option value="1">Full face · 100% payload</option><option value="0.75">Sparse · 75% payload</option><option value="0.5">Sparse · 50% payload</option></select>', 'The exact mask is retained in the key.')}
       </div>
-      <div class="cube-lab-actions"><button type="button" class="link-button" data-cube-generate>Generate Key</button><button type="button" class="link-button" data-cube-encrypt>Encrypt Binary</button><button type="button" class="link-button" data-cube-decrypt>Decrypt Package</button><button type="button" class="layout-button" data-cube-validate>Validate Pair</button><button type="button" class="layout-button" data-cube-open-visualizer>Open in Visualizer</button><button type="button" class="layout-button" data-cube-reset>Reset</button></div>
+      <div class="cube-lab-actions"><button type="button" class="link-button" data-cube-generate>Generate Key</button><button type="button" class="link-button" data-cube-encrypt>Encrypt Binary</button><button type="button" class="link-button" data-cube-decrypt>Decrypt Package</button><button type="button" class="layout-button" data-cube-validate>Validate Pair</button><button type="button" class="layout-button" data-cube-open-visualizer>Open in Visualizer</button><button type="button" class="layout-button" data-cube-reset>Reset</button><button type="button" class="layout-button cube-cancel-operation" data-cube-cancel disabled>Cancel active operation</button></div>
       <p id="cube-status" class="cube-lab-status" role="status" aria-live="polite"></p>
       <div class="cube-lab-output">
         ${field('Encrypted package JSON', '<textarea id="cube-package" spellcheck="false"></textarea>', 'Contains framing metadata, ciphertext, and corruption checksum; the key remains separate.')}
@@ -167,28 +167,69 @@
     const node = panel.querySelector(selector);
     if (node) node.textContent = message;
   }
-  function syncOptionsFromKey(panel, key) {
-    panel.querySelector('#cube-size').value = String(key.gridSize);
-    panel.querySelector('#cube-seed').value = key.seed;
-    panel.querySelector('#cube-input-face').value = key.inputFace;
-    panel.querySelector('#cube-output-face').value = key.outputFace;
-    panel.querySelector('#cube-input-turns').value = String(key.inputQuarterTurns);
-    panel.querySelector('#cube-output-turns').value = String(key.outputQuarterTurns);
-    const density = key.mask.filter(Boolean).length / key.mask.length;
-    const nearest = [1, 0.75, 0.5].sort((a, b) => Math.abs(a - density) - Math.abs(b - density))[0];
-    panel.querySelector('#cube-mask-density').value = String(nearest);
+  function syncOptionsFromSummary(panel, summary) {
+    if (!summary) return;
+    if (summary.gridSize != null) panel.querySelector('#cube-size').value = String(summary.gridSize);
   }
   function clearDiagnostics(panel) {
     panel.querySelector('#cube-diagnostics').hidden = true;
     panel.querySelector('#cube-diagnostics').innerHTML = '';
     panel.querySelector('#cube-preview-row').innerHTML = '';
   }
-  function renderDiagnostics(panel, packageObject, keyObject) {
-    const diagnostics = Engine.diagnosePackage(packageObject, keyObject);
+  function renderDiagnosticsSummary(panel, diagnostics) {
+    if (!diagnostics) return clearDiagnostics(panel);
     const node = panel.querySelector('#cube-diagnostics');
     node.hidden = false;
-    node.innerHTML = `<strong>Validated key ${escapeHtml(diagnostics.keyId)}</strong><span>${diagnostics.pointField.pointCount} collision-free points · ${diagnostics.payloadCapacity} payload cells · ${diagnostics.inactiveMaskCells} masked filler cells</span><span>${diagnostics.blockCount} block${diagnostics.blockCount === 1 ? '' : 's'} · ${diagnostics.originalBitLength} source bits · ${diagnostics.ciphertextBitLength} transmitted bits</span><span>Checksum ${escapeHtml(diagnostics.checksum)} · ${escapeHtml(diagnostics.checksumType)}</span>`;
-    panel.querySelector('#cube-preview-row').innerHTML = FACES.map(face => gridMarkup(diagnostics.firstBlock.faces[face], diagnostics.gridSize, `${face} projection`)).join('');
+    const proof = diagnostics.exhaustive ? 'exhaustive six-face check' : 'algebraic invariant';
+    node.innerHTML = `<strong>Validated key ${escapeHtml(diagnostics.keyId)}</strong><span>${Number(diagnostics.pointCount).toLocaleString()} collision-free points · ${Number(diagnostics.payloadCapacity).toLocaleString()} payload cells · ${Number(diagnostics.inactiveMaskCells).toLocaleString()} masked filler cells</span><span>${diagnostics.blockCount} block${diagnostics.blockCount === 1 ? '' : 's'} · ${Number(diagnostics.originalBitLength).toLocaleString()} source bits · ${Number(diagnostics.ciphertextBitLength).toLocaleString()} transmitted bits</span><span>Checksum ${escapeHtml(diagnostics.checksum)} · ${escapeHtml(diagnostics.checksumType)} · ${escapeHtml(proof)}</span>`;
+    const faces = diagnostics.firstBlockFaces;
+    panel.querySelector('#cube-preview-row').innerHTML = faces
+      ? FACES.map(face => gridMarkup(faces[face], diagnostics.gridSize, `${face} projection`)).join('')
+      : `<div class="cube-preview-summary"><strong>Large-grid diagnostic</strong><span>Exact per-face DOM previews are intentionally omitted. Use Validate Pair for the exhaustive six-face calculation without blocking the page.</span></div>`;
+  }
+
+  const HEAVY_SELECTORS = Object.freeze([
+    '[data-cube-generate]', '[data-cube-encrypt]', '[data-cube-decrypt]', '[data-cube-validate]',
+    '[data-cube-encrypt-file]', '[data-cube-decrypt-file]', '#cube-import-key', '#cube-import-package', '#cube-import-encrypted-file'
+  ]);
+
+  function setBusy(panel, busy) {
+    HEAVY_SELECTORS.forEach(selector => {
+      const control = panel.querySelector(selector);
+      if (control) control.disabled = busy;
+    });
+    const cancel = panel.querySelector('[data-cube-cancel]');
+    if (cancel) cancel.disabled = !busy;
+    panel.dataset.cubeWorkerBusy = busy ? 'true' : 'false';
+  }
+
+  async function runBackground(panel, operation, payload, label) {
+    if (!Executor?.run) fail('Freeze-safe Binary Cube worker execution is unavailable. Reload the page so binary-cube-worker-client.js can initialize.');
+    const generation = ++operationGeneration;
+    if (Executor.isBusy?.()) Executor.cancelAll('superseded by a newer operation');
+    setBusy(panel, true);
+    setStatus(panel, `${label} · starting background worker…`);
+    try {
+      const result = await Executor.run(operation, payload, {
+        onProgress: update => {
+          if (generation !== operationGeneration) return;
+          const percentage = Math.round(update.fraction * 100);
+          setStatus(panel, `${label} · ${update.stage} · ${percentage}%`);
+        }
+      });
+      if (generation !== operationGeneration) throw Object.assign(new Error('Operation was superseded.'), { name: 'AbortError' });
+      return result;
+    } finally {
+      if (generation === operationGeneration) setBusy(panel, false);
+    }
+  }
+
+  function cancelActiveOperation(panel, reason = 'cancelled by user') {
+    operationGeneration += 1;
+    const cancelled = Executor?.cancelAll?.(reason) || false;
+    setBusy(panel, false);
+    if (cancelled) setStatus(panel, 'Background Binary Cube operation cancelled.', 'success');
+    return cancelled;
   }
 
   function save(panel) {
@@ -246,8 +287,8 @@
     link.remove();
     URL.revokeObjectURL(url);
   }
-  function downloadJson(value, filename) {
-    downloadBlob(new Blob([`${JSON.stringify(value, null, 2)}\n`], { type: 'application/json' }), filename);
+  function downloadText(value, filename, type = 'application/json') {
+    downloadBlob(new Blob([String(value)], { type }), filename);
   }
   async function copyText(value) {
     const text = String(value || '');
@@ -264,7 +305,9 @@
   }
   async function readJsonFile(file, label) {
     if (!file) fail(`${label} was not selected.`);
-    return parseJson(await file.text(), label);
+    const text = await file.text();
+    parseJson(text, label);
+    return text;
   }
 
   async function importPlainFile(panel, file) {
@@ -280,38 +323,54 @@
     setStatus(panel, `Unencrypted file loaded: ${lastPlainFileName}.`, 'success');
     save(panel);
   }
+
   async function importEncryptedFile(panel, file) {
-    const packageObject = await readJsonFile(file, 'Encrypted package file');
-    panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
+    const packageJson = await readJsonFile(file, 'Encrypted package file');
+    panel.querySelector('#cube-package').value = packageJson;
     setFileNote(panel, '#cube-encrypted-file-note', `${file.name || 'encrypted package'} loaded.`);
-    const keyRaw = panel.querySelector('#cube-key').value.trim();
-    if (keyRaw) renderDiagnostics(panel, Engine.validatePackage(packageObject, Engine.validateKey(JSON.parse(keyRaw))), Engine.validateKey(JSON.parse(keyRaw)));
-    else clearDiagnostics(panel);
-    setStatus(panel, keyRaw ? 'Encrypted package loaded and validated.' : 'Encrypted package loaded. Import its matching key before decryption.', 'success');
+    const keyJson = panel.querySelector('#cube-key').value.trim();
+    if (keyJson) {
+      const result = await runBackground(panel, 'validate-pair', { keyJson, packageJson, exhaustive: false }, 'Import validation');
+      panel.querySelector('#cube-key').value = result.keyJson;
+      panel.querySelector('#cube-package').value = result.packageJson;
+      renderDiagnosticsSummary(panel, result.diagnostics);
+      setStatus(panel, 'Encrypted package loaded; checksum, framing, and algebraic invariant validated. Use Validate Pair for the exhaustive six-face check.', 'success');
+    } else {
+      clearDiagnostics(panel);
+      setStatus(panel, 'Encrypted package loaded. Import its matching key before decryption.', 'success');
+    }
     save(panel);
   }
 
-  function encryptCurrentInput(panel) {
-    let key;
-    if (panel.querySelector('#cube-key').value.trim()) key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
-    else {
-      key = Engine.createKey(values(panel));
-      panel.querySelector('#cube-key').value = JSON.stringify(key, null, 2);
-    }
-    const packageObject = Engine.encryptBinary(panel.querySelector('#cube-input').value, key);
-    panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
-    setTransportArtifact(panel, 'internal-package', packageObject);
+  async function encryptCurrentInput(panel) {
+    const keyJson = panel.querySelector('#cube-key').value.trim() || null;
+    const result = await runBackground(panel, 'encrypt', {
+      bits: panel.querySelector('#cube-input').value,
+      keyJson,
+      options: values(panel),
+      exhaustive: false
+    }, 'Encrypting');
+    panel.querySelector('#cube-key').value = result.keyJson;
+    panel.querySelector('#cube-package').value = result.packageJson;
     panel.querySelector('#cube-decrypted').value = '';
-    renderDiagnostics(panel, packageObject, key);
-    return { key, packageObject };
+    syncOptionsFromSummary(panel, result.keySummary);
+    setTransportArtifact(panel, 'internal-package', parseJson(result.packageJson, 'Worker package result'));
+    renderDiagnosticsSummary(panel, result.diagnostics);
+    return result;
   }
-  function decryptCurrentPackage(panel) {
-    const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
-    const packageObject = Engine.validatePackage(parseJsonField(panel, '#cube-package', 'Encrypted package JSON'), key);
-    const plaintext = Engine.decryptBinary(packageObject, key);
-    panel.querySelector('#cube-decrypted').value = plaintext;
-    renderDiagnostics(panel, packageObject, key);
-    return { key, packageObject, plaintext };
+
+  async function decryptCurrentPackage(panel) {
+    const result = await runBackground(panel, 'decrypt', {
+      keyJson: panel.querySelector('#cube-key').value,
+      packageJson: panel.querySelector('#cube-package').value,
+      exhaustive: false
+    }, 'Decrypting');
+    panel.querySelector('#cube-key').value = result.keyJson;
+    panel.querySelector('#cube-package').value = result.packageJson;
+    panel.querySelector('#cube-decrypted').value = result.plaintext;
+    setTransportArtifact(panel, 'internal-package', parseJson(result.packageJson, 'Worker package result'));
+    renderDiagnosticsSummary(panel, result.diagnostics);
+    return result;
   }
 
   function currentArtifacts() {
@@ -320,8 +379,8 @@
     const packageText = panel?.querySelector('#cube-package')?.value.trim() || '';
     let key = null;
     let packageObject = null;
-    try { if (keyText) key = Engine.validateKey(JSON.parse(keyText)); } catch (_) { /* Preserve editable invalid text without exporting it. */ }
-    try { if (packageText && key) packageObject = Engine.validatePackage(JSON.parse(packageText), key); } catch (_) { /* Preserve editable invalid text without exporting it. */ }
+    try { if (keyText) key = JSON.parse(keyText); } catch (_) { /* Preserve editable invalid text without exporting it. */ }
+    try { if (packageText) packageObject = JSON.parse(packageText); } catch (_) { /* Preserve editable invalid text without exporting it. */ }
     const transport = transportArtifact(panel);
     return Object.freeze({
       source: 'laboratory',
@@ -337,16 +396,18 @@
     });
   }
 
-  function loadArtifacts(artifacts = {}) {
+  async function loadArtifacts(artifacts = {}) {
     const panel = buildPanel();
     if (!panel) fail('The Shadowrun workspace is unavailable.');
     if (artifacts.sourceFileName) lastPlainFileName = safeFileName(artifacts.sourceFileName, lastPlainFileName);
     if (artifacts.bits) panel.querySelector('#cube-input').value = String(artifacts.bits).replace(/\s+/g, '');
-    let key = null;
+    let keyJson = '';
     if (artifacts.key) {
-      key = Engine.validateKey(artifacts.key);
-      panel.querySelector('#cube-key').value = JSON.stringify(key, null, 2);
-      syncOptionsFromKey(panel, key);
+      keyJson = JSON.stringify(artifacts.key, null, 2);
+      const validated = await runBackground(panel, 'validate-key', { keyJson, exhaustive: false }, 'Loading key');
+      keyJson = validated.keyJson;
+      panel.querySelector('#cube-key').value = keyJson;
+      syncOptionsFromSummary(panel, validated.summary);
     }
     const transportKind = artifacts.transportKind
       || (artifacts.secureExport ? 'secure-export' : artifacts.authenticatedEnvelope ? 'authenticated-envelope' : 'internal-package');
@@ -358,16 +419,21 @@
       panel.querySelector('#cube-decrypted').value = '';
       clearDiagnostics(panel);
     } else if (transportDocument) {
-      if (!key) key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON'));
-      const packageObject = transportKind === 'secure-export'
-        ? window.ShadowrunBinaryCubeSecureExport.expandSecureExport(transportDocument, key, Engine)
-        : Engine.validatePackage(transportDocument, key);
-      const plaintext = Engine.decryptBinary(packageObject, key);
-      panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2);
-      panel.querySelector('#cube-decrypted').value = plaintext;
-      if (!panel.querySelector('#cube-input').value.trim()) panel.querySelector('#cube-input').value = plaintext;
+      if (!keyJson) keyJson = panel.querySelector('#cube-key').value.trim();
+      if (!keyJson) fail('A matching Binary Cube key is required to load this transport artifact.');
+      let packageDocument = transportDocument;
+      if (transportKind === 'secure-export') {
+        const key = Engine.validateKey(JSON.parse(keyJson));
+        packageDocument = window.ShadowrunBinaryCubeSecureExport.expandSecureExport(transportDocument, key, Engine);
+      }
+      const packageJson = JSON.stringify(packageDocument, null, 2);
+      const result = await runBackground(panel, 'decrypt', { keyJson, packageJson, exhaustive: false }, 'Loading package');
+      panel.querySelector('#cube-key').value = result.keyJson;
+      panel.querySelector('#cube-package').value = result.packageJson;
+      panel.querySelector('#cube-decrypted').value = result.plaintext;
+      if (!panel.querySelector('#cube-input').value.trim()) panel.querySelector('#cube-input').value = result.plaintext;
       setTransportArtifact(panel, transportKind, transportDocument);
-      renderDiagnostics(panel, packageObject, key);
+      renderDiagnosticsSummary(panel, result.diagnostics);
     } else {
       setTransportArtifact(panel, 'internal-package', null);
       panel.querySelector('#cube-package').value = '';
@@ -384,26 +450,28 @@
   function bindPanel(panel) {
     if (panel.dataset.cubeLabBound === 'true') return;
     panel.dataset.cubeLabBound = 'true';
-    panel.querySelector('[data-cube-close]').addEventListener('click', () => { panel.hidden = true; });
+    panel.querySelector('[data-cube-close]').addEventListener('click', () => { cancelActiveOperation(panel, 'cancelled because the laboratory closed'); panel.hidden = true; });
+    panel.querySelector('[data-cube-cancel]').addEventListener('click', () => cancelActiveOperation(panel));
     panel.querySelector('#cube-import-plain-file').addEventListener('change', async event => { try { await importPlainFile(panel, event.target.files?.[0]); } catch (error) { setStatus(panel, error.message, 'error'); } event.target.value = ''; });
-    panel.querySelector('#cube-import-encrypted-file').addEventListener('change', async event => { try { await importEncryptedFile(panel, event.target.files?.[0]); } catch (error) { setStatus(panel, error.message, 'error'); } event.target.value = ''; });
-    panel.querySelector('[data-cube-encrypt-file]').addEventListener('click', () => { try { const { key, packageObject } = encryptCurrentInput(panel); setFileNote(panel, '#cube-encrypted-file-note', `Encrypted package ready for key ${packageObject.keyId}.`); setStatus(panel, `${packageObject.blockCount} package block${packageObject.blockCount === 1 ? '' : 's'} generated using key ${key.keyId}.`, 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-decrypt-file]').addEventListener('click', () => { try { const { plaintext } = decryptCurrentPackage(panel); setStatus(panel, `${plaintext.length} recovered bits are ready.`, 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-download-encrypted-file]').addEventListener('click', () => { try { const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON')); const packageObject = Engine.validatePackage(parseJsonField(panel, '#cube-package', 'Encrypted package JSON'), key); downloadJson(packageObject, `encrypted-binary-cube-package-${packageObject.keyId}.json`); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('#cube-import-encrypted-file').addEventListener('change', async event => { try { await importEncryptedFile(panel, event.target.files?.[0]); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } event.target.value = ''; });
+    panel.querySelector('[data-cube-encrypt-file]').addEventListener('click', async () => { try { const result = await encryptCurrentInput(panel); setFileNote(panel, '#cube-encrypted-file-note', `Encrypted package ready for key ${result.keySummary.keyId}.`); setStatus(panel, `${result.diagnostics.blockCount} package block${result.diagnostics.blockCount === 1 ? '' : 's'} generated using key ${result.keySummary.keyId}.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-decrypt-file]').addEventListener('click', async () => { try { const result = await decryptCurrentPackage(panel); setStatus(panel, `${result.plaintext.length} recovered bits are ready.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-download-encrypted-file]').addEventListener('click', async () => { try { const result = await runBackground(panel, 'validate-pair', { keyJson: panel.querySelector('#cube-key').value, packageJson: panel.querySelector('#cube-package').value, exhaustive: false }, 'Preparing download'); downloadText(`${result.packageJson}\n`, `encrypted-binary-cube-package-${result.keySummary.keyId}.json`); setStatus(panel, 'Validated encrypted package downloaded.', 'success'); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-download-plain-file]').addEventListener('click', () => { try { downloadBlob(new Blob([bitsToBytes(panel.querySelector('#cube-decrypted').value)], { type: 'application/octet-stream' }), `decrypted-${lastPlainFileName}`); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-generate]').addEventListener('click', () => { try { const key = Engine.createKey(values(panel)); Engine.assertProjectionUniqueness(key); panel.querySelector('#cube-key').value = JSON.stringify(key, null, 2); panel.querySelector('#cube-package').value = ''; panel.querySelector('#cube-decrypted').value = ''; clearDiagnostics(panel); setStatus(panel, `Key ${key.keyId} generated with ${key.mask.filter(Boolean).length} payload cells.`, 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-encrypt]').addEventListener('click', () => { try { const { key, packageObject } = encryptCurrentInput(panel); setStatus(panel, `${packageObject.originalBitLength} bits encrypted into ${packageObject.blockCount} block${packageObject.blockCount === 1 ? '' : 's'} using key ${key.keyId}.`, 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-decrypt]').addEventListener('click', () => { try { const { plaintext } = decryptCurrentPackage(panel); setStatus(panel, `${plaintext.length} original bits recovered.`, 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-validate]').addEventListener('click', () => { try { const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON')); const packageObject = Engine.validatePackage(parseJsonField(panel, '#cube-package', 'Encrypted package JSON'), key); renderDiagnostics(panel, packageObject, key); setStatus(panel, `Key ${key.keyId} and checksum ${packageObject.checksum} are valid.`, 'success'); } catch (error) { setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-generate]').addEventListener('click', async () => { try { const result = await runBackground(panel, 'create-key', { options: values(panel), exhaustive: true }, 'Generating key'); panel.querySelector('#cube-key').value = result.keyJson; panel.querySelector('#cube-package').value = ''; panel.querySelector('#cube-decrypted').value = ''; clearDiagnostics(panel); setStatus(panel, `Key ${result.summary.keyId} generated and exhaustively checked with ${result.summary.payloadCells.toLocaleString()} payload cells.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-encrypt]').addEventListener('click', async () => { try { const result = await encryptCurrentInput(panel); setStatus(panel, `${result.diagnostics.originalBitLength} bits encrypted into ${result.diagnostics.blockCount} block${result.diagnostics.blockCount === 1 ? '' : 's'} using key ${result.keySummary.keyId}.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-decrypt]').addEventListener('click', async () => { try { const result = await decryptCurrentPackage(panel); setStatus(panel, `${result.plaintext.length} original bits recovered.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-validate]').addEventListener('click', async () => { try { const result = await runBackground(panel, 'validate-pair', { keyJson: panel.querySelector('#cube-key').value, packageJson: panel.querySelector('#cube-package').value, exhaustive: true }, 'Exhaustive validation'); panel.querySelector('#cube-key').value = result.keyJson; panel.querySelector('#cube-package').value = result.packageJson; renderDiagnosticsSummary(panel, result.diagnostics); setStatus(panel, `Key ${result.keySummary.keyId}, checksum ${result.diagnostics.checksum}, and all six face projections are valid.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-open-visualizer]').addEventListener('click', () => { try { window.dispatchEvent(new CustomEvent('shadowrun-binary-cube-open-visualizer', { detail: currentArtifacts() })); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-copy-key]').addEventListener('click', async () => { try { await copyText(panel.querySelector('#cube-key').value); setStatus(panel, 'Key JSON copied.', 'success'); } catch (error) { setStatus(panel, error.message, 'error'); } });
     panel.querySelector('[data-cube-copy-package]').addEventListener('click', async () => { try { await copyText(panel.querySelector('#cube-package').value); setStatus(panel, 'Package JSON copied.', 'success'); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-download-key]').addEventListener('click', () => { try { const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON')); downloadJson(key, `shadowrun-binary-cube-key-${key.keyId}.json`); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('[data-cube-download-package]').addEventListener('click', () => { try { const key = Engine.validateKey(parseJsonField(panel, '#cube-key', 'Key JSON')); const packageObject = Engine.validatePackage(parseJsonField(panel, '#cube-package', 'Encrypted package JSON'), key); downloadJson(packageObject, `shadowrun-binary-cube-package-${packageObject.keyId}.json`); } catch (error) { setStatus(panel, error.message, 'error'); } });
-    panel.querySelector('#cube-import-key').addEventListener('change', async event => { try { const key = Engine.validateKey(await readJsonFile(event.target.files?.[0], 'Key file')); panel.querySelector('#cube-key').value = JSON.stringify(key, null, 2); syncOptionsFromKey(panel, key); clearDiagnostics(panel); setStatus(panel, `Key ${key.keyId} imported and validated.`, 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } event.target.value = ''; });
-    panel.querySelector('#cube-import-package').addEventListener('change', async event => { try { const packageObject = await readJsonFile(event.target.files?.[0], 'Package file'); panel.querySelector('#cube-package').value = JSON.stringify(packageObject, null, 2); const keyRaw = panel.querySelector('#cube-key').value.trim(); if (keyRaw) { const key = Engine.validateKey(JSON.parse(keyRaw)); renderDiagnostics(panel, Engine.validatePackage(packageObject, key), key); } else clearDiagnostics(panel); setStatus(panel, keyRaw ? 'Package imported and validated.' : 'Package imported; add its matching key to validate.', 'success'); save(panel); } catch (error) { setStatus(panel, error.message, 'error'); } event.target.value = ''; });
+    panel.querySelector('[data-cube-download-key]').addEventListener('click', async () => { try { const result = await runBackground(panel, 'validate-key', { keyJson: panel.querySelector('#cube-key').value, exhaustive: false }, 'Validating key'); downloadText(`${result.keyJson}\n`, `shadowrun-binary-cube-key-${result.summary.keyId}.json`); setStatus(panel, 'Validated key downloaded.', 'success'); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('[data-cube-download-package]').addEventListener('click', async () => { try { const result = await runBackground(panel, 'validate-pair', { keyJson: panel.querySelector('#cube-key').value, packageJson: panel.querySelector('#cube-package').value, exhaustive: false }, 'Validating package'); downloadText(`${result.packageJson}\n`, `shadowrun-binary-cube-package-${result.keySummary.keyId}.json`); setStatus(panel, 'Validated package downloaded.', 'success'); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } });
+    panel.querySelector('#cube-import-key').addEventListener('change', async event => { try { const keyJson = await readJsonFile(event.target.files?.[0], 'Key file'); const result = await runBackground(panel, 'validate-key', { keyJson, exhaustive: false }, 'Importing key'); panel.querySelector('#cube-key').value = result.keyJson; syncOptionsFromSummary(panel, result.summary); clearDiagnostics(panel); setStatus(panel, `Key ${result.summary.keyId} imported and validated.`, 'success'); save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } event.target.value = ''; });
+    panel.querySelector('#cube-import-package').addEventListener('change', async event => { try { const packageJson = await readJsonFile(event.target.files?.[0], 'Package file'); panel.querySelector('#cube-package').value = packageJson; const keyJson = panel.querySelector('#cube-key').value.trim(); if (keyJson) { const result = await runBackground(panel, 'validate-pair', { keyJson, packageJson, exhaustive: false }, 'Importing package'); panel.querySelector('#cube-key').value = result.keyJson; panel.querySelector('#cube-package').value = result.packageJson; renderDiagnosticsSummary(panel, result.diagnostics); setStatus(panel, 'Package imported; checksum, framing, and algebraic invariant validated.', 'success'); } else { clearDiagnostics(panel); setStatus(panel, 'Package imported; add its matching key to validate.', 'success'); } save(panel); } catch (error) { if (error.name !== 'AbortError') setStatus(panel, error.message, 'error'); } event.target.value = ''; });
     panel.querySelector('[data-cube-reset]').addEventListener('click', () => {
       if (!confirm('Clear the Binary Cube Encryption Laboratory and its local browser save?')) return;
+      cancelActiveOperation(panel, 'cancelled by laboratory reset');
       localStorage.removeItem(laboratoryStorageKey());
       for (const legacyKey of LEGACY_STORAGE_KEYS) localStorage.removeItem(legacyKey);
       panel.querySelectorAll('textarea').forEach(textarea => { textarea.value = ''; });
@@ -440,9 +508,11 @@
     openPanel,
     loadArtifacts,
     currentArtifacts,
+    cancelActiveOperation: () => cancelActiveOperation(buildPanel()),
     utilities: Object.freeze({ bytesToBits, bitsToBytes, laboratoryStorageKey, migrateLaboratoryState }),
     constants: Object.freeze({ LAB_STATE_FORMAT, LAB_STATE_SCHEMA_VERSION }),
-    engine: Engine
+    engine: Engine,
+    executor: Executor || null
   });
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
 })();
