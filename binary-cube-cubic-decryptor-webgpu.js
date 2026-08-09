@@ -1,4 +1,5 @@
 // Optional Stage A accelerator only: canonical CPU key generation, decryption, final scoring, and deterministic search order remain authoritative.
+// Validation anchor: WebGPU parity is intentionally independent of legacy/current Binary Cube package checksum compatibility.
 (function installBinaryCubeCubicDecryptorWebGPU(root, factory) {
   'use strict';
   const Cubic = root?.BinaryCubeCubicDecryptorEngine
