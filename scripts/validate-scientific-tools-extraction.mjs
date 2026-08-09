@@ -33,6 +33,7 @@ const sources = Object.freeze({
   diagnosticPanel: read('binary-cube-diagnostic-pipeline-panel.js'),
   cubicDecryptorEngine: read('binary-cube-cubic-decryptor-engine.js'),
   cubicDecryptorPool: read('binary-cube-cubic-decryptor-worker-pool.js'),
+  cubicDecryptorWebGpu: read('binary-cube-cubic-decryptor-webgpu.js'),
   cubicDecryptorWorker: read('binary-cube-cubic-decryptor-worker.js'),
   cubicDecryptorUi: read('binary-cube-cubic-decryptor.js'),
   diagnosticLocal: read('scripts/run-scientific-diagnostic-local.mjs'),
@@ -108,8 +109,10 @@ checks.push(includes('Cubic decryptor delegates generator and cryptographic auth
 checks.push(excludes('Cubic decryptor does not duplicate cube transforms or generators', sources.cubicDecryptorEngine, ['function transformBlockWithKey(', 'function iterativePermutation(', 'function randomWalkPermutation(', 'function nestedPermutation(']));
 checks.push(includes('Cubic worker pool owns deterministic ordinal sharding without cryptographic duplication', sources.cubicDecryptorPool, ['BinaryCubeCubicDecryptorWorkerPool', 'function partitionRun(', 'function startSearch(', 'resumeCursor', 'maxAttemptsThisRun', 'earliest exact identity match', 'Cubic.makeCheckpoint(']));
 checks.push(excludes('Cubic worker pool does not own key generation or decryption', sources.cubicDecryptorPool, ['generateResearchKey(', 'Engine.decryptBinary(', 'function transformBlockWithKey(']));
-checks.push(includes('Cubic decryptor worker delegates deterministic attempts', sources.cubicDecryptorWorker, ["'binary-cube-cubic-decryptor-engine.js'", 'Cubic.attemptCandidate(', 'Cubic.makeCheckpoint(', "message.operation !== 'search'"]));
-checks.push(includes('Cubic decryptor UI exposes resumable specialist search', sources.cubicDecryptorUi, ['Cubic Decryptor Tool', 'Build staged plan', 'Run / resume decryptor', 'Export checkpoint', 'Recover full plaintext', 'openInformationAnalysisSuite', 'openMediaForensicsSuite', 'regenerateKey(']));
+checks.push(includes('Cubic WebGPU accelerator owns Stage A statistics only', sources.cubicDecryptorWebGpu, ['BinaryCubeCubicDecryptorWebGPU', 'atomicAdd', 'histogramBatch(', 'scoreCandidates(', 'verifyParity(', 'Cubic.entropyFromCounts(', 'Cubic.scorePlaintextFromMetrics(', 'Cubic.completeCandidateEvidence(']));
+checks.push(excludes('Cubic WebGPU accelerator does not own keys or decryption', sources.cubicDecryptorWebGpu, ['generateResearchKey(', 'Engine.decryptBinary(', 'transformBlockWithKey(', 'iterativePermutation(']));
+checks.push(includes('Cubic decryptor worker delegates deterministic attempts and parity-gated acceleration', sources.cubicDecryptorWorker, ["'binary-cube-cubic-decryptor-engine.js'", 'binary-cube-cubic-decryptor-webgpu.js', 'Cubic.prepareCandidate(', 'Cubic.completeCandidateEvidence(', 'WebGPU.createAccelerator(', 'accelerator.verifyParity()', 'Cubic.makeCheckpoint(', "message.operation !== 'search'"]));
+checks.push(includes('Cubic decryptor UI exposes resumable specialist search', sources.cubicDecryptorUi, ['Cubic Decryptor Tool', 'Build staged plan', 'Run / resume decryptor', 'GPU acceleration', 'bccd-acceleration-mode', 'WebGPU Stage A batch size', 'Export checkpoint', 'Recover full plaintext', 'openInformationAnalysisSuite', 'openMediaForensicsSuite', 'regenerateKey(']));
 
 checks.push(includes('Steganalysis engine owns quantitative math', sources.steganalysisEngine, ['BinaryCubeSteganalysisEngine', 'function rsAnalysis(', 'function samplePairAnalysisFromPairs(', 'function localizedRasterAnalysis(', 'function compareRasters(', 'function inspectJpegCoefficients(', 'function analyzeTextSteganography(', 'function rocCurve(']));
 checks.push(excludes('Steganalysis engine does not become a media decoder or cipher', sources.steganalysisEngine, ['createImageBitmap(', 'decodeAudioData(', 'function encryptBinary(', 'function decryptBinary(', 'ShadowrunBinaryCubeEngine']));

@@ -13,6 +13,7 @@ const Engine = require(path.join(root, 'shadowrun-binary-cube-engine.js'));
 const Research = require(path.join(root, 'binary-cube-key-generation-research.js'));
 const Cubic = require(path.join(root, 'binary-cube-cubic-decryptor-engine.js'));
 const Pool = require(path.join(root, 'binary-cube-cubic-decryptor-worker-pool.js'));
+const WebGPU = require(path.join(root, 'binary-cube-cubic-decryptor-webgpu.js'));
 const Information = require(path.join(root, 'binary-cube-information-analysis-suite.js'));
 const ui = fs.readFileSync(path.join(root, 'binary-cube-cubic-decryptor.js'), 'utf8');
 const workerPath = path.join(root, 'binary-cube-cubic-decryptor-worker.js');
@@ -57,9 +58,9 @@ function createWorkerHarness() {
   vm.runInContext(worker, context, { filename: workerPath });
   assert.equal(typeof messageListener, 'function', 'Cubic worker must register a message listener');
   return Object.freeze({
-    run(message) {
+    async run(message) {
       messages.length = 0;
-      messageListener({ data: message });
+      await messageListener({ data: message });
       return [...messages];
     }
   });
@@ -72,10 +73,10 @@ function createWorkerAdapter() {
   return {
     addEventListener(type, listener) { if (listeners[type]) listeners[type].push(listener); },
     postMessage(message) {
-      queueMicrotask(() => {
+      queueMicrotask(async () => {
         if (terminated) return;
         try {
-          const rows = harness.run(message);
+          const rows = await harness.run(message);
           for (const row of rows) {
             if (terminated) break;
             for (const listener of listeners.message) listener({ data: row });
@@ -95,7 +96,14 @@ function resultMessage(messages, label) {
   return row.result;
 }
 
-assert.equal(Cubic.constants.VERSION, '0.2.0');
+assert.equal(Cubic.constants.VERSION, '0.3.0');
+assert.equal(WebGPU.version, '0.1.0');
+assert.equal(WebGPU.backend, 'webgpu-stage-a-histogram-v1');
+assert.equal(WebGPU.capability().supported, false, 'Node validation intentionally exercises the deterministic CPU fallback environment.');
+assert.equal(typeof Cubic.entropyFromCounts, 'function');
+assert.equal(typeof Cubic.scorePlaintextFromMetrics, 'function');
+assert.equal(typeof Cubic.prepareCandidate, 'function');
+assert.equal(typeof Cubic.completeCandidateEvidence, 'function');
 assert.equal(Pool.constants.VERSION, '0.1.0');
 assert.equal(Pool.resolveWorkerCount(0, 8), 4);
 assert.equal(Pool.resolveWorkerCount(6, 8), 6);
@@ -130,6 +138,31 @@ assert.equal(textCrib.offsetBytes, 3);
 assert.equal(textCrib.hex, Buffer.from('KNOWN', 'utf8').toString('hex'));
 assert.equal(Cubic.normalizeCrib({ cribMode: 'signature', cribSignature: 'PNG' }).hex, '89504e470d0a1a0a');
 assert.throws(() => Cubic.normalizeCrib({ cribMode: 'hex', cribValue: 'abc' }), /complete hexadecimal bytes/);
+
+const gpuParityBits = utf8Bits('WebGPU Stage A canonical scoring parity fixture.');
+const gpuParityBytes = Cubic.bitsToBytes(gpuParityBits);
+const gpuParityHistogram = new Uint32Array(256);
+let gpuParityPrintable = 0;
+for (const byte of gpuParityBytes) {
+  gpuParityHistogram[byte] += 1;
+  if ((byte >= 32 && byte <= 126) || byte === 9 || byte === 10 || byte === 13) gpuParityPrintable += 1;
+}
+const gpuParityMetrics = {
+  printableCount: gpuParityPrintable,
+  printableFraction: gpuParityPrintable / gpuParityBytes.length,
+  entropy: Cubic.entropyFromCounts(gpuParityHistogram, gpuParityBytes.length),
+  histogram: Array.from(gpuParityHistogram),
+  byteLength: gpuParityBytes.length
+};
+assert.deepEqual(Cubic.scorePlaintextFromMetrics(gpuParityBits, gpuParityMetrics), Cubic.scorePlaintext(gpuParityBits), 'GPU-produced integer statistics must feed the exact canonical Stage A score.');
+assert.match(WebGPU.shaderSource, /atomicAdd/);
+assert.doesNotMatch(WebGPU.shaderSource, /decrypt|permutation|key/i, 'WebGPU shader must not duplicate key generation or decryption.');
+assert.ok(worker.includes('binary-cube-cubic-decryptor-webgpu.js'));
+assert.ok(worker.includes('accelerator.verifyParity()'));
+assert.ok(worker.includes('Cubic.prepareCandidate('));
+assert.ok(worker.includes('Cubic.completeCandidateEvidence('));
+assert.ok(ui.includes('id="bccd-acceleration-mode"'));
+assert.ok(ui.includes('Automatic · WebGPU after parity check'));
 
 const plaintext = '01001000011001010110110001101100011011110010000001000011011101010110001001100101'; // Hello Cube
 const recovered = [];
@@ -217,6 +250,14 @@ assert.equal(broadPlan.stages[0].profile, 'direct-permutation');
 assert.ok(broadPlan.stages.some(stage => stage.profile === 'iterative-chain'));
 assert.ok(broadPlan.stages.every(stage => stage.gridSizes.every(size => rawSource.bits.length % (size * size) === 0)));
 
+const broadPlanGpuPreference = Cubic.buildSearchPlan(rawSource, {
+  profiles: ['direct-permutation', 'iterative-chain'], usePackageMetadata: false, maxGridSize: 16,
+  seedStart: 0, seedEnd: 3, seedTemplates: ['{n}'], includeFixedSeeds: false,
+  orientationMode: 'manual', capacityMode: 'manual', payloadCapacity: directPackage.payloadCapacity,
+  inputFace: 'top', outputFace: 'front', accelerationMode: 'webgpu', webgpuBatchSize: 128
+});
+assert.equal(broadPlanGpuPreference.planId, broadPlan.planId, 'Acceleration preference and batch size must never alter deterministic Plan ID or candidate space.');
+
 const checkpoint = Cubic.makeCheckpoint(broadPlan, 12, 12, broadPlan.stages[0].id);
 assert.equal(Cubic.validateCheckpoint(checkpoint, broadPlan).cursor, 12);
 const otherPlan = Cubic.buildSearchPlan(rawSource, { ...broadPlan, seedEnd: 4, profiles: ['direct-permutation'], seedTemplates: ['{n}'], includeFixedSeeds: false, maxGridSize: 16, usePackageMetadata: false, payloadCapacity: directPackage.payloadCapacity, inputFace: 'top', outputFace: 'front' });
@@ -250,7 +291,7 @@ const workerSearchOptions = {
 };
 
 const firstHarness = createWorkerHarness();
-const firstMessages = firstHarness.run({
+const firstMessages = await firstHarness.run({
   id: 1001,
   operation: 'search',
   source: { kind: 'package', package: workerPackage },
@@ -270,7 +311,7 @@ assert.equal(restoredCheckpoint.cursor, 200);
 
 // Destroy the first harness, create a fresh worker context, and resume only from the serialized deterministic cursor.
 const resumedHarness = createWorkerHarness();
-const resumedMessages = resumedHarness.run({
+const resumedMessages = await resumedHarness.run({
   id: 1002,
   operation: 'search',
   source: { kind: 'package', package: workerPackage },
@@ -374,7 +415,7 @@ const cribPlanA = Cubic.buildSearchPlan(cribRawSource, cribSearchOptions);
 const cribPlanB = Cubic.buildSearchPlan(cribRawSource, { ...cribSearchOptions, cribValue: 'WRONG-PLAINTEXT-CRIB' });
 assert.notEqual(cribPlanA.planId, cribPlanB.planId, 'Changing crib bytes must change the deterministic Plan ID.');
 const cribHarness = createWorkerHarness();
-const cribResult = resultMessage(cribHarness.run({ id: 1003, operation: 'search', source: { kind: 'raw', bits: cribRawSource.bits, framing: cribRawSource.framing }, options: cribSearchOptions, resumeCursor: 0 }), 'Crib-assisted raw worker run');
+const cribResult = resultMessage(await cribHarness.run({ id: 1003, operation: 'search', source: { kind: 'raw', bits: cribRawSource.bits, framing: cribRawSource.framing }, options: cribSearchOptions, resumeCursor: 0 }), 'Crib-assisted raw worker run');
 assert.equal(cribResult.exhausted, true);
 const cribCandidate = cribResult.candidates.find(candidate => candidate.seed === cribSeed);
 assert.ok(cribCandidate, 'Known-plaintext crib must retain the correct raw candidate even when Stage A threshold is 100.');
@@ -433,7 +474,9 @@ for (const required of [
   "'binary-cube-key-generation-research.js'",
   "'binary-cube-cubic-decryptor-engine.js'",
   "operation !== 'search'",
-  'Cubic.attemptCandidate',
+  'Cubic.prepareCandidate',
+  'Cubic.completeCandidateEvidence',
+  'accelerator.verifyParity()',
   'Cubic.makeCheckpoint',
   'maxAttemptsThisRun',
   'attemptsPerSecond',
@@ -446,7 +489,7 @@ assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty')
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.8.0',
+  schema: '0.9.0',
   pass: true,
   recovered,
   rawRoundTrip: true,

@@ -88,7 +88,7 @@
     const startedAt = Date.now();
     const candidates = [];
     const errors = [];
-    const states = shards.map(shard => ({ shard, worker: null, progressCursor: shard.startCursor, attempts: 0, result: null, terminated: false }));
+    const states = shards.map(shard => ({ shard, worker: null, progressCursor: shard.startCursor, attempts: 0, result: null, acceleration: null, terminated: false }));
     let settled = false;
     let rejectPromise = null;
     let resolvePromise = null;
@@ -96,6 +96,21 @@
     let exactOrdinal = Number.POSITIVE_INFINITY;
 
     function totalAttemptsThisRun() { return states.reduce((sum, state) => sum + Math.max(0, Number(state.attempts) || 0), 0); }
+
+
+    function accelerationSummary() {
+      const reports = states.map(state => state.acceleration).filter(Boolean);
+      const backends = [...new Set(reports.map(report => report.backend).filter(Boolean))];
+      const reasons = [...new Set(reports.map(report => report.reason).filter(Boolean))];
+      const parityRows = reports.filter(report => typeof report.parityPassed === 'boolean');
+      return Object.freeze({
+        requestedMode: String(options.accelerationMode || 'cpu'),
+        backends: Object.freeze(backends),
+        parityPassed: parityRows.length ? parityRows.every(report => report.parityPassed) : null,
+        fallback: reports.some(report => report.fallback),
+        reasons: Object.freeze(reasons)
+      });
+    }
 
     function contiguousCursor() {
       let cursor = resumeCursor;
@@ -141,6 +156,7 @@
         planId: plan.planId,
         workerCount: shards.length,
         activeWorkers,
+        acceleration: accelerationSummary(),
         checkpoint: Cubic.makeCheckpoint(plan, cursor, attempts, null)
       });
     }
@@ -195,6 +211,7 @@
         attemptsPerSecond: elapsedMilliseconds > 0 ? attempts * 1000 / elapsedMilliseconds : 0,
         workerCount: shards.length,
         shards,
+        acceleration: accelerationSummary(),
         checkpoint: Cubic.makeCheckpoint(plan, cursor, attempts, lastCompleted?.result?.checkpoint?.stageId || exactMatch?.stageId || null),
         caveat: exactMatch && stopOnFingerprint
           ? 'Parallel workers searched disjoint global ordinal ranges. The result is resolved only after every lower ordinal shard is complete, so the retained exact key is the earliest exact identity match in the searched prefix.'
@@ -267,6 +284,7 @@
         const message = event.data || {};
         if (message.id !== id) return;
         if (message.type === 'progress') {
+          if (message.acceleration) state.acceleration = message.acceleration;
           state.progressCursor = Math.max(state.progressCursor, Math.min(state.shard.endCursorExclusive, Number(message.cursor) || state.progressCursor));
           state.attempts = Math.max(state.attempts, Number(message.attemptsThisRun) || 0);
           emitProgress(`${message.stage || 'Cubic search'} · worker ${state.shard.index + 1}/${shards.length}`);
@@ -279,6 +297,7 @@
         }
         if (message.type === 'result') {
           state.result = message.result;
+          if (message.result?.acceleration) state.acceleration = message.result.acceleration;
           state.progressCursor = Math.max(state.progressCursor, Math.min(state.shard.endCursorExclusive, Number(message.result?.cursor) || state.progressCursor));
           state.attempts = Math.max(state.attempts, Number(message.result?.attemptsThisRun) || 0);
           for (const candidate of message.result?.candidates || []) mergeCandidate(candidates, candidate, resultLimit);

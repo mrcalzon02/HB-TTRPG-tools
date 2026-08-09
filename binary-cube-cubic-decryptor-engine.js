@@ -13,7 +13,7 @@
   if (!Engine) throw new Error('Cubic Decryptor requires ShadowrunBinaryCubeEngine.');
   if (!Research) throw new Error('Cubic Decryptor requires BinaryCubeKeyGenerationResearch.');
 
-  const VERSION = '0.2.0';
+  const VERSION = '0.3.0';
   const PLAN_FORMAT = 'hb-ttrpg-cubic-decryptor-search-plan';
   const CHECKPOINT_FORMAT = 'hb-ttrpg-cubic-decryptor-checkpoint';
   const RESULT_FORMAT = 'hb-ttrpg-cubic-decryptor-result';
@@ -113,14 +113,28 @@
     return Array.from(bytes, byte => (byte >= 32 && byte <= 126) || byte === 9 || byte === 10 || byte === 13 ? String.fromCharCode(byte) : '�').join('');
   }
 
+  function entropyFromCounts(countsValue, totalValue = null) {
+    const counts = Array.from(countsValue || [], value => Math.max(0, Math.floor(Number(value) || 0)));
+    invariant(counts.length === 256, 'Byte histogram must contain exactly 256 bins.');
+    const total = totalValue == null ? counts.reduce((sum, count) => sum + count, 0) : Math.max(0, Math.floor(Number(totalValue) || 0));
+    if (!total) return 0;
+    invariant(counts.reduce((sum, count) => sum + count, 0) === total, 'Byte histogram count does not match plaintext byte length.');
+    let result = 0;
+    for (const count of counts) if (count) { const p = count / total; result -= p * Math.log2(p); }
+    return result;
+  }
+
+  function histogram(bytesValue) {
+    const bytes = Uint8Array.from(bytesValue || []);
+    const counts = new Uint32Array(256);
+    for (const byte of bytes) counts[byte] += 1;
+    return Object.freeze(Array.from(counts));
+  }
+
   function entropy(bytesValue) {
     const bytes = Uint8Array.from(bytesValue || []);
     if (!bytes.length) return 0;
-    const counts = new Uint32Array(256);
-    for (const byte of bytes) counts[byte] += 1;
-    let result = 0;
-    for (const count of counts) if (count) { const p = count / bytes.length; result -= p * Math.log2(p); }
-    return result;
+    return entropyFromCounts(histogram(bytes), bytes.length);
   }
 
   function printableFraction(bytesValue) {
@@ -136,13 +150,21 @@
     return FILE_SIGNATURES.find(item => item.bytes.every((byte, index) => bytes[index] === byte))?.label || null;
   }
 
-  function scorePlaintext(bitsValue) {
+  function scorePlaintextFromMetrics(bitsValue, metricsValue = {}) {
     const bits = asBits(bitsValue, 'Candidate plaintext');
     const bytes = bitsToBytes(bits);
-    const printable = printableFraction(bytes);
+    const metrics = metricsValue || {};
+    let printable;
+    if (Number.isInteger(Number(metrics.printableCount))) {
+      const printableCount = Math.max(0, Math.floor(Number(metrics.printableCount)));
+      invariant(printableCount <= bytes.length, 'Printable-byte count exceeds plaintext byte length.');
+      printable = bytes.length ? printableCount / bytes.length : 0;
+    } else printable = Number.isFinite(Number(metrics.printableFraction)) ? Number(metrics.printableFraction) : printableFraction(bytes);
+    let byteEntropy;
+    if (Array.isArray(metrics.histogram) || ArrayBuffer.isView(metrics.histogram)) byteEntropy = entropyFromCounts(metrics.histogram, bytes.length);
+    else byteEntropy = Number.isFinite(Number(metrics.entropy)) ? Number(metrics.entropy) : entropy(bytes);
     const text = bytesToText(bytes, 4096).toLowerCase();
     const detectedSignature = signature(bytes);
-    const byteEntropy = entropy(bytes);
     let tokenHits = 0;
     for (const token of COMMON_TOKENS) if (text.includes(token)) tokenHits += 1;
     const entropyStructure = Math.max(0, 1 - Math.abs(byteEntropy - 5.2) / 5.2);
@@ -162,6 +184,10 @@
       hexPreview: bytesToHex(bytes),
       byteLength: bytes.length
     });
+  }
+
+  function scorePlaintext(bitsValue) {
+    return scorePlaintextFromMetrics(bitsValue);
   }
 
   function normalizeCrib(options = {}) {
@@ -426,7 +452,7 @@
     return payload;
   }
 
-  function attemptCandidate(source, candidate, options = {}) {
+  function prepareCandidate(source, candidate, options = {}) {
     const baseOptions = candidateBaseOptions(candidate.gridSize, candidate.orientation, candidate.payloadCapacity);
     const key = Research.generateResearchKey(candidate.profile, candidate.seed, candidate.gridSize, baseOptions);
     const actualCapacity = key.mask.filter(Boolean).length;
@@ -457,7 +483,6 @@
     }
     const cribEvidence = evaluateCrib(plaintext, crib);
     if (cribEvidence.enabled && !cribEvidence.matched && !exactFingerprintMatch) return null;
-    const evidence = scorePlaintext(plaintext);
     return Object.freeze({
       profile: candidate.profile,
       profileLabel: Research.constants.PROFILE_DEFINITIONS.find(item => item.id === candidate.profile)?.label || candidate.profile,
@@ -479,13 +504,24 @@
       crib: cribEvidence,
       cribMatch: cribEvidence.enabled ? cribEvidence.matched : null,
       plaintextBits: plaintext,
-      ...evidence,
       caveat: exactDigestMatch
         ? 'The package SHA-256 canonical key digest matches this generated key. This is collision-resistant key-identity evidence; plaintext meaning and the experimental cipher security model remain separate questions.'
         : exactFingerprintMatch
           ? 'The legacy package key fingerprint matches this generated key. The fingerprint is FNV-1a corruption-detection metadata, not a cryptographic proof against deliberate collisions.'
           : 'Raw-ciphertext ranking is heuristic. A readable or structured preview is evidence to investigate, not proof that the candidate key is correct.'
     });
+  }
+
+
+  function completeCandidateEvidence(candidateValue, metricsValue = null) {
+    if (!candidateValue) return null;
+    const candidate = candidateValue;
+    const evidence = metricsValue ? scorePlaintextFromMetrics(candidate.plaintextBits, metricsValue) : scorePlaintext(candidate.plaintextBits);
+    return Object.freeze({ ...candidate, ...evidence });
+  }
+
+  function attemptCandidate(source, candidate, options = {}) {
+    return completeCandidateEvidence(prepareCandidate(source, candidate, options));
   }
 
   function makeCheckpoint(plan, cursor, attempts, stageId = null) {
@@ -513,9 +549,14 @@
     bytesToHex,
     bytesToText,
     entropy,
+    entropyFromCounts,
+    histogram,
     printableFraction,
     signature,
+    scorePlaintextFromMetrics,
     scorePlaintext,
+    prepareCandidate,
+    completeCandidateEvidence,
     normalizeCrib,
     cribRequiredSampleBlocks,
     evaluateCrib,
