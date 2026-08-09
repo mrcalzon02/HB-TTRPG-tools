@@ -100,7 +100,7 @@ for (const required of [
   'Surface roughness',
   'source-region colors',
   'actual Latin-cube point field',
-  'visual chaos is not proof of cryptographic security',
+  'visually chaotic cube is not proof of cryptographic security',
   'ShadowrunBinaryCubeEngine',
   'BinaryCubeKeyGenerationVisualizer = Object.freeze'
 ]) assert.ok(visualizer.includes(required), `3D visualizer is missing ${JSON.stringify(required)}.`);
@@ -122,7 +122,7 @@ for (const required of [
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-key-generation-visualizer-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.1.1',
   pass: true,
   researchSchemaVersion: Research.constants.RESEARCH_SCHEMA_VERSION,
   profiles: expectedProfiles,
