@@ -3,8 +3,8 @@ from pathlib import Path
 
 path = Path('scripts/apply-cubic-crib-search.py')
 text = path.read_text()
-old = "hex: bytesToHex(bytes, bytes.length), label:"
-new = "hex: bytesToHex(bytes, bytes.length).replaceAll(' ', ''), label:"
+old = "hex: bytesToHex(bytes, bytes.length)"
+new = "hex: bytesToHex(bytes, bytes.length).replaceAll(' ', '')"
 count = text.count(old)
 if count == 0 and text.count(new) >= 2:
     print('Crib migration already canonicalizes plan hex.')
