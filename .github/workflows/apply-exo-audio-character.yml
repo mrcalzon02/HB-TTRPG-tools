@@ -1,0 +1,41 @@
+name: Apply EXO station audio character pass
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-exo-audio-character.yml'
+      - 'scripts/apply-exo-audio-character.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-exo-audio-character
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebase onto current main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - name: Apply station acoustic character
+        run: python3 scripts/apply-exo-audio-character.py
+      - name: Validate shared audio module
+        run: node --check blacklight-exo-control-audio.js
+      - name: Commit directly to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Add station acoustic character and preload EXO control SFX"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
