@@ -108,6 +108,23 @@ const display = `:${650 + (process.pid % 100)}`;
 const profileDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'binary-cube-v11-browser-'));
 const pageUrl = `http://127.0.0.1:${pagePort}/`;
 const server = http.createServer((request, response) => {
+  const pathname = new URL(request.url || '/', 'http://127.0.0.1').pathname;
+  if (pathname !== '/') {
+    const relative = pathname.replace(/^\/+/, '');
+    const candidate = path.resolve(repositoryRoot, relative);
+    const withinRepository = candidate.startsWith(`${repositoryRoot}${path.sep}`);
+    if (withinRepository && fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+      response.writeHead(200, {
+        'content-type': candidate.endsWith('.js') || candidate.endsWith('.mjs') ? 'text/javascript; charset=utf-8' : 'application/octet-stream',
+        'cache-control': 'no-store'
+      });
+      response.end(fs.readFileSync(candidate));
+      return;
+    }
+    response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
+    response.end('not found');
+    return;
+  }
   response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
   response.end('<!doctype html><html><head><meta charset="utf-8"></head><body data-binary-cube-storage-scope="compatibility-test"><main><section id="shadowrun"></section></main></body></html>');
 });
@@ -151,6 +168,7 @@ try {
   await evaluate(cdp, `(() => { const node = document.createElement('style'); node.textContent = ${JSON.stringify(styleNode)}; document.head.appendChild(node); })()`, 'visualizer style');
   for (const filename of [
     'shadowrun-binary-cube-engine.js',
+    'binary-cube-worker-client.js',
     'shadowrun-binary-cube-auth.js',
     'shadowrun-binary-cube-encryption.js',
     'shadowrun-binary-cube-editor.js',
@@ -166,19 +184,20 @@ try {
 
   const receipt = await evaluate(cdp, `(async () => {
     const Engine = window.ShadowrunBinaryCubeEngine;
+    const WorkerClient = window.ShadowrunBinaryCubeWorkerClient;
     const Lab = window.ShadowrunBinaryCubeEncryption;
     const Editor = window.ShadowrunBinaryCubeEditor;
     const Auth = window.ShadowrunBinaryCubeAuth;
     const AuthUI = window.ShadowrunBinaryCubeAuthUI;
     const SecureExport = window.ShadowrunBinaryCubeSecureExport;
     const Visualizer = window.ShadowrunBinaryCubeVisualizer;
-    if (!Engine || !Lab || !Editor || !Auth || !AuthUI || !SecureExport || !Visualizer) throw new Error('V11 tool family did not load completely.');
+    if (!Engine || !WorkerClient?.run || !Lab || !Editor || !Auth || !AuthUI || !SecureExport || !Visualizer) throw new Error('V11 tool family including freeze-safe worker execution did not load completely.');
 
     const bits = '10110100101101001010110100101101001';
     const key = Engine.createKey({ gridSize: 4, seed: 'v11-browser', inputFace: 'left', outputFace: 'top', inputQuarterTurns: 1, outputQuarterTurns: 3, maskDensity: 0.5 });
     const packageObject = Engine.encryptBinary(bits, key);
 
-    Lab.loadArtifacts({ source: 'browser-internal', sourceFileName: 'v11.bin', bits, key, packageObject });
+    await Lab.loadArtifacts({ source: 'browser-internal', sourceFileName: 'v11.bin', bits, key, packageObject });
     const labInternal = Lab.currentArtifacts();
     if (labInternal.transportKind !== 'internal-package' || !labInternal.packageObject) throw new Error('Laboratory internal artifact provenance failed.');
     await Visualizer.loadArtifacts(labInternal);
@@ -194,7 +213,7 @@ try {
     let invalidRejected = false;
     try { Editor.applyDraft(key, invalid); } catch (_) { invalidRejected = true; }
     if (!invalidRejected) throw new Error('Invalid editor draft was accepted.');
-    Lab.loadArtifacts({ source: 'validated-editor', bits, key: editedKey });
+    await Lab.loadArtifacts({ source: 'validated-editor', bits, key: editedKey });
     await Visualizer.loadArtifacts(Lab.currentArtifacts());
     state = Visualizer.currentState();
     if (state.keyId !== editedKey.keyId || !state.packageReady || !state.roundTripValid) throw new Error('Validated editor key handoff failed.');
@@ -208,7 +227,7 @@ try {
     if (!state.packageReady || !state.roundTripValid || state.transportKind !== 'secure-export' || !state.transportMetadataMinimized) throw new Error('Secure export did not open as a validated package.');
     if (Object.hasOwn(secureDisplayed, 'keyId') || Object.hasOwn(secureDisplayed, 'originalBitLength') || Object.hasOwn(secureDisplayed, 'gridSize')) throw new Error('Visualizer exposed secure-export metadata.');
     if (secureArtifacts.packageObject !== null || !secureArtifacts.secureExport) throw new Error('Secure export handoff exposed the reconstructed internal package.');
-    Lab.loadArtifacts(secureArtifacts);
+    await Lab.loadArtifacts(secureArtifacts);
     const labSecure = Lab.currentArtifacts();
     if (labSecure.transportKind !== 'secure-export' || labSecure.packageObject !== null || !labSecure.secureExport) throw new Error('Secure export provenance was lost on return to the laboratory.');
 
@@ -232,7 +251,7 @@ try {
     const storedObject = JSON.parse(stored);
     if (storedObject.schemaVersion !== Visualizer.constants.VISUALIZER_STATE_SCHEMA_VERSION || storedObject.transportKind !== 'authenticated-envelope') throw new Error('Visualizer storage schema or provenance was not persisted.');
 
-    Lab.loadArtifacts(envelopeArtifacts);
+    await Lab.loadArtifacts(envelopeArtifacts);
     const labEnvelope = Lab.currentArtifacts();
     const authArtifact = AuthUI.currentEnvelopeArtifact();
     if (labEnvelope.transportKind !== 'authenticated-envelope' || labEnvelope.packageObject !== null || !authArtifact) throw new Error('Authenticated envelope was not preserved in the laboratory.');
@@ -243,11 +262,12 @@ try {
     if (visualizerKey === laboratoryKey) throw new Error('Visualizer and laboratory storage keys collide.');
     const migratedVisualizer = Visualizer.utilities.migrateVisualizerState({ bits, key: editedKey, packageObject: editedPackage, displayMode: '2d' });
     const migratedLab = Lab.utilities.migrateLaboratoryState({ input: bits, key: JSON.stringify(editedKey), package: JSON.stringify(editedPackage) });
-    if (migratedVisualizer.schemaVersion !== '0.1.0' || migratedLab.schemaVersion !== '0.3.0') throw new Error('Explicit storage migration failed.');
+    if (migratedVisualizer.schemaVersion !== '0.1.0' || migratedLab.schemaVersion !== '0.4.0') throw new Error('Explicit storage migration failed.');
 
+    WorkerClient.cancelAll?.('V11 browser compatibility complete');
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v11-browser-compatibility-receipt',
-      schemaVersion: '0.2.0',
+      schemaVersion: '0.2.1',
       pass: true,
       webglVersion: document.querySelector('[data-cube-visualizer-canvas]').getContext('webgl2')?.getParameter(0x1F02) || '2D fallback',
       internalHandoff: true,
@@ -259,6 +279,7 @@ try {
       authenticatedEnvelopeReturnHandoff: true,
       passphrasePersisted: false,
       scopedStorageKeysDistinct: true,
+      laboratoryWorkerDelegation: true,
       visualizerStorageSchema: migratedVisualizer.schemaVersion,
       laboratoryStorageSchema: migratedLab.schemaVersion,
       recoveredBitsMatch: Visualizer.currentState().recoveredBits === bits
@@ -275,8 +296,9 @@ try {
   assert.equal(receipt.authenticatedEnvelopeReturnHandoff, true);
   assert.equal(receipt.passphrasePersisted, false);
   assert.equal(receipt.scopedStorageKeysDistinct, true);
+  assert.equal(receipt.laboratoryWorkerDelegation, true);
   assert.equal(receipt.visualizerStorageSchema, '0.1.0');
-  assert.equal(receipt.laboratoryStorageSchema, '0.3.0');
+  assert.equal(receipt.laboratoryStorageSchema, '0.4.0');
   assert.equal(receipt.recoveredBitsMatch, true);
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
