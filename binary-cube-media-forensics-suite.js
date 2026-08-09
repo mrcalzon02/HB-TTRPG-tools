@@ -520,7 +520,9 @@
       energies.push(carrierFrequency > 0 ? goertzelPower(frame, sampleRate, carrierFrequency) / Math.max(1, frame.length ** 2) : rms(frame));
     }
     const sorted = [...energies].sort((a, b) => a - b);
-    const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : sorted[Math.floor(sorted.length / 2)] || 0;
+    const lowerMedian = sorted[Math.max(0, Math.floor((sorted.length - 1) / 2))] || 0;
+    const upperMedian = sorted[Math.floor(sorted.length / 2)] || lowerMedian;
+    const threshold = Number.isFinite(Number(options.threshold)) ? Number(options.threshold) : (lowerMedian + upperMedian) / 2;
     const bits = energies.map(value => value > threshold ? 1 : 0);
     return Object.freeze({ baud, carrierFrequency, threshold, energies: Object.freeze(energies), bits: Object.freeze(bits), bytesMsb: packBits(bits, 'msb'), bytesLsb: packBits(bits, 'lsb') });
   }
