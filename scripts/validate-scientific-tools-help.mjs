@@ -38,7 +38,7 @@ for (const required of [
   'Recommended workflow',
   'What the outputs mean',
   'Evidence boundary',
-  'role="tooltip"',
+  "setAttribute('role', 'tooltip')",
   'aria-describedby',
   'MutationObserver',
   'decorateSections(',
