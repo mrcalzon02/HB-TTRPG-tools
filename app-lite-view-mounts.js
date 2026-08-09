@@ -203,7 +203,7 @@
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-binary-cube-unified');
+      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-ism-quantum-foam-1');
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;
