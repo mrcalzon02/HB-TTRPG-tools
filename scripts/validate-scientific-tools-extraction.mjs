@@ -64,7 +64,7 @@ checks.push(includes('Main menu exposes Scientific Tools as a top-level view', m
   "card.dataset.scientificToolsCard = 'true'",
   "button.textContent = 'Open Scientific Tools'",
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=20260809-binary-cube-unified')",
+  "loadScript('scientific-tools-entry.js?v=20260809-ism-quantum-foam-1')",
   "loadScript('shadowrun-entry.js?v=20260809-binary-cube-unified')",
   'ensureScientificToolsView();'
 ]));
