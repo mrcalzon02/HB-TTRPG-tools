@@ -98,7 +98,7 @@ for (const required of [
   'Regional predictability',
   'Axis leakage',
   'Surface roughness',
-  'source-region colors',
+  'Source-region colors + mesh',
   'actual Latin-cube point field',
   'visually chaotic cube is not proof of cryptographic security',
   'ShadowrunBinaryCubeEngine',
@@ -122,7 +122,7 @@ for (const required of [
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-key-generation-visualizer-validation-receipt',
-  schemaVersion: '0.1.1',
+  schemaVersion: '0.1.2',
   pass: true,
   researchSchemaVersion: Research.constants.RESEARCH_SCHEMA_VERSION,
   profiles: expectedProfiles,
