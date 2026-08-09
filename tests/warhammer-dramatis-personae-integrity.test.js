@@ -7,16 +7,16 @@ const P=ctx.window.CafarronDramatisPersonaeV1;
 if(!P)throw new Error('Archivum Personae register did not answer.');
 const v=P.validate();
 if(!v.allValid)throw new Error(`Personae validation failed: ${JSON.stringify(v)}`);
-if(v.personae!==22)throw new Error(`Expected twenty-two chronicle personae; received ${v.personae}.`);
+if(v.personae!==24)throw new Error(`Expected twenty-four chronicle personae; received ${v.personae}.`);
 const by=new Map(P.PERSONAE.map(p=>[p.id,p]));
-const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine'];
+const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren'];
 for(const id of expected)if(!by.has(id))throw new Error(`Missing chronicle persona ${id}.`);
 for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev'])if(!by.get(id).mapNodeIds.includes('node-kertora'))throw new Error(`${id} lost Kertora concordance.`);
 for(const id of ['interrogator-javard','pontiff-montpclair'])if(!by.get(id).mapNodeIds.includes('node-jhasyiapan'))throw new Error(`${id} lost Jhasyi’apan concordance.`);
 for(const id of ['chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned'])if(!by.get(id).mapNodeIds.includes('node-presteria'))throw new Error(`${id} lost Presteria concordance.`);
 for(const id of ['sergeant-maximillion-dewinter','lieutenant-abereneth'])if(!by.get(id).mapNodeIds.includes('node-panthes'))throw new Error(`${id} lost Panthes concordance.`);
 for(const id of ['benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen'])if(!by.get(id).mapNodeIds.includes('node-new-presidio'))throw new Error(`${id} lost New Presidio concordance.`);
-for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine'])if(!by.get(id).mapNodeIds.includes('node-galladin'))throw new Error(`${id} lost Galladin concordance.`);
+for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren'])if(!by.get(id).mapNodeIds.includes('node-galladin'))throw new Error(`${id} lost Galladin concordance.`);
 if(!/Critical casualty/i.test(by.get('vishwa-love').status)||/dead|killed/i.test(by.get('vishwa-love').status))throw new Error('Vishwa outcome was over-resolved beyond the attached chronicle.');
 if(!/not established/i.test(by.get('besorev').status))throw new Error('Besorev survival uncertainty was lost.');
 if(!/Alive when removed/i.test(by.get('pontiff-montpclair').status))throw new Error('Montpclair medicae status is over-resolved or missing.');
@@ -28,10 +28,21 @@ for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor'])if(/ki
 if(/killed|dead|missing in action|corrupted/i.test(by.get('sergeant-vange').status)||!/Active at latest attached testimony/i.test(by.get('sergeant-vange').status))throw new Error('Vange later outcome was over-resolved.');
 const vangeText=[by.get('sergeant-vange').standing,by.get('sergeant-vange').role,by.get('sergeant-vange').biography,by.get('sergeant-vange').doctrine].join(' ');if(/\b(blank|psyker|saint|pariah)\b/i.test(vangeText))throw new Error('Vange received an unsupported supernatural classification.');
 if(!by.get('sergeant-vange').storyBeats.some(x=>/Neverborn/i.test(x.beat)&&/unexplained resistance/i.test(x.beat)))throw new Error('Vange lost the observed-but-unexplained Neverborn resistance testimony.');
+if(!P.sourceHistory(by.get('sergeant-vange')).some(s=>/1ggo856/i.test(s.url)))throw new Error('Vange lost his Galladin Part-3 secondary chronicle seal.');
+if(!by.get('sergeant-vange').storyBeats.some(x=>/Durak/i.test(x.beat)&&/Volkite/i.test(x.beat))||!by.get('sergeant-vange').storyBeats.some(x=>/rotating checkpoints/i.test(x.place)))throw new Error('Vange lost his Part-3 continuation testimony.');
 if(/killed|dead|missing in action|executed/i.test(by.get('commissar-velraden').status)||!/Active at last direct appearance/i.test(by.get('commissar-velraden').status))throw new Error('Velraden later fate was invented.');
 if(!by.get('commissar-velraden').storyBeats.some(x=>/tasked with carrying out/i.test(x.beat)&&/not directly depicted/i.test(x.beat)))throw new Error('Velraden execution-assignment uncertainty was lost.');
 if(!/Executed following summary judgment/i.test(by.get('corporal-kathine').status)||!/death is explicitly reported/i.test(by.get('corporal-kathine').status))throw new Error('Kathine explicit execution seal was weakened or lost.');
 if(!by.get('sergeant-vange').relationships.some(x=>/Kathine/i.test(x.name))||!by.get('corporal-kathine').relationships.some(x=>/Vange/i.test(x.name)))throw new Error('Vange and Kathine lost their direct command concordance.');
+const durak=by.get('lieutenant-durak');
+if(!/Lieutenant/.test(durak.rank)||!/Active at latest attached testimony/i.test(durak.status)||/killed|dead|missing in action/i.test(durak.status))throw new Error('Durak rank or unresolved later fate was corrupted.');
+if(!durak.possessions.some(x=>/Volkite/i.test(x))||!durak.possessions.some(x=>/Cadian Meritorious Citation/i.test(x)))throw new Error('Durak lost the Volkite or citation testimony.');
+if(!/Kerodan VII/i.test(durak.biography)||!/Durak’s own account/i.test(durak.sourceAuthority))throw new Error('Durak backstory lost its self-reported evidentiary boundary.');
+if(!/formal command does not know/i.test(durak.biography)||!/open secret/i.test(durak.biography))throw new Error('Durak command-awareness contradiction was flattened instead of preserved.');
+const cren=by.get('private-cren');
+if(!/Private/.test(cren.rank)||!/Active at latest attached testimony/i.test(cren.status)||/killed|dead|missing in action|promoted/i.test(cren.status))throw new Error('Cren narrow enlisted record over-resolved his later life.');
+if(!by.get('sergeant-vange').relationships.some(x=>/Lieutenant Durak/i.test(x.name))||!durak.relationships.some(x=>/Sergeant Vange/i.test(x.name)))throw new Error('Vange and Durak lost their direct field concordance.');
+if(!by.get('sergeant-vange').relationships.some(x=>/Private Cren/i.test(x.name))||!cren.relationships.some(x=>/Sergeant Vange/i.test(x.name)))throw new Error('Vange and Cren lost their direct command concordance.');
 if(!by.get('harbour-master-gaston-selecton').relationships.some(x=>/^Jak$/i.test(x.name))||!by.get('jak-degravian-harbor').relationships.some(x=>/Gaston/i.test(x.name)))throw new Error('Gaston and Jak lost their direct Degravian Harbor concordance.');
 if(!/(served as a sked captain|former sked captain)/i.test(by.get('harbour-master-gaston-selecton').biography)||!by.get('harbour-master-gaston-selecton').affiliations.some(x=>/Degravian Harbor/i.test(x)))throw new Error('Gaston lost his sked-captain history or harbor authority.');
 if(!by.get('benson-pelcher').relationships.some(x=>/Jerry Slassen/i.test(x.name))||!by.get('jerry-slassen').relationships.some(x=>/Benson Pelcher/i.test(x.name)))throw new Error('Benson and Jerry lost their mutual Channel 93-H Sigma concordance.');
@@ -50,8 +61,8 @@ const exactSources=new Map([
  ['benson-pelcher','1lga6is'],['jerry-slassen','1lga6is'],
  ['governor-talbor-varik','1lr8fmy'],['commissar-keeper-dren-solvik','1lr8fmy'],['domina-aestra-callen','1lr8fmy'],
  ['harbour-master-gaston-selecton','1ggo76o'],['jak-degravian-harbor','1ggo76o'],
- ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i']
+ ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i'],['lieutenant-durak','1ggo856'],['private-cren','1ggo856']
 ]);
 for(const[id,post]of exactSources)if(!new RegExp(`/comments/${post}/`,'i').test(by.get(id).source.url))throw new Error(`${id} lost its exact chronicle seal.`);
-for(const p of P.PERSONAE){if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(p.source.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
-console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:4,panthes:2,newPresidioBroadcast:2,antegra:3,galladinHarbor:2,galladinThrone:3,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
+for(const p of P.PERSONAE){for(const s of P.sourceHistory(p))if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(s.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
+console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:4,panthes:2,newPresidioBroadcast:2,antegra:3,galladinHarbor:2,galladinThrone:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
