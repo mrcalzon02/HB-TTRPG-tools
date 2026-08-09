@@ -13,6 +13,7 @@ const files = Object.freeze({
   vessel: 'assets/warhammer-40k/imperial-vessel-history-v1.js',
   components: 'assets/warhammer-40k/imperial-component-lineage-v1.js',
   personnel: 'assets/warhammer-40k/imperial-personnel-lineage-v1.js',
+  dramatis: 'assets/warhammer-40k/imperial-dramatis-personae-v1.js',
   events: 'assets/warhammer-40k/imperial-sector-events-v1.js',
   medicae: 'assets/warhammer-40k/imperial-medicae-institutions-v1.js',
   mercatura: 'assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js'
@@ -57,7 +58,8 @@ const required = Object.freeze({
     'Concordant Dockets',
     'Imperial Archive Seal Withheld',
     'Active carriage writs',
-    'Renewals within one standard year'
+    'Renewals within one standard year',
+    '♙ Dramatis Personae'
   ],
   workspace: [
     'Navis Contact Dossier',
@@ -90,6 +92,13 @@ const required = Object.freeze({
     'Personnel & Command Concordance',
     'Medicae retention doctrine',
     'Professional concordance'
+  ],
+  dramatis: [
+    'Archivum Personae · Chronicle-Sealed Dramatis Persona',
+    'Unseal personal & institutional concordances',
+    'Unseal attached life testimony',
+    'Present-era concordance',
+    'Archive authority'
   ],
   events: [
     'Archivum Historical Concordance Seal',
@@ -133,5 +142,6 @@ console.log(JSON.stringify({
   requiredPhrases: Object.values(required).reduce((total, list) => total + list.length, 0),
   navisContactDossierUnified: true,
   chronologyAuthoritySealed: true,
+  dramatisPersonaeDiegetic: true,
   diegeticArchiveLanguage: true
 }, null, 2));
