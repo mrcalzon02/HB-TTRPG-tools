@@ -7,7 +7,7 @@ on:
       - 'scripts/apply-galladin-dramatis-increment.py'
       - '.github/workflows/apply-galladin-dramatis-increment.yml'
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '28 * * * *'
   workflow_dispatch:
 
 permissions:
