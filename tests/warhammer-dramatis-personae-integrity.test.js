@@ -1,0 +1,20 @@
+'use strict';
+const fs=require('fs'),path=require('path'),vm=require('vm');
+const root=path.resolve(__dirname,'..');
+const ctx={window:{},console};vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(path.join(root,'assets/warhammer-40k/imperial-dramatis-personae-v1.js'),'utf8'),ctx,{filename:'imperial-dramatis-personae-v1.js'});
+const P=ctx.window.CafarronDramatisPersonaeV1;
+if(!P)throw new Error('Archivum Personae register did not answer.');
+const v=P.validate();
+if(!v.allValid)throw new Error(`Personae validation failed: ${JSON.stringify(v)}`);
+if(v.personae!==6)throw new Error(`Expected six first-cohort personae; received ${v.personae}.`);
+const by=new Map(P.PERSONAE.map(p=>[p.id,p]));
+for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair'])if(!by.has(id))throw new Error(`Missing first-cohort persona ${id}.`);
+for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev'])if(!by.get(id).mapNodeIds.includes('node-kertora'))throw new Error(`${id} lost Kertora concordance.`);
+for(const id of ['interrogator-javard','pontiff-montpclair'])if(!by.get(id).mapNodeIds.includes('node-jhasyiapan'))throw new Error(`${id} lost Jhasyi’apan concordance.`);
+if(!/Critical casualty/i.test(by.get('vishwa-love').status)||/dead|killed/i.test(by.get('vishwa-love').status))throw new Error('Vishwa outcome was over-resolved beyond the attached chronicle.');
+if(!/not established/i.test(by.get('besorev').status))throw new Error('Besorev survival uncertainty was lost.');
+if(!/Interrogator/.test(by.get('interrogator-javard').rank)||!by.get('interrogator-javard').affiliations.some(x=>/Kelford del Blank/i.test(x)))throw new Error('Javard inquisitorial service seal is incomplete.');
+if(!/Alive when removed/i.test(by.get('pontiff-montpclair').status))throw new Error('Montpclair medicae status is over-resolved or missing.');
+for(const p of P.PERSONAE){if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(p.source.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
+console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
