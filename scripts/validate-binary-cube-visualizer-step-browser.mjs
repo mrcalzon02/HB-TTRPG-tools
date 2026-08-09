@@ -124,7 +124,7 @@ try {
     const gl = canvas.getContext('webgl2');
     if (!gl) throw new Error('WebGL2 unavailable.');
     const initial = window.ShadowrunBinaryCubeVisualizer.currentState();
-    if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.rendererVersion !== '0.5.0') throw new Error('V5 boundary did not initialize under V9.');
+    if (!initial.traceReady || initial.traceTime !== 0 || initial.tracePhaseIndex !== 0 || initial.rendererVersion !== '0.6.0') throw new Error('V5 boundary did not initialize under the current renderer.');
     const key = JSON.parse(panel.querySelector('[data-cube-visualizer-key]').value);
     const bits = panel.querySelector('[data-cube-trace-bits]').value.replace(/\s+/g, '');
     const trace = window.ShadowrunBinaryCubeEngine.traceEncryptBlock(bits, key, 0);
@@ -187,7 +187,7 @@ try {
   })()`, 'Binary Cube V5 boundary browser test');
 
   assert.equal(receipt.pass, true);
-  assert.equal(receipt.rendererVersion, '0.5.0');
+  assert.equal(receipt.rendererVersion, '0.6.0');
   assert.equal(receipt.canvasWidth, 800);
   assert.equal(receipt.canvasHeight, 600);
   assert.equal(receipt.phaseCount, 10);
