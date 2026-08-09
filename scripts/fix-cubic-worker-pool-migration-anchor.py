@@ -8,8 +8,8 @@ old = '''replace_once(scientific_validator,
 """  'function loadCubicDecryptor()', \\"loadScript('binary-cube-cubic-decryptor-worker-pool.js'\\", 'id=\\"scientific-tools-open-diagnostic-pipeline\\"',""",
 'Scientific ownership Cubic pool loader')'''
 new = '''replace_once(scientific_validator,
-"""  \\"loadScript('binary-cube-cubic-decryptor-engine.js'\\", \\"loadScript('binary-cube-steganalysis-evidence-profile.js'\\",""",
-"""  \\"loadScript('binary-cube-cubic-decryptor-engine.js'\\", \\"loadScript('binary-cube-cubic-decryptor-worker-pool.js'\\", \\"loadScript('binary-cube-steganalysis-evidence-profile.js'\\",""",
+"""  "loadScript('binary-cube-cubic-decryptor-engine.js'", "loadScript('binary-cube-steganalysis-evidence-profile.js'",""",
+"""  "loadScript('binary-cube-cubic-decryptor-engine.js'", "loadScript('binary-cube-cubic-decryptor-worker-pool.js'", "loadScript('binary-cube-steganalysis-evidence-profile.js'",""",
 'Scientific ownership Cubic pool loader')'''
 if new in text and old not in text:
     print('Cubic worker-pool migration ownership anchor already tightened.')
