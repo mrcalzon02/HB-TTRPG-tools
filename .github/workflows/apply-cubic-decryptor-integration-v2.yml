@@ -1,0 +1,52 @@
+name: Apply validated Cubic Decryptor integration
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/apply-cubic-decryptor-integration-v2.yml"
+
+permissions:
+  contents: write
+  statuses: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=pending -f context='binary-cube/cubic-integration' -f description='Applying validated Cubic Decryptor integration.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build exact integration
+        run: python scripts/build-cubic-decryptor-integration-artifact.py
+      - name: Validate integration
+        run: |
+          node --check scientific-tools-entry.js
+          node --check binary-cube-cubic-decryptor.js
+          node --check scripts/validate-scientific-tools-extraction.mjs
+          node scripts/validate-binary-cube-cubic-decryptor.mjs
+          node scripts/validate-scientific-tools-extraction.mjs
+      - name: Commit authoritative integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scientific-tools-entry.js binary-cube-cubic-decryptor.js .github/workflows/scientific-tools-extraction.yml scripts/validate-scientific-tools-extraction.mjs
+          git commit -m "feat: integrate Cubic Decryptor into Scientific Tools"
+          git push origin HEAD:main
+      - name: Record success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=success -f context='binary-cube/cubic-integration' -f description='Cubic Decryptor integrated into Scientific Tools.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" -f state=failure -f context='binary-cube/cubic-integration' -f description='Cubic Decryptor integration failed.' -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
