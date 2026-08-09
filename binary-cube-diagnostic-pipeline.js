@@ -48,7 +48,8 @@
     Object.freeze({ id: 'audio-signal-forensics', stage: 2, order: 65, family: 'audio', independenceGroup: 'decoded-carrier', cost: 'high', profiles: ['thorough','exhaustive'] }),
     Object.freeze({ id: 'raster-steganalysis', stage: 2, order: 70, family: 'raster', independenceGroup: 'pixel-domain', cost: 'high', profiles: ['thorough','exhaustive'] }),
     Object.freeze({ id: 'deobfuscation-sweep', stage: 3, order: 80, family: 'deobfuscation', independenceGroup: 'transform-search', cost: 'high', profiles: ['thorough','exhaustive'] }),
-    Object.freeze({ id: 'binary-cube-attack-suite', stage: 3, order: 90, family: 'binary-cube', independenceGroup: 'cryptanalytic-attack', cost: 'high', profiles: ['exhaustive'] })
+    Object.freeze({ id: 'cubic-decryptor-search', stage: 3, order: 90, family: 'binary-cube', independenceGroup: 'cryptanalytic-key-search', cost: 'bounded-high', profiles: ['exhaustive'] }),
+    Object.freeze({ id: 'binary-cube-attack-suite', stage: 3, order: 95, family: 'binary-cube', independenceGroup: 'cryptanalytic-attack', cost: 'high', profiles: ['exhaustive'] })
   ]);
 
   const clamp = (value, minimum = 0, maximum = 1) => Math.max(minimum, Math.min(maximum, Number(value) || 0));
@@ -68,6 +69,7 @@
       steganalysisEvidence: root?.BinaryCubeSteganalysisEvidenceProfile || optionalRequire('./binary-cube-steganalysis-evidence-profile.js'),
       steganalysisWorker: root?.BinaryCubeSteganalysisWorkerClient || null,
       cubeDashboard: root?.BinaryCubeDecryptionDashboard || optionalRequire('./binary-cube-decryption-dashboard.js'),
+      cubicDecryptor: root?.BinaryCubeCubicDecryptorEngine || optionalRequire('./binary-cube-cubic-decryptor-engine.js'),
       calibration: root?.BinaryCubeDiagnosticCalibrationRegistry || optionalRequire('./binary-cube-diagnostic-calibration-registry.js'),
       calibrationBaseline: root?.BinaryCubeDiagnosticCalibrationBaseline || optionalRequire('./binary-cube-diagnostic-calibration-baseline.js'),
       runner: root?.ScientificToolsCooperativeRunner || null
@@ -181,13 +183,24 @@
       }
       case 'raster-steganalysis': return Object.freeze({ applicable: classification.classId === 'raster-image', weight: 1.2, reason: options.raster ? 'Decoded pixel raster supplied; R/G/B/luma RS/SPA/localized evidence profiling can run.' : 'Raster image detected, but decoded pixels are not available in this runtime.' });
       case 'deobfuscation-sweep': return Object.freeze({ applicable: Boolean(deps.information?.rankDeobfuscationCandidates), weight: 1.1, reason: deps.information?.rankDeobfuscationCandidates ? 'Thorough profile tests reversible encodings and obfuscation hypotheses.' : 'Deobfuscation engine unavailable.' });
-      case 'binary-cube-attack-suite': return Object.freeze({ applicable: classification.classId === 'binary-cube-artifact' && Boolean(deps.cubeDashboard?.runAttackSuite), weight: 1.2, reason: classification.classId === 'binary-cube-artifact' ? 'Exhaustive profile runs bounded Binary Cube cryptanalytic attacks.' : 'Not a Binary Cube artifact.' });
+      case 'cubic-decryptor-search': {
+        const canonicalPackage = classification.classId === 'binary-cube-artifact' && classification.subtype === 'binary-cube-package';
+        const ready = Boolean(deps.cubicDecryptor?.buildSearchPlan && deps.cubicDecryptor?.parsePackage);
+        return Object.freeze({ applicable: canonicalPackage && ready, weight: 1.25, reason: !canonicalPackage ? 'Not a canonical Binary Cube package.' : ready ? 'Canonical package metadata can define a deterministic Cubic Decryptor search plan without starting an unbounded brute-force job.' : 'Cubic Decryptor search engine unavailable.' });
+      }
+      case 'binary-cube-attack-suite': {
+        const canonicalPackage = classification.classId === 'binary-cube-artifact' && classification.subtype === 'binary-cube-package';
+        const cubicReady = Boolean(deps.cubicDecryptor?.buildSearchPlan && deps.cubicDecryptor?.parsePackage);
+        const fallback = classification.classId === 'binary-cube-artifact' && (!canonicalPackage || !cubicReady);
+        return Object.freeze({ applicable: fallback && Boolean(deps.cubeDashboard?.runAttackSuite), weight: 1.2, reason: classification.classId !== 'binary-cube-artifact' ? 'Not a Binary Cube artifact.' : canonicalPackage && cubicReady ? 'Canonical package search is owned by the Cubic Decryptor stage.' : 'Legacy/secure-export artifact retains the bounded dashboard attack fallback.' });
+      }
       default: return Object.freeze({ applicable: false, weight: 0, reason: 'Unknown detector.' });
     }
   }
 
   function normalizeProfile(profileValue) {
-    const id = String(profileValue || 'thorough').toLowerCase();
+    const raw = profileValue && typeof profileValue === 'object' ? profileValue.id : profileValue;
+    const id = String(raw || 'thorough').toLowerCase();
     return PROFILES[id] || PROFILES.thorough;
   }
 
@@ -385,6 +398,53 @@
       const candidates = await deps.information.rankDeobfuscationCandidates(bytes, { token: context.token, limit: options.profile.candidateLimit, singleByteXor: true, repeatingXor: true, onProgress: update => context.emitSubprogress?.(definition, update.fraction || 0, update.label || 'Deobfuscation sweep') });
       const best = candidates[0] || null; const strong = best ? clamp((best.score - 55) / 45) : 0;
       return finding(definition, { status: strong >= 0.5 ? 'positive' : best ? 'mixed' : 'negative', positiveEvidence: strong, negativeEvidence: best && best.score < 40 ? 0.25 : 0.05, reliability: 0.62, sampleSufficiency: sampleSufficiency(bytes.length, 4096), metrics: { candidateCount: candidates.length, topMethod: best?.method || null, topScore: best?.score || 0, topPrintable: best?.printable || 0, topUtf8: best?.utf8 || 0, topSignatureCount: best?.signatures?.length || 0 }, notes: ['Candidate ranking is a search heuristic. A high-ranked reversible transform requires semantic or format corroboration before it is called recovery.'], sensitivity: ['common-codecs','single-byte-xor','repeating-xor','bitplanes','endianness','transposition','simple-text-ciphers'], raw: candidates });
+    }
+    if (definition.id === 'cubic-decryptor-search') {
+      const source = deps.cubicDecryptor.parsePackage(classification.artifact);
+      if (!source) return finding(definition, { status: 'inconclusive', reliability: 0.1, sampleSufficiency: 0, missRiskEvidence: 1, notes: ['The asset was classified as a canonical Binary Cube package but the Cubic Decryptor could not parse it into a deterministic search source.'], sensitivity: ['candidate-key-generators','seed-ranges','orientation-variants','payload-capacity-variants'] });
+      const seedEnd = Math.max(0, Math.floor(Number(options.cubicSeedEnd ?? deps.cubicDecryptor.constants.DEFAULT_SEED_END)));
+      const searchOptions = {
+        profiles: [...deps.cubicDecryptor.constants.PROFILE_ORDER],
+        usePackageMetadata: true,
+        maxGridSize: Number(classification.artifact?.gridSize) || 64,
+        seedStart: 0,
+        seedEnd,
+        seedTemplates: Array.from(options.cubicSeedTemplates || ['{n}']),
+        includeFixedSeeds: true,
+        orientationMode: 'manual',
+        capacityMode: 'manual'
+      };
+      const searchPlan = deps.cubicDecryptor.buildSearchPlan(source, searchOptions);
+      const firstStage = searchPlan.stages[0] || null;
+      const requestedBudget = Math.max(1, Math.floor(Number(options.cubicAttemptBudget) || 2048));
+      const recommendedAttemptBudget = Math.min(requestedBudget, firstStage?.attempts || 0);
+      const firstStageCoverageFraction = firstStage?.attempts ? recommendedAttemptBudget / firstStage.attempts : 0;
+      const fullPlanCoverageFraction = searchPlan.totalAttempts ? recommendedAttemptBudget / searchPlan.totalAttempts : 0;
+      const identityStrength = classification.artifact?.keyDigest ? 'sha256' : 'legacy-fnv1a32';
+      return finding(definition, {
+        status: 'inconclusive',
+        positiveEvidence: 0,
+        negativeEvidence: 0,
+        missRiskEvidence: searchPlan.totalAttempts ? 0.72 : 1,
+        reliability: 1,
+        sampleSufficiency: 1,
+        metrics: {
+          planId: searchPlan.planId,
+          stageCount: searchPlan.stages.length,
+          totalAttempts: searchPlan.totalAttempts,
+          firstStageId: firstStage?.id || null,
+          firstStageAttempts: firstStage?.attempts || 0,
+          recommendedAttemptBudget,
+          firstStageCoverageFraction,
+          fullPlanCoverageFraction,
+          seedStart: searchPlan.seedStart,
+          seedEnd: searchPlan.seedEnd,
+          identityStrength
+        },
+        notes: ['A deterministic Cubic Decryptor plan was constructed from canonical package metadata. The diagnostic pipeline does not silently exhaust this brute-force domain; continue in the Cubic Decryptor Tool to execute, pause, checkpoint, and resume the search.', 'Failure to execute the full plan remains explicit miss-risk rather than negative evidence.'],
+        sensitivity: ['candidate-key-generators','seed-ranges','orientation-variants','payload-capacity-variants','deterministic-search-plan'],
+        raw: { plan: searchPlan, recommendedAttemptBudget }
+      });
     }
     if (definition.id === 'binary-cube-attack-suite') {
       const source = deps.cubeDashboard.parseSourceBytes(bytes, sourceName);

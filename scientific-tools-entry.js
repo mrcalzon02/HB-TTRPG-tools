@@ -288,6 +288,8 @@
       await loadCooperativeRunner();
       await Promise.all([loadDecryptionDashboard(), loadInformationAnalysisSuite(), loadMediaForensicsSuite(), loadSteganalysisLab()]);
       await loadStyle('binary-cube-diagnostic-pipeline.css');
+      await loadScript('binary-cube-key-generation-research.js', () => Boolean(window.BinaryCubeKeyGenerationResearch));
+      await loadScript('binary-cube-cubic-decryptor-engine.js', () => Boolean(window.BinaryCubeCubicDecryptorEngine));
       await loadScript('binary-cube-steganalysis-evidence-profile.js', () => Boolean(window.BinaryCubeSteganalysisEvidenceProfile));
       await loadScript('binary-cube-steganalysis-worker-client.js', () => Boolean(window.BinaryCubeSteganalysisWorkerClient));
       await loadScript('binary-cube-diagnostic-calibration-registry.js', () => Boolean(window.BinaryCubeDiagnosticCalibrationRegistry));
