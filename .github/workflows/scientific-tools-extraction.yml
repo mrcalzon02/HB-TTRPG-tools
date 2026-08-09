@@ -1,4 +1,4 @@
-# Combined-head gate for centralized Scientific Tools, cryptanalysis, media-forensics, and steganalysis runtimes.
+# Combined-head gate for centralized Scientific Tools, cryptanalysis, media-forensics, steganalysis, and routed diagnostic runtimes.
 name: Validate Scientific Tools extraction
 
 on:
@@ -34,6 +34,10 @@ on:
       - "binary-cube-steganalysis-worker.js"
       - "binary-cube-steganalysis-lab.js"
       - "binary-cube-steganalysis-lab.css"
+      - "binary-cube-diagnostic-pipeline.js"
+      - "binary-cube-diagnostic-pipeline-panel.js"
+      - "binary-cube-diagnostic-pipeline.css"
+      - "docs/scientific-diagnostic-pipeline-plan.md"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -41,6 +45,8 @@ on:
       - "double-slit-lab.js"
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
+      - "scripts/validate-scientific-diagnostic-pipeline.mjs"
+      - "scripts/run-scientific-diagnostic-local.mjs"
       - "scripts/validate-cooperative-slice-budget.mjs"
       - "scripts/validate-binary-cube-reseed.mjs"
       - "scripts/research-binary-cube-key-generation-profiles.mjs"
@@ -109,11 +115,15 @@ jobs:
           node --check binary-cube-steganalysis-engine.js
           node --check binary-cube-steganalysis-worker.js
           node --check binary-cube-steganalysis-lab.js
+          node --check binary-cube-diagnostic-pipeline.js
+          node --check binary-cube-diagnostic-pipeline-panel.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
+          node --check scripts/validate-scientific-diagnostic-pipeline.mjs
+          node --check scripts/run-scientific-diagnostic-local.mjs
           node --check scripts/validate-cooperative-slice-budget.mjs
           node --check scripts/validate-binary-cube-reseed.mjs
           node --check scripts/research-binary-cube-key-generation-profiles.mjs
@@ -134,6 +144,8 @@ jobs:
           test -s binary-cube-communication-capacity-analyzer.css
           test -s binary-cube-media-forensics-suite.css
           test -s binary-cube-steganalysis-lab.css
+          test -s binary-cube-diagnostic-pipeline.css
+          test -s docs/scientific-diagnostic-pipeline-plan.md
           test -s interstellar-media-collisions-lab.css
           test -s double-slit-lab.css
 
@@ -142,6 +154,16 @@ jobs:
 
       - name: Validate Advanced Steganalysis Laboratory
         run: node scripts/validate-binary-cube-steganalysis-lab.mjs
+
+      - name: Validate routed Diagnostic Evaluation Pipeline
+        run: node scripts/validate-scientific-diagnostic-pipeline.mjs
+
+      - name: Exercise local Diagnostic Evaluation Pipeline
+        run: |
+          printf 'Local diagnostic runner control material. This is ordinary text.\n' > /tmp/hb-diagnostic-control.txt
+          node scripts/run-scientific-diagnostic-local.mjs /tmp/hb-diagnostic-control.txt --profile=triage --json=/tmp/hb-diagnostic-report.json > /tmp/hb-diagnostic-stdout.json
+          test -s /tmp/hb-diagnostic-report.json
+          grep -q 'hb-ttrpg-scientific-diagnostic-pipeline-report' /tmp/hb-diagnostic-report.json
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
