@@ -84,6 +84,23 @@ const port = 9900 + (process.pid % 90);
 const display = `:${630 + (process.pid % 80)}`;
 const profileDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'binary-cube-v7-browser-'));
 const webServer = createServer((request, response) => {
+  const pathname = new URL(request.url || '/', 'http://127.0.0.1').pathname;
+  if (pathname !== '/') {
+    const relative = pathname.replace(/^\/+/, '');
+    const candidate = path.resolve(repositoryRoot, relative);
+    const withinRepository = candidate.startsWith(`${repositoryRoot}${path.sep}`);
+    if (withinRepository && fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+      response.writeHead(200, {
+        'Content-Type': candidate.endsWith('.js') || candidate.endsWith('.mjs') ? 'text/javascript; charset=utf-8' : 'application/octet-stream',
+        'Cache-Control': 'no-store'
+      });
+      response.end(fs.readFileSync(candidate));
+      return;
+    }
+    response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end('not found');
+    return;
+  }
   response.writeHead(200, {
     'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'no-store'
@@ -139,7 +156,7 @@ try {
     localStorage.clear();
   })()`, 'Prepare V7 document');
 
-  for (const filename of ['shadowrun-binary-cube-engine.js', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js', 'shadowrun-binary-cube-encryption.js']) {
+  for (const filename of ['shadowrun-binary-cube-engine.js', 'binary-cube-worker-client.js', 'binary-cube-visualizer-renderer.js', 'shadowrun-binary-cube-visualizer.js', 'shadowrun-binary-cube-encryption.js']) {
     const source = fs.readFileSync(path.join(repositoryRoot, filename), 'utf8');
     await evaluate(cdp, `${source}\n//# sourceURL=${filename}`, filename);
   }
@@ -148,6 +165,8 @@ try {
     const Visualizer = window.ShadowrunBinaryCubeVisualizer;
     const Laboratory = window.ShadowrunBinaryCubeEncryption;
     const Engine = window.ShadowrunBinaryCubeEngine;
+    const WorkerClient = window.ShadowrunBinaryCubeWorkerClient;
+    if (!WorkerClient?.run) throw new Error('Freeze-safe Binary Cube worker client did not load.');
     const panel = Visualizer.openPanel();
     const canvas = panel.querySelector('[data-cube-visualizer-canvas]');
     const gl = canvas.getContext('webgl2');
@@ -213,7 +232,7 @@ try {
     if (!fileState.roundTripValid || fileState.recoveredBits !== fileBits || JSON.stringify(filePackage) !== JSON.stringify(Engine.encryptBinary(fileBits, fileKey))) throw new Error('File-derived package parity failed.');
 
     const visualizerArtifacts = Visualizer.currentArtifacts();
-    const loadedLaboratory = Laboratory.loadArtifacts(visualizerArtifacts);
+    const loadedLaboratory = await Laboratory.loadArtifacts(visualizerArtifacts);
     const labPanel = document.getElementById('shadowrun-binary-cube-lab');
     if (!labPanel || labPanel.hidden) throw new Error('Visualizer-to-laboratory artifact handoff did not open the laboratory.');
     if (labPanel.querySelector('#cube-input').value !== fileBits) throw new Error('Laboratory source bits differ after handoff.');
@@ -223,10 +242,13 @@ try {
 
     const laboratoryBits = '1010101000111100';
     labPanel.querySelector('#cube-input').value = laboratoryBits;
+    labPanel.querySelector('#cube-package').value = '';
+    labPanel.querySelector('#cube-decrypted').value = '';
     labPanel.querySelector('[data-cube-encrypt]').click();
+    for (let attempt = 0; attempt < 240 && (labPanel.dataset.cubeWorkerBusy === 'true' || !labPanel.querySelector('#cube-package').value.trim()); attempt += 1) await new Promise(resolve => setTimeout(resolve, 25));
     const laboratoryArtifacts = Laboratory.currentArtifacts();
-    if (!laboratoryArtifacts.packageObject || Engine.decryptBinary(laboratoryArtifacts.packageObject, laboratoryArtifacts.key) !== laboratoryBits) throw new Error('Laboratory did not generate a canonical handoff package.');
-    Visualizer.loadArtifacts(laboratoryArtifacts);
+    if (!laboratoryArtifacts.packageObject || Engine.decryptBinary(laboratoryArtifacts.packageObject, laboratoryArtifacts.key) !== laboratoryBits) throw new Error('Laboratory did not generate a canonical handoff package after its background worker completed.');
+    await Visualizer.loadArtifacts(laboratoryArtifacts);
     const returnedState = Visualizer.currentState();
     if (!returnedState.packageReady || !returnedState.roundTripValid || returnedState.recoveredBits !== laboratoryBits) throw new Error('Laboratory-to-visualizer artifact loading failed.');
     if (returnedState.packageChecksum !== laboratoryArtifacts.packageObject.checksum) throw new Error('Package checksum changed during laboratory-to-visualizer transfer.');
@@ -236,7 +258,7 @@ try {
     packageTransfer.items.add(new File([JSON.stringify(laboratoryArtifacts.packageObject)], 'package.json', { type: 'application/json' }));
     Object.defineProperty(packageFileInput, 'files', { configurable: true, value: packageTransfer.files });
     packageFileInput.dispatchEvent(new Event('change', { bubbles: true }));
-    await new Promise(resolve => setTimeout(resolve, 40));
+    for (let attempt = 0; attempt < 80 && !Visualizer.currentState().roundTripValid; attempt += 1) await new Promise(resolve => setTimeout(resolve, 25));
     if (!Visualizer.currentState().roundTripValid) throw new Error('Package-file import did not retain exact round-trip validity.');
 
     maskMode.value = '1';
@@ -248,9 +270,10 @@ try {
     if (largeState.gridSize !== 20 || !largeState.packageReady || !largeState.roundTripValid || !largeState.traceReady || largeState.traceCollectionCount !== largeState.packageBlockCount || largeState.renderTier !== 'batched' || largeState.exactPointCount !== 400 || largeState.renderedPointCount !== 400 || largeState.traceExactPointCount !== 400 || largeState.traceRenderedPointCount !== 400) throw new Error('The V7 large-grid package/exact-batched boundary failed: ' + JSON.stringify(largeState));
     if (panel.querySelectorAll('.cube-trace-cell').length !== 0) throw new Error('The 20 × 20 package trace expanded one document cell per point.');
 
+    WorkerClient.cancelAll?.('V7 browser validation complete');
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v7-browser-validation-receipt',
-      schemaVersion: '0.3.0',
+      schemaVersion: '0.3.1',
       pass: true,
       rendererVersion: returnedState.rendererVersion,
       webglVersion: gl.getParameter(gl.VERSION),
@@ -268,6 +291,7 @@ try {
       packageFileImport: true,
       visualizerToLaboratoryHandoff: true,
       laboratoryToVisualizerHandoff: true,
+      laboratoryWorkerDelegation: true,
       exactBatchedLargeGridTrace: true,
       storageCapableLocalhostOrigin: true
     };
@@ -289,6 +313,7 @@ try {
   assert.equal(receipt.packageFileImport, true);
   assert.equal(receipt.visualizerToLaboratoryHandoff, true);
   assert.equal(receipt.laboratoryToVisualizerHandoff, true);
+  assert.equal(receipt.laboratoryWorkerDelegation, true);
   assert.equal(receipt.exactBatchedLargeGridTrace, true);
   assert.equal(receipt.storageCapableLocalhostOrigin, true);
   assert.match(receipt.webglVersion, /WebGL 2\.0/);
