@@ -13,6 +13,8 @@ on:
       - "shadowrun-binary-cube-encryption.js"
       - "binary-cube-decryption-dashboard.js"
       - "binary-cube-decryption-dashboard.css"
+      - "binary-cube-cryptanalytic-test-lab.js"
+      - "binary-cube-cryptanalytic-test-lab.css"
       - "binary-cube-information-analysis-suite.js"
       - "binary-cube-information-analysis-suite.css"
       - "binary-cube-communication-capacity-analyzer.js"
@@ -31,6 +33,7 @@ on:
       - "scripts/validate-cooperative-slice-budget.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard.mjs"
       - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
+      - "scripts/validate-binary-cube-cryptanalytic-test-lab.mjs"
       - "scripts/validate-binary-cube-information-analysis-suite.mjs"
       - "scripts/validate-binary-cube-communication-capacity-analyzer.mjs"
       - "scripts/validate-binary-cube-media-forensics-suite.mjs"
@@ -76,6 +79,7 @@ jobs:
           node --check binary-cube-worker-client.js
           node --check shadowrun-binary-cube-encryption.js
           node --check binary-cube-decryption-dashboard.js
+          node --check binary-cube-cryptanalytic-test-lab.js
           node --check binary-cube-information-analysis-suite.js
           node --check binary-cube-communication-capacity-analyzer.js
           node --check binary-cube-communication-capacity-worker.js
@@ -89,11 +93,13 @@ jobs:
           node --check scripts/validate-cooperative-slice-budget.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard.mjs
           node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
+          node --check scripts/validate-binary-cube-cryptanalytic-test-lab.mjs
           node --check scripts/validate-binary-cube-information-analysis-suite.mjs
           node --check scripts/validate-binary-cube-communication-capacity-analyzer.mjs
           node --check scripts/validate-binary-cube-media-forensics-suite.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s binary-cube-decryption-dashboard.css
+          test -s binary-cube-cryptanalytic-test-lab.css
           test -s binary-cube-information-analysis-suite.css
           test -s binary-cube-communication-capacity-analyzer.css
           test -s binary-cube-media-forensics-suite.css
@@ -111,6 +117,9 @@ jobs:
 
       - name: Exercise Binary Cube Decryption Dashboard in Chromium
         run: node scripts/validate-binary-cube-decryption-dashboard-browser.mjs
+
+      - name: Validate Binary Cube Cryptanalytic Test Lab
+        run: node scripts/validate-binary-cube-cryptanalytic-test-lab.mjs
 
       - name: Validate Information and Deobfuscation Analysis Suite
         run: node scripts/validate-binary-cube-information-analysis-suite.mjs
