@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('fs'),path=require('path'),vm=require('vm');
+const root=path.resolve(__dirname,'..');
+const ctx={window:{},console};vm.createContext(ctx);
+for(const file of ['assets/warhammer-40k/imperial-logistics-v1.js','assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx,{filename:file});
+const L=ctx.window.CafarronImperialLogisticsV1,M=ctx.window.CafarronMercaturaHouseLedgerV1;
+if(!L||!M)throw new Error('Mercatura dependencies did not answer.');
+const v=M.validate(L),idx=M.build(L);
+if(!v.allValid)throw new Error(`Mercatura validation failed: ${JSON.stringify(v)}`);
+if(v.houses!==47||v.majorProfiles!==7||v.minorProfiles!==40)throw new Error(`Unexpected trade-house census: ${JSON.stringify(v)}`);
+if(idx.profiles.some(p=>p.documentedAgeYears<20||p.averageRunsPerStandardYear<1||!p.contracts.length||!p.suppliers.length||!p.upheavals.length))throw new Error('A house lacks required continuity detail.');
+if(idx.profiles.some(p=>p.contracts.some(c=>c.renewalMonths<1||!/^MERC-WRIT\//.test(c.seal))))throw new Error('A carriage writ has an invalid renewal or seal.');
+if(new Set(idx.profiles.map(p=>p.houseId)).size!==47)throw new Error('Trade-house IDs are not unique.');
+console.log(JSON.stringify({houses:v.houses,major:v.majorProfiles,minor:v.minorProfiles,contracts:idx.profiles.reduce((n,p)=>n+p.contracts.length,0),supplierLinks:idx.profiles.reduce((n,p)=>n+p.suppliers.length,0),upheavals:idx.profiles.reduce((n,p)=>n+p.upheavals.length,0),allValid:v.allValid},null,2));
