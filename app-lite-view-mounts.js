@@ -209,7 +209,7 @@
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-diagnostic-raster-evidence-1');
+      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-cubic-decryptor-hardening-1');
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;
