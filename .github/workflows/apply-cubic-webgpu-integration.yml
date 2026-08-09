@@ -45,15 +45,27 @@ jobs:
           python3 scripts/apply-cubic-webgpu-integration.py
           python3 - <<'PY'
           from pathlib import Path
-          path = Path('binary-cube-cubic-decryptor-worker.js')
-          text = path.read_text(encoding='utf-8')
-          if text.startswith('\\\n'):
-              text = text[2:]
+
+          worker_path = Path('binary-cube-cubic-decryptor-worker.js')
+          worker = worker_path.read_text(encoding='utf-8')
+          if worker.startswith('\\\n'):
+              worker = worker[2:]
           bad = "const resultLimit = Math.max(1, Math.min(100, Math.floor(Number(options.resultLimit) || Cubic.constants.DEFAULT_RESULT_LIMIT));"
           good = "const resultLimit = Math.max(1, Math.min(100, Math.floor(Number(options.resultLimit) || Cubic.constants.DEFAULT_RESULT_LIMIT)));"
-          if bad not in text:
+          if bad not in worker:
               raise SystemExit('Expected generated resultLimit clamp was not found.')
-          path.write_text(text.replace(bad, good, 1), encoding='utf-8')
+          worker_path.write_text(worker.replace(bad, good, 1), encoding='utf-8')
+
+          validator_path = Path('scripts/validate-binary-cube-cubic-decryptor.mjs')
+          validator = validator_path.read_text(encoding='utf-8')
+          nested = "resultMessage(cribHarness.run({"
+          awaited_nested = "resultMessage(await cribHarness.run({"
+          if nested not in validator:
+              raise SystemExit('Expected nested crib worker harness call was not found.')
+          validator = validator.replace(nested, awaited_nested, 1)
+          validator = validator.replace("  'Cubic.attemptCandidate',\n", "  'Cubic.prepareCandidate',\n  'Cubic.completeCandidateEvidence',\n  'accelerator.verifyParity()',\n", 1)
+          validator = validator.replace("schema: '0.8.0'", "schema: '0.9.0'", 1)
+          validator_path.write_text(validator, encoding='utf-8')
           PY
       - name: Validate modified sources
         run: |
