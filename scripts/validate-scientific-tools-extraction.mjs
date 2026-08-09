@@ -22,7 +22,9 @@ const sources = Object.freeze({
   keyVisualizer: read('binary-cube-key-generation-visualizer.js'),
   mediaDemos: read('binary-cube-media-forensics-demo-corpus.js'),
   steganalysisEngine: read('binary-cube-steganalysis-engine.js'),
+  steganalysisEvidence: read('binary-cube-steganalysis-evidence-profile.js'),
   steganalysisWorker: read('binary-cube-steganalysis-worker.js'),
+  steganalysisWorkerClient: read('binary-cube-steganalysis-worker-client.js'),
   steganalysisLab: read('binary-cube-steganalysis-lab.js'),
   calibrationRegistry: read('binary-cube-diagnostic-calibration-registry.js'),
   calibrationBaseline: read('binary-cube-diagnostic-calibration-baseline.js'),
@@ -69,7 +71,7 @@ checks.push(excludes('Black Light does not duplicate centralized runtimes', sour
 ]));
 
 checks.push(includes('Main menu owns one cache-refreshed Scientific Tools destination', sources.mounts, [
-  "button.dataset.view = 'scientific-tools'", "card.dataset.scientificToolsCard = 'true'", 'routed Diagnostic Evaluation Pipeline', "loadScript('scientific-tools-entry.js?v=20260809-diagnostic-calibration-1')", 'ensureScientificToolsView();'
+  "button.dataset.view = 'scientific-tools'", "card.dataset.scientificToolsCard = 'true'", 'routed Diagnostic Evaluation Pipeline', "loadScript('scientific-tools-entry.js?v=20260809-diagnostic-raster-evidence-1')", 'ensureScientificToolsView();'
 ]));
 assert.equal(count(sources.mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'Scientific Tools must have exactly one main-menu card.');
 checks.push('Main menu Scientific Tools ownership is singular');
@@ -103,7 +105,10 @@ checks.push(includes('Cubic decryptor UI exposes resumable specialist search', s
 
 checks.push(includes('Steganalysis engine owns quantitative math', sources.steganalysisEngine, ['BinaryCubeSteganalysisEngine', 'function rsAnalysis(', 'function samplePairAnalysisFromPairs(', 'function localizedRasterAnalysis(', 'function compareRasters(', 'function inspectJpegCoefficients(', 'function analyzeTextSteganography(', 'function rocCurve(']));
 checks.push(excludes('Steganalysis engine does not become a media decoder or cipher', sources.steganalysisEngine, ['createImageBitmap(', 'decodeAudioData(', 'function encryptBinary(', 'function decryptBinary(', 'ShadowrunBinaryCubeEngine']));
-checks.push(includes('Steganalysis worker delegates to one engine', sources.steganalysisWorker, ["importScripts('binary-cube-steganalysis-engine.js?v=20260809-steganalysis-1')", 'const Engine = self.BinaryCubeSteganalysisEngine;', 'Engine.localizedRasterAnalysis(', 'Engine.compareRasters(', 'Engine.inspectJpegCoefficients(']));
+checks.push(includes('Raster evidence profile preserves detector outputs as separate evidence channels', sources.steganalysisEvidence, ['BinaryCubeSteganalysisEvidenceProfile', "const DEFAULT_CHANNELS = Object.freeze(['r', 'g', 'b', 'luma']);", 'Engine.localizedRasterAnalysis(', 'legacyPayloadMagnitudeEvidence', 'diagnosticFlags', 'evidence vector rather than a new universal steganography score']));
+checks.push(excludes('Raster evidence profile does not duplicate detector math', sources.steganalysisEvidence, ['function rsAnalysis(', 'function samplePairAnalysis(', 'function residualCooccurrence(']));
+checks.push(includes('Steganalysis worker delegates to authoritative engine and evidence profile', sources.steganalysisWorker, ["importScripts('binary-cube-steganalysis-engine.js?v=20260809-steganalysis-1')", "importScripts('binary-cube-steganalysis-evidence-profile.js?v=20260809-raster-evidence-profile-1')", 'const Engine = self.BinaryCubeSteganalysisEngine;', 'const EvidenceProfile = self.BinaryCubeSteganalysisEvidenceProfile;', 'Engine.localizedRasterAnalysis(', 'EvidenceProfile.profileRaster(', 'Engine.compareRasters(', 'Engine.inspectJpegCoefficients(']));
+checks.push(includes('Shared steganalysis worker client owns freeze-safe raster profiling', sources.steganalysisWorkerClient, ['BinaryCubeSteganalysisWorkerClient', 'new Worker(', "run('raster-evidence-profile'", 'new Uint8ClampedArray(rgbaValue)', 'transfer: [rgba.buffer]', 'worker.terminate()', 'function cancelAll(']));
 checks.push(includes('Steganalysis lab reuses shared media decoding', sources.steganalysisLab, ['Advanced Steganalysis Laboratory', 'const Media = window.BinaryCubeMediaForensicsSuite;', 'Media.decodeBrowserRaster(', 'Raster RS / SPA', 'Known-cover parity', 'JPEG DCT', 'Text / Unicode', 'Batch / Evaluation', 'Measurements remain separate evidence channels']));
 
 checks.push(includes('Calibration registry owns corpus-bounded detector reliability', sources.calibrationRegistry, [
@@ -117,11 +122,11 @@ checks.push(includes('Calibration runner reuses authoritative demo corpus and lo
 ]));
 
 checks.push(includes('Diagnostic pipeline owns routing and calibrated evidence aggregation', sources.diagnosticPipeline, [
-  'BinaryCubeDiagnosticPipeline', "const VERSION = '0.2.0';", "id: 'information-structure'", "id: 'media-forensic-sweep'", "id: 'audio-signal-forensics'", "id: 'raster-steganalysis'", "id: 'binary-cube-attack-suite'", 'resolveCalibrationSnapshot', 'calibrationStatus', 'calibrationCases', 'calibrationIndex', 'async function runConcurrent(', 'for (const stage of plan.stages)', 'presenceIndex', 'certaintyIndex', 'coverageIndex', 'missRiskIndex', 'decodeBinaryFsk', 'decodeDtmf', 'not posterior probabilities'
+  'BinaryCubeDiagnosticPipeline', "const VERSION = '0.3.0';", "const REPORT_SCHEMA_VERSION = '0.3.0';", "id: 'information-structure'", "id: 'media-forensic-sweep'", "id: 'audio-signal-forensics'", "id: 'raster-steganalysis'", "id: 'binary-cube-attack-suite'", 'resolveCalibrationSnapshot', 'calibrationStatus', 'calibrationCases', 'calibrationIndex', 'missRiskEvidence', 'unresolvedEvidenceIndex', 'RASTER_UNRESOLVED_FLAG_WEIGHTS', 'steganalysisWorker?.profileRaster', 'async function runConcurrent(', 'for (const stage of plan.stages)', 'presenceIndex', 'certaintyIndex', 'coverageIndex', 'missRiskIndex', 'decodeBinaryFsk', 'decodeDtmf', 'not posterior probabilities'
 ]));
 checks.push(excludes('Diagnostic orchestrator does not duplicate specialist detector implementations', sources.diagnosticPipeline, ['function rsAnalysis(', 'function samplePairAnalysis(', 'function convolve2d(', 'function decodeBinaryFsk(', 'function decodeDtmf(', 'function encryptBinary(', 'function decryptBinary(']));
-checks.push(includes('Diagnostic panel exposes calibration provenance and evidence ledger', sources.diagnosticPanel, [
-  'Diagnostic Evaluation Pipeline', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Undetected / Miss-Risk Index', 'Calibration provenance', 'Calibration boundary', 'calibrationStatus', 'runtime prior', 'Specialist handoff', 'Export JSON Report'
+checks.push(includes('Diagnostic panel exposes calibration provenance and separated evidence ledger', sources.diagnosticPanel, [
+  'Diagnostic Evaluation Pipeline', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Unresolved Evidence Index', 'Undetected / Miss-Risk Index', 'unresolved / miss-risk', 'Calibration provenance', 'Calibration boundary', 'calibrationStatus', 'runtime prior', 'Specialist handoff', 'Export JSON Report'
 ]));
 checks.push(includes('Local diagnostic runner shares routed model and one local media implementation', sources.diagnosticLocal, [
   "require(path.join(root, 'scientific-tools-local-media.js'))", 'LocalMedia.decodePngRgba(', 'Pipeline.runPipeline(', '--profile=triage|thorough|exhaustive'
@@ -130,8 +135,8 @@ checks.push(excludes('Local diagnostic runner does not duplicate PNG decoding', 
 checks.push(includes('Shared local media helper owns Node PNG decode', sources.localMedia, ['ScientificToolsLocalMedia', "require('node:zlib')", 'function decodePngRgba(', '8-bit, non-interlaced']));
 checks.push(includes('Diagnostic plan records staged local/offline architecture', sources.diagnosticPlan, ['# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pipeline', 'absence of positive evidence', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Undetected / Miss-Risk Index', 'local Node.js runtime', 'Phase 6 — Resumable long-run jobs']));
 
-checks.push(includes('Scientific Tools centrally loads calibration before routed pipeline', sources.workspace, [
-  "const ASSET_VERSION = '20260809-diagnostic-calibration-1';", 'function loadDiagnosticPipeline()', "loadScript('binary-cube-diagnostic-calibration-registry.js'", "loadScript('binary-cube-diagnostic-calibration-baseline.js'", "loadScript('binary-cube-diagnostic-pipeline.js'", "loadScript('binary-cube-diagnostic-pipeline-panel.js'", 'Measured calibration:', 'RGB-LSB false negative', 'function loadCubicDecryptor()', 'id="scientific-tools-open-diagnostic-pipeline"', 'id="scientific-tools-open-cubic-decryptor"', 'absence of positive evidence is not evidence of absence'
+checks.push(includes('Scientific Tools centrally loads raster evidence and calibration before routed pipeline', sources.workspace, [
+  "const ASSET_VERSION = '20260809-diagnostic-raster-evidence-1';", 'function loadDiagnosticPipeline()', "loadScript('binary-cube-steganalysis-evidence-profile.js'", "loadScript('binary-cube-steganalysis-worker-client.js'", "loadScript('binary-cube-diagnostic-calibration-registry.js'", "loadScript('binary-cube-diagnostic-calibration-baseline.js'", "loadScript('binary-cube-diagnostic-pipeline.js'", "loadScript('binary-cube-diagnostic-pipeline-panel.js'", 'Measured calibration:', 'RGB-LSB false negative', 'function loadCubicDecryptor()', 'id="scientific-tools-open-diagnostic-pipeline"', 'id="scientific-tools-open-cubic-decryptor"', 'absence of positive evidence is not evidence of absence'
 ]));
 checks.push(includes('Scientific Tools preserves established destinations', sources.workspace, ['data-scientific-tools-tab="binary-cube"', 'data-scientific-tools-tab="decryption-dashboard"', 'data-scientific-tools-tab="ism-media-simulation"', 'data-scientific-tools-tab="double-slit"', 'id="scientific-tools-open-binary-cube-visualizer"', 'id="scientific-tools-open-binary-cube-laboratory"', 'id="scientific-tools-open-media-forensics-demos"', 'id="scientific-tools-open-ism"', 'id="scientific-tools-open-double-slit"', 'loadMediaForensicsDemoCorpus', 'openMediaForensicsDemoCorpus']));
 for (const tab of ['binary-cube', 'decryption-dashboard', 'ism-media-simulation', 'double-slit']) assert.equal(count(sources.workspace, `data-scientific-tools-tab="${tab}"`), 1, `${tab} must have one owner.`);
@@ -142,13 +147,13 @@ checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, [
 checks.push(includes('Double Slit remains cooperative with hypothesis separation', sources.doubleSlit, ['function electronWavelength(kineticEv)', 'function coherentIntensityAtX(x, physics, config)', 'function registerHypothesisLayer(definition)', 'async function buildDistributionAsync(', 'ScientificToolsCooperativeRunner']));
 
 for (const relativePath of [
-  'scientific-tools-local-media.js', 'binary-cube-key-generation-visualizer.css', 'scripts/validate-binary-cube-key-generation-visualizer.mjs', 'binary-cube-decryption-dashboard.css', 'binary-cube-cryptanalytic-test-lab.css', 'binary-cube-information-analysis-suite.css', 'binary-cube-communication-capacity-analyzer.css', 'binary-cube-media-forensics-suite.css', 'binary-cube-steganalysis-lab.css', 'scripts/validate-binary-cube-steganalysis-lab.mjs', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-diagnostic-calibration-baseline.js', 'binary-cube-diagnostic-pipeline.css', 'binary-cube-cubic-decryptor.css', 'scripts/validate-binary-cube-cubic-decryptor.mjs', 'scripts/validate-scientific-diagnostic-pipeline.mjs', 'scripts/calibrate-scientific-diagnostic-pipeline.mjs', 'scripts/validate-scientific-diagnostic-calibration.mjs', 'scripts/run-scientific-diagnostic-local.mjs', 'docs/scientific-diagnostic-pipeline-plan.md', 'interstellar-media-collisions-lab.css', 'double-slit-lab.css'
+  'scientific-tools-local-media.js', 'binary-cube-key-generation-visualizer.css', 'scripts/validate-binary-cube-key-generation-visualizer.mjs', 'binary-cube-decryption-dashboard.css', 'binary-cube-cryptanalytic-test-lab.css', 'binary-cube-information-analysis-suite.css', 'binary-cube-communication-capacity-analyzer.css', 'binary-cube-media-forensics-suite.css', 'binary-cube-steganalysis-engine.js', 'binary-cube-steganalysis-evidence-profile.js', 'binary-cube-steganalysis-worker.js', 'binary-cube-steganalysis-worker-client.js', 'binary-cube-steganalysis-lab.css', 'scripts/validate-binary-cube-steganalysis-lab.mjs', 'scripts/validate-diagnostic-raster-evidence-routing.mjs', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-diagnostic-calibration-baseline.js', 'binary-cube-diagnostic-pipeline.css', 'binary-cube-cubic-decryptor.css', 'scripts/validate-binary-cube-cubic-decryptor.mjs', 'scripts/validate-scientific-diagnostic-pipeline.mjs', 'scripts/calibrate-scientific-diagnostic-pipeline.mjs', 'scripts/validate-scientific-diagnostic-calibration.mjs', 'scripts/run-scientific-diagnostic-local.mjs', 'docs/scientific-diagnostic-pipeline-plan.md', 'interstellar-media-collisions-lab.css', 'double-slit-lab.css'
 ]) nonEmpty(relativePath);
-checks.push('Scientific Tools styles, calibration data, local runtime, plan, and validators are present');
+checks.push('Scientific Tools styles, raster evidence routing, calibration data, local runtime, plan, and validators are present');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.16.0',
+  schemaVersion: '0.17.0',
   pass: true,
   checkCount: checks.length,
   checks
