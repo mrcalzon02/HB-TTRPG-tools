@@ -1,0 +1,90 @@
+name: Validate Diagnostic Raster Evidence Routing
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/diagnostic-raster-evidence-routing.yml"
+      - "binary-cube-diagnostic-pipeline.js"
+      - "binary-cube-steganalysis-engine.js"
+      - "binary-cube-steganalysis-evidence-profile.js"
+      - "binary-cube-steganalysis-worker.js"
+      - "binary-cube-steganalysis-worker-client.js"
+      - "binary-cube-media-forensics-demo-corpus.js"
+      - "scientific-tools-local-media.js"
+      - "scientific-tools-entry.js"
+      - "app-lite-view-mounts.js"
+      - "scripts/validate-diagnostic-raster-evidence-routing.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "diagnostic-raster-evidence-routing-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record routing pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='scientific-tools/diagnostic-raster-routing' \
+            -f description='Diagnostic raster evidence routing validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check routed sources
+        run: |
+          node --check binary-cube-diagnostic-pipeline.js
+          node --check binary-cube-steganalysis-engine.js
+          node --check binary-cube-steganalysis-evidence-profile.js
+          node --check binary-cube-steganalysis-worker.js
+          node --check binary-cube-steganalysis-worker-client.js
+          node --check scripts/validate-diagnostic-raster-evidence-routing.mjs
+
+      - name: Validate evidence separation and miss-risk routing
+        run: node scripts/validate-diagnostic-raster-evidence-routing.mjs
+
+      - name: Validate browser dependency routing
+        run: |
+          grep -q "binary-cube-steganalysis-evidence-profile.js" scientific-tools-entry.js
+          grep -q "binary-cube-steganalysis-worker-client.js" scientific-tools-entry.js
+          grep -q "scientific-tools-entry.js?v=20260809-diagnostic-raster-evidence-1" app-lite-view-mounts.js
+          grep -q "steganalysisWorker?.profileRaster" binary-cube-diagnostic-pipeline.js
+          grep -q "missRiskEvidence" binary-cube-diagnostic-pipeline.js
+
+      - name: Record routing success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='scientific-tools/diagnostic-raster-routing' \
+            -f description='Diagnostic raster evidence routing validation passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record routing failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='scientific-tools/diagnostic-raster-routing' \
+            -f description='Diagnostic raster evidence routing validation failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
