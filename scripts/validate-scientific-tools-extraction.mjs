@@ -7,30 +7,36 @@ import process from 'node:process';
 
 const root = process.cwd();
 const read = relativePath => fs.readFileSync(path.join(root, relativePath), 'utf8');
-const shadowrun = read('shadowrun-entry.js');
-const blacklight = read('blacklight-continuum-entry.js');
-const mounts = read('app-lite-view-mounts.js');
-const workspace = read('scientific-tools-entry.js');
-const cooperative = read('scientific-tools-cooperative-runner.js');
-const cubeWorker = read('shadowrun-binary-cube-worker.js');
-const cubeWorkerClient = read('binary-cube-worker-client.js');
-const cubeLab = read('shadowrun-binary-cube-encryption.js');
-const keyResearch = read('binary-cube-key-generation-research.js');
-const keyResearchWorker = read('binary-cube-key-generation-research-worker.js');
-const keyVisualizer = read('binary-cube-key-generation-visualizer.js');
-const mediaDemos = read('binary-cube-media-forensics-demo-corpus.js');
-const steganalysisEngine = read('binary-cube-steganalysis-engine.js');
-const steganalysisWorker = read('binary-cube-steganalysis-worker.js');
-const steganalysisLab = read('binary-cube-steganalysis-lab.js');
-const diagnosticPipeline = read('binary-cube-diagnostic-pipeline.js');
-const diagnosticPanel = read('binary-cube-diagnostic-pipeline-panel.js');
-const cubicDecryptorEngine = read('binary-cube-cubic-decryptor-engine.js');
-const cubicDecryptorWorker = read('binary-cube-cubic-decryptor-worker.js');
-const cubicDecryptorUi = read('binary-cube-cubic-decryptor.js');
-const diagnosticLocal = read('scripts/run-scientific-diagnostic-local.mjs');
-const diagnosticPlan = read('docs/scientific-diagnostic-pipeline-plan.md');
-const ism = read('interstellar-media-collisions-lab.js');
-const doubleSlit = read('double-slit-lab.js');
+const sources = Object.freeze({
+  shadowrun: read('shadowrun-entry.js'),
+  blacklight: read('blacklight-continuum-entry.js'),
+  mounts: read('app-lite-view-mounts.js'),
+  workspace: read('scientific-tools-entry.js'),
+  cooperative: read('scientific-tools-cooperative-runner.js'),
+  localMedia: read('scientific-tools-local-media.js'),
+  cubeWorker: read('shadowrun-binary-cube-worker.js'),
+  cubeWorkerClient: read('binary-cube-worker-client.js'),
+  cubeLab: read('shadowrun-binary-cube-encryption.js'),
+  keyResearch: read('binary-cube-key-generation-research.js'),
+  keyResearchWorker: read('binary-cube-key-generation-research-worker.js'),
+  keyVisualizer: read('binary-cube-key-generation-visualizer.js'),
+  mediaDemos: read('binary-cube-media-forensics-demo-corpus.js'),
+  steganalysisEngine: read('binary-cube-steganalysis-engine.js'),
+  steganalysisWorker: read('binary-cube-steganalysis-worker.js'),
+  steganalysisLab: read('binary-cube-steganalysis-lab.js'),
+  calibrationRegistry: read('binary-cube-diagnostic-calibration-registry.js'),
+  calibrationBaseline: read('binary-cube-diagnostic-calibration-baseline.js'),
+  diagnosticPipeline: read('binary-cube-diagnostic-pipeline.js'),
+  diagnosticPanel: read('binary-cube-diagnostic-pipeline-panel.js'),
+  cubicDecryptorEngine: read('binary-cube-cubic-decryptor-engine.js'),
+  cubicDecryptorWorker: read('binary-cube-cubic-decryptor-worker.js'),
+  cubicDecryptorUi: read('binary-cube-cubic-decryptor.js'),
+  diagnosticLocal: read('scripts/run-scientific-diagnostic-local.mjs'),
+  calibrationRunner: read('scripts/calibrate-scientific-diagnostic-pipeline.mjs'),
+  diagnosticPlan: read('docs/scientific-diagnostic-pipeline-plan.md'),
+  ism: read('interstellar-media-collisions-lab.js'),
+  doubleSlit: read('double-slit-lab.js')
+});
 
 function includes(label, source, values) {
   for (const value of values) assert.ok(source.includes(value), `${label}: missing ${JSON.stringify(value)}`);
@@ -49,403 +55,100 @@ function nonEmpty(relativePath) {
 
 const checks = [];
 
-checks.push(includes('Shadowrun retains the definitive Binary Cube launch targets', shadowrun, [
-  "['tools','Binary Cube Encryption Laboratory'",
-  "['tools','Binary Cube Encoder Visualizer'",
-  'function loadCubeTool()',
-  'function loadCubeVisualizer()',
-  "loadScript('shadowrun-binary-cube-engine.js'"
+checks.push(includes('Shadowrun retains definitive Binary Cube launch targets', sources.shadowrun, [
+  "['tools','Binary Cube Encryption Laboratory'", "['tools','Binary Cube Encoder Visualizer'", 'function loadCubeTool()', 'function loadCubeVisualizer()', "loadScript('shadowrun-binary-cube-engine.js'"
 ]));
-checks.push(excludes('Shadowrun does not absorb setting-neutral research/simulation implementations', shadowrun, [
-  'binary-cube-key-generation-research.js',
-  'binary-cube-key-generation-visualizer.js',
-  'binary-cube-decryption-dashboard.js',
-  'binary-cube-information-analysis-suite.js',
-  'binary-cube-communication-capacity-analyzer.js',
-  'binary-cube-media-forensics-suite.js',
-  'binary-cube-steganalysis-engine.js',
-  'binary-cube-steganalysis-lab.js',
-  'binary-cube-diagnostic-pipeline.js',
-  'binary-cube-cubic-decryptor-engine.js',
-  'binary-cube-cubic-decryptor.js',
-  'interstellar-media-collisions-lab.js',
-  'double-slit-lab.js'
+checks.push(excludes('Shadowrun does not absorb setting-neutral Scientific Tools', sources.shadowrun, [
+  'binary-cube-key-generation-research.js', 'binary-cube-diagnostic-pipeline.js', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-cubic-decryptor-engine.js', 'binary-cube-steganalysis-lab.js', 'interstellar-media-collisions-lab.js', 'double-slit-lab.js'
+]));
+checks.push(includes('Black Light delegates to centralized Scientific Tools', sources.blacklight, [
+  'data-blacklight-systems-tab="science"', "prepareView('scientific-tools')", "openSharedScientificTool('openBinaryCubeVisualizer'", "openSharedScientificTool('openBinaryCubeLaboratory'", "openSharedScientificTool('openIsmSimulation'"
+]));
+checks.push(excludes('Black Light does not duplicate centralized runtimes', sources.blacklight, [
+  'binary-cube-diagnostic-pipeline.js', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-cubic-decryptor-engine.js', 'binary-cube-steganalysis-engine.js', 'interstellar-media-collisions-lab.js', 'double-slit-lab.js'
 ]));
 
-checks.push(includes('Black Light delegates to centralized Scientific Tools', blacklight, [
-  'data-blacklight-systems-tab="science"',
-  "prepareView('scientific-tools')",
-  "openSharedScientificTool('openBinaryCubeVisualizer'",
-  "openSharedScientificTool('openBinaryCubeLaboratory'",
-  "openSharedScientificTool('openIsmSimulation'"
+checks.push(includes('Main menu owns one cache-refreshed Scientific Tools destination', sources.mounts, [
+  "button.dataset.view = 'scientific-tools'", "card.dataset.scientificToolsCard = 'true'", 'routed Diagnostic Evaluation Pipeline', "loadScript('scientific-tools-entry.js?v=20260809-diagnostic-calibration-1')", 'ensureScientificToolsView();'
 ]));
-checks.push(excludes('Black Light does not duplicate centralized runtimes', blacklight, [
-  'binary-cube-key-generation-research.js',
-  'binary-cube-key-generation-visualizer.js',
-  'shadowrun-binary-cube-engine.js',
-  'binary-cube-steganalysis-engine.js',
-  'binary-cube-steganalysis-lab.js',
-  'binary-cube-diagnostic-pipeline.js',
-  'binary-cube-cubic-decryptor-engine.js',
-  'binary-cube-cubic-decryptor.js',
-  'interstellar-media-collisions-lab.js',
-  'double-slit-lab.js'
+assert.equal(count(sources.mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'Scientific Tools must have exactly one main-menu card.');
+checks.push('Main menu Scientific Tools ownership is singular');
+
+checks.push(includes('Shared cooperative runner owns bounded deterministic scheduling', sources.cooperative, [
+  'ScientificToolsCooperativeRunner', 'const DEFAULT_MAX_SLICE_MS = 8;', 'class CooperativeCancelledError extends Error', 'function createToken(', 'async function forRange(', 'now() - sliceStartedAt >= maxSliceMs', 'await yieldControl()'
+]));
+checks.push(excludes('Scheduler remains model-neutral', sources.cooperative, ['ShadowrunBinaryCubeEngine', 'BinaryCubeDiagnosticPipeline', 'BinaryCubeSteganalysisEngine', 'DoubleSlitExperimentLab']));
+
+checks.push(includes('Canonical Binary Cube worker delegates to canonical engine', sources.cubeWorker, [
+  'const Engine = self.ShadowrunBinaryCubeEngine;', "case 'create-key':", 'Engine.createKey(', "case 'encrypt':", 'Engine.encryptBinary(', "case 'decrypt':", 'Engine.decryptBinary(', 'Engine.validatePackage('
+]));
+checks.push(excludes('Canonical worker does not duplicate cube transform', sources.cubeWorker, ['function pointDepthForKey(', 'function transformBlockWithKey(', 'rowPermutation[x] + key.columnPermutation[y]']));
+checks.push(includes('Worker client owns secure reseeding and cancellation', sources.cubeWorkerClient, ['new Worker(', 'const RESEED_BYTES = 16;', 'crypto.getRandomValues', 'function freshSeed(', 'worker.terminate()', 'function cancelAll(']));
+checks.push(includes('Laboratory distinguishes deterministic generation from fresh reseeding', sources.cubeLab, ['data-cube-reseed', "Executor.freshSeed('binary-cube')", 'await generateKey(panel, false)', 'await generateKey(panel, true)', 'Generate Key reproduces this seed exactly.']));
+
+checks.push(includes('Key-generation research remains above canonical engine', sources.keyResearch, [
+  "const RESEARCH_SCHEMA_VERSION = 'research-0.4.0';", "'direct-permutation'", "'iterative-chain'", "'random-transposition-walk'", "'local-adjacent-walk'", "'nested-permutation'", "'nested-hierarchy'", "'nested-interleaved'", 'Engine.createKey(options)', 'function regionalPredictabilityFraction(', 'function pointSurfaceRoughness(', 'const ignoreAdjacency = options.ignoreAdjacency === true;'
+]));
+checks.push(excludes('Key-generation research does not own encryption', sources.keyResearch, ['function encryptBinary(', 'function decryptBinary(', 'function keyFingerprint(']));
+checks.push(includes('Key research worker delegates to one model', sources.keyResearchWorker, ['const Research = self.BinaryCubeKeyGenerationResearch;', 'Research.buildProfileSnapshot(', "operation !== 'compare-profiles'", "type: 'progress'", "type: 'result'"]));
+checks.push(excludes('Key research worker does not duplicate candidate generators', sources.keyResearchWorker, ['function iterativePermutation(', 'function randomWalkPermutation(', 'function nestedHierarchyPermutation(']));
+checks.push(includes('3D key visualizer exposes structural comparison', sources.keyVisualizer, ['Key Generation Structure Visualizer', 'new Worker(WORKER_URL)', 'Ignore adjacency as a rejection criterion', 'Regional predictability', 'Axis leakage', 'Surface roughness', 'actual Latin-cube point field', 'visually chaotic cube is not proof of cryptographic security']));
+
+checks.push(includes('Cubic decryptor delegates generator and cryptographic authority', sources.cubicDecryptorEngine, [
+  'BinaryCubeCubicDecryptorEngine', 'Research.generateResearchKey(', 'Engine.decryptBinary(', 'function buildSearchPlan(', "'direct-permutation'", "'iterative-chain'", "'random-transposition-walk'", "'nested-permutation'", "'nested-interleaved'", 'function makeCheckpoint('
+]));
+checks.push(excludes('Cubic decryptor does not duplicate cube transforms or generators', sources.cubicDecryptorEngine, ['function transformBlockWithKey(', 'function iterativePermutation(', 'function randomWalkPermutation(', 'function nestedPermutation(']));
+checks.push(includes('Cubic decryptor worker delegates deterministic attempts', sources.cubicDecryptorWorker, ["'binary-cube-cubic-decryptor-engine.js'", 'Cubic.attemptCandidate(', 'Cubic.makeCheckpoint(', "message.operation !== 'search'"]));
+checks.push(includes('Cubic decryptor UI exposes resumable specialist search', sources.cubicDecryptorUi, ['Cubic Decryptor Tool', 'Build staged plan', 'Run / resume decryptor', 'Export checkpoint', 'Recover full plaintext', 'openInformationAnalysisSuite', 'openMediaForensicsSuite', 'regenerateKey(']));
+
+checks.push(includes('Steganalysis engine owns quantitative math', sources.steganalysisEngine, ['BinaryCubeSteganalysisEngine', 'function rsAnalysis(', 'function samplePairAnalysisFromPairs(', 'function localizedRasterAnalysis(', 'function compareRasters(', 'function inspectJpegCoefficients(', 'function analyzeTextSteganography(', 'function rocCurve(']));
+checks.push(excludes('Steganalysis engine does not become a media decoder or cipher', sources.steganalysisEngine, ['createImageBitmap(', 'decodeAudioData(', 'function encryptBinary(', 'function decryptBinary(', 'ShadowrunBinaryCubeEngine']));
+checks.push(includes('Steganalysis worker delegates to one engine', sources.steganalysisWorker, ["importScripts('binary-cube-steganalysis-engine.js?v=20260809-steganalysis-1')", 'const Engine = self.BinaryCubeSteganalysisEngine;', 'Engine.localizedRasterAnalysis(', 'Engine.compareRasters(', 'Engine.inspectJpegCoefficients(']));
+checks.push(includes('Steganalysis lab reuses shared media decoding', sources.steganalysisLab, ['Advanced Steganalysis Laboratory', 'const Media = window.BinaryCubeMediaForensicsSuite;', 'Media.decodeBrowserRaster(', 'Raster RS / SPA', 'Known-cover parity', 'JPEG DCT', 'Text / Unicode', 'Batch / Evaluation', 'Measurements remain separate evidence channels']));
+
+checks.push(includes('Calibration registry owns corpus-bounded detector reliability', sources.calibrationRegistry, [
+  'BinaryCubeDiagnosticCalibrationRegistry', 'SHRINKAGE_CASES', 'MIN_MEASURED_CASES', 'priorReliability', 'blindSpots', 'function calibrateDetector(', 'balancedAccuracy', 'effectiveReliability', 'effectiveWeight', 'Calibration measurements describe detector behavior on the tested corpus only', "id: 'cubic-decryptor-search'"
+]));
+checks.push(includes('Measured calibration baseline preserves observed detector failure', sources.calibrationBaseline, [
+  "const VERSION = '20260809-ground-truth-1';", "fixtureId: 'rgb-lsb'", "detectorId: 'raster-steganalysis'", 'observedPositive: false', 'pass: false', 'Measured false negative retained', 'Registry.buildSnapshot('
+]));
+checks.push(includes('Calibration runner reuses authoritative demo corpus and local decoder', sources.calibrationRunner, [
+  "binary-cube-media-forensics-demo-corpus.js", 'BinaryCubeMediaForensicsDemoCorpus', 'LocalMedia.decodePngRgba(', "fixtureId: 'afsk1200'", "detectorId: 'audio-signal-forensics'", 'failed expectation is retained'
 ]));
 
-checks.push(includes('Main menu owns and cache-refreshes Scientific Tools', mounts, [
-  "button.dataset.view = 'scientific-tools'",
-  "card.dataset.scientificToolsCard = 'true'",
-  'key-generation structure comparison',
-  'routed Diagnostic Evaluation Pipeline',
-  'Advanced Steganalysis Laboratory',
-  "loadScript('scientific-tools-entry.js?v=20260809-diagnostic-pipeline-1')",
-  'ensureScientificToolsView();'
+checks.push(includes('Diagnostic pipeline owns routing and calibrated evidence aggregation', sources.diagnosticPipeline, [
+  'BinaryCubeDiagnosticPipeline', "const VERSION = '0.2.0';", "id: 'information-structure'", "id: 'media-forensic-sweep'", "id: 'audio-signal-forensics'", "id: 'raster-steganalysis'", "id: 'binary-cube-attack-suite'", 'resolveCalibrationSnapshot', 'calibrationStatus', 'calibrationCases', 'calibrationIndex', 'async function runConcurrent(', 'for (const stage of plan.stages)', 'presenceIndex', 'certaintyIndex', 'coverageIndex', 'missRiskIndex', 'decodeBinaryFsk', 'decodeDtmf', 'not posterior probabilities'
 ]));
-assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'Scientific Tools must have exactly one main-menu card.');
-checks.push('Main menu owns one Scientific Tools destination');
+checks.push(excludes('Diagnostic orchestrator does not duplicate specialist detector implementations', sources.diagnosticPipeline, ['function rsAnalysis(', 'function samplePairAnalysis(', 'function convolve2d(', 'function decodeBinaryFsk(', 'function decodeDtmf(', 'function encryptBinary(', 'function decryptBinary(']));
+checks.push(includes('Diagnostic panel exposes calibration provenance and evidence ledger', sources.diagnosticPanel, [
+  'Diagnostic Evaluation Pipeline', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Undetected / Miss-Risk Index', 'Calibration provenance', 'Calibration boundary', 'calibrationStatus', 'runtime prior', 'Specialist handoff', 'Export JSON Report'
+]));
+checks.push(includes('Local diagnostic runner shares routed model and one local media implementation', sources.diagnosticLocal, [
+  "require(path.join(root, 'scientific-tools-local-media.js'))", 'LocalMedia.decodePngRgba(', 'Pipeline.runPipeline(', '--profile=triage|thorough|exhaustive'
+]));
+checks.push(excludes('Local diagnostic runner does not duplicate PNG decoding', sources.diagnosticLocal, ["import zlib from 'node:zlib'", 'function decodePngRgba(', 'function paeth(']));
+checks.push(includes('Shared local media helper owns Node PNG decode', sources.localMedia, ['ScientificToolsLocalMedia', "require('node:zlib')", 'function decodePngRgba(', '8-bit, non-interlaced']));
+checks.push(includes('Diagnostic plan records staged local/offline architecture', sources.diagnosticPlan, ['# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pipeline', 'absence of positive evidence', 'Asset Presence Index', 'Certainty Index', 'Coverage Index', 'Undetected / Miss-Risk Index', 'local Node.js runtime', 'Phase 6 — Resumable long-run jobs']));
 
-checks.push(includes('Shared cooperative runner owns bounded deterministic scheduling', cooperative, [
-  'ScientificToolsCooperativeRunner',
-  'const DEFAULT_MAX_SLICE_MS = 8;',
-  'class CooperativeCancelledError extends Error',
-  'function createToken(',
-  'async function forRange(',
-  'now() - sliceStartedAt >= maxSliceMs',
-  'await yieldControl()'
+checks.push(includes('Scientific Tools centrally loads calibration before routed pipeline', sources.workspace, [
+  "const ASSET_VERSION = '20260809-diagnostic-calibration-1';", 'function loadDiagnosticPipeline()', "loadScript('binary-cube-diagnostic-calibration-registry.js'", "loadScript('binary-cube-diagnostic-calibration-baseline.js'", "loadScript('binary-cube-diagnostic-pipeline.js'", "loadScript('binary-cube-diagnostic-pipeline-panel.js'", 'Measured calibration:', 'RGB-LSB false negative', 'function loadCubicDecryptor()', 'id="scientific-tools-open-diagnostic-pipeline"', 'id="scientific-tools-open-cubic-decryptor"', 'absence of positive evidence is not evidence of absence'
 ]));
-checks.push(excludes('Scheduler remains model-neutral', cooperative, [
-  'ShadowrunBinaryCubeEngine',
-  'BinaryCubeKeyGenerationResearch',
-  'BinaryCubeSteganalysisEngine',
-  'BinaryCubeDiagnosticPipeline',
-  'DoubleSlitExperimentLab',
-  'LAMBDA_COEFFICIENT'
-]));
-
-checks.push(includes('Canonical Binary Cube worker delegates to the canonical engine', cubeWorker, [
-  'const Engine = self.ShadowrunBinaryCubeEngine;',
-  "case 'create-key':",
-  'Engine.createKey(',
-  "case 'encrypt':",
-  'Engine.encryptBinary(',
-  "case 'decrypt':",
-  'Engine.decryptBinary(',
-  "case 'validate-pair':",
-  'Engine.validatePackage('
-]));
-checks.push(excludes('Canonical worker does not duplicate the cube transform', cubeWorker, [
-  'function pointDepthForKey(',
-  'function transformBlockWithKey(',
-  'rowPermutation[x] + key.columnPermutation[y]'
-]));
-checks.push(includes('Worker client owns secure reseeding and cancellation', cubeWorkerClient, [
-  'new Worker(',
-  'const RESEED_BYTES = 16;',
-  'crypto.getRandomValues',
-  'function freshSeed(',
-  'worker.terminate()',
-  'function cancelAll('
-]));
-checks.push(includes('Laboratory distinguishes deterministic generation from fresh reseeding', cubeLab, [
-  'data-cube-reseed',
-  "Executor.freshSeed('binary-cube')",
-  'await generateKey(panel, false)',
-  'await generateKey(panel, true)',
-  'Generate Key reproduces this seed exactly.'
-]));
-
-checks.push(includes('Key-generation research remains a shared candidate model above the canonical engine', keyResearch, [
-  "const RESEARCH_SCHEMA_VERSION = 'research-0.4.0';",
-  "'direct-permutation'",
-  "'iterative-chain'",
-  "'random-transposition-walk'",
-  "'local-adjacent-walk'",
-  "'nested-permutation'",
-  "'nested-hierarchy'",
-  "'nested-interleaved'",
-  'Engine.createKey(options)',
-  'Engine.validateKey({ ...template, ...proposed, keyId: undefined })',
-  'function regionalPredictabilityFraction(',
-  'function pointSurfaceRoughness(',
-  'const ignoreAdjacency = options.ignoreAdjacency === true;'
-]));
-checks.push(excludes('Research model does not own encryption/decryption', keyResearch, [
-  'function encryptBinary(',
-  'function decryptBinary(',
-  'function keyFingerprint('
-]));
-checks.push(includes('Research worker delegates candidate snapshots to the shared model', keyResearchWorker, [
-  'const Research = self.BinaryCubeKeyGenerationResearch;',
-  'Research.buildProfileSnapshot(',
-  "operation !== 'compare-profiles'",
-  "type: 'progress'",
-  "type: 'result'"
-]));
-checks.push(excludes('Research worker does not duplicate candidate generators', keyResearchWorker, [
-  'function iterativePermutation(',
-  'function randomWalkPermutation(',
-  'function localAdjacentWalkPermutation(',
-  'function nestedHierarchyPermutation('
-]));
-checks.push(includes('3D key-generation visualizer exposes same-seed structural comparison', keyVisualizer, [
-  'Key Generation Structure Visualizer',
-  'new Worker(WORKER_URL)',
-  'worker.terminate()',
-  'Ignore adjacency as a rejection criterion',
-  'Regional predictability',
-  'Axis leakage',
-  'Surface roughness',
-  'actual Latin-cube point field',
-  'visually chaotic cube is not proof of cryptographic security',
-  'BinaryCubeKeyGenerationVisualizer = Object.freeze'
-]));
-
-
-checks.push(includes('Cubic decryptor owns deterministic staged search and delegates cryptographic authority', cubicDecryptorEngine, [
-  'BinaryCubeCubicDecryptorEngine',
-  'Research.generateResearchKey(',
-  'Engine.decryptBinary(',
-  'function buildSearchPlan(',
-  "'direct-permutation'",
-  "'iterative-chain'",
-  "'random-transposition-walk'",
-  "'nested-permutation'",
-  "'nested-interleaved'",
-  'function makeCheckpoint('
-]));
-checks.push(excludes('Cubic decryptor does not duplicate cube transforms or generator implementations', cubicDecryptorEngine, [
-  'function transformBlockWithKey(',
-  'function iterativePermutation(',
-  'function randomWalkPermutation(',
-  'function nestedPermutation('
-]));
-checks.push(includes('Cubic decryptor worker delegates deterministic attempts to the shared search engine', cubicDecryptorWorker, [
-  "'binary-cube-cubic-decryptor-engine.js'",
-  'Cubic.attemptCandidate(',
-  'Cubic.makeCheckpoint(',
-  "message.operation !== 'search'"
-]));
-checks.push(includes('Cubic decryptor UI exposes staged recovery, resume, full recovery, and specialist handoff', cubicDecryptorUi, [
-  'Cubic Decryptor Tool',
-  'Build staged plan',
-  'Run / resume decryptor',
-  'Export checkpoint',
-  'Recover full plaintext',
-  'openInformationAnalysisSuite',
-  'openMediaForensicsSuite',
-  'regenerateKey('
-]));
-
-checks.push(includes('Advanced steganalysis engine owns quantitative and parity math', steganalysisEngine, [
-  'BinaryCubeSteganalysisEngine',
-  'function rsAnalysis(',
-  'function samplePairAnalysisFromPairs(',
-  'function localizedRasterAnalysis(',
-  'function residualCooccurrence(',
-  'function compareRasters(',
-  'function inspectJpegCoefficients(',
-  'function analyzeTextSteganography(',
-  'function confusionMetrics(',
-  'function rocCurve(',
-  'function regressionMetrics(',
-  'function recoveredBitMetrics('
-]));
-checks.push(excludes('Steganalysis engine does not become a second media decoder or Binary Cube cipher', steganalysisEngine, [
-  'createImageBitmap(',
-  'decodeAudioData(',
-  'function encryptBinary(',
-  'function decryptBinary(',
-  'ShadowrunBinaryCubeEngine'
-]));
-checks.push(includes('Steganalysis worker delegates heavy analysis to one engine', steganalysisWorker, [
-  "importScripts('binary-cube-steganalysis-engine.js?v=20260809-steganalysis-1')",
-  'const Engine = self.BinaryCubeSteganalysisEngine;',
-  'Engine.localizedRasterAnalysis(',
-  'Engine.compareRasters(',
-  'Engine.inspectJpegCoefficients(',
-  'Engine.analyzeRasterRegion('
-]));
-checks.push(excludes('Steganalysis worker does not duplicate detector implementations', steganalysisWorker, [
-  'function rsAnalysis(',
-  'function samplePairAnalysis(',
-  'function compareRasters(',
-  'function inspectJpegCoefficients('
-]));
-checks.push(includes('Steganalysis lab reuses shared media decoding and worker-backed detector execution', steganalysisLab, [
-  'Advanced Steganalysis Laboratory',
-  'const Engine = window.BinaryCubeSteganalysisEngine;',
-  'const Media = window.BinaryCubeMediaForensicsSuite;',
-  'Media.decodeBrowserRaster(',
-  'new Worker(new URL(WORKER_URL, document.baseURI).href)',
-  "runWorker('localized-raster'",
-  "runWorker('compare-raster'",
-  "runWorker('jpeg-coefficients'",
-  'Raster RS / SPA',
-  'Known-cover parity',
-  'JPEG DCT',
-  'Text / Unicode',
-  'Batch / Evaluation',
-  'ROC AUC',
-  'Measurements remain separate evidence channels'
-]));
-checks.push(excludes('Steganalysis UI does not invent a single opaque probability', steganalysisLab, [
-  'Steganography Probability'
-]));
-
-checks.push(includes('Diagnostic pipeline owns routing and evidence aggregation without absorbing specialist algorithms', diagnosticPipeline, [
-  'BinaryCubeDiagnosticPipeline',
-  "id: 'information-structure'",
-  "id: 'media-forensic-sweep'",
-  "id: 'text-unicode-steganalysis'",
-  "id: 'png-structure'",
-  "id: 'jpeg-coefficients'",
-  "id: 'raster-steganalysis'",
-  "id: 'deobfuscation-sweep'",
-  "id: 'binary-cube-attack-suite'",
-  'async function runConcurrent(',
-  'for (const stage of plan.stages)',
-  'presenceIndex',
-  'certaintyIndex',
-  'coverageIndex',
-  'missRiskIndex',
-  'not posterior probabilities'
-]));
-checks.push(excludes('Diagnostic orchestrator does not duplicate specialist detector math', diagnosticPipeline, [
-  'function rsAnalysis(',
-  'function samplePairAnalysis(',
-  'function convolve2d(',
-  'function decodeBinaryFsk(',
-  'function encryptBinary(',
-  'function decryptBinary('
-]));
-checks.push(includes('Diagnostic panel exposes routed evidence and specialist handoff', diagnosticPanel, [
-  'Diagnostic Evaluation Pipeline',
-  'Asset Presence Index',
-  'Certainty Index',
-  'Coverage Index',
-  'Undetected / Miss-Risk Index',
-  'Specialist handoff',
-  'Export JSON Report',
-  'workspace?.openMediaForensicsSuite',
-  'workspace?.openInformationAnalysisSuite',
-  'workspace?.openSteganalysisLab',
-  'workspace?.openDecryptionDashboard'
-]));
-checks.push(includes('Diagnostic local runner shares the routed model', diagnosticLocal, [
-  "import zlib from 'node:zlib'",
-  'fileURLToPath(import.meta.url)',
-  'function decodePngRgba(',
-  'Pipeline.runPipeline(',
-  '--profile=triage|thorough|exhaustive'
-]));
-checks.push(includes('Diagnostic plan records staged local/offline architecture', diagnosticPlan, [
-  '# [SYSTEM REPORT] Scientific Diagnostic Evaluation Pipeline',
-  'absence of positive evidence',
-  'Asset Presence Index',
-  'Certainty Index',
-  'Coverage Index',
-  'Undetected / Miss-Risk Index',
-  'local Node.js runtime',
-  'Phase 6 — Resumable long-run jobs'
-]));
-
-checks.push(includes('Scientific Tools owns one launch for key research, steganalysis, and the routed diagnostic pipeline', workspace, [
-  "const ASSET_VERSION = '20260809-diagnostic-pipeline-1';",
-  'function loadKeyGenerationVisualizer()',
-  "loadStyle('binary-cube-key-generation-visualizer.css')",
-  "loadScript('binary-cube-key-generation-research.js'",
-  "loadScript('binary-cube-key-generation-visualizer.js'",
-  'function openKeyGenerationVisualizer(',
-  'id="scientific-tools-open-key-generation-visualizer"',
-  'Compare Key Generators in 3D',
-  'adjacency as one diagnostic rather than an automatic failure',
-  'function loadSteganalysisLab()',
-  "loadStyle('binary-cube-steganalysis-lab.css')",
-  "loadScript('binary-cube-steganalysis-engine.js'",
-  "loadScript('binary-cube-steganalysis-lab.js'",
-  'function openSteganalysisLab(',
-  'id="scientific-tools-open-steganalysis"',
-  'Open Advanced Steganalysis Laboratory',
-  'function loadDiagnosticPipeline()',
-  "loadStyle('binary-cube-diagnostic-pipeline.css')",
-  "loadScript('binary-cube-diagnostic-pipeline.js'",
-  "loadScript('binary-cube-diagnostic-pipeline-panel.js'",
-  'function openDiagnosticPipeline(',
-  'id="scientific-tools-open-diagnostic-pipeline"',
-  'Run Diagnostic Evaluation Pipeline',
-  'function loadCubicDecryptor()',
-  "loadStyle('binary-cube-cubic-decryptor.css')",
-  "loadScript('binary-cube-cubic-decryptor-engine.js'",
-  "loadScript('binary-cube-cubic-decryptor.js'",
-  'function openCubicDecryptor(',
-  'id="scientific-tools-open-cubic-decryptor"',
-  'Open Cubic Decryptor Tool',
-  'absence of positive evidence is not evidence of absence'
-]));
-checks.push(includes('Scientific Tools preserves its established destinations and demo corpus', workspace, [
-  'data-scientific-tools-tab="binary-cube"',
-  'data-scientific-tools-tab="decryption-dashboard"',
-  'data-scientific-tools-tab="ism-media-simulation"',
-  'data-scientific-tools-tab="double-slit"',
-  'id="scientific-tools-open-binary-cube-visualizer"',
-  'id="scientific-tools-open-binary-cube-laboratory"',
-  'id="scientific-tools-open-decryption-dashboard"',
-  'id="scientific-tools-open-cubic-decryptor"',
-  'id="scientific-tools-open-media-forensics-demos"',
-  'id="scientific-tools-open-ism"',
-  'id="scientific-tools-open-double-slit"',
-  'loadMediaForensicsDemoCorpus',
-  'openMediaForensicsDemoCorpus'
-]));
-for (const tab of ['binary-cube', 'decryption-dashboard', 'ism-media-simulation', 'double-slit']) {
-  assert.equal(count(workspace, `data-scientific-tools-tab="${tab}"`), 1, `${tab} must have one owner.`);
-}
+checks.push(includes('Scientific Tools preserves established destinations', sources.workspace, ['data-scientific-tools-tab="binary-cube"', 'data-scientific-tools-tab="decryption-dashboard"', 'data-scientific-tools-tab="ism-media-simulation"', 'data-scientific-tools-tab="double-slit"', 'id="scientific-tools-open-binary-cube-visualizer"', 'id="scientific-tools-open-binary-cube-laboratory"', 'id="scientific-tools-open-media-forensics-demos"', 'id="scientific-tools-open-ism"', 'id="scientific-tools-open-double-slit"', 'loadMediaForensicsDemoCorpus', 'openMediaForensicsDemoCorpus']));
+for (const tab of ['binary-cube', 'decryption-dashboard', 'ism-media-simulation', 'double-slit']) assert.equal(count(sources.workspace, `data-scientific-tools-tab="${tab}"`), 1, `${tab} must have one owner.`);
 checks.push('Scientific Tools tab ownership is singular');
 
-checks.push(includes('Media demonstration corpus remains launchable', mediaDemos, [
-  'BinaryCubeMediaForensicsDemoCorpus',
-  'openPanel',
-  'openInAppropriateTool'
-]));
-checks.push(includes('ISM remains cooperatively executed and model-bounded', ism, [
-  'const LAMBDA = 1.097e-52;',
-  'const PLANCK_LENGTH = 1.616255e-35;',
-  'function magneticPhysics(config)',
-  'async function simulateAsync(config, options = {})',
-  'ScientificToolsCooperativeRunner'
-]));
-checks.push(includes('Double Slit remains cooperatively executed with hypothesis separation', doubleSlit, [
-  'function electronWavelength(kineticEv)',
-  'function coherentIntensityAtX(x, physics, config)',
-  'function registerHypothesisLayer(definition)',
-  'async function buildDistributionAsync(',
-  'ScientificToolsCooperativeRunner'
-]));
+checks.push(includes('Media demonstration corpus remains authoritative and launchable', sources.mediaDemos, ['BinaryCubeMediaForensicsDemoCorpus', 'buildDemoBytes', 'openPanel', 'openInAppropriateTool']));
+checks.push(includes('ISM remains cooperative and model-bounded', sources.ism, ['const LAMBDA = 1.097e-52;', 'const PLANCK_LENGTH = 1.616255e-35;', 'function magneticPhysics(config)', 'async function simulateAsync(config, options = {})', 'ScientificToolsCooperativeRunner']));
+checks.push(includes('Double Slit remains cooperative with hypothesis separation', sources.doubleSlit, ['function electronWavelength(kineticEv)', 'function coherentIntensityAtX(x, physics, config)', 'function registerHypothesisLayer(definition)', 'async function buildDistributionAsync(', 'ScientificToolsCooperativeRunner']));
 
 for (const relativePath of [
-  'binary-cube-key-generation-visualizer.css',
-  'scripts/validate-binary-cube-key-generation-visualizer.mjs',
-  'binary-cube-decryption-dashboard.css',
-  'binary-cube-cryptanalytic-test-lab.css',
-  'binary-cube-information-analysis-suite.css',
-  'binary-cube-communication-capacity-analyzer.css',
-  'binary-cube-media-forensics-suite.css',
-  'binary-cube-steganalysis-lab.css',
-  'scripts/validate-binary-cube-steganalysis-lab.mjs',
-  'binary-cube-diagnostic-pipeline.css',
-  'binary-cube-cubic-decryptor.css',
-  'scripts/validate-binary-cube-cubic-decryptor.mjs',
-  'scripts/validate-scientific-diagnostic-pipeline.mjs',
-  'scripts/run-scientific-diagnostic-local.mjs',
-  'docs/scientific-diagnostic-pipeline-plan.md',
-  'interstellar-media-collisions-lab.css',
-  'double-slit-lab.css'
+  'scientific-tools-local-media.js', 'binary-cube-key-generation-visualizer.css', 'scripts/validate-binary-cube-key-generation-visualizer.mjs', 'binary-cube-decryption-dashboard.css', 'binary-cube-cryptanalytic-test-lab.css', 'binary-cube-information-analysis-suite.css', 'binary-cube-communication-capacity-analyzer.css', 'binary-cube-media-forensics-suite.css', 'binary-cube-steganalysis-lab.css', 'scripts/validate-binary-cube-steganalysis-lab.mjs', 'binary-cube-diagnostic-calibration-registry.js', 'binary-cube-diagnostic-calibration-baseline.js', 'binary-cube-diagnostic-pipeline.css', 'binary-cube-cubic-decryptor.css', 'scripts/validate-binary-cube-cubic-decryptor.mjs', 'scripts/validate-scientific-diagnostic-pipeline.mjs', 'scripts/calibrate-scientific-diagnostic-pipeline.mjs', 'scripts/validate-scientific-diagnostic-calibration.mjs', 'scripts/run-scientific-diagnostic-local.mjs', 'docs/scientific-diagnostic-pipeline-plan.md', 'interstellar-media-collisions-lab.css', 'double-slit-lab.css'
 ]) nonEmpty(relativePath);
-checks.push('Scientific Tools styles, local runner, plan, and specialized validators are present');
+checks.push('Scientific Tools styles, calibration data, local runtime, plan, and validators are present');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.15.0',
+  schemaVersion: '0.16.0',
   pass: true,
   checkCount: checks.length,
   checks
