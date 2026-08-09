@@ -41,7 +41,15 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
       - name: Apply authoritative WebGPU integration
-        run: python3 scripts/apply-cubic-webgpu-integration.py
+        run: |
+          python3 scripts/apply-cubic-webgpu-integration.py
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('binary-cube-cubic-decryptor-worker.js')
+          text = path.read_text(encoding='utf-8')
+          if text.startswith('\\\n'):
+              path.write_text(text[2:], encoding='utf-8')
+          PY
       - name: Validate modified sources
         run: |
           node --check binary-cube-cubic-decryptor-engine.js
