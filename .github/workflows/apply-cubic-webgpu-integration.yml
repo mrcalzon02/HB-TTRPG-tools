@@ -1,0 +1,61 @@
+name: Apply Cubic WebGPU integration
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "scripts/apply-cubic-webgpu-integration.py"
+      - ".github/workflows/apply-cubic-webgpu-integration.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "apply-cubic-webgpu-integration"
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Rebase onto current main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - name: Apply authoritative WebGPU integration
+        run: python3 scripts/apply-cubic-webgpu-integration.py
+      - name: Validate modified sources
+        run: |
+          node --check binary-cube-cubic-decryptor-engine.js
+          node --check binary-cube-cubic-decryptor-webgpu.js
+          node --check binary-cube-cubic-decryptor-worker-pool.js
+          node --check binary-cube-cubic-decryptor-worker.js
+          node --check binary-cube-cubic-decryptor.js
+          node --check scripts/validate-binary-cube-cubic-decryptor.mjs
+          node --check scripts/validate-scientific-tools-extraction.mjs
+          node scripts/validate-binary-cube-cubic-decryptor.mjs
+          node scripts/validate-scientific-tools-extraction.mjs
+      - name: Commit directly to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            binary-cube-cubic-decryptor-engine.js \
+            binary-cube-cubic-decryptor-worker-pool.js \
+            binary-cube-cubic-decryptor-worker.js \
+            binary-cube-cubic-decryptor.js \
+            scripts/validate-binary-cube-cubic-decryptor.mjs \
+            scripts/validate-scientific-tools-extraction.mjs
+          if git diff --cached --quiet; then
+            echo "No integration changes to commit."
+            exit 0
+          fi
+          git commit -m "feat: integrate parity-gated Cubic WebGPU acceleration"
+          git push origin HEAD:main
