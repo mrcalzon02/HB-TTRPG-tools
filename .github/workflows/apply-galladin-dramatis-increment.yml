@@ -6,6 +6,8 @@ on:
     paths:
       - 'scripts/apply-galladin-dramatis-increment.py'
       - '.github/workflows/apply-galladin-dramatis-increment.yml'
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -41,5 +43,3 @@ jobs:
           git diff --cached --check
           git commit -m 'feat: add Galladin harbor personae'
           git push origin HEAD:main
-
-# one-shot executor retriggered after verification that authoritative blobs remain unchanged
