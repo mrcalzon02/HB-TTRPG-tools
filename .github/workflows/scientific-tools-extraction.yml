@@ -11,6 +11,8 @@ on:
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
       - "interstellar-media-collisions-lab.css"
+      - "double-slit-lab.js"
+      - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
   workflow_dispatch:
@@ -52,9 +54,11 @@ jobs:
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
+          node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s interstellar-media-collisions-lab.css
+          test -s double-slit-lab.css
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
