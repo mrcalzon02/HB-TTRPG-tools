@@ -9,10 +9,16 @@ import { performance } from 'node:perf_hooks';
 const require = createRequire(import.meta.url);
 const Engine = require(path.join(process.cwd(), 'shadowrun-binary-cube-engine.js'));
 
-const PROFILE_VERSION = 'research-0.1.0';
-const PROFILES = Object.freeze(['direct-permutation', 'iterative-chain', 'random-transposition-walk', 'nested-permutation']);
+const PROFILE_VERSION = 'research-0.2.0';
+const PROFILES = Object.freeze([
+  'direct-permutation',
+  'iterative-chain',
+  'random-transposition-walk',
+  'nested-permutation',
+  'nested-hierarchy'
+]);
 const GRID_SIZES = Object.freeze([12, 64, 128]);
-const SEEDS_PER_GRID = 12;
+const SEEDS_PER_GRID = 16;
 const BASE_OPTIONS = Object.freeze({
   inputFace: 'top',
   outputFace: 'front',
@@ -105,6 +111,21 @@ function nestedPermutation(size, seed, domain) {
   return assertPermutation(output, size, `${domain} nested permutation`);
 }
 
+function nestedHierarchyPermutation(size, seed, domain) {
+  function recurse(values, nodePath) {
+    if (values.length <= 4) {
+      const random = mulberry32(fnv1a32(`${seed}|${size}|nested-hierarchy|${domain}|${nodePath}|leaf|${PROFILE_VERSION}`));
+      return shuffle(values, random);
+    }
+    const split = Math.ceil(values.length / 2);
+    const left = recurse(values.slice(0, split), `${nodePath}L`);
+    const right = recurse(values.slice(split), `${nodePath}R`);
+    const random = mulberry32(fnv1a32(`${seed}|${size}|nested-hierarchy|${domain}|${nodePath}|branch|${PROFILE_VERSION}`));
+    return random() < 0.5 ? [...left, ...right] : [...right, ...left];
+  }
+  return assertPermutation(recurse(range(size), 'root'), size, `${domain} nested hierarchy permutation`);
+}
+
 function profilePermutations(profile, seed, size) {
   if (profile === 'iterative-chain') {
     return {
@@ -127,6 +148,13 @@ function profilePermutations(profile, seed, size) {
       depthPermutation: nestedPermutation(size, seed, 'depth')
     };
   }
+  if (profile === 'nested-hierarchy') {
+    return {
+      rowPermutation: nestedHierarchyPermutation(size, seed, 'row'),
+      columnPermutation: nestedHierarchyPermutation(size, seed, 'column'),
+      depthPermutation: nestedHierarchyPermutation(size, seed, 'depth')
+    };
+  }
   throw new Error(`Unsupported research profile: ${profile}`);
 }
 
@@ -135,16 +163,12 @@ function generateResearchKey(profile, seed, gridSize) {
   if (profile === 'direct-permutation') return Engine.createKey(options);
 
   // The canonical engine remains authoritative for key structure, fingerprinting,
-  // masks, face legality, and collision-free validation. This research harness
-  // changes only how the three complete permutations are proposed, while holding
-  // the canonical direct-generator mask constant for a fair profile comparison.
+  // masks, face legality, and collision-free validation. Candidate profiles alter
+  // only the proposed complete row/column/depth permutations. The canonical direct
+  // generator's mask is deliberately held constant for a same-seed profile comparison.
   const template = Engine.createKey(options);
   const proposed = profilePermutations(profile, seed, gridSize);
-  return Engine.validateKey({
-    ...template,
-    ...proposed,
-    keyId: undefined
-  });
+  return Engine.validateKey({ ...template, ...proposed, keyId: undefined });
 }
 
 function cycleMetrics(permutation) {
@@ -190,32 +214,41 @@ function permutationMetrics(permutation) {
   };
 }
 
+function pearson(left, right) {
+  assert.equal(left.length, right.length, 'Correlation requires equal vectors.');
+  if (!left.length) return 0;
+  const leftMean = mean(left);
+  const rightMean = mean(right);
+  let covariance = 0;
+  let leftVariance = 0;
+  let rightVariance = 0;
+  for (let index = 0; index < left.length; index += 1) {
+    const a = left[index] - leftMean;
+    const b = right[index] - rightMean;
+    covariance += a * b;
+    leftVariance += a * a;
+    rightVariance += b * b;
+  }
+  return leftVariance && rightVariance ? covariance / Math.sqrt(leftVariance * rightVariance) : 0;
+}
+
 function mean(values) {
   return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
 }
 
 function keyMetrics(key) {
-  const axes = [key.rowPermutation, key.columnPermutation, key.depthPermutation].map(permutationMetrics);
+  const permutations = [key.rowPermutation, key.columnPermutation, key.depthPermutation];
+  const axes = permutations.map(permutationMetrics);
   const keys = Object.keys(axes[0]);
-  return Object.fromEntries(keys.map(metric => [metric, mean(axes.map(axis => axis[metric]))]));
-}
-
-function keyDifferenceFraction(left, right) {
-  assert.equal(left.gridSize, right.gridSize, 'Key comparison requires equal grid sizes.');
-  const axes = ['rowPermutation', 'columnPermutation', 'depthPermutation'];
-  let changed = 0;
-  let total = 0;
-  for (const axis of axes) {
-    for (let index = 0; index < left[axis].length; index += 1) {
-      total += 1;
-      if (left[axis][index] !== right[axis][index]) changed += 1;
-    }
-  }
-  for (let index = 0; index < left.mask.length; index += 1) {
-    total += 1;
-    if (Boolean(left.mask[index]) !== Boolean(right.mask[index])) changed += 1;
-  }
-  return changed / total;
+  const correlations = [
+    Math.abs(pearson(permutations[0], permutations[1])),
+    Math.abs(pearson(permutations[0], permutations[2])),
+    Math.abs(pearson(permutations[1], permutations[2]))
+  ];
+  return {
+    ...Object.fromEntries(keys.map(metric => [metric, mean(axes.map(axis => axis[metric]))])),
+    meanAbsoluteInterAxisCorrelation: mean(correlations)
+  };
 }
 
 function permutationOverlapFraction(left, right) {
@@ -231,6 +264,28 @@ function permutationOverlapFraction(left, right) {
   return same / total;
 }
 
+function maskDifferenceFraction(left, right) {
+  assert.equal(left.mask.length, right.mask.length, 'Mask comparison requires equal domains.');
+  let changed = 0;
+  for (let index = 0; index < left.mask.length; index += 1) if (Boolean(left.mask[index]) !== Boolean(right.mask[index])) changed += 1;
+  return changed / Math.max(1, left.mask.length);
+}
+
+function bitDifferenceFraction(leftValue, rightValue) {
+  const left = String(leftValue || '');
+  const right = String(rightValue || '');
+  assert.equal(left.length, right.length, 'Bit comparison requires equal lengths.');
+  let changed = 0;
+  for (let index = 0; index < left.length; index += 1) if (left[index] !== right[index]) changed += 1;
+  return changed / Math.max(1, left.length);
+}
+
+function researchPayload(gridSize) {
+  const length = Math.min(4096, Math.max(512, gridSize * gridSize * 2));
+  const random = mulberry32(fnv1a32(`binary-cube-profile-research-payload|${gridSize}|v1`));
+  return Array.from({ length }, () => random() >= 0.5 ? '1' : '0').join('');
+}
+
 function round(value, digits = 6) {
   const factor = 10 ** digits;
   return Math.round(value * factor) / factor;
@@ -240,10 +295,16 @@ const rows = [];
 for (const profile of PROFILES) {
   for (const gridSize of GRID_SIZES) {
     const metricRows = [];
-    const avalancheRows = [];
-    const overlapRows = [];
+    const permutationMutationRows = [];
+    const maskMutationRows = [];
+    const ciphertextMutationRows = [];
+    const neighboringOverlapRows = [];
+    const directOverlapRows = [];
+    const directCiphertextDifferenceRows = [];
     const generationMilliseconds = [];
+    const keyIds = new Set();
     const keys = [];
+    const payload = researchPayload(gridSize);
 
     for (let seedIndex = 0; seedIndex < SEEDS_PER_GRID; seedIndex += 1) {
       const seed = `profile-research-${gridSize}-${seedIndex}`;
@@ -254,26 +315,51 @@ for (const profile of PROFILES) {
       assert.deepEqual(repeated, key, `${profile} is not deterministic at ${gridSize} for seed ${seed}.`);
       assert.equal(Engine.algebraicInvariant(key).collisionFree, true, `${profile} violated the canonical algebraic invariant at ${gridSize}.`);
       if (gridSize === GRID_SIZES[0]) Engine.assertProjectionUniqueness(key);
+      keyIds.add(key.keyId);
 
       const mutated = generateResearchKey(profile, `${seed}!`, gridSize);
-      avalancheRows.push(keyDifferenceFraction(key, mutated));
+      const direct = generateResearchKey('direct-permutation', seed, gridSize);
+      permutationMutationRows.push(1 - permutationOverlapFraction(key, mutated));
+      maskMutationRows.push(maskDifferenceFraction(key, mutated));
+      directOverlapRows.push(permutationOverlapFraction(key, direct));
+
+      const encrypted = Engine.encryptBinary(payload, key);
+      const mutatedEncrypted = Engine.encryptBinary(payload, mutated);
+      const directEncrypted = Engine.encryptBinary(payload, direct);
+      ciphertextMutationRows.push(bitDifferenceFraction(encrypted.ciphertext, mutatedEncrypted.ciphertext));
+      directCiphertextDifferenceRows.push(bitDifferenceFraction(encrypted.ciphertext, directEncrypted.ciphertext));
+
       metricRows.push(keyMetrics(key));
-      if (keys.length) overlapRows.push(permutationOverlapFraction(keys[keys.length - 1], key));
+      if (keys.length) neighboringOverlapRows.push(permutationOverlapFraction(keys[keys.length - 1], key));
       keys.push(key);
     }
 
+    assert.equal(keyIds.size, SEEDS_PER_GRID, `${profile} produced a repeated key ID at grid ${gridSize}.`);
     const metricNames = Object.keys(metricRows[0]);
+    const expectedRandomPositionOverlap = 1 / gridSize;
+    const expectedRandomAdjacentPreservation = 2 / gridSize;
     rows.push(Object.freeze({
       profile,
       gridSize,
       keysTested: keys.length,
+      uniqueKeyIds: keyIds.size,
       deterministic: true,
       collisionFree: true,
       exhaustiveSixFaceCheck: gridSize === GRID_SIZES[0],
       meanGenerationMilliseconds: round(mean(generationMilliseconds), 4),
-      seedMutationDifferenceFraction: round(mean(avalancheRows)),
-      neighboringSeedPermutationOverlapFraction: round(mean(overlapRows)),
-      metrics: Object.freeze(Object.fromEntries(metricNames.map(name => [name, round(mean(metricRows.map(row => row[name])))])))
+      permutationSeedMutationDifferenceFraction: round(mean(permutationMutationRows)),
+      maskSeedMutationDifferenceFraction: round(mean(maskMutationRows)),
+      ciphertextSeedMutationDifferenceFraction: round(mean(ciphertextMutationRows)),
+      neighboringSeedPermutationOverlapFraction: round(mean(neighboringOverlapRows)),
+      directSameSeedPermutationOverlapFraction: round(mean(directOverlapRows)),
+      directSameSeedCiphertextDifferenceFraction: round(mean(directCiphertextDifferenceRows)),
+      expectedRandomPositionOverlap: round(expectedRandomPositionOverlap),
+      expectedRandomAdjacentPreservation: round(expectedRandomAdjacentPreservation),
+      metrics: Object.freeze({
+        ...Object.fromEntries(metricNames.map(name => [name, round(mean(metricRows.map(row => row[name])))])),
+        adjacentPreservationVsRandomRatio: round(mean(metricRows.map(row => row.adjacentPreservationFraction)) / expectedRandomAdjacentPreservation),
+        fixedPointVsRandomRatio: round(mean(metricRows.map(row => row.fixedPointFraction)) / expectedRandomPositionOverlap)
+      })
     }));
   }
 }
@@ -281,13 +367,20 @@ for (const profile of PROFILES) {
 const byProfile = Object.fromEntries(PROFILES.map(profile => {
   const profileRows = rows.filter(row => row.profile === profile);
   return [profile, Object.freeze({
-    seedMutationDifferenceFraction: round(mean(profileRows.map(row => row.seedMutationDifferenceFraction))),
+    permutationSeedMutationDifferenceFraction: round(mean(profileRows.map(row => row.permutationSeedMutationDifferenceFraction))),
+    maskSeedMutationDifferenceFraction: round(mean(profileRows.map(row => row.maskSeedMutationDifferenceFraction))),
+    ciphertextSeedMutationDifferenceFraction: round(mean(profileRows.map(row => row.ciphertextSeedMutationDifferenceFraction))),
     neighboringSeedPermutationOverlapFraction: round(mean(profileRows.map(row => row.neighboringSeedPermutationOverlapFraction))),
+    directSameSeedPermutationOverlapFraction: round(mean(profileRows.map(row => row.directSameSeedPermutationOverlapFraction))),
+    directSameSeedCiphertextDifferenceFraction: round(mean(profileRows.map(row => row.directSameSeedCiphertextDifferenceFraction))),
     meanNormalizedDisplacement: round(mean(profileRows.map(row => row.metrics.meanNormalizedDisplacement))),
     rmsNormalizedDisplacement: round(mean(profileRows.map(row => row.metrics.rmsNormalizedDisplacement))),
     adjacentPreservationFraction: round(mean(profileRows.map(row => row.metrics.adjacentPreservationFraction))),
+    adjacentPreservationVsRandomRatio: round(mean(profileRows.map(row => row.metrics.adjacentPreservationVsRandomRatio))),
     longestCycleFraction: round(mean(profileRows.map(row => row.metrics.longestCycleFraction))),
     fixedPointFraction: round(mean(profileRows.map(row => row.metrics.fixedPointFraction))),
+    fixedPointVsRandomRatio: round(mean(profileRows.map(row => row.metrics.fixedPointVsRandomRatio))),
+    meanAbsoluteInterAxisCorrelation: round(mean(profileRows.map(row => row.metrics.meanAbsoluteInterAxisCorrelation))),
     meanGenerationMilliseconds: round(mean(profileRows.map(row => row.meanGenerationMilliseconds)), 4)
   })];
 }));
@@ -301,7 +394,8 @@ console.log(JSON.stringify({
   gridSizes: GRID_SIZES,
   seedsPerGrid: SEEDS_PER_GRID,
   totalKeysValidated: PROFILES.length * GRID_SIZES.length * SEEDS_PER_GRID,
-  comparisonBoundary: 'Research-only candidate permutation generators. The canonical engine remains unchanged. The mask is held to the canonical direct-generator mask for each seed so this run isolates permutation-generation behavior.',
+  comparisonBoundary: 'Research-only candidate permutation generators. The canonical engine remains unchanged. The direct generator mask is held constant across profiles for a given seed. Mutation tests separately report permutation, mask, and actual ciphertext bit differences.',
+  interpretationBoundary: 'Permutation composition can collapse to another ordinary permutation. Extra generation steps are not treated as added security unless they produce independently useful measurable behavior without introducing structure.',
   aggregate: byProfile,
   rows
 }, null, 2));
