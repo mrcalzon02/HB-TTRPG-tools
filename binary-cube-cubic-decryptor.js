@@ -84,7 +84,7 @@
   function sourceForWorker() {
     if (!activeSource) fail('Load a Binary Cube package or raw ciphertext first.');
     if (activeSource.kind === 'package') return { kind: 'package', package: activeSource.package };
-    return { kind: 'raw', bits: activeSource.bits, framing: { ...manualFraming(), ...(activeSource.framing || {}) } };
+    return { kind: 'raw', bits: activeSource.bits, framing: { ...(activeSource.framing || {}), ...manualFraming() } };
   }
 
   function normalizeParsedSource(parsed, sourceName) {
@@ -178,7 +178,7 @@
   function renderCandidates() {
     const target = panel.querySelector('[data-bccd-results]');
     if (!candidates.length) { target.innerHTML = '<p class="bccd-muted">No candidate plaintexts retained yet.</p>'; return; }
-    target.innerHTML = candidates.map((candidate, index) => `<article class="bccd-candidate ${candidate.exactFingerprintMatch ? 'bccd-exact' : ''}"><header><div><span>#${index + 1}</span><strong>${esc(candidate.profileLabel)} · ${candidate.gridSize}³</strong></div><b>${candidate.exactFingerprintMatch ? 'KEY FINGERPRINT MATCH' : `score ${num(candidate.score, 1)}`}</b></header><div class="bccd-chips"><span>seed <code>${esc(candidate.seed)}</code></span><span>${esc(candidate.inputFace)}→${esc(candidate.outputFace)}</span><span>turns ${candidate.inputQuarterTurns}/${candidate.outputQuarterTurns}</span><span>capacity ${candidate.payloadCapacity}</span><span>printable ${pct(candidate.printableFraction)}</span><span>entropy ${num(candidate.entropy, 3)}</span>${candidate.signature ? `<span>${esc(candidate.signature)}</span>` : ''}</div><pre>${esc(candidate.preview || '(binary / no printable preview)')}</pre><details><summary>Hex preview and evidence boundary</summary><code>${esc(candidate.hexPreview || '')}</code><p>${esc(candidate.caveat || '')}</p></details><div class="bccd-actions"><button type="button" data-bccd-analyze="${index}">Analyze candidate</button><button type="button" data-bccd-media="${index}">Media forensics</button><button type="button" data-bccd-save="${index}">Save plaintext</button><button type="button" data-bccd-save-key="${index}" ${candidate.key ? '' : 'disabled'}>Save recovered key</button></div></article>`).join('');
+    target.innerHTML = candidates.map((candidate, index) => `<article class="bccd-candidate ${candidate.exactFingerprintMatch ? 'bccd-exact' : ''}"><header><div><span>#${index + 1}</span><strong>${esc(candidate.profileLabel)} · ${candidate.gridSize}³</strong></div><b>${candidate.exactFingerprintMatch ? 'KEY FINGERPRINT MATCH' : `score ${num(candidate.score, 1)}`}</b></header><div class="bccd-chips"><span>seed <code>${esc(candidate.seed)}</code></span><span>${esc(candidate.inputFace)}→${esc(candidate.outputFace)}</span><span>turns ${candidate.inputQuarterTurns}/${candidate.outputQuarterTurns}</span><span>capacity ${candidate.payloadCapacity}</span><span>printable ${pct(candidate.printableFraction)}</span><span>entropy ${num(candidate.entropy, 3)}</span>${candidate.signature ? `<span>${esc(candidate.signature)}</span>` : ''}</div><pre>${esc(candidate.preview || '(binary / no printable preview)')}</pre><details><summary>Hex preview and evidence boundary</summary><code>${esc(candidate.hexPreview || '')}</code><p>${esc(candidate.caveat || '')}</p></details><div class="bccd-actions"><button type="button" data-bccd-analyze="${index}">Analyze candidate</button><button type="button" data-bccd-media="${index}">Media forensics</button><button type="button" data-bccd-full="${index}">Recover full plaintext</button><button type="button" data-bccd-save="${index}">Save plaintext</button><button type="button" data-bccd-save-key="${index}">Save recovered key</button></div></article>`).join('');
   }
 
   function download(value, filename, type = 'application/octet-stream') {
@@ -191,9 +191,44 @@
     download(candidateBytes(candidate), `cubic-decryptor-${candidate.profile}-${candidate.gridSize}-${candidate.keyId || 'candidate'}.bin`);
   }
 
+  function regenerateKey(candidate) {
+    const Research = window.BinaryCubeKeyGenerationResearch;
+    if (!Research?.generateResearchKey) fail('Binary Cube key-generation research is unavailable.');
+    const key = Research.generateResearchKey(candidate.profile, candidate.seed, candidate.gridSize, {
+      gridSize: candidate.gridSize,
+      inputFace: candidate.inputFace,
+      outputFace: candidate.outputFace,
+      inputQuarterTurns: candidate.inputQuarterTurns,
+      outputQuarterTurns: candidate.outputQuarterTurns,
+      maskDensity: candidate.payloadCapacity / (candidate.gridSize * candidate.gridSize)
+    });
+    if (candidate.keyId && key.keyId !== candidate.keyId) fail('Regenerated key fingerprint does not match the retained candidate.');
+    return key;
+  }
+
   function saveKey(candidate) {
-    if (!candidate.key) return;
-    download(JSON.stringify(candidate.key, null, 2), `cubic-decryptor-key-${candidate.key.keyId || 'candidate'}.json`, 'application/json');
+    const key = regenerateKey(candidate);
+    download(JSON.stringify(key, null, 2), `cubic-decryptor-key-${key.keyId || 'candidate'}.json`, 'application/json');
+  }
+
+  function recoverFullCandidate(candidate) {
+    const key = regenerateKey(candidate);
+    let plaintextBits;
+    if (activeSource?.kind === 'package') plaintextBits = Engine.decryptBinary(activeSource.package, key);
+    else {
+      if (!activeSource?.bits) fail('The raw ciphertext source is no longer loaded.');
+      const framing = { ...(activeSource.framing || {}), ...manualFraming() };
+      const source = Cubic.sourceFromRaw(activeSource.bits, framing);
+      const payload = Cubic.syntheticPackage(source, key, candidate.payloadCapacity, source.bits, framing.originalBitLength);
+      plaintextBits = Engine.decryptBinary(payload, key);
+    }
+    const evidence = Cubic.scorePlaintext(plaintextBits);
+    const updated = Object.freeze({ ...candidate, ...evidence, plaintextBits, fullRecovery: true });
+    const index = candidates.findIndex(item => candidateIdentity(item) === candidateIdentity(candidate));
+    if (index >= 0) candidates.splice(index, 1, updated);
+    renderCandidates();
+    setStatus(`Recovered full plaintext with ${updated.profileLabel} / seed ${updated.seed}.`, 'success');
+    return updated;
   }
 
   function openAnalysis(candidate) {
@@ -289,10 +324,11 @@
     target.querySelector('[data-bccd-export-checkpoint]').addEventListener('click', () => { try { exportCheckpoint(); } catch (error) { setStatus(error.message, 'error'); } });
     target.querySelector('#bccd-checkpoint-file').addEventListener('change', event => { const file = event.target.files?.[0]; if (file) void importCheckpoint(file).catch(error => setStatus(error.message, 'error')); });
     target.querySelector('[data-bccd-results]').addEventListener('click', event => {
-      const analyze = event.target.closest('[data-bccd-analyze]'); const media = event.target.closest('[data-bccd-media]'); const save = event.target.closest('[data-bccd-save]'); const saveKeyButton = event.target.closest('[data-bccd-save-key]');
+      const analyze = event.target.closest('[data-bccd-analyze]'); const media = event.target.closest('[data-bccd-media]'); const full = event.target.closest('[data-bccd-full]'); const save = event.target.closest('[data-bccd-save]'); const saveKeyButton = event.target.closest('[data-bccd-save-key]');
       try {
         if (analyze) void openAnalysis(candidates[Number(analyze.dataset.bccdAnalyze)]);
         if (media) void openMedia(candidates[Number(media.dataset.bccdMedia)]);
+        if (full) recoverFullCandidate(candidates[Number(full.dataset.bccdFull)]);
         if (save) saveCandidate(candidates[Number(save.dataset.bccdSave)]);
         if (saveKeyButton) saveKey(candidates[Number(saveKeyButton.dataset.bccdSaveKey)]);
       } catch (error) { setStatus(error.message, 'error'); }

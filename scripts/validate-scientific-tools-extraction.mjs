@@ -24,6 +24,9 @@ const steganalysisWorker = read('binary-cube-steganalysis-worker.js');
 const steganalysisLab = read('binary-cube-steganalysis-lab.js');
 const diagnosticPipeline = read('binary-cube-diagnostic-pipeline.js');
 const diagnosticPanel = read('binary-cube-diagnostic-pipeline-panel.js');
+const cubicDecryptorEngine = read('binary-cube-cubic-decryptor-engine.js');
+const cubicDecryptorWorker = read('binary-cube-cubic-decryptor-worker.js');
+const cubicDecryptorUi = read('binary-cube-cubic-decryptor.js');
 const diagnosticLocal = read('scripts/run-scientific-diagnostic-local.mjs');
 const diagnosticPlan = read('docs/scientific-diagnostic-pipeline-plan.md');
 const ism = read('interstellar-media-collisions-lab.js');
@@ -63,6 +66,8 @@ checks.push(excludes('Shadowrun does not absorb setting-neutral research/simulat
   'binary-cube-steganalysis-engine.js',
   'binary-cube-steganalysis-lab.js',
   'binary-cube-diagnostic-pipeline.js',
+  'binary-cube-cubic-decryptor-engine.js',
+  'binary-cube-cubic-decryptor.js',
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js'
 ]));
@@ -81,6 +86,8 @@ checks.push(excludes('Black Light does not duplicate centralized runtimes', blac
   'binary-cube-steganalysis-engine.js',
   'binary-cube-steganalysis-lab.js',
   'binary-cube-diagnostic-pipeline.js',
+  'binary-cube-cubic-decryptor-engine.js',
+  'binary-cube-cubic-decryptor.js',
   'interstellar-media-collisions-lab.js',
   'double-slit-lab.js'
 ]));
@@ -191,6 +198,42 @@ checks.push(includes('3D key-generation visualizer exposes same-seed structural 
   'actual Latin-cube point field',
   'visually chaotic cube is not proof of cryptographic security',
   'BinaryCubeKeyGenerationVisualizer = Object.freeze'
+]));
+
+
+checks.push(includes('Cubic decryptor owns deterministic staged search and delegates cryptographic authority', cubicDecryptorEngine, [
+  'BinaryCubeCubicDecryptorEngine',
+  'Research.generateResearchKey(',
+  'Engine.decryptBinary(',
+  'function buildSearchPlan(',
+  "'direct-permutation'",
+  "'iterative-chain'",
+  "'random-transposition-walk'",
+  "'nested-permutation'",
+  "'nested-interleaved'",
+  'function makeCheckpoint('
+]));
+checks.push(excludes('Cubic decryptor does not duplicate cube transforms or generator implementations', cubicDecryptorEngine, [
+  'function transformBlockWithKey(',
+  'function iterativePermutation(',
+  'function randomWalkPermutation(',
+  'function nestedPermutation('
+]));
+checks.push(includes('Cubic decryptor worker delegates deterministic attempts to the shared search engine', cubicDecryptorWorker, [
+  "'binary-cube-cubic-decryptor-engine.js'",
+  'Cubic.attemptCandidate(',
+  'Cubic.makeCheckpoint(',
+  "message.operation !== 'search'"
+]));
+checks.push(includes('Cubic decryptor UI exposes staged recovery, resume, full recovery, and specialist handoff', cubicDecryptorUi, [
+  'Cubic Decryptor Tool',
+  'Build staged plan',
+  'Run / resume decryptor',
+  'Export checkpoint',
+  'Recover full plaintext',
+  'openInformationAnalysisSuite',
+  'openMediaForensicsSuite',
+  'regenerateKey('
 ]));
 
 checks.push(includes('Advanced steganalysis engine owns quantitative and parity math', steganalysisEngine, [
@@ -330,6 +373,13 @@ checks.push(includes('Scientific Tools owns one launch for key research, stegana
   'function openDiagnosticPipeline(',
   'id="scientific-tools-open-diagnostic-pipeline"',
   'Run Diagnostic Evaluation Pipeline',
+  'function loadCubicDecryptor()',
+  "loadStyle('binary-cube-cubic-decryptor.css')",
+  "loadScript('binary-cube-cubic-decryptor-engine.js'",
+  "loadScript('binary-cube-cubic-decryptor.js'",
+  'function openCubicDecryptor(',
+  'id="scientific-tools-open-cubic-decryptor"',
+  'Open Cubic Decryptor Tool',
   'absence of positive evidence is not evidence of absence'
 ]));
 checks.push(includes('Scientific Tools preserves its established destinations and demo corpus', workspace, [
@@ -340,6 +390,7 @@ checks.push(includes('Scientific Tools preserves its established destinations an
   'id="scientific-tools-open-binary-cube-visualizer"',
   'id="scientific-tools-open-binary-cube-laboratory"',
   'id="scientific-tools-open-decryption-dashboard"',
+  'id="scientific-tools-open-cubic-decryptor"',
   'id="scientific-tools-open-media-forensics-demos"',
   'id="scientific-tools-open-ism"',
   'id="scientific-tools-open-double-slit"',
@@ -382,6 +433,8 @@ for (const relativePath of [
   'binary-cube-steganalysis-lab.css',
   'scripts/validate-binary-cube-steganalysis-lab.mjs',
   'binary-cube-diagnostic-pipeline.css',
+  'binary-cube-cubic-decryptor.css',
+  'scripts/validate-binary-cube-cubic-decryptor.mjs',
   'scripts/validate-scientific-diagnostic-pipeline.mjs',
   'scripts/run-scientific-diagnostic-local.mjs',
   'docs/scientific-diagnostic-pipeline-plan.md',
