@@ -2,7 +2,7 @@
   'use strict';
 
   const VIEW_ID = 'scientific-tools';
-  const ASSET_VERSION = '20260809-cubic-decryptor-hardening-1';
+  const ASSET_VERSION = '20260809-cubic-decryptor-hardening-2';
   let cooperativeRunnerPromise = null;
   let ismPromise = null;
   let doubleSlitPromise = null;

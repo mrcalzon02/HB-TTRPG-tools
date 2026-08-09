@@ -12,6 +12,7 @@ const root = process.cwd();
 const Engine = require(path.join(root, 'shadowrun-binary-cube-engine.js'));
 const Research = require(path.join(root, 'binary-cube-key-generation-research.js'));
 const Cubic = require(path.join(root, 'binary-cube-cubic-decryptor-engine.js'));
+const Information = require(path.join(root, 'binary-cube-information-analysis-suite.js'));
 const ui = fs.readFileSync(path.join(root, 'binary-cube-cubic-decryptor.js'), 'utf8');
 const workerPath = path.join(root, 'binary-cube-cubic-decryptor-worker.js');
 const worker = fs.readFileSync(workerPath, 'utf8');
@@ -89,6 +90,9 @@ assert.deepEqual(
 );
 assert.equal(Cubic.renderSeed('seed-{n8}-{hex8}', 42), 'seed-00000042-0000002a');
 assert.throws(() => Cubic.normalizeTemplates(['no-counter']), /counter placeholder/);
+const informationProbe = Information.utilities.candidateScore(Uint8Array.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a,0,0,0,0]));
+assert.ok(informationProbe.signatures.some(item => item.label === 'PNG'), 'Stage B authority must recognize a canonical PNG signature.');
+assert.ok(Number.isFinite(informationProbe.score));
 
 const plaintext = '01001000011001010110110001101100011011110010000001000011011101010110001001100101'; // Hello Cube
 const recovered = [];
@@ -256,7 +260,11 @@ for (const required of [
   'openInformationAnalysisSuite',
   'openMediaForensicsSuite',
   'SHA-256 KEY MATCH',
-  'LEGACY KEY FINGERPRINT MATCH'
+  'LEGACY KEY FINGERPRINT MATCH',
+  'Corroborate retained candidates',
+  'Stage B specialist corroboration',
+  'Information.utilities.candidateScore',
+  'Information.analyzeInformation'
 ]) assert.ok(ui.includes(required), `UI is missing ${JSON.stringify(required)}`);
 for (const required of [
   "importScripts(",
@@ -272,7 +280,7 @@ assert.ok(css.length > 1000, 'Cubic Decryptor stylesheet is unexpectedly empty')
 
 console.log(JSON.stringify({
   receipt: 'hb-ttrpg-binary-cube-cubic-decryptor-validation-receipt',
-  schema: '0.2.0',
+  schema: '0.3.0',
   pass: true,
   recovered,
   rawRoundTrip: true,
