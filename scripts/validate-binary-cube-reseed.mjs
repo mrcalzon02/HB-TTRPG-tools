@@ -13,6 +13,7 @@ const root = process.cwd();
 const read = relativePath => fs.readFileSync(path.join(root, relativePath), 'utf8');
 const workerClientSource = read('binary-cube-worker-client.js');
 const laboratorySource = read('shadowrun-binary-cube-encryption.js');
+const visualizerSource = read('shadowrun-binary-cube-visualizer.js');
 
 for (const marker of [
   'const RESEED_BYTES = 16;',
@@ -37,8 +38,23 @@ for (const marker of [
   'reseedKey: () => generateKey(buildPanel(), true)'
 ]) assert.ok(laboratorySource.includes(marker), `Binary Cube laboratory is missing reseed contract marker ${marker}`);
 
-assert.ok(laboratorySource.includes('Generate Key reproduces this seed exactly.'), 'The deterministic Generate Key behavior must remain explicit.');
+for (const marker of [
+  'const SeedSource = root?.ShadowrunBinaryCubeWorkerClient;',
+  'data-cube-visualizer-reseed',
+  '>Reseed Key</button>',
+  "SeedSource.freshSeed('binary-cube')",
+  "panel.querySelector('[data-cube-visualizer-seed]').value = freshSeed;",
+  "clearPackage(panel, 'Current package invalidated by key reseed.');",
+  'function reseedDraftKey(panel)',
+  'reseedKey: () => reseedDraftKey(buildPanel())',
+  'reseedAvailable: Boolean(SeedSource?.freshSeed)',
+  'Generate reproduces this seed exactly.'
+]) assert.ok(visualizerSource.includes(marker), `Binary Cube visualizer is missing reseed contract marker ${marker}`);
+
+assert.ok(laboratorySource.includes('Generate Key reproduces this seed exactly.'), 'The deterministic laboratory Generate Key behavior must remain explicit.');
+assert.ok(visualizerSource.includes('128 bits of browser cryptographic randomness'), 'The visualizer must disclose the reseed entropy source and size.');
 assert.ok(!workerClientSource.includes('Math.random'), 'Secure reseeding must not silently fall back to Math.random().');
+assert.ok(!visualizerSource.includes('crypto.getRandomValues'), 'The visualizer must consume the shared seed source instead of duplicating entropy generation.');
 
 const context = vm.createContext({
   console,
@@ -76,11 +92,14 @@ for (const key of reseededKeys) assert.equal(Engine.algebraicInvariant(key).coll
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-reseed-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   pass: true,
   entropyBytesPerReseed: client.reseedBytes,
   sampledFreshSeeds: seeds.length,
   deterministicGeneratePreserved: fixedA.keyId === fixedB.keyId,
   distinctReseededKeyIds: reseededKeys.length,
-  collisionFreeReseededKeys: true
+  collisionFreeReseededKeys: true,
+  laboratoryReseedBound: true,
+  visualizerReseedBound: true,
+  sharedEntropySource: true
 }, null, 2));
