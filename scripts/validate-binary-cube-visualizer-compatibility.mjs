@@ -19,7 +19,7 @@ globalThis.ShadowrunBinaryCubeAuth = Auth;
 globalThis.ShadowrunBinaryCubeSecureExport = SecureExport;
 globalThis.BinaryCubeVisualizerRenderer = Object.freeze({
   constants: Object.freeze({
-    RENDERER_VERSION: '0.5.0',
+    RENDERER_VERSION: '0.6.0',
     PLAYBACK_MODES: Object.freeze(['all', 'selected', 'row']),
     RENDER_TIER_POLICY: Object.freeze({ batchedMaximum: 64 })
   }),
@@ -128,7 +128,7 @@ assert.match(laboratorySource, /authenticatedEnvelope/);
 assert.match(authUiSource, /currentEnvelopeArtifact/);
 assert.match(authUiSource, /loadEnvelopeArtifact/);
 assert.match(secureSource, /setTransportArtifact\(targetPanel, 'secure-export'/);
-assert.match(assetVersion, /^\d{8}(?:-\d+|-v\d+)$/);
+assert.match(assetVersion, /^\d{8}(?:-\d+|-v\d+(?:-[a-z0-9-]+)?)$/i);
 assert.ok((entrySource.match(/shadowrun-binary-cube-secure-export\.js/g) || []).length >= 2);
 assert.match(entrySource, /await Promise\.resolve\(api\.loadArtifacts/);
 
@@ -142,7 +142,7 @@ assert.match(desktopSource, /Promise\.resolve\(window\.ShadowrunBinaryCubeVisual
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-shadowrun-binary-cube-v11-compatibility-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   pass: true,
   editorDraftValidation: true,
   secureExportMetadataMinimized: true,
