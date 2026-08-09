@@ -1,4 +1,4 @@
-# Combined-head gate for centralized Scientific Tools, cryptanalysis, and media-forensics runtimes.
+# Combined-head gate for centralized Scientific Tools, cryptanalysis, media-forensics, and steganalysis runtimes.
 name: Validate Scientific Tools extraction
 
 on:
@@ -30,6 +30,10 @@ on:
       - "binary-cube-media-forensics-suite.css"
       - "binary-cube-media-forensics-worker.js"
       - "binary-cube-media-forensics-demo-corpus.js"
+      - "binary-cube-steganalysis-engine.js"
+      - "binary-cube-steganalysis-worker.js"
+      - "binary-cube-steganalysis-lab.js"
+      - "binary-cube-steganalysis-lab.css"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -48,6 +52,7 @@ on:
       - "scripts/validate-binary-cube-communication-capacity-analyzer.mjs"
       - "scripts/validate-binary-cube-media-forensics-suite.mjs"
       - "scripts/validate-binary-cube-media-forensics-demo-corpus.mjs"
+      - "scripts/validate-binary-cube-steganalysis-lab.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
   workflow_dispatch:
 
@@ -101,6 +106,9 @@ jobs:
           node --check binary-cube-media-forensics-suite.js
           node --check binary-cube-media-forensics-worker.js
           node --check binary-cube-media-forensics-demo-corpus.js
+          node --check binary-cube-steganalysis-engine.js
+          node --check binary-cube-steganalysis-worker.js
+          node --check binary-cube-steganalysis-lab.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
@@ -117,6 +125,7 @@ jobs:
           node --check scripts/validate-binary-cube-communication-capacity-analyzer.mjs
           node --check scripts/validate-binary-cube-media-forensics-suite.mjs
           node --check scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
+          node --check scripts/validate-binary-cube-steganalysis-lab.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s binary-cube-key-generation-visualizer.css
           test -s binary-cube-decryption-dashboard.css
@@ -124,11 +133,15 @@ jobs:
           test -s binary-cube-information-analysis-suite.css
           test -s binary-cube-communication-capacity-analyzer.css
           test -s binary-cube-media-forensics-suite.css
+          test -s binary-cube-steganalysis-lab.css
           test -s interstellar-media-collisions-lab.css
           test -s double-slit-lab.css
 
       - name: Validate Steganography Signal and Media Demonstration Corpus
         run: node scripts/validate-binary-cube-media-forensics-demo-corpus.mjs
+
+      - name: Validate Advanced Steganalysis Laboratory
+        run: node scripts/validate-binary-cube-steganalysis-lab.mjs
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
