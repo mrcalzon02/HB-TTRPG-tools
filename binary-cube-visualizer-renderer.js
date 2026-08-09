@@ -6,10 +6,13 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeVisualizerRendererApi() {
   'use strict';
 
-  const RENDERER_VERSION = '0.5.0';
+  const RENDERER_VERSION = '0.6.0';
   const FACES = Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
   const PLAYBACK_MODES = Object.freeze(['all', 'selected', 'row']);
   const RENDER_QUALITIES = Object.freeze(['auto', 'exact', 'sampled', 'aggregate']);
+  const VIEW_MODES = Object.freeze(['perspective', 'isometric']);
+  const DEFAULT_MANUAL_BITS = '01001100110100110100110011010011';
+  const DEFAULT_LOREM_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
   const RENDER_TIER_POLICY = Object.freeze({
     detailedMaximum: 12,
     batchedMaximum: 64,
@@ -28,6 +31,7 @@
   });
   const CAMERA_PRESETS = Object.freeze({
     perspective: Object.freeze({ yaw: 0.72, pitch: 0.48, distance: 4.8 }),
+    isometric: Object.freeze({ yaw: Math.PI / 4, pitch: Math.atan(1 / Math.sqrt(2)), distance: 4.8 }),
     front: Object.freeze({ yaw: 0, pitch: 0, distance: 4.5 }),
     back: Object.freeze({ yaw: Math.PI, pitch: 0, distance: 4.5 }),
     left: Object.freeze({ yaw: -Math.PI / 2, pitch: 0, distance: 4.5 }),
@@ -70,6 +74,13 @@
 
   function nowMilliseconds() {
     return typeof performance !== 'undefined' && typeof performance.now === 'function' ? performance.now() : Date.now();
+  }
+
+  function textToBits(text) {
+    const bytes = typeof TextEncoder !== 'undefined'
+      ? new TextEncoder().encode(String(text ?? ''))
+      : Uint8Array.from(unescape(encodeURIComponent(String(text ?? ''))), character => character.charCodeAt(0));
+    return Array.from(bytes, byte => byte.toString(2).padStart(8, '0')).join('');
   }
 
   function normalizeRenderQuality(value) {
@@ -232,6 +243,18 @@
     const f = 1 / Math.tan(fieldOfView / 2);
     const rangeInverse = 1 / (near - far);
     return new Float32Array([f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (near + far) * rangeInverse, -1, 0, 0, near * far * 2 * rangeInverse, 0]);
+  }
+
+  function orthographic(left, right, bottom, top, near, far) {
+    const width = right - left;
+    const height = top - bottom;
+    const depth = far - near;
+    return new Float32Array([
+      2 / width, 0, 0, 0,
+      0, 2 / height, 0, 0,
+      0, 0, -2 / depth, 0,
+      -(right + left) / width, -(top + bottom) / height, -(far + near) / depth, 1
+    ]);
   }
 
   function lookAt(eye, target, up) {
@@ -499,12 +522,17 @@
       this.performanceState = Object.freeze({ sceneBuildMilliseconds: 0, uploadMilliseconds: 0, renderMilliseconds: 0, renderedPointCount: 0, totalPointCount: 0, bufferBytes: 0, tier: 'detailed', requestedQuality: 'auto', effectiveQuality: 'exact' });
       this.directionLabelPositions = {};
       this.camera = { ...CAMERA_PRESETS.perspective, panX: 0, panY: 0, panZ: 0 };
+      this.viewMode = 'perspective';
+      this.preIsometricCamera = null;
+      this.viewportControls = null;
+      this.playbackMonitorFrame = null;
       this.pointer = null;
       this.pointerMoved = false;
       this.disposed = false;
       this.labels = new Map();
       this.installLabels();
       this.installStaticLines();
+      this.installViewportControls();
       this.bindEvents();
       this.resizeObserver = new ResizeObserver(() => this.render());
       this.resizeObserver.observe(this.canvas);
@@ -552,6 +580,189 @@
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.lineBuffer);
       this.gl.bufferData(this.gl.ARRAY_BUFFER, vertices, this.gl.STATIC_DRAW);
       this.lineVertexCount = vertices.length / 6;
+    }
+
+    installViewportControls() {
+      const shell = this.canvas.closest('[data-cube-visualizer-scene-shell]') || this.canvas.parentElement;
+      if (!(shell instanceof HTMLElement)) return;
+      if (getComputedStyle(shell).position === 'static') shell.style.position = 'relative';
+      const controls = document.createElement('div');
+      controls.className = 'cube-visualizer-viewport-controls';
+      controls.setAttribute('role', 'group');
+      controls.setAttribute('aria-label', 'Binary Cube viewport controls');
+      Object.assign(controls.style, { position:'absolute', inset:'10px 10px auto 10px', zIndex:'30', pointerEvents:'none' });
+
+      const play = document.createElement('button');
+      play.type = 'button';
+      play.className = 'layout-button cube-visualizer-viewport-play';
+      play.textContent = '▶ Play Encoding';
+      play.title = 'Build the canonical package if needed, then animate its validated encoding trace.';
+      play.setAttribute('aria-label', 'Play canonical Binary Cube encoding');
+      Object.assign(play.style, { position:'absolute', left:'0', top:'0', pointerEvents:'auto', minHeight:'34px', boxShadow:'0 8px 24px rgba(0,0,0,.45)' });
+      play.addEventListener('click', () => this.toggleCanonicalEncodingPlayback());
+
+      const view = document.createElement('button');
+      view.type = 'button';
+      view.className = 'layout-button cube-visualizer-viewport-view';
+      view.textContent = '👁 Isometric';
+      view.title = 'Toggle a true orthographic isometric projection.';
+      view.setAttribute('aria-label', 'Toggle isometric orthographic view');
+      view.setAttribute('aria-pressed', 'false');
+      Object.assign(view.style, { position:'absolute', right:'0', top:'0', pointerEvents:'auto', minHeight:'34px', boxShadow:'0 8px 24px rgba(0,0,0,.45)' });
+      view.addEventListener('click', () => this.toggleIsometricView());
+
+      controls.append(play, view);
+      shell.appendChild(controls);
+      this.viewportControls = { shell, controls, play, view };
+    }
+
+    updateViewControl() {
+      const button = this.viewportControls?.view;
+      if (!button) return;
+      const isometric = this.viewMode === 'isometric';
+      button.setAttribute('aria-pressed', String(isometric));
+      button.textContent = isometric ? '👁 Perspective' : '👁 Isometric';
+      button.title = isometric ? 'Return to the previous perspective camera.' : 'Switch to a true orthographic isometric projection.';
+    }
+
+    canonicalPanel() {
+      return this.canvas.closest('.cube-visualizer-panel');
+    }
+
+    setViewportPlayState(state) {
+      const button = this.viewportControls?.play;
+      if (!button) return;
+      if (state === 'playing') {
+        button.disabled = false;
+        button.textContent = '❚❚ Pause Encoding';
+        button.setAttribute('aria-label', 'Pause canonical Binary Cube encoding playback');
+      } else if (state === 'preparing') {
+        button.disabled = true;
+        button.textContent = 'Preparing Encoding…';
+        button.setAttribute('aria-label', 'Preparing canonical Binary Cube encoding playback');
+      } else {
+        button.disabled = false;
+        button.textContent = '▶ Play Encoding';
+        button.setAttribute('aria-label', 'Play canonical Binary Cube encoding');
+      }
+    }
+
+    reportViewportStatus(panel, message, type = '') {
+      const node = panel?.querySelector('[data-cube-visualizer-status]');
+      if (!node) return;
+      node.textContent = message;
+      node.classList.toggle('success', type === 'success');
+      node.classList.toggle('error', type === 'error');
+    }
+
+    ensureDemoInput(panel) {
+      const field = panel?.querySelector('[data-cube-trace-bits]');
+      const note = panel?.querySelector('[data-cube-encoder-file-note]');
+      if (!field || !note) return false;
+      const normalized = field.value.replace(/\s+/g, '');
+      const noFile = /^No file loaded/i.test(note.textContent || '');
+      if (!noFile || (normalized && normalized !== DEFAULT_MANUAL_BITS)) return false;
+      const bits = textToBits(DEFAULT_LOREM_TEXT);
+      field.value = bits;
+      note.textContent = `No file loaded; using built-in Lorem Ipsum demo input · ${bits.length / 8} bytes · ${bits.length} bits`;
+      field.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    }
+
+    setPackagePlaybackScope(panel) {
+      const scope = panel?.querySelector('[data-cube-trace-scope]');
+      if (!scope || scope.value === 'all-blocks') return;
+      scope.value = 'all-blocks';
+      scope.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    monitorCanonicalPlayback(panel) {
+      if (this.playbackMonitorFrame != null) cancelAnimationFrame(this.playbackMonitorFrame);
+      const tick = () => {
+        if (this.disposed) return;
+        const play = panel?.querySelector('[data-cube-trace-play]');
+        const playing = Boolean(play?.classList.contains('active'));
+        this.setViewportPlayState(playing ? 'playing' : 'idle');
+        if (playing) this.playbackMonitorFrame = requestAnimationFrame(tick);
+        else this.playbackMonitorFrame = null;
+      };
+      this.playbackMonitorFrame = requestAnimationFrame(tick);
+    }
+
+    waitForCanonicalTrace(panel, attempt = 0) {
+      if (this.disposed) return;
+      const workspace = panel?.querySelector('[data-cube-trace-workspace]');
+      const play = panel?.querySelector('[data-cube-trace-play]');
+      if (workspace && !workspace.hidden && play && !play.disabled) {
+        this.setPackagePlaybackScope(panel);
+        play.click();
+        this.monitorCanonicalPlayback(panel);
+        return;
+      }
+      if (attempt >= 240) {
+        this.setViewportPlayState('idle');
+        this.reportViewportStatus(panel, 'Exact animated trace playback is unavailable for the current package or rendering tier. The renderer did not substitute a decorative approximation.', 'error');
+        return;
+      }
+      requestAnimationFrame(() => this.waitForCanonicalTrace(panel, attempt + 1));
+    }
+
+    toggleCanonicalEncodingPlayback() {
+      const panel = this.canonicalPanel();
+      if (!panel) return;
+      const lowerPlay = panel.querySelector('[data-cube-trace-play]');
+      if (lowerPlay?.classList.contains('active')) {
+        panel.querySelector('[data-cube-trace-pause]')?.click();
+        this.setViewportPlayState('idle');
+        return;
+      }
+      const workspace = panel.querySelector('[data-cube-trace-workspace]');
+      if (workspace && !workspace.hidden && lowerPlay && !lowerPlay.disabled) {
+        this.setPackagePlaybackScope(panel);
+        lowerPlay.click();
+        this.monitorCanonicalPlayback(panel);
+        return;
+      }
+      const usedDemo = this.ensureDemoInput(panel);
+      const build = panel.querySelector('[data-cube-trace-build]');
+      if (!build) {
+        this.reportViewportStatus(panel, 'The canonical encoder action is unavailable; playback was not simulated.', 'error');
+        return;
+      }
+      this.setViewportPlayState('preparing');
+      build.click();
+      if (usedDemo) this.reportViewportStatus(panel, 'No source file was supplied. Built-in Lorem Ipsum bytes were passed through the canonical encoder and are being prepared for validated trace playback.', 'success');
+      this.waitForCanonicalTrace(panel);
+    }
+
+    setViewMode(modeValue) {
+      const mode = VIEW_MODES.includes(modeValue) ? modeValue : 'perspective';
+      if (mode === this.viewMode) return this.getViewState();
+      if (mode === 'isometric') {
+        this.preIsometricCamera = { ...this.camera };
+        this.camera = {
+          ...CAMERA_PRESETS.isometric,
+          distance: this.camera.distance,
+          panX: this.camera.panX,
+          panY: this.camera.panY,
+          panZ: this.camera.panZ
+        };
+      } else {
+        this.camera = this.preIsometricCamera ? { ...this.preIsometricCamera } : { ...CAMERA_PRESETS.perspective, panX:0, panY:0, panZ:0 };
+        this.preIsometricCamera = null;
+      }
+      this.viewMode = mode;
+      this.updateViewControl();
+      this.render();
+      return this.getViewState();
+    }
+
+    toggleIsometricView() {
+      return this.setViewMode(this.viewMode === 'isometric' ? 'perspective' : 'isometric');
+    }
+
+    getViewState() {
+      return Object.freeze({ mode: this.viewMode, camera: Object.freeze({ ...this.camera }), orthographic: this.viewMode === 'isometric' });
     }
 
     bindEvents() {
@@ -741,8 +952,26 @@
 
     getTraceState() { return this.traceState; }
     getPerformanceState() { return Object.freeze({ ...this.performanceState, renderPlan: this.renderPlan }); }
-    resetCamera() { this.camera = {...CAMERA_PRESETS.perspective,panX:0,panY:0,panZ:0}; this.render(); }
-    setCameraPreset(name) { const preset = CAMERA_PRESETS[name]; if (!preset) fail(`Unknown Binary Cube camera preset: ${name}`); this.camera = {...preset,panX:0,panY:0,panZ:0}; this.render(); }
+    resetCamera() {
+      this.viewMode = 'perspective';
+      this.preIsometricCamera = null;
+      this.camera = {...CAMERA_PRESETS.perspective,panX:0,panY:0,panZ:0};
+      this.updateViewControl();
+      this.render();
+    }
+    setCameraPreset(name) {
+      const preset = CAMERA_PRESETS[name];
+      if (!preset) fail(`Unknown Binary Cube camera preset: ${name}`);
+      if (name === 'isometric') {
+        this.setViewMode('isometric');
+        return;
+      }
+      this.viewMode = 'perspective';
+      this.preIsometricCamera = null;
+      this.camera = {...preset,panX:0,panY:0,panZ:0};
+      this.updateViewControl();
+      this.render();
+    }
 
     cameraFrame() {
       const {yaw,pitch,distance,panX,panY,panZ} = this.camera;
@@ -754,7 +983,13 @@
       const up = normalize(cross(right,forward));
       const view = lookAt(eye,target,[0,1,0]);
       const aspect = Math.max(1,this.canvas.width)/Math.max(1,this.canvas.height);
-      return {eye,forward,right,up,aspect,viewProjection:multiplyMatrices(perspective(Math.PI/4,aspect,0.08,100),view)};
+      if (this.viewMode === 'isometric') {
+        const halfHeight = clamp(distance * 0.46, 1.45, 5.6);
+        const halfWidth = halfHeight * aspect;
+        const projection = orthographic(-halfWidth, halfWidth, -halfHeight, halfHeight, 0.08, 100);
+        return {eye,forward,right,up,aspect,projectionKind:'orthographic',halfWidth,halfHeight,viewProjection:multiplyMatrices(projection,view)};
+      }
+      return {eye,forward,right,up,aspect,projectionKind:'perspective',halfWidth:null,halfHeight:null,viewProjection:multiplyMatrices(perspective(Math.PI/4,aspect,0.08,100),view)};
     }
 
     pickFaceAt(clientX,clientY) {
@@ -763,6 +998,10 @@
       const frame = this.cameraFrame();
       const ndcX = ((clientX-rect.left)/rect.width)*2-1;
       const ndcY = 1-((clientY-rect.top)/rect.height)*2;
+      if (frame.projectionKind === 'orthographic') {
+        const origin = add(add(frame.eye, scale(frame.right, ndcX * frame.halfWidth)), scale(frame.up, ndcY * frame.halfHeight));
+        return rayBoxFace(origin, frame.forward);
+      }
       const tangent = Math.tan(Math.PI/8);
       const direction = normalize(add(add(frame.forward,scale(frame.right,ndcX*frame.aspect*tangent)),scale(frame.up,ndcY*tangent)));
       return rayBoxFace(frame.eye,direction);
@@ -836,6 +1075,8 @@
       if (this.disposed) return;
       this.disposed = true;
       this.resizeObserver?.disconnect();
+      if (this.playbackMonitorFrame != null) cancelAnimationFrame(this.playbackMonitorFrame);
+      this.viewportControls?.controls?.remove();
       for (const [event,handler] of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerUp],['pointercancel',this.onPointerUp],['click',this.onClick],['wheel',this.onWheel],['contextmenu',this.onContextMenu]]) this.canvas.removeEventListener(event,handler);
       for (const buffer of [this.lineBuffer,this.pointBuffer,this.selectionLineBuffer,this.arrowBuffer,this.selectedPointBuffer,this.selectedPathBuffer]) this.gl.deleteBuffer(buffer);
       this.gl.deleteProgram(this.program);
@@ -854,6 +1095,8 @@
     resolveRenderPlan,
     resolveTraceRenderPointIds,
     rayBoxFace,
-    constants:Object.freeze({RENDERER_VERSION,FACES,FACE_GEOMETRY,CAMERA_PRESETS,PLAYBACK_MODES,RENDER_QUALITIES,RENDER_TIER_POLICY})
+    orthographic,
+    textToBits,
+    constants:Object.freeze({RENDERER_VERSION,FACES,FACE_GEOMETRY,CAMERA_PRESETS,PLAYBACK_MODES,RENDER_QUALITIES,VIEW_MODES,RENDER_TIER_POLICY,DEFAULT_LOREM_TEXT})
   });
 });
