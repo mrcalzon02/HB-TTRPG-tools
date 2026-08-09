@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -69,6 +70,8 @@ function resultMessage(messages, label) {
 }
 
 assert.equal(Cubic.constants.VERSION, '0.1.0');
+assert.equal(Engine.constants.KEY_DIGEST_TYPE, 'sha256-canonical-key-material-v1');
+assert.equal(Engine.sha256Hex('abc'), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
 assert.deepEqual(Cubic.constants.PROFILE_ORDER, [
   'direct-permutation',
   'iterative-chain',
@@ -125,12 +128,33 @@ for (let index = 0; index < Cubic.constants.PROFILE_ORDER.length; index += 1) {
   assert.equal(candidate.exactFingerprintMatch, true, `${profile} fingerprint should match`);
   assert.equal(candidate.plaintextBits, plaintext, `${profile} plaintext must recover exactly`);
   assert.equal(candidate.keyId, key.keyId, `${profile} key fingerprint must recover`);
-  recovered.push({ profile, keyId: candidate.keyId, score: candidate.score });
+  assert.equal(key.keyDigestType, Engine.constants.KEY_DIGEST_TYPE, `${profile} key must carry the canonical digest type`);
+  assert.match(key.keyDigest, /^[0-9a-f]{64}$/, `${profile} key digest must be lowercase SHA-256 hex`);
+  const nodeDigest = createHash('sha256').update(Engine.keyIdentityMaterial(key), 'utf8').digest('hex');
+  assert.equal(key.keyDigest, nodeDigest, `${profile} key digest must match Node SHA-256`);
+  assert.equal(candidate.exactDigestMatch, true, `${profile} package candidate must use SHA-256 identity`);
+  assert.equal(candidate.keyDigest, key.keyDigest, `${profile} key digest must recover`);
+  recovered.push({ profile, keyId: candidate.keyId, keyDigest: candidate.keyDigest, score: candidate.score });
 }
 
 const directKey = Engine.createKey({ gridSize: 4, seed: '3', inputFace: 'top', outputFace: 'front', maskDensity: 0.75 });
+const tamperedDigestKey = { ...directKey, keyDigest: `${directKey.keyDigest.slice(0, -1)}${directKey.keyDigest.endsWith('0') ? '1' : '0'}` };
+assert.throws(() => Engine.validateKey(tamperedDigestKey), /SHA-256 digest/);
+const legacyKey = { ...directKey };
+delete legacyKey.keyDigest;
+delete legacyKey.keyDigestType;
+const normalizedLegacyKey = Engine.validateKey(legacyKey);
+assert.equal(normalizedLegacyKey.keyId, directKey.keyId, 'Legacy keyId must remain stable');
+assert.equal(normalizedLegacyKey.keyDigest, directKey.keyDigest, 'Legacy keys must gain the deterministic strong digest when validated');
 const shortPlaintext = '01001000';
 const directPackage = Engine.encryptBinary(shortPlaintext, directKey);
+assert.equal(directPackage.keyDigestType, Engine.constants.KEY_DIGEST_TYPE);
+assert.equal(directPackage.keyDigest, directKey.keyDigest);
+const legacyPackage = { ...directPackage };
+delete legacyPackage.keyDigestType;
+delete legacyPackage.keyDigest;
+legacyPackage.checksum = Engine.packageChecksum(legacyPackage);
+assert.equal(Engine.decryptBinary(legacyPackage, legacyKey), shortPlaintext, 'Legacy package without SHA-256 metadata must remain decryptable');
 const rawSource = Cubic.sourceFromRaw(directPackage.ciphertext, {
   inputFace: 'top', outputFace: 'front', inputQuarterTurns: 0, outputQuarterTurns: 0,
   payloadCapacity: directPackage.payloadCapacity, originalBitLength: shortPlaintext.length
@@ -215,6 +239,9 @@ assert.equal(resumedWorkerResult.stoppedEarly, true);
 assert.ok(resumedWorkerResult.exactMatch, 'Fresh worker must recover the late key after checkpoint resume');
 assert.equal(resumedWorkerResult.exactMatch.seed, workerSeed);
 assert.equal(resumedWorkerResult.exactMatch.keyId, workerKey.keyId);
+assert.equal(resumedWorkerResult.exactMatch.keyDigest, workerKey.keyDigest);
+assert.equal(resumedWorkerResult.exactMatch.exactDigestMatch, true);
+assert.equal(resumedWorkerResult.exactMatch.identityStrength, 'sha256');
 assert.equal(resumedWorkerResult.exactMatch.plaintextBits, workerPlaintext);
 assert.equal(resumedWorkerResult.cursor, 438, 'Resume must continue from cursor 200 and stop immediately after seed 437');
 assert.equal(resumedWorkerResult.attemptsThisRun, 238, 'Resumed worker must not replay the first 200 candidate attempts');
@@ -228,7 +255,8 @@ for (const required of [
   'BinaryCubeKeyGenerationResearch',
   'openInformationAnalysisSuite',
   'openMediaForensicsSuite',
-  'KEY FINGERPRINT MATCH'
+  'SHA-256 KEY MATCH',
+  'LEGACY KEY FINGERPRINT MATCH'
 ]) assert.ok(ui.includes(required), `UI is missing ${JSON.stringify(required)}`);
 for (const required of [
   "importScripts(",
@@ -259,6 +287,8 @@ console.log(JSON.stringify({
     resumedAttempts: resumedWorkerResult.attemptsThisRun,
     recoveredSeed: resumedWorkerResult.exactMatch.seed,
     recoveredKeyId: resumedWorkerResult.exactMatch.keyId,
+    recoveredKeyDigest: resumedWorkerResult.exactMatch.keyDigest,
+    strongIdentityMatch: resumedWorkerResult.exactMatch.exactDigestMatch,
     exactPlaintextRecovery: resumedWorkerResult.exactMatch.plaintextBits === workerPlaintext
   }
 }, null, 2));

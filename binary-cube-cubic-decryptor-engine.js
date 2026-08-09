@@ -341,6 +341,8 @@
       algorithm: Engine.constants.ALGORITHM,
       securityClassification: Engine.constants.SECURITY_CLASSIFICATION,
       keyId: key.keyId,
+      keyDigestType: key.keyDigestType,
+      keyDigest: key.keyDigest,
       gridSize: key.gridSize,
       inputFace: key.inputFace,
       outputFace: key.outputFace,
@@ -362,12 +364,18 @@
     const actualCapacity = key.mask.filter(Boolean).length;
     if (actualCapacity !== candidate.payloadCapacity) return null;
     const targetKeyId = source.package?.keyId || null;
+    const targetKeyDigest = String(source.package?.keyDigest || '').toLowerCase() || null;
+    const targetKeyDigestType = source.package?.keyDigestType || null;
     if (targetKeyId && key.keyId !== targetKeyId) return null;
+    if (targetKeyDigestType && targetKeyDigestType !== Engine.constants.KEY_DIGEST_TYPE) return null;
+    if (targetKeyDigest && key.keyDigest !== targetKeyDigest) return null;
 
     let plaintext;
     let exactFingerprintMatch = false;
+    let exactDigestMatch = false;
     if (source.kind === 'package') {
-      exactFingerprintMatch = Boolean(targetKeyId && key.keyId === targetKeyId);
+      exactDigestMatch = Boolean(targetKeyDigest && key.keyDigest === targetKeyDigest);
+      exactFingerprintMatch = exactDigestMatch || Boolean(!targetKeyDigest && targetKeyId && key.keyId === targetKeyId);
       plaintext = Engine.decryptBinary(source.package, key);
     } else {
       const cellCount = candidate.gridSize * candidate.gridSize;
@@ -389,12 +397,18 @@
       outputQuarterTurns: key.outputQuarterTurns,
       payloadCapacity: actualCapacity,
       keyId: key.keyId,
+      keyDigestType: key.keyDigestType,
+      keyDigest: key.keyDigest,
       exactFingerprintMatch,
+      exactDigestMatch,
+      identityStrength: exactDigestMatch ? 'sha256' : exactFingerprintMatch ? 'legacy-fnv1a32' : 'heuristic-raw',
       plaintextBits: plaintext,
       ...evidence,
-      caveat: exactFingerprintMatch
-        ? 'The package key fingerprint matches this generated key. The fingerprint is FNV-1a corruption-detection metadata, not a cryptographic proof against deliberate collisions.'
-        : 'Raw-ciphertext ranking is heuristic. A readable or structured preview is evidence to investigate, not proof that the candidate key is correct.'
+      caveat: exactDigestMatch
+        ? 'The package SHA-256 canonical key digest matches this generated key. This is collision-resistant key-identity evidence; plaintext meaning and the experimental cipher security model remain separate questions.'
+        : exactFingerprintMatch
+          ? 'The legacy package key fingerprint matches this generated key. The fingerprint is FNV-1a corruption-detection metadata, not a cryptographic proof against deliberate collisions.'
+          : 'Raw-ciphertext ranking is heuristic. A readable or structured preview is evidence to investigate, not proof that the candidate key is correct.'
     });
   }
 
