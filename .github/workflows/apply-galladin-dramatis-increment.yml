@@ -1,0 +1,43 @@
+name: Apply Galladin Dramatis Increment
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/apply-galladin-dramatis-increment.py'
+      - '.github/workflows/apply-galladin-dramatis-increment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Rebase onto latest concurrent main
+        run: git pull --rebase origin main
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply verified direct-source increment
+        run: python scripts/apply-galladin-dramatis-increment.py
+      - name: Remove one-shot migration mechanism
+        run: |
+          rm scripts/apply-galladin-dramatis-increment.py
+          rm .github/workflows/apply-galladin-dramatis-increment.yml
+      - name: Commit direct authoritative changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'feat: add Galladin harbor personae'
+          git push origin HEAD:main
