@@ -43,7 +43,7 @@ jobs:
           node --check scripts/validate-scientific-tools-extraction.mjs
           node scripts/validate-binary-cube-cubic-decryptor.mjs
           node scripts/validate-scientific-tools-extraction.mjs
-      - name: Commit directly to main
+      - name: Commit and fast-forward directly to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -59,4 +59,6 @@ jobs:
             exit 0
           fi
           git commit -m "feat: integrate parity-gated Cubic WebGPU acceleration"
+          git fetch origin main
+          git rebase origin/main
           git push origin HEAD:main
