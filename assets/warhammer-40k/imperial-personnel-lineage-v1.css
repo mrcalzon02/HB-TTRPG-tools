@@ -1,0 +1,6 @@
+.wh-personnel-link{margin:.55rem 0;border:1px solid rgba(198,169,90,.26);border-radius:.5rem;background:rgba(13,16,18,.68)}
+.wh-personnel-link>summary{cursor:pointer;padding:.65rem .8rem;font-weight:700;letter-spacing:.025em}
+.wh-personnel-compact,.wh-personnel-dossier{display:grid;gap:.65rem;padding:.75rem .85rem}
+.wh-personnel-dossier{border:1px solid rgba(198,169,90,.34);border-radius:.65rem;background:linear-gradient(180deg,rgba(24,25,26,.92),rgba(10,12,14,.92))}
+.wh-personnel-cross-index{position:relative;overflow:hidden}
+.wh-personnel-cross-index::before{content:'PERSONNEL SEAL';position:absolute;right:.7rem;top:.45rem;font-size:.62rem;letter-spacing:.16em;opacity:.26}
