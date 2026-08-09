@@ -7,6 +7,7 @@ on:
       - ".github/workflows/steganalysis-evidence-profile.yml"
       - "binary-cube-steganalysis-engine.js"
       - "binary-cube-steganalysis-evidence-profile.js"
+      - "binary-cube-steganalysis-worker.js"
       - "binary-cube-media-forensics-demo-corpus.js"
       - "scientific-tools-local-media.js"
       - "scripts/research-rgb-lsb-steganalysis-blindspot.mjs"
@@ -48,11 +49,17 @@ jobs:
         run: |
           node --check binary-cube-steganalysis-engine.js
           node --check binary-cube-steganalysis-evidence-profile.js
+          node --check binary-cube-steganalysis-worker.js
           node --check binary-cube-media-forensics-demo-corpus.js
           node --check scientific-tools-local-media.js
           node --check scripts/research-rgb-lsb-steganalysis-blindspot.mjs
           node --check scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
           node --check scripts/validate-binary-cube-steganalysis-evidence-profile.mjs
+          grep -q "importScripts('binary-cube-steganalysis-evidence-profile.js?v=20260809-raster-evidence-profile-1')" binary-cube-steganalysis-worker.js
+          grep -q "operation === 'raster-evidence-profile'" binary-cube-steganalysis-worker.js
+          grep -q "EvidenceProfile.profileRaster" binary-cube-steganalysis-worker.js
+          ! grep -q "function rsAnalysis(" binary-cube-steganalysis-worker.js
+          ! grep -q "function samplePairAnalysis(" binary-cube-steganalysis-worker.js
 
       - name: Validate evidence-vector separation
         run: node scripts/validate-binary-cube-steganalysis-evidence-profile.mjs
