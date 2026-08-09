@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('fs'),path=require('path'),vm=require('vm');
+const root=path.resolve(__dirname,'..'),ctx={window:{},console};vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(path.join(root,'assets/warhammer-40k/imperial-chronology-v1.js'),'utf8'),ctx,{filename:'imperial-chronology-v1.js'});
+const C=ctx.window.CafarronImperialChronologyV1;if(!C)throw new Error('Chronometric concordance did not answer.');
+const v=C.validate();if(!v.allValid||!v.deterministic||!v.presentAnchored||!v.preRiftOld)throw new Error(`Chronology validation failed: ${JSON.stringify(v)}`);
+const now=C.current({systemName:'Cafarron'},'test-now'),galladin=C.stampPast(69,{systemName:'Galladin'},'same-event'),galladin2=C.stampPast(69,{systemName:'Galladin'},'same-event'),pelzane=C.stampPast(69,{systemName:'Pelzane'},'same-event'),renewal=C.stampFutureMonths(18,{systemName:'Galladin'},'contract-renewal');
+if(now.terran.label!=='ca. 012.M42')throw new Error(`Campaign present moved: ${now.terran.label}`);
+if(galladin.terran.label!=='ca. 943.M41')throw new Error(`69-year Terran conversion failed: ${galladin.terran.label}`);
+if(JSON.stringify(galladin)!==JSON.stringify(galladin2))throw new Error('Identical chronology inputs produced different stamps.');
+if(galladin.local.label===pelzane.local.label)throw new Error('Distinct local systems did not retain distinct local reckonings.');
+if(!/M42$/.test(renewal.terran.label))throw new Error(`Future renewal escaped the intended M42 concordance window: ${renewal.terran.label}`);
+if(C.PRESENT.clusterYearsPostRift!==12||C.PRESENT.clusterCode!=='CFCM')throw new Error('Cafarron Rift anchor changed unexpectedly.');
+console.log(JSON.stringify({present:now.terran.label,clusterPresent:now.cluster.label,galladin69YearsAgo:galladin.terran.label,galladinLocal:galladin.local.label,pelzaneLocal:pelzane.local.label,renewal18Months:C.format(renewal),deterministic:true},null,2));
