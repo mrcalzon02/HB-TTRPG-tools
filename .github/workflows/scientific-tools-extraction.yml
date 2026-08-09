@@ -44,6 +44,7 @@ on:
       - "binary-cube-diagnostic-pipeline-panel.js"
       - "binary-cube-diagnostic-pipeline.css"
       - "binary-cube-cubic-decryptor-engine.js"
+      - "binary-cube-cubic-decryptor-worker-pool.js"
       - "binary-cube-cubic-decryptor-worker.js"
       - "binary-cube-cubic-decryptor.js"
       - "binary-cube-cubic-decryptor.css"
@@ -139,6 +140,7 @@ jobs:
           node --check binary-cube-diagnostic-pipeline.js
           node --check binary-cube-diagnostic-pipeline-panel.js
           node --check binary-cube-cubic-decryptor-engine.js
+          node --check binary-cube-cubic-decryptor-worker-pool.js
           node --check binary-cube-cubic-decryptor-worker.js
           node --check binary-cube-cubic-decryptor.js
           node --check shadowrun-entry.js
