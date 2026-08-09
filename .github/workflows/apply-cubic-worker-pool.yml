@@ -7,6 +7,7 @@ on:
       - ".github/workflows/apply-cubic-worker-pool.yml"
       - "scripts/apply-cubic-worker-pool.py"
       - "scripts/fix-cubic-worker-pool-migration-anchor.py"
+      - "scripts/fix-cubic-worker-pool-validator-contract.py"
       - "binary-cube-cubic-decryptor-worker-pool.js"
 
 permissions:
@@ -38,6 +39,7 @@ jobs:
           git checkout main
           git reset --hard origin/main
           python scripts/fix-cubic-worker-pool-migration-anchor.py
+          python scripts/fix-cubic-worker-pool-validator-contract.py
           python scripts/apply-cubic-worker-pool.py
           node --check binary-cube-cubic-decryptor-worker-pool.js
           node --check binary-cube-cubic-decryptor-worker.js
