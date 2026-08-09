@@ -9,13 +9,15 @@ import { performance } from 'node:perf_hooks';
 const require = createRequire(import.meta.url);
 const Engine = require(path.join(process.cwd(), 'shadowrun-binary-cube-engine.js'));
 
-const PROFILE_VERSION = 'research-0.2.0';
+const PROFILE_VERSION = 'research-0.3.0';
 const PROFILES = Object.freeze([
   'direct-permutation',
   'iterative-chain',
   'random-transposition-walk',
+  'local-adjacent-walk',
   'nested-permutation',
-  'nested-hierarchy'
+  'nested-hierarchy',
+  'nested-interleaved'
 ]);
 const GRID_SIZES = Object.freeze([12, 64, 128]);
 const SEEDS_PER_GRID = 16;
@@ -95,6 +97,22 @@ function randomWalkPermutation(size, seed, domain) {
   return assertPermutation(output, size, `${domain} random-walk permutation`);
 }
 
+function localAdjacentWalkPermutation(size, seed, domain) {
+  const output = range(size);
+  const random = mulberry32(fnv1a32(`${seed}|${size}|local-adjacent-walk|${domain}|${PROFILE_VERSION}`));
+  let walker = Math.floor(random() * size);
+  const steps = Math.max(64 * size, 1024);
+  for (let step = 0; step < steps; step += 1) {
+    const direction = random() < 0.5 ? -1 : 1;
+    let neighbor = walker + direction;
+    if (neighbor < 0) neighbor = 1;
+    if (neighbor >= size) neighbor = size - 2;
+    [output[walker], output[neighbor]] = [output[neighbor], output[walker]];
+    walker = neighbor;
+  }
+  return assertPermutation(output, size, `${domain} local-adjacent-walk permutation`);
+}
+
 function composePermutations(outer, inner) {
   assert.equal(outer.length, inner.length, 'Permutation composition requires equal domains.');
   return inner.map(value => outer[value]);
@@ -126,6 +144,28 @@ function nestedHierarchyPermutation(size, seed, domain) {
   return assertPermutation(recurse(range(size), 'root'), size, `${domain} nested hierarchy permutation`);
 }
 
+function nestedInterleavedPermutation(size, seed, domain) {
+  function recurse(values, nodePath) {
+    if (values.length <= 4) {
+      const random = mulberry32(fnv1a32(`${seed}|${size}|nested-interleaved|${domain}|${nodePath}|leaf|${PROFILE_VERSION}`));
+      return shuffle(values, random);
+    }
+    const split = Math.ceil(values.length / 2);
+    const left = recurse(values.slice(0, split), `${nodePath}L`);
+    const right = recurse(values.slice(split), `${nodePath}R`);
+    const random = mulberry32(fnv1a32(`${seed}|${size}|nested-interleaved|${domain}|${nodePath}|merge|${PROFILE_VERSION}`));
+    const merged = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length || rightIndex < right.length) {
+      const chooseLeft = rightIndex >= right.length || (leftIndex < left.length && random() < 0.5);
+      merged.push(chooseLeft ? left[leftIndex++] : right[rightIndex++]);
+    }
+    return merged;
+  }
+  return assertPermutation(recurse(range(size), 'root'), size, `${domain} nested interleaved permutation`);
+}
+
 function profilePermutations(profile, seed, size) {
   if (profile === 'iterative-chain') {
     return {
@@ -141,6 +181,13 @@ function profilePermutations(profile, seed, size) {
       depthPermutation: randomWalkPermutation(size, seed, 'depth')
     };
   }
+  if (profile === 'local-adjacent-walk') {
+    return {
+      rowPermutation: localAdjacentWalkPermutation(size, seed, 'row'),
+      columnPermutation: localAdjacentWalkPermutation(size, seed, 'column'),
+      depthPermutation: localAdjacentWalkPermutation(size, seed, 'depth')
+    };
+  }
   if (profile === 'nested-permutation') {
     return {
       rowPermutation: nestedPermutation(size, seed, 'row'),
@@ -153,6 +200,13 @@ function profilePermutations(profile, seed, size) {
       rowPermutation: nestedHierarchyPermutation(size, seed, 'row'),
       columnPermutation: nestedHierarchyPermutation(size, seed, 'column'),
       depthPermutation: nestedHierarchyPermutation(size, seed, 'depth')
+    };
+  }
+  if (profile === 'nested-interleaved') {
+    return {
+      rowPermutation: nestedInterleavedPermutation(size, seed, 'row'),
+      columnPermutation: nestedInterleavedPermutation(size, seed, 'column'),
+      depthPermutation: nestedInterleavedPermutation(size, seed, 'depth')
     };
   }
   throw new Error(`Unsupported research profile: ${profile}`);
@@ -395,7 +449,7 @@ console.log(JSON.stringify({
   seedsPerGrid: SEEDS_PER_GRID,
   totalKeysValidated: PROFILES.length * GRID_SIZES.length * SEEDS_PER_GRID,
   comparisonBoundary: 'Research-only candidate permutation generators. The canonical engine remains unchanged. The direct generator mask is held constant across profiles for a given seed. Mutation tests separately report permutation, mask, and actual ciphertext bit differences.',
-  interpretationBoundary: 'Permutation composition can collapse to another ordinary permutation. Extra generation steps are not treated as added security unless they produce independently useful measurable behavior without introducing structure.',
+  interpretationBoundary: 'Permutation composition can collapse to another ordinary permutation. Local random walks and hierarchical construction can preserve detectable locality even when ciphertext avalanche appears healthy, so structural metrics are evaluated independently.',
   aggregate: byProfile,
   rows
 }, null, 2));
