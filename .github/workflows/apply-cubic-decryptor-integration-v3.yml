@@ -5,6 +5,7 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/apply-cubic-decryptor-integration-v3.yml"
+      - "scripts/trigger-scientific-tools-local-media-repair.txt"
 
 permissions:
   contents: write
