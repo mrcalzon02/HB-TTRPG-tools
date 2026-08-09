@@ -18,6 +18,9 @@ on:
       - "binary-cube-communication-capacity-analyzer.js"
       - "binary-cube-communication-capacity-analyzer.css"
       - "binary-cube-communication-capacity-worker.js"
+      - "binary-cube-media-forensics-suite.js"
+      - "binary-cube-media-forensics-suite.css"
+      - "binary-cube-media-forensics-worker.js"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -30,6 +33,7 @@ on:
       - "scripts/validate-binary-cube-decryption-dashboard-browser.mjs"
       - "scripts/validate-binary-cube-information-analysis-suite.mjs"
       - "scripts/validate-binary-cube-communication-capacity-analyzer.mjs"
+      - "scripts/validate-binary-cube-media-forensics-suite.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
   workflow_dispatch:
 
@@ -75,6 +79,8 @@ jobs:
           node --check binary-cube-information-analysis-suite.js
           node --check binary-cube-communication-capacity-analyzer.js
           node --check binary-cube-communication-capacity-worker.js
+          node --check binary-cube-media-forensics-suite.js
+          node --check binary-cube-media-forensics-worker.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
@@ -85,10 +91,12 @@ jobs:
           node --check scripts/validate-binary-cube-decryption-dashboard-browser.mjs
           node --check scripts/validate-binary-cube-information-analysis-suite.mjs
           node --check scripts/validate-binary-cube-communication-capacity-analyzer.mjs
+          node --check scripts/validate-binary-cube-media-forensics-suite.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           test -s binary-cube-decryption-dashboard.css
           test -s binary-cube-information-analysis-suite.css
           test -s binary-cube-communication-capacity-analyzer.css
+          test -s binary-cube-media-forensics-suite.css
           test -s interstellar-media-collisions-lab.css
           test -s double-slit-lab.css
 
@@ -109,6 +117,9 @@ jobs:
 
       - name: Validate Communication Capacity Analyzer
         run: node scripts/validate-binary-cube-communication-capacity-analyzer.mjs
+
+      - name: Validate Steganography Signal and Media Forensics Suite
+        run: node scripts/validate-binary-cube-media-forensics-suite.mjs
 
       - name: Preserve accepted Binary Cube launch contract
         run: node scripts/validate-binary-cube-v13-launch.mjs
