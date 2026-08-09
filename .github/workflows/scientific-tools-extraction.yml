@@ -8,6 +8,8 @@ on:
       - "app-lite-view-mounts.js"
       - "scientific-tools-entry.js"
       - "scientific-tools-cooperative-runner.js"
+      - "binary-cube-decryption-dashboard.js"
+      - "binary-cube-decryption-dashboard.css"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
       - "interstellar-media-collisions-lab.js"
@@ -15,6 +17,7 @@ on:
       - "double-slit-lab.js"
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
+      - "scripts/validate-binary-cube-decryption-dashboard.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
   workflow_dispatch:
 
@@ -53,17 +56,23 @@ jobs:
           node --check app-lite-view-mounts.js
           node --check scientific-tools-entry.js
           node --check scientific-tools-cooperative-runner.js
+          node --check binary-cube-decryption-dashboard.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
+          node --check scripts/validate-binary-cube-decryption-dashboard.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
+          test -s binary-cube-decryption-dashboard.css
           test -s interstellar-media-collisions-lab.css
           test -s double-slit-lab.css
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
+
+      - name: Validate Binary Cube Decryption Dashboard
+        run: node scripts/validate-binary-cube-decryption-dashboard.mjs
 
       - name: Preserve accepted Binary Cube launch contract
         run: node scripts/validate-binary-cube-v13-launch.mjs
