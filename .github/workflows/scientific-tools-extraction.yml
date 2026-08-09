@@ -37,6 +37,10 @@ on:
       - "binary-cube-diagnostic-pipeline.js"
       - "binary-cube-diagnostic-pipeline-panel.js"
       - "binary-cube-diagnostic-pipeline.css"
+      - "binary-cube-cubic-decryptor-engine.js"
+      - "binary-cube-cubic-decryptor-worker.js"
+      - "binary-cube-cubic-decryptor.js"
+      - "binary-cube-cubic-decryptor.css"
       - "docs/scientific-diagnostic-pipeline-plan.md"
       - "shadowrun-entry.js"
       - "blacklight-continuum-entry.js"
@@ -46,6 +50,7 @@ on:
       - "double-slit-lab.css"
       - "scripts/validate-scientific-tools-extraction.mjs"
       - "scripts/validate-scientific-diagnostic-pipeline.mjs"
+      - "scripts/validate-binary-cube-cubic-decryptor.mjs"
       - "scripts/run-scientific-diagnostic-local.mjs"
       - "scripts/validate-cooperative-slice-budget.mjs"
       - "scripts/validate-binary-cube-reseed.mjs"
@@ -117,12 +122,16 @@ jobs:
           node --check binary-cube-steganalysis-lab.js
           node --check binary-cube-diagnostic-pipeline.js
           node --check binary-cube-diagnostic-pipeline-panel.js
+          node --check binary-cube-cubic-decryptor-engine.js
+          node --check binary-cube-cubic-decryptor-worker.js
+          node --check binary-cube-cubic-decryptor.js
           node --check shadowrun-entry.js
           node --check blacklight-continuum-entry.js
           node --check interstellar-media-collisions-lab.js
           node --check double-slit-lab.js
           node --check scripts/validate-scientific-tools-extraction.mjs
           node --check scripts/validate-scientific-diagnostic-pipeline.mjs
+          node --check scripts/validate-binary-cube-cubic-decryptor.mjs
           node --check scripts/run-scientific-diagnostic-local.mjs
           node --check scripts/validate-cooperative-slice-budget.mjs
           node --check scripts/validate-binary-cube-reseed.mjs
@@ -145,6 +154,7 @@ jobs:
           test -s binary-cube-media-forensics-suite.css
           test -s binary-cube-steganalysis-lab.css
           test -s binary-cube-diagnostic-pipeline.css
+          test -s binary-cube-cubic-decryptor.css
           test -s docs/scientific-diagnostic-pipeline-plan.md
           test -s interstellar-media-collisions-lab.css
           test -s double-slit-lab.css
@@ -164,6 +174,9 @@ jobs:
           node scripts/run-scientific-diagnostic-local.mjs /tmp/hb-diagnostic-control.txt --profile=triage --json=/tmp/hb-diagnostic-report.json > /tmp/hb-diagnostic-stdout.json
           test -s /tmp/hb-diagnostic-report.json
           grep -q 'hb-ttrpg-scientific-diagnostic-pipeline-report' /tmp/hb-diagnostic-report.json
+
+      - name: Validate Cubic Decryptor Tool
+        run: node scripts/validate-binary-cube-cubic-decryptor.mjs
 
       - name: Validate Scientific Tools main-menu contract
         run: node scripts/validate-scientific-tools-extraction.mjs
