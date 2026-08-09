@@ -5,6 +5,15 @@
 
   const MASTER_VOLUME = 0.72;
   const MAX_ACTIVE = 28;
+  const STATION_CHARACTER = Object.freeze({
+    helm: Object.freeze({ gain: 0.96, rate: 1.03 }),
+    navigation: Object.freeze({ gain: 0.88, rate: 1.07 }),
+    gunnery: Object.freeze({ gain: 1.08, rate: 0.95 }),
+    engineering: Object.freeze({ gain: 1.14, rate: 0.90 }),
+    science: Object.freeze({ gain: 0.84, rate: 1.09 }),
+    comms: Object.freeze({ gain: 0.90, rate: 1.06 })
+  });
+  const PRELOAD_ASSETS = Object.freeze(['click', 'snap', 'snick', 'krunk', 'clickKlunk', 'slowCoinClicking', 'engineLoop', 'deng']);
   const assets = Object.freeze({
     click: 'assets/Klick.mp3',
     snap: 'assets/Snap.mp3',
@@ -135,6 +144,7 @@
 
   const active = new Set();
   const loops = new Map();
+  const preloaders = new Map();
   let masterVolume = MASTER_VOLUME;
 
   function clamp(value, minimum, maximum) {
@@ -153,6 +163,31 @@
   function variation(seed, index) {
     const value = hash(`${seed}:${index}`) % 1001;
     return (value / 1000 - 0.5) * 0.045;
+  }
+
+  function stationFromOptions(options = {}) {
+    const source = String(options.station || options.seed || options.key || '');
+    const match = source.match(/(?:^|:)(helm|navigation|gunnery|engineering|science|comms)(?=:|$)/i);
+    return match ? match[1].toLowerCase() : null;
+  }
+
+  function characterFor(options = {}) {
+    return STATION_CHARACTER[stationFromOptions(options)] || { gain: 1, rate: 1 };
+  }
+
+  function prime() {
+    PRELOAD_ASSETS.forEach(name => {
+      if (preloaders.has(name) || !assets[name]) return;
+      try {
+        const audio = new Audio(assets[name]);
+        audio.preload = 'auto';
+        audio.volume = 0;
+        audio.load();
+        preloaders.set(name, audio);
+      } catch (_) {
+        // Asset priming is optional; interaction playback remains the fallback.
+      }
+    });
   }
 
   function retire(audio) {
@@ -180,9 +215,10 @@
     enforceActiveLimit();
     const audio = new Audio(source);
     const rateVariation = options.vary === false ? 0 : variation(options.seed || options.key || options.scene || '', index);
+    const character = characterFor(options);
     audio.preload = 'auto';
-    audio.volume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * masterVolume, 0, 1);
-    audio.playbackRate = clamp((layer.rate ?? 1) + rateVariation, 0.5, 2);
+    audio.volume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * masterVolume, 0, 1);
+    audio.playbackRate = clamp(((layer.rate ?? 1) + rateVariation) * character.rate, 0.5, 2);
     audio.loop = Boolean(layer.loop);
     active.add(audio);
     audio.addEventListener('ended', () => retire(audio), { once: true });
@@ -249,6 +285,8 @@
   window.EXO_CONTROL_AUDIO = Object.freeze({
     assets,
     scenes,
+    stationCharacter: STATION_CHARACTER,
+    prime,
     play,
     startLoop,
     stopLoop,
@@ -256,4 +294,8 @@
     setMasterVolume,
     get masterVolume() { return masterVolume; }
   });
+
+  prime();
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopAll(); });
+  window.addEventListener('pagehide', stopAll);
 })();
