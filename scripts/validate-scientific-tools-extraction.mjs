@@ -96,8 +96,8 @@ checks.push(includes('Main menu cache-refreshes the current Scientific Tools ent
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
   "loadScript('shadowrun-binary-cube-engine.js')",
-  "loadScript('binary-cube-worker-client.js?v=20260809-v15-binary-cube-worker-liveness')",
-  "loadScript('shadowrun-binary-cube-encryption.js?v=20260809-v14-binary-cube-worker')",
+  "loadScript('binary-cube-worker-client.js?v=20260809-v16-binary-cube-reseed')",
+  "loadScript('shadowrun-binary-cube-encryption.js?v=20260809-v16-binary-cube-reseed')",
   "loadScript('binary-cube-large-grid-ui.js')"
 ]));
 assert.equal(count(mounts, "card.dataset.scientificToolsCard = 'true'"), 1, 'The main menu must own exactly one Scientific Tools card.');
@@ -151,10 +151,14 @@ checks.push(excludes('Binary Cube worker does not duplicate the canonical cube t
   'rowPermutation[x] + key.columnPermutation[y]'
 ]));
 
-checks.push(includes('Binary Cube worker client keeps heavy work off the browser main thread, reports liveness, and can terminate it', cubeWorkerClient, [
+checks.push(includes('Binary Cube worker client keeps heavy work off the browser main thread, reports liveness, and owns the secure reseed source', cubeWorkerClient, [
   'new Worker(',
   'pending = new Map()',
   'const HEARTBEAT_INTERVAL_MS = 1000;',
+  'const RESEED_BYTES = 16;',
+  'crypto.getRandomValues',
+  'function freshSeed(',
+  'freshSeed,',
   "message.type === 'progress'",
   'elapsedMilliseconds:',
   'still working',
@@ -164,7 +168,7 @@ checks.push(includes('Binary Cube worker client keeps heavy work off the browser
   'ShadowrunBinaryCubeWorkerClient'
 ]));
 
-checks.push(includes('Binary Cube laboratory routes expensive user actions through the background worker', cubeLab, [
+checks.push(includes('Binary Cube laboratory routes expensive user actions through the background worker and keeps reseeding distinct from deterministic generation', cubeLab, [
   'const Executor = window.ShadowrunBinaryCubeWorkerClient;',
   'Slow-hardware execution:',
   'async function runBackground(',
@@ -172,6 +176,13 @@ checks.push(includes('Binary Cube laboratory routes expensive user actions throu
   "runBackground(panel, 'encrypt'",
   "runBackground(panel, 'decrypt'",
   "runBackground(panel, 'validate-pair'",
+  'data-cube-reseed',
+  "Executor.freshSeed('binary-cube')",
+  'await generateKey(panel, false)',
+  'await generateKey(panel, true)',
+  'reseedKey: () => generateKey(buildPanel(), true)',
+  'Generate Key reproduces this seed exactly.',
+  'Current encrypted package invalidated by key reseed.',
   'Cancel active operation',
   'cancelActiveOperation(',
   'Routine encrypt/decrypt uses the algebraic collision-free invariant',
@@ -498,7 +509,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.11.0',
+  schemaVersion: '0.12.0',
   pass: true,
   checkCount: checks.length,
   checks
