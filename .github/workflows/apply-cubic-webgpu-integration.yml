@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  statuses: write
 
 concurrency:
   group: "apply-cubic-webgpu-integration"
@@ -20,6 +21,15 @@ jobs:
   apply:
     runs-on: ubuntu-latest
     steps:
+      - name: Record migration pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='cubic-webgpu/migration' \
+            -f description='Parity-gated Cubic WebGPU migration is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -62,3 +72,23 @@ jobs:
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
+      - name: Record migration success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='cubic-webgpu/migration' \
+            -f description='Parity-gated Cubic WebGPU migration landed and validated.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Record migration failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='cubic-webgpu/migration' \
+            -f description='Parity-gated Cubic WebGPU migration failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
