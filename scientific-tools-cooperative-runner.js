@@ -2,6 +2,7 @@
   'use strict';
 
   const DEFAULT_CHUNK_SIZE = 128;
+  const DEFAULT_MAX_SLICE_MS = 8;
   const DEFAULT_PROGRESS_INTERVAL_MS = 80;
   let nextTokenId = 1;
 
@@ -35,11 +36,30 @@
 
   function yieldControl() {
     return new Promise(resolve => {
-      if (typeof requestAnimationFrame === 'function') {
-        requestAnimationFrame(() => setTimeout(resolve, 0));
+      const finish = () => setTimeout(resolve, 0);
+      const documentVisible = typeof document === 'undefined' || document.visibilityState !== 'hidden';
+      if (documentVisible && typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(finish);
       } else {
         setTimeout(resolve, 0);
       }
+    });
+  }
+
+  function normalizedSliceBudget(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return DEFAULT_MAX_SLICE_MS;
+    return Math.max(1, Math.min(50, numeric));
+  }
+
+  function progressSnapshot(label, completed, total, sliceItems, sliceMilliseconds) {
+    return Object.freeze({
+      label,
+      completed,
+      total,
+      fraction: total ? completed / total : 1,
+      sliceItems,
+      sliceMilliseconds
     });
   }
 
@@ -47,29 +67,46 @@
     const start = Number.isInteger(options.start) ? options.start : 0;
     const end = Number.isInteger(options.end) ? options.end : start;
     const chunkSize = Math.max(1, Math.floor(Number(options.chunkSize) || DEFAULT_CHUNK_SIZE));
+    const maxSliceMs = normalizedSliceBudget(options.maxSliceMs);
     const step = options.step;
     if (typeof step !== 'function') throw new TypeError('forRange requires a step(index) function.');
     const token = options.token || null;
     const onProgress = typeof options.onProgress === 'function' ? options.onProgress : null;
     const label = String(options.label || token?.label || 'scientific-task');
     const total = Math.max(0, end - start);
+    let index = start;
     let completed = 0;
     let lastProgressAt = -Infinity;
 
-    for (let chunkStart = start; chunkStart < end; chunkStart += chunkSize) {
+    while (index < end) {
       assertActive(token);
-      const chunkEnd = Math.min(end, chunkStart + chunkSize);
-      for (let index = chunkStart; index < chunkEnd; index += 1) step(index);
-      completed = chunkEnd - start;
+      const sliceStartedAt = now();
+      let sliceItems = 0;
+
+      while (index < end && sliceItems < chunkSize) {
+        assertActive(token);
+        step(index);
+        index += 1;
+        sliceItems += 1;
+        completed = index - start;
+
+        // Time is deliberately not part of the scientific result. It only decides
+        // when the browser gets control back; item order and deterministic RNG order
+        // remain unchanged on fast and slow hardware.
+        if (sliceItems > 0 && now() - sliceStartedAt >= maxSliceMs) break;
+      }
+
       const timestamp = now();
+      const sliceMilliseconds = timestamp - sliceStartedAt;
       if (onProgress && (completed === total || timestamp - lastProgressAt >= DEFAULT_PROGRESS_INTERVAL_MS)) {
         lastProgressAt = timestamp;
-        onProgress(Object.freeze({ label, completed, total, fraction: total ? completed / total : 1 }));
+        onProgress(progressSnapshot(label, completed, total, sliceItems, sliceMilliseconds));
       }
-      if (chunkEnd < end) await yieldControl();
+
+      if (index < end) await yieldControl();
     }
 
-    if (onProgress && total === 0) onProgress(Object.freeze({ label, completed: 0, total: 0, fraction: 1 }));
+    if (onProgress && total === 0) onProgress(progressSnapshot(label, 0, 0, 0, 0));
     return completed;
   }
 
@@ -88,15 +125,22 @@
     if (!generator || typeof generator.next !== 'function') throw new TypeError('consumeGenerator requires a generator.');
     const token = options.token || null;
     const stepsPerSlice = Math.max(1, Math.floor(Number(options.stepsPerSlice) || DEFAULT_CHUNK_SIZE));
+    const maxSliceMs = normalizedSliceBudget(options.maxSliceMs);
     const onProgress = typeof options.onProgress === 'function' ? options.onProgress : null;
     let stepCount = 0;
+
     while (true) {
       assertActive(token);
-      for (let index = 0; index < stepsPerSlice; index += 1) {
+      const sliceStartedAt = now();
+      let sliceItems = 0;
+      while (sliceItems < stepsPerSlice) {
+        assertActive(token);
         const next = generator.next();
         if (next.done) return next.value;
         stepCount += 1;
+        sliceItems += 1;
         if (onProgress && next.value?.progress) onProgress(next.value.progress);
+        if (now() - sliceStartedAt >= maxSliceMs) break;
       }
       await yieldControl();
     }
@@ -116,6 +160,7 @@
 
   window.ScientificToolsCooperativeRunner = Object.freeze({
     DEFAULT_CHUNK_SIZE,
+    DEFAULT_MAX_SLICE_MS,
     CooperativeCancelledError,
     createToken,
     assertActive,
