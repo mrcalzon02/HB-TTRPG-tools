@@ -1,0 +1,83 @@
+name: Validate Raster Steganalysis Evidence Profile
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/steganalysis-evidence-profile.yml"
+      - "binary-cube-steganalysis-engine.js"
+      - "binary-cube-steganalysis-evidence-profile.js"
+      - "binary-cube-media-forensics-demo-corpus.js"
+      - "scientific-tools-local-media.js"
+      - "scripts/research-rgb-lsb-steganalysis-blindspot.mjs"
+      - "scripts/validate-rgb-lsb-steganalysis-blindspot.mjs"
+      - "scripts/validate-binary-cube-steganalysis-evidence-profile.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: "steganalysis-evidence-profile-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record evidence-profile pending
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=pending \
+            -f context='scientific-tools/raster-evidence-profile' \
+            -f description='Raster evidence-profile validation is running.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check authoritative and evidence-profile sources
+        run: |
+          node --check binary-cube-steganalysis-engine.js
+          node --check binary-cube-steganalysis-evidence-profile.js
+          node --check binary-cube-media-forensics-demo-corpus.js
+          node --check scientific-tools-local-media.js
+          node --check scripts/research-rgb-lsb-steganalysis-blindspot.mjs
+          node --check scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
+          node --check scripts/validate-binary-cube-steganalysis-evidence-profile.mjs
+
+      - name: Validate evidence-vector separation
+        run: node scripts/validate-binary-cube-steganalysis-evidence-profile.mjs
+
+      - name: Preserve measured RGB-LSB blind spot
+        run: node scripts/validate-rgb-lsb-steganalysis-blindspot.mjs
+
+      - name: Record evidence-profile success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=success \
+            -f context='scientific-tools/raster-evidence-profile' \
+            -f description='Raster evidence-profile validation passed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Record evidence-profile failure
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -f state=failure \
+            -f context='scientific-tools/raster-evidence-profile' \
+            -f description='Raster evidence-profile validation failed.' \
+            -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
