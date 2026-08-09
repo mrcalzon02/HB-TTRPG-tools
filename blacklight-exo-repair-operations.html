@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blacklight EXO | Console Repair Bay</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="blacklight-exo-repair-operations.css">
+  <script src="blacklight-exo-repair-operations.js" defer></script>
+</head>
+<body class="blacklight-corp-body exo-repair-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-exo-operations.html" aria-label="Return to EXO Operations">
+      <span class="bli-mark" aria-hidden="true"></span>
+      <span class="bli-brand-text"><span>Blacklight</span><span>EXO Console Repair Bay</span></span>
+    </a>
+    <nav class="bli-nav" aria-label="EXO repair navigation">
+      <a href="blacklight-exo-crew-operations.html">Crew Operations</a>
+      <a href="blacklight-exo-vessel.html">Vessel Engineering</a>
+      <a href="blacklight-exo-operations.html">EXO Operations</a>
+      <a href="blacklight-systems-black.html">Black Archive</a>
+    </nav>
+  </header>
+
+  <section class="bli-hero exo-repair-hero" aria-labelledby="repair-title">
+    <div>
+      <p class="bli-eyebrow">Black compartment · field maintenance role-play console</p>
+      <h1 id="repair-title">Console Repair Bay.</h1>
+      <p class="bli-lede">A separate maintenance minigame for damaged crew stations. Select a human console, inject a randomized internal fault, trace the generated service schematic, test components and conductors, perform a repair sequence, then hand the resulting suggested World of Darkness-derived d10 difficulty to the DM. The tool never decides whether the character actually repairs the system.</p>
+      <div class="bli-actions">
+        <button id="repair-new-fault" class="bli-action primary" type="button">Inject Random Damage</button>
+        <button id="repair-reset" class="bli-action" type="button">Reset Repair Bay</button>
+        <a class="bli-action" href="blacklight-exo-crew-operations.html">Return to Crew Operations</a>
+      </div>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Repair bay status">
+      <div class="bli-directory-title">Service Status</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Technology</strong><span class="bli-arrow">Human Standard</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Station</strong><span id="repair-status-station" class="bli-arrow">Engineering</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Fault state</strong><span id="repair-status-fault" class="bli-arrow">none injected</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Resolution</strong><span class="bli-arrow">DM adjudicated</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Last relay</strong><span id="repair-status-difficulty" class="bli-arrow">pending</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="bli-shell exo-repair-shell">
+    <section class="bli-section">
+      <div class="exo-repair-notice">
+        <strong>Maintenance boundary:</strong> this is a role-play troubleshooting and repair aid, not an electrical-engineering simulator. Service diagrams use physically recognizable power, signal, interlock, relay, fuse, connector and conductor relationships derived from the placement and role of the human console controls. Fault location, testing order and repair discipline affect the suggested roll difficulty, but the DM remains authoritative for success, time, consequences and whether a temporary repair holds.
+      </div>
+    </section>
+
+    <section class="bli-section" aria-labelledby="repair-station-title">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Generated internal service topology</p>
+        <h2 id="repair-station-title">Crew-station wiring and repair.</h2>
+        <p>Choose the station whose faceplate is being serviced. The diagram below is generated from a structured component graph laid out to mirror the console's physical control groups. Component blocks and wire runs are selectable test targets.</p>
+      </div>
+      <div id="repair-station-tabs" class="exo-repair-tabs" role="tablist" aria-label="Repairable crew stations"></div>
+
+      <div class="exo-repair-grid">
+        <article class="exo-repair-card exo-schematic-card">
+          <header>
+            <div><span class="exo-kicker">Service schematic</span><h3 id="schematic-title">Engineering internal control panel</h3></div>
+            <div class="exo-schematic-tools">
+              <button id="repair-fit" class="exo-repair-mini" type="button">Fit Diagram</button>
+              <button id="repair-training-overlay" class="exo-repair-mini" type="button" aria-pressed="false">Training Fault Overlay</button>
+            </div>
+          </header>
+          <div id="repair-schematic" class="exo-schematic-host" aria-label="Interactive station wiring schematic"></div>
+          <div class="exo-schematic-legend">
+            <span><i class="power"></i>Power</span>
+            <span><i class="signal"></i>Control signal</span>
+            <span><i class="safety"></i>Safety / execution interlock</span>
+            <span><i class="return"></i>Feedback / return</span>
+          </div>
+        </article>
+
+        <aside class="exo-repair-card exo-diagnostic-card">
+          <header><div><span class="exo-kicker">Operator complaint / symptom</span><h3>Fault ticket</h3></div><span id="fault-severity" class="exo-repair-badge">No fault</span></header>
+          <p id="fault-symptom" class="exo-fault-symptom">Inject randomized damage to begin a repair attempt.</p>
+          <div class="exo-diagnostic-readouts">
+            <div><span>Selected target</span><strong id="selected-target">None</strong></div>
+            <div><span>Target type</span><strong id="selected-kind">—</strong></div>
+            <div><span>Instrument result</span><strong id="instrument-result">No test performed</strong></div>
+          </div>
+
+          <div class="exo-repair-actions">
+            <span class="exo-kicker">Diagnostic / repair actions</span>
+            <button data-repair-action="isolate-power" type="button">Open service disconnect</button>
+            <button data-repair-action="inspect" type="button">Visual inspection</button>
+            <button data-repair-action="continuity-test" type="button">Continuity test</button>
+            <button data-repair-action="ground-test" type="button">Insulation / ground test</button>
+            <button data-repair-action="replace" type="button">Replace component</button>
+            <button data-repair-action="splice" type="button">Splice / replace conductor</button>
+            <button data-repair-action="reseat" type="button">Reseat connector</button>
+            <button data-repair-action="restore-power" type="button">Close service disconnect</button>
+            <button data-repair-action="functional-test" class="primary" type="button">Run functional test / relay</button>
+          </div>
+
+          <div class="exo-service-state">
+            <div><span>Service power</span><strong id="service-power-state">ENERGIZED</strong></div>
+            <div><span>Attempt state</span><strong id="repair-attempt-state">Awaiting fault</strong></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="bli-section exo-repair-lower">
+      <article class="exo-repair-card">
+        <header><div><span class="exo-kicker">Recorded technician actions</span><h3>Repair sequence</h3></div><button id="repair-clear-sequence" class="exo-repair-mini" type="button">Clear Attempt</button></header>
+        <ol id="repair-sequence" class="exo-repair-sequence"><li class="empty">No actions recorded.</li></ol>
+      </article>
+
+      <article class="exo-repair-card exo-repair-relay">
+        <header><div><span class="exo-kicker">World of Darkness-derived d10 handoff</span><h3>DM Repair Relay</h3></div><span id="repair-relay-status" class="exo-repair-badge">Awaiting functional test</span></header>
+        <div class="exo-repair-relay-main">
+          <div class="exo-repair-difficulty"><span>Suggested difficulty</span><strong id="repair-difficulty">—</strong><div id="repair-pips" class="exo-repair-pips"></div></div>
+          <div id="repair-relay-detail" class="exo-repair-relay-detail"></div>
+        </div>
+        <p id="repair-relay-call" class="exo-repair-call">The repair console does not determine whether the system is restored. Complete a repair attempt and run the functional test to produce a DM-facing difficulty.</p>
+      </article>
+    </section>
+
+    <section class="bli-section">
+      <article class="exo-repair-card">
+        <header><div><span class="exo-kicker">Field service record</span><h3>Maintenance log</h3></div><button id="repair-log-clear" class="exo-repair-mini" type="button">Clear</button></header>
+        <ol id="repair-log" class="exo-repair-log"></ol>
+      </article>
+    </section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO console repair role-play system · generated service schematics · DM-adjudicated WoD-derived d10 resolution.</footer>
+  <script src="blacklight-background-audio.js"></script>
+</body>
+</html>
