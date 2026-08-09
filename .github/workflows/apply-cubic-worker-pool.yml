@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/apply-cubic-worker-pool.yml"
       - "scripts/apply-cubic-worker-pool.py"
+      - "scripts/fix-cubic-worker-pool-migration-anchor.py"
       - "binary-cube-cubic-decryptor-worker-pool.js"
 
 permissions:
@@ -36,6 +37,7 @@ jobs:
           git fetch origin main
           git checkout main
           git reset --hard origin/main
+          python scripts/fix-cubic-worker-pool-migration-anchor.py
           python scripts/apply-cubic-worker-pool.py
           node --check binary-cube-cubic-decryptor-worker-pool.js
           node --check binary-cube-cubic-decryptor-worker.js
