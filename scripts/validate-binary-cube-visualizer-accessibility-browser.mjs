@@ -190,7 +190,7 @@ try {
     const press = (code, options = {}) => panel.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, code, key: options.key || '', ctrlKey: Boolean(options.ctrlKey) }));
 
     const initial = await waitForState(state => state.packageReady && state.roundTripValid && state.traceReady, 'Initial V10 package did not settle.');
-    if (!initial.rendererAvailable || initial.effectiveDisplayMode !== '3d' || initial.rendererVersion !== '0.5.0') throw new Error('The normal V10 WebGL path did not initialize.');
+    if (!initial.rendererAvailable || initial.effectiveDisplayMode !== '3d' || initial.rendererVersion !== '0.6.0') throw new Error('The normal V10 WebGL path did not initialize.');
     if (initial.traceTranscriptEntryCount !== 10) throw new Error('The ten-phase transcript was not created.');
     const status = panel.querySelector('[data-cube-visualizer-status]');
     const live = panel.querySelector('[data-cube-accessibility-live]');
@@ -273,7 +273,7 @@ try {
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v10-accessibility-browser-receipt',
-      schemaVersion: '0.1.0',
+      schemaVersion: '0.2.0',
       pass: true,
       rendererVersion: Visualizer.currentState().rendererVersion,
       webglVersion: (() => { const context = panel.querySelector('[data-cube-visualizer-canvas]').getContext('webgl2'); return context.getParameter(context.VERSION); })(),
@@ -322,7 +322,7 @@ try {
   })()`, 'Binary Cube V10 forced 2D fallback');
 
   assert.equal(normalReceipt.pass, true);
-  assert.equal(normalReceipt.rendererVersion, '0.5.0');
+  assert.equal(normalReceipt.rendererVersion, '0.6.0');
   assert.equal(normalReceipt.transcriptPhaseCount, 10);
   assert.equal(normalReceipt.exactTwoDimensionalCells, 32);
   assert.equal(normalReceipt.reducedMotionDiscretePhases, true);
