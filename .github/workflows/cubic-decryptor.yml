@@ -1,4 +1,4 @@
-# Validates deterministic search/resume, generator coverage, legacy compatibility, and additive SHA-256 key identity.
+# Validates deterministic search/resume, generator coverage, legacy compatibility, additive SHA-256 key identity, and routed Scientific Tools integration.
 name: Validate Cubic Decryptor Tool
 
 on:
@@ -12,7 +12,13 @@ on:
       - "binary-cube-cubic-decryptor-worker.js"
       - "binary-cube-cubic-decryptor.js"
       - "binary-cube-cubic-decryptor.css"
+      - "binary-cube-diagnostic-pipeline.js"
+      - "binary-cube-diagnostic-pipeline-panel.js"
+      - "scientific-tools-entry.js"
+      - "app-lite-view-mounts.js"
       - "scripts/validate-binary-cube-cubic-decryptor.mjs"
+      - "scripts/validate-scientific-diagnostic-pipeline.mjs"
+      - "scripts/validate-scientific-tools-extraction.mjs"
   workflow_dispatch:
 
 permissions:
@@ -40,15 +46,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check Cubic Decryptor sources
+      - name: Check Cubic Decryptor and integration sources
         run: |
+          node --check shadowrun-binary-cube-engine.js
           node --check binary-cube-cubic-decryptor-engine.js
           node --check binary-cube-cubic-decryptor-worker.js
           node --check binary-cube-cubic-decryptor.js
+          node --check binary-cube-diagnostic-pipeline.js
+          node --check binary-cube-diagnostic-pipeline-panel.js
+          node --check scientific-tools-entry.js
+          node --check app-lite-view-mounts.js
           node --check scripts/validate-binary-cube-cubic-decryptor.mjs
+          node --check scripts/validate-scientific-diagnostic-pipeline.mjs
+          node --check scripts/validate-scientific-tools-extraction.mjs
           test -s binary-cube-cubic-decryptor.css
       - name: Recover all current cubic key-generator families
         run: node scripts/validate-binary-cube-cubic-decryptor.mjs
+      - name: Validate routed Cubic diagnostic contract
+        run: node scripts/validate-scientific-diagnostic-pipeline.mjs
+      - name: Validate Scientific Tools Cubic ownership
+        run: node scripts/validate-scientific-tools-extraction.mjs
       - name: Record success
         if: ${{ success() }}
         env:
@@ -57,7 +74,7 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=success \
             -f context='binary-cube/cubic-decryptor' \
-            -f description='Cubic Decryptor regression passed.' \
+            -f description='Cubic Decryptor and Scientific Tools integration regression passed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - name: Record failure
         if: ${{ failure() }}
@@ -67,5 +84,5 @@ jobs:
           gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=failure \
             -f context='binary-cube/cubic-decryptor' \
-            -f description='Cubic Decryptor regression failed.' \
+            -f description='Cubic Decryptor or Scientific Tools integration regression failed.' \
             -f target_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
