@@ -1,4 +1,4 @@
-# Validates deterministic search/resume, IndexedDB interrupted-search persistence contract, generator coverage, legacy compatibility, additive SHA-256 key identity, and routed Scientific Tools integration.
+# Validates deterministic single/pooled search and resume, IndexedDB interrupted-search persistence, generator coverage, legacy compatibility, additive SHA-256 key identity, and routed Scientific Tools integration.
 name: Validate Cubic Decryptor Tool
 
 on:
@@ -9,6 +9,7 @@ on:
       - "shadowrun-binary-cube-engine.js"
       - "binary-cube-key-generation-research.js"
       - "binary-cube-cubic-decryptor-engine.js"
+      - "binary-cube-cubic-decryptor-worker-pool.js"
       - "binary-cube-cubic-decryptor-worker.js"
       - "binary-cube-cubic-decryptor.js"
       - "binary-cube-cubic-decryptor.css"
@@ -50,6 +51,7 @@ jobs:
         run: |
           node --check shadowrun-binary-cube-engine.js
           node --check binary-cube-cubic-decryptor-engine.js
+          node --check binary-cube-cubic-decryptor-worker-pool.js
           node --check binary-cube-cubic-decryptor-worker.js
           node --check binary-cube-cubic-decryptor.js
           node --check binary-cube-diagnostic-pipeline.js
