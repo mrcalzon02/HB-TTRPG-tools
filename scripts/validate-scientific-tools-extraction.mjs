@@ -20,6 +20,9 @@ const decryption = read('binary-cube-decryption-dashboard.js');
 const decryptionCss = read('binary-cube-decryption-dashboard.css');
 const informationSuite = read('binary-cube-information-analysis-suite.js');
 const informationSuiteCss = read('binary-cube-information-analysis-suite.css');
+const communicationCapacity = read('binary-cube-communication-capacity-analyzer.js');
+const communicationCapacityCss = read('binary-cube-communication-capacity-analyzer.css');
+const communicationCapacityWorker = read('binary-cube-communication-capacity-worker.js');
 const ism = read('interstellar-media-collisions-lab.js');
 const ismCss = read('interstellar-media-collisions-lab.css');
 const doubleSlit = read('double-slit-lab.js');
@@ -50,9 +53,11 @@ checks.push(excludes('Scientific simulation and cryptanalysis implementations ar
   'double-slit-lab.js',
   'binary-cube-decryption-dashboard.js',
   'binary-cube-information-analysis-suite.js',
+  'binary-cube-communication-capacity-analyzer.js',
   'DoubleSlitExperimentLab',
   'BinaryCubeDecryptionDashboard',
-  'BinaryCubeInformationAnalysisSuite'
+  'BinaryCubeInformationAnalysisSuite',
+  'BinaryCubeCommunicationCapacityAnalyzer'
 ]));
 
 checks.push(includes('Black Light delegates to the shared Scientific Tools workspace', blacklight, [
@@ -67,6 +72,7 @@ checks.push(excludes('Black Light does not duplicate scientific or cryptanalysis
   'double-slit-lab.js',
   'binary-cube-decryption-dashboard.js',
   'binary-cube-information-analysis-suite.js',
+  'binary-cube-communication-capacity-analyzer.js',
   'shadowrun-binary-cube-engine.js'
 ]));
 
@@ -76,8 +82,9 @@ checks.push(includes('Main menu cache-refreshes the current Scientific Tools ent
   "card.dataset.scientificToolsCard = 'true'",
   'Decryption Dashboard',
   'Information & Deobfuscation Analysis Suite',
+  'Communication Capacity Analyzer',
   "if (viewId === 'scientific-tools')",
-  "loadScript('scientific-tools-entry.js?v=20260809-information-analysis-1')",
+  "loadScript('scientific-tools-entry.js?v=20260809-communication-capacity-1')",
   'ensureScientificToolsView();'
 ]));
 checks.push(includes('Main runtime preloads freeze-safe Binary Cube execution before the laboratory', mounts, [
@@ -109,7 +116,8 @@ checks.push(excludes('Cooperative runner does not own scientific model logic', c
   'DoubleSlitExperimentLab',
   'ShadowrunBinaryCubeEngine',
   'BinaryCubeDecryptionDashboard',
-  'BinaryCubeInformationAnalysisSuite'
+  'BinaryCubeInformationAnalysisSuite',
+  'BinaryCubeCommunicationCapacityAnalyzer'
 ]));
 
 checks.push(includes('Binary Cube worker delegates all heavy mathematics to the canonical engine', cubeWorker, [
@@ -169,12 +177,13 @@ checks.push(excludes('Binary Cube laboratory no longer performs the primary expe
 ]));
 
 checks.push(includes('Scientific Tools loads the cooperative scheduler before scientific runtimes', workspace, [
-  "const ASSET_VERSION = '20260809-information-analysis-1';",
+  "const ASSET_VERSION = '20260809-communication-capacity-1';",
   'function loadCooperativeRunner()',
   "loadScript('scientific-tools-cooperative-runner.js'",
   'await loadCooperativeRunner();',
   "loadScript('binary-cube-decryption-dashboard.js'",
   "loadScript('binary-cube-information-analysis-suite.js'",
+  "loadScript('binary-cube-communication-capacity-analyzer.js'",
   "loadScript('interstellar-media-collisions-lab.js'",
   "loadScript('double-slit-lab.js'",
   'ScientificToolsCooperativeRunner loads before Scientific Tools runtimes',
@@ -191,12 +200,15 @@ checks.push(includes('Scientific Tools owns one Binary Cube, Decryption Dashboar
   'id="scientific-tools-open-binary-cube-laboratory"',
   'id="scientific-tools-open-decryption-dashboard"',
   'id="scientific-tools-open-information-analysis"',
+  'id="scientific-tools-open-communication-capacity"',
   'id="scientific-tools-open-ism"',
   'id="scientific-tools-open-double-slit"',
   'loadDecryptionDashboard',
   'openDecryptionDashboard',
   'loadInformationAnalysisSuite',
   'openInformationAnalysisSuite',
+  'loadCommunicationCapacityAnalyzer',
+  'openCommunicationCapacityAnalyzer',
   'loadDoubleSlitLab',
   'openDoubleSlitLab'
 ]));
@@ -280,6 +292,52 @@ assert.ok(informationSuiteCss.includes('.bias-candidate'), 'Information Analysis
 assert.ok(informationSuiteCss.includes('.bias-metric-grid'), 'Information Analysis Suite stylesheet must retain evidence metrics.');
 checks.push('Information Analysis Suite stylesheet remains authoritative');
 
+checks.push(includes('Communication Capacity Analyzer implements the McCowan-Hanser-Doyle information-theory family', communicationCapacity, [
+  'BinaryCubeCommunicationCapacityAnalyzer',
+  'const PAPER_YEAR = 1999;',
+  "const HUMAN_ZIPF_REFERENCE = -1.00;",
+  "const ADULT_DOLPHIN_ZIPF_REFERENCE = -0.95;",
+  "const INFANT_DOLPHIN_ZIPF_REFERENCE = -0.82;",
+  "const RANDOM_ZIPF_REFERENCE = -0.09;",
+  'function zipfAnalysis(',
+  'function conditionalEntropy(',
+  'function entropyOrderProfile(',
+  'function surrogateSequenceTest(',
+  'function sampleSufficiency(',
+  'function lagMutualInformation(',
+  'function analyzeCommunicationCapacity(',
+  'Adult dolphin whistles',
+  'undersampled',
+  'not proof of language'
+]));
+checks.push(excludes('Communication Capacity Analyzer does not duplicate Binary Cube encryption or unrelated scientific models', communicationCapacity, [
+  'ShadowrunBinaryCubeEngine.encryptBinary',
+  'Engine.encryptBinary(',
+  'Engine.transformBlock(',
+  'InterstellarMediaCollisionsLab',
+  'DoubleSlitExperimentLab',
+  'PLANCK_LENGTH',
+  'LAMBDA_COEFFICIENT'
+]));
+checks.push(includes('Communication Capacity worker delegates the full statistical model to the authoritative analyzer', communicationCapacityWorker, [
+  "importScripts('binary-cube-communication-capacity-analyzer.js?v=20260809-communication-capacity-2')",
+  'const Analyzer = self.BinaryCubeCommunicationCapacityAnalyzer;',
+  'Analyzer.analyzeCommunicationCapacity(bytes, request.options || {})',
+  "type: 'progress'",
+  "type: 'result'"
+]));
+checks.push(excludes('Communication Capacity worker does not duplicate statistical model mathematics', communicationCapacityWorker, [
+  'function zipfAnalysis(',
+  'function conditionalEntropy(',
+  'function entropyOrderProfile(',
+  'function surrogateSequenceTest(',
+  'function sampleSufficiency('
+]));
+assert.ok(communicationCapacityCss.includes('.bcca-panel'), 'Communication Capacity Analyzer stylesheet must retain authoritative panel styling.');
+assert.ok(communicationCapacityCss.includes('.bcca-metrics'), 'Communication Capacity Analyzer stylesheet must retain metric styling.');
+assert.ok(communicationCapacityCss.includes('.bcca-table'), 'Communication Capacity Analyzer stylesheet must retain table styling.');
+checks.push('Communication Capacity Analyzer stylesheet remains authoritative');
+
 checks.push(includes('ISM preserves physical, foam, and Shadow model boundaries', ism, [
   'const LAMBDA = 1.097e-52;',
   'const PLANCK_LENGTH = 1.616255e-35;',
@@ -308,6 +366,7 @@ checks.push(excludes('ISM remains independent of Double Slit, cryptanalysis, and
   'DoubleSlitExperimentLab',
   'BinaryCubeDecryptionDashboard',
   'BinaryCubeInformationAnalysisSuite',
+  'BinaryCubeCommunicationCapacityAnalyzer',
   'ShadowrunBinaryCubeEngine',
   'ShadowrunBinaryCubeEncryption'
 ]));
@@ -339,6 +398,7 @@ checks.push(excludes('Double Slit does not absorb ISM, cryptanalysis, or Binary 
   'InterstellarMediaCollisionsLab',
   'BinaryCubeDecryptionDashboard',
   'BinaryCubeInformationAnalysisSuite',
+  'BinaryCubeCommunicationCapacityAnalyzer',
   'ShadowrunBinaryCubeEngine',
   'PLANCK_LENGTH',
   'LAMBDA_COEFFICIENT'
@@ -354,7 +414,7 @@ checks.push('Double Slit stylesheet remains authoritative');
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-scientific-tools-main-menu-contract-receipt',
-  schemaVersion: '0.9.1',
+  schemaVersion: '0.10.0',
   pass: true,
   checkCount: checks.length,
   checks
