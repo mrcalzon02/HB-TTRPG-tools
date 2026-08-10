@@ -7,9 +7,9 @@ const P=ctx.window.CafarronDramatisPersonaeV1;
 if(!P)throw new Error('Archivum Personae register did not answer.');
 const v=P.validate();
 if(!v.allValid)throw new Error(`Personae validation failed: ${JSON.stringify(v)}`);
-if(v.personae!==37)throw new Error(`Expected thirty-seven chronicle personae; received ${v.personae}.`);
+if(v.personae!==43)throw new Error(`Expected forty-three chronicle personae; received ${v.personae}.`);
 const by=new Map(P.PERSONAE.map(p=>[p.id,p]));
-const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin','commissar-cressus-argenetio','sister-alara','sister-exegete-halvenna-mord','canoness-deyra-solm','sister-arbentia-tenelja','magos-abraxas-8207','sister-bethany-pradaxa','mulvane-drenal'];
+const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin','commissar-cressus-argenetio','sister-alara','sister-exegete-halvenna-mord','canoness-deyra-solm','sister-arbentia-tenelja','magos-abraxas-8207','sister-bethany-pradaxa','mulvane-drenal','doctor-reinhold-vigilant-shade','doc-finkey-vigilant-shade','inquisitor-atwell-zavoner','lieutenant-hendrick-laar','magos-elebendentis-zabrin','hans-vigilant-shade'];
 for(const id of expected)if(!by.has(id))throw new Error(`Missing chronicle persona ${id}.`);
 for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev'])if(!by.get(id).mapNodeIds.includes('node-kertora'))throw new Error(`${id} lost Kertora concordance.`);
 for(const id of ['interrogator-javard','pontiff-montpclair'])if(!by.get(id).mapNodeIds.includes('node-jhasyiapan'))throw new Error(`${id} lost Jhasyi’apan concordance.`);
@@ -74,6 +74,28 @@ if(!/Active at latest attached life testimony/i.test(mulvane.status)||/killed|de
 if(mulvane.mapNodeIds.length!==0||!/Sol System|Terra/i.test(mulvane.offMapConcordance||''))throw new Error('Mulvane was forced onto a Cafarron map node or lost his extra-sector concordance.');
 if(!/fourteen Terran years/i.test(mulvane.biography)||!/twenty-five/i.test(mulvane.biography)||!/two decades/i.test(mulvane.biography)||!/twelve sons/i.test(mulvane.biography))throw new Error('Mulvane lost core age, service or lineage testimony.');
 if(!mulvane.storyBeats.some(x=>/Terra approaches/i.test(x.place)&&/summoned specialist/i.test(x.beat)))throw new Error('Mulvane lost his inner-system navigation specialty.');
+const vigilantIds=['doctor-reinhold-vigilant-shade','doc-finkey-vigilant-shade','inquisitor-atwell-zavoner','lieutenant-hendrick-laar','magos-elebendentis-zabrin','hans-vigilant-shade'];
+for(const id of vigilantIds){const p=by.get(id);if(p.mapNodeIds.length!==0||!/Installation Theta-99/i.test(p.offMapConcordance||''))throw new Error(`${id} was forced onto a Cafarron node or lost the classified VIGILANT SHADE concordance.`)}
+const reinhold=by.get('doctor-reinhold-vigilant-shade');
+if(!/Active at latest attached testimony in Part-4/i.test(reinhold.status)||/killed|dead|missing in action/i.test(reinhold.status))throw new Error('Reinhold later fate was invented.');
+if(!/forbidden replication/i.test(reinhold.biography)||!/Magos Biologis designation/i.test(reinhold.sourceAuthority)||P.sourceHistory(reinhold).length!==4)throw new Error('Reinhold lost replication, reported-rank or four-part provenance.');
+const finkey=by.get('doc-finkey-vigilant-shade');
+if(!/Active at latest attached testimony in Part-4/i.test(finkey.status)||!/Madboy/i.test(finkey.rank)||/killed|dead|purged/i.test(finkey.status))throw new Error('Finkey status or Madboy identity was corrupted.');
+if(!/Finkey.*Finky|Finky.*Finkey/i.test(finkey.sourceAuthority)||P.sourceHistory(finkey).length!==4)throw new Error('Finkey serial spelling or four-part source concordance was lost.');
+if(!finkey.physicalHistory.some(x=>/cranial implants|neuron stabilizers/i.test(x))||!/High Gothic, Low Gothic and Orkish/i.test(finkey.biography))throw new Error('Finkey coherence mechanism or language testimony was lost.');
+const zavoner=by.get('inquisitor-atwell-zavoner');
+if(!/Active at latest attached testimony/i.test(zavoner.status)||!/Ordo Xenos/i.test(zavoner.rank)||!/Pale Conclave/i.test(zavoner.affiliations.join(' '))||!/Resurrectionist Affection/i.test(zavoner.affiliations.join(' ')))throw new Error('Zavoner office or faction testimony was lost.');
+if(!/does not generalize/i.test(zavoner.doctrine)||P.sourceHistory(zavoner).length!==4)throw new Error('Zavoner faction boundary or serial provenance was lost.');
+const laar=by.get('lieutenant-hendrick-laar');
+if(!/Active at first attached/i.test(laar.status)||/killed|dead|retired again/i.test(laar.status))throw new Error('Laar later fate was over-resolved.');
+if(!laar.physicalHistory.some(x=>/servo-braces/i.test(x))||!laar.physicalHistory.some(x=>/tracheal augmetic/i.test(x))||!/personal attendant to Commissar Sebastian Yarrick/i.test(laar.biography))throw new Error('Laar physical or Yarrick testimony was lost.');
+const zabrin=by.get('magos-elebendentis-zabrin');
+if(!/Active at latest direct appearance in Part-3/i.test(zabrin.status)||/killed|dead|removed/i.test(zabrin.status)||P.sourceHistory(zabrin).length!==2)throw new Error('Zabrin later fate or two-part provenance was corrupted.');
+if(!zabrin.storyBeats.some(x=>/Pattern Omicron-Null/i.test(x.beat))||!zabrin.relationships.some(x=>/Doc Finkey/i.test(x.name)))throw new Error('Zabrin stasis or Finkey collaboration testimony was lost.');
+const hans=by.get('hans-vigilant-shade');
+if(!/Stasis-preserved/i.test(hans.status)||!/moment before death/i.test(hans.status)||/confirmed dead|recovered|resurrected/i.test(hans.status))throw new Error('Hans liminal stasis state was over-resolved.');
+if(!/not decaying and not alive, preserved/i.test(hans.status)||P.sourceHistory(hans).length!==3)throw new Error('Hans explicit preservation wording or three-part provenance was lost.');
+if(!hans.storyBeats.some(x=>/last known living human/i.test(x.beat)&&/Yarrick/i.test(x.beat))||!hans.storyBeats.some(x=>/full stasis/i.test(x.beat)||/stasis lattice/i.test(x.beat)))throw new Error('Hans Yarrick witness or stasis testimony was lost.');
 const johnis=by.get('suitor-johnis');
 if(!/Active at latest direct testimony/i.test(johnis.status)||/killed|dead|missing in action/i.test(johnis.status))throw new Error('Johnis later fate was invented.');
 if(!/served for decades/i.test(johnis.biography)||!/raised from childhood/i.test(johnis.biography)||!johnis.storyBeats.some(x=>/administered the poison/i.test(x.beat)))throw new Error('Johnis lost his steward-assassin life testimony.');
@@ -111,11 +133,19 @@ const exactSources=new Map([
  ['benson-pelcher','1lga6is'],['jerry-slassen','1lga6is'],
  ['commissar-cressus-argenetio','1ovtfru'],['sister-alara','1ovtfru'],
  ['sister-arbentia-tenelja','1kvp2hx'],['magos-abraxas-8207','1kvp2hx'],['sister-bethany-pradaxa','1kvp2hx'],['mulvane-drenal','1kyqzh1'],
+ ['doctor-reinhold-vigilant-shade','1lcyc58'],['doc-finkey-vigilant-shade','1lcyc58'],['inquisitor-atwell-zavoner','1lcyc58'],['lieutenant-hendrick-laar','1lcyc58'],['magos-elebendentis-zabrin','1lffz82'],['hans-vigilant-shade','1lffz82'],
  ['governor-talbor-varik','1lr8fmy'],['commissar-keeper-dren-solvik','1lr8fmy'],['domina-aestra-callen','1lr8fmy'],
  ['harbour-master-gaston-selecton','1ggo76o'],['jak-degravian-harbor','1ggo76o'],
  ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i'],['lieutenant-durak','1ggo856'],['private-cren','1ggo856'],
  ['suitor-johnis','1gkv2sj'],['galladin-planetary-governor','1gkv2sj'],['stefan-galladin-heir','1gkv2sj'],['valen-galladin-aide','1gkv2sj'],['lord-commissar-galladin','1gkv2sj']
 ]);
 for(const[id,post]of exactSources)if(!new RegExp(`/comments/${post}/`,'i').test(by.get(id).source.url))throw new Error(`${id} lost its exact chronicle seal.`);
+
+const sourceIds=(id)=>P.sourceHistory(by.get(id)).map(s=>s.url);
+for(const post of ['1lcyc58','1lffz82','1lg965s','1ljgl26'])if(!sourceIds('doctor-reinhold-vigilant-shade').some(u=>u.includes(`/comments/${post}/`)))throw new Error(`Reinhold lost VIGILANT source ${post}.`);
+for(const post of ['1lcyc58','1lffz82','1lg965s','1ljgl26'])if(!sourceIds('doc-finkey-vigilant-shade').some(u=>u.includes(`/comments/${post}/`)))throw new Error(`Finkey lost VIGILANT source ${post}.`);
+for(const post of ['1lcyc58','1lffz82','1lg965s','1ljgl26'])if(!sourceIds('inquisitor-atwell-zavoner').some(u=>u.includes(`/comments/${post}/`)))throw new Error(`Zavoner lost VIGILANT source ${post}.`);
+for(const post of ['1lffz82','1lg965s'])if(!sourceIds('magos-elebendentis-zabrin').some(u=>u.includes(`/comments/${post}/`)))throw new Error(`Zabrin lost VIGILANT source ${post}.`);
+for(const post of ['1lffz82','1lg965s','1ljgl26'])if(!sourceIds('hans-vigilant-shade').some(u=>u.includes(`/comments/${post}/`)))throw new Error(`Hans lost VIGILANT source ${post}.`);
 for(const p of P.PERSONAE){for(const s of P.sourceHistory(p))if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(s.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
-console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:6,panthes:2,newPresidioBroadcast:2,highPresidioSchola:2,tenelja:3,solExtraSector:1,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
+console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:6,panthes:2,newPresidioBroadcast:2,highPresidioSchola:2,tenelja:3,solExtraSector:1,vigilantShade:6,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
