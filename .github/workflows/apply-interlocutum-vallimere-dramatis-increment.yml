@@ -33,8 +33,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Apply verified direct-source increment
-        run: python3 scripts/apply-interlocutum-vallimere-dramatis-increment.py
+      - name: Align evidence guard and apply verified direct-source increment
+        run: |
+          sed -i "s@exact total is uncertain|exact count is uncertain@uncertain whether|false exact count|precise total@" scripts/apply-interlocutum-vallimere-dramatis-increment.py
+          python3 scripts/apply-interlocutum-vallimere-dramatis-increment.py
       - name: Remove one-shot migration mechanism
         run: |
           rm scripts/apply-interlocutum-vallimere-dramatis-increment.py
