@@ -207,6 +207,7 @@
   let ambientUnlocked = false;
   let ambientSyncQueued = false;
   let ambientObserver = null;
+  let activeAmbientStation = null;
 
   function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, value));
@@ -340,6 +341,7 @@
     loops.forEach(handles => handles.forEach(retire));
     loops.clear();
     ambientMix.clear();
+    activeAmbientStation = null;
     [...active].forEach(retire);
   }
 
@@ -391,16 +393,25 @@
         result.push({ id: 'capacitors', scene: 'ambient-capacitor-bank', intensity });
       }
     } else if (station === 'engineering') {
-      const breakers = value('ENG-CBB-01');
-      const source = value('ENG-DST-02');
-      const coolant = value('ENG-CHV-04');
-      const pump = value('ENG-CPS-05');
-      if (breakers !== 'ISOLATED' && source !== 'ISOLATED' && (breakers || source)) {
-        const intensity = breakers === 'CASUALTY' || source === 'AUXILIARY' ? 0.62 : 0.42;
-        result.push({ id: 'plant', scene: 'ambient-machinery', intensity });
+      const rectifierFeeds = [value('ENG-RFA-01'), value('ENG-RFB-02'), value('ENG-RFC-03'), value('ENG-RFD-04')];
+      const busTransfer = value('ENG-BBT-05');
+      const busA = value('ENG-VBA-06');
+      const busB = value('ENG-VBB-07');
+      const rectifierBreaker = value('ENG-B02-09');
+      const coolantBreaker = value('ENG-B03-10');
+      const coolant = value('ENG-CHV-16');
+      const pump = value('ENG-CPS-17');
+      const rectifierLive = rectifierBreaker === 'ON' && busTransfer !== 'ISOLATED';
+      if (busTransfer && busTransfer !== 'ISOLATED') {
+        const imbalance = (busA && busB && busA !== busB) ? 0.18 : 0;
+        result.push({ id: 'plant', scene: 'ambient-machinery', intensity: clamp((busTransfer === 'AUXILIARY' ? 0.58 : 0.40) + imbalance, 0, 1) });
       }
-      if (coolant && coolant !== 'CLOSED') {
-        const intensity = clamp((coolant === 'OPEN' ? 0.72 : 0.36) + (pump === 'CROSS-TIE' ? 0.10 : 0), 0, 1);
+      if (rectifierLive) {
+        const feederDeviation = rectifierFeeds.filter(feed => feed && feed !== 'NOMINAL').length;
+        result.push({ id: 'rectifier', scene: 'ambient-capacitor-bank', intensity: clamp(0.28 + feederDeviation * 0.11, 0, 0.78) });
+      }
+      if (coolantBreaker === 'ON' && coolant && coolant !== 'CLOSED') {
+        const intensity = clamp((coolant === 'OPEN' ? 0.72 : 0.36) + (pump === 'CROSS-TIE' ? 0.12 : 0), 0, 1);
         result.push({ id: 'coolant', scene: 'ambient-fluid-loop', intensity });
       }
     } else if (station === 'science') {
@@ -427,7 +438,7 @@
   }
 
   function syncAmbientStation(station) {
-    if (!ambientUnlocked || document.hidden) return;
+    if (!ambientUnlocked || document.hidden || station !== activeAmbientStation) return;
     const desired = ambientDescriptors(station, ambientHardware[station]);
     const desiredKeys = new Set();
     desired.forEach(descriptor => {
@@ -446,14 +457,30 @@
     });
   }
 
+  function stopAmbientAll() {
+    [...ambientMix.keys()].forEach(stopLoop);
+    ambientMix.clear();
+  }
+
+  function activateAmbientStation(station) {
+    if (activeAmbientStation === station) return;
+    stopAmbientAll();
+    activeAmbientStation = station;
+  }
+
   function syncAllAmbient() {
     if (!ambientUnlocked || document.hidden) return;
-    Object.keys(ambientHardware).forEach(syncAmbientStation);
+    const current = visibleStationHardware();
+    if (!current) return;
+    activateAmbientStation(current.station);
+    ambientHardware[current.station] = current.values;
+    syncAmbientStation(current.station);
   }
 
   function rememberVisibleHardware() {
     const current = visibleStationHardware();
     if (!current) return;
+    activateAmbientStation(current.station);
     ambientHardware[current.station] = current.values;
     syncAmbientStation(current.station);
   }
@@ -467,16 +494,10 @@
     });
   }
 
-  function stopAmbientAll() {
-    [...ambientMix.keys()].forEach(stopLoop);
-    ambientMix.clear();
-  }
-
   function unlockAmbient() {
     if (ambientUnlocked) return;
     ambientUnlocked = true;
     rememberVisibleHardware();
-    syncAllAmbient();
   }
 
   function installAmbientBindings() {
@@ -517,6 +538,7 @@
   document.addEventListener('click', event => {
     if (!event.target.closest?.('#crew-scenario-reset')) return;
     stopAmbientAll();
+    activeAmbientStation = null;
     Object.keys(ambientHardware).forEach(key => delete ambientHardware[key]);
     requestAnimationFrame(scheduleAmbientSync);
   }, true);
