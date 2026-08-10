@@ -7,13 +7,14 @@ const P=ctx.window.CafarronDramatisPersonaeV1;
 if(!P)throw new Error('Archivum Personae register did not answer.');
 const v=P.validate();
 if(!v.allValid)throw new Error(`Personae validation failed: ${JSON.stringify(v)}`);
-if(v.personae!==33)throw new Error(`Expected thirty-three chronicle personae; received ${v.personae}.`);
+if(v.personae!==37)throw new Error(`Expected thirty-seven chronicle personae; received ${v.personae}.`);
 const by=new Map(P.PERSONAE.map(p=>[p.id,p]));
-const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin','commissar-cressus-argenetio','sister-alara','sister-exegete-halvenna-mord','canoness-deyra-solm'];
+const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin','commissar-cressus-argenetio','sister-alara','sister-exegete-halvenna-mord','canoness-deyra-solm','sister-arbentia-tenelja','magos-abraxas-8207','sister-bethany-pradaxa','mulvane-drenal'];
 for(const id of expected)if(!by.has(id))throw new Error(`Missing chronicle persona ${id}.`);
 for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev'])if(!by.get(id).mapNodeIds.includes('node-kertora'))throw new Error(`${id} lost Kertora concordance.`);
 for(const id of ['interrogator-javard','pontiff-montpclair'])if(!by.get(id).mapNodeIds.includes('node-jhasyiapan'))throw new Error(`${id} lost Jhasyi’apan concordance.`);
 for(const id of ['chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sister-exegete-halvenna-mord','canoness-deyra-solm'])if(!by.get(id).mapNodeIds.includes('node-presteria'))throw new Error(`${id} lost Presteria concordance.`);
+for(const id of ['sister-arbentia-tenelja','magos-abraxas-8207','sister-bethany-pradaxa'])if(!by.get(id).mapNodeIds.includes('node-pelzane'))throw new Error(`${id} lost Pelzane/Tenelja concordance.`);
 for(const id of ['sergeant-maximillion-dewinter','lieutenant-abereneth'])if(!by.get(id).mapNodeIds.includes('node-panthes'))throw new Error(`${id} lost Panthes concordance.`);
 for(const id of ['benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','commissar-cressus-argenetio','sister-alara'])if(!by.get(id).mapNodeIds.includes('node-new-presidio'))throw new Error(`${id} lost New Presidio concordance.`);
 for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin'])if(!by.get(id).mapNodeIds.includes('node-galladin'))throw new Error(`${id} lost Galladin concordance.`);
@@ -59,6 +60,20 @@ const deyra=by.get('canoness-deyra-solm');
 if(!/Serving as Canoness/i.test(deyra.status)||!/never directly appears/i.test(deyra.status)||/killed|dead|removed/i.test(deyra.status))throw new Error('Deyra direct-appearance or later-fate boundary was lost.');
 if(!/exact planetary location not supplied/i.test(deyra.currentLocation)||!/rather than asserting physical residence/i.test(deyra.sourceAuthority))throw new Error('Deyra was assigned invented physical geography.');
 if(!deyra.storyBeats.some(x=>/fourteen thousand/i.test(x.beat)&&/no personal action/i.test(x.beat)))throw new Error('Deyra inherited institutional reliquary irregularity was misattributed as her personal act.');
+const arbentia=by.get('sister-arbentia-tenelja');
+if(!/Active at latest direct testimony/i.test(arbentia.status)||/killed|dead|missing in action|promoted/i.test(arbentia.status))throw new Error('Arbentia later fate or rank was invented.');
+if(!/petitioned repeatedly/i.test(arbentia.biography)||!arbentia.relationships.some(x=>/^Rix$/i.test(x.name))||!arbentia.storyBeats.some(x=>/patient survived|survived repeated/i.test(x.beat)))throw new Error('Arbentia lost her education, Rix or survivor testimony.');
+const abraxas=by.get('magos-abraxas-8207');
+if(!/Magos Biologis-Abstrator/i.test(abraxas.rank)||!/Active at latest direct appearance/i.test(abraxas.status)||/killed|dead|removed/i.test(abraxas.status))throw new Error('Abraxas rank or later fate was corrupted.');
+if(!abraxas.relationships.some(x=>/Bethany Pradaxa/i.test(x.name))||!abraxas.storyBeats.some(x=>/cardiac crisis|emergency/i.test(x.beat)))throw new Error('Abraxas lost Tenelja clinical testimony.');
+const bethany=by.get('sister-bethany-pradaxa');
+if(!/Hospitaller Militant/i.test(bethany.rank)||!/Active at latest direct appearance/i.test(bethany.status)||/killed|dead|removed/i.test(bethany.status))throw new Error('Bethany rank or later fate was corrupted.');
+if(!bethany.relationships.some(x=>/Abraxas 8207/i.test(x.name))||!bethany.storyBeats.some(x=>/urgent|stabilization/i.test(x.beat)))throw new Error('Bethany lost Tenelja clinical testimony.');
+const mulvane=by.get('mulvane-drenal');
+if(!/Active at latest attached life testimony/i.test(mulvane.status)||/killed|dead|retired|failed/i.test(mulvane.status))throw new Error('Mulvane later fate was invented.');
+if(mulvane.mapNodeIds.length!==0||!/Sol System|Terra/i.test(mulvane.offMapConcordance||''))throw new Error('Mulvane was forced onto a Cafarron map node or lost his extra-sector concordance.');
+if(!/fourteen Terran years/i.test(mulvane.biography)||!/twenty-five/i.test(mulvane.biography)||!/two decades/i.test(mulvane.biography)||!/twelve sons/i.test(mulvane.biography))throw new Error('Mulvane lost core age, service or lineage testimony.');
+if(!mulvane.storyBeats.some(x=>/Terra approaches/i.test(x.place)&&/summoned specialist/i.test(x.beat)))throw new Error('Mulvane lost his inner-system navigation specialty.');
 const johnis=by.get('suitor-johnis');
 if(!/Active at latest direct testimony/i.test(johnis.status)||/killed|dead|missing in action/i.test(johnis.status))throw new Error('Johnis later fate was invented.');
 if(!/served for decades/i.test(johnis.biography)||!/raised from childhood/i.test(johnis.biography)||!johnis.storyBeats.some(x=>/administered the poison/i.test(x.beat)))throw new Error('Johnis lost his steward-assassin life testimony.');
@@ -95,6 +110,7 @@ const exactSources=new Map([
  ['sergeant-maximillion-dewinter','1msi8aa'],['lieutenant-abereneth','1msi8aa'],
  ['benson-pelcher','1lga6is'],['jerry-slassen','1lga6is'],
  ['commissar-cressus-argenetio','1ovtfru'],['sister-alara','1ovtfru'],
+ ['sister-arbentia-tenelja','1kvp2hx'],['magos-abraxas-8207','1kvp2hx'],['sister-bethany-pradaxa','1kvp2hx'],['mulvane-drenal','1kyqzh1'],
  ['governor-talbor-varik','1lr8fmy'],['commissar-keeper-dren-solvik','1lr8fmy'],['domina-aestra-callen','1lr8fmy'],
  ['harbour-master-gaston-selecton','1ggo76o'],['jak-degravian-harbor','1ggo76o'],
  ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i'],['lieutenant-durak','1ggo856'],['private-cren','1ggo856'],
@@ -102,4 +118,4 @@ const exactSources=new Map([
 ]);
 for(const[id,post]of exactSources)if(!new RegExp(`/comments/${post}/`,'i').test(by.get(id).source.url))throw new Error(`${id} lost its exact chronicle seal.`);
 for(const p of P.PERSONAE){for(const s of P.sourceHistory(p))if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(s.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
-console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:6,panthes:2,newPresidioBroadcast:2,highPresidioSchola:2,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
+console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:6,panthes:2,newPresidioBroadcast:2,highPresidioSchola:2,tenelja:3,solExtraSector:1,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
