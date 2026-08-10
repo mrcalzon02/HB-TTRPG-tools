@@ -30,10 +30,11 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Re-anchor on current main
+      - name: Re-anchor on current main and remove accidental branch
         run: |
           git fetch origin main
           git reset --hard origin/main
+          git push origin --delete __invalid__ || true
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
