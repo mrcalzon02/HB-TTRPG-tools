@@ -1,0 +1,46 @@
+#audio-laboratory.audio-laboratory-panel{position:fixed;inset:0;z-index:100000;background:rgba(5,9,13,.96);color:#e8f0f5;overflow:auto;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#audio-laboratory *{box-sizing:border-box}
+#audio-laboratory .al-shell{width:min(1560px,calc(100% - 28px));margin:14px auto 36px}
+#audio-laboratory .al-header{position:sticky;top:0;z-index:6;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:18px 20px;border:1px solid rgba(130,175,205,.24);border-radius:18px;background:rgba(10,17,24,.96);backdrop-filter:blur(12px);box-shadow:0 12px 34px rgba(0,0,0,.28)}
+#audio-laboratory .al-header h2{margin:2px 0 4px;font-size:clamp(1.55rem,2.5vw,2.35rem);letter-spacing:.01em}
+#audio-laboratory .al-header p{margin:0;color:#a9bac6;line-height:1.5}
+#audio-laboratory .al-eyebrow{font-size:.72rem!important;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#72d5ff!important}
+#audio-laboratory .al-close{flex:0 0 auto;width:42px;height:42px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:1.65rem;cursor:pointer}
+#audio-laboratory .al-close:hover{background:rgba(255,255,255,.1)}
+#audio-laboratory .al-safety,#audio-laboratory .al-boundary{margin:12px 0;padding:12px 14px;border-left:3px solid #ffb86c;border-radius:8px;background:rgba(255,184,108,.07);color:#c5d0d8;line-height:1.55}
+#audio-laboratory .al-boundary{border-left-color:#72d5ff;background:rgba(114,213,255,.06)}
+#audio-laboratory .al-layout{display:grid;grid-template-columns:minmax(300px,390px) minmax(0,1fr);gap:14px;align-items:start}
+#audio-laboratory .al-controls{display:grid;gap:12px;position:sticky;top:116px;max-height:calc(100vh - 130px);overflow:auto;padding-right:2px}
+#audio-laboratory .al-workspace{display:grid;gap:12px;min-width:0}
+#audio-laboratory .al-card{border:1px solid rgba(130,175,205,.2);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);box-shadow:inset 0 1px rgba(255,255,255,.025)}
+#audio-laboratory .al-card h3{margin:0 0 10px;font-size:1rem;color:#f2f7fa}
+#audio-laboratory .al-card p{margin:7px 0;color:#9fb0bc;line-height:1.48;font-size:.88rem}
+#audio-laboratory .al-fields{display:grid;gap:8px}
+#audio-laboratory .al-fields label{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#b7c5cf;font-size:.82rem}
+#audio-laboratory .al-fields label>span{display:flex;align-items:center;justify-content:flex-end;gap:5px;color:#8498a7;white-space:nowrap}
+#audio-laboratory input{width:112px;max-width:100%;border:1px solid rgba(130,175,205,.28);border-radius:8px;padding:7px 8px;background:#071019;color:#edf7fb;font:inherit}
+#audio-laboratory input[type="text"]{width:152px}
+#audio-laboratory input:focus{outline:2px solid rgba(114,213,255,.4);border-color:#72d5ff}
+#audio-laboratory .al-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#audio-laboratory button.primary-action,#audio-laboratory button.secondary-action{border-radius:9px;padding:8px 11px;font-weight:800;cursor:pointer}
+#audio-laboratory button.primary-action{border:1px solid #72d5ff;background:rgba(114,213,255,.16);color:#eafaff}
+#audio-laboratory button.secondary-action{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.045);color:#d7e2e8}
+#audio-laboratory button:hover{filter:brightness(1.12)}
+#audio-laboratory .al-derived{display:grid;gap:5px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem;color:#98abb7}
+#audio-laboratory .al-derived strong,#audio-laboratory .al-readout strong{color:#dce9ef}
+#audio-laboratory .al-status{padding:10px 13px;border:1px solid rgba(130,175,205,.22);border-radius:12px;background:rgba(114,213,255,.05);color:#cfeaf5;line-height:1.45}
+#audio-laboratory .al-status[data-state="running"]{border-color:rgba(114,213,255,.5)}
+#audio-laboratory .al-status[data-state="complete"]{border-color:rgba(118,255,168,.45);background:rgba(118,255,168,.05);color:#d9ffe6}
+#audio-laboratory .al-status[data-state="warning"]{border-color:rgba(255,184,108,.5);background:rgba(255,184,108,.06);color:#ffe4c7}
+#audio-laboratory .al-status[data-state="error"]{border-color:rgba(255,108,122,.6);background:rgba(255,108,122,.07);color:#ffd5d9}
+#audio-laboratory .al-canvas{display:block;width:100%;height:280px;border:1px solid rgba(130,175,205,.16);border-radius:12px;background:#050b10}
+#audio-laboratory .al-canvas.al-map{height:440px}
+#audio-laboratory .al-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#audio-laboratory .al-table-wrap{overflow:auto;margin-top:10px;border:1px solid rgba(255,255,255,.07);border-radius:10px}
+#audio-laboratory table{width:100%;border-collapse:collapse;font-size:.76rem;white-space:nowrap}
+#audio-laboratory th,#audio-laboratory td{padding:8px 9px;border-bottom:1px solid rgba(255,255,255,.065);text-align:left}
+#audio-laboratory th{position:sticky;top:0;background:#0d1720;color:#d7e5ec;font-weight:850}
+#audio-laboratory td{color:#aebec8}
+#audio-laboratory tr:last-child td{border-bottom:0}
+@media (max-width:1050px){#audio-laboratory .al-layout{grid-template-columns:1fr}#audio-laboratory .al-controls{position:static;max-height:none;grid-template-columns:repeat(2,minmax(0,1fr))}#audio-laboratory .al-controls>.al-card:first-child{grid-column:1/-1}}
+@media (max-width:760px){#audio-laboratory .al-shell{width:min(100% - 12px,1560px);margin-top:6px}#audio-laboratory .al-header{position:static;padding:14px}#audio-laboratory .al-controls{grid-template-columns:1fr}#audio-laboratory .al-controls>.al-card:first-child{grid-column:auto}#audio-laboratory .al-grid-two{grid-template-columns:1fr}#audio-laboratory .al-fields label{align-items:flex-start;flex-direction:column;gap:4px}#audio-laboratory .al-fields label>span{width:100%;justify-content:space-between}#audio-laboratory input,#audio-laboratory input[type="text"]{width:60%}#audio-laboratory .al-canvas.al-map{height:350px}}
