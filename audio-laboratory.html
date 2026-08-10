@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Audio Laboratory · HB-TTRPG Scientific Tools</title>
+  <meta name="description" content="Active acoustic ranging and multi-station room-geometry research laboratory.">
+  <link rel="stylesheet" href="audio-laboratory.css?v=20260809-audio-lab-1">
+  <style>html,body{margin:0;min-height:100%;background:#05090d;color:#e8f0f5}body>main{max-width:900px;margin:40px auto;padding:20px;font-family:system-ui,sans-serif}body>main a{color:#72d5ff}</style>
+</head>
+<body>
+  <main id="audio-laboratory-fallback">
+    <h1>Audio Laboratory</h1>
+    <p>Loading the active acoustic ranging workbench…</p>
+    <p><a href="index.html#scientific-tools">Return to Scientific Tools</a></p>
+  </main>
+  <script src="audio-laboratory.js?v=20260809-audio-lab-1"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const fallback = document.getElementById('audio-laboratory-fallback');
+      try {
+        if (!window.AudioLaboratory?.openPanel) throw new Error('Audio Laboratory API did not load.');
+        fallback.hidden = true;
+        window.AudioLaboratory.openPanel();
+      } catch (error) {
+        fallback.querySelector('p').textContent = `Audio Laboratory could not initialize: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
