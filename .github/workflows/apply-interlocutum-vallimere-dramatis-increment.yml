@@ -5,6 +5,7 @@ on:
     branches: ["main"]
     paths:
       - "scripts/apply-interlocutum-vallimere-dramatis-increment.py"
+      - "scripts/run-interlocutum-vallimere-dramatis.trigger"
       - ".github/workflows/apply-interlocutum-vallimere-dramatis-increment.yml"
   workflow_dispatch:
 
@@ -39,8 +40,9 @@ jobs:
           python3 scripts/apply-interlocutum-vallimere-dramatis-increment.py
       - name: Remove one-shot migration mechanism
         run: |
-          rm scripts/apply-interlocutum-vallimere-dramatis-increment.py
-          rm .github/workflows/apply-interlocutum-vallimere-dramatis-increment.yml
+          rm -f scripts/apply-interlocutum-vallimere-dramatis-increment.py
+          rm -f scripts/run-interlocutum-vallimere-dramatis.trigger
+          rm -f .github/workflows/apply-interlocutum-vallimere-dramatis-increment.yml
       - name: Commit and fast-forward directly to main
         run: |
           git config user.name "github-actions[bot]"
