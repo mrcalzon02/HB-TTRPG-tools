@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 path = ROOT / 'blacklight-exo-crew-operations.js'
 text = path.read_text(encoding='utf-8')
 
-EXPECTED_BLOB = '00daa7843081228c1cb7166f8cf76a9ca98f03bf'
+EXPECTED_BLOB = 'd97572c3cb79eb5056175090bd67a0abef550b75'
 
 def git_blob_sha(data: bytes) -> str:
     header = f'blob {len(data)}\0'.encode()
