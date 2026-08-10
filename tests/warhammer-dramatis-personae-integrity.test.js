@@ -7,15 +7,15 @@ const P=ctx.window.CafarronDramatisPersonaeV1;
 if(!P)throw new Error('Archivum Personae register did not answer.');
 const v=P.validate();
 if(!v.allValid)throw new Error(`Personae validation failed: ${JSON.stringify(v)}`);
-if(v.personae!==29)throw new Error(`Expected twenty-nine chronicle personae; received ${v.personae}.`);
+if(v.personae!==33)throw new Error(`Expected thirty-three chronicle personae; received ${v.personae}.`);
 const by=new Map(P.PERSONAE.map(p=>[p.id,p]));
-const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin'];
+const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin','commissar-cressus-argenetio','sister-alara','sister-exegete-halvenna-mord','canoness-deyra-solm'];
 for(const id of expected)if(!by.has(id))throw new Error(`Missing chronicle persona ${id}.`);
 for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev'])if(!by.get(id).mapNodeIds.includes('node-kertora'))throw new Error(`${id} lost Kertora concordance.`);
 for(const id of ['interrogator-javard','pontiff-montpclair'])if(!by.get(id).mapNodeIds.includes('node-jhasyiapan'))throw new Error(`${id} lost Jhasyi’apan concordance.`);
-for(const id of ['chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned'])if(!by.get(id).mapNodeIds.includes('node-presteria'))throw new Error(`${id} lost Presteria concordance.`);
+for(const id of ['chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sister-exegete-halvenna-mord','canoness-deyra-solm'])if(!by.get(id).mapNodeIds.includes('node-presteria'))throw new Error(`${id} lost Presteria concordance.`);
 for(const id of ['sergeant-maximillion-dewinter','lieutenant-abereneth'])if(!by.get(id).mapNodeIds.includes('node-panthes'))throw new Error(`${id} lost Panthes concordance.`);
-for(const id of ['benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen'])if(!by.get(id).mapNodeIds.includes('node-new-presidio'))throw new Error(`${id} lost New Presidio concordance.`);
+for(const id of ['benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','commissar-cressus-argenetio','sister-alara'])if(!by.get(id).mapNodeIds.includes('node-new-presidio'))throw new Error(`${id} lost New Presidio concordance.`);
 for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin'])if(!by.get(id).mapNodeIds.includes('node-galladin'))throw new Error(`${id} lost Galladin concordance.`);
 if(!/Critical casualty/i.test(by.get('vishwa-love').status)||/dead|killed/i.test(by.get('vishwa-love').status))throw new Error('Vishwa outcome was over-resolved beyond the attached chronicle.');
 if(!/not established/i.test(by.get('besorev').status))throw new Error('Besorev survival uncertainty was lost.');
@@ -41,6 +41,24 @@ if(!/Kerodan VII/i.test(durak.biography)||!/Durak’s own account/i.test(durak.s
 if(!/formal command does not know/i.test(durak.biography)||!/open secret/i.test(durak.biography))throw new Error('Durak command-awareness contradiction was flattened instead of preserved.');
 const cren=by.get('private-cren');
 if(!/Private/.test(cren.rank)||!/Active at latest attached testimony/i.test(cren.status)||/killed|dead|missing in action|promoted/i.test(cren.status))throw new Error('Cren narrow enlisted record over-resolved his later life.');
+const cressus=by.get('commissar-cressus-argenetio');
+if(!/Active at latest direct testimony/i.test(cressus.status)||/killed|dead|missing in action/i.test(cressus.status))throw new Error('Cressus later fate was invented.');
+if(!/Prescia/i.test(cressus.biography)||!/twenty-one/i.test(cressus.biography)||!/Umezeprel-Beta/i.test(cressus.biography)||!/founding Headmaster/i.test(cressus.biography))throw new Error('Cressus lost core Schola or campaign testimony.');
+if(!cressus.storyBeats.some(x=>/High Presidio/i.test(x.place)&&/no arrival|not.*depicted/i.test(x.beat)))throw new Error('Cressus High Presidio destination was over-resolved into an arrival.');
+const alara=by.get('sister-alara');
+if(!/Active at latest direct testimony/i.test(alara.status)||!/Sister of Battle/i.test(alara.rank)||/killed|dead|missing in action/i.test(alara.status))throw new Error('Alara rank or later fate was corrupted.');
+if(!/bodyguard and Ecclesiastical monitor/i.test(alara.role)||!alara.storyBeats.some(x=>/daily|Checked on Cressus daily/i.test(x.beat)))throw new Error('Alara lost her direct A’reef assignment testimony.');
+if(/Alara (personally |herself )?(donated|contributed|provided).*(gene|genetic)/i.test(alara.biography)||alara.physicalHistory.some(x=>/donor|genetic-legacy|gene-offering/i.test(x)))throw new Error('Alara was falsely converted from collective Sororitas testimony into a personal genetic donor record.');
+if(!cressus.relationships.some(x=>/Sister Alara/i.test(x.name))||!alara.relationships.some(x=>/Cressus/i.test(x.name)))throw new Error('Cressus and Alara lost their direct mission concordance.');
+const halvenna=by.get('sister-exegete-halvenna-mord');
+if(!/Dead by the time/i.test(halvenna.status)||!/stripped of rank, condemned/i.test(halvenna.status))throw new Error('Halvenna death or condemnation seal was weakened.');
+if(!/conflict|conflicting/i.test(halvenna.biography)||!/sealed/i.test(halvenna.sourceAuthority))throw new Error('Halvenna fall was over-resolved beyond contradictory sealed testimony.');
+if(!/disciple-authenticated appendix/i.test(halvenna.doctrine)||!/disciple/i.test(halvenna.sourceAuthority)||/Halvenna (wrote|authored).*life-preservation exception/i.test(halvenna.biography))throw new Error('Halvenna appendix authorship boundary was lost.');
+if(!halvenna.storyBeats.some(x=>/Argent Sepulchre/i.test(x.beat))||!halvenna.affiliations.some(x=>/Adepta Sororitas/i.test(x)))throw new Error('Halvenna Sororitas elevation testimony was lost.');
+const deyra=by.get('canoness-deyra-solm');
+if(!/Serving as Canoness/i.test(deyra.status)||!/never directly appears/i.test(deyra.status)||/killed|dead|removed/i.test(deyra.status))throw new Error('Deyra direct-appearance or later-fate boundary was lost.');
+if(!/exact planetary location not supplied/i.test(deyra.currentLocation)||!/rather than asserting physical residence/i.test(deyra.sourceAuthority))throw new Error('Deyra was assigned invented physical geography.');
+if(!deyra.storyBeats.some(x=>/fourteen thousand/i.test(x.beat)&&/no personal action/i.test(x.beat)))throw new Error('Deyra inherited institutional reliquary irregularity was misattributed as her personal act.');
 const johnis=by.get('suitor-johnis');
 if(!/Active at latest direct testimony/i.test(johnis.status)||/killed|dead|missing in action/i.test(johnis.status))throw new Error('Johnis later fate was invented.');
 if(!/served for decades/i.test(johnis.biography)||!/raised from childhood/i.test(johnis.biography)||!johnis.storyBeats.some(x=>/administered the poison/i.test(x.beat)))throw new Error('Johnis lost his steward-assassin life testimony.');
@@ -73,9 +91,10 @@ const g=by.get('grand-reverend-grellholm');
 if(!g.physicalHistory.some(x=>/xenos-derived|xenos derivatives/i.test(x))||!g.physicalHistory.some(x=>/wholly human|human Imperial alternative/i.test(x)))throw new Error('Grellholm Prolong provenance testimony is incomplete.');
 if(g.physicalHistory.some(x=>/administered|received the wholly human|underwent the wholly human/i.test(x)))throw new Error('Grellholm treatment administration was invented beyond the chronicle.');
 const exactSources=new Map([
- ['chancellor-ardenal','1vfnma7'],['grand-reverend-grellholm','1vfnma7'],['prefect-lorus','1vfnma7'],['minister-heldforned','1vfnma7'],
+ ['chancellor-ardenal','1vfnma7'],['grand-reverend-grellholm','1vfnma7'],['prefect-lorus','1vfnma7'],['minister-heldforned','1vfnma7'],['sister-exegete-halvenna-mord','1vfnma7'],['canoness-deyra-solm','1vfnma7'],
  ['sergeant-maximillion-dewinter','1msi8aa'],['lieutenant-abereneth','1msi8aa'],
  ['benson-pelcher','1lga6is'],['jerry-slassen','1lga6is'],
+ ['commissar-cressus-argenetio','1ovtfru'],['sister-alara','1ovtfru'],
  ['governor-talbor-varik','1lr8fmy'],['commissar-keeper-dren-solvik','1lr8fmy'],['domina-aestra-callen','1lr8fmy'],
  ['harbour-master-gaston-selecton','1ggo76o'],['jak-degravian-harbor','1ggo76o'],
  ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i'],['lieutenant-durak','1ggo856'],['private-cren','1ggo856'],
@@ -83,4 +102,4 @@ const exactSources=new Map([
 ]);
 for(const[id,post]of exactSources)if(!new RegExp(`/comments/${post}/`,'i').test(by.get(id).source.url))throw new Error(`${id} lost its exact chronicle seal.`);
 for(const p of P.PERSONAE){for(const s of P.sourceHistory(p))if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(s.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
-console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:4,panthes:2,newPresidioBroadcast:2,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
+console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:6,panthes:2,newPresidioBroadcast:2,highPresidioSchola:2,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
