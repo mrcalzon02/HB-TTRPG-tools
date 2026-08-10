@@ -31,7 +31,7 @@ jobs:
         run: |
           node --check blacklight-exo-crew-operations.js
           test "$(grep -c 'physical:"' blacklight-exo-crew-operations.js)" -ge 44
-          grep -q 'physical-spring-transmit-key' blacklight-exo-crew-operations.css
+          grep -q 'mech-transmit-key' blacklight-exo-crew-operations.css
           grep -q 'physical-coolant-handwheel' blacklight-exo-crew-operations.css
           grep -q 'physical-weapon-bank-selector' blacklight-exo-crew-operations.css
           grep -q 'data-control-physical' blacklight-exo-crew-operations.js
