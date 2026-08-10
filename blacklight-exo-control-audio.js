@@ -4,7 +4,7 @@
   if (window.EXO_CONTROL_AUDIO) return;
 
   const MASTER_VOLUME = 0.72;
-  const MAX_ACTIVE = 28;
+  const MAX_ACTIVE = 48;
   const STATION_CHARACTER = Object.freeze({
     helm: Object.freeze({ gain: 0.96, rate: 1.03 }),
     navigation: Object.freeze({ gain: 0.88, rate: 1.07 }),
@@ -13,7 +13,34 @@
     science: Object.freeze({ gain: 0.84, rate: 1.09 }),
     comms: Object.freeze({ gain: 0.90, rate: 1.06 })
   });
+  const STATION_NAMES = Object.freeze(Object.keys(STATION_CHARACTER));
   const PRELOAD_ASSETS = Object.freeze(['click', 'snap', 'snick', 'krunk', 'clickKlunk', 'slowCoinClicking', 'engineLoop', 'deng']);
+  const EXTERNAL_CC0_SOURCES = Object.freeze({
+    rocketEngine: Object.freeze({
+      author: 'theMinesAreShakin',
+      license: 'CC0',
+      page: 'https://opengameart.org/content/rocket-engine',
+      asset: 'https://opengameart.org/sites/default/files/rocket_engine.001.wav'
+    }),
+    electronicDevice: Object.freeze({
+      author: 'qubodup',
+      license: 'CC0',
+      page: 'https://opengameart.org/content/electronic-device-loop',
+      asset: 'https://opengameart.org/sites/default/files/qubodup-edev.flac'
+    }),
+    generatorLoop: Object.freeze({
+      author: 'bart',
+      license: 'CC0',
+      page: 'https://opengameart.org/content/steam-boiler-sound-loop',
+      asset: 'https://opengameart.org/sites/default/files/generator_loop.wav'
+    }),
+    waterFlow: Object.freeze({
+      author: 'TyberiusGames',
+      license: 'CC0',
+      page: 'https://opengameart.org/content/waterflow-sound',
+      asset: 'https://opengameart.org/sites/default/files/waterflow.mp3'
+    })
+  });
   const assets = Object.freeze({
     click: 'assets/Klick.mp3',
     snap: 'assets/Snap.mp3',
@@ -33,7 +60,11 @@
     urnk: 'assets/Urnk.mp3',
     deng: 'assets/deng.mp3',
     groanCliark: 'assets/GroanCliark.mp3',
-    graonkerliker: 'assets/Graonkerliker.mp3'
+    graonkerliker: 'assets/Graonkerliker.mp3',
+    cc0RocketEngine: EXTERNAL_CC0_SOURCES.rocketEngine.asset,
+    cc0ElectronicDevice: EXTERNAL_CC0_SOURCES.electronicDevice.asset,
+    cc0GeneratorLoop: EXTERNAL_CC0_SOURCES.generatorLoop.asset,
+    cc0WaterFlow: EXTERNAL_CC0_SOURCES.waterFlow.asset
   });
 
   const scenes = Object.freeze({
@@ -139,6 +170,30 @@
     ]),
     'servo-loop': Object.freeze([
       { asset: 'engineLoop', gain: 0.017, rate: 1.42, loop: true }
+    ]),
+    'ambient-drive-rumble': Object.freeze([
+      { asset: 'cc0RocketEngine', gain: 0.038, rate: 0.82, loop: true },
+      { asset: 'engineLoop', gain: 0.010, rate: 0.72, loop: true }
+    ]),
+    'ambient-machinery': Object.freeze([
+      { asset: 'cc0GeneratorLoop', gain: 0.025, rate: 0.88, loop: true },
+      { asset: 'rhythmicCrumping', gain: 0.009, rate: 0.82, loop: true }
+    ]),
+    'ambient-capacitor-bank': Object.freeze([
+      { asset: 'cc0ElectronicDevice', gain: 0.018, rate: 1.08, loop: true },
+      { asset: 'engineLoop', gain: 0.006, rate: 1.46, loop: true }
+    ]),
+    'ambient-fluid-loop': Object.freeze([
+      { asset: 'cc0WaterFlow', gain: 0.022, rate: 0.82, loop: true },
+      { asset: 'cakThumpLoop', gain: 0.008, rate: 0.86, loop: true }
+    ]),
+    'ambient-electronics': Object.freeze([
+      { asset: 'cc0ElectronicDevice', gain: 0.009, rate: 1.14, loop: true },
+      { asset: 'engineLoop', gain: 0.004, rate: 1.34, loop: true }
+    ]),
+    'ambient-rf-carrier': Object.freeze([
+      { asset: 'cc0ElectronicDevice', gain: 0.011, rate: 1.34, loop: true },
+      { asset: 'engineLoop', gain: 0.004, rate: 1.72, loop: true }
     ])
   });
 
@@ -146,7 +201,12 @@
   const activeBaseVolumes = new WeakMap();
   const loops = new Map();
   const preloaders = new Map();
+  const ambientHardware = Object.create(null);
+  const ambientMix = new Map();
   let masterVolume = MASTER_VOLUME;
+  let ambientUnlocked = false;
+  let ambientSyncQueued = false;
+  let ambientObserver = null;
 
   function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, value));
@@ -255,10 +315,10 @@
   }
 
   function startLoop(scene, key, options = {}) {
-    if (!key) return;
+    if (!key) return [];
     stopLoop(key);
     const layers = scenes[scene];
-    if (!layers) return;
+    if (!layers) return [];
     const handles = [];
     layers.forEach((layer, index) => {
       const loopLayer = { ...layer, loop: true, stopMs: undefined, delay: undefined };
@@ -266,6 +326,7 @@
       if (handle) handles.push(handle);
     });
     if (handles.length) loops.set(key, handles);
+    return handles;
   }
 
   function stopLoop(key) {
@@ -278,6 +339,7 @@
   function stopAll() {
     loops.forEach(handles => handles.forEach(retire));
     loops.clear();
+    ambientMix.clear();
     [...active].forEach(retire);
   }
 
@@ -289,20 +351,185 @@
     });
   }
 
+  function directControlValue(block) {
+    if (!block) return '';
+    const node = Array.from(block.children).find(child => child.tagName === 'STRONG');
+    return String(node?.textContent || '').trim().toUpperCase();
+  }
+
+  function visibleStationHardware() {
+    const root = document.querySelector('#station-panel .exo-physical-controls');
+    if (!root) return null;
+    const station = STATION_NAMES.find(name => root.classList.contains(`station-${name}`));
+    if (!station) return null;
+    const values = Object.create(null);
+    root.querySelectorAll('.exo-device-block[data-control-code]').forEach(block => {
+      const code = block.dataset.controlCode;
+      if (code) values[code] = directControlValue(block);
+    });
+    return { station, values };
+  }
+
+  function ambientDescriptors(station, values) {
+    const result = [];
+    const value = code => String(values?.[code] || '').toUpperCase();
+    if (station === 'helm') {
+      const throttle = value('HEL-THT-05');
+      const gate = value('HEL-TGT-06');
+      if (gate === 'FORWARD' || gate === 'AFT') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.95 });
+      else if (throttle === 'HIGH') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.68 });
+      else if (throttle === 'NOMINAL') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.28 });
+    } else if (station === 'navigation') {
+      const solver = value('NAV-SOL-02');
+      const latch = value('NAV-SHL-07');
+      if (solver && solver !== 'STANDBY') result.push({ id: 'computer', scene: 'ambient-electronics', intensity: latch === 'RELAY' ? 0.62 : latch === 'STAGED' ? 0.48 : 0.30 });
+    } else if (station === 'gunnery') {
+      const capacitor = value('GUN-CAP-05');
+      const arm = value('GUN-ARM-06');
+      if (capacitor === 'READY' || capacitor === 'MAX') {
+        const intensity = clamp((capacitor === 'MAX' ? 0.82 : 0.34) + (arm === 'ARMED' ? 0.16 : 0), 0, 1);
+        result.push({ id: 'capacitors', scene: 'ambient-capacitor-bank', intensity });
+      }
+    } else if (station === 'engineering') {
+      const breakers = value('ENG-CBB-01');
+      const source = value('ENG-DST-02');
+      const coolant = value('ENG-CHV-04');
+      const pump = value('ENG-CPS-05');
+      if (breakers !== 'ISOLATED' && source !== 'ISOLATED' && (breakers || source)) {
+        const intensity = breakers === 'CASUALTY' || source === 'AUXILIARY' ? 0.62 : 0.42;
+        result.push({ id: 'plant', scene: 'ambient-machinery', intensity });
+      }
+      if (coolant && coolant !== 'CLOSED') {
+        const intensity = clamp((coolant === 'OPEN' ? 0.72 : 0.36) + (pump === 'CROSS-TIE' ? 0.10 : 0), 0, 1);
+        result.push({ id: 'coolant', scene: 'ambient-fluid-loop', intensity });
+      }
+    } else if (station === 'science') {
+      const receiver = value('SCI-RBT-01');
+      const aperture = value('SCI-APM-02');
+      const inhibit = value('SCI-AEI-05');
+      const emitter = value('SCI-EMT-06');
+      if (receiver && receiver !== 'STANDBY') {
+        const intensity = aperture === 'HIGH GAIN' ? 0.34 : 0.20;
+        result.push({ id: 'receiver', scene: 'ambient-electronics', intensity });
+      }
+      if (emitter === 'PULSE' || inhibit === 'OPEN') result.push({ id: 'emitter', scene: 'ambient-capacitor-bank', intensity: emitter === 'PULSE' ? 0.88 : 0.30 });
+    } else if (station === 'comms') {
+      const crypto = value('COM-CRY-06');
+      const transmit = value('COM-TXK-07');
+      const power = value('COM-TXP-05');
+      if (crypto === 'SECURE') result.push({ id: 'crypto', scene: 'ambient-electronics', intensity: 0.18 });
+      if (transmit === 'TRANSMIT') {
+        const intensity = power === 'HIGH / NARROW' ? 0.82 : power === 'LOW / WIDE' ? 0.34 : 0.54;
+        result.push({ id: 'carrier', scene: 'ambient-rf-carrier', intensity });
+      }
+    }
+    return result;
+  }
+
+  function syncAmbientStation(station) {
+    if (!ambientUnlocked || document.hidden) return;
+    const desired = ambientDescriptors(station, ambientHardware[station]);
+    const desiredKeys = new Set();
+    desired.forEach(descriptor => {
+      const key = `ambient:${station}:${descriptor.id}`;
+      const signature = `${descriptor.scene}:${descriptor.intensity.toFixed(3)}`;
+      desiredKeys.add(key);
+      if (ambientMix.get(key) === signature) return;
+      stopLoop(key);
+      startLoop(descriptor.scene, key, { station, seed: key, intensity: descriptor.intensity, vary: false });
+      ambientMix.set(key, signature);
+    });
+    [...ambientMix.keys()].forEach(key => {
+      if (!key.startsWith(`ambient:${station}:`) || desiredKeys.has(key)) return;
+      stopLoop(key);
+      ambientMix.delete(key);
+    });
+  }
+
+  function syncAllAmbient() {
+    if (!ambientUnlocked || document.hidden) return;
+    Object.keys(ambientHardware).forEach(syncAmbientStation);
+  }
+
+  function rememberVisibleHardware() {
+    const current = visibleStationHardware();
+    if (!current) return;
+    ambientHardware[current.station] = current.values;
+    syncAmbientStation(current.station);
+  }
+
+  function scheduleAmbientSync() {
+    if (ambientSyncQueued) return;
+    ambientSyncQueued = true;
+    requestAnimationFrame(() => {
+      ambientSyncQueued = false;
+      rememberVisibleHardware();
+    });
+  }
+
+  function stopAmbientAll() {
+    [...ambientMix.keys()].forEach(stopLoop);
+    ambientMix.clear();
+  }
+
+  function unlockAmbient() {
+    if (ambientUnlocked) return;
+    ambientUnlocked = true;
+    rememberVisibleHardware();
+    syncAllAmbient();
+  }
+
+  function installAmbientBindings() {
+    const panel = document.getElementById('station-panel');
+    if (!panel || ambientObserver) return;
+    ambientObserver = new MutationObserver(scheduleAmbientSync);
+    ambientObserver.observe(panel, { childList: true, subtree: true, characterData: true });
+    scheduleAmbientSync();
+  }
+
+  try {
+    const stored = localStorage.getItem('blacklightBackgroundAudioVolume');
+    if (stored !== null && Number.isFinite(Number(stored))) masterVolume = clamp(Number(stored), 0, 1);
+  } catch (_) {
+    // Local storage may be unavailable in private or restricted browsing contexts.
+  }
+
   window.EXO_CONTROL_AUDIO = Object.freeze({
     assets,
     scenes,
+    externalSources: EXTERNAL_CC0_SOURCES,
     stationCharacter: STATION_CHARACTER,
     prime,
     play,
     startLoop,
     stopLoop,
     stopAll,
+    stopAmbientAll,
     setMasterVolume,
     get masterVolume() { return masterVolume; }
   });
 
   prime();
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stopAll(); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installAmbientBindings, { once: true });
+  else installAmbientBindings();
+  document.addEventListener('pointerdown', unlockAmbient, { once: true, capture: true });
+  document.addEventListener('keydown', unlockAmbient, { once: true, capture: true });
+  document.addEventListener('click', event => {
+    if (!event.target.closest?.('#crew-scenario-reset')) return;
+    stopAmbientAll();
+    Object.keys(ambientHardware).forEach(key => delete ambientHardware[key]);
+    requestAnimationFrame(scheduleAmbientSync);
+  }, true);
+  document.addEventListener('blacklight-master-volume-change', event => {
+    const value = Number(event.detail?.volume);
+    if (Number.isFinite(value)) setMasterVolume(value);
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAll();
+    else if (ambientUnlocked) {
+      scheduleAmbientSync();
+      requestAnimationFrame(syncAllAmbient);
+    }
+  });
   window.addEventListener('pagehide', stopAll);
 })();
