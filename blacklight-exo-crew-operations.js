@@ -97,6 +97,7 @@
   const RESET_AFTER_EXECUTE=Object.freeze({helm:{"thrust-gate":"HOLD"},navigation:{"solution-latch":"HOLD"},science:{"emitter-gate":"SAFE"},comms:{"transmit-key":"SAFE"}});
   const MOMENTARY_KINDS=new Set(["dual-button","yoke"]);
   const GESTURE_KINDS=new Set(["selector","rotary","wheel","yoke","thumbwheel","lever","knife-switch","toggle","guard","dual-slider"]);
+  function controlMode(station,ctrl){if(MOMENTARY_KINDS.has(ctrl.kind))return "momentary";if(RESET_AFTER_EXECUTE[station]?.[ctrl.id]!==undefined)return "reset-execute";return "latched";}
   const controlAudio=()=>window.EXO_CONTROL_AUDIO||null;
   const CONTROL_SOUND_SCENE=Object.freeze({selector:"selector-set",rotary:"rotary-detent",wheel:"wheel-stop",thumbwheel:"thumbwheel-notch",lever:"lever-throw","knife-switch":"knife-throw",toggle:"toggle-flick",guard:"guard-cover","dual-slider":"servo-set",slider:"servo-set",yoke:"yoke-return",keypad:"button-light",matrix:"button-light","switch-bank":"toggle-flick","breaker-bank":"breaker-throw","dual-button":"button-heavy",lockout:"key-turn"});
   function controlSoundScene(token,controlId){if(token==="auth-key-insert")return "key-insert";if(token==="auth-key-arm")return "key-turn";if(token==="auth-shield-open")return "guard-cover";if(token==="execute")return "execute-heavy";const def=STATIONS[activeStation],ctrl=controlId?def.controls.find(c=>c.id===controlId):null;return CONTROL_SOUND_SCENE[ctrl?.kind]||"button-light";}
