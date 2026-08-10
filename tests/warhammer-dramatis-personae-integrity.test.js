@@ -7,16 +7,16 @@ const P=ctx.window.CafarronDramatisPersonaeV1;
 if(!P)throw new Error('Archivum Personae register did not answer.');
 const v=P.validate();
 if(!v.allValid)throw new Error(`Personae validation failed: ${JSON.stringify(v)}`);
-if(v.personae!==24)throw new Error(`Expected twenty-four chronicle personae; received ${v.personae}.`);
+if(v.personae!==29)throw new Error(`Expected twenty-nine chronicle personae; received ${v.personae}.`);
 const by=new Map(P.PERSONAE.map(p=>[p.id,p]));
-const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren'];
+const expected=['vishwa-love','karenov','lieutenant-mandrel','besorev','interrogator-javard','pontiff-montpclair','chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned','sergeant-maximillion-dewinter','lieutenant-abereneth','benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen','harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin'];
 for(const id of expected)if(!by.has(id))throw new Error(`Missing chronicle persona ${id}.`);
 for(const id of ['vishwa-love','karenov','lieutenant-mandrel','besorev'])if(!by.get(id).mapNodeIds.includes('node-kertora'))throw new Error(`${id} lost Kertora concordance.`);
 for(const id of ['interrogator-javard','pontiff-montpclair'])if(!by.get(id).mapNodeIds.includes('node-jhasyiapan'))throw new Error(`${id} lost Jhasyi’apan concordance.`);
 for(const id of ['chancellor-ardenal','grand-reverend-grellholm','prefect-lorus','minister-heldforned'])if(!by.get(id).mapNodeIds.includes('node-presteria'))throw new Error(`${id} lost Presteria concordance.`);
 for(const id of ['sergeant-maximillion-dewinter','lieutenant-abereneth'])if(!by.get(id).mapNodeIds.includes('node-panthes'))throw new Error(`${id} lost Panthes concordance.`);
 for(const id of ['benson-pelcher','jerry-slassen','governor-talbor-varik','commissar-keeper-dren-solvik','domina-aestra-callen'])if(!by.get(id).mapNodeIds.includes('node-new-presidio'))throw new Error(`${id} lost New Presidio concordance.`);
-for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren'])if(!by.get(id).mapNodeIds.includes('node-galladin'))throw new Error(`${id} lost Galladin concordance.`);
+for(const id of ['harbour-master-gaston-selecton','jak-degravian-harbor','sergeant-vange','commissar-velraden','corporal-kathine','lieutenant-durak','private-cren','suitor-johnis','galladin-planetary-governor','stefan-galladin-heir','valen-galladin-aide','lord-commissar-galladin'])if(!by.get(id).mapNodeIds.includes('node-galladin'))throw new Error(`${id} lost Galladin concordance.`);
 if(!/Critical casualty/i.test(by.get('vishwa-love').status)||/dead|killed/i.test(by.get('vishwa-love').status))throw new Error('Vishwa outcome was over-resolved beyond the attached chronicle.');
 if(!/not established/i.test(by.get('besorev').status))throw new Error('Besorev survival uncertainty was lost.');
 if(!/Alive when removed/i.test(by.get('pontiff-montpclair').status))throw new Error('Montpclair medicae status is over-resolved or missing.');
@@ -41,6 +41,23 @@ if(!/Kerodan VII/i.test(durak.biography)||!/Durak’s own account/i.test(durak.s
 if(!/formal command does not know/i.test(durak.biography)||!/open secret/i.test(durak.biography))throw new Error('Durak command-awareness contradiction was flattened instead of preserved.');
 const cren=by.get('private-cren');
 if(!/Private/.test(cren.rank)||!/Active at latest attached testimony/i.test(cren.status)||/killed|dead|missing in action|promoted/i.test(cren.status))throw new Error('Cren narrow enlisted record over-resolved his later life.');
+const johnis=by.get('suitor-johnis');
+if(!/Active at latest direct testimony/i.test(johnis.status)||/killed|dead|missing in action/i.test(johnis.status))throw new Error('Johnis later fate was invented.');
+if(!/served for decades/i.test(johnis.biography)||!/raised from childhood/i.test(johnis.biography)||!johnis.storyBeats.some(x=>/administered the poison/i.test(x.beat)))throw new Error('Johnis lost his steward-assassin life testimony.');
+const galladinGovernor=by.get('galladin-planetary-governor');
+if(!/Active at latest attached testimony/i.test(galladinGovernor.status)||/killed|dead|removed from office/i.test(galladinGovernor.status))throw new Error('Galladin governor later fate was invented.');
+if(!galladinGovernor.physicalHistory.some(x=>/centuries/i.test(x))||!galladinGovernor.physicalHistory.some(x=>/throat implant|subsonic/i.test(x)))throw new Error('Galladin governor lost longevity or implant testimony.');
+if(!/personal name is not supplied/i.test(galladinGovernor.sourceAuthority)||!/reported framing/i.test(galladinGovernor.sourceAuthority))throw new Error('Galladin governor title-only or framing boundary was lost.');
+if(/Kathine|Vange/i.test([galladinGovernor.biography,...galladinGovernor.storyBeats.map(x=>x.beat)].join(' ')))throw new Error('Galladin governor was speculatively tied to a separately recorded frontline persona.');
+const stefan=by.get('stefan-galladin-heir');
+if(!/Poisoned at latest direct testimony/i.test(stefan.status)||/(dead|killed|executed)|death is (established|confirmed)/i.test(stefan.status))throw new Error('Stefan poisoning was over-resolved into a confirmed death.');
+if(!stefan.storyBeats.some(x=>/poison/i.test(x.beat)&&/not.*observ|before.*observ/i.test(x.beat)))throw new Error('Stefan lost the poisoned-but-unwitnessed outcome boundary.');
+const valen=by.get('valen-galladin-aide');
+if(!/Active at latest direct appearance/i.test(valen.status)||/killed|dead|removed/i.test(valen.status))throw new Error('Valen narrow political record over-resolved his later life.');
+const lordCommissar=by.get('lord-commissar-galladin');
+if(!/Active at latest direct appearance/i.test(lordCommissar.status)||!/personal name/i.test(lordCommissar.sourceAuthority)||/Kathine|Vange/i.test(lordCommissar.biography))throw new Error('Galladin Lord Commissar title-only or non-linkage boundary was lost.');
+if(!johnis.relationships.some(x=>/Planetary Governor/i.test(x.name))||!galladinGovernor.relationships.some(x=>/Sui’tor Johnis/i.test(x.name)))throw new Error('Johnis and the Galladin governor lost their household concordance.');
+if(!johnis.relationships.some(x=>/^Stefan$/i.test(x.name))||!stefan.relationships.some(x=>/Johnis/i.test(x.name)))throw new Error('Johnis and Stefan lost their direct assassination concordance.');
 if(!by.get('sergeant-vange').relationships.some(x=>/Lieutenant Durak/i.test(x.name))||!durak.relationships.some(x=>/Sergeant Vange/i.test(x.name)))throw new Error('Vange and Durak lost their direct field concordance.');
 if(!by.get('sergeant-vange').relationships.some(x=>/Private Cren/i.test(x.name))||!cren.relationships.some(x=>/Sergeant Vange/i.test(x.name)))throw new Error('Vange and Cren lost their direct command concordance.');
 if(!by.get('harbour-master-gaston-selecton').relationships.some(x=>/^Jak$/i.test(x.name))||!by.get('jak-degravian-harbor').relationships.some(x=>/Gaston/i.test(x.name)))throw new Error('Gaston and Jak lost their direct Degravian Harbor concordance.');
@@ -61,8 +78,9 @@ const exactSources=new Map([
  ['benson-pelcher','1lga6is'],['jerry-slassen','1lga6is'],
  ['governor-talbor-varik','1lr8fmy'],['commissar-keeper-dren-solvik','1lr8fmy'],['domina-aestra-callen','1lr8fmy'],
  ['harbour-master-gaston-selecton','1ggo76o'],['jak-degravian-harbor','1ggo76o'],
- ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i'],['lieutenant-durak','1ggo856'],['private-cren','1ggo856']
+ ['sergeant-vange','1fakl6i'],['commissar-velraden','1fakl6i'],['corporal-kathine','1fakl6i'],['lieutenant-durak','1ggo856'],['private-cren','1ggo856'],
+ ['suitor-johnis','1gkv2sj'],['galladin-planetary-governor','1gkv2sj'],['stefan-galladin-heir','1gkv2sj'],['valen-galladin-aide','1gkv2sj'],['lord-commissar-galladin','1gkv2sj']
 ]);
 for(const[id,post]of exactSources)if(!new RegExp(`/comments/${post}/`,'i').test(by.get(id).source.url))throw new Error(`${id} lost its exact chronicle seal.`);
 for(const p of P.PERSONAE){for(const s of P.sourceHistory(p))if(!/^https:\/\/www\.reddit\.com\/r\/EmperorProtects\/comments\/[a-z0-9]+\//i.test(s.url))throw new Error(`${p.id} lacks an EmperorProtects chronicle route.`);if(!p.storyBeats.length||!p.relationships.length)throw new Error(`${p.id} lacks narrative or relationship depth.`)}
-console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:4,panthes:2,newPresidioBroadcast:2,antegra:3,galladinHarbor:2,galladinThrone:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
+console.log(JSON.stringify({personae:v.personae,kertora:4,jhasyiapan:2,presteria:4,panthes:2,newPresidioBroadcast:2,antegra:3,galladinHarbor:2,galladinThrone:10,galladinHousehold:5,multiChroniclePersonae:1,sourceSealed:v.allSourceSealed,allValid:v.allValid},null,2));
