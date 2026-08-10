@@ -8,7 +8,8 @@
     volume: 'blacklightBackgroundMusicVolume',
     paused: 'blacklightBackgroundMusicPaused',
     time: 'blacklightBackgroundMusicTime',
-    updated: 'blacklightBackgroundMusicUpdated'
+    updated: 'blacklightBackgroundMusicUpdated',
+    minimized: 'blacklightBackgroundAudioMinimized'
   });
   const DEFAULT_VOLUME = 0.75;
   const SAVE_INTERVAL_MS = 1000;
@@ -41,12 +42,14 @@
     const style = document.createElement('style');
     style.id = 'blacklight-background-audio-style';
     style.textContent = `
-      .blacklight-background-audio-bar{position:fixed;right:16px;bottom:16px;z-index:2147483000;width:min(360px,calc(100vw - 24px));box-sizing:border-box;border:1px solid rgba(217,168,79,.55);border-radius:18px;background:linear-gradient(145deg,rgba(21,19,16,.97),rgba(4,4,4,.98));box-shadow:0 18px 48px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.04);color:#f4efe5;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px;display:grid;gap:9px;backdrop-filter:blur(16px)}
+      .blacklight-background-audio-bar{position:fixed;right:16px;bottom:16px;z-index:2147483000;width:min(360px,calc(100vw - 24px));box-sizing:border-box;border:1px solid rgba(217,168,79,.55);border-radius:18px;background:linear-gradient(145deg,rgba(21,19,16,.97),rgba(4,4,4,.98));box-shadow:0 18px 48px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.04);color:#f4efe5;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px;display:grid;gap:9px;backdrop-filter:blur(16px);transition:width .18s ease,height .18s ease,padding .18s ease,border-radius .18s ease}
       .blacklight-background-audio-head{display:flex;align-items:center;gap:10px;min-width:0}.blacklight-background-audio-play{width:38px;height:38px;flex:0 0 auto;border:1px solid rgba(217,168,79,.72);border-radius:999px;background:rgba(217,168,79,.14);color:#f4efe5;font-size:1rem;font-weight:900;cursor:pointer}.blacklight-background-audio-play:hover{background:rgba(217,168,79,.25)}
       .blacklight-background-audio-copy{min-width:0;display:grid;gap:2px;flex:1}.blacklight-background-audio-copy strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.9rem;letter-spacing:.02em}.blacklight-background-audio-status{color:#d9a84f;font-size:.67rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
-      .blacklight-background-audio-time{font-variant-numeric:tabular-nums;color:#d9d1c0;font-size:.74rem;white-space:nowrap}.blacklight-background-audio-seek{width:100%;accent-color:#d9a84f;cursor:pointer}.blacklight-background-audio-lower{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;color:#bdb4a4;font-size:.72rem}.blacklight-background-audio-volume{width:100%;min-width:80px;accent-color:#d9a84f;cursor:pointer}.blacklight-background-audio-mute{border:0;background:transparent;color:#d9d1c0;padding:2px;cursor:pointer;font-size:.95rem}
+      .blacklight-background-audio-time{font-variant-numeric:tabular-nums;color:#d9d1c0;font-size:.74rem;white-space:nowrap}.blacklight-background-audio-seek{width:100%;accent-color:#d9a84f;cursor:pointer}.blacklight-background-audio-lower{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;color:#bdb4a4;font-size:.72rem}.blacklight-background-audio-volume{width:100%;min-width:80px;accent-color:#d9a84f;cursor:pointer}.blacklight-background-audio-mute,.blacklight-background-audio-minimize{border:0;background:transparent;color:#d9d1c0;padding:2px;cursor:pointer}.blacklight-background-audio-mute{font-size:.95rem}.blacklight-background-audio-minimize{width:26px;height:26px;border-radius:999px;font-size:1rem;line-height:1;font-weight:800}.blacklight-background-audio-minimize:hover{background:rgba(217,168,79,.16);color:#fff}
+      .blacklight-background-audio-compact{display:none;width:46px;height:46px;padding:0;border:0;border-radius:999px;background:transparent;color:#f4efe5;font-size:1.15rem;cursor:pointer;align-items:center;justify-content:center}.blacklight-background-audio-compact:hover{background:rgba(217,168,79,.16)}
       .blacklight-background-audio-bar[data-blocked="true"]{border-color:rgba(217,168,79,.9);box-shadow:0 18px 48px rgba(0,0,0,.48),0 0 24px rgba(217,168,79,.16)}
-      @media(max-width:520px){.blacklight-background-audio-bar{right:12px;bottom:12px;width:calc(100vw - 24px)}}
+      .blacklight-background-audio-bar[data-minimized="true"]{width:48px;height:48px;padding:0;border-radius:999px;display:block;overflow:hidden}.blacklight-background-audio-bar[data-minimized="true"] .blacklight-background-audio-head,.blacklight-background-audio-bar[data-minimized="true"] .blacklight-background-audio-seek,.blacklight-background-audio-bar[data-minimized="true"] .blacklight-background-audio-lower{display:none}.blacklight-background-audio-bar[data-minimized="true"] .blacklight-background-audio-compact{display:flex}
+      @media(max-width:520px){.blacklight-background-audio-bar{right:12px;bottom:12px;width:calc(100vw - 24px)}.blacklight-background-audio-bar[data-minimized="true"]{width:48px}}
       @media print{.blacklight-background-audio-bar{display:none!important}}
     `;
     document.head.appendChild(style);
@@ -60,6 +63,7 @@
     const userPaused = readBoolean(STORAGE.paused, false);
     const savedTime = Math.max(0, readNumber(STORAGE.time, 0));
     const savedAt = Math.max(0, readNumber(STORAGE.updated, Date.now()));
+    const minimized = readBoolean(STORAGE.minimized, false);
 
     const audio = document.createElement('audio');
     audio.id = 'blacklight-background-music';
@@ -72,19 +76,22 @@
     const bar = document.createElement('section');
     bar.id = 'blacklight-background-audio-bar';
     bar.className = 'blacklight-background-audio-bar';
-    bar.setAttribute('aria-label', 'Blacklight background music controls');
+    bar.dataset.minimized = String(minimized);
+    bar.setAttribute('aria-label', 'Blacklight master audio controls');
     bar.innerHTML = `
       <div class="blacklight-background-audio-head">
         <button class="blacklight-background-audio-play" type="button" aria-label="Pause background music">▶</button>
         <div class="blacklight-background-audio-copy"><strong>Starry Cereal</strong><span class="blacklight-background-audio-status" aria-live="polite">Loading background music</span></div>
         <span class="blacklight-background-audio-time">0:00 / 0:00</span>
+        <button class="blacklight-background-audio-minimize" type="button" aria-label="Minimize audio controls" title="Minimize audio controls">−</button>
       </div>
       <input class="blacklight-background-audio-seek" type="range" min="0" max="1000" value="0" aria-label="Background music position">
       <div class="blacklight-background-audio-lower">
-        <button class="blacklight-background-audio-mute" type="button" aria-label="Mute background music">🔊</button>
-        <input class="blacklight-background-audio-volume" type="range" min="0" max="1" step="0.01" value="${storedVolume}" aria-label="Background music volume">
+        <button class="blacklight-background-audio-mute" type="button" aria-label="Mute all sound">🔊</button>
+        <input class="blacklight-background-audio-volume" type="range" min="0" max="1" step="0.01" value="${storedVolume}" aria-label="Master sound volume">
         <span class="blacklight-background-audio-volume-label">${Math.round(storedVolume * 100)}%</span>
       </div>
+      <button class="blacklight-background-audio-compact" type="button" aria-label="Open audio controls" title="Open audio controls">🔊</button>
     `;
 
     const playButton = bar.querySelector('.blacklight-background-audio-play');
@@ -94,9 +101,28 @@
     const muteButton = bar.querySelector('.blacklight-background-audio-mute');
     const volume = bar.querySelector('.blacklight-background-audio-volume');
     const volumeLabel = bar.querySelector('.blacklight-background-audio-volume-label');
+    const minimizeButton = bar.querySelector('.blacklight-background-audio-minimize');
+    const compactButton = bar.querySelector('.blacklight-background-audio-compact');
     let lastAudibleVolume = storedVolume || DEFAULT_VOLUME;
     let lastSave = 0;
     let seeking = false;
+
+    function applyMasterVolume(value) {
+      const nextVolume = clamp(Number(value) || 0, 0, 1);
+      audio.volume = nextVolume;
+      if (window.EXO_CONTROL_AUDIO?.setMasterVolume) {
+        window.EXO_CONTROL_AUDIO.setMasterVolume(nextVolume);
+      }
+      document.dispatchEvent(new CustomEvent('blacklight-master-volume-change', { detail: { volume: nextVolume } }));
+      return nextVolume;
+    }
+
+    function setMinimized(nextMinimized) {
+      const value = Boolean(nextMinimized);
+      bar.dataset.minimized = String(value);
+      localStorage.setItem(STORAGE.minimized, String(value));
+      compactButton.textContent = audio.volume === 0 ? '🔇' : audio.volume < 0.45 ? '🔉' : '🔊';
+    }
 
     function saveState(force = false) {
       const now = Date.now();
@@ -115,7 +141,9 @@
       if (!seeking) seek.value = duration > 0 ? String(Math.round((current / duration) * 1000)) : '0';
       playButton.textContent = audio.paused ? '▶' : 'Ⅱ';
       playButton.setAttribute('aria-label', audio.paused ? 'Play background music' : 'Pause background music');
-      muteButton.textContent = audio.volume === 0 ? '🔇' : audio.volume < 0.45 ? '🔉' : '🔊';
+      const soundIcon = audio.volume === 0 ? '🔇' : audio.volume < 0.45 ? '🔉' : '🔊';
+      muteButton.textContent = soundIcon;
+      compactButton.textContent = soundIcon;
       volume.value = String(audio.volume);
       volumeLabel.textContent = `${Math.round(audio.volume * 100)}%`;
       if (!audio.paused) saveState();
@@ -150,6 +178,9 @@
       }
     });
 
+    minimizeButton.addEventListener('click', () => setMinimized(true));
+    compactButton.addEventListener('click', () => setMinimized(false));
+
     seek.addEventListener('pointerdown', () => { seeking = true; });
     seek.addEventListener('pointerup', () => { seeking = false; });
     seek.addEventListener('input', () => {
@@ -160,19 +191,16 @@
     });
 
     volume.addEventListener('input', () => {
-      audio.volume = clamp(Number(volume.value), 0, 1);
-      if (audio.volume > 0) lastAudibleVolume = audio.volume;
-      localStorage.setItem(STORAGE.volume, String(audio.volume));
+      const nextVolume = applyMasterVolume(volume.value);
+      if (nextVolume > 0) lastAudibleVolume = nextVolume;
+      localStorage.setItem(STORAGE.volume, String(nextVolume));
       updateControls();
     });
 
     muteButton.addEventListener('click', () => {
-      if (audio.volume > 0) {
-        lastAudibleVolume = audio.volume;
-        audio.volume = 0;
-      } else {
-        audio.volume = clamp(lastAudibleVolume || DEFAULT_VOLUME, 0.01, 1);
-      }
+      const nextVolume = audio.volume > 0 ? 0 : clamp(lastAudibleVolume || DEFAULT_VOLUME, 0.01, 1);
+      if (audio.volume > 0) lastAudibleVolume = audio.volume;
+      applyMasterVolume(nextVolume);
       localStorage.setItem(STORAGE.volume, String(audio.volume));
       updateControls();
     });
@@ -198,6 +226,8 @@
 
     audio.src = trackUrl;
     document.body.append(audio, bar);
+    applyMasterVolume(storedVolume);
+    setMinimized(minimized);
     window.addEventListener('pagehide', () => saveState(true));
     window.addEventListener('beforeunload', () => saveState(true));
 
