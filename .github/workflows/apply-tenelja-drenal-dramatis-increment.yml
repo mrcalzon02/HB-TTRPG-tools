@@ -38,6 +38,7 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
+          sed -i "s@!/three recent petitions/i.test(arbentia.biography)@!/petitioned repeatedly/i.test(arbentia.biography)@" scripts/apply-tenelja-drenal-dramatis-increment.py
           python3 scripts/apply-tenelja-drenal-dramatis-increment.py 2>&1 | tee /tmp/tenelja-dramatis.log
       - name: Publish temporary failure diagnostic
         if: steps.apply.outcome == 'failure'
