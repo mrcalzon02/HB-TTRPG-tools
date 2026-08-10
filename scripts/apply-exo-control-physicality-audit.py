@@ -135,7 +135,7 @@ if len(control_lines) != 44:
 unclassified = [line for line in control_lines if 'physical:"' not in line]
 if unclassified:
     raise SystemExit(f'Unclassified Crew control lines remain: {len(unclassified)}')
-for required in ('physical-spring-transmit-key','physical-coolant-handwheel','physical-weapon-bank-selector','physical-carrier-path-selector','physical-pump-selector'):
+for required in ('mech-transmit-key','physical-coolant-handwheel','physical-weapon-bank-selector','physical-carrier-path-selector','physical-pump-selector'):
     if required not in css:
         raise SystemExit(f'Missing audited physical style: {required}')
 
