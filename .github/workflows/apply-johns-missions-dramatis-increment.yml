@@ -34,7 +34,9 @@ jobs:
         with:
           node-version: "22"
       - name: Apply verified direct-source increment
-        run: python3 scripts/apply-johns-missions-dramatis-increment.py
+        run: |
+          sed -i 's/^assertions="""$/assertions=r"""/' scripts/apply-johns-missions-dramatis-increment.py
+          python3 scripts/apply-johns-missions-dramatis-increment.py
       - name: Remove one-shot migration mechanism
         run: |
           rm scripts/apply-johns-missions-dramatis-increment.py
