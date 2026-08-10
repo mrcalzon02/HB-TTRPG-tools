@@ -7,10 +7,13 @@ on:
       - "scripts/apply-interlocutum-vallimere-dramatis-increment.py"
       - "scripts/run-interlocutum-vallimere-dramatis.trigger"
       - ".github/workflows/apply-interlocutum-vallimere-dramatis-increment.yml"
+  issues:
+    types: [opened]
   workflow_dispatch:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: "apply-interlocutum-vallimere-dramatis-increment"
@@ -18,6 +21,7 @@ concurrency:
 
 jobs:
   apply:
+    if: github.event_name != 'issues' || github.event.issue.title == 'RUN: Interlocutum Vallimere Dramatis Apply'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
