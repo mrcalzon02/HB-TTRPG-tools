@@ -143,6 +143,7 @@
   });
 
   const active = new Set();
+  const activeBaseVolumes = new WeakMap();
   const loops = new Map();
   const preloaders = new Map();
   let masterVolume = MASTER_VOLUME;
@@ -216,8 +217,10 @@
     const audio = new Audio(source);
     const rateVariation = options.vary === false ? 0 : variation(options.seed || options.key || options.scene || '', index);
     const character = characterFor(options);
+    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain, 0, 1);
     audio.preload = 'auto';
-    audio.volume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * masterVolume, 0, 1);
+    activeBaseVolumes.set(audio, baseVolume);
+    audio.volume = clamp(baseVolume * masterVolume, 0, 1);
     audio.playbackRate = clamp(((layer.rate ?? 1) + rateVariation) * character.rate, 0.5, 2);
     audio.loop = Boolean(layer.loop);
     active.add(audio);
@@ -280,6 +283,10 @@
 
   function setMasterVolume(value) {
     masterVolume = clamp(Number(value) || 0, 0, 1);
+    active.forEach(audio => {
+      const baseVolume = activeBaseVolumes.get(audio);
+      if (Number.isFinite(baseVolume)) audio.volume = clamp(baseVolume * masterVolume, 0, 1);
+    });
   }
 
   window.EXO_CONTROL_AUDIO = Object.freeze({
