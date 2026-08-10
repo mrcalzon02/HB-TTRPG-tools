@@ -36,6 +36,7 @@ jobs:
       - name: Apply verified direct-source increment
         run: |
           sed -i 's/^assertions="""$/assertions=r"""/' scripts/apply-johns-missions-dramatis-increment.py
+          sed -i "s/\[galladinGovernor.biography,galladinGovernor.sourceAuthority,...galladinGovernor.storyBeats.map(x=>x.beat)\]/[galladinGovernor.biography,...galladinGovernor.storyBeats.map(x=>x.beat)]/" scripts/apply-johns-missions-dramatis-increment.py
           python3 scripts/apply-johns-missions-dramatis-increment.py
       - name: Remove one-shot migration mechanism
         run: |
