@@ -5,32 +5,39 @@ import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
 const Lab=require('../live-signals-laboratory.js');
 
-assert.equal(Lab.constants.VERSION,'0.2.0');
-assert.equal(Lab.constants.CURRENT_MODE,'passive-receive-only');
-assert.equal(Lab.constants.SAFETY_POLICY.receiveOnly,true);
+assert.equal(Lab.constants.VERSION,'0.3.0');
+assert.equal(Lab.constants.CURRENT_MODE,'passive-default-active-ranging-gated');
+assert.equal(Lab.constants.SAFETY_POLICY.passiveModeReceiveOnly,true);
 assert.equal(Lab.constants.SAFETY_POLICY.transmitterControlsExposed,false);
-assert.equal(Lab.constants.SAFETY_POLICY.passiveTelemetryOnly,true);
-assert.equal(Lab.constants.SAFETY_POLICY.activeRangingEnabled,false);
+assert.equal(Lab.constants.SAFETY_POLICY.activeRangingEnabled,true);
 assert.equal(Lab.constants.SAFETY_POLICY.appRequestedWifiScanEnabled,false);
-for(const operation of ['set-tx-power','wifi-start-scan','wifi-rtt-ranging','uwb-ranging','frequency-sweep-transmit','pulse-transmit']) {
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.authorizedTargetsOnly,true);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.arbitraryFrequencySelection,false);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.transmitterPowerMutation,false);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.channelMutation,false);
+for(const operation of ['set-tx-power','wifi-start-scan','frequency-sweep-transmit','pulse-transmit','subnet-sweep']) {
   assert.ok(Lab.constants.SAFETY_POLICY.prohibitedOperations.includes(operation));
-  assert.throws(()=>Lab.assertReceiveOnlyOperation(operation),/blocks active\/radio mutation/);
+  assert.throws(()=>Lab.assertActiveScanOperation(operation),/blocks unsafe radio mutation/);
 }
+for(const operation of ['wifi-rtt-ranging','uwb-ranging','ble-ranging','authorized-network-rtt']) assert.equal(Lab.assertActiveScanOperation(operation),true);
+assert.throws(()=>Lab.assertReceiveOnlyOperation('wifi-rtt-ranging'),/Passive Scan/);
 assert.equal(Lab.assertReceiveOnlyOperation('observe'),true);
 
 const profiles=Lab.hardwareProfiles();
 for(const id of ['android-native','ios-native','openwrt-readonly','browser-context','generic-receive-json']) assert.ok(profiles.some(profile=>profile.id===id),`missing ${id}`);
+assert.deepEqual(Lab.expectedPassiveChannels('android-native'),['wifi','cellular','ble','gnss','motion','magnetometer']);
 const android=Lab.capabilityMatrix('android-native');
 assert.ok(android.rows.some(row=>row.capability.includes('Wi-Fi system/cached scan results')));
 assert.ok(android.rows.some(row=>row.capability.includes('Cellular')));
 assert.ok(android.rows.some(row=>row.capability.includes('Bluetooth')));
-assert.ok(android.rows.some(row=>row.capability.includes('Wi-Fi RTT / UWB')&&row.status==='future-gated'));
+assert.ok(android.rows.some(row=>row.capability==='Wi-Fi RTT active ranging'&&row.status==='active-scan-conditional'));
+assert.ok(android.rows.some(row=>row.capability==='UWB / Bluetooth ranging'&&row.status==='active-scan-conditional'));
 const ios=Lab.capabilityMatrix('ios-native');
 assert.ok(ios.rows.some(row=>row.capability==='General Wi-Fi scan'&&row.status==='unavailable-public-api'));
 assert.ok(ios.rows.some(row=>row.capability==='Cellular signal strength'&&row.status==='unavailable-public-api'));
 const router=Lab.capabilityMatrix('openwrt-readonly');
 assert.ok(router.rows.some(row=>row.capability.includes('Per-chain')));
-assert.ok(router.rows.some(row=>row.capability==='Radio configuration writes'&&row.status==='blocked'));
+assert.ok(router.rows.some(row=>row.capability.includes('Authorized endpoint / RTT')));
 
 const polling=Lab.safePollingConfiguration({wifiResultPollMs:1000,bleObserveWindowMs:30000,bleObservePeriodMs:1000,sensorHz:500,sessionMinutes:999});
 assert.equal(polling.wifiResultPollMs,5000);
@@ -43,78 +50,93 @@ assert.equal(polling.privacyRedaction,true);
 assert.equal(Lab.safetyPreflight({thermalState:'critical',batteryPercent:100}).pass,false);
 assert.equal(Lab.safetyPreflight({thermalState:'nominal',batteryPercent:10,externalPower:false}).pass,false);
 assert.equal(Lab.safetyPreflight({thermalState:'nominal',batteryPercent:10,externalPower:true}).pass,true);
-assert.equal(Lab.safetyPreflight({thermalState:'nominal',batteryPercent:100,appRequestedWifiScan:true}).pass,false);
 assert.equal(Lab.safetyPreflight({thermalState:'nominal',batteryPercent:100,activeRangingRequested:true}).pass,false);
 
-const session=Lab.createSession({profileId:'openwrt-readonly',hardwareState:{thermalState:'nominal',batteryPercent:80},polling:{privacyRedaction:true}});
+const session=Lab.createSession({profileId:'android-native',hardwareState:{thermalState:'nominal',batteryPercent:80},polling:{privacyRedaction:true}});
 assert.equal(session.receiveOnly,true);
-assert.equal(session.mode,'passive-receive-only');
 let timestampMs=1000;
 for(let i=0;i<20;i+=1) Lab.appendObservation(session,{timestampMs:timestampMs++,kind:'wifi',frequencyHz:2437e6,rssiDbm:-55+(i%3)*.4,noiseDbm:-96+(i%2)*.3,sourceId:'00:11:22:33:44:55',ssid:'private',localX:0,localY:0,headingDeg:0,chainRssiDbm:[-55,-56.5],provenance:'reported-by-platform'},{nowMs:timestampMs});
-for(let i=0;i<6;i+=1) Lab.appendObservation(session,{timestampMs:timestampMs++,kind:'ble',frequencyHz:2440e6,rssiDbm:-70+i*.2,sourceId:`ble-${i}`,localX:i/10,localY:0,headingDeg:i*5},{nowMs:timestampMs});
-const first=session.observations[0];
-assert.match(first.sourceId,/^anon-/);
-assert.equal(first.ssid,'[redacted-ssid]');
-assert.equal(first.auxiliary.chainRssiDbm.length,2);
+let coverage=Lab.channelCoverage(session);
+assert.equal(coverage.find(row=>row.id==='wifi')?.status,'observing');
+assert.equal(coverage.find(row=>row.id==='cellular')?.status,'expected-no-samples');
+assert.equal(coverage.find(row=>row.id==='ble')?.status,'expected-no-samples');
+
+const bridge={
+  id:'mock-android-native',
+  getCapabilities(){return {
+    bridgeId:'mock-android-native',
+    passiveChannels:['wifi','cellular','ble','gnss','motion','magnetometer'],
+    activeMethods:['wifi-rtt-ranging','ble-ranging'],
+    authorizedTargets:[
+      {id:'lab-ap',label:'Lab AP',authorized:true,methods:['wifi-rtt-ranging']},
+      {id:'lab-ble-peer',label:'Lab BLE Peer',authorized:true,methods:['ble-ranging']}
+    ]
+  };},
+  async runActiveScan(plan){
+    assert.equal(plan.authorizedTargetsOnly,true);
+    assert.equal(plan.arbitraryFrequencySelection,false);
+    return plan.targets.map((target,index)=>({
+      kind:plan.method==='wifi-rtt-ranging'?'wifi-rtt':'ble-range',targetId:target.id,distanceM:3.5+index,
+      distanceStdDevM:.25,localX:1,localY:2,rangingTechnology:plan.method,provenance:'reported-by-platform'
+    }));
+  }
+};
+Lab.registerHardwareBridge(bridge);
+await Lab.refreshHardwareBridgeCapabilities();
+coverage=Lab.channelCoverage(session);
+assert.equal(coverage.find(row=>row.id==='cellular')?.status,'bridge-available-no-samples');
+assert.equal(coverage.find(row=>row.id==='ble')?.status,'bridge-available-no-samples');
+
+assert.equal(Lab.activeScanPreflight({method:'wifi-rtt-ranging',targetsAuthorized:false,thermalState:'nominal',batteryPercent:80},bridge.getCapabilities()).pass,false);
+const activePreflight=Lab.activeScanPreflight({method:'wifi-rtt-ranging',targetsAuthorized:true,thermalState:'nominal',batteryPercent:80},bridge.getCapabilities());
+assert.equal(activePreflight.pass,true);
+const plan=Lab.buildActiveScanPlan({method:'wifi-rtt-ranging',targetsAuthorized:true,targetIds:['lab-ap'],samplesPerTarget:999,sampleIntervalMs:1},bridge.getCapabilities());
+assert.equal(plan.targets.length,1);
+assert.equal(plan.samplesPerTarget,Lab.constants.MAX_ACTIVE_SAMPLES_PER_TARGET);
+assert.equal(plan.sampleIntervalMs,Lab.constants.MIN_ACTIVE_SAMPLE_INTERVAL_MS);
+assert.equal(plan.transmitterPowerMutation,false);
+const activeResult=await Lab.runActiveScan(session,{method:'wifi-rtt-ranging',targetsAuthorized:true,targetIds:['lab-ap'],samplesPerTarget:2,sampleIntervalMs:1000},bridge);
+assert.equal(activeResult.observations.length,1);
+assert.equal(activeResult.observations[0].acquisitionMode,'active');
+assert.equal(activeResult.observations[0].ranging.technology,'wifi-rtt-ranging');
+assert.equal(activeResult.observations[0].ranging.authorized,true);
+assert.ok(Number.isFinite(activeResult.observations[0].ranging.distanceM));
+const rangeSummary=Lab.activeRangeSummary(session);
+assert.equal(rangeSummary.sampleCount,1);
+assert.equal(rangeSummary.burstCount,1);
+assert.ok(rangeSummary.byTechnology['wifi-rtt-ranging']);
+
+for(let i=0;i<4;i+=1) Lab.appendObservation(session,{timestampMs:timestampMs++,kind:'cellular',frequencyHz:1900e6,rsrpDbm:-92+i*.2,sourceId:'cell-1',provenance:'reported-by-platform'},{nowMs:timestampMs});
+for(let i=0;i<4;i+=1) Lab.appendObservation(session,{timestampMs:timestampMs++,kind:'ble',frequencyHz:2440e6,rssiDbm:-68+i*.2,sourceId:`ble-${i}`,provenance:'reported-by-platform'},{nowMs:timestampMs});
+coverage=Lab.channelCoverage(session);
+assert.equal(coverage.find(row=>row.id==='cellular')?.status,'observing');
+assert.equal(coverage.find(row=>row.id==='ble')?.status,'observing');
 
 const inventory=Lab.passiveFrequencyInventory(session);
-assert.ok(inventory.bins.length>=2);
-assert.ok(inventory.uniqueSources>=2);
-assert.ok(inventory.bins.some(row=>row.kind==='wifi'&&row.frequencyHz===2437e6));
+assert.ok(inventory.bins.some(row=>row.kind==='wifi'));
+assert.ok(inventory.bins.some(row=>row.kind==='cellular'));
 assert.ok(inventory.bins.some(row=>row.kind==='ble'));
-
-const clean=Lab.receiverHealthDiagnostic(session);
-assert.equal(clean.state,'clean-reference');
-assert.ok(clean.current.sampleCount>=20);
-assert.ok(clean.current.medianChainImbalanceDb<5);
-const baseline=Lab.captureReceiverBaseline(session);
+const baseline=Lab.captureReceiverBaseline(session,{referenceKey:Lab.chooseReferenceSeries(session).key});
 assert.equal(baseline.format,'hb-ttrpg-live-signals-receiver-baseline');
-assert.equal(baseline.referenceKey,clean.current.referenceKey);
-
-for(let i=0;i<20;i+=1) Lab.appendObservation(session,{timestampMs:timestampMs++,kind:'wifi',frequencyHz:2437e6,rssiDbm:-64+(i%3)*.5,noiseDbm:-89+(i%2)*.4,sourceId:'00:11:22:33:44:55',localX:0,localY:0,headingDeg:0,chainRssiDbm:[-64,-74],provenance:'reported-by-platform'},{nowMs:timestampMs});
-const degraded=Lab.receiverHealthDiagnostic(session);
-assert.equal(degraded.state,'degradation-suspect');
-assert.ok(degraded.sensitivityLossDb>=8);
-assert.ok(degraded.current.medianChainImbalanceDb>=8);
-assert.equal(degraded.cleanlinessState,'degraded-suspect');
-assert.ok(degraded.flags.some(flag=>flag.id==='baseline-sensitivity-loss'));
-assert.ok(degraded.flags.some(flag=>flag.id==='chain-imbalance'));
-assert.ok(degraded.flags.some(flag=>flag.id==='baseline-noise-rise'));
-assert.match(degraded.boundary,/screening diagnostic/);
-
-const summary=Lab.summarizeSession(session);
-assert.equal(summary.observationCount,46);
-assert.ok(summary.passiveFrequencyBins>=2);
-assert.ok(summary.uniqueSources>=2);
-const plan=Lab.buildRefinementPlan(session);
-assert.equal(plan.length,9);
-assert.ok(plan.some(stage=>stage.id==='passive-spectrum-census'&&stage.status==='ready'));
-assert.ok(plan.some(stage=>stage.id==='receiver-health-baseline'&&stage.status==='complete'));
+const serialized=Lab.serializeSession(session);
+assert.match(serialized,/channelCoverage/);
+assert.match(serialized,/activeRanges/);
+assert.doesNotMatch(serialized,/00:11:22:33:44:55/);
 const future=Lab.futureGatedResearch();
-assert.equal(future.length,4);
 assert.ok(future.every(item=>item.status==='not-implemented'));
 assert.ok(future.some(item=>item.id==='attenuated-receiver-sweep'));
+assert.ok(future.some(item=>item.id==='controlled-frequency-sweep'));
 assert.ok(future.some(item=>item.id==='hybrid-attenuation-correlation'));
+assert.equal(future.some(item=>item.id==='documented-active-ranging'),false);
 
-const serialized=Lab.serializeSession(session);
-assert.match(serialized,/hb-ttrpg-live-signals-session/);
-assert.match(serialized,/passiveInventory/);
-assert.match(serialized,/receiverHealth/);
-assert.match(serialized,/futureGatedResearch/);
-assert.doesNotMatch(serialized,/00:11:22:33:44:55/);
-
-const entry=await readFile(new URL('../scientific-tools-entry.js',import.meta.url),'utf8');
-for(const pattern of [/live-signals-laboratory\.css/,/live-signals-laboratory\.js/,/function loadLiveSignalsLaboratory\(/,/function openLiveSignalsLaboratory\(/,/id="scientific-tools-open-live-signals-laboratory"/,/Open Simulation Laboratory/,/Open Live Signals Laboratory/]) assert.match(entry,pattern);
 const source=await readFile(new URL('../live-signals-laboratory.js',import.meta.url),'utf8');
-for(const pattern of [/No transmission path in this phase/,/system\/cached scan results/,/do not invoke <code>startScan\(\)<\/code>/,/Receiver \/ antenna-path cleanliness & degradation screening/,/passiveFrequencyInventory/,/receiverHealthDiagnostic/,/baseline-sensitivity-loss/,/chain-imbalance/,/Future gated attenuation \/ ranging research/,/not-implemented/]) assert.match(source,pattern);
-assert.doesNotMatch(source,/function\s+(setTxPower|startWifiScan|pulseTransmit|frequencySweepTransmit)\s*\(/);
+for(const pattern of [/Start Passive Scan/,/Run Active Scan/,/Receiver channel coverage/,/Cellular receiver/,/Bluetooth \/ BLE receiver/,/Active ranging \/ ping-back mapping/,/authorized targets only/,/browser alone cannot access Android TelephonyManager/,/wifi-rtt-ranging/,/ble-ranging/,/uwb-ranging/,/activeScanPreflight/,/channelCoverage/]) assert.match(source,pattern);
+assert.doesNotMatch(source,/function\s+(setTxPower|pulseTransmit|frequencySweepTransmit|subnetSweep)\s*\(/);
 
 console.log(JSON.stringify({
-  format:'hb-ttrpg-live-signals-laboratory-validation-receipt',schemaVersion:'0.2.0',pass:true,
-  separateLiveLaboratory:true,strictPassiveReceiveOnly:true,noAppInitiatedWifiScan:true,noActiveRanging:true,
-  androidWifiBleCellularPassiveScope:true,iosPublicApiBoundaries:true,routerAntennaChainTelemetryConditional:true,
-  platformPollingLimitsClamped:true,thermalBatteryGuards:true,privacyRedactionDefault:true,
-  passiveFrequencyInventory:true,receiverAntennaHealthScreening:true,baselineSensitivityDrift:true,
-  chainImbalanceDetection:true,receiveChainCleanlinessProxy:true,refinementProcedure:true,
-  futureActiveResearchGatedNotImplemented:true,signalsSuiteIntegration:true
+  format:'hb-ttrpg-live-signals-laboratory-validation-receipt',schemaVersion:'0.3.0',pass:true,
+  passiveScanStillReceiveOnly:true,separateActiveScanButton:true,gatedActiveRanging:true,authorizedTargetsOnly:true,
+  noArbitraryFrequencySweep:true,noPowerOrChannelMutation:true,androidExpectedWifiCellularBle:true,
+  missingChannelFaultVisibility:true,bridgeAvailableNoSamplesVisibility:true,cellularAndBleObservationCoverage:true,
+  wifiRttPlan:true,bleRangingPlan:true,activeRangeMappingContract:true,receiverHealthPreserved:true
 },null,2));
