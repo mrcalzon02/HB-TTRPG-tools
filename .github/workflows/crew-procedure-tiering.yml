@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - '.github/crew-procedure-tiering-trigger.txt'
+  schedule:
+    - cron: '*/5 * * * *'
 permissions:
   contents: write
 jobs:
@@ -118,7 +120,7 @@ jobs:
           assert 'correctStationActions===0?11:Math.min(10,Math.max(2,baseDifficulty+rollPenalty-earnedRelief))' in s
           print('Validated 121 procedures with explicit tier coverage and tiered roll-relief model.')
           PY
-      - name: Commit authoritative source
+      - name: Commit authoritative source and remove migration scaffolding
         shell: bash
         run: |
           if git diff --quiet -- blacklight-exo-crew-operations.js; then
@@ -127,6 +129,8 @@ jobs:
           fi
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm -f .github/workflows/crew-procedure-tiering.yml .github/crew-procedure-tiering-trigger.txt
           git add blacklight-exo-crew-operations.js
           git commit -m 'classify crew procedures and tier roll relief'
+          git pull --rebase origin main
           git push origin HEAD:main
