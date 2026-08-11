@@ -184,7 +184,7 @@
     <section class="exo-aux-drawer aux-drawer-${station}" aria-hidden="${drawerOpen?"false":"true"}">
       <header class="exo-aux-drawer-head"><div><span class="exo-kicker">${meta.subtitle}</span><strong>${meta.title}</strong><p>${meta.note} Panel I remains intact above; these mechanisms are exclusive to this station's auxiliary hardware bank.</p></div><div class="exo-aux-attempt"><b>${attempt?attempt.procedureName:"Preview"}</b><span>${message}</span></div></header>
       <div class="exo-aux-grid aux-grid-${station}">${controls.map((c,i)=>controlCard(c,i,station,preview)).join("")}</div>
-      <footer><span>${attempt?`${attempt.history.length} auxiliary manipulation${attempt.history.length===1?"":"s"} recorded this attempt`:"Targets shown are a preview until Begin Procedure is pressed."}</span><b>${attempt?(allRequirementsSatisfied()?"AUXILIARY REQUIREMENTS COMPLETE":`${incomplete} AUXILIARY REQUIREMENT${incomplete===1?"":"S"} OUTSTANDING`):`MASTER +${configuredDifficulty}`}</b></footer>
+      <footer><span>${attempt?`${attempt.history.length} distinct auxiliary control${attempt.history.length===1?"":"s"} recorded this attempt`:"Targets shown are a preview until Begin Procedure is pressed."}</span><b>${attempt?(allRequirementsSatisfied()?"AUXILIARY REQUIREMENTS COMPLETE":`${incomplete} AUXILIARY REQUIREMENT${incomplete===1?"":"S"} OUTSTANDING`):`MASTER +${configuredDifficulty}`}</b></footer>
     </section>`;
   }
 
@@ -197,10 +197,17 @@
     const readout=card.querySelector("[data-aux-readout]");if(readout)readout.textContent=formatValue(control,value);
   }
 
+  function recordAuxiliaryAction(station,control,req){
+    const value=values[station][control.id],controls=AUXILIARY_CONTROLS[station]||[],index=controls.indexOf(control)+1,code=req?.code||`${STATION_CODES[station]}-AUX-${String(index).padStart(2,"0")}`,formatted=formatValue(control,value),entry={controlId:control.id,value,time:Date.now(),required:Boolean(req),satisfied:Boolean(req&&isAtTarget(req)),mechanism:control.mechanism,code,label:control.label,formatted};
+    const existing=attempt.history.find(item=>item.controlId===control.id);
+    if(existing)Object.assign(existing,entry);else attempt.history.push(entry);
+    document.dispatchEvent(new CustomEvent("exo:auxiliary-input",{detail:{station,controlId:control.id,code,label:`PANEL II · ${code} ${control.label}: ${formatted}`,value:formatted,required:entry.required,satisfied:entry.satisfied}}));
+  }
+
   function commitAuxControl(station,control,value){
     values[station][control.id]=quantize(control,value);
     if(!(attempt&&attempt.station===station&&coreAttemptActive())){renderDrawer();return;}
-    attempt.touched.add(control.id);const req=requirementFor(control.id);attempt.history.push({controlId:control.id,value:values[station][control.id],time:Date.now(),required:Boolean(req),satisfied:Boolean(req&&isAtTarget(req)),mechanism:control.mechanism});
+    attempt.touched.add(control.id);const req=requirementFor(control.id);recordAuxiliaryAction(station,control,req);
     window.EXO_CONTROL_AUDIO?.play?.("servo-set",{seed:`aux:${station}:${control.mechanism}:${control.id}`,intensity:.74});
     message=req?(isAtTarget(req)?`${req.code} ${control.label} accepted at ${formatValue(control,values[station][control.id])}.`:`${req.code} ${control.label} set to ${formatValue(control,values[station][control.id])}; target remains ${formatValue(control,req.target)}.`):`${control.hardware} adjusted; this mechanism is not required by the active difficulty plan.`;
     renderDrawer();
