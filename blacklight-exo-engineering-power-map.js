@@ -187,14 +187,14 @@
           <text class="exo-eng-core-subtitle" x="151" y="244" text-anchor="middle">4 INPUT / 4 OUTPUT · MODERATOR NEUTRAL</text>
 
           <g class="exo-eng-output-arms">
-            <path class="exo-eng-output-arm bus-a" d="M113 199 Q104 232 87 270"/>
-            <path class="exo-eng-output-arm bus-a" d="M135 212 Q126 238 119 270"/>
-            <path class="exo-eng-output-arm bus-b" d="M168 212 Q177 238 183 270"/>
-            <path class="exo-eng-output-arm bus-b" d="M189 199 Q199 232 215 270"/>
-            <path class="exo-eng-output-flow bus-a" d="M113 199 Q104 232 87 270"/>
-            <path class="exo-eng-output-flow bus-a" d="M135 212 Q126 238 119 270"/>
-            <path class="exo-eng-output-flow bus-b" d="M168 212 Q177 238 183 270"/>
-            <path class="exo-eng-output-flow bus-b" d="M189 199 Q199 232 215 270"/>
+            <path class="exo-eng-output-arm bus-a" d="M113 199 Q104 244 87 299"/>
+            <path class="exo-eng-output-arm bus-a" d="M135 212 Q128 255 119 299"/>
+            <path class="exo-eng-output-arm bus-b" d="M168 212 Q176 255 183 299"/>
+            <path class="exo-eng-output-arm bus-b" d="M189 199 Q199 244 215 299"/>
+            <path class="exo-eng-output-flow bus-a" d="M113 199 Q104 244 87 299"/>
+            <path class="exo-eng-output-flow bus-a" d="M135 212 Q128 255 119 299"/>
+            <path class="exo-eng-output-flow bus-b" d="M168 212 Q176 255 183 299"/>
+            <path class="exo-eng-output-flow bus-b" d="M189 199 Q199 244 215 299"/>
           </g>
 
           <g class="exo-eng-buses">
