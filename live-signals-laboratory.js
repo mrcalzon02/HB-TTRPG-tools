@@ -6,11 +6,11 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createLiveSignalsLaboratory(root) {
   'use strict';
 
-  const VERSION = '0.3.0';
+  const VERSION = '0.3.1';
   const PANEL_ID = 'live-signals-laboratory';
   const STYLE_ID = 'live-signals-laboratory-style';
-  const VERIFIED_AT = '2026-08-09';
-  const CURRENT_MODE = 'passive-default-active-ranging-gated';
+  const VERIFIED_AT = '2026-08-11';
+  const CURRENT_MODE = 'passive-default-active-ranging-local-hardware-authorized';
   const MAX_SESSION_MINUTES = 60;
   const DEFAULT_SESSION_MINUTES = 15;
   const MAX_SENSOR_HZ = 50;
@@ -41,16 +41,21 @@
   ]);
 
   const ACTIVE_SCAN_METHODS = freeze({
-    'wifi-rtt-ranging': freeze({id:'wifi-rtt-ranging',label:'Wi-Fi RTT',measurement:'distance',targetClass:'participating-access-point-or-peer',requiresAuthorization:true}),
-    'uwb-ranging': freeze({id:'uwb-ranging',label:'UWB ranging',measurement:'distance-angle-when-reported',targetClass:'paired-participating-peer',requiresAuthorization:true}),
-    'ble-ranging': freeze({id:'ble-ranging',label:'Bluetooth ranging / channel sounding',measurement:'distance-or-rssi-range-when-supported',targetClass:'participating-peer',requiresAuthorization:true}),
-    'authorized-network-rtt': freeze({id:'authorized-network-rtt',label:'Authorized network RTT',measurement:'latency-context-not-rf-distance',targetClass:'explicit-owned-or-authorized-endpoint',requiresAuthorization:true})
+    'wifi-rtt-ranging': freeze({id:'wifi-rtt-ranging',label:'Wi-Fi RTT',measurement:'distance',targetClass:'platform-discovered-rtt-responder',manualTargetAuthorizationRequired:false}),
+    'uwb-ranging': freeze({id:'uwb-ranging',label:'UWB ranging',measurement:'distance-angle-when-reported',targetClass:'participating-peer',manualTargetAuthorizationRequired:false}),
+    'ble-ranging': freeze({id:'ble-ranging',label:'Bluetooth ranging / channel sounding',measurement:'distance-or-rssi-range-when-supported',targetClass:'participating-peer',manualTargetAuthorizationRequired:false}),
+    'authorized-network-rtt': freeze({id:'authorized-network-rtt',label:'Selected network RTT',measurement:'latency-context-not-rf-distance',targetClass:'bridge-selected-endpoint',manualTargetAuthorizationRequired:false})
   });
 
   const ACTIVE_SCAN_POLICY = freeze({
     enabled:true,
     separateFromPassive:true,
-    authorizedTargetsOnly:true,
+    localRuntimeHardwareAssumedAuthorized:true,
+    manualTargetAuthorizationRequired:false,
+    standardsResponderDiscoveryAllowed:true,
+    bridgeReportedTargetsOnly:true,
+    remoteDeviceControlAssumed:false,
+    nonDestructiveRangingOnly:true,
     capabilityReportedMethodsOnly:true,
     arbitraryFrequencySelection:false,
     transmitterPowerMutation:false,
@@ -59,7 +64,7 @@
     maximumSamplesPerTarget:MAX_ACTIVE_SAMPLES_PER_TARGET,
     minimumSampleIntervalMs:MIN_ACTIVE_SAMPLE_INTERVAL_MS,
     maximumBurstSeconds:MAX_ACTIVE_BURST_SECONDS,
-    note:'Active Scan is limited to standards/platform-supported ranging or explicit authorized endpoint RTT. It does not expose arbitrary RF emission, power control, channel control, packet injection, subnet sweeps, or frequency sweeps.'
+    note:'The radio hardware hosting the Live Signals runtime is treated as the operator-authorized instrument. Active Scan may use standards/platform-supported ranging responders or bridge-selected endpoints without a manual authorization checkbox. It never assumes administrative control of remote devices and does not expose arbitrary RF emission, power/channel mutation, packet injection, subnet sweeps, or frequency sweeps.'
   });
 
   const CHANNEL_CATALOG = freeze({
@@ -116,7 +121,7 @@
     minimumBatteryPercentWithoutExternalPower: 15,
     prohibitedOperations: UNSAFE_RADIO_MUTATIONS,
     privacyRedactionDefault: true,
-    note: 'Passive Scan remains receive-only. Active Scan is a separate gated ranging/authorized-RTT path; arbitrary transmitter control, app-requested Wi-Fi discovery scans, frequency sweeps, pulse transmission, packet injection and radio mutation remain blocked.'
+    note: 'Passive Scan remains receive-only. Active Scan is a separate standards-supported ranging path using the runtime-attached hardware as the authorized instrument; it does not assume control of remote devices. Arbitrary transmitter control, app-requested Wi-Fi discovery scans, frequency sweeps, pulse transmission, packet injection and radio mutation remain blocked.'
   });
 
   const HARDWARE_PROFILES = freeze({
@@ -125,7 +130,7 @@
       scope: freeze(['wifi-system-scan-results','ble-observation','cellular-signal','cell-neighbors','gnss','motion','magnetometer','barometer-conditional','light-conditional','proximity-conditional']),
       expectedPassiveChannels: freeze(['wifi','cellular','ble','gnss','motion','magnetometer']),
       activeMethods: freeze(['wifi-rtt-ranging','uwb-ranging','ble-ranging']),
-      limitations: freeze(['Do not call WifiManager.startScan in passive phase; consume system/cached scan results and scan-completion broadcasts.','Cell signal freshness is modem/platform controlled and requires a native TelephonyManager bridge.','BLE observation requires the native Bluetooth scan permission/API path.','Wi-Fi RTT/UWB/Bluetooth ranging are capability- and peer-dependent and only belong to the separate Active Scan path.']),
+      limitations: freeze(['Do not call WifiManager.startScan in passive phase; consume system/cached scan results and scan-completion broadcasts.','Cell signal freshness is modem/platform controlled and requires a native TelephonyManager bridge.','BLE observation requires the native Bluetooth scan permission/API path.','Wi-Fi RTT/UWB/Bluetooth ranging are capability- and responder/peer-dependent and only belong to the separate Active Scan path.']),
       preferred: true
     }),
     'ios-native': freeze({
@@ -142,7 +147,7 @@
       scope: freeze(['wifi-radio-status','channel-frequency','noise-floor','station-rssi','station-rates','survey-telemetry','antenna-chain-rssi-conditional','interface-counters']),
       expectedPassiveChannels: freeze(['wifi','router']),
       activeMethods: freeze(['authorized-network-rtt','wifi-rtt-ranging']),
-      limitations: freeze(['Per-chain telemetry depends on driver/chipset exposure.','The bridge is read-only: no channel, power, bandwidth, chain, reset, association, or interface-state writes.']),
+      limitations: freeze(['Per-chain telemetry depends on driver/chipset exposure.','The bridge does not expose channel, power, bandwidth, chain, reset, association, or interface-state writes to the laboratory.']),
       preferred: true
     }),
     'browser-context': freeze({
@@ -158,7 +163,7 @@
       scope: freeze(['normalized-observation-ingest']),
       expectedPassiveChannels: freeze([]),
       activeMethods: freeze(['authorized-network-rtt']),
-      limitations: freeze(['The bridge must provide receive-side telemetry only; this laboratory rejects active/radio-mutation operations.']),
+      limitations: freeze(['The bridge supplies normalized telemetry/ranging results; unsafe radio-mutation operations remain rejected.']),
       preferred: false
     })
   });
@@ -178,7 +183,7 @@
     freeze({id:'orientation-sweep',label:'5 · Orientation sweep',goal:'Rotate the receiver/device through controlled orientations without moving its position.',exit:'Orientation-linked signal changes can be separated from positional or long-term receiver changes.'}),
     freeze({id:'spatial-traverse',label:'6 · Spatial traverse',goal:'Move the receiver along a measured route while recording local position, orientation and passive signal telemetry.',exit:'Path contains repeatable spatial anchors and no hardware safety guard was exceeded.'}),
     freeze({id:'cross-instrument',label:'7 · Cross-instrument comparison',goal:'Repeat selected points with a second device or router telemetry source to estimate device-specific offsets.',exit:'Per-device bias/variance is characterized instead of assuming RSSI values are interchangeable.'}),
-    freeze({id:'active-ranging-map',label:'8 · Gated active ranging map',goal:'Use only standards-supported ranging or explicitly authorized endpoint RTT against capability-reported targets while passive receivers continue recording context.',exit:'Ranging observations identify their technology, target authorization, uncertainty and local pose; no arbitrary RF sweep or radio mutation occurs.'}),
+    freeze({id:'active-ranging-map',label:'8 · Gated active ranging map',goal:'Use standards-supported responder ranging or bridge-selected endpoint RTT while passive receivers continue recording context. The local runtime-attached radio is the authorized instrument; remote-device administrative control is never assumed.',exit:'Ranging observations identify their technology, responder/endpoint, uncertainty and local pose; no arbitrary RF sweep or radio mutation occurs.'}),
     freeze({id:'model-correlation',label:'9 · Simulation correlation',goal:'Compare live measurements against the Signals Simulation Laboratory without forcing the simulation to fit unsupported detail.',exit:'Residuals, assumptions and unresolved structure are recorded; empirical data remains distinct from model output.'})
   ]);
 
@@ -190,7 +195,7 @@
   function ensureStyle() {
     if (!root?.document || root.document.getElementById(STYLE_ID)) return;
     const link = root.document.createElement('link');
-    link.id = STYLE_ID; link.rel = 'stylesheet'; link.href = 'live-signals-laboratory.css?v=20260809-live-signals-active-ranging-3';
+    link.id = STYLE_ID; link.rel = 'stylesheet'; link.href = 'live-signals-laboratory.css?v=20260811-live-signals-active-trust-4';
     root.document.head.appendChild(link);
   }
 
@@ -289,7 +294,7 @@
       add('GNSS/location','available-with-permission','Android location stack','Use accuracy and timestamp with every sample.');
       add('Motion/orientation/magnetic field','device-dependent','Android SensorManager','Inventory actual sensor list and max rates at runtime.');
       add('Pressure/light/proximity','device-dependent','Android SensorManager','Do not assume presence.');
-      add('Wi-Fi RTT active ranging','active-scan-conditional','Android WifiRttManager / RangingManager','Separate Active Scan only; supported AP/peer and permissions required.');
+      add('Wi-Fi RTT active ranging','active-scan-conditional','Android WifiRttManager / RangingManager','Separate Active Scan only; nearby RTT-capable responders may be discovered by the platform and do not require a manual target-authorization checkbox.');
       add('UWB / Bluetooth ranging','active-scan-conditional','Android RangingManager / UWB APIs','Separate Active Scan only; capability and participating peer required.');
     } else if (profile.id === 'ios-native') {
       add('Current Wi-Fi network','conditional','NetworkExtension NEHotspotNetwork','Entitlement and authorization conditions apply.');
@@ -299,13 +304,13 @@
       add('GNSS/location/heading','available-with-permission','Core Location','Accuracy, timestamp and authorization must be retained.');
       add('Motion/gyro/magnetometer','device-dependent','Core Motion','Check service availability before use.');
       add('Barometer','device-dependent','Core Motion / device hardware','Optional context channel.');
-      add('Nearby UWB ranging','active-scan-conditional','Nearby Interaction / UWB hardware','Separate Active Scan only; participating paired peer and device support required.');
+      add('Nearby UWB ranging','active-scan-conditional','Nearby Interaction / UWB hardware','Separate Active Scan only; participating peer and device support required.');
     } else if (profile.id === 'openwrt-readonly') {
       add('Radio channel/frequency/noise','bridge-dependent','OpenWrt/Linux read-only telemetry','Typical sources include iwinfo/iw/ubus observation output.');
       add('Station RSSI/rates','bridge-dependent','OpenWrt/Linux read-only telemetry','Observe only telemetry exposed by driver.');
       add('Per-chain antenna RSSI','driver-dependent','nl80211/driver telemetry','Only expose when chipset reports it; never synthesize missing chains.');
       add('Interface counters','available','router OS telemetry','Useful for context; not a direct RF power measurement.');
-      add('Authorized endpoint / RTT ranging','active-scan-conditional','Bridge-declared capability','Only explicit owned/authorized targets; no subnet sweep or radio configuration mutation.');
+      add('Standards ranging / selected RTT endpoint','active-scan-conditional','Bridge-declared capability','The attached router is treated as operator-authorized instrumentation; responder/endpoint selection comes from the bridge. No subnet sweep or radio configuration mutation.');
       add('Radio configuration writes','blocked','Live Signals safety boundary','No channel/power/bandwidth/antenna/interface mutation path exists in the live lab.');
     } else if (profile.id === 'browser-context') {
       add('Geolocation', runtime.geolocation ? 'browser-available' : 'unavailable', 'Web Geolocation','Context only; not an RF sensor.');
@@ -314,7 +319,7 @@
       add('Web Bluetooth observation', runtime.webBluetooth ? 'browser-available' : 'unavailable', 'Web Bluetooth','Browser support varies; not a general RF spectrum API.');
       add('Wi-Fi/cellular scan','unavailable-web-api','Browser security boundary','Requires native/router bridge.');
     } else {
-      add('Normalized receive telemetry','available','JSON bridge contract','Bridge is responsible for hardware access and must remain passive/receive-only.');
+      add('Normalized receive telemetry','available','JSON bridge contract','Bridge is responsible for hardware access; unsafe radio mutation remains blocked.');
     }
     return freeze({ profile, rows:freeze(rows) });
   }
@@ -372,6 +377,9 @@
         targetLocalX: Number.isFinite(Number(raw.targetLocalX)) ? Number(raw.targetLocalX) : null,
         targetLocalY: Number.isFinite(Number(raw.targetLocalY)) ? Number(raw.targetLocalY) : null,
         targetLocalZ: Number.isFinite(Number(raw.targetLocalZ)) ? Number(raw.targetLocalZ) : null,
+        localHardwareAuthorized: raw.localHardwareAuthorized !== false,
+        responderParticipating: raw.responderParticipating !== false,
+        remoteDeviceControlAssumed: false,
         authorized: raw.authorized === true
       }),
       position: freeze({
@@ -614,13 +622,15 @@
 
   function normalizeActiveCapabilityReport(report = {}) {
     const methods = [...new Set((report.activeMethods || []).map(String).filter(id=>ACTIVE_SCAN_METHODS[id]))];
-    const targets = (report.authorizedTargets || []).map(target=>freeze({
+    const rawTargets = report.rangingTargets || report.activeTargets || report.authorizedTargets || [];
+    const targets = rawTargets.map(target=>freeze({
       id:String(target.id || target.targetId || ''),
       label:String(target.label || target.id || target.targetId || 'target'),
-      authorized:target.authorized === true,
+      participating:target.participating !== false,
+      responderCapable:target.responderCapable !== false,
       methods:freeze((target.methods || methods).map(String).filter(id=>methods.includes(id)))
     })).filter(target=>target.id);
-    return freeze({bridgeId:String(report.bridgeId || report.id || 'unknown-bridge'),passiveChannels:freeze([...(report.passiveChannels||[]).map(String)]),activeMethods:freeze(methods),authorizedTargets:freeze(targets)});
+    return freeze({bridgeId:String(report.bridgeId || report.id || 'unknown-bridge'),passiveChannels:freeze([...(report.passiveChannels||[]).map(String)]),activeMethods:freeze(methods),rangingTargets:freeze(targets),localRuntimeHardwareAuthorized:true});
   }
 
   function activeScanPreflight(input = {}, capabilityReport = bridgeCapabilityReport || {}) {
@@ -631,20 +641,19 @@
     const warnings = [...base.warnings];
     if (!ACTIVE_SCAN_METHODS[method]) blockers.push('no supported allowlisted Active Scan method is selected');
     if (method && !normalized.activeMethods.includes(method)) blockers.push(`connected bridge does not report Active Scan capability ${method}`);
-    if (input.targetsAuthorized !== true) blockers.push('Active Scan requires explicit owned/authorized target confirmation');
-    if (!normalized.authorizedTargets.some(target=>target.authorized && target.methods.includes(method))) blockers.push('bridge reports no authorized participating target for the selected method');
+    if (!normalized.rangingTargets.some(target=>target.participating && target.responderCapable && target.methods.includes(method))) blockers.push('bridge reports no participating/capable ranging responder or selected endpoint for the chosen method');
     if (base.reduceDutyCycle) warnings.push('thermal state requests minimum active sample count and maximum interval');
-    return freeze({pass:blockers.length===0,method,capabilities:normalized,blockers:freeze(blockers),warnings:freeze(warnings),thermalState:base.thermalState,batteryPercent:base.batteryPercent,externalPower:base.externalPower});
+    return freeze({pass:blockers.length===0,method,capabilities:normalized,localRuntimeHardwareAuthorized:true,manualTargetAuthorizationRequired:false,blockers:freeze(blockers),warnings:freeze(warnings),thermalState:base.thermalState,batteryPercent:base.batteryPercent,externalPower:base.externalPower});
   }
 
   function buildActiveScanPlan(input = {}, capabilityReport = bridgeCapabilityReport || {}) {
     const preflight = activeScanPreflight(input, capabilityReport);
     if (!preflight.pass) throw new Error(`Active Scan preflight blocked: ${preflight.blockers.join('; ')}`);
     assertActiveScanOperation(preflight.method);
-    const authorized = preflight.capabilities.authorizedTargets.filter(target=>target.authorized && target.methods.includes(preflight.method));
+    const eligible = preflight.capabilities.rangingTargets.filter(target=>target.participating && target.responderCapable && target.methods.includes(preflight.method));
     const requestedIds = new Set((input.targetIds || []).map(String).filter(Boolean));
-    const targets = authorized.filter(target=>!requestedIds.size || requestedIds.has(target.id)).slice(0, MAX_ACTIVE_TARGETS);
-    if (!targets.length) throw new Error('No authorized targets remain after Active Scan target selection.');
+    const targets = eligible.filter(target=>!requestedIds.size || requestedIds.has(target.id)).slice(0, MAX_ACTIVE_TARGETS);
+    if (!targets.length) throw new Error('No capable participating responders/endpoints remain after Active Scan target selection.');
     const samplesPerTarget = clamp(Math.floor(finite(input.samplesPerTarget, 3)),1,MAX_ACTIVE_SAMPLES_PER_TARGET);
     const sampleIntervalMs = Math.max(MIN_ACTIVE_SAMPLE_INTERVAL_MS, finite(input.sampleIntervalMs, 1000));
     const maximumSamplesByTime = Math.max(1, Math.floor(MAX_ACTIVE_BURST_SECONDS * 1000 / (targets.length * sampleIntervalMs)));
@@ -653,7 +662,8 @@
       format:'hb-ttrpg-live-signals-active-scan-plan',schemaVersion:VERSION,method:preflight.method,
       measurement:ACTIVE_SCAN_METHODS[preflight.method].measurement,
       targets:freeze(targets),samplesPerTarget:clampedSamples,sampleIntervalMs,
-      maximumBurstSeconds:MAX_ACTIVE_BURST_SECONDS,authorizedTargetsOnly:true,
+      maximumBurstSeconds:MAX_ACTIVE_BURST_SECONDS,localRuntimeHardwareAuthorized:true,manualTargetAuthorizationRequired:false,
+      standardsResponderDiscoveryAllowed:true,remoteDeviceControlAssumed:false,
       estimatedBurstSeconds:targets.length*clampedSamples*sampleIntervalMs/1000,
       arbitraryFrequencySelection:false,transmitterPowerMutation:false,channelMutation:false
     });
@@ -672,7 +682,7 @@
       const targetId = String(raw.targetId || raw.sourceId || '');
       const target = plan.targets.find(item=>item.id===targetId);
       if (!target) continue;
-      const observation = appendObservation(session,{...raw,kind:raw.kind||'ranging',acquisitionMode:'active',operation:plan.method,authorized:true,rangingTechnology:raw.rangingTechnology||plan.method},{acquisitionMode:'active'});
+      const observation = appendObservation(session,{...raw,kind:raw.kind||'ranging',acquisitionMode:'active',operation:plan.method,localHardwareAuthorized:true,responderParticipating:true,rangingTechnology:raw.rangingTechnology||plan.method},{acquisitionMode:'active'});
       accepted.push(observation);
     }
     const record = freeze({startedAt,endedAt:new Date().toISOString(),plan,resultCount:accepted.length});
@@ -835,8 +845,9 @@
     const target=panel?.querySelector('[data-lsl-active]'); if(!target)return;
     const bridge=hardwareBridgeStatus(), report=bridgeCapabilityReport ? normalizeActiveCapabilityReport(bridgeCapabilityReport) : null;
     const methods=report?.activeMethods||[];
+    const responders=report?.rangingTargets||[];
     const ranges=activeRangeSummary(activeSession);
-    target.innerHTML=`<div class="lsl-active-status"><strong>${bridge.connected?'Hardware bridge connected':'Active Scan awaiting native/router bridge'}</strong><span>${methods.length?`Available: ${methods.map(id=>ACTIVE_SCAN_METHODS[id]?.label||id).join(', ')}`:'No active ranging capabilities reported yet.'}</span></div><div class="lsl-metrics"><div><span>Active bursts</span><strong>${ranges.burstCount}</strong></div><div><span>Range samples</span><strong>${ranges.sampleCount}</strong></div><div><span>Positioned ranges</span><strong>${ranges.positionedRangeSamples}</strong></div><div><span>Policy</span><strong>authorized targets only</strong></div></div>${Object.keys(ranges.byTechnology).length?`<div class="lsl-table"><table><thead><tr><th>Technology</th><th>Samples</th><th>Median distance</th><th>Range</th></tr></thead><tbody>${Object.entries(ranges.byTechnology).map(([id,row])=>`<tr><td>${esc(id)}</td><td>${row.samples}</td><td>${row.medianDistanceM.toFixed(2)} m</td><td>${row.minimumDistanceM.toFixed(2)}–${row.maximumDistanceM.toFixed(2)} m</td></tr>`).join('')}</tbody></table></div>`:''}`;
+    target.innerHTML=`<div class="lsl-active-status"><strong>${bridge.connected?'Hardware bridge connected':'Active Scan awaiting native/router bridge'}</strong><span>${methods.length?`Available: ${methods.map(id=>ACTIVE_SCAN_METHODS[id]?.label||id).join(', ')}`:'No active ranging capabilities reported yet.'}</span></div><div class="lsl-metrics"><div><span>Active bursts</span><strong>${ranges.burstCount}</strong></div><div><span>Range samples</span><strong>${ranges.sampleCount}</strong></div><div><span>Positioned ranges</span><strong>${ranges.positionedRangeSamples}</strong></div><div><span>Responders/endpoints</span><strong>${responders.length}</strong></div><div><span>Trust model</span><strong>local instrument authorized</strong></div></div>${Object.keys(ranges.byTechnology).length?`<div class="lsl-table"><table><thead><tr><th>Technology</th><th>Samples</th><th>Median distance</th><th>Range</th></tr></thead><tbody>${Object.entries(ranges.byTechnology).map(([id,row])=>`<tr><td>${esc(id)}</td><td>${row.samples}</td><td>${row.medianDistanceM.toFixed(2)} m</td><td>${row.minimumDistanceM.toFixed(2)}–${row.maximumDistanceM.toFixed(2)} m</td></tr>`).join('')}</tbody></table></div>`:''}`;
     drawActiveRangeMap();
   }
 
@@ -845,7 +856,7 @@
     const {w,h,dpr}=fitCanvas(canvas),ctx=canvas.getContext('2d');
     ctx.clearRect(0,0,w,h);ctx.fillStyle='#081016';ctx.fillRect(0,0,w,h);ctx.font=`${11*dpr}px sans-serif`;
     const rows=(activeSession?.observations||[]).filter(row=>row.acquisitionMode==='active'&&Number.isFinite(row.ranging?.distanceM)&&Number.isFinite(row.position.localX)&&Number.isFinite(row.position.localY));
-    if(!rows.length){ctx.fillStyle='#9eabb5';ctx.fillText('Active range constraints will appear here when the native/router bridge returns authorized ranging results.',12*dpr,22*dpr);return;}
+    if(!rows.length){ctx.fillStyle='#9eabb5';ctx.fillText('Active range constraints will appear when the bridge returns standards-supported responder/endpoint ranging results.',12*dpr,22*dpr);return;}
     const extents=[];for(const row of rows){const r=row.ranging.distanceM;extents.push(row.position.localX-r,row.position.localX+r,row.position.localY-r,row.position.localY+r);if(Number.isFinite(row.ranging.targetLocalX))extents.push(row.ranging.targetLocalX);if(Number.isFinite(row.ranging.targetLocalY))extents.push(row.ranging.targetLocalY);}
     const min=Math.min(...extents),max=Math.max(...extents),span=Math.max(1,max-min),px=v=>20*dpr+(v-min)/span*(Math.min(w,h)-40*dpr);
     for(const row of rows.slice(-120)){const cx=px(row.position.localX),cy=h-px(row.position.localY),rr=row.ranging.distanceM/span*(Math.min(w,h)-40*dpr);ctx.strokeStyle='rgba(114,213,255,.24)';ctx.beginPath();ctx.arc(cx,cy,rr,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#72d5ff';ctx.beginPath();ctx.arc(cx,cy,2.5*dpr,0,Math.PI*2);ctx.fill();if(Number.isFinite(row.ranging.targetLocalX)&&Number.isFinite(row.ranging.targetLocalY)){ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(px(row.ranging.targetLocalX),h-px(row.ranging.targetLocalY),4*dpr,0,Math.PI*2);ctx.fill();}}
@@ -910,7 +921,7 @@
 
   function renderPreflight() {
     const preflight=safetyPreflight(readHardwareState()),polling=readPolling(),target=panel.querySelector('[data-lsl-preflight]');
-    target.innerHTML=`<div class="lsl-safety ${preflight.pass?'pass':'blocked'}"><strong>${preflight.pass?'PASSIVE PREFLIGHT PASS':'SESSION BLOCKED'}</strong><span>${preflight.blockers.length?esc(preflight.blockers.join('; ')):'Passive Scan preflight passed. Active Scan remains separate and capability/authorization gated; arbitrary RF sweeps and radio mutation remain blocked.'}</span>${preflight.warnings.length?`<small>${esc(preflight.warnings.join('; '))}</small>`:''}</div><div class="lsl-metrics"><div><span>Wi-Fi result refresh floor</span><strong>${(polling.wifiResultPollMs/1000).toFixed(0)} s</strong></div><div><span>BLE observe window / period</span><strong>${(polling.bleObserveWindowMs/1000).toFixed(1)} / ${(polling.bleObservePeriodMs/1000).toFixed(0)} s</strong></div><div><span>Sensor rate cap</span><strong>${polling.sensorHz.toFixed(0)} Hz</strong></div><div><span>Session limit</span><strong>${polling.sessionMinutes.toFixed(0)} min</strong></div></div>`;
+    target.innerHTML=`<div class="lsl-safety ${preflight.pass?'pass':'blocked'}"><strong>${preflight.pass?'PASSIVE PREFLIGHT PASS':'SESSION BLOCKED'}</strong><span>${preflight.blockers.length?esc(preflight.blockers.join('; ')):'Passive Scan preflight passed. Active Scan remains separate and capability/responder gated; the local attached hardware is treated as the authorized instrument while arbitrary RF sweeps and radio mutation remain blocked.'}</span>${preflight.warnings.length?`<small>${esc(preflight.warnings.join('; '))}</small>`:''}</div><div class="lsl-metrics"><div><span>Wi-Fi result refresh floor</span><strong>${(polling.wifiResultPollMs/1000).toFixed(0)} s</strong></div><div><span>BLE observe window / period</span><strong>${(polling.bleObserveWindowMs/1000).toFixed(1)} / ${(polling.bleObservePeriodMs/1000).toFixed(0)} s</strong></div><div><span>Sensor rate cap</span><strong>${polling.sensorHz.toFixed(0)} Hz</strong></div><div><span>Session limit</span><strong>${polling.sessionMinutes.toFixed(0)} min</strong></div></div>`;
     return preflight;
   }
 
@@ -918,14 +929,14 @@
     if(!root?.document) throw new Error('Live Signals Laboratory requires a browser document.');
     const existing=root.document.getElementById(PANEL_ID); if(existing){panel=existing;return panel;} ensureStyle();
     panel=root.document.createElement('section');panel.id=PANEL_ID;panel.className='lsl-shell';panel.hidden=true;
-    panel.innerHTML=`<div class="lsl-backdrop" data-lsl-close></div><div class="lsl-panel" role="dialog" aria-modal="true" aria-labelledby="lsl-title"><header class="lsl-header"><div><p class="lsl-eyebrow">Signals Suite · empirical multi-radio instrumentation</p><h2 id="lsl-title">Live Signals Laboratory</h2><p>Separate from the simulation laboratory. Passive Scan continuously gathers available Wi-Fi, cellular, Bluetooth/BLE, router and sensor telemetry. Active Scan is a separate gated ranging path for standards-supported participating devices or explicit authorized endpoints; arbitrary transmitter sweeps remain outside this mode.</p></div><button class="lsl-close" data-lsl-close aria-label="Close Live Signals Laboratory">×</button></header><div class="lsl-body"><aside class="lsl-controls"><section class="lsl-card lsl-lock"><h3>Hardware safety lock</h3><p><strong>Passive Scan is receive-only.</strong> Active Scan is separate and may only invoke an allowlisted ranging/authorized-RTT capability reported by the connected bridge. Power/channel mutation, packet injection, subnet sweeps, arbitrary frequency sweeps and pulse controls remain blocked.</p><label>Thermal state<select id="lsl-thermal"><option>nominal</option><option>fair</option><option>serious</option><option>severe</option><option>critical</option></select></label><label>Battery %<input id="lsl-battery" type="number" min="0" max="100" value="100"></label><label class="lsl-check"><input id="lsl-external-power" type="checkbox"> External power connected</label><label class="lsl-check"><input id="lsl-redact" type="checkbox" checked> Redact network/device identifiers and geographic coordinates</label><button class="lsl-secondary" data-lsl-preflight-button>Run passive preflight</button><div data-lsl-preflight></div></section><section class="lsl-card"><h3>Passive acquisition profile</h3><label>Hardware bridge<select id="lsl-profile">${profileOptions()}</select></label><label>Session minutes<input id="lsl-session-minutes" type="number" min="1" max="${MAX_SESSION_MINUTES}" value="${DEFAULT_SESSION_MINUTES}"></label><label>Wi-Fi result refresh floor ms<input id="lsl-wifi-ms" type="number" value="10000"></label><p class="lsl-hint">Android bridge contract: consume system/cached scan results and scan-completion broadcasts; do not invoke <code>startScan()</code> in passive mode.</p><label>BLE observe window ms<input id="lsl-ble-window-ms" type="number" value="5000"></label><label>BLE observe period ms<input id="lsl-ble-period-ms" type="number" value="${MIN_BLE_OBSERVE_PERIOD_MS}"></label><label>Cellular poll ms<input id="lsl-cell-ms" type="number" value="3000"></label><label>GNSS poll ms<input id="lsl-gnss-ms" type="number" value="1000"></label><label>Router telemetry poll ms<input id="lsl-router-ms" type="number" value="3000"></label><label>Context sensor Hz<input id="lsl-sensor-hz" type="number" min="1" max="${MAX_SENSOR_HZ}" value="${DEFAULT_SENSOR_HZ}"></label><button class="lsl-primary" data-lsl-start>Start Passive Scan</button><button class="lsl-active-button" data-lsl-active-scan>Run Active Scan</button><button class="lsl-secondary" data-lsl-stop>Stop session</button><div class="lsl-active-controls"><label>Active method<select id="lsl-active-method"><option value="auto">Auto from bridge</option><option value="wifi-rtt-ranging">Wi-Fi RTT</option><option value="uwb-ranging">UWB ranging</option><option value="ble-ranging">Bluetooth ranging</option><option value="authorized-network-rtt">Authorized network RTT</option></select></label><label>Authorized target IDs (comma separated)<input id="lsl-active-targets" type="text" placeholder="AP-lab-1, peer-2"></label><label>Samples per target<input id="lsl-active-samples" type="number" min="1" max="${MAX_ACTIVE_SAMPLES_PER_TARGET}" value="3"></label><label>Sample interval ms<input id="lsl-active-interval" type="number" min="${MIN_ACTIVE_SAMPLE_INTERVAL_MS}" value="1000"></label><label class="lsl-check"><input id="lsl-active-authorized" type="checkbox"> I own/control or have permission to range these targets</label></div></section><section class="lsl-card"><h3>Bridge observation ingest</h3><p>Native mobile apps or a local router bridge should send normalized passive JSON observations. Manual ingest is available for contract testing.</p><textarea id="lsl-json" rows="12" spellcheck="false">{"kind":"wifi","adapterId":"android-native","frequencyHz":2437000000,"rssiDbm":-58,"noiseDbm":-95,"sourceId":"00:11:22:33:44:55","localX":0,"localY":0,"headingDeg":0,"chainRssiDbm":[-58,-60],"provenance":"reported-by-platform"}</textarea><button class="lsl-primary" data-lsl-ingest>Ingest passive observation JSON</button><button class="lsl-secondary" data-lsl-copy>Copy session JSON</button><div class="lsl-status" data-lsl-status>Ready.</div></section></aside><main class="lsl-workspace"><section class="lsl-card lsl-channel-card"><div class="lsl-section-head"><h3>Receiver channel coverage</h3><span>Wi-Fi · cellular · Bluetooth/BLE · sensors · router telemetry</span></div><div data-lsl-channels></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Capability matrix</h3><span>public/platform exposure, not assumed raw RF access</span></div><div data-lsl-capabilities></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive session & refinement procedure</h3><span>empirical telemetry remains separate from simulation</span></div><div data-lsl-session></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive frequency / source census</h3><span>observed information density without active probing</span></div><div data-lsl-inventory></div></section><section class="lsl-card lsl-health-card"><div class="lsl-section-head"><h3>Receiver / antenna-path cleanliness & degradation screening</h3><span>baseline-relative passive diagnostics</span></div><div data-lsl-health></div></section><section class="lsl-card lsl-active-card"><div class="lsl-section-head"><h3>Active ranging / ping-back mapping</h3><span>separate gated path · participating/authorized targets only</span></div><div data-lsl-active></div><canvas id="lsl-active-map" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Live signal history</h3><span>RSSI / RSRP / SNR when reported</span></div><canvas id="lsl-timeseries" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Local spatial trace</h3><span>requires measured localX/localY anchors</span></div><canvas id="lsl-spatial" class="lsl-canvas"></canvas></section><section class="lsl-card"><h3>Recent normalized observations</h3><div class="lsl-table"><table><thead><tr><th>Time</th><th>Kind</th><th>Frequency</th><th>Signal</th><th>Source</th><th>Provenance</th></tr></thead><tbody data-lsl-observations><tr><td colspan="6">No observations yet.</td></tr></tbody></table></div></section><section class="lsl-card lsl-future"><div class="lsl-section-head"><h3>Future attenuation / sweep research</h3><span>still gated · not implemented</span></div><div class="lsl-future-grid" data-lsl-future></div></section><section class="lsl-boundary"><strong>Measurement boundary:</strong> mobile operating systems often expose derived telemetry rather than raw spectrum/IQ data. The laboratory records what the platform or read-only hardware bridge actually reports, together with timestamps, permissions, stale state and device context. Receiver/antenna-health flags are screening evidence, not proof of hardware failure. Missing expected radio channels are surfaced as acquisition gaps rather than interpreted as absent RF energy. Active network RTT is latency context and is not treated as direct RF distance unless the ranging technology reports distance. Privacy redaction is enabled by default.</section></main></div></div>`;
+    panel.innerHTML=`<div class="lsl-backdrop" data-lsl-close></div><div class="lsl-panel" role="dialog" aria-modal="true" aria-labelledby="lsl-title"><header class="lsl-header"><div><p class="lsl-eyebrow">Signals Suite · empirical multi-radio instrumentation</p><h2 id="lsl-title">Live Signals Laboratory</h2><p>Separate from the simulation laboratory. Passive Scan continuously gathers available Wi-Fi, cellular, Bluetooth/BLE, router and sensor telemetry. Active Scan is a separate standards-supported ranging path: the device/router hosting the runtime is treated as the operator-authorized instrument, while nearby responder-capable devices remain participants rather than devices the lab controls.</p></div><button class="lsl-close" data-lsl-close aria-label="Close Live Signals Laboratory">×</button></header><div class="lsl-body"><aside class="lsl-controls"><section class="lsl-card lsl-lock"><h3>Hardware safety lock</h3><p><strong>Passive Scan is receive-only.</strong> Active Scan may invoke only allowlisted ranging capabilities reported by the connected bridge. The lab assumes authorization to operate the hardware it is running on, but it never assumes administrative control of nearby devices. Power/channel mutation, packet injection, subnet sweeps, arbitrary frequency sweeps and pulse controls remain blocked.</p><label>Thermal state<select id="lsl-thermal"><option>nominal</option><option>fair</option><option>serious</option><option>severe</option><option>critical</option></select></label><label>Battery %<input id="lsl-battery" type="number" min="0" max="100" value="100"></label><label class="lsl-check"><input id="lsl-external-power" type="checkbox"> External power connected</label><label class="lsl-check"><input id="lsl-redact" type="checkbox" checked> Redact network/device identifiers and geographic coordinates</label><button class="lsl-secondary" data-lsl-preflight-button>Run passive preflight</button><div data-lsl-preflight></div></section><section class="lsl-card"><h3>Passive acquisition profile</h3><label>Hardware bridge<select id="lsl-profile">${profileOptions()}</select></label><label>Session minutes<input id="lsl-session-minutes" type="number" min="1" max="${MAX_SESSION_MINUTES}" value="${DEFAULT_SESSION_MINUTES}"></label><label>Wi-Fi result refresh floor ms<input id="lsl-wifi-ms" type="number" value="10000"></label><p class="lsl-hint">Android bridge contract: consume system/cached scan results and scan-completion broadcasts; do not invoke <code>startScan()</code> in passive mode.</p><label>BLE observe window ms<input id="lsl-ble-window-ms" type="number" value="5000"></label><label>BLE observe period ms<input id="lsl-ble-period-ms" type="number" value="${MIN_BLE_OBSERVE_PERIOD_MS}"></label><label>Cellular poll ms<input id="lsl-cell-ms" type="number" value="3000"></label><label>GNSS poll ms<input id="lsl-gnss-ms" type="number" value="1000"></label><label>Router telemetry poll ms<input id="lsl-router-ms" type="number" value="3000"></label><label>Context sensor Hz<input id="lsl-sensor-hz" type="number" min="1" max="${MAX_SENSOR_HZ}" value="${DEFAULT_SENSOR_HZ}"></label><button class="lsl-primary" data-lsl-start>Start Passive Scan</button><button class="lsl-active-button" data-lsl-active-scan>Run Active Scan</button><button class="lsl-secondary" data-lsl-stop>Stop session</button><div class="lsl-active-controls"><label>Active method<select id="lsl-active-method"><option value="auto">Auto from bridge</option><option value="wifi-rtt-ranging">Wi-Fi RTT</option><option value="uwb-ranging">UWB ranging</option><option value="ble-ranging">Bluetooth ranging</option><option value="authorized-network-rtt">Selected network RTT</option></select></label><label>Responder / endpoint IDs (optional)<input id="lsl-active-targets" type="text" placeholder="leave blank for bridge-discovered responders"></label><label>Samples per target<input id="lsl-active-samples" type="number" min="1" max="${MAX_ACTIVE_SAMPLES_PER_TARGET}" value="3"></label><label>Sample interval ms<input id="lsl-active-interval" type="number" min="${MIN_ACTIVE_SAMPLE_INTERVAL_MS}" value="1000"></label><p class="lsl-hint">The attached phone/router is presumed operator-authorized. Blank target IDs allow the bridge to use nearby standards-capable responders it reports; this does not grant the laboratory control over those responders.</p></div></section><section class="lsl-card"><h3>Bridge observation ingest</h3><p>Native mobile apps or a local router bridge should send normalized passive JSON observations. Manual ingest is available for contract testing.</p><textarea id="lsl-json" rows="12" spellcheck="false">{"kind":"wifi","adapterId":"android-native","frequencyHz":2437000000,"rssiDbm":-58,"noiseDbm":-95,"sourceId":"00:11:22:33:44:55","localX":0,"localY":0,"headingDeg":0,"chainRssiDbm":[-58,-60],"provenance":"reported-by-platform"}</textarea><button class="lsl-primary" data-lsl-ingest>Ingest passive observation JSON</button><button class="lsl-secondary" data-lsl-copy>Copy session JSON</button><div class="lsl-status" data-lsl-status>Ready.</div></section></aside><main class="lsl-workspace"><section class="lsl-card lsl-channel-card"><div class="lsl-section-head"><h3>Receiver channel coverage</h3><span>Wi-Fi · cellular · Bluetooth/BLE · sensors · router telemetry</span></div><div data-lsl-channels></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Capability matrix</h3><span>public/platform exposure, not assumed raw RF access</span></div><div data-lsl-capabilities></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive session & refinement procedure</h3><span>empirical telemetry remains separate from simulation</span></div><div data-lsl-session></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive frequency / source census</h3><span>observed information density without active probing</span></div><div data-lsl-inventory></div></section><section class="lsl-card lsl-health-card"><div class="lsl-section-head"><h3>Receiver / antenna-path cleanliness & degradation screening</h3><span>baseline-relative passive diagnostics</span></div><div data-lsl-health></div></section><section class="lsl-card lsl-active-card"><div class="lsl-section-head"><h3>Active ranging / ping-back mapping</h3><span>separate gated path · standards-capable responders</span></div><div data-lsl-active></div><canvas id="lsl-active-map" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Live signal history</h3><span>RSSI / RSRP / SNR when reported</span></div><canvas id="lsl-timeseries" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Local spatial trace</h3><span>requires measured localX/localY anchors</span></div><canvas id="lsl-spatial" class="lsl-canvas"></canvas></section><section class="lsl-card"><h3>Recent normalized observations</h3><div class="lsl-table"><table><thead><tr><th>Time</th><th>Kind</th><th>Frequency</th><th>Signal</th><th>Source</th><th>Provenance</th></tr></thead><tbody data-lsl-observations><tr><td colspan="6">No observations yet.</td></tr></tbody></table></div></section><section class="lsl-card lsl-future"><div class="lsl-section-head"><h3>Future attenuation / sweep research</h3><span>still gated · not implemented</span></div><div class="lsl-future-grid" data-lsl-future></div></section><section class="lsl-boundary"><strong>Measurement boundary:</strong> mobile operating systems often expose derived telemetry rather than raw spectrum/IQ data. The laboratory records what the platform or hardware bridge actually reports, together with timestamps, permissions, stale state and device context. Receiver/antenna-health flags are screening evidence, not proof of hardware failure. Missing expected radio channels are surfaced as acquisition gaps rather than interpreted as absent RF energy. Active ranging uses the attached instrument's documented/platform-supported ranging capabilities and does not imply administrative control of remote responders. Network RTT is latency context and is not treated as direct RF distance unless the ranging technology reports distance. Privacy redaction is enabled by default.</section></main></div></div>`;
     root.document.body.appendChild(panel);
     panel.querySelectorAll('[data-lsl-close]').forEach(node=>node.addEventListener('click',closePanel));
     panel.querySelector('#lsl-profile')?.addEventListener('change',renderCapabilityMatrix);
     for(const id of ['#lsl-thermal','#lsl-battery','#lsl-external-power','#lsl-redact','#lsl-session-minutes','#lsl-wifi-ms','#lsl-ble-window-ms','#lsl-ble-period-ms','#lsl-cell-ms','#lsl-gnss-ms','#lsl-router-ms','#lsl-sensor-hz']) panel.querySelector(id)?.addEventListener('change',renderPreflight);
     panel.querySelector('[data-lsl-preflight-button]')?.addEventListener('click',renderPreflight);
     panel.querySelector('[data-lsl-start]')?.addEventListener('click',()=>{try{activeSession=createSession({profileId:panel.querySelector('#lsl-profile')?.value,polling:readPolling(),hardwareState:readHardwareState()});renderSession();setStatus('Passive Scan started. Waiting for all available receiver channels; missing expected channels will be flagged.','success');}catch(error){setStatus(error.message,'error');}});
-    panel.querySelector('[data-lsl-active-scan]')?.addEventListener('click',async()=>{try{if(!activeSession)throw new Error('Start Passive Scan first so active ranging has synchronized passive context.');if(!hardwareBridge){const embedded=root.LiveSignalsHardwareBridge||root.AndroidLiveSignalsBridge||null;if(embedded)registerHardwareBridge(embedded);}if(!hardwareBridge)throw new Error('Active Scan requires a connected native/router hardware bridge. The browser alone cannot access Android TelephonyManager or hardware ranging APIs.');await refreshHardwareBridgeCapabilities();const methodValue=panel.querySelector('#lsl-active-method')?.value||'auto';const method=methodValue==='auto'?(bridgeCapabilityReport?.activeMethods||[])[0]:methodValue;const targetIds=String(panel.querySelector('#lsl-active-targets')?.value||'').split(',').map(v=>v.trim()).filter(Boolean);const result=await runActiveScan(activeSession,{method,targetIds,samplesPerTarget:finite(panel.querySelector('#lsl-active-samples')?.value,3),sampleIntervalMs:finite(panel.querySelector('#lsl-active-interval')?.value,1000),targetsAuthorized:Boolean(panel.querySelector('#lsl-active-authorized')?.checked),...readHardwareState()});renderSession();setStatus(`Active Scan completed: ${result.observations.length} authorized ranging observations.`, 'success');}catch(error){setStatus(error.message,'error');}});
+    panel.querySelector('[data-lsl-active-scan]')?.addEventListener('click',async()=>{try{if(!activeSession)throw new Error('Start Passive Scan first so active ranging has synchronized passive context.');if(!hardwareBridge){const embedded=root.LiveSignalsHardwareBridge||root.AndroidLiveSignalsBridge||null;if(embedded)registerHardwareBridge(embedded);}if(!hardwareBridge)throw new Error('Active Scan requires a connected native/router hardware bridge. The browser alone cannot access Android TelephonyManager or hardware ranging APIs.');await refreshHardwareBridgeCapabilities();const methodValue=panel.querySelector('#lsl-active-method')?.value||'auto';const method=methodValue==='auto'?(bridgeCapabilityReport?.activeMethods||[])[0]:methodValue;const targetIds=String(panel.querySelector('#lsl-active-targets')?.value||'').split(',').map(v=>v.trim()).filter(Boolean);const result=await runActiveScan(activeSession,{method,targetIds,samplesPerTarget:finite(panel.querySelector('#lsl-active-samples')?.value,3),sampleIntervalMs:finite(panel.querySelector('#lsl-active-interval')?.value,1000),...readHardwareState()});renderSession();setStatus(`Active Scan completed: ${result.observations.length} ranging observations.`, 'success');}catch(error){setStatus(error.message,'error');}});
     panel.querySelector('[data-lsl-stop]')?.addEventListener('click',()=>{if(activeSession&&!activeSession.endedAt)activeSession.endedAt=new Date().toISOString();renderSession();setStatus('Session stopped.','success');});
     panel.querySelector('[data-lsl-ingest]')?.addEventListener('click',()=>{try{if(!activeSession)throw new Error('Start a passive session before ingesting telemetry.');const raw=JSON.parse(panel.querySelector('#lsl-json').value);appendObservation(activeSession,raw);renderSession();setStatus('Passive observation ingested.','success');}catch(error){setStatus(error.message,'error');}});
     panel.querySelector('[data-lsl-copy]')?.addEventListener('click',async()=>{try{if(!activeSession)throw new Error('No session to copy.');await root.navigator?.clipboard?.writeText(serializeSession(activeSession));setStatus('Session JSON copied.','success');}catch(error){setStatus(error.message,'error');}});
