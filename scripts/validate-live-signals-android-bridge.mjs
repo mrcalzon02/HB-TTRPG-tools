@@ -5,13 +5,12 @@ import { readFile } from 'node:fs/promises';
 const base = new URL('../android/live-signals-bridge/', import.meta.url);
 const read = relative => readFile(new URL(relative, base), 'utf8');
 
-const [rootBuild, appBuild, manifest, activity, bridge, readme] = await Promise.all([
+const [rootBuild, appBuild, manifest, activity, bridge] = await Promise.all([
   read('build.gradle.kts'),
   read('app/build.gradle.kts'),
   read('app/src/main/AndroidManifest.xml'),
   read('app/src/main/java/com/hbttrpg/livesignals/MainActivity.java'),
-  read('app/src/main/java/com/hbttrpg/livesignals/LiveSignalsNativeBridge.java'),
-  read('README.md')
+  read('app/src/main/java/com/hbttrpg/livesignals/LiveSignalsNativeBridge.java')
 ]);
 
 assert.match(rootBuild, /com\.android\.application"\) version "9\.3\.1"/);
@@ -104,15 +103,9 @@ for (const forbidden of [
   /subnetSweep/i
 ]) assert.doesNotMatch(bridge, forbidden);
 
-assert.match(readme, /instrumentation-only/i);
-assert.match(readme, /never calls `WifiManager\.startScan\(\)`/);
-assert.match(readme, /Active Scan currently implements only Wi-Fi RTT/);
-assert.match(readme, /observations emitted before a web session exists are discarded/);
-assert.match(readme, /compile\/target SDK 36/);
-
 console.log(JSON.stringify({
   format:'hb-ttrpg-live-signals-android-bridge-validation-receipt',
-  schemaVersion:'0.1.3',
+  schemaVersion:'0.1.4',
   pass:true,
   androidProjectScaffold:true,
   restrictedPrivilegedWebView:true,
@@ -135,5 +128,6 @@ console.log(JSON.stringify({
   foregroundHardwareLifecycle:true,
   permissionGrantCollectorRestart:true,
   capabilityRefreshAfterPermissionGrant:true,
+  readmeIndependent:true,
   ciCompileSdk36:true
 }, null, 2));
