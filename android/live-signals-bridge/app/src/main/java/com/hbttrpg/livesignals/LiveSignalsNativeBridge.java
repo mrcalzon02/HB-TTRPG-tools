@@ -699,7 +699,11 @@ final class LiveSignalsNativeBridge implements AutoCloseable {
     private static void putArray(JSONObject object, String key, float[] values, int limit) {
         if (values == null) return;
         JSONArray array = new JSONArray();
-        for (int i = 0; i < Math.min(limit, values.length); i++) array.put(values[i]);
+        for (int i = 0; i < Math.min(limit, values.length); i++) {
+            float value = values[i];
+            if (!Float.isFinite(value)) continue;
+            try { array.put((double) value); } catch (JSONException ignored) {}
+        }
         put(object, key, array);
     }
 
