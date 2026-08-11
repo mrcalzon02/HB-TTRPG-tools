@@ -1,0 +1,178 @@
+name: Crew procedure expansion
+
+on:
+  push:
+    paths:
+      - '.github/crew-procedure-expansion-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Expand authoritative crew procedure catalogs
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('blacklight-exo-crew-operations.js')
+          text = path.read_text(encoding='utf-8')
+
+          def replace_once(old, new, label):
+              global text
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one anchor, found {count}')
+              text = text.replace(old, new, 1)
+
+          helm_old = '''      {id:"attitude-desaturation",name:"Attitude-control desaturation",secondary:true,cue:"Unload accumulated attitude-control bias by cycling trim through a corrective detent before returning to zero.",sequence:withAuthorization("helm-mode-attitude","helm-bank-rcs","helm-trim-right","helm-trim-zero","helm-pitch-up","helm-vector-confirm")}]},'''
+          helm_new = '''      {id:"attitude-desaturation",name:"Attitude-control desaturation",secondary:true,cue:"Unload accumulated attitude-control bias by cycling trim through a corrective detent before returning to zero.",sequence:withAuthorization("helm-mode-attitude","helm-bank-rcs","helm-trim-right","helm-trim-zero","helm-pitch-up","helm-vector-confirm")},
+      {id:"braking-turn",name:"Coordinated braking turn",recommendedDifficulty:3,cue:"Combine a high-energy retard burn with deliberate attitude correction while preserving a confirmed maneuver vector.",sequence:withAuthorization("helm-mode-burn","helm-bank-main","helm-throttle-high","helm-gate-aft","helm-vector-confirm","helm-mode-attitude","helm-bank-rcs","helm-yaw-left","helm-pilot-ack")},
+      {id:"collision-dodge",name:"Collision-imminent dodge",recommendedDifficulty:4,cue:"Commit reaction-control authority to an abrupt multi-axis dodge when collision warning time is too short for a plotted burn.",sequence:withAuthorization("helm-mode-attitude","helm-bank-rcs","helm-yaw-right","helm-pitch-up","helm-trim-right","helm-vector-confirm","helm-pilot-ack")},
+      {id:"formation-reposition",name:"Formation station reposition",support:true,recommendedDifficulty:2,cue:"Shift the vessel to a neighboring formation station using low-energy proximity thrust while preserving predictable relative motion.",sequence:withAuthorization("helm-mode-dock","helm-bank-dock","helm-throttle-low","helm-yaw-right","helm-trim-zero","helm-vector-confirm")},
+      {id:"silent-rcs-drift",name:"Low-emission RCS drift",secondary:true,recommendedDifficulty:3,cue:"Translate on reaction control with minimal drive signature and restrained attitude correction for covert station keeping.",sequence:withAuthorization("helm-mode-attitude","helm-bank-rcs","helm-throttle-low","helm-trim-left","helm-yaw-left","helm-pilot-ack")},
+      {id:"capture-alignment",name:"Docking capture alignment",recommendedDifficulty:2,cue:"Bring the hull onto final capture geometry with low-power docking jets, centered trim and a positively confirmed vector.",sequence:withAuthorization("helm-mode-dock","helm-bank-dock","helm-throttle-low","helm-yaw-right","helm-trim-zero","helm-vector-confirm")},
+      {id:"wounded-drive-burn",name:"Degraded-drive translation burn",recommendedDifficulty:5,cue:"Build thrust cautiously through a damaged main-drive train, commit only after an intermediate power plateau and retain immediate cutoff authority.",sequence:withAuthorization("helm-mode-burn","helm-bank-main","helm-throttle-low","helm-throttle-mid","helm-vector-confirm","helm-gate-forward","helm-throttle-low","helm-pilot-ack")},
+      {id:"pursuit-vector-change",name:"Pursuit vector change",support:true,recommendedDifficulty:4,cue:"Slew onto a rapidly changing intercept line, then transition immediately into a main-drive pursuit burn for Navigation and Gunnery support.",sequence:withAuthorization("helm-mode-attitude","helm-bank-rcs","helm-yaw-right","helm-pitch-up","helm-vector-confirm","helm-mode-burn","helm-bank-main","helm-throttle-high","helm-gate-forward")},
+      {id:"emergency-main-cutoff",name:"Emergency main-drive cutoff",secondary:true,recommendedDifficulty:3,cue:"Retard and close the main thrust gate under abnormal acceleration, then leave the vessel in a controlled hold state.",sequence:withAuthorization("helm-mode-burn","helm-bank-main","helm-throttle-low","helm-gate-aft","helm-gate-center","helm-pilot-ack")}]},'''
+          replace_once(helm_old, helm_new, 'helm procedures')
+
+          nav_old = '''      {id:"transfer-crosscheck",name:"Transfer solution cross-check",secondary:true,cue:"Zero both coordinate drums, normalize the trajectory coupler and independently validate a celestial transfer solution.",sequence:withAuthorization("nav-ref-celestial","nav-solver-transfer","nav-az-zero","nav-el-zero","nav-dv-mid","nav-vector-confirm","nav-plot-ack")}]},'''
+          nav_new = '''      {id:"transfer-crosscheck",name:"Transfer solution cross-check",secondary:true,cue:"Zero both coordinate drums, normalize the trajectory coupler and independently validate a celestial transfer solution.",sequence:withAuthorization("nav-ref-celestial","nav-solver-transfer","nav-az-zero","nav-el-zero","nav-dv-mid","nav-vector-confirm","nav-plot-ack")},
+      {id:"minimum-time-transfer",name:"Minimum-time transfer solution",recommendedDifficulty:4,cue:"Bias a transfer toward minimum elapsed time while retaining disciplined timing and a fully relayed high-delta-v solution.",sequence:withAuthorization("nav-ref-inertial","nav-solver-transfer","nav-az-right","nav-el-up","nav-dv-high","nav-time-lock","nav-vector-confirm","nav-latch-relay")},
+      {id:"gravity-assist-pass",name:"Gravity-assist passage solution",recommendedDifficulty:5,cue:"Build a celestial-reference transfer that deliberately threads a gravity-well passage before staging the solution for Helm.",sequence:withAuthorization("nav-ref-celestial","nav-solver-transfer","nav-az-left","nav-el-down","nav-dv-low","nav-time-lock","nav-vector-confirm","nav-latch-stage")},
+      {id:"blind-dead-reckoning",name:"Blind inertial dead reckoning",secondary:true,recommendedDifficulty:4,cue:"Recover a navigation solution without remote fixes by breaking and rebuilding the timebase around a zeroed inertial reference.",sequence:withAuthorization("nav-ref-inertial","nav-time-free","nav-az-zero","nav-el-zero","nav-time-lock","nav-plot-ack","nav-vector-confirm")},
+      {id:"debris-corridor",name:"Debris-field transit corridor",recommendedDifficulty:3,cue:"Use a remote hazard fix and collision solver to shape a conservative low-delta-v corridor through dense local debris.",sequence:withAuthorization("nav-ref-remote","nav-solver-avoid","nav-az-left","nav-el-up","nav-dv-low","nav-latch-stage","nav-plot-ack")},
+      {id:"formation-rendezvous",name:"Formation rendezvous solution",support:true,recommendedDifficulty:2,cue:"Generate a restrained rendezvous correction that returns the vessel to a shared formation reference without excessive closing velocity.",sequence:withAuthorization("nav-ref-remote","nav-solver-transfer","nav-az-zero","nav-el-zero","nav-dv-low","nav-latch-stage")},
+      {id:"intercept-cutoff",name:"Intercept cutoff geometry",support:true,recommendedDifficulty:4,cue:"Lead a moving contact with a high-bias cutoff solution suitable for immediate Helm pursuit and Gunnery handoff.",sequence:withAuthorization("nav-ref-remote","nav-solver-transfer","nav-az-right","nav-el-down","nav-dv-high","nav-time-lock","nav-vector-confirm","nav-latch-relay")},
+      {id:"silent-drift-route",name:"Low-emission drift route",recommendedDifficulty:3,cue:"Prepare a low-delta-v celestial route intended to minimize powered maneuvering while preserving timing discipline.",sequence:withAuthorization("nav-ref-celestial","nav-solver-transfer","nav-dv-low","nav-time-lock","nav-plot-ack","nav-latch-hold")},
+      {id:"recovery-vector",name:"Small-craft recovery vector",support:true,recommendedDifficulty:3,cue:"Plot a moderate closing solution toward a remote recovery target and stage it for controlled proximity operations.",sequence:withAuthorization("nav-ref-remote","nav-solver-transfer","nav-az-left","nav-el-down","nav-dv-mid","nav-vector-confirm","nav-latch-stage")}]},'''
+          replace_once(nav_old, nav_new, 'navigation procedures')
+
+          gun_old = '''      {id:"weapons-safe-down",name:"Post-engagement weapons safe-down",secondary:true,cue:"Return the arm lever to SAFE, bleed capacitor demand and close the master guard after an engagement.",sequence:withAuthorization("gun-arm-safe","gun-cap-low","gun-safe-close","gun-weapons-ack")}]},'''
+          gun_new = '''      {id:"weapons-safe-down",name:"Post-engagement weapons safe-down",secondary:true,cue:"Return the arm lever to SAFE, bleed capacitor demand and close the master guard after an engagement.",sequence:withAuthorization("gun-arm-safe","gun-cap-low","gun-safe-close","gun-weapons-ack")},
+      {id:"staggered-coil-salvo",name:"Staggered coil-battery salvo",recommendedDifficulty:4,cue:"Prepare a maximum-charge direct-fire solution and deliberately stage a staggered heavy-battery engagement.",sequence:withAuthorization("gun-safe-open","gun-bank-coil","gun-track-direct","gun-range-far","gun-cap-high","gun-track-confirm","gun-arm-live")},
+      {id:"pdc-saturation-screen",name:"Point-defense saturation screen",support:true,recommendedDifficulty:4,cue:"Raise a close defensive screen at maximum capacitor demand to protect the vessel during high-threat maneuvering.",sequence:withAuthorization("gun-safe-open","gun-bank-pd","gun-track-close","gun-range-near","gun-cap-high","gun-track-confirm","gun-arm-live")},
+      {id:"guided-ripple",name:"Guided-weapon ripple launch",recommendedDifficulty:5,cue:"Build a far guided track, maximize available launch energy and authorize a deliberately sequenced guided-weapon ripple.",sequence:withAuthorization("gun-safe-open","gun-bank-guided","gun-track-guided","gun-range-far","gun-cap-high","gun-weapons-ack","gun-arm-live")},
+      {id:"crossing-target",name:"Crossing-target lead correction",recommendedDifficulty:3,cue:"Walk a direct-fire range gate across a crossing contact before confirming the final far-track solution.",sequence:withAuthorization("gun-safe-open","gun-bank-coil","gun-track-direct","gun-range-center","gun-range-far","gun-track-confirm")},
+      {id:"degraded-track-fire",name:"Degraded-track firing solution",recommendedDifficulty:5,cue:"Build a conservative direct-fire solution from a weak track while holding the weapon system staged rather than immediately releasing fire.",sequence:withAuthorization("gun-safe-open","gun-bank-coil","gun-track-direct","gun-range-near","gun-cap-mid","gun-track-confirm","gun-arm-standby","gun-weapons-ack")},
+      {id:"reserve-capacitor-shot",name:"Reserve-capacitor precision shot",recommendedDifficulty:3,cue:"Fire from a restrained capacitor state when thermal or plant conditions make maximum charge undesirable.",sequence:withAuthorization("gun-safe-open","gun-bank-coil","gun-track-direct","gun-range-far","gun-cap-mid","gun-track-confirm","gun-arm-live")},
+      {id:"terminal-defense",name:"Terminal defensive intercept",support:true,recommendedDifficulty:4,cue:"Commit the point-defense system to the nearest closing threat with maximum available defensive authority.",sequence:withAuthorization("gun-safe-open","gun-bank-pd","gun-track-close","gun-range-near","gun-cap-high","gun-weapons-ack","gun-arm-live")},
+      {id:"ceasefire-secure",name:"Immediate ceasefire and secure",secondary:true,recommendedDifficulty:2,cue:"Terminate an engagement by safing the arm lever, bleeding capacitor demand and physically closing the master guard.",sequence:withAuthorization("gun-arm-safe","gun-cap-low","gun-safe-close","gun-weapons-ack")}]},'''
+          replace_once(gun_old, gun_new, 'gunnery procedures')
+
+          eng_old = '''      {id:"reactor-grid-protection-check",name:"Reactor / grid protection check",secondary:true,cue:"Verify Calder remains energized while cycling the Larken distribution branch through an intentional reset.",sequence:withAuthorization("eng-brk-reactor-on","eng-brk-grid-off","eng-brk-grid-on","eng-plant-confirm")}]},'''
+          eng_new = '''      {id:"reactor-grid-protection-check",name:"Reactor / grid protection check",secondary:true,cue:"Verify Calder remains energized while cycling the Larken distribution branch through an intentional reset.",sequence:withAuthorization("eng-brk-reactor-on","eng-brk-grid-off","eng-brk-grid-on","eng-plant-confirm")},
+      {id:"reactor-load-shed",name:"Emergency reactor load shed",recommendedDifficulty:4,cue:"Strip nonessential distribution branches while preserving reactor and coolant protection during an acute plant overload.",sequence:withAuthorization("eng-brk-reactor-on","eng-brk-grid-off","eng-brk-lighting-off","eng-brk-sensor-off","eng-brk-coolant-on","eng-casualty-ack")},
+      {id:"emergency-bus-island",name:"Emergency bus islanding",recommendedDifficulty:5,cue:"Isolate the distribution bus, equalize retained voltage, preserve cooling and deliberately establish an auxiliary island.",sequence:withAuthorization("eng-bus-isolate","eng-vba-nom","eng-vbb-nom","eng-brk-coolant-on","eng-brk-grid-off","eng-bus-aux","eng-plant-confirm")},
+      {id:"coolant-purge",name:"Coolant header purge cycle",secondary:true,recommendedDifficulty:3,cue:"Drive the cooling header through a full-open purge before returning it to a stable metered operating position.",sequence:withAuthorization("eng-brk-coolant-on","eng-pump-cross","eng-cool-open","eng-cool-close","eng-cool-mid","eng-casualty-ack")},
+      {id:"asymmetric-rectifier-comp",name:"Asymmetric rectifier compensation",recommendedDifficulty:4,cue:"Counter an uneven feeder condition by deliberately opposing A and B rectifier trims while holding C and D nominal.",sequence:withAuthorization("eng-rfa-high","eng-rfb-low","eng-rfc-nom","eng-rfd-nom","eng-vba-nom","eng-vbb-nom","eng-plant-confirm")},
+      {id:"sensor-power-restoration",name:"Sensor bus power restoration",support:true,recommendedDifficulty:3,cue:"Cycle the Vesper branch, verify balanced primary distribution and return Science to a clean power feed.",sequence:withAuthorization("eng-brk-sensor-off","eng-brk-sensor-on","eng-vba-nom","eng-vbb-nom","eng-bus-primary","eng-plant-confirm")},
+      {id:"combat-bus-restoration",name:"Combat systems bus restoration",support:true,recommendedDifficulty:4,cue:"Recover the main grid branch under confirmed reactor and rectifier support before restoring combat-system distribution.",sequence:withAuthorization("eng-brk-reactor-on","eng-brk-rectifier-on","eng-brk-grid-off","eng-brk-grid-on","eng-vba-nom","eng-vbb-nom","eng-plant-confirm")},
+      {id:"inverter-phase-resync",name:"Field / inverter phase resynchronization",recommendedDifficulty:4,cue:"Drop the coupled field and inverter protection, restore them in dependency order and acknowledge stable plant operation.",sequence:withAuthorization("eng-brk-inverter-off","eng-brk-field-off","eng-brk-field-on","eng-brk-inverter-on","eng-plant-confirm")},
+      {id:"thermal-emergency-circulation",name:"Thermal emergency circulation",recommendedDifficulty:5,cue:"Establish maximum cross-tied cooling while explicitly preserving reactor and rectifier protection under severe thermal load.",sequence:withAuthorization("eng-brk-reactor-on","eng-brk-rectifier-on","eng-brk-coolant-on","eng-pump-cross","eng-cool-open","eng-casualty-ack","eng-plant-confirm")}]},'''
+          replace_once(eng_old, eng_new, 'engineering procedures')
+
+          sci_old = '''      {id:"active-pulse-recovery",name:"Active-pulse gate recovery",secondary:true,cue:"Exercise the active emitter through standby and pulse, then deliberately safe the gate before analyst acknowledgement.",sequence:withAuthorization("sci-emitter-open","sci-gate-standby","sci-gate-pulse","sci-gate-safe","sci-analyst-ack")}]},'''
+          sci_new = '''      {id:"active-pulse-recovery",name:"Active-pulse gate recovery",secondary:true,cue:"Exercise the active emitter through standby and pulse, then deliberately safe the gate before analyst acknowledgement.",sequence:withAuthorization("sci-emitter-open","sci-gate-standby","sci-gate-pulse","sci-gate-safe","sci-analyst-ack")},
+      {id:"emcon-passive-search",name:"EMCON passive search",recommendedDifficulty:4,cue:"Conduct a long-duration wideband search from the side array while positively retaining active-emitter inhibit.",sequence:withAuthorization("sci-emitter-close","sci-band-wide","sci-ap-side","sci-gain-high","sci-int-long","sci-analyst-ack")},
+      {id:"transient-capture",name:"Transient event capture",recommendedDifficulty:3,cue:"Use the auxiliary aperture and a short high-gain wideband integration to catch a brief or intermittent phenomenon.",sequence:withAuthorization("sci-band-wide","sci-ap-aux","sci-gain-high","sci-int-short","sci-track-confirm")},
+      {id:"drive-plume-analysis",name:"Drive-plume spectral analysis",recommendedDifficulty:3,cue:"Shift a suspected propulsion signature onto the high-gain spectral chain for a long classification integration.",sequence:withAuthorization("sci-band-spectral","sci-ap-high","sci-gain-high","sci-int-long","sci-analyst-ack")},
+      {id:"debris-field-map",name:"Debris-field optical mapping",recommendedDifficulty:4,cue:"Build a long optical survey across the side aperture for navigation-quality structure and motion discrimination.",sequence:withAuthorization("sci-band-optical","sci-ap-side","sci-gain-mid","sci-int-long","sci-track-confirm","sci-analyst-ack")},
+      {id:"optical-parallax-fix",name:"Dual-aperture optical parallax fix",support:true,recommendedDifficulty:4,cue:"Compare the side and auxiliary apertures in sequence to provide Navigation with an independent geometric range constraint.",sequence:withAuthorization("sci-band-optical","sci-ap-side","sci-gain-high","sci-int-long","sci-track-confirm","sci-ap-aux","sci-track-confirm")},
+      {id:"thermal-wake-discrimination",name:"Thermal wake discrimination",recommendedDifficulty:4,cue:"Use a restrained-gain spectral integration to separate a weak wake from background contamination.",sequence:withAuthorization("sci-band-spectral","sci-ap-main","sci-gain-low","sci-int-long","sci-analyst-ack")},
+      {id:"active-ping-ladder",name:"Active ranging pulse ladder",recommendedDifficulty:5,cue:"Progress the active-emission hardware deliberately through standby, pulse and safe states while retaining a confirmed ranging track.",sequence:withAuthorization("sci-emitter-open","sci-band-optical","sci-ap-main","sci-gate-standby","sci-gate-pulse","sci-track-confirm","sci-gate-safe","sci-analyst-ack")},
+      {id:"unknown-emission-characterize",name:"Unknown emission characterization",recommendedDifficulty:5,cue:"Acquire an unresolved emitter in wideband, then transition it onto the spectral high-gain chain for a second long integration.",sequence:withAuthorization("sci-band-wide","sci-ap-main","sci-gain-high","sci-int-long","sci-track-confirm","sci-band-spectral","sci-ap-high","sci-gain-mid","sci-int-long","sci-analyst-ack")}]},'''
+          replace_once(sci_old, sci_new, 'science procedures')
+
+          com_old = '''      {id:"optical-secure-burst",name:"Secure optical burst",secondary:true,cue:"Move secure traffic onto the optical emitter, center the carrier controls and physically key a high-power encrypted burst.",sequence:withAuthorization("com-mode-secure","com-path-optical","com-freq-center","com-power-high","com-crypto-secure","com-key-transmit")}]}
+  });'''
+          com_new = '''      {id:"optical-secure-burst",name:"Secure optical burst",secondary:true,cue:"Move secure traffic onto the optical emitter, center the carrier controls and physically key a high-power encrypted burst.",sequence:withAuthorization("com-mode-secure","com-path-optical","com-freq-center","com-power-high","com-crypto-secure","com-key-transmit")},
+      {id:"frequency-hop-resync",name:"Frequency-hop net resynchronization",recommendedDifficulty:4,cue:"Walk a secure link away from and back through the assigned hop index before re-establishing centered timing and crypto acknowledgement.",sequence:withAuthorization("com-mode-secure","com-path-tight","com-channel-down","com-channel-up","com-channel-home","com-freq-center","com-squelch-tight","com-crypto-ack")},
+      {id:"jam-resistant-fallback",name:"Jam-resistant RF fallback",recommendedDifficulty:5,cue:"Sweep through both vernier extremes under interference, then establish a high-power secure omni carrier with a tight noise gate.",sequence:withAuthorization("com-mode-secure","com-path-omni","com-freq-down2","com-freq-up2","com-freq-center","com-squelch-tight","com-power-high","com-crypto-secure","com-address-confirm")},
+      {id:"low-probability-link",name:"Low-probability optical link",recommendedDifficulty:4,cue:"Use a low-power encrypted optical carrier for a short, difficult-to-intercept point-to-point transmission.",sequence:withAuthorization("com-mode-secure","com-path-optical","com-channel-home","com-freq-center","com-squelch-tight","com-power-low","com-crypto-secure","com-key-transmit")},
+      {id:"array-handover",name:"Directional array handover",secondary:true,recommendedDifficulty:3,cue:"Transfer an established hail from omni reception to a directional path without losing the centered carrier or address confirmation.",sequence:withAuthorization("com-mode-hail","com-path-omni","com-freq-center","com-squelch-nom","com-path-tight","com-address-confirm")},
+      {id:"convoy-net-checkin",name:"Convoy net check-in",recommendedDifficulty:2,cue:"Join a routine convoy circuit on the home channel and verify a moderate-power hail carrier before address confirmation.",sequence:withAuthorization("com-mode-hail","com-path-omni","com-channel-home","com-freq-up","com-squelch-nom","com-power-mid","com-address-confirm")},
+      {id:"rescue-beacon-triangulation",name:"Rescue-beacon reception setup",support:true,recommendedDifficulty:4,cue:"Open the distress receiver around the lower carrier and hold a low-power reference configuration for Science and Navigation triangulation.",sequence:withAuthorization("com-mode-distress","com-path-omni","com-channel-down","com-freq-down","com-squelch-open","com-power-low","com-address-confirm")},
+      {id:"emergency-all-stations",name:"Emergency all-stations broadcast",recommendedDifficulty:3,cue:"Open an unrestricted high-power distress path and physically key a shipwide emergency transmission.",sequence:withAuthorization("com-mode-distress","com-path-omni","com-freq-down","com-squelch-open","com-power-high","com-key-transmit")},
+      {id:"burst-encrypted-relay",name:"Burst encrypted tactical relay",support:true,recommendedDifficulty:5,cue:"Move secure traffic onto an adjacent tightbeam channel, verify crypto, then key a high-power tactical burst.",sequence:withAuthorization("com-mode-secure","com-path-tight","com-channel-up","com-freq-center","com-squelch-tight","com-power-high","com-crypto-secure","com-crypto-ack","com-key-transmit")}]}
+  });'''
+          replace_once(com_old, com_new, 'comms procedures')
+
+          helper_old = '''  function procedureOptionPrefix(proc){const type=procedureType(proc);return type==="primary"?"":`[${type.toUpperCase()}] `;}
+  function procedureSummary(def){const c=procedureCounts(def),parts=[`${c.primary} primary`];if(c.secondary)parts.push(`${c.secondary} secondary`);if(c.support)parts.push(`${c.support} support`);return parts.join(" · ");}'''
+          helper_new = '''  function procedureOptionPrefix(proc){const type=procedureType(proc);return type==="primary"?"":`[${type.toUpperCase()}] `;}
+  const procedureRecommendedDifficulty=proc=>clamp(Number(proc?.recommendedDifficulty)||Math.ceil(Math.max(1,(proc?.sequence?.length||AUTH_TAIL.length)-AUTH_TAIL.length)/2),1,5);
+  const procedureDifficultyLabel=proc=>`AUX OPTIONAL +1–+5 · REC +${procedureRecommendedDifficulty(proc)}`;
+  function procedureSummary(def){const c=procedureCounts(def),parts=[`${c.primary} primary`];if(c.secondary)parts.push(`${c.secondary} secondary`);if(c.support)parts.push(`${c.support} support`);return parts.join(" · ");}'''
+          replace_once(helper_old, helper_new, 'difficulty helper')
+
+          replace_once('<option value="${x.id}" ${x.id===proc.id?"selected":""}>${procedureOptionPrefix(x)}${x.name} · ${x.sequence.length} canonical inputs</option>', '<option value="${x.id}" data-recommended-difficulty="${procedureRecommendedDifficulty(x)}" ${x.id===proc.id?"selected":""}>${procedureOptionPrefix(x)}${x.name} · ${x.sequence.length} canonical inputs · ${procedureDifficultyLabel(x)}</option>', 'procedure selector difficulty label')
+          replace_once('<b>${p.sequence.length} steps</b>', '<b>${p.sequence.length} steps · ${procedureDifficultyLabel(p)}</b>', 'manual difficulty label')
+
+          path.write_text(text, encoding='utf-8')
+
+          aux_path = Path('blacklight-exo-crew-auxiliary.js')
+          aux = aux_path.read_text(encoding='utf-8')
+
+          def aux_replace(old, new, label):
+              global aux
+              count = aux.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one anchor, found {count}')
+              aux = aux.replace(old, new, 1)
+
+          aux_replace('''  function activeProcedureName(){const select=document.querySelector("#station-panel [data-procedure-select]");return select?.selectedOptions?.[0]?.textContent?.replace(/\\s+·\\s+\\d+\\s+canonical inputs.*$/i,"").trim() || "Selected procedure";}''', '''  function activeProcedureName(){const select=document.querySelector("#station-panel [data-procedure-select]");return select?.selectedOptions?.[0]?.textContent?.replace(/\\s+·\\s+\\d+\\s+canonical inputs.*$/i,"").trim() || "Selected procedure";}
+  function activeRecommendedDifficulty(){const raw=Number(document.querySelector("#station-panel [data-procedure-select]")?.selectedOptions?.[0]?.dataset.recommendedDifficulty);return clamp(Number.isFinite(raw)&&raw?raw:3,1,MAX_DIFFICULTY);}''', 'aux recommended difficulty reader')
+          aux_replace('''      const slot=stableHash(`${station}:${procedureId}:${control.id}:aux-target`)%slots;''', '''      const slot=stableHash(`${station}:${procedureId}:${control.id}:aux-target:level-${count}`)%slots;''', 'level-specific auxiliary targets')
+          aux_replace('''    attempt={station,procedureId,procedureName:activeProcedureName(),difficulty,requirements:requirementPlan(station,procedureId,difficulty),touched:new Set(),history:[]};
+    message=difficulty?`Panel II armed: ${difficulty} auxiliary control${difficulty===1?"":"s"} must be deliberately set before authorization.`:"Master +0: no Panel II manipulation required for this procedure.";''', '''    attempt={station,procedureId,procedureName:activeProcedureName(),difficulty,recommendedDifficulty:activeRecommendedDifficulty(),requirements:requirementPlan(station,procedureId,difficulty),touched:new Set(),history:[]};
+    message=difficulty?`Panel II level +${difficulty} armed: ${difficulty} auxiliary control${difficulty===1?"":"s"} must be deliberately set before authorization. Procedure recommendation is +${attempt.recommendedDifficulty}; +1 through +5 remain optional.`:`Master +0: no Panel II manipulation required. This procedure recommends +${attempt.recommendedDifficulty}, with optional levels +1 through +5 available.`;''', 'aux attempt difficulty messaging')
+          aux_replace('''    if(summary)summary.textContent=configuredDifficulty?`${configuredDifficulty} auxiliary control${configuredDifficulty===1?"":"s"} added to every primary procedure`:`Primary procedure + authorization only`;
+    if(state)state.textContent=attempt?`Attempt locked at +${attempt.difficulty}`:"Changes apply to the next procedure";''', '''    if(summary)summary.textContent=configuredDifficulty?`${configuredDifficulty} Panel II control${configuredDifficulty===1?"":"s"} added to the selected procedure`:`Primary procedure + authorization only`;
+    if(state)state.textContent=attempt?`Attempt locked at +${attempt.difficulty} · recommended +${attempt.recommendedDifficulty}`:`Selected procedure recommends +${activeRecommendedDifficulty()} · optional +1–+5`;''', 'aux master difficulty messaging')
+          aux_replace('''      <span><b>PANEL II · AUXILIARY CONTROLS</b><small>${STATION_CODES[station]} · ${requiredCount} required @ master +${attempt?.difficulty??configuredDifficulty}${attempt?` · ${incomplete} remaining`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>''', '''      <span><b>PANEL II · AUXILIARY CONTROLS</b><small>${STATION_CODES[station]} · ${requiredCount} required @ level +${attempt?.difficulty??configuredDifficulty} · REC +${attempt?.recommendedDifficulty??activeRecommendedDifficulty()}${attempt?` · ${incomplete} remaining`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>''', 'aux drawer difficulty readout')
+
+          aux_path.write_text(aux, encoding='utf-8')
+          PY
+      - name: Verify JavaScript and expansion depth
+        shell: bash
+        run: |
+          node --check blacklight-exo-crew-operations.js
+          node --check blacklight-exo-crew-auxiliary.js
+          python - <<'PY'
+          from pathlib import Path
+          src=Path('blacklight-exo-crew-operations.js').read_text(encoding='utf-8')
+          aux=Path('blacklight-exo-crew-auxiliary.js').read_text(encoding='utf-8')
+          ids=[
+            'braking-turn','collision-dodge','formation-reposition','silent-rcs-drift','capture-alignment','wounded-drive-burn','pursuit-vector-change','emergency-main-cutoff',
+            'minimum-time-transfer','gravity-assist-pass','blind-dead-reckoning','debris-corridor','formation-rendezvous','intercept-cutoff','silent-drift-route','recovery-vector',
+            'staggered-coil-salvo','pdc-saturation-screen','guided-ripple','crossing-target','degraded-track-fire','reserve-capacitor-shot','terminal-defense','ceasefire-secure',
+            'reactor-load-shed','emergency-bus-island','coolant-purge','asymmetric-rectifier-comp','sensor-power-restoration','combat-bus-restoration','inverter-phase-resync','thermal-emergency-circulation',
+            'emcon-passive-search','transient-capture','drive-plume-analysis','debris-field-map','optical-parallax-fix','thermal-wake-discrimination','active-ping-ladder','unknown-emission-characterize',
+            'frequency-hop-resync','jam-resistant-fallback','low-probability-link','array-handover','convoy-net-checkin','rescue-beacon-triangulation','emergency-all-stations','burst-encrypted-relay'
+          ]
+          missing=[x for x in ids if src.count(f'id:"{x}"')!=1]
+          if missing: raise SystemExit(f'procedure id verification failed: {missing}')
+          if src.count('recommendedDifficulty:') < 48: raise SystemExit('expected at least 48 explicit recommended difficulty values')
+          if 'AUX OPTIONAL +1–+5' not in src: raise SystemExit('difficulty label missing from primary procedure UI')
+          if 'aux-target:level-${count}' not in aux: raise SystemExit('auxiliary targets are not difficulty-level-specific')
+          print(f'verified {len(ids)} new procedures and five optional auxiliary tiers')
+          PY
+      - name: Commit authoritative source changes and remove staging files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/crew-procedure-expansion.yml .github/crew-procedure-expansion-trigger.txt
+          git add blacklight-exo-crew-operations.js blacklight-exo-crew-auxiliary.js
+          git commit -m "expand crew procedures and auxiliary difficulty tiers"
+          git push origin HEAD:main
