@@ -506,11 +506,11 @@
     const selectedPointId = clamp(Number(selectedPointIdValue) || 0, 0, trace.pointField.length - 1);
     const playbackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
     if (playbackMode === 'serial') return tweenPointAcrossTrace(trace, pointId, serialPointTraceTime(trace, pointId, traceTimeValue));
-    if (!pointParticipates(trace, pointId, selectedPointId, playbackMode)) return pointAnchorPosition(trace, pointId, 0);
     const timeline = resolveTraceTimeline(traceTimeValue, trace.phases.length);
     const start = pointAnchorPosition(trace, pointId, timeline.phaseIndex);
     const end = pointAnchorPosition(trace, pointId, timeline.nextPhaseIndex);
-    return Object.freeze(mix(start, end, timeline.easedProgress));
+    const progress = pointParticipates(trace, pointId, selectedPointId, playbackMode) ? timeline.easedProgress : 0;
+    return Object.freeze(mix(start, end, progress));
   }
 
   function colorAtPhase(trace, pointId, phaseIndex) {
