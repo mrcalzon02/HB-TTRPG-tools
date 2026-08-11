@@ -1,30 +1,151 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blacklight | Archive Systems</title>
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .bli-resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .bli-resource-button {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 12px 16px;
+      border: 1px solid var(--bli-line);
+      border-radius: 14px;
+      color: var(--bli-ink);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.014)),
+        var(--bli-panel);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+      text-align: center;
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 900;
+      letter-spacing: .035em;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .bli-resource-button:hover,
+    .bli-resource-button:focus-visible {
+      z-index: 10;
+      transform: translateY(-2px);
+      border-color: rgba(217, 168, 79, 0.7);
+      background:
+        linear-gradient(145deg, rgba(217,168,79,.12), rgba(255,255,255,.025)),
+        var(--bli-panel);
+      outline: none;
+    }
+
+    .bli-resource-button::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      z-index: 50;
+      width: min(340px, calc(100vw - 48px));
+      padding: 11px 13px;
+      border: 1px solid rgba(217, 168, 79, 0.48);
+      border-radius: 12px;
+      color: var(--bli-ink);
+      background: rgba(4, 4, 3, .97);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .62);
+      font-size: .78rem;
+      font-weight: 600;
+      line-height: 1.42;
+      letter-spacing: normal;
+      text-align: left;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .bli-resource-button:hover::after,
+    .bli-resource-button:focus-visible::after {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 520px) {
+      .bli-resource-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .bli-resource-button {
+        min-height: 52px;
+        padding: 10px 12px;
+        font-size: .82rem;
+      }
+    }
+  </style>
 </head>
 <body class="blacklight-corp-body">
-  <header class="bli-topbar"><a class="bli-brand" href="blacklight-corporate.html"><span class="bli-mark"></span><span class="bli-brand-text"><span>Blacklight</span><span>Archive</span></span></a><nav class="bli-nav"><a href="blacklight-corporate-systems.html">Gateway</a><a href="blacklight-systems-white.html">Employee</a><a href="blacklight-systems-blue.html">Client Ops</a><a href="blacklight-systems-green.html">Support</a><a href="blacklight-wiki-archive.html">Continuum Wiki</a><a href="blacklight-charles-record.html">Charles</a><a href="blacklight-wiki-migration.html">Migration Control</a><a href="blacklight-era-campaign.html">Blacklight Era</a><a href="blacklight-awakening-prophecy-generator.html">Recovered Auguries</a></nav></header>
-  <section class="bli-hero"><div><p class="bli-eyebrow">Archive tier</p><h1>Deep archive systems.</h1><p class="bli-lede">This static page contains deeper record indexes and direct archive routes. These options are not displayed on the lower-tier pages.</p></div></section>
-  <main class="bli-shell"><section class="bli-section"><div class="bli-section-head"><p class="bli-eyebrow">Archive resources</p><h2>Current tier resources.</h2></div><div class="bli-card-grid">
-    <article class="bli-card"><h3>Blacklight Continuum Wiki Archive</h3><p>Open the unified setting encyclopedia for every established player Archetype, class subgroup, supernatural faction, court, pack, lineage, nation, order, cult, political body, and deeper source route.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-wiki-archive.html">Open Continuum Wiki</a></div></article>
-    <article class="bli-card"><h3>Charles Definitive Entity Record</h3><p>Open the highest-order setting record for Charles: his extradimensional Matrioshka-brain corpus, wormhole antenna architecture, headquarters receiver, physical manifestations, Faux Charles products, personality, electronic reach, economic trail, Watcher relationship, and known limits.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-charles-record.html">Open Charles Record</a></div></article>
-    <article class="bli-card"><h3>Continuum Wiki Migration Control</h3><p>Open the preservation inventory, Charles intelligence-report style guide, report schema, source snapshots, phase gates, and live ledger checks governing the slow diegetic conversion of the setting wiki.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-wiki-migration.html">Open Migration Control</a></div></article>
-    <article class="bli-card"><h3>EXO Operations</h3><p>Open the restricted exosolar planning compartment for solar systems, planetary environments, alien species and ecologies, stellar governments, FTL hierarchies, gate networks, vessels, stations, settlements, outposts, and vehicles.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-operations.html">Open EXO Operations</a></div></article>
-    <article class="bli-card"><h3>Blacklight Continuum Internal Archive</h3><p>Open the internal record browser for corporate operations, personnel references, facility systems, continuity records, capabilities, entities, equipment, and restricted terminology.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-internal-archive.html">Open Internal Archive</a></div></article>
-    <article class="bli-card"><h3>The Blacklight Era Campaign</h3><p>Open the Black-level campaign dossier covering the delayed 2011 Awakening, the chrome-lit awakened corporate future glimpsed by Charles, his post-Tribunal strategy, consensus reality, and the six canonical failure states capable of triggering the metahuman crisis. The attached custody archive contains recovered, stolen, purchased, and intercepted auguries tied to each trigger.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-era-campaign.html">Open Blacklight Era Campaign</a><a class="bli-action" href="blacklight-awakening-prophecy-generator.html">Open Recovered Augury Archive</a></div></article>
-    <article class="bli-card"><h3>Blacklight Binary Cube Encryption Laboratory</h3><p>Open the Black-level copy of the Binary Cube research workspace with isolated Blacklight browser storage, separate key handling, metadata-minimized encrypted exports, authenticated transport, validation, and file recovery.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-binary-cube-encryption.html">Open Encryption Laboratory</a></div></article>
-    <article class="bli-card"><h3>Blacklight Mission Generator</h3><p>Create complete missions with player disclosure, Moderator truths, supernatural client randomization, rivalry-linked opposition, and attached location pressure.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-mission-generator.html">Open Mission Generator</a></div></article>
-    <article class="bli-card"><h3>Supernatural Rivalry Web</h3><p>Review the known rivalry map connecting blood courts, fae courts, Gaian packs, corrupted shapechangers, dream cartels, hunter orders, memory parasites, manufacturers, and archive custodians.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-supernatural-rivalry-web.html">Open Rivalry Web</a></div></article>
-    <article class="bli-card"><h3>Generate the Thing in the Room</h3><p>Create civilians, witnesses, operatives, unusual archetype actors, cryptids, alien remnants, otherworldly entities, cognitohazards, and Charles-tier reality powers.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-npc-generator.html">Open NPC and Entity Generator</a></div></article>
-    <article class="bli-card"><h3>Metaphysics Conversation Starter Generator</h3><p>Generate ten coherent metaphysics prompts at a time using fictional media lenses, scientific precedents, and edge-of-physics questions without overused famous examples.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-metaphysics-conversation-generator.html">Open Metaphysics Generator</a></div></article>
-    <article class="bli-card"><h3>Technobabble Name Generator</h3><p>Create sci-fi names for weapons, guns, swords, ships, power generators, engines, armor, and devices across one-to-ten escalating layers of archive-grade nonsense.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-technobabble-name-generator.html">Open Technobabble Generator</a></div></article>
-    <article class="bli-card"><h3>Comprehensive Entity Catalog</h3><p>Open the archive route for creature, civilian, operative, anomaly, machine, alien, court, sovereign, and Charles-tier reference records.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-entity-catalog.html">Open Entity Catalog</a></div></article>
-    <article class="bli-card"><h3>Vampiric and Fae Court Catalogs</h3><p>Open the archive route for blood courts, fae jurisdictions, court offices, feeding systems, oath structures, market organizations, envoys, and heralds.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-court-catalogs.html">Open Court Catalogs</a></div></article>
-    <article class="bli-card"><h3>Gaian Shapechangers and Spirits Index</h3><p>Open the archive route for shapechanger society, tribal pack leaders, prominent members, pack offices, spirit ecology, named spirits, and fae-spirit contract relationships.</p><div class="bli-actions"><a class="bli-action primary" href="blacklight-gaian-society.html">Open Gaian Society</a></div></article>
-  </div></section></main>
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-corporate.html"><span class="bli-mark"></span><span class="bli-brand-text"><span>Blacklight</span><span>Archive</span></span></a>
+    <nav class="bli-nav"><a href="blacklight-corporate-systems.html">Gateway</a><a href="blacklight-systems-white.html">Employee</a><a href="blacklight-systems-blue.html">Client Ops</a><a href="blacklight-systems-green.html">Support</a><a href="blacklight-wiki-archive.html">Continuum Wiki</a><a href="blacklight-charles-record.html">Charles</a><a href="blacklight-wiki-migration.html">Migration Control</a><a href="blacklight-era-campaign.html">Blacklight Era</a><a href="blacklight-awakening-prophecy-generator.html">Recovered Auguries</a></nav>
+  </header>
+
+  <section class="bli-hero">
+    <div>
+      <p class="bli-eyebrow">Archive tier</p>
+      <h1>Deep archive systems.</h1>
+      <p class="bli-lede">This static page contains deeper record indexes and direct archive routes. These options are not displayed on the lower-tier pages.</p>
+    </div>
+  </section>
+
+  <main class="bli-shell">
+    <section class="bli-section">
+      <div class="bli-section-head">
+        <p class="bli-eyebrow">Archive resources</p>
+        <h2>Current tier resources.</h2>
+      </div>
+
+      <div class="bli-resource-grid">
+        <a class="bli-resource-button" href="blacklight-wiki-archive.html" title="Open the unified setting encyclopedia for every established player Archetype, class subgroup, supernatural faction, court, pack, lineage, nation, order, cult, political body, and deeper source route." data-tooltip="Open the unified setting encyclopedia for every established player Archetype, class subgroup, supernatural faction, court, pack, lineage, nation, order, cult, political body, and deeper source route.">Continuum Wiki</a>
+
+        <a class="bli-resource-button" href="blacklight-charles-record.html" title="Open the highest-order setting record for Charles: his extradimensional Matrioshka-brain corpus, wormhole antenna architecture, headquarters receiver, physical manifestations, Faux Charles products, personality, electronic reach, economic trail, Watcher relationship, and known limits." data-tooltip="Open the highest-order setting record for Charles: his extradimensional Matrioshka-brain corpus, wormhole antenna architecture, headquarters receiver, physical manifestations, Faux Charles products, personality, electronic reach, economic trail, Watcher relationship, and known limits.">Charles Record</a>
+
+        <a class="bli-resource-button" href="blacklight-wiki-migration.html" title="Open the preservation inventory, Charles intelligence-report style guide, report schema, source snapshots, phase gates, and live ledger checks governing the slow diegetic conversion of the setting wiki." data-tooltip="Open the preservation inventory, Charles intelligence-report style guide, report schema, source snapshots, phase gates, and live ledger checks governing the slow diegetic conversion of the setting wiki.">Migration Control</a>
+
+        <a class="bli-resource-button" href="blacklight-exo-operations.html" title="Open the restricted exosolar planning compartment for solar systems, planetary environments, alien species and ecologies, stellar governments, FTL hierarchies, gate networks, vessels, stations, settlements, outposts, and vehicles." data-tooltip="Open the restricted exosolar planning compartment for solar systems, planetary environments, alien species and ecologies, stellar governments, FTL hierarchies, gate networks, vessels, stations, settlements, outposts, and vehicles.">EXO Operations</a>
+
+        <a class="bli-resource-button" href="blacklight-internal-archive.html" title="Open the internal record browser for corporate operations, personnel references, facility systems, continuity records, capabilities, entities, equipment, and restricted terminology." data-tooltip="Open the internal record browser for corporate operations, personnel references, facility systems, continuity records, capabilities, entities, equipment, and restricted terminology.">Internal Archive</a>
+
+        <a class="bli-resource-button" href="blacklight-era-campaign.html" title="Open the Black-level campaign dossier covering the delayed 2011 Awakening, the chrome-lit awakened corporate future glimpsed by Charles, his post-Tribunal strategy, consensus reality, and the six canonical failure states capable of triggering the metahuman crisis." data-tooltip="Open the Black-level campaign dossier covering the delayed 2011 Awakening, the chrome-lit awakened corporate future glimpsed by Charles, his post-Tribunal strategy, consensus reality, and the six canonical failure states capable of triggering the metahuman crisis.">Blacklight Era</a>
+
+        <a class="bli-resource-button" href="blacklight-awakening-prophecy-generator.html" title="Open the custody archive of recovered, stolen, purchased, and intercepted auguries tied to the Blacklight Era campaign's six canonical Awakening triggers." data-tooltip="Open the custody archive of recovered, stolen, purchased, and intercepted auguries tied to the Blacklight Era campaign's six canonical Awakening triggers.">Recovered Auguries</a>
+
+        <a class="bli-resource-button" href="blacklight-binary-cube-encryption.html" title="Open the Black-level copy of the Binary Cube research workspace with isolated Blacklight browser storage, separate key handling, metadata-minimized encrypted exports, authenticated transport, validation, and file recovery." data-tooltip="Open the Black-level copy of the Binary Cube research workspace with isolated Blacklight browser storage, separate key handling, metadata-minimized encrypted exports, authenticated transport, validation, and file recovery.">Binary Cube Lab</a>
+
+        <a class="bli-resource-button" href="blacklight-mission-generator.html" title="Create complete missions with player disclosure, Moderator truths, supernatural client randomization, rivalry-linked opposition, and attached location pressure." data-tooltip="Create complete missions with player disclosure, Moderator truths, supernatural client randomization, rivalry-linked opposition, and attached location pressure.">Mission Generator</a>
+
+        <a class="bli-resource-button" href="blacklight-supernatural-rivalry-web.html" title="Review the known rivalry map connecting blood courts, fae courts, Gaian packs, corrupted shapechangers, dream cartels, hunter orders, memory parasites, manufacturers, and archive custodians." data-tooltip="Review the known rivalry map connecting blood courts, fae courts, Gaian packs, corrupted shapechangers, dream cartels, hunter orders, memory parasites, manufacturers, and archive custodians.">Rivalry Web</a>
+
+        <a class="bli-resource-button" href="blacklight-npc-generator.html" title="Create civilians, witnesses, operatives, unusual archetype actors, cryptids, alien remnants, otherworldly entities, cognitohazards, and Charles-tier reality powers." data-tooltip="Create civilians, witnesses, operatives, unusual archetype actors, cryptids, alien remnants, otherworldly entities, cognitohazards, and Charles-tier reality powers.">NPC &amp; Entity Generator</a>
+
+        <a class="bli-resource-button" href="blacklight-metaphysics-conversation-generator.html" title="Generate ten coherent metaphysics prompts at a time using fictional media lenses, scientific precedents, and edge-of-physics questions without overused famous examples." data-tooltip="Generate ten coherent metaphysics prompts at a time using fictional media lenses, scientific precedents, and edge-of-physics questions without overused famous examples.">Metaphysics Generator</a>
+
+        <a class="bli-resource-button" href="blacklight-technobabble-name-generator.html" title="Create sci-fi names for weapons, guns, swords, ships, power generators, engines, armor, and devices across one-to-ten escalating layers of archive-grade nonsense." data-tooltip="Create sci-fi names for weapons, guns, swords, ships, power generators, engines, armor, and devices across one-to-ten escalating layers of archive-grade nonsense.">Technobabble Generator</a>
+
+        <a class="bli-resource-button" href="blacklight-entity-catalog.html" title="Open the archive route for creature, civilian, operative, anomaly, machine, alien, court, sovereign, and Charles-tier reference records." data-tooltip="Open the archive route for creature, civilian, operative, anomaly, machine, alien, court, sovereign, and Charles-tier reference records.">Entity Catalog</a>
+
+        <a class="bli-resource-button" href="blacklight-court-catalogs.html" title="Open the archive route for blood courts, fae jurisdictions, court offices, feeding systems, oath structures, market organizations, envoys, and heralds." data-tooltip="Open the archive route for blood courts, fae jurisdictions, court offices, feeding systems, oath structures, market organizations, envoys, and heralds.">Court Catalogs</a>
+
+        <a class="bli-resource-button" href="blacklight-gaian-society.html" title="Open the archive route for shapechanger society, tribal pack leaders, prominent members, pack offices, spirit ecology, named spirits, and fae-spirit contract relationships." data-tooltip="Open the archive route for shapechanger society, tribal pack leaders, prominent members, pack offices, spirit ecology, named spirits, and fae-spirit contract relationships.">Gaian Society</a>
+      </div>
+    </section>
+  </main>
+
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Archive systems.</footer>
   <script src="blacklight-background-audio.js"></script>
 </body>
