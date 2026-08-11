@@ -4,27 +4,12 @@
   if (window.EXO_STATION_KEY_CURSOR) return;
 
   const CURSOR_SIZE = 64;
+  const HOTSPOT_X = 25;
+  const HOTSPOT_Y = 10;
   const cache = new Map();
   let currentStation = null;
   let syncQueued = false;
   let observer = null;
-
-  // The key in the execution cylinder and the key used as the player pointer are
-  // the same physical object viewed from different positions. The station loadout
-  // remains authoritative for cap finish + charm; this profile only supplies the
-  // hidden blade geometry and the held-key camera projection.
-  const STATION_KEY_PERSPECTIVE = Object.freeze({
-    helm: Object.freeze({ rotation: -34, roll: -5, skewX: -7, scaleX: .98, scaleY: .88, offsetX: 2, offsetY: 5, hotspotX: 13, hotspotY: 6, bitting: [2, 5, 1, 4, 2, 6] }),
-    navigation: Object.freeze({ rotation: -31, roll: -8, skewX: -3, scaleX: .93, scaleY: .91, offsetX: 4, offsetY: 4, hotspotX: 13, hotspotY: 6, bitting: [5, 1, 4, 6, 2, 3] }),
-    gunnery: Object.freeze({ rotation: -37, roll: -2, skewX: -10, scaleX: 1.01, scaleY: .84, offsetX: 1, offsetY: 7, hotspotX: 12, hotspotY: 6, bitting: [6, 3, 5, 1, 4, 2] }),
-    engineering: Object.freeze({ rotation: -29, roll: -10, skewX: -5, scaleX: .96, scaleY: .94, offsetX: 5, offsetY: 3, hotspotX: 14, hotspotY: 6, bitting: [3, 6, 2, 5, 1, 4] }),
-    science: Object.freeze({ rotation: -35, roll: 1, skewX: -8, scaleX: .91, scaleY: .87, offsetX: 3, offsetY: 6, hotspotX: 12, hotspotY: 7, bitting: [1, 4, 6, 2, 5, 3] }),
-    comms: Object.freeze({ rotation: -32, roll: -6, skewX: -2, scaleX: .95, scaleY: .90, offsetX: 4, offsetY: 5, hotspotX: 13, hotspotY: 6, bitting: [4, 2, 6, 3, 5, 1] })
-  });
-
-  function perspectiveFor(station) {
-    return STATION_KEY_PERSPECTIVE[station] || STATION_KEY_PERSPECTIVE.helm;
-  }
 
   function capPath(profile, cx, top) {
     const w = profile.width;
@@ -51,25 +36,6 @@
     const h = profile.height;
     const x = cx - w / 2;
     return `<g data-key-cap data-key-base-rotation="${rotation}" transform="rotate(${rotation} ${cx} ${top + h / 2})"><path d="${capPath(profile, cx, top)}" fill="${profile.edge}"/><path d="${capPath({ ...profile, width: Math.max(10, w - 5), height: h - 6, radius: Math.max(1, profile.radius - 1) }, cx, top + 3)}" fill="${profile.face}" stroke="${profile.highlight}" stroke-width="1.5"/><path d="M${cx - 4} ${top + 9} H${cx + 4} M${cx - 4} ${top + 14} H${cx + 3}" stroke="${profile.highlight}" stroke-width="1.4" opacity=".7"/>${profile.shape === "ribbed" ? `<path d="M${x + 4} ${top + 20} H${x + w - 4} M${x + 4} ${top + 25} H${x + w - 4} M${x + 4} ${top + 30} H${x + w - 4}" stroke="${profile.highlight}" opacity=".55"/>` : ""}<circle cx="${cx}" cy="${top + h - 5}" r="3.4" fill="${profile.edge}" stroke="${profile.highlight}" stroke-width="1.3"/></g>`;
-  }
-
-  function bladeMarkup(perspective) {
-    const cx = 60;
-    const shoulderY = 25;
-    const tipY = -34;
-    const half = 5.4;
-    const bits = perspective.bitting;
-    const left = [];
-    const right = [];
-    const step = (shoulderY - tipY - 16) / Math.max(1, bits.length - 1);
-    bits.forEach((depth, index) => {
-      const y = tipY + 11 + index * step;
-      const inset = 1.1 + depth * .48;
-      left.push(`${(cx - half + inset).toFixed(2)},${y.toFixed(2)}`);
-      right.unshift(`${(cx + half - inset * .58).toFixed(2)},${(y + 2.8).toFixed(2)}`);
-    });
-    const path = `M${cx - 2.2},${tipY} L${cx - half},${tipY + 8} L${left.join(" L")} L${cx - half},${shoulderY - 5} L${cx - 8.8},${shoulderY} L${cx + 8.8},${shoulderY} L${cx + half},${shoulderY - 5} L${right.join(" L")} L${cx + half},${tipY + 8} L${cx + 2.2},${tipY} Z`;
-    return `<g class="exo-cursor-key-blade" transform="rotate(${perspective.rotation} 60 47)"><path d="${path}" fill="url(#bladeMetal)" stroke="#242729" stroke-width="1.25"/><path d="M55.7 ${tipY + 12} L55.7 ${shoulderY - 7} M59.2 ${tipY + 6} L59.2 ${shoulderY - 4}" stroke="#f1eee3" stroke-width=".8" opacity=".62"/><path d="M63.5 ${tipY + 10} L63.5 ${shoulderY - 7}" stroke="#555b5d" stroke-width="1" opacity=".8"/></g>`;
   }
 
   function charmShapeMarkup(charm) {
@@ -128,9 +94,7 @@
   function cursorSvg(station) {
     const loadout = window.EXO_KEY_LOADOUT?.[station];
     if (!loadout?.cap || !loadout?.charm) return null;
-    const perspective = perspectiveFor(station);
-    const outer = `translate(${perspective.offsetX} ${perspective.offsetY}) rotate(${perspective.roll} 60 48) skewX(${perspective.skewX}) scale(${perspective.scaleX} ${perspective.scaleY})`;
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${CURSOR_SIZE}" height="${CURSOR_SIZE}" viewBox="-8 -42 145 178" overflow="visible"><defs><linearGradient id="bladeMetal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#41484b"/><stop offset=".23" stop-color="#d7d9d4"/><stop offset=".48" stop-color="#7d8586"/><stop offset=".72" stop-color="#ece8dc"/><stop offset="1" stop-color="#474d4f"/></linearGradient><filter id="shadow" x="-45%" y="-45%" width="190%" height="190%"><feDropShadow dx="1" dy="4" stdDeviation="2.5" flood-color="#000" flood-opacity=".84"/></filter></defs><g filter="url(#shadow)" transform="${outer}">${bladeMarkup(perspective)}${keyCapMarkup(loadout.cap, perspective.rotation)}${charmMarkup(station, loadout.charm)}</g></svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${CURSOR_SIZE}" height="${CURSOR_SIZE}" viewBox="18 8 105 122" overflow="visible"><g filter="url(#shadow)">${keyCapMarkup(loadout.cap, -34)}${charmMarkup(station, loadout.charm)}</g><defs><filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="3" stdDeviation="2.2" flood-color="#000" flood-opacity=".82"/></filter></defs></svg>`;
   }
 
   function stationFromDom() {
@@ -145,8 +109,7 @@
     if (cache.has(station)) return cache.get(station);
     const svg = cursorSvg(station);
     if (!svg) return null;
-    const perspective = perspectiveFor(station);
-    const value = `url("data:image/svg+xml,${encodeURIComponent(svg)}") ${perspective.hotspotX} ${perspective.hotspotY}, auto`;
+    const value = `url("data:image/svg+xml,${encodeURIComponent(svg)}") ${HOTSPOT_X} ${HOTSPOT_Y}, auto`;
     cache.set(station, value);
     return value;
   }
@@ -182,7 +145,6 @@
   }
 
   window.EXO_STATION_KEY_CURSOR = Object.freeze({
-    perspectives: STATION_KEY_PERSPECTIVE,
     sync: queueSync,
     get station() { return currentStation; }
   });
