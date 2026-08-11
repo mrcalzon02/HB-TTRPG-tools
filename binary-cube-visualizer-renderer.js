@@ -583,6 +583,10 @@
       const filler = trace.cellKindByPoint[pointId] === 'filler';
       const inputColor = filler ? (bit === '1' ? COLORS.fillerOne : COLORS.fillerZero) : (bit === '1' ? COLORS.payloadOne : COLORS.payloadZero);
       const outputColor = bit === '1' ? COLORS.projectedOne : COLORS.projectedZero;
+      const serialState = serialPlaybackState(trace, traceTimeValue);
+      const inputCellIndex = trace.inputCellIndexByPoint[pointId];
+      if (inputCellIndex < serialState.inputCellIndex) return mix(COLORS.dim, outputColor, 0.34);
+      if (inputCellIndex > serialState.inputCellIndex) return mix(COLORS.dim, inputColor, 0.24);
       return mix(inputColor, outputColor, smoothstep(localTraceTime));
     }
     const timeline = resolveTraceTimeline(localTraceTime, trace.phases.length);
