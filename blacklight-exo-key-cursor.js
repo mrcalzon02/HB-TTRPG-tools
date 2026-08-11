@@ -57,6 +57,16 @@
     return {anchor,mid,hinge};
   }
 
+  function panelCharmGeometry(profile,rotation) {
+    const cx = 60;
+    const top = 22;
+    const h = Number(profile?.height) || 42;
+    const anchor = rotatePoint(cx,top+h-5,cx,top+h/2,rotation);
+    const hinge = {x:60,y:76};
+    const mid = {x:(anchor.x+hinge.x)/2+2.4,y:(anchor.y+hinge.y)/2+1.8};
+    return {anchor,mid,hinge};
+  }
+
   function capPath(profile, cx, top) {
     const w = Number(profile.width) || 30;
     const h = Number(profile.height) || 42;
@@ -148,6 +158,30 @@
     return stationClass ? stationClass.slice("station-".length) : null;
   }
 
+  function upgradePanelCharm(station) {
+    const loadout = window.EXO_KEY_LOADOUT?.[station];
+    const body = document.querySelector(`#station-panel [data-key-charm="${station}"]`);
+    if (!loadout?.cap || !body || body.dataset.physicsUpgraded === "true") return;
+    const svg = body.closest("svg");
+    const cap = svg?.querySelector("[data-key-cap]");
+    if (!svg || !cap) return;
+    const rotation = Number(cap.dataset.keyBaseRotation);
+    const geometry = panelCharmGeometry(loadout.cap,Number.isFinite(rotation)?rotation:-34);
+    const symbol = [...body.children].find(child => child.tagName?.toLowerCase() === "g");
+    if (!symbol) return;
+    const symbolMarkup = symbol.innerHTML;
+    const namespace = "http://www.w3.org/2000/svg";
+    const chain = document.createElementNS(namespace,"g");
+    chain.dataset.panelKeyChain = station;
+    chain.innerHTML = `<path d="M${geometry.anchor.x.toFixed(2)} ${geometry.anchor.y.toFixed(2)} Q${geometry.mid.x.toFixed(2)} ${geometry.mid.y.toFixed(2)} 60 76" fill="none" stroke="#8c7a55" stroke-width="1.8" stroke-linecap="round"/><circle cx="${geometry.mid.x.toFixed(2)}" cy="${geometry.mid.y.toFixed(2)}" r="1.45" fill="#ad965f"/><circle cx="60" cy="76" r="2.4" fill="none" stroke="#ad965f" stroke-width="1.45"/>`;
+    body.parentNode?.insertBefore(chain,body);
+    body.innerHTML = `<circle cx="60" cy="76" r="1.25" fill="#ad965f"/><g transform="translate(60 78.2) scale(.72)">${symbolMarkup}</g>`;
+    body.dataset.physicsUpgraded = "true";
+    body.dataset.charmHingeX = "60";
+    body.dataset.charmHingeY = "76";
+    body.setAttribute("transform","rotate(0 60 76)");
+  }
+
   function ensureOverlay() {
     if (overlay?.isConnected) return overlay;
     overlay = document.createElement("div");
@@ -164,6 +198,7 @@
     syncQueued = false;
     const station = stationFromDom();
     if (!station) return;
+    upgradePanelCharm(station);
     const node = ensureOverlay();
     if (station !== currentStation || !node.firstElementChild) {
       const svg = cursorSvg(station);
