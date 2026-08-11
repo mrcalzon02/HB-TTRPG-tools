@@ -22,6 +22,7 @@ on:
       - "scripts/validate-binary-cube-serial-demonstration.mjs"
       - "scripts/validate-binary-cube-serial-demonstration-browser.mjs"
       - "scripts/validate-binary-cube-serial-translation-marker.mjs"
+      - "scripts/validate-binary-cube-serial-pages-browser.mjs"
   workflow_dispatch:
 
 permissions:
@@ -62,6 +63,7 @@ jobs:
           node --check scripts/validate-binary-cube-v12-pages-browser.mjs
           node --check scripts/validate-binary-cube-v13-launch.mjs
           node --check scripts/validate-binary-cube-v13-pages-browser.mjs
+          node --check scripts/validate-binary-cube-serial-pages-browser.mjs
           test -s docs/binary-cube-v12-runtime-failure-report.md
           test -s docs/binary-cube-v13-launch-report.md
           test -s docs/binary-cube-visualizer-user-guide.md
@@ -121,6 +123,15 @@ jobs:
           set -o pipefail
           node scripts/validate-binary-cube-v13-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-v13.log
 
+      - name: Validate public one-bit serial demonstration
+        id: pages_serial
+        continue-on-error: true
+        env:
+          BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#scientific-tools
+        run: |
+          set -o pipefail
+          node scripts/validate-binary-cube-serial-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-serial.log
+
       - name: Retain V13 launch logs
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
@@ -141,6 +152,7 @@ jobs:
           [ '${{ steps.deployed_entry.outcome }}' = 'success' ] || failures="$failures deployed-entry"
           [ '${{ steps.pages_v12.outcome }}' = 'success' ] || failures="$failures pages-v12"
           [ '${{ steps.pages_v13.outcome }}' = 'success' ] || failures="$failures pages-v13"
+          [ '${{ steps.pages_serial.outcome }}' = 'success' ] || failures="$failures pages-serial"
           if [ -n "$failures" ]; then
             echo "Binary Cube V13 launch failures:$failures"
             exit 1
