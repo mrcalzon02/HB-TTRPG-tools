@@ -30,15 +30,17 @@ Canonical computational authority. Important operations include key creation and
 
 ### `shadowrun-binary-cube-visualizer.js`
 
-Owns visualizer state, panel lifecycle, package sequencing, selected-block traces, playback time, inspection state, persistence, import/export controls, protected transport provenance, accessibility output, and laboratory handoff.
+Owns visualizer state, panel lifecycle, package sequencing, selected-block traces, playback time, inspection state, persistence, import/export controls, protected transport provenance, accessibility output, and laboratory handoff. It also owns the serial-demonstration clock. Viewport serial playback uses a fixed `1400 ms` per bit and deliberately ignores the ordinary playback-speed multiplier while that mode is active.
 
 ### `binary-cube-visualizer-renderer.js`
 
 Owns WebGL resources, camera behavior, face picking, point and path buffers, rendering tiers, trace interpolation, labels, resize observation, and disposal. It receives canonical coordinates and trace data; it does not encrypt.
 
+The renderer’s serial presentation mode consumes the same immutable trace as normal phase playback. It does not expose a second public transformation algorithm. For the active input bit it derives four exact presentation anchors from canonical trace phases: input-face staging, keyed point assignment, output-face staging, and final emitted landing. The moving bit is distance-tweened along that exact polyline, the white path grows progressively behind it, and a stationary marker plus **KEYED TRANSLATION** label identify the exact keyed interior coordinate.
+
 ### `binary-cube-visualizer.css`
 
-Defines the desktop and narrow-screen visual hierarchy, canvas shell, exact 2D mapping, trace controls, transcripts, inspector, performance disclosures, accessibility states, and responsive stacking.
+Defines the desktop and narrow-screen visual hierarchy, canvas shell, exact 2D mapping, trace controls, transcripts, inspector, performance disclosures, accessibility states, responsive stacking, and the keyed-translation label used by serial playback.
 
 ### `shadowrun-binary-cube-encryption.js`
 
@@ -74,6 +76,8 @@ Provides landing-page lazy-view activation. It loads `shadowrun-entry.js` when S
 4. The renderer receives point coordinates and direction state derived from that key.
 5. Draft face or mask changes remain separate until a new canonical key is generated.
 
+The optional **DEMONSTRATION ONLY · Flat Z Ripple** profile still passes through the same engine validator. It deliberately uses identity row, column, and depth permutations plus a full payload mask so the canonical point field follows `z = (x + y) mod gridSize`. Its predictable structure is presentation-oriented and is explicitly marked demonstration-only; ordinary generated keys retain their randomized permutations.
+
 ### Package flow
 
 1. Binary input is normalized.
@@ -89,6 +93,22 @@ Provides landing-page lazy-view activation. It loads `shadowrun-entry.js` when S
 A selected block trace contains stable point IDs, coordinates, cell kinds, bits, source indexes, input and output cell indexes, projection orders, phase state, and the exact output block. The controller treats a trace as immutable evidence.
 
 Timeline rendering derives visible state from normalized trace time. Play, pause, reverse, scrub, restart, and reduced-motion snapping do not accumulate scene mutations.
+
+### Serial viewport flow
+
+Viewport **Play Encoding** is a presentation of a canonical trace, not a replacement trace format.
+
+1. Global trace time is divided by the trace point count so exactly one input cell is active at a time.
+2. The active point ID is taken directly from `inputProjectionPointIds[inputCellIndex]`.
+3. The route uses exact point anchors from phases `3`, `4`, `7`, and `9`.
+4. Segment lengths determine distance-weighted progress, preventing long and short route segments from receiving arbitrary equal-time jumps.
+5. The moving selected marker follows the interpolated route.
+6. A second stationary selected-point-buffer vertex remains at the exact phase-4 keyed coordinate.
+7. The progressive selected-path buffer draws only the portion of the route already traversed.
+8. The keyed-translation label is positioned from the same exact phase-4 coordinate stored in trace presentation state.
+9. When the 1.4-second interval completes, the next input cell becomes the sole active bit.
+
+Completed bits are represented at their completed route position and later bits remain at their unstarted route position; only the active bit receives intermediate motion. The ordinary speed selector remains visible but is ignored by the serial clock so a selected `2×` speed cannot silently halve the demonstration interval.
 
 ## Rendering tiers
 
@@ -123,6 +143,8 @@ The renderer owns:
 - line, point, selection, arrow, selected-point, and selected-path buffers;
 - one WebGL program;
 - generated labels.
+
+Serial playback reuses the existing selected-point buffer for both the moving bit and stationary keyed marker. It does not allocate a second renderer or persistent GPU subsystem.
 
 `dispose()` is idempotent and releases every owned resource. V12 Chromium evidence executes 24 open/play/close/reopen cycles and explicit double disposal while checking live counters.
 
@@ -181,7 +203,11 @@ The repository uses no-build static assets under the GitHub Pages subpath `/HB-T
 
 ### Complete V0–V12 workflow
 
-`.github/workflows/binary-cube-v12-complete.yml` runs 24 historical, browser, performance, accessibility, compatibility, desktop, lifecycle, failure, and stale-work checks. Browser processes receive at most one fresh-process retry for isolated startup races; deterministic failures still fail.
+`.github/workflows/binary-cube-v12-complete.yml` runs the historical, browser, performance, accessibility, compatibility, desktop, lifecycle, failure, stale-work, and dedicated serial-demonstration checks. The serial checks prove exact route anchors, monotonic interpolation, one-bit sequencing, the fixed 1.4-second interval, speed-override isolation, and the keyed marker/label contract. Browser processes receive at most one fresh-process retry for isolated startup races; deterministic failures still fail.
+
+### V13 public launch workflow
+
+`.github/workflows/binary-cube-v13-launch.yml` watches the serial validators as first-class launch inputs, re-runs the complete V0–V12 evidence, waits for the promoted static assets on GitHub Pages, and then validates the live public cards, mobile/fallback behavior, and visualizer launch.
 
 ### Public Pages workflow
 
@@ -195,9 +221,11 @@ Any future visualizer change must preserve:
 2. package and trace parity;
 3. protected transport provenance;
 4. deterministic playback;
-5. explicit stale-work invalidation;
-6. exact fallback and keyboard operation;
-7. complete renderer disposal;
-8. responsive public deployment;
-9. the laboratory companion workflow;
-10. the complete V0–V12 gates.
+5. one-bit serial playback as a presentation over the canonical trace rather than a second transformation implementation;
+6. exact keyed-route and keyed-translation marker/label correspondence;
+7. explicit stale-work invalidation;
+8. exact fallback and keyboard operation;
+9. complete renderer disposal;
+10. responsive public deployment;
+11. the laboratory companion workflow;
+12. the complete V0–V12 and V13 launch gates.
