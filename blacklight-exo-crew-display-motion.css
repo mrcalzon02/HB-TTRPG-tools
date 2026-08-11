@@ -1,0 +1,383 @@
+/* Blacklight EXO Crew Operations — live station display motion
+   Continuous instrument motion for Helm, Navigation, Gunnery, Engineering,
+   and Science. Control-state selectors intentionally derive from the same
+   authoritative hardware markup rendered by blacklight-exo-crew-operations.js.
+   Comms retains its dedicated JS-driven CRT/spectrum renderer. */
+
+.exo-crew-body .exo-tactical-display {
+  --display-pulse: 3.2s;
+  --contact-pulse: 1.9s;
+  isolation: isolate;
+}
+
+.exo-crew-body .exo-tactical-display .exo-contact {
+  animation: exo-display-contact-live var(--contact-pulse) ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes exo-display-contact-live {
+  0%, 100% { filter: brightness(.84); }
+  48% { filter: brightness(1.28); }
+  52% { filter: brightness(1.08); }
+}
+
+/* ================================================================
+   HELM — flight director motion follows the actual latched controls.
+   ================================================================ */
+.exo-crew-body .display-maneuver {
+  --helm-cycle: 4.8s;
+  --helm-roll: 0deg;
+  --helm-heave: 2px;
+  --helm-scale: 1;
+  --helm-ship-cycle: 3.7s;
+  --helm-contact-cycle: 2.2s;
+}
+
+.exo-crew-body .display-maneuver .exo-tactical-ring {
+  transform-origin: 50% 50%;
+  animation: exo-helm-director var(--helm-cycle) ease-in-out infinite;
+}
+.exo-crew-body .display-maneuver .exo-ownship {
+  transform-origin: 50% 50%;
+  animation: exo-helm-ownship var(--helm-ship-cycle) ease-in-out infinite;
+}
+.exo-crew-body .display-maneuver .exo-contact {
+  --contact-pulse: var(--helm-contact-cycle);
+}
+
+@keyframes exo-helm-director {
+  0%,100% {
+    transform: translate(-50%,-50%) rotate(calc(var(--helm-roll) - .7deg)) scale(var(--helm-scale));
+    filter: brightness(.91);
+  }
+  50% {
+    transform: translate(-50%,calc(-50% + var(--helm-heave))) rotate(calc(var(--helm-roll) + .7deg)) scale(var(--helm-scale));
+    filter: brightness(1.08);
+  }
+}
+@keyframes exo-helm-ownship {
+  0%,100% { transform: translate(-50%,-50%) translateY(1px); filter: brightness(.92); }
+  50% { transform: translate(-50%,-50%) translateY(-2px); filter: brightness(1.14); }
+}
+
+/* Flight regime. */
+.exo-crew-body .exo-station-body:has([data-control-id="flight-mode"][data-control-state="ATTITUDE"][aria-pressed="true"]) .display-maneuver {
+  --helm-cycle: 5.8s;
+  --helm-heave: 1px;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="flight-mode"][data-control-state="TRANSLATE"][aria-pressed="true"]) .display-maneuver {
+  --helm-cycle: 2.65s;
+  --helm-heave: 4px;
+  --helm-ship-cycle: 1.9s;
+  --helm-contact-cycle: 1.35s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="flight-mode"][data-control-state="PROXIMITY"][aria-pressed="true"]) .display-maneuver {
+  --helm-cycle: 7.4s;
+  --helm-heave: .7px;
+  --helm-scale: .96;
+  --helm-contact-cycle: 2.9s;
+}
+
+/* Thruster selection and trim physically bias the director. */
+.exo-crew-body .exo-station-body:has([data-control-id="thruster-bank"][data-control-state="MAIN DRIVE"][aria-pressed="true"]) .display-maneuver {
+  --helm-scale: 1.035;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="thruster-bank"][data-control-state="RCS"][aria-pressed="true"]) .display-maneuver {
+  --helm-heave: 5px;
+  --helm-cycle: 2.15s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="thruster-bank"][data-control-state="DOCK JETS"][aria-pressed="true"]) .display-maneuver {
+  --helm-scale: .92;
+  --helm-cycle: 6.6s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="trim-wheel"][data-control-state="−1 DETENT"][aria-pressed="true"]) .display-maneuver {
+  --helm-roll: -5deg;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="trim-wheel"][data-control-state="+1 DETENT"][aria-pressed="true"]) .display-maneuver {
+  --helm-roll: 5deg;
+}
+
+/* Gate direction changes director energy and apparent thrust response. */
+.exo-crew-body .exo-station-body:has([data-control-id="thrust-gate"][data-control-state="FORWARD"][aria-pressed="true"]) .display-maneuver .exo-ownship {
+  animation-duration: 1.2s;
+  filter: brightness(1.22);
+}
+.exo-crew-body .exo-station-body:has([data-control-id="thrust-gate"][data-control-state="AFT"][aria-pressed="true"]) .display-maneuver .exo-ownship {
+  animation-direction: reverse;
+  animation-duration: 1.55s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="thrust-gate"][data-control-state="HOLD"][aria-pressed="true"]) .display-maneuver .exo-ownship {
+  animation-duration: 4.8s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="hand-controller"]:active) .display-maneuver {
+  animation: exo-display-control-kick .16s linear 2;
+}
+
+/* ================================================================
+   NAVIGATION — plotted solution breathes, slews and changes cadence.
+   ================================================================ */
+.exo-crew-body .display-plot {
+  --nav-cycle: 7.5s;
+  --nav-roll: -7deg;
+  --nav-drift: 3px;
+  --nav-scale: 1;
+  --nav-contact-cycle: 2.55s;
+}
+.exo-crew-body .display-plot .exo-tactical-ring {
+  transform-origin: 50% 50%;
+  animation: exo-nav-plot var(--nav-cycle) ease-in-out infinite;
+}
+.exo-crew-body .display-plot .exo-ownship {
+  animation: exo-nav-fix 3.6s ease-in-out infinite;
+}
+.exo-crew-body .display-plot .exo-contact { --contact-pulse: var(--nav-contact-cycle); }
+
+@keyframes exo-nav-plot {
+  0%,100% { transform: translate(-50%,-50%) rotate(calc(var(--nav-roll) - .8deg)) scale(var(--nav-scale)); filter: brightness(.92); }
+  50% { transform: translate(calc(-50% + var(--nav-drift)),calc(-50% - 1px)) rotate(calc(var(--nav-roll) + .8deg)) scale(var(--nav-scale)); filter: brightness(1.08); }
+}
+@keyframes exo-nav-fix {
+  0%,100% { filter: brightness(.84); }
+  50% { filter: brightness(1.24); }
+}
+
+.exo-crew-body .exo-station-body:has([data-control-id="nav-reference"][data-control-state="INERTIAL"][aria-pressed="true"]) .display-plot {
+  --nav-cycle: 8.6s;
+  --nav-drift: 1px;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="nav-reference"][data-control-state="CELESTIAL"][aria-pressed="true"]) .display-plot {
+  --nav-cycle: 10.5s;
+  --nav-roll: -10deg;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="nav-reference"][data-control-state="REMOTE FIX"][aria-pressed="true"]) .display-plot {
+  --nav-cycle: 4.2s;
+  --nav-drift: 6px;
+  --nav-contact-cycle: 1.4s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="solver-bank"][data-control-state="TRANSFER"][aria-pressed="true"]) .display-plot {
+  --nav-scale: 1.02;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="solver-bank"][data-control-state="COLLISION"][aria-pressed="true"]) .display-plot {
+  --nav-cycle: 2.7s;
+  --nav-drift: 8px;
+  --nav-contact-cycle: .95s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="solver-bank"][data-control-state="EGRESS"][aria-pressed="true"]) .display-plot {
+  --nav-cycle: 4.8s;
+  --nav-roll: -3deg;
+  --nav-scale: 1.045;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="timebase"][data-control-state="LOCKED"][aria-pressed="true"]) .display-plot .exo-tactical-ring {
+  animation-timing-function: steps(8,end);
+}
+.exo-crew-body .exo-station-body:has([data-control-id="timebase"][data-control-state="FREE"][aria-pressed="true"]) .display-plot {
+  --nav-cycle: 3.4s;
+  --nav-drift: 9px;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="solution-latch"][data-control-state="STAGED"][aria-pressed="true"]) .display-plot {
+  --nav-contact-cycle: 1.1s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="solution-latch"][data-control-state="RELAY"][aria-pressed="true"]) .display-plot .exo-contact {
+  animation: exo-nav-relay .72s steps(2,end) infinite;
+}
+@keyframes exo-nav-relay { 50% { opacity: .22; } }
+
+/* ================================================================
+   GUNNERY — continuously rotating fire-control sweep plus lock pulse.
+   ================================================================ */
+@property --exo-gun-sweep {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+.exo-crew-body .display-target {
+  --gun-cycle: 3.8s;
+  --gun-contact-cycle: 1.35s;
+  --gun-reticle-cycle: 2.6s;
+}
+.exo-crew-body .display-target .exo-tactical-ring {
+  background:
+    conic-gradient(from var(--exo-gun-sweep), transparent 0 7%, rgba(219,116,119,.10) 7% 8.4%, transparent 8.4% 25%, rgba(219,116,119,.055) 25% 26%, transparent 26% 50%, rgba(219,116,119,.055) 50% 51%, transparent 51% 75%, rgba(219,116,119,.055) 75% 76%, transparent 76%),
+    radial-gradient(circle, transparent 0 32%, rgba(219,116,119,.18) 32.4% 32.8%, transparent 33.2% 65%, rgba(219,116,119,.13) 65.4% 65.8%, transparent 66.2%);
+  animation: exo-gun-sweep var(--gun-cycle) linear infinite, exo-gun-reticle var(--gun-reticle-cycle) ease-in-out infinite;
+}
+.exo-crew-body .display-target .exo-contact { --contact-pulse: var(--gun-contact-cycle); }
+@keyframes exo-gun-sweep { to { --exo-gun-sweep: 360deg; } }
+@keyframes exo-gun-reticle {
+  0%,100% { box-shadow: inset 0 0 24px rgba(0,0,0,.52), 0 0 8px rgba(219,116,119,.05); }
+  50% { box-shadow: inset 0 0 24px rgba(0,0,0,.52), 0 0 18px rgba(219,116,119,.18); }
+}
+.exo-crew-body .exo-station-body:has([data-control-id="track-mode"][data-control-state="DIRECT TRACK"][aria-pressed="true"]) .display-target { --gun-cycle: 3.1s; }
+.exo-crew-body .exo-station-body:has([data-control-id="track-mode"][data-control-state="CLOSE TRACK"][aria-pressed="true"]) .display-target {
+  --gun-cycle: 1.25s;
+  --gun-contact-cycle: .62s;
+  --gun-reticle-cycle: 1.1s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="track-mode"][data-control-state="GUIDED TRACK"][aria-pressed="true"]) .display-target {
+  --gun-cycle: 5.1s;
+  --gun-contact-cycle: .92s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="range-gate"][data-control-state="NEAR"][aria-pressed="true"]) .display-target .exo-tactical-ring { transform: translate(-50%,-50%) scale(.88); }
+.exo-crew-body .exo-station-body:has([data-control-id="range-gate"][data-control-state="FAR"][aria-pressed="true"]) .display-target .exo-tactical-ring { transform: translate(-50%,-50%) scale(1.05); }
+.exo-crew-body .exo-station-body:has([data-control-id="capacitor"][data-control-state="READY"][aria-pressed="true"]) .display-target { --gun-reticle-cycle: 1.55s; }
+.exo-crew-body .exo-station-body:has([data-control-id="capacitor"][data-control-state="MAX"][aria-pressed="true"]) .display-target {
+  --gun-reticle-cycle: .78s;
+  --gun-contact-cycle: .7s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="weapon-arm"][data-control-state="ARMED"][aria-pressed="true"]) .display-target .exo-ownship {
+  animation: exo-gun-armed .58s ease-in-out infinite;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="weapon-safe"][data-control-state="GUARD CLOSED"][aria-pressed="true"]) .display-target {
+  --gun-cycle: 7s;
+  --gun-reticle-cycle: 4.6s;
+}
+@keyframes exo-gun-armed {
+  0%,100% { filter: brightness(.9); }
+  50% { filter: brightness(1.45); }
+}
+
+/* ================================================================
+   ENGINEERING — bus mimic has a living load/flow pulse.
+   ================================================================ */
+.exo-crew-body .display-systems {
+  --eng-cycle: 2.8s;
+  --eng-shift: 0px;
+  --eng-contact-cycle: 2.2s;
+}
+.exo-crew-body .display-systems .exo-tactical-ring {
+  animation: exo-eng-bus-flow var(--eng-cycle) ease-in-out infinite;
+}
+.exo-crew-body .display-systems .exo-ownship {
+  animation: exo-eng-bus-core calc(var(--eng-cycle) * .72) ease-in-out infinite;
+}
+.exo-crew-body .display-systems .exo-contact { --contact-pulse: var(--eng-contact-cycle); }
+@keyframes exo-eng-bus-flow {
+  0%,100% { filter: brightness(.86); transform: translate(-50%,-50%) translateX(calc(var(--eng-shift) * -1)); }
+  50% { filter: brightness(1.18); transform: translate(-50%,-50%) translateX(var(--eng-shift)); }
+}
+@keyframes exo-eng-bus-core {
+  0%,100% { box-shadow: inset 0 0 8px #000, 0 0 6px rgba(214,173,103,.09); }
+  50% { box-shadow: inset 0 0 8px #000, 0 0 16px rgba(214,173,103,.26); }
+}
+.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="PRIMARY"][aria-pressed="true"]) .display-systems {
+  --eng-cycle: 2.25s;
+  --eng-shift: 2px;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="AUXILIARY"][aria-pressed="true"]) .display-systems {
+  --eng-cycle: 2.25s;
+  --eng-shift: -2px;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="ISOLATED"][aria-pressed="true"]) .display-systems {
+  --eng-cycle: 6.5s;
+  --eng-shift: 0px;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="CLOSED"][aria-pressed="true"]) .display-systems {
+  --eng-cycle: 5.8s;
+  --eng-contact-cycle: .8s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="OPEN"][aria-pressed="true"]) .display-systems { --eng-cycle: 1.75s; }
+.exo-crew-body .exo-station-body:has([data-control-id="pump-select"][data-control-state="CROSS-TIE"][aria-pressed="true"]) .display-systems .exo-tactical-ring {
+  animation-direction: alternate-reverse;
+}
+.exo-crew-body .exo-station-body:has([data-control-id^="breaker-"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems .exo-contact,
+.exo-crew-body .exo-station-body:has([data-control-id^="breaker-"][data-control-state="OFF"][aria-pressed="true"]) .display-systems .exo-contact {
+  animation-duration: .46s;
+  filter: brightness(1.35);
+}
+
+/* ================================================================
+   SCIENCE — real rotating acquisition sweep tied to receiver controls.
+   ================================================================ */
+.exo-crew-body .display-sensor {
+  --science-cycle: 3.4s;
+  --science-sweep-start: -32deg;
+  --science-sweep-end: 328deg;
+  --science-contact-cycle: 2.2s;
+  --science-ring-scale: 1;
+}
+.exo-crew-body .display-sensor .exo-tactical-ring {
+  transform: translate(-50%,-50%) scale(var(--science-ring-scale));
+  transition: transform .24s ease;
+}
+.exo-crew-body .display-sensor .exo-tactical-ring::before {
+  animation: exo-science-sweep var(--science-cycle) linear infinite;
+}
+.exo-crew-body .display-sensor .exo-tactical-ring::after {
+  animation: exo-science-integrate calc(var(--science-cycle) * .72) ease-in-out infinite;
+}
+.exo-crew-body .display-sensor .exo-contact { --contact-pulse: var(--science-contact-cycle); }
+@keyframes exo-science-sweep {
+  from { transform: rotate(var(--science-sweep-start)); opacity: .52; }
+  48% { opacity: 1; }
+  to { transform: rotate(var(--science-sweep-end)); opacity: .52; }
+}
+@keyframes exo-science-integrate {
+  0%,100% { opacity: .28; transform: scale(.98); }
+  50% { opacity: .84; transform: scale(1.025); }
+}
+.exo-crew-body .exo-station-body:has([data-control-id="receiver-band"][data-control-state="WIDEBAND"][aria-pressed="true"]) .display-sensor { --science-cycle: 2.3s; }
+.exo-crew-body .exo-station-body:has([data-control-id="receiver-band"][data-control-state="OPTICAL"][aria-pressed="true"]) .display-sensor {
+  --science-cycle: 4.6s;
+  --science-contact-cycle: 1.2s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="receiver-band"][data-control-state="SPECTRAL"][aria-pressed="true"]) .display-sensor {
+  --science-cycle: 6.2s;
+  --science-sweep-start: -75deg;
+  --science-sweep-end: 285deg;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="aperture"][data-control-state="HIGH GAIN"][aria-pressed="true"]) .display-sensor {
+  --science-ring-scale: .84;
+  --science-contact-cycle: .86s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="aperture"][data-control-state="SIDE ARRAY"][aria-pressed="true"]) .display-sensor {
+  --science-ring-scale: .93;
+  --science-sweep-start: 58deg;
+  --science-sweep-end: 418deg;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="aperture"][data-control-state="AUX ARRAY"][aria-pressed="true"]) .display-sensor {
+  --science-ring-scale: .74;
+  --science-cycle: 5.4s;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="integration"][data-control-state="SHORT"][aria-pressed="true"]) .display-sensor { --science-cycle: 1.35s; }
+.exo-crew-body .exo-station-body:has([data-control-id="integration"][data-control-state="NOMINAL"][aria-pressed="true"]) .display-sensor { --science-cycle: 3.4s; }
+.exo-crew-body .exo-station-body:has([data-control-id="integration"][data-control-state="LONG"][aria-pressed="true"]) .display-sensor { --science-cycle: 7.5s; }
+.exo-crew-body .exo-station-body:has([data-control-id="emitter-gate"][data-control-state="PULSE"][aria-pressed="true"]) .display-sensor .exo-tactical-ring {
+  animation: exo-science-active-pulse .72s ease-out infinite;
+}
+.exo-crew-body .exo-station-body:has([data-control-id="emitter-inhibit"][data-control-state="CLOSED"][aria-pressed="true"]) .display-sensor .exo-tactical-ring::before {
+  opacity: .32;
+}
+@keyframes exo-science-active-pulse {
+  0% { box-shadow: inset 0 0 26px rgba(0,0,0,.5), 0 0 4px rgba(134,202,226,.08); }
+  42% { box-shadow: inset 0 0 26px rgba(0,0,0,.5), 0 0 24px rgba(134,202,226,.32); }
+  100% { box-shadow: inset 0 0 26px rgba(0,0,0,.5), 0 0 7px rgba(134,202,226,.1); }
+}
+
+/* Immediate tactile feedback while a physical control is being manipulated. */
+@keyframes exo-display-control-kick {
+  0%,100% { filter: brightness(1); }
+  50% { filter: brightness(1.22); }
+}
+.exo-crew-body .exo-station-body:has([data-control-gesture]:active) .exo-tactical-display:not(.display-link),
+.exo-crew-body .exo-station-body:has([data-proc-slider]:active) .exo-tactical-display:not(.display-link),
+.exo-crew-body .exo-station-body:has([data-proc-range]:active) .exo-tactical-display:not(.display-link) {
+  animation: exo-display-control-kick .22s ease-out 1;
+}
+
+/* Keep the displays alive without ignoring accessibility preferences. */
+@media (prefers-reduced-motion: reduce) {
+  .exo-crew-body .display-maneuver .exo-tactical-ring,
+  .exo-crew-body .display-maneuver .exo-ownship,
+  .exo-crew-body .display-plot .exo-tactical-ring,
+  .exo-crew-body .display-plot .exo-ownship,
+  .exo-crew-body .display-target .exo-tactical-ring,
+  .exo-crew-body .display-target .exo-ownship,
+  .exo-crew-body .display-systems .exo-tactical-ring,
+  .exo-crew-body .display-systems .exo-ownship,
+  .exo-crew-body .display-sensor .exo-tactical-ring::before,
+  .exo-crew-body .display-sensor .exo-tactical-ring::after,
+  .exo-crew-body .exo-tactical-display .exo-contact {
+    animation-duration: 12s !important;
+    animation-timing-function: linear !important;
+  }
+}
