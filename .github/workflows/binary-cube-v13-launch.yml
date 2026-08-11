@@ -19,6 +19,9 @@ on:
       - "scripts/validate-binary-cube-v12-pages-browser.mjs"
       - "scripts/validate-binary-cube-v13-launch.mjs"
       - "scripts/validate-binary-cube-v13-pages-browser.mjs"
+      - "scripts/validate-binary-cube-serial-demonstration.mjs"
+      - "scripts/validate-binary-cube-serial-demonstration-browser.mjs"
+      - "scripts/validate-binary-cube-serial-translation-marker.mjs"
   workflow_dispatch:
 
 permissions:
