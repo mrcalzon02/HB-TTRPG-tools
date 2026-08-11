@@ -17,15 +17,16 @@ The **Binary Cube Encryption Laboratory** remains available as a separate card. 
 
 ## Quick start
 
-1. Keep the default `4 × 4` key or choose a grid size and seed.
-2. Select an input face and one legal perpendicular output face.
-3. Choose input and output quarter-turn orientation.
-4. Choose a full, sparse, or exact custom data-entry mask.
-5. Select **Generate Canonical Draft Key**.
-6. Enter binary digits or choose an unencrypted file.
-7. Select **Encrypt Complete Package**.
-8. Use the block, phase, timeline, and point controls to inspect the transformation.
-9. Select **Decrypt and Verify Package** to confirm the exact round trip.
+1. Choose **Canonical randomized key** for normal experimentation, or **DEMONSTRATION ONLY · Flat Z Ripple** when you want a deliberately readable keyed geometry.
+2. Keep the default `4 × 4` size or choose another grid size.
+3. Select an input face and one legal perpendicular output face.
+4. Choose input and output quarter-turn orientation.
+5. For a canonical randomized key, choose a full, sparse, or exact custom data-entry mask and seed. The demonstration profile fixes the permutations and uses the full payload face intentionally.
+6. Select **Generate Canonical Draft Key**.
+7. Enter binary digits or choose an unencrypted file.
+8. Select **Encrypt Complete Package** for ordinary trace inspection, or use **▶ Play Encoding** in the upper-left of the viewport for the one-bit-at-a-time demonstration.
+9. Use the block, phase, timeline, and point controls to inspect the transformation.
+10. Select **Decrypt and Verify Package** to confirm the exact round trip.
 
 ## The real transformation model
 
@@ -56,6 +57,12 @@ Input and output quarter-turns are encoding parameters. Each value represents `0
 
 Each face cell maps to one stable point ID. The key’s row, column, and depth permutations determine the point coordinate. Selecting a point shows its source index, input face cell, coordinate, output face cell, package output index, bit, and payload-or-filler state.
 
+### Demonstration-only Flat Z Ripple
+
+**DEMONSTRATION ONLY · Flat Z Ripple** is a visibility aid, not a stronger or recommended security configuration. It is still passed through the canonical key validator and transformation engine, but it deliberately removes the usual visual randomness by using identity row, column, and depth permutations, a full payload mask, and the deterministic keyed relation `z = (x + y) mod gridSize`.
+
+This makes neighboring input cells produce an easy-to-follow ripple through depth. The profile is explicitly labeled demonstration-only because the predictable structure exists to make the transformation legible.
+
 ### Mask and filler
 
 A mask value of `1` marks a payload cell. A value of `0` marks deterministic filler. A final partial block can also contain filler in otherwise active payload positions. Filler is deterministic canonical state, not random visual decoration.
@@ -79,7 +86,19 @@ Every selected block uses the same ten canonical phases:
 9. `encrypted-block-emitted`
 10. `block-complete`
 
-Use **First**, **Previous Phase**, **Next Phase**, **Last**, and **Restart** for discrete inspection. Use **Play**, **Reverse**, **Pause**, speed, scope, cohort, and the timeline for deterministic playback.
+Use **First**, **Previous Phase**, **Next Phase**, **Last**, and **Restart** for discrete inspection. Use **Play**, **Reverse**, **Pause**, speed, scope, cohort, and the timeline for deterministic phase playback.
+
+### Viewport one-bit-at-a-time demonstration
+
+The viewport’s **▶ Play Encoding** control is intentionally different from the ordinary ten-phase block playback. It serializes the validated trace so that exactly one input bit is active at a time. Each bit receives **1.4 seconds** to traverse its complete route, and the ordinary playback-speed selector does not accelerate this demonstration.
+
+For each active bit, the moving bright point follows the exact canonical geometry:
+
+`input face cell → keyed interior coordinate → output face cell → emitted landing position`
+
+The white route grows progressively with the travelling bit. A second stationary pale point marks the bit’s exact keyed interior coordinate, with an on-canvas **KEYED TRANSLATION · (x, y, z)** label. The travelling point therefore visibly arrives at the keyed translation target and then continues toward the output face instead of jumping between coarse animation phases.
+
+If no source file or manual input has been supplied when viewport playback is requested, the visualizer prepares its built-in demonstration input and then runs the same validated canonical trace path. It does not substitute decorative particles or an independent animation model.
 
 ## Rendering tiers
 
@@ -168,4 +187,6 @@ Confirm the passphrase and matching key. Wrong passphrases fail AES-GCM authenti
 
 ## Verification record
 
-V12 regression, runtime, failure, lifecycle, desktop, accessibility, compatibility, stale-work, narrow-screen, and public GitHub Pages evidence is recorded in `docs/binary-cube-v12-runtime-failure-report.md`.
+The complete validation chain now includes dedicated static and Chromium serial-demonstration evidence in addition to the V12 regression, runtime, failure, lifecycle, desktop, accessibility, compatibility, stale-work, narrow-screen, and public GitHub Pages evidence. The serial gates verify one-bit ordering, the fixed 1.4-second bit duration, exact keyed route anchors, monotonic tweening, the speed-selector override boundary, and the keyed-translation marker/label contract.
+
+The broader V12 evidence remains recorded in `docs/binary-cube-v12-runtime-failure-report.md`.
