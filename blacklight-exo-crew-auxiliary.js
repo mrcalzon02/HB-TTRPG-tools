@@ -149,7 +149,7 @@
     }
   }
 
-  function blockAuthorization(e,token){
+  function blockAuthorization(e){
     if(!coreAttemptActive())return false;
     if(!attempt)beginAttempt();
     if(!attempt||attempt.difficulty===0)return false;
@@ -168,18 +168,23 @@
     $("crew-auxiliary-root")?.addEventListener("change",e=>{const input=e.target.closest("[data-aux-range]");if(input)handleAuxInput(input,true);});
 
     document.addEventListener("click",e=>{
-      const auth=e.target.closest("#station-panel [data-proc-input]");if(auth&&AUTH_TOKENS.has(auth.dataset.procInput)){if(blockAuthorization(e,auth.dataset.procInput))return;}
+      const begin=e.target.closest("#station-panel [data-procedure-begin]");
+      const abort=e.target.closest("#station-panel [data-procedure-abort]");
+      const stationTab=e.target.closest("#station-tabs [data-station]");
+      const reset=e.target.closest("#crew-scenario-reset");
+      const auth=e.target.closest("#station-panel [data-proc-input]");
+      const authToken=auth?.dataset.procInput;
+      if(auth&&AUTH_TOKENS.has(authToken)&&blockAuthorization(e))return;
+      if(begin){queueMicrotask(beginAttempt);return;}
+      if(abort){queueMicrotask(()=>clearAttempt("Primary procedure aborted; Panel II attempt requirements cleared."));return;}
+      if(stationTab){queueMicrotask(()=>{attempt=null;drawerOpen=false;message="Station changed. Begin a primary procedure to arm this station's Panel II requirements.";renderAll();});return;}
+      if(reset){queueMicrotask(()=>{configuredDifficulty=0;values=initialValues();attempt=null;drawerOpen=false;message="Human baseline reset; Panel II returned to nominal mid-range settings.";renderAll();});return;}
+      if(authToken==="execute"){setTimeout(()=>{if(!coreAttemptActive())clearAttempt("Command executed; Panel II is standing by for the next procedure.");},0);}
     },true);
 
-    document.addEventListener("click",e=>{
-      if(e.target.closest("#station-panel [data-procedure-begin]")){queueMicrotask(beginAttempt);return;}
-      if(e.target.closest("#station-panel [data-procedure-abort]")){queueMicrotask(()=>clearAttempt("Primary procedure aborted; Panel II attempt requirements cleared."));return;}
-      if(e.target.closest("#station-tabs [data-station]")){queueMicrotask(()=>{attempt=null;drawerOpen=false;message="Station changed. Begin a primary procedure to arm this station's Panel II requirements.";renderAll();});return;}
-      if(e.target.closest("#crew-scenario-reset")){queueMicrotask(()=>{configuredDifficulty=0;values=initialValues();attempt=null;drawerOpen=false;message="Human baseline reset; Panel II returned to nominal mid-range settings.";renderAll();});return;}
-      const execute=e.target.closest("#station-panel [data-proc-input='execute']");if(execute){setTimeout(()=>{if(!coreAttemptActive())clearAttempt("Command executed; Panel II is standing by for the next procedure.");},0);}
-    });
-
-    document.addEventListener("change",e=>{if(e.target.closest("#station-panel [data-procedure-select]")){queueMicrotask(()=>{attempt=null;message="Procedure selection changed. New auxiliary targets will arm on Begin Procedure.";renderAll();});}});
+    document.addEventListener("change",e=>{
+      if(e.target.closest("#station-panel [data-procedure-select]")){queueMicrotask(()=>{attempt=null;message="Procedure selection changed. New auxiliary targets will arm on Begin Procedure.";renderAll();});}
+    },true);
     document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawerOpen){drawerOpen=false;renderDrawer();}});
   }
 
