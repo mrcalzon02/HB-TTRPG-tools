@@ -25,7 +25,7 @@ Wi-Fi scan results include a center frequency, so `frequencyHz` is emitted.
 
 BLE scan callbacks do not identify which advertising-channel RF frequency produced an individual result, so the bridge does not invent a 2.4 GHz channel value.
 
-Cellular observations preserve Android-reported LTE/NR signal metrics, normalized radio technology, registration state, ARFCN/EARFCN/UARFCN/NRARFCN-style channel number and channel-number type, LTE/NR band identifiers, LTE bandwidth when the platform exposes it, and the age of the modem's `CellInfo` sample relative to Android elapsed realtime. The bridge deliberately keeps modem-sample age separate from the observation receipt timestamp. It does not guess a physical center frequency from a cellular channel number without an explicit band/channel conversion model.
+Cellular callbacks preserve LTE/NR signal metrics and ARFCN/EARFCN/NRARFCN-style channel numbers when Android exposes them. The bridge does not guess a center frequency from a channel number without an explicit band/channel conversion model.
 
 ## Build
 
@@ -44,9 +44,9 @@ API 36 is intentionally used for the reproducible CI build because the current G
 
 The privileged WebView is restricted to `https://mrcalzon02.github.io/HB-TTRPG-tools/`. External URLs are opened outside the WebView and never inherit the JavaScript bridge.
 
-The Activity starts passive collectors while the companion is foregrounded so hardware capability discovery is available as the page initializes, and it still stops them on pause/destroy. Live Signals Laboratory 0.4 also calls `bridge.startPassive()` when a Passive Scan session begins and `bridge.stopPassive()` when that session ends. The native methods are idempotent, so the web session becomes the authoritative in-app acquisition lifetime without creating a second collector path.
+In this first packaged scaffold, passive collectors start while the companion Activity is foregrounded and stop on pause/destroy. The Live Signals web session determines whether observations are retained; observations emitted before a web session exists are discarded rather than queued as stale data.
 
-Observations emitted before a web session exists are discarded rather than queued as stale RF telemetry. When Android runtime permissions are granted after first launch, the Activity restarts the native collectors and refreshes the web capability report so newly available cellular/BLE/Wi-Fi/location channels become visible immediately.
+A later authoritative web-runtime revision should call `bridge.startPassive()` and `bridge.stopPassive()` directly from the Live Signals session controls so hardware duty cycle exactly follows the web session.
 
 ## Native bridge API
 
