@@ -182,10 +182,12 @@ assert.match(controllerSource, /demonstrationFormula:\s*'z=\(x\+y\) mod gridSize
 assert.match(rendererSource, /SERIAL BIT/);
 assert.match(rendererSource, /serialPathVertices/);
 assert.match(rendererSource, /\[3, 4, 7, 9\]/);
+assert.match(rendererSource, /if \(inputCellIndex < serialState\.inputCellIndex\) return mix\(COLORS\.dim, outputColor, 0\.34\)/);
+assert.match(rendererSource, /if \(inputCellIndex > serialState\.inputCellIndex\) return mix\(COLORS\.dim, inputColor, 0\.24\)/);
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-serial-demonstration-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   rendererVersion: Renderer.constants.RENDERER_VERSION,
   gridSize: GRID_SIZE,
   cellCount: CELL_COUNT,
@@ -199,6 +201,9 @@ console.log(JSON.stringify({
   smoothMonotonicTweening: true,
   exactKeyedRoute: true,
   playbackSpeedOverrideDisabled: true,
+  futureInputContextDimmed: true,
+  completedOutputContextDimmed: true,
+  activeBitFocusPreserved: true,
   testedRoutes: serialReceipts,
   pass: true
 }, null, 2));
