@@ -136,6 +136,14 @@
     (() => {
       "use strict";
       const slider = () => document.getElementById("crew-master-difficulty");
+      const ENGINEERING_BREAKERS = Object.freeze([
+        "breaker-reactor","breaker-rectifier","breaker-coolant","breaker-grid",
+        "breaker-field","breaker-inverter","breaker-sensor","breaker-lighting"
+      ]);
+      const engineeringEntryPlan = Object.freeze(Object.fromEntries(ENGINEERING_BREAKERS.map(id => [id, Math.random() < .5 ? "OFF" : "ON"])));
+      let engineeringEntryApplied = false;
+      let engineeringEntryApplying = false;
+
       const selectedDifficulty = () => {
         const option = document.querySelector("#station-panel [data-procedure-select]")?.selectedOptions?.[0];
         const value = Number(option?.dataset.recommendedDifficulty);
@@ -149,9 +157,43 @@
         input.value = String(next);
         input.dispatchEvent(new Event("input", { bubbles: true }));
       };
-      document.addEventListener("DOMContentLoaded", () => setTimeout(syncAuxiliaryDepth, 0));
+      const applyEngineeringEntryPlan = () => {
+        if (engineeringEntryApplied || engineeringEntryApplying) return;
+        const active = document.querySelector('#station-tabs [data-station="engineering"][aria-selected="true"]');
+        if (!active) return;
+        engineeringEntryApplying = true;
+        let index = 0;
+        const applyNext = () => {
+          if (index >= ENGINEERING_BREAKERS.length) {
+            engineeringEntryApplied = true;
+            engineeringEntryApplying = false;
+            document.body.dataset.engineeringEntryRandomized = "true";
+            return;
+          }
+          const id = ENGINEERING_BREAKERS[index++];
+          const desired = engineeringEntryPlan[id];
+          const control = document.querySelector(`#station-panel [data-control-id="${id}"][data-control-state="${desired}"]`);
+          if (control && control.getAttribute("aria-pressed") !== "true") {
+            control.click();
+            setTimeout(applyNext, 0);
+          } else {
+            applyNext();
+          }
+        };
+        applyNext();
+      };
+      document.addEventListener("DOMContentLoaded", () => setTimeout(() => { syncAuxiliaryDepth(); applyEngineeringEntryPlan(); }, 0));
       document.addEventListener("change", event => { if (event.target.closest?.("#station-panel [data-procedure-select]")) syncAuxiliaryDepth(); });
-      document.addEventListener("click", event => { if (event.target.closest?.("#station-panel [data-procedure-begin]")) syncAuxiliaryDepth(); if (event.target.closest?.("#station-tabs [data-station], #crew-scenario-reset")) setTimeout(syncAuxiliaryDepth, 0); });
+      document.addEventListener("click", event => {
+        if (event.target.closest?.("#station-panel [data-procedure-begin]")) syncAuxiliaryDepth();
+        if (event.target.closest?.("#station-tabs [data-station]")) setTimeout(() => { syncAuxiliaryDepth(); applyEngineeringEntryPlan(); }, 0);
+        if (event.target.closest?.("#crew-scenario-reset")) {
+          engineeringEntryApplied = false;
+          engineeringEntryApplying = false;
+          delete document.body.dataset.engineeringEntryRandomized;
+          setTimeout(syncAuxiliaryDepth, 0);
+        }
+      });
     })();
   </script>
 </body>
