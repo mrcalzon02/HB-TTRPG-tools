@@ -20,6 +20,7 @@ const checks = Object.freeze([
   ['v5-browser', 'node', ['scripts/validate-binary-cube-visualizer-step-browser.mjs']],
   ['v6-static', 'node', ['scripts/validate-binary-cube-visualizer-animation.mjs']],
   ['serial-demonstration', 'node', ['scripts/validate-binary-cube-serial-demonstration.mjs']],
+  ['serial-translation-marker', 'node', ['scripts/validate-binary-cube-serial-translation-marker.mjs']],
   ['serial-demonstration-browser', 'node', ['scripts/validate-binary-cube-serial-demonstration-browser.mjs']],
   ['v6-browser', 'node', ['scripts/validate-binary-cube-visualizer-animation-browser.mjs']],
   ['v7-static', 'node', ['scripts/validate-binary-cube-visualizer-encoder.mjs']],
