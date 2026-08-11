@@ -12,10 +12,17 @@ const repositoryRoot = path.resolve(scriptDirectory, '..');
 const Engine = require(path.join(repositoryRoot, 'shadowrun-binary-cube-engine.js'));
 const Renderer = require(path.join(repositoryRoot, 'binary-cube-visualizer-renderer.js'));
 const rendererSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visualizer-renderer.js'), 'utf8');
+const styleSource = fs.readFileSync(path.join(repositoryRoot, 'binary-cube-visualizer.css'), 'utf8');
 
 assert.match(rendererSource, /const translationPoint = serialState \? pointAnchorPosition\(trace, highlightedPointId, 4\) : null/);
 assert.match(rendererSource, /new Float32Array\(\[\.\.\.highlightedPosition, \.\.\.COLORS\.selected, \.\.\.translationPoint, \.\.\.COLORS\.path\]\)/);
 assert.match(rendererSource, /this\.selectedPointCount = serialState \? 2 : 1/);
+assert.match(rendererSource, /translationLabel\.className = 'cube-visualizer-translation-label'/);
+assert.match(rendererSource, /this\.labels\.set\('translation-point', translationLabel\)/);
+assert.match(rendererSource, /translationPointPosition: translationPoint \? Object\.freeze\(\[\.\.\.translationPoint\]\) : null/);
+assert.match(rendererSource, /translationLabel\.textContent = `KEYED TRANSLATION · \(\$\{point\.x\}, \$\{point\.y\}, \$\{point\.z\}\)`/);
+assert.match(rendererSource, /positions\['translation-point'\] = this\.traceState\.translationPointPosition/);
+assert.match(styleSource, /\.cube-visualizer-translation-label\{/);
 
 const key = Engine.createKey({
   gridSize: 4,
@@ -39,7 +46,7 @@ assert.notDeepEqual(keyedTranslationPoint, routeAnchors[2], 'The translation mar
 
 console.log(JSON.stringify({
   format: 'hb-ttrpg-binary-cube-serial-translation-marker-validation-receipt',
-  schemaVersion: '0.1.0',
+  schemaVersion: '0.2.0',
   pass: true,
   rendererVersion: Renderer.constants.RENDERER_VERSION,
   inputCellIndex,
@@ -48,5 +55,7 @@ console.log(JSON.stringify({
   movingBitMarkerCount: 1,
   stationaryTranslationMarkerCount: 1,
   stationaryMarkerUsesExactRouteAnchor: true,
-  markerVisibleOnlyDuringSerialPlayback: true
+  markerVisibleOnlyDuringSerialPlayback: true,
+  keyedTranslationLabelPresent: true,
+  keyedTranslationLabelTracksExactMarker: true
 }, null, 2));
