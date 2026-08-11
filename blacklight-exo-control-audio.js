@@ -14,6 +14,18 @@
     science: Object.freeze({ gain: 0.84, rate: 1.09 }),
     comms: Object.freeze({ gain: 0.90, rate: 1.06 })
   });
+  // Engineering is the perceived-level reference. Ambient compensation is
+  // deliberately isolated from mechanical control SFX so the other stations
+  // can reach the same audible soundscape range without making their switches,
+  // keys and levers disproportionately loud.
+  const AMBIENT_STATION_GAIN = Object.freeze({
+    helm: 1.25,
+    navigation: 2.35,
+    gunnery: 1.55,
+    engineering: 1.00,
+    science: 2.35,
+    comms: 2.20
+  });
   const STATION_NAMES = Object.freeze(Object.keys(STATION_CHARACTER));
   const PRELOAD_ASSETS = Object.freeze(['click', 'snap', 'snick', 'krunk', 'clickKlunk', 'slowCoinClicking', 'engineLoop', 'deng']);
   const EXTERNAL_CC0_SOURCES = Object.freeze({
@@ -278,9 +290,12 @@
     enforceActiveLimit();
     const audio = new Audio(source);
     const rateVariation = options.vary === false ? 0 : variation(options.seed || options.key || options.scene || '', index);
+    const station = stationFromOptions(options);
     const character = characterFor(options);
-    const controlEffectGain = String(options.scene || '').startsWith('ambient-') ? 1 : CONTROL_EFFECT_GAIN;
-    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * controlEffectGain, 0, 1);
+    const ambientScene = String(options.scene || '').startsWith('ambient-');
+    const controlEffectGain = ambientScene ? 1 : CONTROL_EFFECT_GAIN;
+    const ambientGain = ambientScene ? (AMBIENT_STATION_GAIN[station] ?? 1) : 1;
+    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * controlEffectGain * ambientGain, 0, 1);
     audio.preload = 'auto';
     activeBaseVolumes.set(audio, baseVolume);
     audio.volume = clamp(baseVolume * masterVolume, 0, 1);
@@ -380,20 +395,27 @@
     if (station === 'helm') {
       const throttle = value('HEL-THT-05');
       const gate = value('HEL-TGT-06');
+      // A flight-control station never becomes acoustically dead. The quiet
+      // machinery bed represents pumps, control electronics and drive support;
+      // actual thrust states add the much stronger drive layer on top.
+      result.push({ id: 'flight-bed', scene: 'ambient-machinery', intensity: 0.28 });
       if (gate === 'FORWARD' || gate === 'AFT') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.95 });
       else if (throttle === 'HIGH') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.68 });
-      else if (throttle === 'NOMINAL') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.28 });
+      else if (throttle === 'NOMINAL') result.push({ id: 'drive', scene: 'ambient-drive-rumble', intensity: 0.32 });
     } else if (station === 'navigation') {
       const solver = value('NAV-SOL-02');
       const latch = value('NAV-SHL-07');
-      if (solver && solver !== 'STANDBY') result.push({ id: 'computer', scene: 'ambient-electronics', intensity: latch === 'RELAY' ? 0.62 : latch === 'STAGED' ? 0.48 : 0.30 });
+      const intensity = latch === 'RELAY' ? 1.00 : latch === 'STAGED' ? 0.90 : solver && solver !== 'STANDBY' ? 0.82 : 0.72;
+      result.push({ id: 'computer', scene: 'ambient-electronics', intensity });
     } else if (station === 'gunnery') {
       const capacitor = value('GUN-CAP-05');
       const arm = value('GUN-ARM-06');
-      if (capacitor === 'READY' || capacitor === 'MAX') {
-        const intensity = clamp((capacitor === 'MAX' ? 0.82 : 0.34) + (arm === 'ARMED' ? 0.16 : 0), 0, 1);
-        result.push({ id: 'capacitors', scene: 'ambient-capacitor-bank', intensity });
-      }
+      const intensity = clamp(
+        (capacitor === 'MAX' ? 0.90 : capacitor === 'READY' ? 0.52 : 0.28) + (arm === 'ARMED' ? 0.10 : 0),
+        0,
+        1
+      );
+      result.push({ id: 'capacitors', scene: 'ambient-capacitor-bank', intensity });
     } else if (station === 'engineering') {
       const rectifierFeeds = [value('ENG-RFA-01'), value('ENG-RFB-02'), value('ENG-RFC-03'), value('ENG-RFD-04')];
       const busTransfer = value('ENG-BBT-05');
@@ -421,18 +443,17 @@
       const aperture = value('SCI-APM-02');
       const inhibit = value('SCI-AEI-05');
       const emitter = value('SCI-EMT-06');
-      if (receiver && receiver !== 'STANDBY') {
-        const intensity = aperture === 'HIGH GAIN' ? 0.34 : 0.20;
-        result.push({ id: 'receiver', scene: 'ambient-electronics', intensity });
-      }
-      if (emitter === 'PULSE' || inhibit === 'OPEN') result.push({ id: 'emitter', scene: 'ambient-capacitor-bank', intensity: emitter === 'PULSE' ? 0.88 : 0.30 });
+      const receiverIntensity = aperture === 'HIGH GAIN' ? 0.92 : receiver && receiver !== 'STANDBY' ? 0.74 : 0.62;
+      result.push({ id: 'receiver', scene: 'ambient-electronics', intensity: receiverIntensity });
+      if (emitter === 'PULSE' || inhibit === 'OPEN') result.push({ id: 'emitter', scene: 'ambient-capacitor-bank', intensity: emitter === 'PULSE' ? 0.92 : 0.38 });
     } else if (station === 'comms') {
       const crypto = value('COM-CRY-06');
       const transmit = value('COM-TXK-07');
       const power = value('COM-TXP-05');
-      if (crypto === 'SECURE') result.push({ id: 'crypto', scene: 'ambient-electronics', intensity: 0.18 });
+      result.push({ id: 'receiver', scene: 'ambient-electronics', intensity: 0.65 });
+      if (crypto === 'SECURE') result.push({ id: 'crypto', scene: 'ambient-capacitor-bank', intensity: 0.35 });
       if (transmit === 'TRANSMIT') {
-        const intensity = power === 'HIGH / NARROW' ? 0.82 : power === 'LOW / WIDE' ? 0.34 : 0.54;
+        const intensity = power === 'HIGH / NARROW' ? 1.00 : power === 'LOW / WIDE' ? 0.58 : 0.78;
         result.push({ id: 'carrier', scene: 'ambient-rf-carrier', intensity });
       }
     }
@@ -522,6 +543,7 @@
     scenes,
     externalSources: EXTERNAL_CC0_SOURCES,
     stationCharacter: STATION_CHARACTER,
+    ambientStationGain: AMBIENT_STATION_GAIN,
     prime,
     play,
     startLoop,
