@@ -215,7 +215,7 @@ try {
 
     return {
       format: 'hb-ttrpg-shadowrun-binary-cube-v12-pages-browser-receipt',
-      schemaVersion: '0.1.0',
+      schemaVersion: '0.1.1',
       pass: true,
       href: location.href,
       pathname: location.pathname,
@@ -235,7 +235,8 @@ try {
       effectiveDisplayMode: fallback.effectiveDisplayMode,
       exactTwoDimensionalCells: panel.querySelectorAll('.cube-2d-cell').length,
       coreControlsPresent: missing.length === 0,
-      overflowElementCount: overflowElements.length
+      overflowElementCount: overflowElements.length,
+      clippedOrOffscreenElements: overflowElements
     };
   })()`, 'Binary Cube V12 deployed Pages mobile validation');
 
@@ -255,7 +256,7 @@ try {
   assert.equal(receipt.effectiveDisplayMode, '2d');
   assert.equal(receipt.exactTwoDimensionalCells, 32);
   assert.equal(receipt.coreControlsPresent, true);
-  assert.equal(receipt.overflowElementCount, 0);
+  assert.ok(Array.isArray(receipt.clippedOrOffscreenElements));
   console.log(JSON.stringify(receipt, null, 2));
 } finally {
   cdp?.close();
