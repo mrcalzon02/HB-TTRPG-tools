@@ -6,9 +6,9 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeVisualizerRendererApi() {
   'use strict';
 
-  const RENDERER_VERSION = '0.6.0';
+  const RENDERER_VERSION = '0.7.0';
   const FACES = Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
-  const PLAYBACK_MODES = Object.freeze(['all', 'selected', 'row']);
+  const PLAYBACK_MODES = Object.freeze(['all', 'selected', 'row', 'serial']);
   const RENDER_QUALITIES = Object.freeze(['auto', 'exact', 'sampled', 'aggregate']);
   const VIEW_MODES = Object.freeze(['perspective', 'isometric']);
   const DEFAULT_MANUAL_BITS = '01001100110100110100110011010011';
@@ -442,11 +442,62 @@
   }
 
   function pointParticipates(trace, pointId, selectedPointId, playbackMode) {
-    if (playbackMode === 'all') return true;
+    if (playbackMode === 'all' || playbackMode === 'serial') return true;
     if (playbackMode === 'selected') return pointId === selectedPointId;
     const selectedInputIndex = trace.inputCellIndexByPoint[selectedPointId];
     const pointInputIndex = trace.inputCellIndexByPoint[pointId];
     return Math.floor(selectedInputIndex / trace.gridSize) === Math.floor(pointInputIndex / trace.gridSize);
+  }
+
+  function serialPlaybackState(traceValue, traceTimeValue) {
+    const trace = validateTraceShape(traceValue);
+    const pointCount = trace.pointField.length;
+    const traceTime = clamp(Number(traceTimeValue) || 0, 0, 1);
+    const scaled = traceTime * pointCount;
+    const inputCellIndex = traceTime >= 1 ? pointCount - 1 : Math.min(pointCount - 1, Math.floor(scaled));
+    const localTraceTime = traceTime >= 1 ? 1 : clamp(scaled - inputCellIndex, 0, 1);
+    const activePointId = trace.inputProjectionPointIds[inputCellIndex];
+    return Object.freeze({
+      traceTime,
+      pointCount,
+      inputCellIndex,
+      activePointId,
+      localTraceTime,
+      completedPointCount: traceTime >= 1 ? pointCount : Math.floor(scaled)
+    });
+  }
+
+  function serialPointTraceTime(traceValue, pointIdValue, traceTimeValue) {
+    const trace = validateTraceShape(traceValue);
+    const pointId = Number(pointIdValue);
+    if (!Number.isInteger(pointId) || pointId < 0 || pointId >= trace.pointField.length) fail(`Trace point ID must be an integer from 0 through ${trace.pointField.length - 1}.`);
+    const inputCellIndex = trace.inputCellIndexByPoint[pointId];
+    return clamp(clamp(Number(traceTimeValue) || 0, 0, 1) * trace.pointField.length - inputCellIndex, 0, 1);
+  }
+
+  function samePosition(left, right) {
+    return Math.abs(left[0] - right[0]) < 1e-9 && Math.abs(left[1] - right[1]) < 1e-9 && Math.abs(left[2] - right[2]) < 1e-9;
+  }
+
+  function traceMotionAnchors(traceValue, pointIdValue) {
+    const trace = validateTraceShape(traceValue);
+    const anchors = [];
+    for (let phaseIndex = 0; phaseIndex < trace.phases.length; phaseIndex += 1) {
+      const position = pointAnchorPosition(trace, pointIdValue, phaseIndex);
+      if (!anchors.length || !samePosition(anchors[anchors.length - 1], position)) anchors.push(position);
+    }
+    return anchors;
+  }
+
+  function tweenPointAcrossTrace(traceValue, pointIdValue, traceTimeValue) {
+    const trace = validateTraceShape(traceValue);
+    const anchors = traceMotionAnchors(trace, pointIdValue);
+    if (anchors.length <= 1) return Object.freeze([...(anchors[0] || [0, 0, 0])]);
+    const traceTime = clamp(Number(traceTimeValue) || 0, 0, 1);
+    const segmentPosition = traceTime * (anchors.length - 1);
+    const segmentIndex = traceTime >= 1 ? anchors.length - 2 : Math.floor(segmentPosition);
+    const segmentProgress = traceTime >= 1 ? 1 : segmentPosition - segmentIndex;
+    return Object.freeze(mix(anchors[segmentIndex], anchors[segmentIndex + 1], smoothstep(segmentProgress)));
   }
 
   function tracePointPosition(traceValue, pointIdValue, traceTimeValue, selectedPointIdValue = 0, playbackModeValue = 'all') {
@@ -454,11 +505,12 @@
     const pointId = Number(pointIdValue);
     const selectedPointId = clamp(Number(selectedPointIdValue) || 0, 0, trace.pointField.length - 1);
     const playbackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
+    if (playbackMode === 'serial') return tweenPointAcrossTrace(trace, pointId, serialPointTraceTime(trace, pointId, traceTimeValue));
+    if (!pointParticipates(trace, pointId, selectedPointId, playbackMode)) return pointAnchorPosition(trace, pointId, 0);
     const timeline = resolveTraceTimeline(traceTimeValue, trace.phases.length);
     const start = pointAnchorPosition(trace, pointId, timeline.phaseIndex);
     const end = pointAnchorPosition(trace, pointId, timeline.nextPhaseIndex);
-    const progress = pointParticipates(trace, pointId, selectedPointId, playbackMode) ? timeline.easedProgress : 0;
-    return Object.freeze(mix(start, end, progress));
+    return Object.freeze(mix(start, end, timeline.easedProgress));
   }
 
   function colorAtPhase(trace, pointId, phaseIndex) {
@@ -469,12 +521,16 @@
     return bit === '1' ? COLORS.projectedOne : COLORS.projectedZero;
   }
 
-  function tracePointColor(trace, pointId, timeline, selectedPointId, playbackMode) {
-    if (pointId === selectedPointId) return COLORS.selected;
+  function tracePointColor(trace, pointId, traceTimeValue, selectedPointId, playbackMode) {
+    if (playbackMode !== 'serial' && pointId === selectedPointId) return COLORS.selected;
+    const participates = pointParticipates(trace, pointId, selectedPointId, playbackMode);
+    const localTraceTime = playbackMode === 'serial'
+      ? serialPointTraceTime(trace, pointId, traceTimeValue)
+      : participates ? clamp(Number(traceTimeValue) || 0, 0, 1) : 0;
+    const timeline = resolveTraceTimeline(localTraceTime, trace.phases.length);
     const start = colorAtPhase(trace, pointId, timeline.phaseIndex);
     const end = colorAtPhase(trace, pointId, timeline.nextPhaseIndex);
-    const progress = pointParticipates(trace, pointId, selectedPointId, playbackMode) ? timeline.easedProgress : 0;
-    return mix(start, end, progress);
+    return mix(start, end, timeline.easedProgress);
   }
 
   function selectedPathVertices(trace, selectedPointId) {
@@ -525,6 +581,7 @@
       this.viewMode = 'perspective';
       this.preIsometricCamera = null;
       this.viewportControls = null;
+      this.viewportSerialMode = false;
       this.playbackMonitorFrame = null;
       this.pointer = null;
       this.pointerMoved = false;
@@ -596,8 +653,8 @@
       play.type = 'button';
       play.className = 'layout-button cube-visualizer-viewport-play';
       play.textContent = '▶ Play Encoding';
-      play.title = 'Build the canonical package if needed, then animate its validated encoding trace.';
-      play.setAttribute('aria-label', 'Play canonical Binary Cube encoding');
+      play.title = 'Build the canonical package if needed, then tween one validated canonical bit at a time through the cube.';
+      play.setAttribute('aria-label', 'Play canonical Binary Cube encoding one bit at a time');
       Object.assign(play.style, { position:'absolute', left:'0', top:'0', pointerEvents:'auto', minHeight:'34px', boxShadow:'0 8px 24px rgba(0,0,0,.45)' });
       play.addEventListener('click', () => this.toggleCanonicalEncodingPlayback());
 
@@ -643,7 +700,7 @@
       } else {
         button.disabled = false;
         button.textContent = '▶ Play Encoding';
-        button.setAttribute('aria-label', 'Play canonical Binary Cube encoding');
+        button.setAttribute('aria-label', 'Play canonical Binary Cube encoding one bit at a time');
       }
     }
 
@@ -684,7 +741,10 @@
         const playing = Boolean(play?.classList.contains('active'));
         this.setViewportPlayState(playing ? 'playing' : 'idle');
         if (playing) this.playbackMonitorFrame = requestAnimationFrame(tick);
-        else this.playbackMonitorFrame = null;
+        else {
+          this.viewportSerialMode = false;
+          this.playbackMonitorFrame = null;
+        }
       };
       this.playbackMonitorFrame = requestAnimationFrame(tick);
     }
@@ -695,11 +755,13 @@
       const play = panel?.querySelector('[data-cube-trace-play]');
       if (workspace && !workspace.hidden && play && !play.disabled) {
         this.setPackagePlaybackScope(panel);
+        this.viewportSerialMode = true;
         play.click();
         this.monitorCanonicalPlayback(panel);
         return;
       }
       if (attempt >= 240) {
+        this.viewportSerialMode = false;
         this.setViewportPlayState('idle');
         this.reportViewportStatus(panel, 'Exact animated trace playback is unavailable for the current package or rendering tier. The renderer did not substitute a decorative approximation.', 'error');
         return;
@@ -713,12 +775,14 @@
       const lowerPlay = panel.querySelector('[data-cube-trace-play]');
       if (lowerPlay?.classList.contains('active')) {
         panel.querySelector('[data-cube-trace-pause]')?.click();
+        this.viewportSerialMode = false;
         this.setViewportPlayState('idle');
         return;
       }
       const workspace = panel.querySelector('[data-cube-trace-workspace]');
       if (workspace && !workspace.hidden && lowerPlay && !lowerPlay.disabled) {
         this.setPackagePlaybackScope(panel);
+        this.viewportSerialMode = true;
         lowerPlay.click();
         this.monitorCanonicalPlayback(panel);
         return;
@@ -729,9 +793,10 @@
         this.reportViewportStatus(panel, 'The canonical encoder action is unavailable; playback was not simulated.', 'error');
         return;
       }
+      this.viewportSerialMode = true;
       this.setViewportPlayState('preparing');
       build.click();
-      if (usedDemo) this.reportViewportStatus(panel, 'No source file was supplied. Built-in Lorem Ipsum bytes were passed through the canonical encoder and are being prepared for validated trace playback.', 'success');
+      if (usedDemo) this.reportViewportStatus(panel, 'No source file was supplied. Built-in Lorem Ipsum bytes were passed through the canonical encoder and are being prepared for validated one-bit-at-a-time trace playback.', 'success');
       this.waitForCanonicalTrace(panel);
     }
 
@@ -904,41 +969,58 @@
       const trace = validateTraceShape(traceValue);
       if (trace.pointField.length !== this.totalPointCount) fail('Trace point count does not match the exact scene point count.');
       const selectedPointId = clamp(Number(selectedPointIdValue) || 0, 0, trace.pointField.length - 1);
-      const playbackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
+      const requestedPlaybackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
+      const playbackMode = this.viewportSerialMode ? 'serial' : requestedPlaybackMode;
       const timeline = resolveTraceTimeline(traceTimeValue, trace.phases.length);
+      const serialState = playbackMode === 'serial' ? serialPlaybackState(trace, timeline.traceTime) : null;
+      const stateTimeline = serialState ? resolveTraceTimeline(serialState.localTraceTime, trace.phases.length) : timeline;
       const renderedPointIds = resolveTraceRenderPointIds(trace, this.renderPlan, selectedPointId, playbackMode);
       const positions = renderedPointIds.map(pointId => tracePointPosition(trace, pointId, timeline.traceTime, selectedPointId, playbackMode));
-      const colors = renderedPointIds.map(pointId => tracePointColor(trace, pointId, timeline, selectedPointId, playbackMode));
+      const colors = renderedPointIds.map(pointId => tracePointColor(trace, pointId, timeline.traceTime, selectedPointId, playbackMode));
       this.uploadPointVertices(positions, colors);
 
       const selectedPosition = tracePointPosition(trace, selectedPointId, timeline.traceTime, selectedPointId, playbackMode);
+      const highlightedPointId = serialState?.activePointId ?? selectedPointId;
+      const highlightedPosition = tracePointPosition(trace, highlightedPointId, timeline.traceTime, selectedPointId, playbackMode);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.selectedPointBuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([...selectedPosition, ...COLORS.selected]), this.gl.DYNAMIC_DRAW);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([...highlightedPosition, ...COLORS.selected]), this.gl.DYNAMIC_DRAW);
       this.selectedPointCount = 1;
 
-      const pathVertices = selectedPathVertices(trace, selectedPointId);
+      const pathVertices = selectedPathVertices(trace, highlightedPointId);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.selectedPathBuffer);
       this.gl.bufferData(this.gl.ARRAY_BUFFER, pathVertices, this.gl.DYNAMIC_DRAW);
       this.selectedPathCount = pathVertices.length / 6;
 
       this.traceState = Object.freeze({
         traceTime: timeline.traceTime,
-        phaseIndex: timeline.phaseIndex,
-        nextPhaseIndex: timeline.nextPhaseIndex,
-        phaseId: trace.phases[timeline.phaseIndex].id,
-        nextPhaseId: trace.phases[timeline.nextPhaseIndex].id,
-        segmentProgress: timeline.segmentProgress,
-        easedProgress: timeline.easedProgress,
+        phaseIndex: stateTimeline.phaseIndex,
+        nextPhaseIndex: stateTimeline.nextPhaseIndex,
+        phaseId: trace.phases[stateTimeline.phaseIndex].id,
+        nextPhaseId: trace.phases[stateTimeline.nextPhaseIndex].id,
+        segmentProgress: stateTimeline.segmentProgress,
+        easedProgress: stateTimeline.easedProgress,
         selectedPointId,
         playbackMode,
+        requestedPlaybackMode,
+        activePointId: highlightedPointId,
+        serialBitIndex: serialState?.inputCellIndex ?? null,
+        serialBitProgress: serialState?.localTraceTime ?? null,
         renderedPointCount: renderedPointIds.length,
         totalPointCount: trace.pointField.length,
         renderTier: this.renderPlan.tier,
-        selectedPosition: Object.freeze([...selectedPosition])
+        selectedPosition: Object.freeze([...selectedPosition]),
+        activePointPosition: Object.freeze([...highlightedPosition])
       });
       const label = this.labels.get('trace-phase');
-      const transition = timeline.phaseIndex === timeline.nextPhaseIndex ? trace.phases[timeline.phaseIndex].id : `${trace.phases[timeline.phaseIndex].id} → ${trace.phases[timeline.nextPhaseIndex].id}`;
-      label.textContent = `TRACE ${(timeline.traceTime * 100).toFixed(1)}% · ${transition.replaceAll('-', ' ').toUpperCase()} · POINT ${selectedPointId} · ${renderedPointIds.length.toLocaleString()}/${trace.pointField.length.toLocaleString()} VISIBLE`;
+      const transition = stateTimeline.phaseIndex === stateTimeline.nextPhaseIndex ? trace.phases[stateTimeline.phaseIndex].id : `${trace.phases[stateTimeline.phaseIndex].id} → ${trace.phases[stateTimeline.nextPhaseIndex].id}`;
+      if (serialState) {
+        const bit = trace.bitByPoint[serialState.activePointId];
+        const kind = trace.cellKindByPoint[serialState.activePointId];
+        const outputCellIndex = trace.outputCellIndexByPoint[serialState.activePointId];
+        label.textContent = `SERIAL BIT ${serialState.inputCellIndex + 1}/${serialState.pointCount} · ${kind.toUpperCase()} ${bit} · ${(serialState.localTraceTime * 100).toFixed(1)}% ROUTE · INPUT ${serialState.inputCellIndex} → POINT ${serialState.activePointId} → OUTPUT ${outputCellIndex}`;
+      } else {
+        label.textContent = `TRACE ${(timeline.traceTime * 100).toFixed(1)}% · ${transition.replaceAll('-', ' ').toUpperCase()} · POINT ${selectedPointId} · ${renderedPointIds.length.toLocaleString()}/${trace.pointField.length.toLocaleString()} VISIBLE`;
+      }
       label.hidden = false;
       this.render();
       return this.traceState;
@@ -1074,6 +1156,7 @@
     dispose() {
       if (this.disposed) return;
       this.disposed = true;
+      this.viewportSerialMode = false;
       this.resizeObserver?.disconnect();
       if (this.playbackMonitorFrame != null) cancelAnimationFrame(this.playbackMonitorFrame);
       this.viewportControls?.controls?.remove();
@@ -1091,6 +1174,9 @@
     resolveTraceTimeline,
     pointAnchorPosition,
     tracePointPosition,
+    serialPlaybackState,
+    serialPointTraceTime,
+    tweenPointAcrossTrace,
     deterministicSamplePointIds,
     resolveRenderPlan,
     resolveTraceRenderPointIds,
