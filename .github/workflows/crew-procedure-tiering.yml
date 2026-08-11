@@ -1,0 +1,132 @@
+name: Crew procedure tiering migration
+on:
+  push:
+    paths:
+      - '.github/crew-procedure-tiering-trigger.txt'
+permissions:
+  contents: write
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply procedure taxonomy and relief model
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path=Path('blacklight-exo-crew-operations.js')
+          s=path.read_text()
+
+          helper=r'''  const PROCEDURE_TIER_META=Object.freeze({
+    1:Object.freeze({label:"BROAD",specificity:"Broad-scope action with deliberately general applicability.",maxRelief:1}),
+    2:Object.freeze({label:"STANDARD",specificity:"Defined routine evolution with moderate task specificity.",maxRelief:2}),
+    3:Object.freeze({label:"FOCUSED",specificity:"Focused evolution aimed at a particular operational condition or result.",maxRelief:3}),
+    4:Object.freeze({label:"SPECIALIST",specificity:"Narrow expert evolution requiring deliberate configuration and procedural precision.",maxRelief:4}),
+    5:Object.freeze({label:"PRECISION",specificity:"Highly specialized, tightly constrained evolution with the greatest preparation burden.",maxRelief:5})
+  });
+  const PROCEDURE_TIER_BY_ID=Object.freeze({
+    "planned-burn":1,"attitude-slew":1,"transfer-solve":1,"fire-solution":1,"point-defense":1,"pump-changeover":1,"sensor-bus-reset":1,"lighting-bus-reset":1,"passive-track":1,"optical-verification":1,"aux-optical-snapshot":1,"spectral-baseline":1,"emitter-standby-check":1,"authenticated-hail":1,"convoy-net-checkin":1,
+    "docking-trim":2,"evasive":2,"rcs-trim-check":2,"retrograde-braking":2,"proximity-hold":2,"docking-departure":2,"formation-reposition":2,"capture-alignment":2,"collision-vector":2,"emergency-egress":2,"intercept-support":2,"celestial-reacquire":2,"remote-fix-validation":2,"timebase-resync":2,"formation-rendezvous":2,"missile-launch":2,"defensive-envelope":2,"capacitor-condition":2,"safe-bank-change":2,"weapons-safe-down":2,"ceasefire-secure":2,"rectifier-balance":2,"bus-transfer":2,"coolant-isolation":2,"breaker-recovery":2,"rectifier-a-trim":2,"bus-voltage-equalize":2,"cross-tie-cooling":2,"primary-bus-reseat":2,"active-range":2,"spectral-classify":2,"wideband-survey":2,"high-gain-followup":2,"transient-capture":2,"drive-plume-analysis":2,"distress":2,"tactical-relay":2,"lower-sideband-search":2,"upper-sideband-search":2,"optical-handshake":2,"channel-reindex":2,"array-handover":2,"emergency-all-stations":2,
+    "main-drive-ramp":3,"rcs-countertranslation":3,"attitude-desaturation":3,"silent-rcs-drift":3,"emergency-main-cutoff":3,"braking-turn":3,"rendezvous-refine":3,"burn-window-refresh":3,"close-approach-corridor":3,"departure-corridor-relay":3,"transfer-crosscheck":3,"debris-corridor":3,"silent-drift-route":3,"recovery-vector":3,"track-refinement":3,"pdc-sector-shift":3,"guided-track-reacquire":3,"reserve-capacitor-shot":3,"crossing-target":3,"rectifier-quartet-scan":3,"field-inverter-reset":3,"reactor-grid-protection-check":3,"coolant-purge":3,"sensor-power-restoration":3,"target-designate":3,"side-array-parallax":3,"active-pulse-recovery":3,"debris-field-map":3,"thermal-wake-discrimination":3,"tightbeam-burst":3,"degraded-rf-fallback":3,"noise-floor-check":3,"secure-low-power-check":3,"distress-carrier-reset":3,"optical-secure-burst":3,
+    "collision-dodge":4,"pursuit-vector-change":4,"minimum-time-transfer":4,"blind-dead-reckoning":4,"intercept-cutoff":4,"coil-volley-prep":4,"staggered-coil-salvo":4,"pdc-saturation-screen":4,"terminal-defense":4,"reactor-load-shed":4,"asymmetric-rectifier-comp":4,"combat-bus-restoration":4,"inverter-phase-resync":4,"emcon-passive-search":4,"optical-parallax-fix":4,"active-ping-ladder":4,"frequency-hop-resync":4,"low-probability-link":4,"rescue-beacon-triangulation":4,"burst-encrypted-relay":4,
+    "wounded-drive-burn":5,"gravity-assist-pass":5,"guided-ripple":5,"degraded-track-fire":5,"emergency-bus-island":5,"thermal-emergency-circulation":5,"unknown-emission-characterize":5,"jam-resistant-fallback":5
+  });
+  const BASE_ROLL_DIFFICULTY=9;
+  const procedureType=proc=>proc?.secondary?"secondary":proc?.support?"support":"primary";
+  const procedureUsageLabel=proc=>procedureType(proc).toUpperCase();
+  function procedureCounts(def){const counts={primary:0,support:0,secondary:0,total:def.procedures.length};for(const proc of def.procedures)counts[procedureType(proc)]++;return counts;}
+  const procedureRecommendedDifficulty=proc=>clamp(Number(proc?.recommendedDifficulty)||Math.ceil(Math.max(1,(proc?.sequence?.length||AUTH_TAIL.length)-AUTH_TAIL.length)/2),1,5);
+  const procedureTaskTier=proc=>clamp(Number(proc?.taskTier)||PROCEDURE_TIER_BY_ID[proc?.id]||procedureRecommendedDifficulty(proc),1,5);
+  const procedureTierMeta=proc=>PROCEDURE_TIER_META[procedureTaskTier(proc)];
+  const procedureReliefPotential=proc=>procedureTierMeta(proc).maxRelief;
+  function procedureOptionPrefix(proc){const tier=procedureTaskTier(proc),meta=procedureTierMeta(proc);return `[${procedureUsageLabel(proc)} · T${tier} ${meta.label}] `;}
+  const procedureDifficultyLabel=proc=>`AUX +0–+5 · REC +${procedureRecommendedDifficulty(proc)} · MAX RELIEF −${procedureReliefPotential(proc)}`;
+  const procedureConventionLabel=proc=>`${procedureUsageLabel(proc)} · T${procedureTaskTier(proc)} ${procedureTierMeta(proc).label} · AUX REC +${procedureRecommendedDifficulty(proc)} · RELIEF 0…−${procedureReliefPotential(proc)}`;
+  const currentAuxDepth=()=>clamp(Number(window.EXO_AUXILIARY_PANEL?.getDifficulty?.())||0,0,5);
+  const procedureUnlockedRelief=(proc,auxDepth=currentAuxDepth())=>Math.min(procedureReliefPotential(proc),clamp(Number(auxDepth)||0,0,5));
+  function procedureEarnedRelief(proc,quality,auxDepth=currentAuxDepth()){const cap=procedureUnlockedRelief(proc,auxDepth);if(!cap||quality<65)return 0;if(quality>=95)return cap;if(quality>=82)return Math.max(1,cap-1);return Math.max(1,Math.ceil(cap/2));}
+  const procedureExecutionPenalty=quality=>quality<45?2:quality<65?1:0;
+  function procedureSummary(def){const c=procedureCounts(def),parts=[`${c.primary} primary`];if(c.secondary)parts.push(`${c.secondary} secondary`);if(c.support)parts.push(`${c.support} support`);return parts.join(" · ");}
+'''
+          pat=r'  const procedureType=proc=>.*?  function procedureSummary\(def\)\{.*?\}\n'
+          s,n=re.subn(pat,helper,s,count=1,flags=re.S)
+          assert n==1, 'procedure helper block not found'
+
+          manual=r'''  function manualOverlay(def){
+    const q=manualQuery.trim().toLowerCase(),code=STATION_CODES[activeStation],entries=def.procedures.map((p,i)=>{const type=procedureType(p),tier=procedureTaskTier(p),meta=procedureTierMeta(p),steps=p.sequence.map(t=>tokenLabel(t,def)),hay=[type,meta.label,`tier ${tier}`,p.name,p.cue,...steps].join(" ").toLowerCase(),hidden=q&&!hay.includes(q)?" hidden":"",badge=type==="primary"?"":` <em class="manual-support">${type.toUpperCase()}</em>`;return `<article class="exo-manual-entry"${hidden} data-manual-search="${hay.replace(/"/g,"&quot;")}"><header><span class="exo-manual-procedure-code">${code}-${String(i+1).padStart(2,"0")}</span><strong>${procedureOptionPrefix(p)}${p.name}${badge}</strong><b>${p.sequence.length} steps · ${procedureDifficultyLabel(p)}</b></header><p><b>CLASSIFICATION.</b> ${procedureConventionLabel(p)}. ${meta.specificity}</p><p><b>APPLICATION.</b> ${p.cue}</p><h4>OPERATING SEQUENCE — REQUIRED CONTROL POSITIONS</h4><ol>${p.sequence.map((token,n)=>manualStepWithFigure(token,def,n)).join("")}</ol></article>`;}).join(""),count=def.procedures.filter(p=>!q||[procedureType(p),procedureTierMeta(p).label,`tier ${procedureTaskTier(p)}`,p.name,p.cue,...p.sequence.map(t=>tokenLabel(t,def))].join(" ").toLowerCase().includes(q)).length;
+    return `<section class="exo-manual-overlay"><div class="exo-manual-sheet"><header class="exo-manual-header"><div class="exo-manual-mark"><span>BLV</span><b>071</b></div><div><small>CREW STATION OPERATING INSTRUCTIONS · HUMAN STANDARD</small><h3>${code} — ${def.label}</h3><p>Publication BLV-071 / ${code} · Revision 8C · Authorized operating instructions</p></div><button type="button" class="exo-manual-close" data-manual-close aria-label="Close station manual">×</button></header><div class="exo-manual-searchbar"><label for="exo-manual-search">INDEX / PROCEDURE SEARCH</label><div><input id="exo-manual-search" data-manual-search-input type="search" value="${manualQuery.replace(/"/g,"&quot;")}" placeholder="Enter procedure, usage, tier, control name, or control code"><span data-manual-count>${count} / ${def.procedures.length} entries</span></div></div><aside class="exo-manual-note"><strong>PROCEDURE CLASSIFICATION.</strong> Every operation uses the same naming grammar: USAGE · TASK TIER · AUXILIARY DEPTH · ROLL RELIEF. PRIMARY entries are direct ship actions, SUPPORT entries enable another watchstation, and SECONDARY entries are station-management, calibration, recovery or configuration evolutions. T1 BROAD procedures are general and can reduce the eventual roll by at most 1; T2 STANDARD by 2; T3 FOCUSED by 3; T4 SPECIALIST by 4; and T5 PRECISION by 5. Panel II depth unlocks that relief ceiling one level at a time: selecting +3 can never unlock more than three points even on a T5 procedure, while a T1 procedure can never exceed one. Execution quality determines how much unlocked relief is actually earned. This deliberately makes narrow high-tier procedures more work before the roll but potentially much easier at the dice stage when executed well. Graduated controls remain evaluated by operating band and persist until deliberately moved.</aside><div class="exo-manual-results">${entries}</div><div class="exo-manual-empty" ${count?" hidden":""} data-manual-empty>NO PROCEDURE FOUND FOR ENTERED INDEX TERM.</div></div></section>`;
+  }
+'''
+          pat=r'  function manualOverlay\(def\)\{.*?\n  function filterManualResults'
+          s,n=re.subn(pat,manual+'  function filterManualResults',s,count=1,flags=re.S)
+          assert n==1, 'manualOverlay not found'
+
+          controls=r'''  function procedureControls(def){
+    const proc=selectedProcedure(),p=state.procedure,active=Boolean(p?.active&&p.station===activeStation&&p.operationId===proc.id),options=def.procedures.map(x=>`<option value="${x.id}" data-recommended-difficulty="${procedureRecommendedDifficulty(x)}" data-task-tier="${procedureTaskTier(x)}" data-max-relief="${procedureReliefPotential(x)}" ${x.id===proc.id?"selected":""}>${procedureOptionPrefix(x)}${x.name} · ${x.sequence.length} canonical inputs · ${procedureDifficultyLabel(x)}</option>`).join(""),stateSummary=active?`<div class="exo-sequence-recorder"><span class="exo-kicker">Current-state requirement · ${procedureConventionLabel(proc)}</span><div class="exo-sequence-strip"><span class="exo-procedure-empty">${p.preSatisfied.length} canonical latched state(s) already correct · ${p.expectedSequence.length} actions required from the current hardware state</span></div></div>`:"";
+    return `<div class="exo-procedure-console"><div class="exo-procedure-setup"><div><span class="exo-kicker">Attempted ship action · ${procedureSummary(def)}</span><select data-procedure-select>${options}</select></div><div class="exo-procedure-actions"><button type="button" class="exo-control-button primary" data-procedure-begin>${active?"Restart procedure":"Begin procedure"}</button><button type="button" class="exo-control-button" data-procedure-abort ${active?"":"disabled"}>Abort / clear inputs</button></div></div>${stateSummary}<div class="exo-physical-controls station-${activeStation}" data-active="${active}">${def.controls.map(c=>renderControl(c,p,active)).join("")}${authorizationAssembly(def,p,active)}</div><div class="exo-sequence-recorder"><span class="exo-kicker">Input recorder</span><div class="exo-sequence-strip">${inputHistory()}</div></div></div>`;
+  }
+'''
+          pat=r'  function procedureControls\(def\)\{.*?\n  function renderStation'
+          s,n=re.subn(pat,controls+'  function renderStation',s,count=1,flags=re.S)
+          assert n==1, 'procedureControls not found'
+
+          relay=r'''  function renderRelay(){
+    const r=state.relay,d=r?.difficulty||0;$("dm-relay-difficulty").textContent=r?d:"—";$("dm-relay-pips").innerHTML=Array.from({length:10},(_,i)=>`<i class="${r&&i<Math.min(d,10)?"active":""}">${i+1}</i>`).join("")+(r&&d===11?`<i class="active" title="Difficulty 11 exceeds the d10 range" style="font-weight:900;border-width:2px">11</i>`:"");
+    if(!r){$("dm-relay-status").textContent="Awaiting executed procedure";$("dm-relay-detail").innerHTML=`<div><span>Station</span><strong>—</strong></div><div><span>Action / tier</span><strong>—</strong></div><div><span>Procedure</span><strong>—</strong></div><div><span>Auxiliary depth</span><strong>—</strong></div><div><span>Roll relief</span><strong>—</strong></div><div><span>Suggested roll</span><strong>—</strong></div><div><span>Correct station actions</span><strong>—</strong></div><div><span>Visual context</span><strong>—</strong></div><div><span>Inputs</span><strong>—</strong></div>`;$("dm-relay-sequence").textContent="No procedure has been committed.";$("dm-relay-call").textContent="The console does not roll for the character and does not determine success or failure.";return;}
+    $("dm-relay-status").textContent=d===11?"CRITICAL PROCEDURAL FAILURE · DIFFICULTY 11 / d10":`${r.classification} · T${r.taskTier} ${r.tierLabel} · suggested difficulty`;
+    $("dm-relay-detail").innerHTML=`<div><span>Station</span><strong>${r.station}</strong></div><div><span>Action / tier</span><strong>${r.operation}<small style="display:block;text-transform:uppercase">${r.operationType} · T${r.taskTier} ${r.tierLabel}</small></strong></div><div><span>Procedure</span><strong>${r.quality}% · final state ${r.finalStateScore}%</strong></div><div><span>Auxiliary depth</span><strong>+${r.auxDepth} · unlocked ${r.reliefCap}/${r.reliefPotential}</strong></div><div><span>Roll relief</span><strong>−${r.earnedRelief} earned · max −${r.reliefPotential}</strong></div><div><span>Suggested roll</span><strong>${r.baseDifficulty}${r.rollPenalty?` + ${r.rollPenalty} deviation`:""} − ${r.earnedRelief} relief → ${r.difficulty}</strong></div><div><span>Correct station actions</span><strong>${r.correctStationActions} / ${r.stationActionCount}</strong></div><div><span>Visual context</span><strong>${r.context}%</strong></div><div><span>Inputs</span><strong>${r.inputCount} total · ${r.authInputCount} authorization</strong></div>`;
+    $("dm-relay-sequence").textContent=r.sequenceLabels.join(" → ");
+    $("dm-relay-call").textContent=d===11?`DM RELAY: Difficulty 11 exceeds the available d10 result. Treat this attempted station action as a critical procedural failure: the operator completed no correct station action before authorization and execution. The DM remains authoritative.`:`DM RELAY: ${r.operation} is a T${r.taskTier} ${r.tierLabel} ${r.operationType} procedure. Its maximum roll relief is −${r.reliefPotential}; Panel II depth +${r.auxDepth} unlocked up to −${r.reliefCap}, and ${r.classification} execution earned −${r.earnedRelief}. Starting roll Difficulty ${r.baseDifficulty}${r.rollPenalty?` received +${r.rollPenalty} for procedural deviation`:""}, producing suggested Difficulty ${r.difficulty}. ${r.mismatches.length?`Final-state mismatch: ${r.mismatches.join(", ")}. `:""}The DM remains authoritative.`;
+  }
+'''
+          pat=r'  function renderRelay\(\)\{.*?\n  function renderAll'
+          s,n=re.subn(pat,relay+'  function renderAll',s,count=1,flags=re.S)
+          assert n==1, 'renderRelay not found'
+
+          evaluate=r'''  function evaluateProcedure(){
+    const p=state.procedure,def=STATIONS[p.station],proc=def.procedures.find(x=>x.id===p.operationId)||def.procedures[0],actual=p.inputs.map(x=>x.token),sequenceScore=procedureQuality(actual,p.expectedSequence),mismatches=p.requiredPersistent.filter(x=>state.hardware[p.station][x.controlId]!==x.state),finalStateScore=p.requiredPersistent.length?Math.round((1-mismatches.length/p.requiredPersistent.length)*100):100,q=Math.round(sequenceScore*.68+finalStateScore*.32),baseClassification=classify(q),context=round(stationContext(p.station)),stationCanonical=proc.sequence.filter(token=>!AUTH_TAIL.includes(token)),stationActual=actual.filter(token=>!AUTH_TAIL.includes(token)),correctStationActions=orderedCorrectStationActions(stationCanonical,stationActual),stationActionCount=stationCanonical.length,authInputCount=actual.filter(token=>AUTH_TAIL.includes(token)).length,taskTier=procedureTaskTier(proc),tierMeta=procedureTierMeta(proc),auxDepth=currentAuxDepth(),reliefPotential=procedureReliefPotential(proc),reliefCap=procedureUnlockedRelief(proc,auxDepth),earnedRelief=procedureEarnedRelief(proc,q,auxDepth),rollPenalty=procedureExecutionPenalty(q),baseDifficulty=BASE_ROLL_DIFFICULTY,difficulty=correctStationActions===0?11:Math.min(10,Math.max(2,baseDifficulty+rollPenalty-earnedRelief)),classification=difficulty===11?"critical procedural failure":baseClassification;
+    state.relay={station:def.label,operation:proc.name,operationType:procedureType(proc),taskTier,tierLabel:tierMeta.label,specificity:tierMeta.specificity,quality:q,sequenceScore,finalStateScore,mismatches:mismatches.map(x=>`${x.label} should be ${x.state}`),classification,context,auxDepth,baseDifficulty,reliefPotential,reliefCap,earnedRelief,rollPenalty,difficulty,correctStationActions,stationActionCount,authInputCount,inputCount:actual.length,expectedCount:p.expectedSequence.length,preSatisfiedCount:p.preSatisfied.length,canonicalCount:proc.sequence.length,sequenceLabels:p.inputs.map(x=>x.label)};
+    applyPostExecuteResets(p.station);p.authKey="out";p.authLock="safe";p.authShield="closed";p.authShieldAnimating=false;p.active=false;addLog(def.label,`${proc.name} [${procedureUsageLabel(proc)} · T${taskTier} ${tierMeta.label}]: ${correctStationActions}/${stationActionCount} correct station actions, procedure ${q}% (${classification}), Panel II +${auxDepth}, roll relief −${earnedRelief}/−${reliefPotential}, suggested Difficulty ${difficulty}.`);renderAll({skipPower:true});
+  }
+'''
+          pat=r'  function evaluateProcedure\(\)\{.*?\n\n  function commitGraduatedControl'
+          s,n=re.subn(pat,evaluate+'\n  function commitGraduatedControl',s,count=1,flags=re.S)
+          assert n==1, 'evaluateProcedure not found'
+
+          path.write_text(s)
+          PY
+          node --check blacklight-exo-crew-operations.js
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('blacklight-exo-crew-operations.js').read_text()
+          before=s.split('const CONTROL_RANGES=',1)[0]
+          ids=set(re.findall(r'\{id:"([^"]+)",name:',before))
+          block=s.split('const PROCEDURE_TIER_BY_ID=Object.freeze({',1)[1].split('});',1)[0]
+          mapped=set(re.findall(r'"([^"]+)":(?:1|2|3|4|5)',block))
+          missing=sorted(ids-mapped)
+          extra=sorted(mapped-ids)
+          assert len(ids)==121, f'expected 121 procedures, found {len(ids)}'
+          assert len(mapped)==121, f'expected 121 explicit tier mappings, found {len(mapped)}'
+          assert not missing, f'missing tier mappings: {missing}'
+          assert not extra, f'non-procedure tier mappings: {extra}'
+          assert 'correctStationActions===0?11:Math.min(10,Math.max(2,baseDifficulty+rollPenalty-earnedRelief))' in s
+          print('Validated 121 procedures with explicit tier coverage and tiered roll-relief model.')
+          PY
+      - name: Commit authoritative source
+        shell: bash
+        run: |
+          if git diff --quiet -- blacklight-exo-crew-operations.js; then
+            echo 'No source change produced.'
+            exit 1
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add blacklight-exo-crew-operations.js
+          git commit -m 'classify crew procedures and tier roll relief'
+          git push origin HEAD:main
