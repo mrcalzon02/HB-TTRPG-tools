@@ -1,0 +1,16 @@
+.exo-crew-body .station-gunnery .exo-device-block[data-control-code="GUN-FCF-07"]{overflow:hidden}
+.exo-crew-body .station-gunnery .exo-fcf07-program{padding:6px}
+.exo-crew-body .exo-fcf07-program>.exo-device-label{margin-bottom:4px}
+.exo-crew-body .exo-fcf07-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px;padding:3px 5px;border:1px solid #44383a;background:#0b090a;color:#a58e8f;font:800 .42rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase;letter-spacing:.05em}
+.exo-crew-body .exo-fcf07-head b{color:#d6b0b2;font-size:.42rem;white-space:nowrap}
+.exo-crew-body .exo-fcf07-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 5px}
+.exo-crew-body .exo-fcf07-field{display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:4px;min-width:0}
+.exo-crew-body .exo-fcf07-field:last-child{grid-column:1/-1}
+.exo-crew-body .exo-fcf07-field>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#876d6f;font:900 .38rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em;text-transform:uppercase}
+.exo-crew-body .exo-fcf07-field select{width:100%;min-width:0;height:22px;padding:1px 20px 1px 5px;border:1px solid #4b4243;border-radius:1px;background:#08090a;color:#d0c2bc;font:800 .42rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase}
+.exo-crew-body .exo-fcf07-summary{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:5px;margin-top:4px;padding:3px 5px;border:1px solid #383b3b;background:#070809;min-width:0}
+.exo-crew-body .exo-fcf07-summary small{color:#756263;font:900 .36rem ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase}
+.exo-crew-body .exo-fcf07-summary b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#bfaeaa;font:800 .4rem ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase}
+.exo-crew-body .exo-fcf07-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px}
+.exo-crew-body .exo-fcf07-actions button{min-height:24px!important;padding:3px 5px!important;border-color:#674a4d!important;background:linear-gradient(180deg,#372629,#151011)!important;color:#ddc2c3!important;font:900 .42rem ui-monospace,SFMono-Regular,Consolas,monospace!important;letter-spacing:.04em!important;text-transform:uppercase}
+@media(max-width:760px){.exo-crew-body .exo-fcf07-grid{grid-template-columns:1fr}.exo-crew-body .exo-fcf07-field:last-child{grid-column:auto}}
