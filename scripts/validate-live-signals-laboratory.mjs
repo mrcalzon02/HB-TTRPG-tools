@@ -5,13 +5,18 @@ import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
 const Lab=require('../live-signals-laboratory.js');
 
-assert.equal(Lab.constants.VERSION,'0.3.0');
-assert.equal(Lab.constants.CURRENT_MODE,'passive-default-active-ranging-gated');
+assert.equal(Lab.constants.VERSION,'0.3.1');
+assert.equal(Lab.constants.CURRENT_MODE,'passive-default-active-ranging-local-hardware-authorized');
 assert.equal(Lab.constants.SAFETY_POLICY.passiveModeReceiveOnly,true);
 assert.equal(Lab.constants.SAFETY_POLICY.transmitterControlsExposed,false);
 assert.equal(Lab.constants.SAFETY_POLICY.activeRangingEnabled,true);
 assert.equal(Lab.constants.SAFETY_POLICY.appRequestedWifiScanEnabled,false);
-assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.authorizedTargetsOnly,true);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.localRuntimeHardwareAssumedAuthorized,true);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.manualTargetAuthorizationRequired,false);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.standardsResponderDiscoveryAllowed,true);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.bridgeReportedTargetsOnly,true);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.remoteDeviceControlAssumed,false);
+assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.nonDestructiveRangingOnly,true);
 assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.arbitraryFrequencySelection,false);
 assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.transmitterPowerMutation,false);
 assert.equal(Lab.constants.ACTIVE_SCAN_POLICY.channelMutation,false);
@@ -37,7 +42,7 @@ assert.ok(ios.rows.some(row=>row.capability==='General Wi-Fi scan'&&row.status==
 assert.ok(ios.rows.some(row=>row.capability==='Cellular signal strength'&&row.status==='unavailable-public-api'));
 const router=Lab.capabilityMatrix('openwrt-readonly');
 assert.ok(router.rows.some(row=>row.capability.includes('Per-chain')));
-assert.ok(router.rows.some(row=>row.capability.includes('Authorized endpoint / RTT')));
+assert.ok(router.rows.some(row=>row.capability.includes('Standards ranging / selected RTT endpoint')));
 
 const polling=Lab.safePollingConfiguration({wifiResultPollMs:1000,bleObserveWindowMs:30000,bleObservePeriodMs:1000,sensorHz:500,sessionMinutes:999});
 assert.equal(polling.wifiResultPollMs,5000);
@@ -67,13 +72,16 @@ const bridge={
     bridgeId:'mock-android-native',
     passiveChannels:['wifi','cellular','ble','gnss','motion','magnetometer'],
     activeMethods:['wifi-rtt-ranging','ble-ranging'],
-    authorizedTargets:[
-      {id:'lab-ap',label:'Lab AP',authorized:true,methods:['wifi-rtt-ranging']},
-      {id:'lab-ble-peer',label:'Lab BLE Peer',authorized:true,methods:['ble-ranging']}
+    rangingTargets:[
+      {id:'nearby-rtt-ap',label:'Nearby RTT AP',participating:true,responderCapable:true,methods:['wifi-rtt-ranging']},
+      {id:'nearby-ble-peer',label:'Nearby BLE Peer',participating:true,responderCapable:true,methods:['ble-ranging']}
     ]
   };},
   async runActiveScan(plan){
-    assert.equal(plan.authorizedTargetsOnly,true);
+    assert.equal(plan.localRuntimeHardwareAuthorized,true);
+    assert.equal(plan.manualTargetAuthorizationRequired,false);
+    assert.equal(plan.standardsResponderDiscoveryAllowed,true);
+    assert.equal(plan.remoteDeviceControlAssumed,false);
     assert.equal(plan.arbitraryFrequencySelection,false);
     return plan.targets.map((target,index)=>({
       kind:plan.method==='wifi-rtt-ranging'?'wifi-rtt':'ble-range',targetId:target.id,distanceM:3.5+index,
@@ -87,19 +95,24 @@ coverage=Lab.channelCoverage(session);
 assert.equal(coverage.find(row=>row.id==='cellular')?.status,'bridge-available-no-samples');
 assert.equal(coverage.find(row=>row.id==='ble')?.status,'bridge-available-no-samples');
 
-assert.equal(Lab.activeScanPreflight({method:'wifi-rtt-ranging',targetsAuthorized:false,thermalState:'nominal',batteryPercent:80},bridge.getCapabilities()).pass,false);
-const activePreflight=Lab.activeScanPreflight({method:'wifi-rtt-ranging',targetsAuthorized:true,thermalState:'nominal',batteryPercent:80},bridge.getCapabilities());
+const activePreflight=Lab.activeScanPreflight({method:'wifi-rtt-ranging',thermalState:'nominal',batteryPercent:80},bridge.getCapabilities());
 assert.equal(activePreflight.pass,true);
-const plan=Lab.buildActiveScanPlan({method:'wifi-rtt-ranging',targetsAuthorized:true,targetIds:['lab-ap'],samplesPerTarget:999,sampleIntervalMs:1},bridge.getCapabilities());
-assert.equal(plan.targets.length,1);
-assert.equal(plan.samplesPerTarget,Lab.constants.MAX_ACTIVE_SAMPLES_PER_TARGET);
-assert.equal(plan.sampleIntervalMs,Lab.constants.MIN_ACTIVE_SAMPLE_INTERVAL_MS);
-assert.equal(plan.transmitterPowerMutation,false);
-const activeResult=await Lab.runActiveScan(session,{method:'wifi-rtt-ranging',targetsAuthorized:true,targetIds:['lab-ap'],samplesPerTarget:2,sampleIntervalMs:1000},bridge);
+assert.equal(activePreflight.localRuntimeHardwareAuthorized,true);
+assert.equal(activePreflight.manualTargetAuthorizationRequired,false);
+const autoPlan=Lab.buildActiveScanPlan({method:'wifi-rtt-ranging',samplesPerTarget:999,sampleIntervalMs:1},bridge.getCapabilities());
+assert.equal(autoPlan.targets.length,1);
+assert.equal(autoPlan.targets[0].id,'nearby-rtt-ap');
+assert.equal(autoPlan.samplesPerTarget,Lab.constants.MAX_ACTIVE_SAMPLES_PER_TARGET);
+assert.equal(autoPlan.sampleIntervalMs,Lab.constants.MIN_ACTIVE_SAMPLE_INTERVAL_MS);
+assert.equal(autoPlan.transmitterPowerMutation,false);
+assert.equal(autoPlan.remoteDeviceControlAssumed,false);
+const activeResult=await Lab.runActiveScan(session,{method:'wifi-rtt-ranging',samplesPerTarget:2,sampleIntervalMs:1000},bridge);
 assert.equal(activeResult.observations.length,1);
 assert.equal(activeResult.observations[0].acquisitionMode,'active');
 assert.equal(activeResult.observations[0].ranging.technology,'wifi-rtt-ranging');
-assert.equal(activeResult.observations[0].ranging.authorized,true);
+assert.equal(activeResult.observations[0].ranging.localHardwareAuthorized,true);
+assert.equal(activeResult.observations[0].ranging.responderParticipating,true);
+assert.equal(activeResult.observations[0].ranging.remoteDeviceControlAssumed,false);
 assert.ok(Number.isFinite(activeResult.observations[0].ranging.distanceM));
 const rangeSummary=Lab.activeRangeSummary(session);
 assert.equal(rangeSummary.sampleCount,1);
@@ -127,16 +140,19 @@ assert.ok(future.every(item=>item.status==='not-implemented'));
 assert.ok(future.some(item=>item.id==='attenuated-receiver-sweep'));
 assert.ok(future.some(item=>item.id==='controlled-frequency-sweep'));
 assert.ok(future.some(item=>item.id==='hybrid-attenuation-correlation'));
-assert.equal(future.some(item=>item.id==='documented-active-ranging'),false);
 
 const source=await readFile(new URL('../live-signals-laboratory.js',import.meta.url),'utf8');
-for(const pattern of [/Start Passive Scan/,/Run Active Scan/,/Receiver channel coverage/,/Cellular receiver/,/Bluetooth \/ BLE receiver/,/Active ranging \/ ping-back mapping/,/authorized targets only/,/browser alone cannot access Android TelephonyManager/,/wifi-rtt-ranging/,/ble-ranging/,/uwb-ranging/,/activeScanPreflight/,/channelCoverage/]) assert.match(source,pattern);
+for(const pattern of [/Start Passive Scan/,/Run Active Scan/,/Receiver channel coverage/,/Cellular receiver/,/Bluetooth \/ BLE receiver/,/Active ranging \/ ping-back mapping/,/local instrument authorized/,/leave blank for bridge-discovered responders/,/browser alone cannot access Android TelephonyManager/,/wifi-rtt-ranging/,/ble-ranging/,/uwb-ranging/,/activeScanPreflight/,/channelCoverage/]) assert.match(source,pattern);
+assert.doesNotMatch(source,/id="lsl-active-authorized"/);
+assert.doesNotMatch(source,/authorized targets only/);
 assert.doesNotMatch(source,/function\s+(setTxPower|pulseTransmit|frequencySweepTransmit|subnetSweep)\s*\(/);
 
 console.log(JSON.stringify({
-  format:'hb-ttrpg-live-signals-laboratory-validation-receipt',schemaVersion:'0.3.0',pass:true,
-  passiveScanStillReceiveOnly:true,separateActiveScanButton:true,gatedActiveRanging:true,authorizedTargetsOnly:true,
-  noArbitraryFrequencySweep:true,noPowerOrChannelMutation:true,androidExpectedWifiCellularBle:true,
-  missingChannelFaultVisibility:true,bridgeAvailableNoSamplesVisibility:true,cellularAndBleObservationCoverage:true,
-  wifiRttPlan:true,bleRangingPlan:true,activeRangeMappingContract:true,receiverHealthPreserved:true
+  format:'hb-ttrpg-live-signals-laboratory-validation-receipt',schemaVersion:'0.3.1',pass:true,
+  passiveScanStillReceiveOnly:true,separateActiveScanButton:true,gatedActiveRanging:true,
+  localRuntimeHardwareAssumedAuthorized:true,manualTargetAuthorizationRemoved:true,standardsResponderDiscovery:true,
+  remoteDeviceControlNotAssumed:true,noArbitraryFrequencySweep:true,noPowerOrChannelMutation:true,
+  androidExpectedWifiCellularBle:true,missingChannelFaultVisibility:true,bridgeAvailableNoSamplesVisibility:true,
+  cellularAndBleObservationCoverage:true,wifiRttResponderPlan:true,bleRangingPlan:true,
+  activeRangeMappingContract:true,receiverHealthPreserved:true
 },null,2));
