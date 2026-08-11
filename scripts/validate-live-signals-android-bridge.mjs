@@ -53,6 +53,17 @@ assert.match(bridge, /CellSignalStrengthNr/);
 assert.match(bridge, /getSsRsrp\(\)/);
 assert.match(bridge, /getSsRsrq\(\)/);
 assert.match(bridge, /getSsSinr\(\)/);
+assert.match(bridge, /cellularTechnology\(/);
+assert.match(bridge, /channelType/);
+assert.match(bridge, /getBands\(\)/);
+assert.match(bridge, /getBandwidth\(\)/);
+assert.match(bridge, /getTimestampMillis\(\)/);
+assert.match(bridge, /SystemClock\.elapsedRealtime\(\)/);
+assert.match(bridge, /modemAgeMs/);
+assert.match(bridge, /bandwidthHz/);
+assert.match(bridge, /"earfcn"/);
+assert.match(bridge, /"nrarfcn"/);
+assert.match(bridge, /RF center frequency is left unknown rather than guessed/);
 
 assert.match(bridge, /WifiManager\.SCAN_RESULTS_AVAILABLE_ACTION/);
 assert.match(bridge, /wifiManager\.getScanResults\(\)/);
@@ -93,7 +104,6 @@ for (const forbidden of [
   /subnetSweep/i
 ]) assert.doesNotMatch(bridge, forbidden);
 
-assert.match(bridge, /RF center frequency is left unknown rather than guessed/);
 assert.match(readme, /instrumentation-only/i);
 assert.match(readme, /never calls `WifiManager\.startScan\(\)`/);
 assert.match(readme, /Active Scan currently implements only Wi-Fi RTT/);
@@ -102,7 +112,7 @@ assert.match(readme, /compile\/target SDK 36/);
 
 console.log(JSON.stringify({
   format:'hb-ttrpg-live-signals-android-bridge-validation-receipt',
-  schemaVersion:'0.1.2',
+  schemaVersion:'0.1.3',
   pass:true,
   androidProjectScaffold:true,
   restrictedPrivilegedWebView:true,
@@ -110,10 +120,14 @@ console.log(JSON.stringify({
   noAppInitiatedWifiDiscoveryScan:true,
   cellularTelephonyCallbacks:true,
   lteNrMetricsPreserved:true,
+  cellularRatAndChannelTypePreserved:true,
+  cellularBandsPreserved:true,
+  cellularBandwidthPreservedWhenExposed:true,
+  cellularModemSampleAgePreserved:true,
+  truthfulUnknownFrequencyHandling:true,
   passiveBleReceivePath:true,
   gnssAndSensorContext:true,
   conservative20HzSensorDefault:true,
-  truthfulUnknownFrequencyHandling:true,
   finiteSensorJson:true,
   wifiRttResponderDiscovery:true,
   wifiRttDistanceAndUncertainty:true,
