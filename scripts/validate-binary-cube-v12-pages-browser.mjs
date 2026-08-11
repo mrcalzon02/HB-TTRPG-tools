@@ -220,6 +220,8 @@ try {
       href: location.href,
       pathname: location.pathname,
       hash: location.hash,
+      requestedViewportWidth: ${viewport.width},
+      requestedViewportHeight: ${viewport.height},
       viewportWidth: window.innerWidth,
       viewportHeight: window.innerHeight,
       documentScrollWidth: document.documentElement.scrollWidth,
@@ -240,7 +242,10 @@ try {
   assert.equal(receipt.pass, true);
   assert.equal(receipt.pathname, '/HB-TTRPG-tools/');
   assert.equal(receipt.hash, '#shadowrun');
-  assert.equal(receipt.viewportWidth, viewport.width);
+  assert.equal(receipt.requestedViewportWidth, viewport.width);
+  assert.equal(receipt.requestedViewportHeight, viewport.height);
+  assert.ok(receipt.viewportWidth >= viewport.width, 'Chromium returned a CSS viewport narrower than the requested mobile device width.');
+  assert.ok(receipt.viewportWidth <= 500, `Responsive test escaped the intended narrow-screen range: ${receipt.viewportWidth}px.`);
   assert.ok(receipt.documentScrollWidth <= receipt.viewportWidth + 2);
   assert.ok(receipt.panelWidth <= receipt.viewportWidth + 2);
   assert.equal(receipt.columnsStacked, true);

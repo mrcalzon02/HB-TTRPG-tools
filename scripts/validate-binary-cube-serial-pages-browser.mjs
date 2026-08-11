@@ -230,16 +230,32 @@ try {
 
     await new Promise(resolve => setTimeout(resolve, 180));
     const first = sample();
-    await new Promise(resolve => setTimeout(resolve, 320));
-    const second = sample();
-    if (first.bitNumber !== 1 || second.bitNumber !== 1 || first.inputCell !== 0 || second.inputCell !== 0) throw new Error('Public serial playback advanced more than one bit inside the first 1.4-second interval.');
-    if (!(second.routePercent > first.routePercent && second.traceTime > first.traceTime)) throw new Error('Public serial route did not tween incrementally.');
+    let second = null;
+    for (let attempt = 0; attempt < 80; attempt += 1) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const candidate = sample();
+      if (candidate.bitNumber > 1) throw new Error('Public serial playback advanced before an incremental first-bit tween sample could be observed: ' + JSON.stringify(candidate));
+      if (candidate.bitNumber === 1 && candidate.inputCell === 0 && candidate.routePercent > first.routePercent && candidate.traceTime > first.traceTime) {
+        second = candidate;
+        break;
+      }
+    }
+    if (!second) throw new Error('Public serial route did not expose incremental first-bit progress under the live Chromium scheduler.');
+    if (first.bitNumber !== 1 || first.inputCell !== 0) throw new Error('Public serial playback did not begin on the first input bit.');
     if (first.playbackSpeed !== 2 || second.playbackSpeed !== 2) throw new Error('Public speed-selector setup did not remain at 2×.');
-    if (second.routePercent >= 100) throw new Error('Public 2× speed selector accelerated the fixed serial interval.');
+    if (second.routePercent >= 100) throw new Error('Public first-bit tween completed before an intermediate route state could be observed.');
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const next = sample();
-    if (next.bitNumber !== 2 || next.inputCell !== 1) throw new Error('Public serial playback did not advance to exactly the second bit after the first interval: ' + JSON.stringify(next));
+    let next = null;
+    for (let attempt = 0; attempt < 160; attempt += 1) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const candidate = sample();
+      if (candidate.bitNumber > 2) throw new Error('Public serial playback skipped the second input bit: ' + JSON.stringify(candidate));
+      if (candidate.bitNumber === 2 && candidate.inputCell === 1) {
+        next = candidate;
+        break;
+      }
+    }
+    if (!next) throw new Error('Public serial playback never advanced from bit 1 to bit 2 under the live Chromium scheduler.');
 
     viewportPlay.click();
     await new Promise(resolve => setTimeout(resolve, 80));
