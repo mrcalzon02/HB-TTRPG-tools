@@ -4,6 +4,7 @@
   if (window.EXO_CONTROL_AUDIO) return;
 
   const MASTER_VOLUME = 0.72;
+  const CONTROL_EFFECT_GAIN = 1.5;
   const MAX_ACTIVE = 48;
   const STATION_CHARACTER = Object.freeze({
     helm: Object.freeze({ gain: 0.96, rate: 1.03 }),
@@ -278,7 +279,8 @@
     const audio = new Audio(source);
     const rateVariation = options.vary === false ? 0 : variation(options.seed || options.key || options.scene || '', index);
     const character = characterFor(options);
-    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain, 0, 1);
+    const controlEffectGain = String(options.scene || '').startsWith('ambient-') ? 1 : CONTROL_EFFECT_GAIN;
+    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * controlEffectGain, 0, 1);
     audio.preload = 'auto';
     activeBaseVolumes.set(audio, baseVolume);
     audio.volume = clamp(baseVolume * masterVolume, 0, 1);
