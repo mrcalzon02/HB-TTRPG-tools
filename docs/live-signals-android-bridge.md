@@ -4,6 +4,14 @@ Status: bridge contract / implementation scaffold for Live Signals Laboratory 0.
 
 The GitHub Pages runtime cannot directly call Android telephony or hardware-ranging APIs. Android hardware acquisition therefore belongs in a native companion/WebView bridge which reports normalized observations to `LiveSignalsLaboratory`.
 
+## Trust model
+
+The Android device hosting or driving the Live Signals runtime is treated as operator-authorized instrumentation. The laboratory therefore does **not** require a second manual checkbox to authorize use of that phone's own Wi-Fi, Bluetooth, UWB, cellular receiver, GNSS, or sensor hardware.
+
+Nearby devices are not treated as equipment the laboratory controls. Active ranging may use a nearby device only when a documented platform/standards ranging mechanism exposes that device as a capable/participating responder or when the bridge presents a deliberately selected network endpoint. This permits ordinary ranging behavior without implying administrative control, association changes, configuration access, packet injection, deauthentication, or interference with the responder.
+
+For Wi-Fi RTT specifically, Android can identify RTT-capable access points from scan results and range them without the phone joining those APs. The native bridge should therefore discover responder-capable APs through the Android API and report them as `rangingTargets`; a hand-maintained authorization list is not the normal workflow.
+
 ## Required passive receiver channels
 
 An Android bridge should inventory each channel independently and report availability rather than treating the phone as one generic RF receiver.
@@ -23,12 +31,20 @@ The bridge capability report should therefore look conceptually like:
   "bridgeId": "android-native",
   "passiveChannels": ["wifi", "cellular", "ble", "gnss", "motion", "magnetometer"],
   "unavailableChannels": [],
-  "activeMethods": [],
-  "authorizedTargets": []
+  "activeMethods": ["wifi-rtt-ranging"],
+  "rangingTargets": [
+    {
+      "id": "opaque-rtt-ap-id",
+      "label": "RTT responder",
+      "participating": true,
+      "responderCapable": true,
+      "methods": ["wifi-rtt-ranging"]
+    }
+  ]
 }
 ```
 
-If cellular service exists but no cellular observations are emitted, the web laboratory will now display `bridge-available-no-samples` instead of silently looking like there is no cellular RF activity.
+If cellular service exists but no cellular observations are emitted, the web laboratory displays `bridge-available-no-samples` instead of silently looking like there is no cellular RF activity.
 
 ## Normalized passive observations
 
@@ -80,11 +96,15 @@ Active Scan is separate from Passive Scan. The web laboratory only accepts bridg
 - `wifi-rtt-ranging`
 - `uwb-ranging`
 - `ble-ranging`
-- `authorized-network-rtt`
+- `authorized-network-rtt` (legacy method ID; displayed as Selected network RTT)
 
-A native bridge exposes these only when the device and participating target support them. The capability report must also provide an explicit list of owned/authorized participating targets. `runActiveScan(plan)` must reject targets not in that list.
+The bridge exposes a method only when the attached device supports it. Targets are reported through `rangingTargets` (the runtime also accepts the older `activeTargets` / `authorizedTargets` field names for compatibility).
 
-Active Scan does **not** authorize arbitrary RF transmission. The bridge must not expose transmitter-power changes, channel changes, modulation changes, packet injection, deauthentication, subnet/broadcast ping sweeps, arbitrary frequency sweeps or pulse transmission.
+For standards-based ranging, targets should be generated from actual platform capability/participation information. Examples include Wi-Fi scan results advertising IEEE 802.11mc/802.11az RTT support, or a UWB/Bluetooth peer that has entered the required ranging session. A target is not a claim that the laboratory owns or administers the responder; it means the platform reports that the responder can participate in the requested ranging mechanism.
+
+`runActiveScan(plan)` receives only those bridge-reported responders/endpoints, capped by the web laboratory's target/sample/time limits. If the optional target-ID field is left blank, the bridge may use all eligible responders within the plan limits. If IDs are supplied, they filter the bridge-discovered set rather than creating arbitrary new targets.
+
+Active Scan does **not** authorize arbitrary RF transmission or remote-device control. The bridge must not expose transmitter-power changes, channel changes, modulation changes, packet injection, deauthentication, subnet/broadcast ping sweeps, arbitrary frequency sweeps or pulse transmission.
 
 `authorized-network-rtt` is latency context only; ordinary IP round-trip time is not converted into RF distance.
 
@@ -103,4 +123,4 @@ runActiveScan(plan) -> observations[] or Promise<observations[]>
 
 Passive collectors push observations independently through `LiveSignalsLaboratory.ingestObservation(observation)` while a Live Signals session is running.
 
-The next implementation step is a packaged Android companion/WebView host that implements this contract using `TelephonyManager`, `WifiManager`, `BluetoothLeScanner`, location and `SensorManager`, then adds Wi-Fi RTT/UWB/Bluetooth ranging adapters only on devices that report those capabilities.
+The packaged Android companion/WebView host should implement this contract using `TelephonyManager`, `WifiManager`, `BluetoothLeScanner`, location and `SensorManager`, then add Wi-Fi RTT/UWB/Bluetooth ranging adapters only on devices that report those capabilities.
