@@ -2,7 +2,6 @@
   "use strict";
 
   const MAX_DIFFICULTY = 5;
-  const AUTH_TOKENS = new Set(["auth-key-insert", "auth-key-arm", "auth-shield-open", "execute"]);
   const STATION_CODES = Object.freeze({helm:"HEL",navigation:"NAV",gunnery:"GUN",engineering:"ENG",science:"SCI",comms:"COM"});
   const $ = id => document.getElementById(id);
   const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
@@ -106,7 +105,7 @@
   function beginAttempt(){
     const station=activeStation(),procedureId=activeProcedureId(),difficulty=configuredDifficulty;
     attempt={station,procedureId,procedureName:activeProcedureName(),difficulty,recommendedDifficulty:activeRecommendedDifficulty(),requirements:requirementPlan(station,procedureId,difficulty),touched:new Set(),history:[]};
-    message=difficulty?`Panel II level +${difficulty} armed: ${difficulty} auxiliary control${difficulty===1?"":"s"} must be deliberately set before authorization. Procedure recommendation is +${attempt.recommendedDifficulty}; +1 through +5 remain optional.`:`Master +0: no Panel II manipulation required. This procedure recommends +${attempt.recommendedDifficulty}, with optional levels +1 through +5 available.`;
+    message=difficulty?`Panel II level +${difficulty} armed: ${difficulty} auxiliary control${difficulty===1?"":"s"} available for additional execution relief. These settings do not interlock or block authorization. Procedure recommendation is +${attempt.recommendedDifficulty}.`:`Master +0: no Panel II manipulation required. Primary controls and authorization remain fully independent of Panel II.`;
     renderAll();
   }
   function clearAttempt(reason="Panel II controls remain live. Begin a primary procedure to start a new recording."){
@@ -117,8 +116,8 @@
     const input=$("crew-master-difficulty"),value=$("crew-master-difficulty-value"),summary=$("crew-master-difficulty-summary"),state=$("crew-master-difficulty-state");
     if(input){input.value=String(configuredDifficulty);input.disabled=Boolean(attempt&&coreAttemptActive());}
     if(value)value.textContent=`+${configuredDifficulty}`;
-    if(summary)summary.textContent=configuredDifficulty?`${configuredDifficulty} Panel II control${configuredDifficulty===1?"":"s"} added to the selected procedure`:`Primary procedure + authorization only`;
-    if(state)state.textContent=attempt?`Attempt locked at +${attempt.difficulty} · recommended +${attempt.recommendedDifficulty}`:`Selected procedure recommends +${activeRecommendedDifficulty()} · optional +1–+5`;
+    if(summary)summary.textContent=configuredDifficulty?`${configuredDifficulty} Panel II control${configuredDifficulty===1?"":"s"} available for auxiliary relief`:`Primary procedure + authorization only`;
+    if(state)state.textContent=attempt?`Attempt tracking +${attempt.difficulty} · authorization independent · recommended +${attempt.recommendedDifficulty}`:`Selected procedure recommends +${activeRecommendedDifficulty()} · optional +1–+5`;
   }
 
   function mechanismBody(control){
@@ -162,7 +161,7 @@
 
   function controlCard(control,index,station,previewRequirements){
     const req=requirementFor(control.id),preview=previewRequirements.find(r=>r.controlId===control.id),activeReq=req||(!attempt?preview:null),required=Boolean(activeReq),satisfied=Boolean(req&&requirementSatisfied(req)),value=values[station][control.id],target=activeReq?formatValue(control,activeReq.target):"—",code=`${STATION_CODES[station]}-AUX-${String(index+1).padStart(2,"0")}`,enabled=true;
-    const status=req?(satisfied?"TARGET SET":attempt.touched.has(control.id)?"ADJUST TO TARGET":"MANIPULATION REQUIRED"):required?"REQUIRED ON NEXT BEGIN":"AVAILABLE";
+    const status=req?(satisfied?"TARGET SET":attempt.touched.has(control.id)?"ADJUST TO TARGET":"AUXILIARY RELIEF AVAILABLE"):required?"AVAILABLE ON NEXT BEGIN":"AVAILABLE";
     return `<article class="exo-aux-control aux-slot-${index+1}" data-required="${required}" data-satisfied="${satisfied}" data-aux-control="${control.id}" data-mechanism="${control.mechanism}">
       <header><span>${code}</span><strong>${control.label}</strong><small>${control.discipline||"Auxiliary regulation"}</small><em>${control.hardware}</em></header>
       <div class="exo-aux-readout"><b data-aux-readout>${formatValue(control,value)}</b><small>${required?`TARGET ${target}`:"NO ACTIVE TARGET"}</small></div>
@@ -179,11 +178,11 @@
     root.dataset.required=requiredCount?"true":"false";
     root.dataset.station=station;
     root.innerHTML=`<button class="exo-aux-handle aux-handle-${station}" type="button" data-aux-toggle aria-expanded="${drawerOpen}">
-      <span><b>PANEL II · ${meta.title.toUpperCase()}</b><small>${STATION_CODES[station]} · ${requiredCount} required @ level +${attempt?.difficulty??configuredDifficulty} · REC +${attempt?.recommendedDifficulty??activeRecommendedDifficulty()}${attempt?` · ${incomplete} remaining`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>
+      <span><b>PANEL II · ${meta.title.toUpperCase()}</b><small>${STATION_CODES[station]} · ${requiredCount} auxiliary @ level +${attempt?.difficulty??configuredDifficulty} · REC +${attempt?.recommendedDifficulty??activeRecommendedDifficulty()}${attempt?` · ${incomplete} unearned`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>
     </button>
     <section class="exo-aux-drawer aux-drawer-${station}" aria-hidden="${drawerOpen?"false":"true"}">
       <div class="exo-aux-grid aux-grid-${station}">${controls.map((c,i)=>controlCard(c,i,station,preview)).join("")}</div>
-      <footer><span>${attempt?`${attempt.history.length} distinct auxiliary control${attempt.history.length===1?"":"s"} recorded this attempt`:"Controls are live; targets remain preview-only until Begin Procedure is pressed."}</span><b>${attempt?(allRequirementsSatisfied()?"AUXILIARY REQUIREMENTS COMPLETE":`${incomplete} AUXILIARY REQUIREMENT${incomplete===1?"":"S"} OUTSTANDING`):`MASTER +${configuredDifficulty}`}</b></footer>
+      <footer><span>${attempt?`${attempt.history.length} distinct auxiliary control${attempt.history.length===1?"":"s"} recorded this attempt`:"Controls are live; targets remain preview-only until Begin Procedure is pressed."}</span><b>${attempt?(allRequirementsSatisfied()?"AUXILIARY RELIEF COMPLETE":`${incomplete} AUXILIARY RELIEF ITEM${incomplete===1?"":"S"} UNEARNED`):`MASTER +${configuredDifficulty}`}</b></footer>
     </section>`;
   }
 
@@ -244,18 +243,6 @@
     e.preventDefault();next=quantize(control,next);if(next===current)return;commitAuxControl(station,control,next);
   }
 
-  function blockAuthorization(e){
-    if(!coreAttemptActive())return false;
-    if(!attempt)beginAttempt();
-    if(!attempt||attempt.difficulty===0)return false;
-    const incomplete=incompleteRequirements();if(!incomplete.length)return false;
-    e.preventDefault();e.stopImmediatePropagation();drawerOpen=true;
-    const first=incomplete[0];message=`AUTHORIZATION HELD: ${incomplete.length} Panel II requirement${incomplete.length===1?"":"s"} incomplete. Next: ${first.code} ${first.control.label} → ${formatValue(first.control,first.target)}.`;
-    renderAll();
-    const root=$("crew-auxiliary-root");root?.classList.remove("exo-aux-alarm");requestAnimationFrame(()=>root?.classList.add("exo-aux-alarm"));
-    return true;
-  }
-
   function bind(){
     $("crew-master-difficulty")?.addEventListener("input",e=>{if(attempt&&coreAttemptActive())return;configuredDifficulty=clamp(Math.round(Number(e.target.value)),0,MAX_DIFFICULTY);renderAll();});
     const root=$("crew-auxiliary-root");
@@ -271,14 +258,13 @@
       const abort=e.target.closest("#station-panel [data-procedure-abort]");
       const stationTab=e.target.closest("#station-tabs [data-station]");
       const reset=e.target.closest("#crew-scenario-reset");
-      const auth=e.target.closest("#station-panel [data-proc-input]");
-      const authToken=auth?.dataset.procInput;
-      if(auth&&AUTH_TOKENS.has(authToken)&&blockAuthorization(e))return;
+      const action=e.target.closest("#station-panel [data-proc-input]");
+      const actionToken=action?.dataset.procInput;
       if(begin){queueMicrotask(beginAttempt);return;}
       if(abort){queueMicrotask(()=>clearAttempt("Primary procedure aborted; Panel II recording cleared and controls remain live."));return;}
       if(stationTab){queueMicrotask(()=>{attempt=null;auxGesture=null;drawerOpen=false;message="Station changed. Panel II controls are live; Begin Procedure will arm this station's recording requirements.";renderAll();});return;}
       if(reset){queueMicrotask(()=>{configuredDifficulty=0;values=initialValues();attempt=null;auxGesture=null;drawerOpen=false;message="Human baseline reset; Panel II controls are live at nominal mid-range settings.";renderAll();});return;}
-      if(authToken==="execute"){setTimeout(()=>{if(!coreAttemptActive())clearAttempt("Command executed; Panel II controls remain live for the next procedure.");},0);}
+      if(actionToken==="execute"){setTimeout(()=>{if(!coreAttemptActive())clearAttempt("Command executed; Panel II controls remain live for the next procedure.");},0);}
     },true);
 
     document.addEventListener("change",e=>{
