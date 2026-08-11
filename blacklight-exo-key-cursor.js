@@ -13,11 +13,20 @@
     comms: Object.freeze({ rotation: -32, roll: -6, skewX: -2, scaleX: .95, scaleY: .90, offsetX: 4, offsetY: 5, hotspotX: 14, hotspotY: 7, bitting: [4,2,6,3,5,1] })
   });
 
+  const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
+  const CURSOR_CHARM_MOTION = Object.fromEntries(Object.keys(STATION_KEY_PERSPECTIVE).map(station => [station, {
+    angle: (Math.random()-.5)*1.4,
+    velocity: 0,
+    phase: Math.random()*Math.PI*2,
+    last: 0
+  }]));
+
   let currentStation = null;
   let overlay = null;
   let observer = null;
   let syncQueued = false;
   let moveQueued = false;
+  let charmAnimationFrame = 0;
   let pointerX = -200;
   let pointerY = -200;
   let pointerVisible = false;
@@ -26,6 +35,26 @@
 
   function perspectiveFor(station) {
     return STATION_KEY_PERSPECTIVE[station] || STATION_KEY_PERSPECTIVE.helm;
+  }
+
+  function rotatePoint(x,y,cx,cy,degrees) {
+    const radians = degrees*Math.PI/180;
+    const dx = x-cx;
+    const dy = y-cy;
+    const cos = Math.cos(radians);
+    const sin = Math.sin(radians);
+    return {x:cx+dx*cos-dy*sin,y:cy+dx*sin+dy*cos};
+  }
+
+  function keyCharmGeometry(profile,rotation) {
+    const cx = 60;
+    const top = 22;
+    const h = Number(profile?.height) || 42;
+    const pivotY = top+h/2;
+    const anchor = rotatePoint(cx,top+h-5,cx,pivotY,rotation);
+    const hinge = {x:anchor.x+7.5,y:anchor.y+14.5};
+    const mid = {x:anchor.x+2.5,y:anchor.y+7.4};
+    return {anchor,mid,hinge};
   }
 
   function capPath(profile, cx, top) {
@@ -70,7 +99,7 @@
       left.push(`${(cx-half+inset).toFixed(2)},${y.toFixed(2)}`);
       right.unshift(`${(cx+half-inset*.58).toFixed(2)},${(y+2.8).toFixed(2)}`);
     });
-    const path = `M${cx-2.2},${tipY} L${cx-half},${tipY+8} L${left.join(" L")} L${cx-half},${shoulderY-5} L${cx-8.8},${shoulderY} L${cx+8.8},${shoulderY} L${cx+half},${shoulderY-5} L${right.join(" L")} L${cx+half},${tipY+8} L${cx+2.2},${tipY} Z`;
+    const path = `M${cx-2.2},${tipY} L${cx-half},${tipY+8} L${left.join(" L")} L${cx-half},${shoulderY-5} L${cx-8.8},${shoulderY} L${cx+8.8},${shoulderY-5} L${right.join(" L")} L${cx+half},${tipY+8} L${cx+2.2},${tipY} Z`;
     return `<g transform="rotate(${perspective.rotation} 60 47)"><path d="${path}" fill="url(#bladeMetal)" stroke="#242729" stroke-width="1.25"/><path d="M55.7 ${tipY+12} L55.7 ${shoulderY-7} M59.2 ${tipY+6} L59.2 ${shoulderY-4}" stroke="#f1eee3" stroke-width=".8" opacity=".62"/><path d="M63.5 ${tipY+10} L63.5 ${shoulderY-7}" stroke="#555b5d" stroke-width="1" opacity=".8"/></g>`;
   }
 
@@ -96,8 +125,11 @@
     return `<g ${common}><path d="M-12 3 H12 L15 8 V34 H-15 V8Z"/><circle cx="0" cy="8" r="3" fill="none"/><text x="0" y="25" text-anchor="middle" fill="${accent}" stroke="none" font-size="11" font-family="ui-monospace,monospace" font-weight="900">${letters}</text></g>`;
   }
 
-  function charmMarkup(station,charm) {
-    return `<g data-key-charm="${station}"><path d="M60 75 C64 79 68 82 72 87" fill="none" stroke="#8c7a55" stroke-width="1.8" stroke-linecap="round"/><circle cx="63" cy="79" r="1.4" fill="#ad965f"/><circle cx="67" cy="83" r="1.4" fill="#ad965f"/><circle cx="71" cy="87" r="1.4" fill="#ad965f"/><g transform="translate(75 88) scale(.72)">${charmSymbolMarkup(charm)}</g></g>`;
+  function charmMarkup(station,charm,profile,rotation) {
+    const {anchor,mid,hinge} = keyCharmGeometry(profile,rotation);
+    const hx = hinge.x.toFixed(2);
+    const hy = hinge.y.toFixed(2);
+    return `<g data-cursor-key-chain="${station}"><path d="M${anchor.x.toFixed(2)} ${anchor.y.toFixed(2)} Q${mid.x.toFixed(2)} ${mid.y.toFixed(2)} ${hx} ${hy}" fill="none" stroke="#8c7a55" stroke-width="1.8" stroke-linecap="round"/><circle cx="${mid.x.toFixed(2)}" cy="${mid.y.toFixed(2)}" r="1.45" fill="#ad965f"/><circle cx="${hx}" cy="${hy}" r="2.3" fill="none" stroke="#ad965f" stroke-width="1.45"/></g><g data-cursor-key-charm="${station}" data-charm-hinge-x="${hx}" data-charm-hinge-y="${hy}" transform="rotate(0 ${hx} ${hy})"><circle cx="${hx}" cy="${hy}" r="1.25" fill="#ad965f"/><g transform="translate(${hx} ${(hinge.y+2.2).toFixed(2)}) scale(.72)">${charmSymbolMarkup(charm)}</g></g>`;
   }
 
   function cursorSvg(station) {
@@ -105,7 +137,7 @@
     if (!loadout?.cap || !loadout?.charm) return null;
     const perspective = perspectiveFor(station);
     const outer = `translate(${perspective.offsetX} ${perspective.offsetY}) rotate(${perspective.roll} 60 48) skewX(${perspective.skewX}) scale(${perspective.scaleX} ${perspective.scaleY})`;
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${CURSOR_SIZE}" height="${CURSOR_SIZE}" viewBox="-8 -42 145 178" overflow="visible" aria-hidden="true"><defs><linearGradient id="bladeMetal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#41484b"/><stop offset=".23" stop-color="#d7d9d4"/><stop offset=".48" stop-color="#7d8586"/><stop offset=".72" stop-color="#ece8dc"/><stop offset="1" stop-color="#474d4f"/></linearGradient><filter id="shadow" x="-45%" y="-45%" width="190%" height="190%"><feDropShadow dx="1" dy="4" stdDeviation="2.5" flood-color="#000" flood-opacity=".84"/></filter></defs><g filter="url(#shadow)" transform="${outer}">${bladeMarkup(perspective)}${keyCapMarkup(loadout.cap,perspective.rotation)}${charmMarkup(station,loadout.charm)}</g></svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${CURSOR_SIZE}" height="${CURSOR_SIZE}" viewBox="-8 -42 145 178" overflow="visible" aria-hidden="true"><defs><linearGradient id="bladeMetal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#41484b"/><stop offset=".23" stop-color="#d7d9d4"/><stop offset=".48" stop-color="#7d8586"/><stop offset=".72" stop-color="#ece8dc"/><stop offset="1" stop-color="#474d4f"/></linearGradient><filter id="shadow" x="-45%" y="-45%" width="190%" height="190%"><feDropShadow dx="1" dy="4" stdDeviation="2.5" flood-color="#000" flood-opacity=".84"/></filter></defs><g filter="url(#shadow)" transform="${outer}">${bladeMarkup(perspective)}${keyCapMarkup(loadout.cap,perspective.rotation)}${charmMarkup(station,loadout.charm,loadout.cap,perspective.rotation)}</g></svg>`;
   }
 
   function stationFromDom() {
@@ -150,6 +182,29 @@
     requestAnimationFrame(syncCursor);
   }
 
+  function animateCharm(now) {
+    const motion = CURSOR_CHARM_MOTION[currentStation];
+    const node = overlay?.querySelector?.("[data-cursor-key-charm]");
+    if (motion && node) {
+      const dt = motion.last ? Math.min(.035,(now-motion.last)/1000) : .016;
+      motion.last = now;
+      const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+      if (reduced) {
+        motion.angle = 0;
+        motion.velocity = 0;
+      } else {
+        const ambient = Math.sin(now/1800+motion.phase)*.42 + Math.sin(now/640+motion.phase*1.8)*.16;
+        const acceleration = (ambient-motion.angle)*8.2-motion.velocity*4.7;
+        motion.velocity += acceleration*dt;
+        motion.angle = clamp(motion.angle+motion.velocity*dt,-15,15);
+      }
+      const hx = Number(node.dataset.charmHingeX) || 60;
+      const hy = Number(node.dataset.charmHingeY) || 76;
+      node.setAttribute("transform",`rotate(${motion.angle.toFixed(2)} ${hx.toFixed(2)} ${hy.toFixed(2)})`);
+    }
+    charmAnimationFrame = requestAnimationFrame(animateCharm);
+  }
+
   function renderPointer() {
     moveQueued = false;
     if (!overlay) return;
@@ -171,8 +226,18 @@
 
   function handlePointerMove(event) {
     lastPointerType = event.pointerType || "mouse";
-    pointerX = event.clientX;
-    pointerY = event.clientY;
+    const nextX = event.clientX;
+    const nextY = event.clientY;
+    if (currentStation && pointerX > -100 && pointerY > -100 && lastPointerType !== "touch") {
+      const motion = CURSOR_CHARM_MOTION[currentStation];
+      if (motion) {
+        const dx = nextX-pointerX;
+        const dy = nextY-pointerY;
+        motion.velocity = clamp(motion.velocity+dx*.18-dy*.055,-48,48);
+      }
+    }
+    pointerX = nextX;
+    pointerY = nextY;
     pointerVisible = !isTextTarget(event.target) && lastPointerType !== "touch";
     queueMove();
   }
@@ -186,7 +251,7 @@
     observer.observe(tabs,{childList:true,subtree:true,attributes:true,attributeFilter:["aria-selected"]});
     observer.observe(panel,{childList:true,subtree:true});
     document.addEventListener("pointermove",handlePointerMove,{passive:true,capture:true});
-    document.addEventListener("pointerdown",event=>{lastPointerType=event.pointerType||"mouse";pointerDown=true;handlePointerMove(event);},{passive:true,capture:true});
+    document.addEventListener("pointerdown",event=>{lastPointerType=event.pointerType||"mouse";pointerDown=true;const motion=CURSOR_CHARM_MOTION[currentStation];if(motion)motion.velocity=clamp(motion.velocity+2.4,-48,48);handlePointerMove(event);},{passive:true,capture:true});
     document.addEventListener("pointerup",()=>{pointerDown=false;queueMove();},{passive:true,capture:true});
     document.addEventListener("pointercancel",()=>{pointerDown=false;pointerVisible=false;queueMove();},{passive:true,capture:true});
     document.addEventListener("pointerout",event=>{if(event.relatedTarget===null){pointerVisible=false;queueMove();}},{passive:true,capture:true});
@@ -194,6 +259,8 @@
     document.addEventListener("click",event=>{if(event.target.closest?.("#station-tabs [data-station],#crew-scenario-reset"))queueSync();},true);
     window.addEventListener("blur",()=>{pointerVisible=false;queueMove();},{passive:true});
     queueSync();
+    if (!charmAnimationFrame) charmAnimationFrame = requestAnimationFrame(animateCharm);
+    window.addEventListener("beforeunload",()=>{cancelAnimationFrame(charmAnimationFrame);charmAnimationFrame=0;},{once:true});
   }
 
   window.EXO_STATION_KEY_CURSOR = Object.freeze({
