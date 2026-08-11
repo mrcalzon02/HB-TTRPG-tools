@@ -84,8 +84,8 @@
 
 /* Ops Manual paged chapter index + uniform fixed-ratio viewport scaling */
 .exo-manual-overlay{padding:8px;scroll-behavior:smooth}
-.exo-manual-scale-stage{position:relative;margin:0 auto}
-.exo-manual-sheet.exo-manual-book{width:960px;min-height:0;padding:0;border:0;background:transparent;box-shadow:none;transform:scale(var(--manual-scale,1));transform-origin:top left;font-family:"Times New Roman",Times,Georgia,serif}
+.exo-manual-scale-stage{position:relative;margin:0 auto;overflow:hidden}
+.exo-manual-sheet.exo-manual-book{position:absolute;left:0;top:0;width:960px;min-height:0;padding:0;border:0;background:transparent;box-shadow:none;transform:scale(var(--manual-scale,1));transform-origin:top left;font-family:"Times New Roman",Times,Georgia,serif}
 .exo-manual-sheet.exo-manual-book:before,.exo-manual-sheet.exo-manual-book:after{content:none;display:none}
 .exo-manual-page{position:relative;box-sizing:border-box;width:960px;min-height:1242px;margin:0 0 28px;padding:40px 48px 58px 76px;color:#1c1a15;border:1px solid #4d483b;border-radius:0;font-family:"Times New Roman",Times,Georgia,serif;background:radial-gradient(circle at 8% 12%,rgba(104,82,47,.08) 0 1px,transparent 1.5px),radial-gradient(circle at 83% 34%,rgba(94,72,42,.055) 0 1px,transparent 1.5px),repeating-linear-gradient(0deg,rgba(65,54,37,.018) 0 1px,transparent 1px 4px),linear-gradient(92deg,#c8bea3 0,#ded4b9 6%,#e3d9be 52%,#d7ccb0 94%,#c3b89d 100%);background-size:43px 37px,61px 47px,auto,auto;box-shadow:inset 0 0 35px rgba(70,55,31,.16),0 14px 34px rgba(0,0,0,.54);scroll-margin-top:8px}
 .exo-manual-page:before{content:"";position:absolute;top:0;bottom:0;left:48px;width:1px;background:rgba(111,78,54,.38);box-shadow:7px 0 rgba(111,78,54,.12)}
