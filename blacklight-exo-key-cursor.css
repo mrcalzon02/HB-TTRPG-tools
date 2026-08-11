@@ -1,0 +1,21 @@
+.exo-crew-body{
+  cursor:var(--exo-station-key-cursor,auto);
+}
+.exo-crew-body button,
+.exo-crew-body a,
+.exo-crew-body select,
+.exo-crew-body input[type="range"],
+.exo-crew-body input[type="checkbox"],
+.exo-crew-body input[type="radio"],
+.exo-crew-body [role="button"],
+.exo-crew-body [data-control-gesture],
+.exo-crew-body [data-ops-book-drag],
+.exo-crew-body [data-ops-book-resize],
+.exo-crew-body .exo-manual-launch{
+  cursor:var(--exo-station-key-cursor,auto)!important;
+}
+.exo-crew-body input[type="text"],
+.exo-crew-body input[type="search"],
+.exo-crew-body textarea{
+  cursor:text!important;
+}
