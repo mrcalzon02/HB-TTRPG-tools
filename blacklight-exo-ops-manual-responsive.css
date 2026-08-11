@@ -1,0 +1,74 @@
+.exo-ops-book-window{container-type:inline-size}
+
+/* Keep the manual's visual density tied to the physical 8.5x11 sheet.
+   The original 650px-wide book is the reference specimen; cqw values below
+   scale typography, furniture and diagrams with the resized book instead of
+   leaving fixed-size text stranded inside a larger sheet. */
+.exo-ops-book-window .ops-book-titlebar{gap:1.54cqw;min-height:5.38cqw;padding:.92cqw 1.23cqw .92cqw 1.85cqw}
+.exo-ops-book-window .ops-book-titlebar>div:first-child{gap:1.38cqw}
+.exo-ops-book-window .ops-book-titlebar>div:first-child>b{font-size:clamp(8px,1.53cqw,16px)}
+.exo-ops-book-window .ops-book-titlebar>div:first-child>span{font-size:clamp(7px,1.38cqw,14px)}
+.exo-ops-book-window .ops-book-title-actions{gap:.77cqw}
+.exo-ops-book-window .ops-book-title-actions button{height:clamp(22px,3.69cqw,39px);padding:0 1.23cqw;font-size:clamp(7px,1.21cqw,13px)}
+.exo-ops-book-window .ops-book-title-actions [data-ops-source-close]{width:clamp(25px,4.15cqw,44px);font-size:clamp(12px,2.22cqw,23px)}
+
+.exo-ops-book-window .ops-book-search-row{gap:.92cqw;padding:.92cqw 1.23cqw}
+.exo-ops-book-window .ops-book-search-row label{gap:.31cqw}
+.exo-ops-book-window .ops-book-search-row label>span{font-size:clamp(6px,1.06cqw,11px)}
+.exo-ops-book-window .ops-book-search-row input{height:clamp(24px,3.85cqw,41px);padding:.46cqw 1.08cqw;font-size:clamp(8px,1.40cqw,15px)}
+.exo-ops-book-window .ops-book-search-row>button{height:clamp(24px,3.85cqw,41px);padding:0 1.54cqw;font-size:clamp(7px,1.21cqw,13px)}
+.exo-ops-book-window .ops-book-search-row>small{max-width:27.7cqw;font-size:clamp(6px,1.06cqw,11px)}
+.exo-ops-book-window .ops-book-thickness{right:-1.23cqw;top:12.62cqw;bottom:7.38cqw;width:1.38cqw}
+
+.exo-ops-book-window .ops-paper-header,
+.exo-ops-book-window .ops-paper-footer{gap:1.23cqw;padding:.92cqw 1.85cqw;font-size:clamp(6px,1.16cqw,12px)}
+.exo-ops-book-window .ops-paper-footer{padding-top:.77cqw;padding-bottom:.77cqw}
+.exo-ops-book-window .ops-paper-body{padding:1.85cqw 2.31cqw 1.38cqw;font-size:clamp(9px,1.70cqw,18px);line-height:1.35}
+.exo-ops-book-window .ops-paper-body h2{margin:0 0 1.08cqw;padding-bottom:.77cqw;border-bottom-width:max(1px,.31cqw)}
+.exo-ops-book-window .ops-paper-body h3{margin:1.23cqw 0 .77cqw;padding-top:.92cqw}
+.exo-ops-book-window .ops-paper-body p{margin:.77cqw 0}
+.exo-ops-book-window .ops-frontmatter-note{margin:1.38cqw 0;padding:1.23cqw 1.54cqw}
+.exo-ops-book-window .ops-physical-specs{gap:1.08cqw;margin-top:1.54cqw}
+.exo-ops-book-window .ops-physical-specs>div{padding:1.08cqw}
+.exo-ops-book-window .ops-physical-specs b{margin-top:.46cqw}
+
+/* Cover dimensions scale with the same physical-page model. */
+.exo-ops-book-window .ops-book-cover{padding:3.69cqw 4cqw 2.92cqw}
+.exo-ops-book-window .ops-cover-spine-label{left:.92cqw;top:7.38cqw;bottom:7.38cqw;width:2.62cqw;font-size:clamp(6px,1.13cqw,12px)}
+.exo-ops-book-window .ops-cover-rule{height:max(2px,.46cqw);box-shadow:0 .62cqw #4e422f;margin:.92cqw 0 3.69cqw 2cqw}
+.exo-ops-book-window .ops-cover-mark{gap:1.23cqw;margin-left:2cqw}
+.exo-ops-book-window .ops-cover-title{margin:auto 1.54cqw auto 2cqw;padding:3.08cqw 0}
+.exo-ops-book-window .ops-cover-title h1{margin:1.23cqw 0 1.38cqw;font-size:clamp(20px,4.9cqw,52px)}
+.exo-ops-book-window .ops-cover-spec{margin:0 1.23cqw 2.92cqw 0;padding-left:3.08cqw}
+.exo-ops-book-window .ops-cover-spec b{margin:.46cqw 0}
+.exo-ops-book-window .ops-cover-footer{gap:1.85cqw;margin-left:2cqw;padding-top:1.08cqw}
+
+/* Index and procedure pages scale their furniture as well as their copy. */
+.exo-ops-book-window .ops-book-index-list{gap:.62cqw;margin-top:1.23cqw}
+.exo-ops-book-window .ops-book-index-list button{grid-template-columns:8.92cqw minmax(0,1fr);gap:.31cqw 1.08cqw;padding:.77cqw 1.08cqw}
+.exo-ops-book-window .ops-procedure-heading{gap:1.23cqw;padding-bottom:.77cqw;margin-bottom:.92cqw;border-bottom-width:max(1px,.31cqw)}
+.exo-ops-book-window .ops-procedure-heading h2{margin:.31cqw 0 0}
+.exo-ops-book-window .ops-continuation-note{padding:.92cqw 1.23cqw;border-left-width:max(2px,.46cqw)}
+.exo-ops-book-window .ops-book-step-list{gap:1.08cqw;padding-left:3.38cqw}
+.exo-ops-book-window .ops-book-step-list>li{padding:.92cqw 1.08cqw .92cqw .62cqw}
+.exo-ops-book-window .ops-book-step-list>li>b:first-child{width:2.77cqw;height:2.77cqw;margin:0 .92cqw .46cqw -.15cqw}
+.exo-ops-book-window .ops-book-step-list .exo-manual-step-block{gap:.92cqw 1.23cqw!important}
+.exo-ops-book-window .ops-book-step-list .exo-manual-figure{flex-basis:17.23cqw!important;width:17.23cqw!important;padding:.46cqw!important}
+.exo-ops-book-window .ops-book-step-list .exo-manual-figure figcaption{font-size:clamp(6px,1.03cqw,11px)!important}
+.exo-ops-book-window .ops-book-step-list .exo-manual-figure figcaption small{font-size:clamp(5.5px,.95cqw,10px)!important}
+.exo-ops-book-window .ops-book-step-list .exo-manual-control-svg{max-height:11.08cqw}
+
+.exo-ops-book-window .ops-book-nav{grid-template-columns:6.46cqw minmax(0,1fr) 6.46cqw;gap:1.08cqw;padding:.92cqw 1.23cqw}
+.exo-ops-book-window .ops-book-nav button{height:clamp(27px,4.46cqw,47px);font-size:clamp(14px,2.71cqw,28px)}
+.exo-ops-book-window .ops-book-nav>div>b{font-size:clamp(8px,1.40cqw,15px)}
+.exo-ops-book-window .ops-book-nav>div>span{margin-top:.15cqw;font-size:clamp(6px,1.06cqw,11px)}
+.exo-ops-book-window .ops-book-resize{width:clamp(22px,3.54cqw,37px);height:clamp(22px,3.54cqw,37px)}
+
+/* A resized page should remain visually occupied at roughly the same percentage
+   of its sheet. Avoid viewport-based text sizing, which caused the large-book
+   empty-space failure shown in the comparison screenshots. */
+@media(max-width:720px){
+  .exo-ops-book-window{font-size:inherit}
+  .exo-ops-book-window .ops-paper-body{padding:1.85cqw 2.31cqw 1.38cqw}
+  .exo-ops-book-window .ops-book-step-list .exo-manual-figure{flex-basis:17.23cqw!important;width:17.23cqw!important}
+}
