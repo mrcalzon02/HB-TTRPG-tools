@@ -321,12 +321,23 @@
     book.className = "exo-ops-book-window";
     book.setAttribute("role", "dialog");
     book.setAttribute("aria-label", `${model.title} operations manual`);
+    book.tabIndex = 0;
     book.innerHTML = `${chromeMarkup()}<div class="ops-book-thickness" aria-hidden="true"></div><div class="ops-book-stage" data-ops-book-stage></div><div data-ops-book-nav></div><div class="ops-book-resize" data-ops-book-resize title="Resize manual" aria-label="Resize manual"></div>`;
     document.body.appendChild(book);
     normalizeWindowState(!Number.isFinite(windowState.x));
     applyWindowGeometry();
     renderPage(0, false);
-    requestAnimationFrame(() => book?.classList.add("is-open"));
+    requestAnimationFrame(() => {
+      book?.classList.add("is-open");
+      book?.focus({ preventScroll: true });
+    });
+  }
+
+  function releaseLegacyModalState() {
+    const close = sourceClose;
+    sourceOverlay = null;
+    sourceClose = null;
+    if (close?.isConnected) close.click();
   }
 
   function adoptOverlay(overlay) {
@@ -339,21 +350,18 @@
     pageIndex = 0;
     overlay.classList.add("ops-manual-source-hidden");
     createBookWindow();
+    queueMicrotask(releaseLegacyModalState);
   }
 
   function closeBook() {
     cancelAnimationFrame(inertiaFrame);
     inertiaFrame = 0;
-    book?.classList.add("is-closing");
-    const close = sourceClose;
+    if (!book) return;
+    const closingBook = book;
+    closingBook.classList.add("is-closing");
     window.setTimeout(() => {
-      book?.remove();
-      book = null;
-      if (close?.isConnected) close.click();
-      else {
-        sourceOverlay?.remove();
-        sourceOverlay = null;
-      }
+      if (book === closingBook) book = null;
+      closingBook.remove();
     }, 110);
   }
 
@@ -376,6 +384,7 @@
     };
     windowState.vx = 0;
     windowState.vy = 0;
+    book.focus({ preventScroll: true });
     book.classList.add("is-dragging");
     handle.setPointerCapture?.(event.pointerId);
     event.preventDefault();
@@ -461,6 +470,7 @@
     cancelAnimationFrame(inertiaFrame);
     inertiaFrame = 0;
     resize = { id: event.pointerId, startX: event.clientX, startWidth: windowState.width };
+    book.focus({ preventScroll: true });
     book.classList.add("is-resizing");
     grip.setPointerCapture?.(event.pointerId);
     event.preventDefault();
@@ -487,6 +497,7 @@
 
   function handleBookClick(event) {
     if (!book || !event.target.closest(".exo-ops-book-window")) return;
+    book.focus({ preventScroll: true });
     if (event.target.closest("[data-ops-source-close]")) {
       event.preventDefault();
       closeBook();
@@ -521,7 +532,7 @@
   }
 
   function handleBookKeydown(event) {
-    if (!book) return;
+    if (!book || !book.contains(document.activeElement)) return;
     const focused = document.activeElement;
     const inSearch = focused?.matches?.("[data-ops-book-search]");
     if (inSearch && event.key === "Enter") {
@@ -551,12 +562,11 @@
   function scanForOverlay() {
     const overlay = document.querySelector("#station-panel .exo-manual-overlay:not([data-ops-book-adopted='true'])");
     if (overlay) adoptOverlay(overlay);
-    if (!document.querySelector("#station-panel .exo-manual-overlay") && book) {
-      book.remove();
-      book = null;
-      sourceOverlay = null;
-      sourceClose = null;
-    }
+  }
+
+  function handleStationChange(event) {
+    if (!book || !event.target.closest?.("#station-tabs [data-station]")) return;
+    closeBook();
   }
 
   function install() {
@@ -565,6 +575,7 @@
     observer = new MutationObserver(scanForOverlay);
     observer.observe(panel, { childList: true, subtree: true });
     document.addEventListener("click", handleBookClick);
+    document.addEventListener("click", handleStationChange, true);
     document.addEventListener("keydown", handleBookKeydown, true);
     document.addEventListener("pointerdown", beginDrag, true);
     document.addEventListener("pointerdown", beginResize, true);
