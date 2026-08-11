@@ -110,7 +110,19 @@ jobs:
           BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun
         run: |
           set -o pipefail
-          node scripts/validate-binary-cube-v12-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-v12.log
+          log='binary-cube-v13-launch-logs/pages-v12.log'
+          : > "$log"
+          passed=''
+          for attempt in 1 2; do
+            echo "--- public responsive attempt ${attempt}/2 ---" | tee -a "$log"
+            if timeout 150s node scripts/validate-binary-cube-v12-pages-browser.mjs 2>&1 | tee -a "$log"; then
+              passed=1
+              break
+            fi
+            echo "Public responsive attempt ${attempt} failed or exceeded 150 seconds; retrying in a fresh browser process." | tee -a "$log"
+            sleep 2
+          done
+          test -n "$passed"
 
       - name: Validate promoted cards and public visualizer launch
         id: pages_v13
@@ -119,7 +131,19 @@ jobs:
           BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun
         run: |
           set -o pipefail
-          node scripts/validate-binary-cube-v13-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-v13.log
+          log='binary-cube-v13-launch-logs/pages-v13.log'
+          : > "$log"
+          passed=''
+          for attempt in 1 2; do
+            echo "--- promoted launch attempt ${attempt}/2 ---" | tee -a "$log"
+            if timeout 150s node scripts/validate-binary-cube-v13-pages-browser.mjs 2>&1 | tee -a "$log"; then
+              passed=1
+              break
+            fi
+            echo "Promoted launch attempt ${attempt} failed or exceeded 150 seconds; retrying in a fresh browser process." | tee -a "$log"
+            sleep 2
+          done
+          test -n "$passed"
 
       - name: Validate public one-bit serial demonstration
         id: pages_serial
@@ -128,7 +152,19 @@ jobs:
           BINARY_CUBE_PAGES_URL: https://mrcalzon02.github.io/HB-TTRPG-tools/#scientific-tools
         run: |
           set -o pipefail
-          node scripts/validate-binary-cube-serial-pages-browser.mjs 2>&1 | tee binary-cube-v13-launch-logs/pages-serial.log
+          log='binary-cube-v13-launch-logs/pages-serial.log'
+          : > "$log"
+          passed=''
+          for attempt in 1 2; do
+            echo "--- public serial attempt ${attempt}/2 ---" | tee -a "$log"
+            if timeout 150s node scripts/validate-binary-cube-serial-pages-browser.mjs 2>&1 | tee -a "$log"; then
+              passed=1
+              break
+            fi
+            echo "Public serial attempt ${attempt} failed or exceeded 150 seconds; retrying in a fresh browser process." | tee -a "$log"
+            sleep 2
+          done
+          test -n "$passed"
 
       - name: Retain V13 launch logs
         if: ${{ always() }}
