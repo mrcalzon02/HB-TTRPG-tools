@@ -20,6 +20,7 @@ public final class MainActivity extends Activity {
             "https://mrcalzon02.github.io/HB-TTRPG-tools/index.html#scientific-tools";
     private static final String ALLOWED_HOST = "mrcalzon02.github.io";
     private static final String ALLOWED_PATH_PREFIX = "/HB-TTRPG-tools/";
+    private static final int SIGNAL_PERMISSION_REQUEST = 1001;
 
     private WebView webView;
     private LiveSignalsNativeBridge nativeBridge;
@@ -87,6 +88,19 @@ public final class MainActivity extends Activity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != SIGNAL_PERMISSION_REQUEST || nativeBridge == null) return;
+
+        // Passive collection may have initialized while the runtime permission dialog was still
+        // open. Restart every collector so newly granted cellular/BLE/Wi-Fi/location channels are
+        // immediately inventoried instead of remaining falsely marked unavailable until relaunch.
+        nativeBridge.stopPassive();
+        if (pageReady) nativeBridge.startPassive();
+        refreshWebBridgeCapabilities();
+    }
+
+    @Override
     protected void onDestroy() {
         if (nativeBridge != null) nativeBridge.close();
         if (webView != null) {
@@ -142,6 +156,22 @@ public final class MainActivity extends Activity {
         webView.evaluateJavascript(script, null);
     }
 
+    private void refreshWebBridgeCapabilities() {
+        if (!pageReady || webView == null) return;
+        webView.evaluateJavascript("""
+            (() => {
+              try {
+                if (window.LiveSignalsLaboratory?.registerHardwareBridge && window.AndroidLiveSignalsBridge) {
+                  window.LiveSignalsLaboratory.registerHardwareBridge(window.AndroidLiveSignalsBridge);
+                }
+                window.LiveSignalsLaboratory?.refreshHardwareBridgeCapabilities?.();
+              } catch (error) {
+                // The laboratory may not be mounted yet; capabilities will be read when it opens.
+              }
+            })();
+            """, null);
+    }
+
     private void requestSignalPermissions() {
         List<String> requested = new ArrayList<>();
         addIfMissing(requested, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -149,7 +179,7 @@ public final class MainActivity extends Activity {
         addIfMissing(requested, Manifest.permission.READ_PHONE_STATE);
         addIfMissing(requested, Manifest.permission.BLUETOOTH_SCAN);
         addIfMissing(requested, Manifest.permission.NEARBY_WIFI_DEVICES);
-        if (!requested.isEmpty()) requestPermissions(requested.toArray(new String[0]), 1001);
+        if (!requested.isEmpty()) requestPermissions(requested.toArray(new String[0]), SIGNAL_PERMISSION_REQUEST);
     }
 
     private void addIfMissing(List<String> out, String permission) {
