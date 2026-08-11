@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeVisualizerRendererApi() {
   'use strict';
 
-  const RENDERER_VERSION = '0.7.0';
+  const RENDERER_VERSION = '0.6.0';
   const FACES = Object.freeze(['top', 'bottom', 'front', 'back', 'left', 'right']);
   const PLAYBACK_MODES = Object.freeze(['all', 'selected', 'row', 'serial']);
   const RENDER_QUALITIES = Object.freeze(['auto', 'exact', 'sampled', 'aggregate']);
