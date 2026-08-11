@@ -36,6 +36,11 @@ assert.match(activity, /getCapabilitiesJson/);
 assert.match(activity, /runActiveScan/);
 assert.match(activity, /nativeBridge\.startPassive\(\)/);
 assert.match(activity, /nativeBridge\.stopPassive\(\)/);
+assert.match(activity, /SIGNAL_PERMISSION_REQUEST = 1001/);
+assert.match(activity, /onRequestPermissionsResult\(/);
+assert.match(activity, /nativeBridge\.stopPassive\(\);[\s\S]*if \(pageReady\) nativeBridge\.startPassive\(\)/);
+assert.match(activity, /refreshWebBridgeCapabilities\(\)/);
+assert.match(activity, /refreshHardwareBridgeCapabilities/);
 
 assert.match(bridge, /TelephonyCallback\.SignalStrengthsListener/);
 assert.match(bridge, /TelephonyCallback\.CellInfoListener/);
@@ -65,6 +70,8 @@ for (const sensor of [
 ]) assert.match(bridge, new RegExp(`Sensor\\.${sensor}`));
 assert.match(bridge, /SENSOR_PERIOD_US = 50_000/);
 assert.match(bridge, /LocationManager\.GPS_PROVIDER/);
+assert.match(bridge, /Float\.isFinite\(value\)/);
+assert.match(bridge, /array\.put\(\(double\) value\)/);
 
 assert.match(bridge, /WifiRttManager/);
 assert.match(bridge, /wifiRttManager\.startRanging/);
@@ -95,7 +102,7 @@ assert.match(readme, /compile\/target SDK 36/);
 
 console.log(JSON.stringify({
   format:'hb-ttrpg-live-signals-android-bridge-validation-receipt',
-  schemaVersion:'0.1.1',
+  schemaVersion:'0.1.2',
   pass:true,
   androidProjectScaffold:true,
   restrictedPrivilegedWebView:true,
@@ -107,9 +114,12 @@ console.log(JSON.stringify({
   gnssAndSensorContext:true,
   conservative20HzSensorDefault:true,
   truthfulUnknownFrequencyHandling:true,
+  finiteSensorJson:true,
   wifiRttResponderDiscovery:true,
   wifiRttDistanceAndUncertainty:true,
   noRadioMutationControls:true,
   foregroundHardwareLifecycle:true,
+  permissionGrantCollectorRestart:true,
+  capabilityRefreshAfterPermissionGrant:true,
   ciCompileSdk36:true
 }, null, 2));
