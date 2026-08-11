@@ -260,7 +260,7 @@
   function lookAt(eye, target, up) {
     const zAxis = normalize(subtract(eye, target));
     const xAxis = normalize(cross(up, zAxis));
-    const yAxis = cross(right = xAxis, zAxis);
+    const yAxis = cross(zAxis, xAxis);
     return new Float32Array([
       xAxis[0], yAxis[0], zAxis[0], 0,
       xAxis[1], yAxis[1], zAxis[1], 0,
