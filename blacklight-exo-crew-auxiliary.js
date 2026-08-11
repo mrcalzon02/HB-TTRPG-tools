@@ -68,6 +68,7 @@
   function activeStation(){return document.querySelector(".exo-station-tab[aria-selected='true']")?.dataset.station || "helm";}
   function activeProcedureId(){return document.querySelector("#station-panel [data-procedure-select]")?.value || "unselected";}
   function activeProcedureName(){const select=document.querySelector("#station-panel [data-procedure-select]");return select?.selectedOptions?.[0]?.textContent?.replace(/\s+·\s+\d+\s+canonical inputs.*$/i,"").trim() || "Selected procedure";}
+  function activeRecommendedDifficulty(){const raw=Number(document.querySelector("#station-panel [data-procedure-select]")?.selectedOptions?.[0]?.dataset.recommendedDifficulty);return clamp(Number.isFinite(raw)&&raw?raw:3,1,MAX_DIFFICULTY);}
   function coreAttemptActive(){const abort=document.querySelector("#station-panel [data-procedure-abort]");return Boolean(abort && !abort.disabled);}
 
   function requirementPlan(station,procedureId,difficulty){
@@ -77,7 +78,7 @@
     const ordered=[...controls.slice(offset),...controls.slice(0,offset)];
     return ordered.slice(0,count).map(control => {
       const slots=Math.max(1,Math.floor((control.max-control.min)/(control.step||1))+1);
-      const slot=stableHash(`${station}:${procedureId}:${control.id}:aux-target`)%slots;
+      const slot=stableHash(`${station}:${procedureId}:${control.id}:aux-target:level-${count}`)%slots;
       const target=quantize(control,control.min+slot*(control.step||1));
       const index=controls.indexOf(control)+1;
       return Object.freeze({controlId:control.id,control,target,tolerance:(control.step||1)/2,token:`aux-${station}-${control.id}`,code:`${STATION_CODES[station]}-AUX-${String(index).padStart(2,"0")}`});
@@ -92,8 +93,8 @@
 
   function beginAttempt(){
     const station=activeStation(),procedureId=activeProcedureId(),difficulty=configuredDifficulty;
-    attempt={station,procedureId,procedureName:activeProcedureName(),difficulty,requirements:requirementPlan(station,procedureId,difficulty),touched:new Set(),history:[]};
-    message=difficulty?`Panel II armed: ${difficulty} auxiliary control${difficulty===1?"":"s"} must be deliberately set before authorization.`:"Master +0: no Panel II manipulation required for this procedure.";
+    attempt={station,procedureId,procedureName:activeProcedureName(),difficulty,recommendedDifficulty:activeRecommendedDifficulty(),requirements:requirementPlan(station,procedureId,difficulty),touched:new Set(),history:[]};
+    message=difficulty?`Panel II level +${difficulty} armed: ${difficulty} auxiliary control${difficulty===1?"":"s"} must be deliberately set before authorization. Procedure recommendation is +${attempt.recommendedDifficulty}; +1 through +5 remain optional.`:`Master +0: no Panel II manipulation required. This procedure recommends +${attempt.recommendedDifficulty}, with optional levels +1 through +5 available.`;
     renderAll();
   }
   function clearAttempt(reason="Panel II standing by. Begin a primary procedure to arm auxiliary requirements."){
@@ -104,8 +105,8 @@
     const input=$("crew-master-difficulty"),value=$("crew-master-difficulty-value"),summary=$("crew-master-difficulty-summary"),state=$("crew-master-difficulty-state");
     if(input){input.value=String(configuredDifficulty);input.disabled=Boolean(attempt&&coreAttemptActive());}
     if(value)value.textContent=`+${configuredDifficulty}`;
-    if(summary)summary.textContent=configuredDifficulty?`${configuredDifficulty} auxiliary control${configuredDifficulty===1?"":"s"} added to every primary procedure`:`Primary procedure + authorization only`;
-    if(state)state.textContent=attempt?`Attempt locked at +${attempt.difficulty}`:"Changes apply to the next procedure";
+    if(summary)summary.textContent=configuredDifficulty?`${configuredDifficulty} Panel II control${configuredDifficulty===1?"":"s"} added to the selected procedure`:`Primary procedure + authorization only`;
+    if(state)state.textContent=attempt?`Attempt locked at +${attempt.difficulty} · recommended +${attempt.recommendedDifficulty}`:`Selected procedure recommends +${activeRecommendedDifficulty()} · optional +1–+5`;
   }
 
   function controlCard(control,index,station,previewRequirements){
@@ -126,7 +127,7 @@
     root.dataset.open=drawerOpen?"true":"false";
     root.dataset.required=requiredCount?"true":"false";
     root.innerHTML=`<button class="exo-aux-handle" type="button" data-aux-toggle aria-expanded="${drawerOpen}">
-      <span><b>PANEL II · AUXILIARY CONTROLS</b><small>${STATION_CODES[station]} · ${requiredCount} required @ master +${attempt?.difficulty??configuredDifficulty}${attempt?` · ${incomplete} remaining`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>
+      <span><b>PANEL II · AUXILIARY CONTROLS</b><small>${STATION_CODES[station]} · ${requiredCount} required @ level +${attempt?.difficulty??configuredDifficulty} · REC +${attempt?.recommendedDifficulty??activeRecommendedDifficulty()}${attempt?` · ${incomplete} remaining`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>
     </button>
     <section class="exo-aux-drawer" aria-hidden="${drawerOpen?"false":"true"}">
       <header class="exo-aux-drawer-head"><div><span class="exo-kicker">Independent secondary hardware bank</span><strong>${station.replace(/^./,c=>c.toUpperCase())} auxiliary console</strong><p>The primary watchstation remains intact underneath this panel. Master difficulty adds only these secondary controls; it never removes or relocates Panel I hardware.</p></div><div class="exo-aux-attempt"><b>${attempt?attempt.procedureName:"Preview"}</b><span>${message}</span></div></header>
