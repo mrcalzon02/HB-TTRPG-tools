@@ -84,25 +84,23 @@ jobs:
           set -o pipefail
           node scripts/validate-binary-cube-v12-complete.mjs 2>&1 | tee binary-cube-v13-launch-logs/complete-v12.log
 
-      - name: Wait for promoted Shadowrun entry on GitHub Pages
+      - name: Wait for current Shadowrun entry on GitHub Pages
         id: deployed_entry
         continue-on-error: true
         env:
           PAGES_ENTRY: https://mrcalzon02.github.io/HB-TTRPG-tools/shadowrun-entry.js
         run: |
-          deployed=''
+          deployed_file="binary-cube-v13-launch-logs/deployed-shadowrun-entry.js"
           for attempt in $(seq 1 60); do
-            deployed="$(curl --fail --silent --show-error "${PAGES_ENTRY}?v=${GITHUB_SHA}-${attempt}" || true)"
-            if grep -q "20260809-v13-binary-cube-unified" <<<"$deployed" \
-              && grep -q "shadowrun-binary-cube-encryption','available'" <<<"$deployed" \
-              && grep -q "shadowrun-binary-cube-visualizer','available'" <<<"$deployed"; then
-              printf '%s\n' "$deployed" > binary-cube-v13-launch-logs/deployed-shadowrun-entry.js
+            if curl --fail --silent --show-error "${PAGES_ENTRY}?v=${GITHUB_SHA}-${attempt}" -o "$deployed_file" \
+              && cmp -s shadowrun-entry.js "$deployed_file" \
+              && grep -q "shadowrun-binary-cube-encryption','available'" "$deployed_file" \
+              && grep -q "shadowrun-binary-cube-visualizer','available'" "$deployed_file"; then
               exit 0
             fi
             sleep 10
           done
-          printf '%s\n' "$deployed" > binary-cube-v13-launch-logs/deployed-shadowrun-entry.js
-          echo "GitHub Pages did not expose the current unified V13 Shadowrun entry." >&2
+          echo "GitHub Pages did not expose the current repository shadowrun-entry.js within the deployment window." >&2
           exit 1
 
       - name: Preserve V12 public mobile and fallback evidence
