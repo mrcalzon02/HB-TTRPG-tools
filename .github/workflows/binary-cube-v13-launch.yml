@@ -103,7 +103,7 @@ jobs:
           echo "GitHub Pages did not expose the current repository shadowrun-entry.js within the deployment window." >&2
           exit 1
 
-      - name: Preserve V12 public mobile and fallback evidence
+      - name: Preserve V12 public responsive and fallback evidence
         id: pages_v12
         continue-on-error: true
         env:
