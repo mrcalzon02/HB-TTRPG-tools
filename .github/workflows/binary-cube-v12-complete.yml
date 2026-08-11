@@ -1,5 +1,4 @@
 # Complete V12 milestone gate: all accepted V0-V11 evidence plus V12 lifecycle, failure-path, fallback, stale-work, and desktop validation.
-# Temporary no-op touch to re-run the complete gate after the serial demonstration changes.
 name: Validate Binary Cube V12 complete milestone
 
 on:
