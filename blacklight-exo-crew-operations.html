@@ -10,6 +10,22 @@
   <link rel="stylesheet" href="blacklight-exo-crew-operations.css">
   <link rel="stylesheet" href="blacklight-exo-crew-auxiliary.css">
   <link rel="stylesheet" href="blacklight-exo-crew-fidelity.css">
+  <style>
+    /* Panel II is equipment, not a second summary screen. Before a primary
+       procedure begins, show the hardware at its current settings without
+       exposing precomputed target previews or redundant difficulty summaries. */
+    .exo-aux-handle small,
+    .exo-aux-attempt,
+    .exo-aux-drawer-head p,
+    .exo-aux-drawer footer { display:none !important; }
+    .exo-aux-drawer-head { display:block; }
+    body:has(#station-panel [data-procedure-abort]:disabled) #crew-auxiliary-root .exo-aux-control[data-required="true"] {
+      border-color:#4c5658;
+      box-shadow:inset 0 1px rgba(255,255,255,.04),inset 0 -12px 18px rgba(0,0,0,.18);
+    }
+    body:has(#station-panel [data-procedure-abort]:disabled) #crew-auxiliary-root .exo-aux-readout small,
+    body:has(#station-panel [data-procedure-abort]:disabled) #crew-auxiliary-root .exo-aux-control-status { display:none !important; }
+  </style>
   <script src="blacklight-exo-control-audio.js" defer></script>
   <script src="blacklight-exo-crew-operations.js" defer></script>
   <script src="blacklight-exo-crew-auxiliary.js" defer></script>
@@ -56,27 +72,16 @@
   </section>
 
   <main class="bli-shell exo-crew-shell">
-    <section class="bli-section exo-crew-command">
-      <div class="exo-master-difficulty" aria-labelledby="crew-master-difficulty-title">
-        <div class="exo-master-difficulty-head">
-          <div class="exo-master-difficulty-copy">
-            <span class="exo-kicker">Global operating modulation</span>
-            <strong id="crew-master-difficulty-title">Master console difficulty / auxiliary depth</strong>
-            <p>The existing crew-station panel remains the complete primary console. Raising this setting adds one additional required control per level on the independent Panel II auxiliary console. Different procedures can reuse the same auxiliary hardware at different exact graduated values; the normal keyed authorization sequence remains unchanged.</p>
-          </div>
-          <div class="exo-master-difficulty-readout">
-            <span>Configured auxiliary depth</span>
-            <strong id="crew-master-difficulty-value">+0</strong>
-            <span id="crew-master-difficulty-summary">Primary procedure + authorization only</span>
-            <small id="crew-master-difficulty-state">Changes apply to the next procedure</small>
-          </div>
-        </div>
-        <input id="crew-master-difficulty" type="range" min="0" max="5" step="1" value="0" aria-label="Master auxiliary difficulty from plus zero through plus five">
-        <div class="exo-master-difficulty-scale" aria-hidden="true">
-          <span>+0<small>0 aux</small></span><span>+1<small>1 aux</small></span><span>+2<small>2 aux</small></span><span>+3<small>3 aux</small></span><span>+4<small>4 aux</small></span><span>+5<small>5 aux</small></span>
-        </div>
-      </div>
+    <!-- Compatibility sinks keep legacy render hooks alive without presenting
+         redundant global controls. Auxiliary depth is driven by the procedure
+         dropdown's recommended difficulty instead of a separate master slider. -->
+    <div hidden aria-hidden="true">
+      <input id="crew-master-difficulty" type="range" min="0" max="5" step="1" value="0" tabindex="-1">
+      <div id="power-controls"></div>
+      <span id="power-total"></span>
+    </div>
 
+    <section class="bli-section exo-crew-command">
       <div class="exo-crew-state-grid">
         <article class="exo-state-card">
           <span>Velocity</span><strong id="state-velocity">12.4 km/s</strong>
@@ -110,14 +115,6 @@
           <span>Weapons readiness</span><strong id="state-weapons">61%</strong>
           <div class="exo-meter"><i id="meter-weapons"></i></div>
         </article>
-      </div>
-
-      <div class="exo-power-bus" aria-label="Engineering power distribution">
-        <div class="exo-power-head">
-          <div><span class="exo-kicker">Main distribution bus · visual setup</span><strong>Engineering power allocation</strong></div>
-          <span id="power-total" class="exo-power-total">100 / 100 points allocated</span>
-        </div>
-        <div id="power-controls" class="exo-power-grid"></div>
       </div>
     </section>
 
@@ -183,5 +180,33 @@
 
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO crew role-play console placeholder · human procedural baseline · DM-adjudicated WoD-derived d10 resolution.</footer>
   <script src="blacklight-background-audio.js"></script>
+  <script>
+    (() => {
+      "use strict";
+      const slider = () => document.getElementById("crew-master-difficulty");
+      const selectedDifficulty = () => {
+        const option = document.querySelector("#station-panel [data-procedure-select]")?.selectedOptions?.[0];
+        const value = Number(option?.dataset.recommendedDifficulty);
+        return Number.isFinite(value) ? Math.max(0, Math.min(5, Math.round(value))) : 0;
+      };
+      const syncAuxiliaryDepth = () => {
+        const input = slider();
+        if (!input) return;
+        const next = selectedDifficulty();
+        if (Number(input.value) === next) return;
+        input.value = String(next);
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      };
+
+      document.addEventListener("DOMContentLoaded", () => setTimeout(syncAuxiliaryDepth, 0));
+      document.addEventListener("change", event => {
+        if (event.target.closest?.("#station-panel [data-procedure-select]")) syncAuxiliaryDepth();
+      });
+      document.addEventListener("click", event => {
+        if (event.target.closest?.("#station-panel [data-procedure-begin]")) syncAuxiliaryDepth();
+        if (event.target.closest?.("#station-tabs [data-station], #crew-scenario-reset")) setTimeout(syncAuxiliaryDepth, 0);
+      });
+    })();
+  </script>
 </body>
 </html>
