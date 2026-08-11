@@ -2,7 +2,8 @@
 
 ## Status
 
-- Milestone: `V13 — Unified Binary Cube Launch and Documentation`
+- Milestone: `V13 — Shadowrun Workspace Launch and Documentation`
+- Current scope: unified Binary Cube launch, centralized Scientific Tools exposure, and serial demonstration evidence
 - State: accepted
 - Prerequisite: V12 accepted
 - Shadowrun route: `https://mrcalzon02.github.io/HB-TTRPG-tools/#shadowrun`
@@ -14,7 +15,7 @@
 - The **Binary Cube Encryption Laboratory** remains a dedicated Shadowrun workspace card.
 - The **Binary Cube Encoder Visualizer** remains a separate dedicated card while delegating to the shared authoritative visualizer implementation.
 - The centralized **Scientific Tools** workspace exposes the same Binary Cube visualizer rather than maintaining a duplicate renderer or controller.
-- Both Shadowrun Binary Cube cards remain marked `available`.
+- Both cards are promoted from `prototype` to `available` in the canonical V13 promotion record and remain `available` today.
 - The current Shadowrun asset version is `20260809-v17-contextual-help`.
 - The landing-page lazy-view loader supports explicit activation and direct `#shadowrun` and `#scientific-tools` navigation.
 - Historical compatibility gates accept forward-moving dated asset versions while continuing to enforce their original encoder, accessibility, transport, storage, and desktop contracts.
@@ -101,7 +102,7 @@ The public V13 browser receipt proves:
 - the canonical package, exact round trip, and selected-block trace settle successfully;
 - the active transport remains an internal package;
 - only one visualizer panel exists;
-- the promoted responsive launch remains within the CSS viewport.
+- the promoted mobile launch remains within the viewport. The current responsive receipt additionally records the actual Chromium CSS viewport and panel dimensions rather than assuming device metrics and CSS pixels are identical.
 
 The dedicated public Scientific Tools serial receipt proves:
 
@@ -129,7 +130,7 @@ Four measured nodes may extend beyond the CSS viewport without increasing docume
 
 ## Post-promotion regression evidence
 
-The complete V0–V12 aggregate now contains **27 checks**, including dedicated serial-demonstration evidence:
+The original V13 acceptance preserved the complete 24-check V0–V12 aggregate. That historical acceptance statement remains part of the immutable V13 contract; the current complete aggregate has since expanded to **27 checks**, including dedicated serial-demonstration evidence:
 
 - exact four-anchor serial route contract;
 - monotonic distance-weighted tweening;
@@ -148,7 +149,7 @@ The complete aggregate passes before V13 proceeds to public deployment checks.
 `.github/workflows/binary-cube-v13-launch.yml` now fails unless all of the following pass together:
 
 1. V13 source and documentation contracts;
-2. the complete 27-check V0–V12 aggregate;
+2. the current complete 27-check V0–V12 aggregate, preserving the complete 24-check V0–V12 aggregate originally accepted at V13;
 3. byte-for-byte public deployment synchronization for the current repository `shadowrun-entry.js`;
 4. the V12 live responsive and exact-fallback browser gate;
 5. the V13 live promoted-card and visualizer-launch browser gate;
