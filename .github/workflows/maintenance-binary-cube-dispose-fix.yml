@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
 
+# Temporary maintenance workflow: remove after the one-line authoritative renderer correction lands.
 jobs:
   fix:
     runs-on: ubuntu-latest
