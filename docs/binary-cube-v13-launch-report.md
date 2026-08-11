@@ -30,9 +30,10 @@ The viewport **Play Encoding** demonstration now uses a dedicated serial present
 - the moving bit follows the exact canonical route from input face cell to keyed interior coordinate to output face cell to emitted landing position;
 - the white route grows progressively with the travelling bit instead of jumping between coarse phase states;
 - a stationary pale marker remains at the exact keyed interior coordinate while the bit traverses the route;
-- an on-canvas **KEYED TRANSLATION · (x, y, z)** label tracks that same canonical coordinate.
+- an on-canvas **KEYED TRANSLATION · (x, y, z)** label tracks that same canonical coordinate;
+- future input bits and completed output bits remain visible only as subdued context, preventing the active single-bit traversal from being visually buried inside a wall of equally bright bits.
 
-The serial renderer derives its four route anchors from existing canonical trace phases `3`, `4`, `7`, and `9`. It does not introduce a second encoding algorithm or reconstruct transformation geometry independently from the canonical trace.
+The serial renderer derives its four route anchors from existing canonical trace phases `3`, `4`, `7`, and `9`. It does not introduce a second encoding algorithm or reconstruct transformation geometry independently from the canonical trace. The inactive context contrast is also deterministic: future input points mix toward the dim renderer color at `0.24`, completed output points at `0.34`, while the moving active bit retains the bright selected-point overlay.
 
 ## Demonstration-only key profile
 
@@ -54,6 +55,7 @@ The deterministic ripple makes neighboring input cells visibly progress through 
 - all ten canonical trace phases;
 - ordinary playback and the one-bit-at-a-time `1.4 s` viewport demonstration;
 - the exact progressive route and keyed-translation marker/label;
+- subdued future/completed serial context and bright active-bit focus;
 - rendering tiers;
 - internal packages, secure exports, and authenticated envelopes;
 - laboratory handoff;
@@ -70,6 +72,7 @@ The deterministic ripple makes neighboring input cells visibly progress through 
 - package, trace, and serial viewport flows;
 - the exact serial route anchors and distance-weighted tweening;
 - the stationary keyed-translation marker and label contract;
+- inactive serial context contrast and active-bit emphasis;
 - the demonstration-only Flat Z Ripple profile;
 - rendering-tier policy;
 - asynchronous generation-token invalidation;
@@ -140,6 +143,7 @@ The original V13 acceptance preserved the complete 24-check V0–V12 aggregate. 
 - real Chromium serial playback;
 - exact stationary keyed-translation marker;
 - keyed-translation label correspondence;
+- subdued future-input and completed-output context with preserved active-bit emphasis;
 - historical engine, trace, encoder, sequencing, performance, accessibility, compatibility, desktop, lifecycle, failure-path, and stale-work evidence.
 
 The complete aggregate passes before V13 proceeds to public deployment checks.
@@ -159,4 +163,4 @@ The deployment synchronization step compares the public `shadowrun-entry.js` dir
 
 ## Acceptance
 
-V13 is accepted. The Binary Cube Encoder Visualizer is a documented, publicly launched shared tool with preserved Shadowrun laboratory access, centralized Scientific Tools exposure, exact one-bit serial transformation visualization, a clearly segregated demonstration-only ripple key, accepted historical regression evidence, live GitHub Pages evidence, and permanent launch enforcement.
+V13 is accepted. The Binary Cube Encoder Visualizer is a documented, publicly launched shared tool with preserved Shadowrun laboratory access, centralized Scientific Tools exposure, exact one-bit serial transformation visualization, a clearly segregated demonstration-only ripple key, subdued inactive-bit context, accepted historical regression evidence, live GitHub Pages evidence, and permanent launch enforcement.
