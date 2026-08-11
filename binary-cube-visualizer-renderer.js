@@ -1048,9 +1048,13 @@
       const selectedPosition = tracePointPosition(trace, selectedPointId, timeline.traceTime, selectedPointId, playbackMode);
       const highlightedPointId = serialState?.activePointId ?? selectedPointId;
       const highlightedPosition = tracePointPosition(trace, highlightedPointId, timeline.traceTime, selectedPointId, playbackMode);
+      const translationPoint = serialState ? pointAnchorPosition(trace, highlightedPointId, 4) : null;
+      const selectedPointVertices = serialState
+        ? new Float32Array([...highlightedPosition, ...COLORS.selected, ...translationPoint, ...COLORS.path])
+        : new Float32Array([...highlightedPosition, ...COLORS.selected]);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.selectedPointBuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([...highlightedPosition, ...COLORS.selected]), this.gl.DYNAMIC_DRAW);
-      this.selectedPointCount = 1;
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, selectedPointVertices, this.gl.DYNAMIC_DRAW);
+      this.selectedPointCount = serialState ? 2 : 1;
 
       const pathVertices = serialState
         ? serialPathVertices(trace, highlightedPointId, serialState.localTraceTime)
