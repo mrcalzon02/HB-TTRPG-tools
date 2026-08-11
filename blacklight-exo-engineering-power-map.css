@@ -1,0 +1,201 @@
+/* Blacklight EXO Engineering — live plant distribution mimic.
+   This layer only visualizes the authoritative controls rendered by the main
+   crew-operations simulator. It owns no Engineering control state. */
+
+.exo-crew-body .display-systems.exo-eng-specialized{
+  min-height:360px;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(202,165,91,.034) 1px,transparent 1px) 0 0/20px 20px,
+    linear-gradient(90deg,rgba(202,165,91,.025) 1px,transparent 1px) 0 0/20px 20px,
+    radial-gradient(circle at 50% 27%,rgba(210,151,62,.07),transparent 31%),
+    linear-gradient(180deg,#07100d,#050a08 62%,#040806);
+}
+.exo-crew-body .display-systems.exo-eng-specialized::before{content:none!important;display:none!important}
+.exo-crew-body .display-systems.exo-eng-specialized>.exo-tactical-ring,
+.exo-crew-body .display-systems.exo-eng-specialized>.exo-ownship,
+.exo-crew-body .display-systems.exo-eng-specialized>.exo-contact,
+.exo-crew-body .display-systems.exo-eng-specialized>.exo-display-caption{display:none!important}
+
+.exo-eng-power-map{
+  position:absolute;
+  inset:8px;
+  z-index:4;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  overflow:hidden;
+  color:#c8b681;
+  border:1px solid rgba(190,150,73,.46);
+  background:linear-gradient(180deg,rgba(13,20,16,.96),rgba(3,8,6,.98));
+  box-shadow:inset 0 0 25px rgba(0,0,0,.82),0 0 0 1px rgba(0,0,0,.68);
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  text-transform:uppercase;
+}
+.exo-eng-map-header{
+  position:relative;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:27px;
+  padding:4px 7px;
+  box-sizing:border-box;
+  border-bottom:1px solid rgba(190,150,73,.42);
+  background:linear-gradient(180deg,rgba(30,30,22,.9),rgba(9,12,9,.94));
+  letter-spacing:.055em;
+  font-size:.39rem;
+  font-weight:900;
+}
+.exo-eng-map-header span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b89d62}
+.exo-eng-map-header b{flex:0 0 auto;color:#e0c77e;font-size:.4rem;text-shadow:0 0 7px rgba(221,183,91,.2)}
+
+.exo-eng-map-stage{position:relative;min-height:0;overflow:hidden}
+.exo-eng-map-stage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 49.8%,rgba(175,144,82,.055) 50%,transparent 50.2%),
+    repeating-linear-gradient(0deg,transparent 0 23px,rgba(134,155,122,.025) 23px 24px);
+}
+.exo-eng-map-svg{display:block;width:100%;height:100%;min-height:440px;overflow:visible}
+.exo-eng-map-svg text{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;user-select:none}
+.exo-eng-top-labels text,.exo-eng-breaker-header text{fill:#7d846f;font-size:6.2px;font-weight:900;letter-spacing:.85px}
+
+/* Four input conduits. Each live plasma trace gets its width, opacity, glow and
+   travel rate directly from the corresponding 400–480 V rectifier trim. */
+.exo-eng-feed-conduit{
+  fill:none;
+  stroke:#43463d;
+  stroke-width:6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+  filter:drop-shadow(0 1px 1px #000);
+}
+.exo-eng-feed-plasma,.exo-eng-core-filament{
+  fill:none;
+  stroke:#e1a645;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:9 7;
+  vector-effect:non-scaling-stroke;
+  animation-name:exo-eng-plasma-flow;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  filter:drop-shadow(0 0 4px rgba(231,157,54,.54));
+}
+.exo-eng-core-filament{stroke:#ffd27a;stroke-dasharray:4 5;mix-blend-mode:screen}
+.exo-eng-feed.feed-a .exo-eng-feed-plasma,.exo-eng-feed.feed-a .exo-eng-core-filament{stroke-width:calc(var(--fa-width)*1px);opacity:var(--fa-alpha);animation-duration:var(--fa-speed);filter:drop-shadow(0 0 var(--fa-glow) rgba(237,164,60,.66))}
+.exo-eng-feed.feed-b .exo-eng-feed-plasma,.exo-eng-feed.feed-b .exo-eng-core-filament{stroke-width:calc(var(--fb-width)*1px);opacity:var(--fb-alpha);animation-duration:var(--fb-speed);filter:drop-shadow(0 0 var(--fb-glow) rgba(246,184,70,.66))}
+.exo-eng-feed.feed-c .exo-eng-feed-plasma,.exo-eng-feed.feed-c .exo-eng-core-filament{stroke-width:calc(var(--fc-width)*1px);opacity:var(--fc-alpha);animation-duration:var(--fc-speed);filter:drop-shadow(0 0 var(--fc-glow) rgba(255,194,79,.66))}
+.exo-eng-feed.feed-d .exo-eng-feed-plasma,.exo-eng-feed.feed-d .exo-eng-core-filament{stroke-width:calc(var(--fd-width)*1px);opacity:var(--fd-alpha);animation-duration:var(--fd-speed);filter:drop-shadow(0 0 var(--fd-glow) rgba(224,135,47,.66))}
+.exo-eng-port{fill:#11140f;stroke:#a47d38;stroke-width:2;filter:drop-shadow(0 0 3px rgba(210,151,62,.32))}
+.exo-eng-feed-label{fill:#c5a964;font-size:6.5px;font-weight:900;letter-spacing:.5px}
+.exo-eng-feed-value{fill:#ece0ba;font-size:7px;font-weight:900}
+@keyframes exo-eng-plasma-flow{to{stroke-dashoffset:-32}}
+
+/* Moderator arm is deliberately distinct from the energized feed/output arms. */
+.exo-eng-moderator-arm{fill:none;stroke:#46584f;stroke-width:7;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.exo-eng-moderator-pulse{fill:none;stroke:#80b49f;stroke-width:1.5;stroke-linecap:round;stroke-dasharray:2 7;vector-effect:non-scaling-stroke;animation:exo-eng-neutral-flow 2.8s linear infinite;filter:drop-shadow(0 0 3px rgba(103,172,145,.32))}
+.exo-eng-moderator circle{fill:#0d1511;stroke:#6d9b87;stroke-width:1.4}
+.exo-eng-moderator text{fill:#719080;font-size:5.6px;font-weight:900;letter-spacing:.36px}
+@keyframes exo-eng-neutral-flow{to{stroke-dashoffset:27}}
+
+/* Top-down bulbous master rectifier: glass envelope, central plasma volume and
+   multiple moving plasma filaments. */
+.exo-eng-glass-bulb{stroke:#a9803b;stroke-width:2.2;filter:drop-shadow(0 0 6px rgba(211,154,61,.36)) drop-shadow(0 0 18px rgba(197,119,33,.12))}
+.exo-eng-glass-rim{fill:none;stroke:rgba(238,202,123,.42);stroke-width:1.1;stroke-dasharray:2 3}
+.exo-eng-plasma-haze{opacity:.76;animation:exo-eng-core-breathe var(--core-rate) ease-in-out infinite;filter:drop-shadow(0 0 var(--core-glow) rgba(236,151,46,.62))}
+.exo-eng-plasma-core{opacity:.7;animation:exo-eng-core-turn calc(var(--core-rate)*1.8) linear infinite;filter:drop-shadow(0 0 9px rgba(255,195,78,.45))}
+.exo-eng-plasma-orbit{fill:none;stroke:#f5b34e;stroke-width:2.1;stroke-linecap:round;stroke-dasharray:5 4;opacity:.66;filter:drop-shadow(0 0 3px rgba(255,177,60,.7));animation:exo-eng-orbit 1.9s linear infinite;transform-origin:center}
+.exo-eng-plasma-orbit.orbit-b{stroke:#e78336;stroke-dasharray:3 5;animation-duration:1.45s;animation-direction:reverse}
+.exo-eng-plasma-orbit.orbit-c{stroke:#ffd377;stroke-width:1.4;stroke-dasharray:2 4;animation-duration:2.35s}
+.exo-eng-neutral-kernel{fill:#07100d;stroke:#a8c3ad;stroke-width:1.5;filter:drop-shadow(0 0 5px rgba(122,184,148,.38))}
+.exo-eng-core-title{fill:#d9b863;font-size:7px;font-weight:900;letter-spacing:.55px}
+.exo-eng-core-subtitle{fill:#777c69;font-size:5.3px;font-weight:800;letter-spacing:.35px}
+@keyframes exo-eng-core-breathe{0%,100%{opacity:.54;transform:scale(.94)}50%{opacity:.92;transform:scale(1.05)}}
+@keyframes exo-eng-core-turn{to{transform:rotate(360deg)}}
+@keyframes exo-eng-orbit{to{stroke-dashoffset:-28}}
+
+/* Four output arms: two land on Bus A and two on Bus B. */
+.exo-eng-output-arm{fill:none;stroke:#4b4839;stroke-width:7;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.exo-eng-output-flow{fill:none;stroke-linecap:round;stroke-dasharray:8 6;vector-effect:non-scaling-stroke;animation:exo-eng-output-flow 1.15s linear infinite}
+.exo-eng-output-flow.bus-a{stroke:#d7ad56;stroke-width:3;opacity:var(--bus-a-alpha);filter:drop-shadow(0 0 5px rgba(217,168,79,.43))}
+.exo-eng-output-flow.bus-b{stroke:#d3a24c;stroke-width:3;opacity:var(--bus-b-alpha);filter:drop-shadow(0 0 5px rgba(217,168,79,.43))}
+@keyframes exo-eng-output-flow{to{stroke-dashoffset:-28}}
+
+/* Bus trunks and transfer interlock. */
+.exo-eng-bus-base{fill:none;stroke:#4a493d;stroke-width:7;stroke-linecap:square;vector-effect:non-scaling-stroke}
+.exo-eng-bus-live{fill:none;stroke:#d7ae58;stroke-width:2.5;stroke-dasharray:10 5;vector-effect:non-scaling-stroke;animation:exo-eng-bus-flow 1.7s linear infinite}
+.exo-eng-bus-live.bus-a{opacity:var(--bus-a-alpha);filter:drop-shadow(0 0 4px rgba(219,171,76,.38))}
+.exo-eng-bus-live.bus-b{opacity:var(--bus-b-alpha);filter:drop-shadow(0 0 4px rgba(219,171,76,.38))}
+.exo-eng-bus-label{fill:#e0c06e;font-size:7px;font-weight:900;letter-spacing:.45px}
+@keyframes exo-eng-bus-flow{to{stroke-dashoffset:-30}}
+
+.exo-eng-transfer-base{fill:none;stroke:#4d4b3e;stroke-width:6;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.exo-eng-transfer-bridge,.exo-eng-transfer-blade{fill:none;stroke:#a98b4c;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.exo-eng-transfer circle{fill:#0c100d;stroke:#b49655;stroke-width:1.5}
+.exo-eng-transfer text{fill:#9e8e66;font-size:5.3px;font-weight:900;letter-spacing:.28px}
+.exo-eng-transfer-flow{fill:none;stroke:#f1c56b;stroke-width:2;stroke-dasharray:4 4;animation:exo-eng-transfer-flow .85s linear infinite;filter:drop-shadow(0 0 4px rgba(234,187,85,.45))}
+.exo-eng-transfer.transfer-isolated .exo-eng-transfer-bridge{opacity:.2;stroke-dasharray:2 4}
+.exo-eng-transfer.transfer-isolated .exo-eng-transfer-flow{display:none}
+.exo-eng-transfer.transfer-auxiliary .exo-eng-transfer-flow{animation-direction:reverse}
+@keyframes exo-eng-transfer-flow{to{stroke-dashoffset:-16}}
+
+/* Breaker branch LEDs live on the actual branch, immediately beside the name.
+   Downstream power is only drawn on an ON branch. */
+.exo-eng-branch-base{fill:none;stroke:#3e433c;stroke-width:5.5;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.exo-eng-branch-live{fill:none;stroke:#95bd71;stroke-width:2;stroke-linecap:round;stroke-dasharray:6 5;vector-effect:non-scaling-stroke;animation:exo-eng-branch-flow 1.45s linear infinite;filter:drop-shadow(0 0 4px rgba(136,190,100,.36))}
+.exo-eng-breaker.state-off .exo-eng-branch-live,.exo-eng-breaker.state-tripped .exo-eng-branch-live{display:none}
+.exo-eng-breaker-led{stroke-width:1.2}
+.exo-eng-breaker-ring{fill:none;stroke:#525b50;stroke-width:1;opacity:.75}
+.exo-eng-breaker.state-on .exo-eng-breaker-led{fill:#a8d478;stroke:#d2eead;filter:drop-shadow(0 0 5px rgba(151,205,105,.72))}
+.exo-eng-breaker.state-off .exo-eng-breaker-led{fill:#202822;stroke:#596259}
+.exo-eng-breaker.state-tripped .exo-eng-breaker-led{fill:#dc6657;stroke:#ff9a87;filter:drop-shadow(0 0 6px rgba(222,85,68,.82));animation:exo-eng-trip-led .58s steps(2,end) infinite}
+.exo-eng-breaker-name{fill:#c7b681;font-size:6.7px;font-weight:900;letter-spacing:.45px}
+.exo-eng-breaker-load{fill:#707a6d;font-size:5.25px;font-weight:800;letter-spacing:.25px}
+.exo-eng-breaker.state-on .exo-eng-breaker-load{fill:#88a778}
+.exo-eng-breaker.state-tripped .exo-eng-breaker-name,.exo-eng-breaker.state-tripped .exo-eng-breaker-load{fill:#d87b6d}
+.exo-eng-load-arrow{fill:#4d574e;stroke:none}
+.exo-eng-breaker.state-on .exo-eng-load-arrow{fill:#8cb06f}
+.exo-eng-breaker.state-tripped .exo-eng-load-arrow{fill:#9c4d44}
+@keyframes exo-eng-branch-flow{to{stroke-dashoffset:-22}}
+@keyframes exo-eng-trip-led{50%{opacity:.28;filter:none}}
+
+.exo-eng-output-footer path{fill:none;stroke:#5e604f;stroke-width:1.4}
+.exo-eng-output-footer path:nth-child(2){fill:#5e604f;stroke:none}
+.exo-eng-output-footer text{fill:#696e60;font-size:5.3px;font-weight:900;letter-spacing:.42px}
+
+.exo-eng-map-footer{
+  position:relative;
+  z-index:5;
+  display:grid;
+  grid-template-columns:1.45fr .85fr 1fr;
+  gap:4px;
+  padding:5px;
+  border-top:1px solid rgba(190,150,73,.42);
+  background:linear-gradient(180deg,rgba(8,12,9,.92),rgba(3,7,5,.98));
+}
+.exo-eng-map-footer span{min-width:0;padding:4px 5px;border:1px solid rgba(124,110,72,.35);background:#060a07}
+.exo-eng-map-footer small,.exo-eng-map-footer b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.exo-eng-map-footer small{color:#6d7566;font-size:.31rem;font-weight:900;letter-spacing:.08em}
+.exo-eng-map-footer b{margin-top:2px;color:#cbb87d;font-size:.39rem;font-weight:900}
+.exo-eng-power-map[data-transfer="ISOLATED"] .exo-eng-map-footer span:nth-child(2) b{color:#d27c6f}
+
+@media(max-width:1050px){
+  .exo-eng-map-svg{min-height:520px}
+}
+@media(max-width:640px){
+  .exo-eng-map-header{align-items:flex-start;flex-direction:column;gap:2px}
+  .exo-eng-map-footer{grid-template-columns:1fr}
+  .exo-eng-map-svg{min-height:570px}
+}
+@media(prefers-reduced-motion:reduce){
+  .exo-eng-feed-plasma,.exo-eng-core-filament,.exo-eng-moderator-pulse,
+  .exo-eng-plasma-haze,.exo-eng-plasma-core,.exo-eng-plasma-orbit,
+  .exo-eng-output-flow,.exo-eng-bus-live,.exo-eng-transfer-flow,
+  .exo-eng-branch-live,.exo-eng-breaker.state-tripped .exo-eng-breaker-led{animation:none!important}
+}
