@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="blacklight-exo-crew-fidelity.css">
   <link rel="stylesheet" href="blacklight-exo-crew-display-motion.css">
   <link rel="stylesheet" href="blacklight-exo-helm-autonav.css?v=20260811-1227">
+  <link rel="stylesheet" href="blacklight-exo-gunnery-fire-control-confirm.css">
   <link rel="stylesheet" href="blacklight-exo-ops-manual-window.css">
   <link rel="stylesheet" href="blacklight-exo-ops-manual-responsive.css">
   <link rel="stylesheet" href="blacklight-exo-key-cursor.css">
@@ -33,6 +34,7 @@
   </style>
   <script src="blacklight-exo-control-audio.js" defer></script>
   <script src="blacklight-exo-crew-operations.js" defer></script>
+  <script src="blacklight-exo-gunnery-fire-control-confirm.js" defer></script>
   <script src="blacklight-exo-crew-auxiliary.js" defer></script>
   <script src="blacklight-exo-helm-autonav.js?v=20260811-1227" defer></script>
   <script src="blacklight-exo-ops-manual-window.js" defer></script>
@@ -80,9 +82,6 @@
   </section>
 
   <main class="bli-shell exo-crew-shell">
-    <!-- Compatibility sinks keep legacy render hooks alive without presenting
-         redundant global controls. Auxiliary depth is driven by the procedure
-         dropdown's recommended difficulty instead of a separate master slider. -->
     <div hidden aria-hidden="true">
       <input id="crew-master-difficulty" type="range" min="0" max="5" step="1" value="0" tabindex="-1">
       <div id="power-controls"></div>
@@ -91,38 +90,14 @@
 
     <section class="bli-section exo-crew-command">
       <div class="exo-crew-state-grid">
-        <article class="exo-state-card">
-          <span>Velocity</span><strong id="state-velocity">12.4 km/s</strong>
-          <div class="exo-meter"><i id="meter-velocity"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Reactor output</span><strong id="state-reactor">68%</strong>
-          <div class="exo-meter"><i id="meter-reactor"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Thermal load</span><strong id="state-thermal">31%</strong>
-          <div class="exo-meter"><i id="meter-thermal"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Hull integrity</span><strong id="state-hull">100%</strong>
-          <div class="exo-meter"><i id="meter-hull"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Track quality</span><strong id="state-track">42%</strong>
-          <div class="exo-meter"><i id="meter-track"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Comms link</span><strong id="state-comms">88%</strong>
-          <div class="exo-meter"><i id="meter-comms"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Navigation solution</span><strong id="state-nav">74%</strong>
-          <div class="exo-meter"><i id="meter-nav"></i></div>
-        </article>
-        <article class="exo-state-card">
-          <span>Weapons readiness</span><strong id="state-weapons">61%</strong>
-          <div class="exo-meter"><i id="meter-weapons"></i></div>
-        </article>
+        <article class="exo-state-card"><span>Velocity</span><strong id="state-velocity">12.4 km/s</strong><div class="exo-meter"><i id="meter-velocity"></i></div></article>
+        <article class="exo-state-card"><span>Reactor output</span><strong id="state-reactor">68%</strong><div class="exo-meter"><i id="meter-reactor"></i></div></article>
+        <article class="exo-state-card"><span>Thermal load</span><strong id="state-thermal">31%</strong><div class="exo-meter"><i id="meter-thermal"></i></div></article>
+        <article class="exo-state-card"><span>Hull integrity</span><strong id="state-hull">100%</strong><div class="exo-meter"><i id="meter-hull"></i></div></article>
+        <article class="exo-state-card"><span>Track quality</span><strong id="state-track">42%</strong><div class="exo-meter"><i id="meter-track"></i></div></article>
+        <article class="exo-state-card"><span>Comms link</span><strong id="state-comms">88%</strong><div class="exo-meter"><i id="meter-comms"></i></div></article>
+        <article class="exo-state-card"><span>Navigation solution</span><strong id="state-nav">74%</strong><div class="exo-meter"><i id="meter-nav"></i></div></article>
+        <article class="exo-state-card"><span>Weapons readiness</span><strong id="state-weapons">61%</strong><div class="exo-meter"><i id="meter-weapons"></i></div></article>
       </div>
     </section>
 
@@ -134,54 +109,23 @@
 
     <section class="bli-section exo-dm-relay-section" aria-labelledby="dm-relay-title">
       <div class="exo-console-card exo-dm-relay-card">
-        <div class="exo-console-head">
-          <div><span class="exo-kicker">World of Darkness-derived d10 handoff</span><h2 id="dm-relay-title">DM Relay</h2></div>
-          <span id="dm-relay-status" class="exo-template-badge">Awaiting executed procedure</span>
-        </div>
-        <div class="exo-dm-relay-layout">
-          <div class="exo-difficulty-display" aria-label="Suggested difficulty">
-            <span>Suggested difficulty</span>
-            <strong id="dm-relay-difficulty">—</strong>
-            <div id="dm-relay-pips" class="exo-difficulty-pips" aria-label="Difficulty pips"></div>
-          </div>
-          <div id="dm-relay-detail" class="exo-relay-detail"></div>
-        </div>
+        <div class="exo-console-head"><div><span class="exo-kicker">World of Darkness-derived d10 handoff</span><h2 id="dm-relay-title">DM Relay</h2></div><span id="dm-relay-status" class="exo-template-badge">Awaiting executed procedure</span></div>
+        <div class="exo-dm-relay-layout"><div class="exo-difficulty-display" aria-label="Suggested difficulty"><span>Suggested difficulty</span><strong id="dm-relay-difficulty">—</strong><div id="dm-relay-pips" class="exo-difficulty-pips" aria-label="Difficulty pips"></div></div><div id="dm-relay-detail" class="exo-relay-detail"></div></div>
         <div class="exo-relay-sequence"><span class="exo-kicker">Recorded player inputs</span><p id="dm-relay-sequence">No procedure has been committed.</p></div>
         <p id="dm-relay-call" class="exo-dm-call">The console does not roll for the character and does not determine success or failure.</p>
       </div>
     </section>
 
     <section class="bli-section exo-crew-lower" aria-label="Crew coordination displays">
-      <article class="exo-console-card">
-        <div class="exo-console-head">
-          <div><span class="exo-kicker">Situational visualization</span><h2>Station context</h2></div>
-          <span id="coordination-score" class="exo-score">100%</span>
-        </div>
-        <div id="dependency-grid" class="exo-dependency-grid"></div>
-      </article>
-
-      <article class="exo-console-card">
-        <div class="exo-console-head">
-          <div><span class="exo-kicker">Role-play event record</span><h2>Operations log</h2></div>
-          <button id="log-clear" class="exo-mini-button" type="button">Clear</button>
-        </div>
-        <ol id="operations-log" class="exo-operations-log" aria-live="polite"></ol>
-      </article>
+      <article class="exo-console-card"><div class="exo-console-head"><div><span class="exo-kicker">Situational visualization</span><h2>Station context</h2></div><span id="coordination-score" class="exo-score">100%</span></div><div id="dependency-grid" class="exo-dependency-grid"></div></article>
+      <article class="exo-console-card"><div class="exo-console-head"><div><span class="exo-kicker">Role-play event record</span><h2>Operations log</h2></div><button id="log-clear" class="exo-mini-button" type="button">Clear</button></div><ol id="operations-log" class="exo-operations-log" aria-live="polite"></ol></article>
     </section>
 
     <section class="bli-section">
       <div class="exo-console-card exo-alien-template">
-        <div class="exo-console-head">
-          <div><span class="exo-kicker">Expansion contract</span><h2>Commandeered alien technology profiles</h2></div>
-          <span class="exo-template-badge">profile-driven</span>
-        </div>
+        <div class="exo-console-head"><div><span class="exo-kicker">Expansion contract</span><h2>Commandeered alien technology profiles</h2></div><span class="exo-template-badge">profile-driven</span></div>
         <p>The human console now establishes a reusable <strong>procedural grammar</strong>: hidden action sequences, repeated inputs, physical-state controls, visual context, and a DM-facing d10 difficulty relay. Future alien profiles can redefine which stations exist, how many crew are needed, what a control means, whether actions require consensus or biological compatibility, how information is represented, and—most importantly—what sequence logic a human boarding crew must learn or improvise to operate commandeered technology.</p>
-        <div class="exo-alien-grid">
-          <div><strong>Layout</strong><span>station names, grouping, hierarchy, display topology</span></div>
-          <div><strong>Interaction</strong><span>buttons, levers, repeated confirmations, gestures, neural/biological links, ritualized sequences</span></div>
-          <div><strong>Semantics</strong><span>alien units, threat concepts, targeting logic, navigation assumptions</span></div>
-          <div><strong>Compatibility</strong><span>human adaptation penalties, translation layers, bypasses, jury-rigging</span></div>
-        </div>
+        <div class="exo-alien-grid"><div><strong>Layout</strong><span>station names, grouping, hierarchy, display topology</span></div><div><strong>Interaction</strong><span>buttons, levers, repeated confirmations, gestures, neural/biological links, ritualized sequences</span></div><div><strong>Semantics</strong><span>alien units, threat concepts, targeting logic, navigation assumptions</span></div><div><strong>Compatibility</strong><span>human adaptation penalties, translation layers, bypasses, jury-rigging</span></div></div>
       </div>
     </section>
   </main>
@@ -205,15 +149,9 @@
         input.value = String(next);
         input.dispatchEvent(new Event("input", { bubbles: true }));
       };
-
       document.addEventListener("DOMContentLoaded", () => setTimeout(syncAuxiliaryDepth, 0));
-      document.addEventListener("change", event => {
-        if (event.target.closest?.("#station-panel [data-procedure-select]")) syncAuxiliaryDepth();
-      });
-      document.addEventListener("click", event => {
-        if (event.target.closest?.("#station-panel [data-procedure-begin]")) syncAuxiliaryDepth();
-        if (event.target.closest?.("#station-tabs [data-station], #crew-scenario-reset")) setTimeout(syncAuxiliaryDepth, 0);
-      });
+      document.addEventListener("change", event => { if (event.target.closest?.("#station-panel [data-procedure-select]")) syncAuxiliaryDepth(); });
+      document.addEventListener("click", event => { if (event.target.closest?.("#station-panel [data-procedure-begin]")) syncAuxiliaryDepth(); if (event.target.closest?.("#station-tabs [data-station], #crew-scenario-reset")) setTimeout(syncAuxiliaryDepth, 0); });
     })();
   </script>
 </body>
