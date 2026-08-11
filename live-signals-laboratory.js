@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createLiveSignalsLaboratory(root) {
   'use strict';
 
-  const VERSION = '0.3.1';
+  const VERSION = '0.4.0';
   const PANEL_ID = 'live-signals-laboratory';
   const STYLE_ID = 'live-signals-laboratory-style';
   const VERIFIED_AT = '2026-08-11';
@@ -23,6 +23,8 @@
   const MIN_ROUTER_POLL_MS = 2000;
   const MAX_OBSERVATIONS = 12000;
   const FREQUENCY_BIN_HZ = 1e6;
+  const DEFAULT_TIMELINE_BUCKET_MS = 250;
+  const MAX_TIMELINE_FRAMES = 2000;
   const MAX_ACTIVE_TARGETS = 8;
   const MAX_ACTIVE_SAMPLES_PER_TARGET = 5;
   const MIN_ACTIVE_SAMPLE_INTERVAL_MS = 750;
@@ -195,7 +197,7 @@
   function ensureStyle() {
     if (!root?.document || root.document.getElementById(STYLE_ID)) return;
     const link = root.document.createElement('link');
-    link.id = STYLE_ID; link.rel = 'stylesheet'; link.href = 'live-signals-laboratory.css?v=20260811-live-signals-active-trust-4';
+    link.id = STYLE_ID; link.rel = 'stylesheet'; link.href = 'live-signals-laboratory.css?v=20260811-live-signals-cadence-sync-1';
     root.document.head.appendChild(link);
   }
 
@@ -290,7 +292,7 @@
     if (profile.id === 'android-native') {
       add('Wi-Fi system/cached scan results','available-with-permission','Android WifiManager','Passive phase consumes results/broadcasts produced by the system; the bridge must not call startScan().');
       add('Bluetooth LE advertisement observations','available-with-permission','Android BluetoothLeScanner','No advertising or GATT connection is requested by this laboratory.');
-      add('Cellular serving/neighbour signal','available-with-permission','Android TelephonyManager','CellInfo and cached modem signal data; freshness varies.');
+      add('Cellular serving/neighbour signal','available-with-permission','Android TelephonyManager','CellInfo and modem signal data; RAT/channel/band metadata and modem sample age are retained when exposed, while callback cadence remains platform controlled.');
       add('GNSS/location','available-with-permission','Android location stack','Use accuracy and timestamp with every sample.');
       add('Motion/orientation/magnetic field','device-dependent','Android SensorManager','Inventory actual sensor list and max rates at runtime.');
       add('Pressure/light/proximity','device-dependent','Android SensorManager','Do not assume presence.');
@@ -350,6 +352,7 @@
     const sourceIdRaw = raw.sourceId ?? raw.bssid ?? raw.address ?? raw.cellId ?? raw.station ?? null;
     const sourceId = sourceIdRaw === null ? null : (redact ? pseudonymize(sourceIdRaw) : String(sourceIdRaw));
     const ssid = raw.ssid == null ? null : (redact ? '[redacted-ssid]' : String(raw.ssid));
+    const sourceAgeMs = Number.isFinite(Number(raw.sourceAgeMs ?? raw.modemAgeMs)) ? Math.max(0, Number(raw.sourceAgeMs ?? raw.modemAgeMs)) : null;
     return freeze({
       timestampMs,
       ageMs: Math.max(0, finite(context.nowMs, Date.now()) - timestampMs),
@@ -364,6 +367,12 @@
         sinrDb: Number.isFinite(Number(raw.sinrDb)) ? Number(raw.sinrDb) : null,
         txPowerReportedDbm: Number.isFinite(Number(raw.txPowerReportedDbm)) ? Number(raw.txPowerReportedDbm) : null,
         distanceM: Number.isFinite(Number(raw.distanceM)) ? Number(raw.distanceM) : null
+      }),
+      cellular: freeze({
+        radioTechnology: raw.radioTechnology == null ? null : String(raw.radioTechnology).toLowerCase(),
+        channelType: raw.channelType == null ? null : String(raw.channelType).toLowerCase(),
+        bands: freeze(Array.isArray(raw.bands) ? raw.bands.map(Number).filter(Number.isFinite) : []),
+        registered: raw.registered == null ? null : Boolean(raw.registered)
       }),
       ranging: freeze({
         technology: raw.rangingTechnology == null ? null : String(raw.rangingTechnology),
@@ -407,7 +416,8 @@
       quality: freeze({
         stale: Boolean(raw.stale), throttled: Boolean(raw.throttled),
         accuracy: raw.accuracy ?? null, permissionState: raw.permissionState ?? null,
-        thermalState: raw.thermalState ?? null, batteryPercent: Number.isFinite(Number(raw.batteryPercent)) ? Number(raw.batteryPercent) : null
+        thermalState: raw.thermalState ?? null, batteryPercent: Number.isFinite(Number(raw.batteryPercent)) ? Number(raw.batteryPercent) : null,
+        sourceAgeMs
       }),
       note: raw.note == null ? '' : String(raw.note)
     });
@@ -620,6 +630,99 @@
     }).sort((a,b)=>Number(b.expected)-Number(a.expected)||a.label.localeCompare(b.label)));
   }
 
+  function channelCadenceReferenceMs(session, channelId) {
+    const polling = session?.polling || {};
+    if (channelId === 'wifi') return finite(polling.wifiResultPollMs, 10000);
+    if (channelId === 'cellular') return finite(polling.cellPollMs, 3000);
+    if (channelId === 'gnss') return finite(polling.gnssPollMs, 1000);
+    if (channelId === 'router') return finite(polling.routerPollMs, 3000);
+    if (['motion','magnetometer','barometer'].includes(channelId)) return 1000 / Math.max(1, finite(polling.sensorHz, DEFAULT_SENSOR_HZ));
+    return null;
+  }
+
+  function channelHealthSnapshot(session, options = {}) {
+    const nowMs = Number.isFinite(Number(options.nowMs)) ? Number(options.nowMs) : Date.now();
+    const coverage = channelCoverage(session, options.capabilityReport ?? bridgeCapabilityReport);
+    const observations = session?.observations || [];
+    const rows = coverage.map(channel => {
+      const channelRows = observations.filter(row=>channelIdForObservation(row)===channel.id).sort((a,b)=>a.timestampMs-b.timestampMs);
+      const streams = new Map();
+      for (const row of channelRows) {
+        const key = `${row.kind}|${row.sourceId || 'source-unreported'}`;
+        if (!streams.has(key)) streams.set(key, []);
+        streams.get(key).push(row.timestampMs);
+      }
+      const intervals = [];
+      for (const timestamps of streams.values()) {
+        timestamps.sort((a,b)=>a-b);
+        for (let i=1;i<timestamps.length;i+=1) {
+          const delta = timestamps[i]-timestamps[i-1];
+          if (delta > 0) intervals.push(delta);
+        }
+      }
+      const medianIntervalMs = median(intervals);
+      const p95IntervalMs = percentile(intervals,.95);
+      const observedHz = Number.isFinite(medianIntervalMs) && medianIntervalMs>0 ? 1000/medianIntervalMs : null;
+      const latestTimestampMs = channelRows.length ? channelRows[channelRows.length-1].timestampMs : null;
+      const latestReceiptAgeMs = latestTimestampMs===null ? null : Math.max(0,nowMs-latestTimestampMs);
+      const sourceAges = channelRows.map(row=>row.quality?.sourceAgeMs).filter(Number.isFinite);
+      const medianSourceAgeMs = median(sourceAges);
+      const referenceCadenceMs = channelCadenceReferenceMs(session,channel.id);
+      const staleLimitMs = Math.max(10000,(referenceCadenceMs||3000)*3);
+      let status = channel.status;
+      if (channelRows.length) {
+        if (channelRows.length < 3) status='warming-up';
+        else if (Number.isFinite(latestReceiptAgeMs) && latestReceiptAgeMs > staleLimitMs) status='stale';
+        else if (Number.isFinite(medianSourceAgeMs) && medianSourceAgeMs > staleLimitMs) status='source-stale';
+        else if (channel.id==='ble') status='platform-paced';
+        else if (Number.isFinite(referenceCadenceMs) && Number.isFinite(medianIntervalMs) && medianIntervalMs > referenceCadenceMs*3) status='sparse';
+        else status='healthy';
+      }
+      return freeze({
+        id:channel.id,label:channel.label,status,sampleCount:channelRows.length,streamCount:streams.size,
+        observedHz,medianInterArrivalMs:medianIntervalMs,p95InterArrivalMs:p95IntervalMs,
+        latestTimestampMs,latestReceiptAgeMs,medianSourceAgeMs,referenceCadenceMs,
+        staleFraction:channelRows.length?channelRows.filter(row=>row.quality.stale).length/channelRows.length:0,
+        throttledFraction:channelRows.length?channelRows.filter(row=>row.quality.throttled).length/channelRows.length:0,
+        uniqueSources:new Set(channelRows.map(row=>row.sourceId).filter(Boolean)).size,
+        expected:channel.expected,bridgeAvailable:channel.bridgeAvailable
+      });
+    });
+    return freeze({
+      format:'hb-ttrpg-live-signals-channel-health',schemaVersion:VERSION,generatedAtMs:nowMs,rows:freeze(rows),
+      healthyChannels:rows.filter(row=>['healthy','platform-paced'].includes(row.status)).length,
+      issueChannels:rows.filter(row=>['stale','source-stale','sparse'].includes(row.status)).length,
+      boundary:'Observed cadence is computed from same-kind/source arrival streams. Poll settings are reference/watch cadences only; Android telephony, Wi-Fi cache refresh and BLE callback cadence remain platform/modem controlled.'
+    });
+  }
+
+  function synchronizedTimeline(session, options = {}) {
+    const bucketWidthMs = clamp(Math.floor(finite(options.bucketWidthMs,DEFAULT_TIMELINE_BUCKET_MS)),10,5000);
+    const maxFrames = clamp(Math.floor(finite(options.maxFrames,MAX_TIMELINE_FRAMES)),1,MAX_TIMELINE_FRAMES);
+    const indexed = (session?.observations || []).map((row,index)=>({row,index})).sort((a,b)=>a.row.timestampMs-b.row.timestampMs);
+    const buckets = new Map();
+    for (const item of indexed) {
+      const startTimestampMs = Math.floor(item.row.timestampMs/bucketWidthMs)*bucketWidthMs;
+      if (!buckets.has(startTimestampMs)) buckets.set(startTimestampMs,{startTimestampMs,indices:[],channelCounts:{}});
+      const bucket=buckets.get(startTimestampMs),channel=channelIdForObservation(item.row);
+      bucket.indices.push(item.index);
+      bucket.channelCounts[channel]=(bucket.channelCounts[channel]||0)+1;
+    }
+    const frames=[...buckets.values()].sort((a,b)=>a.startTimestampMs-b.startTimestampMs).slice(-maxFrames).map(bucket=>freeze({
+      startTimestampMs:bucket.startTimestampMs,endTimestampMs:bucket.startTimestampMs+bucketWidthMs,
+      centerTimestampMs:bucket.startTimestampMs+bucketWidthMs/2,
+      observationIndices:freeze([...bucket.indices]),
+      channels:freeze(Object.keys(bucket.channelCounts).filter(id=>id!=='unknown').sort()),
+      channelCounts:freeze({...bucket.channelCounts})
+    }));
+    return freeze({
+      format:'hb-ttrpg-live-signals-synchronized-timeline',schemaVersion:VERSION,bucketWidthMs,
+      frameCount:frames.length,crossChannelFrames:frames.filter(frame=>frame.channels.length>=2).length,frames:freeze(frames),
+      interpolation:'none',gapFilling:'none',
+      boundary:'Timeline frames only bucket observations that actually arrived. Missing channels are not interpolated, duplicated, or treated as zero signal.'
+    });
+  }
+
   function normalizeActiveCapabilityReport(report = {}) {
     const methods = [...new Set((report.activeMethods || []).map(String).filter(id=>ACTIVE_SCAN_METHODS[id]))];
     const rawTargets = report.rangingTargets || report.activeTargets || report.authorizedTargets || [];
@@ -742,6 +845,8 @@
     const inventory = passiveFrequencyInventory(session);
     const coverage = channelCoverage(session);
     const activeRanges = activeRangeSummary(session);
+    const channelHealth = channelHealthSnapshot(session);
+    const timeline = synchronizedTimeline(session);
     return freeze({
       observationCount:observations.length, kinds:freeze({...kinds}),
       medianSignal:median(values), q1Signal:percentile(values,.25), q3Signal:percentile(values,.75),
@@ -752,6 +857,8 @@
       chainTelemetrySamples:observations.filter(row=>row.auxiliary.chainRssiDbm?.length).length,
       passiveFrequencyBins:inventory.bins.length, uniqueSources:inventory.uniqueSources,
       expectedChannels:coverage.filter(row=>row.expected).length, observingChannels:coverage.filter(row=>row.status==='observing').length,
+      healthyChannels:channelHealth.healthyChannels,cadenceIssueChannels:channelHealth.issueChannels,
+      synchronizedFrames:timeline.frameCount,crossChannelFrames:timeline.crossChannelFrames,
       activeRangeSamples:activeRanges.sampleCount, activeBurstCount:activeRanges.burstCount
     });
   }
@@ -784,6 +891,8 @@
       passiveInventory:passiveFrequencyInventory(session),
       receiverHealth:receiverHealthDiagnostic(session),
       channelCoverage:channelCoverage(session),
+      channelHealth:channelHealthSnapshot(session),
+      synchronizedTimeline:synchronizedTimeline(session),
       activeRanges:activeRangeSummary(session),
       refinementPlan:buildRefinementPlan(session),
       futureGatedResearch:FUTURE_GATED_RESEARCH
@@ -795,7 +904,9 @@
       version:VERSION, verifiedAt:VERIFIED_AT, mode:CURRENT_MODE, browser:browserCapabilities(),
       safety:SAFETY_POLICY, activeScan:ACTIVE_SCAN_POLICY, bridge:hardwareBridgeStatus(), activeSession:Boolean(activeSession),
       activeSummary:activeSession?summarizeSession(activeSession):null,
-      receiverHealth:activeSession?receiverHealthDiagnostic(activeSession):null
+      receiverHealth:activeSession?receiverHealthDiagnostic(activeSession):null,
+      channelHealth:activeSession?channelHealthSnapshot(activeSession):null,
+      synchronizedTimeline:activeSession?synchronizedTimeline(activeSession):null
     });
   }
 
@@ -836,9 +947,11 @@
 
   function renderChannelCoverage() {
     const target=panel?.querySelector('[data-lsl-channels]'); if(!target)return;
-    const coverage=channelCoverage(activeSession||{profileId:panel.querySelector('#lsl-profile')?.value||'android-native',observations:[]});
+    const session=activeSession||{profileId:panel.querySelector('#lsl-profile')?.value||'android-native',observations:[],polling:readPolling()};
+    const coverage=channelCoverage(session),health=channelHealthSnapshot(session);
     const bridge=hardwareBridgeStatus();
-    target.innerHTML=`<div class="lsl-profile-note"><strong>${bridge.connected?`Bridge: ${esc(bridge.id)}`:'No native/router bridge connected'}</strong><span>missing expected channels are treated as acquisition gaps, not absence of RF energy</span></div><div class="lsl-channel-grid">${coverage.map(row=>`<article data-status="${esc(row.status)}"><span>${esc(row.label)}</span><strong>${esc(row.status)}</strong><small>${row.samples} samples${row.expected?' · expected':''}</small></article>`).join('')}</div>`;
+    const fmtMs=value=>Number.isFinite(value)?value>=1000?`${(value/1000).toFixed(2)} s`:`${value.toFixed(0)} ms`:'—';
+    target.innerHTML=`<div class="lsl-profile-note"><strong>${bridge.connected?`Bridge: ${esc(bridge.id)}`:'No native/router bridge connected'}</strong><span>missing expected channels are treated as acquisition gaps, not absence of RF energy</span></div><div class="lsl-channel-grid">${coverage.map(row=>`<article data-status="${esc(row.status)}"><span>${esc(row.label)}</span><strong>${esc(row.status)}</strong><small>${row.samples} samples${row.expected?' · expected':''}</small></article>`).join('')}</div><div class="lsl-section-head"><h3>Channel cadence / freshness</h3><span>arrival streams only · no inferred radio refresh</span></div><div class="lsl-table"><table><thead><tr><th>Channel</th><th>Status</th><th>Samples / streams</th><th>Observed rate</th><th>Median / p95 interval</th><th>Latest receipt age</th><th>Source/modem age</th></tr></thead><tbody>${health.rows.map(row=>`<tr><td>${esc(row.label)}</td><td>${esc(row.status)}</td><td>${row.sampleCount} / ${row.streamCount}</td><td>${row.observedHz===null?'—':row.observedHz.toFixed(2)+' Hz'}</td><td>${fmtMs(row.medianInterArrivalMs)} / ${fmtMs(row.p95InterArrivalMs)}</td><td>${fmtMs(row.latestReceiptAgeMs)}</td><td>${fmtMs(row.medianSourceAgeMs)}</td></tr>`).join('')}</tbody></table></div><p class="lsl-hint">${esc(health.boundary)}</p>`;
   }
 
   function renderActiveScan() {
@@ -889,8 +1002,8 @@
     if(!panel)return;
     const target=panel.querySelector('[data-lsl-session]');
     if(!activeSession){target.innerHTML='<p>No passive session is active. Run preflight, then start a receive-only session.</p>';panel.querySelector('[data-lsl-observations]').innerHTML='<tr><td colspan="6">No observations yet.</td></tr>';drawTimeSeries();drawSpatial();renderPassiveInventory();renderReceiverHealth();renderChannelCoverage();renderActiveScan();return;}
-    const summary=summarizeSession(activeSession),plan=buildRefinementPlan(activeSession);
-    target.innerHTML=`<div class="lsl-metrics"><div><span>Session</span><strong>${esc(activeSession.sessionId)}</strong></div><div><span>Mode</span><strong>${esc(activeSession.mode)}</strong></div><div><span>Profile</span><strong>${esc(activeSession.profileId)}</strong></div><div><span>Observations</span><strong>${summary.observationCount}</strong></div><div><span>Median signal</span><strong>${summary.medianSignal===null?'—':summary.medianSignal.toFixed(2)}</strong></div><div><span>Frequency bins</span><strong>${summary.passiveFrequencyBins}</strong></div><div><span>Unique sources</span><strong>${summary.uniqueSources}</strong></div><div><span>Spatial samples</span><strong>${summary.spatialSamples}</strong></div><div><span>Chain telemetry</span><strong>${summary.chainTelemetrySamples}</strong></div><div><span>Stale</span><strong>${(summary.staleFraction*100).toFixed(1)}%</strong></div></div><div class="lsl-refinement">${plan.map(stage=>`<article data-status="${stage.status}"><span>${esc(stage.label)}</span><strong>${esc(stage.status)}</strong><p>${esc(stage.goal)}</p><small>Exit: ${esc(stage.exit)}</small></article>`).join('')}</div>`;
+    const summary=summarizeSession(activeSession),plan=buildRefinementPlan(activeSession),timeline=synchronizedTimeline(activeSession);
+    target.innerHTML=`<div class="lsl-metrics"><div><span>Session</span><strong>${esc(activeSession.sessionId)}</strong></div><div><span>Mode</span><strong>${esc(activeSession.mode)}</strong></div><div><span>Profile</span><strong>${esc(activeSession.profileId)}</strong></div><div><span>Observations</span><strong>${summary.observationCount}</strong></div><div><span>Median signal</span><strong>${summary.medianSignal===null?'—':summary.medianSignal.toFixed(2)}</strong></div><div><span>Frequency bins</span><strong>${summary.passiveFrequencyBins}</strong></div><div><span>Unique sources</span><strong>${summary.uniqueSources}</strong></div><div><span>Spatial samples</span><strong>${summary.spatialSamples}</strong></div><div><span>Chain telemetry</span><strong>${summary.chainTelemetrySamples}</strong></div><div><span>Healthy channels</span><strong>${summary.healthyChannels}</strong></div><div><span>Cadence issues</span><strong>${summary.cadenceIssueChannels}</strong></div><div><span>Sync frames</span><strong>${timeline.frameCount} · ${timeline.crossChannelFrames} cross-channel</strong></div><div><span>Stale</span><strong>${(summary.staleFraction*100).toFixed(1)}%</strong></div></div><div class="lsl-refinement">${plan.map(stage=>`<article data-status="${stage.status}"><span>${esc(stage.label)}</span><strong>${esc(stage.status)}</strong><p>${esc(stage.goal)}</p><small>Exit: ${esc(stage.exit)}</small></article>`).join('')}</div><p class="lsl-hint">Synchronization uses ${timeline.bucketWidthMs} ms timestamp buckets with no interpolation or gap filling.</p>`;
     const rows=activeSession.observations.slice(-40).reverse();
     panel.querySelector('[data-lsl-observations]').innerHTML=rows.map(row=>`<tr><td>${new Date(row.timestampMs).toLocaleTimeString()}</td><td>${esc(row.kind)}</td><td>${row.signal.frequencyHz?`${(row.signal.frequencyHz/1e6).toFixed(3)} MHz`:'—'}</td><td>${signalValue(row)===null?'—':signalValue(row).toFixed(1)}</td><td>${esc(row.sourceId||'—')}</td><td>${esc(row.provenance)}</td></tr>`).join('')||'<tr><td colspan="6">No observations yet.</td></tr>';
     drawTimeSeries();drawSpatial();renderPassiveInventory();renderReceiverHealth();renderChannelCoverage();renderActiveScan();
@@ -929,15 +1042,15 @@
     if(!root?.document) throw new Error('Live Signals Laboratory requires a browser document.');
     const existing=root.document.getElementById(PANEL_ID); if(existing){panel=existing;return panel;} ensureStyle();
     panel=root.document.createElement('section');panel.id=PANEL_ID;panel.className='lsl-shell';panel.hidden=true;
-    panel.innerHTML=`<div class="lsl-backdrop" data-lsl-close></div><div class="lsl-panel" role="dialog" aria-modal="true" aria-labelledby="lsl-title"><header class="lsl-header"><div><p class="lsl-eyebrow">Signals Suite · empirical multi-radio instrumentation</p><h2 id="lsl-title">Live Signals Laboratory</h2><p>Separate from the simulation laboratory. Passive Scan continuously gathers available Wi-Fi, cellular, Bluetooth/BLE, router and sensor telemetry. Active Scan is a separate standards-supported ranging path: the device/router hosting the runtime is treated as the operator-authorized instrument, while nearby responder-capable devices remain participants rather than devices the lab controls.</p></div><button class="lsl-close" data-lsl-close aria-label="Close Live Signals Laboratory">×</button></header><div class="lsl-body"><aside class="lsl-controls"><section class="lsl-card lsl-lock"><h3>Hardware safety lock</h3><p><strong>Passive Scan is receive-only.</strong> Active Scan may invoke only allowlisted ranging capabilities reported by the connected bridge. The lab assumes authorization to operate the hardware it is running on, but it never assumes administrative control of nearby devices. Power/channel mutation, packet injection, subnet sweeps, arbitrary frequency sweeps and pulse controls remain blocked.</p><label>Thermal state<select id="lsl-thermal"><option>nominal</option><option>fair</option><option>serious</option><option>severe</option><option>critical</option></select></label><label>Battery %<input id="lsl-battery" type="number" min="0" max="100" value="100"></label><label class="lsl-check"><input id="lsl-external-power" type="checkbox"> External power connected</label><label class="lsl-check"><input id="lsl-redact" type="checkbox" checked> Redact network/device identifiers and geographic coordinates</label><button class="lsl-secondary" data-lsl-preflight-button>Run passive preflight</button><div data-lsl-preflight></div></section><section class="lsl-card"><h3>Passive acquisition profile</h3><label>Hardware bridge<select id="lsl-profile">${profileOptions()}</select></label><label>Session minutes<input id="lsl-session-minutes" type="number" min="1" max="${MAX_SESSION_MINUTES}" value="${DEFAULT_SESSION_MINUTES}"></label><label>Wi-Fi result refresh floor ms<input id="lsl-wifi-ms" type="number" value="10000"></label><p class="lsl-hint">Android bridge contract: consume system/cached scan results and scan-completion broadcasts; do not invoke <code>startScan()</code> in passive mode.</p><label>BLE observe window ms<input id="lsl-ble-window-ms" type="number" value="5000"></label><label>BLE observe period ms<input id="lsl-ble-period-ms" type="number" value="${MIN_BLE_OBSERVE_PERIOD_MS}"></label><label>Cellular poll ms<input id="lsl-cell-ms" type="number" value="3000"></label><label>GNSS poll ms<input id="lsl-gnss-ms" type="number" value="1000"></label><label>Router telemetry poll ms<input id="lsl-router-ms" type="number" value="3000"></label><label>Context sensor Hz<input id="lsl-sensor-hz" type="number" min="1" max="${MAX_SENSOR_HZ}" value="${DEFAULT_SENSOR_HZ}"></label><button class="lsl-primary" data-lsl-start>Start Passive Scan</button><button class="lsl-active-button" data-lsl-active-scan>Run Active Scan</button><button class="lsl-secondary" data-lsl-stop>Stop session</button><div class="lsl-active-controls"><label>Active method<select id="lsl-active-method"><option value="auto">Auto from bridge</option><option value="wifi-rtt-ranging">Wi-Fi RTT</option><option value="uwb-ranging">UWB ranging</option><option value="ble-ranging">Bluetooth ranging</option><option value="authorized-network-rtt">Selected network RTT</option></select></label><label>Responder / endpoint IDs (optional)<input id="lsl-active-targets" type="text" placeholder="leave blank for bridge-discovered responders"></label><label>Samples per target<input id="lsl-active-samples" type="number" min="1" max="${MAX_ACTIVE_SAMPLES_PER_TARGET}" value="3"></label><label>Sample interval ms<input id="lsl-active-interval" type="number" min="${MIN_ACTIVE_SAMPLE_INTERVAL_MS}" value="1000"></label><p class="lsl-hint">The attached phone/router is presumed operator-authorized. Blank target IDs allow the bridge to use nearby standards-capable responders it reports; this does not grant the laboratory control over those responders.</p></div></section><section class="lsl-card"><h3>Bridge observation ingest</h3><p>Native mobile apps or a local router bridge should send normalized passive JSON observations. Manual ingest is available for contract testing.</p><textarea id="lsl-json" rows="12" spellcheck="false">{"kind":"wifi","adapterId":"android-native","frequencyHz":2437000000,"rssiDbm":-58,"noiseDbm":-95,"sourceId":"00:11:22:33:44:55","localX":0,"localY":0,"headingDeg":0,"chainRssiDbm":[-58,-60],"provenance":"reported-by-platform"}</textarea><button class="lsl-primary" data-lsl-ingest>Ingest passive observation JSON</button><button class="lsl-secondary" data-lsl-copy>Copy session JSON</button><div class="lsl-status" data-lsl-status>Ready.</div></section></aside><main class="lsl-workspace"><section class="lsl-card lsl-channel-card"><div class="lsl-section-head"><h3>Receiver channel coverage</h3><span>Wi-Fi · cellular · Bluetooth/BLE · sensors · router telemetry</span></div><div data-lsl-channels></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Capability matrix</h3><span>public/platform exposure, not assumed raw RF access</span></div><div data-lsl-capabilities></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive session & refinement procedure</h3><span>empirical telemetry remains separate from simulation</span></div><div data-lsl-session></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive frequency / source census</h3><span>observed information density without active probing</span></div><div data-lsl-inventory></div></section><section class="lsl-card lsl-health-card"><div class="lsl-section-head"><h3>Receiver / antenna-path cleanliness & degradation screening</h3><span>baseline-relative passive diagnostics</span></div><div data-lsl-health></div></section><section class="lsl-card lsl-active-card"><div class="lsl-section-head"><h3>Active ranging / ping-back mapping</h3><span>separate gated path · standards-capable responders</span></div><div data-lsl-active></div><canvas id="lsl-active-map" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Live signal history</h3><span>RSSI / RSRP / SNR when reported</span></div><canvas id="lsl-timeseries" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Local spatial trace</h3><span>requires measured localX/localY anchors</span></div><canvas id="lsl-spatial" class="lsl-canvas"></canvas></section><section class="lsl-card"><h3>Recent normalized observations</h3><div class="lsl-table"><table><thead><tr><th>Time</th><th>Kind</th><th>Frequency</th><th>Signal</th><th>Source</th><th>Provenance</th></tr></thead><tbody data-lsl-observations><tr><td colspan="6">No observations yet.</td></tr></tbody></table></div></section><section class="lsl-card lsl-future"><div class="lsl-section-head"><h3>Future attenuation / sweep research</h3><span>still gated · not implemented</span></div><div class="lsl-future-grid" data-lsl-future></div></section><section class="lsl-boundary"><strong>Measurement boundary:</strong> mobile operating systems often expose derived telemetry rather than raw spectrum/IQ data. The laboratory records what the platform or hardware bridge actually reports, together with timestamps, permissions, stale state and device context. Receiver/antenna-health flags are screening evidence, not proof of hardware failure. Missing expected radio channels are surfaced as acquisition gaps rather than interpreted as absent RF energy. Active ranging uses the attached instrument's documented/platform-supported ranging capabilities and does not imply administrative control of remote responders. Network RTT is latency context and is not treated as direct RF distance unless the ranging technology reports distance. Privacy redaction is enabled by default.</section></main></div></div>`;
+    panel.innerHTML=`<div class="lsl-backdrop" data-lsl-close></div><div class="lsl-panel" role="dialog" aria-modal="true" aria-labelledby="lsl-title"><header class="lsl-header"><div><p class="lsl-eyebrow">Signals Suite · empirical multi-radio instrumentation</p><h2 id="lsl-title">Live Signals Laboratory</h2><p>Separate from the simulation laboratory. Passive Scan continuously gathers available Wi-Fi, cellular, Bluetooth/BLE, router and sensor telemetry. Active Scan is a separate standards-supported ranging path: the device/router hosting the runtime is treated as the operator-authorized instrument, while nearby responder-capable devices remain participants rather than devices the lab controls.</p></div><button class="lsl-close" data-lsl-close aria-label="Close Live Signals Laboratory">×</button></header><div class="lsl-body"><aside class="lsl-controls"><section class="lsl-card lsl-lock"><h3>Hardware safety lock</h3><p><strong>Passive Scan is receive-only.</strong> Active Scan may invoke only allowlisted ranging capabilities reported by the connected bridge. The lab assumes authorization to operate the hardware it is running on, but it never assumes administrative control of nearby devices. Power/channel mutation, packet injection, subnet sweeps, arbitrary frequency sweeps and pulse controls remain blocked.</p><label>Thermal state<select id="lsl-thermal"><option>nominal</option><option>fair</option><option>serious</option><option>severe</option><option>critical</option></select></label><label>Battery %<input id="lsl-battery" type="number" min="0" max="100" value="100"></label><label class="lsl-check"><input id="lsl-external-power" type="checkbox"> External power connected</label><label class="lsl-check"><input id="lsl-redact" type="checkbox" checked> Redact network/device identifiers and geographic coordinates</label><button class="lsl-secondary" data-lsl-preflight-button>Run passive preflight</button><div data-lsl-preflight></div></section><section class="lsl-card"><h3>Passive acquisition profile</h3><label>Hardware bridge<select id="lsl-profile">${profileOptions()}</select></label><label>Session minutes<input id="lsl-session-minutes" type="number" min="1" max="${MAX_SESSION_MINUTES}" value="${DEFAULT_SESSION_MINUTES}"></label><label>Wi-Fi result refresh floor ms<input id="lsl-wifi-ms" type="number" value="10000"></label><p class="lsl-hint">Android bridge contract: consume system/cached scan results and scan-completion broadcasts; do not invoke <code>startScan()</code> in passive mode.</p><label>BLE observe window ms<input id="lsl-ble-window-ms" type="number" value="5000"></label><label>BLE observe period ms<input id="lsl-ble-period-ms" type="number" value="${MIN_BLE_OBSERVE_PERIOD_MS}"></label><label>Cellular cadence reference ms<input id="lsl-cell-ms" type="number" value="3000"></label><p class="lsl-hint">Cellular cadence is a freshness/watch reference. Telephony callback timing is controlled by Android and the modem, not by this field.</p><label>GNSS poll ms<input id="lsl-gnss-ms" type="number" value="1000"></label><label>Router telemetry poll ms<input id="lsl-router-ms" type="number" value="3000"></label><label>Context sensor Hz<input id="lsl-sensor-hz" type="number" min="1" max="${MAX_SENSOR_HZ}" value="${DEFAULT_SENSOR_HZ}"></label><button class="lsl-primary" data-lsl-start>Start Passive Scan</button><button class="lsl-active-button" data-lsl-active-scan>Run Active Scan</button><button class="lsl-secondary" data-lsl-stop>Stop session</button><div class="lsl-active-controls"><label>Active method<select id="lsl-active-method"><option value="auto">Auto from bridge</option><option value="wifi-rtt-ranging">Wi-Fi RTT</option><option value="uwb-ranging">UWB ranging</option><option value="ble-ranging">Bluetooth ranging</option><option value="authorized-network-rtt">Selected network RTT</option></select></label><label>Responder / endpoint IDs (optional)<input id="lsl-active-targets" type="text" placeholder="leave blank for bridge-discovered responders"></label><label>Samples per target<input id="lsl-active-samples" type="number" min="1" max="${MAX_ACTIVE_SAMPLES_PER_TARGET}" value="3"></label><label>Sample interval ms<input id="lsl-active-interval" type="number" min="${MIN_ACTIVE_SAMPLE_INTERVAL_MS}" value="1000"></label><p class="lsl-hint">The attached phone/router is presumed operator-authorized. Blank target IDs allow the bridge to use nearby standards-capable responders it reports; this does not grant the laboratory control over those responders.</p></div></section><section class="lsl-card"><h3>Bridge observation ingest</h3><p>Native mobile apps or a local router bridge should send normalized passive JSON observations. Manual ingest is available for contract testing.</p><textarea id="lsl-json" rows="12" spellcheck="false">{"kind":"wifi","adapterId":"android-native","frequencyHz":2437000000,"rssiDbm":-58,"noiseDbm":-95,"sourceId":"00:11:22:33:44:55","localX":0,"localY":0,"headingDeg":0,"chainRssiDbm":[-58,-60],"provenance":"reported-by-platform"}</textarea><button class="lsl-primary" data-lsl-ingest>Ingest passive observation JSON</button><button class="lsl-secondary" data-lsl-copy>Copy session JSON</button><div class="lsl-status" data-lsl-status>Ready.</div></section></aside><main class="lsl-workspace"><section class="lsl-card lsl-channel-card"><div class="lsl-section-head"><h3>Receiver channel coverage</h3><span>Wi-Fi · cellular · Bluetooth/BLE · sensors · router telemetry</span></div><div data-lsl-channels></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Capability matrix</h3><span>public/platform exposure, not assumed raw RF access</span></div><div data-lsl-capabilities></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive session & refinement procedure</h3><span>empirical telemetry remains separate from simulation</span></div><div data-lsl-session></div></section><section class="lsl-card"><div class="lsl-section-head"><h3>Passive frequency / source census</h3><span>observed information density without active probing</span></div><div data-lsl-inventory></div></section><section class="lsl-card lsl-health-card"><div class="lsl-section-head"><h3>Receiver / antenna-path cleanliness & degradation screening</h3><span>baseline-relative passive diagnostics</span></div><div data-lsl-health></div></section><section class="lsl-card lsl-active-card"><div class="lsl-section-head"><h3>Active ranging / ping-back mapping</h3><span>separate gated path · standards-capable responders</span></div><div data-lsl-active></div><canvas id="lsl-active-map" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Live signal history</h3><span>RSSI / RSRP / SNR when reported</span></div><canvas id="lsl-timeseries" class="lsl-canvas"></canvas></section><section class="lsl-card"><div class="lsl-section-head"><h3>Local spatial trace</h3><span>requires measured localX/localY anchors</span></div><canvas id="lsl-spatial" class="lsl-canvas"></canvas></section><section class="lsl-card"><h3>Recent normalized observations</h3><div class="lsl-table"><table><thead><tr><th>Time</th><th>Kind</th><th>Frequency</th><th>Signal</th><th>Source</th><th>Provenance</th></tr></thead><tbody data-lsl-observations><tr><td colspan="6">No observations yet.</td></tr></tbody></table></div></section><section class="lsl-card lsl-future"><div class="lsl-section-head"><h3>Future attenuation / sweep research</h3><span>still gated · not implemented</span></div><div class="lsl-future-grid" data-lsl-future></div></section><section class="lsl-boundary"><strong>Measurement boundary:</strong> mobile operating systems often expose derived telemetry rather than raw spectrum/IQ data. The laboratory records what the platform or hardware bridge actually reports, together with timestamps, source/modem freshness, permissions, stale state and device context. Cellular channel numbers and band identifiers remain metadata unless an explicit conversion model is applied; they are not silently promoted into RF center frequencies. Receiver/antenna-health flags are screening evidence, not proof of hardware failure. Missing expected radio channels are surfaced as acquisition gaps rather than interpreted as absent RF energy. Active ranging uses the attached instrument's documented/platform-supported ranging capabilities and does not imply administrative control of remote responders. Network RTT is latency context and is not treated as direct RF distance unless the ranging technology reports distance. Privacy redaction is enabled by default.</section></main></div></div>`;
     root.document.body.appendChild(panel);
     panel.querySelectorAll('[data-lsl-close]').forEach(node=>node.addEventListener('click',closePanel));
     panel.querySelector('#lsl-profile')?.addEventListener('change',renderCapabilityMatrix);
     for(const id of ['#lsl-thermal','#lsl-battery','#lsl-external-power','#lsl-redact','#lsl-session-minutes','#lsl-wifi-ms','#lsl-ble-window-ms','#lsl-ble-period-ms','#lsl-cell-ms','#lsl-gnss-ms','#lsl-router-ms','#lsl-sensor-hz']) panel.querySelector(id)?.addEventListener('change',renderPreflight);
     panel.querySelector('[data-lsl-preflight-button]')?.addEventListener('click',renderPreflight);
-    panel.querySelector('[data-lsl-start]')?.addEventListener('click',()=>{try{activeSession=createSession({profileId:panel.querySelector('#lsl-profile')?.value,polling:readPolling(),hardwareState:readHardwareState()});renderSession();setStatus('Passive Scan started. Waiting for all available receiver channels; missing expected channels will be flagged.','success');}catch(error){setStatus(error.message,'error');}});
+    panel.querySelector('[data-lsl-start]')?.addEventListener('click',async()=>{try{if(activeSession&&!activeSession.endedAt)throw new Error('Stop the current session before starting another Passive Scan.');const embedded=root.LiveSignalsHardwareBridge||root.AndroidLiveSignalsBridge||null;if(!hardwareBridge&&embedded)registerHardwareBridge(embedded);activeSession=createSession({profileId:panel.querySelector('#lsl-profile')?.value,polling:readPolling(),hardwareState:readHardwareState()});try{if(hardwareBridge?.startPassive)await hardwareBridge.startPassive();if(hardwareBridge)await refreshHardwareBridgeCapabilities();}catch(error){activeSession.endedAt=new Date().toISOString();throw error;}renderSession();setStatus('Passive Scan started. Hardware bridge collection is bound to this session; missing expected channels will be flagged.','success');}catch(error){setStatus(error.message,'error');}});
     panel.querySelector('[data-lsl-active-scan]')?.addEventListener('click',async()=>{try{if(!activeSession)throw new Error('Start Passive Scan first so active ranging has synchronized passive context.');if(!hardwareBridge){const embedded=root.LiveSignalsHardwareBridge||root.AndroidLiveSignalsBridge||null;if(embedded)registerHardwareBridge(embedded);}if(!hardwareBridge)throw new Error('Active Scan requires a connected native/router hardware bridge. The browser alone cannot access Android TelephonyManager or hardware ranging APIs.');await refreshHardwareBridgeCapabilities();const methodValue=panel.querySelector('#lsl-active-method')?.value||'auto';const method=methodValue==='auto'?(bridgeCapabilityReport?.activeMethods||[])[0]:methodValue;const targetIds=String(panel.querySelector('#lsl-active-targets')?.value||'').split(',').map(v=>v.trim()).filter(Boolean);const result=await runActiveScan(activeSession,{method,targetIds,samplesPerTarget:finite(panel.querySelector('#lsl-active-samples')?.value,3),sampleIntervalMs:finite(panel.querySelector('#lsl-active-interval')?.value,1000),...readHardwareState()});renderSession();setStatus(`Active Scan completed: ${result.observations.length} ranging observations.`, 'success');}catch(error){setStatus(error.message,'error');}});
-    panel.querySelector('[data-lsl-stop]')?.addEventListener('click',()=>{if(activeSession&&!activeSession.endedAt)activeSession.endedAt=new Date().toISOString();renderSession();setStatus('Session stopped.','success');});
+    panel.querySelector('[data-lsl-stop]')?.addEventListener('click',async()=>{try{if(activeSession&&!activeSession.endedAt)activeSession.endedAt=new Date().toISOString();if(hardwareBridge?.stopPassive)await hardwareBridge.stopPassive();renderSession();setStatus('Session stopped and passive hardware collectors released.','success');}catch(error){renderSession();setStatus(`Session ended, but hardware bridge stop reported: ${error.message}`,'error');}});
     panel.querySelector('[data-lsl-ingest]')?.addEventListener('click',()=>{try{if(!activeSession)throw new Error('Start a passive session before ingesting telemetry.');const raw=JSON.parse(panel.querySelector('#lsl-json').value);appendObservation(activeSession,raw);renderSession();setStatus('Passive observation ingested.','success');}catch(error){setStatus(error.message,'error');}});
     panel.querySelector('[data-lsl-copy]')?.addEventListener('click',async()=>{try{if(!activeSession)throw new Error('No session to copy.');await root.navigator?.clipboard?.writeText(serializeSession(activeSession));setStatus('Session JSON copied.','success');}catch(error){setStatus(error.message,'error');}});
     const embeddedBridge=root.LiveSignalsHardwareBridge||root.AndroidLiveSignalsBridge||null;if(embeddedBridge)registerHardwareBridge(embeddedBridge);
@@ -955,7 +1068,7 @@
     hardwareProfiles, capabilityMatrix, browserCapabilities, safePollingConfiguration, safetyPreflight, assertReceiveOnlyOperation, assertActiveScanOperation,
     activeScanMethods, activeScanPreflight, buildActiveScanPlan, runActiveScan, registerHardwareBridge, unregisterHardwareBridge, hardwareBridgeStatus, refreshHardwareBridgeCapabilities,
     normalizeObservation, refinementStages, buildRefinementPlan, futureGatedResearch, passiveFrequencyInventory, chooseReferenceSeries,
-    receiverHealthSnapshot, captureReceiverBaseline, receiverHealthDiagnostic, channelCoverage, expectedPassiveChannels, activeRangeSummary,
-    constants: freeze({VERSION,PANEL_ID,VERIFIED_AT,CURRENT_MODE,MAX_SESSION_MINUTES,DEFAULT_SESSION_MINUTES,MAX_SENSOR_HZ,DEFAULT_SENSOR_HZ,MIN_WIFI_RESULT_POLL_MS,MIN_BLE_OBSERVE_PERIOD_MS,MAX_BLE_OBSERVE_WINDOW_MS,MIN_CELL_POLL_MS,MIN_GNSS_POLL_MS,MIN_ROUTER_POLL_MS,MAX_OBSERVATIONS,FREQUENCY_BIN_HZ,MAX_ACTIVE_TARGETS,MAX_ACTIVE_SAMPLES_PER_TARGET,MIN_ACTIVE_SAMPLE_INTERVAL_MS,MAX_ACTIVE_BURST_SECONDS,HARDWARE_PROFILES,SAFETY_POLICY,ACTIVE_SCAN_POLICY,ACTIVE_SCAN_METHODS,CHANNEL_CATALOG,REFINEMENT_STAGES,FUTURE_GATED_RESEARCH,RECEIVER_HEALTH_THRESHOLDS})
+    receiverHealthSnapshot, captureReceiverBaseline, receiverHealthDiagnostic, channelCoverage, expectedPassiveChannels, channelHealthSnapshot, synchronizedTimeline, activeRangeSummary,
+    constants: freeze({VERSION,PANEL_ID,VERIFIED_AT,CURRENT_MODE,MAX_SESSION_MINUTES,DEFAULT_SESSION_MINUTES,MAX_SENSOR_HZ,DEFAULT_SENSOR_HZ,MIN_WIFI_RESULT_POLL_MS,MIN_BLE_OBSERVE_PERIOD_MS,MAX_BLE_OBSERVE_WINDOW_MS,MIN_CELL_POLL_MS,MIN_GNSS_POLL_MS,MIN_ROUTER_POLL_MS,MAX_OBSERVATIONS,FREQUENCY_BIN_HZ,DEFAULT_TIMELINE_BUCKET_MS,MAX_TIMELINE_FRAMES,MAX_ACTIVE_TARGETS,MAX_ACTIVE_SAMPLES_PER_TARGET,MIN_ACTIVE_SAMPLE_INTERVAL_MS,MAX_ACTIVE_BURST_SECONDS,HARDWARE_PROFILES,SAFETY_POLICY,ACTIVE_SCAN_POLICY,ACTIVE_SCAN_METHODS,CHANNEL_CATALOG,REFINEMENT_STAGES,FUTURE_GATED_RESEARCH,RECEIVER_HEALTH_THRESHOLDS})
   });
 });
