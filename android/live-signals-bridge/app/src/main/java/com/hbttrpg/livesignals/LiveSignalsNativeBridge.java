@@ -27,6 +27,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.telephony.CellIdentity;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
@@ -433,16 +434,25 @@ final class LiveSignalsNativeBridge implements AutoCloseable {
 
     private void emitCellInfo(List<CellInfo> cells) {
         if (cells == null) return;
+        long elapsedRealtimeMs = SystemClock.elapsedRealtime();
         for (CellInfo cell : cells) {
             CellSignalStrength strength = cellStrength(cell);
             CellIdentity identity = cellIdentity(cell);
             if (strength == null) continue;
             JSONObject row = cellularStrengthObservation(strength,
                     identity == null ? "cell-unknown" : "cell-" + opaqueId(identity.toString()));
+            put(row, "radioTechnology", cellularTechnology(identity, strength));
             put(row, "registered", cell.isRegistered());
+            put(row, "modemAgeMs", Math.max(0L, elapsedRealtimeMs - cell.getTimestampMillis()));
             Integer channel = cellularChannel(identity);
-            if (channel != null && channel != CellInfo.UNAVAILABLE) put(row, "channel", channel);
-            put(row, "note", "CellInfo observation; channel number is preserved when Android exposes it. RF center frequency is left unknown rather than guessed from ARFCN/EARFCN/NRARFCN.");
+            if (channel != null && channel != CellInfo.UNAVAILABLE) {
+                put(row, "channel", channel);
+                put(row, "channelType", cellularChannelType(identity));
+            }
+            putIntArray(row, "bands", cellularBands(identity));
+            Long bandwidthHz = cellularBandwidthHz(identity);
+            if (bandwidthHz != null) put(row, "bandwidthHz", bandwidthHz);
+            put(row, "note", "CellInfo observation; Android-reported RAT, channel number/type, LTE/NR bands, LTE bandwidth, and modem sample age are preserved when exposed. RF center frequency is left unknown rather than guessed from ARFCN/EARFCN/NRARFCN.");
             emit(row);
         }
     }
@@ -450,7 +460,7 @@ final class LiveSignalsNativeBridge implements AutoCloseable {
     private JSONObject cellularStrengthObservation(CellSignalStrength strength, String sourceId) {
         JSONObject row = baseObservation("cellular", "android-telephony-callback");
         put(row, "sourceId", sourceId);
-        put(row, "radioTechnology", strength.getClass().getSimpleName());
+        put(row, "radioTechnology", cellularTechnology(null, strength));
         if (strength instanceof CellSignalStrengthLte lte) {
             putAvailable(row, "rssiDbm", lte.getRssi());
             putAvailable(row, "rsrpDbm", lte.getRsrp());
@@ -495,6 +505,16 @@ final class LiveSignalsNativeBridge implements AutoCloseable {
         return null;
     }
 
+    private static String cellularTechnology(CellIdentity identity, CellSignalStrength strength) {
+        if (identity instanceof CellIdentityNr || strength instanceof CellSignalStrengthNr) return "nr";
+        if (identity instanceof CellIdentityLte || strength instanceof CellSignalStrengthLte) return "lte";
+        if (identity instanceof CellIdentityWcdma || strength instanceof CellSignalStrengthWcdma) return "wcdma";
+        if (identity instanceof CellIdentityTdscdma || strength instanceof CellSignalStrengthTdscdma) return "tdscdma";
+        if (identity instanceof CellIdentityGsm || strength instanceof CellSignalStrengthGsm) return "gsm";
+        if (strength instanceof CellSignalStrengthCdma) return "cdma";
+        return "unknown";
+    }
+
     private static Integer cellularChannel(CellIdentity identity) {
         if (identity instanceof CellIdentityLte x) return x.getEarfcn();
         if (identity instanceof CellIdentityNr x) return x.getNrarfcn();
@@ -502,6 +522,27 @@ final class LiveSignalsNativeBridge implements AutoCloseable {
         if (identity instanceof CellIdentityGsm x) return x.getArfcn();
         if (identity instanceof CellIdentityTdscdma x) return x.getUarfcn();
         return null;
+    }
+
+    private static String cellularChannelType(CellIdentity identity) {
+        if (identity instanceof CellIdentityLte) return "earfcn";
+        if (identity instanceof CellIdentityNr) return "nrarfcn";
+        if (identity instanceof CellIdentityWcdma || identity instanceof CellIdentityTdscdma) return "uarfcn";
+        if (identity instanceof CellIdentityGsm) return "arfcn";
+        return null;
+    }
+
+    private static int[] cellularBands(CellIdentity identity) {
+        if (identity instanceof CellIdentityLte x) return x.getBands();
+        if (identity instanceof CellIdentityNr x) return x.getBands();
+        return new int[0];
+    }
+
+    private static Long cellularBandwidthHz(CellIdentity identity) {
+        if (!(identity instanceof CellIdentityLte lte)) return null;
+        int bandwidthKhz = lte.getBandwidth();
+        if (bandwidthKhz == CellInfo.UNAVAILABLE || bandwidthKhz <= 0) return null;
+        return bandwidthKhz * 1000L;
     }
 
     private void startBleObservation() {
@@ -694,6 +735,15 @@ final class LiveSignalsNativeBridge implements AutoCloseable {
 
     private static void putAvailable(JSONObject object, String key, int value) {
         if (value != CellInfo.UNAVAILABLE) put(object, key, value);
+    }
+
+    private static void putIntArray(JSONObject object, String key, int[] values) {
+        if (values == null || values.length == 0) return;
+        JSONArray array = new JSONArray();
+        for (int value : values) {
+            try { array.put(value); } catch (JSONException ignored) {}
+        }
+        put(object, key, array);
     }
 
     private static void putArray(JSONObject object, String key, float[] values, int limit) {
