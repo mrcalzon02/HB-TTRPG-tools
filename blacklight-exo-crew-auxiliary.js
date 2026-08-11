@@ -182,7 +182,6 @@
       <span><b>PANEL II · ${meta.title.toUpperCase()}</b><small>${STATION_CODES[station]} · ${requiredCount} required @ level +${attempt?.difficulty??configuredDifficulty} · REC +${attempt?.recommendedDifficulty??activeRecommendedDifficulty()}${attempt?` · ${incomplete} remaining`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>
     </button>
     <section class="exo-aux-drawer aux-drawer-${station}" aria-hidden="${drawerOpen?"false":"true"}">
-      <header class="exo-aux-drawer-head"><div><span class="exo-kicker">${meta.subtitle}</span><strong>${meta.title}</strong><p>${meta.note} Panel I remains intact above; these mechanisms are exclusive to this station's auxiliary hardware bank.</p></div><div class="exo-aux-attempt"><b>${attempt?attempt.procedureName:"Preview"}</b><span>${message}</span></div></header>
       <div class="exo-aux-grid aux-grid-${station}">${controls.map((c,i)=>controlCard(c,i,station,preview)).join("")}</div>
       <footer><span>${attempt?`${attempt.history.length} distinct auxiliary control${attempt.history.length===1?"":"s"} recorded this attempt`:"Targets shown are a preview until Begin Procedure is pressed."}</span><b>${attempt?(allRequirementsSatisfied()?"AUXILIARY REQUIREMENTS COMPLETE":`${incomplete} AUXILIARY REQUIREMENT${incomplete===1?"":"S"} OUTSTANDING`):`MASTER +${configuredDifficulty}`}</b></footer>
     </section>`;
