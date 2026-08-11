@@ -688,6 +688,12 @@
       phaseLabel.hidden = true;
       this.labelLayer.appendChild(phaseLabel);
       this.labels.set('trace-phase', phaseLabel);
+      const translationLabel = document.createElement('span');
+      translationLabel.className = 'cube-visualizer-translation-label';
+      translationLabel.textContent = 'KEYED TRANSLATION';
+      translationLabel.hidden = true;
+      this.labelLayer.appendChild(translationLabel);
+      this.labels.set('translation-point', translationLabel);
     }
 
     installStaticLines() {
@@ -1028,6 +1034,8 @@
       this.selectedPathCount = 0;
       const label = this.labels.get('trace-phase');
       if (label) label.hidden = true;
+      const translationLabel = this.labels.get('translation-point');
+      if (translationLabel) translationLabel.hidden = true;
       this.render();
     }
 
@@ -1081,9 +1089,11 @@
         totalPointCount: trace.pointField.length,
         renderTier: this.renderPlan.tier,
         selectedPosition: Object.freeze([...selectedPosition]),
-        activePointPosition: Object.freeze([...highlightedPosition])
+        activePointPosition: Object.freeze([...highlightedPosition]),
+        translationPointPosition: translationPoint ? Object.freeze([...translationPoint]) : null
       });
       const label = this.labels.get('trace-phase');
+      const translationLabel = this.labels.get('translation-point');
       const transition = stateTimeline.phaseIndex === stateTimeline.nextPhaseIndex ? trace.phases[stateTimeline.phaseIndex].id : `${trace.phases[stateTimeline.phaseIndex].id} → ${trace.phases[stateTimeline.nextPhaseIndex].id}`;
       if (serialState) {
         const bit = trace.bitByPoint[serialState.activePointId];
@@ -1091,8 +1101,13 @@
         const outputCellIndex = trace.outputCellIndexByPoint[serialState.activePointId];
         const point = trace.pointField[serialState.activePointId];
         label.textContent = `SERIAL BIT ${serialState.inputCellIndex + 1}/${serialState.pointCount} · ${kind.toUpperCase()} ${bit} · ${(serialState.localTraceTime * 100).toFixed(1)}% ROUTE · INPUT ${serialState.inputCellIndex} → KEY POINT (${point.x}, ${point.y}, ${point.z}) → OUTPUT ${outputCellIndex}`;
+        if (translationLabel) {
+          translationLabel.textContent = `KEYED TRANSLATION · (${point.x}, ${point.y}, ${point.z})`;
+          translationLabel.hidden = false;
+        }
       } else {
         label.textContent = `TRACE ${(timeline.traceTime * 100).toFixed(1)}% · ${transition.replaceAll('-', ' ').toUpperCase()} · POINT ${selectedPointId} · ${renderedPointIds.length.toLocaleString()}/${trace.pointField.length.toLocaleString()} VISIBLE`;
+        if (translationLabel) translationLabel.hidden = true;
       }
       label.hidden = false;
       this.render();
@@ -1180,6 +1195,7 @@
 
     positionLabels(viewProjection) {
       const positions = {'axis-x':[1.5,0,0],'axis-y':[0,1.5,0],'axis-z':[0,0,1.5],...this.directionLabelPositions,'trace-phase':[0,1.52,0]};
+      if (this.traceState?.translationPointPosition) positions['translation-point'] = this.traceState.translationPointPosition;
       for (const face of FACES) positions[face] = JSON.parse(this.labels.get(face).dataset.position);
       for (const [name,position] of Object.entries(positions)) {
         const label = this.labels.get(name);
@@ -1188,7 +1204,7 @@
         const x=clip[0]/clip[3];
         const y=clip[1]/clip[3];
         const hidden = clip[3]<=0 || x<-1.25 || x>1.25 || y<-1.25 || y>1.25;
-        if (name !== 'trace-phase' || this.traceState) label.hidden = hidden;
+        if ((name !== 'trace-phase' && name !== 'translation-point') || this.traceState) label.hidden = hidden;
         if (!label.hidden) label.style.transform = `translate(${(x*0.5+0.5)*this.canvas.clientWidth}px, ${(-y*0.5+0.5)*this.canvas.clientHeight}px) translate(-50%, -50%)`;
       }
     }
