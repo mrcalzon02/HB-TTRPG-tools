@@ -1,0 +1,47 @@
+name: Patch Binary Cube serial focus documentation
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/patch-binary-cube-serial-focus-docs.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch user and architecture documentation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          guide_path = Path('docs/binary-cube-visualizer-user-guide.md')
+          guide = guide_path.read_text()
+          old_guide = """The white route grows progressively with the travelling bit. A second stationary pale point marks the bit’s exact keyed interior coordinate, with an on-canvas **KEYED TRANSLATION · (x, y, z)** label. The travelling point therefore visibly arrives at the keyed translation target and then continues toward the output face instead of jumping between coarse animation phases.\n"""
+          new_guide = """The white route grows progressively with the travelling bit. A second stationary pale point marks the bit’s exact keyed interior coordinate, with an on-canvas **KEYED TRANSLATION · (x, y, z)** label. Future bits waiting on the input face and completed bits already emitted on the output face remain visible only as subdued context, so they do not compete visually with the single active traversal. The travelling point therefore visibly arrives at the keyed translation target and then continues toward the output face instead of jumping between coarse animation phases or being lost inside a wall of equally bright bits.\n"""
+          if old_guide not in guide:
+              raise SystemExit('Expected serial demonstration guide paragraph was not found.')
+          guide_path.write_text(guide.replace(old_guide, new_guide, 1))
+
+          architecture_path = Path('docs/binary-cube-visualizer-architecture.md')
+          architecture = architecture_path.read_text()
+          old_arch = """7. The progressive selected-path buffer draws only the portion of the route already traversed.\n8. The keyed-translation label is positioned from the same exact phase-4 coordinate stored in trace presentation state.\n9. When the 1.4-second interval completes, the next input cell becomes the sole active bit.\n\nCompleted bits are represented at their completed route position and later bits remain at their unstarted route position; only the active bit receives intermediate motion. The ordinary speed selector remains visible but is ignored by the serial clock so a selected `2×` speed cannot silently halve the demonstration interval.\n"""
+          new_arch = """7. The progressive selected-path buffer draws only the portion of the route already traversed.\n8. The keyed-translation label is positioned from the same exact phase-4 coordinate stored in trace presentation state.\n9. Inactive serial cohorts are deliberately de-emphasized: future input cells mix toward the renderer's dim context color at `0.24`, while completed output cells mix toward dim context at `0.34`. The active moving bit remains fully emphasized by the selected-point overlay.\n10. When the 1.4-second interval completes, the next input cell becomes the sole active bit.\n\nCompleted bits are represented at their completed route position and later bits remain at their unstarted route position, but both cohorts are visually subdued; only the active bit receives intermediate motion and full emphasis. The ordinary speed selector remains visible but is ignored by the serial clock so a selected `2×` speed cannot silently halve the demonstration interval.\n"""
+          if old_arch not in architecture:
+              raise SystemExit('Expected serial architecture paragraph was not found.')
+          architecture_path.write_text(architecture.replace(old_arch, new_arch, 1))
+          PY
+      - name: Commit documentation and remove maintenance workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/patch-binary-cube-serial-focus-docs.yml
+          git add docs/binary-cube-visualizer-user-guide.md docs/binary-cube-visualizer-architecture.md
+          git commit -m "docs: explain Binary Cube serial focus contrast"
+          git push origin HEAD:main
