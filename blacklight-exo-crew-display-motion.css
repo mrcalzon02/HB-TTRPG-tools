@@ -237,61 +237,185 @@
 }
 
 /* ================================================================
-   ENGINEERING — bus mimic has a living load/flow pulse.
+   ENGINEERING — live rectifier / bus / breaker power map.
    ================================================================ */
 .exo-crew-body .display-systems {
-  --eng-cycle: 2.8s;
-  --eng-core-cycle: 2.05s;
-  --eng-shift: 0px;
-  --eng-contact-cycle: 2.2s;
+  --eng-cycle:2.8s;
+  --eng-core-cycle:2.05s;
+  --eng-shift:0px;
+  --eng-contact-cycle:2.2s;
+  --ra:.5;--rb:.5;--rc:.5;--rd:.5;--va:.5;--vb:.5;
+  --b1:#313934;--b2:#313934;--b3:#313934;--b4:#313934;
+  --b5:#313934;--b6:#313934;--b7:#313934;--b8:#313934;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(214,173,103,.035) 1px,transparent 1px) 0 0/100% 22px,
+    linear-gradient(90deg,rgba(214,173,103,.025) 1px,transparent 1px) 0 0/22px 100%,
+    radial-gradient(circle at 50% 38%,rgba(214,173,103,.08),transparent 42%),#07100e;
 }
-.exo-crew-body .display-systems .exo-tactical-ring {
-  animation: exo-eng-bus-flow var(--eng-cycle) ease-in-out infinite;
+.exo-crew-body .display-systems::before{
+  content:"";position:absolute;inset:28px 0 112px 0;pointer-events:none;z-index:1;
+  background:
+    linear-gradient(90deg,rgb(211 168 87 / calc(.12 + var(--ra)*.76)),rgb(235 199 119 / calc(.2 + var(--ra)*.75)) 76%,transparent 77%) 0 14%/calc(35% + var(--ra)*12%) 2px no-repeat,
+    linear-gradient(90deg,rgb(211 168 87 / calc(.12 + var(--rb)*.76)),rgb(235 199 119 / calc(.2 + var(--rb)*.75)) 76%,transparent 77%) 0 32%/calc(35% + var(--rb)*12%) 2px no-repeat,
+    linear-gradient(90deg,rgb(211 168 87 / calc(.12 + var(--rc)*.76)),rgb(235 199 119 / calc(.2 + var(--rc)*.75)) 76%,transparent 77%) 0 50%/calc(35% + var(--rc)*12%) 2px no-repeat,
+    linear-gradient(90deg,rgb(211 168 87 / calc(.12 + var(--rd)*.76)),rgb(235 199 119 / calc(.2 + var(--rd)*.75)) 76%,transparent 77%) 0 68%/calc(35% + var(--rd)*12%) 2px no-repeat,
+    linear-gradient(90deg,transparent 0 58%,rgb(202 165 91 / calc(.18 + var(--va)*.72)) 58% 98%,transparent 98%) 0 36%/100% 3px no-repeat,
+    linear-gradient(90deg,transparent 0 58%,rgb(202 165 91 / calc(.18 + var(--vb)*.72)) 58% 98%,transparent 98%) 0 58%/100% 3px no-repeat;
+  animation:exo-eng-feed-breathe var(--eng-cycle) ease-in-out infinite;
 }
-.exo-crew-body .display-systems .exo-ownship {
-  animation: exo-eng-bus-core var(--eng-core-cycle) ease-in-out infinite;
+.exo-crew-body .display-systems .exo-tactical-ring{
+  left:50%;top:38%;width:116px;height:116px;border-radius:50%;z-index:3;
+  transform:translate(-50%,-50%);transform-origin:50% 50%;
+  background:
+    radial-gradient(circle,rgba(255,224,151,.86) 0 5%,rgba(218,169,79,.28) 6% 20%,transparent 22% 38%,rgba(189,137,57,.18) 39% 42%,transparent 43%),
+    conic-gradient(from 0deg,
+      rgb(226 177 84 / calc(.16 + var(--ra)*.72)) 0 25%,
+      rgb(201 147 61 / calc(.16 + var(--rb)*.72)) 25% 50%,
+      rgb(238 195 110 / calc(.16 + var(--rc)*.72)) 50% 75%,
+      rgb(186 128 49 / calc(.16 + var(--rd)*.72)) 75% 100%);
+  border:1px solid rgba(224,188,113,.5);
+  box-shadow:inset 0 0 20px #000,0 0 20px rgba(214,173,103,.18);
+  animation:exo-eng-plasma-spin var(--eng-cycle) linear infinite,exo-eng-plasma-pulse var(--eng-core-cycle) ease-in-out infinite;
 }
-.exo-crew-body .display-systems .exo-contact { --contact-pulse: var(--eng-contact-cycle); }
-@keyframes exo-eng-bus-flow {
-  0%,100% { filter: brightness(.86); transform: translate(-50%,-50%) translateX(calc(0px - var(--eng-shift))); }
-  50% { filter: brightness(1.18); transform: translate(-50%,-50%) translateX(var(--eng-shift)); }
+.exo-crew-body .display-systems .exo-tactical-ring::before,
+.exo-crew-body .display-systems .exo-tactical-ring::after{content:"";position:absolute;border-radius:50%;inset:14%;border:2px dashed rgba(245,205,126,.52);animation:exo-eng-plasma-counter calc(var(--eng-cycle)*.72) linear infinite;}
+.exo-crew-body .display-systems .exo-tactical-ring::after{inset:29%;border-style:solid;border-width:1px;box-shadow:0 0 10px rgba(244,193,94,.5);animation-direction:reverse;}
+.exo-crew-body .display-systems .exo-ownship{
+  left:78%;top:38%;width:24%;height:78px;z-index:2;border:0;border-radius:0;clip-path:none;
+  transform:translate(-50%,-50%);background:
+    linear-gradient(90deg,rgba(220,177,92,.15),rgb(223 182 101 / calc(.2 + var(--va)*.7))) 0 24%/100% 4px no-repeat,
+    linear-gradient(90deg,rgba(220,177,92,.15),rgb(223 182 101 / calc(.2 + var(--vb)*.7))) 0 72%/100% 4px no-repeat;
+  box-shadow:none;animation:exo-eng-bus-core var(--eng-core-cycle) ease-in-out infinite;
 }
-@keyframes exo-eng-bus-core {
-  0%,100% { box-shadow: inset 0 0 8px #000, 0 0 6px rgba(214,173,103,.09); }
-  50% { box-shadow: inset 0 0 8px #000, 0 0 16px rgba(214,173,103,.26); }
+.exo-crew-body .display-systems .exo-ownship::before{content:"BUS A";position:absolute;right:2px;top:5px;color:#d6b66f;font:800 .48rem ui-monospace,monospace;letter-spacing:.07em;}
+.exo-crew-body .display-systems .exo-ownship::after{content:"BUS B";position:absolute;right:2px;bottom:5px;color:#d6b66f;font:800 .48rem ui-monospace,monospace;letter-spacing:.07em;}
+.exo-crew-body .display-systems .exo-contact{display:none!important;}
+.exo-crew-body .display-systems .exo-display-caption{
+  left:7px;right:7px;bottom:7px;height:96px;padding:7px 7px 7px 25px;box-sizing:border-box;z-index:6;
+  border:1px solid rgba(191,155,85,.4);background:
+    radial-gradient(circle at 10px 14px,var(--b1) 0 3px,transparent 4px),
+    radial-gradient(circle at 10px 34px,var(--b2) 0 3px,transparent 4px),
+    radial-gradient(circle at 10px 54px,var(--b3) 0 3px,transparent 4px),
+    radial-gradient(circle at 10px 74px,var(--b4) 0 3px,transparent 4px),
+    radial-gradient(circle at calc(50% + 10px) 14px,var(--b5) 0 3px,transparent 4px),
+    radial-gradient(circle at calc(50% + 10px) 34px,var(--b6) 0 3px,transparent 4px),
+    radial-gradient(circle at calc(50% + 10px) 54px,var(--b7) 0 3px,transparent 4px),
+    radial-gradient(circle at calc(50% + 10px) 74px,var(--b8) 0 3px,transparent 4px),rgba(2,9,8,.9);
+  color:transparent;font-size:0;white-space:normal;overflow:hidden;
+  box-shadow:inset 0 0 15px rgba(0,0,0,.7);
 }
-.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="PRIMARY"][aria-pressed="true"]) .display-systems {
-  --eng-cycle: 2.25s;
-  --eng-core-cycle: 1.62s;
-  --eng-shift: 2px;
-}
-.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="AUXILIARY"][aria-pressed="true"]) .display-systems {
-  --eng-cycle: 2.25s;
-  --eng-core-cycle: 1.62s;
-  --eng-shift: -2px;
-}
-.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="ISOLATED"][aria-pressed="true"]) .display-systems {
-  --eng-cycle: 6.5s;
-  --eng-core-cycle: 5.4s;
-  --eng-shift: 0px;
-}
-.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="CLOSED"][aria-pressed="true"]) .display-systems {
-  --eng-cycle: 5.8s;
-  --eng-core-cycle: 3.9s;
-  --eng-contact-cycle: .8s;
-}
-.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="OPEN"][aria-pressed="true"]) .display-systems {
-  --eng-cycle: 1.75s;
-  --eng-core-cycle: 1.2s;
-}
-.exo-crew-body .exo-station-body:has([data-control-id="pump-select"][data-control-state="CROSS-TIE"][aria-pressed="true"]) .display-systems .exo-tactical-ring {
-  animation-direction: alternate-reverse;
-}
-.exo-crew-body .exo-station-body:has([data-control-id^="breaker-"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems .exo-contact,
-.exo-crew-body .exo-station-body:has([data-control-id^="breaker-"][data-control-state="OFF"][aria-pressed="true"]) .display-systems .exo-contact {
-  animation-duration: .46s;
-  filter: brightness(1.35);
-}
+.exo-crew-body .display-systems .exo-display-caption::before,
+.exo-crew-body .display-systems .exo-display-caption::after{position:absolute;top:7px;width:calc(50% - 30px);white-space:pre;line-height:20px;color:#aeb6a7;font:800 .45rem ui-monospace,monospace;letter-spacing:.035em;text-align:left;}
+.exo-crew-body .display-systems .exo-display-caption::before{content:"B01  CALDER\A B02  MORROW\A B03  VOSS\A B04  LARKEN";left:24px;}
+.exo-crew-body .display-systems .exo-display-caption::after{content:"B05  ASTER\A B06  HALDEN\A B07  VESPER\A B08  ORISON";left:calc(50% + 24px);}
+@keyframes exo-eng-feed-breathe{0%,100%{opacity:.72}50%{opacity:1}}
+@keyframes exo-eng-plasma-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes exo-eng-plasma-counter{to{transform:rotate(-360deg)}}
+@keyframes exo-eng-plasma-pulse{0%,100%{filter:brightness(.86) saturate(.92)}50%{filter:brightness(1.28) saturate(1.2)}}
+@keyframes exo-eng-trip-panel{0%,48%{border-color:rgba(207,92,77,.34)}49%,100%{border-color:rgba(235,112,91,.9);box-shadow:inset 0 0 15px rgba(0,0,0,.7),0 0 9px rgba(213,78,63,.28)}}
+
+.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="PRIMARY"][aria-pressed="true"]) .display-systems{--eng-cycle:2.25s;--eng-core-cycle:1.62s;--eng-shift:2px;}
+.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="AUXILIARY"][aria-pressed="true"]) .display-systems{--eng-cycle:2.25s;--eng-core-cycle:1.62s;--eng-shift:-2px;}
+.exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="ISOLATED"][aria-pressed="true"]) .display-systems{--eng-cycle:6.5s;--eng-core-cycle:5.4s;--eng-shift:0px;filter:saturate(.55) brightness(.8);}
+.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="CLOSED"][aria-pressed="true"]) .display-systems{--eng-cycle:5.8s;--eng-core-cycle:3.9s;--eng-contact-cycle:.8s;}
+.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="OPEN"][aria-pressed="true"]) .display-systems{--eng-cycle:1.75s;--eng-core-cycle:1.2s;}
+.exo-crew-body .exo-station-body:has([data-control-id="pump-select"][data-control-state="CROSS-TIE"][aria-pressed="true"]) .display-systems .exo-tactical-ring{animation-direction:reverse,normal;}
+
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-reactor"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b1:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-reactor"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b1:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-reactor"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b1:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-rectifier"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b2:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-rectifier"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b2:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-rectifier"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b2:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-coolant"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b3:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-coolant"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b3:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-coolant"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b3:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-grid"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b4:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-grid"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b4:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-grid"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b4:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-field"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b5:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-field"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b5:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-field"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b5:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-inverter"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b6:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-inverter"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b6:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-inverter"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b6:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-sensor"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b7:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-sensor"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b7:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-sensor"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b7:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-lighting"][data-control-state="ON"][aria-pressed="true"]) .display-systems{--b8:#9bc775;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-lighting"][data-control-state="OFF"][aria-pressed="true"]) .display-systems{--b8:#343c37;}
+.exo-crew-body .exo-station-body:has([data-control-id="breaker-lighting"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems{--b8:#e06d5d;}
+.exo-crew-body .exo-station-body:has([data-control-id^="breaker-"][data-control-state="TRIPPED"][aria-pressed="true"]) .display-systems .exo-display-caption{animation:exo-eng-trip-panel .72s steps(2,end) infinite;}
+
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-62"]) .display-systems{--ra:0;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-54.25"]) .display-systems{--ra:.0625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-46.5"]) .display-systems{--ra:.125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-38.75"]) .display-systems{--ra:.1875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-31"]) .display-systems{--ra:.25;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-23.25"]) .display-systems{--ra:.3125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-15.5"]) .display-systems{--ra:.375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="-7.75"]) .display-systems{--ra:.4375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="0"]) .display-systems{--ra:.5;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="7.75"]) .display-systems{--ra:.5625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="15.5"]) .display-systems{--ra:.625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="23.25"]) .display-systems{--ra:.6875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="31"]) .display-systems{--ra:.75;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="38.75"]) .display-systems{--ra:.8125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="46.5"]) .display-systems{--ra:.875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="54.25"]) .display-systems{--ra:.9375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-a"][data-dial-angle="62"]) .display-systems{--ra:1;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-62"]) .display-systems{--rb:0;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-54.25"]) .display-systems{--rb:.0625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-46.5"]) .display-systems{--rb:.125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-38.75"]) .display-systems{--rb:.1875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-31"]) .display-systems{--rb:.25;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-23.25"]) .display-systems{--rb:.3125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-15.5"]) .display-systems{--rb:.375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="-7.75"]) .display-systems{--rb:.4375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="0"]) .display-systems{--rb:.5;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="7.75"]) .display-systems{--rb:.5625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="15.5"]) .display-systems{--rb:.625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="23.25"]) .display-systems{--rb:.6875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="31"]) .display-systems{--rb:.75;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="38.75"]) .display-systems{--rb:.8125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="46.5"]) .display-systems{--rb:.875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="54.25"]) .display-systems{--rb:.9375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-b"][data-dial-angle="62"]) .display-systems{--rb:1;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-62"]) .display-systems{--rc:0;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-54.25"]) .display-systems{--rc:.0625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-46.5"]) .display-systems{--rc:.125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-38.75"]) .display-systems{--rc:.1875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-31"]) .display-systems{--rc:.25;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-23.25"]) .display-systems{--rc:.3125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-15.5"]) .display-systems{--rc:.375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="-7.75"]) .display-systems{--rc:.4375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="0"]) .display-systems{--rc:.5;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="7.75"]) .display-systems{--rc:.5625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="15.5"]) .display-systems{--rc:.625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="23.25"]) .display-systems{--rc:.6875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="31"]) .display-systems{--rc:.75;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="38.75"]) .display-systems{--rc:.8125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="46.5"]) .display-systems{--rc:.875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="54.25"]) .display-systems{--rc:.9375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-c"][data-dial-angle="62"]) .display-systems{--rc:1;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-62"]) .display-systems{--rd:0;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-54.25"]) .display-systems{--rd:.0625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-46.5"]) .display-systems{--rd:.125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-38.75"]) .display-systems{--rd:.1875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-31"]) .display-systems{--rd:.25;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-23.25"]) .display-systems{--rd:.3125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-15.5"]) .display-systems{--rd:.375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="-7.75"]) .display-systems{--rd:.4375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="0"]) .display-systems{--rd:.5;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="7.75"]) .display-systems{--rd:.5625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="15.5"]) .display-systems{--rd:.625;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="23.25"]) .display-systems{--rd:.6875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="31"]) .display-systems{--rd:.75;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="38.75"]) .display-systems{--rd:.8125;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="46.5"]) .display-systems{--rd:.875;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="54.25"]) .display-systems{--rd:.9375;}
+.exo-crew-body .exo-station-body:has([data-control-id="rectifier-d"][data-dial-angle="62"]) .display-systems{--rd:1;}
 
 /* ================================================================
    SCIENCE — real rotating acquisition sweep tied to receiver controls.
