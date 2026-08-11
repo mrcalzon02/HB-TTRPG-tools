@@ -6,7 +6,8 @@
   const LETTER_RATIO = 8.5 / 11;
   const DEFAULT_WIDTH = 650;
   const MIN_WIDTH = 390;
-  const PAGE_STEPS = 2;
+  const PAGE_STEPS = 4;
+  const MAX_PAGE_STEPS = 5;
   const INDEX_ITEMS = 11;
   const WINDOW_MARGIN = 12;
   const DRAG_FRICTION = 0.915;
@@ -26,6 +27,7 @@
   let pageAnimationTimer = 0;
   let observer = null;
   let audioContext = null;
+  let compactFourStepProcedures = new Set();
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
@@ -91,6 +93,21 @@
     return { title, publication, note, entries, stationCode: stationCodeFromTitle(title) };
   }
 
+  function procedureChunks(proc) {
+    if (!proc.steps.length) return [{ steps: [], startStep: 0 }];
+    const chunks = [];
+    const forceFour = compactFourStepProcedures.has(proc.index);
+    for (let start = 0; start < proc.steps.length;) {
+      const remaining = proc.steps.length - start;
+      let count = Math.min(PAGE_STEPS, remaining);
+      if (!forceFour && remaining <= MAX_PAGE_STEPS) count = remaining;
+      else if (!forceFour && remaining >= 9) count = MAX_PAGE_STEPS;
+      chunks.push({ steps: proc.steps.slice(start, start + count), startStep: start });
+      start += count;
+    }
+    return chunks;
+  }
+
   function buildPages(data) {
     const result = [
       { type: "cover", label: "Cover" },
@@ -102,16 +119,15 @@
     }
 
     data.entries.forEach(proc => {
-      const chunks = [];
-      if (!proc.steps.length) chunks.push([]);
-      for (let i = 0; i < proc.steps.length; i += PAGE_STEPS) chunks.push(proc.steps.slice(i, i + PAGE_STEPS));
-      chunks.forEach((steps, part) => result.push({
+      const chunks = procedureChunks(proc);
+      chunks.forEach(({ steps, startStep }, part) => result.push({
         type: "procedure",
         label: proc.name,
         proc,
         part,
         parts: chunks.length,
         steps,
+        startStep,
         search: proc.search
       }));
     });
@@ -171,14 +187,14 @@
 
   function procedureMarkup(page) {
     const proc = page.proc;
-    const classification = page.part === 0 ? proc.paragraphs.join("") : `<p class="ops-continuation-note"><b>CONTINUED.</b> Continue the required operating sequence from the preceding sheet.</p>`;
+    const classification = page.startStep === 0 ? proc.paragraphs.join("") : `<p class="ops-continuation-note"><b>CONTINUED.</b> Continue the required operating sequence from the preceding sheet.</p>`;
     return `<section class="ops-book-page ops-book-paper ops-book-procedure-page" data-procedure-index="${proc.index}">
       <header class="ops-paper-header"><b>${esc(proc.code)}</b><span>${esc(model.stationCode)} · OPERATING PROCEDURE</span></header>
       <div class="ops-paper-body">
         <div class="ops-procedure-heading"><div><small>AUTHORIZED PROCEDURE</small><h2>${proc.nameHtml}</h2></div><b>${esc(proc.meta)}</b></div>
         ${classification}
         <h3>Operating Sequence — Required Control Positions</h3>
-        <ol class="ops-book-step-list" start="${page.part * PAGE_STEPS + 1}">${page.steps.join("")}</ol>
+        <ol class="ops-book-step-list" start="${page.startStep + 1}">${page.steps.join("")}</ol>
       </div>
       <footer class="ops-paper-footer"><span>${esc(proc.code)} · SHEET ${page.part + 1} OF ${page.parts}</span><b>${page.part + 1}/${page.parts}</b></footer>
     </section>`;
@@ -216,6 +232,23 @@
     </div>`;
   }
 
+  function locateProcedurePage(procIndex, stepIndex = 0) {
+    return pages.findIndex(page => page.type === "procedure" && page.proc?.index === Number(procIndex) && stepIndex >= page.startStep && stepIndex < page.startStep + Math.max(1, page.steps.length));
+  }
+
+  function fallbackFiveStepOverflow(stage, page) {
+    if (!stage || page?.type !== "procedure" || page.steps.length !== MAX_PAGE_STEPS || compactFourStepProcedures.has(page.proc.index)) return false;
+    const body = stage.querySelector(".ops-paper-body");
+    if (!body || body.scrollHeight <= body.clientHeight + 1) return false;
+    compactFourStepProcedures.add(page.proc.index);
+    const stepIndex = page.startStep;
+    pages = buildPages(model);
+    const nextIndex = locateProcedurePage(page.proc.index, stepIndex);
+    pageIndex = nextIndex >= 0 ? nextIndex : clamp(pageIndex, 0, pages.length - 1);
+    stage.innerHTML = pageMarkup(pages[pageIndex]);
+    return true;
+  }
+
   function renderPage(direction = 0, withSound = false) {
     if (!book || !pages.length) return;
     pageIndex = clamp(pageIndex, 0, pages.length - 1);
@@ -225,6 +258,7 @@
     clearTimeout(pageAnimationTimer);
     stage.classList.remove("turn-next", "turn-prev");
     stage.innerHTML = pageMarkup(pages[pageIndex]);
+    fallbackFiveStepOverflow(stage, pages[pageIndex]);
     nav.innerHTML = navigatorMarkup();
     if (direction) {
       void stage.offsetWidth;
@@ -349,6 +383,7 @@
     sourceOverlay = overlay;
     sourceClose = overlay.querySelector("[data-manual-close]");
     model = extractModel(overlay);
+    compactFourStepProcedures = new Set();
     pages = buildPages(model);
     pageIndex = 0;
     overlay.classList.add("ops-manual-source-hidden");
@@ -496,6 +531,12 @@
     resize = null;
     book?.classList.remove("is-resizing");
     applyWindowGeometry();
+    const stage = book?.querySelector("[data-ops-book-stage]");
+    const page = pages[pageIndex];
+    if (fallbackFiveStepOverflow(stage, page)) {
+      const nav = book?.querySelector("[data-ops-book-nav]");
+      if (nav) nav.innerHTML = navigatorMarkup();
+    }
   }
 
   function handleBookClick(event) {
