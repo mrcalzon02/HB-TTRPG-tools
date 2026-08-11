@@ -260,7 +260,7 @@
   function lookAt(eye, target, up) {
     const zAxis = normalize(subtract(eye, target));
     const xAxis = normalize(cross(up, zAxis));
-    const yAxis = cross(zAxis, xAxis);
+    const yAxis = cross(right = xAxis, zAxis);
     return new Float32Array([
       xAxis[0], yAxis[0], zAxis[0], 0,
       xAxis[1], yAxis[1], zAxis[1], 0,
@@ -500,12 +500,63 @@
     return Object.freeze(mix(anchors[segmentIndex], anchors[segmentIndex + 1], smoothstep(segmentProgress)));
   }
 
+  function serialRouteAnchors(traceValue, pointIdValue) {
+    const trace = validateTraceShape(traceValue);
+    return Object.freeze([3, 4, 7, 9].map(phaseIndex => pointAnchorPosition(trace, pointIdValue, phaseIndex)));
+  }
+
+  function routeState(anchorsValue, progressValue) {
+    const anchors = Array.from(anchorsValue || []);
+    if (!anchors.length) return Object.freeze({ segmentIndex: 0, segmentProgress: 0, position: Object.freeze([0, 0, 0]) });
+    if (anchors.length === 1) return Object.freeze({ segmentIndex: 0, segmentProgress: 1, position: Object.freeze([...anchors[0]]) });
+    const lengths = [];
+    let totalLength = 0;
+    for (let index = 0; index < anchors.length - 1; index += 1) {
+      const length = Math.hypot(...subtract(anchors[index + 1], anchors[index]));
+      lengths.push(length);
+      totalLength += length;
+    }
+    if (totalLength <= 1e-9) return Object.freeze({ segmentIndex: anchors.length - 2, segmentProgress: 1, position: Object.freeze([...anchors.at(-1)]) });
+    const targetDistance = clamp(Number(progressValue) || 0, 0, 1) * totalLength;
+    let traversed = 0;
+    for (let segmentIndex = 0; segmentIndex < lengths.length; segmentIndex += 1) {
+      const length = lengths[segmentIndex];
+      const isLast = segmentIndex === lengths.length - 1;
+      if (targetDistance <= traversed + length || isLast) {
+        const rawProgress = length <= 1e-9 ? 1 : clamp((targetDistance - traversed) / length, 0, 1);
+        const segmentProgress = smoothstep(rawProgress);
+        return Object.freeze({
+          segmentIndex,
+          segmentProgress: rawProgress,
+          position: Object.freeze(mix(anchors[segmentIndex], anchors[segmentIndex + 1], segmentProgress))
+        });
+      }
+      traversed += length;
+    }
+    return Object.freeze({ segmentIndex: anchors.length - 2, segmentProgress: 1, position: Object.freeze([...anchors.at(-1)]) });
+  }
+
+  function tweenPointAcrossSerialRoute(traceValue, pointIdValue, traceTimeValue) {
+    const anchors = serialRouteAnchors(traceValue, pointIdValue);
+    return routeState(anchors, traceTimeValue).position;
+  }
+
+  function serialPathVertices(traceValue, pointIdValue, traceTimeValue) {
+    const trace = validateTraceShape(traceValue);
+    const anchors = serialRouteAnchors(trace, pointIdValue);
+    const state = routeState(anchors, traceTimeValue);
+    const vertices = [];
+    for (let index = 0; index <= state.segmentIndex; index += 1) pushVertex(vertices, anchors[index], COLORS.path);
+    pushVertex(vertices, state.position, COLORS.path);
+    return new Float32Array(vertices);
+  }
+
   function tracePointPosition(traceValue, pointIdValue, traceTimeValue, selectedPointIdValue = 0, playbackModeValue = 'all') {
     const trace = validateTraceShape(traceValue);
     const pointId = Number(pointIdValue);
     const selectedPointId = clamp(Number(selectedPointIdValue) || 0, 0, trace.pointField.length - 1);
     const playbackMode = PLAYBACK_MODES.includes(playbackModeValue) ? playbackModeValue : 'all';
-    if (playbackMode === 'serial') return tweenPointAcrossTrace(trace, pointId, serialPointTraceTime(trace, pointId, traceTimeValue));
+    if (playbackMode === 'serial') return tweenPointAcrossSerialRoute(trace, pointId, serialPointTraceTime(trace, pointId, traceTimeValue));
     const timeline = resolveTraceTimeline(traceTimeValue, trace.phases.length);
     const start = pointAnchorPosition(trace, pointId, timeline.phaseIndex);
     const end = pointAnchorPosition(trace, pointId, timeline.nextPhaseIndex);
@@ -527,6 +578,13 @@
     const localTraceTime = playbackMode === 'serial'
       ? serialPointTraceTime(trace, pointId, traceTimeValue)
       : participates ? clamp(Number(traceTimeValue) || 0, 0, 1) : 0;
+    if (playbackMode === 'serial') {
+      const bit = trace.bitByPoint[pointId];
+      const filler = trace.cellKindByPoint[pointId] === 'filler';
+      const inputColor = filler ? (bit === '1' ? COLORS.fillerOne : COLORS.fillerZero) : (bit === '1' ? COLORS.payloadOne : COLORS.payloadZero);
+      const outputColor = bit === '1' ? COLORS.projectedOne : COLORS.projectedZero;
+      return mix(inputColor, outputColor, smoothstep(localTraceTime));
+    }
     const timeline = resolveTraceTimeline(localTraceTime, trace.phases.length);
     const start = colorAtPhase(trace, pointId, timeline.phaseIndex);
     const end = colorAtPhase(trace, pointId, timeline.nextPhaseIndex);
@@ -686,6 +744,15 @@
       return this.canvas.closest('.cube-visualizer-panel');
     }
 
+    setViewportSerialMode(enabled, panel = this.canonicalPanel()) {
+      this.viewportSerialMode = Boolean(enabled);
+      if (panel) {
+        if (this.viewportSerialMode) panel.dataset.cubeViewportSerialPlayback = 'true';
+        else delete panel.dataset.cubeViewportSerialPlayback;
+      }
+      return this.viewportSerialMode;
+    }
+
     setViewportPlayState(state) {
       const button = this.viewportControls?.play;
       if (!button) return;
@@ -718,10 +785,9 @@
       if (!field || !note) return false;
       const normalized = field.value.replace(/\s+/g, '');
       const noFile = /^No file loaded/i.test(note.textContent || '');
-      if (!noFile || (normalized && normalized !== DEFAULT_MANUAL_BITS)) return false;
-      const bits = textToBits(DEFAULT_LOREM_TEXT);
-      field.value = bits;
-      note.textContent = `No file loaded; using built-in Lorem Ipsum demo input · ${bits.length / 8} bytes · ${bits.length} bits`;
+      if (!noFile || normalized) return false;
+      field.value = DEFAULT_MANUAL_BITS;
+      note.textContent = `No file loaded; using built-in 32-bit demonstration input · ${DEFAULT_MANUAL_BITS.length} bits`;
       field.dispatchEvent(new Event('input', { bubbles: true }));
       return true;
     }
@@ -742,7 +808,7 @@
         this.setViewportPlayState(playing ? 'playing' : 'idle');
         if (playing) this.playbackMonitorFrame = requestAnimationFrame(tick);
         else {
-          this.viewportSerialMode = false;
+          this.setViewportSerialMode(false, panel);
           this.playbackMonitorFrame = null;
         }
       };
@@ -755,13 +821,13 @@
       const play = panel?.querySelector('[data-cube-trace-play]');
       if (workspace && !workspace.hidden && play && !play.disabled) {
         this.setPackagePlaybackScope(panel);
-        this.viewportSerialMode = true;
+        this.setViewportSerialMode(true, panel);
         play.click();
         this.monitorCanonicalPlayback(panel);
         return;
       }
       if (attempt >= 240) {
-        this.viewportSerialMode = false;
+        this.setViewportSerialMode(false, panel);
         this.setViewportPlayState('idle');
         this.reportViewportStatus(panel, 'Exact animated trace playback is unavailable for the current package or rendering tier. The renderer did not substitute a decorative approximation.', 'error');
         return;
@@ -775,14 +841,14 @@
       const lowerPlay = panel.querySelector('[data-cube-trace-play]');
       if (lowerPlay?.classList.contains('active')) {
         panel.querySelector('[data-cube-trace-pause]')?.click();
-        this.viewportSerialMode = false;
+        this.setViewportSerialMode(false, panel);
         this.setViewportPlayState('idle');
         return;
       }
       const workspace = panel.querySelector('[data-cube-trace-workspace]');
       if (workspace && !workspace.hidden && lowerPlay && !lowerPlay.disabled) {
         this.setPackagePlaybackScope(panel);
-        this.viewportSerialMode = true;
+        this.setViewportSerialMode(true, panel);
         lowerPlay.click();
         this.monitorCanonicalPlayback(panel);
         return;
@@ -793,10 +859,10 @@
         this.reportViewportStatus(panel, 'The canonical encoder action is unavailable; playback was not simulated.', 'error');
         return;
       }
-      this.viewportSerialMode = true;
+      this.setViewportSerialMode(true, panel);
       this.setViewportPlayState('preparing');
       build.click();
-      if (usedDemo) this.reportViewportStatus(panel, 'No source file was supplied. Built-in Lorem Ipsum bytes were passed through the canonical encoder and are being prepared for validated one-bit-at-a-time trace playback.', 'success');
+      if (usedDemo) this.reportViewportStatus(panel, 'No source file was supplied. The built-in 32-bit demonstration input is being prepared for validated one-bit-at-a-time trace playback.', 'success');
       this.waitForCanonicalTrace(panel);
     }
 
@@ -986,7 +1052,9 @@
       this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array([...highlightedPosition, ...COLORS.selected]), this.gl.DYNAMIC_DRAW);
       this.selectedPointCount = 1;
 
-      const pathVertices = selectedPathVertices(trace, highlightedPointId);
+      const pathVertices = serialState
+        ? serialPathVertices(trace, highlightedPointId, serialState.localTraceTime)
+        : selectedPathVertices(trace, highlightedPointId);
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.selectedPathBuffer);
       this.gl.bufferData(this.gl.ARRAY_BUFFER, pathVertices, this.gl.DYNAMIC_DRAW);
       this.selectedPathCount = pathVertices.length / 6;
@@ -1017,7 +1085,8 @@
         const bit = trace.bitByPoint[serialState.activePointId];
         const kind = trace.cellKindByPoint[serialState.activePointId];
         const outputCellIndex = trace.outputCellIndexByPoint[serialState.activePointId];
-        label.textContent = `SERIAL BIT ${serialState.inputCellIndex + 1}/${serialState.pointCount} · ${kind.toUpperCase()} ${bit} · ${(serialState.localTraceTime * 100).toFixed(1)}% ROUTE · INPUT ${serialState.inputCellIndex} → POINT ${serialState.activePointId} → OUTPUT ${outputCellIndex}`;
+        const point = trace.pointField[serialState.activePointId];
+        label.textContent = `SERIAL BIT ${serialState.inputCellIndex + 1}/${serialState.pointCount} · ${kind.toUpperCase()} ${bit} · ${(serialState.localTraceTime * 100).toFixed(1)}% ROUTE · INPUT ${serialState.inputCellIndex} → KEY POINT (${point.x}, ${point.y}, ${point.z}) → OUTPUT ${outputCellIndex}`;
       } else {
         label.textContent = `TRACE ${(timeline.traceTime * 100).toFixed(1)}% · ${transition.replaceAll('-', ' ').toUpperCase()} · POINT ${selectedPointId} · ${renderedPointIds.length.toLocaleString()}/${trace.pointField.length.toLocaleString()} VISIBLE`;
       }
@@ -1155,8 +1224,8 @@
 
     dispose() {
       if (this.disposed) return;
+      this.setViewportSerialMode(false, this.canonicalPanel());
       this.disposed = true;
-      this.viewportSerialMode = false;
       this.resizeObserver?.disconnect();
       if (this.playbackMonitorFrame != null) cancelAnimationFrame(this.playbackMonitorFrame);
       this.viewportControls?.controls?.remove();
@@ -1176,6 +1245,8 @@
     tracePointPosition,
     serialPlaybackState,
     serialPointTraceTime,
+    serialRouteAnchors,
+    tweenPointAcrossSerialRoute,
     tweenPointAcrossTrace,
     deterministicSamplePointIds,
     resolveRenderPlan,
