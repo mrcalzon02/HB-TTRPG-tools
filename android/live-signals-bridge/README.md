@@ -25,7 +25,7 @@ Wi-Fi scan results include a center frequency, so `frequencyHz` is emitted.
 
 BLE scan callbacks do not identify which advertising-channel RF frequency produced an individual result, so the bridge does not invent a 2.4 GHz channel value.
 
-Cellular callbacks preserve LTE/NR signal metrics and ARFCN/EARFCN/NRARFCN-style channel numbers when Android exposes them. The bridge does not guess a center frequency from a channel number without an explicit band/channel conversion model.
+Cellular observations preserve Android-reported LTE/NR signal metrics, normalized radio technology, registration state, ARFCN/EARFCN/UARFCN/NRARFCN-style channel number and channel-number type, LTE/NR band identifiers, LTE bandwidth when the platform exposes it, and the age of the modem's `CellInfo` sample relative to Android elapsed realtime. The bridge deliberately keeps modem-sample age separate from the observation receipt timestamp. It does not guess a physical center frequency from a cellular channel number without an explicit band/channel conversion model.
 
 ## Build
 
