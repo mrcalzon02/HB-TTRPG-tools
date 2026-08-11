@@ -8,8 +8,10 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <link rel="stylesheet" href="blacklight-exo-crew-operations.css">
+  <link rel="stylesheet" href="blacklight-exo-crew-auxiliary.css">
   <script src="blacklight-exo-control-audio.js" defer></script>
   <script src="blacklight-exo-crew-operations.js" defer></script>
+  <script src="blacklight-exo-crew-auxiliary.js" defer></script>
 </head>
 <body class="blacklight-corp-body exo-crew-body">
   <header class="bli-topbar">
@@ -54,6 +56,26 @@
 
   <main class="bli-shell exo-crew-shell">
     <section class="bli-section exo-crew-command">
+      <div class="exo-master-difficulty" aria-labelledby="crew-master-difficulty-title">
+        <div class="exo-master-difficulty-head">
+          <div class="exo-master-difficulty-copy">
+            <span class="exo-kicker">Global operating modulation</span>
+            <strong id="crew-master-difficulty-title">Master console difficulty / auxiliary depth</strong>
+            <p>The existing crew-station panel remains the complete primary console. Raising this setting adds one additional required control per level on the independent Panel II auxiliary console. Different procedures can reuse the same auxiliary hardware at different exact graduated values; the normal keyed authorization sequence remains unchanged.</p>
+          </div>
+          <div class="exo-master-difficulty-readout">
+            <span>Configured auxiliary depth</span>
+            <strong id="crew-master-difficulty-value">+0</strong>
+            <span id="crew-master-difficulty-summary">Primary procedure + authorization only</span>
+            <small id="crew-master-difficulty-state">Changes apply to the next procedure</small>
+          </div>
+        </div>
+        <input id="crew-master-difficulty" type="range" min="0" max="5" step="1" value="0" aria-label="Master auxiliary difficulty from plus zero through plus five">
+        <div class="exo-master-difficulty-scale" aria-hidden="true">
+          <span>+0<small>0 aux</small></span><span>+1<small>1 aux</small></span><span>+2<small>2 aux</small></span><span>+3<small>3 aux</small></span><span>+4<small>4 aux</small></span><span>+5<small>5 aux</small></span>
+        </div>
+      </div>
+
       <div class="exo-crew-state-grid">
         <article class="exo-state-card">
           <span>Velocity</span><strong id="state-velocity">12.4 km/s</strong>
@@ -157,6 +179,7 @@
     </section>
   </main>
 
+  <div id="crew-auxiliary-root" data-open="false" data-required="false" aria-live="polite"></div>
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO crew role-play console placeholder · human procedural baseline · DM-adjudicated WoD-derived d10 resolution.</footer>
   <script src="blacklight-background-audio.js"></script>
 </body>
