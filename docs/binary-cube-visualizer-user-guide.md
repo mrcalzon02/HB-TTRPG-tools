@@ -96,7 +96,7 @@ For each active bit, the moving bright point follows the exact canonical geometr
 
 `input face cell → keyed interior coordinate → output face cell → emitted landing position`
 
-The white route grows progressively with the travelling bit. A second stationary pale point marks the bit’s exact keyed interior coordinate, with an on-canvas **KEYED TRANSLATION · (x, y, z)** label. The travelling point therefore visibly arrives at the keyed translation target and then continues toward the output face instead of jumping between coarse animation phases.
+The white route grows progressively with the travelling bit. A second stationary pale point marks the bit’s exact keyed interior coordinate, with an on-canvas **KEYED TRANSLATION · (x, y, z)** label. Future bits waiting on the input face and completed bits already emitted on the output face remain visible only as subdued context, so they do not compete visually with the single active traversal. The travelling point therefore visibly arrives at the keyed translation target and then continues toward the output face instead of jumping between coarse animation phases or being lost inside a wall of equally bright bits.
 
 If no source file or manual input has been supplied when viewport playback is requested, the visualizer prepares its built-in demonstration input and then runs the same validated canonical trace path. It does not substitute decorative particles or an independent animation model.
 

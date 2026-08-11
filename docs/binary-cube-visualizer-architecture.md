@@ -106,9 +106,10 @@ Viewport **Play Encoding** is a presentation of a canonical trace, not a replace
 6. A second stationary selected-point-buffer vertex remains at the exact phase-4 keyed coordinate.
 7. The progressive selected-path buffer draws only the portion of the route already traversed.
 8. The keyed-translation label is positioned from the same exact phase-4 coordinate stored in trace presentation state.
-9. When the 1.4-second interval completes, the next input cell becomes the sole active bit.
+9. Inactive serial cohorts are deliberately de-emphasized: future input cells mix toward the renderer's dim context color at `0.24`, while completed output cells mix toward dim context at `0.34`. The active moving bit remains fully emphasized by the selected-point overlay.
+10. When the 1.4-second interval completes, the next input cell becomes the sole active bit.
 
-Completed bits are represented at their completed route position and later bits remain at their unstarted route position; only the active bit receives intermediate motion. The ordinary speed selector remains visible but is ignored by the serial clock so a selected `2×` speed cannot silently halve the demonstration interval.
+Completed bits are represented at their completed route position and later bits remain at their unstarted route position, but both cohorts are visually subdued; only the active bit receives intermediate motion and full emphasis. The ordinary speed selector remains visible but is ignored by the serial clock so a selected `2×` speed cannot silently halve the demonstration interval.
 
 ## Rendering tiers
 
