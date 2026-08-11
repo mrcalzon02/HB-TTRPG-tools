@@ -15,7 +15,8 @@ const [rootBuild, appBuild, manifest, activity, bridge, readme] = await Promise.
 ]);
 
 assert.match(rootBuild, /com\.android\.application"\) version "9\.3\.1"/);
-assert.match(appBuild, /compileSdk = 37/);
+assert.match(appBuild, /compileSdk = 36/);
+assert.match(appBuild, /targetSdk = 36/);
 assert.match(appBuild, /minSdk = 31/);
 assert.match(appBuild, /JavaVersion\.VERSION_17/);
 
@@ -90,10 +91,11 @@ assert.match(readme, /instrumentation-only/i);
 assert.match(readme, /never calls `WifiManager\.startScan\(\)`/);
 assert.match(readme, /Active Scan currently implements only Wi-Fi RTT/);
 assert.match(readme, /observations emitted before a web session exists are discarded/);
+assert.match(readme, /compile\/target SDK 36/);
 
 console.log(JSON.stringify({
   format:'hb-ttrpg-live-signals-android-bridge-validation-receipt',
-  schemaVersion:'0.1.0',
+  schemaVersion:'0.1.1',
   pass:true,
   androidProjectScaffold:true,
   restrictedPrivilegedWebView:true,
@@ -108,5 +110,6 @@ console.log(JSON.stringify({
   wifiRttResponderDiscovery:true,
   wifiRttDistanceAndUncertainty:true,
   noRadioMutationControls:true,
-  foregroundHardwareLifecycle:true
+  foregroundHardwareLifecycle:true,
+  ciCompileSdk36:true
 }, null, 2));

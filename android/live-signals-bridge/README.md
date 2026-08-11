@@ -29,14 +29,16 @@ Cellular callbacks preserve LTE/NR signal metrics and ARFCN/EARFCN/NRARFCN-style
 
 ## Build
 
-The project targets current Android tooling and contains no third-party radio libraries:
+The project uses Android tooling available on current GitHub-hosted runners and contains no third-party radio libraries:
 
 - Android Gradle Plugin 9.3.1
-- compile/target SDK 37
+- compile/target SDK 36
 - min SDK 31
 - Java 17
 
-Open `android/live-signals-bridge` in Android Studio with JDK 17 and the Android 37 SDK installed. The repository does not currently commit a Gradle wrapper JAR, so either let Android Studio configure the project or use a compatible installed Gradle.
+Open `android/live-signals-bridge` in Android Studio with JDK 17 and the Android 36 SDK installed. The repository does not currently commit a Gradle wrapper JAR, so either let Android Studio configure the project or use a compatible installed Gradle.
+
+API 36 is intentionally used for the reproducible CI build because the current GitHub Android SDK repository does not yet publish `platforms;android-37` to the hosted runner. The collector does not currently depend on an API newer than 36.
 
 ## Runtime lifecycle
 
