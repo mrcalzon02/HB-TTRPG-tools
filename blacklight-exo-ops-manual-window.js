@@ -283,7 +283,10 @@
       window.EXO_CONTROL_AUDIO?.play?.("button-light", { seed: `manual:page:${pageIndex}`, intensity: 0.32 });
       return;
     }
-    if (ctx.state === "suspended") ctx.resume?.().catch?.(() => {});
+    if (ctx.state === "suspended") {
+      const resume = ctx.resume?.();
+      if (resume?.catch) resume.catch(() => {});
+    }
     const duration = 0.19;
     const count = Math.max(1, Math.floor(ctx.sampleRate * duration));
     const buffer = ctx.createBuffer(1, count, ctx.sampleRate);
@@ -497,7 +500,6 @@
 
   function handleBookClick(event) {
     if (!book || !event.target.closest(".exo-ops-book-window")) return;
-    book.focus({ preventScroll: true });
     if (event.target.closest("[data-ops-source-close]")) {
       event.preventDefault();
       closeBook();
