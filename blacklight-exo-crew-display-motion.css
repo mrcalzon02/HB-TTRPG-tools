@@ -241,6 +241,7 @@
    ================================================================ */
 .exo-crew-body .display-systems {
   --eng-cycle: 2.8s;
+  --eng-core-cycle: 2.05s;
   --eng-shift: 0px;
   --eng-contact-cycle: 2.2s;
 }
@@ -248,11 +249,11 @@
   animation: exo-eng-bus-flow var(--eng-cycle) ease-in-out infinite;
 }
 .exo-crew-body .display-systems .exo-ownship {
-  animation: exo-eng-bus-core calc(var(--eng-cycle) * .72) ease-in-out infinite;
+  animation: exo-eng-bus-core var(--eng-core-cycle) ease-in-out infinite;
 }
 .exo-crew-body .display-systems .exo-contact { --contact-pulse: var(--eng-contact-cycle); }
 @keyframes exo-eng-bus-flow {
-  0%,100% { filter: brightness(.86); transform: translate(-50%,-50%) translateX(calc(var(--eng-shift) * -1)); }
+  0%,100% { filter: brightness(.86); transform: translate(-50%,-50%) translateX(calc(0px - var(--eng-shift))); }
   50% { filter: brightness(1.18); transform: translate(-50%,-50%) translateX(var(--eng-shift)); }
 }
 @keyframes exo-eng-bus-core {
@@ -261,21 +262,28 @@
 }
 .exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="PRIMARY"][aria-pressed="true"]) .display-systems {
   --eng-cycle: 2.25s;
+  --eng-core-cycle: 1.62s;
   --eng-shift: 2px;
 }
 .exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="AUXILIARY"][aria-pressed="true"]) .display-systems {
   --eng-cycle: 2.25s;
+  --eng-core-cycle: 1.62s;
   --eng-shift: -2px;
 }
 .exo-crew-body .exo-station-body:has([data-control-id="bus-transfer"][data-control-state="ISOLATED"][aria-pressed="true"]) .display-systems {
   --eng-cycle: 6.5s;
+  --eng-core-cycle: 5.4s;
   --eng-shift: 0px;
 }
 .exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="CLOSED"][aria-pressed="true"]) .display-systems {
   --eng-cycle: 5.8s;
+  --eng-core-cycle: 3.9s;
   --eng-contact-cycle: .8s;
 }
-.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="OPEN"][aria-pressed="true"]) .display-systems { --eng-cycle: 1.75s; }
+.exo-crew-body .exo-station-body:has([data-control-id="coolant-valve"][data-control-state="OPEN"][aria-pressed="true"]) .display-systems {
+  --eng-cycle: 1.75s;
+  --eng-core-cycle: 1.2s;
+}
 .exo-crew-body .exo-station-body:has([data-control-id="pump-select"][data-control-state="CROSS-TIE"][aria-pressed="true"]) .display-systems .exo-tactical-ring {
   animation-direction: alternate-reverse;
 }
@@ -303,7 +311,7 @@
   animation: exo-science-sweep var(--science-cycle) linear infinite;
 }
 .exo-crew-body .display-sensor .exo-tactical-ring::after {
-  animation: exo-science-integrate calc(var(--science-cycle) * .72) ease-in-out infinite;
+  animation: exo-science-integrate 2.45s ease-in-out infinite;
 }
 .exo-crew-body .display-sensor .exo-contact { --contact-pulse: var(--science-contact-cycle); }
 @keyframes exo-science-sweep {
