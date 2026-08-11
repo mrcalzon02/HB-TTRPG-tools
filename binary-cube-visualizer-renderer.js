@@ -1224,8 +1224,8 @@
 
     dispose() {
       if (this.disposed) return;
-      this.setViewportSerialMode(false, this.canonicalPanel());
       this.disposed = true;
+      this.setViewportSerialMode(false, this.canonicalPanel());
       this.resizeObserver?.disconnect();
       if (this.playbackMonitorFrame != null) cancelAnimationFrame(this.playbackMonitorFrame);
       this.viewportControls?.controls?.remove();
