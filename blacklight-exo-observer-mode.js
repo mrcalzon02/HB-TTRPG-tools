@@ -3,423 +3,412 @@
 
   if (window.EXO_OBSERVER_MODE) return;
 
-  const OPERATION_INTERVAL_MS = 25000;
-  const CURSOR_TRAVEL_MS = 5200;
-  const GESTURE_TRAVEL_MS = 3600;
-  const STATION_SWITCH_MS = 5200;
   const POINTER_ID = 7719;
   const STATIONS = ["helm","navigation","gunnery","engineering","science","comms"];
+  const CURSOR_TRAVEL_MS = 1500;
+  const CONTROL_DWELL_MS = 420;
+  const ACTION_SETTLE_MS = 620;
+  const PROCEDURE_SETTLE_MS = 1150;
+  const STATION_SETTLE_MS = 1250;
   const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
-  const randomBetween = (min,max) => min + Math.random() * (max-min);
-  const randomInt = (min,max) => Math.floor(randomBetween(min,max+1));
+  const ease = t => t*t*(3-2*t);
   const now = () => performance.now();
 
   let active = false;
   let runToken = 0;
-  let operationsRemaining = 0;
-  let activeStation = null;
-  let lastControlCode = "";
-  let cursorPoint = { x: Math.max(48,window.innerWidth*.78), y: Math.max(48,window.innerHeight*.34) };
-  let currentFocus = null;
   let toggleButton = null;
+  let observerFrame = null;
+  let observerKey = null;
+  let cursorPoint = {x:48,y:48};
+  let currentFocus = null;
+  let sourceModelPromise = null;
+  let previousScrollBehavior = "";
 
-  function selectedStation() {
-    return document.querySelector('#station-tabs [data-station][aria-selected="true"]')?.dataset.station || "helm";
-  }
+  function tokenAlive(token){ return active && token === runToken; }
+  function selectedStation(){ return document.querySelector('#station-tabs [data-station][aria-selected="true"]')?.dataset.station || "helm"; }
+  function selectedProcedureId(){ return document.querySelector('#station-panel [data-procedure-select]')?.value || null; }
 
-  function tokenAlive(token) {
-    return active && token === runToken;
-  }
-
-  function sleep(ms,token) {
+  function sleep(ms,token){
     return new Promise(resolve => {
-      const id = window.setTimeout(() => resolve(tokenAlive(token)),Math.max(0,ms));
-      if (!tokenAlive(token)) {
-        clearTimeout(id);
-        resolve(false);
-      }
+      if(!tokenAlive(token)){ resolve(false); return; }
+      const id=setTimeout(()=>resolve(tokenAlive(token)),Math.max(0,ms));
+      if(!tokenAlive(token)){clearTimeout(id);resolve(false);}
     });
   }
 
-  function cursorTargetAt(x,y,fallback) {
-    return document.elementFromPoint(clamp(x,1,window.innerWidth-2),clamp(y,1,window.innerHeight-2)) || fallback || document.body;
+  async function waitFor(resolver,timeout,token,interval=80){
+    const started=now();
+    while(tokenAlive(token) && now()-started<timeout){
+      const value=resolver();
+      if(value) return value;
+      if(!(await sleep(interval,token))) return null;
+    }
+    return null;
   }
 
-  function pointerEvent(type,target,x,y,buttons=0,button=0) {
-    const event = new PointerEvent(type,{
-      bubbles:true,
-      cancelable:true,
-      composed:true,
-      pointerId:POINTER_ID,
-      pointerType:"mouse",
-      isPrimary:true,
-      clientX:x,
-      clientY:y,
-      screenX:x,
-      screenY:y,
-      buttons,
-      button
-    });
-    target.dispatchEvent(event);
+  function pointerEvent(type,target,x,y,buttons=0,button=0){
+    if(!target) return;
+    target.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,composed:true,pointerId:POINTER_ID,pointerType:"mouse",isPrimary:true,clientX:x,clientY:y,screenX:x,screenY:y,buttons,button}));
   }
 
-  function mouseClick(target,x,y) {
-    target.dispatchEvent(new MouseEvent("click",{
-      bubbles:true,
-      cancelable:true,
-      composed:true,
-      clientX:x,
-      clientY:y,
-      screenX:x,
-      screenY:y,
-      button:0,
-      buttons:0
-    }));
+  function setCursorPoint(x,y){
+    cursorPoint={x,y};
+    if(observerKey) observerKey.style.transform=`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) translate(-18%,-9%)`;
   }
 
-  function pointFor(element,xBias=.5,yBias=.5) {
-    const r = element.getBoundingClientRect();
-    return {
-      x: clamp(r.left + r.width*xBias,8,window.innerWidth-8),
-      y: clamp(r.top + r.height*yBias,8,window.innerHeight-8)
-    };
+  function pointFor(element,xBias=.5,yBias=.5){
+    const r=element.getBoundingClientRect();
+    return {x:r.left+r.width*xBias,y:r.top+r.height*yBias};
   }
 
-  async function moveCursorTo(element,duration,token,pointOverride=null) {
-    if (!tokenAlive(token) || !element?.isConnected) return false;
-    const end = pointOverride || pointFor(element,.5,.5);
-    const start = { ...cursorPoint };
-    const started = now();
-    const easing = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
-    return await new Promise(resolve => {
-      const frame = () => {
-        if (!tokenAlive(token) || !element?.isConnected) { resolve(false); return; }
-        const t = clamp((now()-started)/Math.max(120,duration),0,1);
-        const e = easing(t);
-        const x = start.x + (end.x-start.x)*e;
-        const y = start.y + (end.y-start.y)*e;
-        cursorPoint = {x,y};
-        pointerEvent("pointermove",cursorTargetAt(x,y,element),x,y,0,-1);
-        if (t < 1) requestAnimationFrame(frame);
-        else resolve(true);
-      };
-      requestAnimationFrame(frame);
-    });
+  function documentPointFor(element,xBias=.5,yBias=.5){
+    const p=pointFor(element,xBias,yBias);
+    return {x:p.x+window.scrollX,y:p.y+window.scrollY};
   }
 
-  function clearFocus() {
-    if (currentFocus?.isConnected) currentFocus.removeAttribute("data-observer-focus");
-    currentFocus = null;
+  function maxScrollY(){ return Math.max(0,document.documentElement.scrollHeight-window.innerHeight); }
+
+  function clearFocus(){
+    if(currentFocus?.isConnected) currentFocus.removeAttribute("data-observer-focus");
+    currentFocus=null;
     document.querySelectorAll("[data-observer-tab-focus]").forEach(node=>node.removeAttribute("data-observer-tab-focus"));
   }
 
-  function focusCamera(element) {
-    if (!element?.isConnected) return;
+  function focusElement(element){
     clearFocus();
-    const host = element.closest?.(".exo-device-block") || element;
-    currentFocus = host;
+    if(!element?.isConnected) return;
+    const host=element.closest?.(".exo-device-block,.exo-procedure-setup,.exo-station-tab") || element;
+    currentFocus=host;
     host.setAttribute("data-observer-focus","true");
-    const panel = document.getElementById("station-panel");
-    if (panel && panel.contains(host)) {
-      const pr = panel.getBoundingClientRect();
-      const tr = host.getBoundingClientRect();
-      const x = clamp(((tr.left+tr.width/2-pr.left)/Math.max(1,pr.width))*100,9,91);
-      const y = clamp(((tr.top+tr.height/2-pr.top)/Math.max(1,pr.height))*100,8,92);
-      panel.style.setProperty("--exo-observer-origin-x",`${x.toFixed(1)}%`);
-      panel.style.setProperty("--exo-observer-origin-y",`${y.toFixed(1)}%`);
-    }
-    const r = host.getBoundingClientRect();
-    const desired = window.scrollY + r.top + r.height/2 - window.innerHeight*.54;
-    window.scrollTo({top:Math.max(0,desired),behavior:"smooth"});
   }
 
-  async function tapElement(element,token) {
-    if (!tokenAlive(token) || !element?.isConnected || element.disabled) return false;
-    const p = pointFor(element,.5,.5);
-    const moved = await moveCursorTo(element,Math.max(1000,CURSOR_TRAVEL_MS*.52),token,p);
-    if (!moved || !tokenAlive(token)) return false;
-    pointerEvent("pointerdown",element,p.x,p.y,1,0);
-    await sleep(260,token);
-    if (!tokenAlive(token)) return false;
-    pointerEvent("pointerup",element,p.x,p.y,0,0);
-    mouseClick(element,p.x,p.y);
-    return true;
-  }
-
-  function chooseStation() {
-    const current = selectedStation();
-    const choices = STATIONS.filter(station=>station!==current && document.querySelector(`#station-tabs [data-station="${station}"]`));
-    return choices[Math.floor(Math.random()*choices.length)] || current;
-  }
-
-  async function switchStation(token) {
-    const station = chooseStation();
-    const tab = document.querySelector(`#station-tabs [data-station="${station}"]`);
-    if (!tab || !tokenAlive(token)) return false;
-    clearFocus();
-    tab.setAttribute("data-observer-tab-focus","true");
-    const r = tab.getBoundingClientRect();
-    const desired = window.scrollY + r.top - window.innerHeight*.22;
-    window.scrollTo({top:Math.max(0,desired),behavior:"smooth"});
-    await moveCursorTo(tab,STATION_SWITCH_MS,token,pointFor(tab,.5,.55));
-    if (!tokenAlive(token)) return false;
-    const ok = await tapElement(tab,token);
-    tab.removeAttribute("data-observer-tab-focus");
-    if (!ok) return false;
-    await sleep(1150,token);
-    activeStation = selectedStation();
-    operationsRemaining = randomInt(2,3);
-    lastControlCode = "";
-    return true;
-  }
-
-  function candidateControls() {
-    const panel = document.getElementById("station-panel");
-    if (!panel) return [];
-    return [...panel.querySelectorAll(".exo-device-block")].filter(host => {
-      if (!host.isConnected || host.classList.contains("exo-lockout-device")) return false;
-      if (host.closest(".exo-procedure-setup")) return false;
-      const code = host.dataset.controlCode || "";
-      if (code && code === lastControlCode) return false;
-      const gesture = host.querySelector('[data-control-gesture]:not([aria-disabled="true"])');
-      const range = host.querySelector('input[data-proc-range]:not(:disabled),input[data-proc-slider]:not(:disabled)');
-      const button = host.querySelector('.exo-hardware-actions button:not(:disabled),button[data-proc-input][data-control-id]:not(:disabled)');
-      return Boolean(gesture || range || button);
-    });
-  }
-
-  function chooseControl() {
-    let candidates = candidateControls();
-    if (!candidates.length) {
-      lastControlCode = "";
-      candidates = candidateControls();
-    }
-    if (!candidates.length) return null;
-    const weighted = [];
-    candidates.forEach(host => {
-      const gesture = host.querySelector('[data-control-gesture]:not([aria-disabled="true"])');
-      weighted.push(host);
-      if (gesture) weighted.push(host,host);
-    });
-    return weighted[Math.floor(Math.random()*weighted.length)];
-  }
-
-  function patchPointerCapture(element) {
-    const hadOwn = Object.prototype.hasOwnProperty.call(element,"setPointerCapture");
-    const original = element.setPointerCapture;
-    try { Object.defineProperty(element,"setPointerCapture",{configurable:true,writable:true,value:()=>{}}); }
-    catch (_) { try { element.setPointerCapture=()=>{}; } catch (_) {} }
-    return () => {
-      try {
-        if (hadOwn) Object.defineProperty(element,"setPointerCapture",{configurable:true,writable:true,value:original});
-        else delete element.setPointerCapture;
-      } catch (_) {}
-    };
-  }
-
-  function gestureVector(gesture) {
-    const kind = gesture.dataset.controlGesture || "";
-    const angle = Number(gesture.dataset.dialAngle);
-    const count = Math.max(2,Number(gesture.dataset.dialCount)||3);
-    if (["selector","rotary","wheel"].includes(kind)) {
-      if (Number.isFinite(angle)) {
-        const current = clamp(Math.round((angle+62)/124*(count-1)),0,count-1);
-        const choices = Array.from({length:count},(_,i)=>i).filter(i=>i!==current);
-        const target = choices[Math.floor(Math.random()*choices.length)] ?? ((current+1)%count);
-        const targetAngle = -62 + 124*(target/(count-1));
-        return {dx:clamp((targetAngle-angle)/.9,-118,118),dy:randomBetween(-5,5)};
-      }
-      return {dx:(Math.random()<.5?-1:1)*randomBetween(46,92),dy:randomBetween(-5,5)};
-    }
-    if (kind === "thumbwheel") return {dx:randomBetween(-4,4),dy:(Math.random()<.5?-1:1)*randomBetween(54,96)};
-    if (kind === "dual-slider") return {dx:randomBetween(-4,4),dy:(Math.random()<.5?-1:1)*randomBetween(58,96)};
-    if (kind === "yoke") {
-      const horizontal = Math.random()<.5;
-      return horizontal ? {dx:(Math.random()<.5?-1:1)*randomBetween(30,54),dy:randomBetween(-10,10)} : {dx:randomBetween(-10,10),dy:(Math.random()<.5?-1:1)*randomBetween(30,50)};
-    }
-    if (["lever","knife-switch","toggle","guard"].includes(kind)) return {dx:randomBetween(-8,8),dy:(Math.random()<.5?-1:1)*randomBetween(38,68)};
-    return {dx:(Math.random()<.5?-1:1)*randomBetween(34,64),dy:(Math.random()<.5?-1:1)*randomBetween(24,48)};
-  }
-
-  async function performGesture(gesture,token) {
-    if (!gesture?.isConnected || !tokenAlive(token)) return false;
-    const start = pointFor(gesture,.5,.48);
-    const vector = gestureVector(gesture);
-    const end = {
-      x:clamp(start.x+vector.dx,8,window.innerWidth-8),
-      y:clamp(start.y+vector.dy,8,window.innerHeight-8)
-    };
-    const moved = await moveCursorTo(gesture,CURSOR_TRAVEL_MS,token,start);
-    if (!moved || !tokenAlive(token)) return false;
-    const restoreCapture = patchPointerCapture(gesture);
-    try {
-      pointerEvent("pointerdown",gesture,start.x,start.y,1,0);
-      const started = now();
-      await new Promise(resolve => {
-        const frame = () => {
-          if (!tokenAlive(token) || !gesture.isConnected) { resolve(); return; }
-          const t = clamp((now()-started)/GESTURE_TRAVEL_MS,0,1);
-          const e = t*t*(3-2*t);
-          const x = start.x+(end.x-start.x)*e;
-          const y = start.y+(end.y-start.y)*e;
-          cursorPoint={x,y};
-          pointerEvent("pointermove",gesture,x,y,1,-1);
-          if (t<1) requestAnimationFrame(frame); else resolve();
-        };
-        requestAnimationFrame(frame);
-      });
-      if (!tokenAlive(token)) return false;
-      pointerEvent("pointerup",gesture,end.x,end.y,0,0);
-      cursorPoint=end;
-      return true;
-    } finally {
-      restoreCapture();
-    }
-  }
-
-  async function performRange(input,token) {
-    if (!input?.isConnected || input.disabled || !tokenAlive(token)) return false;
-    const min = Number(input.min || 0),max = Number(input.max || 100),step = Math.max(Number(input.step || 1),.000001);
-    const current = Number(input.value);
-    let target = current;
-    for (let i=0;i<8 && target===current;i++) {
-      const raw = randomBetween(min,max);
-      target = clamp(Math.round((raw-min)/step)*step+min,min,max);
-    }
-    if (target===current) target = current>=max ? Math.max(min,current-step) : Math.min(max,current+step);
-    const rect = input.getBoundingClientRect();
-    const startFrac = (current-min)/Math.max(step,max-min);
-    const endFrac = (target-min)/Math.max(step,max-min);
-    const start = {x:clamp(rect.left+rect.width*clamp(startFrac,0,1),8,window.innerWidth-8),y:clamp(rect.top+rect.height*.5,8,window.innerHeight-8)};
-    const end = {x:clamp(rect.left+rect.width*clamp(endFrac,0,1),8,window.innerWidth-8),y:start.y};
-    await moveCursorTo(input,CURSOR_TRAVEL_MS,token,start);
-    if (!tokenAlive(token)) return false;
-    pointerEvent("pointerdown",input,start.x,start.y,1,0);
+  async function moveCursorTo(element,duration,token,xBias=.5,yBias=.5){
+    if(!tokenAlive(token)||!element?.isConnected) return false;
+    focusElement(element);
+    const targetDoc=documentPointFor(element,xBias,yBias);
+    const startCursor={...cursorPoint};
+    const startScroll=window.scrollY;
+    const desiredScroll=clamp(targetDoc.y-window.innerHeight*.52,0,maxScrollY());
     const started=now();
-    await new Promise(resolve=>{
+    const travel=Math.max(420,duration||CURSOR_TRAVEL_MS);
+    const bend=(targetDoc.x-(startCursor.x+window.scrollX))>=0?1:-1;
+    return await new Promise(resolve=>{
       const frame=()=>{
-        if(!tokenAlive(token)||!input.isConnected){resolve();return;}
-        const t=clamp((now()-started)/GESTURE_TRAVEL_MS,0,1),e=t*t*(3-2*t);
-        const value=current+(target-current)*e;
-        input.value=String(clamp(Math.round((value-min)/step)*step+min,min,max));
-        input.dispatchEvent(new Event("input",{bubbles:true}));
-        const x=start.x+(end.x-start.x)*e;
-        cursorPoint={x,y:start.y};
-        pointerEvent("pointermove",input,x,start.y,1,-1);
-        if(t<1)requestAnimationFrame(frame);else resolve();
+        if(!tokenAlive(token)||!element?.isConnected){resolve(false);return;}
+        const t=clamp((now()-started)/travel,0,1),e=ease(t);
+        const scrollY=startScroll+(desiredScroll-startScroll)*e;
+        window.scrollTo(window.scrollX,scrollY);
+        const targetX=targetDoc.x-window.scrollX;
+        const targetY=targetDoc.y-scrollY;
+        const arc=Math.sin(Math.PI*e);
+        const x=startCursor.x+(targetX-startCursor.x)*e+bend*arc*22;
+        const y=startCursor.y+(targetY-startCursor.y)*e-arc*14;
+        setCursorPoint(x,y);
+        pointerEvent("pointermove",document.elementFromPoint(clamp(x,1,window.innerWidth-2),clamp(y,1,window.innerHeight-2))||element,x,y,0,-1);
+        if(t<1) requestAnimationFrame(frame); else {setCursorPoint(targetX,targetY);resolve(true);}
       };
       requestAnimationFrame(frame);
     });
-    if(!tokenAlive(token))return false;
-    input.value=String(target);
-    input.dispatchEvent(new Event("input",{bubbles:true}));
-    input.dispatchEvent(new Event("change",{bubbles:true}));
-    pointerEvent("pointerup",input,end.x,end.y,0,0);
-    cursorPoint=end;
+  }
+
+  async function tapElement(element,token,{dwell=CONTROL_DWELL_MS}={}){
+    if(!tokenAlive(token)||!element?.isConnected||element.disabled) return false;
+    if(!(await moveCursorTo(element,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(dwell,token))) return false;
+    const p=pointFor(element,.5,.5);
+    setCursorPoint(p.x,p.y);
+    element.setAttribute("data-observer-press","true");
+    pointerEvent("pointerdown",element,p.x,p.y,1,0);
+    await sleep(150,token);
+    if(!tokenAlive(token)) return false;
+    pointerEvent("pointerup",element,p.x,p.y,0,0);
+    element.click();
+    setTimeout(()=>element?.removeAttribute?.("data-observer-press"),180);
     return true;
   }
 
-  async function performButton(host,token) {
-    const buttons=[...host.querySelectorAll('.exo-hardware-actions button:not(:disabled),button[data-proc-input][data-control-id]:not(:disabled)')]
-      .filter(button=>!button.closest(".exo-lockout-device"));
-    if(!buttons.length)return false;
-    const inactive=buttons.filter(button=>button.getAttribute("aria-pressed")!=="true");
-    const pool=inactive.length?inactive:buttons;
-    const button=pool[Math.floor(Math.random()*pool.length)];
-    return await tapElement(button,token);
+  async function selectValue(select,value,token){
+    if(!select?.isConnected||!tokenAlive(token)) return false;
+    if(!(await moveCursorTo(select,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
+    select.setAttribute("data-observer-press","true");
+    select.focus({preventScroll:true});
+    await sleep(180,token);
+    if(!tokenAlive(token)) return false;
+    select.value=value;
+    select.dispatchEvent(new Event("input",{bubbles:true}));
+    select.dispatchEvent(new Event("change",{bubbles:true}));
+    setTimeout(()=>select?.removeAttribute?.("data-observer-press"),180);
+    return true;
   }
 
-  async function performControl(host,token) {
-    if (!host?.isConnected || !tokenAlive(token)) return false;
-    focusCamera(host);
-    await sleep(1550,token);
-    if (!tokenAlive(token)) return false;
-    const gesture = host.querySelector('[data-control-gesture]:not([aria-disabled="true"])');
-    const range = host.querySelector('input[data-proc-range]:not(:disabled),input[data-proc-slider]:not(:disabled)');
-    let ok=false;
-    if (gesture && (Math.random()<.78 || !range)) ok=await performGesture(gesture,token);
-    else if (range) ok=await performRange(range,token);
-    else ok=await performButton(host,token);
-    if (ok) lastControlCode=host.dataset.controlCode||host.querySelector("[data-control-id]")?.dataset.controlId||"";
-    return ok;
+  function patchPointerCapture(element){
+    const hadOwn=Object.prototype.hasOwnProperty.call(element,"setPointerCapture"),original=element.setPointerCapture;
+    try{Object.defineProperty(element,"setPointerCapture",{configurable:true,writable:true,value:()=>{}});}catch(_){try{element.setPointerCapture=()=>{};}catch(__){}}
+    return ()=>{try{if(hadOwn)Object.defineProperty(element,"setPointerCapture",{configurable:true,writable:true,value:original});else delete element.setPointerCapture;}catch(_){}};
   }
 
-  function updateToggle() {
-    if (!toggleButton) return;
-    toggleButton.setAttribute("aria-pressed",active?"true":"false");
-    toggleButton.dataset.active=active?"true":"false";
-    toggleButton.setAttribute("aria-label",active?"Disable observer mode":"Enable observer mode");
-    toggleButton.title=active?"Observer mode active — press any key to stop":"Observer mode — autonomous crew demonstration";
+  function numericReadout(host){
+    const text=host?.querySelector("[data-range-readout]")?.textContent||"";
+    const match=text.replace(/−/g,"-").match(/[+-]?\d+(?:\.\d+)?/);
+    return match?Number(match[0]):NaN;
   }
 
-  function stop(reason="manual") {
-    if (!active) return;
-    active=false;
-    runToken++;
-    clearFocus();
-    const panel=document.getElementById("station-panel");
-    panel?.style.removeProperty("--exo-observer-origin-x");
-    panel?.style.removeProperty("--exo-observer-origin-y");
-    document.body.classList.remove("exo-observer-mode");
-    updateToggle();
-    window.dispatchEvent(new CustomEvent("exo:observer-mode",{detail:{active:false,reason}}));
-  }
-
-  async function run(token) {
-    activeStation=selectedStation();
-    operationsRemaining=randomInt(2,3);
-    await sleep(1800,token);
-    while(tokenAlive(token)) {
-      if (operationsRemaining<=0 || activeStation!==selectedStation()) {
-        const switched=await switchStation(token);
-        if(!switched&&tokenAlive(token))await sleep(2000,token);
-        continue;
+  function gesturePlan(gesture,token,model){
+    const tokens=(gesture.dataset.gestureTokens||"").split("|"),idx=tokens.indexOf(token),count=tokens.length;
+    if(idx<0) return null;
+    const kind=gesture.dataset.controlGesture||"",controlId=gesture.dataset.controlId||model.actions.get(token)?.controlId,range=model.ranges.get(controlId);
+    if(range){
+      const target=Number.isFinite(range.targets[idx])?range.targets[idx]:range.min+(range.max-range.min)*(idx/Math.max(1,count-1));
+      let current=NaN;
+      if(["selector","rotary","wheel"].includes(kind)){
+        const angle=Number(gesture.dataset.dialAngle);
+        if(Number.isFinite(angle)) current=range.min+clamp((angle+62)/124,0,1)*(range.max-range.min);
       }
-      const cycleStart=now();
-      const host=chooseControl();
-      if(host) {
-        await performControl(host,token);
-        if(tokenAlive(token))operationsRemaining--;
+      if(!Number.isFinite(current)) current=numericReadout(gesture.closest(".exo-device-block"));
+      if(!Number.isFinite(current)) current=(range.min+range.max)/2;
+      const fraction=(target-current)/Math.max(.0001,range.max-range.min);
+      if((range.axis||(["thumbwheel","dual-slider"].includes(kind)?"y":"x"))==="y") return {dx:0,dy:-fraction*120};
+      return {dx:fraction*150,dy:0};
+    }
+    if(kind==="yoke"){
+      const vectors=[[-38,0],[0,-36],[38,0],[0,36]];
+      const v=vectors[idx]||vectors[0];return {dx:v[0],dy:v[1]};
+    }
+    if(["selector","rotary","wheel"].includes(kind)){
+      const current=Number(gesture.dataset.dialAngle)||0,target=-62+124*(idx/Math.max(1,count-1));
+      return {dx:(target-current)/.9,dy:0};
+    }
+    if(kind==="thumbwheel") return {dx:0,dy:idx===0?54:-54};
+    if(kind==="lever") return {dx:idx===1?24:0,dy:count===3?(idx===2?-50:idx===0?50:0):(idx===count-1?-50:50)};
+    if(kind==="knife-switch") return {dx:idx===1?22:0,dy:count===3?(idx===0?-50:idx===2?50:0):(idx===0?-50:50)};
+    if(kind==="toggle"||kind==="guard") return {dx:0,dy:idx===0?-50:50};
+    if(kind==="dual-slider") return {dx:0,dy:idx===count-1?-64:idx===0?64:0};
+    return null;
+  }
+
+  async function performGestureForToken(gesture,procedureToken,model,token){
+    if(!gesture?.isConnected||!tokenAlive(token)) return false;
+    const plan=gesturePlan(gesture,procedureToken,model);if(!plan)return false;
+    if(!(await moveCursorTo(gesture,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
+    const start=pointFor(gesture,.5,.5),end={x:clamp(start.x+plan.dx,10,window.innerWidth-10),y:clamp(start.y+plan.dy,10,window.innerHeight-10)};
+    const restore=patchPointerCapture(gesture);
+    try{
+      pointerEvent("pointerdown",gesture,start.x,start.y,1,0);
+      const started=now(),duration=720;
+      await new Promise(resolve=>{
+        const frame=()=>{
+          if(!tokenAlive(token)||!gesture.isConnected){resolve();return;}
+          const t=clamp((now()-started)/duration,0,1),e=ease(t),x=start.x+(end.x-start.x)*e,y=start.y+(end.y-start.y)*e;
+          setCursorPoint(x,y);pointerEvent("pointermove",gesture,x,y,1,-1);
+          if(t<1)requestAnimationFrame(frame);else resolve();
+        };requestAnimationFrame(frame);
+      });
+      if(!tokenAlive(token)) return false;
+      pointerEvent("pointerup",gesture,end.x,end.y,0,0);setCursorPoint(end.x,end.y);return true;
+    }finally{restore();}
+  }
+
+  function parseStrings(source){return [...String(source||"").matchAll(/"([^"]+)"/g)].map(match=>match[1]);}
+
+  async function loadSourceModel(){
+    if(sourceModelPromise) return sourceModelPromise;
+    sourceModelPromise=(async()=>{
+      const response=await fetch(new URL("blacklight-exo-crew-operations.js",document.baseURI),{cache:"no-store"});
+      if(!response.ok) throw new Error(`Observer could not load procedure source (${response.status})`);
+      const text=await response.text(),procedures=new Map(),actions=new Map(),ranges=new Map();
+      const authMatch=text.match(/const AUTH_TAIL=Object\.freeze\(\[([^\]]+)\]\)/),authTail=parseStrings(authMatch?.[1]||"");
+      for(const line of text.split(/\r?\n/)){
+        if(line.includes("sequence:withAuthorization(")){
+          const id=line.match(/\{id:"([^"]+)"/),args=line.match(/sequence:withAuthorization\(([^)]*)\)/);
+          if(id&&args) procedures.set(id[1],[...parseStrings(args[1]),...authTail]);
+        }
+        if(line.includes('control("')&&line.includes('action("')){
+          const controlMatch=line.match(/control\("([^"]+)","([^"]+)"/);
+          if(controlMatch){
+            const found=[...line.matchAll(/action\("([^"]+)","([^"]*)"(?:,"([^"]*)")?\)/g)];
+            found.forEach((match,index)=>actions.set(match[1],{controlId:controlMatch[1],kind:controlMatch[2],index,count:found.length,label:match[2],state:match[3]||match[2]}));
+          }
+        }
       }
-      const elapsed=now()-cycleStart;
-      const jitter=randomBetween(-1800,1800);
-      await sleep(Math.max(1800,OPERATION_INTERVAL_MS+jitter-elapsed),token);
+      const rangeRe=/"([^"]+)":Object\.freeze\(\{min:([-\d.]+),max:([-\d.]+),step:([-\d.]+),([^}]*?)targets:\[([^\]]*)\]\}\)/g;
+      for(const match of text.matchAll(rangeRe)){
+        const axis=(match[5].match(/axis:"([xy])"/)||[])[1]||null;
+        ranges.set(match[1],{min:Number(match[2]),max:Number(match[3]),step:Number(match[4]),axis,targets:match[6].split(",").map(Number)});
+      }
+      return {procedures,actions,ranges,authTail};
+    })().catch(error=>{sourceModelPromise=null;throw error;});
+    return sourceModelPromise;
+  }
+
+  function hostForToken(procedureToken,model){
+    const direct=document.querySelector(`#station-panel [data-proc-input="${CSS.escape(procedureToken)}"]`);
+    if(direct) return direct.closest(".exo-device-block")||direct;
+    const meta=model.actions.get(procedureToken);
+    if(meta){const byId=document.querySelector(`#station-panel [data-control-id="${CSS.escape(meta.controlId)}"]`);if(byId)return byId.closest(".exo-device-block")||byId;}
+    const gesture=[...document.querySelectorAll("#station-panel [data-control-gesture]")].find(node=>(node.dataset.gestureTokens||"").split("|").includes(procedureToken));
+    return gesture?.closest(".exo-device-block")||gesture||null;
+  }
+
+  function tokenAlreadySatisfied(procedureToken,model){
+    const host=hostForToken(procedureToken,model);
+    if(!host||host.classList.contains("exo-lockout-device")) return false;
+    return host.dataset.controlActivity && host.dataset.controlActivity!=="live";
+  }
+
+  async function performToken(procedureToken,model,token){
+    if(!tokenAlive(token)) return false;
+    if(!model.authTail.includes(procedureToken)&&tokenAlreadySatisfied(procedureToken,model)) return true;
+    const direct=()=>document.querySelector(`#station-panel [data-proc-input="${CSS.escape(procedureToken)}"]:not(:disabled)`);
+    const meta=model.actions.get(procedureToken);
+    const gesture=()=>[...document.querySelectorAll("#station-panel [data-control-gesture]:not([aria-disabled=\"true\"])" )].find(node=>(node.dataset.gestureTokens||"").split("|").includes(procedureToken));
+    const g=gesture();
+    if(g && meta) return performGestureForToken(g,procedureToken,model,token);
+    const button=direct();
+    if(button) return tapElement(button,token);
+    const late=await waitFor(()=>direct()||gesture(),1800,token);
+    if(!late) return false;
+    if(late.matches?.("[data-control-gesture]")) return performGestureForToken(late,procedureToken,model,token);
+    return tapElement(late,token);
+  }
+
+  function autonavRequirement(procedureId){return window.EXO_HELM_AUTONAV_SUITE?.procedureRequirements?.[procedureId]||null;}
+
+  async function prepareHelmAutonav(procedureId,token){
+    const api=window.EXO_HELM_AUTONAV_SUITE,req=autonavRequirement(procedureId);if(!api||!req)return true;
+    const choose=async(selector,value)=>{const control=await waitFor(()=>document.querySelector(selector),1200,token);if(!control)return false;if(value&&control.value!==value)return selectValue(control,value,token);if(value){await moveCursorTo(control,CURSOR_TRAVEL_MS,token);await sleep(260,token);}return true;};
+    if(req.encounter && !(await choose("#station-panel [data-autonav-encounter]",req.encounter))) return false;
+    if(req.pattern && !(await choose("#station-panel [data-autonav-evasive]",req.pattern))) return false;
+    let state=api.getState?.()||{};
+    const clickAction=async(name)=>{const button=await waitFor(()=>document.querySelector(`#station-panel [data-autonav-action="${name}"]:not(:disabled)`),1600,token);return button?tapElement(button,token):false;};
+    if(req.package&&!state.queued){if(!(await clickAction("queue")))return false;await sleep(ACTION_SETTLE_MS,token);state=api.getState?.()||state;}
+    if(req.simulate&&!state.simulated){if(!(await clickAction("simulate")))return false;await sleep(ACTION_SETTLE_MS,token);state=api.getState?.()||state;}
+    if(req.evasive&&!state.evasiveLoaded){if(!(await clickAction("load-evasive")))return false;await sleep(ACTION_SETTLE_MS,token);state=api.getState?.()||state;}
+    if(req.sync&&!state.synced){if(!(await clickAction("sync")))return false;await sleep(ACTION_SETTLE_MS,token);}
+    return true;
+  }
+
+  function variedProcedurePlan(station,count){
+    const select=document.querySelector("#station-panel [data-procedure-select]");if(!select)return[];
+    let options=[...select.options].map(option=>({id:option.value,difficulty:Number(option.dataset.recommendedDifficulty)||0}));
+    if(station==="helm")options=options.filter(item=>{const req=autonavRequirement(item.id);return !(req?.simulate&&!req?.package);});
+    const groups=new Map();options.forEach(item=>{if(!groups.has(item.difficulty))groups.set(item.difficulty,[]);groups.get(item.difficulty).push(item);});
+    const levels=[...groups.keys()].sort((a,b)=>a-b);if(!levels.length)return[];
+    const wanted=count>=3&&levels.length>=3?[levels[0],levels[Math.floor((levels.length-1)/2)],levels.at(-1)]:levels.length>=2?[levels[0],levels.at(-1)]:[levels[0]];
+    const chosen=[];for(const level of wanted){const pool=groups.get(level).filter(item=>!chosen.some(x=>x.id===item.id));if(pool.length)chosen.push(pool[Math.floor(Math.random()*pool.length)]);}
+    for(const item of options.sort(()=>Math.random()-.5)){if(chosen.length>=count)break;if(!chosen.some(x=>x.id===item.id))chosen.push(item);}
+    return chosen.slice(0,count);
+  }
+
+  async function chooseProcedure(procedureId,token){
+    const select=await waitFor(()=>document.querySelector("#station-panel [data-procedure-select]"),2000,token);if(!select)return false;
+    return selectValue(select,procedureId,token);
+  }
+
+  async function beginProcedure(token){
+    const button=await waitFor(()=>document.querySelector("#station-panel [data-procedure-begin]"),1800,token);if(!button)return false;
+    if(!(await tapElement(button,token,{dwell:520})))return false;
+    return Boolean(await waitFor(()=>document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)"),2400,token));
+  }
+
+  async function runProcedure(plan,model,token){
+    if(!tokenAlive(token))return false;
+    if(!(await chooseProcedure(plan.id,token)))return false;
+    await sleep(700,token);
+    if(!(await beginProcedure(token)))return false;
+    await sleep(850,token);
+    const sequence=model.procedures.get(plan.id);if(!sequence?.length)return false;
+    for(const procedureToken of sequence){
+      if(!tokenAlive(token))return false;
+      if(selectedStation()==="helm"&&(procedureToken==="helm-vector-confirm"||procedureToken==="helm-pilot-ack")){
+        if(!(await prepareHelmAutonav(plan.id,token)))return false;
+      }
+      if(!(await performToken(procedureToken,model,token)))return false;
+      if(!(await sleep(ACTION_SETTLE_MS,token)))return false;
+    }
+    await waitFor(()=>!document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)"),2600,token);
+    await sleep(PROCEDURE_SETTLE_MS,token);
+    return true;
+  }
+
+  async function switchStation(station,token){
+    const tab=await waitFor(()=>document.querySelector(`#station-tabs [data-station="${station}"]`),1600,token);if(!tab)return false;
+    clearFocus();tab.setAttribute("data-observer-tab-focus","true");
+    if(!(await tapElement(tab,token,{dwell:480})))return false;
+    await sleep(STATION_SETTLE_MS,token);
+    window.EXO_STATION_KEY_CURSOR?.sync?.();
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    refreshKeyVisual();
+    return selectedStation()===station;
+  }
+
+  async function clearExistingAttempt(token){
+    const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");
+    if(abort){await tapElement(abort,token);await sleep(700,token);}
+  }
+
+  function extractCursorUrl(){
+    const raw=getComputedStyle(document.documentElement).getPropertyValue("--exo-station-key-cursor").trim();
+    const match=raw.match(/url\(([^)]+)\)/);return match?match[1].trim():null;
+  }
+
+  function refreshKeyVisual(){
+    if(!observerKey)return;
+    const url=extractCursorUrl();if(url)observerKey.style.backgroundImage=`url(${url})`;
+    observerKey.dataset.station=selectedStation();
+  }
+
+  function mountObserverLayer(){
+    observerFrame=document.createElement("div");observerFrame.className="exo-observer-viewport";observerFrame.setAttribute("aria-hidden","true");observerFrame.innerHTML='<span class="exo-observer-label top">Observer mode</span><span class="exo-observer-label bottom">Click to cancel</span>';
+    observerKey=document.createElement("div");observerKey.className="exo-observer-key";observerKey.setAttribute("aria-hidden","true");
+    document.body.append(observerFrame,observerKey);
+    const origin=toggleButton?.getBoundingClientRect();setCursorPoint(origin?origin.left+origin.width/2:window.innerWidth*.78,origin?origin.top+origin.height/2:window.innerHeight*.28);
+    window.EXO_STATION_KEY_CURSOR?.sync?.();requestAnimationFrame(()=>requestAnimationFrame(refreshKeyVisual));
+  }
+
+  function unmountObserverLayer(){observerFrame?.remove();observerKey?.remove();observerFrame=null;observerKey=null;}
+
+  function updateToggle(){
+    if(!toggleButton)return;toggleButton.setAttribute("aria-pressed",active?"true":"false");toggleButton.dataset.active=active?"true":"false";toggleButton.setAttribute("aria-label",active?"Disable observer mode":"Enable observer mode");toggleButton.title=active?"Observer mode active — click anywhere to cancel":"Observer mode — autonomous crew demonstration";
+  }
+
+  function stop(reason="manual"){
+    if(!active)return;active=false;runToken++;clearFocus();document.body.classList.remove("exo-observer-mode");document.documentElement.style.scrollBehavior=previousScrollBehavior;unmountObserverLayer();updateToggle();window.dispatchEvent(new CustomEvent("exo:observer-mode",{detail:{active:false,reason}}));
+  }
+
+  async function run(token){
+    let model;
+    try{model=await loadSourceModel();}catch(error){console.error(error);stop("procedure-source-error");return;}
+    await clearExistingAttempt(token);
+    let stationIndex=Math.max(0,STATIONS.indexOf(selectedStation()));
+    while(tokenAlive(token)){
+      const station=selectedStation(),count=Math.random()<.5?2:3,plan=variedProcedurePlan(station,count);
+      for(const procedure of plan){
+        if(!tokenAlive(token))return;
+        const ok=await runProcedure(procedure,model,token);
+        if(!ok&&tokenAlive(token)){const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");if(abort)await tapElement(abort,token);await sleep(900,token);}
+      }
+      if(!tokenAlive(token))return;
+      stationIndex=(stationIndex+1)%STATIONS.length;
+      if(!(await switchStation(STATIONS[stationIndex],token))&&tokenAlive(token))await sleep(1200,token);
     }
   }
 
-  function start() {
-    if (active) return;
-    active=true;
-    const token=++runToken;
-    document.body.classList.add("exo-observer-mode");
-    updateToggle();
-    window.dispatchEvent(new CustomEvent("exo:observer-mode",{detail:{active:true}}));
-    run(token);
+  function start(){
+    if(active)return;active=true;const token=++runToken;previousScrollBehavior=document.documentElement.style.scrollBehavior;document.documentElement.style.scrollBehavior="auto";document.body.classList.add("exo-observer-mode");mountObserverLayer();updateToggle();window.dispatchEvent(new CustomEvent("exo:observer-mode",{detail:{active:true}}));run(token);
   }
 
-  function toggle() {
-    if(active)stop("toggle"); else start();
-  }
+  function toggle(){if(active)stop("toggle");else start();}
 
-  function bind() {
-    toggleButton=document.getElementById("crew-observer-toggle");
-    if(!toggleButton)return;
+  function bind(){
+    toggleButton=document.getElementById("crew-observer-toggle");if(!toggleButton)return;
     toggleButton.addEventListener("click",toggle);
-    document.addEventListener("keydown",event=>{
-      if(active&&!event.isComposing)stop(`key:${event.key}`);
-    },true);
-    window.addEventListener("blur",()=>{ if(active) clearFocus(); });
+    document.addEventListener("click",event=>{if(active&&event.isTrusted){event.preventDefault();event.stopImmediatePropagation();stop("click");}},true);
+    document.addEventListener("keydown",event=>{if(active&&!event.isComposing)stop(`key:${event.key}`);},true);
     updateToggle();
   }
 
-  window.EXO_OBSERVER_MODE=Object.freeze({
-    start,
-    stop,
-    toggle,
-    get active(){return active;},
-    get station(){return selectedStation();}
-  });
-
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind,{once:true});
-  else bind();
+  window.EXO_OBSERVER_MODE=Object.freeze({start,stop,toggle,get active(){return active;},get station(){return selectedStation();}});
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind,{once:true});else bind();
 })();
