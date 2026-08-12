@@ -62,17 +62,18 @@
 .exo-crew-body .exo-pdc-layout{display:grid;grid-template-columns:minmax(128px,.8fr) minmax(210px,1.45fr);gap:8px;min-height:255px}
 .exo-crew-body .exo-pdc-ammo,.exo-crew-body .exo-pdc-methods{padding:6px;border:1px solid #3f4647;background:#07090a;min-width:0}
 .exo-crew-body .exo-pdc-ammo h4,.exo-crew-body .exo-pdc-methods h4{margin:0 0 5px;color:#8c7678;font:900 .35rem ui-monospace,monospace;letter-spacing:.05em}
-.exo-crew-body .exo-pdc-wheel{display:grid;grid-template-rows:22px 94px 22px;gap:3px}
-.exo-crew-body .exo-pdc-wheel>button{min-height:0!important;padding:0!important;background:#17191a!important;border:1px solid #4b5355!important;color:#9ca5a5!important;font:900 .38rem ui-monospace,monospace!important}
-.exo-crew-body .exo-pdc-drum{display:grid;grid-template-rows:1fr 1.35fr 1fr;align-items:center;text-align:center;border:1px solid #576164;background:linear-gradient(#07090a,#111517 50%,#07090a);box-shadow:inset 0 8px 16px #000}
-.exo-crew-body .exo-pdc-drum span{color:#596164;font:800 .34rem ui-monospace,monospace}
-.exo-crew-body .exo-pdc-drum b{color:#d0c4b0;font:900 .47rem ui-monospace,monospace}
+.exo-crew-body .exo-pdc-wheel{display:grid;grid-template-rows:22px 94px 22px;gap:3px;user-select:none}
+.exo-crew-body .exo-pdc-wheel>button{min-height:0!important;padding:0!important;background:#17191a!important;border:1px solid #4b5355!important;color:#9ca5a5!important;font:900 .38rem ui-monospace,monospace!important;user-select:none}
+.exo-crew-body .exo-pdc-drum{position:relative;overflow:hidden;border:1px solid #576164;border-radius:5px;background:linear-gradient(90deg,#050708,#1c2325 17%,#465052 50%,#1c2325 83%,#050708);box-shadow:inset 9px 0 14px #000,inset -9px 0 14px #000,inset 0 6px 10px rgba(255,255,255,.055),0 1px 0 #000;cursor:ns-resize;user-select:none}
+.exo-crew-body .exo-pdc-drum::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(196,207,204,.16) 7px 8px,rgba(0,0,0,.78) 8px 11px);pointer-events:none}
+.exo-crew-body .exo-pdc-drum::after{content:"";position:absolute;left:10px;right:10px;top:50%;height:2px;transform:translateY(-50%);background:#b8a889;box-shadow:0 0 5px rgba(184,168,137,.46);pointer-events:none}
+.exo-crew-body .exo-pdc-drum span,.exo-crew-body .exo-pdc-drum b{display:none!important;user-select:none}
 .exo-crew-body .exo-pdc-preview{display:grid;grid-template-rows:62px auto auto auto auto;gap:2px;margin-top:5px;text-align:center}
 .exo-crew-body .exo-pdc-preview svg{width:100%;height:62px;border:1px solid #343c3e;background:#050708}
 .exo-crew-body .pdc-round{fill:#2d3335;stroke:#9ca4a2;stroke-width:2}
 .exo-crew-body .pdc-core{fill:#bdb28c;stroke:#e0d5b0}
 .exo-crew-body .pdc-vector,.exo-crew-body .pdc-burst,.exo-crew-body .pdc-arc{fill:none;stroke:#b27376;stroke-width:2}
-.exo-crew-body .exo-pdc-burst.inner{opacity:.55}
+.exo-crew-body .pdc-burst.inner{opacity:.55}
 .exo-crew-body .exo-pdc-preview small{color:#657174;font:900 .28rem ui-monospace,monospace}
 .exo-crew-body .exo-pdc-preview b{color:#d9d1c1;font:900 .44rem ui-monospace,monospace}
 .exo-crew-body .exo-pdc-preview span{color:#8d9693;font:800 .31rem ui-monospace,monospace}
