@@ -11,7 +11,8 @@
     radial-gradient(circle at 50% 24%,rgba(40,203,194,.07),transparent 30%),
     linear-gradient(180deg,#06100e,#040b09 64%,#030806);
 }
-.exo-crew-body .display-systems.exo-eng-specialized::before{content:none!important;display:none!important}
+.exo-crew-body .display-systems.exo-eng-specialized::before,
+.exo-crew-body .display-systems.exo-eng-specialized::after{content:none!important;display:none!important}
 .exo-crew-body .display-systems.exo-eng-specialized>.exo-tactical-ring,
 .exo-crew-body .display-systems.exo-eng-specialized>.exo-ownship,
 .exo-crew-body .display-systems.exo-eng-specialized>.exo-contact,
@@ -89,7 +90,7 @@
 .exo-eng-aux-source text{fill:#729a90;font-size:4.8px;font-weight:900;letter-spacing:.18px}
 .exo-eng-battery{fill:none;stroke:#86b9ac;stroke-width:1.5;vector-effect:non-scaling-stroke}
 .exo-eng-sync-ring{fill:#04100d;stroke:#648f84;stroke-width:1}
-.exo-eng-sync-needle{fill:none;stroke:#b8e7dc;stroke-width:1.4;transform-origin:261px 276px;transition:transform .18s ease-out}
+.exo-eng-sync-needle{fill:none;stroke:#b8e7dc;stroke-width:1.4;vector-effect:non-scaling-stroke}
 .exo-eng-aux-source.sync .exo-eng-sync-ring{stroke:#80cf9f;filter:drop-shadow(0 0 4px rgba(96,215,139,.36))}
 .exo-eng-aux-source.unsync .exo-eng-sync-ring{stroke:#b37a67}.exo-eng-aux-source.unsync .exo-eng-sync-value{fill:#c48a78}
 .exo-eng-aux-incomer{fill:none;stroke:#4c6e68;stroke-width:6;vector-effect:non-scaling-stroke}
