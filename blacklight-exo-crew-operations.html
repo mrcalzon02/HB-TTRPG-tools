@@ -32,6 +32,10 @@
     }
     body:has(#station-panel [data-procedure-abort]:disabled) #crew-auxiliary-root .exo-aux-readout small,
     body:has(#station-panel [data-procedure-abort]:disabled) #crew-auxiliary-root .exo-aux-control-status { display:none !important; }
+
+    /* Arming a procedure must not insert a new row above the physical console.
+       The persistent Input Recorder below the hardware already reports the same state. */
+    #station-panel .exo-procedure-setup + .exo-sequence-recorder { display:none !important; }
   </style>
   <script src="blacklight-exo-control-audio.js" defer></script>
   <script src="blacklight-exo-crew-operations.js" defer></script>
