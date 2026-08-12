@@ -48,18 +48,21 @@
 .exo-eng-feed-value{fill:#cdf4e9;font-size:6.8px;font-weight:900}
 @keyframes exo-eng-plasma-flow{to{stroke-dashoffset:-30}}
 
-/* Plasma rectifier: transparent envelope with wandering cyan/green plasma filaments. */
+/* Plasma rectifier: transparent vessel with electrode-seeking cyan/green discharge.
+   The faint gas haze is static; visible motion comes from unstable branching plasma arcs. */
 .exo-eng-core-title{fill:#b7e6d9;font-size:7.2px;font-weight:900;letter-spacing:.64px}
 .exo-eng-core-subtitle{fill:#708f86;font-size:4.9px;font-weight:800;letter-spacing:.32px}
 .exo-eng-glass-bulb{stroke:#4b968c;stroke-width:2.1;filter:drop-shadow(0 0 8px rgba(57,208,194,.24)) drop-shadow(0 0 22px rgba(29,133,135,.12))}
 .exo-eng-glass-rim{fill:none;stroke:rgba(145,235,220,.32);stroke-width:1.05;stroke-dasharray:2 3}
-.exo-eng-plasma-haze{opacity:.67;transform-origin:center;animation:exo-eng-core-breathe var(--core-rate) ease-in-out infinite;filter:drop-shadow(0 0 var(--core-glow) rgba(43,220,210,.48))}
-.exo-eng-plasma-core{fill:#eaffff;stroke:#69ffe8;stroke-width:1;opacity:.96;filter:drop-shadow(0 0 4px #dffffa) drop-shadow(0 0 12px rgba(71,245,224,.88))}
-.exo-eng-plasma-filament{fill:none;stroke:#7effec;stroke-width:1.45;stroke-linecap:round;opacity:var(--filament);vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 2px #d8ffff) drop-shadow(0 0 6px rgba(60,240,220,.75))}
-.exo-eng-plasma-filament:nth-of-type(3n){stroke:#b8fff3;stroke-width:1.05}
-.exo-eng-plasma-filament:nth-of-type(4n){stroke:#3ed6d4;stroke-width:1.8}
-.exo-eng-neutral-kernel{fill:#03110f;stroke:#a6fff0;stroke-width:1.3;filter:drop-shadow(0 0 6px rgba(107,255,233,.5))}
-@keyframes exo-eng-core-breathe{0%,100%{opacity:.44;transform:scale(.94)}48%{opacity:.84;transform:scale(1.06)}62%{opacity:.62;transform:scale(1.01)}}
+.exo-eng-plasma-haze{opacity:.22;filter:drop-shadow(0 0 12px rgba(43,220,210,.18))}
+.exo-eng-plasma-core{fill:#f0ffff;stroke:#7effee;stroke-width:.9;opacity:.98;filter:drop-shadow(0 0 3px #e8ffff) drop-shadow(0 0 10px rgba(71,245,224,.9)) drop-shadow(0 0 19px rgba(41,187,192,.5))}
+.exo-eng-plasma-corona{mix-blend-mode:screen}
+.exo-eng-plasma-tendril{mix-blend-mode:screen}
+.exo-eng-plasma-filament{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:var(--filament);vector-effect:non-scaling-stroke}
+.exo-eng-plasma-filament-main{stroke:#b4fff6;filter:drop-shadow(0 0 1px #f0ffff) drop-shadow(0 0 4px rgba(91,255,236,.96)) drop-shadow(0 0 9px rgba(44,211,211,.58))}
+.exo-eng-plasma-filament-branch{stroke:#42d7d3;filter:drop-shadow(0 0 2px rgba(82,247,230,.84)) drop-shadow(0 0 5px rgba(37,182,190,.46))}
+.exo-eng-plasma-contact{mix-blend-mode:screen;filter:drop-shadow(0 0 2px #edffff) drop-shadow(0 0 7px rgba(74,242,221,.9))}
+.exo-eng-neutral-kernel{fill:#03110f;stroke:#bafff4;stroke-width:1.15;filter:drop-shadow(0 0 5px rgba(107,255,233,.58))}
 
 /* Moderator / neutral reference is deliberately non-power-carrying green. */
 .exo-eng-moderator-arm{fill:none;stroke:#435d55;stroke-width:7;stroke-linecap:round;vector-effect:non-scaling-stroke}
@@ -146,4 +149,4 @@
 .exo-eng-map-footer b{display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#a8c9bf;font-size:.38rem;font-weight:900;letter-spacing:.02em}
 
 @media(max-width:900px){.exo-eng-map-svg{min-height:610px}.exo-eng-map-footer{grid-template-columns:1fr}.exo-eng-map-footer b{white-space:normal}}
-@media(prefers-reduced-motion:reduce){.exo-eng-feed-plasma,.exo-eng-plasma-haze,.exo-eng-rectifier-output-live,.exo-eng-source-live,.exo-eng-common-bus-live,.exo-eng-rail-live,.exo-eng-branch-live,.exo-eng-cool-main,.exo-eng-cool-bypass,.exo-eng-moderator-pulse{animation:none!important}.exo-eng-plasma-filament animate{display:none}}
+@media(prefers-reduced-motion:reduce){.exo-eng-feed-plasma,.exo-eng-rectifier-output-live,.exo-eng-source-live,.exo-eng-common-bus-live,.exo-eng-rail-live,.exo-eng-branch-live,.exo-eng-cool-main,.exo-eng-cool-bypass,.exo-eng-moderator-pulse{animation:none!important}.exo-eng-plasma-tendril animate,.exo-eng-plasma-corona animate{display:none}}
