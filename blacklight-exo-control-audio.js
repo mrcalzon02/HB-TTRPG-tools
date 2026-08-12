@@ -196,6 +196,11 @@
       { asset: 'cc0ElectronicDevice', gain: 0.018, rate: 1.08, loop: true },
       { asset: 'engineLoop', gain: 0.006, rate: 1.46, loop: true }
     ]),
+    'ambient-plasma-rectifier': Object.freeze([
+      { asset: 'cc0ElectronicDevice', gain: 0.020, rate: 0.96, loop: true },
+      { asset: 'engineLoop', gain: 0.008, rate: 1.24, loop: true },
+      { asset: 'rhythmicCrumping', gain: 0.004, rate: 0.94, loop: true }
+    ]),
     'ambient-fluid-loop': Object.freeze([
       { asset: 'cc0WaterFlow', gain: 0.022, rate: 0.82, loop: true },
       { asset: 'cakThumpLoop', gain: 0.008, rate: 0.86, loop: true }
@@ -392,6 +397,10 @@
   function ambientDescriptors(station, values) {
     const result = [];
     const value = code => String(values?.[code] || '').toUpperCase();
+    const numericValue = code => {
+      const match = value(code).match(/-?\d+(?:\.\d+)?/);
+      return match ? Number(match[0]) : NaN;
+    };
     if (station === 'helm') {
       const throttle = value('HEL-THT-05');
       const gate = value('HEL-TGT-06');
@@ -417,7 +426,7 @@
       );
       result.push({ id: 'capacitors', scene: 'ambient-capacitor-bank', intensity });
     } else if (station === 'engineering') {
-      const rectifierFeeds = [value('ENG-RFA-01'), value('ENG-RFB-02'), value('ENG-RFC-03'), value('ENG-RFD-04')];
+      const rectifierFeeds = [numericValue('ENG-RFA-01'), numericValue('ENG-RFB-02'), numericValue('ENG-RFC-03'), numericValue('ENG-RFD-04')].filter(Number.isFinite);
       const busTransfer = value('ENG-BBT-05');
       const busA = value('ENG-VBA-06');
       const busB = value('ENG-VBB-07');
@@ -425,14 +434,19 @@
       const coolantBreaker = value('ENG-B03-10');
       const coolant = value('ENG-CHV-16');
       const pump = value('ENG-CPS-17');
-      const rectifierLive = rectifierBreaker === 'ON' && busTransfer !== 'ISOLATED';
+      const downstreamLoaded = rectifierBreaker === 'ON' && busTransfer !== 'ISOLATED';
       if (busTransfer && busTransfer !== 'ISOLATED') {
         const imbalance = (busA && busB && busA !== busB) ? 0.18 : 0;
         result.push({ id: 'plant', scene: 'ambient-machinery', intensity: clamp((busTransfer === 'AUXILIARY' ? 0.58 : 0.40) + imbalance, 0, 1) });
       }
-      if (rectifierLive) {
-        const feederDeviation = rectifierFeeds.filter(feed => feed && feed !== 'NOMINAL').length;
-        result.push({ id: 'rectifier', scene: 'ambient-capacitor-bank', intensity: clamp(0.28 + feederDeviation * 0.11, 0, 0.78) });
+      if (rectifierFeeds.length) {
+        const averageFeed = rectifierFeeds.reduce((sum, feed) => sum + feed, 0) / rectifierFeeds.length;
+        const feedLevel = clamp((averageFeed - 400) / 80, 0, 1);
+        const spread = rectifierFeeds.length > 1 ? (Math.max(...rectifierFeeds) - Math.min(...rectifierFeeds)) / 80 : 0;
+        const humIntensity = clamp(0.18 + feedLevel * 0.70 + (downstreamLoaded ? 0.12 : 0), 0, 1);
+        result.push({ id: 'rectifier', scene: 'ambient-plasma-rectifier', intensity: humIntensity });
+        const stressIntensity = clamp(Math.max(0, feedLevel - 0.48) * 1.52 + spread * 0.24 + (downstreamLoaded && feedLevel > 0.72 ? 0.08 : 0), 0, 0.92);
+        if (stressIntensity > 0.025) result.push({ id: 'rectifier-stress', scene: 'ambient-machinery', intensity: stressIntensity });
       }
       if (coolantBreaker === 'ON' && coolant && coolant !== 'CLOSED') {
         const intensity = clamp((coolant === 'OPEN' ? 0.72 : 0.36) + (pump === 'CROSS-TIE' ? 0.12 : 0), 0, 1);
