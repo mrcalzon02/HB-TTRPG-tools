@@ -1,11 +1,9 @@
-/* SCI-ACF-07 · ANALYSIS CONFIRM
-   Dedicated Science-station physical face. The authoritative control remains the
-   existing sci-confirms dual-button control; TRACK CONFIRM and ANALYST ACK still
-   feed the same procedure engine. This layer turns that face into a paired LTO
-   tape-routing bay so the center harness can become the wiring mini-game next. */
+/* SCI-ACF-07 · ANALYSIS CONFIRM / LTO 20 ZIPPY-ZAP TAPE-TORNADO
+   Science-station physical patch bay. blacklight-exo-science-tape-router.js owns
+   the live cable geometry and procedure-routing interlock. */
 
 .station-science .physical-analysis-confirm-buttons{
-  min-height:340px;
+  min-height:390px;
   padding:10px 10px 12px!important;
   border-top:2px solid #6b9db1!important;
   background:
@@ -23,179 +21,278 @@
   font-size:.58rem!important;
   letter-spacing:.06em;
 }
-
 .station-science .physical-analysis-confirm-buttons .exo-hardware-actions{
-  position:relative;
-  isolation:isolate;
   display:grid!important;
-  grid-template-columns:minmax(82px,.28fr) minmax(138px,.44fr) minmax(82px,.28fr)!important;
-  grid-template-rows:26px 230px 34px;
-  gap:6px 8px!important;
-  min-height:296px;
+  grid-template-columns:1fr 1fr!important;
+  gap:7px!important;
   padding:7px!important;
+  min-width:0;
   border:1px solid #3e5964;
   background:linear-gradient(180deg,#0b1216,#080d10 62%,#060a0c)!important;
   box-shadow:inset 0 8px 18px rgba(0,0,0,.62),inset 0 0 0 1px rgba(160,213,231,.025);
-  overflow:hidden;
+  overflow:visible;
 }
 
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions::after{
-  content:"LTO 20-ZIPPY-ZAP TAPE-TORNADO  ·  ANALYSIS ROUTING BAY";
-  position:absolute;
-  left:7px;
-  right:7px;
-  top:6px;
-  z-index:8;
-  height:19px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid #526e79;
-  background:linear-gradient(180deg,#18272d,#0b1215);
-  color:#b7dbe7;
-  font:900 .43rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
-  letter-spacing:.075em;
-  text-transform:uppercase;
-  box-shadow:inset 0 1px rgba(255,255,255,.04),0 1px 0 #020405;
-  pointer-events:none;
-}
-
-/* Central cross-connect field. The five colored conductors mirror the supplied
-   A/B/C/D/E routing example: A and C slope down, B and D run straight, E crosses up. */
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions::before{
-  content:"";
-  position:relative;
-  z-index:2;
-  grid-column:2;
-  grid-row:2;
-  display:block;
+.exo-tape-router-stage{
+  grid-column:1 / -1;
   min-width:0;
+  padding:6px;
+  border:1px solid #526e79;
+  background:
+    repeating-linear-gradient(90deg,rgba(148,190,204,.025) 0 1px,transparent 1px 18px),
+    linear-gradient(180deg,#0b1215,#070c0e);
+  box-shadow:inset 0 7px 16px #020405,0 1px rgba(255,255,255,.03);
+  user-select:none;
+}
+.exo-tape-router-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:9px;
+  min-height:22px;
+  padding:4px 7px;
+  border:1px solid #526e79;
+  background:linear-gradient(180deg,#1a2a31,#0c1519);
+  color:#b7dbe7;
+  font:900 .43rem/1.15 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.exo-tape-router-head span{color:#708d98;font-size:.38rem;white-space:nowrap}
+
+.exo-tape-router-layout{
+  display:grid;
+  grid-template-columns:minmax(86px,.27fr) minmax(170px,.46fr) minmax(86px,.27fr);
+  gap:7px;
+  min-height:254px;
+  margin-top:6px;
+}
+.exo-tape-rack{
+  display:grid;
+  grid-template-rows:repeat(5,minmax(42px,1fr));
+  gap:3px;
+  padding:4px;
   border:1px solid #526169;
   background:
-    linear-gradient(16deg,transparent 0 47.8%,rgba(210,76,79,.28) 47.9% 48.55%,#ed6f72 48.7% 49.35%,rgba(210,76,79,.24) 49.5% 50%,transparent 50.1%),
-    linear-gradient(0deg,transparent 0 79%,rgba(83,188,107,.26) 79.1% 79.65%,#82dc9b 79.8% 80.35%,rgba(83,188,107,.24) 80.5% 81%,transparent 81.1%),
-    linear-gradient(16deg,transparent 0 17.8%,rgba(82,116,210,.28) 17.9% 18.55%,#79a3ee 18.7% 19.35%,rgba(82,116,210,.24) 19.5% 20%,transparent 20.1%),
-    linear-gradient(0deg,transparent 0 29%,rgba(211,187,80,.24) 29.1% 29.65%,#e6d276 29.8% 30.35%,rgba(211,187,80,.22) 30.5% 31%,transparent 31.1%),
-    linear-gradient(-27deg,transparent 0 47.8%,rgba(187,85,192,.28) 47.9% 48.55%,#d779dd 48.7% 49.35%,rgba(187,85,192,.24) 49.5% 50%,transparent 50.1%),
-    repeating-linear-gradient(0deg,rgba(157,190,203,.028) 0 1px,transparent 1px 14px),
-    repeating-linear-gradient(90deg,rgba(157,190,203,.02) 0 1px,transparent 1px 18px),
-    linear-gradient(180deg,#202a2e,#141c20);
-  box-shadow:inset 0 0 18px rgba(0,0,0,.72),0 0 0 1px rgba(130,185,205,.05);
-  filter:drop-shadow(0 0 2px rgba(122,185,220,.14));
+    linear-gradient(90deg,#0b0f11 0 5px,#697175 5px 6px,#151a1d 6px calc(100% - 6px),#697175 calc(100% - 6px) calc(100% - 5px),#080b0d calc(100% - 5px)),
+    #101517;
+  box-shadow:inset 0 0 14px #000;
+}
+.exo-tape-socket{
+  --socket-color:#9fb3ba;
+  appearance:none;
+  position:relative;
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr);
+  grid-template-rows:1fr 1fr;
+  align-items:center;
+  min-width:0;
+  min-height:42px;
+  padding:3px 4px 3px 29px;
+  border:1px solid #626d70;
+  border-radius:1px;
+  background:
+    linear-gradient(90deg,var(--socket-color) 0 20px,#090c0e 20px 22px,transparent 22px),
+    repeating-linear-gradient(180deg,#2d3538 0 4px,#111618 4px 6px,#677175 6px 7px,#14191b 7px 17px,#090d0e 17px 19px)!important;
+  color:#d8e8ed!important;
+  cursor:grab;
+  text-align:left;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  box-shadow:inset 0 1px rgba(255,255,255,.07),inset 0 -5px 7px rgba(0,0,0,.48),0 1px #020405!important;
+  touch-action:none;
+}
+.exo-tape-rack.right .exo-tape-socket{
+  grid-template-columns:minmax(0,1fr) 22px;
+  padding:3px 29px 3px 4px;
+  background:
+    linear-gradient(90deg,transparent 0 calc(100% - 22px),#090c0e calc(100% - 22px) calc(100% - 20px),var(--socket-color) calc(100% - 20px) 100%),
+    repeating-linear-gradient(180deg,#2d3538 0 4px,#111618 4px 6px,#677175 6px 7px,#14191b 7px 17px,#090d0e 17px 19px)!important;
+  cursor:pointer;
+}
+.exo-tape-socket b{
+  position:absolute;
+  left:4px;
+  top:50%;
+  width:14px;
+  transform:translateY(-50%);
+  color:#050708;
+  text-align:center;
+  font:1000 .66rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  text-shadow:0 1px rgba(255,255,255,.2);
+  z-index:3;
+}
+.exo-tape-rack.right .exo-tape-socket b{left:auto;right:4px}
+.exo-tape-socket span{
+  grid-column:1/-1;
+  justify-self:center;
+  align-self:end;
+  max-width:100%;
+  overflow:hidden;
+  color:#7d9198;
+  font:900 .32rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.09em;
+  white-space:nowrap;
+}
+.exo-tape-socket i{
+  position:absolute;
+  left:30px;
+  right:5px;
+  top:5px;
+  bottom:13px;
+  border:1px solid #465257;
+  background:
+    radial-gradient(circle at 28% 50%,#050708 0 4px,#88979b 4.5px 5.8px,#111719 6.2px 9px,transparent 9.5px),
+    radial-gradient(circle at 72% 50%,#050708 0 4px,#88979b 4.5px 5.8px,#111719 6.2px 9px,transparent 9.5px),
+    linear-gradient(180deg,#101719,#080c0e);
+  box-shadow:inset 0 2px 5px #000;
   pointer-events:none;
 }
-
-/* The two authoritative momentary buttons are rendered as full tape-drive towers.
-   Clicking the left rack still emits TRACK CONFIRM; clicking the right rack still
-   emits ANALYST ACK, so existing Science procedures remain mechanically intact. */
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button{
-  position:relative!important;
-  z-index:5;
-  grid-row:2 / 4;
-  width:100%!important;
-  max-width:none!important;
-  min-width:0!important;
-  min-height:0!important;
-  height:auto!important;
-  margin:0!important;
-  padding:232px 5px 5px!important;
-  border:1px solid #6b777a!important;
-  border-radius:2px!important;
-  overflow:hidden;
-  background:
-    repeating-linear-gradient(180deg,
-      #2d3538 0 5px,#111618 5px 7px,#697478 7px 8px,#151a1d 8px 43px,
-      #050809 43px 45px,#323b3e 45px 50px,#101416 50px 52px,#606a6e 52px 53px,
-      #13191b 53px 88px,#050809 88px 90px)!important;
-  color:#d0e1e7!important;
-  font:900 .42rem/1.15 ui-monospace,SFMono-Regular,Consolas,monospace!important;
-  letter-spacing:.035em!important;
-  text-align:center;
-  text-shadow:0 1px 1px #000;
-  box-shadow:inset 0 1px rgba(255,255,255,.07),inset 0 0 14px rgba(0,0,0,.66),0 2px 2px #020405!important;
-}
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button:first-child{grid-column:1}
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button:last-child{grid-column:3}
-
-/* Five cartridge/reel windows per rack. */
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button::after{
+.exo-tape-rack.right .exo-tape-socket i{left:5px;right:30px}
+.exo-tape-socket::after{
   content:"";
   position:absolute;
-  left:27px;
-  right:6px;
-  top:15px;
-  height:192px;
-  z-index:1;
+  top:50%;
+  right:-9px;
+  width:14px;
+  height:14px;
+  transform:translateY(-50%);
+  border:2px solid #768287;
+  border-radius:50%;
+  background:radial-gradient(circle,#080b0c 0 32%,#a4afb2 34% 42%,#202729 44% 65%,#060809 67%);
+  box-shadow:0 0 0 2px #050809,0 0 7px color-mix(in srgb,var(--socket-color) 48%,transparent);
+  z-index:5;
+}
+.exo-tape-rack.right .exo-tape-socket::after{right:auto;left:-9px}
+.exo-tape-socket[data-selected="true"],
+.exo-tape-socket[data-hover="true"]{
+  border-color:#c5e7f1!important;
+  box-shadow:inset 0 0 14px rgba(137,211,236,.16),0 0 8px rgba(137,211,236,.28)!important;
+}
+.exo-tape-socket[data-occupied="true"]::after,
+.exo-tape-socket[data-connected="true"]::after{border-color:var(--socket-color)}
+
+.exo-tape-patchfield{
+  position:relative;
+  min-width:0;
+  min-height:254px;
+  overflow:hidden;
+  border:1px solid #526169;
+  background:linear-gradient(180deg,#202a2e,#141c20);
+  box-shadow:inset 0 0 18px rgba(0,0,0,.72),0 0 0 1px rgba(130,185,205,.05);
+}
+.exo-tape-patchfield-grid{
+  position:absolute;
+  inset:0;
   background:
-    radial-gradient(circle at 28% 9%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 72% 9%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 28% 29.5%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 72% 29.5%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 28% 50%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 72% 50%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 28% 70.5%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 72% 70.5%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 28% 91%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    radial-gradient(circle at 72% 91%,#060809 0 4px,#819095 4.5px 5.7px,#111719 6px 9px,transparent 9.4px),
-    repeating-linear-gradient(180deg,transparent 0 37px,#657175 37px 38px,transparent 38px 39px);
-  opacity:.94;
+    repeating-linear-gradient(0deg,rgba(157,190,203,.035) 0 1px,transparent 1px 18px),
+    repeating-linear-gradient(90deg,rgba(157,190,203,.025) 0 1px,transparent 1px 22px),
+    radial-gradient(circle at 50% 48%,rgba(91,133,148,.08),transparent 55%);
   pointer-events:none;
 }
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button:last-child::after{left:6px;right:27px}
+.exo-tape-wire-layer{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.65));
+}
+.exo-tape-wire{
+  fill:none;
+  stroke:var(--wire-color,#9fb3ba);
+  stroke-width:6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.94;
+  vector-effect:non-scaling-stroke;
+}
+.exo-tape-wire-terminal{
+  fill:none;
+  stroke:var(--terminal-color,#d5e5e9);
+  stroke-width:7.5;
+  stroke-linecap:butt;
+  stroke-dasharray:4 5;
+  opacity:1;
+  vector-effect:non-scaling-stroke;
+  filter:drop-shadow(0 0 2px rgba(255,255,255,.22));
+}
+.exo-tape-plug{pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.8))}
+.exo-tape-plug .plug-body{fill:var(--wire-color,#9fb3ba);stroke:#d1d8da;stroke-width:1}
+.exo-tape-plug .plug-stripe{fill:#aeb8bb;stroke:#101416;stroke-width:.45}
+.exo-tape-plug[data-connected="true"] .plug-body{stroke:#f0f4f4}
 
-/* Color-coded rack identifiers. Left bank A/B/C/D/E; right bank E/B/A/D/C. */
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button::before{
-  content:"A\A B\A C\A D\A E";
-  white-space:pre;
+.exo-tape-route-meta{
   position:absolute;
   left:5px;
-  top:15px;
-  bottom:45px;
-  width:18px;
-  z-index:3;
-  box-sizing:border-box;
-  padding-top:1px;
-  border:1px solid #596568;
-  background:
-    linear-gradient(180deg,
-      rgba(232,91,93,.88) 0 20%,
-      rgba(94,203,116,.88) 20% 40%,
-      rgba(83,120,219,.9) 40% 60%,
-      rgba(224,200,87,.9) 60% 80%,
-      rgba(197,91,203,.88) 80% 100%);
-  color:#090b0c;
-  font:900 .57rem/38.4px ui-monospace,SFMono-Regular,Consolas,monospace;
-  text-align:center;
-  text-shadow:0 1px rgba(255,255,255,.25);
-  box-shadow:inset 0 0 5px rgba(255,255,255,.13),0 0 0 1px #050708;
+  right:5px;
+  bottom:5px;
+  z-index:10;
+  display:grid;
+  gap:2px;
+  padding:4px 5px;
+  border:1px solid rgba(92,120,130,.75);
+  background:rgba(5,9,11,.88);
+  color:#677e87;
+  font:800 .31rem/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.025em;
   pointer-events:none;
 }
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button:last-child::before{
-  content:"E\A B\A A\A D\A C";
-  left:auto;
-  right:5px;
-  background:
-    linear-gradient(180deg,
-      rgba(197,91,203,.88) 0 20%,
-      rgba(94,203,116,.88) 20% 40%,
-      rgba(232,91,93,.88) 40% 60%,
-      rgba(224,200,87,.9) 60% 80%,
-      rgba(83,120,219,.9) 80% 100%);
+.exo-tape-route-meta span{display:grid;grid-template-columns:45px minmax(0,1fr);gap:4px}
+.exo-tape-route-meta b{min-width:0;color:#a8c2cb;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.exo-tape-router-status{
+  min-height:14px;
+  margin-top:5px;
+  padding:4px 6px;
+  border:1px solid #344a52;
+  background:#071014;
+  color:#8daab4;
+  font:900 .36rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.055em;
+  text-transform:uppercase;
 }
+.exo-tape-router-status[data-tone="good"]{border-color:#356147;color:#91dda9;background:#07120b}
+.exo-tape-router-status[data-tone="warn"]{border-color:#716039;color:#ddc379;background:#151106}
+.exo-tape-router-status[data-tone="bad"]{border-color:#7d3e43;color:#ee8e93;background:#19090b}
 
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button[aria-pressed="true"]{
-  border-color:#a6d6e6!important;
-  color:#f2fbff!important;
-  box-shadow:inset 0 0 20px rgba(121,185,220,.14),0 0 10px rgba(121,185,220,.24)!important;
+.station-science .physical-analysis-confirm-buttons .exo-tape-router-confirm{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:37px!important;
+  margin:0!important;
+  padding:7px 8px!important;
+  border:1px solid #5e737c!important;
+  border-radius:2px!important;
+  background:linear-gradient(180deg,#24343a,#10181b)!important;
+  color:#bad7e1!important;
+  font:900 .44rem/1.15 ui-monospace,SFMono-Regular,Consolas,monospace!important;
+  letter-spacing:.05em!important;
+  text-transform:uppercase;
+  box-shadow:inset 0 1px rgba(255,255,255,.06),0 2px 2px #020405!important;
 }
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button:hover:not(:disabled){border-color:#8bb8c8!important}
-.station-science .physical-analysis-confirm-buttons .exo-hardware-actions>button:disabled{opacity:.62!important}
+.station-science .physical-analysis-confirm-buttons[data-routing-correct="true"] .exo-tape-router-confirm:not(:disabled){
+  border-color:#75a98b!important;
+  box-shadow:inset 0 0 12px rgba(126,214,155,.08),0 0 7px rgba(126,214,155,.12)!important;
+}
+.station-science .physical-analysis-confirm-buttons[data-routing-correct="false"] .exo-tape-router-confirm:not(:disabled){
+  border-color:#785156!important;
+  color:#a98e91!important;
+}
 
 @media(max-width:1050px){
-  .station-science .physical-analysis-confirm-buttons{min-height:320px}
-  .station-science .physical-analysis-confirm-buttons .exo-hardware-actions{grid-template-columns:minmax(76px,.3fr) minmax(120px,.4fr) minmax(76px,.3fr)!important}
+  .station-science .physical-analysis-confirm-buttons{min-height:370px}
+  .exo-tape-router-layout{grid-template-columns:minmax(80px,.28fr) minmax(150px,.44fr) minmax(80px,.28fr)}
+  .exo-tape-router-head{align-items:flex-start;flex-direction:column}
 }
 @media(max-width:640px){
-  .station-science .physical-analysis-confirm-buttons .exo-hardware-actions{grid-template-columns:74px minmax(112px,1fr) 74px!important;overflow-x:auto}
-  .station-science .physical-analysis-confirm-buttons .exo-hardware-actions::after{font-size:.38rem;letter-spacing:.045em}
+  .station-science .physical-analysis-confirm-buttons .exo-hardware-actions{grid-template-columns:1fr!important}
+  .exo-tape-router-stage,.station-science .physical-analysis-confirm-buttons .exo-tape-router-confirm{grid-column:1}
+  .exo-tape-router-layout{grid-template-columns:74px minmax(150px,1fr) 74px;overflow-x:auto}
+  .exo-tape-socket{padding-left:25px}.exo-tape-rack.right .exo-tape-socket{padding-right:25px}
+  .exo-tape-socket i{left:26px}.exo-tape-rack.right .exo-tape-socket i{right:26px}
+  .exo-tape-route-meta{font-size:.28rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .exo-tape-wire-layer{filter:none}
 }
