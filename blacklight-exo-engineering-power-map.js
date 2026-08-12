@@ -521,7 +521,7 @@
     }
 
     const input=kind==="input";
-    const motionScale=reduced?.46:1;
+    const motionScale=reduced ? .46 : 1;
     motion.phase+=dt*(input ? (.0058+.0042*strength) : (.0021+.0018*ramp))*motionScale;
     motion.ripplePhase+=dt*(input ? (.030+.026*strength+.018*ramp) : (.010+.008*ramp))*motionScale;
 
@@ -543,9 +543,9 @@
       }
     }
 
-    motion.noise+=(motion.target-motion.noise)*(input?.16:.055)*motionScale;
-    motion.sag*=Math.pow(input?.922:.958,dt/16.67);
-    motion.surge*=Math.pow(input?.884:.947,dt/16.67);
+    motion.noise+=(motion.target-motion.noise)*(input ? .16 : .055)*motionScale;
+    motion.sag*=Math.pow(input ? .922 : .958,dt/16.67);
+    motion.surge*=Math.pow(input ? .884 : .947,dt/16.67);
 
     const lossBias=input
       ? .9+strength*2.4+ramp*(2.8+6.8*strength)
@@ -561,7 +561,7 @@
     const noise=rippleAmp*(slowWave+commutation+motion.noise*.46);
     const transient=transientAmp*(-motion.sag+motion.surge*.58);
     const targetValue=clamp(base-lossBias+noise+transient,input?350:370,520);
-    motion.displayed+=(targetValue-motion.displayed)*(input?.31:.105)*motionScale;
+    motion.displayed+=(targetValue-motion.displayed)*(input ? .31 : .105)*motionScale;
 
     const value=motion.displayed;
     const angle=clamp((value-440)/80*92,-58,58);
