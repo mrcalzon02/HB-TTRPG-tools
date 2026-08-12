@@ -129,50 +129,77 @@
       {x:39,y:32,feed:0,role:"output-a"},{x:16,y:47,feed:1,role:"output-b"},{x:-16,y:47,feed:2,role:"output-c"},{x:-39,y:32,feed:3,role:"output-d"}
     ];
     const cubicFrame=(x,y,index,strength,phase)=>{
-      const wander=5.5+strength*12.5;
+      const wander=8+strength*17;
       const theta=(index+1)*1.73+phase;
-      const c1x=x*.18+Math.sin(theta)*wander;
-      const c1y=y*.17+Math.cos(theta*1.17+.4)*wander;
-      const c2x=x*.62+Math.cos(theta*.91+1.2)*wander*1.12;
-      const c2y=y*.60+Math.sin(theta*1.29+.7)*wander*1.12;
+      const c1x=x*.17+Math.sin(theta)*wander;
+      const c1y=y*.16+Math.cos(theta*1.19+.4)*wander;
+      const c2x=x*.61+Math.cos(theta*.93+1.2)*wander*1.18;
+      const c2y=y*.59+Math.sin(theta*1.31+.7)*wander*1.18;
       return `M0 0 C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${x} ${y}`;
     };
     const branchFrame=(x,y,index,strength,phase,offset)=>{
-      const wander=4+strength*9.5;
+      const wander=5+strength*11.5;
       const theta=(index+1)*1.31+phase+offset;
-      const startX=x*.38+Math.sin(theta*.86)*wander*.32;
-      const startY=y*.38+Math.cos(theta*1.14)*wander*.32;
-      const endX=x*.76+Math.sin(theta*1.23+1.1)*wander*.72;
-      const endY=y*.76+Math.cos(theta*.97+.3)*wander*.72;
-      const controlX=x*.55+Math.cos(theta*1.07+.8)*wander*1.1;
-      const controlY=y*.55+Math.sin(theta*1.41+.5)*wander*1.1;
+      const startX=x*.29+Math.sin(theta*.86)*wander*.34;
+      const startY=y*.29+Math.cos(theta*1.14)*wander*.34;
+      const endX=x*.79+Math.sin(theta*1.23+1.1)*wander*.72;
+      const endY=y*.79+Math.cos(theta*.97+.3)*wander*.72;
+      const controlX=x*.54+Math.cos(theta*1.07+.8)*wander*1.18;
+      const controlY=y*.54+Math.sin(theta*1.41+.5)*wander*1.18;
       return `M${startX.toFixed(1)} ${startY.toFixed(1)} Q${controlX.toFixed(1)} ${controlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}`;
     };
-    const spline=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1";
-    const phases=[0,1.55,3.2,4.85];
+    const phases=[0,1.46,3.08,4.74];
+    const keyTimes="0;.25;.5;.75;1";
+    const splines=".37 0 .63 1;.42 0 .58 1;.34 0 .66 1;.42 0 .58 1";
+    const animatePath=(frames,duration)=>`<animate attributeName="d" values="${[...frames,frames[0]].join(";")}" dur="${duration.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${splines}"/>`;
+    const animateWidth=(base,duration,phaseShift=0)=>{
+      const values=[base*.72,base*1.34,base*.88,base*1.52,base*.72].map(v=>v.toFixed(2)).join(";");
+      return `<animate attributeName="stroke-width" values="${values}" dur="${(duration*(1.04+phaseShift)).toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${splines}"/>`;
+    };
+    const animateOpacity=(duration,min=.48,max=1)=>`<animate attributeName="opacity" values="${min};${max};${Math.max(min,.72)};${Math.max(min,max*.9)};${min}" dur="${(duration*1.13).toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${splines}"/>`;
+
     return electrodes.map((electrode,index)=>{
       const strength=clamp(feedFractions[electrode.feed],0,1),x=electrode.x,y=electrode.y;
       const mainFrames=phases.map(phase=>cubicFrame(x,y,index,strength,phase));
       const branchFrames=phases.map(phase=>branchFrame(x,y,index,strength,phase,0));
       const forkFrames=phases.map(phase=>branchFrame(x,y,index,strength,phase,2.35));
-      const mainValues=[...mainFrames,mainFrames[0]].join(";");
-      const branchValues=[...branchFrames,branchFrames[0]].join(";");
-      const forkValues=[...forkFrames,forkFrames[0]].join(";");
-      const dur=1.38-strength*.72+(index%4)*.055;
-      const branchDur=dur*.73;
-      const forkDur=dur*.89;
-      const width=.9+strength*1.5,branchWidth=.42+strength*.72,contact=2.1+strength*1.8;
-      return `<g class="exo-eng-plasma-tendril ${electrode.role}" data-feed-pair="${electrode.feed}" style="--filament:${(.42+strength*.58).toFixed(2)};--tendril-rate:${dur.toFixed(2)}s;--branch-rate:${branchDur.toFixed(2)}s;--phase:${(-index*.09).toFixed(2)}s">
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-main" d="${mainFrames[0]}" stroke-width="${width.toFixed(2)}">
-          <animate attributeName="d" values="${mainValues}" dur="${dur.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.25;.5;.75;1" keySplines="${spline}"/>
+      const dur=1.62-strength*.78+(index%4)*.065;
+      const branchDur=dur*.82;
+      const forkDur=dur*.94;
+      const width=1.0+strength*1.65;
+      const branchWidth=.52+strength*.82;
+      const contact=2.25+strength*1.95;
+      const originX=x*.085+Math.sin(index*1.7)*1.4;
+      const originY=y*.085+Math.cos(index*1.3)*1.4;
+      const whiskerAngle=Math.atan2(y,x);
+      const tx=Math.cos(whiskerAngle+Math.PI/2),ty=Math.sin(whiskerAngle+Math.PI/2);
+      const whisker=`M${(x-tx*4.4).toFixed(1)} ${(y-ty*4.4).toFixed(1)} Q${(x+Math.cos(whiskerAngle)*2.8).toFixed(1)} ${(y+Math.sin(whiskerAngle)*2.8).toFixed(1)} ${(x+tx*4.4).toFixed(1)} ${(y+ty*4.4).toFixed(1)}`;
+      return `<g class="exo-eng-plasma-tendril ${electrode.role}" data-feed-pair="${electrode.feed}" style="--filament:${(.48+strength*.52).toFixed(2)};--tendril-rate:${dur.toFixed(2)}s;--branch-rate:${branchDur.toFixed(2)}s;--phase:${(-index*.11).toFixed(2)}s">
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-halo exo-eng-plasma-filament-main" d="${mainFrames[0]}" stroke-width="${(width*4.4).toFixed(2)}" filter="url(#exoEngPlasmaHalo)">
+          ${animatePath(mainFrames,dur)}${animateWidth(width*4.4,dur,.03)}${animateOpacity(dur,.15,.42)}
         </path>
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch" d="${branchFrames[0]}" stroke-width="${branchWidth.toFixed(2)}">
-          <animate attributeName="d" values="${branchValues}" dur="${branchDur.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.25;.5;.75;1" keySplines="${spline}"/>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-core exo-eng-plasma-filament-main" d="${mainFrames[0]}" stroke-width="${width.toFixed(2)}">
+          ${animatePath(mainFrames,dur)}${animateWidth(width,dur)}${animateOpacity(dur,.62,1)}
         </path>
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch exo-eng-plasma-filament-fork" d="${forkFrames[0]}" stroke-width="${(branchWidth*.78).toFixed(2)}">
-          <animate attributeName="d" values="${forkValues}" dur="${forkDur.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.25;.5;.75;1" keySplines="${spline}"/>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-halo exo-eng-plasma-filament-branch" d="${branchFrames[0]}" stroke-width="${(branchWidth*3.5).toFixed(2)}" filter="url(#exoEngPlasmaHalo)">
+          ${animatePath(branchFrames,branchDur)}${animateWidth(branchWidth*3.5,branchDur,.07)}${animateOpacity(branchDur,.10,.32)}
         </path>
-        <circle class="exo-eng-plasma-contact" cx="${x}" cy="${y}" r="${contact.toFixed(2)}" fill="#d8fffb" stroke="#59f4df" stroke-width=".8"/>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-core exo-eng-plasma-filament-branch" d="${branchFrames[0]}" stroke-width="${branchWidth.toFixed(2)}">
+          ${animatePath(branchFrames,branchDur)}${animateWidth(branchWidth,branchDur,.04)}${animateOpacity(branchDur,.42,.86)}
+        </path>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-core exo-eng-plasma-filament-fork" d="${forkFrames[0]}" stroke-width="${(branchWidth*.72).toFixed(2)}">
+          ${animatePath(forkFrames,forkDur)}${animateWidth(branchWidth*.72,forkDur,.09)}${animateOpacity(forkDur,.28,.72)}
+        </path>
+        <g class="exo-eng-ionization exo-eng-ionization-origin" transform="translate(${originX.toFixed(1)} ${originY.toFixed(1)})">
+          <circle class="exo-eng-ion-cloud" r="${(4.2+strength*2.8).toFixed(2)}" filter="url(#exoEngIonBloom)"><animate attributeName="r" values="${(3.4+strength*2.2).toFixed(2)};${(6.1+strength*3.5).toFixed(2)};${(4.1+strength*2.5).toFixed(2)};${(6.8+strength*3.8).toFixed(2)};${(3.4+strength*2.2).toFixed(2)}" dur="${(dur*1.21).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".18;.5;.28;.62;.18" dur="${(dur*1.21).toFixed(2)}s" repeatCount="indefinite"/></circle>
+          <circle class="exo-eng-ion-hot" r="${(1.25+strength*.8).toFixed(2)}"><animate attributeName="r" values="${(1.0+strength*.6).toFixed(2)};${(1.75+strength*1.0).toFixed(2)};${(1.0+strength*.6).toFixed(2)}" dur="${(dur*.71).toFixed(2)}s" repeatCount="indefinite"/></circle>
+        </g>
+        <g class="exo-eng-ionization exo-eng-ionization-electrode">
+          <circle class="exo-eng-ion-cloud" cx="${x}" cy="${y}" r="${(5.4+strength*3.6).toFixed(2)}" filter="url(#exoEngIonBloom)"><animate attributeName="r" values="${(4.0+strength*2.8).toFixed(2)};${(7.5+strength*4.6).toFixed(2)};${(5.0+strength*3.2).toFixed(2)};${(8.2+strength*4.9).toFixed(2)};${(4.0+strength*2.8).toFixed(2)}" dur="${(branchDur*1.16).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".16;.58;.28;.72;.16" dur="${(branchDur*1.16).toFixed(2)}s" repeatCount="indefinite"/></circle>
+          <circle class="exo-eng-ion-ring" cx="${x}" cy="${y}" r="${(contact+1.8).toFixed(2)}"><animate attributeName="r" values="${(contact+1.0).toFixed(2)};${(contact+4.8).toFixed(2)};${(contact+1.0).toFixed(2)}" dur="${(branchDur*.92).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.08;.7" dur="${(branchDur*.92).toFixed(2)}s" repeatCount="indefinite"/></circle>
+          <path class="exo-eng-ion-whisker" d="${whisker}"><animate attributeName="opacity" values=".24;.92;.38;.76;.24" dur="${(forkDur*.77).toFixed(2)}s" repeatCount="indefinite"/></path>
+          <circle class="exo-eng-plasma-contact" cx="${x}" cy="${y}" r="${contact.toFixed(2)}"><animate attributeName="r" values="${(contact*.78).toFixed(2)};${(contact*1.22).toFixed(2)};${(contact*.9).toFixed(2)};${(contact*1.35).toFixed(2)};${(contact*.78).toFixed(2)}" dur="${branchDur.toFixed(2)}s" repeatCount="indefinite"/></circle>
+        </g>
       </g>`;
     }).join("");
   }
@@ -336,6 +363,14 @@
               <stop offset=".58" stop-color="#18bfc4" stop-opacity=".07"/>
               <stop offset="1" stop-color="#0c5361" stop-opacity="0"/>
             </radialGradient>
+            <radialGradient id="exoEngCoreIon" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#f5ffff" stop-opacity=".92"/>
+              <stop offset=".18" stop-color="#98fff4" stop-opacity=".58"/>
+              <stop offset=".52" stop-color="#4daeff" stop-opacity=".20"/>
+              <stop offset="1" stop-color="#5870ff" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="exoEngPlasmaHalo" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.7"/></filter>
+            <filter id="exoEngIonBloom" x="-180%" y="-180%" width="460%" height="460%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="2.6"/></filter>
           </defs>
 
           <text class="exo-eng-section-title" x="151" y="11" text-anchor="middle">RAW PRIMARY GENERATION · VARIABLE FOUR-FEED INPUT</text>
@@ -356,6 +391,7 @@
             <circle class="exo-eng-glass-bulb" r="58" fill="url(#exoEngGlass)"/>
             <circle class="exo-eng-glass-rim" r="52"/>
             <circle class="exo-eng-plasma-haze" r="34" fill="url(#exoEngPlasma)"/>
+            <circle class="exo-eng-plasma-core-halo" r="18" fill="url(#exoEngCoreIon)" filter="url(#exoEngIonBloom)"/>
             <circle class="exo-eng-plasma-corona" r="11" fill="none" stroke="#55eadc" stroke-width="1.1" opacity=".38"/>
             <circle class="exo-eng-plasma-core" r="5.2"/>
             ${plasmaFilaments(state)}
