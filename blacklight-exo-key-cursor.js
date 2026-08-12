@@ -259,7 +259,12 @@
     return Boolean(target?.closest?.('input[type="text"],input[type="search"],textarea,[contenteditable="true"]'));
   }
 
+  /* The player key belongs exclusively to trusted hardware pointer input.
+     Observer Mode dispatches synthetic PointerEvents into the console to work
+     the real controls; those events must never be allowed to reposition this
+     overlay or inject charm momentum. */
   function handlePointerMove(event) {
+    if (!event?.isTrusted) return;
     lastPointerType = event.pointerType || "mouse";
     const nextX = event.clientX;
     const nextY = event.clientY;
@@ -286,10 +291,17 @@
     observer.observe(tabs,{childList:true,subtree:true,attributes:true,attributeFilter:["aria-selected"]});
     observer.observe(panel,{childList:true,subtree:true});
     document.addEventListener("pointermove",handlePointerMove,{passive:true,capture:true});
-    document.addEventListener("pointerdown",event=>{lastPointerType=event.pointerType||"mouse";pointerDown=true;const motion=CURSOR_CHARM_MOTION[currentStation];if(motion)motion.velocity=clamp(motion.velocity+2.4,-48,48);handlePointerMove(event);},{passive:true,capture:true});
-    document.addEventListener("pointerup",()=>{pointerDown=false;queueMove();},{passive:true,capture:true});
-    document.addEventListener("pointercancel",()=>{pointerDown=false;pointerVisible=false;queueMove();},{passive:true,capture:true});
-    document.addEventListener("pointerout",event=>{if(event.relatedTarget===null){pointerVisible=false;queueMove();}},{passive:true,capture:true});
+    document.addEventListener("pointerdown",event=>{
+      if (!event.isTrusted) return;
+      lastPointerType=event.pointerType||"mouse";
+      pointerDown=true;
+      const motion=CURSOR_CHARM_MOTION[currentStation];
+      if(motion)motion.velocity=clamp(motion.velocity+2.4,-48,48);
+      handlePointerMove(event);
+    },{passive:true,capture:true});
+    document.addEventListener("pointerup",event=>{if(!event.isTrusted)return;pointerDown=false;queueMove();},{passive:true,capture:true});
+    document.addEventListener("pointercancel",event=>{if(!event.isTrusted)return;pointerDown=false;pointerVisible=false;queueMove();},{passive:true,capture:true});
+    document.addEventListener("pointerout",event=>{if(!event.isTrusted)return;if(event.relatedTarget===null){pointerVisible=false;queueMove();}},{passive:true,capture:true});
     document.addEventListener("pointerover",handlePointerMove,{passive:true,capture:true});
     document.addEventListener("click",event=>{if(event.target.closest?.("#station-tabs [data-station],#crew-scenario-reset"))queueSync();},true);
     window.addEventListener("blur",()=>{pointerVisible=false;queueMove();},{passive:true});
