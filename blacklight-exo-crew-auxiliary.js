@@ -66,6 +66,10 @@
   let values = initialValues();
   let configuredDifficulty = 0;
   let drawerOpen = false;
+  let drawerFloating = false;
+  let floatingPosition = {x:null,y:null};
+  let auxWindowGesture = null;
+  let suppressAuxHandleClickUntil = 0;
   let attempt = null;
   let message = "Panel II controls are live. Begin a primary procedure to start recording and arm auxiliary requirements.";
   let auxGesture = null;
@@ -171,19 +175,38 @@
     </article>`;
   }
 
+  function floatingWidth(){return Math.max(320,Math.min(1100,window.innerWidth-24));}
+  function clampFloatingPosition(root,x,y){
+    const width=root?.getBoundingClientRect().width||floatingWidth(),height=Math.min(root?.getBoundingClientRect().height||48,window.innerHeight-24);
+    return {x:clamp(Number(x)||12,12,Math.max(12,window.innerWidth-width-12)),y:clamp(Number(y)||12,12,Math.max(12,window.innerHeight-height-12))};
+  }
+  function applyAuxWindowState(root=$("crew-auxiliary-root")){
+    if(!root)return;
+    root.dataset.floating=drawerFloating?"true":"false";
+    if(!drawerFloating){
+      ["position","z-index","left","top","width","max-width","max-height","margin","filter"].forEach(name=>root.style.removeProperty(name));
+      return;
+    }
+    root.style.position="fixed";root.style.zIndex="70";root.style.width=`${floatingWidth()}px`;root.style.maxWidth="calc(100vw - 24px)";root.style.maxHeight="calc(100vh - 24px)";root.style.margin="0";root.style.filter="drop-shadow(0 18px 30px rgba(0,0,0,.62))";
+    if(!Number.isFinite(floatingPosition.x)||!Number.isFinite(floatingPosition.y))floatingPosition={x:Math.max(12,(window.innerWidth-floatingWidth())/2),y:12};
+    floatingPosition=clampFloatingPosition(root,floatingPosition.x,floatingPosition.y);root.style.left=`${floatingPosition.x}px`;root.style.top=`${floatingPosition.y}px`;
+  }
+
   function renderDrawer(){
     const root=$("crew-auxiliary-root");if(!root)return;
     const station=activeStation(),controls=AUXILIARY_CONTROLS[station]||[],meta=STATION_AUX_META[station],preview=requirementPlan(station,activeProcedureId(),configuredDifficulty),requiredCount=attempt?.requirements.length??preview.length,incomplete=attempt?incompleteRequirements().length:requiredCount;
     root.dataset.open=drawerOpen?"true":"false";
     root.dataset.required=requiredCount?"true":"false";
     root.dataset.station=station;
-    root.innerHTML=`<button class="exo-aux-handle aux-handle-${station}" type="button" data-aux-toggle aria-expanded="${drawerOpen}">
+    root.innerHTML=`<button class="exo-aux-handle aux-handle-${station}" type="button" data-aux-toggle data-aux-window-drag aria-expanded="${drawerOpen}" style="padding-right:150px;cursor:${drawerFloating?"move":"pointer"}">
       <span><b>PANEL II · ${meta.title.toUpperCase()}</b><small>${STATION_CODES[station]} · ${requiredCount} auxiliary @ level +${attempt?.difficulty??configuredDifficulty} · REC +${attempt?.recommendedDifficulty??activeRecommendedDifficulty()}${attempt?` · ${incomplete} unearned`:""}</small></span><i>${drawerOpen?"▼ CLOSE":"▲ OPEN"}</i>
     </button>
+    <button type="button" data-aux-float-toggle aria-pressed="${drawerFloating}" aria-label="${drawerFloating?"Snap Panel II back to the station":"Open Panel II as a floating panel"}" style="position:absolute;right:72px;top:8px;z-index:8;height:31px;min-width:64px;padding:0 9px;border:1px solid #8b7343;border-radius:3px;background:linear-gradient(180deg,#2b261b,#12130f);color:#e6c77b;font:900 .48rem ui-monospace,monospace;letter-spacing:.08em;cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.06)">${drawerFloating?"SNAP":"FLOAT"}</button>
     <section class="exo-aux-drawer aux-drawer-${station}" aria-hidden="${drawerOpen?"false":"true"}">
       <div class="exo-aux-grid aux-grid-${station}">${controls.map((c,i)=>controlCard(c,i,station,preview)).join("")}</div>
       <footer><span>${attempt?`${attempt.history.length} distinct auxiliary control${attempt.history.length===1?"":"s"} recorded this attempt`:"Controls are live; targets remain preview-only until Begin Procedure is pressed."}</span><b>${attempt?(allRequirementsSatisfied()?"AUXILIARY RELIEF COMPLETE":`${incomplete} AUXILIARY RELIEF ITEM${incomplete===1?"":"S"} UNEARNED`):`MASTER +${configuredDifficulty}`}</b></footer>
     </section>`;
+    applyAuxWindowState(root);
   }
 
   function renderAll(){renderMaster();renderDrawer();}
@@ -235,6 +258,23 @@
     commitAuxControl(g.station,g.control,g.lastValue);
   }
 
+  function beginAuxWindowDrag(e){
+    if(!drawerFloating||e.button!==0||e.target.closest("[data-aux-float-toggle]"))return;
+    const handle=e.target.closest("[data-aux-window-drag]");if(!handle)return;
+    const root=$("crew-auxiliary-root"),rect=root?.getBoundingClientRect();if(!root||!rect)return;
+    auxWindowGesture={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,baseX:rect.left,baseY:rect.top,moved:false,handle};
+    handle.setPointerCapture?.(e.pointerId);e.preventDefault();
+  }
+  function moveAuxWindowDrag(e){
+    const g=auxWindowGesture;if(!g||g.pointerId!==e.pointerId)return;if(e.cancelable)e.preventDefault();
+    const dx=e.clientX-g.startX,dy=e.clientY-g.startY;if(Math.hypot(dx,dy)>3)g.moved=true;
+    const root=$("crew-auxiliary-root");if(!root)return;floatingPosition=clampFloatingPosition(root,g.baseX+dx,g.baseY+dy);root.style.left=`${floatingPosition.x}px`;root.style.top=`${floatingPosition.y}px`;
+  }
+  function endAuxWindowDrag(e){
+    const g=auxWindowGesture;if(!g||g.pointerId!==e.pointerId)return;auxWindowGesture=null;
+    if(g.moved)suppressAuxHandleClickUntil=Date.now()+350;
+  }
+
   function handleAuxKeyboard(e){
     const actuator=e.target.closest("[data-aux-actuator]");if(!actuator||actuator.getAttribute("aria-disabled")==="true")return;
     const station=activeStation(),control=controlFor(station,actuator.dataset.auxActuator);if(!control)return;
@@ -246,9 +286,21 @@
   function bind(){
     $("crew-master-difficulty")?.addEventListener("input",e=>{if(attempt&&coreAttemptActive())return;configuredDifficulty=clamp(Math.round(Number(e.target.value)),0,MAX_DIFFICULTY);renderAll();});
     const root=$("crew-auxiliary-root");
-    root?.addEventListener("click",e=>{const toggle=e.target.closest("[data-aux-toggle]");if(toggle){drawerOpen=!drawerOpen;renderDrawer();}});
+    root?.addEventListener("click",e=>{
+      const floatToggle=e.target.closest("[data-aux-float-toggle]");
+      if(floatToggle){
+        if(!drawerFloating){const rect=root.getBoundingClientRect(),width=floatingWidth();floatingPosition={x:clamp(rect.left,12,Math.max(12,window.innerWidth-width-12)),y:clamp(rect.top,12,Math.max(12,window.innerHeight-96))};drawerFloating=true;drawerOpen=true;}
+        else drawerFloating=false;
+        window.EXO_CONTROL_AUDIO?.play?.("panel-latch",{seed:`aux-window:${drawerFloating?"float":"snap"}`,intensity:.8});renderDrawer();return;
+      }
+      const toggle=e.target.closest("[data-aux-toggle]");if(toggle){if(Date.now()<suppressAuxHandleClickUntil)return;drawerOpen=!drawerOpen;renderDrawer();}
+    });
+    root?.addEventListener("pointerdown",beginAuxWindowDrag);
     root?.addEventListener("pointerdown",beginAuxGesture);
     root?.addEventListener("keydown",handleAuxKeyboard);
+    document.addEventListener("pointermove",moveAuxWindowDrag,{passive:false});
+    document.addEventListener("pointerup",endAuxWindowDrag);
+    document.addEventListener("pointercancel",endAuxWindowDrag);
     document.addEventListener("pointermove",moveAuxGesture,{passive:false});
     document.addEventListener("pointerup",e=>endAuxGesture(e,false));
     document.addEventListener("pointercancel",e=>endAuxGesture(e,true));
@@ -262,8 +314,8 @@
       const actionToken=action?.dataset.procInput;
       if(begin){queueMicrotask(beginAttempt);return;}
       if(abort){queueMicrotask(()=>clearAttempt("Primary procedure aborted; Panel II recording cleared and controls remain live."));return;}
-      if(stationTab){queueMicrotask(()=>{attempt=null;auxGesture=null;drawerOpen=false;message="Station changed. Panel II controls are live; Begin Procedure will arm this station's recording requirements.";renderAll();});return;}
-      if(reset){queueMicrotask(()=>{configuredDifficulty=0;values=initialValues();attempt=null;auxGesture=null;drawerOpen=false;message="Human baseline reset; Panel II controls are live at nominal mid-range settings.";renderAll();});return;}
+      if(stationTab){queueMicrotask(()=>{attempt=null;auxGesture=null;auxWindowGesture=null;drawerOpen=false;drawerFloating=false;floatingPosition={x:null,y:null};message="Station changed. Panel II controls are live; Begin Procedure will arm this station's recording requirements.";renderAll();});return;}
+      if(reset){queueMicrotask(()=>{configuredDifficulty=0;values=initialValues();attempt=null;auxGesture=null;auxWindowGesture=null;drawerOpen=false;drawerFloating=false;floatingPosition={x:null,y:null};message="Human baseline reset; Panel II controls are live at nominal mid-range settings.";renderAll();});return;}
       if(actionToken==="execute"){setTimeout(()=>{if(!coreAttemptActive())clearAttempt("Command executed; Panel II controls remain live for the next procedure.");},0);}
     },true);
 
@@ -271,6 +323,7 @@
       if(e.target.closest("#station-panel [data-procedure-select]")){queueMicrotask(()=>{attempt=null;auxGesture=null;message="Procedure selection changed. Controls remain live; new auxiliary targets will arm on Begin Procedure.";renderAll();});}
     },true);
     document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawerOpen&&!e.target.closest("[data-aux-actuator]")){drawerOpen=false;renderDrawer();}});
+    window.addEventListener("resize",()=>{if(drawerFloating)requestAnimationFrame(()=>applyAuxWindowState(root));},{passive:true});
   }
 
   document.addEventListener("DOMContentLoaded",()=>{renderAll();bind();});
