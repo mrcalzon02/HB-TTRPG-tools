@@ -43,6 +43,28 @@
     HIGH:Object.freeze(["gun-cap-high","capacitor","MAX"])
   });
 
+  const GUNNERY_DOCTRINE=Object.freeze({
+    "fire-solution":Object.freeze({name:"Coil Gun vector-lead precision solution",cue:"Build the normal long-range Coil Gun solution around an IK-12 kinetic round and VECTOR LEAD topology. Validate the fire-control package before the keyed firing cycle; the synthetic target display should show a conventional lead point rather than an area solution.",settings:["GUN-MGD-01 · INERT KINETIC / VECTOR LEAD","GUN-FCF-07 · validate the selected target and terminal package","RANGE / RATE · FAR solution before execution"],require:{coilMunition:"INERT KINETIC",coilTopology:"VECTOR LEAD"}}),
+    "point-defense":Object.freeze({name:"PDC threat-threshold close-in burst",cue:"Configure the Point Defense Control Matrix for a close-in autonomous intercept. HE-FLK and THREAT THRESHOLD prioritize the shortest time-to-impact threat while a medium cone burst conserves ammunition for follow-up engagements.",settings:["GUN-TRK-03 · 30mm HE-FLK","TRACKING · THREAT THRESHOLD","BURST / SPREAD · MED / CONE","ENVELOPE / LOGIC · CLOSE-IN / HARD-LOCK","AUTO-ENGAGE · MISSILES + TORPEDOES"],require:{pdcMunition:"30mm HE-FLK",pdcTrack:"THREAT THRESHOLD",pdcDensity:"MED",pdcSpread:"CONE",pdcEnvelope:"CLOSE-IN",pdcLogic:"HARD-LOCK",pdcMissiles:true,pdcTorpedoes:true}}),
+    "missile-launch":Object.freeze({name:"Guided weapon fire-control relay",cue:"Prepare a guided-weapon launch through GUN-FCF-07 rather than the PDC matrix. Establish the guided track, confirm the programmed target/approach/terminal package and acknowledge the weapon before arming the release train.",settings:["WEAPON BANK · GUIDED","GUN-FCF-07 · target / approach / terminal package","FIRE CONTROL · GUIDED TRACK","WEAPONS ACK before ARM"]}),
+    "defensive-envelope":Object.freeze({name:"PDC cooperative perimeter defense envelope",cue:"Establish a broad perimeter-defense screen that can begin engaging before threats reach the ship's local lethal ring. Cooperative relay and overlap sweep spread the PDC solution across the enabled incoming threat classes.",settings:["GUN-TRK-03 · 30mm EMP-S","TRACKING · COOPERATIVE RELAY","BURST / SPREAD · MED / RING","ENVELOPE / LOGIC · PERIMETER / OVERLAP-SWEEP","AUTO-ENGAGE · MISSILES + TORPEDOES + DRONES"],require:{pdcMunition:"30mm EMP-S",pdcTrack:"COOPERATIVE RELAY",pdcDensity:"MED",pdcSpread:"RING",pdcEnvelope:"PERIMETER",pdcLogic:"OVERLAP-SWEEP",pdcMissiles:true,pdcTorpedoes:true,pdcDrones:true}}),
+    "capacitor-condition":Object.freeze({name:"PDC burst-density capacitor conditioning",cue:"Exercise the PDC energy train through a low-demand burst state and return it to the standard medium-demand condition. This is a weapon-readiness evolution, not a live engagement.",settings:["POINT DEFENSE bank selected","BURST DENSITY · LOW, then MED","CAPACITOR DEMAND · LOW, then READY","WEAPONS ACK after stabilization"]}),
+    "track-refinement":Object.freeze({name:"Coil Gun pattern-prediction track refinement",cue:"Refine a marginal Coil Gun track using PATTERN PREDICTION rather than a simple instantaneous lead. Re-center the range/rate solution and validate the updated probability heat zone before firing authority is considered.",settings:["GUN-MGD-01 · INERT KINETIC / PATTERN PREDICTION","RANGE / RATE · CENTERED","GUN-FCF-07 · VALIDATE refined solution"],require:{coilMunition:"INERT KINETIC",coilTopology:"PATTERN PREDICTION"}}),
+    "safe-bank-change":Object.freeze({name:"Armament bank safe-transfer",cue:"Place the master armament guard and weapon-arm train in a physically safe state before transferring between Coil Gun, PDC or Guided weapon banks. No firing topology remains authoritative across the bank change until revalidated.",settings:["GUN-MGD-01 · MASTER GUARD SAFE","WEAPON ARM · SAFE","Select the new WEAPON BANK","Revalidate the receiving fire-control system"]}),
+    "coil-volley-prep":Object.freeze({name:"Coil Gun bracket-spread volley preparation",cue:"Prepare a heavy Coil Gun volley without releasing it. Select a breach penetrator, BRACKET SPREAD topology and sequential bracket geometry, then bring the capacitor train to maximum and leave the arm lever staged.",settings:["GUN-MGD-01 · BREACH PENETRATOR","TOPOLOGY · BRACKET SPREAD","BRACKET · SEQUENTIAL","CAPACITOR · MAX","WEAPON ARM · STANDBY"],require:{coilMunition:"BREACH PENETRATOR",coilTopology:"BRACKET SPREAD",coilBracket:"SEQUENTIAL"}}),
+    "pdc-sector-shift":Object.freeze({name:"PDC perimeter-to-close-in sector transition",cue:"Reconfigure a running PDC defense from perimeter interception to close-in CIWS authority while retaining threat-threshold prioritization and a controlled cone pattern. The range gate transition should be visible in the firing display.",settings:["GUN-TRK-03 · 30mm HE-FLK","TRACKING · THREAT THRESHOLD","BURST / SPREAD · MED / CONE","Final ENVELOPE · CLOSE-IN","LOGIC · HARD-LOCK"],require:{pdcMunition:"30mm HE-FLK",pdcTrack:"THREAT THRESHOLD",pdcDensity:"MED",pdcSpread:"CONE",pdcEnvelope:"CLOSE-IN",pdcLogic:"HARD-LOCK"}}),
+    "guided-track-reacquire":Object.freeze({name:"Guided weapon cooperative track reacquisition",cue:"Recover a lost guided-weapon solution at long range. Use the guided track processor, rebuild the GUN-FCF-07 target and terminal package, confirm the track and leave the arm train staged for later authorization.",settings:["WEAPON BANK · GUIDED","GUN-FCF-07 · rebuild target / approach / terminal selections","RANGE / RATE · FAR","TRACK CONFIRM","WEAPON ARM · STANDBY"]}),
+    "weapons-safe-down":Object.freeze({name:"Post-engagement armament secure",cue:"Terminate the firing evolution deliberately: return the arm lever to SAFE, bleed capacitor demand, close the Coil Gun master guard and acknowledge that all firing solutions are no longer authorized.",settings:["WEAPON ARM · SAFE","CAPACITOR · LOW","GUN-MGD-01 · MASTER GUARD SAFE","WEAPONS ACK"]}),
+    "staggered-coil-salvo":Object.freeze({name:"Coil Gun cross-bracket heavy salvo",cue:"Authorize a maximum-energy Coil Gun salvo using BRACKET SPREAD with a cross pattern. The cross solution trades ammunition expenditure for a larger target-intercept footprint against a maneuvering heavy contact.",settings:["GUN-MGD-01 · BREACH PENETRATOR","TOPOLOGY · BRACKET SPREAD","BRACKET · CROSS","CAPACITOR · MAX","WEAPON ARM · ARMED"],require:{coilMunition:"BREACH PENETRATOR",coilTopology:"BRACKET SPREAD",coilBracket:"CROSS"}}),
+    "pdc-saturation-screen":Object.freeze({name:"PDC overlap-sweep saturation screen",cue:"Raise the highest-volume defensive screen for a dense multi-axis attack. HE-FLK, high burst density and a wall spread combine with overlap-sweep logic so the firing director paints every enabled inbound threat instead of remaining on a single hard lock.",settings:["GUN-TRK-03 · 30mm HE-FLK","TRACKING · THREAT THRESHOLD","BURST / SPREAD · HIGH / WALL","ENVELOPE / LOGIC · PERIMETER / OVERLAP-SWEEP","AUTO-ENGAGE · MISSILES + TORPEDOES + DRONES"],require:{pdcMunition:"30mm HE-FLK",pdcTrack:"THREAT THRESHOLD",pdcDensity:"HIGH",pdcSpread:"WALL",pdcEnvelope:"PERIMETER",pdcLogic:"OVERLAP-SWEEP",pdcMissiles:true,pdcTorpedoes:true,pdcDrones:true}}),
+    "guided-ripple":Object.freeze({name:"Guided cooperative ripple authorization",cue:"Program and authorize a sequenced guided-weapon ripple. Use cooperative designation where available, verify the complete GUN-FCF-07 munition program and acknowledge the weapon train before the live arm state.",settings:["WEAPON BANK · GUIDED","GUN-FCF-07 · cooperative designation / programmed terminal behavior","RANGE / RATE · FAR","CAPACITOR · MAX","WEAPONS ACK then ARM"]}),
+    "crossing-target":Object.freeze({name:"Coil Gun predictive crossing shot",cue:"Solve a high-angular-rate crossing contact with PATTERN PREDICTION. The probability heat zone should migrate ahead of the synthetic target as the range gate is walked from center to the final far solution.",settings:["GUN-MGD-01 · INERT KINETIC","TOPOLOGY · PATTERN PREDICTION","RANGE / RATE · CENTER → FAR","GUN-FCF-07 · VALIDATE final solution"],require:{coilMunition:"INERT KINETIC",coilTopology:"PATTERN PREDICTION"}}),
+    "degraded-track-fire":Object.freeze({name:"Coil Gun degraded-track marker hold",cue:"Build a conservative firing solution while target quality is poor. Use the Sensor / Marker round with PATTERN PREDICTION so the system favors track recovery and battlespace marking instead of immediately committing a destructive shot.",settings:["GUN-MGD-01 · SENSOR / MARKER","TOPOLOGY · PATTERN PREDICTION","CAPACITOR · READY","WEAPON ARM · STANDBY","VALIDATE + LOAD / ACK"],require:{coilMunition:"SENSOR / MARKER",coilTopology:"PATTERN PREDICTION"}}),
+    "reserve-capacitor-shot":Object.freeze({name:"Coil Gun reserve-charge vector shot",cue:"Prepare a restrained-energy Coil Gun shot for thermal or plant-limited conditions. VECTOR LEAD and an inert kinetic round minimize solve delay while the capacitor train remains at READY rather than MAX.",settings:["GUN-MGD-01 · INERT KINETIC / VECTOR LEAD","RANGE / RATE · FAR","CAPACITOR · READY","TRACK CONFIRM before ARM"],require:{coilMunition:"INERT KINETIC",coilTopology:"VECTOR LEAD"}}),
+    "terminal-defense":Object.freeze({name:"PDC hard-lock terminal intercept",cue:"Commit the PDC system to the nearest lethal inbound threat. AP-K, high burst density, a tight cone and CLOSE-IN hard-lock logic concentrate maximum destructive fire on one missile or torpedo until neutralization.",settings:["GUN-TRK-03 · 30mm AP-K","TRACKING · THREAT THRESHOLD","BURST / SPREAD · HIGH / CONE","ENVELOPE / LOGIC · CLOSE-IN / HARD-LOCK","AUTO-ENGAGE · MISSILES + TORPEDOES"],require:{pdcMunition:"30mm AP-K",pdcTrack:"THREAT THRESHOLD",pdcDensity:"HIGH",pdcSpread:"CONE",pdcEnvelope:"CLOSE-IN",pdcLogic:"HARD-LOCK",pdcMissiles:true,pdcTorpedoes:true}}),
+    "ceasefire-secure":Object.freeze({name:"Immediate ceasefire / master guard secure",cue:"Break the firing chain immediately. Drive the arm lever to SAFE, reduce capacitor demand and close the master guard so neither the Coil Gun nor PDC firing director can complete another command cycle without deliberate reauthorization.",settings:["WEAPON ARM · SAFE","CAPACITOR · LOW","GUN-MGD-01 · MASTER GUARD SAFE","WEAPONS ACK"]})
+  });
+
   const selection=Object.fromEntries(Object.entries(OPTIONS).map(([id,list])=>[id,Math.floor(list.length/2)]));
   const armament={munition:0,topology:0,bracket:0,guard:"GUARD CLOSED",serial:1};
   const pdc={munition:0,track:1,density:"MED",spread:"CONE",envelope:"PERIMETER",logic:"HARD-LOCK",missiles:true,torpedoes:true,drones:false,serial:1};
@@ -56,25 +78,13 @@
   const currentBracket=()=>BRACKET_PATTERNS[armament.bracket];
   const currentPdcMunition=()=>PDC_MUNITIONS[pdc.munition];
   const procAttrs=(token,controlId,state,label)=>`data-proc-input="${token}" data-control-id="${controlId}" data-control-state="${state}" data-proc-label="${esc(label)}"`;
+  const selectedProcedureId=()=>document.querySelector("#station-panel [data-procedure-select]")?.value||null;
+  const currentDoctrine=()=>GUNNERY_DOCTRINE[selectedProcedureId()]||null;
 
-  function activeProcedure(){
-    const begin=document.querySelector("#station-panel [data-procedure-begin]");
-    return Boolean(begin&&/restart procedure/i.test(begin.textContent||""));
-  }
+  function activeProcedure(){const begin=document.querySelector("#station-panel [data-procedure-begin]");return Boolean(begin&&/restart procedure/i.test(begin.textContent||""));}
   function optionMarkup(id){return OPTIONS[id].map((v,i)=>`<option value="${i}" ${i===selection[id]?"selected":""}>${esc(v)}</option>`).join("");}
   function summary(){return `${current("targeting")} · ${current("terminal")} · ${current("warhead")}`;}
-  function fcfMarkup(){
-    const armed=activeProcedure();
-    const fields=Object.keys(OPTIONS).map(id=>`<label class="exo-fcf07-field"><span>${LABELS[id]}</span><select data-fcf07-select="${id}">${optionMarkup(id)}</select></label>`).join("");
-    return `<span class="exo-device-label"><b class="exo-device-code">GUN-FCF-07</b><span> · FIRE CONTROL CONFIRM</span></span>
-      <div class="exo-fcf07-head"><span>MUNITION PROGRAM / SLOT ${String(serial).padStart(2,"0")}</span><b>${armed?"PROCEDURE LIVE":"LOCAL SETUP"}</b></div>
-      <div class="exo-fcf07-grid">${fields}</div>
-      <div class="exo-fcf07-summary"><small>PROGRAM</small><b>${esc(summary())}</b></div>
-      <div class="exo-fcf07-actions">
-        <button type="button" ${procAttrs("gun-track-confirm","gun-confirms","TRACK CONFIRMED","GUN-FCF-07 · FIRE CONTROL CONFIRM: PROGRAM VALIDATED")}>VALIDATE</button>
-        <button type="button" ${procAttrs("gun-weapons-ack","gun-confirms","ACKNOWLEDGED","GUN-FCF-07 · FIRE CONTROL CONFIRM: PROGRAM LOADED / ACKNOWLEDGED")}>LOAD / ACK</button>
-      </div>`;
-  }
+  function fcfMarkup(){const armed=activeProcedure(),fields=Object.keys(OPTIONS).map(id=>`<label class="exo-fcf07-field"><span>${LABELS[id]}</span><select data-fcf07-select="${id}">${optionMarkup(id)}</select></label>`).join("");return `<span class="exo-device-label"><b class="exo-device-code">GUN-FCF-07</b><span> · FIRE CONTROL CONFIRM</span></span><div class="exo-fcf07-head"><span>MUNITION PROGRAM / SLOT ${String(serial).padStart(2,"0")}</span><b>${armed?"PROCEDURE LIVE":"LOCAL SETUP"}</b></div><div class="exo-fcf07-grid">${fields}</div><div class="exo-fcf07-summary"><small>PROGRAM</small><b>${esc(summary())}</b></div><div class="exo-fcf07-actions"><button type="button" ${procAttrs("gun-track-confirm","gun-confirms","TRACK CONFIRMED","GUN-FCF-07 · FIRE CONTROL CONFIRM: PROGRAM VALIDATED")}>VALIDATE</button><button type="button" ${procAttrs("gun-weapons-ack","gun-confirms","ACKNOWLEDGED","GUN-FCF-07 · FIRE CONTROL CONFIRM: PROGRAM LOADED / ACKNOWLEDGED")}>LOAD / ACK</button></div>`;}
 
   function coilPreviewSvg(type){
     if(type==="penetrator")return `<svg viewBox="0 0 160 68"><path class="round-body" d="M18 28h72l24 6-24 6H18z"/><path class="round-core" d="M34 31h66l13 3-13 3H34z"/><path class="vector" d="M118 34h28m-8-6 8 6-8 6"/></svg>`;
@@ -84,204 +94,70 @@
     if(type==="marker")return `<svg viewBox="0 0 160 68"><path class="round-body" d="M44 25h44l12 9-12 9H44z"/><circle class="round-core" cx="69" cy="34" r="5"/><path class="burst" d="M110 20v28M96 34h28M102 26l16 16M118 26l-16 16"/></svg>`;
     return `<svg viewBox="0 0 160 68"><path class="round-body" d="M18 27h76l20 7-20 7H18z"/><path class="vector" d="M116 34h30m-8-6 8 6-8 6"/><path class="vector faint" d="M34 20h46M34 48h46"/></svg>`;
   }
-  function munitionDrumMarkup(){
-    const m=currentMunition(),prev=COIL_MUNITIONS[wrap(armament.munition-1,COIL_MUNITIONS.length)],next=COIL_MUNITIONS[wrap(armament.munition+1,COIL_MUNITIONS.length)];
-    return `<div class="exo-mgd01-ammo-bay">
-      <div class="exo-mgd01-wheel"><button type="button" data-mgd-munition-step="-1">▲</button><div class="exo-mgd01-drum"><span>${esc(prev.name)}</span><b>${esc(m.name)}</b><span>${esc(next.name)}</span></div><button type="button" data-mgd-munition-step="1">▼</button></div>
-      <div class="exo-mgd01-ammo-preview"><div class="exo-ammo-visual">${coilPreviewSvg(m.preview)}</div><div><small>${esc(m.code)} · CHAMBER PREVIEW</small><b>${esc(m.name)}</b><span>${esc(m.subtitle)}</span><em>${esc(m.use)}</em></div></div>
-    </div>`;
-  }
-  function topologyMarkup(){
-    return `<div class="exo-mgd01-topology">${FIRE_CONTROL_TOPOLOGIES.map((it,i)=>{
-      const [token,controlId,state]=it.proc;
-      return `<button type="button" data-mgd-topology="${i}" aria-pressed="${i===armament.topology}" ${procAttrs(token,controlId,state,`GUN-MGD-01 · FIRE CONTROL TOPOLOGY: ${it.label}`)}><b>${it.short}</b><span>${it.label}</span></button>`;
-    }).join("")}</div>`;
-  }
-  function bracketMarkup(){
-    const enabled=currentTopology().id==="bracket";
-    return `<div class="exo-mgd01-bracket" data-enabled="${enabled}"><small>BRACKET</small>${BRACKET_PATTERNS.map((x,i)=>`<button type="button" data-mgd-bracket="${i}" aria-pressed="${i===armament.bracket}" ${enabled?"":"disabled"} ${enabled?procAttrs("gun-track-confirm","gun-confirms","TRACK CONFIRMED",`GUN-MGD-01 · BRACKET PATTERN: ${x}`):""}>${x}</button>`).join("")}</div>`;
-  }
-  function guardStateFromBlock(block){
-    if(!block)return armament.guard;
-    if(block.querySelector('[data-control-state="GUARD OPEN"][aria-pressed="true"]'))return "GUARD OPEN";
-    if(block.querySelector('[data-control-state="GUARD CLOSED"][aria-pressed="true"]'))return "GUARD CLOSED";
-    return armament.guard;
-  }
-  function armamentMarkup(){
-    const topology=currentTopology(),open=armament.guard==="GUARD OPEN";
-    return `<span class="exo-device-label"><b class="exo-device-code">GUN-MGD-01</b><span> · COIL GUN MASTER ARMAMENT</span></span>
-      <div class="exo-mgd01-body">
-        <div class="exo-mgd01-status"><b>${esc(currentMunition().name)}</b><span>${topology.feedback} · ${topology.tradeoff}</span></div>
-        <div class="exo-mgd01-upper"><div class="exo-mgd01-guard"><small>MASTER GUARD</small><button type="button" aria-pressed="${open}" ${procAttrs("gun-safe-open","weapon-safe","GUARD OPEN","GUN-MGD-01 · MASTER GUARD: LIFT")}>LIFT</button><button type="button" aria-pressed="${!open}" ${procAttrs("gun-safe-close","weapon-safe","GUARD CLOSED","GUN-MGD-01 · MASTER GUARD: SAFE")}>SAFE</button></div>${topologyMarkup()}${bracketMarkup()}</div>
-        ${munitionDrumMarkup()}
-      </div>`;
-  }
+  function munitionDrumMarkup(){const m=currentMunition(),prev=COIL_MUNITIONS[wrap(armament.munition-1,COIL_MUNITIONS.length)],next=COIL_MUNITIONS[wrap(armament.munition+1,COIL_MUNITIONS.length)];return `<div class="exo-mgd01-ammo-bay"><div class="exo-mgd01-wheel"><button type="button" data-mgd-munition-step="-1">▲</button><div class="exo-mgd01-drum"><span>${esc(prev.name)}</span><b>${esc(m.name)}</b><span>${esc(next.name)}</span></div><button type="button" data-mgd-munition-step="1">▼</button></div><div class="exo-mgd01-ammo-preview"><div class="exo-ammo-visual">${coilPreviewSvg(m.preview)}</div><div><small>${esc(m.code)} · CHAMBER PREVIEW</small><b>${esc(m.name)}</b><span>${esc(m.subtitle)}</span><em>${esc(m.use)}</em></div></div></div>`;}
+  function topologyMarkup(){return `<div class="exo-mgd01-topology">${FIRE_CONTROL_TOPOLOGIES.map((it,i)=>{const [token,controlId,state]=it.proc;return `<button type="button" data-mgd-topology="${i}" aria-pressed="${i===armament.topology}" ${procAttrs(token,controlId,state,`GUN-MGD-01 · FIRE CONTROL TOPOLOGY: ${it.label}`)}><b>${it.short}</b><span>${it.label}</span></button>`;}).join("")}</div>`;}
+  function bracketMarkup(){const enabled=currentTopology().id==="bracket";return `<div class="exo-mgd01-bracket" data-enabled="${enabled}"><small>BRACKET</small>${BRACKET_PATTERNS.map((x,i)=>`<button type="button" data-mgd-bracket="${i}" aria-pressed="${i===armament.bracket}" ${enabled?"":"disabled"} ${enabled?procAttrs("gun-track-confirm","gun-confirms","TRACK CONFIRMED",`GUN-MGD-01 · BRACKET PATTERN: ${x}`):""}>${x}</button>`).join("")}</div>`;}
+  function guardStateFromBlock(block){if(!block)return armament.guard;if(block.querySelector('[data-control-state="GUARD OPEN"][aria-pressed="true"]'))return "GUARD OPEN";if(block.querySelector('[data-control-state="GUARD CLOSED"][aria-pressed="true"]'))return "GUARD CLOSED";return armament.guard;}
+  function armamentMarkup(){const topology=currentTopology(),open=armament.guard==="GUARD OPEN";return `<span class="exo-device-label"><b class="exo-device-code">GUN-MGD-01</b><span> · COIL GUN MASTER ARMAMENT</span></span><div class="exo-mgd01-body"><div class="exo-mgd01-status"><b>${esc(currentMunition().name)}</b><span>${topology.feedback} · ${topology.tradeoff}</span></div><div class="exo-mgd01-upper"><div class="exo-mgd01-guard"><small>MASTER GUARD</small><button type="button" aria-pressed="${open}" ${procAttrs("gun-safe-open","weapon-safe","GUARD OPEN","GUN-MGD-01 · MASTER GUARD: LIFT")}>LIFT</button><button type="button" aria-pressed="${!open}" ${procAttrs("gun-safe-close","weapon-safe","GUARD CLOSED","GUN-MGD-01 · MASTER GUARD: SAFE")}>SAFE</button></div>${topologyMarkup()}${bracketMarkup()}</div>${munitionDrumMarkup()}</div>`;}
 
-  function pdcPreviewSvg(type){
-    if(type==="flak")return `<svg viewBox="0 0 130 82"><circle class="pdc-round" cx="45" cy="41" r="8"/><circle class="pdc-burst" cx="82" cy="41" r="22"/><circle class="pdc-burst inner" cx="82" cy="41" r="12"/><path class="pdc-vector" d="M52 41h18"/></svg>`;
-    if(type==="emp")return `<svg viewBox="0 0 130 82"><path class="pdc-round" d="M24 34h28l10 7-10 7H24z"/><path class="pdc-arc" d="M69 24q14 17 0 34M79 17q22 24 0 48M91 11q29 30 0 60"/></svg>`;
-    return `<svg viewBox="0 0 130 82"><path class="pdc-round" d="M20 34h43l15 7-15 7H20z"/><path class="pdc-core" d="M31 38h35l10 3-10 3H31z"/><path class="pdc-vector" d="M80 41h35m-8-6 8 6-8 6"/></svg>`;
-  }
-  function pdcAmmoMarkup(){
-    const m=currentPdcMunition(),prev=PDC_MUNITIONS[wrap(pdc.munition-1,PDC_MUNITIONS.length)],next=PDC_MUNITIONS[wrap(pdc.munition+1,PDC_MUNITIONS.length)];
-    return `<section class="exo-pdc-ammo"><h4>AMMO SELECTION THUMB WHEEL</h4><div class="exo-pdc-wheel"><button type="button" data-pdc-ammo-step="-1">▲ UP</button><div class="exo-pdc-drum"><span>${esc(prev.name)}</span><b>&gt; ${esc(m.name)} &lt;</b><span>${esc(next.name)}</span></div><button type="button" data-pdc-ammo-step="1">DOWN ▼</button></div><div class="exo-pdc-preview">${pdcPreviewSvg(m.preview)}<small>SELECTED FEED</small><b>${esc(m.name)}</b><span>${esc(m.subtitle)} · ${esc(m.detail)}</span><em>${esc(m.use)}</em></div></section>`;
-  }
-  function pdcChoice(group,value,label,sub,attrs=""){
-    return `<button type="button" data-pdc-choice="${group}" data-pdc-value="${esc(value)}" aria-pressed="${pdc[group]===value}" ${attrs}><b>${label}</b>${sub?`<span>${sub}</span>`:""}</button>`;
-  }
-  function pdcTrackMarkup(){
-    return PDC_TRACK.map((it,i)=>pdcChoice("track",i,it.label,it.sub,procAttrs(it.token,"track-mode",it.state,`GUN-TRK-03 · TRACKING MODE: ${it.label}`))).join("");
-  }
-  function densityAttrs(value){
-    const [token,controlId,state]=PDC_DENSITY_PROC[value];
-    return procAttrs(token,controlId,state,`GUN-TRK-03 · BURST DENSITY: ${value}`);
-  }
+  function pdcPreviewSvg(type){if(type==="flak")return `<svg viewBox="0 0 130 82"><circle class="pdc-round" cx="45" cy="41" r="8"/><circle class="pdc-burst" cx="82" cy="41" r="22"/><circle class="pdc-burst inner" cx="82" cy="41" r="12"/><path class="pdc-vector" d="M52 41h18"/></svg>`;if(type==="emp")return `<svg viewBox="0 0 130 82"><path class="pdc-round" d="M24 34h28l10 7-10 7H24z"/><path class="pdc-arc" d="M69 24q14 17 0 34M79 17q22 24 0 48M91 11q29 30 0 60"/></svg>`;return `<svg viewBox="0 0 130 82"><path class="pdc-round" d="M20 34h43l15 7-15 7H20z"/><path class="pdc-core" d="M31 38h35l10 3-10 3H31z"/><path class="pdc-vector" d="M80 41h35m-8-6 8 6-8 6"/></svg>`;}
+  function pdcAmmoMarkup(){const m=currentPdcMunition(),prev=PDC_MUNITIONS[wrap(pdc.munition-1,PDC_MUNITIONS.length)],next=PDC_MUNITIONS[wrap(pdc.munition+1,PDC_MUNITIONS.length)];return `<section class="exo-pdc-ammo"><h4>AMMO SELECTION THUMB WHEEL</h4><div class="exo-pdc-wheel"><button type="button" data-pdc-ammo-step="-1">▲ UP</button><div class="exo-pdc-drum"><span>${esc(prev.name)}</span><b>&gt; ${esc(m.name)} &lt;</b><span>${esc(next.name)}</span></div><button type="button" data-pdc-ammo-step="1">DOWN ▼</button></div><div class="exo-pdc-preview">${pdcPreviewSvg(m.preview)}<small>SELECTED FEED</small><b>${esc(m.name)}</b><span>${esc(m.subtitle)} · ${esc(m.detail)}</span><em>${esc(m.use)}</em></div></section>`;}
+  function pdcChoice(group,value,label,sub,attrs=""){return `<button type="button" data-pdc-choice="${group}" data-pdc-value="${esc(value)}" aria-pressed="${pdc[group]===value}" ${attrs}><b>${label}</b>${sub?`<span>${sub}</span>`:""}</button>`;}
+  function pdcTrackMarkup(){return PDC_TRACK.map((it,i)=>pdcChoice("track",i,it.label,it.sub,procAttrs(it.token,"track-mode",it.state,`GUN-TRK-03 · TRACKING MODE: ${it.label}`))).join("");}
+  function densityAttrs(value){const [token,controlId,state]=PDC_DENSITY_PROC[value];return procAttrs(token,controlId,state,`GUN-TRK-03 · BURST DENSITY: ${value}`);}
   function spreadAttrs(value){return procAttrs("gun-track-confirm","gun-confirms","TRACK CONFIRMED",`GUN-TRK-03 · SPREAD PROFILE: ${value}`);}
   function logicAttrs(value){return procAttrs("gun-weapons-ack","gun-confirms","ACKNOWLEDGED",`GUN-TRK-03 · ENGAGEMENT LOGIC: ${value}`);}
-  function pdcMatrixMarkup(){
-    const m=currentPdcMunition();
-    return `<span class="exo-device-label"><b class="exo-device-code">GUN-TRK-03</b><span> · POINT DEFENSE CONTROL MATRIX</span></span>
-      <div class="exo-pdc-head"><b>POINT DEFENSE CONTROL MATRIX</b><span>SYS.STATE: ONLINE</span></div>
-      <div class="exo-pdc-layout">${pdcAmmoMarkup()}<section class="exo-pdc-methods"><h4>TARGETING & ENGAGEMENT METHODOLOGIES</h4>
-        <label>TRACKING MODE</label><div class="exo-pdc-track">${pdcTrackMarkup()}</div>
-        <label>FIRING PATTERN</label>
-        <div class="exo-pdc-inline"><span>BURST DENSITY</span>${["LOW","MED","HIGH"].map(x=>pdcChoice("density",x,x,"",densityAttrs(x))).join("")}</div>
-        <div class="exo-pdc-inline"><span>SPREAD PROFILE</span>${["CONE","WALL","RING"].map(x=>pdcChoice("spread",x,x,"",spreadAttrs(x))).join("")}</div>
-        <label>INTERCEPT ENVELOPE</label>
-        <div class="exo-pdc-two">${pdcChoice("envelope","PERIMETER","PERIMETER","MAXIMUM-RANGE ENGAGE",procAttrs("gun-range-far","range-gate","FAR","GUN-TRK-03 · INTERCEPT ENVELOPE: PERIMETER"))}${pdcChoice("envelope","CLOSE-IN","CLOSE-IN","CIWS / LETHAL-RANGE HOLD",procAttrs("gun-range-near","range-gate","NEAR","GUN-TRK-03 · INTERCEPT ENVELOPE: CLOSE-IN"))}</div>
-        <div class="exo-pdc-two">${pdcChoice("logic","HARD-LOCK","HARD-LOCK","ONE THREAT TO KILL",logicAttrs("HARD-LOCK"))}${pdcChoice("logic","OVERLAP-SWEEP","OVERLAP-SWEEP","MULTI-TRACK PAINT",logicAttrs("OVERLAP-SWEEP"))}</div>
-        <label>AUTO-ENGAGE PARAMETERS</label>
-        <div class="exo-pdc-filters">${[["missiles","MISSILES"],["torpedoes","TORPEDOES"],["drones","DRONES / STRIKE CRAFT"]].map(([id,label])=>`<button type="button" data-pdc-filter="${id}" aria-pressed="${pdc[id]}"><b>${pdc[id]?"☒":"☐"}</b>${label}</button>`).join("")}</div>
-      </section></div>
-      <footer class="exo-pdc-footer"><b>SELECTED MUNITION: ${esc(m.name)}</b><span>VELOCITY: ${m.velocity} m/s</span><span>THREAT PRIORITIZATION: ${pdc.track===1?"AUTO":"MANUAL / ASSIST"}</span></footer>`;
-  }
+  function pdcMatrixMarkup(){const m=currentPdcMunition();return `<span class="exo-device-label"><b class="exo-device-code">GUN-TRK-03</b><span> · POINT DEFENSE CONTROL MATRIX</span></span><div class="exo-pdc-head"><b>POINT DEFENSE CONTROL MATRIX</b><span>SYS.STATE: ONLINE</span></div><div class="exo-pdc-layout">${pdcAmmoMarkup()}<section class="exo-pdc-methods"><h4>TARGETING & ENGAGEMENT METHODOLOGIES</h4><label>TRACKING MODE</label><div class="exo-pdc-track">${pdcTrackMarkup()}</div><label>FIRING PATTERN</label><div class="exo-pdc-inline"><span>BURST DENSITY</span>${["LOW","MED","HIGH"].map(x=>pdcChoice("density",x,x,"",densityAttrs(x))).join("")}</div><div class="exo-pdc-inline"><span>SPREAD PROFILE</span>${["CONE","WALL","RING"].map(x=>pdcChoice("spread",x,x,"",spreadAttrs(x))).join("")}</div><label>INTERCEPT ENVELOPE</label><div class="exo-pdc-two">${pdcChoice("envelope","PERIMETER","PERIMETER","MAXIMUM-RANGE ENGAGE",procAttrs("gun-range-far","range-gate","FAR","GUN-TRK-03 · INTERCEPT ENVELOPE: PERIMETER"))}${pdcChoice("envelope","CLOSE-IN","CLOSE-IN","CIWS / LETHAL-RANGE HOLD",procAttrs("gun-range-near","range-gate","NEAR","GUN-TRK-03 · INTERCEPT ENVELOPE: CLOSE-IN"))}</div><div class="exo-pdc-two">${pdcChoice("logic","HARD-LOCK","HARD-LOCK","ONE THREAT TO KILL",logicAttrs("HARD-LOCK"))}${pdcChoice("logic","OVERLAP-SWEEP","OVERLAP-SWEEP","MULTI-TRACK PAINT",logicAttrs("OVERLAP-SWEEP"))}</div><label>AUTO-ENGAGE PARAMETERS</label><div class="exo-pdc-filters">${[["missiles","MISSILES"],["torpedoes","TORPEDOES"],["drones","DRONES / STRIKE CRAFT"]].map(([id,label])=>`<button type="button" data-pdc-filter="${id}" aria-pressed="${pdc[id]}"><b>${pdc[id]?"☒":"☐"}</b>${label}</button>`).join("")}</div></section></div><footer class="exo-pdc-footer"><b>SELECTED MUNITION: ${esc(m.name)}</b><span>VELOCITY: ${m.velocity} m/s</span><span>THREAT PRIORITIZATION: ${pdc.track===1?"AUTO":"MANUAL / ASSIST"}</span></footer>`;}
 
-  function rangeTelemetry(display){
-    const text=display?.querySelector(".exo-display-caption")?.textContent||"";
-    return {range:text.match(/([\d,]+)\s*km/i)?.[1]||"42,000",bearing:text.match(/(\d+(?:\.\d+)?)°/)?.[1]||"074"};
-  }
-  function bracketSvg(pattern){
-    if(pattern==="RING")return `<g class="exo-gun-bracket-pattern"><circle cx="78" cy="23" r="8"/><circle cx="78" cy="23" r="4.7"/></g>`;
-    if(pattern==="SEQUENTIAL")return `<g class="exo-gun-bracket-pattern"><path d="M68 32L88 14"/><circle cx="70" cy="30" r="2"/><circle cx="78" cy="23" r="2"/><circle cx="86" cy="16" r="2"/></g>`;
-    return `<g class="exo-gun-bracket-pattern"><path d="M66 23h24M78 11v24"/></g>`;
-  }
-  function topologySvg(t){
-    if(t.id==="prediction")return `<g class="exo-gun-prediction-zone"><rect x="78" y="8" width="18" height="15" rx="2"/><ellipse cx="87" cy="15.5" rx="6" ry="4"/></g>`;
-    if(t.id==="cooperative")return `<g class="exo-gun-cooperative"><rect x="71" y="15" width="14" height="16"/><circle cx="64" cy="11" r="2.3"/><path d="M65.5 12.5L74 19"/></g>`;
-    if(t.id==="bracket")return bracketSvg(currentBracket());
-    return `<g class="exo-gun-lead-reticle"><circle cx="88" cy="14" r="4.4"/><path d="M88 6v5M88 17v5M80 14h5M91 14h5"/></g>`;
-  }
-  function coilFireControlMarkup(display){
-    const t=currentTopology(),telemetry=rangeTelemetry(display);
-    return `<div class="exo-gun-solution-overlay" data-gun-mode="coil" data-gun-topology="${t.id}">
-      <svg class="exo-gun-solution-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="exo-gun-range-vector" d="M50 58L78 23"/><path class="exo-gun-lead-vector" d="M78 23L88 14"/><g class="exo-gun-synthetic-target" transform="translate(78 23) rotate(-28)"><path d="M-5 0L1-1.8L5 0L1 1.8Z"/></g>${topologySvg(t)}</svg>
-      <div class="exo-gun-hud left"><small>COIL FIRE CONTROL</small><b>${t.label}</b><span>${t.feedback}</span></div>
-      <div class="exo-gun-hud right"><small>TARGET / LEAD</small><b>BRG ${telemetry.bearing}° · RNG ${telemetry.range} KM</b><span>LEAD +06.4° · TOF 8.4 S</span></div>
-      <div class="exo-gun-solution-status"><b>${esc(currentMunition().name)}</b><span>${t.tradeoff}</span></div>
-    </div>`;
-  }
+  function rangeTelemetry(display){const text=display?.querySelector(".exo-display-caption")?.textContent||"";return {range:text.match(/([\d,]+)\s*km/i)?.[1]||"42,000",bearing:text.match(/(\d+(?:\.\d+)?)°/)?.[1]||"074"};}
+  function bracketSvg(pattern){if(pattern==="RING")return `<g class="exo-gun-bracket-pattern"><circle cx="78" cy="23" r="8"/><circle cx="78" cy="23" r="4.7"/></g>`;if(pattern==="SEQUENTIAL")return `<g class="exo-gun-bracket-pattern"><path d="M68 32L88 14"/><circle cx="70" cy="30" r="2"/><circle cx="78" cy="23" r="2"/><circle cx="86" cy="16" r="2"/></g>`;return `<g class="exo-gun-bracket-pattern"><path d="M66 23h24M78 11v24"/></g>`;}
+  function topologySvg(t){if(t.id==="prediction")return `<g class="exo-gun-prediction-zone"><rect x="78" y="8" width="18" height="15" rx="2"/><ellipse cx="87" cy="15.5" rx="6" ry="4"/></g>`;if(t.id==="cooperative")return `<g class="exo-gun-cooperative"><rect x="71" y="15" width="14" height="16"/><circle cx="64" cy="11" r="2.3"/><path d="M65.5 12.5L74 19"/></g>`;if(t.id==="bracket")return bracketSvg(currentBracket());return `<g class="exo-gun-lead-reticle"><circle cx="88" cy="14" r="4.4"/><path d="M88 6v5M88 17v5M80 14h5M91 14h5"/></g>`;}
+  function coilFireControlMarkup(display){const t=currentTopology(),telemetry=rangeTelemetry(display);return `<div class="exo-gun-solution-overlay" data-gun-mode="coil" data-gun-topology="${t.id}"><svg class="exo-gun-solution-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="exo-gun-range-vector" d="M50 58L78 23"/><path class="exo-gun-lead-vector" d="M78 23L88 14"/><g class="exo-gun-synthetic-target" transform="translate(78 23) rotate(-28)"><path d="M-5 0L1-1.8L5 0L1 1.8Z"/></g>${topologySvg(t)}</svg><div class="exo-gun-hud left"><small>COIL FIRE CONTROL</small><b>${t.label}</b><span>${t.feedback}</span></div><div class="exo-gun-hud right"><small>TARGET / LEAD</small><b>BRG ${telemetry.bearing}° · RNG ${telemetry.range} KM</b><span>LEAD +06.4° · TOF 8.4 S</span></div><div class="exo-gun-solution-status"><b>${esc(currentMunition().name)}</b><span>${t.tradeoff}</span></div></div>`;}
 
-  function pdcThreats(){
-    const all=[
-      {id:"M-17",kind:"missiles",x:82,y:20,tti:2.1,label:"MISSILE"},
-      {id:"T-04",kind:"torpedoes",x:18,y:28,tti:3.8,label:"TORPEDO"},
-      {id:"D-11",kind:"drones",x:86,y:70,tti:7.2,label:"DRONE"}
-    ];
-    const visible=all.filter(t=>pdc[t.kind]);
-    return visible.length?visible:[{id:"NO-AUTO",kind:"none",x:82,y:20,tti:9.9,label:"MANUAL TRACK"}];
-  }
-  function threatMarkup(threat,primary){
-    const hot=threat.id===primary.id;
-    return `<g class="exo-pdc-threat ${hot?"primary":""}" transform="translate(${threat.x} ${threat.y})"><path d="M-3 0L0-2L3 0L0 2Z"/><circle r="${hot?5.2:3.6}"/><text x="5" y="-2">${threat.id}</text><text x="5" y="3">TTI ${threat.tti.toFixed(1)}s</text></g>`;
-  }
-  function tracerMarkup(targets,primary){
-    const count=pdc.density==="HIGH"?10:pdc.density==="LOW"?3:6;
-    const aimed=pdc.logic==="OVERLAP-SWEEP"?targets:[primary];
-    return Array.from({length:count},(_,i)=>{
-      const t=aimed[i%aimed.length],phase=(i-(count-1)/2);
-      let x=t.x,y=t.y;
-      if(pdc.spread==="CONE"){x+=phase*.65;y+=Math.abs(phase)*.22;}
-      if(pdc.spread==="WALL"){x+=phase*1.2;y+=phase*.18;}
-      if(pdc.spread==="RING"){const a=(i/count)*Math.PI*2;x+=Math.cos(a)*5.2;y+=Math.sin(a)*5.2;}
-      return `<path class="exo-pdc-tracer tracer-${i%4}" d="M50 58 Q${(50+x)/2 + phase*.3} ${(58+y)/2 - 4} ${x.toFixed(1)} ${y.toFixed(1)}"/>`;
-    }).join("");
-  }
-  function pdcImpactMarkup(primary){
-    const m=currentPdcMunition();
-    if(m.preview==="flak")return `<g class="exo-pdc-impact flak" transform="translate(${primary.x} ${primary.y})"><circle r="8"/><circle r="4.5"/><path d="M-11 0H11M0-11V11"/></g>`;
-    if(m.preview==="emp")return `<g class="exo-pdc-impact emp" transform="translate(${primary.x} ${primary.y})"><path d="M-3-9Q7-4-3 1Q7 6-3 11"/><path d="M3-9Q13-4 3 1Q13 6 3 11"/></g>`;
-    return `<g class="exo-pdc-impact ap" transform="translate(${primary.x} ${primary.y})"><circle r="2.4"/><path d="M-6 0H6M0-6V6"/></g>`;
-  }
-  function pdcFireControlMarkup(display){
-    const threats=pdcThreats().sort((a,b)=>a.tti-b.tti);
-    const primary=pdc.track===1?threats[0]:threats[Math.min(pdc.track===2?1:0,threats.length-1)];
-    const envelope=pdc.envelope==="CLOSE-IN"?24:43;
-    const relay=pdc.track===2?`<g class="exo-pdc-relay"><circle cx="14" cy="12" r="3"/><text x="19" y="13">RLY-03</text><path d="M17 14L${primary.x} ${primary.y}"/></g>`:"";
-    return `<div class="exo-gun-solution-overlay exo-pdc-fire-overlay" data-gun-mode="pdc" data-pdc-density="${pdc.density.toLowerCase()}" data-pdc-spread="${pdc.spread.toLowerCase()}" data-pdc-logic="${pdc.logic.toLowerCase()}">
-      <svg class="exo-gun-solution-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <circle class="exo-pdc-envelope" cx="50" cy="58" r="${envelope}"/>
-        <circle class="exo-pdc-envelope-inner" cx="50" cy="58" r="17"/>
-        ${threats.map(t=>threatMarkup(t,primary)).join("")}
-        ${relay}
-        ${tracerMarkup(threats,primary)}
-        ${pdcImpactMarkup(primary)}
-      </svg>
-      <div class="exo-gun-hud left"><small>PDC INTERCEPT CONTROL</small><b>${PDC_TRACK[pdc.track].label}</b><span>${pdc.envelope} · ${pdc.logic}</span></div>
-      <div class="exo-gun-hud right"><small>FIRING DOCTRINE</small><b>${pdc.density} / ${pdc.spread}</b><span>${esc(currentPdcMunition().name)} · ${currentPdcMunition().velocity} m/s</span></div>
-      <div class="exo-pdc-priority-tag"><small>PRIMARY THREAT</small><b>${primary.id} · ${primary.label}</b><span>TTI ${primary.tti.toFixed(1)} S</span></div>
-      <div class="exo-gun-solution-status"><b>${esc(currentPdcMunition().name)}</b><span>${pdc.logic==="OVERLAP-SWEEP"?`${threats.length} TRACK SWEEP`:`HARD LOCK ${primary.id}`} · ${pdc.density} BURST · ${pdc.spread}</span></div>
-    </div>`;
-  }
+  function pdcThreats(){const all=[{id:"M-17",kind:"missiles",x:82,y:20,tti:2.1,label:"MISSILE"},{id:"T-04",kind:"torpedoes",x:18,y:28,tti:3.8,label:"TORPEDO"},{id:"D-11",kind:"drones",x:86,y:70,tti:7.2,label:"DRONE"}],visible=all.filter(t=>pdc[t.kind]);return visible.length?visible:[{id:"NO-AUTO",kind:"none",x:82,y:20,tti:9.9,label:"MANUAL TRACK"}];}
+  function threatMarkup(threat,primary){const hot=threat.id===primary.id;return `<g class="exo-pdc-threat ${hot?"primary":""}" transform="translate(${threat.x} ${threat.y})"><path d="M-3 0L0-2L3 0L0 2Z"/><circle r="${hot?5.2:3.6}"/><text x="5" y="-2">${threat.id}</text><text x="5" y="3">TTI ${threat.tti.toFixed(1)}s</text></g>`;}
+  function tracerMarkup(targets,primary){const count=pdc.density==="HIGH"?10:pdc.density==="LOW"?3:6,aimed=pdc.logic==="OVERLAP-SWEEP"?targets:[primary];return Array.from({length:count},(_,i)=>{const t=aimed[i%aimed.length],phase=(i-(count-1)/2);let x=t.x,y=t.y;if(pdc.spread==="CONE"){x+=phase*.65;y+=Math.abs(phase)*.22;}if(pdc.spread==="WALL"){x+=phase*1.2;y+=phase*.18;}if(pdc.spread==="RING"){const a=(i/count)*Math.PI*2;x+=Math.cos(a)*5.2;y+=Math.sin(a)*5.2;}return `<path class="exo-pdc-tracer tracer-${i%4}" d="M50 58 Q${(50+x)/2 + phase*.3} ${(58+y)/2 - 4} ${x.toFixed(1)} ${y.toFixed(1)}"/>`;}).join("");}
+  function pdcImpactMarkup(primary){const m=currentPdcMunition();if(m.preview==="flak")return `<g class="exo-pdc-impact flak" transform="translate(${primary.x} ${primary.y})"><circle r="8"/><circle r="4.5"/><path d="M-11 0H11M0-11V11"/></g>`;if(m.preview==="emp")return `<g class="exo-pdc-impact emp" transform="translate(${primary.x} ${primary.y})"><path d="M-3-9Q7-4-3 1Q7 6-3 11"/><path d="M3-9Q13-4 3 1Q13 6 3 11"/></g>`;return `<g class="exo-pdc-impact ap" transform="translate(${primary.x} ${primary.y})"><circle r="2.4"/><path d="M-6 0H6M0-6V6"/></g>`;}
+  function pdcFireControlMarkup(){const threats=pdcThreats().sort((a,b)=>a.tti-b.tti),primary=pdc.track===1?threats[0]:threats[Math.min(pdc.track===2?1:0,threats.length-1)],envelope=pdc.envelope==="CLOSE-IN"?24:43,relay=pdc.track===2?`<g class="exo-pdc-relay"><circle cx="14" cy="12" r="3"/><text x="19" y="13">RLY-03</text><path d="M17 14L${primary.x} ${primary.y}"/></g>`:"";return `<div class="exo-gun-solution-overlay exo-pdc-fire-overlay" data-gun-mode="pdc" data-pdc-density="${pdc.density.toLowerCase()}" data-pdc-spread="${pdc.spread.toLowerCase()}" data-pdc-logic="${pdc.logic.toLowerCase()}"><svg class="exo-gun-solution-svg" viewBox="0 0 100 100" preserveAspectRatio="none"><circle class="exo-pdc-envelope" cx="50" cy="58" r="${envelope}"/><circle class="exo-pdc-envelope-inner" cx="50" cy="58" r="17"/>${threats.map(t=>threatMarkup(t,primary)).join("")}${relay}${tracerMarkup(threats,primary)}${pdcImpactMarkup(primary)}</svg><div class="exo-gun-hud left"><small>PDC INTERCEPT CONTROL</small><b>${PDC_TRACK[pdc.track].label}</b><span>${pdc.envelope} · ${pdc.logic}</span></div><div class="exo-gun-hud right"><small>FIRING DOCTRINE</small><b>${pdc.density} / ${pdc.spread}</b><span>${esc(currentPdcMunition().name)} · ${currentPdcMunition().velocity} m/s</span></div><div class="exo-pdc-priority-tag"><small>PRIMARY THREAT</small><b>${primary.id} · ${primary.label}</b><span>TTI ${primary.tti.toFixed(1)} S</span></div><div class="exo-gun-solution-status"><b>${esc(currentPdcMunition().name)}</b><span>${pdc.logic==="OVERLAP-SWEEP"?`${threats.length} TRACK SWEEP`:`HARD LOCK ${primary.id}`} · ${pdc.density} BURST · ${pdc.spread}</span></div></div>`;}
 
   function stationSelected(){return document.querySelector("#station-tabs [data-station='gunnery'][aria-selected='true']");}
   function locate(code){if(!stationSelected())return null;return document.querySelector(`#station-panel .station-gunnery .exo-device-block[data-control-code='${code}']`);}
   const locateFcf=()=>locate("GUN-FCF-07"),locateMgd=()=>locate("GUN-MGD-01"),locateTrk=()=>locate("GUN-TRK-03");
   function locateFireControlDisplay(){if(!stationSelected())return null;return document.querySelector("#station-panel .display-target");}
-  function selectedWeaponBank(){
-    const block=locate("GUN-WBN-02");
-    const readout=block?.querySelector(":scope > strong")?.textContent||block?.querySelector("strong")?.textContent||"COIL A";
-    return readout.trim().toUpperCase();
-  }
+  function selectedWeaponBank(){const block=locate("GUN-WBN-02"),readout=block?.querySelector(":scope > strong")?.textContent||block?.querySelector("strong")?.textContent||"COIL A";return readout.trim().toUpperCase();}
+
+  const doctrineValues=()=>({coilMunition:currentMunition().name,coilTopology:currentTopology().label,coilBracket:currentBracket(),pdcMunition:currentPdcMunition().name,pdcTrack:PDC_TRACK[pdc.track].label,pdcDensity:pdc.density,pdcSpread:pdc.spread,pdcEnvelope:pdc.envelope,pdcLogic:pdc.logic,pdcMissiles:Boolean(pdc.missiles),pdcTorpedoes:Boolean(pdc.torpedoes),pdcDrones:Boolean(pdc.drones)});
+  const DOCTRINE_LABELS=Object.freeze({coilMunition:"COIL MUNITION",coilTopology:"COIL TOPOLOGY",coilBracket:"COIL BRACKET",pdcMunition:"PDC MUNITION",pdcTrack:"PDC TRACKING",pdcDensity:"PDC BURST DENSITY",pdcSpread:"PDC SPREAD",pdcEnvelope:"PDC ENVELOPE",pdcLogic:"PDC ENGAGEMENT LOGIC",pdcMissiles:"PDC MISSILE FILTER",pdcTorpedoes:"PDC TORPEDO FILTER",pdcDrones:"PDC DRONE FILTER"});
+  function dispatchDoctrineField(key){const doctrine=currentDoctrine(),expected=doctrine?.require?.[key];if(expected===undefined||!activeProcedure())return;const value=doctrineValues()[key],satisfied=value===expected;document.dispatchEvent(new CustomEvent("exo:auxiliary-input",{detail:{station:"gunnery",controlId:`gunnery-doctrine-${key}`,label:`GUN DOCTRINE · ${DOCTRINE_LABELS[key]}`,value:String(value),required:true,satisfied}}));}
+  function dispatchDoctrineSnapshot(){const doctrine=currentDoctrine();if(!doctrine?.require||!activeProcedure())return;Object.keys(doctrine.require).forEach(dispatchDoctrineField);}
+  function doctrineSettingsMarkup(doctrine){return `<section class="exo-gun-manual-doctrine" style="margin:10px 0;padding:9px 11px;border:1px solid #756d5c;background:rgba(222,211,188,.42);color:#28241d;font-family:'Courier New',monospace"><h4 style="margin:0 0 6px;font-size:.68rem;letter-spacing:.04em">WEAPON DOCTRINE — REQUIRED CONFIGURATION</h4><ul style="margin:0;padding-left:18px;font-size:.56rem;line-height:1.45">${doctrine.settings.map(item=>`<li>${esc(item)}</li>`).join("")}</ul></section>`;}
+  function rewriteProcedureOption(option,doctrine){if(!option||!doctrine)return;const text=option.dataset.gunCoreText||option.textContent;option.dataset.gunCoreText=text;const match=text.match(/^(\[[^\]]+\]\s*)(.*?)(\s·\s\d+\s+canonical inputs.*)$/);option.textContent=match?`${match[1]}${doctrine.name}${match[3]}`:doctrine.name;}
+  function rewriteManualEntry(id,doctrine){const chapterId=`manual-chapter-gunnery-${id}`,entry=document.getElementById(chapterId);if(!entry||entry.dataset.gunDoctrineName===doctrine.name)return;entry.dataset.gunDoctrineName=doctrine.name;const indexLink=document.querySelector(`#manual-index-gunnery a[href="#${chapterId}"]`);if(indexLink){const strong=indexLink.querySelector("strong");if(strong)strong.textContent=doctrine.name;}const headerStrong=entry.querySelector("header strong");if(headerStrong){const badge=headerStrong.querySelector(".manual-support")?.outerHTML||"",prefix=(headerStrong.textContent.match(/^\[[^\]]+\]\s*/)||[""])[0];headerStrong.innerHTML=`${esc(prefix+doctrine.name)}${badge}`;}const application=[...entry.querySelectorAll(":scope > p")].find(p=>p.querySelector("b")?.textContent?.includes("APPLICATION"));if(application)application.innerHTML=`<b>APPLICATION.</b> ${esc(doctrine.cue)}`;entry.querySelector(".exo-gun-manual-doctrine")?.remove();const sequence=entry.querySelector("h4");if(sequence)sequence.insertAdjacentHTML("beforebegin",doctrineSettingsMarkup(doctrine));entry.dataset.manualSearch=`${entry.dataset.manualSearch||""} ${doctrine.name} ${doctrine.cue} ${doctrine.settings.join(" ")}`.toLowerCase();}
+  function upgradeDoctrineCatalog(){if(!stationSelected())return;const select=document.querySelector("#station-panel [data-procedure-select]");select?.querySelectorAll("option").forEach(option=>rewriteProcedureOption(option,GUNNERY_DOCTRINE[option.value]));Object.entries(GUNNERY_DOCTRINE).forEach(([id,doctrine])=>rewriteManualEntry(id,doctrine));}
+
   function renderFcf(){const b=locateFcf();if(!b||b.dataset.fcf07Program===String(serial))return;b.dataset.fcf07Program=String(serial);b.classList.add("exo-fcf07-program");b.innerHTML=fcfMarkup();}
   function renderArmament(){const b=locateMgd();if(!b)return;if(!b.classList.contains("exo-mgd01-armament"))armament.guard=guardStateFromBlock(b);if(b.dataset.mgd01Serial===String(armament.serial))return;b.dataset.mgd01Serial=String(armament.serial);b.classList.add("exo-mgd01-armament");b.innerHTML=armamentMarkup();}
   function renderPdc(){const b=locateTrk();if(!b||b.dataset.pdcSerial===String(pdc.serial))return;b.dataset.pdcSerial=String(pdc.serial);b.classList.add("exo-pdc03-matrix");b.innerHTML=pdcMatrixMarkup();}
-  function renderFireControl(){
-    const d=locateFireControlDisplay();if(!d)return;
-    const bank=selectedWeaponBank(),mode=bank.includes("POINT DEFENSE")?"pdc":"coil";
-    const signature=`${mode}:${armament.serial}:${pdc.serial}:${bank}`;
-    const e=d.querySelector(".exo-gun-solution-overlay");
-    if(e?.dataset.signature===signature)return;
-    e?.remove();
-    d.insertAdjacentHTML("beforeend",mode==="pdc"?pdcFireControlMarkup(d):coilFireControlMarkup(d));
-    const n=d.querySelector(".exo-gun-solution-overlay");if(n)n.dataset.signature=signature;
-  }
-  function render(){queued=false;renderFcf();renderArmament();renderPdc();renderFireControl();}
+  function renderFireControl(){const d=locateFireControlDisplay();if(!d)return;const bank=selectedWeaponBank(),mode=bank.includes("POINT DEFENSE")?"pdc":"coil",signature=`${mode}:${armament.serial}:${pdc.serial}:${bank}`,e=d.querySelector(".exo-gun-solution-overlay");if(e?.dataset.signature===signature)return;e?.remove();d.insertAdjacentHTML("beforeend",mode==="pdc"?pdcFireControlMarkup():coilFireControlMarkup(d));const n=d.querySelector(".exo-gun-solution-overlay");if(n)n.dataset.signature=signature;}
+  function render(){queued=false;renderFcf();renderArmament();renderPdc();renderFireControl();upgradeDoctrineCatalog();}
   function queueRender(){if(queued)return;queued=true;requestAnimationFrame(render);}
   function bumpArmament(){armament.serial=armament.serial>=9999?1:armament.serial+1;queueRender();}
   function bumpPdc(){pdc.serial=pdc.serial>=9999?1:pdc.serial+1;queueRender();}
   function playDetent(seed,intensity=.78){try{window.EXO_CONTROL_AUDIO?.play?.("thumbwheel-notch",{station:"gunnery",seed,intensity});}catch(_){}}
 
-  document.addEventListener("change",e=>{
-    const s=e.target.closest("[data-fcf07-select]");if(!s)return;
-    const id=s.dataset.fcf07Select;if(!OPTIONS[id])return;
-    selection[id]=Math.max(0,Math.min(OPTIONS[id].length-1,Number(s.value)||0));serial=serial>=99?1:serial+1;
-    playDetent(`fcf07:${id}:${selection[id]}`);queueRender();
-  });
+  document.addEventListener("change",e=>{const s=e.target.closest("[data-fcf07-select]");if(s){const id=s.dataset.fcf07Select;if(!OPTIONS[id])return;selection[id]=Math.max(0,Math.min(OPTIONS[id].length-1,Number(s.value)||0));serial=serial>=99?1:serial+1;playDetent(`fcf07:${id}:${selection[id]}`);queueRender();return;}if(e.target.closest("#station-panel [data-procedure-select]"))setTimeout(()=>{upgradeDoctrineCatalog();if(activeProcedure())dispatchDoctrineSnapshot();},0);});
   document.addEventListener("click",e=>{
-    const mun=e.target.closest("[data-mgd-munition-step]");if(mun){armament.munition=wrap(armament.munition+Number(mun.dataset.mgdMunitionStep||0),COIL_MUNITIONS.length);playDetent(`mgd01:munition:${armament.munition}`,.88);bumpArmament();return;}
-    const top=e.target.closest("[data-mgd-topology]");if(top){armament.topology=Math.max(0,Math.min(FIRE_CONTROL_TOPOLOGIES.length-1,Number(top.dataset.mgdTopology)||0));playDetent(`mgd01:topology:${armament.topology}`,.82);bumpArmament();return;}
-    const br=e.target.closest("[data-mgd-bracket]");if(br&&currentTopology().id==="bracket"){armament.bracket=Math.max(0,Math.min(BRACKET_PATTERNS.length-1,Number(br.dataset.mgdBracket)||0));playDetent(`mgd01:bracket:${armament.bracket}`,.8);bumpArmament();return;}
+    if(e.target.closest("#station-panel [data-procedure-begin]")){setTimeout(()=>{upgradeDoctrineCatalog();dispatchDoctrineSnapshot();},0);return;}
+    const mun=e.target.closest("[data-mgd-munition-step]");if(mun){armament.munition=wrap(armament.munition+Number(mun.dataset.mgdMunitionStep||0),COIL_MUNITIONS.length);playDetent(`mgd01:munition:${armament.munition}`,.88);dispatchDoctrineField("coilMunition");bumpArmament();return;}
+    const top=e.target.closest("[data-mgd-topology]");if(top){armament.topology=Math.max(0,Math.min(FIRE_CONTROL_TOPOLOGIES.length-1,Number(top.dataset.mgdTopology)||0));playDetent(`mgd01:topology:${armament.topology}`,.82);dispatchDoctrineField("coilTopology");bumpArmament();return;}
+    const br=e.target.closest("[data-mgd-bracket]");if(br&&currentTopology().id==="bracket"){armament.bracket=Math.max(0,Math.min(BRACKET_PATTERNS.length-1,Number(br.dataset.mgdBracket)||0));playDetent(`mgd01:bracket:${armament.bracket}`,.8);dispatchDoctrineField("coilBracket");bumpArmament();return;}
     const guard=e.target.closest(".exo-mgd01-armament [data-control-state]");if(guard?.dataset.controlId==="weapon-safe"){armament.guard=guard.dataset.controlState||armament.guard;armament.serial++;queueRender();return;}
-    const ammo=e.target.closest("[data-pdc-ammo-step]");if(ammo){pdc.munition=wrap(pdc.munition+Number(ammo.dataset.pdcAmmoStep||0),PDC_MUNITIONS.length);playDetent(`pdc:ammo:${pdc.munition}`,.9);bumpPdc();return;}
-    const choice=e.target.closest("[data-pdc-choice]");if(choice){const group=choice.dataset.pdcChoice,value=choice.dataset.pdcValue;if(group==="track")pdc.track=Number(value);else if(group in pdc)pdc[group]=value;playDetent(`pdc:${group}:${value}`,.8);bumpPdc();return;}
-    const filter=e.target.closest("[data-pdc-filter]");if(filter){const id=filter.dataset.pdcFilter;if(id in pdc)pdc[id]=!pdc[id];playDetent(`pdc:${id}:${pdc[id]}`,.72);bumpPdc();}
+    const ammo=e.target.closest("[data-pdc-ammo-step]");if(ammo){pdc.munition=wrap(pdc.munition+Number(ammo.dataset.pdcAmmoStep||0),PDC_MUNITIONS.length);playDetent(`pdc:ammo:${pdc.munition}`,.9);dispatchDoctrineField("pdcMunition");bumpPdc();return;}
+    const choice=e.target.closest("[data-pdc-choice]");if(choice){const group=choice.dataset.pdcChoice,value=choice.dataset.pdcValue;if(group==="track")pdc.track=Number(value);else if(group in pdc)pdc[group]=value;playDetent(`pdc:${group}:${value}`,.8);const key={track:"pdcTrack",density:"pdcDensity",spread:"pdcSpread",envelope:"pdcEnvelope",logic:"pdcLogic"}[group];if(key)dispatchDoctrineField(key);bumpPdc();return;}
+    const filter=e.target.closest("[data-pdc-filter]");if(filter){const id=filter.dataset.pdcFilter;if(id in pdc)pdc[id]=!pdc[id];playDetent(`pdc:${id}:${pdc[id]}`,.72);dispatchDoctrineField({missiles:"pdcMissiles",torpedoes:"pdcTorpedoes",drones:"pdcDrones"}[id]);bumpPdc();}
   });
 
-  function start(){
-    observer=new MutationObserver(queueRender);
-    observer.observe(document.getElementById("station-panel")||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["aria-selected","aria-pressed","data-control-state"]});
-    queueRender();
-  }
-  window.EXO_GUN_FCF07=Object.freeze({selection,armament,pdc,current:id=>current(id),currentMunition,currentTopology,currentBracket,currentPdcMunition,refresh:queueRender});
+  function start(){observer=new MutationObserver(queueRender);observer.observe(document.getElementById("station-panel")||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["aria-selected","aria-pressed","data-control-state"]});queueRender();}
+  window.EXO_GUN_FCF07=Object.freeze({selection,armament,pdc,doctrine:GUNNERY_DOCTRINE,current:id=>current(id),currentMunition,currentTopology,currentBracket,currentPdcMunition,refresh:queueRender});
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
 })();
