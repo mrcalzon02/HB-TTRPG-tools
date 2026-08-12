@@ -46,7 +46,6 @@
   let lastTime = 0;
   let remountQueued = false;
   let lastAuxSignature = "";
-  let suppressSocketClickUntil = 0;
 
   const selectedProcedureId = () => document.querySelector("#station-panel [data-procedure-select]")?.value || "passive-track";
   const procedureActive = () => Boolean(document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)"));
@@ -75,8 +74,9 @@
   }
 
   function setStatus(message, tone = "normal") {
-    if (!mountedPanel) return;
-    const status = mountedPanel.querySelector("[data-tape-router-status]");
+    const panel = mountedPanel;
+    if (!panel) return;
+    const status = panel.querySelector("[data-tape-router-status]");
     if (!status) return;
     status.textContent = message;
     status.dataset.tone = tone;
@@ -110,116 +110,394 @@
     if (!svg || !element) return { x:0, y:0 };
     const s = svg.getBoundingClientRect();
     const r = element.getBoundingClientRect();
-    return { x:r.left+r.width/2-s.left, y:r.top+r.height/2-s.top };
+    const socketX = element.hasAttribute("data-tape-source") ? r.right : element.hasAttribute("data-tape-destination") ? r.left : r.left + r.width / 2;
+    const x = socketX - s.left;
+    const y = r.top + r.height / 2 - s.top;
+    return { x, y };
   }
 
   function pointerPoint(event) {
     const r = svg.getBoundingClientRect();
     return {
-      x: Math.max(0, Math.min(r.width, event.clientX-r.left)),
-      y: Math.max(0, Math.min(r.height, event.clientY-r.top))
+      x: Math.max(0, Math.min(r.width, event.clientX - r.left)),
+      y: Math.max(0, Math.min(r.height, event.clientY - r.top))
     };
   }
 
   function makeNodes(a, b, count = 11) {
-    return Array.from({length:count},(_,i) => {
-      const t=i/(count-1), sag=Math.sin(Math.PI*t)*26, x=a.x+(b.x-a.x)*t, y=a.y+(b.y-a.y)*t+sag;
-      return {x,y,px:x,py:y};
-    });
+    const nodes = [];
+    for (let i = 0; i < count; i++) {
+      const t = i / (count - 1);
+      const sag = Math.sin(Math.PI * t) * 26;
+      const x = a.x + (b.x - a.x) * t;
+      const y = a.y + (b.y - a.y) * t + sag;
+      nodes.push({ x, y, px:x, py:y });
+    }
+    return nodes;
   }
 
   function ropePath(nodes) {
     if (!nodes.length) return "";
     if (nodes.length === 1) return `M${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
-    let d=`M${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
-    for (let i=1;i<nodes.length-1;i++) {
-      const a=nodes[i],b=nodes[i+1],mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
-      d+=` Q${a.x.toFixed(1)} ${a.y.toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`;
+    let d = `M${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
+    for (let i = 1; i < nodes.length - 1; i++) {
+      const a = nodes[i];
+      const b = nodes[i + 1];
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2;
+      d += ` Q${a.x.toFixed(1)} ${a.y.toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`;
     }
-    const last=nodes[nodes.length-1];
-    return d+` T${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+    const last = nodes[nodes.length - 1];
+    d += ` T${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+    return d;
   }
 
-  const terminalSegmentPath = nodes => ropePath(nodes.length<3?nodes:nodes.slice(-3));
-  const destinationFor = source => mountedPanel?.querySelector(`[data-tape-destination="${routing[source]}"]`) || null;
-  const anchorFor = source => mountedPanel?.querySelector(`[data-tape-source="${source}"]`) || null;
+  function terminalSegmentPath(nodes) {
+    if (nodes.length < 3) return ropePath(nodes);
+    return ropePath(nodes.slice(-3));
+  }
+
+  function destinationFor(source) {
+    return mountedPanel?.querySelector(`[data-tape-destination="${routing[source]}"]`) || null;
+  }
+
+  function anchorFor(source) {
+    return mountedPanel?.querySelector(`[data-tape-source="${source}"]`) || null;
+  }
 
   function ensureRope(source) {
-    const anchor=anchorFor(source);
+    const anchor = anchorFor(source);
     if (!anchor || !svg) return null;
-    const start=pointForSocket(anchor),destination=destinationFor(source),end=drag?.source===source?drag.point:destination?pointForSocket(destination):{x:start.x+72,y:start.y+18};
-    let rope=ropes.get(source);
-    if (!rope || rope.nodes.length!==11) {
-      const base=document.createElementNS("http://www.w3.org/2000/svg","path");
-      const stripe=document.createElementNS("http://www.w3.org/2000/svg","path");
-      const plug=document.createElementNS("http://www.w3.org/2000/svg","g");
-      const plugBody=document.createElementNS("http://www.w3.org/2000/svg","rect");
-      const plugStripe=document.createElementNS("http://www.w3.org/2000/svg","rect");
-      base.classList.add("exo-tape-wire"); stripe.classList.add("exo-tape-wire-terminal"); plug.classList.add("exo-tape-plug"); plugBody.classList.add("plug-body"); plugStripe.classList.add("plug-stripe");
-      plugBody.setAttribute("x","-8"); plugBody.setAttribute("y","-5"); plugBody.setAttribute("width","16"); plugBody.setAttribute("height","10"); plugBody.setAttribute("rx","2");
-      plugStripe.setAttribute("x","-7"); plugStripe.setAttribute("y","-2"); plugStripe.setAttribute("width","14"); plugStripe.setAttribute("height","4"); plugStripe.setAttribute("rx","1");
-      plug.append(plugBody,plugStripe); svg.append(base,stripe,plug);
-      rope={source,nodes:makeNodes(start,end),base,stripe,plug}; ropes.set(source,rope);
+    const start = pointForSocket(anchor);
+    const destination = destinationFor(source);
+    const end = drag?.source === source ? drag.point : destination ? pointForSocket(destination) : { x:start.x + 72, y:start.y + 18 };
+    let rope = ropes.get(source);
+    if (!rope || rope.nodes.length !== 11) {
+      const base = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const stripe = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const plug = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      const plugBody = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      const plugStripe = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      base.classList.add("exo-tape-wire");
+      stripe.classList.add("exo-tape-wire-terminal");
+      plug.classList.add("exo-tape-plug");
+      plugBody.classList.add("plug-body");
+      plugStripe.classList.add("plug-stripe");
+      plugBody.setAttribute("x", "-8"); plugBody.setAttribute("y", "-5"); plugBody.setAttribute("width", "16"); plugBody.setAttribute("height", "10"); plugBody.setAttribute("rx", "2");
+      plugStripe.setAttribute("x", "-7"); plugStripe.setAttribute("y", "-2"); plugStripe.setAttribute("width", "14"); plugStripe.setAttribute("height", "4"); plugStripe.setAttribute("rx", "1");
+      plug.append(plugBody, plugStripe);
+      svg.append(base, stripe, plug);
+      rope = { source, nodes:makeNodes(start,end), base, stripe, plug, length:0 };
+      ropes.set(source, rope);
     }
-    rope.base.style.setProperty("--wire-color",COLORS[source]);
-    rope.plug.style.setProperty("--wire-color",COLORS[source]);
+    rope.base.style.setProperty("--wire-color", COLORS[source]);
+    rope.plug.style.setProperty("--wire-color", COLORS[source]);
     return rope;
   }
 
   function resetRopesToCurrentAnchors() {
     ropes.clear();
-    if (svg) svg.innerHTML="";
+    if (svg) svg.innerHTML = "";
     SOURCE_IDS.forEach(ensureRope);
   }
 
   function integrateRope(rope, dt) {
-    const source=rope.source,start=pointForSocket(anchorFor(source)),destination=destinationFor(source),end=drag?.source===source?drag.point:destination?pointForSocket(destination):{x:start.x+70,y:start.y+24},nodes=rope.nodes;
+    const source = rope.source;
+    const start = pointForSocket(anchorFor(source));
+    const destination = destinationFor(source);
+    const end = drag?.source === source ? drag.point : destination ? pointForSocket(destination) : { x:start.x + 70, y:start.y + 24 };
+    const nodes = rope.nodes;
     if (!nodes.length) return;
-    const reduced=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches,gravity=reduced?0:520,damping=reduced?0:.986,step=Math.min(.032,Math.max(.008,dt));
-    nodes[0].x=start.x;nodes[0].y=start.y;nodes[0].px=start.x;nodes[0].py=start.y;
-    const last=nodes[nodes.length-1];last.x=end.x;last.y=end.y;last.px=end.x;last.py=end.y;
-    for(let i=1;i<nodes.length-1;i++){const node=nodes[i],vx=(node.x-node.px)*damping,vy=(node.y-node.py)*damping;node.px=node.x;node.py=node.y;node.x+=vx;node.y+=vy+gravity*step*step;}
-    const straight=Math.hypot(end.x-start.x,end.y-start.y),cableLength=Math.max(straight*1.08,straight+36),segment=cableLength/(nodes.length-1);
-    for(let iter=0;iter<5;iter++){
-      nodes[0].x=start.x;nodes[0].y=start.y;last.x=end.x;last.y=end.y;
-      for(let i=0;i<nodes.length-1;i++){const a=nodes[i],b=nodes[i+1],vx=b.x-a.x,vy=b.y-a.y,dist=Math.max(.001,Math.hypot(vx,vy)),correction=(dist-segment)/dist,cx=vx*correction*.5,cy=vy*correction*.5;if(i!==0){a.x+=cx;a.y+=cy;}if(i+1!==nodes.length-1){b.x-=cx;b.y-=cy;}}
+
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const gravity = reduced ? 0 : 520;
+    const damping = reduced ? 0 : 0.986;
+    const step = Math.min(0.032, Math.max(0.008, dt));
+
+    nodes[0].x = start.x; nodes[0].y = start.y; nodes[0].px = start.x; nodes[0].py = start.y;
+    const last = nodes[nodes.length - 1];
+    last.x = end.x; last.y = end.y; last.px = end.x; last.py = end.y;
+
+    for (let i = 1; i < nodes.length - 1; i++) {
+      const node = nodes[i];
+      const vx = (node.x - node.px) * damping;
+      const vy = (node.y - node.py) * damping;
+      node.px = node.x;
+      node.py = node.y;
+      node.x += vx;
+      node.y += vy + gravity * step * step;
     }
-    rope.base.setAttribute("d",ropePath(nodes));
-    const destinationId=routing[source];
-    if(destinationId&&destination){rope.stripe.setAttribute("d",terminalSegmentPath(nodes));rope.stripe.style.setProperty("--terminal-color",COLORS[destinationId]);rope.stripe.style.opacity="1";}else rope.stripe.style.opacity="0";
-    const endpoint=nodes[nodes.length-1],prev=nodes[nodes.length-2],angle=Math.atan2(endpoint.y-prev.y,endpoint.x-prev.x)*180/Math.PI;
-    rope.plug.setAttribute("transform",`translate(${endpoint.x.toFixed(1)} ${endpoint.y.toFixed(1)}) rotate(${angle.toFixed(1)})`);
-    rope.plug.querySelector(".plug-stripe").style.fill=destinationId?COLORS[destinationId]:"#aeb8bb";
-    rope.plug.dataset.connected=destinationId?"true":"false";
+
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const straight = Math.hypot(dx,dy);
+    const cableLength = Math.max(straight * 1.08, straight + 36);
+    const segment = cableLength / (nodes.length - 1);
+    for (let iter = 0; iter < 5; iter++) {
+      nodes[0].x = start.x; nodes[0].y = start.y;
+      last.x = end.x; last.y = end.y;
+      for (let i = 0; i < nodes.length - 1; i++) {
+        const a = nodes[i], b = nodes[i+1];
+        const vx = b.x - a.x, vy = b.y - a.y;
+        const dist = Math.max(0.001, Math.hypot(vx,vy));
+        const correction = (dist - segment) / dist;
+        const cx = vx * correction * 0.5;
+        const cy = vy * correction * 0.5;
+        if (i !== 0) { a.x += cx; a.y += cy; }
+        if (i + 1 !== nodes.length - 1) { b.x -= cx; b.y -= cy; }
+      }
+    }
+
+    const path = ropePath(nodes);
+    rope.base.setAttribute("d", path);
+    const destinationId = routing[source];
+    if (destinationId && destination) {
+      rope.stripe.setAttribute("d", terminalSegmentPath(nodes));
+      rope.stripe.style.setProperty("--terminal-color", COLORS[destinationId]);
+      rope.stripe.style.opacity = "1";
+    } else {
+      rope.stripe.style.opacity = "0";
+    }
+    const endpoint = nodes[nodes.length - 1];
+    const prev = nodes[nodes.length - 2];
+    const angle = Math.atan2(endpoint.y-prev.y, endpoint.x-prev.x) * 180 / Math.PI;
+    rope.plug.setAttribute("transform", `translate(${endpoint.x.toFixed(1)} ${endpoint.y.toFixed(1)}) rotate(${angle.toFixed(1)})`);
+    rope.plug.querySelector(".plug-stripe").style.fill = destinationId ? COLORS[destinationId] : "#aeb8bb";
+    rope.plug.dataset.connected = destinationId ? "true" : "false";
   }
 
   function animate(time) {
-    raf=requestAnimationFrame(animate);
-    if(!mountedPanel?.isConnected||!svg?.isConnected)return;
-    const dt=lastTime?(time-lastTime)/1000:.016;lastTime=time;
-    SOURCE_IDS.forEach(source=>{const rope=ensureRope(source);if(rope)integrateRope(rope,dt);});
+    raf = requestAnimationFrame(animate);
+    if (!mountedPanel?.isConnected || !svg?.isConnected) return;
+    const dt = lastTime ? (time-lastTime)/1000 : 0.016;
+    lastTime = time;
+    SOURCE_IDS.forEach(source => {
+      const rope = ensureRope(source);
+      if (rope) integrateRope(rope,dt);
+    });
   }
 
-  function connect(source,destination){if(!SOURCE_IDS.includes(source)||!SOURCE_IDS.includes(destination))return;const other=SOURCE_IDS.find(s=>s!==source&&routing[s]===destination);if(other)routing[other]=null;routing[source]=destination;selectedSource=null;refreshStatus();emitRoutingState(true);}
-  function disconnect(source){if(!SOURCE_IDS.includes(source))return;routing[source]=null;selectedSource=source;refreshStatus();emitRoutingState(true);}
+  function connect(source, destination) {
+    if (!SOURCE_IDS.includes(source) || !SOURCE_IDS.includes(destination)) return;
+    const other = SOURCE_IDS.find(s => s !== source && routing[s] === destination);
+    if (other) routing[other] = null;
+    routing[source] = destination;
+    selectedSource = null;
+    refreshStatus();
+    emitRoutingState(true);
+  }
 
-  function nearestDestination(point,maxDistance=34){if(!mountedPanel)return null;let best=null,bestDistance=maxDistance;for(const id of DESTINATION_ORDER){const element=mountedPanel.querySelector(`[data-tape-destination="${id}"]`);if(!element)continue;const p=pointForSocket(element),d=Math.hypot(point.x-p.x,point.y-p.y);if(d<bestDistance){best=id;bestDistance=d;}}return best;}
+  function disconnect(source, emit = true) {
+    if (!SOURCE_IDS.includes(source)) return;
+    routing[source] = null;
+    selectedSource = source;
+    refreshStatus();
+    if (emit) emitRoutingState(true);
+  }
 
-  function handlePointerDown(event){const socket=event.target.closest?.("[data-tape-source]");if(!socket||!mountedPanel?.contains(socket)||socket.disabled)return;const source=socket.dataset.tapeSource;disconnect(source);drag={source,pointerId:event.pointerId,point:pointerPoint(event)};socket.setPointerCapture?.(event.pointerId);mountedPanel.dataset.dragging=source;event.preventDefault();event.stopPropagation();}
-  function handlePointerMove(event){if(!drag||event.pointerId!==drag.pointerId)return;drag.point=pointerPoint(event);const destination=nearestDestination(drag.point,42);mountedPanel?.querySelectorAll("[data-tape-destination]").forEach(el=>{el.dataset.hover=el.dataset.tapeDestination===destination?"true":"false";});event.preventDefault();}
-  function finishDrag(event,cancelled=false){if(!drag||event.pointerId!==drag.pointerId)return;const source=drag.source,destination=cancelled?null:nearestDestination(drag.point,48);drag=null;suppressSocketClickUntil=Date.now()+220;if(mountedPanel){delete mountedPanel.dataset.dragging;mountedPanel.querySelectorAll("[data-tape-destination]").forEach(el=>delete el.dataset.hover);}if(destination)connect(source,destination);else disconnect(source);event.preventDefault();event.stopPropagation();}
+  function nearestDestination(point, maxDistance = 34) {
+    if (!mountedPanel) return null;
+    let best = null;
+    let bestDistance = maxDistance;
+    for (const id of DESTINATION_ORDER) {
+      const element = mountedPanel.querySelector(`[data-tape-destination="${id}"]`);
+      if (!element) continue;
+      const p = pointForSocket(element);
+      const d = Math.hypot(point.x-p.x,point.y-p.y);
+      if (d < bestDistance) { best = id; bestDistance = d; }
+    }
+    return best;
+  }
 
-  function handleClick(event){if(Date.now()<suppressSocketClickUntil){event.preventDefault();event.stopPropagation();return;}const sourceSocket=event.target.closest?.("[data-tape-source]");if(sourceSocket&&mountedPanel?.contains(sourceSocket)){const source=sourceSocket.dataset.tapeSource;selectedSource=selectedSource===source?null:source;mountedPanel.querySelectorAll("[data-tape-source]").forEach(el=>el.dataset.selected=el.dataset.tapeSource===selectedSource?"true":"false");event.preventDefault();event.stopPropagation();return;}const destinationSocket=event.target.closest?.("[data-tape-destination]");if(destinationSocket&&mountedPanel?.contains(destinationSocket)&&selectedSource){connect(selectedSource,destinationSocket.dataset.tapeDestination);mountedPanel.querySelectorAll("[data-tape-source]").forEach(el=>delete el.dataset.selected);event.preventDefault();event.stopPropagation();}}
+  function handlePointerDown(event) {
+    const socket = event.target.closest?.("[data-tape-source]");
+    if (!socket || !mountedPanel?.contains(socket) || socket.disabled) return;
+    const source = socket.dataset.tapeSource;
+    const point = pointerPoint(event);
+    disconnect(source, false);
+    drag = { source, pointerId:event.pointerId, point };
+    socket.setPointerCapture?.(event.pointerId);
+    mountedPanel.dataset.dragging = source;
+    event.preventDefault();
+    event.stopPropagation();
+  }
 
-  function createSocket(kind,id,index){const button=document.createElement("button");button.type="button";button.className=`exo-tape-socket ${kind}`;button.dataset[kind==="source"?"tapeSource":"tapeDestination"]=id;button.dataset.socketIndex=String(index);button.style.setProperty("--socket-color",COLORS[id]);button.innerHTML=`<b>${id}</b><span>${kind==="source"?"SEND":"RETURN"}</span><i aria-hidden="true"></i>`;button.setAttribute("aria-label",`${kind==="source"?"Source":"Destination"} ${id}`);return button;}
+  function handlePointerMove(event) {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    drag.point = pointerPoint(event);
+    const destination = nearestDestination(drag.point,42);
+    mountedPanel?.querySelectorAll("[data-tape-destination]").forEach(el => {
+      el.dataset.hover = el.dataset.tapeDestination === destination ? "true" : "false";
+    });
+    event.preventDefault();
+  }
 
-  function mount(){const panel=document.querySelector(PANEL_SELECTOR);if(!panel||(panel===mountedPanel&&panel.querySelector("[data-tape-router-stage]")))return;mountedPanel=panel||null;if(!panel)return;const actions=panel.querySelector(".exo-hardware-actions");if(!actions)return;[...actions.querySelectorAll(":scope > button")].forEach(button=>{button.classList.add("exo-tape-router-confirm");button.hidden=false;});actions.querySelector("[data-tape-router-stage]")?.remove();const stage=document.createElement("section");stage.className="exo-tape-router-stage";stage.dataset.tapeRouterStage="true";stage.innerHTML=`<header class="exo-tape-router-head"><b>LTO 20-ZIPPY-ZAP TAPE-TORNADO</b><span>PHYSICAL PATCH / ANALYSIS ROUTING</span></header><div class="exo-tape-router-layout"><div class="exo-tape-rack left" data-tape-left></div><div class="exo-tape-patchfield"><div class="exo-tape-patchfield-grid" aria-hidden="true"></div><svg class="exo-tape-wire-layer" data-tape-wire-layer aria-label="Physical patch cables"></svg><div class="exo-tape-route-meta"><span>REQUIRED <b data-tape-router-target></b></span><span>CURRENT <b data-tape-router-current></b></span></div></div><div class="exo-tape-rack right" data-tape-right></div></div><div class="exo-tape-router-status" data-tape-router-status aria-live="polite"></div>`;const left=stage.querySelector("[data-tape-left]"),right=stage.querySelector("[data-tape-right]");SOURCE_IDS.forEach((id,index)=>left.append(createSocket("source",id,index)));DESTINATION_ORDER.forEach((id,index)=>right.append(createSocket("destination",id,index)));actions.prepend(stage);svg=stage.querySelector("[data-tape-wire-layer]");resetRopesToCurrentAnchors();refreshStatus();stage.addEventListener("pointerdown",handlePointerDown);stage.addEventListener("pointermove",handlePointerMove);stage.addEventListener("pointerup",event=>finishDrag(event,false));stage.addEventListener("pointercancel",event=>finishDrag(event,true));stage.addEventListener("click",handleClick);requestAnimationFrame(()=>{resetRopesToCurrentAnchors();refreshStatus();emitRoutingState();});}
+  function finishDrag(event, cancelled = false) {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    const source = drag.source;
+    const destination = cancelled ? null : nearestDestination(drag.point,48);
+    drag = null;
+    if (mountedPanel) {
+      delete mountedPanel.dataset.dragging;
+      mountedPanel.querySelectorAll("[data-tape-destination]").forEach(el => delete el.dataset.hover);
+    }
+    if (destination) connect(source,destination); else disconnect(source);
+    event.preventDefault();
+    event.stopPropagation();
+  }
 
-  function blockIfMisrouted(event){const target=event.target.closest?.("#station-panel [data-proc-input]");if(!target||!document.querySelector(PANEL_SELECTOR))return;const token=target.dataset.procInput||"",guarded=token==="sci-track-confirm"||token==="sci-analyst-ack"||token==="auth-key-insert"||token==="execute";if(!guarded||isCorrect())return;event.preventDefault();event.stopImmediatePropagation();setStatus(`INTERLOCK · ${token.toUpperCase()} BLOCKED · REQUIRED ${routeString(requirement())}`,"bad");mountedPanel?.animate?.([{transform:"translateX(0)"},{transform:"translateX(-2px)"},{transform:"translateX(2px)"},{transform:"translateX(0)"}],{duration:160,iterations:2});}
-  function handleGlobalClick(event){if(event.target.closest?.("#crew-scenario-reset")){Object.assign(routing,identityRouting());lastAuxSignature="";requestAnimationFrame(()=>{mount();refreshStatus();});return;}if(event.target.closest?.("#station-tabs [data-station], #station-panel [data-procedure-begin], #station-panel [data-procedure-abort]")){lastAuxSignature="";queueRemount();}}
-  function handleGlobalChange(event){if(!event.target.closest?.("#station-panel [data-procedure-select]"))return;lastAuxSignature="";queueRemount();}
-  function queueRemount(){if(remountQueued)return;remountQueued=true;requestAnimationFrame(()=>{remountQueued=false;mount();refreshStatus();emitRoutingState();});}
-  function observeStationPanel(){const panel=document.getElementById("station-panel");if(!panel)return;new MutationObserver(()=>queueRemount()).observe(panel,{childList:true,subtree:true});}
+  function handleClick(event) {
+    const sourceSocket = event.target.closest?.("[data-tape-source]");
+    if (sourceSocket && mountedPanel?.contains(sourceSocket)) {
+      const source = sourceSocket.dataset.tapeSource;
+      if (selectedSource === source) selectedSource = null;
+      else selectedSource = source;
+      mountedPanel.querySelectorAll("[data-tape-source]").forEach(el => el.dataset.selected = el.dataset.tapeSource === selectedSource ? "true" : "false");
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    const destinationSocket = event.target.closest?.("[data-tape-destination]");
+    if (destinationSocket && mountedPanel?.contains(destinationSocket) && selectedSource) {
+      connect(selectedSource,destinationSocket.dataset.tapeDestination);
+      mountedPanel.querySelectorAll("[data-tape-source]").forEach(el => delete el.dataset.selected);
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
 
-  document.addEventListener("DOMContentLoaded",()=>{document.addEventListener("click",blockIfMisrouted,true);document.addEventListener("click",handleGlobalClick,false);document.addEventListener("change",handleGlobalChange,false);observeStationPanel();queueRemount();raf=requestAnimationFrame(animate);addEventListener("beforeunload",()=>cancelAnimationFrame(raf),{once:true});});
+  function createSocket(kind,id,index) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `exo-tape-socket ${kind}`;
+    button.dataset[kind === "source" ? "tapeSource" : "tapeDestination"] = id;
+    button.dataset.socketIndex = String(index);
+    button.style.setProperty("--socket-color", COLORS[id]);
+    button.innerHTML = `<b>${id}</b><span>${kind === "source" ? "SEND" : "RETURN"}</span><i aria-hidden="true"></i>`;
+    button.setAttribute("aria-label", `${kind === "source" ? "Source" : "Destination"} ${id}`);
+    return button;
+  }
+
+  function mount() {
+    const panel = document.querySelector(PANEL_SELECTOR);
+    if (!panel || panel === mountedPanel && panel.querySelector("[data-tape-router-stage]")) return;
+    mountedPanel = panel || null;
+    if (!panel) return;
+
+    const actions = panel.querySelector(".exo-hardware-actions");
+    if (!actions) return;
+    const originalButtons = [...actions.querySelectorAll(":scope > button")];
+    originalButtons.forEach(button => {
+      button.classList.add("exo-tape-router-confirm");
+      button.hidden = false;
+    });
+
+    actions.querySelector("[data-tape-router-stage]")?.remove();
+    const stage = document.createElement("section");
+    stage.className = "exo-tape-router-stage";
+    stage.dataset.tapeRouterStage = "true";
+    stage.innerHTML = `
+      <header class="exo-tape-router-head">
+        <b>LTO 20-ZIPPY-ZAP TAPE-TORNADO</b>
+        <span>PHYSICAL PATCH / ANALYSIS ROUTING</span>
+      </header>
+      <div class="exo-tape-router-layout">
+        <div class="exo-tape-rack left" data-tape-left></div>
+        <div class="exo-tape-patchfield">
+          <div class="exo-tape-patchfield-grid" aria-hidden="true"></div>
+          <svg class="exo-tape-wire-layer" data-tape-wire-layer aria-label="Physical patch cables"></svg>
+          <div class="exo-tape-route-meta">
+            <span>REQUIRED <b data-tape-router-target></b></span>
+            <span>CURRENT <b data-tape-router-current></b></span>
+          </div>
+        </div>
+        <div class="exo-tape-rack right" data-tape-right></div>
+      </div>
+      <div class="exo-tape-router-status" data-tape-router-status aria-live="polite"></div>`;
+
+    const left = stage.querySelector("[data-tape-left]");
+    const right = stage.querySelector("[data-tape-right]");
+    SOURCE_IDS.forEach((id,index) => left.append(createSocket("source",id,index)));
+    DESTINATION_ORDER.forEach((id,index) => right.append(createSocket("destination",id,index)));
+
+    actions.prepend(stage);
+    svg = stage.querySelector("[data-tape-wire-layer]");
+    resetRopesToCurrentAnchors();
+    refreshStatus();
+
+    stage.addEventListener("pointerdown",handlePointerDown);
+    stage.addEventListener("pointermove",handlePointerMove);
+    stage.addEventListener("pointerup",event => finishDrag(event,false));
+    stage.addEventListener("pointercancel",event => finishDrag(event,true));
+    stage.addEventListener("click",handleClick);
+    requestAnimationFrame(() => {
+      resetRopesToCurrentAnchors();
+      refreshStatus();
+      emitRoutingState();
+    });
+  }
+
+  function blockIfMisrouted(event) {
+    const target = event.target.closest?.("#station-panel [data-proc-input]");
+    if (!target || !document.querySelector(PANEL_SELECTOR)) return;
+    const token = target.dataset.procInput || "";
+    const guarded = token === "sci-track-confirm" || token === "sci-analyst-ack" || token === "auth-key-insert" || token === "execute";
+    if (!guarded || isCorrect()) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    setStatus(`INTERLOCK · ${token.toUpperCase()} BLOCKED · REQUIRED ${routeString(requirement())}`,"bad");
+    mountedPanel?.animate?.([
+      { transform:"translateX(0)" },
+      { transform:"translateX(-2px)" },
+      { transform:"translateX(2px)" },
+      { transform:"translateX(0)" }
+    ],{duration:160,iterations:2});
+  }
+
+  function handleGlobalClick(event) {
+    if (event.target.closest?.("#crew-scenario-reset")) {
+      Object.assign(routing,identityRouting());
+      lastAuxSignature = "";
+      requestAnimationFrame(() => { mount(); refreshStatus(); });
+      return;
+    }
+    if (event.target.closest?.("#station-tabs [data-station], #station-panel [data-procedure-begin], #station-panel [data-procedure-abort]")) {
+      lastAuxSignature = "";
+      queueRemount();
+    }
+  }
+
+  function handleGlobalChange(event) {
+    if (!event.target.closest?.("#station-panel [data-procedure-select]")) return;
+    lastAuxSignature = "";
+    queueRemount();
+  }
+
+  function queueRemount() {
+    if (remountQueued) return;
+    remountQueued = true;
+    requestAnimationFrame(() => {
+      remountQueued = false;
+      mount();
+      refreshStatus();
+      emitRoutingState();
+    });
+  }
+
+  function observeStationPanel() {
+    const panel = document.getElementById("station-panel");
+    if (!panel) return;
+    const observer = new MutationObserver(() => queueRemount());
+    observer.observe(panel,{childList:true,subtree:true});
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("click",blockIfMisrouted,true);
+    document.addEventListener("click",handleGlobalClick,false);
+    document.addEventListener("change",handleGlobalChange,false);
+    observeStationPanel();
+    queueRemount();
+    raf = requestAnimationFrame(animate);
+    addEventListener("beforeunload",() => cancelAnimationFrame(raf),{once:true});
+  });
 })();
