@@ -38,31 +38,36 @@
 
 /* Variable primary feed conduits. */
 .exo-eng-feed-conduit{fill:none;stroke:#35433f;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 1px 1px #000)}
-.exo-eng-feed-plasma{fill:none;stroke:#4fe4d4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7;vector-effect:non-scaling-stroke;animation:exo-eng-plasma-flow linear infinite;mix-blend-mode:screen}
-.exo-eng-feed.feed-a .exo-eng-feed-plasma{stroke-width:calc(var(--fa-width)*1px);opacity:var(--fa-alpha);animation-duration:var(--fa-speed);filter:drop-shadow(0 0 var(--fa-glow) rgba(71,239,218,.72))}
-.exo-eng-feed.feed-b .exo-eng-feed-plasma{stroke-width:calc(var(--fb-width)*1px);opacity:var(--fb-alpha);animation-duration:var(--fb-speed);filter:drop-shadow(0 0 var(--fb-glow) rgba(100,255,236,.72))}
-.exo-eng-feed.feed-c .exo-eng-feed-plasma{stroke-width:calc(var(--fc-width)*1px);opacity:var(--fc-alpha);animation-duration:var(--fc-speed);filter:drop-shadow(0 0 var(--fc-glow) rgba(64,217,220,.72))}
-.exo-eng-feed.feed-d .exo-eng-feed-plasma{stroke-width:calc(var(--fd-width)*1px);opacity:var(--fd-alpha);animation-duration:var(--fd-speed);filter:drop-shadow(0 0 var(--fd-glow) rgba(86,231,209,.72))}
-.exo-eng-port{fill:#07110f;stroke:#5bcfbe;stroke-width:1.6;filter:drop-shadow(0 0 4px rgba(68,221,202,.42))}
+.exo-eng-feed-plasma{fill:none;stroke:#4fe4d4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7;vector-effect:non-scaling-stroke;animation:exo-eng-plasma-flow linear infinite}
+.exo-eng-feed.feed-a .exo-eng-feed-plasma{stroke-width:calc(var(--fa-width)*1px);opacity:var(--fa-alpha);animation-duration:var(--fa-speed);filter:drop-shadow(0 0 4px rgba(71,239,218,.58))}
+.exo-eng-feed.feed-b .exo-eng-feed-plasma{stroke-width:calc(var(--fb-width)*1px);opacity:var(--fb-alpha);animation-duration:var(--fb-speed);filter:drop-shadow(0 0 4px rgba(100,255,236,.58))}
+.exo-eng-feed.feed-c .exo-eng-feed-plasma{stroke-width:calc(var(--fc-width)*1px);opacity:var(--fc-alpha);animation-duration:var(--fc-speed);filter:drop-shadow(0 0 4px rgba(64,217,220,.58))}
+.exo-eng-feed.feed-d .exo-eng-feed-plasma{stroke-width:calc(var(--fd-width)*1px);opacity:var(--fd-alpha);animation-duration:var(--fd-speed);filter:drop-shadow(0 0 4px rgba(86,231,209,.58))}
+.exo-eng-port{fill:#07110f;stroke:#5bcfbe;stroke-width:1.6;filter:drop-shadow(0 0 3px rgba(68,221,202,.38))}
 .exo-eng-feed-label{fill:#86bcae;font-size:6px;font-weight:900;letter-spacing:.45px}
 .exo-eng-feed-value{fill:#cdf4e9;font-size:6.8px;font-weight:900}
 @keyframes exo-eng-plasma-flow{to{stroke-dashoffset:-30}}
 
-/* Plasma rectifier: transparent vessel with electrode-seeking cyan/green discharge.
-   The faint gas haze is static; visible motion comes from unstable branching plasma arcs. */
+/* Plasma rectifier: path geometry stays static. Apparent instability comes from
+   lightweight dash travel and stepped intensity changes rather than per-frame curve morphing. */
 .exo-eng-core-title{fill:#b7e6d9;font-size:7.2px;font-weight:900;letter-spacing:.64px}
 .exo-eng-core-subtitle{fill:#708f86;font-size:4.9px;font-weight:800;letter-spacing:.32px}
-.exo-eng-glass-bulb{stroke:#4b968c;stroke-width:2.1;filter:drop-shadow(0 0 8px rgba(57,208,194,.24)) drop-shadow(0 0 22px rgba(29,133,135,.12))}
+.exo-eng-glass-bulb{stroke:#4b968c;stroke-width:2.1;filter:drop-shadow(0 0 7px rgba(57,208,194,.2))}
 .exo-eng-glass-rim{fill:none;stroke:rgba(145,235,220,.32);stroke-width:1.05;stroke-dasharray:2 3}
-.exo-eng-plasma-haze{opacity:.22;filter:drop-shadow(0 0 12px rgba(43,220,210,.18))}
-.exo-eng-plasma-core{fill:#f0ffff;stroke:#7effee;stroke-width:.9;opacity:.98;filter:drop-shadow(0 0 3px #e8ffff) drop-shadow(0 0 10px rgba(71,245,224,.9)) drop-shadow(0 0 19px rgba(41,187,192,.5))}
-.exo-eng-plasma-corona{mix-blend-mode:screen}
-.exo-eng-plasma-tendril{mix-blend-mode:screen}
-.exo-eng-plasma-filament{fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:var(--filament);vector-effect:non-scaling-stroke}
-.exo-eng-plasma-filament-main{stroke:#b4fff6;filter:drop-shadow(0 0 1px #f0ffff) drop-shadow(0 0 4px rgba(91,255,236,.96)) drop-shadow(0 0 9px rgba(44,211,211,.58))}
-.exo-eng-plasma-filament-branch{stroke:#42d7d3;filter:drop-shadow(0 0 2px rgba(82,247,230,.84)) drop-shadow(0 0 5px rgba(37,182,190,.46))}
-.exo-eng-plasma-contact{mix-blend-mode:screen;filter:drop-shadow(0 0 2px #edffff) drop-shadow(0 0 7px rgba(74,242,221,.9))}
-.exo-eng-neutral-kernel{fill:#03110f;stroke:#bafff4;stroke-width:1.15;filter:drop-shadow(0 0 5px rgba(107,255,233,.58))}
+.exo-eng-plasma-haze{opacity:.2}
+.exo-eng-plasma-core{fill:#f0ffff;stroke:#7effee;stroke-width:.9;opacity:.98;filter:drop-shadow(0 0 5px rgba(71,245,224,.72))}
+.exo-eng-plasma-corona{transform-box:fill-box;transform-origin:center;animation:exo-eng-corona-pulse 1.45s ease-in-out infinite;filter:drop-shadow(0 0 3px rgba(65,229,214,.48))}
+.exo-eng-plasma-tendril{opacity:var(--filament);animation:exo-eng-tendril-flicker var(--tendril-rate) steps(4,end) infinite;animation-delay:var(--phase)}
+.exo-eng-plasma-filament{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.exo-eng-plasma-filament-main{stroke:#b4fff6;stroke-dasharray:13 3 6 4;animation:exo-eng-filament-crawl var(--tendril-rate) linear infinite;animation-delay:var(--phase);filter:drop-shadow(0 0 3px rgba(91,255,236,.66))}
+.exo-eng-plasma-filament-branch{stroke:#42d7d3;stroke-dasharray:5 5;opacity:.62;animation:exo-eng-filament-crawl-reverse var(--branch-rate) linear infinite;animation-delay:var(--phase);filter:drop-shadow(0 0 2px rgba(82,247,230,.46))}
+.exo-eng-plasma-contact{transform-box:fill-box;transform-origin:center;animation:exo-eng-contact-flicker var(--branch-rate) steps(3,end) infinite;animation-delay:var(--phase);filter:drop-shadow(0 0 3px rgba(74,242,221,.58))}
+.exo-eng-neutral-kernel{fill:#03110f;stroke:#bafff4;stroke-width:1.15;filter:drop-shadow(0 0 3px rgba(107,255,233,.42))}
+@keyframes exo-eng-filament-crawl{to{stroke-dashoffset:-26}}
+@keyframes exo-eng-filament-crawl-reverse{to{stroke-dashoffset:20}}
+@keyframes exo-eng-tendril-flicker{0%,100%{opacity:calc(var(--filament)*.52)}25%{opacity:var(--filament)}50%{opacity:calc(var(--filament)*.7)}75%{opacity:calc(var(--filament)*.9)}}
+@keyframes exo-eng-contact-flicker{0%,100%{opacity:.42;transform:scale(.9)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes exo-eng-corona-pulse{0%,100%{opacity:.2;transform:scale(.82)}50%{opacity:.52;transform:scale(1.16)}}
 
 /* Moderator / neutral reference is deliberately non-power-carrying green. */
 .exo-eng-moderator-arm{fill:none;stroke:#435d55;stroke-width:7;stroke-linecap:round;vector-effect:non-scaling-stroke}
@@ -73,7 +78,7 @@
 
 /* Rectifier output and primary conditioning. Ripple-rejection setting visibly changes output texture. */
 .exo-eng-rectifier-output-base,.exo-eng-main-incomer{fill:none;stroke:#344a45;stroke-width:7;stroke-linecap:round;vector-effect:non-scaling-stroke}
-.exo-eng-rectifier-output-live{fill:none;stroke:#67eee0;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:calc(4px + var(--ripple)*5px) calc(3px + var(--ripple)*5px);vector-effect:non-scaling-stroke;animation:exo-eng-conditioned-flow calc(.82s + var(--ripple)*.55s) linear infinite;filter:drop-shadow(0 0 5px rgba(71,226,210,.48))}
+.exo-eng-rectifier-output-live{fill:none;stroke:#67eee0;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:calc(4px + var(--ripple)*5px) calc(3px + var(--ripple)*5px);vector-effect:non-scaling-stroke;animation:exo-eng-conditioned-flow calc(.82s + var(--ripple)*.55s) linear infinite;filter:drop-shadow(0 0 4px rgba(71,226,210,.42))}
 .exo-eng-primary-conditioner rect{fill:#071510;stroke:#5c8f80;stroke-width:1}
 .exo-eng-primary-conditioner text{fill:#78a999;font-size:4.7px;font-weight:900;letter-spacing:.2px}
 @keyframes exo-eng-conditioned-flow{to{stroke-dashoffset:-28}}
@@ -84,7 +89,7 @@
 .exo-eng-battery{fill:none;stroke:#86b9ac;stroke-width:1.5;vector-effect:non-scaling-stroke}
 .exo-eng-sync-ring{fill:#04100d;stroke:#648f84;stroke-width:1}
 .exo-eng-sync-needle{fill:none;stroke:#b8e7dc;stroke-width:1.4;transform-origin:261px 276px;transition:transform .18s ease-out}
-.exo-eng-aux-source.sync .exo-eng-sync-ring{stroke:#80cf9f;filter:drop-shadow(0 0 5px rgba(96,215,139,.42))}
+.exo-eng-aux-source.sync .exo-eng-sync-ring{stroke:#80cf9f;filter:drop-shadow(0 0 4px rgba(96,215,139,.36))}
 .exo-eng-aux-source.unsync .exo-eng-sync-ring{stroke:#b37a67}.exo-eng-aux-source.unsync .exo-eng-sync-value{fill:#c48a78}
 .exo-eng-aux-incomer{fill:none;stroke:#4c6e68;stroke-width:6;vector-effect:non-scaling-stroke}
 
@@ -149,4 +154,4 @@
 .exo-eng-map-footer b{display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#a8c9bf;font-size:.38rem;font-weight:900;letter-spacing:.02em}
 
 @media(max-width:900px){.exo-eng-map-svg{min-height:610px}.exo-eng-map-footer{grid-template-columns:1fr}.exo-eng-map-footer b{white-space:normal}}
-@media(prefers-reduced-motion:reduce){.exo-eng-feed-plasma,.exo-eng-rectifier-output-live,.exo-eng-source-live,.exo-eng-common-bus-live,.exo-eng-rail-live,.exo-eng-branch-live,.exo-eng-cool-main,.exo-eng-cool-bypass,.exo-eng-moderator-pulse{animation:none!important}.exo-eng-plasma-tendril animate,.exo-eng-plasma-corona animate{display:none}}
+@media(prefers-reduced-motion:reduce){.exo-eng-feed-plasma,.exo-eng-plasma-corona,.exo-eng-plasma-tendril,.exo-eng-plasma-filament-main,.exo-eng-plasma-filament-branch,.exo-eng-plasma-contact,.exo-eng-rectifier-output-live,.exo-eng-source-live,.exo-eng-common-bus-live,.exo-eng-rail-live,.exo-eng-branch-live,.exo-eng-cool-main,.exo-eng-cool-bypass,.exo-eng-moderator-pulse{animation:none!important}}
