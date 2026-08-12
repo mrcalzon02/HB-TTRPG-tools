@@ -396,15 +396,33 @@
     return tokenAlive(token)&&selectedStation()===station&&!procedureAttemptActive();
   }
 
-  function extractCursorUrl(){
-    const raw=getComputedStyle(document.documentElement).getPropertyValue("--exo-station-key-cursor").trim();
-    const match=raw.match(/url\(([^)]+)\)/);return match?match[1].trim():null;
+  function cloneObserverKeySvg(){
+    const source=window.EXO_STATION_KEY_CURSOR?.overlay?.querySelector?.("svg");
+    if(!source)return null;
+    const clone=source.cloneNode(true),ids=new Map(),prefix=`exo-observer-${selectedStation()}-`;
+    clone.querySelectorAll("[id]").forEach((node,index)=>{
+      const oldId=node.id,newId=`${prefix}${oldId||index}`;
+      ids.set(oldId,newId);node.id=newId;
+    });
+    clone.querySelectorAll("*").forEach(node=>{
+      for(const attr of ["fill","stroke","filter","clip-path","mask"]){
+        const value=node.getAttribute(attr);if(!value)continue;
+        let next=value;ids.forEach((newId,oldId)=>{next=next.replaceAll(`url(#${oldId})`,`url(#${newId})`);});
+        if(next!==value)node.setAttribute(attr,next);
+      }
+    });
+    clone.classList.add("exo-observer-key-svg");
+    clone.setAttribute("aria-hidden","true");
+    return clone;
   }
 
   function refreshKeyVisual(){
     if(!observerKey)return;
-    const url=extractCursorUrl();if(url)observerKey.style.backgroundImage=`url(${url})`;
-    observerKey.dataset.station=selectedStation();
+    const station=selectedStation(),clone=cloneObserverKeySvg();
+    observerKey.dataset.station=station;
+    observerKey.style.backgroundImage="none";
+    if(clone){observerKey.replaceChildren(clone);observerKey.dataset.keyReady="true";}
+    else{observerKey.replaceChildren();observerKey.dataset.keyReady="false";}
   }
 
   function mountObserverLayer(){
