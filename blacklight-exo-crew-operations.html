@@ -88,6 +88,10 @@
       <button id="crew-scenario-contact" type="button" tabindex="-1"></button>
       <button id="crew-scenario-damage" type="button" tabindex="-1"></button>
       <button id="crew-scenario-battle" type="button" tabindex="-1"></button>
+      <span id="coordination-score"></span>
+      <div id="dependency-grid"></div>
+      <button id="log-clear" type="button" tabindex="-1"></button>
+      <ol id="operations-log"></ol>
     </div>
 
     <section class="bli-section exo-stations">
@@ -103,11 +107,6 @@
         <div class="exo-relay-sequence"><span class="exo-kicker">Recorded player inputs</span><p id="dm-relay-sequence">No procedure has been committed.</p></div>
         <p id="dm-relay-call" class="exo-dm-call">The console does not roll for the character and does not determine success or failure.</p>
       </div>
-    </section>
-
-    <section class="bli-section exo-crew-lower" aria-label="Crew coordination displays">
-      <article class="exo-console-card"><div class="exo-console-head"><div><span class="exo-kicker">Situational visualization</span><h2>Station context</h2></div><span id="coordination-score" class="exo-score">100%</span></div><div id="dependency-grid" class="exo-dependency-grid"></div></article>
-      <article class="exo-console-card"><div class="exo-console-head"><div><span class="exo-kicker">Role-play event record</span><h2>Operations log</h2></div><button id="log-clear" class="exo-mini-button" type="button">Clear</button></div><ol id="operations-log" class="exo-operations-log" aria-live="polite"></ol></article>
     </section>
 
     <section class="bli-section">
