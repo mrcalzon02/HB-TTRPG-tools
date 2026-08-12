@@ -34,6 +34,8 @@
   let queued = false;
   let plantPulseUntil = 0;
   let plantPulseLabel = "READY";
+  let meterAnimationFrame = 0;
+  const meterMotion = new WeakMap();
 
   const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
   const esc = value => String(value ?? "").replace(/[&<>\"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;"}[ch]));
@@ -110,6 +112,10 @@
     });
   }
 
+  function rectifierRamp(state) {
+    return clamp((state.feed.a.fraction+state.feed.b.fraction+state.feed.c.fraction+state.feed.d.fraction)/4,0,1);
+  }
+
   function feedStyle(letter,feed,state) {
     const governor = state.aux["governor-bias"];
     const f = clamp(feed.fraction + governor/100,0,1);
@@ -120,6 +126,25 @@
       `--f${letter}-speed:${(1.7-f*.9+ripple*.25).toFixed(2)}s`,
       `--f${letter}-glow:${(3+f*10).toFixed(1)}px`
     ].join(";");
+  }
+
+  function voltmeterMarkup(x,y,base,kind,strength,ramp,label) {
+    const input=kind==="input";
+    const w=input?39:31,h=input?25:22;
+    const pivotY=y+2.5;
+    const arcR=input?12:9;
+    const left=x-arcR,right=x+arcR,top=pivotY-arcR;
+    const accent=input?"#84dff0":"#a8c98b";
+    const glow=input?"rgba(100,220,255,.48)":"rgba(160,205,126,.34)";
+    return `<g class="exo-eng-voltmeter exo-eng-voltmeter-${kind}" data-voltmeter data-meter-kind="${kind}" data-meter-base="${base}" data-meter-strength="${strength.toFixed(3)}" data-meter-ramp="${ramp.toFixed(3)}" data-meter-cx="${x}" data-meter-cy="${pivotY}" style="pointer-events:none">
+      <rect x="${(x-w/2).toFixed(1)}" y="${(y-h/2).toFixed(1)}" width="${w}" height="${h}" rx="2.2" fill="#04100e" stroke="${accent}" stroke-width=".72" opacity=".96"/>
+      <path d="M${left.toFixed(1)} ${pivotY.toFixed(1)} A${arcR} ${arcR} 0 0 1 ${right.toFixed(1)} ${pivotY.toFixed(1)}" fill="none" stroke="#334843" stroke-width="1"/>
+      <path d="M${left.toFixed(1)} ${pivotY.toFixed(1)} A${arcR} ${arcR} 0 0 1 ${right.toFixed(1)} ${pivotY.toFixed(1)}" fill="none" stroke="${accent}" stroke-width=".55" opacity=".72"/>
+      <path d="M${x} ${pivotY} L${x} ${top.toFixed(1)}" data-meter-needle fill="none" stroke="#f4ffff" stroke-width="1" stroke-linecap="round" vector-effect="non-scaling-stroke" filter="drop-shadow(0 0 2px ${glow})"/>
+      <circle cx="${x}" cy="${pivotY}" r="1.45" fill="#dffff8" stroke="${accent}" stroke-width=".55"/>
+      <text x="${x}" y="${(y+h/2-3).toFixed(1)}" text-anchor="middle" data-meter-readout fill="#e5fff7" stroke="#04100e" stroke-width=".5" font-size="${input?4.7:4.2}px" font-weight="900">${Math.round(base)} V</text>
+      <text x="${x}" y="${(y-h/2+4.2).toFixed(1)}" text-anchor="middle" fill="${accent}" stroke="#04100e" stroke-width=".45" font-size="${input?3.25:3}px" font-weight="900" letter-spacing=".2">${label}</text>
+    </g>`;
   }
 
   function plasmaFilaments(state) {
@@ -157,6 +182,7 @@
       return `<animate attributeName="stroke-width" values="${values}" dur="${(duration*(1.04+phaseShift)).toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${splines}"/>`;
     };
     const animateOpacity=(duration,min=.48,max=1)=>`<animate attributeName="opacity" values="${min};${max};${Math.max(min,.72)};${Math.max(min,max*.9)};${min}" dur="${(duration*1.13).toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="${splines}"/>`;
+    const flowPulse=(frames,duration,width,offset)=>`<path class="exo-eng-plasma-filament exo-eng-plasma-flow-pulse" d="${frames[0]}" fill="none" stroke="#f4ffff" stroke-width="${width.toFixed(2)}" stroke-linecap="round" stroke-dasharray="1.6 11 3.4 16" opacity=".82" filter="drop-shadow(0 0 2px rgba(225,255,255,.96)) drop-shadow(0 0 4px rgba(91,145,255,.82))">${animatePath(frames,duration)}<animate attributeName="stroke-dashoffset" values="${offset};${offset-64}" dur="${(duration*.54).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".18;.96;.42;1;.18" dur="${(duration*.91).toFixed(2)}s" repeatCount="indefinite"/></path>`;
 
     return electrodes.map((electrode,index)=>{
       const strength=clamp(feedFractions[electrode.feed],0,1),x=electrode.x,y=electrode.y;
@@ -181,12 +207,14 @@
         <path class="exo-eng-plasma-filament exo-eng-plasma-filament-core exo-eng-plasma-filament-main" d="${mainFrames[0]}" stroke-width="${width.toFixed(2)}">
           ${animatePath(mainFrames,dur)}${animateWidth(width,dur)}${animateOpacity(dur,.62,1)}
         </path>
+        ${flowPulse(mainFrames,dur,width*.52,-index*7)}
         <path class="exo-eng-plasma-filament exo-eng-plasma-filament-halo exo-eng-plasma-filament-branch" d="${branchFrames[0]}" stroke-width="${(branchWidth*3.5).toFixed(2)}" filter="url(#exoEngPlasmaHalo)">
           ${animatePath(branchFrames,branchDur)}${animateWidth(branchWidth*3.5,branchDur,.07)}${animateOpacity(branchDur,.10,.32)}
         </path>
         <path class="exo-eng-plasma-filament exo-eng-plasma-filament-core exo-eng-plasma-filament-branch" d="${branchFrames[0]}" stroke-width="${branchWidth.toFixed(2)}">
           ${animatePath(branchFrames,branchDur)}${animateWidth(branchWidth,branchDur,.04)}${animateOpacity(branchDur,.42,.86)}
         </path>
+        ${flowPulse(branchFrames,branchDur,Math.max(.34,branchWidth*.46),-index*5-11)}
         <path class="exo-eng-plasma-filament exo-eng-plasma-filament-core exo-eng-plasma-filament-fork" d="${forkFrames[0]}" stroke-width="${(branchWidth*.72).toFixed(2)}">
           ${animatePath(forkFrames,forkDur)}${animateWidth(branchWidth*.72,forkDur,.09)}${animateOpacity(forkDur,.28,.72)}
         </path>
@@ -205,28 +233,33 @@
   }
 
   function feedMarkup(item,state) {
-    const key=item.letter.toLowerCase(),volts=state.feed[key].volts;
+    const key=item.letter.toLowerCase(),feed=state.feed[key],volts=feed.volts,ramp=rectifierRamp(state);
     return `<g class="exo-eng-feed feed-${key}" data-feed="${item.letter}">
       <path class="exo-eng-feed-conduit" d="${item.path}"/>
       <path class="exo-eng-feed-plasma" d="${item.path}"/>
       <circle class="exo-eng-port" cx="${item.portX}" cy="${item.portY}" r="5.4"/>
       <text class="exo-eng-feed-label" x="${item.x}" y="18" text-anchor="middle">FEED ${item.letter}</text>
       <text class="exo-eng-feed-value" x="${item.x}" y="30" text-anchor="middle">${volts} V</text>
+      ${voltmeterMarkup(item.x,50,volts,"input",feed.fraction,ramp,`RAW ${item.letter}`)}
     </g>`;
   }
 
-  function breakerMarkup(item,state) {
-    const cssState=state==="ON"?"on":state==="TRIPPED"?"tripped":"off";
+  function breakerMarkup(item,breakerState,plantState) {
+    const cssState=breakerState==="ON"?"on":breakerState==="TRIPPED"?"tripped":"off";
     const railX=item.rail==="A"?88:214;
     const endX=item.side==="left"?20:282;
     const ledX=item.side==="left"?50:252;
     const labelX=item.side==="left"?58:244;
     const anchor=item.side==="left"?"start":"end";
     const bladeX=item.side==="left"?68:234;
-    const open=state!=="ON";
+    const open=breakerState!=="ON";
     const bladePath=item.side==="left"
       ? (open?`M${railX} ${item.y} L${bladeX+10} ${item.y-8}`:`M${railX} ${item.y} H${bladeX+10}`)
       : (open?`M${railX} ${item.y} L${bladeX-10} ${item.y-8}`:`M${railX} ${item.y} H${bladeX-10}`);
+    const rail=item.rail==="A"?plantState.busA:plantState.busB;
+    const ramp=rectifierRamp(plantState);
+    const base=breakerState==="ON"?rail.volts:0;
+    const meterX=item.side==="left"?29:273;
     return `<g class="exo-eng-breaker state-${cssState}" data-breaker="${item.id}">
       <path class="exo-eng-branch-base" d="M${railX} ${item.y} H${endX}"/>
       <path class="exo-eng-branch-live" d="M${railX} ${item.y} H${endX}"/>
@@ -235,7 +268,8 @@
       <circle class="exo-eng-breaker-led" cx="${ledX}" cy="${item.y}" r="4.2"/>
       <circle class="exo-eng-breaker-ring" cx="${ledX}" cy="${item.y}" r="7.2"/>
       <text class="exo-eng-breaker-name" x="${labelX}" y="${item.y-5}" text-anchor="${anchor}">${item.name}</text>
-      <text class="exo-eng-breaker-load" x="${labelX}" y="${item.y+8}" text-anchor="${anchor}">${item.load} · ${state}</text>
+      <text class="exo-eng-breaker-load" x="${labelX}" y="${item.y+8}" text-anchor="${anchor}">${item.load} · ${breakerState}</text>
+      ${voltmeterMarkup(meterX,item.y,base,"output",rail.fraction,ramp,`${item.rail} OUT`)}
     </g>`;
   }
 
@@ -415,8 +449,8 @@
             <text class="exo-eng-bus-label" x="249" y="432" text-anchor="end">BUS B REG · ${state.busB.volts} V</text>
           </g>
 
-          <text class="exo-eng-section-title" x="151" y="451" text-anchor="middle">PROTECTED DISTRIBUTION BRANCHES · BREAKER LED STATUS</text>
-          ${BREAKERS.map(item=>breakerMarkup(item,state.breakers[item.id])).join("")}
+          <text class="exo-eng-section-title" x="151" y="451" text-anchor="middle">PROTECTED DISTRIBUTION BRANCHES · LIVE VOLTAGE / BREAKER LED STATUS</text>
+          ${BREAKERS.map(item=>breakerMarkup(item,state.breakers[item.id],state)).join("")}
           ${coolingMarkup(state)}
         </svg>
       </div>
@@ -453,6 +487,50 @@
     setTimeout(queueRender,1000);
   }
 
+  function updateVoltmeter(node,now,reduced) {
+    const base=Number(node.dataset.meterBase)||0;
+    const strength=clamp(Number(node.dataset.meterStrength)||0,0,1);
+    const ramp=clamp(Number(node.dataset.meterRamp)||0,0,1);
+    const kind=node.dataset.meterKind||"output";
+    const cx=Number(node.dataset.meterCx)||0,cy=Number(node.dataset.meterCy)||0;
+    const needle=node.querySelector("[data-meter-needle]");
+    const readout=node.querySelector("[data-meter-readout]");
+    if(!needle||!readout)return;
+    let motion=meterMotion.get(node);
+    if(!motion){motion={last:now,phase:Math.random()*Math.PI*2,noise:0,target:0,nextNoise:now,spike:0};meterMotion.set(node,motion);}
+    const dt=Math.min(50,Math.max(0,now-motion.last));
+    motion.last=now;
+    if(reduced||base<=0){
+      const value=base<=0?0:base;
+      const angle=base<=0?-58:clamp((value-440)/80*92,-58,58);
+      needle.setAttribute("transform",`rotate(${angle.toFixed(1)} ${cx} ${cy})`);
+      readout.textContent=`${Math.round(value)} V`;
+      return;
+    }
+    const input=kind==="input";
+    motion.phase+=dt*(input?.011+.010*strength:.0042+.0048*ramp);
+    if(now>=motion.nextNoise){
+      motion.target=Math.random()*2-1;
+      motion.nextNoise=now+(input?65+Math.random()*115:170+Math.random()*260);
+      const spikeChance=input?.13+.24*ramp:.035+.08*ramp;
+      if(Math.random()<spikeChance)motion.spike=(Math.random()<.5?-1:1)*(input?.75+Math.random()*.75:.35+Math.random()*.45);
+    }
+    motion.noise+=(motion.target-motion.noise)*(input?.20:.075);
+    motion.spike*=Math.pow(input?.88:.94,dt/16.67);
+    const amp=input?(2.8+strength*11+ramp*10):(0.7+ramp*4.6+strength*1.2);
+    const wave=Math.sin(motion.phase)*.34+Math.sin(motion.phase*2.73+1.2)*.17+Math.sin(motion.phase*.63-2.1)*.13;
+    const value=clamp(base+amp*(wave+motion.noise*.52+motion.spike),0,520);
+    const angle=clamp((value-440)/80*92,-58,58);
+    needle.setAttribute("transform",`rotate(${angle.toFixed(1)} ${cx} ${cy})`);
+    readout.textContent=`${Math.round(value)} V`;
+  }
+
+  function animateVoltmeters(now) {
+    const reduced=Boolean(window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches);
+    if(engineeringActive())document.querySelectorAll("#station-panel [data-eng-power-map] [data-voltmeter]").forEach(node=>updateVoltmeter(node,now,reduced));
+    meterAnimationFrame=requestAnimationFrame(animateVoltmeters);
+  }
+
   function start() {
     const panel=document.getElementById("station-panel");
     if(!panel) return;
@@ -472,6 +550,8 @@
     document.addEventListener("input",event=>{if(event.target.closest?.("#station-panel,#crew-auxiliary-root"))queueRender();},true);
     document.addEventListener("exo:auxiliary-input",event=>{if(event.detail?.station==="engineering")queueRender();});
     queueRender();
+    if(!meterAnimationFrame)meterAnimationFrame=requestAnimationFrame(animateVoltmeters);
+    window.addEventListener("beforeunload",()=>{if(meterAnimationFrame)cancelAnimationFrame(meterAnimationFrame);meterAnimationFrame=0;},{once:true});
   }
 
   window.EXO_ENGINEERING_POWER_MAP=Object.freeze({refresh:queueRender,read:readState});
