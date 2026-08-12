@@ -79,7 +79,7 @@
   function focusElement(element){
     clearFocus();
     if(!element?.isConnected) return;
-    const host=element.closest?.(".exo-device-block,.exo-procedure-setup,.exo-station-tab") || element;
+    const host=element.closest?.(".exo-device-block,.exo-procedure-setup,.exo-station-tab,.exo-aux-control,#crew-auxiliary-root") || element;
     currentFocus=host;
     host.setAttribute("data-observer-focus","true");
   }
@@ -140,6 +140,52 @@
     select.dispatchEvent(new Event("change",{bubbles:true}));
     setTimeout(()=>select?.removeAttribute?.("data-observer-press"),180);
     return true;
+  }
+
+  function rangePoint(input,value){
+    const min=Number(input.min),max=Number(input.max),r=input.getBoundingClientRect();
+    const f=max>min?clamp((Number(value)-min)/(max-min),0,1):.5;
+    return {x:r.left+Math.max(8,r.width*.08)+(Math.max(16,r.width*.84))*f,y:r.top+r.height*.5};
+  }
+
+  async function driveRangeInput(input,targetValue,token){
+    if(!input?.isConnected||input.disabled||!tokenAlive(token)) return false;
+    const min=Number(input.min),max=Number(input.max),step=Number(input.step)||1;
+    const target=clamp(Math.round((clamp(Number(targetValue),min,max)-min)/step)*step+min,min,max);
+    if(!(await moveCursorTo(input,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
+    const startValue=Number(input.value),start=rangePoint(input,startValue),end=rangePoint(input,target);
+    const restore=patchPointerCapture(input);
+    input.setAttribute("data-observer-press","true");
+    try{
+      setCursorPoint(start.x,start.y);
+      pointerEvent("pointerdown",input,start.x,start.y,1,0);
+      const started=now(),duration=760;
+      const moved=await new Promise(resolve=>{
+        const frame=()=>{
+          if(!tokenAlive(token)||!input.isConnected){resolve(false);return;}
+          const t=clamp((now()-started)/duration,0,1),e=ease(t);
+          const value=startValue+(target-startValue)*e;
+          input.value=String(value);
+          input.dispatchEvent(new Event("input",{bubbles:true}));
+          const p={x:start.x+(end.x-start.x)*e,y:start.y+(end.y-start.y)*e};
+          setCursorPoint(p.x,p.y);
+          pointerEvent("pointermove",input,p.x,p.y,1,-1);
+          if(t<1) requestAnimationFrame(frame); else resolve(true);
+        };
+        requestAnimationFrame(frame);
+      });
+      if(!moved) return false;
+      input.value=String(target);
+      input.dispatchEvent(new Event("input",{bubbles:true}));
+      pointerEvent("pointerup",input,end.x,end.y,0,0);
+      input.dispatchEvent(new Event("change",{bubbles:true}));
+      setCursorPoint(end.x,end.y);
+      return true;
+    }finally{
+      restore();
+      setTimeout(()=>input?.removeAttribute?.("data-observer-press"),180);
+    }
   }
 
   function patchPointerCapture(element){
@@ -292,6 +338,15 @@
     return host.dataset.controlActivity && host.dataset.controlActivity!=="live";
   }
 
+  async function performRangeToken(input,procedureToken,meta,model,token){
+    if(!input?.isConnected||!meta||!tokenAlive(token)) return false;
+    if(input.matches("[data-proc-slider]")) return driveRangeInput(input,meta.index,token);
+    const range=model.ranges.get(meta.controlId);
+    if(!range) return false;
+    const target=Number.isFinite(range.targets[meta.index])?range.targets[meta.index]:range.min+(range.max-range.min)*(meta.index/Math.max(1,meta.count-1));
+    return driveRangeInput(input,target,token);
+  }
+
   async function performToken(procedureToken,model,token){
     if(!tokenAlive(token)) return false;
     if(procedureToken==="auth-key-arm") return performAuthorizationKeyTwist(token);
@@ -299,15 +354,101 @@
     if(!model.authTail.includes(procedureToken)&&tokenAlreadySatisfied(procedureToken,model)) return true;
     const direct=()=>document.querySelector(`#station-panel [data-proc-input="${CSS.escape(procedureToken)}"]:not(:disabled)`);
     const meta=model.actions.get(procedureToken);
+    const ranged=()=>meta?document.querySelector(`#station-panel [data-control-id="${CSS.escape(meta.controlId)}"][data-proc-range]:not(:disabled), #station-panel [data-control-id="${CSS.escape(meta.controlId)}"][data-proc-slider]:not(:disabled)`):null;
     const gesture=()=>[...document.querySelectorAll('#station-panel [data-control-gesture]:not([aria-disabled="true"])')].find(node=>(node.dataset.gestureTokens||"").split("|").includes(procedureToken));
+    const rangeControl=ranged();
+    if(rangeControl) return performRangeToken(rangeControl,procedureToken,meta,model,token);
     const g=gesture();
     if(g&&meta) return performGestureForToken(g,procedureToken,model,token);
     const button=direct();
     if(button) return tapElement(button,token);
-    const late=await waitFor(()=>direct()||gesture(),1800,token);
+    const late=await waitFor(()=>ranged()||direct()||gesture(),1800,token);
     if(!late) return false;
+    if(late.matches?.("[data-proc-range],[data-proc-slider]")) return performRangeToken(late,procedureToken,meta,model,token);
     if(late.matches?.("[data-control-gesture]")&&meta) return performGestureForToken(late,procedureToken,model,token);
     return tapElement(late,token);
+  }
+
+  function stableHash(text){let h=2166136261;for(const ch of String(text)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+  function decimalPlaces(value){const text=String(value??1);return text.includes(".")?text.length-text.indexOf(".")-1:0;}
+  function quantizeAux(control,value){
+    const step=Number(control.step)||1,steps=Math.round((clamp(Number(value),Number(control.min),Number(control.max))-Number(control.min))/step);
+    return Number(clamp(Number(control.min)+steps*step,Number(control.min),Number(control.max)).toFixed(decimalPlaces(step)));
+  }
+
+  function auxiliaryRequirementPlan(station,procedureId){
+    const api=window.EXO_AUXILIARY_PANEL,controls=api?.controls?.[station]||[],difficulty=clamp(Math.round(Number(api?.getDifficulty?.()||0)),0,5);
+    const count=Math.min(difficulty,controls.length);
+    if(!count)return[];
+    const offset=stableHash(`${station}:${procedureId}:aux-order`)%controls.length;
+    const ordered=[...controls.slice(offset),...controls.slice(0,offset)];
+    return ordered.slice(0,count).map(control=>{
+      const slots=Math.max(1,Math.floor((Number(control.max)-Number(control.min))/(Number(control.step)||1))+1);
+      const slot=stableHash(`${station}:${procedureId}:${control.id}:aux-target:level-${count}`)%slots;
+      return {control,target:quantizeAux(control,Number(control.min)+slot*(Number(control.step)||1))};
+    });
+  }
+
+  async function performAuxiliaryControl(control,target,token){
+    const actuator=await waitFor(()=>document.querySelector(`#crew-auxiliary-root [data-aux-control="${CSS.escape(control.id)}"] [data-aux-actuator="${CSS.escape(control.id)}"]:not([aria-disabled="true"])`),1800,token);
+    if(!actuator) return false;
+    if(!(await moveCursorTo(actuator,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
+    const current=Number(actuator.getAttribute("aria-valuenow")),min=Number(control.min),max=Number(control.max);
+    if(!Number.isFinite(current)||!(max>min)) return false;
+    const fraction=(target-current)/(max-min);
+    if(Math.abs(fraction)<1e-9){
+      const step=Number(control.step)||1,away=target<max?quantizeAux(control,target+step):quantizeAux(control,target-step);
+      if(away===target) return true;
+      const awayFraction=(away-current)/(max-min),gesture=control.gesture||"x",start=pointFor(actuator,.5,.5);
+      let awayEnd;
+      if(gesture==="y") awayEnd={x:start.x,y:clamp(start.y-awayFraction*145,8,window.innerHeight-8)};
+      else if(gesture==="dial") awayEnd={x:clamp(start.x+awayFraction*190,8,window.innerWidth-8),y:start.y};
+      else awayEnd={x:clamp(start.x+awayFraction*175,8,window.innerWidth-8),y:start.y};
+      if(!(await animatePointerGesture(actuator,start,awayEnd,520,token))) return false;
+      if(!(await sleep(160,token))) return false;
+      const refreshed=await waitFor(()=>document.querySelector(`#crew-auxiliary-root [data-aux-control="${CSS.escape(control.id)}"] [data-aux-actuator="${CSS.escape(control.id)}"]:not([aria-disabled="true"])`),900,token);
+      if(!refreshed) return false;
+      const refreshedValue=Number(refreshed.getAttribute("aria-valuenow")),returnFraction=(target-refreshedValue)/(max-min),returnStart=pointFor(refreshed,.5,.5);
+      let returnEnd;
+      if(gesture==="y") returnEnd={x:returnStart.x,y:clamp(returnStart.y-returnFraction*145,8,window.innerHeight-8)};
+      else if(gesture==="dial") returnEnd={x:clamp(returnStart.x+returnFraction*190,8,window.innerWidth-8),y:returnStart.y};
+      else returnEnd={x:clamp(returnStart.x+returnFraction*175,8,window.innerWidth-8),y:returnStart.y};
+      if(!(await animatePointerGesture(refreshed,returnStart,returnEnd,520,token))) return false;
+    }else{
+      const gesture=control.gesture||"x",start=pointFor(actuator,.5,.5);
+      let end;
+      if(gesture==="y") end={x:start.x,y:clamp(start.y-fraction*145,8,window.innerHeight-8)};
+      else if(gesture==="dial") end={x:clamp(start.x+fraction*190,8,window.innerWidth-8),y:start.y};
+      else end={x:clamp(start.x+fraction*175,8,window.innerWidth-8),y:start.y};
+      if(!(await animatePointerGesture(actuator,start,end,760,token))) return false;
+    }
+    return Boolean(await waitFor(()=>{
+      const card=document.querySelector(`#crew-auxiliary-root [data-aux-control="${CSS.escape(control.id)}"]`);
+      const currentActuator=card?.querySelector(`[data-aux-actuator="${CSS.escape(control.id)}"]`);
+      return card?.dataset.satisfied==="true"||Number(currentActuator?.getAttribute("aria-valuenow"))===target;
+    },1500,token));
+  }
+
+  async function performAuxiliaryPlan(station,procedureId,token){
+    const api=await waitFor(()=>window.EXO_AUXILIARY_PANEL,1200,token);
+    if(!api) return true;
+    const plan=auxiliaryRequirementPlan(station,procedureId);
+    if(!plan.length) return true;
+    const root=await waitFor(()=>document.getElementById("crew-auxiliary-root"),1200,token);
+    if(!root) return false;
+    if(root.dataset.open!=="true"){
+      const handle=root.querySelector("[data-aux-toggle]");
+      if(!handle||!(await tapElement(handle,token,{dwell:520}))) return false;
+      if(!(await waitFor(()=>root.dataset.open==="true",1200,token))) return false;
+      if(!(await sleep(420,token))) return false;
+    }
+    for(const item of plan){
+      if(!tokenAlive(token)||selectedStation()!==station||!procedureAttemptActive()) return false;
+      if(!(await performAuxiliaryControl(item.control,item.target,token))) return false;
+      if(!(await sleep(360,token))) return false;
+    }
+    return true;
   }
 
   function autonavRequirement(procedureId){return window.EXO_HELM_AUTONAV_SUITE?.procedureRequirements?.[procedureId]||null;}
@@ -355,6 +496,8 @@
     if(!(await sleep(700,token)))return false;
     if(!(await beginProcedure(token)))return false;
     if(!(await sleep(850,token)))return false;
+    if(!(await performAuxiliaryPlan(station,plan.id,token)))return false;
+    if(!(await sleep(520,token)))return false;
     const sequence=model.procedures.get(plan.id);if(!sequence?.length)return false;
     for(const procedureToken of sequence){
       if(!tokenAlive(token)||selectedStation()!==station||!procedureAttemptActive())return false;
