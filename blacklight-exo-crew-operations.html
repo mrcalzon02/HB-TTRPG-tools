@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="blacklight-exo-crew-auxiliary.css">
   <link rel="stylesheet" href="blacklight-exo-crew-fidelity.css">
   <link rel="stylesheet" href="blacklight-exo-crew-display-motion.css">
-  <link rel="stylesheet" href="blacklight-exo-engineering-power-map.css?v=20260811-1505">
+  <link rel="stylesheet" href="blacklight-exo-engineering-power-map.css?v=20260811-1712">
   <link rel="stylesheet" href="blacklight-exo-helm-autonav.css?v=20260811-1227">
   <link rel="stylesheet" href="blacklight-exo-gunnery-fire-control-confirm.css?v=20260811-1536">
   <link rel="stylesheet" href="blacklight-exo-ops-manual-window.css">
@@ -35,7 +35,7 @@
   </style>
   <script src="blacklight-exo-control-audio.js" defer></script>
   <script src="blacklight-exo-crew-operations.js" defer></script>
-  <script src="blacklight-exo-engineering-power-map.js?v=20260811-1505" defer></script>
+  <script src="blacklight-exo-engineering-power-map.js?v=20260811-1712" defer></script>
   <script src="blacklight-exo-gunnery-fire-control-confirm.js?v=20260811-1536" defer></script>
   <script src="blacklight-exo-crew-auxiliary.js" defer></script>
   <script src="blacklight-exo-helm-autonav.js?v=20260811-1227" defer></script>
@@ -77,7 +77,7 @@
         <div class="bli-directory-item" role="listitem"><strong>Technology basis</strong><span id="crew-profile-name" class="bli-arrow">Human Standard</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Vessel</strong><span class="bli-arrow">BLV-071 Wayfarer</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Rules basis</strong><span id="crew-summary-rules" class="bli-arrow">WoD-derived d10</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Resolution</strong><span id="crew-summary-resolution" class="bli-arrow">DM adjudicated</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Resolution</strong><span class="bli-arrow">DM adjudicated</span></div>
         <div class="bli-directory-item" role="listitem"><strong>Last relay</strong><span id="crew-summary-difficulty" class="bli-arrow">pending</span></div>
       </div>
     </aside>
@@ -138,14 +138,6 @@
     (() => {
       "use strict";
       const slider = () => document.getElementById("crew-master-difficulty");
-      const ENGINEERING_BREAKERS = Object.freeze([
-        "breaker-reactor","breaker-rectifier","breaker-coolant","breaker-grid",
-        "breaker-field","breaker-inverter","breaker-sensor","breaker-lighting"
-      ]);
-      const engineeringEntryPlan = Object.freeze(Object.fromEntries(ENGINEERING_BREAKERS.map(id => [id, Math.random() < .5 ? "OFF" : "ON"])));
-      let engineeringEntryApplied = false;
-      let engineeringEntryApplying = false;
-
       const selectedDifficulty = () => {
         const option = document.querySelector("#station-panel [data-procedure-select]")?.selectedOptions?.[0];
         const value = Number(option?.dataset.recommendedDifficulty);
@@ -159,42 +151,11 @@
         input.value = String(next);
         input.dispatchEvent(new Event("input", { bubbles: true }));
       };
-      const applyEngineeringEntryPlan = () => {
-        if (engineeringEntryApplied || engineeringEntryApplying) return;
-        const active = document.querySelector('#station-tabs [data-station="engineering"][aria-selected="true"]');
-        if (!active) return;
-        engineeringEntryApplying = true;
-        let index = 0;
-        const applyNext = () => {
-          if (index >= ENGINEERING_BREAKERS.length) {
-            engineeringEntryApplied = true;
-            engineeringEntryApplying = false;
-            document.body.dataset.engineeringEntryRandomized = "true";
-            return;
-          }
-          const id = ENGINEERING_BREAKERS[index++];
-          const desired = engineeringEntryPlan[id];
-          const control = document.querySelector(`#station-panel [data-control-id="${id}"][data-control-state="${desired}"]`);
-          if (control && control.getAttribute("aria-pressed") !== "true") {
-            control.click();
-            setTimeout(applyNext, 0);
-          } else {
-            applyNext();
-          }
-        };
-        applyNext();
-      };
-      document.addEventListener("DOMContentLoaded", () => setTimeout(() => { syncAuxiliaryDepth(); applyEngineeringEntryPlan(); }, 0));
+      document.addEventListener("DOMContentLoaded", () => setTimeout(syncAuxiliaryDepth, 0));
       document.addEventListener("change", event => { if (event.target.closest?.("#station-panel [data-procedure-select]")) syncAuxiliaryDepth(); });
       document.addEventListener("click", event => {
         if (event.target.closest?.("#station-panel [data-procedure-begin]")) syncAuxiliaryDepth();
-        if (event.target.closest?.("#station-tabs [data-station]")) setTimeout(() => { syncAuxiliaryDepth(); applyEngineeringEntryPlan(); }, 0);
-        if (event.target.closest?.("#crew-scenario-reset")) {
-          engineeringEntryApplied = false;
-          engineeringEntryApplying = false;
-          delete document.body.dataset.engineeringEntryRandomized;
-          setTimeout(syncAuxiliaryDepth, 0);
-        }
+        if (event.target.closest?.("#station-tabs [data-station], #crew-scenario-reset")) setTimeout(syncAuxiliaryDepth, 0);
       });
     })();
   </script>
