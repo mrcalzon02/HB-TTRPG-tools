@@ -133,29 +133,14 @@
       const side=x<0?-1:1,vertical=y<0?-1:1,wander=5+strength*8;
       const c1x=side*(5+(index%3)*3),c1y=vertical*(4+(index%2)*4);
       const c2x=x*.52+side*((index%2?1:-1)*wander),c2y=y*.54+vertical*((index%3-1)*wander*.55);
-      const c3x=x*.48-side*wander*.7,c3y=y*.62+vertical*wander*.35;
-      const main1=`M0 0 C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${x} ${y}`;
-      const main2=`M0 0 C${(-c1x*.72).toFixed(1)} ${(c1y+vertical*wander).toFixed(1)} ${c3x.toFixed(1)} ${c3y.toFixed(1)} ${x} ${y}`;
-      const main3=`M0 0 C${(c1x+side*wander*.45).toFixed(1)} ${(-c1y*.55).toFixed(1)} ${(c2x-side*wander*.8).toFixed(1)} ${(c2y+vertical*wander*.65).toFixed(1)} ${x} ${y}`;
+      const main=`M0 0 C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${x} ${y}`;
       const branchX=x*.72+side*(6+(index%2)*3),branchY=y*.72-vertical*(4+(index%3)*2);
-      const branch1=`M${(x*.42).toFixed(1)} ${(y*.42).toFixed(1)} Q${(x*.58-side*wander).toFixed(1)} ${(y*.52+vertical*wander*.45).toFixed(1)} ${branchX.toFixed(1)} ${branchY.toFixed(1)}`;
-      const branch2=`M${(x*.38).toFixed(1)} ${(y*.46).toFixed(1)} Q${(x*.62+side*wander*.65).toFixed(1)} ${(y*.55-vertical*wander*.55).toFixed(1)} ${(branchX-side*wander*.45).toFixed(1)} ${(branchY+vertical*wander*.35).toFixed(1)}`;
-      const branch3=`M${(x*.46).toFixed(1)} ${(y*.38).toFixed(1)} Q${(x*.54-side*wander*.4).toFixed(1)} ${(y*.65+vertical*wander*.3).toFixed(1)} ${(branchX+side*wander*.35).toFixed(1)} ${(branchY-vertical*wander*.4).toFixed(1)}`;
-      const dur=(.54+(index%4)*.11+(1-strength)*.24).toFixed(2),branchDur=(Number(dur)*.71).toFixed(2),width=(.85+strength*1.35).toFixed(2),branchWidth=(.45+strength*.65).toFixed(2),contact=(2.1+strength*1.6).toFixed(2);
-      return `<g class="exo-eng-plasma-tendril ${electrode.role}" style="--filament:${(.34+strength*.66).toFixed(2)}">
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-main" d="${main1}" stroke-width="${width}">
-          <animate attributeName="d" values="${main1};${main2};${main3};${main1}" dur="${dur}s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values=".22;.96;.38;.78;.22" dur="${(Number(dur)*.91).toFixed(2)}s" repeatCount="indefinite"/>
-          <animate attributeName="stroke-width" values="${(.65+strength*.75).toFixed(2)};${(1.05+strength*1.65).toFixed(2)};${(.78+strength).toFixed(2)};${(.65+strength*.75).toFixed(2)}" dur="${(Number(dur)*1.13).toFixed(2)}s" repeatCount="indefinite"/>
-        </path>
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch" d="${branch1}" stroke-width="${branchWidth}">
-          <animate attributeName="d" values="${branch1};${branch2};${branch3};${branch1}" dur="${branchDur}s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0;.68;.16;.52;0" dur="${(Number(branchDur)*.83).toFixed(2)}s" repeatCount="indefinite"/>
-        </path>
-        <circle class="exo-eng-plasma-contact" cx="${x}" cy="${y}" r="${contact}" fill="#d8fffb" stroke="#59f4df" stroke-width=".8" filter="url(#exoEngGlow)">
-          <animate attributeName="r" values="${(1.6+strength).toFixed(2)};${(2.5+strength*2).toFixed(2)};${(1.8+strength*1.2).toFixed(2)}" dur="${(Number(dur)*.76).toFixed(2)}s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values=".32;1;.46;.82;.32" dur="${(Number(dur)*.69).toFixed(2)}s" repeatCount="indefinite"/>
-        </circle>
+      const branch=`M${(x*.42).toFixed(1)} ${(y*.42).toFixed(1)} Q${(x*.58-side*wander).toFixed(1)} ${(y*.52+vertical*wander*.45).toFixed(1)} ${branchX.toFixed(1)} ${branchY.toFixed(1)}`;
+      const dur=.82+(index%4)*.13+(1-strength)*.28,branchDur=dur*.72,width=.85+strength*1.35,branchWidth=.45+strength*.65,contact=2.1+strength*1.6;
+      return `<g class="exo-eng-plasma-tendril ${electrode.role}" style="--filament:${(.34+strength*.66).toFixed(2)};--tendril-rate:${dur.toFixed(2)}s;--branch-rate:${branchDur.toFixed(2)}s;--phase:${(-index*.11).toFixed(2)}s">
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-main" d="${main}" stroke-width="${width.toFixed(2)}"/>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch" d="${branch}" stroke-width="${branchWidth.toFixed(2)}"/>
+        <circle class="exo-eng-plasma-contact" cx="${x}" cy="${y}" r="${contact.toFixed(2)}" fill="#d8fffb" stroke="#59f4df" stroke-width=".8"/>
       </g>`;
     }).join("");
   }
@@ -318,7 +303,6 @@
               <stop offset=".58" stop-color="#18bfc4" stop-opacity=".07"/>
               <stop offset="1" stop-color="#0c5361" stop-opacity="0"/>
             </radialGradient>
-            <filter id="exoEngGlow"><feGaussianBlur stdDeviation="1.7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
 
           <text class="exo-eng-section-title" x="151" y="11" text-anchor="middle">RAW PRIMARY GENERATION · VARIABLE FOUR-FEED INPUT</text>
@@ -339,10 +323,7 @@
             <circle class="exo-eng-glass-bulb" r="58" fill="url(#exoEngGlass)"/>
             <circle class="exo-eng-glass-rim" r="52"/>
             <circle class="exo-eng-plasma-haze" r="34" fill="url(#exoEngPlasma)"/>
-            <circle class="exo-eng-plasma-corona" r="11" fill="none" stroke="#55eadc" stroke-width="1.1" opacity=".38" filter="url(#exoEngGlow)">
-              <animate attributeName="r" values="8;13;10;12;8" dur="1.37s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values=".18;.62;.28;.48;.18" dur=".91s" repeatCount="indefinite"/>
-            </circle>
+            <circle class="exo-eng-plasma-corona" r="11" fill="none" stroke="#55eadc" stroke-width="1.1" opacity=".38"/>
             <circle class="exo-eng-plasma-core" r="5.2"/>
             ${plasmaFilaments(state)}
             <circle class="exo-eng-neutral-kernel" r="3.2"/>
