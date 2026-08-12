@@ -126,20 +126,52 @@
     const feedFractions=[state.feed.a.fraction,state.feed.b.fraction,state.feed.c.fraction,state.feed.d.fraction];
     const electrodes=[
       {x:-39,y:-32,feed:0,role:"input-a"},{x:-16,y:-47,feed:1,role:"input-b"},{x:16,y:-47,feed:2,role:"input-c"},{x:39,y:-32,feed:3,role:"input-d"},
-      {x:-39,y:32,feed:0,role:"output-a"},{x:-16,y:47,feed:1,role:"output-b"},{x:16,y:47,feed:2,role:"output-c"},{x:39,y:32,feed:3,role:"output-d"}
+      {x:39,y:32,feed:0,role:"output-a"},{x:16,y:47,feed:1,role:"output-b"},{x:-16,y:47,feed:2,role:"output-c"},{x:-39,y:32,feed:3,role:"output-d"}
     ];
+    const cubicFrame=(x,y,index,strength,phase)=>{
+      const wander=5.5+strength*12.5;
+      const theta=(index+1)*1.73+phase;
+      const c1x=x*.18+Math.sin(theta)*wander;
+      const c1y=y*.17+Math.cos(theta*1.17+.4)*wander;
+      const c2x=x*.62+Math.cos(theta*.91+1.2)*wander*1.12;
+      const c2y=y*.60+Math.sin(theta*1.29+.7)*wander*1.12;
+      return `M0 0 C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${x} ${y}`;
+    };
+    const branchFrame=(x,y,index,strength,phase,offset)=>{
+      const wander=4+strength*9.5;
+      const theta=(index+1)*1.31+phase+offset;
+      const startX=x*.38+Math.sin(theta*.86)*wander*.32;
+      const startY=y*.38+Math.cos(theta*1.14)*wander*.32;
+      const endX=x*.76+Math.sin(theta*1.23+1.1)*wander*.72;
+      const endY=y*.76+Math.cos(theta*.97+.3)*wander*.72;
+      const controlX=x*.55+Math.cos(theta*1.07+.8)*wander*1.1;
+      const controlY=y*.55+Math.sin(theta*1.41+.5)*wander*1.1;
+      return `M${startX.toFixed(1)} ${startY.toFixed(1)} Q${controlX.toFixed(1)} ${controlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}`;
+    };
+    const spline=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1";
+    const phases=[0,1.55,3.2,4.85];
     return electrodes.map((electrode,index)=>{
       const strength=clamp(feedFractions[electrode.feed],0,1),x=electrode.x,y=electrode.y;
-      const side=x<0?-1:1,vertical=y<0?-1:1,wander=5+strength*8;
-      const c1x=side*(5+(index%3)*3),c1y=vertical*(4+(index%2)*4);
-      const c2x=x*.52+side*((index%2?1:-1)*wander),c2y=y*.54+vertical*((index%3-1)*wander*.55);
-      const main=`M0 0 C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${x} ${y}`;
-      const branchX=x*.72+side*(6+(index%2)*3),branchY=y*.72-vertical*(4+(index%3)*2);
-      const branch=`M${(x*.42).toFixed(1)} ${(y*.42).toFixed(1)} Q${(x*.58-side*wander).toFixed(1)} ${(y*.52+vertical*wander*.45).toFixed(1)} ${branchX.toFixed(1)} ${branchY.toFixed(1)}`;
-      const dur=.82+(index%4)*.13+(1-strength)*.28,branchDur=dur*.72,width=.85+strength*1.35,branchWidth=.45+strength*.65,contact=2.1+strength*1.6;
-      return `<g class="exo-eng-plasma-tendril ${electrode.role}" style="--filament:${(.34+strength*.66).toFixed(2)};--tendril-rate:${dur.toFixed(2)}s;--branch-rate:${branchDur.toFixed(2)}s;--phase:${(-index*.11).toFixed(2)}s">
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-main" d="${main}" stroke-width="${width.toFixed(2)}"/>
-        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch" d="${branch}" stroke-width="${branchWidth.toFixed(2)}"/>
+      const mainFrames=phases.map(phase=>cubicFrame(x,y,index,strength,phase));
+      const branchFrames=phases.map(phase=>branchFrame(x,y,index,strength,phase,0));
+      const forkFrames=phases.map(phase=>branchFrame(x,y,index,strength,phase,2.35));
+      const mainValues=[...mainFrames,mainFrames[0]].join(";");
+      const branchValues=[...branchFrames,branchFrames[0]].join(";");
+      const forkValues=[...forkFrames,forkFrames[0]].join(";");
+      const dur=1.38-strength*.72+(index%4)*.055;
+      const branchDur=dur*.73;
+      const forkDur=dur*.89;
+      const width=.9+strength*1.5,branchWidth=.42+strength*.72,contact=2.1+strength*1.8;
+      return `<g class="exo-eng-plasma-tendril ${electrode.role}" data-feed-pair="${electrode.feed}" style="--filament:${(.42+strength*.58).toFixed(2)};--tendril-rate:${dur.toFixed(2)}s;--branch-rate:${branchDur.toFixed(2)}s;--phase:${(-index*.09).toFixed(2)}s">
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-main" d="${mainFrames[0]}" stroke-width="${width.toFixed(2)}">
+          <animate attributeName="d" values="${mainValues}" dur="${dur.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.25;.5;.75;1" keySplines="${spline}"/>
+        </path>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch" d="${branchFrames[0]}" stroke-width="${branchWidth.toFixed(2)}">
+          <animate attributeName="d" values="${branchValues}" dur="${branchDur.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.25;.5;.75;1" keySplines="${spline}"/>
+        </path>
+        <path class="exo-eng-plasma-filament exo-eng-plasma-filament-branch exo-eng-plasma-filament-fork" d="${forkFrames[0]}" stroke-width="${(branchWidth*.78).toFixed(2)}">
+          <animate attributeName="d" values="${forkValues}" dur="${forkDur.toFixed(2)}s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.25;.5;.75;1" keySplines="${spline}"/>
+        </path>
         <circle class="exo-eng-plasma-contact" cx="${x}" cy="${y}" r="${contact.toFixed(2)}" fill="#d8fffb" stroke="#59f4df" stroke-width=".8"/>
       </g>`;
     }).join("");
@@ -223,10 +255,11 @@
     const spread=Math.max(state.feed.a.volts,state.feed.b.volts,state.feed.c.volts,state.feed.d.volts)-Math.min(state.feed.a.volts,state.feed.b.volts,state.feed.c.volts,state.feed.d.volts);
     const ripple=Math.round(state.aux["ripple-rejection"]);
     const gov=state.aux["governor-bias"];
+    const outputPaths="M190 222 Q177 249 107 272 M167 237 Q153 257 97 272 M135 237 Q123 257 86 272 M112 222 Q102 249 75 272";
     return `<g class="exo-eng-primary-conditioner">
-      <path class="exo-eng-rectifier-output-base" d="M123 238 Q112 263 91 286 M179 238 Q190 263 211 286"/>
-      <path class="exo-eng-rectifier-output-live" d="M123 238 Q112 263 91 286 M179 238 Q190 263 211 286"/>
-      <path class="exo-eng-main-incomer" d="M91 286 V309"/>
+      <path class="exo-eng-rectifier-output-base" d="${outputPaths}"/>
+      <path class="exo-eng-rectifier-output-live" d="${outputPaths}"/>
+      <path class="exo-eng-main-incomer" d="M91 303 V309"/>
       <rect x="53" y="272" width="76" height="31" rx="2"/>
       <text x="91" y="282" text-anchor="middle">PRIMARY CONDITIONED DC</text>
       <text x="91" y="292" text-anchor="middle">${avg} V · Δ${spread} V</text>
@@ -309,7 +342,7 @@
           ${FEEDS.map(item=>feedMarkup(item,state)).join("")}
 
           <text class="exo-eng-core-title" x="151" y="102" text-anchor="middle">MASTER PLASMA RECTIFIER</text>
-          <text class="exo-eng-core-subtitle" x="151" y="112" text-anchor="middle">4 INPUT / 4 OUTPUT · MODERATOR NEUTRAL · DC CONDITIONING</text>
+          <text class="exo-eng-core-subtitle" x="151" y="112" text-anchor="middle">4 INPUT / 4 OUTPUT · OPPOSED ELECTRODE PAIRS · MODERATOR NEUTRAL</text>
 
           <g class="exo-eng-moderator">
             <path class="exo-eng-moderator-arm" d="M18 190 H93"/>
