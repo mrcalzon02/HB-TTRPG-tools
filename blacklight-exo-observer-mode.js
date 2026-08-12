@@ -11,6 +11,8 @@
   const PROCEDURE_SETTLE_MS = 1150;
   const STATION_SETTLE_MS = 1250;
   const RETRY_SETTLE_MS = 950;
+  const AUTH_KEY_TWIST_MS = 820;
+  const AUTH_SHIELD_FLIP_MS = 680;
   const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
   const ease = t => t*t*(3-2*t);
   const now = () => performance.now();
@@ -27,14 +29,12 @@
 
   function tokenAlive(token){ return active && token === runToken; }
   function selectedStation(){ return document.querySelector('#station-tabs [data-station][aria-selected="true"]')?.dataset.station || "helm"; }
-  function selectedProcedureId(){ return document.querySelector('#station-panel [data-procedure-select]')?.value || null; }
   function procedureAttemptActive(){ return Boolean(document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)")); }
 
   function sleep(ms,token){
     return new Promise(resolve => {
       if(!tokenAlive(token)){ resolve(false); return; }
-      const id=setTimeout(()=>resolve(tokenAlive(token)),Math.max(0,ms));
-      if(!tokenAlive(token)){clearTimeout(id);resolve(false);}
+      setTimeout(()=>resolve(tokenAlive(token)),Math.max(0,ms));
     });
   }
 
@@ -121,10 +121,9 @@
     setCursorPoint(p.x,p.y);
     element.setAttribute("data-observer-press","true");
     pointerEvent("pointerdown",element,p.x,p.y,1,0);
-    await sleep(150,token);
-    if(!tokenAlive(token)) return false;
+    if(!(await sleep(150,token))) return false;
     pointerEvent("pointerup",element,p.x,p.y,0,0);
-    element.click();
+    if(element.isConnected) element.click();
     setTimeout(()=>element?.removeAttribute?.("data-observer-press"),180);
     return true;
   }
@@ -135,8 +134,7 @@
     if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
     select.setAttribute("data-observer-press","true");
     select.focus({preventScroll:true});
-    await sleep(180,token);
-    if(!tokenAlive(token)) return false;
+    if(!(await sleep(180,token))) return false;
     select.value=value;
     select.dispatchEvent(new Event("input",{bubbles:true}));
     select.dispatchEvent(new Event("change",{bubbles:true}));
@@ -150,16 +148,66 @@
     return ()=>{try{if(hadOwn)Object.defineProperty(element,"setPointerCapture",{configurable:true,writable:true,value:original});else delete element.setPointerCapture;}catch(_){}};
   }
 
+  async function animatePointerGesture(element,start,end,duration,token,path){
+    if(!element?.isConnected||!tokenAlive(token)) return false;
+    const restore=patchPointerCapture(element);
+    try{
+      setCursorPoint(start.x,start.y);
+      pointerEvent("pointerdown",element,start.x,start.y,1,0);
+      const started=now();
+      const moved=await new Promise(resolve=>{
+        const frame=()=>{
+          if(!tokenAlive(token)||!element.isConnected){resolve(false);return;}
+          const t=clamp((now()-started)/Math.max(1,duration),0,1),e=ease(t);
+          const p=path?path(e,start,end):{x:start.x+(end.x-start.x)*e,y:start.y+(end.y-start.y)*e};
+          setCursorPoint(p.x,p.y);
+          pointerEvent("pointermove",element,p.x,p.y,1,-1);
+          if(t<1) requestAnimationFrame(frame); else resolve(true);
+        };
+        requestAnimationFrame(frame);
+      });
+      if(!moved||!tokenAlive(token)||!element.isConnected) return false;
+      const final=path?path(1,start,end):end;
+      pointerEvent("pointerup",element,final.x,final.y,0,0);
+      setCursorPoint(final.x,final.y);
+      return true;
+    }finally{restore();}
+  }
+
+  async function performAuthorizationKeyTwist(token){
+    const key=await waitFor(()=>document.querySelector('#station-panel [data-proc-input="auth-key-arm"][data-control-gesture="key-twist"]:not(:disabled)'),1800,token);
+    if(!key) return false;
+    if(!(await moveCursorTo(key,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
+    const r=key.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,radius=clamp(Math.min(r.width,r.height)*.30,14,24);
+    const start={x:cx+radius,y:cy},end={x:cx,y:cy+radius};
+    const ok=await animatePointerGesture(key,start,end,AUTH_KEY_TWIST_MS,token,e=>({x:cx+radius*Math.cos(e*Math.PI/2),y:cy+radius*Math.sin(e*Math.PI/2)}));
+    if(!ok) return false;
+    return Boolean(await waitFor(()=>document.querySelector("#station-panel .exo-lockout-device.is-armed"),1500,token));
+  }
+
+  async function performAuthorizationShieldFlip(token){
+    const shield=await waitFor(()=>document.querySelector('#station-panel [data-proc-input="auth-shield-open"][data-control-gesture="shield-flip"]:not(:disabled)'),1800,token);
+    if(!shield) return false;
+    if(!(await moveCursorTo(shield,CURSOR_TRAVEL_MS,token))) return false;
+    if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
+    const start=pointFor(shield,.5,.62),end={x:start.x,y:Math.max(12,start.y-58)};
+    if(start.y-end.y<30) end.y=Math.max(2,start.y-32);
+    const ok=await animatePointerGesture(shield,start,end,AUTH_SHIELD_FLIP_MS,token);
+    if(!ok) return false;
+    return Boolean(await waitFor(()=>document.querySelector("#station-panel .exo-lockout-device.shield-open"),1500,token));
+  }
+
   function numericReadout(host){
     const text=host?.querySelector("[data-range-readout]")?.textContent||"";
     const match=text.replace(/−/g,"-").match(/[+-]?\d+(?:\.\d+)?/);
     return match?Number(match[0]):NaN;
   }
 
-  function gesturePlan(gesture,token,model){
-    const tokens=(gesture.dataset.gestureTokens||"").split("|"),idx=tokens.indexOf(token),count=tokens.length;
+  function gesturePlan(gesture,procedureToken,model){
+    const tokens=(gesture.dataset.gestureTokens||"").split("|"),idx=tokens.indexOf(procedureToken),count=tokens.length;
     if(idx<0) return null;
-    const kind=gesture.dataset.controlGesture||"",controlId=gesture.dataset.controlId||model.actions.get(token)?.controlId,range=model.ranges.get(controlId);
+    const kind=gesture.dataset.controlGesture||"",controlId=gesture.dataset.controlId||model.actions.get(procedureToken)?.controlId,range=model.ranges.get(controlId);
     if(range){
       const target=Number.isFinite(range.targets[idx])?range.targets[idx]:range.min+(range.max-range.min)*(idx/Math.max(1,count-1));
       let current=NaN;
@@ -174,8 +222,7 @@
       return {dx:fraction*150,dy:0};
     }
     if(kind==="yoke"){
-      const vectors=[[-38,0],[0,-36],[38,0],[0,36]];
-      const v=vectors[idx]||vectors[0];return {dx:v[0],dy:v[1]};
+      const vectors=[[-38,0],[0,-36],[38,0],[0,36]],v=vectors[idx]||vectors[0];return {dx:v[0],dy:v[1]};
     }
     if(["selector","rotary","wheel"].includes(kind)){
       const current=Number(gesture.dataset.dialAngle)||0,target=-62+124*(idx/Math.max(1,count-1));
@@ -195,21 +242,7 @@
     if(!(await moveCursorTo(gesture,CURSOR_TRAVEL_MS,token))) return false;
     if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
     const start=pointFor(gesture,.5,.5),end={x:clamp(start.x+plan.dx,10,window.innerWidth-10),y:clamp(start.y+plan.dy,10,window.innerHeight-10)};
-    const restore=patchPointerCapture(gesture);
-    try{
-      pointerEvent("pointerdown",gesture,start.x,start.y,1,0);
-      const started=now(),duration=720;
-      await new Promise(resolve=>{
-        const frame=()=>{
-          if(!tokenAlive(token)||!gesture.isConnected){resolve();return;}
-          const t=clamp((now()-started)/duration,0,1),e=ease(t),x=start.x+(end.x-start.x)*e,y=start.y+(end.y-start.y)*e;
-          setCursorPoint(x,y);pointerEvent("pointermove",gesture,x,y,1,-1);
-          if(t<1)requestAnimationFrame(frame);else resolve();
-        };requestAnimationFrame(frame);
-      });
-      if(!tokenAlive(token)) return false;
-      pointerEvent("pointerup",gesture,end.x,end.y,0,0);setCursorPoint(end.x,end.y);return true;
-    }finally{restore();}
+    return animatePointerGesture(gesture,start,end,720,token);
   }
 
   function parseStrings(source){return [...String(source||"").matchAll(/"([^"]+)"/g)].map(match=>match[1]);}
@@ -261,17 +294,19 @@
 
   async function performToken(procedureToken,model,token){
     if(!tokenAlive(token)) return false;
+    if(procedureToken==="auth-key-arm") return performAuthorizationKeyTwist(token);
+    if(procedureToken==="auth-shield-open") return performAuthorizationShieldFlip(token);
     if(!model.authTail.includes(procedureToken)&&tokenAlreadySatisfied(procedureToken,model)) return true;
     const direct=()=>document.querySelector(`#station-panel [data-proc-input="${CSS.escape(procedureToken)}"]:not(:disabled)`);
     const meta=model.actions.get(procedureToken);
-    const gesture=()=>[...document.querySelectorAll("#station-panel [data-control-gesture]:not([aria-disabled=\"true\"])" )].find(node=>(node.dataset.gestureTokens||"").split("|").includes(procedureToken));
+    const gesture=()=>[...document.querySelectorAll('#station-panel [data-control-gesture]:not([aria-disabled="true"])')].find(node=>(node.dataset.gestureTokens||"").split("|").includes(procedureToken));
     const g=gesture();
-    if(g && meta) return performGestureForToken(g,procedureToken,model,token);
+    if(g&&meta) return performGestureForToken(g,procedureToken,model,token);
     const button=direct();
     if(button) return tapElement(button,token);
     const late=await waitFor(()=>direct()||gesture(),1800,token);
     if(!late) return false;
-    if(late.matches?.("[data-control-gesture]")) return performGestureForToken(late,procedureToken,model,token);
+    if(late.matches?.("[data-control-gesture]")&&meta) return performGestureForToken(late,procedureToken,model,token);
     return tapElement(late,token);
   }
 
@@ -280,14 +315,14 @@
   async function prepareHelmAutonav(procedureId,token){
     const api=window.EXO_HELM_AUTONAV_SUITE,req=autonavRequirement(procedureId);if(!api||!req)return true;
     const choose=async(selector,value)=>{const control=await waitFor(()=>document.querySelector(selector),1200,token);if(!control)return false;if(value&&control.value!==value)return selectValue(control,value,token);if(value){await moveCursorTo(control,CURSOR_TRAVEL_MS,token);await sleep(260,token);}return true;};
-    if(req.encounter && !(await choose("#station-panel [data-autonav-encounter]",req.encounter))) return false;
-    if(req.pattern && !(await choose("#station-panel [data-autonav-evasive]",req.pattern))) return false;
+    if(req.encounter&&!(await choose("#station-panel [data-autonav-encounter]",req.encounter)))return false;
+    if(req.pattern&&!(await choose("#station-panel [data-autonav-evasive]",req.pattern)))return false;
     let state=api.getState?.()||{};
-    const clickAction=async(name)=>{const button=await waitFor(()=>document.querySelector(`#station-panel [data-autonav-action="${name}"]:not(:disabled)`),1600,token);return button?tapElement(button,token):false;};
-    if(req.package&&!state.queued){if(!(await clickAction("queue")))return false;await sleep(ACTION_SETTLE_MS,token);state=api.getState?.()||state;}
-    if(req.simulate&&!state.simulated){if(!(await clickAction("simulate")))return false;await sleep(ACTION_SETTLE_MS,token);state=api.getState?.()||state;}
-    if(req.evasive&&!state.evasiveLoaded){if(!(await clickAction("load-evasive")))return false;await sleep(ACTION_SETTLE_MS,token);state=api.getState?.()||state;}
-    if(req.sync&&!state.synced){if(!(await clickAction("sync")))return false;await sleep(ACTION_SETTLE_MS,token);}
+    const clickAction=async name=>{const button=await waitFor(()=>document.querySelector(`#station-panel [data-autonav-action="${name}"]:not(:disabled)`),1600,token);return button?tapElement(button,token):false;};
+    if(req.package&&!state.queued){if(!(await clickAction("queue")))return false;if(!(await sleep(ACTION_SETTLE_MS,token)))return false;state=api.getState?.()||state;}
+    if(req.simulate&&!state.simulated){if(!(await clickAction("simulate")))return false;if(!(await sleep(ACTION_SETTLE_MS,token)))return false;state=api.getState?.()||state;}
+    if(req.evasive&&!state.evasiveLoaded){if(!(await clickAction("load-evasive")))return false;if(!(await sleep(ACTION_SETTLE_MS,token)))return false;state=api.getState?.()||state;}
+    if(req.sync&&!state.synced){if(!(await clickAction("sync")))return false;if(!(await sleep(ACTION_SETTLE_MS,token)))return false;}
     return true;
   }
 
@@ -339,7 +374,7 @@
     const tab=await waitFor(()=>document.querySelector(`#station-tabs [data-station="${station}"]`),1600,token);if(!tab)return false;
     clearFocus();tab.setAttribute("data-observer-tab-focus","true");
     if(!(await tapElement(tab,token,{dwell:480})))return false;
-    await sleep(STATION_SETTLE_MS,token);
+    if(!(await sleep(STATION_SETTLE_MS,token)))return false;
     window.EXO_STATION_KEY_CURSOR?.sync?.();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     refreshKeyVisual();
@@ -354,14 +389,9 @@
   async function recoverProcedureAttempt(station,token){
     if(!tokenAlive(token))return false;
     const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");
-    if(abort){
-      await tapElement(abort,token,{dwell:360});
-      await waitFor(()=>!procedureAttemptActive(),2200,token);
-    }
+    if(abort){await tapElement(abort,token,{dwell:360});await waitFor(()=>!procedureAttemptActive(),2200,token);}
     if(!tokenAlive(token))return false;
-    if(selectedStation()!==station){
-      if(!(await switchStation(station,token)))return false;
-    }
+    if(selectedStation()!==station&&!(await switchStation(station,token)))return false;
     await sleep(RETRY_SETTLE_MS,token);
     return tokenAlive(token)&&selectedStation()===station&&!procedureAttemptActive();
   }
