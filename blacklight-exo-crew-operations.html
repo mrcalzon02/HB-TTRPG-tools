@@ -39,20 +39,13 @@
        The persistent Input Recorder below the hardware already reports the same state. */
     #station-panel .exo-procedure-setup + .exo-sequence-recorder { display:none !important; }
 
-    /* The hero no longer carries a decorative simulation-status directory.
-       Observer mode remains available as the single eye control. */
-    .exo-crew-hero {
-      position:relative;
-      grid-template-columns:minmax(0,1fr) !important;
-    }
-    .exo-observer-hero-toggle {
-      position:absolute;
-      top:42px;
-      right:42px;
-      z-index:3;
-    }
-    @media (max-width:720px) {
-      .exo-observer-hero-toggle { top:18px; right:18px; }
+    /* Observer mode belongs with the page controls, not inside a decorative hero. */
+    .exo-crew-body .bli-topbar .bli-nav { margin-left:auto; }
+    .exo-observer-topbar-toggle { flex:0 0 31px; margin-left:2px; }
+    @media (max-width:860px) {
+      .exo-crew-body .bli-topbar { flex-direction:row; align-items:center; flex-wrap:wrap; }
+      .exo-crew-body .bli-nav { order:3; width:100%; margin-left:0; justify-content:flex-start; }
+      .exo-observer-topbar-toggle { margin-left:auto; }
     }
   </style>
   <script src="blacklight-exo-control-audio.js?v=20260811-2147" defer></script>
@@ -81,31 +74,20 @@
       <a href="blacklight-exo-solar-system.html">Cartography</a>
       <a href="blacklight-systems-black.html">Black Archive</a>
     </nav>
-  </header>
-
-  <section class="bli-hero exo-crew-hero" aria-labelledby="crew-title">
-    <div>
-      <p class="bli-eyebrow">Black compartment · procedural bridge role-play visualization</p>
-      <h1 id="crew-title">Crew Operations Simulator.</h1>
-      <p class="bli-lede">Space combat is usually either slow enough to take hours or fast enough that no human crew could react in time. The ship handles most of the math and timing, while the crew decides what it should actually do. This simulator lets players take those bridge roles, work the controls, carry out procedures, and hand the result to the DM.</p>
-      <div class="bli-actions">
-        <button id="crew-scenario-reset" class="bli-action primary" type="button">Reset Human Baseline</button>
-        <button id="crew-scenario-contact" class="bli-action" type="button">Inject Unknown Contact</button>
-        <button id="crew-scenario-damage" class="bli-action" type="button">Inject Engineering Fault</button>
-        <button id="crew-scenario-battle" class="bli-action" type="button">Combat Drill</button>
-        <a class="bli-action" href="blacklight-exo-repair-operations.html">Open Console Repair Bay</a>
-      </div>
-    </div>
-    <button id="crew-observer-toggle" class="exo-observer-toggle exo-observer-hero-toggle" type="button" aria-pressed="false" aria-label="Enable observer mode" title="Observer mode — autonomous crew demonstration">
+    <button id="crew-observer-toggle" class="exo-observer-toggle exo-observer-topbar-toggle" type="button" aria-pressed="false" aria-label="Enable observer mode" title="Observer mode — autonomous crew demonstration">
       <svg viewBox="0 0 24 14" aria-hidden="true"><path class="eye-outline" d="M1 7C4.2 2.8 7.8 1 12 1s7.8 1.8 11 6c-3.2 4.2-6.8 6-11 6S4.2 11.2 1 7Z"/><circle class="eye-pupil" cx="12" cy="7" r="2.5"/></svg>
     </button>
-  </section>
+  </header>
 
   <main class="bli-shell exo-crew-shell">
     <div hidden aria-hidden="true">
       <input id="crew-master-difficulty" type="range" min="0" max="5" step="1" value="0" tabindex="-1">
       <div id="power-controls"></div>
       <span id="power-total"></span>
+      <button id="crew-scenario-reset" type="button" tabindex="-1"></button>
+      <button id="crew-scenario-contact" type="button" tabindex="-1"></button>
+      <button id="crew-scenario-damage" type="button" tabindex="-1"></button>
+      <button id="crew-scenario-battle" type="button" tabindex="-1"></button>
     </div>
 
     <section class="bli-section exo-stations">
