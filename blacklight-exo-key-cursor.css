@@ -39,6 +39,18 @@
   overflow:visible;
 }
 
+/* Observer Mode owns a completely separate synthetic key actor. Keep the
+   physical-user key overlay invisible for the entire autonomous run so real
+   pointer motion can never visually fight the Observer key. The JS cursor
+   tracker continues remembering trusted hardware coordinates underneath this
+   suppression, which lets the player cursor return at the correct physical
+   mouse position when Observer Mode exits. */
+.exo-crew-body.exo-observer-mode .exo-station-key-cursor-overlay{
+  display:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+}
+
 @media (pointer:coarse){
   .exo-crew-body.exo-key-cursor-ready,
   .exo-crew-body.exo-key-cursor-ready *{
