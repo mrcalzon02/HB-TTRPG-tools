@@ -39,6 +39,10 @@
        The persistent Input Recorder below the hardware already reports the same state. */
     #station-panel .exo-procedure-setup + .exo-sequence-recorder { display:none !important; }
 
+    /* The station tabs already identify the active watchstation. Remove the
+       redundant title / fake ship-state header between the tabs and console. */
+    #station-panel > .exo-station-head { display:none !important; }
+
     /* Observer mode belongs with the page controls, not inside a decorative hero. */
     .exo-crew-body .bli-topbar .bli-nav { margin-left:auto; }
     .exo-observer-topbar-toggle { flex:0 0 31px; margin-left:2px; }
