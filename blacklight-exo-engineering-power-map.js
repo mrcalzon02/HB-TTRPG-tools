@@ -508,15 +508,15 @@
       return;
     }
     const input=kind==="input";
-    motion.phase+=dt*(input?.011+.010*strength:.0042+.0048*ramp);
+    motion.phase+=dt*(input ? .011+.010*strength : .0042+.0048*ramp);
     if(now>=motion.nextNoise){
       motion.target=Math.random()*2-1;
       motion.nextNoise=now+(input?65+Math.random()*115:170+Math.random()*260);
-      const spikeChance=input?.13+.24*ramp:.035+.08*ramp;
-      if(Math.random()<spikeChance)motion.spike=(Math.random()<.5?-1:1)*(input?.75+Math.random()*.75:.35+Math.random()*.45);
+      const spikeChance=input ? .13+.24*ramp : .035+.08*ramp;
+      if(Math.random()<spikeChance)motion.spike=(Math.random()<.5?-1:1)*(input ? .75+Math.random()*.75 : .35+Math.random()*.45);
     }
-    motion.noise+=(motion.target-motion.noise)*(input?.20:.075);
-    motion.spike*=Math.pow(input?.88:.94,dt/16.67);
+    motion.noise+=(motion.target-motion.noise)*(input ? .20 : .075);
+    motion.spike*=Math.pow(input ? .88 : .94,dt/16.67);
     const amp=input?(2.8+strength*11+ramp*10):(0.7+ramp*4.6+strength*1.2);
     const wave=Math.sin(motion.phase)*.34+Math.sin(motion.phase*2.73+1.2)*.17+Math.sin(motion.phase*.63-2.1)*.13;
     const value=clamp(base+amp*(wave+motion.noise*.52+motion.spike),0,520);
