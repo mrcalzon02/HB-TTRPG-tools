@@ -497,32 +497,79 @@
     const readout=node.querySelector("[data-meter-readout]");
     if(!needle||!readout)return;
     let motion=meterMotion.get(node);
-    if(!motion){motion={last:now,phase:Math.random()*Math.PI*2,noise:0,target:0,nextNoise:now,spike:0};meterMotion.set(node,motion);}
+    if(!motion){
+      motion={
+        last:now,
+        phase:Math.random()*Math.PI*2,
+        ripplePhase:Math.random()*Math.PI*2,
+        noise:0,
+        target:0,
+        nextNoise:now,
+        sag:0,
+        surge:0,
+        displayed:base,
+        nextReadout:now
+      };
+      meterMotion.set(node,motion);
+    }
     const dt=Math.min(50,Math.max(0,now-motion.last));
     motion.last=now;
-    if(reduced||base<=0){
-      const value=base<=0?0:base;
-      const angle=base<=0?-58:clamp((value-440)/80*92,-58,58);
-      needle.setAttribute("transform",`rotate(${angle.toFixed(1)} ${cx} ${cy})`);
-      readout.textContent=`${Math.round(value)} V`;
+    if(base<=0){
+      needle.setAttribute("transform",`rotate(-58 ${cx} ${cy})`);
+      readout.textContent="0 V";
       return;
     }
+
     const input=kind==="input";
-    motion.phase+=dt*(input ? .011+.010*strength : .0042+.0048*ramp);
+    const motionScale=reduced?.46:1;
+    motion.phase+=dt*(input ? (.0058+.0042*strength) : (.0021+.0018*ramp))*motionScale;
+    motion.ripplePhase+=dt*(input ? (.030+.026*strength+.018*ramp) : (.010+.008*ramp))*motionScale;
+
     if(now>=motion.nextNoise){
       motion.target=Math.random()*2-1;
-      motion.nextNoise=now+(input?65+Math.random()*115:170+Math.random()*260);
-      const spikeChance=input ? .13+.24*ramp : .035+.08*ramp;
-      if(Math.random()<spikeChance)motion.spike=(Math.random()<.5?-1:1)*(input ? .75+Math.random()*.75 : .35+Math.random()*.45);
+      motion.nextNoise=now+(input?70+Math.random()*120:190+Math.random()*330);
+      if(input){
+        const sagChance=.10+.19*ramp+.08*strength;
+        const surgeChance=.035+.07*ramp;
+        const event=Math.random();
+        if(event<sagChance)motion.sag=.72+Math.random()*1.18;
+        else if(event<sagChance+surgeChance)motion.surge=.32+Math.random()*.72;
+      }else{
+        const eventChance=.018+.055*ramp;
+        if(Math.random()<eventChance){
+          if(Math.random()<.72)motion.sag=.18+Math.random()*.38;
+          else motion.surge=.12+Math.random()*.28;
+        }
+      }
     }
-    motion.noise+=(motion.target-motion.noise)*(input ? .20 : .075);
-    motion.spike*=Math.pow(input ? .88 : .94,dt/16.67);
-    const amp=input?(2.8+strength*11+ramp*10):(0.7+ramp*4.6+strength*1.2);
-    const wave=Math.sin(motion.phase)*.34+Math.sin(motion.phase*2.73+1.2)*.17+Math.sin(motion.phase*.63-2.1)*.13;
-    const value=clamp(base+amp*(wave+motion.noise*.52+motion.spike),0,520);
+
+    motion.noise+=(motion.target-motion.noise)*(input?.16:.055)*motionScale;
+    motion.sag*=Math.pow(input?.922:.958,dt/16.67);
+    motion.surge*=Math.pow(input?.884:.947,dt/16.67);
+
+    const lossBias=input
+      ? .9+strength*2.4+ramp*(2.8+6.8*strength)
+      : .18+ramp*.85;
+    const rippleAmp=input
+      ? 6.5+strength*8.5+ramp*10.5
+      : .65+ramp*2.5+strength*.65;
+    const transientAmp=input
+      ? 7.5+strength*13.5+ramp*18
+      : 1.0+ramp*3.8+strength*.8;
+    const slowWave=Math.sin(motion.phase)*.52+Math.sin(motion.phase*.43-1.7)*.18;
+    const commutation=Math.sin(motion.ripplePhase)*.24+Math.sin(motion.ripplePhase*2.13+.8)*.12;
+    const noise=rippleAmp*(slowWave+commutation+motion.noise*.46);
+    const transient=transientAmp*(-motion.sag+motion.surge*.58);
+    const targetValue=clamp(base-lossBias+noise+transient,input?350:370,520);
+    motion.displayed+=(targetValue-motion.displayed)*(input?.31:.105)*motionScale;
+
+    const value=motion.displayed;
     const angle=clamp((value-440)/80*92,-58,58);
     needle.setAttribute("transform",`rotate(${angle.toFixed(1)} ${cx} ${cy})`);
-    readout.textContent=`${Math.round(value)} V`;
+    if(now>=motion.nextReadout){
+      readout.textContent=`${Math.round(value)} V`;
+      motion.nextReadout=now+(input?(reduced?180:90):(reduced?300:175));
+    }
   }
 
   function animateVoltmeters(now) {
