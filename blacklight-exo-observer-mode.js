@@ -10,6 +10,7 @@
   const ACTION_SETTLE_MS = 620;
   const PROCEDURE_SETTLE_MS = 1150;
   const STATION_SETTLE_MS = 1250;
+  const RETRY_SETTLE_MS = 950;
   const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
   const ease = t => t*t*(3-2*t);
   const now = () => performance.now();
@@ -27,6 +28,7 @@
   function tokenAlive(token){ return active && token === runToken; }
   function selectedStation(){ return document.querySelector('#station-tabs [data-station][aria-selected="true"]')?.dataset.station || "helm"; }
   function selectedProcedureId(){ return document.querySelector('#station-panel [data-procedure-select]')?.value || null; }
+  function procedureAttemptActive(){ return Boolean(document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)")); }
 
   function sleep(ms,token){
     return new Promise(resolve => {
@@ -309,26 +311,27 @@
   async function beginProcedure(token){
     const button=await waitFor(()=>document.querySelector("#station-panel [data-procedure-begin]"),1800,token);if(!button)return false;
     if(!(await tapElement(button,token,{dwell:520})))return false;
-    return Boolean(await waitFor(()=>document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)"),2400,token));
+    return Boolean(await waitFor(()=>procedureAttemptActive(),2400,token));
   }
 
-  async function runProcedure(plan,model,token){
-    if(!tokenAlive(token))return false;
+  async function runProcedure(plan,model,token,station){
+    if(!tokenAlive(token)||selectedStation()!==station)return false;
     if(!(await chooseProcedure(plan.id,token)))return false;
-    await sleep(700,token);
+    if(!(await sleep(700,token)))return false;
     if(!(await beginProcedure(token)))return false;
-    await sleep(850,token);
+    if(!(await sleep(850,token)))return false;
     const sequence=model.procedures.get(plan.id);if(!sequence?.length)return false;
     for(const procedureToken of sequence){
-      if(!tokenAlive(token))return false;
-      if(selectedStation()==="helm"&&(procedureToken==="helm-vector-confirm"||procedureToken==="helm-pilot-ack")){
+      if(!tokenAlive(token)||selectedStation()!==station||!procedureAttemptActive())return false;
+      if(station==="helm"&&(procedureToken==="helm-vector-confirm"||procedureToken==="helm-pilot-ack")){
         if(!(await prepareHelmAutonav(plan.id,token)))return false;
       }
       if(!(await performToken(procedureToken,model,token)))return false;
       if(!(await sleep(ACTION_SETTLE_MS,token)))return false;
     }
-    await waitFor(()=>!document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)"),2600,token);
-    await sleep(PROCEDURE_SETTLE_MS,token);
+    const completed=await waitFor(()=>!procedureAttemptActive(),4200,token);
+    if(!completed||!tokenAlive(token)||selectedStation()!==station)return false;
+    if(!(await sleep(PROCEDURE_SETTLE_MS,token)))return false;
     return true;
   }
 
@@ -345,7 +348,22 @@
 
   async function clearExistingAttempt(token){
     const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");
-    if(abort){await tapElement(abort,token);await sleep(700,token);}
+    if(abort){await tapElement(abort,token);await waitFor(()=>!procedureAttemptActive(),1800,token);await sleep(700,token);}
+  }
+
+  async function recoverProcedureAttempt(station,token){
+    if(!tokenAlive(token))return false;
+    const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");
+    if(abort){
+      await tapElement(abort,token,{dwell:360});
+      await waitFor(()=>!procedureAttemptActive(),2200,token);
+    }
+    if(!tokenAlive(token))return false;
+    if(selectedStation()!==station){
+      if(!(await switchStation(station,token)))return false;
+    }
+    await sleep(RETRY_SETTLE_MS,token);
+    return tokenAlive(token)&&selectedStation()===station&&!procedureAttemptActive();
   }
 
   function extractCursorUrl(){
@@ -386,12 +404,21 @@
       const station=selectedStation(),count=Math.random()<.5?2:3,plan=variedProcedurePlan(station,count);
       for(const procedure of plan){
         if(!tokenAlive(token))return;
-        const ok=await runProcedure(procedure,model,token);
-        if(!ok&&tokenAlive(token)){const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");if(abort)await tapElement(abort,token);await sleep(900,token);}
+        let completed=false;
+        while(tokenAlive(token)&&!completed){
+          completed=await runProcedure(procedure,model,token,station);
+          if(!completed&&tokenAlive(token)){
+            const recovered=await recoverProcedureAttempt(station,token);
+            if(!recovered&&tokenAlive(token))await sleep(RETRY_SETTLE_MS,token);
+          }
+        }
+        if(!completed)return;
       }
       if(!tokenAlive(token))return;
       stationIndex=(stationIndex+1)%STATIONS.length;
-      if(!(await switchStation(STATIONS[stationIndex],token))&&tokenAlive(token))await sleep(1200,token);
+      while(tokenAlive(token)&&selectedStation()!==STATIONS[stationIndex]){
+        if(!(await switchStation(STATIONS[stationIndex],token)))await sleep(1200,token);
+      }
     }
   }
 
