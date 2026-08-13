@@ -5,14 +5,14 @@
 
   const POINTER_ID = 7719;
   const STATIONS = ["helm","navigation","gunnery","engineering","science","comms"];
-  const CURSOR_TRAVEL_MS = 1500;
-  const CONTROL_DWELL_MS = 420;
-  const ACTION_SETTLE_MS = 620;
-  const PROCEDURE_SETTLE_MS = 1150;
-  const STATION_SETTLE_MS = 1250;
-  const RETRY_SETTLE_MS = 950;
-  const AUTH_KEY_TWIST_MS = 820;
-  const AUTH_SHIELD_FLIP_MS = 680;
+  const CURSOR_TRAVEL_MS = 750;
+  const CONTROL_DWELL_MS = 180;
+  const ACTION_SETTLE_MS = 200;
+  const PROCEDURE_SETTLE_MS = 700;
+  const STATION_SETTLE_MS = 750;
+  const RETRY_SETTLE_MS = 600;
+  const AUTH_KEY_TWIST_MS = 440;
+  const AUTH_SHIELD_FLIP_MS = 380;
   const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
   const ease = t => t*t*(3-2*t);
   const now = () => performance.now();
@@ -92,7 +92,7 @@
     const startScroll=window.scrollY;
     const desiredScroll=clamp(targetDoc.y-window.innerHeight*.52,0,maxScrollY());
     const started=now();
-    const travel=Math.max(420,duration||CURSOR_TRAVEL_MS);
+    const travel=Math.max(320,duration||CURSOR_TRAVEL_MS);
     const bend=(targetDoc.x-(startCursor.x+window.scrollX))>=0?1:-1;
     return await new Promise(resolve=>{
       const frame=()=>{
@@ -121,10 +121,10 @@
     setCursorPoint(p.x,p.y);
     element.setAttribute("data-observer-press","true");
     pointerEvent("pointerdown",element,p.x,p.y,1,0);
-    if(!(await sleep(150,token))) return false;
+    if(!(await sleep(110,token))) return false;
     pointerEvent("pointerup",element,p.x,p.y,0,0);
     if(element.isConnected) element.click();
-    setTimeout(()=>element?.removeAttribute?.("data-observer-press"),180);
+    setTimeout(()=>element?.removeAttribute?.("data-observer-press"),130);
     return true;
   }
 
@@ -134,11 +134,11 @@
     if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
     select.setAttribute("data-observer-press","true");
     select.focus({preventScroll:true});
-    if(!(await sleep(180,token))) return false;
+    if(!(await sleep(120,token))) return false;
     select.value=value;
     select.dispatchEvent(new Event("input",{bubbles:true}));
     select.dispatchEvent(new Event("change",{bubbles:true}));
-    setTimeout(()=>select?.removeAttribute?.("data-observer-press"),180);
+    setTimeout(()=>select?.removeAttribute?.("data-observer-press"),130);
     return true;
   }
 
@@ -160,7 +160,7 @@
     try{
       setCursorPoint(start.x,start.y);
       pointerEvent("pointerdown",input,start.x,start.y,1,0);
-      const started=now(),duration=760;
+      const started=now(),duration=440;
       const moved=await new Promise(resolve=>{
         const frame=()=>{
           if(!tokenAlive(token)||!input.isConnected){resolve(false);return;}
@@ -184,7 +184,7 @@
       return true;
     }finally{
       restore();
-      setTimeout(()=>input?.removeAttribute?.("data-observer-press"),180);
+      setTimeout(()=>input?.removeAttribute?.("data-observer-press"),130);
     }
   }
 
@@ -288,7 +288,7 @@
     if(!(await moveCursorTo(gesture,CURSOR_TRAVEL_MS,token))) return false;
     if(!(await sleep(CONTROL_DWELL_MS,token))) return false;
     const start=pointFor(gesture,.5,.5),end={x:clamp(start.x+plan.dx,10,window.innerWidth-10),y:clamp(start.y+plan.dy,10,window.innerHeight-10)};
-    return animatePointerGesture(gesture,start,end,720,token);
+    return animatePointerGesture(gesture,start,end,420,token);
   }
 
   function parseStrings(source){return [...String(source||"").matchAll(/"([^"]+)"/g)].map(match=>match[1]);}
@@ -405,8 +405,8 @@
       if(gesture==="y") awayEnd={x:start.x,y:clamp(start.y-awayFraction*145,8,window.innerHeight-8)};
       else if(gesture==="dial") awayEnd={x:clamp(start.x+awayFraction*190,8,window.innerWidth-8),y:start.y};
       else awayEnd={x:clamp(start.x+awayFraction*175,8,window.innerWidth-8),y:start.y};
-      if(!(await animatePointerGesture(actuator,start,awayEnd,520,token))) return false;
-      if(!(await sleep(160,token))) return false;
+      if(!(await animatePointerGesture(actuator,start,awayEnd,320,token))) return false;
+      if(!(await sleep(90,token))) return false;
       const refreshed=await waitFor(()=>document.querySelector(`#crew-auxiliary-root [data-aux-control="${CSS.escape(control.id)}"] [data-aux-actuator="${CSS.escape(control.id)}"]:not([aria-disabled="true"])`),900,token);
       if(!refreshed) return false;
       const refreshedValue=Number(refreshed.getAttribute("aria-valuenow")),returnFraction=(target-refreshedValue)/(max-min),returnStart=pointFor(refreshed,.5,.5);
@@ -414,14 +414,14 @@
       if(gesture==="y") returnEnd={x:returnStart.x,y:clamp(returnStart.y-returnFraction*145,8,window.innerHeight-8)};
       else if(gesture==="dial") returnEnd={x:clamp(returnStart.x+returnFraction*190,8,window.innerWidth-8),y:returnStart.y};
       else returnEnd={x:clamp(returnStart.x+returnFraction*175,8,window.innerWidth-8),y:returnStart.y};
-      if(!(await animatePointerGesture(refreshed,returnStart,returnEnd,520,token))) return false;
+      if(!(await animatePointerGesture(refreshed,returnStart,returnEnd,320,token))) return false;
     }else{
       const gesture=control.gesture||"x",start=pointFor(actuator,.5,.5);
       let end;
       if(gesture==="y") end={x:start.x,y:clamp(start.y-fraction*145,8,window.innerHeight-8)};
       else if(gesture==="dial") end={x:clamp(start.x+fraction*190,8,window.innerWidth-8),y:start.y};
       else end={x:clamp(start.x+fraction*175,8,window.innerWidth-8),y:start.y};
-      if(!(await animatePointerGesture(actuator,start,end,760,token))) return false;
+      if(!(await animatePointerGesture(actuator,start,end,440,token))) return false;
     }
     return Boolean(await waitFor(()=>{
       const card=document.querySelector(`#crew-auxiliary-root [data-aux-control="${CSS.escape(control.id)}"]`);
@@ -439,14 +439,14 @@
     if(!root) return false;
     if(root.dataset.open!=="true"){
       const handle=root.querySelector("[data-aux-toggle]");
-      if(!handle||!(await tapElement(handle,token,{dwell:520}))) return false;
+      if(!handle||!(await tapElement(handle,token,{dwell:260}))) return false;
       if(!(await waitFor(()=>root.dataset.open==="true",1200,token))) return false;
-      if(!(await sleep(420,token))) return false;
+      if(!(await sleep(240,token))) return false;
     }
     for(const item of plan){
       if(!tokenAlive(token)||selectedStation()!==station||!procedureAttemptActive()) return false;
       if(!(await performAuxiliaryControl(item.control,item.target,token))) return false;
-      if(!(await sleep(360,token))) return false;
+      if(!(await sleep(200,token))) return false;
     }
     return true;
   }
@@ -455,7 +455,7 @@
 
   async function prepareHelmAutonav(procedureId,token){
     const api=window.EXO_HELM_AUTONAV_SUITE,req=autonavRequirement(procedureId);if(!api||!req)return true;
-    const choose=async(selector,value)=>{const control=await waitFor(()=>document.querySelector(selector),1200,token);if(!control)return false;if(value&&control.value!==value)return selectValue(control,value,token);if(value){await moveCursorTo(control,CURSOR_TRAVEL_MS,token);await sleep(260,token);}return true;};
+    const choose=async(selector,value)=>{const control=await waitFor(()=>document.querySelector(selector),1200,token);if(!control)return false;if(value&&control.value!==value)return selectValue(control,value,token);if(value){await moveCursorTo(control,CURSOR_TRAVEL_MS,token);await sleep(160,token);}return true;};
     if(req.encounter&&!(await choose("#station-panel [data-autonav-encounter]",req.encounter)))return false;
     if(req.pattern&&!(await choose("#station-panel [data-autonav-evasive]",req.pattern)))return false;
     let state=api.getState?.()||{};
@@ -486,18 +486,18 @@
 
   async function beginProcedure(token){
     const button=await waitFor(()=>document.querySelector("#station-panel [data-procedure-begin]"),1800,token);if(!button)return false;
-    if(!(await tapElement(button,token,{dwell:520})))return false;
+    if(!(await tapElement(button,token,{dwell:260})))return false;
     return Boolean(await waitFor(()=>procedureAttemptActive(),2400,token));
   }
 
   async function runProcedure(plan,model,token,station){
     if(!tokenAlive(token)||selectedStation()!==station)return false;
     if(!(await chooseProcedure(plan.id,token)))return false;
-    if(!(await sleep(700,token)))return false;
+    if(!(await sleep(400,token)))return false;
     if(!(await beginProcedure(token)))return false;
-    if(!(await sleep(850,token)))return false;
+    if(!(await sleep(500,token)))return false;
     if(!(await performAuxiliaryPlan(station,plan.id,token)))return false;
-    if(!(await sleep(520,token)))return false;
+    if(!(await sleep(300,token)))return false;
     const sequence=model.procedures.get(plan.id);if(!sequence?.length)return false;
     for(const procedureToken of sequence){
       if(!tokenAlive(token)||selectedStation()!==station||!procedureAttemptActive())return false;
@@ -516,7 +516,7 @@
   async function switchStation(station,token){
     const tab=await waitFor(()=>document.querySelector(`#station-tabs [data-station="${station}"]`),1600,token);if(!tab)return false;
     clearFocus();tab.setAttribute("data-observer-tab-focus","true");
-    if(!(await tapElement(tab,token,{dwell:480})))return false;
+    if(!(await tapElement(tab,token,{dwell:240})))return false;
     if(!(await sleep(STATION_SETTLE_MS,token)))return false;
     window.EXO_STATION_KEY_CURSOR?.sync?.();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
@@ -526,13 +526,13 @@
 
   async function clearExistingAttempt(token){
     const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");
-    if(abort){await tapElement(abort,token);await waitFor(()=>!procedureAttemptActive(),1800,token);await sleep(700,token);}
+    if(abort){await tapElement(abort,token);await waitFor(()=>!procedureAttemptActive(),1800,token);await sleep(400,token);}
   }
 
   async function recoverProcedureAttempt(station,token){
     if(!tokenAlive(token))return false;
     const abort=document.querySelector("#station-panel [data-procedure-abort]:not(:disabled)");
-    if(abort){await tapElement(abort,token,{dwell:360});await waitFor(()=>!procedureAttemptActive(),2200,token);}
+    if(abort){await tapElement(abort,token,{dwell:220});await waitFor(()=>!procedureAttemptActive(),2200,token);}
     if(!tokenAlive(token))return false;
     if(selectedStation()!==station&&!(await switchStation(station,token)))return false;
     await sleep(RETRY_SETTLE_MS,token);
@@ -608,7 +608,7 @@
       if(!tokenAlive(token))return;
       stationIndex=(stationIndex+1)%STATIONS.length;
       while(tokenAlive(token)&&selectedStation()!==STATIONS[stationIndex]){
-        if(!(await switchStation(STATIONS[stationIndex],token)))await sleep(1200,token);
+        if(!(await switchStation(STATIONS[stationIndex],token)))await sleep(700,token);
       }
     }
   }
