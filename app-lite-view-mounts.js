@@ -212,7 +212,10 @@
     }
     if (viewId === 'scientific-tools') {
       ensureScientificToolsView();
-      scientificToolsEntryPromise ||= loadScript('scientific-tools-entry.js?v=20260809-scientific-help-1');
+      scientificToolsEntryPromise ||= Promise.all([
+        loadScript('scientific-tools-entry.js?v=20260809-scientific-help-1'),
+        loadScript('live-signals-activity-status.js?v=20260813-live-signals-status-1')
+      ]);
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       return;
