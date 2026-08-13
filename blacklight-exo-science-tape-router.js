@@ -91,7 +91,7 @@
     if (currentNode) currentNode.textContent = routeString(routing);
     const ok = isCorrect();
     mountedPanel.dataset.routingCorrect = ok ? "true" : "false";
-    setStatus(ok ? "ROUTING COHERENT · CONFIRMATION / AUTHORIZATION ENABLED" : "ROUTING MISMATCH · PATCH LEADS TO REQUIRED DESTINATIONS", ok ? "good" : "warn");
+    setStatus(ok ? "ROUTING COHERENT · ANALYSIS PATH MATCHED" : "ROUTING MISMATCH · PATCH LEADS TO REQUIRED DESTINATIONS", ok ? "good" : "warn");
     SOURCE_IDS.forEach(source => {
       const sourceSocket = mountedPanel.querySelector(`[data-tape-source="${source}"]`);
       if (sourceSocket) sourceSocket.dataset.connected = routing[source] ? "true" : "false";
@@ -437,23 +437,6 @@
     });
   }
 
-  function blockIfMisrouted(event) {
-    const target = event.target.closest?.("#station-panel [data-proc-input]");
-    if (!target || !document.querySelector(PANEL_SELECTOR)) return;
-    const token = target.dataset.procInput || "";
-    const guarded = token === "sci-track-confirm" || token === "sci-analyst-ack" || token === "auth-key-insert" || token === "execute";
-    if (!guarded || isCorrect()) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    setStatus(`INTERLOCK · ${token.toUpperCase()} BLOCKED · REQUIRED ${routeString(requirement())}`,"bad");
-    mountedPanel?.animate?.([
-      { transform:"translateX(0)" },
-      { transform:"translateX(-2px)" },
-      { transform:"translateX(2px)" },
-      { transform:"translateX(0)" }
-    ],{duration:160,iterations:2});
-  }
-
   function handleGlobalClick(event) {
     if (event.target.closest?.("#crew-scenario-reset")) {
       Object.assign(routing,identityRouting());
@@ -492,7 +475,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    document.addEventListener("click",blockIfMisrouted,true);
     document.addEventListener("click",handleGlobalClick,false);
     document.addEventListener("change",handleGlobalChange,false);
     observeStationPanel();
