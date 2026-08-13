@@ -7,7 +7,7 @@
   // foreground dialogue. This CC0 recording is intentionally long so the loop
   // does not call attention to itself during autonomous demonstrations.
   const AMBIENCE_URL = "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cafe_ambiance.ogg";
-  const AMBIENCE_GAIN = 0.078;
+  const AMBIENCE_GAIN = 0.1365;
   const FADE_IN_MS = 2600;
   const FADE_OUT_MS = 1250;
 
