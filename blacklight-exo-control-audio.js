@@ -4,7 +4,8 @@
   if (window.EXO_CONTROL_AUDIO) return;
 
   const MASTER_VOLUME = 0.72;
-  const CONTROL_EFFECT_GAIN = 1.5;
+  const CONTROL_EFFECT_GAIN = 3.25;
+  const AMBIENT_EFFECT_GAIN = 4.0;
   const MAX_ACTIVE = 48;
   const STATION_CHARACTER = Object.freeze({
     helm: Object.freeze({ gain: 0.96, rate: 1.03 }),
@@ -179,10 +180,10 @@
       { asset: 'deng', gain: 0.058, rate: 1.08, stopMs: 420 }
     ]),
     'detent-roll-loop': Object.freeze([
-      { asset: 'slowCoinClicking', gain: 0.043, rate: 1.10, loop: true }
+      { asset: 'slowCoinClicking', gain: 0.085, rate: 1.10, loop: true }
     ]),
     'servo-loop': Object.freeze([
-      { asset: 'engineLoop', gain: 0.017, rate: 1.42, loop: true }
+      { asset: 'engineLoop', gain: 0.055, rate: 1.42, loop: true }
     ]),
     'ambient-drive-rumble': Object.freeze([
       { asset: 'cc0RocketEngine', gain: 0.038, rate: 0.82, loop: true },
@@ -299,8 +300,9 @@
     const character = characterFor(options);
     const ambientScene = String(options.scene || '').startsWith('ambient-');
     const controlEffectGain = ambientScene ? 1 : CONTROL_EFFECT_GAIN;
+    const ambientEffectGain = ambientScene ? AMBIENT_EFFECT_GAIN : 1;
     const ambientGain = ambientScene ? (AMBIENT_STATION_GAIN[station] ?? 1) : 1;
-    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * controlEffectGain * ambientGain, 0, 1);
+    const baseVolume = clamp((layer.gain ?? 0.1) * (options.intensity ?? 1) * character.gain * controlEffectGain * ambientEffectGain * ambientGain, 0, 1);
     audio.preload = 'auto';
     activeBaseVolumes.set(audio, baseVolume);
     audio.volume = clamp(baseVolume * masterVolume, 0, 1);
