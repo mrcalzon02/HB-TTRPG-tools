@@ -2,7 +2,7 @@
 
 Network Investigator is the privileged/local half of the Scientific Tools network diagnostic system. The hosted site must not pretend that a browser can inspect Windows TCP ownership, services, Task Scheduler, WFP or ETW directly. This companion owns those responsibilities and serves its control UI only on loopback.
 
-## Implemented in this slice
+## Implemented
 
 - Java 21, dependency-free localhost service bound to `127.0.0.1:8765`.
 - Same-origin dashboard with a dominant `RECORD / STOP RECORDING` control.
@@ -13,6 +13,10 @@ Network Investigator is the privileged/local half of the Scientific Tools networ
 - Wall-clock plus monotonic event timing.
 - Session metadata and append-only JSONL raw evidence.
 - Every event is flushed to disk in this first implementation so a process or machine failure leaves useful evidence rather than an all-or-nothing in-memory capture.
+- Process lifecycle/ancestry observation using Java `ProcessHandle`, with PID, process start time, executable, command line where exposed, user, parent PID and parent executable where available.
+- Windows TCP ownership/state snapshots using `Get-NetTCPConnection`, correlated to the process baseline. Already-existing endpoints are explicitly recorded as baseline observations; later appearances/disappearances/state changes are separate events.
+- Windows UDP endpoint ownership snapshots using `Get-NetUDPEndpoint`. The endpoint table does not expose the remote peer, so this baseline does not invent one; ETW is required for high-fidelity UDP traffic destinations.
+- Dashboard counters for visible processes and current TCP/UDP endpoints.
 - Local mutation token, Host validation, Origin validation, no CORS, and a restrictive CSP. The public GitHub Pages site should launch/direct the user to this local dashboard rather than receiving privileged telemetry itself.
 - No application payload capture.
 
@@ -31,12 +35,14 @@ java --add-modules jdk.httpserver -cp out io.calzon.networkinvestigator.Main
 
 Then open `http://127.0.0.1:8765/`.
 
-## Collector roadmap attached to this evidence pipeline
+## Current evidence limitations
 
-The recorder is intentionally implemented before the Windows-specific collectors so every later collector writes through one durable event contract instead of inventing its own log format. Next collectors should be added in this order:
+The PowerShell TCP/UDP path is a deliberately conservative baseline, not the final capture engine. A two-second snapshot can miss very short connections and does not provide per-flow byte counts, packet events or retransmission timing. Those belong in the native IP Helper/ETW/WFP collectors rather than being approximated and mislabeled as facts.
 
-1. Process lifecycle + ancestry snapshots, including executable path, command line where permitted, parent PID/start time, signer/product metadata where available.
-2. TCP/UDP endpoint ownership and connection lifecycle using IP Helper first, then ETW for event/throughput fidelity.
+## Next collectors
+
+1. Native IP Helper endpoint collector, retaining the PowerShell collector as a diagnostic fallback.
+2. ETW TCP/IP event ingestion for send/receive/connect/disconnect/retransmit events and per-flow throughput accounting.
 3. DNS configuration, resolver tests and DNS-event correlation.
 4. Windows Service Control Manager attribution for shared hosts such as `svchost.exe`.
 5. Task Scheduler inventory/run-event correlation so launch causes can be shown as evidence.
