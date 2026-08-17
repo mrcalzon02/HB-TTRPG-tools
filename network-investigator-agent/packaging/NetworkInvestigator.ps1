@@ -51,14 +51,16 @@ try {
         $StderrLog = Join-Path $LogRoot "launcher-$stamp.stderr.log"
 
         Write-Host "Starting Network Investigator on 127.0.0.1:$Port ..."
-        $StartedProcess = Start-Process \
-            -FilePath $Java \
-            -WorkingDirectory $PSScriptRoot \
-            -ArgumentList @('--add-modules','jdk.httpserver','-jar','NetworkInvestigator.jar',"$Port") \
-            -WindowStyle Hidden \
-            -RedirectStandardOutput $StdoutLog \
-            -RedirectStandardError $StderrLog \
-            -PassThru
+        $startArguments = @{
+            FilePath = $Java
+            WorkingDirectory = $PSScriptRoot
+            ArgumentList = @('--add-modules','jdk.httpserver','-jar','NetworkInvestigator.jar',"$Port")
+            WindowStyle = 'Hidden'
+            RedirectStandardOutput = $StdoutLog
+            RedirectStandardError = $StderrLog
+            PassThru = $true
+        }
+        $StartedProcess = Start-Process @startArguments
 
         $ready = $false
         for ($attempt = 0; $attempt -lt 60; $attempt++) {
