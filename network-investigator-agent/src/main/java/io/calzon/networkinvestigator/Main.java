@@ -21,11 +21,13 @@ public final class Main {
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private final SessionRecorder recorder;
+    private final WindowsTelemetryCollector telemetry;
     private final String mutationToken;
     private final Path webRoot;
 
-    private Main(SessionRecorder recorder, Path webRoot) {
+    private Main(SessionRecorder recorder, WindowsTelemetryCollector telemetry, Path webRoot) {
         this.recorder = recorder;
+        this.telemetry = telemetry;
         this.webRoot = webRoot.toAbsolutePath().normalize();
         byte[] token = new byte[32];
         RANDOM.nextBytes(token);
@@ -35,12 +37,16 @@ public final class Main {
     public static void main(String[] args) throws Exception {
         int port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
         Path dataRoot = Path.of(System.getProperty("user.home"), "Network Investigator");
+        Path webRoot = Path.of("web");
         SessionRecorder recorder = new SessionRecorder(dataRoot);
-        Main app = new Main(recorder, Path.of("web"));
+        WindowsTelemetryCollector telemetry = new WindowsTelemetryCollector(recorder);
+        telemetry.start();
+        Main app = new Main(recorder, telemetry, webRoot);
         HttpServer server = HttpServer.create(new InetSocketAddress(InetAddress.getByName(HOST), port), 32);
         server.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
         app.register(server, port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            telemetry.close();
             try { recorder.close(); }
             catch (IOException ignored) {}
         }, "network-investigator-shutdown"));
@@ -54,11 +60,18 @@ public final class Main {
             if (!permitLocalRequest(exchange, port)) return;
             if (!"GET".equals(exchange.getRequestMethod())) { methodNotAllowed(exchange); return; }
             SessionRecorder.Status status = recorder.status();
+            WindowsTelemetryCollector.Snapshot telemetryStatus = telemetry.snapshot();
             String body = "{" +
                     "\"state\":" + JsonUtil.quote(status.state().name()) + "," +
                     "\"preRollSeconds\":" + status.preRollAvailable().toSeconds() + "," +
                     "\"activeSeconds\":" + status.activeDuration().toSeconds() + "," +
                     "\"observedEvents\":" + status.observedEvents() + "," +
+                    "\"processCount\":" + telemetryStatus.processCount() + "," +
+                    "\"tcpEndpointCount\":" + telemetryStatus.tcpEndpointCount() + "," +
+                    "\"udpEndpointCount\":" + telemetryStatus.udpEndpointCount() + "," +
+                    "\"windowsCollectorSupported\":" + telemetryStatus.windowsCollectorSupported() + "," +
+                    "\"collectorLastPoll\":" + JsonUtil.quote(telemetryStatus.lastSuccessfulPoll() == null ? null : telemetryStatus.lastSuccessfulPoll().toString()) + "," +
+                    "\"collectorLastError\":" + JsonUtil.quote(telemetryStatus.lastError()) + "," +
                     "\"session\":" + JsonUtil.quote(status.sessionDirectory() == null ? null : status.sessionDirectory().getFileName().toString()) + "," +
                     "\"manualTrigger\":" + JsonUtil.quote(status.manualTrigger() == null ? null : status.manualTrigger().toString()) + "," +
                     "\"mutationToken\":" + JsonUtil.quote(mutationToken) +
@@ -66,8 +79,8 @@ public final class Main {
             json(exchange, 200, body);
         });
 
-        server.createContext("/api/record/start", exchange -> mutate(exchange, port, recorder::startRecording));
-        server.createContext("/api/record/stop", exchange -> mutate(exchange, port, recorder::stopRecording));
+        server.createContext("/api/record/start", exchange -> mutate(exchange, port, () -> recorder.startRecording()));
+        server.createContext("/api/record/stop", exchange -> mutate(exchange, port, () -> recorder.stopRecording()));
         server.createContext("/api/marker", exchange -> {
             if (!permitMutation(exchange, port)) return;
             String note = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);

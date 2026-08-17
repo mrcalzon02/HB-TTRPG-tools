@@ -31,6 +31,9 @@
         <div><span>Pre-roll available</span><strong id="preroll-time">00:00 / 10:00</strong></div>
         <div><span>Active recording</span><strong id="active-time">00:00:00</strong></div>
         <div><span>Observed events</span><strong id="event-count">0</strong></div>
+        <div><span>Processes visible</span><strong id="process-count">0</strong></div>
+        <div><span>TCP endpoints</span><strong id="tcp-count">0</strong></div>
+        <div><span>UDP endpoints</span><strong id="udp-count">0</strong></div>
         <div><span>Session</span><strong id="session-name">—</strong></div>
       </div>
       <div class="marker-row">
@@ -51,7 +54,7 @@
 
     <section class="notice-card">
       <h2>Current implementation boundary</h2>
-      <p>The recorder, crash-survivable disk pre-roll, manual trigger, session transition and event markers are live in this first slice. Windows ETW/WFP traffic telemetry, DNS health, process/service/task attribution, throughput accounting and session replay are the next collectors to attach to the same evidence pipeline. Application payloads are not captured.</p>
+      <p>The recorder, crash-survivable disk pre-roll, manual trigger and markers are live. Process lifecycle/ancestry and Windows TCP/UDP ownership are now captured into the same evidence stream. Native ETW/WFP throughput, DNS health, service/task attribution and session replay remain queued. Application payloads are not captured.</p>
     </section>
   </main>
   <script src="network-investigator.js"></script>

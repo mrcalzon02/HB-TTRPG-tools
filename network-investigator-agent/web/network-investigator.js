@@ -27,6 +27,9 @@
     $('preroll-time').textContent = `${formatClock(data.preRollSeconds)} / 10:00`;
     $('active-time').textContent = formatClock(data.activeSeconds, true);
     $('event-count').textContent = Number(data.observedEvents || 0).toLocaleString();
+    $('process-count').textContent = Number(data.processCount || 0).toLocaleString();
+    $('tcp-count').textContent = Number(data.tcpEndpointCount || 0).toLocaleString();
+    $('udp-count').textContent = Number(data.udpEndpointCount || 0).toLocaleString();
     $('session-name').textContent = data.session || '—';
     $('timeline-progress').style.width = `${Math.min(100, (Number(data.preRollSeconds) / 600) * 100)}%`;
 
