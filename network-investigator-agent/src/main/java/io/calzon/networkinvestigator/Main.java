@@ -22,12 +22,16 @@ public final class Main {
 
     private final SessionRecorder recorder;
     private final WindowsTelemetryCollector telemetry;
+    private final NetworkHealthCollector health;
+    private final Path dataRoot;
     private final String mutationToken;
     private final Path webRoot;
 
-    private Main(SessionRecorder recorder, WindowsTelemetryCollector telemetry, Path webRoot) {
+    private Main(SessionRecorder recorder, WindowsTelemetryCollector telemetry, NetworkHealthCollector health, Path dataRoot, Path webRoot) {
         this.recorder = recorder;
         this.telemetry = telemetry;
+        this.health = health;
+        this.dataRoot = dataRoot.toAbsolutePath().normalize();
         this.webRoot = webRoot.toAbsolutePath().normalize();
         byte[] token = new byte[32];
         RANDOM.nextBytes(token);
@@ -40,12 +44,15 @@ public final class Main {
         Path webRoot = Path.of("web");
         SessionRecorder recorder = new SessionRecorder(dataRoot);
         WindowsTelemetryCollector telemetry = new WindowsTelemetryCollector(recorder);
+        NetworkHealthCollector health = new NetworkHealthCollector(recorder);
         telemetry.start();
-        Main app = new Main(recorder, telemetry, webRoot);
+        health.start();
+        Main app = new Main(recorder, telemetry, health, dataRoot, webRoot);
         HttpServer server = HttpServer.create(new InetSocketAddress(InetAddress.getByName(HOST), port), 32);
         server.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
         app.register(server, port);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            health.close();
             telemetry.close();
             try { recorder.close(); }
             catch (IOException ignored) {}
@@ -61,6 +68,7 @@ public final class Main {
             if (!"GET".equals(exchange.getRequestMethod())) { methodNotAllowed(exchange); return; }
             SessionRecorder.Status status = recorder.status();
             WindowsTelemetryCollector.Snapshot telemetryStatus = telemetry.snapshot();
+            NetworkHealthCollector.Snapshot healthStatus = health.snapshot();
             String body = "{" +
                     "\"state\":" + JsonUtil.quote(status.state().name()) + "," +
                     "\"preRollSeconds\":" + status.preRollAvailable().toSeconds() + "," +
@@ -72,6 +80,24 @@ public final class Main {
                     "\"windowsCollectorSupported\":" + telemetryStatus.windowsCollectorSupported() + "," +
                     "\"collectorLastPoll\":" + JsonUtil.quote(telemetryStatus.lastSuccessfulPoll() == null ? null : telemetryStatus.lastSuccessfulPoll().toString()) + "," +
                     "\"collectorLastError\":" + JsonUtil.quote(telemetryStatus.lastError()) + "," +
+                    "\"healthCollectorSupported\":" + healthStatus.supported() + "," +
+                    "\"lanStatus\":" + JsonUtil.quote(healthStatus.lanStatus()) + "," +
+                    "\"dnsStatus\":" + JsonUtil.quote(healthStatus.dnsStatus()) + "," +
+                    "\"internetStatus\":" + JsonUtil.quote(healthStatus.internetStatus()) + "," +
+                    "\"diagnosis\":" + JsonUtil.quote(healthStatus.diagnosis()) + "," +
+                    "\"gateway\":" + JsonUtil.quote(healthStatus.gateway()) + "," +
+                    "\"gatewayReachable\":" + healthStatus.gatewayReachable() + "," +
+                    "\"dnsServers\":" + JsonUtil.quote(String.join(", ", healthStatus.dnsServers())) + "," +
+                    "\"internetTargetsReachable\":" + healthStatus.internetTargetsReachable() + "," +
+                    "\"internetTargetsTested\":" + healthStatus.internetTargetsTested() + "," +
+                    "\"bestInternetLatencyMs\":" + healthStatus.bestInternetLatencyMs() + "," +
+                    "\"dnsResolversResponsive\":" + healthStatus.dnsResolversResponsive() + "," +
+                    "\"dnsResolversHealthy\":" + healthStatus.dnsResolversHealthy() + "," +
+                    "\"dnsResolversTested\":" + healthStatus.dnsResolversTested() + "," +
+                    "\"bestDnsLatencyMs\":" + healthStatus.bestDnsLatencyMs() + "," +
+                    "\"healthLastSample\":" + JsonUtil.quote(healthStatus.sampledAt() == null ? null : healthStatus.sampledAt().toString()) + "," +
+                    "\"healthLastError\":" + JsonUtil.quote(healthStatus.lastError()) + "," +
+                    "\"dataRoot\":" + JsonUtil.quote(dataRoot.toString()) + "," +
                     "\"session\":" + JsonUtil.quote(status.sessionDirectory() == null ? null : status.sessionDirectory().getFileName().toString()) + "," +
                     "\"manualTrigger\":" + JsonUtil.quote(status.manualTrigger() == null ? null : status.manualTrigger().toString()) + "," +
                     "\"mutationToken\":" + JsonUtil.quote(mutationToken) +
@@ -92,6 +118,30 @@ public final class Main {
             } catch (Exception e) {
                 json(exchange, 500, "{\"error\":" + JsonUtil.quote(e.getMessage()) + "}");
             }
+        });
+
+        server.createContext("/api/data-folder/open", exchange -> {
+            if (!permitMutation(exchange, port)) return;
+            try {
+                if (!System.getProperty("os.name", "").toLowerCase().contains("windows")) {
+                    json(exchange, 409, "{\"error\":\"Opening Explorer is only supported on Windows.\"}");
+                    return;
+                }
+                new ProcessBuilder("explorer.exe", dataRoot.toString()).start();
+                json(exchange, 200, "{\"ok\":true}");
+            } catch (Exception error) {
+                json(exchange, 500, "{\"error\":" + JsonUtil.quote(error.getMessage()) + "}");
+            }
+        });
+
+        server.createContext("/api/agent/stop", exchange -> {
+            if (!permitMutation(exchange, port)) return;
+            json(exchange, 200, "{\"ok\":true,\"stopping\":true}");
+            Thread.startVirtualThread(() -> {
+                try { Thread.sleep(150L); }
+                catch (InterruptedException ignored) { Thread.currentThread().interrupt(); }
+                System.exit(0);
+            });
         });
 
         server.createContext("/", exchange -> {

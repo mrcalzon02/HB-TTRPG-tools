@@ -18,9 +18,15 @@
     </header>
 
     <section class="health-grid" aria-label="Network health overview">
-      <article><span>LOCAL NETWORK</span><strong id="lan-status">COLLECTOR QUEUED</strong></article>
-      <article><span>DNS</span><strong id="dns-status">COLLECTOR QUEUED</strong></article>
-      <article><span>INTERNET</span><strong id="internet-status">COLLECTOR QUEUED</strong></article>
+      <article><span>LOCAL NETWORK</span><strong id="lan-status">COLLECTING</strong></article>
+      <article><span>DNS</span><strong id="dns-status">COLLECTING</strong></article>
+      <article><span>INTERNET BY IP</span><strong id="internet-status">COLLECTING</strong></article>
+    </section>
+
+    <section class="diagnosis-card">
+      <p class="eyebrow">Evidence-based current assessment</p>
+      <h2 id="diagnosis-status">COLLECTING BASELINE</h2>
+      <p id="diagnosis-evidence">Waiting for gateway, direct-IP and configured-resolver probes.</p>
     </section>
 
     <section class="recorder-card">
@@ -35,6 +41,7 @@
         <div><span>TCP endpoints</span><strong id="tcp-count">0</strong></div>
         <div><span>UDP endpoints</span><strong id="udp-count">0</strong></div>
         <div><span>Session</span><strong id="session-name">—</strong></div>
+        <div><span>Evidence folder</span><strong id="data-root">—</strong></div>
       </div>
       <div class="marker-row">
         <button id="mark-button" type="button" disabled>★ MARK EVENT</button>
@@ -53,8 +60,12 @@
     </section>
 
     <section class="notice-card">
-      <h2>Current implementation boundary</h2>
-      <p>The recorder, crash-survivable disk pre-roll, manual trigger and markers are live. Process lifecycle/ancestry and Windows TCP/UDP ownership are now captured into the same evidence stream. Native ETW/WFP throughput, DNS health, service/task attribution and session replay remain queued. Application payloads are not captured.</p>
+      <h2>Local agent</h2>
+      <p>Process ancestry, TCP/UDP ownership, gateway/default-route evidence, direct Internet-by-IP probes and configured DNS-resolver probes are live. Native ETW/WFP throughput, service/task attribution and replay analysis remain later fidelity upgrades. Application payloads are not captured.</p>
+      <div class="agent-actions">
+        <button id="open-data-button" type="button" disabled>OPEN EVIDENCE FOLDER</button>
+        <button id="stop-agent-button" type="button" disabled>STOP LOCAL AGENT</button>
+      </div>
     </section>
   </main>
   <script src="network-investigator.js"></script>
