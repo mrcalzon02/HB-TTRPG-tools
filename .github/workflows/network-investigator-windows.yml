@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: network-investigator-windows-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-smoke-test:
     runs-on: windows-latest
@@ -32,3 +36,57 @@ jobs:
           name: NetworkInvestigator-Windows-x64
           path: network-investigator-agent/dist/NetworkInvestigator-Windows-x64.zip
           if-no-files-found: error
+          retention-days: 30
+
+  record-outcome:
+    if: ${{ always() }}
+    needs: [build-and-smoke-test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Persist exact Windows deployment-gate result
+        shell: pwsh
+        env:
+          BUILD_RESULT: ${{ needs.build-and-smoke-test.result }}
+          SOURCE_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $statusDirectory = '.ci-results'
+          $statusPath = Join-Path $statusDirectory 'network-investigator-windows.json'
+          New-Item -ItemType Directory -Force $statusDirectory | Out-Null
+
+          $payload = [ordered]@{
+            schemaVersion = 1
+            workflow = 'Network Investigator Windows'
+            sourceCommit = $env:SOURCE_SHA
+            result = $env:BUILD_RESULT
+            runId = [long]$env:RUN_ID
+            runAttempt = [int]$env:RUN_ATTEMPT
+            runUrl = "$($env:SERVER_URL)/$($env:REPOSITORY)/actions/runs/$($env:RUN_ID)"
+            artifactName = 'NetworkInvestigator-Windows-x64'
+            artifactRetentionDays = 30
+            recordedAtUtc = [DateTime]::UtcNow.ToString('o')
+          }
+          $payload | ConvertTo-Json -Depth 4 | Set-Content $statusPath -Encoding utf8
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- $statusPath
+          if (git diff --cached --quiet) {
+            Write-Host 'CI outcome file is already current.'
+            exit 0
+          }
+          git commit -m "Record Network Investigator Windows CI outcome [$env:BUILD_RESULT]"
+          git pull --rebase origin main
+          git push origin HEAD:main
