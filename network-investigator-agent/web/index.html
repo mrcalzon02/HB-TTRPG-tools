@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Network Investigator</title>
+  <link rel="stylesheet" href="network-investigator.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Scientific Tools / Local Windows Diagnostics</p>
+        <h1>Network Investigator</h1>
+        <p class="lede">What the hell is going on with my Internet connection?</p>
+      </div>
+      <div class="agent-status"><span class="status-dot" id="agent-dot"></span><span id="agent-label">Connecting to local recorder…</span></div>
+    </header>
+
+    <section class="health-grid" aria-label="Network health overview">
+      <article><span>LOCAL NETWORK</span><strong id="lan-status">COLLECTOR QUEUED</strong></article>
+      <article><span>DNS</span><strong id="dns-status">COLLECTOR QUEUED</strong></article>
+      <article><span>INTERNET</span><strong id="internet-status">COLLECTOR QUEUED</strong></article>
+    </section>
+
+    <section class="recorder-card">
+      <button id="record-button" class="record-button" type="button" disabled>● RECORD</button>
+      <p class="record-help" id="record-help">Network Investigator is already keeping a rolling ten-minute pre-record buffer. RECORD means “keep what you saw.”</p>
+      <div class="record-meta">
+        <div><span>Recorder state</span><strong id="recorder-state">PASSIVE</strong></div>
+        <div><span>Pre-roll available</span><strong id="preroll-time">00:00 / 10:00</strong></div>
+        <div><span>Active recording</span><strong id="active-time">00:00:00</strong></div>
+        <div><span>Observed events</span><strong id="event-count">0</strong></div>
+        <div><span>Session</span><strong id="session-name">—</strong></div>
+      </div>
+      <div class="marker-row">
+        <button id="mark-button" type="button" disabled>★ MARK EVENT</button>
+        <input id="marker-note" type="text" maxlength="500" placeholder="Optional note: website stopped loading, Discord spike, DNS died…" disabled>
+      </div>
+    </section>
+
+    <section class="timeline-card">
+      <h2>Evidence Timeline</h2>
+      <div class="timeline">
+        <span>rolling pre-record</span>
+        <div class="timeline-line"><i id="timeline-progress"></i><b id="trigger-marker" hidden>RECORD</b></div>
+        <span>live now</span>
+      </div>
+      <p id="timeline-copy">Passive history is ephemeral until RECORD is pressed.</p>
+    </section>
+
+    <section class="notice-card">
+      <h2>Current implementation boundary</h2>
+      <p>The recorder, crash-survivable disk pre-roll, manual trigger, session transition and event markers are live in this first slice. Windows ETW/WFP traffic telemetry, DNS health, process/service/task attribution, throughput accounting and session replay are the next collectors to attach to the same evidence pipeline. Application payloads are not captured.</p>
+    </section>
+  </main>
+  <script src="network-investigator.js"></script>
+</body>
+</html>
