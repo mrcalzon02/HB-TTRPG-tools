@@ -120,7 +120,7 @@
       const title = document.createElement('h3');
       title.textContent = 'Scientific Tools';
       const copy = document.createElement('p');
-      copy.textContent = 'Setting-neutral experimental systems, including the shared Binary Cube Laboratory, Encoder Visualizer, key-generation structure comparison, routed Diagnostic Evaluation Pipeline, Decryption Dashboard, Information & Deobfuscation Analysis Suite, Communication Capacity Analyzer, Steganography, Signal & Media Forensics Suite, Advanced Steganalysis Laboratory, ISM Media Simulation, and quantum experiment tools.';
+      copy.textContent = 'Setting-neutral experimental systems, including Network Investigator local Windows diagnostics, the shared Binary Cube Laboratory, Encoder Visualizer, key-generation structure comparison, routed Diagnostic Evaluation Pipeline, Decryption Dashboard, Information & Deobfuscation Analysis Suite, Communication Capacity Analyzer, Steganography, Signal & Media Forensics Suite, Advanced Steganalysis Laboratory, ISM Media Simulation, and quantum experiment tools.';
       const button = document.createElement('button');
       button.className = 'link-button';
       button.type = 'button';
@@ -214,10 +214,12 @@
       ensureScientificToolsView();
       scientificToolsEntryPromise ||= Promise.all([
         loadScript('scientific-tools-entry.js?v=20260809-scientific-help-1'),
-        loadScript('live-signals-activity-status.js?v=20260813-live-signals-status-1')
+        loadScript('live-signals-activity-status.js?v=20260813-live-signals-status-1'),
+        loadScript('network-investigator-site-entry.js?v=20260817-network-investigator-1')
       ]);
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
+      window.NetworkInvestigatorSiteEntry?.initialize?.();
       return;
     }
     if (viewId === 'warhammer-40k') {
