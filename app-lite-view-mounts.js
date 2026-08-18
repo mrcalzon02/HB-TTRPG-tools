@@ -146,6 +146,38 @@
     return view;
   }
 
+  function ensureNetworkInvestigatorRoute() {
+    const primaryNav = document.querySelector('.top-nav[aria-label="Primary"]');
+    if (primaryNav && !primaryNav.querySelector('[data-view="network-investigator"]')) {
+      const button = document.createElement('button');
+      button.className = 'nav-button';
+      button.type = 'button';
+      button.dataset.view = 'network-investigator';
+      button.textContent = 'Network Investigator';
+      const scientificToolsButton = primaryNav.querySelector('[data-view="scientific-tools"]');
+      const searchLink = primaryNav.querySelector('a[href="#foundry-search"]');
+      primaryNav.insertBefore(button, scientificToolsButton || searchLink || null);
+    }
+
+    const menuGrid = document.querySelector('#tools .menu-grid');
+    if (menuGrid && !menuGrid.querySelector('[data-network-investigator-card="true"]')) {
+      const card = document.createElement('article');
+      card.className = 'menu-card';
+      card.dataset.networkInvestigatorCard = 'true';
+      const title = document.createElement('h3');
+      title.textContent = 'Network Investigator';
+      const copy = document.createElement('p');
+      copy.textContent = 'Open the local Windows network diagnostics and forensic recording doorway directly, with its own stable workspace address.';
+      const button = document.createElement('button');
+      button.className = 'link-button';
+      button.type = 'button';
+      button.dataset.view = 'network-investigator';
+      button.textContent = 'Open Network Investigator';
+      card.append(title, copy, button);
+      menuGrid.appendChild(card);
+    }
+  }
+
   function ensureWarhammerLoreView() {
     const primaryNav = document.querySelector('.top-nav[aria-label="Primary"]');
     if (primaryNav && !primaryNav.querySelector('[data-view="warhammer-40k"]')) {
@@ -210,7 +242,7 @@
       await Promise.all([shadowrunEntryPromise, base.prepareView(viewId)]);
       return;
     }
-    if (viewId === 'scientific-tools') {
+    if (viewId === 'scientific-tools' || viewId === 'network-investigator') {
       ensureScientificToolsView();
       scientificToolsEntryPromise ||= Promise.all([
         loadScript('scientific-tools-entry.js?v=20260809-scientific-help-1'),
@@ -220,6 +252,7 @@
       await scientificToolsEntryPromise;
       window.ScientificToolsWorkspace?.initialize?.();
       window.NetworkInvestigatorSiteEntry?.initialize?.();
+      if (viewId === 'network-investigator') window.ScientificToolsWorkspace?.selectTab?.('network-investigator');
       return;
     }
     if (viewId === 'warhammer-40k') {
@@ -247,7 +280,8 @@
   }
 
   function setActiveView(viewId) {
-    const view = document.getElementById(viewId);
+    const resolvedViewId = viewId === 'network-investigator' ? 'scientific-tools' : viewId;
+    const view = document.getElementById(resolvedViewId);
     if (!view?.classList.contains('view')) throw new Error(`The ${viewId} workspace did not create an activatable view.`);
     document.querySelectorAll('.view').forEach(candidate => candidate.classList.toggle('active', candidate === view));
     document.querySelectorAll('[data-view]').forEach(control => control.classList.toggle('active', control.dataset.view === viewId));
@@ -288,6 +322,7 @@
   }
 
   ensureScientificToolsView();
+  ensureNetworkInvestigatorRoute();
   ensureWarhammerLoreView();
 
   document.addEventListener('click', event => {
