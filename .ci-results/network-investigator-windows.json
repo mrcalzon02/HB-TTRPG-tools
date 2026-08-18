@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "workflow": "Network Investigator Windows",
-  "sourceCommit": "4df7a357610503845fe41f41fb1ae8cebb1bb5a7",
-  "result": "success",
-  "runId": 32076902357,
+  "sourceCommit": "672189b0d8e149ba1f9d1c40ea5054ec59f803de",
+  "result": "cancelled",
+  "runId": 32092960683,
   "runAttempt": 1,
-  "runUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32076902357",
+  "runUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32092960683",
   "artifactName": "NetworkInvestigator-Windows-x64",
   "artifactRetentionDays": 30,
-  "recordedAtUtc": "2026-08-17T22:40:22.8297101Z"
+  "recordedAtUtc": "2026-08-18T02:45:47.2178777Z"
 }
