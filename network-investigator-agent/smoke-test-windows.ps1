@@ -69,7 +69,8 @@ try {
     # returns Not found. The human launcher must recognize and repair this stale state.
     $Java = Join-Path $HumanBundle 'runtime\bin\java.exe'
     $Jar = Join-Path $HumanBundle 'NetworkInvestigator.jar'
-    $StaleProcess = Start-Process -FilePath $Java -WorkingDirectory $WrongWorkingDirectory -ArgumentList @('--add-modules','jdk.httpserver','-jar',$Jar,"$Port") -WindowStyle Hidden -PassThru
+    $staleArguments = "--add-modules jdk.httpserver -jar `"$Jar`" $Port"
+    $StaleProcess = Start-Process -FilePath $Java -WorkingDirectory $WrongWorkingDirectory -ArgumentList $staleArguments -WindowStyle Hidden -PassThru
     $staleStatus = Wait-ForStatus
     if ($null -eq $staleStatus) { throw 'Could not reproduce stale API-only agent state.' }
 
