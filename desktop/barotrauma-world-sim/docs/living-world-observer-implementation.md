@@ -82,7 +82,7 @@ Acceptance:
 
 ### Gate 2 — Interactive entity inspectors
 
-**Status: Active**
+**Status: Active — core visible entities complete**
 
 Persistent selection has replaced hover-only evidence for the first three visible entity classes.
 
@@ -94,15 +94,15 @@ Implemented:
 - Clicking a transit line pins a live route dossier.
 - Selected vessels, locations, and routes receive visible map highlighting.
 - Clicking empty map space or `World Overview` returns to the world dossier.
-- Vessel dossiers expose identity, role, state, hull, supplies, cargo, crew capabilities, mission, origin/destination, progress, ETA, delay, incident schedule, voyage logs, and encounter evidence.
-- Station/location dossiers expose geography, faction, economy/condition where applicable, local/inbound NPC traffic, and mission/trade records.
-- Route dossiers expose endpoints, progress, ETA, delay, incident count, current mission, hull/supplies, and recent incident evidence.
+- Vessel dossiers expose identity, role, state, hull, supplies, cargo, crew capabilities, mission, origin/destination, progress, ETA, delay, incident schedule, voyage logs, encounters, fleet-response roles, response transit, freight manifests, and treasury settlement evidence.
+- Station/location dossiers expose geography, faction, economy/condition, local/inbound NPC traffic, missions, fleet-response records, freight movement, and treasury transactions.
+- Route dossiers expose endpoints, progress, ETA, delay, incidents, current mission, response legs, freight, hull/supplies, and recent hazard evidence.
 
-Remaining inspectors:
+Remaining dedicated selectable entity classes:
 
 - **Mission:** dedicated selectable contract/outcome inspector.
 - **Encounter:** dedicated selectable hazard/outcome inspector.
-- **Fleet response:** dispatch, outbound, on-scene, return, casualty, and completion evidence.
+- **Fleet response:** make a response operation itself selectable rather than only visible through related vessel/location dossiers.
 - **Natural-world site/event:** resource exposure, ecology/geology cause, danger, and generated work.
 - Population/migration/settlement/faction inspectors as their corresponding visual layers are integrated.
 
@@ -110,28 +110,30 @@ Selection must continue to survive live refresh by stable entity ID, and all ins
 
 ### Gate 3 — Human-readable document layer
 
-**Status: Active**
+**Status: Active — causal trade/recovery chain integrated**
 
-The first document rendering is now integrated into the live dossiers rather than exposed only as raw database tables.
+Document rendering is now integrated into the live dossiers rather than exposed only as raw database tables.
 
 Implemented document views:
 
 - Mission/contract summaries in vessel, route, and station/location dossiers.
 - Voyage-log documents with tick, event, summary, details, resolution, and state effects.
 - Encounter reports with hazard, challenge, roll, margin, outcome, and narrative.
-- Station-local mission/trade records.
-- Headless dossier verification checks route progress, contracts, voyage evidence, encounter evidence, station economy, and local traffic.
+- Fleet-response operation dossiers showing responder, casualty, target, phase, progress, difficulty, committed stores, and outbound/scene/return/home ticks.
+- Fleet-response event logs and response transit-leg documents.
+- NPC freight manifests tied to their mission, carrier, source, destination, cargo, status, and delivery tick.
+- Treasury/settlement evidence tied back to station and NPC counterparty.
+- Station freight/trade ledger and treasury ledger.
+- Headless dossier verification now covers route progress, contracts, voyage evidence, encounters, fleet response, response transit, freight manifests, station economy, treasury settlement, and local traffic.
 
 Still required:
 
-- Cargo/trade manifest with freight and treasury consequences.
-- Damage and repair report.
-- Fleet-response dispatch/recovery report.
-- Station market/transaction ledger.
+- Damage and repair report beyond the current response/voyage evidence.
 - Research report.
 - Migration manifest.
 - Settlement project report.
-- Natural-world survey/resource report.
+- Natural-world survey/resource report integration into the live selected-location dossier.
+- Document index/navigation so a causal record can be opened directly from a selected event or entity instead of only appearing inline.
 
 Documents are generated from committed evidence and retain stable IDs/ticks so the same event is not rewritten differently on each view.
 
@@ -143,24 +145,23 @@ Acceptance remains:
 
 ### Gate 4 — Observer layers and world readability
 
-**Status: Planned**
+**Status: Active — natural-layer model started**
 
-Add selectable map layers without duplicating simulation authority:
+The observer layer model is now being built directly from the existing read-only world registries rather than inventing a second simulation state.
 
-- Station status and economy.
-- NPC traffic.
-- Mission traffic.
-- Migration.
-- Population pressure.
-- Settlement projects.
-- Faction influence.
-- Fauna/creature pressure.
-- Natural resources.
-- Natural hazards.
-- Fleet-response operations.
-- Recent incidents and losses.
+Implemented foundation:
 
-Add label density/level-of-detail behavior so the 960-location master world remains readable while zoomed out.
+- `WorldObserverNaturalLayer` converts committed ecology, geology, resource-site, extraction, and natural-event evidence into human-readable location dossiers.
+- The same model produces normalized map-ready signals for ecological risk, habitat integrity, geological risk, mineral opportunity, resource opportunity, and recent-event severity.
+- A headless natural-layer verification fixture covers ecology, geology, active resource sites, extraction consequences, events, and signal projection.
+
+Next visual integration:
+
+- Add selectable layer controls for station status/economy, NPC traffic, missions, fleet response, ecological pressure, geological hazards, resources, and recent incidents.
+- Feed the natural-layer signals into the live map without changing simulation state.
+- Append natural-world evidence to selected location dossiers.
+- Add population, migration, settlement, and faction layers from their existing authoritative registries.
+- Add label density/level-of-detail behavior so the 960-location master world remains readable while zoomed out.
 
 ### Gate 5 — Temporal observation
 
@@ -223,14 +224,13 @@ The implementation order remains vertical rather than subsystem-by-subsystem:
 
 1. ~~Restore the fleet-response verification gate.~~ **Complete.**
 2. ~~Complete Gate 1 living observer shell.~~ **Complete.**
-3. **Active:** finish dedicated entity inspectors and evidence navigation.
-4. **Active:** deepen document rendering for voyages, trade, encounters, fleet response, and station consequences.
-5. Add migration/settlement/natural-world inspectors and layers.
-6. Add world readability layers and label level-of-detail.
-7. Add timeline/history/replay.
-8. Prove unattended operation.
-9. Repoint standalone packaging to `BarotraumaWorldObserverApplication`.
-10. Run the end-to-end release acceptance scenario.
+3. **Active:** finish dedicated mission/encounter/response selectors and evidence navigation.
+4. **Active:** complete natural-world, migration, settlement, population, and faction observer layers.
+5. Add layer controls and level-of-detail behavior to the viewport.
+6. Add timeline/history/replay.
+7. Prove unattended operation.
+8. Repoint standalone packaging to `BarotraumaWorldObserverApplication`.
+9. Run the end-to-end release acceptance scenario.
 
 ## Development record
 
@@ -253,15 +253,24 @@ The implementation order remains vertical rather than subsystem-by-subsystem:
 - Corrected both immediate fleet assignment paths and added a completion docking barrier.
 - Re-ran the full desktop verification suite successfully, including fleet response, towing return, natural world, migration, settlement, transit, logistics, persistence, and observer projection contracts.
 
-### 2026-08-21 — Gate 2/3 interaction and dossier work started
+### 2026-08-21 — Gate 2/3 interaction and dossier work
 
 - Added stable click selection for vessels, stations/locations, and transit routes.
 - Added persistent live selection that survives refresh by stable UUID.
 - Added selected-entity map highlighting.
 - Added vessel, route, station/location, and world dossiers.
 - Integrated mission contracts, voyage documents, encounter reports, station economy, and local traffic into the evidence pane.
-- Added a headless dossier contract to prevent the observer from silently losing the committed facts it is expected to display.
+- Exposed fleet-response operations/logs/transit legs, freight lots, and treasury transactions through the read-only observer registry.
+- Integrated response lifecycle, freight manifests, and economic settlement evidence into vessel, route, and station dossiers.
+- Expanded the headless dossier contract so these causal chains cannot silently disappear from the observer.
+
+### 2026-08-21 — Gate 4 natural-layer foundation started
+
+- Added a pure presentation model over the authoritative natural-world registry.
+- Added location dossiers for ecology, geology, resource sites, recent natural events, and extraction history.
+- Added map-ready hazard/opportunity signals derived only from committed evidence.
+- Added a headless verification fixture for the natural-layer projection.
 
 ## Next implementation slice
 
-Expose fleet-response operations, freight/trade settlement, and treasury consequences through a read-only observer evidence model, then connect those records to the existing vessel/station/route dossiers. This closes the largest current gap between “watch an NPC move” and “inspect why that voyage happened and what it changed.”
+Load the existing `NaturalWorldAndFleetRegistry` alongside the passive snapshot in the living observer, append its natural-world dossier to clicked locations, and add the first actual viewport layer controls for ecological pressure, geological hazards, resources, fleet response, and recent incidents. After that, extend the same pattern to population/migration/settlement/faction evidence.
