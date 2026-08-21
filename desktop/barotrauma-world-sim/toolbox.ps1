@@ -206,6 +206,7 @@ switch ($Command) {
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverProjectionVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverInspectorVerification'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22Inspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.official.BarotraumaSaveInspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts'; Arguments=@() }
