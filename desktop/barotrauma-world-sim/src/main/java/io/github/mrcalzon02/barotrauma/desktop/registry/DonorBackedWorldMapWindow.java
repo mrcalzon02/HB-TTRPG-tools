@@ -1,7 +1,6 @@
 package io.github.mrcalzon02.barotrauma.desktop.registry;
 
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
-import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.GraphicSource;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.VisualRole;
 import io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
@@ -10,6 +9,7 @@ import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry.LocationRow;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
+import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,10 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import java.awt.AlphaComposite;
@@ -30,6 +33,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -39,6 +43,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -49,25 +54,43 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-/** Graphical normalized Europa map using local Barotrauma textures or independent procedural fallbacks. */
+/**
+ * Living graphical Europa observer using local Barotrauma textures or independent procedural fallbacks.
+ *
+ * <p>This window is intentionally coupled to the authoritative desktop world. It resumes an already-enabled
+ * Passive Mode scheduler, can explicitly start or pause that scheduler, refreshes live evidence, and renders
+ * in-transit NPC vessels between their current and destination locations rather than parking them at the origin.
+ */
 public final class DonorBackedWorldMapWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final BarotraumaAssetCatalogue assets = new BarotraumaAssetCatalogue();
     private final JLabel worldStatus = new JLabel("No desktop world open");
+    private final JLabel passiveStatus = new JLabel("Passive mode unavailable");
     private final JLabel assetStatus = new JLabel("Visual catalogue ready");
     private final JButton openWorldButton = new JButton("Open World");
     private final JButton refreshButton = new JButton("Refresh");
     private final JButton configureAssetsButton = new JButton("Configure Assets");
+    private final JButton enablePassiveButton = new JButton("Run Passive");
+    private final JButton disablePassiveButton = new JButton("Pause Passive");
+    private final JButton zoomInButton = new JButton("Zoom +");
+    private final JButton zoomOutButton = new JButton("Zoom -");
+    private final JButton fitMapButton = new JButton("Fit World");
+    private final JSpinner cadenceSeconds = new JSpinner(new SpinnerNumberModel(5, 1, 3600, 1));
+    private final JSpinner ticksPerCycle = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
     private final JTextArea details = new JTextArea();
     private final EuropaMapCanvas canvas = new EuropaMapCanvas(assets);
+    private final JScrollPane mapScroll = new JScrollPane(canvas);
+    private final Timer refreshTimer = new Timer(2000, event -> refresh());
 
     private WorldPaths world;
     private Path lastDirectory;
     private AutoCloseable subscription;
+    private AutoCloseable passiveSubscription;
+    private boolean passiveControlsInitialized;
     private boolean busy;
 
     public DonorBackedWorldMapWindow() {
-        super("Barotrauma Graphical Europa Map");
+        super("Barotrauma Living World Observer");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(1080, 720));
         setSize(1500, 920);
@@ -76,7 +99,10 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
         JPanel header = new JPanel(new BorderLayout(12, 6));
         header.setBorder(BorderFactory.createEmptyBorder(10, 12, 0, 12));
-        header.add(worldStatus, BorderLayout.WEST);
+        JPanel state = new JPanel(new BorderLayout(4, 4));
+        state.add(worldStatus, BorderLayout.NORTH);
+        state.add(passiveStatus, BorderLayout.SOUTH);
+        header.add(state, BorderLayout.WEST);
         header.add(assetStatus, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
@@ -86,31 +112,57 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         details.setWrapStyleWord(true);
         details.setText("Open a normalized desktop world to render its locations and active NPC routes.\n");
 
-        JScrollPane mapScroll = new JScrollPane(canvas);
         mapScroll.getVerticalScrollBar().setUnitIncrement(24);
         mapScroll.getHorizontalScrollBar().setUnitIncrement(24);
         JScrollPane detailsScroll = new JScrollPane(details);
-        detailsScroll.setPreferredSize(new Dimension(360, 700));
+        detailsScroll.setPreferredSize(new Dimension(380, 700));
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapScroll, detailsScroll);
         split.setDividerLocation(1080);
         split.setResizeWeight(0.78);
         add(split, BorderLayout.CENTER);
 
-        JPanel footer = new JPanel();
-        footer.add(openWorldButton);
-        footer.add(refreshButton);
-        footer.add(configureAssetsButton);
+        JPanel simulationControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        simulationControls.add(new JLabel("Cadence seconds:"));
+        simulationControls.add(cadenceSeconds);
+        simulationControls.add(new JLabel("Ticks per cycle:"));
+        simulationControls.add(ticksPerCycle);
+        simulationControls.add(enablePassiveButton);
+        simulationControls.add(disablePassiveButton);
+
+        JPanel viewControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        viewControls.add(openWorldButton);
+        viewControls.add(refreshButton);
+        viewControls.add(zoomOutButton);
+        viewControls.add(zoomInButton);
+        viewControls.add(fitMapButton);
+        viewControls.add(configureAssetsButton);
+
+        JPanel footer = new JPanel(new BorderLayout(8, 8));
         footer.setBorder(BorderFactory.createEmptyBorder(0, 12, 10, 12));
+        footer.add(simulationControls, BorderLayout.NORTH);
+        footer.add(viewControls, BorderLayout.SOUTH);
         add(footer, BorderLayout.SOUTH);
 
         openWorldButton.addActionListener(event -> chooseWorld());
         refreshButton.addActionListener(event -> refresh());
+        enablePassiveButton.addActionListener(event -> enablePassiveMode());
+        disablePassiveButton.addActionListener(event -> disablePassiveMode());
+        zoomInButton.addActionListener(event -> zoomBy(1.25));
+        zoomOutButton.addActionListener(event -> zoomBy(0.80));
+        fitMapButton.addActionListener(event -> fitWorld());
         configureAssetsButton.addActionListener(event -> {
             DonorAssetSetupWindow window = new DonorAssetSetupWindow();
             window.setLocationRelativeTo(this);
             window.setVisible(true);
         });
+        canvas.addMouseWheelListener(event -> {
+            if (!event.isControlDown()) return;
+            zoomBy(event.getPreciseWheelRotation() < 0 ? 1.15 : 1.0 / 1.15);
+            event.consume();
+        });
         subscription = session.addListener(this::activateWorld, true);
+        refreshTimer.setRepeats(true);
+        refreshTimer.start();
         refreshControls();
     }
 
@@ -128,23 +180,133 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     }
 
     private void activateWorld(WorldPaths selectedWorld) {
+        detachPassiveListener();
         world = selectedWorld;
+        passiveControlsInitialized = false;
         canvas.clear();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
+            passiveStatus.setText("Passive mode unavailable");
             details.setText("Open a normalized desktop world to render its locations and active NPC routes.\n");
             refreshControls();
             return;
         }
         lastDirectory = selectedWorld.root().getParent();
         worldStatus.setText("Shared world: " + selectedWorld.root());
-        refresh();
+        passiveStatus.setText("Checking passive world runtime…");
+        setBusy(true, "Checking passive world runtime…");
+        new SwingWorker<PassiveWorldSimulationService, Void>() {
+            @Override protected PassiveWorldSimulationService doInBackground() throws Exception {
+                return PassiveWorldSimulationService.resumeIfEnabled(selectedWorld);
+            }
+
+            @Override protected void done() {
+                try {
+                    if (!Objects.equals(selectedWorld, world)) return;
+                    attachPassiveListener(get());
+                } catch (InterruptedException exception) {
+                    Thread.currentThread().interrupt();
+                    showFailure("Passive mode resume interrupted", exception);
+                } catch (ExecutionException exception) {
+                    showFailure("Passive mode resume failed", cause(exception));
+                } finally {
+                    setBusy(false, "World ready");
+                    refresh();
+                }
+            }
+        }.execute();
+    }
+
+    private void enablePassiveMode() {
+        WorldPaths selectedWorld = world;
+        if (selectedWorld == null || busy) return;
+        int cadence = ((Number) cadenceSeconds.getValue()).intValue();
+        long ticks = ((Number) ticksPerCycle.getValue()).longValue();
+        setBusy(true, "Starting Passive Mode…");
+        new SwingWorker<PassiveWorldSimulationService, Void>() {
+            @Override protected PassiveWorldSimulationService doInBackground() throws Exception {
+                return PassiveWorldSimulationService.enable(selectedWorld, Duration.ofSeconds(cadence), ticks);
+            }
+
+            @Override protected void done() {
+                try {
+                    if (!Objects.equals(selectedWorld, world)) return;
+                    attachPassiveListener(get());
+                } catch (InterruptedException exception) {
+                    Thread.currentThread().interrupt();
+                    showFailure("Passive mode start interrupted", exception);
+                } catch (ExecutionException exception) {
+                    showFailure("Passive mode start failed", cause(exception));
+                } finally {
+                    setBusy(false, "Passive Mode ready");
+                    refresh();
+                }
+            }
+        }.execute();
+    }
+
+    private void disablePassiveMode() {
+        WorldPaths selectedWorld = world;
+        if (selectedWorld == null || busy) return;
+        setBusy(true, "Pausing Passive Mode…");
+        new SwingWorker<Void, Void>() {
+            @Override protected Void doInBackground() throws Exception {
+                PassiveWorldSimulationService.disable(selectedWorld);
+                return null;
+            }
+
+            @Override protected void done() {
+                try {
+                    get();
+                    if (!Objects.equals(selectedWorld, world)) return;
+                    detachPassiveListener();
+                    passiveStatus.setText("Passive mode paused");
+                } catch (InterruptedException exception) {
+                    Thread.currentThread().interrupt();
+                    showFailure("Passive mode pause interrupted", exception);
+                } catch (ExecutionException exception) {
+                    showFailure("Passive mode pause failed", cause(exception));
+                } finally {
+                    setBusy(false, "Passive Mode paused");
+                    refresh();
+                }
+            }
+        }.execute();
+    }
+
+    private void attachPassiveListener(PassiveWorldSimulationService service) {
+        detachPassiveListener();
+        if (service == null) {
+            passiveStatus.setText("Passive mode paused");
+            refreshControls();
+            return;
+        }
+        passiveSubscription = service.addListener(status -> SwingUtilities.invokeLater(() -> {
+            if (!Objects.equals(status.world(), world)) return;
+            if (status.fault() != null) {
+                passiveStatus.setText("Passive mode fault: " + status.fault().getMessage());
+            } else if (status.cycleRunning()) {
+                passiveStatus.setText("Passive mode running · advancing " + status.ticksPerCycle() + " tick(s)");
+            } else {
+                passiveStatus.setText("Passive mode running · every " + status.cadence().toSeconds()
+                        + "s · " + status.ticksPerCycle() + " tick(s)/cycle");
+            }
+            refreshControls();
+            if (!busy) refresh();
+        }), true);
+        refreshControls();
+    }
+
+    private void detachPassiveListener() {
+        if (passiveSubscription == null) return;
+        try { passiveSubscription.close(); } catch (Exception ignored) { }
+        passiveSubscription = null;
     }
 
     private void refresh() {
         WorldPaths selectedWorld = world;
         if (selectedWorld == null || busy) return;
-        setBusy(true, "Loading map and route evidence…");
+        setBusy(true, "Loading live map and route evidence…");
         assets.clearCache();
         new SwingWorker<LoadedMap, Void>() {
             @Override protected LoadedMap doInBackground() throws Exception {
@@ -175,6 +337,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
     private void renderDetails(LoadedMap loaded) {
         var summary = loaded.registry().summary();
+        var configuration = loaded.passive().configuration();
         long activeVessels = loaded.passive().vessels().stream()
                 .filter(vessel -> !"DOCKED".equals(vessel.status()) && !"LOST".equals(vessel.status()))
                 .count();
@@ -183,24 +346,70 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 .count();
         String donorRoot = assets.activeDonor().map(candidate -> candidate.installationRoot().toString())
                 .orElse("No active Barotrauma installation; procedural fallback visuals are in use.");
-        details.setText("GRAPHICAL EUROPA MAP\n\n"
+
+        if (configuration.configured()) {
+            if (!passiveControlsInitialized) {
+                cadenceSeconds.setValue(configuration.cadenceSeconds());
+                ticksPerCycle.setValue(configuration.ticksPerCycle());
+                passiveControlsInitialized = true;
+            }
+            if (PassiveWorldSimulationService.active(world) == null) {
+                passiveStatus.setText(configuration.enabled()
+                        ? "Passive mode configured; runtime is not currently active"
+                        : "Passive mode paused");
+            }
+        }
+
+        details.setText("LIVING EUROPA OBSERVER\n\n"
                 + "World: " + summary.displayName() + "\n"
                 + "Master world: " + blank(summary.masterWorldId()) + "\n"
                 + "Canonical time: " + nullable(summary.canonicalTime()) + "\n"
+                + "Canonical tick: " + nullable(configuration.currentTickSequence()) + "\n"
                 + "Locations: " + loaded.registry().locations().size() + "\n"
                 + "Stations: " + loaded.registry().stations().size() + "\n"
                 + "NPC vessels: " + loaded.passive().vessels().size() + "\n"
                 + "Active routes: " + activeVessels + "\n"
-                + "Damaged or lost vessels: " + damagedVessels + "\n\n"
+                + "Damaged or lost vessels: " + damagedVessels + "\n"
+                + "Passive Mode: " + (configuration.enabled() ? "enabled" : "paused")
+                + " · " + configuration.cadenceSeconds() + "s cadence"
+                + " · " + configuration.ticksPerCycle() + " tick(s)/cycle\n\n"
                 + "Visual source:\n" + donorRoot + "\n\n"
                 + "Donor-backed roles: " + loaded.coverage().donorCount() + "\n"
                 + "Procedural fallbacks: " + loaded.coverage().fallbackCount() + "\n\n"
-                + "The map resolves Barotrauma style-sheet atlas entries before filename matches. Hover over a "
-                + "location or vessel marker for current evidence. Route lines connect a vessel's current location "
-                + "to its declared destination.\n\nLEGEND\n"
+                + "The viewport refreshes every two seconds and immediately after Passive Mode cycle notifications. "
+                + "NPC vessel markers interpolate along their declared route using committed route progress. "
+                + "Use Zoom +/- or Ctrl+mouse-wheel to change scale; scroll the viewport to pan. "
+                + "Hover over a location or vessel marker for current evidence.\n\nLEGEND\n"
                 + "Outpost hexagon · location circle · cave arch · ruin grid · beacon mast · wreck crossed hull · "
                 + "submarine silhouette · hostile fauna marker · radiation trefoil.\n");
         details.setCaretPosition(0);
+    }
+
+    private void zoomBy(double factor) {
+        var viewport = mapScroll.getViewport();
+        double oldZoom = canvas.zoom();
+        Point oldPosition = viewport.getViewPosition();
+        Dimension extent = viewport.getExtentSize();
+        double centerX = (oldPosition.x + extent.width / 2.0) / oldZoom;
+        double centerY = (oldPosition.y + extent.height / 2.0) / oldZoom;
+        double newZoom = canvas.setZoom(oldZoom * factor);
+        SwingUtilities.invokeLater(() -> {
+            Dimension viewSize = canvas.getPreferredSize();
+            int x = (int) Math.round(centerX * newZoom - extent.width / 2.0);
+            int y = (int) Math.round(centerY * newZoom - extent.height / 2.0);
+            x = Math.max(0, Math.min(x, Math.max(0, viewSize.width - extent.width)));
+            y = Math.max(0, Math.min(y, Math.max(0, viewSize.height - extent.height)));
+            viewport.setViewPosition(new Point(x, y));
+        });
+    }
+
+    private void fitWorld() {
+        Dimension extent = mapScroll.getViewport().getExtentSize();
+        if (extent.width <= 0 || extent.height <= 0) return;
+        double fit = Math.min(extent.width / (double) EuropaMapCanvas.MAP_WIDTH,
+                extent.height / (double) EuropaMapCanvas.MAP_HEIGHT);
+        canvas.setZoom(fit);
+        SwingUtilities.invokeLater(() -> mapScroll.getViewport().setViewPosition(new Point(0, 0)));
     }
 
     private void setBusy(boolean value, String message) {
@@ -210,9 +419,18 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     }
 
     private void refreshControls() {
+        boolean worldOpen = world != null;
+        boolean passiveRunning = worldOpen && PassiveWorldSimulationService.active(world) != null;
         openWorldButton.setEnabled(!busy);
-        refreshButton.setEnabled(!busy && world != null);
+        refreshButton.setEnabled(!busy && worldOpen);
         configureAssetsButton.setEnabled(!busy);
+        enablePassiveButton.setEnabled(!busy && worldOpen && !passiveRunning);
+        disablePassiveButton.setEnabled(!busy && passiveRunning);
+        cadenceSeconds.setEnabled(!busy && worldOpen && !passiveRunning);
+        ticksPerCycle.setEnabled(!busy && worldOpen && !passiveRunning);
+        zoomInButton.setEnabled(!busy);
+        zoomOutButton.setEnabled(!busy);
+        fitMapButton.setEnabled(!busy);
     }
 
     private void showFailure(String title, Throwable throwable) {
@@ -223,6 +441,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     }
 
     @Override public void dispose() {
+        refreshTimer.stop();
+        detachPassiveListener();
         if (subscription != null) {
             try { subscription.close(); } catch (Exception ignored) { }
             subscription = null;
@@ -243,6 +463,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         private static final int MAP_WIDTH = 1500;
         private static final int MAP_HEIGHT = 900;
         private static final int MARGIN = 70;
+        private static final double MIN_ZOOM = 0.35;
+        private static final double MAX_ZOOM = 4.0;
 
         private final BarotraumaAssetCatalogue assets;
         private final Map<VisualRole, BufferedImage> icons = new EnumMap<>(VisualRole.class);
@@ -250,13 +472,32 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         private WorldMapRegistry.RegistrySnapshot registry;
         private PassiveWorldRegistry.Snapshot passive;
         private BufferedImage background;
+        private double zoom = 1.0;
 
         private EuropaMapCanvas(BarotraumaAssetCatalogue assets) {
             this.assets = assets;
-            setPreferredSize(new Dimension(MAP_WIDTH, MAP_HEIGHT));
+            applyZoom();
             setMinimumSize(new Dimension(900, 600));
             setOpaque(true);
             setToolTipText("");
+        }
+
+        double zoom() {
+            return zoom;
+        }
+
+        double setZoom(double requestedZoom) {
+            zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, requestedZoom));
+            applyZoom();
+            return zoom;
+        }
+
+        private void applyZoom() {
+            setPreferredSize(new Dimension(
+                    Math.max(1, (int) Math.round(MAP_WIDTH * zoom)),
+                    Math.max(1, (int) Math.round(MAP_HEIGHT * zoom))));
+            revalidate();
+            repaint();
         }
 
         void setSnapshots(WorldMapRegistry.RegistrySnapshot registry, PassiveWorldRegistry.Snapshot passive) {
@@ -358,12 +599,14 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             if (passive == null) return;
             Map<String, Integer> offsets = new HashMap<>();
             for (var vessel : passive.vessels()) {
-                Point base = positions.get(vessel.currentLocation());
-                if (base == null) continue;
-                int offset = offsets.merge(vessel.currentLocation(), 1, Integer::sum) - 1;
+                Point routePoint = vesselPosition(vessel, positions);
+                if (routePoint == null) continue;
+                String stackKey = vessel.currentLocation() + "->" + nullable(vessel.destinationLocation());
+                int offset = offsets.merge(stackKey, 1, Integer::sum) - 1;
                 double angle = offset * Math.PI * 0.65;
-                int x = base.x + (int) Math.round(Math.cos(angle) * (24 + offset * 5));
-                int y = base.y + (int) Math.round(Math.sin(angle) * (24 + offset * 5));
+                int radius = offset == 0 ? 0 : 12 + offset * 4;
+                int x = routePoint.x + (int) Math.round(Math.cos(angle) * radius);
+                int y = routePoint.y + (int) Math.round(Math.sin(angle) * radius);
                 VisualRole role = "LOST".equals(vessel.status()) ? VisualRole.WRECK_MARKER
                         : "DISABLED".equals(vessel.status()) ? VisualRole.BROKEN_STATUS
                         : VisualRole.SUBMARINE_MARKER;
@@ -371,11 +614,32 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 g.drawImage(icon(role, size, size), x - size / 2, y - size / 2, null);
                 g.setColor(routeColor(vessel.status()));
                 g.drawOval(x - size / 2 - 2, y - size / 2 - 2, size + 4, size + 4);
+                String progress = vessel.destinationLocation() == null || vessel.routeTicksRequired() <= 0
+                        ? ""
+                        : " · route " + vessel.routeProgress() + "/" + vessel.routeTicksRequired();
+                String incidents = vessel.plannedIncidents() == null
+                        ? ""
+                        : " · incidents " + nullable(vessel.incidentsResolved()) + "/" + vessel.plannedIncidents();
+                String eta = vessel.scheduledArrivalTick() == null ? "" : " · ETA tick " + vessel.scheduledArrivalTick();
                 hitRegions.add(new HitRegion(new Rectangle(x - size / 2, y - size / 2, size, size),
                         vessel.name() + " · " + vessel.role() + " · " + vessel.status()
                                 + " · hull " + vessel.hull() + "% · supplies " + vessel.supplies()
-                                + (vessel.destinationLocation() == null ? "" : " · destination " + vessel.destinationLocation())));
+                                + (vessel.destinationLocation() == null ? "" : " · destination " + vessel.destinationLocation())
+                                + progress + incidents + eta));
             }
+        }
+
+        private static Point vesselPosition(PassiveWorldRegistry.VesselRow vessel, Map<String, Point> positions) {
+            Point from = positions.get(vessel.currentLocation());
+            if (from == null || vessel.destinationLocation() == null) return from;
+            Point to = positions.get(vessel.destinationLocation());
+            if (to == null) return from;
+            if (vessel.routeTicksRequired() <= 0) return from;
+            double fraction = vessel.routeProgress() / (double) vessel.routeTicksRequired();
+            fraction = Math.max(0.0, Math.min(1.0, fraction));
+            return new Point(
+                    (int) Math.round(from.x + (to.x - from.x) * fraction),
+                    (int) Math.round(from.y + (to.y - from.y) * fraction));
         }
 
         private void drawSourceBadge(Graphics2D g) {
