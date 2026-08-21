@@ -76,8 +76,7 @@ function Build-Application {
     $sources = @(Get-ChildItem -LiteralPath $sourceRoot -Recurse -Filter '*.java' | ForEach-Object FullName)
     if ($sources.Count -eq 0) { throw 'No Java sources were found.' }
     & $javac -encoding UTF-8 --release 17 -d $classesRoot $sources
-    if ($LASTEXITCODE -ne 0) { throw "Java compilation failed with exit code $LASTEXITCODE."
-    }
+    if ($LASTEXITCODE -ne 0) { throw "Java compilation failed with exit code $LASTEXITCODE." }
     if (Test-Path -LiteralPath $resourceRoot) {
         Copy-Item -Path (Join-Path $resourceRoot '*') -Destination $classesRoot -Recurse -Force
     }
@@ -206,6 +205,7 @@ switch ($Command) {
         $verifications = @(
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverProjectionVerification'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22Inspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.official.BarotraumaSaveInspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts'; Arguments=@() }
