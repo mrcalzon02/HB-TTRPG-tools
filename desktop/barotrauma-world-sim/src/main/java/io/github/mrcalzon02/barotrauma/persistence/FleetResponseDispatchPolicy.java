@@ -10,16 +10,17 @@ import java.sql.Statement;
  * Canonical fleet-response dispatch policy.
  *
  * <p>A responder that has just completed a physical return must remain observably docked for that completion
- * tick. Recursive trigger chains previously exposed two ways to consume that DOCKED state immediately: an
- * already-queued response could be accepted by the dock transition, or a new response request created later
- * in the same tick could immediately select the just-returned vessel. Both dispatch paths now apply the same
- * one-tick completion cooldown while preserving immediate assignment for all other eligible docked vessels.
+ * tick. Recursive trigger chains historically exposed more than one path that could consume the DOCKED
+ * transition immediately. The policy therefore protects both dispatch entry points and adds a completion
+ * barrier that rejects any same-tick attempt to send a just-returned responder back to PREPARING/IN_TRANSIT.
  */
 public final class FleetResponseDispatchPolicy {
     public static final String DOCKED_TRIGGER = "docked_vessel_accepts_response";
     public static final String REQUEST_TRIGGER = "response_request_immediate_assignment";
+    public static final String COMPLETION_GUARD_TRIGGER = "fleet_response_completion_docking_guard";
     private static final String DOCKED_MARKER = "responder_returned_tick=NEW.last_tick";
     private static final String REQUEST_MARKER = "responder_returned_tick=NEW.created_tick";
+    private static final String GUARD_MARKER = "recent.responder_returned_tick=NEW.last_tick";
 
     private FleetResponseDispatchPolicy() { }
 
@@ -29,6 +30,10 @@ public final class FleetResponseDispatchPolicy {
 
     public static String dropRequestStatement() {
         return "DROP TRIGGER IF EXISTS " + REQUEST_TRIGGER;
+    }
+
+    public static String dropCompletionGuardStatement() {
+        return "DROP TRIGGER IF EXISTS " + COMPLETION_GUARD_TRIGGER;
     }
 
     public static String createDockedStatement() {
@@ -77,23 +82,45 @@ public final class FleetResponseDispatchPolicy {
                 + "WHERE operation_id=NEW.operation_id; END";
     }
 
+    public static String createCompletionGuardStatement() {
+        return "CREATE TRIGGER " + COMPLETION_GUARD_TRIGGER + " AFTER UPDATE OF status ON npc_vessel "
+                + "WHEN NEW.status IN ('PREPARING','IN_TRANSIT') "
+                + "AND EXISTS (SELECT 1 FROM fleet_response_operation recent "
+                + "WHERE recent.assigned_npc_vessel_id=NEW.npc_vessel_id "
+                + "AND recent.status='COMPLETE' AND recent.response_phase='COMPLETE' "
+                + "AND recent.responder_returned_tick=NEW.last_tick) BEGIN "
+                + "UPDATE fleet_response_operation SET assigned_npc_vessel_id=NULL,status='AVAILABLE',"
+                + "response_phase='WAITING',updated_tick=NEW.last_tick "
+                + "WHERE assigned_npc_vessel_id=NEW.npc_vessel_id AND status='ACTIVE' "
+                + "AND updated_tick=NEW.last_tick; "
+                + "UPDATE npc_vessel SET status='DOCKED',destination_location_id=NULL,mission_id=NULL,"
+                + "route_progress=0,route_ticks_required=1,last_tick=NEW.last_tick "
+                + "WHERE npc_vessel_id=NEW.npc_vessel_id AND status IN ('PREPARING','IN_TRANSIT'); END";
+    }
+
     /** Repairs current worlds without a schema-number bump. */
     public static void installIfSupported(Connection connection) throws SQLException {
         if (!hasTable(connection, "npc_vessel") || !hasTable(connection, "fleet_response_operation")
-                || !hasColumn(connection, "fleet_response_operation", "responder_returned_tick")) {
+                || !hasColumn(connection, "fleet_response_operation", "responder_returned_tick")
+                || !hasColumn(connection, "fleet_response_operation", "response_phase")) {
             return;
         }
         String docked = normalizedTriggerSql(connection, DOCKED_TRIGGER);
         String request = normalizedTriggerSql(connection, REQUEST_TRIGGER);
-        if (docked != null && request != null
-                && docked.contains(DOCKED_MARKER) && request.contains(REQUEST_MARKER)) {
+        String guard = normalizedTriggerSql(connection, COMPLETION_GUARD_TRIGGER);
+        if (docked != null && request != null && guard != null
+                && docked.contains(DOCKED_MARKER)
+                && request.contains(REQUEST_MARKER)
+                && guard.contains(GUARD_MARKER)) {
             return;
         }
         try (Statement statement = connection.createStatement()) {
+            statement.execute(dropCompletionGuardStatement());
             statement.execute(dropDockedStatement());
             statement.execute(dropRequestStatement());
             statement.execute(createDockedStatement());
             statement.execute(createRequestStatement());
+            statement.execute(createCompletionGuardStatement());
         }
     }
 
