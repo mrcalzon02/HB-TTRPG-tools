@@ -75,7 +75,7 @@ public final class WorldObserverInspector {
                 .append("Current: ").append(value(vessel.currentLocation())).append("\n")
                 .append("Destination: ").append(value(vessel.destinationLocation())).append("\n")
                 .append("Route: ").append(vessel.routeProgress()).append('/').append(vessel.routeTicksRequired())
-                .append(" (\").append(percent(vessel.routeProgress(), vessel.routeTicksRequired())).append("%)\n")
+                .append(" (").append(percent(vessel.routeProgress(), vessel.routeTicksRequired())).append("%)\n")
                 .append("Base arrival tick: ").append(value(vessel.baseArrivalTick())).append("\n")
                 .append("Revised arrival tick: ").append(value(vessel.scheduledArrivalTick())).append("\n")
                 .append("Next incident tick: ").append(value(vessel.nextIncidentTick())).append("\n")
@@ -93,11 +93,8 @@ public final class WorldObserverInspector {
 
         MissionRow mission = mission(passive, vessel.missionId());
         out.append("CURRENT MISSION / CONTRACT\n");
-        if (mission == null) {
-            out.append("No ordinary mission assigned.\n");
-        } else {
-            appendMission(out, mission);
-        }
+        if (mission == null) out.append("No ordinary mission assigned.\n");
+        else appendMission(out, mission);
 
         List<VoyageLogRow> logs = passive.voyageLogs().stream()
                 .filter(row -> vessel.vesselId().equals(row.vesselId()))
@@ -144,7 +141,7 @@ public final class WorldObserverInspector {
                 .append(value(vessel.currentLocation())).append("  →  ").append(value(vessel.destinationLocation())).append("\n")
                 .append("Vessel state: ").append(value(vessel.status())).append("\n")
                 .append("Progress: ").append(vessel.routeProgress()).append('/').append(vessel.routeTicksRequired())
-                .append(" (\").append(percent(vessel.routeProgress(), vessel.routeTicksRequired())).append("%)\n")
+                .append(" (").append(percent(vessel.routeProgress(), vessel.routeTicksRequired())).append("%)\n")
                 .append("Base arrival tick: ").append(value(vessel.baseArrivalTick())).append("\n")
                 .append("Revised arrival tick: ").append(value(vessel.scheduledArrivalTick())).append("\n")
                 .append("Accumulated delay: ").append(value(vessel.cumulativeDelayTicks())).append(" tick(s)\n")
