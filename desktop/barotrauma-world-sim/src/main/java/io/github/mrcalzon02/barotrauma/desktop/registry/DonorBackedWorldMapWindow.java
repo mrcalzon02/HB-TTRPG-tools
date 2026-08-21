@@ -40,7 +40,10 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -52,14 +55,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 /**
  * Living graphical Europa observer using local Barotrauma textures or independent procedural fallbacks.
  *
- * <p>This window is intentionally coupled to the authoritative desktop world. It resumes an already-enabled
- * Passive Mode scheduler, can explicitly start or pause that scheduler, refreshes live evidence, and renders
- * in-transit NPC vessels between their current and destination locations rather than parking them at the origin.
+ * <p>The window is coupled to the authoritative desktop world. It resumes an already-enabled Passive Mode
+ * scheduler, can explicitly run or pause that scheduler, renders in-transit NPC vessels at committed route
+ * progress, and keeps a clicked vessel, route, station, or location pinned in the evidence inspector while
+ * the world continues to advance.
  */
 public final class DonorBackedWorldMapWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
@@ -72,6 +78,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JButton configureAssetsButton = new JButton("Configure Assets");
     private final JButton enablePassiveButton = new JButton("Run Passive");
     private final JButton disablePassiveButton = new JButton("Pause Passive");
+    private final JButton worldOverviewButton = new JButton("World Overview");
     private final JButton zoomInButton = new JButton("Zoom +");
     private final JButton zoomOutButton = new JButton("Zoom -");
     private final JButton fitMapButton = new JButton("Fit World");
@@ -86,6 +93,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private Path lastDirectory;
     private AutoCloseable subscription;
     private AutoCloseable passiveSubscription;
+    private LoadedMap lastLoaded;
+    private Selection selection = Selection.world();
     private boolean passiveControlsInitialized;
     private boolean busy;
 
@@ -110,15 +119,15 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         details.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         details.setLineWrap(true);
         details.setWrapStyleWord(true);
-        details.setText("Open a normalized desktop world to render its locations and active NPC routes.\n");
+        details.setText("Open a normalized desktop world to begin passive observation.\n");
 
         mapScroll.getVerticalScrollBar().setUnitIncrement(24);
         mapScroll.getHorizontalScrollBar().setUnitIncrement(24);
         JScrollPane detailsScroll = new JScrollPane(details);
-        detailsScroll.setPreferredSize(new Dimension(380, 700));
+        detailsScroll.setPreferredSize(new Dimension(430, 700));
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapScroll, detailsScroll);
-        split.setDividerLocation(1080);
-        split.setResizeWeight(0.78);
+        split.setDividerLocation(1040);
+        split.setResizeWeight(0.74);
         add(split, BorderLayout.CENTER);
 
         JPanel simulationControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
@@ -132,6 +141,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         JPanel viewControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         viewControls.add(openWorldButton);
         viewControls.add(refreshButton);
+        viewControls.add(worldOverviewButton);
         viewControls.add(zoomOutButton);
         viewControls.add(zoomInButton);
         viewControls.add(fitMapButton);
@@ -147,6 +157,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         refreshButton.addActionListener(event -> refresh());
         enablePassiveButton.addActionListener(event -> enablePassiveMode());
         disablePassiveButton.addActionListener(event -> disablePassiveMode());
+        worldOverviewButton.addActionListener(event -> select(Selection.world()));
         zoomInButton.addActionListener(event -> zoomBy(1.25));
         zoomOutButton.addActionListener(event -> zoomBy(0.80));
         fitMapButton.addActionListener(event -> fitWorld());
@@ -155,15 +166,51 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             window.setLocationRelativeTo(this);
             window.setVisible(true);
         });
+        canvas.setSelectionConsumer(this::select);
         canvas.addMouseWheelListener(event -> {
             if (!event.isControlDown()) return;
             zoomBy(event.getPreciseWheelRotation() < 0 ? 1.15 : 1.0 / 1.15);
             event.consume();
         });
+        installViewportPan();
         subscription = session.addListener(this::activateWorld, true);
         refreshTimer.setRepeats(true);
         refreshTimer.start();
         refreshControls();
+    }
+
+    private void installViewportPan() {
+        MouseAdapter adapter = new MouseAdapter() {
+            private Point pressed;
+            private Point viewAtPress;
+
+            @Override public void mousePressed(MouseEvent event) {
+                if (!SwingUtilities.isMiddleMouseButton(event) && !SwingUtilities.isRightMouseButton(event)) return;
+                pressed = event.getPoint();
+                viewAtPress = mapScroll.getViewport().getViewPosition();
+                canvas.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.MOVE_CURSOR));
+            }
+
+            @Override public void mouseDragged(MouseEvent event) {
+                if (pressed == null || viewAtPress == null) return;
+                int dx = event.getX() - pressed.x;
+                int dy = event.getY() - pressed.y;
+                Dimension extent = mapScroll.getViewport().getExtentSize();
+                Dimension view = canvas.getPreferredSize();
+                int x = Math.max(0, Math.min(viewAtPress.x - dx, Math.max(0, view.width - extent.width)));
+                int y = Math.max(0, Math.min(viewAtPress.y - dy, Math.max(0, view.height - extent.height)));
+                mapScroll.getViewport().setViewPosition(new Point(x, y));
+            }
+
+            @Override public void mouseReleased(MouseEvent event) {
+                if (pressed == null) return;
+                pressed = null;
+                viewAtPress = null;
+                canvas.setCursor(java.awt.Cursor.getDefaultCursor());
+            }
+        };
+        canvas.addMouseListener(adapter);
+        canvas.addMouseMotionListener(adapter);
     }
 
     private void chooseWorld() {
@@ -182,12 +229,15 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private void activateWorld(WorldPaths selectedWorld) {
         detachPassiveListener();
         world = selectedWorld;
+        lastLoaded = null;
+        selection = Selection.world();
         passiveControlsInitialized = false;
         canvas.clear();
+        canvas.setSelected(selection);
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
             passiveStatus.setText("Passive mode unavailable");
-            details.setText("Open a normalized desktop world to render its locations and active NPC routes.\n");
+            details.setText("Open a normalized desktop world to begin passive observation.\n");
             refreshControls();
             return;
         }
@@ -319,8 +369,10 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 try {
                     LoadedMap loaded = get();
                     if (!Objects.equals(selectedWorld, world)) return;
+                    lastLoaded = loaded;
                     canvas.setSnapshots(loaded.registry(), loaded.passive());
-                    renderDetails(loaded);
+                    canvas.setSelected(selection);
+                    renderSelection();
                     assetStatus.setText("Donor roles " + loaded.coverage().donorCount()
                             + " · fallback roles " + loaded.coverage().fallbackCount());
                 } catch (InterruptedException exception) {
@@ -335,18 +387,16 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         }.execute();
     }
 
-    private void renderDetails(LoadedMap loaded) {
-        var summary = loaded.registry().summary();
-        var configuration = loaded.passive().configuration();
-        long activeVessels = loaded.passive().vessels().stream()
-                .filter(vessel -> !"DOCKED".equals(vessel.status()) && !"LOST".equals(vessel.status()))
-                .count();
-        long damagedVessels = loaded.passive().vessels().stream()
-                .filter(vessel -> vessel.hull() < 40 || "DISABLED".equals(vessel.status()) || "LOST".equals(vessel.status()))
-                .count();
-        String donorRoot = assets.activeDonor().map(candidate -> candidate.installationRoot().toString())
-                .orElse("No active Barotrauma installation; procedural fallback visuals are in use.");
+    private void select(Selection requested) {
+        selection = requested == null ? Selection.world() : requested;
+        canvas.setSelected(selection);
+        renderSelection();
+    }
 
+    private void renderSelection() {
+        LoadedMap loaded = lastLoaded;
+        if (loaded == null) return;
+        var configuration = loaded.passive().configuration();
         if (configuration.configured()) {
             if (!passiveControlsInitialized) {
                 cadenceSeconds.setValue(configuration.cadenceSeconds());
@@ -360,29 +410,36 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             }
         }
 
-        details.setText("LIVING EUROPA OBSERVER\n\n"
-                + "World: " + summary.displayName() + "\n"
-                + "Master world: " + blank(summary.masterWorldId()) + "\n"
-                + "Canonical time: " + nullable(summary.canonicalTime()) + "\n"
-                + "Canonical tick: " + nullable(configuration.currentTickSequence()) + "\n"
-                + "Locations: " + loaded.registry().locations().size() + "\n"
-                + "Stations: " + loaded.registry().stations().size() + "\n"
-                + "NPC vessels: " + loaded.passive().vessels().size() + "\n"
-                + "Active routes: " + activeVessels + "\n"
-                + "Damaged or lost vessels: " + damagedVessels + "\n"
-                + "Passive Mode: " + (configuration.enabled() ? "enabled" : "paused")
-                + " · " + configuration.cadenceSeconds() + "s cadence"
-                + " · " + configuration.ticksPerCycle() + " tick(s)/cycle\n\n"
-                + "Visual source:\n" + donorRoot + "\n\n"
-                + "Donor-backed roles: " + loaded.coverage().donorCount() + "\n"
-                + "Procedural fallbacks: " + loaded.coverage().fallbackCount() + "\n\n"
-                + "The viewport refreshes every two seconds and immediately after Passive Mode cycle notifications. "
-                + "NPC vessel markers interpolate along their declared route using committed route progress. "
-                + "Use Zoom +/- or Ctrl+mouse-wheel to change scale; scroll the viewport to pan. "
-                + "Hover over a location or vessel marker for current evidence.\n\nLEGEND\n"
-                + "Outpost hexagon · location circle · cave arch · ruin grid · beacon mast · wreck crossed hull · "
-                + "submarine silhouette · hostile fauna marker · radiation trefoil.\n");
+        String text = switch (selection.kind()) {
+            case WORLD -> worldDossier(loaded);
+            case LOCATION -> loaded.registry().locations().stream()
+                    .filter(row -> row.locationId().equals(selection.id())).findFirst()
+                    .map(row -> WorldObserverInspector.location(row, loaded.registry(), loaded.passive()))
+                    .orElseGet(() -> missingSelection(loaded));
+            case VESSEL -> loaded.passive().vessels().stream()
+                    .filter(row -> row.vesselId().equals(selection.id())).findFirst()
+                    .map(row -> WorldObserverInspector.vessel(row, loaded.passive()))
+                    .orElseGet(() -> missingSelection(loaded));
+            case ROUTE -> loaded.passive().vessels().stream()
+                    .filter(row -> row.vesselId().equals(selection.id())).findFirst()
+                    .map(row -> WorldObserverInspector.route(row, loaded.passive()))
+                    .orElseGet(() -> missingSelection(loaded));
+        };
+        details.setText(text);
         details.setCaretPosition(0);
+    }
+
+    private String missingSelection(LoadedMap loaded) {
+        selection = Selection.world();
+        canvas.setSelected(selection);
+        return "The selected entity is no longer present in the current world state.\n\n" + worldDossier(loaded);
+    }
+
+    private String worldDossier(LoadedMap loaded) {
+        String donorRoot = assets.activeDonor().map(candidate -> candidate.installationRoot().toString())
+                .orElse("No active Barotrauma installation; procedural fallback visuals are in use.");
+        return WorldObserverInspector.world(loaded.registry(), loaded.passive(), donorRoot,
+                loaded.coverage().donorCount(), loaded.coverage().fallbackCount());
     }
 
     private void zoomBy(double factor) {
@@ -424,6 +481,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         openWorldButton.setEnabled(!busy);
         refreshButton.setEnabled(!busy && worldOpen);
         configureAssetsButton.setEnabled(!busy);
+        worldOverviewButton.setEnabled(!busy && worldOpen);
         enablePassiveButton.setEnabled(!busy && worldOpen && !passiveRunning);
         disablePassiveButton.setEnabled(!busy && passiveRunning);
         cadenceSeconds.setEnabled(!busy && worldOpen && !passiveRunning);
@@ -456,6 +514,24 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         return exception.getCause() == null ? exception : exception.getCause();
     }
 
+    private enum SelectionKind { WORLD, LOCATION, VESSEL, ROUTE }
+
+    private record Selection(SelectionKind kind, UUID id, String label) {
+        private Selection {
+            Objects.requireNonNull(kind, "kind");
+        }
+        static Selection world() { return new Selection(SelectionKind.WORLD, null, "World overview"); }
+        static Selection location(LocationRow row) {
+            return new Selection(SelectionKind.LOCATION, row.locationId(), row.displayName());
+        }
+        static Selection vessel(PassiveWorldRegistry.VesselRow row) {
+            return new Selection(SelectionKind.VESSEL, row.vesselId(), row.name());
+        }
+        static Selection route(PassiveWorldRegistry.VesselRow row) {
+            return new Selection(SelectionKind.ROUTE, row.vesselId(), row.name() + " route");
+        }
+    }
+
     private record LoadedMap(WorldMapRegistry.RegistrySnapshot registry, PassiveWorldRegistry.Snapshot passive,
                              BarotraumaAssetCatalogue.CoverageReport coverage) { }
 
@@ -472,6 +548,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         private WorldMapRegistry.RegistrySnapshot registry;
         private PassiveWorldRegistry.Snapshot passive;
         private BufferedImage background;
+        private Consumer<Selection> selectionConsumer = ignored -> { };
+        private Selection selected = Selection.world();
         private double zoom = 1.0;
 
         private EuropaMapCanvas(BarotraumaAssetCatalogue assets) {
@@ -480,11 +558,35 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             setMinimumSize(new Dimension(900, 600));
             setOpaque(true);
             setToolTipText("");
+            addMouseListener(new MouseAdapter() {
+                @Override public void mouseClicked(MouseEvent event) {
+                    if (!SwingUtilities.isLeftMouseButton(event)) return;
+                    selectAt(event.getPoint());
+                }
+            });
         }
 
-        double zoom() {
-            return zoom;
+        void setSelectionConsumer(Consumer<Selection> consumer) {
+            selectionConsumer = Objects.requireNonNull(consumer, "consumer");
         }
+
+        void setSelected(Selection selection) {
+            selected = selection == null ? Selection.world() : selection;
+            repaint();
+        }
+
+        private void selectAt(Point point) {
+            for (int index = hitRegions.size() - 1; index >= 0; index--) {
+                HitRegion region = hitRegions.get(index);
+                if (region.shape().contains(point)) {
+                    selectionConsumer.accept(region.selection());
+                    return;
+                }
+            }
+            selectionConsumer.accept(Selection.world());
+        }
+
+        double zoom() { return zoom; }
 
         double setZoom(double requestedZoom) {
             zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, requestedZoom));
@@ -543,8 +645,12 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
         private void drawBackground(Graphics2D g) {
             if (background == null || background.getWidth() != getWidth() || background.getHeight() != getHeight()) {
-                try { background = assets.loadImage(VisualRole.MAP_BACKGROUND, Math.max(1, getWidth()), Math.max(1, getHeight())); }
-                catch (Exception exception) { background = null; }
+                try {
+                    background = assets.loadImage(VisualRole.MAP_BACKGROUND,
+                            Math.max(1, getWidth()), Math.max(1, getHeight()));
+                } catch (Exception exception) {
+                    background = null;
+                }
             }
             if (background != null) g.drawImage(background, 0, 0, null);
             else {
@@ -559,24 +665,36 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
         private void drawRoutes(Graphics2D g, Map<String, Point> positions) {
             if (passive == null) return;
-            g.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
-                    10f, new float[]{8f, 8f}, 0f));
             for (var vessel : passive.vessels()) {
                 if (vessel.destinationLocation() == null) continue;
                 Point from = positions.get(vessel.currentLocation());
                 Point to = positions.get(vessel.destinationLocation());
                 if (from == null || to == null) continue;
+                boolean selectedRoute = selected.kind() == SelectionKind.ROUTE
+                        && vessel.vesselId().equals(selected.id());
+                if (selectedRoute) {
+                    g.setStroke(new BasicStroke(5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    g.setColor(new Color(245, 230, 155));
+                    g.drawLine(from.x, from.y, to.x, to.y);
+                }
+                g.setStroke(new BasicStroke(selectedRoute ? 2.8f : 2f, BasicStroke.CAP_ROUND,
+                        BasicStroke.JOIN_ROUND, 10f, new float[]{8f, 8f}, 0f));
                 g.setColor(routeColor(vessel.status()));
                 g.drawLine(from.x, from.y, to.x, to.y);
                 drawArrow(g, from, to);
+                Shape routeHit = new BasicStroke(14f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
+                        .createStrokedShape(new Line2D.Double(from, to));
+                hitRegions.add(new HitRegion(routeHit,
+                        vessel.name() + " · " + vessel.currentLocation() + " → " + vessel.destinationLocation()
+                                + " · " + vessel.routeProgress() + "/" + vessel.routeTicksRequired(),
+                        Selection.route(vessel)));
             }
             g.setStroke(new BasicStroke(1f));
         }
 
         private void drawLocations(Graphics2D g, Map<String, Point> positions) {
             List<LocationRow> rows = registry.locations().stream()
-                    .sorted(Comparator.comparing(LocationRow::station))
-                    .toList();
+                    .sorted(Comparator.comparing(LocationRow::station)).toList();
             for (LocationRow row : rows) {
                 Point point = positions.get(row.displayName());
                 if (point == null) continue;
@@ -584,14 +702,23 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 int size = row.station() ? 38 : 30;
                 BufferedImage icon = icon(role, size, size);
                 g.drawImage(icon, point.x - size / 2, point.y - size / 2, null);
+                boolean selectedLocation = selected.kind() == SelectionKind.LOCATION
+                        && row.locationId().equals(selected.id());
+                if (selectedLocation) {
+                    g.setStroke(new BasicStroke(3f));
+                    g.setColor(new Color(245, 230, 155));
+                    g.drawOval(point.x - size / 2 - 6, point.y - size / 2 - 6, size + 12, size + 12);
+                    g.setStroke(new BasicStroke(1f));
+                }
                 g.setColor(new Color(225, 236, 226));
                 g.setFont(getFont().deriveFont(row.station() ? Font.BOLD : Font.PLAIN, row.station() ? 12f : 11f));
-                String label = row.displayName();
-                g.drawString(label, point.x + size / 2 + 4, point.y + 4);
+                g.drawString(row.displayName(), point.x + size / 2 + 4, point.y + 4);
                 Rectangle bounds = new Rectangle(point.x - size / 2, point.y - size / 2, size, size);
-                hitRegions.add(new HitRegion(bounds, label + " · ring " + row.ring() + " · level "
-                        + row.locationLevel() + " · " + blank(row.locationType())
-                        + (row.faction() == null ? "" : " · " + row.faction())));
+                hitRegions.add(new HitRegion(bounds,
+                        row.displayName() + " · ring " + row.ring() + " · level " + row.locationLevel()
+                                + " · " + blank(row.locationType())
+                                + (row.faction() == null ? "" : " · " + row.faction()),
+                        Selection.location(row)));
             }
         }
 
@@ -614,18 +741,27 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 g.drawImage(icon(role, size, size), x - size / 2, y - size / 2, null);
                 g.setColor(routeColor(vessel.status()));
                 g.drawOval(x - size / 2 - 2, y - size / 2 - 2, size + 4, size + 4);
+                boolean selectedVessel = selected.kind() == SelectionKind.VESSEL
+                        && vessel.vesselId().equals(selected.id());
+                if (selectedVessel) {
+                    g.setStroke(new BasicStroke(3f));
+                    g.setColor(new Color(245, 230, 155));
+                    g.drawOval(x - size / 2 - 7, y - size / 2 - 7, size + 14, size + 14);
+                    g.setStroke(new BasicStroke(1f));
+                }
                 String progress = vessel.destinationLocation() == null || vessel.routeTicksRequired() <= 0
-                        ? ""
-                        : " · route " + vessel.routeProgress() + "/" + vessel.routeTicksRequired();
-                String incidents = vessel.plannedIncidents() == null
-                        ? ""
+                        ? "" : " · route " + vessel.routeProgress() + "/" + vessel.routeTicksRequired();
+                String incidents = vessel.plannedIncidents() == null ? ""
                         : " · incidents " + nullable(vessel.incidentsResolved()) + "/" + vessel.plannedIncidents();
-                String eta = vessel.scheduledArrivalTick() == null ? "" : " · ETA tick " + vessel.scheduledArrivalTick();
+                String eta = vessel.scheduledArrivalTick() == null ? ""
+                        : " · ETA tick " + vessel.scheduledArrivalTick();
                 hitRegions.add(new HitRegion(new Rectangle(x - size / 2, y - size / 2, size, size),
                         vessel.name() + " · " + vessel.role() + " · " + vessel.status()
                                 + " · hull " + vessel.hull() + "% · supplies " + vessel.supplies()
-                                + (vessel.destinationLocation() == null ? "" : " · destination " + vessel.destinationLocation())
-                                + progress + incidents + eta));
+                                + (vessel.destinationLocation() == null ? ""
+                                : " · destination " + vessel.destinationLocation())
+                                + progress + incidents + eta,
+                        Selection.vessel(vessel)));
             }
         }
 
@@ -633,24 +769,21 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             Point from = positions.get(vessel.currentLocation());
             if (from == null || vessel.destinationLocation() == null) return from;
             Point to = positions.get(vessel.destinationLocation());
-            if (to == null) return from;
-            if (vessel.routeTicksRequired() <= 0) return from;
-            double fraction = vessel.routeProgress() / (double) vessel.routeTicksRequired();
-            fraction = Math.max(0.0, Math.min(1.0, fraction));
-            return new Point(
-                    (int) Math.round(from.x + (to.x - from.x) * fraction),
-                    (int) Math.round(from.y + (to.y - from.y) * fraction));
+            if (to == null || vessel.routeTicksRequired() <= 0) return from;
+            return WorldObserverProjection.interpolate(from, to, vessel.routeProgress(), vessel.routeTicksRequired());
         }
 
         private void drawSourceBadge(Graphics2D g) {
-            String text = assets.activeDonor().isPresent() ? "Barotrauma donor textures active" : "Procedural fallback visuals";
+            String text = assets.activeDonor().isPresent()
+                    ? "Barotrauma donor textures active" : "Procedural fallback visuals";
             g.setFont(getFont().deriveFont(Font.BOLD, 12f));
             int width = g.getFontMetrics().stringWidth(text) + 24;
             int x = getWidth() - width - 16;
             int y = getHeight() - 40;
             g.setColor(new Color(4, 15, 20, 210));
             g.fillRoundRect(x, y, width, 26, 12, 12);
-            g.setColor(assets.activeDonor().isPresent() ? new Color(129, 205, 188) : new Color(226, 177, 92));
+            g.setColor(assets.activeDonor().isPresent()
+                    ? new Color(129, 205, 188) : new Color(226, 177, 92));
             g.drawRoundRect(x, y, width, 26, 12, 12);
             g.drawString(text, x + 12, y + 18);
         }
@@ -671,7 +804,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
         private static Map<String, Point> positions(List<LocationRow> locations, int width, int height) {
             Map<String, Point> result = new HashMap<>();
-            List<LocationRow> mapped = locations.stream().filter(row -> row.mapX() != null && row.mapY() != null).toList();
+            List<LocationRow> mapped = locations.stream()
+                    .filter(row -> row.mapX() != null && row.mapY() != null).toList();
             if (mapped.size() >= 2) {
                 double minX = mapped.stream().mapToDouble(LocationRow::mapX).min().orElse(0);
                 double maxX = mapped.stream().mapToDouble(LocationRow::mapX).max().orElse(1);
@@ -681,8 +815,10 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 double rangeY = Math.max(1.0, maxY - minY);
                 for (LocationRow row : locations) {
                     if (row.mapX() == null || row.mapY() == null) continue;
-                    int x = MARGIN + (int) Math.round((row.mapX() - minX) / rangeX * Math.max(1, width - MARGIN * 2));
-                    int y = MARGIN + (int) Math.round((row.mapY() - minY) / rangeY * Math.max(1, height - MARGIN * 2));
+                    int x = MARGIN + (int) Math.round((row.mapX() - minX) / rangeX
+                            * Math.max(1, width - MARGIN * 2));
+                    int y = MARGIN + (int) Math.round((row.mapY() - minY) / rangeY
+                            * Math.max(1, height - MARGIN * 2));
                     result.put(row.displayName(), new Point(x, y));
                 }
             }
@@ -739,12 +875,12 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         @Override public String getToolTipText(MouseEvent event) {
             for (int index = hitRegions.size() - 1; index >= 0; index--) {
                 HitRegion region = hitRegions.get(index);
-                if (region.bounds().contains(event.getPoint())) return region.text();
+                if (region.shape().contains(event.getPoint())) return region.text();
             }
             return null;
         }
 
-        private record HitRegion(Rectangle bounds, String text) { }
+        private record HitRegion(Shape shape, String text, Selection selection) { }
     }
 
     public static void main(String[] args) {
