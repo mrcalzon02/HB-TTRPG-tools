@@ -7,27 +7,32 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Canonical dispatch trigger for a vessel that has just become docked.
+ * Canonical fleet-response dispatch policy.
  *
- * <p>A fleet responder must be observably docked for at least the completion tick after returning home.
- * Recursive SQLite triggers previously allowed the older schema-011 dispatch trigger to immediately consume
- * the DOCKED transition produced by fleet_response_responder_returns_home, assigning another queued response
- * in the same trigger chain and leaving the vessel PREPARING instead of DOCKED. This policy preserves the
- * immediate-assignment behavior for ordinary docking while excluding a responder whose completed operation
- * records responder_returned_tick == NEW.last_tick.
+ * <p>A responder that has just completed a physical return must remain observably docked for that completion
+ * tick. Recursive trigger chains previously exposed two ways to consume that DOCKED state immediately: an
+ * already-queued response could be accepted by the dock transition, or a new response request created later
+ * in the same tick could immediately select the just-returned vessel. Both dispatch paths now apply the same
+ * one-tick completion cooldown while preserving immediate assignment for all other eligible docked vessels.
  */
 public final class FleetResponseDispatchPolicy {
-    public static final String TRIGGER_NAME = "docked_vessel_accepts_response";
-    private static final String POLICY_MARKER = "responder_returned_tick=NEW.last_tick";
+    public static final String DOCKED_TRIGGER = "docked_vessel_accepts_response";
+    public static final String REQUEST_TRIGGER = "response_request_immediate_assignment";
+    private static final String DOCKED_MARKER = "responder_returned_tick=NEW.last_tick";
+    private static final String REQUEST_MARKER = "responder_returned_tick=NEW.created_tick";
 
     private FleetResponseDispatchPolicy() { }
 
-    public static String dropStatement() {
-        return "DROP TRIGGER IF EXISTS " + TRIGGER_NAME;
+    public static String dropDockedStatement() {
+        return "DROP TRIGGER IF EXISTS " + DOCKED_TRIGGER;
     }
 
-    public static String createStatement() {
-        return "CREATE TRIGGER " + TRIGGER_NAME + " AFTER UPDATE OF status ON npc_vessel "
+    public static String dropRequestStatement() {
+        return "DROP TRIGGER IF EXISTS " + REQUEST_TRIGGER;
+    }
+
+    public static String createDockedStatement() {
+        return "CREATE TRIGGER " + DOCKED_TRIGGER + " AFTER UPDATE OF status ON npc_vessel "
                 + "WHEN NEW.status='DOCKED' AND OLD.status<>'DOCKED' AND NEW.mission_id IS NULL "
                 + "AND NEW.role IN ('SALVAGE','PATROL','COURIER') "
                 + "AND NOT EXISTS (SELECT 1 FROM fleet_response_operation recent "
@@ -44,26 +49,62 @@ public final class FleetResponseDispatchPolicy {
                 + "WHERE busy.assigned_npc_vessel_id=NEW.npc_vessel_id AND busy.status='ACTIVE'); END";
     }
 
-    /** Repairs worlds that already contain the pre-cooldown trigger without changing their schema version. */
+    public static String createRequestStatement() {
+        String eligible = "SELECT 1 FROM npc_vessel v WHERE v.world_id=NEW.world_id AND v.status='DOCKED' "
+                + "AND v.mission_id IS NULL AND v.role IN ('SALVAGE','PATROL','COURIER') "
+                + "AND v.npc_vessel_id<>COALESCE(NEW.distressed_npc_vessel_id,'') "
+                + "AND NOT EXISTS (SELECT 1 FROM fleet_response_operation busy "
+                + "WHERE busy.assigned_npc_vessel_id=v.npc_vessel_id AND busy.status='ACTIVE') "
+                + "AND NOT EXISTS (SELECT 1 FROM fleet_response_operation recent "
+                + "WHERE recent.assigned_npc_vessel_id=v.npc_vessel_id "
+                + "AND recent.status='COMPLETE' AND recent.response_phase='COMPLETE' "
+                + "AND recent.responder_returned_tick=NEW.created_tick)";
+        String candidate = "SELECT v.npc_vessel_id FROM npc_vessel v WHERE v.world_id=NEW.world_id "
+                + "AND v.status='DOCKED' AND v.mission_id IS NULL "
+                + "AND v.role IN ('SALVAGE','PATROL','COURIER') "
+                + "AND v.npc_vessel_id<>COALESCE(NEW.distressed_npc_vessel_id,'') "
+                + "AND NOT EXISTS (SELECT 1 FROM fleet_response_operation busy "
+                + "WHERE busy.assigned_npc_vessel_id=v.npc_vessel_id AND busy.status='ACTIVE') "
+                + "AND NOT EXISTS (SELECT 1 FROM fleet_response_operation recent "
+                + "WHERE recent.assigned_npc_vessel_id=v.npc_vessel_id "
+                + "AND recent.status='COMPLETE' AND recent.response_phase='COMPLETE' "
+                + "AND recent.responder_returned_tick=NEW.created_tick) "
+                + "ORDER BY CASE v.role WHEN 'SALVAGE' THEN 0 WHEN 'PATROL' THEN 1 ELSE 2 END,"
+                + "v.engineering DESC,v.npc_vessel_id LIMIT 1";
+        return "CREATE TRIGGER " + REQUEST_TRIGGER + " AFTER INSERT ON fleet_response_operation "
+                + "WHEN NEW.status='AVAILABLE' BEGIN UPDATE fleet_response_operation SET assigned_npc_vessel_id=("
+                + candidate + "),status=CASE WHEN EXISTS (" + eligible + ") THEN 'ACTIVE' ELSE 'AVAILABLE' END "
+                + "WHERE operation_id=NEW.operation_id; END";
+    }
+
+    /** Repairs current worlds without a schema-number bump. */
     public static void installIfSupported(Connection connection) throws SQLException {
         if (!hasTable(connection, "npc_vessel") || !hasTable(connection, "fleet_response_operation")
                 || !hasColumn(connection, "fleet_response_operation", "responder_returned_tick")) {
             return;
         }
-        String existing = triggerSql(connection);
-        if (existing != null && existing.replaceAll("\\s+", "").contains(POLICY_MARKER)) return;
+        String docked = normalizedTriggerSql(connection, DOCKED_TRIGGER);
+        String request = normalizedTriggerSql(connection, REQUEST_TRIGGER);
+        if (docked != null && request != null
+                && docked.contains(DOCKED_MARKER) && request.contains(REQUEST_MARKER)) {
+            return;
+        }
         try (Statement statement = connection.createStatement()) {
-            statement.execute(dropStatement());
-            statement.execute(createStatement());
+            statement.execute(dropDockedStatement());
+            statement.execute(dropRequestStatement());
+            statement.execute(createDockedStatement());
+            statement.execute(createRequestStatement());
         }
     }
 
-    private static String triggerSql(Connection connection) throws SQLException {
+    private static String normalizedTriggerSql(Connection connection, String triggerName) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT sql FROM sqlite_master WHERE type='trigger' AND name=?")) {
-            statement.setString(1, TRIGGER_NAME);
+            statement.setString(1, triggerName);
             try (ResultSet result = statement.executeQuery()) {
-                return result.next() ? result.getString(1) : null;
+                if (!result.next()) return null;
+                String sql = result.getString(1);
+                return sql == null ? null : sql.replaceAll("\\s+", "");
             }
         }
     }
