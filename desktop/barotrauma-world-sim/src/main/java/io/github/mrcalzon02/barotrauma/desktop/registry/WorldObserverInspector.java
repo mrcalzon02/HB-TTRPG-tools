@@ -2,8 +2,13 @@ package io.github.mrcalzon02.barotrauma.desktop.registry;
 
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.EncounterRow;
+import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.FleetResponseLogRow;
+import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.FleetResponseRow;
+import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.FleetTransitLegRow;
+import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.FreightRow;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.MissionRow;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.StationRow;
+import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.TreasuryRow;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.VesselRow;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry.VoyageLogRow;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry;
@@ -12,13 +17,18 @@ import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry.LocationRow;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /** Formats durable simulation evidence as operator-facing living-world dossiers. */
 public final class WorldObserverInspector {
     private static final int MAX_LOG_ROWS = 16;
     private static final int MAX_ENCOUNTER_ROWS = 12;
     private static final int MAX_MISSION_ROWS = 12;
+    private static final int MAX_FLEET_ROWS = 12;
+    private static final int MAX_FREIGHT_ROWS = 16;
+    private static final int MAX_TREASURY_ROWS = 20;
 
     private WorldObserverInspector() { }
 
@@ -37,6 +47,12 @@ public final class WorldObserverInspector {
         long activeMissions = passive.missions().stream()
                 .filter(mission -> List.of("ACTIVE", "ASSIGNED", "AVAILABLE").contains(mission.status()))
                 .count();
+        long activeResponses = passive.fleetResponses().stream()
+                .filter(response -> "ACTIVE".equals(response.status()) || "AVAILABLE".equals(response.status()))
+                .count();
+        long freightInMotion = passive.freight().stream()
+                .filter(freight -> List.of("READY", "LOADED", "IN_TRANSIT").contains(freight.status()))
+                .count();
 
         return "LIVING EUROPA OBSERVER\n\n"
                 + "World: " + value(summary.displayName()) + "\n"
@@ -53,6 +69,9 @@ public final class WorldObserverInspector {
                 + "Active routes/vessels: " + activeVessels + "\n"
                 + "Damaged, disabled or lost: " + damaged + "\n"
                 + "Open missions: " + activeMissions + "\n"
+                + "Active fleet responses: " + activeResponses + "\n"
+                + "Freight in transit: " + freightInMotion + "\n"
+                + "Treasury entries: " + passive.treasury().size() + "\n"
                 + "Recorded encounters: " + passive.encounters().size() + "\n\n"
                 + "VISUAL SOURCE\n" + value(visualSource) + "\n"
                 + "Donor-backed roles: " + donorRoles + "\n"
@@ -64,6 +83,7 @@ public final class WorldObserverInspector {
     public static String vessel(VesselRow vessel, PassiveWorldRegistry.Snapshot passive) {
         Objects.requireNonNull(vessel, "vessel");
         Objects.requireNonNull(passive, "passive");
+        String vesselId = vessel.vesselId().toString();
         StringBuilder out = new StringBuilder();
         out.append("NPC VESSEL DOSSIER\n\n")
                 .append(vessel.name()).append("\n")
@@ -95,6 +115,39 @@ public final class WorldObserverInspector {
         out.append("CURRENT MISSION / CONTRACT\n");
         if (mission == null) out.append("No ordinary mission assigned.\n");
         else appendMission(out, mission);
+
+        List<FleetResponseRow> responses = passive.fleetResponses().stream()
+                .filter(row -> vesselId.equals(row.responderVesselId()) || vesselId.equals(row.distressedVesselId()))
+                .sorted(Comparator.comparingLong(FleetResponseRow::updatedTick).reversed())
+                .limit(MAX_FLEET_ROWS).toList();
+        out.append("\nFLEET RESPONSE OPERATIONS\n");
+        if (responses.isEmpty()) out.append("No fleet-response operation references this vessel.\n");
+        for (FleetResponseRow response : responses) appendFleetResponse(out, response, vesselId);
+        appendFleetResponseLogs(out, passive, responses);
+
+        List<FleetTransitLegRow> fleetLegs = passive.fleetTransitLegs().stream()
+                .filter(row -> vesselId.equals(row.responderVesselId()))
+                .sorted(Comparator.comparingLong(FleetTransitLegRow::startedTick).reversed())
+                .limit(MAX_FLEET_ROWS).toList();
+        out.append("\nFLEET RESPONSE TRANSIT\n");
+        if (fleetLegs.isEmpty()) out.append("No response transit legs recorded.\n");
+        for (FleetTransitLegRow leg : fleetLegs) appendFleetTransit(out, leg);
+
+        List<FreightRow> freight = passive.freight().stream()
+                .filter(row -> vesselId.equals(row.npcVesselId()))
+                .sorted(Comparator.comparingLong(FreightRow::updatedTick).reversed())
+                .limit(MAX_FREIGHT_ROWS).toList();
+        out.append("\nFREIGHT MANIFESTS\n");
+        if (freight.isEmpty()) out.append("No freight lots assigned to this vessel.\n");
+        for (FreightRow row : freight) appendFreight(out, row);
+
+        List<TreasuryRow> settlement = passive.treasury().stream()
+                .filter(row -> vesselId.equals(row.counterpartyId()))
+                .sorted(Comparator.comparingLong(TreasuryRow::tickSequence).reversed())
+                .limit(MAX_TREASURY_ROWS).toList();
+        out.append("\nTREASURY / SETTLEMENT EVIDENCE\n");
+        if (settlement.isEmpty()) out.append("No treasury entries reference this vessel.\n");
+        for (TreasuryRow row : settlement) appendTreasury(out, row);
 
         List<VoyageLogRow> logs = passive.voyageLogs().stream()
                 .filter(row -> vessel.vesselId().equals(row.vesselId()))
@@ -135,6 +188,7 @@ public final class WorldObserverInspector {
     public static String route(VesselRow vessel, PassiveWorldRegistry.Snapshot passive) {
         Objects.requireNonNull(vessel, "vessel");
         Objects.requireNonNull(passive, "passive");
+        String vesselId = vessel.vesselId().toString();
         StringBuilder out = new StringBuilder();
         out.append("TRANSIT ROUTE DOSSIER\n\n")
                 .append(vessel.name()).append("\n")
@@ -153,6 +207,30 @@ public final class WorldObserverInspector {
         MissionRow mission = mission(passive, vessel.missionId());
         if (mission == null) out.append("No ordinary mission assigned; route may be fleet response or repositioning.\n");
         else appendMission(out, mission);
+
+        List<FleetResponseRow> responses = passive.fleetResponses().stream()
+                .filter(row -> vesselId.equals(row.responderVesselId()))
+                .sorted(Comparator.comparingLong(FleetResponseRow::updatedTick).reversed())
+                .limit(MAX_FLEET_ROWS).toList();
+        out.append("\nFLEET RESPONSE ROUTE\n");
+        if (responses.isEmpty()) out.append("No fleet-response operation currently or historically uses this responder.\n");
+        for (FleetResponseRow response : responses) appendFleetResponse(out, response, vesselId);
+
+        List<FleetTransitLegRow> legs = passive.fleetTransitLegs().stream()
+                .filter(row -> vesselId.equals(row.responderVesselId()))
+                .sorted(Comparator.comparingLong(FleetTransitLegRow::startedTick).reversed())
+                .limit(MAX_FLEET_ROWS).toList();
+        out.append("\nFLEET RESPONSE TRANSIT LEGS\n");
+        if (legs.isEmpty()) out.append("No response transit legs recorded.\n");
+        for (FleetTransitLegRow leg : legs) appendFleetTransit(out, leg);
+
+        List<FreightRow> freight = passive.freight().stream()
+                .filter(row -> vesselId.equals(row.npcVesselId()))
+                .sorted(Comparator.comparingLong(FreightRow::updatedTick).reversed())
+                .limit(MAX_FREIGHT_ROWS).toList();
+        out.append("\nROUTE FREIGHT\n");
+        if (freight.isEmpty()) out.append("No freight manifests reference this vessel.\n");
+        for (FreightRow row : freight) appendFreight(out, row);
 
         out.append("\nROUTE INCIDENT LEDGER\n");
         List<EncounterRow> encounters = passive.encounters().stream()
@@ -223,6 +301,35 @@ public final class WorldObserverInspector {
         out.append("\nMISSION / TRADE DOCUMENTS\n");
         if (missions.isEmpty()) out.append("No mission records reference this location.\n");
         for (MissionRow mission : missions) appendMission(out, mission);
+
+        List<FleetResponseRow> responses = passive.fleetResponses().stream()
+                .filter(row -> location.displayName().equals(row.originStationName())
+                        || location.displayName().equals(row.targetStationName())
+                        || location.displayName().equals(row.targetLocationName())
+                        || location.displayName().equals(row.responderOriginLocationName()))
+                .sorted(Comparator.comparingLong(FleetResponseRow::updatedTick).reversed())
+                .limit(MAX_FLEET_ROWS).toList();
+        out.append("\nFLEET RESPONSE DOCUMENTS\n");
+        if (responses.isEmpty()) out.append("No fleet-response operations reference this location.\n");
+        for (FleetResponseRow response : responses) appendFleetResponse(out, response, null);
+        appendFleetResponseLogs(out, passive, responses);
+
+        List<FreightRow> freight = passive.freight().stream()
+                .filter(row -> location.displayName().equals(row.sourceStation())
+                        || location.displayName().equals(row.destinationStation()))
+                .sorted(Comparator.comparingLong(FreightRow::updatedTick).reversed())
+                .limit(MAX_FREIGHT_ROWS).toList();
+        out.append("\nFREIGHT / TRADE LEDGER\n");
+        if (freight.isEmpty()) out.append("No freight lots reference this station.\n");
+        for (FreightRow row : freight) appendFreight(out, row);
+
+        List<TreasuryRow> treasury = passive.treasury().stream()
+                .filter(row -> location.displayName().equals(row.stationName()))
+                .sorted(Comparator.comparingLong(TreasuryRow::tickSequence).reversed())
+                .limit(MAX_TREASURY_ROWS).toList();
+        out.append("\nTREASURY LEDGER\n");
+        if (treasury.isEmpty()) out.append("No treasury entries reference this station.\n");
+        for (TreasuryRow row : treasury) appendTreasury(out, row);
         return out.toString();
     }
 
@@ -240,6 +347,78 @@ public final class WorldObserverInspector {
                 .append(mission.cargoUnits()).append("\n")
                 .append("  Created/updated/completed: ").append(mission.createdTick()).append(" / ")
                 .append(mission.updatedTick()).append(" / ").append(value(mission.completedTick())).append("\n");
+    }
+
+    private static void appendFleetResponse(StringBuilder out, FleetResponseRow response, String selectedVesselId) {
+        out.append("• ").append(value(response.type())).append(" · ").append(value(response.status()))
+                .append(" · ").append(value(response.phase())).append("\n")
+                .append("  Responder: ").append(value(response.responderVesselName()));
+        if (selectedVesselId != null && selectedVesselId.equals(response.responderVesselId())) out.append(" [THIS VESSEL]");
+        out.append("\n")
+                .append("  Casualty: ").append(value(response.distressedVesselName()));
+        if (selectedVesselId != null && selectedVesselId.equals(response.distressedVesselId())) out.append(" [THIS VESSEL]");
+        out.append("\n")
+                .append("  Target: ").append(value(response.targetStationName())).append(" / ")
+                .append(value(response.targetLocationName())).append("\n")
+                .append("  Progress: ").append(response.progress()).append("% · difficulty ")
+                .append(response.difficulty()).append(" · attempt ").append(response.attemptNumber()).append("\n")
+                .append("  Stores: steel ").append(response.sparePartsRequired())
+                .append(", fuel ").append(response.fuelRequired())
+                .append(", ammunition ").append(response.ammunitionRequired())
+                .append(", medical ").append(response.medicalRequired())
+                .append(" · committed ").append(response.materialsCommitted() ? "yes" : "no").append("\n")
+                .append("  Outbound/scene/return/home ticks: ")
+                .append(value(response.outboundStartedTick())).append(" / ")
+                .append(value(response.arrivedTick())).append(" / ")
+                .append(value(response.returnStartedTick())).append(" / ")
+                .append(value(response.responderReturnedTick())).append("\n");
+    }
+
+    private static void appendFleetResponseLogs(StringBuilder out, PassiveWorldRegistry.Snapshot passive,
+                                                List<FleetResponseRow> responses) {
+        Set<String> operationIds = responses.stream().map(FleetResponseRow::operationId).collect(Collectors.toSet());
+        if (operationIds.isEmpty()) return;
+        List<FleetResponseLogRow> logs = passive.fleetResponseLogs().stream()
+                .filter(row -> operationIds.contains(row.operationId()))
+                .sorted(Comparator.comparingLong(FleetResponseLogRow::tickSequence).reversed())
+                .limit(MAX_LOG_ROWS).toList();
+        out.append("  RESPONSE LOG\n");
+        if (logs.isEmpty()) out.append("  No response-log entries recorded.\n");
+        for (FleetResponseLogRow log : logs) {
+            out.append("  [Tick ").append(log.tickSequence()).append("] ")
+                    .append(value(log.eventType())).append(" · ").append(value(log.summary())).append("\n");
+        }
+    }
+
+    private static void appendFleetTransit(StringBuilder out, FleetTransitLegRow leg) {
+        out.append("• ").append(value(leg.legType())).append(" · ").append(value(leg.status())).append("\n")
+                .append("  ").append(value(leg.startLocation())).append(" → ").append(value(leg.endLocation())).append("\n")
+                .append("  Route length: ").append(leg.routeTicksRequired()).append(" tick(s) · attempt ")
+                .append(leg.attemptNumber()).append("\n")
+                .append("  Started/arrived/completed: ").append(leg.startedTick()).append(" / ")
+                .append(value(leg.arrivedTick())).append(" / ").append(value(leg.completedTick())).append("\n");
+    }
+
+    private static void appendFreight(StringBuilder out, FreightRow row) {
+        out.append("• ").append(value(row.itemName())).append(" ×").append(row.quantity())
+                .append(" · ").append(value(row.status())).append("\n")
+                .append("  ").append(value(row.sourceStation())).append(" → ")
+                .append(value(row.destinationStation())).append("\n")
+                .append("  Carrier: ").append(value(row.npcVesselName())).append(" · category ")
+                .append(value(row.itemCategory())).append("\n")
+                .append("  Lot: ").append(value(row.lotId())).append(" · mission ")
+                .append(value(row.missionId())).append("\n")
+                .append("  Created/updated/delivered: ").append(row.createdTick()).append(" / ")
+                .append(row.updatedTick()).append(" / ").append(value(row.deliveredTick())).append("\n");
+    }
+
+    private static void appendTreasury(StringBuilder out, TreasuryRow row) {
+        out.append("• [Tick ").append(row.tickSequence()).append("] ")
+                .append(value(row.category())).append(" · ").append(signed(row.creditsDelta())).append(" credits\n")
+                .append("  Station: ").append(value(row.stationName())).append("\n")
+                .append("  Counterparty: ").append(value(row.counterpartyType())).append(" / ")
+                .append(value(row.counterpartyId())).append("\n")
+                .append("  ").append(value(row.memo())).append("\n");
     }
 
     private static int percent(int progress, int required) {
