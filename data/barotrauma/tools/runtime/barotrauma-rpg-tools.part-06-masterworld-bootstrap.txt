@@ -1,7 +1,129 @@
 
-  const MASTER_WORLD_BOOTSTRAP_VERSION = '1.0.0';
+  const MASTER_WORLD_BOOTSTRAP_VERSION = '1.1.0';
   const MASTER_WORLD_BOOTSTRAP_MINIMUM_RINGS = 48;
   const MASTER_WORLD_BOOTSTRAP_MINIMUM_LOCATIONS = 960;
+  const MASTER_WORLD_SITE_NAMING_VERSION = '1.0.0';
+  const MASTER_WORLD_GENERIC_SITE_PATTERN = /^(?:Europa|Europan)\s+Site\s+\d+$/i;
+  const MASTER_WORLD_SITE_NAUTICAL_WORDS = [
+    'Anchor', 'Beacon', 'Bilge', 'Breaker', 'Breakwater', 'Bulwark', 'Capstan', 'Compass',
+    'Current', 'Deepwater', 'Drift', 'Fathom', 'Gale', 'Harbor', 'Helm', 'Hawser',
+    'Keel', 'Lantern', 'Leeward', 'Mariner', 'Midwatch', 'Mooring', 'Nautilus', 'Pelagic',
+    'Portside', 'Reef', 'Rigging', 'Rudder', 'Seamount', 'Shoal', 'Sounder', 'Sounding',
+    'Starboard', 'Stern', 'Tidewater', 'Trawler', 'Undertow', 'Wake', 'Whaler', 'Windward',
+    'Abyssal', 'Ballast', 'Binnacle', 'Bluewater', 'Bosun', 'Channel', 'Drydock', 'Estuary',
+    'Flotsam', 'Foremast', 'Headland', 'Jetty', 'Longshore', 'Maelstrom', 'Offing', 'Quarterdeck',
+    'Roadstead', 'Seaward', 'Sound', 'Wakefield', 'Whitecap', 'Yardarm'
+  ];
+  const MASTER_WORLD_SITE_DESIGNATIONS = [
+    'Farm', 'Survey Station', 'Factory', 'Works', 'Foundry', 'Refinery', 'Mine', 'Relay',
+    'Depot', 'Dockyard', 'Shipyard', 'Habitat', 'Outpost', 'Laboratory', 'Observatory', 'Research Annex',
+    'Reactor Station', 'Pump Station', 'Cargo Hub', 'Salvage Yard', 'Clinic', 'Security Post', 'Exchange', 'Processing Plant',
+    'Hydroponics', 'Drilling Platform', 'Sonar Post', 'Maintenance Yard', 'Storage Vault', 'Fuel Depot', 'Fabrication Plant', 'Aquaculture Farm',
+    'Navigation Relay', 'Communications Array', 'Power Station', 'Extraction Site', 'Manufacturing Hub', 'Quarantine Post', 'Research Station', 'Logistics Hub',
+    'Repair Dock', 'Survey Office', 'Prospecting Camp', 'Machine Works', 'Supply Station', 'Transit Hub', 'Cold Storage', 'Pressure Works',
+    'Water Plant', 'Ore Terminal', 'Trading Post', 'Patrol Base', 'Medical Annex', 'Archive', 'Generator Station', 'Listening Post'
+  ];
+  const MASTER_WORLD_SITE_CITIES = [
+    'Amsterdam', 'Antwerp', 'Athens', 'Barcelona', 'Belfast', 'Bergen', 'Berlin', 'Bordeaux',
+    'Bremen', 'Bristol', 'Brussels', 'Bucharest', 'Budapest', 'Copenhagen', 'Dublin', 'Edinburgh',
+    'Genoa', 'Glasgow', 'Hamburg', 'Helsinki', 'Lisbon', 'Liverpool', 'London', 'Lyon',
+    'Madrid', 'Marseille', 'Milan', 'Naples', 'Oslo', 'Paris', 'Prague', 'Reykjavik',
+    'Riga', 'Rome', 'Rotterdam', 'Seville', 'Split', 'Stockholm', 'Tallinn', 'Trieste',
+    'Valencia', 'Venice', 'Vienna', 'Vilnius', 'Warsaw', 'Zurich', 'Arkhangelsk', 'Astrakhan',
+    'Irkutsk', 'Kazan', 'Kaliningrad', 'Khabarovsk', 'Moscow', 'Murmansk', 'Nizhny Novgorod', 'Novosibirsk',
+    'Omsk', 'Perm', 'Petrozavodsk', 'Rostov', 'Samara', 'Saratov', 'Smolensk', 'Sochi',
+    'St Petersburg', 'Tomsk', 'Tula', 'Vladivostok', 'Volgograd', 'Voronezh', 'Yekaterinburg', 'Anchorage',
+    'Baltimore', 'Boston', 'Charleston', 'Chicago', 'Cleveland', 'Detroit', 'Honolulu', 'Houston',
+    'Juneau', 'Los Angeles', 'Miami', 'Mobile', 'New Orleans', 'New York', 'Norfolk', 'Oakland',
+    'Philadelphia', 'Portland', 'Providence', 'San Diego', 'San Francisco', 'Savannah', 'Seattle', 'Tampa',
+    'Tacoma', 'Galveston', 'Corpus Christi', 'Jacksonville', 'Newport', 'Duluth', 'Milwaukee', 'Astoria'
+  ];
+
+  function masterWorldSiteNameHash(value) {
+    let hash = 2166136261;
+    const text = String(value ?? '');
+    for (let index = 0; index < text.length; index += 1) {
+      hash ^= text.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+  }
+
+  function masterWorldSiteNameCandidate(seed, attempt = 0) {
+    const nautical = MASTER_WORLD_SITE_NAUTICAL_WORDS[
+      masterWorldSiteNameHash(`${seed}|nautical|${attempt}`) % MASTER_WORLD_SITE_NAUTICAL_WORDS.length
+    ];
+    const designation = MASTER_WORLD_SITE_DESIGNATIONS[
+      masterWorldSiteNameHash(`${seed}|designation|${attempt}`) % MASTER_WORLD_SITE_DESIGNATIONS.length
+    ];
+    const city = MASTER_WORLD_SITE_CITIES[
+      masterWorldSiteNameHash(`${seed}|city|${attempt}`) % MASTER_WORLD_SITE_CITIES.length
+    ];
+    return `${nautical} ${designation} - ${city}`;
+  }
+
+  function masterWorldSiteNameSeed(node, index) {
+    if (node?.id) return String(node.id);
+    const ring = Number.isFinite(Number(node?.ring)) ? Number(node.ring) : 0;
+    const x = Number.isFinite(Number(node?.x)) ? Number(node.x).toFixed(3) : '0';
+    const y = Number.isFinite(Number(node?.y)) ? Number(node.y).toFixed(3) : '0';
+    return `ring-${ring}|x-${x}|y-${y}|index-${index}`;
+  }
+
+  function masterWorldReplaceSiteReferences(value, previousName, nextName) {
+    if (typeof value === 'string') return value.includes(previousName) ? value.split(previousName).join(nextName) : value;
+    if (Array.isArray(value)) {
+      for (let index = 0; index < value.length; index += 1) {
+        value[index] = masterWorldReplaceSiteReferences(value[index], previousName, nextName);
+      }
+      return value;
+    }
+    if (value && typeof value === 'object') {
+      Object.keys(value).forEach(key => {
+        value[key] = masterWorldReplaceSiteReferences(value[key], previousName, nextName);
+      });
+    }
+    return value;
+  }
+
+  function masterWorldResolveSiteMap(target) {
+    if (Array.isArray(target?.nodes)) return target;
+    if (Array.isArray(target?.map?.nodes)) return target.map;
+    if (Array.isArray(target?.world?.map?.nodes)) return target.world.map;
+    if (Array.isArray(target?.state?.world?.map?.nodes)) return target.state.world.map;
+    return null;
+  }
+
+  function masterWorldNormalizeGenericSiteNames(target) {
+    const map = masterWorldResolveSiteMap(target);
+    const nodes = Array.isArray(map?.nodes) ? map.nodes : [];
+    if (!nodes.length) return 0;
+
+    const usedNames = new Set(
+      nodes
+        .map(node => String(node?.name || '').trim())
+        .filter(name => name && !MASTER_WORLD_GENERIC_SITE_PATTERN.test(name))
+    );
+    let renamedCount = 0;
+
+    nodes.forEach((node, index) => {
+      const previousName = String(node?.name || '').trim();
+      if (!MASTER_WORLD_GENERIC_SITE_PATTERN.test(previousName)) return;
+      const seed = masterWorldSiteNameSeed(node, index);
+      let attempt = 0;
+      let nextName = masterWorldSiteNameCandidate(seed, attempt);
+      while (usedNames.has(nextName) && attempt < 10000) {
+        attempt += 1;
+        nextName = masterWorldSiteNameCandidate(seed, attempt);
+      }
+      if (usedNames.has(nextName)) throw new Error(`Unable to allocate a unique Master World site name for ${previousName}.`);
+      masterWorldReplaceSiteReferences(node, previousName, nextName);
+      usedNames.add(nextName);
+      renamedCount += 1;
+    });
+
+    return renamedCount;
+  }
 
   function masterWorldBootstrapCurrentReport() {
     const map = state.world?.map;
@@ -19,15 +141,32 @@
   function masterWorldBootstrapImport() {
     const payload = globalThis.BAROTRAUMA_MASTER_WORLD_SAVE;
     if (!payload || payload.schema !== WORLD_SAVE_SCHEMA) return false;
-    if (!masterWorldBootstrapShouldImport()) return false;
+
+    const normalizedPayload = cloneWorldData(payload);
+    const payloadRenamedCount = masterWorldNormalizeGenericSiteNames(normalizedPayload);
+    globalThis.BAROTRAUMA_MASTER_WORLD_SAVE = normalizedPayload;
+
+    if (!masterWorldBootstrapShouldImport()) {
+      const liveRenamedCount = masterWorldNormalizeGenericSiteNames(state.world?.map);
+      if (liveRenamedCount > 0) save();
+      globalThis.BAROTRAUMA_MASTER_WORLD_SITE_NAMING = {
+        version: MASTER_WORLD_SITE_NAMING_VERSION,
+        combinations: MASTER_WORLD_SITE_NAUTICAL_WORDS.length * MASTER_WORLD_SITE_DESIGNATIONS.length * MASTER_WORLD_SITE_CITIES.length,
+        payloadRenamedCount,
+        liveRenamedCount
+      };
+      return false;
+    }
+
     const previousSavedStates = cloneWorldData(normalizeWorldHub().savedStates || []);
     const previousMasterWorldId = state.world?.masterWorldId || state.worldHub?.masterWorldId || '';
-    importWorldSave(payload);
+    importWorldSave(normalizedPayload);
     if (previousSavedStates.length) {
       state.worldHub.savedStates = [...previousSavedStates, ...(state.worldHub.savedStates || [])].slice(0, 30);
     }
     if (previousMasterWorldId && !state.world.masterWorldId) state.world.masterWorldId = previousMasterWorldId;
     if (typeof synchronizeMasterWorldId === 'function') synchronizeMasterWorldId(false);
+    const liveRenamedCount = masterWorldNormalizeGenericSiteNames(state.world?.map);
     if (state.world?.map) {
       if (typeof reconcileWorldStationLevels === 'function') reconcileWorldStationLevels(state.world.map);
       if (typeof seedWorldFactions === 'function') seedWorldFactions(state.world.map, false);
@@ -46,6 +185,12 @@
     globalThis.__BAROTRAUMA_STATION_CORRIDOR_CACHE = null;
     globalThis.__BAROTRAUMA_LOCAL_STATION_TOPOLOGY_CACHE = null;
     globalThis.__BAROTRAUMA_LOCAL_WORLD_TOPOLOGY_CACHE = null;
+    globalThis.BAROTRAUMA_MASTER_WORLD_SITE_NAMING = {
+      version: MASTER_WORLD_SITE_NAMING_VERSION,
+      combinations: MASTER_WORLD_SITE_NAUTICAL_WORDS.length * MASTER_WORLD_SITE_DESIGNATIONS.length * MASTER_WORLD_SITE_CITIES.length,
+      payloadRenamedCount,
+      liveRenamedCount
+    };
     save();
     return true;
   }
@@ -55,7 +200,9 @@
     version: MASTER_WORLD_BOOTSTRAP_VERSION,
     imported: masterWorldBootstrapImported,
     source: 'data/barotrauma/tools/world/master-world-save.json',
-    removesWebRegenerationRequirement: true
+    removesWebRegenerationRequirement: true,
+    siteNamingVersion: MASTER_WORLD_SITE_NAMING_VERSION,
+    siteNameCombinations: MASTER_WORLD_SITE_NAUTICAL_WORDS.length * MASTER_WORLD_SITE_DESIGNATIONS.length * MASTER_WORLD_SITE_CITIES.length
   };
 
   if (!globalThis.__BAROTRAUMA_JOB_SYSTEM_PACKED_LOADING) {
