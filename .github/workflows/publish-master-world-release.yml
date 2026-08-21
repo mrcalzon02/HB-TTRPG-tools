@@ -1,0 +1,97 @@
+name: Publish Master World standalone release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-master-world-release.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build standalone Master World save
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const input = 'data/barotrauma/tools/world/master-world-save.json';
+          const output = 'barotrauma-master-world-save.json';
+          const payload = JSON.parse(fs.readFileSync(input, 'utf8'));
+          const generic = /^(?:Europa|Europan)\s+Site\s+\d+$/i;
+          const nautical = [
+            'Anchor','Beacon','Bilge','Breaker','Breakwater','Bulwark','Capstan','Compass','Current','Deepwater','Drift','Fathom','Gale','Harbor','Helm','Hawser','Keel','Lantern','Leeward','Mariner','Midwatch','Mooring','Nautilus','Pelagic','Portside','Reef','Rigging','Rudder','Seamount','Shoal','Sounder','Sounding','Starboard','Stern','Tidewater','Trawler','Undertow','Wake','Whaler','Windward','Abyssal','Ballast','Binnacle','Bluewater','Bosun','Channel','Drydock','Estuary','Flotsam','Foremast','Headland','Jetty','Longshore','Maelstrom','Offing','Quarterdeck','Roadstead','Seaward','Sound','Wakefield','Whitecap','Yardarm'
+          ];
+          const designations = [
+            'Farm','Survey Station','Factory','Works','Foundry','Refinery','Mine','Relay','Depot','Dockyard','Shipyard','Habitat','Outpost','Laboratory','Observatory','Research Annex','Reactor Station','Pump Station','Cargo Hub','Salvage Yard','Clinic','Security Post','Exchange','Processing Plant','Hydroponics','Drilling Platform','Sonar Post','Maintenance Yard','Storage Vault','Fuel Depot','Fabrication Plant','Aquaculture Farm','Navigation Relay','Communications Array','Power Station','Extraction Site','Manufacturing Hub','Quarantine Post','Research Station','Logistics Hub','Repair Dock','Survey Office','Prospecting Camp','Machine Works','Supply Station','Transit Hub','Cold Storage','Pressure Works','Water Plant','Ore Terminal','Trading Post','Patrol Base','Medical Annex','Archive','Generator Station','Listening Post'
+          ];
+          const cities = [
+            'Amsterdam','Antwerp','Athens','Barcelona','Belfast','Bergen','Berlin','Bordeaux','Bremen','Bristol','Brussels','Bucharest','Budapest','Copenhagen','Dublin','Edinburgh','Genoa','Glasgow','Hamburg','Helsinki','Lisbon','Liverpool','London','Lyon','Madrid','Marseille','Milan','Naples','Oslo','Paris','Prague','Reykjavik','Riga','Rome','Rotterdam','Seville','Split','Stockholm','Tallinn','Trieste','Valencia','Venice','Vienna','Vilnius','Warsaw','Zurich','Arkhangelsk','Astrakhan','Irkutsk','Kazan','Kaliningrad','Khabarovsk','Moscow','Murmansk','Nizhny Novgorod','Novosibirsk','Omsk','Perm','Petrozavodsk','Rostov','Samara','Saratov','Smolensk','Sochi','St Petersburg','Tomsk','Tula','Vladivostok','Volgograd','Voronezh','Yekaterinburg','Anchorage','Baltimore','Boston','Charleston','Chicago','Cleveland','Detroit','Honolulu','Houston','Juneau','Los Angeles','Miami','Mobile','New Orleans','New York','Norfolk','Oakland','Philadelphia','Portland','Providence','San Diego','San Francisco','Savannah','Seattle','Tampa','Tacoma','Galveston','Corpus Christi','Jacksonville','Newport','Duluth','Milwaukee','Astoria'
+          ];
+          function hash(value) {
+            let h = 2166136261;
+            for (const ch of String(value ?? '')) {
+              h ^= ch.charCodeAt(0);
+              h = Math.imul(h, 16777619);
+            }
+            return h >>> 0;
+          }
+          function candidate(seed, attempt) {
+            return `${nautical[hash(`${seed}|nautical|${attempt}`) % nautical.length]} ${designations[hash(`${seed}|designation|${attempt}`) % designations.length]} - ${cities[hash(`${seed}|city|${attempt}`) % cities.length]}`;
+          }
+          function resolveMap(target) {
+            if (Array.isArray(target?.nodes)) return target;
+            if (Array.isArray(target?.map?.nodes)) return target.map;
+            if (Array.isArray(target?.world?.map?.nodes)) return target.world.map;
+            if (Array.isArray(target?.state?.world?.map?.nodes)) return target.state.world.map;
+            return null;
+          }
+          function replaceRefs(value, oldName, newName) {
+            if (typeof value === 'string') return value.includes(oldName) ? value.split(oldName).join(newName) : value;
+            if (Array.isArray(value)) return value.map(v => replaceRefs(v, oldName, newName));
+            if (value && typeof value === 'object') for (const key of Object.keys(value)) value[key] = replaceRefs(value[key], oldName, newName);
+            return value;
+          }
+          const map = resolveMap(payload);
+          if (!map) throw new Error('Master World map not found in save.');
+          const used = new Set(map.nodes.map(n => String(n?.name || '').trim()).filter(n => n && !generic.test(n)));
+          let renamed = 0;
+          map.nodes.forEach((node, index) => {
+            const oldName = String(node?.name || '').trim();
+            if (!generic.test(oldName)) return;
+            const seed = node?.id ? String(node.id) : `ring-${node?.ring ?? 0}|x-${node?.x ?? 0}|y-${node?.y ?? 0}|index-${index}`;
+            let attempt = 0;
+            let next = candidate(seed, attempt);
+            while (used.has(next)) next = candidate(seed, ++attempt);
+            replaceRefs(node, oldName, next);
+            used.add(next);
+            renamed += 1;
+          });
+          payload.standaloneRelease = {
+            generatedAt: new Date().toISOString(),
+            siteNamingVersion: '1.0.0',
+            renamedGenericSites: renamed,
+            availableBaseNameCombinations: nautical.length * designations.length * cities.length
+          };
+          fs.writeFileSync(output, JSON.stringify(payload, null, 2) + '\n');
+          console.log(`Built ${output}; renamed ${renamed} generic sites.`);
+          NODE
+
+      - name: Publish GitHub Release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TAG='master-world-standalone-2026-08-21'
+          gh release create "$TAG" \
+            'barotrauma-master-world-save.json#Barotrauma Master World Save (standalone JSON)' \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title 'Barotrauma Master World Standalone Save — 2026-08-21' \
+            --notes 'Standalone downloadable Master World save for the Barotrauma RPG Tools. Generic Europa/Europan Site number placeholders are replaced with deterministic nautical/facility/city site names.'
