@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('setup','build','verify','package','run','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
+    [ValidateSet('setup','build','verify','package','run','observer','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
     [string]$Command = 'build'
 )
 
@@ -76,7 +76,8 @@ function Build-Application {
     $sources = @(Get-ChildItem -LiteralPath $sourceRoot -Recurse -Filter '*.java' | ForEach-Object FullName)
     if ($sources.Count -eq 0) { throw 'No Java sources were found.' }
     & $javac -encoding UTF-8 --release 17 -d $classesRoot $sources
-    if ($LASTEXITCODE -ne 0) { throw "Java compilation failed with exit code $LASTEXITCODE." }
+    if ($LASTEXITCODE -ne 0) { throw "Java compilation failed with exit code $LASTEXITCODE."
+    }
     if (Test-Path -LiteralPath $resourceRoot) {
         Copy-Item -Path (Join-Path $resourceRoot '*') -Destination $classesRoot -Recurse -Force
     }
@@ -177,6 +178,7 @@ function Run-Class([string]$mainClass, [string[]]$arguments = @()) {
 
 $entryPoints = @{
     'run' = 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication'
+    'observer' = 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldObserverApplication'
     'asset-setup' = 'io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow'
     'world-map' = 'io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow'
     'observation' = 'io.github.mrcalzon02.barotrauma.desktop.observation.ObservationFoundationWindow'
