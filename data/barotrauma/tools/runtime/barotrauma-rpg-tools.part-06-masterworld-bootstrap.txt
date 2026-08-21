@@ -1,8 +1,8 @@
 
-  const MASTER_WORLD_BOOTSTRAP_VERSION = '1.1.0';
+  const MASTER_WORLD_BOOTSTRAP_VERSION = '1.1.1';
   const MASTER_WORLD_BOOTSTRAP_MINIMUM_RINGS = 48;
   const MASTER_WORLD_BOOTSTRAP_MINIMUM_LOCATIONS = 960;
-  const MASTER_WORLD_SITE_NAMING_VERSION = '1.0.0';
+  const MASTER_WORLD_SITE_NAMING_VERSION = '1.0.1';
   const MASTER_WORLD_GENERIC_SITE_PATTERN = /^(?:Europa|Europan)\s+Site\s+\d+$/i;
   const MASTER_WORLD_SITE_NAUTICAL_WORDS = [
     'Anchor', 'Beacon', 'Bilge', 'Breaker', 'Breakwater', 'Bulwark', 'Capstan', 'Compass',
@@ -125,6 +125,16 @@
     return renamedCount;
   }
 
+  const masterWorldGenerateWorldMapBeforeSiteNaming = typeof generateWorldMap === 'function' ? generateWorldMap : null;
+  if (masterWorldGenerateWorldMapBeforeSiteNaming) {
+    generateWorldMap = function generateWorldMapWithSiteNaming(...args) {
+      const result = masterWorldGenerateWorldMapBeforeSiteNaming.apply(this, args);
+      const renamedCount = masterWorldNormalizeGenericSiteNames(state.world?.map);
+      if (renamedCount > 0) save();
+      return result;
+    };
+  }
+
   function masterWorldBootstrapCurrentReport() {
     const map = state.world?.map;
     const nodeCount = Array.isArray(map?.nodes) ? map.nodes.length : 0;
@@ -202,7 +212,8 @@
     source: 'data/barotrauma/tools/world/master-world-save.json',
     removesWebRegenerationRequirement: true,
     siteNamingVersion: MASTER_WORLD_SITE_NAMING_VERSION,
-    siteNameCombinations: MASTER_WORLD_SITE_NAUTICAL_WORDS.length * MASTER_WORLD_SITE_DESIGNATIONS.length * MASTER_WORLD_SITE_CITIES.length
+    siteNameCombinations: MASTER_WORLD_SITE_NAUTICAL_WORDS.length * MASTER_WORLD_SITE_DESIGNATIONS.length * MASTER_WORLD_SITE_CITIES.length,
+    generationNamingGuard: Boolean(masterWorldGenerateWorldMapBeforeSiteNaming)
   };
 
   if (!globalThis.__BAROTRAUMA_JOB_SYSTEM_PACKED_LOADING) {
