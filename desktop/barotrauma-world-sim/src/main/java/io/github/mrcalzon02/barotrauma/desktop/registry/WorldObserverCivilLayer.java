@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Read-only presentation model for population, migration, settlement, faction, and creature activity.
- * It reuses the Observation Registry and never owns simulation mutation.
+ * Read-only presentation model for population, migration, settlement, faction, creature, and institutional activity.
+ * It reuses query-only registries and never owns simulation mutation.
  */
 public final class WorldObserverCivilLayer {
     private static final int QUERY_LIMIT = 2_000;
@@ -34,7 +34,8 @@ public final class WorldObserverCivilLayer {
         return new CivilSnapshot(
                 ObservationRegistry.load(world),
                 ObservationRegistry.migrationFlows(world, -1, QUERY_LIMIT),
-                ObservationRegistry.settlementProjects(world, -1, QUERY_LIMIT));
+                ObservationRegistry.settlementProjects(world, -1, QUERY_LIMIT),
+                WorldObserverInstitutionalLayer.load(world));
     }
 
     public static String world(CivilSnapshot civil) {
@@ -49,7 +50,7 @@ public final class WorldObserverCivilLayer {
         long creaturePressureZones = civil.observation().creaturePopulations().stream()
                 .filter(row -> creaturePressure(row) >= 50).map(CreaturePopulationRow::locationName).distinct().count();
 
-        return "CIVILIZATION / POPULATION LAYERS\n\n"
+        String base = "CIVILIZATION / POPULATION LAYERS\n\n"
                 + "Estimated NPC population: " + summary.npcPopulationTotal() + "\n"
                 + "Station population records: " + summary.npcPopulations() + "\n"
                 + "Population-pressure stations: " + populationStress + "\n"
@@ -58,6 +59,7 @@ public final class WorldObserverCivilLayer {
                 + "Faction presence records: " + summary.factionPresences() + "\n"
                 + "Estimated creatures: " + summary.creatureEstimatedTotal() + "\n"
                 + "High creature-pressure locations: " + creaturePressureZones + "\n";
+        return base + "\n" + WorldObserverInstitutionalLayer.world(civil.institutions());
     }
 
     public static String location(String locationName, CivilSnapshot civil) {
@@ -124,8 +126,8 @@ public final class WorldObserverCivilLayer {
                 .filter(row -> locationName.equals(row.locationName()))
                 .sorted(Comparator.comparingInt(FactionPresenceRow::influence).reversed())
                 .limit(MAX_FACTION_ROWS).toList();
-        out.append("\nFACTION PRESENCE\n");
-        if (factions.isEmpty()) out.append("No faction-presence evidence recorded.\n");
+        out.append("\nLEGACY FACTION PRESENCE EVIDENCE\n");
+        if (factions.isEmpty()) out.append("No legacy faction-presence evidence recorded.\n");
         for (FactionPresenceRow row : factions) {
             out.append("• ").append(value(row.factionKey())).append(" · influence ").append(row.influence())
                     .append(" · ").append(value(row.presenceState())).append("\n")
@@ -146,6 +148,8 @@ public final class WorldObserverCivilLayer {
                     .append("  Migration/territory/nest pressure: ").append(row.migrationPressure()).append(" / ")
                     .append(row.territoryPressure()).append(" / ").append(row.nestStrength()).append("\n");
         }
+
+        out.append("\n").append(WorldObserverInstitutionalLayer.location(locationName, civil.institutions()));
         return out.toString();
     }
 
@@ -185,6 +189,12 @@ public final class WorldObserverCivilLayer {
                 signal.dominantFactionInfluence = clamp(row.influence());
                 signal.dominantFaction = row.factionKey();
             }
+        }
+        // Schema-033+ station control is authoritative. Legacy faction-presence rows remain evidence only.
+        for (var row : civil.institutions().politics()) {
+            MutableSignal signal = working.computeIfAbsent(row.stationName(), ignored -> new MutableSignal());
+            signal.dominantFaction = row.controllingMajorFaction();
+            signal.dominantFactionInfluence = clamp(row.controlScore());
         }
         for (CreaturePopulationRow row : civil.observation().creaturePopulations()) {
             MutableSignal signal = working.computeIfAbsent(row.locationName(), ignored -> new MutableSignal());
@@ -256,11 +266,20 @@ public final class WorldObserverCivilLayer {
 
     public record CivilSnapshot(ObservationRegistry.Snapshot observation,
                                 List<MigrationFlowRow> migrations,
-                                List<SettlementProjectRow> settlements) {
+                                List<SettlementProjectRow> settlements,
+                                WorldObserverInstitutionalLayer.InstitutionalSnapshot institutions) {
         public CivilSnapshot {
             Objects.requireNonNull(observation, "observation");
             migrations = List.copyOf(migrations);
             settlements = List.copyOf(settlements);
+            institutions = Objects.requireNonNull(institutions, "institutions");
+        }
+
+        /** Compatibility constructor for presentation-only fixtures predating institutional projection. */
+        public CivilSnapshot(ObservationRegistry.Snapshot observation,
+                             List<MigrationFlowRow> migrations,
+                             List<SettlementProjectRow> settlements) {
+            this(observation, migrations, settlements, WorldObserverInstitutionalLayer.InstitutionalSnapshot.empty());
         }
     }
 
