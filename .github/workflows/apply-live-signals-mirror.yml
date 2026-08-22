@@ -7,6 +7,7 @@ on:
       - ".github/workflows/apply-live-signals-mirror.yml"
       - "scripts/apply_live_signals_mirror.py"
       - "scripts/apply_live_signals_validation_fixes.py"
+      - "scripts/apply_live_signals_dedup_fixes.py"
   workflow_dispatch:
 
 permissions:
@@ -42,6 +43,9 @@ jobs:
       - name: Apply full-validation fixes
         run: python scripts/apply_live_signals_validation_fixes.py
 
+      - name: Apply duplicate-status fixes
+        run: python scripts/apply_live_signals_dedup_fixes.py
+
       - name: Validate JavaScript syntax
         run: |
           node --check live-signals-laboratory.js
@@ -60,7 +64,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm scripts/apply_live_signals_mirror.py scripts/apply_live_signals_validation_fixes.py .github/workflows/apply-live-signals-mirror.yml
+          git rm scripts/apply_live_signals_mirror.py scripts/apply_live_signals_validation_fixes.py scripts/apply_live_signals_dedup_fixes.py .github/workflows/apply-live-signals-mirror.yml
           git add live-signals-laboratory.js live-signals-laboratory.css scientific-tools-entry.js scripts/validate-live-signals-laboratory.mjs .github/workflows/scientific-tools-extraction.yml docs/live-signals-laboratory-mirror-and-safety.md
           git diff --cached --check
           git commit -m "Validate and consolidate Live Signals Laboratory"
