@@ -42,6 +42,42 @@ jobs:
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Probe alternate public Reddit endpoints
+        id: probe
+        if: steps.migrate.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          python - <<'PY' | tee .ci-results/warhammer-reddit-endpoint-probe.log
+          import urllib.error
+          import urllib.request
+
+          urls = [
+              'https://old.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/',
+              'https://old.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/.json?raw_json=1&limit=1',
+              'https://old.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/.rss',
+              'https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/.rss',
+              'https://www.reddit.com/comments/1vid8o1.json?raw_json=1',
+              'https://api.reddit.com/comments/1vid8o1',
+              'https://www.redditmedia.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/?ref_source=embed&ref=share&embed=true',
+              'https://embed.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/',
+          ]
+          for url in urls:
+              request = urllib.request.Request(url, headers={
+                  'User-Agent': 'Mozilla/5.0 (compatible; Mrcalzon02-Lore-Archive-Probe/1.0)',
+                  'Accept': 'text/html,application/json,application/atom+xml,application/xml;q=0.9,*/*;q=0.8',
+              })
+              try:
+                  with urllib.request.urlopen(request, timeout=20) as response:
+                      body = response.read(4096)
+                      preview = body[:160].decode('utf-8', 'replace').replace('\n', ' ')
+                      print(f'OK {response.status} {response.headers.get("content-type")} bytes>={len(body)} :: {url}')
+                      print(f'  preview: {preview}')
+              except urllib.error.HTTPError as exc:
+                  print(f'HTTP {exc.code} {exc.reason} :: {url}')
+              except Exception as exc:
+                  print(f'ERROR {type(exc).__name__}: {exc} :: {url}')
+          PY
+
       - name: Validate generated archive
         id: validate
         if: steps.migrate.outputs.exit_code == '0'
@@ -71,66 +107,28 @@ jobs:
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Record result and commit successful archive
-        if: always()
+      - name: Commit successful archive
+        if: steps.migrate.outputs.exit_code == '0' && steps.validate.outputs.exit_code == '0'
         id: record
         shell: bash
-        env:
-          MIGRATION_EXIT: ${{ steps.migrate.outputs.exit_code }}
-          VALIDATION_EXIT: ${{ steps.validate.outputs.exit_code }}
         run: |
-          python - <<'PY'
-          import datetime as dt
-          import json
-          import os
-          from pathlib import Path
-
-          migration = os.environ.get('MIGRATION_EXIT') or 'not-run'
-          validation = os.environ.get('VALIDATION_EXIT') or 'not-run'
-          success = migration == '0' and validation == '0'
-          payload = {
-              'workflow': 'Migrate Warhammer Reddit Lore Archive',
-              'recorded_utc': dt.datetime.now(tz=dt.timezone.utc).isoformat().replace('+00:00', 'Z'),
-              'migration_exit': migration,
-              'validation_exit': validation,
-              'success': success,
-              'expected_minimum_story_count': 86,
-              'archive_path': 'warhammer-40k-lore.html',
-              'data_path': 'assets/warhammer-40k/lore/reddit-story-archive.json',
-              'run_id': '${{ github.run_id }}',
-          }
-          Path('.ci-results/warhammer-reddit-lore-migration.json').write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
-          PY
-
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .ci-results/warhammer-reddit-lore-migration.json
-          git add -f .ci-results/warhammer-reddit-lore-migration.log
-          if [ -f .ci-results/warhammer-reddit-lore-validation.log ]; then
-            git add -f .ci-results/warhammer-reddit-lore-validation.log
-          fi
-
-          if [ "${MIGRATION_EXIT:-not-run}" = "0" ] && [ "${VALIDATION_EXIT:-not-run}" = "0" ]; then
-            git add \
-              warhammer-40k-lore.html \
-              assets/warhammer-40k/lore/reddit-story-archive.json \
-              warhammer-40k-workspace-v8.js \
-              warhammer-40k-workspace-v8.css \
-              app-lite-view-mounts.js
-            commit_message='Migrate Reddit fiction archive into Warhammer 40K Lore'
-            echo 'result=success' >> "$GITHUB_OUTPUT"
-          else
-            commit_message='Record failed Warhammer Reddit lore migration'
-            echo 'result=failure' >> "$GITHUB_OUTPUT"
-          fi
-
+          git add \
+            warhammer-40k-lore.html \
+            assets/warhammer-40k/lore/reddit-story-archive.json \
+            warhammer-40k-workspace-v8.js \
+            warhammer-40k-workspace-v8.css \
+            app-lite-view-mounts.js
           if git diff --cached --quiet; then
-            echo 'No migration result changes to commit.'
+            echo 'result=success' >> "$GITHUB_OUTPUT"
+            echo 'Archive already current; no commit required.'
             exit 0
           fi
-          git commit -m "$commit_message"
+          git commit -m 'Migrate Reddit fiction archive into Warhammer 40K Lore'
           git pull --rebase origin main
           git push origin HEAD:main
+          echo 'result=success' >> "$GITHUB_OUTPUT"
 
       - name: Report result to control issue
         if: always() && github.event_name == 'issues'
@@ -139,11 +137,12 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           MIGRATION_EXIT: ${{ steps.migrate.outputs.exit_code }}
           VALIDATION_EXIT: ${{ steps.validate.outputs.exit_code }}
+          RECORD_OUTCOME: ${{ steps.record.outcome }}
           RESULT: ${{ steps.record.outputs.result }}
           RUN_ID: ${{ github.run_id }}
         shell: bash
         run: |
-          if [ "${RESULT:-failure}" = "success" ]; then
+          if [ "${RESULT:-failure}" = "success" ] && [ "${RECORD_OUTCOME:-skipped}" != "failure" ]; then
             cat > /tmp/lore-migration-comment.md <<EOF
           Lore migration completed successfully. The archive and native Lore register were validated and committed to main.
 
@@ -151,18 +150,26 @@ jobs:
           EOF
           else
             {
-              echo "Lore migration failed. migration_exit=${MIGRATION_EXIT:-not-run}; validation_exit=${VALIDATION_EXIT:-not-run}."
+              echo "Lore migration did not complete. migration_exit=${MIGRATION_EXIT:-not-run}; validation_exit=${VALIDATION_EXIT:-not-run}; commit_outcome=${RECORD_OUTCOME:-not-run}."
               echo
               echo "Workflow run: ${RUN_ID}"
               echo
+              echo 'Migration tail:'
               echo '```text'
-              tail -n 45 .ci-results/warhammer-reddit-lore-migration.log 2>/dev/null || true
+              tail -n 35 .ci-results/warhammer-reddit-lore-migration.log 2>/dev/null || true
               echo '```'
+              if [ -f .ci-results/warhammer-reddit-endpoint-probe.log ]; then
+                echo
+                echo 'Endpoint probe:'
+                echo '```text'
+                cat .ci-results/warhammer-reddit-endpoint-probe.log
+                echo '```'
+              fi
             } > /tmp/lore-migration-comment.md
           fi
           gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file /tmp/lore-migration-comment.md
 
-      - name: Fail when migration or validation failed
-        if: always() && (steps.migrate.outputs.exit_code != '0' || steps.validate.outputs.exit_code != '0')
+      - name: Fail when migration, validation, or commit failed
+        if: always() && (steps.migrate.outputs.exit_code != '0' || steps.validate.outputs.exit_code != '0' || steps.record.outcome == 'failure')
         shell: bash
         run: exit 1
