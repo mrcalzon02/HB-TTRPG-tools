@@ -25,7 +25,10 @@ import java.util.concurrent.TimeUnit;
 public final class WorldObserverUnattendedSoakVerification {
     private static final int TICKS_PER_CYCLE = 25;
     private static final long REQUIRED_CYCLES = 4;
-    private static final long DEADLINE_SECONDS = 18;
+    // Windows hosted runners execute the same SQLite-heavy 25-tick cycles materially slower than Linux.
+    // Keep the workload identical and bounded; give slower platforms enough wall-clock time to finish it.
+    private static final long DEADLINE_SECONDS = 60;
+    private static final long NO_PROGRESS_DEADLINE_SECONDS = 30;
     private static final long CLEANUP_DEADLINE_SECONDS = 8;
     private static final long CLEANUP_RETRY_MILLIS = 75;
 
@@ -45,10 +48,21 @@ public final class WorldObserverUnattendedSoakVerification {
                     "Unattended observer fixture created a duplicate scheduler owner.");
 
             long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(DEADLINE_SECONDS);
+            long lastProgressAt = System.nanoTime();
+            long observedCycles = service.health().cyclesCommitted();
             int observerReads = 0;
             while (service.health().cyclesCommitted() < REQUIRED_CYCLES && System.nanoTime() < deadline) {
                 exerciseObserverReads(world);
                 observerReads += 1;
+                long committed = service.health().cyclesCommitted();
+                if (committed > observedCycles) {
+                    observedCycles = committed;
+                    lastProgressAt = System.nanoTime();
+                }
+                if (System.nanoTime() - lastProgressAt > TimeUnit.SECONDS.toNanos(NO_PROGRESS_DEADLINE_SECONDS)) {
+                    throw new IllegalStateException("Passive runtime made no cycle progress for "
+                            + NO_PROGRESS_DEADLINE_SECONDS + " seconds during unattended observer soak.");
+                }
                 Thread.sleep(200L);
             }
 
@@ -56,7 +70,8 @@ public final class WorldObserverUnattendedSoakVerification {
             require(health.running(), "Passive runtime stopped during unattended observer soak.");
             require(health.fault() == null, "Passive runtime faulted during unattended observer soak: " + health.fault());
             require(health.cyclesCommitted() >= REQUIRED_CYCLES,
-                    "Passive runtime did not commit the required unattended cycles.");
+                    "Passive runtime did not commit the required unattended cycles within "
+                            + DEADLINE_SECONDS + " seconds; committed=" + health.cyclesCommitted() + ".");
             require(health.lastCycleCompletedAt() != null,
                     "Passive runtime health did not report a completed cycle.");
             require(health.lastCycleDuration() != null && !health.lastCycleDuration().isNegative(),
