@@ -33,6 +33,19 @@ public final class WorldObserverTimeline {
                     row.vesselName(), row.hazardType(), row.outcome(), row.narrative(),
                     clamp(Math.max(0, row.challenge())), "encounter:" + row.encounterId()));
         }
+        for (var row : passive.missions()) {
+            long tick = row.completedTick() == null ? row.updatedTick() : row.completedTick();
+            int severity = switch (row.status()) {
+                case "FAILED" -> 70;
+                case "ACTIVE", "ASSIGNED" -> Math.max(15, row.difficulty() / 2);
+                default -> 10;
+            };
+            entries.add(new Entry(tick, "MISSION", "MISSION", row.missionId().toString(),
+                    first(row.vessel(), row.target(), row.origin()), row.type() + " · " + row.status(),
+                    row.progress() + "% · " + row.rewardCredits() + " credits",
+                    value(row.origin()) + " → " + value(row.target()), clamp(severity),
+                    "mission:" + row.missionId() + ':' + tick));
+        }
         for (var row : passive.fleetResponseLogs()) {
             var response = passive.fleetResponses().stream()
                     .filter(candidate -> candidate.operationId().equals(row.operationId())).findFirst().orElse(null);
@@ -41,6 +54,15 @@ public final class WorldObserverTimeline {
             entries.add(new Entry(row.tickSequence(), "FLEET_RESPONSE", "FLEET_RESPONSE", row.operationId(),
                     label, row.eventType(), row.summary(), row.summary(),
                     response == null ? 45 : clamp(response.difficulty()), "fleet:" + row.logId()));
+        }
+        for (var row : passive.freight()) {
+            long tick = row.deliveredTick() == null ? row.updatedTick() : row.deliveredTick();
+            String summary = row.quantity() + " × " + value(row.itemName()) + " · " + row.status();
+            entries.add(new Entry(tick, "FREIGHT", "FREIGHT", row.lotId(),
+                    first(row.npcVesselName(), row.destinationStation(), row.sourceStation()),
+                    "Freight · " + row.status(), summary,
+                    value(row.sourceStation()) + " → " + value(row.destinationStation()),
+                    "LOST".equals(row.status()) ? 65 : 12, "freight:" + row.lotId()));
         }
         for (var row : passive.treasury()) {
             entries.add(new Entry(row.tickSequence(), "ECONOMY", "STATION", value(row.stationName()),
@@ -51,6 +73,14 @@ public final class WorldObserverTimeline {
             entries.add(new Entry(row.tickSequence(), "NATURAL", "LOCATION", row.locationName(),
                     row.locationName(), row.eventType(), "Severity " + row.severity(), row.summary(),
                     clamp(row.severity()), "natural:" + row.eventId()));
+        }
+        for (var row : natural.extractions()) {
+            int impact = clamp(Math.max(row.ecologicalImpact(), row.geologicalImpact()));
+            entries.add(new Entry(row.tickSequence(), "EXTRACTION", "RESOURCE_EXTRACTION", row.extractionId(),
+                    row.locationName(), row.resourceType(), row.quantity() + " unit(s) extracted",
+                    value(row.vesselName()) + " · " + row.remainingBefore() + " → " + row.remainingAfter()
+                            + " remaining · " + row.creditsValue() + " credits",
+                    Math.max(10, impact), "extraction:" + row.extractionId()));
         }
 
         ObservationRegistry.Snapshot observation = civil.observation();
