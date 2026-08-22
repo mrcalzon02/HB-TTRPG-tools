@@ -489,7 +489,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         return WorldObserverInspector.world(loaded.registry(), loaded.passive(), donorRoot,
                 loaded.coverage().donorCount(), loaded.coverage().fallbackCount())
                 + "\n\n" + WorldObserverNaturalLayer.world(loaded.natural())
-                + "\n\n" + WorldObserverCivilLayer.world(loaded.civil());
+                + "\n\n" + WorldObserverCivilLayer.world(loaded.civil())
+                + "\n\n" + WorldObserverTimeline.render(loaded.passive(), loaded.natural(), loaded.civil());
     }
 
     private void zoomBy(double factor) {
