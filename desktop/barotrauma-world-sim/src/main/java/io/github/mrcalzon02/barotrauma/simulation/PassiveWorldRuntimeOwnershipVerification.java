@@ -1,6 +1,7 @@
 package io.github.mrcalzon02.barotrauma.simulation;
 
 import io.github.mrcalzon02.barotrauma.persistence.DefaultWorldGenerator;
+import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,14 +17,16 @@ public final class PassiveWorldRuntimeOwnershipVerification {
 
     public static void main(String[] args) throws Exception {
         Path root = Files.createTempDirectory("barotrauma-passive-ownership-");
+        WorldPaths world = null;
         try {
             var generated = DefaultWorldGenerator.create(root.resolve("world"), "Runtime Ownership Verification");
+            world = generated.paths();
             PassiveWorldSimulationService first = PassiveWorldSimulationService.enable(
-                    generated.paths(), Duration.ofSeconds(1), 1);
+                    world, Duration.ofSeconds(1), 1);
             PassiveWorldSimulationService second = PassiveWorldSimulationService.enable(
-                    generated.paths(), Duration.ofSeconds(1), 1);
+                    world, Duration.ofSeconds(1), 1);
             require(first == second, "Repeated enable created more than one process-wide scheduler for a world.");
-            require(PassiveWorldSimulationService.active(generated.paths()) == first,
+            require(PassiveWorldSimulationService.active(world) == first,
                     "Active-world lookup did not retain the canonical scheduler owner.");
 
             AtomicInteger callbacks = new AtomicInteger();
@@ -47,13 +50,15 @@ public final class PassiveWorldRuntimeOwnershipVerification {
             require(callbacks.get() == callbacksAfterClose,
                     "A removed observer listener continued receiving passive-runtime notifications.");
 
-            PassiveWorldSimulationService.disable(generated.paths());
-            require(PassiveWorldSimulationService.active(generated.paths()) == null,
+            PassiveWorldSimulationService.disable(world);
+            require(PassiveWorldSimulationService.active(world) == null,
                     "Disabling Passive Mode left a process-wide scheduler owner registered.");
 
             System.out.println("Passive world scheduler ownership and listener cleanup verification passed.");
         } finally {
-            try { PassiveWorldSimulationService.disable(null); } catch (Exception ignored) { }
+            if (world != null) {
+                try { PassiveWorldSimulationService.disable(world); } catch (Exception ignored) { }
+            }
             deleteTree(root);
         }
     }
