@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "recordType": "spatial-site-generation-test-artifact",
   "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
-  "sourceCommit": "5debe8bb0171a6fbb62b1d0e5f7f454d32253ebd",
+  "sourceCommit": "e1d631ce4d9f6e6acccad96f167a75c5160fc4c1",
   "caseNumber": 31,
   "caseId": "seeded-random-12-hideout",
   "caseKind": "seeded-random",

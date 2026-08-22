@@ -1,7 +1,7 @@
 # Spatial Site Generation Batch Archive
 
 Batch: **2026-08-22-purpose-aware-variety-02-connector-normalized**  
-Source commit tested: **5debe8bb0171a6fbb62b1d0e5f7f454d32253ebd**  
+Source commit tested: **e1d631ce4d9f6e6acccad96f167a75c5160fc4c1**  
 Cases: **32** (19 curated + 13 seeded-random)  
 Acceptance: **PASS**
 
