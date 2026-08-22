@@ -4,12 +4,14 @@ import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.VisualRole;
 import io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
+import io.github.mrcalzon02.barotrauma.observation.ObservationRegistry.SnapshotRow;
 import io.github.mrcalzon02.barotrauma.persistence.NaturalWorldAndFleetRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry.LocationRow;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
+import io.github.mrcalzon02.barotrauma.simulation.ManualWorldStepService;
 import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 
 import javax.swing.BorderFactory;
@@ -71,10 +73,10 @@ import java.util.function.Consumer;
  * Living graphical Europa observer using local Barotrauma textures or independent procedural fallbacks.
  *
  * <p>The window is coupled to the authoritative desktop world. It resumes an already-enabled Passive Mode
- * scheduler, can explicitly run or pause that scheduler, renders in-transit NPC vessels at committed route
- * progress, and keeps a clicked vessel, route, station, location, or timeline record pinned in the evidence
- * inspector while the world continues to advance. Environmental and civilization layers are read-only
- * projections of committed simulation and observation evidence.</p>
+ * scheduler, can explicitly run, pause, or manually step that scheduler authority, renders in-transit NPC
+ * vessels at committed route progress, and keeps a clicked vessel, route, station, location, timeline record,
+ * or historical evidence snapshot pinned in the evidence inspector. Environmental and civilization layers
+ * are read-only projections of committed simulation and observation evidence.</p>
  */
 public final class DonorBackedWorldMapWindow extends JFrame {
     private static final int TIMELINE_VISIBLE_LIMIT = 140;
@@ -94,6 +96,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JButton configureAssetsButton = new JButton("Configure Assets");
     private final JButton enablePassiveButton = new JButton("Run Passive");
     private final JButton disablePassiveButton = new JButton("Pause Passive");
+    private final JButton manualStepButton = new JButton("Step Once");
     private final JButton worldOverviewButton = new JButton("World Overview");
     private final JButton zoomInButton = new JButton("Zoom +");
     private final JButton zoomOutButton = new JButton("Zoom -");
@@ -113,6 +116,10 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JSpinner ticksPerCycle = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
     private final JComboBox<String> timelineCategory = new JComboBox<>(TIMELINE_CATEGORIES);
     private final JSpinner timelineMinimumSeverity = new JSpinner(new SpinnerNumberModel(0, 0, 100, 5));
+    private final JComboBox<String> historySnapshot = new JComboBox<>();
+    private final JButton inspectHistoryButton = new JButton("Inspect Snapshot");
+    private final JButton compareHistoryButton = new JButton("Compare Previous");
+    private final JButton returnEvidenceButton = new JButton("Return to Live Dossier");
     private final JTextArea details = new JTextArea();
     private final DefaultListModel<WorldObserverTimeline.Entry> timelineModel = new DefaultListModel<>();
     private final JList<WorldObserverTimeline.Entry> timelineList = new JList<>(timelineModel);
@@ -128,6 +135,9 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private Selection selection = Selection.world();
     private WorldObserverNavigation.Target recordTarget;
     private String selectedTimelineKey;
+    private List<SnapshotRow> historyRows = List.of();
+    private String historicalSnapshotId;
+    private boolean historicalComparison;
     private boolean suppressTimelineSelection;
     private boolean passiveControlsInitialized;
     private boolean viewFrozen;
@@ -185,6 +195,17 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         mapScroll.getVerticalScrollBar().setUnitIncrement(24);
         mapScroll.getHorizontalScrollBar().setUnitIncrement(24);
         JScrollPane detailsScroll = new JScrollPane(details);
+        JPanel evidencePanel = new JPanel(new BorderLayout(4, 4));
+        JPanel historyControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        historyControls.add(new JLabel("History:"));
+        historySnapshot.setPreferredSize(new Dimension(210, historySnapshot.getPreferredSize().height));
+        historyControls.add(historySnapshot);
+        historyControls.add(inspectHistoryButton);
+        historyControls.add(compareHistoryButton);
+        historyControls.add(returnEvidenceButton);
+        evidencePanel.add(historyControls, BorderLayout.NORTH);
+        evidencePanel.add(detailsScroll, BorderLayout.CENTER);
+
         JPanel timelinePanel = new JPanel(new BorderLayout(4, 4));
         timelinePanel.setBorder(BorderFactory.createTitledBorder("Recent committed world timeline"));
         JPanel timelineControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
@@ -194,23 +215,24 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         timelineControls.add(timelineMinimumSeverity);
         timelinePanel.add(timelineControls, BorderLayout.NORTH);
         timelinePanel.add(new JScrollPane(timelineList), BorderLayout.CENTER);
-        JSplitPane evidenceSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, detailsScroll, timelinePanel);
+        JSplitPane evidenceSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, evidencePanel, timelinePanel);
         evidenceSplit.setDividerLocation(500);
         evidenceSplit.setResizeWeight(0.68);
-        evidenceSplit.setPreferredSize(new Dimension(470, 700));
+        evidenceSplit.setPreferredSize(new Dimension(500, 700));
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapScroll, evidenceSplit);
-        split.setDividerLocation(1010);
-        split.setResizeWeight(0.72);
+        split.setDividerLocation(990);
+        split.setResizeWeight(0.70);
         add(split, BorderLayout.CENTER);
 
         JPanel simulationControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         simulationControls.add(new JLabel("Cadence seconds:"));
         simulationControls.add(cadenceSeconds);
-        simulationControls.add(new JLabel("Ticks per cycle:"));
+        simulationControls.add(new JLabel("Ticks / cycle or step:"));
         simulationControls.add(ticksPerCycle);
         simulationControls.add(enablePassiveButton);
         simulationControls.add(disablePassiveButton);
+        simulationControls.add(manualStepButton);
 
         JPanel layerControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         layerControls.add(new JLabel("Layers:"));
@@ -246,8 +268,15 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         refreshButton.addActionListener(event -> refresh());
         enablePassiveButton.addActionListener(event -> enablePassiveMode());
         disablePassiveButton.addActionListener(event -> disablePassiveMode());
+        manualStepButton.addActionListener(event -> manualStep());
         worldOverviewButton.addActionListener(event -> select(Selection.world()));
         freezeViewButton.addActionListener(event -> toggleViewFreeze());
+        inspectHistoryButton.addActionListener(event -> inspectHistoricalSnapshot(false));
+        compareHistoryButton.addActionListener(event -> inspectHistoricalSnapshot(true));
+        returnEvidenceButton.addActionListener(event -> {
+            clearHistoricalMode();
+            renderSelection();
+        });
         zoomInButton.addActionListener(event -> zoomBy(1.25));
         zoomOutButton.addActionListener(event -> zoomBy(0.80));
         fitMapButton.addActionListener(event -> fitWorld());
@@ -299,7 +328,12 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             viewStatus.setText("NO WORLD");
             return;
         }
-        if (viewFrozen) {
+        if (historicalSnapshotId != null) {
+            SnapshotRow row = historyRows.stream().filter(candidate -> historicalSnapshotId.equals(candidate.snapshotId()))
+                    .findFirst().orElse(null);
+            viewStatus.setText("HISTORICAL EVIDENCE" + (row == null ? "" : " @ tick " + row.tickSequence())
+                    + " · map remains " + (viewFrozen ? "FROZEN" : "LIVE") + " current-state context");
+        } else if (viewFrozen) {
             Long tick = lastLoaded == null ? null : lastLoaded.passive().configuration().currentTickSequence();
             viewStatus.setText("VIEW FROZEN" + (tick == null ? "" : " @ tick " + tick)
                     + " · simulation continues independently");
@@ -362,6 +396,10 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         selection = Selection.world();
         recordTarget = null;
         selectedTimelineKey = null;
+        historyRows = List.of();
+        historicalSnapshotId = null;
+        historicalComparison = false;
+        historySnapshot.removeAllItems();
         clearTimelineSelection();
         timelineModel.clear();
         passiveControlsInitialized = false;
@@ -461,6 +499,36 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         }.execute();
     }
 
+    private void manualStep() {
+        WorldPaths selectedWorld = world;
+        if (selectedWorld == null || busy || PassiveWorldSimulationService.active(selectedWorld) != null) return;
+        long ticks = ((Number) ticksPerCycle.getValue()).longValue();
+        setBusy(true, "Advancing authoritative world by " + ticks + " tick(s)…");
+        new SwingWorker<io.github.mrcalzon02.barotrauma.persistence.PassiveWorldTickTransaction.TickResult, Void>() {
+            @Override protected io.github.mrcalzon02.barotrauma.persistence.PassiveWorldTickTransaction.TickResult
+                    doInBackground() throws Exception {
+                return ManualWorldStepService.step(selectedWorld, ticks);
+            }
+
+            @Override protected void done() {
+                try {
+                    var result = get();
+                    if (!Objects.equals(selectedWorld, world)) return;
+                    assetStatus.setText("Manual step committed · tick " + result.tickSequence());
+                } catch (InterruptedException exception) {
+                    Thread.currentThread().interrupt();
+                    showFailure("Manual step interrupted", exception);
+                } catch (ExecutionException exception) {
+                    showFailure("Manual step failed", cause(exception));
+                } finally {
+                    setBusy(false, assetStatus.getText());
+                    if (!viewFrozen) refresh();
+                    else updateViewStatus();
+                }
+            }
+        }.execute();
+    }
+
     private void attachPassiveListener(PassiveWorldSimulationService service) {
         detachPassiveListener();
         if (service == null) {
@@ -512,6 +580,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                     canvas.setSnapshots(loaded.registry(), loaded.passive(), loaded.natural(), loaded.civil());
                     canvas.setSelected(selection);
                     refreshTimeline(loaded);
+                    refreshHistory(loaded);
                     renderSelection();
                     updateViewStatus();
                     assetStatus.setText("Donor roles " + loaded.coverage().donorCount()
@@ -553,9 +622,48 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         }
     }
 
+    private void refreshHistory(LoadedMap loaded) {
+        String selectedId = selectedHistoryRow() == null ? historicalSnapshotId : selectedHistoryRow().snapshotId();
+        historyRows = WorldObserverHistory.snapshots(loaded.civil().observation());
+        historySnapshot.removeAllItems();
+        int selectedIndex = -1;
+        for (int index = 0; index < historyRows.size(); index++) {
+            SnapshotRow row = historyRows.get(index);
+            historySnapshot.addItem("Tick " + row.tickSequence() + " · " + row.snapshotId());
+            if (selectedId != null && selectedId.equals(row.snapshotId())) selectedIndex = index;
+        }
+        if (selectedIndex >= 0) historySnapshot.setSelectedIndex(selectedIndex);
+        else if (!historyRows.isEmpty()) historySnapshot.setSelectedIndex(0);
+    }
+
+    private SnapshotRow selectedHistoryRow() {
+        int index = historySnapshot.getSelectedIndex();
+        return index >= 0 && index < historyRows.size() ? historyRows.get(index) : null;
+    }
+
+    private void inspectHistoricalSnapshot(boolean comparePrevious) {
+        LoadedMap loaded = lastLoaded;
+        SnapshotRow row = selectedHistoryRow();
+        if (loaded == null || row == null) return;
+        historicalSnapshotId = row.snapshotId();
+        historicalComparison = comparePrevious;
+        recordTarget = null;
+        selectedTimelineKey = null;
+        clearTimelineSelection();
+        renderSelection();
+        updateViewStatus();
+    }
+
+    private void clearHistoricalMode() {
+        historicalSnapshotId = null;
+        historicalComparison = false;
+        updateViewStatus();
+    }
+
     private void navigateTimeline(WorldObserverTimeline.Entry entry) {
         LoadedMap loaded = lastLoaded;
         if (entry == null || loaded == null) return;
+        clearHistoricalMode();
         WorldObserverNavigation.Target target = WorldObserverNavigation.resolve(entry,
                 loaded.registry(), loaded.passive(), loaded.natural(), loaded.civil());
         recordTarget = target;
@@ -584,6 +692,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     }
 
     private void select(Selection requested) {
+        clearHistoricalMode();
         recordTarget = null;
         selectedTimelineKey = null;
         clearTimelineSelection();
@@ -616,7 +725,18 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         }
 
         String text;
-        if (recordTarget != null) {
+        if (historicalSnapshotId != null) {
+            if (historicalComparison) {
+                SnapshotRow previous = WorldObserverHistory.previous(historicalSnapshotId, loaded.civil().observation());
+                text = previous == null
+                        ? WorldObserverHistory.renderSnapshot(historicalSnapshotId, loaded.civil().observation())
+                                + "\n\nNo older committed snapshot is available for comparison.\n"
+                        : WorldObserverHistory.compare(historicalSnapshotId, previous.snapshotId(),
+                                loaded.civil().observation());
+            } else {
+                text = WorldObserverHistory.renderSnapshot(historicalSnapshotId, loaded.civil().observation());
+            }
+        } else if (recordTarget != null) {
             text = WorldObserverRecordInspector.render(recordTarget, loaded.passive(), loaded.natural(), loaded.civil());
             if (recordTarget.anchor().present()) {
                 text += "\n\nMAP ANCHOR\n" + recordTarget.anchor().kind() + " · "
@@ -643,6 +763,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         }
         details.setText(text);
         details.setCaretPosition(0);
+        updateViewStatus();
     }
 
     private String missingSelection(LoadedMap loaded) {
@@ -658,6 +779,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 loaded.coverage().donorCount(), loaded.coverage().fallbackCount())
                 + "\n\n" + WorldObserverNaturalLayer.world(loaded.natural())
                 + "\n\n" + WorldObserverCivilLayer.world(loaded.civil())
+                + "\n\n" + WorldObserverHistory.renderIndex(loaded.civil().observation())
                 + "\n\nRECENT WORLD TIMELINE\nUse the interactive timeline pane below to filter and open committed causal records.\n";
     }
 
@@ -715,11 +837,16 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         freezeViewButton.setEnabled(!busy && worldOpen);
         enablePassiveButton.setEnabled(!busy && worldOpen && !passiveRunning);
         disablePassiveButton.setEnabled(!busy && passiveRunning);
+        manualStepButton.setEnabled(!busy && worldOpen && !passiveRunning);
         cadenceSeconds.setEnabled(!busy && worldOpen && !passiveRunning);
         ticksPerCycle.setEnabled(!busy && worldOpen && !passiveRunning);
         timelineList.setEnabled(!busy && worldOpen);
         timelineCategory.setEnabled(worldOpen);
         timelineMinimumSeverity.setEnabled(worldOpen);
+        historySnapshot.setEnabled(worldOpen && !historyRows.isEmpty());
+        inspectHistoryButton.setEnabled(worldOpen && !historyRows.isEmpty());
+        compareHistoryButton.setEnabled(worldOpen && historyRows.size() > 1);
+        returnEvidenceButton.setEnabled(worldOpen && historicalSnapshotId != null);
         zoomInButton.setEnabled(!busy);
         zoomOutButton.setEnabled(!busy);
         fitMapButton.setEnabled(!busy);
