@@ -845,3 +845,7 @@ body.warhammer-archive-active #warhammer-40k{min-height:100vh;padding:0}
   #warhammer-40k .wh-filter,
   #warhammer-40k .wh-record{transition:none!important}
 }
+
+
+/* Reddit Lore archive integration */
+.wh-lore-panel{padding:0;min-width:0}.wh-lore-register-heading{margin:0 0 14px;padding:18px 20px;border:1px solid rgba(215,179,95,.32);background:rgba(11,15,16,.88)}.wh-lore-register-heading h2{margin:.2rem 0 .45rem}.wh-lore-register-heading p:last-child{margin-bottom:0}.wh-lore-frame{display:block;width:100%;min-height:82vh;height:calc(100vh - 230px);border:1px solid rgba(215,179,95,.36);background:#090b0c}.wh-lore-panel[hidden]{display:none!important}@media(max-width:800px){.wh-lore-frame{height:78vh;min-height:620px}}
