@@ -195,7 +195,7 @@ public final class WorldObserverRecordInspector {
                 + "Immigration / emigration: " + row.immigration() + " / " + row.emigration() + "\n"
                 + "Disaster losses: " + row.disasterLosses() + "\n"
                 + "Cause: " + value(row.primaryCause()) + "\n"
-                + "Source: " + value(row.sourceEntityId()) + "\n"
+                + "Evidence: " + value(row.evidenceKey()) + "\n"
                 + "Reconciliation: " + value(row.reconciliationStatus()) + "\n\n"
                 + value(row.summary()) + "\n";
     }
@@ -212,8 +212,10 @@ public final class WorldObserverRecordInspector {
                 + "Losses / stranded: " + row.losses() + " / " + row.stranded() + "\n"
                 + "Transport: " + value(row.transportName()) + "\n"
                 + "Progress: " + row.progressTicks() + " / " + value(row.durationTicks()) + "\n"
-                + "Created / updated / completed: " + row.createdTick() + " / " + row.updatedTick() + " / "
-                + value(row.completedTick()) + "\n\n" + value(row.summary()) + "\n";
+                + "Created / updated: " + row.createdTick() + " / " + row.updatedTick() + "\n"
+                + "Preparation / departure / arrival / return: " + value(row.preparationTick()) + " / "
+                + value(row.departureTick()) + " / " + value(row.arrivalTick()) + " / " + value(row.returnTick()) + "\n\n"
+                + value(row.summary()) + "\n";
     }
 
     private static String settlement(String id, WorldObserverCivilLayer.CivilSnapshot civil) {
@@ -244,7 +246,8 @@ public final class WorldObserverRecordInspector {
                 + "ID / tick: " + row.eventId() + " / " + row.tickSequence() + "\n"
                 + "Entity: " + row.entityType() + " / " + row.entityId() + "\n"
                 + "Category / cause: " + row.category() + " / " + value(row.primaryCause()) + "\n"
-                + "Source: " + value(row.sourceEntityType()) + " / " + value(row.sourceEntityId()) + "\n"
+                + "Evidence: " + value(row.evidenceKey()) + "\n"
+                + "Contributing factors: " + value(row.contributingFactors()) + "\n"
                 + "Magnitude / confidence: " + row.magnitude() + " / " + row.confidence() + "\n"
                 + "Visibility: " + row.visibility() + "\n\n" + value(row.summary()) + "\n";
     }
