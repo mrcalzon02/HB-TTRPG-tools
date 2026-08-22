@@ -1,6 +1,8 @@
 package io.github.mrcalzon02.barotrauma.persistence;
 
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
+import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock.ClockSnapshot;
+import io.github.mrcalzon02.barotrauma.simulation.DeterministicSimulationClock.SchedulerState;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.Locale;
 
@@ -120,8 +124,77 @@ public final class DailyNewspaperVerification {
                         "DELETE FROM daily_newspaper_edition WHERE edition_id='" + sql(editionId) + "'",
                         "Sealed newspaper editions are immutable.");
             }
+
+            verifyJavaBackfillSnapshot(root.resolve("java-backfill-world"));
         } finally {
             deleteTree(root);
+        }
+    }
+
+    private static void verifyJavaBackfillSnapshot(Path worldRoot) throws Exception {
+        WorldPaths world = DefaultWorldGenerator.create(worldRoot, "Daily Newspaper Java Backfill Verification").paths();
+        DailyNewspaperInstaller.install(world);
+        String stationId;
+        String stationName;
+        String worldId;
+
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + world.database())) {
+            configure(connection);
+            worldId = text(connection, "SELECT world_id FROM world_metadata LIMIT 1");
+            stationId = text(connection, "SELECT station_id FROM world_station ORDER BY station_id LIMIT 1");
+            stationName = text(connection,
+                    "SELECT display_name FROM world_station WHERE station_id='" + sql(stationId) + "'");
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("UPDATE station_simulation_state SET credits=98765,supplies=654,ore=88,"
+                        + "industry=71,security=82,integrity=93,threat=17,research=29 WHERE station_id='"
+                        + sql(stationId) + "'");
+            }
+            try (PreparedStatement event = connection.prepareStatement(
+                    "INSERT INTO station_event(event_id,world_id,station_id,tick_sequence,canonical_time,event_type,"
+                            + "severity,headline,narrative,cause_type,deterministic_key,visibility,correlation_id,"
+                            + "policy_version,created_at) VALUES(?,?,?,?,?,'DELIVERY',4,?,?,?,?, 'OBSERVED',?,1,?)")) {
+                event.setString(1, "daily-news-java-backfill-event");
+                event.setString(2, worldId);
+                event.setString(3, stationId);
+                event.setLong(4, 1439L);
+                event.setString(5, "2175-01-01T23:59:00Z");
+                event.setString(6, "Backfill convoy closes the daily ledger");
+                event.setString(7, "A committed convoy delivery was recorded before the simulation-day boundary.");
+                event.setString(8, "DAILY_NEWS_JAVA_BACKFILL_VERIFICATION");
+                event.setString(9, "daily-news-java-backfill:2175-01-01");
+                event.setString(10, "daily-news-java-backfill:2175-01-01");
+                event.setString(11, "2175-01-01T23:59:00Z");
+                event.executeUpdate();
+            }
+        }
+
+        Instant realEpoch = Instant.parse("2175-01-01T00:00:00Z");
+        ClockSnapshot before = new ClockSnapshot(Instant.parse("2175-01-01T23:59:00Z"), realEpoch,
+                1439L, Duration.ofMinutes(1), true, SchedulerState.PAUSED);
+        ClockSnapshot after = new ClockSnapshot(Instant.parse("2175-01-02T00:00:00Z"), realEpoch,
+                1440L, Duration.ofMinutes(1), true, SchedulerState.PAUSED);
+        DailyNewspaperArchive.sealClosedDays(world, before, after);
+
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + world.database())) {
+            configure(connection);
+            String articleId = text(connection, "SELECT article_id FROM daily_newspaper_article WHERE source_key="
+                    + "'station:daily-news-java-backfill-event' LIMIT 1");
+            String body = text(connection,
+                    "SELECT body FROM daily_newspaper_article WHERE article_id='" + sql(articleId) + "'");
+            String conditions = text(connection,
+                    "SELECT conditions_snapshot FROM daily_newspaper_article WHERE article_id='" + sql(articleId) + "'");
+            require(body.contains("Backfill convoy closes the daily ledger")
+                            && body.contains(stationName.toUpperCase(Locale.ROOT)),
+                    "Java newspaper backfill did not preserve the source event and station dateline.");
+            require(conditions.contains("Credits: 98765")
+                            && conditions.contains("Supplies: 654")
+                            && conditions.contains("Ore: 88")
+                            && conditions.contains("Industry: 71")
+                            && conditions.contains("Security: 82")
+                            && conditions.contains("Integrity: 93")
+                            && conditions.contains("Threat: 17")
+                            && conditions.contains("Research: 29"),
+                    "Java newspaper backfill read one or more station-condition columns incorrectly.");
         }
     }
 
@@ -175,6 +248,6 @@ public final class DailyNewspaperVerification {
 
     public static void main(String[] args) throws Exception {
         verifyContract();
-        System.out.println("Daily newspaper midnight snapshot and immutability verification passed.");
+        System.out.println("Daily newspaper midnight, Java backfill snapshot, and immutability verification passed.");
     }
 }
