@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 /** Dependency-free filesystem, locking, atomic-write, and database-schema contracts. */
 public final class WorldStorageContracts {
-    public static final int DATABASE_SCHEMA_VERSION = 34;
+    public static final int DATABASE_SCHEMA_VERSION = 35;
     private static final Pattern SAFE_SLUG = Pattern.compile("[a-z0-9]+(?:-[a-z0-9]+)*");
 
     static {
@@ -200,6 +200,7 @@ public final class WorldStorageContracts {
     public static List<String> schema032Statements() { return SettlementPhysicalSupportHardeningSchema.statements(); }
     public static List<String> schema033Statements() { return OrganizationFactionSchema.statements(); }
     public static List<String> schema034Statements() { return OrganizationOperationsSchema.statements(); }
+    public static List<String> schema035Statements() { return InstitutionalEconomySchema.statements(); }
 
     public static String slug(String displayName) {
         String value = displayName.toLowerCase(Locale.ROOT)
