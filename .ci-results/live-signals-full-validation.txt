@@ -1,0 +1,8 @@
+Live Signals full validation failed.
+Source commit: d019dc9736b24dfb3fbaf751c54ebb2cfea44373
+Run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32561818353
+
+== mirror migration ==
+/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/apply_live_signals_mirror.py:357: SyntaxWarning: invalid escape sequence '\/'
+  "  /no interpolation or gap filling/i,/Signals Laboratory mirror/,/Live band harvesting controls/,/Documentation \/ safety \/ legality audit ledger/,/bandHarvestPreflight/,/buildBandHarvestPlan/,/startBandHarvest/,/regulatoryLimitsEnforced/,/hardwareLimitsEnforced/\n",
+constant exports: expected exactly one anchor, found 0
