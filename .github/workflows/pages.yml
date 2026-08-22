@@ -17,6 +17,8 @@ on:
       - "docs/**"
       - "package.json"
       - "package-lock.json"
+      - "sitemap.xml"
+      - "robots.txt"
       - ".nojekyll"
       - "CNAME"
   workflow_dispatch:
