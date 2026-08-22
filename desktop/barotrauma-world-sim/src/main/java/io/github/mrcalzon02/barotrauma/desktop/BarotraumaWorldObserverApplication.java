@@ -1,8 +1,8 @@
 package io.github.mrcalzon02.barotrauma.desktop;
 
 import io.github.mrcalzon02.barotrauma.desktop.assets.BarotraumaDesktopTheme;
-import io.github.mrcalzon02.barotrauma.desktop.registry.DailyNewspaperTickerWindow;
 import io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow;
+import io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNewsTickerBar;
 import io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverTimeControlBar;
 
 import javax.swing.SwingUtilities;
@@ -27,15 +27,15 @@ public final class BarotraumaWorldObserverApplication {
             }
             BarotraumaDesktopTheme.install();
 
-            // Construct the ticker first so its world-session listener installs the midnight newspaper
-            // trigger before the map listener can resume an already-enabled Passive Mode scheduler.
-            DailyNewspaperTickerWindow ticker = new DailyNewspaperTickerWindow();
+            // Register the embedded news ticker with the shared world session before the map window is
+            // constructed. Its world listener therefore installs the midnight newspaper archive before
+            // the map listener can resume an already-enabled Passive Mode scheduler.
+            WorldObserverNewsTickerBar newsTicker = new WorldObserverNewsTickerBar();
             DonorBackedWorldMapWindow window = new DonorBackedWorldMapWindow();
+            newsTicker.installInto(window);
             WorldObserverTimeControlBar.install(window);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
-            ticker.setLocation(window.getX() + 70, window.getY() + 90);
-            ticker.setVisible(true);
         });
     }
 }
