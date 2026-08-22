@@ -9,6 +9,7 @@ on:
       - "scripts/apply_live_signals_mirror.py"
       - "scripts/apply_live_signals_validation_fixes.py"
       - "scripts/apply_live_signals_dedup_fixes.py"
+      - "scripts/fix_live_signals_validator_expectation.py"
   workflow_dispatch:
 
 permissions:
@@ -52,6 +53,8 @@ jobs:
             python scripts/apply_live_signals_validation_fixes.py &&
             echo '== duplicate-status fixes ==' &&
             python scripts/apply_live_signals_dedup_fixes.py &&
+            echo '== align validator with canonical UI ==' &&
+            python scripts/fix_live_signals_validator_expectation.py &&
             echo '== javascript syntax ==' &&
             node --check live-signals-laboratory.js &&
             node --check scientific-tools-entry.js &&
@@ -103,7 +106,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm scripts/fix_live_signals_migration_anchor.py scripts/apply_live_signals_mirror.py scripts/apply_live_signals_validation_fixes.py scripts/apply_live_signals_dedup_fixes.py .github/workflows/apply-live-signals-mirror.yml
+          git rm scripts/fix_live_signals_migration_anchor.py scripts/apply_live_signals_mirror.py scripts/apply_live_signals_validation_fixes.py scripts/apply_live_signals_dedup_fixes.py scripts/fix_live_signals_validator_expectation.py .github/workflows/apply-live-signals-mirror.yml
           if [ -f .ci-results/live-signals-full-validation.txt ]; then
             git rm -f .ci-results/live-signals-full-validation.txt
           fi
