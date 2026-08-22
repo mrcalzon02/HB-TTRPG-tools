@@ -6,6 +6,7 @@ on:
       - 'scripts/archive_spatial_site_batch.mjs'
       - 'semantic-spatial-engine.js'
       - 'tests/spatial-connector-normalization.test.js'
+      - 'scripts/.run-spatial-batch-trigger'
   workflow_dispatch:
 
 permissions:
