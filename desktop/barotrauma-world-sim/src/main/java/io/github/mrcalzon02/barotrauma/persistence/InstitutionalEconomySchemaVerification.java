@@ -44,11 +44,14 @@ public final class InstitutionalEconomySchemaVerification {
             String engineer = text(connection,
                     "SELECT organization_id FROM world_organization WHERE home_station_id='station-2' "
                             + "AND organization_key LIKE 'local-institution:%:engineering' LIMIT 1");
-            String lender = text(connection,
-                    "SELECT organization_id FROM world_organization WHERE home_station_id='station-2' "
-                            + "AND organization_key LIKE 'local-institution:%:credit' LIMIT 1");
+            String expectedLender = text(connection,
+                    "SELECT p.organization_id FROM organization_station_presence p "
+                            + "JOIN world_organization o ON o.organization_id=p.organization_id "
+                            + "WHERE p.station_id='station-2' AND o.organization_type IN ('BANK','CREDIT_UNION') "
+                            + "AND p.organization_id<>'" + engineer + "' "
+                            + "ORDER BY p.economic_influence DESC,p.organization_id LIMIT 1");
             long lenderBefore = scalar(connection,
-                    "SELECT treasury FROM organization_finance_state WHERE organization_id='" + lender + "'");
+                    "SELECT treasury FROM organization_finance_state WHERE organization_id='" + expectedLender + "'");
 
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("UPDATE organization_finance_state SET treasury=1000 WHERE organization_id='" + engineer + "'");
@@ -63,7 +66,12 @@ public final class InstitutionalEconomySchemaVerification {
                             "SELECT COUNT(*) FROM organization_operation_partner WHERE operation_id='institutional-build' "
                                     + "AND partner_role IN ('FINANCE','LABOR','LOGISTICS')") == 3,
                     "Construction did not recruit finance, labor and logistics partners.");
-            require(lender.equals(text(connection,
+            String selectedLender = text(connection,
+                    "SELECT partner_organization_id FROM organization_operation_partner "
+                            + "WHERE operation_id='institutional-build' AND partner_role='FINANCE'");
+            require(expectedLender.equals(selectedLender),
+                    "Construction did not select the strongest eligible finance presence.");
+            require(selectedLender.equals(text(connection,
                             "SELECT financing_organization_id FROM organization_operation_finance "
                                     + "WHERE operation_id='institutional-build'")),
                     "Financing partner was not synchronized independently of trigger execution order.");
@@ -75,7 +83,7 @@ public final class InstitutionalEconomySchemaVerification {
                             "SELECT debt FROM organization_finance_state WHERE organization_id='" + engineer + "'") == borrowed,
                     "Sponsor debt does not equal the financed construction gap.");
             require(scalar(connection,
-                            "SELECT treasury FROM organization_finance_state WHERE organization_id='" + lender + "'")
+                            "SELECT treasury FROM organization_finance_state WHERE organization_id='" + selectedLender + "'")
                             == lenderBefore - borrowed,
                     "Lender treasury did not fund the recorded loan draw.");
             require(scalar(connection,
@@ -93,7 +101,7 @@ public final class InstitutionalEconomySchemaVerification {
                             "SELECT debt FROM organization_finance_state WHERE organization_id='" + engineer + "'") == 0,
                     "Successful financed project did not repay principal.");
             require(scalar(connection,
-                            "SELECT revenue_total FROM organization_finance_state WHERE organization_id='" + lender + "'") > 0,
+                            "SELECT revenue_total FROM organization_finance_state WHERE organization_id='" + selectedLender + "'") > 0,
                     "Financing organization did not receive a lending return.");
             require(scalar(connection,
                             "SELECT COUNT(*) FROM organization_station_asset WHERE source_operation_id='institutional-build'") == 1,
