@@ -6,13 +6,15 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createHBFoundryAPI(root) {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const scriptElement = root?.document?.currentScript || null;
   const defaultBase = root?.location?.href || 'https://mrcalzon02.github.io/HB-TTRPG-tools/';
   const BASE_URL = new URL('.', scriptElement?.src || defaultBase);
   const MANIFEST_URL = new URL('api/foundry-capabilities.json', BASE_URL);
   const SEARCH_INDEX_URL = new URL('search-index.json', BASE_URL);
+  const COLLECTIONS_URL = new URL('api/resource-collections.json', BASE_URL);
   const manifestPromise = { value: null };
+  const collectionsPromise = { value: null };
   const scriptPromises = new Map();
   const resourceCache = new Map();
 
@@ -35,6 +37,11 @@
   async function manifest() {
     if (!manifestPromise.value) manifestPromise.value = fetchJson(MANIFEST_URL);
     return manifestPromise.value;
+  }
+
+  async function collectionManifest() {
+    if (!collectionsPromise.value) collectionsPromise.value = fetchJson(COLLECTIONS_URL).catch(() => ({ resources: [] }));
+    return collectionsPromise.value;
   }
 
   function matches(entry, filter = {}) {
@@ -71,16 +78,30 @@
     return clone((data.laboratories || []).filter(entry => matches(entry, filter)));
   }
 
+  async function allResourceDescriptors() {
+    const [data, extras] = await Promise.all([manifest(), collectionManifest()]);
+    const merged = new Map();
+    for (const entry of data.resources || []) merged.set(entry.id, entry);
+    for (const entry of extras.resources || []) merged.set(entry.id, { ...(merged.get(entry.id) || {}), ...entry });
+    return [...merged.values()];
+  }
+
   async function listResources(filter = {}) {
-    const data = await manifest();
-    return clone((data.resources || []).filter(entry => matches(entry, filter)));
+    return clone((await allResourceDescriptors()).filter(entry => matches(entry, filter)));
   }
 
   async function resourceDescriptor(id) {
-    const data = await manifest();
-    const entry = (data.resources || []).find(item => item.id === id);
+    const entry = (await allResourceDescriptors()).find(item => item.id === id);
     if (!entry) fail(`Unknown resource: ${id}`);
     return entry;
+  }
+
+  async function getPath(path, options = {}) {
+    const url = sameOriginUrl(path);
+    const response = await fetch(url, { cache: options.refresh ? 'reload' : 'no-cache' });
+    if (!response.ok) fail(`${path} returned HTTP ${response.status}.`);
+    const format = options.format || (/\.json(?:$|\?)/i.test(url.pathname) ? 'json' : 'text');
+    return format === 'json' && !options.raw ? response.json() : response.text();
   }
 
   async function getResource(id, options = {}) {
@@ -152,6 +173,65 @@
     return results;
   }
 
+  async function expandResourceIndex(id) {
+    const descriptor = await resourceDescriptor(id);
+    if (!descriptor.indexRules?.length) fail(`${id} is not registered as an expandable resource index.`);
+    const data = await getResource(id);
+    const children = [];
+    const seen = new Set();
+    for (const rule of descriptor.indexRules) {
+      const values = data?.[rule.key];
+      if (!Array.isArray(values)) continue;
+      for (const value of values) {
+        const raw = typeof value === 'string' ? value : value?.path;
+        if (!raw) continue;
+        const path = `${rule.base || ''}${raw}`.replace(/^\.\//, '');
+        if (seen.has(path)) continue;
+        seen.add(path);
+        children.push({
+          id: `${id}::${path}`,
+          parentId: id,
+          title: typeof value === 'object' && value.title ? value.title : path.split('/').pop(),
+          workspace: descriptor.workspace,
+          kind: rule.kind || descriptor.childKind || 'collection-member',
+          format: /\.json$/i.test(path) ? 'json' : /\.html?$/i.test(path) ? 'html' : 'text',
+          path,
+          tags: [...new Set([...(descriptor.tags || []), ...(rule.tags || [])])]
+        });
+      }
+    }
+    return children;
+  }
+
+  async function searchCollection(id, queryValue, options = {}) {
+    const query = normalize(queryValue);
+    if (!query) fail('searchCollection requires a non-empty query.');
+    const maxResults = Math.max(1, Math.min(500, Number(options.maxResults) || 80));
+    const children = await expandResourceIndex(id);
+    const results = [];
+    for (const child of children) {
+      if (results.length >= maxResults) break;
+      try {
+        const data = await getPath(child.path, { format: child.format === 'json' ? 'json' : 'text' });
+        if (child.format === 'json') walk(data, query, child.id, [], results, maxResults);
+        else {
+          const text = stripHtml(data);
+          const normalized = normalize(text);
+          let offset = 0;
+          while (results.length < maxResults) {
+            const at = normalized.indexOf(query, offset);
+            if (at < 0) break;
+            results.push({ resourceId: child.id, parentId: id, path: child.path, value: text.slice(Math.max(0, at - 140), at + 300) });
+            offset = at + query.length;
+          }
+        }
+      } catch (error) {
+        if (options.includeErrors) results.push({ resourceId: child.id, parentId: id, path: child.path, error: error.message });
+      }
+    }
+    return results;
+  }
+
   function resolveGlobal(path) {
     const parts = String(path || '').split('.').filter(Boolean);
     let value = root;
@@ -164,7 +244,7 @@
     const url = sameOriginUrl(path).href;
     if (scriptPromises.has(url)) return scriptPromises.get(url);
     const existing = [...root.document.scripts].find(script => script.src === url || script.src.split('?')[0] === url);
-    if (existing && existing.dataset.hbFoundryLoaded === 'true') return Promise.resolve();
+    if (existing && (existing.dataset.hbFoundryLoaded === 'true' || root.document.readyState !== 'loading')) return Promise.resolve();
     const promise = new Promise((resolve, reject) => {
       const script = existing || root.document.createElement('script');
       const done = () => { script.dataset.hbFoundryLoaded = 'true'; resolve(); };
@@ -244,7 +324,9 @@
     version: VERSION,
     baseUrl: BASE_URL.href,
     manifestUrl: MANIFEST_URL.href,
+    collectionsUrl: COLLECTIONS_URL.href,
     manifest,
+    collectionManifest,
     catalog,
     listCapabilities,
     describe,
@@ -253,7 +335,10 @@
     listLaboratories,
     listResources,
     getResource,
+    getPath,
+    expandResourceIndex,
     searchResources,
+    searchCollection,
     siteIndex
   });
 });
