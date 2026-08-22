@@ -14,6 +14,7 @@ $libraryRoot = Join-Path $projectRoot 'lib'
 $applicationJar = Join-Path $buildRoot 'barotrauma-world-sim.jar'
 $releasePropertiesPath = Join-Path $projectRoot 'release.properties'
 $packageInputRoot = Join-Path $buildRoot 'package-input'
+$appImageRoot = Join-Path $buildRoot 'observer-app-image'
 $releaseRoot = Join-Path $buildRoot 'release'
 $sqliteVersion = '3.53.1.0'
 $sqliteSha256 = '28aceecfcc9535645bd19fa988385703c7b89982c1506a6855f5942b4032eca6'
@@ -112,25 +113,48 @@ function Package-Application {
     Build-Application
     $jpackage = Resolve-JdkTool 'jpackage'
     $release = Read-ReleaseProperties
+    $applicationName = 'Barotrauma World Observer'
+    $observerMain = 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldObserverApplication'
 
-    foreach ($path in @($packageInputRoot, $releaseRoot)) {
+    foreach ($path in @($packageInputRoot, $appImageRoot, $releaseRoot)) {
         if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Recurse -Force }
         New-Item -ItemType Directory -Path $path -Force | Out-Null
     }
     Copy-Item -LiteralPath $applicationJar -Destination $packageInputRoot -Force
     Copy-Item -LiteralPath $sqliteJar -Destination $packageInputRoot -Force
 
-    $arguments = @(
-        '--type', 'msi',
-        '--dest', $releaseRoot,
+    $commonArguments = @(
         '--input', $packageInputRoot,
-        '--name', 'Barotrauma World Simulation Toolbox',
+        '--name', $applicationName,
         '--main-jar', (Split-Path -Leaf $applicationJar),
-        '--main-class', 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication',
+        '--main-class', $observerMain,
         '--app-version', $release.Version,
         '--vendor', "Calzon's TTRPG Foundry",
-        '--description', 'Local Java 17 Barotrauma campaign world simulation and observation runtime.',
-        '--java-options', '--enable-native-access=ALL-UNNAMED',
+        '--description', 'Living standalone observer for passive Barotrauma world simulation, NPC voyages, stations, trade, hazards, migration, settlement, and committed evidence.',
+        '--java-options', '--enable-native-access=ALL-UNNAMED'
+    )
+
+    $appImageArguments = @(
+        '--type', 'app-image',
+        '--dest', $appImageRoot
+    ) + $commonArguments
+    & $jpackage @appImageArguments
+    if ($LASTEXITCODE -ne 0) { throw "Observer app-image packaging failed with exit code $LASTEXITCODE." }
+
+    $launcher = Join-Path $appImageRoot "$applicationName/$applicationName.exe"
+    if (-not (Test-Path -LiteralPath $launcher -PathType Leaf)) {
+        throw "Packaged World Observer executable was not found: $launcher"
+    }
+    & $launcher '--verify-launch'
+    if ($LASTEXITCODE -ne 0) {
+        throw "Packaged World Observer executable smoke test failed with exit code $LASTEXITCODE."
+    }
+    Write-Host "Verified double-clickable observer launcher: $launcher"
+
+    $arguments = @(
+        '--type', 'msi',
+        '--dest', $releaseRoot
+    ) + $commonArguments + @(
         '--win-dir-chooser',
         '--win-menu',
         '--win-menu-group', "Calzon's TTRPG Foundry",
@@ -205,8 +229,20 @@ switch ($Command) {
         $verifications = @(
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldObserverApplication'; Arguments=@('--verify-launch') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverProjectionVerification'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverInspectorVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNaturalLayerVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverCivilLayerVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverLevelOfDetailVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverTimelineVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNavigationVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverHistoryVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.simulation.ManualWorldStepServiceVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.simulation.PassiveWorldCatchUpPolicyVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.simulation.PassiveWorldRestartCatchUpVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.simulation.PassiveWorldRuntimeOwnershipVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverUnattendedSoakVerification'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22Inspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.official.BarotraumaSaveInspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts'; Arguments=@() }
@@ -217,7 +253,7 @@ switch ($Command) {
                 throw "$($verification.MainClass) failed with exit code $LASTEXITCODE."
             }
         }
-        Write-Host 'Complete Gradle-free desktop verification passed.'
+        Write-Host 'Complete Gradle-free desktop and Living World Observer verification passed.'
     }
     default { Run-Class $entryPoints[$Command] }
 }

@@ -5,12 +5,17 @@ import io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindo
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import java.util.Arrays;
 
 /** Dedicated entry point for the living passive Barotrauma world observer. */
 public final class BarotraumaWorldObserverApplication {
     private BarotraumaWorldObserverApplication() { }
 
     public static void main(String[] args) {
+        if (args != null && Arrays.asList(args).contains("--verify-launch")) {
+            System.out.println("Barotrauma World Observer launcher verification passed.");
+            return;
+        }
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
