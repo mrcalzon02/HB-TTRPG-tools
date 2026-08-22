@@ -80,15 +80,21 @@ public final class OrganizationOperationsSchemaVerification {
 
             String separatists = text(connection,
                     "SELECT organization_id FROM world_organization WHERE organization_type='MAJOR_FACTION' AND display_name='Separatists'");
-            long incumbentInfluence = scalar(connection,
-                    "SELECT political_influence FROM organization_station_presence p "
-                            + "JOIN station_control_state c ON c.station_id=p.station_id "
-                            + "WHERE p.station_id='station-2' AND p.organization_id=c.controlling_major_organization_id");
-            require(incumbentInfluence == 80,
-                    "Control-transfer verification expected the imported sovereign station baseline at 80 political influence.");
+            String coalition = text(connection,
+                    "SELECT controlling_major_organization_id FROM station_control_state WHERE station_id='station-2'");
 
-            // Coalition Beta is not the Coalition HQ. The challenge rule requires >=12 points over the incumbent,
-            // so 95 is intentionally used here rather than an equal-strength 80/80 contest.
+            // Prior successful operations intentionally affect sovereign influence. Normalize this one station before
+            // the takeover fixture so the test measures the sustained-control rule rather than earlier economic activity.
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("UPDATE organization_station_presence SET political_influence=70,last_tick=9 "
+                        + "WHERE organization_id='" + coalition + "' AND station_id='station-2'");
+            }
+            require(scalar(connection,
+                            "SELECT political_influence FROM organization_station_presence WHERE organization_id='" + coalition
+                                    + "' AND station_id='station-2'") == 70,
+                    "Control-transfer fixture could not establish a deterministic incumbent influence baseline.");
+
+            // Coalition Beta is not the Coalition HQ. The challenge rule requires >=12 points over the incumbent.
             try (Statement statement = connection.createStatement()) {
                 statement.execute("INSERT OR IGNORE INTO organization_station_presence(organization_id,station_id,world_id,"
                         + "political_influence,economic_influence,labor_influence,security_influence,presence_state,last_tick) "
