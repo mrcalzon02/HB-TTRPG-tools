@@ -2,3 +2,4 @@
 run-with-preserved-evidence
 run-with-durable-test-logs
 run-with-readable-test-output
+run-after-occupied-deck-fix
