@@ -31,11 +31,18 @@ public final class DefaultWorldGeneratorVerification {
                             && generated.geologyLocationCount() == generated.locationCount(),
                     "Generated world did not initialize ecology and geology for every location.");
             require(generated.organizationCount() >= 50
+                            + generated.stationCount() * DefaultWorldGenerator.LOCAL_INSTITUTIONS_PER_STATION
                             && generated.sovereignFactionCount() >= 2
                             && generated.lockedHeadquartersCount() == generated.sovereignFactionCount(),
                     "Generated world did not initialize the expanded faction and institution ecology.");
-            require(generated.alignedInstitutionCount() >= 20,
+            require(generated.localInstitutionCount()
+                            == generated.stationCount() * DefaultWorldGenerator.LOCAL_INSTITUTIONS_PER_STATION,
+                    "Generated world did not scale local institutions with station count.");
+            require(generated.alignedInstitutionCount() >= generated.localInstitutionCount(),
                     "Generated world did not align its headquartered institutions to sovereign factions.");
+            require(generated.financeStateCount() == generated.organizationCount()
+                            && generated.membershipStateCount() == generated.organizationCount(),
+                    "Generated world did not give every organization finance and membership accounting.");
             require(generated.organizationOperationCount() >= generated.stationCount()
                             && generated.organizationNewsCount() >= generated.stationCount(),
                     "Generated world passive initialization did not produce institutional activity and observer news.");
@@ -55,19 +62,30 @@ public final class DefaultWorldGeneratorVerification {
                                 && objectExists(statement, "table", "organization_operation")
                                 && objectExists(statement, "table", "organization_station_asset")
                                 && objectExists(statement, "table", "organization_news_event")
-                                && objectExists(statement, "table", "station_control_challenge"),
+                                && objectExists(statement, "table", "station_control_challenge")
+                                && objectExists(statement, "table", "organization_finance_state")
+                                && objectExists(statement, "table", "organization_membership_state")
+                                && objectExists(statement, "table", "organization_operation_partner")
+                                && objectExists(statement, "table", "organization_operation_finance")
+                                && objectExists(statement, "table", "organization_finance_ledger"),
                         "Generated world is missing a current-system persistence authority.");
                 require(objectExists(statement, "view", "organization_ecology_observation")
                                 && objectExists(statement, "view", "station_political_observation")
                                 && objectExists(statement, "view", "organization_operation_observation")
                                 && objectExists(statement, "view", "organization_station_asset_observation")
-                                && objectExists(statement, "view", "regional_conflict_observation"),
-                        "Generated world is missing organization observer projections.");
+                                && objectExists(statement, "view", "regional_conflict_observation")
+                                && objectExists(statement, "view", "institutional_economy_observation")
+                                && objectExists(statement, "view", "organization_operation_partnership_observation")
+                                && objectExists(statement, "view", "organization_finance_observation"),
+                        "Generated world is missing institutional observer projections.");
                 require(scalar(statement, "SELECT COUNT(*) FROM observation_snapshot") > 0,
                         "Generated world did not retain its initialization observation snapshot.");
                 require(scalar(statement, "SELECT COUNT(*) FROM organization_operation_observation")
                                 == generated.organizationOperationCount(),
                         "Organization operation observer view does not expose every generated operation.");
+                require(scalar(statement, "SELECT COUNT(*) FROM institutional_economy_observation")
+                                == generated.organizationCount(),
+                        "Institutional economy observer does not expose every generated organization.");
                 require(scalar(statement, "SELECT COUNT(*) FROM organization_news_event")
                                 == generated.organizationNewsCount(),
                         "Organization news count changed between generation and inspection.");
