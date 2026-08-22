@@ -912,24 +912,32 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             for (LocationRow row : rows) {
                 Point point = positions.get(row.displayName());
                 if (point == null) continue;
+                var naturalSignal = naturalSignals.get(row.displayName());
+                var civilSignal = civilSignals.get(row.displayName());
+                int importance = WorldObserverLevelOfDetail.importance(naturalSignal, civilSignal);
+                boolean selectedLocation = selected.kind() == SelectionKind.LOCATION
+                        && row.locationId().equals(selected.id());
+                if (!WorldObserverLevelOfDetail.showGenericMarker(zoom, row.station(), selectedLocation, importance)) {
+                    continue;
+                }
+
                 VisualRole role = locationRole(row);
                 int size = row.station() ? 38 : 30;
                 BufferedImage icon = icon(role, size, size);
                 g.drawImage(icon, point.x - size / 2, point.y - size / 2, null);
-                boolean selectedLocation = selected.kind() == SelectionKind.LOCATION
-                        && row.locationId().equals(selected.id());
                 if (selectedLocation) {
                     g.setStroke(new BasicStroke(3f));
                     g.setColor(new Color(245, 230, 155));
                     g.drawOval(point.x - size / 2 - 6, point.y - size / 2 - 6, size + 12, size + 12);
                     g.setStroke(new BasicStroke(1f));
                 }
-                g.setColor(new Color(225, 236, 226));
-                g.setFont(getFont().deriveFont(row.station() ? Font.BOLD : Font.PLAIN, row.station() ? 12f : 11f));
-                g.drawString(row.displayName(), point.x + size / 2 + 4, point.y + 4);
+                if (WorldObserverLevelOfDetail.showLabel(zoom, row.station(), selectedLocation, importance)) {
+                    g.setColor(new Color(225, 236, 226));
+                    g.setFont(getFont().deriveFont(row.station() ? Font.BOLD : Font.PLAIN,
+                            row.station() ? 12f : 11f));
+                    g.drawString(row.displayName(), point.x + size / 2 + 4, point.y + 4);
+                }
                 Rectangle bounds = new Rectangle(point.x - size / 2, point.y - size / 2, size, size);
-                var naturalSignal = naturalSignals.get(row.displayName());
-                var civilSignal = civilSignals.get(row.displayName());
                 String naturalText = naturalSignal == null ? "" : " · hazard " + naturalSignal.overallHazard()
                         + " · resource " + naturalSignal.overallOpportunity();
                 String civilText = civilSignal == null ? "" : " · pop " + civilSignal.population()
