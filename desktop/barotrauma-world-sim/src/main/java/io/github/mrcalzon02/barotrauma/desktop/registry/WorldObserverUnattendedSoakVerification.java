@@ -7,10 +7,12 @@ import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPaths;
 import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,6 +26,8 @@ public final class WorldObserverUnattendedSoakVerification {
     private static final int TICKS_PER_CYCLE = 25;
     private static final long REQUIRED_CYCLES = 4;
     private static final long DEADLINE_SECONDS = 18;
+    private static final long CLEANUP_DEADLINE_SECONDS = 8;
+    private static final long CLEANUP_RETRY_MILLIS = 75;
 
     private WorldObserverUnattendedSoakVerification() { }
 
@@ -99,8 +103,31 @@ public final class WorldObserverUnattendedSoakVerification {
 
     private static void deleteTree(Path root) throws Exception {
         if (!Files.exists(root)) return;
+        List<Path> paths;
         try (var stream = Files.walk(root)) {
-            for (Path path : stream.sorted(Comparator.reverseOrder()).toList()) Files.deleteIfExists(path);
+            paths = stream.sorted(Comparator.reverseOrder()).toList();
+        }
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(CLEANUP_DEADLINE_SECONDS);
+        for (Path path : paths) deleteWithRetry(path, deadline);
+    }
+
+    private static void deleteWithRetry(Path path, long deadline) throws Exception {
+        IOException lastFailure = null;
+        while (Files.exists(path)) {
+            try {
+                Files.deleteIfExists(path);
+                return;
+            } catch (IOException exception) {
+                lastFailure = exception;
+                if (System.nanoTime() >= deadline) throw exception;
+                try {
+                    Thread.sleep(CLEANUP_RETRY_MILLIS);
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    if (lastFailure != null) interrupted.addSuppressed(lastFailure);
+                    throw interrupted;
+                }
+            }
         }
     }
 
