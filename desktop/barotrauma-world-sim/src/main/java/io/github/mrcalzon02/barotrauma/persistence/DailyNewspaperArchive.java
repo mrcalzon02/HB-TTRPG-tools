@@ -223,8 +223,8 @@ public final class DailyNewspaperArchive {
                 if (!r.next()) return new Conditions(null, value(fallbackName, "Europa-wide desk"), null, null,
                         0,0,0,0,0,0,0,0,0);
                 return new Conditions(r.getString(1),r.getString(2),r.getString(13),r.getString(14),
-                        r.getInt(3)==0?0:r.getInt(4),r.getInt(5),r.getInt(6),r.getInt(7),r.getInt(8),r.getInt(9),
-                        r.getInt(10),r.getInt(11),r.getLong(12), r.getString(3));
+                        r.getInt(4),r.getInt(5),r.getInt(6),r.getInt(7),r.getInt(8),r.getInt(9),
+                        r.getInt(10),r.getInt(11),r.getLong(12),r.getString(3));
             }
         }
     }
