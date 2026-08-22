@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
   const DEFAULTS = Object.freeze({
     gridWidth: 72,
     gridHeight: 56,
@@ -49,7 +49,7 @@
       }
       return out;
     };
-    return next;
+    return out;
   }
 
   function roleId(role, index) {
@@ -122,28 +122,47 @@
       used.clear();
     });
 
-    if (nodes.length > 1) {
-      const connected = new Set([nodes[0].id]);
-      while (connected.size < nodes.length) {
-        const fromCandidates = nodes.filter(node => connected.has(node.id));
-        const toCandidates = nodes.filter(node => !connected.has(node.id));
-        const from = rng.pick(fromCandidates);
-        const preferred = toCandidates.filter(node => node.deck == null || from.deck == null || node.deck === from.deck);
-        const to = rng.pick(preferred.length ? preferred : toCandidates);
-        addEdge(edges, from.id, to.id, 'backbone', true);
-        connected.add(to.id);
-      }
-    }
-
-    const extraChance = Number.isFinite(spec.extraEdgeChance) ? spec.extraEdgeChance : DEFAULTS.extraEdgeChance;
-    for (let i = 0; i < nodes.length; i += 1) {
-      for (let j = i + 1; j < nodes.length; j += 1) {
-        const a = nodes[i], b = nodes[j];
-        if (a.deck != null && b.deck != null && a.deck !== b.deck) continue;
-        if (rng() < extraChance) addEdge(edges, a.id, b.id, 'redundant', false);
-      }
-    }
     return { nodes, edges };
+  }
+
+  function expandSameDeckConnectivity(graph, deckNodes, connected) {
+    const deckIds = new Set(deckNodes.map(node => node.id));
+    let changed = true;
+    while (changed) {
+      changed = false;
+      graph.edges.forEach(edge => {
+        if (!deckIds.has(edge.a) || !deckIds.has(edge.b)) return;
+        if (connected.has(edge.a) && !connected.has(edge.b)) { connected.add(edge.b); changed = true; }
+        if (connected.has(edge.b) && !connected.has(edge.a)) { connected.add(edge.a); changed = true; }
+      });
+    }
+  }
+
+  function completeInferredConnectivity(graph, spec, rng, deckCount) {
+    const extraChance = Number.isFinite(spec.extraEdgeChance) ? spec.extraEdgeChance : DEFAULTS.extraEdgeChance;
+    const byDeck = Array.from({ length: deckCount }, (_, deck) => graph.nodes.filter(node => node.deck === deck));
+
+    byDeck.forEach(deckNodes => {
+      if (deckNodes.length > 1) {
+        const connected = new Set([deckNodes[0].id]);
+        expandSameDeckConnectivity(graph, deckNodes, connected);
+        while (connected.size < deckNodes.length) {
+          const from = rng.pick(deckNodes.filter(node => connected.has(node.id)));
+          const to = rng.pick(deckNodes.filter(node => !connected.has(node.id)));
+          addEdge(graph.edges, from.id, to.id, 'backbone', true);
+          connected.add(to.id);
+          expandSameDeckConnectivity(graph, deckNodes, connected);
+        }
+      }
+
+      for (let i = 0; i < deckNodes.length; i += 1) {
+        for (let j = i + 1; j < deckNodes.length; j += 1) {
+          if (rng() < extraChance) addEdge(graph.edges, deckNodes[i].id, deckNodes[j].id, 'redundant', false);
+        }
+      }
+    });
+
+    return byDeck;
   }
 
   function assignDecks(graph, spec, rng) {
@@ -152,10 +171,18 @@
     nodes.forEach((node, index) => {
       if (node.deck == null) node.deck = deckCount === 1 ? 0 : Math.min(deckCount - 1, Math.floor(index * deckCount / Math.max(1, nodes.length)));
     });
+
+    const byDeck = completeInferredConnectivity(graph, spec, rng, deckCount);
     if (deckCount > 1) {
-      const byDeck = Array.from({ length: deckCount }, (_, deck) => nodes.filter(node => node.deck === deck));
+      const nodeById = new Map(nodes.map(node => [node.id, node]));
       for (let deck = 0; deck < deckCount - 1; deck += 1) {
         if (!byDeck[deck].length || !byDeck[deck + 1].length) continue;
+        const alreadyLinked = graph.edges.some(edge => {
+          const a = nodeById.get(edge.a), b = nodeById.get(edge.b);
+          if (!a || !b) return false;
+          return (a.deck === deck && b.deck === deck + 1) || (a.deck === deck + 1 && b.deck === deck);
+        });
+        if (alreadyLinked) continue;
         const a = rng.pick(byDeck[deck]);
         const b = rng.pick(byDeck[deck + 1]);
         addEdge(graph.edges, a.id, b.id, 'interdeck', true, { connectorRequired: true, fromDeck: deck, toDeck: deck + 1 });
