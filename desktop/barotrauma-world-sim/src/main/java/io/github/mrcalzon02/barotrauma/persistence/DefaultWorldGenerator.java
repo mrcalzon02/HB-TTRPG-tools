@@ -21,7 +21,7 @@ import java.util.UUID;
 
 /** Creates a fresh schema-current Europa world through canonical import and passive writer authorities. */
 public final class DefaultWorldGenerator {
-    public static final String TEMPLATE_ID = "europa-operations-default-033";
+    public static final String TEMPLATE_ID = "europa-operations-default-034";
     public static final int EXPECTED_LOCATIONS = 24;
     public static final int EXPECTED_STATIONS = 12;
 
@@ -92,6 +92,14 @@ public final class DefaultWorldGenerator {
                     "SELECT COUNT(*) FROM world_organization WHERE organization_type='MAJOR_FACTION'");
             int lockedHeadquarters = scalar(statement,
                     "SELECT COUNT(*) FROM organization_headquarters WHERE sovereignty_locked=1");
+            int alignedInstitutions = scalar(statement,
+                    "SELECT COUNT(*) FROM world_organization WHERE organization_type NOT IN ('MAJOR_FACTION','SUBFACTION') "
+                            + "AND home_station_id IS NOT NULL AND aligned_major_organization_id IS NOT NULL");
+            int unalignedInstitutions = scalar(statement,
+                    "SELECT COUNT(*) FROM world_organization WHERE organization_type NOT IN ('MAJOR_FACTION','SUBFACTION') "
+                            + "AND home_station_id IS NOT NULL AND aligned_major_organization_id IS NULL");
+            int operations = scalar(statement, "SELECT COUNT(*) FROM organization_operation");
+            int organizationNews = scalar(statement, "SELECT COUNT(*) FROM organization_news_event");
             long tick = longScalar(statement, "SELECT COALESCE(current_tick_sequence,imported_tick_sequence,0) "
                     + "FROM world_simulation_metadata LIMIT 1");
             int enabled = scalar(statement,
@@ -110,15 +118,19 @@ public final class DefaultWorldGenerator {
                     || organizations < 50
                     || sovereignFactions < 2
                     || lockedHeadquarters != sovereignFactions
+                    || alignedInstitutions < 20
+                    || unalignedInstitutions != 0
+                    || operations < stations
+                    || organizationNews < stations
                     || tick < 1
                     || enabled != 0
                     || !"PAUSED".equals(scheduler)) {
                 throw new IllegalStateException(
-                        "Generated default world did not reach the current paused-system and organization baseline.");
+                        "Generated default world did not reach the current paused-system, organization, and operation baseline.");
             }
             return new GeneratedWorld(paths, worldId, schema, locations, stations, stationStates,
                     populations, aggregatePopulations, ecology, geology, organizations, sovereignFactions,
-                    lockedHeadquarters, tick, scheduler);
+                    lockedHeadquarters, alignedInstitutions, operations, organizationNews, tick, scheduler);
         }
     }
 
@@ -175,6 +187,9 @@ public final class DefaultWorldGenerator {
             int organizationCount,
             int sovereignFactionCount,
             int lockedHeadquartersCount,
+            int alignedInstitutionCount,
+            int organizationOperationCount,
+            int organizationNewsCount,
             long initializedTick,
             String schedulerState) { }
 }
