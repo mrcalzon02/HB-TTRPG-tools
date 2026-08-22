@@ -49,7 +49,7 @@
       }
       return out;
     };
-    return out;
+    return next;
   }
 
   function roleId(role, index) {
