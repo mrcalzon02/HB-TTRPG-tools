@@ -1,14 +1,14 @@
 {
   "recordType": "barotraumaDesktopReleaseWorkflowOutcome",
-  "runId": "32545347366",
-  "runAttempt": "1",
-  "sourceCommit": "4c404522b84e7b8ec8ebe8ea01d6ee76e64a8777",
+  "runId": "32545189007",
+  "runAttempt": "2",
+  "sourceCommit": "3647b1a3a95979a88262c2f581e825369b9d32ea",
   "workflow": "Verify and release Barotrauma desktop application",
   "event": "push",
   "linuxVerification": "success",
-  "windowsInstallerRelease": "cancelled",
+  "windowsInstallerRelease": "success",
   "releaseTag": "barotrauma-desktop-v0.1.672",
-  "releaseVerified": false,
+  "releaseVerified": true,
   "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.1.672",
   "releaseAssets": [
     "Barotrauma-World-Simulation-Toolbox-0.1.672-Windows-x64.msi",
@@ -16,13 +16,102 @@
   ],
   "jobs": [
     {
-      "id": 96962789764,
+      "id": 96963270471,
+      "name": "windows-installer-release",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-08-22T02:11:31Z",
+      "completedAt": "2026-08-22T02:20:38Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32545189007/job/96963270471",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Checkout verified source",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Set up Java 17 with jpackage",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Ensure WiX Toolset for MSI packaging",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Verify Windows desktop runtime",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Package Windows MSI",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "Read release manifest",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "Write release notes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Upload installer workflow artifact",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Publish immutable GitHub release",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 19,
+          "name": "Post Set up Java 17 with jpackage",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 20,
+          "name": "Post Checkout verified source",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 21,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 96963270780,
       "name": "java-17-verification",
       "status": "completed",
       "conclusion": "success",
-      "startedAt": "2026-08-22T02:07:24Z",
-      "completedAt": "2026-08-22T02:09:29Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32545347366/job/96962789764",
+      "startedAt": "2026-08-22T02:03:25Z",
+      "completedAt": "2026-08-22T02:05:33Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32545189007/job/96963270780",
       "steps": [
         {
           "number": 1,
@@ -69,102 +158,13 @@
       ]
     },
     {
-      "id": 96963046826,
-      "name": "windows-installer-release",
-      "status": "completed",
-      "conclusion": "cancelled",
-      "startedAt": "2026-08-22T02:09:31Z",
-      "completedAt": "2026-08-22T02:10:52Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32545347366/job/96963046826",
-      "steps": [
-        {
-          "number": 1,
-          "name": "Set up job",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "number": 2,
-          "name": "Checkout verified source",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "number": 3,
-          "name": "Set up Java 17 with jpackage",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "number": 4,
-          "name": "Ensure WiX Toolset for MSI packaging",
-          "status": "completed",
-          "conclusion": "cancelled"
-        },
-        {
-          "number": 5,
-          "name": "Verify Windows desktop runtime",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "number": 6,
-          "name": "Package Windows MSI",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "number": 7,
-          "name": "Read release manifest",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "number": 8,
-          "name": "Write release notes",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "number": 9,
-          "name": "Upload installer workflow artifact",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "number": 10,
-          "name": "Publish immutable GitHub release",
-          "status": "completed",
-          "conclusion": "skipped"
-        },
-        {
-          "number": 19,
-          "name": "Post Set up Java 17 with jpackage",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "number": 20,
-          "name": "Post Checkout verified source",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "number": 21,
-          "name": "Complete job",
-          "status": "completed",
-          "conclusion": "success"
-        }
-      ]
-    },
-    {
-      "id": 96963203102,
+      "id": 96964369899,
       "name": "release-workflow-outcome",
       "status": "in_progress",
       "conclusion": null,
-      "startedAt": "2026-08-22T02:10:55Z",
+      "startedAt": "2026-08-22T02:20:40Z",
       "completedAt": null,
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32545347366/job/96963203102",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32545189007/job/96964369899",
       "steps": [
         {
           "number": 1,
@@ -194,5 +194,5 @@
     }
   ],
   "failedJobLogs": [],
-  "recordedAt": "2026-08-22T02:11:23.1917980Z"
+  "recordedAt": "2026-08-22T02:21:04.1738777Z"
 }
