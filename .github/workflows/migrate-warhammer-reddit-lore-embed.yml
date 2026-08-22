@@ -1,0 +1,149 @@
+name: Migrate Warhammer Reddit Lore Archive via Embed
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: migrate-warhammer-reddit-lore-embed
+  cancel-in-progress: true
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]' && (github.event_name != 'issues' || github.event.issue.title == '[SYSTEM] Run Warhammer Reddit lore embed migration')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build embed-backed fiction archive
+        id: migrate
+        shell: bash
+        run: |
+          mkdir -p /tmp/lore-migration
+          set +e
+          python scripts/migrate_reddit_warhammer_lore_embed.py 2>&1 | tee /tmp/lore-migration/migration.log
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Validate generated archive
+        id: validate
+        if: steps.migrate.outputs.exit_code == '0'
+        shell: bash
+        run: |
+          set +e
+          python - <<'PY' 2>&1 | tee /tmp/lore-migration/validation.log
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('assets/warhammer-40k/lore/reddit-story-archive.json').read_text(encoding='utf-8'))
+          stories = data.get('stories', [])
+          if len(stories) != 86:
+              raise SystemExit(f'Archive validation failed: expected 86 stories, found {len(stories)}')
+          if len({story.get('post_id') for story in stories}) != 86:
+              raise SystemExit('Archive validation failed: duplicate or missing story IDs')
+          if any(not story.get('selftext', '').strip() for story in stories):
+              raise SystemExit('Archive validation failed: one or more story bodies are empty')
+          if any(len(story.get('selftext', '').strip()) < 100 for story in stories):
+              raise SystemExit('Archive validation failed: one or more story bodies are implausibly short')
+
+          page = Path('warhammer-40k-lore.html').read_text(encoding='utf-8')
+          if page.count('class="story"') != 86:
+              raise SystemExit('Archive validation failed: static reader does not contain 86 story articles')
+          for required in [
+              'Yes, these stories are all written by me, Mrcalzon02',
+              'Christopher Vardeman',
+              'Terms of Service & Usage Agreement',
+              'Warhammer 40,000 and related names',
+          ]:
+              if required not in page:
+                  raise SystemExit(f'Archive validation failed: missing required notice: {required}')
+
+          workspace = Path('warhammer-40k-workspace-v8.js').read_text(encoding='utf-8')
+          for required in ["['lore','✠ Lore']", 'function buildLorePanel()', "frame.src='warhammer-40k-lore.html'"]:
+              if required not in workspace:
+                  raise SystemExit(f'Archive validation failed: missing workspace integration: {required}')
+          print('Validated exactly 86 complete stories, authorship/legal notices, and native Lore register integration.')
+          PY
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Commit archive to main
+        id: commit
+        if: steps.migrate.outputs.exit_code == '0' && steps.validate.outputs.exit_code == '0'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            warhammer-40k-lore.html \
+            assets/warhammer-40k/lore/reddit-story-archive.json \
+            warhammer-40k-workspace-v8.js \
+            warhammer-40k-workspace-v8.css \
+            app-lite-view-mounts.js
+          if git diff --cached --quiet; then
+            echo 'result=success' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m 'Migrate Reddit fiction archive into Warhammer 40K Lore'
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo 'result=success' >> "$GITHUB_OUTPUT"
+
+      - name: Report result to control issue
+        if: always() && github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          MIGRATION_EXIT: ${{ steps.migrate.outputs.exit_code }}
+          VALIDATION_EXIT: ${{ steps.validate.outputs.exit_code }}
+          COMMIT_OUTCOME: ${{ steps.commit.outcome }}
+          RESULT: ${{ steps.commit.outputs.result }}
+          RUN_ID: ${{ github.run_id }}
+        shell: bash
+        run: |
+          if [ "${RESULT:-failure}" = "success" ] && [ "${COMMIT_OUTCOME:-skipped}" != "failure" ]; then
+            cat > /tmp/lore-migration-comment.md <<EOF
+          Embed-backed lore migration completed successfully. Exactly 86 story bodies, the authorship notice, the main-page legal terms, and the native Lore register were validated and committed to main.
+
+          Workflow run: ${RUN_ID}
+          EOF
+          else
+            {
+              echo "Embed lore migration did not complete. migration_exit=${MIGRATION_EXIT:-not-run}; validation_exit=${VALIDATION_EXIT:-not-run}; commit_outcome=${COMMIT_OUTCOME:-not-run}."
+              echo
+              echo "Workflow run: ${RUN_ID}"
+              echo
+              echo 'Migration tail:'
+              echo '```text'
+              tail -n 80 /tmp/lore-migration/migration.log 2>/dev/null || true
+              echo '```'
+              if [ -f /tmp/lore-migration/validation.log ]; then
+                echo
+                echo 'Validation:'
+                echo '```text'
+                cat /tmp/lore-migration/validation.log
+                echo '```'
+              fi
+            } > /tmp/lore-migration-comment.md
+          fi
+          gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file /tmp/lore-migration-comment.md
+
+      - name: Fail when incomplete
+        if: always() && (steps.migrate.outputs.exit_code != '0' || steps.validate.outputs.exit_code != '0' || steps.commit.outcome == 'failure')
+        run: exit 1
