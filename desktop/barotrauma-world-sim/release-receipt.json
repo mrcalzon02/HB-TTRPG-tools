@@ -1,0 +1,13 @@
+{
+  "recordType": "barotraumaDesktopReleaseReceipt",
+  "version": "0.1.672",
+  "tag": "barotrauma-desktop-v0.1.672",
+  "title": "Barotrauma Desktop Runtime 0.1.672",
+  "sourceCommit": "2ef4aa76f8c9cf7ed422f389bc147b23667d57b2",
+  "assetName": "Barotrauma-World-Simulation-Toolbox-0.1.672-Windows-x64.msi",
+  "assetSha256": "aef1eb8e9f2f5102003f75b73e4c108b9f4659924490399537a403729dcbcf8b",
+  "packageType": "windows-x64-msi-bundled-runtime",
+  "verification": "linux-and-windows-toolbox-verify",
+  "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.1.672",
+  "publishedAt": "2026-08-22T01:36:15.3984297Z"
+}
