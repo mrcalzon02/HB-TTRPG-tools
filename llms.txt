@@ -2,6 +2,8 @@
 
 Canonical site: https://mrcalzon02.github.io/HB-TTRPG-tools/
 Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json
+Operational argument contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
+Resource collections: https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json
 Browser facade: https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js
 Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html
 Search index: https://mrcalzon02.github.io/HB-TTRPG-tools/search-index.json
@@ -12,6 +14,19 @@ Mirrored calls, not mirrored logic. The site's existing generators, calculators,
 
 GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable with GET. Executable capabilities run through the canonical JavaScript modules (or an external MCP/tool bridge that mirrors their invocation descriptors). Do not infer a server-side RPC endpoint where none exists.
 
+## Self-describing calls
+
+Do not guess positional arguments or inspect implementation source as the normal integration path. `api/operation-contracts.json` is the public operational contract index. It documents capability call style, exact operation names, positional argument order, argument names/types/units/defaults/ranges/enums, nested public fields, return descriptions, context requirements, and examples where useful.
+
+HBFoundryAPI exposes the same documentation programmatically:
+- listOperationContracts()
+- operationContract(capabilityId)
+- operationContract(capabilityId, operation)
+- describe(capabilityId) — includes the capability's operationContract inline
+- listCapabilities(filter) — indicates whether a self-describing contract is available
+
+Executable dispatch is contract-gated: a dispatch operation must both be allowed by the capability manifest and have a documented operational contract.
+
 ## Important callable engines
 
 - spatial.module-map.generate — purpose-aware module/location generation.
@@ -19,26 +34,29 @@ GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable wi
 - kaysender.airship.generate — Kaysender airship spatial generation.
 - signals.configuration.analyze — full Signals Laboratory analysis.
 - signals.utilities — RF, antenna, RLC, propagation, mapping, heterodyne, interfrequency, adaptive sampling, and experiment utilities.
-- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations.
+- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments.
 - blacklight.exo.jump.calculate — canonical EXO jump calculation when the EXO cartography page context is initialized.
 
-Use the capability manifest for schemas, runtime scripts, globals, invocation methods, status, and limitations.
+Use the capability manifest for identity, runtime scripts, globals, invocation methods, status, and limitations. Use the operational argument contracts for constructing calls.
 
 ## Campaign, rules, and lore resources
 
-The manifest registers Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, and Era campaign; the Warhammer 40K lore story archive; and the major Barotrauma, Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
+The indexes register Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, and Era campaign; the Warhammer 40K lore story archive; Barotrauma encounter/lethality packs; and the major Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
 
 For in-browser or embedded-agent retrieval, HBFoundryAPI provides:
 - listResources(filter)
 - getResource(id)
+- getPath(path, options)
+- expandResourceIndex(id)
 - searchResources(query, options)
+- searchCollection(id, query, options)
 - siteIndex({query})
 - catalog(filter)
 
 ## Laboratories
 
-The manifest treats laboratory capacity as a first-class surface. Portable solver engines (Signals Laboratory and Binary Cube) are callable. Live Signals and other sensor/UI laboratories are separately identified as browser/device-context capabilities so external agents can discover them without falsely claiming headless access.
+The manifest treats laboratory capacity as a first-class surface. Portable solver engines (Signals Laboratory and Binary Cube) are callable and self-documented. Live Signals and other sensor/UI laboratories are separately identified as browser/device-context capabilities so external agents can discover them without falsely claiming headless access.
 
 ## Compatibility expectation
 
-An external MCP/OpenAI-tool adapter should preserve stable capability ids, input schemas, provenance/source paths, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
+An external MCP/OpenAI-tool adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
