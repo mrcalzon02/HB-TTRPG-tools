@@ -11,7 +11,7 @@
   const loadedBundles = new Map();
 
   const BUNDLES = Object.freeze({
-    modules: ['module-viewer.js'],
+    modules: ['semantic-spatial-engine.js', 'module-map-generator.js', 'module-viewer.js'],
     barotrauma: ['barotrauma-entry.js', 'barotrauma-rpg-entry.js'],
     'solanum-umbra': ['solanum-umbra-entry.js'],
     shadowrun: ['shadowrun-entry.js'],
@@ -41,6 +41,18 @@
   });
 
   const GENERATOR_MODULES = Object.freeze([
+    {
+      id: 'semantic-module-map',
+      title: 'Semantic Module Map Generator',
+      description: 'Generate deterministic purpose-first room topology, placement, corridors, doors, and module-editor-compatible tile maps.',
+      script: 'module-map-generator-entry.js'
+    },
+    {
+      id: 'alien-vessel',
+      title: 'Alien Vessel Generator',
+      description: 'Generate connected multi-deck Alpthon reconnaissance vessels from semantic compartment requirements using the shared spatial engine.',
+      script: 'alien-vessel-generator-entry.js'
+    },
     {
       id: 'spell-creator',
       title: 'Spell Creator',
