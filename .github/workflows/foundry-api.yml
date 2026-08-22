@@ -1,0 +1,43 @@
+name: Validate Foundry AI API
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "foundry-api.js"
+      - "llms.txt"
+      - "api/**"
+      - "scripts/validate-foundry-api.mjs"
+      - "semantic-spatial-engine.js"
+      - "semantic-content-populator.js"
+      - "vessel-hull-envelope.js"
+      - "module-map-generator.js"
+      - "alien-vessel-generator.js"
+      - "kaysender-airship-generator.js"
+      - "signals-laboratory.js"
+      - "shadowrun-binary-cube-engine.js"
+      - "blacklight-exo-*.js"
+      - "blacklight-*.html"
+      - "data/kaysender/**"
+      - "data/blacklight-continuum/**"
+      - "data/barotrauma/tools/encounters/**"
+      - "assets/warhammer-40k/lore/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check API facade syntax
+        run: node --check foundry-api.js
+      - name: Validate capability and resource contracts
+        run: node scripts/validate-foundry-api.mjs
