@@ -6,15 +6,17 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createHBFoundryAPI(root) {
   'use strict';
 
-  const VERSION = '1.1.0';
+  const VERSION = '1.2.0';
   const scriptElement = root?.document?.currentScript || null;
   const defaultBase = root?.location?.href || 'https://mrcalzon02.github.io/HB-TTRPG-tools/';
   const BASE_URL = new URL('.', scriptElement?.src || defaultBase);
   const MANIFEST_URL = new URL('api/foundry-capabilities.json', BASE_URL);
   const SEARCH_INDEX_URL = new URL('search-index.json', BASE_URL);
   const COLLECTIONS_URL = new URL('api/resource-collections.json', BASE_URL);
+  const OPERATION_CONTRACTS_URL = new URL('api/operation-contracts.json', BASE_URL);
   const manifestPromise = { value: null };
   const collectionsPromise = { value: null };
+  const contractsPromise = { value: null };
   const scriptPromises = new Map();
   const resourceCache = new Map();
 
@@ -44,6 +46,32 @@
     return collectionsPromise.value;
   }
 
+  async function operationContracts() {
+    if (!contractsPromise.value) contractsPromise.value = fetchJson(OPERATION_CONTRACTS_URL);
+    return contractsPromise.value;
+  }
+
+  async function operationContract(capabilityId, operation = null) {
+    const data = await operationContracts();
+    const contract = data?.capabilities?.[capabilityId];
+    if (!contract) fail(`No operation contract is registered for capability: ${capabilityId}`);
+    if (operation == null) return clone(contract);
+    const operationEntry = contract.operations?.[operation];
+    if (!operationEntry) fail(`No documented operation contract for ${capabilityId}.${operation}.`);
+    return clone({ capabilityId, operation, callStyle: contract.callStyle, sharedTypes: contract.sharedTypes || null, ...operationEntry });
+  }
+
+  async function listOperationContracts() {
+    const data = await operationContracts();
+    return Object.entries(data.capabilities || {}).map(([capabilityId, contract]) => ({
+      capabilityId,
+      callStyle: contract.callStyle || null,
+      operation: contract.operation || null,
+      operations: Object.keys(contract.operations || {}),
+      headlessCallable: contract.headlessCallable !== false
+    }));
+  }
+
   function matches(entry, filter = {}) {
     if (!entry) return false;
     if (filter.workspace && normalize(entry.workspace) !== normalize(filter.workspace)) return false;
@@ -62,15 +90,19 @@
   }
 
   async function listCapabilities(filter = {}) {
-    const data = await manifest();
-    return clone((data.capabilities || []).filter(entry => matches(entry, filter)));
+    const [data, contracts] = await Promise.all([manifest(), operationContracts()]);
+    return clone((data.capabilities || []).filter(entry => matches(entry, filter)).map(entry => ({
+      ...entry,
+      operationContractAvailable: Boolean(contracts?.capabilities?.[entry.id]),
+      operationContractUrl: `${OPERATION_CONTRACTS_URL.href}#${entry.id}`
+    })));
   }
 
   async function describe(id) {
-    const data = await manifest();
+    const [data, contracts] = await Promise.all([manifest(), operationContracts()]);
     const entry = (data.capabilities || []).find(item => item.id === id);
     if (!entry) fail(`Unknown capability: ${id}`);
-    return clone(entry);
+    return clone({ ...entry, operationContract: contracts?.capabilities?.[id] || null });
   }
 
   async function listLaboratories(filter = {}) {
@@ -284,6 +316,7 @@
     const target = resolveGlobal(invocation.global);
     if (!target) fail(`${invocation.global} is unavailable.`);
     if (invocation.type === 'global-method') {
+      if (!descriptor.operationContract) fail(`${id} has no self-describing operation contract.`);
       const fn = target?.[invocation.method];
       if (typeof fn !== 'function') fail(`${invocation.global}.${invocation.method} is not callable.`);
       return fn.call(target, input);
@@ -291,6 +324,7 @@
     if (invocation.type === 'global-dispatch') {
       const operation = input?.[invocation.operationField || 'operation'];
       if (!operation || !invocation.allowedOperations?.includes(operation)) fail(`Unsupported operation for ${id}: ${operation || '(missing)'}.`);
+      if (!descriptor.operationContract?.operations?.[operation]) fail(`${id}.${operation} is executable but lacks a self-describing operation contract.`);
       const fn = target?.[operation];
       if (typeof fn !== 'function') fail(`${invocation.global}.${operation} is not callable.`);
       const rawArgs = input?.[invocation.argsField || 'args'];
@@ -311,13 +345,14 @@
   }
 
   async function catalog(filter = {}) {
-    const [capabilities, laboratories, resources, indexedPages] = await Promise.all([
+    const [capabilities, laboratories, resources, indexedPages, contracts] = await Promise.all([
       listCapabilities(filter.capabilities || {}),
       listLaboratories(filter.laboratories || {}),
       listResources(filter.resources || {}),
-      siteIndex(filter.site || {})
+      siteIndex(filter.site || {}),
+      listOperationContracts()
     ]);
-    return { version: VERSION, baseUrl: BASE_URL.href, capabilities, laboratories, resources, indexedPages };
+    return { version: VERSION, baseUrl: BASE_URL.href, capabilities, laboratories, resources, indexedPages, operationContracts: contracts };
   }
 
   return Object.freeze({
@@ -325,8 +360,12 @@
     baseUrl: BASE_URL.href,
     manifestUrl: MANIFEST_URL.href,
     collectionsUrl: COLLECTIONS_URL.href,
+    operationContractsUrl: OPERATION_CONTRACTS_URL.href,
     manifest,
     collectionManifest,
+    operationContracts,
+    operationContract,
+    listOperationContracts,
     catalog,
     listCapabilities,
     describe,
