@@ -29,7 +29,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -215,13 +214,6 @@ public final class WorldObserverNewsTickerBar extends JPanel implements AutoClos
         DailyNewspaperReaderWindow reader = new DailyNewspaperReaderWindow(selectedWorld, edition.editionId(), articleId);
         reader.setLocationRelativeTo(SwingUtilities.getWindowAncestor(this));
         reader.setVisible(true);
-    }
-
-    public static void verifyContract() {
-        List<Integer> expected = List.of(1, 2, 4, 8, 16);
-        if (!expected.equals(WorldObserverTimeControlBar.runningMultipliers())) {
-            throw new IllegalStateException("Embedded news ticker was verified against an unexpected time-control ladder.");
-        }
     }
 
     @Override public void close() {
