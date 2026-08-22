@@ -1,5 +1,6 @@
 name: Migrate Warhammer Reddit Lore Archive
 
+# One-shot migration is intentionally retriggerable by editing this workflow or its migration script.
 on:
   push:
     branches:
