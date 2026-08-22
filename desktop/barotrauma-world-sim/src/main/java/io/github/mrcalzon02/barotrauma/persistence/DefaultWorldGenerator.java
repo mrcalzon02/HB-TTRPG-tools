@@ -21,7 +21,7 @@ import java.util.UUID;
 
 /** Creates a fresh schema-current Europa world through canonical import and passive writer authorities. */
 public final class DefaultWorldGenerator {
-    public static final String TEMPLATE_ID = "europa-operations-default-032";
+    public static final String TEMPLATE_ID = "europa-operations-default-033";
     public static final int EXPECTED_LOCATIONS = 24;
     public static final int EXPECTED_STATIONS = 12;
 
@@ -44,6 +44,7 @@ public final class DefaultWorldGenerator {
                     new WebWorldV22ImportTransaction.ImportRequest(
                             plan.artifactId(), plan.artifact().artifactIdentity().digest(),
                             "default-world-generator", document));
+            OrganizationFactionBootstrap.seed(paths);
             initializeCurrentSystems(paths);
             GeneratedWorld result = inspect(paths, imported.worldId());
             complete = true;
@@ -86,6 +87,11 @@ public final class DefaultWorldGenerator {
             int aggregatePopulations = scalar(statement, "SELECT COUNT(*) FROM station_population_state");
             int ecology = scalar(statement, "SELECT COUNT(*) FROM location_ecology_state");
             int geology = scalar(statement, "SELECT COUNT(*) FROM location_geology_state");
+            int organizations = scalar(statement, "SELECT COUNT(*) FROM world_organization");
+            int sovereignFactions = scalar(statement,
+                    "SELECT COUNT(*) FROM world_organization WHERE organization_type='MAJOR_FACTION'");
+            int lockedHeadquarters = scalar(statement,
+                    "SELECT COUNT(*) FROM organization_headquarters WHERE sovereignty_locked=1");
             long tick = longScalar(statement, "SELECT COALESCE(current_tick_sequence,imported_tick_sequence,0) "
                     + "FROM world_simulation_metadata LIMIT 1");
             int enabled = scalar(statement,
@@ -101,14 +107,18 @@ public final class DefaultWorldGenerator {
                     || aggregatePopulations != stations
                     || ecology != locations
                     || geology != locations
+                    || organizations < 50
+                    || sovereignFactions < 2
+                    || lockedHeadquarters != sovereignFactions
                     || tick < 1
                     || enabled != 0
                     || !"PAUSED".equals(scheduler)) {
                 throw new IllegalStateException(
-                        "Generated default world did not reach the current paused-system baseline.");
+                        "Generated default world did not reach the current paused-system and organization baseline.");
             }
             return new GeneratedWorld(paths, worldId, schema, locations, stations, stationStates,
-                    populations, aggregatePopulations, ecology, geology, tick, scheduler);
+                    populations, aggregatePopulations, ecology, geology, organizations, sovereignFactions,
+                    lockedHeadquarters, tick, scheduler);
         }
     }
 
@@ -162,6 +172,9 @@ public final class DefaultWorldGenerator {
             int aggregatePopulationCount,
             int ecologyLocationCount,
             int geologyLocationCount,
+            int organizationCount,
+            int sovereignFactionCount,
+            int lockedHeadquartersCount,
             long initializedTick,
             String schedulerState) { }
 }
