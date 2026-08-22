@@ -101,12 +101,14 @@ jobs:
           $notes = @"
           # $($manifest.title)
 
-          Verified desktop build from commit ``${env:GITHUB_SHA}``.
+          Verified Living World Observer build from commit ``${env:GITHUB_SHA}``.
 
-          - Windows x64 MSI installer with a bundled Java runtime.
+          - Double-clickable Windows x64 MSI with a bundled Java runtime; the installed application opens directly into Barotrauma World Observer.
+          - Passive simulation time controls: Pause, 1x, 2x, 4x, 8x, and 16x.
+          - Living Europa map with moving NPC vessels, stations, routes, natural/civil overlays, history, and inspectable committed evidence.
+          - Embedded previous-day news ticker and immutable daily newspaper editions sealed at simulation midnight.
           - Complete Gradle-free Java 17 and SQLite verification passed on Linux and Windows before publication.
-          - Includes the local world simulation, observation, import, map, logistics, migration, settlement, and campaign-operation interfaces present in this commit.
-          - Barotrauma donor media is not redistributed. The installed application can discover a locally owned Barotrauma installation or use packaged project-owned fallback assets.
+          - Barotrauma donor media is not redistributed. The application can discover a locally owned Barotrauma installation or use packaged project-owned fallback assets.
           - The adjacent ``.sha256`` asset contains the installer checksum.
           "@
           Set-Content desktop/barotrauma-world-sim/build/no-gradle/release/RELEASE_NOTES.md $notes -Encoding utf8
@@ -129,7 +131,16 @@ jobs:
           RELEASE_TITLE: ${{ steps.release.outputs.title }}
           RELEASE_ASSET: ${{ steps.release.outputs.asset_name }}
           RELEASE_CHECKSUM: ${{ steps.release.outputs.checksum_name }}
+          RELEASE_SHA256: ${{ steps.release.outputs.asset_sha256 }}
         run: |
+          $assetPath = "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_ASSET"
+          $checksumPath = "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_CHECKSUM"
+          $currentHash = (Get-FileHash -LiteralPath $assetPath -Algorithm SHA256).Hash.ToLowerInvariant()
+          $expectedHash = $env:RELEASE_SHA256.ToLowerInvariant()
+          if ($currentHash -ne $expectedHash) {
+            throw "Packaged installer hash $currentHash does not match workflow manifest hash $expectedHash."
+          }
+
           $existing = $null
           gh release view $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY --json tagName,url,assets 2>$null |
             Tee-Object -Variable releaseJson | Out-Null
@@ -139,11 +150,27 @@ jobs:
             if ($assetNames -notcontains $env:RELEASE_ASSET -or $assetNames -notcontains $env:RELEASE_CHECKSUM) {
               throw "Release $env:RELEASE_TAG exists without the required immutable installer assets."
             }
-            Write-Host "Verified existing immutable release $env:RELEASE_TAG."
+
+            $verifyRoot = Join-Path $env:RUNNER_TEMP "barotrauma-release-$env:GITHUB_RUN_ID"
+            if (Test-Path -LiteralPath $verifyRoot) { Remove-Item -LiteralPath $verifyRoot -Recurse -Force }
+            New-Item -ItemType Directory -Path $verifyRoot -Force | Out-Null
+            gh release download $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY `
+              --pattern $env:RELEASE_ASSET --pattern $env:RELEASE_CHECKSUM --dir $verifyRoot
+            if ($LASTEXITCODE -ne 0) { throw "Existing release assets could not be downloaded for immutable verification." }
+            $publishedAsset = Join-Path $verifyRoot $env:RELEASE_ASSET
+            $publishedChecksum = Join-Path $verifyRoot $env:RELEASE_CHECKSUM
+            $publishedHash = (Get-FileHash -LiteralPath $publishedAsset -Algorithm SHA256).Hash.ToLowerInvariant()
+            $declaredHash = ((Get-Content -LiteralPath $publishedChecksum -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
+            Remove-Item -LiteralPath $verifyRoot -Recurse -Force -ErrorAction SilentlyContinue
+            if ($publishedHash -ne $currentHash -or $declaredHash -ne $currentHash) {
+              throw "Release $env:RELEASE_TAG exists, but its immutable installer bytes do not match this verified build. Bump release.properties before publication."
+            }
+            Write-Host "Verified existing immutable release $env:RELEASE_TAG by exact SHA-256 $publishedHash."
             exit 0
           }
-          $asset = Get-Item "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_ASSET"
-          $checksum = Get-Item "desktop/barotrauma-world-sim/build/no-gradle/release/$env:RELEASE_CHECKSUM"
+
+          $asset = Get-Item $assetPath
+          $checksum = Get-Item $checksumPath
           $notes = 'desktop/barotrauma-world-sim/build/no-gradle/release/RELEASE_NOTES.md'
           gh release create $env:RELEASE_TAG $asset.FullName $checksum.FullName `
             --repo $env:GITHUB_REPOSITORY `
@@ -217,6 +244,7 @@ jobs:
             })
 
           $releaseVerified = $false
+          $releaseHashVerified = $false
           $releaseUrl = $null
           $releaseAssets = @()
           $effectiveTag = $env:RELEASE_TAG
@@ -231,9 +259,25 @@ jobs:
             $releaseUrl = $release.url
             $releaseAssets = @($release.assets | ForEach-Object name)
             if (-not [string]::IsNullOrWhiteSpace($env:RELEASE_ASSET) -and
-                -not [string]::IsNullOrWhiteSpace($env:RELEASE_CHECKSUM)) {
-              $releaseVerified = $releaseAssets -contains $env:RELEASE_ASSET -and
-                $releaseAssets -contains $env:RELEASE_CHECKSUM
+                -not [string]::IsNullOrWhiteSpace($env:RELEASE_CHECKSUM) -and
+                -not [string]::IsNullOrWhiteSpace($env:RELEASE_SHA256) -and
+                $releaseAssets -contains $env:RELEASE_ASSET -and
+                $releaseAssets -contains $env:RELEASE_CHECKSUM) {
+              $verifyRoot = Join-Path $env:RUNNER_TEMP "barotrauma-outcome-$env:GITHUB_RUN_ID"
+              if (Test-Path -LiteralPath $verifyRoot) { Remove-Item -LiteralPath $verifyRoot -Recurse -Force }
+              New-Item -ItemType Directory -Path $verifyRoot -Force | Out-Null
+              gh release download $effectiveTag --repo $env:GITHUB_REPOSITORY `
+                --pattern $env:RELEASE_ASSET --pattern $env:RELEASE_CHECKSUM --dir $verifyRoot
+              if ($LASTEXITCODE -eq 0) {
+                $publishedAsset = Join-Path $verifyRoot $env:RELEASE_ASSET
+                $publishedChecksum = Join-Path $verifyRoot $env:RELEASE_CHECKSUM
+                $publishedHash = (Get-FileHash -LiteralPath $publishedAsset -Algorithm SHA256).Hash.ToLowerInvariant()
+                $declaredHash = ((Get-Content -LiteralPath $publishedChecksum -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
+                $expectedHash = $env:RELEASE_SHA256.ToLowerInvariant()
+                $releaseHashVerified = $publishedHash -eq $expectedHash -and $declaredHash -eq $expectedHash
+                $releaseVerified = $releaseHashVerified
+              }
+              Remove-Item -LiteralPath $verifyRoot -Recurse -Force -ErrorAction SilentlyContinue
             }
           }
 
@@ -248,6 +292,8 @@ jobs:
             windowsInstallerRelease = $env:WINDOWS_RESULT
             releaseTag = $effectiveTag
             releaseVerified = $releaseVerified
+            releaseHashVerified = $releaseHashVerified
+            releaseAssetSha256 = $env:RELEASE_SHA256
             releaseUrl = $releaseUrl
             releaseAssets = $releaseAssets
             jobs = $jobs
@@ -270,7 +316,7 @@ jobs:
               assetName = $env:RELEASE_ASSET
               assetSha256 = $env:RELEASE_SHA256
               packageType = 'windows-x64-msi-bundled-runtime'
-              verification = 'linux-and-windows-toolbox-verify'
+              verification = 'linux-and-windows-toolbox-verify-plus-release-sha256'
               releaseUrl = $releaseUrl
               publishedAt = [DateTime]::UtcNow.ToString('o')
             }
