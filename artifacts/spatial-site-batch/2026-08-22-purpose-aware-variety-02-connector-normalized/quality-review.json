@@ -1,0 +1,1794 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-generation-quality-review",
+  "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
+  "sourceBatchCommit": "747a456ee2eb60b7efec16ede3a4eb8867caa37e",
+  "archiveAcceptance": {
+    "ok": true,
+    "totalCases": 32,
+    "passedCases": 32,
+    "failedCases": 0,
+    "deterministicCases": 32,
+    "topologyValidCases": 32,
+    "curatedCases": 19,
+    "seededRandomCases": 13,
+    "curatedArchetypeCoverage": 19,
+    "availableArchetypes": 19
+  },
+  "methodology": {
+    "purpose": "Identify mechanically valid but semantically weak, over-saturated, under-interacted, or statistically unusual generated sites.",
+    "note": "Review findings are tuning signals, not topology failures. Explicitly unusual worldbuilding combinations remain legal.",
+    "curatedBaselineCases": 19,
+    "seededRandomCases": 13,
+    "severityPenalty": {
+      "critical": 40,
+      "high": 15,
+      "medium": 7,
+      "low": 3
+    }
+  },
+  "cohortStats": {
+    "curated": {
+      "count": 19,
+      "reviewScoreMean": 95.6,
+      "reviewScoreMedian": 100,
+      "findingCounts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 11,
+        "low": 2
+      },
+      "metrics": {
+        "interactionsPerRoom": 0.157,
+        "adaptedRoleRatio": 0.118,
+        "currentUseRatio": 0.118,
+        "overlayRatio": 0.008,
+        "hazardsPerRoom": 2.032,
+        "occupantsPerRoom": 0.566,
+        "socialPerRoom": 0.167,
+        "trapsPerRoom": 0.203,
+        "securityPerRoom": 0.223,
+        "treasurePerRoom": 0.299,
+        "evidencePerRoom": 0.321,
+        "objectivesPerRoom": 0.067,
+        "narrativePerRoom": 0.261,
+        "secretAccessPerRoom": 0.181,
+        "corridorsPerRoom": 1.834,
+        "doorsPerRoom": 3.669,
+        "connectorsPerRoom": 0.499,
+        "connectorsPerDeck": 3.491,
+        "profileLayers": 14
+      }
+    },
+    "seededRandom": {
+      "count": 13,
+      "reviewScoreMean": 99.1,
+      "reviewScoreMedian": 100,
+      "findingCounts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 4
+      },
+      "metrics": {
+        "interactionsPerRoom": 0.176,
+        "adaptedRoleRatio": 0.142,
+        "currentUseRatio": 0.142,
+        "overlayRatio": 0.01,
+        "hazardsPerRoom": 2.125,
+        "occupantsPerRoom": 0.454,
+        "socialPerRoom": 0.135,
+        "trapsPerRoom": 0.127,
+        "securityPerRoom": 0.223,
+        "treasurePerRoom": 0.307,
+        "evidencePerRoom": 0.379,
+        "objectivesPerRoom": 0.066,
+        "narrativePerRoom": 0.366,
+        "secretAccessPerRoom": 0.166,
+        "corridorsPerRoom": 1.377,
+        "doorsPerRoom": 2.755,
+        "connectorsPerRoom": 0.838,
+        "connectorsPerDeck": 5.405,
+        "profileLayers": 14
+      }
+    }
+  },
+  "curatedVsRandom": {
+    "interactionsPerRoom": {
+      "curatedMean": 0.157,
+      "randomMean": 0.176,
+      "deltaPercent": 12.1
+    },
+    "adaptedRoleRatio": {
+      "curatedMean": 0.118,
+      "randomMean": 0.142,
+      "deltaPercent": 20.3
+    },
+    "currentUseRatio": {
+      "curatedMean": 0.118,
+      "randomMean": 0.142,
+      "deltaPercent": 20.3
+    },
+    "overlayRatio": {
+      "curatedMean": 0.008,
+      "randomMean": 0.01,
+      "deltaPercent": 25
+    },
+    "hazardsPerRoom": {
+      "curatedMean": 2.032,
+      "randomMean": 2.125,
+      "deltaPercent": 4.6
+    },
+    "occupantsPerRoom": {
+      "curatedMean": 0.566,
+      "randomMean": 0.454,
+      "deltaPercent": -19.8
+    },
+    "socialPerRoom": {
+      "curatedMean": 0.167,
+      "randomMean": 0.135,
+      "deltaPercent": -19.2
+    },
+    "trapsPerRoom": {
+      "curatedMean": 0.203,
+      "randomMean": 0.127,
+      "deltaPercent": -37.4
+    },
+    "securityPerRoom": {
+      "curatedMean": 0.223,
+      "randomMean": 0.223,
+      "deltaPercent": 0
+    },
+    "treasurePerRoom": {
+      "curatedMean": 0.299,
+      "randomMean": 0.307,
+      "deltaPercent": 2.7
+    },
+    "evidencePerRoom": {
+      "curatedMean": 0.321,
+      "randomMean": 0.379,
+      "deltaPercent": 18.1
+    },
+    "objectivesPerRoom": {
+      "curatedMean": 0.067,
+      "randomMean": 0.066,
+      "deltaPercent": -1.5
+    },
+    "narrativePerRoom": {
+      "curatedMean": 0.261,
+      "randomMean": 0.366,
+      "deltaPercent": 40.2
+    },
+    "secretAccessPerRoom": {
+      "curatedMean": 0.181,
+      "randomMean": 0.166,
+      "deltaPercent": -8.3
+    },
+    "corridorsPerRoom": {
+      "curatedMean": 1.834,
+      "randomMean": 1.377,
+      "deltaPercent": -24.9
+    },
+    "doorsPerRoom": {
+      "curatedMean": 3.669,
+      "randomMean": 2.755,
+      "deltaPercent": -24.9
+    },
+    "connectorsPerRoom": {
+      "curatedMean": 0.499,
+      "randomMean": 0.838,
+      "deltaPercent": 67.9
+    },
+    "connectorsPerDeck": {
+      "curatedMean": 3.491,
+      "randomMean": 5.405,
+      "deltaPercent": 54.8
+    },
+    "profileLayers": {
+      "curatedMean": 14,
+      "randomMean": 14,
+      "deltaPercent": 0
+    }
+  },
+  "repetition": {
+    "hazards": {
+      "totalEntries": 1187,
+      "uniqueEntries": 130,
+      "uniquenessRatio": 0.11,
+      "topExactStrings": [
+        {
+          "text": "occupied state affecting access, visibility, utilities, furnishings, or structural safety",
+          "count": 116,
+          "share": 0.098
+        },
+        {
+          "text": "repurposed state affecting access, visibility, utilities, furnishings, or structural safety",
+          "count": 56,
+          "share": 0.047
+        },
+        {
+          "text": "quarantined state affecting access, visibility, utilities, furnishings, or structural safety",
+          "count": 54,
+          "share": 0.045
+        },
+        {
+          "text": "dust contamination interacting with the room's existing use",
+          "count": 45,
+          "share": 0.038
+        },
+        {
+          "text": "reclaimed state affecting access, visibility, utilities, furnishings, or structural safety",
+          "count": 41,
+          "share": 0.035
+        },
+        {
+          "text": "disease contamination interacting with the room's existing use",
+          "count": 37,
+          "share": 0.031
+        },
+        {
+          "text": "haunted state affecting access, visibility, utilities, furnishings, or structural safety",
+          "count": 35,
+          "share": 0.029
+        },
+        {
+          "text": "raided state affecting access, visibility, utilities, furnishings, or structural safety",
+          "count": 33,
+          "share": 0.028
+        },
+        {
+          "text": "necrotic contamination interacting with the room's existing use",
+          "count": 32,
+          "share": 0.027
+        },
+        {
+          "text": "radiological contamination interacting with the room's existing use",
+          "count": 30,
+          "share": 0.025
+        }
+      ]
+    },
+    "occupants": {
+      "totalEntries": 294,
+      "uniqueEntries": 81,
+      "uniquenessRatio": 0.276,
+      "topExactStrings": [
+        {
+          "text": "armed humanoid patrol [humanoid]",
+          "count": 25,
+          "share": 0.085
+        },
+        {
+          "text": "workers, retainers, or raiders [humanoid]",
+          "count": 19,
+          "share": 0.065
+        },
+        {
+          "text": "organized residents [humanoid]",
+          "count": 16,
+          "share": 0.054
+        },
+        {
+          "text": "corrosive slime [ooze]",
+          "count": 10,
+          "share": 0.034
+        },
+        {
+          "text": "alarm animal [sentry-animal]",
+          "count": 8,
+          "share": 0.027
+        },
+        {
+          "text": "feral city animals [urban-pest]",
+          "count": 8,
+          "share": 0.027
+        },
+        {
+          "text": "ecological indicator species [nonhostile-wildlife]",
+          "count": 7,
+          "share": 0.024
+        },
+        {
+          "text": "nesting pests [vermin]",
+          "count": 7,
+          "share": 0.024
+        },
+        {
+          "text": "trained guard animal [sentry-animal]",
+          "count": 7,
+          "share": 0.024
+        },
+        {
+          "text": "waste-feeding ooze [ooze]",
+          "count": 7,
+          "share": 0.024
+        }
+      ]
+    },
+    "narrativeDiscoveries": {
+      "totalEntries": 179,
+      "uniqueEntries": 20,
+      "uniquenessRatio": 0.112,
+      "topExactStrings": [
+        {
+          "text": "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose",
+          "count": 64,
+          "share": 0.358
+        },
+        {
+          "text": "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes",
+          "count": 43,
+          "share": 0.24
+        },
+        {
+          "text": "historical adaptation: structural failure narrows or redirects original circulation",
+          "count": 24,
+          "share": 0.134
+        },
+        {
+          "text": "historical adaptation: historic room use shapes the supernatural manifestation rather than erasing the old purpose",
+          "count": 6,
+          "share": 0.034
+        },
+        {
+          "text": "historical adaptation: occupiers exploit visible functions while bypassing, damaging, or fearing inaccessible controls",
+          "count": 6,
+          "share": 0.034
+        },
+        {
+          "text": "historical adaptation: teaching spaces are reorganized into repeated sleeping and briefing bays",
+          "count": 5,
+          "share": 0.028
+        },
+        {
+          "text": "historical adaptation: formal social rooms become public occupation centers",
+          "count": 4,
+          "share": 0.022
+        },
+        {
+          "text": "historical adaptation: former confinement is inverted into compartmentalized shelter and caches",
+          "count": 4,
+          "share": 0.022
+        },
+        {
+          "text": "historical adaptation: clinical public space becomes survival infrastructure",
+          "count": 3,
+          "share": 0.017
+        },
+        {
+          "text": "historical adaptation: fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+          "count": 3,
+          "share": 0.017
+        }
+      ]
+    }
+  },
+  "patternFindings": [
+    {
+      "code": "thin-adaptation-coverage",
+      "severity": "medium",
+      "cases": [
+        "elven-outlaw-manor",
+        "halfling-quarantine-bunkhouse",
+        "goblinoid-outlaw-hideout",
+        "rebel-civic-building"
+      ]
+    },
+    {
+      "code": "thin-history-interactions",
+      "severity": "medium",
+      "cases": [
+        "elven-outlaw-manor",
+        "halfling-quarantine-bunkhouse",
+        "goblinoid-outlaw-hideout",
+        "rebel-civic-building"
+      ]
+    },
+    {
+      "code": "narrative-discovery-thin",
+      "severity": "low",
+      "cases": [
+        "generic-neutral-urban",
+        "halfling-quarantine-bunkhouse",
+        "seeded-random-06-warehouse"
+      ]
+    },
+    {
+      "code": "secret-density-under-delivery",
+      "severity": "medium",
+      "cases": [
+        "syndicate-guildhall",
+        "orcish-mine-dwarven-hold",
+        "rebel-civic-building"
+      ]
+    },
+    {
+      "code": "curated-outlier-occupantsPerRoom",
+      "severity": "low",
+      "cases": [
+        "seeded-random-07-laboratory",
+        "seeded-random-10-mine"
+      ]
+    },
+    {
+      "code": "curated-outlier-narrativePerRoom",
+      "severity": "low",
+      "cases": [
+        "seeded-random-04-sewer"
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "high",
+      "area": "historical interaction matrix",
+      "reason": "4 cases show strong historical pressure with little or no explicit adaptation.",
+      "action": "Add interaction rules for the specific controller/archetype/ecology combinations listed by the flagged cases; do not add generic random rooms."
+    },
+    {
+      "priority": "medium",
+      "area": "secret traversal scaling",
+      "reason": "3 high-secret cases produce little secret access.",
+      "action": "Map secretDensity to topology-safe alternate access and hidden room connections rather than only content tags."
+    },
+    {
+      "priority": "low",
+      "area": "content phrase diversity",
+      "reason": "Exact-string uniqueness is low in one or more populated content categories.",
+      "action": "Add semantic phrasing variants only after structural interaction quality is addressed; do not use cosmetic text variety to hide repeated mechanics."
+    }
+  ],
+  "cases": [
+    {
+      "caseNumber": 1,
+      "caseId": "generic-neutral-urban",
+      "caseKind": "curated",
+      "archetype": "generic",
+      "culture": "culture-neutral",
+      "controller": "civilian-residents",
+      "occupancyState": "active",
+      "biome": "urban",
+      "ecology": "urban-vermin",
+      "rulesTarget": "open_d20",
+      "reviewScore": 97,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.111,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 0.889,
+        "occupantsPerRoom": 0.222,
+        "socialPerRoom": 0.111,
+        "trapsPerRoom": 0,
+        "securityPerRoom": 0,
+        "treasurePerRoom": 0.444,
+        "evidencePerRoom": 0,
+        "objectivesPerRoom": 0.111,
+        "narrativePerRoom": 0,
+        "secretAccessPerRoom": 0.111,
+        "corridorsPerRoom": 1.556,
+        "doorsPerRoom": 3.111,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "low",
+          "code": "narrative-discovery-thin",
+          "message": "The site contains evidence/objectives but no narrative discoveries.",
+          "evidence": {
+            "evidenceEntries": 0,
+            "objectives": 1
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 2,
+      "caseId": "dwarven-bandit-mansion",
+      "caseKind": "curated",
+      "archetype": "mansion",
+      "culture": "dwarven",
+      "controller": "bandits",
+      "occupancyState": "occupied",
+      "biome": "alpine",
+      "ecology": "scavenger",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.421,
+        "adaptedRoleRatio": 0.474,
+        "currentUseRatio": 0.474,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.053,
+        "occupantsPerRoom": 0.579,
+        "socialPerRoom": 0.158,
+        "trapsPerRoom": 0.158,
+        "securityPerRoom": 0.368,
+        "treasurePerRoom": 0.263,
+        "evidencePerRoom": 0.579,
+        "objectivesPerRoom": 0.053,
+        "narrativePerRoom": 0.474,
+        "secretAccessPerRoom": 0.316,
+        "corridorsPerRoom": 1.526,
+        "doorsPerRoom": 3.053,
+        "connectorsPerRoom": 0.842,
+        "connectorsPerDeck": 8,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 3,
+      "caseId": "elven-outlaw-manor",
+      "caseKind": "curated",
+      "archetype": "manor",
+      "culture": "elven",
+      "controller": "outlaws",
+      "occupancyState": "repurposed",
+      "biome": "temperate-forest",
+      "ecology": "overgrown",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 86,
+      "reviewBand": "review",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.05,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.8,
+        "occupantsPerRoom": 0.65,
+        "socialPerRoom": 0.2,
+        "trapsPerRoom": 0.15,
+        "securityPerRoom": 0.05,
+        "treasurePerRoom": 0.2,
+        "evidencePerRoom": 0.15,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0.1,
+        "secretAccessPerRoom": 0.15,
+        "corridorsPerRoom": 1.25,
+        "doorsPerRoom": 2.5,
+        "connectorsPerRoom": 1.3,
+        "connectorsPerDeck": 8.667,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "thin-history-interactions",
+          "message": "High historical pressure produced fewer than two explicit interactions.",
+          "evidence": {
+            "pressure": 4,
+            "interactions": 1
+          }
+        },
+        {
+          "severity": "medium",
+          "code": "thin-adaptation-coverage",
+          "message": "High historical pressure affected very little of the inherited room program.",
+          "evidence": {
+            "pressure": 4,
+            "adaptedRoleRatio": 0
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 4,
+      "caseId": "ancient-desert-tomb",
+      "caseKind": "curated",
+      "archetype": "tomb",
+      "culture": "ancient-unknown",
+      "controller": "adventuring-company",
+      "occupancyState": "reclaimed",
+      "biome": "hot-desert",
+      "ecology": "undead",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.19,
+        "adaptedRoleRatio": 0.19,
+        "currentUseRatio": 0.19,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.857,
+        "occupantsPerRoom": 0.667,
+        "socialPerRoom": 0.048,
+        "trapsPerRoom": 0.429,
+        "securityPerRoom": 0.048,
+        "treasurePerRoom": 0.571,
+        "evidencePerRoom": 0.286,
+        "objectivesPerRoom": 0.143,
+        "narrativePerRoom": 0.19,
+        "secretAccessPerRoom": 0.143,
+        "corridorsPerRoom": 1.619,
+        "doorsPerRoom": 3.238,
+        "connectorsPerRoom": 0.286,
+        "connectorsPerDeck": 3,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 5,
+      "caseId": "criminal-urban-sewer",
+      "caseKind": "curated",
+      "archetype": "sewer",
+      "culture": "human",
+      "controller": "criminal-syndicate",
+      "occupancyState": "active",
+      "biome": "urban",
+      "ecology": "urban-vermin",
+      "rulesTarget": "open_d20",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 2,
+      "normalized": {
+        "interactionsPerRoom": 0.048,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.429,
+        "occupantsPerRoom": 0.619,
+        "socialPerRoom": 0.048,
+        "trapsPerRoom": 0.143,
+        "securityPerRoom": 0.238,
+        "treasurePerRoom": 0.286,
+        "evidencePerRoom": 0.095,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0.048,
+        "secretAccessPerRoom": 0.143,
+        "corridorsPerRoom": 1.714,
+        "doorsPerRoom": 3.429,
+        "connectorsPerRoom": 0.571,
+        "connectorsPerDeck": 6,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 6,
+      "caseId": "dwarven-goblin-fortress",
+      "caseKind": "curated",
+      "archetype": "fortress",
+      "culture": "dwarven",
+      "controller": "goblin-clan",
+      "occupancyState": "occupied",
+      "biome": "cavern",
+      "ecology": "fungal",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 5,
+      "normalized": {
+        "interactionsPerRoom": 0.368,
+        "adaptedRoleRatio": 0.316,
+        "currentUseRatio": 0.316,
+        "overlayRatio": 0.053,
+        "hazardsPerRoom": 2.316,
+        "occupantsPerRoom": 0.842,
+        "socialPerRoom": 0.105,
+        "trapsPerRoom": 0.158,
+        "securityPerRoom": 0.579,
+        "treasurePerRoom": 0.211,
+        "evidencePerRoom": 0.421,
+        "objectivesPerRoom": 0.105,
+        "narrativePerRoom": 0.421,
+        "secretAccessPerRoom": 0.474,
+        "corridorsPerRoom": 1.421,
+        "doorsPerRoom": 2.842,
+        "connectorsPerRoom": 1.158,
+        "connectorsPerDeck": 7.333,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 7,
+      "caseId": "occupied-human-school",
+      "caseKind": "curated",
+      "archetype": "school",
+      "culture": "human",
+      "controller": "military-garrison",
+      "occupancyState": "occupied",
+      "biome": "ruined-city",
+      "ecology": "urban-vermin",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 2,
+      "normalized": {
+        "interactionsPerRoom": 0.176,
+        "adaptedRoleRatio": 0.118,
+        "currentUseRatio": 0.118,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.647,
+        "occupantsPerRoom": 0.471,
+        "socialPerRoom": 0.412,
+        "trapsPerRoom": 0.294,
+        "securityPerRoom": 0.294,
+        "treasurePerRoom": 0.118,
+        "evidencePerRoom": 0.529,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0.353,
+        "secretAccessPerRoom": 0.235,
+        "corridorsPerRoom": 2.353,
+        "doorsPerRoom": 4.706,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 8,
+      "caseId": "necromancer-arcane-university",
+      "caseKind": "curated",
+      "archetype": "arcane_university",
+      "culture": "elven",
+      "controller": "necromancers",
+      "occupancyState": "haunted",
+      "biome": "arcane-wilds",
+      "ecology": "undead",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.095,
+        "adaptedRoleRatio": 0.095,
+        "currentUseRatio": 0.095,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.952,
+        "occupantsPerRoom": 0.524,
+        "socialPerRoom": 0.238,
+        "trapsPerRoom": 0.333,
+        "securityPerRoom": 0.286,
+        "treasurePerRoom": 0.143,
+        "evidencePerRoom": 0.524,
+        "objectivesPerRoom": 0.095,
+        "narrativePerRoom": 0.571,
+        "secretAccessPerRoom": 0.19,
+        "corridorsPerRoom": 1.429,
+        "doorsPerRoom": 2.857,
+        "connectorsPerRoom": 0.476,
+        "connectorsPerDeck": 3.333,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 9,
+      "caseId": "syndicate-guildhall",
+      "caseKind": "curated",
+      "archetype": "guildhall",
+      "culture": "mixed-cosmopolitan",
+      "controller": "criminal-syndicate",
+      "occupancyState": "active",
+      "biome": "urban",
+      "ecology": "urban-vermin",
+      "rulesTarget": "open_d20",
+      "reviewScore": 93,
+      "reviewBand": "healthy",
+      "historyPressure": 1,
+      "normalized": {
+        "interactionsPerRoom": 0.077,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 0.308,
+        "occupantsPerRoom": 0.462,
+        "socialPerRoom": 0.231,
+        "trapsPerRoom": 0.231,
+        "securityPerRoom": 0.308,
+        "treasurePerRoom": 0.385,
+        "evidencePerRoom": 0.231,
+        "objectivesPerRoom": 0.077,
+        "narrativePerRoom": 0.077,
+        "secretAccessPerRoom": 0.077,
+        "corridorsPerRoom": 1.923,
+        "doorsPerRoom": 3.846,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "secret-density-under-delivery",
+          "message": "High requested secret density produced little secret access.",
+          "evidence": {
+            "secretDensity": "high",
+            "secretAccessPerRoom": 0.077
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 10,
+      "caseId": "dragonkin-cult-temple",
+      "caseKind": "curated",
+      "archetype": "temple",
+      "culture": "dragonkin",
+      "controller": "cult",
+      "occupancyState": "occupied",
+      "biome": "volcanic",
+      "ecology": "elemental",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 2,
+      "normalized": {
+        "interactionsPerRoom": 0.2,
+        "adaptedRoleRatio": 0.267,
+        "currentUseRatio": 0.267,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.333,
+        "occupantsPerRoom": 0.4,
+        "socialPerRoom": 0.2,
+        "trapsPerRoom": 0.2,
+        "securityPerRoom": 0.333,
+        "treasurePerRoom": 0.4,
+        "evidencePerRoom": 0.333,
+        "objectivesPerRoom": 0.267,
+        "narrativePerRoom": 0.267,
+        "secretAccessPerRoom": 0.333,
+        "corridorsPerRoom": 1.467,
+        "doorsPerRoom": 2.933,
+        "connectorsPerRoom": 0.933,
+        "connectorsPerDeck": 7,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 11,
+      "caseId": "coastal-refugee-warehouse",
+      "caseKind": "curated",
+      "archetype": "warehouse",
+      "culture": "culture-neutral",
+      "controller": "refugees",
+      "occupancyState": "occupied",
+      "biome": "coastal",
+      "ecology": "wetland",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 3,
+      "normalized": {
+        "interactionsPerRoom": 0.214,
+        "adaptedRoleRatio": 0.214,
+        "currentUseRatio": 0.214,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.5,
+        "occupantsPerRoom": 0.786,
+        "socialPerRoom": 0.143,
+        "trapsPerRoom": 0.071,
+        "securityPerRoom": 0.071,
+        "treasurePerRoom": 0.429,
+        "evidencePerRoom": 0.5,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0.429,
+        "secretAccessPerRoom": 0.071,
+        "corridorsPerRoom": 1,
+        "doorsPerRoom": 2,
+        "connectorsPerRoom": 0.857,
+        "connectorsPerDeck": 6,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 12,
+      "caseId": "gnomish-salvage-laboratory",
+      "caseKind": "curated",
+      "archetype": "laboratory",
+      "culture": "gnomish",
+      "controller": "salvagers",
+      "occupancyState": "partially-collapsed",
+      "biome": "badlands",
+      "ecology": "construct",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.188,
+        "adaptedRoleRatio": 0.125,
+        "currentUseRatio": 0.125,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.813,
+        "occupantsPerRoom": 0.25,
+        "socialPerRoom": 0,
+        "trapsPerRoom": 0.313,
+        "securityPerRoom": 0.125,
+        "treasurePerRoom": 0.438,
+        "evidencePerRoom": 0.438,
+        "objectivesPerRoom": 0.063,
+        "narrativePerRoom": 0.313,
+        "secretAccessPerRoom": 0.313,
+        "corridorsPerRoom": 2.375,
+        "doorsPerRoom": 4.75,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 13,
+      "caseId": "halfling-quarantine-bunkhouse",
+      "caseKind": "curated",
+      "archetype": "bunkhouse_compound",
+      "culture": "halfling",
+      "controller": "plague-survivors",
+      "occupancyState": "quarantined",
+      "biome": "grassland",
+      "ecology": "plague",
+      "rulesTarget": "open_d20",
+      "reviewScore": 83,
+      "reviewBand": "review",
+      "historyPressure": 5,
+      "normalized": {
+        "interactionsPerRoom": 0.045,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.045,
+        "occupantsPerRoom": 0.364,
+        "socialPerRoom": 0.227,
+        "trapsPerRoom": 0.136,
+        "securityPerRoom": 0.273,
+        "treasurePerRoom": 0.182,
+        "evidencePerRoom": 0.045,
+        "objectivesPerRoom": 0.045,
+        "narrativePerRoom": 0,
+        "secretAccessPerRoom": 0.091,
+        "corridorsPerRoom": 4.5,
+        "doorsPerRoom": 9,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "thin-history-interactions",
+          "message": "High historical pressure produced fewer than two explicit interactions.",
+          "evidence": {
+            "pressure": 5,
+            "interactions": 1
+          }
+        },
+        {
+          "severity": "medium",
+          "code": "thin-adaptation-coverage",
+          "message": "High historical pressure affected very little of the inherited room program.",
+          "evidence": {
+            "pressure": 5,
+            "adaptedRoleRatio": 0
+          }
+        },
+        {
+          "severity": "low",
+          "code": "narrative-discovery-thin",
+          "message": "The site contains evidence/objectives but no narrative discoveries.",
+          "evidence": {
+            "evidenceEntries": 1,
+            "objectives": 1
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 14,
+      "caseId": "escaped-prisoner-prison",
+      "caseKind": "curated",
+      "archetype": "prison",
+      "culture": "human",
+      "controller": "escaped-prisoners",
+      "occupancyState": "repurposed",
+      "biome": "urban",
+      "ecology": "urban-vermin",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.167,
+        "adaptedRoleRatio": 0.111,
+        "currentUseRatio": 0.111,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2,
+        "occupantsPerRoom": 0.556,
+        "socialPerRoom": 0.222,
+        "trapsPerRoom": 0.222,
+        "securityPerRoom": 0.333,
+        "treasurePerRoom": 0.222,
+        "evidencePerRoom": 0.667,
+        "objectivesPerRoom": 0.056,
+        "narrativePerRoom": 0.389,
+        "secretAccessPerRoom": 0.111,
+        "corridorsPerRoom": 1.389,
+        "doorsPerRoom": 2.778,
+        "connectorsPerRoom": 0.333,
+        "connectorsPerDeck": 3,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 15,
+      "caseId": "urban-plague-hospital",
+      "caseKind": "curated",
+      "archetype": "hospital",
+      "culture": "human",
+      "controller": "plague-survivors",
+      "occupancyState": "quarantined",
+      "biome": "ruined-city",
+      "ecology": "plague",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.188,
+        "adaptedRoleRatio": 0.188,
+        "currentUseRatio": 0.188,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.5,
+        "occupantsPerRoom": 0.75,
+        "socialPerRoom": 0.313,
+        "trapsPerRoom": 0.438,
+        "securityPerRoom": 0.25,
+        "treasurePerRoom": 0.25,
+        "evidencePerRoom": 0.375,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0.25,
+        "secretAccessPerRoom": 0.063,
+        "corridorsPerRoom": 2.688,
+        "doorsPerRoom": 5.375,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 16,
+      "caseId": "orcish-mine-dwarven-hold",
+      "caseKind": "curated",
+      "archetype": "mine",
+      "culture": "orcish",
+      "controller": "dwarven-hold",
+      "occupancyState": "occupied",
+      "biome": "underdark",
+      "ecology": "subterranean",
+      "rulesTarget": "kaysender",
+      "reviewScore": 93,
+      "reviewBand": "healthy",
+      "historyPressure": 2,
+      "normalized": {
+        "interactionsPerRoom": 0.05,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.6,
+        "occupantsPerRoom": 0.85,
+        "socialPerRoom": 0.15,
+        "trapsPerRoom": 0.15,
+        "securityPerRoom": 0.2,
+        "treasurePerRoom": 0.1,
+        "evidencePerRoom": 0.1,
+        "objectivesPerRoom": 0.05,
+        "narrativePerRoom": 0.1,
+        "secretAccessPerRoom": 0.05,
+        "corridorsPerRoom": 1,
+        "doorsPerRoom": 2,
+        "connectorsPerRoom": 1.3,
+        "connectorsPerDeck": 6.5,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "secret-density-under-delivery",
+          "message": "High requested secret density produced little secret access.",
+          "evidence": {
+            "secretDensity": "high",
+            "secretAccessPerRoom": 0.05
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 17,
+      "caseId": "flooded-gnomish-industrial",
+      "caseKind": "curated",
+      "archetype": "industrial_facility",
+      "culture": "gnomish",
+      "controller": "occupation-force",
+      "occupancyState": "partially-flooded",
+      "biome": "riverine",
+      "ecology": "invasive",
+      "rulesTarget": "open_d20",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 5,
+      "normalized": {
+        "interactionsPerRoom": 0.238,
+        "adaptedRoleRatio": 0.143,
+        "currentUseRatio": 0.143,
+        "overlayRatio": 0.095,
+        "hazardsPerRoom": 2.81,
+        "occupantsPerRoom": 0.714,
+        "socialPerRoom": 0.048,
+        "trapsPerRoom": 0.19,
+        "securityPerRoom": 0.238,
+        "treasurePerRoom": 0.333,
+        "evidencePerRoom": 0.333,
+        "objectivesPerRoom": 0.048,
+        "narrativePerRoom": 0.667,
+        "secretAccessPerRoom": 0.19,
+        "corridorsPerRoom": 1.048,
+        "doorsPerRoom": 2.095,
+        "connectorsPerRoom": 1.429,
+        "connectorsPerDeck": 7.5,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 18,
+      "caseId": "goblinoid-outlaw-hideout",
+      "caseKind": "curated",
+      "archetype": "hideout",
+      "culture": "goblinoid",
+      "controller": "outlaws",
+      "occupancyState": "active",
+      "biome": "boreal-forest",
+      "ecology": "woodland",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 86,
+      "reviewBand": "review",
+      "historyPressure": 3,
+      "normalized": {
+        "interactionsPerRoom": 0.077,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 0.846,
+        "occupantsPerRoom": 0.462,
+        "socialPerRoom": 0.077,
+        "trapsPerRoom": 0.077,
+        "securityPerRoom": 0.154,
+        "treasurePerRoom": 0.538,
+        "evidencePerRoom": 0.154,
+        "objectivesPerRoom": 0.077,
+        "narrativePerRoom": 0.231,
+        "secretAccessPerRoom": 0.385,
+        "corridorsPerRoom": 1.846,
+        "doorsPerRoom": 3.692,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "thin-history-interactions",
+          "message": "High historical pressure produced fewer than two explicit interactions.",
+          "evidence": {
+            "pressure": 3,
+            "interactions": 1
+          }
+        },
+        {
+          "severity": "medium",
+          "code": "thin-adaptation-coverage",
+          "message": "High historical pressure affected very little of the inherited room program.",
+          "evidence": {
+            "pressure": 3,
+            "adaptedRoleRatio": 0
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 19,
+      "caseId": "rebel-civic-building",
+      "caseKind": "curated",
+      "archetype": "civic_building",
+      "culture": "mixed-cosmopolitan",
+      "controller": "rebels",
+      "occupancyState": "occupied",
+      "biome": "ruined-city",
+      "ecology": "urban-vermin",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 79,
+      "reviewBand": "review",
+      "historyPressure": 4,
+      "normalized": {
+        "interactionsPerRoom": 0.083,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.917,
+        "occupantsPerRoom": 0.583,
+        "socialPerRoom": 0.25,
+        "trapsPerRoom": 0.167,
+        "securityPerRoom": 0.083,
+        "treasurePerRoom": 0.167,
+        "evidencePerRoom": 0.333,
+        "objectivesPerRoom": 0.083,
+        "narrativePerRoom": 0.083,
+        "secretAccessPerRoom": 0,
+        "corridorsPerRoom": 2.75,
+        "doorsPerRoom": 5.5,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "thin-history-interactions",
+          "message": "High historical pressure produced fewer than two explicit interactions.",
+          "evidence": {
+            "pressure": 4,
+            "interactions": 1
+          }
+        },
+        {
+          "severity": "medium",
+          "code": "thin-adaptation-coverage",
+          "message": "High historical pressure affected very little of the inherited room program.",
+          "evidence": {
+            "pressure": 4,
+            "adaptedRoleRatio": 0
+          }
+        },
+        {
+          "severity": "medium",
+          "code": "secret-density-under-delivery",
+          "message": "High requested secret density produced little secret access.",
+          "evidence": {
+            "secretDensity": "high",
+            "secretAccessPerRoom": 0
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 20,
+      "caseId": "seeded-random-01-fortress",
+      "caseKind": "seeded-random",
+      "archetype": "fortress",
+      "culture": "culture-neutral",
+      "controller": "military-garrison",
+      "occupancyState": "haunted",
+      "biome": "ruined-city",
+      "ecology": "arachnid",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.286,
+        "adaptedRoleRatio": 0.286,
+        "currentUseRatio": 0.286,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.214,
+        "occupantsPerRoom": 0.357,
+        "socialPerRoom": 0.071,
+        "trapsPerRoom": 0,
+        "securityPerRoom": 0.5,
+        "treasurePerRoom": 0.5,
+        "evidencePerRoom": 0.429,
+        "objectivesPerRoom": 0.143,
+        "narrativePerRoom": 0.429,
+        "secretAccessPerRoom": 0.214,
+        "corridorsPerRoom": 1.286,
+        "doorsPerRoom": 2.571,
+        "connectorsPerRoom": 0.857,
+        "connectorsPerDeck": 6,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 21,
+      "caseId": "seeded-random-02-mansion",
+      "caseKind": "seeded-random",
+      "archetype": "mansion",
+      "culture": "mixed-cosmopolitan",
+      "controller": "criminal-syndicate",
+      "occupancyState": "evacuated",
+      "biome": "riverine",
+      "ecology": "feral",
+      "rulesTarget": "open_d20",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.267,
+        "adaptedRoleRatio": 0.267,
+        "currentUseRatio": 0.267,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.2,
+        "occupantsPerRoom": 0.733,
+        "socialPerRoom": 0.267,
+        "trapsPerRoom": 0.2,
+        "securityPerRoom": 0.267,
+        "treasurePerRoom": 0.333,
+        "evidencePerRoom": 0.4,
+        "objectivesPerRoom": 0.067,
+        "narrativePerRoom": 0.267,
+        "secretAccessPerRoom": 0.133,
+        "corridorsPerRoom": 1.467,
+        "doorsPerRoom": 2.933,
+        "connectorsPerRoom": 1.067,
+        "connectorsPerDeck": 8,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 22,
+      "caseId": "seeded-random-03-tomb",
+      "caseKind": "seeded-random",
+      "archetype": "tomb",
+      "culture": "gnomish",
+      "controller": "cult",
+      "occupancyState": "reclaimed",
+      "biome": "jungle",
+      "ecology": "reptilian",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.25,
+        "adaptedRoleRatio": 0.2,
+        "currentUseRatio": 0.2,
+        "overlayRatio": 0.05,
+        "hazardsPerRoom": 2.55,
+        "occupantsPerRoom": 0.55,
+        "socialPerRoom": 0.05,
+        "trapsPerRoom": 0.4,
+        "securityPerRoom": 0.55,
+        "treasurePerRoom": 0.55,
+        "evidencePerRoom": 0.35,
+        "objectivesPerRoom": 0.2,
+        "narrativePerRoom": 0.55,
+        "secretAccessPerRoom": 0.2,
+        "corridorsPerRoom": 1.4,
+        "doorsPerRoom": 2.8,
+        "connectorsPerRoom": 0.9,
+        "connectorsPerDeck": 6,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 23,
+      "caseId": "seeded-random-04-sewer",
+      "caseKind": "seeded-random",
+      "archetype": "sewer",
+      "culture": "human",
+      "controller": "industrial-workers",
+      "occupancyState": "infested",
+      "biome": "marsh",
+      "ecology": "fungal",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 97,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.28,
+        "adaptedRoleRatio": 0.24,
+        "currentUseRatio": 0.24,
+        "overlayRatio": 0.08,
+        "hazardsPerRoom": 2.76,
+        "occupantsPerRoom": 0.28,
+        "socialPerRoom": 0.04,
+        "trapsPerRoom": 0,
+        "securityPerRoom": 0.04,
+        "treasurePerRoom": 0.04,
+        "evidencePerRoom": 0.6,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 1.12,
+        "secretAccessPerRoom": 0.16,
+        "corridorsPerRoom": 1.44,
+        "doorsPerRoom": 2.88,
+        "connectorsPerRoom": 0.8,
+        "connectorsPerDeck": 6.667,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "low",
+          "code": "curated-outlier-narrativePerRoom",
+          "message": "Seeded-random result is a strong outlier from the curated median for narrativePerRoom.",
+          "evidence": {
+            "value": 1.12,
+            "curatedMedian": 0.25,
+            "curatedMad": 0.167
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 24,
+      "caseId": "seeded-random-05-arcane-university",
+      "caseKind": "seeded-random",
+      "archetype": "arcane_university",
+      "culture": "colonial",
+      "controller": "necromancers",
+      "occupancyState": "burned",
+      "biome": "urban",
+      "ecology": "scavenger",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.053,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.895,
+        "occupantsPerRoom": 0.579,
+        "socialPerRoom": 0.211,
+        "trapsPerRoom": 0.316,
+        "securityPerRoom": 0,
+        "treasurePerRoom": 0.211,
+        "evidencePerRoom": 0.368,
+        "objectivesPerRoom": 0.105,
+        "narrativePerRoom": 0.368,
+        "secretAccessPerRoom": 0.105,
+        "corridorsPerRoom": 0.842,
+        "doorsPerRoom": 1.684,
+        "connectorsPerRoom": 0.947,
+        "connectorsPerDeck": 3.6,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 25,
+      "caseId": "seeded-random-06-warehouse",
+      "caseKind": "seeded-random",
+      "archetype": "warehouse",
+      "culture": "mixed-cosmopolitan",
+      "controller": "adventuring-company",
+      "occupancyState": "raided",
+      "biome": "riverine",
+      "ecology": "fiendish",
+      "rulesTarget": "open_d20",
+      "reviewScore": 97,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.077,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.769,
+        "occupantsPerRoom": 0.385,
+        "socialPerRoom": 0.077,
+        "trapsPerRoom": 0.077,
+        "securityPerRoom": 0.077,
+        "treasurePerRoom": 0.538,
+        "evidencePerRoom": 0.154,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0,
+        "secretAccessPerRoom": 0,
+        "corridorsPerRoom": 1.923,
+        "doorsPerRoom": 3.846,
+        "connectorsPerRoom": 0,
+        "connectorsPerDeck": 0,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "low",
+          "code": "narrative-discovery-thin",
+          "message": "The site contains evidence/objectives but no narrative discoveries.",
+          "evidence": {
+            "evidenceEntries": 2,
+            "objectives": 0
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 26,
+      "caseId": "seeded-random-07-laboratory",
+      "caseKind": "seeded-random",
+      "archetype": "laboratory",
+      "culture": "culture-neutral",
+      "controller": "military-garrison",
+      "occupancyState": "quarantined",
+      "biome": "cavern",
+      "ecology": "arachnid",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 97,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.188,
+        "adaptedRoleRatio": 0.188,
+        "currentUseRatio": 0.188,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.563,
+        "occupantsPerRoom": 0.125,
+        "socialPerRoom": 0,
+        "trapsPerRoom": 0,
+        "securityPerRoom": 0.563,
+        "treasurePerRoom": 0.313,
+        "evidencePerRoom": 0.688,
+        "objectivesPerRoom": 0.063,
+        "narrativePerRoom": 0.625,
+        "secretAccessPerRoom": 0.188,
+        "corridorsPerRoom": 1,
+        "doorsPerRoom": 2,
+        "connectorsPerRoom": 1,
+        "connectorsPerDeck": 5.333,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "low",
+          "code": "curated-outlier-occupantsPerRoom",
+          "message": "Seeded-random result is a strong outlier from the curated median for occupantsPerRoom.",
+          "evidence": {
+            "value": 0.125,
+            "curatedMedian": 0.579,
+            "curatedMad": 0.117
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 27,
+      "caseId": "seeded-random-08-prison",
+      "caseKind": "seeded-random",
+      "archetype": "prison",
+      "culture": "orcish",
+      "controller": "dragonkin-host",
+      "occupancyState": "sealed",
+      "biome": "crystal-wilds",
+      "ecology": "overgrown",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.05,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.9,
+        "occupantsPerRoom": 0.85,
+        "socialPerRoom": 0.2,
+        "trapsPerRoom": 0.4,
+        "securityPerRoom": 0.6,
+        "treasurePerRoom": 0.15,
+        "evidencePerRoom": 0.35,
+        "objectivesPerRoom": 0.05,
+        "narrativePerRoom": 0.1,
+        "secretAccessPerRoom": 0.2,
+        "corridorsPerRoom": 1.45,
+        "doorsPerRoom": 2.9,
+        "connectorsPerRoom": 0.9,
+        "connectorsPerDeck": 6,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 28,
+      "caseId": "seeded-random-09-hospital",
+      "caseKind": "seeded-random",
+      "archetype": "hospital",
+      "culture": "mixed-cosmopolitan",
+      "controller": "smugglers",
+      "occupancyState": "looted",
+      "biome": "swamp",
+      "ecology": "aquatic",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.333,
+        "adaptedRoleRatio": 0.267,
+        "currentUseRatio": 0.267,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.867,
+        "occupantsPerRoom": 0.333,
+        "socialPerRoom": 0.267,
+        "trapsPerRoom": 0.133,
+        "securityPerRoom": 0.067,
+        "treasurePerRoom": 0.333,
+        "evidencePerRoom": 0.4,
+        "objectivesPerRoom": 0,
+        "narrativePerRoom": 0.4,
+        "secretAccessPerRoom": 0.2,
+        "corridorsPerRoom": 1.467,
+        "doorsPerRoom": 2.933,
+        "connectorsPerRoom": 0.4,
+        "connectorsPerDeck": 3,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 29,
+      "caseId": "seeded-random-10-mine",
+      "caseKind": "seeded-random",
+      "archetype": "mine",
+      "culture": "elven",
+      "controller": "adventuring-company",
+      "occupancyState": "raided",
+      "biome": "coastal",
+      "ecology": "aquatic",
+      "rulesTarget": "open_d20",
+      "reviewScore": 97,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.15,
+        "adaptedRoleRatio": 0.1,
+        "currentUseRatio": 0.1,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.55,
+        "occupantsPerRoom": 0.1,
+        "socialPerRoom": 0.1,
+        "trapsPerRoom": 0,
+        "securityPerRoom": 0,
+        "treasurePerRoom": 0.4,
+        "evidencePerRoom": 0.2,
+        "objectivesPerRoom": 0.05,
+        "narrativePerRoom": 0.1,
+        "secretAccessPerRoom": 0.1,
+        "corridorsPerRoom": 1.5,
+        "doorsPerRoom": 3,
+        "connectorsPerRoom": 1.2,
+        "connectorsPerDeck": 8,
+        "profileLayers": 14
+      },
+      "findings": [
+        {
+          "severity": "low",
+          "code": "curated-outlier-occupantsPerRoom",
+          "message": "Seeded-random result is a strong outlier from the curated median for occupantsPerRoom.",
+          "evidence": {
+            "value": 0.1,
+            "curatedMedian": 0.579,
+            "curatedMad": 0.117
+          }
+        }
+      ]
+    },
+    {
+      "caseNumber": 30,
+      "caseId": "seeded-random-11-industrial-facility",
+      "caseKind": "seeded-random",
+      "archetype": "industrial_facility",
+      "culture": "orcish",
+      "controller": "bandits",
+      "occupancyState": "understaffed",
+      "biome": "marsh",
+      "ecology": "wetland",
+      "rulesTarget": "world_of_darkness",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.158,
+        "adaptedRoleRatio": 0.158,
+        "currentUseRatio": 0.158,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.474,
+        "occupantsPerRoom": 0.421,
+        "socialPerRoom": 0.105,
+        "trapsPerRoom": 0.053,
+        "securityPerRoom": 0.105,
+        "treasurePerRoom": 0.263,
+        "evidencePerRoom": 0.368,
+        "objectivesPerRoom": 0.053,
+        "narrativePerRoom": 0.474,
+        "secretAccessPerRoom": 0.263,
+        "corridorsPerRoom": 1.368,
+        "doorsPerRoom": 2.737,
+        "connectorsPerRoom": 1.263,
+        "connectorsPerDeck": 8,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 31,
+      "caseId": "seeded-random-12-hideout",
+      "caseKind": "seeded-random",
+      "archetype": "hideout",
+      "culture": "orcish",
+      "controller": "abandoned",
+      "occupancyState": "long-abandoned",
+      "biome": "temperate-forest",
+      "ecology": "herbivore-heavy",
+      "rulesTarget": "blacklight_continuum",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.143,
+        "adaptedRoleRatio": 0.143,
+        "currentUseRatio": 0.143,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 1.714,
+        "occupantsPerRoom": 0.357,
+        "socialPerRoom": 0.143,
+        "trapsPerRoom": 0.071,
+        "securityPerRoom": 0.071,
+        "treasurePerRoom": 0.143,
+        "evidencePerRoom": 0.286,
+        "objectivesPerRoom": 0.071,
+        "narrativePerRoom": 0.214,
+        "secretAccessPerRoom": 0.286,
+        "corridorsPerRoom": 0.929,
+        "doorsPerRoom": 1.857,
+        "connectorsPerRoom": 1,
+        "connectorsPerDeck": 4.667,
+        "profileLayers": 14
+      },
+      "findings": []
+    },
+    {
+      "caseNumber": 32,
+      "caseId": "seeded-random-13-civic-building",
+      "caseKind": "seeded-random",
+      "archetype": "civic_building",
+      "culture": "dwarven",
+      "controller": "refugees",
+      "occupancyState": "repurposed",
+      "biome": "mangrove",
+      "ecology": "parasite",
+      "rulesTarget": "kaysender",
+      "reviewScore": 100,
+      "reviewBand": "healthy",
+      "historyPressure": 0,
+      "normalized": {
+        "interactionsPerRoom": 0.056,
+        "adaptedRoleRatio": 0,
+        "currentUseRatio": 0,
+        "overlayRatio": 0,
+        "hazardsPerRoom": 2.167,
+        "occupantsPerRoom": 0.833,
+        "socialPerRoom": 0.222,
+        "trapsPerRoom": 0,
+        "securityPerRoom": 0.056,
+        "treasurePerRoom": 0.222,
+        "evidencePerRoom": 0.333,
+        "objectivesPerRoom": 0.056,
+        "narrativePerRoom": 0.111,
+        "secretAccessPerRoom": 0.111,
+        "corridorsPerRoom": 1.833,
+        "doorsPerRoom": 3.667,
+        "connectorsPerRoom": 0.556,
+        "connectorsPerDeck": 5,
+        "profileLayers": 14
+      },
+      "findings": []
+    }
+  ]
+}
