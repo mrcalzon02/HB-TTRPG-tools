@@ -46,3 +46,5 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Observer timeline navigation verification failed." }
           java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverHistoryVerification
           if ($LASTEXITCODE -ne 0) { throw "Historical observer evidence verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.simulation.ManualWorldStepServiceVerification
+          if ($LASTEXITCODE -ne 0) { throw "Authoritative manual observer step verification failed." }
