@@ -1,0 +1,24 @@
+{
+  "id": "donjon-name",
+  "title": "Markov Name Generator",
+  "provider": "donjon.bin.sh",
+  "provider_credit": "drow",
+  "source_page": "https://donjon.bin.sh/code/name/",
+  "retrieval": [
+    {
+      "file": "name_generator.js",
+      "url": "https://donjon.bin.sh/code/name/name_generator.js",
+      "role": "generator-engine",
+      "rights": "public-domain-per-provider"
+    },
+    {
+      "file": "egyptian_set.js",
+      "url": "https://donjon.bin.sh/code/name/egyptian_set.js",
+      "role": "example-data",
+      "rights": "separately-attributed-example-data"
+    }
+  ],
+  "example_data_attribution": "Kate Monk's Onomastikon, © 1997 Kate Monk",
+  "project_role": ["name-generation-reference", "markov-model", "culture-language-style"],
+  "native_dataset_policy": "Use canonical HB-TTRPG corpora; do not silently absorb third-party example datasets."
+}

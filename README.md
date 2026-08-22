@@ -118,6 +118,106 @@ The following registry cards now launch working alpha or editor-alpha tools:
 - Airship Core and Ship Module Builder
 - Crafting, Gadget, and Equipment Creator
 - Supply, Water, and Survival Planner
+- NPC and Crew Generator
+
+The general **Generators** page also launches the standalone **Spell Creator**, which is the project’s single standard spell-generation workflow.
+
+### Spell Creator
+
+The Spell Creator builds complete Hypertext d20-compatible spell drafts rather than flavor-only stubs. It provides spell level, class assignment, school, role, delivery shape, damage or energy type, saves or attack resolution, conditions, range, concentration, ritual casting, component burden, spell resistance, target or area, duration, damage or healing progression, caster-level caps, generous manifestation and origin text, practical-use guidance, automatic balance warnings, copyable full spell text, and JSON export.
+
+The former split Normal and Eccentric spell placeholders are not part of the active generator system. All standard spell work is consolidated in `spell-creator.html` and its dedicated vocabulary, mechanics, and module files.
+
+### NPC and Crew Generator
+
+The NPC and Crew Generator supports 37 population bands ranging from children, elderly residents, laborers, farmers, artisans, scribes, government workers, clergy, and merchants through militia, professional soldiers, officers, mercenaries, bandits, criminals, smugglers, pirates, prisoners, refugees, explorers, and specialized airship crews.
+
+It draws from eleven standard player classes, five standard NPC classes, and the converted Kaysender Airship Engineer, Air Captain, and Sky Warden class families.
+
+### Crafting, Equipment, and Ship Systems Generator
+
+The crafting engine currently contains 43 reusable project patterns:
+
+- 19 personal-equipment, survival, technical, communication, medical, weapon, and armor patterns
+- 13 general ship-module patterns
+- 5 ship-weapon and defense patterns
+- 6 airship-core patterns
+
+Generated projects include:
+
+- Hypertext d20 complexity and project DC
+- Work units, staffing assumptions, and estimated labor days
+- Material quality and facility modifiers
+- Planned raw-material cost and draft market value
+- Construction, research, and testing skills
+- Operating effect, activation, limitations, weight, and module slot
+- Power source and maintenance requirements
+- Legal status, complication, planned improvements, and possible flaws
+- Optional simulation of research, repeated construction checks, exceptional progress, material loss, minor or major failures, and final testing
+- Individual project JSON, batch JSON, and draft wiki-entry export
+
+The current complexity model uses Routine, Standard, Complex, Advanced, and Revolutionary projects with DCs from 10 to 30. Work is scaled from personal equipment through crew-served installations, ship modules, and major core systems.
+
+These tools are campaign-operation and playtest utilities. Generated prices, save DCs, structural values, and ship effects should be tuned through campaign play before being treated as final publication-ready balance.
+
+## Main-line editor production model
+
+The original Island, Settlement, and Airship stages are retained as prototype history. Production development follows the dependency order in `data/kaysender/editors/editor-roadmap.json` and `docs/kaysender-editor-staging-plan.md`.
+
+Only one main-line editor is implemented at a time on the single active branch `main`. Random generators remain accelerators; they do not count as completed editors.
+
+The production order is:
+
+1. **P0 — Shared Editor Kernel and Profile Contract**
+2. **P1 — Promote Floating Island / Skyland Editor**
+3. **P2 — Population and Demographics Editor**
+4. **P3 — Promote Settlement / Skyport Editor**
+5. **P4 — City District, Civic Site, and Facility Editor**
+6. **P5 — Crafting, Equipment, Ship Module, and Production Editor**
+7. **P6 — NPC, Crew, Household, and Roster Editor**
+8. **P7 — Promote Airship / Vessel Editor**
+9. **P8 — Sky Ecology, Creature, Herd, and Disease Editor**
+10. **P9 — World Region, Route, and Airspace Editor**
+11. **P10 — Market, Supply Chain, Inventory, and Production Editor**
+12. **P11 — Faction, Guild, Government, and Fleet Editor**
+13. **P12 — Organization Operations, Finance, Logistics, and Project Editor**
+14. **P13 — Black Market, Piracy, Smuggling, and Criminal Network Editor**
+15. **P14 — Draconic Tithe, Settlement Crisis, and Intervention Editor**
+16. **P15 — Encounter, Hazard, Chase, and Conflict Editor**
+17. **P16 — Job Board, Mission Packet, and Campaign Hook Editor**
+
+### P0 shared framework status
+
+The P0 framework implementation is complete and recorded as `framework-implementation-complete-pending-runtime-gate`.
+
+The shared infrastructure now supplies separate registered editors with:
+
+- stable record identity and revision behavior;
+- explicit schema versions and versioned migrations;
+- nested and legacy-flat field mapping;
+- malformed, wrong-profile, outdated, and future-schema diagnostics;
+- recovery drafts, dirty-state tracking, and unsaved-change protection;
+- persistent multi-record storage;
+- explicit **Update Existing Record** and **Save as New Clone** behavior;
+- pinned-revision inheritance with current, stale, unavailable, and locally older reference states;
+- direct saved-parent selection and deliberate **Refresh to Latest Parent** behavior;
+- canonical JSON, wiki drafts, provenance, locks, validation, and recoverable diagnostics.
+
+P0 is not promoted by code completion alone. The integrated Island → Settlement → Airship Chromium gate must pass on `main`, produce a valid P0 verification receipt, and reach deployment successfully. Until that occurs, P0 remains the sole `required-next` stage and P1 remains closed.
+
+Each production editor must clear its documented exit gate before work advances to the next stage.
+
+## Cross-linking model
+
+The wiki entries use stable IDs and contain both `relatedEntries` and `relatedModules` arrays.
+
+The dashboard cards also receive quick wiki chips, allowing a GM to jump from a generator card to relevant lore. Inside the wiki browser, related wiki entries open directly, while related tool/generator chips push the dashboard search toward the matching module.
+
+Generated crafting projects can export draft wiki entries containing operation, construction, material, power, and maintenance sections.
+
+## Panel layout system
+
+The sheet can be switched between modular 2-panel, 3-panel, and 4-panel layouts. Future tools can reuse the same `.panel-grid`, `.panels-2`, `.panels-3`, and `.panels-4` layout classes.
 
 ## Local use
 

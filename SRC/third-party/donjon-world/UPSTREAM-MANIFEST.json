@@ -1,0 +1,27 @@
+{
+  "id": "donjon-world",
+  "title": "Fractal World Generator",
+  "provider": "donjon.bin.sh",
+  "provider_credit": "drow",
+  "original_author": "John Olsson",
+  "source_page": "https://donjon.bin.sh/code/world/",
+  "retrieval": [
+    {
+      "file": "worldgen-2.2.c",
+      "url": "https://donjon.bin.sh/code/world/worldgen-2.2.c",
+      "role": "original-source"
+    },
+    {
+      "file": "worldgen-2.2a.c",
+      "url": "https://donjon.bin.sh/code/world/worldgen-2.2a.c",
+      "role": "donjon-hosted-corrected-source"
+    }
+  ],
+  "license": {
+    "family": "GNU GPL",
+    "page_statement": "GPL version 2",
+    "source_header": "GPL version 2 or later"
+  },
+  "project_role": ["world-generation-reference", "terrain-faulting", "sea-level-selection", "map-projection"],
+  "native_engine_policy": "Keep project-native implementation and GPL-derived implementation boundaries explicit."
+}
