@@ -5,7 +5,6 @@ import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPa
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/** Read-only query model for passive station, mission, NPC voyage, research, and encounter state. */
+/** Read-only query model for passive station, mission, fleet, logistics, voyage, research, and encounter state. */
 public final class PassiveWorldRegistry {
     private PassiveWorldRegistry() { }
 
@@ -30,7 +29,8 @@ public final class PassiveWorldRegistry {
             verifySchema(connection);
             return new Snapshot(readConfiguration(connection), readStations(connection), readVessels(connection),
                     readMissions(connection), readLogs(connection), readEncounters(connection),
-                    readResearch(connection));
+                    readResearch(connection), readFleetResponses(connection), readFleetResponseLogs(connection),
+                    readFleetTransitLegs(connection), readFreight(connection), readTreasury(connection));
         }
     }
 
@@ -176,6 +176,118 @@ public final class PassiveWorldRegistry {
         return List.copyOf(rows);
     }
 
+    private static List<FleetResponseRow> readFleetResponses(Connection connection) throws SQLException {
+        List<FleetResponseRow> rows = new ArrayList<>();
+        String sql = "SELECT o.operation_id,o.operation_type,o.status,o.response_phase,o.progress,o.difficulty,"
+                + "o.distressed_npc_vessel_id,dv.display_name distressed_name,o.assigned_npc_vessel_id,"
+                + "rv.display_name responder_name,o.origin_station_id,os.display_name origin_name,"
+                + "o.target_station_id,ts.display_name target_station_name,o.target_location_id,"
+                + "tl.display_name target_location_name,o.responder_origin_location_id,rol.display_name responder_origin_name,"
+                + "o.spare_parts_required,o.fuel_required,o.ammunition_required,o.medical_required,"
+                + "o.attempt_number,o.materials_committed,o.created_tick,o.updated_tick,o.completed_tick,"
+                + "o.outbound_started_tick,o.arrived_tick,o.return_started_tick,o.responder_returned_tick "
+                + "FROM fleet_response_operation o "
+                + "LEFT JOIN npc_vessel dv ON dv.npc_vessel_id=o.distressed_npc_vessel_id "
+                + "LEFT JOIN npc_vessel rv ON rv.npc_vessel_id=o.assigned_npc_vessel_id "
+                + "LEFT JOIN world_station os ON os.station_id=o.origin_station_id "
+                + "LEFT JOIN world_station ts ON ts.station_id=o.target_station_id "
+                + "LEFT JOIN world_location tl ON tl.location_id=o.target_location_id "
+                + "LEFT JOIN world_location rol ON rol.location_id=o.responder_origin_location_id "
+                + "ORDER BY CASE o.status WHEN 'ACTIVE' THEN 0 WHEN 'AVAILABLE' THEN 1 ELSE 2 END,o.updated_tick DESC LIMIT 500";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new FleetResponseRow(
+                    result.getString("operation_id"), result.getString("operation_type"), result.getString("status"),
+                    result.getString("response_phase"), result.getInt("progress"), result.getInt("difficulty"),
+                    result.getString("distressed_npc_vessel_id"), result.getString("distressed_name"),
+                    result.getString("assigned_npc_vessel_id"), result.getString("responder_name"),
+                    result.getString("origin_station_id"), result.getString("origin_name"),
+                    result.getString("target_station_id"), result.getString("target_station_name"),
+                    result.getString("target_location_id"), result.getString("target_location_name"),
+                    result.getString("responder_origin_location_id"), result.getString("responder_origin_name"),
+                    result.getInt("spare_parts_required"), result.getInt("fuel_required"),
+                    result.getInt("ammunition_required"), result.getInt("medical_required"),
+                    result.getInt("attempt_number"), result.getInt("materials_committed") == 1,
+                    result.getLong("created_tick"), result.getLong("updated_tick"),
+                    nullableLong(result, "completed_tick"), nullableLong(result, "outbound_started_tick"),
+                    nullableLong(result, "arrived_tick"), nullableLong(result, "return_started_tick"),
+                    nullableLong(result, "responder_returned_tick")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<FleetResponseLogRow> readFleetResponseLogs(Connection connection) throws SQLException {
+        List<FleetResponseLogRow> rows = new ArrayList<>();
+        String sql = "SELECT log_id,operation_id,tick_sequence,event_type,summary FROM fleet_response_log "
+                + "ORDER BY tick_sequence DESC LIMIT 1000";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new FleetResponseLogRow(result.getString("log_id"),
+                    result.getString("operation_id"), result.getLong("tick_sequence"),
+                    result.getString("event_type"), result.getString("summary")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<FleetTransitLegRow> readFleetTransitLegs(Connection connection) throws SQLException {
+        List<FleetTransitLegRow> rows = new ArrayList<>();
+        String sql = "SELECT l.leg_id,l.operation_id,l.responder_npc_vessel_id,v.display_name responder_name,"
+                + "l.attempt_number,l.leg_type,l.status,sl.display_name start_name,el.display_name end_name,"
+                + "l.route_ticks_required,l.started_tick,l.arrived_tick,l.completed_tick "
+                + "FROM fleet_response_transit_leg l "
+                + "JOIN npc_vessel v ON v.npc_vessel_id=l.responder_npc_vessel_id "
+                + "JOIN world_location sl ON sl.location_id=l.start_location_id "
+                + "JOIN world_location el ON el.location_id=l.end_location_id "
+                + "ORDER BY l.started_tick DESC LIMIT 1000";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new FleetTransitLegRow(result.getString("leg_id"),
+                    result.getString("operation_id"), result.getString("responder_npc_vessel_id"),
+                    result.getString("responder_name"), result.getInt("attempt_number"),
+                    result.getString("leg_type"), result.getString("status"), result.getString("start_name"),
+                    result.getString("end_name"), result.getInt("route_ticks_required"),
+                    result.getLong("started_tick"), nullableLong(result, "arrived_tick"),
+                    nullableLong(result, "completed_tick")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<FreightRow> readFreight(Connection connection) throws SQLException {
+        List<FreightRow> rows = new ArrayList<>();
+        String sql = "SELECT f.lot_id,f.mission_id,ss.display_name source_name,ds.display_name destination_name,"
+                + "i.display_name item_name,i.category item_category,f.quantity,f.status,f.assigned_npc_vessel_id,"
+                + "v.display_name vessel_name,f.created_tick,f.updated_tick,f.delivered_tick "
+                + "FROM freight_lot f JOIN item_catalogue i ON i.item_id=f.item_id "
+                + "LEFT JOIN world_station ss ON ss.station_id=f.source_station_id "
+                + "LEFT JOIN world_station ds ON ds.station_id=f.destination_station_id "
+                + "LEFT JOIN npc_vessel v ON v.npc_vessel_id=f.assigned_npc_vessel_id "
+                + "ORDER BY CASE f.status WHEN 'IN_TRANSIT' THEN 0 WHEN 'LOADED' THEN 1 WHEN 'READY' THEN 2 ELSE 3 END,"
+                + "f.updated_tick DESC LIMIT 1000";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new FreightRow(result.getString("lot_id"),
+                    result.getString("mission_id"), result.getString("source_name"),
+                    result.getString("destination_name"), result.getString("item_name"),
+                    result.getString("item_category"), result.getInt("quantity"), result.getString("status"),
+                    result.getString("assigned_npc_vessel_id"), result.getString("vessel_name"),
+                    result.getLong("created_tick"), result.getLong("updated_tick"),
+                    nullableLong(result, "delivered_tick")));
+        }
+        return List.copyOf(rows);
+    }
+
+    private static List<TreasuryRow> readTreasury(Connection connection) throws SQLException {
+        List<TreasuryRow> rows = new ArrayList<>();
+        String sql = "SELECT t.transaction_id,ws.display_name station_name,t.tick_sequence,t.category,"
+                + "t.credits_delta,t.counterparty_type,t.counterparty_id,t.memo "
+                + "FROM treasury_transaction t LEFT JOIN world_station ws ON ws.station_id=t.station_id "
+                + "ORDER BY t.tick_sequence DESC,t.transaction_id DESC LIMIT 1000";
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) rows.add(new TreasuryRow(result.getString("transaction_id"),
+                    result.getString("station_name"), result.getLong("tick_sequence"),
+                    result.getString("category"), result.getInt("credits_delta"),
+                    result.getString("counterparty_type"), result.getString("counterparty_id"),
+                    result.getString("memo")));
+        }
+        return List.copyOf(rows);
+    }
+
     private static void configureReadOnly(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute("PRAGMA foreign_keys=ON");
@@ -218,7 +330,10 @@ public final class PassiveWorldRegistry {
 
     public record Snapshot(Configuration configuration, List<StationRow> stations, List<VesselRow> vessels,
                            List<MissionRow> missions, List<VoyageLogRow> voyageLogs,
-                           List<EncounterRow> encounters, List<ResearchRow> research) {
+                           List<EncounterRow> encounters, List<ResearchRow> research,
+                           List<FleetResponseRow> fleetResponses, List<FleetResponseLogRow> fleetResponseLogs,
+                           List<FleetTransitLegRow> fleetTransitLegs, List<FreightRow> freight,
+                           List<TreasuryRow> treasury) {
         public Snapshot {
             Objects.requireNonNull(configuration, "configuration");
             stations = List.copyOf(stations);
@@ -227,6 +342,11 @@ public final class PassiveWorldRegistry {
             voyageLogs = List.copyOf(voyageLogs);
             encounters = List.copyOf(encounters);
             research = List.copyOf(research);
+            fleetResponses = List.copyOf(fleetResponses);
+            fleetResponseLogs = List.copyOf(fleetResponseLogs);
+            fleetTransitLegs = List.copyOf(fleetTransitLegs);
+            freight = List.copyOf(freight);
+            treasury = List.copyOf(treasury);
         }
     }
 
@@ -255,4 +375,28 @@ public final class PassiveWorldRegistry {
                                String outcome, String narrative) { }
     public record ResearchRow(String projectId, String stationName, String topic, String status, int progress,
                               int target, long createdTick, long updatedTick, Long completedTick) { }
+    public record FleetResponseRow(String operationId, String type, String status, String phase, int progress,
+                                   int difficulty, String distressedVesselId, String distressedVesselName,
+                                   String responderVesselId, String responderVesselName, String originStationId,
+                                   String originStationName, String targetStationId, String targetStationName,
+                                   String targetLocationId, String targetLocationName,
+                                   String responderOriginLocationId, String responderOriginLocationName,
+                                   int sparePartsRequired, int fuelRequired, int ammunitionRequired,
+                                   int medicalRequired, int attemptNumber, boolean materialsCommitted,
+                                   long createdTick, long updatedTick, Long completedTick,
+                                   Long outboundStartedTick, Long arrivedTick, Long returnStartedTick,
+                                   Long responderReturnedTick) { }
+    public record FleetResponseLogRow(String logId, String operationId, long tickSequence,
+                                      String eventType, String summary) { }
+    public record FleetTransitLegRow(String legId, String operationId, String responderVesselId,
+                                     String responderVesselName, int attemptNumber, String legType,
+                                     String status, String startLocation, String endLocation,
+                                     int routeTicksRequired, long startedTick, Long arrivedTick,
+                                     Long completedTick) { }
+    public record FreightRow(String lotId, String missionId, String sourceStation, String destinationStation,
+                             String itemName, String itemCategory, int quantity, String status,
+                             String npcVesselId, String npcVesselName, long createdTick, long updatedTick,
+                             Long deliveredTick) { }
+    public record TreasuryRow(String transactionId, String stationName, long tickSequence, String category,
+                              int creditsDelta, String counterpartyType, String counterpartyId, String memo) { }
 }

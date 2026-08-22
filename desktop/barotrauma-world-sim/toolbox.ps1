@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('setup','build','verify','package','run','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
+    [ValidateSet('setup','build','verify','package','run','observer','asset-setup','world-map','observation','frontier','natural-world','logistics','player-transit','simulation-monitor','web-import','import-approval','campaign-mapping','vessel-registry','snapshot-approval')]
     [string]$Command = 'build'
 )
 
@@ -177,6 +177,7 @@ function Run-Class([string]$mainClass, [string[]]$arguments = @()) {
 
 $entryPoints = @{
     'run' = 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldSimApplication'
+    'observer' = 'io.github.mrcalzon02.barotrauma.desktop.BarotraumaWorldObserverApplication'
     'asset-setup' = 'io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow'
     'world-map' = 'io.github.mrcalzon02.barotrauma.desktop.registry.WorldMapRegistryWindow'
     'observation' = 'io.github.mrcalzon02.barotrauma.desktop.observation.ObservationFoundationWindow'
@@ -204,6 +205,8 @@ switch ($Command) {
         $verifications = @(
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.domain.identity.IdentityContracts'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverProjectionVerification'; Arguments=@() },
+            [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverInspectorVerification'; Arguments=@() },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.web.WebSuiteV22Inspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.compatibility.official.BarotraumaSaveInspector'; Arguments=@('--verify') },
             [pscustomobject]@{ MainClass='io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts'; Arguments=@() }

@@ -87,6 +87,7 @@ public final class RecursiveSqliteDriver implements Driver {
                 }
             }
             installReturnLifecycleTrigger(connection);
+            FleetResponseDispatchPolicy.installIfSupported(connection);
             success = true;
             return connection;
         } finally {

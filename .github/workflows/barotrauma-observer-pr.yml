@@ -1,0 +1,58 @@
+name: Verify Barotrauma living world observer
+
+on:
+  pull_request:
+    paths:
+      - "desktop/barotrauma-world-sim/**"
+      - ".github/workflows/barotrauma-observer-pr.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "barotrauma-observer-pr-${{ github.event.pull_request.number }}"
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout proposed observer source
+        uses: actions/checkout@v6
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build and verify desktop simulation and observer
+        shell: pwsh
+        run: ./desktop/barotrauma-world-sim/toolbox.ps1 verify
+
+      - name: Verify observer world-layer projections
+        shell: pwsh
+        run: |
+          $jar = "desktop/barotrauma-world-sim/build/no-gradle/barotrauma-world-sim.jar"
+          $sqlite = "desktop/barotrauma-world-sim/lib/sqlite-jdbc-3.53.1.0.jar"
+          $runtimeCp = "$jar$([IO.Path]::PathSeparator)$sqlite"
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNaturalLayerVerification
+          if ($LASTEXITCODE -ne 0) { throw "Natural-world observer layer verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverCivilLayerVerification
+          if ($LASTEXITCODE -ne 0) { throw "Civilization observer layer verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverLevelOfDetailVerification
+          if ($LASTEXITCODE -ne 0) { throw "Observer level-of-detail verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverTimelineVerification
+          if ($LASTEXITCODE -ne 0) { throw "Unified observer timeline verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNavigationVerification
+          if ($LASTEXITCODE -ne 0) { throw "Observer timeline navigation verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverHistoryVerification
+          if ($LASTEXITCODE -ne 0) { throw "Historical observer evidence verification failed." }
+          java -cp $runtimeCp io.github.mrcalzon02.barotrauma.simulation.ManualWorldStepServiceVerification
+          if ($LASTEXITCODE -ne 0) { throw "Authoritative manual observer step verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.simulation.PassiveWorldCatchUpPolicyVerification
+          if ($LASTEXITCODE -ne 0) { throw "Passive restart catch-up policy verification failed." }
+          java -cp $runtimeCp io.github.mrcalzon02.barotrauma.simulation.PassiveWorldRestartCatchUpVerification
+          if ($LASTEXITCODE -ne 0) { throw "Passive restart catch-up/health verification failed." }
+          java -cp $runtimeCp io.github.mrcalzon02.barotrauma.simulation.PassiveWorldRuntimeOwnershipVerification
+          if ($LASTEXITCODE -ne 0) { throw "Passive scheduler ownership/listener cleanup verification failed." }
