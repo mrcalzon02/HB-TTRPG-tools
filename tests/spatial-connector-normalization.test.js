@@ -16,6 +16,24 @@ const dense = engine.generate({
 assert.strictEqual(dense.validation.ok,true,dense.validation.errors.join('\n'));
 assert.strictEqual(connectorPairs(dense).size,2,'three unconstrained decks should need exactly two adjacent-deck connector pairs');
 assert.strictEqual(dense.connectors.length,4,'connector endpoints should be two per intentional pair, not random cross-deck edge inflation');
+
+const sparseDecks = engine.generate({
+  seed:'connector-normalization-empty-intermediate-deck',
+  decks:4,
+  roles:[
+    {id:'deck-zero',role:'deck-zero',deck:0},
+    {id:'deck-one',role:'deck-one',deck:1},
+    {id:'deck-three-a',role:'deck-three-a',deck:3},
+    {id:'deck-three-b',role:'deck-three-b',deck:3}
+  ],
+  adjacency:[['deck-zero','deck-one'],['deck-three-a','deck-three-b']],
+  extraEdgeChance:0,
+  layout:{gridWidth:58,gridHeight:42}
+});
+assert.strictEqual(sparseDecks.validation.ok,true,sparseDecks.validation.errors.join('\n'));
+assert.strictEqual(connectorPairs(sparseDecks).size,2,'consecutive occupied decks must remain connected across an intentionally empty intermediate deck');
+assert.strictEqual(sparseDecks.connectors.length,4,'empty numeric decks must not disconnect upper occupied decks or create connector inflation');
+assert.ok(sparseDecks.edges.some(edge=>edge.kind==='interdeck'&&edge.metadata.skippedEmptyDecks===true),'bridge across empty intermediate deck must retain explicit provenance');
 const nodes=nodeById(dense);
 for(const edge of dense.edges){
   if(edge.kind==='backbone'||edge.kind==='redundant'){

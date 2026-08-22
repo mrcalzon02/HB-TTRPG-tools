@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const VERSION = '1.1.0';
+  const VERSION = '1.1.1';
   const DEFAULTS = Object.freeze({
     gridWidth: 72,
     gridHeight: 56,
@@ -175,17 +175,18 @@
     const byDeck = completeInferredConnectivity(graph, spec, rng, deckCount);
     if (deckCount > 1) {
       const nodeById = new Map(nodes.map(node => [node.id, node]));
-      for (let deck = 0; deck < deckCount - 1; deck += 1) {
-        if (!byDeck[deck].length || !byDeck[deck + 1].length) continue;
+      const occupiedDecks = byDeck.map((deckNodes, deck) => deckNodes.length ? deck : null).filter(deck => deck != null);
+      for (let index = 0; index < occupiedDecks.length - 1; index += 1) {
+        const fromDeck = occupiedDecks[index], toDeck = occupiedDecks[index + 1];
         const alreadyLinked = graph.edges.some(edge => {
           const a = nodeById.get(edge.a), b = nodeById.get(edge.b);
           if (!a || !b) return false;
-          return (a.deck === deck && b.deck === deck + 1) || (a.deck === deck + 1 && b.deck === deck);
+          return (a.deck === fromDeck && b.deck === toDeck) || (a.deck === toDeck && b.deck === fromDeck);
         });
         if (alreadyLinked) continue;
-        const a = rng.pick(byDeck[deck]);
-        const b = rng.pick(byDeck[deck + 1]);
-        addEdge(graph.edges, a.id, b.id, 'interdeck', true, { connectorRequired: true, fromDeck: deck, toDeck: deck + 1 });
+        const a = rng.pick(byDeck[fromDeck]);
+        const b = rng.pick(byDeck[toDeck]);
+        addEdge(graph.edges, a.id, b.id, 'interdeck', true, { connectorRequired: true, fromDeck, toDeck, skippedEmptyDecks: toDeck - fromDeck > 1 });
       }
     }
     return deckCount;
