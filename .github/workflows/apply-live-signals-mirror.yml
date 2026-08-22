@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: apply-live-signals-mirror
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   migrate:
