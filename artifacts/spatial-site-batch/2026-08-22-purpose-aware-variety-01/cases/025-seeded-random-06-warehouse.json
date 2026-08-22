@@ -1,0 +1,5789 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-generation-test-artifact",
+  "batchId": "2026-08-22-purpose-aware-variety-01",
+  "sourceCommit": "02db448d120f51e7993dcb6c8a5271207ee73a4c",
+  "caseNumber": 25,
+  "caseId": "seeded-random-06-warehouse",
+  "caseKind": "seeded-random",
+  "input": {
+    "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+    "locationArchetype": "warehouse",
+    "rulesTarget": "open_d20",
+    "dangerLevel": 8,
+    "creatureDensity": 5,
+    "hazardIntensity": 7,
+    "treasureDensity": 6,
+    "socialDensity": 2,
+    "sitePreferences": {
+      "originCulture": {
+        "preferred": [
+          "mixed-cosmopolitan",
+          "gnomish",
+          "orcish",
+          "ancient-unknown"
+        ]
+      },
+      "controller": {
+        "preferred": [
+          "cult",
+          "criminal-syndicate",
+          "adventuring-company",
+          "plague-survivors"
+        ]
+      },
+      "ecology": {
+        "preferred": [
+          "fungal",
+          "overgrown",
+          "urban-vermin",
+          "subterranean",
+          "magical",
+          "wetland"
+        ]
+      },
+      "creatureFamilies": {
+        "exclude": [
+          "celestial"
+        ]
+      },
+      "hazardFamilies": {
+        "exclude": [
+          "vacuum"
+        ]
+      }
+    }
+  },
+  "acceptance": {
+    "ok": true,
+    "deterministic": true,
+    "topologyValid": true
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "metrics": {
+    "rooms": 16,
+    "corridors": 11,
+    "doors": 22,
+    "connectors": 68,
+    "decks": 3,
+    "interactions": 1,
+    "profileLayers": 14,
+    "historicallyAdaptedRoleTemplates": 0,
+    "currentUseRoleTemplates": 0,
+    "currentUseOverlayRoleTemplates": 0,
+    "occupants": 7,
+    "socialEncounters": 2,
+    "traps": 3,
+    "hazards": 45,
+    "securityEntries": 3,
+    "treasureEntries": 5,
+    "evidenceEntries": 1,
+    "objectives": 0,
+    "narrativeDiscoveries": 0,
+    "secretAccessEntries": 2
+  },
+  "result": {
+    "schemaVersion": "0.3.0",
+    "generator": "generator.module_map",
+    "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+    "width": 90,
+    "height": 70,
+    "deckCount": 3,
+    "locationArchetype": "warehouse",
+    "semanticProgram": {
+      "locationArchetype": "warehouse",
+      "source": "site-archetype-defaults",
+      "layerPolicy": "full",
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "weather: heavy-rain->clear (climate compatibility)",
+            "ecology: wetland->symbiotic (biome ecology)",
+            "magicTech: biomagical->none (builder culture)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "subterranean-complex",
+          "changes": [
+            "warehouse-floor count 3->4",
+            "added large-site service hub and secondary access",
+            "decks=3",
+            "grid=90x70"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "mixed-cosmopolitan",
+          "changes": [
+            "added shared-common",
+            "materials brick, cut-stone, timber, glass, steel"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "druid-circle",
+          "changes": [
+            "added druid-circle",
+            "added herbal-store"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "frozen",
+          "changes": [
+            "introduced occupation-state hazard pressure"
+          ]
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "ash-waste",
+            "climate": "magically-temperate",
+            "season": "wet-season",
+            "weather": "clear",
+            "waterState": "cistern-fed",
+            "verticality": "cavern-tiered"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "mixed-cosmopolitan",
+            "controller": "druid-circle",
+            "archetype": "warehouse",
+            "occupancyState": "frozen",
+            "ecology": "symbiotic",
+            "condition": "neglected",
+            "waterState": "cistern-fed"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "symbiotic",
+            "creatureFamilies": [
+              "insect",
+              "plant",
+              "beast",
+              "fey"
+            ],
+            "creatureDensity": 5
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "fire"
+            ],
+            "intensity": 7,
+            "contamination": "radiological"
+          },
+          "changes": [
+            "distributed 1 hazard families over semantically suitable rooms"
+          ]
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "magical",
+            "doctrine": "passive"
+          },
+          "changes": [
+            "hardened thresholds and restricted spaces"
+          ]
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "wealthy",
+            "resourceProfile": "contraband",
+            "magicTech": "none"
+          },
+          "changes": [
+            "increased high-value room identity",
+            "added contraband resource store"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "mature",
+            "condition": "neglected",
+            "maintenance": "meticulous",
+            "contamination": "radiological"
+          },
+          "changes": [
+            "applied radiological contamination"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "festive",
+            "socialMode": "quarantine",
+            "traffic": "processional",
+            "secretDensity": "scarce"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 16,
+            "decks": 3,
+            "roomsPerDeckEstimate": 6
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ]
+    },
+    "siteProfile": {
+      "schemaVersion": "1.0.0",
+      "generator": "hb-semantic-site-profile-layers",
+      "version": "1.0.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+      "archetype": "warehouse",
+      "axes": {
+        "scale": "subterranean-complex",
+        "originCulture": "mixed-cosmopolitan",
+        "controller": "druid-circle",
+        "occupancyState": "frozen",
+        "biome": "ash-waste",
+        "climate": "magically-temperate",
+        "season": "wet-season",
+        "weather": "clear",
+        "ecology": "symbiotic",
+        "wealth": "wealthy",
+        "security": "magical",
+        "age": "mature",
+        "condition": "neglected",
+        "magicTech": "none",
+        "lighting": "gaslight",
+        "waterState": "cistern-fed",
+        "verticality": "cavern-tiered",
+        "secretDensity": "scarce",
+        "traffic": "processional",
+        "socialMode": "quarantine",
+        "resourceProfile": "contraband",
+        "maintenance": "meticulous",
+        "contamination": "radiological",
+        "defenseDoctrine": "passive",
+        "narrativeTone": "festive"
+      },
+      "scalars": {
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 6,
+        "socialDensity": 2
+      },
+      "creatureFamilies": [
+        "insect",
+        "plant",
+        "beast",
+        "fey"
+      ],
+      "hazardFamilies": [
+        "fire"
+      ],
+      "materials": [
+        "brick",
+        "cut-stone",
+        "timber",
+        "glass",
+        "steel",
+        "blackstone",
+        "brass",
+        "plaster",
+        "bronze"
+      ],
+      "roles": [
+        {
+          "id": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance",
+          "tags": [
+            "entrance",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "hazard-fire",
+            "security",
+            "controlled",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "floor",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "count": 4
+        },
+        {
+          "id": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "tags": [
+            "private",
+            "evidence",
+            "mixed-culture",
+            "adaptive",
+            "cultural-overprint",
+            "high-value",
+            "tone-festive"
+          ]
+        },
+        {
+          "id": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "cultural-overprint",
+            "hazard",
+            "hazard-fire",
+            "controlled",
+            "high-value",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock",
+          "tags": [
+            "exit",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "tags": [
+            "service",
+            "hazard",
+            "mixed-culture",
+            "adaptive",
+            "cultural-overprint",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "scale-service-hub",
+          "role": "service-hub",
+          "label": "Service Hub",
+          "tags": [
+            "service",
+            "transit",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "scale-secondary-access",
+          "role": "secondary-access",
+          "label": "Secondary Access",
+          "tags": [
+            "entrance",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "security",
+            "controlled",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "culture-market",
+          "role": "shared-common",
+          "label": "Shared Common / Exchange",
+          "tags": [
+            "public",
+            "social",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "controller-circle",
+          "role": "druid-circle",
+          "label": "Druid Circle",
+          "tags": [
+            "ritual",
+            "social",
+            "cultural-overprint"
+          ]
+        },
+        {
+          "id": "controller-herbs",
+          "role": "herbal-store",
+          "label": "Herbal Store",
+          "tags": [
+            "service",
+            "treasure",
+            "hazard",
+            "cultural-overprint",
+            "high-value",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-radiological"
+          ]
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "contraband Store",
+          "tags": [
+            "service",
+            "treasure",
+            "contamination-radiological"
+          ]
+        }
+      ],
+      "adjacency": [
+        [
+          "loading-entry",
+          "warehouse-floor"
+        ],
+        [
+          "warehouse-floor",
+          "warehouse-office"
+        ],
+        [
+          "warehouse-floor",
+          "secure-cage"
+        ],
+        [
+          "warehouse-floor",
+          "loading-dock"
+        ],
+        [
+          "utility-room",
+          "warehouse-floor"
+        ],
+        [
+          "entry",
+          "service-hub"
+        ],
+        [
+          "service-hub",
+          "secondary-access"
+        ],
+        [
+          "loading-entry",
+          "shared-common"
+        ],
+        [
+          "shared-common",
+          "druid-circle"
+        ],
+        [
+          "shared-common",
+          "herbal-store"
+        ],
+        [
+          "loading-entry",
+          "ecology-den"
+        ],
+        [
+          "loading-entry",
+          "resource-specific-store"
+        ]
+      ],
+      "decks": 3,
+      "layout": {
+        "gridWidth": 90,
+        "gridHeight": 70
+      },
+      "extraEdgeChance": 0.29000000000000004,
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "weather: heavy-rain->clear (climate compatibility)",
+            "ecology: wetland->symbiotic (biome ecology)",
+            "magicTech: biomagical->none (builder culture)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "subterranean-complex",
+          "changes": [
+            "warehouse-floor count 3->4",
+            "added large-site service hub and secondary access",
+            "decks=3",
+            "grid=90x70"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "mixed-cosmopolitan",
+          "changes": [
+            "added shared-common",
+            "materials brick, cut-stone, timber, glass, steel"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "druid-circle",
+          "changes": [
+            "added druid-circle",
+            "added herbal-store"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "frozen",
+          "changes": [
+            "introduced occupation-state hazard pressure"
+          ]
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "ash-waste",
+            "climate": "magically-temperate",
+            "season": "wet-season",
+            "weather": "clear",
+            "waterState": "cistern-fed",
+            "verticality": "cavern-tiered"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "mixed-cosmopolitan",
+            "controller": "druid-circle",
+            "archetype": "warehouse",
+            "occupancyState": "frozen",
+            "ecology": "symbiotic",
+            "condition": "neglected",
+            "waterState": "cistern-fed"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "symbiotic",
+            "creatureFamilies": [
+              "insect",
+              "plant",
+              "beast",
+              "fey"
+            ],
+            "creatureDensity": 5
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "fire"
+            ],
+            "intensity": 7,
+            "contamination": "radiological"
+          },
+          "changes": [
+            "distributed 1 hazard families over semantically suitable rooms"
+          ]
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "magical",
+            "doctrine": "passive"
+          },
+          "changes": [
+            "hardened thresholds and restricted spaces"
+          ]
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "wealthy",
+            "resourceProfile": "contraband",
+            "magicTech": "none"
+          },
+          "changes": [
+            "increased high-value room identity",
+            "added contraband resource store"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "mature",
+            "condition": "neglected",
+            "maintenance": "meticulous",
+            "contamination": "radiological"
+          },
+          "changes": [
+            "applied radiological contamination"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "festive",
+            "socialMode": "quarantine",
+            "traffic": "processional",
+            "secretDensity": "scarce"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 16,
+            "decks": 3,
+            "roomsPerDeckEstimate": 6
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ],
+      "interactions": [
+        {
+          "order": 1,
+          "id": "cultural-overprint",
+          "drivers": {
+            "culture": "mixed-cosmopolitan",
+            "controller": "druid-circle"
+          },
+          "targets": [
+            "loading-entry",
+            "warehouse-floor",
+            "warehouse-office",
+            "secure-cage",
+            "loading-dock",
+            "utility-room"
+          ],
+          "effects": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        }
+      ],
+      "explicit": {
+        "security": false
+      },
+      "explicitAxes": [],
+      "contentContext": {
+        "culture": "mixed-cosmopolitan",
+        "controller": "druid-circle",
+        "occupancyState": "frozen",
+        "biome": "ash-waste",
+        "climate": "magically-temperate",
+        "season": "wet-season",
+        "weather": "clear",
+        "ecology": "symbiotic",
+        "creatureFamilies": [
+          "insect",
+          "plant",
+          "beast",
+          "fey"
+        ],
+        "hazardFamilies": [
+          "fire"
+        ],
+        "materials": [
+          "brick",
+          "cut-stone",
+          "timber",
+          "glass",
+          "steel",
+          "blackstone",
+          "brass",
+          "plaster",
+          "bronze"
+        ],
+        "wealth": "wealthy",
+        "security": "magical",
+        "magicTech": "none",
+        "lighting": "gaslight",
+        "waterState": "cistern-fed",
+        "contamination": "radiological",
+        "narrativeTone": "festive",
+        "interactionCount": 1,
+        "interactionIds": [
+          "cultural-overprint"
+        ],
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 6,
+        "socialDensity": 2
+      }
+    },
+    "spatialLayout": {
+      "schemaVersion": "1.0.0",
+      "engine": "hb-semantic-spatial-engine",
+      "engineVersion": "1.0.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+      "deckCount": 3,
+      "bounds": {
+        "width": 90,
+        "height": 70
+      },
+      "nodes": [
+        {
+          "id": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "hazard-fire",
+            "security",
+            "controlled",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "mixed-culture",
+            "adaptive",
+            "cultural-overprint",
+            "high-value",
+            "tone-festive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "cultural-overprint",
+            "hazard",
+            "hazard-fire",
+            "controlled",
+            "high-value",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "exit",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "mixed-culture",
+            "adaptive",
+            "cultural-overprint",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-service-hub",
+          "role": "service-hub",
+          "label": "Service Hub",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "transit",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-secondary-access",
+          "role": "secondary-access",
+          "label": "Secondary Access",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "security",
+            "controlled",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "culture-market",
+          "role": "shared-common",
+          "label": "Shared Common / Exchange",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-circle",
+          "role": "druid-circle",
+          "label": "Druid Circle",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "ritual",
+            "social",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-herbs",
+          "role": "herbal-store",
+          "label": "Herbal Store",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "hazard",
+            "cultural-overprint",
+            "high-value",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "contraband Store",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "a": "entry",
+          "b": "warehouse-floor-2",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-1"
+          }
+        },
+        {
+          "id": "edge-2",
+          "a": "warehouse-floor-2",
+          "b": "office",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-2"
+          }
+        },
+        {
+          "id": "edge-3",
+          "a": "warehouse-floor-2",
+          "b": "secure",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-3"
+          },
+          "connectorPairId": "connector-1"
+        },
+        {
+          "id": "edge-4",
+          "a": "warehouse-floor-2",
+          "b": "dock",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-4"
+          },
+          "connectorPairId": "connector-3"
+        },
+        {
+          "id": "edge-5",
+          "a": "utility",
+          "b": "warehouse-floor-2",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-5"
+          },
+          "connectorPairId": "connector-5"
+        },
+        {
+          "id": "edge-6",
+          "a": "entry",
+          "b": "scale-service-hub",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-6"
+          },
+          "connectorPairId": "connector-7"
+        },
+        {
+          "id": "edge-7",
+          "a": "scale-service-hub",
+          "b": "scale-secondary-access",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-7"
+          }
+        },
+        {
+          "id": "edge-8",
+          "a": "entry",
+          "b": "culture-market",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-8"
+          },
+          "connectorPairId": "connector-9"
+        },
+        {
+          "id": "edge-9",
+          "a": "culture-market",
+          "b": "controller-circle",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-9"
+          }
+        },
+        {
+          "id": "edge-10",
+          "a": "culture-market",
+          "b": "controller-herbs",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-10"
+          }
+        },
+        {
+          "id": "edge-11",
+          "a": "entry",
+          "b": "ecology-den",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-11"
+          },
+          "connectorPairId": "connector-11"
+        },
+        {
+          "id": "edge-12",
+          "a": "entry",
+          "b": "resource-store",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-12"
+          },
+          "connectorPairId": "connector-13"
+        },
+        {
+          "id": "edge-13",
+          "a": "entry",
+          "b": "controller-herbs",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-15"
+        },
+        {
+          "id": "edge-14",
+          "a": "entry",
+          "b": "scale-secondary-access",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-17"
+        },
+        {
+          "id": "edge-15",
+          "a": "scale-secondary-access",
+          "b": "office",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-19"
+        },
+        {
+          "id": "edge-16",
+          "a": "controller-herbs",
+          "b": "warehouse-floor-3",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-21"
+        },
+        {
+          "id": "edge-17",
+          "a": "controller-herbs",
+          "b": "controller-circle",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-18",
+          "a": "warehouse-floor-2",
+          "b": "warehouse-floor-5",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-19",
+          "a": "dock",
+          "b": "culture-market",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-23"
+        },
+        {
+          "id": "edge-20",
+          "a": "controller-circle",
+          "b": "resource-store",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-21",
+          "a": "dock",
+          "b": "utility",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-22",
+          "a": "controller-circle",
+          "b": "warehouse-floor-4",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-25"
+        },
+        {
+          "id": "edge-23",
+          "a": "warehouse-floor-5",
+          "b": "scale-service-hub",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-27"
+        },
+        {
+          "id": "edge-24",
+          "a": "scale-service-hub",
+          "b": "ecology-den",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-29"
+        },
+        {
+          "id": "edge-25",
+          "a": "warehouse-floor-4",
+          "b": "secure",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {},
+          "connectorPairId": "connector-31"
+        },
+        {
+          "id": "edge-26",
+          "a": "entry",
+          "b": "utility",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-33"
+        },
+        {
+          "id": "edge-27",
+          "a": "entry",
+          "b": "controller-circle",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-35"
+        },
+        {
+          "id": "edge-28",
+          "a": "warehouse-floor-2",
+          "b": "scale-service-hub",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-37"
+        },
+        {
+          "id": "edge-29",
+          "a": "warehouse-floor-2",
+          "b": "scale-secondary-access",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-39"
+        },
+        {
+          "id": "edge-30",
+          "a": "warehouse-floor-2",
+          "b": "culture-market",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-41"
+        },
+        {
+          "id": "edge-31",
+          "a": "warehouse-floor-4",
+          "b": "office",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-32",
+          "a": "warehouse-floor-4",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-43"
+        },
+        {
+          "id": "edge-33",
+          "a": "warehouse-floor-5",
+          "b": "secure",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-45"
+        },
+        {
+          "id": "edge-34",
+          "a": "office",
+          "b": "scale-service-hub",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-47"
+        },
+        {
+          "id": "edge-35",
+          "a": "office",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-49"
+        },
+        {
+          "id": "edge-36",
+          "a": "secure",
+          "b": "controller-circle",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-51"
+        },
+        {
+          "id": "edge-37",
+          "a": "secure",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-53"
+        },
+        {
+          "id": "edge-38",
+          "a": "secure",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-55"
+        },
+        {
+          "id": "edge-39",
+          "a": "dock",
+          "b": "controller-herbs",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-57"
+        },
+        {
+          "id": "edge-40",
+          "a": "dock",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-59"
+        },
+        {
+          "id": "edge-41",
+          "a": "utility",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-61"
+        },
+        {
+          "id": "edge-42",
+          "a": "scale-secondary-access",
+          "b": "controller-herbs",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {},
+          "connectorPairId": "connector-63"
+        },
+        {
+          "id": "edge-43",
+          "a": "culture-market",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-44",
+          "a": "warehouse-floor-3",
+          "b": "secure",
+          "kind": "interdeck",
+          "required": true,
+          "metadata": {
+            "connectorRequired": true,
+            "fromDeck": 0,
+            "toDeck": 1
+          },
+          "connectorPairId": "connector-65"
+        },
+        {
+          "id": "edge-45",
+          "a": "utility",
+          "b": "culture-market",
+          "kind": "interdeck",
+          "required": true,
+          "metadata": {
+            "connectorRequired": true,
+            "fromDeck": 1,
+            "toDeck": 2
+          },
+          "connectorPairId": "connector-67"
+        }
+      ],
+      "rooms": [
+        {
+          "id": "entry",
+          "nodeId": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance",
+          "deck": 0,
+          "x": 55,
+          "y": 16,
+          "width": 9,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "hazard-fire",
+            "security",
+            "controlled",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-2",
+          "nodeId": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 69,
+          "y": 18,
+          "width": 7,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-3",
+          "nodeId": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 50,
+          "y": 41,
+          "width": 7,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-4",
+          "nodeId": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 45,
+          "y": 2,
+          "width": 10,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-5",
+          "nodeId": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 19,
+          "y": 10,
+          "width": 9,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "office",
+          "nodeId": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "deck": 0,
+          "x": 41,
+          "y": 45,
+          "width": 6,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "mixed-culture",
+            "adaptive",
+            "cultural-overprint",
+            "high-value",
+            "tone-festive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "secure",
+          "nodeId": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "deck": 1,
+          "x": 26,
+          "y": 11,
+          "width": 9,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "cultural-overprint",
+            "hazard",
+            "hazard-fire",
+            "controlled",
+            "high-value",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "dock",
+          "nodeId": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock",
+          "deck": 1,
+          "x": 16,
+          "y": 40,
+          "width": 11,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "exit",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "hazard-fire",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "utility",
+          "nodeId": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "deck": 1,
+          "x": 75,
+          "y": 45,
+          "width": 7,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "mixed-culture",
+            "adaptive",
+            "cultural-overprint",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-service-hub",
+          "nodeId": "scale-service-hub",
+          "role": "service-hub",
+          "label": "Service Hub",
+          "deck": 1,
+          "x": 41,
+          "y": 52,
+          "width": 5,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "service",
+            "transit",
+            "mixed-culture",
+            "adaptive",
+            "hazard",
+            "cultural-overprint",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-secondary-access",
+          "nodeId": "scale-secondary-access",
+          "role": "secondary-access",
+          "label": "Secondary Access",
+          "deck": 1,
+          "x": 23,
+          "y": 51,
+          "width": 7,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "security",
+            "controlled",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "culture-market",
+          "nodeId": "culture-market",
+          "role": "shared-common",
+          "label": "Shared Common / Exchange",
+          "deck": 2,
+          "x": 35,
+          "y": 35,
+          "width": 7,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "mixed-culture",
+            "adaptive",
+            "druid-held",
+            "living-overprint",
+            "hazard",
+            "ash-waste",
+            "magically-temperate",
+            "wet-season",
+            "clear",
+            "cistern-fed",
+            "cultural-overprint",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-circle",
+          "nodeId": "controller-circle",
+          "role": "druid-circle",
+          "label": "Druid Circle",
+          "deck": 2,
+          "x": 77,
+          "y": 56,
+          "width": 9,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "ritual",
+            "social",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-herbs",
+          "nodeId": "controller-herbs",
+          "role": "herbal-store",
+          "label": "Herbal Store",
+          "deck": 2,
+          "x": 8,
+          "y": 5,
+          "width": 11,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "hazard",
+            "cultural-overprint",
+            "high-value",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "nodeId": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 2,
+          "x": 70,
+          "y": 12,
+          "width": 6,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "nodeId": "resource-store",
+          "role": "resource-specific-store",
+          "label": "contraband Store",
+          "deck": 2,
+          "x": 56,
+          "y": 35,
+          "width": 5,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "contamination-radiological"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "corridors": [
+        {
+          "id": "corridor-1",
+          "edgeId": "edge-1",
+          "deck": 0,
+          "a": "entry",
+          "b": "warehouse-floor-2",
+          "points": [
+            {
+              "x": 63,
+              "y": 21
+            },
+            {
+              "x": 63,
+              "y": 20
+            },
+            {
+              "x": 63,
+              "y": 19
+            },
+            {
+              "x": 64,
+              "y": 19
+            },
+            {
+              "x": 65,
+              "y": 19
+            },
+            {
+              "x": 66,
+              "y": 19
+            },
+            {
+              "x": 67,
+              "y": 19
+            },
+            {
+              "x": 68,
+              "y": 19
+            },
+            {
+              "x": 69,
+              "y": 19
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-2",
+          "edgeId": "edge-2",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "office",
+          "points": [
+            {
+              "x": 69,
+              "y": 23
+            },
+            {
+              "x": 69,
+              "y": 24
+            },
+            {
+              "x": 69,
+              "y": 25
+            },
+            {
+              "x": 69,
+              "y": 26
+            },
+            {
+              "x": 69,
+              "y": 27
+            },
+            {
+              "x": 69,
+              "y": 28
+            },
+            {
+              "x": 69,
+              "y": 29
+            },
+            {
+              "x": 69,
+              "y": 30
+            },
+            {
+              "x": 69,
+              "y": 31
+            },
+            {
+              "x": 69,
+              "y": 32
+            },
+            {
+              "x": 69,
+              "y": 33
+            },
+            {
+              "x": 69,
+              "y": 34
+            },
+            {
+              "x": 69,
+              "y": 35
+            },
+            {
+              "x": 69,
+              "y": 36
+            },
+            {
+              "x": 69,
+              "y": 37
+            },
+            {
+              "x": 69,
+              "y": 38
+            },
+            {
+              "x": 69,
+              "y": 39
+            },
+            {
+              "x": 69,
+              "y": 40
+            },
+            {
+              "x": 69,
+              "y": 41
+            },
+            {
+              "x": 69,
+              "y": 42
+            },
+            {
+              "x": 69,
+              "y": 43
+            },
+            {
+              "x": 69,
+              "y": 44
+            },
+            {
+              "x": 69,
+              "y": 45
+            },
+            {
+              "x": 69,
+              "y": 46
+            },
+            {
+              "x": 68,
+              "y": 46
+            },
+            {
+              "x": 67,
+              "y": 46
+            },
+            {
+              "x": 66,
+              "y": 46
+            },
+            {
+              "x": 65,
+              "y": 46
+            },
+            {
+              "x": 64,
+              "y": 46
+            },
+            {
+              "x": 63,
+              "y": 46
+            },
+            {
+              "x": 62,
+              "y": 46
+            },
+            {
+              "x": 61,
+              "y": 46
+            },
+            {
+              "x": 60,
+              "y": 46
+            },
+            {
+              "x": 59,
+              "y": 46
+            },
+            {
+              "x": 58,
+              "y": 46
+            },
+            {
+              "x": 57,
+              "y": 46
+            },
+            {
+              "x": 56,
+              "y": 46
+            },
+            {
+              "x": 55,
+              "y": 46
+            },
+            {
+              "x": 54,
+              "y": 46
+            },
+            {
+              "x": 53,
+              "y": 46
+            },
+            {
+              "x": 52,
+              "y": 46
+            },
+            {
+              "x": 51,
+              "y": 46
+            },
+            {
+              "x": 50,
+              "y": 46
+            },
+            {
+              "x": 49,
+              "y": 46
+            },
+            {
+              "x": 48,
+              "y": 46
+            },
+            {
+              "x": 47,
+              "y": 46
+            },
+            {
+              "x": 46,
+              "y": 46
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-3",
+          "edgeId": "edge-7",
+          "deck": 1,
+          "a": "scale-service-hub",
+          "b": "scale-secondary-access",
+          "points": [
+            {
+              "x": 41,
+              "y": 55
+            },
+            {
+              "x": 40,
+              "y": 55
+            },
+            {
+              "x": 39,
+              "y": 55
+            },
+            {
+              "x": 38,
+              "y": 55
+            },
+            {
+              "x": 37,
+              "y": 55
+            },
+            {
+              "x": 36,
+              "y": 55
+            },
+            {
+              "x": 35,
+              "y": 55
+            },
+            {
+              "x": 34,
+              "y": 55
+            },
+            {
+              "x": 33,
+              "y": 55
+            },
+            {
+              "x": 32,
+              "y": 55
+            },
+            {
+              "x": 31,
+              "y": 55
+            },
+            {
+              "x": 30,
+              "y": 55
+            },
+            {
+              "x": 29,
+              "y": 55
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-4",
+          "edgeId": "edge-9",
+          "deck": 2,
+          "a": "culture-market",
+          "b": "controller-circle",
+          "points": [
+            {
+              "x": 41,
+              "y": 41
+            },
+            {
+              "x": 42,
+              "y": 41
+            },
+            {
+              "x": 43,
+              "y": 41
+            },
+            {
+              "x": 44,
+              "y": 41
+            },
+            {
+              "x": 45,
+              "y": 41
+            },
+            {
+              "x": 46,
+              "y": 41
+            },
+            {
+              "x": 47,
+              "y": 41
+            },
+            {
+              "x": 48,
+              "y": 41
+            },
+            {
+              "x": 49,
+              "y": 41
+            },
+            {
+              "x": 50,
+              "y": 41
+            },
+            {
+              "x": 51,
+              "y": 41
+            },
+            {
+              "x": 52,
+              "y": 41
+            },
+            {
+              "x": 53,
+              "y": 41
+            },
+            {
+              "x": 54,
+              "y": 41
+            },
+            {
+              "x": 55,
+              "y": 41
+            },
+            {
+              "x": 56,
+              "y": 41
+            },
+            {
+              "x": 57,
+              "y": 41
+            },
+            {
+              "x": 58,
+              "y": 41
+            },
+            {
+              "x": 59,
+              "y": 41
+            },
+            {
+              "x": 60,
+              "y": 41
+            },
+            {
+              "x": 61,
+              "y": 41
+            },
+            {
+              "x": 62,
+              "y": 41
+            },
+            {
+              "x": 63,
+              "y": 41
+            },
+            {
+              "x": 64,
+              "y": 41
+            },
+            {
+              "x": 65,
+              "y": 41
+            },
+            {
+              "x": 66,
+              "y": 41
+            },
+            {
+              "x": 67,
+              "y": 41
+            },
+            {
+              "x": 68,
+              "y": 41
+            },
+            {
+              "x": 69,
+              "y": 41
+            },
+            {
+              "x": 70,
+              "y": 41
+            },
+            {
+              "x": 71,
+              "y": 41
+            },
+            {
+              "x": 72,
+              "y": 41
+            },
+            {
+              "x": 73,
+              "y": 41
+            },
+            {
+              "x": 74,
+              "y": 41
+            },
+            {
+              "x": 75,
+              "y": 41
+            },
+            {
+              "x": 76,
+              "y": 41
+            },
+            {
+              "x": 77,
+              "y": 41
+            },
+            {
+              "x": 77,
+              "y": 42
+            },
+            {
+              "x": 77,
+              "y": 43
+            },
+            {
+              "x": 77,
+              "y": 44
+            },
+            {
+              "x": 77,
+              "y": 45
+            },
+            {
+              "x": 77,
+              "y": 46
+            },
+            {
+              "x": 77,
+              "y": 47
+            },
+            {
+              "x": 77,
+              "y": 48
+            },
+            {
+              "x": 77,
+              "y": 49
+            },
+            {
+              "x": 77,
+              "y": 50
+            },
+            {
+              "x": 77,
+              "y": 51
+            },
+            {
+              "x": 77,
+              "y": 52
+            },
+            {
+              "x": 77,
+              "y": 53
+            },
+            {
+              "x": 77,
+              "y": 54
+            },
+            {
+              "x": 77,
+              "y": 55
+            },
+            {
+              "x": 77,
+              "y": 56
+            },
+            {
+              "x": 77,
+              "y": 57
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-5",
+          "edgeId": "edge-10",
+          "deck": 2,
+          "a": "culture-market",
+          "b": "controller-herbs",
+          "points": [
+            {
+              "x": 36,
+              "y": 35
+            },
+            {
+              "x": 35,
+              "y": 35
+            },
+            {
+              "x": 34,
+              "y": 35
+            },
+            {
+              "x": 33,
+              "y": 35
+            },
+            {
+              "x": 32,
+              "y": 35
+            },
+            {
+              "x": 31,
+              "y": 35
+            },
+            {
+              "x": 30,
+              "y": 35
+            },
+            {
+              "x": 29,
+              "y": 35
+            },
+            {
+              "x": 28,
+              "y": 35
+            },
+            {
+              "x": 27,
+              "y": 35
+            },
+            {
+              "x": 26,
+              "y": 35
+            },
+            {
+              "x": 25,
+              "y": 35
+            },
+            {
+              "x": 24,
+              "y": 35
+            },
+            {
+              "x": 23,
+              "y": 35
+            },
+            {
+              "x": 22,
+              "y": 35
+            },
+            {
+              "x": 21,
+              "y": 35
+            },
+            {
+              "x": 20,
+              "y": 35
+            },
+            {
+              "x": 19,
+              "y": 35
+            },
+            {
+              "x": 18,
+              "y": 35
+            },
+            {
+              "x": 17,
+              "y": 35
+            },
+            {
+              "x": 17,
+              "y": 34
+            },
+            {
+              "x": 17,
+              "y": 33
+            },
+            {
+              "x": 17,
+              "y": 32
+            },
+            {
+              "x": 17,
+              "y": 31
+            },
+            {
+              "x": 17,
+              "y": 30
+            },
+            {
+              "x": 17,
+              "y": 29
+            },
+            {
+              "x": 17,
+              "y": 28
+            },
+            {
+              "x": 17,
+              "y": 27
+            },
+            {
+              "x": 17,
+              "y": 26
+            },
+            {
+              "x": 17,
+              "y": 25
+            },
+            {
+              "x": 17,
+              "y": 24
+            },
+            {
+              "x": 17,
+              "y": 23
+            },
+            {
+              "x": 17,
+              "y": 22
+            },
+            {
+              "x": 17,
+              "y": 21
+            },
+            {
+              "x": 17,
+              "y": 20
+            },
+            {
+              "x": 17,
+              "y": 19
+            },
+            {
+              "x": 17,
+              "y": 18
+            },
+            {
+              "x": 17,
+              "y": 17
+            },
+            {
+              "x": 17,
+              "y": 16
+            },
+            {
+              "x": 17,
+              "y": 15
+            },
+            {
+              "x": 17,
+              "y": 14
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-6",
+          "edgeId": "edge-17",
+          "deck": 2,
+          "a": "controller-herbs",
+          "b": "controller-circle",
+          "points": [
+            {
+              "x": 18,
+              "y": 13
+            },
+            {
+              "x": 18,
+              "y": 14
+            },
+            {
+              "x": 18,
+              "y": 15
+            },
+            {
+              "x": 18,
+              "y": 16
+            },
+            {
+              "x": 18,
+              "y": 17
+            },
+            {
+              "x": 18,
+              "y": 18
+            },
+            {
+              "x": 18,
+              "y": 19
+            },
+            {
+              "x": 18,
+              "y": 20
+            },
+            {
+              "x": 18,
+              "y": 21
+            },
+            {
+              "x": 18,
+              "y": 22
+            },
+            {
+              "x": 18,
+              "y": 23
+            },
+            {
+              "x": 18,
+              "y": 24
+            },
+            {
+              "x": 18,
+              "y": 25
+            },
+            {
+              "x": 18,
+              "y": 26
+            },
+            {
+              "x": 18,
+              "y": 27
+            },
+            {
+              "x": 18,
+              "y": 28
+            },
+            {
+              "x": 18,
+              "y": 29
+            },
+            {
+              "x": 18,
+              "y": 30
+            },
+            {
+              "x": 18,
+              "y": 31
+            },
+            {
+              "x": 18,
+              "y": 32
+            },
+            {
+              "x": 18,
+              "y": 33
+            },
+            {
+              "x": 18,
+              "y": 34
+            },
+            {
+              "x": 18,
+              "y": 35
+            },
+            {
+              "x": 18,
+              "y": 36
+            },
+            {
+              "x": 18,
+              "y": 37
+            },
+            {
+              "x": 18,
+              "y": 38
+            },
+            {
+              "x": 18,
+              "y": 39
+            },
+            {
+              "x": 18,
+              "y": 40
+            },
+            {
+              "x": 18,
+              "y": 41
+            },
+            {
+              "x": 18,
+              "y": 42
+            },
+            {
+              "x": 18,
+              "y": 43
+            },
+            {
+              "x": 18,
+              "y": 44
+            },
+            {
+              "x": 18,
+              "y": 45
+            },
+            {
+              "x": 18,
+              "y": 46
+            },
+            {
+              "x": 18,
+              "y": 47
+            },
+            {
+              "x": 18,
+              "y": 48
+            },
+            {
+              "x": 18,
+              "y": 49
+            },
+            {
+              "x": 18,
+              "y": 50
+            },
+            {
+              "x": 18,
+              "y": 51
+            },
+            {
+              "x": 18,
+              "y": 52
+            },
+            {
+              "x": 18,
+              "y": 53
+            },
+            {
+              "x": 18,
+              "y": 54
+            },
+            {
+              "x": 18,
+              "y": 55
+            },
+            {
+              "x": 18,
+              "y": 56
+            },
+            {
+              "x": 18,
+              "y": 57
+            },
+            {
+              "x": 19,
+              "y": 57
+            },
+            {
+              "x": 20,
+              "y": 57
+            },
+            {
+              "x": 21,
+              "y": 57
+            },
+            {
+              "x": 22,
+              "y": 57
+            },
+            {
+              "x": 23,
+              "y": 57
+            },
+            {
+              "x": 24,
+              "y": 57
+            },
+            {
+              "x": 25,
+              "y": 57
+            },
+            {
+              "x": 26,
+              "y": 57
+            },
+            {
+              "x": 27,
+              "y": 57
+            },
+            {
+              "x": 28,
+              "y": 57
+            },
+            {
+              "x": 29,
+              "y": 57
+            },
+            {
+              "x": 30,
+              "y": 57
+            },
+            {
+              "x": 31,
+              "y": 57
+            },
+            {
+              "x": 32,
+              "y": 57
+            },
+            {
+              "x": 33,
+              "y": 57
+            },
+            {
+              "x": 34,
+              "y": 57
+            },
+            {
+              "x": 35,
+              "y": 57
+            },
+            {
+              "x": 36,
+              "y": 57
+            },
+            {
+              "x": 37,
+              "y": 57
+            },
+            {
+              "x": 38,
+              "y": 57
+            },
+            {
+              "x": 39,
+              "y": 57
+            },
+            {
+              "x": 40,
+              "y": 57
+            },
+            {
+              "x": 41,
+              "y": 57
+            },
+            {
+              "x": 42,
+              "y": 57
+            },
+            {
+              "x": 43,
+              "y": 57
+            },
+            {
+              "x": 44,
+              "y": 57
+            },
+            {
+              "x": 45,
+              "y": 57
+            },
+            {
+              "x": 46,
+              "y": 57
+            },
+            {
+              "x": 47,
+              "y": 57
+            },
+            {
+              "x": 48,
+              "y": 57
+            },
+            {
+              "x": 49,
+              "y": 57
+            },
+            {
+              "x": 50,
+              "y": 57
+            },
+            {
+              "x": 51,
+              "y": 57
+            },
+            {
+              "x": 52,
+              "y": 57
+            },
+            {
+              "x": 53,
+              "y": 57
+            },
+            {
+              "x": 54,
+              "y": 57
+            },
+            {
+              "x": 55,
+              "y": 57
+            },
+            {
+              "x": 56,
+              "y": 57
+            },
+            {
+              "x": 57,
+              "y": 57
+            },
+            {
+              "x": 58,
+              "y": 57
+            },
+            {
+              "x": 59,
+              "y": 57
+            },
+            {
+              "x": 60,
+              "y": 57
+            },
+            {
+              "x": 61,
+              "y": 57
+            },
+            {
+              "x": 62,
+              "y": 57
+            },
+            {
+              "x": 63,
+              "y": 57
+            },
+            {
+              "x": 64,
+              "y": 57
+            },
+            {
+              "x": 65,
+              "y": 57
+            },
+            {
+              "x": 66,
+              "y": 57
+            },
+            {
+              "x": 67,
+              "y": 57
+            },
+            {
+              "x": 68,
+              "y": 57
+            },
+            {
+              "x": 69,
+              "y": 57
+            },
+            {
+              "x": 70,
+              "y": 57
+            },
+            {
+              "x": 71,
+              "y": 57
+            },
+            {
+              "x": 72,
+              "y": 57
+            },
+            {
+              "x": 73,
+              "y": 57
+            },
+            {
+              "x": 74,
+              "y": 57
+            },
+            {
+              "x": 75,
+              "y": 57
+            },
+            {
+              "x": 76,
+              "y": 57
+            },
+            {
+              "x": 77,
+              "y": 57
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-7",
+          "edgeId": "edge-18",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "warehouse-floor-5",
+          "points": [
+            {
+              "x": 69,
+              "y": 19
+            },
+            {
+              "x": 69,
+              "y": 18
+            },
+            {
+              "x": 69,
+              "y": 17
+            },
+            {
+              "x": 69,
+              "y": 16
+            },
+            {
+              "x": 69,
+              "y": 15
+            },
+            {
+              "x": 68,
+              "y": 15
+            },
+            {
+              "x": 67,
+              "y": 15
+            },
+            {
+              "x": 66,
+              "y": 15
+            },
+            {
+              "x": 65,
+              "y": 15
+            },
+            {
+              "x": 64,
+              "y": 15
+            },
+            {
+              "x": 63,
+              "y": 15
+            },
+            {
+              "x": 62,
+              "y": 15
+            },
+            {
+              "x": 61,
+              "y": 15
+            },
+            {
+              "x": 60,
+              "y": 15
+            },
+            {
+              "x": 59,
+              "y": 15
+            },
+            {
+              "x": 58,
+              "y": 15
+            },
+            {
+              "x": 57,
+              "y": 15
+            },
+            {
+              "x": 56,
+              "y": 15
+            },
+            {
+              "x": 55,
+              "y": 15
+            },
+            {
+              "x": 54,
+              "y": 15
+            },
+            {
+              "x": 53,
+              "y": 15
+            },
+            {
+              "x": 52,
+              "y": 15
+            },
+            {
+              "x": 51,
+              "y": 15
+            },
+            {
+              "x": 50,
+              "y": 15
+            },
+            {
+              "x": 49,
+              "y": 15
+            },
+            {
+              "x": 48,
+              "y": 15
+            },
+            {
+              "x": 47,
+              "y": 15
+            },
+            {
+              "x": 46,
+              "y": 15
+            },
+            {
+              "x": 45,
+              "y": 15
+            },
+            {
+              "x": 44,
+              "y": 15
+            },
+            {
+              "x": 43,
+              "y": 15
+            },
+            {
+              "x": 42,
+              "y": 15
+            },
+            {
+              "x": 41,
+              "y": 15
+            },
+            {
+              "x": 40,
+              "y": 15
+            },
+            {
+              "x": 39,
+              "y": 15
+            },
+            {
+              "x": 38,
+              "y": 15
+            },
+            {
+              "x": 37,
+              "y": 15
+            },
+            {
+              "x": 36,
+              "y": 15
+            },
+            {
+              "x": 35,
+              "y": 15
+            },
+            {
+              "x": 34,
+              "y": 15
+            },
+            {
+              "x": 33,
+              "y": 15
+            },
+            {
+              "x": 32,
+              "y": 15
+            },
+            {
+              "x": 31,
+              "y": 15
+            },
+            {
+              "x": 30,
+              "y": 15
+            },
+            {
+              "x": 29,
+              "y": 15
+            },
+            {
+              "x": 28,
+              "y": 15
+            },
+            {
+              "x": 27,
+              "y": 15
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-8",
+          "edgeId": "edge-20",
+          "deck": 2,
+          "a": "controller-circle",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 77,
+              "y": 57
+            },
+            {
+              "x": 76,
+              "y": 57
+            },
+            {
+              "x": 75,
+              "y": 57
+            },
+            {
+              "x": 74,
+              "y": 57
+            },
+            {
+              "x": 73,
+              "y": 57
+            },
+            {
+              "x": 72,
+              "y": 57
+            },
+            {
+              "x": 71,
+              "y": 57
+            },
+            {
+              "x": 70,
+              "y": 57
+            },
+            {
+              "x": 69,
+              "y": 57
+            },
+            {
+              "x": 68,
+              "y": 57
+            },
+            {
+              "x": 67,
+              "y": 57
+            },
+            {
+              "x": 66,
+              "y": 57
+            },
+            {
+              "x": 65,
+              "y": 57
+            },
+            {
+              "x": 64,
+              "y": 57
+            },
+            {
+              "x": 63,
+              "y": 57
+            },
+            {
+              "x": 62,
+              "y": 57
+            },
+            {
+              "x": 61,
+              "y": 57
+            },
+            {
+              "x": 60,
+              "y": 57
+            },
+            {
+              "x": 60,
+              "y": 56
+            },
+            {
+              "x": 60,
+              "y": 55
+            },
+            {
+              "x": 60,
+              "y": 54
+            },
+            {
+              "x": 60,
+              "y": 53
+            },
+            {
+              "x": 60,
+              "y": 52
+            },
+            {
+              "x": 60,
+              "y": 51
+            },
+            {
+              "x": 60,
+              "y": 50
+            },
+            {
+              "x": 60,
+              "y": 49
+            },
+            {
+              "x": 60,
+              "y": 48
+            },
+            {
+              "x": 60,
+              "y": 47
+            },
+            {
+              "x": 60,
+              "y": 46
+            },
+            {
+              "x": 60,
+              "y": 45
+            },
+            {
+              "x": 60,
+              "y": 44
+            },
+            {
+              "x": 60,
+              "y": 43
+            },
+            {
+              "x": 60,
+              "y": 42
+            },
+            {
+              "x": 60,
+              "y": 41
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-9",
+          "edgeId": "edge-21",
+          "deck": 1,
+          "a": "dock",
+          "b": "utility",
+          "points": [
+            {
+              "x": 26,
+              "y": 47
+            },
+            {
+              "x": 26,
+              "y": 46
+            },
+            {
+              "x": 27,
+              "y": 46
+            },
+            {
+              "x": 28,
+              "y": 46
+            },
+            {
+              "x": 29,
+              "y": 46
+            },
+            {
+              "x": 30,
+              "y": 46
+            },
+            {
+              "x": 31,
+              "y": 46
+            },
+            {
+              "x": 32,
+              "y": 46
+            },
+            {
+              "x": 33,
+              "y": 46
+            },
+            {
+              "x": 34,
+              "y": 46
+            },
+            {
+              "x": 35,
+              "y": 46
+            },
+            {
+              "x": 36,
+              "y": 46
+            },
+            {
+              "x": 37,
+              "y": 46
+            },
+            {
+              "x": 38,
+              "y": 46
+            },
+            {
+              "x": 39,
+              "y": 46
+            },
+            {
+              "x": 40,
+              "y": 46
+            },
+            {
+              "x": 41,
+              "y": 46
+            },
+            {
+              "x": 42,
+              "y": 46
+            },
+            {
+              "x": 43,
+              "y": 46
+            },
+            {
+              "x": 44,
+              "y": 46
+            },
+            {
+              "x": 45,
+              "y": 46
+            },
+            {
+              "x": 46,
+              "y": 46
+            },
+            {
+              "x": 47,
+              "y": 46
+            },
+            {
+              "x": 48,
+              "y": 46
+            },
+            {
+              "x": 49,
+              "y": 46
+            },
+            {
+              "x": 50,
+              "y": 46
+            },
+            {
+              "x": 51,
+              "y": 46
+            },
+            {
+              "x": 52,
+              "y": 46
+            },
+            {
+              "x": 53,
+              "y": 46
+            },
+            {
+              "x": 54,
+              "y": 46
+            },
+            {
+              "x": 55,
+              "y": 46
+            },
+            {
+              "x": 56,
+              "y": 46
+            },
+            {
+              "x": 57,
+              "y": 46
+            },
+            {
+              "x": 58,
+              "y": 46
+            },
+            {
+              "x": 59,
+              "y": 46
+            },
+            {
+              "x": 60,
+              "y": 46
+            },
+            {
+              "x": 61,
+              "y": 46
+            },
+            {
+              "x": 62,
+              "y": 46
+            },
+            {
+              "x": 63,
+              "y": 46
+            },
+            {
+              "x": 64,
+              "y": 46
+            },
+            {
+              "x": 65,
+              "y": 46
+            },
+            {
+              "x": 66,
+              "y": 46
+            },
+            {
+              "x": 67,
+              "y": 46
+            },
+            {
+              "x": 68,
+              "y": 46
+            },
+            {
+              "x": 69,
+              "y": 46
+            },
+            {
+              "x": 70,
+              "y": 46
+            },
+            {
+              "x": 71,
+              "y": 46
+            },
+            {
+              "x": 72,
+              "y": 46
+            },
+            {
+              "x": 73,
+              "y": 46
+            },
+            {
+              "x": 74,
+              "y": 46
+            },
+            {
+              "x": 75,
+              "y": 46
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-10",
+          "edgeId": "edge-31",
+          "deck": 0,
+          "a": "warehouse-floor-4",
+          "b": "office",
+          "points": [
+            {
+              "x": 46,
+              "y": 7
+            },
+            {
+              "x": 46,
+              "y": 8
+            },
+            {
+              "x": 46,
+              "y": 9
+            },
+            {
+              "x": 46,
+              "y": 10
+            },
+            {
+              "x": 46,
+              "y": 11
+            },
+            {
+              "x": 46,
+              "y": 12
+            },
+            {
+              "x": 46,
+              "y": 13
+            },
+            {
+              "x": 46,
+              "y": 14
+            },
+            {
+              "x": 46,
+              "y": 15
+            },
+            {
+              "x": 46,
+              "y": 16
+            },
+            {
+              "x": 46,
+              "y": 17
+            },
+            {
+              "x": 46,
+              "y": 18
+            },
+            {
+              "x": 46,
+              "y": 19
+            },
+            {
+              "x": 46,
+              "y": 20
+            },
+            {
+              "x": 46,
+              "y": 21
+            },
+            {
+              "x": 46,
+              "y": 22
+            },
+            {
+              "x": 46,
+              "y": 23
+            },
+            {
+              "x": 46,
+              "y": 24
+            },
+            {
+              "x": 46,
+              "y": 25
+            },
+            {
+              "x": 46,
+              "y": 26
+            },
+            {
+              "x": 46,
+              "y": 27
+            },
+            {
+              "x": 46,
+              "y": 28
+            },
+            {
+              "x": 46,
+              "y": 29
+            },
+            {
+              "x": 46,
+              "y": 30
+            },
+            {
+              "x": 46,
+              "y": 31
+            },
+            {
+              "x": 46,
+              "y": 32
+            },
+            {
+              "x": 46,
+              "y": 33
+            },
+            {
+              "x": 46,
+              "y": 34
+            },
+            {
+              "x": 46,
+              "y": 35
+            },
+            {
+              "x": 46,
+              "y": 36
+            },
+            {
+              "x": 46,
+              "y": 37
+            },
+            {
+              "x": 46,
+              "y": 38
+            },
+            {
+              "x": 46,
+              "y": 39
+            },
+            {
+              "x": 46,
+              "y": 40
+            },
+            {
+              "x": 46,
+              "y": 41
+            },
+            {
+              "x": 46,
+              "y": 42
+            },
+            {
+              "x": 46,
+              "y": 43
+            },
+            {
+              "x": 46,
+              "y": 44
+            },
+            {
+              "x": 46,
+              "y": 45
+            },
+            {
+              "x": 45,
+              "y": 45
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-11",
+          "edgeId": "edge-43",
+          "deck": 2,
+          "a": "culture-market",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 41,
+              "y": 39
+            },
+            {
+              "x": 42,
+              "y": 39
+            },
+            {
+              "x": 43,
+              "y": 39
+            },
+            {
+              "x": 44,
+              "y": 39
+            },
+            {
+              "x": 45,
+              "y": 39
+            },
+            {
+              "x": 46,
+              "y": 39
+            },
+            {
+              "x": 47,
+              "y": 39
+            },
+            {
+              "x": 48,
+              "y": 39
+            },
+            {
+              "x": 49,
+              "y": 39
+            },
+            {
+              "x": 50,
+              "y": 39
+            },
+            {
+              "x": 51,
+              "y": 39
+            },
+            {
+              "x": 52,
+              "y": 39
+            },
+            {
+              "x": 53,
+              "y": 39
+            },
+            {
+              "x": 54,
+              "y": 39
+            },
+            {
+              "x": 55,
+              "y": 39
+            },
+            {
+              "x": 56,
+              "y": 39
+            }
+          ],
+          "required": false,
+          "protected": false
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-1",
+          "edgeId": "edge-1",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 63,
+          "y": 21,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-2",
+          "edgeId": "edge-1",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 69,
+          "y": 19,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-3",
+          "edgeId": "edge-2",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 69,
+          "y": 23,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-4",
+          "edgeId": "edge-2",
+          "roomId": "office",
+          "deck": 0,
+          "x": 46,
+          "y": 46,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-5",
+          "edgeId": "edge-7",
+          "roomId": "scale-service-hub",
+          "deck": 1,
+          "x": 41,
+          "y": 55,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-6",
+          "edgeId": "edge-7",
+          "roomId": "scale-secondary-access",
+          "deck": 1,
+          "x": 29,
+          "y": 55,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-7",
+          "edgeId": "edge-9",
+          "roomId": "culture-market",
+          "deck": 2,
+          "x": 41,
+          "y": 41,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-8",
+          "edgeId": "edge-9",
+          "roomId": "controller-circle",
+          "deck": 2,
+          "x": 77,
+          "y": 57,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-9",
+          "edgeId": "edge-10",
+          "roomId": "culture-market",
+          "deck": 2,
+          "x": 36,
+          "y": 35,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-10",
+          "edgeId": "edge-10",
+          "roomId": "controller-herbs",
+          "deck": 2,
+          "x": 17,
+          "y": 14,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-11",
+          "edgeId": "edge-17",
+          "roomId": "controller-herbs",
+          "deck": 2,
+          "x": 18,
+          "y": 13,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-12",
+          "edgeId": "edge-17",
+          "roomId": "controller-circle",
+          "deck": 2,
+          "x": 77,
+          "y": 57,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-13",
+          "edgeId": "edge-18",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 69,
+          "y": 19,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-14",
+          "edgeId": "edge-18",
+          "roomId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 27,
+          "y": 15,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-15",
+          "edgeId": "edge-20",
+          "roomId": "controller-circle",
+          "deck": 2,
+          "x": 77,
+          "y": 57,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-16",
+          "edgeId": "edge-20",
+          "roomId": "resource-store",
+          "deck": 2,
+          "x": 60,
+          "y": 41,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-17",
+          "edgeId": "edge-21",
+          "roomId": "dock",
+          "deck": 1,
+          "x": 26,
+          "y": 47,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-18",
+          "edgeId": "edge-21",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 75,
+          "y": 46,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-19",
+          "edgeId": "edge-31",
+          "roomId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 46,
+          "y": 7,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-20",
+          "edgeId": "edge-31",
+          "roomId": "office",
+          "deck": 0,
+          "x": 45,
+          "y": 45,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-21",
+          "edgeId": "edge-43",
+          "roomId": "culture-market",
+          "deck": 2,
+          "x": 41,
+          "y": 39,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-22",
+          "edgeId": "edge-43",
+          "roomId": "resource-store",
+          "deck": 2,
+          "x": 56,
+          "y": 39,
+          "corridorId": "corridor-11"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "connector-1-a",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 51,
+          "y": 18,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-1-b",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 51,
+          "y": 18,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-3-a",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 47,
+          "y": 33,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-3-b",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "dock",
+          "deck": 1,
+          "x": 47,
+          "y": 33,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-5-a",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "utility",
+          "deck": 1,
+          "x": 75,
+          "y": 35,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-5-b",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 75,
+          "y": 35,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-7-a",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 51,
+          "y": 37,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-7-b",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 1,
+          "x": 51,
+          "y": 37,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-9-a",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 49,
+          "y": 29,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-9-b",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "culture-market",
+          "deck": 2,
+          "x": 49,
+          "y": 29,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-11-a",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 66,
+          "y": 18,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-11-b",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 66,
+          "y": 18,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-13-a",
+          "pairId": "connector-13",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 59,
+          "y": 29,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-13-b",
+          "pairId": "connector-13",
+          "kind": "lift-shaft",
+          "nodeId": "resource-store",
+          "deck": 2,
+          "x": 59,
+          "y": 29,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-15-a",
+          "pairId": "connector-15",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 36,
+          "y": 15,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-15-b",
+          "pairId": "connector-15",
+          "kind": "lift-shaft",
+          "nodeId": "controller-herbs",
+          "deck": 2,
+          "x": 36,
+          "y": 15,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-17-a",
+          "pairId": "connector-17",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 43,
+          "y": 37,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-17-b",
+          "pairId": "connector-17",
+          "kind": "lift-shaft",
+          "nodeId": "scale-secondary-access",
+          "deck": 1,
+          "x": 43,
+          "y": 37,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-19-a",
+          "pairId": "connector-19",
+          "kind": "lift-shaft",
+          "nodeId": "scale-secondary-access",
+          "deck": 1,
+          "x": 35,
+          "y": 52,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-19-b",
+          "pairId": "connector-19",
+          "kind": "lift-shaft",
+          "nodeId": "office",
+          "deck": 0,
+          "x": 35,
+          "y": 52,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-21-a",
+          "pairId": "connector-21",
+          "kind": "lift-shaft",
+          "nodeId": "controller-herbs",
+          "deck": 2,
+          "x": 33,
+          "y": 28,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-21-b",
+          "pairId": "connector-21",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 33,
+          "y": 28,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-23-a",
+          "pairId": "connector-23",
+          "kind": "lift-shaft",
+          "nodeId": "dock",
+          "deck": 1,
+          "x": 30,
+          "y": 42,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-23-b",
+          "pairId": "connector-23",
+          "kind": "lift-shaft",
+          "nodeId": "culture-market",
+          "deck": 2,
+          "x": 30,
+          "y": 42,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-25-a",
+          "pairId": "connector-25",
+          "kind": "lift-shaft",
+          "nodeId": "controller-circle",
+          "deck": 2,
+          "x": 66,
+          "y": 33,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-25-b",
+          "pairId": "connector-25",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 66,
+          "y": 33,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-27-a",
+          "pairId": "connector-27",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 33,
+          "y": 34,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-27-b",
+          "pairId": "connector-27",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 1,
+          "x": 33,
+          "y": 34,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-29-a",
+          "pairId": "connector-29",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 1,
+          "x": 58,
+          "y": 36,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-29-b",
+          "pairId": "connector-29",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 58,
+          "y": 36,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-31-a",
+          "pairId": "connector-31",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 40,
+          "y": 10,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-31-b",
+          "pairId": "connector-31",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 40,
+          "y": 10,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-33-a",
+          "pairId": "connector-33",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 69,
+          "y": 34,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-33-b",
+          "pairId": "connector-33",
+          "kind": "lift-shaft",
+          "nodeId": "utility",
+          "deck": 1,
+          "x": 69,
+          "y": 34,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-35-a",
+          "pairId": "connector-35",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 70,
+          "y": 40,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-35-b",
+          "pairId": "connector-35",
+          "kind": "lift-shaft",
+          "nodeId": "controller-circle",
+          "deck": 2,
+          "x": 70,
+          "y": 40,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-37-a",
+          "pairId": "connector-37",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 58,
+          "y": 38,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-37-b",
+          "pairId": "connector-37",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 1,
+          "x": 58,
+          "y": 38,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-39-a",
+          "pairId": "connector-39",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 49,
+          "y": 38,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-39-b",
+          "pairId": "connector-39",
+          "kind": "lift-shaft",
+          "nodeId": "scale-secondary-access",
+          "deck": 1,
+          "x": 49,
+          "y": 38,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-41-a",
+          "pairId": "connector-41",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 55,
+          "y": 30,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-41-b",
+          "pairId": "connector-41",
+          "kind": "lift-shaft",
+          "nodeId": "culture-market",
+          "deck": 2,
+          "x": 55,
+          "y": 30,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-43-a",
+          "pairId": "connector-43",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 62,
+          "y": 11,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-43-b",
+          "pairId": "connector-43",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 62,
+          "y": 11,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-45-a",
+          "pairId": "connector-45",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 27,
+          "y": 14,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-45-b",
+          "pairId": "connector-45",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 27,
+          "y": 14,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-47-a",
+          "pairId": "connector-47",
+          "kind": "lift-shaft",
+          "nodeId": "office",
+          "deck": 0,
+          "x": 44,
+          "y": 52,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-47-b",
+          "pairId": "connector-47",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 1,
+          "x": 44,
+          "y": 52,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-49-a",
+          "pairId": "connector-49",
+          "kind": "lift-shaft",
+          "nodeId": "office",
+          "deck": 0,
+          "x": 59,
+          "y": 32,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-49-b",
+          "pairId": "connector-49",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 59,
+          "y": 32,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-51-a",
+          "pairId": "connector-51",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 56,
+          "y": 37,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-51-b",
+          "pairId": "connector-51",
+          "kind": "lift-shaft",
+          "nodeId": "controller-circle",
+          "deck": 2,
+          "x": 56,
+          "y": 37,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-53-a",
+          "pairId": "connector-53",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 52,
+          "y": 15,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-53-b",
+          "pairId": "connector-53",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 52,
+          "y": 15,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-55-a",
+          "pairId": "connector-55",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 44,
+          "y": 27,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-55-b",
+          "pairId": "connector-55",
+          "kind": "lift-shaft",
+          "nodeId": "resource-store",
+          "deck": 2,
+          "x": 44,
+          "y": 27,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-57-a",
+          "pairId": "connector-57",
+          "kind": "lift-shaft",
+          "nodeId": "dock",
+          "deck": 1,
+          "x": 17,
+          "y": 27,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-57-b",
+          "pairId": "connector-57",
+          "kind": "lift-shaft",
+          "nodeId": "controller-herbs",
+          "deck": 2,
+          "x": 17,
+          "y": 27,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-59-a",
+          "pairId": "connector-59",
+          "kind": "lift-shaft",
+          "nodeId": "dock",
+          "deck": 1,
+          "x": 47,
+          "y": 30,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-59-b",
+          "pairId": "connector-59",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 47,
+          "y": 30,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-61-a",
+          "pairId": "connector-61",
+          "kind": "lift-shaft",
+          "nodeId": "utility",
+          "deck": 1,
+          "x": 76,
+          "y": 33,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-61-b",
+          "pairId": "connector-61",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 2,
+          "x": 76,
+          "y": 33,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-63-a",
+          "pairId": "connector-63",
+          "kind": "lift-shaft",
+          "nodeId": "scale-secondary-access",
+          "deck": 1,
+          "x": 20,
+          "y": 33,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-63-b",
+          "pairId": "connector-63",
+          "kind": "lift-shaft",
+          "nodeId": "controller-herbs",
+          "deck": 2,
+          "x": 20,
+          "y": 33,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-65-a",
+          "pairId": "connector-65",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 42,
+          "y": 30,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-65-b",
+          "pairId": "connector-65",
+          "kind": "lift-shaft",
+          "nodeId": "secure",
+          "deck": 1,
+          "x": 42,
+          "y": 30,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-67-a",
+          "pairId": "connector-67",
+          "kind": "lift-shaft",
+          "nodeId": "utility",
+          "deck": 1,
+          "x": 58,
+          "y": 44,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-67-b",
+          "pairId": "connector-67",
+          "kind": "lift-shaft",
+          "nodeId": "culture-market",
+          "deck": 2,
+          "x": 58,
+          "y": 44,
+          "connectsDeck": 1
+        }
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      "semanticProgram": {
+        "locationArchetype": "warehouse",
+        "source": "site-archetype-defaults",
+        "layerPolicy": "full",
+        "layers": [
+          {
+            "order": 1,
+            "id": "relationship-reconciliation",
+            "input": {
+              "explicit": []
+            },
+            "changes": [
+              "weather: heavy-rain->clear (climate compatibility)",
+              "ecology: wetland->symbiotic (biome ecology)",
+              "magicTech: biomagical->none (builder culture)"
+            ]
+          },
+          {
+            "order": 2,
+            "id": "scale",
+            "input": "subterranean-complex",
+            "changes": [
+              "warehouse-floor count 3->4",
+              "added large-site service hub and secondary access",
+              "decks=3",
+              "grid=90x70"
+            ]
+          },
+          {
+            "order": 3,
+            "id": "origin-culture",
+            "input": "mixed-cosmopolitan",
+            "changes": [
+              "added shared-common",
+              "materials brick, cut-stone, timber, glass, steel"
+            ]
+          },
+          {
+            "order": 4,
+            "id": "current-controller",
+            "input": "druid-circle",
+            "changes": [
+              "added druid-circle",
+              "added herbal-store"
+            ]
+          },
+          {
+            "order": 5,
+            "id": "occupancy-state",
+            "input": "frozen",
+            "changes": [
+              "introduced occupation-state hazard pressure"
+            ]
+          },
+          {
+            "order": 6,
+            "id": "environment",
+            "input": {
+              "biome": "ash-waste",
+              "climate": "magically-temperate",
+              "season": "wet-season",
+              "weather": "clear",
+              "waterState": "cistern-fed",
+              "verticality": "cavern-tiered"
+            },
+            "changes": [
+              "environment increased vertical organization"
+            ]
+          },
+          {
+            "order": 7,
+            "id": "cross-layer-interactions",
+            "input": {
+              "culture": "mixed-cosmopolitan",
+              "controller": "druid-circle",
+              "archetype": "warehouse",
+              "occupancyState": "frozen",
+              "ecology": "symbiotic",
+              "condition": "neglected",
+              "waterState": "cistern-fed"
+            },
+            "changes": [
+              "current occupants alter inherited spaces while original construction remains legible"
+            ]
+          },
+          {
+            "order": 8,
+            "id": "ecology",
+            "input": {
+              "ecology": "symbiotic",
+              "creatureFamilies": [
+                "insect",
+                "plant",
+                "beast",
+                "fey"
+              ],
+              "creatureDensity": 5
+            },
+            "changes": [
+              "added ecology habitat space"
+            ]
+          },
+          {
+            "order": 9,
+            "id": "hazard-ecology",
+            "input": {
+              "families": [
+                "fire"
+              ],
+              "intensity": 7,
+              "contamination": "radiological"
+            },
+            "changes": [
+              "distributed 1 hazard families over semantically suitable rooms"
+            ]
+          },
+          {
+            "order": 10,
+            "id": "security-defense",
+            "input": {
+              "security": "magical",
+              "doctrine": "passive"
+            },
+            "changes": [
+              "hardened thresholds and restricted spaces"
+            ]
+          },
+          {
+            "order": 11,
+            "id": "resources-magic",
+            "input": {
+              "wealth": "wealthy",
+              "resourceProfile": "contraband",
+              "magicTech": "none"
+            },
+            "changes": [
+              "increased high-value room identity",
+              "added contraband resource store"
+            ]
+          },
+          {
+            "order": 12,
+            "id": "condition-history",
+            "input": {
+              "age": "mature",
+              "condition": "neglected",
+              "maintenance": "meticulous",
+              "contamination": "radiological"
+            },
+            "changes": [
+              "applied radiological contamination"
+            ]
+          },
+          {
+            "order": 13,
+            "id": "narrative-social",
+            "input": {
+              "tone": "festive",
+              "socialMode": "quarantine",
+              "traffic": "processional",
+              "secretDensity": "scarce"
+            },
+            "changes": [
+              "retained previous spatial functions while adding narrative/social interpretation"
+            ]
+          },
+          {
+            "order": 14,
+            "id": "spatial-capacity-normalization",
+            "input": {
+              "expandedRoomCount": 16,
+              "decks": 3,
+              "roomsPerDeckEstimate": 6
+            },
+            "changes": [
+              "existing canvas already accommodates the accumulated semantic program"
+            ]
+          }
+        ]
+      }
+    },
+    "content": {
+      "schemaVersion": "1.2.0",
+      "generator": "hb-semantic-content-populator",
+      "version": "1.2.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06:content:archive-2026-08-22-purpose-aware-variety-01-seeded-random-06:open_d20",
+      "compatibility": {
+        "id": "open_d20",
+        "family": "open d20 / Hypertext d20-compatible",
+        "provenance": "Open d20-compatible presentation; setting-specific rules are not silently imported.",
+        "mechanicalDetailsAreSettingScoped": true
+      },
+      "provenance": {
+        "topologyEngine": "hb-semantic-spatial-engine",
+        "topologySeed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+        "contentLayer": "semantic-content-populator",
+        "locationArchetype": "warehouse",
+        "faction": "druid-circle",
+        "adventurePurpose": null,
+        "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+        "siteLayers": [
+          "relationship-reconciliation",
+          "scale",
+          "origin-culture",
+          "current-controller",
+          "occupancy-state",
+          "environment",
+          "cross-layer-interactions",
+          "ecology",
+          "hazard-ecology",
+          "security-defense",
+          "resources-magic",
+          "condition-history",
+          "narrative-social",
+          "spatial-capacity-normalization"
+        ]
+      },
+      "siteContext": {
+        "culture": "mixed-cosmopolitan",
+        "controller": "druid-circle",
+        "occupancyState": "frozen",
+        "biome": "ash-waste",
+        "climate": "magically-temperate",
+        "season": "wet-season",
+        "weather": "clear",
+        "ecology": "symbiotic",
+        "creatureFamilies": [
+          "insect",
+          "plant",
+          "beast",
+          "fey"
+        ],
+        "hazardFamilies": [
+          "fire"
+        ],
+        "materials": [
+          "brick",
+          "cut-stone",
+          "timber",
+          "glass",
+          "steel",
+          "blackstone",
+          "brass",
+          "plaster",
+          "bronze"
+        ],
+        "lighting": "gaslight",
+        "waterState": "cistern-fed",
+        "contamination": "radiological",
+        "narrativeTone": "festive",
+        "interactionIds": [
+          "cultural-overprint"
+        ],
+        "interactionCount": 1,
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 6,
+        "socialDensity": 2
+      },
+      "rooms": [
+        {
+          "roomId": "entry",
+          "role": "loading-entry",
+          "deck": 0,
+          "depth": 0,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "loading-entry",
+            "originalLabel": "Loading Entrance",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "improvised barricade and warning system"
+          ],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Loading Entrance",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 7
+        },
+        {
+          "roomId": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "colony insect [insect]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "spreading fire risk [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "insect presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "spreading fire risk [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "dangerous vine growth [plant]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "open flame and combustible clutter [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "plant presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "mobile plant creature [plant]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "plant presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "office",
+          "role": "warehouse-office",
+          "deck": 0,
+          "depth": 2,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "warehouse-office",
+            "originalLabel": "Shipping Office",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "documents or records clarifying recent events"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Shipping Office",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "secure",
+          "role": "secure-cage",
+          "deck": 1,
+          "depth": 2,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "secure-cage",
+            "originalLabel": "Secure Cage",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "layered observation and response point"
+          ],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Secure Cage",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 8
+        },
+        {
+          "roomId": "dock",
+          "role": "loading-dock",
+          "deck": 1,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "loading-dock",
+            "originalLabel": "Loading Dock",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "spreading fire risk [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Loading Dock",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "utility",
+          "role": "utility-room",
+          "deck": 1,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "utility-room",
+            "originalLabel": "Utility Room",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "burrowing insect [insect]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Utility Room",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "insect presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "scale-service-hub",
+          "role": "service-hub",
+          "deck": 1,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "service-hub",
+            "originalLabel": "Service Hub",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Service Hub",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "scale-secondary-access",
+          "role": "secondary-access",
+          "deck": 1,
+          "depth": 1,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "secondary-access",
+            "originalLabel": "Secondary Access",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "open flame and combustible clutter [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "layered observation and response point"
+          ],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Secondary Access",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 7
+        },
+        {
+          "roomId": "culture-market",
+          "role": "shared-common",
+          "deck": 2,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "shared-common",
+            "originalLabel": "Shared Common / Exchange",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "colony insect [insect]"
+          ],
+          "socialEncounters": [
+            "druid-circle personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "hot surfaces and embers [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Shared Common / Exchange",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "insect presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "controller-circle",
+          "role": "druid-circle",
+          "deck": 2,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "druid-circle",
+            "originalLabel": "Druid Circle",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "colony insect [insect]"
+          ],
+          "socialEncounters": [
+            "druid-circle personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Druid Circle",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "insect presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "controller-herbs",
+          "role": "herbal-store",
+          "deck": 2,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "herbal-store",
+            "originalLabel": "Herbal Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "open flame and combustible clutter [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Herbal Store",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "ecology-den",
+          "role": "ecology-den",
+          "deck": 2,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "ecology-den",
+            "originalLabel": "Nest / Den / Habitat",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "sentient botanical guardian [plant]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "spreading fire risk [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in Nest / Den / Habitat",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [
+            "plant presence consistent with symbiotic ecology and frozen occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "resource-store",
+          "role": "resource-specific-store",
+          "deck": 2,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "resource-specific-store",
+            "originalLabel": "contraband Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "spreading fire risk [fire]",
+            "radiological contamination interacting with the room's existing use",
+            "frozen state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "valuable records, components, heirlooms, or salvage"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "mixed-cosmopolitan cultural/construction influence remains legible in contraband Store",
+            "dominant materials: brick, cut-stone, timber",
+            "ash-waste / magically-temperate / wet-season / clear",
+            "gaslight lighting conditions",
+            "cistern-fed water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        }
+      ]
+    },
+    "compatibility": {
+      "id": "open_d20",
+      "family": "open d20 / Hypertext d20-compatible",
+      "provenance": "Open d20-compatible presentation; setting-specific rules are not silently imported.",
+      "mechanicalDetailsAreSettingScoped": true
+    },
+    "provenance": {
+      "topologyEngine": "hb-semantic-spatial-engine",
+      "topologySeed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+      "contentLayer": "semantic-content-populator",
+      "locationArchetype": "warehouse",
+      "faction": "druid-circle",
+      "adventurePurpose": null,
+      "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+      "siteLayers": [
+        "relationship-reconciliation",
+        "scale",
+        "origin-culture",
+        "current-controller",
+        "occupancy-state",
+        "environment",
+        "cross-layer-interactions",
+        "ecology",
+        "hazard-ecology",
+        "security-defense",
+        "resources-magic",
+        "condition-history",
+        "narrative-social",
+        "spatial-capacity-normalization"
+      ]
+    }
+  }
+}

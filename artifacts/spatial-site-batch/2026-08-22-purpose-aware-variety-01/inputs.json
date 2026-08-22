@@ -1,0 +1,1562 @@
+[
+  {
+    "id": "generic-neutral-urban",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-generic-neutral-urban",
+      "locationArchetype": "generic",
+      "rulesTarget": "open_d20",
+      "adventurePurpose": "exploration",
+      "siteScale": "standard",
+      "culturalInfluence": "culture-neutral",
+      "currentController": "civilian-residents",
+      "occupancyState": "active",
+      "biome": "urban",
+      "climate": "temperate",
+      "season": "late-summer",
+      "weather": "overcast",
+      "ecology": "urban-vermin",
+      "creatureFamilies": [
+        "humanoid",
+        "urban-pest"
+      ],
+      "hazardFamilies": [
+        "fire",
+        "security"
+      ],
+      "creatureDensity": 4,
+      "hazardIntensity": 3,
+      "condition": "serviceable",
+      "maintenance": "routine",
+      "security": "watched",
+      "defenseDoctrine": "passive",
+      "magicTech": "low-magic",
+      "wealth": "modest",
+      "traffic": "busy",
+      "socialMode": "public",
+      "resourceProfile": "trade-goods",
+      "secretDensity": "scarce",
+      "lighting": "windows",
+      "waterState": "dry",
+      "verticality": "flat",
+      "contamination": "dust",
+      "narrativeTone": "neutral",
+      "dangerLevel": 3
+    }
+  },
+  {
+    "id": "dwarven-bandit-mansion",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-dwarven-bandit-mansion",
+      "locationArchetype": "mansion",
+      "rulesTarget": "world_of_darkness",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "dwarven",
+      "currentController": "bandits",
+      "occupancyState": "occupied",
+      "biome": "alpine",
+      "climate": "alpine",
+      "season": "deep-winter",
+      "weather": "snow",
+      "ecology": "scavenger",
+      "creatureFamilies": [
+        "humanoid",
+        "sentry-animal"
+      ],
+      "hazardFamilies": [
+        "cold",
+        "traps",
+        "structural"
+      ],
+      "creatureDensity": 7,
+      "hazardIntensity": 6,
+      "condition": "patched",
+      "maintenance": "jury-rigged",
+      "security": "improvised",
+      "defenseDoctrine": "chokepoints",
+      "magicTech": "runic",
+      "wealth": "plundered",
+      "traffic": "night-active",
+      "socialMode": "criminal",
+      "resourceProfile": "contraband",
+      "secretDensity": "high",
+      "lighting": "hearths",
+      "waterState": "icebound",
+      "verticality": "split-level",
+      "contamination": "smoke",
+      "narrativeTone": "lawless",
+      "dangerLevel": 7
+    }
+  },
+  {
+    "id": "elven-outlaw-manor",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-elven-outlaw-manor",
+      "locationArchetype": "manor",
+      "rulesTarget": "blacklight_continuum",
+      "adventurePurpose": "exploration",
+      "siteScale": "sprawling",
+      "culturalInfluence": "elven",
+      "currentController": "outlaws",
+      "occupancyState": "repurposed",
+      "biome": "temperate-forest",
+      "climate": "temperate",
+      "season": "harvest",
+      "weather": "fog",
+      "ecology": "overgrown",
+      "creatureFamilies": [
+        "humanoid",
+        "fey",
+        "nonhostile-wildlife"
+      ],
+      "hazardFamilies": [
+        "traps",
+        "unstable-magic"
+      ],
+      "creatureDensity": 6,
+      "hazardIntensity": 5,
+      "condition": "weathered",
+      "maintenance": "deferred",
+      "security": "hidden",
+      "defenseDoctrine": "hidden-defense",
+      "magicTech": "druidic",
+      "wealth": "affluent",
+      "traffic": "light",
+      "socialMode": "criminal",
+      "resourceProfile": "luxury-goods",
+      "secretDensity": "very-high",
+      "lighting": "moonlight",
+      "waterState": "damp",
+      "verticality": "terraced",
+      "contamination": "mold",
+      "narrativeTone": "mysterious",
+      "dangerLevel": 6
+    }
+  },
+  {
+    "id": "ancient-desert-tomb",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-ancient-desert-tomb",
+      "locationArchetype": "tomb",
+      "rulesTarget": "kaysender",
+      "adventurePurpose": "relic-recovery",
+      "siteScale": "monumental",
+      "culturalInfluence": "ancient-unknown",
+      "currentController": "adventuring-company",
+      "occupancyState": "reclaimed",
+      "biome": "hot-desert",
+      "climate": "arid",
+      "season": "dry-season",
+      "weather": "sandstorm",
+      "ecology": "undead",
+      "creatureFamilies": [
+        "undead",
+        "spirit",
+        "ambusher"
+      ],
+      "hazardFamilies": [
+        "curse",
+        "traps",
+        "dust"
+      ],
+      "creatureDensity": 8,
+      "hazardIntensity": 9,
+      "condition": "ruin",
+      "maintenance": "abandoned",
+      "security": "decayed",
+      "defenseDoctrine": "traps",
+      "magicTech": "ancient-tech",
+      "wealth": "legendary",
+      "traffic": "rare",
+      "socialMode": "transient",
+      "resourceProfile": "artifacts",
+      "secretDensity": "labyrinthine",
+      "lighting": "darkness",
+      "waterState": "dry",
+      "verticality": "deep",
+      "contamination": "dust",
+      "narrativeTone": "haunted",
+      "dangerLevel": 9
+    }
+  },
+  {
+    "id": "criminal-urban-sewer",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-criminal-urban-sewer",
+      "locationArchetype": "sewer",
+      "rulesTarget": "open_d20",
+      "adventurePurpose": "exploration",
+      "siteScale": "sprawling",
+      "culturalInfluence": "human",
+      "currentController": "criminal-syndicate",
+      "occupancyState": "active",
+      "biome": "urban",
+      "climate": "maritime",
+      "season": "storm-season",
+      "weather": "heavy-rain",
+      "ecology": "urban-vermin",
+      "creatureFamilies": [
+        "humanoid",
+        "vermin",
+        "aquatic"
+      ],
+      "hazardFamilies": [
+        "sewage",
+        "disease",
+        "flood"
+      ],
+      "creatureDensity": 8,
+      "hazardIntensity": 8,
+      "condition": "worn",
+      "maintenance": "poor",
+      "security": "layered",
+      "defenseDoctrine": "chokepoints",
+      "magicTech": "none",
+      "wealth": "modest",
+      "traffic": "night-active",
+      "socialMode": "criminal",
+      "resourceProfile": "contraband",
+      "secretDensity": "high",
+      "lighting": "intermittent",
+      "waterState": "flowing-channel",
+      "verticality": "deep",
+      "contamination": "sewage",
+      "narrativeTone": "oppressive",
+      "dangerLevel": 8
+    }
+  },
+  {
+    "id": "dwarven-goblin-fortress",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-dwarven-goblin-fortress",
+      "locationArchetype": "fortress",
+      "rulesTarget": "world_of_darkness",
+      "adventurePurpose": "infiltration",
+      "siteScale": "fortified-complex",
+      "culturalInfluence": "dwarven",
+      "currentController": "goblin-clan",
+      "occupancyState": "occupied",
+      "biome": "cavern",
+      "climate": "geothermal",
+      "season": "late-autumn",
+      "weather": "fog",
+      "ecology": "fungal",
+      "creatureFamilies": [
+        "humanoid",
+        "fungus",
+        "cave-fauna"
+      ],
+      "hazardFamilies": [
+        "spores",
+        "structural",
+        "traps"
+      ],
+      "creatureDensity": 9,
+      "hazardIntensity": 9,
+      "condition": "damaged",
+      "maintenance": "jury-rigged",
+      "security": "improvised",
+      "defenseDoctrine": "layered-defense",
+      "magicTech": "runic",
+      "wealth": "plundered",
+      "traffic": "busy",
+      "socialMode": "hostile-occupation",
+      "resourceProfile": "weapons",
+      "secretDensity": "very-high",
+      "lighting": "fungal-glow",
+      "waterState": "dripping",
+      "verticality": "cavern-tiered",
+      "contamination": "spores",
+      "narrativeTone": "lawless",
+      "dangerLevel": 9
+    }
+  },
+  {
+    "id": "occupied-human-school",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-occupied-human-school",
+      "locationArchetype": "school",
+      "rulesTarget": "blacklight_continuum",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "human",
+      "currentController": "military-garrison",
+      "occupancyState": "occupied",
+      "biome": "ruined-city",
+      "climate": "continental",
+      "season": "first-frost",
+      "weather": "cold-snap",
+      "ecology": "urban-vermin",
+      "creatureFamilies": [
+        "humanoid",
+        "sentry-animal"
+      ],
+      "hazardFamilies": [
+        "security",
+        "fire",
+        "sharp-debris"
+      ],
+      "creatureDensity": 6,
+      "hazardIntensity": 6,
+      "condition": "patched",
+      "maintenance": "routine",
+      "security": "military",
+      "defenseDoctrine": "patrols",
+      "magicTech": "mixed-tech",
+      "wealth": "modest",
+      "traffic": "military-regulated",
+      "socialMode": "military",
+      "resourceProfile": "medical",
+      "secretDensity": "low",
+      "lighting": "emergency",
+      "waterState": "dry",
+      "verticality": "low-rise",
+      "contamination": "smoke",
+      "narrativeTone": "militarized",
+      "dangerLevel": 7
+    }
+  },
+  {
+    "id": "necromancer-arcane-university",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-necromancer-arcane-university",
+      "locationArchetype": "arcane_university",
+      "rulesTarget": "kaysender",
+      "adventurePurpose": "occult-investigation",
+      "siteScale": "campus",
+      "culturalInfluence": "elven",
+      "currentController": "necromancers",
+      "occupancyState": "haunted",
+      "biome": "arcane-wilds",
+      "climate": "magically-temperate",
+      "season": "late-autumn",
+      "weather": "magical-storm",
+      "ecology": "undead",
+      "creatureFamilies": [
+        "undead",
+        "aberration",
+        "spirit"
+      ],
+      "hazardFamilies": [
+        "necrotic",
+        "unstable-magic",
+        "curse"
+      ],
+      "creatureDensity": 9,
+      "hazardIntensity": 10,
+      "condition": "damaged",
+      "maintenance": "ritual-dependent",
+      "security": "magical",
+      "defenseDoctrine": "wards",
+      "magicTech": "necromantic",
+      "wealth": "legendary",
+      "traffic": "rare",
+      "socialMode": "scholarly",
+      "resourceProfile": "magical-components",
+      "secretDensity": "labyrinthine",
+      "lighting": "magical",
+      "waterState": "damp",
+      "verticality": "multi-level",
+      "contamination": "necrotic",
+      "narrativeTone": "haunted",
+      "dangerLevel": 10
+    }
+  },
+  {
+    "id": "syndicate-guildhall",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-syndicate-guildhall",
+      "locationArchetype": "guildhall",
+      "rulesTarget": "open_d20",
+      "adventurePurpose": "exploration",
+      "siteScale": "standard",
+      "culturalInfluence": "mixed-cosmopolitan",
+      "currentController": "criminal-syndicate",
+      "occupancyState": "active",
+      "biome": "urban",
+      "climate": "temperate",
+      "season": "late-summer",
+      "weather": "drizzle",
+      "ecology": "urban-vermin",
+      "creatureFamilies": [
+        "humanoid",
+        "urban-pest"
+      ],
+      "hazardFamilies": [
+        "traps",
+        "security"
+      ],
+      "creatureDensity": 5,
+      "hazardIntensity": 5,
+      "condition": "maintained",
+      "maintenance": "good",
+      "security": "layered",
+      "defenseDoctrine": "hidden-defense",
+      "magicTech": "common-magic",
+      "wealth": "wealthy",
+      "traffic": "busy",
+      "socialMode": "mercantile",
+      "resourceProfile": "trade-goods",
+      "secretDensity": "high",
+      "lighting": "oil-lamps",
+      "waterState": "dry",
+      "verticality": "low-rise",
+      "contamination": "none",
+      "narrativeTone": "paranoid",
+      "dangerLevel": 6
+    }
+  },
+  {
+    "id": "dragonkin-cult-temple",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-dragonkin-cult-temple",
+      "locationArchetype": "temple",
+      "rulesTarget": "world_of_darkness",
+      "adventurePurpose": "exploration",
+      "siteScale": "monumental",
+      "culturalInfluence": "dragonkin",
+      "currentController": "cult",
+      "occupancyState": "occupied",
+      "biome": "volcanic",
+      "climate": "volcanic",
+      "season": "storm-season",
+      "weather": "ashfall",
+      "ecology": "elemental",
+      "creatureFamilies": [
+        "fiend",
+        "elemental",
+        "dragon"
+      ],
+      "hazardFamilies": [
+        "lava",
+        "magical",
+        "ritual"
+      ],
+      "creatureDensity": 8,
+      "hazardIntensity": 10,
+      "condition": "serviceable",
+      "maintenance": "ritual-dependent",
+      "security": "paranoid",
+      "defenseDoctrine": "wards",
+      "magicTech": "elemental",
+      "wealth": "opulent",
+      "traffic": "processional",
+      "socialMode": "religious",
+      "resourceProfile": "ritual-goods",
+      "secretDensity": "high",
+      "lighting": "braziers",
+      "waterState": "geothermal",
+      "verticality": "towered",
+      "contamination": "ash",
+      "narrativeTone": "sacred",
+      "dangerLevel": 10
+    }
+  },
+  {
+    "id": "coastal-refugee-warehouse",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-coastal-refugee-warehouse",
+      "locationArchetype": "warehouse",
+      "rulesTarget": "blacklight_continuum",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "culture-neutral",
+      "currentController": "refugees",
+      "occupancyState": "occupied",
+      "biome": "coastal",
+      "climate": "maritime",
+      "season": "storm-season",
+      "weather": "heavy-rain",
+      "ecology": "wetland",
+      "creatureFamilies": [
+        "humanoid",
+        "aquatic",
+        "plague-carrier"
+      ],
+      "hazardFamilies": [
+        "flood",
+        "disease",
+        "structural"
+      ],
+      "creatureDensity": 5,
+      "hazardIntensity": 7,
+      "condition": "worn",
+      "maintenance": "deferred",
+      "security": "low",
+      "defenseDoctrine": "passive",
+      "magicTech": "none",
+      "wealth": "poor",
+      "traffic": "crowded",
+      "socialMode": "communal",
+      "resourceProfile": "food",
+      "secretDensity": "scarce",
+      "lighting": "daylight",
+      "waterState": "partially-flooded",
+      "verticality": "low-rise",
+      "contamination": "salt",
+      "narrativeTone": "desperate",
+      "dangerLevel": 6
+    }
+  },
+  {
+    "id": "gnomish-salvage-laboratory",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-gnomish-salvage-laboratory",
+      "locationArchetype": "laboratory",
+      "rulesTarget": "kaysender",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "gnomish",
+      "currentController": "salvagers",
+      "occupancyState": "partially-collapsed",
+      "biome": "badlands",
+      "climate": "semi-arid",
+      "season": "dry-season",
+      "weather": "dust-storm",
+      "ecology": "construct",
+      "creatureFamilies": [
+        "construct",
+        "scavenger",
+        "vermin"
+      ],
+      "hazardFamilies": [
+        "mechanical",
+        "chemical",
+        "structural"
+      ],
+      "creatureDensity": 6,
+      "hazardIntensity": 9,
+      "condition": "partial-collapse",
+      "maintenance": "failing",
+      "security": "decayed",
+      "defenseDoctrine": "ruined-defense",
+      "magicTech": "clockwork",
+      "wealth": "resource-rich",
+      "traffic": "light",
+      "socialMode": "industrial",
+      "resourceProfile": "industrial-parts",
+      "secretDensity": "moderate",
+      "lighting": "intermittent",
+      "waterState": "dry",
+      "verticality": "split-level",
+      "contamination": "chemical",
+      "narrativeTone": "industrial",
+      "dangerLevel": 9
+    }
+  },
+  {
+    "id": "halfling-quarantine-bunkhouse",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-halfling-quarantine-bunkhouse",
+      "locationArchetype": "bunkhouse_compound",
+      "rulesTarget": "open_d20",
+      "adventurePurpose": "exploration",
+      "siteScale": "campus",
+      "culturalInfluence": "halfling",
+      "currentController": "plague-survivors",
+      "occupancyState": "quarantined",
+      "biome": "grassland",
+      "climate": "continental",
+      "season": "early-autumn",
+      "weather": "overcast",
+      "ecology": "plague",
+      "creatureFamilies": [
+        "humanoid",
+        "domestic",
+        "plague-carrier"
+      ],
+      "hazardFamilies": [
+        "disease",
+        "biological",
+        "contamination"
+      ],
+      "creatureDensity": 7,
+      "hazardIntensity": 8,
+      "condition": "patched",
+      "maintenance": "jury-rigged",
+      "security": "controlled",
+      "defenseDoctrine": "chokepoints",
+      "magicTech": "low-magic",
+      "wealth": "poor",
+      "traffic": "crowded",
+      "socialMode": "quarantine",
+      "resourceProfile": "medical",
+      "secretDensity": "low",
+      "lighting": "hearths",
+      "waterState": "rain-capture",
+      "verticality": "flat",
+      "contamination": "disease",
+      "narrativeTone": "desperate",
+      "dangerLevel": 8
+    }
+  },
+  {
+    "id": "escaped-prisoner-prison",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-escaped-prisoner-prison",
+      "locationArchetype": "prison",
+      "rulesTarget": "world_of_darkness",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "human",
+      "currentController": "escaped-prisoners",
+      "occupancyState": "repurposed",
+      "biome": "urban",
+      "climate": "continental",
+      "season": "late-autumn",
+      "weather": "steady-rain",
+      "ecology": "urban-vermin",
+      "creatureFamilies": [
+        "humanoid",
+        "urban-pest"
+      ],
+      "hazardFamilies": [
+        "security",
+        "fire",
+        "traps"
+      ],
+      "creatureDensity": 8,
+      "hazardIntensity": 8,
+      "condition": "damaged",
+      "maintenance": "poor",
+      "security": "improvised",
+      "defenseDoctrine": "chokepoints",
+      "magicTech": "none",
+      "wealth": "impoverished",
+      "traffic": "busy",
+      "socialMode": "hostile-occupation",
+      "resourceProfile": "weapons",
+      "secretDensity": "high",
+      "lighting": "emergency",
+      "waterState": "damp",
+      "verticality": "multi-level",
+      "contamination": "smoke",
+      "narrativeTone": "tense",
+      "dangerLevel": 9
+    }
+  },
+  {
+    "id": "urban-plague-hospital",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-urban-plague-hospital",
+      "locationArchetype": "hospital",
+      "rulesTarget": "blacklight_continuum",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "human",
+      "currentController": "plague-survivors",
+      "occupancyState": "quarantined",
+      "biome": "ruined-city",
+      "climate": "temperate",
+      "season": "late-spring",
+      "weather": "drizzle",
+      "ecology": "plague",
+      "creatureFamilies": [
+        "humanoid",
+        "plague-carrier",
+        "vermin"
+      ],
+      "hazardFamilies": [
+        "disease",
+        "biological",
+        "toxic"
+      ],
+      "creatureDensity": 7,
+      "hazardIntensity": 9,
+      "condition": "worn",
+      "maintenance": "failing",
+      "security": "controlled",
+      "defenseDoctrine": "chokepoints",
+      "magicTech": "alchemical",
+      "wealth": "modest",
+      "traffic": "crowded",
+      "socialMode": "quarantine",
+      "resourceProfile": "medical",
+      "secretDensity": "moderate",
+      "lighting": "emergency",
+      "waterState": "dry",
+      "verticality": "low-rise",
+      "contamination": "disease",
+      "narrativeTone": "tragic",
+      "dangerLevel": 9
+    }
+  },
+  {
+    "id": "orcish-mine-dwarven-hold",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-orcish-mine-dwarven-hold",
+      "locationArchetype": "mine",
+      "rulesTarget": "kaysender",
+      "adventurePurpose": "exploration",
+      "siteScale": "subterranean-complex",
+      "culturalInfluence": "orcish",
+      "currentController": "dwarven-hold",
+      "occupancyState": "occupied",
+      "biome": "underdark",
+      "climate": "geothermal",
+      "season": "deep-winter",
+      "weather": "fog",
+      "ecology": "subterranean",
+      "creatureFamilies": [
+        "cave-fauna",
+        "deep-dweller",
+        "humanoid"
+      ],
+      "hazardFamilies": [
+        "cave-in",
+        "gas",
+        "darkness"
+      ],
+      "creatureDensity": 8,
+      "hazardIntensity": 9,
+      "condition": "worn",
+      "maintenance": "routine",
+      "security": "hardened",
+      "defenseDoctrine": "chokepoints",
+      "magicTech": "runic",
+      "wealth": "resource-rich",
+      "traffic": "shift-work",
+      "socialMode": "industrial",
+      "resourceProfile": "ore",
+      "secretDensity": "high",
+      "lighting": "crystal-glow",
+      "waterState": "dripping",
+      "verticality": "shafted",
+      "contamination": "dust",
+      "narrativeTone": "austere",
+      "dangerLevel": 8
+    }
+  },
+  {
+    "id": "flooded-gnomish-industrial",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-flooded-gnomish-industrial",
+      "locationArchetype": "industrial_facility",
+      "rulesTarget": "open_d20",
+      "adventurePurpose": "exploration",
+      "siteScale": "megastructure",
+      "culturalInfluence": "gnomish",
+      "currentController": "occupation-force",
+      "occupancyState": "partially-flooded",
+      "biome": "riverine",
+      "climate": "humid-subtropical",
+      "season": "wet-season",
+      "weather": "monsoon-rain",
+      "ecology": "invasive",
+      "creatureFamilies": [
+        "construct",
+        "vermin",
+        "aquatic"
+      ],
+      "hazardFamilies": [
+        "industrial",
+        "flood",
+        "electrical"
+      ],
+      "creatureDensity": 7,
+      "hazardIntensity": 10,
+      "condition": "heavily-damaged",
+      "maintenance": "failing",
+      "security": "military",
+      "defenseDoctrine": "layered-defense",
+      "magicTech": "arcane-industrial",
+      "wealth": "resource-rich",
+      "traffic": "military-regulated",
+      "socialMode": "hostile-occupation",
+      "resourceProfile": "industrial-parts",
+      "secretDensity": "moderate",
+      "lighting": "electric",
+      "waterState": "flooded",
+      "verticality": "multi-level",
+      "contamination": "industrial-waste",
+      "narrativeTone": "oppressive",
+      "dangerLevel": 10
+    }
+  },
+  {
+    "id": "goblinoid-outlaw-hideout",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-goblinoid-outlaw-hideout",
+      "locationArchetype": "hideout",
+      "rulesTarget": "world_of_darkness",
+      "adventurePurpose": "exploration",
+      "siteScale": "small",
+      "culturalInfluence": "goblinoid",
+      "currentController": "outlaws",
+      "occupancyState": "active",
+      "biome": "boreal-forest",
+      "climate": "subarctic",
+      "season": "deep-winter",
+      "weather": "heavy-snow",
+      "ecology": "woodland",
+      "creatureFamilies": [
+        "humanoid",
+        "sentry-animal",
+        "scavenger"
+      ],
+      "hazardFamilies": [
+        "traps",
+        "cold",
+        "smoke"
+      ],
+      "creatureDensity": 7,
+      "hazardIntensity": 7,
+      "condition": "patched",
+      "maintenance": "jury-rigged",
+      "security": "hidden",
+      "defenseDoctrine": "hidden-defense",
+      "magicTech": "low-magic",
+      "wealth": "poor",
+      "traffic": "night-active",
+      "socialMode": "criminal",
+      "resourceProfile": "contraband",
+      "secretDensity": "very-high",
+      "lighting": "hearths",
+      "waterState": "icebound",
+      "verticality": "split-level",
+      "contamination": "smoke",
+      "narrativeTone": "lawless",
+      "dangerLevel": 8
+    }
+  },
+  {
+    "id": "rebel-civic-building",
+    "kind": "curated",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-rebel-civic-building",
+      "locationArchetype": "civic_building",
+      "rulesTarget": "blacklight_continuum",
+      "adventurePurpose": "exploration",
+      "siteScale": "large",
+      "culturalInfluence": "mixed-cosmopolitan",
+      "currentController": "rebels",
+      "occupancyState": "occupied",
+      "biome": "ruined-city",
+      "climate": "continental",
+      "season": "late-autumn",
+      "weather": "smoke-haze",
+      "ecology": "urban-vermin",
+      "creatureFamilies": [
+        "humanoid",
+        "urban-pest"
+      ],
+      "hazardFamilies": [
+        "security",
+        "fire",
+        "structural"
+      ],
+      "creatureDensity": 8,
+      "hazardIntensity": 7,
+      "condition": "damaged",
+      "maintenance": "poor",
+      "security": "improvised",
+      "defenseDoctrine": "mobile-defense",
+      "magicTech": "mixed-tech",
+      "wealth": "modest",
+      "traffic": "busy",
+      "socialMode": "communal",
+      "resourceProfile": "weapons",
+      "secretDensity": "high",
+      "lighting": "emergency",
+      "waterState": "dry",
+      "verticality": "low-rise",
+      "contamination": "smoke",
+      "narrativeTone": "hopeful",
+      "dangerLevel": 8
+    }
+  },
+  {
+    "id": "seeded-random-01-fortress",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-01",
+      "locationArchetype": "fortress",
+      "rulesTarget": "kaysender",
+      "dangerLevel": 2,
+      "creatureDensity": 3,
+      "hazardIntensity": 4,
+      "treasureDensity": 2,
+      "socialDensity": 1,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "dwarven",
+            "elven",
+            "human",
+            "culture-neutral"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-02-mansion",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-02",
+      "locationArchetype": "mansion",
+      "rulesTarget": "open_d20",
+      "dangerLevel": 5,
+      "creatureDensity": 10,
+      "hazardIntensity": 9,
+      "treasureDensity": 5,
+      "socialDensity": 10,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "cult",
+            "criminal-syndicate",
+            "adventuring-company",
+            "plague-survivors"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "celestial"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "vacuum"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-03-tomb",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-03",
+      "locationArchetype": "tomb",
+      "rulesTarget": "world_of_darkness",
+      "dangerLevel": 8,
+      "creatureDensity": 6,
+      "hazardIntensity": 3,
+      "treasureDensity": 8,
+      "socialDensity": 8,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-04-sewer",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-04",
+      "locationArchetype": "sewer",
+      "rulesTarget": "blacklight_continuum",
+      "dangerLevel": 2,
+      "creatureDensity": 2,
+      "hazardIntensity": 8,
+      "treasureDensity": 0,
+      "socialDensity": 6,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "dwarven",
+            "elven",
+            "human",
+            "culture-neutral"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "cult",
+            "criminal-syndicate",
+            "adventuring-company",
+            "plague-survivors"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "celestial"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "vacuum"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-05-arcane-university",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-05",
+      "locationArchetype": "arcane_university",
+      "rulesTarget": "kaysender",
+      "dangerLevel": 5,
+      "creatureDensity": 9,
+      "hazardIntensity": 2,
+      "treasureDensity": 3,
+      "socialDensity": 4,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-06-warehouse",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-06",
+      "locationArchetype": "warehouse",
+      "rulesTarget": "open_d20",
+      "dangerLevel": 8,
+      "creatureDensity": 5,
+      "hazardIntensity": 7,
+      "treasureDensity": 6,
+      "socialDensity": 2,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "cult",
+            "criminal-syndicate",
+            "adventuring-company",
+            "plague-survivors"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "celestial"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "vacuum"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-07-laboratory",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-07",
+      "locationArchetype": "laboratory",
+      "rulesTarget": "world_of_darkness",
+      "dangerLevel": 2,
+      "creatureDensity": 1,
+      "hazardIntensity": 1,
+      "treasureDensity": 9,
+      "socialDensity": 0,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "dwarven",
+            "elven",
+            "human",
+            "culture-neutral"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-08-prison",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-08",
+      "locationArchetype": "prison",
+      "rulesTarget": "blacklight_continuum",
+      "dangerLevel": 5,
+      "creatureDensity": 8,
+      "hazardIntensity": 6,
+      "treasureDensity": 1,
+      "socialDensity": 9,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "cult",
+            "criminal-syndicate",
+            "adventuring-company",
+            "plague-survivors"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "celestial"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "vacuum"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-09-hospital",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-09",
+      "locationArchetype": "hospital",
+      "rulesTarget": "kaysender",
+      "dangerLevel": 8,
+      "creatureDensity": 4,
+      "hazardIntensity": 0,
+      "treasureDensity": 4,
+      "socialDensity": 7,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-10-mine",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-10",
+      "locationArchetype": "mine",
+      "rulesTarget": "open_d20",
+      "dangerLevel": 2,
+      "creatureDensity": 0,
+      "hazardIntensity": 5,
+      "treasureDensity": 7,
+      "socialDensity": 5,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "dwarven",
+            "elven",
+            "human",
+            "culture-neutral"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "cult",
+            "criminal-syndicate",
+            "adventuring-company",
+            "plague-survivors"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "celestial"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "vacuum"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-11-industrial-facility",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-11",
+      "locationArchetype": "industrial_facility",
+      "rulesTarget": "world_of_darkness",
+      "dangerLevel": 5,
+      "creatureDensity": 7,
+      "hazardIntensity": 10,
+      "treasureDensity": 10,
+      "socialDensity": 3,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-12-hideout",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-12",
+      "locationArchetype": "hideout",
+      "rulesTarget": "blacklight_continuum",
+      "dangerLevel": 8,
+      "creatureDensity": 3,
+      "hazardIntensity": 4,
+      "treasureDensity": 2,
+      "socialDensity": 1,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "mixed-cosmopolitan",
+            "gnomish",
+            "orcish",
+            "ancient-unknown"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "cult",
+            "criminal-syndicate",
+            "adventuring-company",
+            "plague-survivors"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "celestial"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "vacuum"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "seeded-random-13-civic-building",
+    "kind": "seeded-random",
+    "input": {
+      "seed": "archive-2026-08-22-purpose-aware-variety-01-seeded-random-13",
+      "locationArchetype": "civic_building",
+      "rulesTarget": "kaysender",
+      "dangerLevel": 2,
+      "creatureDensity": 10,
+      "hazardIntensity": 9,
+      "treasureDensity": 5,
+      "socialDensity": 10,
+      "sitePreferences": {
+        "originCulture": {
+          "preferred": [
+            "dwarven",
+            "elven",
+            "human",
+            "culture-neutral"
+          ]
+        },
+        "controller": {
+          "preferred": [
+            "bandits",
+            "refugees",
+            "military-garrison",
+            "goblin-clan"
+          ]
+        },
+        "ecology": {
+          "preferred": [
+            "fungal",
+            "overgrown",
+            "urban-vermin",
+            "subterranean",
+            "magical",
+            "wetland"
+          ]
+        },
+        "creatureFamilies": {
+          "exclude": [
+            "dragon"
+          ]
+        },
+        "hazardFamilies": {
+          "exclude": [
+            "lava"
+          ]
+        }
+      }
+    }
+  }
+]
