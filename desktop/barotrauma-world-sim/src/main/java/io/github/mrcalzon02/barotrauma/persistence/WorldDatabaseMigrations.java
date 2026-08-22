@@ -85,7 +85,8 @@ final class WorldDatabaseMigrations {
             case 30 -> WorldStorageContracts.schema030Statements();
             case 31 -> WorldStorageContracts.schema031Statements();
             case 32 -> WorldStorageContracts.schema032Statements();
-            case 33 -> OrganizationFactionSchema.statements();
+            case 33 -> WorldStorageContracts.schema033Statements();
+            case 34 -> WorldStorageContracts.schema034Statements();
             default -> throw new SQLException("No forward migration is defined for schema " + targetVersion + ".");
         };
     }
@@ -227,8 +228,8 @@ final class WorldDatabaseMigrations {
              ResultSet result = statement.executeQuery("PRAGMA foreign_key_check")) {
             long count = 0;
             while (result.next()) count++;
-            return count;
         }
+        return 0;
     }
 
     static void configure(Connection connection) throws SQLException {
