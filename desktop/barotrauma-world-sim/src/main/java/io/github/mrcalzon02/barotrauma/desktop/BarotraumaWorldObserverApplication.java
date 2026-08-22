@@ -3,6 +3,7 @@ package io.github.mrcalzon02.barotrauma.desktop;
 import io.github.mrcalzon02.barotrauma.desktop.assets.BarotraumaDesktopTheme;
 import io.github.mrcalzon02.barotrauma.desktop.registry.DailyNewspaperTickerWindow;
 import io.github.mrcalzon02.barotrauma.desktop.registry.DonorBackedWorldMapWindow;
+import io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverTimeControlBar;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -14,6 +15,7 @@ public final class BarotraumaWorldObserverApplication {
 
     public static void main(String[] args) {
         if (args != null && Arrays.asList(args).contains("--verify-launch")) {
+            WorldObserverTimeControlBar.verifyContract();
             System.out.println("Barotrauma World Observer launcher verification passed.");
             return;
         }
@@ -29,6 +31,7 @@ public final class BarotraumaWorldObserverApplication {
             // trigger before the map listener can resume an already-enabled Passive Mode scheduler.
             DailyNewspaperTickerWindow ticker = new DailyNewspaperTickerWindow();
             DonorBackedWorldMapWindow window = new DonorBackedWorldMapWindow();
+            WorldObserverTimeControlBar.install(window);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
             ticker.setLocation(window.getX() + 70, window.getY() + 90);
