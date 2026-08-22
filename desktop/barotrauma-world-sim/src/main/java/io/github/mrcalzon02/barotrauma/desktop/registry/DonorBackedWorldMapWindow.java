@@ -4,6 +4,7 @@ import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue;
 import io.github.mrcalzon02.barotrauma.assets.BarotraumaAssetCatalogue.VisualRole;
 import io.github.mrcalzon02.barotrauma.desktop.assets.DonorAssetSetupWindow;
 import io.github.mrcalzon02.barotrauma.desktop.session.DesktopWorldSession;
+import io.github.mrcalzon02.barotrauma.persistence.NaturalWorldAndFleetRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.PassiveWorldRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry;
 import io.github.mrcalzon02.barotrauma.persistence.WorldMapRegistry.LocationRow;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -65,7 +67,8 @@ import java.util.function.Consumer;
  * <p>The window is coupled to the authoritative desktop world. It resumes an already-enabled Passive Mode
  * scheduler, can explicitly run or pause that scheduler, renders in-transit NPC vessels at committed route
  * progress, and keeps a clicked vessel, route, station, or location pinned in the evidence inspector while
- * the world continues to advance.
+ * the world continues to advance. Natural-world layers are read-only projections of committed ecology,
+ * geology, resource, event, and fleet-response evidence.
  */
 public final class DonorBackedWorldMapWindow extends JFrame {
     private final DesktopWorldSession session = DesktopWorldSession.global();
@@ -82,6 +85,11 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JButton zoomInButton = new JButton("Zoom +");
     private final JButton zoomOutButton = new JButton("Zoom -");
     private final JButton fitMapButton = new JButton("Fit World");
+    private final JToggleButton ecologyLayerButton = new JToggleButton("Ecology");
+    private final JToggleButton geologyLayerButton = new JToggleButton("Geology");
+    private final JToggleButton resourceLayerButton = new JToggleButton("Resources");
+    private final JToggleButton fleetLayerButton = new JToggleButton("Fleet response", true);
+    private final JToggleButton incidentLayerButton = new JToggleButton("Incidents", true);
     private final JSpinner cadenceSeconds = new JSpinner(new SpinnerNumberModel(5, 1, 3600, 1));
     private final JSpinner ticksPerCycle = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
     private final JTextArea details = new JTextArea();
@@ -145,6 +153,12 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         viewControls.add(zoomOutButton);
         viewControls.add(zoomInButton);
         viewControls.add(fitMapButton);
+        viewControls.add(new JLabel("Layers:"));
+        viewControls.add(ecologyLayerButton);
+        viewControls.add(geologyLayerButton);
+        viewControls.add(resourceLayerButton);
+        viewControls.add(fleetLayerButton);
+        viewControls.add(incidentLayerButton);
         viewControls.add(configureAssetsButton);
 
         JPanel footer = new JPanel(new BorderLayout(8, 8));
@@ -166,6 +180,16 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             window.setLocationRelativeTo(this);
             window.setVisible(true);
         });
+        var layerListener = new java.awt.event.ActionListener() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent event) { applyLayerSelection(); }
+        };
+        ecologyLayerButton.addActionListener(layerListener);
+        geologyLayerButton.addActionListener(layerListener);
+        resourceLayerButton.addActionListener(layerListener);
+        fleetLayerButton.addActionListener(layerListener);
+        incidentLayerButton.addActionListener(layerListener);
+        applyLayerSelection();
+
         canvas.setSelectionConsumer(this::select);
         canvas.addMouseWheelListener(event -> {
             if (!event.isControlDown()) return;
@@ -177,6 +201,11 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         refreshTimer.setRepeats(true);
         refreshTimer.start();
         refreshControls();
+    }
+
+    private void applyLayerSelection() {
+        canvas.setLayers(ecologyLayerButton.isSelected(), geologyLayerButton.isSelected(),
+                resourceLayerButton.isSelected(), fleetLayerButton.isSelected(), incidentLayerButton.isSelected());
     }
 
     private void installViewportPan() {
@@ -362,7 +391,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             @Override protected LoadedMap doInBackground() throws Exception {
                 WorldMapRegistry.RegistrySnapshot registry = WorldMapRegistry.load(selectedWorld);
                 PassiveWorldRegistry.Snapshot passive = PassiveWorldRegistry.load(selectedWorld);
-                return new LoadedMap(registry, passive, assets.coverage());
+                NaturalWorldAndFleetRegistry.Snapshot natural = NaturalWorldAndFleetRegistry.load(selectedWorld);
+                return new LoadedMap(registry, passive, natural, assets.coverage());
             }
 
             @Override protected void done() {
@@ -370,7 +400,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                     LoadedMap loaded = get();
                     if (!Objects.equals(selectedWorld, world)) return;
                     lastLoaded = loaded;
-                    canvas.setSnapshots(loaded.registry(), loaded.passive());
+                    canvas.setSnapshots(loaded.registry(), loaded.passive(), loaded.natural());
                     canvas.setSelected(selection);
                     renderSelection();
                     assetStatus.setText("Donor roles " + loaded.coverage().donorCount()
@@ -414,7 +444,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             case WORLD -> worldDossier(loaded);
             case LOCATION -> loaded.registry().locations().stream()
                     .filter(row -> row.locationId().equals(selection.id())).findFirst()
-                    .map(row -> WorldObserverInspector.location(row, loaded.registry(), loaded.passive()))
+                    .map(row -> WorldObserverInspector.location(row, loaded.registry(), loaded.passive())
+                            + "\n\n" + WorldObserverNaturalLayer.location(row.displayName(), loaded.natural()))
                     .orElseGet(() -> missingSelection(loaded));
             case VESSEL -> loaded.passive().vessels().stream()
                     .filter(row -> row.vesselId().equals(selection.id())).findFirst()
@@ -439,7 +470,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         String donorRoot = assets.activeDonor().map(candidate -> candidate.installationRoot().toString())
                 .orElse("No active Barotrauma installation; procedural fallback visuals are in use.");
         return WorldObserverInspector.world(loaded.registry(), loaded.passive(), donorRoot,
-                loaded.coverage().donorCount(), loaded.coverage().fallbackCount());
+                loaded.coverage().donorCount(), loaded.coverage().fallbackCount())
+                + "\n\n" + WorldObserverNaturalLayer.world(loaded.natural());
     }
 
     private void zoomBy(double factor) {
@@ -489,6 +521,11 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         zoomInButton.setEnabled(!busy);
         zoomOutButton.setEnabled(!busy);
         fitMapButton.setEnabled(!busy);
+        ecologyLayerButton.setEnabled(!busy && worldOpen);
+        geologyLayerButton.setEnabled(!busy && worldOpen);
+        resourceLayerButton.setEnabled(!busy && worldOpen);
+        fleetLayerButton.setEnabled(!busy && worldOpen);
+        incidentLayerButton.setEnabled(!busy && worldOpen);
     }
 
     private void showFailure(String title, Throwable throwable) {
@@ -533,6 +570,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     }
 
     private record LoadedMap(WorldMapRegistry.RegistrySnapshot registry, PassiveWorldRegistry.Snapshot passive,
+                             NaturalWorldAndFleetRegistry.Snapshot natural,
                              BarotraumaAssetCatalogue.CoverageReport coverage) { }
 
     private static final class EuropaMapCanvas extends JPanel {
@@ -547,10 +585,17 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         private final List<HitRegion> hitRegions = new ArrayList<>();
         private WorldMapRegistry.RegistrySnapshot registry;
         private PassiveWorldRegistry.Snapshot passive;
+        private NaturalWorldAndFleetRegistry.Snapshot natural;
+        private Map<String, WorldObserverNaturalLayer.LayerSignal> naturalSignals = Map.of();
         private BufferedImage background;
         private Consumer<Selection> selectionConsumer = ignored -> { };
         private Selection selected = Selection.world();
         private double zoom = 1.0;
+        private boolean ecologyLayer;
+        private boolean geologyLayer;
+        private boolean resourceLayer;
+        private boolean fleetLayer = true;
+        private boolean incidentLayer = true;
 
         private EuropaMapCanvas(BarotraumaAssetCatalogue assets) {
             this.assets = assets;
@@ -572,6 +617,15 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
         void setSelected(Selection selection) {
             selected = selection == null ? Selection.world() : selection;
+            repaint();
+        }
+
+        void setLayers(boolean ecology, boolean geology, boolean resources, boolean fleet, boolean incidents) {
+            ecologyLayer = ecology;
+            geologyLayer = geology;
+            resourceLayer = resources;
+            fleetLayer = fleet;
+            incidentLayer = incidents;
             repaint();
         }
 
@@ -602,9 +656,12 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             repaint();
         }
 
-        void setSnapshots(WorldMapRegistry.RegistrySnapshot registry, PassiveWorldRegistry.Snapshot passive) {
+        void setSnapshots(WorldMapRegistry.RegistrySnapshot registry, PassiveWorldRegistry.Snapshot passive,
+                          NaturalWorldAndFleetRegistry.Snapshot natural) {
             this.registry = registry;
             this.passive = passive;
+            this.natural = natural;
+            naturalSignals = natural == null ? Map.of() : WorldObserverNaturalLayer.signals(natural);
             icons.clear();
             background = null;
             repaint();
@@ -613,6 +670,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         void clear() {
             registry = null;
             passive = null;
+            natural = null;
+            naturalSignals = Map.of();
             icons.clear();
             background = null;
             hitRegions.clear();
@@ -634,9 +693,11 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 }
                 hitRegions.clear();
                 Map<String, Point> positions = positions(registry.locations(), getWidth(), getHeight());
+                drawNaturalLayers(g, positions);
                 drawRoutes(g, positions);
                 drawLocations(g, positions);
                 drawVessels(g, positions);
+                drawLayerLegend(g);
                 drawSourceBadge(g);
             } finally {
                 g.dispose();
@@ -660,6 +721,67 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             g.setComposite(AlphaComposite.SrcOver.derive(0.32f));
             g.setColor(new Color(0, 8, 12));
             g.fillRect(0, 0, getWidth(), getHeight());
+            g.setComposite(AlphaComposite.SrcOver);
+        }
+
+        private void drawNaturalLayers(Graphics2D g, Map<String, Point> positions) {
+            if (natural == null) return;
+            for (var entry : naturalSignals.entrySet()) {
+                Point point = positions.get(entry.getKey());
+                if (point == null) continue;
+                var signal = entry.getValue();
+                if (ecologyLayer && signal.ecologicalRisk() > 0) {
+                    int radius = 18 + signal.ecologicalRisk() / 8;
+                    g.setComposite(AlphaComposite.SrcOver.derive(0.22f));
+                    g.setColor(new Color(95, 190, 125));
+                    g.fillOval(point.x - radius, point.y - radius, radius * 2, radius * 2);
+                    g.setComposite(AlphaComposite.SrcOver);
+                    g.setColor(new Color(129, 220, 155));
+                    g.drawOval(point.x - radius, point.y - radius, radius * 2, radius * 2);
+                }
+                if (geologyLayer && signal.geologicalRisk() > 0) {
+                    int radius = 22 + signal.geologicalRisk() / 7;
+                    g.setStroke(new BasicStroke(2f));
+                    g.setColor(new Color(226, 145, 82, 190));
+                    g.drawOval(point.x - radius, point.y - radius, radius * 2, radius * 2);
+                }
+                if (resourceLayer && signal.overallOpportunity() > 0) {
+                    int radius = 7 + signal.overallOpportunity() / 18;
+                    g.setColor(new Color(105, 205, 225, 210));
+                    g.fillOval(point.x - radius, point.y - radius, radius * 2, radius * 2);
+                    g.setColor(new Color(220, 245, 250));
+                    g.drawOval(point.x - radius, point.y - radius, radius * 2, radius * 2);
+                }
+                if (incidentLayer && signal.eventSeverity() >= 35) {
+                    int radius = 11 + signal.eventSeverity() / 12;
+                    g.setStroke(new BasicStroke(2.5f));
+                    g.setColor(new Color(235, 95, 86, 220));
+                    g.drawLine(point.x - radius, point.y - radius, point.x + radius, point.y + radius);
+                    g.drawLine(point.x + radius, point.y - radius, point.x - radius, point.y + radius);
+                }
+            }
+            if (fleetLayer && passive != null) {
+                for (var response : passive.fleetResponses()) {
+                    if (!"ACTIVE".equals(response.status()) && !"AVAILABLE".equals(response.status())) continue;
+                    Point target = positions.get(response.targetLocationName());
+                    if (target == null) continue;
+                    g.setStroke(new BasicStroke(3f));
+                    g.setColor(new Color(245, 190, 92, 220));
+                    g.drawOval(target.x - 24, target.y - 24, 48, 48);
+                    if (response.responderVesselId() != null) {
+                        var responder = passive.vessels().stream()
+                                .filter(vessel -> vessel.vesselId().toString().equals(response.responderVesselId()))
+                                .findFirst().orElse(null);
+                        Point responderPoint = responder == null ? null : vesselPosition(responder, positions);
+                        if (responderPoint != null) {
+                            g.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                                    10f, new float[]{4f, 6f}, 0f));
+                            g.drawLine(responderPoint.x, responderPoint.y, target.x, target.y);
+                        }
+                    }
+                }
+            }
+            g.setStroke(new BasicStroke(1f));
             g.setComposite(AlphaComposite.SrcOver);
         }
 
@@ -714,10 +836,13 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 g.setFont(getFont().deriveFont(row.station() ? Font.BOLD : Font.PLAIN, row.station() ? 12f : 11f));
                 g.drawString(row.displayName(), point.x + size / 2 + 4, point.y + 4);
                 Rectangle bounds = new Rectangle(point.x - size / 2, point.y - size / 2, size, size);
+                var signal = naturalSignals.get(row.displayName());
+                String naturalText = signal == null ? "" : " · hazard " + signal.overallHazard()
+                        + " · resource " + signal.overallOpportunity();
                 hitRegions.add(new HitRegion(bounds,
                         row.displayName() + " · ring " + row.ring() + " · level " + row.locationLevel()
                                 + " · " + blank(row.locationType())
-                                + (row.faction() == null ? "" : " · " + row.faction()),
+                                + (row.faction() == null ? "" : " · " + row.faction()) + naturalText,
                         Selection.location(row)));
             }
         }
@@ -771,6 +896,26 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             Point to = positions.get(vessel.destinationLocation());
             if (to == null || vessel.routeTicksRequired() <= 0) return from;
             return WorldObserverProjection.interpolate(from, to, vessel.routeProgress(), vessel.routeTicksRequired());
+        }
+
+        private void drawLayerLegend(Graphics2D g) {
+            List<String> labels = new ArrayList<>();
+            if (ecologyLayer) labels.add("Ecology");
+            if (geologyLayer) labels.add("Geology");
+            if (resourceLayer) labels.add("Resources");
+            if (fleetLayer) labels.add("Fleet response");
+            if (incidentLayer) labels.add("Incidents");
+            if (labels.isEmpty()) return;
+            String text = "Layers: " + String.join(" · ", labels);
+            g.setFont(getFont().deriveFont(Font.BOLD, 11f));
+            int width = g.getFontMetrics().stringWidth(text) + 20;
+            int x = Math.max(12, getWidth() - width - 16);
+            int y = 16;
+            g.setColor(new Color(4, 15, 20, 210));
+            g.fillRoundRect(x, y, width, 24, 12, 12);
+            g.setColor(new Color(200, 225, 220));
+            g.drawRoundRect(x, y, width, 24, 12, 12);
+            g.drawString(text, x + 10, y + 16);
         }
 
         private void drawSourceBadge(Graphics2D g) {
