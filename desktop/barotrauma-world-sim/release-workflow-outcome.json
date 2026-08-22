@@ -1,28 +1,25 @@
 {
   "recordType": "barotraumaDesktopReleaseWorkflowOutcome",
-  "runId": "32557052086",
+  "runId": "32578755972",
   "runAttempt": "1",
-  "sourceCommit": "a7535cfed950e6dc680cced63950e227bf4966b9",
+  "sourceCommit": "a1d696cd49c2ac64ee6d4e9b95c4d6ffa3c0c914",
   "workflow": "Verify and release Barotrauma desktop application",
   "event": "push",
   "linuxVerification": "success",
-  "windowsInstallerRelease": "success",
-  "releaseTag": "barotrauma-desktop-v0.1.672",
-  "releaseVerified": true,
-  "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.1.672",
-  "releaseAssets": [
-    "Barotrauma-World-Simulation-Toolbox-0.1.672-Windows-x64.msi",
-    "Barotrauma-World-Simulation-Toolbox-0.1.672-Windows-x64.msi.sha256"
-  ],
+  "windowsInstallerRelease": "cancelled",
+  "releaseTag": "barotrauma-desktop-v0.2.0",
+  "releaseVerified": false,
+  "releaseUrl": null,
+  "releaseAssets": [],
   "jobs": [
     {
-      "id": 96992849160,
+      "id": 97044875871,
       "name": "java-17-verification",
       "status": "completed",
       "conclusion": "success",
-      "startedAt": "2026-08-22T06:28:46Z",
-      "completedAt": "2026-08-22T06:30:50Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32557052086/job/96992849160",
+      "startedAt": "2026-08-22T14:27:32Z",
+      "completedAt": "2026-08-22T14:29:41Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32578755972/job/97044875871",
       "steps": [
         {
           "number": 1,
@@ -69,13 +66,13 @@
       ]
     },
     {
-      "id": 96993086326,
+      "id": 97045122860,
       "name": "windows-installer-release",
       "status": "completed",
-      "conclusion": "success",
-      "startedAt": "2026-08-22T06:30:54Z",
-      "completedAt": "2026-08-22T06:36:21Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32557052086/job/96993086326",
+      "conclusion": "cancelled",
+      "startedAt": "2026-08-22T14:29:43Z",
+      "completedAt": "2026-08-22T14:35:08Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32578755972/job/97045122860",
       "steps": [
         {
           "number": 1,
@@ -111,31 +108,31 @@
           "number": 6,
           "name": "Package Windows MSI",
           "status": "completed",
-          "conclusion": "success"
+          "conclusion": "cancelled"
         },
         {
           "number": 7,
           "name": "Read release manifest",
           "status": "completed",
-          "conclusion": "success"
+          "conclusion": "skipped"
         },
         {
           "number": 8,
           "name": "Write release notes",
           "status": "completed",
-          "conclusion": "success"
+          "conclusion": "skipped"
         },
         {
           "number": 9,
           "name": "Upload installer workflow artifact",
           "status": "completed",
-          "conclusion": "success"
+          "conclusion": "skipped"
         },
         {
           "number": 10,
           "name": "Publish immutable GitHub release",
           "status": "completed",
-          "conclusion": "success"
+          "conclusion": "skipped"
         },
         {
           "number": 19,
@@ -158,13 +155,13 @@
       ]
     },
     {
-      "id": 96993675881,
+      "id": 97045749814,
       "name": "release-workflow-outcome",
       "status": "in_progress",
       "conclusion": null,
-      "startedAt": "2026-08-22T06:36:24Z",
+      "startedAt": "2026-08-22T14:35:12Z",
       "completedAt": null,
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32557052086/job/96993675881",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32578755972/job/97045749814",
       "steps": [
         {
           "number": 1,
@@ -194,5 +191,5 @@
     }
   ],
   "failedJobLogs": [],
-  "recordedAt": "2026-08-22T06:36:42.0464856Z"
+  "recordedAt": "2026-08-22T14:35:32.2497557Z"
 }
