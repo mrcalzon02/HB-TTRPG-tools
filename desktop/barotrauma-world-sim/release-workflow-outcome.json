@@ -1,12 +1,12 @@
 {
   "recordType": "barotraumaDesktopReleaseWorkflowOutcome",
-  "runId": "32553471743",
+  "runId": "32553572272",
   "runAttempt": "1",
-  "sourceCommit": "e448805f1a3c82aa415d0894e57e7fcd1236798f",
+  "sourceCommit": "c0417f95c01dfbc5e61c6e39fbabeebb90bff0e2",
   "workflow": "Verify and release Barotrauma desktop application",
   "event": "push",
-  "linuxVerification": "failure",
-  "windowsInstallerRelease": "skipped",
+  "linuxVerification": "cancelled",
+  "windowsInstallerRelease": "cancelled",
   "releaseTag": "barotrauma-desktop-v0.1.672",
   "releaseVerified": false,
   "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.1.672",
@@ -16,13 +16,13 @@
   ],
   "jobs": [
     {
-      "id": 96983926007,
+      "id": 96984119861,
       "name": "java-17-verification",
       "status": "completed",
-      "conclusion": "failure",
-      "startedAt": "2026-08-22T05:07:05Z",
-      "completedAt": "2026-08-22T05:08:01Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32553471743/job/96983926007",
+      "conclusion": "cancelled",
+      "startedAt": "2026-08-22T05:08:47Z",
+      "completedAt": "2026-08-22T05:09:42Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32553572272/job/96984119861",
       "steps": [
         {
           "number": 1,
@@ -46,7 +46,7 @@
           "number": 4,
           "name": "Build and verify without Gradle",
           "status": "completed",
-          "conclusion": "failure"
+          "conclusion": "cancelled"
         },
         {
           "number": 7,
@@ -69,13 +69,13 @@
       ]
     },
     {
-      "id": 96984040089,
+      "id": 96984233571,
       "name": "release-workflow-outcome",
       "status": "in_progress",
       "conclusion": null,
-      "startedAt": "2026-08-22T05:08:04Z",
+      "startedAt": "2026-08-22T05:09:45Z",
       "completedAt": null,
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32553471743/job/96984040089",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32553572272/job/96984233571",
       "steps": [
         {
           "number": 1,
@@ -104,25 +104,16 @@
       ]
     },
     {
-      "id": 96984040436,
+      "id": 96984233943,
       "name": "windows-installer-release",
       "status": "completed",
-      "conclusion": "skipped",
-      "startedAt": "2026-08-22T05:08:02Z",
-      "completedAt": "2026-08-22T05:08:02Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32553471743/job/96984040436",
+      "conclusion": "cancelled",
+      "startedAt": "2026-08-22T05:09:43Z",
+      "completedAt": "2026-08-22T05:09:43Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32553572272/job/96984233943",
       "steps": []
     }
   ],
-  "failedJobLogs": [
-    {
-      "id": 96983926007,
-      "name": "java-17-verification",
-      "tail": [
-        "the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway",
-        ""
-      ]
-    }
-  ],
-  "recordedAt": "2026-08-22T05:08:24.6499096Z"
+  "failedJobLogs": [],
+  "recordedAt": "2026-08-22T05:10:02.4062872Z"
 }
