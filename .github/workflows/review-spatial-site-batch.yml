@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'scripts/review_spatial_site_batch.mjs'
+      - 'scripts/.run-spatial-quality-trigger'
   workflow_dispatch:
 
 permissions:
@@ -29,18 +30,18 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Analyze archived batch
+      - name: Analyze connector-normalized archived batch
         env:
-          BATCH_ID: 2026-08-22-purpose-aware-variety-01
+          BATCH_ID: 2026-08-22-purpose-aware-variety-02-connector-normalized
         run: node scripts/review_spatial_site_batch.mjs
 
       - name: Upload review artifact
         uses: actions/upload-artifact@v4
         with:
-          name: spatial-site-quality-review-2026-08-22-purpose-aware-variety-01
+          name: spatial-site-quality-review-2026-08-22-purpose-aware-variety-02-connector-normalized
           path: |
-            artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/quality-review.json
-            artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/QUALITY_REVIEW.md
+            artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/quality-review.json
+            artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/QUALITY_REVIEW.md
           if-no-files-found: error
           retention-days: 90
 
@@ -48,7 +49,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          BASE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01'
+          BASE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized'
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$BASE/quality-review.json" "$BASE/QUALITY_REVIEW.md"
@@ -56,7 +57,7 @@ jobs:
             echo 'Quality review already current.'
             exit 0
           fi
-          git commit -m 'Archive spatial site batch quality review [skip ci]'
+          git commit -m 'Archive connector-normalized spatial quality review [skip ci]'
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then
