@@ -2,14 +2,14 @@
   "schemaVersion": "1.1.0",
   "recordType": "spatial-site-batch-workflow-outcome",
   "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
-  "sourceCommit": "c7efe491dfd1538d987b31d1804e0a4d03c0c0fa",
-  "regressionStatus": 1,
+  "sourceCommit": "747a456ee2eb60b7efec16ede3a4eb8867caa37e",
+  "regressionStatus": 0,
   "batchStatus": 0,
   "tests": [
     {
       "test": "tests/spatial-engine.test.js",
-      "exitCode": 1,
-      "ok": false
+      "exitCode": 0,
+      "ok": true
     },
     {
       "test": "tests/site-profile-layers.test.js",
@@ -27,5 +27,5 @@
       "ok": true
     }
   ],
-  "ok": false
+  "ok": true
 }

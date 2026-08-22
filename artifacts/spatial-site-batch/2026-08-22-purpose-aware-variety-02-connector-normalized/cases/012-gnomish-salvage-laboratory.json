@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "recordType": "spatial-site-generation-test-artifact",
   "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
-  "sourceCommit": "c7efe491dfd1538d987b31d1804e0a4d03c0c0fa",
+  "sourceCommit": "747a456ee2eb60b7efec16ede3a4eb8867caa37e",
   "caseNumber": 12,
   "caseId": "gnomish-salvage-laboratory",
   "caseKind": "curated",
@@ -986,7 +986,7 @@
     "spatialLayout": {
       "schemaVersion": "1.0.0",
       "engine": "hb-semantic-spatial-engine",
-      "engineVersion": "1.1.0",
+      "engineVersion": "1.1.1",
       "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-gnomish-salvage-laboratory",
       "deckCount": 1,
       "bounds": {

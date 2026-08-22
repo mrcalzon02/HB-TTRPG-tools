@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "recordType": "spatial-site-generation-batch-summary",
   "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
-  "sourceCommit": "c7efe491dfd1538d987b31d1804e0a4d03c0c0fa",
+  "sourceCommit": "747a456ee2eb60b7efec16ede3a4eb8867caa37e",
   "runner": "scripts/archive_spatial_site_batch.mjs",
   "acceptance": {
     "ok": true,
@@ -155,7 +155,7 @@
     "totalHazards": 1187,
     "totalOccupants": 294,
     "totalNarrativeDiscoveries": 179,
-    "totalArtifactBytes": 6535834
+    "totalArtifactBytes": 6535954
   },
   "failures": []
 }

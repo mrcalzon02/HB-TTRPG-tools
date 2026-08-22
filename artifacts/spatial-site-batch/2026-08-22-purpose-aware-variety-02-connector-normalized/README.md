@@ -1,7 +1,7 @@
 # Spatial Site Generation Batch Archive
 
 Batch: **2026-08-22-purpose-aware-variety-02-connector-normalized**  
-Source commit tested: **c7efe491dfd1538d987b31d1804e0a4d03c0c0fa**  
+Source commit tested: **747a456ee2eb60b7efec16ede3a4eb8867caa37e**  
 Cases: **32** (19 curated + 13 seeded-random)  
 Acceptance: **PASS**
 
@@ -27,7 +27,7 @@ This archive preserves purpose-aware site generation results without the redunda
 - Populated hazard entries: 1187
 - Populated occupant entries: 294
 - Narrative discoveries: 179
-- Per-case JSON bytes: 6535834
+- Per-case JSON bytes: 6535954
 
 ## Case results
 
