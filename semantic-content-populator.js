@@ -1,129 +1,40 @@
-(function (root, factory) {
-  const engine = root && root.HBSemanticSpatialEngine ? root.HBSemanticSpatialEngine : (typeof require === 'function' ? require('./semantic-spatial-engine.js') : null);
-  const api = factory(engine);
-  if (typeof module === 'object' && module.exports) module.exports = api;
-  if (root) root.HBSemanticContentPopulator = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (engine) {
-  'use strict';
-  if (!engine) throw new Error('semantic-content-populator requires HBSemanticSpatialEngine.');
-
-  const VERSION = '1.0.0';
-  const COMPATIBILITY_TARGETS = Object.freeze({
-    open_d20: Object.freeze({ id:'open_d20', family:'open d20 / Hypertext d20-compatible', provenance:'Open d20-compatible presentation; setting-specific rules are not silently imported.' }),
-    world_of_darkness: Object.freeze({ id:'world_of_darkness', family:'World of Darkness', provenance:'World of Darkness-targeted content; mechanics remain identified as World of Darkness.' }),
-    blacklight_continuum: Object.freeze({ id:'blacklight_continuum', family:'Blacklight Continuum', provenance:'Blacklight Continuum-native content; mechanics remain identified as Blacklight Continuum.' }),
-    kaysender: Object.freeze({ id:'kaysender', family:'Kaysender', provenance:'Kaysender-native content with open d20 / Hypertext d20-compatible presentation where rules-facing text is required.' })
-  });
-  const TARGET_ALIASES = Object.freeze({
-    'open d20':'open_d20', d20:'open_d20', hypertext:'open_d20', 'hypertext d20':'open_d20', open_d20:'open_d20',
-    wod:'world_of_darkness', 'world of darkness':'world_of_darkness', world_of_darkness:'world_of_darkness',
-    blacklight:'blacklight_continuum', 'blacklight continuum':'blacklight_continuum', blacklight_continuum:'blacklight_continuum',
-    kaysender:'kaysender'
-  });
-
-  function compatibilityTarget(value) {
-    const key = TARGET_ALIASES[String(value || 'open_d20').trim().toLowerCase()] || 'open_d20';
-    return COMPATIBILITY_TARGETS[key];
-  }
-
-  function graphDepths(layout) {
-    const links = new Map((layout.rooms || []).map(room => [room.nodeId, []]));
-    (layout.edges || []).forEach(edge => {
-      if (links.has(edge.a) && links.has(edge.b)) { links.get(edge.a).push(edge.b); links.get(edge.b).push(edge.a); }
-    });
-    const start = (layout.rooms || []).find(room => (room.tags || []).includes('entrance')) ||
-      (layout.rooms || []).find(room => /entry|entrance|gate|dock|access/i.test(room.role || '')) || (layout.rooms || [])[0];
-    const depths = new Map();
-    if (!start) return depths;
-    depths.set(start.nodeId, 0);
-    const queue = [start.nodeId];
-    while (queue.length) {
-      const current = queue.shift(), depth = depths.get(current);
-      for (const next of links.get(current) || []) if (!depths.has(next)) { depths.set(next, depth + 1); queue.push(next); }
-    }
-    return depths;
-  }
-
-  function zoneOf(room, depth) {
-    const tags = room.tags || [];
-    if (tags.includes('restricted') || tags.includes('security') || tags.includes('inner')) return 'restricted';
-    if (tags.includes('private') || tags.includes('staff')) return 'private';
-    if (tags.includes('service') || tags.includes('infrastructure')) return 'service';
-    if (tags.includes('public') || tags.includes('social') || depth <= 1) return 'public';
-    return depth >= 4 ? 'restricted' : 'controlled';
-  }
-
-  function pushUnique(target, value) { if (value && !target.includes(value)) target.push(value); }
-  function includesAny(text, fragments) { return fragments.some(fragment => text.includes(fragment)); }
-  function choose(rng, list) { return list.length ? list[Math.floor(rng() * list.length)] : null; }
-
-  function populateRoom(room, context, rng) {
-    const role = String(room.role || '').toLowerCase();
-    const tags = (room.tags || []).map(String);
-    const depth = context.depths.get(room.nodeId) || 0;
-    const zone = zoneOf(room, depth);
-    const danger = Math.max(0, Math.min(10, Number(context.options.dangerLevel) || 4));
-    const damage = String(context.options.damageState || 'intact').toLowerCase();
-    const adventure = String(context.options.adventurePurpose || 'exploration').toLowerCase();
-    const faction = String(context.options.faction || 'local occupants');
-    const content = {
-      roomId: room.nodeId, role: room.role, deck: room.deck, depth, zone,
-      occupants: [], socialEncounters: [], traps: [], hazards: [], security: [], treasure: [], evidence: [], objectives: [], narrativeDiscoveries: [], lockedRestrictedAreas: [], secretAccess: [], encounterPressure: 0
-    };
-
-    if (tags.includes('social') || includesAny(role, ['hall','commons','mess','ward','classroom','chapel','market','recreation'])) {
-      pushUnique(content.socialEncounters, `${faction} personnel, petitioners, or bystanders with location-relevant motives`);
-    }
-    if (tags.includes('security') || tags.includes('defense') || includesAny(role, ['guard','gate','armory','brig','vault','command','checkpoint'])) {
-      pushUnique(content.security, choose(rng, ['controlled access and posted watch','credential or key-controlled access','layered observation and response point']));
-      content.encounterPressure += 2;
-    }
-    if (tags.includes('hazard') || includesAny(role, ['sewer','cistern','mine','reactor','machine','laboratory','industrial','ritual'])) {
-      pushUnique(content.hazards, choose(rng, ['unstable environment or machinery','contamination, fumes, runoff, or dangerous residue','terrain or infrastructure failure risk']));
-      content.encounterPressure += 1;
-    }
-    if (tags.includes('treasure') || includesAny(role, ['vault','treasury','archive','stores','armory','study','crypt','sanctum','cargo'])) {
-      pushUnique(content.treasure, choose(rng, ['secured valuables or rare materials','specialized equipment or trade goods','valuable records, components, or heirlooms']));
-    }
-    if (tags.includes('evidence') || includesAny(role, ['office','archive','study','laboratory','command','records','cell','interrogation'])) {
-      pushUnique(content.evidence, choose(rng, ['documents or records that clarify recent events','physical evidence tied to the site purpose','logs, testimony, or traces connecting actors to the location']));
-    }
-    if (tags.includes('objective') || includesAny(role, ['sanctum','command','core','vault','objective','warden','ritual'])) {
-      pushUnique(content.objectives, `${adventure} objective anchored to this room's semantic function`);
-    }
-    if (tags.includes('secret') || (zone === 'restricted' && rng() < 0.32)) pushUnique(content.secretAccess, 'concealed service route, bypass, or hidden connection');
-    if (zone === 'restricted') {
-      pushUnique(content.lockedRestrictedAreas, 'restricted threshold keyed to local authority, ownership, or security practice');
-      content.encounterPressure += 2;
-    }
-    if (danger >= 6 && rng() < danger / 11) {
-      pushUnique(content.occupants, choose(rng, [`hostile or defensive ${faction} presence`,'opportunistic intruders or dangerous inhabitants','site-specific opposition using the room as intended or repurposed']));
-      content.encounterPressure += 2;
-    } else if (rng() < 0.3) pushUnique(content.occupants, `${faction} presence appropriate to ${room.label || room.role}`);
-    if ((tags.includes('trap') || (zone === 'restricted' && danger >= 5)) && rng() < 0.7) pushUnique(content.traps, 'site-appropriate alarm, denial device, or physical trap');
-    if (damage !== 'intact' && damage !== 'pristine') {
-      pushUnique(content.hazards, `${damage} damage affecting access, visibility, utilities, or structural safety`);
-      content.encounterPressure += 1;
-    }
-    if (depth >= 3 && rng() < 0.55) pushUnique(content.narrativeDiscoveries, 'deeper-context discovery revealing ownership, history, failure, or hidden purpose');
-    content.encounterPressure += Math.min(3, Math.floor(depth / 2));
-    return content;
-  }
-
-  function populate(layout, options) {
-    const settings = { ...(options || {}) };
-    const target = compatibilityTarget(settings.rulesTarget || settings.compatibilityTarget || settings.system);
-    const seed = `${layout.seed || 'spatial'}:content:${settings.seed || 'default'}:${target.id}`;
-    const rng = engine.createRng(seed);
-    const context = { options: settings, depths: graphDepths(layout) };
-    const rooms = (layout.rooms || []).map(room => populateRoom(room, context, rng));
-    return {
-      schemaVersion:'1.0.0', generator:'hb-semantic-content-populator', version:VERSION, seed,
-      compatibility:{ ...target, mechanicalDetailsAreSettingScoped:true },
-      provenance:{ topologyEngine:layout.engine || 'hb-semantic-spatial-engine', topologySeed:layout.seed, contentLayer:'semantic-content-populator', locationArchetype:settings.locationArchetype || null, faction:settings.faction || null, adventurePurpose:settings.adventurePurpose || null },
-      rooms
-    };
-  }
-
-  return Object.freeze({ VERSION, COMPATIBILITY_TARGETS, compatibilityTarget, graphDepths, populate });
+(function(root,factory){
+  const engine=root&&root.HBSemanticSpatialEngine?root.HBSemanticSpatialEngine:(typeof require==='function'?require('./semantic-spatial-engine.js'):null);
+  const api=factory(engine);if(typeof module==='object'&&module.exports)module.exports=api;if(root)root.HBSemanticContentPopulator=api;
+})(typeof globalThis!=='undefined'?globalThis:this,function(engine){'use strict';
+if(!engine)throw new Error('semantic-content-populator requires HBSemanticSpatialEngine.');
+const VERSION='1.1.0';
+const COMPATIBILITY_TARGETS=Object.freeze({
+  open_d20:Object.freeze({id:'open_d20',family:'open d20 / Hypertext d20-compatible',provenance:'Open d20-compatible presentation; setting-specific rules are not silently imported.'}),
+  world_of_darkness:Object.freeze({id:'world_of_darkness',family:'World of Darkness',provenance:'World of Darkness-targeted content; mechanics remain identified as World of Darkness.'}),
+  blacklight_continuum:Object.freeze({id:'blacklight_continuum',family:'Blacklight Continuum',provenance:'Blacklight Continuum-native content; mechanics remain identified as Blacklight Continuum.'}),
+  kaysender:Object.freeze({id:'kaysender',family:'Kaysender',provenance:'Kaysender-native content with open d20 / Hypertext d20-compatible presentation where rules-facing text is required.'})
 });
+const TARGET_ALIASES=Object.freeze({'open d20':'open_d20',d20:'open_d20',hypertext:'open_d20','hypertext d20':'open_d20',open_d20:'open_d20',wod:'world_of_darkness','world of darkness':'world_of_darkness',world_of_darkness:'world_of_darkness',blacklight:'blacklight_continuum','blacklight continuum':'blacklight_continuum',blacklight_continuum:'blacklight_continuum',kaysender:'kaysender'});
+const CREATURE_LIBRARY=Object.freeze({
+ humanoid:['organized residents','armed humanoid patrol','workers, retainers, or raiders'],beast:['territorial beasts','foraging animals','trained or feral beasts'],vermin:['rats and vermin','nesting pests','disease-bearing vermin'],undead:['restless dead','skeletal guardians','corporeal undead'],construct:['maintenance construct','guardian automaton','damaged construct'],elemental:['bound elemental','wild elemental manifestation','element-touched creature'],fey:['minor fey inhabitants','territorial fey','misleading fey visitors'],aberration:['unnatural aberrant organism','alien-minded lurker','distorted deep creature'],dragon:['draconic juvenile or servant','dragon-touched predator','small territorial drake'],giant:['giant-kin occupant','oversized scavenger or sentry','giant-blooded raider'],ooze:['slow scavenging ooze','corrosive slime','waste-feeding ooze'],plant:['mobile plant creature','dangerous vine growth','sentient botanical guardian'],fungus:['mobile fungal growth','spore colony organism','fungal scavenger'],aquatic:['amphibious predator','water-dwelling scavenger','aquatic colony'],swarm:['insect swarm','bat or bird swarm','vermin swarm'],fiend:['minor fiendish intruder','bound infernal entity','fiend-touched predator'],celestial:['celestial sentinel','sacred spirit-creature','radiant guardian'],spirit:['site-bound spirit','ancestral presence','restless local apparition'],'magical-beast':['arcane-adapted predator','enchanted beast','magically altered animal'],reptile:['large reptile','venomous reptile','cold-blooded ambusher'],avian:['nesting birds','large aerial predator','trained messenger or sentry bird'],insect:['large insect','burrowing insect','colony insect'],arachnid:['web-building spider','hunting arachnid','venomous cave spider'],lycanthrope:['shapechanging hunter','lycanthropic pack member','cursed resident'],parasite:['host-seeking parasite','nest parasite','blood- or mana-feeding parasite'],scavenger:['opportunistic scavenger','carrion feeder','salvage-following animal'],predator:['stalking predator','territorial hunter','ambush predator'],herbivore:['grazing animal','escaped domestic herbivore','large browsing animal'],domestic:['livestock or pets','work animal','domestic animal gone feral'],'sentry-animal':['trained guard animal','alarm animal','patrol beast'],'trained-monster':['controlled monster guard','handler-dependent creature','trained war beast'],burrower:['burrowing predator','tunneling scavenger','soil or rubble dweller'],flyer:['flying predator','roosting creature','aerial scavenger'],ambusher:['camouflaged ambusher','ceiling or wall lurker','concealed hunting creature'],'intelligent-resident':['intelligent site resident','negotiable local inhabitant','organized nonhuman occupant'],'nonhostile-wildlife':['harmless local wildlife','nesting nonhostile animals','ecological indicator species'],'plague-carrier':['infected animal','disease vector swarm','contaminated scavenger'],'cave-fauna':['blind cave fauna','echo-hunting cave predator','subterranean grazer'],'urban-pest':['urban rats or scavengers','feral city animals','roof and wall pests'],'deep-dweller':['deep subterranean hunter','pressure-adapted creature','ancient cavern organism']
+});
+const HAZARD_LIBRARY=Object.freeze({
+ structural:['cracked supports or unstable masonry','load-bearing failure risk','damaged stairs, roof, or floor'],fire:['open flame and combustible clutter','spreading fire risk','hot surfaces and embers'],flood:['rising water','fast flood channel','waterlogged lower space'],water:['slippery wet surfaces','deep standing water','dangerous current'],electrical:['exposed energized conductors','intermittent power arc','wet electrical equipment'],mechanical:['moving machinery','pinch/crush mechanism','jammed mechanical system'],chemical:['reactive chemicals','corrosive spill','unstable stored reagent'],toxic:['toxic residue','poisonous material','contaminated surface'],biological:['biohazardous waste','dangerous organic contamination','infectious material'],disease:['disease exposure','infectious remains','contaminated living area'],spores:['airborne spores','dense spore pocket','spore-producing growth'],mold:['toxic mold','slick mold growth','mold-hidden structural decay'],radiation:['ionizing radiation pocket','contaminated material','shielding failure'],magical:['unstable magical field','arcane feedback','unpredictable magical residue'],curse:['cursed threshold','persistent curse effect','tainted object or chamber'],necrotic:['necrotic residue','life-draining area','death-aspected contamination'],psychic:['disturbing psychic imprint','hallucinatory pressure','mental interference'],cold:['dangerous cold','frostbite conditions','frozen mechanisms'],heat:['extreme heat','heat exhaustion conditions','superheated surface'],steam:['steam leak','scalding pipe failure','low-visibility steam cloud'],pressure:['pressure differential','burst-risk vessel or pipe','compressed system failure'],vacuum:['depressurized zone','air-loss breach','vacuum-exposed compartment'],'cave-in':['loose ceiling','rockfall risk','unstable excavation'],'unstable-floor':['rotted floor','cracked platform','concealed weak flooring'],falling:['falling debris','unsecured overhead load','vertical drop hazard'],'sharp-debris':['broken glass or metal','jagged rubble','razor-edged wreckage'],explosive:['explosive material','unstable ammunition','pressure or fuel explosion risk'],traps:['mechanical trap','concealed trigger hazard','purpose-built denial device'],security:['alarm zone','locking security response','automated or magical denial'],darkness:['near-total darkness','light-swallowing space','unlit obstacles'],noise:['deafening machinery or echoes','sound masking danger','noise-triggered attention'],smoke:['smoke-filled room','low visibility from smoke','respiratory smoke hazard'],gas:['dangerous gas pocket','leaking fuel or vapor','asphyxiating atmosphere'],acid:['acidic runoff','corrosive pool','acidic vapor'],lava:['open molten material','radiant heat near lava','unstable crust over molten zone'],ice:['slick ice','falling icicles','frozen mechanisms'],avalanche:['snow or debris slide risk','unstable slope','loaded roof snow'],dust:['dense dust cloud','combustible dust','visibility-reducing particulate'],storm:['wind-driven debris','lightning exposure','storm-water intrusion'],contamination:['mixed contamination','uncertain residue','cross-contaminated surfaces'],ritual:['active ritual hazard','ritual backlash zone','sacrificial or summoning residue'],planar:['planar instability','reality shear','foreign environmental intrusion'],gravity:['unstable gravity','localized heavy/light gravity','unexpected fall direction'],temporal:['time distortion','repeating temporal pocket','accelerated decay zone'],infestation:['nesting infestation','creature-contaminated surfaces','hidden colony'],'unstable-magic':['wild magic surge','failing ward network','arcane discharge'],artillery:['unexploded projectile','damaged gun emplacement','ammunition cook-off risk'],'siege-damage':['breached wall','collapsed defensive work','unstable impact crater'],industrial:['unguarded industrial process','hot pipe or conveyor','dangerous production residue'],quicksand:['unstable saturated ground','sucking mud','concealed soft substrate'],'thin-ice':['weak ice cover','hidden water beneath ice','fracturing frozen surface'],drowning:['submerged passage','deep flooded shaft','entrapment below water'],suffocation:['oxygen-poor enclosure','blocked ventilation','airborne particulate overload'],poison:['poisoned surface or food','venomous residue','toxic bait or trap'],corrosion:['corroded fasteners','structural rust-through','chemically weakened material']
+});
+function compatibilityTarget(value){const key=TARGET_ALIASES[String(value||'open_d20').trim().toLowerCase()]||'open_d20';return COMPATIBILITY_TARGETS[key];}
+function graphDepths(layout){const links=new Map((layout.rooms||[]).map(r=>[r.nodeId,[]]));(layout.edges||[]).forEach(e=>{if(links.has(e.a)&&links.has(e.b)){links.get(e.a).push(e.b);links.get(e.b).push(e.a);}});const start=(layout.rooms||[]).find(r=>(r.tags||[]).includes('entrance'))||(layout.rooms||[]).find(r=>/entry|entrance|gate|dock|access/i.test(r.role||''))||(layout.rooms||[])[0],depths=new Map();if(!start)return depths;depths.set(start.nodeId,0);const q=[start.nodeId];while(q.length){const cur=q.shift(),d=depths.get(cur);for(const n of links.get(cur)||[])if(!depths.has(n)){depths.set(n,d+1);q.push(n);}}return depths;}
+function zoneOf(room,depth){const t=room.tags||[];if(t.includes('restricted')||t.includes('security')||t.includes('inner'))return'restricted';if(t.includes('private')||t.includes('staff'))return'private';if(t.includes('service')||t.includes('infrastructure'))return'service';if(t.includes('public')||t.includes('social')||depth<=1)return'public';return depth>=4?'restricted':'controlled';}
+const choose=(rng,list)=>list&&list.length?list[Math.floor(rng()*list.length)]:null;const push=(a,v)=>{if(v&&!a.includes(v))a.push(v);};const any=(s,frags)=>frags.some(f=>s.includes(f));
+function siteContext(options){const p=options.siteProfile||{},c=p.contentContext||{},axes=p.axes||{};return{culture:c.culture||axes.originCulture||options.culturalInfluence||null,controller:c.controller||axes.controller||options.controller||options.faction||'local occupants',occupancyState:c.occupancyState||axes.occupancyState||options.occupancyState||'active',biome:c.biome||axes.biome||options.biome||null,climate:c.climate||axes.climate||options.climate||null,season:c.season||axes.season||options.season||null,weather:c.weather||axes.weather||options.weather||null,ecology:c.ecology||axes.ecology||options.ecology||null,creatureFamilies:(c.creatureFamilies||p.creatureFamilies||options.creatureFamilies||[]).slice(),hazardFamilies:(c.hazardFamilies||p.hazardFamilies||options.hazardFamilies||[]).slice(),materials:(c.materials||p.materials||options.materials||[]).slice(),lighting:c.lighting||axes.lighting||options.lighting||null,waterState:c.waterState||axes.waterState||options.waterState||null,contamination:c.contamination||axes.contamination||options.contamination||null,narrativeTone:c.narrativeTone||axes.narrativeTone||options.narrativeTone||null,creatureDensity:Number(c.creatureDensity??options.creatureDensity??4),hazardIntensity:Number(c.hazardIntensity??options.hazardIntensity??options.dangerLevel??4),treasureDensity:Number(c.treasureDensity??options.treasureDensity??4),socialDensity:Number(c.socialDensity??options.socialDensity??4)};}
+function creatureFor(rng,ctx){if(!ctx.creatureFamilies.length)return null;const family=choose(rng,ctx.creatureFamilies),detail=choose(rng,CREATURE_LIBRARY[family]||[`${family} inhabitants`]);return{family,detail};}
+function hazardFor(rng,ctx){if(!ctx.hazardFamilies.length)return null;const family=choose(rng,ctx.hazardFamilies),detail=choose(rng,HAZARD_LIBRARY[family]||[`${family} hazard`]);return{family,detail};}
+function populateRoom(room,context,rng){const role=String(room.role||'').toLowerCase(),tags=(room.tags||[]).map(String),depth=context.depths.get(room.nodeId)||0,zone=zoneOf(room,depth),o=context.options,s=context.site,danger=Math.max(0,Math.min(10,Number(o.dangerLevel??s.hazardIntensity??4))),damage=String(o.damageState||s.occupancyState||'intact').toLowerCase(),adventure=String(o.adventurePurpose||'exploration').toLowerCase(),faction=String(o.faction||s.controller||'local occupants');const out={roomId:room.nodeId,role:room.role,deck:room.deck,depth,zone,occupants:[],socialEncounters:[],traps:[],hazards:[],security:[],treasure:[],evidence:[],objectives:[],narrativeDiscoveries:[],lockedRestrictedAreas:[],secretAccess:[],environmentalDetails:[],ecology:[],encounterPressure:0};
+if(s.culture)push(out.environmentalDetails,`${s.culture} cultural/construction influence remains legible in ${room.label||room.role}`);if(s.materials.length)push(out.environmentalDetails,`dominant materials: ${s.materials.slice(0,3).join(', ')}`);if(s.biome||s.weather)push(out.environmentalDetails,[s.biome,s.climate,s.season,s.weather].filter(Boolean).join(' / '));if(s.lighting)push(out.environmentalDetails,`${s.lighting} lighting conditions`);if(s.waterState&&s.waterState!=='dry')push(out.environmentalDetails,`${s.waterState} water condition`);
+if(tags.includes('social')||any(role,['hall','commons','mess','ward','classroom','chapel','market','recreation','hearth'])){push(out.socialEncounters,`${faction} personnel, petitioners, residents, or bystanders using the space according to its current role`);out.encounterPressure+=Math.ceil(s.socialDensity/4);}
+if(tags.includes('security')||tags.includes('defense')||any(role,['guard','gate','armory','brig','vault','command','checkpoint','lookout'])){push(out.security,choose(rng,['controlled access and posted watch','credential, key, password, or symbol-controlled access','layered observation and response point','improvised barricade and warning system']));out.encounterPressure+=2;}
+const hazardTagged=tags.includes('hazard')||tags.some(t=>t.startsWith('hazard-'))||any(role,['sewer','cistern','mine','reactor','machine','laboratory','industrial','ritual','forge']);if(hazardTagged||rng()<s.hazardIntensity/18){const h=hazardFor(rng,s);if(h){push(out.hazards,`${h.detail} [${h.family}]`);out.encounterPressure+=1+Math.floor(s.hazardIntensity/5);}}
+if(s.contamination&&s.contamination!=='none'&&(hazardTagged||zone==='service'))push(out.hazards,`${s.contamination} contamination interacting with the room's existing use`);
+if(tags.includes('treasure')||any(role,['vault','treasury','archive','stores','armory','study','crypt','sanctum','cargo','cache'])||rng()<s.treasureDensity/35)push(out.treasure,choose(rng,['secured valuables or rare materials','specialized equipment or trade goods','valuable records, components, heirlooms, or salvage','resources appropriate to the site culture and current controller']));
+if(tags.includes('evidence')||any(role,['office','archive','study','laboratory','command','records','cell','interrogation','ledger']))push(out.evidence,choose(rng,['documents or records clarifying recent events','physical evidence tied to the original site purpose','logs, testimony, or traces connecting current and former occupants','material changes showing how the current controller repurposed the original space']));
+if(tags.includes('objective')||any(role,['sanctum','command','core','vault','objective','warden','ritual']))push(out.objectives,`${adventure} objective anchored to this room's semantic function and layered site history`);
+if(tags.includes('secret')||(zone==='restricted'&&rng()<.32))push(out.secretAccess,'concealed service route, bypass, cultural feature, later excavation, or hidden connection');if(zone==='restricted'){push(out.lockedRestrictedAreas,'restricted threshold keyed to local authority, ownership, culture, or security practice');out.encounterPressure+=2;}
+const creatureChance=Math.min(.9,.08+s.creatureDensity*.065+(tags.includes('ecology')||tags.includes('ecology-active')?0.18:0));if(rng()<creatureChance){const c=creatureFor(rng,s);if(c){push(out.occupants,`${c.detail} [${c.family}]`);push(out.ecology,`${c.family} presence consistent with ${s.ecology||'local'} ecology and ${s.occupancyState} occupation state`);out.encounterPressure+=1+Math.floor(s.creatureDensity/5);}}else if(rng()<.22&&s.occupancyState==='active')push(out.occupants,`${faction} presence appropriate to ${room.label||room.role}`);
+if((tags.includes('trap')||(zone==='restricted'&&danger>=5))&&rng()<.7)push(out.traps,'site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense');if(damage&&!['intact','pristine','active'].includes(damage)){push(out.hazards,`${damage} state affecting access, visibility, utilities, furnishings, or structural safety`);out.encounterPressure+=1;}if(depth>=3&&rng()<.55)push(out.narrativeDiscoveries,'deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose');out.encounterPressure+=Math.min(3,Math.floor(depth/2));return out;}
+function populate(layout,options){const settings={...(options||{})},target=compatibilityTarget(settings.rulesTarget||settings.compatibilityTarget||settings.system),seed=`${layout.seed||'spatial'}:content:${settings.seed||'default'}:${target.id}`,rng=engine.createRng(seed),site=siteContext(settings),context={options:settings,site,depths:graphDepths(layout)},rooms=(layout.rooms||[]).map(r=>populateRoom(r,context,rng));return{schemaVersion:'1.1.0',generator:'hb-semantic-content-populator',version:VERSION,seed,compatibility:{...target,mechanicalDetailsAreSettingScoped:true},provenance:{topologyEngine:layout.engine||'hb-semantic-spatial-engine',topologySeed:layout.seed,contentLayer:'semantic-content-populator',locationArchetype:settings.locationArchetype||null,faction:settings.faction||site.controller||null,adventurePurpose:settings.adventurePurpose||null,siteProfileSeed:settings.siteProfile?.seed||null,siteLayers:(settings.siteProfile?.layers||[]).map(l=>l.id)},siteContext:site,rooms};}
+return Object.freeze({VERSION,COMPATIBILITY_TARGETS,CREATURE_LIBRARY,HAZARD_LIBRARY,compatibilityTarget,graphDepths,populate});});
