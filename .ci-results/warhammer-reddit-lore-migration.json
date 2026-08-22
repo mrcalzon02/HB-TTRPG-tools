@@ -1,0 +1,11 @@
+{
+  "workflow": "Migrate Warhammer Reddit Lore Archive",
+  "recorded_utc": "2026-08-22T06:43:24.814523Z",
+  "migration_exit": "1",
+  "validation_exit": "not-run",
+  "success": false,
+  "expected_minimum_story_count": 86,
+  "archive_path": "warhammer-40k-lore.html",
+  "data_path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+  "run_id": "32557690709"
+}

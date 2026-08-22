@@ -1,0 +1,36 @@
+MIGRATION FAILED: HTTP Error 403: Blocked
+Fetching master archive index: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/
+Reddit returned HTTP 403; retrying in 0.0s: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index.json?raw_json=1&limit=1
+Reddit returned HTTP 403; retrying in 0.0s: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index.json?raw_json=1&limit=1
+Reddit returned HTTP 403; retrying in 0.0s: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index.json?raw_json=1&limit=1
+Reddit returned HTTP 403; retrying in 0.0s: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index.json?raw_json=1&limit=1
+Reddit returned HTTP 403; retrying in 0.0s: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index.json?raw_json=1&limit=1
+Reddit returned HTTP 403; retrying in 0.0s: https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index.json?raw_json=1&limit=1
+Traceback (most recent call last):
+  File "/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/migrate_reddit_warhammer_lore.py", line 487, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/migrate_reddit_warhammer_lore.py", line 447, in main
+    master = post_data(get_json(MASTER_URL))
+                       ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/migrate_reddit_warhammer_lore.py", line 114, in get_json
+    with urllib.request.urlopen(request, timeout=40) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py", line 521, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py", line 630, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py", line 559, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py", line 639, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 403: Blocked
