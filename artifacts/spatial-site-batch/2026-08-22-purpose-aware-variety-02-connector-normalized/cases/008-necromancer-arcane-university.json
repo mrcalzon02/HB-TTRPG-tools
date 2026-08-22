@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "recordType": "spatial-site-generation-test-artifact",
   "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
-  "sourceCommit": "e1d631ce4d9f6e6acccad96f167a75c5160fc4c1",
+  "sourceCommit": "c7efe491dfd1538d987b31d1804e0a4d03c0c0fa",
   "caseNumber": 8,
   "caseId": "necromancer-arcane-university",
   "caseKind": "curated",
