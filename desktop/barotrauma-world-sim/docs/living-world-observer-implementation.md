@@ -2,275 +2,275 @@
 
 Status: **Active**
 
-This document is the focused implementation plan for Milestone 6 of the desktop Barotrauma World Simulation Toolbox. The authoritative roadmap remains `DEVELOPMENT_PLAN.md`; this plan defines the executable path for turning the existing passive simulation, registries, and graphical map into the actual living-world observer application.
+This document is the focused implementation plan for Milestone 6 of the desktop Barotrauma World Simulation Toolbox. The authoritative high-level roadmap remains `DEVELOPMENT_PLAN.md`; this file is the executable product path for turning the existing passive simulation into the living Barotrauma World Observer.
 
 ## Product definition
 
-The target is one desktop application in which an operator can leave Europa running and observe the committed world rather than manually drive it.
+The target is one desktop application in which Europa can continue operating while the user watches the committed world rather than manually driving it.
 
-The observer must eventually support all of the following from one coherent surface:
+The finished observer must provide a coherent surface where:
 
-- Passive Mode advances the authoritative SQLite world while the observer remains open.
-- NPC submarines visibly travel from origin to destination instead of teleporting between location markers.
-- Station economies, trade, research, migration, settlement work, fleet response, natural events, fauna pressure, damage, loss, and recovery remain driven by the existing authoritative simulation.
-- The viewport can be zoomed and panned without changing world state.
-- Stations, vessels, routes, encounters, missions, settlements, natural events, and later creature populations can be selected and inspected.
-- Durable simulation evidence is readable as human-facing documents: voyage logs, manifests, contracts, encounter reports, station ledgers, research records, fleet-response records, and related causal history.
-- The operator can determine both **what is happening now** and **why it happened**.
-- Observation never becomes a second simulation authority. SQLite plus the existing single-writer transaction path remains authoritative.
+- Passive Mode advances the authoritative SQLite world while the observer is open.
+- NPC submarines visibly travel between locations instead of teleporting between endpoints.
+- Ships encounter hazards, take damage, complete missions, deliver freight, respond to distress calls, recover, fail, and return home according to the existing simulation.
+- Stations produce, consume, trade, gain and lose population, receive migrants, sponsor settlement work, and experience faction and environmental pressure.
+- Natural ecology, geology, resource extraction, wildlife pressure, and disasters remain authoritative simulation outputs rather than decorative overlays.
+- The user can zoom from a world-scale overview down to individual stations, routes, and submarines.
+- Visible entities expose human-readable evidence explaining what is happening and why.
+- A recent-history stream exposes the world's continuing trials and consequences without becoming a second simulation authority.
 
-A release is not considered a functioning World Observer merely because tables exist or a map can be opened.
+A release is not a functioning World Observer merely because a Java window opens or database tables can be viewed.
 
-## Non-negotiable architectural rules
+## Non-negotiable architecture
 
-1. `PassiveWorldSimulationService` remains the only automatic desktop scheduler for an authoritative world.
+1. `PassiveWorldSimulationService` remains the only automatic scheduler for an authoritative desktop world.
 2. Simulation mutation remains transactional and single-writer.
-3. Observer registries remain read-only.
-4. The visual layer derives positions and presentation from committed state; it does not invent simulation results.
-5. Closing an observer window does not implicitly disable persisted Passive Mode.
+3. Observer registries and presentation models remain read-only.
+4. Visual positions, layers, dossiers, and timelines are derived from committed state.
+5. Closing the observer does not implicitly disable persisted Passive Mode.
 6. Pausing Passive Mode is an explicit operator action.
-7. Donor Barotrauma assets remain optional and local-only; procedural fallbacks remain sufficient to operate the observer.
-8. Existing detailed registry/evidence windows remain available as advanced/debug views until the unified observer replaces them.
+7. Barotrauma donor assets remain optional/local-only; procedural fallback visuals must remain sufficient.
+8. Detailed registry/evidence windows remain valid advanced/debug surfaces while the unified observer is completed.
 
 ## Delivery gates
 
-### Gate 0 — Restore simulation verification to green
+### Gate 0 — Simulation correctness
 
 **Status: Complete**
 
-The fleet-response verification defect was reproduced on the live observer PR and repaired in the authoritative transition path. The failure was not a missing return journey: the responder physically completed its return and was set to `DOCKED`, but recursive fleet-dispatch triggers could consume that docked transition again in the same completion tick.
+The fleet-response verification defect was reproduced and repaired. The responder was physically returning and becoming `DOCKED`, but same-tick recursive dispatch could immediately consume that docking transition and assign the vessel again.
 
-Implemented correction:
+Implemented:
 
-- Centralized current-schema dispatch repair in `FleetResponseDispatchPolicy`.
-- Protected both immediate assignment paths from selecting a responder whose `responder_returned_tick` is the current completion tick.
-- Added a completion docking barrier that rejects any remaining same-tick attempt to place a just-returned responder back into `PREPARING` or `IN_TRANSIT`.
-- Existing current-schema worlds receive the corrected trigger policy on SQLite connection without rewriting world identity or simulation state.
-- Outbound response transit, on-scene work, towing/return transit, casualty recovery, responder return, and final `DOCKED` states are covered by the existing full verification suite.
+- centralized current-schema dispatch repair in `FleetResponseDispatchPolicy`;
+- guards on both automatic dispatch paths against same-completion-tick redispatch;
+- completion docking barrier preventing a just-returned responder from re-entering `PREPARING` or `IN_TRANSIT` in the same tick;
+- verification of outbound response transit, on-scene work, towing/return transit, casualty recovery, responder return, and final docking.
 
-Acceptance result:
-
-- The fresh pull-request workflow `Verify Barotrauma living world observer` completed successfully on 2026-08-21 after the final dispatch-barrier correction.
-- `DesktopPersistenceVerificationSuite` passed, including the fleet-response and natural-world contract that previously failed.
+The full desktop persistence/simulation verification suite has passed after this repair.
 
 ### Gate 1 — Living observer shell
 
 **Status: Complete**
 
-The canonical observer entry point and live Passive Mode viewport are now implemented.
+Implemented:
 
-Implemented behavior:
-
-- Dedicated `BarotraumaWorldObserverApplication` entry point.
-- Opens one authoritative desktop world through the shared `DesktopWorldSession`.
-- Resumes Passive Mode automatically when the selected world was previously enabled.
-- Explicit Run/Pause Passive controls with cadence and ticks-per-cycle.
-- Live refresh after scheduler notifications plus bounded two-second periodic refresh as a safety net.
-- NPC vessels render at fractional route positions derived from committed route progress.
-- Hover evidence includes committed hull, supplies, destination, incident progress, and revised ETA.
-- Zoom in/out, fit-world, Ctrl+mouse-wheel zoom, and middle/right-button drag panning.
-- Closing the observer detaches listeners but does not silently pause the simulation.
-- Route projection has a headless verification contract and is part of `toolbox.ps1 verify`.
-
-Acceptance:
-
-- Passive Mode can advance without manual Step clicks while the observer remains open.
-- A vessel with nonzero route progress renders between its current and destination locations.
-- Observer refresh remains query-only.
-- Pausing and resuming remain explicit persisted simulation operations.
-- The viewport supports whole-world and local inspection scales.
+- dedicated `BarotraumaWorldObserverApplication` entry point;
+- shared authoritative world session;
+- automatic resume of previously enabled Passive Mode;
+- explicit Run/Pause Passive controls;
+- cadence and ticks-per-cycle controls;
+- scheduler-driven refresh with bounded two-second fallback refresh;
+- committed route-progress interpolation for NPC submarine positions;
+- hull, supplies, destination, incident progress, and ETA hover evidence;
+- zoom in/out, Fit World, Ctrl+mouse-wheel zoom, and drag panning;
+- listener cleanup without silently disabling persisted Passive Mode.
 
 ### Gate 2 — Interactive entity inspectors
 
-**Status: Active — core visible entities complete**
-
-Persistent selection has replaced hover-only evidence for the first three visible entity classes.
+**Status: Active — core map entities complete**
 
 Implemented:
 
-- Stable UUID-backed selection survives live refresh.
-- Clicking a vessel pins a live vessel dossier.
-- Clicking a station/location pins a live station/location dossier.
-- Clicking a transit line pins a live route dossier.
-- Selected vessels, locations, and routes receive visible map highlighting.
-- Clicking empty map space or `World Overview` returns to the world dossier.
-- Vessel dossiers expose identity, role, state, hull, supplies, cargo, crew capabilities, mission, origin/destination, progress, ETA, delay, incident schedule, voyage logs, encounters, fleet-response roles, response transit, freight manifests, and treasury settlement evidence.
-- Station/location dossiers expose geography, faction, economy/condition, local/inbound NPC traffic, missions, fleet-response records, freight movement, and treasury transactions.
-- Route dossiers expose endpoints, progress, ETA, delay, incidents, current mission, response legs, freight, hull/supplies, and recent hazard evidence.
+- stable UUID-backed selection survives live refresh;
+- clickable NPC vessels;
+- clickable stations/locations;
+- clickable NPC transit routes;
+- selected entity highlighting;
+- persistent live vessel, station/location, and route dossiers;
+- empty-map/World Overview return path.
+
+Current vessel dossiers include identity, role, state, hull, supplies, cargo, crew capabilities, mission, route progress, ETA, delays, incident schedule, voyage evidence, encounters, fleet-response roles, response transit, freight, and treasury settlement evidence.
+
+Current station/location dossiers include geography, faction, economy, population, local/inbound traffic, missions, response operations, freight, treasury, ecology, geology, natural resources, extraction history, migration, settlement projects, faction presence, and creature populations.
 
 Remaining dedicated selectable entity classes:
 
-- **Mission:** dedicated selectable contract/outcome inspector.
-- **Encounter:** dedicated selectable hazard/outcome inspector.
-- **Fleet response:** make a response operation itself selectable rather than only visible through related vessel/location dossiers.
-- **Natural-world site/event:** resource exposure, ecology/geology cause, danger, and generated work.
-- Population/migration/settlement/faction inspectors as their corresponding visual layers are integrated.
+- mission/contract;
+- encounter/incident;
+- fleet-response operation;
+- natural resource site/event;
+- migration flow;
+- settlement project;
+- later historical timeline entries.
 
-Selection must continue to survive live refresh by stable entity ID, and all inspector queries must remain read-only.
+### Gate 3 — Human-readable causal documents
 
-### Gate 3 — Human-readable document layer
+**Status: Active — major causal chains integrated**
 
-**Status: Active — causal trade/recovery chain integrated**
+Implemented document families:
 
-Document rendering is now integrated into the live dossiers rather than exposed only as raw database tables.
-
-Implemented document views:
-
-- Mission/contract summaries in vessel, route, and station/location dossiers.
-- Voyage-log documents with tick, event, summary, details, resolution, and state effects.
-- Encounter reports with hazard, challenge, roll, margin, outcome, and narrative.
-- Fleet-response operation dossiers showing responder, casualty, target, phase, progress, difficulty, committed stores, and outbound/scene/return/home ticks.
-- Fleet-response event logs and response transit-leg documents.
-- NPC freight manifests tied to their mission, carrier, source, destination, cargo, status, and delivery tick.
-- Treasury/settlement evidence tied back to station and NPC counterparty.
-- Station freight/trade ledger and treasury ledger.
-- Headless dossier verification now covers route progress, contracts, voyage evidence, encounters, fleet response, response transit, freight manifests, station economy, treasury settlement, and local traffic.
+- mission/contract summaries;
+- voyage reports;
+- encounter reports;
+- fleet-response operation dossiers;
+- response event logs;
+- outbound/return response transit legs;
+- NPC freight manifests;
+- treasury/settlement records;
+- station freight/trade ledgers;
+- station treasury ledgers;
+- population accounting ledgers;
+- migration manifests;
+- settlement project reports;
+- natural-world ecology/geology/resource evidence;
+- extraction ledgers and natural-event reports.
 
 Still required:
 
-- Damage and repair report beyond the current response/voyage evidence.
-- Research report.
-- Migration manifest.
-- Settlement project report.
-- Natural-world survey/resource report integration into the live selected-location dossier.
-- Document index/navigation so a causal record can be opened directly from a selected event or entity instead of only appearing inline.
-
-Documents are generated from committed evidence and retain stable IDs/ticks so the same event is not rewritten differently on each view.
-
-Acceptance remains:
-
-- Every significant visible incident links to at least one inspectable causal record.
-- Trade movement can be followed from mission/manifest through arrival and station economic effect.
-- A damaged/lost/recovered vessel exposes the chain of events that produced its current state.
+- dedicated damage/repair report beyond voyage/response evidence;
+- research report navigation;
+- direct document index/navigation so a specific causal record can be selected instead of only appearing inside a dossier;
+- stable cross-links from timeline event → entity → causal document.
 
 ### Gate 4 — Observer layers and world readability
 
-**Status: Active — natural-layer model started**
+**Status: Active — principal live layers integrated**
 
-The observer layer model is now being built directly from the existing read-only world registries rather than inventing a second simulation state.
+The live viewport now loads the authoritative passive, natural-world, and observation registries together and derives visual overlays without mutating the world.
 
-Implemented foundation:
+Implemented layer controls:
 
-- `WorldObserverNaturalLayer` converts committed ecology, geology, resource-site, extraction, and natural-event evidence into human-readable location dossiers.
-- The same model produces normalized map-ready signals for ecological risk, habitat integrity, geological risk, mineral opportunity, resource opportunity, and recent-event severity.
-- A headless natural-layer verification fixture covers ecology, geology, active resource sites, extraction consequences, events, and signal projection.
+- ecology pressure;
+- geology hazards;
+- natural resources;
+- recent natural incidents;
+- fleet-response operations;
+- population / population pressure;
+- migration corridors;
+- settlement activity;
+- faction influence;
+- creature pressure.
 
-Next visual integration:
+Implemented evidence integration:
 
-- Add selectable layer controls for station status/economy, NPC traffic, missions, fleet response, ecological pressure, geological hazards, resources, and recent incidents.
-- Feed the natural-layer signals into the live map without changing simulation state.
-- Append natural-world evidence to selected location dossiers.
-- Add population, migration, settlement, and faction layers from their existing authoritative registries.
-- Add label density/level-of-detail behavior so the 960-location master world remains readable while zoomed out.
+- `WorldObserverNaturalLayer` provides location/world natural-world dossiers and normalized hazard/opportunity signals;
+- `WorldObserverCivilLayer` provides population, population-ledger, migration, settlement, faction, and creature dossiers/signals;
+- clicked locations expose the committed records behind the visible overlays;
+- location hover evidence includes environmental hazard/opportunity, population, migration, creature pressure, and dominant faction data.
+
+Implemented large-world readability:
+
+- `WorldObserverLevelOfDetail` assigns importance from committed natural/civil signals;
+- low-value generic labels and markers collapse at world scale;
+- stations, selected locations, and high-signal trouble/opportunity locations remain visible;
+- detail progressively returns as zoom increases;
+- headless contracts verify the projection and LOD policies used for the 960-location observer surface.
+
+Remaining Gate 4 work:
+
+- dedicated map interaction for migration/settlement/fleet/natural markers rather than location-only inspection;
+- optional station economy and mission overlays;
+- visual legend refinement and density tuning against a real 960-location master world;
+- clustering/aggregation if runtime testing shows marker density is still excessive.
 
 ### Gate 5 — Temporal observation
 
-**Status: Planned**
+**Status: Active — live recent-history timeline implemented**
 
-Integrate existing snapshot/evidence foundations into non-mutating observation controls:
+`WorldObserverTimeline` now merges committed evidence from multiple subsystems into one descending-tick stream:
 
-- Pause live rendering without pausing simulation.
-- Pause simulation explicitly.
-- Manual Step.
-- Recent-event timeline.
-- Jump to event/entity.
-- Historical snapshot selection.
-- Compare two ticks/snapshots.
-- Replay/scrub of recorded state without writing current world state.
+- NPC voyage events;
+- transit encounters;
+- fleet-response events;
+- station treasury/economic settlement entries;
+- natural-world incidents;
+- observation/civilization events;
+- population ledger changes;
+- migration updates;
+- settlement-project updates.
 
-Live and historical modes must be visually distinct.
+`World Overview` renders this recent world timeline beneath the current world/environment/civilization summaries. Timeline entries carry a stable evidence key, tick, category, entity identity, title, details, and bounded severity.
+
+Remaining Gate 5 work:
+
+- timeline filtering by category/entity/severity;
+- jump from timeline event to the related map entity/dossier;
+- pause live rendering without pausing simulation;
+- manual Step control in the observer shell;
+- historical snapshot selection;
+- compare two ticks/snapshots;
+- non-mutating replay/scrub mode;
+- visually distinct Live versus Historical state.
 
 ### Gate 6 — Long-running observer operation
 
 **Status: Planned**
 
-Prove that the application can be left running unattended.
-
 Required:
 
-- Restart recovery of enabled Passive Mode.
-- Bounded catch-up after downtime.
-- Health/fault status visible in the observer.
-- Automatic checkpoints/backups according to existing storage contracts.
-- Rendering throttled independently from accelerated simulation.
-- No duplicate scheduler for the same world.
-- No listener/resource leak after opening/closing observer views repeatedly.
+- restart recovery of enabled Passive Mode;
+- bounded catch-up after downtime;
+- observer-visible health/fault status;
+- automatic checkpoints/backups according to existing storage contracts;
+- rendering throttled independently from accelerated simulation;
+- proof that duplicate schedulers cannot run for one world;
+- listener/resource-leak tests for repeated open/close cycles;
+- unattended soak test with continuing voyages, economy, ecology, migration, and fleet response.
 
 ### Gate 7 — Release and packaging
 
 **Status: Planned**
 
-The standalone artifact must launch the living observer rather than the evidence-only Observation Foundation window.
+The standalone artifact must launch `BarotraumaWorldObserverApplication`, not the evidence-only Observation Foundation window.
 
 Release acceptance scenario:
 
-1. Start from a clean packaged install.
+1. Start from a clean packaged Windows build.
 2. Open or generate a valid master world.
 3. Enable Passive Mode.
 4. Observe at least one NPC vessel depart.
-5. Watch the vessel visibly progress along its route.
-6. Observe at least one transit encounter or difficulty.
-7. Observe at least one completed trade mission that changes station economic state.
-8. Inspect the vessel, route, station, mission, encounter, and resulting records.
-9. Pause and resume Passive Mode.
-10. Close and reopen the observer and confirm configured Passive Mode resumes.
-11. Complete a fleet-response cycle with both casualty and responder ending in correct authoritative states.
-12. Run the full verification suite successfully.
-13. Only then package and publish the World Observer executable/installer.
+5. Watch it visibly advance along its route.
+6. Observe at least one transit encounter/difficulty.
+7. Observe at least one trade/freight mission alter station economic state.
+8. Inspect vessel, route, station, mission, encounter, freight, and resulting economic evidence.
+9. Observe population/migration/settlement or environmental activity through the world layers.
+10. Pause and resume Passive Mode.
+11. Close/reopen and confirm configured Passive Mode resumes correctly.
+12. Complete a fleet-response cycle with casualty and responder in valid final authoritative states.
+13. Run the full verification suite successfully.
+14. Run a packaged observer smoke test.
+15. Only then publish the executable/portable package.
 
-## Implementation order
+## Current implementation order
 
-The implementation order remains vertical rather than subsystem-by-subsystem:
+1. ~~Restore fleet-response verification.~~ **Complete.**
+2. ~~Build the living observer shell.~~ **Complete.**
+3. ~~Integrate core vessel/station/route selection.~~ **Complete.**
+4. ~~Integrate principal natural and civilization overlays.~~ **Complete first pass.**
+5. ~~Add large-world LOD policy.~~ **Complete first pass.**
+6. ~~Add unified recent world timeline.~~ **Complete first pass.**
+7. **Next:** make mission, encounter, response, migration, settlement, and natural-event evidence directly selectable/jumpable.
+8. Add timeline filters, historical snapshots, comparison, and replay.
+9. Prove unattended/soak operation.
+10. Repoint standalone packaging to the living observer.
+11. Run the packaged end-to-end acceptance scenario and publish only after it passes.
 
-1. ~~Restore the fleet-response verification gate.~~ **Complete.**
-2. ~~Complete Gate 1 living observer shell.~~ **Complete.**
-3. **Active:** finish dedicated mission/encounter/response selectors and evidence navigation.
-4. **Active:** complete natural-world, migration, settlement, population, and faction observer layers.
-5. Add layer controls and level-of-detail behavior to the viewport.
-6. Add timeline/history/replay.
-7. Prove unattended operation.
-8. Repoint standalone packaging to `BarotraumaWorldObserverApplication`.
-9. Run the end-to-end release acceptance scenario.
+## Verification policy
 
-## Development record
+The PR-scoped `Verify Barotrauma living world observer` workflow is the active development gate. It runs:
 
-### 2026-08-21 — Gate 1 living observer shell implemented
+- the full Java 17 desktop simulation/persistence verification suite;
+- natural-world observer projection verification;
+- civilization observer projection verification;
+- level-of-detail/readability verification;
+- unified timeline verification.
 
-- Added the dedicated World Observer application entry point.
-- Wired the graphical Europa map directly to the real passive runtime.
-- Added Passive Mode resume/start/pause controls and runtime status.
-- Added scheduler-listener refresh plus two-second bounded refresh fallback.
-- Added committed route-progress interpolation for submarine markers.
-- Added richer vessel hover evidence for route progress, incidents, and ETA.
-- Added zoom-in, zoom-out, fit-world, Ctrl+mouse-wheel zoom, and drag panning.
-- Added headless route-projection verification.
+A new observer slice is not promoted merely because it compiles.
 
-### 2026-08-21 — Gate 0 fleet-response blocker cleared
+## Development record — 2026-08-21
 
-- Added a PR-scoped full Java 17 desktop verification workflow so observer work is verified before merge.
-- Reproduced the existing fleet-response responder-docking failure on the feature branch.
-- Traced the failure to same-tick recursive redispatch after successful physical return.
-- Corrected both immediate fleet assignment paths and added a completion docking barrier.
-- Re-ran the full desktop verification suite successfully, including fleet response, towing return, natural world, migration, settlement, transit, logistics, persistence, and observer projection contracts.
-
-### 2026-08-21 — Gate 2/3 interaction and dossier work
-
-- Added stable click selection for vessels, stations/locations, and transit routes.
-- Added persistent live selection that survives refresh by stable UUID.
-- Added selected-entity map highlighting.
-- Added vessel, route, station/location, and world dossiers.
-- Integrated mission contracts, voyage documents, encounter reports, station economy, and local traffic into the evidence pane.
-- Exposed fleet-response operations/logs/transit legs, freight lots, and treasury transactions through the read-only observer registry.
-- Integrated response lifecycle, freight manifests, and economic settlement evidence into vessel, route, and station dossiers.
-- Expanded the headless dossier contract so these causal chains cannot silently disappear from the observer.
-
-### 2026-08-21 — Gate 4 natural-layer foundation started
-
-- Added a pure presentation model over the authoritative natural-world registry.
-- Added location dossiers for ecology, geology, resource sites, recent natural events, and extraction history.
-- Added map-ready hazard/opportunity signals derived only from committed evidence.
-- Added a headless verification fixture for the natural-layer projection.
+- Added dedicated living observer application entry point and Passive Mode controls.
+- Added committed route interpolation and live submarine movement.
+- Repaired the fleet-response same-tick responder redispatch defect and restored full verification.
+- Added stable click selection and persistent vessel/station/route dossiers.
+- Integrated mission, voyage, encounter, fleet-response, freight, and treasury evidence.
+- Added ecology, geology, resource, natural-event, population, migration, settlement, faction, and creature evidence models.
+- Added switchable natural and civilization viewport layers.
+- Added world-scale label/marker level-of-detail policy for the 960-location world.
+- Added a unified recent-world timeline in World Overview.
+- Expanded the PR workflow so the observer-specific projection policies execute as headless contracts in addition to the full simulation suite.
 
 ## Next implementation slice
 
-Load the existing `NaturalWorldAndFleetRegistry` alongside the passive snapshot in the living observer, append its natural-world dossier to clicked locations, and add the first actual viewport layer controls for ecological pressure, geological hazards, resources, fleet response, and recent incidents. After that, extend the same pattern to population/migration/settlement/faction evidence.
+Promote the timeline and overlay records from passive evidence to **direct navigation targets**: selectable mission, encounter, fleet-response, migration, settlement, and natural-event records with stable IDs and jump-to-entity/map behavior. This is the bridge from a readable observer to an actually explorable history of the world's individual trials and consequences.
