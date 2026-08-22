@@ -97,15 +97,17 @@ jobs:
               'expected_minimum_story_count': 86,
               'archive_path': 'warhammer-40k-lore.html',
               'data_path': 'assets/warhammer-40k/lore/reddit-story-archive.json',
+              'run_id': '${{ github.run_id }}',
           }
           Path('.ci-results/warhammer-reddit-lore-migration.json').write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
           PY
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .ci-results/warhammer-reddit-lore-migration.json .ci-results/warhammer-reddit-lore-migration.log
+          git add .ci-results/warhammer-reddit-lore-migration.json
+          git add -f .ci-results/warhammer-reddit-lore-migration.log
           if [ -f .ci-results/warhammer-reddit-lore-validation.log ]; then
-            git add .ci-results/warhammer-reddit-lore-validation.log
+            git add -f .ci-results/warhammer-reddit-lore-validation.log
           fi
 
           if [ "${MIGRATION_EXIT:-not-run}" = "0" ] && [ "${VALIDATION_EXIT:-not-run}" = "0" ]; then
@@ -138,13 +140,27 @@ jobs:
           MIGRATION_EXIT: ${{ steps.migrate.outputs.exit_code }}
           VALIDATION_EXIT: ${{ steps.validate.outputs.exit_code }}
           RESULT: ${{ steps.record.outputs.result }}
+          RUN_ID: ${{ github.run_id }}
+        shell: bash
         run: |
           if [ "${RESULT:-failure}" = "success" ]; then
-            body='Lore migration completed successfully. The archive and native Lore register were validated and committed to main.'
+            cat > /tmp/lore-migration-comment.md <<EOF
+          Lore migration completed successfully. The archive and native Lore register were validated and committed to main.
+
+          Workflow run: ${RUN_ID}
+          EOF
           else
-            body="Lore migration failed. migration_exit=${MIGRATION_EXIT:-not-run}; validation_exit=${VALIDATION_EXIT:-not-run}. See .ci-results/warhammer-reddit-lore-migration.log on main."
+            {
+              echo "Lore migration failed. migration_exit=${MIGRATION_EXIT:-not-run}; validation_exit=${VALIDATION_EXIT:-not-run}."
+              echo
+              echo "Workflow run: ${RUN_ID}"
+              echo
+              echo '```text'
+              tail -n 45 .ci-results/warhammer-reddit-lore-migration.log 2>/dev/null || true
+              echo '```'
+            } > /tmp/lore-migration-comment.md
           fi
-          gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body "$body"
+          gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file /tmp/lore-migration-comment.md
 
       - name: Fail when migration or validation failed
         if: always() && (steps.migrate.outputs.exit_code != '0' || steps.validate.outputs.exit_code != '0')
