@@ -44,6 +44,7 @@ jobs:
         run: |
           set +e
           python - <<'PY' 2>&1 | tee /tmp/lore-migration/validation.log
+          import html
           import json
           from pathlib import Path
 
@@ -53,6 +54,7 @@ jobs:
           assert len({s['post_id'] for s in stories}) == 86
           assert all(len(s.get('selftext', '').strip()) >= 100 for s in stories)
           page = Path('warhammer-40k-lore.html').read_text(encoding='utf-8')
+          page_text = html.unescape(page)
           assert page.count('class="story"') == 86
           for text in [
               'Yes, these stories are all written by me, Mrcalzon02',
@@ -60,7 +62,7 @@ jobs:
               'Terms of Service & Usage Agreement',
               'Warhammer 40,000 and related names',
           ]:
-              assert text in page, text
+              assert text in page_text, text
           workspace = Path('warhammer-40k-workspace-v8.js').read_text(encoding='utf-8')
           for text in ["['lore','✠ Lore']", 'function buildLorePanel()', "frame.src='warhammer-40k-lore.html'"]:
               assert text in workspace, text
