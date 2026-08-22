@@ -1,0 +1,79 @@
+name: Archive spatial site generator batch
+
+on:
+  push:
+    paths:
+      - 'scripts/archive_spatial_site_batch.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spatial-site-batch-archive
+  cancel-in-progress: false
+
+jobs:
+  archive-batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run spatial regressions
+        run: |
+          node tests/spatial-engine.test.js
+          node tests/site-profile-layers.test.js
+          node tests/site-history-interactions.test.js
+
+      - name: Generate archived batch
+        env:
+          BATCH_ID: 2026-08-22-purpose-aware-variety-01
+          SOURCE_COMMIT: ${{ github.sha }}
+        run: node scripts/archive_spatial_site_batch.mjs
+
+      - name: Upload immutable workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spatial-site-batch-2026-08-22-purpose-aware-variety-01
+          path: artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Commit archived results to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARCHIVE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$ARCHIVE"
+          if git diff --cached --quiet; then
+            echo 'Archive already present; nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'Archive 32 spatial site generation test artifacts [skip ci]'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo 'Unexpected archive conflict during rebase.' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push raced with concurrent main update; retrying ($attempt/5)."
+            sleep 2
+          done
+          echo 'Unable to publish archive after retries.' >&2
+          exit 1
