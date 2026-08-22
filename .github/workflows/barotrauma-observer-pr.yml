@@ -29,3 +29,12 @@ jobs:
       - name: Build and verify desktop simulation and observer
         shell: pwsh
         run: ./desktop/barotrauma-world-sim/toolbox.ps1 verify
+
+      - name: Verify observer world-layer projections
+        shell: pwsh
+        run: |
+          $jar = "desktop/barotrauma-world-sim/build/no-gradle/barotrauma-world-sim.jar"
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNaturalLayerVerification
+          if ($LASTEXITCODE -ne 0) { throw "Natural-world observer layer verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverCivilLayerVerification
+          if ($LASTEXITCODE -ne 0) { throw "Civilization observer layer verification failed." }
