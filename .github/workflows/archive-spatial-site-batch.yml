@@ -51,10 +51,10 @@ jobs:
             tests/spatial-connector-normalization.test.js
           do
             name="$(basename "$test" .js)"
-            node "$test" > "$OUT/$name.log" 2>&1
+            node "$test" > "$OUT/$name.txt" 2>&1
             rc=$?
             printf '%s\t%s\n' "$test" "$rc" >> "$OUT/test-status.tsv"
-            cat "$OUT/$name.log"
+            cat "$OUT/$name.txt"
             if [ "$rc" -ne 0 ]; then status=1; fi
           done
           printf '%s\n' "$status" > "$OUT/regression-status"
@@ -67,9 +67,9 @@ jobs:
           SOURCE_COMMIT: ${{ github.sha }}
         run: |
           set +e
-          node scripts/archive_spatial_site_batch.mjs > /tmp/spatial-batch.log 2>&1
+          node scripts/archive_spatial_site_batch.mjs > /tmp/spatial-batch.txt 2>&1
           rc=$?
-          cat /tmp/spatial-batch.log
+          cat /tmp/spatial-batch.txt
           echo "BATCH_STATUS=$rc" >> "$GITHUB_ENV"
           exit 0
 
@@ -80,9 +80,9 @@ jobs:
           OUT="artifacts/spatial-site-batch/$BATCH_ID/validation"
           mkdir -p "$OUT"
           cp /tmp/spatial-validation/test-status.tsv "$OUT/test-status.tsv"
-          cp /tmp/spatial-validation/*.log "$OUT/"
+          cp /tmp/spatial-validation/*.txt "$OUT/"
           cp /tmp/spatial-validation/regression-status "$OUT/regression-status.txt"
-          cp /tmp/spatial-batch.log "$OUT/batch-runner.log"
+          cp /tmp/spatial-batch.txt "$OUT/batch-runner.txt"
 
       - name: Record workflow outcome
         shell: bash
@@ -119,7 +119,7 @@ jobs:
           if git diff --cached --quiet; then
             echo 'Archive/evidence already present; nothing to commit.'
           else
-            git commit -m 'Record connector-normalized spatial regression evidence [skip ci]'
+            git commit -m 'Record readable connector-normalized regression evidence [skip ci]'
             for attempt in 1 2 3 4 5; do
               git fetch origin main
               if ! git rebase origin/main; then
