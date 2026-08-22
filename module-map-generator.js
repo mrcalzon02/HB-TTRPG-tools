@@ -137,10 +137,36 @@ if((culture==='giantkin'||culture==='dragonkin'||['monumental','megastructure'].
  const big=state.roles.filter(r=>(r.tags||[]).some(t=>['public','social','defense'].includes(t))).slice(0,3);mutate('scale-mismatch-subdivision',big,'partitioned micro-settlement','occupants subdivide oversized inherited volumes with platforms, curtains, lean-tos, and mezzanines',['subdivided','multi-scale-use']);
  added('scale-mismatch-subdivision',role('interaction-mezzanine','occupier-mezzanine','Improvised Mezzanine / Platform','social service'),'entry','new habitable level inserted inside oversized inherited volume');
 }
-if(archetype==='mansion'&&irregular.includes(controller)){
+if(['mansion','manor'].includes(archetype)&&irregular.includes(controller)){
  mutate('mansion-irregular-occupation',['receiving-hall','salon'],'gang common / negotiation and feasting space','formal social rooms become public occupation centers',['repurposed-use','social']);
  mutate('mansion-irregular-occupation',['study'],'planning / ledger / intelligence room','private owner workspace becomes occupier command support',['evidence','objective']);
  mutate('mansion-irregular-occupation',['private-chambers'],'bunks, hostage room, or sorted-loot quarters','private household rooms are partitioned around occupier needs',['private','subdivided']);
+ if(archetype==='manor'){
+  mutate('manor-irregular-estate-use',['estate-office'],'fence ledger / tribute and route office','estate administration is reused to track contraband, debts, patrols, and local pressure',['evidence','objective']);
+  mutate('manor-irregular-estate-use',['formal-garden','grounds-storage'],'concealed exchange yard / dispersed stash grounds','landscaped estate grounds become screened meeting, lookout, and distributed storage space',['secret','security','treasure']);
+ }
+}
+if(archetype==='bunkhouse_compound'&&controller==='plague-survivors'&&['quarantined','occupied','overcrowded','reclaimed'].includes(a.occupancyState)){
+ mutate('bunkhouse-quarantine-reoccupation',['assembly-yard'],'triage, exposure-screening, and controlled queue yard','open work ground is divided into intake lanes, symptom screening, clean/dirty routes, and guarded waiting areas',['quarantine','medical','controlled']);
+ mutate('bunkhouse-quarantine-reoccupation',['bunkhouse'],'cohort isolation ward / household quarantine bunk','shared sleeping quarters are partitioned into exposure cohorts with improvised isolation boundaries',['quarantine','medical','subdivided']);
+ mutate('bunkhouse-quarantine-reoccupation',['compound-mess','compound-kitchen'],'controlled relief kitchen / ration dispensary','communal food service becomes rationed low-contact distribution with clean-store separation',['service','medical','controlled']);
+ mutate('bunkhouse-quarantine-reoccupation',['washhouse'],'decontamination and fever-wash station','wash infrastructure is intensified for clothing boil, body washing, and contaminated runoff handling',['medical','hazard','service']);
+ mutate('bunkhouse-quarantine-reoccupation',['sergeant-office'],'quarantine registry / case tracking office','supervisory paperwork space becomes exposure registry, treatment log, and household movement control',['evidence','objective','medical']);
+ mutate('bunkhouse-quarantine-reoccupation',['communal-pantry','great-hearth'],'protected clean provisions / distanced warming ward','halfling hospitality infrastructure survives but is reorganized around protected food and separated communal care',['cultural-continuity','medical','social']);
+}
+if(archetype==='hideout'&&irregular.includes(controller)){
+ mutate('hideout-irregular-occupation',['concealed-entry','watch-post'],'layered countersurveillance and ambush choke','existing concealment is reinforced with rotating lookouts, challenge points, false approaches, and trap-ready observation',['security','secret','controlled']);
+ mutate('hideout-irregular-occupation',['hideout-common'],'fence, negotiation, and crew common','shared refuge space becomes the social center for dividing proceeds, recruiting, and receiving trusted contacts',['social','criminal']);
+ mutate('hideout-irregular-occupation',['planning-room'],'raid-route and intelligence table','planning space accumulates maps, patrol timings, debt records, targets, and fallback routes',['evidence','objective']);
+ mutate('hideout-irregular-occupation',['hidden-cache'],'distributed contraband and emergency reserve','the original cache is reorganized into fast-grab stores and compartmentalized illicit stock',['treasure','secret']);
+ mutate('hideout-irregular-occupation',['escape-route','utility-crawlway'],'mapped smuggling bypass / winter escape path','existing escape and service passages are actively maintained as concealed movement routes',['secret','exit','transit']);
+}
+if(archetype==='civic_building'&&controller==='rebels'){
+ mutate('civic-rebel-occupation',['public-lobby','public-service'],'volunteer intake, aid distribution, and barricaded public commons','public-facing civic space becomes a defended contact point for civilians, couriers, supplies, and recruits',['public','social','security']);
+ mutate('civic-rebel-occupation',['council-chamber'],'rebel assembly / command council','formal civic deliberation space is reused for operational planning, political debate, and local coordination',['objective','evidence','social']);
+ mutate('civic-rebel-occupation',['administrative-office','public-records'],'intelligence, maps, and surviving civil-record archive','bureaucratic records are mined for routes, identities, infrastructure knowledge, sympathizers, and occupation evidence',['evidence','restricted']);
+ mutate('civic-rebel-occupation',['secure-office'],'armory, secure communications, and courier safe room','preexisting secure office construction is reused for weapons, radios, codes, and trusted messengers',['security','treasure','restricted']);
+ mutate('civic-rebel-occupation',['civic-service'],'generator, repair, and emergency logistics support','building service infrastructure is jury-rigged to keep power, water, fortifications, and field equipment functioning',['service','industrial','condition-degraded']);
 }
 if(archetype==='fortress'&&['refugees','squatters','civilian-residents','mixed-settlement'].includes(controller)){
  mutate('fortress-civilian-reoccupation',['barracks'],'family shelter / communal sleeping','military sleeping space becomes civilian household shelter',['domestic','social']);
