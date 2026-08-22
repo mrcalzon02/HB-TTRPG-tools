@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -77,11 +78,16 @@ import java.util.function.Consumer;
  */
 public final class DonorBackedWorldMapWindow extends JFrame {
     private static final int TIMELINE_VISIBLE_LIMIT = 140;
+    private static final String[] TIMELINE_CATEGORIES = {
+            "ALL", "VOYAGE", "ENCOUNTER", "MISSION", "FLEET_RESPONSE", "FREIGHT", "ECONOMY",
+            "NATURAL", "EXTRACTION", "CIVILIZATION", "POPULATION", "MIGRATION", "SETTLEMENT"
+    };
 
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final BarotraumaAssetCatalogue assets = new BarotraumaAssetCatalogue();
     private final JLabel worldStatus = new JLabel("No desktop world open");
     private final JLabel passiveStatus = new JLabel("Passive mode unavailable");
+    private final JLabel viewStatus = new JLabel("NO WORLD");
     private final JLabel assetStatus = new JLabel("Visual catalogue ready");
     private final JButton openWorldButton = new JButton("Open World");
     private final JButton refreshButton = new JButton("Refresh");
@@ -92,6 +98,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JButton zoomInButton = new JButton("Zoom +");
     private final JButton zoomOutButton = new JButton("Zoom -");
     private final JButton fitMapButton = new JButton("Fit World");
+    private final JToggleButton freezeViewButton = new JToggleButton("Freeze View");
     private final JToggleButton ecologyLayerButton = new JToggleButton("Ecology");
     private final JToggleButton geologyLayerButton = new JToggleButton("Geology");
     private final JToggleButton resourceLayerButton = new JToggleButton("Resources");
@@ -104,6 +111,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JToggleButton creatureLayerButton = new JToggleButton("Creatures", true);
     private final JSpinner cadenceSeconds = new JSpinner(new SpinnerNumberModel(5, 1, 3600, 1));
     private final JSpinner ticksPerCycle = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
+    private final JComboBox<String> timelineCategory = new JComboBox<>(TIMELINE_CATEGORIES);
+    private final JSpinner timelineMinimumSeverity = new JSpinner(new SpinnerNumberModel(0, 0, 100, 5));
     private final JTextArea details = new JTextArea();
     private final DefaultListModel<WorldObserverTimeline.Entry> timelineModel = new DefaultListModel<>();
     private final JList<WorldObserverTimeline.Entry> timelineList = new JList<>(timelineModel);
@@ -121,6 +130,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private String selectedTimelineKey;
     private boolean suppressTimelineSelection;
     private boolean passiveControlsInitialized;
+    private boolean viewFrozen;
     private boolean busy;
 
     public DonorBackedWorldMapWindow() {
@@ -137,6 +147,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         state.add(worldStatus, BorderLayout.NORTH);
         state.add(passiveStatus, BorderLayout.SOUTH);
         header.add(state, BorderLayout.WEST);
+        header.add(viewStatus, BorderLayout.CENTER);
         header.add(assetStatus, BorderLayout.EAST);
         add(header, BorderLayout.NORTH);
 
@@ -164,12 +175,24 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             if (event.getValueIsAdjusting() || suppressTimelineSelection) return;
             navigateTimeline(timelineList.getSelectedValue());
         });
+        timelineCategory.addActionListener(event -> {
+            if (lastLoaded != null) refreshTimeline(lastLoaded);
+        });
+        timelineMinimumSeverity.addChangeListener(event -> {
+            if (lastLoaded != null) refreshTimeline(lastLoaded);
+        });
 
         mapScroll.getVerticalScrollBar().setUnitIncrement(24);
         mapScroll.getHorizontalScrollBar().setUnitIncrement(24);
         JScrollPane detailsScroll = new JScrollPane(details);
         JPanel timelinePanel = new JPanel(new BorderLayout(4, 4));
         timelinePanel.setBorder(BorderFactory.createTitledBorder("Recent committed world timeline"));
+        JPanel timelineControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+        timelineControls.add(new JLabel("Category:"));
+        timelineControls.add(timelineCategory);
+        timelineControls.add(new JLabel("Min severity:"));
+        timelineControls.add(timelineMinimumSeverity);
+        timelinePanel.add(timelineControls, BorderLayout.NORTH);
         timelinePanel.add(new JScrollPane(timelineList), BorderLayout.CENTER);
         JSplitPane evidenceSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, detailsScroll, timelinePanel);
         evidenceSplit.setDividerLocation(500);
@@ -206,6 +229,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         viewControls.add(openWorldButton);
         viewControls.add(refreshButton);
         viewControls.add(worldOverviewButton);
+        viewControls.add(freezeViewButton);
         viewControls.add(zoomOutButton);
         viewControls.add(zoomInButton);
         viewControls.add(fitMapButton);
@@ -223,6 +247,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         enablePassiveButton.addActionListener(event -> enablePassiveMode());
         disablePassiveButton.addActionListener(event -> disablePassiveMode());
         worldOverviewButton.addActionListener(event -> select(Selection.world()));
+        freezeViewButton.addActionListener(event -> toggleViewFreeze());
         zoomInButton.addActionListener(event -> zoomBy(1.25));
         zoomOutButton.addActionListener(event -> zoomBy(0.80));
         fitMapButton.addActionListener(event -> fitWorld());
@@ -259,6 +284,28 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 resourceLayerButton.isSelected(), fleetLayerButton.isSelected(), incidentLayerButton.isSelected(),
                 populationLayerButton.isSelected(), migrationLayerButton.isSelected(),
                 settlementLayerButton.isSelected(), factionLayerButton.isSelected(), creatureLayerButton.isSelected());
+    }
+
+    private void toggleViewFreeze() {
+        viewFrozen = freezeViewButton.isSelected();
+        freezeViewButton.setText(viewFrozen ? "Resume Live View" : "Freeze View");
+        updateViewStatus();
+        refreshControls();
+        if (!viewFrozen) refresh();
+    }
+
+    private void updateViewStatus() {
+        if (world == null) {
+            viewStatus.setText("NO WORLD");
+            return;
+        }
+        if (viewFrozen) {
+            Long tick = lastLoaded == null ? null : lastLoaded.passive().configuration().currentTickSequence();
+            viewStatus.setText("VIEW FROZEN" + (tick == null ? "" : " @ tick " + tick)
+                    + " · simulation continues independently");
+        } else {
+            viewStatus.setText("LIVE VIEW");
+        }
     }
 
     private void installViewportPan() {
@@ -318,8 +365,12 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         clearTimelineSelection();
         timelineModel.clear();
         passiveControlsInitialized = false;
+        viewFrozen = false;
+        freezeViewButton.setSelected(false);
+        freezeViewButton.setText("Freeze View");
         canvas.clear();
         canvas.setSelected(selection);
+        updateViewStatus();
         if (selectedWorld == null) {
             worldStatus.setText("No desktop world open");
             passiveStatus.setText("Passive mode unavailable");
@@ -375,7 +426,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                     showFailure("Passive mode start failed", cause(exception));
                 } finally {
                     setBusy(false, "Passive Mode ready");
-                    refresh();
+                    if (!viewFrozen) refresh();
                 }
             }
         }.execute();
@@ -404,7 +455,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                     showFailure("Passive mode pause failed", cause(exception));
                 } finally {
                     setBusy(false, "Passive Mode paused");
-                    refresh();
+                    if (!viewFrozen) refresh();
                 }
             }
         }.execute();
@@ -428,7 +479,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                         + "s · " + status.ticksPerCycle() + " tick(s)/cycle");
             }
             refreshControls();
-            if (!busy) refresh();
+            if (!busy && !viewFrozen) refresh();
         }), true);
         refreshControls();
     }
@@ -441,7 +492,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
 
     private void refresh() {
         WorldPaths selectedWorld = world;
-        if (selectedWorld == null || busy) return;
+        if (selectedWorld == null || busy || viewFrozen) return;
         setBusy(true, "Loading live world evidence…");
         assets.clearCache();
         new SwingWorker<LoadedMap, Void>() {
@@ -462,6 +513,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                     canvas.setSelected(selection);
                     refreshTimeline(loaded);
                     renderSelection();
+                    updateViewStatus();
                     assetStatus.setText("Donor roles " + loaded.coverage().donorCount()
                             + " · fallback roles " + loaded.coverage().fallbackCount());
                 } catch (InterruptedException exception) {
@@ -477,14 +529,19 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     }
 
     private void refreshTimeline(LoadedMap loaded) {
+        String category = Objects.toString(timelineCategory.getSelectedItem(), "ALL");
+        int minimumSeverity = ((Number) timelineMinimumSeverity.getValue()).intValue();
         List<WorldObserverTimeline.Entry> entries = WorldObserverTimeline.build(
-                loaded.passive(), loaded.natural(), loaded.civil());
+                        loaded.passive(), loaded.natural(), loaded.civil()).stream()
+                .filter(entry -> "ALL".equals(category) || category.equals(entry.category()))
+                .filter(entry -> entry.severity() >= minimumSeverity)
+                .limit(TIMELINE_VISIBLE_LIMIT)
+                .toList();
         suppressTimelineSelection = true;
         try {
             timelineModel.clear();
             int selectedIndex = -1;
-            int count = Math.min(TIMELINE_VISIBLE_LIMIT, entries.size());
-            for (int index = 0; index < count; index++) {
+            for (int index = 0; index < entries.size(); index++) {
                 WorldObserverTimeline.Entry entry = entries.get(index);
                 timelineModel.addElement(entry);
                 if (selectedTimelineKey != null && selectedTimelineKey.equals(entry.stableKey())) selectedIndex = index;
@@ -601,7 +658,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 loaded.coverage().donorCount(), loaded.coverage().fallbackCount())
                 + "\n\n" + WorldObserverNaturalLayer.world(loaded.natural())
                 + "\n\n" + WorldObserverCivilLayer.world(loaded.civil())
-                + "\n\n" + WorldObserverTimeline.render(loaded.passive(), loaded.natural(), loaded.civil());
+                + "\n\nRECENT WORLD TIMELINE\nUse the interactive timeline pane below to filter and open committed causal records.\n";
     }
 
     private void focusSelection(Selection requested) {
@@ -652,14 +709,17 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         boolean worldOpen = world != null;
         boolean passiveRunning = worldOpen && PassiveWorldSimulationService.active(world) != null;
         openWorldButton.setEnabled(!busy);
-        refreshButton.setEnabled(!busy && worldOpen);
+        refreshButton.setEnabled(!busy && worldOpen && !viewFrozen);
         configureAssetsButton.setEnabled(!busy);
         worldOverviewButton.setEnabled(!busy && worldOpen);
+        freezeViewButton.setEnabled(!busy && worldOpen);
         enablePassiveButton.setEnabled(!busy && worldOpen && !passiveRunning);
         disablePassiveButton.setEnabled(!busy && passiveRunning);
         cadenceSeconds.setEnabled(!busy && worldOpen && !passiveRunning);
         ticksPerCycle.setEnabled(!busy && worldOpen && !passiveRunning);
         timelineList.setEnabled(!busy && worldOpen);
+        timelineCategory.setEnabled(worldOpen);
+        timelineMinimumSeverity.setEnabled(worldOpen);
         zoomInButton.setEnabled(!busy);
         zoomOutButton.setEnabled(!busy);
         fitMapButton.setEnabled(!busy);
