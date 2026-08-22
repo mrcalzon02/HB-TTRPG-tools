@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'scripts/archive_spatial_site_batch.mjs'
+      - 'semantic-spatial-engine.js'
+      - 'tests/spatial-connector-normalization.test.js'
   workflow_dispatch:
 
 permissions:
@@ -34,18 +36,19 @@ jobs:
           node tests/spatial-engine.test.js
           node tests/site-profile-layers.test.js
           node tests/site-history-interactions.test.js
+          node tests/spatial-connector-normalization.test.js
 
       - name: Generate archived batch
         env:
-          BATCH_ID: 2026-08-22-purpose-aware-variety-01
+          BATCH_ID: 2026-08-22-purpose-aware-variety-02-connector-normalized
           SOURCE_COMMIT: ${{ github.sha }}
         run: node scripts/archive_spatial_site_batch.mjs
 
       - name: Upload immutable workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: spatial-site-batch-2026-08-22-purpose-aware-variety-01
-          path: artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/
+          name: spatial-site-batch-2026-08-22-purpose-aware-variety-02-connector-normalized
+          path: artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/
           if-no-files-found: error
           retention-days: 90
 
@@ -53,14 +56,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ARCHIVE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01'
+          ARCHIVE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized'
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$ARCHIVE"
           if git diff --cached --quiet; then
             echo 'Archive already present; nothing to commit.'
           else
-            git commit -m 'Archive 32 spatial site generation test artifacts [skip ci]'
+            git commit -m 'Archive connector-normalized spatial site batch [skip ci]'
             for attempt in 1 2 3 4 5; do
               git fetch origin main
               if ! git rebase origin/main; then
@@ -82,4 +85,4 @@ jobs:
 
       - name: Enforce batch acceptance
         run: |
-          node -e "const s=require('./artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/summary.json'); if(!s.acceptance.ok){console.error(JSON.stringify(s.acceptance,null,2));process.exit(1)} console.log(JSON.stringify(s.acceptance,null,2))"
+          node -e "const s=require('./artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/summary.json'); if(!s.acceptance.ok){console.error(JSON.stringify(s.acceptance,null,2));process.exit(1)} console.log(JSON.stringify(s.acceptance,null,2))"
