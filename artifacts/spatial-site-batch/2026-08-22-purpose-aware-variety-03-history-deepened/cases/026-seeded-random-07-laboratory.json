@@ -1,0 +1,7946 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-generation-test-artifact",
+  "batchId": "2026-08-22-purpose-aware-variety-03-history-deepened",
+  "sourceCommit": "c0583f55950c6dc3b0e18c3652f3ca9483115c70",
+  "caseNumber": 26,
+  "caseId": "seeded-random-07-laboratory",
+  "caseKind": "seeded-random",
+  "input": {
+    "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+    "locationArchetype": "laboratory",
+    "rulesTarget": "world_of_darkness",
+    "dangerLevel": 2,
+    "creatureDensity": 1,
+    "hazardIntensity": 1,
+    "treasureDensity": 9,
+    "socialDensity": 0,
+    "sitePreferences": {
+      "originCulture": {
+        "preferred": [
+          "dwarven",
+          "elven",
+          "human",
+          "culture-neutral"
+        ]
+      },
+      "controller": {
+        "preferred": [
+          "bandits",
+          "refugees",
+          "military-garrison",
+          "goblin-clan"
+        ]
+      },
+      "ecology": {
+        "preferred": [
+          "fungal",
+          "overgrown",
+          "urban-vermin",
+          "subterranean",
+          "magical",
+          "wetland"
+        ]
+      },
+      "creatureFamilies": {
+        "exclude": [
+          "dragon"
+        ]
+      },
+      "hazardFamilies": {
+        "exclude": [
+          "lava"
+        ]
+      }
+    }
+  },
+  "acceptance": {
+    "ok": true,
+    "deterministic": true,
+    "topologyValid": true
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "metrics": {
+    "rooms": 15,
+    "corridors": 24,
+    "doors": 48,
+    "connectors": 12,
+    "decks": 2,
+    "interactions": 4,
+    "profileLayers": 14,
+    "historicallyAdaptedRoleTemplates": 3,
+    "currentUseRoleTemplates": 3,
+    "currentUseOverlayRoleTemplates": 2,
+    "occupants": 4,
+    "socialEncounters": 0,
+    "traps": 0,
+    "hazards": 41,
+    "securityEntries": 2,
+    "treasureEntries": 6,
+    "evidenceEntries": 8,
+    "objectives": 1,
+    "narrativeDiscoveries": 10,
+    "secretAccessEntries": 4
+  },
+  "result": {
+    "schemaVersion": "0.3.0",
+    "generator": "generator.module_map",
+    "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+    "width": 88,
+    "height": 68,
+    "deckCount": 2,
+    "locationArchetype": "laboratory",
+    "semanticProgram": {
+      "locationArchetype": "laboratory",
+      "source": "site-archetype-defaults",
+      "layerPolicy": "full",
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "climate: subarctic->continental (biome compatibility)",
+            "weather: fog->cold-snap (climate compatibility)",
+            "ecology: urban-vermin->fungal (biome ecology)",
+            "magicTech: low-magic->common-magic (builder culture)",
+            "controller: original-owners->abandoned (vacancy consistency)",
+            "traffic: light->empty (vacancy)",
+            "maintenance: routine->poor (vacancy maintenance)",
+            "condition: damaged->heavily-damaged (vacancy condition)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "fortified-complex",
+          "changes": [
+            "laboratory count 3->4",
+            "decks=2",
+            "grid=88x68"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "nomadic",
+          "changes": [
+            "applied broad cultural influence tag"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "abandoned",
+          "changes": [
+            "recontextualized existing spaces for controller"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "long-abandoned",
+          "changes": [
+            "preserved original purpose as legacy use while marking current vacancy"
+          ]
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "cold-desert",
+            "climate": "continental",
+            "season": "late-spring",
+            "weather": "cold-snap",
+            "waterState": "dry",
+            "verticality": "cavern-tiered"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "nomadic",
+            "controller": "abandoned",
+            "archetype": "laboratory",
+            "occupancyState": "long-abandoned",
+            "ecology": "fungal",
+            "condition": "heavily-damaged",
+            "waterState": "dry"
+          },
+          "changes": [
+            "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+            "nonhuman ecology opens a route that did not exist in the original building plan",
+            "structural failure narrows or redirects original circulation",
+            "later traffic cuts or discovers an alternate path around failed construction"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "fungal",
+            "creatureFamilies": [
+              "urban-pest",
+              "herbivore"
+            ],
+            "creatureDensity": 1
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "siege-damage"
+            ],
+            "intensity": 1,
+            "contamination": "chemical"
+          },
+          "changes": []
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "decayed",
+            "doctrine": "wards"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "poor",
+            "resourceProfile": "textiles",
+            "magicTech": "common-magic"
+          },
+          "changes": [
+            "added textiles resource store",
+            "applied common-magic infrastructure"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "time-displaced",
+            "condition": "heavily-damaged",
+            "maintenance": "poor",
+            "contamination": "chemical"
+          },
+          "changes": [
+            "degraded existing spaces without replacing their semantic purpose",
+            "applied chemical contamination"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "oppressive",
+            "socialMode": "transient",
+            "traffic": "empty",
+            "secretDensity": "high"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 15,
+            "decks": 2,
+            "roomsPerDeckEstimate": 8
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ]
+    },
+    "siteProfile": {
+      "schemaVersion": "1.0.0",
+      "generator": "hb-semantic-site-profile-layers",
+      "version": "1.0.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+      "archetype": "laboratory",
+      "axes": {
+        "scale": "fortified-complex",
+        "originCulture": "nomadic",
+        "controller": "abandoned",
+        "occupancyState": "long-abandoned",
+        "biome": "cold-desert",
+        "climate": "continental",
+        "season": "late-spring",
+        "weather": "cold-snap",
+        "ecology": "fungal",
+        "wealth": "poor",
+        "security": "decayed",
+        "age": "time-displaced",
+        "condition": "heavily-damaged",
+        "magicTech": "common-magic",
+        "lighting": "bioluminescent",
+        "waterState": "dry",
+        "verticality": "cavern-tiered",
+        "secretDensity": "high",
+        "traffic": "empty",
+        "socialMode": "transient",
+        "resourceProfile": "textiles",
+        "maintenance": "poor",
+        "contamination": "chemical",
+        "defenseDoctrine": "wards",
+        "narrativeTone": "oppressive"
+      },
+      "scalars": {
+        "creatureDensity": 1,
+        "hazardIntensity": 1,
+        "treasureDensity": 9,
+        "socialDensity": 0
+      },
+      "creatureFamilies": [
+        "urban-pest",
+        "herbivore"
+      ],
+      "hazardFamilies": [
+        "siege-damage"
+      ],
+      "materials": [
+        "granite",
+        "cut-stone",
+        "ice"
+      ],
+      "roles": [
+        {
+          "id": "entry",
+          "role": "lab-entry",
+          "label": "Controlled Entry",
+          "tags": [
+            "entrance",
+            "security",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "cold-desert",
+            "continental",
+            "late-spring",
+            "cold-snap",
+            "dry",
+            "tech-common-magic"
+          ]
+        },
+        {
+          "id": "reception",
+          "role": "lab-reception",
+          "label": "Reception / Check-in — ecological colony / blocked-growth zone",
+          "tags": [
+            "public",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "unattended",
+            "cold-desert",
+            "continental",
+            "late-spring",
+            "cold-snap",
+            "dry",
+            "historically-adapted",
+            "ecology-active",
+            "hazard",
+            "condition-degraded",
+            "blocked-route",
+            "contamination-chemical"
+          ],
+          "metadata": {
+            "originalRole": "lab-reception",
+            "originalLabel": "Reception / Check-in",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ],
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "lab",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "count": 4
+        },
+        {
+          "id": "prep",
+          "role": "prep-room",
+          "label": "Preparation Room — ecological colony / blocked-growth zone",
+          "tags": [
+            "service",
+            "nomadic-influence",
+            "legacy-use",
+            "historically-adapted",
+            "ecology-active",
+            "hazard",
+            "condition-degraded",
+            "blocked-route",
+            "tech-common-magic",
+            "contamination-chemical"
+          ],
+          "metadata": {
+            "originalRole": "prep-room",
+            "originalLabel": "Preparation Room",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ],
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "storage",
+          "role": "specimen-storage",
+          "label": "Specimen / Material Storage",
+          "tags": [
+            "restricted",
+            "hazard",
+            "treasure",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical"
+          ]
+        },
+        {
+          "id": "office",
+          "role": "research-office",
+          "label": "Research Office",
+          "tags": [
+            "private",
+            "evidence",
+            "nomadic-influence",
+            "legacy-use",
+            "tone-oppressive"
+          ]
+        },
+        {
+          "id": "contain",
+          "role": "containment",
+          "label": "Containment Room",
+          "tags": [
+            "inner",
+            "hazard",
+            "objective",
+            "security",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ]
+        },
+        {
+          "id": "utility",
+          "role": "lab-utilities",
+          "label": "Utilities — ecological colony / blocked-growth zone",
+          "tags": [
+            "service",
+            "hazard",
+            "nomadic-influence",
+            "legacy-use",
+            "historically-adapted",
+            "ecology-active",
+            "tech-common-magic",
+            "condition-degraded",
+            "contamination-chemical"
+          ],
+          "metadata": {
+            "originalRole": "lab-utilities",
+            "originalLabel": "Utilities",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure"
+            ],
+            "interactionIds": [
+              "ecological-succession"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "interaction-ecology-breach",
+          "role": "ecology-breach",
+          "label": "Ecological Breach / Growth Route",
+          "tags": [
+            "hazard",
+            "ecology",
+            "secret",
+            "contamination-chemical"
+          ]
+        },
+        {
+          "id": "interaction-collapse-bypass",
+          "role": "collapse-bypass",
+          "label": "Rubble Bypass / Breach",
+          "tags": [
+            "secret",
+            "transit",
+            "hazard",
+            "contamination-chemical"
+          ]
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-chemical"
+          ]
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "textiles Store",
+          "tags": [
+            "service",
+            "treasure",
+            "tech-common-magic",
+            "condition-degraded",
+            "contamination-chemical"
+          ]
+        }
+      ],
+      "adjacency": [
+        [
+          "lab-entry",
+          "lab-reception"
+        ],
+        [
+          "lab-reception",
+          "laboratory"
+        ],
+        [
+          "laboratory",
+          "prep-room"
+        ],
+        [
+          "prep-room",
+          "specimen-storage"
+        ],
+        [
+          "laboratory",
+          "research-office"
+        ],
+        [
+          "laboratory",
+          "containment"
+        ],
+        [
+          "lab-utilities",
+          "containment"
+        ],
+        [
+          "lab-reception",
+          "ecology-breach"
+        ],
+        [
+          "lab-reception",
+          "collapse-bypass"
+        ],
+        [
+          "prep-room",
+          "ecology-den"
+        ],
+        [
+          "prep-room",
+          "resource-specific-store"
+        ]
+      ],
+      "decks": 2,
+      "layout": {
+        "gridWidth": 88,
+        "gridHeight": 68
+      },
+      "extraEdgeChance": 0.19999999999999998,
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "climate: subarctic->continental (biome compatibility)",
+            "weather: fog->cold-snap (climate compatibility)",
+            "ecology: urban-vermin->fungal (biome ecology)",
+            "magicTech: low-magic->common-magic (builder culture)",
+            "controller: original-owners->abandoned (vacancy consistency)",
+            "traffic: light->empty (vacancy)",
+            "maintenance: routine->poor (vacancy maintenance)",
+            "condition: damaged->heavily-damaged (vacancy condition)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "fortified-complex",
+          "changes": [
+            "laboratory count 3->4",
+            "decks=2",
+            "grid=88x68"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "nomadic",
+          "changes": [
+            "applied broad cultural influence tag"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "abandoned",
+          "changes": [
+            "recontextualized existing spaces for controller"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "long-abandoned",
+          "changes": [
+            "preserved original purpose as legacy use while marking current vacancy"
+          ]
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "cold-desert",
+            "climate": "continental",
+            "season": "late-spring",
+            "weather": "cold-snap",
+            "waterState": "dry",
+            "verticality": "cavern-tiered"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "nomadic",
+            "controller": "abandoned",
+            "archetype": "laboratory",
+            "occupancyState": "long-abandoned",
+            "ecology": "fungal",
+            "condition": "heavily-damaged",
+            "waterState": "dry"
+          },
+          "changes": [
+            "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+            "nonhuman ecology opens a route that did not exist in the original building plan",
+            "structural failure narrows or redirects original circulation",
+            "later traffic cuts or discovers an alternate path around failed construction"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "fungal",
+            "creatureFamilies": [
+              "urban-pest",
+              "herbivore"
+            ],
+            "creatureDensity": 1
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "siege-damage"
+            ],
+            "intensity": 1,
+            "contamination": "chemical"
+          },
+          "changes": []
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "decayed",
+            "doctrine": "wards"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "poor",
+            "resourceProfile": "textiles",
+            "magicTech": "common-magic"
+          },
+          "changes": [
+            "added textiles resource store",
+            "applied common-magic infrastructure"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "time-displaced",
+            "condition": "heavily-damaged",
+            "maintenance": "poor",
+            "contamination": "chemical"
+          },
+          "changes": [
+            "degraded existing spaces without replacing their semantic purpose",
+            "applied chemical contamination"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "oppressive",
+            "socialMode": "transient",
+            "traffic": "empty",
+            "secretDensity": "high"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 15,
+            "decks": 2,
+            "roomsPerDeckEstimate": 8
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ],
+      "interactions": [
+        {
+          "order": 1,
+          "id": "ecological-succession",
+          "drivers": {
+            "culture": "nomadic",
+            "controller": "abandoned",
+            "archetype": "laboratory",
+            "occupancyState": "long-abandoned",
+            "ecology": "fungal"
+          },
+          "targets": [
+            "lab-reception",
+            "prep-room",
+            "lab-utilities"
+          ],
+          "effects": [
+            "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "ecological-succession",
+          "drivers": {
+            "culture": "nomadic",
+            "controller": "abandoned",
+            "archetype": "laboratory"
+          },
+          "targets": [
+            "ecology-breach"
+          ],
+          "effects": [
+            "nonhuman ecology opens a route that did not exist in the original building plan"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "collapse-reroute",
+          "drivers": {
+            "culture": "nomadic",
+            "controller": "abandoned",
+            "archetype": "laboratory",
+            "occupancyState": "long-abandoned",
+            "ecology": "fungal"
+          },
+          "targets": [
+            "lab-reception",
+            "prep-room"
+          ],
+          "effects": [
+            "structural failure narrows or redirects original circulation"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "collapse-reroute",
+          "drivers": {
+            "culture": "nomadic",
+            "controller": "abandoned",
+            "archetype": "laboratory"
+          },
+          "targets": [
+            "collapse-bypass"
+          ],
+          "effects": [
+            "later traffic cuts or discovers an alternate path around failed construction"
+          ]
+        }
+      ],
+      "explicit": {
+        "security": false
+      },
+      "explicitAxes": [],
+      "contentContext": {
+        "culture": "nomadic",
+        "controller": "abandoned",
+        "occupancyState": "long-abandoned",
+        "biome": "cold-desert",
+        "climate": "continental",
+        "season": "late-spring",
+        "weather": "cold-snap",
+        "ecology": "fungal",
+        "creatureFamilies": [
+          "urban-pest",
+          "herbivore"
+        ],
+        "hazardFamilies": [
+          "siege-damage"
+        ],
+        "materials": [
+          "granite",
+          "cut-stone",
+          "ice"
+        ],
+        "wealth": "poor",
+        "security": "decayed",
+        "magicTech": "common-magic",
+        "lighting": "bioluminescent",
+        "waterState": "dry",
+        "contamination": "chemical",
+        "narrativeTone": "oppressive",
+        "interactionCount": 4,
+        "interactionIds": [
+          "ecological-succession",
+          "ecological-succession",
+          "collapse-reroute",
+          "collapse-reroute"
+        ],
+        "creatureDensity": 1,
+        "hazardIntensity": 1,
+        "treasureDensity": 9,
+        "socialDensity": 0
+      }
+    },
+    "spatialLayout": {
+      "schemaVersion": "1.0.0",
+      "engine": "hb-semantic-spatial-engine",
+      "engineVersion": "1.1.1",
+      "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+      "deckCount": 2,
+      "bounds": {
+        "width": 88,
+        "height": 68
+      },
+      "nodes": [
+        {
+          "id": "entry",
+          "role": "lab-entry",
+          "label": "Controlled Entry",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "security",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "cold-desert",
+            "continental",
+            "late-spring",
+            "cold-snap",
+            "dry",
+            "tech-common-magic"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "reception",
+          "role": "lab-reception",
+          "label": "Reception / Check-in — ecological colony / blocked-growth zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "public",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "unattended",
+            "cold-desert",
+            "continental",
+            "late-spring",
+            "cold-snap",
+            "dry",
+            "historically-adapted",
+            "ecology-active",
+            "hazard",
+            "condition-degraded",
+            "blocked-route",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "lab-reception",
+            "originalLabel": "Reception / Check-in",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ],
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "laboratory-3",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "laboratory-4",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "laboratory-5",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "laboratory-6",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "prep",
+          "role": "prep-room",
+          "label": "Preparation Room — ecological colony / blocked-growth zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "nomadic-influence",
+            "legacy-use",
+            "historically-adapted",
+            "ecology-active",
+            "hazard",
+            "condition-degraded",
+            "blocked-route",
+            "tech-common-magic",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "prep-room",
+            "originalLabel": "Preparation Room",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ],
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "storage",
+          "role": "specimen-storage",
+          "label": "Specimen / Material Storage",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "treasure",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "office",
+          "role": "research-office",
+          "label": "Research Office",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "nomadic-influence",
+            "legacy-use",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "contain",
+          "role": "containment",
+          "label": "Containment Room",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "inner",
+            "hazard",
+            "objective",
+            "security",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "utility",
+          "role": "lab-utilities",
+          "label": "Utilities — ecological colony / blocked-growth zone",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "nomadic-influence",
+            "legacy-use",
+            "historically-adapted",
+            "ecology-active",
+            "tech-common-magic",
+            "condition-degraded",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "lab-utilities",
+            "originalLabel": "Utilities",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure"
+            ],
+            "interactionIds": [
+              "ecological-succession"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "interaction-ecology-breach",
+          "role": "ecology-breach",
+          "label": "Ecological Breach / Growth Route",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "secret",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "interaction-collapse-bypass",
+          "role": "collapse-bypass",
+          "label": "Rubble Bypass / Breach",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "secret",
+            "transit",
+            "hazard",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "textiles Store",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "tech-common-magic",
+            "condition-degraded",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "a": "entry",
+          "b": "reception",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-1"
+          }
+        },
+        {
+          "id": "edge-2",
+          "a": "reception",
+          "b": "laboratory-3",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-2"
+          }
+        },
+        {
+          "id": "edge-3",
+          "a": "laboratory-3",
+          "b": "prep",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-3"
+          }
+        },
+        {
+          "id": "edge-4",
+          "a": "prep",
+          "b": "storage",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-4"
+          }
+        },
+        {
+          "id": "edge-5",
+          "a": "laboratory-3",
+          "b": "office",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-5"
+          },
+          "connectorPairId": "connector-1"
+        },
+        {
+          "id": "edge-6",
+          "a": "laboratory-3",
+          "b": "contain",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-6"
+          },
+          "connectorPairId": "connector-3"
+        },
+        {
+          "id": "edge-7",
+          "a": "utility",
+          "b": "contain",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-7"
+          }
+        },
+        {
+          "id": "edge-8",
+          "a": "reception",
+          "b": "interaction-ecology-breach",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-8"
+          },
+          "connectorPairId": "connector-5"
+        },
+        {
+          "id": "edge-9",
+          "a": "reception",
+          "b": "interaction-collapse-bypass",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-9"
+          },
+          "connectorPairId": "connector-7"
+        },
+        {
+          "id": "edge-10",
+          "a": "prep",
+          "b": "ecology-den",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-10"
+          },
+          "connectorPairId": "connector-9"
+        },
+        {
+          "id": "edge-11",
+          "a": "prep",
+          "b": "resource-store",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-11"
+          },
+          "connectorPairId": "connector-11"
+        },
+        {
+          "id": "edge-12",
+          "a": "laboratory-3",
+          "b": "laboratory-5",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-13",
+          "a": "prep",
+          "b": "laboratory-4",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-14",
+          "a": "laboratory-3",
+          "b": "laboratory-6",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-15",
+          "a": "entry",
+          "b": "laboratory-4",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-16",
+          "a": "reception",
+          "b": "laboratory-6",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-17",
+          "a": "laboratory-5",
+          "b": "laboratory-6",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-18",
+          "a": "laboratory-5",
+          "b": "prep",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-19",
+          "a": "laboratory-6",
+          "b": "prep",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-20",
+          "a": "laboratory-6",
+          "b": "storage",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-21",
+          "a": "office",
+          "b": "interaction-ecology-breach",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-22",
+          "a": "office",
+          "b": "utility",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-23",
+          "a": "office",
+          "b": "interaction-collapse-bypass",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-24",
+          "a": "interaction-collapse-bypass",
+          "b": "ecology-den",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-25",
+          "a": "utility",
+          "b": "resource-store",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-26",
+          "a": "contain",
+          "b": "interaction-ecology-breach",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-27",
+          "a": "utility",
+          "b": "interaction-collapse-bypass",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-28",
+          "a": "utility",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-29",
+          "a": "interaction-ecology-breach",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-30",
+          "a": "interaction-collapse-bypass",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        }
+      ],
+      "rooms": [
+        {
+          "id": "entry",
+          "nodeId": "entry",
+          "role": "lab-entry",
+          "label": "Controlled Entry",
+          "deck": 0,
+          "x": 63,
+          "y": 51,
+          "width": 11,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "security",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "cold-desert",
+            "continental",
+            "late-spring",
+            "cold-snap",
+            "dry",
+            "tech-common-magic"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "reception",
+          "nodeId": "reception",
+          "role": "lab-reception",
+          "label": "Reception / Check-in — ecological colony / blocked-growth zone",
+          "deck": 0,
+          "x": 14,
+          "y": 30,
+          "width": 8,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "public",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "unattended",
+            "cold-desert",
+            "continental",
+            "late-spring",
+            "cold-snap",
+            "dry",
+            "historically-adapted",
+            "ecology-active",
+            "hazard",
+            "condition-degraded",
+            "blocked-route",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "lab-reception",
+            "originalLabel": "Reception / Check-in",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ],
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "laboratory-3",
+          "nodeId": "laboratory-3",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "x": 2,
+          "y": 36,
+          "width": 7,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "laboratory-4",
+          "nodeId": "laboratory-4",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "x": 53,
+          "y": 13,
+          "width": 6,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "laboratory-5",
+          "nodeId": "laboratory-5",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "x": 27,
+          "y": 5,
+          "width": 11,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "laboratory-6",
+          "nodeId": "laboratory-6",
+          "role": "laboratory",
+          "label": "Laboratory",
+          "deck": 0,
+          "x": 3,
+          "y": 12,
+          "width": 7,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "prep",
+          "nodeId": "prep",
+          "role": "prep-room",
+          "label": "Preparation Room — ecological colony / blocked-growth zone",
+          "deck": 0,
+          "x": 24,
+          "y": 41,
+          "width": 7,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "service",
+            "nomadic-influence",
+            "legacy-use",
+            "historically-adapted",
+            "ecology-active",
+            "hazard",
+            "condition-degraded",
+            "blocked-route",
+            "tech-common-magic",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "prep-room",
+            "originalLabel": "Preparation Room",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ],
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "storage",
+          "nodeId": "storage",
+          "role": "specimen-storage",
+          "label": "Specimen / Material Storage",
+          "deck": 0,
+          "x": 62,
+          "y": 36,
+          "width": 9,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "treasure",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "office",
+          "nodeId": "office",
+          "role": "research-office",
+          "label": "Research Office",
+          "deck": 1,
+          "x": 76,
+          "y": 39,
+          "width": 10,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "nomadic-influence",
+            "legacy-use",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "contain",
+          "nodeId": "contain",
+          "role": "containment",
+          "label": "Containment Room",
+          "deck": 1,
+          "x": 45,
+          "y": 42,
+          "width": 6,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "inner",
+            "hazard",
+            "objective",
+            "security",
+            "nomadic-influence",
+            "uncontrolled",
+            "abandoned",
+            "legacy-use",
+            "tech-common-magic",
+            "contamination-chemical",
+            "tone-oppressive"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "utility",
+          "nodeId": "utility",
+          "role": "lab-utilities",
+          "label": "Utilities — ecological colony / blocked-growth zone",
+          "deck": 1,
+          "x": 78,
+          "y": 5,
+          "width": 8,
+          "height": 5,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "nomadic-influence",
+            "legacy-use",
+            "historically-adapted",
+            "ecology-active",
+            "tech-common-magic",
+            "condition-degraded",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "lab-utilities",
+            "originalLabel": "Utilities",
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure"
+            ],
+            "interactionIds": [
+              "ecological-succession"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "ecological colony / blocked-growth zone"
+          }
+        },
+        {
+          "id": "interaction-ecology-breach",
+          "nodeId": "interaction-ecology-breach",
+          "role": "ecology-breach",
+          "label": "Ecological Breach / Growth Route",
+          "deck": 1,
+          "x": 36,
+          "y": 5,
+          "width": 11,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "secret",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "interaction-collapse-bypass",
+          "nodeId": "interaction-collapse-bypass",
+          "role": "collapse-bypass",
+          "label": "Rubble Bypass / Breach",
+          "deck": 1,
+          "x": 15,
+          "y": 55,
+          "width": 9,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "secret",
+            "transit",
+            "hazard",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "nodeId": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 1,
+          "x": 9,
+          "y": 29,
+          "width": 9,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "nodeId": "resource-store",
+          "role": "resource-specific-store",
+          "label": "textiles Store",
+          "deck": 1,
+          "x": 71,
+          "y": 12,
+          "width": 6,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "tech-common-magic",
+            "condition-degraded",
+            "contamination-chemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "corridors": [
+        {
+          "id": "corridor-1",
+          "edgeId": "edge-1",
+          "deck": 0,
+          "a": "entry",
+          "b": "reception",
+          "points": [
+            {
+              "x": 63,
+              "y": 52
+            },
+            {
+              "x": 63,
+              "y": 51
+            },
+            {
+              "x": 63,
+              "y": 50
+            },
+            {
+              "x": 63,
+              "y": 49
+            },
+            {
+              "x": 63,
+              "y": 48
+            },
+            {
+              "x": 63,
+              "y": 47
+            },
+            {
+              "x": 63,
+              "y": 46
+            },
+            {
+              "x": 63,
+              "y": 45
+            },
+            {
+              "x": 63,
+              "y": 44
+            },
+            {
+              "x": 63,
+              "y": 43
+            },
+            {
+              "x": 63,
+              "y": 42
+            },
+            {
+              "x": 63,
+              "y": 41
+            },
+            {
+              "x": 63,
+              "y": 40
+            },
+            {
+              "x": 63,
+              "y": 39
+            },
+            {
+              "x": 63,
+              "y": 38
+            },
+            {
+              "x": 63,
+              "y": 37
+            },
+            {
+              "x": 63,
+              "y": 36
+            },
+            {
+              "x": 63,
+              "y": 35
+            },
+            {
+              "x": 62,
+              "y": 35
+            },
+            {
+              "x": 61,
+              "y": 35
+            },
+            {
+              "x": 60,
+              "y": 35
+            },
+            {
+              "x": 59,
+              "y": 35
+            },
+            {
+              "x": 58,
+              "y": 35
+            },
+            {
+              "x": 57,
+              "y": 35
+            },
+            {
+              "x": 56,
+              "y": 35
+            },
+            {
+              "x": 55,
+              "y": 35
+            },
+            {
+              "x": 54,
+              "y": 35
+            },
+            {
+              "x": 53,
+              "y": 35
+            },
+            {
+              "x": 52,
+              "y": 35
+            },
+            {
+              "x": 51,
+              "y": 35
+            },
+            {
+              "x": 50,
+              "y": 35
+            },
+            {
+              "x": 49,
+              "y": 35
+            },
+            {
+              "x": 48,
+              "y": 35
+            },
+            {
+              "x": 47,
+              "y": 35
+            },
+            {
+              "x": 46,
+              "y": 35
+            },
+            {
+              "x": 45,
+              "y": 35
+            },
+            {
+              "x": 44,
+              "y": 35
+            },
+            {
+              "x": 43,
+              "y": 35
+            },
+            {
+              "x": 42,
+              "y": 35
+            },
+            {
+              "x": 41,
+              "y": 35
+            },
+            {
+              "x": 40,
+              "y": 35
+            },
+            {
+              "x": 39,
+              "y": 35
+            },
+            {
+              "x": 38,
+              "y": 35
+            },
+            {
+              "x": 37,
+              "y": 35
+            },
+            {
+              "x": 36,
+              "y": 35
+            },
+            {
+              "x": 35,
+              "y": 35
+            },
+            {
+              "x": 34,
+              "y": 35
+            },
+            {
+              "x": 33,
+              "y": 35
+            },
+            {
+              "x": 32,
+              "y": 35
+            },
+            {
+              "x": 31,
+              "y": 35
+            },
+            {
+              "x": 30,
+              "y": 35
+            },
+            {
+              "x": 29,
+              "y": 35
+            },
+            {
+              "x": 28,
+              "y": 35
+            },
+            {
+              "x": 27,
+              "y": 35
+            },
+            {
+              "x": 26,
+              "y": 35
+            },
+            {
+              "x": 25,
+              "y": 35
+            },
+            {
+              "x": 24,
+              "y": 35
+            },
+            {
+              "x": 23,
+              "y": 35
+            },
+            {
+              "x": 22,
+              "y": 35
+            },
+            {
+              "x": 21,
+              "y": 35
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-2",
+          "edgeId": "edge-2",
+          "deck": 0,
+          "a": "reception",
+          "b": "laboratory-3",
+          "points": [
+            {
+              "x": 14,
+              "y": 35
+            },
+            {
+              "x": 13,
+              "y": 35
+            },
+            {
+              "x": 12,
+              "y": 35
+            },
+            {
+              "x": 11,
+              "y": 35
+            },
+            {
+              "x": 10,
+              "y": 35
+            },
+            {
+              "x": 9,
+              "y": 35
+            },
+            {
+              "x": 8,
+              "y": 35
+            },
+            {
+              "x": 8,
+              "y": 36
+            },
+            {
+              "x": 8,
+              "y": 37
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-3",
+          "edgeId": "edge-3",
+          "deck": 0,
+          "a": "laboratory-3",
+          "b": "prep",
+          "points": [
+            {
+              "x": 8,
+              "y": 41
+            },
+            {
+              "x": 9,
+              "y": 41
+            },
+            {
+              "x": 10,
+              "y": 41
+            },
+            {
+              "x": 11,
+              "y": 41
+            },
+            {
+              "x": 12,
+              "y": 41
+            },
+            {
+              "x": 13,
+              "y": 41
+            },
+            {
+              "x": 14,
+              "y": 41
+            },
+            {
+              "x": 15,
+              "y": 41
+            },
+            {
+              "x": 16,
+              "y": 41
+            },
+            {
+              "x": 17,
+              "y": 41
+            },
+            {
+              "x": 18,
+              "y": 41
+            },
+            {
+              "x": 19,
+              "y": 41
+            },
+            {
+              "x": 20,
+              "y": 41
+            },
+            {
+              "x": 21,
+              "y": 41
+            },
+            {
+              "x": 22,
+              "y": 41
+            },
+            {
+              "x": 23,
+              "y": 41
+            },
+            {
+              "x": 24,
+              "y": 41
+            },
+            {
+              "x": 24,
+              "y": 42
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-4",
+          "edgeId": "edge-4",
+          "deck": 0,
+          "a": "prep",
+          "b": "storage",
+          "points": [
+            {
+              "x": 30,
+              "y": 42
+            },
+            {
+              "x": 31,
+              "y": 42
+            },
+            {
+              "x": 32,
+              "y": 42
+            },
+            {
+              "x": 33,
+              "y": 42
+            },
+            {
+              "x": 34,
+              "y": 42
+            },
+            {
+              "x": 35,
+              "y": 42
+            },
+            {
+              "x": 36,
+              "y": 42
+            },
+            {
+              "x": 37,
+              "y": 42
+            },
+            {
+              "x": 38,
+              "y": 42
+            },
+            {
+              "x": 39,
+              "y": 42
+            },
+            {
+              "x": 40,
+              "y": 42
+            },
+            {
+              "x": 41,
+              "y": 42
+            },
+            {
+              "x": 42,
+              "y": 42
+            },
+            {
+              "x": 43,
+              "y": 42
+            },
+            {
+              "x": 44,
+              "y": 42
+            },
+            {
+              "x": 45,
+              "y": 42
+            },
+            {
+              "x": 46,
+              "y": 42
+            },
+            {
+              "x": 47,
+              "y": 42
+            },
+            {
+              "x": 48,
+              "y": 42
+            },
+            {
+              "x": 49,
+              "y": 42
+            },
+            {
+              "x": 50,
+              "y": 42
+            },
+            {
+              "x": 51,
+              "y": 42
+            },
+            {
+              "x": 52,
+              "y": 42
+            },
+            {
+              "x": 53,
+              "y": 42
+            },
+            {
+              "x": 54,
+              "y": 42
+            },
+            {
+              "x": 55,
+              "y": 42
+            },
+            {
+              "x": 56,
+              "y": 42
+            },
+            {
+              "x": 57,
+              "y": 42
+            },
+            {
+              "x": 58,
+              "y": 42
+            },
+            {
+              "x": 59,
+              "y": 42
+            },
+            {
+              "x": 60,
+              "y": 42
+            },
+            {
+              "x": 61,
+              "y": 42
+            },
+            {
+              "x": 62,
+              "y": 42
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-5",
+          "edgeId": "edge-7",
+          "deck": 1,
+          "a": "utility",
+          "b": "contain",
+          "points": [
+            {
+              "x": 79,
+              "y": 9
+            },
+            {
+              "x": 79,
+              "y": 10
+            },
+            {
+              "x": 79,
+              "y": 11
+            },
+            {
+              "x": 79,
+              "y": 12
+            },
+            {
+              "x": 79,
+              "y": 13
+            },
+            {
+              "x": 79,
+              "y": 14
+            },
+            {
+              "x": 79,
+              "y": 15
+            },
+            {
+              "x": 79,
+              "y": 16
+            },
+            {
+              "x": 79,
+              "y": 17
+            },
+            {
+              "x": 79,
+              "y": 18
+            },
+            {
+              "x": 79,
+              "y": 19
+            },
+            {
+              "x": 79,
+              "y": 20
+            },
+            {
+              "x": 79,
+              "y": 21
+            },
+            {
+              "x": 79,
+              "y": 22
+            },
+            {
+              "x": 79,
+              "y": 23
+            },
+            {
+              "x": 79,
+              "y": 24
+            },
+            {
+              "x": 79,
+              "y": 25
+            },
+            {
+              "x": 79,
+              "y": 26
+            },
+            {
+              "x": 79,
+              "y": 27
+            },
+            {
+              "x": 79,
+              "y": 28
+            },
+            {
+              "x": 79,
+              "y": 29
+            },
+            {
+              "x": 79,
+              "y": 30
+            },
+            {
+              "x": 79,
+              "y": 31
+            },
+            {
+              "x": 79,
+              "y": 32
+            },
+            {
+              "x": 79,
+              "y": 33
+            },
+            {
+              "x": 79,
+              "y": 34
+            },
+            {
+              "x": 79,
+              "y": 35
+            },
+            {
+              "x": 79,
+              "y": 36
+            },
+            {
+              "x": 79,
+              "y": 37
+            },
+            {
+              "x": 79,
+              "y": 38
+            },
+            {
+              "x": 79,
+              "y": 39
+            },
+            {
+              "x": 79,
+              "y": 40
+            },
+            {
+              "x": 79,
+              "y": 41
+            },
+            {
+              "x": 79,
+              "y": 42
+            },
+            {
+              "x": 78,
+              "y": 42
+            },
+            {
+              "x": 77,
+              "y": 42
+            },
+            {
+              "x": 76,
+              "y": 42
+            },
+            {
+              "x": 75,
+              "y": 42
+            },
+            {
+              "x": 74,
+              "y": 42
+            },
+            {
+              "x": 73,
+              "y": 42
+            },
+            {
+              "x": 72,
+              "y": 42
+            },
+            {
+              "x": 71,
+              "y": 42
+            },
+            {
+              "x": 70,
+              "y": 42
+            },
+            {
+              "x": 69,
+              "y": 42
+            },
+            {
+              "x": 68,
+              "y": 42
+            },
+            {
+              "x": 67,
+              "y": 42
+            },
+            {
+              "x": 66,
+              "y": 42
+            },
+            {
+              "x": 65,
+              "y": 42
+            },
+            {
+              "x": 64,
+              "y": 42
+            },
+            {
+              "x": 63,
+              "y": 42
+            },
+            {
+              "x": 62,
+              "y": 42
+            },
+            {
+              "x": 61,
+              "y": 42
+            },
+            {
+              "x": 60,
+              "y": 42
+            },
+            {
+              "x": 59,
+              "y": 42
+            },
+            {
+              "x": 58,
+              "y": 42
+            },
+            {
+              "x": 57,
+              "y": 42
+            },
+            {
+              "x": 56,
+              "y": 42
+            },
+            {
+              "x": 55,
+              "y": 42
+            },
+            {
+              "x": 54,
+              "y": 42
+            },
+            {
+              "x": 53,
+              "y": 42
+            },
+            {
+              "x": 52,
+              "y": 42
+            },
+            {
+              "x": 51,
+              "y": 42
+            },
+            {
+              "x": 50,
+              "y": 42
+            },
+            {
+              "x": 49,
+              "y": 42
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-6",
+          "edgeId": "edge-12",
+          "deck": 0,
+          "a": "laboratory-3",
+          "b": "laboratory-5",
+          "points": [
+            {
+              "x": 7,
+              "y": 36
+            },
+            {
+              "x": 7,
+              "y": 35
+            },
+            {
+              "x": 7,
+              "y": 34
+            },
+            {
+              "x": 7,
+              "y": 33
+            },
+            {
+              "x": 7,
+              "y": 32
+            },
+            {
+              "x": 7,
+              "y": 31
+            },
+            {
+              "x": 7,
+              "y": 30
+            },
+            {
+              "x": 7,
+              "y": 29
+            },
+            {
+              "x": 7,
+              "y": 28
+            },
+            {
+              "x": 7,
+              "y": 27
+            },
+            {
+              "x": 7,
+              "y": 26
+            },
+            {
+              "x": 7,
+              "y": 25
+            },
+            {
+              "x": 7,
+              "y": 24
+            },
+            {
+              "x": 7,
+              "y": 23
+            },
+            {
+              "x": 7,
+              "y": 22
+            },
+            {
+              "x": 7,
+              "y": 21
+            },
+            {
+              "x": 7,
+              "y": 20
+            },
+            {
+              "x": 7,
+              "y": 19
+            },
+            {
+              "x": 7,
+              "y": 18
+            },
+            {
+              "x": 7,
+              "y": 17
+            },
+            {
+              "x": 7,
+              "y": 16
+            },
+            {
+              "x": 7,
+              "y": 15
+            },
+            {
+              "x": 7,
+              "y": 14
+            },
+            {
+              "x": 7,
+              "y": 13
+            },
+            {
+              "x": 7,
+              "y": 12
+            },
+            {
+              "x": 7,
+              "y": 11
+            },
+            {
+              "x": 7,
+              "y": 10
+            },
+            {
+              "x": 8,
+              "y": 10
+            },
+            {
+              "x": 9,
+              "y": 10
+            },
+            {
+              "x": 10,
+              "y": 10
+            },
+            {
+              "x": 11,
+              "y": 10
+            },
+            {
+              "x": 12,
+              "y": 10
+            },
+            {
+              "x": 13,
+              "y": 10
+            },
+            {
+              "x": 14,
+              "y": 10
+            },
+            {
+              "x": 15,
+              "y": 10
+            },
+            {
+              "x": 16,
+              "y": 10
+            },
+            {
+              "x": 17,
+              "y": 10
+            },
+            {
+              "x": 18,
+              "y": 10
+            },
+            {
+              "x": 19,
+              "y": 10
+            },
+            {
+              "x": 20,
+              "y": 10
+            },
+            {
+              "x": 21,
+              "y": 10
+            },
+            {
+              "x": 22,
+              "y": 10
+            },
+            {
+              "x": 23,
+              "y": 10
+            },
+            {
+              "x": 24,
+              "y": 10
+            },
+            {
+              "x": 25,
+              "y": 10
+            },
+            {
+              "x": 26,
+              "y": 10
+            },
+            {
+              "x": 27,
+              "y": 10
+            },
+            {
+              "x": 28,
+              "y": 10
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-7",
+          "edgeId": "edge-13",
+          "deck": 0,
+          "a": "prep",
+          "b": "laboratory-4",
+          "points": [
+            {
+              "x": 30,
+              "y": 42
+            },
+            {
+              "x": 30,
+              "y": 41
+            },
+            {
+              "x": 30,
+              "y": 40
+            },
+            {
+              "x": 30,
+              "y": 39
+            },
+            {
+              "x": 30,
+              "y": 38
+            },
+            {
+              "x": 30,
+              "y": 37
+            },
+            {
+              "x": 30,
+              "y": 36
+            },
+            {
+              "x": 30,
+              "y": 35
+            },
+            {
+              "x": 30,
+              "y": 34
+            },
+            {
+              "x": 30,
+              "y": 33
+            },
+            {
+              "x": 30,
+              "y": 32
+            },
+            {
+              "x": 30,
+              "y": 31
+            },
+            {
+              "x": 30,
+              "y": 30
+            },
+            {
+              "x": 30,
+              "y": 29
+            },
+            {
+              "x": 30,
+              "y": 28
+            },
+            {
+              "x": 30,
+              "y": 27
+            },
+            {
+              "x": 30,
+              "y": 26
+            },
+            {
+              "x": 30,
+              "y": 25
+            },
+            {
+              "x": 30,
+              "y": 24
+            },
+            {
+              "x": 30,
+              "y": 23
+            },
+            {
+              "x": 30,
+              "y": 22
+            },
+            {
+              "x": 30,
+              "y": 21
+            },
+            {
+              "x": 30,
+              "y": 20
+            },
+            {
+              "x": 30,
+              "y": 19
+            },
+            {
+              "x": 31,
+              "y": 19
+            },
+            {
+              "x": 32,
+              "y": 19
+            },
+            {
+              "x": 33,
+              "y": 19
+            },
+            {
+              "x": 34,
+              "y": 19
+            },
+            {
+              "x": 35,
+              "y": 19
+            },
+            {
+              "x": 36,
+              "y": 19
+            },
+            {
+              "x": 37,
+              "y": 19
+            },
+            {
+              "x": 38,
+              "y": 19
+            },
+            {
+              "x": 39,
+              "y": 19
+            },
+            {
+              "x": 40,
+              "y": 19
+            },
+            {
+              "x": 41,
+              "y": 19
+            },
+            {
+              "x": 42,
+              "y": 19
+            },
+            {
+              "x": 43,
+              "y": 19
+            },
+            {
+              "x": 44,
+              "y": 19
+            },
+            {
+              "x": 45,
+              "y": 19
+            },
+            {
+              "x": 46,
+              "y": 19
+            },
+            {
+              "x": 47,
+              "y": 19
+            },
+            {
+              "x": 48,
+              "y": 19
+            },
+            {
+              "x": 49,
+              "y": 19
+            },
+            {
+              "x": 50,
+              "y": 19
+            },
+            {
+              "x": 51,
+              "y": 19
+            },
+            {
+              "x": 52,
+              "y": 19
+            },
+            {
+              "x": 53,
+              "y": 19
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-8",
+          "edgeId": "edge-14",
+          "deck": 0,
+          "a": "laboratory-3",
+          "b": "laboratory-6",
+          "points": [
+            {
+              "x": 6,
+              "y": 36
+            },
+            {
+              "x": 6,
+              "y": 35
+            },
+            {
+              "x": 6,
+              "y": 34
+            },
+            {
+              "x": 6,
+              "y": 33
+            },
+            {
+              "x": 6,
+              "y": 32
+            },
+            {
+              "x": 6,
+              "y": 31
+            },
+            {
+              "x": 6,
+              "y": 30
+            },
+            {
+              "x": 6,
+              "y": 29
+            },
+            {
+              "x": 6,
+              "y": 28
+            },
+            {
+              "x": 6,
+              "y": 27
+            },
+            {
+              "x": 6,
+              "y": 26
+            },
+            {
+              "x": 6,
+              "y": 25
+            },
+            {
+              "x": 6,
+              "y": 24
+            },
+            {
+              "x": 6,
+              "y": 23
+            },
+            {
+              "x": 6,
+              "y": 22
+            },
+            {
+              "x": 6,
+              "y": 21
+            },
+            {
+              "x": 6,
+              "y": 20
+            },
+            {
+              "x": 6,
+              "y": 19
+            },
+            {
+              "x": 6,
+              "y": 18
+            },
+            {
+              "x": 5,
+              "y": 18
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-9",
+          "edgeId": "edge-15",
+          "deck": 0,
+          "a": "entry",
+          "b": "laboratory-4",
+          "points": [
+            {
+              "x": 64,
+              "y": 51
+            },
+            {
+              "x": 64,
+              "y": 50
+            },
+            {
+              "x": 64,
+              "y": 49
+            },
+            {
+              "x": 64,
+              "y": 48
+            },
+            {
+              "x": 64,
+              "y": 47
+            },
+            {
+              "x": 64,
+              "y": 46
+            },
+            {
+              "x": 64,
+              "y": 45
+            },
+            {
+              "x": 64,
+              "y": 44
+            },
+            {
+              "x": 64,
+              "y": 43
+            },
+            {
+              "x": 64,
+              "y": 42
+            },
+            {
+              "x": 64,
+              "y": 41
+            },
+            {
+              "x": 64,
+              "y": 40
+            },
+            {
+              "x": 64,
+              "y": 39
+            },
+            {
+              "x": 64,
+              "y": 38
+            },
+            {
+              "x": 64,
+              "y": 37
+            },
+            {
+              "x": 64,
+              "y": 36
+            },
+            {
+              "x": 64,
+              "y": 35
+            },
+            {
+              "x": 64,
+              "y": 34
+            },
+            {
+              "x": 64,
+              "y": 33
+            },
+            {
+              "x": 64,
+              "y": 32
+            },
+            {
+              "x": 64,
+              "y": 31
+            },
+            {
+              "x": 64,
+              "y": 30
+            },
+            {
+              "x": 64,
+              "y": 29
+            },
+            {
+              "x": 64,
+              "y": 28
+            },
+            {
+              "x": 64,
+              "y": 27
+            },
+            {
+              "x": 64,
+              "y": 26
+            },
+            {
+              "x": 64,
+              "y": 25
+            },
+            {
+              "x": 64,
+              "y": 24
+            },
+            {
+              "x": 64,
+              "y": 23
+            },
+            {
+              "x": 64,
+              "y": 22
+            },
+            {
+              "x": 64,
+              "y": 21
+            },
+            {
+              "x": 64,
+              "y": 20
+            },
+            {
+              "x": 63,
+              "y": 20
+            },
+            {
+              "x": 62,
+              "y": 20
+            },
+            {
+              "x": 61,
+              "y": 20
+            },
+            {
+              "x": 60,
+              "y": 20
+            },
+            {
+              "x": 59,
+              "y": 20
+            },
+            {
+              "x": 58,
+              "y": 20
+            },
+            {
+              "x": 57,
+              "y": 20
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-10",
+          "edgeId": "edge-16",
+          "deck": 0,
+          "a": "reception",
+          "b": "laboratory-6",
+          "points": [
+            {
+              "x": 15,
+              "y": 30
+            },
+            {
+              "x": 15,
+              "y": 29
+            },
+            {
+              "x": 15,
+              "y": 28
+            },
+            {
+              "x": 15,
+              "y": 27
+            },
+            {
+              "x": 15,
+              "y": 26
+            },
+            {
+              "x": 15,
+              "y": 25
+            },
+            {
+              "x": 15,
+              "y": 24
+            },
+            {
+              "x": 15,
+              "y": 23
+            },
+            {
+              "x": 15,
+              "y": 22
+            },
+            {
+              "x": 15,
+              "y": 21
+            },
+            {
+              "x": 15,
+              "y": 20
+            },
+            {
+              "x": 15,
+              "y": 19
+            },
+            {
+              "x": 15,
+              "y": 18
+            },
+            {
+              "x": 14,
+              "y": 18
+            },
+            {
+              "x": 13,
+              "y": 18
+            },
+            {
+              "x": 12,
+              "y": 18
+            },
+            {
+              "x": 11,
+              "y": 18
+            },
+            {
+              "x": 10,
+              "y": 18
+            },
+            {
+              "x": 9,
+              "y": 18
+            },
+            {
+              "x": 8,
+              "y": 18
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-11",
+          "edgeId": "edge-17",
+          "deck": 0,
+          "a": "laboratory-5",
+          "b": "laboratory-6",
+          "points": [
+            {
+              "x": 27,
+              "y": 9
+            },
+            {
+              "x": 26,
+              "y": 9
+            },
+            {
+              "x": 25,
+              "y": 9
+            },
+            {
+              "x": 24,
+              "y": 9
+            },
+            {
+              "x": 23,
+              "y": 9
+            },
+            {
+              "x": 22,
+              "y": 9
+            },
+            {
+              "x": 21,
+              "y": 9
+            },
+            {
+              "x": 20,
+              "y": 9
+            },
+            {
+              "x": 19,
+              "y": 9
+            },
+            {
+              "x": 18,
+              "y": 9
+            },
+            {
+              "x": 17,
+              "y": 9
+            },
+            {
+              "x": 16,
+              "y": 9
+            },
+            {
+              "x": 15,
+              "y": 9
+            },
+            {
+              "x": 14,
+              "y": 9
+            },
+            {
+              "x": 13,
+              "y": 9
+            },
+            {
+              "x": 12,
+              "y": 9
+            },
+            {
+              "x": 11,
+              "y": 9
+            },
+            {
+              "x": 10,
+              "y": 9
+            },
+            {
+              "x": 9,
+              "y": 9
+            },
+            {
+              "x": 9,
+              "y": 10
+            },
+            {
+              "x": 9,
+              "y": 11
+            },
+            {
+              "x": 9,
+              "y": 12
+            },
+            {
+              "x": 9,
+              "y": 13
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-12",
+          "edgeId": "edge-18",
+          "deck": 0,
+          "a": "laboratory-5",
+          "b": "prep",
+          "points": [
+            {
+              "x": 28,
+              "y": 10
+            },
+            {
+              "x": 28,
+              "y": 11
+            },
+            {
+              "x": 28,
+              "y": 12
+            },
+            {
+              "x": 28,
+              "y": 13
+            },
+            {
+              "x": 28,
+              "y": 14
+            },
+            {
+              "x": 28,
+              "y": 15
+            },
+            {
+              "x": 28,
+              "y": 16
+            },
+            {
+              "x": 28,
+              "y": 17
+            },
+            {
+              "x": 28,
+              "y": 18
+            },
+            {
+              "x": 28,
+              "y": 19
+            },
+            {
+              "x": 28,
+              "y": 20
+            },
+            {
+              "x": 28,
+              "y": 21
+            },
+            {
+              "x": 28,
+              "y": 22
+            },
+            {
+              "x": 28,
+              "y": 23
+            },
+            {
+              "x": 28,
+              "y": 24
+            },
+            {
+              "x": 28,
+              "y": 25
+            },
+            {
+              "x": 28,
+              "y": 26
+            },
+            {
+              "x": 28,
+              "y": 27
+            },
+            {
+              "x": 28,
+              "y": 28
+            },
+            {
+              "x": 28,
+              "y": 29
+            },
+            {
+              "x": 28,
+              "y": 30
+            },
+            {
+              "x": 28,
+              "y": 31
+            },
+            {
+              "x": 28,
+              "y": 32
+            },
+            {
+              "x": 28,
+              "y": 33
+            },
+            {
+              "x": 28,
+              "y": 34
+            },
+            {
+              "x": 28,
+              "y": 35
+            },
+            {
+              "x": 28,
+              "y": 36
+            },
+            {
+              "x": 28,
+              "y": 37
+            },
+            {
+              "x": 28,
+              "y": 38
+            },
+            {
+              "x": 28,
+              "y": 39
+            },
+            {
+              "x": 28,
+              "y": 40
+            },
+            {
+              "x": 28,
+              "y": 41
+            },
+            {
+              "x": 29,
+              "y": 41
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-13",
+          "edgeId": "edge-19",
+          "deck": 0,
+          "a": "laboratory-6",
+          "b": "prep",
+          "points": [
+            {
+              "x": 8,
+              "y": 18
+            },
+            {
+              "x": 9,
+              "y": 18
+            },
+            {
+              "x": 10,
+              "y": 18
+            },
+            {
+              "x": 11,
+              "y": 18
+            },
+            {
+              "x": 12,
+              "y": 18
+            },
+            {
+              "x": 13,
+              "y": 18
+            },
+            {
+              "x": 14,
+              "y": 18
+            },
+            {
+              "x": 15,
+              "y": 18
+            },
+            {
+              "x": 16,
+              "y": 18
+            },
+            {
+              "x": 17,
+              "y": 18
+            },
+            {
+              "x": 18,
+              "y": 18
+            },
+            {
+              "x": 19,
+              "y": 18
+            },
+            {
+              "x": 20,
+              "y": 18
+            },
+            {
+              "x": 21,
+              "y": 18
+            },
+            {
+              "x": 22,
+              "y": 18
+            },
+            {
+              "x": 23,
+              "y": 18
+            },
+            {
+              "x": 24,
+              "y": 18
+            },
+            {
+              "x": 25,
+              "y": 18
+            },
+            {
+              "x": 25,
+              "y": 19
+            },
+            {
+              "x": 25,
+              "y": 20
+            },
+            {
+              "x": 25,
+              "y": 21
+            },
+            {
+              "x": 25,
+              "y": 22
+            },
+            {
+              "x": 25,
+              "y": 23
+            },
+            {
+              "x": 25,
+              "y": 24
+            },
+            {
+              "x": 25,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 26
+            },
+            {
+              "x": 25,
+              "y": 27
+            },
+            {
+              "x": 25,
+              "y": 28
+            },
+            {
+              "x": 25,
+              "y": 29
+            },
+            {
+              "x": 25,
+              "y": 30
+            },
+            {
+              "x": 25,
+              "y": 31
+            },
+            {
+              "x": 25,
+              "y": 32
+            },
+            {
+              "x": 25,
+              "y": 33
+            },
+            {
+              "x": 25,
+              "y": 34
+            },
+            {
+              "x": 25,
+              "y": 35
+            },
+            {
+              "x": 25,
+              "y": 36
+            },
+            {
+              "x": 25,
+              "y": 37
+            },
+            {
+              "x": 25,
+              "y": 38
+            },
+            {
+              "x": 25,
+              "y": 39
+            },
+            {
+              "x": 25,
+              "y": 40
+            },
+            {
+              "x": 25,
+              "y": 41
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-14",
+          "edgeId": "edge-20",
+          "deck": 0,
+          "a": "laboratory-6",
+          "b": "storage",
+          "points": [
+            {
+              "x": 9,
+              "y": 17
+            },
+            {
+              "x": 9,
+              "y": 18
+            },
+            {
+              "x": 9,
+              "y": 19
+            },
+            {
+              "x": 9,
+              "y": 20
+            },
+            {
+              "x": 9,
+              "y": 21
+            },
+            {
+              "x": 9,
+              "y": 22
+            },
+            {
+              "x": 9,
+              "y": 23
+            },
+            {
+              "x": 9,
+              "y": 24
+            },
+            {
+              "x": 9,
+              "y": 25
+            },
+            {
+              "x": 9,
+              "y": 26
+            },
+            {
+              "x": 9,
+              "y": 27
+            },
+            {
+              "x": 9,
+              "y": 28
+            },
+            {
+              "x": 9,
+              "y": 29
+            },
+            {
+              "x": 9,
+              "y": 30
+            },
+            {
+              "x": 9,
+              "y": 31
+            },
+            {
+              "x": 9,
+              "y": 32
+            },
+            {
+              "x": 9,
+              "y": 33
+            },
+            {
+              "x": 9,
+              "y": 34
+            },
+            {
+              "x": 9,
+              "y": 35
+            },
+            {
+              "x": 9,
+              "y": 36
+            },
+            {
+              "x": 9,
+              "y": 37
+            },
+            {
+              "x": 10,
+              "y": 37
+            },
+            {
+              "x": 11,
+              "y": 37
+            },
+            {
+              "x": 12,
+              "y": 37
+            },
+            {
+              "x": 13,
+              "y": 37
+            },
+            {
+              "x": 14,
+              "y": 37
+            },
+            {
+              "x": 15,
+              "y": 37
+            },
+            {
+              "x": 16,
+              "y": 37
+            },
+            {
+              "x": 17,
+              "y": 37
+            },
+            {
+              "x": 18,
+              "y": 37
+            },
+            {
+              "x": 19,
+              "y": 37
+            },
+            {
+              "x": 20,
+              "y": 37
+            },
+            {
+              "x": 21,
+              "y": 37
+            },
+            {
+              "x": 22,
+              "y": 37
+            },
+            {
+              "x": 23,
+              "y": 37
+            },
+            {
+              "x": 24,
+              "y": 37
+            },
+            {
+              "x": 25,
+              "y": 37
+            },
+            {
+              "x": 26,
+              "y": 37
+            },
+            {
+              "x": 27,
+              "y": 37
+            },
+            {
+              "x": 28,
+              "y": 37
+            },
+            {
+              "x": 29,
+              "y": 37
+            },
+            {
+              "x": 30,
+              "y": 37
+            },
+            {
+              "x": 31,
+              "y": 37
+            },
+            {
+              "x": 32,
+              "y": 37
+            },
+            {
+              "x": 33,
+              "y": 37
+            },
+            {
+              "x": 34,
+              "y": 37
+            },
+            {
+              "x": 35,
+              "y": 37
+            },
+            {
+              "x": 36,
+              "y": 37
+            },
+            {
+              "x": 37,
+              "y": 37
+            },
+            {
+              "x": 38,
+              "y": 37
+            },
+            {
+              "x": 39,
+              "y": 37
+            },
+            {
+              "x": 40,
+              "y": 37
+            },
+            {
+              "x": 41,
+              "y": 37
+            },
+            {
+              "x": 42,
+              "y": 37
+            },
+            {
+              "x": 43,
+              "y": 37
+            },
+            {
+              "x": 44,
+              "y": 37
+            },
+            {
+              "x": 45,
+              "y": 37
+            },
+            {
+              "x": 46,
+              "y": 37
+            },
+            {
+              "x": 47,
+              "y": 37
+            },
+            {
+              "x": 48,
+              "y": 37
+            },
+            {
+              "x": 49,
+              "y": 37
+            },
+            {
+              "x": 50,
+              "y": 37
+            },
+            {
+              "x": 51,
+              "y": 37
+            },
+            {
+              "x": 52,
+              "y": 37
+            },
+            {
+              "x": 53,
+              "y": 37
+            },
+            {
+              "x": 54,
+              "y": 37
+            },
+            {
+              "x": 55,
+              "y": 37
+            },
+            {
+              "x": 56,
+              "y": 37
+            },
+            {
+              "x": 57,
+              "y": 37
+            },
+            {
+              "x": 58,
+              "y": 37
+            },
+            {
+              "x": 59,
+              "y": 37
+            },
+            {
+              "x": 60,
+              "y": 37
+            },
+            {
+              "x": 61,
+              "y": 37
+            },
+            {
+              "x": 62,
+              "y": 37
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-15",
+          "edgeId": "edge-21",
+          "deck": 1,
+          "a": "office",
+          "b": "interaction-ecology-breach",
+          "points": [
+            {
+              "x": 76,
+              "y": 40
+            },
+            {
+              "x": 75,
+              "y": 40
+            },
+            {
+              "x": 74,
+              "y": 40
+            },
+            {
+              "x": 73,
+              "y": 40
+            },
+            {
+              "x": 72,
+              "y": 40
+            },
+            {
+              "x": 71,
+              "y": 40
+            },
+            {
+              "x": 70,
+              "y": 40
+            },
+            {
+              "x": 69,
+              "y": 40
+            },
+            {
+              "x": 68,
+              "y": 40
+            },
+            {
+              "x": 67,
+              "y": 40
+            },
+            {
+              "x": 66,
+              "y": 40
+            },
+            {
+              "x": 65,
+              "y": 40
+            },
+            {
+              "x": 64,
+              "y": 40
+            },
+            {
+              "x": 63,
+              "y": 40
+            },
+            {
+              "x": 62,
+              "y": 40
+            },
+            {
+              "x": 61,
+              "y": 40
+            },
+            {
+              "x": 60,
+              "y": 40
+            },
+            {
+              "x": 59,
+              "y": 40
+            },
+            {
+              "x": 58,
+              "y": 40
+            },
+            {
+              "x": 57,
+              "y": 40
+            },
+            {
+              "x": 56,
+              "y": 40
+            },
+            {
+              "x": 55,
+              "y": 40
+            },
+            {
+              "x": 54,
+              "y": 40
+            },
+            {
+              "x": 53,
+              "y": 40
+            },
+            {
+              "x": 52,
+              "y": 40
+            },
+            {
+              "x": 51,
+              "y": 40
+            },
+            {
+              "x": 50,
+              "y": 40
+            },
+            {
+              "x": 49,
+              "y": 40
+            },
+            {
+              "x": 48,
+              "y": 40
+            },
+            {
+              "x": 47,
+              "y": 40
+            },
+            {
+              "x": 46,
+              "y": 40
+            },
+            {
+              "x": 46,
+              "y": 39
+            },
+            {
+              "x": 46,
+              "y": 38
+            },
+            {
+              "x": 46,
+              "y": 37
+            },
+            {
+              "x": 46,
+              "y": 36
+            },
+            {
+              "x": 46,
+              "y": 35
+            },
+            {
+              "x": 46,
+              "y": 34
+            },
+            {
+              "x": 46,
+              "y": 33
+            },
+            {
+              "x": 46,
+              "y": 32
+            },
+            {
+              "x": 46,
+              "y": 31
+            },
+            {
+              "x": 46,
+              "y": 30
+            },
+            {
+              "x": 46,
+              "y": 29
+            },
+            {
+              "x": 46,
+              "y": 28
+            },
+            {
+              "x": 46,
+              "y": 27
+            },
+            {
+              "x": 46,
+              "y": 26
+            },
+            {
+              "x": 46,
+              "y": 25
+            },
+            {
+              "x": 46,
+              "y": 24
+            },
+            {
+              "x": 46,
+              "y": 23
+            },
+            {
+              "x": 46,
+              "y": 22
+            },
+            {
+              "x": 46,
+              "y": 21
+            },
+            {
+              "x": 46,
+              "y": 20
+            },
+            {
+              "x": 46,
+              "y": 19
+            },
+            {
+              "x": 46,
+              "y": 18
+            },
+            {
+              "x": 46,
+              "y": 17
+            },
+            {
+              "x": 46,
+              "y": 16
+            },
+            {
+              "x": 46,
+              "y": 15
+            },
+            {
+              "x": 46,
+              "y": 14
+            },
+            {
+              "x": 46,
+              "y": 13
+            },
+            {
+              "x": 46,
+              "y": 12
+            },
+            {
+              "x": 46,
+              "y": 11
+            },
+            {
+              "x": 46,
+              "y": 10
+            },
+            {
+              "x": 46,
+              "y": 9
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-16",
+          "edgeId": "edge-22",
+          "deck": 1,
+          "a": "office",
+          "b": "utility",
+          "points": [
+            {
+              "x": 82,
+              "y": 39
+            },
+            {
+              "x": 81,
+              "y": 39
+            },
+            {
+              "x": 81,
+              "y": 38
+            },
+            {
+              "x": 81,
+              "y": 37
+            },
+            {
+              "x": 81,
+              "y": 36
+            },
+            {
+              "x": 81,
+              "y": 35
+            },
+            {
+              "x": 81,
+              "y": 34
+            },
+            {
+              "x": 81,
+              "y": 33
+            },
+            {
+              "x": 81,
+              "y": 32
+            },
+            {
+              "x": 81,
+              "y": 31
+            },
+            {
+              "x": 81,
+              "y": 30
+            },
+            {
+              "x": 81,
+              "y": 29
+            },
+            {
+              "x": 81,
+              "y": 28
+            },
+            {
+              "x": 81,
+              "y": 27
+            },
+            {
+              "x": 81,
+              "y": 26
+            },
+            {
+              "x": 81,
+              "y": 25
+            },
+            {
+              "x": 81,
+              "y": 24
+            },
+            {
+              "x": 81,
+              "y": 23
+            },
+            {
+              "x": 81,
+              "y": 22
+            },
+            {
+              "x": 81,
+              "y": 21
+            },
+            {
+              "x": 81,
+              "y": 20
+            },
+            {
+              "x": 81,
+              "y": 19
+            },
+            {
+              "x": 81,
+              "y": 18
+            },
+            {
+              "x": 81,
+              "y": 17
+            },
+            {
+              "x": 81,
+              "y": 16
+            },
+            {
+              "x": 81,
+              "y": 15
+            },
+            {
+              "x": 81,
+              "y": 14
+            },
+            {
+              "x": 81,
+              "y": 13
+            },
+            {
+              "x": 81,
+              "y": 12
+            },
+            {
+              "x": 81,
+              "y": 11
+            },
+            {
+              "x": 81,
+              "y": 10
+            },
+            {
+              "x": 81,
+              "y": 9
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-17",
+          "edgeId": "edge-23",
+          "deck": 1,
+          "a": "office",
+          "b": "interaction-collapse-bypass",
+          "points": [
+            {
+              "x": 76,
+              "y": 46
+            },
+            {
+              "x": 76,
+              "y": 47
+            },
+            {
+              "x": 76,
+              "y": 48
+            },
+            {
+              "x": 76,
+              "y": 49
+            },
+            {
+              "x": 76,
+              "y": 50
+            },
+            {
+              "x": 76,
+              "y": 51
+            },
+            {
+              "x": 76,
+              "y": 52
+            },
+            {
+              "x": 76,
+              "y": 53
+            },
+            {
+              "x": 76,
+              "y": 54
+            },
+            {
+              "x": 76,
+              "y": 55
+            },
+            {
+              "x": 76,
+              "y": 56
+            },
+            {
+              "x": 75,
+              "y": 56
+            },
+            {
+              "x": 74,
+              "y": 56
+            },
+            {
+              "x": 73,
+              "y": 56
+            },
+            {
+              "x": 72,
+              "y": 56
+            },
+            {
+              "x": 71,
+              "y": 56
+            },
+            {
+              "x": 70,
+              "y": 56
+            },
+            {
+              "x": 69,
+              "y": 56
+            },
+            {
+              "x": 68,
+              "y": 56
+            },
+            {
+              "x": 67,
+              "y": 56
+            },
+            {
+              "x": 66,
+              "y": 56
+            },
+            {
+              "x": 65,
+              "y": 56
+            },
+            {
+              "x": 64,
+              "y": 56
+            },
+            {
+              "x": 63,
+              "y": 56
+            },
+            {
+              "x": 62,
+              "y": 56
+            },
+            {
+              "x": 61,
+              "y": 56
+            },
+            {
+              "x": 60,
+              "y": 56
+            },
+            {
+              "x": 59,
+              "y": 56
+            },
+            {
+              "x": 58,
+              "y": 56
+            },
+            {
+              "x": 57,
+              "y": 56
+            },
+            {
+              "x": 56,
+              "y": 56
+            },
+            {
+              "x": 55,
+              "y": 56
+            },
+            {
+              "x": 54,
+              "y": 56
+            },
+            {
+              "x": 53,
+              "y": 56
+            },
+            {
+              "x": 52,
+              "y": 56
+            },
+            {
+              "x": 51,
+              "y": 56
+            },
+            {
+              "x": 50,
+              "y": 56
+            },
+            {
+              "x": 49,
+              "y": 56
+            },
+            {
+              "x": 48,
+              "y": 56
+            },
+            {
+              "x": 47,
+              "y": 56
+            },
+            {
+              "x": 46,
+              "y": 56
+            },
+            {
+              "x": 45,
+              "y": 56
+            },
+            {
+              "x": 44,
+              "y": 56
+            },
+            {
+              "x": 43,
+              "y": 56
+            },
+            {
+              "x": 42,
+              "y": 56
+            },
+            {
+              "x": 41,
+              "y": 56
+            },
+            {
+              "x": 40,
+              "y": 56
+            },
+            {
+              "x": 39,
+              "y": 56
+            },
+            {
+              "x": 38,
+              "y": 56
+            },
+            {
+              "x": 37,
+              "y": 56
+            },
+            {
+              "x": 36,
+              "y": 56
+            },
+            {
+              "x": 35,
+              "y": 56
+            },
+            {
+              "x": 34,
+              "y": 56
+            },
+            {
+              "x": 33,
+              "y": 56
+            },
+            {
+              "x": 32,
+              "y": 56
+            },
+            {
+              "x": 31,
+              "y": 56
+            },
+            {
+              "x": 30,
+              "y": 56
+            },
+            {
+              "x": 29,
+              "y": 56
+            },
+            {
+              "x": 28,
+              "y": 56
+            },
+            {
+              "x": 27,
+              "y": 56
+            },
+            {
+              "x": 26,
+              "y": 56
+            },
+            {
+              "x": 25,
+              "y": 56
+            },
+            {
+              "x": 24,
+              "y": 56
+            },
+            {
+              "x": 23,
+              "y": 56
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-18",
+          "edgeId": "edge-24",
+          "deck": 1,
+          "a": "interaction-collapse-bypass",
+          "b": "ecology-den",
+          "points": [
+            {
+              "x": 16,
+              "y": 55
+            },
+            {
+              "x": 16,
+              "y": 54
+            },
+            {
+              "x": 16,
+              "y": 53
+            },
+            {
+              "x": 16,
+              "y": 52
+            },
+            {
+              "x": 16,
+              "y": 51
+            },
+            {
+              "x": 16,
+              "y": 50
+            },
+            {
+              "x": 16,
+              "y": 49
+            },
+            {
+              "x": 16,
+              "y": 48
+            },
+            {
+              "x": 16,
+              "y": 47
+            },
+            {
+              "x": 16,
+              "y": 46
+            },
+            {
+              "x": 16,
+              "y": 45
+            },
+            {
+              "x": 16,
+              "y": 44
+            },
+            {
+              "x": 16,
+              "y": 43
+            },
+            {
+              "x": 16,
+              "y": 42
+            },
+            {
+              "x": 16,
+              "y": 41
+            },
+            {
+              "x": 16,
+              "y": 40
+            },
+            {
+              "x": 16,
+              "y": 39
+            },
+            {
+              "x": 16,
+              "y": 38
+            },
+            {
+              "x": 16,
+              "y": 37
+            },
+            {
+              "x": 16,
+              "y": 36
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-19",
+          "edgeId": "edge-25",
+          "deck": 1,
+          "a": "utility",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 78,
+              "y": 8
+            },
+            {
+              "x": 77,
+              "y": 8
+            },
+            {
+              "x": 76,
+              "y": 8
+            },
+            {
+              "x": 76,
+              "y": 9
+            },
+            {
+              "x": 76,
+              "y": 10
+            },
+            {
+              "x": 76,
+              "y": 11
+            },
+            {
+              "x": 76,
+              "y": 12
+            },
+            {
+              "x": 76,
+              "y": 13
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-20",
+          "edgeId": "edge-26",
+          "deck": 1,
+          "a": "contain",
+          "b": "interaction-ecology-breach",
+          "points": [
+            {
+              "x": 46,
+              "y": 42
+            },
+            {
+              "x": 45,
+              "y": 42
+            },
+            {
+              "x": 45,
+              "y": 41
+            },
+            {
+              "x": 45,
+              "y": 40
+            },
+            {
+              "x": 45,
+              "y": 39
+            },
+            {
+              "x": 45,
+              "y": 38
+            },
+            {
+              "x": 45,
+              "y": 37
+            },
+            {
+              "x": 45,
+              "y": 36
+            },
+            {
+              "x": 45,
+              "y": 35
+            },
+            {
+              "x": 45,
+              "y": 34
+            },
+            {
+              "x": 45,
+              "y": 33
+            },
+            {
+              "x": 45,
+              "y": 32
+            },
+            {
+              "x": 45,
+              "y": 31
+            },
+            {
+              "x": 45,
+              "y": 30
+            },
+            {
+              "x": 45,
+              "y": 29
+            },
+            {
+              "x": 45,
+              "y": 28
+            },
+            {
+              "x": 45,
+              "y": 27
+            },
+            {
+              "x": 45,
+              "y": 26
+            },
+            {
+              "x": 45,
+              "y": 25
+            },
+            {
+              "x": 45,
+              "y": 24
+            },
+            {
+              "x": 45,
+              "y": 23
+            },
+            {
+              "x": 45,
+              "y": 22
+            },
+            {
+              "x": 45,
+              "y": 21
+            },
+            {
+              "x": 45,
+              "y": 20
+            },
+            {
+              "x": 45,
+              "y": 19
+            },
+            {
+              "x": 45,
+              "y": 18
+            },
+            {
+              "x": 45,
+              "y": 17
+            },
+            {
+              "x": 45,
+              "y": 16
+            },
+            {
+              "x": 45,
+              "y": 15
+            },
+            {
+              "x": 45,
+              "y": 14
+            },
+            {
+              "x": 45,
+              "y": 13
+            },
+            {
+              "x": 45,
+              "y": 12
+            },
+            {
+              "x": 45,
+              "y": 11
+            },
+            {
+              "x": 45,
+              "y": 10
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-21",
+          "edgeId": "edge-27",
+          "deck": 1,
+          "a": "utility",
+          "b": "interaction-collapse-bypass",
+          "points": [
+            {
+              "x": 78,
+              "y": 8
+            },
+            {
+              "x": 77,
+              "y": 8
+            },
+            {
+              "x": 76,
+              "y": 8
+            },
+            {
+              "x": 75,
+              "y": 8
+            },
+            {
+              "x": 74,
+              "y": 8
+            },
+            {
+              "x": 73,
+              "y": 8
+            },
+            {
+              "x": 72,
+              "y": 8
+            },
+            {
+              "x": 71,
+              "y": 8
+            },
+            {
+              "x": 70,
+              "y": 8
+            },
+            {
+              "x": 69,
+              "y": 8
+            },
+            {
+              "x": 68,
+              "y": 8
+            },
+            {
+              "x": 67,
+              "y": 8
+            },
+            {
+              "x": 66,
+              "y": 8
+            },
+            {
+              "x": 65,
+              "y": 8
+            },
+            {
+              "x": 64,
+              "y": 8
+            },
+            {
+              "x": 63,
+              "y": 8
+            },
+            {
+              "x": 62,
+              "y": 8
+            },
+            {
+              "x": 61,
+              "y": 8
+            },
+            {
+              "x": 60,
+              "y": 8
+            },
+            {
+              "x": 59,
+              "y": 8
+            },
+            {
+              "x": 58,
+              "y": 8
+            },
+            {
+              "x": 57,
+              "y": 8
+            },
+            {
+              "x": 56,
+              "y": 8
+            },
+            {
+              "x": 55,
+              "y": 8
+            },
+            {
+              "x": 54,
+              "y": 8
+            },
+            {
+              "x": 53,
+              "y": 8
+            },
+            {
+              "x": 52,
+              "y": 8
+            },
+            {
+              "x": 51,
+              "y": 8
+            },
+            {
+              "x": 50,
+              "y": 8
+            },
+            {
+              "x": 49,
+              "y": 8
+            },
+            {
+              "x": 48,
+              "y": 8
+            },
+            {
+              "x": 47,
+              "y": 8
+            },
+            {
+              "x": 46,
+              "y": 8
+            },
+            {
+              "x": 45,
+              "y": 8
+            },
+            {
+              "x": 44,
+              "y": 8
+            },
+            {
+              "x": 43,
+              "y": 8
+            },
+            {
+              "x": 42,
+              "y": 8
+            },
+            {
+              "x": 41,
+              "y": 8
+            },
+            {
+              "x": 40,
+              "y": 8
+            },
+            {
+              "x": 39,
+              "y": 8
+            },
+            {
+              "x": 38,
+              "y": 8
+            },
+            {
+              "x": 37,
+              "y": 8
+            },
+            {
+              "x": 36,
+              "y": 8
+            },
+            {
+              "x": 35,
+              "y": 8
+            },
+            {
+              "x": 34,
+              "y": 8
+            },
+            {
+              "x": 33,
+              "y": 8
+            },
+            {
+              "x": 32,
+              "y": 8
+            },
+            {
+              "x": 31,
+              "y": 8
+            },
+            {
+              "x": 30,
+              "y": 8
+            },
+            {
+              "x": 29,
+              "y": 8
+            },
+            {
+              "x": 28,
+              "y": 8
+            },
+            {
+              "x": 27,
+              "y": 8
+            },
+            {
+              "x": 26,
+              "y": 8
+            },
+            {
+              "x": 25,
+              "y": 8
+            },
+            {
+              "x": 24,
+              "y": 8
+            },
+            {
+              "x": 23,
+              "y": 8
+            },
+            {
+              "x": 23,
+              "y": 9
+            },
+            {
+              "x": 23,
+              "y": 10
+            },
+            {
+              "x": 23,
+              "y": 11
+            },
+            {
+              "x": 23,
+              "y": 12
+            },
+            {
+              "x": 23,
+              "y": 13
+            },
+            {
+              "x": 23,
+              "y": 14
+            },
+            {
+              "x": 23,
+              "y": 15
+            },
+            {
+              "x": 23,
+              "y": 16
+            },
+            {
+              "x": 23,
+              "y": 17
+            },
+            {
+              "x": 23,
+              "y": 18
+            },
+            {
+              "x": 23,
+              "y": 19
+            },
+            {
+              "x": 23,
+              "y": 20
+            },
+            {
+              "x": 23,
+              "y": 21
+            },
+            {
+              "x": 23,
+              "y": 22
+            },
+            {
+              "x": 23,
+              "y": 23
+            },
+            {
+              "x": 23,
+              "y": 24
+            },
+            {
+              "x": 23,
+              "y": 25
+            },
+            {
+              "x": 23,
+              "y": 26
+            },
+            {
+              "x": 23,
+              "y": 27
+            },
+            {
+              "x": 23,
+              "y": 28
+            },
+            {
+              "x": 23,
+              "y": 29
+            },
+            {
+              "x": 23,
+              "y": 30
+            },
+            {
+              "x": 23,
+              "y": 31
+            },
+            {
+              "x": 23,
+              "y": 32
+            },
+            {
+              "x": 23,
+              "y": 33
+            },
+            {
+              "x": 23,
+              "y": 34
+            },
+            {
+              "x": 23,
+              "y": 35
+            },
+            {
+              "x": 23,
+              "y": 36
+            },
+            {
+              "x": 23,
+              "y": 37
+            },
+            {
+              "x": 23,
+              "y": 38
+            },
+            {
+              "x": 23,
+              "y": 39
+            },
+            {
+              "x": 23,
+              "y": 40
+            },
+            {
+              "x": 23,
+              "y": 41
+            },
+            {
+              "x": 23,
+              "y": 42
+            },
+            {
+              "x": 23,
+              "y": 43
+            },
+            {
+              "x": 23,
+              "y": 44
+            },
+            {
+              "x": 23,
+              "y": 45
+            },
+            {
+              "x": 23,
+              "y": 46
+            },
+            {
+              "x": 23,
+              "y": 47
+            },
+            {
+              "x": 23,
+              "y": 48
+            },
+            {
+              "x": 23,
+              "y": 49
+            },
+            {
+              "x": 23,
+              "y": 50
+            },
+            {
+              "x": 23,
+              "y": 51
+            },
+            {
+              "x": 23,
+              "y": 52
+            },
+            {
+              "x": 23,
+              "y": 53
+            },
+            {
+              "x": 23,
+              "y": 54
+            },
+            {
+              "x": 23,
+              "y": 55
+            },
+            {
+              "x": 23,
+              "y": 56
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-22",
+          "edgeId": "edge-28",
+          "deck": 1,
+          "a": "utility",
+          "b": "ecology-den",
+          "points": [
+            {
+              "x": 78,
+              "y": 8
+            },
+            {
+              "x": 78,
+              "y": 9
+            },
+            {
+              "x": 78,
+              "y": 10
+            },
+            {
+              "x": 78,
+              "y": 11
+            },
+            {
+              "x": 78,
+              "y": 12
+            },
+            {
+              "x": 78,
+              "y": 13
+            },
+            {
+              "x": 78,
+              "y": 14
+            },
+            {
+              "x": 78,
+              "y": 15
+            },
+            {
+              "x": 78,
+              "y": 16
+            },
+            {
+              "x": 78,
+              "y": 17
+            },
+            {
+              "x": 78,
+              "y": 18
+            },
+            {
+              "x": 78,
+              "y": 19
+            },
+            {
+              "x": 78,
+              "y": 20
+            },
+            {
+              "x": 78,
+              "y": 21
+            },
+            {
+              "x": 78,
+              "y": 22
+            },
+            {
+              "x": 78,
+              "y": 23
+            },
+            {
+              "x": 78,
+              "y": 24
+            },
+            {
+              "x": 78,
+              "y": 25
+            },
+            {
+              "x": 78,
+              "y": 26
+            },
+            {
+              "x": 78,
+              "y": 27
+            },
+            {
+              "x": 78,
+              "y": 28
+            },
+            {
+              "x": 78,
+              "y": 29
+            },
+            {
+              "x": 78,
+              "y": 30
+            },
+            {
+              "x": 77,
+              "y": 30
+            },
+            {
+              "x": 76,
+              "y": 30
+            },
+            {
+              "x": 75,
+              "y": 30
+            },
+            {
+              "x": 74,
+              "y": 30
+            },
+            {
+              "x": 73,
+              "y": 30
+            },
+            {
+              "x": 72,
+              "y": 30
+            },
+            {
+              "x": 71,
+              "y": 30
+            },
+            {
+              "x": 70,
+              "y": 30
+            },
+            {
+              "x": 69,
+              "y": 30
+            },
+            {
+              "x": 68,
+              "y": 30
+            },
+            {
+              "x": 67,
+              "y": 30
+            },
+            {
+              "x": 66,
+              "y": 30
+            },
+            {
+              "x": 65,
+              "y": 30
+            },
+            {
+              "x": 64,
+              "y": 30
+            },
+            {
+              "x": 63,
+              "y": 30
+            },
+            {
+              "x": 62,
+              "y": 30
+            },
+            {
+              "x": 61,
+              "y": 30
+            },
+            {
+              "x": 60,
+              "y": 30
+            },
+            {
+              "x": 59,
+              "y": 30
+            },
+            {
+              "x": 58,
+              "y": 30
+            },
+            {
+              "x": 57,
+              "y": 30
+            },
+            {
+              "x": 56,
+              "y": 30
+            },
+            {
+              "x": 55,
+              "y": 30
+            },
+            {
+              "x": 54,
+              "y": 30
+            },
+            {
+              "x": 53,
+              "y": 30
+            },
+            {
+              "x": 52,
+              "y": 30
+            },
+            {
+              "x": 51,
+              "y": 30
+            },
+            {
+              "x": 50,
+              "y": 30
+            },
+            {
+              "x": 49,
+              "y": 30
+            },
+            {
+              "x": 48,
+              "y": 30
+            },
+            {
+              "x": 47,
+              "y": 30
+            },
+            {
+              "x": 46,
+              "y": 30
+            },
+            {
+              "x": 45,
+              "y": 30
+            },
+            {
+              "x": 44,
+              "y": 30
+            },
+            {
+              "x": 43,
+              "y": 30
+            },
+            {
+              "x": 42,
+              "y": 30
+            },
+            {
+              "x": 41,
+              "y": 30
+            },
+            {
+              "x": 40,
+              "y": 30
+            },
+            {
+              "x": 39,
+              "y": 30
+            },
+            {
+              "x": 38,
+              "y": 30
+            },
+            {
+              "x": 37,
+              "y": 30
+            },
+            {
+              "x": 36,
+              "y": 30
+            },
+            {
+              "x": 35,
+              "y": 30
+            },
+            {
+              "x": 34,
+              "y": 30
+            },
+            {
+              "x": 33,
+              "y": 30
+            },
+            {
+              "x": 32,
+              "y": 30
+            },
+            {
+              "x": 31,
+              "y": 30
+            },
+            {
+              "x": 30,
+              "y": 30
+            },
+            {
+              "x": 29,
+              "y": 30
+            },
+            {
+              "x": 28,
+              "y": 30
+            },
+            {
+              "x": 27,
+              "y": 30
+            },
+            {
+              "x": 26,
+              "y": 30
+            },
+            {
+              "x": 25,
+              "y": 30
+            },
+            {
+              "x": 24,
+              "y": 30
+            },
+            {
+              "x": 23,
+              "y": 30
+            },
+            {
+              "x": 22,
+              "y": 30
+            },
+            {
+              "x": 21,
+              "y": 30
+            },
+            {
+              "x": 20,
+              "y": 30
+            },
+            {
+              "x": 19,
+              "y": 30
+            },
+            {
+              "x": 18,
+              "y": 30
+            },
+            {
+              "x": 17,
+              "y": 30
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-23",
+          "edgeId": "edge-29",
+          "deck": 1,
+          "a": "interaction-ecology-breach",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 46,
+              "y": 9
+            },
+            {
+              "x": 47,
+              "y": 9
+            },
+            {
+              "x": 48,
+              "y": 9
+            },
+            {
+              "x": 49,
+              "y": 9
+            },
+            {
+              "x": 50,
+              "y": 9
+            },
+            {
+              "x": 51,
+              "y": 9
+            },
+            {
+              "x": 52,
+              "y": 9
+            },
+            {
+              "x": 53,
+              "y": 9
+            },
+            {
+              "x": 54,
+              "y": 9
+            },
+            {
+              "x": 55,
+              "y": 9
+            },
+            {
+              "x": 56,
+              "y": 9
+            },
+            {
+              "x": 57,
+              "y": 9
+            },
+            {
+              "x": 58,
+              "y": 9
+            },
+            {
+              "x": 59,
+              "y": 9
+            },
+            {
+              "x": 60,
+              "y": 9
+            },
+            {
+              "x": 61,
+              "y": 9
+            },
+            {
+              "x": 62,
+              "y": 9
+            },
+            {
+              "x": 63,
+              "y": 9
+            },
+            {
+              "x": 64,
+              "y": 9
+            },
+            {
+              "x": 65,
+              "y": 9
+            },
+            {
+              "x": 66,
+              "y": 9
+            },
+            {
+              "x": 67,
+              "y": 9
+            },
+            {
+              "x": 68,
+              "y": 9
+            },
+            {
+              "x": 69,
+              "y": 9
+            },
+            {
+              "x": 70,
+              "y": 9
+            },
+            {
+              "x": 71,
+              "y": 9
+            },
+            {
+              "x": 71,
+              "y": 10
+            },
+            {
+              "x": 71,
+              "y": 11
+            },
+            {
+              "x": 71,
+              "y": 12
+            },
+            {
+              "x": 71,
+              "y": 13
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-24",
+          "edgeId": "edge-30",
+          "deck": 1,
+          "a": "interaction-collapse-bypass",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 23,
+              "y": 56
+            },
+            {
+              "x": 24,
+              "y": 56
+            },
+            {
+              "x": 25,
+              "y": 56
+            },
+            {
+              "x": 26,
+              "y": 56
+            },
+            {
+              "x": 27,
+              "y": 56
+            },
+            {
+              "x": 28,
+              "y": 56
+            },
+            {
+              "x": 29,
+              "y": 56
+            },
+            {
+              "x": 30,
+              "y": 56
+            },
+            {
+              "x": 31,
+              "y": 56
+            },
+            {
+              "x": 32,
+              "y": 56
+            },
+            {
+              "x": 33,
+              "y": 56
+            },
+            {
+              "x": 34,
+              "y": 56
+            },
+            {
+              "x": 35,
+              "y": 56
+            },
+            {
+              "x": 36,
+              "y": 56
+            },
+            {
+              "x": 37,
+              "y": 56
+            },
+            {
+              "x": 38,
+              "y": 56
+            },
+            {
+              "x": 39,
+              "y": 56
+            },
+            {
+              "x": 40,
+              "y": 56
+            },
+            {
+              "x": 41,
+              "y": 56
+            },
+            {
+              "x": 42,
+              "y": 56
+            },
+            {
+              "x": 43,
+              "y": 56
+            },
+            {
+              "x": 44,
+              "y": 56
+            },
+            {
+              "x": 45,
+              "y": 56
+            },
+            {
+              "x": 46,
+              "y": 56
+            },
+            {
+              "x": 47,
+              "y": 56
+            },
+            {
+              "x": 48,
+              "y": 56
+            },
+            {
+              "x": 49,
+              "y": 56
+            },
+            {
+              "x": 50,
+              "y": 56
+            },
+            {
+              "x": 51,
+              "y": 56
+            },
+            {
+              "x": 52,
+              "y": 56
+            },
+            {
+              "x": 53,
+              "y": 56
+            },
+            {
+              "x": 54,
+              "y": 56
+            },
+            {
+              "x": 55,
+              "y": 56
+            },
+            {
+              "x": 56,
+              "y": 56
+            },
+            {
+              "x": 57,
+              "y": 56
+            },
+            {
+              "x": 58,
+              "y": 56
+            },
+            {
+              "x": 59,
+              "y": 56
+            },
+            {
+              "x": 60,
+              "y": 56
+            },
+            {
+              "x": 61,
+              "y": 56
+            },
+            {
+              "x": 62,
+              "y": 56
+            },
+            {
+              "x": 63,
+              "y": 56
+            },
+            {
+              "x": 64,
+              "y": 56
+            },
+            {
+              "x": 65,
+              "y": 56
+            },
+            {
+              "x": 66,
+              "y": 56
+            },
+            {
+              "x": 67,
+              "y": 56
+            },
+            {
+              "x": 68,
+              "y": 56
+            },
+            {
+              "x": 69,
+              "y": 56
+            },
+            {
+              "x": 70,
+              "y": 56
+            },
+            {
+              "x": 71,
+              "y": 56
+            },
+            {
+              "x": 71,
+              "y": 55
+            },
+            {
+              "x": 71,
+              "y": 54
+            },
+            {
+              "x": 71,
+              "y": 53
+            },
+            {
+              "x": 71,
+              "y": 52
+            },
+            {
+              "x": 71,
+              "y": 51
+            },
+            {
+              "x": 71,
+              "y": 50
+            },
+            {
+              "x": 71,
+              "y": 49
+            },
+            {
+              "x": 71,
+              "y": 48
+            },
+            {
+              "x": 71,
+              "y": 47
+            },
+            {
+              "x": 71,
+              "y": 46
+            },
+            {
+              "x": 71,
+              "y": 45
+            },
+            {
+              "x": 71,
+              "y": 44
+            },
+            {
+              "x": 71,
+              "y": 43
+            },
+            {
+              "x": 71,
+              "y": 42
+            },
+            {
+              "x": 71,
+              "y": 41
+            },
+            {
+              "x": 71,
+              "y": 40
+            },
+            {
+              "x": 71,
+              "y": 39
+            },
+            {
+              "x": 71,
+              "y": 38
+            },
+            {
+              "x": 71,
+              "y": 37
+            },
+            {
+              "x": 71,
+              "y": 36
+            },
+            {
+              "x": 71,
+              "y": 35
+            },
+            {
+              "x": 71,
+              "y": 34
+            },
+            {
+              "x": 71,
+              "y": 33
+            },
+            {
+              "x": 71,
+              "y": 32
+            },
+            {
+              "x": 71,
+              "y": 31
+            },
+            {
+              "x": 71,
+              "y": 30
+            },
+            {
+              "x": 71,
+              "y": 29
+            },
+            {
+              "x": 71,
+              "y": 28
+            },
+            {
+              "x": 71,
+              "y": 27
+            },
+            {
+              "x": 71,
+              "y": 26
+            },
+            {
+              "x": 71,
+              "y": 25
+            },
+            {
+              "x": 71,
+              "y": 24
+            },
+            {
+              "x": 71,
+              "y": 23
+            },
+            {
+              "x": 71,
+              "y": 22
+            },
+            {
+              "x": 71,
+              "y": 21
+            },
+            {
+              "x": 71,
+              "y": 20
+            },
+            {
+              "x": 71,
+              "y": 19
+            },
+            {
+              "x": 71,
+              "y": 18
+            },
+            {
+              "x": 71,
+              "y": 17
+            }
+          ],
+          "required": false,
+          "protected": false
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-1",
+          "edgeId": "edge-1",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 63,
+          "y": 52,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-2",
+          "edgeId": "edge-1",
+          "roomId": "reception",
+          "deck": 0,
+          "x": 21,
+          "y": 35,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-3",
+          "edgeId": "edge-2",
+          "roomId": "reception",
+          "deck": 0,
+          "x": 14,
+          "y": 35,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-4",
+          "edgeId": "edge-2",
+          "roomId": "laboratory-3",
+          "deck": 0,
+          "x": 8,
+          "y": 37,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-5",
+          "edgeId": "edge-3",
+          "roomId": "laboratory-3",
+          "deck": 0,
+          "x": 8,
+          "y": 41,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-6",
+          "edgeId": "edge-3",
+          "roomId": "prep",
+          "deck": 0,
+          "x": 24,
+          "y": 42,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-7",
+          "edgeId": "edge-4",
+          "roomId": "prep",
+          "deck": 0,
+          "x": 30,
+          "y": 42,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-8",
+          "edgeId": "edge-4",
+          "roomId": "storage",
+          "deck": 0,
+          "x": 62,
+          "y": 42,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-9",
+          "edgeId": "edge-7",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 79,
+          "y": 9,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-10",
+          "edgeId": "edge-7",
+          "roomId": "contain",
+          "deck": 1,
+          "x": 49,
+          "y": 42,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-11",
+          "edgeId": "edge-12",
+          "roomId": "laboratory-3",
+          "deck": 0,
+          "x": 7,
+          "y": 36,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-12",
+          "edgeId": "edge-12",
+          "roomId": "laboratory-5",
+          "deck": 0,
+          "x": 28,
+          "y": 10,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-13",
+          "edgeId": "edge-13",
+          "roomId": "prep",
+          "deck": 0,
+          "x": 30,
+          "y": 42,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-14",
+          "edgeId": "edge-13",
+          "roomId": "laboratory-4",
+          "deck": 0,
+          "x": 53,
+          "y": 19,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-15",
+          "edgeId": "edge-14",
+          "roomId": "laboratory-3",
+          "deck": 0,
+          "x": 6,
+          "y": 36,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-16",
+          "edgeId": "edge-14",
+          "roomId": "laboratory-6",
+          "deck": 0,
+          "x": 5,
+          "y": 18,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-17",
+          "edgeId": "edge-15",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 64,
+          "y": 51,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-18",
+          "edgeId": "edge-15",
+          "roomId": "laboratory-4",
+          "deck": 0,
+          "x": 57,
+          "y": 20,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-19",
+          "edgeId": "edge-16",
+          "roomId": "reception",
+          "deck": 0,
+          "x": 15,
+          "y": 30,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-20",
+          "edgeId": "edge-16",
+          "roomId": "laboratory-6",
+          "deck": 0,
+          "x": 8,
+          "y": 18,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-21",
+          "edgeId": "edge-17",
+          "roomId": "laboratory-5",
+          "deck": 0,
+          "x": 27,
+          "y": 9,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-22",
+          "edgeId": "edge-17",
+          "roomId": "laboratory-6",
+          "deck": 0,
+          "x": 9,
+          "y": 13,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-23",
+          "edgeId": "edge-18",
+          "roomId": "laboratory-5",
+          "deck": 0,
+          "x": 28,
+          "y": 10,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-24",
+          "edgeId": "edge-18",
+          "roomId": "prep",
+          "deck": 0,
+          "x": 29,
+          "y": 41,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-25",
+          "edgeId": "edge-19",
+          "roomId": "laboratory-6",
+          "deck": 0,
+          "x": 8,
+          "y": 18,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-26",
+          "edgeId": "edge-19",
+          "roomId": "prep",
+          "deck": 0,
+          "x": 25,
+          "y": 41,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-27",
+          "edgeId": "edge-20",
+          "roomId": "laboratory-6",
+          "deck": 0,
+          "x": 9,
+          "y": 17,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-28",
+          "edgeId": "edge-20",
+          "roomId": "storage",
+          "deck": 0,
+          "x": 62,
+          "y": 37,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-29",
+          "edgeId": "edge-21",
+          "roomId": "office",
+          "deck": 1,
+          "x": 76,
+          "y": 40,
+          "corridorId": "corridor-15"
+        },
+        {
+          "id": "door-30",
+          "edgeId": "edge-21",
+          "roomId": "interaction-ecology-breach",
+          "deck": 1,
+          "x": 46,
+          "y": 9,
+          "corridorId": "corridor-15"
+        },
+        {
+          "id": "door-31",
+          "edgeId": "edge-22",
+          "roomId": "office",
+          "deck": 1,
+          "x": 82,
+          "y": 39,
+          "corridorId": "corridor-16"
+        },
+        {
+          "id": "door-32",
+          "edgeId": "edge-22",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 81,
+          "y": 9,
+          "corridorId": "corridor-16"
+        },
+        {
+          "id": "door-33",
+          "edgeId": "edge-23",
+          "roomId": "office",
+          "deck": 1,
+          "x": 76,
+          "y": 46,
+          "corridorId": "corridor-17"
+        },
+        {
+          "id": "door-34",
+          "edgeId": "edge-23",
+          "roomId": "interaction-collapse-bypass",
+          "deck": 1,
+          "x": 23,
+          "y": 56,
+          "corridorId": "corridor-17"
+        },
+        {
+          "id": "door-35",
+          "edgeId": "edge-24",
+          "roomId": "interaction-collapse-bypass",
+          "deck": 1,
+          "x": 16,
+          "y": 55,
+          "corridorId": "corridor-18"
+        },
+        {
+          "id": "door-36",
+          "edgeId": "edge-24",
+          "roomId": "ecology-den",
+          "deck": 1,
+          "x": 16,
+          "y": 36,
+          "corridorId": "corridor-18"
+        },
+        {
+          "id": "door-37",
+          "edgeId": "edge-25",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 78,
+          "y": 8,
+          "corridorId": "corridor-19"
+        },
+        {
+          "id": "door-38",
+          "edgeId": "edge-25",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 76,
+          "y": 13,
+          "corridorId": "corridor-19"
+        },
+        {
+          "id": "door-39",
+          "edgeId": "edge-26",
+          "roomId": "contain",
+          "deck": 1,
+          "x": 46,
+          "y": 42,
+          "corridorId": "corridor-20"
+        },
+        {
+          "id": "door-40",
+          "edgeId": "edge-26",
+          "roomId": "interaction-ecology-breach",
+          "deck": 1,
+          "x": 45,
+          "y": 10,
+          "corridorId": "corridor-20"
+        },
+        {
+          "id": "door-41",
+          "edgeId": "edge-27",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 78,
+          "y": 8,
+          "corridorId": "corridor-21"
+        },
+        {
+          "id": "door-42",
+          "edgeId": "edge-27",
+          "roomId": "interaction-collapse-bypass",
+          "deck": 1,
+          "x": 23,
+          "y": 56,
+          "corridorId": "corridor-21"
+        },
+        {
+          "id": "door-43",
+          "edgeId": "edge-28",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 78,
+          "y": 8,
+          "corridorId": "corridor-22"
+        },
+        {
+          "id": "door-44",
+          "edgeId": "edge-28",
+          "roomId": "ecology-den",
+          "deck": 1,
+          "x": 17,
+          "y": 30,
+          "corridorId": "corridor-22"
+        },
+        {
+          "id": "door-45",
+          "edgeId": "edge-29",
+          "roomId": "interaction-ecology-breach",
+          "deck": 1,
+          "x": 46,
+          "y": 9,
+          "corridorId": "corridor-23"
+        },
+        {
+          "id": "door-46",
+          "edgeId": "edge-29",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 71,
+          "y": 13,
+          "corridorId": "corridor-23"
+        },
+        {
+          "id": "door-47",
+          "edgeId": "edge-30",
+          "roomId": "interaction-collapse-bypass",
+          "deck": 1,
+          "x": 23,
+          "y": 56,
+          "corridorId": "corridor-24"
+        },
+        {
+          "id": "door-48",
+          "edgeId": "edge-30",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 71,
+          "y": 17,
+          "corridorId": "corridor-24"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "connector-1-a",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "laboratory-3",
+          "deck": 0,
+          "x": 43,
+          "y": 41,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-1-b",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "office",
+          "deck": 1,
+          "x": 43,
+          "y": 41,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-3-a",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "laboratory-3",
+          "deck": 0,
+          "x": 27,
+          "y": 43,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-3-b",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "contain",
+          "deck": 1,
+          "x": 27,
+          "y": 43,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-5-a",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "reception",
+          "deck": 0,
+          "x": 30,
+          "y": 21,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-5-b",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "interaction-ecology-breach",
+          "deck": 1,
+          "x": 30,
+          "y": 21,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-7-a",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "reception",
+          "deck": 0,
+          "x": 19,
+          "y": 47,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-7-b",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "interaction-collapse-bypass",
+          "deck": 1,
+          "x": 19,
+          "y": 47,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-9-a",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "prep",
+          "deck": 0,
+          "x": 20,
+          "y": 39,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-9-b",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 1,
+          "x": 20,
+          "y": 39,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-11-a",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "prep",
+          "deck": 0,
+          "x": 51,
+          "y": 30,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-11-b",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "resource-store",
+          "deck": 1,
+          "x": 51,
+          "y": 30,
+          "connectsDeck": 0
+        }
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      "semanticProgram": {
+        "locationArchetype": "laboratory",
+        "source": "site-archetype-defaults",
+        "layerPolicy": "full",
+        "layers": [
+          {
+            "order": 1,
+            "id": "relationship-reconciliation",
+            "input": {
+              "explicit": []
+            },
+            "changes": [
+              "climate: subarctic->continental (biome compatibility)",
+              "weather: fog->cold-snap (climate compatibility)",
+              "ecology: urban-vermin->fungal (biome ecology)",
+              "magicTech: low-magic->common-magic (builder culture)",
+              "controller: original-owners->abandoned (vacancy consistency)",
+              "traffic: light->empty (vacancy)",
+              "maintenance: routine->poor (vacancy maintenance)",
+              "condition: damaged->heavily-damaged (vacancy condition)"
+            ]
+          },
+          {
+            "order": 2,
+            "id": "scale",
+            "input": "fortified-complex",
+            "changes": [
+              "laboratory count 3->4",
+              "decks=2",
+              "grid=88x68"
+            ]
+          },
+          {
+            "order": 3,
+            "id": "origin-culture",
+            "input": "nomadic",
+            "changes": [
+              "applied broad cultural influence tag"
+            ]
+          },
+          {
+            "order": 4,
+            "id": "current-controller",
+            "input": "abandoned",
+            "changes": [
+              "recontextualized existing spaces for controller"
+            ]
+          },
+          {
+            "order": 5,
+            "id": "occupancy-state",
+            "input": "long-abandoned",
+            "changes": [
+              "preserved original purpose as legacy use while marking current vacancy"
+            ]
+          },
+          {
+            "order": 6,
+            "id": "environment",
+            "input": {
+              "biome": "cold-desert",
+              "climate": "continental",
+              "season": "late-spring",
+              "weather": "cold-snap",
+              "waterState": "dry",
+              "verticality": "cavern-tiered"
+            },
+            "changes": [
+              "environment increased vertical organization"
+            ]
+          },
+          {
+            "order": 7,
+            "id": "cross-layer-interactions",
+            "input": {
+              "culture": "nomadic",
+              "controller": "abandoned",
+              "archetype": "laboratory",
+              "occupancyState": "long-abandoned",
+              "ecology": "fungal",
+              "condition": "heavily-damaged",
+              "waterState": "dry"
+            },
+            "changes": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "nonhuman ecology opens a route that did not exist in the original building plan",
+              "structural failure narrows or redirects original circulation",
+              "later traffic cuts or discovers an alternate path around failed construction"
+            ]
+          },
+          {
+            "order": 8,
+            "id": "ecology",
+            "input": {
+              "ecology": "fungal",
+              "creatureFamilies": [
+                "urban-pest",
+                "herbivore"
+              ],
+              "creatureDensity": 1
+            },
+            "changes": [
+              "added ecology habitat space"
+            ]
+          },
+          {
+            "order": 9,
+            "id": "hazard-ecology",
+            "input": {
+              "families": [
+                "siege-damage"
+              ],
+              "intensity": 1,
+              "contamination": "chemical"
+            },
+            "changes": []
+          },
+          {
+            "order": 10,
+            "id": "security-defense",
+            "input": {
+              "security": "decayed",
+              "doctrine": "wards"
+            },
+            "changes": []
+          },
+          {
+            "order": 11,
+            "id": "resources-magic",
+            "input": {
+              "wealth": "poor",
+              "resourceProfile": "textiles",
+              "magicTech": "common-magic"
+            },
+            "changes": [
+              "added textiles resource store",
+              "applied common-magic infrastructure"
+            ]
+          },
+          {
+            "order": 12,
+            "id": "condition-history",
+            "input": {
+              "age": "time-displaced",
+              "condition": "heavily-damaged",
+              "maintenance": "poor",
+              "contamination": "chemical"
+            },
+            "changes": [
+              "degraded existing spaces without replacing their semantic purpose",
+              "applied chemical contamination"
+            ]
+          },
+          {
+            "order": 13,
+            "id": "narrative-social",
+            "input": {
+              "tone": "oppressive",
+              "socialMode": "transient",
+              "traffic": "empty",
+              "secretDensity": "high"
+            },
+            "changes": [
+              "retained previous spatial functions while adding narrative/social interpretation"
+            ]
+          },
+          {
+            "order": 14,
+            "id": "spatial-capacity-normalization",
+            "input": {
+              "expandedRoomCount": 15,
+              "decks": 2,
+              "roomsPerDeckEstimate": 8
+            },
+            "changes": [
+              "existing canvas already accommodates the accumulated semantic program"
+            ]
+          }
+        ]
+      }
+    },
+    "content": {
+      "schemaVersion": "1.2.0",
+      "generator": "hb-semantic-content-populator",
+      "version": "1.2.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07:content:archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07:world_of_darkness",
+      "compatibility": {
+        "id": "world_of_darkness",
+        "family": "World of Darkness",
+        "provenance": "World of Darkness-targeted content; mechanics remain identified as World of Darkness.",
+        "mechanicalDetailsAreSettingScoped": true
+      },
+      "provenance": {
+        "topologyEngine": "hb-semantic-spatial-engine",
+        "topologySeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+        "contentLayer": "semantic-content-populator",
+        "locationArchetype": "laboratory",
+        "faction": "abandoned",
+        "adventurePurpose": null,
+        "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+        "siteLayers": [
+          "relationship-reconciliation",
+          "scale",
+          "origin-culture",
+          "current-controller",
+          "occupancy-state",
+          "environment",
+          "cross-layer-interactions",
+          "ecology",
+          "hazard-ecology",
+          "security-defense",
+          "resources-magic",
+          "condition-history",
+          "narrative-social",
+          "spatial-capacity-normalization"
+        ]
+      },
+      "siteContext": {
+        "culture": "nomadic",
+        "controller": "abandoned",
+        "occupancyState": "long-abandoned",
+        "biome": "cold-desert",
+        "climate": "continental",
+        "season": "late-spring",
+        "weather": "cold-snap",
+        "ecology": "fungal",
+        "creatureFamilies": [
+          "urban-pest",
+          "herbivore"
+        ],
+        "hazardFamilies": [
+          "siege-damage"
+        ],
+        "materials": [
+          "granite",
+          "cut-stone",
+          "ice"
+        ],
+        "lighting": "bioluminescent",
+        "waterState": "dry",
+        "contamination": "chemical",
+        "narrativeTone": "oppressive",
+        "interactionIds": [
+          "ecological-succession",
+          "ecological-succession",
+          "collapse-reroute",
+          "collapse-reroute"
+        ],
+        "interactionCount": 4,
+        "creatureDensity": 1,
+        "hazardIntensity": 1,
+        "treasureDensity": 9,
+        "socialDensity": 0
+      },
+      "rooms": [
+        {
+          "roomId": "entry",
+          "role": "lab-entry",
+          "deck": 0,
+          "depth": 0,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "lab-entry",
+            "originalLabel": "Controlled Entry",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "credential, key, password, or symbol-controlled access"
+          ],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Controlled Entry",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "reception",
+          "role": "lab-reception",
+          "deck": 0,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "lab-reception",
+            "originalLabel": "Reception / Check-in",
+            "currentUse": "ecological colony / blocked-growth zone",
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ]
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "breached wall [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: ecological-succession, collapse-reroute"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+            "historical adaptation: structural failure narrows or redirects original circulation"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: ecological colony / blocked-growth zone; inherited function: Reception / Check-in",
+            "additional layered effect: partially blocked legacy route",
+            "nomadic cultural/construction influence remains legible in Reception / Check-in — ecological colony / blocked-growth zone",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions",
+            "original circulation is visibly interrupted and traffic has been redirected"
+          ],
+          "ecology": [],
+          "encounterPressure": 2
+        },
+        {
+          "roomId": "laboratory-3",
+          "role": "laboratory",
+          "deck": 0,
+          "depth": 2,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "laboratory",
+            "originalLabel": "Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "breached wall [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "material changes showing how the current controller repurposed the original space"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Laboratory",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "laboratory-4",
+          "role": "laboratory",
+          "deck": 0,
+          "depth": 1,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "laboratory",
+            "originalLabel": "Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "collapsed defensive work [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "resources appropriate to the site culture and current controller"
+          ],
+          "evidence": [
+            "material changes showing how the current controller repurposed the original space"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Laboratory",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "laboratory-5",
+          "role": "laboratory",
+          "deck": 0,
+          "depth": 3,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "laboratory",
+            "originalLabel": "Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "collapsed defensive work [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [
+            "physical evidence tied to the original site purpose"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Laboratory",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "laboratory-6",
+          "role": "laboratory",
+          "deck": 0,
+          "depth": 2,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "laboratory",
+            "originalLabel": "Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "collapsed defensive work [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [
+            "physical evidence tied to the original site purpose"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Laboratory",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "prep",
+          "role": "prep-room",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "prep-room",
+            "originalLabel": "Preparation Room",
+            "currentUse": "ecological colony / blocked-growth zone",
+            "currentUseOverlays": [
+              "partially blocked legacy route"
+            ],
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+              "structural failure narrows or redirects original circulation"
+            ],
+            "interactionIds": [
+              "ecological-succession",
+              "collapse-reroute"
+            ]
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "unstable impact crater [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: ecological-succession, collapse-reroute"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+            "historical adaptation: structural failure narrows or redirects original circulation"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: ecological colony / blocked-growth zone; inherited function: Preparation Room",
+            "additional layered effect: partially blocked legacy route",
+            "nomadic cultural/construction influence remains legible in Preparation Room — ecological colony / blocked-growth zone",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions",
+            "original circulation is visibly interrupted and traffic has been redirected"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "storage",
+          "role": "specimen-storage",
+          "deck": 0,
+          "depth": 3,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "specimen-storage",
+            "originalLabel": "Specimen / Material Storage",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "collapsed defensive work [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "resources appropriate to the site culture and current controller"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Specimen / Material Storage",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "office",
+          "role": "research-office",
+          "deck": 1,
+          "depth": 3,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "research-office",
+            "originalLabel": "Research Office",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "logs, testimony, or traces connecting current and former occupants"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Research Office",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 2
+        },
+        {
+          "roomId": "contain",
+          "role": "containment",
+          "deck": 1,
+          "depth": 3,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "containment",
+            "originalLabel": "Containment Room",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "breached wall [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "layered observation and response point"
+          ],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [
+            "exploration objective anchored to this room's semantic function and layered site history"
+          ],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Containment Room",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 7
+        },
+        {
+          "roomId": "utility",
+          "role": "lab-utilities",
+          "deck": 1,
+          "depth": 3,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "lab-utilities",
+            "originalLabel": "Utilities",
+            "currentUse": "ecological colony / blocked-growth zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure"
+            ],
+            "interactionIds": [
+              "ecological-succession"
+            ]
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "breached wall [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: ecological-succession"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: fungal ecology follows moisture, shelter, waste, and low traffic through the abandoned structure",
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: ecological colony / blocked-growth zone; inherited function: Utilities",
+            "nomadic cultural/construction influence remains legible in Utilities — ecological colony / blocked-growth zone",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "interaction-ecology-breach",
+          "role": "ecology-breach",
+          "deck": 1,
+          "depth": 2,
+          "zone": "controlled",
+          "historicalUse": {
+            "originalRole": "ecology-breach",
+            "originalLabel": "Ecological Breach / Growth Route",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "escaped domestic herbivore [herbivore]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "unstable impact crater [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "valuable records, components, heirlooms, or salvage"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Ecological Breach / Growth Route",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [
+            "herbivore presence consistent with fungal ecology and long-abandoned occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "interaction-collapse-bypass",
+          "role": "collapse-bypass",
+          "deck": 1,
+          "depth": 2,
+          "zone": "controlled",
+          "historicalUse": {
+            "originalRole": "collapse-bypass",
+            "originalLabel": "Rubble Bypass / Breach",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "grazing animal [herbivore]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "collapsed defensive work [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Rubble Bypass / Breach",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [
+            "herbivore presence consistent with fungal ecology and long-abandoned occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "ecology-den",
+          "role": "ecology-den",
+          "deck": 1,
+          "depth": 3,
+          "zone": "controlled",
+          "historicalUse": {
+            "originalRole": "ecology-den",
+            "originalLabel": "Nest / Den / Habitat",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "grazing animal [herbivore]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "breached wall [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in Nest / Den / Habitat",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [
+            "herbivore presence consistent with fungal ecology and long-abandoned occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "resource-store",
+          "role": "resource-specific-store",
+          "deck": 1,
+          "depth": 3,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "resource-specific-store",
+            "originalLabel": "textiles Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "urban rats or scavengers [urban-pest]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "collapsed defensive work [siege-damage]",
+            "chemical contamination interacting with the room's existing use",
+            "long-abandoned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "resources appropriate to the site culture and current controller"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "nomadic cultural/construction influence remains legible in textiles Store",
+            "dominant materials: granite, cut-stone, ice",
+            "cold-desert / continental / late-spring / cold-snap",
+            "bioluminescent lighting conditions"
+          ],
+          "ecology": [
+            "urban-pest presence consistent with fungal ecology and long-abandoned occupation state"
+          ],
+          "encounterPressure": 4
+        }
+      ]
+    },
+    "compatibility": {
+      "id": "world_of_darkness",
+      "family": "World of Darkness",
+      "provenance": "World of Darkness-targeted content; mechanics remain identified as World of Darkness.",
+      "mechanicalDetailsAreSettingScoped": true
+    },
+    "provenance": {
+      "topologyEngine": "hb-semantic-spatial-engine",
+      "topologySeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+      "contentLayer": "semantic-content-populator",
+      "locationArchetype": "laboratory",
+      "faction": "abandoned",
+      "adventurePurpose": null,
+      "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-07",
+      "siteLayers": [
+        "relationship-reconciliation",
+        "scale",
+        "origin-culture",
+        "current-controller",
+        "occupancy-state",
+        "environment",
+        "cross-layer-interactions",
+        "ecology",
+        "hazard-ecology",
+        "security-defense",
+        "resources-magic",
+        "condition-history",
+        "narrative-social",
+        "spatial-capacity-normalization"
+      ]
+    }
+  }
+}

@@ -1,0 +1,6854 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-generation-test-artifact",
+  "batchId": "2026-08-22-purpose-aware-variety-03-history-deepened",
+  "sourceCommit": "c0583f55950c6dc3b0e18c3652f3ca9483115c70",
+  "caseNumber": 25,
+  "caseId": "seeded-random-06-warehouse",
+  "caseKind": "seeded-random",
+  "input": {
+    "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+    "locationArchetype": "warehouse",
+    "rulesTarget": "open_d20",
+    "dangerLevel": 8,
+    "creatureDensity": 5,
+    "hazardIntensity": 7,
+    "treasureDensity": 6,
+    "socialDensity": 2,
+    "sitePreferences": {
+      "originCulture": {
+        "preferred": [
+          "mixed-cosmopolitan",
+          "gnomish",
+          "orcish",
+          "ancient-unknown"
+        ]
+      },
+      "controller": {
+        "preferred": [
+          "cult",
+          "criminal-syndicate",
+          "adventuring-company",
+          "plague-survivors"
+        ]
+      },
+      "ecology": {
+        "preferred": [
+          "fungal",
+          "overgrown",
+          "urban-vermin",
+          "subterranean",
+          "magical",
+          "wetland"
+        ]
+      },
+      "creatureFamilies": {
+        "exclude": [
+          "celestial"
+        ]
+      },
+      "hazardFamilies": {
+        "exclude": [
+          "vacuum"
+        ]
+      }
+    }
+  },
+  "acceptance": {
+    "ok": true,
+    "deterministic": true,
+    "topologyValid": true
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "metrics": {
+    "rooms": 15,
+    "corridors": 24,
+    "doors": 48,
+    "connectors": 10,
+    "decks": 2,
+    "interactions": 2,
+    "profileLayers": 14,
+    "historicallyAdaptedRoleTemplates": 2,
+    "currentUseRoleTemplates": 2,
+    "currentUseOverlayRoleTemplates": 0,
+    "occupants": 9,
+    "socialEncounters": 1,
+    "traps": 1,
+    "hazards": 28,
+    "securityEntries": 1,
+    "treasureEntries": 4,
+    "evidenceEntries": 5,
+    "objectives": 0,
+    "narrativeDiscoveries": 2,
+    "secretAccessEntries": 0
+  },
+  "result": {
+    "schemaVersion": "0.3.0",
+    "generator": "generator.module_map",
+    "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+    "width": 81,
+    "height": 63,
+    "deckCount": 2,
+    "locationArchetype": "warehouse",
+    "semanticProgram": {
+      "locationArchetype": "warehouse",
+      "source": "site-archetype-defaults",
+      "layerPolicy": "full",
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "climate: geothermal->semi-arid (biome compatibility)",
+            "weather: steady-rain->dust-storm (climate compatibility)",
+            "ecology: magical->undead (biome ecology)",
+            "magicTech: necromantic->low-magic (builder culture)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "large",
+          "changes": [
+            "warehouse-floor count 3->4",
+            "decks=1",
+            "grid=81x63"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "orcish",
+          "changes": [
+            "added clan-feast-hall",
+            "added trophy-space",
+            "materials rough-stone, timber, iron, salvaged-material"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "adventuring-company",
+          "changes": [
+            "added expedition-planning",
+            "added expedition-gear-store"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "overcrowded",
+          "changes": []
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "savanna",
+            "climate": "semi-arid",
+            "season": "first-frost",
+            "weather": "dust-storm",
+            "waterState": "geothermal",
+            "verticality": "cliff-cut"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "orcish",
+            "controller": "adventuring-company",
+            "archetype": "warehouse",
+            "occupancyState": "overcrowded",
+            "ecology": "undead",
+            "condition": "patched",
+            "waterState": "geothermal"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible",
+            "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "undead",
+            "creatureFamilies": [
+              "fungus",
+              "dragon",
+              "magical-beast"
+            ],
+            "creatureDensity": 5
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "heat",
+              "corrosion",
+              "unstable-floor"
+            ],
+            "intensity": 7,
+            "contamination": "none"
+          },
+          "changes": [
+            "distributed 3 hazard families over semantically suitable rooms"
+          ]
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "controlled",
+            "doctrine": "traps"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "legendary",
+            "resourceProfile": "precious-metal",
+            "magicTech": "low-magic"
+          },
+          "changes": [
+            "increased high-value room identity",
+            "added precious-metal resource store",
+            "applied low-magic infrastructure"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "recent",
+            "condition": "patched",
+            "maintenance": "good",
+            "contamination": "none"
+          },
+          "changes": [
+            "degraded existing spaces without replacing their semantic purpose"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "neutral",
+            "socialMode": "institutional",
+            "traffic": "shift-work",
+            "secretDensity": "moderate"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 15,
+            "decks": 2,
+            "roomsPerDeckEstimate": 8
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ]
+    },
+    "siteProfile": {
+      "schemaVersion": "1.0.0",
+      "generator": "hb-semantic-site-profile-layers",
+      "version": "1.0.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+      "archetype": "warehouse",
+      "axes": {
+        "scale": "large",
+        "originCulture": "orcish",
+        "controller": "adventuring-company",
+        "occupancyState": "overcrowded",
+        "biome": "savanna",
+        "climate": "semi-arid",
+        "season": "first-frost",
+        "weather": "dust-storm",
+        "ecology": "undead",
+        "wealth": "legendary",
+        "security": "controlled",
+        "age": "recent",
+        "condition": "patched",
+        "magicTech": "low-magic",
+        "lighting": "braziers",
+        "waterState": "geothermal",
+        "verticality": "cliff-cut",
+        "secretDensity": "moderate",
+        "traffic": "shift-work",
+        "socialMode": "institutional",
+        "resourceProfile": "precious-metal",
+        "maintenance": "good",
+        "contamination": "none",
+        "defenseDoctrine": "traps",
+        "narrativeTone": "neutral"
+      },
+      "scalars": {
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 6,
+        "socialDensity": 2
+      },
+      "creatureFamilies": [
+        "fungus",
+        "dragon",
+        "magical-beast"
+      ],
+      "hazardFamilies": [
+        "heat",
+        "corrosion",
+        "unstable-floor"
+      ],
+      "materials": [
+        "rough-stone",
+        "timber",
+        "iron",
+        "salvaged-material",
+        "enchanted-stone",
+        "fungus",
+        "sandstone"
+      ],
+      "roles": [
+        {
+          "id": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance",
+          "tags": [
+            "entrance",
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ]
+        },
+        {
+          "id": "floor",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "count": 4
+        },
+        {
+          "id": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "tags": [
+            "private",
+            "evidence",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "high-value",
+            "tone-neutral"
+          ]
+        },
+        {
+          "id": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "cultural-overprint",
+            "hazard",
+            "hazard-unstable-floor",
+            "high-value",
+            "tech-low-magic"
+          ]
+        },
+        {
+          "id": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock",
+          "tags": [
+            "exit",
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-heat",
+            "tech-low-magic",
+            "condition-degraded"
+          ]
+        },
+        {
+          "id": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "tags": [
+            "service",
+            "hazard",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "tech-low-magic",
+            "condition-degraded"
+          ]
+        },
+        {
+          "id": "culture-feast",
+          "role": "clan-feast-hall",
+          "label": "Clan Feast Hall",
+          "tags": [
+            "social",
+            "public",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "condition-degraded"
+          ]
+        },
+        {
+          "id": "culture-trophy",
+          "role": "trophy-space",
+          "label": "Trophy Space — haunt locus / memory-saturated room",
+          "tags": [
+            "public",
+            "evidence",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "historically-adapted",
+            "haunted",
+            "hazard",
+            "condition-degraded",
+            "tone-neutral"
+          ],
+          "metadata": {
+            "originalRole": "trophy-space",
+            "originalLabel": "Trophy Space",
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "haunt locus / memory-saturated room"
+          }
+        },
+        {
+          "id": "controller-planning",
+          "role": "expedition-planning",
+          "label": "Expedition Planning Room — haunt locus / memory-saturated room",
+          "tags": [
+            "private",
+            "evidence",
+            "cultural-overprint",
+            "historically-adapted",
+            "haunted",
+            "hazard",
+            "high-value",
+            "tone-neutral"
+          ],
+          "metadata": {
+            "originalRole": "expedition-planning",
+            "originalLabel": "Expedition Planning Room",
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "haunt locus / memory-saturated room"
+          }
+        },
+        {
+          "id": "controller-gear",
+          "role": "expedition-gear-store",
+          "label": "Expedition Gear Store",
+          "tags": [
+            "service",
+            "treasure",
+            "cultural-overprint",
+            "high-value",
+            "tech-low-magic",
+            "condition-degraded"
+          ]
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "tags": [
+            "hazard",
+            "ecology"
+          ]
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "precious metal Store",
+          "tags": [
+            "service",
+            "treasure",
+            "tech-low-magic",
+            "condition-degraded"
+          ]
+        }
+      ],
+      "adjacency": [
+        [
+          "loading-entry",
+          "warehouse-floor"
+        ],
+        [
+          "warehouse-floor",
+          "warehouse-office"
+        ],
+        [
+          "warehouse-floor",
+          "secure-cage"
+        ],
+        [
+          "warehouse-floor",
+          "loading-dock"
+        ],
+        [
+          "utility-room",
+          "warehouse-floor"
+        ],
+        [
+          "loading-entry",
+          "clan-feast-hall"
+        ],
+        [
+          "loading-entry",
+          "trophy-space"
+        ],
+        [
+          "clan-feast-hall",
+          "expedition-planning"
+        ],
+        [
+          "clan-feast-hall",
+          "expedition-gear-store"
+        ],
+        [
+          "loading-entry",
+          "ecology-den"
+        ],
+        [
+          "loading-entry",
+          "resource-specific-store"
+        ]
+      ],
+      "decks": 2,
+      "layout": {
+        "gridWidth": 81,
+        "gridHeight": 63
+      },
+      "extraEdgeChance": 0.24,
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "climate: geothermal->semi-arid (biome compatibility)",
+            "weather: steady-rain->dust-storm (climate compatibility)",
+            "ecology: magical->undead (biome ecology)",
+            "magicTech: necromantic->low-magic (builder culture)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "large",
+          "changes": [
+            "warehouse-floor count 3->4",
+            "decks=1",
+            "grid=81x63"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "orcish",
+          "changes": [
+            "added clan-feast-hall",
+            "added trophy-space",
+            "materials rough-stone, timber, iron, salvaged-material"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "adventuring-company",
+          "changes": [
+            "added expedition-planning",
+            "added expedition-gear-store"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "overcrowded",
+          "changes": []
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "savanna",
+            "climate": "semi-arid",
+            "season": "first-frost",
+            "weather": "dust-storm",
+            "waterState": "geothermal",
+            "verticality": "cliff-cut"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "orcish",
+            "controller": "adventuring-company",
+            "archetype": "warehouse",
+            "occupancyState": "overcrowded",
+            "ecology": "undead",
+            "condition": "patched",
+            "waterState": "geothermal"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible",
+            "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "undead",
+            "creatureFamilies": [
+              "fungus",
+              "dragon",
+              "magical-beast"
+            ],
+            "creatureDensity": 5
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "heat",
+              "corrosion",
+              "unstable-floor"
+            ],
+            "intensity": 7,
+            "contamination": "none"
+          },
+          "changes": [
+            "distributed 3 hazard families over semantically suitable rooms"
+          ]
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "controlled",
+            "doctrine": "traps"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "legendary",
+            "resourceProfile": "precious-metal",
+            "magicTech": "low-magic"
+          },
+          "changes": [
+            "increased high-value room identity",
+            "added precious-metal resource store",
+            "applied low-magic infrastructure"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "recent",
+            "condition": "patched",
+            "maintenance": "good",
+            "contamination": "none"
+          },
+          "changes": [
+            "degraded existing spaces without replacing their semantic purpose"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "neutral",
+            "socialMode": "institutional",
+            "traffic": "shift-work",
+            "secretDensity": "moderate"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 15,
+            "decks": 2,
+            "roomsPerDeckEstimate": 8
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ],
+      "interactions": [
+        {
+          "order": 1,
+          "id": "cultural-overprint",
+          "drivers": {
+            "culture": "orcish",
+            "controller": "adventuring-company"
+          },
+          "targets": [
+            "loading-entry",
+            "warehouse-floor",
+            "warehouse-office",
+            "secure-cage",
+            "loading-dock",
+            "utility-room"
+          ],
+          "effects": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "haunt-memory-layer",
+          "drivers": {
+            "culture": "orcish",
+            "controller": "adventuring-company",
+            "archetype": "warehouse",
+            "occupancyState": "overcrowded",
+            "ecology": "undead"
+          },
+          "targets": [
+            "trophy-space",
+            "expedition-planning"
+          ],
+          "effects": [
+            "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+          ]
+        }
+      ],
+      "explicit": {
+        "security": false
+      },
+      "explicitAxes": [],
+      "contentContext": {
+        "culture": "orcish",
+        "controller": "adventuring-company",
+        "occupancyState": "overcrowded",
+        "biome": "savanna",
+        "climate": "semi-arid",
+        "season": "first-frost",
+        "weather": "dust-storm",
+        "ecology": "undead",
+        "creatureFamilies": [
+          "fungus",
+          "dragon",
+          "magical-beast"
+        ],
+        "hazardFamilies": [
+          "heat",
+          "corrosion",
+          "unstable-floor"
+        ],
+        "materials": [
+          "rough-stone",
+          "timber",
+          "iron",
+          "salvaged-material",
+          "enchanted-stone",
+          "fungus",
+          "sandstone"
+        ],
+        "wealth": "legendary",
+        "security": "controlled",
+        "magicTech": "low-magic",
+        "lighting": "braziers",
+        "waterState": "geothermal",
+        "contamination": "none",
+        "narrativeTone": "neutral",
+        "interactionCount": 2,
+        "interactionIds": [
+          "cultural-overprint",
+          "haunt-memory-layer"
+        ],
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 6,
+        "socialDensity": 2
+      }
+    },
+    "spatialLayout": {
+      "schemaVersion": "1.0.0",
+      "engine": "hb-semantic-spatial-engine",
+      "engineVersion": "1.1.1",
+      "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+      "deckCount": 2,
+      "bounds": {
+        "width": 81,
+        "height": 63
+      },
+      "nodes": [
+        {
+          "id": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "high-value",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "cultural-overprint",
+            "hazard",
+            "hazard-unstable-floor",
+            "high-value",
+            "tech-low-magic"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "exit",
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-heat",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "culture-feast",
+          "role": "clan-feast-hall",
+          "label": "Clan Feast Hall",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "social",
+            "public",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "culture-trophy",
+          "role": "trophy-space",
+          "label": "Trophy Space — haunt locus / memory-saturated room",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "public",
+            "evidence",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "historically-adapted",
+            "haunted",
+            "hazard",
+            "condition-degraded",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "trophy-space",
+            "originalLabel": "Trophy Space",
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "haunt locus / memory-saturated room"
+          }
+        },
+        {
+          "id": "controller-planning",
+          "role": "expedition-planning",
+          "label": "Expedition Planning Room — haunt locus / memory-saturated room",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "cultural-overprint",
+            "historically-adapted",
+            "haunted",
+            "hazard",
+            "high-value",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "expedition-planning",
+            "originalLabel": "Expedition Planning Room",
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "haunt locus / memory-saturated room"
+          }
+        },
+        {
+          "id": "controller-gear",
+          "role": "expedition-gear-store",
+          "label": "Expedition Gear Store",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "cultural-overprint",
+            "high-value",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "precious metal Store",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "a": "entry",
+          "b": "warehouse-floor-2",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-1"
+          }
+        },
+        {
+          "id": "edge-2",
+          "a": "warehouse-floor-2",
+          "b": "office",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-2"
+          }
+        },
+        {
+          "id": "edge-3",
+          "a": "warehouse-floor-2",
+          "b": "secure",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-3"
+          }
+        },
+        {
+          "id": "edge-4",
+          "a": "warehouse-floor-2",
+          "b": "dock",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-4"
+          }
+        },
+        {
+          "id": "edge-5",
+          "a": "utility",
+          "b": "warehouse-floor-2",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-5"
+          },
+          "connectorPairId": "connector-1"
+        },
+        {
+          "id": "edge-6",
+          "a": "entry",
+          "b": "culture-feast",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-6"
+          },
+          "connectorPairId": "connector-3"
+        },
+        {
+          "id": "edge-7",
+          "a": "entry",
+          "b": "culture-trophy",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-7"
+          },
+          "connectorPairId": "connector-5"
+        },
+        {
+          "id": "edge-8",
+          "a": "culture-feast",
+          "b": "controller-planning",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-8"
+          }
+        },
+        {
+          "id": "edge-9",
+          "a": "culture-feast",
+          "b": "controller-gear",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-9"
+          }
+        },
+        {
+          "id": "edge-10",
+          "a": "entry",
+          "b": "ecology-den",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-10"
+          },
+          "connectorPairId": "connector-7"
+        },
+        {
+          "id": "edge-11",
+          "a": "entry",
+          "b": "resource-store",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-11"
+          },
+          "connectorPairId": "connector-9"
+        },
+        {
+          "id": "edge-12",
+          "a": "dock",
+          "b": "warehouse-floor-3",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-13",
+          "a": "entry",
+          "b": "warehouse-floor-5",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-14",
+          "a": "warehouse-floor-3",
+          "b": "warehouse-floor-4",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-15",
+          "a": "entry",
+          "b": "dock",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-16",
+          "a": "warehouse-floor-2",
+          "b": "warehouse-floor-4",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-17",
+          "a": "warehouse-floor-3",
+          "b": "warehouse-floor-5",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-18",
+          "a": "warehouse-floor-3",
+          "b": "secure",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-19",
+          "a": "warehouse-floor-4",
+          "b": "secure",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-20",
+          "a": "warehouse-floor-5",
+          "b": "secure",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-21",
+          "a": "office",
+          "b": "dock",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-22",
+          "a": "secure",
+          "b": "dock",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-23",
+          "a": "utility",
+          "b": "controller-gear",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-24",
+          "a": "controller-planning",
+          "b": "ecology-den",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-25",
+          "a": "culture-feast",
+          "b": "culture-trophy",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-26",
+          "a": "culture-trophy",
+          "b": "resource-store",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-27",
+          "a": "utility",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-28",
+          "a": "culture-feast",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-29",
+          "a": "controller-gear",
+          "b": "ecology-den",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        }
+      ],
+      "rooms": [
+        {
+          "id": "entry",
+          "nodeId": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance",
+          "deck": 0,
+          "x": 50,
+          "y": 22,
+          "width": 10,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-2",
+          "nodeId": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 22,
+          "y": 33,
+          "width": 5,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-3",
+          "nodeId": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 3,
+          "y": 22,
+          "width": 5,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-4",
+          "nodeId": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 15,
+          "y": 46,
+          "width": 10,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "warehouse-floor-5",
+          "nodeId": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "label": "Storage Floor",
+          "deck": 0,
+          "x": 27,
+          "y": 4,
+          "width": 10,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-corrosion",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "office",
+          "nodeId": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "deck": 0,
+          "x": 40,
+          "y": 46,
+          "width": 7,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "high-value",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "secure",
+          "nodeId": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "deck": 0,
+          "x": 50,
+          "y": 15,
+          "width": 11,
+          "height": 5,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "cultural-overprint",
+            "hazard",
+            "hazard-unstable-floor",
+            "high-value",
+            "tech-low-magic"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "dock",
+          "nodeId": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock",
+          "deck": 0,
+          "x": 70,
+          "y": 44,
+          "width": 9,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "exit",
+            "service",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "hazard",
+            "hazard-heat",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "utility",
+          "nodeId": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "deck": 1,
+          "x": 40,
+          "y": 33,
+          "width": 11,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "cultural-overprint",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "culture-feast",
+          "nodeId": "culture-feast",
+          "role": "clan-feast-hall",
+          "label": "Clan Feast Hall",
+          "deck": 1,
+          "x": 67,
+          "y": 19,
+          "width": 6,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "social",
+            "public",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "culture-trophy",
+          "nodeId": "culture-trophy",
+          "role": "trophy-space",
+          "label": "Trophy Space — haunt locus / memory-saturated room",
+          "deck": 1,
+          "x": 4,
+          "y": 45,
+          "width": 8,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "public",
+            "evidence",
+            "orcish-built",
+            "clan-oriented",
+            "robust",
+            "expedition-held",
+            "temporary-occupation",
+            "savanna",
+            "semi-arid",
+            "first-frost",
+            "dust-storm",
+            "geothermal",
+            "cultural-overprint",
+            "historically-adapted",
+            "haunted",
+            "hazard",
+            "condition-degraded",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "trophy-space",
+            "originalLabel": "Trophy Space",
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "haunt locus / memory-saturated room"
+          }
+        },
+        {
+          "id": "controller-planning",
+          "nodeId": "controller-planning",
+          "role": "expedition-planning",
+          "label": "Expedition Planning Room — haunt locus / memory-saturated room",
+          "deck": 1,
+          "x": 23,
+          "y": 14,
+          "width": 10,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "cultural-overprint",
+            "historically-adapted",
+            "haunted",
+            "hazard",
+            "high-value",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "expedition-planning",
+            "originalLabel": "Expedition Planning Room",
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "haunt locus / memory-saturated room"
+          }
+        },
+        {
+          "id": "controller-gear",
+          "nodeId": "controller-gear",
+          "role": "expedition-gear-store",
+          "label": "Expedition Gear Store",
+          "deck": 1,
+          "x": 38,
+          "y": 24,
+          "width": 10,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "cultural-overprint",
+            "high-value",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "nodeId": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 1,
+          "x": 7,
+          "y": 17,
+          "width": 5,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "nodeId": "resource-store",
+          "role": "resource-specific-store",
+          "label": "precious metal Store",
+          "deck": 1,
+          "x": 15,
+          "y": 40,
+          "width": 7,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "tech-low-magic",
+            "condition-degraded"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "corridors": [
+        {
+          "id": "corridor-1",
+          "edgeId": "edge-1",
+          "deck": 0,
+          "a": "entry",
+          "b": "warehouse-floor-2",
+          "points": [
+            {
+              "x": 50,
+              "y": 30
+            },
+            {
+              "x": 50,
+              "y": 31
+            },
+            {
+              "x": 50,
+              "y": 32
+            },
+            {
+              "x": 50,
+              "y": 33
+            },
+            {
+              "x": 50,
+              "y": 34
+            },
+            {
+              "x": 49,
+              "y": 34
+            },
+            {
+              "x": 48,
+              "y": 34
+            },
+            {
+              "x": 47,
+              "y": 34
+            },
+            {
+              "x": 46,
+              "y": 34
+            },
+            {
+              "x": 45,
+              "y": 34
+            },
+            {
+              "x": 44,
+              "y": 34
+            },
+            {
+              "x": 43,
+              "y": 34
+            },
+            {
+              "x": 42,
+              "y": 34
+            },
+            {
+              "x": 41,
+              "y": 34
+            },
+            {
+              "x": 40,
+              "y": 34
+            },
+            {
+              "x": 39,
+              "y": 34
+            },
+            {
+              "x": 38,
+              "y": 34
+            },
+            {
+              "x": 37,
+              "y": 34
+            },
+            {
+              "x": 36,
+              "y": 34
+            },
+            {
+              "x": 35,
+              "y": 34
+            },
+            {
+              "x": 34,
+              "y": 34
+            },
+            {
+              "x": 33,
+              "y": 34
+            },
+            {
+              "x": 32,
+              "y": 34
+            },
+            {
+              "x": 31,
+              "y": 34
+            },
+            {
+              "x": 30,
+              "y": 34
+            },
+            {
+              "x": 29,
+              "y": 34
+            },
+            {
+              "x": 28,
+              "y": 34
+            },
+            {
+              "x": 27,
+              "y": 34
+            },
+            {
+              "x": 26,
+              "y": 34
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-2",
+          "edgeId": "edge-2",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "office",
+          "points": [
+            {
+              "x": 26,
+              "y": 41
+            },
+            {
+              "x": 26,
+              "y": 42
+            },
+            {
+              "x": 26,
+              "y": 43
+            },
+            {
+              "x": 26,
+              "y": 44
+            },
+            {
+              "x": 26,
+              "y": 45
+            },
+            {
+              "x": 26,
+              "y": 46
+            },
+            {
+              "x": 26,
+              "y": 47
+            },
+            {
+              "x": 27,
+              "y": 47
+            },
+            {
+              "x": 28,
+              "y": 47
+            },
+            {
+              "x": 29,
+              "y": 47
+            },
+            {
+              "x": 30,
+              "y": 47
+            },
+            {
+              "x": 31,
+              "y": 47
+            },
+            {
+              "x": 32,
+              "y": 47
+            },
+            {
+              "x": 33,
+              "y": 47
+            },
+            {
+              "x": 34,
+              "y": 47
+            },
+            {
+              "x": 35,
+              "y": 47
+            },
+            {
+              "x": 36,
+              "y": 47
+            },
+            {
+              "x": 37,
+              "y": 47
+            },
+            {
+              "x": 38,
+              "y": 47
+            },
+            {
+              "x": 39,
+              "y": 47
+            },
+            {
+              "x": 40,
+              "y": 47
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-3",
+          "edgeId": "edge-3",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "secure",
+          "points": [
+            {
+              "x": 26,
+              "y": 34
+            },
+            {
+              "x": 26,
+              "y": 33
+            },
+            {
+              "x": 26,
+              "y": 32
+            },
+            {
+              "x": 26,
+              "y": 31
+            },
+            {
+              "x": 26,
+              "y": 30
+            },
+            {
+              "x": 26,
+              "y": 29
+            },
+            {
+              "x": 26,
+              "y": 28
+            },
+            {
+              "x": 26,
+              "y": 27
+            },
+            {
+              "x": 26,
+              "y": 26
+            },
+            {
+              "x": 26,
+              "y": 25
+            },
+            {
+              "x": 26,
+              "y": 24
+            },
+            {
+              "x": 26,
+              "y": 23
+            },
+            {
+              "x": 26,
+              "y": 22
+            },
+            {
+              "x": 26,
+              "y": 21
+            },
+            {
+              "x": 26,
+              "y": 20
+            },
+            {
+              "x": 26,
+              "y": 19
+            },
+            {
+              "x": 26,
+              "y": 18
+            },
+            {
+              "x": 27,
+              "y": 18
+            },
+            {
+              "x": 28,
+              "y": 18
+            },
+            {
+              "x": 29,
+              "y": 18
+            },
+            {
+              "x": 30,
+              "y": 18
+            },
+            {
+              "x": 31,
+              "y": 18
+            },
+            {
+              "x": 32,
+              "y": 18
+            },
+            {
+              "x": 33,
+              "y": 18
+            },
+            {
+              "x": 34,
+              "y": 18
+            },
+            {
+              "x": 35,
+              "y": 18
+            },
+            {
+              "x": 36,
+              "y": 18
+            },
+            {
+              "x": 37,
+              "y": 18
+            },
+            {
+              "x": 38,
+              "y": 18
+            },
+            {
+              "x": 39,
+              "y": 18
+            },
+            {
+              "x": 40,
+              "y": 18
+            },
+            {
+              "x": 41,
+              "y": 18
+            },
+            {
+              "x": 42,
+              "y": 18
+            },
+            {
+              "x": 43,
+              "y": 18
+            },
+            {
+              "x": 44,
+              "y": 18
+            },
+            {
+              "x": 45,
+              "y": 18
+            },
+            {
+              "x": 46,
+              "y": 18
+            },
+            {
+              "x": 47,
+              "y": 18
+            },
+            {
+              "x": 48,
+              "y": 18
+            },
+            {
+              "x": 49,
+              "y": 18
+            },
+            {
+              "x": 50,
+              "y": 18
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-4",
+          "edgeId": "edge-4",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "dock",
+          "points": [
+            {
+              "x": 26,
+              "y": 41
+            },
+            {
+              "x": 26,
+              "y": 42
+            },
+            {
+              "x": 26,
+              "y": 43
+            },
+            {
+              "x": 26,
+              "y": 44
+            },
+            {
+              "x": 26,
+              "y": 45
+            },
+            {
+              "x": 27,
+              "y": 45
+            },
+            {
+              "x": 28,
+              "y": 45
+            },
+            {
+              "x": 29,
+              "y": 45
+            },
+            {
+              "x": 30,
+              "y": 45
+            },
+            {
+              "x": 31,
+              "y": 45
+            },
+            {
+              "x": 32,
+              "y": 45
+            },
+            {
+              "x": 33,
+              "y": 45
+            },
+            {
+              "x": 34,
+              "y": 45
+            },
+            {
+              "x": 35,
+              "y": 45
+            },
+            {
+              "x": 36,
+              "y": 45
+            },
+            {
+              "x": 37,
+              "y": 45
+            },
+            {
+              "x": 38,
+              "y": 45
+            },
+            {
+              "x": 39,
+              "y": 45
+            },
+            {
+              "x": 40,
+              "y": 45
+            },
+            {
+              "x": 41,
+              "y": 45
+            },
+            {
+              "x": 42,
+              "y": 45
+            },
+            {
+              "x": 43,
+              "y": 45
+            },
+            {
+              "x": 44,
+              "y": 45
+            },
+            {
+              "x": 45,
+              "y": 45
+            },
+            {
+              "x": 46,
+              "y": 45
+            },
+            {
+              "x": 47,
+              "y": 45
+            },
+            {
+              "x": 48,
+              "y": 45
+            },
+            {
+              "x": 49,
+              "y": 45
+            },
+            {
+              "x": 50,
+              "y": 45
+            },
+            {
+              "x": 51,
+              "y": 45
+            },
+            {
+              "x": 52,
+              "y": 45
+            },
+            {
+              "x": 53,
+              "y": 45
+            },
+            {
+              "x": 54,
+              "y": 45
+            },
+            {
+              "x": 55,
+              "y": 45
+            },
+            {
+              "x": 56,
+              "y": 45
+            },
+            {
+              "x": 57,
+              "y": 45
+            },
+            {
+              "x": 58,
+              "y": 45
+            },
+            {
+              "x": 59,
+              "y": 45
+            },
+            {
+              "x": 60,
+              "y": 45
+            },
+            {
+              "x": 61,
+              "y": 45
+            },
+            {
+              "x": 62,
+              "y": 45
+            },
+            {
+              "x": 63,
+              "y": 45
+            },
+            {
+              "x": 64,
+              "y": 45
+            },
+            {
+              "x": 65,
+              "y": 45
+            },
+            {
+              "x": 66,
+              "y": 45
+            },
+            {
+              "x": 67,
+              "y": 45
+            },
+            {
+              "x": 68,
+              "y": 45
+            },
+            {
+              "x": 69,
+              "y": 45
+            },
+            {
+              "x": 70,
+              "y": 45
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-5",
+          "edgeId": "edge-8",
+          "deck": 1,
+          "a": "culture-feast",
+          "b": "controller-planning",
+          "points": [
+            {
+              "x": 67,
+              "y": 20
+            },
+            {
+              "x": 67,
+              "y": 21
+            },
+            {
+              "x": 66,
+              "y": 21
+            },
+            {
+              "x": 65,
+              "y": 21
+            },
+            {
+              "x": 64,
+              "y": 21
+            },
+            {
+              "x": 63,
+              "y": 21
+            },
+            {
+              "x": 62,
+              "y": 21
+            },
+            {
+              "x": 61,
+              "y": 21
+            },
+            {
+              "x": 60,
+              "y": 21
+            },
+            {
+              "x": 59,
+              "y": 21
+            },
+            {
+              "x": 58,
+              "y": 21
+            },
+            {
+              "x": 57,
+              "y": 21
+            },
+            {
+              "x": 56,
+              "y": 21
+            },
+            {
+              "x": 55,
+              "y": 21
+            },
+            {
+              "x": 54,
+              "y": 21
+            },
+            {
+              "x": 53,
+              "y": 21
+            },
+            {
+              "x": 52,
+              "y": 21
+            },
+            {
+              "x": 51,
+              "y": 21
+            },
+            {
+              "x": 50,
+              "y": 21
+            },
+            {
+              "x": 49,
+              "y": 21
+            },
+            {
+              "x": 48,
+              "y": 21
+            },
+            {
+              "x": 47,
+              "y": 21
+            },
+            {
+              "x": 46,
+              "y": 21
+            },
+            {
+              "x": 45,
+              "y": 21
+            },
+            {
+              "x": 44,
+              "y": 21
+            },
+            {
+              "x": 43,
+              "y": 21
+            },
+            {
+              "x": 42,
+              "y": 21
+            },
+            {
+              "x": 41,
+              "y": 21
+            },
+            {
+              "x": 40,
+              "y": 21
+            },
+            {
+              "x": 39,
+              "y": 21
+            },
+            {
+              "x": 38,
+              "y": 21
+            },
+            {
+              "x": 37,
+              "y": 21
+            },
+            {
+              "x": 36,
+              "y": 21
+            },
+            {
+              "x": 35,
+              "y": 21
+            },
+            {
+              "x": 34,
+              "y": 21
+            },
+            {
+              "x": 33,
+              "y": 21
+            },
+            {
+              "x": 32,
+              "y": 21
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-6",
+          "edgeId": "edge-9",
+          "deck": 1,
+          "a": "culture-feast",
+          "b": "controller-gear",
+          "points": [
+            {
+              "x": 67,
+              "y": 26
+            },
+            {
+              "x": 66,
+              "y": 26
+            },
+            {
+              "x": 65,
+              "y": 26
+            },
+            {
+              "x": 64,
+              "y": 26
+            },
+            {
+              "x": 63,
+              "y": 26
+            },
+            {
+              "x": 62,
+              "y": 26
+            },
+            {
+              "x": 61,
+              "y": 26
+            },
+            {
+              "x": 60,
+              "y": 26
+            },
+            {
+              "x": 59,
+              "y": 26
+            },
+            {
+              "x": 58,
+              "y": 26
+            },
+            {
+              "x": 57,
+              "y": 26
+            },
+            {
+              "x": 56,
+              "y": 26
+            },
+            {
+              "x": 55,
+              "y": 26
+            },
+            {
+              "x": 54,
+              "y": 26
+            },
+            {
+              "x": 53,
+              "y": 26
+            },
+            {
+              "x": 52,
+              "y": 26
+            },
+            {
+              "x": 51,
+              "y": 26
+            },
+            {
+              "x": 50,
+              "y": 26
+            },
+            {
+              "x": 49,
+              "y": 26
+            },
+            {
+              "x": 48,
+              "y": 26
+            },
+            {
+              "x": 47,
+              "y": 26
+            },
+            {
+              "x": 47,
+              "y": 25
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-7",
+          "edgeId": "edge-12",
+          "deck": 0,
+          "a": "dock",
+          "b": "warehouse-floor-3",
+          "points": [
+            {
+              "x": 70,
+              "y": 45
+            },
+            {
+              "x": 70,
+              "y": 44
+            },
+            {
+              "x": 70,
+              "y": 43
+            },
+            {
+              "x": 70,
+              "y": 42
+            },
+            {
+              "x": 70,
+              "y": 41
+            },
+            {
+              "x": 70,
+              "y": 40
+            },
+            {
+              "x": 70,
+              "y": 39
+            },
+            {
+              "x": 70,
+              "y": 38
+            },
+            {
+              "x": 70,
+              "y": 37
+            },
+            {
+              "x": 70,
+              "y": 36
+            },
+            {
+              "x": 70,
+              "y": 35
+            },
+            {
+              "x": 70,
+              "y": 34
+            },
+            {
+              "x": 70,
+              "y": 33
+            },
+            {
+              "x": 70,
+              "y": 32
+            },
+            {
+              "x": 70,
+              "y": 31
+            },
+            {
+              "x": 70,
+              "y": 30
+            },
+            {
+              "x": 70,
+              "y": 29
+            },
+            {
+              "x": 69,
+              "y": 29
+            },
+            {
+              "x": 68,
+              "y": 29
+            },
+            {
+              "x": 67,
+              "y": 29
+            },
+            {
+              "x": 66,
+              "y": 29
+            },
+            {
+              "x": 65,
+              "y": 29
+            },
+            {
+              "x": 64,
+              "y": 29
+            },
+            {
+              "x": 63,
+              "y": 29
+            },
+            {
+              "x": 62,
+              "y": 29
+            },
+            {
+              "x": 61,
+              "y": 29
+            },
+            {
+              "x": 60,
+              "y": 29
+            },
+            {
+              "x": 59,
+              "y": 29
+            },
+            {
+              "x": 58,
+              "y": 29
+            },
+            {
+              "x": 57,
+              "y": 29
+            },
+            {
+              "x": 56,
+              "y": 29
+            },
+            {
+              "x": 55,
+              "y": 29
+            },
+            {
+              "x": 54,
+              "y": 29
+            },
+            {
+              "x": 53,
+              "y": 29
+            },
+            {
+              "x": 52,
+              "y": 29
+            },
+            {
+              "x": 51,
+              "y": 29
+            },
+            {
+              "x": 50,
+              "y": 29
+            },
+            {
+              "x": 49,
+              "y": 29
+            },
+            {
+              "x": 48,
+              "y": 29
+            },
+            {
+              "x": 47,
+              "y": 29
+            },
+            {
+              "x": 46,
+              "y": 29
+            },
+            {
+              "x": 45,
+              "y": 29
+            },
+            {
+              "x": 44,
+              "y": 29
+            },
+            {
+              "x": 43,
+              "y": 29
+            },
+            {
+              "x": 42,
+              "y": 29
+            },
+            {
+              "x": 41,
+              "y": 29
+            },
+            {
+              "x": 40,
+              "y": 29
+            },
+            {
+              "x": 39,
+              "y": 29
+            },
+            {
+              "x": 38,
+              "y": 29
+            },
+            {
+              "x": 37,
+              "y": 29
+            },
+            {
+              "x": 36,
+              "y": 29
+            },
+            {
+              "x": 35,
+              "y": 29
+            },
+            {
+              "x": 34,
+              "y": 29
+            },
+            {
+              "x": 33,
+              "y": 29
+            },
+            {
+              "x": 32,
+              "y": 29
+            },
+            {
+              "x": 31,
+              "y": 29
+            },
+            {
+              "x": 30,
+              "y": 29
+            },
+            {
+              "x": 29,
+              "y": 29
+            },
+            {
+              "x": 28,
+              "y": 29
+            },
+            {
+              "x": 27,
+              "y": 29
+            },
+            {
+              "x": 26,
+              "y": 29
+            },
+            {
+              "x": 25,
+              "y": 29
+            },
+            {
+              "x": 24,
+              "y": 29
+            },
+            {
+              "x": 23,
+              "y": 29
+            },
+            {
+              "x": 22,
+              "y": 29
+            },
+            {
+              "x": 21,
+              "y": 29
+            },
+            {
+              "x": 20,
+              "y": 29
+            },
+            {
+              "x": 19,
+              "y": 29
+            },
+            {
+              "x": 18,
+              "y": 29
+            },
+            {
+              "x": 17,
+              "y": 29
+            },
+            {
+              "x": 16,
+              "y": 29
+            },
+            {
+              "x": 15,
+              "y": 29
+            },
+            {
+              "x": 14,
+              "y": 29
+            },
+            {
+              "x": 13,
+              "y": 29
+            },
+            {
+              "x": 12,
+              "y": 29
+            },
+            {
+              "x": 11,
+              "y": 29
+            },
+            {
+              "x": 10,
+              "y": 29
+            },
+            {
+              "x": 9,
+              "y": 29
+            },
+            {
+              "x": 8,
+              "y": 29
+            },
+            {
+              "x": 7,
+              "y": 29
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-8",
+          "edgeId": "edge-13",
+          "deck": 0,
+          "a": "entry",
+          "b": "warehouse-floor-5",
+          "points": [
+            {
+              "x": 50,
+              "y": 23
+            },
+            {
+              "x": 49,
+              "y": 23
+            },
+            {
+              "x": 48,
+              "y": 23
+            },
+            {
+              "x": 47,
+              "y": 23
+            },
+            {
+              "x": 46,
+              "y": 23
+            },
+            {
+              "x": 45,
+              "y": 23
+            },
+            {
+              "x": 44,
+              "y": 23
+            },
+            {
+              "x": 43,
+              "y": 23
+            },
+            {
+              "x": 42,
+              "y": 23
+            },
+            {
+              "x": 41,
+              "y": 23
+            },
+            {
+              "x": 40,
+              "y": 23
+            },
+            {
+              "x": 39,
+              "y": 23
+            },
+            {
+              "x": 38,
+              "y": 23
+            },
+            {
+              "x": 37,
+              "y": 23
+            },
+            {
+              "x": 36,
+              "y": 23
+            },
+            {
+              "x": 36,
+              "y": 22
+            },
+            {
+              "x": 36,
+              "y": 21
+            },
+            {
+              "x": 36,
+              "y": 20
+            },
+            {
+              "x": 36,
+              "y": 19
+            },
+            {
+              "x": 36,
+              "y": 18
+            },
+            {
+              "x": 36,
+              "y": 17
+            },
+            {
+              "x": 36,
+              "y": 16
+            },
+            {
+              "x": 36,
+              "y": 15
+            },
+            {
+              "x": 36,
+              "y": 14
+            },
+            {
+              "x": 36,
+              "y": 13
+            },
+            {
+              "x": 36,
+              "y": 12
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-9",
+          "edgeId": "edge-14",
+          "deck": 0,
+          "a": "warehouse-floor-3",
+          "b": "warehouse-floor-4",
+          "points": [
+            {
+              "x": 6,
+              "y": 30
+            },
+            {
+              "x": 7,
+              "y": 30
+            },
+            {
+              "x": 8,
+              "y": 30
+            },
+            {
+              "x": 9,
+              "y": 30
+            },
+            {
+              "x": 10,
+              "y": 30
+            },
+            {
+              "x": 11,
+              "y": 30
+            },
+            {
+              "x": 12,
+              "y": 30
+            },
+            {
+              "x": 13,
+              "y": 30
+            },
+            {
+              "x": 14,
+              "y": 30
+            },
+            {
+              "x": 15,
+              "y": 30
+            },
+            {
+              "x": 16,
+              "y": 30
+            },
+            {
+              "x": 16,
+              "y": 31
+            },
+            {
+              "x": 16,
+              "y": 32
+            },
+            {
+              "x": 16,
+              "y": 33
+            },
+            {
+              "x": 16,
+              "y": 34
+            },
+            {
+              "x": 16,
+              "y": 35
+            },
+            {
+              "x": 16,
+              "y": 36
+            },
+            {
+              "x": 16,
+              "y": 37
+            },
+            {
+              "x": 16,
+              "y": 38
+            },
+            {
+              "x": 16,
+              "y": 39
+            },
+            {
+              "x": 16,
+              "y": 40
+            },
+            {
+              "x": 16,
+              "y": 41
+            },
+            {
+              "x": 16,
+              "y": 42
+            },
+            {
+              "x": 16,
+              "y": 43
+            },
+            {
+              "x": 16,
+              "y": 44
+            },
+            {
+              "x": 16,
+              "y": 45
+            },
+            {
+              "x": 16,
+              "y": 46
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-10",
+          "edgeId": "edge-15",
+          "deck": 0,
+          "a": "entry",
+          "b": "dock",
+          "points": [
+            {
+              "x": 58,
+              "y": 31
+            },
+            {
+              "x": 58,
+              "y": 32
+            },
+            {
+              "x": 58,
+              "y": 33
+            },
+            {
+              "x": 58,
+              "y": 34
+            },
+            {
+              "x": 58,
+              "y": 35
+            },
+            {
+              "x": 58,
+              "y": 36
+            },
+            {
+              "x": 58,
+              "y": 37
+            },
+            {
+              "x": 58,
+              "y": 38
+            },
+            {
+              "x": 58,
+              "y": 39
+            },
+            {
+              "x": 58,
+              "y": 40
+            },
+            {
+              "x": 58,
+              "y": 41
+            },
+            {
+              "x": 58,
+              "y": 42
+            },
+            {
+              "x": 58,
+              "y": 43
+            },
+            {
+              "x": 58,
+              "y": 44
+            },
+            {
+              "x": 59,
+              "y": 44
+            },
+            {
+              "x": 60,
+              "y": 44
+            },
+            {
+              "x": 61,
+              "y": 44
+            },
+            {
+              "x": 62,
+              "y": 44
+            },
+            {
+              "x": 63,
+              "y": 44
+            },
+            {
+              "x": 64,
+              "y": 44
+            },
+            {
+              "x": 65,
+              "y": 44
+            },
+            {
+              "x": 66,
+              "y": 44
+            },
+            {
+              "x": 67,
+              "y": 44
+            },
+            {
+              "x": 68,
+              "y": 44
+            },
+            {
+              "x": 69,
+              "y": 44
+            },
+            {
+              "x": 70,
+              "y": 44
+            },
+            {
+              "x": 71,
+              "y": 44
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-11",
+          "edgeId": "edge-16",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "warehouse-floor-4",
+          "points": [
+            {
+              "x": 23,
+              "y": 42
+            },
+            {
+              "x": 23,
+              "y": 43
+            },
+            {
+              "x": 23,
+              "y": 44
+            },
+            {
+              "x": 23,
+              "y": 45
+            },
+            {
+              "x": 23,
+              "y": 46
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-12",
+          "edgeId": "edge-17",
+          "deck": 0,
+          "a": "warehouse-floor-3",
+          "b": "warehouse-floor-5",
+          "points": [
+            {
+              "x": 7,
+              "y": 23
+            },
+            {
+              "x": 7,
+              "y": 22
+            },
+            {
+              "x": 7,
+              "y": 21
+            },
+            {
+              "x": 7,
+              "y": 20
+            },
+            {
+              "x": 7,
+              "y": 19
+            },
+            {
+              "x": 7,
+              "y": 18
+            },
+            {
+              "x": 7,
+              "y": 17
+            },
+            {
+              "x": 7,
+              "y": 16
+            },
+            {
+              "x": 7,
+              "y": 15
+            },
+            {
+              "x": 7,
+              "y": 14
+            },
+            {
+              "x": 7,
+              "y": 13
+            },
+            {
+              "x": 7,
+              "y": 12
+            },
+            {
+              "x": 8,
+              "y": 12
+            },
+            {
+              "x": 9,
+              "y": 12
+            },
+            {
+              "x": 10,
+              "y": 12
+            },
+            {
+              "x": 11,
+              "y": 12
+            },
+            {
+              "x": 12,
+              "y": 12
+            },
+            {
+              "x": 13,
+              "y": 12
+            },
+            {
+              "x": 14,
+              "y": 12
+            },
+            {
+              "x": 15,
+              "y": 12
+            },
+            {
+              "x": 16,
+              "y": 12
+            },
+            {
+              "x": 17,
+              "y": 12
+            },
+            {
+              "x": 18,
+              "y": 12
+            },
+            {
+              "x": 19,
+              "y": 12
+            },
+            {
+              "x": 20,
+              "y": 12
+            },
+            {
+              "x": 21,
+              "y": 12
+            },
+            {
+              "x": 22,
+              "y": 12
+            },
+            {
+              "x": 23,
+              "y": 12
+            },
+            {
+              "x": 24,
+              "y": 12
+            },
+            {
+              "x": 25,
+              "y": 12
+            },
+            {
+              "x": 26,
+              "y": 12
+            },
+            {
+              "x": 27,
+              "y": 12
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-13",
+          "edgeId": "edge-18",
+          "deck": 0,
+          "a": "warehouse-floor-3",
+          "b": "secure",
+          "points": [
+            {
+              "x": 7,
+              "y": 23
+            },
+            {
+              "x": 8,
+              "y": 23
+            },
+            {
+              "x": 9,
+              "y": 23
+            },
+            {
+              "x": 10,
+              "y": 23
+            },
+            {
+              "x": 11,
+              "y": 23
+            },
+            {
+              "x": 12,
+              "y": 23
+            },
+            {
+              "x": 13,
+              "y": 23
+            },
+            {
+              "x": 14,
+              "y": 23
+            },
+            {
+              "x": 15,
+              "y": 23
+            },
+            {
+              "x": 16,
+              "y": 23
+            },
+            {
+              "x": 17,
+              "y": 23
+            },
+            {
+              "x": 18,
+              "y": 23
+            },
+            {
+              "x": 19,
+              "y": 23
+            },
+            {
+              "x": 20,
+              "y": 23
+            },
+            {
+              "x": 21,
+              "y": 23
+            },
+            {
+              "x": 22,
+              "y": 23
+            },
+            {
+              "x": 23,
+              "y": 23
+            },
+            {
+              "x": 24,
+              "y": 23
+            },
+            {
+              "x": 25,
+              "y": 23
+            },
+            {
+              "x": 26,
+              "y": 23
+            },
+            {
+              "x": 27,
+              "y": 23
+            },
+            {
+              "x": 28,
+              "y": 23
+            },
+            {
+              "x": 29,
+              "y": 23
+            },
+            {
+              "x": 30,
+              "y": 23
+            },
+            {
+              "x": 31,
+              "y": 23
+            },
+            {
+              "x": 32,
+              "y": 23
+            },
+            {
+              "x": 33,
+              "y": 23
+            },
+            {
+              "x": 34,
+              "y": 23
+            },
+            {
+              "x": 35,
+              "y": 23
+            },
+            {
+              "x": 36,
+              "y": 23
+            },
+            {
+              "x": 37,
+              "y": 23
+            },
+            {
+              "x": 38,
+              "y": 23
+            },
+            {
+              "x": 39,
+              "y": 23
+            },
+            {
+              "x": 40,
+              "y": 23
+            },
+            {
+              "x": 41,
+              "y": 23
+            },
+            {
+              "x": 42,
+              "y": 23
+            },
+            {
+              "x": 43,
+              "y": 23
+            },
+            {
+              "x": 44,
+              "y": 23
+            },
+            {
+              "x": 45,
+              "y": 23
+            },
+            {
+              "x": 46,
+              "y": 23
+            },
+            {
+              "x": 47,
+              "y": 23
+            },
+            {
+              "x": 48,
+              "y": 23
+            },
+            {
+              "x": 49,
+              "y": 23
+            },
+            {
+              "x": 50,
+              "y": 23
+            },
+            {
+              "x": 50,
+              "y": 22
+            },
+            {
+              "x": 50,
+              "y": 21
+            },
+            {
+              "x": 50,
+              "y": 20
+            },
+            {
+              "x": 50,
+              "y": 19
+            },
+            {
+              "x": 50,
+              "y": 18
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-14",
+          "edgeId": "edge-19",
+          "deck": 0,
+          "a": "warehouse-floor-4",
+          "b": "secure",
+          "points": [
+            {
+              "x": 24,
+              "y": 47
+            },
+            {
+              "x": 25,
+              "y": 47
+            },
+            {
+              "x": 26,
+              "y": 47
+            },
+            {
+              "x": 27,
+              "y": 47
+            },
+            {
+              "x": 28,
+              "y": 47
+            },
+            {
+              "x": 29,
+              "y": 47
+            },
+            {
+              "x": 30,
+              "y": 47
+            },
+            {
+              "x": 31,
+              "y": 47
+            },
+            {
+              "x": 32,
+              "y": 47
+            },
+            {
+              "x": 33,
+              "y": 47
+            },
+            {
+              "x": 34,
+              "y": 47
+            },
+            {
+              "x": 35,
+              "y": 47
+            },
+            {
+              "x": 36,
+              "y": 47
+            },
+            {
+              "x": 37,
+              "y": 47
+            },
+            {
+              "x": 38,
+              "y": 47
+            },
+            {
+              "x": 39,
+              "y": 47
+            },
+            {
+              "x": 40,
+              "y": 47
+            },
+            {
+              "x": 41,
+              "y": 47
+            },
+            {
+              "x": 42,
+              "y": 47
+            },
+            {
+              "x": 43,
+              "y": 47
+            },
+            {
+              "x": 44,
+              "y": 47
+            },
+            {
+              "x": 45,
+              "y": 47
+            },
+            {
+              "x": 46,
+              "y": 47
+            },
+            {
+              "x": 47,
+              "y": 47
+            },
+            {
+              "x": 48,
+              "y": 47
+            },
+            {
+              "x": 49,
+              "y": 47
+            },
+            {
+              "x": 50,
+              "y": 47
+            },
+            {
+              "x": 50,
+              "y": 46
+            },
+            {
+              "x": 50,
+              "y": 45
+            },
+            {
+              "x": 50,
+              "y": 44
+            },
+            {
+              "x": 50,
+              "y": 43
+            },
+            {
+              "x": 50,
+              "y": 42
+            },
+            {
+              "x": 50,
+              "y": 41
+            },
+            {
+              "x": 50,
+              "y": 40
+            },
+            {
+              "x": 50,
+              "y": 39
+            },
+            {
+              "x": 50,
+              "y": 38
+            },
+            {
+              "x": 50,
+              "y": 37
+            },
+            {
+              "x": 50,
+              "y": 36
+            },
+            {
+              "x": 50,
+              "y": 35
+            },
+            {
+              "x": 50,
+              "y": 34
+            },
+            {
+              "x": 50,
+              "y": 33
+            },
+            {
+              "x": 50,
+              "y": 32
+            },
+            {
+              "x": 50,
+              "y": 31
+            },
+            {
+              "x": 50,
+              "y": 30
+            },
+            {
+              "x": 50,
+              "y": 29
+            },
+            {
+              "x": 50,
+              "y": 28
+            },
+            {
+              "x": 50,
+              "y": 27
+            },
+            {
+              "x": 50,
+              "y": 26
+            },
+            {
+              "x": 50,
+              "y": 25
+            },
+            {
+              "x": 50,
+              "y": 24
+            },
+            {
+              "x": 50,
+              "y": 23
+            },
+            {
+              "x": 50,
+              "y": 22
+            },
+            {
+              "x": 50,
+              "y": 21
+            },
+            {
+              "x": 50,
+              "y": 20
+            },
+            {
+              "x": 50,
+              "y": 19
+            },
+            {
+              "x": 50,
+              "y": 18
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-15",
+          "edgeId": "edge-20",
+          "deck": 0,
+          "a": "warehouse-floor-5",
+          "b": "secure",
+          "points": [
+            {
+              "x": 36,
+              "y": 12
+            },
+            {
+              "x": 36,
+              "y": 13
+            },
+            {
+              "x": 36,
+              "y": 14
+            },
+            {
+              "x": 36,
+              "y": 15
+            },
+            {
+              "x": 36,
+              "y": 16
+            },
+            {
+              "x": 37,
+              "y": 16
+            },
+            {
+              "x": 38,
+              "y": 16
+            },
+            {
+              "x": 39,
+              "y": 16
+            },
+            {
+              "x": 40,
+              "y": 16
+            },
+            {
+              "x": 41,
+              "y": 16
+            },
+            {
+              "x": 42,
+              "y": 16
+            },
+            {
+              "x": 43,
+              "y": 16
+            },
+            {
+              "x": 44,
+              "y": 16
+            },
+            {
+              "x": 45,
+              "y": 16
+            },
+            {
+              "x": 46,
+              "y": 16
+            },
+            {
+              "x": 47,
+              "y": 16
+            },
+            {
+              "x": 48,
+              "y": 16
+            },
+            {
+              "x": 49,
+              "y": 16
+            },
+            {
+              "x": 50,
+              "y": 16
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-16",
+          "edgeId": "edge-21",
+          "deck": 0,
+          "a": "office",
+          "b": "dock",
+          "points": [
+            {
+              "x": 46,
+              "y": 48
+            },
+            {
+              "x": 46,
+              "y": 49
+            },
+            {
+              "x": 46,
+              "y": 50
+            },
+            {
+              "x": 47,
+              "y": 50
+            },
+            {
+              "x": 48,
+              "y": 50
+            },
+            {
+              "x": 49,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 50
+            },
+            {
+              "x": 51,
+              "y": 50
+            },
+            {
+              "x": 52,
+              "y": 50
+            },
+            {
+              "x": 53,
+              "y": 50
+            },
+            {
+              "x": 54,
+              "y": 50
+            },
+            {
+              "x": 55,
+              "y": 50
+            },
+            {
+              "x": 56,
+              "y": 50
+            },
+            {
+              "x": 57,
+              "y": 50
+            },
+            {
+              "x": 58,
+              "y": 50
+            },
+            {
+              "x": 59,
+              "y": 50
+            },
+            {
+              "x": 60,
+              "y": 50
+            },
+            {
+              "x": 61,
+              "y": 50
+            },
+            {
+              "x": 62,
+              "y": 50
+            },
+            {
+              "x": 63,
+              "y": 50
+            },
+            {
+              "x": 64,
+              "y": 50
+            },
+            {
+              "x": 65,
+              "y": 50
+            },
+            {
+              "x": 66,
+              "y": 50
+            },
+            {
+              "x": 67,
+              "y": 50
+            },
+            {
+              "x": 68,
+              "y": 50
+            },
+            {
+              "x": 69,
+              "y": 50
+            },
+            {
+              "x": 70,
+              "y": 50
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-17",
+          "edgeId": "edge-22",
+          "deck": 0,
+          "a": "secure",
+          "b": "dock",
+          "points": [
+            {
+              "x": 59,
+              "y": 19
+            },
+            {
+              "x": 59,
+              "y": 20
+            },
+            {
+              "x": 59,
+              "y": 21
+            },
+            {
+              "x": 59,
+              "y": 22
+            },
+            {
+              "x": 59,
+              "y": 23
+            },
+            {
+              "x": 59,
+              "y": 24
+            },
+            {
+              "x": 59,
+              "y": 25
+            },
+            {
+              "x": 59,
+              "y": 26
+            },
+            {
+              "x": 59,
+              "y": 27
+            },
+            {
+              "x": 59,
+              "y": 28
+            },
+            {
+              "x": 59,
+              "y": 29
+            },
+            {
+              "x": 59,
+              "y": 30
+            },
+            {
+              "x": 59,
+              "y": 31
+            },
+            {
+              "x": 59,
+              "y": 32
+            },
+            {
+              "x": 59,
+              "y": 33
+            },
+            {
+              "x": 59,
+              "y": 34
+            },
+            {
+              "x": 59,
+              "y": 35
+            },
+            {
+              "x": 59,
+              "y": 36
+            },
+            {
+              "x": 59,
+              "y": 37
+            },
+            {
+              "x": 59,
+              "y": 38
+            },
+            {
+              "x": 59,
+              "y": 39
+            },
+            {
+              "x": 59,
+              "y": 40
+            },
+            {
+              "x": 59,
+              "y": 41
+            },
+            {
+              "x": 59,
+              "y": 42
+            },
+            {
+              "x": 59,
+              "y": 43
+            },
+            {
+              "x": 59,
+              "y": 44
+            },
+            {
+              "x": 60,
+              "y": 44
+            },
+            {
+              "x": 61,
+              "y": 44
+            },
+            {
+              "x": 62,
+              "y": 44
+            },
+            {
+              "x": 63,
+              "y": 44
+            },
+            {
+              "x": 64,
+              "y": 44
+            },
+            {
+              "x": 65,
+              "y": 44
+            },
+            {
+              "x": 66,
+              "y": 44
+            },
+            {
+              "x": 67,
+              "y": 44
+            },
+            {
+              "x": 68,
+              "y": 44
+            },
+            {
+              "x": 69,
+              "y": 44
+            },
+            {
+              "x": 70,
+              "y": 44
+            },
+            {
+              "x": 71,
+              "y": 44
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-18",
+          "edgeId": "edge-23",
+          "deck": 1,
+          "a": "utility",
+          "b": "controller-gear",
+          "points": [
+            {
+              "x": 43,
+              "y": 33
+            },
+            {
+              "x": 44,
+              "y": 33
+            },
+            {
+              "x": 45,
+              "y": 33
+            },
+            {
+              "x": 45,
+              "y": 32
+            },
+            {
+              "x": 45,
+              "y": 31
+            },
+            {
+              "x": 45,
+              "y": 30
+            },
+            {
+              "x": 45,
+              "y": 29
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-19",
+          "edgeId": "edge-24",
+          "deck": 1,
+          "a": "controller-planning",
+          "b": "ecology-den",
+          "points": [
+            {
+              "x": 23,
+              "y": 21
+            },
+            {
+              "x": 22,
+              "y": 21
+            },
+            {
+              "x": 21,
+              "y": 21
+            },
+            {
+              "x": 20,
+              "y": 21
+            },
+            {
+              "x": 19,
+              "y": 21
+            },
+            {
+              "x": 18,
+              "y": 21
+            },
+            {
+              "x": 17,
+              "y": 21
+            },
+            {
+              "x": 16,
+              "y": 21
+            },
+            {
+              "x": 15,
+              "y": 21
+            },
+            {
+              "x": 14,
+              "y": 21
+            },
+            {
+              "x": 13,
+              "y": 21
+            },
+            {
+              "x": 12,
+              "y": 21
+            },
+            {
+              "x": 11,
+              "y": 21
+            },
+            {
+              "x": 11,
+              "y": 20
+            },
+            {
+              "x": 11,
+              "y": 19
+            },
+            {
+              "x": 11,
+              "y": 18
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-20",
+          "edgeId": "edge-25",
+          "deck": 1,
+          "a": "culture-feast",
+          "b": "culture-trophy",
+          "points": [
+            {
+              "x": 67,
+              "y": 26
+            },
+            {
+              "x": 66,
+              "y": 26
+            },
+            {
+              "x": 65,
+              "y": 26
+            },
+            {
+              "x": 64,
+              "y": 26
+            },
+            {
+              "x": 63,
+              "y": 26
+            },
+            {
+              "x": 62,
+              "y": 26
+            },
+            {
+              "x": 61,
+              "y": 26
+            },
+            {
+              "x": 60,
+              "y": 26
+            },
+            {
+              "x": 59,
+              "y": 26
+            },
+            {
+              "x": 58,
+              "y": 26
+            },
+            {
+              "x": 57,
+              "y": 26
+            },
+            {
+              "x": 56,
+              "y": 26
+            },
+            {
+              "x": 55,
+              "y": 26
+            },
+            {
+              "x": 54,
+              "y": 26
+            },
+            {
+              "x": 53,
+              "y": 26
+            },
+            {
+              "x": 52,
+              "y": 26
+            },
+            {
+              "x": 51,
+              "y": 26
+            },
+            {
+              "x": 50,
+              "y": 26
+            },
+            {
+              "x": 49,
+              "y": 26
+            },
+            {
+              "x": 48,
+              "y": 26
+            },
+            {
+              "x": 47,
+              "y": 26
+            },
+            {
+              "x": 46,
+              "y": 26
+            },
+            {
+              "x": 45,
+              "y": 26
+            },
+            {
+              "x": 44,
+              "y": 26
+            },
+            {
+              "x": 43,
+              "y": 26
+            },
+            {
+              "x": 42,
+              "y": 26
+            },
+            {
+              "x": 41,
+              "y": 26
+            },
+            {
+              "x": 40,
+              "y": 26
+            },
+            {
+              "x": 39,
+              "y": 26
+            },
+            {
+              "x": 38,
+              "y": 26
+            },
+            {
+              "x": 37,
+              "y": 26
+            },
+            {
+              "x": 36,
+              "y": 26
+            },
+            {
+              "x": 35,
+              "y": 26
+            },
+            {
+              "x": 34,
+              "y": 26
+            },
+            {
+              "x": 33,
+              "y": 26
+            },
+            {
+              "x": 32,
+              "y": 26
+            },
+            {
+              "x": 31,
+              "y": 26
+            },
+            {
+              "x": 30,
+              "y": 26
+            },
+            {
+              "x": 29,
+              "y": 26
+            },
+            {
+              "x": 28,
+              "y": 26
+            },
+            {
+              "x": 27,
+              "y": 26
+            },
+            {
+              "x": 26,
+              "y": 26
+            },
+            {
+              "x": 25,
+              "y": 26
+            },
+            {
+              "x": 24,
+              "y": 26
+            },
+            {
+              "x": 23,
+              "y": 26
+            },
+            {
+              "x": 22,
+              "y": 26
+            },
+            {
+              "x": 21,
+              "y": 26
+            },
+            {
+              "x": 20,
+              "y": 26
+            },
+            {
+              "x": 19,
+              "y": 26
+            },
+            {
+              "x": 18,
+              "y": 26
+            },
+            {
+              "x": 17,
+              "y": 26
+            },
+            {
+              "x": 16,
+              "y": 26
+            },
+            {
+              "x": 15,
+              "y": 26
+            },
+            {
+              "x": 14,
+              "y": 26
+            },
+            {
+              "x": 13,
+              "y": 26
+            },
+            {
+              "x": 12,
+              "y": 26
+            },
+            {
+              "x": 11,
+              "y": 26
+            },
+            {
+              "x": 11,
+              "y": 27
+            },
+            {
+              "x": 11,
+              "y": 28
+            },
+            {
+              "x": 11,
+              "y": 29
+            },
+            {
+              "x": 11,
+              "y": 30
+            },
+            {
+              "x": 11,
+              "y": 31
+            },
+            {
+              "x": 11,
+              "y": 32
+            },
+            {
+              "x": 11,
+              "y": 33
+            },
+            {
+              "x": 11,
+              "y": 34
+            },
+            {
+              "x": 11,
+              "y": 35
+            },
+            {
+              "x": 11,
+              "y": 36
+            },
+            {
+              "x": 11,
+              "y": 37
+            },
+            {
+              "x": 11,
+              "y": 38
+            },
+            {
+              "x": 11,
+              "y": 39
+            },
+            {
+              "x": 11,
+              "y": 40
+            },
+            {
+              "x": 11,
+              "y": 41
+            },
+            {
+              "x": 11,
+              "y": 42
+            },
+            {
+              "x": 11,
+              "y": 43
+            },
+            {
+              "x": 11,
+              "y": 44
+            },
+            {
+              "x": 11,
+              "y": 45
+            },
+            {
+              "x": 11,
+              "y": 46
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-21",
+          "edgeId": "edge-26",
+          "deck": 1,
+          "a": "culture-trophy",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 11,
+              "y": 46
+            },
+            {
+              "x": 12,
+              "y": 46
+            },
+            {
+              "x": 13,
+              "y": 46
+            },
+            {
+              "x": 14,
+              "y": 46
+            },
+            {
+              "x": 15,
+              "y": 46
+            },
+            {
+              "x": 15,
+              "y": 45
+            },
+            {
+              "x": 15,
+              "y": 44
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-22",
+          "edgeId": "edge-27",
+          "deck": 1,
+          "a": "utility",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 40,
+              "y": 40
+            },
+            {
+              "x": 39,
+              "y": 40
+            },
+            {
+              "x": 38,
+              "y": 40
+            },
+            {
+              "x": 37,
+              "y": 40
+            },
+            {
+              "x": 36,
+              "y": 40
+            },
+            {
+              "x": 35,
+              "y": 40
+            },
+            {
+              "x": 34,
+              "y": 40
+            },
+            {
+              "x": 33,
+              "y": 40
+            },
+            {
+              "x": 32,
+              "y": 40
+            },
+            {
+              "x": 31,
+              "y": 40
+            },
+            {
+              "x": 30,
+              "y": 40
+            },
+            {
+              "x": 29,
+              "y": 40
+            },
+            {
+              "x": 28,
+              "y": 40
+            },
+            {
+              "x": 27,
+              "y": 40
+            },
+            {
+              "x": 26,
+              "y": 40
+            },
+            {
+              "x": 25,
+              "y": 40
+            },
+            {
+              "x": 24,
+              "y": 40
+            },
+            {
+              "x": 23,
+              "y": 40
+            },
+            {
+              "x": 22,
+              "y": 40
+            },
+            {
+              "x": 21,
+              "y": 40
+            },
+            {
+              "x": 21,
+              "y": 41
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-23",
+          "edgeId": "edge-28",
+          "deck": 1,
+          "a": "culture-feast",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 67,
+              "y": 26
+            },
+            {
+              "x": 67,
+              "y": 27
+            },
+            {
+              "x": 67,
+              "y": 28
+            },
+            {
+              "x": 67,
+              "y": 29
+            },
+            {
+              "x": 67,
+              "y": 30
+            },
+            {
+              "x": 67,
+              "y": 31
+            },
+            {
+              "x": 67,
+              "y": 32
+            },
+            {
+              "x": 67,
+              "y": 33
+            },
+            {
+              "x": 67,
+              "y": 34
+            },
+            {
+              "x": 67,
+              "y": 35
+            },
+            {
+              "x": 67,
+              "y": 36
+            },
+            {
+              "x": 67,
+              "y": 37
+            },
+            {
+              "x": 67,
+              "y": 38
+            },
+            {
+              "x": 67,
+              "y": 39
+            },
+            {
+              "x": 67,
+              "y": 40
+            },
+            {
+              "x": 67,
+              "y": 41
+            },
+            {
+              "x": 66,
+              "y": 41
+            },
+            {
+              "x": 65,
+              "y": 41
+            },
+            {
+              "x": 64,
+              "y": 41
+            },
+            {
+              "x": 63,
+              "y": 41
+            },
+            {
+              "x": 62,
+              "y": 41
+            },
+            {
+              "x": 61,
+              "y": 41
+            },
+            {
+              "x": 60,
+              "y": 41
+            },
+            {
+              "x": 59,
+              "y": 41
+            },
+            {
+              "x": 58,
+              "y": 41
+            },
+            {
+              "x": 57,
+              "y": 41
+            },
+            {
+              "x": 56,
+              "y": 41
+            },
+            {
+              "x": 55,
+              "y": 41
+            },
+            {
+              "x": 54,
+              "y": 41
+            },
+            {
+              "x": 53,
+              "y": 41
+            },
+            {
+              "x": 52,
+              "y": 41
+            },
+            {
+              "x": 51,
+              "y": 41
+            },
+            {
+              "x": 50,
+              "y": 41
+            },
+            {
+              "x": 49,
+              "y": 41
+            },
+            {
+              "x": 48,
+              "y": 41
+            },
+            {
+              "x": 47,
+              "y": 41
+            },
+            {
+              "x": 46,
+              "y": 41
+            },
+            {
+              "x": 45,
+              "y": 41
+            },
+            {
+              "x": 44,
+              "y": 41
+            },
+            {
+              "x": 43,
+              "y": 41
+            },
+            {
+              "x": 42,
+              "y": 41
+            },
+            {
+              "x": 41,
+              "y": 41
+            },
+            {
+              "x": 40,
+              "y": 41
+            },
+            {
+              "x": 39,
+              "y": 41
+            },
+            {
+              "x": 38,
+              "y": 41
+            },
+            {
+              "x": 37,
+              "y": 41
+            },
+            {
+              "x": 36,
+              "y": 41
+            },
+            {
+              "x": 35,
+              "y": 41
+            },
+            {
+              "x": 34,
+              "y": 41
+            },
+            {
+              "x": 33,
+              "y": 41
+            },
+            {
+              "x": 32,
+              "y": 41
+            },
+            {
+              "x": 31,
+              "y": 41
+            },
+            {
+              "x": 30,
+              "y": 41
+            },
+            {
+              "x": 29,
+              "y": 41
+            },
+            {
+              "x": 28,
+              "y": 41
+            },
+            {
+              "x": 27,
+              "y": 41
+            },
+            {
+              "x": 26,
+              "y": 41
+            },
+            {
+              "x": 25,
+              "y": 41
+            },
+            {
+              "x": 24,
+              "y": 41
+            },
+            {
+              "x": 23,
+              "y": 41
+            },
+            {
+              "x": 22,
+              "y": 41
+            },
+            {
+              "x": 21,
+              "y": 41
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-24",
+          "edgeId": "edge-29",
+          "deck": 1,
+          "a": "controller-gear",
+          "b": "ecology-den",
+          "points": [
+            {
+              "x": 38,
+              "y": 25
+            },
+            {
+              "x": 37,
+              "y": 25
+            },
+            {
+              "x": 36,
+              "y": 25
+            },
+            {
+              "x": 35,
+              "y": 25
+            },
+            {
+              "x": 34,
+              "y": 25
+            },
+            {
+              "x": 33,
+              "y": 25
+            },
+            {
+              "x": 32,
+              "y": 25
+            },
+            {
+              "x": 31,
+              "y": 25
+            },
+            {
+              "x": 30,
+              "y": 25
+            },
+            {
+              "x": 29,
+              "y": 25
+            },
+            {
+              "x": 28,
+              "y": 25
+            },
+            {
+              "x": 27,
+              "y": 25
+            },
+            {
+              "x": 26,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 25
+            },
+            {
+              "x": 24,
+              "y": 25
+            },
+            {
+              "x": 23,
+              "y": 25
+            },
+            {
+              "x": 22,
+              "y": 25
+            },
+            {
+              "x": 21,
+              "y": 25
+            },
+            {
+              "x": 20,
+              "y": 25
+            },
+            {
+              "x": 19,
+              "y": 25
+            },
+            {
+              "x": 18,
+              "y": 25
+            },
+            {
+              "x": 17,
+              "y": 25
+            },
+            {
+              "x": 16,
+              "y": 25
+            },
+            {
+              "x": 15,
+              "y": 25
+            },
+            {
+              "x": 14,
+              "y": 25
+            },
+            {
+              "x": 13,
+              "y": 25
+            },
+            {
+              "x": 12,
+              "y": 25
+            },
+            {
+              "x": 11,
+              "y": 25
+            },
+            {
+              "x": 11,
+              "y": 24
+            },
+            {
+              "x": 11,
+              "y": 23
+            }
+          ],
+          "required": false,
+          "protected": false
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-1",
+          "edgeId": "edge-1",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 50,
+          "y": 30,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-2",
+          "edgeId": "edge-1",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 26,
+          "y": 34,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-3",
+          "edgeId": "edge-2",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 26,
+          "y": 41,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-4",
+          "edgeId": "edge-2",
+          "roomId": "office",
+          "deck": 0,
+          "x": 40,
+          "y": 47,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-5",
+          "edgeId": "edge-3",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 26,
+          "y": 34,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-6",
+          "edgeId": "edge-3",
+          "roomId": "secure",
+          "deck": 0,
+          "x": 50,
+          "y": 18,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-7",
+          "edgeId": "edge-4",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 26,
+          "y": 41,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-8",
+          "edgeId": "edge-4",
+          "roomId": "dock",
+          "deck": 0,
+          "x": 70,
+          "y": 45,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-9",
+          "edgeId": "edge-8",
+          "roomId": "culture-feast",
+          "deck": 1,
+          "x": 67,
+          "y": 20,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-10",
+          "edgeId": "edge-8",
+          "roomId": "controller-planning",
+          "deck": 1,
+          "x": 32,
+          "y": 21,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-11",
+          "edgeId": "edge-9",
+          "roomId": "culture-feast",
+          "deck": 1,
+          "x": 67,
+          "y": 26,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-12",
+          "edgeId": "edge-9",
+          "roomId": "controller-gear",
+          "deck": 1,
+          "x": 47,
+          "y": 25,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-13",
+          "edgeId": "edge-12",
+          "roomId": "dock",
+          "deck": 0,
+          "x": 70,
+          "y": 45,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-14",
+          "edgeId": "edge-12",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 7,
+          "y": 29,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-15",
+          "edgeId": "edge-13",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 50,
+          "y": 23,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-16",
+          "edgeId": "edge-13",
+          "roomId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 36,
+          "y": 12,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-17",
+          "edgeId": "edge-14",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 6,
+          "y": 30,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-18",
+          "edgeId": "edge-14",
+          "roomId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 16,
+          "y": 46,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-19",
+          "edgeId": "edge-15",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 58,
+          "y": 31,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-20",
+          "edgeId": "edge-15",
+          "roomId": "dock",
+          "deck": 0,
+          "x": 71,
+          "y": 44,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-21",
+          "edgeId": "edge-16",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 23,
+          "y": 42,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-22",
+          "edgeId": "edge-16",
+          "roomId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 23,
+          "y": 46,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-23",
+          "edgeId": "edge-17",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 7,
+          "y": 23,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-24",
+          "edgeId": "edge-17",
+          "roomId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 27,
+          "y": 12,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-25",
+          "edgeId": "edge-18",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 7,
+          "y": 23,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-26",
+          "edgeId": "edge-18",
+          "roomId": "secure",
+          "deck": 0,
+          "x": 50,
+          "y": 18,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-27",
+          "edgeId": "edge-19",
+          "roomId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 24,
+          "y": 47,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-28",
+          "edgeId": "edge-19",
+          "roomId": "secure",
+          "deck": 0,
+          "x": 50,
+          "y": 18,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-29",
+          "edgeId": "edge-20",
+          "roomId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 36,
+          "y": 12,
+          "corridorId": "corridor-15"
+        },
+        {
+          "id": "door-30",
+          "edgeId": "edge-20",
+          "roomId": "secure",
+          "deck": 0,
+          "x": 50,
+          "y": 16,
+          "corridorId": "corridor-15"
+        },
+        {
+          "id": "door-31",
+          "edgeId": "edge-21",
+          "roomId": "office",
+          "deck": 0,
+          "x": 46,
+          "y": 48,
+          "corridorId": "corridor-16"
+        },
+        {
+          "id": "door-32",
+          "edgeId": "edge-21",
+          "roomId": "dock",
+          "deck": 0,
+          "x": 70,
+          "y": 50,
+          "corridorId": "corridor-16"
+        },
+        {
+          "id": "door-33",
+          "edgeId": "edge-22",
+          "roomId": "secure",
+          "deck": 0,
+          "x": 59,
+          "y": 19,
+          "corridorId": "corridor-17"
+        },
+        {
+          "id": "door-34",
+          "edgeId": "edge-22",
+          "roomId": "dock",
+          "deck": 0,
+          "x": 71,
+          "y": 44,
+          "corridorId": "corridor-17"
+        },
+        {
+          "id": "door-35",
+          "edgeId": "edge-23",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 43,
+          "y": 33,
+          "corridorId": "corridor-18"
+        },
+        {
+          "id": "door-36",
+          "edgeId": "edge-23",
+          "roomId": "controller-gear",
+          "deck": 1,
+          "x": 45,
+          "y": 29,
+          "corridorId": "corridor-18"
+        },
+        {
+          "id": "door-37",
+          "edgeId": "edge-24",
+          "roomId": "controller-planning",
+          "deck": 1,
+          "x": 23,
+          "y": 21,
+          "corridorId": "corridor-19"
+        },
+        {
+          "id": "door-38",
+          "edgeId": "edge-24",
+          "roomId": "ecology-den",
+          "deck": 1,
+          "x": 11,
+          "y": 18,
+          "corridorId": "corridor-19"
+        },
+        {
+          "id": "door-39",
+          "edgeId": "edge-25",
+          "roomId": "culture-feast",
+          "deck": 1,
+          "x": 67,
+          "y": 26,
+          "corridorId": "corridor-20"
+        },
+        {
+          "id": "door-40",
+          "edgeId": "edge-25",
+          "roomId": "culture-trophy",
+          "deck": 1,
+          "x": 11,
+          "y": 46,
+          "corridorId": "corridor-20"
+        },
+        {
+          "id": "door-41",
+          "edgeId": "edge-26",
+          "roomId": "culture-trophy",
+          "deck": 1,
+          "x": 11,
+          "y": 46,
+          "corridorId": "corridor-21"
+        },
+        {
+          "id": "door-42",
+          "edgeId": "edge-26",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 15,
+          "y": 44,
+          "corridorId": "corridor-21"
+        },
+        {
+          "id": "door-43",
+          "edgeId": "edge-27",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 40,
+          "y": 40,
+          "corridorId": "corridor-22"
+        },
+        {
+          "id": "door-44",
+          "edgeId": "edge-27",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 21,
+          "y": 41,
+          "corridorId": "corridor-22"
+        },
+        {
+          "id": "door-45",
+          "edgeId": "edge-28",
+          "roomId": "culture-feast",
+          "deck": 1,
+          "x": 67,
+          "y": 26,
+          "corridorId": "corridor-23"
+        },
+        {
+          "id": "door-46",
+          "edgeId": "edge-28",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 21,
+          "y": 41,
+          "corridorId": "corridor-23"
+        },
+        {
+          "id": "door-47",
+          "edgeId": "edge-29",
+          "roomId": "controller-gear",
+          "deck": 1,
+          "x": 38,
+          "y": 25,
+          "corridorId": "corridor-24"
+        },
+        {
+          "id": "door-48",
+          "edgeId": "edge-29",
+          "roomId": "ecology-den",
+          "deck": 1,
+          "x": 11,
+          "y": 23,
+          "corridorId": "corridor-24"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "connector-1-a",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "utility",
+          "deck": 1,
+          "x": 35,
+          "y": 38,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-1-b",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 35,
+          "y": 38,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-3-a",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 63,
+          "y": 25,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-3-b",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "culture-feast",
+          "deck": 1,
+          "x": 63,
+          "y": 25,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-5-a",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 32,
+          "y": 38,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-5-b",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "culture-trophy",
+          "deck": 1,
+          "x": 32,
+          "y": 38,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-7-a",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 32,
+          "y": 24,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-7-b",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 1,
+          "x": 32,
+          "y": 24,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-9-a",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 37,
+          "y": 35,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-9-b",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "resource-store",
+          "deck": 1,
+          "x": 37,
+          "y": 35,
+          "connectsDeck": 0
+        }
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      "semanticProgram": {
+        "locationArchetype": "warehouse",
+        "source": "site-archetype-defaults",
+        "layerPolicy": "full",
+        "layers": [
+          {
+            "order": 1,
+            "id": "relationship-reconciliation",
+            "input": {
+              "explicit": []
+            },
+            "changes": [
+              "climate: geothermal->semi-arid (biome compatibility)",
+              "weather: steady-rain->dust-storm (climate compatibility)",
+              "ecology: magical->undead (biome ecology)",
+              "magicTech: necromantic->low-magic (builder culture)"
+            ]
+          },
+          {
+            "order": 2,
+            "id": "scale",
+            "input": "large",
+            "changes": [
+              "warehouse-floor count 3->4",
+              "decks=1",
+              "grid=81x63"
+            ]
+          },
+          {
+            "order": 3,
+            "id": "origin-culture",
+            "input": "orcish",
+            "changes": [
+              "added clan-feast-hall",
+              "added trophy-space",
+              "materials rough-stone, timber, iron, salvaged-material"
+            ]
+          },
+          {
+            "order": 4,
+            "id": "current-controller",
+            "input": "adventuring-company",
+            "changes": [
+              "added expedition-planning",
+              "added expedition-gear-store"
+            ]
+          },
+          {
+            "order": 5,
+            "id": "occupancy-state",
+            "input": "overcrowded",
+            "changes": []
+          },
+          {
+            "order": 6,
+            "id": "environment",
+            "input": {
+              "biome": "savanna",
+              "climate": "semi-arid",
+              "season": "first-frost",
+              "weather": "dust-storm",
+              "waterState": "geothermal",
+              "verticality": "cliff-cut"
+            },
+            "changes": [
+              "environment increased vertical organization"
+            ]
+          },
+          {
+            "order": 7,
+            "id": "cross-layer-interactions",
+            "input": {
+              "culture": "orcish",
+              "controller": "adventuring-company",
+              "archetype": "warehouse",
+              "occupancyState": "overcrowded",
+              "ecology": "undead",
+              "condition": "patched",
+              "waterState": "geothermal"
+            },
+            "changes": [
+              "current occupants alter inherited spaces while original construction remains legible",
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ]
+          },
+          {
+            "order": 8,
+            "id": "ecology",
+            "input": {
+              "ecology": "undead",
+              "creatureFamilies": [
+                "fungus",
+                "dragon",
+                "magical-beast"
+              ],
+              "creatureDensity": 5
+            },
+            "changes": [
+              "added ecology habitat space"
+            ]
+          },
+          {
+            "order": 9,
+            "id": "hazard-ecology",
+            "input": {
+              "families": [
+                "heat",
+                "corrosion",
+                "unstable-floor"
+              ],
+              "intensity": 7,
+              "contamination": "none"
+            },
+            "changes": [
+              "distributed 3 hazard families over semantically suitable rooms"
+            ]
+          },
+          {
+            "order": 10,
+            "id": "security-defense",
+            "input": {
+              "security": "controlled",
+              "doctrine": "traps"
+            },
+            "changes": []
+          },
+          {
+            "order": 11,
+            "id": "resources-magic",
+            "input": {
+              "wealth": "legendary",
+              "resourceProfile": "precious-metal",
+              "magicTech": "low-magic"
+            },
+            "changes": [
+              "increased high-value room identity",
+              "added precious-metal resource store",
+              "applied low-magic infrastructure"
+            ]
+          },
+          {
+            "order": 12,
+            "id": "condition-history",
+            "input": {
+              "age": "recent",
+              "condition": "patched",
+              "maintenance": "good",
+              "contamination": "none"
+            },
+            "changes": [
+              "degraded existing spaces without replacing their semantic purpose"
+            ]
+          },
+          {
+            "order": 13,
+            "id": "narrative-social",
+            "input": {
+              "tone": "neutral",
+              "socialMode": "institutional",
+              "traffic": "shift-work",
+              "secretDensity": "moderate"
+            },
+            "changes": [
+              "retained previous spatial functions while adding narrative/social interpretation"
+            ]
+          },
+          {
+            "order": 14,
+            "id": "spatial-capacity-normalization",
+            "input": {
+              "expandedRoomCount": 15,
+              "decks": 2,
+              "roomsPerDeckEstimate": 8
+            },
+            "changes": [
+              "existing canvas already accommodates the accumulated semantic program"
+            ]
+          }
+        ]
+      }
+    },
+    "content": {
+      "schemaVersion": "1.2.0",
+      "generator": "hb-semantic-content-populator",
+      "version": "1.2.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06:content:archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06:open_d20",
+      "compatibility": {
+        "id": "open_d20",
+        "family": "open d20 / Hypertext d20-compatible",
+        "provenance": "Open d20-compatible presentation; setting-specific rules are not silently imported.",
+        "mechanicalDetailsAreSettingScoped": true
+      },
+      "provenance": {
+        "topologyEngine": "hb-semantic-spatial-engine",
+        "topologySeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+        "contentLayer": "semantic-content-populator",
+        "locationArchetype": "warehouse",
+        "faction": "adventuring-company",
+        "adventurePurpose": null,
+        "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+        "siteLayers": [
+          "relationship-reconciliation",
+          "scale",
+          "origin-culture",
+          "current-controller",
+          "occupancy-state",
+          "environment",
+          "cross-layer-interactions",
+          "ecology",
+          "hazard-ecology",
+          "security-defense",
+          "resources-magic",
+          "condition-history",
+          "narrative-social",
+          "spatial-capacity-normalization"
+        ]
+      },
+      "siteContext": {
+        "culture": "orcish",
+        "controller": "adventuring-company",
+        "occupancyState": "overcrowded",
+        "biome": "savanna",
+        "climate": "semi-arid",
+        "season": "first-frost",
+        "weather": "dust-storm",
+        "ecology": "undead",
+        "creatureFamilies": [
+          "fungus",
+          "dragon",
+          "magical-beast"
+        ],
+        "hazardFamilies": [
+          "heat",
+          "corrosion",
+          "unstable-floor"
+        ],
+        "materials": [
+          "rough-stone",
+          "timber",
+          "iron",
+          "salvaged-material",
+          "enchanted-stone",
+          "fungus",
+          "sandstone"
+        ],
+        "lighting": "braziers",
+        "waterState": "geothermal",
+        "contamination": "none",
+        "narrativeTone": "neutral",
+        "interactionIds": [
+          "cultural-overprint",
+          "haunt-memory-layer"
+        ],
+        "interactionCount": 2,
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 6,
+        "socialDensity": 2
+      },
+      "rooms": [
+        {
+          "roomId": "entry",
+          "role": "loading-entry",
+          "deck": 0,
+          "depth": 0,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "loading-entry",
+            "originalLabel": "Loading Entrance",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "mobile fungal growth [fungus]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "chemically weakened material [corrosion]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Loading Entrance",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "fungus presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "spore colony organism [fungus]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "extreme heat [heat]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "fungus presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "structural rust-through [corrosion]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "draconic juvenile or servant [dragon]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "extreme heat [heat]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "dragon presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "draconic juvenile or servant [dragon]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "cracked platform [unstable-floor]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Storage Floor",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "dragon presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "office",
+          "role": "warehouse-office",
+          "deck": 0,
+          "depth": 2,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "warehouse-office",
+            "originalLabel": "Shipping Office",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "arcane-adapted predator [magical-beast]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "logs, testimony, or traces connecting current and former occupants"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Shipping Office",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "magical-beast presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "secure",
+          "role": "secure-cage",
+          "deck": 0,
+          "depth": 2,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "secure-cage",
+            "originalLabel": "Secure Cage",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "rotted floor [unstable-floor]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "layered observation and response point"
+          ],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Secure Cage",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 8
+        },
+        {
+          "roomId": "dock",
+          "role": "loading-dock",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "loading-dock",
+            "originalLabel": "Loading Dock",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "chemically weakened material [corrosion]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Loading Dock",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "utility",
+          "role": "utility-room",
+          "deck": 1,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "utility-room",
+            "originalLabel": "Utility Room",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "heat exhaustion conditions [heat]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Utility Room",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "culture-feast",
+          "role": "clan-feast-hall",
+          "deck": 1,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "clan-feast-hall",
+            "originalLabel": "Clan Feast Hall",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "arcane-adapted predator [magical-beast]"
+          ],
+          "socialEncounters": [
+            "adventuring-company personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Clan Feast Hall",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "magical-beast presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "culture-trophy",
+          "role": "trophy-space",
+          "deck": 1,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "trophy-space",
+            "originalLabel": "Trophy Space",
+            "currentUse": "haunt locus / memory-saturated room",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ]
+          },
+          "occupants": [
+            "mobile fungal growth [fungus]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "concealed weak flooring [unstable-floor]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [
+            "physical alterations record cross-layer history: haunt-memory-layer",
+            "documents or records clarifying recent events"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: haunt locus / memory-saturated room; inherited function: Trophy Space",
+            "orcish cultural/construction influence remains legible in Trophy Space — haunt locus / memory-saturated room",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "fungus presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "controller-planning",
+          "role": "expedition-planning",
+          "deck": 1,
+          "depth": 2,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "expedition-planning",
+            "originalLabel": "Expedition Planning Room",
+            "currentUse": "haunt locus / memory-saturated room",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+            ],
+            "interactionIds": [
+              "haunt-memory-layer"
+            ]
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "concealed weak flooring [unstable-floor]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: haunt-memory-layer",
+            "logs, testimony, or traces connecting current and former occupants"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: historic room use shapes the supernatural manifestation rather than erasing the old purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: haunt locus / memory-saturated room; inherited function: Expedition Planning Room",
+            "orcish cultural/construction influence remains legible in Expedition Planning Room — haunt locus / memory-saturated room",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "controller-gear",
+          "role": "expedition-gear-store",
+          "deck": 1,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "expedition-gear-store",
+            "originalLabel": "Expedition Gear Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "chemically weakened material [corrosion]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Expedition Gear Store",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "ecology-den",
+          "role": "ecology-den",
+          "deck": 1,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "ecology-den",
+            "originalLabel": "Nest / Den / Habitat",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "fungal scavenger [fungus]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "concealed weak flooring [unstable-floor]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in Nest / Den / Habitat",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "fungus presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "resource-store",
+          "role": "resource-specific-store",
+          "deck": 1,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "resource-specific-store",
+            "originalLabel": "precious metal Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "magically altered animal [magical-beast]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "superheated surface [heat]",
+            "overcrowded state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "orcish cultural/construction influence remains legible in precious metal Store",
+            "dominant materials: rough-stone, timber, iron",
+            "savanna / semi-arid / first-frost / dust-storm",
+            "braziers lighting conditions",
+            "geothermal water condition"
+          ],
+          "ecology": [
+            "magical-beast presence consistent with undead ecology and overcrowded occupation state"
+          ],
+          "encounterPressure": 5
+        }
+      ]
+    },
+    "compatibility": {
+      "id": "open_d20",
+      "family": "open d20 / Hypertext d20-compatible",
+      "provenance": "Open d20-compatible presentation; setting-specific rules are not silently imported.",
+      "mechanicalDetailsAreSettingScoped": true
+    },
+    "provenance": {
+      "topologyEngine": "hb-semantic-spatial-engine",
+      "topologySeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+      "contentLayer": "semantic-content-populator",
+      "locationArchetype": "warehouse",
+      "faction": "adventuring-company",
+      "adventurePurpose": null,
+      "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-03-history-deepened-seeded-random-06",
+      "siteLayers": [
+        "relationship-reconciliation",
+        "scale",
+        "origin-culture",
+        "current-controller",
+        "occupancy-state",
+        "environment",
+        "cross-layer-interactions",
+        "ecology",
+        "hazard-ecology",
+        "security-defense",
+        "resources-magic",
+        "condition-history",
+        "narrative-social",
+        "spatial-capacity-normalization"
+      ]
+    }
+  }
+}

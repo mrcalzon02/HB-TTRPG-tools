@@ -1,0 +1,12 @@
+spatial-engine acceptance: PASS
+{
+  "engine": "1.1.1",
+  "content": "1.2.0",
+  "hull": "1.0.0",
+  "moduleArchetypes": 19,
+  "moduleRooms": 15,
+  "alienReconRooms": 10,
+  "kaysenderRooms": 19,
+  "kaysenderCultureProfiles": 10,
+  "hullShapes": 8
+}

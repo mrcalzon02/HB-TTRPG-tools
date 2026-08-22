@@ -1,0 +1,8 @@
+site-profile layered composition: PASS
+{
+  "axisCount": 28,
+  "optionCount": 614,
+  "layerCount": 14,
+  "diverseProfiles": 60,
+  "rooms": 20
+}

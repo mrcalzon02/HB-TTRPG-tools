@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.2.0",
+  "recordType": "spatial-site-batch-workflow-outcome",
+  "batchId": "2026-08-22-purpose-aware-variety-03-history-deepened",
+  "sourceCommit": "c0583f55950c6dc3b0e18c3652f3ca9483115c70",
+  "regressionStatus": 0,
+  "batchStatus": 0,
+  "tests": [
+    {
+      "test": "tests/spatial-engine.test.js",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "test": "tests/site-profile-layers.test.js",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "test": "tests/site-history-interactions.test.js",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "test": "tests/spatial-connector-normalization.test.js",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "test": "tests/site-interaction-quality-regressions.test.js",
+      "exitCode": 0,
+      "ok": true
+    }
+  ],
+  "ok": true
+}

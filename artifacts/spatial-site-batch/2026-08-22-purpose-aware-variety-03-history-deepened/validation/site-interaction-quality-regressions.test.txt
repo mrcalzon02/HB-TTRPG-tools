@@ -1,0 +1,6 @@
+site interaction quality regressions: PASS
+{
+  "cases": 4,
+  "minimumInteractions": 4,
+  "minimumAdaptedTemplates": 5
+}

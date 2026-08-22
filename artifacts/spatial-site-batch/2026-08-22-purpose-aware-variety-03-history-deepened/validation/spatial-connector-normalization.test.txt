@@ -1,0 +1,9 @@
+spatial connector normalization: PASS
+{
+  "engine": "1.1.1",
+  "rooms": 24,
+  "decks": 3,
+  "connectorPairs": 2,
+  "connectorEndpoints": 4,
+  "edges": 58
+}
