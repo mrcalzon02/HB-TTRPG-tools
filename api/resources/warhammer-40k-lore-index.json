@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "setting": "Warhammer 40K",
+  "description": "Warhammer 40K archive routes currently exposed by the Foundry, including the migrated long-form story archive.",
+  "resources": [
+    "warhammer-40k-lore.html",
+    "warhammer-40k-map.html",
+    "assets/warhammer-40k/lore/reddit-story-archive.json"
+  ]
+}
