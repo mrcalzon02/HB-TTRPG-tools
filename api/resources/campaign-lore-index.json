@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "description": "Cross-setting campaign, lore, rules, module, and operations entry routes. Setting-specific indexes should be preferred when available.",
+  "resources": [
+    "site-map.html",
+    "generators.html",
+    "modules.html",
+    "kaysender.html",
+    "data/kaysender/wiki/wiki-index.json",
+    "barotrauma.html",
+    "barotrauma-rpg-tools.html",
+    "data/barotrauma/tools/encounters/encounter-index.json",
+    "shadowrun.html",
+    "world-of-darkness.html",
+    "solanum-umbra.html",
+    "blacklight-wiki-archive.html",
+    "blacklight-era-campaign.html",
+    "warhammer-40k-lore.html",
+    "assets/warhammer-40k/lore/reddit-story-archive.json"
+  ]
+}
