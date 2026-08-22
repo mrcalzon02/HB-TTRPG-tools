@@ -44,26 +44,32 @@ public final class OrganizationFactionBootstrap {
             throw new SQLException("Organization bootstrap requires schema 033 or newer.");
         }
         try (Statement statement = connection.createStatement()) {
-            for (String sql : OrganizationFactionSchema.statements()) {
-                String normalized = sql.stripLeading().toUpperCase(Locale.ROOT);
-                if (normalized.startsWith("INSERT ")
-                        || normalized.startsWith("INSERT OR ")
-                        || normalized.startsWith("WITH ")
-                        || normalized.startsWith("UPDATE STATION_CONTROL_STATE")) {
-                    statement.execute(sql);
-                }
-            }
+            replayDataStatements(statement, OrganizationFactionSchema.statements());
             if (tableExists(connection, "organization_operation")) {
                 for (String sql : OrganizationOperationsSchema.statements()) {
                     String normalized = sql.stripLeading().toUpperCase(Locale.ROOT);
-                    if (normalized.startsWith("UPDATE WORLD_ORGANIZATION")) {
-                        statement.execute(sql);
-                    }
+                    if (normalized.startsWith("UPDATE WORLD_ORGANIZATION")) statement.execute(sql);
                 }
+            }
+            if (tableExists(connection, "organization_finance_state")) {
+                replayDataStatements(statement, InstitutionalEconomySchema.statements());
             }
         }
         validateMajorFactionHeadquarters(connection);
         validateInstitutionAlignment(connection);
+        validateStationScaledInstitutions(connection);
+    }
+
+    private static void replayDataStatements(Statement statement, Iterable<String> statements) throws SQLException {
+        for (String sql : statements) {
+            String normalized = sql.stripLeading().toUpperCase(Locale.ROOT);
+            if (normalized.startsWith("INSERT ")
+                    || normalized.startsWith("INSERT OR ")
+                    || normalized.startsWith("WITH ")
+                    || normalized.startsWith("UPDATE STATION_CONTROL_STATE")) {
+                statement.execute(sql);
+            }
+        }
     }
 
     private static void validateMajorFactionHeadquarters(Connection connection) throws SQLException {
@@ -84,6 +90,25 @@ public final class OrganizationFactionBootstrap {
         if (unaligned != 0) {
             throw new SQLException("Every headquartered non-sovereign organization must inherit its HQ sovereign alignment; missing="
                     + unaligned);
+        }
+    }
+
+    private static void validateStationScaledInstitutions(Connection connection) throws SQLException {
+        if (!tableExists(connection, "organization_finance_state")) return;
+        long stations = scalar(connection, "SELECT COUNT(*) FROM world_station");
+        long localInstitutions = scalar(connection,
+                "SELECT COUNT(*) FROM world_organization WHERE organization_key LIKE 'local-institution:%'");
+        if (localInstitutions != stations * 8L) {
+            throw new SQLException("Institutional density bootstrap expected eight local institutions per station; stations="
+                    + stations + ", localInstitutions=" + localInstitutions);
+        }
+        long missingFinance = scalar(connection, "SELECT COUNT(*) FROM world_organization o WHERE NOT EXISTS ("
+                + "SELECT 1 FROM organization_finance_state f WHERE f.organization_id=o.organization_id)");
+        long missingMembership = scalar(connection, "SELECT COUNT(*) FROM world_organization o WHERE NOT EXISTS ("
+                + "SELECT 1 FROM organization_membership_state m WHERE m.organization_id=o.organization_id)");
+        if (missingFinance != 0 || missingMembership != 0) {
+            throw new SQLException("Every organization must receive finance and membership state; missingFinance="
+                    + missingFinance + ", missingMembership=" + missingMembership);
         }
     }
 
