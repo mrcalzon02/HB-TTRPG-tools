@@ -1,6 +1,40 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "description": "Expandable authoritative indexes and broader campaign/lore/operation-contract resources for HBFoundryAPI.",
+  "operationContracts": {
+    "getResource": {
+      "call": "HBFoundryAPI.getResource(resourceId, options)",
+      "arguments": [
+        {"name":"resourceId","type":"string","required":true,"description":"Stable resource id from this registry or the capability manifest."},
+        {"name":"options","type":"object","required":false,"fields":{"raw":{"type":"boolean","required":false,"default":false,"description":"Return raw text instead of JSON parsing when applicable."},"refresh":{"type":"boolean","required":false,"default":false,"description":"Force a reload instead of using the facade cache."}}}
+      ],
+      "returns":"Parsed JSON for json resources or text for non-json resources."
+    },
+    "expandResourceIndex": {
+      "call": "HBFoundryAPI.expandResourceIndex(resourceId)",
+      "arguments": [
+        {"name":"resourceId","type":"string","required":true,"description":"Stable id of a resource that declares indexRules."}
+      ],
+      "returns":"Array of generated child descriptors containing stable derived id, parentId, title, workspace, kind, format, path, and tags."
+    },
+    "searchCollection": {
+      "call": "HBFoundryAPI.searchCollection(resourceId, query, options)",
+      "arguments": [
+        {"name":"resourceId","type":"string","required":true,"description":"Stable id of an expandable indexed resource."},
+        {"name":"query","type":"string","required":true,"description":"Case-insensitive literal search term. Must be non-empty."},
+        {"name":"options","type":"object","required":false,"fields":{"maxResults":{"type":"integer","required":false,"default":80,"range":"1..500"},"includeErrors":{"type":"boolean","required":false,"default":false,"description":"Include child retrieval errors as result records instead of silently skipping them."}}}
+      ],
+      "returns":"Search-hit records carrying child resource id/path and matching value excerpt."
+    },
+    "searchResources": {
+      "call": "HBFoundryAPI.searchResources(query, options)",
+      "arguments": [
+        {"name":"query","type":"string","required":true,"description":"Case-insensitive literal search term. Must be non-empty."},
+        {"name":"options","type":"object","required":false,"fields":{"workspace":{"type":"string","required":false},"kind":{"type":"string","required":false},"resourceQuery":{"type":"string","required":false,"description":"Filter resource descriptors before content search."},"resourceIds":{"type":"array<string>","required":false,"description":"Restrict search to specified top-level resource ids."},"maxResults":{"type":"integer","required":false,"default":40,"range":"1..200"},"includeErrors":{"type":"boolean","required":false,"default":false}}}
+      ],
+      "returns":"Search-hit records across registered top-level resources."
+    }
+  },
   "resources": [
     {
       "id": "foundry.operation-contracts",
@@ -9,7 +43,8 @@
       "kind": "operation-index",
       "format": "json",
       "path": "api/operation-contracts.json",
-      "tags": ["api", "operations", "arguments", "schemas", "self-documenting"]
+      "tags": ["api", "operations", "arguments", "schemas", "self-documenting"],
+      "supports": ["getResource"]
     },
     {
       "id": "kaysender.wiki-index",
@@ -20,9 +55,10 @@
       "path": "data/kaysender/wiki/wiki-index.json",
       "tags": ["kaysender", "lore", "campaign", "rules", "converted stats"],
       "childKind": "lore-pack",
+      "supports": ["getResource", "expandResourceIndex", "searchCollection"],
       "indexRules": [
-        {"key":"packs","base":"","kind":"lore-pack"},
-        {"key":"sourceDocuments","base":"data/kaysender/wiki/","kind":"source-reference"}
+        {"key":"packs","base":"","kind":"lore-pack","description":"Each packs entry is already a repository-root-relative authoritative JSON path."},
+        {"key":"sourceDocuments","base":"data/kaysender/wiki/","kind":"source-reference","description":"Source-document entries are relative to the Kaysender wiki directory."}
       ]
     },
     {
@@ -34,9 +70,10 @@
       "path": "data/barotrauma/tools/encounters/encounter-index.json",
       "tags": ["barotrauma", "encounters", "lethality", "campaign", "generator data"],
       "childKind": "encounter-data",
+      "supports": ["getResource", "expandResourceIndex", "searchCollection"],
       "indexRules": [
-        {"key":"parts","base":"","kind":"encounter-templates"},
-        {"key":"lethalityParts","base":"","kind":"encounter-lethality"}
+        {"key":"parts","base":"","kind":"encounter-templates","description":"Encounter-template JSON parts."},
+        {"key":"lethalityParts","base":"","kind":"encounter-lethality","description":"Matching lethality-profile JSON parts."}
       ]
     },
     {
@@ -48,8 +85,9 @@
       "path": "api/resources/blacklight-lore-index.json",
       "tags": ["blacklight", "campaign", "lore", "rules", "archives"],
       "childKind": "blacklight-record",
+      "supports": ["getResource", "expandResourceIndex", "searchCollection"],
       "indexRules": [
-        {"key":"resources","base":"","kind":"blacklight-record"}
+        {"key":"resources","base":"","kind":"blacklight-record","description":"Repository-root-relative Blacklight HTML/JSON authority paths."}
       ]
     },
     {
@@ -61,8 +99,9 @@
       "path": "api/resources/campaign-lore-index.json",
       "tags": ["campaign", "lore", "settings", "modules"],
       "childKind": "campaign-resource",
+      "supports": ["getResource", "expandResourceIndex", "searchCollection"],
       "indexRules": [
-        {"key":"resources","base":"","kind":"campaign-resource"}
+        {"key":"resources","base":"","kind":"campaign-resource","description":"Repository-root-relative cross-setting campaign/lore entry paths."}
       ]
     },
     {
@@ -74,8 +113,9 @@
       "path": "api/resources/warhammer-40k-lore-index.json",
       "tags": ["warhammer", "40k", "campaign", "lore"],
       "childKind": "lore-resource",
+      "supports": ["getResource", "expandResourceIndex", "searchCollection"],
       "indexRules": [
-        {"key":"resources","base":"","kind":"lore-resource"}
+        {"key":"resources","base":"","kind":"lore-resource","description":"Repository-root-relative Warhammer lore/archive paths."}
       ]
     }
   ]
