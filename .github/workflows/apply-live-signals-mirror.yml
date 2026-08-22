@@ -37,34 +37,73 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Apply mirror migration
-        run: python scripts/apply_live_signals_mirror.py
-
-      - name: Apply full-validation fixes
-        run: python scripts/apply_live_signals_validation_fixes.py
-
-      - name: Apply duplicate-status fixes
-        run: python scripts/apply_live_signals_dedup_fixes.py
-
-      - name: Validate JavaScript syntax
+      - name: Apply and validate candidate
+        id: validate
+        shell: bash
         run: |
-          node --check live-signals-laboratory.js
-          node --check scientific-tools-entry.js
+          set +e
+          {
+            echo '== mirror migration =='
+            python scripts/apply_live_signals_mirror.py &&
+            echo '== full-validation fixes ==' &&
+            python scripts/apply_live_signals_validation_fixes.py &&
+            echo '== duplicate-status fixes ==' &&
+            python scripts/apply_live_signals_dedup_fixes.py &&
+            echo '== javascript syntax ==' &&
+            node --check live-signals-laboratory.js &&
+            node --check scientific-tools-entry.js &&
+            echo '== live signals validator ==' &&
+            node scripts/validate-live-signals-laboratory.mjs &&
+            echo '== signals simulation validator ==' &&
+            node scripts/validate-signals-laboratory.mjs &&
+            echo '== scientific tools extraction validator ==' &&
+            node scripts/validate-scientific-tools-extraction.mjs &&
+            echo '== patch hygiene ==' &&
+            git diff --check
+          } > /tmp/live-signals-validation.log 2>&1
+          status=$?
+          cat /tmp/live-signals-validation.log
+          echo "status=${status}" >> "$GITHUB_OUTPUT"
+          exit 0
 
-      - name: Validate Signals laboratories
+      - name: Commit validation failure receipt
+        if: ${{ steps.validate.outputs.status != '0' }}
+        shell: bash
         run: |
-          node scripts/validate-live-signals-laboratory.mjs
-          node scripts/validate-signals-laboratory.mjs
-          node scripts/validate-scientific-tools-extraction.mjs
-
-      - name: Check patch hygiene
-        run: git diff --check
+          git reset --hard HEAD
+          mkdir -p .ci-results
+          {
+            echo "Live Signals full validation failed."
+            echo "Source commit: $GITHUB_SHA"
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            cat /tmp/live-signals-validation.log
+          } > .ci-results/live-signals-full-validation.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .ci-results/live-signals-full-validation.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Record Live Signals validation failure"
+            for attempt in 1 2 3 4 5; do
+              git pull --rebase origin main
+              if git push origin HEAD:main; then
+                break
+              fi
+              sleep 2
+            done
+          fi
+          exit 1
 
       - name: Commit and integrate validated migration result
+        if: ${{ steps.validate.outputs.status == '0' }}
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm scripts/apply_live_signals_mirror.py scripts/apply_live_signals_validation_fixes.py scripts/apply_live_signals_dedup_fixes.py .github/workflows/apply-live-signals-mirror.yml
+          if [ -f .ci-results/live-signals-full-validation.txt ]; then
+            git rm -f .ci-results/live-signals-full-validation.txt
+          fi
           git add live-signals-laboratory.js live-signals-laboratory.css scientific-tools-entry.js scripts/validate-live-signals-laboratory.mjs .github/workflows/scientific-tools-extraction.yml docs/live-signals-laboratory-mirror-and-safety.md
           git diff --cached --check
           git commit -m "Validate and consolidate Live Signals Laboratory"
