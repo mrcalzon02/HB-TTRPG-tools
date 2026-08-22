@@ -228,8 +228,8 @@ final class WorldDatabaseMigrations {
              ResultSet result = statement.executeQuery("PRAGMA foreign_key_check")) {
             long count = 0;
             while (result.next()) count++;
+            return count;
         }
-        return 0;
     }
 
     static void configure(Connection connection) throws SQLException {
