@@ -59,21 +59,27 @@ jobs:
           git add "$ARCHIVE"
           if git diff --cached --quiet; then
             echo 'Archive already present; nothing to commit.'
-            exit 0
+          else
+            git commit -m 'Archive 32 spatial site generation test artifacts [skip ci]'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                echo 'Unexpected archive conflict during rebase.' >&2
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" -eq 5 ]; then
+                echo 'Unable to publish archive after retries.' >&2
+                exit 1
+              fi
+              echo "Push raced with concurrent main update; retrying ($attempt/5)."
+              sleep 2
+            done
           fi
-          git commit -m 'Archive 32 spatial site generation test artifacts [skip ci]'
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              echo 'Unexpected archive conflict during rebase.' >&2
-              exit 1
-            fi
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            echo "Push raced with concurrent main update; retrying ($attempt/5)."
-            sleep 2
-          done
-          echo 'Unable to publish archive after retries.' >&2
-          exit 1
+
+      - name: Enforce batch acceptance
+        run: |
+          node -e "const s=require('./artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/summary.json'); if(!s.acceptance.ok){console.error(JSON.stringify(s.acceptance,null,2));process.exit(1)} console.log(JSON.stringify(s.acceptance,null,2))"
