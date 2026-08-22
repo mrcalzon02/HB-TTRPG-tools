@@ -1,0 +1,73 @@
+name: Diagnose spatial connector regressions
+
+on:
+  push:
+    paths:
+      - 'scripts/.diagnose-spatial-connectors-trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run and preserve all spatial suites
+        shell: bash
+        run: |
+          set +e
+          OUT='/tmp/spatial-diagnostic'
+          rm -rf "$OUT" && mkdir -p "$OUT"
+          status=0
+          : > "$OUT/test-status.tsv"
+          for test in \
+            tests/spatial-engine.test.js \
+            tests/site-profile-layers.test.js \
+            tests/site-history-interactions.test.js \
+            tests/spatial-connector-normalization.test.js
+          do
+            name="$(basename "$test" .js)"
+            node "$test" > "$OUT/$name.log" 2>&1
+            rc=$?
+            printf '%s\t%s\n' "$test" "$rc" >> "$OUT/test-status.tsv"
+            if [ "$rc" -ne 0 ]; then status=1; fi
+          done
+          echo "$status" > "$OUT/overall-status"
+          exit 0
+      - name: Publish diagnostic evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/validation/diagnostic'
+          rm -rf "$DEST"
+          mkdir -p "$DEST"
+          cp /tmp/spatial-diagnostic/* "$DEST/"
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path');
+          const dir='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/validation/diagnostic';
+          const tests=fs.readFileSync(path.join(dir,'test-status.tsv'),'utf8').trim().split(/\n/).filter(Boolean).map(line=>{const [test,exitCode]=line.split('\t');return{test,exitCode:Number(exitCode),ok:Number(exitCode)===0};});
+          const overallStatus=Number(fs.readFileSync(path.join(dir,'overall-status'),'utf8').trim());
+          fs.writeFileSync(path.join(dir,'outcome.json'),JSON.stringify({schemaVersion:'1.0.0',recordType:'spatial-regression-diagnostic',sourceCommit:process.env.GITHUB_SHA,overallStatus,ok:overallStatus===0,tests},null,2)+'\n');
+          NODE
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEST"
+          git commit -m 'Record spatial connector regression diagnostic [skip ci]'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then break; fi
+            test "$attempt" -lt 5 || exit 1
+            sleep 2
+          done
+      - name: Enforce diagnostic result
+        shell: bash
+        run: test "$(cat /tmp/spatial-diagnostic/overall-status)" -eq 0
