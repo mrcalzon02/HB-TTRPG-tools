@@ -1,0 +1,82 @@
+name: Migrate Warhammer Reddit Lore Archive
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/migrate-warhammer-reddit-lore.yml
+      - scripts/migrate_reddit_warhammer_lore.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: migrate-warhammer-reddit-lore
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build Reddit fiction archive
+        run: python scripts/migrate_reddit_warhammer_lore.py
+
+      - name: Validate generated archive
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('assets/warhammer-40k/lore/reddit-story-archive.json').read_text(encoding='utf-8'))
+          stories = data.get('stories', [])
+          if len(stories) < 86:
+              raise SystemExit(f'Archive validation failed: expected at least 86 stories, found {len(stories)}')
+          if any(not story.get('selftext', '').strip() for story in stories):
+              raise SystemExit('Archive validation failed: at least one story body is empty')
+          page = Path('warhammer-40k-lore.html').read_text(encoding='utf-8')
+          if page.count('class="story"') != len(stories):
+              raise SystemExit('Archive validation failed: static reader story count does not match JSON')
+          workspace = Path('warhammer-40k-workspace-v8.js').read_text(encoding='utf-8')
+          for required in ["['lore','✠ Lore']", 'function buildLorePanel()', "frame.src='warhammer-40k-lore.html'"]:
+              if required not in workspace:
+                  raise SystemExit(f'Archive validation failed: missing workspace integration: {required}')
+          print(f'Validated {len(stories)} Reddit stories and native Lore register integration.')
+          PY
+
+      - name: Commit migrated archive to main
+        shell: bash
+        run: |
+          if git diff --quiet -- \
+            warhammer-40k-lore.html \
+            assets/warhammer-40k/lore/reddit-story-archive.json \
+            warhammer-40k-workspace-v8.js \
+            warhammer-40k-workspace-v8.css \
+            app-lite-view-mounts.js; then
+            echo 'Archive already current; no commit required.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            warhammer-40k-lore.html \
+            assets/warhammer-40k/lore/reddit-story-archive.json \
+            warhammer-40k-workspace-v8.js \
+            warhammer-40k-workspace-v8.css \
+            app-lite-view-mounts.js
+          git commit -m 'Migrate Reddit fiction archive into Warhammer 40K Lore'
+          git push origin HEAD:main
