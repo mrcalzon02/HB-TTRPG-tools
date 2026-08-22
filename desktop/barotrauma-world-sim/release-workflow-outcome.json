@@ -1,14 +1,14 @@
 {
   "recordType": "barotraumaDesktopReleaseWorkflowOutcome",
-  "runId": "32556895845",
+  "runId": "32557052086",
   "runAttempt": "1",
-  "sourceCommit": "db47b1e2b2823d2a9b0e5cbc377ffcce56bf77a1",
+  "sourceCommit": "a7535cfed950e6dc680cced63950e227bf4966b9",
   "workflow": "Verify and release Barotrauma desktop application",
   "event": "push",
   "linuxVerification": "success",
-  "windowsInstallerRelease": "cancelled",
+  "windowsInstallerRelease": "success",
   "releaseTag": "barotrauma-desktop-v0.1.672",
-  "releaseVerified": false,
+  "releaseVerified": true,
   "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.1.672",
   "releaseAssets": [
     "Barotrauma-World-Simulation-Toolbox-0.1.672-Windows-x64.msi",
@@ -16,13 +16,13 @@
   ],
   "jobs": [
     {
-      "id": 96992466519,
+      "id": 96992849160,
       "name": "java-17-verification",
       "status": "completed",
       "conclusion": "success",
-      "startedAt": "2026-08-22T06:25:09Z",
-      "completedAt": "2026-08-22T06:26:59Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32556895845/job/96992466519",
+      "startedAt": "2026-08-22T06:28:46Z",
+      "completedAt": "2026-08-22T06:30:50Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32557052086/job/96992849160",
       "steps": [
         {
           "number": 1,
@@ -69,13 +69,13 @@
       ]
     },
     {
-      "id": 96992663440,
+      "id": 96993086326,
       "name": "windows-installer-release",
       "status": "completed",
-      "conclusion": "cancelled",
-      "startedAt": "2026-08-22T06:27:01Z",
-      "completedAt": "2026-08-22T06:28:22Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32556895845/job/96992663440",
+      "conclusion": "success",
+      "startedAt": "2026-08-22T06:30:54Z",
+      "completedAt": "2026-08-22T06:36:21Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32557052086/job/96993086326",
       "steps": [
         {
           "number": 1,
@@ -99,43 +99,43 @@
           "number": 4,
           "name": "Ensure WiX Toolset for MSI packaging",
           "status": "completed",
-          "conclusion": "cancelled"
+          "conclusion": "success"
         },
         {
           "number": 5,
           "name": "Verify Windows desktop runtime",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 6,
           "name": "Package Windows MSI",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 7,
           "name": "Read release manifest",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 8,
           "name": "Write release notes",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 9,
           "name": "Upload installer workflow artifact",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 10,
           "name": "Publish immutable GitHub release",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 19,
@@ -158,13 +158,13 @@
       ]
     },
     {
-      "id": 96992809519,
+      "id": 96993675881,
       "name": "release-workflow-outcome",
       "status": "in_progress",
       "conclusion": null,
-      "startedAt": "2026-08-22T06:28:24Z",
+      "startedAt": "2026-08-22T06:36:24Z",
       "completedAt": null,
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32556895845/job/96992809519",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32557052086/job/96993675881",
       "steps": [
         {
           "number": 1,
@@ -194,5 +194,5 @@
     }
   ],
   "failedJobLogs": [],
-  "recordedAt": "2026-08-22T06:28:40.4787169Z"
+  "recordedAt": "2026-08-22T06:36:42.0464856Z"
 }
