@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-regression-diagnostic",
+  "sourceCommit": "d205e39a09cdd7cbce643d3cca2eb192eb8f91d1",
+  "overallStatus": 1,
+  "ok": false,
+  "tests": [
+    {
+      "test": "tests/spatial-engine.test.js",
+      "exitCode": 1,
+      "ok": false
+    },
+    {
+      "test": "tests/site-profile-layers.test.js",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "test": "tests/site-history-interactions.test.js",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "test": "tests/spatial-connector-normalization.test.js",
+      "exitCode": 0,
+      "ok": true
+    }
+  ]
+}
