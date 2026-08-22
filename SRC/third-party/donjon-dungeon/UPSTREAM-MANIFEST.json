@@ -1,0 +1,27 @@
+{
+  "archive_id": "donjon-random-dungeon-generator",
+  "archive_role": "third-party-procedural-topology-reference",
+  "upstream": {
+    "name": "donjon; Random Dungeon Generator",
+    "author_credit": "drow / donjon",
+    "project_url": "https://donjon.bin.sh/code/dungeon/",
+    "source_url": "https://donjon.bin.sh/code/dungeon/dungeon.pl",
+    "source_filename": "dungeon.pl",
+    "license_name": "Creative Commons Attribution-NonCommercial 3.0 Unported",
+    "license_id": "CC-BY-NC-3.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc/3.0/"
+  },
+  "provenance_established": "2026-08-21",
+  "expected_snapshot_path": "SRC/third-party/donjon-dungeon/dungeon.pl",
+  "snapshot_acquisition_helper": "SRC/third-party/donjon-dungeon/fetch-original.sh",
+  "snapshot_status": "pending_explicit_upstream_fetch",
+  "production_import_allowed": false,
+  "intended_project_use": [
+    "shared topology engine research",
+    "generic module map generation",
+    "alien vessel generation",
+    "facility and station generation",
+    "future connected-space generators"
+  ],
+  "integration_policy": "Keep upstream source and licensing isolated. Prefer independently authored project-native topology code using the documented algorithmic model; do not silently relicense third-party source."
+}
