@@ -112,8 +112,7 @@ public final class WorldObserverInstitutionalLayer {
                     .append("  Employees/members/contractors/crews: ").append(row.employees()).append(" / ")
                     .append(row.members()).append(" / ").append(row.contractors()).append(" / ")
                     .append(row.activeCrews()).append("\n")
-                    .append("  Active operations/assets: ").append(row.activeOperations()).append(" / ")
-                    .append(row.ownedAssets()).append(" · aligned ").append(value(row.alignedMajorName())).append("\n");
+                    .append("  Alignment: ").append(value(row.alignedMajorName())).append("\n");
         }
 
         List<OperationRow> operations = snapshot.operations().stream()
@@ -241,7 +240,7 @@ public final class WorldObserverInstitutionalLayer {
                 + "FROM organization_station_presence p JOIN world_organization o ON o.organization_id=p.organization_id "
                 + "LEFT JOIN world_organization major ON major.organization_id=o.aligned_major_organization_id "
                 + "JOIN world_station s ON s.station_id=p.station_id "
-                + "ORDER BY s.display_name,MAX(MAX(p.political_influence,p.economic_influence),MAX(p.labor_influence,p.security_influence)) DESC "
+                + "ORDER BY s.display_name,MAX(p.political_influence,p.economic_influence,p.labor_influence,p.security_influence) DESC "
                 + "LIMIT " + PRESENCE_LIMIT;
         List<PresenceRow> rows = new ArrayList<>();
         try (Statement statement = c.createStatement(); ResultSet r = statement.executeQuery(sql)) {
