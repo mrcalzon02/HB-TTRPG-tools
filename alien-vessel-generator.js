@@ -1,14 +1,16 @@
 (function (root, factory) {
   const engine = root && root.HBSemanticSpatialEngine ? root.HBSemanticSpatialEngine : (typeof require === 'function' ? require('./semantic-spatial-engine.js') : null);
-  const api = factory(engine);
+  const hull = root && root.HBVesselHullEnvelope ? root.HBVesselHullEnvelope : (typeof require === 'function' ? require('./vessel-hull-envelope.js') : null);
+  const api = factory(engine, hull);
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) {
     root.generator = root.generator || {};
     root.generator.alien_vessel = api;
   }
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (engine) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (engine, hull) {
   'use strict';
   if (!engine) throw new Error('alien-vessel-generator requires HBSemanticSpatialEngine.');
+  if (!hull) throw new Error('alien-vessel-generator requires HBVesselHullEnvelope.');
 
   const PROFILES = Object.freeze({
     recon: {
@@ -68,12 +70,19 @@
       pruneDeadEnds: options.pruneDeadEnds !== false,
       strict: options.strict
     });
+    const hullEnvelope = hull.wrap(layout, {
+      shape: options.hullShape || options.shape || 'connected-skin',
+      tightness: options.hullTightness == null ? (options.tightness == null ? 'standard' : options.tightness) : options.hullTightness
+    });
+    if (options.strict !== false && !hullEnvelope.validation.ok) throw new Error(`Vessel hull generation failed validation: ${hullEnvelope.validation.errors.join(' | ')}`);
     return {
-      schemaVersion:'1.0.0', generator:'generator.alien_vessel', vesselType: options.vesselType || 'short-range reconnaissance vessel',
+      schemaVersion:'1.1.0', generator:'generator.alien_vessel', vesselType: options.vesselType || 'short-range reconnaissance vessel',
       faction: options.faction || 'Alpthon', profile: options.profile || 'recon', seed: layout.seed, deckCount: layout.deckCount,
       semanticSummary: layout.rooms.map(room => ({ id:room.nodeId, role:room.role, label:room.label, deck:room.deck, pressureZone:room.pressureZone, tags:room.tags })),
+      hull: hullEnvelope,
       damage: damageState(layout, options.damageSeverity == null && options.profile === 'damaged_recon' ? 0.65 : options.damageSeverity, layout.seed),
-      spatialLayout: layout, validation: layout.validation
+      spatialLayout: layout,
+      validation: { ok: layout.validation.ok && hullEnvelope.validation.ok, spatial: layout.validation, hull: hullEnvelope.validation }
     };
   }
 

@@ -4,26 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Semantic Spatial Generators | Calzon’s TTRPG Foundry</title>
-  <meta name="description" content="Deterministic semantic-first procedural module map and alien vessel generators using one shared spatial engine.">
+  <meta name="description" content="Deterministic semantic-first procedural module map and alien vessel generators using one shared spatial engine and selectable connected hull envelopes.">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="workspace-landing.css">
 </head>
 <body class="workspace-landing-body">
   <header class="site-header no-print">
-    <div><p class="eyebrow">Shared procedural architecture</p><h1>Semantic Spatial Generators</h1><p class="subtitle">Purpose and connectivity first; geometry and rendering second.</p></div>
+    <div><p class="eyebrow">Shared procedural architecture</p><h1>Semantic Spatial Generators</h1><p class="subtitle">Purpose and connectivity first; geometry, hull envelope, and rendering second.</p></div>
     <nav class="top-nav" aria-label="Spatial generator navigation"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button" href="generators.html">Generator Index</a><a class="nav-button" href="index.html?view=modules">Module Viewer</a></nav>
   </header>
   <main id="generators" class="workspace-landing-shell">
     <nav class="workspace-breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Calzon’s TTRPG Foundry</a><span>›</span><a href="generators.html">Generators</a><span>›</span><span>Semantic Spatial Generators</span></nav>
     <section class="workspace-hero" data-workspace-code="SPATIAL" aria-labelledby="spatial-title">
-      <div class="workspace-hero-copy"><p class="eyebrow">Deterministic shared engine</p><h1 id="spatial-title">One topology engine, multiple setting adapters.</h1><p>The module-map and alien-vessel generators use the same seeded semantic graph, room placement, corridor routing, door/socket, interdeck connector, pruning, and validation implementation. Module maps adapt the result to the existing tile editor schema; alien vessels preserve semantic compartment and pressure-zone data.</p></div>
-      <aside class="workspace-summary-panel"><h2>Acceptance gates</h2><div class="workspace-summary-list"><div><strong>Deterministic</strong><span>Same seed and semantics produce the same topology and geometry.</span></div><div><strong>Connected</strong><span>All semantic destinations remain reachable.</span></div><div><strong>Separated</strong><span>Placed rooms cannot geometrically overlap.</span></div><div><strong>Multi-deck</strong><span>Deck transitions are emitted as paired vertical connectors.</span></div></div></aside>
+      <div class="workspace-hero-copy"><p class="eyebrow">Deterministic shared engine</p><h1 id="spatial-title">One topology engine, multiple setting adapters.</h1><p>The module-map and alien-vessel generators use the same seeded semantic graph, room placement, corridor routing, door/socket, interdeck connector, pruning, and validation implementation. Vessels add a second derived layer that wraps the interior in a continuous selectable hull: connected skin, oval, capsule, rectangle, square/cube, or circle/cylinder, with adjustable hull tightness.</p></div>
+      <aside class="workspace-summary-panel"><h2>Acceptance gates</h2><div class="workspace-summary-list"><div><strong>Deterministic</strong><span>Same seed and semantics produce the same topology and geometry.</span></div><div><strong>Connected</strong><span>All semantic destinations remain reachable.</span></div><div><strong>Separated</strong><span>Placed rooms cannot geometrically overlap.</span></div><div><strong>Hull-contained</strong><span>Every occupied interior cell remains inside one continuous vertically connected outer skin.</span></div></div></aside>
     </section>
     <div id="generator-library-panel"></div>
   </main>
   <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Shared semantic spatial generation.</p></footer>
   <script src="semantic-spatial-engine.js"></script>
   <script src="module-map-generator.js"></script>
+  <script src="vessel-hull-envelope.js"></script>
   <script src="alien-vessel-generator.js"></script>
   <script src="module-map-generator-entry.js"></script>
   <script src="alien-vessel-generator-entry.js"></script>

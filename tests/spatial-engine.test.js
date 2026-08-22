@@ -2,6 +2,7 @@
 const assert = require('assert');
 const engine = require('../semantic-spatial-engine.js');
 const moduleMap = require('../module-map-generator.js');
+const hull = require('../vessel-hull-envelope.js');
 const vessel = require('../alien-vessel-generator.js');
 
 function reachable(layout) {
@@ -26,14 +27,29 @@ assert.strictEqual(map.tool,'module-map-editor');
 assert.ok(Array.isArray(map.cells) && map.cells.length===48 && map.cells[0].length===64, 'module adapter must preserve tile schema');
 assert.strictEqual(map.spatialLayout.validation.ok,true);
 
-const recon = vessel.generate({seed:'ship-9',profile:'recon'});
-const damaged = vessel.generate({seed:'ship-9',profile:'damaged_recon'});
+const shapes = ['connected-skin','oval','capsule','rectangle','square','circle','cube','skin'];
+for (const shape of shapes) {
+  const wrapped = hull.wrap(a, { shape, tightness:'tight' });
+  assert.strictEqual(wrapped.validation.ok, true, `${shape}: ${wrapped.validation.errors.join('\n')}`);
+  assert.strictEqual(wrapped.surface.connectedAcrossDecks, true, `${shape} hull must remain vertically connected`);
+  assert.ok(wrapped.shellCells.length > 0, `${shape} hull must have an outer shell`);
+}
+assert.strictEqual(hull.normalizeShape('cube'),'square');
+assert.strictEqual(hull.normalizeShape('skin'),'connected-skin');
+assert.ok(hull.normalizeTightness('loose').clearance > hull.normalizeTightness('tight').clearance, 'loose hull must create more clearance than tight hull');
+
+const recon = vessel.generate({seed:'ship-9',profile:'recon',hullShape:'oval',hullTightness:'tight'});
+const damaged = vessel.generate({seed:'ship-9',profile:'damaged_recon',hullShape:'connected-skin',hullTightness:'standard'});
 assert.strictEqual(recon.validation.ok,true);
 assert.strictEqual(damaged.validation.ok,true);
 assert.ok(recon.deckCount >= 3, 'recon vessel should be multi-deck');
 assert.ok(recon.spatialLayout.connectors.length >= 4, 'recon vessel should have interdeck reachability');
 assert.notStrictEqual(engine.fingerprint(recon.spatialLayout), engine.fingerprint(damaged.spatialLayout), 'semantic profile changes must alter topology');
 assert.ok(damaged.damage.length > 0, 'damaged profile must carry deterministic damage state');
+assert.strictEqual(recon.hull.shape,'oval');
+assert.strictEqual(damaged.hull.shape,'connected-skin');
+assert.strictEqual(recon.hull.validation.ok,true);
+assert.strictEqual(damaged.hull.validation.ok,true);
 
 console.log('spatial-engine acceptance: PASS');
-console.log(JSON.stringify({engine:engine.VERSION,moduleRooms:map.spatialLayout.rooms.length,reconRooms:recon.spatialLayout.rooms.length,damagedRooms:damaged.spatialLayout.rooms.length,connectors:recon.spatialLayout.connectors.length},null,2));
+console.log(JSON.stringify({engine:engine.VERSION,hull:hull.VERSION,moduleRooms:map.spatialLayout.rooms.length,reconRooms:recon.spatialLayout.rooms.length,damagedRooms:damaged.spatialLayout.rooms.length,connectors:recon.spatialLayout.connectors.length,hullShapes:shapes.length},null,2));
