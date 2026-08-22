@@ -79,9 +79,11 @@
       "section": "generators",
       "title": "Airship and Vessel Generator and Editor",
       "priority": 8,
-      "status": "editor-alpha",
-      "description": "Generates and edits detailed airship profiles with vessel class, hull culture, core type, purpose, legal status, crew, cargo, armament, defenses, condition, maintenance pressure, route compatibility, faction entanglement, hidden problems, missions, and optional island/settlement inheritance.",
-      "dataFamilies": ["vesselProfile", "crewProfile", "cargoProfile", "shipCondition", "coreProfile", "routeHook", "maintenanceHook", "wikiDraft"]
+      "status": "spatial-alpha",
+      "description": "Generates and edits detailed airship profiles and now derives deterministic semantic-first multi-deck interiors through the shared spatial engine, with hull culture, core type, purpose, crew, cargo, armament, defenses, condition, legal status, and faction entanglement materially influencing ship organization and content.",
+      "browserEntry": "kaysender-airship-generator.html",
+      "apiSurface": "generator.kaysender_airship",
+      "dataFamilies": ["vesselProfile", "crewProfile", "cargoProfile", "shipCondition", "coreProfile", "routeHook", "maintenanceHook", "semanticProgram", "spatialLayout", "hullEnvelope", "contentPopulation", "compatibilityProvenance", "wikiDraft"]
     },
     {
       "id": "airship-core-builder",
