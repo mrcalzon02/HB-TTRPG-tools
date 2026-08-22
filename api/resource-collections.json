@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "description": "Expandable authoritative indexes and broader campaign/lore resources for HBFoundryAPI.",
+  "resources": [
+    {
+      "id": "kaysender.wiki-index",
+      "title": "Kaysender Complete Layered Wiki Index",
+      "workspace": "Kaysender",
+      "kind": "lore-index",
+      "format": "json",
+      "path": "data/kaysender/wiki/wiki-index.json",
+      "tags": ["kaysender", "lore", "campaign", "rules", "converted stats"],
+      "childKind": "lore-pack",
+      "indexRules": [
+        {"key":"packs","base":"","kind":"lore-pack"},
+        {"key":"sourceDocuments","base":"data/kaysender/wiki/","kind":"source-reference"}
+      ]
+    },
+    {
+      "id": "barotrauma.encounter-index",
+      "title": "Barotrauma General Encounter Engine Registry",
+      "workspace": "Barotrauma",
+      "kind": "encounter-index",
+      "format": "json",
+      "path": "data/barotrauma/tools/encounters/encounter-index.json",
+      "tags": ["barotrauma", "encounters", "lethality", "campaign", "generator data"],
+      "childKind": "encounter-data",
+      "indexRules": [
+        {"key":"parts","base":"","kind":"encounter-templates"},
+        {"key":"lethalityParts","base":"","kind":"encounter-lethality"}
+      ]
+    },
+    {
+      "id": "blacklight.complete-lore-index",
+      "title": "Blacklight Continuum Campaign and Lore Index",
+      "workspace": "Blacklight Continuum",
+      "kind": "lore-index",
+      "format": "json",
+      "path": "api/resources/blacklight-lore-index.json",
+      "tags": ["blacklight", "campaign", "lore", "rules", "archives"],
+      "childKind": "blacklight-record",
+      "indexRules": [
+        {"key":"resources","base":"","kind":"blacklight-record"}
+      ]
+    },
+    {
+      "id": "foundry.campaign-lore-index",
+      "title": "Foundry Cross-Setting Campaign and Lore Index",
+      "workspace": "Foundry",
+      "kind": "campaign-index",
+      "format": "json",
+      "path": "api/resources/campaign-lore-index.json",
+      "tags": ["campaign", "lore", "settings", "modules"],
+      "childKind": "campaign-resource",
+      "indexRules": [
+        {"key":"resources","base":"","kind":"campaign-resource"}
+      ]
+    },
+    {
+      "id": "warhammer.lore-index",
+      "title": "Warhammer 40K Lore Index",
+      "workspace": "Warhammer 40K",
+      "kind": "lore-index",
+      "format": "json",
+      "path": "api/resources/warhammer-40k-lore-index.json",
+      "tags": ["warhammer", "40k", "campaign", "lore"],
+      "childKind": "lore-resource",
+      "indexRules": [
+        {"key":"resources","base":"","kind":"lore-resource"}
+      ]
+    }
+  ]
+}
