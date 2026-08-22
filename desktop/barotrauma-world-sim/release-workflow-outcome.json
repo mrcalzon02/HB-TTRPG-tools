@@ -1,25 +1,30 @@
 {
   "recordType": "barotraumaDesktopReleaseWorkflowOutcome",
-  "runId": "32578755972",
+  "runId": "32579118316",
   "runAttempt": "1",
-  "sourceCommit": "a1d696cd49c2ac64ee6d4e9b95c4d6ffa3c0c914",
+  "sourceCommit": "da839058dc058837b66c005fa3ebb7a06392741e",
   "workflow": "Verify and release Barotrauma desktop application",
   "event": "push",
   "linuxVerification": "success",
-  "windowsInstallerRelease": "cancelled",
+  "windowsInstallerRelease": "success",
   "releaseTag": "barotrauma-desktop-v0.2.0",
-  "releaseVerified": false,
-  "releaseUrl": null,
-  "releaseAssets": [],
+  "releaseVerified": true,
+  "releaseHashVerified": true,
+  "releaseAssetSha256": "b085ab91c7431b5cdac5c6c07609b21f4683ccfad7c44a4be49ba6fa8caf0f34",
+  "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.2.0",
+  "releaseAssets": [
+    "Barotrauma-World-Observer-0.2.0-Windows-x64.msi",
+    "Barotrauma-World-Observer-0.2.0-Windows-x64.msi.sha256"
+  ],
   "jobs": [
     {
-      "id": 97044875871,
+      "id": 97045805444,
       "name": "java-17-verification",
       "status": "completed",
       "conclusion": "success",
-      "startedAt": "2026-08-22T14:27:32Z",
-      "completedAt": "2026-08-22T14:29:41Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32578755972/job/97044875871",
+      "startedAt": "2026-08-22T14:35:39Z",
+      "completedAt": "2026-08-22T14:37:34Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32579118316/job/97045805444",
       "steps": [
         {
           "number": 1,
@@ -66,13 +71,13 @@
       ]
     },
     {
-      "id": 97045122860,
+      "id": 97046028911,
       "name": "windows-installer-release",
       "status": "completed",
-      "conclusion": "cancelled",
-      "startedAt": "2026-08-22T14:29:43Z",
-      "completedAt": "2026-08-22T14:35:08Z",
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32578755972/job/97045122860",
+      "conclusion": "success",
+      "startedAt": "2026-08-22T14:37:36Z",
+      "completedAt": "2026-08-22T14:44:21Z",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32579118316/job/97046028911",
       "steps": [
         {
           "number": 1,
@@ -108,31 +113,31 @@
           "number": 6,
           "name": "Package Windows MSI",
           "status": "completed",
-          "conclusion": "cancelled"
+          "conclusion": "success"
         },
         {
           "number": 7,
           "name": "Read release manifest",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 8,
           "name": "Write release notes",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 9,
           "name": "Upload installer workflow artifact",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 10,
           "name": "Publish immutable GitHub release",
           "status": "completed",
-          "conclusion": "skipped"
+          "conclusion": "success"
         },
         {
           "number": 19,
@@ -155,13 +160,13 @@
       ]
     },
     {
-      "id": 97045749814,
+      "id": 97046848820,
       "name": "release-workflow-outcome",
       "status": "in_progress",
       "conclusion": null,
-      "startedAt": "2026-08-22T14:35:12Z",
+      "startedAt": "2026-08-22T14:44:23Z",
       "completedAt": null,
-      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32578755972/job/97045749814",
+      "htmlUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32579118316/job/97046848820",
       "steps": [
         {
           "number": 1,
@@ -191,5 +196,5 @@
     }
   ],
   "failedJobLogs": [],
-  "recordedAt": "2026-08-22T14:35:32.2497557Z"
+  "recordedAt": "2026-08-22T14:44:44.0029329Z"
 }

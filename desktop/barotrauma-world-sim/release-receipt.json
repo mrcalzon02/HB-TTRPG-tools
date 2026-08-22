@@ -1,0 +1,13 @@
+{
+  "recordType": "barotraumaDesktopReleaseReceipt",
+  "version": "0.2.0",
+  "tag": "barotrauma-desktop-v0.2.0",
+  "title": "Barotrauma World Observer 0.2.0",
+  "sourceCommit": "da839058dc058837b66c005fa3ebb7a06392741e",
+  "assetName": "Barotrauma-World-Observer-0.2.0-Windows-x64.msi",
+  "assetSha256": "b085ab91c7431b5cdac5c6c07609b21f4683ccfad7c44a4be49ba6fa8caf0f34",
+  "packageType": "windows-x64-msi-bundled-runtime",
+  "verification": "linux-and-windows-toolbox-verify-plus-release-sha256",
+  "releaseUrl": "https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/barotrauma-desktop-v0.2.0",
+  "publishedAt": "2026-08-22T14:44:44.0613389Z"
+}
