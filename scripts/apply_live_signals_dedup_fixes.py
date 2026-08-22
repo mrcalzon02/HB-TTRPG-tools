@@ -67,7 +67,7 @@ channels=r'''  function renderChannelCoverage() {
   }
 
 '''
-live=replace_between(live,'  function renderChannelCoverage() {','  function renderSignalsMirror() {',channels,'channel output deduplication')
+live=replace_between(live,'  function renderChannelCoverage() {','  function renderControlBoard() {',channels,'channel output deduplication')
 
 active=r'''  function renderActiveScan() {
     const target=panel?.querySelector('[data-lsl-active]'); if(!target)return;
