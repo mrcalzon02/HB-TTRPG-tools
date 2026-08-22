@@ -1,0 +1,4960 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-generation-test-artifact",
+  "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
+  "sourceCommit": "5debe8bb0171a6fbb62b1d0e5f7f454d32253ebd",
+  "caseNumber": 11,
+  "caseId": "coastal-refugee-warehouse",
+  "caseKind": "curated",
+  "input": {
+    "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+    "locationArchetype": "warehouse",
+    "rulesTarget": "blacklight_continuum",
+    "adventurePurpose": "exploration",
+    "siteScale": "large",
+    "culturalInfluence": "culture-neutral",
+    "currentController": "refugees",
+    "occupancyState": "occupied",
+    "biome": "coastal",
+    "climate": "maritime",
+    "season": "storm-season",
+    "weather": "heavy-rain",
+    "ecology": "wetland",
+    "creatureFamilies": [
+      "humanoid",
+      "aquatic",
+      "plague-carrier"
+    ],
+    "hazardFamilies": [
+      "flood",
+      "disease",
+      "structural"
+    ],
+    "creatureDensity": 5,
+    "hazardIntensity": 7,
+    "condition": "worn",
+    "maintenance": "deferred",
+    "security": "low",
+    "defenseDoctrine": "passive",
+    "magicTech": "none",
+    "wealth": "poor",
+    "traffic": "crowded",
+    "socialMode": "communal",
+    "resourceProfile": "food",
+    "secretDensity": "scarce",
+    "lighting": "daylight",
+    "waterState": "partially-flooded",
+    "verticality": "low-rise",
+    "contamination": "salt",
+    "narrativeTone": "desperate",
+    "dangerLevel": 6
+  },
+  "acceptance": {
+    "ok": true,
+    "deterministic": true,
+    "topologyValid": true
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "metrics": {
+    "rooms": 14,
+    "corridors": 14,
+    "doors": 28,
+    "connectors": 12,
+    "decks": 2,
+    "interactions": 3,
+    "profileLayers": 14,
+    "historicallyAdaptedRoleTemplates": 3,
+    "currentUseRoleTemplates": 3,
+    "currentUseOverlayRoleTemplates": 0,
+    "occupants": 11,
+    "socialEncounters": 2,
+    "traps": 1,
+    "hazards": 35,
+    "securityEntries": 1,
+    "treasureEntries": 6,
+    "evidenceEntries": 7,
+    "objectives": 0,
+    "narrativeDiscoveries": 6,
+    "secretAccessEntries": 1
+  },
+  "result": {
+    "schemaVersion": "0.3.0",
+    "generator": "generator.module_map",
+    "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+    "width": 81,
+    "height": 63,
+    "deckCount": 2,
+    "locationArchetype": "warehouse",
+    "semanticProgram": {
+      "locationArchetype": "warehouse",
+      "source": "site-archetype-defaults",
+      "layerPolicy": "full",
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": [
+              "scale",
+              "originCulture",
+              "controller",
+              "occupancyState",
+              "biome",
+              "climate",
+              "season",
+              "weather",
+              "ecology",
+              "wealth",
+              "security",
+              "condition",
+              "magicTech",
+              "lighting",
+              "waterState",
+              "verticality",
+              "secretDensity",
+              "traffic",
+              "socialMode",
+              "resourceProfile",
+              "maintenance",
+              "contamination",
+              "defenseDoctrine",
+              "narrativeTone"
+            ]
+          },
+          "changes": [
+            "random selections already mutually compatible"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "large",
+          "changes": [
+            "warehouse-floor count 3->4",
+            "decks=1",
+            "grid=81x63"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "culture-neutral",
+          "changes": [
+            "applied broad cultural influence tag"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "refugees",
+          "changes": [
+            "added communal-relief-space",
+            "added overflow-sleeping"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "occupied",
+          "changes": []
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "coastal",
+            "climate": "maritime",
+            "season": "storm-season",
+            "weather": "heavy-rain",
+            "waterState": "partially-flooded",
+            "verticality": "low-rise"
+          },
+          "changes": [
+            "water pressure applied to service/infrastructure spaces"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "culture-neutral",
+            "controller": "refugees",
+            "archetype": "warehouse",
+            "occupancyState": "occupied",
+            "ecology": "wetland",
+            "condition": "worn",
+            "waterState": "partially-flooded"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible",
+            "water changes usable circulation and pushes traffic onto higher or improvised routes",
+            "occupants or explorers establish an elevated route around submerged inherited circulation"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "wetland",
+            "creatureFamilies": [
+              "humanoid",
+              "aquatic",
+              "plague-carrier"
+            ],
+            "creatureDensity": 5
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "flood",
+              "disease",
+              "structural"
+            ],
+            "intensity": 7,
+            "contamination": "salt"
+          },
+          "changes": [
+            "distributed 3 hazard families over semantically suitable rooms"
+          ]
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "low",
+            "doctrine": "passive"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "poor",
+            "resourceProfile": "food",
+            "magicTech": "none"
+          },
+          "changes": [
+            "added food resource store"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "old",
+            "condition": "worn",
+            "maintenance": "deferred",
+            "contamination": "salt"
+          },
+          "changes": [
+            "applied salt contamination"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "desperate",
+            "socialMode": "communal",
+            "traffic": "crowded",
+            "secretDensity": "scarce"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 14,
+            "decks": 2,
+            "roomsPerDeckEstimate": 7
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ]
+    },
+    "siteProfile": {
+      "schemaVersion": "1.0.0",
+      "generator": "hb-semantic-site-profile-layers",
+      "version": "1.0.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+      "archetype": "warehouse",
+      "axes": {
+        "scale": "large",
+        "originCulture": "culture-neutral",
+        "controller": "refugees",
+        "occupancyState": "occupied",
+        "biome": "coastal",
+        "climate": "maritime",
+        "season": "storm-season",
+        "weather": "heavy-rain",
+        "ecology": "wetland",
+        "wealth": "poor",
+        "security": "low",
+        "age": "old",
+        "condition": "worn",
+        "magicTech": "none",
+        "lighting": "daylight",
+        "waterState": "partially-flooded",
+        "verticality": "low-rise",
+        "secretDensity": "scarce",
+        "traffic": "crowded",
+        "socialMode": "communal",
+        "resourceProfile": "food",
+        "maintenance": "deferred",
+        "contamination": "salt",
+        "defenseDoctrine": "passive",
+        "narrativeTone": "desperate"
+      },
+      "scalars": {
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 9,
+        "socialDensity": 6
+      },
+      "creatureFamilies": [
+        "humanoid",
+        "aquatic",
+        "plague-carrier"
+      ],
+      "hazardFamilies": [
+        "flood",
+        "disease",
+        "structural"
+      ],
+      "materials": [
+        "rune-stone",
+        "bronze",
+        "ice",
+        "concrete",
+        "steel"
+      ],
+      "roles": [
+        {
+          "id": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance — submerged / intermittently accessible zone",
+          "tags": [
+            "entrance",
+            "service",
+            "culture-neutral-influence",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "coastal",
+            "maritime",
+            "storm-season",
+            "heavy-rain",
+            "partially-flooded",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "metadata": {
+            "originalRole": "loading-entry",
+            "originalLabel": "Loading Entrance",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "floor",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "count": 4,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "tags": [
+            "private",
+            "evidence",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "cultural-overprint",
+            "tone-desperate"
+          ]
+        },
+        {
+          "id": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "culture-neutral-influence",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "cultural-overprint",
+            "hazard",
+            "hazard-structural",
+            "contamination-salt"
+          ]
+        },
+        {
+          "id": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock — submerged / intermittently accessible zone",
+          "tags": [
+            "exit",
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "contamination-salt"
+          ],
+          "metadata": {
+            "originalRole": "loading-dock",
+            "originalLabel": "Loading Dock",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "tags": [
+            "service",
+            "hazard",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "ecology-active",
+            "contamination-salt"
+          ]
+        },
+        {
+          "id": "controller-relief",
+          "role": "communal-relief-space",
+          "label": "Communal Relief Space",
+          "tags": [
+            "social",
+            "public",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "coastal",
+            "maritime",
+            "storm-season",
+            "heavy-rain",
+            "partially-flooded",
+            "cultural-overprint",
+            "ecology-active"
+          ]
+        },
+        {
+          "id": "controller-sleep",
+          "role": "overflow-sleeping",
+          "label": "Overflow Sleeping Area",
+          "tags": [
+            "private",
+            "social",
+            "repurposed-use",
+            "cultural-overprint"
+          ]
+        },
+        {
+          "id": "interaction-high-route",
+          "role": "high-water-bypass",
+          "label": "High-Water Bypass",
+          "tags": [
+            "secret",
+            "transit"
+          ]
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-salt"
+          ]
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "food Store",
+          "tags": [
+            "service",
+            "treasure",
+            "contamination-salt"
+          ]
+        }
+      ],
+      "adjacency": [
+        [
+          "loading-entry",
+          "warehouse-floor"
+        ],
+        [
+          "warehouse-floor",
+          "warehouse-office"
+        ],
+        [
+          "warehouse-floor",
+          "secure-cage"
+        ],
+        [
+          "warehouse-floor",
+          "loading-dock"
+        ],
+        [
+          "utility-room",
+          "warehouse-floor"
+        ],
+        [
+          "loading-entry",
+          "communal-relief-space"
+        ],
+        [
+          "communal-relief-space",
+          "overflow-sleeping"
+        ],
+        [
+          "entry",
+          "high-water-bypass"
+        ],
+        [
+          "loading-entry",
+          "ecology-den"
+        ],
+        [
+          "loading-entry",
+          "resource-specific-store"
+        ]
+      ],
+      "decks": 2,
+      "layout": {
+        "gridWidth": 81,
+        "gridHeight": 63
+      },
+      "extraEdgeChance": 0.19999999999999998,
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": [
+              "scale",
+              "originCulture",
+              "controller",
+              "occupancyState",
+              "biome",
+              "climate",
+              "season",
+              "weather",
+              "ecology",
+              "wealth",
+              "security",
+              "condition",
+              "magicTech",
+              "lighting",
+              "waterState",
+              "verticality",
+              "secretDensity",
+              "traffic",
+              "socialMode",
+              "resourceProfile",
+              "maintenance",
+              "contamination",
+              "defenseDoctrine",
+              "narrativeTone"
+            ]
+          },
+          "changes": [
+            "random selections already mutually compatible"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "large",
+          "changes": [
+            "warehouse-floor count 3->4",
+            "decks=1",
+            "grid=81x63"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "culture-neutral",
+          "changes": [
+            "applied broad cultural influence tag"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "refugees",
+          "changes": [
+            "added communal-relief-space",
+            "added overflow-sleeping"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "occupied",
+          "changes": []
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "coastal",
+            "climate": "maritime",
+            "season": "storm-season",
+            "weather": "heavy-rain",
+            "waterState": "partially-flooded",
+            "verticality": "low-rise"
+          },
+          "changes": [
+            "water pressure applied to service/infrastructure spaces"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "culture-neutral",
+            "controller": "refugees",
+            "archetype": "warehouse",
+            "occupancyState": "occupied",
+            "ecology": "wetland",
+            "condition": "worn",
+            "waterState": "partially-flooded"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible",
+            "water changes usable circulation and pushes traffic onto higher or improvised routes",
+            "occupants or explorers establish an elevated route around submerged inherited circulation"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "wetland",
+            "creatureFamilies": [
+              "humanoid",
+              "aquatic",
+              "plague-carrier"
+            ],
+            "creatureDensity": 5
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "flood",
+              "disease",
+              "structural"
+            ],
+            "intensity": 7,
+            "contamination": "salt"
+          },
+          "changes": [
+            "distributed 3 hazard families over semantically suitable rooms"
+          ]
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "low",
+            "doctrine": "passive"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "poor",
+            "resourceProfile": "food",
+            "magicTech": "none"
+          },
+          "changes": [
+            "added food resource store"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "old",
+            "condition": "worn",
+            "maintenance": "deferred",
+            "contamination": "salt"
+          },
+          "changes": [
+            "applied salt contamination"
+          ]
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "desperate",
+            "socialMode": "communal",
+            "traffic": "crowded",
+            "secretDensity": "scarce"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 14,
+            "decks": 2,
+            "roomsPerDeckEstimate": 7
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ],
+      "interactions": [
+        {
+          "order": 1,
+          "id": "cultural-overprint",
+          "drivers": {
+            "culture": "culture-neutral",
+            "controller": "refugees"
+          },
+          "targets": [
+            "loading-entry",
+            "warehouse-floor",
+            "warehouse-office",
+            "secure-cage",
+            "loading-dock",
+            "utility-room"
+          ],
+          "effects": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "flooded-circulation",
+          "drivers": {
+            "culture": "culture-neutral",
+            "controller": "refugees",
+            "archetype": "warehouse",
+            "occupancyState": "occupied",
+            "ecology": "wetland"
+          },
+          "targets": [
+            "loading-entry",
+            "warehouse-floor",
+            "loading-dock"
+          ],
+          "effects": [
+            "water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "flooded-circulation",
+          "drivers": {
+            "culture": "culture-neutral",
+            "controller": "refugees",
+            "archetype": "warehouse"
+          },
+          "targets": [
+            "high-water-bypass"
+          ],
+          "effects": [
+            "occupants or explorers establish an elevated route around submerged inherited circulation"
+          ]
+        }
+      ],
+      "explicit": {
+        "security": true
+      },
+      "explicitAxes": [
+        "scale",
+        "originCulture",
+        "controller",
+        "occupancyState",
+        "biome",
+        "climate",
+        "season",
+        "weather",
+        "ecology",
+        "wealth",
+        "security",
+        "condition",
+        "magicTech",
+        "lighting",
+        "waterState",
+        "verticality",
+        "secretDensity",
+        "traffic",
+        "socialMode",
+        "resourceProfile",
+        "maintenance",
+        "contamination",
+        "defenseDoctrine",
+        "narrativeTone"
+      ],
+      "contentContext": {
+        "culture": "culture-neutral",
+        "controller": "refugees",
+        "occupancyState": "occupied",
+        "biome": "coastal",
+        "climate": "maritime",
+        "season": "storm-season",
+        "weather": "heavy-rain",
+        "ecology": "wetland",
+        "creatureFamilies": [
+          "humanoid",
+          "aquatic",
+          "plague-carrier"
+        ],
+        "hazardFamilies": [
+          "flood",
+          "disease",
+          "structural"
+        ],
+        "materials": [
+          "rune-stone",
+          "bronze",
+          "ice",
+          "concrete",
+          "steel"
+        ],
+        "wealth": "poor",
+        "security": "low",
+        "magicTech": "none",
+        "lighting": "daylight",
+        "waterState": "partially-flooded",
+        "contamination": "salt",
+        "narrativeTone": "desperate",
+        "interactionCount": 3,
+        "interactionIds": [
+          "cultural-overprint",
+          "flooded-circulation",
+          "flooded-circulation"
+        ],
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 9,
+        "socialDensity": 6
+      }
+    },
+    "spatialLayout": {
+      "schemaVersion": "1.0.0",
+      "engine": "hb-semantic-spatial-engine",
+      "engineVersion": "1.1.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+      "deckCount": 2,
+      "bounds": {
+        "width": 81,
+        "height": 63
+      },
+      "nodes": [
+        {
+          "id": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance — submerged / intermittently accessible zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "culture-neutral-influence",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "coastal",
+            "maritime",
+            "storm-season",
+            "heavy-rain",
+            "partially-flooded",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "loading-entry",
+            "originalLabel": "Loading Entrance",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "cultural-overprint",
+            "tone-desperate"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "culture-neutral-influence",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "cultural-overprint",
+            "hazard",
+            "hazard-structural",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock — submerged / intermittently accessible zone",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "exit",
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "loading-dock",
+            "originalLabel": "Loading Dock",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "ecology-active",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-relief",
+          "role": "communal-relief-space",
+          "label": "Communal Relief Space",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "social",
+            "public",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "coastal",
+            "maritime",
+            "storm-season",
+            "heavy-rain",
+            "partially-flooded",
+            "cultural-overprint",
+            "ecology-active"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-sleep",
+          "role": "overflow-sleeping",
+          "label": "Overflow Sleeping Area",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "private",
+            "social",
+            "repurposed-use",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "interaction-high-route",
+          "role": "high-water-bypass",
+          "label": "High-Water Bypass",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "secret",
+            "transit"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "food Store",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "a": "entry",
+          "b": "warehouse-floor-2",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-1"
+          }
+        },
+        {
+          "id": "edge-2",
+          "a": "warehouse-floor-2",
+          "b": "office",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-2"
+          }
+        },
+        {
+          "id": "edge-3",
+          "a": "warehouse-floor-2",
+          "b": "secure",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-3"
+          }
+        },
+        {
+          "id": "edge-4",
+          "a": "warehouse-floor-2",
+          "b": "dock",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-4"
+          },
+          "connectorPairId": "connector-1"
+        },
+        {
+          "id": "edge-5",
+          "a": "utility",
+          "b": "warehouse-floor-2",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-5"
+          },
+          "connectorPairId": "connector-3"
+        },
+        {
+          "id": "edge-6",
+          "a": "entry",
+          "b": "controller-relief",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-6"
+          },
+          "connectorPairId": "connector-5"
+        },
+        {
+          "id": "edge-7",
+          "a": "controller-relief",
+          "b": "controller-sleep",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-7"
+          }
+        },
+        {
+          "id": "edge-8",
+          "a": "entry",
+          "b": "interaction-high-route",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-8"
+          },
+          "connectorPairId": "connector-7"
+        },
+        {
+          "id": "edge-9",
+          "a": "entry",
+          "b": "ecology-den",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-9"
+          },
+          "connectorPairId": "connector-9"
+        },
+        {
+          "id": "edge-10",
+          "a": "entry",
+          "b": "resource-store",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-10"
+          },
+          "connectorPairId": "connector-11"
+        },
+        {
+          "id": "edge-11",
+          "a": "entry",
+          "b": "warehouse-floor-3",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-12",
+          "a": "warehouse-floor-3",
+          "b": "warehouse-floor-4",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-13",
+          "a": "entry",
+          "b": "warehouse-floor-5",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-14",
+          "a": "warehouse-floor-3",
+          "b": "office",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-15",
+          "a": "dock",
+          "b": "ecology-den",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-16",
+          "a": "dock",
+          "b": "resource-store",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-17",
+          "a": "resource-store",
+          "b": "interaction-high-route",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-18",
+          "a": "dock",
+          "b": "controller-sleep",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-19",
+          "a": "controller-relief",
+          "b": "utility",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-20",
+          "a": "utility",
+          "b": "controller-sleep",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        }
+      ],
+      "rooms": [
+        {
+          "id": "entry",
+          "nodeId": "entry",
+          "role": "loading-entry",
+          "label": "Loading Entrance — submerged / intermittently accessible zone",
+          "deck": 0,
+          "x": 59,
+          "y": 33,
+          "width": 5,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "culture-neutral-influence",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "coastal",
+            "maritime",
+            "storm-season",
+            "heavy-rain",
+            "partially-flooded",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "loading-entry",
+            "originalLabel": "Loading Entrance",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-2",
+          "nodeId": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "x": 13,
+          "y": 8,
+          "width": 7,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-3",
+          "nodeId": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "x": 68,
+          "y": 36,
+          "width": 11,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-4",
+          "nodeId": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "x": 24,
+          "y": 30,
+          "width": 11,
+          "height": 5,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "warehouse-floor-5",
+          "nodeId": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "label": "Storage Floor — submerged / intermittently accessible zone",
+          "deck": 0,
+          "x": 51,
+          "y": 2,
+          "width": 5,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "hazard-disease",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "office",
+          "nodeId": "office",
+          "role": "warehouse-office",
+          "label": "Shipping Office",
+          "deck": 0,
+          "x": 73,
+          "y": 17,
+          "width": 6,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "private",
+            "evidence",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "cultural-overprint",
+            "tone-desperate"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "secure",
+          "nodeId": "secure",
+          "role": "secure-cage",
+          "label": "Secure Cage",
+          "deck": 0,
+          "x": 28,
+          "y": 15,
+          "width": 8,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "treasure",
+            "security",
+            "culture-neutral-influence",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "cultural-overprint",
+            "hazard",
+            "hazard-structural",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "dock",
+          "nodeId": "dock",
+          "role": "loading-dock",
+          "label": "Loading Dock — submerged / intermittently accessible zone",
+          "deck": 1,
+          "x": 11,
+          "y": 24,
+          "width": 8,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "exit",
+            "service",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "historically-adapted",
+            "hazard",
+            "restricted-access",
+            "ecology-active",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {
+            "originalRole": "loading-dock",
+            "originalLabel": "Loading Dock",
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ],
+            "currentUseOverlays": [],
+            "currentUse": "submerged / intermittently accessible zone"
+          }
+        },
+        {
+          "id": "utility",
+          "nodeId": "utility",
+          "role": "utility-room",
+          "label": "Utility Room",
+          "deck": 1,
+          "x": 60,
+          "y": 37,
+          "width": 7,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "hazard",
+            "culture-neutral-influence",
+            "repurposed-use",
+            "wet",
+            "slip-hazard",
+            "cultural-overprint",
+            "ecology-active",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-relief",
+          "nodeId": "controller-relief",
+          "role": "communal-relief-space",
+          "label": "Communal Relief Space",
+          "deck": 1,
+          "x": 43,
+          "y": 32,
+          "width": 8,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "social",
+            "public",
+            "refugee-occupied",
+            "improvised-domestic",
+            "repurposed-use",
+            "coastal",
+            "maritime",
+            "storm-season",
+            "heavy-rain",
+            "partially-flooded",
+            "cultural-overprint",
+            "ecology-active"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "controller-sleep",
+          "nodeId": "controller-sleep",
+          "role": "overflow-sleeping",
+          "label": "Overflow Sleeping Area",
+          "deck": 1,
+          "x": 47,
+          "y": 47,
+          "width": 9,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "private",
+            "social",
+            "repurposed-use",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "interaction-high-route",
+          "nodeId": "interaction-high-route",
+          "role": "high-water-bypass",
+          "label": "High-Water Bypass",
+          "deck": 1,
+          "x": 7,
+          "y": 3,
+          "width": 5,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "secret",
+            "transit"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "nodeId": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 1,
+          "x": 47,
+          "y": 8,
+          "width": 8,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "nodeId": "resource-store",
+          "role": "resource-specific-store",
+          "label": "food Store",
+          "deck": 1,
+          "x": 26,
+          "y": 21,
+          "width": 10,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "contamination-salt"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "corridors": [
+        {
+          "id": "corridor-1",
+          "edgeId": "edge-1",
+          "deck": 0,
+          "a": "entry",
+          "b": "warehouse-floor-2",
+          "points": [
+            {
+              "x": 59,
+              "y": 34
+            },
+            {
+              "x": 58,
+              "y": 34
+            },
+            {
+              "x": 57,
+              "y": 34
+            },
+            {
+              "x": 56,
+              "y": 34
+            },
+            {
+              "x": 55,
+              "y": 34
+            },
+            {
+              "x": 54,
+              "y": 34
+            },
+            {
+              "x": 53,
+              "y": 34
+            },
+            {
+              "x": 52,
+              "y": 34
+            },
+            {
+              "x": 51,
+              "y": 34
+            },
+            {
+              "x": 50,
+              "y": 34
+            },
+            {
+              "x": 49,
+              "y": 34
+            },
+            {
+              "x": 48,
+              "y": 34
+            },
+            {
+              "x": 47,
+              "y": 34
+            },
+            {
+              "x": 46,
+              "y": 34
+            },
+            {
+              "x": 45,
+              "y": 34
+            },
+            {
+              "x": 44,
+              "y": 34
+            },
+            {
+              "x": 43,
+              "y": 34
+            },
+            {
+              "x": 42,
+              "y": 34
+            },
+            {
+              "x": 41,
+              "y": 34
+            },
+            {
+              "x": 40,
+              "y": 34
+            },
+            {
+              "x": 39,
+              "y": 34
+            },
+            {
+              "x": 38,
+              "y": 34
+            },
+            {
+              "x": 37,
+              "y": 34
+            },
+            {
+              "x": 36,
+              "y": 34
+            },
+            {
+              "x": 35,
+              "y": 34
+            },
+            {
+              "x": 34,
+              "y": 34
+            },
+            {
+              "x": 33,
+              "y": 34
+            },
+            {
+              "x": 32,
+              "y": 34
+            },
+            {
+              "x": 31,
+              "y": 34
+            },
+            {
+              "x": 30,
+              "y": 34
+            },
+            {
+              "x": 29,
+              "y": 34
+            },
+            {
+              "x": 28,
+              "y": 34
+            },
+            {
+              "x": 27,
+              "y": 34
+            },
+            {
+              "x": 26,
+              "y": 34
+            },
+            {
+              "x": 25,
+              "y": 34
+            },
+            {
+              "x": 24,
+              "y": 34
+            },
+            {
+              "x": 23,
+              "y": 34
+            },
+            {
+              "x": 22,
+              "y": 34
+            },
+            {
+              "x": 21,
+              "y": 34
+            },
+            {
+              "x": 20,
+              "y": 34
+            },
+            {
+              "x": 19,
+              "y": 34
+            },
+            {
+              "x": 19,
+              "y": 33
+            },
+            {
+              "x": 19,
+              "y": 32
+            },
+            {
+              "x": 19,
+              "y": 31
+            },
+            {
+              "x": 19,
+              "y": 30
+            },
+            {
+              "x": 19,
+              "y": 29
+            },
+            {
+              "x": 19,
+              "y": 28
+            },
+            {
+              "x": 19,
+              "y": 27
+            },
+            {
+              "x": 19,
+              "y": 26
+            },
+            {
+              "x": 19,
+              "y": 25
+            },
+            {
+              "x": 19,
+              "y": 24
+            },
+            {
+              "x": 19,
+              "y": 23
+            },
+            {
+              "x": 19,
+              "y": 22
+            },
+            {
+              "x": 19,
+              "y": 21
+            },
+            {
+              "x": 19,
+              "y": 20
+            },
+            {
+              "x": 19,
+              "y": 19
+            },
+            {
+              "x": 19,
+              "y": 18
+            },
+            {
+              "x": 19,
+              "y": 17
+            },
+            {
+              "x": 19,
+              "y": 16
+            },
+            {
+              "x": 19,
+              "y": 15
+            },
+            {
+              "x": 19,
+              "y": 14
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-2",
+          "edgeId": "edge-2",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "office",
+          "points": [
+            {
+              "x": 19,
+              "y": 14
+            },
+            {
+              "x": 19,
+              "y": 15
+            },
+            {
+              "x": 19,
+              "y": 16
+            },
+            {
+              "x": 19,
+              "y": 17
+            },
+            {
+              "x": 19,
+              "y": 18
+            },
+            {
+              "x": 20,
+              "y": 18
+            },
+            {
+              "x": 21,
+              "y": 18
+            },
+            {
+              "x": 22,
+              "y": 18
+            },
+            {
+              "x": 23,
+              "y": 18
+            },
+            {
+              "x": 24,
+              "y": 18
+            },
+            {
+              "x": 25,
+              "y": 18
+            },
+            {
+              "x": 26,
+              "y": 18
+            },
+            {
+              "x": 27,
+              "y": 18
+            },
+            {
+              "x": 28,
+              "y": 18
+            },
+            {
+              "x": 29,
+              "y": 18
+            },
+            {
+              "x": 30,
+              "y": 18
+            },
+            {
+              "x": 31,
+              "y": 18
+            },
+            {
+              "x": 32,
+              "y": 18
+            },
+            {
+              "x": 33,
+              "y": 18
+            },
+            {
+              "x": 34,
+              "y": 18
+            },
+            {
+              "x": 35,
+              "y": 18
+            },
+            {
+              "x": 36,
+              "y": 18
+            },
+            {
+              "x": 37,
+              "y": 18
+            },
+            {
+              "x": 38,
+              "y": 18
+            },
+            {
+              "x": 39,
+              "y": 18
+            },
+            {
+              "x": 40,
+              "y": 18
+            },
+            {
+              "x": 41,
+              "y": 18
+            },
+            {
+              "x": 42,
+              "y": 18
+            },
+            {
+              "x": 43,
+              "y": 18
+            },
+            {
+              "x": 44,
+              "y": 18
+            },
+            {
+              "x": 45,
+              "y": 18
+            },
+            {
+              "x": 46,
+              "y": 18
+            },
+            {
+              "x": 47,
+              "y": 18
+            },
+            {
+              "x": 48,
+              "y": 18
+            },
+            {
+              "x": 49,
+              "y": 18
+            },
+            {
+              "x": 50,
+              "y": 18
+            },
+            {
+              "x": 51,
+              "y": 18
+            },
+            {
+              "x": 52,
+              "y": 18
+            },
+            {
+              "x": 53,
+              "y": 18
+            },
+            {
+              "x": 54,
+              "y": 18
+            },
+            {
+              "x": 55,
+              "y": 18
+            },
+            {
+              "x": 56,
+              "y": 18
+            },
+            {
+              "x": 57,
+              "y": 18
+            },
+            {
+              "x": 58,
+              "y": 18
+            },
+            {
+              "x": 59,
+              "y": 18
+            },
+            {
+              "x": 60,
+              "y": 18
+            },
+            {
+              "x": 61,
+              "y": 18
+            },
+            {
+              "x": 62,
+              "y": 18
+            },
+            {
+              "x": 63,
+              "y": 18
+            },
+            {
+              "x": 64,
+              "y": 18
+            },
+            {
+              "x": 65,
+              "y": 18
+            },
+            {
+              "x": 66,
+              "y": 18
+            },
+            {
+              "x": 67,
+              "y": 18
+            },
+            {
+              "x": 68,
+              "y": 18
+            },
+            {
+              "x": 69,
+              "y": 18
+            },
+            {
+              "x": 70,
+              "y": 18
+            },
+            {
+              "x": 71,
+              "y": 18
+            },
+            {
+              "x": 72,
+              "y": 18
+            },
+            {
+              "x": 73,
+              "y": 18
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-3",
+          "edgeId": "edge-3",
+          "deck": 0,
+          "a": "warehouse-floor-2",
+          "b": "secure",
+          "points": [
+            {
+              "x": 19,
+              "y": 14
+            },
+            {
+              "x": 19,
+              "y": 15
+            },
+            {
+              "x": 19,
+              "y": 16
+            },
+            {
+              "x": 20,
+              "y": 16
+            },
+            {
+              "x": 21,
+              "y": 16
+            },
+            {
+              "x": 22,
+              "y": 16
+            },
+            {
+              "x": 23,
+              "y": 16
+            },
+            {
+              "x": 24,
+              "y": 16
+            },
+            {
+              "x": 25,
+              "y": 16
+            },
+            {
+              "x": 26,
+              "y": 16
+            },
+            {
+              "x": 27,
+              "y": 16
+            },
+            {
+              "x": 28,
+              "y": 16
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-4",
+          "edgeId": "edge-7",
+          "deck": 1,
+          "a": "controller-relief",
+          "b": "controller-sleep",
+          "points": [
+            {
+              "x": 49,
+              "y": 37
+            },
+            {
+              "x": 48,
+              "y": 37
+            },
+            {
+              "x": 48,
+              "y": 38
+            },
+            {
+              "x": 48,
+              "y": 39
+            },
+            {
+              "x": 48,
+              "y": 40
+            },
+            {
+              "x": 48,
+              "y": 41
+            },
+            {
+              "x": 48,
+              "y": 42
+            },
+            {
+              "x": 48,
+              "y": 43
+            },
+            {
+              "x": 48,
+              "y": 44
+            },
+            {
+              "x": 48,
+              "y": 45
+            },
+            {
+              "x": 48,
+              "y": 46
+            },
+            {
+              "x": 48,
+              "y": 47
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-5",
+          "edgeId": "edge-11",
+          "deck": 0,
+          "a": "entry",
+          "b": "warehouse-floor-3",
+          "points": [
+            {
+              "x": 63,
+              "y": 39
+            },
+            {
+              "x": 64,
+              "y": 39
+            },
+            {
+              "x": 65,
+              "y": 39
+            },
+            {
+              "x": 66,
+              "y": 39
+            },
+            {
+              "x": 67,
+              "y": 39
+            },
+            {
+              "x": 68,
+              "y": 39
+            },
+            {
+              "x": 68,
+              "y": 38
+            },
+            {
+              "x": 68,
+              "y": 37
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-6",
+          "edgeId": "edge-12",
+          "deck": 0,
+          "a": "warehouse-floor-3",
+          "b": "warehouse-floor-4",
+          "points": [
+            {
+              "x": 68,
+              "y": 37
+            },
+            {
+              "x": 67,
+              "y": 37
+            },
+            {
+              "x": 66,
+              "y": 37
+            },
+            {
+              "x": 65,
+              "y": 37
+            },
+            {
+              "x": 64,
+              "y": 37
+            },
+            {
+              "x": 63,
+              "y": 37
+            },
+            {
+              "x": 62,
+              "y": 37
+            },
+            {
+              "x": 61,
+              "y": 37
+            },
+            {
+              "x": 60,
+              "y": 37
+            },
+            {
+              "x": 59,
+              "y": 37
+            },
+            {
+              "x": 58,
+              "y": 37
+            },
+            {
+              "x": 57,
+              "y": 37
+            },
+            {
+              "x": 56,
+              "y": 37
+            },
+            {
+              "x": 55,
+              "y": 37
+            },
+            {
+              "x": 54,
+              "y": 37
+            },
+            {
+              "x": 53,
+              "y": 37
+            },
+            {
+              "x": 52,
+              "y": 37
+            },
+            {
+              "x": 51,
+              "y": 37
+            },
+            {
+              "x": 50,
+              "y": 37
+            },
+            {
+              "x": 49,
+              "y": 37
+            },
+            {
+              "x": 48,
+              "y": 37
+            },
+            {
+              "x": 47,
+              "y": 37
+            },
+            {
+              "x": 46,
+              "y": 37
+            },
+            {
+              "x": 45,
+              "y": 37
+            },
+            {
+              "x": 44,
+              "y": 37
+            },
+            {
+              "x": 43,
+              "y": 37
+            },
+            {
+              "x": 42,
+              "y": 37
+            },
+            {
+              "x": 41,
+              "y": 37
+            },
+            {
+              "x": 40,
+              "y": 37
+            },
+            {
+              "x": 39,
+              "y": 37
+            },
+            {
+              "x": 38,
+              "y": 37
+            },
+            {
+              "x": 37,
+              "y": 37
+            },
+            {
+              "x": 36,
+              "y": 37
+            },
+            {
+              "x": 35,
+              "y": 37
+            },
+            {
+              "x": 34,
+              "y": 37
+            },
+            {
+              "x": 34,
+              "y": 36
+            },
+            {
+              "x": 34,
+              "y": 35
+            },
+            {
+              "x": 34,
+              "y": 34
+            },
+            {
+              "x": 34,
+              "y": 33
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-7",
+          "edgeId": "edge-13",
+          "deck": 0,
+          "a": "entry",
+          "b": "warehouse-floor-5",
+          "points": [
+            {
+              "x": 60,
+              "y": 33
+            },
+            {
+              "x": 59,
+              "y": 33
+            },
+            {
+              "x": 58,
+              "y": 33
+            },
+            {
+              "x": 57,
+              "y": 33
+            },
+            {
+              "x": 56,
+              "y": 33
+            },
+            {
+              "x": 55,
+              "y": 33
+            },
+            {
+              "x": 54,
+              "y": 33
+            },
+            {
+              "x": 54,
+              "y": 32
+            },
+            {
+              "x": 54,
+              "y": 31
+            },
+            {
+              "x": 54,
+              "y": 30
+            },
+            {
+              "x": 54,
+              "y": 29
+            },
+            {
+              "x": 54,
+              "y": 28
+            },
+            {
+              "x": 54,
+              "y": 27
+            },
+            {
+              "x": 54,
+              "y": 26
+            },
+            {
+              "x": 54,
+              "y": 25
+            },
+            {
+              "x": 54,
+              "y": 24
+            },
+            {
+              "x": 54,
+              "y": 23
+            },
+            {
+              "x": 54,
+              "y": 22
+            },
+            {
+              "x": 54,
+              "y": 21
+            },
+            {
+              "x": 54,
+              "y": 20
+            },
+            {
+              "x": 54,
+              "y": 19
+            },
+            {
+              "x": 54,
+              "y": 18
+            },
+            {
+              "x": 54,
+              "y": 17
+            },
+            {
+              "x": 54,
+              "y": 16
+            },
+            {
+              "x": 54,
+              "y": 15
+            },
+            {
+              "x": 54,
+              "y": 14
+            },
+            {
+              "x": 54,
+              "y": 13
+            },
+            {
+              "x": 54,
+              "y": 12
+            },
+            {
+              "x": 54,
+              "y": 11
+            },
+            {
+              "x": 54,
+              "y": 10
+            },
+            {
+              "x": 54,
+              "y": 9
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-8",
+          "edgeId": "edge-14",
+          "deck": 0,
+          "a": "warehouse-floor-3",
+          "b": "office",
+          "points": [
+            {
+              "x": 76,
+              "y": 36
+            },
+            {
+              "x": 76,
+              "y": 35
+            },
+            {
+              "x": 76,
+              "y": 34
+            },
+            {
+              "x": 76,
+              "y": 33
+            },
+            {
+              "x": 76,
+              "y": 32
+            },
+            {
+              "x": 76,
+              "y": 31
+            },
+            {
+              "x": 76,
+              "y": 30
+            },
+            {
+              "x": 76,
+              "y": 29
+            },
+            {
+              "x": 76,
+              "y": 28
+            },
+            {
+              "x": 76,
+              "y": 27
+            },
+            {
+              "x": 76,
+              "y": 26
+            },
+            {
+              "x": 76,
+              "y": 25
+            },
+            {
+              "x": 76,
+              "y": 24
+            },
+            {
+              "x": 75,
+              "y": 24
+            },
+            {
+              "x": 74,
+              "y": 24
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-9",
+          "edgeId": "edge-15",
+          "deck": 1,
+          "a": "dock",
+          "b": "ecology-den",
+          "points": [
+            {
+              "x": 18,
+              "y": 25
+            },
+            {
+              "x": 19,
+              "y": 25
+            },
+            {
+              "x": 20,
+              "y": 25
+            },
+            {
+              "x": 21,
+              "y": 25
+            },
+            {
+              "x": 22,
+              "y": 25
+            },
+            {
+              "x": 23,
+              "y": 25
+            },
+            {
+              "x": 24,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 25
+            },
+            {
+              "x": 26,
+              "y": 25
+            },
+            {
+              "x": 27,
+              "y": 25
+            },
+            {
+              "x": 28,
+              "y": 25
+            },
+            {
+              "x": 29,
+              "y": 25
+            },
+            {
+              "x": 30,
+              "y": 25
+            },
+            {
+              "x": 31,
+              "y": 25
+            },
+            {
+              "x": 32,
+              "y": 25
+            },
+            {
+              "x": 33,
+              "y": 25
+            },
+            {
+              "x": 34,
+              "y": 25
+            },
+            {
+              "x": 35,
+              "y": 25
+            },
+            {
+              "x": 36,
+              "y": 25
+            },
+            {
+              "x": 37,
+              "y": 25
+            },
+            {
+              "x": 38,
+              "y": 25
+            },
+            {
+              "x": 39,
+              "y": 25
+            },
+            {
+              "x": 40,
+              "y": 25
+            },
+            {
+              "x": 41,
+              "y": 25
+            },
+            {
+              "x": 42,
+              "y": 25
+            },
+            {
+              "x": 43,
+              "y": 25
+            },
+            {
+              "x": 44,
+              "y": 25
+            },
+            {
+              "x": 45,
+              "y": 25
+            },
+            {
+              "x": 46,
+              "y": 25
+            },
+            {
+              "x": 47,
+              "y": 25
+            },
+            {
+              "x": 47,
+              "y": 24
+            },
+            {
+              "x": 47,
+              "y": 23
+            },
+            {
+              "x": 47,
+              "y": 22
+            },
+            {
+              "x": 47,
+              "y": 21
+            },
+            {
+              "x": 47,
+              "y": 20
+            },
+            {
+              "x": 47,
+              "y": 19
+            },
+            {
+              "x": 47,
+              "y": 18
+            },
+            {
+              "x": 47,
+              "y": 17
+            },
+            {
+              "x": 47,
+              "y": 16
+            },
+            {
+              "x": 47,
+              "y": 15
+            },
+            {
+              "x": 47,
+              "y": 14
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-10",
+          "edgeId": "edge-16",
+          "deck": 1,
+          "a": "dock",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 18,
+              "y": 25
+            },
+            {
+              "x": 19,
+              "y": 25
+            },
+            {
+              "x": 20,
+              "y": 25
+            },
+            {
+              "x": 21,
+              "y": 25
+            },
+            {
+              "x": 22,
+              "y": 25
+            },
+            {
+              "x": 23,
+              "y": 25
+            },
+            {
+              "x": 24,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 25
+            },
+            {
+              "x": 26,
+              "y": 25
+            },
+            {
+              "x": 26,
+              "y": 26
+            },
+            {
+              "x": 26,
+              "y": 27
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-11",
+          "edgeId": "edge-17",
+          "deck": 1,
+          "a": "resource-store",
+          "b": "interaction-high-route",
+          "points": [
+            {
+              "x": 26,
+              "y": 22
+            },
+            {
+              "x": 26,
+              "y": 21
+            },
+            {
+              "x": 26,
+              "y": 20
+            },
+            {
+              "x": 26,
+              "y": 19
+            },
+            {
+              "x": 26,
+              "y": 18
+            },
+            {
+              "x": 26,
+              "y": 17
+            },
+            {
+              "x": 26,
+              "y": 16
+            },
+            {
+              "x": 26,
+              "y": 15
+            },
+            {
+              "x": 26,
+              "y": 14
+            },
+            {
+              "x": 26,
+              "y": 13
+            },
+            {
+              "x": 26,
+              "y": 12
+            },
+            {
+              "x": 26,
+              "y": 11
+            },
+            {
+              "x": 26,
+              "y": 10
+            },
+            {
+              "x": 25,
+              "y": 10
+            },
+            {
+              "x": 24,
+              "y": 10
+            },
+            {
+              "x": 23,
+              "y": 10
+            },
+            {
+              "x": 22,
+              "y": 10
+            },
+            {
+              "x": 21,
+              "y": 10
+            },
+            {
+              "x": 20,
+              "y": 10
+            },
+            {
+              "x": 19,
+              "y": 10
+            },
+            {
+              "x": 18,
+              "y": 10
+            },
+            {
+              "x": 17,
+              "y": 10
+            },
+            {
+              "x": 16,
+              "y": 10
+            },
+            {
+              "x": 15,
+              "y": 10
+            },
+            {
+              "x": 14,
+              "y": 10
+            },
+            {
+              "x": 13,
+              "y": 10
+            },
+            {
+              "x": 12,
+              "y": 10
+            },
+            {
+              "x": 11,
+              "y": 10
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-12",
+          "edgeId": "edge-18",
+          "deck": 1,
+          "a": "dock",
+          "b": "controller-sleep",
+          "points": [
+            {
+              "x": 18,
+              "y": 32
+            },
+            {
+              "x": 19,
+              "y": 32
+            },
+            {
+              "x": 20,
+              "y": 32
+            },
+            {
+              "x": 21,
+              "y": 32
+            },
+            {
+              "x": 22,
+              "y": 32
+            },
+            {
+              "x": 23,
+              "y": 32
+            },
+            {
+              "x": 24,
+              "y": 32
+            },
+            {
+              "x": 25,
+              "y": 32
+            },
+            {
+              "x": 26,
+              "y": 32
+            },
+            {
+              "x": 27,
+              "y": 32
+            },
+            {
+              "x": 28,
+              "y": 32
+            },
+            {
+              "x": 29,
+              "y": 32
+            },
+            {
+              "x": 30,
+              "y": 32
+            },
+            {
+              "x": 31,
+              "y": 32
+            },
+            {
+              "x": 32,
+              "y": 32
+            },
+            {
+              "x": 33,
+              "y": 32
+            },
+            {
+              "x": 34,
+              "y": 32
+            },
+            {
+              "x": 35,
+              "y": 32
+            },
+            {
+              "x": 36,
+              "y": 32
+            },
+            {
+              "x": 37,
+              "y": 32
+            },
+            {
+              "x": 38,
+              "y": 32
+            },
+            {
+              "x": 39,
+              "y": 32
+            },
+            {
+              "x": 40,
+              "y": 32
+            },
+            {
+              "x": 41,
+              "y": 32
+            },
+            {
+              "x": 42,
+              "y": 32
+            },
+            {
+              "x": 43,
+              "y": 32
+            },
+            {
+              "x": 44,
+              "y": 32
+            },
+            {
+              "x": 45,
+              "y": 32
+            },
+            {
+              "x": 46,
+              "y": 32
+            },
+            {
+              "x": 47,
+              "y": 32
+            },
+            {
+              "x": 47,
+              "y": 33
+            },
+            {
+              "x": 47,
+              "y": 34
+            },
+            {
+              "x": 47,
+              "y": 35
+            },
+            {
+              "x": 47,
+              "y": 36
+            },
+            {
+              "x": 47,
+              "y": 37
+            },
+            {
+              "x": 47,
+              "y": 38
+            },
+            {
+              "x": 47,
+              "y": 39
+            },
+            {
+              "x": 47,
+              "y": 40
+            },
+            {
+              "x": 47,
+              "y": 41
+            },
+            {
+              "x": 47,
+              "y": 42
+            },
+            {
+              "x": 47,
+              "y": 43
+            },
+            {
+              "x": 47,
+              "y": 44
+            },
+            {
+              "x": 47,
+              "y": 45
+            },
+            {
+              "x": 47,
+              "y": 46
+            },
+            {
+              "x": 47,
+              "y": 47
+            },
+            {
+              "x": 47,
+              "y": 48
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-13",
+          "edgeId": "edge-19",
+          "deck": 1,
+          "a": "controller-relief",
+          "b": "utility",
+          "points": [
+            {
+              "x": 50,
+              "y": 36
+            },
+            {
+              "x": 51,
+              "y": 36
+            },
+            {
+              "x": 52,
+              "y": 36
+            },
+            {
+              "x": 53,
+              "y": 36
+            },
+            {
+              "x": 54,
+              "y": 36
+            },
+            {
+              "x": 55,
+              "y": 36
+            },
+            {
+              "x": 56,
+              "y": 36
+            },
+            {
+              "x": 57,
+              "y": 36
+            },
+            {
+              "x": 58,
+              "y": 36
+            },
+            {
+              "x": 59,
+              "y": 36
+            },
+            {
+              "x": 60,
+              "y": 36
+            },
+            {
+              "x": 60,
+              "y": 37
+            },
+            {
+              "x": 60,
+              "y": 38
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-14",
+          "edgeId": "edge-20",
+          "deck": 1,
+          "a": "utility",
+          "b": "controller-sleep",
+          "points": [
+            {
+              "x": 60,
+              "y": 43
+            },
+            {
+              "x": 59,
+              "y": 43
+            },
+            {
+              "x": 58,
+              "y": 43
+            },
+            {
+              "x": 57,
+              "y": 43
+            },
+            {
+              "x": 56,
+              "y": 43
+            },
+            {
+              "x": 55,
+              "y": 43
+            },
+            {
+              "x": 55,
+              "y": 44
+            },
+            {
+              "x": 55,
+              "y": 45
+            },
+            {
+              "x": 55,
+              "y": 46
+            },
+            {
+              "x": 55,
+              "y": 47
+            },
+            {
+              "x": 55,
+              "y": 48
+            }
+          ],
+          "required": false,
+          "protected": false
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-1",
+          "edgeId": "edge-1",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 59,
+          "y": 34,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-2",
+          "edgeId": "edge-1",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 19,
+          "y": 14,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-3",
+          "edgeId": "edge-2",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 19,
+          "y": 14,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-4",
+          "edgeId": "edge-2",
+          "roomId": "office",
+          "deck": 0,
+          "x": 73,
+          "y": 18,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-5",
+          "edgeId": "edge-3",
+          "roomId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 19,
+          "y": 14,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-6",
+          "edgeId": "edge-3",
+          "roomId": "secure",
+          "deck": 0,
+          "x": 28,
+          "y": 16,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-7",
+          "edgeId": "edge-7",
+          "roomId": "controller-relief",
+          "deck": 1,
+          "x": 49,
+          "y": 37,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-8",
+          "edgeId": "edge-7",
+          "roomId": "controller-sleep",
+          "deck": 1,
+          "x": 48,
+          "y": 47,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-9",
+          "edgeId": "edge-11",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 63,
+          "y": 39,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-10",
+          "edgeId": "edge-11",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 68,
+          "y": 37,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-11",
+          "edgeId": "edge-12",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 68,
+          "y": 37,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-12",
+          "edgeId": "edge-12",
+          "roomId": "warehouse-floor-4",
+          "deck": 0,
+          "x": 34,
+          "y": 33,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-13",
+          "edgeId": "edge-13",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 60,
+          "y": 33,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-14",
+          "edgeId": "edge-13",
+          "roomId": "warehouse-floor-5",
+          "deck": 0,
+          "x": 54,
+          "y": 9,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-15",
+          "edgeId": "edge-14",
+          "roomId": "warehouse-floor-3",
+          "deck": 0,
+          "x": 76,
+          "y": 36,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-16",
+          "edgeId": "edge-14",
+          "roomId": "office",
+          "deck": 0,
+          "x": 74,
+          "y": 24,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-17",
+          "edgeId": "edge-15",
+          "roomId": "dock",
+          "deck": 1,
+          "x": 18,
+          "y": 25,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-18",
+          "edgeId": "edge-15",
+          "roomId": "ecology-den",
+          "deck": 1,
+          "x": 47,
+          "y": 14,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-19",
+          "edgeId": "edge-16",
+          "roomId": "dock",
+          "deck": 1,
+          "x": 18,
+          "y": 25,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-20",
+          "edgeId": "edge-16",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 26,
+          "y": 27,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-21",
+          "edgeId": "edge-17",
+          "roomId": "resource-store",
+          "deck": 1,
+          "x": 26,
+          "y": 22,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-22",
+          "edgeId": "edge-17",
+          "roomId": "interaction-high-route",
+          "deck": 1,
+          "x": 11,
+          "y": 10,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-23",
+          "edgeId": "edge-18",
+          "roomId": "dock",
+          "deck": 1,
+          "x": 18,
+          "y": 32,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-24",
+          "edgeId": "edge-18",
+          "roomId": "controller-sleep",
+          "deck": 1,
+          "x": 47,
+          "y": 48,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-25",
+          "edgeId": "edge-19",
+          "roomId": "controller-relief",
+          "deck": 1,
+          "x": 50,
+          "y": 36,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-26",
+          "edgeId": "edge-19",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 60,
+          "y": 38,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-27",
+          "edgeId": "edge-20",
+          "roomId": "utility",
+          "deck": 1,
+          "x": 60,
+          "y": 43,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-28",
+          "edgeId": "edge-20",
+          "roomId": "controller-sleep",
+          "deck": 1,
+          "x": 55,
+          "y": 48,
+          "corridorId": "corridor-14"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "connector-1-a",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 16,
+          "y": 21,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-1-b",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "dock",
+          "deck": 1,
+          "x": 16,
+          "y": 21,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-3-a",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "utility",
+          "deck": 1,
+          "x": 40,
+          "y": 27,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-3-b",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "warehouse-floor-2",
+          "deck": 0,
+          "x": 40,
+          "y": 27,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-5-a",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 54,
+          "y": 36,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-5-b",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "controller-relief",
+          "deck": 1,
+          "x": 54,
+          "y": 36,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-7-a",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 35,
+          "y": 22,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-7-b",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "interaction-high-route",
+          "deck": 1,
+          "x": 35,
+          "y": 22,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-9-a",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 56,
+          "y": 25,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-9-b",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 1,
+          "x": 56,
+          "y": 25,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-11-a",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 46,
+          "y": 31,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-11-b",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "resource-store",
+          "deck": 1,
+          "x": 46,
+          "y": 31,
+          "connectsDeck": 0
+        }
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      "semanticProgram": {
+        "locationArchetype": "warehouse",
+        "source": "site-archetype-defaults",
+        "layerPolicy": "full",
+        "layers": [
+          {
+            "order": 1,
+            "id": "relationship-reconciliation",
+            "input": {
+              "explicit": [
+                "scale",
+                "originCulture",
+                "controller",
+                "occupancyState",
+                "biome",
+                "climate",
+                "season",
+                "weather",
+                "ecology",
+                "wealth",
+                "security",
+                "condition",
+                "magicTech",
+                "lighting",
+                "waterState",
+                "verticality",
+                "secretDensity",
+                "traffic",
+                "socialMode",
+                "resourceProfile",
+                "maintenance",
+                "contamination",
+                "defenseDoctrine",
+                "narrativeTone"
+              ]
+            },
+            "changes": [
+              "random selections already mutually compatible"
+            ]
+          },
+          {
+            "order": 2,
+            "id": "scale",
+            "input": "large",
+            "changes": [
+              "warehouse-floor count 3->4",
+              "decks=1",
+              "grid=81x63"
+            ]
+          },
+          {
+            "order": 3,
+            "id": "origin-culture",
+            "input": "culture-neutral",
+            "changes": [
+              "applied broad cultural influence tag"
+            ]
+          },
+          {
+            "order": 4,
+            "id": "current-controller",
+            "input": "refugees",
+            "changes": [
+              "added communal-relief-space",
+              "added overflow-sleeping"
+            ]
+          },
+          {
+            "order": 5,
+            "id": "occupancy-state",
+            "input": "occupied",
+            "changes": []
+          },
+          {
+            "order": 6,
+            "id": "environment",
+            "input": {
+              "biome": "coastal",
+              "climate": "maritime",
+              "season": "storm-season",
+              "weather": "heavy-rain",
+              "waterState": "partially-flooded",
+              "verticality": "low-rise"
+            },
+            "changes": [
+              "water pressure applied to service/infrastructure spaces"
+            ]
+          },
+          {
+            "order": 7,
+            "id": "cross-layer-interactions",
+            "input": {
+              "culture": "culture-neutral",
+              "controller": "refugees",
+              "archetype": "warehouse",
+              "occupancyState": "occupied",
+              "ecology": "wetland",
+              "condition": "worn",
+              "waterState": "partially-flooded"
+            },
+            "changes": [
+              "current occupants alter inherited spaces while original construction remains legible",
+              "water changes usable circulation and pushes traffic onto higher or improvised routes",
+              "occupants or explorers establish an elevated route around submerged inherited circulation"
+            ]
+          },
+          {
+            "order": 8,
+            "id": "ecology",
+            "input": {
+              "ecology": "wetland",
+              "creatureFamilies": [
+                "humanoid",
+                "aquatic",
+                "plague-carrier"
+              ],
+              "creatureDensity": 5
+            },
+            "changes": [
+              "added ecology habitat space"
+            ]
+          },
+          {
+            "order": 9,
+            "id": "hazard-ecology",
+            "input": {
+              "families": [
+                "flood",
+                "disease",
+                "structural"
+              ],
+              "intensity": 7,
+              "contamination": "salt"
+            },
+            "changes": [
+              "distributed 3 hazard families over semantically suitable rooms"
+            ]
+          },
+          {
+            "order": 10,
+            "id": "security-defense",
+            "input": {
+              "security": "low",
+              "doctrine": "passive"
+            },
+            "changes": []
+          },
+          {
+            "order": 11,
+            "id": "resources-magic",
+            "input": {
+              "wealth": "poor",
+              "resourceProfile": "food",
+              "magicTech": "none"
+            },
+            "changes": [
+              "added food resource store"
+            ]
+          },
+          {
+            "order": 12,
+            "id": "condition-history",
+            "input": {
+              "age": "old",
+              "condition": "worn",
+              "maintenance": "deferred",
+              "contamination": "salt"
+            },
+            "changes": [
+              "applied salt contamination"
+            ]
+          },
+          {
+            "order": 13,
+            "id": "narrative-social",
+            "input": {
+              "tone": "desperate",
+              "socialMode": "communal",
+              "traffic": "crowded",
+              "secretDensity": "scarce"
+            },
+            "changes": [
+              "retained previous spatial functions while adding narrative/social interpretation"
+            ]
+          },
+          {
+            "order": 14,
+            "id": "spatial-capacity-normalization",
+            "input": {
+              "expandedRoomCount": 14,
+              "decks": 2,
+              "roomsPerDeckEstimate": 7
+            },
+            "changes": [
+              "existing canvas already accommodates the accumulated semantic program"
+            ]
+          }
+        ]
+      }
+    },
+    "content": {
+      "schemaVersion": "1.2.0",
+      "generator": "hb-semantic-content-populator",
+      "version": "1.2.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse:content:archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse:blacklight_continuum",
+      "compatibility": {
+        "id": "blacklight_continuum",
+        "family": "Blacklight Continuum",
+        "provenance": "Blacklight Continuum-native content; mechanics remain identified as Blacklight Continuum.",
+        "mechanicalDetailsAreSettingScoped": true
+      },
+      "provenance": {
+        "topologyEngine": "hb-semantic-spatial-engine",
+        "topologySeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+        "contentLayer": "semantic-content-populator",
+        "locationArchetype": "warehouse",
+        "faction": "refugees",
+        "adventurePurpose": "exploration",
+        "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+        "siteLayers": [
+          "relationship-reconciliation",
+          "scale",
+          "origin-culture",
+          "current-controller",
+          "occupancy-state",
+          "environment",
+          "cross-layer-interactions",
+          "ecology",
+          "hazard-ecology",
+          "security-defense",
+          "resources-magic",
+          "condition-history",
+          "narrative-social",
+          "spatial-capacity-normalization"
+        ]
+      },
+      "siteContext": {
+        "culture": "culture-neutral",
+        "controller": "refugees",
+        "occupancyState": "occupied",
+        "biome": "coastal",
+        "climate": "maritime",
+        "season": "storm-season",
+        "weather": "heavy-rain",
+        "ecology": "wetland",
+        "creatureFamilies": [
+          "humanoid",
+          "aquatic",
+          "plague-carrier"
+        ],
+        "hazardFamilies": [
+          "flood",
+          "disease",
+          "structural"
+        ],
+        "materials": [
+          "rune-stone",
+          "bronze",
+          "ice",
+          "concrete",
+          "steel"
+        ],
+        "lighting": "daylight",
+        "waterState": "partially-flooded",
+        "contamination": "salt",
+        "narrativeTone": "desperate",
+        "interactionIds": [
+          "cultural-overprint",
+          "flooded-circulation",
+          "flooded-circulation"
+        ],
+        "interactionCount": 3,
+        "creatureDensity": 5,
+        "hazardIntensity": 7,
+        "treasureDensity": 9,
+        "socialDensity": 6
+      },
+      "rooms": [
+        {
+          "roomId": "entry",
+          "role": "loading-entry",
+          "deck": 0,
+          "depth": 0,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "loading-entry",
+            "originalLabel": "Loading Entrance",
+            "currentUse": "submerged / intermittently accessible zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ]
+          },
+          "occupants": [
+            "infected animal [plague-carrier]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "infectious remains [disease]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: flooded-circulation"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: submerged / intermittently accessible zone; inherited function: Loading Entrance",
+            "culture-neutral cultural/construction influence remains legible in Loading Entrance — submerged / intermittently accessible zone",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "plague-carrier presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "warehouse-floor-2",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": "submerged / intermittently accessible zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ]
+          },
+          "occupants": [
+            "organized residents [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "fast flood channel [flood]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: flooded-circulation"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: submerged / intermittently accessible zone; inherited function: Storage Floor",
+            "culture-neutral cultural/construction influence remains legible in Storage Floor — submerged / intermittently accessible zone",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "warehouse-floor-3",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": "submerged / intermittently accessible zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ]
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "cracked supports or unstable masonry [structural]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: flooded-circulation"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: submerged / intermittently accessible zone; inherited function: Storage Floor",
+            "culture-neutral cultural/construction influence remains legible in Storage Floor — submerged / intermittently accessible zone",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "warehouse-floor-4",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": "submerged / intermittently accessible zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ]
+          },
+          "occupants": [
+            "aquatic colony [aquatic]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "load-bearing failure risk [structural]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: flooded-circulation"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: submerged / intermittently accessible zone; inherited function: Storage Floor",
+            "culture-neutral cultural/construction influence remains legible in Storage Floor — submerged / intermittently accessible zone",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "aquatic presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "warehouse-floor-5",
+          "role": "warehouse-floor",
+          "deck": 0,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "warehouse-floor",
+            "originalLabel": "Storage Floor",
+            "currentUse": "submerged / intermittently accessible zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ]
+          },
+          "occupants": [
+            "armed humanoid patrol [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "cracked supports or unstable masonry [structural]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [
+            "physical alterations record cross-layer history: flooded-circulation"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: submerged / intermittently accessible zone; inherited function: Storage Floor",
+            "culture-neutral cultural/construction influence remains legible in Storage Floor — submerged / intermittently accessible zone",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "office",
+          "role": "warehouse-office",
+          "deck": 0,
+          "depth": 2,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "warehouse-office",
+            "originalLabel": "Shipping Office",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "workers, retainers, or raiders [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [
+            "logs, testimony, or traces connecting current and former occupants"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in Shipping Office",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "secure",
+          "role": "secure-cage",
+          "deck": 0,
+          "depth": 2,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "secure-cage",
+            "originalLabel": "Secure Cage",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "cracked supports or unstable masonry [structural]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [
+            "credential, key, password, or symbol-controlled access"
+          ],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in Secure Cage",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 8
+        },
+        {
+          "roomId": "dock",
+          "role": "loading-dock",
+          "deck": 1,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "loading-dock",
+            "originalLabel": "Loading Dock",
+            "currentUse": "submerged / intermittently accessible zone",
+            "currentUseOverlays": [],
+            "adaptations": [
+              "water changes usable circulation and pushes traffic onto higher or improvised routes"
+            ],
+            "interactionIds": [
+              "flooded-circulation"
+            ]
+          },
+          "occupants": [
+            "armed humanoid patrol [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "load-bearing failure risk [structural]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical alterations record cross-layer history: flooded-circulation"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "historical adaptation: water changes usable circulation and pushes traffic onto higher or improvised routes"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "current use: submerged / intermittently accessible zone; inherited function: Loading Dock",
+            "culture-neutral cultural/construction influence remains legible in Loading Dock — submerged / intermittently accessible zone",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "utility",
+          "role": "utility-room",
+          "deck": 1,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "utility-room",
+            "originalLabel": "Utility Room",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "armed humanoid patrol [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "damaged stairs, roof, or floor [structural]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in Utility Room",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "controller-relief",
+          "role": "communal-relief-space",
+          "deck": 1,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "communal-relief-space",
+            "originalLabel": "Communal Relief Space",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "infected animal [plague-carrier]"
+          ],
+          "socialEncounters": [
+            "refugees personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in Communal Relief Space",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "plague-carrier presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "controller-sleep",
+          "role": "overflow-sleeping",
+          "deck": 1,
+          "depth": 2,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "overflow-sleeping",
+            "originalLabel": "Overflow Sleeping Area",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [
+            "refugees personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "valuable records, components, heirlooms, or salvage"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in Overflow Sleeping Area",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "interaction-high-route",
+          "role": "high-water-bypass",
+          "deck": 1,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "high-water-bypass",
+            "originalLabel": "High-Water Bypass",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "water-dwelling scavenger [aquatic]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "disease exposure [disease]",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in High-Water Bypass",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "aquatic presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "ecology-den",
+          "role": "ecology-den",
+          "deck": 1,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "ecology-den",
+            "originalLabel": "Nest / Den / Habitat",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "workers, retainers, or raiders [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "fast flood channel [flood]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "valuable records, components, heirlooms, or salvage"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in Nest / Den / Habitat",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "resource-store",
+          "role": "resource-specific-store",
+          "deck": 1,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "resource-specific-store",
+            "originalLabel": "food Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "workers, retainers, or raiders [humanoid]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "rising water [flood]",
+            "salt contamination interacting with the room's existing use",
+            "occupied state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "secured valuables or rare materials"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "culture-neutral cultural/construction influence remains legible in food Store",
+            "dominant materials: rune-stone, bronze, ice",
+            "coastal / maritime / storm-season / heavy-rain",
+            "daylight lighting conditions",
+            "partially-flooded water condition"
+          ],
+          "ecology": [
+            "humanoid presence consistent with wetland ecology and occupied occupation state"
+          ],
+          "encounterPressure": 5
+        }
+      ]
+    },
+    "compatibility": {
+      "id": "blacklight_continuum",
+      "family": "Blacklight Continuum",
+      "provenance": "Blacklight Continuum-native content; mechanics remain identified as Blacklight Continuum.",
+      "mechanicalDetailsAreSettingScoped": true
+    },
+    "provenance": {
+      "topologyEngine": "hb-semantic-spatial-engine",
+      "topologySeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+      "contentLayer": "semantic-content-populator",
+      "locationArchetype": "warehouse",
+      "faction": "refugees",
+      "adventurePurpose": "exploration",
+      "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-coastal-refugee-warehouse",
+      "siteLayers": [
+        "relationship-reconciliation",
+        "scale",
+        "origin-culture",
+        "current-controller",
+        "occupancy-state",
+        "environment",
+        "cross-layer-interactions",
+        "ecology",
+        "hazard-ecology",
+        "security-defense",
+        "resources-magic",
+        "condition-history",
+        "narrative-social",
+        "spatial-capacity-normalization"
+      ]
+    }
+  }
+}

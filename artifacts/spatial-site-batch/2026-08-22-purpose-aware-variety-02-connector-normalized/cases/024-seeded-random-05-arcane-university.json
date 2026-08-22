@@ -1,0 +1,5482 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-generation-test-artifact",
+  "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
+  "sourceCommit": "5debe8bb0171a6fbb62b1d0e5f7f454d32253ebd",
+  "caseNumber": 24,
+  "caseId": "seeded-random-05-arcane-university",
+  "caseKind": "seeded-random",
+  "input": {
+    "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+    "locationArchetype": "arcane_university",
+    "rulesTarget": "kaysender",
+    "dangerLevel": 5,
+    "creatureDensity": 9,
+    "hazardIntensity": 2,
+    "treasureDensity": 3,
+    "socialDensity": 4,
+    "sitePreferences": {
+      "originCulture": {
+        "preferred": [
+          "mixed-cosmopolitan",
+          "gnomish",
+          "orcish",
+          "ancient-unknown"
+        ]
+      },
+      "controller": {
+        "preferred": [
+          "bandits",
+          "refugees",
+          "military-garrison",
+          "goblin-clan"
+        ]
+      },
+      "ecology": {
+        "preferred": [
+          "fungal",
+          "overgrown",
+          "urban-vermin",
+          "subterranean",
+          "magical",
+          "wetland"
+        ]
+      },
+      "creatureFamilies": {
+        "exclude": [
+          "dragon"
+        ]
+      },
+      "hazardFamilies": {
+        "exclude": [
+          "lava"
+        ]
+      }
+    }
+  },
+  "acceptance": {
+    "ok": true,
+    "deterministic": true,
+    "topologyValid": true
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "metrics": {
+    "rooms": 19,
+    "corridors": 16,
+    "doors": 32,
+    "connectors": 18,
+    "decks": 5,
+    "interactions": 1,
+    "profileLayers": 14,
+    "historicallyAdaptedRoleTemplates": 0,
+    "currentUseRoleTemplates": 0,
+    "currentUseOverlayRoleTemplates": 0,
+    "occupants": 11,
+    "socialEncounters": 4,
+    "traps": 6,
+    "hazards": 36,
+    "securityEntries": 0,
+    "treasureEntries": 4,
+    "evidenceEntries": 7,
+    "objectives": 2,
+    "narrativeDiscoveries": 7,
+    "secretAccessEntries": 2
+  },
+  "result": {
+    "schemaVersion": "0.3.0",
+    "generator": "generator.module_map",
+    "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+    "width": 90,
+    "height": 70,
+    "deckCount": 5,
+    "locationArchetype": "arcane_university",
+    "semanticProgram": {
+      "locationArchetype": "arcane_university",
+      "source": "site-archetype-defaults",
+      "layerPolicy": "full",
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "climate: arid->magically-temperate (biome compatibility)",
+            "weather: overcast->aurora-flux (climate compatibility)",
+            "ecology: agricultural->scavenger (biome ecology)",
+            "magicTech: low-magic->alchemical (builder culture)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "subterranean-complex",
+          "changes": [
+            "lecture-hall count 2->3",
+            "arcane-laboratory count 2->3",
+            "added large-site service hub and secondary access",
+            "decks=5",
+            "grid=90x70"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "colonial",
+          "changes": [
+            "applied broad cultural influence tag"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "necromancers",
+          "changes": [
+            "recontextualized existing spaces for controller"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "burned",
+          "changes": [
+            "introduced occupation-state hazard pressure"
+          ]
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "urban",
+            "climate": "magically-temperate",
+            "season": "thaw",
+            "weather": "aurora-flux",
+            "waterState": "humid",
+            "verticality": "shafted"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "colonial",
+            "controller": "necromancers",
+            "archetype": "arcane_university",
+            "occupancyState": "burned",
+            "ecology": "scavenger",
+            "condition": "serviceable",
+            "waterState": "humid"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "scavenger",
+            "creatureFamilies": [
+              "spirit",
+              "flyer",
+              "nonhostile-wildlife",
+              "celestial"
+            ],
+            "creatureDensity": 9
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "mechanical",
+              "noise"
+            ],
+            "intensity": 2,
+            "contamination": "none"
+          },
+          "changes": []
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "ceremonial",
+            "doctrine": "passive"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "destitute",
+            "resourceProfile": "contraband",
+            "magicTech": "alchemical"
+          },
+          "changes": [
+            "added contraband resource store",
+            "applied alchemical infrastructure"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "layered-renovations",
+            "condition": "serviceable",
+            "maintenance": "deferred",
+            "contamination": "none"
+          },
+          "changes": []
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "neutral",
+            "socialMode": "criminal",
+            "traffic": "seasonal",
+            "secretDensity": "scarce"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 19,
+            "decks": 5,
+            "roomsPerDeckEstimate": 4
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ]
+    },
+    "siteProfile": {
+      "schemaVersion": "1.0.0",
+      "generator": "hb-semantic-site-profile-layers",
+      "version": "1.0.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+      "archetype": "arcane_university",
+      "axes": {
+        "scale": "subterranean-complex",
+        "originCulture": "colonial",
+        "controller": "necromancers",
+        "occupancyState": "burned",
+        "biome": "urban",
+        "climate": "magically-temperate",
+        "season": "thaw",
+        "weather": "aurora-flux",
+        "ecology": "scavenger",
+        "wealth": "destitute",
+        "security": "ceremonial",
+        "age": "layered-renovations",
+        "condition": "serviceable",
+        "magicTech": "alchemical",
+        "lighting": "magical",
+        "waterState": "humid",
+        "verticality": "shafted",
+        "secretDensity": "scarce",
+        "traffic": "seasonal",
+        "socialMode": "criminal",
+        "resourceProfile": "contraband",
+        "maintenance": "deferred",
+        "contamination": "none",
+        "defenseDoctrine": "passive",
+        "narrativeTone": "neutral"
+      },
+      "scalars": {
+        "creatureDensity": 9,
+        "hazardIntensity": 2,
+        "treasureDensity": 3,
+        "socialDensity": 4
+      },
+      "creatureFamilies": [
+        "spirit",
+        "flyer",
+        "nonhostile-wildlife",
+        "celestial"
+      ],
+      "hazardFamilies": [
+        "mechanical",
+        "noise"
+      ],
+      "materials": [
+        "copper",
+        "ironwood"
+      ],
+      "roles": [
+        {
+          "id": "entry",
+          "role": "university-entry",
+          "label": "Arcane University Gate",
+          "tags": [
+            "entrance",
+            "public",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ]
+        },
+        {
+          "id": "admin",
+          "role": "administration",
+          "label": "Rectorate / Administration",
+          "tags": [
+            "public",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tone-neutral"
+          ]
+        },
+        {
+          "id": "lecture",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "count": 3
+        },
+        {
+          "id": "library",
+          "role": "grand-library",
+          "label": "Grand Library",
+          "tags": [
+            "public",
+            "evidence",
+            "treasure",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tone-neutral"
+          ]
+        },
+        {
+          "id": "faculty",
+          "role": "faculty-offices",
+          "label": "Faculty Offices",
+          "tags": [
+            "private",
+            "staff",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint"
+          ]
+        },
+        {
+          "id": "student",
+          "role": "student-commons",
+          "label": "Student Commons",
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ]
+        },
+        {
+          "id": "lab",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "count": 3
+        },
+        {
+          "id": "ritual",
+          "role": "ritual-chamber",
+          "label": "Ritual Chamber",
+          "tags": [
+            "restricted",
+            "ritual",
+            "objective",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ]
+        },
+        {
+          "id": "archives",
+          "role": "sealed-archives",
+          "label": "Sealed Archives",
+          "tags": [
+            "inner",
+            "evidence",
+            "treasure",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tone-neutral"
+          ]
+        },
+        {
+          "id": "danger",
+          "role": "dangerous-research",
+          "label": "Dangerous Research Wing",
+          "tags": [
+            "inner",
+            "hazard",
+            "objective",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tone-neutral"
+          ]
+        },
+        {
+          "id": "service",
+          "role": "university-service",
+          "label": "Custodial / Service Space",
+          "tags": [
+            "service",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "cultural-overprint",
+            "tech-alchemical"
+          ]
+        },
+        {
+          "id": "scale-service-hub",
+          "role": "service-hub",
+          "label": "Service Hub",
+          "tags": [
+            "service",
+            "transit",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "cultural-overprint",
+            "tech-alchemical"
+          ]
+        },
+        {
+          "id": "scale-secondary-access",
+          "role": "secondary-access",
+          "label": "Secondary Access",
+          "tags": [
+            "entrance",
+            "service",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tech-alchemical"
+          ]
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "tags": [
+            "hazard",
+            "ecology"
+          ]
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "contraband Store",
+          "tags": [
+            "service",
+            "treasure",
+            "tech-alchemical"
+          ]
+        }
+      ],
+      "adjacency": [
+        [
+          "university-entry",
+          "administration"
+        ],
+        [
+          "administration",
+          "lecture-hall"
+        ],
+        [
+          "lecture-hall",
+          "student-commons"
+        ],
+        [
+          "lecture-hall",
+          "grand-library"
+        ],
+        [
+          "grand-library",
+          "faculty-offices"
+        ],
+        [
+          "faculty-offices",
+          "arcane-laboratory"
+        ],
+        [
+          "arcane-laboratory",
+          "ritual-chamber"
+        ],
+        [
+          "grand-library",
+          "sealed-archives"
+        ],
+        [
+          "sealed-archives",
+          "dangerous-research"
+        ],
+        [
+          "university-service",
+          "arcane-laboratory"
+        ],
+        [
+          "entry",
+          "service-hub"
+        ],
+        [
+          "service-hub",
+          "secondary-access"
+        ],
+        [
+          "university-service",
+          "ecology-den"
+        ],
+        [
+          "university-service",
+          "resource-specific-store"
+        ]
+      ],
+      "decks": 5,
+      "layout": {
+        "gridWidth": 90,
+        "gridHeight": 70
+      },
+      "extraEdgeChance": 0.22,
+      "layers": [
+        {
+          "order": 1,
+          "id": "relationship-reconciliation",
+          "input": {
+            "explicit": []
+          },
+          "changes": [
+            "climate: arid->magically-temperate (biome compatibility)",
+            "weather: overcast->aurora-flux (climate compatibility)",
+            "ecology: agricultural->scavenger (biome ecology)",
+            "magicTech: low-magic->alchemical (builder culture)"
+          ]
+        },
+        {
+          "order": 2,
+          "id": "scale",
+          "input": "subterranean-complex",
+          "changes": [
+            "lecture-hall count 2->3",
+            "arcane-laboratory count 2->3",
+            "added large-site service hub and secondary access",
+            "decks=5",
+            "grid=90x70"
+          ]
+        },
+        {
+          "order": 3,
+          "id": "origin-culture",
+          "input": "colonial",
+          "changes": [
+            "applied broad cultural influence tag"
+          ]
+        },
+        {
+          "order": 4,
+          "id": "current-controller",
+          "input": "necromancers",
+          "changes": [
+            "recontextualized existing spaces for controller"
+          ]
+        },
+        {
+          "order": 5,
+          "id": "occupancy-state",
+          "input": "burned",
+          "changes": [
+            "introduced occupation-state hazard pressure"
+          ]
+        },
+        {
+          "order": 6,
+          "id": "environment",
+          "input": {
+            "biome": "urban",
+            "climate": "magically-temperate",
+            "season": "thaw",
+            "weather": "aurora-flux",
+            "waterState": "humid",
+            "verticality": "shafted"
+          },
+          "changes": [
+            "environment increased vertical organization"
+          ]
+        },
+        {
+          "order": 7,
+          "id": "cross-layer-interactions",
+          "input": {
+            "culture": "colonial",
+            "controller": "necromancers",
+            "archetype": "arcane_university",
+            "occupancyState": "burned",
+            "ecology": "scavenger",
+            "condition": "serviceable",
+            "waterState": "humid"
+          },
+          "changes": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        },
+        {
+          "order": 8,
+          "id": "ecology",
+          "input": {
+            "ecology": "scavenger",
+            "creatureFamilies": [
+              "spirit",
+              "flyer",
+              "nonhostile-wildlife",
+              "celestial"
+            ],
+            "creatureDensity": 9
+          },
+          "changes": [
+            "added ecology habitat space"
+          ]
+        },
+        {
+          "order": 9,
+          "id": "hazard-ecology",
+          "input": {
+            "families": [
+              "mechanical",
+              "noise"
+            ],
+            "intensity": 2,
+            "contamination": "none"
+          },
+          "changes": []
+        },
+        {
+          "order": 10,
+          "id": "security-defense",
+          "input": {
+            "security": "ceremonial",
+            "doctrine": "passive"
+          },
+          "changes": []
+        },
+        {
+          "order": 11,
+          "id": "resources-magic",
+          "input": {
+            "wealth": "destitute",
+            "resourceProfile": "contraband",
+            "magicTech": "alchemical"
+          },
+          "changes": [
+            "added contraband resource store",
+            "applied alchemical infrastructure"
+          ]
+        },
+        {
+          "order": 12,
+          "id": "condition-history",
+          "input": {
+            "age": "layered-renovations",
+            "condition": "serviceable",
+            "maintenance": "deferred",
+            "contamination": "none"
+          },
+          "changes": []
+        },
+        {
+          "order": 13,
+          "id": "narrative-social",
+          "input": {
+            "tone": "neutral",
+            "socialMode": "criminal",
+            "traffic": "seasonal",
+            "secretDensity": "scarce"
+          },
+          "changes": [
+            "retained previous spatial functions while adding narrative/social interpretation"
+          ]
+        },
+        {
+          "order": 14,
+          "id": "spatial-capacity-normalization",
+          "input": {
+            "expandedRoomCount": 19,
+            "decks": 5,
+            "roomsPerDeckEstimate": 4
+          },
+          "changes": [
+            "existing canvas already accommodates the accumulated semantic program"
+          ]
+        }
+      ],
+      "interactions": [
+        {
+          "order": 1,
+          "id": "cultural-overprint",
+          "drivers": {
+            "culture": "colonial",
+            "controller": "necromancers"
+          },
+          "targets": [
+            "university-entry",
+            "administration",
+            "lecture-hall",
+            "grand-library",
+            "faculty-offices",
+            "student-commons"
+          ],
+          "effects": [
+            "current occupants alter inherited spaces while original construction remains legible"
+          ]
+        }
+      ],
+      "explicit": {
+        "security": false
+      },
+      "explicitAxes": [],
+      "contentContext": {
+        "culture": "colonial",
+        "controller": "necromancers",
+        "occupancyState": "burned",
+        "biome": "urban",
+        "climate": "magically-temperate",
+        "season": "thaw",
+        "weather": "aurora-flux",
+        "ecology": "scavenger",
+        "creatureFamilies": [
+          "spirit",
+          "flyer",
+          "nonhostile-wildlife",
+          "celestial"
+        ],
+        "hazardFamilies": [
+          "mechanical",
+          "noise"
+        ],
+        "materials": [
+          "copper",
+          "ironwood"
+        ],
+        "wealth": "destitute",
+        "security": "ceremonial",
+        "magicTech": "alchemical",
+        "lighting": "magical",
+        "waterState": "humid",
+        "contamination": "none",
+        "narrativeTone": "neutral",
+        "interactionCount": 1,
+        "interactionIds": [
+          "cultural-overprint"
+        ],
+        "creatureDensity": 9,
+        "hazardIntensity": 2,
+        "treasureDensity": 3,
+        "socialDensity": 4
+      }
+    },
+    "spatialLayout": {
+      "schemaVersion": "1.0.0",
+      "engine": "hb-semantic-spatial-engine",
+      "engineVersion": "1.1.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+      "deckCount": 5,
+      "bounds": {
+        "width": 90,
+        "height": 70
+      },
+      "nodes": [
+        {
+          "id": "entry",
+          "role": "university-entry",
+          "label": "Arcane University Gate",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "public",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "admin",
+          "role": "administration",
+          "label": "Rectorate / Administration",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "public",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "lecture-hall-3",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "lecture-hall-4",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "deck": 0,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "lecture-hall-5",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "library",
+          "role": "grand-library",
+          "label": "Grand Library",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "public",
+            "evidence",
+            "treasure",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "faculty",
+          "role": "faculty-offices",
+          "label": "Faculty Offices",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "private",
+            "staff",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "student",
+          "role": "student-commons",
+          "label": "Student Commons",
+          "deck": 1,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "arcane-laboratory-9",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "arcane-laboratory-10",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "arcane-laboratory-11",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ritual",
+          "role": "ritual-chamber",
+          "label": "Ritual Chamber",
+          "deck": 2,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "ritual",
+            "objective",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "archives",
+          "role": "sealed-archives",
+          "label": "Sealed Archives",
+          "deck": 3,
+          "protected": true,
+          "tags": [
+            "inner",
+            "evidence",
+            "treasure",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "danger",
+          "role": "dangerous-research",
+          "label": "Dangerous Research Wing",
+          "deck": 3,
+          "protected": true,
+          "tags": [
+            "inner",
+            "hazard",
+            "objective",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "service",
+          "role": "university-service",
+          "label": "Custodial / Service Space",
+          "deck": 3,
+          "protected": true,
+          "tags": [
+            "service",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "cultural-overprint",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-service-hub",
+          "role": "service-hub",
+          "label": "Service Hub",
+          "deck": 3,
+          "protected": true,
+          "tags": [
+            "service",
+            "transit",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "cultural-overprint",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-secondary-access",
+          "role": "secondary-access",
+          "label": "Secondary Access",
+          "deck": 4,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 4,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "role": "resource-specific-store",
+          "label": "contraband Store",
+          "deck": 4,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "a": "entry",
+          "b": "admin",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-1"
+          }
+        },
+        {
+          "id": "edge-2",
+          "a": "admin",
+          "b": "lecture-hall-3",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-2"
+          }
+        },
+        {
+          "id": "edge-3",
+          "a": "lecture-hall-3",
+          "b": "student",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-3"
+          },
+          "connectorPairId": "connector-1"
+        },
+        {
+          "id": "edge-4",
+          "a": "lecture-hall-3",
+          "b": "library",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-4"
+          },
+          "connectorPairId": "connector-3"
+        },
+        {
+          "id": "edge-5",
+          "a": "library",
+          "b": "faculty",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-5"
+          }
+        },
+        {
+          "id": "edge-6",
+          "a": "faculty",
+          "b": "arcane-laboratory-9",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-6"
+          },
+          "connectorPairId": "connector-5"
+        },
+        {
+          "id": "edge-7",
+          "a": "arcane-laboratory-9",
+          "b": "ritual",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-7"
+          }
+        },
+        {
+          "id": "edge-8",
+          "a": "library",
+          "b": "archives",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-8"
+          },
+          "connectorPairId": "connector-7"
+        },
+        {
+          "id": "edge-9",
+          "a": "archives",
+          "b": "danger",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-9"
+          }
+        },
+        {
+          "id": "edge-10",
+          "a": "service",
+          "b": "arcane-laboratory-9",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-10"
+          },
+          "connectorPairId": "connector-9"
+        },
+        {
+          "id": "edge-11",
+          "a": "entry",
+          "b": "scale-service-hub",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-11"
+          },
+          "connectorPairId": "connector-11"
+        },
+        {
+          "id": "edge-12",
+          "a": "scale-service-hub",
+          "b": "scale-secondary-access",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-12"
+          },
+          "connectorPairId": "connector-13"
+        },
+        {
+          "id": "edge-13",
+          "a": "service",
+          "b": "ecology-den",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-13"
+          },
+          "connectorPairId": "connector-15"
+        },
+        {
+          "id": "edge-14",
+          "a": "service",
+          "b": "resource-store",
+          "kind": "semantic",
+          "required": true,
+          "metadata": {
+            "constraintId": "constraint-14"
+          },
+          "connectorPairId": "connector-17"
+        },
+        {
+          "id": "edge-15",
+          "a": "admin",
+          "b": "lecture-hall-4",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-16",
+          "a": "entry",
+          "b": "lecture-hall-4",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        },
+        {
+          "id": "edge-17",
+          "a": "lecture-hall-5",
+          "b": "library",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-18",
+          "a": "faculty",
+          "b": "student",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-19",
+          "a": "ritual",
+          "b": "arcane-laboratory-10",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-20",
+          "a": "arcane-laboratory-9",
+          "b": "arcane-laboratory-11",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-21",
+          "a": "archives",
+          "b": "service",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-22",
+          "a": "archives",
+          "b": "scale-service-hub",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-23",
+          "a": "scale-secondary-access",
+          "b": "ecology-den",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-24",
+          "a": "ecology-den",
+          "b": "resource-store",
+          "kind": "backbone",
+          "required": true,
+          "metadata": {}
+        },
+        {
+          "id": "edge-25",
+          "a": "scale-secondary-access",
+          "b": "resource-store",
+          "kind": "redundant",
+          "required": false,
+          "metadata": {}
+        }
+      ],
+      "rooms": [
+        {
+          "id": "entry",
+          "nodeId": "entry",
+          "role": "university-entry",
+          "label": "Arcane University Gate",
+          "deck": 0,
+          "x": 70,
+          "y": 39,
+          "width": 6,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "public",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "admin",
+          "nodeId": "admin",
+          "role": "administration",
+          "label": "Rectorate / Administration",
+          "deck": 0,
+          "x": 60,
+          "y": 20,
+          "width": 5,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "public",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "lecture-hall-3",
+          "nodeId": "lecture-hall-3",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "deck": 0,
+          "x": 46,
+          "y": 46,
+          "width": 7,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "lecture-hall-4",
+          "nodeId": "lecture-hall-4",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "deck": 0,
+          "x": 50,
+          "y": 35,
+          "width": 7,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "lecture-hall-5",
+          "nodeId": "lecture-hall-5",
+          "role": "lecture-hall",
+          "label": "Lecture Hall",
+          "deck": 1,
+          "x": 54,
+          "y": 39,
+          "width": 5,
+          "height": 10,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "library",
+          "nodeId": "library",
+          "role": "grand-library",
+          "label": "Grand Library",
+          "deck": 1,
+          "x": 27,
+          "y": 53,
+          "width": 6,
+          "height": 7,
+          "protected": true,
+          "tags": [
+            "public",
+            "evidence",
+            "treasure",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "faculty",
+          "nodeId": "faculty",
+          "role": "faculty-offices",
+          "label": "Faculty Offices",
+          "deck": 1,
+          "x": 61,
+          "y": 37,
+          "width": 7,
+          "height": 5,
+          "protected": true,
+          "tags": [
+            "private",
+            "staff",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "student",
+          "nodeId": "student",
+          "role": "student-commons",
+          "label": "Student Commons",
+          "deck": 1,
+          "x": 62,
+          "y": 59,
+          "width": 11,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "public",
+            "social",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "arcane-laboratory-9",
+          "nodeId": "arcane-laboratory-9",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "deck": 2,
+          "x": 24,
+          "y": 51,
+          "width": 6,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "arcane-laboratory-10",
+          "nodeId": "arcane-laboratory-10",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "deck": 2,
+          "x": 43,
+          "y": 46,
+          "width": 5,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "arcane-laboratory-11",
+          "nodeId": "arcane-laboratory-11",
+          "role": "arcane-laboratory",
+          "label": "Arcane Laboratory",
+          "deck": 2,
+          "x": 5,
+          "y": 47,
+          "width": 7,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "hazard",
+            "evidence",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ritual",
+          "nodeId": "ritual",
+          "role": "ritual-chamber",
+          "label": "Ritual Chamber",
+          "deck": 2,
+          "x": 65,
+          "y": 57,
+          "width": 5,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "restricted",
+            "ritual",
+            "objective",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tech-alchemical",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "archives",
+          "nodeId": "archives",
+          "role": "sealed-archives",
+          "label": "Sealed Archives",
+          "deck": 3,
+          "x": 20,
+          "y": 19,
+          "width": 9,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "inner",
+            "evidence",
+            "treasure",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "danger",
+          "nodeId": "danger",
+          "role": "dangerous-research",
+          "label": "Dangerous Research Wing",
+          "deck": 3,
+          "x": 19,
+          "y": 3,
+          "width": 10,
+          "height": 9,
+          "protected": true,
+          "tags": [
+            "inner",
+            "hazard",
+            "objective",
+            "colonial-influence",
+            "necromancers-controlled",
+            "cultural-overprint",
+            "tone-neutral"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "service",
+          "nodeId": "service",
+          "role": "university-service",
+          "label": "Custodial / Service Space",
+          "deck": 3,
+          "x": 42,
+          "y": 47,
+          "width": 10,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "cultural-overprint",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-service-hub",
+          "nodeId": "scale-service-hub",
+          "role": "service-hub",
+          "label": "Service Hub",
+          "deck": 3,
+          "x": 69,
+          "y": 26,
+          "width": 11,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "service",
+            "transit",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "cultural-overprint",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "scale-secondary-access",
+          "nodeId": "scale-secondary-access",
+          "role": "secondary-access",
+          "label": "Secondary Access",
+          "deck": 4,
+          "x": 62,
+          "y": 38,
+          "width": 9,
+          "height": 6,
+          "protected": true,
+          "tags": [
+            "entrance",
+            "service",
+            "colonial-influence",
+            "necromancers-controlled",
+            "hazard",
+            "urban",
+            "magically-temperate",
+            "thaw",
+            "aurora-flux",
+            "humid",
+            "cultural-overprint",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "ecology-den",
+          "nodeId": "ecology-den",
+          "role": "ecology-den",
+          "label": "Nest / Den / Habitat",
+          "deck": 4,
+          "x": 24,
+          "y": 26,
+          "width": 11,
+          "height": 8,
+          "protected": true,
+          "tags": [
+            "hazard",
+            "ecology"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        },
+        {
+          "id": "resource-store",
+          "nodeId": "resource-store",
+          "role": "resource-specific-store",
+          "label": "contraband Store",
+          "deck": 4,
+          "x": 12,
+          "y": 27,
+          "width": 9,
+          "height": 5,
+          "protected": true,
+          "tags": [
+            "service",
+            "treasure",
+            "tech-alchemical"
+          ],
+          "pressureZone": null,
+          "metadata": {}
+        }
+      ],
+      "corridors": [
+        {
+          "id": "corridor-1",
+          "edgeId": "edge-1",
+          "deck": 0,
+          "a": "entry",
+          "b": "admin",
+          "points": [
+            {
+              "x": 71,
+              "y": 39
+            },
+            {
+              "x": 71,
+              "y": 38
+            },
+            {
+              "x": 71,
+              "y": 37
+            },
+            {
+              "x": 71,
+              "y": 36
+            },
+            {
+              "x": 71,
+              "y": 35
+            },
+            {
+              "x": 71,
+              "y": 34
+            },
+            {
+              "x": 71,
+              "y": 33
+            },
+            {
+              "x": 71,
+              "y": 32
+            },
+            {
+              "x": 71,
+              "y": 31
+            },
+            {
+              "x": 71,
+              "y": 30
+            },
+            {
+              "x": 71,
+              "y": 29
+            },
+            {
+              "x": 71,
+              "y": 28
+            },
+            {
+              "x": 71,
+              "y": 27
+            },
+            {
+              "x": 70,
+              "y": 27
+            },
+            {
+              "x": 69,
+              "y": 27
+            },
+            {
+              "x": 68,
+              "y": 27
+            },
+            {
+              "x": 67,
+              "y": 27
+            },
+            {
+              "x": 66,
+              "y": 27
+            },
+            {
+              "x": 65,
+              "y": 27
+            },
+            {
+              "x": 64,
+              "y": 27
+            },
+            {
+              "x": 63,
+              "y": 27
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-2",
+          "edgeId": "edge-2",
+          "deck": 0,
+          "a": "admin",
+          "b": "lecture-hall-3",
+          "points": [
+            {
+              "x": 61,
+              "y": 27
+            },
+            {
+              "x": 60,
+              "y": 27
+            },
+            {
+              "x": 59,
+              "y": 27
+            },
+            {
+              "x": 58,
+              "y": 27
+            },
+            {
+              "x": 57,
+              "y": 27
+            },
+            {
+              "x": 56,
+              "y": 27
+            },
+            {
+              "x": 55,
+              "y": 27
+            },
+            {
+              "x": 54,
+              "y": 27
+            },
+            {
+              "x": 53,
+              "y": 27
+            },
+            {
+              "x": 52,
+              "y": 27
+            },
+            {
+              "x": 51,
+              "y": 27
+            },
+            {
+              "x": 51,
+              "y": 28
+            },
+            {
+              "x": 51,
+              "y": 29
+            },
+            {
+              "x": 51,
+              "y": 30
+            },
+            {
+              "x": 51,
+              "y": 31
+            },
+            {
+              "x": 51,
+              "y": 32
+            },
+            {
+              "x": 51,
+              "y": 33
+            },
+            {
+              "x": 51,
+              "y": 34
+            },
+            {
+              "x": 51,
+              "y": 35
+            },
+            {
+              "x": 51,
+              "y": 36
+            },
+            {
+              "x": 51,
+              "y": 37
+            },
+            {
+              "x": 51,
+              "y": 38
+            },
+            {
+              "x": 51,
+              "y": 39
+            },
+            {
+              "x": 51,
+              "y": 40
+            },
+            {
+              "x": 51,
+              "y": 41
+            },
+            {
+              "x": 51,
+              "y": 42
+            },
+            {
+              "x": 51,
+              "y": 43
+            },
+            {
+              "x": 51,
+              "y": 44
+            },
+            {
+              "x": 51,
+              "y": 45
+            },
+            {
+              "x": 51,
+              "y": 46
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-3",
+          "edgeId": "edge-5",
+          "deck": 1,
+          "a": "library",
+          "b": "faculty",
+          "points": [
+            {
+              "x": 32,
+              "y": 54
+            },
+            {
+              "x": 33,
+              "y": 54
+            },
+            {
+              "x": 34,
+              "y": 54
+            },
+            {
+              "x": 35,
+              "y": 54
+            },
+            {
+              "x": 36,
+              "y": 54
+            },
+            {
+              "x": 37,
+              "y": 54
+            },
+            {
+              "x": 38,
+              "y": 54
+            },
+            {
+              "x": 39,
+              "y": 54
+            },
+            {
+              "x": 40,
+              "y": 54
+            },
+            {
+              "x": 41,
+              "y": 54
+            },
+            {
+              "x": 42,
+              "y": 54
+            },
+            {
+              "x": 43,
+              "y": 54
+            },
+            {
+              "x": 44,
+              "y": 54
+            },
+            {
+              "x": 45,
+              "y": 54
+            },
+            {
+              "x": 46,
+              "y": 54
+            },
+            {
+              "x": 47,
+              "y": 54
+            },
+            {
+              "x": 48,
+              "y": 54
+            },
+            {
+              "x": 49,
+              "y": 54
+            },
+            {
+              "x": 50,
+              "y": 54
+            },
+            {
+              "x": 51,
+              "y": 54
+            },
+            {
+              "x": 52,
+              "y": 54
+            },
+            {
+              "x": 53,
+              "y": 54
+            },
+            {
+              "x": 54,
+              "y": 54
+            },
+            {
+              "x": 55,
+              "y": 54
+            },
+            {
+              "x": 56,
+              "y": 54
+            },
+            {
+              "x": 57,
+              "y": 54
+            },
+            {
+              "x": 58,
+              "y": 54
+            },
+            {
+              "x": 59,
+              "y": 54
+            },
+            {
+              "x": 60,
+              "y": 54
+            },
+            {
+              "x": 61,
+              "y": 54
+            },
+            {
+              "x": 61,
+              "y": 53
+            },
+            {
+              "x": 61,
+              "y": 52
+            },
+            {
+              "x": 61,
+              "y": 51
+            },
+            {
+              "x": 61,
+              "y": 50
+            },
+            {
+              "x": 61,
+              "y": 49
+            },
+            {
+              "x": 61,
+              "y": 48
+            },
+            {
+              "x": 61,
+              "y": 47
+            },
+            {
+              "x": 61,
+              "y": 46
+            },
+            {
+              "x": 61,
+              "y": 45
+            },
+            {
+              "x": 61,
+              "y": 44
+            },
+            {
+              "x": 61,
+              "y": 43
+            },
+            {
+              "x": 61,
+              "y": 42
+            },
+            {
+              "x": 61,
+              "y": 41
+            },
+            {
+              "x": 61,
+              "y": 40
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-4",
+          "edgeId": "edge-7",
+          "deck": 2,
+          "a": "arcane-laboratory-9",
+          "b": "ritual",
+          "points": [
+            {
+              "x": 29,
+              "y": 57
+            },
+            {
+              "x": 30,
+              "y": 57
+            },
+            {
+              "x": 31,
+              "y": 57
+            },
+            {
+              "x": 32,
+              "y": 57
+            },
+            {
+              "x": 33,
+              "y": 57
+            },
+            {
+              "x": 34,
+              "y": 57
+            },
+            {
+              "x": 35,
+              "y": 57
+            },
+            {
+              "x": 36,
+              "y": 57
+            },
+            {
+              "x": 37,
+              "y": 57
+            },
+            {
+              "x": 38,
+              "y": 57
+            },
+            {
+              "x": 39,
+              "y": 57
+            },
+            {
+              "x": 40,
+              "y": 57
+            },
+            {
+              "x": 41,
+              "y": 57
+            },
+            {
+              "x": 42,
+              "y": 57
+            },
+            {
+              "x": 43,
+              "y": 57
+            },
+            {
+              "x": 44,
+              "y": 57
+            },
+            {
+              "x": 45,
+              "y": 57
+            },
+            {
+              "x": 46,
+              "y": 57
+            },
+            {
+              "x": 47,
+              "y": 57
+            },
+            {
+              "x": 48,
+              "y": 57
+            },
+            {
+              "x": 49,
+              "y": 57
+            },
+            {
+              "x": 50,
+              "y": 57
+            },
+            {
+              "x": 51,
+              "y": 57
+            },
+            {
+              "x": 52,
+              "y": 57
+            },
+            {
+              "x": 53,
+              "y": 57
+            },
+            {
+              "x": 54,
+              "y": 57
+            },
+            {
+              "x": 55,
+              "y": 57
+            },
+            {
+              "x": 56,
+              "y": 57
+            },
+            {
+              "x": 57,
+              "y": 57
+            },
+            {
+              "x": 58,
+              "y": 57
+            },
+            {
+              "x": 59,
+              "y": 57
+            },
+            {
+              "x": 60,
+              "y": 57
+            },
+            {
+              "x": 61,
+              "y": 57
+            },
+            {
+              "x": 62,
+              "y": 57
+            },
+            {
+              "x": 63,
+              "y": 57
+            },
+            {
+              "x": 64,
+              "y": 57
+            },
+            {
+              "x": 65,
+              "y": 57
+            },
+            {
+              "x": 65,
+              "y": 58
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-5",
+          "edgeId": "edge-9",
+          "deck": 3,
+          "a": "archives",
+          "b": "danger",
+          "points": [
+            {
+              "x": 24,
+              "y": 19
+            },
+            {
+              "x": 24,
+              "y": 18
+            },
+            {
+              "x": 24,
+              "y": 17
+            },
+            {
+              "x": 24,
+              "y": 16
+            },
+            {
+              "x": 24,
+              "y": 15
+            },
+            {
+              "x": 24,
+              "y": 14
+            },
+            {
+              "x": 24,
+              "y": 13
+            },
+            {
+              "x": 24,
+              "y": 12
+            },
+            {
+              "x": 24,
+              "y": 11
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-6",
+          "edgeId": "edge-15",
+          "deck": 0,
+          "a": "admin",
+          "b": "lecture-hall-4",
+          "points": [
+            {
+              "x": 61,
+              "y": 27
+            },
+            {
+              "x": 60,
+              "y": 27
+            },
+            {
+              "x": 59,
+              "y": 27
+            },
+            {
+              "x": 58,
+              "y": 27
+            },
+            {
+              "x": 57,
+              "y": 27
+            },
+            {
+              "x": 56,
+              "y": 27
+            },
+            {
+              "x": 55,
+              "y": 27
+            },
+            {
+              "x": 55,
+              "y": 28
+            },
+            {
+              "x": 55,
+              "y": 29
+            },
+            {
+              "x": 55,
+              "y": 30
+            },
+            {
+              "x": 55,
+              "y": 31
+            },
+            {
+              "x": 55,
+              "y": 32
+            },
+            {
+              "x": 55,
+              "y": 33
+            },
+            {
+              "x": 55,
+              "y": 34
+            },
+            {
+              "x": 55,
+              "y": 35
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-7",
+          "edgeId": "edge-16",
+          "deck": 0,
+          "a": "entry",
+          "b": "lecture-hall-4",
+          "points": [
+            {
+              "x": 70,
+              "y": 40
+            },
+            {
+              "x": 69,
+              "y": 40
+            },
+            {
+              "x": 68,
+              "y": 40
+            },
+            {
+              "x": 67,
+              "y": 40
+            },
+            {
+              "x": 66,
+              "y": 40
+            },
+            {
+              "x": 65,
+              "y": 40
+            },
+            {
+              "x": 64,
+              "y": 40
+            },
+            {
+              "x": 63,
+              "y": 40
+            },
+            {
+              "x": 62,
+              "y": 40
+            },
+            {
+              "x": 61,
+              "y": 40
+            },
+            {
+              "x": 60,
+              "y": 40
+            },
+            {
+              "x": 59,
+              "y": 40
+            },
+            {
+              "x": 58,
+              "y": 40
+            },
+            {
+              "x": 57,
+              "y": 40
+            },
+            {
+              "x": 56,
+              "y": 40
+            }
+          ],
+          "required": false,
+          "protected": false
+        },
+        {
+          "id": "corridor-8",
+          "edgeId": "edge-17",
+          "deck": 1,
+          "a": "lecture-hall-5",
+          "b": "library",
+          "points": [
+            {
+              "x": 54,
+              "y": 47
+            },
+            {
+              "x": 53,
+              "y": 47
+            },
+            {
+              "x": 52,
+              "y": 47
+            },
+            {
+              "x": 51,
+              "y": 47
+            },
+            {
+              "x": 50,
+              "y": 47
+            },
+            {
+              "x": 49,
+              "y": 47
+            },
+            {
+              "x": 48,
+              "y": 47
+            },
+            {
+              "x": 47,
+              "y": 47
+            },
+            {
+              "x": 46,
+              "y": 47
+            },
+            {
+              "x": 45,
+              "y": 47
+            },
+            {
+              "x": 44,
+              "y": 47
+            },
+            {
+              "x": 43,
+              "y": 47
+            },
+            {
+              "x": 42,
+              "y": 47
+            },
+            {
+              "x": 41,
+              "y": 47
+            },
+            {
+              "x": 40,
+              "y": 47
+            },
+            {
+              "x": 39,
+              "y": 47
+            },
+            {
+              "x": 38,
+              "y": 47
+            },
+            {
+              "x": 37,
+              "y": 47
+            },
+            {
+              "x": 36,
+              "y": 47
+            },
+            {
+              "x": 35,
+              "y": 47
+            },
+            {
+              "x": 34,
+              "y": 47
+            },
+            {
+              "x": 33,
+              "y": 47
+            },
+            {
+              "x": 32,
+              "y": 47
+            },
+            {
+              "x": 32,
+              "y": 48
+            },
+            {
+              "x": 32,
+              "y": 49
+            },
+            {
+              "x": 32,
+              "y": 50
+            },
+            {
+              "x": 32,
+              "y": 51
+            },
+            {
+              "x": 32,
+              "y": 52
+            },
+            {
+              "x": 32,
+              "y": 53
+            },
+            {
+              "x": 32,
+              "y": 54
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-9",
+          "edgeId": "edge-18",
+          "deck": 1,
+          "a": "faculty",
+          "b": "student",
+          "points": [
+            {
+              "x": 66,
+              "y": 41
+            },
+            {
+              "x": 66,
+              "y": 42
+            },
+            {
+              "x": 66,
+              "y": 43
+            },
+            {
+              "x": 66,
+              "y": 44
+            },
+            {
+              "x": 66,
+              "y": 45
+            },
+            {
+              "x": 66,
+              "y": 46
+            },
+            {
+              "x": 66,
+              "y": 47
+            },
+            {
+              "x": 66,
+              "y": 48
+            },
+            {
+              "x": 66,
+              "y": 49
+            },
+            {
+              "x": 66,
+              "y": 50
+            },
+            {
+              "x": 66,
+              "y": 51
+            },
+            {
+              "x": 66,
+              "y": 52
+            },
+            {
+              "x": 66,
+              "y": 53
+            },
+            {
+              "x": 66,
+              "y": 54
+            },
+            {
+              "x": 66,
+              "y": 55
+            },
+            {
+              "x": 66,
+              "y": 56
+            },
+            {
+              "x": 66,
+              "y": 57
+            },
+            {
+              "x": 66,
+              "y": 58
+            },
+            {
+              "x": 66,
+              "y": 59
+            },
+            {
+              "x": 65,
+              "y": 59
+            },
+            {
+              "x": 64,
+              "y": 59
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-10",
+          "edgeId": "edge-19",
+          "deck": 2,
+          "a": "ritual",
+          "b": "arcane-laboratory-10",
+          "points": [
+            {
+              "x": 65,
+              "y": 58
+            },
+            {
+              "x": 64,
+              "y": 58
+            },
+            {
+              "x": 63,
+              "y": 58
+            },
+            {
+              "x": 62,
+              "y": 58
+            },
+            {
+              "x": 61,
+              "y": 58
+            },
+            {
+              "x": 60,
+              "y": 58
+            },
+            {
+              "x": 59,
+              "y": 58
+            },
+            {
+              "x": 58,
+              "y": 58
+            },
+            {
+              "x": 57,
+              "y": 58
+            },
+            {
+              "x": 56,
+              "y": 58
+            },
+            {
+              "x": 55,
+              "y": 58
+            },
+            {
+              "x": 54,
+              "y": 58
+            },
+            {
+              "x": 53,
+              "y": 58
+            },
+            {
+              "x": 52,
+              "y": 58
+            },
+            {
+              "x": 51,
+              "y": 58
+            },
+            {
+              "x": 50,
+              "y": 58
+            },
+            {
+              "x": 49,
+              "y": 58
+            },
+            {
+              "x": 48,
+              "y": 58
+            },
+            {
+              "x": 47,
+              "y": 58
+            },
+            {
+              "x": 47,
+              "y": 57
+            },
+            {
+              "x": 47,
+              "y": 56
+            },
+            {
+              "x": 47,
+              "y": 55
+            },
+            {
+              "x": 47,
+              "y": 54
+            },
+            {
+              "x": 47,
+              "y": 53
+            },
+            {
+              "x": 47,
+              "y": 52
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-11",
+          "edgeId": "edge-20",
+          "deck": 2,
+          "a": "arcane-laboratory-9",
+          "b": "arcane-laboratory-11",
+          "points": [
+            {
+              "x": 24,
+              "y": 52
+            },
+            {
+              "x": 24,
+              "y": 53
+            },
+            {
+              "x": 24,
+              "y": 54
+            },
+            {
+              "x": 23,
+              "y": 54
+            },
+            {
+              "x": 22,
+              "y": 54
+            },
+            {
+              "x": 21,
+              "y": 54
+            },
+            {
+              "x": 20,
+              "y": 54
+            },
+            {
+              "x": 19,
+              "y": 54
+            },
+            {
+              "x": 18,
+              "y": 54
+            },
+            {
+              "x": 17,
+              "y": 54
+            },
+            {
+              "x": 16,
+              "y": 54
+            },
+            {
+              "x": 15,
+              "y": 54
+            },
+            {
+              "x": 14,
+              "y": 54
+            },
+            {
+              "x": 13,
+              "y": 54
+            },
+            {
+              "x": 12,
+              "y": 54
+            },
+            {
+              "x": 11,
+              "y": 54
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-12",
+          "edgeId": "edge-21",
+          "deck": 3,
+          "a": "archives",
+          "b": "service",
+          "points": [
+            {
+              "x": 27,
+              "y": 26
+            },
+            {
+              "x": 27,
+              "y": 27
+            },
+            {
+              "x": 27,
+              "y": 28
+            },
+            {
+              "x": 27,
+              "y": 29
+            },
+            {
+              "x": 27,
+              "y": 30
+            },
+            {
+              "x": 27,
+              "y": 31
+            },
+            {
+              "x": 27,
+              "y": 32
+            },
+            {
+              "x": 27,
+              "y": 33
+            },
+            {
+              "x": 27,
+              "y": 34
+            },
+            {
+              "x": 27,
+              "y": 35
+            },
+            {
+              "x": 27,
+              "y": 36
+            },
+            {
+              "x": 27,
+              "y": 37
+            },
+            {
+              "x": 27,
+              "y": 38
+            },
+            {
+              "x": 27,
+              "y": 39
+            },
+            {
+              "x": 27,
+              "y": 40
+            },
+            {
+              "x": 27,
+              "y": 41
+            },
+            {
+              "x": 27,
+              "y": 42
+            },
+            {
+              "x": 27,
+              "y": 43
+            },
+            {
+              "x": 27,
+              "y": 44
+            },
+            {
+              "x": 27,
+              "y": 45
+            },
+            {
+              "x": 27,
+              "y": 46
+            },
+            {
+              "x": 27,
+              "y": 47
+            },
+            {
+              "x": 28,
+              "y": 47
+            },
+            {
+              "x": 29,
+              "y": 47
+            },
+            {
+              "x": 30,
+              "y": 47
+            },
+            {
+              "x": 31,
+              "y": 47
+            },
+            {
+              "x": 32,
+              "y": 47
+            },
+            {
+              "x": 33,
+              "y": 47
+            },
+            {
+              "x": 34,
+              "y": 47
+            },
+            {
+              "x": 35,
+              "y": 47
+            },
+            {
+              "x": 36,
+              "y": 47
+            },
+            {
+              "x": 37,
+              "y": 47
+            },
+            {
+              "x": 38,
+              "y": 47
+            },
+            {
+              "x": 39,
+              "y": 47
+            },
+            {
+              "x": 40,
+              "y": 47
+            },
+            {
+              "x": 41,
+              "y": 47
+            },
+            {
+              "x": 42,
+              "y": 47
+            },
+            {
+              "x": 43,
+              "y": 47
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-13",
+          "edgeId": "edge-22",
+          "deck": 3,
+          "a": "archives",
+          "b": "scale-service-hub",
+          "points": [
+            {
+              "x": 28,
+              "y": 25
+            },
+            {
+              "x": 29,
+              "y": 25
+            },
+            {
+              "x": 30,
+              "y": 25
+            },
+            {
+              "x": 31,
+              "y": 25
+            },
+            {
+              "x": 32,
+              "y": 25
+            },
+            {
+              "x": 33,
+              "y": 25
+            },
+            {
+              "x": 34,
+              "y": 25
+            },
+            {
+              "x": 35,
+              "y": 25
+            },
+            {
+              "x": 36,
+              "y": 25
+            },
+            {
+              "x": 37,
+              "y": 25
+            },
+            {
+              "x": 38,
+              "y": 25
+            },
+            {
+              "x": 39,
+              "y": 25
+            },
+            {
+              "x": 40,
+              "y": 25
+            },
+            {
+              "x": 41,
+              "y": 25
+            },
+            {
+              "x": 42,
+              "y": 25
+            },
+            {
+              "x": 43,
+              "y": 25
+            },
+            {
+              "x": 44,
+              "y": 25
+            },
+            {
+              "x": 45,
+              "y": 25
+            },
+            {
+              "x": 46,
+              "y": 25
+            },
+            {
+              "x": 47,
+              "y": 25
+            },
+            {
+              "x": 48,
+              "y": 25
+            },
+            {
+              "x": 49,
+              "y": 25
+            },
+            {
+              "x": 50,
+              "y": 25
+            },
+            {
+              "x": 51,
+              "y": 25
+            },
+            {
+              "x": 52,
+              "y": 25
+            },
+            {
+              "x": 53,
+              "y": 25
+            },
+            {
+              "x": 54,
+              "y": 25
+            },
+            {
+              "x": 55,
+              "y": 25
+            },
+            {
+              "x": 56,
+              "y": 25
+            },
+            {
+              "x": 57,
+              "y": 25
+            },
+            {
+              "x": 58,
+              "y": 25
+            },
+            {
+              "x": 59,
+              "y": 25
+            },
+            {
+              "x": 60,
+              "y": 25
+            },
+            {
+              "x": 61,
+              "y": 25
+            },
+            {
+              "x": 62,
+              "y": 25
+            },
+            {
+              "x": 63,
+              "y": 25
+            },
+            {
+              "x": 64,
+              "y": 25
+            },
+            {
+              "x": 65,
+              "y": 25
+            },
+            {
+              "x": 66,
+              "y": 25
+            },
+            {
+              "x": 67,
+              "y": 25
+            },
+            {
+              "x": 68,
+              "y": 25
+            },
+            {
+              "x": 69,
+              "y": 25
+            },
+            {
+              "x": 69,
+              "y": 26
+            },
+            {
+              "x": 69,
+              "y": 27
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-14",
+          "edgeId": "edge-23",
+          "deck": 4,
+          "a": "scale-secondary-access",
+          "b": "ecology-den",
+          "points": [
+            {
+              "x": 62,
+              "y": 39
+            },
+            {
+              "x": 61,
+              "y": 39
+            },
+            {
+              "x": 60,
+              "y": 39
+            },
+            {
+              "x": 59,
+              "y": 39
+            },
+            {
+              "x": 58,
+              "y": 39
+            },
+            {
+              "x": 57,
+              "y": 39
+            },
+            {
+              "x": 56,
+              "y": 39
+            },
+            {
+              "x": 55,
+              "y": 39
+            },
+            {
+              "x": 54,
+              "y": 39
+            },
+            {
+              "x": 53,
+              "y": 39
+            },
+            {
+              "x": 52,
+              "y": 39
+            },
+            {
+              "x": 51,
+              "y": 39
+            },
+            {
+              "x": 50,
+              "y": 39
+            },
+            {
+              "x": 49,
+              "y": 39
+            },
+            {
+              "x": 48,
+              "y": 39
+            },
+            {
+              "x": 47,
+              "y": 39
+            },
+            {
+              "x": 46,
+              "y": 39
+            },
+            {
+              "x": 45,
+              "y": 39
+            },
+            {
+              "x": 44,
+              "y": 39
+            },
+            {
+              "x": 43,
+              "y": 39
+            },
+            {
+              "x": 42,
+              "y": 39
+            },
+            {
+              "x": 41,
+              "y": 39
+            },
+            {
+              "x": 40,
+              "y": 39
+            },
+            {
+              "x": 39,
+              "y": 39
+            },
+            {
+              "x": 38,
+              "y": 39
+            },
+            {
+              "x": 37,
+              "y": 39
+            },
+            {
+              "x": 36,
+              "y": 39
+            },
+            {
+              "x": 35,
+              "y": 39
+            },
+            {
+              "x": 34,
+              "y": 39
+            },
+            {
+              "x": 34,
+              "y": 38
+            },
+            {
+              "x": 34,
+              "y": 37
+            },
+            {
+              "x": 34,
+              "y": 36
+            },
+            {
+              "x": 34,
+              "y": 35
+            },
+            {
+              "x": 34,
+              "y": 34
+            },
+            {
+              "x": 34,
+              "y": 33
+            },
+            {
+              "x": 34,
+              "y": 32
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-15",
+          "edgeId": "edge-24",
+          "deck": 4,
+          "a": "ecology-den",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 24,
+              "y": 29
+            },
+            {
+              "x": 23,
+              "y": 29
+            },
+            {
+              "x": 22,
+              "y": 29
+            },
+            {
+              "x": 21,
+              "y": 29
+            },
+            {
+              "x": 20,
+              "y": 29
+            },
+            {
+              "x": 20,
+              "y": 30
+            }
+          ],
+          "required": true,
+          "protected": true
+        },
+        {
+          "id": "corridor-16",
+          "edgeId": "edge-25",
+          "deck": 4,
+          "a": "scale-secondary-access",
+          "b": "resource-store",
+          "points": [
+            {
+              "x": 62,
+              "y": 39
+            },
+            {
+              "x": 62,
+              "y": 38
+            },
+            {
+              "x": 62,
+              "y": 37
+            },
+            {
+              "x": 62,
+              "y": 36
+            },
+            {
+              "x": 62,
+              "y": 35
+            },
+            {
+              "x": 62,
+              "y": 34
+            },
+            {
+              "x": 62,
+              "y": 33
+            },
+            {
+              "x": 62,
+              "y": 32
+            },
+            {
+              "x": 62,
+              "y": 31
+            },
+            {
+              "x": 62,
+              "y": 30
+            },
+            {
+              "x": 61,
+              "y": 30
+            },
+            {
+              "x": 60,
+              "y": 30
+            },
+            {
+              "x": 59,
+              "y": 30
+            },
+            {
+              "x": 58,
+              "y": 30
+            },
+            {
+              "x": 57,
+              "y": 30
+            },
+            {
+              "x": 56,
+              "y": 30
+            },
+            {
+              "x": 55,
+              "y": 30
+            },
+            {
+              "x": 54,
+              "y": 30
+            },
+            {
+              "x": 53,
+              "y": 30
+            },
+            {
+              "x": 52,
+              "y": 30
+            },
+            {
+              "x": 51,
+              "y": 30
+            },
+            {
+              "x": 50,
+              "y": 30
+            },
+            {
+              "x": 49,
+              "y": 30
+            },
+            {
+              "x": 48,
+              "y": 30
+            },
+            {
+              "x": 47,
+              "y": 30
+            },
+            {
+              "x": 46,
+              "y": 30
+            },
+            {
+              "x": 45,
+              "y": 30
+            },
+            {
+              "x": 44,
+              "y": 30
+            },
+            {
+              "x": 43,
+              "y": 30
+            },
+            {
+              "x": 42,
+              "y": 30
+            },
+            {
+              "x": 41,
+              "y": 30
+            },
+            {
+              "x": 40,
+              "y": 30
+            },
+            {
+              "x": 39,
+              "y": 30
+            },
+            {
+              "x": 38,
+              "y": 30
+            },
+            {
+              "x": 37,
+              "y": 30
+            },
+            {
+              "x": 36,
+              "y": 30
+            },
+            {
+              "x": 35,
+              "y": 30
+            },
+            {
+              "x": 34,
+              "y": 30
+            },
+            {
+              "x": 33,
+              "y": 30
+            },
+            {
+              "x": 32,
+              "y": 30
+            },
+            {
+              "x": 31,
+              "y": 30
+            },
+            {
+              "x": 30,
+              "y": 30
+            },
+            {
+              "x": 29,
+              "y": 30
+            },
+            {
+              "x": 28,
+              "y": 30
+            },
+            {
+              "x": 27,
+              "y": 30
+            },
+            {
+              "x": 26,
+              "y": 30
+            },
+            {
+              "x": 25,
+              "y": 30
+            },
+            {
+              "x": 24,
+              "y": 30
+            },
+            {
+              "x": 23,
+              "y": 30
+            },
+            {
+              "x": 22,
+              "y": 30
+            },
+            {
+              "x": 21,
+              "y": 30
+            },
+            {
+              "x": 20,
+              "y": 30
+            }
+          ],
+          "required": false,
+          "protected": false
+        }
+      ],
+      "doors": [
+        {
+          "id": "door-1",
+          "edgeId": "edge-1",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 71,
+          "y": 39,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-2",
+          "edgeId": "edge-1",
+          "roomId": "admin",
+          "deck": 0,
+          "x": 63,
+          "y": 27,
+          "corridorId": "corridor-1"
+        },
+        {
+          "id": "door-3",
+          "edgeId": "edge-2",
+          "roomId": "admin",
+          "deck": 0,
+          "x": 61,
+          "y": 27,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-4",
+          "edgeId": "edge-2",
+          "roomId": "lecture-hall-3",
+          "deck": 0,
+          "x": 51,
+          "y": 46,
+          "corridorId": "corridor-2"
+        },
+        {
+          "id": "door-5",
+          "edgeId": "edge-5",
+          "roomId": "library",
+          "deck": 1,
+          "x": 32,
+          "y": 54,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-6",
+          "edgeId": "edge-5",
+          "roomId": "faculty",
+          "deck": 1,
+          "x": 61,
+          "y": 40,
+          "corridorId": "corridor-3"
+        },
+        {
+          "id": "door-7",
+          "edgeId": "edge-7",
+          "roomId": "arcane-laboratory-9",
+          "deck": 2,
+          "x": 29,
+          "y": 57,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-8",
+          "edgeId": "edge-7",
+          "roomId": "ritual",
+          "deck": 2,
+          "x": 65,
+          "y": 58,
+          "corridorId": "corridor-4"
+        },
+        {
+          "id": "door-9",
+          "edgeId": "edge-9",
+          "roomId": "archives",
+          "deck": 3,
+          "x": 24,
+          "y": 19,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-10",
+          "edgeId": "edge-9",
+          "roomId": "danger",
+          "deck": 3,
+          "x": 24,
+          "y": 11,
+          "corridorId": "corridor-5"
+        },
+        {
+          "id": "door-11",
+          "edgeId": "edge-15",
+          "roomId": "admin",
+          "deck": 0,
+          "x": 61,
+          "y": 27,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-12",
+          "edgeId": "edge-15",
+          "roomId": "lecture-hall-4",
+          "deck": 0,
+          "x": 55,
+          "y": 35,
+          "corridorId": "corridor-6"
+        },
+        {
+          "id": "door-13",
+          "edgeId": "edge-16",
+          "roomId": "entry",
+          "deck": 0,
+          "x": 70,
+          "y": 40,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-14",
+          "edgeId": "edge-16",
+          "roomId": "lecture-hall-4",
+          "deck": 0,
+          "x": 56,
+          "y": 40,
+          "corridorId": "corridor-7"
+        },
+        {
+          "id": "door-15",
+          "edgeId": "edge-17",
+          "roomId": "lecture-hall-5",
+          "deck": 1,
+          "x": 54,
+          "y": 47,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-16",
+          "edgeId": "edge-17",
+          "roomId": "library",
+          "deck": 1,
+          "x": 32,
+          "y": 54,
+          "corridorId": "corridor-8"
+        },
+        {
+          "id": "door-17",
+          "edgeId": "edge-18",
+          "roomId": "faculty",
+          "deck": 1,
+          "x": 66,
+          "y": 41,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-18",
+          "edgeId": "edge-18",
+          "roomId": "student",
+          "deck": 1,
+          "x": 64,
+          "y": 59,
+          "corridorId": "corridor-9"
+        },
+        {
+          "id": "door-19",
+          "edgeId": "edge-19",
+          "roomId": "ritual",
+          "deck": 2,
+          "x": 65,
+          "y": 58,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-20",
+          "edgeId": "edge-19",
+          "roomId": "arcane-laboratory-10",
+          "deck": 2,
+          "x": 47,
+          "y": 52,
+          "corridorId": "corridor-10"
+        },
+        {
+          "id": "door-21",
+          "edgeId": "edge-20",
+          "roomId": "arcane-laboratory-9",
+          "deck": 2,
+          "x": 24,
+          "y": 52,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-22",
+          "edgeId": "edge-20",
+          "roomId": "arcane-laboratory-11",
+          "deck": 2,
+          "x": 11,
+          "y": 54,
+          "corridorId": "corridor-11"
+        },
+        {
+          "id": "door-23",
+          "edgeId": "edge-21",
+          "roomId": "archives",
+          "deck": 3,
+          "x": 27,
+          "y": 26,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-24",
+          "edgeId": "edge-21",
+          "roomId": "service",
+          "deck": 3,
+          "x": 43,
+          "y": 47,
+          "corridorId": "corridor-12"
+        },
+        {
+          "id": "door-25",
+          "edgeId": "edge-22",
+          "roomId": "archives",
+          "deck": 3,
+          "x": 28,
+          "y": 25,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-26",
+          "edgeId": "edge-22",
+          "roomId": "scale-service-hub",
+          "deck": 3,
+          "x": 69,
+          "y": 27,
+          "corridorId": "corridor-13"
+        },
+        {
+          "id": "door-27",
+          "edgeId": "edge-23",
+          "roomId": "scale-secondary-access",
+          "deck": 4,
+          "x": 62,
+          "y": 39,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-28",
+          "edgeId": "edge-23",
+          "roomId": "ecology-den",
+          "deck": 4,
+          "x": 34,
+          "y": 32,
+          "corridorId": "corridor-14"
+        },
+        {
+          "id": "door-29",
+          "edgeId": "edge-24",
+          "roomId": "ecology-den",
+          "deck": 4,
+          "x": 24,
+          "y": 29,
+          "corridorId": "corridor-15"
+        },
+        {
+          "id": "door-30",
+          "edgeId": "edge-24",
+          "roomId": "resource-store",
+          "deck": 4,
+          "x": 20,
+          "y": 30,
+          "corridorId": "corridor-15"
+        },
+        {
+          "id": "door-31",
+          "edgeId": "edge-25",
+          "roomId": "scale-secondary-access",
+          "deck": 4,
+          "x": 62,
+          "y": 39,
+          "corridorId": "corridor-16"
+        },
+        {
+          "id": "door-32",
+          "edgeId": "edge-25",
+          "roomId": "resource-store",
+          "deck": 4,
+          "x": 20,
+          "y": 30,
+          "corridorId": "corridor-16"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "connector-1-a",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "lecture-hall-3",
+          "deck": 0,
+          "x": 58,
+          "y": 56,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-1-b",
+          "pairId": "connector-1",
+          "kind": "lift-shaft",
+          "nodeId": "student",
+          "deck": 1,
+          "x": 58,
+          "y": 56,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-3-a",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "lecture-hall-3",
+          "deck": 0,
+          "x": 40,
+          "y": 53,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-3-b",
+          "pairId": "connector-3",
+          "kind": "lift-shaft",
+          "nodeId": "library",
+          "deck": 1,
+          "x": 40,
+          "y": 53,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-5-a",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "faculty",
+          "deck": 1,
+          "x": 46,
+          "y": 47,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-5-b",
+          "pairId": "connector-5",
+          "kind": "lift-shaft",
+          "nodeId": "arcane-laboratory-9",
+          "deck": 2,
+          "x": 46,
+          "y": 47,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-7-a",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "library",
+          "deck": 1,
+          "x": 27,
+          "y": 40,
+          "connectsDeck": 3
+        },
+        {
+          "id": "connector-7-b",
+          "pairId": "connector-7",
+          "kind": "lift-shaft",
+          "nodeId": "archives",
+          "deck": 3,
+          "x": 27,
+          "y": 40,
+          "connectsDeck": 1
+        },
+        {
+          "id": "connector-9-a",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "service",
+          "deck": 3,
+          "x": 37,
+          "y": 53,
+          "connectsDeck": 2
+        },
+        {
+          "id": "connector-9-b",
+          "pairId": "connector-9",
+          "kind": "lift-shaft",
+          "nodeId": "arcane-laboratory-9",
+          "deck": 2,
+          "x": 37,
+          "y": 53,
+          "connectsDeck": 3
+        },
+        {
+          "id": "connector-11-a",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "entry",
+          "deck": 0,
+          "x": 74,
+          "y": 36,
+          "connectsDeck": 3
+        },
+        {
+          "id": "connector-11-b",
+          "pairId": "connector-11",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 3,
+          "x": 74,
+          "y": 36,
+          "connectsDeck": 0
+        },
+        {
+          "id": "connector-13-a",
+          "pairId": "connector-13",
+          "kind": "lift-shaft",
+          "nodeId": "scale-service-hub",
+          "deck": 3,
+          "x": 70,
+          "y": 36,
+          "connectsDeck": 4
+        },
+        {
+          "id": "connector-13-b",
+          "pairId": "connector-13",
+          "kind": "lift-shaft",
+          "nodeId": "scale-secondary-access",
+          "deck": 4,
+          "x": 70,
+          "y": 36,
+          "connectsDeck": 3
+        },
+        {
+          "id": "connector-15-a",
+          "pairId": "connector-15",
+          "kind": "lift-shaft",
+          "nodeId": "service",
+          "deck": 3,
+          "x": 38,
+          "y": 41,
+          "connectsDeck": 4
+        },
+        {
+          "id": "connector-15-b",
+          "pairId": "connector-15",
+          "kind": "lift-shaft",
+          "nodeId": "ecology-den",
+          "deck": 4,
+          "x": 38,
+          "y": 41,
+          "connectsDeck": 3
+        },
+        {
+          "id": "connector-17-a",
+          "pairId": "connector-17",
+          "kind": "lift-shaft",
+          "nodeId": "service",
+          "deck": 3,
+          "x": 32,
+          "y": 40,
+          "connectsDeck": 4
+        },
+        {
+          "id": "connector-17-b",
+          "pairId": "connector-17",
+          "kind": "lift-shaft",
+          "nodeId": "resource-store",
+          "deck": 4,
+          "x": 32,
+          "y": 40,
+          "connectsDeck": 3
+        }
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      "semanticProgram": {
+        "locationArchetype": "arcane_university",
+        "source": "site-archetype-defaults",
+        "layerPolicy": "full",
+        "layers": [
+          {
+            "order": 1,
+            "id": "relationship-reconciliation",
+            "input": {
+              "explicit": []
+            },
+            "changes": [
+              "climate: arid->magically-temperate (biome compatibility)",
+              "weather: overcast->aurora-flux (climate compatibility)",
+              "ecology: agricultural->scavenger (biome ecology)",
+              "magicTech: low-magic->alchemical (builder culture)"
+            ]
+          },
+          {
+            "order": 2,
+            "id": "scale",
+            "input": "subterranean-complex",
+            "changes": [
+              "lecture-hall count 2->3",
+              "arcane-laboratory count 2->3",
+              "added large-site service hub and secondary access",
+              "decks=5",
+              "grid=90x70"
+            ]
+          },
+          {
+            "order": 3,
+            "id": "origin-culture",
+            "input": "colonial",
+            "changes": [
+              "applied broad cultural influence tag"
+            ]
+          },
+          {
+            "order": 4,
+            "id": "current-controller",
+            "input": "necromancers",
+            "changes": [
+              "recontextualized existing spaces for controller"
+            ]
+          },
+          {
+            "order": 5,
+            "id": "occupancy-state",
+            "input": "burned",
+            "changes": [
+              "introduced occupation-state hazard pressure"
+            ]
+          },
+          {
+            "order": 6,
+            "id": "environment",
+            "input": {
+              "biome": "urban",
+              "climate": "magically-temperate",
+              "season": "thaw",
+              "weather": "aurora-flux",
+              "waterState": "humid",
+              "verticality": "shafted"
+            },
+            "changes": [
+              "environment increased vertical organization"
+            ]
+          },
+          {
+            "order": 7,
+            "id": "cross-layer-interactions",
+            "input": {
+              "culture": "colonial",
+              "controller": "necromancers",
+              "archetype": "arcane_university",
+              "occupancyState": "burned",
+              "ecology": "scavenger",
+              "condition": "serviceable",
+              "waterState": "humid"
+            },
+            "changes": [
+              "current occupants alter inherited spaces while original construction remains legible"
+            ]
+          },
+          {
+            "order": 8,
+            "id": "ecology",
+            "input": {
+              "ecology": "scavenger",
+              "creatureFamilies": [
+                "spirit",
+                "flyer",
+                "nonhostile-wildlife",
+                "celestial"
+              ],
+              "creatureDensity": 9
+            },
+            "changes": [
+              "added ecology habitat space"
+            ]
+          },
+          {
+            "order": 9,
+            "id": "hazard-ecology",
+            "input": {
+              "families": [
+                "mechanical",
+                "noise"
+              ],
+              "intensity": 2,
+              "contamination": "none"
+            },
+            "changes": []
+          },
+          {
+            "order": 10,
+            "id": "security-defense",
+            "input": {
+              "security": "ceremonial",
+              "doctrine": "passive"
+            },
+            "changes": []
+          },
+          {
+            "order": 11,
+            "id": "resources-magic",
+            "input": {
+              "wealth": "destitute",
+              "resourceProfile": "contraband",
+              "magicTech": "alchemical"
+            },
+            "changes": [
+              "added contraband resource store",
+              "applied alchemical infrastructure"
+            ]
+          },
+          {
+            "order": 12,
+            "id": "condition-history",
+            "input": {
+              "age": "layered-renovations",
+              "condition": "serviceable",
+              "maintenance": "deferred",
+              "contamination": "none"
+            },
+            "changes": []
+          },
+          {
+            "order": 13,
+            "id": "narrative-social",
+            "input": {
+              "tone": "neutral",
+              "socialMode": "criminal",
+              "traffic": "seasonal",
+              "secretDensity": "scarce"
+            },
+            "changes": [
+              "retained previous spatial functions while adding narrative/social interpretation"
+            ]
+          },
+          {
+            "order": 14,
+            "id": "spatial-capacity-normalization",
+            "input": {
+              "expandedRoomCount": 19,
+              "decks": 5,
+              "roomsPerDeckEstimate": 4
+            },
+            "changes": [
+              "existing canvas already accommodates the accumulated semantic program"
+            ]
+          }
+        ]
+      }
+    },
+    "content": {
+      "schemaVersion": "1.2.0",
+      "generator": "hb-semantic-content-populator",
+      "version": "1.2.0",
+      "seed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05:content:archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05:kaysender",
+      "compatibility": {
+        "id": "kaysender",
+        "family": "Kaysender",
+        "provenance": "Kaysender-native content with open d20 / Hypertext d20-compatible presentation where rules-facing text is required.",
+        "mechanicalDetailsAreSettingScoped": true
+      },
+      "provenance": {
+        "topologyEngine": "hb-semantic-spatial-engine",
+        "topologySeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+        "contentLayer": "semantic-content-populator",
+        "locationArchetype": "arcane_university",
+        "faction": "necromancers",
+        "adventurePurpose": null,
+        "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+        "siteLayers": [
+          "relationship-reconciliation",
+          "scale",
+          "origin-culture",
+          "current-controller",
+          "occupancy-state",
+          "environment",
+          "cross-layer-interactions",
+          "ecology",
+          "hazard-ecology",
+          "security-defense",
+          "resources-magic",
+          "condition-history",
+          "narrative-social",
+          "spatial-capacity-normalization"
+        ]
+      },
+      "siteContext": {
+        "culture": "colonial",
+        "controller": "necromancers",
+        "occupancyState": "burned",
+        "biome": "urban",
+        "climate": "magically-temperate",
+        "season": "thaw",
+        "weather": "aurora-flux",
+        "ecology": "scavenger",
+        "creatureFamilies": [
+          "spirit",
+          "flyer",
+          "nonhostile-wildlife",
+          "celestial"
+        ],
+        "hazardFamilies": [
+          "mechanical",
+          "noise"
+        ],
+        "materials": [
+          "copper",
+          "ironwood"
+        ],
+        "lighting": "magical",
+        "waterState": "humid",
+        "contamination": "none",
+        "narrativeTone": "neutral",
+        "interactionIds": [
+          "cultural-overprint"
+        ],
+        "interactionCount": 1,
+        "creatureDensity": 9,
+        "hazardIntensity": 2,
+        "treasureDensity": 3,
+        "socialDensity": 4
+      },
+      "rooms": [
+        {
+          "roomId": "entry",
+          "role": "university-entry",
+          "deck": 0,
+          "depth": 0,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "university-entry",
+            "originalLabel": "Arcane University Gate",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "ecological indicator species [nonhostile-wildlife]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "moving machinery [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Arcane University Gate",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "nonhostile-wildlife presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "admin",
+          "role": "administration",
+          "deck": 0,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "administration",
+            "originalLabel": "Rectorate / Administration",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "flying predator [flyer]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "pinch/crush mechanism [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "documents or records clarifying recent events"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Rectorate / Administration",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "flyer presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "lecture-hall-3",
+          "role": "lecture-hall",
+          "deck": 0,
+          "depth": 2,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "lecture-hall",
+            "originalLabel": "Lecture Hall",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "radiant guardian [celestial]"
+          ],
+          "socialEncounters": [
+            "necromancers personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "noise-triggered attention [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Lecture Hall",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "celestial presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "lecture-hall-4",
+          "role": "lecture-hall",
+          "deck": 0,
+          "depth": 1,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "lecture-hall",
+            "originalLabel": "Lecture Hall",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [
+            "necromancers personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "noise-triggered attention [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Lecture Hall",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "lecture-hall-5",
+          "role": "lecture-hall",
+          "deck": 1,
+          "depth": 4,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "lecture-hall",
+            "originalLabel": "Lecture Hall",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [
+            "necromancers personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "pinch/crush mechanism [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Lecture Hall",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "library",
+          "role": "grand-library",
+          "deck": 1,
+          "depth": 3,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "grand-library",
+            "originalLabel": "Grand Library",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "ancestral presence [spirit]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "sound masking danger [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [
+            "material changes showing how the current controller repurposed the original space"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Grand Library",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "spirit presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "faculty",
+          "role": "faculty-offices",
+          "deck": 1,
+          "depth": 4,
+          "zone": "private",
+          "historicalUse": {
+            "originalRole": "faculty-offices",
+            "originalLabel": "Faculty Offices",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "ecological indicator species [nonhostile-wildlife]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "logs, testimony, or traces connecting current and former occupants"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Faculty Offices",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "nonhostile-wildlife presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "student",
+          "role": "student-commons",
+          "deck": 1,
+          "depth": 3,
+          "zone": "public",
+          "historicalUse": {
+            "originalRole": "student-commons",
+            "originalLabel": "Student Commons",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [
+            "necromancers personnel, petitioners, residents, or bystanders using the space as its current role"
+          ],
+          "traps": [],
+          "hazards": [
+            "deafening machinery or echoes [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Student Commons",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "arcane-laboratory-9",
+          "role": "arcane-laboratory",
+          "deck": 2,
+          "depth": 4,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "arcane-laboratory",
+            "originalLabel": "Arcane Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "sound masking danger [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical evidence tied to the original site purpose"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Arcane Laboratory",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "arcane-laboratory-10",
+          "role": "arcane-laboratory",
+          "deck": 2,
+          "depth": 6,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "arcane-laboratory",
+            "originalLabel": "Arcane Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "restless local apparition [spirit]"
+          ],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "noise-triggered attention [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [
+            "physical evidence tied to the original site purpose"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Arcane Laboratory",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "spirit presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 9
+        },
+        {
+          "roomId": "arcane-laboratory-11",
+          "role": "arcane-laboratory",
+          "deck": 2,
+          "depth": 5,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "arcane-laboratory",
+            "originalLabel": "Arcane Laboratory",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "deafening machinery or echoes [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "resources appropriate to the site culture and current controller"
+          ],
+          "evidence": [
+            "physical evidence tied to the original site purpose"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Arcane Laboratory",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 6
+        },
+        {
+          "roomId": "ritual",
+          "role": "ritual-chamber",
+          "deck": 2,
+          "depth": 5,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "ritual-chamber",
+            "originalLabel": "Ritual Chamber",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "harmless local wildlife [nonhostile-wildlife]"
+          ],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "moving machinery [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [
+            "exploration objective anchored to this room's semantic function and layered site history"
+          ],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Ritual Chamber",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "nonhostile-wildlife presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 8
+        },
+        {
+          "roomId": "archives",
+          "role": "sealed-archives",
+          "deck": 3,
+          "depth": 2,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "sealed-archives",
+            "originalLabel": "Sealed Archives",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "valuable records, components, heirlooms, or salvage"
+          ],
+          "evidence": [
+            "documents or records clarifying recent events"
+          ],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [
+            "concealed service route, bypass, cultural feature, later excavation, or hidden connection"
+          ],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Sealed Archives",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "danger",
+          "role": "dangerous-research",
+          "deck": 3,
+          "depth": 3,
+          "zone": "restricted",
+          "historicalUse": {
+            "originalRole": "dangerous-research",
+            "originalLabel": "Dangerous Research Wing",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "celestial sentinel [celestial]"
+          ],
+          "socialEncounters": [],
+          "traps": [
+            "site-appropriate alarm, denial device, magical ward, improvised trap, or inherited defense"
+          ],
+          "hazards": [
+            "jammed mechanical system [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [
+            "exploration objective anchored to this room's semantic function and layered site history"
+          ],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [
+            "restricted threshold keyed to local authority, ownership, culture, or security practice"
+          ],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Dangerous Research Wing",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "celestial presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 7
+        },
+        {
+          "roomId": "service",
+          "role": "university-service",
+          "deck": 3,
+          "depth": 3,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "university-service",
+            "originalLabel": "Custodial / Service Space",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "jammed mechanical system [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Custodial / Service Space",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "scale-service-hub",
+          "role": "service-hub",
+          "deck": 3,
+          "depth": 1,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "service-hub",
+            "originalLabel": "Service Hub",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "ecological indicator species [nonhostile-wildlife]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "pinch/crush mechanism [mechanical]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Service Hub",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "nonhostile-wildlife presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 4
+        },
+        {
+          "roomId": "scale-secondary-access",
+          "role": "secondary-access",
+          "deck": 4,
+          "depth": 2,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "secondary-access",
+            "originalLabel": "Secondary Access",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "sound masking danger [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Secondary Access",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [],
+          "encounterPressure": 3
+        },
+        {
+          "roomId": "ecology-den",
+          "role": "ecology-den",
+          "deck": 4,
+          "depth": 3,
+          "zone": "controlled",
+          "historicalUse": {
+            "originalRole": "ecology-den",
+            "originalLabel": "Nest / Den / Habitat",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "roosting creature [flyer]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "deafening machinery or echoes [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in Nest / Den / Habitat",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "flyer presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 5
+        },
+        {
+          "roomId": "resource-store",
+          "role": "resource-specific-store",
+          "deck": 4,
+          "depth": 3,
+          "zone": "service",
+          "historicalUse": {
+            "originalRole": "resource-specific-store",
+            "originalLabel": "contraband Store",
+            "currentUse": null,
+            "currentUseOverlays": [],
+            "adaptations": [],
+            "interactionIds": []
+          },
+          "occupants": [
+            "ecological indicator species [nonhostile-wildlife]"
+          ],
+          "socialEncounters": [],
+          "traps": [],
+          "hazards": [
+            "deafening machinery or echoes [noise]",
+            "burned state affecting access, visibility, utilities, furnishings, or structural safety"
+          ],
+          "security": [],
+          "treasure": [
+            "specialized equipment or trade goods"
+          ],
+          "evidence": [],
+          "objectives": [],
+          "narrativeDiscoveries": [
+            "deeper-context discovery revealing original builders, later controllers, ecological succession, failure, or hidden purpose"
+          ],
+          "lockedRestrictedAreas": [],
+          "secretAccess": [],
+          "environmentalDetails": [
+            "colonial cultural/construction influence remains legible in contraband Store",
+            "dominant materials: copper, ironwood",
+            "urban / magically-temperate / thaw / aurora-flux",
+            "magical lighting conditions",
+            "humid water condition"
+          ],
+          "ecology": [
+            "nonhostile-wildlife presence consistent with scavenger ecology and burned occupation state"
+          ],
+          "encounterPressure": 5
+        }
+      ]
+    },
+    "compatibility": {
+      "id": "kaysender",
+      "family": "Kaysender",
+      "provenance": "Kaysender-native content with open d20 / Hypertext d20-compatible presentation where rules-facing text is required.",
+      "mechanicalDetailsAreSettingScoped": true
+    },
+    "provenance": {
+      "topologyEngine": "hb-semantic-spatial-engine",
+      "topologySeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+      "contentLayer": "semantic-content-populator",
+      "locationArchetype": "arcane_university",
+      "faction": "necromancers",
+      "adventurePurpose": null,
+      "siteProfileSeed": "archive-2026-08-22-purpose-aware-variety-02-connector-normalized-seeded-random-05",
+      "siteLayers": [
+        "relationship-reconciliation",
+        "scale",
+        "origin-culture",
+        "current-controller",
+        "occupancy-state",
+        "environment",
+        "cross-layer-interactions",
+        "ecology",
+        "hazard-ecology",
+        "security-defense",
+        "resources-magic",
+        "condition-history",
+        "narrative-social",
+        "spatial-capacity-normalization"
+      ]
+    }
+  }
+}

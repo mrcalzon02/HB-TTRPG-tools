@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "spatial-site-batch-workflow-outcome",
+  "batchId": "2026-08-22-purpose-aware-variety-02-connector-normalized",
+  "sourceCommit": "5debe8bb0171a6fbb62b1d0e5f7f454d32253ebd",
+  "regressionStatus": 1,
+  "batchStatus": 0,
+  "tests": [],
+  "ok": false
+}
