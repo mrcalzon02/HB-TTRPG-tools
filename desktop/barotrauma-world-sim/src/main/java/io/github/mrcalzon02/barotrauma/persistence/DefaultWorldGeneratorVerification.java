@@ -30,6 +30,15 @@ public final class DefaultWorldGeneratorVerification {
             require(generated.ecologyLocationCount() == generated.locationCount()
                             && generated.geologyLocationCount() == generated.locationCount(),
                     "Generated world did not initialize ecology and geology for every location.");
+            require(generated.organizationCount() >= 50
+                            && generated.sovereignFactionCount() >= 2
+                            && generated.lockedHeadquartersCount() == generated.sovereignFactionCount(),
+                    "Generated world did not initialize the expanded faction and institution ecology.");
+            require(generated.alignedInstitutionCount() >= 20,
+                    "Generated world did not align its headquartered institutions to sovereign factions.");
+            require(generated.organizationOperationCount() >= generated.stationCount()
+                            && generated.organizationNewsCount() >= generated.stationCount(),
+                    "Generated world passive initialization did not produce institutional activity and observer news.");
             require(generated.initializedTick() >= 1 && generated.schedulerState().equals("PAUSED"),
                     "Generated world did not finish one canonical initialization tick in a paused state.");
 
@@ -41,10 +50,27 @@ public final class DefaultWorldGeneratorVerification {
                                 && objectExists(statement, "table", "settlement_project")
                                 && objectExists(statement, "table", "settlement_founding_handoff")
                                 && objectExists(statement, "table", "settlement_project_contribution_disposition")
-                                && objectExists(statement, "table", "world_observation_event"),
+                                && objectExists(statement, "table", "world_observation_event")
+                                && objectExists(statement, "table", "world_organization")
+                                && objectExists(statement, "table", "organization_operation")
+                                && objectExists(statement, "table", "organization_station_asset")
+                                && objectExists(statement, "table", "organization_news_event")
+                                && objectExists(statement, "table", "station_control_challenge"),
                         "Generated world is missing a current-system persistence authority.");
+                require(objectExists(statement, "view", "organization_ecology_observation")
+                                && objectExists(statement, "view", "station_political_observation")
+                                && objectExists(statement, "view", "organization_operation_observation")
+                                && objectExists(statement, "view", "organization_station_asset_observation")
+                                && objectExists(statement, "view", "regional_conflict_observation"),
+                        "Generated world is missing organization observer projections.");
                 require(scalar(statement, "SELECT COUNT(*) FROM observation_snapshot") > 0,
                         "Generated world did not retain its initialization observation snapshot.");
+                require(scalar(statement, "SELECT COUNT(*) FROM organization_operation_observation")
+                                == generated.organizationOperationCount(),
+                        "Organization operation observer view does not expose every generated operation.");
+                require(scalar(statement, "SELECT COUNT(*) FROM organization_news_event")
+                                == generated.organizationNewsCount(),
+                        "Organization news count changed between generation and inspection.");
                 require(foreignKeyViolations(statement) == 0,
                         "Generated world contains foreign-key violations.");
             }
