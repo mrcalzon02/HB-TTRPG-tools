@@ -21,9 +21,10 @@ import java.util.UUID;
 
 /** Creates a fresh schema-current Europa world through canonical import and passive writer authorities. */
 public final class DefaultWorldGenerator {
-    public static final String TEMPLATE_ID = "europa-operations-default-034";
+    public static final String TEMPLATE_ID = "europa-operations-default-036";
     public static final int EXPECTED_LOCATIONS = 24;
     public static final int EXPECTED_STATIONS = 12;
+    public static final int LOCAL_INSTITUTIONS_PER_STATION = 8;
 
     private DefaultWorldGenerator() { }
 
@@ -98,6 +99,12 @@ public final class DefaultWorldGenerator {
             int unalignedInstitutions = scalar(statement,
                     "SELECT COUNT(*) FROM world_organization WHERE organization_type NOT IN ('MAJOR_FACTION','SUBFACTION') "
                             + "AND home_station_id IS NOT NULL AND aligned_major_organization_id IS NULL");
+            int localInstitutions = scalar(statement,
+                    "SELECT COUNT(*) FROM world_organization WHERE organization_key LIKE 'local-institution:%'");
+            int financeStates = scalar(statement, "SELECT COUNT(*) FROM organization_finance_state");
+            int membershipStates = scalar(statement, "SELECT COUNT(*) FROM organization_membership_state");
+            int openingBalances = scalar(statement,
+                    "SELECT COUNT(*) FROM organization_finance_ledger WHERE entry_type='OPENING_BALANCE'");
             int operations = scalar(statement, "SELECT COUNT(*) FROM organization_operation");
             int organizationNews = scalar(statement, "SELECT COUNT(*) FROM organization_news_event");
             long tick = longScalar(statement, "SELECT COALESCE(current_tick_sequence,imported_tick_sequence,0) "
@@ -115,22 +122,27 @@ public final class DefaultWorldGenerator {
                     || aggregatePopulations != stations
                     || ecology != locations
                     || geology != locations
-                    || organizations < 50
+                    || organizations < 50 + stations * LOCAL_INSTITUTIONS_PER_STATION
                     || sovereignFactions < 2
                     || lockedHeadquarters != sovereignFactions
-                    || alignedInstitutions < 20
+                    || alignedInstitutions < stations * LOCAL_INSTITUTIONS_PER_STATION
                     || unalignedInstitutions != 0
+                    || localInstitutions != stations * LOCAL_INSTITUTIONS_PER_STATION
+                    || financeStates != organizations
+                    || membershipStates != organizations
+                    || openingBalances != organizations
                     || operations < stations
                     || organizationNews < stations
                     || tick < 1
                     || enabled != 0
                     || !"PAUSED".equals(scheduler)) {
                 throw new IllegalStateException(
-                        "Generated default world did not reach the current paused-system, organization, and operation baseline.");
+                        "Generated default world did not reach the current paused-system, institutional-density, finance, and operation baseline.");
             }
             return new GeneratedWorld(paths, worldId, schema, locations, stations, stationStates,
                     populations, aggregatePopulations, ecology, geology, organizations, sovereignFactions,
-                    lockedHeadquarters, alignedInstitutions, operations, organizationNews, tick, scheduler);
+                    lockedHeadquarters, alignedInstitutions, localInstitutions, financeStates, membershipStates,
+                    operations, organizationNews, tick, scheduler);
         }
     }
 
@@ -188,6 +200,9 @@ public final class DefaultWorldGenerator {
             int sovereignFactionCount,
             int lockedHeadquartersCount,
             int alignedInstitutionCount,
+            int localInstitutionCount,
+            int financeStateCount,
+            int membershipStateCount,
             int organizationOperationCount,
             int organizationNewsCount,
             long initializedTick,
