@@ -1,8 +1,374 @@
 Live Signals full validation failed.
-Source commit: d019dc9736b24dfb3fbaf751c54ebb2cfea44373
-Run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32561818353
+Source commit: d73a593da26ee920d85fc38d332f174883d61be1
+Run: https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/32561906395
 
+== repair migration anchor ==
+Repaired Live Signals migration constant-export anchor while preserving the current API exports.
 == mirror migration ==
 /home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/apply_live_signals_mirror.py:357: SyntaxWarning: invalid escape sequence '\/'
   "  /no interpolation or gap filling/i,/Signals Laboratory mirror/,/Live band harvesting controls/,/Documentation \/ safety \/ legality audit ledger/,/bandHarvestPreflight/,/buildBandHarvestPlan/,/startBandHarvest/,/regulatoryLimitsEnforced/,/hardwareLimitsEnforced/\n",
-constant exports: expected exactly one anchor, found 0
+Applied Live Signals Laboratory mirror + safety/legal/audit migration.
+== full-validation fixes ==
+Applied Live Signals full-validation fixes: UI consolidation, stable recording, thermal enforcement, and stricter regulatory gates.
+== duplicate-status fixes ==
+Applied duplicate-status consolidation fixes.
+== javascript syntax ==
+== live signals validator ==
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /local instrument authorized/. Input:
+
+'(function installLiveSignalsLaboratory(root, factory) {\n' +
+  "  'use strict';\n" +
+  '  const api = factory(root || globalThis);\n' +
+  "  if (typeof module === 'object' && module.exports) module.exports = api;\n" +
+  '  if (root) root.LiveSignalsLaboratory = api;\n' +
+  "})(typeof globalThis !== 'undefined' ? globalThis : this, function createLiveSignalsLaboratory(root) {\n" +
+  "  'use strict';\n" +
+  '\n' +
+  "  const VERSION = '0.5.1';\n" +
+  "  const PANEL_ID = 'live-signals-laboratory';\n" +
+  "  const STYLE_ID = 'live-signals-laboratory-style';\n" +
+  "  const VERIFIED_AT = '2026-08-21';\n" +
+  "  const CURRENT_MODE = 'signals-mirror-passive-active-band-harvesting-safety-gated';\n" +
+  '  const MAX_SESSION_MINUTES = 60;\n' +
+  '  const DEFAULT_SESSION_MINUTES = 15;\n' +
+  '  const MAX_SENSOR_HZ = 50;\n' +
+  '  const DEFAULT_SENSOR_HZ = 20;\n' +
+  '  const MIN_WIFI_RESULT_POLL_MS = 5000;\n' +
+  '  const MIN_BLE_OBSERVE_PERIOD_MS = 30000;\n' +
+  '  const MAX_BLE_OBSERVE_WINDOW_MS = 10000;\n' +
+  '  const MIN_CELL_POLL_MS = 2000;\n' +
+  '  const MIN_GNSS_POLL_MS = 1000;\n' +
+  '  const MIN_ROUTER_POLL_MS = 2000;\n' +
+  '  const MAX_OBSERVATIONS = 12000;\n' +
+  '  const FREQUENCY_BIN_HZ = 1e6;\n' +
+  '  const DEFAULT_TIMELINE_BUCKET_MS = 250;\n' +
+  '  const MAX_TIMELINE_FRAMES = 2000;\n' +
+  '  const MAX_ACTIVE_TARGETS = 8;\n' +
+  '  const MAX_ACTIVE_SAMPLES_PER_TARGET = 5;\n' +
+  '  const MIN_ACTIVE_SAMPLE_INTERVAL_MS = 750;\n' +
+  '  const MAX_ACTIVE_BURST_SECONDS = 30;\n' +
+  '  const MAX_AUDIT_EVENTS = 5000;\n' +
+  '  const MAX_CAPTURE_LEDGER = 12000;\n' +
+  '\n' +
+  '  const freeze = value => Object.freeze(value);\n' +
+  '  const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;\n' +
+  '  const clamp = (value, low, high) => Math.max(low, Math.min(high, value));\n' +
+  `  const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[ch]));\n` +
+  '\n' +
+  '  const UNSAFE_RADIO_MUTATIONS = freeze([\n' +
+  "    'set-tx-power','set-channel','set-bandwidth','set-modulation','set-antenna-chain','set-antenna-gain',\n" +
+  "    'packet-injection','deauthentication','continuous-transmit','beacon-spam','radio-reset','interface-down','interface-up',\n" +
+  "    'wifi-association-change','wifi-start-scan','wifi-probe-request','bluetooth-advertise','bluetooth-connect',\n" +
+  "    'cellular-transmit-control','uwb-transmit-control','frequency-sweep-transmit','pulse-transmit','subnet-sweep','broadcast-ping-sweep'\n" +
+  '  ]);\n' +
+  '\n' +
+  '  const ACTIVE_SCAN_METHODS = freeze({\n' +
+  "    'wifi-rtt-ranging': freeze({id:'wifi-rtt-ranging',label:'Wi-Fi RTT',measurement:'distance',targetClass:'platform-discovered-rtt-responder',manualTargetAuthorizationRequired:false}),\n" +
+  "    'uwb-ranging': freeze({id:'uwb-ranging',label:'UWB ranging',measurement:'distance-angle-when-reported',targetClass:'participating-peer',manualTargetAuthorizationRequired:false}),\n" +
+  "    'ble-ranging': freeze({id:'ble-ranging',label:'Bluetooth ranging / channel sounding',measurement:'distance-or-rssi-range-when-supported',targetClass:'participating-peer',manualTargetAuthorizationRequired:false}),\n" +
+  "    'authorized-network-rtt': freeze({id:'authorized-network-rtt',label:'Selected network RTT',measurement:'latency-context-not-rf-distance',targetClass:'bridge-selected-endpoint',manualTargetAuthorizationRequired:false})\n" +
+  '  });\n' +
+  '\n' +
+  '  const ACTIVE_SCAN_POLICY = freeze({\n' +
+  '    enabled:true,\n' +
+  '    separateFromPassive:true,\n' +
+  '    localRuntimeHardwareAssumedAuthorized:true,\n' +
+  '    manualTargetAuthorizationRequired:false,\n' +
+  '    standardsResponderDiscoveryAllowed:true,\n' +
+  '    bridgeReportedTargetsOnly:true,\n' +
+  '    remoteDeviceControlAssumed:false,\n' +
+  '    nonDestructiveRangingOnly:true,\n' +
+  '    capabilityReportedMethodsOnly:true,\n' +
+  '    arbitraryFrequencySelection:false,\n' +
+  '    transmitterPowerMutation:false,\n' +
+  '    channelMutation:false,\n' +
+  '    maximumTargets:MAX_ACTIVE_TARGETS,\n' +
+  '    maximumSamplesPerTarget:MAX_ACTIVE_SAMPLES_PER_TARGET,\n' +
+  '    minimumSampleIntervalMs:MIN_ACTIVE_SAMPLE_INTERVAL_MS,\n' +
+  '    maximumBurstSeconds:MAX_ACTIVE_BURST_SECONDS,\n' +
+  "    note:'The radio hardware hosting the Live Signals runtime is treated as the operator-authorized instrument. Active Scan may use standards/platform-supported ranging responders or bridge-selected endpoints without a manual authorization checkbox. It never assumes administrative control of remote devices and does not expose arbitrary RF emission, power/channel mutation, packet injection, subnet sweeps, or frequency sweeps.'\n" +
+  '  });\n' +
+  '\n' +
+  '  const CHANNEL_CATALOG = freeze({\n' +
+  "    wifi:freeze({id:'wifi',label:'Wi-Fi receiver',kinds:freeze(['wifi','wifi-scan','wifi-current-network'])}),\n" +
+  "    cellular:freeze({id:'cellular',label:'Cellular receiver',kinds:freeze(['cellular','cell','lte','nr','gsm','wcdma','cdma'])}),\n" +
+  "    ble:freeze({id:'ble',label:'Bluetooth / BLE receiver',kinds:freeze(['ble','bluetooth'])}),\n" +
+  "    gnss:freeze({id:'gnss',label:'GNSS / location',kinds:freeze(['gnss','location'])}),\n" +
+  "    motion:freeze({id:'motion',label:'Motion / orientation',kinds:freeze(['motion','orientation','accelerometer','gyroscope'])}),\n" +
+  "    magnetometer:freeze({id:'magnetometer',label:'Magnetometer',kinds:freeze(['magnetometer','magnetic'])}),\n" +
+  "    barometer:freeze({id:'barometer',label:'Barometer',kinds:freeze(['barometer','pressure'])}),\n" +
+  "    router:freeze({id:'router',label:'Router / AP telemetry',kinds:freeze(['router','station','survey'])}),\n" +
+  "    ranging:freeze({id:'ranging',label:'Active ranging results',kinds:freeze(['range','ranging','wifi-rtt','uwb-range','ble-range','network-rtt'])})\n" +
+  '  });\n' +
+  '\n' +
+  '  const RECEIVER_HEALTH_THRESHOLDS = freeze({\n' +
+  '    minimumReferenceSamples: 12,\n' +
+  '    preferredReferenceSamples: 30,\n' +
+  '    chainImbalanceWatchDb: 5,\n' +
+  '    chainImbalanceSuspectDb: 8,\n' +
+  '    signalIqrWatchDb: 4,\n' +
+  '    signalIqrSuspectDb: 7,\n' +
+  '    noiseIqrWatchDb: 3,\n' +
+  '    noiseIqrSuspectDb: 6,\n' +
+  '    baselineLossWatchDb: 4,\n' +
+  '    baselineLossSuspectDb: 7,\n' +
+  '    baselineNoiseRiseWatchDb: 3,\n' +
+  '    baselineNoiseRiseSuspectDb: 6,\n' +
+  '    staleFractionWatch: .20,\n' +
+  '    staleFractionSuspect: .50\n' +
+  '  });\n' +
+  '\n' +
+  '  const SAFETY_POLICY = freeze({\n' +
+  '    mode: CURRENT_MODE,\n' +
+  "    defaultAcquisitionMode:'passive',\n" +
+  '    receiveOnly: false,\n' +
+  '    transmitterControlsExposed: false,\n' +
+  '    passiveTelemetryOnly: false,\n' +
+  '    passiveModeReceiveOnly:true,\n' +
+  '    activeRangingEnabled: true,\n' +
+  '    activeScanPolicy:ACTIVE_SCAN_POLICY,\n' +
+  '    appRequestedWifiScanEnabled: false,\n' +
+  '    maximumSessionMinutes: MAX_SESSION_MINUTES,\n' +
+  '    defaultSessionMinutes: DEFAULT_SESSION_MINUTES,\n' +
+  '    maximumSensorHz: MAX_SENSOR_HZ,\n' +
+  '    defaultSensorHz: DEFAULT_SENSOR_HZ,\n' +
+  '    minimumWifiResultPollMs: MIN_WIFI_RESULT_POLL_MS,\n' +
+  '    minimumBleObservePeriodMs: MIN_BLE_OBSERVE_PERIOD_MS,\n' +
+  '    maximumBleObserveWindowMs: MAX_BLE_OBSERVE_WINDOW_MS,\n' +
+  '    minimumCellPollMs: MIN_CELL_POLL_MS,\n' +
+  '    minimumGnssPollMs: MIN_GNSS_POLL_MS,\n' +
+  '    minimumRouterPollMs: MIN_ROUTER_POLL_MS,\n' +
+  "    stopThermalStates: freeze(['critical','emergency','shutdown']),\n" +
+  "    reduceThermalStates: freeze(['serious','severe']),\n" +
+  '    minimumBatteryPercentWithoutExternalPower: 15,\n' +
+  '    prohibitedOperations: UNSAFE_RADIO_MUTATIONS,\n' +
+  '    privacyRedactionDefault: true,\n' +
+  "    note: 'Passive Scan remains receive-only. Active Scan is a separate standards-supported ranging path using the runtime-attached hardware as the authorized instrument; it does not assume control of remote devices. Arbitrary transmitter control, app-requested Wi-Fi discovery scans, frequency sweeps, pulse transmission, packet injection and radio mutation remain blocked.'\n" +
+  '  });\n' +
+  '\n' +
+  '  const SIGNALS_MIRROR_EXPERIMENT_IDS = freeze([\n' +
+  "    'rf-baseline','antenna-tuning','q-bandwidth','impedance-response','material-penetration','aperture-transport',\n" +
+  "    'coherent-multipath','secondary-carrier','receiver-interfrequency','source-intermodulation','adaptive-sampling',\n" +
+  "    'resolution-limit','heterodyne-inference','range-scenarios'\n" +
+  '  ]);\n' +
+  '\n' +
+  '  const LIVE_CONTROL_POLICY = freeze({\n' +
+  "    mirrorSource:'SignalsLaboratory.experimentCatalog',\n" +
+  '    mirrorSourceRequiredInBrowser:true,\n' +
+  '    empiricalDataRemainsDistinctFromSimulation:true,\n' +
+  '    failClosed:true,\n' +
+  '    passiveReceiveOnly:true,\n' +
+  '    activeMethodsAllowlisted:true,\n' +
+  '    bridgeDeclaredBandsPreferred:true,\n' +
+  '    customActiveBandsRequireHardwareLimitEnforcement:true,\n' +
+  '    customActiveBandsRequireRegulatoryLimitEnforcement:true,\n' +
+  '    customActiveBandsRequireExplicitJurisdiction:true,\n' +
+  '    customActiveBandsRequireExplicitFrequencyBounds:true,\n' +
+  '    platformManagedStandardsRangingAllowed:true,\n' +
+  '    arbitraryFrequencySelection:false,\n' +
+  '    arbitraryPowerControl:false,\n' +
+  '    interferenceOperationsAllowed:false,\n' +
+  '    auditRecordingRequired:true,\n' +
+  '    captureLedgerRequired:true,\n' +
+  "    note:'Live Signals mirrors the Signals Laboratory experiment register from the same runtime source of truth. Live-only controls select the active device, usable band, passive/active harvest mode and allowlisted detection method. Active operation remains platform/bridge managed and fails closed when hardware or regulatory enforcement is not established.'\n" +
+  '  });\n' +
+  '\n' +
+  '\n' +
+  '  const HARDWARE_PROFILES = freeze({\n' +
+  "    'android-native': freeze({\n" +
+  "      id:'android-native', label:'Android passive native bridge', class:'mobile',\n" +
+  "      scope: freeze(['wifi-system-scan-results','ble-observation','cellular-signal','cell-neighbors','gnss','motion','magnetometer','barometer-conditional','light-conditional','proximity-conditional']),\n" +
+  "      expectedPassiveChannels: freeze(['wifi','cellular','ble','gnss','motion','magnetometer']),\n" +
+  "      activeMethods: freeze(['wifi-rtt-ranging','uwb-ranging','ble-ranging']),\n" +
+  "      limitations: freeze(['Do not call WifiManager.startScan in passive phase; consume system/cached scan results and scan-completion broadcasts.','Cell signal freshness is modem/platform controlled and requires a native TelephonyManager bridge.','BLE observation requires the native Bluetooth scan permission/API path.','Wi-Fi RTT/UWB/Bluetooth ranging are capability- and responder/peer-dependent and only belong to the separate Active Scan path.']),\n" +
+  '      preferred: true\n' +
+  '    }),\n' +
+  "    'ios-native': freeze({\n" +
+  "      id:'ios-native', label:'iOS passive native bridge', class:'mobile',\n" +
+  "      scope: freeze(['wifi-current-network','ble-observation','gnss','heading','motion','magnetometer','barometer-conditional','ibeacon-observation-conditional']),\n" +
+  "      expectedPassiveChannels: freeze(['wifi','"... 122731 more characters
+
+    at file:///home/runner/work/HB-TTRPG-tools/HB-TTRPG-tools/scripts/validate-live-signals-laboratory.mjs:240:11 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '(function installLiveSignalsLaboratory(root, factory) {\n' +
+    "  'use strict';\n" +
+    '  const api = factory(root || globalThis);\n' +
+    "  if (typeof module === 'object' && module.exports) module.exports = api;\n" +
+    '  if (root) root.LiveSignalsLaboratory = api;\n' +
+    "})(typeof globalThis !== 'undefined' ? globalThis : this, function createLiveSignalsLaboratory(root) {\n" +
+    "  'use strict';\n" +
+    '\n' +
+    "  const VERSION = '0.5.1';\n" +
+    "  const PANEL_ID = 'live-signals-laboratory';\n" +
+    "  const STYLE_ID = 'live-signals-laboratory-style';\n" +
+    "  const VERIFIED_AT = '2026-08-21';\n" +
+    "  const CURRENT_MODE = 'signals-mirror-passive-active-band-harvesting-safety-gated';\n" +
+    '  const MAX_SESSION_MINUTES = 60;\n' +
+    '  const DEFAULT_SESSION_MINUTES = 15;\n' +
+    '  const MAX_SENSOR_HZ = 50;\n' +
+    '  const DEFAULT_SENSOR_HZ = 20;\n' +
+    '  const MIN_WIFI_RESULT_POLL_MS = 5000;\n' +
+    '  const MIN_BLE_OBSERVE_PERIOD_MS = 30000;\n' +
+    '  const MAX_BLE_OBSERVE_WINDOW_MS = 10000;\n' +
+    '  const MIN_CELL_POLL_MS = 2000;\n' +
+    '  const MIN_GNSS_POLL_MS = 1000;\n' +
+    '  const MIN_ROUTER_POLL_MS = 2000;\n' +
+    '  const MAX_OBSERVATIONS = 12000;\n' +
+    '  const FREQUENCY_BIN_HZ = 1e6;\n' +
+    '  const DEFAULT_TIMELINE_BUCKET_MS = 250;\n' +
+    '  const MAX_TIMELINE_FRAMES = 2000;\n' +
+    '  const MAX_ACTIVE_TARGETS = 8;\n' +
+    '  const MAX_ACTIVE_SAMPLES_PER_TARGET = 5;\n' +
+    '  const MIN_ACTIVE_SAMPLE_INTERVAL_MS = 750;\n' +
+    '  const MAX_ACTIVE_BURST_SECONDS = 30;\n' +
+    '  const MAX_AUDIT_EVENTS = 5000;\n' +
+    '  const MAX_CAPTURE_LEDGER = 12000;\n' +
+    '\n' +
+    '  const freeze = value => Object.freeze(value);\n' +
+    '  const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;\n' +
+    '  const clamp = (value, low, high) => Math.max(low, Math.min(high, value));\n' +
+    `  const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[ch]));\n` +
+    '\n' +
+    '  const UNSAFE_RADIO_MUTATIONS = freeze([\n' +
+    "    'set-tx-power','set-channel','set-bandwidth','set-modulation','set-antenna-chain','set-antenna-gain',\n" +
+    "    'packet-injection','deauthentication','continuous-transmit','beacon-spam','radio-reset','interface-down','interface-up',\n" +
+    "    'wifi-association-change','wifi-start-scan','wifi-probe-request','bluetooth-advertise','bluetooth-connect',\n" +
+    "    'cellular-transmit-control','uwb-transmit-control','frequency-sweep-transmit','pulse-transmit','subnet-sweep','broadcast-ping-sweep'\n" +
+    '  ]);\n' +
+    '\n' +
+    '  const ACTIVE_SCAN_METHODS = freeze({\n' +
+    "    'wifi-rtt-ranging': freeze({id:'wifi-rtt-ranging',label:'Wi-Fi RTT',measurement:'distance',targetClass:'platform-discovered-rtt-responder',manualTargetAuthorizationRequired:false}),\n" +
+    "    'uwb-ranging': freeze({id:'uwb-ranging',label:'UWB ranging',measurement:'distance-angle-when-reported',targetClass:'participating-peer',manualTargetAuthorizationRequired:false}),\n" +
+    "    'ble-ranging': freeze({id:'ble-ranging',label:'Bluetooth ranging / channel sounding',measurement:'distance-or-rssi-range-when-supported',targetClass:'participating-peer',manualTargetAuthorizationRequired:false}),\n" +
+    "    'authorized-network-rtt': freeze({id:'authorized-network-rtt',label:'Selected network RTT',measurement:'latency-context-not-rf-distance',targetClass:'bridge-selected-endpoint',manualTargetAuthorizationRequired:false})\n" +
+    '  });\n' +
+    '\n' +
+    '  const ACTIVE_SCAN_POLICY = freeze({\n' +
+    '    enabled:true,\n' +
+    '    separateFromPassive:true,\n' +
+    '    localRuntimeHardwareAssumedAuthorized:true,\n' +
+    '    manualTargetAuthorizationRequired:false,\n' +
+    '    standardsResponderDiscoveryAllowed:true,\n' +
+    '    bridgeReportedTargetsOnly:true,\n' +
+    '    remoteDeviceControlAssumed:false,\n' +
+    '    nonDestructiveRangingOnly:true,\n' +
+    '    capabilityReportedMethodsOnly:true,\n' +
+    '    arbitraryFrequencySelection:false,\n' +
+    '    transmitterPowerMutation:false,\n' +
+    '    channelMutation:false,\n' +
+    '    maximumTargets:MAX_ACTIVE_TARGETS,\n' +
+    '    maximumSamplesPerTarget:MAX_ACTIVE_SAMPLES_PER_TARGET,\n' +
+    '    minimumSampleIntervalMs:MIN_ACTIVE_SAMPLE_INTERVAL_MS,\n' +
+    '    maximumBurstSeconds:MAX_ACTIVE_BURST_SECONDS,\n' +
+    "    note:'The radio hardware hosting the Live Signals runtime is treated as the operator-authorized instrument. Active Scan may use standards/platform-supported ranging responders or bridge-selected endpoints without a manual authorization checkbox. It never assumes administrative control of remote devices and does not expose arbitrary RF emission, power/channel mutation, packet injection, subnet sweeps, or frequency sweeps.'\n" +
+    '  });\n' +
+    '\n' +
+    '  const CHANNEL_CATALOG = freeze({\n' +
+    "    wifi:freeze({id:'wifi',label:'Wi-Fi receiver',kinds:freeze(['wifi','wifi-scan','wifi-current-network'])}),\n" +
+    "    cellular:freeze({id:'cellular',label:'Cellular receiver',kinds:freeze(['cellular','cell','lte','nr','gsm','wcdma','cdma'])}),\n" +
+    "    ble:freeze({id:'ble',label:'Bluetooth / BLE receiver',kinds:freeze(['ble','bluetooth'])}),\n" +
+    "    gnss:freeze({id:'gnss',label:'GNSS / location',kinds:freeze(['gnss','location'])}),\n" +
+    "    motion:freeze({id:'motion',label:'Motion / orientation',kinds:freeze(['motion','orientation','accelerometer','gyroscope'])}),\n" +
+    "    magnetometer:freeze({id:'magnetometer',label:'Magnetometer',kinds:freeze(['magnetometer','magnetic'])}),\n" +
+    "    barometer:freeze({id:'barometer',label:'Barometer',kinds:freeze(['barometer','pressure'])}),\n" +
+    "    router:freeze({id:'router',label:'Router / AP telemetry',kinds:freeze(['router','station','survey'])}),\n" +
+    "    ranging:freeze({id:'ranging',label:'Active ranging results',kinds:freeze(['range','ranging','wifi-rtt','uwb-range','ble-range','network-rtt'])})\n" +
+    '  });\n' +
+    '\n' +
+    '  const RECEIVER_HEALTH_THRESHOLDS = freeze({\n' +
+    '    minimumReferenceSamples: 12,\n' +
+    '    preferredReferenceSamples: 30,\n' +
+    '    chainImbalanceWatchDb: 5,\n' +
+    '    chainImbalanceSuspectDb: 8,\n' +
+    '    signalIqrWatchDb: 4,\n' +
+    '    signalIqrSuspectDb: 7,\n' +
+    '    noiseIqrWatchDb: 3,\n' +
+    '    noiseIqrSuspectDb: 6,\n' +
+    '    baselineLossWatchDb: 4,\n' +
+    '    baselineLossSuspectDb: 7,\n' +
+    '    baselineNoiseRiseWatchDb: 3,\n' +
+    '    baselineNoiseRiseSuspectDb: 6,\n' +
+    '    staleFractionWatch: .20,\n' +
+    '    staleFractionSuspect: .50\n' +
+    '  });\n' +
+    '\n' +
+    '  const SAFETY_POLICY = freeze({\n' +
+    '    mode: CURRENT_MODE,\n' +
+    "    defaultAcquisitionMode:'passive',\n" +
+    '    receiveOnly: false,\n' +
+    '    transmitterControlsExposed: false,\n' +
+    '    passiveTelemetryOnly: false,\n' +
+    '    passiveModeReceiveOnly:true,\n' +
+    '    activeRangingEnabled: true,\n' +
+    '    activeScanPolicy:ACTIVE_SCAN_POLICY,\n' +
+    '    appRequestedWifiScanEnabled: false,\n' +
+    '    maximumSessionMinutes: MAX_SESSION_MINUTES,\n' +
+    '    defaultSessionMinutes: DEFAULT_SESSION_MINUTES,\n' +
+    '    maximumSensorHz: MAX_SENSOR_HZ,\n' +
+    '    defaultSensorHz: DEFAULT_SENSOR_HZ,\n' +
+    '    minimumWifiResultPollMs: MIN_WIFI_RESULT_POLL_MS,\n' +
+    '    minimumBleObservePeriodMs: MIN_BLE_OBSERVE_PERIOD_MS,\n' +
+    '    maximumBleObserveWindowMs: MAX_BLE_OBSERVE_WINDOW_MS,\n' +
+    '    minimumCellPollMs: MIN_CELL_POLL_MS,\n' +
+    '    minimumGnssPollMs: MIN_GNSS_POLL_MS,\n' +
+    '    minimumRouterPollMs: MIN_ROUTER_POLL_MS,\n' +
+    "    stopThermalStates: freeze(['critical','emergency','shutdown']),\n" +
+    "    reduceThermalStates: freeze(['serious','severe']),\n" +
+    '    minimumBatteryPercentWithoutExternalPower: 15,\n' +
+    '    prohibitedOperations: UNSAFE_RADIO_MUTATIONS,\n' +
+    '    privacyRedactionDefault: true,\n' +
+    "    note: 'Passive Scan remains receive-only. Active Scan is a separate standards-supported ranging path using the runtime-attached hardware as the authorized instrument; it does not assume control of remote devices. Arbitrary transmitter control, app-requested Wi-Fi discovery scans, frequency sweeps, pulse transmission, packet injection and radio mutation remain blocked.'\n" +
+    '  });\n' +
+    '\n' +
+    '  const SIGNALS_MIRROR_EXPERIMENT_IDS = freeze([\n' +
+    "    'rf-baseline','antenna-tuning','q-bandwidth','impedance-response','material-penetration','aperture-transport',\n" +
+    "    'coherent-multipath','secondary-carrier','receiver-interfrequency','source-intermodulation','adaptive-sampling',\n" +
+    "    'resolution-limit','heterodyne-inference','range-scenarios'\n" +
+    '  ]);\n' +
+    '\n' +
+    '  const LIVE_CONTROL_POLICY = freeze({\n' +
+    "    mirrorSource:'SignalsLaboratory.experimentCatalog',\n" +
+    '    mirrorSourceRequiredInBrowser:true,\n' +
+    '    empiricalDataRemainsDistinctFromSimulation:true,\n' +
+    '    failClosed:true,\n' +
+    '    passiveReceiveOnly:true,\n' +
+    '    activeMethodsAllowlisted:true,\n' +
+    '    bridgeDeclaredBandsPreferred:true,\n' +
+    '    customActiveBandsRequireHardwareLimitEnforcement:true,\n' +
+    '    customActiveBandsRequireRegulatoryLimitEnforcement:true,\n' +
+    '    customActiveBandsRequireExplicitJurisdiction:true,\n' +
+    '    customActiveBandsRequireExplicitFrequencyBounds:true,\n' +
+    '    platformManagedStandardsRangingAllowed:true,\n' +
+    '    arbitraryFrequencySelection:false,\n' +
+    '    arbitraryPowerControl:false,\n' +
+    '    interferenceOperationsAllowed:false,\n' +
+    '    auditRecordingRequired:true,\n' +
+    '    captureLedgerRequired:true,\n' +
+    "    note:'Live Signals mirrors the Signals Laboratory experiment register from the same runtime source of truth. Live-only controls select the active device, usable band, passive/active harvest mode and allowlisted detection method. Active operation remains platform/bridge managed and fails closed when hardware or regulatory enforcement is not established.'\n" +
+    '  });\n' +
+    '\n' +
+    '\n' +
+    '  const HARDWARE_PROFILES = freeze({\n' +
+    "    'android-native': freeze({\n" +
+    "      id:'android-native', label:'Android passive native bridge', class:'mobile',\n" +
+    "      scope: freeze(['wifi-system-scan-results','ble-observation','cellular-signal','cell-neighbors','gnss','motion','magnetometer','barometer-conditional','light-conditional','proximity-conditional']),\n" +
+    "      expectedPassiveChannels: freeze(['wifi','cellular','ble','gnss','motion','magnetometer']),\n" +
+    "      activeMethods: freeze(['wifi-rtt-ranging','uwb-ranging','ble-ranging']),\n" +
+    "      limitations: freeze(['Do not call WifiManager.startScan in passive phase; consume system/cached scan results and scan-completion broadcasts.','Cell signal freshness is modem/platform controlled and requires a native TelephonyManager bridge.','BLE observation requires the native Bluetooth scan permission/API path.','Wi-Fi RTT/UWB/Bluetooth ranging are capability- and responder/peer-dependent and only belong to the separate Active Scan path.']),\n" +
+    '      preferred: true\n' +
+    '    }),\n' +
+    "    'ios-native': freeze({\n" +
+    "      id:'ios-native', label:'iOS passive native bridge', class:'mobile',\n" +
+    "      scope: freeze(['wifi-current-network','ble-observation','gnss','heading','motion','magnetometer','barometer-conditional','ibeacon-observation-conditional']),\n" +
+    "      expectedPassiveChannels: freeze(['wifi','"... 122731 more characters,
+  expected: /local instrument authorized/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v22.23.2
