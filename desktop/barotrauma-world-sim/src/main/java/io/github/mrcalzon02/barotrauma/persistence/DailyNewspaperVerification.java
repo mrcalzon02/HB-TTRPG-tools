@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Comparator;
+import java.util.Locale;
 
 /** Acceptance contract for prior-day newspaper sealing, frozen conditions, and archive immutability. */
 public final class DailyNewspaperVerification {
@@ -81,7 +82,7 @@ public final class DailyNewspaperVerification {
                 String originalConditions = text(connection,
                         "SELECT conditions_snapshot FROM daily_newspaper_article WHERE article_id='" + sql(articleId) + "'");
                 require(originalBody.contains("Pressure incident closes station concourse")
-                                && originalBody.contains(stationName),
+                                && originalBody.contains(stationName.toUpperCase(Locale.ROOT)),
                         "Synthesized article did not preserve its committed event and station of origin.");
                 require(originalConditions.contains("Credits: 43210")
                                 && originalConditions.contains("Supplies: 321")
