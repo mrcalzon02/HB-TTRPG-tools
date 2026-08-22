@@ -44,6 +44,7 @@ public final class DesktopPersistenceVerificationSuite {
         OrganizationOperationsSchemaVerification.verifyContract();
         InstitutionalEconomySchemaVerification.verifyContract();
         DefaultWorldGeneratorVerification.verifyContract();
+        DailyNewspaperVerification.verifyContract();
         SettlementLifecycleSchemaVerification.verifyContract();
         SettlementFoundingMigrationSchemaVerification.verifyContract();
         SettlementContributionDispositionSchemaVerification.verifyContract();
@@ -85,7 +86,7 @@ public final class DesktopPersistenceVerificationSuite {
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("--verify")) {
             verifyContract();
-            System.out.println("Complete Barotrauma donor discovery, graphical desktop shell, current-schema default Europa world generation, atlas-aware semantic assets, observation vocabulary, conserved NPC population accounting, demographic lifecycle, transport-backed migration, guarded settlement/founding lifecycle, schema-033 sovereign factions and internal doctrinal blocs with permanent headquarters, schema-034 active organization operations, construction, trade, finance, labor, research, security, relief, blockade/raid, station-control and regional-conflict behavior, schema-035 eight station-local institutions per station with independent balance sheets, workforces, memberships, project finance and multi-organization partnerships, schema-036 order-independent lender synchronization, durable partner relationships, loan draws/repayment and recurring payroll/workforce evolution, authoritative transaction lifecycle, passive-world station consumption, production, delivery, attack, recovery, frontier, population, faction planning, NPC transit, fleet response, ecology, geology, finite resource harvesting, logistics, research, encounters, and recovery contracts passed.");
+            System.out.println("Complete Barotrauma donor discovery, graphical desktop shell, current-schema default Europa world generation, atlas-aware semantic assets, observation vocabulary, conserved NPC population accounting, demographic lifecycle, transport-backed migration, guarded settlement/founding lifecycle, schema-033 sovereign factions and internal doctrinal blocs with permanent headquarters, schema-034 active organization operations, construction, trade, finance, labor, research, security, relief, blockade/raid, station-control and regional-conflict behavior, schema-035 eight station-local institutions per station with independent balance sheets, workforces, memberships, project finance and multi-organization partnerships, schema-036 order-independent lender synchronization, durable partner relationships, loan draws/repayment and recurring payroll/workforce evolution, prior-day newspaper midnight sealing with frozen immutable articles, authoritative transaction lifecycle, passive-world station consumption, production, delivery, attack, recovery, frontier, population, faction planning, NPC transit, fleet response, ecology, geology, finite resource harvesting, logistics, research, encounters, and recovery contracts passed.");
             return;
         }
         System.err.println("Usage: DesktopPersistenceVerificationSuite --verify");
