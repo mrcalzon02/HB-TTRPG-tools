@@ -13,10 +13,13 @@ import io.github.mrcalzon02.barotrauma.persistence.WorldStorageContracts.WorldPa
 import io.github.mrcalzon02.barotrauma.simulation.PassiveWorldSimulationService;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,6 +27,7 @@ import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -34,6 +38,7 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -66,11 +71,13 @@ import java.util.function.Consumer;
  *
  * <p>The window is coupled to the authoritative desktop world. It resumes an already-enabled Passive Mode
  * scheduler, can explicitly run or pause that scheduler, renders in-transit NPC vessels at committed route
- * progress, and keeps a clicked vessel, route, station, or location pinned in the evidence inspector while
- * the world continues to advance. Environmental and civilization layers are read-only projections of
- * committed simulation and observation evidence.
+ * progress, and keeps a clicked vessel, route, station, location, or timeline record pinned in the evidence
+ * inspector while the world continues to advance. Environmental and civilization layers are read-only
+ * projections of committed simulation and observation evidence.</p>
  */
 public final class DonorBackedWorldMapWindow extends JFrame {
+    private static final int TIMELINE_VISIBLE_LIMIT = 140;
+
     private final DesktopWorldSession session = DesktopWorldSession.global();
     private final BarotraumaAssetCatalogue assets = new BarotraumaAssetCatalogue();
     private final JLabel worldStatus = new JLabel("No desktop world open");
@@ -98,6 +105,8 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private final JSpinner cadenceSeconds = new JSpinner(new SpinnerNumberModel(5, 1, 3600, 1));
     private final JSpinner ticksPerCycle = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
     private final JTextArea details = new JTextArea();
+    private final DefaultListModel<WorldObserverTimeline.Entry> timelineModel = new DefaultListModel<>();
+    private final JList<WorldObserverTimeline.Entry> timelineList = new JList<>(timelineModel);
     private final EuropaMapCanvas canvas = new EuropaMapCanvas(assets);
     private final JScrollPane mapScroll = new JScrollPane(canvas);
     private final Timer refreshTimer = new Timer(2000, event -> refresh());
@@ -108,6 +117,9 @@ public final class DonorBackedWorldMapWindow extends JFrame {
     private AutoCloseable passiveSubscription;
     private LoadedMap lastLoaded;
     private Selection selection = Selection.world();
+    private WorldObserverNavigation.Target recordTarget;
+    private String selectedTimelineKey;
+    private boolean suppressTimelineSelection;
     private boolean passiveControlsInitialized;
     private boolean busy;
 
@@ -134,13 +146,39 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         details.setWrapStyleWord(true);
         details.setText("Open a normalized desktop world to begin passive observation.\n");
 
+        timelineList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        timelineList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
+        timelineList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                                    boolean selectedCell, boolean focusedCell) {
+                super.getListCellRendererComponent(list, value, index, selectedCell, focusedCell);
+                if (value instanceof WorldObserverTimeline.Entry entry) {
+                    setText("[" + entry.tick() + "] " + entry.category() + " · " + entry.label()
+                            + " — " + entry.title() + " · sev " + entry.severity());
+                    setToolTipText(entry.summary() + " · " + entry.details());
+                }
+                return this;
+            }
+        });
+        timelineList.addListSelectionListener(event -> {
+            if (event.getValueIsAdjusting() || suppressTimelineSelection) return;
+            navigateTimeline(timelineList.getSelectedValue());
+        });
+
         mapScroll.getVerticalScrollBar().setUnitIncrement(24);
         mapScroll.getHorizontalScrollBar().setUnitIncrement(24);
         JScrollPane detailsScroll = new JScrollPane(details);
-        detailsScroll.setPreferredSize(new Dimension(430, 700));
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapScroll, detailsScroll);
-        split.setDividerLocation(1040);
-        split.setResizeWeight(0.74);
+        JPanel timelinePanel = new JPanel(new BorderLayout(4, 4));
+        timelinePanel.setBorder(BorderFactory.createTitledBorder("Recent committed world timeline"));
+        timelinePanel.add(new JScrollPane(timelineList), BorderLayout.CENTER);
+        JSplitPane evidenceSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, detailsScroll, timelinePanel);
+        evidenceSplit.setDividerLocation(500);
+        evidenceSplit.setResizeWeight(0.68);
+        evidenceSplit.setPreferredSize(new Dimension(470, 700));
+
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapScroll, evidenceSplit);
+        split.setDividerLocation(1010);
+        split.setResizeWeight(0.72);
         add(split, BorderLayout.CENTER);
 
         JPanel simulationControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
@@ -275,6 +313,10 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         world = selectedWorld;
         lastLoaded = null;
         selection = Selection.world();
+        recordTarget = null;
+        selectedTimelineKey = null;
+        clearTimelineSelection();
+        timelineModel.clear();
         passiveControlsInitialized = false;
         canvas.clear();
         canvas.setSelected(selection);
@@ -418,6 +460,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                     lastLoaded = loaded;
                     canvas.setSnapshots(loaded.registry(), loaded.passive(), loaded.natural(), loaded.civil());
                     canvas.setSelected(selection);
+                    refreshTimeline(loaded);
                     renderSelection();
                     assetStatus.setText("Donor roles " + loaded.coverage().donorCount()
                             + " · fallback roles " + loaded.coverage().fallbackCount());
@@ -433,10 +476,69 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         }.execute();
     }
 
+    private void refreshTimeline(LoadedMap loaded) {
+        List<WorldObserverTimeline.Entry> entries = WorldObserverTimeline.build(
+                loaded.passive(), loaded.natural(), loaded.civil());
+        suppressTimelineSelection = true;
+        try {
+            timelineModel.clear();
+            int selectedIndex = -1;
+            int count = Math.min(TIMELINE_VISIBLE_LIMIT, entries.size());
+            for (int index = 0; index < count; index++) {
+                WorldObserverTimeline.Entry entry = entries.get(index);
+                timelineModel.addElement(entry);
+                if (selectedTimelineKey != null && selectedTimelineKey.equals(entry.stableKey())) selectedIndex = index;
+            }
+            if (selectedIndex >= 0) timelineList.setSelectedIndex(selectedIndex);
+            else timelineList.clearSelection();
+        } finally {
+            suppressTimelineSelection = false;
+        }
+    }
+
+    private void navigateTimeline(WorldObserverTimeline.Entry entry) {
+        LoadedMap loaded = lastLoaded;
+        if (entry == null || loaded == null) return;
+        WorldObserverNavigation.Target target = WorldObserverNavigation.resolve(entry,
+                loaded.registry(), loaded.passive(), loaded.natural(), loaded.civil());
+        recordTarget = target;
+        selectedTimelineKey = entry.stableKey();
+        selection = selectionForAnchor(target.anchor(), loaded);
+        canvas.setSelected(selection);
+        renderSelection();
+        focusSelection(selection);
+    }
+
+    private Selection selectionForAnchor(WorldObserverNavigation.Anchor anchor, LoadedMap loaded) {
+        if (anchor == null || !anchor.present()) return Selection.world();
+        try {
+            if (anchor.kind() == WorldObserverNavigation.TargetKind.LOCATION) {
+                UUID id = UUID.fromString(anchor.id());
+                return loaded.registry().locations().stream().filter(row -> row.locationId().equals(id))
+                        .findFirst().map(Selection::location).orElse(Selection.world());
+            }
+            if (anchor.kind() == WorldObserverNavigation.TargetKind.VESSEL) {
+                UUID id = UUID.fromString(anchor.id());
+                return loaded.passive().vessels().stream().filter(row -> row.vesselId().equals(id))
+                        .findFirst().map(Selection::vessel).orElse(Selection.world());
+            }
+        } catch (IllegalArgumentException ignored) { }
+        return Selection.world();
+    }
+
     private void select(Selection requested) {
+        recordTarget = null;
+        selectedTimelineKey = null;
+        clearTimelineSelection();
         selection = requested == null ? Selection.world() : requested;
         canvas.setSelected(selection);
         renderSelection();
+    }
+
+    private void clearTimelineSelection() {
+        suppressTimelineSelection = true;
+        try { timelineList.clearSelection(); }
+        finally { suppressTimelineSelection = false; }
     }
 
     private void renderSelection() {
@@ -456,23 +558,32 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             }
         }
 
-        String text = switch (selection.kind()) {
-            case WORLD -> worldDossier(loaded);
-            case LOCATION -> loaded.registry().locations().stream()
-                    .filter(row -> row.locationId().equals(selection.id())).findFirst()
-                    .map(row -> WorldObserverInspector.location(row, loaded.registry(), loaded.passive())
-                            + "\n\n" + WorldObserverNaturalLayer.location(row.displayName(), loaded.natural())
-                            + "\n\n" + WorldObserverCivilLayer.location(row.displayName(), loaded.civil()))
-                    .orElseGet(() -> missingSelection(loaded));
-            case VESSEL -> loaded.passive().vessels().stream()
-                    .filter(row -> row.vesselId().equals(selection.id())).findFirst()
-                    .map(row -> WorldObserverInspector.vessel(row, loaded.passive()))
-                    .orElseGet(() -> missingSelection(loaded));
-            case ROUTE -> loaded.passive().vessels().stream()
-                    .filter(row -> row.vesselId().equals(selection.id())).findFirst()
-                    .map(row -> WorldObserverInspector.route(row, loaded.passive()))
-                    .orElseGet(() -> missingSelection(loaded));
-        };
+        String text;
+        if (recordTarget != null) {
+            text = WorldObserverRecordInspector.render(recordTarget, loaded.passive(), loaded.natural(), loaded.civil());
+            if (recordTarget.anchor().present()) {
+                text += "\n\nMAP ANCHOR\n" + recordTarget.anchor().kind() + " · "
+                        + recordTarget.anchor().label() + "\n";
+            }
+        } else {
+            text = switch (selection.kind()) {
+                case WORLD -> worldDossier(loaded);
+                case LOCATION -> loaded.registry().locations().stream()
+                        .filter(row -> row.locationId().equals(selection.id())).findFirst()
+                        .map(row -> WorldObserverInspector.location(row, loaded.registry(), loaded.passive())
+                                + "\n\n" + WorldObserverNaturalLayer.location(row.displayName(), loaded.natural())
+                                + "\n\n" + WorldObserverCivilLayer.location(row.displayName(), loaded.civil()))
+                        .orElseGet(() -> missingSelection(loaded));
+                case VESSEL -> loaded.passive().vessels().stream()
+                        .filter(row -> row.vesselId().equals(selection.id())).findFirst()
+                        .map(row -> WorldObserverInspector.vessel(row, loaded.passive()))
+                        .orElseGet(() -> missingSelection(loaded));
+                case ROUTE -> loaded.passive().vessels().stream()
+                        .filter(row -> row.vesselId().equals(selection.id())).findFirst()
+                        .map(row -> WorldObserverInspector.route(row, loaded.passive()))
+                        .orElseGet(() -> missingSelection(loaded));
+            };
+        }
         details.setText(text);
         details.setCaretPosition(0);
     }
@@ -491,6 +602,17 @@ public final class DonorBackedWorldMapWindow extends JFrame {
                 + "\n\n" + WorldObserverNaturalLayer.world(loaded.natural())
                 + "\n\n" + WorldObserverCivilLayer.world(loaded.civil())
                 + "\n\n" + WorldObserverTimeline.render(loaded.passive(), loaded.natural(), loaded.civil());
+    }
+
+    private void focusSelection(Selection requested) {
+        Point point = canvas.pointFor(requested);
+        if (point == null) return;
+        var viewport = mapScroll.getViewport();
+        Dimension extent = viewport.getExtentSize();
+        Dimension view = canvas.getPreferredSize();
+        int x = Math.max(0, Math.min(point.x - extent.width / 2, Math.max(0, view.width - extent.width)));
+        int y = Math.max(0, Math.min(point.y - extent.height / 2, Math.max(0, view.height - extent.height)));
+        viewport.setViewPosition(new Point(x, y));
     }
 
     private void zoomBy(double factor) {
@@ -537,6 +659,7 @@ public final class DonorBackedWorldMapWindow extends JFrame {
         disablePassiveButton.setEnabled(!busy && passiveRunning);
         cadenceSeconds.setEnabled(!busy && worldOpen && !passiveRunning);
         ticksPerCycle.setEnabled(!busy && worldOpen && !passiveRunning);
+        timelineList.setEnabled(!busy && worldOpen);
         zoomInButton.setEnabled(!busy);
         zoomOutButton.setEnabled(!busy);
         fitMapButton.setEnabled(!busy);
@@ -702,6 +825,25 @@ public final class DonorBackedWorldMapWindow extends JFrame {
             icons.clear();
             background = null;
             repaint();
+        }
+
+        Point pointFor(Selection requested) {
+            if (requested == null || registry == null || requested.kind() == SelectionKind.WORLD) return null;
+            Map<String, Point> positions = positions(registry.locations(), getWidth(), getHeight());
+            if (requested.kind() == SelectionKind.LOCATION) {
+                return registry.locations().stream().filter(row -> row.locationId().equals(requested.id()))
+                        .findFirst().map(row -> positions.get(row.displayName())).orElse(null);
+            }
+            if (passive == null) return null;
+            var vessel = passive.vessels().stream().filter(row -> row.vesselId().equals(requested.id()))
+                    .findFirst().orElse(null);
+            if (vessel == null) return null;
+            if (requested.kind() == SelectionKind.VESSEL) return vesselPosition(vessel, positions);
+            Point from = positions.get(vessel.currentLocation());
+            Point to = positions.get(vessel.destinationLocation());
+            if (from == null) return null;
+            if (to == null) return from;
+            return new Point((from.x + to.x) / 2, (from.y + to.y) / 2);
         }
 
         void clear() {
