@@ -1,0 +1,74 @@
+name: Review archived spatial site batch quality
+
+on:
+  push:
+    paths:
+      - 'scripts/review_spatial_site_batch.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spatial-site-batch-quality-review
+  cancel-in-progress: false
+
+jobs:
+  quality-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Analyze archived batch
+        env:
+          BATCH_ID: 2026-08-22-purpose-aware-variety-01
+        run: node scripts/review_spatial_site_batch.mjs
+
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spatial-site-quality-review-2026-08-22-purpose-aware-variety-01
+          path: |
+            artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/quality-review.json
+            artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01/QUALITY_REVIEW.md
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Commit review to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-01'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$BASE/quality-review.json" "$BASE/QUALITY_REVIEW.md"
+          if git diff --cached --quiet; then
+            echo 'Quality review already current.'
+            exit 0
+          fi
+          git commit -m 'Archive spatial site batch quality review [skip ci]'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo 'Unexpected quality-review conflict during rebase.' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push raced with concurrent main update; retrying ($attempt/5)."
+            sleep 2
+          done
+          echo 'Unable to publish quality review after retries.' >&2
+          exit 1
