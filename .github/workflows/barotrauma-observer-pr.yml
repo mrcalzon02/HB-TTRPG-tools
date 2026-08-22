@@ -54,3 +54,5 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Passive restart catch-up policy verification failed." }
           java -cp $runtimeCp io.github.mrcalzon02.barotrauma.simulation.PassiveWorldRestartCatchUpVerification
           if ($LASTEXITCODE -ne 0) { throw "Passive restart catch-up/health verification failed." }
+          java -cp $runtimeCp io.github.mrcalzon02.barotrauma.simulation.PassiveWorldRuntimeOwnershipVerification
+          if ($LASTEXITCODE -ne 0) { throw "Passive scheduler ownership/listener cleanup verification failed." }
