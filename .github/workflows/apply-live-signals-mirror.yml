@@ -1,0 +1,62 @@
+name: Apply Live Signals mirror migration
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/apply-live-signals-mirror.yml"
+      - "scripts/apply_live_signals_mirror.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-live-signals-mirror
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Apply migration
+        run: python scripts/apply_live_signals_mirror.py
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check live-signals-laboratory.js
+          node --check scientific-tools-entry.js
+
+      - name: Validate Signals laboratories
+        run: |
+          node scripts/validate-live-signals-laboratory.mjs
+          node scripts/validate-signals-laboratory.mjs
+          node scripts/validate-scientific-tools-extraction.mjs
+
+      - name: Check patch hygiene
+        run: git diff --check
+
+      - name: Commit migration result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm scripts/apply_live_signals_mirror.py .github/workflows/apply-live-signals-mirror.yml
+          git add live-signals-laboratory.js live-signals-laboratory.css scientific-tools-entry.js scripts/validate-live-signals-laboratory.mjs .github/workflows/scientific-tools-extraction.yml docs/live-signals-laboratory-mirror-and-safety.md
+          git diff --cached --check
+          git commit -m "Mirror Live Signals Laboratory with safety-gated band harvesting"
+          git push origin HEAD:main
