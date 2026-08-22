@@ -89,3 +89,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+# Push-trigger marker: workflow already exists on main.
