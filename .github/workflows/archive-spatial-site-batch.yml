@@ -35,11 +35,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run spatial regressions with preserved evidence
+      - name: Run spatial regressions into durable scratch evidence
         shell: bash
         run: |
           set +e
-          OUT="artifacts/spatial-site-batch/$BATCH_ID/validation"
+          OUT='/tmp/spatial-validation'
+          rm -rf "$OUT"
           mkdir -p "$OUT"
           status=0
           : > "$OUT/test-status.tsv"
@@ -56,22 +57,32 @@ jobs:
             cat "$OUT/$name.log"
             if [ "$rc" -ne 0 ]; then status=1; fi
           done
+          printf '%s\n' "$status" > "$OUT/regression-status"
           echo "REGRESSION_STATUS=$status" >> "$GITHUB_ENV"
           exit 0
 
-      - name: Generate archived batch with preserved evidence
+      - name: Generate archived batch
         shell: bash
         env:
           SOURCE_COMMIT: ${{ github.sha }}
         run: |
           set +e
-          node scripts/archive_spatial_site_batch.mjs > "/tmp/spatial-batch.log" 2>&1
+          node scripts/archive_spatial_site_batch.mjs > /tmp/spatial-batch.log 2>&1
           rc=$?
-          mkdir -p "artifacts/spatial-site-batch/$BATCH_ID/validation"
-          cp /tmp/spatial-batch.log "artifacts/spatial-site-batch/$BATCH_ID/validation/batch-runner.log"
           cat /tmp/spatial-batch.log
           echo "BATCH_STATUS=$rc" >> "$GITHUB_ENV"
           exit 0
+
+      - name: Merge validation evidence after batch output exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="artifacts/spatial-site-batch/$BATCH_ID/validation"
+          mkdir -p "$OUT"
+          cp /tmp/spatial-validation/test-status.tsv "$OUT/test-status.tsv"
+          cp /tmp/spatial-validation/*.log "$OUT/"
+          cp /tmp/spatial-validation/regression-status "$OUT/regression-status.txt"
+          cp /tmp/spatial-batch.log "$OUT/batch-runner.log"
 
       - name: Record workflow outcome
         shell: bash
@@ -79,9 +90,10 @@ jobs:
           node - <<'NODE'
           const fs=require('fs'),path=require('path');
           const dir=path.join('artifacts','spatial-site-batch',process.env.BATCH_ID,'validation');
-          fs.mkdirSync(dir,{recursive:true});
-          const tests=fs.existsSync(path.join(dir,'test-status.tsv'))?fs.readFileSync(path.join(dir,'test-status.tsv'),'utf8').trim().split(/\n/).filter(Boolean).map(line=>{const [test,exitCode]=line.split('\t');return{test,exitCode:Number(exitCode),ok:Number(exitCode)===0};}):[];
-          const outcome={schemaVersion:'1.0.0',recordType:'spatial-site-batch-workflow-outcome',batchId:process.env.BATCH_ID,sourceCommit:process.env.GITHUB_SHA,regressionStatus:Number(process.env.REGRESSION_STATUS||1),batchStatus:Number(process.env.BATCH_STATUS||1),tests,ok:Number(process.env.REGRESSION_STATUS||1)===0&&Number(process.env.BATCH_STATUS||1)===0};
+          const tests=fs.readFileSync(path.join(dir,'test-status.tsv'),'utf8').trim().split(/\n/).filter(Boolean).map(line=>{const [test,exitCode]=line.split('\t');return{test,exitCode:Number(exitCode),ok:Number(exitCode)===0};});
+          const regressionStatus=Number(fs.readFileSync(path.join(dir,'regression-status.txt'),'utf8').trim());
+          const batchStatus=Number(process.env.BATCH_STATUS||1);
+          const outcome={schemaVersion:'1.1.0',recordType:'spatial-site-batch-workflow-outcome',batchId:process.env.BATCH_ID,sourceCommit:process.env.GITHUB_SHA,regressionStatus,batchStatus,tests,ok:regressionStatus===0&&batchStatus===0};
           fs.writeFileSync(path.join(dir,'workflow-outcome.json'),JSON.stringify(outcome,null,2)+'\n');
           console.log(JSON.stringify(outcome,null,2));
           NODE
@@ -107,7 +119,7 @@ jobs:
           if git diff --cached --quiet; then
             echo 'Archive/evidence already present; nothing to commit.'
           else
-            git commit -m 'Archive connector-normalized spatial validation evidence [skip ci]'
+            git commit -m 'Record connector-normalized spatial regression evidence [skip ci]'
             for attempt in 1 2 3 4 5; do
               git fetch origin main
               if ! git rebase origin/main; then
