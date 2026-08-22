@@ -80,18 +80,26 @@ public final class OrganizationOperationsSchemaVerification {
 
             String separatists = text(connection,
                     "SELECT organization_id FROM world_organization WHERE organization_type='MAJOR_FACTION' AND display_name='Separatists'");
-            // Coalition Beta is not the Coalition HQ. Four sustained challenger pressure updates must transfer it.
+            long incumbentInfluence = scalar(connection,
+                    "SELECT political_influence FROM organization_station_presence p "
+                            + "JOIN station_control_state c ON c.station_id=p.station_id "
+                            + "WHERE p.station_id='station-2' AND p.organization_id=c.controlling_major_organization_id");
+            require(incumbentInfluence == 80,
+                    "Control-transfer verification expected the imported sovereign station baseline at 80 political influence.");
+
+            // Coalition Beta is not the Coalition HQ. The challenge rule requires >=12 points over the incumbent,
+            // so 95 is intentionally used here rather than an equal-strength 80/80 contest.
             try (Statement statement = connection.createStatement()) {
                 statement.execute("INSERT OR IGNORE INTO organization_station_presence(organization_id,station_id,world_id,"
                         + "political_influence,economic_influence,labor_influence,security_influence,presence_state,last_tick) "
-                        + "VALUES('" + separatists + "','station-2','world-1',80,30,20,30,'ACTIVE',10)");
+                        + "VALUES('" + separatists + "','station-2','world-1',95,30,20,30,'ACTIVE',10)");
                 for (int tick = 11; tick <= 14; tick++) {
-                    statement.executeUpdate("UPDATE organization_station_presence SET political_influence=80,last_tick=" + tick
+                    statement.executeUpdate("UPDATE organization_station_presence SET political_influence=95,last_tick=" + tick
                             + " WHERE organization_id='" + separatists + "' AND station_id='station-2'");
                 }
             }
             require("Separatists".equals(text(connection, "SELECT faction FROM world_station WHERE station_id='station-2'")),
-                    "Sustained political pressure did not transfer a normal station.");
+                    "Sustained superior political pressure did not transfer a normal station.");
             require(scalar(connection, "SELECT COUNT(*) FROM station_control_history WHERE station_id='station-2' "
                             + "AND cause_type='SUSTAINED_ORGANIZATION_INFLUENCE'") == 1,
                     "Station takeover did not preserve a durable control-history event.");
