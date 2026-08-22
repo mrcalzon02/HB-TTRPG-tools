@@ -42,3 +42,5 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Observer level-of-detail verification failed." }
           java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverTimelineVerification
           if ($LASTEXITCODE -ne 0) { throw "Unified observer timeline verification failed." }
+          java -cp $jar io.github.mrcalzon02.barotrauma.desktop.registry.WorldObserverNavigationVerification
+          if ($LASTEXITCODE -ne 0) { throw "Observer timeline navigation verification failed." }
