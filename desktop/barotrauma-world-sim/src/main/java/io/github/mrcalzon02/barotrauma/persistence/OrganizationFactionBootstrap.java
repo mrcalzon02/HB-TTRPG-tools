@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Locale;
 import java.util.Objects;
 
-/** Idempotently populates schema-033 organization records after stations exist. */
+/** Idempotently populates organization records after imported stations exist. */
 public final class OrganizationFactionBootstrap {
     private OrganizationFactionBootstrap() { }
 
@@ -41,7 +41,7 @@ public final class OrganizationFactionBootstrap {
     static void seed(Connection connection) throws SQLException {
         Objects.requireNonNull(connection, "connection");
         if (!tableExists(connection, "world_organization")) {
-            throw new SQLException("Organization bootstrap requires schema 033.");
+            throw new SQLException("Organization bootstrap requires schema 033 or newer.");
         }
         try (Statement statement = connection.createStatement()) {
             for (String sql : OrganizationFactionSchema.statements()) {
@@ -53,8 +53,17 @@ public final class OrganizationFactionBootstrap {
                     statement.execute(sql);
                 }
             }
+            if (tableExists(connection, "organization_operation")) {
+                for (String sql : OrganizationOperationsSchema.statements()) {
+                    String normalized = sql.stripLeading().toUpperCase(Locale.ROOT);
+                    if (normalized.startsWith("UPDATE WORLD_ORGANIZATION")) {
+                        statement.execute(sql);
+                    }
+                }
+            }
         }
         validateMajorFactionHeadquarters(connection);
+        validateInstitutionAlignment(connection);
     }
 
     private static void validateMajorFactionHeadquarters(Connection connection) throws SQLException {
@@ -64,6 +73,17 @@ public final class OrganizationFactionBootstrap {
                 + "AND h.sovereignty_locked=1)");
         if (missing != 0) {
             throw new SQLException("Every sovereign faction requires one permanent headquarters; missing=" + missing);
+        }
+    }
+
+    private static void validateInstitutionAlignment(Connection connection) throws SQLException {
+        if (!tableExists(connection, "organization_operation")) return;
+        long unaligned = scalar(connection, "SELECT COUNT(*) FROM world_organization "
+                + "WHERE organization_type NOT IN ('MAJOR_FACTION','SUBFACTION') "
+                + "AND home_station_id IS NOT NULL AND aligned_major_organization_id IS NULL");
+        if (unaligned != 0) {
+            throw new SQLException("Every headquartered non-sovereign organization must inherit its HQ sovereign alignment; missing="
+                    + unaligned);
         }
     }
 
@@ -87,7 +107,8 @@ public final class OrganizationFactionBootstrap {
              ResultSet result = statement.executeQuery("SELECT COALESCE(MAX(version),0) FROM schema_migration")) {
             int version = result.next() ? result.getInt(1) : 0;
             if (version != WorldStorageContracts.DATABASE_SCHEMA_VERSION || version < 33) {
-                throw new SQLException("Organization bootstrap requires current schema 033; found " + version + ".");
+                throw new SQLException("Organization bootstrap requires the current schema at version 33 or newer; found "
+                        + version + ".");
             }
         }
     }
