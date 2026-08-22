@@ -16,6 +16,9 @@ concurrency:
   group: spatial-site-batch-archive
   cancel-in-progress: false
 
+env:
+  BATCH_ID: 2026-08-22-purpose-aware-variety-02-connector-normalized
+
 jobs:
   archive-batch:
     runs-on: ubuntu-latest
@@ -32,20 +35,59 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run spatial regressions
+      - name: Run spatial regressions with preserved evidence
+        shell: bash
         run: |
-          node tests/spatial-engine.test.js
-          node tests/site-profile-layers.test.js
-          node tests/site-history-interactions.test.js
-          node tests/spatial-connector-normalization.test.js
+          set +e
+          OUT="artifacts/spatial-site-batch/$BATCH_ID/validation"
+          mkdir -p "$OUT"
+          status=0
+          : > "$OUT/test-status.tsv"
+          for test in \
+            tests/spatial-engine.test.js \
+            tests/site-profile-layers.test.js \
+            tests/site-history-interactions.test.js \
+            tests/spatial-connector-normalization.test.js
+          do
+            name="$(basename "$test" .js)"
+            node "$test" > "$OUT/$name.log" 2>&1
+            rc=$?
+            printf '%s\t%s\n' "$test" "$rc" >> "$OUT/test-status.tsv"
+            cat "$OUT/$name.log"
+            if [ "$rc" -ne 0 ]; then status=1; fi
+          done
+          echo "REGRESSION_STATUS=$status" >> "$GITHUB_ENV"
+          exit 0
 
-      - name: Generate archived batch
+      - name: Generate archived batch with preserved evidence
+        shell: bash
         env:
-          BATCH_ID: 2026-08-22-purpose-aware-variety-02-connector-normalized
           SOURCE_COMMIT: ${{ github.sha }}
-        run: node scripts/archive_spatial_site_batch.mjs
+        run: |
+          set +e
+          node scripts/archive_spatial_site_batch.mjs > "/tmp/spatial-batch.log" 2>&1
+          rc=$?
+          mkdir -p "artifacts/spatial-site-batch/$BATCH_ID/validation"
+          cp /tmp/spatial-batch.log "artifacts/spatial-site-batch/$BATCH_ID/validation/batch-runner.log"
+          cat /tmp/spatial-batch.log
+          echo "BATCH_STATUS=$rc" >> "$GITHUB_ENV"
+          exit 0
+
+      - name: Record workflow outcome
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path');
+          const dir=path.join('artifacts','spatial-site-batch',process.env.BATCH_ID,'validation');
+          fs.mkdirSync(dir,{recursive:true});
+          const tests=fs.existsSync(path.join(dir,'test-status.tsv'))?fs.readFileSync(path.join(dir,'test-status.tsv'),'utf8').trim().split(/\n/).filter(Boolean).map(line=>{const [test,exitCode]=line.split('\t');return{test,exitCode:Number(exitCode),ok:Number(exitCode)===0};}):[];
+          const outcome={schemaVersion:'1.0.0',recordType:'spatial-site-batch-workflow-outcome',batchId:process.env.BATCH_ID,sourceCommit:process.env.GITHUB_SHA,regressionStatus:Number(process.env.REGRESSION_STATUS||1),batchStatus:Number(process.env.BATCH_STATUS||1),tests,ok:Number(process.env.REGRESSION_STATUS||1)===0&&Number(process.env.BATCH_STATUS||1)===0};
+          fs.writeFileSync(path.join(dir,'workflow-outcome.json'),JSON.stringify(outcome,null,2)+'\n');
+          console.log(JSON.stringify(outcome,null,2));
+          NODE
 
       - name: Upload immutable workflow artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: spatial-site-batch-2026-08-22-purpose-aware-variety-02-connector-normalized
@@ -53,18 +95,19 @@ jobs:
           if-no-files-found: error
           retention-days: 90
 
-      - name: Commit archived results to main
+      - name: Commit archived results and validation evidence to main
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
-          ARCHIVE='artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized'
+          ARCHIVE="artifacts/spatial-site-batch/$BATCH_ID"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$ARCHIVE"
           if git diff --cached --quiet; then
-            echo 'Archive already present; nothing to commit.'
+            echo 'Archive/evidence already present; nothing to commit.'
           else
-            git commit -m 'Archive connector-normalized spatial site batch [skip ci]'
+            git commit -m 'Archive connector-normalized spatial validation evidence [skip ci]'
             for attempt in 1 2 3 4 5; do
               git fetch origin main
               if ! git rebase origin/main; then
@@ -79,11 +122,14 @@ jobs:
                 echo 'Unable to publish archive after retries.' >&2
                 exit 1
               fi
-              echo "Push raced with concurrent main update; retrying ($attempt/5)."
               sleep 2
             done
           fi
 
-      - name: Enforce batch acceptance
+      - name: Enforce regression and batch acceptance
+        shell: bash
         run: |
+          set -euo pipefail
+          test "${REGRESSION_STATUS:-1}" -eq 0
+          test "${BATCH_STATUS:-1}" -eq 0
           node -e "const s=require('./artifacts/spatial-site-batch/2026-08-22-purpose-aware-variety-02-connector-normalized/summary.json'); if(!s.acceptance.ok){console.error(JSON.stringify(s.acceptance,null,2));process.exit(1)} console.log(JSON.stringify(s.acceptance,null,2))"
