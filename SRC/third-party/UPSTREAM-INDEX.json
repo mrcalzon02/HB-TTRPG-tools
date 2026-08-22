@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Machine-readable index of third-party algorithm/source reference packages used by HB-TTRPG-tools.",
+  "entries": [
+    {
+      "id": "donjon-dungeon",
+      "path": "SRC/third-party/donjon-dungeon",
+      "provider": "donjon.bin.sh",
+      "source_page": "https://donjon.bin.sh/code/dungeon/",
+      "role": ["topology", "spatial-generation", "connectivity"],
+      "license_boundary": "CC-BY-NC-3.0-upstream-reference"
+    },
+    {
+      "id": "donjon-world",
+      "path": "SRC/third-party/donjon-world",
+      "provider": "donjon.bin.sh",
+      "source_page": "https://donjon.bin.sh/code/world/",
+      "role": ["world-generation", "terrain", "projection", "sea-level"],
+      "license_boundary": "GPL-2.0-or-later-upstream-source"
+    },
+    {
+      "id": "donjon-name",
+      "path": "SRC/third-party/donjon-name",
+      "provider": "donjon.bin.sh",
+      "source_page": "https://donjon.bin.sh/code/name/",
+      "role": ["markov", "name-generation", "language-style"],
+      "license_boundary": "public-domain-engine-with-separately-attributed-example-data"
+    }
+  ]
+}
