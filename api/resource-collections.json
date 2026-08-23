@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "description": "Expandable authoritative indexes and broader campaign/lore/operation-contract/Agent-Skills resources for HBFoundryAPI.",
   "operationContracts": {
     "getResource": {
@@ -85,6 +85,16 @@
         {"key":"parts","base":"","kind":"encounter-templates","description":"Encounter-template JSON parts."},
         {"key":"lethalityParts","base":"","kind":"encounter-lethality","description":"Matching lethality-profile JSON parts."}
       ]
+    },
+    {
+      "id": "blacklight.crew-operations",
+      "title": "Blacklight EXO Crew Operations Simulator",
+      "workspace": "Blacklight Continuum",
+      "kind": "operations-page",
+      "format": "html",
+      "path": "blacklight-exo-crew-operations.html",
+      "tags": ["blacklight", "EXO", "crew operations", "helm", "navigation", "gunnery", "engineering", "science", "comms"],
+      "supports": ["getResource"]
     },
     {
       "id": "blacklight.complete-lore-index",
