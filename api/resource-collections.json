@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.2.0",
-  "description": "Expandable authoritative indexes and broader campaign/lore/operation-contract resources for HBFoundryAPI.",
+  "schemaVersion": "1.3.0",
+  "description": "Expandable authoritative indexes and broader campaign/lore/operation-contract/Agent-Skills resources for HBFoundryAPI.",
   "operationContracts": {
     "getResource": {
       "call": "HBFoundryAPI.getResource(resourceId, options)",
@@ -36,6 +36,16 @@
     }
   },
   "resources": [
+    {
+      "id": "foundry.agent-skills",
+      "title": "Foundry Agent Skills Registry",
+      "workspace": "Foundry",
+      "kind": "skill-index",
+      "format": "json",
+      "path": "skills/index.json",
+      "tags": ["skills", "agents", "workflows", "open standard", "discoverability"],
+      "supports": ["getResource"]
+    },
     {
       "id": "foundry.operation-contracts",
       "title": "Foundry Self-Describing Operation Contracts",
