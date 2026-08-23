@@ -5,6 +5,7 @@
   if (!base) return;
 
   let sheetPromise = null;
+  let moduleSpatialEntryPromise = null;
   let barotraumaEntryPromise = null;
   let shadowrunEntryPromise = null;
   let scientificToolsEntryPromise = null;
@@ -224,6 +225,12 @@
   }
 
   async function prepareView(viewId) {
+    if (viewId === 'modules') {
+      moduleSpatialEntryPromise ||= loadScript('module-map-generator-entry.js?v=20260822-modules-interface-1');
+      await Promise.all([moduleSpatialEntryPromise, base.prepareView(viewId)]);
+      window.initModuleViewer?.();
+      return;
+    }
     if (viewId === 'utilities') {
       sheetPromise ||= loadScript('character-sheet-view.js');
       await sheetPromise;
