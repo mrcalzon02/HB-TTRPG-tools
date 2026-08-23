@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/apply_modules_spatial_interface.py'
+      - '.github/workflows/apply-modules-spatial-interface.yml'
   workflow_dispatch:
 
 permissions:
