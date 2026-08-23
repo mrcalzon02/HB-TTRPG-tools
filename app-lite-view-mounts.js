@@ -226,7 +226,15 @@
 
   async function prepareView(viewId) {
     if (viewId === 'modules') {
-      moduleSpatialEntryPromise ||= loadScript('module-map-generator-entry.js?v=20260822-modules-interface-1');
+      moduleSpatialEntryPromise ||= loadScript('semantic-spatial-engine.js')
+        .then(() => loadScript('semantic-content-populator.js'))
+        .then(() => loadScript('module-map-generator.js'))
+        .then(() => loadScript('vessel-hull-envelope.js'))
+        .then(() => loadScript('alien-vessel-generator.js'))
+        .then(() => loadScript('kaysender-airship-generator.js'))
+        .then(() => loadScript('module-map-generator-entry.js?v=20260822-modules-interface-2'))
+        .then(() => loadScript('alien-vessel-generator-entry.js?v=20260822-modules-interface-1'))
+        .then(() => loadScript('kaysender-airship-generator-entry.js?v=20260822-modules-interface-1'));
       await Promise.all([moduleSpatialEntryPromise, base.prepareView(viewId)]);
       window.initModuleViewer?.();
       return;
