@@ -20,7 +20,7 @@ GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable wi
 
 `skills/index.json` registers portable Agent Skills backed by stable Foundry capability/resource/laboratory IDs. Each skill lives at `skills/<name>/SKILL.md` and uses the Agent Skills open folder format. Skill instructions are workflow adapters only; detailed argument schemas remain authoritative in `api/operation-contracts.json`.
 
-Current skills:
+Current skills (21):
 - foundry-discovery
 - module-map-generation
 - alien-vessel-generation
@@ -32,12 +32,22 @@ Current skills:
 - binary-cube-laboratory
 - scientific-laboratory-workflows
 - blacklight-exo-navigation
+- blacklight-helm-operations
+- blacklight-navigation-operations
+- blacklight-gunnery-operations
+- blacklight-engineering-operations
+- blacklight-science-operations
+- blacklight-comms-operations
 - blacklight-character-creation
 - campaign-lore-retrieval
 - barotrauma-encounter-workflow
 - adventure-module-operations
 
 A skill's status may be callable, page-context, mixed-runtime, callable-resource, or guided/UI-bound. Do not treat UI/live-context skills as headless APIs unless the capability manifest is promoted accordingly.
+
+## Blacklight Crew Operations
+
+The Crew Operations simulator is registered as resource `blacklight.crew-operations`. Helm, Navigation, Gunnery, Engineering, Science/Scanning, and Comms remain six distinct skills while sharing the same authoritative simulator and station procedure banks. Station skills preserve the simulator's DM-facing World of Darkness-derived d10 handoff and do not treat a correctly entered console sequence as automatic character success.
 
 ## Self-describing calls
 
@@ -66,7 +76,7 @@ Use the capability manifest for identity, runtime scripts, globals, invocation m
 
 ## Campaign, rules, and lore resources
 
-The indexes register Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, and Era campaign; the Warhammer 40K lore story archive; Barotrauma encounter/lethality packs; and the major Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
+The indexes register Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, Era campaign, and Crew Operations; the Warhammer 40K lore story archive; Barotrauma encounter/lethality packs; and the major Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
 
 For in-browser or embedded-agent retrieval, HBFoundryAPI provides:
 - listResources(filter)
