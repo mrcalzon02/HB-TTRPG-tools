@@ -1,0 +1,73 @@
+name: Apply Modules spatial interface integration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/apply_modules_spatial_interface.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: modules-spatial-interface-integration
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Apply authoritative Modules integration
+        run: python scripts/apply_modules_spatial_interface.py
+
+      - name: Validate browser wiring and spatial regressions
+        run: |
+          node --check module-map-generator-entry.js
+          node --check app-lite-view-mounts.js
+          node tests/modules-spatial-interface.test.js
+          node tests/site-profile-layers.test.js
+          node tests/site-history-interactions.test.js
+          node tests/spatial-connector-normalization.test.js
+          node tests/site-interaction-quality-regressions.test.js
+
+      - name: Commit authoritative interface changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html app-lite-view-mounts.js module-map-generator-entry.js tests/modules-spatial-interface.test.js
+          if git diff --cached --quiet; then
+            echo 'Modules spatial interface already current.'
+            exit 0
+          fi
+          git commit -m 'Expose spatial site generation in Modules interface'
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo 'Unexpected Modules interface conflict during rebase.' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              echo 'Unable to publish Modules interface integration.' >&2
+              exit 1
+            fi
+            sleep 2
+          done
