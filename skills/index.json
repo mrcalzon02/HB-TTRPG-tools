@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "standard": "Agent Skills",
   "standardUrl": "https://agentskills.io/specification",
   "architectureRule": "Mirrored calls, not mirrored logic.",
@@ -103,6 +103,60 @@
       "resourceIds": ["blacklight.complete-lore-index"],
       "laboratoryIds": [],
       "useFor": ["Blacklight EXO jump", "FTL route", "EXO navigation", "cluster travel"]
+    },
+    {
+      "name": "blacklight-helm-operations",
+      "path": "skills/blacklight-helm-operations/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight helm", "piloting", "maneuvers", "docking", "evasion", "crew operations"]
+    },
+    {
+      "name": "blacklight-navigation-operations",
+      "path": "skills/blacklight-navigation-operations/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight navigation station", "transfer solutions", "dead reckoning", "rendezvous", "crew operations"]
+    },
+    {
+      "name": "blacklight-gunnery-operations",
+      "path": "skills/blacklight-gunnery-operations/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight gunnery", "fire control", "weapon systems", "engagement procedures", "crew operations"]
+    },
+    {
+      "name": "blacklight-engineering-operations",
+      "path": "skills/blacklight-engineering-operations/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight engineering", "power systems", "breakers", "coolant", "damage control", "crew operations"]
+    },
+    {
+      "name": "blacklight-science-operations",
+      "path": "skills/blacklight-science-operations/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight science station", "sensors", "scanning", "contact analysis", "crew operations"]
+    },
+    {
+      "name": "blacklight-comms-operations",
+      "path": "skills/blacklight-comms-operations/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight comms", "hailing", "secure links", "distress", "signal routing", "crew operations"]
     },
     {
       "name": "blacklight-character-creation",
