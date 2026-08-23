@@ -18,21 +18,26 @@ GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable wi
 
 ## Agent Skills
 
-`skills/index.json` registers portable Agent Skills backed by stable Foundry capability/resource IDs. Each skill lives at `skills/<name>/SKILL.md` and uses the Agent Skills open folder format. Skill instructions are workflow adapters only; detailed argument schemas remain authoritative in `api/operation-contracts.json`.
+`skills/index.json` registers portable Agent Skills backed by stable Foundry capability/resource/laboratory IDs. Each skill lives at `skills/<name>/SKILL.md` and uses the Agent Skills open folder format. Skill instructions are workflow adapters only; detailed argument schemas remain authoritative in `api/operation-contracts.json`.
 
-Initial skills:
+Current skills:
 - foundry-discovery
 - module-map-generation
 - alien-vessel-generation
 - kaysender-airship-generation
+- kaysender-npc-and-crew
+- kaysender-crafting-and-modules
+- spell-creation
 - signals-laboratory-analysis
 - binary-cube-laboratory
+- scientific-laboratory-workflows
 - blacklight-exo-navigation
+- blacklight-character-creation
 - campaign-lore-retrieval
 - barotrauma-encounter-workflow
-- blacklight-character-creation
+- adventure-module-operations
 
-A skill's status may be callable, page-context, or guided/UI-bound. Do not treat UI/live-context skills as headless APIs unless the capability manifest is promoted accordingly.
+A skill's status may be callable, page-context, mixed-runtime, callable-resource, or guided/UI-bound. Do not treat UI/live-context skills as headless APIs unless the capability manifest is promoted accordingly.
 
 ## Self-describing calls
 
@@ -81,4 +86,4 @@ The manifest treats laboratory capacity as a first-class surface. Portable solve
 
 ## Compatibility expectation
 
-An external MCP/OpenAI-tool/Agent-Skills adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
+An external MCP/OpenAI-tool/Agent-Skills adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, laboratory statuses, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
