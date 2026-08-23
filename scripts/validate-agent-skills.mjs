@@ -19,6 +19,7 @@ if (index.architectureRule !== 'Mirrored calls, not mirrored logic.') fail('skil
 if (!Array.isArray(index.skills) || !index.skills.length) fail('skills/index.json must contain at least one skill.');
 
 const capabilityIds = new Set((manifest.capabilities || []).map(item => item.id));
+const laboratoryIds = new Set((manifest.laboratories || []).map(item => item.id));
 const resourceIds = new Set((manifest.resources || []).map(item => item.id));
 for (const item of collections.resources || []) resourceIds.add(item.id);
 
@@ -74,6 +75,7 @@ for (const skill of index.skills) {
 
   for (const id of skill.capabilityIds || []) if (!capabilityIds.has(id)) fail(`${skill.name} references unknown capability ${id}.`);
   for (const id of skill.resourceIds || []) if (!resourceIds.has(id)) fail(`${skill.name} references unknown resource ${id}.`);
+  for (const id of skill.laboratoryIds || []) if (!laboratoryIds.has(id)) fail(`${skill.name} references unknown laboratory ${id}.`);
 }
 
 const skillDirs = fs.readdirSync(path.join(root, 'skills'), { withFileTypes: true })
@@ -87,4 +89,4 @@ for (const name of seen) if (!skillDirs.includes(name)) fail(`${name} is indexed
 const llms = read('llms.txt');
 if (!llms.includes('skills/index.json')) fail('llms.txt does not advertise the Agent Skills index.');
 
-console.log(`[agent-skills] validated ${index.skills.length} Agent Skills and all capability/resource references.`);
+console.log(`[agent-skills] validated ${index.skills.length} Agent Skills and all capability/resource/laboratory references.`);
