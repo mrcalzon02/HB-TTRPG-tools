@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0.0",
+  "standard": "Agent Skills",
+  "standardUrl": "https://agentskills.io/specification",
+  "architectureRule": "Mirrored calls, not mirrored logic.",
+  "basePath": "skills/",
+  "skills": [
+    {
+      "name": "foundry-discovery",
+      "path": "skills/foundry-discovery/SKILL.md",
+      "status": "callable-resource",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["foundry.search-index", "foundry.operation-contracts", "foundry.campaign-lore-index"],
+      "useFor": ["discover tools", "find repository capabilities", "enumerate generators", "find campaign resources", "inspect operation contracts"]
+    },
+    {
+      "name": "module-map-generation",
+      "path": "skills/module-map-generation/SKILL.md",
+      "status": "callable",
+      "capabilityIds": ["spatial.module-map.generate"],
+      "resourceIds": [],
+      "useFor": ["module maps", "dungeons", "buildings", "location generation", "encounter spaces"]
+    },
+    {
+      "name": "alien-vessel-generation",
+      "path": "skills/alien-vessel-generation/SKILL.md",
+      "status": "callable",
+      "capabilityIds": ["spatial.alien-vessel.generate"],
+      "resourceIds": [],
+      "useFor": ["alien ships", "vessel interiors", "multi-deck maps", "damaged reconnaissance vessels"]
+    },
+    {
+      "name": "kaysender-airship-generation",
+      "path": "skills/kaysender-airship-generation/SKILL.md",
+      "status": "callable",
+      "capabilityIds": ["kaysender.airship.generate"],
+      "resourceIds": ["kaysender.wiki-index", "kaysender.tools-registry"],
+      "useFor": ["Kaysender airships", "skyships", "crew spaces", "airship encounters", "vessel generation"]
+    },
+    {
+      "name": "signals-laboratory-analysis",
+      "path": "skills/signals-laboratory-analysis/SKILL.md",
+      "status": "callable",
+      "capabilityIds": ["signals.configuration.analyze", "signals.utilities"],
+      "resourceIds": ["foundry.operation-contracts"],
+      "useFor": ["RF analysis", "signals laboratory", "antenna calculations", "propagation", "heterodyne", "interfrequency", "environment maps"]
+    },
+    {
+      "name": "binary-cube-laboratory",
+      "path": "skills/binary-cube-laboratory/SKILL.md",
+      "status": "callable",
+      "capabilityIds": ["shadowrun.binary-cube"],
+      "resourceIds": ["foundry.operation-contracts"],
+      "useFor": ["Binary Cube Laboratory", "cube encryption", "TTRPG obfuscation", "projection diagnostics", "transformation traces"]
+    },
+    {
+      "name": "blacklight-exo-navigation",
+      "path": "skills/blacklight-exo-navigation/SKILL.md",
+      "status": "page-context",
+      "capabilityIds": ["blacklight.exo.jump.calculate"],
+      "resourceIds": ["blacklight.complete-lore-index"],
+      "useFor": ["Blacklight EXO jump", "FTL route", "EXO navigation", "cluster travel"]
+    },
+    {
+      "name": "campaign-lore-retrieval",
+      "path": "skills/campaign-lore-retrieval/SKILL.md",
+      "status": "callable-resource",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["foundry.campaign-lore-index", "kaysender.wiki-index", "blacklight.complete-lore-index", "warhammer.lore-index"],
+      "useFor": ["campaign lore", "setting research", "factions", "rules references", "wiki search", "cross-setting retrieval"]
+    },
+    {
+      "name": "barotrauma-encounter-workflow",
+      "path": "skills/barotrauma-encounter-workflow/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": [],
+      "resourceIds": ["barotrauma.encounter-index"],
+      "useFor": ["Barotrauma encounters", "lethality profiles", "encounter templates", "Europa operations"]
+    },
+    {
+      "name": "blacklight-character-creation",
+      "path": "skills/blacklight-character-creation/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["blacklight.random-character"],
+      "resourceIds": ["blacklight.character-options", "blacklight.character-creation", "blacklight.random-character-content", "blacklight.complete-lore-index"],
+      "useFor": ["Blacklight character creation", "random character", "archetypes", "equipment", "supernatural options"]
+    }
+  ]
+}
