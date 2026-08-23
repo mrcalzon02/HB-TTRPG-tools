@@ -4,15 +4,35 @@ Canonical site: https://mrcalzon02.github.io/HB-TTRPG-tools/
 Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json
 Operational argument contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
 Resource collections: https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json
+Agent Skills index: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json
+Agent Skills documentation: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/README.md
 Browser facade: https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js
 Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html
 Search index: https://mrcalzon02.github.io/HB-TTRPG-tools/search-index.json
 
 ## Integration doctrine
 
-Mirrored calls, not mirrored logic. The site's existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, and lore archives are authoritative. AI, MCP, plugin, and tool-calling adapters should discover and invoke those authorities rather than reproduce their algorithms.
+Mirrored calls, not mirrored logic. The site's existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, and lore archives are authoritative. AI, MCP, plugin, tool-calling, and Agent Skills adapters should discover and invoke those authorities rather than reproduce their algorithms.
 
 GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable with GET. Executable capabilities run through the canonical JavaScript modules (or an external MCP/tool bridge that mirrors their invocation descriptors). Do not infer a server-side RPC endpoint where none exists.
+
+## Agent Skills
+
+`skills/index.json` registers portable Agent Skills backed by stable Foundry capability/resource IDs. Each skill lives at `skills/<name>/SKILL.md` and uses the Agent Skills open folder format. Skill instructions are workflow adapters only; detailed argument schemas remain authoritative in `api/operation-contracts.json`.
+
+Initial skills:
+- foundry-discovery
+- module-map-generation
+- alien-vessel-generation
+- kaysender-airship-generation
+- signals-laboratory-analysis
+- binary-cube-laboratory
+- blacklight-exo-navigation
+- campaign-lore-retrieval
+- barotrauma-encounter-workflow
+- blacklight-character-creation
+
+A skill's status may be callable, page-context, or guided/UI-bound. Do not treat UI/live-context skills as headless APIs unless the capability manifest is promoted accordingly.
 
 ## Self-describing calls
 
@@ -53,10 +73,12 @@ For in-browser or embedded-agent retrieval, HBFoundryAPI provides:
 - siteIndex({query})
 - catalog(filter)
 
+The Agent Skills registry itself is retrievable as resource `foundry.agent-skills`.
+
 ## Laboratories
 
 The manifest treats laboratory capacity as a first-class surface. Portable solver engines (Signals Laboratory and Binary Cube) are callable and self-documented. Live Signals and other sensor/UI laboratories are separately identified as browser/device-context capabilities so external agents can discover them without falsely claiming headless access.
 
 ## Compatibility expectation
 
-An external MCP/OpenAI-tool adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
+An external MCP/OpenAI-tool/Agent-Skills adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
