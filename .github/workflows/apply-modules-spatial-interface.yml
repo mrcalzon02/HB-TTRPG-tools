@@ -32,7 +32,9 @@ jobs:
           node-version: '20'
 
       - name: Apply authoritative Modules integration
-        run: python scripts/apply_modules_spatial_interface.py
+        run: |
+          python scripts/apply_modules_spatial_interface.py
+          sed -i "1c'use strict';" tests/modules-spatial-interface.test.js
 
       - name: Validate browser wiring and spatial regressions
         run: |
