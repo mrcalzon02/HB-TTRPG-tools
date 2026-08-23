@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "standard": "Agent Skills",
   "standardUrl": "https://agentskills.io/specification",
   "architectureRule": "Mirrored calls, not mirrored logic.",
@@ -11,6 +11,7 @@
       "status": "callable-resource",
       "capabilityIds": ["foundry.site-index"],
       "resourceIds": ["foundry.search-index", "foundry.operation-contracts", "foundry.campaign-lore-index"],
+      "laboratoryIds": [],
       "useFor": ["discover tools", "find repository capabilities", "enumerate generators", "find campaign resources", "inspect operation contracts"]
     },
     {
@@ -19,6 +20,7 @@
       "status": "callable",
       "capabilityIds": ["spatial.module-map.generate"],
       "resourceIds": [],
+      "laboratoryIds": [],
       "useFor": ["module maps", "dungeons", "buildings", "location generation", "encounter spaces"]
     },
     {
@@ -27,6 +29,7 @@
       "status": "callable",
       "capabilityIds": ["spatial.alien-vessel.generate"],
       "resourceIds": [],
+      "laboratoryIds": [],
       "useFor": ["alien ships", "vessel interiors", "multi-deck maps", "damaged reconnaissance vessels"]
     },
     {
@@ -35,7 +38,35 @@
       "status": "callable",
       "capabilityIds": ["kaysender.airship.generate"],
       "resourceIds": ["kaysender.wiki-index", "kaysender.tools-registry"],
+      "laboratoryIds": [],
       "useFor": ["Kaysender airships", "skyships", "crew spaces", "airship encounters", "vessel generation"]
+    },
+    {
+      "name": "kaysender-npc-and-crew",
+      "path": "skills/kaysender-npc-and-crew/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["kaysender.tools-registry", "kaysender.wiki-index"],
+      "laboratoryIds": [],
+      "useFor": ["Kaysender NPCs", "crew generation", "population bands", "civilians", "airship crew"]
+    },
+    {
+      "name": "kaysender-crafting-and-modules",
+      "path": "skills/kaysender-crafting-and-modules/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["kaysender.tools-registry", "kaysender.wiki-index"],
+      "laboratoryIds": [],
+      "useFor": ["Kaysender crafting", "equipment", "gadgets", "ship modules", "ship weapons", "airship cores"]
+    },
+    {
+      "name": "spell-creation",
+      "path": "skills/spell-creation/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": ["spell creator", "Hypertext d20 spells", "spell design", "spell balance", "spell JSON"]
     },
     {
       "name": "signals-laboratory-analysis",
@@ -43,6 +74,7 @@
       "status": "callable",
       "capabilityIds": ["signals.configuration.analyze", "signals.utilities"],
       "resourceIds": ["foundry.operation-contracts"],
+      "laboratoryIds": ["signals-laboratory"],
       "useFor": ["RF analysis", "signals laboratory", "antenna calculations", "propagation", "heterodyne", "interfrequency", "environment maps"]
     },
     {
@@ -51,7 +83,17 @@
       "status": "callable",
       "capabilityIds": ["shadowrun.binary-cube"],
       "resourceIds": ["foundry.operation-contracts"],
+      "laboratoryIds": ["binary-cube-laboratory"],
       "useFor": ["Binary Cube Laboratory", "cube encryption", "TTRPG obfuscation", "projection diagnostics", "transformation traces"]
+    },
+    {
+      "name": "scientific-laboratory-workflows",
+      "path": "skills/scientific-laboratory-workflows/SKILL.md",
+      "status": "mixed-runtime",
+      "capabilityIds": ["signals.configuration.analyze", "signals.utilities", "shadowrun.binary-cube"],
+      "resourceIds": ["foundry.operation-contracts"],
+      "laboratoryIds": ["signals-laboratory", "binary-cube-laboratory", "live-signals-laboratory", "audio-laboratory", "steganalysis-laboratory", "double-slit-laboratory", "interstellar-media-collisions-laboratory"],
+      "useFor": ["scientific laboratories", "laboratory routing", "live signals", "audio laboratory", "steganalysis", "double slit", "interstellar collisions"]
     },
     {
       "name": "blacklight-exo-navigation",
@@ -59,7 +101,17 @@
       "status": "page-context",
       "capabilityIds": ["blacklight.exo.jump.calculate"],
       "resourceIds": ["blacklight.complete-lore-index"],
+      "laboratoryIds": [],
       "useFor": ["Blacklight EXO jump", "FTL route", "EXO navigation", "cluster travel"]
+    },
+    {
+      "name": "blacklight-character-creation",
+      "path": "skills/blacklight-character-creation/SKILL.md",
+      "status": "guided-ui-bound",
+      "capabilityIds": ["blacklight.random-character"],
+      "resourceIds": ["blacklight.character-options", "blacklight.character-creation", "blacklight.random-character-content", "blacklight.complete-lore-index"],
+      "laboratoryIds": [],
+      "useFor": ["Blacklight character creation", "random character", "archetypes", "equipment", "supernatural options"]
     },
     {
       "name": "campaign-lore-retrieval",
@@ -67,6 +119,7 @@
       "status": "callable-resource",
       "capabilityIds": ["foundry.site-index"],
       "resourceIds": ["foundry.campaign-lore-index", "kaysender.wiki-index", "blacklight.complete-lore-index", "warhammer.lore-index"],
+      "laboratoryIds": [],
       "useFor": ["campaign lore", "setting research", "factions", "rules references", "wiki search", "cross-setting retrieval"]
     },
     {
@@ -75,15 +128,17 @@
       "status": "guided-ui-bound",
       "capabilityIds": [],
       "resourceIds": ["barotrauma.encounter-index"],
+      "laboratoryIds": [],
       "useFor": ["Barotrauma encounters", "lethality profiles", "encounter templates", "Europa operations"]
     },
     {
-      "name": "blacklight-character-creation",
-      "path": "skills/blacklight-character-creation/SKILL.md",
-      "status": "guided-ui-bound",
-      "capabilityIds": ["blacklight.random-character"],
-      "resourceIds": ["blacklight.character-options", "blacklight.character-creation", "blacklight.random-character-content", "blacklight.complete-lore-index"],
-      "useFor": ["Blacklight character creation", "random character", "archetypes", "equipment", "supernatural options"]
+      "name": "adventure-module-operations",
+      "path": "skills/adventure-module-operations/SKILL.md",
+      "status": "mixed-runtime",
+      "capabilityIds": ["foundry.site-index"],
+      "resourceIds": ["modules.workspace"],
+      "laboratoryIds": [],
+      "useFor": ["adventure modules", "module usage", "encounters", "treasure", "rooms", "campaign hooks"]
     }
   ]
 }
