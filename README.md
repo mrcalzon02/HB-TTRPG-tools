@@ -4,6 +4,15 @@ A lightweight, browser-based toolkit for homebrew tabletop RPG tools, utilities,
 
 The project is intentionally simple: plain HTML, CSS, JSON, and JavaScript. It can run directly from GitHub Pages without an application build step.
 
+## Blacklight Intelligence: Charles
+
+Charles now has two repository-level reference documents intended for both human authors and AI integrations:
+
+- [Charles Personality Profile](docs/blacklight/charles-personality-profile.md) — the human-readable baseline for who Charles is, how he speaks, how he behaves, his relationship to the user, operating modes, and canon discipline.
+- [Charles Personality Engram Specification](docs/blacklight/charles-personality-engram.md) — the compact `CE1` semantic personality capsule for token-efficient prompt assembly across GPT, Gemini, Claude, local models, and other reasoning layers.
+
+The profile and engram describe Charles's presentation and response logic. Specific Blacklight facts, history, campaign state, and deeper Charles lore remain authoritative in the relevant repository sources and should be retrieved only when needed.
+
 ## Current structure
 
 - `index.html` — main menu page, character sheet utility, Kaysender module dashboard, and script loading.
