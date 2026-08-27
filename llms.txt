@@ -9,6 +9,10 @@ Agent Skills documentation: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/R
 Browser facade: https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js
 Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html
 Search index: https://mrcalzon02.github.io/HB-TTRPG-tools/search-index.json
+Charles engram manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram-manifest.json
+Charles CE1 personality engram: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json
+Charles personality profile: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-profile.md
+Definitive Charles entity record: https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-charles-record.html
 
 ## Integration doctrine
 
@@ -49,6 +53,12 @@ A skill's status may be callable, page-context, mixed-runtime, callable-resource
 
 The Crew Operations simulator is registered as resource `blacklight.crew-operations`. Helm, Navigation, Gunnery, Engineering, Science/Scanning, and Comms remain six distinct skills while sharing the same authoritative simulator and station procedure banks. Station skills preserve the simulator's DM-facing World of Darkness-derived d10 handoff and do not treat a correctly entered console sequence as automatic character success.
 
+## Charles personality and engram
+
+Charles is registered as a first-class Blacklight resource. `blacklight.charles-personality-engram` is the token-efficient CE1 machine-readable personality capsule. `blacklight.charles-personality-profile` is the human-readable behavioral baseline, `blacklight.charles-engram-manifest` is the discovery manifest, and `blacklight.charles-engram-spec` documents the compact schema.
+
+These resources describe the same definitive Charles entity documented in `blacklight-charles-record.html`: the extradimensional Matrioshka-brain intelligence. They are not a separate biological Charles, an alternate replacement character, or the public Faux Charles product persona. Load the CE1 JSON first for compact personality reconstruction, then retrieve the definitive entity record or deeper Blacklight lore only when the request needs it.
+
 ## Self-describing calls
 
 Do not guess positional arguments or inspect implementation source as the normal integration path. `api/operation-contracts.json` is the public operational contract index. It documents capability call style, exact operation names, positional argument order, argument names/types/units/defaults/ranges/enums, nested public fields, return descriptions, context requirements, and examples where useful.
@@ -76,7 +86,7 @@ Use the capability manifest for identity, runtime scripts, globals, invocation m
 
 ## Campaign, rules, and lore resources
 
-The indexes register Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, Era campaign, and Crew Operations; the Warhammer 40K lore story archive; Barotrauma encounter/lethality packs; and the major Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
+The indexes register Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, Era campaign, Crew Operations, and Charles personality/engram resources; the Warhammer 40K lore story archive; Barotrauma encounter/lethality packs; and the major Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
 
 For in-browser or embedded-agent retrieval, HBFoundryAPI provides:
 - listResources(filter)
