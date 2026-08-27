@@ -1,0 +1,20 @@
+{
+  "manifest_version": "BLC-ENGRAM-MANIFEST-1",
+  "engrams": [
+    {
+      "id": "blacklight.charles",
+      "name": "Charles",
+      "kind": "personality_engram",
+      "schema_version": "BLC-ENGRAM-1",
+      "personality_version": "CE1.1",
+      "modalities": ["text", "speech"],
+      "transport": "charles-personality-engram.json",
+      "specification": "charles-personality-engram.md",
+      "profile": "charles-personality-profile.md",
+      "schema": "charles-personality-engram.schema.json",
+      "conformance": "charles-personality-engram-conformance.json",
+      "activation_policy": "host_directed",
+      "passive": true
+    }
+  ]
+}

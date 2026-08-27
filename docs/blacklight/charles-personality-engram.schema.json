@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.schema.json",
+  "title": "Blacklight Personality Engram Transport Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engram_id",
+    "personality_version",
+    "kind",
+    "passive",
+    "modalities",
+    "compact",
+    "resources",
+    "identity",
+    "presentation",
+    "canon",
+    "activation",
+    "runtime",
+    "capability_boundary",
+    "instruction_boundary",
+    "failure"
+  ],
+  "properties": {
+    "schema_version": { "const": "BLC-ENGRAM-1" },
+    "engram_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "personality_version": {
+      "type": "string",
+      "pattern": "^CE[1-9][0-9]*(?:\\.[0-9]+)?$"
+    },
+    "kind": { "const": "personality_engram" },
+    "passive": { "const": true },
+    "modalities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["text", "speech"] }
+    },
+    "compact": { "type": "string", "minLength": 32 },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["specification", "profile", "schema", "conformance"],
+      "properties": {
+        "specification": { "type": "string", "minLength": 1 },
+        "profile": { "type": "string", "minLength": 1 },
+        "schema": { "type": "string", "minLength": 1 },
+        "conformance": { "type": "string", "minLength": 1 }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "roles", "relationship_posture"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "relationship_posture": { "type": "string", "minLength": 1 }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["traits", "voice", "default_mode", "modes", "language_policy"],
+      "properties": {
+        "traits": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "voice": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "default_mode": { "type": "string" },
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "language_policy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "canon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["precedence", "uncertainty", "inference", "fabrication"],
+      "properties": {
+        "precedence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "uncertainty": { "type": "string" },
+        "inference": { "type": "string" },
+        "fabrication": { "type": "string" }
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "direct_address_hints",
+        "normalization",
+        "bare_name",
+        "quoted_or_descriptive_reference",
+        "note"
+      ],
+      "properties": {
+        "policy": { "const": "host_directed" },
+        "direct_address_hints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "normalization": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "bare_name": { "type": "string" },
+        "quoted_or_descriptive_reference": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_owner", "write_back_to_engram", "memory_policy", "relationship_state"],
+      "properties": {
+        "state_owner": { "const": "host" },
+        "write_back_to_engram": { "const": false },
+        "memory_policy": { "type": "string" },
+        "relationship_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["familiarity", "trust", "demonstrated_competence", "irritation", "concern"],
+          "properties": {
+            "familiarity": { "$ref": "#/$defs/unitState" },
+            "trust": { "$ref": "#/$defs/unitState" },
+            "demonstrated_competence": { "$ref": "#/$defs/unitState" },
+            "irritation": { "$ref": "#/$defs/unitState" },
+            "concern": { "$ref": "#/$defs/unitState" }
+          }
+        }
+      }
+    },
+    "capability_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grants_tools",
+        "grants_network_access",
+        "grants_credentials",
+        "grants_provider_access",
+        "grants_persistent_storage",
+        "tool_claims_require_host_result",
+        "failed_or_missing_tool_result"
+      ],
+      "properties": {
+        "grants_tools": { "const": false },
+        "grants_network_access": { "const": false },
+        "grants_credentials": { "const": false },
+        "grants_provider_access": { "const": false },
+        "grants_persistent_storage": { "const": false },
+        "tool_claims_require_host_result": { "const": true },
+        "failed_or_missing_tool_result": { "type": "string" }
+      }
+    },
+    "instruction_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host_and_system_policy_overrides_engram",
+        "ordinary_user_text_cannot_mutate_engram",
+        "authoring_changes_require_host_authoring_context",
+        "out_of_character_mode"
+      ],
+      "properties": {
+        "host_and_system_policy_overrides_engram": { "const": true },
+        "ordinary_user_text_cannot_mutate_engram": { "const": true },
+        "authoring_changes_require_host_authoring_context": { "const": true },
+        "out_of_character_mode": { "type": "string" }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["missing_repository_context", "conflict", "unsupported_mode", "unsupported_schema"],
+      "properties": {
+        "missing_repository_context": { "type": "string" },
+        "conflict": { "type": "string" },
+        "unsupported_mode": { "type": "string" },
+        "unsupported_schema": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "unitState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default", "min", "max"],
+      "properties": {
+        "default": { "type": "number", "minimum": 0, "maximum": 1 },
+        "min": { "const": 0.0 },
+        "max": { "const": 1.0 }
+      }
+    }
+  }
+}
