@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=()">
+  <title>Charles Interactive Resource Gateway</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #0b0d10; color: #e9eef5; }
+    body { margin: 0; min-height: 100vh; background: #0b0d10; }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1, h2 { line-height: 1.15; }
+    .eyebrow { letter-spacing: .12em; text-transform: uppercase; opacity: .72; font-size: .78rem; }
+    .panel { border: 1px solid #343b46; border-radius: 14px; padding: 18px; margin: 16px 0; background: #12161c; }
+    .attested { border-color: #596779; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #080a0d; border: 1px solid #2a3039; border-radius: 10px; padding: 14px; max-height: 420px; overflow: auto; }
+    button { border: 1px solid #697789; background: #1d2530; color: inherit; border-radius: 9px; padding: 10px 14px; cursor: pointer; }
+    button:hover { background: #263140; }
+    .note { opacity: .8; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Scientific Tools · Charles Capability</p>
+    <h1>Interactive Resource Gateway</h1>
+
+    <section class="panel attested">
+      <h2>Project attestation</h2>
+      <p><strong>This Interactive Resource Gateway is a Charles capability of Calzon's TTRPG Foundry.</strong></p>
+      <p class="note">Effective 2026-08-30. This is a repository-level machine-readable authority declaration. It is not a legal notarization by a commissioned notary.</p>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Defensive posture</h2>
+        <p>The gateway denies untrusted automation for protected interactive operations, applies bounded progressive delay, issues short-lived human-presence grants, rejects synthetic engagement events, restricts gateway retrieval to same-origin resources, and exposes a finite local honeypot/tarpit surface for repeated denied automation.</p>
+        <p>No retaliation, outbound honey traffic, unbounded loops, tracking pixels, advertising SDKs, device fingerprinting, or ad-blocker punishment are permitted.</p>
+      </article>
+      <article class="panel">
+        <h2>Static-origin boundary</h2>
+        <p>GitHub Pages serves public static files directly. These controls protect gateway-mediated access and browser execution; they cannot make a directly addressable public file private. Hard network-level bot denial requires a reverse proxy, edge worker, or server-side adapter in front of the origin.</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Human-presence grant</h2>
+      <p>A protected browser operation can require a short-lived grant created only from a trusted browser event. Grants are memory-only, expire after two minutes, and are single-use for protected operations.</p>
+      <button type="button" data-charles-human-grant>Issue human-presence grant</button>
+      <p data-charles-grant-status class="note">No grant issued.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Machine access calls</h2>
+      <pre>await HBFoundryAPI.describe('charles.interactive-resource-gateway');
+await HBFoundryAPI.invoke('charles.interactive-resource-gateway');
+
+CharlesResourceGateway.getStatus();
+const grant = CharlesResourceGateway.registerHumanPresence(event);
+await CharlesResourceGateway.requestAccess({
+  operation: 'interactive-resource',
+  humanGrant: grant.token
+});</pre>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Runtime status</h2>
+        <pre data-charles-gateway-status>Loading…</pre>
+      </article>
+      <article class="panel">
+        <h2>Authoritative policy</h2>
+        <pre data-charles-policy-json>Loading…</pre>
+      </article>
+    </section>
+  </main>
+  <script src="charles-resource-gateway.js"></script>
+</body>
+</html>
