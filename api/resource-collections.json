@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.5.0",
-  "description": "Expandable authoritative indexes and broader campaign/lore/operation-contract/Agent-Skills/personality resources for HBFoundryAPI.",
+  "schemaVersion": "1.6.0",
+  "description": "Expandable authoritative indexes and broader campaign/lore/operation-contract/Agent-Skills/personality/Charles gateway resources for HBFoundryAPI.",
   "operationContracts": {
     "getResource": {
       "call": "HBFoundryAPI.getResource(resourceId, options)",
@@ -162,6 +162,29 @@
         "arguments",
         "schemas",
         "self-documenting"
+      ],
+      "supports": [
+        "getResource"
+      ]
+    },
+    {
+      "id": "charles.interactive-resource-gateway",
+      "title": "Charles Interactive Resource Gateway",
+      "workspace": "Scientific Tools",
+      "kind": "capability-contract",
+      "format": "json",
+      "path": "api/charles-interactive-resource-gateway.json",
+      "authority": "Charles",
+      "tags": [
+        "Charles",
+        "AI interface",
+        "access control",
+        "privacy",
+        "anti-abuse",
+        "automation",
+        "honeypot",
+        "tarpit",
+        "discoverability"
       ],
       "supports": [
         "getResource"
