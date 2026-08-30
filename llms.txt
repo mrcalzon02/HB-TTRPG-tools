@@ -13,6 +13,9 @@ Charles engram manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blackl
 Charles CE1 personality engram: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json
 Charles personality profile: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-profile.md
 Definitive Charles entity record: https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-charles-record.html
+Charles Interactive Resource Gateway policy: https://mrcalzon02.github.io/HB-TTRPG-tools/api/charles-interactive-resource-gateway.json
+Charles Interactive Resource Gateway page: https://mrcalzon02.github.io/HB-TTRPG-tools/charles-interactive-resource-gateway.html
+Charles Interactive Resource Gateway runtime: https://mrcalzon02.github.io/HB-TTRPG-tools/charles-resource-gateway.js
 
 ## Integration doctrine
 
@@ -59,6 +62,24 @@ Charles is registered as a first-class Blacklight resource. `blacklight.charles-
 
 These resources describe the same definitive Charles entity documented in `blacklight-charles-record.html`: the extradimensional Matrioshka-brain intelligence. They are not a separate biological Charles, an alternate replacement character, or the public Faux Charles product persona. Load the CE1 JSON first for compact personality reconstruction, then retrieve the definitive entity record or deeper Blacklight lore only when the request needs it.
 
+## Charles Interactive Resource Gateway
+
+`charles.interactive-resource-gateway` is a formally project-attested Charles capability in the Scientific Tools workspace. The authoritative policy is `api/charles-interactive-resource-gateway.json`; the browser runtime is `charles-resource-gateway.js`; the human control/status surface is `charles-interactive-resource-gateway.html`.
+
+Project attestation: **This Interactive Resource Gateway is a Charles capability of Calzon's TTRPG Foundry.** The policy's `legalNotarization` field is deliberately false: this is a machine-readable repository authority declaration, not a claim that a commissioned notary performed a legal notarization.
+
+Machine discovery and access calls:
+- `HBFoundryAPI.describe('charles.interactive-resource-gateway')`
+- `HBFoundryAPI.invoke('charles.interactive-resource-gateway')` — returns the authoritative attested policy resource.
+- `CharlesResourceGateway.getStatus()`
+- `CharlesResourceGateway.registerHumanPresence(event)`
+- `await CharlesResourceGateway.requestAccess({operation, humanGrant, clientContext})`
+- `await CharlesResourceGateway.guardedFetch(path, options)` — same-origin only.
+
+The gateway is defensive and non-retaliatory. Protected interactive operations deny untrusted automation by default, use short-lived single-use human-presence grants, apply token-bucket quotas and bounded progressive delay, reject synthetic engagement events, and provide only finite local honeypot/tarpit responses with hard delay/byte/concurrency ceilings. The gateway performs no outbound honeypot traffic, recursive work, infinite loops, counter-attacks, device fingerprinting, tracking-pixel activity, third-party analytics, advertising SDK loading, or ad-blocker punishment.
+
+Because the canonical site is hosted on GitHub Pages, these controls apply to gateway-mediated retrieval and interactive browser execution. Public static files remain directly GET-addressable. Hard network-level blocking of arbitrary bots, scrapers, or ad-tech clients requires a reverse proxy, edge worker, or server-side adapter in front of the origin; adapters implementing that upgrade must preserve the policy's bounded-work, no-retaliation, no-client-secret, and fail-closed requirements.
+
 ## Self-describing calls
 
 Do not guess positional arguments or inspect implementation source as the normal integration path. `api/operation-contracts.json` is the public operational contract index. It documents capability call style, exact operation names, positional argument order, argument names/types/units/defaults/ranges/enums, nested public fields, return descriptions, context requirements, and examples where useful.
@@ -70,7 +91,7 @@ HBFoundryAPI exposes the same documentation programmatically:
 - describe(capabilityId) — includes the capability's operationContract inline
 - listCapabilities(filter) — indicates whether a self-describing contract is available
 
-Executable dispatch is contract-gated: a dispatch operation must both be allowed by the capability manifest and have a documented operational contract.
+Executable dispatch is contract-gated: a dispatch operation must both be allowed by the capability manifest and have a documented operational contract. Static-resource capabilities such as the Charles Interactive Resource Gateway return their registered authoritative resource through `HBFoundryAPI.invoke` and do not fabricate a server-side RPC service.
 
 ## Important callable engines
 
@@ -81,6 +102,7 @@ Executable dispatch is contract-gated: a dispatch operation must both be allowed
 - signals.utilities — RF, antenna, RLC, propagation, mapping, heterodyne, interfrequency, adaptive sampling, and experiment utilities.
 - shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments.
 - blacklight.exo.jump.calculate — canonical EXO jump calculation when the EXO cartography page context is initialized.
+- charles.interactive-resource-gateway — attested Charles access-control policy plus bounded browser runtime.
 
 Use the capability manifest for identity, runtime scripts, globals, invocation methods, status, and limitations. Use the operational argument contracts for constructing calls.
 
@@ -106,4 +128,4 @@ The manifest treats laboratory capacity as a first-class surface. Portable solve
 
 ## Compatibility expectation
 
-An external MCP/OpenAI-tool/Agent-Skills adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, laboratory statuses, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
+An external MCP/OpenAI-tool/Agent-Skills adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, laboratory statuses, the Charles gateway's attested policy and enforcement boundary, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
