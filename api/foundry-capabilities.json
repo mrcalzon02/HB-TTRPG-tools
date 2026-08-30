@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "apiVersion": "2026-08-21",
+  "schemaVersion": "1.1.0",
+  "apiVersion": "2026-08-30",
   "name": "Calzon's TTRPG Foundry AI Capability Manifest",
   "baseUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
   "architecture": {
@@ -145,6 +145,23 @@
       "description": "The existing character generator is authoritative but still couples generation state to page controls. Its complete rule/content sources are exposed below as callable resources; no duplicate headless generator is invented here.",
       "page": "blacklight-random-character.html",
       "source": ["blacklight-random-character.js"]
+    },
+    {
+      "id": "charles.interactive-resource-gateway",
+      "title": "Charles Interactive Resource Gateway",
+      "workspace": "Scientific Tools",
+      "kind": "access-control",
+      "mode": "static-resource",
+      "status": "callable-policy-browser-runtime",
+      "deterministic": false,
+      "tags": ["Charles", "AI interface", "access control", "privacy", "anti-abuse", "automation", "honeypot", "tarpit", "human-presence"],
+      "description": "Discover the formally attested Charles access-control policy and its bounded browser runtime. The capability denies untrusted automation for protected gateway operations, supports short-lived human-presence grants, rejects synthetic engagement events, isolates gateway retrieval from ad-tech/cross-origin calls, and uses only finite non-retaliatory honeypot/tarpit behavior.",
+      "authority": "Charles",
+      "attestation": "This Interactive Resource Gateway is a Charles capability of Calzon's TTRPG Foundry.",
+      "resourceId": "charles.interactive-resource-gateway",
+      "runtime": {"scripts":["charles-resource-gateway.js"],"page":"charles-interactive-resource-gateway.html","notes":"GitHub Pages is a public static origin. Hard network-level denial of direct static-file requests requires a server/CDN enforcement layer."},
+      "accessCall": {"discover":"HBFoundryAPI.describe('charles.interactive-resource-gateway')","policy":"HBFoundryAPI.invoke('charles.interactive-resource-gateway')","browser":"CharlesResourceGateway.requestAccess(request)"},
+      "source": ["api/charles-interactive-resource-gateway.json","charles-resource-gateway.js","charles-interactive-resource-gateway.html"]
     },
     {
       "id": "foundry.site-index",
