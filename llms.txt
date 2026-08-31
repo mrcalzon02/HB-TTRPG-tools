@@ -1,6 +1,11 @@
 # Calzon's TTRPG Foundry — AI / Agent Discovery
 
 Canonical site: https://mrcalzon02.github.io/HB-TTRPG-tools/
+Top-level AI discovery manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json
+AI access index: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json
+AI discovery OpenAPI: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json
+Agent Skills onboarding profile: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json
+Human AI Access page: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
 Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json
 Operational argument contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
 Resource collections: https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json
@@ -22,6 +27,21 @@ Charles Interactive Resource Gateway runtime: https://mrcalzon02.github.io/HB-TT
 Mirrored calls, not mirrored logic. The site's existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, and lore archives are authoritative. AI, MCP, plugin, tool-calling, and Agent Skills adapters should discover and invoke those authorities rather than reproduce their algorithms.
 
 GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable with GET. Executable capabilities run through the canonical JavaScript modules (or an external MCP/tool bridge that mirrors their invocation descriptors). Do not infer a server-side RPC endpoint where none exists.
+
+## Machine discovery order
+
+When asked to examine this site for AI-available tools, do not reconstruct the answer only from human-facing page prose. Start with `.well-known/ai-capabilities.json`, then follow `api/ai/index.json` to the canonical capability, operation, resource, and Agent Skills registries.
+
+Use this sequence:
+1. Read `.well-known/ai-capabilities.json` for the authoritative machine entrypoints and transport status.
+2. Read `api/foundry-capabilities.json` to enumerate stable capability IDs, modes, statuses, runtime scripts, invocation descriptors, sources, and limitations.
+3. Read `api/operation-contracts.json` before constructing executable calls.
+4. Read `skills/index.json` and the selected `skills/<name>/SKILL.md` when task-specific Agent Skills workflow guidance is useful.
+5. Check the selected capability's runtime class and `api/ai/index.json` transport status before claiming the current reasoning environment can invoke it.
+
+The Binary Cube Laboratory is capability `shadowrun.binary-cube`; do not reduce it to a generic description of a browser encryption widget. The capability is callable in a compatible JavaScript host through the canonical Binary Cube engine and has exact operations documented in `api/operation-contracts.json`. The canonical GitHub Pages origin does not currently expose a remote MCP or RPC execution endpoint, so an external model without a compatible browser/tool host must report that transport limitation explicitly rather than silently reproducing the algorithm.
+
+The Charles Interactive Resource Gateway is discoverable as capability `charles.interactive-resource-gateway`. Its current browser runtime and policy do not constitute a deployed arbitrary remote browser automation service. External clients must distinguish gateway/browser runtime availability from remote tool transport availability.
 
 ## Agent Skills
 
