@@ -10,8 +10,9 @@ Each skill follows the Agent Skills open format: a directory whose `SKILL.md` be
 
 Canonical discovery surfaces:
 
+- `/api/ai/status-vocabulary.json` — shared availability and host-execution status meanings.
 - `/api/foundry-capabilities.json` — capability identity, runtime, status, and invocation.
-- `/api/operation-contracts.json` — exact callable argument and return contracts.
+- `/api/operation-contracts.json` — exact operation argument and return contracts.
 - `/api/resource-collections.json` — indexed campaign/lore/resource retrieval contracts.
 - `/foundry-api.js` — same-origin discovery/invocation facade.
 - `/skills/index.json` — machine-readable skill registry.
@@ -19,11 +20,15 @@ Canonical discovery surfaces:
 
 ## Status classes
 
-A skill may wrap one of three capability classes:
+Skill registry status values use `/api/ai/status-vocabulary.json`. The important static declarations are:
 
-1. **Callable** — the authoritative engine has a portable invocation contract and may be executed in an appropriate JavaScript/browser runtime.
-2. **Page-context** — the engine is callable only after its canonical page/runtime state is initialized.
-3. **Guided/UI-bound** — the authoritative implementation remains tied to UI/state. The skill may discover resources and guide use of the canonical page, but must not invent a replacement headless algorithm.
+1. **`onboardable`** — the skill can be loaded and understood, but that alone does not claim the current host can execute every referenced capability.
+2. **`runtime-required`** — the authoritative engine exists and requires the declared JavaScript/runtime host before execution can be attempted.
+3. **`page-context`** — execution requires the canonical page/runtime state and its declared dependencies.
+4. **`ui-bound`** — authoritative behavior remains tied to human UI/state; the skill may discover resources and guide use of the canonical page but must not invent a replacement headless algorithm.
+5. **`live-device-context`** — the capability requires live sensor, microphone, radio, hardware, or other device context.
+
+`runtime-compatible`, `self-test-passed`, `ready`, `incompatible`, and `degraded` are host-observed states. They must not be published as unconditional facts about an arbitrary external LLM environment.
 
 ## Adding a skill
 
