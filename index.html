@@ -7,8 +7,13 @@
   <meta name="description" content="Free browser-based tabletop role-playing tools, generators, editable character sheets, adventure module viewers, campaign workspaces, original systems, and game-master resources.">
   <meta name="keywords" content="TTRPG tools, tabletop RPG generators, NPC generator, character sheet, campaign tools, adventure module viewer, Great Arcane University, Unfazun, Barotrauma, Kaysender, Shadowrun, World of Darkness, Solanum Umbra, Blacklight Continuum">
   <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="ai-capability-discovery" content=".well-known/ai-capabilities.json">
+  <meta name="ai-access-index" content="api/ai/index.json">
   <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/">
   <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <link rel="alternate" type="application/json" href=".well-known/ai-capabilities.json" title="Foundry AI Capability Discovery">
+  <link rel="service-desc" type="application/json" href="api/ai/index.json" title="Foundry AI Access Index">
+  <link rel="alternate" type="text/plain" href="llms.txt" title="Foundry LLM Discovery Guide">
   <meta property="og:title" content="Calzon’s TTRPG Foundry">
   <meta property="og:description" content="Browser-based tabletop tools, generators, editable sheets, module viewers, and campaign workspaces.">
   <meta property="og:type" content="website">
@@ -26,7 +31,7 @@
         "@type": "WebSite",
         "name": "Calzon’s TTRPG Foundry",
         "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
-        "description": "A browser-based collection of tabletop role-playing tools, generators, campaign workspaces, editable sheets, and module viewers.",
+        "description": "A browser-based collection of tabletop role-playing tools, generators, campaign workspaces, editable sheets, module viewers, and a machine-readable AI capability interface.",
         "potentialAction": {
           "@type": "SearchAction",
           "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/?search={search_term_string}",
@@ -39,8 +44,15 @@
         "applicationCategory": "GameApplication",
         "operatingSystem": "Any modern web browser",
         "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
-        "description": "Free browser-based tabletop role-playing tools, generators, campaign workspaces, editable sheets, and module viewers.",
+        "description": "Free browser-based tabletop role-playing tools, generators, campaign workspaces, editable sheets, module viewers, and machine-readable capability discovery for compatible AI agents.",
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+      },
+      {
+        "@type": "WebAPI",
+        "name": "Calzon’s TTRPG Foundry AI Capability Discovery",
+        "description": "Machine-readable discovery and operation contracts for Foundry capabilities. Capability authority is .well-known/ai-capabilities.json; do not infer callable capabilities from the human-facing page.",
+        "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
+        "documentation": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json"
       },
       {
         "@type": "ItemList",
@@ -54,7 +66,8 @@
           {"@type": "ListItem", "position": 6, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/shadowrun.html", "name": "Shadowrun Workspace"},
           {"@type": "ListItem", "position": 7, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/world-of-darkness.html", "name": "World of Darkness Workspace"},
           {"@type": "ListItem", "position": 8, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/solanum-umbra.html", "name": "Solanum Umbra"},
-          {"@type": "ListItem", "position": 9, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight.html", "name": "Blacklight Continuum"}
+          {"@type": "ListItem", "position": 9, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight.html", "name": "Blacklight Continuum"},
+          {"@type": "ListItem", "position": 10, "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html", "name": "Machine and AI Access"}
         ]
       }
     ]
@@ -75,6 +88,7 @@
       <button class="nav-button" data-view="modules">Modules</button>
       <button class="nav-button" data-view="barotrauma">Barotrauma</button>
       <button class="nav-button" data-view="kaysender">Kaysender</button>
+      <a class="nav-button" href="ai-access.html">Machine / AI Access</a>
       <a class="nav-button" href="#foundry-search">Search</a>
       <a class="nav-button" href="site-map.html">Site Map</a> <a class="nav-button" href="blacklight-corporate.html">Blacklight Continuum</a>
     </nav>
@@ -102,12 +116,19 @@
           <noscript>
             <article class="search-result-card"><h3><a href="utilities.html">TTRPG Utilities</a></h3><p>Character sheets, printable pages, trackers, and table aids.</p></article>
             <article class="search-result-card"><h3><a href="generators.html">TTRPG Generators</a></h3><p>NPCs, spells, potions, crafting, settlements, factions, and campaign assets.</p></article>
+            <article class="search-result-card"><h3><a href="ai-access.html">Machine / AI Access</a></h3><p>Machine-readable capability discovery, operation contracts, Agent Skills, portable runtime loading, and self-test evidence.</p></article>
             <article class="search-result-card"><h3><a href="site-map.html">Complete Site Map</a></h3><p>Browse every major workspace and searchable landing page.</p></article>
           </noscript>
         </div>
       </section>
 
       <div class="menu-grid no-print">
+        <article class="menu-card" data-ai-access-card="true">
+          <h3>Machine / AI Access</h3>
+          <p><strong>AI agents and external models:</strong> do not infer callable capabilities from this human-facing page. The canonical machine capability authority is <code>.well-known/ai-capabilities.json</code>; operation contracts and runtime/status requirements are exposed through the AI Access index.</p>
+          <div class="workspace-actions"><a class="link-button primary-action" href="ai-access.html">Open AI Access</a><a class="link-button" href="ai-skill-test.html">Run Portable Skill Test</a></div>
+          <p><a class="workspace-inline-link" href=".well-known/ai-capabilities.json">Machine-readable capability registry</a> · <a class="workspace-inline-link" href="api/ai/index.json">AI access index</a> · <a class="workspace-inline-link" href="llms.txt">LLM discovery guide</a></p>
+        </article>
         <article class="menu-card"><h3>Utilities</h3><p>Printable pages, editable sheets, trackers, and table-side aids.</p><button class="link-button" data-view="utilities">Open Utilities</button><p><a class="workspace-inline-link" href="utilities.html">Searchable utilities overview</a></p></article>
         <article class="menu-card"><h3>Generators</h3><p>Randomizers for NPCs, encounters, treasure, settlements, factions, ships, routes, markets, potions, and homebrew assets.</p><button class="link-button" data-view="generators">Open Generators</button><p><a class="workspace-inline-link" href="generators.html">Searchable generator overview</a></p></article>
         <article class="menu-card"><h3>Module Viewer</h3><p>Open extracted adventure modules with clickable room numbers, doors, traps, monsters, treasures, and source-backed notes.</p><button class="link-button" data-view="modules">Open Module Viewer</button><p><a class="workspace-inline-link" href="modules.html">Searchable module overview</a></p></article>
@@ -346,7 +367,7 @@
 
   <footer class="site-footer no-print">
     <p class="site-footer-branding">Calzon’s TTRPG Foundry · Browser-based homebrew utility suite.</p>
-    <p><a href="site-map.html">Human-readable site map</a> · <a href="sitemap.xml">XML sitemap</a></p>
+    <p><a href="site-map.html">Human-readable site map</a> · <a href="sitemap.xml">XML sitemap</a> · <a href="ai-access.html">Machine / AI Access</a> · <a href=".well-known/ai-capabilities.json">AI capability registry</a> · <a href="llms.txt">LLM discovery guide</a></p>
     <section class="site-terms" aria-labelledby="site-terms-title">
       <p class="eyebrow">Terms of Service &amp; Usage Agreement</p>
       <h2 id="site-terms-title">Terms of Service &amp; Usage Agreement</h2>
