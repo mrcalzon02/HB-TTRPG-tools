@@ -11,10 +11,16 @@
     INCOMPATIBLE: 'incompatible'
   });
 
-  function currentBaseUrl() {
+  const INSTALL_BASE_URL = (() => {
     if (typeof document !== 'undefined' && document.currentScript && document.currentScript.src) {
       return new URL('./', document.currentScript.src).href;
     }
+    if (typeof location !== 'undefined' && location.href) return new URL('./', location.href).href;
+    return null;
+  })();
+
+  function currentBaseUrl() {
+    if (INSTALL_BASE_URL) return INSTALL_BASE_URL;
     if (typeof location !== 'undefined' && location.href) return new URL('./', location.href).href;
     throw new Error('A browser URL context or explicit baseUrl is required.');
   }
@@ -151,7 +157,7 @@
     }
     if (thrown) throw thrown;
     if (Object.prototype.hasOwnProperty.call(expect || {}, 'equals') && result !== expect.equals) {
-      throw new Error('Result did not equal expected scalar value.');
+      throw new Error(`Result did not equal expected scalar value.`);
     }
     if (expect?.equalsFixture) {
       const expected = fixtures[expect.equalsFixture];
