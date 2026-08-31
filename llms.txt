@@ -6,6 +6,10 @@ AI access index: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json
 Canonical status vocabulary: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json
 AI discovery OpenAPI: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json
 Agent Skills onboarding profile: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json
+Portable skill loader: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js
+Portable skill browser self-test: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html
+Binary Cube portable package: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/manifest.json
+Binary Cube deterministic self-test: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/self-test.json
 Human AI Access page: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
 Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json
 Operational argument contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
@@ -40,8 +44,9 @@ Use this sequence:
 4. Read `api/operation-contracts.json` before constructing executable calls.
 5. Read `skills/index.json` and the selected `skills/<name>/SKILL.md` when task-specific Agent Skills workflow guidance is useful.
 6. Check the selected capability's runtime class and `api/ai/index.json` transport status before claiming the current reasoning environment can execute it.
+7. When a portable package declares a deterministic self-test and the current host is runtime-compatible, run that self-test before promoting host state to `self-test-passed` or `ready`.
 
-The Binary Cube Laboratory is capability `shadowrun.binary-cube`; do not reduce it to a generic description of a browser encryption widget. Its static status is `runtime-required`: the canonical engine and exact operations are documented, but execution depends on a compatible JavaScript host. The canonical GitHub Pages origin does not currently expose a remote MCP or RPC execution endpoint, so an external model without a compatible browser/tool host must report that transport limitation explicitly rather than silently reproducing the algorithm.
+The Binary Cube Laboratory is capability `shadowrun.binary-cube`; do not reduce it to a generic description of a browser encryption widget. Its static status is `runtime-required`: the canonical engine and exact operations are documented, but execution depends on a compatible JavaScript host. Its portable companion metadata is `skills/binary-cube-laboratory/manifest.json`; deterministic fixtures and checks are in `skills/binary-cube-laboratory/self-test.json`; small call examples are in `skills/binary-cube-laboratory/examples.json`. The generic same-origin proof harness is `ai-skill-test.html`, backed by `ai-skill-loader.js`. The canonical GitHub Pages origin does not expose a remote MCP or RPC execution endpoint, so an external model without a compatible browser/tool host must report that transport limitation explicitly rather than silently reproducing the algorithm.
 
 The Charles Interactive Resource Gateway is discoverable as capability `charles.interactive-resource-gateway`. Its current browser runtime and policy do not constitute a deployed arbitrary remote browser automation service. External clients must distinguish gateway/browser runtime availability from remote tool transport availability.
 
@@ -73,6 +78,12 @@ Current skills (21):
 - adventure-module-operations
 
 Skill statuses use `api/ai/status-vocabulary.json`. Static registry values such as `onboardable`, `runtime-required`, `page-context`, `ui-bound`, and `live-device-context` describe what must exist before execution can be attempted. Host-observed values such as `runtime-compatible`, `self-test-passed`, `ready`, `incompatible`, and `degraded` must be determined by the consuming environment and must not be inferred merely from the existence of a skill.
+
+## Portable skill proof
+
+The first complete portable browser-JavaScript proof target is `binary-cube-laboratory`. Its Agent Skill remains the behavioral authority; its companion `manifest.json` identifies the canonical runtime and security/runtime constraints without copying implementation logic. `self-test.json` contains deterministic, non-destructive, credential-free fixtures generated from the canonical `shadowrun-binary-cube-engine.js` revision identified in that package. `examples.json` demonstrates calls while leaving argument definitions authoritative in `api/operation-contracts.json`.
+
+`ai-skill-loader.js` is the generic same-origin browser loader. It accepts only a registered Agent Skill, validates the companion package against `skills/index.json`, `api/foundry-capabilities.json`, and `api/operation-contracts.json`, rejects cross-origin runtime paths, loads only a capability-allow-listed first-party runtime, verifies the expected global export, and runs only contract-declared/allow-listed self-test operations. `ai-skill-test.html` is the human/browser proof surface. Repository presence alone does not constitute `self-test-passed` or `ready`; those host-observed statuses require an actual successful execution in the current compatible host.
 
 ## Blacklight Crew Operations
 
@@ -122,7 +133,7 @@ Executable dispatch is contract-gated: a dispatch operation must both be allowed
 - kaysender.airship.generate — Kaysender airship spatial generation; browser-JavaScript runtime required.
 - signals.configuration.analyze — full Signals Laboratory analysis; browser-JavaScript runtime required.
 - signals.utilities — RF, antenna, RLC, propagation, mapping, heterodyne, interfrequency, adaptive sampling, and experiment utilities; browser-JavaScript runtime required.
-- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments; browser-JavaScript runtime required.
+- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments; browser-JavaScript runtime required; portable package/self-test available.
 - blacklight.exo.jump.calculate — canonical EXO jump calculation in the required EXO cartography page context.
 - charles.interactive-resource-gateway — attested Charles access-control policy plus bounded browser runtime.
 
