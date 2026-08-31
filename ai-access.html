@@ -40,7 +40,7 @@
     <section class="hero-card">
       <p class="eyebrow">Start here for machine discovery</p>
       <h2>Do not reconstruct the Foundry's capabilities from page prose.</h2>
-      <p>External LLMs, agents, tool hosts, and adapters should begin with the machine discovery manifest below, then resolve the canonical capability registry, exact operation contracts, resource collections, and Agent Skills index. These documents are the machine authority; this page is only the human-readable entrypoint.</p>
+      <p>External LLMs, agents, tool hosts, and adapters should begin with the machine discovery manifest below, then resolve the canonical status vocabulary, capability registry, exact operation contracts, resource collections, and Agent Skills index. These documents are the machine authority; this page is only the human-readable entrypoint.</p>
       <p><a class="link-button primary-action" href=".well-known/ai-capabilities.json">Open AI Capability Discovery Manifest</a></p>
     </section>
 
@@ -56,13 +56,18 @@
           <p><a href="api/ai/index.json">api/ai/index.json</a></p>
         </article>
         <article class="module-card">
+          <h3>Status Vocabulary</h3>
+          <p>Canonical meanings for discovery, onboarding, runtime requirements, page/device context, host compatibility, self-test state, and readiness.</p>
+          <p><a href="api/ai/status-vocabulary.json">api/ai/status-vocabulary.json</a></p>
+        </article>
+        <article class="module-card">
           <h3>Capability Registry</h3>
           <p>Stable capability IDs, modes, runtime scripts, invocation descriptors, statuses, sources, and limitations.</p>
           <p><a href="api/foundry-capabilities.json">api/foundry-capabilities.json</a></p>
         </article>
         <article class="module-card">
           <h3>Operation Contracts</h3>
-          <p>Exact callable operation names, argument order, types, units, enums, defaults, context requirements, and return descriptions.</p>
+          <p>Exact operation names, argument order, types, units, enums, defaults, context requirements, and return descriptions.</p>
           <p><a href="api/operation-contracts.json">api/operation-contracts.json</a></p>
         </article>
         <article class="module-card">
@@ -87,11 +92,11 @@
       <div class="section-heading">
         <p class="eyebrow">Execution truth</p>
         <h2 id="runtime-status-title">Runtime and transport status</h2>
-        <p>GitHub Pages is a static origin. Public resources are directly retrievable, while executable capabilities require the runtime declared by their canonical descriptor.</p>
+        <p>GitHub Pages is a static origin. Public resources are directly retrievable, while executable capabilities require the runtime declared by their canonical descriptor. Static availability does not imply that an arbitrary LLM host is runtime-compatible or ready.</p>
       </div>
       <div class="module-grid">
         <article class="module-card"><h3>Static GET</h3><p><strong>Ready.</strong> JSON, text, HTML, JavaScript, manifests, skills, and public resources can be fetched directly.</p></article>
-        <article class="module-card"><h3>Browser JavaScript</h3><p><strong>Ready in a compatible host.</strong> The host must load the canonical scripts and execute the declared global/method or dispatch contract.</p></article>
+        <article class="module-card"><h3>Browser JavaScript</h3><p><strong>Runtime required.</strong> The host must load the canonical scripts and execute the declared global/method or dispatch contract before host-level readiness can be established.</p></article>
         <article class="module-card"><h3>Page / Device Context</h3><p><strong>Conditional.</strong> Page-bound, UI-bound, and sensor capabilities require their declared browser or device context.</p></article>
         <article class="module-card"><h3>Remote MCP / RPC</h3><p><strong>Not deployed.</strong> Discovery files must not be interpreted as an active remote execution service. A future transport adapter can mirror the same capability IDs and contracts.</p></article>
       </div>
@@ -105,15 +110,15 @@
       <div class="module-grid">
         <article class="module-card">
           <h3>Binary Cube Laboratory</h3>
-          <p><code>shadowrun.binary-cube</code> is a canonical browser-JavaScript capability. Exact operations and arguments are defined in the operation-contract registry. It is experimental TTRPG obfuscation research, not production cryptography.</p>
+          <p><code>shadowrun.binary-cube</code> is a canonical browser-JavaScript capability with status <code>runtime-required</code>. Exact operations and arguments are defined in the operation-contract registry. It is experimental TTRPG obfuscation research, not production cryptography.</p>
         </article>
         <article class="module-card">
           <h3>Signals Laboratory</h3>
-          <p><code>signals.configuration.analyze</code> and <code>signals.utilities</code> expose the authoritative Signals Laboratory analysis and pure utility functions through browser-JavaScript invocation descriptors.</p>
+          <p><code>signals.configuration.analyze</code> and <code>signals.utilities</code> expose the authoritative Signals Laboratory analysis and pure utility functions through browser-JavaScript invocation descriptors and require a compatible runtime host.</p>
         </article>
         <article class="module-card">
           <h3>Blacklight EXO Jump</h3>
-          <p><code>blacklight.exo.jump.calculate</code> is callable when the EXO cartography context and declared dependencies are initialized. The registry reports that dependency rather than inventing a duplicate headless cluster model.</p>
+          <p><code>blacklight.exo.jump.calculate</code> has status <code>page-context</code>: it can execute only when the EXO cartography context and declared dependencies are initialized. The registry reports that dependency rather than inventing a duplicate headless cluster model.</p>
         </article>
         <article class="module-card">
           <h3>Charles Interactive Resource Gateway</h3>
@@ -127,7 +132,7 @@
         <p class="eyebrow">Loadable LLM workflows</p>
         <h2 id="skill-onboarding-title">Agent Skills onboarding</h2>
       </div>
-      <p>The Foundry uses the open Agent Skills folder format already present under <code>skills/</code>. An external client should load <a href="api/ai/skill-onboarding.json">the onboarding profile</a>, select a skill from <a href="skills/index.json">the skill registry</a>, load its <code>SKILL.md</code>, then resolve every referenced capability and operation against the canonical registries before invoking anything.</p>
+      <p>The Foundry uses the open Agent Skills folder format already present under <code>skills/</code>. An external client should load <a href="api/ai/skill-onboarding.json">the onboarding profile</a>, read <a href="api/ai/status-vocabulary.json">the status vocabulary</a>, select a skill from <a href="skills/index.json">the skill registry</a>, load its <code>SKILL.md</code>, then resolve every referenced capability and operation against the canonical registries before invoking anything.</p>
       <p>A skill describes a workflow. It does not grant credentials, create permissions, or magically attach an execution transport.</p>
     </section>
 
@@ -136,7 +141,7 @@
         <p class="eyebrow">External-model acceptance test</p>
         <h2 id="acceptance-title">Expected behavior</h2>
       </div>
-      <p>When asked to examine this Foundry for AI-available tools, a capable external model should identify and read the machine discovery manifest instead of only summarizing the human tool directory. When asked about Cube Encryption, it should identify <code>shadowrun.binary-cube</code>, inspect its operation contract, and then report whether its current environment can satisfy the declared browser-JavaScript runtime. When no compatible transport is attached, an explicit runtime limitation is a correct result.</p>
+      <p>When asked to examine this Foundry for AI-available tools, a capable external model should identify and read the machine discovery manifest instead of only summarizing the human tool directory. When asked about Cube Encryption, it should identify <code>shadowrun.binary-cube</code>, inspect its operation contract, read its <code>runtime-required</code> status correctly, and then report whether its current environment can satisfy the declared browser-JavaScript runtime. When no compatible transport is attached, an explicit runtime limitation is a correct result.</p>
     </section>
   </main>
 </body>
