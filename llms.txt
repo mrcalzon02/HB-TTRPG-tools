@@ -3,6 +3,7 @@
 Canonical site: https://mrcalzon02.github.io/HB-TTRPG-tools/
 Top-level AI discovery manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json
 AI access index: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json
+Canonical status vocabulary: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json
 AI discovery OpenAPI: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json
 Agent Skills onboarding profile: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json
 Human AI Access page: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
@@ -30,16 +31,17 @@ GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable wi
 
 ## Machine discovery order
 
-When asked to examine this site for AI-available tools, do not reconstruct the answer only from human-facing page prose. Start with `.well-known/ai-capabilities.json`, then follow `api/ai/index.json` to the canonical capability, operation, resource, and Agent Skills registries.
+When asked to examine this site for AI-available tools, do not reconstruct the answer only from human-facing page prose. Start with `.well-known/ai-capabilities.json`, then follow `api/ai/index.json` to the canonical status vocabulary, capability, operation, resource, and Agent Skills registries.
 
 Use this sequence:
 1. Read `.well-known/ai-capabilities.json` for the authoritative machine entrypoints and transport status.
-2. Read `api/foundry-capabilities.json` to enumerate stable capability IDs, modes, statuses, runtime scripts, invocation descriptors, sources, and limitations.
-3. Read `api/operation-contracts.json` before constructing executable calls.
-4. Read `skills/index.json` and the selected `skills/<name>/SKILL.md` when task-specific Agent Skills workflow guidance is useful.
-5. Check the selected capability's runtime class and `api/ai/index.json` transport status before claiming the current reasoning environment can invoke it.
+2. Read `api/ai/status-vocabulary.json` before interpreting availability or execution state.
+3. Read `api/foundry-capabilities.json` to enumerate stable capability IDs, modes, statuses, runtime scripts, invocation descriptors, sources, and limitations.
+4. Read `api/operation-contracts.json` before constructing executable calls.
+5. Read `skills/index.json` and the selected `skills/<name>/SKILL.md` when task-specific Agent Skills workflow guidance is useful.
+6. Check the selected capability's runtime class and `api/ai/index.json` transport status before claiming the current reasoning environment can execute it.
 
-The Binary Cube Laboratory is capability `shadowrun.binary-cube`; do not reduce it to a generic description of a browser encryption widget. The capability is callable in a compatible JavaScript host through the canonical Binary Cube engine and has exact operations documented in `api/operation-contracts.json`. The canonical GitHub Pages origin does not currently expose a remote MCP or RPC execution endpoint, so an external model without a compatible browser/tool host must report that transport limitation explicitly rather than silently reproducing the algorithm.
+The Binary Cube Laboratory is capability `shadowrun.binary-cube`; do not reduce it to a generic description of a browser encryption widget. Its static status is `runtime-required`: the canonical engine and exact operations are documented, but execution depends on a compatible JavaScript host. The canonical GitHub Pages origin does not currently expose a remote MCP or RPC execution endpoint, so an external model without a compatible browser/tool host must report that transport limitation explicitly rather than silently reproducing the algorithm.
 
 The Charles Interactive Resource Gateway is discoverable as capability `charles.interactive-resource-gateway`. Its current browser runtime and policy do not constitute a deployed arbitrary remote browser automation service. External clients must distinguish gateway/browser runtime availability from remote tool transport availability.
 
@@ -70,7 +72,7 @@ Current skills (21):
 - barotrauma-encounter-workflow
 - adventure-module-operations
 
-A skill's status may be callable, page-context, mixed-runtime, callable-resource, or guided/UI-bound. Do not treat UI/live-context skills as headless APIs unless the capability manifest is promoted accordingly.
+Skill statuses use `api/ai/status-vocabulary.json`. Static registry values such as `onboardable`, `runtime-required`, `page-context`, `ui-bound`, and `live-device-context` describe what must exist before execution can be attempted. Host-observed values such as `runtime-compatible`, `self-test-passed`, `ready`, `incompatible`, and `degraded` must be determined by the consuming environment and must not be inferred merely from the existence of a skill.
 
 ## Blacklight Crew Operations
 
@@ -113,15 +115,15 @@ HBFoundryAPI exposes the same documentation programmatically:
 
 Executable dispatch is contract-gated: a dispatch operation must both be allowed by the capability manifest and have a documented operational contract. Static-resource capabilities such as the Charles Interactive Resource Gateway return their registered authoritative resource through `HBFoundryAPI.invoke` and do not fabricate a server-side RPC service.
 
-## Important callable engines
+## Important runtime-backed capabilities
 
-- spatial.module-map.generate — purpose-aware module/location generation.
-- spatial.alien-vessel.generate — semantic multi-deck alien vessel generation.
-- kaysender.airship.generate — Kaysender airship spatial generation.
-- signals.configuration.analyze — full Signals Laboratory analysis.
-- signals.utilities — RF, antenna, RLC, propagation, mapping, heterodyne, interfrequency, adaptive sampling, and experiment utilities.
-- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments.
-- blacklight.exo.jump.calculate — canonical EXO jump calculation when the EXO cartography page context is initialized.
+- spatial.module-map.generate — purpose-aware module/location generation; browser-JavaScript runtime required.
+- spatial.alien-vessel.generate — semantic multi-deck alien vessel generation; browser-JavaScript runtime required.
+- kaysender.airship.generate — Kaysender airship spatial generation; browser-JavaScript runtime required.
+- signals.configuration.analyze — full Signals Laboratory analysis; browser-JavaScript runtime required.
+- signals.utilities — RF, antenna, RLC, propagation, mapping, heterodyne, interfrequency, adaptive sampling, and experiment utilities; browser-JavaScript runtime required.
+- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments; browser-JavaScript runtime required.
+- blacklight.exo.jump.calculate — canonical EXO jump calculation in the required EXO cartography page context.
 - charles.interactive-resource-gateway — attested Charles access-control policy plus bounded browser runtime.
 
 Use the capability manifest for identity, runtime scripts, globals, invocation methods, status, and limitations. Use the operational argument contracts for constructing calls.
@@ -144,7 +146,7 @@ The Agent Skills registry itself is retrievable as resource `foundry.agent-skill
 
 ## Laboratories
 
-The manifest treats laboratory capacity as a first-class surface. Portable solver engines (Signals Laboratory and Binary Cube) are callable and self-documented. Live Signals and other sensor/UI laboratories are separately identified as browser/device-context capabilities so external agents can discover them without falsely claiming headless access.
+The manifest treats laboratory capacity as a first-class surface. Portable solver engines such as Signals Laboratory and Binary Cube are declared `runtime-required` and self-documented. Live Signals and other sensor/UI laboratories are separately identified as page/device-context capabilities so external agents can discover them without falsely claiming headless access.
 
 ## Compatibility expectation
 
