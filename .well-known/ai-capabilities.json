@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "protocol": "hb-ai-discovery/1",
   "service": {
     "id": "hb-ttrpg-tools",
@@ -15,6 +15,8 @@
     "resourceCollections": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
     "agentSkills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
     "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
+    "portableSkillLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js",
+    "portableSkillTest": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html",
     "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
     "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
     "browserFacade": "https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js",
@@ -28,9 +30,9 @@
     "remoteMcpAvailable": false,
     "notes": [
       "Static JSON, text, HTML, and JavaScript resources are remotely GET-addressable.",
-      "Browser-JavaScript capabilities execute only when their canonical runtime scripts are loaded in a JavaScript-capable host.",
+      "Browser-JavaScript capabilities begin at runtime-required and may be promoted by the current host to runtime-compatible, self-test-passed, and ready only after observed execution evidence.",
       "Page-context, live-device, and UI-bound capabilities require the declared browser/device context.",
-      "No external model should infer a remote POST/RPC/MCP execution service unless a transport is explicitly marked ready."
+      "No external model should infer a remote POST/RPC/MCP execution service unless a transport is explicitly deployed and verified."
     ]
   },
   "transportStatus": [
@@ -43,19 +45,22 @@
     {
       "id": "browser-js",
       "kind": "runtime",
-      "status": "ready-in-compatible-browser-host",
+      "status": "runtime-required",
+      "hostPromotionSequence": ["runtime-compatible", "self-test-passed", "ready"],
+      "proofHarness": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html",
       "useFor": "canonical JavaScript generators and laboratory engines"
     },
     {
       "id": "remote-mcp",
       "kind": "tool-transport",
-      "status": "not-deployed",
+      "deployed": false,
       "useFor": "future external LLM tool invocation"
     },
     {
       "id": "openapi",
       "kind": "discovery",
-      "status": "ready-static-discovery",
+      "status": "discoverable",
+      "executionTransport": false,
       "useFor": "machine discovery of public registries; not a claim of remote execution"
     }
   ],
@@ -65,7 +70,9 @@
       "title": "Binary Cube Laboratory Engine",
       "status": "runtime-required",
       "mode": "browser-js",
-      "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
+      "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
+      "portablePackage": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/manifest.json",
+      "selfTest": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/self-test.json"
     },
     {
       "id": "signals.configuration.analyze",
@@ -106,6 +113,7 @@
     "Use the canonical capability registry for identity, status, runtime scripts, invocation style, source paths, and limitations.",
     "Use operationContracts for exact operation names and argument schemas.",
     "Use agentSkills to load task-specific Agent Skills instructions.",
+    "For portable browser-JavaScript packages, use the registered same-origin loader/self-test chain before promoting a capability to self-test-passed or ready.",
     "Check execution mode and transport status before claiming that a capability can be invoked from the current reasoning environment."
   ]
 }
