@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "protocol": "hb-ai-discovery/1",
   "service": {
     "id": "hb-ttrpg-tools",
@@ -9,6 +9,7 @@
   },
   "entrypoints": {
     "aiIndex": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json",
+    "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
     "capabilityRegistry": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
     "operationContracts": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
     "resourceCollections": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
@@ -22,6 +23,7 @@
   "executionModel": {
     "origin": "github-pages-static",
     "rule": "Mirrored calls, not mirrored logic.",
+    "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
     "remoteRpcAvailable": false,
     "remoteMcpAvailable": false,
     "notes": [
@@ -61,45 +63,46 @@
     {
       "id": "shadowrun.binary-cube",
       "title": "Binary Cube Laboratory Engine",
-      "status": "callable",
+      "status": "runtime-required",
       "mode": "browser-js",
       "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
     },
     {
       "id": "signals.configuration.analyze",
       "title": "Signals Laboratory Configuration Analyzer",
-      "status": "callable",
+      "status": "runtime-required",
       "mode": "browser-js",
       "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
     },
     {
       "id": "signals.utilities",
       "title": "Signals Laboratory Utility Functions",
-      "status": "callable",
+      "status": "runtime-required",
       "mode": "browser-js",
       "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
     },
     {
       "id": "spatial.module-map.generate",
       "title": "Semantic Module Map Generator",
-      "status": "callable",
+      "status": "runtime-required",
       "mode": "browser-js"
     },
     {
       "id": "blacklight.exo.jump.calculate",
       "title": "Blacklight EXO Cluster Jump Calculator",
-      "status": "callable-in-exo-context",
+      "status": "page-context",
       "mode": "browser-page-context"
     },
     {
       "id": "charles.interactive-resource-gateway",
       "title": "Charles Interactive Resource Gateway",
-      "status": "callable-policy-browser-runtime",
+      "status": "onboardable",
       "mode": "static-resource"
     }
   ],
   "agentGuidance": [
     "Start with entrypoints.aiIndex instead of reconstructing capabilities from page prose.",
+    "Read entrypoints.statusVocabulary before interpreting capability availability or execution state.",
     "Use the canonical capability registry for identity, status, runtime scripts, invocation style, source paths, and limitations.",
     "Use operationContracts for exact operation names and argument schemas.",
     "Use agentSkills to load task-specific Agent Skills instructions.",
