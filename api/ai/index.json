@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "protocol": "hb-ai-discovery/1",
   "service": "Calzon's TTRPG Foundry",
   "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
@@ -7,18 +7,21 @@
     "capabilities": "../foundry-capabilities.json",
     "operations": "../operation-contracts.json",
     "resources": "../resource-collections.json",
-    "skills": "../../skills/index.json"
+    "skills": "../../skills/index.json",
+    "statusVocabulary": "status-vocabulary.json"
   },
   "absoluteAuthorities": {
     "capabilities": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
     "operations": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
     "resources": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
-    "skills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json"
+    "skills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
+    "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json"
   },
   "discovery": {
     "wellKnown": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
     "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
     "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
+    "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
     "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html"
   },
@@ -60,23 +63,29 @@
     {
       "step": 2,
       "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
+      "purpose": "Use the canonical status meanings and distinguish static declarations from host-observed execution state."
+    },
+    {
+      "step": 3,
+      "action": "GET",
       "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
       "purpose": "Enumerate canonical capabilities and execution modes."
     },
     {
-      "step": 3,
+      "step": 4,
       "action": "GET",
       "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
       "purpose": "Resolve exact operation signatures before constructing a call."
     },
     {
-      "step": 4,
+      "step": 5,
       "action": "GET",
       "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
       "purpose": "Select a task-specific Agent Skill when workflow guidance is useful."
     },
     {
-      "step": 5,
+      "step": 6,
       "action": "CHECK_RUNTIME",
       "target": "selected capability",
       "purpose": "Only invoke when the current host can satisfy the declared runtime and transport."
@@ -91,7 +100,7 @@
     {
       "id": "binary-cube",
       "prompt": "Find the Cube Encryption capability and determine whether the current environment can invoke it.",
-      "passCondition": "Model identifies shadowrun.binary-cube, reads its operation contract, and distinguishes browser-JS callability from remote transport availability."
+      "passCondition": "Model identifies shadowrun.binary-cube, reads its operation contract, and distinguishes its browser-JavaScript runtime requirement from remote transport availability."
     },
     {
       "id": "website-interaction",
