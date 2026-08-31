@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0.0",
+  "protocol": "hb-ai-status/1",
+  "name": "Calzon's TTRPG Foundry AI Capability Status Vocabulary",
+  "authority": "api/ai/status-vocabulary.json",
+  "purpose": "Define one shared vocabulary for discovery, onboarding, runtime compatibility, validation, and execution state without implying that static GitHub Pages resources provide universal remote execution.",
+  "rules": [
+    "Capability availability and host execution state are separate concerns.",
+    "A static descriptor must not use callable as a synonym for remotely executable from every LLM host.",
+    "runtime-compatible, self-test-passed, ready, incompatible, and degraded are environment-scoped observations and must not be published as unconditional host-independent facts.",
+    "Discovery and onboarding can succeed even when execution is unavailable in the current host.",
+    "GitHub Pages remains a static origin unless a separately deployed execution transport is explicitly declared and verified."
+  ],
+  "statuses": {
+    "discoverable": {
+      "scope": "static",
+      "meaning": "The capability or resource descriptor can be found through the machine-discovery chain.",
+      "executionClaim": false
+    },
+    "onboardable": {
+      "scope": "static",
+      "meaning": "The capability has sufficient skill or instruction material for an agent to understand authority, contracts, runtime requirements, and constraints.",
+      "executionClaim": false
+    },
+    "runtime-required": {
+      "scope": "static",
+      "meaning": "An authoritative implementation exists, but the consuming host must supply the declared execution runtime before invocation can be attempted.",
+      "executionClaim": false
+    },
+    "runtime-compatible": {
+      "scope": "host-observed",
+      "meaning": "The current host satisfies the declared runtime requirements.",
+      "executionClaim": false
+    },
+    "self-test-passed": {
+      "scope": "host-observed",
+      "meaning": "The authoritative implementation passed its declared deterministic non-destructive self-test in the current host.",
+      "executionClaim": false
+    },
+    "ready": {
+      "scope": "host-observed",
+      "meaning": "The selected operation may be invoked in the current host after required runtime and validation gates have succeeded.",
+      "executionClaim": true
+    },
+    "incompatible": {
+      "scope": "host-observed",
+      "meaning": "The current host cannot satisfy the capability's declared runtime or context requirements.",
+      "executionClaim": false
+    },
+    "degraded": {
+      "scope": "host-observed",
+      "meaning": "Only part of the declared capability is usable in the current host.",
+      "executionClaim": false
+    },
+    "ui-bound": {
+      "scope": "static",
+      "meaning": "Authoritative behavior remains coupled to human page controls or UI state and must not be presented as a headless API.",
+      "executionClaim": false
+    },
+    "page-context": {
+      "scope": "static",
+      "meaning": "Execution requires a declared browser page context and initialized page-specific dependencies.",
+      "executionClaim": false
+    },
+    "live-device-context": {
+      "scope": "static",
+      "meaning": "Execution requires live browser, sensor, microphone, radio, hardware, or other device context.",
+      "executionClaim": false
+    }
+  },
+  "recommendedStaticStatusByRuntimeClass": {
+    "static-resource": "discoverable",
+    "browser-js": "runtime-required",
+    "browser-page-context": "page-context",
+    "browser-ui": "ui-bound",
+    "live-sensor-browser-context": "live-device-context"
+  },
+  "hostEvaluationOrder": [
+    "discoverable",
+    "onboardable",
+    "runtime-compatible",
+    "self-test-passed",
+    "ready"
+  ],
+  "failureOrLimitationStates": [
+    "incompatible",
+    "degraded",
+    "ui-bound",
+    "page-context",
+    "live-device-context"
+  ]
+}
