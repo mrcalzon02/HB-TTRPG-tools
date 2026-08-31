@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "skill": "binary-cube-laboratory",
+  "capabilityId": "shadowrun.binary-cube",
+  "contractAuthority": "api/operation-contracts.json",
+  "architectureRule": "Examples demonstrate declared calls only. Argument definitions and runtime behavior remain authoritative in the operation contracts and canonical engine.",
+  "examples": [
+    {
+      "id": "create-deterministic-key",
+      "operation": "createKey",
+      "args": [
+        {
+          "gridSize": 4,
+          "seed": "example-binary-cube-key",
+          "inputFace": "top",
+          "outputFace": "front",
+          "maskDensity": 0.75
+        }
+      ],
+      "invoke": {
+        "capabilityId": "shadowrun.binary-cube",
+        "payloadShape": {"operation": "createKey", "argsRef": "args"}
+      },
+      "result": "Canonical key object; inspect the createKey return contract rather than assuming fields."
+    },
+    {
+      "id": "hash-known-text",
+      "operation": "sha256Hex",
+      "args": ["test"],
+      "invoke": {
+        "capabilityId": "shadowrun.binary-cube",
+        "payloadShape": {"operation": "sha256Hex", "argsRef": "args"}
+      },
+      "result": "Lowercase hexadecimal SHA-256 digest as declared by the operation contract."
+    },
+    {
+      "id": "encrypt-binary-with-created-key",
+      "operation": "encryptBinary",
+      "args": ["0100100001101001", {"$resultRef": "create-deterministic-key"}],
+      "invoke": {
+        "capabilityId": "shadowrun.binary-cube",
+        "payloadShape": {"operation": "encryptBinary", "argsRef": "args"}
+      },
+      "result": "Canonical encrypted package; do not treat the Binary Cube engine as production cryptography."
+    },
+    {
+      "id": "decrypt-canonical-package",
+      "operation": "decryptBinary",
+      "args": [{"$resultRef": "encrypt-binary-with-created-key"}, {"$resultRef": "create-deterministic-key"}],
+      "invoke": {
+        "capabilityId": "shadowrun.binary-cube",
+        "payloadShape": {"operation": "decryptBinary", "argsRef": "args"}
+      },
+      "result": "Recovered binary payload string."
+    }
+  ]
+}
