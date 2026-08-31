@@ -1,0 +1,165 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Calzon's TTRPG Foundry Machine Discovery",
+    "version": "1.0.0",
+    "description": "Static machine-discovery surface for the Foundry's canonical capability, operation, resource, and Agent Skills registries. This document describes public GET discovery resources; it does not claim a remote execution RPC service."
+  },
+  "servers": [
+    {
+      "url": "https://mrcalzon02.github.io/HB-TTRPG-tools"
+    }
+  ],
+  "x-hb-execution-model": {
+    "remoteRpc": "not-deployed",
+    "remoteMcp": "not-deployed",
+    "browserJs": "available-in-compatible-host",
+    "staticResources": "available"
+  },
+  "paths": {
+    "/.well-known/ai-capabilities.json": {
+      "get": {
+        "operationId": "getAiCapabilityDiscovery",
+        "summary": "Get the top-level AI capability discovery manifest",
+        "responses": {
+          "200": {
+            "description": "Machine discovery manifest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ai/index.json": {
+      "get": {
+        "operationId": "getAiAccessIndex",
+        "summary": "Get the AI access index and transport status",
+        "responses": {
+          "200": {
+            "description": "AI access index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/foundry-capabilities.json": {
+      "get": {
+        "operationId": "listFoundryCapabilities",
+        "summary": "Get canonical capability descriptors",
+        "responses": {
+          "200": {
+            "description": "Canonical Foundry capability manifest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/operation-contracts.json": {
+      "get": {
+        "operationId": "getOperationContracts",
+        "summary": "Get exact executable operation contracts",
+        "responses": {
+          "200": {
+            "description": "Operation contracts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/resource-collections.json": {
+      "get": {
+        "operationId": "getResourceCollections",
+        "summary": "Get authoritative resource collection descriptors",
+        "responses": {
+          "200": {
+            "description": "Resource collections",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/skills/index.json": {
+      "get": {
+        "operationId": "listAgentSkills",
+        "summary": "Get the Agent Skills registry",
+        "responses": {
+          "200": {
+            "description": "Agent Skills index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ai/skill-onboarding.json": {
+      "get": {
+        "operationId": "getSkillOnboardingProfile",
+        "summary": "Get the Agent Skills onboarding sequence and status semantics",
+        "responses": {
+          "200": {
+            "description": "Skill onboarding profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/charles-interactive-resource-gateway.json": {
+      "get": {
+        "operationId": "getCharlesGatewayPolicy",
+        "summary": "Get the Charles Interactive Resource Gateway policy",
+        "responses": {
+          "200": {
+            "description": "Charles gateway policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
