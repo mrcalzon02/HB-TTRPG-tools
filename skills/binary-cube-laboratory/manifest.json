@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "packageType": "hb-agent-skill-companion",
+  "skill": {
+    "name": "binary-cube-laboratory",
+    "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
+    "capabilityId": "shadowrun.binary-cube",
+    "laboratoryId": "binary-cube-laboratory",
+    "packageVersion": "1.0.0"
+  },
+  "status": "runtime-required",
+  "runtime": {
+    "family": "javascript",
+    "class": "browser-js",
+    "authoritativePath": "shadowrun-binary-cube-engine.js",
+    "moduleStyle": "umd-global-commonjs",
+    "expectedGlobal": "ShadowrunBinaryCubeEngine",
+    "commonJsExport": true,
+    "externalNetworkRequiredAfterLoad": false,
+    "remoteRpcRequired": false,
+    "mcpRequired": false,
+    "crossOriginCodeAllowed": false,
+    "sameOriginOnly": true
+  },
+  "authorities": {
+    "operationContracts": "api/operation-contracts.json",
+    "capabilityRegistry": "api/foundry-capabilities.json",
+    "skillRegistry": "skills/index.json",
+    "statusVocabulary": "api/ai/status-vocabulary.json",
+    "selfTest": "skills/binary-cube-laboratory/self-test.json"
+  },
+  "provenance": {
+    "canonicalRuntimePath": "shadowrun-binary-cube-engine.js",
+    "canonicalRuntimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
+    "companionUiPath": "shadowrun-binary-cube-encryption.js",
+    "architectureRule": "Mirrored calls, not mirrored logic."
+  },
+  "dependencies": [],
+  "security": {
+    "classification": "experimental-ttrpg-obfuscation-not-production-cryptography",
+    "credentialsRequired": false,
+    "destructiveOperations": false,
+    "productionCryptography": false
+  },
+  "selfTest": {
+    "path": "skills/binary-cube-laboratory/self-test.json",
+    "deterministic": true,
+    "nonDestructive": true,
+    "credentialFree": true,
+    "networkFreeAfterRuntimeLoad": true
+  },
+  "integrity": {
+    "runtimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
+    "contentDigest": null,
+    "signature": null,
+    "note": "Digest/signature fields are reserved for a later integrity profile; runtimeBlobSha binds this package revision to the current Git blob without introducing a second implementation."
+  }
+}
