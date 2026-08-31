@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "1.0.0",
+  "protocol": "hb-ai-discovery/1",
+  "service": "Calzon's TTRPG Foundry",
+  "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
+  "authority": {
+    "capabilities": "../foundry-capabilities.json",
+    "operations": "../operation-contracts.json",
+    "resources": "../resource-collections.json",
+    "skills": "../../skills/index.json"
+  },
+  "absoluteAuthorities": {
+    "capabilities": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
+    "operations": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
+    "resources": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
+    "skills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json"
+  },
+  "discovery": {
+    "wellKnown": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
+    "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
+    "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
+    "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
+    "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html"
+  },
+  "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, or encryption logic in AI adapters. Discover and invoke the authoritative implementation.",
+  "runtimeClasses": {
+    "static-resource": "Remotely readable with ordinary HTTP GET. Invocation may mean retrieving the registered authoritative resource.",
+    "browser-js": "Executable only in a JavaScript-capable host after loading the runtime scripts declared by the capability.",
+    "browser-page-context": "Executable only after the capability's declared page context and dependencies are initialized.",
+    "browser-ui": "Authoritative behavior is still coupled to page controls; do not claim a headless API.",
+    "live-sensor-browser-context": "Requires browser/device sensor context and cannot be represented as a static remote RPC."
+  },
+  "transport": {
+    "staticGet": {
+      "status": "ready"
+    },
+    "browserJavaScript": {
+      "status": "ready-in-compatible-host"
+    },
+    "remoteMcp": {
+      "status": "not-deployed",
+      "endpoint": null
+    },
+    "remoteRpc": {
+      "status": "not-deployed",
+      "endpoint": null
+    },
+    "openapi": {
+      "status": "discovery-only",
+      "document": "openapi.json"
+    }
+  },
+  "quickStart": [
+    {
+      "step": 1,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
+      "purpose": "Confirm machine-discovery entrypoints and transport status."
+    },
+    {
+      "step": 2,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
+      "purpose": "Enumerate canonical capabilities and execution modes."
+    },
+    {
+      "step": 3,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
+      "purpose": "Resolve exact operation signatures before constructing a call."
+    },
+    {
+      "step": 4,
+      "action": "GET",
+      "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
+      "purpose": "Select a task-specific Agent Skill when workflow guidance is useful."
+    },
+    {
+      "step": 5,
+      "action": "CHECK_RUNTIME",
+      "target": "selected capability",
+      "purpose": "Only invoke when the current host can satisfy the declared runtime and transport."
+    }
+  ],
+  "externalModelAcceptanceTests": [
+    {
+      "id": "discover-capabilities",
+      "prompt": "Examine the Foundry and enumerate its AI-available capabilities.",
+      "passCondition": "Model uses the machine capability registry rather than only reconstructing the human site catalog."
+    },
+    {
+      "id": "binary-cube",
+      "prompt": "Find the Cube Encryption capability and determine whether the current environment can invoke it.",
+      "passCondition": "Model identifies shadowrun.binary-cube, reads its operation contract, and distinguishes browser-JS callability from remote transport availability."
+    },
+    {
+      "id": "website-interaction",
+      "prompt": "Find the website interaction capability and determine whether it is usable from the current environment.",
+      "passCondition": "Model reports the declared gateway/browser status and does not fabricate a remote browser service."
+    }
+  ]
+}
