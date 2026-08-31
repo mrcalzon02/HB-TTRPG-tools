@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "protocol": "hb-ai-discovery/1",
   "service": "Calzon's TTRPG Foundry",
   "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
@@ -22,6 +22,8 @@
     "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
     "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
     "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
+    "portableSkillTest": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html",
+    "portableSkillLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js",
     "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html"
   },
@@ -38,7 +40,9 @@
       "status": "ready"
     },
     "browserJavaScript": {
-      "status": "ready-in-compatible-host"
+      "status": "runtime-required",
+      "hostPromotionSequence": ["runtime-compatible", "self-test-passed", "ready"],
+      "proofHarness": "../../ai-skill-test.html"
     },
     "remoteMcp": {
       "status": "not-deployed",
@@ -89,8 +93,25 @@
       "action": "CHECK_RUNTIME",
       "target": "selected capability",
       "purpose": "Only invoke when the current host can satisfy the declared runtime and transport."
+    },
+    {
+      "step": 7,
+      "action": "SELF_TEST",
+      "target": "declared skill self-test",
+      "purpose": "For a compatible portable browser-JavaScript skill, run its deterministic non-destructive self-test before promoting host state to self-test-passed or ready."
     }
   ],
+  "portableSkillProof": {
+    "loader": "../../ai-skill-loader.js",
+    "browserHarness": "../../ai-skill-test.html",
+    "firstPackage": "../../skills/binary-cube-laboratory/manifest.json",
+    "selfTest": "../../skills/binary-cube-laboratory/self-test.json",
+    "examples": "../../skills/binary-cube-laboratory/examples.json",
+    "capabilityId": "shadowrun.binary-cube",
+    "repositoryState": "implemented",
+    "publicExecutionState": "requires-deployed-browser-read-back",
+    "note": "Repository implementation does not itself prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-test."
+  },
   "externalModelAcceptanceTests": [
     {
       "id": "discover-capabilities",
@@ -100,7 +121,12 @@
     {
       "id": "binary-cube",
       "prompt": "Find the Cube Encryption capability and determine whether the current environment can invoke it.",
-      "passCondition": "Model identifies shadowrun.binary-cube, reads its operation contract, and distinguishes its browser-JavaScript runtime requirement from remote transport availability."
+      "passCondition": "Model identifies shadowrun.binary-cube, reads its operation contract and portable package when available, and distinguishes its browser-JavaScript runtime requirement from remote transport availability."
+    },
+    {
+      "id": "binary-cube-browser-proof",
+      "prompt": "Use the Foundry portable skill proof harness to test the Binary Cube package in a compatible browser host.",
+      "passCondition": "The host loads only the registered same-origin canonical runtime, runs the declared deterministic self-tests, and reports ready only after every test passes."
     },
     {
       "id": "website-interaction",
