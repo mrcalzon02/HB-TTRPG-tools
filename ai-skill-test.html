@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foundry Portable Skill Self-Test</title>
+  <meta name="description" content="Same-origin browser harness for registered Calzon's TTRPG Foundry portable Agent Skill packages.">
+  <style>
+    :root { color-scheme: dark; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    body { margin: 0; background: #111; color: #eee; }
+    main { width: min(960px, calc(100% - 32px)); margin: 32px auto; }
+    h1 { margin-bottom: 8px; }
+    p { line-height: 1.5; }
+    .panel { border: 1px solid #555; border-radius: 8px; padding: 16px; margin-top: 20px; background: #181818; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    select, button { font: inherit; padding: 8px 10px; background: #222; color: #fff; border: 1px solid #666; border-radius: 4px; }
+    button { cursor: pointer; }
+    button:disabled { cursor: wait; opacity: .65; }
+    pre { white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; line-height: 1.45; }
+    .status { font-weight: 700; }
+    .muted { color: #bbb; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Portable Agent Skill Self-Test</h1>
+    <p>This page validates registered same-origin Foundry skill packages in the visitor's browser. It does not provide remote RPC, MCP, credentials, or server-side execution.</p>
+
+    <section class="panel">
+      <div class="controls">
+        <label for="skill">Registered skill</label>
+        <select id="skill">
+          <option value="binary-cube-laboratory">binary-cube-laboratory</option>
+        </select>
+        <button id="run" type="button">Load and self-test</button>
+      </div>
+      <p id="summary" class="status">Not tested.</p>
+      <p class="muted">The loader accepts only registered packages, same-origin runtime paths, capability-allow-listed scripts, and contract-declared operations.</p>
+      <pre id="report" aria-live="polite">No report yet.</pre>
+    </section>
+  </main>
+
+  <script src="ai-skill-loader.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const skill = document.getElementById('skill');
+      const run = document.getElementById('run');
+      const summary = document.getElementById('summary');
+      const reportNode = document.getElementById('report');
+
+      run.addEventListener('click', async () => {
+        run.disabled = true;
+        summary.textContent = 'Testing registered package…';
+        reportNode.textContent = 'Loading discovery documents, package metadata, runtime, and deterministic tests.';
+        try {
+          const report = await HBFoundrySkillLoader.loadAndTest(skill.value);
+          summary.textContent = report.ready
+            ? `READY — ${report.tests.length} deterministic tests passed.`
+            : 'NOT READY — inspect the structured report below.';
+          reportNode.textContent = JSON.stringify(report, null, 2);
+        } catch (error) {
+          summary.textContent = 'NOT READY — harness error.';
+          reportNode.textContent = JSON.stringify({ error: error.message }, null, 2);
+        } finally {
+          run.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
