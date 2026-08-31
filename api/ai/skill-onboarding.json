@@ -1,54 +1,60 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "profile": "hb-agent-skill-onboarding/1",
   "standard": "Agent Skills",
   "standardUrl": "https://agentskills.io/specification",
   "registry": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
+  "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
   "architectureRule": "Agent Skills are workflow/onboarding modules. Capability identities, runtime status, and exact operation schemas remain authoritative in the capability and operation registries.",
   "onboardingSequence": [
     {
       "step": 1,
+      "action": "GET_STATUS_VOCABULARY",
+      "resource": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
+      "result": "Load the shared meanings that distinguish static availability from host-observed execution state."
+    },
+    {
+      "step": 2,
       "action": "GET",
       "resource": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
       "result": "Enumerate available skills and select by useFor, capabilityIds, resourceIds, and status."
     },
     {
-      "step": 2,
+      "step": 3,
       "action": "GET_SKILL",
       "template": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/{name}/SKILL.md",
       "result": "Load the selected skill's workflow instructions."
     },
     {
-      "step": 3,
+      "step": 4,
       "action": "RESOLVE_CAPABILITIES",
       "resource": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
       "result": "Resolve each capabilityId to status, mode, runtime, invocation, source, and limitations."
     },
     {
-      "step": 4,
+      "step": 5,
       "action": "RESOLVE_OPERATIONS",
       "resource": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
       "result": "Resolve exact arguments and operation contracts for executable capabilities."
     },
     {
-      "step": 5,
+      "step": 6,
       "action": "RESOLVE_RESOURCES",
       "resource": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
       "result": "Retrieve authoritative static resources referenced by resourceIds."
     },
     {
-      "step": 6,
-      "action": "CHECK_TRANSPORT",
+      "step": 7,
+      "action": "CHECK_TRANSPORT_AND_RUNTIME",
       "resource": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json",
-      "result": "Determine whether the current reasoning environment has a compatible execution transport."
+      "result": "Determine whether the current reasoning environment can satisfy the selected capability runtime and transport requirements."
     }
   ],
   "statusSemantics": {
-    "callable": "Canonical operation is executable in its declared runtime.",
-    "callable-resource": "Skill is backed by directly retrievable authoritative resources.",
-    "page-context": "Requires the declared page/application context.",
-    "guided-ui-bound": "Authoritative behavior remains coupled to a human-facing UI.",
-    "mixed-runtime": "Skill spans capabilities with more than one runtime class."
+    "authority": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
+    "staticExamples": ["discoverable", "onboardable", "runtime-required", "ui-bound", "page-context", "live-device-context"],
+    "hostObservedExamples": ["runtime-compatible", "self-test-passed", "ready", "incompatible", "degraded"],
+    "rule": "Do not infer ready or runtime-compatible from the presence of a skill, capability descriptor, or JavaScript source file."
   },
   "safetyAndIntegrity": {
     "declarativeInstructionsOnly": true,
