@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "protocol": "hb-ai-discovery/1",
+  "service": {
+    "id": "hb-ttrpg-tools",
+    "name": "Calzon's TTRPG Foundry",
+    "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
+    "description": "Browser-based TTRPG generators, scientific laboratories, campaign workspaces, reference resources, and machine-discoverable AI capabilities."
+  },
+  "entrypoints": {
+    "aiIndex": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json",
+    "capabilityRegistry": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
+    "operationContracts": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
+    "resourceCollections": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
+    "agentSkills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
+    "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
+    "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
+    "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
+    "browserFacade": "https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js",
+    "humanAccessPage": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html"
+  },
+  "executionModel": {
+    "origin": "github-pages-static",
+    "rule": "Mirrored calls, not mirrored logic.",
+    "remoteRpcAvailable": false,
+    "remoteMcpAvailable": false,
+    "notes": [
+      "Static JSON, text, HTML, and JavaScript resources are remotely GET-addressable.",
+      "Browser-JavaScript capabilities execute only when their canonical runtime scripts are loaded in a JavaScript-capable host.",
+      "Page-context, live-device, and UI-bound capabilities require the declared browser/device context.",
+      "No external model should infer a remote POST/RPC/MCP execution service unless a transport is explicitly marked ready."
+    ]
+  },
+  "transportStatus": [
+    {
+      "id": "static-get",
+      "kind": "resource",
+      "status": "ready",
+      "useFor": "manifests, schemas, skills, lore, policy, and other public resources"
+    },
+    {
+      "id": "browser-js",
+      "kind": "runtime",
+      "status": "ready-in-compatible-browser-host",
+      "useFor": "canonical JavaScript generators and laboratory engines"
+    },
+    {
+      "id": "remote-mcp",
+      "kind": "tool-transport",
+      "status": "not-deployed",
+      "useFor": "future external LLM tool invocation"
+    },
+    {
+      "id": "openapi",
+      "kind": "discovery",
+      "status": "ready-static-discovery",
+      "useFor": "machine discovery of public registries; not a claim of remote execution"
+    }
+  ],
+  "highlightedCapabilities": [
+    {
+      "id": "shadowrun.binary-cube",
+      "title": "Binary Cube Laboratory Engine",
+      "status": "callable",
+      "mode": "browser-js",
+      "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
+    },
+    {
+      "id": "signals.configuration.analyze",
+      "title": "Signals Laboratory Configuration Analyzer",
+      "status": "callable",
+      "mode": "browser-js",
+      "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
+    },
+    {
+      "id": "signals.utilities",
+      "title": "Signals Laboratory Utility Functions",
+      "status": "callable",
+      "mode": "browser-js",
+      "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"
+    },
+    {
+      "id": "spatial.module-map.generate",
+      "title": "Semantic Module Map Generator",
+      "status": "callable",
+      "mode": "browser-js"
+    },
+    {
+      "id": "blacklight.exo.jump.calculate",
+      "title": "Blacklight EXO Cluster Jump Calculator",
+      "status": "callable-in-exo-context",
+      "mode": "browser-page-context"
+    },
+    {
+      "id": "charles.interactive-resource-gateway",
+      "title": "Charles Interactive Resource Gateway",
+      "status": "callable-policy-browser-runtime",
+      "mode": "static-resource"
+    }
+  ],
+  "agentGuidance": [
+    "Start with entrypoints.aiIndex instead of reconstructing capabilities from page prose.",
+    "Use the canonical capability registry for identity, status, runtime scripts, invocation style, source paths, and limitations.",
+    "Use operationContracts for exact operation names and argument schemas.",
+    "Use agentSkills to load task-specific Agent Skills instructions.",
+    "Check execution mode and transport status before claiming that a capability can be invoked from the current reasoning environment."
+  ]
+}
