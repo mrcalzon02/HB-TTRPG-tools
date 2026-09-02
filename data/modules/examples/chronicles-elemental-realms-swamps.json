@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "chronicles-elemental-realms-swamps",
+  "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
+  "subtitle": "Preserved environmental module example",
+  "system": "Module example / source reference",
+  "referenceOnly": true,
+  "source": {
+    "fileName": "Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
+    "pdf": "SRC/Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
+    "notes": "Example, template, and use case retained for environmental, encounter, and module-content comparison."
+  },
+  "general": {"status": "source-reference"},
+  "map": {"image": "", "grid": "Source PDF"},
+  "hotspots": [],
+  "rooms": [],
+  "doors": []
+}
