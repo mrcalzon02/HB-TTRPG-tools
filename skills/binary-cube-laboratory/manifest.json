@@ -6,7 +6,7 @@
     "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
     "capabilityId": "shadowrun.binary-cube",
     "laboratoryId": "binary-cube-laboratory",
-    "packageVersion": "1.1.0"
+    "packageVersion": "1.2.0"
   },
   "status": "runtime-required",
   "runtime": {
@@ -27,13 +27,16 @@
         "runtime": "node-commonjs",
         "dependencies": [],
         "interfaces": ["module", "cli", "json-tool"],
+        "discoveryMethods": ["describe", "listOperations", "operationContract"],
         "commands": {
           "describe": "node binary-cube-node-adapter.js describe",
+          "operations": "node binary-cube-node-adapter.js operations",
+          "contract": "node binary-cube-node-adapter.js contract <operation>",
           "selfTest": "node binary-cube-node-adapter.js self-test",
           "invoke": "node binary-cube-node-adapter.js invoke '{\"operation\":\"sha256Hex\",\"args\":[\"test\"]}'"
         },
         "stdin": "For invoke, omit the JSON argument and provide the same request object on stdin.",
-        "authority": "Delegates to shadowrun-binary-cube-engine.js and derives its operation allow-list from api/foundry-capabilities.json."
+        "authority": "Delegates to shadowrun-binary-cube-engine.js, derives its operation allow-list from api/foundry-capabilities.json, and returns argument/return definitions from api/operation-contracts.json."
       }
     }
   },
