@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "protocol": "hb-ai-discovery/1",
   "service": "Calzon's TTRPG Foundry",
   "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
@@ -32,7 +32,7 @@
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
     "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js"
   },
-  "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, or tabletop-state logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",
+  "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, tabletop-state, or battlespace logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",
   "compatibilityRule": "HTML compatibility views may mirror discovery metadata for restricted model browsers, but authoritative JSON registries, Charles engram resources, helper scripts, and SKILL.md files remain the source of truth.",
   "personalityBinding": {
     "engramId": "blacklight.charles",
@@ -41,7 +41,7 @@
     "scope": "all-registered-skills",
     "loadPolicy": "load-once-before-selected-skills",
     "orchestratorSkill": "charles-foundry-interface",
-    "capabilityBoundary": "Loading Charles does not imply tools, permissions, filesystem access, randomness, runtime compatibility, persistence, or successful execution."
+    "capabilityBoundary": "Loading Charles does not imply tools, permissions, filesystem access, randomness, rendering, runtime compatibility, persistence, or successful execution."
   },
   "runtimeClasses": {
     "static-resource": "Remotely readable with ordinary HTTP GET when the current host permits the resource content type. Invocation may mean retrieving the registered authoritative resource.",
@@ -52,12 +52,35 @@
     "host-sandbox": "Workflow can use local helper scripts and files only when the consuming host exposes the declared sandbox/runtime. Repository presence alone is not execution evidence."
   },
   "transport": {
-    "staticGet": {"status":"ready","hostConstraint":"Some model browsing environments restrict direct JSON, text, or Markdown retrieval even when the resource is publicly hosted."},
-    "browserJavaScript": {"status":"runtime-required","hostPromotionSequence":["runtime-compatible","self-test-passed","ready"],"proofHarness":"../../ai-skill-test.html"},
-    "hostSandbox": {"status":"host-dependent","notes":"Tabletop CSV persistence requires writable filesystem/sandbox access. Secure dice helpers require an actual cryptographic RNG in the host."},
-    "remoteMcp": {"status":"not-deployed","endpoint":null},
-    "remoteRpc": {"status":"not-deployed","endpoint":null},
-    "openapi": {"status":"discovery-only","document":"openapi.json"}
+    "staticGet": {
+      "status": "ready",
+      "hostConstraint": "Some model browsing environments restrict direct JSON, text, or Markdown retrieval even when the resource is publicly hosted."
+    },
+    "browserJavaScript": {
+      "status": "runtime-required",
+      "hostPromotionSequence": [
+        "runtime-compatible",
+        "self-test-passed",
+        "ready"
+      ],
+      "proofHarness": "../../ai-skill-test.html"
+    },
+    "hostSandbox": {
+      "status": "host-dependent",
+      "notes": "Tabletop CSV persistence requires writable filesystem/sandbox access. Secure dice helpers require an actual cryptographic RNG. Battlespace preview rendering additionally requires Python 3 and Pillow."
+    },
+    "remoteMcp": {
+      "status": "not-deployed",
+      "endpoint": null
+    },
+    "remoteRpc": {
+      "status": "not-deployed",
+      "endpoint": null
+    },
+    "openapi": {
+      "status": "discovery-only",
+      "document": "openapi.json"
+    }
   },
   "quickStart": [
     {"step":1,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","purpose":"Confirm machine-discovery entrypoints and transport status."},
@@ -66,7 +89,7 @@
     {"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once as the inherited personality layer before task skills."},
     {"step":5,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json","purpose":"Enumerate canonical capabilities and execution modes."},
     {"step":6,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json","purpose":"Resolve exact operation signatures before constructing a capability call."},
-    {"step":7,"action":"CHECK_HOST","target":"selected skill or capability","purpose":"Confirm required browser runtime, page context, writable sandbox, file access, or cryptographic RNG before claiming execution."},
+    {"step":7,"action":"CHECK_HOST","target":"selected skill or capability","purpose":"Confirm required browser runtime, page context, writable sandbox, file access, cryptographic RNG, Python, or Pillow before claiming execution."},
     {"step":8,"action":"SELF_TEST","target":"declared portable self-test","purpose":"For compatible portable browser-JavaScript packages, run deterministic non-destructive self-tests before promoting host state to self-test-passed or ready."}
   ],
   "portableSkillProof": {
@@ -81,22 +104,31 @@
     "note": "Repository implementation does not itself prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-test."
   },
   "tabletopOperations": {
-    "skillCount": 10,
+    "skillCount": 11,
     "diceSkill": "tabletop-dice-rolling",
     "dicePortableRange": "1-10 dice, d2-d100, optional integer modifier",
     "diceModes": ["cumulative","individual total"],
     "randomnessRule": "Use host cryptographic randomness such as Python secrets or Web Crypto rejection sampling; do not claim physical true randomness without an independently attested physical entropy source.",
     "sandboxStateSkill": "tabletop-sandbox-data-management",
     "defaultChatGptSandboxPath": "/mnt/data/ttrpg_state/",
-    "stateModel": "system-neutral CSV current-state tables plus append-only campaign ledger"
+    "stateModel": "system-neutral CSV current-state tables plus append-only campaign ledger",
+    "battlespaceSkill": "tabletop-battlespace-visualization",
+    "battlespacePackage": "../../skills/tabletop-battlespace-visualization/manifest.json",
+    "battlespaceHelper": "../../skills/tabletop-battlespace-visualization/scripts/battlespace.py",
+    "battlespaceTables": ["battlefield_maps.csv","battlefield_tokens.csv","battlefield_terrain.csv","battlefield_effects.csv"],
+    "battlespaceRenderMinimum": "1 pixel = 1 grid cell",
+    "battlespaceRenderScaling": "nearest-neighbor",
+    "battlespaceAuthority": "CSV coordinates are authoritative; PNG previews are diagnostic projections."
   },
   "externalModelAcceptanceTests": [
     {"id":"discover-capabilities","prompt":"Examine the Foundry and enumerate its AI-available capabilities.","passCondition":"Model uses the machine capability registry rather than only reconstructing the human site catalog."},
-    {"id":"enumerate-agent-skills","prompt":"The authoritative skill registry contains 41 registered Agent Skills. What are they, and what personality do they inherit?","passCondition":"Model retrieves skills/index.json and enumerates all 41 exact name values plus defaultPersonality blacklight.charles; if raw JSON is blocked, it uses agent-skills.html and still reports the inherited Charles binding."},
+    {"id":"enumerate-agent-skills","prompt":"The authoritative skill registry contains 42 registered Agent Skills. What are they, and what personality do they inherit?","passCondition":"Model retrieves skills/index.json and enumerates all 42 exact name values plus defaultPersonality blacklight.charles; if raw JSON is blocked, it uses agent-skills.html and still reports the inherited Charles binding."},
     {"id":"charles-personality-binding","prompt":"Load a Foundry Agent Skill and determine which personality engram should remain active while using it.","passCondition":"Model resolves defaultPersonality to blacklight.charles, loads the canonical engram once, and does not invent a skill-local replacement persona."},
-    {"id":"charles-cross-skill-routing","prompt":"Ask Charles to prepare and run ordinary homebrew tabletop support across characters, dice, encounters, inventory, and campaign state.","passCondition":"Model uses charles-foundry-interface and routes to the smallest relevant tabletop skill set while preserving one Charles personality layer."},
+    {"id":"charles-cross-skill-routing","prompt":"Ask Charles to prepare and run ordinary homebrew tabletop support across characters, dice, encounters, inventory, campaign state, and tactical position.","passCondition":"Model uses charles-foundry-interface and routes to the smallest relevant tabletop skill set while preserving one Charles personality layer."},
     {"id":"tabletop-dice-modes","prompt":"Roll 6d10 cumulative, then roll 6d10 individual total.","passCondition":"Model identifies tabletop-dice-rolling; cumulative presents one aggregate total, individual total presents every die in roll order without collapsing them into one displayed sum, and randomness is not fabricated if the host lacks a trustworthy RNG."},
     {"id":"tabletop-state","prompt":"Import a character sheet and track a stat change in CSV-backed campaign state.","passCondition":"Model preserves the source, uses stable IDs and system-neutral CSV state, records significant mutation in campaign_ledger.csv, and does not claim file persistence without writable-sandbox evidence."},
+    {"id":"tabletop-battlespace-1px","prompt":"Create a 40 by 30 five-foot-grid battlespace, place two PCs and an enemy, render the smallest valid preview, then move one PC two cells left and one cell up.","passCondition":"Model selects tabletop-battlespace-visualization; stores integer CSV coordinates; renders or requests a 40x30 RGB PNG at cell_pixels=1 when Python/Pillow are actually available; applies movement as dx=-2,dy=-1 to structured state before rerendering; and does not claim persistence or rendering without host evidence."},
+    {"id":"tabletop-battlespace-rules-boundary","prompt":"Which targets are inside this area and who is within 30 feet?","passCondition":"Model uses structured battlespace geometry, respects the map/rules distance mode, prefers explicit affected cells when authoritative, and does not silently invent system-specific diagonal, reach, LOS, cover, or AoE-template rules."},
     {"id":"skill-document-access","prompt":"Open a named registered Agent Skill and report its instructions and compatibility requirements.","passCondition":"Model opens the registered SKILL.md or the HTML compatibility projection rather than fabricating instructions."},
     {"id":"binary-cube","prompt":"Find the Cube Encryption capability and determine whether the current environment can invoke it.","passCondition":"Model identifies shadowrun.binary-cube, reads its operation contract and portable package when available, and distinguishes browser-JavaScript runtime requirements from remote transport availability."},
     {"id":"binary-cube-browser-proof","prompt":"Use the Foundry portable skill proof harness to test the Binary Cube package in a compatible browser host.","passCondition":"The host loads only the registered same-origin canonical runtime, runs the declared deterministic self-tests, and reports ready only after every test passes."},
