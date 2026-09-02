@@ -6,7 +6,7 @@
     "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
     "capabilityId": "shadowrun.binary-cube",
     "laboratoryId": "binary-cube-laboratory",
-    "packageVersion": "1.4.0"
+    "packageVersion": "1.5.0"
   },
   "status": "runtime-required",
   "runtime": {
@@ -27,19 +27,39 @@
         "runtime": "node-commonjs",
         "dependencies": [],
         "interfaces": ["module", "cli", "json-tool"],
-        "discoveryMethods": ["describe", "listOperations", "operationContract"],
+        "discoveryMethods": ["describe", "listOperations", "operationContract", "listTestPackages"],
+        "validationMethods": ["runSelfTest", "runThreeStateValidation"],
         "commands": {
           "describe": "node binary-cube-node-adapter.js describe",
           "operations": "node binary-cube-node-adapter.js operations",
           "contract": "node binary-cube-node-adapter.js contract <operation>",
+          "testPackages": "node binary-cube-node-adapter.js test-packages",
+          "validationSuite": "node binary-cube-node-adapter.js validation-suite",
+          "validateTest": "node binary-cube-node-adapter.js validate-test '<json request or test id>'",
           "selfTest": "node binary-cube-node-adapter.js self-test",
           "parity": "node binary-cube-parity-runner.js",
           "invoke": "node binary-cube-node-adapter.js invoke '{\"operation\":\"sha256Hex\",\"args\":[\"test\"]}'"
         },
-        "stdin": "For invoke, omit the JSON argument and provide the same request object on stdin.",
-        "authority": "Delegates to shadowrun-binary-cube-engine.js, derives its operation allow-list from api/foundry-capabilities.json, and returns argument/return definitions from api/operation-contracts.json."
+        "stdin": "Structured invoke/encrypt/decrypt requests may be supplied as JSON on stdin where supported by the command.",
+        "authority": "Delegates to shadowrun-binary-cube-engine.js, derives its operation allow-list from api/foundry-capabilities.json, returns argument/return definitions from api/operation-contracts.json, and delegates test-state capture to binary-cube-three-state-validator.js."
       }
     }
+  },
+  "humanTesting": {
+    "page": "binary-cube-test-laboratory.html",
+    "modes": ["registered deterministic package", "custom configuration", "complete suite"],
+    "stateViews": ["pre-encryption", "encrypted", "recovered"],
+    "note": "The human testing page loads the same canonical engine and three-state validator used by programmatic surfaces."
+  },
+  "validationProtocol": {
+    "id": "binary-cube-three-state-validation-v1",
+    "validator": "binary-cube-three-state-validator.js",
+    "testPackages": "skills/binary-cube-laboratory/test-packages.json",
+    "states": ["pre-encryption", "encrypted", "recovered"],
+    "encryptedMethodRequirements": ["canonical package validation", "key binding", "deterministic replay"],
+    "scramblingQualitySignals": ["plaintext equality", "plaintext substring exposure", "aligned Hamming distance", "bit balance", "transition rate", "longest run", "binary entropy"],
+    "recoveryRequirements": ["exact payload", "exact bit length", "exact SHA-256 digest"],
+    "negativeTesting": "Validator-layer fault injection includes invalid input, invalid geometry, package tampering, ciphertext tampering, checksum/key identity failures, wrong valid keys, and malformed key structures."
   },
   "toolIntegration": {
     "projection": "skills/binary-cube-laboratory/tool-projection.json",
@@ -55,14 +75,19 @@
     "skillRegistry": "skills/index.json",
     "statusVocabulary": "api/ai/status-vocabulary.json",
     "selfTest": "skills/binary-cube-laboratory/self-test.json",
+    "testPackages": "skills/binary-cube-laboratory/test-packages.json",
+    "threeStateValidator": "binary-cube-three-state-validator.js",
     "parityRunner": "binary-cube-parity-runner.js"
   },
   "provenance": {
     "canonicalRuntimePath": "shadowrun-binary-cube-engine.js",
     "canonicalRuntimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
     "companionUiPath": "shadowrun-binary-cube-encryption.js",
+    "testUiPath": "binary-cube-test-laboratory.html",
     "nodeAdapterPath": "binary-cube-node-adapter.js",
     "toolProjectionPath": "skills/binary-cube-laboratory/tool-projection.json",
+    "threeStateValidatorPath": "binary-cube-three-state-validator.js",
+    "testPackagePath": "skills/binary-cube-laboratory/test-packages.json",
     "parityRunnerPath": "binary-cube-parity-runner.js",
     "architectureRule": "Mirrored calls, not mirrored logic."
   },
@@ -84,7 +109,7 @@
   "parity": {
     "path": "binary-cube-parity-runner.js",
     "runtime": "node-commonjs",
-    "covers": ["canonical engine through adapter", "Node API", "structured AI tool projection", "operation contract coverage", "deterministic self-test"],
+    "covers": ["canonical engine through adapter", "Node API", "structured AI tool projection", "operation contract coverage", "deterministic self-test", "three-state positive test packages", "validator-layer negative packages"],
     "browserStatus": "runtime-required",
     "note": "Browser execution remains a separate acceptance gate; the runner does not claim browser parity without a browser host."
   },
