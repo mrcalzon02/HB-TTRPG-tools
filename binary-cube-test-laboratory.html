@@ -47,17 +47,21 @@
 <main>
   <section class="bar">
     <h1>Binary Cube Three-State Test Laboratory</h1>
-    <p>Capture the source before encryption, verify that the encrypted package is a canonical Binary Cube transformation while measuring scrambling weaknesses, then decrypt and require exact source recovery. Experimental TTRPG obfuscation research; not production cryptography.</p>
+    <p>Capture the untouched source and any optional pre-entry masked cube-input field, verify that the encrypted package is a canonical Binary Cube transformation while measuring scrambling weaknesses, then decrypt, unmask when required, and demand exact source recovery. Experimental TTRPG obfuscation research; not production cryptography.</p>
     <div class="controls">
       <label class="wide">Registered package<select id="packageSelect"></select></label>
       <label class="wide">Custom payload<input id="payload" value="0100100001101001" spellcheck="false"></label>
       <label>Grid size<input id="gridSize" type="number" min="3" max="1024" value="4"></label>
-      <label>Mask density<input id="maskDensity" type="number" min="0.01" max="1" step="0.01" value="0.75"></label>
-      <label class="wide">Seed<input id="seed" value="browser-three-state-custom"></label>
+      <label>Cube mask density<input id="maskDensity" type="number" min="0.01" max="1" step="0.01" value="0.75"></label>
+      <label class="wide">Cube seed<input id="seed" value="browser-three-state-custom"></label>
       <label>Input face<select id="inputFace"><option>top</option><option>bottom</option><option>front</option><option>back</option><option>left</option><option>right</option></select></label>
       <label>Output face<select id="outputFace"><option>front</option><option>back</option><option>left</option><option>right</option><option>top</option><option>bottom</option></select></label>
       <label>Input turns<input id="inputTurns" type="number" min="0" max="3" value="0"></label>
       <label>Output turns<input id="outputTurns" type="number" min="0" max="3" value="0"></label>
+      <label>Pre-entry mask<select id="preMask"><option value="none">None</option></select></label>
+      <label class="wide">Pre-entry mask seed<input id="preMaskSeed" value="browser-three-state-mask"></label>
+      <label>Mask field width<input id="preMaskWidth" type="number" min="1" value="8"></label>
+      <label>Mask intensity<input id="preMaskIntensity" type="number" min="0.01" max="0.99" step="0.01" value="0.5"></label>
     </div>
     <div class="actions">
       <button id="runPackage">Run selected package</button>
@@ -89,12 +93,14 @@
   </section>
 </main>
 <script src="shadowrun-binary-cube-engine.js"></script>
+<script src="binary-cube-pre-entry-mask.js"></script>
 <script src="binary-cube-three-state-validator.js"></script>
 <script>
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
   let catalog = null;
+  const Mask = window.BinaryCubePreEntryMask;
 
   function badge(element, text, state) {
     element.textContent = text;
@@ -124,10 +130,15 @@
     badge($('preBadge'), pre.passed ? 'captured' : 'failed', pre.passed ? 'good' : 'bad');
     badge($('encBadge'), enc.status, enc.passed ? 'good' : (enc.methodValid ? 'warn' : 'bad'));
     badge($('recBadge'), rec.passed ? 'exact match' : 'mismatch', rec.passed ? 'good' : 'bad');
+    const maskApplied = Boolean(pre.preEntryMask && pre.preEntryMask.applied);
+    const maskDescriptor = maskApplied ? pre.preEntryMask.descriptor : null;
     rows($('preState'), [
-      ['Test', pre.testId], ['Bits', pre.source.statistics.bitLength], ['SHA-256', pre.source.sha256], ['Key ID', pre.keySummary.keyId],
-      ['Grid', pre.keySummary.gridSize], ['Faces', `${pre.keySummary.inputFace} → ${pre.keySummary.outputFace}`],
-      ['Turns', `${pre.keySummary.inputQuarterTurns} → ${pre.keySummary.outputQuarterTurns}`], ['Effective mask', pre.keySummary.maskDensity.toFixed(4)]
+      ['Test', pre.testId], ['Source bits', pre.source.statistics.bitLength], ['Source SHA-256', pre.source.sha256],
+      ['Pre-entry mask', maskApplied ? maskDescriptor.method : 'none'], ['Mask checksum', maskApplied ? maskDescriptor.maskChecksum : '—'],
+      ['Source→masked Hamming', maskApplied ? pre.preEntryMask.sourceToMaskedHamming.ratio.toFixed(4) : '0.0000'],
+      ['Cube-input SHA-256', pre.cubeInput.sha256], ['Key ID', pre.keySummary.keyId], ['Grid', pre.keySummary.gridSize],
+      ['Faces', `${pre.keySummary.inputFace} → ${pre.keySummary.outputFace}`], ['Turns', `${pre.keySummary.inputQuarterTurns} → ${pre.keySummary.outputQuarterTurns}`],
+      ['Cube payload mask', pre.keySummary.maskDensity.toFixed(4)]
     ]);
     rows($('encState'), [
       ['Method valid', enc.methodValid], ['Scrambling observed', enc.scramblingObserved], ['Cipher bits', enc.package.ciphertext.length],
@@ -135,13 +146,15 @@
       ['Key binding', enc.methodValidity.keyBinding], ['Package SHA-256', enc.packageSha256]
     ]);
     rows($('recState'), [
-      ['Payload match', rec.equivalence.exactPayloadMatch], ['Length match', rec.equivalence.exactLengthMatch],
-      ['Digest match', rec.equivalence.exactDigestMatch], ['Recovered bits', rec.recovered.statistics.bitLength], ['SHA-256', rec.recovered.sha256]
+      ['Cube-input match', rec.equivalence.exactCubeInputMatch], ['Payload match', rec.equivalence.exactPayloadMatch],
+      ['Length match', rec.equivalence.exactLengthMatch], ['Digest match', rec.equivalence.exactDigestMatch],
+      ['Recovered bits', rec.recovered.statistics.bitLength], ['SHA-256', rec.recovered.sha256]
     ]);
     const q = enc.scramblingQuality;
+    const maskMetric = maskApplied ? pre.preEntryMask.sourceToMaskedHamming.ratio.toFixed(4) : '0.0000';
     $('metrics').replaceChildren(
-      metric('Aligned Hamming', q.alignedHamming.ratio.toFixed(4)), metric('Cipher one ratio', q.ciphertextStatistics.oneRatio.toFixed(4)),
-      metric('Transition rate', q.ciphertextStatistics.transitionRate.toFixed(4)), metric('Longest run', q.ciphertextStatistics.longestRun),
+      metric('Source→mask Hamming', maskMetric), metric('Source→cipher Hamming', q.alignedHamming.ratio.toFixed(4)),
+      metric('Cipher one ratio', q.ciphertextStatistics.oneRatio.toFixed(4)), metric('Transition rate', q.ciphertextStatistics.transitionRate.toFixed(4)),
       metric('Binary entropy', q.ciphertextStatistics.binaryEntropy.toFixed(4))
     );
     $('warnings').replaceChildren();
@@ -158,8 +171,15 @@
     );
   }
   function customCase() {
+    const preEntryMaskOptions = $('preMask').value === 'none' ? undefined : {
+      method:$('preMask').value,
+      seed:$('preMaskSeed').value,
+      fieldWidth:Number($('preMaskWidth').value),
+      intensity:Number($('preMaskIntensity').value)
+    };
     return {
       id: 'browser-custom', description: 'Browser-entered custom three-state case', payload: { type:'literal', value:$('payload').value },
+      preEntryMaskOptions,
       keyOptions: {
         gridSize:Number($('gridSize').value), seed:$('seed').value, inputFace:$('inputFace').value, outputFace:$('outputFace').value,
         inputQuarterTurns:Number($('inputTurns').value), outputQuarterTurns:Number($('outputTurns').value), maskDensity:Number($('maskDensity').value)
@@ -168,6 +188,8 @@
   }
   function fail(error) { $('output').textContent = `${error.name}: ${error.message}`; $('output').classList.add('error'); }
   async function initialize() {
+    if (!Mask) throw new Error('BinaryCubePreEntryMask did not load.');
+    for (const method of Mask.listMethods().filter(method => method.id !== 'none')) { const option=document.createElement('option'); option.value=method.id; option.textContent=method.title; $('preMask').append(option); }
     const response = await fetch('skills/binary-cube-laboratory/test-packages.json', { cache:'no-store' });
     if (!response.ok) throw new Error(`Could not load test package catalog: HTTP ${response.status}.`);
     catalog = await response.json();
