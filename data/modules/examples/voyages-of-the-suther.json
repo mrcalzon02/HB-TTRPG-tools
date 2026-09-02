@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "voyages-of-the-suther",
+  "title": "Voyages of the Suther",
+  "subtitle": "Preserved long-form adventure module example",
+  "system": "Module example / source reference",
+  "referenceOnly": true,
+  "source": {
+    "fileName": "Voyages of the Suther.pdf",
+    "pdf": "SRC/Voyages of the Suther.pdf",
+    "notes": "Example, template, and use case retained for long-form adventure structure and module-content comparison."
+  },
+  "general": {"status": "source-reference"},
+  "map": {"image": "", "grid": "Source PDF"},
+  "hotspots": [],
+  "rooms": [],
+  "doors": []
+}
