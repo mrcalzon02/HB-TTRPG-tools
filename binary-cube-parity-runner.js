@@ -2,15 +2,15 @@
 'use strict';
 
 const adapter = require('./binary-cube-node-adapter.js');
+const validator = require('./binary-cube-three-state-validator.js');
+const testPackages = require('./skills/binary-cube-laboratory/test-packages.json');
 const toolProjection = require('./skills/binary-cube-laboratory/tool-projection.json');
 
 const TOOL_BY_METHOD = new Map((toolProjection.tools || []).map(tool => [tool.binding && tool.binding.method, tool]));
 
 function normalize(value) {
   if (Array.isArray(value)) return value.map(normalize);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.keys(value).sort().map(key => [key, normalize(value[key])]));
-  }
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, normalize(value[key])]));
   return value;
 }
 
@@ -30,7 +30,15 @@ function toolCall(method, input) {
 
 function runParity(options = {}) {
   const bits = String(options.bits || '010011000110000101100010').replace(/\s+/g, '');
-  const keyOptions = options.keyOptions || { cubeSize: 3, face: 'front', orientation: 0, maskDensity: 0.25, seed: 'parity-runner-v1' };
+  const keyOptions = options.keyOptions || {
+    gridSize: 4,
+    seed: 'parity-runner-v2',
+    inputFace: 'top',
+    outputFace: 'front',
+    inputQuarterTurns: 0,
+    outputQuarterTurns: 0,
+    maskDensity: 0.75
+  };
   const checks = [];
   const record = (id, passed, detail) => checks.push({ id, passed: Boolean(passed), detail });
 
@@ -56,6 +64,9 @@ function runParity(options = {}) {
   const toolDecrypt = toolCall('decryptWorkflow', { package: directEncrypt.package, key: directEncrypt.key });
   record('decrypt-workflow-parity', directDecrypt.bits === bits && toolDecrypt.bits === bits && directDecrypt.bits === toolDecrypt.bits, 'Direct adapter and structured-tool binding recovered identical input bits');
 
+  const threeState = validator.runSuite(testPackages);
+  record('three-state-validation-suite', threeState.ok, `${threeState.positivePassed}/${threeState.positiveCaseCount} positive packages and ${threeState.negativePassed}/${threeState.negativeCaseCount} validator-error packages passed; ${threeState.weaknessCount} scrambling warnings observed`);
+
   const projectedMethods = (toolProjection.tools || []).map(tool => tool.binding && tool.binding.method).filter(Boolean);
   const missingBindings = projectedMethods.filter(method => typeof adapter[method] !== 'function');
   record('tool-binding-coverage', missingBindings.length === 0, missingBindings.length ? `Missing adapter exports: ${missingBindings.join(', ')}` : `${projectedMethods.length} projected methods resolve to adapter exports`);
@@ -63,19 +74,28 @@ function runParity(options = {}) {
   const failed = checks.filter(check => !check.passed);
   return {
     ok: failed.length === 0,
-    schemaVersion: '1.0.0',
+    schemaVersion: '1.1.0',
     capabilityId: adapter.CAPABILITY_ID,
     runtime: 'node-commonjs',
-    surfaces: ['canonical-engine-via-adapter', 'node-api', 'structured-tool-projection'],
+    surfaces: ['canonical-engine-via-adapter', 'node-api', 'structured-tool-projection', 'three-state-validation-protocol'],
     browserParity: {
       status: 'runtime-required',
-      reason: 'This headless runner verifies shared contracts and Node/tool execution. Browser UI parity still requires execution in a browser host.'
+      reason: 'This headless runner verifies shared contracts and Node/tool execution. Browser UI parity requires execution of the same validator in a browser host.'
     },
     inputBits: bits.length,
     checkCount: checks.length,
     passedCount: checks.length - failed.length,
     failedCount: failed.length,
-    checks
+    checks,
+    threeStateSummary: {
+      ok: threeState.ok,
+      positiveCaseCount: threeState.positiveCaseCount,
+      positivePassed: threeState.positivePassed,
+      negativeCaseCount: threeState.negativeCaseCount,
+      negativePassed: threeState.negativePassed,
+      weaknessCount: threeState.weaknessCount,
+      weaknessFindings: threeState.weaknessFindings
+    }
   };
 }
 
