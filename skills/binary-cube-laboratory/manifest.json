@@ -6,7 +6,7 @@
     "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
     "capabilityId": "shadowrun.binary-cube",
     "laboratoryId": "binary-cube-laboratory",
-    "packageVersion": "1.2.0"
+    "packageVersion": "1.3.0"
   },
   "status": "runtime-required",
   "runtime": {
@@ -40,6 +40,14 @@
       }
     }
   },
+  "toolIntegration": {
+    "projection": "skills/binary-cube-laboratory/tool-projection.json",
+    "projectionType": "ai-tool-descriptor",
+    "protocolTargets": ["OpenAI function tools", "MCP", "generic JSON tool runners"],
+    "executionBinding": "binary-cube-node-adapter.js",
+    "remoteRpcProvided": false,
+    "note": "The projection describes local structured calls and never duplicates the Binary Cube transform."
+  },
   "authorities": {
     "operationContracts": "api/operation-contracts.json",
     "capabilityRegistry": "api/foundry-capabilities.json",
@@ -52,6 +60,7 @@
     "canonicalRuntimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
     "companionUiPath": "shadowrun-binary-cube-encryption.js",
     "nodeAdapterPath": "binary-cube-node-adapter.js",
+    "toolProjectionPath": "skills/binary-cube-laboratory/tool-projection.json",
     "architectureRule": "Mirrored calls, not mirrored logic."
   },
   "dependencies": [],
