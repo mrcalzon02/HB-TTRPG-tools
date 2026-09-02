@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Adventure Modules and Static Dungeon References | Calzon’s TTRPG Foundry</title>
-  <meta name="description" content="Browse tabletop adventure modules through the interactive viewer or open static room-by-room references including Unfazun’s Guildhall and Great Arcane University.">
-  <meta name="keywords" content="adventure module viewer, static dungeon module, Unfazun guildhall, Great Arcane University, Alkroves Ichesnas, dungeon room viewer, TTRPG module tools, game master module reference">
+  <meta name="description" content="Browse tabletop adventure modules through the interactive viewer, preserved example corpus, or static room-by-room references including Unfazun’s Guildhall and Great Arcane University.">
+  <meta name="keywords" content="adventure module viewer, dungeon examples, random dungeon reference, static dungeon module, Unfazun guildhall, Great Arcane University, dungeon room viewer, TTRPG module tools, game master module reference">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html">
   <meta property="og:title" content="Adventure Modules | Calzon’s TTRPG Foundry">
-  <meta property="og:description" content="Open the interactive module viewer or browse static room-by-room adventure references.">
+  <meta property="og:description" content="Open the interactive module viewer, preserved reference corpus, or static room-by-room adventure references.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html">
   <link rel="stylesheet" href="styles.css">
@@ -20,14 +20,14 @@
     "@type": "CollectionPage",
     "name": "Adventure Modules",
     "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/modules.html",
-    "description": "A browser-based collection of interactive and static tabletop adventure module references.",
+    "description": "A browser-based collection of interactive, preserved-example, and static tabletop adventure module references.",
     "isPartOf": {"@type": "WebSite", "name": "Calzon’s TTRPG Foundry", "url": "https://mrcalzon02.github.io/HB-TTRPG-tools/"}
   }
   </script>
 </head>
 <body class="workspace-landing-body">
   <header class="site-header no-print">
-    <div><p class="eyebrow">Searchable module landing</p><h1>Adventure Modules</h1><p class="subtitle">Interactive extraction tools and stable room-by-room module pages.</p></div>
+    <div><p class="eyebrow">Searchable module landing</p><h1>Adventure Modules</h1><p class="subtitle">Interactive extraction tools, preserved generation examples, and stable room-by-room module pages.</p></div>
     <nav class="top-nav" aria-label="Module navigation"><a class="nav-button" href="index.html">Foundry Home</a><a class="nav-button" href="index.html?view=modules">Interactive Viewer</a><a class="nav-button active" href="modules.html" aria-current="page">Module Index</a><a class="nav-button" href="unfazun-guildhall.html">Unfazun Guildhall</a><a class="nav-button" href="unfazun-arcane-university.html">Arcane University</a><a class="nav-button" href="site-map.html">Site Map</a></nav>
   </header>
 
@@ -36,24 +36,39 @@
 
     <section class="workspace-hero" data-workspace-code="MOD" aria-labelledby="modules-page-title">
       <div class="workspace-hero-copy">
-        <p class="eyebrow">Interactive and static references</p>
+        <p class="eyebrow">Interactive, example, and static references</p>
         <h1 id="modules-page-title">Choose the module format that remains useful at the table.</h1>
-        <p>The interactive viewer supports extracted maps, clickable rooms, doors, traps, monsters, treasure, and source-backed notes. Static module pages remain completely separate from that runtime and present preserved campaign material without JavaScript transformation.</p>
-        <div class="workspace-actions"><a class="link-button primary-action" href="unfazun-arcane-university.html">Open Great Arcane University</a><a class="link-button" href="unfazun-guildhall.html">Open Unfazun Guildhall</a><a class="link-button" href="index.html?view=modules">Open Interactive Viewer</a></div>
+        <p>The interactive viewer supports extracted maps, clickable rooms, doors, traps, monsters, treasure, source-backed notes, and the preserved PDF example corpus used to guide procedural module generation. Static module pages remain separate and present preserved campaign material without runtime transformation.</p>
+        <div class="workspace-actions"><a class="link-button primary-action" href="index.html?view=modules">Open Module Viewer & Generator</a><a class="link-button" href="unfazun-arcane-university.html">Great Arcane University</a><a class="link-button" href="unfazun-guildhall.html">Unfazun Guildhall</a></div>
       </div>
       <aside class="workspace-summary-panel" aria-label="Module formats summary">
         <h2>Available formats</h2>
         <div class="workspace-summary-list">
+          <div><strong>Example corpus</strong><span>Preserved complete modules are visible as examples, templates, and generation use cases.</span></div>
+          <div><strong>Interactive viewer</strong><span>Clickable rooms, doors, traps, maps, extracted notes, and in-viewer source PDFs.</span></div>
           <div><strong>Static source pages</strong><span>Complete prose remains in independent HTML documents without runtime rewriting.</span></div>
-          <div><strong>Indexed atlas pages</strong><span>Chapter navigation and interpretive 3D room networks sit beside the preserved source.</span></div>
-          <div><strong>Interactive viewer</strong><span>Clickable rooms, doors, traps, maps, and extracted notes.</span></div>
-          <div><strong>Table speed</strong><span>Choose the least disruptive format for active play.</span></div>
+          <div><strong>Procedural generation</strong><span>Reference-driven room/corridor topology can be generated, inspected, and sent to the map editor.</span></div>
         </div>
       </aside>
     </section>
 
+    <section class="workspace-section" aria-labelledby="example-corpus-title">
+      <div class="workspace-section-head"><p class="eyebrow">Examples, templates, and use cases</p><h2 id="example-corpus-title">Preserved module example corpus</h2><p>These are not loose source files. They are the module-generation reference library. Each entry can be pulled directly into the Modules workspace; extracted examples show their mapped records, while source-reference examples display the preserved PDF in the viewer.</p></div>
+      <div class="workspace-card-grid">
+        <article class="workspace-tool-card"><h3>The Northern Watchtower 09</h3><p>Small 39 × 39 keyed dungeon example with extracted room and door data.</p><a class="link-button primary-action" href="index.html?view=modules&amp;module=northern-watchtower-09">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Veteck Henrina'yea 09</h3><p>Huge 73 × 65 ice-dungeon example with 65 keyed rooms and extracted encounter content.</p><a class="link-button primary-action" href="index.html?view=modules&amp;module=veteck-henrinayea-09">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Caves of Whispering Wild 10</h3><p>Preserved cave-module example for cave topology, room placement, and encounter comparison.</p><a class="link-button" href="index.html?view=modules&amp;module=caves-of-whispering-wild-10">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders</h3><p>Environmental and encounter-focused reference for biome-driven module content.</p><a class="link-button" href="index.html?view=modules&amp;module=chronicles-elemental-realms-swamps">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Mad Martiken’s Menagerie of Magical Services</h3><p>Service-location and keyed-content reference for semantic room programming.</p><a class="link-button" href="index.html?view=modules&amp;module=mad-martikens-menagerie">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>The Secret Chambers of Sabiesha the Enchantress 10</h3><p>Large keyed dungeon reference with secret-space and encounter-layout use cases.</p><a class="link-button" href="index.html?view=modules&amp;module=secret-chambers-sabiesha-10">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>The Secret Prison of Souls 10</h3><p>Compact prison/dungeon reference for route structure, room density, and constrained layouts.</p><a class="link-button" href="index.html?view=modules&amp;module=secret-prison-of-souls-10">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Tomb of Antwig 05</h3><p>Tomb-module reference for rooms, corridors, traps, and encounter density.</p><a class="link-button" href="index.html?view=modules&amp;module=tomb-of-antwig-05">Open in Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Voyages of the Suther</h3><p>Long-form adventure/campaign example retained for broader module-structure comparison.</p><a class="link-button" href="index.html?view=modules&amp;module=voyages-of-the-suther">Open in Viewer</a></article>
+      </div>
+    </section>
+
     <section class="workspace-section" aria-labelledby="static-modules-title">
-      <div class="workspace-section-head"><p class="eyebrow">Static module library</p><h2 id="static-modules-title">Complete references with independent indexed atlases.</h2><p>Each module keeps its complete prose in a dedicated static source page. Its atlas reads that page without assembling, paraphrasing, patching, or reformatting the underlying text.</p></div>
+      <div class="workspace-section-head"><p class="eyebrow">Static module library</p><h2 id="static-modules-title">Complete references with independent indexed atlases.</h2><p>Each static module keeps its complete prose in a dedicated source page. Its atlas reads that page without assembling, paraphrasing, patching, or reformatting the underlying text.</p></div>
       <div class="workspace-card-grid">
         <article class="workspace-tool-card"><h3>Alkroves Ichesnas Arcane Academia Universitalis</h3><p>The Great Arcane University of Unfazun, preserved room by room across eighty-four locations with a left-side chapter index and a right-side interactive 3D model synthesized from its collapsed architecture and stated connections.</p><a class="link-button primary-action" href="unfazun-arcane-university.html">Open University Atlas</a><a class="workspace-inline-link" href="unfazun-arcane-university-source.html">Open preserved source text</a></article>
         <article class="workspace-tool-card"><h3>Unfazun, the Guildhall of a Thousand Roads</h3><p>The ancient central mining guildhall of the Seventh Layer, keyed room by room across eighty-two locations, seven districts, the dwarven necromantic civil war, and the sealed royal road below.</p><a class="link-button primary-action" href="unfazun-guildhall.html">Open Guildhall Atlas</a><a class="workspace-inline-link" href="unfazun-guildhall-source.html">Open preserved source text</a></article>
@@ -61,22 +76,22 @@
     </section>
 
     <section class="workspace-section" aria-labelledby="module-features-title">
-      <div class="workspace-section-head"><p class="eyebrow">Interactive viewer functions</p><h2 id="module-features-title">Extracted module information organized for live play.</h2><p>The interactive workspace remains available for modules that benefit from mapped hotspots and selectable room records.</p></div>
+      <div class="workspace-section-head"><p class="eyebrow">Interactive viewer functions</p><h2 id="module-features-title">Extracted module information and procedural layout tools organized for live use.</h2><p>The interactive workspace combines mapped records, preserved source references, map editing, semantic content tools, and the Donjon-informed random dungeon topology generator.</p></div>
       <div class="workspace-card-grid">
         <article class="workspace-tool-card"><h3>Clickable Room Directory</h3><p>Navigate room numbers and location records without scanning an entire document during play.</p><a class="link-button" href="index.html?view=modules">Open Room Directory</a></article>
+        <article class="workspace-tool-card"><h3>Reference-Driven Random Module Generator</h3><p>Generate seeded room-and-corridor layouts with masks, packed or scattered rooms, corridor persistence, doors, stairs, and dead-end pruning, then send the result into the editor/viewer.</p><a class="link-button" href="index.html?view=modules">Open Generator</a></article>
         <article class="workspace-tool-card"><h3>Door and Route Notes</h3><p>Review connections, access points, blocked passages, routes, and location transitions.</p><a class="link-button" href="index.html?view=modules">Open Route Notes</a></article>
         <article class="workspace-tool-card"><h3>Trap Reference</h3><p>Surface trap placement, triggers, consequences, and room context in a fast table-side format.</p><a class="link-button" href="index.html?view=modules">Open Trap Reference</a></article>
         <article class="workspace-tool-card"><h3>Monster and Encounter Notes</h3><p>Keep encounter information associated with the room where it matters.</p><a class="link-button" href="index.html?view=modules">Open Encounter Notes</a></article>
-        <article class="workspace-tool-card"><h3>Treasure and Reward Records</h3><p>Locate room treasure, recoverable items, rewards, and source-backed campaign notes.</p><a class="link-button" href="index.html?view=modules">Open Treasure Records</a></article>
-        <article class="workspace-tool-card"><h3>Source-Backed Extraction</h3><p>Keep extracted adventure information traceable to its original source context.</p><a class="link-button" href="index.html?view=modules">Open Source Viewer</a></article>
+        <article class="workspace-tool-card"><h3>Source-Backed Extraction</h3><p>Keep extracted adventure information traceable to its original source context and open preserved examples directly beside generated work.</p><a class="link-button" href="index.html?view=modules">Open Source Viewer</a></article>
       </div>
     </section>
 
-    <section class="workspace-section" aria-labelledby="module-keywords-title"><div class="workspace-section-head"><p class="eyebrow">Search topics</p><h2 id="module-keywords-title">Module viewer keywords and subjects</h2></div><div class="keyword-cloud"><span>Great Arcane University</span><span>Alkroves Ichesnas</span><span>Unfazun guildhall</span><span>static dungeon module</span><span>dwarven necromancy</span><span>interactive 3D dungeon map</span><span>adventure module viewer</span><span>dungeon room index</span><span>game master reference</span><span>source-backed extraction</span></div></section>
+    <section class="workspace-section" aria-labelledby="module-keywords-title"><div class="workspace-section-head"><p class="eyebrow">Search topics</p><h2 id="module-keywords-title">Module viewer keywords and subjects</h2></div><div class="keyword-cloud"><span>module example library</span><span>random dungeon generator</span><span>Donjon topology</span><span>Northern Watchtower</span><span>Veteck Henrina'yea</span><span>Caves of Whispering Wild</span><span>Secret Chambers of Sabiesha</span><span>Secret Prison of Souls</span><span>Tomb of Antwig</span><span>Great Arcane University</span><span>Unfazun guildhall</span><span>adventure module viewer</span><span>source-backed extraction</span></div></section>
 
     <section class="workspace-section"><h2>Related workspaces</h2><div class="workspace-related"><a href="unfazun-arcane-university.html">Great Arcane University</a><a href="unfazun-guildhall.html">Unfazun Guildhall</a><a href="utilities.html">Utilities</a><a href="generators.html">Generators</a><a href="barotrauma.html">Barotrauma</a><a href="site-map.html">Complete Site Map</a></div></section>
   </main>
 
-  <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Interactive and static adventure module directory.</p></footer>
+  <footer class="site-footer no-print"><p>Calzon’s TTRPG Foundry · Interactive, preserved-example, and static adventure module directory.</p></footer>
 </body>
 </html>
