@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "tomb-of-antwig-05",
+  "title": "Tomb of Antwig 05",
+  "subtitle": "Preserved tomb dungeon module example",
+  "system": "Module example / source reference",
+  "referenceOnly": true,
+  "source": {
+    "fileName": "Tomb of Antwig 05.pdf",
+    "pdf": "SRC/Tomb of Antwig 05.pdf",
+    "notes": "Example, template, and use case retained for tomb layout, trap, room-density, and encounter comparison."
+  },
+  "general": {"status": "source-reference"},
+  "map": {"image": "", "grid": "Source PDF"},
+  "hotspots": [],
+  "rooms": [],
+  "doors": []
+}
