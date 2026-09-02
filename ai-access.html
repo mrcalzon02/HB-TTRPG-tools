@@ -8,6 +8,7 @@
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html">
   <link rel="alternate" type="application/json" href=".well-known/ai-capabilities.json" title="AI Capability Discovery Manifest">
+  <link rel="alternate" type="text/html" href="agent-skills.html" title="Agent Skills HTML Compatibility Directory">
   <link rel="service-desc" type="application/vnd.oai.openapi+json" href="api/ai/openapi.json" title="AI Discovery OpenAPI">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="workspace-landing.css">
@@ -31,6 +32,7 @@
     </div>
     <nav class="top-nav" aria-label="AI access navigation">
       <a class="nav-button" href="index.html">Foundry Home</a>
+      <a class="nav-button" href="agent-skills.html">Agent Skills</a>
       <a class="nav-button" href="site-map.html">Site Map</a>
       <a class="nav-button" href="charles-interactive-resource-gateway.html">Charles Gateway</a>
     </nav>
@@ -41,7 +43,8 @@
       <p class="eyebrow">Start here for machine discovery</p>
       <h2>Do not reconstruct the Foundry's capabilities from page prose.</h2>
       <p>External LLMs, agents, tool hosts, and adapters should begin with the machine discovery manifest below, then resolve the canonical status vocabulary, capability registry, exact operation contracts, resource collections, and Agent Skills index. These documents are the machine authority; this page is only the human-readable entrypoint.</p>
-      <p><a class="link-button primary-action" href=".well-known/ai-capabilities.json">Open AI Capability Discovery Manifest</a></p>
+      <p>If the current model browser cannot retrieve raw JSON or Markdown, use the HTML Agent Skills compatibility directory to enumerate registered skills and follow its GitHub HTML fallbacks. The compatibility directory does not replace <code>skills/index.json</code> or any <code>SKILL.md</code> as authority.</p>
+      <p><a class="link-button primary-action" href=".well-known/ai-capabilities.json">Open AI Capability Discovery Manifest</a> <a class="link-button" href="agent-skills.html">Open Agent Skills HTML Directory</a></p>
     </section>
 
     <section class="registry-section" aria-labelledby="machine-entrypoints-title">
@@ -77,8 +80,8 @@
         </article>
         <article class="module-card">
           <h3>Agent Skills</h3>
-          <p>Loadable task-oriented Agent Skills mapped to Foundry capability IDs and resource IDs without duplicating implementation logic.</p>
-          <p><a href="skills/index.json">skills/index.json</a></p>
+          <p>The authoritative registry is <code>skills/index.json</code>. Restricted model browsers that cannot retrieve raw JSON can use the HTML compatibility projection to enumerate all 21 exact registered names, statuses, capability IDs, and skill-document routes.</p>
+          <p><a href="skills/index.json">Authoritative skills/index.json</a> · <a href="agent-skills.html">HTML compatibility directory</a></p>
         </article>
         <article class="module-card">
           <h3>OpenAPI Discovery</h3>
@@ -92,10 +95,10 @@
       <div class="section-heading">
         <p class="eyebrow">Execution truth</p>
         <h2 id="runtime-status-title">Runtime and transport status</h2>
-        <p>GitHub Pages is a static origin. Public resources are directly retrievable, while executable capabilities require the runtime declared by their canonical descriptor. Static availability does not imply that an arbitrary LLM host is runtime-compatible or ready.</p>
+        <p>GitHub Pages is a static origin. Public resources are directly addressable, while executable capabilities require the runtime declared by their canonical descriptor. Static availability does not imply that an arbitrary LLM host is permitted to retrieve every content type or is runtime-compatible or ready.</p>
       </div>
       <div class="module-grid">
-        <article class="module-card"><h3>Static GET</h3><p><strong>Ready.</strong> JSON, text, HTML, JavaScript, manifests, skills, and public resources can be fetched directly.</p></article>
+        <article class="module-card"><h3>Static GET</h3><p><strong>Ready at the origin.</strong> JSON, text, HTML, JavaScript, manifests, skills, and public resources are public GET-addressable. Individual model browsing environments may still block raw JSON, text, or Markdown; the Agent Skills HTML compatibility view exists for that host limitation.</p></article>
         <article class="module-card"><h3>Browser JavaScript</h3><p><strong>Runtime required.</strong> The host must load the canonical scripts and execute the declared global/method or dispatch contract before host-level readiness can be established.</p></article>
         <article class="module-card"><h3>Page / Device Context</h3><p><strong>Conditional.</strong> Page-bound, UI-bound, and sensor capabilities require their declared browser or device context.</p></article>
         <article class="module-card"><h3>Remote MCP / RPC</h3><p><strong>Not deployed.</strong> Discovery files must not be interpreted as an active remote execution service. A future transport adapter can mirror the same capability IDs and contracts.</p></article>
@@ -132,8 +135,8 @@
         <p class="eyebrow">Loadable LLM workflows</p>
         <h2 id="skill-onboarding-title">Agent Skills onboarding</h2>
       </div>
-      <p>The Foundry uses the open Agent Skills folder format already present under <code>skills/</code>. An external client should load <a href="api/ai/skill-onboarding.json">the onboarding profile</a>, read <a href="api/ai/status-vocabulary.json">the status vocabulary</a>, select a skill from <a href="skills/index.json">the skill registry</a>, load its <code>SKILL.md</code>, then resolve every referenced capability and operation against the canonical registries before invoking anything.</p>
-      <p>A skill describes a workflow. It does not grant credentials, create permissions, or magically attach an execution transport.</p>
+      <p>The Foundry uses the open Agent Skills folder format already present under <code>skills/</code>. An external client should load <a href="api/ai/skill-onboarding.json">the onboarding profile</a>, read <a href="api/ai/status-vocabulary.json">the status vocabulary</a>, select a skill from <a href="skills/index.json">the authoritative skill registry</a>, load its <code>SKILL.md</code>, then resolve every referenced capability and operation against the canonical registries before invoking anything.</p>
+      <p>If the host cannot retrieve the raw registry or Markdown, it should use <a href="agent-skills.html">agent-skills.html</a> to enumerate the registered skills and follow the GitHub HTML fallback for the selected <code>SKILL.md</code>. A skill describes a workflow; it does not grant credentials, create permissions, or magically attach an execution transport.</p>
     </section>
 
     <section class="registry-section" aria-labelledby="acceptance-title">
@@ -141,7 +144,8 @@
         <p class="eyebrow">External-model acceptance test</p>
         <h2 id="acceptance-title">Expected behavior</h2>
       </div>
-      <p>When asked to examine this Foundry for AI-available tools, a capable external model should identify and read the machine discovery manifest instead of only summarizing the human tool directory. When asked about Cube Encryption, it should identify <code>shadowrun.binary-cube</code>, inspect its operation contract, read its <code>runtime-required</code> status correctly, and then report whether its current environment can satisfy the declared browser-JavaScript runtime. When no compatible transport is attached, an explicit runtime limitation is a correct result.</p>
+      <p>When asked to examine this Foundry for AI-available tools, a capable external model should identify and read the machine discovery layer instead of only summarizing the human tool directory. When asked, “The authoritative skill registry currently contains 21 registered Agent Skills. What are they?”, it should retrieve <code>skills/index.json</code> and enumerate all 21 exact <code>name</code> values. If its host blocks raw JSON, it should use the linked HTML compatibility directory, say that it is using a compatibility projection, and still enumerate all 21 exact names rather than stopping at an access error.</p>
+      <p>When asked about Cube Encryption, it should identify <code>shadowrun.binary-cube</code>, inspect its operation contract, read its <code>runtime-required</code> status correctly, and then report whether its current environment can satisfy the declared browser-JavaScript runtime. When no compatible transport is attached, an explicit runtime limitation is a correct result.</p>
     </section>
   </main>
 </body>
