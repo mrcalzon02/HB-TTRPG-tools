@@ -1,13 +1,13 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "protocolId": "binary-cube-three-state-validation-v1",
   "capabilityId": "shadowrun.binary-cube",
   "securityClassification": "experimental-ttrpg-obfuscation-not-production-cryptography",
-  "purpose": "Deterministic test package catalog for capturing plaintext state, validating canonical encrypted scrambling state, validating recovered plaintext state, and exercising validator failures without creating a second encryption implementation.",
+  "purpose": "Deterministic test package catalog for capturing plaintext state, optional pre-entry masked cube input, validating canonical encrypted scrambling state, validating recovered plaintext state, and exercising validator failures without creating a second cube implementation.",
   "stateModel": [
-    {"id":"pre-encryption","ordinal":1,"requirement":"Capture normalized input bits, source digest, canonical key, and effective key configuration before encryption."},
-    {"id":"encrypted","ordinal":2,"requirement":"Capture the canonical encrypted package, validate package/key binding and deterministic replay through the Binary Cube engine, and record scrambling-quality observations separately from method validity."},
-    {"id":"recovered","ordinal":3,"requirement":"Decrypt the captured encrypted package with the captured key and require exact payload, length, and digest equivalence to the pre-encryption capture."}
+    {"id":"pre-encryption","ordinal":1,"requirement":"Capture normalized source bits, optional reversible pre-entry mask and resulting cube-input field, source/cube-input digests, canonical key, and effective configuration before encryption."},
+    {"id":"encrypted","ordinal":2,"requirement":"Capture the canonical encrypted package, validate package/key binding and deterministic replay from the exact captured cube-input field, and record scrambling-quality observations separately from method validity."},
+    {"id":"recovered","ordinal":3,"requirement":"Decrypt the captured package, require exact cube-input recovery, remove any captured pre-entry mask, and require exact original payload, length, and digest equivalence."}
   ],
   "positiveCases": [
     {
@@ -48,13 +48,13 @@
     },
     {
       "id": "sparse-mask-padding-pressure",
-      "description": "Sparse payload mask designed to exercise multi-block filler behavior and package sizing.",
+      "description": "Sparse canonical cube payload mask designed to exercise multi-block filler behavior and package sizing.",
       "payload": {"type":"repeat","pattern":"01101001","count":48},
       "keyOptions": {"gridSize":12,"seed":"three-state-sparse-mask","inputFace":"left","outputFace":"top","inputQuarterTurns":2,"outputQuarterTurns":2,"maskDensity":0.05}
     },
     {
       "id": "full-mask-no-filler-capacity",
-      "description": "Full mask configuration minimizing filler cells while spanning multiple blocks.",
+      "description": "Full canonical cube payload mask configuration minimizing filler cells while spanning multiple blocks.",
       "payload": {"type":"repeat","pattern":"11000011","count":64},
       "keyOptions": {"gridSize":12,"seed":"three-state-full-mask","inputFace":"front","outputFace":"top","inputQuarterTurns":3,"outputQuarterTurns":1,"maskDensity":1}
     },
@@ -69,6 +69,34 @@
       "description": "Human-entered binary input containing whitespace; state one must capture the normalized canonical bitstream.",
       "payload": {"type":"literal","value":"0100 1000\n0110 1001\t0010 0001"},
       "keyOptions": {"gridSize":4,"seed":"three-state-whitespace","inputFace":"top","outputFace":"front","inputQuarterTurns":0,"outputQuarterTurns":2,"maskDensity":0.75}
+    },
+    {
+      "id":"masked-white-noise-all-zero",
+      "description":"All-zero low-entropy input with a deterministic white-noise pre-entry field mask; verifies masked cube-input capture and exact unmask recovery.",
+      "payload":{"type":"repeat","pattern":"0","count":128},
+      "preEntryMaskOptions":{"method":"white-noise","seed":"three-state-mask-white","fieldWidth":16,"intensity":0.5},
+      "keyOptions":{"gridSize":12,"seed":"three-state-mask-white-cube","inputFace":"top","outputFace":"front","inputQuarterTurns":0,"outputQuarterTurns":1,"maskDensity":0.75}
+    },
+    {
+      "id":"masked-newspaper-repeated-pattern",
+      "description":"Repeated byte pattern with irregular newspaper-cutout pre-entry masking.",
+      "payload":{"type":"repeat","pattern":"00111100","count":32},
+      "preEntryMaskOptions":{"method":"newspaper-cutout","seed":"three-state-mask-newspaper","fieldWidth":16,"intensity":0.55,"patchCount":12},
+      "keyOptions":{"gridSize":12,"seed":"three-state-mask-newspaper-cube","inputFace":"front","outputFace":"left","inputQuarterTurns":1,"outputQuarterTurns":2,"maskDensity":0.5}
+    },
+    {
+      "id":"masked-plasma-low-entropy",
+      "description":"All-one low-entropy input with multi-octave plasma-noise pre-entry masking.",
+      "payload":{"type":"repeat","pattern":"1","count":192},
+      "preEntryMaskOptions":{"method":"plasma-noise","seed":"three-state-mask-plasma","fieldWidth":16,"intensity":0.5,"scale":8,"octaves":4},
+      "keyOptions":{"gridSize":12,"seed":"three-state-mask-plasma-cube","inputFace":"right","outputFace":"front","inputQuarterTurns":2,"outputQuarterTurns":0,"maskDensity":0.75}
+    },
+    {
+      "id":"masked-cellular-alternating",
+      "description":"Alternating input with cellular-diffusion pre-entry masking and multiple evolution steps.",
+      "payload":{"type":"repeat","pattern":"01","count":128},
+      "preEntryMaskOptions":{"method":"cellular-diffusion","seed":"three-state-mask-cellular","fieldWidth":16,"intensity":0.5,"cellularSteps":5},
+      "keyOptions":{"gridSize":12,"seed":"three-state-mask-cellular-cube","inputFace":"bottom","outputFace":"front","inputQuarterTurns":3,"outputQuarterTurns":1,"maskDensity":0.75}
     }
   ],
   "negativeCases": [
@@ -77,6 +105,7 @@
     {"id":"reject-grid-below-minimum","stage":"pre-encryption","description":"Grid size below the canonical minimum must be rejected.","case":{"payload":{"type":"literal","value":"0101"},"keyOptions":{"gridSize":2,"seed":"invalid-small-grid","inputFace":"top","outputFace":"front","maskDensity":1}}},
     {"id":"reject-same-face","stage":"pre-encryption","description":"Identical input/output faces must be rejected.","case":{"payload":{"type":"literal","value":"0101"},"keyOptions":{"gridSize":4,"seed":"invalid-same-face","inputFace":"top","outputFace":"top","maskDensity":1}}},
     {"id":"reject-opposite-face","stage":"pre-encryption","description":"Opposite input/output faces must be rejected because they preserve the original projection.","case":{"payload":{"type":"literal","value":"0101"},"keyOptions":{"gridSize":4,"seed":"invalid-opposite-face","inputFace":"top","outputFace":"bottom","maskDensity":1}}},
+    {"id":"reject-unsupported-pre-entry-mask","stage":"pre-encryption","description":"Unknown pre-entry mask methods must fail before cube encryption.","case":{"payload":{"type":"literal","value":"01010101"},"preEntryMaskOptions":{"method":"unknown-mask","seed":"invalid-mask"},"keyOptions":{"gridSize":4,"seed":"invalid-mask-cube","inputFace":"top","outputFace":"front","maskDensity":1}}},
     {"id":"reject-ciphertext-bit-flip","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"flip-ciphertext-bit","index":0},"description":"A ciphertext mutation must fail canonical package validation."},
     {"id":"reject-truncated-ciphertext","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"truncate-ciphertext","bits":1},"description":"Truncated ciphertext must fail encrypted-state validation."},
     {"id":"reject-tampered-checksum","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"tamper-checksum"},"description":"Checksum tampering must be rejected by the package validator."},
@@ -91,6 +120,7 @@
   "scramblingObservations": {
     "methodValidityRequired": ["canonicalPackageValidation", "keyBinding", "deterministicReplay"],
     "qualitySignals": ["exactPlaintextEquality", "plaintextSubstringExposure", "alignedHammingRatio", "ciphertextOneRatio", "ciphertextTransitionRate", "ciphertextLongestRun", "ciphertextBinaryEntropy"],
-    "interpretation": "Method validity establishes that the package is a canonical Binary Cube transformation. Quality signals look for weaknesses and are intentionally reported separately so pathological inputs can reveal weaknesses without being mistaken for an unrelated algorithm."
+    "preEntryMaskSignals":["sourceToMaskedHamming","maskOneRatio","maskTransitionRate","maskBinaryEntropy","cubeInputScramblingQuality"],
+    "interpretation": "Method validity establishes that the package is a canonical Binary Cube transformation of the captured cube-input field. Optional pre-entry masks are captured inside state one and reversed after cube decryption. Quality signals look for weaknesses and remain separate from method validity so pathological inputs or ineffective masks remain visible evidence."
   }
 }
