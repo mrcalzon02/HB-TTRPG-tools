@@ -1,79 +1,24 @@
 {
-  "schemaVersion": "0.2.0",
-  "description": "Registry for extracted and preserved example adventure modules that can be opened from module-viewer.js. The source-reference entries are deliberate examples/templates/use-cases and are displayed in-viewer through the module reference library bridge.",
+  "schemaVersion": "0.3.0",
+  "description": "Registry for extracted and preserved example adventure modules that can be opened from module-viewer.js. Reference-example entries are deliberate templates and use cases for viewer inspection and procedural-generation comparison.",
   "inventory": "data/modules/module-inventory.json",
   "modules": [
-    {
-      "id": "northern-watchtower-09",
-      "title": "The Northern Watchtower 09",
-      "status": "extracted-alpha",
-      "system": "Hypertext d20 / D&D 3.5-compatible extraction",
-      "sourceFile": "The Northern Watchtower 09.pdf",
-      "path": "data/modules/northern-watchtower-09.json"
-    },
-    {
-      "id": "veteck-henrinayea-09",
-      "title": "Veteck Henrina'yea 09",
-      "status": "extracted-shell",
-      "system": "Hypertext d20 / D&D 3.5-compatible extraction",
-      "sourceFile": "Veteck Henrina'yea 09.pdf",
-      "path": "data/modules/veteck-henrinayea-09.json"
-    },
-    {
-      "id": "caves-of-whispering-wild-10",
-      "title": "Caves of Whispering Wild 10",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "Caves of Whispering wild 10.pdf",
-      "path": "data/modules/examples/caves-of-whispering-wild-10.json"
-    },
-    {
-      "id": "chronicles-elemental-realms-swamps",
-      "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
-      "path": "data/modules/examples/chronicles-elemental-realms-swamps.json"
-    },
-    {
-      "id": "mad-martikens-menagerie",
-      "title": "Mad Martiken’s Menagerie of Magical Services",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "Mad Martiken’s Menagerie of Magical Services.pdf",
-      "path": "data/modules/examples/mad-martikens-menagerie.json"
-    },
-    {
-      "id": "secret-chambers-sabiesha-10",
-      "title": "The Secret Chambers of Sabiesha the Enchantress 10",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "The Secret Chambers of Sabiesha the Enchantress 10.pdf",
-      "path": "data/modules/examples/secret-chambers-sabiesha-10.json"
-    },
-    {
-      "id": "secret-prison-of-souls-10",
-      "title": "The Secret Prison of Souls 10",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "The Secret Prison of Souls 10.pdf",
-      "path": "data/modules/examples/secret-prison-of-souls-10.json"
-    },
-    {
-      "id": "tomb-of-antwig-05",
-      "title": "Tomb of Antwig 05",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "Tomb of Antwig 05.pdf",
-      "path": "data/modules/examples/tomb-of-antwig-05.json"
-    },
-    {
-      "id": "voyages-of-the-suther",
-      "title": "Voyages of the Suther",
-      "status": "source-reference",
-      "system": "Module example / source reference",
-      "sourceFile": "Voyages of the Suther.pdf",
-      "path": "data/modules/examples/voyages-of-the-suther.json"
-    }
+    {"id":"northern-watchtower-09","title":"The Northern Watchtower 09","status":"extracted-alpha","system":"Hypertext d20 / D&D 3.5-compatible extraction","sourceFile":"The Northern Watchtower 09.pdf","path":"data/modules/northern-watchtower-09.json"},
+    {"id":"veteck-henrinayea-09","title":"Veteck Henrina'yea 09","status":"extracted-shell","system":"Hypertext d20 / D&D 3.5-compatible extraction","sourceFile":"Veteck Henrina'yea 09.pdf","path":"data/modules/veteck-henrinayea-09.json"},
+    {"id":"caves-of-whispering-wild-10","title":"Caves of Whispering Wild 10","status":"source-reference","system":"Module example / source reference","sourceFile":"Caves of Whispering wild 10.pdf","path":"data/modules/examples/caves-of-whispering-wild-10.json"},
+    {"id":"chronicles-elemental-realms-swamps","title":"Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders","status":"source-reference","system":"Module example / source reference","sourceFile":"Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf","path":"data/modules/examples/chronicles-elemental-realms-swamps.json"},
+    {"id":"mad-martikens-menagerie","title":"Mad Martiken’s Menagerie of Magical Services","status":"source-reference","system":"Module example / source reference","sourceFile":"Mad Martiken’s Menagerie of Magical Services.pdf","path":"data/modules/examples/mad-martikens-menagerie.json"},
+    {"id":"secret-chambers-sabiesha-10","title":"The Secret Chambers of Sabiesha the Enchantress 10","status":"source-reference","system":"Module example / source reference","sourceFile":"The Secret Chambers of Sabiesha the Enchantress 10.pdf","path":"data/modules/examples/secret-chambers-sabiesha-10.json"},
+    {"id":"secret-prison-of-souls-10","title":"The Secret Prison of Souls 10","status":"source-reference","system":"Module example / source reference","sourceFile":"The Secret Prison of Souls 10.pdf","path":"data/modules/examples/secret-prison-of-souls-10.json"},
+    {"id":"tomb-of-antwig-05","title":"Tomb of Antwig 05","status":"source-reference","system":"Module example / source reference","sourceFile":"Tomb of Antwig 05.pdf","path":"data/modules/examples/tomb-of-antwig-05.json"},
+    {"id":"voyages-of-the-suther","title":"Voyages of the Suther","status":"source-reference","system":"Module example / source reference","sourceFile":"Voyages of the Suther.pdf","path":"data/modules/examples/voyages-of-the-suther.json"},
+    {"id":"forsaken-prison-demon-emperor-01","title":"The Forsaken Prison of the Demon Emperor 01","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"The Forsaken Prison of the Demon Emperor 01(1).html","path":"data/modules/examples/forsaken-prison-demon-emperor-01.json"},
+    {"id":"example-34534534-01","title":"34534534 01","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"34534534 01.html","path":"data/modules/examples/example-34534534-01.json"},
+    {"id":"halls-wyrm-duchess-01-a","title":"The Halls of the Wyrm Duchess 01 — Variant A","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"The Halls of the Wyrm Duchess 01(1).html","path":"data/modules/examples/halls-wyrm-duchess-01-a.json"},
+    {"id":"halls-wyrm-duchess-01-b","title":"The Halls of the Wyrm Duchess 01 — Variant B","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"The Halls of the Wyrm Duchess 01.html","path":"data/modules/examples/halls-wyrm-duchess-01-b.json"},
+    {"id":"lyran-research-01","title":"Lyran Research 01","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"Lyran Research 01.pdf","path":"data/modules/examples/lyran-research-01.json"},
+    {"id":"abarea-trehill-crusier-04","title":"Abarea Trehill Crusier 04","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"Abarea Trehill Crusier 04(1).html","path":"data/modules/examples/abarea-trehill-crusier-04.json"},
+    {"id":"alpthon-recon-vessel-systemic-casualty","title":"Alpthon Short-Range Reconnaissance Vessel — Systemic Casualty","status":"reference-example","system":"Preserved module/vessel example","sourceFile":"Alpthon_Reconnaissance_Vessel_Map_Preserved(1).html","path":"data/modules/examples/alpthon-recon-vessel-systemic-casualty.json"},
+    {"id":"dread-caverns-necromancy-01","title":"The Dread Caverns of Necromancy 01","status":"reference-example","system":"Preserved Donjon-derived module example","sourceFile":"The Dread Caverns of Necromancy 01(1).html","path":"data/modules/examples/dread-caverns-necromancy-01.json"}
   ]
 }
