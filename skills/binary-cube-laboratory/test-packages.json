@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "1.0.0",
+  "protocolId": "binary-cube-three-state-validation-v1",
+  "capabilityId": "shadowrun.binary-cube",
+  "securityClassification": "experimental-ttrpg-obfuscation-not-production-cryptography",
+  "purpose": "Deterministic test package catalog for capturing plaintext state, validating canonical encrypted scrambling state, validating recovered plaintext state, and exercising validator failures without creating a second encryption implementation.",
+  "stateModel": [
+    {"id":"pre-encryption","ordinal":1,"requirement":"Capture normalized input bits, source digest, canonical key, and effective key configuration before encryption."},
+    {"id":"encrypted","ordinal":2,"requirement":"Capture the canonical encrypted package, validate package/key binding and deterministic replay through the Binary Cube engine, and record scrambling-quality observations separately from method validity."},
+    {"id":"recovered","ordinal":3,"requirement":"Decrypt the captured encrypted package with the captured key and require exact payload, length, and digest equivalence to the pre-encryption capture."}
+  ],
+  "positiveCases": [
+    {
+      "id": "baseline-canonical-4",
+      "description": "Canonical four-cell baseline aligned with the portable self-test family.",
+      "payload": {"type":"literal","value":"0100100001101001"},
+      "keyOptions": {"gridSize":4,"seed":"three-state-baseline-v1","inputFace":"top","outputFace":"front","inputQuarterTurns":1,"outputQuarterTurns":3,"maskDensity":0.75}
+    },
+    {
+      "id": "minimum-grid-single-bit",
+      "description": "Minimum legal grid with a one-bit payload and heavy deterministic filler pressure.",
+      "payload": {"type":"literal","value":"1"},
+      "keyOptions": {"gridSize":3,"seed":"three-state-min-grid","inputFace":"top","outputFace":"left","inputQuarterTurns":0,"outputQuarterTurns":0,"maskDensity":1}
+    },
+    {
+      "id": "all-zero-low-entropy",
+      "description": "Low-entropy all-zero input intended to expose statistical leakage or weak scrambling characteristics.",
+      "payload": {"type":"repeat","pattern":"0","count":97},
+      "keyOptions": {"gridSize":4,"seed":"three-state-all-zero","inputFace":"back","outputFace":"top","inputQuarterTurns":2,"outputQuarterTurns":1,"maskDensity":1}
+    },
+    {
+      "id": "all-one-low-entropy",
+      "description": "Low-entropy all-one input paired with a different face family.",
+      "payload": {"type":"repeat","pattern":"1","count":97},
+      "keyOptions": {"gridSize":4,"seed":"three-state-all-one","inputFace":"right","outputFace":"front","inputQuarterTurns":3,"outputQuarterTurns":2,"maskDensity":1}
+    },
+    {
+      "id": "alternating-bits",
+      "description": "Highly regular alternating input for transition-pattern leakage testing.",
+      "payload": {"type":"repeat","pattern":"01","count":128},
+      "keyOptions": {"gridSize":4,"seed":"three-state-alternating","inputFace":"bottom","outputFace":"front","inputQuarterTurns":1,"outputQuarterTurns":0,"maskDensity":0.75}
+    },
+    {
+      "id": "repeated-byte-pattern",
+      "description": "Repeated structured byte pattern for block repetition and pattern-preservation observations.",
+      "payload": {"type":"repeat","pattern":"00111100","count":64},
+      "keyOptions": {"gridSize":12,"seed":"three-state-byte-repeat","inputFace":"front","outputFace":"left","inputQuarterTurns":0,"outputQuarterTurns":3,"maskDensity":0.5}
+    },
+    {
+      "id": "sparse-mask-padding-pressure",
+      "description": "Sparse payload mask designed to exercise multi-block filler behavior and package sizing.",
+      "payload": {"type":"repeat","pattern":"01101001","count":48},
+      "keyOptions": {"gridSize":12,"seed":"three-state-sparse-mask","inputFace":"left","outputFace":"top","inputQuarterTurns":2,"outputQuarterTurns":2,"maskDensity":0.05}
+    },
+    {
+      "id": "full-mask-no-filler-capacity",
+      "description": "Full mask configuration minimizing filler cells while spanning multiple blocks.",
+      "payload": {"type":"repeat","pattern":"11000011","count":64},
+      "keyOptions": {"gridSize":12,"seed":"three-state-full-mask","inputFace":"front","outputFace":"top","inputQuarterTurns":3,"outputQuarterTurns":1,"maskDensity":1}
+    },
+    {
+      "id": "rotation-extremes",
+      "description": "Quarter-turn normalization and perpendicular-face transform exercise.",
+      "payload": {"type":"repeat","pattern":"00011101","count":33},
+      "keyOptions": {"gridSize":4,"seed":"three-state-rotations","inputFace":"top","outputFace":"right","inputQuarterTurns":3,"outputQuarterTurns":3,"maskDensity":0.5}
+    },
+    {
+      "id": "whitespace-normalization",
+      "description": "Human-entered binary input containing whitespace; state one must capture the normalized canonical bitstream.",
+      "payload": {"type":"literal","value":"0100 1000\n0110 1001\t0010 0001"},
+      "keyOptions": {"gridSize":4,"seed":"three-state-whitespace","inputFace":"top","outputFace":"front","inputQuarterTurns":0,"outputQuarterTurns":2,"maskDensity":0.75}
+    }
+  ],
+  "negativeCases": [
+    {"id":"reject-empty-input","stage":"pre-encryption","description":"Empty payload must be rejected before encryption.","case":{"payload":{"type":"literal","value":""},"keyOptions":{"gridSize":4,"seed":"invalid-empty","inputFace":"top","outputFace":"front","maskDensity":1}}},
+    {"id":"reject-non-binary-input","stage":"pre-encryption","description":"Non-binary payload characters must be rejected before encryption.","case":{"payload":{"type":"literal","value":"01012001"},"keyOptions":{"gridSize":4,"seed":"invalid-nonbinary","inputFace":"top","outputFace":"front","maskDensity":1}}},
+    {"id":"reject-grid-below-minimum","stage":"pre-encryption","description":"Grid size below the canonical minimum must be rejected.","case":{"payload":{"type":"literal","value":"0101"},"keyOptions":{"gridSize":2,"seed":"invalid-small-grid","inputFace":"top","outputFace":"front","maskDensity":1}}},
+    {"id":"reject-same-face","stage":"pre-encryption","description":"Identical input/output faces must be rejected.","case":{"payload":{"type":"literal","value":"0101"},"keyOptions":{"gridSize":4,"seed":"invalid-same-face","inputFace":"top","outputFace":"top","maskDensity":1}}},
+    {"id":"reject-opposite-face","stage":"pre-encryption","description":"Opposite input/output faces must be rejected because they preserve the original projection.","case":{"payload":{"type":"literal","value":"0101"},"keyOptions":{"gridSize":4,"seed":"invalid-opposite-face","inputFace":"top","outputFace":"bottom","maskDensity":1}}},
+    {"id":"reject-ciphertext-bit-flip","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"flip-ciphertext-bit","index":0},"description":"A ciphertext mutation must fail canonical package validation."},
+    {"id":"reject-truncated-ciphertext","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"truncate-ciphertext","bits":1},"description":"Truncated ciphertext must fail encrypted-state validation."},
+    {"id":"reject-tampered-checksum","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"tamper-checksum"},"description":"Checksum tampering must be rejected by the package validator."},
+    {"id":"reject-package-key-id","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"tamper-package-key-id"},"description":"Package/key identity mismatch must be rejected."},
+    {"id":"reject-package-format","stage":"encrypted","baseCaseId":"baseline-canonical-4","mutation":{"type":"tamper-package-format"},"description":"Unknown package format must be rejected."},
+    {"id":"reject-wrong-valid-key","stage":"recovered","baseCaseId":"baseline-canonical-4","mutation":{"type":"alternate-valid-key"},"description":"A separately valid but incorrect key must not decrypt the captured package."},
+    {"id":"reject-key-fingerprint","stage":"recovered","baseCaseId":"baseline-canonical-4","mutation":{"type":"tamper-key-id"},"description":"Tampered key fingerprint must fail before decryption."},
+    {"id":"reject-key-digest","stage":"recovered","baseCaseId":"baseline-canonical-4","mutation":{"type":"tamper-key-digest"},"description":"Tampered SHA-256 key digest must fail before decryption."},
+    {"id":"reject-empty-key-mask","stage":"recovered","baseCaseId":"baseline-canonical-4","mutation":{"type":"empty-key-mask"},"description":"A key with no payload cells must fail structural validation."},
+    {"id":"reject-duplicate-row-permutation","stage":"recovered","baseCaseId":"baseline-canonical-4","mutation":{"type":"duplicate-row-permutation"},"description":"A non-permutation row map must fail key validation."}
+  ],
+  "scramblingObservations": {
+    "methodValidityRequired": ["canonicalPackageValidation", "keyBinding", "deterministicReplay"],
+    "qualitySignals": ["exactPlaintextEquality", "plaintextSubstringExposure", "alignedHammingRatio", "ciphertextOneRatio", "ciphertextTransitionRate", "ciphertextLongestRun", "ciphertextBinaryEntropy"],
+    "interpretation": "Method validity establishes that the package is a canonical Binary Cube transformation. Quality signals look for weaknesses and are intentionally reported separately so pathological inputs can reveal weaknesses without being mistaken for an unrelated algorithm."
+  }
+}
