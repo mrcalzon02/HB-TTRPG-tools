@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "skill": "tabletop-battlespace-visualization",
+  "version": "1.0.0",
+  "executionClass": "host-sandbox",
+  "entrypoints": {
+    "python": "scripts/battlespace.py"
+  },
+  "executionRequirements": [
+    "python3",
+    "pillow",
+    "writable-sandbox",
+    "csv-file-io"
+  ],
+  "stateDirectory": "ttrpg_state/",
+  "preferredChatGptStateDirectory": "/mnt/data/ttrpg_state/",
+  "tables": [
+    "battlefield_maps.csv",
+    "battlefield_tokens.csv",
+    "battlefield_terrain.csv",
+    "battlefield_effects.csv"
+  ],
+  "operations": [
+    "init",
+    "upsert-map",
+    "place",
+    "move",
+    "distance",
+    "within",
+    "affected",
+    "render"
+  ],
+  "renderContract": {
+    "minimumCellPixels": 1,
+    "canonicalMinimum": "1 pixel = 1 grid cell",
+    "imageFormat": "PNG",
+    "colorMode": "RGB",
+    "scaling": "nearest-neighbor",
+    "layers": ["composite", "terrain", "effects", "occupancy"],
+    "mandatoryDecorativeAssets": false,
+    "mandatoryTextLabels": false,
+    "sidecarLegend": true
+  },
+  "coordinateContract": {
+    "origin": "top-left",
+    "xPositive": "right/east",
+    "yPositive": "down/south",
+    "coordinates": "integer grid cells",
+    "pixelCoordinatesAuthoritative": false
+  },
+  "distanceRules": ["grid-chebyshev", "manhattan", "euclidean"],
+  "rulesBoundary": "Geometric outputs do not replace system-specific movement, diagonal, reach, cover, LOS, or area-template rules."
+}
