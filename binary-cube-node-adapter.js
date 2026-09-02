@@ -125,6 +125,12 @@ function runSelfTest() {
 }
 function readRequestArgument(argument) { if (argument) return argument; if (process.stdin.isTTY) throw new Error('Command requires a JSON request argument or JSON on stdin.'); return fs.readFileSync(0, 'utf8'); }
 function writeJson(value, stream = process.stdout) { stream.write(`${JSON.stringify(value, null, 2)}\n`); }
+function parseValidationRequest(argument) {
+  if (!argument) return JSON.parse(readRequestArgument(argument));
+  const trimmed = String(argument).trim();
+  if (trimmed.startsWith('{')) return JSON.parse(trimmed);
+  return { testId: trimmed };
+}
 function main(argv = process.argv.slice(2)) {
   const command = argv[0] || 'describe';
   if (command === 'describe' || command === '--describe' || command === '--help' || command === '-h') { writeJson(describe()); return 0; }
@@ -132,7 +138,7 @@ function main(argv = process.argv.slice(2)) {
   if (command === 'contract') { writeJson(operationContract(argv[1])); return 0; }
   if (command === 'test-packages') { writeJson(listTestPackages()); return 0; }
   if (command === 'validation-suite') { const report = runThreeStateValidation({}); writeJson(report); return report.ok ? 0 : 1; }
-  if (command === 'validate-test') { const request = argv[1] ? JSON.parse(argv[1]) : { testId: argv[2] }; const report = runThreeStateValidation(request); writeJson(report); return report.ok ? 0 : 1; }
+  if (command === 'validate-test') { const report = runThreeStateValidation(parseValidationRequest(argv[1])); writeJson(report); return report.ok ? 0 : 1; }
   if (command === 'self-test' || command === '--self-test') { const report = runSelfTest(); writeJson(report); return report.ok ? 0 : 1; }
   if (command === 'invoke') { writeJson(invoke(JSON.parse(readRequestArgument(argv[1])))); return 0; }
   if (command === 'encrypt') { writeJson(encryptWorkflow(JSON.parse(readRequestArgument(argv[1])))); return 0; }
