@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaysender Airship Generation Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Generate Kaysender airships and skyships with semantic interiors, hulls, crew spaces, cargo, armament, defenses, condition damage, faction context, encounter content, and provenance. Use when a user needs a Kaysender vessel, skyship encounter location, or reproducible airship profile.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/kaysender-airship-generation.html">
+<link rel="alternate" type="text/markdown" href="../skills/kaysender-airship-generation/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Kaysender Airship Generation</h1><p class="subtitle">Generate Kaysender airships and skyships with semantic interiors, hulls, crew spaces, cargo, armament, defenses, condition damage, faction context, encounter content, and provenance. Use when a user needs a Kaysender vessel, skyship encounter location, or reproducible airship profile.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/kaysender-airship-generation/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/kaysender-airship-generation/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/kaysender-airship-generation/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>kaysender-airship-generation</code> · <strong>Status:</strong> <code>runtime-required</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <code>kaysender.airship.generate</code></p>
+<p><strong>Resource IDs:</strong> <code>kaysender.wiki-index</code>, <code>kaysender.tools-registry</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Requires access to HBFoundryAPI or the canonical HB-TTRPG-tools JavaScript runtime; Kaysender lore resources improve setting-aware inputs.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: kaysender-airship-generation
+description: Generate Kaysender airships and skyships with semantic interiors, hulls, crew spaces, cargo, armament, defenses, condition damage, faction context, encounter content, and provenance. Use when a user needs a Kaysender vessel, skyship encounter location, or reproducible airship profile.
+compatibility: Requires access to HBFoundryAPI or the canonical HB-TTRPG-tools JavaScript runtime; Kaysender lore resources improve setting-aware inputs.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-capability: kaysender.airship.generate
+---
+
+# Kaysender Airship Generation
+
+Use `kaysender.airship.generate` as the authoritative generator and the Kaysender wiki index for setting context.
+
+## Workflow
+
+1. Retrieve the current operation contract for `kaysender.airship.generate`.
+2. If the request depends on Kaysender lore, retrieve or search `kaysender.wiki-index` rather than inventing setting facts.
+3. Build the input from vessel class, hull culture, core type, purpose/current mission, crew scale, cargo profile, armament, defense system, condition, legal status, faction affiliation, danger level, and seed.
+4. Invoke `HBFoundryAPI.invoke(&#x27;kaysender.airship.generate&#x27;, input)`.
+5. Preserve the returned spatial layout, hull, damage state, populated content, compatibility data, provenance, and validation.
+6. Report the seed for repeatable ships.
+
+## Hard rules
+
+- Do not replace culture-driven or class-driven generator behavior with skill prose.
+- Do not fabricate Kaysender lore when the wiki collection can be searched.
+- Preserve validation and provenance.
+- Use the current operation contract for supported fields and defaults.
+
+## Canonical resources
+
+- `kaysender.wiki-index`
+- `kaysender.tools-registry`
+- `kaysender.airship.generate`
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>
