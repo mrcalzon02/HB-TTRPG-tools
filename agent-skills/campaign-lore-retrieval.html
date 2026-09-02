@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Campaign and Lore Retrieval Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Search and retrieve authoritative campaign lore, rules references, factions, wiki entries, modules, archives, and setting data across Kaysender, Blacklight Continuum, Warhammer 40K, Barotrauma, Shadowrun, World of Darkness, Solanum Umbra, and Foundry module resources. Use when a user asks what the campaign canon says or needs setting-grounded information.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/campaign-lore-retrieval.html">
+<link rel="alternate" type="text/markdown" href="../skills/campaign-lore-retrieval/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Campaign and Lore Retrieval</h1><p class="subtitle">Search and retrieve authoritative campaign lore, rules references, factions, wiki entries, modules, archives, and setting data across Kaysender, Blacklight Continuum, Warhammer 40K, Barotrauma, Shadowrun, World of Darkness, Solanum Umbra, and Foundry module resources. Use when a user asks what the campaign canon says or needs setting-grounded information.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/campaign-lore-retrieval/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/campaign-lore-retrieval/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/campaign-lore-retrieval/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>campaign-lore-retrieval</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <code>foundry.site-index</code></p>
+<p><strong>Resource IDs:</strong> <code>foundry.campaign-lore-index</code>, <code>kaysender.wiki-index</code>, <code>blacklight.complete-lore-index</code>, <code>warhammer.lore-index</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Requires network access to the HB-TTRPG-tools GitHub Pages resources or repository files.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: campaign-lore-retrieval
+description: Search and retrieve authoritative campaign lore, rules references, factions, wiki entries, modules, archives, and setting data across Kaysender, Blacklight Continuum, Warhammer 40K, Barotrauma, Shadowrun, World of Darkness, Solanum Umbra, and Foundry module resources. Use when a user asks what the campaign canon says or needs setting-grounded information.
+compatibility: Requires network access to the HB-TTRPG-tools GitHub Pages resources or repository files.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-resource: foundry.campaign-lore-index
+---
+
+# Campaign and Lore Retrieval
+
+Use the Foundry resource/index APIs rather than relying on memory when the repository contains the answer.
+
+## Workflow
+
+1. Identify the relevant setting/workspace.
+2. Prefer a setting-specific index when available: `kaysender.wiki-index`, `blacklight.complete-lore-index`, `warhammer.lore-index`, or `barotrauma.encounter-index`. Use `foundry.campaign-lore-index` for cross-setting discovery.
+3. Inspect the resource descriptor&#x27;s `supports` list before choosing `getResource`, `expandResourceIndex`, `searchCollection`, or `searchResources`.
+4. Search narrowly first, then expand to broader collections when necessary.
+5. Retrieve the matching authoritative resource and ground the answer in its actual content.
+6. Preserve provenance: identify the resource ID/path used, especially when combining multiple settings or source layers.
+
+## Canon boundaries
+
+- Keep different settings separate unless the user explicitly requests a crossover or comparison.
+- Distinguish original setting lore from converted rules/mechanics when the repository does so.
+- Do not treat generated content as established lore unless the relevant source marks it canonical.
+- If indexed sources conflict, prefer the more authoritative/current layer and describe the discrepancy.
+
+## Hard rules
+
+- Do not fabricate lore to fill a failed search.
+- Do not scrape rendered pages when an authoritative JSON resource exists.
+- Do not collapse source provenance when merging results.
+- Use the self-described resource operation contracts rather than guessing how an index is structured.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>

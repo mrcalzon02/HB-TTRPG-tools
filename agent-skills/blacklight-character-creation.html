@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blacklight Character Creation Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Guide Blacklight Continuum character creation using the repository&#x27;s authoritative character rules, archetypes, supernatural subgroup options, equipment, factions, random-character content, and canonical UI generator. Activate when a user asks to create, randomize, review, or explain a Blacklight character.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/blacklight-character-creation.html">
+<link rel="alternate" type="text/markdown" href="../skills/blacklight-character-creation/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Blacklight Character Creation</h1><p class="subtitle">Guide Blacklight Continuum character creation using the repository&#x27;s authoritative character rules, archetypes, supernatural subgroup options, equipment, factions, random-character content, and canonical UI generator. Activate when a user asks to create, randomize, review, or explain a Blacklight character.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/blacklight-character-creation/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/blacklight-character-creation/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/blacklight-character-creation/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>blacklight-character-creation</code> · <strong>Status:</strong> <code>ui-bound</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <code>blacklight.random-character</code></p>
+<p><strong>Resource IDs:</strong> <code>blacklight.character-options</code>, <code>blacklight.character-creation</code>, <code>blacklight.random-character-content</code>, <code>blacklight.complete-lore-index</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Rules/content resources are remotely retrievable; the current random-character generator is browser-UI/state-bound pending canonical core extraction.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: blacklight-character-creation
+description: Guide Blacklight Continuum character creation using the repository&#x27;s authoritative character rules, archetypes, supernatural subgroup options, equipment, factions, random-character content, and canonical UI generator. Activate when a user asks to create, randomize, review, or explain a Blacklight character.
+compatibility: Rules/content resources are remotely retrievable; the current random-character generator is browser-UI/state-bound pending canonical core extraction.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-capability: blacklight.random-character
+---
+
+# Blacklight Character Creation
+
+Use the repository&#x27;s character-creation resources and the canonical Blacklight character generator without inventing a parallel character system.
+
+## Authoritative resources
+
+- `blacklight.character-options`
+- `blacklight.character-creation`
+- `blacklight.random-character-content`
+- subgroup rules registered in the Blacklight resource collection
+- equipment/artifact/alien-technology resources when relevant
+- `blacklight.complete-lore-index` for faction and setting context
+
+## Workflow
+
+1. Determine whether the user wants rules guidance, option discovery, a review of an existing character, or actual random generation.
+2. Retrieve the relevant character/rules resources before selecting archetypes, subgroup options, practices, equipment, or lore.
+3. If the canonical Blacklight random-character UI/runtime is available, use it for actual random generation.
+4. If the UI runtime is unavailable, do not claim a canonical random roll occurred. You may explain available options, build a user-directed character from authoritative rules, or identify what the canonical generator would need.
+5. Keep mechanical choices grounded in the character-creation foundation and associated subgroup/equipment resources.
+6. Preserve provenance for unusual options, faction ties, relics, alien technology, or campaign-specific material.
+
+## Hard rules
+
+- Do not create a second random-character algorithm in the skill.
+- Do not merge subgroup mechanics unless repository rules permit it.
+- Keep lore and mechanics distinguishable when the source data separates them.
+- Do not call UI-bound generation headless until the canonical generator core is extracted and registered.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>
