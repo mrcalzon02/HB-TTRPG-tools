@@ -15,16 +15,34 @@ function loadJson(relativePath) {
 
 const engine = require(path.join(ROOT, 'shadowrun-binary-cube-engine.js'));
 const capabilityRegistry = loadJson('api/foundry-capabilities.json');
+const operationRegistry = loadJson('api/operation-contracts.json');
 const capability = (capabilityRegistry.capabilities || []).find(item => item && item.id === CAPABILITY_ID);
 if (!capability) throw new Error(`Capability ${CAPABILITY_ID} is missing from api/foundry-capabilities.json.`);
 
 const allowedOperations = Object.freeze([...(capability.invocation?.allowedOperations || [])]);
 if (!allowedOperations.length) throw new Error(`Capability ${CAPABILITY_ID} declares no allowed operations.`);
 
+const capabilityContracts = operationRegistry.capabilities?.[CAPABILITY_ID];
+if (!capabilityContracts || capabilityContracts.callStyle !== 'dispatcher' || !capabilityContracts.operations) {
+  throw new Error(`Capability ${CAPABILITY_ID} is missing dispatcher contracts from api/operation-contracts.json.`);
+}
+
+function operationContract(operation) {
+  const name = String(operation || '');
+  if (!allowedOperations.includes(name)) throw new Error(`Operation ${name || '(missing)'} is not allowed for ${CAPABILITY_ID}.`);
+  const contract = capabilityContracts.operations[name];
+  if (!contract) throw new Error(`Operation ${name} is allowed but has no canonical operation contract.`);
+  return JSON.parse(JSON.stringify({ operation: name, ...contract }));
+}
+
+function listOperations() {
+  return allowedOperations.map(operation => operationContract(operation));
+}
+
 function describe() {
   return {
     adapter: 'binary-cube-node-adapter',
-    schemaVersion: '1.0.0',
+    schemaVersion: '1.1.0',
     skill: SKILL_ID,
     capabilityId: CAPABILITY_ID,
     runtime: 'node-commonjs',
@@ -34,19 +52,19 @@ function describe() {
     securityClassification: SECURITY_CLASSIFICATION,
     productionCryptography: false,
     allowedOperations: [...allowedOperations],
+    discovery: {
+      listOperations: 'Returns every allowed operation with its canonical argument and return contract.',
+      operationContract: 'Returns one canonical operation contract by name.'
+    },
     requestShape: { operation: 'string', args: 'array (optional; defaults to [])' },
     responseShape: { ok: 'boolean', capabilityId: CAPABILITY_ID, operation: 'string', result: 'canonical engine result' }
   };
 }
 
 function invoke(request) {
-  if (!request || typeof request !== 'object' || Array.isArray(request)) {
-    throw new Error('A request object is required.');
-  }
+  if (!request || typeof request !== 'object' || Array.isArray(request)) throw new Error('A request object is required.');
   const operation = String(request.operation || '');
-  if (!allowedOperations.includes(operation)) {
-    throw new Error(`Operation ${operation || '(missing)'} is not allowed for ${CAPABILITY_ID}.`);
-  }
+  operationContract(operation);
   const args = request.args === undefined ? [] : request.args;
   if (!Array.isArray(args)) throw new Error('request.args must be an array when provided.');
   const fn = engine[operation];
@@ -67,26 +85,18 @@ function resolveFixture(value, fixtures) {
   return value;
 }
 
-function stableJson(value) {
-  return JSON.stringify(value);
-}
+function stableJson(value) { return JSON.stringify(value); }
 
 function runSelfTest() {
   const spec = loadJson('skills/binary-cube-laboratory/self-test.json');
   if (spec.capabilityId !== CAPABILITY_ID) throw new Error(`Self-test capability mismatch: ${spec.capabilityId}.`);
   const fixtures = spec.fixtures || {};
   const results = [];
-
   for (const test of spec.tests || []) {
     const args = resolveFixture(test.args || [], fixtures);
     let actual;
     let thrown = null;
-    try {
-      actual = invoke({ operation: test.operation, args }).result;
-    } catch (error) {
-      thrown = error;
-    }
-
+    try { actual = invoke({ operation: test.operation, args }).result; } catch (error) { thrown = error; }
     const expectation = test.expect || {};
     let passed = true;
     let reason = 'passed';
@@ -95,8 +105,7 @@ function runSelfTest() {
       if (passed && expectation.messageIncludes) passed = String(thrown.message).includes(expectation.messageIncludes);
       if (!passed) reason = thrown ? `unexpected error: ${thrown.message}` : 'expected operation to throw';
     } else if (thrown) {
-      passed = false;
-      reason = thrown.message;
+      passed = false; reason = thrown.message;
     } else if (Object.prototype.hasOwnProperty.call(expectation, 'equals')) {
       passed = actual === expectation.equals;
       if (!passed) reason = 'value did not equal expected literal';
@@ -107,21 +116,10 @@ function runSelfTest() {
       passed = stableJson(actual) === stableJson(fixtures[expectation.deepEqualsFixture]);
       if (!passed) reason = `value did not deep-equal fixture ${expectation.deepEqualsFixture}`;
     }
-
     results.push({ id: test.id, operation: test.operation, passed, reason });
   }
-
   const passed = results.length > 0 && results.every(result => result.passed);
-  return {
-    ok: passed,
-    capabilityId: CAPABILITY_ID,
-    skill: SKILL_ID,
-    runtime: 'node-commonjs',
-    testCount: results.length,
-    passedCount: results.filter(result => result.passed).length,
-    failedCount: results.filter(result => !result.passed).length,
-    results
-  };
+  return { ok: passed, capabilityId: CAPABILITY_ID, skill: SKILL_ID, runtime: 'node-commonjs', testCount: results.length, passedCount: results.filter(r => r.passed).length, failedCount: results.filter(r => !r.passed).length, results };
 }
 
 function readRequestArgument(argument) {
@@ -129,44 +127,21 @@ function readRequestArgument(argument) {
   if (process.stdin.isTTY) throw new Error('Invoke requires a JSON request argument or JSON on stdin.');
   return fs.readFileSync(0, 'utf8');
 }
-
-function writeJson(value, stream = process.stdout) {
-  stream.write(`${JSON.stringify(value, null, 2)}\n`);
-}
+function writeJson(value, stream = process.stdout) { stream.write(`${JSON.stringify(value, null, 2)}\n`); }
 
 function main(argv = process.argv.slice(2)) {
   const command = argv[0] || 'describe';
-  if (command === 'describe' || command === '--describe' || command === '--help' || command === '-h') {
-    writeJson(describe());
-    return 0;
-  }
-  if (command === 'self-test' || command === '--self-test') {
-    const report = runSelfTest();
-    writeJson(report);
-    return report.ok ? 0 : 1;
-  }
-  if (command === 'invoke') {
-    const request = JSON.parse(readRequestArgument(argv[1]));
-    writeJson(invoke(request));
-    return 0;
-  }
-  throw new Error(`Unknown command ${command}. Use describe, self-test, or invoke.`);
+  if (command === 'describe' || command === '--describe' || command === '--help' || command === '-h') { writeJson(describe()); return 0; }
+  if (command === 'operations' || command === 'list-operations') { writeJson({ capabilityId: CAPABILITY_ID, operations: listOperations() }); return 0; }
+  if (command === 'contract') { writeJson(operationContract(argv[1])); return 0; }
+  if (command === 'self-test' || command === '--self-test') { const report = runSelfTest(); writeJson(report); return report.ok ? 0 : 1; }
+  if (command === 'invoke') { writeJson(invoke(JSON.parse(readRequestArgument(argv[1])))); return 0; }
+  throw new Error(`Unknown command ${command}. Use describe, operations, contract <operation>, self-test, or invoke.`);
 }
 
 if (require.main === module) {
-  try {
-    process.exitCode = main();
-  } catch (error) {
-    writeJson({ ok: false, capabilityId: CAPABILITY_ID, error: { name: error.name, message: error.message } }, process.stderr);
-    process.exitCode = 1;
-  }
+  try { process.exitCode = main(); }
+  catch (error) { writeJson({ ok: false, capabilityId: CAPABILITY_ID, error: { name: error.name, message: error.message } }, process.stderr); process.exitCode = 1; }
 }
 
-module.exports = Object.freeze({
-  CAPABILITY_ID,
-  SKILL_ID,
-  describe,
-  invoke,
-  runSelfTest,
-  engine
-});
+module.exports = Object.freeze({ CAPABILITY_ID, SKILL_ID, describe, listOperations, operationContract, invoke, runSelfTest, engine });
