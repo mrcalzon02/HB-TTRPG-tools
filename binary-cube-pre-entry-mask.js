@@ -8,6 +8,7 @@
 
   const FORMAT = 'hb-ttrpg-binary-cube-pre-entry-mask';
   const SCHEMA_VERSION = '1.0.0';
+  const CHECKSUM_TYPE = 'fnv1a32-corruption-detection-only';
   const METHODS = Object.freeze([
     Object.freeze({id:'none', title:'None', description:'No pre-entry mask. Control condition for comparison.'}),
     Object.freeze({id:'white-noise', title:'White Noise', description:'Independent deterministic pseudorandom mask bits across the complete input field.'}),
@@ -53,6 +54,11 @@
   function integer(value, min, max, fallback) {
     const number = Number(value);
     return Number.isInteger(number) ? Math.max(min, Math.min(max, number)) : fallback;
+  }
+  function exactInteger(value, min, max, label) {
+    const number = Number(value);
+    if (!Number.isInteger(number) || number < min || number > max) fail(`${label} must be an integer from ${min} through ${max}.`);
+    return number;
   }
   function smoothstep(value) { return value * value * (3 - 2 * value); }
   function lerp(left, right, amount) { return left + (right - left) * amount; }
@@ -103,7 +109,6 @@
   }
   function randomFor(options, salt = '') { return mulberry32(fnv1a32(`${options.seed}|${options.method}|${salt}`)); }
   function flatIndex(x, y, width) { return y * width + x; }
-  function inLength(index, length) { return index >= 0 && index < length; }
 
   function whiteNoise(length, options) {
     const random = randomFor(options, 'white');
@@ -131,8 +136,7 @@
     return Array.from(field.slice(0, length), value => value ? '1' : '0').join('');
   }
   function latticeValue(x, y, octave, options) {
-    const hash = fnv1a32(`${options.seed}|plasma|${octave}|${x}|${y}`);
-    return hash / 0xffffffff;
+    return fnv1a32(`${options.seed}|plasma|${octave}|${x}|${y}`) / 0xffffffff;
   }
   function valueNoise(x, y, scale, octave, options) {
     const gx = x / scale;
@@ -221,8 +225,7 @@
     return bits;
   }
   function generateMaskBits(length, rawOptions = {}) {
-    const size = Number(length);
-    if (!Number.isInteger(size) || size < 1 || size > 10000000) fail('Pre-entry mask length must be an integer from 1 through 10000000 bits.');
+    const size = exactInteger(length, 1, 10000000, 'Pre-entry mask length');
     const options = normalizeOptions(size, rawOptions);
     switch (options.method) {
       case 'none': return '0'.repeat(size);
@@ -236,38 +239,54 @@
     }
   }
   function descriptorFor(length, rawOptions = {}, maskBits = null) {
-    const options = normalizeOptions(length, rawOptions);
-    const generated = maskBits || generateMaskBits(length, options);
+    const size = exactInteger(length, 1, 10000000, 'Pre-entry mask descriptor length');
+    const options = normalizeOptions(size, rawOptions);
+    const generated = maskBits || generateMaskBits(size, options);
+    if (generated.length !== size) fail('Generated pre-entry mask length does not match descriptor length.');
     return Object.freeze({
       format: FORMAT,
       schemaVersion: SCHEMA_VERSION,
       method: options.method,
       seed: options.seed,
-      bitLength: length,
+      bitLength: size,
       fieldWidth: options.fieldWidth,
       fieldHeight: options.fieldHeight,
       parameters: Object.freeze({intensity:options.intensity,scale:options.scale,octaves:options.octaves,cellularSteps:options.cellularSteps,patchCount:options.patchCount,clusterCount:options.clusterCount}),
+      maskChecksumType: CHECKSUM_TYPE,
       maskChecksum: hex32(generated)
     });
   }
+  function parseDescriptor(rawDescriptor) {
+    try { return typeof rawDescriptor === 'string' ? JSON.parse(rawDescriptor) : rawDescriptor; }
+    catch (error) { fail(`Pre-entry mask descriptor JSON is invalid: ${error.message}`); }
+  }
   function validateDescriptor(rawDescriptor) {
-    const descriptor = typeof rawDescriptor === 'string' ? JSON.parse(rawDescriptor) : rawDescriptor;
+    const descriptor = parseDescriptor(rawDescriptor);
     if (!descriptor || typeof descriptor !== 'object' || Array.isArray(descriptor)) fail('A pre-entry mask descriptor is required.');
     if (descriptor.format !== FORMAT) fail('Pre-entry mask descriptor format is not recognized.');
     if (descriptor.schemaVersion !== SCHEMA_VERSION) fail(`Unsupported pre-entry mask schema version: ${descriptor.schemaVersion || 'missing'}.`);
     if (!METHOD_IDS.includes(descriptor.method)) fail(`Unsupported pre-entry mask method: ${descriptor.method}.`);
-    const bitLength = integer(descriptor.bitLength, 1, 10000000, null);
-    if (!bitLength) fail('Pre-entry mask descriptor bitLength is invalid.');
-    const options = {
-      method:descriptor.method,
-      seed:String(descriptor.seed || ''),
-      fieldWidth:descriptor.fieldWidth,
-      ...(descriptor.parameters || {})
-    };
+    const bitLength = exactInteger(descriptor.bitLength, 1, 10000000, 'Pre-entry mask descriptor bitLength');
+    if (descriptor.maskChecksumType && descriptor.maskChecksumType !== CHECKSUM_TYPE) fail(`Unsupported pre-entry mask checksum type: ${descriptor.maskChecksumType}.`);
+    if (!/^[0-9a-f]{8}$/i.test(String(descriptor.maskChecksum || ''))) fail('Pre-entry mask descriptor checksum is invalid.');
+    const options = { method:descriptor.method, seed:String(descriptor.seed || ''), fieldWidth:descriptor.fieldWidth, ...(descriptor.parameters || {}) };
     const normalized = normalizeOptions(bitLength, options);
+    if (Number(descriptor.fieldWidth) !== normalized.fieldWidth || Number(descriptor.fieldHeight) !== normalized.fieldHeight) fail('Pre-entry mask descriptor field dimensions are inconsistent with bitLength.');
     const maskBits = generateMaskBits(bitLength, normalized);
-    if (descriptor.maskChecksum !== hex32(maskBits)) fail('Pre-entry mask descriptor checksum does not match regenerated mask bits.');
-    return Object.freeze({...descriptor, seed:String(descriptor.seed || ''), bitLength, fieldWidth:normalized.fieldWidth, fieldHeight:normalized.fieldHeight, parameters:Object.freeze({...descriptor.parameters})});
+    if (String(descriptor.maskChecksum).toLowerCase() !== hex32(maskBits)) fail('Pre-entry mask descriptor checksum does not match regenerated mask bits.');
+    return Object.freeze({
+      ...descriptor,
+      seed:String(descriptor.seed || ''),
+      bitLength,
+      fieldWidth:normalized.fieldWidth,
+      fieldHeight:normalized.fieldHeight,
+      maskChecksumType:CHECKSUM_TYPE,
+      maskChecksum:String(descriptor.maskChecksum).toLowerCase(),
+      parameters:Object.freeze({...normalized,method:undefined,seed:undefined,fieldWidth:undefined,fieldHeight:undefined})
+    });
+  }
+  function descriptorOptions(descriptor) {
+    return {method:descriptor.method,seed:descriptor.seed,fieldWidth:descriptor.fieldWidth,...descriptor.parameters};
   }
   function applyMask(bitsValue, rawOptions = {}) {
     const bits = normalizeBits(bitsValue);
@@ -287,7 +306,7 @@
     const maskedBits = normalizeBits(maskedBitsValue, 'Masked binary input');
     const descriptor = validateDescriptor(rawDescriptor);
     if (maskedBits.length !== descriptor.bitLength) fail(`Masked input length ${maskedBits.length} does not match descriptor bitLength ${descriptor.bitLength}.`);
-    const maskBits = generateMaskBits(descriptor.bitLength, {method:descriptor.method,seed:descriptor.seed,fieldWidth:descriptor.fieldWidth,...descriptor.parameters});
+    const maskBits = generateMaskBits(descriptor.bitLength, descriptorOptions(descriptor));
     return Object.freeze({
       format:'hb-ttrpg-binary-cube-pre-entry-unmask-result',
       schemaVersion:SCHEMA_VERSION,
@@ -305,19 +324,24 @@
       const first = applyMask(source, options);
       const second = applyMask(source, options);
       const recovered = removeMask(first.maskedBits, first.descriptor);
+      let tamperRejected = false;
+      try { validateDescriptor({...first.descriptor,maskChecksum:first.descriptor.maskChecksum === '00000000' ? 'ffffffff' : '00000000'}); }
+      catch (_) { tamperRejected = true; }
       results.push({
         method,
         deterministic:first.maskBits === second.maskBits && first.descriptor.maskChecksum === second.descriptor.maskChecksum,
         reversible:recovered.bits === source,
-        lengthPreserved:first.maskedBits.length === source.length
+        lengthPreserved:first.maskedBits.length === source.length,
+        descriptorTamperRejected:tamperRejected
       });
     }
-    const ok = results.every(result => result.deterministic && result.reversible && result.lengthPreserved);
-    return Object.freeze({ok,schemaVersion:SCHEMA_VERSION,testCount:results.length,passedCount:results.filter(result=>result.deterministic&&result.reversible&&result.lengthPreserved).length,results});
+    const passed = result => result.deterministic && result.reversible && result.lengthPreserved && result.descriptorTamperRejected;
+    const ok = results.every(passed);
+    return Object.freeze({ok,schemaVersion:SCHEMA_VERSION,testCount:results.length,passedCount:results.filter(passed).length,results});
   }
 
   return Object.freeze({
-    FORMAT,SCHEMA_VERSION,METHODS,
+    FORMAT,SCHEMA_VERSION,CHECKSUM_TYPE,METHODS,
     listMethods,normalizeBits,generateMaskBits,descriptorFor,validateDescriptor,applyMask,removeMask,maskStats,runSelfTest
   });
 });
