@@ -2,9 +2,17 @@
 
 ## Architectural purpose
 
-Donjon is being preserved here because its generation order provides the missing reusable spatial layer for several HB-TTRPG-tools generators. The project should implement **one authoritative topology engine** and supply it with different semantic programs rather than maintaining unrelated dungeon, module, station, and vessel layout algorithms.
+Donjon is preserved here because its generation order provides a reusable spatial model for several HB-TTRPG-tools generators. The project should implement **one authoritative topology engine** and supply it with different semantic programs rather than maintaining unrelated dungeon, module, station, and vessel layout algorithms.
 
 The topology engine owns spatial relationships and connectivity. Domain generators own meaning.
+
+## Current implementation status
+
+The Modules workspace now uses `module-random-dungeon-generator.js` as the authoritative browser implementation for Donjon-informed random module topology. It is an original project JavaScript implementation of the reference generation phases and does not execute or transplant the upstream Perl source at runtime.
+
+The visible reference corpus is registered in `data/modules/module-inventory.json` and exposed through `data/modules/module-index.json` plus `module-reference-library.js`. Preserved examples are deliberately treated as examples, templates, and use cases rather than as loose archival source files. The current corpus includes the extracted Northern Watchtower and Veteck Henrina'yea modules plus preserved source references such as Caves of Whispering Wild, Secret Chambers of Sabiesha, Secret Prison of Souls, Tomb of Antwig, and other module/adventure examples.
+
+The first implementation target is the generic adventure-module generator. Its topology stages are now field masking, room emplacement, room opening/door selection, corridor tunneling with configurable directional persistence, stair placement, dead-end pruning, cleanup/validation statistics, and conversion into Module Map Editor state. Small 39 × 39 and huge 73 × 65 presets correspond to dimensions represented by the example corpus.
 
 ## Reference generation phases
 
