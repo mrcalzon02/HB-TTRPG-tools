@@ -4,7 +4,7 @@ description: Use the Foundry Binary Cube Laboratory for TTRPG-oriented cube perm
 compatibility: Requires HBFoundryAPI, shadowrun-binary-cube-engine.js, or the dependency-free binary-cube-node-adapter.js on Node/CommonJS. This engine is experimental TTRPG obfuscation research, not production cryptography.
 metadata:
   author: mrcalzon02
-  version: "1.2.0"
+  version: "1.3.0"
   foundry-capability: shadowrun.binary-cube
 ---
 
@@ -15,7 +15,7 @@ Use `shadowrun.binary-cube` and its self-describing operation contracts. Browser
 ## Workflow
 
 1. Identify the requested operation: key creation/validation, encryption/decryption, projection work, transformation tracing, package diagnostics, hashing/key identity, or invariant checking.
-2. Retrieve the operation definition from `api/operation-contracts.json` before building positional arguments. In a browser host, `HBFoundryAPI.operationContract('shadowrun.binary-cube', operation)` is the preferred helper.
+2. Retrieve the operation definition before building positional arguments. Browser hosts should use `HBFoundryAPI.operationContract('shadowrun.binary-cube', operation)`. Node hosts should use `require('./binary-cube-node-adapter.js').operationContract(operation)`. CLI/tool hosts can use `node binary-cube-node-adapter.js contract <operation>`.
 3. Choose the available execution surface without changing operation semantics:
    - Browser/Foundry: `HBFoundryAPI.invoke('shadowrun.binary-cube', { operation, args })`.
    - Node/CommonJS module: `require('./binary-cube-node-adapter.js').invoke({ operation, args })`.
@@ -25,7 +25,9 @@ Use `shadowrun.binary-cube` and its self-describing operation contracts. Browser
 
 ## Capability discovery
 
-For browser/remote discovery, read `api/foundry-capabilities.json`, `api/operation-contracts.json`, and the companion manifest. For Node/CommonJS discovery, call `require('./binary-cube-node-adapter.js').describe()` or run `node binary-cube-node-adapter.js describe`. The adapter derives its operation allow-list from the canonical capability registry rather than maintaining a second list.
+For browser/remote discovery, use the Foundry capability and operation-contract registries. For Node/CommonJS discovery, `describe()` returns capability-level metadata, `listOperations()` returns every allowed operation together with its canonical arguments and return contract, and `operationContract(name)` returns one operation contract. CLI equivalents are `describe`, `operations`, and `contract <operation>`.
+
+The Node adapter validates that every invoked operation is both present in the capability allow-list and documented by the canonical operation registry before dispatching to the engine. It does not maintain an independent operation schema.
 
 A reasoning system should treat the adapter's structured request shape as `{ "operation": string, "args": array }`. Successful adapter calls return `{ "ok": true, "capabilityId": "shadowrun.binary-cube", "operation": string, "result": <canonical engine result> }`. Adapter/CLI failures are explicit errors; do not reinterpret them as successful laboratory results.
 
@@ -39,7 +41,7 @@ The small call examples in `skills/binary-cube-laboratory/examples.json` referen
 
 ## Human access
 
-The existing Binary Cube laboratory UI remains the interactive human surface. The Node adapter adds an operator-friendly terminal surface for headless, server, CI-free, and local research environments without replacing that UI. Use `describe` to discover operations and `self-test` to validate the current host before invoking research operations from a shell.
+The existing Binary Cube laboratory UI remains the interactive human surface and exposes ordinary configuration through labeled controls rather than positional arguments. The Node adapter adds an operator-friendly terminal surface for headless, server, CI-free, and local research environments without replacing that UI. Use `operations` to see callable operations with argument definitions, `contract <operation>` for focused help, and `self-test` to validate the current host before invoking research operations from a shell.
 
 ## Security classification
 
