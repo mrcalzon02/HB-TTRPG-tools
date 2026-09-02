@@ -107,6 +107,16 @@
       clusterCount: integer(raw.clusterCount, 1, 4096, Math.max(3, Math.ceil(length / Math.max(32, dimensions.width * 4))))
     });
   }
+  function descriptorParameters(options) {
+    return Object.freeze({
+      intensity:options.intensity,
+      scale:options.scale,
+      octaves:options.octaves,
+      cellularSteps:options.cellularSteps,
+      patchCount:options.patchCount,
+      clusterCount:options.clusterCount
+    });
+  }
   function randomFor(options, salt = '') { return mulberry32(fnv1a32(`${options.seed}|${options.method}|${salt}`)); }
   function flatIndex(x, y, width) { return y * width + x; }
 
@@ -251,7 +261,7 @@
       bitLength: size,
       fieldWidth: options.fieldWidth,
       fieldHeight: options.fieldHeight,
-      parameters: Object.freeze({intensity:options.intensity,scale:options.scale,octaves:options.octaves,cellularSteps:options.cellularSteps,patchCount:options.patchCount,clusterCount:options.clusterCount}),
+      parameters: descriptorParameters(options),
       maskChecksumType: CHECKSUM_TYPE,
       maskChecksum: hex32(generated)
     });
@@ -282,7 +292,7 @@
       fieldHeight:normalized.fieldHeight,
       maskChecksumType:CHECKSUM_TYPE,
       maskChecksum:String(descriptor.maskChecksum).toLowerCase(),
-      parameters:Object.freeze({...normalized,method:undefined,seed:undefined,fieldWidth:undefined,fieldHeight:undefined})
+      parameters:descriptorParameters(normalized)
     });
   }
   function descriptorOptions(descriptor) {
