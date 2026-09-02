@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Binary Cube Three-State Test Laboratory</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0c1015; --panel:#141a22; --line:#2b3542; --text:#e7edf4; --muted:#9eabb8; --good:#72d89b; --warn:#f2c76d; --bad:#f08080; --accent:#86b7ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:15px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+    main { width:min(1480px,calc(100% - 32px)); margin:24px auto 48px; }
+    h1,h2,h3 { margin:0 0 10px; }
+    p { margin:0 0 14px; color:var(--muted); }
+    .bar,.panel,.state { border:1px solid var(--line); background:var(--panel); border-radius:12px; }
+    .bar { padding:18px; margin-bottom:16px; }
+    .controls { display:grid; grid-template-columns:repeat(6,minmax(130px,1fr)); gap:12px; align-items:end; }
+    .controls .wide { grid-column:span 2; }
+    label { display:grid; gap:6px; color:var(--muted); font-size:13px; }
+    input,select,textarea,button { width:100%; border:1px solid var(--line); border-radius:8px; background:#0f141b; color:var(--text); padding:9px 10px; font:inherit; }
+    button { cursor:pointer; background:#182231; border-color:#3a4a60; font-weight:650; }
+    button:hover { border-color:var(--accent); }
+    .actions { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+    .actions button { width:auto; min-width:150px; }
+    .states { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
+    .state { padding:16px; min-height:240px; }
+    .state header { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:12px; }
+    .badge { border:1px solid var(--line); border-radius:999px; padding:3px 8px; font-size:12px; color:var(--muted); }
+    .badge.good { color:var(--good); border-color:#315d43; }
+    .badge.warn { color:var(--warn); border-color:#6c592e; }
+    .badge.bad { color:var(--bad); border-color:#6a3838; }
+    dl { display:grid; grid-template-columns:minmax(130px,auto) 1fr; gap:7px 10px; margin:0; }
+    dt { color:var(--muted); }
+    dd { margin:0; overflow-wrap:anywhere; }
+    .panel { padding:16px; margin-top:16px; }
+    .summary { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:10px; }
+    .metric { border:1px solid var(--line); border-radius:9px; padding:10px; }
+    .metric strong { display:block; font-size:19px; }
+    .metric span { color:var(--muted); font-size:12px; }
+    ul { margin:8px 0 0; padding-left:20px; }
+    pre { margin:0; max-height:520px; overflow:auto; white-space:pre-wrap; word-break:break-word; color:#cdd9e5; }
+    .error { color:var(--bad); }
+    @media (max-width:1050px) { .controls { grid-template-columns:repeat(3,1fr); } .states { grid-template-columns:1fr; } }
+    @media (max-width:620px) { main { width:min(100% - 20px,1480px); } .controls { grid-template-columns:1fr; } .controls .wide { grid-column:auto; } .summary { grid-template-columns:repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+<main>
+  <section class="bar">
+    <h1>Binary Cube Three-State Test Laboratory</h1>
+    <p>Capture the source before encryption, verify that the encrypted package is a canonical Binary Cube transformation while measuring scrambling weaknesses, then decrypt and require exact source recovery. Experimental TTRPG obfuscation research; not production cryptography.</p>
+    <div class="controls">
+      <label class="wide">Registered package<select id="packageSelect"></select></label>
+      <label class="wide">Custom payload<input id="payload" value="0100100001101001" spellcheck="false"></label>
+      <label>Grid size<input id="gridSize" type="number" min="3" max="1024" value="4"></label>
+      <label>Mask density<input id="maskDensity" type="number" min="0.01" max="1" step="0.01" value="0.75"></label>
+      <label class="wide">Seed<input id="seed" value="browser-three-state-custom"></label>
+      <label>Input face<select id="inputFace"><option>top</option><option>bottom</option><option>front</option><option>back</option><option>left</option><option>right</option></select></label>
+      <label>Output face<select id="outputFace"><option>front</option><option>back</option><option>left</option><option>right</option><option>top</option><option>bottom</option></select></label>
+      <label>Input turns<input id="inputTurns" type="number" min="0" max="3" value="0"></label>
+      <label>Output turns<input id="outputTurns" type="number" min="0" max="3" value="0"></label>
+    </div>
+    <div class="actions">
+      <button id="runPackage">Run selected package</button>
+      <button id="runCustom">Run custom configuration</button>
+      <button id="runSuite">Run complete suite</button>
+    </div>
+  </section>
+
+  <section class="states">
+    <article class="state"><header><h2>1 · Pre-encryption</h2><span id="preBadge" class="badge">not run</span></header><dl id="preState"></dl></article>
+    <article class="state"><header><h2>2 · Encrypted</h2><span id="encBadge" class="badge">not run</span></header><dl id="encState"></dl></article>
+    <article class="state"><header><h2>3 · Recovered</h2><span id="recBadge" class="badge">not run</span></header><dl id="recState"></dl></article>
+  </section>
+
+  <section class="panel">
+    <h2>Scrambling observations</h2>
+    <div id="metrics" class="summary"></div>
+    <ul id="warnings"></ul>
+  </section>
+
+  <section class="panel">
+    <h2>Suite / protocol result</h2>
+    <div id="suiteSummary" class="summary"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Structured evidence</h2>
+    <pre id="output">Load a package or run the suite.</pre>
+  </section>
+</main>
+<script src="shadowrun-binary-cube-engine.js"></script>
+<script src="binary-cube-three-state-validator.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  let catalog = null;
+
+  function badge(element, text, state) {
+    element.textContent = text;
+    element.className = `badge ${state || ''}`.trim();
+  }
+  function rows(target, entries) {
+    target.replaceChildren();
+    for (const [name, value] of entries) {
+      const dt = document.createElement('dt'); dt.textContent = name;
+      const dd = document.createElement('dd'); dd.textContent = value == null ? '—' : String(value);
+      target.append(dt, dd);
+    }
+  }
+  function metric(label, value) {
+    const box = document.createElement('div'); box.className = 'metric';
+    const strong = document.createElement('strong'); strong.textContent = value;
+    const span = document.createElement('span'); span.textContent = label;
+    box.append(strong, span); return box;
+  }
+  function showRun(report) {
+    $('output').textContent = JSON.stringify(report, null, 2);
+    if (!report.preEncryption || !report.encrypted || !report.recovered) {
+      badge($('preBadge'), 'failed', 'bad'); badge($('encBadge'), 'not reached', 'bad'); badge($('recBadge'), 'not reached', 'bad');
+      rows($('preState'), [['Error', report.error && report.error.message]]); rows($('encState'), []); rows($('recState'), []); return;
+    }
+    const pre = report.preEncryption, enc = report.encrypted, rec = report.recovered;
+    badge($('preBadge'), pre.passed ? 'captured' : 'failed', pre.passed ? 'good' : 'bad');
+    badge($('encBadge'), enc.status, enc.passed ? 'good' : (enc.methodValid ? 'warn' : 'bad'));
+    badge($('recBadge'), rec.passed ? 'exact match' : 'mismatch', rec.passed ? 'good' : 'bad');
+    rows($('preState'), [
+      ['Test', pre.testId], ['Bits', pre.source.statistics.bitLength], ['SHA-256', pre.source.sha256], ['Key ID', pre.keySummary.keyId],
+      ['Grid', pre.keySummary.gridSize], ['Faces', `${pre.keySummary.inputFace} → ${pre.keySummary.outputFace}`],
+      ['Turns', `${pre.keySummary.inputQuarterTurns} → ${pre.keySummary.outputQuarterTurns}`], ['Effective mask', pre.keySummary.maskDensity.toFixed(4)]
+    ]);
+    rows($('encState'), [
+      ['Method valid', enc.methodValid], ['Scrambling observed', enc.scramblingObserved], ['Cipher bits', enc.package.ciphertext.length],
+      ['Blocks', enc.package.blockCount], ['Checksum', enc.package.checksum], ['Deterministic replay', enc.methodValidity.deterministicReplay],
+      ['Key binding', enc.methodValidity.keyBinding], ['Package SHA-256', enc.packageSha256]
+    ]);
+    rows($('recState'), [
+      ['Payload match', rec.equivalence.exactPayloadMatch], ['Length match', rec.equivalence.exactLengthMatch],
+      ['Digest match', rec.equivalence.exactDigestMatch], ['Recovered bits', rec.recovered.statistics.bitLength], ['SHA-256', rec.recovered.sha256]
+    ]);
+    const q = enc.scramblingQuality;
+    $('metrics').replaceChildren(
+      metric('Aligned Hamming', q.alignedHamming.ratio.toFixed(4)), metric('Cipher one ratio', q.ciphertextStatistics.oneRatio.toFixed(4)),
+      metric('Transition rate', q.ciphertextStatistics.transitionRate.toFixed(4)), metric('Longest run', q.ciphertextStatistics.longestRun),
+      metric('Binary entropy', q.ciphertextStatistics.binaryEntropy.toFixed(4))
+    );
+    $('warnings').replaceChildren();
+    if (!q.warnings.length) {
+      const li = document.createElement('li'); li.textContent = 'No configured scrambling weakness thresholds triggered.'; $('warnings').append(li);
+    } else for (const warning of q.warnings) { const li = document.createElement('li'); li.textContent = `${warning.severity.toUpperCase()} · ${warning.code}: ${warning.message}`; $('warnings').append(li); }
+  }
+  function showSuite(report) {
+    $('output').textContent = JSON.stringify(report, null, 2);
+    $('suiteSummary').replaceChildren(
+      metric('Suite', report.ok ? 'PASS' : 'FAIL'), metric('Positive', `${report.positivePassed}/${report.positiveCaseCount}`),
+      metric('Validator errors', `${report.negativePassed}/${report.negativeCaseCount}`), metric('Weakness findings', report.weaknessCount),
+      metric('Duration ms', Number(report.durationMs || 0).toFixed(2))
+    );
+  }
+  function customCase() {
+    return {
+      id: 'browser-custom', description: 'Browser-entered custom three-state case', payload: { type:'literal', value:$('payload').value },
+      keyOptions: {
+        gridSize:Number($('gridSize').value), seed:$('seed').value, inputFace:$('inputFace').value, outputFace:$('outputFace').value,
+        inputQuarterTurns:Number($('inputTurns').value), outputQuarterTurns:Number($('outputTurns').value), maskDensity:Number($('maskDensity').value)
+      }
+    };
+  }
+  function fail(error) { $('output').textContent = `${error.name}: ${error.message}`; $('output').classList.add('error'); }
+  async function initialize() {
+    const response = await fetch('skills/binary-cube-laboratory/test-packages.json', { cache:'no-store' });
+    if (!response.ok) throw new Error(`Could not load test package catalog: HTTP ${response.status}.`);
+    catalog = await response.json();
+    for (const testCase of catalog.positiveCases || []) { const option = document.createElement('option'); option.value = testCase.id; option.textContent = `${testCase.id} — ${testCase.description}`; $('packageSelect').append(option); }
+    $('runPackage').onclick = () => { try { $('output').classList.remove('error'); const testCase = catalog.positiveCases.find(item => item.id === $('packageSelect').value); showRun(BinaryCubeThreeStateValidator.runCase(testCase)); } catch (error) { fail(error); } };
+    $('runCustom').onclick = () => { try { $('output').classList.remove('error'); showRun(BinaryCubeThreeStateValidator.runCase(customCase())); } catch (error) { fail(error); } };
+    $('runSuite').onclick = () => { try { $('output').classList.remove('error'); showSuite(BinaryCubeThreeStateValidator.runSuite(catalog)); } catch (error) { fail(error); } };
+  }
+  initialize().catch(fail);
+})();
+</script>
+</body>
+</html>
