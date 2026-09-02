@@ -4,6 +4,7 @@
   const SPELL_ENTRY_SCRIPT = 'spell-creator-entry.js';
   const RECORD_BRIDGE_SCRIPT = 'module-viewer-record-bridge.js';
   const REFERENCE_LIBRARY_SCRIPT = 'module-reference-library.js';
+  const PRIMARY_GENERATOR_BRIDGE_SCRIPT = 'module-generator-primary-bridge.js';
   let injected = false;
   let fillerButtonInjected = false;
   let pendingPdfModule = null;
@@ -14,7 +15,7 @@
   }
 
   function loadScriptOnce(src){
-    if(document.querySelector(`script[src="${src}"]`)) return;
+    if([...document.scripts].some(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src))) return;
     const script = document.createElement('script');
     script.src = src;
     script.defer = true;
@@ -27,6 +28,7 @@
     loadScriptOnce(SPELL_ENTRY_SCRIPT);
     loadScriptOnce(RECORD_BRIDGE_SCRIPT);
     loadScriptOnce(REFERENCE_LIBRARY_SCRIPT);
+    loadScriptOnce(PRIMARY_GENERATOR_BRIDGE_SCRIPT);
   }
 
   function makeModule(detail){
