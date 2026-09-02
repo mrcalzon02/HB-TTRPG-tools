@@ -4,7 +4,7 @@ This directory packages repository capabilities and tabletop workflows as portab
 
 ## Architecture rule
 
-**Mirrored calls, not mirrored logic.** Skills are workflow/adaptation layers. They use the authoritative Foundry capability manifest, operation contracts, API facade, campaign indexes, canonical browser/runtime code, and personality resources. They do not reproduce generator, laboratory, calculator, rules, campaign, or personality algorithms in skill instructions. Reusable tabletop randomness and state logic belongs in one authoritative helper and is referenced by sibling skills instead of being copied across them.
+**Mirrored calls, not mirrored logic.** Skills are workflow/adaptation layers. They use the authoritative Foundry capability manifest, operation contracts, API facade, campaign indexes, canonical browser/runtime code, personality resources, and shared host-local helpers. They do not reproduce generator, laboratory, calculator, rules, campaign, personality, randomness, persistence, or battlespace algorithms across multiple skills.
 
 Canonical discovery surfaces:
 
@@ -26,11 +26,11 @@ Canonical discovery surfaces:
 
 Individual skills may point to `blacklight.charles` for discoverability, but they must not copy, fork, mutate, summarize into a replacement persona, or silently override the canonical engram. Higher-priority host/system policy remains authoritative, and an explicit out-of-character/system presentation request may suppress Charles presentation without changing the engram.
 
-Personality is not capability: loading Charles does not grant tools, permissions, credentials, network access, provider access, persistent storage, filesystem access, a random source, runtime compatibility, or evidence that an operation succeeded.
+Personality is not capability: loading Charles does not grant tools, permissions, credentials, network access, provider access, persistent storage, filesystem access, a random source, image rendering, runtime compatibility, or evidence that an operation succeeded.
 
 ## Charles orchestration
 
-Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, or a cryptographic RNG, that dependency still applies.
+Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, a cryptographic RNG, Python, or Pillow, that dependency still applies.
 
 ## Common homebrew tabletop family
 
@@ -62,6 +62,7 @@ The system-neutral live-play and state-management family includes:
 - `inventory-and-resource-tracking` — equipment, consumables, ammunition, currency, charges, cargo, and supplies.
 - `campaign-ledger-management` — append-only audit history for campaign-significant state changes.
 - `tabletop-sandbox-data-management` — shared system-neutral CSV persistence and Python helper when a writable sandbox exists.
+- `tabletop-battlespace-visualization` — integer-grid battlefield state, range/proximity/AoE queries, human correction by coordinate mutation, and deliberately primitive Pillow previews down to exactly one pixel per grid cell.
 
 ### Dice modes and randomness integrity
 
@@ -84,8 +85,20 @@ The canonical state files are:
 - `encounter_participants.csv` — initiative, health/resources, conditions, and active state.
 - `inventory.csv` — equipment, quantity, item state, location, and notes.
 - `campaign_ledger.csv` — append-only audit trail of campaign-significant changes.
+- `battlefield_maps.csv` — map size, encounter binding, physical cell scale, and selected geometric distance rule.
+- `battlefield_tokens.csv` — stable token/entity identity, faction, integer position, footprint, elevation, and display color.
+- `battlefield_terrain.csv` — per-cell terrain, passability, movement/cover/LOS metadata, and primitive color.
+- `battlefield_effects.csv` — explicit or primitive geometric AoE/effect state.
 
 Use stable entity IDs; a display name is never the sole key. Preserve imported source files and normalize into working CSVs rather than destructively rewriting character sheets. Re-import is reconciliation, not blind replacement of in-play state.
+
+### Battlespace raster contract
+
+`tabletop-battlespace-visualization` treats CSV coordinates as authoritative and the image as a diagnostic projection. The canonical minimum preview is `width_cells × height_cells` pixels: **one pixel per grid cell**. A 40×30 battlefield must therefore render correctly as a 40×30 RGB PNG.
+
+The baseline path requires no fonts, labels, sprites, textures, SVG, browser canvas, WebGL, network resources, or antialiasing. Larger previews use nearest-neighbor scaling so the same source cell raster remains exact. Separate `terrain`, `effects`, and `occupancy` rasters are supported when one composite pixel cannot represent overlapping semantics. A sidecar legend maps token IDs and structured coordinates to colors.
+
+Human corrections mutate structured positions first. “Left two” is `dx=-2`; “up one” is `dy=-1`. The renderer then regenerates from state. Never move tokens by editing the prior PNG.
 
 ## Status classes
 
@@ -95,7 +108,7 @@ Skill registry status values use `/api/ai/status-vocabulary.json`. `onboardable`
 
 `ai-skill-context-loader.js` is for declarative skill/personality context. `HBFoundrySkillContextLoader.load(name)` returns the selected registered skill document with the canonical Charles engram; `loadMany(names)` loads Charles once and returns multiple task skills beneath the same personality binding.
 
-`ai-skill-loader.js` remains a separate executable-package proof loader. It validates registered browser-JavaScript companion packages, loads only allow-listed same-origin runtime scripts, and runs declared deterministic self-tests. Do not confuse personality/skill context loading with executable runtime readiness. Likewise, a tabletop skill's helper path does not prove the consuming host has Python, Web Crypto, writable file access, or successful persistence.
+`ai-skill-loader.js` remains a separate executable-package proof loader. It validates registered browser-JavaScript companion packages, loads only allow-listed same-origin runtime scripts, and runs declared deterministic self-tests. Do not confuse personality/skill context loading with executable runtime readiness. Likewise, a tabletop skill's helper path does not prove the consuming host has Python, Pillow, Web Crypto, writable file access, or successful persistence.
 
 ## Adding a skill
 
