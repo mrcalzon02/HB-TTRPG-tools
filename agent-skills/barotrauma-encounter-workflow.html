@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Barotrauma Encounter Workflow Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Discover and use the Barotrauma general encounter and lethality data for Europa operations, encounter templates, danger interpretation, and canonical runtime guidance. Activate for Barotrauma encounter-generation requests or when a user needs the repository&#x27;s encounter/lethality authorities.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/barotrauma-encounter-workflow.html">
+<link rel="alternate" type="text/markdown" href="../skills/barotrauma-encounter-workflow/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Barotrauma Encounter Workflow</h1><p class="subtitle">Discover and use the Barotrauma general encounter and lethality data for Europa operations, encounter templates, danger interpretation, and canonical runtime guidance. Activate for Barotrauma encounter-generation requests or when a user needs the repository&#x27;s encounter/lethality authorities.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/barotrauma-encounter-workflow/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/barotrauma-encounter-workflow/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/barotrauma-encounter-workflow/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>barotrauma-encounter-workflow</code> · <strong>Status:</strong> <code>ui-bound</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> None registered</p>
+<p><strong>Resource IDs:</strong> <code>barotrauma.encounter-index</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Encounter data are remotely searchable; the current authoritative encounter-generation runtime remains UI/state-coupled and is not yet a portable headless capability.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: barotrauma-encounter-workflow
+description: Discover and use the Barotrauma general encounter and lethality data for Europa operations, encounter templates, danger interpretation, and canonical runtime guidance. Activate for Barotrauma encounter-generation requests or when a user needs the repository&#x27;s encounter/lethality authorities.
+compatibility: Encounter data are remotely searchable; the current authoritative encounter-generation runtime remains UI/state-coupled and is not yet a portable headless capability.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-resource: barotrauma.encounter-index
+---
+
+# Barotrauma Encounter Workflow
+
+Use `barotrauma.encounter-index` as the authoritative encounter-data collection.
+
+## Workflow
+
+1. Retrieve or expand `barotrauma.encounter-index` to identify the canonical encounter-template and lethality files.
+2. Search the collection for environment, creature, station, route, mission, hazard, or lethality terms relevant to the request.
+3. When the canonical Barotrauma operations runtime is available, use that runtime to perform generation/stateful selection.
+4. When only static-resource access is available, retrieve and explain the authoritative templates and lethality records, but do not pretend a headless encounter-engine call occurred.
+5. Preserve source paths and lethality/probability context in outputs.
+
+## Runtime boundary
+
+The encounter engine is currently assembled into the Barotrauma operations UI/runtime. This skill deliberately does not copy its closure/state logic into a second generator. Promotion to fully headless status should happen by extracting the existing runtime into a canonical pure core, then updating the Foundry capability manifest.
+
+## Hard rules
+
+- Do not invent an encounter-generator algorithm in the skill.
+- Do not confuse template retrieval with canonical generated output.
+- Do not discard lethality metadata when evaluating encounter severity.
+- Use the registered encounter index rather than searching arbitrary repository text first.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>

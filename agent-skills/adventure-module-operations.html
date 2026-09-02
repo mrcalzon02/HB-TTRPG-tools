@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adventure Module Operations Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Discover, inspect, and use Foundry adventure modules, room/encounter content, treasure, campaign hooks, and module workspace information. Activate when a user asks how a module is structured, wants module content retrieved, or needs repository-backed adventure/module operations.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/adventure-module-operations.html">
+<link rel="alternate" type="text/markdown" href="../skills/adventure-module-operations/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Adventure Module Operations</h1><p class="subtitle">Discover, inspect, and use Foundry adventure modules, room/encounter content, treasure, campaign hooks, and module workspace information. Activate when a user asks how a module is structured, wants module content retrieved, or needs repository-backed adventure/module operations.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/adventure-module-operations/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/adventure-module-operations/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/adventure-module-operations/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>adventure-module-operations</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <code>foundry.site-index</code></p>
+<p><strong>Resource IDs:</strong> <code>modules.workspace</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Module data and pages are remotely retrievable; individual generation/editing actions may remain browser/UI-bound depending on the selected module tool.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: adventure-module-operations
+description: Discover, inspect, and use Foundry adventure modules, room/encounter content, treasure, campaign hooks, and module workspace information. Activate when a user asks how a module is structured, wants module content retrieved, or needs repository-backed adventure/module operations.
+compatibility: Module data and pages are remotely retrievable; individual generation/editing actions may remain browser/UI-bound depending on the selected module tool.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-resource: modules.workspace
+---
+
+# Adventure Module Operations
+
+Use `modules.workspace`, the Foundry search index, and any module-specific registered resources/capabilities before relying on generic TTRPG assumptions.
+
+## Workflow
+
+1. Identify the requested module, room, encounter, treasure, hook, or operational task.
+2. Use `foundry.site-index` and `modules.workspace` to locate the authoritative module surface and any associated generator/editor.
+3. If a stable capability exists, retrieve its operation contract and invoke it rather than simulating the result in prose.
+4. If the selected module tool is UI-bound, retrieve the available module data and guide the canonical workflow without pretending a headless call occurred.
+5. Preserve module IDs, source paths, encounter/treasure provenance, and compatibility/rules-target information when present.
+
+## Hard rules
+
+- Do not collapse multiple modules into one implied canon.
+- Do not invent generator outputs when only static module data were retrieved.
+- Prefer module-specific content over generic random tables when available.
+- Keep generated encounter/location content distinct from authored module canon.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>
