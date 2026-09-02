@@ -6,7 +6,7 @@
     "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
     "capabilityId": "shadowrun.binary-cube",
     "laboratoryId": "binary-cube-laboratory",
-    "packageVersion": "1.3.0"
+    "packageVersion": "1.4.0"
   },
   "status": "runtime-required",
   "runtime": {
@@ -33,6 +33,7 @@
           "operations": "node binary-cube-node-adapter.js operations",
           "contract": "node binary-cube-node-adapter.js contract <operation>",
           "selfTest": "node binary-cube-node-adapter.js self-test",
+          "parity": "node binary-cube-parity-runner.js",
           "invoke": "node binary-cube-node-adapter.js invoke '{\"operation\":\"sha256Hex\",\"args\":[\"test\"]}'"
         },
         "stdin": "For invoke, omit the JSON argument and provide the same request object on stdin.",
@@ -53,7 +54,8 @@
     "capabilityRegistry": "api/foundry-capabilities.json",
     "skillRegistry": "skills/index.json",
     "statusVocabulary": "api/ai/status-vocabulary.json",
-    "selfTest": "skills/binary-cube-laboratory/self-test.json"
+    "selfTest": "skills/binary-cube-laboratory/self-test.json",
+    "parityRunner": "binary-cube-parity-runner.js"
   },
   "provenance": {
     "canonicalRuntimePath": "shadowrun-binary-cube-engine.js",
@@ -61,6 +63,7 @@
     "companionUiPath": "shadowrun-binary-cube-encryption.js",
     "nodeAdapterPath": "binary-cube-node-adapter.js",
     "toolProjectionPath": "skills/binary-cube-laboratory/tool-projection.json",
+    "parityRunnerPath": "binary-cube-parity-runner.js",
     "architectureRule": "Mirrored calls, not mirrored logic."
   },
   "dependencies": [],
@@ -77,6 +80,13 @@
     "credentialFree": true,
     "networkFreeAfterRuntimeLoad": true,
     "supportedRuntimes": ["browser-js", "node-commonjs"]
+  },
+  "parity": {
+    "path": "binary-cube-parity-runner.js",
+    "runtime": "node-commonjs",
+    "covers": ["canonical engine through adapter", "Node API", "structured AI tool projection", "operation contract coverage", "deterministic self-test"],
+    "browserStatus": "runtime-required",
+    "note": "Browser execution remains a separate acceptance gate; the runner does not claim browser parity without a browser host."
   },
   "integrity": {
     "runtimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
