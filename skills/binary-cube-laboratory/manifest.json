@@ -6,7 +6,7 @@
     "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
     "capabilityId": "shadowrun.binary-cube",
     "laboratoryId": "binary-cube-laboratory",
-    "packageVersion": "1.5.0"
+    "packageVersion": "1.6.0"
   },
   "status": "runtime-required",
   "runtime": {
@@ -27,47 +27,80 @@
         "runtime": "node-commonjs",
         "dependencies": [],
         "interfaces": ["module", "cli", "json-tool"],
-        "discoveryMethods": ["describe", "listOperations", "operationContract", "listTestPackages"],
-        "validationMethods": ["runSelfTest", "runThreeStateValidation"],
+        "discoveryMethods": ["describe", "listOperations", "operationContract", "listTestPackages", "listPreEntryMaskMethods"],
+        "validationMethods": ["runSelfTest", "runPreEntryMaskSelfTest", "runThreeStateValidation"],
+        "workflowMethods": ["encryptWorkflow", "decryptWorkflow", "maskedEncryptWorkflow", "maskedDecryptWorkflow"],
         "commands": {
           "describe": "node binary-cube-node-adapter.js describe",
           "operations": "node binary-cube-node-adapter.js operations",
           "contract": "node binary-cube-node-adapter.js contract <operation>",
           "testPackages": "node binary-cube-node-adapter.js test-packages",
+          "maskMethods": "node binary-cube-node-adapter.js mask-methods",
+          "maskSelfTest": "node binary-cube-node-adapter.js mask-self-test",
+          "mask": "node binary-cube-node-adapter.js mask '<json>'",
+          "unmask": "node binary-cube-node-adapter.js unmask '<json>'",
+          "maskedEncrypt": "node binary-cube-node-adapter.js masked-encrypt '<json>'",
+          "maskedDecrypt": "node binary-cube-node-adapter.js masked-decrypt '<json>'",
           "validationSuite": "node binary-cube-node-adapter.js validation-suite",
           "validateTest": "node binary-cube-node-adapter.js validate-test '<json request or test id>'",
           "selfTest": "node binary-cube-node-adapter.js self-test",
           "parity": "node binary-cube-parity-runner.js",
           "invoke": "node binary-cube-node-adapter.js invoke '{\"operation\":\"sha256Hex\",\"args\":[\"test\"]}'"
         },
-        "stdin": "Structured invoke/encrypt/decrypt requests may be supplied as JSON on stdin where supported by the command.",
-        "authority": "Delegates to shadowrun-binary-cube-engine.js, derives its operation allow-list from api/foundry-capabilities.json, returns argument/return definitions from api/operation-contracts.json, and delegates test-state capture to binary-cube-three-state-validator.js."
+        "stdin": "Structured requests may be supplied as JSON on stdin where supported by the command.",
+        "authority": "Delegates cube operations to shadowrun-binary-cube-engine.js, pre-entry masking to binary-cube-pre-entry-mask.js, test-state capture to binary-cube-three-state-validator.js, and contract discovery to the canonical registries."
       }
     }
   },
   "humanTesting": {
-    "page": "binary-cube-test-laboratory.html",
-    "modes": ["registered deterministic package", "custom configuration", "complete suite"],
+    "threeStatePage": "binary-cube-test-laboratory.html",
+    "preEntryMaskPage": "binary-cube-pre-entry-mask-laboratory.html",
+    "strengthPage": "binary-cube-strength-laboratory.html",
+    "modes": ["registered deterministic package", "custom configuration", "complete suite", "pre-entry mask visualization", "masked encrypt/decrypt", "perturbation strength analysis"],
     "stateViews": ["pre-encryption", "encrypted", "recovered"],
-    "note": "The human testing page loads the same canonical engine and three-state validator used by programmatic surfaces."
+    "note": "Human research pages load the same canonical modules used by programmatic surfaces. Experimental masking remains separate from the ordinary Binary Cube UI until runtime acceptance is observed."
+  },
+  "preEntryMasking": {
+    "module": "binary-cube-pre-entry-mask.js",
+    "record": "docs/binary-cube-pre-entry-masking.md",
+    "methods": ["none", "white-noise", "newspaper-cutout", "plasma-noise", "cellular-diffusion", "crosshatch-jitter", "burst-cluster"],
+    "operation": "reversible XOR field mask before canonical cube entry",
+    "recoveryMaterial": "The mask descriptor contains deterministic regeneration parameters and should be kept with the separate key during secrecy-oriented experiments.",
+    "strengthBoundary": "A fixed XOR mask can obscure visible low-entropy structure but does not by itself create avalanche diffusion."
+  },
+  "strengthAnalysis": {
+    "module": "binary-cube-strength-analysis.js",
+    "record": "docs/binary-cube-strength-analysis.md",
+    "measures": ["sampled one-bit plaintext perturbation diffusion", "deterministic key-seed perturbation diffusion", "gridSize^2 diagnostic-window localization"],
+    "securityClaim": "diagnostic only"
+  },
+  "subcubeStrengthening": {
+    "status": "design-gate",
+    "record": "docs/binary-cube-subcube-multi-input-indexing-plan.md",
+    "intent": "Encode one logical source bit into several keyed physical cube-entry positions distributed across distinct subcube regions before the canonical transform.",
+    "initialFanOuts": [1,3,5,7],
+    "candidateModes": ["direct-replication-control", "keyed-codeword-experiment"],
+    "promotionRule": "Do not add to ordinary encryption until standalone plan/encode/decode validation and before/after strength measurements pass."
   },
   "validationProtocol": {
     "id": "binary-cube-three-state-validation-v1",
+    "schemaVersion": "1.1.0",
     "validator": "binary-cube-three-state-validator.js",
     "testPackages": "skills/binary-cube-laboratory/test-packages.json",
     "states": ["pre-encryption", "encrypted", "recovered"],
-    "encryptedMethodRequirements": ["canonical package validation", "key binding", "deterministic replay"],
+    "preEncryptionCapture": ["source bits/digest", "optional pre-entry mask descriptor/statistics", "exact masked cube-input bits/digest", "canonical key/configuration"],
+    "encryptedMethodRequirements": ["canonical package validation", "key binding", "deterministic replay from captured cube input"],
     "scramblingQualitySignals": ["plaintext equality", "plaintext substring exposure", "aligned Hamming distance", "bit balance", "transition rate", "longest run", "binary entropy"],
-    "recoveryRequirements": ["exact payload", "exact bit length", "exact SHA-256 digest"],
-    "negativeTesting": "Validator-layer fault injection includes invalid input, invalid geometry, package tampering, ciphertext tampering, checksum/key identity failures, wrong valid keys, and malformed key structures."
+    "recoveryRequirements": ["exact cube-input recovery", "mask removal when present", "exact original payload", "exact bit length", "exact SHA-256 digest"],
+    "negativeTesting": "Validator-layer fault injection includes invalid input, invalid geometry, unsupported mask methods, package tampering, ciphertext tampering, checksum/key identity failures, wrong valid keys, and malformed key structures."
   },
   "toolIntegration": {
     "projection": "skills/binary-cube-laboratory/tool-projection.json",
     "projectionType": "ai-tool-descriptor",
     "protocolTargets": ["OpenAI function tools", "MCP", "generic JSON tool runners"],
-    "executionBinding": "binary-cube-node-adapter.js",
+    "executionBinding": "binary-cube-node-adapter.js plus declared local analysis modules",
     "remoteRpcProvided": false,
-    "note": "The projection describes local structured calls and never duplicates the Binary Cube transform."
+    "note": "The projection describes local structured calls and never duplicates the Binary Cube transform or mask generation logic."
   },
   "authorities": {
     "operationContracts": "api/operation-contracts.json",
@@ -76,6 +109,11 @@
     "statusVocabulary": "api/ai/status-vocabulary.json",
     "selfTest": "skills/binary-cube-laboratory/self-test.json",
     "testPackages": "skills/binary-cube-laboratory/test-packages.json",
+    "preEntryMask": "binary-cube-pre-entry-mask.js",
+    "preEntryMaskRecord": "docs/binary-cube-pre-entry-masking.md",
+    "strengthAnalysis": "binary-cube-strength-analysis.js",
+    "strengthRecord": "docs/binary-cube-strength-analysis.md",
+    "subcubePlan": "docs/binary-cube-subcube-multi-input-indexing-plan.md",
     "threeStateValidator": "binary-cube-three-state-validator.js",
     "parityRunner": "binary-cube-parity-runner.js"
   },
@@ -84,8 +122,11 @@
     "canonicalRuntimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
     "companionUiPath": "shadowrun-binary-cube-encryption.js",
     "testUiPath": "binary-cube-test-laboratory.html",
+    "preEntryMaskUiPath": "binary-cube-pre-entry-mask-laboratory.html",
+    "strengthUiPath": "binary-cube-strength-laboratory.html",
     "nodeAdapterPath": "binary-cube-node-adapter.js",
     "toolProjectionPath": "skills/binary-cube-laboratory/tool-projection.json",
+    "preEntryMaskPath": "binary-cube-pre-entry-mask.js",
     "threeStateValidatorPath": "binary-cube-three-state-validator.js",
     "testPackagePath": "skills/binary-cube-laboratory/test-packages.json",
     "parityRunnerPath": "binary-cube-parity-runner.js",
@@ -109,7 +150,7 @@
   "parity": {
     "path": "binary-cube-parity-runner.js",
     "runtime": "node-commonjs",
-    "covers": ["canonical engine through adapter", "Node API", "structured AI tool projection", "operation contract coverage", "deterministic self-test", "three-state positive test packages", "validator-layer negative packages"],
+    "covers": ["canonical engine through adapter", "Node API", "structured AI tool projection", "operation contract coverage", "deterministic self-test", "three-state positive test packages", "pre-entry masked three-state packages", "validator-layer negative packages"],
     "browserStatus": "runtime-required",
     "note": "Browser execution remains a separate acceptance gate; the runner does not claim browser parity without a browser host."
   },
@@ -117,6 +158,6 @@
     "runtimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
     "contentDigest": null,
     "signature": null,
-    "note": "Digest/signature fields are reserved for a later integrity profile; runtimeBlobSha binds this package revision to the current Git blob without introducing a second implementation."
+    "note": "Digest/signature fields are reserved for a later integrity profile; runtimeBlobSha binds this package revision to the current Git blob without introducing a second cube implementation."
   }
 }
