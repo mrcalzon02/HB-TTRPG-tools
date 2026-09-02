@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "protocol": "hb-ai-discovery/1",
   "service": "Calzon's TTRPG Foundry",
   "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
@@ -21,6 +21,7 @@
     "wellKnown": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
     "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
     "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
+    "agentSkillsHtml": "https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html",
     "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
     "portableSkillTest": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html",
     "portableSkillLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js",
@@ -28,8 +29,9 @@
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html"
   },
   "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, or encryption logic in AI adapters. Discover and invoke the authoritative implementation.",
+  "compatibilityRule": "HTML compatibility views may mirror discovery metadata for restricted model browsers, but authoritative JSON registries and SKILL.md files remain the source of truth.",
   "runtimeClasses": {
-    "static-resource": "Remotely readable with ordinary HTTP GET. Invocation may mean retrieving the registered authoritative resource.",
+    "static-resource": "Remotely readable with ordinary HTTP GET when the current host permits the resource content type. Invocation may mean retrieving the registered authoritative resource.",
     "browser-js": "Executable only in a JavaScript-capable host after loading the runtime scripts declared by the capability.",
     "browser-page-context": "Executable only after the capability's declared page context and dependencies are initialized.",
     "browser-ui": "Authoritative behavior is still coupled to page controls; do not claim a headless API.",
@@ -37,7 +39,8 @@
   },
   "transport": {
     "staticGet": {
-      "status": "ready"
+      "status": "ready",
+      "hostConstraint": "Some model browsing environments restrict direct JSON, text, or Markdown retrieval even when the resource is publicly hosted."
     },
     "browserJavaScript": {
       "status": "runtime-required",
@@ -86,7 +89,8 @@
       "step": 5,
       "action": "GET",
       "target": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
-      "purpose": "Select a task-specific Agent Skill when workflow guidance is useful."
+      "fallback": "https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html",
+      "purpose": "Select and enumerate task-specific Agent Skills. Use the HTML compatibility projection only when the current host cannot retrieve the authoritative JSON registry."
     },
     {
       "step": 6,
@@ -117,6 +121,16 @@
       "id": "discover-capabilities",
       "prompt": "Examine the Foundry and enumerate its AI-available capabilities.",
       "passCondition": "Model uses the machine capability registry rather than only reconstructing the human site catalog."
+    },
+    {
+      "id": "enumerate-agent-skills",
+      "prompt": "The authoritative skill registry contains 21 registered Agent Skills. What are they?",
+      "passCondition": "Model retrieves skills/index.json and enumerates all 21 exact name values; if raw JSON is blocked by the current host, it uses agent-skills.html, explicitly identifies it as a compatibility projection, and still enumerates all 21 exact names."
+    },
+    {
+      "id": "skill-document-access",
+      "prompt": "Open a named registered Agent Skill and report its instructions and compatibility requirements.",
+      "passCondition": "Model opens the registered SKILL.md or, when raw Markdown is blocked by its host, follows the GitHub HTML fallback supplied by agent-skills.html rather than fabricating instructions."
     },
     {
       "id": "binary-cube",
