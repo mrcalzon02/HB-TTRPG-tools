@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "mad-martikens-menagerie",
+  "title": "Mad Martiken’s Menagerie of Magical Services",
+  "subtitle": "Preserved service-location module example",
+  "system": "Module example / source reference",
+  "referenceOnly": true,
+  "source": {
+    "fileName": "Mad Martiken’s Menagerie of Magical Services.pdf",
+    "pdf": "SRC/Mad Martiken’s Menagerie of Magical Services.pdf",
+    "notes": "Example, template, and use case retained for keyed service locations and semantic room-content comparison."
+  },
+  "general": {"status": "source-reference"},
+  "map": {"image": "", "grid": "Source PDF"},
+  "hotspots": [],
+  "rooms": [],
+  "doors": []
+}
