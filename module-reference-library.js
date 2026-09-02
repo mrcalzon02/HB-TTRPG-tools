@@ -32,12 +32,13 @@
     const items=inventory?.items||[];
     return items.find(item=>item.id===module?.id) || items.find(item=>item.viewerPath===path) || null;
   }
-  function openInViewer(path){
+  function openInViewer(path,scroll=true){
     const select=document.querySelector('#module-select');
-    if(!select) return;
+    if(!select) return false;
     select.value=path;
     select.dispatchEvent(new Event('change',{bubbles:true}));
-    document.querySelector('#module-viewer-root')?.scrollIntoView({behavior:'smooth',block:'start'});
+    if(scroll) document.querySelector('#module-viewer-root')?.scrollIntoView({behavior:'smooth',block:'start'});
+    return true;
   }
   function renderLibrary(){
     const shell=document.querySelector('#module-viewer-root .module-viewer-shell');
@@ -91,6 +92,9 @@
     try{ await getInventory(); }catch(error){ console.warn('Module example inventory failed to load',error); return; }
     renderLibrary();
     const select=document.querySelector('#module-select');
+    const requestedId=new URLSearchParams(location.search).get('module');
+    const requested=(inventory.items||[]).find(item=>item.id===requestedId);
+    if(requested && select){ openInViewer(requested.viewerPath,false); return; }
     if(select){ activePath=select.value; const item=(inventory.items||[]).find(entry=>entry.viewerPath===activePath); if(item) addSourcePane(item,{id:item.id,referenceOnly:item.status==='source-reference'}); }
   }
 
