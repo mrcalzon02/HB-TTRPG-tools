@@ -1,0 +1,19 @@
+{
+  "schemaVersion":"1.0.0",
+  "projectionType":"ai-tool-descriptor-companion",
+  "capabilityId":"shadowrun.binary-cube.subcube-indexing-experiment",
+  "laboratoryId":"binary-cube-laboratory",
+  "status":"experimental-standalone",
+  "security":{"classification":"experimental-ttrpg-obfuscation-not-production-cryptography","productionCryptography":false},
+  "binding":{"runtime":"node-commonjs","module":"binary-cube-subcube-indexing.js","rule":"The tool projection calls the shared indexing module; it contains no indexing or cube-transform logic."},
+  "tools":[
+    {"name":"binary_cube_list_subcube_indexing_modes","description":"List standalone subcube multi-input indexing modes and their research purpose.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"listSubcubeIndexingModes"}},
+    {"name":"binary_cube_build_subcube_index_plan","description":"Build and validate a deterministic collision-free plan mapping each logical source bit to fan-out physical cube-entry positions.","inputSchema":{"type":"object","required":["sourceBitLength"],"additionalProperties":false,"properties":{"sourceBitLength":{"type":"integer","minimum":1},"mode":{"type":"string","enum":["direct-replication","keyed-codeword"],"default":"keyed-codeword"},"fanOut":{"type":"integer","enum":[1,3,5,7],"default":3},"regionCount":{"type":"integer","minimum":1,"maximum":256},"seed":{"type":"string"},"distinctRegions":{"type":"boolean","default":true}}},"binding":{"method":"buildSubcubeIndexPlan","requestObject":true}},
+    {"name":"binary_cube_validate_subcube_index_plan","description":"Reject malformed, colliding, out-of-range, incomplete, or region-incompatible subcube index plans.","inputSchema":{"type":"object","required":["plan"],"additionalProperties":false,"properties":{"plan":{"type":"object"}}},"binding":{"method":"validateSubcubeIndexPlan","arguments":["plan"]}},
+    {"name":"binary_cube_encode_subcube_inputs","description":"Encode logical source bits into a fan-out physical input field using a validated plan or plan options.","inputSchema":{"type":"object","required":["bits","planOrOptions"],"additionalProperties":false,"properties":{"bits":{"type":"string"},"planOrOptions":{"type":"object"}}},"binding":{"method":"encodeSubcubeInputs","arguments":["bits","planOrOptions"]}},
+    {"name":"binary_cube_decode_subcube_inputs","description":"Strictly decode a physical subcube input field; corrupted or non-codeword observations fail rather than silently producing plaintext.","inputSchema":{"type":"object","required":["encodedBits","plan"],"additionalProperties":false,"properties":{"encodedBits":{"type":"string"},"plan":{"type":"object"}}},"binding":{"method":"decodeSubcubeInputs","arguments":["encodedBits","plan"]}},
+    {"name":"binary_cube_analyze_subcube_coverage","description":"Report expansion, collisions and physical placement distribution across subcube regions.","inputSchema":{"type":"object","required":["plan"],"additionalProperties":false,"properties":{"plan":{"type":"object"}}},"binding":{"method":"analyzeSubcubeCoverage","arguments":["plan"]}},
+    {"name":"binary_cube_subcube_indexing_self_test","description":"Run deterministic fan-out 1/3 tests for both replication and keyed-codeword modes, exact recovery, collision freedom, expansion accounting and distinct-region coverage.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"runSubcubeIndexingSelfTest"}}
+  ],
+  "promotionBoundary":"These tools expose a standalone strengthening experiment. They must not be described as part of ordinary Binary Cube encryption until runtime tests and comparative post-cube strength measurements justify promotion."
+}
