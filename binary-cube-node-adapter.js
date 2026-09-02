@@ -9,9 +9,12 @@ const SKILL_ID = 'binary-cube-laboratory';
 const SECURITY_CLASSIFICATION = 'experimental-ttrpg-obfuscation-not-production-cryptography';
 
 function loadJson(relativePath) { return JSON.parse(fs.readFileSync(path.join(ROOT, relativePath), 'utf8')); }
+function deepClone(value) { return JSON.parse(JSON.stringify(value)); }
 const engine = require(path.join(ROOT, 'shadowrun-binary-cube-engine.js'));
+const threeStateValidator = require(path.join(ROOT, 'binary-cube-three-state-validator.js'));
 const capabilityRegistry = loadJson('api/foundry-capabilities.json');
 const operationRegistry = loadJson('api/operation-contracts.json');
+const testPackages = loadJson('skills/binary-cube-laboratory/test-packages.json');
 const capability = (capabilityRegistry.capabilities || []).find(item => item && item.id === CAPABILITY_ID);
 if (!capability) throw new Error(`Capability ${CAPABILITY_ID} is missing from api/foundry-capabilities.json.`);
 const allowedOperations = Object.freeze([...(capability.invocation?.allowedOperations || [])]);
@@ -24,20 +27,44 @@ function operationContract(operation) {
   if (!allowedOperations.includes(name)) throw new Error(`Operation ${name || '(missing)'} is not allowed for ${CAPABILITY_ID}.`);
   const contract = capabilityContracts.operations[name];
   if (!contract) throw new Error(`Operation ${name} is allowed but has no canonical operation contract.`);
-  return JSON.parse(JSON.stringify({ operation: name, ...contract }));
+  return deepClone({ operation: name, ...contract });
 }
 function listOperations() { return allowedOperations.map(operation => operationContract(operation)); }
+function listTestPackages() {
+  return {
+    protocolId: testPackages.protocolId,
+    positiveCases: (testPackages.positiveCases || []).map(testCase => ({ id: testCase.id, description: testCase.description, keyOptions: deepClone(testCase.keyOptions) })),
+    negativeCases: (testPackages.negativeCases || []).map(testCase => ({ id: testCase.id, stage: testCase.stage, description: testCase.description, baseCaseId: testCase.baseCaseId || null, mutation: deepClone(testCase.mutation || null) }))
+  };
+}
+function findPositiveTestCase(testId) {
+  const testCase = (testPackages.positiveCases || []).find(item => item.id === testId);
+  if (!testCase) throw new Error(`Unknown Binary Cube positive test package: ${testId}.`);
+  return deepClone(testCase);
+}
+function runThreeStateValidation(request = {}) {
+  if (!request || typeof request !== 'object' || Array.isArray(request)) throw new Error('Three-state validation requires a request object.');
+  if (request.case) return threeStateValidator.runCase(deepClone(request.case));
+  if (request.testId) return threeStateValidator.runCase(findPositiveTestCase(String(request.testId)));
+  return threeStateValidator.runSuite(testPackages);
+}
 function describe() {
   return {
-    adapter: 'binary-cube-node-adapter', schemaVersion: '1.2.0', skill: SKILL_ID, capabilityId: CAPABILITY_ID,
+    adapter: 'binary-cube-node-adapter', schemaVersion: '1.3.0', skill: SKILL_ID, capabilityId: CAPABILITY_ID,
     runtime: 'node-commonjs', enginePath: 'shadowrun-binary-cube-engine.js', contractAuthority: 'api/operation-contracts.json',
     capabilityAuthority: 'api/foundry-capabilities.json', securityClassification: SECURITY_CLASSIFICATION, productionCryptography: false,
     allowedOperations: [...allowedOperations],
     workflows: {
       encrypt: 'Create or accept a key and encrypt a binary payload in one call.',
-      decrypt: 'Decrypt a canonical package with its separate key in one call.'
+      decrypt: 'Decrypt a canonical package with its separate key in one call.',
+      threeStateValidation: 'Capture and validate pre-encryption, encrypted/scrambled, and recovered states; run positive and validator-error package suites.'
     },
-    discovery: { listOperations: 'Returns every allowed operation with its canonical argument and return contract.', operationContract: 'Returns one canonical operation contract by name.' },
+    discovery: {
+      listOperations: 'Returns every allowed operation with its canonical argument and return contract.',
+      operationContract: 'Returns one canonical operation contract by name.',
+      listTestPackages: 'Lists deterministic positive packages and negative validator-layer packages.'
+    },
+    validationProtocol: { id: testPackages.protocolId, packageCatalog: 'skills/binary-cube-laboratory/test-packages.json', validator: 'binary-cube-three-state-validator.js' },
     requestShape: { operation: 'string', args: 'array (optional; defaults to [])' },
     responseShape: { ok: 'boolean', capabilityId: CAPABILITY_ID, operation: 'string', result: 'canonical engine result' }
   };
@@ -58,14 +85,14 @@ function encryptWorkflow(request = {}) {
   const key = request.key || invoke({ operation: 'createKey', args: [request.keyOptions || {}] }).result;
   invoke({ operation: 'validateKey', args: [key] });
   const packageObject = invoke({ operation: 'encryptBinary', args: [bits, key] }).result;
-  invoke({ operation: 'validatePackage', args: [packageObject] });
+  invoke({ operation: 'validatePackage', args: [packageObject, key] });
   return { ok: true, workflow: 'encrypt', capabilityId: CAPABILITY_ID, key, package: packageObject, inputBits: bits.length };
 }
 function decryptWorkflow(request = {}) {
   if (!request || typeof request !== 'object' || Array.isArray(request)) throw new Error('Decrypt workflow requires a request object.');
   if (!request.package || !request.key) throw new Error('Decrypt workflow requires package and key.');
   invoke({ operation: 'validateKey', args: [request.key] });
-  invoke({ operation: 'validatePackage', args: [request.package] });
+  invoke({ operation: 'validatePackage', args: [request.package, request.key] });
   const bits = invoke({ operation: 'decryptBinary', args: [request.package, request.key] }).result;
   return { ok: true, workflow: 'decrypt', capabilityId: CAPABILITY_ID, bits, outputBits: String(bits).length };
 }
@@ -103,11 +130,14 @@ function main(argv = process.argv.slice(2)) {
   if (command === 'describe' || command === '--describe' || command === '--help' || command === '-h') { writeJson(describe()); return 0; }
   if (command === 'operations' || command === 'list-operations') { writeJson({ capabilityId: CAPABILITY_ID, operations: listOperations() }); return 0; }
   if (command === 'contract') { writeJson(operationContract(argv[1])); return 0; }
+  if (command === 'test-packages') { writeJson(listTestPackages()); return 0; }
+  if (command === 'validation-suite') { const report = runThreeStateValidation({}); writeJson(report); return report.ok ? 0 : 1; }
+  if (command === 'validate-test') { const request = argv[1] ? JSON.parse(argv[1]) : { testId: argv[2] }; const report = runThreeStateValidation(request); writeJson(report); return report.ok ? 0 : 1; }
   if (command === 'self-test' || command === '--self-test') { const report = runSelfTest(); writeJson(report); return report.ok ? 0 : 1; }
   if (command === 'invoke') { writeJson(invoke(JSON.parse(readRequestArgument(argv[1])))); return 0; }
   if (command === 'encrypt') { writeJson(encryptWorkflow(JSON.parse(readRequestArgument(argv[1])))); return 0; }
   if (command === 'decrypt') { writeJson(decryptWorkflow(JSON.parse(readRequestArgument(argv[1])))); return 0; }
-  throw new Error(`Unknown command ${command}. Use describe, operations, contract <operation>, self-test, invoke, encrypt, or decrypt.`);
+  throw new Error(`Unknown command ${command}. Use describe, operations, contract <operation>, test-packages, validation-suite, validate-test, self-test, invoke, encrypt, or decrypt.`);
 }
 if (require.main === module) { try { process.exitCode = main(); } catch (error) { writeJson({ ok: false, capabilityId: CAPABILITY_ID, error: { name: error.name, message: error.message } }, process.stderr); process.exitCode = 1; } }
-module.exports = Object.freeze({ CAPABILITY_ID, SKILL_ID, describe, listOperations, operationContract, invoke, encryptWorkflow, decryptWorkflow, runSelfTest, engine });
+module.exports = Object.freeze({ CAPABILITY_ID, SKILL_ID, describe, listOperations, operationContract, listTestPackages, runThreeStateValidation, invoke, encryptWorkflow, decryptWorkflow, runSelfTest, engine, threeStateValidator });
