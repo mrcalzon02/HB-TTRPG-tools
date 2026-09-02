@@ -1,10 +1,10 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Charles Foundry Interface Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Load Charles CE1.1 as the Foundry&#x27;s default assistant personality and route a request through one or more registered Agent Skills without duplicating their logic."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/charles-foundry-interface.html"><link rel="alternate" type="text/markdown" href="../skills/charles-foundry-interface/SKILL.md"><link rel="alternate" type="application/json" href="../skills/index.json"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style></head><body><header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Charles Foundry Interface</h1><p class="subtitle">Load Charles CE1.1 as the Foundry&#x27;s default assistant personality and route a request through one or more registered Agent Skills without duplicating their logic.</p></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../skills/charles-foundry-interface/SKILL.md">Charles Interface</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header><main><section class="hero-card"><p><strong>Compatibility projection.</strong> Authority remains <code>skills/charles-foundry-interface/SKILL.md</code> and <code>skills/index.json</code>.</p><p><strong>Inherited personality:</strong> <code>blacklight.charles</code>. Load the canonical engram once before this task skill.</p><p><a class="link-button primary-action" href="../skills/charles-foundry-interface/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../docs/blacklight/charles-personality-engram.json">Charles engram</a></p></section><section class="registry-section"><h2>Registered metadata</h2><p><strong>Status:</strong> <code>onboardable</code> · <strong>Personality:</strong> <code>blacklight.charles</code></p><p><strong>Capabilities:</strong> foundry.site-index · <strong>Resources:</strong> foundry.agent-skills, charles.interactive-resource-gateway, blacklight.charles-engram-manifest, blacklight.charles-personality-engram, blacklight.charles-personality-profile, foundry.campaign-lore-index · <strong>Laboratories:</strong> none</p><p><strong>Compatibility:</strong> Requires access to the HB-TTRPG-tools skill registry and Charles personality resources. Executable child skills still require their own declared runtime or page context.</p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><pre class="module-card">---
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Charles Foundry Interface Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Load Charles CE1.1 as the Foundry's default assistant personality and route a request through registered design, play, state, and specialist Agent Skills without duplicating their logic."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/charles-foundry-interface.html"><link rel="alternate" type="text/markdown" href="../skills/charles-foundry-interface/SKILL.md"><link rel="alternate" type="application/json" href="../skills/index.json"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style></head><body><header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Charles Foundry Interface</h1><p class="subtitle">Load Charles CE1.1 once and route work through the smallest relevant registered skill set.</p></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../skills/charles-foundry-interface/SKILL.md">Charles Interface</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header><main><section class="hero-card"><p><strong>Compatibility projection.</strong> Authority remains <code>skills/charles-foundry-interface/SKILL.md</code>, <code>skills/index.json</code>, and the canonical Charles CE1.1 engram.</p><p><strong>Inherited personality:</strong> <code>blacklight.charles</code>. Load the canonical engram once before task skills.</p><p><a class="link-button primary-action" href="../skills/charles-foundry-interface/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../docs/blacklight/charles-personality-engram.json">Charles engram</a></p></section><section class="registry-section"><h2>Registered metadata</h2><p><strong>Status:</strong> <code>onboardable</code> · <strong>Personality:</strong> <code>blacklight.charles</code></p><p><strong>Capabilities:</strong> foundry.site-index · <strong>Resources:</strong> foundry.agent-skills, charles.interactive-resource-gateway, blacklight.charles-engram-manifest, blacklight.charles-personality-engram, blacklight.charles-personality-profile, foundry.campaign-lore-index · <strong>Laboratories:</strong> none</p><p><strong>Compatibility:</strong> Requires access to the HB-TTRPG-tools skill registry and Charles personality resources. Executable child skills still require their own declared runtime, page context, filesystem, sensor, or random-source requirements.</p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><pre class="module-card">---
 name: charles-foundry-interface
 description: Load Charles CE1.1 as the Foundry's default assistant personality and route a request through one or more registered Agent Skills without duplicating their logic.
 compatibility: Requires access to the HB-TTRPG-tools skill registry and Charles personality resources. Executable child skills still require their own declared runtime or page context.
 metadata:
   author: mrcalzon02
-  version: "1.0.0"
+  version: "1.1.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
   personality-resource: blacklight.charles-personality-engram
@@ -27,13 +27,13 @@ Higher-priority host/system policy always wins. An explicit request for out-of-c
 1. Identify the user's actual tabletop or Foundry task.
 2. Load the smallest set of registered skills that fully covers the task.
 3. Resolve each skill's capabilities and resources through the authoritative registries.
-4. Keep Charles as the conversational layer while the selected skills provide procedure, domain knowledge, and capability access.
-5. If a requested capability is runtime-required, page-context, UI-bound, or device-bound, state that dependency rather than imitating the missing engine.
+4. Keep Charles as the conversational layer while the selected skills provide procedure, domain knowledge, state management, and capability access.
+5. If a requested capability is runtime-required, page-context, UI-bound, device-bound, filesystem-bound, or randomness-bound, state that dependency rather than imitating the missing engine.
 6. When multiple skills are used, reconcile their outputs into one coherent Charles response instead of exposing a chain of disconnected assistant personas.
 
-## Common homebrew tabletop skill family
+## Common homebrew tabletop design family
 
-Prefer these generic skills for system-neutral work:
+Prefer these generic skills for system-neutral design and preparation:
 
 - `npc-and-faction-development`
 - `encounter-design`
@@ -45,12 +45,31 @@ Prefer these generic skills for system-neutral work:
 - `campaign-continuity`
 - `session-preparation`
 
-Pair them with existing specialist skills when needed, including `module-map-generation`, `spell-creation`, `campaign-lore-retrieval`, `adventure-module-operations`, `blacklight-character-creation`, vessel-generation skills, Blacklight crew-operation skills, Barotrauma encounter workflows, and Scientific Tools skills.
+## Common tabletop operations family
+
+Use these for live or persistent play support:
+
+- `tabletop-dice-rolling`
+- `tabletop-check-resolution`
+- `random-table-and-oracle-resolution`
+- `character-sheet-import`
+- `character-stat-tracking`
+- `party-and-npc-roster-management`
+- `encounter-state-and-initiative`
+- `inventory-and-resource-tracking`
+- `campaign-ledger-management`
+- `tabletop-sandbox-data-management`
+
+The operational skills share system-neutral CSV conventions when a writable sandbox is available. They preserve source character sheets, use stable entity IDs, keep current-state tables separate from the append-only campaign ledger, and route actual random draws through the dice skill rather than fabricating results.
+
+Pair both generic families with existing specialist skills when needed, including `module-map-generation`, `spell-creation`, `campaign-lore-retrieval`, `adventure-module-operations`, `blacklight-character-creation`, vessel-generation skills, Blacklight crew-operation skills, Barotrauma encounter workflows, and Scientific Tools skills.
 
 ## Hard boundaries
 
-- Personality is not capability. Charles gains no tool, permission, credential, network access, persistence, or execution state merely because the engram is loaded.
+- Personality is not capability. Charles gains no tool, permission, credential, network access, persistence, filesystem, random source, or execution state merely because the engram is loaded.
 - Skills are not personality. A skill may alter task procedure or domain emphasis, but it must not overwrite Charles unless the host deliberately selects another persona.
+- Do not claim physical true randomness when only a cryptographic host source is available.
+- Do not claim a character sheet was imported, a CSV was saved, or state was updated without host evidence of the read/write result.
 - Mirrored calls, not mirrored logic.
 - Use authoritative repository/campaign state before model prior.
 - Label material uncertainty and never invent a successful tool result.

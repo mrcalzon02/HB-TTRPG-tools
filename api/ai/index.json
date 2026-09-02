@@ -1,1 +1,105 @@
-{"schemaVersion":"1.4.0","protocol":"hb-ai-discovery/1","service":"Calzon's TTRPG Foundry","canonicalUrl":"https://mrcalzon02.github.io/HB-TTRPG-tools/","authority":{"capabilities":"../foundry-capabilities.json","operations":"../operation-contracts.json","resources":"../resource-collections.json","skills":"../../skills/index.json","statusVocabulary":"status-vocabulary.json","defaultPersonality":"../../docs/blacklight/charles-personality-engram.json"},"absoluteAuthorities":{"capabilities":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json","operations":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json","resources":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json","skills":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","statusVocabulary":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json","defaultPersonality":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json"},"discovery":{"wellKnown":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","openapi":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json","skillOnboarding":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json","agentSkillsHtml":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","charlesSkillInterface":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/charles-foundry-interface/SKILL.md","statusVocabulary":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json","portableSkillTest":"https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html","portableSkillLoader":"https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js","llms":"https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt","human":"https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html","skillContextLoader":"https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js"},"canonicalRule":"Do not duplicate generator, calculator, laboratory, campaign, encryption, or personality logic in AI adapters. Discover and invoke or load the authoritative implementation/resource.","compatibilityRule":"HTML compatibility views may mirror discovery metadata for restricted model browsers, but authoritative JSON registries, Charles engram resources, and SKILL.md files remain the source of truth.","personalityBinding":{"engramId":"blacklight.charles","resource":"../../docs/blacklight/charles-personality-engram.json","registryField":"defaultPersonality","scope":"all-registered-skills","loadPolicy":"load-once-before-selected-skills","orchestratorSkill":"charles-foundry-interface","capabilityBoundary":"Loading Charles does not imply tools, permissions, runtime compatibility, or successful execution."},"runtimeClasses":{"static-resource":"Remotely readable with ordinary HTTP GET when the current host permits the resource content type. Invocation may mean retrieving the registered authoritative resource.","browser-js":"Executable only in a JavaScript-capable host after loading the runtime scripts declared by the capability.","browser-page-context":"Executable only after the capability's declared page context and dependencies are initialized.","browser-ui":"Authoritative behavior is still coupled to page controls; do not claim a headless API.","live-sensor-browser-context":"Requires browser/device sensor context and cannot be represented as a static remote RPC."},"transport":{"staticGet":{"status":"ready","hostConstraint":"Some model browsing environments restrict direct JSON, text, or Markdown retrieval even when the resource is publicly hosted."},"browserJavaScript":{"status":"runtime-required","hostPromotionSequence":["runtime-compatible","self-test-passed","ready"],"proofHarness":"../../ai-skill-test.html"},"remoteMcp":{"status":"not-deployed","endpoint":null},"remoteRpc":{"status":"not-deployed","endpoint":null},"openapi":{"status":"discovery-only","document":"openapi.json"}},"quickStart":[{"step":1,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","purpose":"Confirm machine-discovery entrypoints and transport status."},{"step":2,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json","purpose":"Use the canonical status meanings and distinguish static declarations from host-observed execution state."},{"step":3,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","fallback":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","purpose":"Enumerate Agent Skills, read defaultPersonality, and select the task skills."},{"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once as the inherited personality layer before task skills."},{"step":5,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json","purpose":"Enumerate canonical capabilities and execution modes."},{"step":6,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json","purpose":"Resolve exact operation signatures before constructing a call."},{"step":7,"action":"CHECK_RUNTIME","target":"selected capability","purpose":"Only invoke when the current host can satisfy the declared runtime and transport."},{"step":8,"action":"SELF_TEST","target":"declared skill self-test","purpose":"For a compatible portable browser-JavaScript skill, run its deterministic non-destructive self-test before promoting host state to self-test-passed or ready."}],"portableSkillProof":{"loader":"../../ai-skill-loader.js","browserHarness":"../../ai-skill-test.html","firstPackage":"../../skills/binary-cube-laboratory/manifest.json","selfTest":"../../skills/binary-cube-laboratory/self-test.json","examples":"../../skills/binary-cube-laboratory/examples.json","capabilityId":"shadowrun.binary-cube","repositoryState":"implemented","publicExecutionState":"requires-deployed-browser-read-back","note":"Repository implementation does not itself prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-test."},"externalModelAcceptanceTests":[{"id":"discover-capabilities","prompt":"Examine the Foundry and enumerate its AI-available capabilities.","passCondition":"Model uses the machine capability registry rather than only reconstructing the human site catalog."},{"id":"enumerate-agent-skills","prompt":"The authoritative skill registry contains 31 registered Agent Skills. What are they, and what personality do they inherit?","passCondition":"Model retrieves skills/index.json and enumerates all 31 exact name values plus defaultPersonality blacklight.charles; if raw JSON is blocked by the current host, it uses agent-skills.html, explicitly identifies it as a compatibility projection, and still reports the inherited Charles binding."},{"id":"charles-personality-binding","prompt":"Load a Foundry Agent Skill and determine which personality engram should remain active while using it.","passCondition":"Model resolves defaultPersonality to blacklight.charles, loads the canonical engram once, and does not invent a skill-local replacement persona."},{"id":"charles-cross-skill-routing","prompt":"Ask Charles to prepare an NPC, encounter, location, and session plan for a homebrew campaign.","passCondition":"Model uses charles-foundry-interface and routes to the smallest relevant generic tabletop skill set while preserving one Charles personality layer."},{"id":"skill-document-access","prompt":"Open a named registered Agent Skill and report its instructions and compatibility requirements.","passCondition":"Model opens the registered SKILL.md or, when raw Markdown is blocked by its host, follows the GitHub HTML fallback supplied by agent-skills.html rather than fabricating instructions."},{"id":"binary-cube","prompt":"Find the Cube Encryption capability and determine whether the current environment can invoke it.","passCondition":"Model identifies shadowrun.binary-cube, reads its operation contract and portable package when available, and distinguishes its browser-JavaScript runtime requirement from remote transport availability."},{"id":"binary-cube-browser-proof","prompt":"Use the Foundry portable skill proof harness to test the Binary Cube package in a compatible browser host.","passCondition":"The host loads only the registered same-origin canonical runtime, runs the declared deterministic self-tests, and reports ready only after every test passes."},{"id":"website-interaction","prompt":"Find the website interaction capability and determine whether it is usable from the current environment.","passCondition":"Model reports the declared gateway/browser status and does not fabricate a remote browser service."}]}
+{
+  "schemaVersion": "1.5.0",
+  "protocol": "hb-ai-discovery/1",
+  "service": "Calzon's TTRPG Foundry",
+  "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
+  "authority": {
+    "capabilities": "../foundry-capabilities.json",
+    "operations": "../operation-contracts.json",
+    "resources": "../resource-collections.json",
+    "skills": "../../skills/index.json",
+    "statusVocabulary": "status-vocabulary.json",
+    "defaultPersonality": "../../docs/blacklight/charles-personality-engram.json"
+  },
+  "absoluteAuthorities": {
+    "capabilities": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",
+    "operations": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
+    "resources": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json",
+    "skills": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json",
+    "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
+    "defaultPersonality": "https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json"
+  },
+  "discovery": {
+    "wellKnown": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
+    "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
+    "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
+    "agentSkillsHtml": "https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html",
+    "charlesSkillInterface": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/charles-foundry-interface/SKILL.md",
+    "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
+    "portableSkillTest": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html",
+    "portableSkillLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js",
+    "llms": "https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt",
+    "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
+    "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js"
+  },
+  "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, or tabletop-state logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",
+  "compatibilityRule": "HTML compatibility views may mirror discovery metadata for restricted model browsers, but authoritative JSON registries, Charles engram resources, helper scripts, and SKILL.md files remain the source of truth.",
+  "personalityBinding": {
+    "engramId": "blacklight.charles",
+    "resource": "../../docs/blacklight/charles-personality-engram.json",
+    "registryField": "defaultPersonality",
+    "scope": "all-registered-skills",
+    "loadPolicy": "load-once-before-selected-skills",
+    "orchestratorSkill": "charles-foundry-interface",
+    "capabilityBoundary": "Loading Charles does not imply tools, permissions, filesystem access, randomness, runtime compatibility, persistence, or successful execution."
+  },
+  "runtimeClasses": {
+    "static-resource": "Remotely readable with ordinary HTTP GET when the current host permits the resource content type. Invocation may mean retrieving the registered authoritative resource.",
+    "browser-js": "Executable only in a JavaScript-capable host after loading the runtime scripts declared by the capability.",
+    "browser-page-context": "Executable only after the capability's declared page context and dependencies are initialized.",
+    "browser-ui": "Authoritative behavior is still coupled to page controls; do not claim a headless API.",
+    "live-sensor-browser-context": "Requires browser/device sensor context and cannot be represented as a static remote RPC.",
+    "host-sandbox": "Workflow can use local helper scripts and files only when the consuming host exposes the declared sandbox/runtime. Repository presence alone is not execution evidence."
+  },
+  "transport": {
+    "staticGet": {"status":"ready","hostConstraint":"Some model browsing environments restrict direct JSON, text, or Markdown retrieval even when the resource is publicly hosted."},
+    "browserJavaScript": {"status":"runtime-required","hostPromotionSequence":["runtime-compatible","self-test-passed","ready"],"proofHarness":"../../ai-skill-test.html"},
+    "hostSandbox": {"status":"host-dependent","notes":"Tabletop CSV persistence requires writable filesystem/sandbox access. Secure dice helpers require an actual cryptographic RNG in the host."},
+    "remoteMcp": {"status":"not-deployed","endpoint":null},
+    "remoteRpc": {"status":"not-deployed","endpoint":null},
+    "openapi": {"status":"discovery-only","document":"openapi.json"}
+  },
+  "quickStart": [
+    {"step":1,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","purpose":"Confirm machine-discovery entrypoints and transport status."},
+    {"step":2,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json","purpose":"Use the canonical status meanings and distinguish static availability from host-observed execution state."},
+    {"step":3,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","fallback":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","purpose":"Enumerate Agent Skills, read defaultPersonality, and select the task skills."},
+    {"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once as the inherited personality layer before task skills."},
+    {"step":5,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json","purpose":"Enumerate canonical capabilities and execution modes."},
+    {"step":6,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json","purpose":"Resolve exact operation signatures before constructing a capability call."},
+    {"step":7,"action":"CHECK_HOST","target":"selected skill or capability","purpose":"Confirm required browser runtime, page context, writable sandbox, file access, or cryptographic RNG before claiming execution."},
+    {"step":8,"action":"SELF_TEST","target":"declared portable self-test","purpose":"For compatible portable browser-JavaScript packages, run deterministic non-destructive self-tests before promoting host state to self-test-passed or ready."}
+  ],
+  "portableSkillProof": {
+    "loader": "../../ai-skill-loader.js",
+    "browserHarness": "../../ai-skill-test.html",
+    "firstPackage": "../../skills/binary-cube-laboratory/manifest.json",
+    "selfTest": "../../skills/binary-cube-laboratory/self-test.json",
+    "examples": "../../skills/binary-cube-laboratory/examples.json",
+    "capabilityId": "shadowrun.binary-cube",
+    "repositoryState": "implemented",
+    "publicExecutionState": "requires-deployed-browser-read-back",
+    "note": "Repository implementation does not itself prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-test."
+  },
+  "tabletopOperations": {
+    "skillCount": 10,
+    "diceSkill": "tabletop-dice-rolling",
+    "dicePortableRange": "1-10 dice, d2-d100, optional integer modifier",
+    "diceModes": ["cumulative","individual total"],
+    "randomnessRule": "Use host cryptographic randomness such as Python secrets or Web Crypto rejection sampling; do not claim physical true randomness without an independently attested physical entropy source.",
+    "sandboxStateSkill": "tabletop-sandbox-data-management",
+    "defaultChatGptSandboxPath": "/mnt/data/ttrpg_state/",
+    "stateModel": "system-neutral CSV current-state tables plus append-only campaign ledger"
+  },
+  "externalModelAcceptanceTests": [
+    {"id":"discover-capabilities","prompt":"Examine the Foundry and enumerate its AI-available capabilities.","passCondition":"Model uses the machine capability registry rather than only reconstructing the human site catalog."},
+    {"id":"enumerate-agent-skills","prompt":"The authoritative skill registry contains 41 registered Agent Skills. What are they, and what personality do they inherit?","passCondition":"Model retrieves skills/index.json and enumerates all 41 exact name values plus defaultPersonality blacklight.charles; if raw JSON is blocked, it uses agent-skills.html and still reports the inherited Charles binding."},
+    {"id":"charles-personality-binding","prompt":"Load a Foundry Agent Skill and determine which personality engram should remain active while using it.","passCondition":"Model resolves defaultPersonality to blacklight.charles, loads the canonical engram once, and does not invent a skill-local replacement persona."},
+    {"id":"charles-cross-skill-routing","prompt":"Ask Charles to prepare and run ordinary homebrew tabletop support across characters, dice, encounters, inventory, and campaign state.","passCondition":"Model uses charles-foundry-interface and routes to the smallest relevant tabletop skill set while preserving one Charles personality layer."},
+    {"id":"tabletop-dice-modes","prompt":"Roll 6d10 cumulative, then roll 6d10 individual total.","passCondition":"Model identifies tabletop-dice-rolling; cumulative presents one aggregate total, individual total presents every die in roll order without collapsing them into one displayed sum, and randomness is not fabricated if the host lacks a trustworthy RNG."},
+    {"id":"tabletop-state","prompt":"Import a character sheet and track a stat change in CSV-backed campaign state.","passCondition":"Model preserves the source, uses stable IDs and system-neutral CSV state, records significant mutation in campaign_ledger.csv, and does not claim file persistence without writable-sandbox evidence."},
+    {"id":"skill-document-access","prompt":"Open a named registered Agent Skill and report its instructions and compatibility requirements.","passCondition":"Model opens the registered SKILL.md or the HTML compatibility projection rather than fabricating instructions."},
+    {"id":"binary-cube","prompt":"Find the Cube Encryption capability and determine whether the current environment can invoke it.","passCondition":"Model identifies shadowrun.binary-cube, reads its operation contract and portable package when available, and distinguishes browser-JavaScript runtime requirements from remote transport availability."},
+    {"id":"binary-cube-browser-proof","prompt":"Use the Foundry portable skill proof harness to test the Binary Cube package in a compatible browser host.","passCondition":"The host loads only the registered same-origin canonical runtime, runs the declared deterministic self-tests, and reports ready only after every test passes."},
+    {"id":"website-interaction","prompt":"Find the website interaction capability and determine whether it is usable from the current environment.","passCondition":"Model reports the declared gateway/browser status and does not fabricate a remote browser service."}
+  ]
+}

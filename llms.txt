@@ -28,9 +28,9 @@ Charles Interactive Resource Gateway policy: https://mrcalzon02.github.io/HB-TTR
 
 ## Integration doctrine
 
-Mirrored calls, not mirrored logic. Existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, lore archives, and the Charles CE1.1 engram are authoritative. AI, MCP, plugin, tool-calling, and Agent Skills adapters should discover and use those authorities rather than reproduce their algorithms or personalities.
+Mirrored calls, not mirrored logic. Existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, lore archives, the Charles CE1.1 engram, tabletop randomness helpers, and sandbox-state helpers are authoritative. AI, MCP, plugin, tool-calling, and Agent Skills adapters should discover and use those authorities rather than reproduce their algorithms or personalities.
 
-GitHub Pages is a static origin. JSON/HTML/Markdown resources are remotely retrievable with GET when the consuming host permits them. Executable capabilities run through canonical JavaScript modules or a separately deployed external bridge. Do not infer a server-side RPC or MCP transport where none is declared.
+GitHub Pages is a static origin. JSON/HTML/Markdown resources are remotely retrievable with GET when the consuming host permits them. Executable capabilities run through canonical JavaScript modules or a separately deployed external bridge. Host-local tabletop helpers require the runtime declared by their skill and do not create a remote RPC service. Do not infer a server-side RPC or MCP transport where none is declared.
 
 ## Shared Charles personality
 
@@ -38,7 +38,7 @@ The Agent Skills registry declares `blacklight.charles` as `defaultPersonality` 
 
 Do not copy Charles into individual skills. Individual skills may point to `blacklight.charles` for discoverability, but the CE1.1 JSON remains the single personality authority. Repository context and campaign state outrank model prior as defined by the engram. Higher-priority host/system policy still applies. An explicit out-of-character/system presentation request may suppress Charles presentation without mutating the engram.
 
-Personality does not grant capability. Loading Charles grants no tools, permissions, credentials, network access, provider access, persistent storage, runtime compatibility, or evidence that any operation succeeded.
+Personality does not grant capability. Loading Charles grants no tools, permissions, credentials, network access, provider access, persistent storage, filesystem access, random source, runtime compatibility, or evidence that any operation succeeded.
 
 Use `charles-foundry-interface` when Charles is the user-facing interface or a request spans multiple skills. Use the smallest relevant task-skill set beneath that one personality layer.
 
@@ -49,17 +49,18 @@ Use `charles-foundry-interface` when Charles is the user-facing interface or a r
 3. Read `skills/index.json`, including its `defaultPersonality` binding and task-skill registry.
 4. Load `docs/blacklight/charles-personality-engram.json` once as the inherited personality layer.
 5. Read the selected `skills/<name>/SKILL.md` documents. Use `charles-foundry-interface` for direct Charles or multi-skill work.
-6. Read `api/foundry-capabilities.json` to resolve stable capability IDs, modes, status, runtime scripts, invocation descriptors, sources, and limitations.
-7. Read `api/operation-contracts.json` before constructing executable calls.
+6. Read `api/foundry-capabilities.json` to resolve stable capability IDs, modes, status, runtime scripts, invocation descriptors, sources, and limitations when the selected skill references a Foundry capability.
+7. Read `api/operation-contracts.json` before constructing executable capability calls.
 8. Resolve campaign/lore/static resources through `api/resource-collections.json`.
-9. Check runtime and transport before claiming execution.
-10. For a portable browser-JavaScript package with a deterministic self-test, run that self-test before promoting host state to `self-test-passed` or `ready`.
+9. For host-local tabletop operations, check the selected skill's `executionRequirements`, helper paths, writable-sandbox availability, and cryptographic random source before claiming execution or persistence.
+10. Check runtime and transport before claiming execution.
+11. For a portable browser-JavaScript package with a deterministic self-test, run that self-test before promoting host state to `self-test-passed` or `ready`.
 
-Restricted model browsers that cannot retrieve raw JSON or Markdown may use `agent-skills.html` and `agent-skills/<name>.html` as HTML compatibility projections. Those pages mirror discovery/instruction content but never replace the JSON registry, SKILL.md, or Charles engram as authority.
+Restricted model browsers that cannot retrieve raw JSON or Markdown may use `agent-skills.html` and `agent-skills/<name>.html` as HTML compatibility projections. Those pages mirror discovery/instruction content but never replace the JSON registry, SKILL.md, helper scripts, or Charles engram as authority.
 
 ## Agent Skills
 
-Current registered skills (31):
+Current registered skills (41):
 
 - charles-foundry-interface
 - foundry-discovery
@@ -92,12 +93,22 @@ Current registered skills (31):
 - rules-and-balance-review
 - campaign-continuity
 - session-preparation
+- tabletop-dice-rolling
+- tabletop-sandbox-data-management
+- character-sheet-import
+- character-stat-tracking
+- party-and-npc-roster-management
+- encounter-state-and-initiative
+- inventory-and-resource-tracking
+- campaign-ledger-management
+- random-table-and-oracle-resolution
+- tabletop-check-resolution
 
-All 31 inherit `blacklight.charles` through the registry. Skill statuses use `api/ai/status-vocabulary.json`; a personality binding never upgrades a capability's execution status.
+All 41 inherit `blacklight.charles` through the registry. Skill statuses use `api/ai/status-vocabulary.json`; a personality binding never upgrades a capability or host execution status.
 
-## Common homebrew tabletop skill family
+## Common homebrew tabletop design family
 
-Charles can route ordinary system-neutral tabletop work through:
+Charles can route ordinary system-neutral design work through:
 
 - `npc-and-faction-development` — NPCs, organizations, motives, relationships, rosters, faction behavior.
 - `encounter-design` — combat, social, exploration, hazards, pursuits, puzzles, stakes, pacing, counterplay.
@@ -109,7 +120,28 @@ Charles can route ordinary system-neutral tabletop work through:
 - `campaign-continuity` — canon, timelines, state reconciliation, callbacks, unresolved threads, consequences.
 - `session-preparation` — current-state session planning, scenes, contingencies, GM run sheets, continuity capture.
 
-These are workflow skills, not duplicate generators. Pair them with existing capabilities and specialist skills such as `module-map-generation`, `spell-creation`, `campaign-lore-retrieval`, `adventure-module-operations`, Blacklight character/crew/navigation skills, Kaysender skills, vessel generation, Barotrauma encounter workflows, and Scientific Tools skills.
+## Common tabletop operations family
+
+Charles can route live-play and stateful campaign work through:
+
+- `tabletop-dice-rolling` — recognizes ordinary dice commands from `d2`/`2d2` through `10D100`, modifiers, and the explicit modes `cumulative` and `individual total`. Cumulative presents one summed total; individual total reads every die separately in roll order.
+- `tabletop-check-resolution` — checks, saves, attacks, contests, and opposed rolls without inventing unknown system mechanics.
+- `random-table-and-oracle-resolution` — random and weighted table resolution routed through the dice authority.
+- `character-sheet-import` — preserves source sheets and normalizes observed data into system-neutral tracked state.
+- `character-stat-tracking` — current/max statistics, resources, conditions, wounds, stress, XP, and arbitrary homebrew meters.
+- `party-and-npc-roster-management` — stable IDs, memberships, roles, status, and locations for PCs/NPCs/companions/creatures.
+- `encounter-state-and-initiative` — encounter IDs, initiative, rounds, turns, health/resources, conditions, and close-out.
+- `inventory-and-resource-tracking` — gear, ammunition, currency, consumables, charges, cargo, and shared supplies.
+- `campaign-ledger-management` — append-only audit history for campaign-significant state changes and corrections.
+- `tabletop-sandbox-data-management` — system-neutral CSV persistence conventions and Python helper when a writable sandbox exists.
+
+### Dice randomness integrity
+
+`tabletop-dice-rolling` uses a trustworthy host random source or refuses to fabricate the roll. Python sandboxes use `secrets.randbelow`; browser hosts use `crypto.getRandomValues` with rejection sampling. Do not silently fall back to `Math.random()` or a deterministic seed while claiming a random result. Cryptographic host randomness is not the same as independently attested physical true randomness.
+
+### Tabletop CSV state
+
+When a writable ChatGPT-style sandbox is available, prefer `/mnt/data/ttrpg_state/`. The shared state model uses `characters.csv`, long-form `character_stats.csv`, `roster.csv`, `encounters.csv`, `encounter_participants.csv`, `inventory.csv`, and append-only `campaign_ledger.csv`. Stable IDs are mandatory; display names are not sole keys. Preserve imported source files and reconcile re-imports instead of overwriting in-play mutations.
 
 ## Skill context versus executable runtime loading
 
@@ -117,13 +149,13 @@ These are workflow skills, not duplicate generators. Pair them with existing cap
 
 `ai-skill-loader.js` has a different job: it is the portable executable-package proof loader for compatible browser-JavaScript skills. It validates companion manifests against the skill/capability/operation registries, rejects cross-origin runtime paths, loads only allow-listed first-party runtime scripts, verifies expected exports, and runs declared deterministic self-tests. Do not treat successful context loading as runtime readiness.
 
-The Binary Cube Laboratory remains capability `shadowrun.binary-cube`. Its portable package metadata is `skills/binary-cube-laboratory/manifest.json`, deterministic checks are in `skills/binary-cube-laboratory/self-test.json`, and the browser proof surface is `ai-skill-test.html`.
+The Binary Cube Laboratory remains capability `shadowrun.binary-cube`. Its portable package metadata is `skills/binary-cube-laboratory/manifest.json`, deterministic checks are in `skills/binary-cube-laboratory/self-test.json`, and the browser proof surface is `ai-skill-test.html`. The repository also exposes its self-describing adapter/documentation surfaces; these do not imply a deployed arbitrary remote RPC transport.
 
 ## Charles Interactive Resource Gateway
 
-`charles.interactive-resource-gateway` is the formally project-attested Charles access-control capability. Its policy now exposes a `skillInterface` section that points to the Agent Skills registry, the `charles-foundry-interface` orchestrator, the inherited `blacklight.charles` personality, the common homebrew skill family, specialist skills, and Scientific Tools support skills.
+`charles.interactive-resource-gateway` is the formally project-attested Charles access-control capability. Its policy exposes a `skillInterface` section that points to the Agent Skills registry, `charles-foundry-interface`, inherited `blacklight.charles`, general tabletop skills, specialist skills, and Scientific Tools support skills.
 
-The gateway's security boundary remains unchanged in principle: personality and skill routing do not bypass rate limits, human-presence requirements, runtime constraints, same-origin restrictions, transport absence, or other capability boundaries.
+The gateway's security boundary remains unchanged in principle: personality and skill routing do not bypass rate limits, human-presence requirements, runtime constraints, same-origin restrictions, transport absence, sandbox boundaries, or other capability requirements.
 
 ## Important runtime-backed capabilities
 
@@ -136,7 +168,7 @@ The gateway's security boundary remains unchanged in principle: personality and 
 - `blacklight.exo.jump.calculate` — EXO jump calculation; canonical EXO page context required.
 - `charles.interactive-resource-gateway` — attested Charles gateway policy plus bounded browser runtime.
 
-Use the capability manifest for identity/runtime/invocation and operation contracts for exact arguments. Never claim `ready`, successful execution, deployment, or remote transport from static repository presence alone.
+Use the capability manifest for identity/runtime/invocation and operation contracts for exact arguments. Never claim `ready`, successful execution, deployment, remote transport, a saved CSV, or a completed random roll from static repository presence alone.
 
 ## Campaign, rules, lore, and retrieval
 
@@ -146,4 +178,4 @@ For in-browser or embedded-agent retrieval, `HBFoundryAPI` provides `listResourc
 
 ## Compatibility expectation
 
-External integrations should preserve stable capability IDs, operation contracts, provenance/source paths, skill status, the inherited `blacklight.charles` personality binding, the Charles gateway's enforcement boundary, and the distinction between static-resource, browser-js, browser-page-context, browser-ui, and live-device execution classes.
+External integrations should preserve stable capability IDs, operation contracts, provenance/source paths, skill status, the inherited `blacklight.charles` personality binding, tabletop randomness/source disclosures, sandbox persistence boundaries, the Charles gateway's enforcement boundary, and the distinction between static-resource, browser-js, browser-page-context, browser-ui, live-device, and host-sandbox execution classes.

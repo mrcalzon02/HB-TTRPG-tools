@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "skill": "tabletop-dice-rolling",
+  "personalityEngram": "blacklight.charles",
+  "portableRange": {"diceCount": [1, 10], "sides": [2, 100], "integerModifier": true},
+  "modes": {
+    "cumulative": {"description": "Roll all dice and present one aggregate total after applying any expression modifier.", "aliases": ["total", "sum"]},
+    "individual total": {"description": "Roll all dice and present each die result in roll order without collapsing them into one displayed sum.", "aliases": ["individual", "each", "per die"]}
+  },
+  "defaultMode": "cumulative",
+  "runtimeAlternatives": {
+    "pythonSandbox": {"path": "scripts/secure_dice.py", "rng": "secrets.randbelow"},
+    "browser": {"path": "scripts/secure-dice.js", "rng": "crypto.getRandomValues with rejection sampling"}
+  },
+  "randomnessClaim": "cryptographic host randomness; not a physical TRNG unless independently attested",
+  "forbiddenFallbacks": ["Math.random", "deterministic seeded PRNG presented as random"]
+}
