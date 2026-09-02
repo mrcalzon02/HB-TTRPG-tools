@@ -3,17 +3,20 @@
   const api = factory(
     typeof module === 'object' && module.exports
       ? require('./shadowrun-binary-cube-engine.js')
-      : root && root.ShadowrunBinaryCubeEngine
+      : root && root.ShadowrunBinaryCubeEngine,
+    typeof module === 'object' && module.exports
+      ? require('./binary-cube-pre-entry-mask.js')
+      : root && root.BinaryCubePreEntryMask
   );
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.BinaryCubeThreeStateValidator = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeThreeStateValidator(engine) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function createBinaryCubeThreeStateValidator(engine, preEntryMask) {
   'use strict';
 
   if (!engine) throw new Error('BinaryCubeThreeStateValidator requires ShadowrunBinaryCubeEngine.');
 
   const PROTOCOL_ID = 'binary-cube-three-state-validation-v1';
-  const SCHEMA_VERSION = '1.0.0';
+  const SCHEMA_VERSION = '1.1.0';
 
   function deepClone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -122,6 +125,12 @@
     const started = nowMs();
     if (!testCase || typeof testCase !== 'object' || Array.isArray(testCase)) throw new Error('A three-state test case object is required.');
     const bits = materializePayload(testCase.payload);
+    let maskResult = null;
+    if (testCase.preEntryMaskOptions) {
+      if (!preEntryMask) throw new Error('This host cannot execute the requested pre-entry mask because BinaryCubePreEntryMask is unavailable.');
+      maskResult = preEntryMask.applyMask(bits, testCase.preEntryMaskOptions);
+    }
+    const cubeInputBits = maskResult ? maskResult.maskedBits : bits;
     const key = engine.createKey(testCase.keyOptions || {});
     const validatedKey = engine.validateKey(key);
     const capture = {
@@ -137,6 +146,17 @@
         sha256: engine.sha256Hex(bits),
         statistics: bitStatistics(bits)
       },
+      preEntryMask: maskResult ? {
+        applied: true,
+        descriptor: maskResult.descriptor,
+        statistics: maskResult.statistics,
+        sourceToMaskedHamming: alignedHamming(bits, maskResult.maskedBits)
+      } : { applied: false, descriptor: null },
+      cubeInput: {
+        bits: cubeInputBits,
+        sha256: engine.sha256Hex(cubeInputBits),
+        statistics: bitStatistics(cubeInputBits)
+      },
       key: validatedKey,
       keySummary: keySummary(validatedKey),
       effectiveConfiguration: {
@@ -146,7 +166,8 @@
         outputFace: validatedKey.outputFace,
         inputQuarterTurns: validatedKey.inputQuarterTurns,
         outputQuarterTurns: validatedKey.outputQuarterTurns,
-        maskDensity: validatedKey.mask.filter(Boolean).length / validatedKey.mask.length
+        maskDensity: validatedKey.mask.filter(Boolean).length / validatedKey.mask.length,
+        preEntryMaskMethod: maskResult ? maskResult.descriptor.method : 'none'
       }
     };
     capture.durationMs = nowMs() - started;
@@ -179,19 +200,22 @@
   function captureEncrypted(preCapture, suppliedPackage) {
     const started = nowMs();
     if (!preCapture || preCapture.state !== 'pre-encryption') throw new Error('Encrypted-state capture requires a valid pre-encryption capture.');
-    const packageObject = suppliedPackage ? deepClone(suppliedPackage) : engine.encryptBinary(preCapture.source.bits, preCapture.key);
+    const cubeInputBits = preCapture.cubeInput ? preCapture.cubeInput.bits : preCapture.source.bits;
+    const packageObject = suppliedPackage ? deepClone(suppliedPackage) : engine.encryptBinary(cubeInputBits, preCapture.key);
     const validatedPackage = engine.validatePackage(packageObject, preCapture.key);
-    const replay = engine.encryptBinary(preCapture.source.bits, preCapture.key);
+    const replay = engine.encryptBinary(cubeInputBits, preCapture.key);
     const deterministicReplay = JSON.stringify(replay) === JSON.stringify(validatedPackage);
     const keyBinding = validatedPackage.keyId === preCapture.key.keyId && validatedPackage.keyDigest === preCapture.key.keyDigest;
     const quality = scrambleQuality(preCapture.source.bits, validatedPackage.ciphertext);
+    const cubeInputQuality = cubeInputBits === preCapture.source.bits ? null : scrambleQuality(cubeInputBits, validatedPackage.ciphertext);
     const methodValidity = {
       canonicalPackageValidation: true,
       keyBinding,
       deterministicReplay,
       algorithm: validatedPackage.algorithm,
       packageFormat: validatedPackage.format,
-      schemaVersion: validatedPackage.schemaVersion
+      schemaVersion: validatedPackage.schemaVersion,
+      cubeInputSha256: engine.sha256Hex(cubeInputBits)
     };
     const methodValid = methodValidity.canonicalPackageValidation && methodValidity.keyBinding && methodValidity.deterministicReplay;
     const capture = {
@@ -207,7 +231,8 @@
       package: validatedPackage,
       packageSha256: engine.sha256Hex(JSON.stringify(validatedPackage)),
       methodValidity,
-      scramblingQuality: quality
+      scramblingQuality: quality,
+      cubeInputScramblingQuality: cubeInputQuality
     };
     capture.durationMs = nowMs() - started;
     return capture;
@@ -220,7 +245,14 @@
     const key = suppliedKey || preCapture.key;
     const validatedKey = engine.validateKey(key);
     engine.validatePackage(encryptedCapture.package, validatedKey);
-    const bits = engine.decryptBinary(encryptedCapture.package, validatedKey);
+    const recoveredCubeInput = engine.decryptBinary(encryptedCapture.package, validatedKey);
+    const expectedCubeInput = preCapture.cubeInput ? preCapture.cubeInput.bits : preCapture.source.bits;
+    const exactCubeInputMatch = recoveredCubeInput === expectedCubeInput;
+    let bits = recoveredCubeInput;
+    if (preCapture.preEntryMask && preCapture.preEntryMask.applied) {
+      if (!preEntryMask) throw new Error('This host cannot remove the captured pre-entry mask because BinaryCubePreEntryMask is unavailable.');
+      bits = preEntryMask.removeMask(recoveredCubeInput, preCapture.preEntryMask.descriptor).bits;
+    }
     const digest = engine.sha256Hex(bits);
     const exactPayloadMatch = bits === preCapture.source.bits;
     const exactLengthMatch = bits.length === preCapture.source.bits.length;
@@ -231,13 +263,15 @@
       state: 'recovered',
       ordinal: 3,
       testId: preCapture.testId,
-      passed: exactPayloadMatch && exactLengthMatch && exactDigestMatch,
+      passed: exactCubeInputMatch && exactPayloadMatch && exactLengthMatch && exactDigestMatch,
       recovered: {
         bits,
         sha256: digest,
-        statistics: bitStatistics(bits)
+        statistics: bitStatistics(bits),
+        cubeInputBits: recoveredCubeInput
       },
       equivalence: {
+        exactCubeInputMatch,
         exactPayloadMatch,
         exactLengthMatch,
         exactDigestMatch,
