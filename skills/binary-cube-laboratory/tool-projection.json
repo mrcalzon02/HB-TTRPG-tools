@@ -1,37 +1,43 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "projectionType": "ai-tool-descriptor",
   "capabilityId": "shadowrun.binary-cube",
   "laboratoryId": "binary-cube-laboratory",
   "title": "Binary Cube Encryption Laboratory Tool Projection",
-  "description": "Portable structured-tool projection for the Binary Cube laboratory. It describes calls into the canonical adapter/engine and does not implement encryption logic or provide a remote RPC service.",
-  "security": {"classification": "experimental-ttrpg-obfuscation-not-production-cryptography", "productionCryptography": false},
-  "binding": {"runtime": "node-commonjs", "adapter": "binary-cube-node-adapter.js", "canonicalEngine": "shadowrun-binary-cube-engine.js", "capabilityRegistry": "api/foundry-capabilities.json", "operationContracts": "api/operation-contracts.json", "validationProtocol":"binary-cube-three-state-validator.js", "testPackages":"skills/binary-cube-laboratory/test-packages.json", "rule": "Mirrored calls, not mirrored logic."},
+  "description": "Portable structured-tool projection for the Binary Cube laboratory. It describes calls into canonical laboratory modules and does not implement encryption logic or provide a remote RPC service.",
+  "security": {"classification":"experimental-ttrpg-obfuscation-not-production-cryptography","productionCryptography":false},
+  "binding": {
+    "runtime":"node-commonjs",
+    "adapter":"binary-cube-node-adapter.js",
+    "canonicalEngine":"shadowrun-binary-cube-engine.js",
+    "strengthAnalysis":"binary-cube-strength-analysis.js",
+    "capabilityRegistry":"api/foundry-capabilities.json",
+    "operationContracts":"api/operation-contracts.json",
+    "validationProtocol":"binary-cube-three-state-validator.js",
+    "testPackages":"skills/binary-cube-laboratory/test-packages.json",
+    "rule":"Mirrored calls, not mirrored logic."
+  },
   "protocolMappings": {
-    "openaiFunctionTools": "Expose each entry in tools as a function tool using its name, description, and inputSchema; bind execution to the named adapter method.",
-    "mcp": "Expose each entry in tools as an MCP tool using inputSchema; bind execution locally to the named adapter method. This descriptor is not itself an MCP server.",
-    "genericJsonTool": "Use the tool name and inputSchema, then dispatch to binding.method on binary-cube-node-adapter.js."
+    "openaiFunctionTools":"Expose each entry in tools as a function tool using its name, description, and inputSchema; bind execution to the named local module and method.",
+    "mcp":"Expose each entry in tools as an MCP tool using inputSchema; bind execution locally to the named module and method. This descriptor is not itself an MCP server.",
+    "genericJsonTool":"Use the tool name and inputSchema, then dispatch to the declared binding module/method."
   },
   "tools": [
-    {"name":"binary_cube_describe","description":"Describe the Binary Cube laboratory, runtime, security classification, discovery facilities, high-level workflows, validation protocol, and callable operation names.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"describe"}},
-    {"name":"binary_cube_list_operations","description":"List every low-level callable Binary Cube operation together with its canonical positional arguments and return contract.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"listOperations"}},
-    {"name":"binary_cube_operation_contract","description":"Return the canonical argument and return contract for one low-level Binary Cube operation before constructing an invocation.","inputSchema":{"type":"object","required":["operation"],"additionalProperties":false,"properties":{"operation":{"type":"string"}}},"binding":{"method":"operationContract","arguments":["operation"]}},
-    {"name":"binary_cube_invoke","description":"Invoke one documented low-level Binary Cube operation through the canonical adapter.","inputSchema":{"type":"object","required":["operation"],"additionalProperties":false,"properties":{"operation":{"type":"string"},"args":{"type":"array","default":[],"description":"Positional arguments in canonical contract order."}}},"binding":{"method":"invoke","requestObject":true}},
-    {"name":"binary_cube_encrypt","description":"High-level common workflow: validate or create a key, encrypt a binary payload, validate the resulting canonical package, and return the separate key and package.","inputSchema":{"type":"object","required":["bits"],"additionalProperties":false,"properties":{"bits":{"type":"string","description":"Binary payload containing 0/1 characters; whitespace is ignored."},"key":{"type":"object","description":"Optional existing canonical key. If omitted, keyOptions are used to create one."},"keyOptions":{"type":"object","default":{},"description":"Canonical createKey options using gridSize, seed, inputFace, outputFace, inputQuarterTurns, outputQuarterTurns, and maskDensity."}}},"binding":{"method":"encryptWorkflow","requestObject":true}},
-    {"name":"binary_cube_decrypt","description":"High-level common workflow: validate a separate canonical key and encrypted package, decrypt them through the canonical engine, and return recovered bits.","inputSchema":{"type":"object","required":["package","key"],"additionalProperties":false,"properties":{"package":{"type":"object"},"key":{"type":"object"}}},"binding":{"method":"decryptWorkflow","requestObject":true}},
-    {"name":"binary_cube_list_test_packages","description":"List deterministic positive test packages and negative validator-layer packages for the three-state validation protocol.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"listTestPackages"}},
-    {"name":"binary_cube_validate_three_state","description":"Run the three-state protocol. With testId, capture and validate pre-encryption, encrypted/scrambled, and recovered states for one registered package. With case, run a custom package. With neither, run the complete positive and validator-error suite.","inputSchema":{"type":"object","additionalProperties":false,"properties":{"testId":{"type":"string","description":"Registered positive test package id."},"case":{"type":"object","description":"Optional custom test case with id, payload specification, and canonical keyOptions."}}},"binding":{"method":"runThreeStateValidation","requestObject":true}},
-    {"name":"binary_cube_self_test","description":"Run the deterministic Binary Cube portable acceptance tests in the current Node/CommonJS host and return structured pass/fail evidence.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"runSelfTest"}}
+    {"name":"binary_cube_describe","description":"Describe the Binary Cube laboratory, runtime, security classification, discovery facilities, high-level workflows, validation protocol, and callable operation names.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"module":"binary-cube-node-adapter.js","method":"describe"}},
+    {"name":"binary_cube_list_operations","description":"List every low-level callable Binary Cube operation together with its canonical positional arguments and return contract.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"module":"binary-cube-node-adapter.js","method":"listOperations"}},
+    {"name":"binary_cube_operation_contract","description":"Return the canonical argument and return contract for one low-level Binary Cube operation before constructing an invocation.","inputSchema":{"type":"object","required":["operation"],"additionalProperties":false,"properties":{"operation":{"type":"string"}}},"binding":{"module":"binary-cube-node-adapter.js","method":"operationContract","arguments":["operation"]}},
+    {"name":"binary_cube_invoke","description":"Invoke one documented low-level Binary Cube operation through the canonical adapter.","inputSchema":{"type":"object","required":["operation"],"additionalProperties":false,"properties":{"operation":{"type":"string"},"args":{"type":"array","default":[]}}},"binding":{"module":"binary-cube-node-adapter.js","method":"invoke","requestObject":true}},
+    {"name":"binary_cube_encrypt","description":"High-level workflow: validate or create a key, encrypt a binary payload, validate the canonical package, and return separate key and package.","inputSchema":{"type":"object","required":["bits"],"additionalProperties":false,"properties":{"bits":{"type":"string"},"key":{"type":"object"},"keyOptions":{"type":"object","default":{}}}},"binding":{"module":"binary-cube-node-adapter.js","method":"encryptWorkflow","requestObject":true}},
+    {"name":"binary_cube_decrypt","description":"High-level workflow: validate a separate canonical key and package, decrypt through the canonical engine, and return recovered bits.","inputSchema":{"type":"object","required":["package","key"],"additionalProperties":false,"properties":{"package":{"type":"object"},"key":{"type":"object"}}},"binding":{"module":"binary-cube-node-adapter.js","method":"decryptWorkflow","requestObject":true}},
+    {"name":"binary_cube_list_test_packages","description":"List deterministic positive test packages and negative validator-layer packages for the three-state validation protocol.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"module":"binary-cube-node-adapter.js","method":"listTestPackages"}},
+    {"name":"binary_cube_validate_three_state","description":"Run the three-state protocol for one registered/custom package or the complete suite.","inputSchema":{"type":"object","additionalProperties":false,"properties":{"testId":{"type":"string"},"case":{"type":"object"}}},"binding":{"module":"binary-cube-node-adapter.js","method":"runThreeStateValidation","requestObject":true}},
+    {"name":"binary_cube_strength_analysis","description":"Measure one-bit plaintext perturbation diffusion, deterministic key-seed perturbation diffusion, and localized gridSize^2 diagnostic-window diffusion. Reports weaknesses; it does not claim production cryptographic security.","inputSchema":{"type":"object","required":["bits"],"additionalProperties":false,"properties":{"bits":{"type":"string","description":"Binary payload containing 0/1; whitespace ignored."},"keyOptions":{"type":"object","default":{},"description":"Canonical createKey options."},"maxPlaintextBitFlips":{"type":"integer","minimum":1,"maximum":4096,"default":32,"description":"Maximum evenly sampled source-bit perturbations."}}},"binding":{"module":"binary-cube-strength-analysis.js","method":"runPerturbationAnalysis","requestObject":true}},
+    {"name":"binary_cube_self_test","description":"Run deterministic Binary Cube portable acceptance tests in the current Node/CommonJS host.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"module":"binary-cube-node-adapter.js","method":"runSelfTest"}}
   ],
   "adoption": {
-    "commonWorkflowSequence": ["binary_cube_describe", "binary_cube_encrypt", "binary_cube_decrypt"],
-    "researchSequence": ["binary_cube_describe", "binary_cube_operation_contract", "binary_cube_invoke"],
-    "validationSequence": ["binary_cube_list_test_packages", "binary_cube_validate_three_state", "binary_cube_self_test"],
-    "threeStateMeaning": {
-      "pre-encryption":"Capture normalized source, digest, statistics, canonical key, and effective configuration before transformation.",
-      "encrypted":"Require canonical package/key validation and deterministic replay, while separately reporting scrambling-quality weakness signals.",
-      "recovered":"Require exact source payload, bit length, and SHA-256 digest recovery after decryption."
-    },
-    "notes": "Prefer high-level encrypt/decrypt workflows for ordinary use. Use three-state validation for algorithm/configuration testing and validator-layer fault injection. Use low-level invoke for research and diagnostics. Hosts should not claim readiness until their relevant self-test/validation gates succeed."
+    "commonWorkflowSequence":["binary_cube_describe","binary_cube_encrypt","binary_cube_decrypt"],
+    "researchSequence":["binary_cube_describe","binary_cube_operation_contract","binary_cube_invoke","binary_cube_strength_analysis"],
+    "validationSequence":["binary_cube_list_test_packages","binary_cube_validate_three_state","binary_cube_strength_analysis","binary_cube_self_test"],
+    "notes":"Prefer high-level encrypt/decrypt for ordinary use. Use three-state validation for correctness and validator faults. Use strength analysis to search for diffusion weaknesses, including localized diagnostic windows. None of these results establishes production cryptographic security."
   }
 }
