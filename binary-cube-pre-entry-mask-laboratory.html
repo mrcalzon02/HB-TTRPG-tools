@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Binary Cube Pre-Entry Mask Laboratory</title>
+  <style>
+    :root{color-scheme:dark;background:#090d13;color:#edf3fa;font-family:Inter,system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:1320px;margin:auto;display:grid;gap:18px}.panel{background:#101722;border:1px solid #2a3545;border-radius:14px;padding:18px}.warning{border-left:5px solid #d99a36;background:#d99a3614}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.field{display:grid;gap:6px}label{font-weight:700}input,select,textarea,button{font:inherit;color:inherit;background:#0b1119;border:1px solid #354258;border-radius:8px;padding:9px}textarea{min-height:100px;resize:vertical;font-family:ui-monospace,monospace}button{cursor:pointer;font-weight:750}button:hover{border-color:#7db7f5}.actions{display:flex;flex-wrap:wrap;gap:8px}.status{min-height:1.4em;color:#b6c5d8}.good{color:#a9e8b2}.bad{color:#ffb2b2}.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}.metric{background:#0b1119;border:1px solid #29374a;border-radius:10px;padding:10px}.metric strong{display:block;font-size:1.15rem}.bitfield{display:grid;grid-template-columns:repeat(var(--field-width),minmax(8px,16px));gap:1px;max-height:420px;overflow:auto;padding:8px;background:#080c12;border-radius:10px}.bit{aspect-ratio:1;border-radius:2px;background:#ffffff0b}.bit.one{background:#84c7ff}.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}code{color:#bdddff}small{color:#aab7c8;line-height:1.4}.eyebrow{text-transform:uppercase;letter-spacing:.12em;color:#7db7f5;font-weight:800;font-size:.78rem}h1,h2,p{margin-top:0}
+  </style>
+</head>
+<body>
+<main>
+  <section class="panel">
+    <p class="eyebrow">Cube Encryption Laboratory · experimental pre-entry stage</p>
+    <h1>Pre-Entry Input Mask Laboratory</h1>
+    <p>Create a deterministic mask across the input field, XOR it with the source bits, send the masked field through the authoritative Binary Cube engine, then decrypt and remove the same mask to verify exact recovery.</p>
+  </section>
+  <section class="panel warning">
+    <strong>Research boundary.</strong> These masks are experimental reversible pattern-masking methods, not production cryptographic stream ciphers. The mask descriptor contains the regeneration seed and is recovery material. A fixed XOR mask can hide visible low-entropy structure but does not by itself create avalanche diffusion.
+  </section>
+  <section class="panel">
+    <h2>Mask and cube configuration</h2>
+    <div class="grid">
+      <div class="field"><label for="input">Input bits</label><textarea id="input">01001000011010010010000100111100000011110101010111000011</textarea><small>Whitespace is ignored.</small></div>
+      <div class="field"><label for="method">Pre-entry mask</label><select id="method"></select><small id="method-note"></small></div>
+      <div class="field"><label for="mask-seed">Mask seed</label><input id="mask-seed" value="mask-laboratory-v1"><small>Keep this descriptor with the separate recovery key during masked-workflow testing.</small></div>
+      <div class="field"><label for="field-width">Field width</label><input id="field-width" type="number" min="1" value="8"></div>
+      <div class="field"><label for="intensity">Mask intensity</label><input id="intensity" type="number" min="0.01" max="0.99" step="0.01" value="0.50"></div>
+      <div class="field"><label for="scale">Noise / structure scale</label><input id="scale" type="number" min="1" max="256" value="8"></div>
+      <div class="field"><label for="octaves">Plasma octaves</label><input id="octaves" type="number" min="1" max="8" value="4"></div>
+      <div class="field"><label for="cellular-steps">Cellular steps</label><input id="cellular-steps" type="number" min="0" max="32" value="4"></div>
+      <div class="field"><label for="grid-size">Cube grid size</label><select id="grid-size"><option>4</option><option>12</option><option>20</option><option>28</option><option>36</option><option>64</option></select></div>
+      <div class="field"><label for="cube-seed">Cube key seed</label><input id="cube-seed" value="mask-laboratory-cube-v1"></div>
+      <div class="field"><label for="input-face">Input face</label><select id="input-face"><option>top</option><option>bottom</option><option>front</option><option>back</option><option>left</option><option>right</option></select></div>
+      <div class="field"><label for="output-face">Output face</label><select id="output-face"><option>front</option><option>back</option><option>left</option><option>right</option><option>top</option><option>bottom</option></select></div>
+      <div class="field"><label for="cube-mask-density">Cube payload mask density</label><input id="cube-mask-density" type="number" min="0.01" max="1" step="0.01" value="0.75"><small>This is the existing cube payload-cell mask, separate from the new pre-entry field mask.</small></div>
+    </div>
+    <div class="actions" style="margin-top:14px">
+      <button id="preview">Apply / Preview Mask</button>
+      <button id="encrypt">Mask + Encrypt</button>
+      <button id="decrypt">Decrypt + Remove Mask</button>
+      <button id="self-test">Run Mask Self-Test</button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <section class="panel">
+    <h2>Input-field evidence</h2>
+    <div id="metrics" class="metric-grid"></div>
+    <div class="split" style="margin-top:14px">
+      <div><h3>Generated mask</h3><div id="mask-field" class="bitfield"></div></div>
+      <div><h3>Masked pre-cube input</h3><div id="masked-field" class="bitfield"></div></div>
+    </div>
+  </section>
+  <section class="panel">
+    <h2>Artifacts</h2>
+    <div class="split">
+      <div class="field"><label for="masked">Masked bits entering the cube</label><textarea id="masked" readonly></textarea></div>
+      <div class="field"><label for="recovered">Recovered original bits</label><textarea id="recovered" readonly></textarea></div>
+      <div class="field"><label for="descriptor">Pre-entry mask descriptor</label><textarea id="descriptor"></textarea></div>
+      <div class="field"><label for="key">Cube key</label><textarea id="key"></textarea></div>
+      <div class="field" style="grid-column:1/-1"><label for="package">Canonical cube package</label><textarea id="package"></textarea></div>
+    </div>
+  </section>
+</main>
+<script src="shadowrun-binary-cube-engine.js"></script>
+<script src="binary-cube-pre-entry-mask.js"></script>
+<script>
+(() => {
+  'use strict';
+  const Engine = window.ShadowrunBinaryCubeEngine;
+  const Mask = window.BinaryCubePreEntryMask;
+  const $ = id => document.getElementById(id);
+  if (!Engine || !Mask) throw new Error('Binary Cube engine and pre-entry mask module are required.');
+  const methods = Mask.listMethods();
+  $('method').innerHTML = methods.map(method => `<option value="${method.id}">${method.title}</option>`).join('');
+  $('method').value = 'white-noise';
+  function methodNote(){ const selected=methods.find(method=>method.id===$('method').value); $('method-note').textContent=selected?.description||''; }
+  $('method').addEventListener('change',methodNote); methodNote();
+  function sourceBits(){ return Mask.normalizeBits($('input').value); }
+  function maskOptions(){ return {method:$('method').value,seed:$('mask-seed').value,fieldWidth:Number($('field-width').value),intensity:Number($('intensity').value),scale:Number($('scale').value),octaves:Number($('octaves').value),cellularSteps:Number($('cellular-steps').value)}; }
+  function keyOptions(){ return {gridSize:Number($('grid-size').value),seed:$('cube-seed').value,inputFace:$('input-face').value,outputFace:$('output-face').value,inputQuarterTurns:0,outputQuarterTurns:0,maskDensity:Number($('cube-mask-density').value)}; }
+  function setStatus(message,type=''){ $('status').textContent=message; $('status').className=`status ${type}`; }
+  function renderField(node,bits,width){ node.style.setProperty('--field-width',String(Math.max(1,Math.min(width,64)))); const shown=bits.slice(0,4096); node.innerHTML=[...shown].map(bit=>`<span class="bit ${bit==='1'?'one':''}" title="${bit}"></span>`).join('')+(bits.length>shown.length?'<small>Preview truncated to 4096 bits.</small>':''); }
+  function renderMetrics(result){ const stats=result.statistics; const source=sourceBits(); let changed=0; for(let i=0;i<source.length;i+=1) if(source[i]!==result.maskedBits[i]) changed+=1; const entries=[['Mask bits',stats.bitLength],['Mask 1 ratio',stats.oneRatio.toFixed(3)],['Mask entropy',stats.binaryEntropy.toFixed(3)],['Transition rate',stats.transitionRate.toFixed(3)],['Longest run',stats.longestRun],['Input bits changed',`${changed}/${source.length} (${(changed/source.length).toFixed(3)})`]]; $('metrics').innerHTML=entries.map(([name,value])=>`<div class="metric"><small>${name}</small><strong>${value}</strong></div>`).join(''); }
+  function apply(){ const result=Mask.applyMask(sourceBits(),maskOptions()); $('masked').value=result.maskedBits; $('descriptor').value=JSON.stringify(result.descriptor,null,2); renderField($('mask-field'),result.maskBits,result.descriptor.fieldWidth); renderField($('masked-field'),result.maskedBits,result.descriptor.fieldWidth); renderMetrics(result); setStatus(`Applied ${result.descriptor.method} mask ${result.descriptor.maskChecksum}.`,'good'); return result; }
+  $('preview').addEventListener('click',()=>{try{apply();}catch(error){setStatus(error.message,'bad');}});
+  $('encrypt').addEventListener('click',()=>{try{const masked=apply();const key=Engine.createKey(keyOptions());Engine.validateKey(key);const packageObject=Engine.encryptBinary(masked.maskedBits,key);Engine.validatePackage(packageObject,key);$('key').value=JSON.stringify(key,null,2);$('package').value=JSON.stringify(packageObject,null,2);$('recovered').value='';setStatus(`Masked input encrypted through canonical key ${key.keyId}; mask descriptor remains separate recovery material.`,'good');}catch(error){setStatus(error.message,'bad');}});
+  $('decrypt').addEventListener('click',()=>{try{const key=Engine.validateKey(JSON.parse($('key').value));const packageObject=Engine.validatePackage(JSON.parse($('package').value),key);const maskedBits=Engine.decryptBinary(packageObject,key);const unmasked=Mask.removeMask(maskedBits,JSON.parse($('descriptor').value));$('masked').value=maskedBits;$('recovered').value=unmasked.bits;const expected=sourceBits();if(unmasked.bits!==expected) throw new Error('Recovered bits do not match the current source input exactly.');setStatus(`Exact masked decrypt + unmask recovery verified for ${unmasked.bits.length} bits.`,'good');}catch(error){setStatus(error.message,'bad');}});
+  $('self-test').addEventListener('click',()=>{try{const report=Mask.runSelfTest();setStatus(`${report.passedCount}/${report.testCount} mask methods passed deterministic reversible self-test.`,report.ok?'good':'bad');}catch(error){setStatus(error.message,'bad');}});
+  apply();
+})();
+</script>
+</body>
+</html>
