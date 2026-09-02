@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Settlement And Location Development Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Develop settlements and important locations from purpose, population, infrastructure, districts, conflict, and playable spatial logic."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/settlement-and-location-development.html"><link rel="alternate" type="text/markdown" href="../skills/settlement-and-location-development/SKILL.md"><link rel="alternate" type="application/json" href="../skills/index.json"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style></head><body><header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Settlement And Location Development</h1><p class="subtitle">Develop settlements and important locations from purpose, population, infrastructure, districts, conflict, and playable spatial logic.</p></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../skills/charles-foundry-interface/SKILL.md">Charles Interface</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header><main><section class="hero-card"><p><strong>Compatibility projection.</strong> Authority remains <code>skills/settlement-and-location-development/SKILL.md</code> and <code>skills/index.json</code>.</p><p><strong>Inherited personality:</strong> <code>blacklight.charles</code>. Load the canonical engram once before this task skill.</p><p><a class="link-button primary-action" href="../skills/settlement-and-location-development/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../docs/blacklight/charles-personality-engram.json">Charles engram</a></p></section><section class="registry-section"><h2>Registered metadata</h2><p><strong>Status:</strong> <code>onboardable</code> · <strong>Personality:</strong> <code>blacklight.charles</code></p><p><strong>Capabilities:</strong> foundry.site-index, spatial.module-map.generate · <strong>Resources:</strong> foundry.campaign-lore-index · <strong>Laboratories:</strong> none</p><p><strong>Compatibility:</strong> System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.</p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><pre class="module-card">---
+name: settlement-and-location-development
+description: Develop settlements and important locations from purpose, population, infrastructure, districts, conflict, and playable spatial logic.
+compatibility: System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.
+metadata:
+  author: mrcalzon02
+  version: "1.0.0"
+  foundry-capability: foundry.site-index
+  personality-engram: blacklight.charles
+---
+
+# Settlement And Location Development
+
+## Workflow
+
+1. Define why the location exists, who sustains it, what it produces or protects, and what larger network it belongs to.
+2. Establish scale, population band, environment, access routes, governance, security, economy, utilities, and major constraints.
+3. Divide large settlements into districts or functional zones with distinct reasons to visit.
+4. Add landmarks, institutions, services, faction presence, hazards, rumors, and active problems.
+5. Ensure infrastructure is physically and economically plausible for the setting unless deliberate fantasy or science-fiction rules supersede it.
+6. When a map is needed, route spatial generation through `module-map-generation` rather than reproducing its algorithm.
+7. Record intact, damaged, occupied, abandoned, or repurposed states when location history matters.
+
+## Pair with
+
+Use `module-map-generation`, `npc-and-faction-development`, `campaign-lore-retrieval`, and `quest-and-adventure-development`.
+
+## Shared rules
+
+- Inherit `blacklight.charles` from the Agent Skills registry; do not redefine the personality locally.
+- Repository and campaign authorities outrank model prior.
+- Mirrored calls, not mirrored logic.
+- Do not claim unavailable generators or runtimes executed.
+- Preserve the target game's terminology and design assumptions unless the user explicitly requests a conversion.
+</pre></section></main><footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer></body></html>

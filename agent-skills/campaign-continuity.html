@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Campaign Continuity Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Maintain campaign canon, timelines, unresolved threads, state changes, callbacks, and consequences across sessions or archived materials."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/campaign-continuity.html"><link rel="alternate" type="text/markdown" href="../skills/campaign-continuity/SKILL.md"><link rel="alternate" type="application/json" href="../skills/index.json"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style></head><body><header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Campaign Continuity</h1><p class="subtitle">Maintain campaign canon, timelines, unresolved threads, state changes, callbacks, and consequences across sessions or archived materials.</p></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../skills/charles-foundry-interface/SKILL.md">Charles Interface</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header><main><section class="hero-card"><p><strong>Compatibility projection.</strong> Authority remains <code>skills/campaign-continuity/SKILL.md</code> and <code>skills/index.json</code>.</p><p><strong>Inherited personality:</strong> <code>blacklight.charles</code>. Load the canonical engram once before this task skill.</p><p><a class="link-button primary-action" href="../skills/campaign-continuity/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../docs/blacklight/charles-personality-engram.json">Charles engram</a></p></section><section class="registry-section"><h2>Registered metadata</h2><p><strong>Status:</strong> <code>onboardable</code> · <strong>Personality:</strong> <code>blacklight.charles</code></p><p><strong>Capabilities:</strong> foundry.site-index · <strong>Resources:</strong> foundry.campaign-lore-index · <strong>Laboratories:</strong> none</p><p><strong>Compatibility:</strong> System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.</p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><pre class="module-card">---
+name: campaign-continuity
+description: Maintain campaign canon, timelines, unresolved threads, state changes, callbacks, and consequences across sessions or archived materials.
+compatibility: System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.
+metadata:
+  author: mrcalzon02
+  version: "1.0.0"
+  foundry-capability: foundry.site-index
+  personality-engram: blacklight.charles
+---
+
+# Campaign Continuity
+
+## Workflow
+
+1. Retrieve authoritative campaign records before filling gaps from memory or model prior.
+2. Separate established canon, current state, unresolved questions, rumors, and proposed additions.
+3. Reconcile dates, locations, NPC status, faction state, inventory or asset changes, promises, debts, injuries, discoveries, and open objectives.
+4. Flag genuine contradictions instead of silently choosing one version.
+5. Preserve consequences from player action and propagate them to affected factions, locations, resources, and future hooks.
+6. Produce a concise continuity record suitable for the next session or future retrieval.
+7. Never retroactively rewrite established events unless the user explicitly chooses a retcon.
+
+## Pair with
+
+Use `campaign-lore-retrieval`, `session-preparation`, and whichever setting-specific skills own the affected material.
+
+## Shared rules
+
+- Inherit `blacklight.charles` from the Agent Skills registry; do not redefine the personality locally.
+- Repository and campaign authorities outrank model prior.
+- Mirrored calls, not mirrored logic.
+- Do not claim unavailable generators or runtimes executed.
+- Preserve the target game's terminology and design assumptions unless the user explicitly requests a conversion.
+</pre></section></main><footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer></body></html>

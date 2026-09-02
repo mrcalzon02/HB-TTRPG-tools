@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rules And Balance Review Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Review homebrew mechanics for clarity, internal consistency, probability, abuse cases, progression impact, and compatibility with the target ruleset."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/rules-and-balance-review.html"><link rel="alternate" type="text/markdown" href="../skills/rules-and-balance-review/SKILL.md"><link rel="alternate" type="application/json" href="../skills/index.json"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style></head><body><header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Rules And Balance Review</h1><p class="subtitle">Review homebrew mechanics for clarity, internal consistency, probability, abuse cases, progression impact, and compatibility with the target ruleset.</p></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../skills/charles-foundry-interface/SKILL.md">Charles Interface</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header><main><section class="hero-card"><p><strong>Compatibility projection.</strong> Authority remains <code>skills/rules-and-balance-review/SKILL.md</code> and <code>skills/index.json</code>.</p><p><strong>Inherited personality:</strong> <code>blacklight.charles</code>. Load the canonical engram once before this task skill.</p><p><a class="link-button primary-action" href="../skills/rules-and-balance-review/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../docs/blacklight/charles-personality-engram.json">Charles engram</a></p></section><section class="registry-section"><h2>Registered metadata</h2><p><strong>Status:</strong> <code>onboardable</code> · <strong>Personality:</strong> <code>blacklight.charles</code></p><p><strong>Capabilities:</strong> foundry.site-index · <strong>Resources:</strong> foundry.campaign-lore-index · <strong>Laboratories:</strong> none</p><p><strong>Compatibility:</strong> System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.</p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><pre class="module-card">---
+name: rules-and-balance-review
+description: Review homebrew mechanics for clarity, internal consistency, probability, abuse cases, progression impact, and compatibility with the target ruleset.
+compatibility: System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.
+metadata:
+  author: mrcalzon02
+  version: "1.0.0"
+  foundry-capability: foundry.site-index
+  personality-engram: blacklight.charles
+---
+
+# Rules And Balance Review
+
+## Workflow
+
+1. Identify the exact rules target and the design goal before judging power.
+2. Restate the proposed mechanic in operational terms: trigger, cost, action, target, resolution, effect, duration, limits, and recovery.
+3. Compare it to nearby baseline mechanics in the same system and progression tier.
+4. Check probability, action economy, stacking, loops, resource conversion, scaling, edge cases, and adversarial player interpretation.
+5. Distinguish balance problems from wording problems and from intentional campaign-level power shifts.
+6. Prefer direct fixes to exceptions layered on exceptions.
+7. Return a recommended rule text plus the reasoning and any tests or examples needed to validate it.
+
+## Pair with
+
+Use setting/rules resources through `campaign-lore-retrieval` and domain skills such as `spell-creation`, `creature-and-monster-design`, or `item-and-loot-design`.
+
+## Shared rules
+
+- Inherit `blacklight.charles` from the Agent Skills registry; do not redefine the personality locally.
+- Repository and campaign authorities outrank model prior.
+- Mirrored calls, not mirrored logic.
+- Do not claim unavailable generators or runtimes executed.
+- Preserve the target game's terminology and design assumptions unless the user explicitly requests a conversion.
+</pre></section></main><footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer></body></html>

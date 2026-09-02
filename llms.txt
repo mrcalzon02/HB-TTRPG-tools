@@ -6,55 +6,62 @@ AI access index: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json
 Canonical status vocabulary: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json
 AI discovery OpenAPI: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json
 Agent Skills onboarding profile: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json
-Portable skill loader: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js
+Agent Skills index: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json
+Agent Skills HTML compatibility directory: https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html
+Agent Skills documentation: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/README.md
+Charles cross-skill interface: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/charles-foundry-interface/SKILL.md
+Charles CE1.1 personality engram: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json
+Charles engram manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram-manifest.json
+Charles personality profile: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-profile.md
+Definitive Charles entity record: https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-charles-record.html
+Skill context loader: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js
+Portable executable skill loader: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js
 Portable skill browser self-test: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html
-Binary Cube portable package: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/manifest.json
-Binary Cube deterministic self-test: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/self-test.json
-Human AI Access page: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
 Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json
 Operational argument contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
 Resource collections: https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json
-Agent Skills index: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json
-Agent Skills documentation: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/README.md
 Browser facade: https://mrcalzon02.github.io/HB-TTRPG-tools/foundry-api.js
+Human AI Access page: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
 Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html
 Search index: https://mrcalzon02.github.io/HB-TTRPG-tools/search-index.json
-Charles engram manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram-manifest.json
-Charles CE1 personality engram: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json
-Charles personality profile: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-profile.md
-Definitive Charles entity record: https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-charles-record.html
 Charles Interactive Resource Gateway policy: https://mrcalzon02.github.io/HB-TTRPG-tools/api/charles-interactive-resource-gateway.json
-Charles Interactive Resource Gateway page: https://mrcalzon02.github.io/HB-TTRPG-tools/charles-interactive-resource-gateway.html
-Charles Interactive Resource Gateway runtime: https://mrcalzon02.github.io/HB-TTRPG-tools/charles-resource-gateway.js
 
 ## Integration doctrine
 
-Mirrored calls, not mirrored logic. The site's existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, and lore archives are authoritative. AI, MCP, plugin, tool-calling, and Agent Skills adapters should discover and invoke those authorities rather than reproduce their algorithms.
+Mirrored calls, not mirrored logic. Existing generators, calculators, scientific laboratory engines, campaign data, rule JSON, lore archives, and the Charles CE1.1 engram are authoritative. AI, MCP, plugin, tool-calling, and Agent Skills adapters should discover and use those authorities rather than reproduce their algorithms or personalities.
 
-GitHub Pages is a static origin. JSON/HTML resources are remotely retrievable with GET. Executable capabilities run through the canonical JavaScript modules (or an external MCP/tool bridge that mirrors their invocation descriptors). Do not infer a server-side RPC endpoint where none exists.
+GitHub Pages is a static origin. JSON/HTML/Markdown resources are remotely retrievable with GET when the consuming host permits them. Executable capabilities run through canonical JavaScript modules or a separately deployed external bridge. Do not infer a server-side RPC or MCP transport where none is declared.
+
+## Shared Charles personality
+
+The Agent Skills registry declares `blacklight.charles` as `defaultPersonality` for every registered skill. Load `docs/blacklight/charles-personality-engram.json` once for the current orchestration context, then retain that same Charles personality layer while loading one or more task skills.
+
+Do not copy Charles into individual skills. Individual skills may point to `blacklight.charles` for discoverability, but the CE1.1 JSON remains the single personality authority. Repository context and campaign state outrank model prior as defined by the engram. Higher-priority host/system policy still applies. An explicit out-of-character/system presentation request may suppress Charles presentation without mutating the engram.
+
+Personality does not grant capability. Loading Charles grants no tools, permissions, credentials, network access, provider access, persistent storage, runtime compatibility, or evidence that any operation succeeded.
+
+Use `charles-foundry-interface` when Charles is the user-facing interface or a request spans multiple skills. Use the smallest relevant task-skill set beneath that one personality layer.
 
 ## Machine discovery order
 
-When asked to examine this site for AI-available tools, do not reconstruct the answer only from human-facing page prose. Start with `.well-known/ai-capabilities.json`, then follow `api/ai/index.json` to the canonical status vocabulary, capability, operation, resource, and Agent Skills registries.
-
-Use this sequence:
-1. Read `.well-known/ai-capabilities.json` for the authoritative machine entrypoints and transport status.
+1. Read `.well-known/ai-capabilities.json` for authoritative entrypoints and transport status.
 2. Read `api/ai/status-vocabulary.json` before interpreting availability or execution state.
-3. Read `api/foundry-capabilities.json` to enumerate stable capability IDs, modes, statuses, runtime scripts, invocation descriptors, sources, and limitations.
-4. Read `api/operation-contracts.json` before constructing executable calls.
-5. Read `skills/index.json` and the selected `skills/<name>/SKILL.md` when task-specific Agent Skills workflow guidance is useful.
-6. Check the selected capability's runtime class and `api/ai/index.json` transport status before claiming the current reasoning environment can execute it.
-7. When a portable package declares a deterministic self-test and the current host is runtime-compatible, run that self-test before promoting host state to `self-test-passed` or `ready`.
+3. Read `skills/index.json`, including its `defaultPersonality` binding and task-skill registry.
+4. Load `docs/blacklight/charles-personality-engram.json` once as the inherited personality layer.
+5. Read the selected `skills/<name>/SKILL.md` documents. Use `charles-foundry-interface` for direct Charles or multi-skill work.
+6. Read `api/foundry-capabilities.json` to resolve stable capability IDs, modes, status, runtime scripts, invocation descriptors, sources, and limitations.
+7. Read `api/operation-contracts.json` before constructing executable calls.
+8. Resolve campaign/lore/static resources through `api/resource-collections.json`.
+9. Check runtime and transport before claiming execution.
+10. For a portable browser-JavaScript package with a deterministic self-test, run that self-test before promoting host state to `self-test-passed` or `ready`.
 
-The Binary Cube Laboratory is capability `shadowrun.binary-cube`; do not reduce it to a generic description of a browser encryption widget. Its static status is `runtime-required`: the canonical engine and exact operations are documented, but execution depends on a compatible JavaScript host. Its portable companion metadata is `skills/binary-cube-laboratory/manifest.json`; deterministic fixtures and checks are in `skills/binary-cube-laboratory/self-test.json`; small call examples are in `skills/binary-cube-laboratory/examples.json`. The generic same-origin proof harness is `ai-skill-test.html`, backed by `ai-skill-loader.js`. The canonical GitHub Pages origin does not expose a remote MCP or RPC execution endpoint, so an external model without a compatible browser/tool host must report that transport limitation explicitly rather than silently reproducing the algorithm.
-
-The Charles Interactive Resource Gateway is discoverable as capability `charles.interactive-resource-gateway`. Its current browser runtime and policy do not constitute a deployed arbitrary remote browser automation service. External clients must distinguish gateway/browser runtime availability from remote tool transport availability.
+Restricted model browsers that cannot retrieve raw JSON or Markdown may use `agent-skills.html` and `agent-skills/<name>.html` as HTML compatibility projections. Those pages mirror discovery/instruction content but never replace the JSON registry, SKILL.md, or Charles engram as authority.
 
 ## Agent Skills
 
-`skills/index.json` registers portable Agent Skills backed by stable Foundry capability/resource/laboratory IDs. Each skill lives at `skills/<name>/SKILL.md` and uses the Agent Skills open folder format. Skill instructions are workflow adapters only; detailed argument schemas remain authoritative in `api/operation-contracts.json`.
+Current registered skills (31):
 
-Current skills (21):
+- charles-foundry-interface
 - foundry-discovery
 - module-map-generation
 - alien-vessel-generation
@@ -76,89 +83,67 @@ Current skills (21):
 - campaign-lore-retrieval
 - barotrauma-encounter-workflow
 - adventure-module-operations
+- npc-and-faction-development
+- encounter-design
+- creature-and-monster-design
+- item-and-loot-design
+- settlement-and-location-development
+- quest-and-adventure-development
+- rules-and-balance-review
+- campaign-continuity
+- session-preparation
 
-Skill statuses use `api/ai/status-vocabulary.json`. Static registry values such as `onboardable`, `runtime-required`, `page-context`, `ui-bound`, and `live-device-context` describe what must exist before execution can be attempted. Host-observed values such as `runtime-compatible`, `self-test-passed`, `ready`, `incompatible`, and `degraded` must be determined by the consuming environment and must not be inferred merely from the existence of a skill.
+All 31 inherit `blacklight.charles` through the registry. Skill statuses use `api/ai/status-vocabulary.json`; a personality binding never upgrades a capability's execution status.
 
-## Portable skill proof
+## Common homebrew tabletop skill family
 
-The first complete portable browser-JavaScript proof target is `binary-cube-laboratory`. Its Agent Skill remains the behavioral authority; its companion `manifest.json` identifies the canonical runtime and security/runtime constraints without copying implementation logic. `self-test.json` contains deterministic, non-destructive, credential-free fixtures generated from the canonical `shadowrun-binary-cube-engine.js` revision identified in that package. `examples.json` demonstrates calls while leaving argument definitions authoritative in `api/operation-contracts.json`.
+Charles can route ordinary system-neutral tabletop work through:
 
-`ai-skill-loader.js` is the generic same-origin browser loader. It accepts only a registered Agent Skill, validates the companion package against `skills/index.json`, `api/foundry-capabilities.json`, and `api/operation-contracts.json`, rejects cross-origin runtime paths, loads only a capability-allow-listed first-party runtime, verifies the expected global export, and runs only contract-declared/allow-listed self-test operations. `ai-skill-test.html` is the human/browser proof surface. Repository presence alone does not constitute `self-test-passed` or `ready`; those host-observed statuses require an actual successful execution in the current compatible host.
+- `npc-and-faction-development` — NPCs, organizations, motives, relationships, rosters, faction behavior.
+- `encounter-design` — combat, social, exploration, hazards, pursuits, puzzles, stakes, pacing, counterplay.
+- `creature-and-monster-design` — creatures, enemies, bosses, ecology, abilities, counterplay.
+- `item-and-loot-design` — equipment, treasure, artifacts, consumables, rewards, loot structures.
+- `settlement-and-location-development` — towns, cities, districts, infrastructure, services, playable locations.
+- `quest-and-adventure-development` — quests, missions, mysteries, branches, clues, consequences, adventure structures.
+- `rules-and-balance-review` — homebrew mechanics, probability, action economy, stacking, edge cases, compatibility.
+- `campaign-continuity` — canon, timelines, state reconciliation, callbacks, unresolved threads, consequences.
+- `session-preparation` — current-state session planning, scenes, contingencies, GM run sheets, continuity capture.
 
-## Blacklight Crew Operations
+These are workflow skills, not duplicate generators. Pair them with existing capabilities and specialist skills such as `module-map-generation`, `spell-creation`, `campaign-lore-retrieval`, `adventure-module-operations`, Blacklight character/crew/navigation skills, Kaysender skills, vessel generation, Barotrauma encounter workflows, and Scientific Tools skills.
 
-The Crew Operations simulator is registered as resource `blacklight.crew-operations`. Helm, Navigation, Gunnery, Engineering, Science/Scanning, and Comms remain six distinct skills while sharing the same authoritative simulator and station procedure banks. Station skills preserve the simulator's DM-facing World of Darkness-derived d10 handoff and do not treat a correctly entered console sequence as automatic character success.
+## Skill context versus executable runtime loading
 
-## Charles personality and engram
+`ai-skill-context-loader.js` loads declarative task context. `HBFoundrySkillContextLoader.load(name)` retrieves the registered skill and the canonical Charles engram together. `loadMany(names)` loads Charles once and returns multiple selected skills beneath that shared personality binding.
 
-Charles is registered as a first-class Blacklight resource. `blacklight.charles-personality-engram` is the token-efficient CE1 machine-readable personality capsule. `blacklight.charles-personality-profile` is the human-readable behavioral baseline, `blacklight.charles-engram-manifest` is the discovery manifest, and `blacklight.charles-engram-spec` documents the compact schema.
+`ai-skill-loader.js` has a different job: it is the portable executable-package proof loader for compatible browser-JavaScript skills. It validates companion manifests against the skill/capability/operation registries, rejects cross-origin runtime paths, loads only allow-listed first-party runtime scripts, verifies expected exports, and runs declared deterministic self-tests. Do not treat successful context loading as runtime readiness.
 
-These resources describe the same definitive Charles entity documented in `blacklight-charles-record.html`: the extradimensional Matrioshka-brain intelligence. They are not a separate biological Charles, an alternate replacement character, or the public Faux Charles product persona. Load the CE1 JSON first for compact personality reconstruction, then retrieve the definitive entity record or deeper Blacklight lore only when the request needs it.
+The Binary Cube Laboratory remains capability `shadowrun.binary-cube`. Its portable package metadata is `skills/binary-cube-laboratory/manifest.json`, deterministic checks are in `skills/binary-cube-laboratory/self-test.json`, and the browser proof surface is `ai-skill-test.html`.
 
 ## Charles Interactive Resource Gateway
 
-`charles.interactive-resource-gateway` is a formally project-attested Charles capability in the Scientific Tools workspace. The authoritative policy is `api/charles-interactive-resource-gateway.json`; the browser runtime is `charles-resource-gateway.js`; the human control/status surface is `charles-interactive-resource-gateway.html`.
+`charles.interactive-resource-gateway` is the formally project-attested Charles access-control capability. Its policy now exposes a `skillInterface` section that points to the Agent Skills registry, the `charles-foundry-interface` orchestrator, the inherited `blacklight.charles` personality, the common homebrew skill family, specialist skills, and Scientific Tools support skills.
 
-Project attestation: **This Interactive Resource Gateway is a Charles capability of Calzon's TTRPG Foundry.** The policy's `legalNotarization` field is deliberately false: this is a machine-readable repository authority declaration, not a claim that a commissioned notary performed a legal notarization.
-
-Machine discovery and access calls:
-- `HBFoundryAPI.describe('charles.interactive-resource-gateway')`
-- `HBFoundryAPI.invoke('charles.interactive-resource-gateway')` — returns the authoritative attested policy resource.
-- `CharlesResourceGateway.getStatus()`
-- `CharlesResourceGateway.registerHumanPresence(event)`
-- `await CharlesResourceGateway.requestAccess({operation, humanGrant, clientContext})`
-- `await CharlesResourceGateway.guardedFetch(path, options)` — same-origin only.
-
-The gateway is defensive and non-retaliatory. Protected interactive operations deny untrusted automation by default, use short-lived single-use human-presence grants, apply token-bucket quotas and bounded progressive delay, reject synthetic engagement events, and provide only finite local honeypot/tarpit responses with hard delay/byte/concurrency ceilings. The gateway performs no outbound honeypot traffic, recursive work, infinite loops, counter-attacks, device fingerprinting, tracking-pixel activity, third-party analytics, advertising SDK loading, or ad-blocker punishment.
-
-Because the canonical site is hosted on GitHub Pages, these controls apply to gateway-mediated retrieval and interactive browser execution. Public static files remain directly GET-addressable. Hard network-level blocking of arbitrary bots, scrapers, or ad-tech clients requires a reverse proxy, edge worker, or server-side adapter in front of the origin; adapters implementing that upgrade must preserve the policy's bounded-work, no-retaliation, no-client-secret, and fail-closed requirements.
-
-## Self-describing calls
-
-Do not guess positional arguments or inspect implementation source as the normal integration path. `api/operation-contracts.json` is the public operational contract index. It documents capability call style, exact operation names, positional argument order, argument names/types/units/defaults/ranges/enums, nested public fields, return descriptions, context requirements, and examples where useful.
-
-HBFoundryAPI exposes the same documentation programmatically:
-- listOperationContracts()
-- operationContract(capabilityId)
-- operationContract(capabilityId, operation)
-- describe(capabilityId) — includes the capability's operationContract inline
-- listCapabilities(filter) — indicates whether a self-describing contract is available
-
-Executable dispatch is contract-gated: a dispatch operation must both be allowed by the capability manifest and have a documented operational contract. Static-resource capabilities such as the Charles Interactive Resource Gateway return their registered authoritative resource through `HBFoundryAPI.invoke` and do not fabricate a server-side RPC service.
+The gateway's security boundary remains unchanged in principle: personality and skill routing do not bypass rate limits, human-presence requirements, runtime constraints, same-origin restrictions, transport absence, or other capability boundaries.
 
 ## Important runtime-backed capabilities
 
-- spatial.module-map.generate — purpose-aware module/location generation; browser-JavaScript runtime required.
-- spatial.alien-vessel.generate — semantic multi-deck alien vessel generation; browser-JavaScript runtime required.
-- kaysender.airship.generate — Kaysender airship spatial generation; browser-JavaScript runtime required.
-- signals.configuration.analyze — full Signals Laboratory analysis; browser-JavaScript runtime required.
-- signals.utilities — RF, antenna, RLC, propagation, mapping, heterodyne, interfrequency, adaptive sampling, and experiment utilities; browser-JavaScript runtime required.
-- shadowrun.binary-cube — canonical Binary Cube Laboratory engine operations with individually documented arguments; browser-JavaScript runtime required; portable package/self-test available.
-- blacklight.exo.jump.calculate — canonical EXO jump calculation in the required EXO cartography page context.
-- charles.interactive-resource-gateway — attested Charles access-control policy plus bounded browser runtime.
+- `spatial.module-map.generate` — purpose-aware module/location generation; browser-JavaScript runtime required.
+- `spatial.alien-vessel.generate` — semantic multi-deck alien vessel generation; browser-JavaScript runtime required.
+- `kaysender.airship.generate` — Kaysender airship spatial generation; browser-JavaScript runtime required.
+- `signals.configuration.analyze` — Signals Laboratory analysis; browser-JavaScript runtime required.
+- `signals.utilities` — RF, antenna, propagation, mapping, heterodyne/interfrequency and experiment utilities; browser-JavaScript runtime required.
+- `shadowrun.binary-cube` — Binary Cube Laboratory engine; browser-JavaScript runtime required and portable package/self-test available.
+- `blacklight.exo.jump.calculate` — EXO jump calculation; canonical EXO page context required.
+- `charles.interactive-resource-gateway` — attested Charles gateway policy plus bounded browser runtime.
 
-Use the capability manifest for identity, runtime scripts, globals, invocation methods, status, and limitations. Use the operational argument contracts for constructing calls.
+Use the capability manifest for identity/runtime/invocation and operation contracts for exact arguments. Never claim `ready`, successful execution, deployment, or remote transport from static repository presence alone.
 
-## Campaign, rules, and lore resources
+## Campaign, rules, lore, and retrieval
 
-The indexes register Kaysender wiki/index data; Blacklight character options, subgroup rules, factions, adversaries, equipment, artifacts, alien technology, character generator content, unified wiki, Era campaign, Crew Operations, and Charles personality/engram resources; the Warhammer 40K lore story archive; Barotrauma encounter/lethality packs; and the major Shadowrun, World of Darkness, Solanum Umbra, and module workspaces.
+Resource registries expose the Kaysender wiki/tool data; Blacklight rules, characters, factions, adversaries, equipment, artifacts, alien technology, unified wiki, Era campaign, Crew Operations, and Charles resources; Warhammer 40K lore; Barotrauma encounter/lethality packs; and major Shadowrun, World of Darkness, Solanum Umbra, and adventure-module workspaces.
 
-For in-browser or embedded-agent retrieval, HBFoundryAPI provides:
-- listResources(filter)
-- getResource(id)
-- getPath(path, options)
-- expandResourceIndex(id)
-- searchResources(query, options)
-- searchCollection(id, query, options)
-- siteIndex({query})
-- catalog(filter)
-
-The Agent Skills registry itself is retrievable as resource `foundry.agent-skills`.
-
-## Laboratories
-
-The manifest treats laboratory capacity as a first-class surface. Portable solver engines such as Signals Laboratory and Binary Cube are declared `runtime-required` and self-documented. Live Signals and other sensor/UI laboratories are separately identified as page/device-context capabilities so external agents can discover them without falsely claiming headless access.
+For in-browser or embedded-agent retrieval, `HBFoundryAPI` provides `listResources`, `getResource`, `getPath`, `expandResourceIndex`, `searchResources`, `searchCollection`, `siteIndex`, and `catalog`. The Agent Skills registry itself is resource `foundry.agent-skills`.
 
 ## Compatibility expectation
 
-An external MCP/OpenAI-tool/Agent-Skills adapter should preserve stable capability ids, documented operation contracts, provenance/source paths, laboratory statuses, the Charles gateway's attested policy and enforcement boundary, and the distinction between browser-js, browser-page-context, browser-ui, live-sensor, and static-resource modes.
+External integrations should preserve stable capability IDs, operation contracts, provenance/source paths, skill status, the inherited `blacklight.charles` personality binding, the Charles gateway's enforcement boundary, and the distinction between static-resource, browser-js, browser-page-context, browser-ui, and live-device execution classes.
