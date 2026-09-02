@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blacklight Navigation Operations Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Use the Blacklight EXO Crew Operations Navigation station for reference selection, transfer and avoidance solutions, azimuth/elevation plotting, delta-v and timebase work, rendezvous, dead reckoning, debris corridors, gravity assists, and solution relay to Helm. Activate for Blacklight EXO navigation-console procedures.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/blacklight-navigation-operations.html">
+<link rel="alternate" type="text/markdown" href="../skills/blacklight-navigation-operations/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Blacklight Navigation Operations</h1><p class="subtitle">Use the Blacklight EXO Crew Operations Navigation station for reference selection, transfer and avoidance solutions, azimuth/elevation plotting, delta-v and timebase work, rendezvous, dead reckoning, debris corridors, gravity assists, and solution relay to Helm. Activate for Blacklight EXO navigation-console procedures.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/blacklight-navigation-operations/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/blacklight-navigation-operations/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/blacklight-navigation-operations/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>blacklight-navigation-operations</code> · <strong>Status:</strong> <code>ui-bound</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <code>foundry.site-index</code></p>
+<p><strong>Resource IDs:</strong> <code>blacklight.crew-operations</code>, <code>blacklight.complete-lore-index</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Requires the canonical Blacklight EXO Crew Operations browser runtime; Navigation is a distinct station workflow inside the shared simulator.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: blacklight-navigation-operations
+description: Use the Blacklight EXO Crew Operations Navigation station for reference selection, transfer and avoidance solutions, azimuth/elevation plotting, delta-v and timebase work, rendezvous, dead reckoning, debris corridors, gravity assists, and solution relay to Helm. Activate for Blacklight EXO navigation-console procedures.
+compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Navigation is a distinct station workflow inside the shared simulator.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-station: navigation
+---
+
+# Blacklight Navigation Operations
+
+Use the **Navigation** station in `blacklight-exo-crew-operations.html` and the shared `blacklight-exo-crew-operations.js` authority. Station code: `NAV`.
+
+## Workflow
+
+1. Select Navigation in the Crew Operations simulator.
+2. Choose the canonical procedure matching the route/plotting problem: transfer, collision avoidance, rendezvous, formation work, dead reckoning, hazard corridor, or other registered Navigation procedure.
+3. Use the displayed reference, solver, azimuth/elevation, delta-v, timebase, validation, and solution-latch controls in the prescribed sequence.
+4. Preserve the recorded input sequence and DM Relay difficulty guidance.
+5. Hand off validated maneuver solutions to Helm where the scenario calls for execution by the pilot station.
+
+## Hard rules
+
+- Do not substitute the separate EXO interstellar jump calculator for Crew Operations Navigation unless the request specifically concerns cluster/FTL jump routing.
+- Do not invent navigation procedures or precomputed outcomes outside the canonical runtime.
+- Do not roll for the character or convert DM Relay guidance into automatic success/failure.
+- Keep Navigation and Helm separate: Navigation solves/relays; Helm executes vessel motion.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>
