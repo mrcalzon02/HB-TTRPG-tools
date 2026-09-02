@@ -6,7 +6,7 @@
     "agentSkillPath": "skills/binary-cube-laboratory/SKILL.md",
     "capabilityId": "shadowrun.binary-cube",
     "laboratoryId": "binary-cube-laboratory",
-    "packageVersion": "1.0.0"
+    "packageVersion": "1.1.0"
   },
   "status": "runtime-required",
   "runtime": {
@@ -20,7 +20,22 @@
     "remoteRpcRequired": false,
     "mcpRequired": false,
     "crossOriginCodeAllowed": false,
-    "sameOriginOnly": true
+    "sameOriginOnly": true,
+    "adapters": {
+      "nodeCommonJs": {
+        "path": "binary-cube-node-adapter.js",
+        "runtime": "node-commonjs",
+        "dependencies": [],
+        "interfaces": ["module", "cli", "json-tool"],
+        "commands": {
+          "describe": "node binary-cube-node-adapter.js describe",
+          "selfTest": "node binary-cube-node-adapter.js self-test",
+          "invoke": "node binary-cube-node-adapter.js invoke '{\"operation\":\"sha256Hex\",\"args\":[\"test\"]}'"
+        },
+        "stdin": "For invoke, omit the JSON argument and provide the same request object on stdin.",
+        "authority": "Delegates to shadowrun-binary-cube-engine.js and derives its operation allow-list from api/foundry-capabilities.json."
+      }
+    }
   },
   "authorities": {
     "operationContracts": "api/operation-contracts.json",
@@ -33,6 +48,7 @@
     "canonicalRuntimePath": "shadowrun-binary-cube-engine.js",
     "canonicalRuntimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
     "companionUiPath": "shadowrun-binary-cube-encryption.js",
+    "nodeAdapterPath": "binary-cube-node-adapter.js",
     "architectureRule": "Mirrored calls, not mirrored logic."
   },
   "dependencies": [],
@@ -47,7 +63,8 @@
     "deterministic": true,
     "nonDestructive": true,
     "credentialFree": true,
-    "networkFreeAfterRuntimeLoad": true
+    "networkFreeAfterRuntimeLoad": true,
+    "supportedRuntimes": ["browser-js", "node-commonjs"]
   },
   "integrity": {
     "runtimeBlobSha": "69b8f30b42a669096f81416f3fed1209de6556a9",
