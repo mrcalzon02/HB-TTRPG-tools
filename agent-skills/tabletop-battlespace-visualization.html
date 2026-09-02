@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tabletop-battlespace-visualization | Agent Skill</title>
+<meta name="description" content="HTML compatibility projection for the tabletop-battlespace-visualization Agent Skill: CSV tactical-grid state and primitive Pillow previews down to one pixel per cell.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/tabletop-battlespace-visualization.html">
+<link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css">
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Agent Skill compatibility projection</p><h1><code>tabletop-battlespace-visualization</code></h1><p class="subtitle">Structured tactical-grid state for Charles and external reasoning engines.</p></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">Agent Skills</a><a class="nav-button" href="../skills/tabletop-battlespace-visualization/SKILL.md">Authoritative SKILL.md</a><a class="nav-button" href="../skills/tabletop-battlespace-visualization/manifest.json">Package manifest</a></nav></header>
+<main class="workspace-shell">
+<section class="hero-card"><p class="eyebrow">Host-sandbox · Python + Pillow + CSV</p><h2>One pixel can equal one battlefield cell.</h2><p>The authoritative state is stored as integer grid coordinates in CSV. The PNG is a deliberately primitive diagnostic projection. The required lowest-common-denominator render is exactly <strong>1 pixel = 1 grid cell</strong>; larger previews use nearest-neighbor scaling of the same raster.</p></section>
+<section class="registry-section"><h2>Spatial contract</h2><div class="module-grid">
+<article class="module-card"><h3>Authoritative state</h3><p><code>battlefield_maps.csv</code>, <code>battlefield_tokens.csv</code>, <code>battlefield_terrain.csv</code>, and <code>battlefield_effects.csv</code>. Stable token IDs link battlefield representations to campaign entities.</p></article>
+<article class="module-card"><h3>Primitive rendering</h3><p>Flat RGB cell colors only. No required fonts, icons, textures, SVG, canvas, WebGL, browser, or network assets. Separate composite, terrain, effects, and occupancy rasters are supported.</p></article>
+<article class="module-card"><h3>Human correction</h3><p>“Left two” mutates <code>dx=-2</code>; “up one” mutates <code>dy=-1</code>. Structured state changes first, then the preview is regenerated. The previous PNG is never the source of truth.</p></article>
+<article class="module-card"><h3>Spatial queries</h3><p>Placement, relative movement, range/proximity, nearest-footprint distance, effect overlap, map-bound validation, collisions, and low-resolution rendering are exposed by the portable Python helper.</p></article>
+</div></section>
+<section class="hero-card"><h2>Rules boundary</h2><p>Generic grid, Manhattan, and Euclidean geometry do not silently replace a tabletop system’s movement, diagonal, reach, cover, line-of-sight, or area-template rules. Use explicit affected-cell sets when an authoritative rules engine has already resolved a template.</p><p><strong>Authority:</strong> <a href="../skills/tabletop-battlespace-visualization/SKILL.md"><code>skills/tabletop-battlespace-visualization/SKILL.md</code></a>.</p></section>
+</main>
+<footer class="site-footer"><p><a href="../skills/index.json">Authoritative registry</a> · <a href="../skills/tabletop-battlespace-visualization/scripts/battlespace.py">Python helper</a></p></footer>
+</body></html>
