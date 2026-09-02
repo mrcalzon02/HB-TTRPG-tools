@@ -1,10 +1,10 @@
 ---
 name: binary-cube-laboratory
 description: Use the Foundry Binary Cube Laboratory for TTRPG-oriented cube permutation/obfuscation experiments, key creation, binary encryption/decryption, projection diagnostics, transformation traces, and invariants. Activate when a user asks to operate or inspect the Binary Cube engine.
-compatibility: Requires HBFoundryAPI, shadowrun-binary-cube-engine.js, or the dependency-free binary-cube-node-adapter.js on Node/CommonJS. This engine is experimental TTRPG obfuscation research, not production cryptography.
+compatibility: Requires HBFoundryAPI, shadowrun-binary-cube-engine.js, or the dependency-free binary-cube-node-adapter.js on Node/CommonJS. Structured AI hosts can project skills/binary-cube-laboratory/tool-projection.json into local function tools. This engine is experimental TTRPG obfuscation research, not production cryptography.
 metadata:
   author: mrcalzon02
-  version: "1.3.0"
+  version: "1.4.0"
   foundry-capability: shadowrun.binary-cube
 ---
 
@@ -20,6 +20,7 @@ Use `shadowrun.binary-cube` and its self-describing operation contracts. Browser
    - Browser/Foundry: `HBFoundryAPI.invoke('shadowrun.binary-cube', { operation, args })`.
    - Node/CommonJS module: `require('./binary-cube-node-adapter.js').invoke({ operation, args })`.
    - CLI or generic tool runner: `node binary-cube-node-adapter.js invoke '{"operation":"sha256Hex","args":["test"]}'`, or provide the same JSON request on stdin.
+   - Structured AI/tool host: load `skills/binary-cube-laboratory/tool-projection.json`, expose its tool descriptors in the host's native function-tool/MCP shape, and bind each descriptor to the declared method on `binary-cube-node-adapter.js`.
 4. Preserve key IDs/digests, schema/format versions, checksums, validation results, and transformation/invariant evidence when returned.
 5. If an imported key/package/trace fails validation, report that failure instead of repairing it heuristically.
 
@@ -31,17 +32,25 @@ The Node adapter validates that every invoked operation is both present in the c
 
 A reasoning system should treat the adapter's structured request shape as `{ "operation": string, "args": array }`. Successful adapter calls return `{ "ok": true, "capabilityId": "shadowrun.binary-cube", "operation": string, "result": <canonical engine result> }`. Adapter/CLI failures are explicit errors; do not reinterpret them as successful laboratory results.
 
+## Structured AI and tool projection
+
+`skills/binary-cube-laboratory/tool-projection.json` is the portable machine-oriented projection for AI/tool hosts. It supplies five bounded tools: laboratory description, operation listing, operation-contract lookup, canonical invocation, and deterministic self-test. Its OpenAI-function-tool and MCP notes describe host mapping only; the JSON file is not a remote service and is not an independent implementation.
+
+Prefer the sequence `binary_cube_describe` → `binary_cube_operation_contract` → `binary_cube_invoke` when an AI does not already know the requested operation contract. Use `binary_cube_list_operations` for broad discovery and `binary_cube_self_test` for host acceptance. Do not claim an MCP server exists merely because the projection can be mapped into MCP tools.
+
 ## Portable package and validation
 
-The companion package metadata is `skills/binary-cube-laboratory/manifest.json`. It identifies the canonical runtime, browser runtime class, Node adapter, expected export, security classification, provenance, and self-test document without copying the engine.
+The companion package metadata is `skills/binary-cube-laboratory/manifest.json`. It identifies the canonical runtime, browser runtime class, Node adapter, structured tool projection, expected export, security classification, provenance, and self-test document without copying the engine.
 
-Before reporting `self-test-passed` or `ready` for a host, execute the deterministic tests in `skills/binary-cube-laboratory/self-test.json` against the canonical runtime. Browser hosts can use the existing portable skill loader/test harness. Node hosts can call `require('./binary-cube-node-adapter.js').runSelfTest()` or run `node binary-cube-node-adapter.js self-test`.
+Before reporting `self-test-passed` or `ready` for a host, execute the deterministic tests in `skills/binary-cube-laboratory/self-test.json` against the canonical runtime. Browser hosts can use the existing portable skill loader/test harness. Node hosts can call `require('./binary-cube-node-adapter.js').runSelfTest()` or run `node binary-cube-node-adapter.js self-test`. Structured AI hosts can bind and invoke `binary_cube_self_test`.
 
 The small call examples in `skills/binary-cube-laboratory/examples.json` reference the canonical operation contracts and are not an alternate API definition. If the current host cannot load or execute a declared runtime, report `incompatible` or `runtime-required` as appropriate rather than claiming the capability executed.
 
 ## Human access
 
 The existing Binary Cube laboratory UI remains the interactive human surface and exposes ordinary configuration through labeled controls rather than positional arguments. The Node adapter adds an operator-friendly terminal surface for headless, server, CI-free, and local research environments without replacing that UI. Use `operations` to see callable operations with argument definitions, `contract <operation>` for focused help, and `self-test` to validate the current host before invoking research operations from a shell.
+
+The structured tool projection deliberately does not add more graphical controls: it exposes the same engine to machine hosts, while the existing browser laboratory remains the human projection of those capabilities. Any future engine capability added to the public allow-list must be evaluated for UI controls, API contract coverage, and tool-projection coverage together.
 
 ## Security classification
 
@@ -55,11 +64,13 @@ Treat the engine exactly as the canonical runtime classifies it: experimental ta
 - Do not implement a second cube transform inside the skill, UI, API adapter, or tool wrapper.
 - Do not load cross-origin runtime code merely because a manifest names it.
 - Keep browser, Node, CLI, and AI/tool terminology and positional argument meanings aligned with the canonical contracts.
+- Treat tool projections as descriptors bound to canonical runtime methods, never as evidence that a remote RPC/MCP service exists.
 
 ## Discovery links
 
 - `https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json`
 - `https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json`
 - `https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/manifest.json`
+- `https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/tool-projection.json`
 - `https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/self-test.json`
 - `https://mrcalzon02.github.io/HB-TTRPG-tools/skills/binary-cube-laboratory/examples.json`
