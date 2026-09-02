@@ -1,88 +1,24 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "title": "Module Example Library",
-  "description": "Authoritative inventory of complete adventure-module examples, templates, and use cases used to inspect layout conventions and guide module generation. Items marked interactive are extracted into the Module Viewer; source-reference items open their preserved PDF directly inside the viewer workspace.",
+  "description": "Authoritative inventory of complete adventure-module examples, templates, and use cases used to inspect layout conventions and guide module generation. Viewer-reference items include an embedded source map so they can be opened directly in the Module Viewer.",
   "items": [
-    {
-      "id": "northern-watchtower-09",
-      "title": "The Northern Watchtower 09",
-      "role": ["example", "template", "use-case"],
-      "status": "interactive",
-      "viewerPath": "data/modules/northern-watchtower-09.json",
-      "sourcePdf": "SRC/The Northern Watchtower 09.pdf",
-      "notes": "Small 39 x 39 keyed dungeon example with extracted room and door data."
-    },
-    {
-      "id": "veteck-henrinayea-09",
-      "title": "Veteck Henrina'yea 09",
-      "role": ["example", "template", "use-case"],
-      "status": "interactive",
-      "viewerPath": "data/modules/veteck-henrinayea-09.json",
-      "sourcePdf": "SRC/Veteck Henrina'yea 09.pdf",
-      "notes": "Huge 73 x 65 ice-dungeon example with 65 keyed rooms and extracted encounter content."
-    },
-    {
-      "id": "caves-of-whispering-wild-10",
-      "title": "Caves of Whispering Wild 10",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/caves-of-whispering-wild-10.json",
-      "sourcePdf": "SRC/Caves of Whispering wild 10.pdf",
-      "notes": "Preserved cave-module example available directly in the Module Viewer."
-    },
-    {
-      "id": "chronicles-elemental-realms-swamps",
-      "title": "Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/chronicles-elemental-realms-swamps.json",
-      "sourcePdf": "SRC/Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf",
-      "notes": "Environment- and encounter-focused module reference retained as a generation use case."
-    },
-    {
-      "id": "mad-martikens-menagerie",
-      "title": "Mad Martiken’s Menagerie of Magical Services",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/mad-martikens-menagerie.json",
-      "sourcePdf": "SRC/Mad Martiken’s Menagerie of Magical Services.pdf",
-      "notes": "Service-location and keyed-content example retained as a module design reference."
-    },
-    {
-      "id": "secret-chambers-sabiesha-10",
-      "title": "The Secret Chambers of Sabiesha the Enchantress 10",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/secret-chambers-sabiesha-10.json",
-      "sourcePdf": "SRC/The Secret Chambers of Sabiesha the Enchantress 10.pdf",
-      "notes": "Large keyed dungeon reference with secret-space and encounter-layout use cases."
-    },
-    {
-      "id": "secret-prison-of-souls-10",
-      "title": "The Secret Prison of Souls 10",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/secret-prison-of-souls-10.json",
-      "sourcePdf": "SRC/The Secret Prison of Souls 10.pdf",
-      "notes": "Compact prison/dungeon reference retained for topology and keyed-room comparison."
-    },
-    {
-      "id": "tomb-of-antwig-05",
-      "title": "Tomb of Antwig 05",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/tomb-of-antwig-05.json",
-      "sourcePdf": "SRC/Tomb of Antwig 05.pdf",
-      "notes": "Tomb-module example retained for room density, corridor, trap, and encounter comparison."
-    },
-    {
-      "id": "voyages-of-the-suther",
-      "title": "Voyages of the Suther",
-      "role": ["example", "template", "use-case"],
-      "status": "source-reference",
-      "viewerPath": "data/modules/examples/voyages-of-the-suther.json",
-      "sourcePdf": "SRC/Voyages of the Suther.pdf",
-      "notes": "Long-form adventure/campaign reference retained as a module use case."
-    }
+    {"id":"northern-watchtower-09","title":"The Northern Watchtower 09","role":["example","template","use-case"],"status":"interactive","viewerPath":"data/modules/northern-watchtower-09.json","sourcePdf":"SRC/The Northern Watchtower 09.pdf","notes":"Small 39 x 39 keyed dungeon example with extracted room and door data."},
+    {"id":"veteck-henrinayea-09","title":"Veteck Henrina'yea 09","role":["example","template","use-case"],"status":"interactive","viewerPath":"data/modules/veteck-henrinayea-09.json","sourcePdf":"SRC/Veteck Henrina'yea 09.pdf","notes":"Huge 73 x 65 ice-dungeon example with 65 keyed rooms and extracted encounter content."},
+    {"id":"caves-of-whispering-wild-10","title":"Caves of Whispering Wild 10","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/caves-of-whispering-wild-10.json","sourcePdf":"SRC/Caves of Whispering wild 10.pdf","notes":"Preserved cave-module example available directly in the Module Viewer."},
+    {"id":"chronicles-elemental-realms-swamps","title":"Chronicles of Elemental Realms: Swamps, Toads, Frogs, and Salamanders","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/chronicles-elemental-realms-swamps.json","sourcePdf":"SRC/Chronicles of Elemental Realms_ Swamps, Toads, Frogs, and Salamanders.pdf","notes":"Environment- and encounter-focused module reference retained as a generation use case."},
+    {"id":"mad-martikens-menagerie","title":"Mad Martiken’s Menagerie of Magical Services","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/mad-martikens-menagerie.json","sourcePdf":"SRC/Mad Martiken’s Menagerie of Magical Services.pdf","notes":"Service-location and keyed-content example retained as a module design reference."},
+    {"id":"secret-chambers-sabiesha-10","title":"The Secret Chambers of Sabiesha the Enchantress 10","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/secret-chambers-sabiesha-10.json","sourcePdf":"SRC/The Secret Chambers of Sabiesha the Enchantress 10.pdf","notes":"Large keyed dungeon reference with secret-space and encounter-layout use cases."},
+    {"id":"secret-prison-of-souls-10","title":"The Secret Prison of Souls 10","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/secret-prison-of-souls-10.json","sourcePdf":"SRC/The Secret Prison of Souls 10.pdf","notes":"Compact prison/dungeon reference retained for topology and keyed-room comparison."},
+    {"id":"tomb-of-antwig-05","title":"Tomb of Antwig 05","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/tomb-of-antwig-05.json","sourcePdf":"SRC/Tomb of Antwig 05.pdf","notes":"Tomb-module example retained for room density, corridor, trap, and encounter comparison."},
+    {"id":"voyages-of-the-suther","title":"Voyages of the Suther","role":["example","template","use-case"],"status":"source-reference","viewerPath":"data/modules/examples/voyages-of-the-suther.json","sourcePdf":"SRC/Voyages of the Suther.pdf","notes":"Long-form adventure/campaign reference retained as a module use case."},
+    {"id":"forsaken-prison-demon-emperor-01","title":"The Forsaken Prison of the Demon Emperor 01","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/forsaken-prison-demon-emperor-01.json","sourceUpload":"The Forsaken Prison of the Demon Emperor 01(1).html","notes":"Medium 51 x 65 Level 1 prison example with 61 keyed rooms; map retained for topology and density comparison."},
+    {"id":"example-34534534-01","title":"34534534 01","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/example-34534534-01.json","sourceUpload":"34534534 01.html","notes":"Level 1 Donjon map example retained as a pure layout comparison case."},
+    {"id":"halls-wyrm-duchess-01-a","title":"The Halls of the Wyrm Duchess 01 — Variant A","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/halls-wyrm-duchess-01-a.json","sourceUpload":"The Halls of the Wyrm Duchess 01(1).html","notes":"Level 1 layout variant retained to compare alternate room/corridor arrangements from the same module concept."},
+    {"id":"halls-wyrm-duchess-01-b","title":"The Halls of the Wyrm Duchess 01 — Variant B","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/halls-wyrm-duchess-01-b.json","sourceUpload":"The Halls of the Wyrm Duchess 01.html","notes":"Second Level 1 layout variant retained to compare alternate generation outcomes from the same module concept."},
+    {"id":"lyran-research-01","title":"Lyran Research 01","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/lyran-research-01.json","sourceUpload":"Lyran Research 01.pdf","notes":"Gargantuan 91 x 91 Level 1 example with 46 keyed rooms, mixed circular/rectangular geometry, extensive doors, portcullises, stairs, traps, encounters, and treasure."},
+    {"id":"abarea-trehill-crusier-04","title":"Abarea Trehill Crusier 04","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/abarea-trehill-crusier-04.json","sourceUpload":"Abarea Trehill Crusier 04(1).html","notes":"Medium 51 x 51 Level 4 keyed example with 39 rooms, reinforced masonry, traps, monsters, doors, and room features."},
+    {"id":"alpthon-recon-vessel-systemic-casualty","title":"Alpthon Short-Range Reconnaissance Vessel — Systemic Casualty","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/alpthon-recon-vessel-systemic-casualty.json","sourceUpload":"Alpthon_Reconnaissance_Vessel_Map_Preserved(1).html","notes":"Medium 51 x 51 science-fiction vessel adaptation with 28 keyed compartments; a direct use case for applying dungeon topology to semantic vessel functions."},
+    {"id":"dread-caverns-necromancy-01","title":"The Dread Caverns of Necromancy 01","role":["example","template","use-case","generator-comparison"],"status":"viewer-reference","viewerPath":"data/modules/examples/dread-caverns-necromancy-01.json","sourceUpload":"The Dread Caverns of Necromancy 01(1).html","notes":"Medium 51 x 51 Level 1 example with 28 keyed rooms, reinforced masonry, rubble, bright magical lighting, traps, encounters, and treasure."}
   ]
 }
