@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blacklight Science Operations Agent Skill | Calzon’s TTRPG Foundry</title>
+<meta name="description" content="Use the Blacklight EXO Crew Operations Science station for receiver bands, apertures, gain, integration, emitter inhibition/gating, scanning, contact analysis, sensor confirmation, and science-console procedures. Activate for Blacklight EXO sensors, scanning, analysis, and science-station tasks.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/blacklight-science-operations.html">
+<link rel="alternate" type="text/markdown" href="../skills/blacklight-science-operations/SKILL.md" title="Authoritative SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../workspace-landing.css">
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+</head>
+<body>
+<header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Blacklight Science Operations</h1><p class="subtitle">Use the Blacklight EXO Crew Operations Science station for receiver bands, apertures, gain, integration, emitter inhibition/gating, scanning, contact analysis, sensor confirmation, and science-console procedures. Activate for Blacklight EXO sensors, scanning, analysis, and science-station tasks.</p></div>
+<nav class="top-nav"><a class="nav-button" href="../agent-skills.html">All Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a><a class="nav-button" href="../index.html">Foundry Home</a></nav></header>
+<main>
+<section class="hero-card">
+<p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/blacklight-science-operations/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><a class="link-button primary-action" href="../skills/blacklight-science-operations/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/blacklight-science-operations/SKILL.md">GitHub HTML source</a></p>
+</section>
+<section class="registry-section"><h2>Registered integration metadata</h2>
+<p><strong>Name:</strong> <code>blacklight-science-operations</code> · <strong>Status:</strong> <code>ui-bound</code> · <strong>Version:</strong> <code>1.0.0</code></p>
+<p><strong>Capability IDs:</strong> <code>foundry.site-index</code></p>
+<p><strong>Resource IDs:</strong> <code>blacklight.crew-operations</code>, <code>blacklight.complete-lore-index</code></p>
+<p><strong>Laboratory IDs:</strong> None registered</p>
+<p><strong>Compatibility:</strong> Requires the canonical Blacklight EXO Crew Operations browser runtime; Science is a distinct station workflow with station-specific tape-router support.</p>
+<p>Exact operation signatures remain authoritative in <a href="../api/operation-contracts.json">operation-contracts.json</a> and runtime/status declarations in <a href="../api/foundry-capabilities.json">foundry-capabilities.json</a>.</p>
+</section>
+<section class="registry-section"><h2>Complete SKILL.md projection</h2>
+<p>The following is the complete current skill document escaped into ordinary HTML for restricted model browsers.</p>
+<pre class="module-card">---
+name: blacklight-science-operations
+description: Use the Blacklight EXO Crew Operations Science station for receiver bands, apertures, gain, integration, emitter inhibition/gating, scanning, contact analysis, sensor confirmation, and science-console procedures. Activate for Blacklight EXO sensors, scanning, analysis, and science-station tasks.
+compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Science is a distinct station workflow with station-specific tape-router support.
+metadata:
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  foundry-station: science
+---
+
+# Blacklight Science Operations
+
+Use the **Science / Scanning** station in `blacklight-exo-crew-operations.html`. Station code: `SCI`.
+
+## Canonical implementation
+
+- `blacklight-exo-crew-operations.js`
+- `blacklight-exo-science-tape-router.js`
+- `blacklight-exo-crew-auxiliary.js`
+
+## Workflow
+
+1. Select Science and the canonical procedure matching the scan, receiver, contact-analysis, or emitter task.
+2. Use the displayed receiver-band, aperture, gain, integration, emitter, confirmation, authorization, and auxiliary controls in the prescribed sequence.
+3. Use the Science tape/router support when the procedure routes or records sensor information.
+4. Preserve recorded player inputs and DM Relay guidance for adjudication.
+5. Relay sensor/targeting information to Navigation, Gunnery, Helm, Engineering, or Comms when the procedure establishes those dependencies.
+
+## Hard rules
+
+- Do not convert scanner visualization into facts the canonical procedure did not establish.
+- Do not invent sensor resolution or contact identification outside the runtime/lore context.
+- Do not roll for the character or declare success from console state alone.
+- Keep Science procedures distinct from the separate Signals Laboratory scientific tooling.
+</pre>
+</section>
+</main>
+<footer class="site-footer"><p><a href="../agent-skills.html">Agent Skills directory</a> · <a href="../skills/index.json">Authoritative registry</a> · <a href="../.well-known/ai-capabilities.json">AI discovery</a></p></footer>
+</body>
+</html>
