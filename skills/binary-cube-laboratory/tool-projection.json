@@ -1,87 +1,30 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "projectionType": "ai-tool-descriptor",
   "capabilityId": "shadowrun.binary-cube",
   "laboratoryId": "binary-cube-laboratory",
   "title": "Binary Cube Encryption Laboratory Tool Projection",
   "description": "Portable structured-tool projection for the Binary Cube laboratory. It describes calls into the canonical adapter/engine and does not implement encryption logic or provide a remote RPC service.",
-  "security": {
-    "classification": "experimental-ttrpg-obfuscation-not-production-cryptography",
-    "productionCryptography": false
-  },
-  "binding": {
-    "runtime": "node-commonjs",
-    "adapter": "binary-cube-node-adapter.js",
-    "canonicalEngine": "shadowrun-binary-cube-engine.js",
-    "capabilityRegistry": "api/foundry-capabilities.json",
-    "operationContracts": "api/operation-contracts.json",
-    "rule": "Mirrored calls, not mirrored logic."
-  },
+  "security": {"classification": "experimental-ttrpg-obfuscation-not-production-cryptography", "productionCryptography": false},
+  "binding": {"runtime": "node-commonjs", "adapter": "binary-cube-node-adapter.js", "canonicalEngine": "shadowrun-binary-cube-engine.js", "capabilityRegistry": "api/foundry-capabilities.json", "operationContracts": "api/operation-contracts.json", "rule": "Mirrored calls, not mirrored logic."},
   "protocolMappings": {
     "openaiFunctionTools": "Expose each entry in tools as a function tool using its name, description, and inputSchema; bind execution to the named adapter method.",
     "mcp": "Expose each entry in tools as an MCP tool using inputSchema; bind execution locally to the named adapter method. This descriptor is not itself an MCP server.",
     "genericJsonTool": "Use the tool name and inputSchema, then dispatch to binding.method on binary-cube-node-adapter.js."
   },
   "tools": [
-    {
-      "name": "binary_cube_describe",
-      "description": "Describe the Binary Cube laboratory, runtime, security classification, discovery facilities, and callable operation names.",
-      "inputSchema": {"type": "object", "additionalProperties": false},
-      "binding": {"method": "describe"}
-    },
-    {
-      "name": "binary_cube_list_operations",
-      "description": "List every callable Binary Cube operation together with its canonical positional arguments and return contract.",
-      "inputSchema": {"type": "object", "additionalProperties": false},
-      "binding": {"method": "listOperations"}
-    },
-    {
-      "name": "binary_cube_operation_contract",
-      "description": "Return the canonical argument and return contract for one Binary Cube operation before constructing an invocation.",
-      "inputSchema": {
-        "type": "object",
-        "required": ["operation"],
-        "additionalProperties": false,
-        "properties": {
-          "operation": {
-            "type": "string",
-            "enum": ["createKey", "validateKey", "validatePackage", "buildPoints", "buildPointsById", "pointDepth", "faceCell", "faceOrder", "projectionOrder", "transformBlock", "deterministicFiller", "traceEncryptBlock", "validateTransformationTrace", "projectionDiagnostics", "assertProjectionUniqueness", "encryptBinary", "decryptBinary", "diagnosePackage", "packageChecksum", "sha256Hex", "keyIdentityMaterial", "keyDigest", "legalOutputFaces", "algebraicInvariant", "assertOmnidirectionalNonConflict"]
-          }
-        }
-      },
-      "binding": {"method": "operationContract", "arguments": ["operation"]}
-    },
-    {
-      "name": "binary_cube_invoke",
-      "description": "Invoke one documented Binary Cube operation through the canonical adapter. Retrieve its operation contract first when positional arguments are not already known.",
-      "inputSchema": {
-        "type": "object",
-        "required": ["operation"],
-        "additionalProperties": false,
-        "properties": {
-          "operation": {
-            "type": "string",
-            "enum": ["createKey", "validateKey", "validatePackage", "buildPoints", "buildPointsById", "pointDepth", "faceCell", "faceOrder", "projectionOrder", "transformBlock", "deterministicFiller", "traceEncryptBlock", "validateTransformationTrace", "projectionDiagnostics", "assertProjectionUniqueness", "encryptBinary", "decryptBinary", "diagnosePackage", "packageChecksum", "sha256Hex", "keyIdentityMaterial", "keyDigest", "legalOutputFaces", "algebraicInvariant", "assertOmnidirectionalNonConflict"]
-          },
-          "args": {
-            "type": "array",
-            "default": [],
-            "description": "Positional arguments in the exact order declared by binary_cube_operation_contract / api/operation-contracts.json."
-          }
-        }
-      },
-      "binding": {"method": "invoke", "requestObject": true}
-    },
-    {
-      "name": "binary_cube_self_test",
-      "description": "Run the deterministic Binary Cube portable acceptance tests in the current Node/CommonJS host and return structured pass/fail evidence.",
-      "inputSchema": {"type": "object", "additionalProperties": false},
-      "binding": {"method": "runSelfTest"}
-    }
+    {"name":"binary_cube_describe","description":"Describe the Binary Cube laboratory, runtime, security classification, discovery facilities, high-level workflows, and callable operation names.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"describe"}},
+    {"name":"binary_cube_list_operations","description":"List every low-level callable Binary Cube operation together with its canonical positional arguments and return contract.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"listOperations"}},
+    {"name":"binary_cube_operation_contract","description":"Return the canonical argument and return contract for one low-level Binary Cube operation before constructing an invocation.","inputSchema":{"type":"object","required":["operation"],"additionalProperties":false,"properties":{"operation":{"type":"string"}}},"binding":{"method":"operationContract","arguments":["operation"]}},
+    {"name":"binary_cube_invoke","description":"Invoke one documented low-level Binary Cube operation through the canonical adapter.","inputSchema":{"type":"object","required":["operation"],"additionalProperties":false,"properties":{"operation":{"type":"string"},"args":{"type":"array","default":[],"description":"Positional arguments in canonical contract order."}}},"binding":{"method":"invoke","requestObject":true}},
+    {"name":"binary_cube_encrypt","description":"High-level common workflow: validate or create a key, encrypt a binary payload, validate the resulting canonical package, and return the separate key and package.","inputSchema":{"type":"object","required":["bits"],"additionalProperties":false,"properties":{"bits":{"type":"string","description":"Binary payload containing 0/1 characters; whitespace is ignored."},"key":{"type":"object","description":"Optional existing canonical key. If omitted, keyOptions are used to create one."},"keyOptions":{"type":"object","default":{},"description":"Canonical createKey options, used only when key is omitted."}}},"binding":{"method":"encryptWorkflow","requestObject":true}},
+    {"name":"binary_cube_decrypt","description":"High-level common workflow: validate a separate canonical key and encrypted package, decrypt them through the canonical engine, and return recovered bits.","inputSchema":{"type":"object","required":["package","key"],"additionalProperties":false,"properties":{"package":{"type":"object"},"key":{"type":"object"}}},"binding":{"method":"decryptWorkflow","requestObject":true}},
+    {"name":"binary_cube_self_test","description":"Run the deterministic Binary Cube portable acceptance tests in the current Node/CommonJS host and return structured pass/fail evidence.","inputSchema":{"type":"object","additionalProperties":false},"binding":{"method":"runSelfTest"}}
   ],
   "adoption": {
-    "recommendedSequence": ["binary_cube_describe", "binary_cube_operation_contract", "binary_cube_invoke"],
+    "commonWorkflowSequence": ["binary_cube_describe", "binary_cube_encrypt", "binary_cube_decrypt"],
+    "researchSequence": ["binary_cube_describe", "binary_cube_operation_contract", "binary_cube_invoke"],
     "validationSequence": ["binary_cube_self_test"],
-    "notes": "Hosts should not claim readiness until binary_cube_self_test succeeds in that host."
+    "notes": "Prefer high-level encrypt/decrypt workflows for ordinary use. Use low-level invoke for research and diagnostics. Hosts should not claim readiness until binary_cube_self_test succeeds in that host."
   }
 }
