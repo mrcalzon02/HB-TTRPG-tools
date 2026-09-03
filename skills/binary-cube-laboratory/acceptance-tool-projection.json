@@ -1,0 +1,20 @@
+{
+  "schemaVersion":"1.0.0",
+  "projectionId":"binary-cube-acceptance-tools",
+  "module":"binary-cube-acceptance-runner.js",
+  "securityClassification":"experimental-ttrpg-obfuscation-not-production-cryptography",
+  "tools":[
+    {
+      "name":"binary_cube_describe_acceptance",
+      "description":"Describe the consolidated experimental strengthening acceptance gates and promotion rule.",
+      "binding":{"export":"describe"},
+      "inputSchema":{"type":"object","properties":{},"additionalProperties":false}
+    },
+    {
+      "name":"binary_cube_run_acceptance",
+      "description":"Run indexing, integrity, integrity-aware corruption, and comparative diffusion gates in one runtime and return one machine-readable promotion report. A pass is experimental evidence, not a production cryptography claim.",
+      "binding":{"export":"runAcceptance"},
+      "inputSchema":{"type":"object","required":["bits"],"properties":{"bits":{"type":"string","description":"Binary source payload."},"mode":{"type":"string","enum":["keyed-codeword","direct-replication"],"default":"keyed-codeword"},"fanOut":{"type":"integer","enum":[3,5,7],"default":3},"regionCount":{"type":"integer","minimum":3,"default":7},"indexingSeed":{"type":"string","default":"acceptance-indexing"},"integrityKey":{"type":"string","minLength":8,"default":"acceptance-integrity-key"},"logicalSamples":{"type":"integer","minimum":1,"default":8},"maxPlaintextBitFlips":{"type":"integer","minimum":1,"default":8},"keyOptions":{"type":"object","description":"Canonical Binary Cube key options; defaults to gridSize 3 and seed acceptance-cube."}},"additionalProperties":false}
+    }
+  ]
+}
