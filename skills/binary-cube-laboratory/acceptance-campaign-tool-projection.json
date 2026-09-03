@@ -1,0 +1,10 @@
+{
+  "schemaVersion":"1.0.0",
+  "projectionId":"binary-cube-acceptance-campaign-tools",
+  "module":"binary-cube-acceptance-campaign.js",
+  "securityClassification":"experimental-ttrpg-obfuscation-not-production-cryptography",
+  "tools":[
+    {"name":"binary_cube_list_acceptance_families","description":"List the representative payload families used by the default Binary Cube strengthening acceptance campaign.","binding":{"export":"listFamilies"},"inputSchema":{"type":"object","properties":{},"additionalProperties":false}},
+    {"name":"binary_cube_run_acceptance_campaign","description":"Run every required strengthening acceptance gate across representative low-entropy, patterned, boundary, mixed, and multi-block payload families. Promotion requires every configured family to pass in one runtime.","binding":{"export":"runCampaign"},"inputSchema":{"type":"object","properties":{"mode":{"type":"string","enum":["keyed-codeword","direct-replication"],"default":"keyed-codeword"},"fanOut":{"type":"integer","enum":[3,5,7],"default":3},"regionCount":{"type":"integer","minimum":3,"default":7},"indexingSeed":{"type":"string","default":"campaign-indexing"},"integrityKey":{"type":"string","minLength":8,"default":"campaign-integrity-key"},"logicalSamples":{"type":"integer","minimum":1,"default":8},"maxPlaintextBitFlips":{"type":"integer","minimum":1,"default":8},"keyOptions":{"type":"object"},"families":{"type":"array","description":"Optional custom campaign cases. Omit to use the canonical representative family set.","items":{"type":"object","required":["bits"],"properties":{"id":{"type":"string"},"family":{"type":"string"},"bits":{"type":"string"}},"additionalProperties":false}}},"additionalProperties":false}}
+  ]
+}
