@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "2.0.0",
+  "packageType": "hb-agent-skill-companion",
+  "skill": {
+    "name": "module-map-generation",
+    "agentSkillPath": "skills/module-map-generation/SKILL.md",
+    "capabilityId": "spatial.module-map.generate",
+    "packageVersion": "1.0.0"
+  },
+  "status": "runtime-required",
+  "security": {
+    "classification": "ttrpg-procedural-generation",
+    "credentialsRequired": false,
+    "destructiveOperations": false,
+    "externalNetworkRequiredAfterLoad": false
+  },
+  "architecture": {
+    "rule": "Mirrored calls, not mirrored logic.",
+    "canonicalRuntimeOrder": [
+      "semantic-spatial-engine.js",
+      "semantic-content-populator.js",
+      "module-map-generator.js"
+    ],
+    "authorityBoundary": "The package loads and tests the canonical Foundry runtime; it does not reproduce topology, semantic-profile, or content-population logic."
+  },
+  "runtime": {
+    "family": "javascript",
+    "class": "browser-js",
+    "scripts": [
+      "semantic-spatial-engine.js",
+      "semantic-content-populator.js",
+      "module-map-generator.js"
+    ],
+    "authoritativePath": "module-map-generator.js",
+    "expectedGlobal": "generator.module_map",
+    "sameOriginOnly": true,
+    "crossOriginCodeAllowed": false
+  },
+  "selfTest": {
+    "path": "skills/module-map-generation/self-test.json",
+    "deterministic": true,
+    "nonDestructive": true
+  },
+  "authorities": {
+    "capabilityRegistry": "api/foundry-capabilities.json",
+    "operationContracts": "api/operation-contracts.json",
+    "selfTest": "skills/module-map-generation/self-test.json"
+  },
+  "dependencies": []
+}
