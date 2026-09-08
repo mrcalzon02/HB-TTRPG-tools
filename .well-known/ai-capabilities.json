@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "protocol": "hb-ai-discovery/1",
   "service": {
     "id": "hb-ttrpg-tools",
@@ -40,6 +40,7 @@
       "Registered Agent Skills inherit the registry default personality blacklight.charles. Load the canonical Charles engram once before selected task skills unless higher-priority host/system policy or an explicit OOC/system presentation request suppresses persona presentation.",
       "Restricted model browsers that cannot retrieve raw JSON or Markdown should use agentSkillsHtml as an HTML compatibility projection; skills/index.json remains authoritative.",
       "Browser-JavaScript and host-sandbox capabilities begin at runtime-required and may be promoted by the current host only after observed runtime evidence; deterministic self-tests are required where declared before ready.",
+      "Portable browser-JavaScript companion manifests may declare one or more canonical same-origin runtime scripts; when multiple scripts are declared their registry order is authoritative and must be preserved exactly.",
       "Page-context, live-device, and UI-bound capabilities require the declared browser/device context.",
       "No external model should infer a remote POST/RPC/MCP execution service unless a transport is explicitly deployed and verified."
     ]
@@ -113,7 +114,15 @@
       "id": "spatial.module-map.generate",
       "title": "Semantic Module Map Generator",
       "status": "runtime-required",
-      "mode": "browser-js"
+      "mode": "browser-js",
+      "operationsFrom": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json",
+      "portablePackage": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/module-map-generation/manifest.json",
+      "selfTest": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/module-map-generation/self-test.json",
+      "runtimeScripts": [
+        "https://mrcalzon02.github.io/HB-TTRPG-tools/semantic-spatial-engine.js",
+        "https://mrcalzon02.github.io/HB-TTRPG-tools/semantic-content-populator.js",
+        "https://mrcalzon02.github.io/HB-TTRPG-tools/module-map-generator.js"
+      ]
     },
     {
       "id": "blacklight.exo.jump.calculate",
@@ -132,12 +141,12 @@
     "Start with entrypoints.aiIndex and read entrypoints.bootstrap before constructing or invoking capabilities; do not reconstruct capabilities from page prose.",
     "Read entrypoints.statusVocabulary before interpreting capability availability or execution state.",
     "Read entrypoints.agentSkills and load its defaultPersonality binding before selected task skills.",
-    "Load the selected SKILL.md before resolving referenced capabilities, helpers, or resources.",
+    "Load the selected SKILL.md before resolving referenced capabilities, helpers, resources, or portable companion metadata.",
     "Use entrypoints.charlesSkillInterface when Charles is the conversational interface or the request spans multiple tabletop skills.",
     "Use the canonical capability registry for identity, status, runtime scripts, invocation style, source paths, and limitations.",
     "Use operationContracts for exact operation names and argument schemas.",
     "If the current host cannot retrieve agentSkills or SKILL.md raw resources, use agentSkillsHtml to enumerate the exact registered skill names and follow its GitHub HTML fallbacks; do not treat the HTML projection as a replacement authority.",
-    "For portable browser-JavaScript packages, use the registered same-origin loader/self-test chain before promoting a capability to self-test-passed or ready.",
+    "For portable browser-JavaScript packages, require the companion runtime script set to match the capability registry exactly and preserve declared order before using the same-origin loader/self-test chain.",
     "Check selected-skill execution requirements, execution mode, runtime context, and transport status before claiming invocation, persistence, rendering, randomness, or execution."
   ]
 }
