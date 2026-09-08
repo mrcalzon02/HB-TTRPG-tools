@@ -92,29 +92,38 @@
       "example":{"seed":"estate-17","locationArchetype":"mansion","originCulture":"human","controller":"noble-house","occupancyState":"active","dangerLevel":5,"adventurePurpose":"investigation","rulesTarget":"open_d20","strict":true}
     },
     "spatial.alien-vessel.generate": {
-      "callStyle":"single-object","operation":"generate",
-      "arguments":[{"name":"input","type":"object","required":false,"fields":{
-        "seed":{"type":"string","required":false,"description":"Deterministic vessel seed."},
-        "profile":{"type":"string","required":false,"default":"recon","enum":["recon","damaged_recon"],"description":"Built-in semantic vessel profile."},
-        "vesselType":{"type":"string","required":false,"default":"short-range reconnaissance vessel"},
-        "faction":{"type":"string","required":false,"default":"Alpthon"},
-        "decks":{"type":"integer","required":false,"range":">=1"},
-        "width":{"type":"integer","required":false,"default":84,"units":"grid cells"},
-        "height":{"type":"integer","required":false,"default":60,"units":"grid cells"},
-        "additionalRoles":{"type":"array<object>","required":false,"description":"Additional semantic compartments appended to the selected profile."},
-        "adjacency":{"type":"array<[string,string]>","required":false,"description":"Additional semantic adjacency requirements."},
-        "layout":{"type":"object","required":false,"description":"Shared spatial-engine layout overrides."},
-        "extraEdgeChance":{"type":"number","required":false,"default":0.12},
-        "pruneDeadEnds":{"type":"boolean","required":false,"default":true},
-        "strict":{"type":"boolean","required":false,"description":"Strict spatial/hull validation unless explicitly false."},
-        "hullShape":{"type":"string","required":false,"default":"connected-skin","description":"Hull-envelope shape. shape is an alias."},
-        "shape":{"type":"string","required":false,"description":"Alias for hullShape."},
-        "hullTightness":{"type":"string|number","required":false,"default":"standard","description":"Hull envelope tightness. tightness is an alias."},
-        "tightness":{"type":"string|number","required":false,"description":"Alias for hullTightness."},
-        "damageSeverity":{"type":"number","required":false,"range":"0..1","description":"Damage annotation severity; damaged_recon defaults to 0.65 when omitted."}
+      "callStyle":"single-object",
+      "operation":"generate",
+      "validatedAgainst": {
+        "date": "2026-09-08",
+        "sources": {
+          "alien-vessel-generator.js": "9db9d35685a766637dc4b2666c8527bb3357fcbb",
+          "semantic-spatial-engine.js": "a21aad5405120063e53cd54cbad2790ac33a2cb5",
+          "vessel-hull-envelope.js": "81320099033a856a7574a75c58e9ea707c285f2f"
+        }
+      },
+      "arguments":[{"name":"input","type":"object","required":false,"description":"Alien vessel generation request. Built-in profiles define the semantic compartment program; additional roles/adjacency extend rather than replace it.","fields":{
+        "seed":{"type":"string","required":false,"description":"Deterministic vessel seed. When omitted the generator derives alien-vessel:<profile>, using recon when profile is omitted."},
+        "profile":{"type":"string","required":false,"default":"recon","enum":["recon","damaged_recon"],"description":"Built-in semantic vessel profile. Public integrations should use the documented enum; the runtime falls back to recon topology for unknown internal values."},
+        "vesselType":{"type":"string","required":false,"default":"short-range reconnaissance vessel","description":"Returned vessel-type label; does not replace the semantic profile program."},
+        "faction":{"type":"string","required":false,"default":"Alpthon","description":"Returned faction/ownership context label."},
+        "decks":{"type":"integer","required":false,"range":">=1","description":"Override the deck count. When omitted it is derived from the highest deck referenced by the selected and additional roles; both built-in profiles currently resolve to three decks."},
+        "width":{"type":"integer","required":false,"default":84,"units":"grid cells","description":"Requested topology width before layout overrides. layout.gridWidth has final precedence when both are supplied."},
+        "height":{"type":"integer","required":false,"default":60,"units":"grid cells","description":"Requested topology height before layout overrides. layout.gridHeight has final precedence when both are supplied."},
+        "additionalRoles":{"type":"array<object>","required":false,"description":"Additional semantic compartments appended to the selected profile before topology generation.","itemFields":{"id":{"type":"string","required":false},"role":{"type":"string","required":false,"description":"Semantic role; type is an alias used by the spatial engine."},"type":{"type":"string","required":false,"description":"Alias for role."},"label":{"type":"string","required":false},"count":{"type":"integer","required":false,"default":1,"range":">=1"},"deck":{"type":"integer","required":false,"range":">=0","description":"A deck above an explicit decks override may cause strict spatial validation to fail."},"width":{"type":"number","required":false},"height":{"type":"number","required":false},"minWidth":{"type":"number","required":false},"maxWidth":{"type":"number","required":false},"minHeight":{"type":"number","required":false},"maxHeight":{"type":"number","required":false},"protected":{"type":"boolean","required":false,"default":true},"tags":{"type":"array<string>","required":false},"pressureZone":{"type":"string","required":false},"metadata":{"type":"object","required":false}}},
+        "adjacency":{"type":"array<[string,string]|object>","required":false,"description":"Additional semantic adjacency constraints appended to the selected profile. Two-item arrays mean required links; object constraints may use a/b or from/to plus optional id, kind, and required=false."},
+        "layout":{"type":"object","required":false,"description":"Shared spatial-engine placement overrides. These values are applied after the Alien Vessel defaults and therefore have final precedence.","fields":{"gridWidth":{"type":"integer","required":false,"units":"grid cells"},"gridHeight":{"type":"integer","required":false,"units":"grid cells"},"margin":{"type":"integer","required":false,"default":2},"roomGap":{"type":"integer","required":false,"default":2},"maxPlacementAttempts":{"type":"integer","required":false,"default":220},"minRoomWidth":{"type":"number","required":false,"default":6},"maxRoomWidth":{"type":"number","required":false,"default":13},"minRoomHeight":{"type":"number","required":false,"default":5},"maxRoomHeight":{"type":"number","required":false,"default":11},"pruneDeadEnds":{"type":"boolean","required":false,"default":true,"description":"Layout-level pruning gate; either top-level or layout-level false disables pruning."}}},
+        "extraEdgeChance":{"type":"number","required":false,"default":0.12,"range":"0..1 recommended","description":"Additional same-deck topology edge probability."},
+        "pruneDeadEnds":{"type":"boolean","required":false,"default":true,"description":"Dead-end pruning is enabled unless explicitly false; layout.pruneDeadEnds=false also disables pruning."},
+        "strict":{"type":"boolean","required":false,"default":true,"description":"Spatial and hull validation are strict unless explicitly false. Spatial validation failure throws in the shared engine; hull validation failure throws in the vessel generator."},
+        "hullShape":{"type":"string","required":false,"default":"connected-skin","enum":["connected-skin","oval","capsule","rectangle","square","circle"],"description":"Canonical hull-envelope shape. Runtime aliases include skin/connected/organic, ellipse/elliptical, pill, rectangular/box, cube/cubic, and circular/cylinder/cylindrical; unknown values normalize to connected-skin."},
+        "shape":{"type":"string","required":false,"description":"Alias for hullShape. hullShape has precedence when both are supplied."},
+        "hullTightness":{"type":"string|number","required":false,"default":"standard","description":"Hull clearance selector. Named presets: skin-tight=1, tight=2, close=3, standard=4, loose=7, very-loose=10 cells. Numeric 0..1 maps from 10 toward 1 cells as the value increases; other finite numbers are rounded and clamped to 1..24 cells."},
+        "tightness":{"type":"string|number","required":false,"description":"Alias for hullTightness. hullTightness has precedence when both are supplied."},
+        "damageSeverity":{"type":"number","required":false,"range":"0..1","description":"Deterministic room-damage annotation intensity, clamped by the runtime to 0..1. If omitted, damaged_recon uses 0.65 and recon uses 0. Damage selection uses the vessel seed with a :damage suffix and avoids most critical rooms probabilistically."}
       }}],
-      "returns":{"type":"object","description":"Alien vessel record containing semanticSummary, full spatialLayout, hull envelope, damage annotations, and validation."},
-      "example":{"seed":"arnock-scout-01","profile":"damaged_recon","vesselType":"short-range reconnaissance vessel","faction":"Alpthon","damageSeverity":0.65}
+      "returns":{"type":"object","description":"Alien vessel record containing schemaVersion/generator, vesselType, faction, profile, final seed/deckCount, semanticSummary, canonical hull envelope with normalized shape/tightness/clearance and validation, deterministic damage annotations, full spatialLayout, and combined spatial/hull validation."},
+      "example":{"seed":"arnock-scout-01","profile":"damaged_recon","vesselType":"short-range reconnaissance vessel","faction":"Alpthon","hullShape":"connected-skin","hullTightness":"standard","damageSeverity":0.65,"strict":true}
     },
     "kaysender.airship.generate": {
       "callStyle":"single-object","operation":"generate",
