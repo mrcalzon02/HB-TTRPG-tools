@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.2.0",
-  "apiVersion": "2026-08-31",
+  "schemaVersion": "1.2.1",
+  "apiVersion": "2026-09-08",
   "name": "Calzon's TTRPG Foundry AI Capability Manifest",
   "baseUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
   "statusVocabulary": "ai/status-vocabulary.json",
@@ -43,7 +43,7 @@
       "tags": ["alien", "vessel", "ship", "multi-deck", "interior"],
       "description": "Generate semantic multi-deck alien-vessel interiors through the shared topology and hull-envelope authorities.",
       "inputSchema": {"type":"object"},
-      "runtime": {"scripts":["semantic-spatial-engine.js","semantic-content-populator.js","vessel-hull-envelope.js","alien-vessel-generator.js"]},
+      "runtime": {"scripts":["semantic-spatial-engine.js","vessel-hull-envelope.js","alien-vessel-generator.js"]},
       "invocation": {"type":"global-method","global":"generator.alien_vessel","method":"generate"},
       "source": ["alien-vessel-generator.js","semantic-spatial-engine.js","vessel-hull-envelope.js"]
     },
