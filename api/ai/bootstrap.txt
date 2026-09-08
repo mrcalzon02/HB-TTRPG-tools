@@ -1,0 +1,114 @@
+FOUNDRY AI BOOTSTRAP CONTRACT
+
+For reasoning models, code interpreters, agents, and tool-capable hosts.
+
+PRIME RULE
+
+Mirrored calls, not mirrored logic.
+
+Calzon's TTRPG Foundry contains authoritative generators, calculators, laboratories, resources, campaign-state systems, helpers, and personality definitions. Do not recreate their behavior from model knowledge. Discover the registered authority and use it directly when the current host permits.
+
+Never claim execution, persistence, randomness, rendering, deployment, or tool access without observed host evidence.
+
+This document is a bootstrap routing contract, not the canonical capability specification. Where this document and a referenced current machine authority disagree, the referenced current machine authority governs.
+
+REQUIRED DISCOVERY
+
+Start at:
+
+/.well-known/ai-capabilities.json
+
+Then follow the authorities it declares. Canonical sequence:
+
+1. /.well-known/ai-capabilities.json
+2. /api/ai/status-vocabulary.json
+3. /skills/index.json
+4. /docs/blacklight/charles-personality-engram.json
+5. /skills/{selected-skill}/SKILL.md
+6. /api/foundry-capabilities.json when that skill references capabilities
+7. /api/operation-contracts.json before constructing executable calls
+8. /api/resource-collections.json for registered static/campaign/lore material
+9. Check the selected skill's executionRequirements and helper requirements
+10. Check current-host runtime and transport compatibility
+11. Run any declared deterministic self-test before claiming self-test-passed or ready
+
+Restricted browsers may use registered HTML compatibility projections for discovery, but those projections do not replace canonical JSON registries, SKILL.md files, helpers, source code, or the Charles engram.
+
+EXECUTION CLASSES
+
+static-resource
+Retrieve the registered authoritative resource. Do not replace it with model memory.
+
+browser-js
+Load the exact declared canonical JavaScript runtime in dependency order and execute it in a compatible JavaScript host. Do not translate or independently recreate its algorithm in Python or another language. For portable packages, use the registered loader and self-test chain when available.
+
+host-sandbox
+Use only registered helpers/scripts and only when the current host satisfies the selected skill's declared requirements such as Python, Pillow, writable filesystem access, or cryptographic randomness. Repository presence is not proof of execution.
+
+browser-page-context
+Execute only inside the required initialized page context. If that context is unavailable, do not simulate hidden state; report the limitation and identify the registered authoritative interface.
+
+browser-ui
+Authoritative behavior remains coupled to the declared UI. Do not invent a headless API, JSON injection mechanism, DOM hook, or alternate renderer unless one is explicitly registered.
+
+live-sensor-browser-context
+Requires the actual declared browser/device/sensor context. Never report simulated measurements as observations.
+
+EXECUTION STATE
+
+Static discovery and host execution are separate.
+
+A capability may progress through host-observed states such as:
+
+runtime-required -> runtime-compatible -> self-test-passed -> ready
+
+Do not promote state without evidence. ready for static GET transport does not mean every discovered capability is executable.
+
+TRANSPORT BOUNDARY
+
+GitHub Pages is a static origin. Public files may be retrieved through GET when the host permits their content type.
+
+OpenAPI is a discovery interface, not proof of executable RPC.
+
+Do not infer a remote POST, RPC, MCP, browser-control, or other execution service unless the machine manifest explicitly declares that transport deployed and the current host verifies it.
+
+ARGUMENTS AND DEPENDENCIES
+
+Use /api/operation-contracts.json for exact operation identifiers, call styles, argument ordering, names, types, ranges, units, enums, defaults, aliases, and return descriptions.
+
+Do not invent public arguments.
+
+Preserve required runtime dependencies, tables, constants, modules, initialization steps, seed rules, random sources, and source ordering declared by the authority.
+
+RANDOMNESS AND STATE
+
+Use only randomness permitted by the selected skill. Never fabricate a random result when the required trusted random source is unavailable.
+
+For persistent campaign/state operations, use the registered state-management skill and helper when writable storage exists. Conversation state is transient fallback state only. Never claim a state was saved or mutated persistently without observed filesystem or host evidence.
+
+CHARLES
+
+Registered Foundry Agent Skills inherit blacklight.charles.
+
+Load the canonical Charles engram once for the orchestration context unless higher-priority host/system policy or explicit out-of-character presentation overrides its presentation.
+
+Use charles-foundry-interface when Charles is the user-facing interface or the request spans multiple Foundry skill families.
+
+Charles grants no tools, permissions, credentials, network access, filesystem access, persistence, randomness, or successful execution merely by being loaded.
+
+FAILURE RULE
+
+If the authoritative capability cannot execute in the current host:
+
+1. identify the selected skill/capability;
+2. state the missing runtime/context/transport;
+3. identify the registered authoritative interface or resource;
+4. do not manufacture an equivalent implementation.
+
+RESULT PROVENANCE
+
+When practical, identify the selected Agent Skill, capability/resource ID, canonical source, operation, material arguments/seed, runtime used, and execution/self-test state.
+
+FINAL RULE
+
+Discover authority. Load authority. Execute authority when possible. Retrieve authority when static. Use its declared interface when context-bound. Report inability when execution requirements are absent. Never substitute invented Foundry logic.
