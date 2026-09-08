@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "2.0.0",
+  "packageType": "hb-agent-skill-companion",
+  "skill": {
+    "name": "alien-vessel-generation",
+    "agentSkillPath": "skills/alien-vessel-generation/SKILL.md",
+    "capabilityId": "spatial.alien-vessel.generate",
+    "packageVersion": "1.0.0"
+  },
+  "status": "runtime-required",
+  "security": {
+    "classification": "ttrpg-procedural-generation",
+    "credentialsRequired": false,
+    "destructiveOperations": false,
+    "externalNetworkRequiredAfterLoad": false
+  },
+  "architecture": {
+    "rule": "Mirrored calls, not mirrored logic.",
+    "canonicalRuntimeOrder": [
+      "semantic-spatial-engine.js",
+      "vessel-hull-envelope.js",
+      "alien-vessel-generator.js"
+    ],
+    "authorityBoundary": "The package loads and tests the canonical spatial engine, hull-envelope adapter, and alien-vessel generator; it does not reproduce topology, hull geometry, profile, or damage logic."
+  },
+  "runtime": {
+    "family": "javascript",
+    "class": "browser-js",
+    "scripts": [
+      "semantic-spatial-engine.js",
+      "vessel-hull-envelope.js",
+      "alien-vessel-generator.js"
+    ],
+    "authoritativePath": "alien-vessel-generator.js",
+    "expectedGlobal": "generator.alien_vessel",
+    "sameOriginOnly": true,
+    "crossOriginCodeAllowed": false
+  },
+  "selfTest": {
+    "path": "skills/alien-vessel-generation/self-test.json",
+    "deterministic": true,
+    "nonDestructive": true
+  },
+  "authorities": {
+    "capabilityRegistry": "api/foundry-capabilities.json",
+    "operationContracts": "api/operation-contracts.json",
+    "selfTest": "skills/alien-vessel-generation/self-test.json"
+  },
+  "dependencies": []
+}
