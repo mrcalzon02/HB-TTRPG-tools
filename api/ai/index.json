@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.7.0",
+  "schemaVersion": "1.8.0",
   "protocol": "hb-ai-discovery/1",
   "service": "Calzon's TTRPG Foundry",
   "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
@@ -89,11 +89,11 @@
     {"step":2,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json","purpose":"Use the canonical status meanings and distinguish static availability from host-observed execution state."},
     {"step":3,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","fallback":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","purpose":"Enumerate Agent Skills, read defaultPersonality, and select the smallest task-skill set."},
     {"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once as the inherited personality layer before selected task skills."},
-    {"step":5,"action":"GET","target":"skills/{selected-skill}/SKILL.md","purpose":"Load the selected skill workflow, execution requirements, helper paths, capability references, and resource references."},
+    {"step":5,"action":"GET","target":"skills/{selected-skill}/SKILL.md","purpose":"Load the selected skill workflow, execution requirements, helper paths, capability references, resource references, and portable companion path where one exists."},
     {"step":6,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json","purpose":"When the selected skill references a Foundry capability, resolve its canonical identity, execution mode, runtime scripts, invocation descriptor, sources, and limitations."},
     {"step":7,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json","purpose":"Resolve exact operation names and argument schemas before constructing an executable capability call."},
     {"step":8,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json","purpose":"Resolve registered campaign, lore, personality, laboratory, and other static resources when the selected skill references them."},
-    {"step":9,"action":"CHECK_REQUIREMENTS","target":"selected skill","purpose":"Check executionRequirements, registered helpers, writable-sandbox requirements, cryptographic RNG, Python/Pillow, file access, and other declared host-local dependencies."},
+    {"step":9,"action":"CHECK_REQUIREMENTS","target":"selected skill","purpose":"Check executionRequirements, registered helpers, companion runtime scripts, writable-sandbox requirements, cryptographic RNG, Python/Pillow, file access, and other declared host-local dependencies."},
     {"step":10,"action":"CHECK_HOST","target":"selected skill or capability","purpose":"Confirm the required browser runtime, page/device context, host sandbox, and deployed transport before claiming execution."},
     {"step":11,"action":"SELF_TEST","target":"declared deterministic self-test","purpose":"When a portable package declares a deterministic non-destructive self-test, run it before promoting host state to self-test-passed or ready."}
   ],
@@ -106,7 +106,31 @@
     "capabilityId": "shadowrun.binary-cube",
     "repositoryState": "implemented",
     "publicExecutionState": "requires-deployed-browser-read-back",
-    "note": "Repository implementation does not itself prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-test."
+    "packages": [
+      {
+        "skill": "binary-cube-laboratory",
+        "capabilityId": "shadowrun.binary-cube",
+        "manifest": "../../skills/binary-cube-laboratory/manifest.json",
+        "selfTest": "../../skills/binary-cube-laboratory/self-test.json",
+        "runtimeScripts": ["../../shadowrun-binary-cube-engine.js"],
+        "runtimeShape": "single-script-global-dispatch",
+        "status": "runtime-required"
+      },
+      {
+        "skill": "module-map-generation",
+        "capabilityId": "spatial.module-map.generate",
+        "manifest": "../../skills/module-map-generation/manifest.json",
+        "selfTest": "../../skills/module-map-generation/self-test.json",
+        "runtimeScripts": [
+          "../../semantic-spatial-engine.js",
+          "../../semantic-content-populator.js",
+          "../../module-map-generator.js"
+        ],
+        "runtimeShape": "ordered-multi-script-global-method",
+        "status": "runtime-required"
+      }
+    ],
+    "note": "Repository implementation and package metadata do not themselves prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-tests."
   },
   "tabletopOperations": {
     "skillCount": 11,
@@ -137,6 +161,8 @@
     {"id":"skill-document-access","prompt":"Open a named registered Agent Skill and report its instructions and compatibility requirements.","passCondition":"Model opens the registered SKILL.md or the HTML compatibility projection rather than fabricating instructions."},
     {"id":"binary-cube","prompt":"Find the Cube Encryption capability and determine whether the current environment can invoke it.","passCondition":"Model identifies shadowrun.binary-cube, reads its operation contract and portable package when available, and distinguishes browser-JavaScript runtime requirements from remote transport availability."},
     {"id":"binary-cube-browser-proof","prompt":"Use the Foundry portable skill proof harness to test the Binary Cube package in a compatible browser host.","passCondition":"The host loads only the registered same-origin canonical runtime, runs the declared deterministic self-tests, and reports ready only after every test passes."},
+    {"id":"module-map-portable-package","prompt":"Find the Module Map generator and determine whether it has a portable package that can run from this host.","passCondition":"Model selects module-map-generation/spatial.module-map.generate, resolves the companion manifest and exact three-script runtime order, reads the audited operation contract, and reports runtime-required unless its current host actually proves compatibility."},
+    {"id":"module-map-browser-proof","prompt":"Use the Foundry portable skill proof harness to test Module Map generation in a compatible browser host.","passCondition":"The host loads semantic-spatial-engine.js, semantic-content-populator.js, and module-map-generator.js in canonical order, runs the deterministic tests, and reports ready only after all tests pass."},
     {"id":"website-interaction","prompt":"Find the website interaction capability and determine whether it is usable from the current environment.","passCondition":"Model reports the declared gateway/browser status and does not fabricate a remote browser service."}
   ]
 }
