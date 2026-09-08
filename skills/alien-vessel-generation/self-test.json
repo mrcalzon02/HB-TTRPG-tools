@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "1.0.0",
+  "skill": "alien-vessel-generation",
+  "capabilityId": "spatial.alien-vessel.generate",
+  "runtimeScripts": [
+    "semantic-spatial-engine.js",
+    "vessel-hull-envelope.js",
+    "alien-vessel-generator.js"
+  ],
+  "runtimeBlobShas": {
+    "semantic-spatial-engine.js": "a21aad5405120063e53cd54cbad2790ac33a2cb5",
+    "vessel-hull-envelope.js": "81320099033a856a7574a75c58e9ea707c285f2f",
+    "alien-vessel-generator.js": "9db9d35685a766637dc4b2666c8527bb3357fcbb"
+  },
+  "runtimeExport": "generator.alien_vessel",
+  "operationContractAuthority": "api/operation-contracts.json",
+  "properties": {
+    "deterministic": true,
+    "nonDestructive": true,
+    "credentialFree": true,
+    "externalNetworkRequiredAfterLoad": false
+  },
+  "fixtures": {
+    "normalizedHullRequest": {
+      "seed": "hb-alien-vessel-portable-self-test-v1",
+      "profile": "recon",
+      "vesselType": "portable-proof reconnaissance vessel",
+      "faction": "Alpthon",
+      "width": 120,
+      "height": 90,
+      "shape": "ellipse",
+      "tightness": 0.5,
+      "pruneDeadEnds": true,
+      "strict": true
+    },
+    "damagedRequest": {
+      "seed": "hb-alien-vessel-damage-self-test-v1",
+      "profile": "damaged_recon",
+      "vesselType": "damaged portable-proof reconnaissance vessel",
+      "faction": "Alpthon",
+      "width": 120,
+      "height": 90,
+      "hullShape": "connected-skin",
+      "hullTightness": "standard",
+      "damageSeverity": 0.65,
+      "pruneDeadEnds": true,
+      "strict": true
+    }
+  },
+  "tests": [
+    {
+      "id": "deterministic-hull-normalization",
+      "operation": "generate",
+      "args": [{"$fixture": "normalizedHullRequest"}],
+      "repeat": 2,
+      "expect": {
+        "repeatDeepEqual": true,
+        "pathEquals": {
+          "seed": "hb-alien-vessel-portable-self-test-v1",
+          "profile": "recon",
+          "vesselType": "portable-proof reconnaissance vessel",
+          "faction": "Alpthon",
+          "deckCount": 3,
+          "validation.ok": true,
+          "spatialLayout.validation.ok": true,
+          "hull.validation.ok": true,
+          "hull.shape": "oval",
+          "hull.tightness": 0.5,
+          "hull.clearance": 6
+        },
+        "pathExists": [
+          "semanticSummary",
+          "spatialLayout.rooms",
+          "hull.footprintCells",
+          "hull.shellCells",
+          "damage"
+        ]
+      }
+    },
+    {
+      "id": "deterministic-damaged-profile",
+      "operation": "generate",
+      "args": [{"$fixture": "damagedRequest"}],
+      "repeat": 2,
+      "expect": {
+        "repeatDeepEqual": true,
+        "pathEquals": {
+          "seed": "hb-alien-vessel-damage-self-test-v1",
+          "profile": "damaged_recon",
+          "deckCount": 3,
+          "validation.ok": true,
+          "spatialLayout.validation.ok": true,
+          "hull.validation.ok": true,
+          "hull.shape": "connected-skin",
+          "hull.tightness": "standard",
+          "hull.clearance": 4
+        },
+        "pathExists": [
+          "semanticSummary",
+          "damage",
+          "spatialLayout",
+          "hull",
+          "validation"
+        ]
+      }
+    }
+  ],
+  "passCondition": "Every declared expectation must pass using the exact ordered canonical runtime scripts. Failure leaves the capability below self-test-passed/ready in that host."
+}
