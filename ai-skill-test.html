@@ -31,11 +31,12 @@
         <label for="skill">Registered skill</label>
         <select id="skill">
           <option value="binary-cube-laboratory">binary-cube-laboratory</option>
+          <option value="module-map-generation">module-map-generation</option>
         </select>
         <button id="run" type="button">Load and self-test</button>
       </div>
       <p id="summary" class="status">Not tested.</p>
-      <p class="muted">The loader accepts only registered packages, same-origin runtime paths, capability-allow-listed scripts, and contract-declared operations.</p>
+      <p class="muted">The loader accepts only registered packages, exact same-origin runtime script sets in canonical dependency order, capability-allow-listed scripts, and contract-declared operations.</p>
       <pre id="report" aria-live="polite">No report yet.</pre>
     </section>
   </main>
@@ -52,7 +53,7 @@
       run.addEventListener('click', async () => {
         run.disabled = true;
         summary.textContent = 'Testing registered package…';
-        reportNode.textContent = 'Loading discovery documents, package metadata, runtime, and deterministic tests.';
+        reportNode.textContent = 'Loading discovery documents, package metadata, ordered runtime scripts, and deterministic tests.';
         try {
           const report = await HBFoundrySkillLoader.loadAndTest(skill.value);
           summary.textContent = report.ready
