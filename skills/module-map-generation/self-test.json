@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "1.0.0",
+  "skill": "module-map-generation",
+  "capabilityId": "spatial.module-map.generate",
+  "runtimeScripts": [
+    "semantic-spatial-engine.js",
+    "semantic-content-populator.js",
+    "module-map-generator.js"
+  ],
+  "runtimeBlobShas": {
+    "semantic-spatial-engine.js": "a21aad5405120063e53cd54cbad2790ac33a2cb5",
+    "semantic-content-populator.js": "d21050da045fc1f7ccc9cda534e1c3786e43ef89",
+    "module-map-generator.js": "7946756583c16b531bca6ecd948e0cc66f73d7ac"
+  },
+  "runtimeExport": "generator.module_map",
+  "operationContractAuthority": "api/operation-contracts.json",
+  "properties": {
+    "deterministic": true,
+    "nonDestructive": true,
+    "credentialFree": true,
+    "externalNetworkRequiredAfterLoad": false
+  },
+  "fixtures": {
+    "deterministicRequest": {
+      "seed": "hb-module-map-portable-self-test-v1",
+      "locationArchetype": "generic",
+      "decks": 1,
+      "width": 120,
+      "height": 96,
+      "originCulture": "human",
+      "controller": "original-owners",
+      "occupancyState": "active",
+      "biome": "urban",
+      "climate": "temperate",
+      "season": "early-spring",
+      "weather": "clear",
+      "ecology": "domestic",
+      "creatureFamilies": ["humanoid"],
+      "hazardFamilies": ["structural"],
+      "materials": ["brick", "timber"],
+      "wealth": "modest",
+      "security": "watched",
+      "age": "established",
+      "condition": "serviceable",
+      "magicTech": "low-magic",
+      "lighting": "daylight",
+      "waterState": "dry",
+      "verticality": "flat",
+      "secretDensity": "low",
+      "traffic": "light",
+      "socialMode": "public",
+      "resourceProfile": "trade-goods",
+      "maintenance": "routine",
+      "contamination": "none",
+      "defenseDoctrine": "passive",
+      "narrativeTone": "neutral",
+      "creatureDensity": 3,
+      "hazardIntensity": 2,
+      "treasureDensity": 3,
+      "socialDensity": 4,
+      "dangerLevel": 3,
+      "adventurePurpose": "validation",
+      "rulesTarget": "open_d20",
+      "pruneDeadEnds": true,
+      "strict": true
+    },
+    "customRoleRequest": {
+      "seed": "hb-module-map-custom-self-test-v1",
+      "locationArchetype": "generic",
+      "decks": 1,
+      "width": 72,
+      "height": 56,
+      "roles": [
+        {"id": "entry", "role": "entry", "label": "Entry", "tags": ["entrance", "public"]},
+        {"id": "objective", "role": "objective", "label": "Objective", "tags": ["objective", "restricted"]}
+      ],
+      "adjacency": [["entry", "objective"]],
+      "originCulture": "human",
+      "controller": "original-owners",
+      "occupancyState": "active",
+      "biome": "urban",
+      "ecology": "domestic",
+      "creatureFamilies": ["humanoid"],
+      "hazardFamilies": ["structural"],
+      "materials": ["brick", "timber"],
+      "creatureDensity": 0,
+      "hazardIntensity": 0,
+      "treasureDensity": 0,
+      "socialDensity": 0,
+      "rulesTarget": "open_d20",
+      "pruneDeadEnds": true,
+      "strict": true
+    }
+  },
+  "tests": [
+    {
+      "id": "deterministic-default-program",
+      "operation": "generate",
+      "args": [{"$fixture": "deterministicRequest"}],
+      "repeat": 2,
+      "expect": {
+        "repeatDeepEqual": true,
+        "pathEquals": {
+          "seed": "hb-module-map-portable-self-test-v1",
+          "locationArchetype": "generic",
+          "deck": 0,
+          "deckCount": 1,
+          "spatialLayout.validation.ok": true,
+          "semanticProgram.source": "site-archetype-defaults",
+          "semanticProgram.layerPolicy": "full",
+          "siteProfile.seed": "hb-module-map-portable-self-test-v1",
+          "content.compatibility.id": "open_d20",
+          "content.provenance.locationArchetype": "generic"
+        },
+        "pathExists": [
+          "cells",
+          "spatialLayout.rooms",
+          "content.rooms",
+          "siteProfile.layers",
+          "provenance"
+        ]
+      }
+    },
+    {
+      "id": "custom-role-context-only-policy",
+      "operation": "generate",
+      "args": [{"$fixture": "customRoleRequest"}],
+      "repeat": 2,
+      "expect": {
+        "repeatDeepEqual": true,
+        "pathEquals": {
+          "seed": "hb-module-map-custom-self-test-v1",
+          "locationArchetype": "generic",
+          "spatialLayout.validation.ok": true,
+          "semanticProgram.source": "explicit-custom-roles",
+          "semanticProgram.layerPolicy": "context-only",
+          "content.compatibility.id": "open_d20"
+        },
+        "pathExists": [
+          "spatialLayout.rooms",
+          "semanticProgram.layers",
+          "siteProfile",
+          "content"
+        ]
+      }
+    }
+  ],
+  "passCondition": "Every declared expectation must pass using the exact ordered canonical runtime scripts. Failure leaves the capability below self-test-passed/ready in that host."
+}
