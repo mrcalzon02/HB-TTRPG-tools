@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -70,6 +71,212 @@ def unique_ids(records, field: str, label: str) -> set[str]:
     return seen
 
 
+def derive_manifest_path(skill: dict) -> str | None:
+    explicit = skill.get("manifestPath")
+    if isinstance(explicit, str) and explicit:
+        return explicit
+    skill_path = skill.get("path")
+    if not isinstance(skill_path, str) or "/" not in skill_path:
+        return None
+    return f"{skill_path.rsplit('/', 1)[0]}/manifest.json"
+
+
+def git_blob_sha(relative: str) -> str | None:
+    """Return the filtered Git blob SHA for the current worktree file when Git is available."""
+    path = ROOT / relative
+    if not path.is_file():
+        return None
+    try:
+        completed = subprocess.run(
+            ["git", "hash-object", f"--path={relative}", str(path)],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        warn(f"could not calculate Git blob SHA for {relative}: {exc}")
+        return None
+    value = completed.stdout.strip()
+    return value or None
+
+
+def validate_declared_blob(relative: str, expected_sha: str, context: str) -> None:
+    require_file(relative, context)
+    if not expected_sha:
+        error(f"{context} is missing a declared blob SHA for {relative}")
+        return
+    actual = git_blob_sha(relative)
+    if actual and actual != expected_sha:
+        error(
+            f"{context} blob SHA drift for {relative}: declared {expected_sha}, current {actual}"
+        )
+
+
+def validate_contract_provenance(capability_id: str, contract: dict) -> None:
+    validated = contract.get("validatedAgainst") if isinstance(contract, dict) else None
+    if not isinstance(validated, dict):
+        return
+    sources = validated.get("sources") or {}
+    if not isinstance(sources, dict) or not sources:
+        error(f"contract {capability_id} validatedAgainst must contain source blob SHAs")
+        return
+    for relative, expected_sha in sources.items():
+        if isinstance(relative, str) and isinstance(expected_sha, str):
+            validate_declared_blob(relative, expected_sha, f"contract {capability_id}")
+        else:
+            error(f"contract {capability_id} has invalid validatedAgainst source entry: {relative!r}")
+
+
+def validate_self_test_operations(
+    skill_name: str,
+    self_test: dict,
+    capability: dict,
+    contract: dict,
+) -> None:
+    invocation = capability.get("invocation") or {}
+    invocation_type = invocation.get("type")
+    tests = self_test.get("tests") or []
+    if not isinstance(tests, list) or not tests:
+        error(f"portable package {skill_name} self-test contains no tests")
+        return
+
+    for test in tests:
+        if not isinstance(test, dict):
+            error(f"portable package {skill_name} has invalid self-test record: {test!r}")
+            continue
+        operation = test.get("operation")
+        if not isinstance(operation, str) or not operation:
+            error(f"portable package {skill_name} self-test has missing operation")
+            continue
+        if invocation_type == "global-method":
+            expected = invocation.get("method") or contract.get("operation")
+            if operation != expected:
+                error(
+                    f"portable package {skill_name} self-test operation {operation} "
+                    f"does not match global method {expected}"
+                )
+            if contract.get("operation") and contract.get("operation") != operation:
+                error(
+                    f"portable package {skill_name} self-test operation {operation} "
+                    f"does not match operation contract {contract.get('operation')}"
+                )
+        elif invocation_type == "global-dispatch":
+            allowed = invocation.get("allowedOperations") or []
+            operations = contract.get("operations") or {}
+            if operation not in allowed:
+                error(
+                    f"portable package {skill_name} self-test operation is not capability-allow-listed: {operation}"
+                )
+            if operation not in operations:
+                error(
+                    f"portable package {skill_name} self-test operation lacks a canonical contract: {operation}"
+                )
+        else:
+            error(
+                f"portable package {skill_name} uses unsupported invocation type for self-test validation: "
+                f"{invocation_type!r}"
+            )
+
+
+def validate_portable_package(skill: dict, capability: dict, contract: dict) -> None:
+    skill_name = skill.get("name", "<unnamed-skill>")
+    manifest_path = derive_manifest_path(skill)
+    if not manifest_path:
+        return
+    manifest_file = ROOT / manifest_path
+    if not manifest_file.is_file():
+        if skill.get("manifestPath"):
+            error(f"skill {skill_name} declares missing companion manifest: {manifest_path}")
+        return
+
+    manifest = load_json(manifest_path)
+    if manifest.get("packageType") != "hb-agent-skill-companion":
+        error(f"portable package {skill_name} has unsupported packageType")
+    if (manifest.get("skill") or {}).get("name") != skill_name:
+        error(f"portable package {skill_name} manifest skill name mismatch")
+
+    capability_id = (manifest.get("skill") or {}).get("capabilityId")
+    if capability_id != capability.get("id"):
+        error(
+            f"portable package {skill_name} capability mismatch: manifest {capability_id!r}, "
+            f"resolved {capability.get('id')!r}"
+        )
+
+    runtime = manifest.get("runtime") or {}
+    if runtime.get("family") != "javascript" or runtime.get("class") != "browser-js":
+        error(f"portable browser package {skill_name} must declare javascript/browser-js runtime")
+    if runtime.get("sameOriginOnly") is not True or runtime.get("crossOriginCodeAllowed") is not False:
+        error(f"portable package {skill_name} must enforce same-origin-only runtime loading")
+
+    package_scripts = runtime.get("scripts") or []
+    capability_scripts = (capability.get("runtime") or {}).get("scripts") or []
+    if package_scripts != capability_scripts:
+        error(
+            f"portable package {skill_name} runtime scripts/order differ from capability registry: "
+            f"package={package_scripts!r}, capability={capability_scripts!r}"
+        )
+    if not package_scripts:
+        error(f"portable package {skill_name} declares no runtime scripts")
+    for script in package_scripts:
+        require_file(script, f"portable package {skill_name} runtime")
+
+    authoritative_path = runtime.get("authoritativePath")
+    if authoritative_path not in package_scripts:
+        error(
+            f"portable package {skill_name} authoritativePath must be one of the canonical runtime scripts"
+        )
+    expected_global = runtime.get("expectedGlobal")
+    if expected_global != (capability.get("invocation") or {}).get("global"):
+        error(
+            f"portable package {skill_name} expectedGlobal differs from capability invocation global"
+        )
+
+    self_test_path = (manifest.get("selfTest") or {}).get("path") or (manifest.get("authorities") or {}).get("selfTest")
+    if not isinstance(self_test_path, str) or not self_test_path:
+        error(f"portable package {skill_name} does not declare a self-test path")
+        return
+    require_file(self_test_path, f"portable package {skill_name} self-test")
+    if not (ROOT / self_test_path).is_file():
+        return
+
+    self_test = load_json(self_test_path)
+    if self_test.get("skill") not in (None, skill_name):
+        error(f"portable package {skill_name} self-test skill mismatch")
+    if self_test.get("capabilityId") != capability.get("id"):
+        error(f"portable package {skill_name} self-test capability mismatch")
+
+    self_scripts = self_test.get("runtimeScripts")
+    if isinstance(self_scripts, list) and self_scripts:
+        if self_scripts != package_scripts:
+            error(f"portable package {skill_name} self-test runtimeScripts differ from package scripts/order")
+    elif self_test.get("runtimePath"):
+        if len(package_scripts) != 1 or self_test.get("runtimePath") != package_scripts[0]:
+            error(f"portable package {skill_name} legacy self-test runtimePath does not match package runtime")
+    else:
+        error(f"portable package {skill_name} self-test declares no runtime path/script set")
+
+    blob_map = self_test.get("runtimeBlobShas")
+    if isinstance(blob_map, dict):
+        for script in package_scripts:
+            expected_sha = blob_map.get(script)
+            if not isinstance(expected_sha, str):
+                error(f"portable package {skill_name} self-test lacks blob SHA for {script}")
+            else:
+                validate_declared_blob(script, expected_sha, f"portable package {skill_name} self-test")
+    elif isinstance(self_test.get("runtimeBlobSha"), str):
+        if len(package_scripts) != 1:
+            error(f"portable package {skill_name} single runtimeBlobSha cannot cover multiple runtime scripts")
+        else:
+            validate_declared_blob(
+                package_scripts[0],
+                self_test.get("runtimeBlobSha"),
+                f"portable package {skill_name} self-test",
+            )
+
+    validate_self_test_operations(skill_name, self_test, capability, contract)
+
+
 def main() -> int:
     status_doc = load_json("api/ai/status-vocabulary.json")
     skills_doc = load_json("skills/index.json")
@@ -103,6 +310,11 @@ def main() -> int:
 
     capabilities = caps_doc.get("capabilities") or []
     capability_ids = unique_ids(capabilities, "id", "capability")
+    capability_by_id = {
+        item.get("id"): item
+        for item in capabilities
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
 
     resources = resources_doc.get("resources") or []
     resource_ids = unique_ids(resources, "id", "resource")
@@ -135,6 +347,21 @@ def main() -> int:
         if manifest_path:
             require_file(manifest_path, f"skill {name} companion manifest")
 
+        browser_caps = [
+            capability_by_id[cid]
+            for cid in skill.get("capabilityIds") or []
+            if cid in capability_by_id and capability_by_id[cid].get("mode") == "browser-js"
+        ]
+        derived_manifest = derive_manifest_path(skill)
+        if browser_caps and derived_manifest and (ROOT / derived_manifest).is_file():
+            if len(browser_caps) != 1:
+                error(
+                    f"portable package validator currently requires exactly one browser-js capability per package: {name}"
+                )
+            else:
+                cid = browser_caps[0].get("id")
+                validate_portable_package(skill, browser_caps[0], contract_caps.get(cid) or {})
+
     for resource in resources:
         if not isinstance(resource, dict):
             continue
@@ -164,6 +391,8 @@ def main() -> int:
         if mode == "browser-js" or invocation.get("type") in {"global-method", "global-dispatch"}:
             if cid not in contract_caps:
                 error(f"executable capability lacks operation contract: {cid}")
+            else:
+                validate_contract_provenance(cid, contract_caps[cid])
 
     entrypoints = manifest.get("entrypoints") or {}
     bootstrap_url = entrypoints.get("bootstrap")
@@ -219,6 +448,19 @@ def main() -> int:
             error("ai-access.html contains a hard-coded registered Agent Skills count")
         if "api/ai/bootstrap.txt" not in text:
             error("ai-access.html does not expose the bootstrap contract")
+
+    harness = ROOT / "ai-skill-test.html"
+    if harness.is_file():
+        text = harness.read_text(encoding="utf-8")
+        options = set(re.findall(r'<option\s+value="([^"]+)"', text))
+        for option in options:
+            if option not in skill_names:
+                error(f"ai-skill-test.html exposes an unregistered skill: {option}")
+            skill = next((item for item in skills if isinstance(item, dict) and item.get("name") == option), None)
+            if skill:
+                manifest_path = derive_manifest_path(skill)
+                if not manifest_path or not (ROOT / manifest_path).is_file():
+                    error(f"ai-skill-test.html exposes skill without companion manifest: {option}")
 
     llms = ROOT / "llms.txt"
     if llms.is_file():
