@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-propulsion-transit.schema.json",
   "title": "Black Light EXO Vessel Propulsion and Transit Installation",
-  "description": "Canon-safe record for conventional propulsion context and Black Light transit/FTL installation resolution. Conventional propulsion band and transit construction maturity are separate axes.",
+  "description": "Canon-safe record for conventional propulsion context and Black Light transit/FTL installation resolution. The ordinary propulsion P-band, family-specific transit Path P-level, and shared transit T-tier are distinct coordinates; the latter two retain the live runtime coupling rule.",
   "type": "object",
   "additionalProperties": false,
   "required": ["recordType","schemaVersion","authoritySnapshot","supplementMode","identity","vessel","conventionalPropulsion","transit","machineChain","routes","navigation","operations","maintenance","signatures","failureModes","infrastructure","validation","provenance"],
   "properties": {
     "recordType": {"const":"exoVesselPropulsionTransitInstallation"},
-    "schemaVersion": {"const":"1.0.0"},
+    "schemaVersion": {"const":"1.1.0"},
     "authoritySnapshot": {"$ref":"#/$defs/authoritySnapshot"},
     "supplementMode": {"enum":["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"]},
     "identity": {
@@ -47,11 +47,15 @@
     },
     "transit": {
       "type":"object","additionalProperties":false,
-      "required":["family","trueFtl","constructionMaturity","pathImplementation","infrastructureClass","energyArchitecture","canonStatus"],
+      "required":["family","trueFtl","pathLevelKey","pathLevelLabel","sharedCapabilityTierKey","sharedCapabilityTierLabel","capabilityCoupling","pathImplementation","infrastructureClass","energyArchitecture","canonStatus"],
       "properties":{
         "family":{"$ref":"#/$defs/transitFamily"},
         "trueFtl":{"type":["boolean","null"]},
-        "constructionMaturity":{"enum":["P0","P1","P2","P3","P4","P5","P6",null]},
+        "pathLevelKey":{"$ref":"#/$defs/pathLevelKey"},
+        "pathLevelLabel":{"type":["string","null"]},
+        "sharedCapabilityTierKey":{"$ref":"#/$defs/sharedCapabilityTierKey"},
+        "sharedCapabilityTierLabel":{"type":["string","null"]},
+        "capabilityCoupling":{"$ref":"#/$defs/capabilityCoupling"},
         "pathImplementation":{"type":["string","null"]},
         "infrastructureClass":{"$ref":"#/$defs/infrastructureClass"},
         "energyArchitecture":{"type":["string","null"]},
@@ -142,14 +146,15 @@
     },
     "validation": {
       "type":"object","additionalProperties":false,
-      "required":["valid","sourceStatus","warnings","unresolved","chronologyAuthorized","axisSeparationVerified","machineChainComplete","routesComplete"],
+      "required":["valid","sourceStatus","warnings","unresolved","chronologyAuthorized","scaleCoordinatesSeparated","pathTierCouplingVerified","machineChainComplete","routesComplete"],
       "properties":{
         "valid":{"type":"boolean"},
         "sourceStatus":{"$ref":"#/$defs/canonStatus"},
         "warnings":{"type":"array","items":{"type":"string"}},
         "unresolved":{"type":"array","items":{"type":"string"}},
         "chronologyAuthorized":{"type":"boolean"},
-        "axisSeparationVerified":{"const":true},
+        "scaleCoordinatesSeparated":{"const":true},
+        "pathTierCouplingVerified":{"type":"boolean"},
         "machineChainComplete":{"type":"boolean"},
         "routesComplete":{"type":"boolean"}
       }
@@ -160,7 +165,21 @@
     "canonStatus":{"enum":["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"]},
     "basisKey":{"enum":["TERRESTRIAL_ELECTROMECHANICAL","AQUATIC_ELECTROCHEMICAL_HYDRAULIC","CRYOGENIC_AMMONIA_HALOCARBON","GAS_GIANT_FLUIDIC_ELECTROSTATIC","BIOLOGICAL_SYMBIOTIC","MINERAL_PIEZOELECTRIC_PHOTONIC","FIELD_MEDIATED_POSTMATERIAL"]},
     "transitFamily":{"enum":["metric-envelope","gravitic-plane","slipstream-shear","q-lattice","n-manifold","fold-jump","wormhole-gate","phase-displacement","inertial-torch",null]},
+    "pathLevelKey":{"enum":["p0","p1","p2","p3","p4","p5","p6",null]},
+    "sharedCapabilityTierKey":{"enum":["t0","t1","t2","t3","t4","t5","t6","t7","t8",null]},
     "infrastructureClass":{"enum":["SELF_CONTAINED_SHIP_DRIVE","BEACON_ASSISTED_NAVIGATION","PREPARED_TRANSIT_CORRIDOR","PAIRED_MOBILE_ORBITAL_GATES","FIXED_STELLAR_GATEWORKS",null]},
+    "capabilityCoupling": {
+      "type":"object","additionalProperties":false,
+      "required":["pathControlsSharedBaseline","defaultMappedTierKey","familyClampApplied","correctionApplied","correctionNote","source"],
+      "properties":{
+        "pathControlsSharedBaseline":{"type":"boolean"},
+        "defaultMappedTierKey":{"$ref":"#/$defs/sharedCapabilityTierKey"},
+        "familyClampApplied":{"type":"boolean"},
+        "correctionApplied":{"type":"boolean"},
+        "correctionNote":{"type":["string","null"]},
+        "source":{"const":"blacklight-exo-ftl-path-level-runtime.js#STAGE_TO_TIER + blacklight-exo-ftl-path-level-controller.js"}
+      }
+    },
     "authoritySnapshot": {
       "type":"object","additionalProperties":false,
       "required":["repository","branch","sourceCommit","authorityDocument","registryVersion","generatorId","generatorVersion","seed"],
@@ -169,7 +188,7 @@
         "branch":{"const":"main"},
         "sourceCommit":{"type":"string","pattern":"^[0-9a-f]{40}$"},
         "authorityDocument":{"const":"docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md"},
-        "registryVersion":{"const":"1.0.0"},
+        "registryVersion":{"const":"1.1.0"},
         "generatorId":{"type":"string","minLength":1},
         "generatorVersion":{"type":"string","minLength":1},
         "seed":{"type":["string","null"]}
