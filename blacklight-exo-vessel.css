@@ -41,7 +41,27 @@
 .exo-vessel-card{padding:12px}
 .exo-vessel-table th,.exo-vessel-table td{padding:8px 9px}
 
+/* Extension controls belong behind one deliberate disclosure rather than
+   continuously expanding the primary mission-definition grid. */
+.exo-vessel-advanced-controls{margin-top:9px;border:1px solid rgba(217,168,79,.2);border-radius:10px;background:rgba(0,0,0,.16)}
+.exo-vessel-advanced-controls>summary{cursor:pointer;list-style:none;padding:9px 11px;color:#d9a84f;font-size:.66rem;font-weight:900;letter-spacing:.075em;text-transform:uppercase}
+.exo-vessel-advanced-controls>summary::-webkit-details-marker{display:none}
+.exo-vessel-advanced-controls>summary::after{content:"＋";float:right}
+.exo-vessel-advanced-controls[open]>summary::after{content:"−"}
+.exo-vessel-advanced-intro{margin:0;padding:0 11px 9px;font-size:.74rem;line-height:1.4}
+.exo-vessel-advanced-control-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:7px 9px;padding:0 11px 11px}
+.exo-vessel-advanced-control-grid label{display:grid;gap:4px;min-width:0}
+.exo-vessel-advanced-control-grid label>span{font-size:.6rem;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#cfc5b3}
+.exo-vessel-advanced-control-grid input,.exo-vessel-advanced-control-grid select{width:100%;min-width:0;min-height:33px;border:1px solid var(--vessel-line);border-radius:7px;background:rgba(0,0,0,.28);color:#f1eadf;padding:6px 8px;font-size:.74rem}
+.exo-vessel-context-actions{margin-top:8px;gap:6px}
+.exo-vessel-context-actions .bli-action{min-height:32px;padding:6px 10px;font-size:.68rem}
+
+/* The hero button is the single visible 3D entry. Keep the launcher node in
+   the DOM because the viewer runtime validates it as static authority. */
+#exo-vessel-campaign-3d-launcher{display:none!important}
+
 @media(min-width:2200px){.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:repeat(11,minmax(0,1fr))}.exo-vessel-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
 @media(max-width:1200px){.exo-vessel-hero{grid-template-columns:1fr}.exo-vessel-hero .bli-directory-list{justify-content:flex-start}}
 @media(max-width:900px){.exo-vessel-hero,.exo-vessel-shell{width:calc(100% - 20px)}.exo-vessel-overview{grid-template-columns:1fr}.exo-vessel-visual{min-height:260px}}
+@media(max-width:700px){.exo-vessel-advanced-control-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.exo-vessel-hero,.exo-vessel-shell{width:calc(100% - 12px)}.exo-vessel-hero{padding:9px}.exo-vessel-hero .bli-directory-panel{grid-template-columns:1fr}.exo-vessel-hero .bli-directory-list{align-items:stretch}.exo-vessel-hero .bli-directory-item{flex:1 1 145px}.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:1fr}.exo-vessel-visual{min-height:220px}.exo-vessel-grid{grid-template-columns:1fr}}

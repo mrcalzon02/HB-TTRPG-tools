@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   if(globalThis.BlacklightExoVesselDiegeticControls)return;
-  const ROOT_SELECTOR='.exo-vessel-body main';
+  const ROOT_SELECTOR='#exo-vessel-campaign-damage-editor';
+  const OBSERVER_ROOT='.exo-vessel-body main';
   const CONFIG={
     'exo-vessel-crew':{minimum:1,maximum:10000,step:1,scale:'log',unit:'crew'},
     'exo-vessel-endurance':{minimum:1,maximum:3650,step:1,scale:'log',unit:'days'},
@@ -60,9 +61,23 @@
     slider.addEventListener('input',()=>{automaticMode=false;input.value=String(positionToValue(slider.value,config));input.dispatchEvent(new Event('input',{bubbles:true}));render();});slider.addEventListener('change',()=>dispatch(input));decrease.addEventListener('click',()=>apply(finite(input.value,config.minimum)-config.step));increase.addEventListener('click',()=>apply(finite(input.value,config.minimum)+config.step));automaticButton.addEventListener('click',()=>{if(automaticMode)apply(config.minimum);else{automaticMode=true;input.value='';dispatch(input);render();}});input.addEventListener('input',render);input.addEventListener('change',render);render();
   }
   function enhance(control){if(control.matches('select'))enhanceSelect(control);else if(control.matches('input[type="number"]'))enhanceNumber(control);}
-  function enhanceAll(root=document){const host=root.querySelector?.(ROOT_SELECTOR)||root;for(const control of host?.querySelectorAll?.('select,input[type="number"]')||[])enhance(control);}
-  function install(){enhanceAll();const root=document.querySelector(ROOT_SELECTOR);if(!root)return;const observer=new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes){if(node.nodeType!==1)continue;if(node.matches?.('select,input[type="number"]'))enhance(node);enhanceAll(node);}});observer.observe(root,{childList:true,subtree:true});}
-  const api=Object.freeze({version:1,enhanceAll,enhanceSelect,enhanceNumber,configuration:CONFIG});
+  function scopedHost(root=document){if(root.matches?.(ROOT_SELECTOR))return root;return root.querySelector?.(ROOT_SELECTOR)||null;}
+  function enhanceAll(root=document){const host=scopedHost(root);if(!host)return;for(const control of host.querySelectorAll('select,input[type="number"]'))enhance(control);}
+  function install(){
+    enhanceAll();
+    const root=document.querySelector(OBSERVER_ROOT);if(!root)return;
+    const observer=new MutationObserver(records=>{
+      for(const record of records)for(const added of record.addedNodes){
+        if(added.nodeType!==1)continue;
+        if(added.matches?.(ROOT_SELECTOR)||added.querySelector?.(ROOT_SELECTOR)){enhanceAll(added);continue;}
+        if(!added.closest?.(ROOT_SELECTOR))continue;
+        if(added.matches?.('select,input[type="number"]'))enhance(added);
+        for(const control of added.querySelectorAll?.('select,input[type="number"]')||[])enhance(control);
+      }
+    });
+    observer.observe(root,{childList:true,subtree:true});
+  }
+  const api=Object.freeze({version:2,enhanceAll,refreshAll:enhanceAll,enhanceSelect,enhanceNumber,configuration:CONFIG});
   globalThis.BlacklightExoVesselDiegeticControls=api;
   document.readyState==='loading'?document.addEventListener('DOMContentLoaded',install,{once:true}):install();
 })();
