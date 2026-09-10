@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-arnock-ftl-family-embodiment-matrix.schema.json",
+  "title": "Ar'nock FTL Family Embodiment Matrix",
+  "description": "Canon-safe scenario embodiment matrix. It applies confirmed Ar'nock constraints to confirmed Black Light transit families without asserting that any family is canonically Ar'nock.",
+  "type": "object",
+  "required": ["recordType", "recordVersion", "species", "authorityMode", "familyAssociationStatus", "sourceChain", "families", "generatorContract", "canonSafeguards"],
+  "properties": {
+    "recordType": {"const": "arnockFtlFamilyEmbodimentMatrix"},
+    "recordVersion": {"type": "string"},
+    "species": {"const": "Ar'nock"},
+    "authorityMode": {"enum": ["LABELED_DERIVATION", "LABELED_PROPOSAL"]},
+    "familyAssociationStatus": {"const": "MIXED"},
+    "sourceChain": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+    "families": {
+      "type": "object",
+      "required": ["metric-envelope", "gravitic-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement"],
+      "additionalProperties": false,
+      "properties": {
+        "metric-envelope": {"$ref": "#/$defs/family"},
+        "gravitic-plane": {"$ref": "#/$defs/family"},
+        "slipstream-shear": {"$ref": "#/$defs/family"},
+        "q-lattice": {"$ref": "#/$defs/family"},
+        "n-manifold": {"$ref": "#/$defs/family"},
+        "fold-jump": {"$ref": "#/$defs/family"},
+        "wormhole-gate": {"$ref": "#/$defs/family"},
+        "phase-displacement": {"$ref": "#/$defs/family"}
+      }
+    },
+    "generatorContract": {"type": "object", "required": ["selectionRule", "outputStatus", "provenanceRule", "unknownRule"], "additionalProperties": true},
+    "canonSafeguards": {"type": "array", "minItems": 4, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "family": {
+      "type": "object",
+      "required": ["familyStatus", "associationStatus", "physicalInvariant", "machinery", "power", "navigation", "control", "maintenance", "signature", "failure", "infrastructure", "scaling", "manualProcedure", "provenance"],
+      "properties": {
+        "familyStatus": {"const": "CONFIRMED"},
+        "associationStatus": {"const": "MIXED"},
+        "physicalInvariant": {"type": "string", "minLength": 1},
+        "machinery": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+        "power": {"type": "string", "minLength": 1},
+        "navigation": {"type": "string", "minLength": 1},
+        "control": {"type": "string", "minLength": 1},
+        "maintenance": {"type": "string", "minLength": 1},
+        "signature": {"type": "string", "minLength": 1},
+        "failure": {"type": "string", "minLength": 1},
+        "infrastructure": {"type": "string", "minLength": 1},
+        "scaling": {"type": "string", "minLength": 1},
+        "manualProcedure": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+        "provenance": {"type": "object", "required": ["familySource", "speciesSource", "associationSource"], "additionalProperties": true}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
