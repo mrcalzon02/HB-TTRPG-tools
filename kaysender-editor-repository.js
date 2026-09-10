@@ -9,6 +9,14 @@
 
   const INDEX_KEY = 'hb-ttrpg-tools:kaysender-editor-record-index';
   const RECORD_PREFIX = 'hb-ttrpg-tools:kaysender-editor-record:';
+  const REQUIRED_INDEX_FIELDS = Object.freeze([
+    'generation',
+    'lineageComplete',
+    'parentProfileId',
+    'parentRevision',
+    'rootProfileId',
+    'rootRevision'
+  ]);
 
   function storage() {
     return window.localStorage || null;
@@ -236,8 +244,73 @@
     }
   }
 
+  function storedProfileIds(target) {
+    const profileIds = [];
+    for (let index = 0; index < target.length; index += 1) {
+      const key = target.key(index);
+      if (key?.startsWith(RECORD_PREFIX)) profileIds.push(key.slice(RECORD_PREFIX.length));
+    }
+    return profileIds.sort();
+  }
+
+  function indexEntryIsCurrent(entry) {
+    return Boolean(
+      entry &&
+      typeof entry === 'object' &&
+      !Array.isArray(entry) &&
+      String(entry.profileId || '').trim() &&
+      REQUIRED_INDEX_FIELDS.every(field => Object.prototype.hasOwnProperty.call(entry, field))
+    );
+  }
+
+  function indexHealth() {
+    const target = storage();
+    if (!target) return { ok: false, stale: false, message: 'Local storage is unavailable.' };
+    const rawIndex = target.getItem(INDEX_KEY);
+    let parsedIndex = [];
+    let indexReadable = true;
+    if (rawIndex !== null) {
+      try {
+        parsedIndex = JSON.parse(rawIndex);
+        if (!Array.isArray(parsedIndex)) {
+          parsedIndex = [];
+          indexReadable = false;
+        }
+      } catch {
+        indexReadable = false;
+      }
+    }
+    const entries = indexReadable ? parsedIndex : [];
+    const storedIds = storedProfileIds(target);
+    const indexedIds = entries.map(item => item?.profileId).filter(Boolean).sort();
+    const storedSet = new Set(storedIds);
+    const indexedSet = new Set(indexedIds);
+    const missing = storedIds.filter(profileId => !indexedSet.has(profileId));
+    const orphaned = indexedIds.filter(profileId => !storedSet.has(profileId));
+    const outdated = entries
+      .filter(item => storedSet.has(item?.profileId) && !indexEntryIsCurrent(item))
+      .map(item => item.profileId);
+    const duplicates = indexedIds.filter((profileId, index) => index > 0 && profileId === indexedIds[index - 1]);
+    const stale = !indexReadable || missing.length > 0 || orphaned.length > 0 || outdated.length > 0 || duplicates.length > 0;
+    return {
+      ok: true,
+      stale,
+      indexReadable,
+      storedCount: storedIds.length,
+      indexedCount: entries.length,
+      missing,
+      orphaned,
+      outdated,
+      duplicates,
+      message: stale
+        ? 'Saved record index metadata is stale and should be rebuilt from canonical records.'
+        : `Saved record index is current for ${storedIds.length} record${storedIds.length === 1 ? '' : 's'}.`
+    };
+  }
+
   function list(options = {}) {
     const target = storage();
+    ensureIndexCurrent();
     const liveEntries = readIndex().filter(item => target?.getItem(recordKey(item.profileId)) !== null);
     return sortEntries(liveEntries.filter(item => {
       if (options.profileType && item.profileType !== options.profileType) return false;
@@ -295,11 +368,24 @@
     }
   }
 
+  function ensureIndexCurrent() {
+    const health = indexHealth();
+    if (!health.ok || !health.stale) return { ...health, repaired: false };
+    const repair = repairIndex();
+    return {
+      ...repair,
+      repaired: repair.ok,
+      previousHealth: health
+    };
+  }
+
   window.KaysenderEditorRepository = Object.freeze({
     save,
     load,
     remove,
     list,
+    indexHealth,
+    ensureIndexCurrent,
     repairIndex,
     indexKey: INDEX_KEY,
     recordPrefix: RECORD_PREFIX
