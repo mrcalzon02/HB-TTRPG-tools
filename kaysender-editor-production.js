@@ -355,42 +355,48 @@
   function unresolvedParentEnvelope(reference) {
     const sourceAdapter = adapters().find(adapter => adapter.profileType === reference.profileType);
     const timestamp = reference.sourceUpdatedAt || new Date().toISOString();
-    return {
-      editorEnvelopeVersion: Kernel.ENVELOPE_VERSION,
+    const profileSchemaVersion = sourceAdapter?.currentSchemaVersion || '1.0.0';
+    const placeholder = Kernel.createEnvelope({
+      name: reference.name || 'Unavailable Parent',
+      profileType: reference.profileType,
+      schemaVersion: profileSchemaVersion
+    }, {
       profileId: reference.profileId,
       profileType: reference.profileType,
-      profileSchemaVersion: sourceAdapter?.currentSchemaVersion || '1.0.0',
-      revision: reference.revision,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-      name: reference.name || 'Unavailable Parent',
-      provenance: {
-        editorId: sourceAdapter?.id || 'unresolved-parent-reference',
-        moduleId: sourceAdapter?.moduleId || 'unresolved-parent-reference',
-        origin: 'unresolved-inheritance-reference',
-        importedAt: null,
-        clonedFromProfileId: null,
-        migrationLog: []
-      },
-      inheritance: [],
-      locks: [],
-      diagnostics: [Kernel.diagnostic('warning', 'inherited-source-data-missing', `Embedded context for ${reference.profileId} is unavailable.`)],
-      data: {
-        name: reference.name || 'Unavailable Parent',
-        profileType: reference.profileType,
-        schemaVersion: sourceAdapter?.currentSchemaVersion || '1.0.0'
-      }
-    };
+      profileSchemaVersion,
+      editorId: sourceAdapter?.id || 'unresolved-parent-reference',
+      moduleId: sourceAdapter?.moduleId || 'unresolved-parent-reference',
+      origin: 'unresolved-inheritance-reference',
+      incrementRevision: false
+    });
+    placeholder.revision = reference.revision;
+    placeholder.createdAt = timestamp;
+    placeholder.updatedAt = timestamp;
+    placeholder.name = reference.name || 'Unavailable Parent';
+    placeholder.diagnostics = [
+      ...Kernel.validateEnvelope(placeholder, [reference.profileType]),
+      Kernel.diagnostic('warning', 'inherited-source-data-missing', `Embedded context for ${reference.profileId} is unavailable.`)
+    ];
+    return placeholder;
   }
 
   function preserveUnresolvedParent(panel, definition, reference) {
     const placeholder = unresolvedParentEnvelope(reference);
+    const validation = Kernel.validateEnvelope(placeholder, [reference.profileType]);
+    if (validation.some(item => item.severity === 'error')) {
+      renderDiagnostics([
+        ...validation,
+        Kernel.diagnostic('error', 'unresolved-parent-placeholder-invalid', `Pinned ${definition.id} ${reference.profileId} could not be preserved as a valid canonical placeholder.`)
+      ]);
+      return false;
+    }
     panel.dataset[definition.contextDatasetKey] = '';
     panel.dataset[definition.envelopeDatasetKey] = JSON.stringify(placeholder);
     const textarea = panel.querySelector(`#${definition.textareaId}`);
     if (textarea) textarea.value = JSON.stringify(placeholder, null, 2);
     const status = definition.statusId ? panel.querySelector(`#${definition.statusId}`) : null;
     if (status) status.textContent = `Pinned ${definition.id} ${reference.profileId} revision ${reference.revision} is retained, but its embedded context is unavailable.`;
+    return true;
   }
 
   function applyEnvelope(adapter, panel, envelope) {
@@ -403,12 +409,16 @@
       if (sourceRecord) {
         const restored = applyParentRecord(panel, definition, sourceRecord, reference);
         if (!restored && reference) {
-          preserveUnresolvedParent(panel, definition, reference);
-          restorationDiagnostics.push(Kernel.diagnostic('error', 'pinned-parent-restore-failed', `Could not restore pinned ${definition.id} ${reference.profileId}; its reference was retained.`, 'inheritance'));
+          const preserved = preserveUnresolvedParent(panel, definition, reference);
+          restorationDiagnostics.push(Kernel.diagnostic(preserved ? 'error' : 'error', 'pinned-parent-restore-failed', preserved
+            ? `Could not restore pinned ${definition.id} ${reference.profileId}; its canonical unresolved reference was retained.`
+            : `Could not restore or preserve pinned ${definition.id} ${reference.profileId}.`, 'inheritance'));
         }
       } else if (reference) {
-        preserveUnresolvedParent(panel, definition, reference);
-        restorationDiagnostics.push(Kernel.diagnostic('warning', 'inherited-source-data-missing', `The record retains a ${definition.relationship} reference to ${reference.profileId}, but its embedded parent context is missing.`, 'inheritance'));
+        const preserved = preserveUnresolvedParent(panel, definition, reference);
+        restorationDiagnostics.push(Kernel.diagnostic(preserved ? 'warning' : 'error', preserved ? 'inherited-source-data-missing' : 'unresolved-parent-preservation-failed', preserved
+          ? `The record retains a ${definition.relationship} reference to ${reference.profileId}, but its embedded parent context is missing.`
+          : `The record's ${definition.relationship} reference to ${reference.profileId} could not be preserved as a valid canonical placeholder.`, 'inheritance'));
       } else {
         clearParentImport(panel, definition);
       }
