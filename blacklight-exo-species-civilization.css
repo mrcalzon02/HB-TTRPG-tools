@@ -1,1 +1,109 @@
-.exo-species-body{min-height:100vh;background:radial-gradient(circle at 20% 0%,rgba(62,125,145,.13),transparent 30rem),radial-gradient(circle at 85% 10%,rgba(217,168,79,.12),transparent 28rem),#080908}.exo-species-shell{display:grid;gap:22px}.exo-species-hero{background:radial-gradient(circle at 80% 30%,rgba(84,160,176,.16),transparent 30rem),linear-gradient(145deg,rgba(14,18,19,.97),rgba(5,6,6,.99))}.exo-species-controls{border-color:rgba(94,171,187,.26)}.exo-species-control-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.exo-species-control-grid label{display:grid;gap:7px}.exo-species-control-grid label span{font-size:.72rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#cfc5b3}.exo-species-control-grid input,.exo-species-control-grid select{width:100%;border:1px solid rgba(217,168,79,.27);border-radius:12px;background:rgba(0,0,0,.34);color:#f4efe5;padding:11px 12px;font:inherit}.exo-species-overview{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.7fr);gap:18px}.exo-species-visual-panel,.exo-species-contact-panel{border:1px solid rgba(217,168,79,.24);border-radius:24px;background:linear-gradient(145deg,rgba(22,25,25,.96),rgba(7,8,8,.98));padding:22px;box-shadow:0 18px 44px rgba(0,0,0,.28)}.exo-species-visual-panel header h2,.exo-species-contact-panel h2{margin:.2rem 0 .5rem}.exo-species-visual-panel header p:last-child,.exo-species-contact-panel>p{color:#c8c0b0;line-height:1.6}.exo-species-visual-panel svg{display:block;width:100%;min-height:360px;margin-top:10px;border:1px solid rgba(94,171,187,.16);border-radius:20px;background:radial-gradient(circle at 50% 48%,rgba(73,137,151,.14),transparent 34%),linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),rgba(0,0,0,.22);background-size:auto,32px 32px,32px 32px,auto}.exo-glyph-core{fill:rgba(217,168,79,.18);stroke:#d9a84f;stroke-width:4}.exo-glyph-limb{stroke:#69a9b8;stroke-width:14;stroke-linecap:round}.exo-glyph-joint{fill:#0c1112;stroke:#69a9b8;stroke-width:4}.exo-glyph-sense{fill:#d8f0f4;stroke:#69a9b8;stroke-width:3}.exo-glyph-aura{fill:none;stroke:rgba(94,171,187,.35);stroke-width:3;stroke-dasharray:7 9}.exo-glyph-organ{fill:rgba(217,168,79,.45)}.exo-species-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.exo-species-badges span{border:1px solid rgba(94,171,187,.3);border-radius:999px;padding:5px 9px;color:#d5eef2;background:rgba(94,171,187,.08);font-size:.72rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase}.exo-contact-meter{height:12px;border:1px solid rgba(217,168,79,.26);border-radius:999px;overflow:hidden;background:rgba(0,0,0,.3);margin:18px 0}.exo-contact-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#5aa977,#d9a84f,#c85345);transition:width .35s ease}.exo-species-data{display:grid;grid-template-columns:minmax(110px,.8fr) minmax(0,1.2fr);gap:8px 14px;margin:0}.exo-species-data dt{color:#a9a091;font-size:.72rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.exo-species-data dd{margin:0;color:#f0eadf}.exo-dossier-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.exo-dossier-card{border:1px solid rgba(217,168,79,.21);border-radius:17px;padding:16px;background:rgba(255,255,255,.025)}.exo-dossier-card h3{margin:0 0 7px;color:#f4efe5;font-size:1rem}.exo-dossier-card p{margin:0;color:#cfc7b7;line-height:1.55}.exo-dossier-card small{display:block;margin-bottom:8px;color:#69a9b8;font-size:.68rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.exo-faction-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.exo-faction-card{border:1px solid rgba(94,171,187,.24);border-radius:18px;padding:17px;background:linear-gradient(145deg,rgba(17,24,25,.82),rgba(7,8,8,.9))}.exo-faction-card h3{margin:0}.exo-faction-card p{color:#cfc7b7;line-height:1.55}.exo-faction-meta{display:flex;flex-wrap:wrap;gap:7px}.exo-faction-meta span{border:1px solid rgba(217,168,79,.22);border-radius:999px;padding:4px 8px;color:#d8cfbf;font-size:.68rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase}.exo-operational-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.exo-operational-grid article{border:1px solid rgba(217,168,79,.2);border-radius:18px;padding:17px;background:rgba(255,255,255,.025)}.exo-operational-grid h3{margin-top:0}.exo-operational-grid ul{margin:.5rem 0 0;padding-left:1.15rem;color:#d7cebe}.exo-operational-grid li{margin:.45rem 0;line-height:1.5}.exo-risk-low{color:#8ed0a3}.exo-risk-moderate{color:#d9c06d}.exo-risk-high{color:#e08a67}.exo-risk-severe{color:#ef6a5a}.exo-fade-in{animation:exoFade .24s ease}@keyframes exoFade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}@media (max-width:1050px){.exo-species-control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exo-species-overview{grid-template-columns:1fr}.exo-dossier-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:720px){.exo-species-control-grid,.exo-dossier-grid,.exo-faction-grid,.exo-operational-grid{grid-template-columns:1fr}.exo-species-visual-panel,.exo-species-contact-panel{padding:16px}.exo-species-data{grid-template-columns:1fr}.exo-species-data dd{margin-bottom:8px}.exo-species-visual-panel svg{min-height:280px}}
+.exo-species-body{min-height:100vh;background:radial-gradient(circle at 20% 0%,rgba(62,125,145,.13),transparent 30rem),radial-gradient(circle at 85% 10%,rgba(217,168,79,.12),transparent 28rem),#080908}
+.exo-species-shell{width:calc(100% - 24px);max-width:none;margin:10px auto 36px;display:grid;gap:10px}
+.exo-species-commandbar{grid-template-columns:minmax(220px,.65fr) auto minmax(420px,1.35fr);gap:10px 16px;padding:9px 11px}
+.exo-species-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px}
+.exo-species-actions .bli-action{min-height:32px;padding:6px 10px;font-size:.69rem;white-space:nowrap}
+.exo-species-summary{gap:5px}
+.exo-species-summary span{gap:5px;max-width:260px;text-transform:none;letter-spacing:0}
+.exo-species-summary strong{color:#a99f90;font-size:.56rem;font-weight:900;letter-spacing:.055em;text-transform:uppercase}
+.exo-species-summary b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f4efe5;font-size:.66rem;font-weight:850}
+
+.exo-source-context{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0;padding:9px 11px;border:1px solid rgba(94,171,187,.34);border-left:3px solid rgba(94,171,187,.68);border-radius:12px;background:linear-gradient(145deg,rgba(16,28,31,.9),rgba(7,9,9,.96))}
+.exo-source-context[hidden]{display:none}
+.exo-source-context>div{min-width:0}
+.exo-source-context .bli-eyebrow{margin:0 0 2px;font-size:.58rem}
+.exo-source-context h2{margin:0;font-size:.9rem}
+.exo-source-context p:last-child{margin:3px 0 0;max-width:none;color:#cfe1e4;font-size:.69rem;line-height:1.35}
+.exo-source-context .bli-action{flex:0 0 auto;min-height:32px;padding:6px 10px;font-size:.68rem}
+
+.exo-species-controls{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:end;margin:0;padding:8px 10px;border:1px solid rgba(94,171,187,.26);border-radius:13px;background:rgba(7,10,11,.66)}
+.exo-species-control-head{min-width:200px;max-width:300px;padding:2px 4px}
+.exo-species-control-head h2{margin:0;color:#f4efe5;font-size:.88rem;line-height:1.1}
+.exo-species-control-head p{margin:3px 0 0;color:#9fa9a8;font-size:.65rem;line-height:1.35}
+.exo-species-control-grid{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:7px}
+.exo-species-control-grid label{display:grid;gap:4px;min-width:0;border:1px solid rgba(217,168,79,.16);border-radius:9px;padding:7px 8px;background:rgba(255,255,255,.024)}
+.exo-species-control-grid label span{font-size:.57rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#aaa191}
+.exo-species-control-grid input,.exo-species-control-grid select{width:100%;min-height:32px;border:1px solid rgba(217,168,79,.25);border-radius:7px;background:rgba(0,0,0,.34);color:#f4efe5;padding:6px 8px;font:inherit;font-size:.72rem}
+
+.exo-species-overview{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(300px,.62fr);gap:10px}
+.exo-species-visual-panel,.exo-species-contact-panel{border:1px solid rgba(217,168,79,.22);border-radius:14px;background:linear-gradient(145deg,rgba(22,25,25,.96),rgba(7,8,8,.98));padding:12px;box-shadow:0 14px 38px rgba(0,0,0,.24)}
+.exo-species-visual-panel header h2,.exo-species-contact-panel h2{margin:.12rem 0 .35rem;font-size:1.05rem}
+.exo-species-visual-panel header p:last-child,.exo-species-contact-panel>p{margin:.25rem 0;color:#c8c0b0;font-size:.72rem;line-height:1.42}
+.exo-species-visual-panel .bli-eyebrow,.exo-species-contact-panel .bli-eyebrow{margin:0 0 2px;font-size:.57rem}
+.exo-species-visual-panel svg{display:block;width:100%;height:clamp(300px,38vh,430px);min-height:0;margin-top:7px;border:1px solid rgba(94,171,187,.16);border-radius:11px;background:radial-gradient(circle at 50% 48%,rgba(73,137,151,.14),transparent 34%),linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),rgba(0,0,0,.22);background-size:auto,32px 32px,32px 32px,auto}
+.exo-glyph-core{fill:rgba(217,168,79,.18);stroke:#d9a84f;stroke-width:4}
+.exo-glyph-limb{stroke:#69a9b8;stroke-width:14;stroke-linecap:round}
+.exo-glyph-joint{fill:#0c1112;stroke:#69a9b8;stroke-width:4}
+.exo-glyph-sense{fill:#d8f0f4;stroke:#69a9b8;stroke-width:3}
+.exo-glyph-aura{fill:none;stroke:rgba(94,171,187,.35);stroke-width:3;stroke-dasharray:7 9}
+.exo-glyph-organ{fill:rgba(217,168,79,.45)}
+.exo-species-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.exo-species-badges span{border:1px solid rgba(94,171,187,.3);border-radius:999px;padding:4px 7px;color:#d5eef2;background:rgba(94,171,187,.08);font-size:.59rem;font-weight:850;letter-spacing:.045em;text-transform:uppercase}
+.exo-contact-meter{height:8px;border:1px solid rgba(217,168,79,.26);border-radius:999px;overflow:hidden;background:rgba(0,0,0,.3);margin:10px 0}
+.exo-contact-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#5aa977,#d9a84f,#c85345);transition:width .35s ease}
+.exo-species-data{display:grid;grid-template-columns:minmax(95px,.75fr) minmax(0,1.25fr);gap:6px 10px;margin:0}
+.exo-species-data dt{color:#a9a091;font-size:.58rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+.exo-species-data dd{margin:0;color:#f0eadf;font-size:.72rem;overflow-wrap:anywhere}
+
+.exo-species-output-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+.exo-species-output-section{min-width:0;border:1px solid rgba(217,168,79,.17);border-radius:13px;padding:10px;background:rgba(6,8,8,.48)}
+.exo-output-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid rgba(217,168,79,.12)}
+.exo-output-head .bli-eyebrow{flex:0 0 auto;margin:0;font-size:.55rem}
+.exo-output-head h2{min-width:0;margin:0;color:#f4efe5;font-size:.86rem;line-height:1.2;text-align:right}
+.exo-dossier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px}
+.exo-dossier-card{border:1px solid rgba(217,168,79,.18);border-radius:9px;padding:9px;background:rgba(255,255,255,.022)}
+.exo-dossier-card h3{margin:0 0 4px;color:#f4efe5;font-size:.82rem}
+.exo-dossier-card p{margin:0;color:#cfc7b7;font-size:.69rem;line-height:1.42}
+.exo-dossier-card small{display:block;margin-bottom:4px;color:#69a9b8;font-size:.55rem;font-weight:900;letter-spacing:.055em;text-transform:uppercase}
+.exo-faction-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:7px}
+.exo-faction-card{border:1px solid rgba(94,171,187,.22);border-radius:9px;padding:9px;background:linear-gradient(145deg,rgba(17,24,25,.82),rgba(7,8,8,.9))}
+.exo-faction-card h3{margin:0;font-size:.83rem}
+.exo-faction-card p{margin:.35rem 0;color:#cfc7b7;font-size:.69rem;line-height:1.42}
+.exo-faction-meta{display:flex;flex-wrap:wrap;gap:4px}
+.exo-faction-meta span{border:1px solid rgba(217,168,79,.2);border-radius:999px;padding:3px 6px;color:#d8cfbf;font-size:.55rem;font-weight:850;letter-spacing:.04em;text-transform:uppercase}
+.exo-operational-section{grid-column:1/-1}
+.exo-operational-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.exo-operational-grid article{border:1px solid rgba(217,168,79,.18);border-radius:9px;padding:9px;background:rgba(255,255,255,.022)}
+.exo-operational-grid h3{margin:0;font-size:.8rem}
+.exo-operational-grid ul{margin:.35rem 0 0;padding-left:1rem;color:#d7cebe;font-size:.68rem}
+.exo-operational-grid li{margin:.3rem 0;line-height:1.4}
+.exo-risk-low{color:#8ed0a3}.exo-risk-moderate{color:#d9c06d}.exo-risk-high{color:#e08a67}.exo-risk-severe{color:#ef6a5a}
+.exo-fade-in{animation:exoFade .24s ease}@keyframes exoFade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+@media(min-width:2200px){
+  .exo-species-commandbar{grid-template-columns:minmax(260px,.55fr) auto minmax(700px,1.45fr)}
+  .exo-species-control-grid{grid-template-columns:repeat(6,minmax(180px,1fr))}
+  .exo-species-overview{grid-template-columns:minmax(0,2.45fr) minmax(340px,.55fr)}
+  .exo-species-output-stack{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .exo-operational-section{grid-column:1/-1}
+}
+@media(max-width:1600px){
+  .exo-species-commandbar{grid-template-columns:minmax(220px,.65fr) minmax(0,1.35fr)}
+  .exo-species-summary{grid-column:1/-1;justify-content:flex-start}
+  .exo-species-controls{grid-template-columns:1fr}
+  .exo-species-control-head{display:flex;align-items:baseline;gap:10px;max-width:none}
+  .exo-species-control-head p{margin:0}
+  .exo-species-control-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:1100px){
+  .exo-species-overview{grid-template-columns:1fr}
+  .exo-species-output-stack{grid-template-columns:1fr}
+  .exo-operational-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .exo-species-shell{width:calc(100% - 12px);margin-top:6px}
+  .exo-species-commandbar{grid-template-columns:1fr}
+  .exo-species-actions{justify-content:flex-start}
+  .exo-species-summary{grid-column:auto;justify-content:flex-start}
+  .exo-species-summary span{max-width:100%}
+  .exo-source-context{display:grid}
+  .exo-source-context .bli-action{width:100%}
+  .exo-species-control-head{display:block}
+  .exo-species-control-grid,.exo-dossier-grid,.exo-faction-grid,.exo-operational-grid{grid-template-columns:1fr}
+  .exo-species-visual-panel,.exo-species-contact-panel{padding:10px}
+  .exo-species-data{grid-template-columns:1fr}
+  .exo-species-data dd{margin-bottom:6px}
+  .exo-species-visual-panel svg{height:auto;min-height:280px}
+  .exo-output-head{display:block}
+  .exo-output-head h2{margin-top:3px;text-align:left}
+}
