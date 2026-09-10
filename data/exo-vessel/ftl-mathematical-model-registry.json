@@ -1,0 +1,267 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "registryType": "blackLightFtlMathematicalModelRegistry",
+  "registryVersion": "1.0.0",
+  "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+  "mathematicalReference": "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+  "schema": "data/schemas/exo-vessel-ftl-mathematical-model-registry.schema.json",
+  "statusRule": "Family action, Path names, Path performance envelopes, breakthroughs, and live Path-to-tier behavior remain CONFIRMED from their source. Equation/operator formalizations are DERIVED unless separately sourced. Uncalibrated coefficients are PROPOSED.",
+  "runtimePerformanceSources": {
+    "sharedTier": "blacklight-exo-ftl-physics-definitions.js",
+    "physicalPaths": "blacklight-exo-ftl-path-level-paths-physical.js",
+    "dimensionalPaths": "blacklight-exo-ftl-path-level-paths-dimensional.js",
+    "discretePaths": "blacklight-exo-ftl-path-level-paths-discrete.js",
+    "pathTierCoupling": "blacklight-exo-ftl-path-level-runtime.js#STAGE_TO_TIER",
+    "rule": "Do not duplicate the live speed/range arrays here until the runtime is deliberately migrated. Resolve runtime performance from the named source and use this registry to explain the mathematics and upgrade cause."
+  },
+  "upgradeDrivers": [
+    "MATHEMATICS",
+    "FIELD_CONTROL",
+    "ACTIVE_MATERIALS",
+    "STRUCTURE",
+    "ENERGY",
+    "NAVIGATION",
+    "DRIVE_SCALE_DISTRIBUTION",
+    "CONTROL_BANDWIDTH",
+    "RECOVERY"
+  ],
+  "commonModels": {
+    "ordinarySeparation": {
+      "id": "common.ordinary-geodesic-separation.v1",
+      "status": "DERIVED",
+      "expression": "D0(A,B)=inf_Gamma integral_Gamma sqrt(gamma_ij dx^i dx^j)"
+    },
+    "totalTransitTime": {
+      "id": "common.total-transit-time.v1",
+      "status": "DERIVED",
+      "expression": "t_total=t_solve+t_spool+t_active+t_terminate+t_recover"
+    },
+    "equivalentSpeed": {
+      "id": "common.equivalent-speed.v1",
+      "status": "DERIVED",
+      "expression": "v_eq=D0/t_total",
+      "safeguard": "Equivalent speed is a comparison quantity and MUST NOT be presented as local hull velocity for discontinuous or nonlocal transit."
+    },
+    "implementationEfficiency": {
+      "id": "common.implementation-efficiency.v1",
+      "status": "PROPOSED",
+      "expression": "eta_impl=eta_source*eta_conditioning*eta_coupling*eta_geometry*eta_control*eta_recovery"
+    },
+    "covariancePropagation": {
+      "id": "common.covariance-propagation.v1",
+      "status": "DERIVED",
+      "expression": "Sigma_out ~= J_T Sigma_in J_T^T + Sigma_model"
+    }
+  },
+  "families": [
+    {
+      "id": "metric-envelope",
+      "equationSetId": "blacklight.ftl.metric-envelope.v1",
+      "operatorClass": "METRIC_DEFORMATION",
+      "actedSpace": "4D local spacetime metric around a protected volume",
+      "distanceModelType": "EFFECTIVE_METRIC_GEODESIC",
+      "status": "MIXED",
+      "models": [
+        {"id":"metric.metric-perturbation.v1","status":"DERIVED","expression":"g^(p)_munu=g^(0)_munu+h^(p)_munu(x,t)"},
+        {"id":"metric.effective-distance.v1","status":"DERIVED","expression":"D_M=integral_Gamma sqrt(gamma_eff_ij dx^i dx^j)"},
+        {"id":"metric.compression-ratio.v1","status":"DERIVED","expression":"chi_M=D0/D_M"},
+        {"id":"metric.gradient-penalty.v1","status":"PROPOSED","expression":"P_grad=integral_Vwall ||grad h||^2 dV"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Metric Stress-Test Monolith","mathematicalCapability":"small local metric perturbation in a fixed narrow corridor","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","STRUCTURE","ENERGY"],"changedTerms":["h_munu amplitude","field support domain","gradient penalty"]},
+        {"pathLevel":"p1","implementationName":"Inertial Relief Envelope","mathematicalCapability":"directed compression/inertial-relief terms while retaining internal control signaling","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","CONTROL_BANDWIDTH"],"changedTerms":["compression ratio","control-horizon margin","field symmetry"]},
+        {"pathLevel":"p2","implementationName":"Subluminal Compression Bubble","mathematicalCapability":"closed 3D moving-hull boundary-value solution","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","ACTIVE_MATERIALS","STRUCTURE","RECOVERY"],"changedTerms":["whole-effect closure","boundary residual","bow-radiation recovery"]},
+        {"pathLevel":"p3","implementationName":"First Causal-Horizon Envelope","mathematicalCapability":"horizon-constrained metric solution with recoverable exit","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","ENERGY","NAVIGATION","CONTROL_BANDWIDTH"],"changedTerms":["horizon constraint","compression ratio","termination authority"]},
+        {"pathLevel":"p4","implementationName":"Operational Warp Envelope","mathematicalCapability":"multi-sector dynamic tensor solution compensating hull/cargo/environment motion","upgradeDrivers":["MATHEMATICS","DRIVE_SCALE_DISTRIBUTION","NAVIGATION","CONTROL_BANDWIDTH","RECOVERY"],"changedTerms":["sector residuals","dynamic covariance","thermal/recovery margin"]},
+        {"pathLevel":"p5","implementationName":"Strategic Metric Drive","mathematicalCapability":"long-horizon route optimization across heterogeneous gravity terrain","upgradeDrivers":["MATHEMATICS","ENERGY","NAVIGATION","FIELD_CONTROL"],"changedTerms":["route functional","gravity correction","field burden per route gain"]},
+        {"pathLevel":"p6","implementationName":"Compact Dynamic Metric Engine","mathematicalCapability":"closed-loop adaptive metric optimization in compact distributed machinery","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION","CONTROL_BANDWIDTH","RECOVERY"],"changedTerms":["adaptive h_munu","machinery volume","cycle time","fault-tolerant sector control"]}
+      ]
+    },
+    {
+      "id": "gravitic-plane",
+      "equationSetId": "blacklight.ftl.gravitic-plane.v1",
+      "operatorClass": "CONSTRAINED_GEODESIC_SELECTION",
+      "actedSpace": "4D gravitational/equipotential geometry",
+      "distanceModelType": "WEIGHTED_GEODESIC_PLANE",
+      "status": "MIXED",
+      "models": [
+        {"id":"gravitic.route-functional.v1","status":"DERIVED","expression":"Gamma*=argmin integral_Gamma [w0+w1|grad Phi|+w2|Hess Phi|+w3 H_R+w4 C_switch] ds"},
+        {"id":"gravitic.effective-distance.v1","status":"DERIVED","expression":"D_g=integral_Gamma* ds/lambda_g(x,t); chi_g=D0/D_g"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Gravitational Rail Monolith","mathematicalCapability":"one fixed precomputed equipotential trajectory","upgradeDrivers":["MATHEMATICS","STRUCTURE","ENERGY"],"changedTerms":["single-route solution","fixed potential map"]},
+        {"pathLevel":"p1","implementationName":"Equipotential Skim Array","mathematicalCapability":"continuous local equipotential adherence","upgradeDrivers":["NAVIGATION","FIELD_CONTROL","CONTROL_BANDWIDTH"],"changedTerms":["local gradient estimate","plane-lock residual"]},
+        {"pathLevel":"p2","implementationName":"Barycentric Plane Rider","mathematicalCapability":"multi-body barycentric potential and plane-transition solution","upgradeDrivers":["MATHEMATICS","NAVIGATION","FIELD_CONTROL"],"changedTerms":["N-body potential","plane-switch cost"]},
+        {"pathLevel":"p3","implementationName":"Interstellar Plane Skimmer","mathematicalCapability":"stellar-saddle and long-baseline curvature prediction","upgradeDrivers":["MATHEMATICS","NAVIGATION","ENERGY"],"changedTerms":["far-field model","saddle solution","prediction covariance"]},
+        {"pathLevel":"p4","implementationName":"Multi-Plane Transit Drive","mathematicalCapability":"dynamic optimization over a sequence of moving admissible planes","upgradeDrivers":["MATHEMATICS","NAVIGATION","CONTROL_BANDWIDTH","DRIVE_SCALE_DISTRIBUTION"],"changedTerms":["multi-plane route graph","traffic/wake constraints"]},
+        {"pathLevel":"p5","implementationName":"Deep-Gradient Skimmer","mathematicalCapability":"probabilistic hidden-mass inference beyond direct sensing","upgradeDrivers":["MATHEMATICS","NAVIGATION","ENERGY"],"changedTerms":["hidden-mass posterior","ridge hazard term","model covariance"]},
+        {"pathLevel":"p6","implementationName":"Adaptive Geodesic Drive","mathematicalCapability":"receding-horizon route rewriting across changing N-body terrain","upgradeDrivers":["MATHEMATICS","NAVIGATION","CONTROL_BANDWIDTH","FIELD_CONTROL"],"changedTerms":["real-time geodesic","adaptive plane-lock","disturbance rejection"]}
+      ]
+    },
+    {
+      "id": "slipstream-shear",
+      "equationSetId": "blacklight.ftl.slipstream-shear.v1",
+      "operatorClass": "BOUNDARY_LAYER_COUPLING",
+      "actedSpace": "Q-space boundary layer adjacent to normal spacetime",
+      "distanceModelType": "BOUNDARY_FLOW_WEIGHTED_DISTANCE",
+      "status": "MIXED",
+      "models": [
+        {"id":"slipstream.correspondence-map.v1","status":"DERIVED","expression":"pi_Q:Q_boundary -> M^(3+1)"},
+        {"id":"slipstream.effective-distance.v1","status":"DERIVED","expression":"D_S=integral_Gamma sigma_Q(x,t,u_Q,a) ds"},
+        {"id":"slipstream.adhesion-margin.v1","status":"DERIVED","expression":"mu_a=a-a_crit(q,qdot,hullState)"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Boundary-Shear Observatory","mathematicalCapability":"local Q-boundary/shear fit","upgradeDrivers":["MATHEMATICS","NAVIGATION","FIELD_CONTROL"],"changedTerms":["q state estimate","u_Q shear estimate"]},
+        {"pathLevel":"p1","implementationName":"Q-Boundary Probe Launcher","mathematicalCapability":"single prepared-payload adhesion trajectory","upgradeDrivers":["FIELD_CONTROL","ACTIVE_MATERIALS","CONTROL_BANDWIDTH"],"changedTerms":["adhesion margin","phase-polarization error"]},
+        {"pathLevel":"p2","implementationName":"Captive Slipstream Tunnel","mathematicalCapability":"forecast bounded corridor with controlled entry/exit","upgradeDrivers":["MATHEMATICS","STRUCTURE","FIELD_CONTROL","RECOVERY"],"changedTerms":["corridor sigma_Q","entry/exit boundary residual"]},
+        {"pathLevel":"p3","implementationName":"Shipboard Slipstream Coupler","mathematicalCapability":"moving-origin coupling plus phase-velocity exit matching","upgradeDrivers":["DRIVE_SCALE_DISTRIBUTION","NAVIGATION","CONTROL_BANDWIDTH"],"changedTerms":["moving reference","exit phase velocity"]},
+        {"pathLevel":"p4","implementationName":"Operational Shear Drive","mathematicalCapability":"stochastic Q-weather and wake-separation model","upgradeDrivers":["MATHEMATICS","NAVIGATION","ENERGY","CONTROL_BANDWIDTH"],"changedTerms":["weather covariance","wake interference"]},
+        {"pathLevel":"p5","implementationName":"Strategic Slipstream Drive","mathematicalCapability":"long-horizon directional shear/storm optimization","upgradeDrivers":["MATHEMATICS","NAVIGATION","FIELD_CONTROL","ENERGY"],"changedTerms":["time-varying sigma_Q","storm forecast horizon"]},
+        {"pathLevel":"p6","implementationName":"Compact Wake-Riding Drive","mathematicalCapability":"rapid inference of useful transient/wake shear in compact craft","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION","CONTROL_BANDWIDTH"],"changedTerms":["local inference latency","minimum stable adhesion volume"]}
+      ]
+    },
+    {
+      "id": "q-lattice",
+      "equationSetId": "blacklight.ftl.q-lattice.v1",
+      "operatorClass": "DISCRETE_STATE_TRANSLATION",
+      "actedSpace": "indexed quantized Q-state lattice",
+      "distanceModelType": "WEIGHTED_PHASE_GRAPH",
+      "status": "MIXED",
+      "models": [
+        {"id":"q-lattice.graph.v1","status":"DERIVED","expression":"G_Q=(V_Q,E_Q)"},
+        {"id":"q-lattice.route-cost.v1","status":"DERIVED","expression":"C_Q(pi)=sum_edges[w_d l_ij+w_phi e_phi+w_tau e_tau+w_o P_occ+w_s P_state]"},
+        {"id":"q-lattice.route-solver.v1","status":"DERIVED","expression":"pi*=argmin_pi C_Q(pi)"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Q-Cell Addressing Monolith","mathematicalCapability":"one-step translation between adjacent stable cells","upgradeDrivers":["MATHEMATICS","NAVIGATION","FIELD_CONTROL"],"changedTerms":["cell address","phase error"]},
+        {"pathLevel":"p1","implementationName":"Molecular Phase Conveyor","mathematicalCapability":"bond/state invariants preserved across translation","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","FIELD_CONTROL"],"changedTerms":["state mismatch","coherence constraint"]},
+        {"pathLevel":"p2","implementationName":"Macroscopic Lattice Translator","mathematicalCapability":"whole-payload coherent address/state map","upgradeDrivers":["MATHEMATICS","DRIVE_SCALE_DISTRIBUTION","FIELD_CONTROL","RECOVERY"],"changedTerms":["coverage state","defect correction","occupation constraint"]},
+        {"pathLevel":"p3","implementationName":"Beacon-Indexed Jump Array","mathematicalCapability":"authenticated remote address and relativistic phase-epoch synchronization","upgradeDrivers":["NAVIGATION","MATHEMATICS","CONTROL_BANDWIDTH"],"changedTerms":["remote address confidence","epoch error"]},
+        {"pathLevel":"p4","implementationName":"Autonomous Q-Lattice Drive","mathematicalCapability":"onboard graph search, anti-alias scoring and reference validation","upgradeDrivers":["MATHEMATICS","NAVIGATION","DRIVE_SCALE_DISTRIBUTION"],"changedTerms":["route graph","alias probability"]},
+        {"pathLevel":"p5","implementationName":"Strategic Phase Network","mathematicalCapability":"network-scale routing over millions of addresses and epochs","upgradeDrivers":["MATHEMATICS","NAVIGATION","ENERGY","CONTROL_BANDWIDTH"],"changedTerms":["network route cost","key/reference graph","throughput"]},
+        {"pathLevel":"p6","implementationName":"Compact State-Translation Core","mathematicalCapability":"fault-tolerant translation of mutable minds/damaged vehicles/state forks","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION","RECOVERY"],"changedTerms":["state error correction","identity continuity","compact coverage"]}
+      ]
+    },
+    {
+      "id": "n-manifold",
+      "equationSetId": "blacklight.ftl.n-manifold.v1",
+      "operatorClass": "HIGHER_DIMENSIONAL_GEODESIC",
+      "actedSpace": "N-dimensional manifold with 3+1D embedding and return projection",
+      "distanceModelType": "N_DIMENSIONAL_GEODESIC",
+      "status": "MIXED",
+      "models": [
+        {"id":"n-manifold.geodesic.v1","status":"DERIVED","expression":"Gamma*=argmin integral_Gamma sqrt(g_AB^(N) dX^A dX^B)"},
+        {"id":"n-manifold.projection.v1","status":"DERIVED","expression":"i:M^(3+1)->M^N; pi:M^N->M^(3+1)"},
+        {"id":"n-manifold.route-gain.v1","status":"DERIVED","expression":"chi_N=D0/L_N(Gamma*)"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Dimensional Topology Observatory","mathematicalCapability":"local higher-dimensional curvature fit and tiny shortcut","upgradeDrivers":["MATHEMATICS","NAVIGATION","FIELD_CONTROL"],"changedTerms":["local g_AB","admissible route width"]},
+        {"pathLevel":"p1","implementationName":"Five-Axis Test Volume","mathematicalCapability":"stable embedding through one extra spatial axis","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","STRUCTURE"],"changedTerms":["embedding error","orientation constraint"]},
+        {"pathLevel":"p2","implementationName":"Captive Manifold Transit Array","mathematicalCapability":"fixed macroscopic geodesic plus certified return map","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION"],"changedTerms":["geodesic length","return-map residual"]},
+        {"pathLevel":"p3","implementationName":"Shipboard N-Manifold Drive","mathematicalCapability":"moving-vessel embedding/geodesic/projection solution","upgradeDrivers":["DRIVE_SCALE_DISTRIBUTION","MATHEMATICS","NAVIGATION"],"changedTerms":["moving boundary","onboard return map"]},
+        {"pathLevel":"p4","implementationName":"Adaptive Higher-Dimensional Drive","mathematicalCapability":"multi-axis real-time route optimization around moving hazards","upgradeDrivers":["MATHEMATICS","NAVIGATION","CONTROL_BANDWIDTH","FIELD_CONTROL"],"changedTerms":["active axis set","route covariance"]},
+        {"pathLevel":"p5","implementationName":"Deep-Range Manifold Engine","mathematicalCapability":"probabilistic manifold continuation beyond direct sensor horizon","upgradeDrivers":["MATHEMATICS","NAVIGATION","ENERGY"],"changedTerms":["forecast manifold","topology uncertainty"]},
+        {"pathLevel":"p6","implementationName":"Compact Multi-Axis Drive","mathematicalCapability":"damage-tolerant constrained optimization with redundant axes and return map","upgradeDrivers":["ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION","MATHEMATICS","RECOVERY","CONTROL_BANDWIDTH"],"changedTerms":["redundant axis solution","fault-tolerant projection","compact stabilizer burden"]}
+      ]
+    },
+    {
+      "id": "fold-jump",
+      "equationSetId": "blacklight.ftl.fold-jump.v1",
+      "operatorClass": "TOPOLOGICAL_ADJACENCY",
+      "actedSpace": "ordinary-space manifold/topology with temporary origin-destination adjacency",
+      "distanceModelType": "TOPOLOGICAL_ADJACENCY_DISTANCE",
+      "status": "MIXED",
+      "models": [
+        {"id":"fold.topology-operator.v1","status":"DERIVED","expression":"F_Theta:M->M_Theta with d_MTheta(A,B) << d_M(A,B)"},
+        {"id":"fold.adjacency-gain.v1","status":"DERIVED","expression":"chi_F=d_M(A,B)/d_MTheta(A,B)"},
+        {"id":"fold.total-time.v1","status":"DERIVED","expression":"t_F=t_solve+t_verify+t_spool+t_adjacency+t_cross+t_restore+t_ringdown"},
+        {"id":"fold.toroidal-control-volume.v1","status":"DERIVED","expression":"physical control surface T^2=S^1xS^1; thickened field volume approximately D^2xS^1","safeguard":"Do not call this T^3 canon unless a source explicitly establishes a three-torus topology."}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Adjacency Test Monolith","mathematicalCapability":"one nearby two-volume identification under severe symmetry/exclusion constraints","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","STRUCTURE","ENERGY"],"changedTerms":["adjacency residual","small exclusion volume"]},
+        {"pathLevel":"p1","implementationName":"Cargo Fold Chamber","mathematicalCapability":"larger certified boundary with bijective payload mapping","upgradeDrivers":["ACTIVE_MATERIALS","STRUCTURE","FIELD_CONTROL","ENERGY"],"changedTerms":["coverage volume","boundary mapping"]},
+        {"pathLevel":"p2","implementationName":"Orbital Fold Gate","mathematicalCapability":"remote destination volume remains certified through passage/repetition","upgradeDrivers":["NAVIGATION","RECOVERY","STRUCTURE","CONTROL_BANDWIDTH"],"changedTerms":["occupancy probability","destination covariance","ringdown"]},
+        {"pathLevel":"p3","implementationName":"Capital Fold-Jump Core","mathematicalCapability":"shipboard topology solve and exclusion model","upgradeDrivers":["DRIVE_SCALE_DISTRIBUTION","ENERGY","MATHEMATICS","NAVIGATION"],"changedTerms":["mobile origin state","stored field burden"]},
+        {"pathLevel":"p4","implementationName":"Fleet Fold Drive","mathematicalCapability":"minimized endpoint covariance, recoil residual and cycle time","upgradeDrivers":["MATHEMATICS","NAVIGATION","RECOVERY","CONTROL_BANDWIDTH"],"changedTerms":["Sigma_endpoint","recoil/ringing residual","spool time"]},
+        {"pathLevel":"p5","implementationName":"Strategic Long-Fold Engine","mathematicalCapability":"adjacency across time-varying gravitational terrain with long-baseline uncertainty propagation","upgradeDrivers":["MATHEMATICS","NAVIGATION","FIELD_CONTROL","ENERGY"],"changedTerms":["environment model","long-baseline covariance","waveguide stability"]},
+        {"pathLevel":"p6","implementationName":"Compact Tactical Fold Core","mathematicalCapability":"rapid robust search across admissible topology modes with short-notice empty-volume certification","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION","CONTROL_BANDWIDTH","RECOVERY"],"changedTerms":["topology-mode search","verification latency","ringdown","machine volume"]}
+      ]
+    },
+    {
+      "id": "wormhole-gate",
+      "equationSetId": "blacklight.ftl.wormhole-gate.v1",
+      "operatorClass": "MAINTAINED_MULTIPLY_CONNECTED_TOPOLOGY",
+      "actedSpace": "spacetime topology between established mouths/anchors",
+      "distanceModelType": "THROAT_PROPER_DISTANCE_PLUS_ACCESS",
+      "status": "MIXED",
+      "models": [
+        {"id":"gate.morris-thorne-analogy.v1","status":"DERIVED","expression":"ds^2=-e^(2Phi) c^2dt^2+dr^2/(1-b(r)/r)+r^2 dOmega^2"},
+        {"id":"gate.throat-conditions.v1","status":"DERIVED","expression":"b(r0)=r0; b'(r0)<1"},
+        {"id":"gate.proper-distance.v1","status":"DERIVED","expression":"ell(r)=+/- integral_r0^r dr'/sqrt(1-b(r')/r')"},
+        {"id":"gate.route-cost.v1","status":"DERIVED","expression":"D_G=D_approach+L_throat+D_departure+C_queue+C_transfer"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Microscopic Throat Foundry","mathematicalCapability":"microscopic local throat satisfying stability conditions","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","ENERGY"],"changedTerms":["throat radius","stability margin"]},
+        {"pathLevel":"p1","implementationName":"Cargo Aperture Gate","mathematicalCapability":"larger aperture with asymmetric mass-flow model","upgradeDrivers":["FIELD_CONTROL","STRUCTURE","ENERGY","RECOVERY"],"changedTerms":["r0","mass-flow imbalance"]},
+        {"pathLevel":"p2","implementationName":"Orbital Paired Gate","mathematicalCapability":"continuous two-mouth synchronization and macroscopic flow control","upgradeDrivers":["NAVIGATION","CONTROL_BANDWIDTH","STRUCTURE"],"changedTerms":["mouth time/reference delta","throughput"]},
+        {"pathLevel":"p3","implementationName":"Stellar Gate Complex","mathematicalCapability":"stable stellar-distance mouth pair under navigation/defense perturbations","upgradeDrivers":["MATHEMATICS","STRUCTURE","ENERGY","NAVIGATION"],"changedTerms":["long-baseline synchronization","anchor stability"]},
+        {"pathLevel":"p4","implementationName":"Corridor Gate Network","mathematicalCapability":"network graph optimization of many throats, schedules and fault domains","upgradeDrivers":["MATHEMATICS","CONTROL_BANDWIDTH","NAVIGATION","RECOVERY"],"changedTerms":["network route cost","flow balancing","cascade isolation"]},
+        {"pathLevel":"p5","implementationName":"Strategic Deep Gate","mathematicalCapability":"deep-range synchronization, controlled relocation and chronology-constrained flow","upgradeDrivers":["MATHEMATICS","ENERGY","NAVIGATION","FIELD_CONTROL"],"changedTerms":["mouth relocation","chronology-safe state","deep reference"]},
+        {"pathLevel":"p6","implementationName":"Self-Stabilizing Gate Lattice","mathematicalCapability":"coupled adaptive control rebalances geometry, flow, timing and damaged nodes","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","CONTROL_BANDWIDTH","RECOVERY"],"changedTerms":["self-stabilization","network redundancy","automatic isolation"]}
+      ]
+    },
+    {
+      "id": "phase-displacement",
+      "equationSetId": "blacklight.ftl.phase-displacement.v1",
+      "operatorClass": "NONLOCAL_STATE_DISPLACEMENT",
+      "actedSpace": "macroscopic quantum/state basis plus destination physical state",
+      "distanceModelType": "STATE_SPACE_DISTANCE",
+      "status": "MIXED",
+      "models": [
+        {"id":"phase.fubini-study.v1","status":"DERIVED","expression":"D_FS(psi_o,psi_t)=arccos(|<psi_o|psi_t>|)"},
+        {"id":"phase.bures-distance.v1","status":"DERIVED","expression":"D_B(rho_o,rho_t)=sqrt(2*(1-sqrt(F(rho_o,rho_t))))"},
+        {"id":"phase.composite-cost.v1","status":"PROPOSED","expression":"J_P=w_s D_B^2+w_o P_occupation+w_r P_reference+w_c P_conservation+w_i P_identity"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Quantum State Conveyor","mathematicalCapability":"small prepared-state mapping between adjacent compatible configurations","upgradeDrivers":["MATHEMATICS","FIELD_CONTROL","NAVIGATION"],"changedTerms":["state fidelity","reference mismatch"]},
+        {"pathLevel":"p1","implementationName":"Gram-to-Tonne Displacement Vault","mathematicalCapability":"material invariants preserved across much larger state dimension","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","ENERGY"],"changedTerms":["state dimension","coherence"]},
+        {"pathLevel":"p2","implementationName":"Macroscopic Phase Chamber","mathematicalCapability":"complete macroscopic map with residual/duplicate-state exclusion","upgradeDrivers":["MATHEMATICS","DRIVE_SCALE_DISTRIBUTION","RECOVERY"],"changedTerms":["occupation constraint","residual-state probability","coverage"]},
+        {"pathLevel":"p3","implementationName":"Beacon-Coupled Vessel Displacement","mathematicalCapability":"authenticated remote target state plus continuity ledger","upgradeDrivers":["NAVIGATION","MATHEMATICS","CONTROL_BANDWIDTH"],"changedTerms":["remote reference","continuity proof"]},
+        {"pathLevel":"p4","implementationName":"Autonomous Phase Drive","mathematicalCapability":"onboard continuous destination compatibility analysis","upgradeDrivers":["MATHEMATICS","NAVIGATION","DRIVE_SCALE_DISTRIBUTION"],"changedTerms":["destination state model","reference independence"]},
+        {"pathLevel":"p5","implementationName":"Strategic Nonlocal Transit Core","mathematicalCapability":"scalable state decomposition/recomposition across populations/fleets and long reference chains","upgradeDrivers":["MATHEMATICS","ENERGY","CONTROL_BANDWIDTH","RECOVERY"],"changedTerms":["state partitioning","reference chain","conservation bookkeeping"]},
+        {"pathLevel":"p6","implementationName":"Compact Identity-Preserving Displacer","mathematicalCapability":"fault-tolerant identity-safe solver under mutable onboard state and damage","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","DRIVE_SCALE_DISTRIBUTION","RECOVERY"],"changedTerms":["identity fidelity","error correction","compact coherence"]}
+      ]
+    },
+    {
+      "id": "inertial-torch",
+      "equationSetId": "blacklight.ftl.inertial-torch.v1",
+      "operatorClass": "RELATIVISTIC_CONTINUOUS_TRAJECTORY",
+      "actedSpace": "ordinary 3+1 spacetime",
+      "distanceModelType": "ORDINARY_TRAJECTORY",
+      "status": "MIXED",
+      "models": [
+        {"id":"torch.lorentz-factor.v1","status":"DERIVED","expression":"gamma=1/sqrt(1-v^2/c^2)","note":"ordinary special relativity"},
+        {"id":"torch.constant-proper-acceleration.v1","status":"DERIVED","expression":"x(tau)=c^2/a[cosh(a tau/c)-1]; t(tau)=c/a sinh(a tau/c)","note":"ordinary special relativity"},
+        {"id":"torch.relativistic-rocket-rapidity.v1","status":"DERIVED","expression":"Delta_eta=(v_e/c) ln(m0/m1); v=c tanh(Delta_eta)","note":"idealized relativistic rocket relation"}
+      ],
+      "pathStages": [
+        {"pathLevel":"p0","implementationName":"Beamed Reaction Launch Monolith","mathematicalCapability":"precomputed externally accelerated trajectory","upgradeDrivers":["ENERGY","STRUCTURE","NAVIGATION"],"changedTerms":["external impulse","ballistic solution"]},
+        {"pathLevel":"p1","implementationName":"Fusion-Pulse Acceleration Spine","mathematicalCapability":"sustained pulse acceleration with thermal/structural constraints","upgradeDrivers":["ENERGY","STRUCTURE","RECOVERY"],"changedTerms":["proper acceleration duration","thermal budget"]},
+        {"pathLevel":"p2","implementationName":"Antimatter-Catalyzed Torch Array","mathematicalCapability":"higher effective exhaust velocity with explicit braking reserve","upgradeDrivers":["ENERGY","ACTIVE_MATERIALS","STRUCTURE"],"changedTerms":["v_e","mass ratio","braking reserve"]},
+        {"pathLevel":"p3","implementationName":"Relativistic Courier Torch","mathematicalCapability":"shipboard acceleration/braking and relativistic navigation solution","upgradeDrivers":["DRIVE_SCALE_DISTRIBUTION","NAVIGATION","STRUCTURE"],"changedTerms":["independent trajectory","frame transform"]},
+        {"pathLevel":"p4","implementationName":"Fleet Inertial Torch","mathematicalCapability":"fleet-standard debris/radiation and relativistic reference prediction","upgradeDrivers":["NAVIGATION","ACTIVE_MATERIALS","CONTROL_BANDWIDTH"],"changedTerms":["hazard forecast","survivable gamma"]},
+        {"pathLevel":"p5","implementationName":"Near-Light Strategic Torch","mathematicalCapability":"near-light trajectory under photon/dust/clock/thermal constraints","upgradeDrivers":["ENERGY","ACTIVE_MATERIALS","NAVIGATION","RECOVERY"],"changedTerms":["gamma","shield burden","thermal budget"]},
+        {"pathLevel":"p6","implementationName":"Asymptotic Relativistic Drive","mathematicalCapability":"autonomous hazard-optimized trajectory approaching practical light barrier","upgradeDrivers":["MATHEMATICS","ACTIVE_MATERIALS","CONTROL_BANDWIDTH","NAVIGATION"],"changedTerms":["hazard-constrained trajectory","asymptotic velocity margin"]}
+      ]
+    }
+  ],
+  "canonSafeguards": [
+    "Do not reinterpret equivalent transit speed as local hull speed for nonlocal/discontinuous families.",
+    "Do not invent numerical coefficients where the runtime or archive provides none.",
+    "Do not promote DERIVED equation notation to recovered in-universe alien notation.",
+    "Do not assign a race/species a transit family from technology-basis compatibility alone.",
+    "Do not merge conventional propulsion P0-P6, Transit Path P0-P6, and shared transit T0-T8.",
+    "Do not call the derived Fold toroidal control volume a confirmed three-torus T^3 topology without source authority.",
+    "Do not authorize chronology violation or time travel from an FTL solution without explicit canon authority."
+  ]
+}
