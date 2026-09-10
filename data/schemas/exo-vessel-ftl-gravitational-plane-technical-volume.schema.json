@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-gravitational-plane-technical-volume.schema.json",
+  "title": "Black Light Gravitational-Plane Skimmer Technical Volume",
+  "type": "object",
+  "required": ["schema_version","family","authority","mathematics","path_progression","machinery","operation","maintenance","signatures","failures","scaling","technology_basis_translation","generator_contract","provenance"],
+  "properties": {
+    "schema_version": {"type":"string"},
+    "family": {"const":"gravitic-plane"},
+    "authority": {"type":"object","required":["status","primary","legacy_design_source","terrain_authority"],"additionalProperties":true},
+    "mathematics": {"type":"object","required":["status","state","route_functional","terrain_state","fork_ambiguity","safety_horizon"],"additionalProperties":true},
+    "path_progression": {"type":"array","minItems":7,"maxItems":7,"items":{"type":"object","required":["path","implementation","mathematical_capability","physical_enablers","changed_limits","operational_result","status"],"additionalProperties":true}},
+    "machinery": {"type":"object","required":["blocks","layout_invariants"],"additionalProperties":true},
+    "operation": {"type":"object","additionalProperties":true},
+    "maintenance": {"type":"object","additionalProperties":true},
+    "signatures": {"type":"object","additionalProperties":true},
+    "failures": {"type":"object","additionalProperties":true},
+    "scaling": {"type":"object","additionalProperties":true},
+    "technology_basis_translation": {"type":"object","additionalProperties":true},
+    "generator_contract": {"type":"object","required":["inputs","outputs","hard_guards"],"additionalProperties":true},
+    "provenance": {"type":"object","required":["canon_rule","field_status_required"],"additionalProperties":true}
+  },
+  "additionalProperties": false
+}
