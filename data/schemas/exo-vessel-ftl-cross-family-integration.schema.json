@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blacklight.local/schemas/exo-vessel-ftl-cross-family-integration.schema.json",
+  "title": "Black Light FTL Cross-Family Integration",
+  "type": "object",
+  "required": ["schema_version","authority","families","comparison_dimensions","selection_contract","mixed_installation_rules","provenance_guards"],
+  "properties": {
+    "schema_version": {"type":"string"},
+    "authority": {"type":"object","required":["status","primary_authority","source_document","source_document_id","canon_labels"]},
+    "families": {"type":"array","minItems":8,"items":{"type":"object","required":["family_id","name","physical_action","gravity_behavior","infrastructure_dependence","signature_profile","failure_character","scaling_character","recovery_character"]}},
+    "comparison_dimensions": {"type":"array","minItems":10,"items":{"type":"string"}},
+    "selection_contract": {"type":"object","required":["hard_vetoes","ranking_inputs","required_outputs","unknown_policy"]},
+    "mixed_installation_rules": {"type":"object","required":["allowed_relationships","forbidden_inferences","shared_support_rules"]},
+    "provenance_guards": {"type":"array","minItems":6,"items":{"type":"string"}},
+    "technology_basis_translation": {"type":"object"},
+    "education_and_manual_requirements": {"type":"object"},
+    "api_contract": {"type":"object"}
+  },
+  "additionalProperties": true
+}
