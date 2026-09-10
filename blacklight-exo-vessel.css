@@ -60,6 +60,35 @@
    the DOM because the viewer runtime validates it as static authority. */
 #exo-vessel-campaign-3d-launcher{display:none!important}
 
+/* Dense engineering record grid. Wide ledgers and spatial/combat surfaces keep
+   a full row; compact card-only engineering chapters can share desktop rows. */
+.exo-vessel-shell>.exo-vessel-source,.exo-vessel-shell>.exo-vessel-controls,.exo-vessel-shell>.exo-vessel-overview{grid-column:1/-1}
+.exo-vessel-shell>.bli-section>.bli-section-head{max-width:none;margin-bottom:7px}
+.exo-vessel-shell>.bli-section>.bli-section-head .bli-eyebrow{margin:0 0 2px;font-size:.56rem}
+.exo-vessel-shell>.bli-section>.bli-section-head h2{margin:0;font-size:.92rem;line-height:1.15}
+.exo-vessel-shell>.bli-section>.bli-section-head>p:last-child{margin:3px 0 0;max-width:none;font-size:.68rem;line-height:1.4}
+.exo-vessel-warning-list{gap:5px;margin:0;padding-left:18px;font-size:.7rem}
+.exo-vessel-warning-list li{line-height:1.4}
+@media(min-width:1400px){
+  .exo-vessel-shell{grid-template-columns:repeat(12,minmax(0,1fr));align-items:start}
+  .exo-vessel-shell>.bli-section{grid-column:span 6;min-width:0;padding:9px 10px;border:1px solid rgba(217,168,79,.13);border-radius:12px;background:rgba(6,8,11,.34)}
+  .exo-vessel-shell>.bli-section:has(.exo-vessel-table-wrap),
+  .exo-vessel-shell>.bli-section:has(canvas),
+  .exo-vessel-shell>.bli-section:has(.exo-vessel-voxel),
+  .exo-vessel-shell>.bli-section:has(.exo-vessel-track),
+  .exo-vessel-shell>.bli-section:has(.exo-vessel-weapon),
+  .exo-vessel-shell>.bli-section:has(.exo-vessel-damage),
+  .exo-vessel-shell>.bli-section:has(.exo-vessel-gameplay),
+  #exo-vessel-contract-section,
+  #exo-vessel-inertial-section,
+  #exo-vessel-campaign-3d-launcher{grid-column:1/-1}
+  .exo-vessel-shell>.bli-section>.exo-vessel-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px}
+  .exo-vessel-shell>.bli-section .exo-vessel-card{padding:9px}
+  .exo-vessel-shell>.bli-section .exo-vessel-card small{font-size:.54rem}
+  .exo-vessel-shell>.bli-section .exo-vessel-card h3{margin:4px 0 5px;font-size:.82rem}
+  .exo-vessel-shell>.bli-section .exo-vessel-card p{font-size:.68rem;line-height:1.4}
+}
+
 @media(min-width:2200px){.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:repeat(11,minmax(0,1fr))}.exo-vessel-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
 @media(max-width:1200px){.exo-vessel-hero{grid-template-columns:1fr}.exo-vessel-hero .bli-directory-list{justify-content:flex-start}}
 @media(max-width:900px){.exo-vessel-hero,.exo-vessel-shell{width:calc(100% - 20px)}.exo-vessel-overview{grid-template-columns:1fr}.exo-vessel-visual{min-height:260px}}
