@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-civilization-engineering-doctrine.schema.json",
+  "title": "Black Light FTL Civilization Engineering Doctrine",
+  "type": "object",
+  "required": ["schema_version","authority","claim_model","binding_rules","embodiment_model","provenance_model","contradiction_policy","integration_doctrine","technology_basis_rules","api_contract","canon_guards"],
+  "properties": {
+    "schema_version": {"type":"string"},
+    "authority": {"type":"object","required":["status","primary_authority","source_document","source_document_id","precedence"]},
+    "claim_model": {"type":"object","required":["statuses","claim_fields","admission_rule"]},
+    "binding_rules": {"type":"object","required":["explicit_evidence_required","permitted_bindings","forbidden_inferences"]},
+    "embodiment_model": {"type":"object","required":["equation","operator_invariant","variable_layers"]},
+    "provenance_model": {"type":"object","required":["graph","origin_chain","independence_rule","coverage_metric"]},
+    "contradiction_policy": {"type":"object","required":["conflict_set","resolution_order","unresolved_rule"]},
+    "integration_doctrine": {"type":"object","required":["foreign_systems","multi_origin_vessels","common_mode_dependencies","return_to_service"]},
+    "technology_basis_rules": {"type":"object","required":["basis_ids","allowed_effects","prohibited_attributions"]},
+    "api_contract": {"type":"object","required":["resolver","inputs","outputs","modes"]},
+    "canon_guards": {"type":"array","minItems":8,"items":{"type":"string"}}
+  },
+  "additionalProperties": true
+}
