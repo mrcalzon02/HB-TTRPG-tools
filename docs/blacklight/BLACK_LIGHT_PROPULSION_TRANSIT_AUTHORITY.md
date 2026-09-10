@@ -2,8 +2,8 @@
 
 **Status:** authoritative integration reference for Black Light propulsion, FTL/transit engineering, generator semantics, EXO vessel handoff, provenance, and presentation views.  
 **Authority scope:** consolidates surviving repository authority without retroactively inventing missing race-, manufacturer-, or mechanism-specific canon.  
-**Reconciliation base:** `main` at `2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf`, the concurrently landed `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md`, and the registry/schema/generator integration created during this reconciliation.  
-**Canon labels:** `CONFIRMED` = directly recovered from repository authority; `DERIVED` = engineering consequence constrained by confirmed canon; `PROPOSED` = useful extension not independently established as canon; `UNRESOLVED` = source or claim cannot currently be recovered; `MIXED` = structured result contains more than one status and must preserve field-level provenance.
+**Reconciliation basis:** current `main`, including the recovered FTL archive, root operative-technology authority, EXO engineering registries, live T0-T8 FTL capability runtime, live P0-P6 transit Path runtime, canonical subordinate engineering field manual, and the propulsion/transit registry/schema/generator integration.  
+**Canon labels:** `CONFIRMED` = directly recovered from repository authority or confirmed current runtime behavior within its stated scope; `DERIVED` = engineering consequence constrained by confirmed canon; `PROPOSED` = useful extension not independently established as canon; `UNRESOLVED` = source or claim cannot currently be recovered; `MIXED` = structured result contains more than one status and must preserve field-level provenance.
 
 ---
 
@@ -11,36 +11,45 @@
 
 Black Light separates **how a vessel moves through ordinary spacetime** from **how it achieves nonlocal or effectively superluminal transit**. Conventional and relativistic propulsion remain part of EXO vessel propulsion engineering. FTL/transit is an adjacent capability domain with its own physical action, machinery, infrastructure, navigation, operating hazards, maintenance, signatures, failure modes, and provenance.
 
-FTL is therefore **not P7**. Two repository systems use P0-P6 terminology, but they describe different axes:
+FTL is therefore **not P7** and a generic `tech level` is not sufficient. The reconciled project contains three different scale coordinates:
 
-- `data/exo-vessel/engineering-registry.json` uses P0-P6 for ordinary-spacetime propulsion technology bands.
-- the recovered FTL archive uses P0-P6 for **construction maturity within a transit path**, from monumental precursor machinery through mature compact/adaptive implementation.
+1. **Conventional propulsion P0-P6** from `data/exo-vessel/engineering-registry.json`: ordinary-spacetime propulsion technology.
+2. **Transit Path P0-P6** from the recovered FTL archive and live Path runtime: family-specific construction/implementation maturity with family-specific performance, charge/recovery, reliability, and scale consequences.
+3. **Shared transit capability T0-T8** from the live base FTL runtime: a cross-family capability/performance envelope used by the current generator.
 
-Those axes may correlate in a particular civilization only when source material says they do. They MUST NOT be merged into one `Path`, `technologyLevel`, or performance number.
+The conventional propulsion P-band is independent of the transit coordinates unless a specific source establishes a relationship. Transit Path level and shared T-tier are distinct but coupled by the current runtime; an explicit Path level normally resolves a shared tier baseline rather than being overwritten by it.
 
-The governing rule is:
+```mermaid
+flowchart LR
+    CP[Conventional propulsion P0-P6] ---|independent unless sourced| TP[Transit Path P0-P6]
+    TP -->|live default mapping| TT[Shared transit T0-T8]
+    TT -->|family window may clamp| RC[Resolved generator capability]
+```
+
+The governing machinery rule remains:
 
 > **Comparable end effects do not imply comparable machines.**
 
-Species environment, body plan, senses, civilization, organization, manufacturer, technology basis, maturity, vessel scale, mission, condition, and selected transit mechanism determine the installation. A biological drive is not a terrestrial drive with organic nouns substituted for mechanical ones. A mineral drive is not a terrestrial drive with crystals glued to a console. The carrier, manufacturing logic, service method, spatial arrangement, control assumptions, failure vocabulary, and signatures must emerge from the operative technology basis and any higher-authority race/manufacturer source.
+Species environment, body plan, senses, civilization, organization, manufacturer, technology basis, Path maturity, shared capability envelope, vessel scale, mission, condition, and selected transit mechanism determine the installation. A biological drive is not a terrestrial drive with organic nouns substituted for mechanical ones. A mineral drive is not a terrestrial drive with crystals glued to a console. The carrier, manufacturing logic, service method, spatial arrangement, control assumptions, failure vocabulary, and signatures must emerge from the operative technology basis and any higher-authority race/manufacturer source.
 
 ---
 
 ## 2. Authority order and provenance
 
-When two records disagree, resolve them in this order:
+When records disagree, resolve them according to **scope** as well as source order:
 
-1. **Specific surviving race/species, organization, manufacturer, named vessel, named installation, and named-technology source material.**
-2. **This Propulsion & Transit Authority** for domain boundaries, common vocabulary, generation order, source/status discipline, and integration rules.
-3. **Recovered FTL archive definitions** represented by `docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md` for confirmed transit families, Path implementations, construction maturity, scale, infrastructure, energy families, and recovered machinery doctrine.
+1. **Specific surviving race/species, organization, manufacturer, named vessel, named installation, and named-technology source material.** This outranks generic generator assumptions.
+2. **This Propulsion & Transit Authority** for domain boundaries, scale-coordinate semantics, common vocabulary, generation order, source/status discipline, and integration rules.
+3. **Recovered FTL archive definitions** represented by `docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md` for confirmed transit families, Path implementations, recovered construction maturity, scale, infrastructure, energy families, machinery doctrine, and archive provenance.
 4. **`EXO_OPERATIVE_TECHNOLOGY_BASIS.md`** for species/environment/organization/manufacturer-derived operative machinery, route carriers, controls, service environments, hybridization, interoperability, and failure language.
 5. **`EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md`** for deterministic vessel-source layers, seed hierarchy, engineering/layout auditability, load-path rules, condition state, and vessel integration.
-6. **Current EXO registries**, especially `data/exo-vessel/technology-basis-registry.json` and `data/exo-vessel/engineering-registry.json`, for machine-readable basis identifiers and ordinary-spacetime propulsion values.
-7. **`docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md`** as a `DERIVED` embodiment workshop mapping confirmed mechanism functions through operative technology bases.
-8. **Mathematical and real-physics analogies** as consistency/education tools only unless separately adopted into setting canon.
-9. **Model inference** only when explicitly labeled `DERIVED` or `PROPOSED` and accompanied by parent inputs and a resolver rule.
+6. **Live FTL runtime definitions** (`blacklight-exo-ftl-physics-definitions.js`, Path-level definitions/runtime/controller, and family Path definition files) are authoritative for **current generator behavior** where higher named canon does not contradict them. They do not retroactively assign a race a drive family or convert generated numeric estimates into setting-wide facts.
+7. **Current EXO registries**, especially `data/exo-vessel/technology-basis-registry.json`, `data/exo-vessel/engineering-registry.json`, and `data/exo-vessel/propulsion-transit-registry.json`, provide machine-readable identifiers, authority relationships, and validation vocabulary.
+8. **`docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md`** remains a `DERIVED` embodiment workshop mapping confirmed mechanism functions through operative technology bases.
+9. **Mathematical and real-physics analogies** are consistency/education tools only unless separately adopted into setting canon.
+10. **Model inference** is permitted only when explicitly labeled `DERIVED` or `PROPOSED` and accompanied by parent inputs and a resolver rule.
 
-A generated vessel instance can become authoritative **for that generated instance** only when its input authority snapshot, resolver choices, seed hierarchy, generator version, and provenance are retained. Generated output never silently rewrites setting-wide canon.
+A generated vessel instance can become authoritative **for that generated instance** only when its input authority snapshot, resolver choices, complete scale coordinates, seed hierarchy, generator version, and provenance are retained. Generated output never silently rewrites setting-wide canon.
 
 ### 2.1 Source index
 
@@ -50,46 +59,94 @@ A generated vessel instance can become authoritative **for that generated instan
 - `EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md` — governing EXO vessel design/integration guide.
 - `data/exo-vessel/technology-basis-registry.json` — seven operative technology families and six invariant route semantics.
 - `data/exo-vessel/engineering-registry.json` — ordinary-spacetime P0-P6 propulsion registry.
+- `blacklight-exo-ftl-physics-definitions.js` — live shared T0-T8 capability/performance definitions and family windows.
+- `blacklight-exo-ftl-path-level-core.js` — live generic Transit Path P0-P6 definitions.
+- `blacklight-exo-ftl-path-level-paths-physical.js`, `blacklight-exo-ftl-path-level-paths-dimensional.js`, `blacklight-exo-ftl-path-level-paths-discrete.js` — family-specific Path implementation definitions.
+- `blacklight-exo-ftl-path-level-runtime.js` — live Path-to-shared-tier coupling and Path performance application.
+- `blacklight-exo-ftl-path-level-controller.js` — live Path precedence/correction behavior.
 - `BLACKLIGHT_EXO_SOURCE_AUTHORITY.md` — cross-domain published-first/provenance precedent used here for canon-safe supplement behavior.
 - `data/blacklight-continuum/wiki/foundation-lore.json` — surviving Black Light campaign/race source including Ar'nock engineering constraints.
 - `docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` — derived family-by-basis machinery embodiment workshop.
-- `data/exo-vessel/propulsion-transit-registry.json` — machine-readable mirror of confirmed families, invariants, source chain, and canon safeguards.
+- `data/exo-vessel/propulsion-transit-registry.json` — machine-readable authority relationships, families, scale semantics, invariants, and canon safeguards.
 - `data/schemas/exo-vessel-propulsion-transit.schema.json` — generated-installation validation contract.
 - `docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` — subordinate resolver/generator implementation reference.
 - `docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` — canonical subordinate practical equipment, engineering, training, chart, and mathematical reference.
 
-### 2.2 Repaired authority-chain gap
+### 2.2 Repaired operative-technology authority gap
 
-An earlier revision of this authority incorrectly treated the operative-technology prose source as missing because it searched for the obsolete path `docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md`.
+An earlier revision incorrectly treated the operative-technology prose source as missing because it searched for obsolete path `docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md`.
 
-The source is live at repository root as:
+The source is live at repository root:
 
 `EXO_OPERATIVE_TECHNOLOGY_BASIS.md`
 
-It explicitly declares itself a Charles-authored Blacklight EXO engineering framework and a **governing supplement to `EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md`**. The current technology-basis registry is therefore its machine-readable companion, not a replacement invented to fill a missing source.
+It explicitly declares itself a Charles-authored Blacklight EXO engineering framework and a **governing supplement to `EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md`**. The technology-basis registry is therefore its machine-readable companion, not a replacement invented to fill a missing source.
 
-This correction closes the gap without promoting any inferred race-specific FTL content. Material previously marked unresolved solely because of the bad path is restored to the authority chain; genuinely missing race/manufacturer transit assignments remain unresolved.
+This repair restores the surviving authority without promoting inferred race-specific FTL content. Genuinely missing race/manufacturer transit assignments remain unresolved.
 
-### 2.3 Concurrent field-manual reconciliation
+### 2.3 Reconciled field-manual authority
 
-`docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` landed on `main` after the initial reconciliation base and before the machine-readable integration commits. It is retained as the canonical subordinate field manual because it is the deeper existing engineering/manual treatment. A smaller subsequently created `PROPULSION_TRANSIT_FIELD_MANUAL.md` was removed rather than allowing two competing manuals to diverge.
+`docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` landed concurrently with the initial propulsion/transit reconciliation. It is retained as the canonical subordinate field manual because it is the deeper existing engineering/manual treatment. A smaller subsequently created duplicate manual was removed rather than allowing two practical manuals to diverge.
 
 The field manual remains subordinate to this authority and to higher-priority specific race/manufacturer/named-system source material. Its equations and extrapolated operating practices retain their own `DERIVED`, `PROPOSED`, or `UNRESOLVED` labels.
 
-### 2.4 Canon-safe overwrite policy
+### 2.4 Repaired scale-authority gap
 
-The propulsion/transit resolver adopts the repository's existing published-first source discipline as a cross-domain provenance rule:
+The initial consolidated authority correctly separated the two P0-P6 vocabularies but failed to include a third, already-live system: the base FTL generator's T0-T8 shared capability hierarchy.
+
+The live FTL runtime establishes:
+
+| Runtime key | Shared transit capability |
+|---|---|
+| `t0` | Relativistic Precursor |
+| `t1` | Near-Light Compression |
+| `t2` | Supra-Light Prototype |
+| `t3` | System-Jump Capability |
+| `t4` | Operational Interstellar Drive |
+| `t5` | Strategic Corridor Drive |
+| `t6` | Deep-Range Manifold Drive |
+| `t7` | Compact Multisystem Drive |
+| `t8` | Post-Material Transit Architecture |
+
+The live Path runtime independently establishes:
+
+| Runtime key | Transit Path maturity |
+|---|---|
+| `p0` | Monumental Precursor |
+| `p1` | Industrial Demonstrator |
+| `p2` | Fixed Operational System |
+| `p3` | Capital-Scale Mobile Prototype |
+| `p4` | Fleet Operational Standard |
+| `p5` | Compact Strategic System |
+| `p6` | Mature Path Apex |
+
+The runtime coupling constant is:
+
+`STAGE_TO_TIER = [0, 1, 2, 3, 4, 6, 8]`
+
+so the default Path baseline mapping is:
+
+`P0->T0, P1->T1, P2->T2, P3->T3, P4->T4, P5->T6, P6->T8`
+
+When a caller explicitly chooses a Path level, the current controller makes that Path level control the shared-tier baseline and records a correction if a simultaneously requested T-tier conflicts. Family availability may clamp the shared tier to the selected family's supported runtime window.
+
+This behavior is `CONFIRMED` current generator behavior. It is not permission to rewrite future explicit named canon. If a higher-authority named source explicitly supplies both a Path level and a shared tier that the current runtime cannot represent, the authority resolver preserves the source values, reports the implementation conflict, and refuses silent normalization.
+
+### 2.5 Canon-safe overwrite policy
+
+The propulsion/transit resolver adopts the repository's published-first source discipline as a cross-domain provenance rule:
 
 | Source condition | Allowed resolver behavior |
 |---|---|
-| Confirmed value | Preserve. A lower layer may specialize within explicit constraints but may not replace it. |
-| Confirmed lower bound/classification | Preserve the bound/classification; any refinement remains separately labeled. |
+| Confirmed named value | Preserve. A lower layer may specialize only where source allows; it may not replace. |
+| Confirmed lower bound/classification | Preserve the bound/classification; refinements remain separately labeled. |
+| Confirmed live runtime rule | Preserve within generator-behavior scope until deliberately migrated. Do not misrepresent it as named setting canon. |
 | Candidate/disputed record | Keep separate from confirmed values and conclusions. |
 | Explicit unknown | Remain unknown in `AUTHORITY_ONLY`. |
 | Gap with sufficient confirmed parents | May become `DERIVED` only in `LABELED_DERIVATION`, with rule and provenance. |
 | Gap lacking sufficient authority | May become `PROPOSED` only in `LABELED_PROPOSAL`. |
 
-Repeated generation, documentation, UI display, or model confidence cannot promote `DERIVED` or `PROPOSED` material to `CONFIRMED`.
+Repeated generation, documentation, UI display, runtime prevalence, or model confidence cannot promote `DERIVED` or `PROPOSED` material to `CONFIRMED` setting canon.
 
 ---
 
@@ -125,7 +182,7 @@ The archive preserves a seven-stage implementation progression for each family. 
 - Phase displacement: Quantum State Conveyor -> Gram-to-Tonne Displacement Vault -> Macroscopic Phase Chamber -> Beacon-Coupled Vessel Displacement -> Autonomous Phase Drive -> Strategic Nonlocal Transit Core -> Compact Identity-Preserving Displacer.
 - Inertial torch: Beamed Reaction Launch Monolith -> Fusion-Pulse Acceleration Spine -> Antimatter-Catalyzed Torch Array -> Relativistic Courier Torch -> Fleet Inertial Torch -> Near-Light Strategic Torch -> Asymptotic Relativistic Drive.
 
-The supporting recovery catalog remains authoritative for the complete recovered component lists and path details.
+The recovered archive and Path definition files remain the detailed source for complete family component lists and level-by-level performance/utility records.
 
 ---
 
@@ -213,9 +270,9 @@ No currently reconciled source establishes a named Ar'nock transit family. There
 
 `Ar'nock transitFamily = UNRESOLVED`
 
-A generator MAY derive service/interface consequences from the confirmed Ar'nock facts: cultivated control substrates, vibration feedback, flexible nonhuman service geometry, biological fabrication compatibility, nonhuman identity/authentication boundaries, and atmosphere/material compatibility. It MUST NOT choose Metric, Q-Lattice, Slipstream, Fold, or any other family simply because one seems aesthetically compatible.
+A generator MAY derive service/interface consequences from confirmed Ar'nock facts: cultivated control substrates, vibration feedback, flexible nonhuman service geometry, biological fabrication compatibility, nonhuman identity/authentication boundaries, and atmosphere/material compatibility. It MUST NOT choose Metric, Q-Lattice, Slipstream, Fold, or any other family simply because one seems aesthetically compatible.
 
-This is the template for all future race-specific integration: recover facts first, constrain embodiment second, leave mechanism unknown until sourced.
+This is the template for future race-specific integration: recover facts first, constrain embodiment second, leave mechanism unknown until sourced.
 
 ---
 
@@ -226,12 +283,13 @@ flowchart TD
     S[Species / Race source] --> O[Organization / Polity]
     O --> M[Manufacturer / Builder]
     M --> B[Technology Basis / Bounded Hybrid]
-    B --> TM[Transit Construction Maturity]
-    TM --> V[Vessel Scale + Hull + Mission + Condition]
+    B --> F[Selected Transit Family]
+    F --> PL[Transit Path P-level]
+    PL --> TT[Resolve shared T0-T8 baseline]
+    TT --> V[Vessel Scale + Hull + Mission + Condition]
     V --> CP[Conventional Propulsion Context]
-    V --> F[Selected Transit Family]
-    F --> E[Energy Architecture]
-    F --> N[Navigation / Operator Model]
+    V --> E[Energy Architecture]
+    V --> N[Navigation / Operator Model]
     E --> X[Resolve 8 Machine Blocks]
     N --> X
     X --> U[Resolve 6 Utility Routes]
@@ -244,11 +302,23 @@ flowchart TD
 
 Canon-safe precedence is:
 
-`explicit named canon > race/species constraint > organization constraint > manufacturer doctrine > technology basis > transit construction maturity > vessel/mission/condition > family default > labeled derived engineering > labeled proposal`
+`explicit named canon > race/species constraint > organization constraint > manufacturer doctrine > technology basis > transit family > Transit Path P-level > shared T-tier resolution > vessel/mission/condition > family default > labeled derived engineering > labeled proposal`
 
-Unknowns are allowed. Silent invention is not.
+The conventional propulsion P-band is a separate vessel-engineering coordinate and is not inferred from the FTL Path/T-tier chain unless a source says to do so.
 
-### 7.1 Supplement modes
+### 7.1 Path/T-tier resolver behavior
+
+For ordinary generator inputs:
+
+1. resolve a family-compatible Path level;
+2. map Path to shared T-tier using `STAGE_TO_TIER`;
+3. clamp to the selected family's runtime tier window if required;
+4. record requested and resolved values plus correction reason;
+5. retain the Path value as the maturity authority rather than silently replacing it with a caller-supplied conflicting shared tier.
+
+For higher-authority named canon, a conflict is not “fixed” by software. Preserve the source values and report that the current runtime needs an implementation extension.
+
+### 7.2 Supplement modes
 
 The registry establishes three generation modes:
 
@@ -260,7 +330,7 @@ The registry establishes three generation modes:
 
 ## 8. Scale and embodiment
 
-Recovered scale bands are:
+Recovered installation scale bands are:
 
 | Scale | Approximate recovered mass band | Dominant engineering pressure |
 |---|---:|---|
@@ -274,6 +344,8 @@ Recovered scale bands are:
 | Gatework / megastructure | 24 million-24 billion t | stationary geometry, aperture/throughput, route infrastructure, strategic geography |
 
 Scale changes embodiment rather than technological identity. A larger biological system grows/distributes additional tissue and circulation; a mineral system expands or segments resonant domains; a terrestrial system distributes field nodes/rings, buses, coolant, service trunks, and supports; a gas-giant system expands membrane/tension architecture; a postmaterial system expands authenticated field volume, anchor density, reserve, and fallback capability.
+
+The Path level constrains what installation scales and maintenance burden are plausible. The shared T-tier supplies a cross-family performance/capability frame. Vessel mass alone does not authorize either value when an explicit source or request already supplies it.
 
 ### 8.1 Non-canon burden estimator
 
@@ -299,7 +371,7 @@ Values below 1 represent an unmet modeled requirement. Thresholds beyond that st
 
 Recovered FTL-supporting plant families include fusion pulse banks, antimatter-catalyzed field plants, contained micro-singularity accumulators, metastable vacuum-polarization cells, Q-state condensate reservoirs, and direct stellar power/mass taps for fixed gateworks.
 
-Power plant and transit mechanism are independent axes. The same family can admit different energy embodiments where the recovered Path permits them.
+Power plant and transit mechanism are independent dimensions. The same family can admit different energy embodiments where its Path permits them.
 
 Every installation must resolve:
 
@@ -366,7 +438,7 @@ Technology basis changes signature language. Biological systems may produce meta
 
 ## 12. Failure model
 
-Failures combine mechanism, basis, integration, vessel condition, navigation, power margin, coverage, infrastructure, and recovery.
+Failures combine mechanism, basis, integration, vessel condition, navigation, Path state, shared capability state, power margin, coverage, infrastructure, and recovery.
 
 `risk = f(mechanismState, technologyHealth, environment, navigationConfidence, energyMargin, coverageIntegrity, recoveryMargin)`
 
@@ -465,19 +537,20 @@ The practical companion is `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md`. It is 
 Every installation manual should be rendered from the same structured record and include:
 
 1. installation identity, source snapshot, and canon-status key;
-2. physical machinery identification and locations;
-3. six utility-route carriers/interfaces/tolerances;
-4. cold/dormant inspection;
-5. basis-specific conditioning;
-6. vessel/route calibration;
-7. spool and precommit checks;
-8. explicit commit boundary and abort state;
-9. family-specific active-transit quantities;
-10. termination/recovery procedure;
-11. post-transit inspection and forensic preservation;
-12. maintenance procedures, consumables, service environment, and depot-only work;
-13. failure symptom -> owning block -> dependency -> repair -> proof-of-restoration tracing;
-14. provenance appendix.
+2. conventional propulsion band, Transit Path level, shared T-tier, and any Path/T-tier correction provenance;
+3. physical machinery identification and locations;
+4. six utility-route carriers/interfaces/tolerances;
+5. cold/dormant inspection;
+6. basis-specific conditioning;
+7. vessel/route calibration;
+8. spool and precommit checks;
+9. explicit commit boundary and abort state;
+10. family-specific active-transit quantities;
+11. termination/recovery procedure;
+12. post-transit inspection and forensic preservation;
+13. maintenance procedures, consumables, service environment, and depot-only work;
+14. failure symptom -> owning block -> dependency -> repair -> proof-of-restoration tracing;
+15. provenance appendix.
 
 The standard derived operating progression is:
 
@@ -507,13 +580,15 @@ Learn the eight machine blocks and six route end effects. Find which end effect 
 
 Transit is a constrained state transformation. Mathematical availability is not engineering viability. The installation must measure state, build a solution under uncertainty, physically realize it, keep the complete payload inside the valid effect, maintain structural and utility dependencies, and recover afterward.
 
+Engineers must also keep the three scale coordinates straight. Ordinary-space propulsion maturity does not dictate FTL maturity. Path maturity describes the family-specific implementation. Shared T-tier describes the cross-family capability envelope used by the live generator. If software collapses them, the resulting calculation may be internally tidy and canonically wrong.
+
 ### 15.4 Intelligence level
 
 Observe signatures by phase and attach confidence/provenance. A vibration-control culture, cultivated computation, biological machinery, or crystalline resonance may constrain hypotheses without proving a specific drive family. Do not promote visual resemblance into mechanism identity.
 
 ### 15.5 API/generator level
 
-`driveType = warp` is insufficient. A valid record retains source snapshot, separate propulsion/transit axes, race/manufacturer/basis, vessel state, all eight blocks, all six routes, navigation, operations, maintenance, signatures, failures, infrastructure, validation, and field provenance.
+`driveType = warp` and `techLevel = 5` are both insufficient. A valid record retains source snapshot, conventional propulsion P-band, Transit Path P-level, shared T-tier and coupling provenance, race/manufacturer/basis, vessel state, all eight blocks, all six routes, navigation, operations, maintenance, signatures, failures, infrastructure, validation, and field provenance.
 
 ---
 
@@ -557,23 +632,30 @@ This is explicitly an ordinary-space propulsion audit and MUST NOT be used to ma
 
 ## 17. API and machine-readable contract
 
-The authoritative machine-readable integration now consists of:
+The authoritative machine-readable integration is:
 
-- `data/exo-vessel/propulsion-transit-registry.json`
-- `data/schemas/exo-vessel-propulsion-transit.schema.json`
+- `data/exo-vessel/propulsion-transit-registry.json` — registry version `1.1.0`;
+- `data/schemas/exo-vessel-propulsion-transit.schema.json` — installation schema version `1.1.0`.
 
 The schema requires these top-level domains:
 
 ```json
 {
   "recordType": "exoVesselPropulsionTransitInstallation",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "authoritySnapshot": {},
   "supplementMode": "AUTHORITY_ONLY|LABELED_DERIVATION|LABELED_PROPOSAL",
   "identity": {},
   "vessel": {},
   "conventionalPropulsion": {},
-  "transit": {},
+  "transit": {
+    "family": null,
+    "pathLevelKey": null,
+    "pathLevelLabel": null,
+    "sharedCapabilityTierKey": null,
+    "sharedCapabilityTierLabel": null,
+    "capabilityCoupling": {}
+  },
   "machineChain": {},
   "routes": {},
   "navigation": {},
@@ -587,9 +669,28 @@ The schema requires these top-level domains:
 }
 ```
 
-The schema intentionally allows `null` for unresolved values where fabricating an answer would be worse than an incomplete record.
+Runtime keys deliberately match the live generator: `p0`-`p6` for Transit Path levels and `t0`-`t8` for shared capability tiers. Conventional propulsion retains its existing registry values `P0`-`P6` in its own field.
 
-### 17.1 Provenance entry
+The schema intentionally permits `null` for unresolved values where fabricating an answer would be worse than an incomplete record.
+
+### 17.1 Path/T-tier coupling record
+
+The schema stores:
+
+```json
+{
+  "pathControlsSharedBaseline": true,
+  "defaultMappedTierKey": "t6",
+  "familyClampApplied": false,
+  "correctionApplied": true,
+  "correctionNote": "Caller requested a conflicting shared tier; explicit Path level controls the current runtime baseline.",
+  "source": "blacklight-exo-ftl-path-level-runtime.js#STAGE_TO_TIER + blacklight-exo-ftl-path-level-controller.js"
+}
+```
+
+This prevents a generated T-tier from looking like a free-standing canonical source value when it was actually resolved from a Path input.
+
+### 17.2 Provenance entry
 
 Every nontrivial field should be traceable:
 
@@ -605,7 +706,7 @@ Every nontrivial field should be traceable:
 }
 ```
 
-A user should be able to ask **why this ship has this machine** and receive the source chain, not a post-hoc narrative.
+A user should be able to ask **why this ship has this machine, Path, or capability tier** and receive the source chain, not a post-hoc narrative.
 
 ---
 
@@ -681,6 +782,7 @@ Transit generation therefore hands the vessel assembler at least:
 - radiator/exchange/deployment requirements;
 - service environment and replace/grow/anneal/reconstruct access;
 - infrastructure interfaces;
+- conventional propulsion, Path-level, shared-tier, and family compatibility records;
 - condition/failure propagation dependencies.
 
 Current closed mass/volume references are not silently recalculated merely because a richer technology methodology exists. A methodology-aware rebalance must explicitly reopen the appropriate engineering ledger and preserve/reconcile prior reference records.
@@ -702,7 +804,7 @@ flowchart TD
     R --> V[Vessel/module viewer]
 ```
 
-A renderer, manual writer, viewer, or narrative generator may change language and detail level. It may not independently re-resolve canon or invent a different drive.
+A renderer, manual writer, viewer, or narrative generator may change language and detail level. It may not independently re-resolve canon or invent a different drive, Path level, or T-tier.
 
 This is the practical meaning of readable procedural canon: every view can be more or less detailed without contradicting the same source object.
 
@@ -712,53 +814,61 @@ This is the practical meaning of readable procedural canon: every view can be mo
 
 A valid propulsion/transit installation proves that:
 
-1. ordinary propulsion band and transit construction maturity remain separate axes;
-2. confirmed source values have not been overwritten by procedural values;
-3. every `DERIVED` or `PROPOSED` value carries provenance and parent inputs;
-4. all eight machine blocks are present or explicitly unresolved;
-5. all six invariant EXO route semantics have carrier/interface/tolerance state;
-6. whole-effect coverage includes the intended payload or reports the shortfall;
-7. navigation/reference inputs match the selected mechanism;
-8. energy architecture includes delivery, isolation, recovery/dump, and thermal/working-medium consequences;
-9. structural integration supplies a continuous load/foundation path;
-10. abort state respects the family-specific commit boundary;
-11. technology-basis embodiment changes actual carrier/control/service/failure language rather than merely vocabulary;
-12. race-specific constraints outrank generic basis assumptions;
-13. no race-specific transit family is invented from aesthetic or technological compatibility;
-14. alien compatibility is not assumed from identical end effects;
-15. no chronology effect is created without explicit canon authority;
-16. output views consume the same validated record;
-17. identical source snapshot, complete seed hierarchy, generator version, and deterministic inputs reproduce the same result;
-18. unresolved material remains visible rather than being silently normalized away.
+1. conventional propulsion P-band, Transit Path P-level, and shared transit T-tier remain distinct and explicitly named;
+2. Path/T-tier coupling follows the current runtime when resolving ordinary generator inputs, including family clamping and correction provenance;
+3. higher-authority named canon is never silently rewritten merely to fit current runtime coupling;
+4. confirmed source values and confirmed in-scope runtime constraints have not been overwritten by procedural values;
+5. every `DERIVED` or `PROPOSED` value carries provenance and parent inputs;
+6. all eight machine blocks are present or explicitly unresolved;
+7. all six invariant EXO route semantics have carrier/interface/tolerance state;
+8. whole-effect coverage includes the intended payload or reports the shortfall;
+9. navigation/reference inputs match the selected mechanism;
+10. energy architecture includes delivery, isolation, recovery/dump, and thermal/working-medium consequences;
+11. structural integration supplies a continuous load/foundation path;
+12. abort state respects the family-specific commit boundary;
+13. technology-basis embodiment changes actual carrier/control/service/failure language rather than merely vocabulary;
+14. race-specific constraints outrank generic basis assumptions;
+15. no race-specific transit family is invented from aesthetic or technological compatibility;
+16. alien compatibility is not assumed from identical end effects;
+17. no chronology effect is created without explicit canon authority;
+18. output views consume the same validated record;
+19. identical source snapshot, complete seed hierarchy, resolver inputs, generator version, and deterministic inputs reproduce the same result;
+20. unresolved material remains visible rather than being silently normalized away.
 
 ---
 
 ## 24. Known gaps and next expansion targets
 
-`RESOLVED:` the operative-technology authority is not missing; it is the root `EXO_OPERATIVE_TECHNOLOGY_BASIS.md`. The stale-path authority gap is closed by this revision.
+`RESOLVED:` the operative-technology authority is not missing; it is root `EXO_OPERATIVE_TECHNOLOGY_BASIS.md`.
 
-`RESOLVED:` the concurrent field-manual branch is reconciled. `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` is the surviving subordinate manual; the smaller duplicate manual was removed.
+`RESOLVED:` the concurrent field manual is reconciled; `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` is the surviving subordinate practical/engineering manual and the smaller duplicate is removed.
+
+`RESOLVED:` the previously omitted live T0-T8 capability hierarchy is now integrated as a distinct third scale coordinate and its Path-to-tier coupling is recorded in registry/schema v1.1.0.
 
 `UNRESOLVED:` Ar'nock and other race/manufacturer-specific named FTL assignments must be added only when surviving source records establish them.
 
-`UNRESOLVED:` canonical numerical range, speed, spool time, detection range, failure probability, energy cost, and scaling exponents cannot be inferred uniformly across the recovered transit families. Where numbers do not survive, the system retains qualitative constraints or labeled design estimators.
+`MIXED:` current T0-T8 and P0-P6 Path numeric performance models are confirmed **runtime behavior**, while not every numeric value is independently established as setting-wide named canon. Presentation and provenance must preserve that distinction.
 
-`PROPOSED:` software resolver implementation should consume `propulsion-transit-registry.json` and validate output against `exo-vessel-propulsion-transit.schema.json` rather than duplicating family/basis lists in renderer code.
+`UNRESOLVED:` canonical numerical detection ranges, universal failure probabilities, universal energy costs, and universal scaling exponents cannot be inferred uniformly across all families. Where sources do not establish numbers, retain qualitative constraints or clearly labeled estimators.
 
-`PROPOSED:` manufacturer-specific manuals, conversion-bay engineering, mixed-technology salvage/refit rules, damage propagation into transit capability, infrastructure traffic models, and transit-signature intelligence tools should be generated as views/extensions of the same structured installation record.
+`PROPOSED:` migrate the live FTL runtime to consume the consolidated registry/schema without first duplicating its detailed performance arrays. The migration must preserve outputs or intentionally version changes and retain the current Path/T-tier mapping.
+
+`PROPOSED:` manufacturer-specific manuals, conversion-bay engineering, mixed-technology salvage/refit rules, damage propagation into transit capability, infrastructure traffic models, and transit-signature intelligence tools should remain views/extensions of the same structured installation record.
 
 ---
 
 ## 25. Supporting-document roles
 
-`FTL_ENGINEERING_CATALOG_WORKING.md` remains the archive-recovery ledger and mathematical workshop. Its recovered commit provenance, path implementations, component families, scale, infrastructure, and energy reconstruction remain important.
+`FTL_ENGINEERING_CATALOG_WORKING.md` remains the archive-recovery ledger and mathematical workshop. Its recovered provenance, Path implementations, component families, scale, infrastructure, and energy reconstruction remain important.
 
-`FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` remains the detailed `DERIVED` embodiment workshop. It is subordinate to confirmed race/manufacturer source material, the live root operative-technology authority, and this consolidated authority.
+`FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` remains the detailed `DERIVED` embodiment workshop. It is subordinate to confirmed race/manufacturer source material, the root operative-technology authority, and this consolidated authority.
 
-`PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` explains how to resolve the structured installation without becoming a competing lore authority.
+The live FTL runtime files remain authoritative for current generator behavior until deliberately migrated; their behavior is documented here instead of silently copied into a second set of numeric tables.
+
+`PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` explains how to resolve the structured installation, including the three-coordinate scale model, without becoming a competing lore authority.
 
 `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` is the canonical subordinate field-engineering, practical equipment, mathematical, and educational manual. It must remain a view/technical expansion of the authority rather than a competing authority chain.
 
-`propulsion-transit-registry.json` and `exo-vessel-propulsion-transit.schema.json` make the core vocabulary and validation rules machine-readable.
+`propulsion-transit-registry.json` and `exo-vessel-propulsion-transit.schema.json` make the core vocabulary, scale relationships, provenance, and validation rules machine-readable.
 
 This document remains the **single authoritative integration entrypoint**. Future refinements should extend or correct this authority deliberately rather than creating another competing top-level propulsion/FTL authority.
