@@ -116,22 +116,40 @@
       'use strict';
 
       const REPOSITORY_TREE = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/git/trees/main?recursive=1';
+      const GITHUB_BLOB_ROOT = 'https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/';
       const grid = document.getElementById('blacklight-resource-grid');
 
-      const explicitBlacklightSupport = new Set([
+      const explicitBlacklightArchives = new Set([
+        'BLACKLIGHT_EXO_SOURCE_AUTHORITY.md',
         'EXO_OPERATIVE_TECHNOLOGY_BASIS.md',
-        'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md',
-        'alien-vessel-generator.js',
-        'alien-vessel-generator-entry.js'
+        'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md'
       ]);
+
+      const excludedPrefixes = [
+        '.github/',
+        '.git/',
+        '.ci-results/',
+        'scripts/',
+        'test/',
+        'tests/',
+        'node_modules/',
+        'dev/',
+        'tools/'
+      ];
+
+      const publicResourceExtension = /\.(?:html?|md|txt|json|csv|xml|pdf|png|jpe?g|gif|webp|svg|ico|avif|mp3|ogg|wav|flac|mp4|webm)$/i;
 
       const isBlacklightResource = (path) => {
         const lower = path.toLowerCase();
-        return lower.includes('blacklight') ||
-          lower.includes('black-light') ||
-          lower.includes('black_light') ||
-          lower.startsWith('docs/blacklight/') ||
-          explicitBlacklightSupport.has(path);
+        if (excludedPrefixes.some(prefix => lower.startsWith(prefix))) return false;
+        if (!publicResourceExtension.test(lower)) return false;
+        if (explicitBlacklightArchives.has(path)) return true;
+        if (/^blacklight-[^/]+\.(?:html?|md|txt|json|csv|xml|pdf|png|jpe?g|gif|webp|svg|ico|avif|mp3|ogg|wav|flac|mp4|webm)$/i.test(path)) return true;
+        if (lower.startsWith('docs/blacklight/')) return true;
+        if (lower.startsWith('assets/blacklight/')) return true;
+        if (lower.startsWith('data/blacklight')) return true;
+        if (lower.startsWith('api/') && (lower.includes('blacklight') || lower.includes('black-light') || lower.includes('black_light'))) return true;
+        return false;
       };
 
       const displayName = (path) => path
@@ -139,6 +157,15 @@
         .replace(/\.[^.]+$/, '')
         .replace(/[_-]+/g, ' ')
         .replace(/\b\w/g, letter => letter.toUpperCase());
+
+      const hrefFor = (path, treePaths) => {
+        if (/\.md$/i.test(path)) {
+          const siblingHtml = path.replace(/\.md$/i, '.html');
+          if (treePaths.has(siblingHtml)) return encodeURI(siblingHtml);
+          return GITHUB_BLOB_ROOT + path.split('/').map(encodeURIComponent).join('/');
+        }
+        return encodeURI(path);
+      };
 
       const existingPaths = new Set(
         Array.from(grid.querySelectorAll('a[href]'), link => link.getAttribute('href'))
@@ -154,24 +181,28 @@
         .then(data => {
           if (!Array.isArray(data.tree)) throw new Error('Repository tree was not returned.');
 
+          const treePaths = new Set(data.tree.filter(item => item.type === 'blob').map(item => item.path));
           const resources = data.tree
-            .filter(item => item.type === 'blob' && isBlacklightResource(item.path) && !existingPaths.has(item.path))
-            .map(item => ({ path: item.path, name: displayName(item.path) }))
+            .filter(item => item.type === 'blob' && isBlacklightResource(item.path))
+            .map(item => ({ path: item.path, name: displayName(item.path), href: hrefFor(item.path, treePaths) }))
+            .filter(item => !existingPaths.has(item.path) && !existingPaths.has(item.href))
             .sort((a, b) => a.name.localeCompare(b.name) || a.path.localeCompare(b.path));
 
           grid.append(...resources.map(item => {
             const link = document.createElement('a');
             link.className = 'bli-resource-button';
-            link.href = encodeURI(item.path);
+            link.href = item.href;
             link.textContent = item.name;
             link.setAttribute('aria-label', `${item.name} — ${item.path}`);
             return link;
           }));
         })
         .catch(() => {
+          const fallbackHref = 'https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/docs/blacklight';
+          if (grid.querySelector(`a[href="${fallbackHref}"]`)) return;
           const fallback = document.createElement('a');
           fallback.className = 'bli-resource-button';
-          fallback.href = 'https://github.com/mrcalzon02/HB-TTRPG-tools/tree/main/docs/blacklight';
+          fallback.href = fallbackHref;
           fallback.textContent = 'Blacklight Archive';
           grid.append(fallback);
         });
