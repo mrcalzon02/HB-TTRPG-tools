@@ -130,6 +130,89 @@
   font-size: 0.88rem;
 }
 
+/* Interaction pages use the same visual language as landing pages without inheriting
+   the document-first hero geometry. Apply these modifiers only to live tools. */
+.workspace-tool-shell {
+  width: min(1720px, calc(100% - 24px));
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.workspace-tool-context {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--landing-panel);
+}
+
+.workspace-tool-context p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.workspace-tool-context .eyebrow {
+  margin-bottom: 3px;
+  color: var(--accent);
+}
+
+.workspace-tool-flags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.workspace-tool-flags span {
+  border: 1px solid rgba(200, 138, 53, 0.3);
+  border-radius: 999px;
+  background: rgba(200, 138, 53, 0.08);
+  color: #e8cfaa;
+  padding: 5px 9px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.workspace-tool-host {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.workspace-tool-reference {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--landing-panel);
+  padding: 0 14px;
+}
+
+.workspace-tool-reference > summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 800;
+  padding: 11px 0;
+}
+
+.workspace-tool-reference[open] {
+  padding-bottom: 14px;
+}
+
+.workspace-tool-reference .workspace-summary-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.workspace-tool-reference .workspace-summary-list div {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+}
+
 .workspace-section {
   border: 1px solid var(--line);
   border-radius: 24px;
@@ -293,15 +376,28 @@
   .search-result-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .workspace-tool-context {
+    grid-template-columns: 1fr;
+  }
+  .workspace-tool-flags {
+    justify-content: flex-start;
+  }
+  .workspace-tool-reference .workspace-summary-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 680px) {
   .workspace-landing-shell {
     width: min(100% - 16px, 1380px);
   }
+  .workspace-tool-shell {
+    width: min(100% - 12px, 1720px);
+  }
   .workspace-card-grid,
   .search-result-grid,
-  .foundry-search-controls {
+  .foundry-search-controls,
+  .workspace-tool-reference .workspace-summary-list {
     grid-template-columns: 1fr;
   }
   .workspace-hero {
