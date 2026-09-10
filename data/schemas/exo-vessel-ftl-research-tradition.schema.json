@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "data/schemas/exo-vessel-ftl-research-tradition.schema.json",
+  "title": "EXO Vessel FTL Research Tradition Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["registryType", "registryVersion", "schema", "authority", "sharedResearchRecord", "technologyBasisTranslation", "families", "namedAttributionGuard", "apiProjection"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlResearchTraditionRegistry"},
+    "registryVersion": {"type": "string"},
+    "schema": {"type": "string"},
+    "authority": {"type": "object", "required": ["primary", "lineage", "familyBasis", "calibration", "legacyDesignSource", "rule"], "additionalProperties": true},
+    "sharedResearchRecord": {"type": "object", "additionalProperties": true},
+    "technologyBasisTranslation": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["basis", "researchMedium", "publicationForm", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "basis": {"type": "string"},
+          "researchMedium": {"type": "string"},
+          "publicationForm": {"type": "string"},
+          "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]}
+        }
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["family", "researchSchool", "tradition", "coreProblem", "objectiveFunction", "objectiveStatus", "mathematicalDisciplines", "instrumentTradition", "patentClasses", "machineryConsequence", "failureReview", "educationSequence", "provenance"],
+        "properties": {
+          "family": {"enum": ["metric-envelope", "gravitic-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement"]},
+          "researchSchool": {"type": "string", "minLength": 1},
+          "tradition": {"type": "string", "minLength": 1},
+          "coreProblem": {"type": "string", "minLength": 1},
+          "objectiveFunction": {"type": "string", "minLength": 1},
+          "objectiveStatus": {"enum": ["DERIVED", "PROPOSED"]},
+          "mathematicalDisciplines": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+          "instrumentTradition": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+          "patentClasses": {"type": "array", "minItems": 4, "items": {"type": "object", "required": ["name", "status"], "additionalProperties": false, "properties": {"name": {"type": "string"}, "status": {"enum": ["DERIVED", "PROPOSED"]}}}},
+          "machineryConsequence": {"type": "string"},
+          "failureReview": {"type": "object", "required": ["mandatoryQuestion", "antiPattern"], "additionalProperties": false, "properties": {"mandatoryQuestion": {"type": "string"}, "antiPattern": {"type": "string"}}},
+          "educationSequence": {"type": "array", "minItems": 7, "items": {"type": "string"}},
+          "provenance": {"type": "object", "additionalProperties": {"type": "string"}}
+        }
+      }
+    },
+    "namedAttributionGuard": {"type": "object", "required": ["status", "requirements"], "additionalProperties": false, "properties": {"status": {"type": "string"}, "requirements": {"type": "array", "minItems": 4, "items": {"type": "string"}}}},
+    "apiProjection": {"type": "object", "required": ["resolverInputs", "resolverOutputs", "modes"], "additionalProperties": false, "properties": {"resolverInputs": {"type": "array", "items": {"type": "string"}}, "resolverOutputs": {"type": "array", "items": {"type": "string"}}, "modes": {"type": "array", "items": {"type": "string"}}}}
+  }
+}
