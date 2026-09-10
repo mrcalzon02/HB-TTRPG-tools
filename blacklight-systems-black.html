@@ -75,8 +75,9 @@
   <main class="bli-shell">
     <section class="bli-section">
       <div class="bli-section-head">
-        <p class="bli-eyebrow">Primary interfaces</p>
-        <h2>Operational Blacklight resources.</h2>
+        <p class="bli-eyebrow">Complete resource directory</p>
+        <h2>All Blacklight pages, assets, archives, and EXO authorities.</h2>
+        <p class="bli-lede">The primary interfaces are listed first. The directory then appends every matching Blacklight and Blacklight EXO resource from the authoritative <code>main</code> repository tree so new pages, manuals, data archives, styles, runtimes, media, and models do not disappear behind lower-access navigation.</p>
       </div>
 
       <div class="bli-resource-grid" id="blacklight-resource-grid" aria-live="polite">
@@ -119,12 +120,15 @@
       const GITHUB_BLOB_ROOT = 'https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/';
       const grid = document.getElementById('blacklight-resource-grid');
 
-      const explicitBlacklightArchives = new Set([
+      const explicitBlacklightResources = new Set([
         'BLACKLIGHT_EXO_SOURCE_AUTHORITY.md',
         'EXO_OPERATIVE_TECHNOLOGY_BASIS.md',
-        'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md'
+        'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md',
+        'alien-vessel-generator.js',
+        'alien-vessel-generator-entry.js'
       ]);
 
+      // Development-only validation and CI material is not a page, site asset, or archive resource.
       const excludedPrefixes = [
         '.github/',
         '.git/',
@@ -132,23 +136,33 @@
         'scripts/',
         'test/',
         'tests/',
-        'node_modules/',
-        'dev/',
-        'tools/'
+        'node_modules/'
       ];
 
-      const publicResourceExtension = /\.(?:html?|md|txt|json|csv|xml|pdf|png|jpe?g|gif|webp|svg|ico|avif|mp3|ogg|wav|flac|mp4|webm)$/i;
+      const resourceExtension = /\.(?:html?|md|txt|json|ya?ml|csv|xml|pdf|css|js|mjs|cjs|map|png|jpe?g|gif|webp|svg|ico|avif|mp3|ogg|wav|flac|mp4|webm|woff2?|ttf|otf|wasm|glb|gltf|obj|mtl|bin)$/i;
 
       const isBlacklightResource = (path) => {
         const lower = path.toLowerCase();
         if (excludedPrefixes.some(prefix => lower.startsWith(prefix))) return false;
-        if (!publicResourceExtension.test(lower)) return false;
-        if (explicitBlacklightArchives.has(path)) return true;
-        if (/^blacklight-[^/]+\.(?:html?|md|txt|json|csv|xml|pdf|png|jpe?g|gif|webp|svg|ico|avif|mp3|ogg|wav|flac|mp4|webm)$/i.test(path)) return true;
+        if (!resourceExtension.test(lower)) return false;
+        if (explicitBlacklightResources.has(path)) return true;
+
+        // The Black tier is the master index. Anything explicitly namespaced to
+        // Blacklight is included regardless of whether it is a page, runtime,
+        // stylesheet, data file, media asset, model, manual, or archive record.
+        if (lower.includes('blacklight') || lower.includes('black-light') || lower.includes('black_light')) return true;
         if (lower.startsWith('docs/blacklight/')) return true;
         if (lower.startsWith('assets/blacklight/')) return true;
         if (lower.startsWith('data/blacklight')) return true;
-        if (lower.startsWith('api/') && (lower.includes('blacklight') || lower.includes('black-light') || lower.includes('black_light'))) return true;
+
+        // EXO is a Blacklight subsystem. Its authorities and data archives belong
+        // in Black access even when an individual filename omits the brand prefix.
+        if (lower.startsWith('exo-') || lower.startsWith('exo_')) return true;
+        if (lower.startsWith('docs/exo-') || lower.startsWith('docs/exo_')) return true;
+        if (lower.startsWith('data/exo-') || lower.startsWith('data/exo_')) return true;
+        if (lower.startsWith('data/schemas/exo-') || lower.startsWith('data/schemas/exo_')) return true;
+        if (lower.startsWith('artifacts/exo-') || lower.startsWith('artifacts/exo_')) return true;
+        if (lower.startsWith('api/exo-') || lower.startsWith('api/exo_')) return true;
         return false;
       };
 
@@ -180,6 +194,7 @@
         })
         .then(data => {
           if (!Array.isArray(data.tree)) throw new Error('Repository tree was not returned.');
+          if (data.truncated) throw new Error('GitHub returned a truncated repository tree; refusing to present an incomplete Blacklight directory.');
 
           const treePaths = new Set(data.tree.filter(item => item.type === 'blob').map(item => item.path));
           const resources = data.tree
@@ -193,6 +208,7 @@
             link.className = 'bli-resource-button';
             link.href = item.href;
             link.textContent = item.name;
+            link.title = item.path;
             link.setAttribute('aria-label', `${item.name} — ${item.path}`);
             return link;
           }));
