@@ -9,7 +9,7 @@ const source=await read('blacklight-exo-vessel-diegetic-controls.js');
 const css=await read('blacklight-exo-vessel-diegetic-controls.css');
 const gameplayUi=await read('blacklight-exo-vessel-gameplay-ui.js');
 
-for(const signature of ['enhanceSelect','enhanceNumber','MutationObserver','exo-vessel-native-authority','exo-diegetic-choice-rail','exo-diegetic-slider','allowAutomatic','log-zero','dispatchEvent(new Event'])if(!source.includes(signature))fail(`Diegetic control runtime lacks ${signature}.`);
+for(const signature of ['enhanceSelect','enhanceNumber','refreshAll','#exo-vessel-campaign-damage-editor','MutationObserver','exo-vessel-native-authority','exo-diegetic-choice-rail','exo-diegetic-slider','allowAutomatic','log-zero','dispatchEvent(new Event'])if(!source.includes(signature))fail(`Diegetic control runtime lacks ${signature}.`);
 for(const signature of ['exo-vessel-native-authority','exo-diegetic-selector','exo-diegetic-number','exo-diegetic-slider','exo-diegetic-choice','exo-diegetic-auto','INSTRUMENT'])if(!css.includes(signature))fail(`Diegetic control stylesheet lacks ${signature}.`);
 for(const signature of ['blacklight-exo-vessel-diegetic-controls.css','blacklight-exo-vessel-diegetic-controls.js','loadVessel10Layers'])if(!gameplayUi.includes(signature))fail(`Gameplay UI does not load diegetic asset ${signature}.`);
 
@@ -34,7 +34,7 @@ class FakeMutationObserver{constructor(callback){this.callback=callback;}observe
 const body=new Element('body'),main=new Element('main');body.className='exo-vessel-body';body.append(main);
 const document={readyState:'loading',body,createElement:tag=>new Element(tag),addEventListener(){},querySelector(selector){if(selector==='.exo-vessel-body main')return main;return null;},querySelectorAll(){return[];}};
 const context={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,Promise,Error,WeakSet,WeakMap,document,MutationObserver:FakeMutationObserver,Event:class{constructor(type,options={}){this.type=type;this.bubbles=options.bubbles;}},Option:OptionElement};context.globalThis=context;vm.createContext(context);vm.runInContext(source,context,{filename:'blacklight-exo-vessel-diegetic-controls.js'});
-const api=context.BlacklightExoVesselDiegeticControls;if(!api?.enhanceSelect||!api?.enhanceNumber||api.version!==1)fail('Diegetic control API did not initialize.');
+const api=context.BlacklightExoVesselDiegeticControls;if(!api?.enhanceSelect||!api?.enhanceNumber||!api?.refreshAll||api.version!==2)fail('Diegetic control API did not initialize with the scoped VESSEL-10 interface.');
 
 function labelled(control,labelText){const label=new Element('label'),span=new Element('span');span.textContent=labelText;label.append(span,control);main.append(label);return label;}
 const select=new Element('select');select.id='exo-vessel-role';select.add(new OptionElement('Explorer','explorer'));select.add(new OptionElement('Warship','warship'));select.value='explorer';const selectLabel=labelled(select,'Mission role');let selectChanges=0;select.addEventListener('change',()=>selectChanges++);api.enhanceSelect(select);const selectPanel=selectLabel.children.find(item=>item.classList.contains('exo-diegetic-selector'));if(!selectPanel||!select.classList.contains('exo-vessel-native-authority'))fail('Select authority was not replaced by a visible diegetic selector.');const choices=descendants(selectPanel).filter(item=>item.classList.contains('exo-diegetic-choice'));if(choices.length!==2)fail('Diegetic selector did not expose every select option.');choices[1].dispatchEvent(new context.Event('click'));if(select.value!=='warship'||selectChanges!==1)fail('Segmented selector did not update the canonical select and dispatch its change event.');
@@ -45,4 +45,4 @@ const payload=new Element('input');payload.type='number';payload.id='exo-vessel-
 
 const workflow=await read('.github/workflows/pages.yml');if(!workflow.includes('node scripts/validate-exo-vessel-diegetic-controls.mjs'))fail('Pages workflow does not gate VESSEL-10 diegetic controls.');
 console.log('EXO vessel VESSEL-10 diegetic control validation passed.');
-console.log('Validated segmented select authority, calibrated numeric sliders, automatic values, hidden canonical fields, legacy input/change events, dynamic enhancement hooks, and synchronized VESSEL-10 asset loading.');
+console.log('Validated scoped campaign-editor instrument ownership, segmented select authority, calibrated numeric sliders, automatic values, hidden canonical fields, legacy input/change events, dynamic enhancement hooks, and synchronized VESSEL-10 asset loading.');
