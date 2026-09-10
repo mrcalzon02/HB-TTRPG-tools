@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0.0",
+  "authority": {
+    "status": "MIXED",
+    "primary_authority": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "comparative_authority": "data/exo-vessel/ftl-cross-family-integration-registry.json",
+    "civilization_authority": "data/exo-stellar-sector/civilization-authority-registry.json",
+    "source_document": "The different lightspeed methods",
+    "source_document_id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "precedence": [
+      "specific named canon for the entity or installation",
+      "specific family/operator canon",
+      "specific technology-basis canon",
+      "cross-family comparative authority",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "rule": "A civilization, race, manufacturer, vessel, installation, inventor, date, prevalence statement, or historical ownership statement is bound to an FTL family only when an authoritative source actually establishes that relation. Machinery resemblance, technology basis, generated prevalence, or repeated examples are not evidence of ownership."
+  },
+  "claim_model": {
+    "statuses": ["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"],
+    "claim_fields": ["claim_id","subject","predicate","object","status","source_ancestry","authority_rank","transformation","contradictions","scope"],
+    "admission_rule": "Admit an externally asserted claim only when its source ancestry supports the claim, no higher-precedence authority contradicts it, and every non-source transformation is explicitly labeled."
+  },
+  "binding_rules": {
+    "explicit_evidence_required": [
+      "civilization-to-family ownership",
+      "race-to-family ownership",
+      "manufacturer-to-family production",
+      "vessel-to-installed-family",
+      "inventor-to-invention",
+      "historical date or first-use",
+      "prevalence or typical-use claim",
+      "licensed, captured, stolen, reverse-engineered, or inherited origin"
+    ],
+    "permitted_bindings": [
+      "confirmed named source directly identifies the relation",
+      "confirmed vessel or installation record explicitly names its drive family",
+      "confirmed manufacturer record explicitly names the product/family",
+      "derived machinery consequence from a confirmed family plus independently confirmed technology basis, with ownership left unchanged",
+      "proposed teaching example with all names/history explicitly fictional or unresolved"
+    ],
+    "forbidden_inferences": [
+      "technology basis implies race ownership",
+      "machinery style implies inventor",
+      "shared visual language implies manufacturer",
+      "same Q-space vocabulary makes Q-Lattice and Slipstream one family",
+      "generated frequency establishes canonical prevalence",
+      "captured hardware changes the originating family's physical operator",
+      "a refit transfers invention credit",
+      "multiple descendants of one source count as independent confirmation"
+    ]
+  },
+  "embodiment_model": {
+    "equation": "R_e,f = O_f + B_e + I_e + C_e",
+    "meaning": {
+      "O_f": "family operator and invariant physics",
+      "B_e": "technology-basis embodiment",
+      "I_e": "installation-specific geometry, power, thermal, control, structural, and maintenance constraints",
+      "C_e": "civilization/manufacturer practices only where canon-supported"
+    },
+    "operator_invariant": "Pi_operator(R_e,f) = O_f",
+    "variable_layers": [
+      "carrier medium and field-former architecture",
+      "power conditioning and storage",
+      "sensor embodiment and reference architecture",
+      "control topology and interface conventions",
+      "thermal rejection",
+      "structural load paths and protected-volume geometry",
+      "maintenance access and replaceable-unit philosophy",
+      "signature management",
+      "safety interlocks and certification workflow"
+    ],
+    "rule": "Embodiment may change how the same effect is generated, controlled, serviced, sensed, cooled, packaged, and detected; it may not silently replace the family operator with another physical mechanism."
+  },
+  "provenance_model": {
+    "graph": "G_P = (V,E), where vertices are source or claim records and directed edges are extraction, normalization, derivation, proposal, inheritance, or contradiction relations.",
+    "origin_chain": ["source","extraction","normalized canon claim","derived engineering consequence","generated output"],
+    "required_node_fields": ["node_id","kind","source_id_or_record","revision_or_commit","locator","status","authority_rank"],
+    "required_edge_fields": ["from","to","transformation","status","rationale"],
+    "independence_rule": "Claims that share the same ultimate source ancestor are correlated evidence and cannot be counted as independent confirmations merely because they appear in separate files or generated records.",
+    "coverage_metric": {
+      "status": "DERIVED",
+      "equation": "C_P = N_claims_with_source_status_transform / N_externally_asserted_claims",
+      "target": 1.0,
+      "scope": "editorial/generated-record provenance completeness; not an in-world physical measurement"
+    }
+  },
+  "contradiction_policy": {
+    "conflict_set": "K(c) = { s_i | s_i supports a materially incompatible value of claim c }",
+    "resolution_order": [
+      "compare scope and subject identity",
+      "compare revision/temporal applicability",
+      "apply explicit authority precedence",
+      "test whether apparent conflict is embodiment-versus-operator rather than true contradiction",
+      "preserve equal-authority unresolved alternatives"
+    ],
+    "unresolved_rule": "When materially incompatible top/equal-authority claims cannot be resolved by scope, revision, or explicit precedence, mark the contested field UNRESOLVED and retain the contradiction set. Do not average, majority-vote, or choose the more convenient value."
+  },
+  "integration_doctrine": {
+    "foreign_systems": {
+      "classes": ["licensed","captured","salvaged","stolen","reverse-engineered","inherited","jointly manufactured","unknown-origin"],
+      "rule": "Keep physical family/operator provenance separate from current custodian, service doctrine, replacement parts, interfaces, and local modifications. Local integration does not rewrite origin."
+    },
+    "multi_origin_vessels": {
+      "rule": "Track propulsion/FTL, power, navigation, sensors, control, cooling, structure, recovery, and reference authorities as independently provenance-bearing subsystems. A vessel may legitimately contain systems from several origins without becoming evidence that any one origin invented the others.",
+      "required_fields": ["subsystem_id","family_or_function","origin_status","current_custodian","integration_status","source_ancestry"]
+    },
+    "common_mode_dependencies": {
+      "shared_domains": ["power","cooling","clock","navigation reference","sensor baseline","command bus","structure","recovery reserve","authentication root"],
+      "derived_metric": "eta_c = N_critical_shared / N_critical_total",
+      "rule": "A secondary or foreign drive is not independent merely because its prime mover is different; shared critical dependencies must appear in failure and survivability analysis."
+    },
+    "return_to_service": {
+      "requirements": ["identity/provenance audit","operator-family verification","configuration survey","reference-root validation","coverage/geometry survey","power and recovery proof","sensor/control calibration","failure-isolation exercise","signature baseline","documented deviations"],
+      "rule": "Unknown provenance or configuration changes remain explicit service limitations rather than being silently normalized."
+    }
+  },
+  "engineering_domains": {
+    "power": "Civilization/manufacturer practice may alter generation, conditioning, buffering, distribution, redundancy, and reserve custody while preserving family-specific event/hold/recovery semantics.",
+    "navigation_control": "Interface philosophy, sensor carrier, compute architecture, automation and crew roles may vary; family-specific observables, commit boundaries, hard vetoes, and recovery requirements remain invariant unless higher canon says otherwise.",
+    "maintenance": "Service intervals, replaceable units, access, calibration tooling, diagnostic vocabulary and certification culture may vary. Diagnostic conclusions must still trace to the same physical failure classes.",
+    "signature": "Materials, cooling, shielding and operating doctrine may redistribute observable channels, but cannot erase operator-required phenomena without explicit higher authority.",
+    "failure": "Embodiment introduces additional implementation failures and common-mode dependencies; it cannot remove confirmed family failure modes by assertion.",
+    "infrastructure": "Local industry may change beacon, gate, service-yard, calibration, traffic-control and spares architecture; family-required infrastructure remains a hard requirement where established.",
+    "scaling": "Manufacturing quality and embodiment can improve coefficients and packaging, but family-specific nonlinear variables remain active. Better craftsmanship is not permission to linearize a confirmed scaling burden."
+  },
+  "technology_basis_rules": {
+    "basis_ids": [
+      "TERRESTRIAL_ELECTROMECHANICAL",
+      "AQUATIC_ELECTROCHEMICAL_HYDRAULIC",
+      "CRYOGENIC_AMMONIA_HALOCARBON",
+      "GAS_GIANT_FLUIDIC_ELECTROSTATIC",
+      "BIOLOGICAL_SYMBIOTIC",
+      "MINERAL_PIEZOELECTRIC_PHOTONIC",
+      "FIELD_MEDIATED_POSTMATERIAL"
+    ],
+    "allowed_effects": ["machinery embodiment","manufacturing method","service access","control carrier","thermal system","sensor carrier","structural integration","failure embodiment","signature distribution"],
+    "prohibited_attributions": ["race ownership","civilization ownership","inventor","manufacturer","date","prevalence","historical first-use"]
+  },
+  "generation_rules": {
+    "authority_only": "Emit only bindings directly supported by admitted authoritative claims; unresolved entity/family relations stay unresolved.",
+    "labeled_derivation": "May derive engineering consequences from confirmed family operator, independently supported technology basis and installation facts; every derived field keeps source ancestry and DERIVED status.",
+    "labeled_proposal": "May construct hypothetical embodiments, manuals, teaching cases, patent classes or retrofit plans, but proposed names/history cannot be re-imported as canon without a new authoritative source.",
+    "determinism": "Given the same authority snapshot, resolver version, inputs and seed where stochastic generation is permitted, claim admission and provenance output must be reproducible."
+  },
+  "api_contract": {
+    "resolver": "resolveCivilizationEngineeringDoctrine(context)",
+    "inputs": ["authoritySnapshot","civilizationId","raceId","manufacturerId","vesselId","installationId","familyId","technologyBasisId","installationContext","requestedDetail","evidenceMode"],
+    "outputs": ["confirmedBindings","confirmedEntityTraits","derivedEmbodiments","unresolvedAttributions","contradictions","provenanceGraph","operatorInvariantChecks","machineryDoctrine","powerDoctrine","navigationControlDoctrine","maintenanceDoctrine","signatureDoctrine","failureDoctrine","infrastructureDoctrine","scalingDoctrine","canonWarnings","generationTrace"],
+    "modes": ["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"],
+    "hard_failures": ["operator mutation","unsupported named ownership","unlabeled extrapolation","discarded top-authority contradiction","false evidence independence"]
+  },
+  "canon_guards": [
+    "Established family physics outranks machinery resemblance.",
+    "Specific named canon outranks generic embodiment defaults.",
+    "Technology basis does not establish race, civilization, or manufacturer ownership.",
+    "Generated prevalence does not become setting prevalence.",
+    "Generated examples, training accidents, patent filings, theses, manuals, and fictional inventors remain at their declared status.",
+    "A captured, licensed, salvaged, reverse-engineered, or refitted system retains independently sourced origin provenance.",
+    "Multiple files descended from one source ancestor are not independent evidence.",
+    "Equal-authority unresolved contradictions remain visible.",
+    "Unknown inventor, date, manufacturer, civilization, race, ownership, or prevalence fields remain UNRESOLVED rather than being completed for narrative neatness.",
+    "Family-specific safety, gravity, commit, recovery, scaling, signature, and infrastructure constraints cannot be overwritten by civilization flavor text.",
+    "A proposed alien patent or educational history cannot recursively cite itself into canon.",
+    "Generated vessel-instance authority is scoped to that instance unless a higher setting authority explicitly generalizes it."
+  ]
+}
