@@ -114,6 +114,18 @@
     }
   }
 
+  function loadWorkspaceNavigation() {
+    if (globalThis.BlacklightExoWorkspaceNavigation) {
+      globalThis.BlacklightExoWorkspaceNavigation.install();
+      return;
+    }
+    if (document.querySelector('script[src="blacklight-exo-workspace-nav.js"]')) return;
+    const script = document.createElement('script');
+    script.src = 'blacklight-exo-workspace-nav.js';
+    script.defer = true;
+    document.head.append(script);
+  }
+
   function loadVesselHandoff() {
     if (document.querySelector('script[src="blacklight-exo-vessel-handoff.js"]')) return;
     const script = document.createElement('script');
@@ -134,6 +146,7 @@
   $('exo-ftl-dossier-close-annexes')?.addEventListener('click', () => setAll(false, true));
   document.addEventListener('blacklight:exo-ftl-generated', () => queueMicrotask(refresh));
   queueMicrotask(refresh);
+  loadWorkspaceNavigation();
   loadVesselHandoff();
   loadStatCharts();
 })();
