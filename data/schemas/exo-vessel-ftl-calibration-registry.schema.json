@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-calibration-registry.schema.json",
+  "title": "Black Light FTL Mathematical Calibration Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["registryType", "registryVersion", "authority", "canonPolicy", "variables", "families"],
+  "properties": {
+    "registryType": {"const": "blackLightFtlMathematicalCalibrationRegistry"},
+    "registryVersion": {"type": "string"},
+    "authority": {
+      "type": "object",
+      "required": ["primary", "designSource", "modelSource", "upgradeSource"],
+      "properties": {
+        "primary": {"type": "string"},
+        "designSource": {"type": "string"},
+        "modelSource": {"type": "string"},
+        "upgradeSource": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "canonPolicy": {
+      "type": "object",
+      "required": ["formulaStatus", "coefficientStatus", "exampleStatus", "rule"],
+      "properties": {
+        "formulaStatus": {"enum": ["DERIVED", "PROPOSED"]},
+        "coefficientStatus": {"const": "PROPOSED"},
+        "exampleStatus": {"const": "PROPOSED"},
+        "rule": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "variables": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["meaning", "range", "status"],
+        "properties": {
+          "meaning": {"type": "string"},
+          "range": {"type": "string"},
+          "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/family"}
+    }
+  },
+  "$defs": {
+    "equation": {
+      "type": "object",
+      "required": ["name", "expression", "meaning", "status"],
+      "properties": {
+        "name": {"type": "string"},
+        "expression": {"type": "string"},
+        "meaning": {"type": "string"},
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED"]}
+      },
+      "additionalProperties": false
+    },
+    "tierCalibration": {
+      "type": "object",
+      "required": ["tier", "mathematicalCapability", "mechanicalEnablers", "changedTerms", "distanceEffect", "safetyEffect", "abortEffect"],
+      "properties": {
+        "tier": {"enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]},
+        "mathematicalCapability": {"type": "string"},
+        "mechanicalEnablers": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "changedTerms": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "distanceEffect": {"type": "string"},
+        "safetyEffect": {"type": "string"},
+        "abortEffect": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "physicalAction", "distanceModel", "gravityCoupling", "forkRisk", "structuralLimit", "abortHorizon", "equations", "tiers", "exampleCase"],
+      "properties": {
+        "family": {"enum": ["metric-envelope", "gravitic-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement", "inertial-torch"]},
+        "physicalAction": {"type": "string"},
+        "distanceModel": {"type": "string"},
+        "gravityCoupling": {"type": "string"},
+        "forkRisk": {"type": "string"},
+        "structuralLimit": {"type": "string"},
+        "abortHorizon": {"type": "string"},
+        "equations": {"type": "array", "items": {"$ref": "#/$defs/equation"}, "minItems": 2},
+        "tiers": {"type": "array", "items": {"$ref": "#/$defs/tierCalibration"}, "minItems": 7, "maxItems": 7},
+        "exampleCase": {
+          "type": "object",
+          "required": ["status", "inputs", "interpretation"],
+          "properties": {
+            "status": {"const": "PROPOSED"},
+            "inputs": {"type": "object"},
+            "interpretation": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  }
+}
