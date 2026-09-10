@@ -93,6 +93,12 @@
     renderInertial(vessel);
   }
 
+  function loadWorkspaceNavigation(){
+    if(globalThis.BlacklightExoWorkspaceNavigation){globalThis.BlacklightExoWorkspaceNavigation.install();return;}
+    if(document.querySelector('script[src="blacklight-exo-workspace-nav.js"]'))return;
+    const script=document.createElement('script');script.src='blacklight-exo-workspace-nav.js';script.defer=true;document.head.append(script);
+  }
+
   function loadStatCharts(){
     if(globalThis.BlacklightExoStatCharts||document.querySelector('script[src="blacklight-exo-stat-charts.js"]'))return;
     const script=document.createElement('script');script.src='blacklight-exo-stat-charts.js';script.defer=true;document.head.append(script);
@@ -103,5 +109,6 @@
   ensureInertialSection();
   document.addEventListener('blacklight:exo-vessel-generated',event=>render(event.detail?.vessel));
   queueMicrotask(()=>render(globalThis.BlacklightExoGetActiveVessel?.()));
+  loadWorkspaceNavigation();
   loadStatCharts();
 })();
