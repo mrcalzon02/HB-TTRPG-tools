@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-technology-response.schema.json",
+  "title": "Black Light FTL Technology-Basis Response Registry",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "authority", "sourceRequirements", "responseEquation", "basisProfiles", "raceSpecializations", "validationInvariants"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlTechnologyResponseRegistry"},
+    "registryVersion": {"type": "string"},
+    "authority": {
+      "type": "object",
+      "required": ["status", "primary", "operativeTechnology", "legacyDesignSource"],
+      "properties": {
+        "status": {"enum": ["MIXED", "DERIVED", "PROPOSED"]},
+        "primary": {"type": "string"},
+        "operativeTechnology": {"type": "string"},
+        "legacyDesignSource": {
+          "type": "object",
+          "required": ["title", "provider", "id", "revisionId", "status"],
+          "properties": {
+            "title": {"type": "string"},
+            "provider": {"const": "google-drive"},
+            "id": {"type": "string"},
+            "revisionId": {"type": "string"},
+            "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED"]}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "sourceRequirements": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "responseEquation": {
+      "type": "object",
+      "required": ["symbolic", "meaning", "status"],
+      "properties": {
+        "symbolic": {"type": "string"},
+        "meaning": {"type": "string"},
+        "status": {"enum": ["DERIVED", "PROPOSED"]}
+      },
+      "additionalProperties": false
+    },
+    "basisProfiles": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/basisProfile"}
+    },
+    "raceSpecializations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/raceSpecialization"}
+    },
+    "validationInvariants": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "statusValue": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]},
+    "responseVector": {
+      "type": "object",
+      "required": ["fieldActuation", "structuralSupport", "controlBandwidth", "sensorLookahead", "energyConditioning", "thermalRecovery", "maintenanceRecovery", "signatureChannels", "failureChannels"],
+      "properties": {
+        "fieldActuation": {"type": "string"},
+        "structuralSupport": {"type": "string"},
+        "controlBandwidth": {"type": "string"},
+        "sensorLookahead": {"type": "string"},
+        "energyConditioning": {"type": "string"},
+        "thermalRecovery": {"type": "string"},
+        "maintenanceRecovery": {"type": "string"},
+        "signatureChannels": {"type": "array", "items": {"type": "string"}},
+        "failureChannels": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "basisProfile": {
+      "type": "object",
+      "required": ["basis", "status", "machineryLanguage", "response", "upgradeDrivers", "scaleBehavior"],
+      "properties": {
+        "basis": {"enum": ["TERRESTRIAL_ELECTROMECHANICAL", "AQUATIC_ELECTROCHEMICAL_HYDRAULIC", "CRYOGENIC_AMMONIA_HALOCARBON", "GAS_GIANT_FLUIDIC_ELECTROSTATIC", "BIOLOGICAL_SYMBIOTIC", "MINERAL_PIEZOELECTRIC_PHOTONIC", "FIELD_MEDIATED_POSTMATERIAL"]},
+        "status": {"$ref": "#/$defs/statusValue"},
+        "machineryLanguage": {"type": "string"},
+        "response": {"$ref": "#/$defs/responseVector"},
+        "upgradeDrivers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "scaleBehavior": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "raceSpecialization": {
+      "type": "object",
+      "required": ["race", "status", "sourceRefs", "basisBinding", "overrides", "transitAssignment"],
+      "properties": {
+        "race": {"type": "string"},
+        "status": {"$ref": "#/$defs/statusValue"},
+        "sourceRefs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "basisBinding": {"type": "object"},
+        "overrides": {"type": "object"},
+        "transitAssignment": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
