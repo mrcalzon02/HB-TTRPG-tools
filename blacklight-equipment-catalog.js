@@ -236,6 +236,58 @@
     elements.classification.innerHTML = '<option value="all">All record types</option>' + classifications.map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
   }
 
+  function mountAlienEquipmentGenerator() {
+    const anchor = document.getElementById('alien-vessel-index');
+    if (!anchor || document.getElementById('alien-equipment-generator')) return;
+
+    const section = document.createElement('section');
+    section.id = 'alien-equipment-generator';
+    section.className = 'equipment-browser';
+    section.setAttribute('aria-labelledby', 'alien-equipment-generator-title');
+    section.innerHTML = `
+      <div class="section-heading no-print">
+        <p class="eyebrow">Alien Equipment & Things · Fixed Helios Vale authority</p>
+        <h2 id="alien-equipment-generator-title">Random Alien Equipment Sets</h2>
+        <p>Select one documented alien species, its recorded polity/government, and Tier 1–10. Generate chooses among complete authored sets; individual items are never independently randomized.</p>
+      </div>
+      <div class="equipment-controls no-print">
+        <select id="alien-equipment-species" aria-label="Alien species"><option>Loading fixed sector species…</option></select>
+        <select id="alien-equipment-government" aria-label="Government or polity"><option>Loading government authority…</option></select>
+        <select id="alien-equipment-tier" aria-label="Equipment tier"><option>Loading tiers…</option></select>
+        <button id="alien-equipment-generate" class="primary-action" type="button">Reroll Fixed Set</button>
+      </div>
+      <p id="alien-equipment-status" class="equipment-status" aria-live="polite">Loading Helios Vale species, governments, technology, and fleet doctrine…</p>
+      <div id="alien-equipment-result"></div>`;
+    anchor.before(section);
+
+    const loadGenerator = () => {
+      if (document.querySelector('script[data-blacklight-alien-equipment-generator]')) return;
+      const script = document.createElement('script');
+      script.src = 'blacklight-alien-equipment-generator.js';
+      script.dataset.blacklightAlienEquipmentGenerator = 'true';
+      script.addEventListener('error', () => {
+        const status = document.getElementById('alien-equipment-status');
+        if (status) status.textContent = 'Alien equipment generator script failed to load.';
+      }, { once: true });
+      document.body.appendChild(script);
+    };
+
+    if (globalThis.BlacklightExoStellarSectorData?.sector) {
+      loadGenerator();
+      return;
+    }
+
+    const authorityScript = document.createElement('script');
+    authorityScript.src = 'blacklight-exo-stellar-sector-data.js';
+    authorityScript.dataset.blacklightExoSectorAuthority = 'true';
+    authorityScript.addEventListener('load', loadGenerator, { once: true });
+    authorityScript.addEventListener('error', () => {
+      const status = document.getElementById('alien-equipment-status');
+      if (status) status.textContent = 'Fixed Helios Vale sector authority failed to load; no substitute species or government data was invented.';
+    }, { once: true });
+    document.head.appendChild(authorityScript);
+  }
+
   async function initialize() {
     elements.search = document.getElementById('equipment-search');
     elements.group = document.getElementById('equipment-group');
@@ -245,6 +297,8 @@
     elements.detail = document.getElementById('equipment-detail');
     elements.summary = document.getElementById('equipment-summary');
     elements.status = document.getElementById('equipment-status');
+
+    mountAlienEquipmentGenerator();
 
     try {
       const sources = await Promise.all(SOURCES.map(fetchJson));
