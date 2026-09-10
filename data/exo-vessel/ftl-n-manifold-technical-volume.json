@@ -1,0 +1,208 @@
+{
+  "registryType": "exoVesselFtlNManifoldTechnicalVolume",
+  "registryVersion": "1.0.0",
+  "schema": "data/schemas/exo-vessel-ftl-n-manifold-technical-volume.schema.json",
+  "family": "n-manifold",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "fieldManual": "docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md",
+    "developmentLineage": "data/exo-vessel/ftl-development-lineage-registry.json",
+    "technologyBasis": "data/exo-vessel/technology-basis-registry.json",
+    "runtimeSource": "blacklight-exo-ftl-path-level-paths-dimensional.js",
+    "legacyDesignSource": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    },
+    "statusRule": "Recovered family action, P0-P6 names, breakthroughs, utilities, limits and energy families are CONFIRMED within runtime scope. Differential-geometric mathematics, engineering embodiments and procedures in this volume are DERIVED unless separately sourced. Numerical coefficients are PROPOSED unless independently adopted. Race, inventor, manufacturer, date and ownership assignments remain UNRESOLVED unless a higher-authority source supplies them."
+  },
+  "mathematics": {
+    "status": "DERIVED",
+    "state": "X_N={M_N,g_N,Pi,R,kappa_R,Sigma_N,Omega,chi_g}",
+    "interpretation": "M_N and g_N describe the locally usable higher-dimensional manifold and metric; Pi maps embedded state toward ordinary spacetime; R is the return map; kappa_R measures return-map conditioning; Sigma_N is estimated route-state covariance; Omega is protected payload support; chi_g captures gravity-conditioned embedding burden.",
+    "routeObjective": "Gamma*=argmin_Gamma integral_Gamma [w_l ds_N + w_k C_kappa + w_g C_g + w_u C_unc + w_o C_obstacle + w_r C_return + w_x C_topology]",
+    "manifoldDistance": "D_N(Gamma)=integral_Gamma sqrt(g_AB dX^A dX^B)",
+    "routeGain": "G_N=D_3+1/D_N; G_N is a route-shortening ratio, not a universal velocity multiplier.",
+    "returnMap": "R: U_N -> U_3+1 with desired closure R(X_exit)=x_target and orientation/state residual epsilon_R=||R(X_exit)-x_target||_W.",
+    "projectionConditioning": "kappa_R=||J_R|| ||J_R^{-1}|| over the admissible return subspace; large kappa_R means small higher-dimensional errors can produce large ordinary-space emergence errors.",
+    "axisBudget": "C_axis ~ alpha^n_active times covariance/solver burden; alpha and exact scaling are PROPOSED, but runtime canon explicitly states that every additional active dimension sharply increases computation and sensor uncertainty.",
+    "protectedCoverage": "C_Omega=min_{x in Omega} c_N(x); local coverage loss can invalidate an otherwise sound route.",
+    "safetyHorizon": "L_Nsafe >= v_eff (t_detect+t_infer+t_solve+t_command+t_reembed+t_return)+D_margin",
+    "abortCriterion": "Commit is invalid when predicted return conditioning, protected-volume coverage, unresolved obstacle probability or recovery reserve violates the installation's certified envelope."
+  },
+  "pathStages": [
+    {
+      "path": "P0",
+      "name": "Dimensional Topology Observatory",
+      "breakthrough": "Measure stable higher-dimensional curvature and move test masses through a controlled local shortcut.",
+      "utility": "Accelerates probes and data packets through laboratory-scale dimensional shortcuts.",
+      "limit": "Early routes are centimeters wide in solution space despite massive physical machinery.",
+      "energy": "fusion-bank",
+      "engineeringAdvance": "Fixed metrology establishes reproducible manifold curvature, primitive embedding coordinates and a recoverable local projection. Machinery is monumental because poor sensing and weak field authority require a large static apparatus.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P1",
+      "name": "Five-Axis Test Volume",
+      "breakthrough": "Maintain a payload embedding across one additional spatial axis without orientation loss.",
+      "utility": "Moves small cargo and instruments rapidly through fixed test volumes.",
+      "limit": "Axis inversion can return a payload mirrored, rotated, or structurally stressed.",
+      "energy": "antimatter",
+      "engineeringAdvance": "Orientation frames, parity monitors and stronger embedding cages turn a mathematical shortcut into a bounded five-axis transport volume. Return-map certification becomes a first-class engineering discipline.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P2",
+      "name": "Captive Manifold Transit Array",
+      "breakthrough": "Create a captive manifold route that returns macroscopic objects to the correct projection.",
+      "utility": "Provides scheduled high-speed system transit and short interstellar service.",
+      "limit": "Unseen higher-dimensional obstacles remain a major source of loss.",
+      "energy": "vacuum-cell",
+      "engineeringAdvance": "Multiple controlled embedding stations, long-baseline dimensional tomography and destination-side projection references allow a macroscopic protected volume to traverse a surveyed captive route.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P3",
+      "name": "Shipboard N-Manifold Drive",
+      "breakthrough": "Carry the embedding field, geodesic solver, and return map aboard a vessel.",
+      "utility": "Allows capital ships to cross independent higher-dimensional routes.",
+      "limit": "Damage to the return map can emerge a ship in an inaccessible gravity well.",
+      "energy": "vacuum-cell",
+      "engineeringAdvance": "Shipwide embedding support, independent return-map storage, forward manifold inference and protected recovery authority turn a fixed route technology into a mobile drive.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P4",
+      "name": "Adaptive Higher-Dimensional Drive",
+      "breakthrough": "Solve changing multi-axis routes in real time around moving gravitational obstacles.",
+      "utility": "Supports routine interstellar fleet movement without fixed gates.",
+      "limit": "Every additional active dimension sharply increases computation and sensor uncertainty.",
+      "energy": "q-condensate",
+      "engineeringAdvance": "Sectional embedding controllers, dynamic axis selection and probabilistic obstacle maps allow the vessel to trade route shortening against projection conditioning and uncertainty while underway.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P5",
+      "name": "Deep-Range Manifold Engine",
+      "breakthrough": "Extend sensors and predictive models beyond the direct normal-space horizon.",
+      "utility": "Provides cluster and multi-cluster strategic mobility.",
+      "limit": "Normal-space neighbors can require unrelated manifold routes.",
+      "energy": "q-condensate",
+      "engineeringAdvance": "Remote references, route-history assimilation, gravitational inverse models and predictive manifold tomography make long routes possible even when ordinary-space proximity provides little routing information.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P6",
+      "name": "Compact Multi-Axis Drive",
+      "breakthrough": "Miniaturize stabilizers while preserving identity, orientation, and topology under battle damage.",
+      "utility": "Makes high-dimensional navigation available to small craft and distributed fleets.",
+      "limit": "Compact drives can fail by topology change rather than by simply stopping.",
+      "energy": "q-condensate",
+      "engineeringAdvance": "Dense field materials, self-checking return maps, local topology monitors, distributed recovery nodes and health-aware axis shedding preserve a valid embedding in machinery volumes that earlier Paths could not safely compact.",
+      "status": "MIXED"
+    }
+  ],
+  "machinery": [
+    {"block":"energy-conditioning","function":"Supply embedding, sensing, control and reserved return energy in independently isolatable channels.","embodimentRule":"Recovery/return reserve must not be consumed as ordinary route power.","failureExposure":"Bus coupling or reserve contamination can convert a recoverable route fault into return failure."},
+    {"block":"manifold-prime-mover","function":"Create the local state that permits payload embedding into the selected higher-dimensional solution.","embodimentRule":"Must expose certified active-axis count and embedding authority rather than generic drive output.","failureExposure":"Insufficient authority produces partial or unstable embedding."},
+    {"block":"embedding-field-formation","function":"Maintain coherent support over the protected vessel volume.","embodimentRule":"Coverage is whole-vessel and sectional; appendages and damage state must be represented.","failureExposure":"Coverage holes produce local orientation, stress or continuity faults."},
+    {"block":"multi-axis-transit-control","function":"Control active axes, route state and sectional embedding during transit.","embodimentRule":"Controller must be able to shed an unsafe axis without silently substituting a different destination.","failureExposure":"Axis-control divergence can produce inversion, topology change or route departure."},
+    {"block":"manifold-navigation-sensing","function":"Infer higher-dimensional curvature, obstacle likelihood, gravity coupling and route covariance.","embodimentRule":"Ordinary-space astronomy is an input, not a complete manifold map.","failureExposure":"Unseen obstacles and overconfident covariance produce catastrophic route selection."},
+    {"block":"return-map-system","function":"Preserve and continuously validate the map from transit state to intended 3+1D emergence state.","embodimentRule":"Independent authenticated return solutions and destination references are required above primitive captive systems.","failureExposure":"Ill-conditioned or corrupted return map can emerge the vessel rotated, stressed, displaced or inside a hostile gravity volume."},
+    {"block":"whole-effect-coverage","function":"Keep all certified payload state within the same admissible embedding and orientation frame.","embodimentRule":"Minimum local coverage, not average coverage, governs commit permission.","failureExposure":"Local support loss can tear the route solution across incompatible projections."},
+    {"block":"control-thermal-abort-backbone","function":"Provide timing, structural feedback, thermal disposal, topology monitoring and independent emergency re-embedding/return authority.","embodimentRule":"Abort path remains electrically/energetically/semantically independent enough to function after primary-control faults.","failureExposure":"Common-mode damage defeats graceful axis shedding and safe return."}
+  ],
+  "powerModel": {
+    "status": "DERIVED",
+    "equation": "P_total=P_embed+P_hold+P_sense+P_solve+P_axis+P_struct+P_thermal+P_return_reserve_charge",
+    "reserveRule": "E_available_route <= E_stored-E_return-E_settle-E_margin",
+    "interpretation": "A shorter manifold route is invalid if achieving it consumes the energy or field authority required to preserve a conditioned return map and recover ordinary-space state."
+  },
+  "navigationControl": {
+    "status": "DERIVED",
+    "stateEstimator": "Maintain posterior p(X_N,obstacles,R | sensors,references,history) rather than treating the manifold as a perfectly surveyed chart.",
+    "routeSelection": "Rank routes by manifold distance, obstacle uncertainty, gravity-conditioned embedding cost, active-axis burden, return conditioning, coverage and recovery margin.",
+    "returnIntegrity": "Continuously compare at least one primary and one independent return solution where Path maturity permits; disagreement consumes commit/continuation margin.",
+    "axisShedding": "When one active dimension becomes unsafe, reduce dimensionality only if a certified lower-axis route and valid return solution remain available.",
+    "gravityRule": "Strong or poorly modeled gravity changes the embedding and return problem; it is never a universal scalar penalty shared with other FTL families."
+  },
+  "operations": [
+    {"id":"NM-01","title":"Pre-Transit Embedding and Return Certification","steps":["Authenticate route/reference snapshot.","Verify protected-volume coverage including temporary repairs and external appendages.","Compute candidate routes and return-map conditioning.","Reject solutions with unresolved obstacle probability above installation limit.","Lock independent return reserve and recovery state.","Commit only after active-axis, orientation/parity and emergence-volume checks agree."]},
+    {"id":"NM-02","title":"Return-Map Divergence in Transit","steps":["Freeze discretionary route optimization.","Compare primary and independent return solutions.","Identify whether divergence is reference, sensor, solver, structural, active-axis or genuine topology evolution.","Shed only certified unsafe axes for which a lower-dimensional continuation exists.","Increase emergence clearance requirement as covariance grows.","Execute controlled return before conditioning crosses the certified threshold."]},
+    {"id":"NM-03","title":"Suspected Higher-Dimensional Obstacle","steps":["Treat unexplained curvature/residuals as an obstacle hypothesis, not sensor noise by default.","Increase tomography and covariance weighting.","Reduce route aggressiveness and active-axis count where safe.","Select alternate geodesic or controlled return while margin remains.","Preserve raw sensor and solver state for post-transit reconstruction."]},
+    {"id":"NM-04","title":"Emergency Axis Inversion Response","steps":["Do not command a blind ordinary-space return from an unresolved parity state.","Stabilize the remaining embedding frame.","Cross-check orientation invariants and parity monitors.","Select an authenticated return map consistent with crew/payload orientation limits.","Return into an expanded clear volume and quarantine the drive for structural and reference inspection."]}
+  ],
+  "maintenance": [
+    {"id":"NM-M01","title":"Return-Map Certification","method":"Inject calibrated synthetic embedding perturbations and verify primary/independent return solvers recover the certified 3+1D state within residual and conditioning limits."},
+    {"id":"NM-M02","title":"Embedding Coverage Survey","method":"Map local field support over the complete current vessel configuration; inspect damage, replacement structure, docking interfaces and deployable equipment for coverage minima."},
+    {"id":"NM-M03","title":"Axis/Parity Metrology","method":"Verify orientation frames, parity sensors and dimensional-axis references against independent standards; investigate coherent drift as reference/model error before replacing local hardware."},
+    {"id":"NM-M04","title":"Tomography Residual Review","method":"Compare predicted and observed curvature histories. Persistent structured residuals become route-model evidence and may not be dismissed as noise without cause."},
+    {"id":"NM-M05","title":"Topology-Monitor Functional Test","method":"Exercise topology-change detection, axis shedding and independent return authority under simulated primary-control loss."}
+  ],
+  "signatures": {
+    "status": "DERIVED",
+    "components": ["embedding onset transient","higher-dimensional curvature coupling residual","gravity-conditioned projection disturbance","return/emergence impulse","thermal and power-conditioning emissions","active-axis control modulation"],
+    "equation": "S_N=f(E_embed,n_active,dX/dt,kappa_R,gravity_state,control_corrections,return_event,technology_basis)",
+    "guard": "Do not promise intrinsic stealth. Different observers may detect different projections of the same embedding/return event."
+  },
+  "failureModels": [
+    {"failure":"axis-inversion","cause":"Orientation/parity state crosses an untracked or incorrectly resolved mapping.","effect":"Payload may emerge mirrored, rotated or structurally loaded.","evidence":"Parity disagreement, orientation residuals, sectional strain anomalies."},
+    {"failure":"return-map-ill-conditioning","cause":"Small transit-state errors amplify strongly under R.","effect":"Large emergence-position/orientation error despite apparently small onboard residual.","evidence":"Rising kappa_R, diverging independent return solutions."},
+    {"failure":"hidden-manifold-obstacle","cause":"Route intersects higher-dimensional structure not adequately inferred from available observations.","effect":"Forced route departure, embedding damage or loss.","evidence":"Unexpected curvature residuals, covariance growth, sensor disagreement."},
+    {"failure":"coverage-fracture","cause":"Protected-volume support falls below minimum in a local vessel region.","effect":"Differential projection, local stress or continuity fault.","evidence":"Coverage minimum, local field current/strain excursion."},
+    {"failure":"axis-budget-overrun","cause":"Too many active dimensions exceed sensing, solver, control or structural authority.","effect":"Control latency and uncertainty grow faster than route benefit.","evidence":"Solver deadline misses, covariance inflation, control saturation."},
+    {"failure":"gravity-conditioned-return-error","cause":"Mass/gravity environment is wrong or changes enough to invalidate the return solution.","effect":"Emergence in unsafe gravity volume or inaccessible region.","evidence":"Gravimetric residual, predicted/observed embedding mismatch."},
+    {"failure":"topology-change","cause":"Compact or damaged system transitions into a different admissible connectivity class rather than simply losing output.","effect":"Expected route/return graph ceases to represent the vessel's actual state.","evidence":"Topology invariant disagreement, abrupt solver-family change, return-map discontinuity."},
+    {"failure":"recovery-exhaustion","cause":"Transit corrections consume energy/field/thermal margin reserved for return.","effect":"Drive remains embedded without a certified ordinary-space recovery path.","evidence":"Return reserve below certified threshold."}
+  ],
+  "infrastructure": [
+    {"type":"dimensional-topology-observatory","benefit":"Improves local manifold models, covariance priors and obstacle catalogs.","limit":"Cannot guarantee that unobserved or time-varying higher-dimensional structure is absent."},
+    {"type":"return-reference-beacon","benefit":"Provides authenticated emergence position, orientation and time reference.","limit":"Cannot repair insufficient shipboard embedding authority or make an occupied emergence volume safe."},
+    {"type":"surveyed-manifold-corridor","benefit":"Supplies historical curvature, failure and route-solution evidence.","limit":"Normal-space proximity does not imply corridor adjacency; old surveys can become stale."},
+    {"type":"deep-range-tomography-array","benefit":"Extends route inference beyond direct shipboard normal-space horizon.","limit":"Reduces covariance but cannot eliminate model error."},
+    {"type":"recovery-sanctuary","benefit":"Maintains unusually large clear emergence volumes and reference redundancy for damaged vessels.","limit":"Useful only while the vessel retains a valid return-map family that reaches it."}
+  ],
+  "scaling": {
+    "status": "DERIVED",
+    "drivers": ["protected volume","surface/section count","sensor baseline","active-axis count","return-map dimension","structural span","solver latency","energy/recovery reserve","technology-basis carrier physics"],
+    "rules": [
+      "Drive scale is not proportional to payload mass alone.",
+      "Increasing active-axis count can shorten routes while increasing computation, covariance and control burden superlinearly.",
+      "Large vessels require distributed embedding and return-state observability; one central emitter cannot be assumed to cover arbitrary geometry.",
+      "Small craft gain from short timing distances and low protected volume but lose redundancy and recovery inventory.",
+      "Multiple manifold drives do not add speed unless their relationship is explicitly coherent; they may instead provide sectors, redundancy, staged embedding or alternate axis sets."
+    ]
+  },
+  "technologyBasisEmbodiments": [
+    {"basis":"TERRESTRIAL_ELECTROMECHANICAL","embodiment":"Superconducting or exotic-material embedding formers, precision clocks, interferometric dimensional sensors, ruggedized return-map computers and distributed structural field nodes.","maintenanceLanguage":"alignment, clock discipline, bus isolation, field-former health, processor/reference integrity","status":"DERIVED"},
+    {"basis":"AQUATIC_ELECTROCHEMICAL_HYDRAULIC","embodiment":"Pressure-native field membranes, wet electrochemical energy carriers, hydroacoustic orientation references and distributed fluid-compatible embedding organs/machines integrated through the vessel's working medium.","maintenanceLanguage":"fluid chemistry, membrane continuity, pressure state, cavitation damage, wet-reference calibration","status":"DERIVED"},
+    {"basis":"CRYOGENIC_AMMONIA_HALOCARBON","embodiment":"Cryogenic coherent field structures, superconducting axis buses, low-noise metrology volumes and quench-isolated return nodes optimized around very low thermal backgrounds.","maintenanceLanguage":"quench history, thermal gradient, coolant purity, superconducting continuity, cryogenic reference drift","status":"DERIVED"},
+    {"basis":"GAS_GIANT_FLUIDIC_ELECTROSTATIC","embodiment":"Large-volume electrostatic/plasma embedding cells, buoyant distributed sensor baselines and fluidic control networks that treat pressure layers and vessel flexure as part of the return model.","maintenanceLanguage":"charge balance, plasma contamination, pressure-layer calibration, flexible-structure modes, flow-control health","status":"DERIVED"},
+    {"basis":"BIOLOGICAL_SYMBIOTIC","embodiment":"Cultivated field-bearing tissues, distributed neural orientation maps, regenerative embedding membranes and redundant living return-state organs rather than mechanically discrete modules.","maintenanceLanguage":"tissue coherence, metabolic reserve, neural latency, scar topology, regenerative state, symbiont reference health","status":"DERIVED"},
+    {"basis":"MINERAL_PIEZOELECTRIC_PHOTONIC","embodiment":"Prestressed coherent crystal volumes, piezoelectric embedding excitation, photonic dimensional metrology and lattice-defect-coded return references.","maintenanceLanguage":"domain coherence, defect map, prestress, optical path purity, fracture modes, resonance calibration","status":"DERIVED"},
+    {"basis":"FIELD_MEDIATED_POSTMATERIAL","embodiment":"Distributed field nodes maintain executable embedding/return state directly, with redundant authenticated topology descriptions and self-reconfiguring support rather than fixed machine rooms.","maintenanceLanguage":"coherence graph, authenticated state lineage, node consensus, topology proof integrity, reconstruction reserve","status":"DERIVED"}
+  ],
+  "generatorContract": {
+    "inputs": ["family=n-manifold","transitPath P0-P6","shared T-tier where applicable","technology basis","species/organization/manufacturer authority snapshot","vessel geometry and condition","mission","power and recovery state","gravity/environment model","manifold survey/reference availability","seed/provenance snapshot"],
+    "outputs": ["resolved implementation name","active-axis budget","manifold route class","embedding machinery","return-map architecture","power/recovery budget","navigation/sensor package","maintenance doctrine","signature profile","failure envelope","infrastructure dependencies","field-level provenance"],
+    "hardGuards": [
+      "Do not turn ordinary-space distance into manifold adjacency without a route solution.",
+      "Do not replace recovered P0-P6 names, breakthroughs, utilities, limits or energy families with derived alternatives.",
+      "Do not treat route gain G_N as a universal speed multiplier.",
+      "Do not average away local protected-volume coverage holes.",
+      "Do not allow route optimization to consume certified return reserve.",
+      "Do not infer race ownership, inventor, manufacturer or prevalence from technology basis.",
+      "Do not promote DERIVED mathematics or PROPOSED coefficients to CONFIRMED through repeated generation.",
+      "Do not represent a topology-change failure as ordinary engine shutdown.",
+      "Do not normalize conflicting named canon to fit current runtime; surface the conflict."
+    ]
+  },
+  "provenance": {
+    "confirmed": ["family identifier and action from consolidated authority","P0-P6 implementation names, breakthroughs, utilities, limits and energy families from live dimensional Path runtime","legacy design-source requirements within its stated scope","seven operative technology-basis identifiers"],
+    "derived": ["differential-geometric state representation","route objective","return conditioning model","safety horizon","machinery decomposition details","maintenance procedures","signature decomposition","technology-basis embodiments"],
+    "proposed": ["any future numeric coefficients, thresholds or empirical scaling exponents until independently adopted"],
+    "unresolved": ["race-specific ownership","inventors","manufacturers","historical dates","named accidents","named research institutions","setting-wide prevalence not established by higher authority"]
+  }
+}
