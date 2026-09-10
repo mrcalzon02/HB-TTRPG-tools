@@ -96,10 +96,10 @@ if(!workflow.includes('Write deployment health manifest')||!workflow.includes('"
 for(const validator of['node scripts/validate-exo-stellar-sector-strategic-atlas.mjs','node scripts/validate-exo-vessel-gameplay.mjs','node scripts/validate-exo-vessel-gameplay-weapon-authority.mjs','node scripts/validate-exo-vessel-campaign-store.mjs','node scripts/validate-exo-vessel-diegetic-controls.mjs','node scripts/validate-exo-vessel-campaign-3d-viewer.mjs'])if(!workflow.includes(validator))fail(`Pages workflow does not gate ${validator}.`);
 
 const dataContext={console,Math,Number,Object,Array,Set,Map,String,Date,JSON,structuredClone};dataContext.globalThis=dataContext;vm.createContext(dataContext);
-for(const file of['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-strategic-atlas.js','blacklight-exo-stellar-sector-extinct-sites.js'])vm.runInContext(read(file),dataContext,{filename:file});
+for(const file of['blacklight-exo-stellar-sector-data.js','blacklight-exo-stellar-sector-worlds.js','blacklight-exo-stellar-sector-generator.js','blacklight-exo-stellar-sector-contracts.js','blacklight-exo-stellar-sector-strategic-atlas.js','blacklight-exo-stellar-sector-extinct-sites.js','blacklight-exo-stellar-sector-civilization-authority.js'])vm.runInContext(read(file),dataContext,{filename:file});
 const authority=dataContext.BlacklightExoStellarSectorData;
 const fixed=authority.build(),generated=authority.generate('BROWSER:SMOKE:SECTOR',{clusterCount:24,speciesCount:12}),repeat=authority.generate('BROWSER:SMOKE:SECTOR',{clusterCount:24,speciesCount:12});
-if(authority.schemaVersion!=='1.3.0'||authority.strategicAtlasVersion!==1||authority.extinctSiteLinkVersion!==1)fail('Browser strategic sector API identity is invalid.');
+if(authority.schemaVersion!=='1.3.0'||authority.strategicAtlasVersion!==1||authority.extinctSiteLinkVersion!==1||authority.civilizationAuthorityVersion!==1)fail('Browser strategic sector API identity is invalid.');
 if(!authority.validate(fixed).valid||!authority.validate(generated).valid)fail('Fixed or procedural strategic sector fails browser-facing contracts.');
 if(JSON.stringify(generated)!==JSON.stringify(repeat))fail('Procedural browser controls do not map to deterministic strategic sector authority.');
 if(generated.clusters.length!==24||generated.species.length!==12)fail('Procedural browser controls do not map to requested sector scale.');
