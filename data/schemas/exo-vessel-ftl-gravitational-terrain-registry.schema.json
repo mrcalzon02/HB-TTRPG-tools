@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-gravitational-terrain-registry.schema.json",
+  "title": "Black Light FTL Gravitational Terrain Registry",
+  "description": "Validation contract for the author-directed Black Light dark-matter / higher-dimensional gravitational-shear terrain model used by propulsion/transit mathematics.",
+  "type": "object",
+  "required": [
+    "projectId",
+    "registryType",
+    "registryVersion",
+    "authorityDocument",
+    "premise",
+    "sharedModel",
+    "observationModel",
+    "sharedRouteModel",
+    "pathTerrainProgression",
+    "familyCouplings",
+    "generatorRules"
+  ],
+  "$defs": {
+    "canonStatus": {
+      "type": "string",
+      "enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]
+    },
+    "upgradeDriver": {
+      "type": "string",
+      "enum": [
+        "MATHEMATICS",
+        "FIELD_CONTROL",
+        "ACTIVE_MATERIALS",
+        "STRUCTURE",
+        "ENERGY",
+        "NAVIGATION",
+        "DRIVE_SCALE_DISTRIBUTION",
+        "CONTROL_BANDWIDTH",
+        "RECOVERY"
+      ]
+    },
+    "terrainUpgradeDriver": {
+      "type": "string",
+      "enum": [
+        "OBSERVATION_DEPTH",
+        "INVERSE_MODEL_QUALITY",
+        "TEMPORAL_FORECAST",
+        "DIMENSIONAL_RESOLUTION",
+        "ROUTE_OPTIMIZATION",
+        "FIELD_TERRAIN_COUPLING",
+        "TERRAIN_DISTURBANCE_COMPENSATION",
+        "UNCERTAINTY_REDUCTION"
+      ]
+    },
+    "pathTerrainStage": {
+      "type": "object",
+      "required": ["pathLevel", "capability", "upgradeDrivers", "terrainUpgradeDrivers", "effect"],
+      "properties": {
+        "pathLevel": {"enum": ["p0", "p1", "p2", "p3", "p4", "p5", "p6"]},
+        "capability": {"type": "string", "minLength": 1},
+        "upgradeDrivers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/upgradeDriver"}
+        },
+        "terrainUpgradeDrivers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/terrainUpgradeDriver"}
+        },
+        "effect": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "familyCoupling": {
+      "type": "object",
+      "required": ["family", "status", "terrainRole", "expression", "routeEffect", "dominantTerrainDrivers"],
+      "properties": {
+        "family": {
+          "enum": [
+            "metric-envelope",
+            "gravitic-plane",
+            "slipstream-shear",
+            "q-lattice",
+            "n-manifold",
+            "fold-jump",
+            "wormhole-gate",
+            "phase-displacement",
+            "inertial-torch"
+          ]
+        },
+        "status": {"$ref": "#/$defs/canonStatus"},
+        "terrainRole": {"type": "string", "minLength": 1},
+        "expression": {"type": "string", "minLength": 1},
+        "routeEffect": {"type": "string", "minLength": 1},
+        "dominantTerrainDrivers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/terrainUpgradeDriver"}
+        },
+        "safeguard": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "properties": {
+    "projectId": {"const": "blacklight-exo-vessel-design-system"},
+    "registryType": {"const": "blackLightFtlGravitationalTerrainRegistry"},
+    "registryVersion": {"type": "string", "minLength": 1},
+    "authorityDocument": {"type": "string", "minLength": 1},
+    "propulsionTransitAuthority": {"type": "string", "minLength": 1},
+    "mathematicalReference": {"type": "string", "minLength": 1},
+    "schema": {"type": "string", "minLength": 1},
+    "premise": {
+      "type": "object",
+      "required": ["status", "sourceScope", "adoptedDate", "statement", "safeguards"],
+      "properties": {
+        "status": {"const": "CONFIRMED"},
+        "sourceScope": {"const": "author-directive"},
+        "adoptedDate": {"type": "string", "format": "date"},
+        "statement": {"type": "string", "minLength": 1},
+        "safeguards": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "sharedModel": {
+      "type": "object",
+      "required": ["modelId", "status", "terrainField", "projectionExpression", "effectiveFieldExpression", "backreactionExpression", "terrainState", "terrainFeatures"],
+      "properties": {
+        "modelId": {"type": "string", "minLength": 1},
+        "status": {"$ref": "#/$defs/canonStatus"},
+        "terrainField": {"type": "string", "minLength": 1},
+        "projectionExpression": {"type": "string", "minLength": 1},
+        "effectiveFieldExpression": {"type": "string", "minLength": 1},
+        "backreactionExpression": {"type": "string", "minLength": 1},
+        "terrainState": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "terrainFeatures": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "observationModel": {"type": "object", "additionalProperties": true},
+    "sharedRouteModel": {"type": "object", "additionalProperties": true},
+    "pathTerrainProgression": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/pathTerrainStage"}
+    },
+    "terrainUpgradeDrivers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/terrainUpgradeDriver"}
+    },
+    "familyCouplings": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/familyCoupling"}
+    },
+    "solutionCertificateExtension": {"type": "object", "additionalProperties": true},
+    "navigationAlarms": {"type": "array", "items": {"type": "string"}},
+    "generatorRules": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
