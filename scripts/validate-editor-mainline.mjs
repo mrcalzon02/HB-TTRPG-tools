@@ -4,6 +4,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const checkTimeoutMs = 30_000;
 const checks = [
   'scripts/validate-editor-provenance-integration.mjs',
   'scripts/validate-editor-generational-roundtrip.mjs',
@@ -14,11 +15,22 @@ for (const relativePath of checks) {
   console.log(`\n=== ${relativePath} ===`);
   const result = spawnSync(process.execPath, [path.join(root, relativePath)], {
     cwd: root,
-    stdio: 'inherit'
+    stdio: 'inherit',
+    timeout: checkTimeoutMs,
+    killSignal: 'SIGTERM'
   });
 
   if (result.error) {
-    console.error(`Could not run ${relativePath}: ${result.error.message}`);
+    const timedOut = result.error.code === 'ETIMEDOUT';
+    console.error(
+      timedOut
+        ? `${relativePath} exceeded ${checkTimeoutMs / 1000}s and was terminated.`
+        : `Could not run ${relativePath}: ${result.error.message}`
+    );
+    process.exit(1);
+  }
+  if (result.signal) {
+    console.error(`${relativePath} was terminated by signal ${result.signal}.`);
     process.exit(1);
   }
   if (result.status !== 0) {
