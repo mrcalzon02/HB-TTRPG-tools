@@ -8,10 +8,22 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <style>
-    .exo-status{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(217,168,79,.34);border-radius:999px;padding:6px 10px;background:rgba(217,168,79,.08);color:#d9d1c0;font-size:.72rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.exo-status::before{content:"";width:8px;height:8px;border-radius:50%;background:#d9a84f;box-shadow:0 0 14px rgba(217,168,79,.7)}
-    .exo-framework-card{position:relative;overflow:hidden}.exo-framework-card::after{content:"FRAMEWORK";position:absolute;right:12px;top:10px;color:rgba(217,168,79,.13);font-size:1.2rem;font-weight:950;letter-spacing:.12em}.exo-framework-card p{max-width:62ch}.exo-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.exo-meta span{border:1px solid rgba(217,168,79,.22);border-radius:999px;padding:4px 8px;color:#cfc5b3;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.18)}
-    .exo-notice{border-left:3px solid rgba(217,168,79,.76);background:rgba(217,168,79,.075);padding:14px 16px;border-radius:12px;color:#d9d1c0;line-height:1.6}
-    .exo-active-card::after{content:"ACTIVE";color:rgba(126,214,155,.32)}
+    .exo-ops-shell{min-height:calc(100vh - 92px)}
+    .exo-module-card{position:relative;display:flex;flex-direction:column;min-height:170px;padding:15px;color:inherit;text-decoration:none;overflow:hidden}
+    .exo-module-card::before{content:"";height:2px;margin:-15px -15px 13px;background:linear-gradient(90deg,var(--bli-gold),transparent 72%)}
+    .exo-module-card[data-state="active"]{transition:transform 150ms ease,border-color 150ms ease,background 150ms ease}
+    .exo-module-card[data-state="active"]:hover,.exo-module-card[data-state="active"]:focus-visible{transform:translateY(-2px);border-color:rgba(217,168,79,.58);background:linear-gradient(145deg,rgba(217,168,79,.09),rgba(255,255,255,.012)),var(--bli-panel);outline:none}
+    .exo-module-card[data-state="planned"]{opacity:.72}
+    .exo-module-card h3{margin:0 0 7px;font-size:1rem;line-height:1.15}
+    .exo-module-card p{margin:0;color:#c9c1b4;font-size:.78rem;line-height:1.45}
+    .exo-card-footer{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:12px}
+    .exo-card-footer span{border:1px solid rgba(217,168,79,.22);border-radius:999px;padding:3px 7px;color:#cfc5b3;background:rgba(0,0,0,.18);font-size:.61rem;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
+    .exo-card-footer .exo-live{border-color:rgba(126,214,155,.34);color:#a9e4ba}
+    .exo-card-footer .exo-planned{color:#c5b28e}
+    .exo-module-card[data-state="active"]::after{content:"↗";position:absolute;right:13px;top:11px;color:rgba(217,168,79,.55);font-size:1rem}
+    .exo-workspace-count{flex:0 0 auto;color:#c9b17f;font-size:.7rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+    .exo-group-label{display:flex;align-items:center;padding:0 5px;color:#826c45;font-size:.66rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+    @media(max-width:620px){.exo-module-card{min-height:0}.exo-workspace-count{display:none}}
   </style>
 </head>
 <body class="blacklight-corp-body">
@@ -20,56 +32,119 @@
       <span class="bli-mark" aria-hidden="true"></span>
       <span class="bli-brand-text"><span>Blacklight</span><span>EXO Operations</span></span>
     </a>
-    <nav class="bli-nav" aria-label="EXO Operations navigation">
-      <a href="blacklight-exo-deployment-health.html">Deployment Health</a>
-      <a href="docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md">Propulsion Authority</a>
+    <nav class="bli-nav" aria-label="Blacklight global navigation">
       <a href="blacklight-systems-black.html">Black Archive</a>
       <a href="blacklight-corporate-systems.html">Systems Gateway</a>
     </nav>
   </header>
 
-  <section class="bli-hero" aria-labelledby="exo-title">
-    <div>
-      <p class="bli-eyebrow">Black compartment · Exosolar operations</p>
-      <h1 id="exo-title">EXO Operations.</h1>
-      <p class="bli-lede">Restricted planning workspace for generating sectors, clusters, exosolar systems, orbital environments, nonhuman civilizations, interstellar governments, faster-than-light infrastructure, vessels, stations, settlements, outposts, creatures, vehicles, and multi-crew vessel role-play tools.</p>
-      <div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-stellar-sector.html">Open Stellar Sector Archive</a><a class="bli-action primary" href="blacklight-exo-solar-system.html">Open Solar System Generator</a><a class="bli-action primary" href="blacklight-exo-species-civilization.html">Open System Dossier Generator</a><a class="bli-action primary" href="blacklight-exo-alien-ecology.html">Open Alien Ecology Generator</a><a class="bli-action primary" href="blacklight-exo-stellar-government.html">Open Stellar Government Generator</a><a class="bli-action primary" href="blacklight-exo-ftl.html">Open FTL Technology Hierarchy</a><a class="bli-action primary" href="blacklight-exo-vessel.html">Open Vessel Engineering Generator</a><a class="bli-action primary" href="blacklight-exo-crew-operations.html">Open Crew Operations Simulator</a><a class="bli-action" href="docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md">Read Propulsion/Transit Authority</a><a class="bli-action" href="docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md">Open FTL Engineering Field Manual</a><a class="bli-action" href="docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md">Open Generator/API Reference</a><a class="bli-action" href="blacklight-exo-deployment-health.html">Verify Deployed EXO Runtime</a><a class="bli-action" href="#generator-framework">Open Generator Framework</a><a class="bli-action" href="blacklight-systems-black.html">Return to Black Archive</a></div>
-    </div>
-    <aside class="bli-directory-panel" aria-label="EXO Operations status">
-      <div class="bli-directory-title">Compartment Status</div>
-      <div class="bli-directory-list" role="list">
-        <div class="bli-directory-item" role="listitem"><strong>Clearance</strong><span class="bli-arrow">Black</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Compartment</strong><span class="bli-arrow">EXO</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Framework</strong><span class="bli-arrow">active</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Propulsion authority</strong><span class="bli-arrow">registry/schema v1.1</span></div>
+  <main class="bli-app-shell exo-ops-shell">
+    <section class="bli-app-commandbar" aria-labelledby="exo-title">
+      <div class="bli-app-identity">
+        <h1 id="exo-title">EXO Operations</h1>
+        <p>Black compartment · Exosolar operations</p>
       </div>
-      <p><span class="exo-status">9 generators active</span></p>
-    </aside>
-  </section>
-
-  <main class="bli-shell">
-    <section class="bli-section">
-      <div class="exo-notice"><strong>Development boundary:</strong> this page is the dedicated container for EXO generators and operational tools. Individual tools are separated by scale and loaded incrementally so sector, cluster, system, orbital, biology, government, transit, vessel engineering, and crew role-play records do not compete for one page-load budget. Propulsion/transit authority, field-engineering guidance, and generator/API semantics are exposed here as first-class Black-tier resources rather than being buried behind the live generator. The deployment health console verifies the exact Pages artifact and both major generator runtimes from the deployed origin.</div>
+      <div class="bli-app-status" aria-label="EXO Operations status">
+        <span>Clearance Black</span>
+        <span>EXO</span>
+        <span data-state="active">Framework active</span>
+        <span>Registry/schema v1.1</span>
+        <span>9 generators active</span>
+      </div>
     </section>
 
-    <section id="generator-framework" class="bli-section">
-      <div class="bli-section-head">
-        <p class="bli-eyebrow">Expansion-system planning pass</p>
-        <h2>EXO generator framework.</h2>
-        <p>Active modules and planned expansion systems share this restricted workspace. Each active tool preserves source records and hands its results forward into the next engineering layer.</p>
+    <nav class="bli-system-nav" aria-label="EXO subsystem navigation">
+      <a href="blacklight-exo-operations.html" aria-current="page">Overview</a>
+      <a href="blacklight-exo-stellar-sector.html">Sector</a>
+      <a href="blacklight-exo-solar-system.html">System</a>
+      <a href="blacklight-exo-species-civilization.html">Dossier</a>
+      <a href="blacklight-exo-alien-ecology.html">Ecology</a>
+      <a href="blacklight-exo-stellar-government.html">Governments</a>
+      <a href="blacklight-exo-ftl.html">FTL</a>
+      <a href="blacklight-exo-vessel.html">Vessel Engineering</a>
+      <a href="blacklight-exo-crew-operations.html">Crew Operations</a>
+      <span class="exo-group-label" aria-hidden="true">References</span>
+      <a href="docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md">Propulsion Authority</a>
+      <a href="docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md">FTL Field Manual</a>
+      <a href="docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md">Generator/API</a>
+      <a href="blacklight-exo-deployment-health.html">Deployment Health</a>
+    </nav>
+
+    <section id="generator-framework" aria-labelledby="generator-framework-title">
+      <div class="bli-workspace-head">
+        <div>
+          <h2 id="generator-framework-title">EXO generator framework</h2>
+          <p>Choose an operational layer. Active generators preserve source records and hand results forward into adjacent EXO systems.</p>
+        </div>
+        <span class="exo-workspace-count">Desktop workspace · live modules first</span>
       </div>
-      <div class="bli-card-grid">
-        <article class="bli-card exo-framework-card exo-active-card"><h3>Stellar Sector Archive</h3><p>Load a fixed, versioned sector containing dozens of clusters, extant and extinct species, governments, controlled territories and planets, fleet commands, doctrines, loadouts, military and civilian institutions, commercial organizations, technology profiles, bestiary records, ruins, dead worlds, and diplomatic relationships. Directories render in idle-time batches and can be exported or recorded as local campaign snapshots.</p><div class="exo-meta"><span>active generator</span><span>36 clusters</span><span>32 active species</span><span>fleet doctrines</span><span>versioned archive</span><span>incremental rendering</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-stellar-sector.html">Open Stellar Sector Archive</a></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>Solar System Generator</h3><p>Generate seeded stellar systems with selectable orbital records while loading clusters, the full satellite catalogue, imagery, ecology, FTL route mathematics, and jump tools as independent layers. The fixed Solar System uses representative satellite rendering by default while preserving every deferred catalogue record in its exported authority.</p><div class="exo-meta"><span>active generator</span><span>incremental loader</span><span>orbital display</span><span>planet inspector</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-solar-system.html">Open Solar System Generator</a></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>System Occupancy, Species and Civilization Generator</h3><p>Generate pristine empty systems, resource frontiers, extraction economies, inhabited hubs, militarized systems, abandoned infrastructure, and extinguished civilizations before developing any surviving or extinct species.</p><div class="exo-meta"><span>active generator</span><span>system economy</span><span>xenology</span><span>ruin states</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-species-civilization.html">Open System Dossier Generator</a></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>Alien Ecology Generator</h3><p>Generate native ecological foundations separately from population and ruin overlays. Barren, chemically active, pseudo-life, and living worlds inherit their physical planet records, while populated and ruined worlds preserve designated species, settlement history, engineered organisms, surviving niches, food webs, hazards, and ecological disturbance.</p><div class="exo-meta"><span>active generator</span><span>chemical ecologies</span><span>pseudo-life</span><span>biospheres</span><span>cluster integration</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-alien-ecology.html">Open Alien Ecology Generator</a></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>Stellar Government Generator</h3><p>Develop sovereignty above a generated world, system dossier, active solar system, or complete star cluster. Generate republics, compacts, confederations, empires, corporate domains, machine consensuses, protectorates, theocratic archives, ecological custodianships, fleet commonwealths, occupation authorities, and successor coalitions with constitutions, jurisdictions, citizenship, law, diplomacy, military command, institutions, factions, and crises.</p><div class="exo-meta"><span>active generator</span><span>government</span><span>constitutions</span><span>jurisdictions</span><span>factions</span><span>cluster handoff</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-stellar-government.html">Open Stellar Government Generator</a></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>FTL Technology Hierarchy</h3><p>Generate technically distinct relativistic, near-light, and faster-than-light systems while keeping ordinary propulsion P-band, family-specific Transit Path P-level, and shared T0-T8 capability envelope distinct. The hierarchy carries clean-space and route-degraded performance, mathematical graphs, energy, thermal, dimensional, navigation, failure, certification, machinery, provenance, and canon-status records.</p><div class="exo-meta"><span>active generator</span><span>3-coordinate scale model</span><span>Path P0-P6</span><span>shared T0-T8</span><span>authority linked</span><span>schema v1.1</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-ftl.html">Open FTL Technology Hierarchy</a><a class="bli-action" href="docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md">Authority</a><a class="bli-action" href="docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md">Field Manual</a><a class="bli-action" href="docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md">Generator/API Reference</a></div></article>
-        <article class="bli-card exo-framework-card"><h3>Gate and Slip Infrastructure</h3><p>Orbital spin-ring stations, gravitational spin matrices, slip disks, temporary worm gates, paired destinations, deep transit networks, anchoring requirements, and strategic gate dependencies.</p><div class="exo-meta"><span>spin ring</span><span>slip disk</span><span>worm gate</span></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>Transit-Capable Vessel Engineering</h3><p>Build the vessel outward from a qualified FTL apparatus, its installed mass and volume, energy architecture, mission fuel, thermal debt, alien biological environment, inertial-reference control, shielding, navigation baseline, maintenance access, conventional propulsion, mission payload, and protected growth margin.</p><div class="exo-meta"><span>active generator</span><span>drive-derived hull</span><span>inertial control</span><span>xenological life support</span><span>mass and power ledger</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-vessel.html">Open Vessel Engineering Generator</a></div></article>
-        <article class="bli-card exo-framework-card exo-active-card"><h3>Crew Operations Simulator</h3><p>Role-play a human-derived vessel through six procedural watchstations: Helm, Navigation, Gunnery, Engineering, Science / Scanning, and Communications. This is currently a visualization and interaction placeholder inside a World of Darkness-derived d10 campaign framework: players perform hidden, order-sensitive control procedures using selectors, repeated confirmations, dial turns, levers, and keyed shielded execution controls. The console scores the attempted procedure and supplies a suggested d10 difficulty to the DM; it never rolls for the character or determines success. The human control grammar is the baseline from which commandeered alien systems can later become genuinely unfamiliar rather than simple visual reskins.</p><div class="exo-meta"><span>role-play placeholder</span><span>6 crew stations</span><span>procedural controls</span><span>WoD-derived d10</span><span>DM difficulty relay</span><span>station manuals</span></div><div class="bli-actions"><a class="bli-action primary" href="blacklight-exo-crew-operations.html">Open Crew Operations Simulator</a></div></article>
-        <article class="bli-card exo-framework-card"><h3>Settlement and Vehicle Generator</h3><p>Cities, colonies, orbital settlements, remote outposts, industrial sites, surface vehicles, aerospace craft, utility platforms, and race-specific civilian or military equipment.</p><div class="exo-meta"><span>cities</span><span>outposts</span><span>vehicles</span></div></article>
+
+      <div class="bli-workspace-grid">
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-stellar-sector.html">
+          <h3>Stellar Sector Archive</h3>
+          <p>Load the versioned sector authority: clusters, species, governments, territories, fleets, doctrines, institutions, technology, ruins, dead worlds, and diplomacy.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>36 clusters</span><span>32 active species</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-solar-system.html">
+          <h3>Solar System Generator</h3>
+          <p>Generate seeded stellar systems with orbital records, satellite catalogues, imagery, ecology, FTL route mathematics, jump tools, and planet inspection.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>Orbital display</span><span>Planet inspector</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-species-civilization.html">
+          <h3>System Dossier</h3>
+          <p>Develop system occupancy, resource frontiers, economies, settlements, militarization, abandoned infrastructure, and surviving or extinct civilizations.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>System economy</span><span>Xenology</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-alien-ecology.html">
+          <h3>Alien Ecology</h3>
+          <p>Build chemical ecologies, pseudo-life, biospheres, engineered organisms, food webs, hazards, surviving niches, and ecological disturbance from planet authority.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>Biospheres</span><span>Cluster integration</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-stellar-government.html">
+          <h3>Stellar Government</h3>
+          <p>Generate sovereignty, constitutions, jurisdictions, citizenship, law, diplomacy, command structures, institutions, factions, crises, and successor authorities.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>Government</span><span>Cluster handoff</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-ftl.html">
+          <h3>FTL Technology Hierarchy</h3>
+          <p>Engineer relativistic, near-light, and FTL systems across propulsion bands, Transit Path levels, shared capability tiers, route degradation, energy, heat, navigation, and failure.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>Path P0–P6</span><span>T0–T8</span><span>Schema v1.1</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-vessel.html">
+          <h3>Transit-Capable Vessel Engineering</h3>
+          <p>Build vessels from installed machinery, mass, volume, power, thermal debt, biology, inertial control, shielding, navigation, maintenance, propulsion, payload, and growth margin.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>Drive-derived hull</span><span>Mass/power ledger</span></div>
+        </a>
+
+        <a class="bli-workspace-panel exo-module-card" data-state="active" href="blacklight-exo-crew-operations.html">
+          <h3>Crew Operations Simulator</h3>
+          <p>Operate procedural watchstations for Helm, Navigation, Gunnery, Engineering, Science/Scanning, and Communications with DM-facing d10 difficulty support.</p>
+          <div class="exo-card-footer"><span class="exo-live">Active</span><span>6 stations</span><span>Procedural controls</span></div>
+        </a>
+
+        <article class="bli-workspace-panel exo-module-card" data-state="planned">
+          <h3>Gate and Slip Infrastructure</h3>
+          <p>Spin-ring stations, gravitational matrices, slip disks, temporary worm gates, paired destinations, transit networks, anchoring requirements, and strategic dependencies.</p>
+          <div class="exo-card-footer"><span class="exo-planned">Planned</span><span>Spin ring</span><span>Slip disk</span><span>Worm gate</span></div>
+        </article>
+
+        <article class="bli-workspace-panel exo-module-card" data-state="planned">
+          <h3>Settlement and Vehicle Generator</h3>
+          <p>Cities, colonies, orbital settlements, remote outposts, industrial sites, surface vehicles, aerospace craft, utility platforms, and race-specific equipment.</p>
+          <div class="exo-card-footer"><span class="exo-planned">Planned</span><span>Settlements</span><span>Vehicles</span></div>
+        </article>
       </div>
+
+      <details class="bli-app-disclosure">
+        <summary>Operational boundary and provenance</summary>
+        <p>EXO generators remain separated by operational scale and load incrementally so sector, system, orbital, biology, government, transit, vessel-engineering, and crew records do not compete for one page-load budget. Propulsion/transit authority, field-engineering guidance, generator/API semantics, and deployed-runtime verification remain directly available from the subsystem navigation above.</p>
+      </details>
     </section>
   </main>
 
