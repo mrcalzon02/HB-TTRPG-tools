@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "data/schemas/exo-vessel-ftl-development-lineage.schema.json",
+  "title": "Black Light FTL Development Lineage Registry",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "authority", "families", "canonSafeguards"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlDevelopmentLineageRegistry"},
+    "registryVersion": {"type": "string"},
+    "authority": {"type": "object"},
+    "families": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["family", "operator", "stages", "educationTrack", "patentTrack", "status"],
+        "properties": {
+          "family": {"type": "string"},
+          "operator": {"type": "string"},
+          "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED", "UNRESOLVED"]},
+          "stages": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {
+              "type": "object",
+              "required": ["path", "historicalRole", "mathematicalAdvance", "physicalAdvance", "changedTerms", "distanceEffect", "safetyEffect", "maintenanceEffect", "signatureEffect", "status"],
+              "properties": {
+                "path": {"pattern": "^P[0-6]$"},
+                "historicalRole": {"type": "string"},
+                "mathematicalAdvance": {"type": "string"},
+                "physicalAdvance": {"type": "string"},
+                "changedTerms": {"type": "array", "items": {"type": "string"}},
+                "distanceEffect": {"type": "string"},
+                "safetyEffect": {"type": "string"},
+                "maintenanceEffect": {"type": "string"},
+                "signatureEffect": {"type": "string"},
+                "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED", "UNRESOLVED"]}
+              }
+            }
+          },
+          "educationTrack": {"type": "array", "items": {"type": "string"}},
+          "patentTrack": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  }
+}
