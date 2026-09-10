@@ -3,7 +3,7 @@
 **Role:** implementation reference subordinate to `BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md`  
 **Registry:** `data/exo-vessel/propulsion-transit-registry.json`  
 **Schema:** `data/schemas/exo-vessel-propulsion-transit.schema.json`  
-**Reconciliation basis:** repository `main` through `2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf`, followed by the registry/schema commits that implement this reference.  
+**Reconciliation basis:** repository `main` through the current propulsion/transit registry/schema integration, including the pre-existing live FTL T0-T8 capability runtime and P0-P6 Path-level runtime.  
 **Canon discipline:** this document defines generator behavior. It does not promote a generated implementation, engineering analogy, or convenient extrapolation into setting-wide canon.
 
 ---
@@ -20,19 +20,23 @@ flowchart TD
     B --> C[Organization doctrine]
     C --> D[Manufacturer doctrine]
     D --> E[Operative technology basis]
-    E --> F[Transit construction maturity]
-    F --> G[Vessel scale + mission + condition]
-    G --> H[Transit-family defaults]
-    H --> I{Supplement mode}
-    I -->|AUTHORITY_ONLY| J[Leave unknowns unresolved]
-    I -->|LABELED_DERIVATION| K[Apply traceable DERIVED rules]
-    I -->|LABELED_PROPOSAL| L[Permit explicit PROPOSED extensions]
-    J --> M[Validate + provenance]
-    K --> M
-    L --> M
+    E --> F[Transit family]
+    F --> G[Family-specific Path P-level]
+    G --> H[Resolve shared T0-T8 capability baseline]
+    H --> I[Vessel scale + mission + condition]
+    I --> J[Power + navigation + machine embodiment]
+    J --> K{Supplement mode}
+    K -->|AUTHORITY_ONLY| L[Leave unknowns unresolved]
+    K -->|LABELED_DERIVATION| M[Apply traceable DERIVED rules]
+    K -->|LABELED_PROPOSAL| N[Permit explicit PROPOSED extensions]
+    L --> O[Validate + provenance]
+    M --> O
+    N --> O
 ```
 
 A lower-priority layer may specialize a higher-priority value but may not contradict it. A generated result that cannot explain its parent inputs and resolver rule is incomplete.
+
+The conventional-propulsion P-band is resolved separately. It is not part of the FTL Path-to-Tier chain.
 
 ---
 
@@ -46,6 +50,7 @@ The generator treats source classes differently:
 |---|---|
 | Confirmed named value | Copy or specialize only where the source explicitly permits specialization. Never replace. |
 | Confirmed lower bound/classification | Preserve the bound/classification and label any model refinement separately. |
+| Confirmed live runtime rule | Preserve the current generator relationship until deliberately migrated; do not restate it differently in a second data table. |
 | Candidate/disputed | Keep segregated from confirmed totals or conclusions. |
 | Explicit unknown | Keep unknown in `AUTHORITY_ONLY`; derive only in `LABELED_DERIVATION`; propose only in `LABELED_PROPOSAL`. |
 | Derived value | Preserve parent inputs, resolver rule, and status. |
@@ -55,26 +60,20 @@ This mirrors the existing Blacklight EXO published-first provenance doctrine: pr
 
 ---
 
-## 3. Keep the two P0-P6 axes separate
+## 3. Three scale coordinates, two different P vocabularies
 
-Two repository systems use P0-P6 labels for different things.
+The reconciled project contains **three distinct scale coordinates**. Two happen to use P0-P6 labels, while the live shared FTL capability model uses T0-T8.
 
 ```mermaid
-quadrantChart
-    title Two independent engineering axes
-    x-axis Lower conventional propulsion band --> Higher conventional propulsion band
-    y-axis Lower transit construction maturity --> Higher transit construction maturity
-    quadrant-1 Mature propulsion + mature transit
-    quadrant-2 Early propulsion + mature transit
-    quadrant-3 Early propulsion + early transit
-    quadrant-4 Mature propulsion + early transit
+flowchart LR
+    CP[Conventional propulsion P0-P6] ---|independent unless sourced| TP[Transit Path P0-P6]
+    TP -->|live default mapping| TT[Shared transit T0-T8]
+    TT -->|family availability may clamp| TF[Resolved transit capability]
 ```
 
-`conventionalPropulsion.technologyBand` comes from `data/exo-vessel/engineering-registry.json` and selects ordinary-spacetime propulsion context. `transit.constructionMaturity` comes from the recovered FTL construction hierarchy and describes how monumental, industrialized, mobile, compact, adaptive, or self-certifying a particular transit path has become.
+### 3.1 Conventional propulsion P0-P6
 
-The generator MUST NOT collapse these into `pathLevel`, `techLevel`, or a single P-value. A culture can, if canon allows, be unusually mature in one axis and immature in the other.
-
-Current conventional registry values are:
+`conventionalPropulsion.technologyBand` comes from `data/exo-vessel/engineering-registry.json`. It describes ordinary-spacetime propulsion technology and remains independent of FTL unless a specific civilization/source establishes a relationship.
 
 | Band | Ordinary-space propulsion | Exhaust velocity | Base strategic delta-v |
 |---|---|---:|---:|
@@ -86,7 +85,63 @@ Current conventional registry values are:
 | P5 | Antimatter-catalyzed plasma | 12,000 km/s | 1,400 km/s |
 | P6 | Field-coupled relativistic torch | 45,000 km/s | 5,000 km/s |
 
-Those numbers are registry inputs, not a license to assign the same numbers to FTL performance.
+These values are ordinary-space registry inputs. They are not FTL speed classes.
+
+### 3.2 Family-specific Transit Path P0-P6
+
+`transit.pathLevelKey` is the live Path maturity/implementation coordinate from `blacklight-exo-ftl-path-level-core.js`:
+
+| Runtime key | Display | Engineering meaning |
+|---|---|---|
+| `p0` | Path 0 · Monumental Precursor | planetary/lunar/deep-orbit monolith; narrow windows; industrial-grid burden |
+| `p1` | Path 1 · Industrial Demonstrator | fixed industrial array; replaceable sectors; inspection/recalibration between activations |
+| `p2` | Path 2 · Fixed Operational System | repeatable orbital/anchored infrastructure; strategic single-point dependence |
+| `p3` | Path 3 · Capital-Scale Mobile Prototype | capital/tender/mobile-ring scale independent machinery |
+| `p4` | Path 4 · Fleet Operational Standard | repeatable fleet/commercial architecture with route surveys and industrial support |
+| `p5` | Path 5 · Compact Strategic System | compact automated shipboard systems; less forgiving thermal/damage margins |
+| `p6` | Path 6 · Mature Path Apex | fighter-scale through self-regulating strategic implementations; remaining risks shift toward causality, identity, interference, and topology |
+
+This level is more than a construction-size adjective in the current runtime. It also carries family-specific performance range, charge/recovery window, energy multiplier, reliability/error factors, and utility/limitation records. Those detailed arrays stay in the live Path definition files until the runtime itself is deliberately migrated to a unified data registry.
+
+### 3.3 Shared transit capability T0-T8
+
+`transit.sharedCapabilityTierKey` is the live cross-family capability/performance envelope from `blacklight-exo-ftl-physics-definitions.js`:
+
+| Runtime key | Shared capability label |
+|---|---|
+| `t0` | Relativistic Precursor |
+| `t1` | Near-Light Compression |
+| `t2` | Supra-Light Prototype |
+| `t3` | System-Jump Capability |
+| `t4` | Operational Interstellar Drive |
+| `t5` | Strategic Corridor Drive |
+| `t6` | Deep-Range Manifold Drive |
+| `t7` | Compact Multisystem Drive |
+| `t8` | Post-Material Transit Architecture |
+
+This tier is a shared comparison/performance framework used by the base generator. It does not replace a family-specific Path level.
+
+### 3.4 Canonical live coupling
+
+The current Path runtime defines:
+
+`STAGE_TO_TIER = [0, 1, 2, 3, 4, 6, 8]`
+
+Therefore the default mapping is:
+
+| Path | Shared tier baseline |
+|---|---|
+| P0 | T0 |
+| P1 | T1 |
+| P2 | T2 |
+| P3 | T3 |
+| P4 | T4 |
+| P5 | T6 |
+| P6 | T8 |
+
+When the caller explicitly requests a Path level, the Path controller sets the shared tier baseline from that mapping. If a selected family cannot operate at that shared tier, family availability may clamp the shared tier into its certified runtime window. If the caller also requested a contradictory T-tier, the Path level wins and the correction is recorded in compatibility/provenance.
+
+The generator MUST NOT collapse any of the three coordinates into `techLevel`, `pathLevel`, or `P-level` without its domain. A report that says merely “P5 technology” is ambiguous and invalid.
 
 ---
 
@@ -182,6 +237,8 @@ In `LABELED_DERIVATION` mode the generator may derive, for example, that service
 Scale changes embodiment, redundancy, geometry, and maintenance burden. It does not by itself change technological identity.
 
 Recovered scale bands remain the primary buckets: probe, fighter/strike craft, shuttle/courier, corvette, frigate/merchant, cruiser, capital/carrier, and gatework/megastructure.
+
+Path level changes which implementation scale is plausible and, in the live runtime, also changes the family-specific performance/reliability envelope. Shared T-tier provides a cross-family capability envelope. Neither should be inferred from vessel mass alone when the caller or source already supplies them.
 
 ### 7.1 Non-canon engineering burden estimator
 
@@ -293,7 +350,7 @@ Basis affects the observable path. Biological drives can produce metabolic, chem
 
 ## 12. Failure generation and propagation
 
-Failure is the Cartesian product of mechanism, basis, integration, vessel condition, environment, navigation state, power margin, coverage margin, and recovery margin.
+Failure is the Cartesian product of mechanism, basis, integration, vessel condition, environment, navigation state, power margin, coverage margin, recovery margin, and any external infrastructure state.
 
 A descriptive risk relation is:
 
@@ -308,6 +365,7 @@ flowchart LR
     P[Power / thermal fault] --> X
     N[Navigation/reference fault] --> X
     H[Hull / coverage damage] --> X
+    I[Infrastructure fault] --> X
     X --> A{Before commit?}
     A -->|yes| AB[Abort / isolate / recertify]
     A -->|no| R[Recovery-only response]
@@ -373,7 +431,20 @@ Every nontrivial generated field receives a provenance entry:
 }
 ```
 
-Provenance belongs to the value, not merely to the overall document. A mixed result can therefore contain confirmed family identity, derived machinery embodiment, proposed scaling coefficients, and unresolved manufacturer procedure without flattening everything to one confidence label.
+Path/T-tier resolution receives its own provenance rather than disappearing into a generic maturity number:
+
+```json
+{
+  "field": "transit.sharedCapabilityTierKey",
+  "status": "CONFIRMED",
+  "sourcePath": "blacklight-exo-ftl-path-level-runtime.js",
+  "resolverRule": "STAGE_TO_TIER then family-window clamp",
+  "parentInputs": ["transit.pathLevelKey","transit.family"],
+  "notes": "Explicit Path level controls the shared capability baseline in the live runtime."
+}
+```
+
+Provenance belongs to the value, not merely to the overall document. A mixed result can therefore contain confirmed family identity, confirmed live runtime scale resolution, derived machinery embodiment, proposed scaling coefficients, and unresolved manufacturer procedure without flattening everything to one confidence label.
 
 ---
 
@@ -400,28 +471,31 @@ The technical view emphasizes fields and margins. The operator view exposes prer
 
 A generated installation is invalid if any of these fail:
 
-1. Conventional propulsion P-band and transit construction maturity are merged.
-2. A confirmed source value was overwritten by a procedural value.
-3. A derived/proposed value lacks provenance and parent inputs.
-4. A transit installation omits any of the eight machine blocks without explicitly marking that block unresolved.
-5. Any of the six EXO route semantics lacks carrier/interface/tolerance state.
-6. Whole-effect coverage does not include the intended payload or does not report the shortfall.
-7. Navigation inputs do not match the selected transit mechanism.
-8. The physical layout cannot provide a structural/load path between drive foundations, hull, and required reaction/field forces.
-9. Energy delivery has no isolation/recovery/dump path.
-10. Abort behavior ignores the family-specific commit boundary.
-11. A race-specific FTL family is invented from generic technology-basis compatibility.
-12. An alien interface is declared `DIRECT` merely because the end effect is recognizable.
-13. A generated chronology effect appears without explicit canon authority.
-14. A generated manual or narrative contradicts the structured installation record.
-15. Re-running with identical source snapshot, complete seed hierarchy, and generator version produces a different authoritative result without a recorded nondeterministic input.
+1. Conventional propulsion P-band, Transit Path P-level, and shared transit T-tier are merged, mislabeled, or lose their coupling provenance.
+2. An explicit Path level is overwritten by a contradictory shared T-tier instead of resolving the T-tier from the live Path mapping and family window.
+3. A confirmed source value or live runtime constraint is overwritten by a procedural value.
+4. A derived/proposed value lacks provenance and parent inputs.
+5. A transit installation omits any of the eight machine blocks without explicitly marking that block unresolved.
+6. Any of the six EXO route semantics lacks carrier/interface/tolerance state.
+7. Whole-effect coverage does not include the intended payload or does not report the shortfall.
+8. Navigation inputs do not match the selected transit mechanism.
+9. The physical layout cannot provide a structural/load path between drive foundations, hull, and required reaction/field forces.
+10. Energy delivery has no isolation/recovery/dump path.
+11. Abort behavior ignores the family-specific commit boundary.
+12. A race-specific FTL family is invented from generic technology-basis compatibility.
+13. An alien interface is declared `DIRECT` merely because the end effect is recognizable.
+14. A generated chronology effect appears without explicit canon authority.
+15. A generated manual or narrative contradicts the structured installation record.
+16. Re-running with identical source snapshot, complete seed hierarchy, resolver inputs, and generator version produces a different authoritative result without a recorded nondeterministic input.
 
 ---
 
 ## 18. Implementation sequence
 
-The next software implementation should consume, in order:
+The software integration sequence is:
 
-`propulsion-transit-registry.json -> exo-vessel-technology-basis record -> species/org/manufacturer authority -> vessel engineering record -> transit resolver -> schema validation -> presentation views`.
+`propulsion-transit-registry.json -> species/org/manufacturer authority -> exo-vessel technology-basis record -> conventional propulsion band -> transit family -> Path P-level -> Path-to-T-tier resolver -> vessel scale/mission/condition -> machine/routes/navigation/power/failure/maintenance resolver -> schema validation -> presentation views`.
+
+Until migration is complete, the live T0-T8 performance tables remain authoritative for generator behavior in `blacklight-exo-ftl-physics-definitions.js`, and the detailed P0-P6 Path tables remain in the Path definition/runtime files. The registry records their relationship without duplicating their detailed numeric arrays.
 
 Do not duplicate the transit-family list in renderer code. Do not encode Ar'nock drive choice in presentation code. Do not let the viewer decide which provenance wins. Authority is resolved once; views display the resolved result.
