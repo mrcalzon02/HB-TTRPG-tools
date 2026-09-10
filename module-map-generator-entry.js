@@ -334,26 +334,66 @@
     }
   }
 
+  function clearGeneratedState(root, message) {
+    root._lastGenerated = null;
+    const editButton = root.querySelector('#smm-edit-generated');
+    const viewButton = root.querySelector('#smm-view-generated');
+    const output = root.querySelector('#smm-output');
+    const preview = root.querySelector('#smm-preview');
+    const meta = root.querySelector('#smm-preview-meta');
+    if (editButton) editButton.hidden = true;
+    if (viewButton) viewButton.hidden = true;
+    if (output) output.textContent = '';
+    if (preview) preview.innerHTML = `<span class="helper-note">${esc(message)}</span>`;
+    if (meta) meta.textContent = message;
+  }
+
+  function validateGenerationInputs(root) {
+    const invalid = [...root.querySelectorAll('input[type="number"]')].find(input => !input.checkValidity());
+    if (!invalid) return true;
+    const label = invalid.closest('label')?.querySelector('span')?.textContent || invalid.id || 'Numeric value';
+    let range = 'within the allowed range';
+    if (invalid.min !== '' && invalid.max !== '') range = `between ${invalid.min} and ${invalid.max}`;
+    else if (invalid.min !== '') range = `at least ${invalid.min}`;
+    else if (invalid.max !== '') range = `no more than ${invalid.max}`;
+    const message = `${label} must be ${range}.`;
+    clearGeneratedState(root, message);
+    invalid.focus();
+    invalid.reportValidity();
+    return false;
+  }
+
   function generate(root) {
+    if (!validateGenerationInputs(root)) return false;
     const variant = val(root, 'smm-variant');
-    let result;
-    if (variant === 'alien') {
-      result = window.generator.alien_vessel.generate({ seed:val(root,'smm-seed'), profile:val(root,'smm-vessel-profile'), faction:val(root,'smm-faction'), hullShape:val(root,'smm-hull-shape'), damageSeverity:num(root,'smm-damage'), width:num(root,'smm-width'), height:num(root,'smm-height') });
-    } else if (variant === 'airship') {
-      result = window.generator.kaysender_airship.generate({ seed:val(root,'smm-seed'), name:val(root,'smm-name'), vesselClass:val(root,'smm-airship-class'), hullCulture:val(root,'smm-airship-culture'), purpose:val(root,'smm-airship-purpose'), condition:val(root,'smm-airship-condition'), width:num(root,'smm-width'), height:num(root,'smm-height') });
-    } else {
-      result = window.generator.module_map.generate(siteInput(root));
+    try {
+      let result;
+      if (variant === 'alien') {
+        result = window.generator.alien_vessel.generate({ seed:val(root,'smm-seed'), profile:val(root,'smm-vessel-profile'), faction:val(root,'smm-faction'), hullShape:val(root,'smm-hull-shape'), damageSeverity:num(root,'smm-damage'), width:num(root,'smm-width'), height:num(root,'smm-height') });
+      } else if (variant === 'airship') {
+        result = window.generator.kaysender_airship.generate({ seed:val(root,'smm-seed'), name:val(root,'smm-name'), vesselClass:val(root,'smm-airship-class'), hullCulture:val(root,'smm-airship-culture'), purpose:val(root,'smm-airship-purpose'), condition:val(root,'smm-airship-condition'), width:num(root,'smm-width'), height:num(root,'smm-height') });
+      } else {
+        result = window.generator.module_map.generate(siteInput(root));
+      }
+      if (!result || typeof result !== 'object') throw new Error('Generator returned no usable module result.');
+      result.displayName = val(root, 'smm-name');
+      result.level = Number(val(root, 'smm-level') || 1);
+      const svg = drawPreview(root, result);
+      const state = editorStateFromResult(result);
+      root._lastGenerated = { result, svg, state };
+      const rooms = result.spatialLayout?.rooms || [];
+      root.querySelector('#smm-output').textContent = JSON.stringify({ name:result.displayName, level:result.level, generator:result.generator, seed:result.seed, deckCount:result.deckCount, rooms:rooms.map(room => ({id:room.nodeId || room.id,label:room.label,role:room.role,deck:room.deck,x:room.x,y:room.y,width:room.width,height:room.height,tags:room.tags})), content:result.content || null, compatibility:result.compatibility || null, validation:result.validation }, null, 2);
+      root.querySelector('#smm-edit-generated').hidden = false;
+      root.querySelector('#smm-view-generated').hidden = false;
+      document.dispatchEvent(new CustomEvent('module-map-generator-output', { detail:result }));
+      return true;
+    } catch (error) {
+      console.error('Module generation failed.', error);
+      const message = `Generation failed: ${error?.message || 'Unknown generator error.'}`;
+      clearGeneratedState(root, message);
+      document.dispatchEvent(new CustomEvent('module-map-generator-error', { detail:{ variant, error } }));
+      return false;
     }
-    result.displayName = val(root, 'smm-name');
-    result.level = Number(val(root, 'smm-level') || 1);
-    const svg = drawPreview(root, result);
-    const state = editorStateFromResult(result);
-    root._lastGenerated = { result, svg, state };
-    const rooms = result.spatialLayout?.rooms || [];
-    root.querySelector('#smm-output').textContent = JSON.stringify({ name:result.displayName, level:result.level, generator:result.generator, seed:result.seed, deckCount:result.deckCount, rooms:rooms.map(room => ({id:room.nodeId || room.id,label:room.label,role:room.role,deck:room.deck,x:room.x,y:room.y,width:room.width,height:room.height,tags:room.tags})), content:result.content || null, compatibility:result.compatibility || null, validation:result.validation }, null, 2);
-    root.querySelector('#smm-edit-generated').hidden = false;
-    root.querySelector('#smm-view-generated').hidden = false;
-    document.dispatchEvent(new CustomEvent('module-map-generator-output', { detail:result }));
   }
 
   function randomize(root) {
