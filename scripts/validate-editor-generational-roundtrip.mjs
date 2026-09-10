@@ -5,14 +5,18 @@ import vm from 'node:vm';
 
 const root = process.cwd();
 const kernelSource = await fs.readFile(path.join(root, 'kaysender-editor-kernel.js'), 'utf8');
+const repositorySource = await fs.readFile(path.join(root, 'kaysender-editor-repository.js'), 'utf8');
 const fail = message => { throw new Error(message); };
 const assert = (condition, message) => { if (!condition) fail(message); };
 
 const storageValues = new Map();
 const localStorage = {
-  getItem: key => storageValues.has(key) ? storageValues.get(key) : null,
+  get length() { return storageValues.size; },
+  getItem: key => storageValues.has(String(key)) ? storageValues.get(String(key)) : null,
   setItem: (key, value) => storageValues.set(String(key), String(value)),
-  removeItem: key => storageValues.delete(String(key))
+  removeItem: key => storageValues.delete(String(key)),
+  key: index => Array.from(storageValues.keys())[index] ?? null,
+  clear: () => storageValues.clear()
 };
 const crypto = {
   randomUUID: (() => {
@@ -31,9 +35,12 @@ context.window = context;
 context.globalThis = context;
 vm.createContext(context);
 new vm.Script(kernelSource, { filename: 'kaysender-editor-kernel.js' }).runInContext(context);
+new vm.Script(repositorySource, { filename: 'kaysender-editor-repository.js' }).runInContext(context);
 
 const Kernel = context.KaysenderEditorKernel;
+const Repository = context.KaysenderEditorRepository;
 assert(Kernel, 'Shared editor kernel did not initialize in the isolated validation runtime.');
+assert(Repository, 'Saved record repository did not initialize in the isolated validation runtime.');
 
 const rootData = {
   profileType: 'settlement-profile',
@@ -82,5 +89,48 @@ assert(imported.envelope.provenance.parent?.profileId === g1.profileId, 'Import 
 assert(imported.envelope.provenance.lineage.map(item => item.profileId).join('|') === g2.provenance.lineage.map(item => item.profileId).join('|'), 'Import roundtrip changed lineage order or identities.');
 assert(imported.envelope.provenance.lineageComplete === true, 'Import roundtrip lost lineage completeness.');
 
-console.log('Editor generational provenance roundtrip validation passed.');
-console.log(`Verified ${g0.profileId} r1 -> r2 without generation change, clone to G1, clone to G2, and canonical JSON import with pinned root/parent ancestry preserved.`);
+assert(Repository.save(g0).ok, 'Repository failed to save generation 0 revision 1.');
+assert(Repository.save(g0r2).ok, 'Repository failed to update generation 0 to revision 2.');
+assert(Repository.save(g1).ok, 'Repository failed to save generation 1.');
+assert(Repository.save(g2).ok, 'Repository failed to save generation 2.');
+
+const allRecords = Repository.list({ editorId: 'roundtrip-test' });
+assert(allRecords.length === 3, 'Repository index did not retain exactly the three stable generational records.');
+const g2Metadata = allRecords.find(item => item.profileId === g2.profileId);
+assert(g2Metadata?.generation === 2, 'Repository index lost generation 2 metadata.');
+assert(g2Metadata?.lineageComplete === true, 'Repository index lost lineage completeness.');
+assert(g2Metadata?.parentProfileId === g1.profileId && g2Metadata?.parentRevision === g1.revision, 'Repository index lost the immediate parent identity or revision.');
+assert(g2Metadata?.rootProfileId === g0r2.profileId && g2Metadata?.rootRevision === g0r2.revision, 'Repository index lost the root identity or pinned revision.');
+assert(Repository.list({ query: 'G2' }).some(item => item.profileId === g2.profileId), 'Repository findability search could not locate generation 2 by generation label.');
+assert(Repository.list({ query: g1.profileId }).some(item => item.profileId === g2.profileId), 'Repository findability search could not locate generation 2 by parent identity.');
+assert(Repository.list({ query: g0r2.profileId }).some(item => item.profileId === g2.profileId), 'Repository findability search could not locate generation 2 by root identity.');
+
+const loadedG2 = Repository.load(g2.profileId);
+assert(loadedG2.ok, 'Repository failed to load the saved generation 2 record.');
+assert(loadedG2.envelope.profileId === g2.profileId && loadedG2.envelope.revision === g2.revision, 'Repository load changed generation 2 stable identity or revision.');
+assert(loadedG2.envelope.provenance.generation === 2, 'Repository load changed generation 2 provenance.');
+assert(loadedG2.envelope.provenance.parent?.profileId === g1.profileId, 'Repository load changed the immediate parent.');
+assert(loadedG2.envelope.provenance.lineage.map(item => item.profileId).join('|') === g2.provenance.lineage.map(item => item.profileId).join('|'), 'Repository load changed lineage order or identities.');
+
+const conflictingG2 = JSON.parse(JSON.stringify(g2));
+conflictingG2.provenance.lineage[0].name = 'Conflicting Root Label';
+assert(!Kernel.validateEnvelope(conflictingG2, ['settlement-profile']).some(item => item.severity === 'error'), 'Conflict fixture must remain a structurally valid envelope.');
+const conflictResult = Repository.save(conflictingG2);
+assert(conflictResult.ok === false && conflictResult.conflict === true, 'Repository did not reject same-revision provenance divergence as a conflict.');
+const afterConflict = Repository.load(g2.profileId);
+assert(afterConflict.ok && afterConflict.envelope.provenance.lineage[0].name === g2.provenance.lineage[0].name, 'Rejected provenance conflict altered the canonical stored record.');
+
+const index = JSON.parse(localStorage.getItem(Repository.indexKey));
+const staleG2 = index.find(item => item.profileId === g2.profileId);
+assert(staleG2, 'Could not locate generation 2 metadata for stale-index repair fixture.');
+delete staleG2.generation;
+localStorage.setItem(Repository.indexKey, JSON.stringify(index));
+const staleHealth = Repository.indexHealth();
+assert(staleHealth.ok && staleHealth.stale && staleHealth.outdated.includes(g2.profileId), 'Repository health check did not detect stale provenance index metadata.');
+const repair = Repository.ensureIndexCurrent({ force: true });
+assert(repair.ok && repair.repaired === true, 'Repository did not rebuild stale index metadata from canonical saved records.');
+const repairedG2 = Repository.list({ query: 'G2' }).find(item => item.profileId === g2.profileId);
+assert(repairedG2?.generation === 2 && repairedG2?.rootProfileId === g0r2.profileId && repairedG2?.parentProfileId === g1.profileId, 'Index repair did not restore generation/root/parent metadata or findability.');
+
+console.log('Editor generational provenance and repository roundtrip validation passed.');
+console.log(`Verified ${g0.profileId} r1 -> r2 without generation change, clone to G1/G2, repository save/index/search/load, same-revision provenance conflict rejection, and stale-index repair from canonical records.`);
