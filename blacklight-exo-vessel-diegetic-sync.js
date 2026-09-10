@@ -56,19 +56,13 @@
     if(shell)new MutationObserver(routeContextActions).observe(shell,{childList:true,subtree:true});
   }
 
-  function installSystemLinks(){
+  function installEquipmentLink(){
     const nav=document.querySelector('.bli-topbar .bli-nav');if(!nav)return;
-    const links=[
-      ['Government','blacklight-exo-stellar-government.html'],
-      ['Equipment','blacklight-equipment-catalog.html'],
-      ['Crew Ops','blacklight-exo-crew-operations.html']
-    ];
-    const existing=new Set([...nav.querySelectorAll('a')].map(link=>link.getAttribute('href')));
-    const archive=[...nav.querySelectorAll('a')].find(link=>link.getAttribute('href')==='blacklight-systems-black.html')||null;
-    for(const [label,href] of links){
-      if(existing.has(href))continue;
-      const link=node('a','',label);link.href=href;nav.insertBefore(link,archive);existing.add(href);
-    }
+    const href='blacklight-equipment-catalog.html';
+    if(nav.querySelector(`a[href="${href}"]`))return;
+    const link=node('a','','Equipment');link.href=href;
+    const archive=nav.querySelector('a[href="blacklight-systems-black.html"]');
+    nav.insertBefore(link,archive);
   }
 
   const refresh=()=>queueMicrotask(()=>{
@@ -78,10 +72,10 @@
 
   installControlTriage();
   installContextActionRouting();
-  installSystemLinks();
+  installEquipmentLink();
   document.addEventListener('change',event=>{if(event.target?.closest?.('#exo-vessel-campaign-damage-editor'))refresh();});
   document.addEventListener('blacklight:exo-vessel-activate',refresh);
   document.addEventListener('blacklight:exo-vessel-generated',()=>{routeContextActions();refresh();});
   document.addEventListener('blacklight:exo-vessel-v10-ready',refresh);
-  globalThis.BlacklightExoVesselDiegeticSync=Object.freeze({version:2,refresh});
+  globalThis.BlacklightExoVesselDiegeticSync=Object.freeze({version:3,refresh});
 })();
