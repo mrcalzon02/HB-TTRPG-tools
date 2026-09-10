@@ -12,7 +12,7 @@ const css=await read('blacklight-exo-vessel-campaign.css');
 const schema=JSON.parse(await read('data/schemas/exo-vessel-campaign-archive.schema.json'));
 
 for(const signature of ['indexedDB.open','createObjectStore','vesselInstanceId','manufacturerId','hullFamilyId','validateEnvelope','migrateRecord','blacklight:exo-vessel-activate','Record Campaign Snapshot','Import Vessel JSON','Manufacturer library','Hull-family library'])if(!storeSource.includes(signature))fail(`VESSEL-10 campaign store lacks ${signature}.`);
-for(const signature of ['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-campaign-store.js','loadCampaignLayer'])if(!uiSource.includes(signature))fail(`VESSEL-09 interface does not load VESSEL-10 campaign asset ${signature}.`);
+for(const signature of ['blacklight-exo-vessel-campaign.css','blacklight-exo-vessel-campaign-store.js','loadVessel10Layers'])if(!uiSource.includes(signature))fail(`VESSEL-09 interface does not load VESSEL-10 campaign asset ${signature}.`);
 if(!vesselUiSource.includes('blacklight:exo-vessel-activate')||!vesselUiSource.includes("activation:'campaign-archive'"))fail('Base vessel UI does not support exact campaign-archive activation.');
 for(const signature of ['exo-vessel-campaign-summary','exo-vessel-campaign-stat-card','exo-vessel-campaign-library-grid','exo-vessel-campaign-row'])if(!css.includes(signature))fail(`VESSEL-10 campaign stylesheet lacks ${signature}.`);
 if(schema.$id!=='https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-campaign-archive.schema.json'||schema.properties.recordType.const!=='blacklightExoVesselCampaignArchive'||schema.properties.vessel.$ref!=='exo-vessel-record.schema.json')fail('VESSEL-10 campaign archive schema identity is invalid.');
