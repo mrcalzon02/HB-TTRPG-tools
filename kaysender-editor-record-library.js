@@ -111,14 +111,27 @@
     };
   }
 
-  function renderResultSummary(visibleCount, totalCount) {
+  function repositoryHealthSummary() {
+    if (typeof Repository.ensureIndexCurrent !== 'function') return '';
+    const result = Repository.ensureIndexCurrent();
+    if (!result) return '';
+    if (result.ok === false) return ` Index health unavailable: ${result.message || 'unknown storage error'}`;
+    if (!result.repaired) return '';
+    const rejectedCount = Array.isArray(result.rejected) ? result.rejected.length : 0;
+    if (rejectedCount) {
+      return ` Index rebuilt from canonical records; ${rejectedCount} malformed record${rejectedCount === 1 ? ' was' : 's were'} excluded.`;
+    }
+    return ' Index rebuilt from canonical records.';
+  }
+
+  function renderResultSummary(visibleCount, totalCount, healthSummary = '') {
     const target = document.getElementById('mainline-editor-record-results');
     if (!target) return;
-    if (visibleCount === totalCount) {
-      target.textContent = `${totalCount} saved record${totalCount === 1 ? '' : 's'} available.`;
-      return;
-    }
-    target.textContent = `${visibleCount} of ${totalCount} saved record${totalCount === 1 ? '' : 's'} shown.`;
+    const recordSummary = visibleCount === totalCount
+      ? `${totalCount} saved record${totalCount === 1 ? '' : 's'} available.`
+      : `${visibleCount} of ${totalCount} saved record${totalCount === 1 ? '' : 's'} shown.`;
+    target.textContent = `${recordSummary}${healthSummary}`;
+    target.dataset.health = healthSummary.includes('malformed') || healthSummary.includes('unavailable') ? 'warning' : healthSummary ? 'repaired' : 'current';
   }
 
   function refresh() {
@@ -127,6 +140,7 @@
     const previous = select.value;
     const { adapter, envelope } = activeContext();
     const filters = libraryFilters();
+    const healthSummary = repositoryHealthSummary();
     const allRecords = adapter ? Repository.list({ profileType: adapter.profileType }) : [];
     const records = adapter ? Repository.list({
       profileType: adapter.profileType,
@@ -158,7 +172,7 @@
       : previous;
     if (records.some(record => record.profileId === preferred)) select.value = preferred;
     select.disabled = !adapter || !records.length;
-    renderResultSummary(records.length, allRecords.length);
+    renderResultSummary(records.length, allRecords.length, healthSummary);
     renderIdentity(envelope);
     refreshButtons();
   }
@@ -333,7 +347,7 @@
           <option value="complete">Complete lineage</option>
           <option value="incomplete">Incomplete legacy lineage</option>
         </select>
-        <span id="mainline-editor-record-results" class="helper-note" aria-live="polite">0 saved records available.</span>
+        <span id="mainline-editor-record-results" class="helper-note" data-health="current" aria-live="polite">0 saved records available.</span>
       </div>
       <div class="mainline-editor-record-library-row">
         <label for="mainline-editor-record-library">Saved records for the active editor</label>
@@ -385,6 +399,8 @@
       .mainline-editor-record-find-row label{color:var(--muted);font-weight:700}
       .mainline-editor-record-find-row label:first-child{grid-column:1}.mainline-editor-record-find-row label:nth-of-type(2){grid-column:2}
       #mainline-editor-record-search{grid-column:1}#mainline-editor-lineage-filter{grid-column:2}#mainline-editor-record-results{grid-column:1/-1;margin:0}
+      #mainline-editor-record-results[data-health="repaired"]{color:#9ed6a4}
+      #mainline-editor-record-results[data-health="warning"]{color:#e7bf73}
       .mainline-editor-record-library-row{display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,auto);gap:8px;align-items:end;margin-top:12px}
       .mainline-editor-record-library-row label{grid-column:1/-1;color:var(--muted);font-weight:700}
       #mainline-editor-library-status[data-severity="error"]{color:#ff8b8b}
