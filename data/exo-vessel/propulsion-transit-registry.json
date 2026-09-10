@@ -1,0 +1,82 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "registryType": "exoVesselPropulsionTransitRegistry",
+  "registryVersion": "1.0.0",
+  "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+  "reconciliationBaseCommit": "2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf",
+  "authoritySources": [
+    {"path":"docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md","role":"recovered-ftl-archive","status":"CONFIRMED"},
+    {"path":"EXO_OPERATIVE_TECHNOLOGY_BASIS.md","role":"operative-technology-governing-supplement","status":"CONFIRMED"},
+    {"path":"EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md","role":"vessel-engineering-governing-guide","status":"CONFIRMED"},
+    {"path":"data/exo-vessel/technology-basis-registry.json","role":"technology-basis-machine-registry","status":"CONFIRMED"},
+    {"path":"data/exo-vessel/engineering-registry.json","role":"conventional-propulsion-registry","status":"CONFIRMED"},
+    {"path":"BLACKLIGHT_EXO_SOURCE_AUTHORITY.md","role":"cross-domain-provenance-policy","status":"CONFIRMED"},
+    {"path":"data/blacklight-continuum/wiki/foundation-lore.json","role":"race-and-setting-source","status":"CONFIRMED"},
+    {"path":"docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md","role":"derived-embodiment-workshop","status":"DERIVED"}
+  ],
+  "canonLabels": ["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"],
+  "supplementModes": ["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"],
+  "axisSeparation": {
+    "conventionalPropulsionBand": {
+      "source": "data/exo-vessel/engineering-registry.json",
+      "values": ["P0","P1","P2","P3","P4","P5","P6"],
+      "meaning": "ordinary-spacetime propulsion technology band"
+    },
+    "transitConstructionMaturity": {
+      "source": "docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md",
+      "values": ["P0","P1","P2","P3","P4","P5","P6"],
+      "meaning": "FTL/transit construction maturity within a recovered transit path"
+    },
+    "rule": "The labels are separate axes and MUST NOT be merged, inferred equivalent, or exposed as a single P-level."
+  },
+  "transitFamilies": [
+    {"id":"metric-envelope","name":"Metric Compression Envelope","trueFtl":true,"physicalAction":"4D local metric deformation","status":"CONFIRMED"},
+    {"id":"gravitic-plane","name":"Gravitational-Plane Skimmer","trueFtl":true,"physicalAction":"4D geodesic-plane transit with higher-order gradient correction","status":"CONFIRMED"},
+    {"id":"slipstream-shear","name":"Hyperspatial Slipstream Shear","trueFtl":true,"physicalAction":"Q-space boundary-layer coupling","status":"CONFIRMED"},
+    {"id":"q-lattice","name":"Q-Lattice Phase Translation","trueFtl":true,"physicalAction":"indexed quantized Q-state translation","status":"CONFIRMED"},
+    {"id":"n-manifold","name":"N-Dimensional Manifold Drive","trueFtl":true,"physicalAction":"higher-dimensional geodesic projected to 3+1 dimensions","status":"CONFIRMED"},
+    {"id":"fold-jump","name":"Discrete Fold-Jump Drive","trueFtl":true,"physicalAction":"temporary topological adjacency of origin and destination volumes","status":"CONFIRMED"},
+    {"id":"wormhole-gate","name":"Anchored Wormhole / Gate Transit","trueFtl":true,"physicalAction":"maintained multiply connected spacetime topology","status":"CONFIRMED"},
+    {"id":"phase-displacement","name":"Quantum Phase Displacement","trueFtl":true,"physicalAction":"macroscopic nonlocal state displacement","status":"CONFIRMED"},
+    {"id":"inertial-torch","name":"Relativistic Inertial Torch","trueFtl":false,"physicalAction":"continuous causal ordinary-spacetime propulsion","status":"CONFIRMED"}
+  ],
+  "universalMachineBlocks": ["energyConditioning","primeMover","fieldFormation","transitControl","navigationSensing","terminationRecovery","wholeEffectCoverage","backbone"],
+  "technologyBasisRegistry": "data/exo-vessel/technology-basis-registry.json",
+  "technologyBasisFamilies": ["TERRESTRIAL_ELECTROMECHANICAL","AQUATIC_ELECTROCHEMICAL_HYDRAULIC","CRYOGENIC_AMMONIA_HALOCARBON","GAS_GIANT_FLUIDIC_ELECTROSTATIC","BIOLOGICAL_SYMBIOTIC","MINERAL_PIEZOELECTRIC_PHOTONIC","FIELD_MEDIATED_POSTMATERIAL"],
+  "invariantRouteSemantics": ["structural","power","cooling","data","atmosphere","access"],
+  "infrastructureClasses": ["SELF_CONTAINED_SHIP_DRIVE","BEACON_ASSISTED_NAVIGATION","PREPARED_TRANSIT_CORRIDOR","PAIRED_MOBILE_ORBITAL_GATES","FIXED_STELLAR_GATEWORKS"],
+  "signaturePhases": ["PRE_ENTRY_SPOOL","ACTIVE_TRANSIT","EMERGENCE_TERMINATION","AFTERMATH_RECOVERY"],
+  "signatureChannels": ["ELECTROMAGNETIC","THERMAL","OPTICAL","GRAVITATIONAL","NEUTRINO","Q_EXOTIC","ACOUSTIC_STRUCTURAL","CHEMICAL","BIOLOGICAL"],
+  "abortStates": ["SAFE_ABORT","DEGRADED_ABORT","COMMIT_BOUNDARY","NO_ABORT","RECOVERY_ONLY"],
+  "generatorPrecedence": ["explicitNamedCanon","raceSpeciesConstraint","organizationConstraint","manufacturerDoctrine","technologyBasis","transitConstructionMaturity","vesselMissionConstraint","familyDefault","labeledDerivedEngineering","labeledProposal"],
+  "canonSafeguards": [
+    "Never overwrite a confirmed source value with generated content.",
+    "Never replace a confirmed lower bound, classification, or explicit unknown with an unlabeled procedural value.",
+    "Keep candidate or disputed source records separate from confirmed records.",
+    "Unknown remains unknown in AUTHORITY_ONLY mode.",
+    "DERIVED content requires a traceable rule and parent inputs.",
+    "PROPOSED content requires explicit proposal mode and cannot be promoted to canon by repetition.",
+    "A generated vessel instance may become authoritative for that instance only when its authority snapshot, resolver choices, seed, and generator version are retained.",
+    "Generated instance authority never silently rewrites setting-wide race, technology, or transit canon.",
+    "FTL does not authorize chronology violation or time travel without explicit source authority."
+  ],
+  "raceConstraints": [
+    {
+      "id": "arnock-recovered-engineering-constraints",
+      "speciesOrCulture": "Ar'nock",
+      "source": "data/blacklight-continuum/wiki/foundation-lore.json",
+      "status": "CONFIRMED",
+      "confirmedTraits": [
+        "biological fabrication from instruction sets and versatile feedstock",
+        "flexible interfaces associated with elongated segmented reach",
+        "vibration-based controls",
+        "cultivated neural computation",
+        "unfamiliar identity controls",
+        "survivable pressure and oxygen-equivalent exchange with acidic compounds and unfamiliar trace gases"
+      ],
+      "transitFamily": "UNRESOLVED",
+      "generatorRule": "These traits may constrain embodiment and maintenance of an Ar'nock installation, but MUST NOT select or name an Ar'nock transit family."
+    }
+  ],
+  "schema": "data/schemas/exo-vessel-propulsion-transit.schema.json"
+}
