@@ -64,7 +64,8 @@ if(!jpl.includes('const supervisor=()=>globalThis.BlacklightExoRuntimeSupervisor
 if(!supervisor.includes('unhandledrejection')||!supervisor.includes('blacklightExoRuntimeDiagnostics'))fail('Runtime supervisor does not capture browser failures.');
 if(!supervisor.includes('blacklight-exo-deployment-health.html'))fail('Runtime supervisor does not link to deployed health verification.');
 if(!sectorSupervision.includes('blacklight:exo-sector-generated')||!sectorSupervision.includes('12 seconds'))fail('Sector startup is not supervised through successful generation and timeout failure.');
-if(!sectorRuntime.includes('requestIdleCallback')||!sectorRuntime.includes('IntersectionObserver')||!sectorRuntime.includes('loadSnapshot'))fail('Sector runtime lacks incremental rendering or archive replay.');
+const sectorReplaySignatures=['function snapshots()','function load(x)','D.migrate?D.migrate(structuredClone(x.sector))','snapshot-load','renderSnapshots()'];
+if(!sectorRuntime.includes('requestIdleCallback')||!sectorRuntime.includes('IntersectionObserver')||sectorReplaySignatures.some(signature=>!sectorRuntime.includes(signature)))fail('Sector runtime lacks incremental rendering or archive replay.');
 for(const forbidden of['insertAdjacentElement(',"document.querySelector('main')?.append",'createSection('])if(sectorWorlds.includes(forbidden)||strategicUi.includes(forbidden))fail(`Sector data or strategic UI still mutates static page structure through ${forbidden}.`);
 for(const signature of['strategicAtlasVersion:1',"schemaVersion:'1.2.0'",'territorialRegions','strategicCorridors','technologyProfiles','militaryFormations','organizationNetworks','extinctSites','migrationRule'])if(!strategicAtlas.includes(signature))fail(`Strategic sector authority lacks ${signature}.`);
 for(const signature of['extinctSiteLinkVersion:1','canonical extinct-civilization site','deadWorldIds'])if(!extinctSites.includes(signature))fail(`Extinct-site linker lacks ${signature}.`);
