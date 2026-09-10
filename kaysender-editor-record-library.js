@@ -29,8 +29,13 @@
     target.dataset.severity = severity;
   }
 
+  function generationLabel(record) {
+    return Number.isInteger(record?.generation) ? `G${record.generation}` : 'G?';
+  }
+
   function optionLabel(record) {
-    return `${record.name} · r${record.revision}`;
+    const lineageWarning = record.lineageComplete === false ? ' · lineage incomplete' : '';
+    return `${record.name} · ${generationLabel(record)} · r${record.revision}${lineageWarning}`;
   }
 
   function savedMetadata(profileId) {
@@ -97,24 +102,55 @@
     if (cloneButton) cloneButton.disabled = !envelope;
   }
 
+  function libraryFilters() {
+    const query = document.getElementById('mainline-editor-record-search')?.value?.trim() || '';
+    const lineage = document.getElementById('mainline-editor-lineage-filter')?.value || 'all';
+    return {
+      query,
+      lineageComplete: lineage === 'complete' ? true : lineage === 'incomplete' ? false : undefined
+    };
+  }
+
+  function renderResultSummary(visibleCount, totalCount) {
+    const target = document.getElementById('mainline-editor-record-results');
+    if (!target) return;
+    if (visibleCount === totalCount) {
+      target.textContent = `${totalCount} saved record${totalCount === 1 ? '' : 's'} available.`;
+      return;
+    }
+    target.textContent = `${visibleCount} of ${totalCount} saved record${totalCount === 1 ? '' : 's'} shown.`;
+  }
+
   function refresh() {
     const select = document.getElementById('mainline-editor-record-library');
     if (!select) return;
     const previous = select.value;
     const { adapter, envelope } = activeContext();
-    const records = adapter ? Repository.list({ profileType: adapter.profileType }) : [];
+    const filters = libraryFilters();
+    const allRecords = adapter ? Repository.list({ profileType: adapter.profileType }) : [];
+    const records = adapter ? Repository.list({
+      profileType: adapter.profileType,
+      query: filters.query,
+      lineageComplete: filters.lineageComplete
+    }) : [];
     select.replaceChildren();
     const placeholder = document.createElement('option');
     placeholder.value = '';
     placeholder.textContent = adapter
-      ? records.length ? 'Choose a saved record…' : 'No saved records for this editor'
+      ? records.length
+        ? 'Choose a saved record…'
+        : allRecords.length
+          ? 'No saved records match the current search or filter'
+          : 'No saved records for this editor'
       : 'Open an editor to view saved records';
     select.appendChild(placeholder);
     records.forEach(record => {
       const option = document.createElement('option');
       option.value = record.profileId;
       option.textContent = optionLabel(record);
-      option.title = `${record.profileId} · ${record.profileType}`;
+      const parent = record.parentProfileId ? ` · parent ${record.parentProfileId}${record.parentRevision ? ` r${record.parentRevision}` : ''}` : '';
+      const root = record.rootProfileId ? ` · root ${record.rootProfileId}${record.rootRevision ? ` r${record.rootRevision}` : ''}` : '';
+      option.title = `${record.profileId} · ${record.profileType} · ${generationLabel(record)}${parent}${root}`;
       select.appendChild(option);
     });
     const preferred = records.some(record => record.profileId === envelope?.profileId)
@@ -122,6 +158,7 @@
       : previous;
     if (records.some(record => record.profileId === preferred)) select.value = preferred;
     select.disabled = !adapter || !records.length;
+    renderResultSummary(records.length, allRecords.length);
     renderIdentity(envelope);
     refreshButtons();
   }
@@ -287,6 +324,17 @@
         <div><dt>Lineage</dt><dd id="mainline-editor-identity-lineage" data-complete="false">—</dd></div>
         <div><dt>Library State</dt><dd id="mainline-editor-identity-storage" data-saved="false">—</dd></div>
       </dl>
+      <div class="mainline-editor-record-find-row" role="search" aria-label="Find saved records">
+        <label for="mainline-editor-record-search">Find saved records</label>
+        <input id="mainline-editor-record-search" class="tool-input" type="search" placeholder="Name, ID, G2, parent, root…" autocomplete="off" />
+        <label for="mainline-editor-lineage-filter">Lineage</label>
+        <select id="mainline-editor-lineage-filter" class="tool-input">
+          <option value="all">All lineage states</option>
+          <option value="complete">Complete lineage</option>
+          <option value="incomplete">Incomplete legacy lineage</option>
+        </select>
+        <span id="mainline-editor-record-results" class="helper-note" aria-live="polite">0 saved records available.</span>
+      </div>
       <div class="mainline-editor-record-library-row">
         <label for="mainline-editor-record-library">Saved records for the active editor</label>
         <select id="mainline-editor-record-library" class="tool-input"></select>
@@ -302,6 +350,8 @@
     controls.querySelector('#mainline-editor-record-delete').addEventListener('click', deleteSelectedRecord);
     controls.querySelector('#mainline-editor-record-repair').addEventListener('click', repairLibrary);
     controls.querySelector('#mainline-editor-record-library').addEventListener('change', refreshButtons);
+    controls.querySelector('#mainline-editor-record-search').addEventListener('input', refresh);
+    controls.querySelector('#mainline-editor-lineage-filter').addEventListener('change', refresh);
     refresh();
     return true;
   }
@@ -331,12 +381,16 @@
       .mainline-editor-record-identity dd{margin:.25rem 0 0;overflow-wrap:anywhere;font-weight:700}
       #mainline-editor-identity-storage[data-saved="true"],#mainline-editor-identity-lineage[data-complete="true"]{color:#9ed6a4}
       #mainline-editor-identity-storage[data-saved="false"],#mainline-editor-identity-lineage[data-complete="false"]{color:#e7bf73}
+      .mainline-editor-record-find-row{display:grid;grid-template-columns:minmax(220px,2fr) minmax(180px,1fr);gap:8px 12px;align-items:end;margin:12px 0;padding-top:12px;border-top:1px solid var(--line)}
+      .mainline-editor-record-find-row label{color:var(--muted);font-weight:700}
+      .mainline-editor-record-find-row label:first-child{grid-column:1}.mainline-editor-record-find-row label:nth-of-type(2){grid-column:2}
+      #mainline-editor-record-search{grid-column:1}#mainline-editor-lineage-filter{grid-column:2}#mainline-editor-record-results{grid-column:1/-1;margin:0}
       .mainline-editor-record-library-row{display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,auto);gap:8px;align-items:end;margin-top:12px}
       .mainline-editor-record-library-row label{grid-column:1/-1;color:var(--muted);font-weight:700}
       #mainline-editor-library-status[data-severity="error"]{color:#ff8b8b}
       #mainline-editor-library-status[data-severity="warning"]{color:#e7bf73}
       #mainline-editor-library-status[data-severity="success"]{color:#9ed6a4}
-      @media(max-width:900px){.mainline-editor-record-library-row,.mainline-editor-record-identity{grid-template-columns:1fr}.mainline-editor-record-library-row label{grid-column:auto}.mainline-editor-record-library-row button,.mainline-editor-record-library-primary-actions button{width:100%}.mainline-editor-record-library-primary-actions{width:100%}}
+      @media(max-width:900px){.mainline-editor-record-find-row,.mainline-editor-record-library-row,.mainline-editor-record-identity{grid-template-columns:1fr}.mainline-editor-record-find-row label,.mainline-editor-record-find-row input,.mainline-editor-record-find-row select,#mainline-editor-record-results,.mainline-editor-record-library-row label{grid-column:auto}.mainline-editor-record-library-row button,.mainline-editor-record-library-primary-actions button{width:100%}.mainline-editor-record-library-primary-actions{width:100%}}
     `;
     document.head.appendChild(style);
   }
