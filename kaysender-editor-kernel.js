@@ -105,6 +105,48 @@
     return '';
   }
 
+  function provenanceSnapshot(envelope) {
+    if (!isEnvelope(envelope)) return null;
+    return {
+      profileId: envelope.profileId,
+      profileType: envelope.profileType,
+      revision: envelope.revision,
+      name: envelope.name || envelope.data?.name || 'Unnamed Profile'
+    };
+  }
+
+  function sameProvenanceSnapshot(left, right) {
+    return Boolean(left && right
+      && left.profileId === right.profileId
+      && left.profileType === right.profileType
+      && left.revision === right.revision
+      && left.name === right.name);
+  }
+
+  function normalizeGenerationalProvenance(envelope) {
+    if (!isEnvelope(envelope)) return envelope;
+    envelope.provenance = envelope.provenance || {};
+    const provenance = envelope.provenance;
+    if (Object.prototype.hasOwnProperty.call(provenance, 'generation')) {
+      if (!Array.isArray(provenance.lineage)) provenance.lineage = [];
+      if (!Object.prototype.hasOwnProperty.call(provenance, 'parent')) provenance.parent = null;
+      if (typeof provenance.lineageComplete !== 'boolean') provenance.lineageComplete = provenance.generation !== null;
+      return envelope;
+    }
+    if (provenance.clonedFromProfileId) {
+      provenance.generation = null;
+      provenance.parent = null;
+      provenance.lineage = [];
+      provenance.lineageComplete = false;
+    } else {
+      provenance.generation = 0;
+      provenance.parent = null;
+      provenance.lineage = [];
+      provenance.lineageComplete = true;
+    }
+    return envelope;
+  }
+
   function validateDomainData(data, expectedTypes = []) {
     const diagnostics = [];
     if (!data || typeof data !== 'object' || Array.isArray(data)) {
@@ -126,6 +168,47 @@
     return diagnostics;
   }
 
+  function validateGenerationalProvenance(envelope) {
+    const diagnostics = [];
+    const provenance = envelope?.provenance;
+    if (!provenance || typeof provenance !== 'object') {
+      diagnostics.push(diagnostic('error', 'provenance-missing', 'Canonical envelope provenance is missing.', 'provenance'));
+      return diagnostics;
+    }
+    const { generation, parent, lineage, lineageComplete } = provenance;
+    if (generation === null && lineageComplete === false && provenance.clonedFromProfileId) {
+      diagnostics.push(diagnostic('warning', 'provenance-lineage-incomplete', `Legacy clone ancestry for ${provenance.clonedFromProfileId} is incomplete because the exact parent envelope was not available during normalization.`, 'provenance'));
+      return diagnostics;
+    }
+    if (!Number.isInteger(generation) || generation < 0) {
+      diagnostics.push(diagnostic('error', 'provenance-generation-invalid', 'Provenance generation must be a non-negative integer.', 'provenance.generation'));
+      return diagnostics;
+    }
+    if (!Array.isArray(lineage)) {
+      diagnostics.push(diagnostic('error', 'provenance-lineage-invalid', 'Provenance lineage must be an array.', 'provenance.lineage'));
+      return diagnostics;
+    }
+    if (generation === 0) {
+      if (parent !== null) diagnostics.push(diagnostic('error', 'provenance-root-parent-invalid', 'Generation 0 records cannot have a provenance parent.', 'provenance.parent'));
+      if (lineage.length !== 0) diagnostics.push(diagnostic('error', 'provenance-root-lineage-invalid', 'Generation 0 records must have an empty provenance lineage.', 'provenance.lineage'));
+      return diagnostics;
+    }
+    if (!parent || typeof parent !== 'object') diagnostics.push(diagnostic('error', 'provenance-parent-missing', 'Derived records must identify their immediate provenance parent.', 'provenance.parent'));
+    if (lineage.length !== generation) diagnostics.push(diagnostic('error', 'provenance-lineage-length-mismatch', `Generation ${generation} requires exactly ${generation} lineage entries.`, 'provenance.lineage'));
+    lineage.forEach((entry, index) => {
+      if (!entry || typeof entry !== 'object' || !String(entry.profileId || '').trim() || !String(entry.profileType || '').trim() || !Number.isInteger(entry.revision) || entry.revision < 1) {
+        diagnostics.push(diagnostic('error', 'provenance-lineage-entry-invalid', `Lineage entry ${index} is missing a valid profile identity, type, or revision.`, `provenance.lineage.${index}`));
+      }
+      if (index > 0 && entry?.profileId === lineage[index - 1]?.profileId && entry?.revision === lineage[index - 1]?.revision) {
+        diagnostics.push(diagnostic('error', 'provenance-lineage-duplicate-adjacent', `Lineage entries ${index - 1} and ${index} duplicate the same source generation.`, `provenance.lineage.${index}`));
+      }
+    });
+    if (parent && lineage.length && !sameProvenanceSnapshot(parent, lineage[lineage.length - 1])) {
+      diagnostics.push(diagnostic('error', 'provenance-parent-lineage-mismatch', 'Immediate provenance parent must equal the final lineage entry.', 'provenance.parent'));
+    }
+    return diagnostics;
+  }
+
   function validateEnvelope(envelope, expectedTypes = []) {
     const diagnostics = [];
     if (!isEnvelope(envelope)) {
@@ -137,6 +220,7 @@
     if (!Number.isInteger(envelope.revision) || envelope.revision < 1) diagnostics.push(diagnostic('error', 'revision-invalid', 'Revision must be a positive integer.', 'revision'));
     if (!Array.isArray(envelope.inheritance)) diagnostics.push(diagnostic('error', 'inheritance-invalid', 'Inheritance ledger must be an array.', 'inheritance'));
     if (!Array.isArray(envelope.locks)) diagnostics.push(diagnostic('error', 'locks-invalid', 'Field locks must be an array.', 'locks'));
+    diagnostics.push(...validateGenerationalProvenance(envelope));
     diagnostics.push(...validateDomainData(envelope.data, expectedTypes));
     return diagnostics;
   }
@@ -146,6 +230,7 @@
     const profileType = options.profileType || inferProfileType(data);
     if (profileType && !data.profileType) data.profileType = profileType;
     const previous = options.existingEnvelope && isEnvelope(options.existingEnvelope) ? options.existingEnvelope : null;
+    if (previous) normalizeGenerationalProvenance(previous);
     const timestamp = nowIso();
     const inheritance = deepClone(options.inheritance || previous?.inheritance || []);
     const locks = Array.from(new Set(options.locks || previous?.locks || [])).sort();
@@ -158,6 +243,10 @@
       ...(previous?.provenance?.migrationLog || []),
       ...(options.migrationLog || [])
     ];
+    const generation = previous?.provenance?.generation ?? (Object.prototype.hasOwnProperty.call(options, 'generation') ? options.generation : 0);
+    const parent = deepClone(previous?.provenance?.parent ?? options.parent ?? null);
+    const lineage = deepClone(previous?.provenance?.lineage ?? options.lineage ?? []);
+    const lineageComplete = previous?.provenance?.lineageComplete ?? (typeof options.lineageComplete === 'boolean' ? options.lineageComplete : generation !== null);
     const diagnostics = validateDomainData(canonicalData, profileType ? [profileType] : []);
     return {
       editorEnvelopeVersion: ENVELOPE_VERSION,
@@ -174,6 +263,10 @@
         origin: options.origin || previous?.provenance?.origin || 'editor-created',
         importedAt: options.importedAt || previous?.provenance?.importedAt || null,
         clonedFromProfileId: options.clonedFromProfileId || previous?.provenance?.clonedFromProfileId || null,
+        generation,
+        parent,
+        lineage,
+        lineageComplete,
         migrationLog
       },
       inheritance,
@@ -184,15 +277,23 @@
   }
 
   function cloneEnvelope(envelope, options = {}) {
-    const source = isEnvelope(envelope) ? envelope : createEnvelope(envelope, options);
+    const source = isEnvelope(envelope) ? normalizeGenerationalProvenance(deepClone(envelope)) : createEnvelope(envelope, options);
     const data = deepClone(source.data);
     data.name = options.name || `${data.name || 'Unnamed Profile'} Copy`;
+    const parent = provenanceSnapshot(source);
+    const sourceGeneration = Number.isInteger(source.provenance?.generation) ? source.provenance.generation : null;
+    const sourceLineage = Array.isArray(source.provenance?.lineage) ? source.provenance.lineage : [];
+    const completeSource = sourceGeneration !== null && source.provenance?.lineageComplete !== false;
     return createEnvelope(data, {
       ...options,
       existingEnvelope: null,
       clonedFromProfileId: source.profileId,
       origin: 'cloned-record',
-      migrationLog: [...(source.provenance?.migrationLog || []), { code: 'profile-cloned', message: `Cloned from ${source.profileId}.` }],
+      generation: completeSource ? sourceGeneration + 1 : null,
+      parent: completeSource ? parent : null,
+      lineage: completeSource ? [...deepClone(sourceLineage), parent] : [],
+      lineageComplete: completeSource,
+      migrationLog: [...(source.provenance?.migrationLog || []), { code: 'profile-cloned', message: `Cloned from ${source.profileId} revision ${source.revision}.` }],
       inheritance: source.inheritance,
       locks: source.locks
     });
@@ -286,7 +387,7 @@
     const migrationLog = [];
     const canonicalInput = isEnvelope(parsed);
     if (canonicalInput) {
-      envelope = deepClone(parsed);
+      envelope = normalizeGenerationalProvenance(deepClone(parsed));
       migrationLog.push({ code: 'canonical-envelope-loaded', message: `Loaded canonical envelope ${envelope.profileId}.` });
     } else {
       const profileType = inferProfileType(parsed);
@@ -473,6 +574,9 @@
     unwrap,
     inferProfileType,
     diagnostic,
+    provenanceSnapshot,
+    normalizeGenerationalProvenance,
+    validateGenerationalProvenance,
     validateDomainData,
     validateEnvelope,
     createEnvelope,
