@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "exo-vessel-ftl-phase-displacement-technical-volume.schema.json",
+  "title": "Black Light Quantum Phase Displacement Technical Volume",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "family", "authority", "mathematics", "pathStages", "machinery", "powerModel", "navigationControl", "operations", "maintenance", "signatures", "failureModels", "infrastructure", "scaling", "technologyBasisEmbodiments", "generatorContract", "provenance"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlPhaseDisplacementTechnicalVolume"},
+    "registryVersion": {"type": "string"},
+    "family": {"const": "phase-displacement"},
+    "authority": {"type": "object", "required": ["primary", "legacyDesignSource", "lineageSource", "embodimentSource", "statusRule"]},
+    "mathematics": {"type": "object", "required": ["stateMap", "compatibilityDistance", "continuityMargin", "coverageMargin", "targetCovariance", "commitAdmissibility", "safetyHorizon"]},
+    "pathStages": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "object", "required": ["path", "name", "breakthrough", "utility", "limit", "engineeringAdvance", "status"]}},
+    "machinery": {"type": "array", "minItems": 8},
+    "powerModel": {"type": "object"},
+    "navigationControl": {"type": "object"},
+    "operations": {"type": "array", "minItems": 4},
+    "maintenance": {"type": "array", "minItems": 4},
+    "signatures": {"type": "object"},
+    "failureModels": {"type": "array", "minItems": 7},
+    "infrastructure": {"type": "array", "minItems": 4},
+    "scaling": {"type": "object"},
+    "technologyBasisEmbodiments": {"type": "array", "minItems": 7, "maxItems": 7},
+    "generatorContract": {"type": "object", "required": ["inputs", "outputs", "hardGuards"]},
+    "provenance": {"type": "object", "required": ["confirmed", "derived", "proposed", "unresolved"]}
+  },
+  "additionalProperties": true
+}
