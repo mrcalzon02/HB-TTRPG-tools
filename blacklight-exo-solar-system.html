@@ -25,79 +25,51 @@
       <span class="bli-mark" aria-hidden="true"></span>
       <span class="bli-brand-text"><span>Blacklight</span><span>EXO Cartography</span></span>
     </a>
-    <nav class="bli-nav" aria-label="EXO solar-system navigation">
-      <a href="blacklight-exo-deployment-health.html">Deployment Health</a>
-      <a href="blacklight-exo-operations.html">EXO Operations</a>
+    <nav class="bli-nav" aria-label="Blacklight global navigation">
       <a href="blacklight-systems-black.html">Black Archive</a>
+      <a href="blacklight-corporate-systems.html">Systems Gateway</a>
     </nav>
   </header>
 
-  <section class="bli-hero exo-system-hero" aria-labelledby="exo-system-title">
-    <div>
-      <p class="bli-eyebrow">Black compartment · Exosolar cartography</p>
-      <h1 id="exo-system-title">Solar Cluster, System, and Orbital Projection Generator.</h1>
-      <p class="bli-lede">The EXAMPLE sector is governed by a published-first source authority. Measured astronomy remains primary, while deterministic generation is restricted to clearly labeled unknown or fictional supplements.</p>
-      <div class="bli-actions exo-system-actions">
-        <button id="exo-generate-system" class="bli-action primary" type="button">Generate Random System</button>
-        <button id="exo-force-populated-hz" class="bli-action" type="button">Force Populated HZ System</button>
+  <main class="bli-app-shell exo-system-shell">
+    <section class="bli-app-commandbar exo-system-commandbar" aria-labelledby="exo-system-title">
+      <div class="bli-app-identity">
+        <h1 id="exo-system-title">EXO Cartography</h1>
+        <p>Solar cluster · system · orbital projection</p>
+      </div>
+      <div class="exo-system-actions" aria-label="Solar-system actions">
+        <button id="exo-generate-system" class="bli-action primary" type="button">Generate System</button>
+        <button id="exo-force-populated-hz" class="bli-action" type="button">Force Populated HZ</button>
         <button id="exo-toggle-orbits" class="bli-action" type="button" aria-pressed="false">Pause Projection</button>
-        <button id="exo-export-system" class="bli-action" type="button">Export System JSON</button>
+        <button id="exo-export-system" class="bli-action" type="button">Export JSON</button>
       </div>
-    </div>
-    <aside class="bli-directory-panel" aria-label="Generated system summary">
-      <div class="bli-directory-title">Current System</div>
-      <div class="bli-directory-list" role="list">
-        <div class="bli-directory-item" role="listitem"><strong>Designation</strong><span id="exo-summary-name" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Primary</strong><span id="exo-summary-star" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Planets</strong><span id="exo-summary-planets" class="bli-arrow">0</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Population</strong><span id="exo-summary-population" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>HZ bodies</strong><span id="exo-summary-hz-bodies" class="bli-arrow">0</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Seed</strong><span id="exo-summary-seed" class="bli-arrow">pending</span></div>
+      <div class="bli-app-status exo-system-summary" aria-label="Current generated system summary">
+        <span><strong>Designation</strong><b id="exo-summary-name">pending</b></span>
+        <span><strong>Primary</strong><b id="exo-summary-star">pending</b></span>
+        <span><strong>Planets</strong><b id="exo-summary-planets">0</b></span>
+        <span><strong>Population</strong><b id="exo-summary-population">pending</b></span>
+        <span><strong>HZ</strong><b id="exo-summary-hz-bodies">0</b></span>
+        <span><strong>Seed</strong><b id="exo-summary-seed">pending</b></span>
       </div>
-    </aside>
-  </section>
-
-  <main class="bli-shell exo-system-shell">
-    <section class="bli-section exo-cluster-section" aria-labelledby="exo-cluster-title">
-      <div class="bli-section-head">
-        <p class="bli-eyebrow">Local stellar neighborhood</p>
-        <h2 id="exo-cluster-title">Published-first sector authority and procedural cluster generation.</h2>
-        <p>EXAMPLE loads the fixed Sol-centered nearby-star record. Published positions, stellar properties, confirmed planets, measured masses, and population evidence take precedence. Other seeds remain fully procedural.</p>
-      </div>
-      <div class="exo-cluster-controls">
-        <label>
-          <span>Cluster seed</span>
-          <div class="exo-cluster-seed-controls">
-            <input id="exo-cluster-seed" type="text" maxlength="100" placeholder="Random cluster seed">
-            <button id="exo-random-cluster" class="bli-action" type="button">Random Cluster</button>
-          </div>
-        </label>
-        <label>
-          <span>Systems in cluster</span>
-          <select id="exo-cluster-count">
-            <option value="3">3 systems</option>
-            <option value="5">5 systems</option>
-            <option value="8" selected>8 systems</option>
-            <option value="12">12 systems</option>
-            <option value="20">20 systems</option>
-          </select>
-        </label>
-        <button id="exo-generate-cluster" class="bli-action primary" type="button">Generate Solar Cluster</button>
-      </div>
-      <div class="exo-cluster-summary" aria-label="Cluster summary">
-        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-systems">0</strong><span>Charted systems</span></div>
-        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-populated">0</strong><span>Known populated systems</span></div>
-        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-habitable">0</strong><span>Systems with confirmed HZ bodies</span></div>
-      </div>
-      <p id="exo-cluster-status" class="exo-cluster-status" aria-live="polite">Preparing source authority and local cluster chart…</p>
-      <div id="exo-cluster-grid" class="exo-cluster-grid" aria-label="Selectable star systems"></div>
     </section>
 
-    <section class="bli-section exo-control-section" aria-labelledby="exo-control-title">
-      <div class="bli-section-head">
-        <p class="bli-eyebrow">Expanded system controls</p>
-        <h2 id="exo-control-title">Create, replay, and inspect one system.</h2>
-        <p>Published EXAMPLE systems retain their source-authority records. For unknown fields, deterministic RNG supplements are permitted only when visibly labeled as hypothetical. Random seeds outside EXAMPLE remain fully generated systems.</p>
+    <nav class="bli-system-nav" aria-label="EXO subsystem navigation">
+      <a href="blacklight-exo-operations.html">Overview</a>
+      <a href="blacklight-exo-stellar-sector.html">Sector</a>
+      <a href="blacklight-exo-solar-system.html" aria-current="page">System</a>
+      <a href="blacklight-exo-species-civilization.html">Dossier</a>
+      <a href="blacklight-exo-alien-ecology.html">Ecology</a>
+      <a href="blacklight-exo-stellar-government.html">Governments</a>
+      <a href="blacklight-exo-ftl.html">FTL</a>
+      <a href="blacklight-exo-vessel.html">Vessel Engineering</a>
+      <a href="blacklight-exo-crew-operations.html">Crew Operations</a>
+      <a href="blacklight-exo-deployment-health.html">Deployment Health</a>
+    </nav>
+
+    <section class="exo-control-section" aria-labelledby="exo-control-title">
+      <div class="exo-utility-head">
+        <h2 id="exo-control-title">System controls</h2>
+        <p>Replay a deterministic seed, change projection speed, or inspect the current selection without leaving the orbital workspace.</p>
       </div>
       <div class="exo-control-grid">
         <label>
@@ -162,7 +134,7 @@
           </svg>
           <div id="exo-orbit-empty" class="exo-orbit-empty">Loading the lightweight Solar System renderer…</div>
         </div>
-        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Published measurements are authoritative when available; generated values must remain labeled supplements.</footer>
+        <footer class="exo-projection-note">Orbital distances are logarithmically compressed. Published measurements are authoritative when available; generated values remain labeled supplements.</footer>
       </article>
 
       <aside id="exo-object-inspector" class="exo-object-inspector" aria-labelledby="exo-inspector-title" aria-live="polite">
@@ -182,11 +154,12 @@
       </aside>
     </section>
 
-    <section class="bli-section" aria-labelledby="exo-system-index-title">
-      <div class="bli-section-head">
-        <p class="bli-eyebrow">System index</p>
-        <h2 id="exo-system-index-title">Orbital bodies, source provenance, and resource profile.</h2>
-        <p>Selecting a row also selects the matching planet, dwarf planet, moon, or debris belt in the orbital display. The fixed Sol record renders representative satellites first while preserving every deferred catalogue record in its export authority.</p>
+    <section class="exo-index-section" aria-labelledby="exo-system-index-title">
+      <div class="bli-workspace-head">
+        <div>
+          <h2 id="exo-system-index-title">System index</h2>
+          <p>Orbital bodies, source provenance, resource profile, and selectable records for the currently loaded system.</p>
+        </div>
       </div>
       <div class="exo-index-layout">
         <div class="exo-table-wrap">
@@ -203,6 +176,47 @@
         </aside>
       </div>
     </section>
+
+    <section class="exo-cluster-section" aria-labelledby="exo-cluster-title">
+      <div class="bli-workspace-head">
+        <div>
+          <h2 id="exo-cluster-title">Cluster browser</h2>
+          <p>Published EXAMPLE records use measured astronomy first. Procedural cluster generation is a separate secondary layer and can hand a selected child system directly into the orbital workspace above.</p>
+        </div>
+      </div>
+      <div class="exo-cluster-controls">
+        <label>
+          <span>Cluster seed</span>
+          <div class="exo-cluster-seed-controls">
+            <input id="exo-cluster-seed" type="text" maxlength="100" placeholder="Random cluster seed">
+            <button id="exo-random-cluster" class="bli-action" type="button">Random Cluster</button>
+          </div>
+        </label>
+        <label>
+          <span>Systems in cluster</span>
+          <select id="exo-cluster-count">
+            <option value="3">3 systems</option>
+            <option value="5">5 systems</option>
+            <option value="8" selected>8 systems</option>
+            <option value="12">12 systems</option>
+            <option value="20">20 systems</option>
+          </select>
+        </label>
+        <button id="exo-generate-cluster" class="bli-action primary" type="button">Generate Cluster</button>
+      </div>
+      <div class="exo-cluster-summary" aria-label="Cluster summary">
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-systems">0</strong><span>Charted systems</span></div>
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-populated">0</strong><span>Known populated systems</span></div>
+        <div class="exo-cluster-summary-item"><strong id="exo-cluster-summary-habitable">0</strong><span>Systems with confirmed HZ bodies</span></div>
+      </div>
+      <p id="exo-cluster-status" class="exo-cluster-status" aria-live="polite">Preparing source authority and local cluster chart…</p>
+      <div id="exo-cluster-grid" class="exo-cluster-grid" aria-label="Selectable star systems"></div>
+    </section>
+
+    <details class="bli-app-disclosure">
+      <summary>Authority and provenance</summary>
+      <p>The EXAMPLE sector is published-first: measured positions, stellar properties, confirmed planets, masses, and population evidence remain primary. Deterministic generation is restricted to visibly labeled unknown or fictional supplements, and those provenance labels remain attached during EXO handoffs.</p>
+    </details>
   </main>
 
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO cluster cartography, orbital projection, and restricted exosolar planning.</footer>
