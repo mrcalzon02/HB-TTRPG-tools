@@ -1,0 +1,158 @@
+{
+  "registryType": "exoVesselFtlWormholeGateTechnicalVolume",
+  "registryVersion": "1.0.0",
+  "schema": "data/schemas/exo-vessel-ftl-wormhole-gate-technical-volume.schema.json",
+  "family": "wormhole-gate",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "legacyDesignSource": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    },
+    "lineageSource": "data/exo-vessel/ftl-development-lineage-registry.json",
+    "embodimentSource": "data/exo-vessel/ftl-family-basis-embodiment-registry.json",
+    "statusRule": "Recovered family identity, physical action and Path implementation names are authoritative within their scope. Mathematics, engineering causal models and basis embodiments added here are DERIVED unless separately confirmed. Numeric coefficients remain PROPOSED unless independently adopted."
+  },
+  "mathematics": {
+    "throatGeometry": {
+      "expression": "A_t = integral_S sqrt(det(h_ab)) d2x; r_eff = sqrt(A_t/pi)",
+      "meaning": "A gate is constrained by a finite traversable throat cross-section, not a point portal. Effective aperture radius is a derived engineering representation.",
+      "status": "DERIVED"
+    },
+    "stabilityMargin": {
+      "expression": "mu_W = W_available - W_required(r_eff, curvature, tidal_load, mass_flux, mouth_error, environment)",
+      "validity": "Planned passage requires mu_W > 0 with reserve; equality is not an operating target.",
+      "status": "DERIVED"
+    },
+    "massFlux": {
+      "expression": "dot_m(t) = integral_A rho(x,t) v_n(x,t) dA; M_window = integral_window dot_m dt",
+      "meaning": "Traffic loading is an aperture-flow problem. Vessel mass, distribution, spacing and transit velocity all matter.",
+      "status": "DERIVED"
+    },
+    "chronologyMargin": {
+      "expression": "mu_chi = Chi_limit - Chi_route(mouth_state_A, mouth_state_B, relative_motion, synchronization, history)",
+      "meaning": "The recovered chronology constraint is represented as a hard admissibility margin; the exact chronology functional is unresolved.",
+      "status": "MIXED"
+    },
+    "synchronizationError": {
+      "expression": "epsilon_sync = sqrt(w_t Delta_t^2 + w_f ||Delta_F||^2 + w_o ||Delta_Omega||^2 + w_r ||Delta_R||^2)",
+      "meaning": "Mouth clocks, field state, orientation and authenticated reference state must agree within family-specific tolerance.",
+      "status": "DERIVED"
+    },
+    "networkFlow": {
+      "expression": "F* = argmax_F sum_k U_k(F_k) subject to throat capacity, chronology, separation, recovery and maintenance constraints",
+      "meaning": "At mature Path levels, strategic performance is network throughput and availability rather than a shipboard speed multiplier.",
+      "status": "DERIVED"
+    },
+    "safetyHorizon": {
+      "expression": "T_guard >= t_detect + t_auth + t_sync + t_schedule + t_field + t_abort + t_margin",
+      "meaning": "Gate control must detect, authenticate, synchronize, schedule, field-stabilize and abort before admitting traffic into an unsafe aperture state.",
+      "status": "DERIVED"
+    }
+  },
+  "pathStages": [
+    {"path":"P0","name":"Microscopic Throat Foundry","breakthrough":"Create and measure a transient microscopic throat solution.","utility":"Laboratory topology research only.","limit":"No usable aperture; extreme apparatus burden and wear.","engineeringAdvance":"Fixed exotic-field apparatus, remote instrumentation and destructive test chambers.","status":"MIXED"},
+    {"path":"P1","name":"Cargo Aperture Gate","breakthrough":"Stabilize a finite-radius throat with bounded mass flux.","utility":"Short-range controlled cargo transfer.","limit":"Strict aperture geometry, payload and flux restrictions.","engineeringAdvance":"Aperture rings, throat supports, dedicated recovery plant and hard mass/shape interlocks.","status":"MIXED"},
+    {"path":"P2","name":"Orbital Paired Gate","breakthrough":"Synchronize separated mouths with stable orientation and chronology constraints.","utility":"Reliable long-range fixed-point transit.","limit":"Requires paired infrastructure, continuous references and dual-end certification.","engineeringAdvance":"Precision clocks, authenticated mouth-state telemetry and dual-end interlocks.","status":"MIXED"},
+    {"path":"P3","name":"Stellar Gate Complex","breakthrough":"Model high-throughput throat dynamics under varying vessel mass and traffic.","utility":"Strategic fleet and commercial throughput.","limit":"Industrial-scale thermal, structural, traffic and maintenance burden.","engineeringAdvance":"Large throats, redundant aperture sectors, traffic control, heat plants and independent recovery reserves.","status":"MIXED"},
+    {"path":"P4","name":"Corridor Gate Network","breakthrough":"Optimize synchronization and flow across many gates as a network.","utility":"Network topology becomes the principal strategic mobility resource.","limit":"Standards, routing trust and cascading infrastructure dependencies become critical.","engineeringAdvance":"Standardized mouth protocols, network clocks, distributed scheduling and alternate-route control.","status":"MIXED"},
+    {"path":"P5","name":"Strategic Deep Gate","breakthrough":"Maintain stable throat solutions across extreme baseline and reference conditions.","utility":"Very long fixed strategic links.","limit":"Anchor provenance, reserve power and conservative chronology margins dominate cost.","engineeringAdvance":"Higher-authority field materials, deep-space anchors, massive reserves and layered reference systems.","status":"MIXED"},
+    {"path":"P6","name":"Self-Stabilizing Gate Lattice","breakthrough":"Co-solve throat geometry, traffic, health and recovery continuously.","utility":"Higher uptime and throughput with lower per-link support burden.","limit":"Still infrastructure-bound; local autonomy must not erase network-level chronology or provenance constraints.","engineeringAdvance":"Distributed smart aperture media, predictive replacement, local fault isolation and authenticated adaptive control.","status":"MIXED"}
+  ],
+  "machinery": [
+    {"block":"energyConditioning","function":"Supply continuous stabilization, transient passage authority and protected recovery reserve.","embodimentRule":"Separate baseline hold power from passage transients and emergency closure reserve.","failureExposure":"brownout, bus asymmetry, reserve depletion, thermal saturation"},
+    {"block":"primeMover","function":"Create and sustain the multiply connected spacetime throat.","embodimentRule":"Physical implementation follows technology basis; family action remains a maintained throat.","failureExposure":"throat nucleation failure, field-sector loss, topology collapse"},
+    {"block":"fieldFormation","function":"Shape aperture radius, throat geometry, mouth orientation and boundary conditions.","embodimentRule":"Use distributed sectors so one local fault can be isolated before full-mouth collapse where maturity permits.","failureExposure":"aperture ellipticity, curvature spike, sector phase error"},
+    {"block":"transitControl","function":"Regulate throat state while traffic changes instantaneous mass and field loading.","embodimentRule":"Control loop must include passage prediction, mass-flow governor and closure authority.","failureExposure":"overshoot, asymmetric loading, unstable feedback"},
+    {"block":"navigationSensing","function":"Authenticate paired mouth identity, synchronization, environment, traffic and chronology state.","embodimentRule":"Both ends must contribute independently authenticated observations.","failureExposure":"reference poisoning, clock disagreement, stale remote state"},
+    {"block":"terminationRecovery","function":"Reject unsafe passage, quench or close the throat, absorb ringing and restore a certified state.","embodimentRule":"Recovery cannot depend on the same single controller or energy path whose failure triggered abort.","failureExposure":"closure rebound, trapped transient state, recovery exhaustion"},
+    {"block":"wholeEffectCoverage","function":"Keep the entire admitted traffic envelope inside certified throat and exclusion geometry.","embodimentRule":"Aperture certification uses worst-case vessel envelope, appendages, wake spacing and navigation uncertainty.","failureExposure":"boundary strike, partial admission, traffic-envelope overlap"},
+    {"block":"controlThermalAbortBackbone","function":"Maintain independent timing, thermal rejection, structural monitoring, interlocks and abort paths.","embodimentRule":"Safety backbone remains independently diagnosable and cannot be bypassed by throughput scheduling.","failureExposure":"common-mode timing loss, heat-sink saturation, interlock defeat, structural fatigue"}
+  ],
+  "powerModel": {
+    "expression": "P_total = P_hold + P_shape + P_sync + P_control + P_thermal + P_recovery_charge + P_traffic(t)",
+    "reserveRule": "Recovery and controlled-closure reserve is protected from discretionary traffic scheduling.",
+    "throughputRule": "Increasing available power may raise admissible throat radius or traffic envelope only when structure, synchronization, chronology and recovery margins remain valid.",
+    "status": "DERIVED"
+  },
+  "navigationControl": {
+    "primaryState": ["mouthIdentity", "mouthClockState", "orientationState", "throatGeometry", "stabilityMargin", "chronologyMargin", "trafficEnvelope", "remoteEnvironment", "recoveryReserve"],
+    "commitRule": "No vessel is admitted unless both mouths independently certify identity, synchronization, aperture geometry, destination exclusion, traffic separation, chronology and recovery state.",
+    "networkRule": "Route selection treats gates as capacity-limited, stateful edges with health, queue, chronology and provenance constraints.",
+    "status": "DERIVED"
+  },
+  "operations": [
+    {"procedure":"WG-01 Paired-Mouth Certification","steps":["Authenticate both mouth identities and reference roots.","Compare independent clocks, orientation and field state.","Verify chronology margin and environmental exclusions.","Certify throat radius, stability margin and closure reserve.","Open traffic only after dual-end agreement."],"status":"DERIVED"},
+    {"procedure":"WG-02 Vessel Admission","steps":["Measure vessel mass and full geometric envelope.","Include appendages, tow loads and navigation covariance.","Reserve passage slot and wake/separation interval.","Project transient mass-flux loading.","Issue admission token only if all hard margins remain positive."],"status":"DERIVED"},
+    {"procedure":"WG-03 Instability Response","steps":["Freeze new admissions.","Command in-aperture traffic to continue or clear according to certified safe direction.","Isolate unstable field sectors if supported.","Increase recovery authority and reduce throat demand.","Close or quench only under the family recovery procedure."],"status":"DERIVED"},
+    {"procedure":"WG-04 Network Reroute","steps":["Mark degraded edge with observed state and provenance.","Recompute capacity-constrained routes.","Reject routes that depend on stale mouth state or exhausted reserves.","Propagate authenticated closure/degradation notice.","Do not promote predicted recovery time to confirmed availability."],"status":"DERIVED"}
+  ],
+  "maintenance": [
+    {"task":"Aperture sector geometry survey","purpose":"Detect alignment, stiffness and field-shape drift before it consumes stability margin.","status":"DERIVED"},
+    {"task":"Clock and reference audit","purpose":"Detect synchronization drift, compromised trust roots and inconsistent remote-mouth state.","status":"DERIVED"},
+    {"task":"Structural anchor inspection","purpose":"Track fatigue, foundation motion and load-path degradation caused by persistent throat forces.","status":"DERIVED"},
+    {"task":"Recovery plant proof test","purpose":"Demonstrate closure, ringing absorption and reserve independence without relying on nominal traffic systems.","status":"DERIVED"},
+    {"task":"Thermal rejection capacity test","purpose":"Verify continuous hold and projected peak traffic heat can be rejected without safety-system derating.","status":"DERIVED"}
+  ],
+  "signatures": {
+    "persistent": ["gravitational/topological field", "large thermal rejection", "continuous synchronization/reference traffic", "power-conditioning activity"],
+    "transient": ["aperture opening/reshaping", "vessel passage loading", "closure/ringing", "sector-isolation events"],
+    "strategicConsequence": "Mature gates are difficult to hide because infrastructure and persistent topology are intrinsic to the family.",
+    "status": "DERIVED"
+  },
+  "failureModels": [
+    {"id":"throat-instability","cause":"Available stabilization authority falls below geometry/environment/traffic demand.","effect":"Rapid geometry change, closure demand or topology loss.","status":"DERIVED"},
+    {"id":"mouth-desynchronization","cause":"Clock, orientation, field or reference state exceeds paired tolerance.","effect":"Unsafe correspondence, forced traffic hold or gate closure.","status":"DERIVED"},
+    {"id":"asymmetric-mass-flux","cause":"Actual traffic distribution differs materially from scheduled throat loading.","effect":"Local curvature/stability burden rises and can cascade across aperture sectors.","status":"DERIVED"},
+    {"id":"chronology-protection-trip","cause":"Recovered chronology constraint reaches its exclusion threshold.","effect":"Admission is vetoed or the throat is forced into a safe restricted/closed state.","status":"MIXED"},
+    {"id":"reference-poisoning","cause":"Authenticated identity, timing or remote-mouth data is stale, compromised or internally inconsistent.","effect":"Controller may solve the wrong paired state with high confidence.","status":"DERIVED"},
+    {"id":"thermal-saturation","cause":"Continuous hold plus passage transients exceed rejection capacity.","effect":"Field authority and control electronics derate, shrinking safe throughput.","status":"DERIVED"},
+    {"id":"network-cascade","cause":"Routing shifts excessive traffic toward surviving gates after one or more closures.","effect":"Queues and loading consume reserve margins on otherwise healthy links.","status":"DERIVED"},
+    {"id":"anchor-drift","cause":"Physical or field anchor reference migrates beyond certified geometry.","effect":"Persistent throat symmetry and mouth orientation degrade.","status":"DERIVED"}
+  ],
+  "infrastructure": [
+    {"system":"paired mouth stations","role":"Provide the two stabilized, authenticated endpoints.","status":"CONFIRMED"},
+    {"system":"power and recovery plant","role":"Sustain throat hold, passage transients, thermal rejection and protected closure reserve.","status":"DERIVED"},
+    {"system":"traffic control and exclusion volume","role":"Schedule vessels by mass, geometry, separation and gate health rather than arrival order alone.","status":"DERIVED"},
+    {"system":"reference and synchronization network","role":"Maintain trusted clocks, identity, orientation and mouth-state telemetry.","status":"DERIVED"},
+    {"system":"gate network routing authority","role":"At corridor-network maturity, distribute traffic according to capacity, health and chronology-safe topology.","status":"DERIVED"}
+  ],
+  "scaling": {
+    "aperture": "Useful diameter raises structural span, controlled field area, throat-support burden and sensitivity to nonuniform traffic loading; it is not a linear power-to-radius conversion.",
+    "throughput": "Throughput depends on aperture geometry, per-vessel mass envelope, separation, synchronization, recovery reserve, thermal duty cycle and traffic-control quality.",
+    "parallelism": "Multiple throats increase capacity only when their anchors, power, recovery and reference systems do not create a common-mode bottleneck.",
+    "network": "Strategic scaling transitions from one larger gate to resilient graph topology, alternate routing and standards compatibility.",
+    "status": "DERIVED"
+  },
+  "technologyBasisEmbodiments": [
+    {"basis":"TERRESTRIAL_ELECTROMECHANICAL","embodiment":"Massive segmented aperture rings, throat stabilizers, precision clocks, field buses, structural foundations and industrial heat/recovery plant.","maintenanceLanguage":"alignment surveys, insulation tests, bearing/mount strain, clock calibration, coolant and heat-sink service","status":"DERIVED"},
+    {"basis":"AQUATIC_ELECTROCHEMICAL_HYDRAULIC","embodiment":"Pressure-supported wet aperture sectors, ionic field banks, hydraulic throat-shaping structures and immersed timing/metrology networks.","maintenanceLanguage":"fluid chemistry, fouling, membrane pressure, cavitation margin, seal integrity and optical timing","status":"DERIVED"},
+    {"basis":"CRYOGENIC_AMMONIA_HALOCARBON","embodiment":"Superconductive cold aperture lattices, cryogenic reference cavities, contraction-compensated anchors and high-capacity phase/recovery sinks.","maintenanceLanguage":"purity, quench margin, contraction geometry, cryofluid state and photonic clock reference","status":"DERIVED"},
+    {"basis":"GAS_GIANT_FLUIDIC_ELECTROSTATIC","embodiment":"Charged tension membranes, pressure-stabilized aperture webs and distributed electrostatic/fluidic local throat controllers.","maintenanceLanguage":"membrane tension, pressure balance, discharge damage, ionic contamination and acoustic control delay","status":"DERIVED"},
+    {"basis":"BIOLOGICAL_SYMBIOTIC","embodiment":"Cultivated aperture organs, mineralized field-support rings, distributed sensory ganglia and regenerative throat-control tissue.","maintenanceLanguage":"perfusion, metabolic reserve, tissue necrosis/scar, neural consensus, symbiont health and regenerative cycles","status":"DERIVED"},
+    {"basis":"MINERAL_PIEZOELECTRIC_PHOTONIC","embodiment":"Prestressed crystalline aperture domains, photonic reference channels and resonant topology-control structures arranged around a stabilized mouth.","maintenanceLanguage":"crack maps, preload, modal spectrum, optical defects, axis registration and annealing history","status":"DERIVED"},
+    {"basis":"FIELD_MEDIATED_POSTMATERIAL","embodiment":"Authenticated persistent field volumes define and stabilize the mouth through distributed stateful nodes with minimal conventional structure.","maintenanceLanguage":"coherence, trust roots, state proofs, fallback matter, reference consistency and recovery-domain integrity","status":"DERIVED"}
+  ],
+  "generatorContract": {
+    "inputs": ["family", "transitPath", "sharedTier", "technologyBasis", "mouthPairId", "apertureClass", "trafficProfile", "environmentState", "networkState", "condition", "provenanceMode"],
+    "outputs": ["resolvedPathName", "throatState", "stabilityMargin", "synchronizationState", "chronologyState", "capacityEnvelope", "queuePolicy", "powerAndRecoveryState", "maintenanceState", "signatureState", "failureRisks", "provenance"],
+    "hardGuards": [
+      "Do not treat wormhole-gate transit as a shipboard speed multiplier.",
+      "Do not infer a race, organization or manufacturer from technology basis.",
+      "Do not admit traffic when either mouth lacks independently authenticated state.",
+      "Do not average a negative hard safety margin into a positive overall score.",
+      "Do not spend protected closure/recovery reserve to satisfy normal throughput demand.",
+      "Do not invent chronology behavior beyond recovered constraints; unresolved mechanism details remain UNRESOLVED or PROPOSED.",
+      "Do not promote DERIVED mathematics, procedures or embodiments to CONFIRMED canon through repeated generation."
+    ]
+  },
+  "provenance": {
+    "confirmed": ["wormhole-gate family identity", "maintained multiply connected topology", "paired synchronized mouths", "P0-P6 implementation names and recovered broad roles", "chronology constraints exist", "infrastructure-heavy strategic character"],
+    "derived": ["throat area/radius engineering representation", "stability margin", "mass-flux model", "synchronization norm", "network-flow objective", "maintenance procedures", "failure causal taxonomy", "technology-basis embodiments"],
+    "proposed": ["all unsourced numeric coefficients and thresholds", "specific tolerance values", "specific control weights"],
+    "unresolved": ["race ownership", "inventors", "manufacturers", "historical dates", "exact exotic-field mechanism", "exact chronology functional", "setting-wide aperture sizes or throughput constants"]
+  }
+}
