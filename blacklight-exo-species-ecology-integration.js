@@ -20,9 +20,11 @@
   }
 
   function addNavLink() {
-    const nav=document.querySelector('.bli-nav');if(!nav||nav.querySelector('a[href="blacklight-exo-alien-ecology.html"]'))return;
-    const link=document.createElement('a');link.href='blacklight-exo-alien-ecology.html';link.textContent='Alien Ecology';
-    const archive=nav.querySelector('a[href="blacklight-systems-black.html"]');nav.insertBefore(link,archive||null);
+    const href='blacklight-exo-alien-ecology.html';
+    if(document.querySelector(`a[href="${href}"]`))return;
+    const nav=document.querySelector('.bli-system-nav')||document.querySelector('.bli-nav');
+    if(!nav)return;
+    const link=document.createElement('a');link.href=href;link.textContent='Alien Ecology';nav.append(link);
   }
 
   function readContext() {
