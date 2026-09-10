@@ -7,7 +7,7 @@
   function validate(record){
     const inherited=prior.validate(record),violations=[...(inherited.violations||[])],basis=record?.technologyBasis,manufacturer=record?.manufacturer,graph=record?.moduleGraph;
     if(!basis){violations.push('Canonical vessel lacks species-derived operative technology basis.');return{valid:false,violations};}
-    if(!basis.validation?.valid)violations.push(...(basis.validation?.violations||['Operative technology basis validation failed.']);
+    if(!basis.validation?.valid)violations.push(...(basis.validation?.violations||['Operative technology basis validation failed.']));
     if(basis.manufacturerId!==manufacturer?.manufacturerId||basis.speciesId!==manufacturer?.speciesId||basis.organizationId!==manufacturer?.organizationId)violations.push('Operative technology basis identity diverges from manufacturer authority.');
     if(manufacturer?.technologyBasis?.basisId!==basis.basisId)violations.push('Manufacturer does not retain the canonical operative technology basis.');
     if(Object.keys(basis.routeStandards||{}).sort().join(',')!==routeKeys.join(','))violations.push('Operative technology basis does not expose all invariant route semantics.');
