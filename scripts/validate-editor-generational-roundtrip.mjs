@@ -144,6 +144,8 @@ const refreshSource = recordLibrarySource.slice(recordLibrarySource.indexOf('fun
 assert(refreshSource.length > 0, 'Could not isolate Saved Record Library refresh implementation for integration validation.');
 assert(!refreshSource.includes('Repository.load('), 'Saved Record Library refresh reopens canonical records instead of using indexed metadata.');
 assert(refreshSource.includes('Repository.ensureIndexCurrent') || recordLibrarySource.includes('function repositoryHealthSummary()'), 'Saved Record Library no longer integrates repository index-health recovery into refresh.');
+assert(recordLibrarySource.includes('function refreshIfContextChanged()'), 'Saved Record Library lost its lightweight context-change refresh guard.');
+assert(recordLibrarySource.includes('window.setInterval(refreshIfContextChanged, 1000);') && !recordLibrarySource.includes('window.setInterval(refresh, 1000);'), 'Saved Record Library resumed unconditional one-second DOM refresh polling.');
 
 console.log('Editor generational provenance, repository roundtrip, and library findability contract validation passed.');
 console.log(`Verified ${g0.profileId} r1 -> r2 without generation change, clone to G1/G2, repository save/index/search/load, same-revision provenance conflict rejection, stale-index repair, and library metadata/findability integration.`);
