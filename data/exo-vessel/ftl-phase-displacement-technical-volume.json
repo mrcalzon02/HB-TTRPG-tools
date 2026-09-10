@@ -1,0 +1,121 @@
+{
+  "registryType": "exoVesselFtlPhaseDisplacementTechnicalVolume",
+  "registryVersion": "1.0.0",
+  "schema": "data/schemas/exo-vessel-ftl-phase-displacement-technical-volume.schema.json",
+  "family": "phase-displacement",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "legacyDesignSource": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    },
+    "lineageSource": "data/exo-vessel/ftl-development-lineage-registry.json",
+    "embodimentSource": "data/exo-vessel/ftl-family-basis-embodiment-registry.json",
+    "statusRule": "Recovered family action and Path names outrank derived explanation. Identity/continuity mathematics, machinery causality and technology-basis embodiments are DERIVED unless separately sourced. Numeric coefficients and philosophical interpretations remain PROPOSED or UNRESOLVED unless adopted."
+  },
+  "mathematics": {
+    "stateMap": {"expression":"D_tau: S_o -> S_t","meaning":"Displacement maps a bounded protected source state to an admissible nonlocal target state; it is not modeled as continuous traversal through intervening space.","status":"DERIVED"},
+    "compatibilityDistance": {"expression":"d_C(S_t,S*) = sqrt((z_t-z*)^T W_C (z_t-z*))","meaning":"Target-state compatibility is a weighted distance over required state descriptors. The weighting matrix is family/configuration specific and not a universal setting constant.","status":"DERIVED"},
+    "continuityMargin": {"expression":"mu_I = I_available - I_required(payload_class, complexity, reference_quality, separation, environment)","meaning":"Commit requires positive identity/continuity margin under the configured invariant set. The setting does not equate this engineering test with a universal philosophical proof of personal identity.","status":"MIXED"},
+    "coverageMargin": {"expression":"mu_C = min_{x in Omega_payload} c(x) - c_required","meaning":"Whole-object protected-state coverage is governed by the weakest certified region, not average coverage.","status":"DERIVED"},
+    "targetCovariance": {"expression":"Sigma_T = J_n Sigma_nav J_n^T + Sigma_ref + Sigma_model + Sigma_grav + Sigma_occ","meaning":"Remote target uncertainty combines navigation, reference, model, gravity and occupancy uncertainty; correlated sources must not be counted as independent confirmations.","status":"DERIVED"},
+    "commitAdmissibility": {"expression":"A_commit = (d_C <= d_max) AND (mu_I > 0) AND (mu_C > 0) AND target_authenticated AND target_unoccupied AND reserve_valid","meaning":"Hard safety conditions are vetoes, not weighted preferences.","status":"DERIVED"},
+    "safetyHorizon": {"expression":"T_precommit >= t_detect + t_auth + t_model + t_crosscheck + t_command + t_state + t_recovery + t_margin","meaning":"Higher performance requires enough time to detect target change, authenticate evidence, solve state compatibility, cross-check invariants, prepare the protected state and retain recovery authority.","status":"DERIVED"}
+  },
+  "pathStages": [
+    {"path":"P0","name":"Quantum State Conveyor","breakthrough":"Demonstrate controlled nonlocal mapping of simple prepared states.","utility":"Microscopic state-transfer research.","limit":"No living or macroscopic payload; extreme preparation purity.","engineeringAdvance":"Fixed preparation/readout apparatus and reference-purity metrology.","status":"MIXED"},
+    {"path":"P1","name":"Gram-to-Tonne Displacement Vault","breakthrough":"Extend compatibility mapping to complex bounded matter states.","utility":"Macroscopic local displacement.","limit":"Large isolation vaults, reference stores and strict completeness tests.","engineeringAdvance":"Larger state cages, environmental isolation and high-capacity reference storage.","status":"MIXED"},
+    {"path":"P2","name":"Macroscopic Phase Chamber","breakthrough":"Preserve defined continuity invariants over complex payloads and longer separation.","utility":"Reliable chamber-to-chamber transfer.","limit":"Prepared endpoints and whole-payload enclosure remain dominant constraints.","engineeringAdvance":"Continuous enclosure metrology, stronger reconciliation systems and precommit continuity proof.","status":"MIXED"},
+    {"path":"P3","name":"Beacon-Coupled Vessel Displacement","breakthrough":"Resolve a remote compatible target state against authenticated beacon observations.","utility":"First vessel-scale interstellar displacement.","limit":"Beacon/reference trust, endpoint occupancy and whole-vessel coverage become flight critical.","engineeringAdvance":"Shipboard state cage, beacon links, remote exclusion sensing and independent reference cross-checks.","status":"MIXED"},
+    {"path":"P4","name":"Autonomous Phase Drive","breakthrough":"Infer target compatibility without a fully prepared receiver.","utility":"Substantially expanded destination flexibility.","limit":"Target uncertainty and model error replace prepared-endpoint dependence.","engineeringAdvance":"Higher-resolution sensing, onboard target models, stronger cages and explicit uncertainty vetoes.","status":"MIXED"},
+    {"path":"P5","name":"Strategic Nonlocal Transit Core","breakthrough":"Optimize target-state compatibility across long baselines and imperfect observations.","utility":"Long-baseline strategic displacement with bounded uncertainty.","limit":"Reference provenance, state-buffer integrity, fallback targets and continuity margin dominate.","engineeringAdvance":"Strategic reference networks, redundant state proofs, larger buffers and protected recovery authority.","status":"MIXED"},
+    {"path":"P6","name":"Compact Identity-Preserving Displacer","breakthrough":"Continuously solve continuity constraints and target compatibility in compact real time.","utility":"Small platforms obtain high-quality autonomous displacement.","limit":"Compactness increases sensitivity to reference trust, state-media health and common-mode faults.","engineeringAdvance":"Dense state-active materials, redundant local reference stores, sectional coverage and receding-horizon invariant checking.","status":"MIXED"}
+  ],
+  "machinery": [
+    {"block":"energyConditioning","function":"Provide state preparation, mapping, target lock, reconciliation and protected recovery energy.","failureExposure":"bus asymmetry, reserve depletion, transient collapse"},
+    {"block":"stateMapper","function":"Realize the nonlocal mapping operator over the certified protected payload state.","failureExposure":"mapping nonconvergence, mode contamination, incomplete state transfer"},
+    {"block":"wholeObjectCage","function":"Maintain complete protected-state coverage over hull, crew, cargo and certified appendages.","failureExposure":"coverage hole, boundary uncertainty, uncatalogued external geometry"},
+    {"block":"continuityReferenceSystem","function":"Measure and preserve the configured identity/continuity invariants and reference history.","failureExposure":"reference drift, common-mode corruption, invariant disagreement"},
+    {"block":"targetSensingAuthentication","function":"Establish target compatibility, occupancy, environmental state and provenance from independent observations.","failureExposure":"stale beacon, correlated evidence, target alias, occupancy uncertainty"},
+    {"block":"transitControl","function":"Arbitrate candidate targets, hard vetoes, commit timing and post-event reconciliation.","failureExposure":"premature commit, veto bypass, estimator/controller disagreement"},
+    {"block":"reconciliationRecovery","function":"Verify arrival state, isolate anomalies, restore normal interfaces and retain abort/recovery authority.","failureExposure":"reconciliation mismatch, trapped protected state, recovery exhaustion"},
+    {"block":"controlThermalAbortBackbone","function":"Provide independent timing, logging, thermal control, interlocks and abort authority.","failureExposure":"common-mode clock loss, thermal saturation, audit-log loss, interlock defeat"}
+  ],
+  "powerModel": {
+    "expression":"E_event = E_prepare + E_reference + E_target_lock + E_map + E_reconcile + E_recovery",
+    "reserveRule":"E_recovery is protected and cannot be traded away for marginal range or schedule performance.",
+    "scalingRule":"Higher energy alone cannot compensate for incomplete state coverage, weak references, incompatible target state or failed continuity proof.",
+    "status":"DERIVED"
+  },
+  "navigationControl": {
+    "primaryState":["sourceStateModel","continuityInvariantSet","coverageMargin","targetStateModel","targetCovariance","occupancyState","referenceTrust","recoveryReserve"],
+    "commitRule":"Commit only when target authentication, compatibility, exclusion, continuity, coverage and recovery vetoes all pass independently.",
+    "identityRule":"The controller reports which engineering invariants were preserved and their evidence. It does not upgrade an engineering continuity check into an absolute metaphysical claim.",
+    "status":"DERIVED"
+  },
+  "operations": [
+    {"procedure":"PD-01 Pre-Displacement Certification","steps":["Inventory the complete protected payload and deployed geometry.","Authenticate continuity references and verify independent evidence roots.","Measure minimum cage coverage and reconcile against current physical configuration.","Build target-state estimate with covariance and occupancy exclusion.","Reserve recovery energy and reject commit if any hard margin fails."],"status":"DERIVED"},
+    {"procedure":"PD-02 Target Ambiguity Alarm","steps":["Freeze commit countdown.","Separate independent from correlated target observations.","Recompute candidate target states and compatibility distances.","Discard candidates requiring averaged occupancy or unauthenticated references.","Resume only after one admissible target remains or abort."],"status":"DERIVED"},
+    {"procedure":"PD-03 Continuity-Invariant Disagreement","steps":["Hold state mapping before commit.","Identify which invariant channel disagrees and its provenance.","Cross-check against isolated local reference stores.","Treat common-source agreement as one evidence family, not multiple votes.","Abort if required invariant set cannot be certified."],"status":"DERIVED"},
+    {"procedure":"PD-04 Post-Arrival Reconciliation","steps":["Maintain protected state until arrival observations stabilize.","Compare arrival state against committed invariant and configuration records.","Quarantine mismatched subsystems or payload zones.","Release ordinary interfaces only after recovery reserve and environment are verified.","Preserve event evidence for maintenance and forensic review."],"status":"DERIVED"}
+  ],
+  "maintenance": [
+    {"task":"State-cage coverage survey","purpose":"Find weak local coverage, configuration drift and uncatalogued geometry before they become commit hazards.","status":"DERIVED"},
+    {"task":"Reference-root independence audit","purpose":"Detect multiple channels that actually depend on one corrupted clock, beacon, model or archive.","status":"DERIVED"},
+    {"task":"State-media integrity test","purpose":"Measure mapper/buffer drift, hysteresis and damaged active media.","status":"DERIVED"},
+    {"task":"Target-model residual review","purpose":"Determine whether growing disagreement is sensor noise, environmental change, model failure or reference poisoning.","status":"DERIVED"},
+    {"task":"Recovery/reconciliation proof test","purpose":"Demonstrate that arrival verification and protected recovery remain available independently of the nominal mapper.","status":"DERIVED"}
+  ],
+  "signatures": {
+    "persistent":["precision reference activity","state-cage conditioning","target sensing/authentication traffic","thermal management"],
+    "transient":["state-preparation pulse","nonlocal mapping event","correlated departure/arrival residuals","reconciliation activity"],
+    "strategicConsequence":"Mature autonomous systems can reduce dependence on obvious fixed receivers, but displacement events and their reference/sensing preparation remain potentially observable.",
+    "status":"DERIVED"
+  },
+  "failureModels": [
+    {"id":"coverage-hole","cause":"One payload region falls below required protected-state coverage.","effect":"Mapping becomes inadmissible or risks incomplete/undefined transfer.","status":"DERIVED"},
+    {"id":"target-alias","cause":"Multiple nonlocal target states remain compatible within current evidence.","effect":"Controller cannot establish unique safe destination correspondence.","status":"DERIVED"},
+    {"id":"continuity-proof-failure","cause":"Required configured invariants disagree or lack independent evidence.","effect":"Commit veto; post-event occurrence triggers quarantine and forensic review.","status":"MIXED"},
+    {"id":"reference-poisoning","cause":"Clock, beacon, archive or model provenance is stale, compromised or falsely treated as independent.","effect":"High-confidence solution may refer to the wrong source or target state.","status":"DERIVED"},
+    {"id":"occupancy-conflict","cause":"Target volume cannot be proven free of incompatible matter/state.","effect":"Commit veto or catastrophic target-state incompatibility if safeguards fail.","status":"DERIVED"},
+    {"id":"reconciliation-divergence","cause":"Arrival measurements do not converge on the committed expected state within tolerance.","effect":"Protected quarantine, restricted subsystem release or recovery action.","status":"DERIVED"},
+    {"id":"recovery-exhaustion","cause":"Energy or state-media authority required for protected reconciliation is consumed by the nominal transit.","effect":"Arrival may succeed but safe normalization cannot be guaranteed.","status":"DERIVED"},
+    {"id":"configuration-drift","cause":"Payload, appendages, repairs or cargo changed after the certified source-state model was built.","effect":"Coverage and state model no longer describe the actual displaced object.","status":"DERIVED"}
+  ],
+  "infrastructure": [
+    {"system":"authenticated target beacons","role":"Provide independently verifiable target state, time, environment and exclusion observations without themselves guaranteeing safety.","status":"MIXED"},
+    {"system":"reference archives","role":"Maintain signed historical state/reference chains used to detect drift, aliasing and false independence.","status":"DERIVED"},
+    {"system":"prepared receiver chambers","role":"At earlier maturity, reduce target-state uncertainty and provide controlled reconciliation environments.","status":"MIXED"},
+    {"system":"strategic sensor/reference network","role":"At higher maturity, support long-baseline target estimation, fallback targets and provenance cross-checks.","status":"DERIVED"}
+  ],
+  "scaling": {
+    "payload":"State complexity, surface/volume coverage, articulation, crew/cargo change and appendage dynamics can grow faster than simple mass.",
+    "distance":"Longer baselines primarily increase target/reference covariance and environmental/model uncertainty unless infrastructure reduces them.",
+    "compactness":"P6 compact machinery replaces bulk with denser active media, faster solving and distributed references; it does not remove whole-object coverage or recovery requirements.",
+    "parallelism":"Multiple mapper modules improve capacity only when their references, cages and recovery systems avoid common-mode dependence.",
+    "status":"DERIVED"
+  },
+  "technologyBasisEmbodiments": [
+    {"basis":"TERRESTRIAL_ELECTROMECHANICAL","embodiment":"Segmented state cages, precision clocks, superconducting reference buses, sensor arrays and hardened reconciliation computers.","maintenanceLanguage":"alignment, insulation, clock discipline, cage continuity, reference checksum and cooling","status":"DERIVED"},
+    {"basis":"AQUATIC_ELECTROCHEMICAL_HYDRAULIC","embodiment":"Pressure-balanced ionic state membranes, wet-photonic references and hydraulic geometry control around immersed payload volumes.","maintenanceLanguage":"fluid chemistry, membrane fouling, pressure balance, ionic drift and wet-reference calibration","status":"DERIVED"},
+    {"basis":"CRYOGENIC_AMMONIA_HALOCARBON","embodiment":"Superconductive state loops, cryogenic reference cavities and low-noise phase media with quench-isolated recovery sectors.","maintenanceLanguage":"quench history, cryogen purity, cavity drift, thermal cycling and junction health","status":"DERIVED"},
+    {"basis":"GAS_GIANT_FLUIDIC_ELECTROSTATIC","embodiment":"Distributed electrostatic state nodes suspended through pressure-supported tension structures and fluidic timing/control paths.","maintenanceLanguage":"charge balance, membrane tension, fluidic delay, storm coupling and node drift","status":"DERIVED"},
+    {"basis":"BIOLOGICAL_SYMBIOTIC","embodiment":"Cultivated state-sensitive tissues, neural reference organs and regenerative phase membranes grown through the protected volume.","maintenanceLanguage":"tissue viability, immune compatibility, neural synchronization, growth lineage and scar-state review","status":"DERIVED"},
+    {"basis":"MINERAL_PIEZOELECTRIC_PHOTONIC","embodiment":"Prestressed crystalline state lattices, photonic reference channels and resonant mineral cages whose defect maps are part of calibration.","maintenanceLanguage":"fracture survey, lattice defect mapping, prestress, resonance drift and optical-path contamination","status":"DERIVED"},
+    {"basis":"FIELD_MEDIATED_POSTMATERIAL","embodiment":"Distributed coherent programmable nodes maintain state mapping, invariant evidence and protected coverage as an authenticated field computation.","maintenanceLanguage":"node consensus, executable-proof integrity, coherence margin, reference ancestry and local reconstruction history","status":"DERIVED"}
+  ],
+  "generatorContract": {
+    "inputs":["pathTier","technologyBasis","payloadGeometry","payloadComplexity","targetEvidence","targetEnvironment","referenceState","infrastructureSupport","damageState","maintenanceState"],
+    "outputs":["stateMapClass","compatibilityAssessment","continuityInvariantReport","coverageMargin","targetCovariance","powerAndRecoveryBudget","signatureProfile","failureExposures","operatingProcedures","provenance"],
+    "hardGuards":["Do not describe phase displacement as continuous flight through intervening space.","Do not treat identity/continuity engineering checks as an absolute philosophical proof unless setting canon explicitly adopts one.","Do not average away occupancy conflicts or local coverage holes.","Do not count correlated references as independent confirmations.","Do not infer race ownership, inventor, manufacturer, historical date or prevalence from technology basis.","Do not convert PROPOSED numerical coefficients into canon through generated repetition.","Do not spend protected recovery reserve to improve nominal range or schedule.","Do not silently convert a training accident, thesis example or patent-class record into setting history."]
+  },
+  "provenance": {
+    "confirmed":["phase-displacement family identity","protected macroscopic nonlocal target-state mapping","P0-P6 historical role names and broad recovered development sequence","beacon-coupled vessel displacement at P3","autonomous target inference at P4","identity/continuity safeguards as a family concern"],
+    "derived":["compatibility-distance formalism","continuity and coverage margins","covariance decomposition","machinery decomposition","power budget","operations and maintenance doctrine","technology-basis embodiments"],
+    "proposed":["specific metric weights, tolerances, coefficients and universal numerical thresholds","sample patent implementations and training-accident particulars"],
+    "unresolved":["universal philosophical definition of personal identity","whether all cultures use identical continuity invariants","exact microphysical mapping mechanism beyond the recovered family action","race/manufacturer/inventor ownership where not independently sourced"]
+  }
+}
