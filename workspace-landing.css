@@ -216,9 +216,43 @@
 /* The primary Modules surface is an application workspace. Its generator entry
    injects legacy width rules at runtime, so these explicit interaction rules keep
    desktop controls and preview side-by-side while retaining the existing mobile collapse. */
+#modules > .hero-card {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+#modules > .hero-card .eyebrow {
+  margin: 0 0 2px;
+  font-size: 0.68rem;
+}
+
+#modules > .hero-card #modules-title {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+}
+
+#modules > .hero-card p:not(.eyebrow) {
+  display: none;
+}
+
 #modules #module-workbench-root {
   width: 100%;
   max-width: none;
+  gap: 10px;
+}
+
+#modules .module-primary-nav {
+  position: sticky;
+  top: 8px;
+  z-index: 20;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(12, 15, 22, 0.96);
+  backdrop-filter: blur(8px);
 }
 
 #modules .dungeon-frame {
@@ -437,5 +471,8 @@
   }
   .workspace-hero {
     padding: 24px 20px;
+  }
+  #modules .module-primary-nav {
+    position: static;
   }
 }
