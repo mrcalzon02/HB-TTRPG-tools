@@ -18,51 +18,57 @@
       <span class="bli-mark" aria-hidden="true"></span>
       <span class="bli-brand-text"><span>Blacklight</span><span>EXO Ecology</span></span>
     </a>
-    <nav class="bli-nav" aria-label="EXO ecology navigation">
-      <a href="blacklight-exo-operations.html">EXO Operations</a>
-      <a href="blacklight-exo-solar-system.html">Solar Systems</a>
-      <a href="blacklight-exo-species-civilization.html">System Dossiers</a>
+    <nav class="bli-nav" aria-label="Blacklight global navigation">
       <a href="blacklight-systems-black.html">Black Archive</a>
+      <a href="blacklight-corporate-systems.html">Systems Gateway</a>
     </nav>
   </header>
 
-  <section class="bli-hero exo-ecology-hero" aria-labelledby="exo-ecology-title">
-    <div>
-      <p class="bli-eyebrow">Black compartment · Xenobiology, planetary chemistry, and ecological operations</p>
-      <h1 id="exo-ecology-title">Alien Ecology Generator.</h1>
-      <p class="bli-lede">Generate ecologies that inherit the physical world, population, species, and ruin decisions already made elsewhere. Native ecology and civilizational status remain separate so a populated or ruined world can still preserve barren, chemical, pseudo-living, or fully living foundations.</p>
-      <div class="bli-actions">
+  <main class="bli-app-shell exo-ecology-shell">
+    <section class="bli-app-commandbar exo-ecology-commandbar" aria-labelledby="exo-ecology-title">
+      <div class="bli-app-identity">
+        <h1 id="exo-ecology-title">Alien Ecology</h1>
+        <p>Planetary chemistry · biosphere · field operations</p>
+      </div>
+      <div class="exo-ecology-actions" aria-label="Ecology actions">
         <button id="exo-ecology-generate" class="bli-action primary" type="button">Generate Ecology</button>
-        <button id="exo-ecology-export" class="bli-action" type="button">Export Ecology JSON</button>
-        <button id="exo-ecology-continue" class="bli-action" type="button">Continue to Species and Civilization</button>
+        <button id="exo-ecology-export" class="bli-action" type="button">Export JSON</button>
+        <button id="exo-ecology-continue" class="bli-action" type="button">Continue to Dossier</button>
       </div>
-    </div>
-    <aside class="bli-directory-panel" aria-label="Current ecology summary">
-      <div class="bli-directory-title">Ecological Assessment</div>
-      <div class="bli-directory-list" role="list">
-        <div class="bli-directory-item" role="listitem"><strong>World</strong><span id="exo-ecology-summary-world" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Final state</strong><span id="exo-ecology-summary-state" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Native ecology</strong><span id="exo-ecology-summary-native" class="bli-arrow">pending</span></div>
-        <div class="bli-directory-item" role="listitem"><strong>Complexity</strong><span id="exo-ecology-summary-complexity" class="bli-arrow">pending</span></div>
+      <div class="bli-app-status exo-ecology-summary-strip" aria-label="Current ecology summary">
+        <span><strong>World</strong><b id="exo-ecology-summary-world">pending</b></span>
+        <span><strong>Final state</strong><b id="exo-ecology-summary-state">pending</b></span>
+        <span><strong>Native ecology</strong><b id="exo-ecology-summary-native">pending</b></span>
+        <span><strong>Complexity</strong><b id="exo-ecology-summary-complexity">pending</b></span>
       </div>
-    </aside>
-  </section>
+    </section>
 
-  <main class="bli-shell exo-ecology-shell">
-    <section id="exo-ecology-source" class="bli-section exo-ecology-source" hidden>
-      <div class="bli-section-head">
+    <nav class="bli-system-nav" aria-label="EXO subsystem navigation">
+      <a href="blacklight-exo-operations.html">Overview</a>
+      <a href="blacklight-exo-stellar-sector.html">Sector</a>
+      <a href="blacklight-exo-solar-system.html">System</a>
+      <a href="blacklight-exo-species-civilization.html">Dossier</a>
+      <a href="blacklight-exo-alien-ecology.html" aria-current="page">Ecology</a>
+      <a href="blacklight-exo-stellar-government.html">Governments</a>
+      <a href="blacklight-exo-ftl.html">FTL</a>
+      <a href="blacklight-exo-vessel.html">Vessel Engineering</a>
+      <a href="blacklight-exo-crew-operations.html">Crew Operations</a>
+      <a href="blacklight-exo-deployment-health.html">Deployment Health</a>
+    </nav>
+
+    <section id="exo-ecology-source" class="exo-ecology-source" hidden>
+      <div>
         <p class="bli-eyebrow">Imported world authority</p>
         <h2 id="exo-ecology-source-title">Physical world handoff</h2>
         <p id="exo-ecology-source-body"></p>
       </div>
-      <div class="bli-actions"><a class="bli-action" href="blacklight-exo-solar-system.html">Return to Solar System Generator</a></div>
+      <a class="bli-action" href="blacklight-exo-solar-system.html">Open Source System</a>
     </section>
 
-    <section class="bli-section exo-ecology-controls" aria-labelledby="exo-ecology-controls-title">
-      <div class="bli-section-head">
-        <p class="bli-eyebrow">Generation controls</p>
-        <h2 id="exo-ecology-controls-title">Set only what has not already been decided.</h2>
-        <p>Imported population, alien-species, and ruin records are preserved as authoritative constraints. Random controls fill unknown ecological layers without erasing those earlier decisions.</p>
+    <section class="exo-ecology-controls" aria-labelledby="exo-ecology-controls-title">
+      <div class="exo-ecology-control-head">
+        <h2 id="exo-ecology-controls-title">Generation parameters</h2>
+        <p>Imported physical, population, species, and ruin records remain authoritative. Use these controls only for ecological layers that are still unknown.</p>
       </div>
       <div class="exo-ecology-control-grid">
         <label><span>Ecology seed</span><input id="exo-ecology-seed" type="text" maxlength="100" placeholder="Random ecology seed"></label>
@@ -89,38 +95,45 @@
       </aside>
     </section>
 
-    <section class="bli-section" aria-labelledby="exo-ecology-chemistry-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Environmental foundation</p><h2 id="exo-ecology-chemistry-title">Atmosphere, solvent, energy, and chemical cycling.</h2></div>
-      <div id="exo-ecology-chemistry-grid" class="exo-ecology-card-grid"></div>
-    </section>
+    <div class="exo-ecology-output-stack">
+      <section class="exo-ecology-output-section" aria-labelledby="exo-ecology-chemistry-title">
+        <div class="exo-output-head"><p class="bli-eyebrow">Environmental foundation</p><h2 id="exo-ecology-chemistry-title">Atmosphere, solvent, energy, and chemical cycling</h2></div>
+        <div id="exo-ecology-chemistry-grid" class="exo-ecology-card-grid"></div>
+      </section>
 
-    <section class="bli-section" aria-labelledby="exo-ecology-niches-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Planetary niches</p><h2 id="exo-ecology-niches-title">Where ecological or pseudo-ecological activity can persist.</h2></div>
-      <div id="exo-ecology-niche-grid" class="exo-ecology-card-grid"></div>
-    </section>
+      <section class="exo-ecology-output-section" aria-labelledby="exo-ecology-niches-title">
+        <div class="exo-output-head"><p class="bli-eyebrow">Planetary niches</p><h2 id="exo-ecology-niches-title">Where ecological or pseudo-ecological activity can persist</h2></div>
+        <div id="exo-ecology-niche-grid" class="exo-ecology-card-grid"></div>
+      </section>
 
-    <section class="bli-section" aria-labelledby="exo-ecology-organisms-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Representative organisms and analogues</p><h2 id="exo-ecology-organisms-title">Producers, consumers, predators, symbionts, megafauna, and self-propagating nonlife.</h2></div>
-      <div id="exo-ecology-organism-grid" class="exo-ecology-organism-grid"></div>
-    </section>
+      <section class="exo-ecology-output-section" aria-labelledby="exo-ecology-organisms-title">
+        <div class="exo-output-head"><p class="bli-eyebrow">Representative organisms</p><h2 id="exo-ecology-organisms-title">Producers, consumers, predators, symbionts, megafauna, and propagating nonlife</h2></div>
+        <div id="exo-ecology-organism-grid" class="exo-ecology-organism-grid"></div>
+      </section>
 
-    <section class="bli-section" aria-labelledby="exo-ecology-network-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Ecological network</p><h2 id="exo-ecology-network-title">Food webs, symbioses, history, and civilizational disturbance.</h2></div>
-      <div class="exo-ecology-network-grid">
-        <article><h3>Trophic and process network</h3><ul id="exo-ecology-food-web"></ul></article>
-        <article><h3>Symbioses and exchanges</h3><ul id="exo-ecology-symbioses"></ul></article>
-        <article><h3>Ecological history</h3><ul id="exo-ecology-history"></ul></article>
-      </div>
-    </section>
+      <section class="exo-ecology-output-section" aria-labelledby="exo-ecology-network-title">
+        <div class="exo-output-head"><p class="bli-eyebrow">Ecological network</p><h2 id="exo-ecology-network-title">Food webs, symbioses, history, and civilizational disturbance</h2></div>
+        <div class="exo-ecology-network-grid">
+          <article><h3>Trophic and process network</h3><ul id="exo-ecology-food-web"></ul></article>
+          <article><h3>Symbioses and exchanges</h3><ul id="exo-ecology-symbioses"></ul></article>
+          <article><h3>Ecological history</h3><ul id="exo-ecology-history"></ul></article>
+        </div>
+      </section>
 
-    <section class="bli-section exo-ecology-operational" aria-labelledby="exo-ecology-operational-title">
-      <div class="bli-section-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-ecology-operational-title">Hazards, contamination rules, and entry protocol.</h2></div>
-      <div class="exo-ecology-network-grid">
-        <article><h3>Primary hazards</h3><ul id="exo-ecology-hazards"></ul></article>
-        <article><h3>Field protocols</h3><ul id="exo-ecology-protocols"></ul></article>
-        <article><h3>Classification basis</h3><ul id="exo-ecology-basis"></ul></article>
-      </div>
-    </section>
+      <section class="exo-ecology-output-section exo-ecology-operational" aria-labelledby="exo-ecology-operational-title">
+        <div class="exo-output-head"><p class="bli-eyebrow">Operational interpretation</p><h2 id="exo-ecology-operational-title">Hazards, contamination rules, and entry protocol</h2></div>
+        <div class="exo-ecology-network-grid">
+          <article><h3>Primary hazards</h3><ul id="exo-ecology-hazards"></ul></article>
+          <article><h3>Field protocols</h3><ul id="exo-ecology-protocols"></ul></article>
+          <article><h3>Classification basis</h3><ul id="exo-ecology-basis"></ul></article>
+        </div>
+      </section>
+    </div>
+
+    <details class="bli-app-disclosure">
+      <summary>Ecology authority model</summary>
+      <p>Native ecology and civilizational status remain separate. A populated or ruined world can preserve a barren, chemical, pseudo-living, or fully living native foundation, and imported decisions are never overwritten merely to make a generated ecology more convenient.</p>
+    </details>
   </main>
 
   <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · EXO alien ecology, chemical-process analysis, biosphere simulation, and restricted field planning.</footer>
