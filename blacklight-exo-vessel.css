@@ -5,5 +5,43 @@
 .exo-vessel-rating-panel{padding:20px;align-self:stretch}.exo-vessel-rating-panel h2{font-size:1.45rem}.exo-vessel-drive-meter{height:9px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin:16px 0}.exo-vessel-drive-meter span{display:block;height:100%;background:linear-gradient(90deg,#7e8da5,#d9a84f);width:0;transition:width .35s ease}.exo-vessel-data{display:grid;grid-template-columns:auto 1fr;gap:9px 14px}.exo-vessel-data dt{color:#a9a39a;font-size:.74rem;font-weight:800}.exo-vessel-data dd{margin:0;color:#f1eadf;text-align:right;font-size:.78rem}
 .exo-vessel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px}.exo-vessel-card{padding:16px}.exo-vessel-card small{display:block;color:#d9a84f;font-size:.65rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.exo-vessel-card h3{margin:7px 0 8px;font-size:1.05rem}.exo-vessel-card p{margin:0;color:#c9c2b6;line-height:1.55}.exo-vessel-card[data-state="warning"]{border-color:rgba(234,151,93,.58)}.exo-vessel-card[data-state="ok"]{border-color:rgba(126,214,155,.42)}
 .exo-vessel-table-wrap{overflow:auto;border:1px solid var(--vessel-line);border-radius:14px;background:rgba(0,0,0,.18)}.exo-vessel-table{width:100%;border-collapse:collapse;min-width:920px}.exo-vessel-table th,.exo-vessel-table td{padding:11px 12px;border-bottom:1px solid rgba(217,168,79,.12);text-align:left;vertical-align:top}.exo-vessel-table th{position:sticky;top:0;background:#15191f;color:#d9a84f;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}.exo-vessel-table td{font-size:.78rem;color:#d8d1c6}.exo-vessel-table td:nth-child(2),.exo-vessel-table td:nth-child(3),.exo-vessel-table td:nth-child(4){white-space:nowrap}.exo-vessel-warning-list{display:grid;gap:9px;padding-left:20px}.exo-vessel-warning-list li{color:#d7cec0;line-height:1.55}.exo-vessel-source{padding:16px 18px;border-left:3px solid rgba(217,168,79,.8)}
-@media(max-width:900px){.exo-vessel-overview{grid-template-columns:1fr}.exo-vessel-visual{min-height:260px}}
-@media(max-width:600px){.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:1fr}.exo-vessel-visual{min-height:220px}.exo-vessel-grid{grid-template-columns:1fr}}
+
+/* Desktop-first vessel workspace: keep navigation, generation controls and the
+   primary engineering view in the first useful viewport instead of spending
+   it on a landing-page hero and a phone-width content column. */
+.exo-vessel-hero,.exo-vessel-shell{width:calc(100% - 32px);max-width:none;margin-inline:auto}
+.exo-vessel-hero{margin-top:10px;margin-bottom:10px;padding:10px 12px;grid-template-columns:minmax(0,1fr) minmax(520px,.72fr);gap:12px;border-radius:14px;align-items:center}
+.exo-vessel-hero>div:first-child{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;min-width:0}
+.exo-vessel-hero .bli-eyebrow,.exo-vessel-hero .bli-lede{display:none}
+.exo-vessel-hero h1{flex:0 1 auto;margin:0;font-size:clamp(1.15rem,1.35vw,1.55rem);line-height:1.05;letter-spacing:-.02em}
+.exo-vessel-hero .bli-actions{margin:0;gap:6px}
+.exo-vessel-hero .bli-action{min-height:34px;padding:7px 11px;font-size:.72rem}
+.exo-vessel-hero .bli-directory-panel{min-height:0;padding:7px 9px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:7px 10px;border-radius:11px;box-shadow:none}
+.exo-vessel-hero .bli-directory-title{font-size:.65rem;white-space:nowrap}
+.exo-vessel-hero .bli-directory-list{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:5px}
+.exo-vessel-hero .bli-directory-item{display:flex;align-items:center;gap:5px;padding:4px 6px;border:1px solid rgba(217,168,79,.15);border-radius:8px;background:rgba(0,0,0,.16);font-size:.62rem;letter-spacing:.045em;text-transform:none}
+.exo-vessel-hero .bli-directory-item strong{font-size:.58rem;text-transform:uppercase;letter-spacing:.055em}
+.exo-vessel-hero .bli-directory-item .bli-arrow{max-width:190px;font-size:.66rem;line-height:1.15;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exo-vessel-shell{gap:12px}
+.exo-vessel-shell>.bli-section{margin:0}
+.exo-vessel-controls{padding:11px 12px;border:1px solid var(--vessel-line);border-radius:14px;background:rgba(7,9,12,.66)}
+.exo-vessel-controls .bli-section-head{max-width:none;margin-bottom:9px}
+.exo-vessel-controls .bli-section-head .bli-eyebrow{margin:0 0 3px;font-size:.64rem}
+#exo-vessel-controls-title{margin:0;font-size:0;line-height:1}
+#exo-vessel-controls-title::after{content:"Mission, drive and design inputs";font-size:1.02rem;line-height:1.15}
+.exo-vessel-controls .bli-section-head>p:last-child{display:none}
+.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:7px 9px}
+.exo-vessel-control-grid label{gap:4px}
+.exo-vessel-control-grid label span{font-size:.62rem;letter-spacing:.055em}
+.exo-vessel-control-grid input,.exo-vessel-control-grid select{min-height:35px;padding:7px 9px;border-radius:8px;font-size:.78rem}
+.exo-vessel-overview{grid-template-columns:minmax(0,2.2fr) minmax(300px,.8fr);gap:12px}
+.exo-vessel-visual-panel{padding:12px}
+.exo-vessel-rating-panel{padding:14px}
+.exo-vessel-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.exo-vessel-card{padding:12px}
+.exo-vessel-table th,.exo-vessel-table td{padding:8px 9px}
+
+@media(min-width:2200px){.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:repeat(11,minmax(0,1fr))}.exo-vessel-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
+@media(max-width:1200px){.exo-vessel-hero{grid-template-columns:1fr}.exo-vessel-hero .bli-directory-list{justify-content:flex-start}}
+@media(max-width:900px){.exo-vessel-hero,.exo-vessel-shell{width:calc(100% - 20px)}.exo-vessel-overview{grid-template-columns:1fr}.exo-vessel-visual{min-height:260px}}
+@media(max-width:600px){.exo-vessel-hero,.exo-vessel-shell{width:calc(100% - 12px)}.exo-vessel-hero{padding:9px}.exo-vessel-hero .bli-directory-panel{grid-template-columns:1fr}.exo-vessel-hero .bli-directory-list{align-items:stretch}.exo-vessel-hero .bli-directory-item{flex:1 1 145px}.exo-vessel-controls .exo-vessel-control-grid{grid-template-columns:1fr}.exo-vessel-visual{min-height:220px}.exo-vessel-grid{grid-template-columns:1fr}}
