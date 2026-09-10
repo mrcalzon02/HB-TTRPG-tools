@@ -1,0 +1,205 @@
+{
+  "registryType": "exoVesselFtlTechnologyResponseRegistry",
+  "registryVersion": "1.0.0",
+  "schema": "data/schemas/exo-vessel-ftl-technology-response.schema.json",
+  "authority": {
+    "status": "MIXED",
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "operativeTechnology": "EXO_OPERATIVE_TECHNOLOGY_BASIS.md",
+    "technologyRegistry": "data/exo-vessel/technology-basis-registry.json",
+    "mathematics": [
+      "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+      "data/exo-vessel/ftl-calibration-registry.json",
+      "data/exo-vessel/ftl-upgrade-causality-registry.json",
+      "data/exo-vessel/ftl-environment-regression-registry.json"
+    ],
+    "legacyDesignSource": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    }
+  },
+  "sourceRequirements": [
+    "Different transit methods must retain different gravity sensitivity, miscalculation loss, efficiency loss, and proximity tolerance.",
+    "Gravitational shear/lensing geometry may be useful terrain for one family and hazardous distortion for another.",
+    "Safety sensing must look at least as far ahead as the transit method can place the vessel into danger, subject to imperfect detection and finite margins.",
+    "Higher transit maturity must improve not only range but the mathematics, sensing, redundancy, field control, materials, structure, energy efficiency, and emergency recovery that make that range safe.",
+    "No safety interlock is perfectly safe; improved technology increases detection and recovery margin rather than eliminating risk.",
+    "Mathematical models invented to fill archive gaps remain DERIVED or PROPOSED and must not overwrite confirmed mechanism identity or runtime performance authority."
+  ],
+  "responseEquation": {
+    "symbolic": "R_instance = T_basis(T_race(R_family(E,Path,Tier,Vessel)),Scale,Condition)",
+    "meaning": "The family mathematics evaluates the environment first; the operative technology basis then determines how the required measurement, field actuation, structure, energy delivery, cooling, control, maintenance, signature, and failure behavior are physically realized. Race or manufacturer authority may specialize that basis without changing the confirmed family operator.",
+    "status": "DERIVED"
+  },
+  "basisProfiles": [
+    {
+      "basis": "TERRESTRIAL_ELECTROMECHANICAL",
+      "status": "DERIVED",
+      "machineryLanguage": "Discrete industrial machines, superconductive or field coils, pressure vessels, cryostats, power buses, structural frames, optical/electronic metrology and replaceable modules.",
+      "response": {
+        "fieldActuation": "coil/ring/tile/projector arrays with electronically commanded current, field or stress-state control",
+        "structuralSupport": "alloy/composite frames, active mounts and load paths sized for field reaction, recoil, vibration and hull distortion",
+        "controlBandwidth": "distributed electronic/optical feedback with redundant clocks and local controllers",
+        "sensorLookahead": "gravimetry, interferometry, clocks, Q/topology sensors and probes fused into predictive route models",
+        "energyConditioning": "conversion plant -> switchgear/isolation -> buffers -> field buses -> dump/recovery plant",
+        "thermalRecovery": "cryogenic loops, heat stores, radiators, reversible field sinks and emergency dumps",
+        "maintenanceRecovery": "inspection, alignment, insulation testing, coolant service, serialized module replacement and recalibration",
+        "signatureChannels": ["electromagnetic", "thermal", "optical", "structural vibration", "family-specific gravitational/Q/topological"],
+        "failureChannels": ["quench", "insulation breakdown", "bus fault", "alignment drift", "coolant loss", "sensor timing fault", "structural mount failure"]
+      },
+      "upgradeDrivers": ["higher field current density", "better superconductors/metamaterials", "faster clocks and computation", "distributed emitters", "stronger lighter frames", "higher recovery capacity", "better predictive sensing"],
+      "scaleBehavior": "Small craft compress functions into integrated modules; capital craft split field formation and control into independently isolated sectors with trunk power/cooling and hierarchical synchronization."
+    },
+    {
+      "basis": "AQUATIC_ELECTROCHEMICAL_HYDRAULIC",
+      "status": "DERIVED",
+      "machineryLanguage": "Pressure-balanced wet machinery, ionic/electrochemical power, hydraulic or fluidic actuation, immersed optical control, membrane exchange and wet field surfaces.",
+      "response": {
+        "fieldActuation": "pressure-shaped or immersed active surfaces, wet superconductive elements, electroactive membranes and fluid-positioned field elements",
+        "structuralSupport": "pressure cells, compliant wet frames and hydraulically biased supports that preserve field geometry under changing external pressure",
+        "controlBandwidth": "fluidic/electrochemical local control with optical timing where high bandwidth is required",
+        "sensorLookahead": "immersed gravimetric/optical/Q sensors whose calibration includes pressure, density, dissolved gas and refractive-state corrections",
+        "energyConditioning": "ionic/electrochemical sources and converters feeding pressure-balanced storage and isolated high-field interfaces",
+        "thermalRecovery": "bulk working-fluid circulation, phase exchange, membrane heat transfer and emergency pressure/heat sinks",
+        "maintenanceRecovery": "chemistry sampling, flushing, fouling removal, cavitation-margin tests, seal service and pressure cycling",
+        "signatureChannels": ["chemical", "acoustic", "pressure", "thermal", "electromagnetic/ionic", "family-specific field signature"],
+        "failureChannels": ["cavitation", "electrolysis excursion", "fouling", "osmotic drift", "dissolved-gas release", "galvanic attack", "membrane or valve failure"]
+      },
+      "upgradeDrivers": ["higher ionic energy density", "cavitation-resistant field surfaces", "faster wet optical control", "cleaner working chemistry", "pressure-balanced structural precision", "improved membrane materials"],
+      "scaleBehavior": "Larger installations gain reservoir and thermal inertia but require sectional pressure isolation and fluid-transit delay compensation; distributed local controllers prevent one long hydraulic loop from setting response time."
+    },
+    {
+      "basis": "CRYOGENIC_AMMONIA_HALOCARBON",
+      "status": "DERIVED",
+      "machineryLanguage": "Superconductive cryogenic networks, phase-change storage/actuation, photonic timing, contraction-tolerant structure and vacuum-jacketed transfer systems.",
+      "response": {
+        "fieldActuation": "cold superconductive field lattices and phase-positioned resonant elements held inside narrow thermal geometry tolerances",
+        "structuralSupport": "contraction-compensating frames, bellows, flexures and cold-aligned supports",
+        "controlBandwidth": "photonic timing with cold electronics and cryofluid actuators",
+        "sensorLookahead": "optical clocks/interferometers isolated from thermal contraction noise and fluid-density drift",
+        "energyConditioning": "cold superconductive buses and phase-change stores with warm-side conversion isolated from precision field volumes",
+        "thermalRecovery": "latent-heat buffers, cryofluid circulation, staged heat rejection and protected cooldown/warmup sequences",
+        "maintenanceRecovery": "purity control, seal inspection, contraction alignment, frost/contamination removal and superconductive transition testing",
+        "signatureChannels": ["thermal gradient", "cryofluid acoustic", "photonic", "electromagnetic", "family-specific field signature"],
+        "failureChannels": ["superconductive transition", "warm contamination", "contraction misalignment", "seal failure", "phase-buffer exhaustion", "cryofluid instability"]
+      },
+      "upgradeDrivers": ["higher critical-field superconductors", "lower-loss cryogenic transfer", "better contraction metrology", "faster photonic timing", "larger latent-heat reserve", "more tolerant cold composites"],
+      "scaleBehavior": "Greater scale improves thermal reserve but multiplies contraction/alignment domains; mature systems divide large field structures into independently referenced cold sectors."
+    },
+    {
+      "basis": "GAS_GIANT_FLUIDIC_ELECTROSTATIC",
+      "status": "DERIVED",
+      "machineryLanguage": "Membranes, tension webs, pressure cells, buoyancy structures, charge-separated flows, electrostatic/ionic actuation and acoustic/fluidic control.",
+      "response": {
+        "fieldActuation": "charged skins, tensioned field membranes and ionized flow structures whose geometry is maintained by pressure and electrostatic bias",
+        "structuralSupport": "tension webs, pressure boundaries and distributed buoyant load paths rather than rigid terrestrial machinery foundations",
+        "controlBandwidth": "local electrostatic and acoustic/fluidic loops synchronized by distributed timing nodes",
+        "sensorLookahead": "field, gravity and route sensors corrected for density stratification, turbulence, membrane motion and charge environment",
+        "energyConditioning": "charge separation, pressure/chemical conversion and sealed high-field stores feeding distributed active surfaces",
+        "thermalRecovery": "convective exchange, phase cells, buoyancy-driven circulation and sacrificial heat/charge dump volumes",
+        "maintenanceRecovery": "membrane patching, tension tuning, pressure balancing, charge cleaning and resonance checks",
+        "signatureChannels": ["electrostatic", "ionic", "acoustic", "pressure", "thermal", "family-specific field signature"],
+        "failureChannels": ["membrane rupture", "pressure imbalance", "electrostatic discharge", "tension-web instability", "acoustic timing corruption", "turbulent control upset"]
+      },
+      "upgradeDrivers": ["stronger adaptive membranes", "higher charge density without breakdown", "faster local control", "better pressure metrology", "more stable electrostatic interfaces", "distributed structural redundancy"],
+      "scaleBehavior": "Large systems become webs of locally stabilized cells; increasing diameter without increasing local control density rapidly destroys geometric precision."
+    },
+    {
+      "basis": "BIOLOGICAL_SYMBIOTIC",
+      "status": "DERIVED",
+      "machineryLanguage": "Grown composite structures, metabolic/electrochemical power, vascular heat transport, neural/chemical control, field-bearing tissues, mineral inclusions and regenerative maintenance.",
+      "response": {
+        "fieldActuation": "distributed field-bearing tissues, mineralized active organs or symbiotic structures recruited in coordinated spatial patterns",
+        "structuralSupport": "grown load-bearing composites with active tension, remodeling and scar/damage compensation",
+        "controlBandwidth": "local neural ganglia, electrochemical signaling and fast specialist pathways rather than one central nervous controller",
+        "sensorLookahead": "family-specific sensing organs coupled to predictive cultivated computation; safety horizon is limited by both external sensor reach and internal neural/control latency",
+        "energyConditioning": "metabolic/electrochemical stores plus specialized conversion organs and high-output buffers",
+        "thermalRecovery": "vascular circulation, countercurrent exchange, thermal storage tissues and emergency perfusion rerouting",
+        "maintenanceRecovery": "feeding, surgery, grafting, microbiome/electrolyte management, regeneration, pathology control and recertification",
+        "signatureChannels": ["biological", "chemical", "thermal", "acoustic/neural", "electromagnetic/ionic", "family-specific field signature"],
+        "failureChannels": ["necrosis", "infection", "rejection", "electrolyte/hormone drift", "neural desynchronization", "scar interference", "vascular loss", "regenerative exhaustion"]
+      },
+      "upgradeDrivers": ["faster cultivated neural pathways", "higher-energy organ chemistry", "more stable field-bearing tissues", "better regenerative reserve", "segmented local control", "improved symbionts", "genetically stabilized geometry"],
+      "scaleBehavior": "Scale drives hierarchical segmentation: regional field organs, local ganglia, vascular isolation and independent recovery reserves replace linear enlargement of one organ."
+    },
+    {
+      "basis": "MINERAL_PIEZOELECTRIC_PHOTONIC",
+      "status": "DERIVED",
+      "machineryLanguage": "Prestressed crystal/ceramic bodies, piezoelectric conversion, photonic/phononic signaling, resonant domains, optical defect channels and annealing/regrowth service.",
+      "response": {
+        "fieldActuation": "phase-locked resonant crystal domains converting controlled strain, polarization and photonic state into the family-specific field operation",
+        "structuralSupport": "prestressed mineral frames in which load path and field reference may be the same physical lattice",
+        "controlBandwidth": "photonic and phononic control through defect-engineered channels with local resonant governors",
+        "sensorLookahead": "interferometric, resonant, polarization and strain-based sensors with exceptionally stable references but strong sensitivity to cracks and axis drift",
+        "energyConditioning": "piezoelectric/thermoelectric conversion, polarization stores and photonic distribution into resonant field domains",
+        "thermalRecovery": "conductive mineral heat paths, phase-stable sinks, radiative surfaces and controlled annealing cycles",
+        "maintenanceRecovery": "flaw mapping, preload restoration, axis calibration, optical cleaning, annealing and crystal regrowth",
+        "signatureChannels": ["optical", "phononic", "polarization", "strain", "thermal", "family-specific field signature"],
+        "failureChannels": ["crack growth", "domain inversion", "preload loss", "modal detuning", "optical defect contamination", "axis misregistration", "annealing failure"]
+      },
+      "upgradeDrivers": ["higher-purity crystals", "better defect engineering", "larger coherent domains", "stronger prestress materials", "lower-loss photonics", "faster modal control", "self-annealing structures"],
+      "scaleBehavior": "Large drives require hierarchical resonant domains and phase bridges; one monolithic crystal becomes less attractive as defect probability and modal density rise."
+    },
+    {
+      "basis": "FIELD_MEDIATED_POSTMATERIAL",
+      "status": "DERIVED",
+      "machineryLanguage": "Persistent field architecture, adaptive anchor matter, programmable boundaries, distributed metrology and state-authenticated control.",
+      "response": {
+        "fieldActuation": "directly configured persistent field volumes with adaptive anchor nodes rather than fixed conventional emitters wherever the mechanism permits",
+        "structuralSupport": "field-stiffened or adaptive geometry backed by material fallback structure and reference anchors",
+        "controlBandwidth": "distributed state-authenticated control with continuous tomography and local autonomous correction",
+        "sensorLookahead": "integrated field-state metrology extending through the same reference architecture used to construct the transit solution",
+        "energyConditioning": "high-density field reserves, reversible state conversion and distributed buffering with authenticated isolation",
+        "thermalRecovery": "reversible field storage, adaptive heat routing, matter-state buffers and safe material fallback dumps",
+        "maintenanceRecovery": "coherence restoration, state validation, reference repair, hostile-state cleansing, reserve replenishment and fallback reconstruction tests",
+        "signatureChannels": ["coherence/reference artifacts", "gravitational/Q/topological", "adaptive-matter transition", "residual field state"],
+        "failureChannels": ["coherence collapse", "reference loss", "state drift", "authorization corruption", "hostile state injection", "reserve depletion", "fallback reconstruction failure"]
+      },
+      "upgradeDrivers": ["higher coherence volume", "denser reference mesh", "faster tomography", "better reversible storage", "self-validating state control", "more capable fallback matter", "larger authenticated control domains"],
+      "scaleBehavior": "Scaling is dominated by reference/coherence volume and fallback reserve rather than machine count; large systems still require partitioned trust and independent recovery domains."
+    }
+  ],
+  "raceSpecializations": [
+    {
+      "race": "arnock",
+      "status": "MIXED",
+      "sourceRefs": [
+        "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
+        "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
+        "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+        "EXO_OPERATIVE_TECHNOLOGY_BASIS.md"
+      ],
+      "basisBinding": {
+        "value": "BIOLOGICAL_SYMBIOTIC",
+        "status": "DERIVED",
+        "reason": "Confirmed biological fabrication, cultivated neural computation and nonhuman biological machinery ancestry map most closely to the modern operative basis; the source does not itself use this registry identifier."
+      },
+      "overrides": {
+        "control": {"value": "cultivated neural control with confirmed vibration/flexible-interface pressure", "status": "DERIVED"},
+        "safetySensorEmbodiment": {"value": "family-specific sensing organs and cultivated predictive computation translated through vibration/neural state rather than human display assumptions", "status": "DERIVED"},
+        "maintenance": {"value": "feeding, chemistry control, grafting, isolation, regeneration and cultivated-controller pathology management", "status": "DERIVED"},
+        "humanInteroperability": {"value": "ADAPTER_REQUIRED, escalating to HOSTILE_WITHOUT_CONVERSION where chemistry, identity or living-system safety requires", "status": "DERIVED"}
+      },
+      "transitAssignment": {
+        "family": null,
+        "pathLevel": null,
+        "sharedTier": null,
+        "status": "UNRESOLVED",
+        "rule": "Do not infer an Ar'nock transit family from biological machinery ancestry. A caller-selected family produces a MIXED hypothetical implementation and must preserve that scenario provenance."
+      }
+    }
+  ],
+  "validationInvariants": [
+    "Apply family mathematics before technology-basis embodiment; a basis cannot change a metric drive into a fold drive or vice versa.",
+    "The same mathematical safety horizon must produce basis-specific sensor, control, power and recovery machinery rather than identical hardware with renamed nouns.",
+    "Every generated improvement must identify whether the limiting gain came from mathematics, field actuation, material science, structure, energy, navigation/sensing, control bandwidth, drive scale/distribution, recovery, or infrastructure.",
+    "A higher tier may increase range only when the resolver can point to the changed solvable term and the physical technology that makes that term achievable.",
+    "Race-specific overrides require source provenance and may not silently assign an unresolved transit family.",
+    "Technology-basis signatures and failures compose with family signatures and failures; neither layer replaces the other.",
+    "Safety lookahead and abort authority must remain finite and imperfect even at high maturity.",
+    "Numerical coefficients without recovered authority remain PROPOSED calibration values, never setting-wide constants."
+  ]
+}
