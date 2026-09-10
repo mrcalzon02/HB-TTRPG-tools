@@ -114,5 +114,13 @@ if (!legacyResult.ok) fail('Legacy clone compatibility normalization should rema
 if (legacyResult.envelope.provenance.generation !== null || legacyResult.envelope.provenance.lineageComplete !== false) fail('Legacy clone ancestry was fabricated instead of being marked incomplete.');
 if (!legacyResult.diagnostics.some(item => item.code === 'provenance-lineage-incomplete')) fail('Legacy incomplete ancestry did not emit an actionable warning.');
 
+const revisedLegacy = Kernel.createEnvelope({ ...clone(legacyResult.envelope.data), name: 'Legacy Branch Revised' }, {
+  existingEnvelope: legacyResult.envelope,
+  editorId: 'floating-island-editor',
+  moduleId: 'floating-island-generator'
+});
+if (revisedLegacy.provenance.generation !== null || revisedLegacy.provenance.lineageComplete !== false) fail('Same-profile legacy revision fabricated a root generation.');
+if (revisedLegacy.provenance.clonedFromProfileId !== legacyResult.envelope.provenance.clonedFromProfileId) fail('Same-profile legacy revision lost immediate clone evidence.');
+
 console.log('Generational provenance validation passed.');
-console.log('Verified G0 -> G1 -> G2 lineage, same-profile revision preservation, exact source revisions, canonical round-trip, local draft persistence, malformed ancestry detection, and non-fabricating legacy compatibility.');
+console.log('Verified G0 -> G1 -> G2 lineage, same-profile revision preservation, exact source revisions, canonical round-trip, local draft persistence, malformed ancestry detection, and non-fabricating legacy compatibility across later revisions.');
