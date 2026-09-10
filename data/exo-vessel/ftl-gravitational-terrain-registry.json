@@ -1,0 +1,254 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "registryType": "blackLightFtlGravitationalTerrainRegistry",
+  "registryVersion": "1.0.0",
+  "authorityDocument": "docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md",
+  "propulsionTransitAuthority": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+  "mathematicalReference": "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+  "schema": "data/schemas/exo-vessel-ftl-gravitational-terrain-registry.schema.json",
+  "premise": {
+    "status": "CONFIRMED",
+    "sourceScope": "author-directive",
+    "adoptedDate": "2026-09-09",
+    "statement": "Dark matter is partly the projected cause and partly the projected effect of higher-dimensional gravitational shear structure; those shear bands form the underlying universal terrain used by advanced Black Light transit mathematics.",
+    "safeguards": [
+      "Do not equate the premise with one exclusive real-world dark-matter particle model.",
+      "Do not claim that all dark matter is exclusively higher-dimensional shear.",
+      "Do not treat gravitational lensing as an illusion; projected terrain produces real 3+1D gravitational effects.",
+      "Do not treat terrain as static.",
+      "Do not make every transit family interact with terrain identically.",
+      "Do not infer chronology violation from higher-dimensional terrain."
+    ]
+  },
+  "sharedModel": {
+    "modelId": "blacklight.cosmology.dark-matter-shear-terrain.v1",
+    "status": "MIXED",
+    "higherDimensionalSpace": "M_N",
+    "ordinarySpacetime": "M_4",
+    "terrainField": "S_AB(X,t)",
+    "projectionExpression": "T_DM_eff_munu=P4[S_AB,G_AB]",
+    "effectiveFieldExpression": "G_munu+Lambda*g_munu=(8*pi*G/c^4)*(T_visible_munu+T_DM_eff_munu)",
+    "backreactionExpression": "S_AB=S0_AB+kappa_v*B_AB[T_visible]+kappa_g*C_AB[g_munu]+deltaS_AB",
+    "observableMap": "O_grav=L[g_munu,dg,d2g]",
+    "terrainState": [
+      "rho_DM_eff",
+      "grad_Phi_eff",
+      "Hessian_Phi_eff",
+      "S_AB",
+      "grad_S_AB",
+      "dS_AB_dt",
+      "curvatureTopologyHazard",
+      "familyAccessibility"
+    ],
+    "terrainFeatures": [
+      "RIDGE",
+      "CHANNEL",
+      "VALLEY",
+      "SADDLE",
+      "KNOT",
+      "SHEAR_BAND",
+      "VOID_BASIN"
+    ],
+    "uncalibratedTerms": [
+      "kappa_v",
+      "kappa_g",
+      "projection operator P4",
+      "backreaction operators B_AB and C_AB",
+      "terrain spectra",
+      "exact active dimensional count",
+      "universal route weights"
+    ]
+  },
+  "observationModel": {
+    "status": "DERIVED",
+    "observationVector": [
+      "lensingShear",
+      "lensingConvergence",
+      "residualAcceleration",
+      "clockTimingResidual",
+      "gradiometry",
+      "beaconOrbitalResidual",
+      "familySpecificExoticObservations"
+    ],
+    "inverseExpression": "S_hat=argmin_S[(y-F(S))^T W (y-F(S))+lambda_R*R(S)]",
+    "covarianceExpression": "Sigma_terrain~=(J_F^T W J_F+lambda_R H_R)^-1",
+    "epochRule": "Every route solution using terrain inference MUST retain the terrain model epoch and uncertainty/covariance state."
+  },
+  "sharedRouteModel": {
+    "status": "DERIVED",
+    "ordinarySeparation": "D0",
+    "effectiveRouteExpression": "D_f=inf_Gamma integral_Gamma w_f(Terrain,Theta_f,VesselState) ds",
+    "routeGainExpression": "chi_f=D0/D_f",
+    "burdenExpression": "B_f(Gamma)=integral_Gamma[C_base_f+C_shear_f(S)+C_grad_f(gradS)+C_topo_f(K)+C_unc_f(Sigma_terrain)] ds",
+    "rule": "For discontinuous families D_f is a generalized transition cost, not necessarily traversed metric length. distanceModelType must remain explicit."
+  },
+  "pathTerrainProgression": [
+    {
+      "pathLevel": "p0",
+      "capability": "local scalar gravity/lensing approximation with a fixed surveyed solution",
+      "upgradeDrivers": ["MATHEMATICS", "STRUCTURE", "ENERGY"],
+      "terrainUpgradeDrivers": ["OBSERVATION_DEPTH"],
+      "effect": "narrow certified route or geometry; higher-dimensional terrain largely unresolved"
+    },
+    {
+      "pathLevel": "p1",
+      "capability": "local gradient vector and first shear estimate",
+      "upgradeDrivers": ["NAVIGATION", "FIELD_CONTROL", "CONTROL_BANDWIDTH"],
+      "terrainUpgradeDrivers": ["OBSERVATION_DEPTH", "UNCERTAINTY_REDUCTION"],
+      "effect": "active adherence to one local terrain feature"
+    },
+    {
+      "pathLevel": "p2",
+      "capability": "closed 3D volumetric terrain reconstruction around the complete payload",
+      "upgradeDrivers": ["MATHEMATICS", "ACTIVE_MATERIALS", "STRUCTURE", "DRIVE_SCALE_DISTRIBUTION"],
+      "terrainUpgradeDrivers": ["INVERSE_MODEL_QUALITY", "UNCERTAINTY_REDUCTION"],
+      "effect": "whole-vessel certification against local terrain"
+    },
+    {
+      "pathLevel": "p3",
+      "capability": "time-dependent terrain prediction beyond immediate sensor volume",
+      "upgradeDrivers": ["MATHEMATICS", "NAVIGATION", "CONTROL_BANDWIDTH", "ENERGY"],
+      "terrainUpgradeDrivers": ["TEMPORAL_FORECAST", "INVERSE_MODEL_QUALITY"],
+      "effect": "interstellar-equivalent solutions can use predicted rather than static terrain"
+    },
+    {
+      "pathLevel": "p4",
+      "capability": "multi-feature and multisystem terrain graph with dynamic rerouting",
+      "upgradeDrivers": ["MATHEMATICS", "NAVIGATION", "DRIVE_SCALE_DISTRIBUTION", "CONTROL_BANDWIDTH"],
+      "terrainUpgradeDrivers": ["ROUTE_OPTIMIZATION", "TEMPORAL_FORECAST"],
+      "effect": "routine operation through heterogeneous and disturbed terrain"
+    },
+    {
+      "pathLevel": "p5",
+      "capability": "inverse reconstruction of weakly observed higher-dimensional terrain from lensing, residual gravity, and historical route data",
+      "upgradeDrivers": ["MATHEMATICS", "NAVIGATION", "FIELD_CONTROL", "ENERGY"],
+      "terrainUpgradeDrivers": ["DIMENSIONAL_RESOLUTION", "INVERSE_MODEL_QUALITY", "ROUTE_OPTIMIZATION", "UNCERTAINTY_REDUCTION"],
+      "effect": "hidden ridges/channels become usable planning inputs; range can increase without proportionate power increase"
+    },
+    {
+      "pathLevel": "p6",
+      "capability": "continuously updated self-consistent higher-dimensional terrain including projection, backreaction, and drive disturbance",
+      "upgradeDrivers": ["MATHEMATICS", "FIELD_CONTROL", "ACTIVE_MATERIALS", "CONTROL_BANDWIDTH", "RECOVERY"],
+      "terrainUpgradeDrivers": ["DIMENSIONAL_RESOLUTION", "TERRAIN_DISTURBANCE_COMPENSATION", "TEMPORAL_FORECAST", "UNCERTAINTY_REDUCTION"],
+      "effect": "real-time route and field re-solution, including transient channels and self-created terrain distortion"
+    }
+  ],
+  "terrainUpgradeDrivers": [
+    "OBSERVATION_DEPTH",
+    "INVERSE_MODEL_QUALITY",
+    "TEMPORAL_FORECAST",
+    "DIMENSIONAL_RESOLUTION",
+    "ROUTE_OPTIMIZATION",
+    "FIELD_TERRAIN_COUPLING",
+    "TERRAIN_DISTURBANCE_COMPENSATION",
+    "UNCERTAINTY_REDUCTION"
+  ],
+  "familyCouplings": [
+    {
+      "family": "metric-envelope",
+      "status": "DERIVED",
+      "terrainRole": "external/background metric burden and route optimizer",
+      "expression": "g_eff=g_visible+g_DM+h_drive",
+      "routeEffect": "favorable shear channels reduce additional drive deformation; ridges increase gradient/horizon/energy burden",
+      "dominantTerrainDrivers": ["ROUTE_OPTIMIZATION", "TEMPORAL_FORECAST", "FIELD_TERRAIN_COUPLING", "TERRAIN_DISTURBANCE_COMPENSATION"]
+    },
+    {
+      "family": "gravitic-plane",
+      "status": "DERIVED",
+      "terrainRole": "primary navigable gravitational terrain",
+      "expression": "Phi_eff=Phi_visible+Phi_DM_eff; Gamma*=argmin integral[w0+w1|gradPhi_eff|+w2|H(Phi_eff)|+w3H_R(S)+w4C_switch]ds",
+      "routeEffect": "skimmer follows favorable projected/higher-dimensional gravitational structures",
+      "dominantTerrainDrivers": ["OBSERVATION_DEPTH", "INVERSE_MODEL_QUALITY", "TEMPORAL_FORECAST", "ROUTE_OPTIMIZATION"]
+    },
+    {
+      "family": "slipstream-shear",
+      "status": "DERIVED",
+      "terrainRole": "large-scale gravitational terrain couples into Q-boundary shear/weather",
+      "expression": "S_Q=S_Q0+alpha_Q*C_Q[S_AB]",
+      "routeEffect": "terrain can steer, strengthen, fork, or destabilize usable Q-shear bands",
+      "dominantTerrainDrivers": ["INVERSE_MODEL_QUALITY", "TEMPORAL_FORECAST", "FIELD_TERRAIN_COUPLING"]
+    },
+    {
+      "family": "q-lattice",
+      "status": "DERIVED",
+      "terrainRole": "modifies edge cost, phase stability, address persistence, and epoch validity",
+      "expression": "C_Q(pi)=sum[w_d*l_ij+w_phi*e_phi+w_tau*e_tau+w_T*P_T(S_ij)+w_o*P_occ+w_s*P_state]",
+      "routeEffect": "route solver prefers lattice paths stable under current/predicted terrain",
+      "dominantTerrainDrivers": ["TEMPORAL_FORECAST", "ROUTE_OPTIMIZATION", "UNCERTAINTY_REDUCTION"]
+    },
+    {
+      "family": "n-manifold",
+      "status": "DERIVED",
+      "terrainRole": "the terrain is part of the actual N-dimensional transit metric",
+      "expression": "Gamma_N*=argmin integral sqrt(G_AB(S)dX^A dX^B)",
+      "routeEffect": "drive finds higher-dimensional valleys, saddles, and valid return maps",
+      "dominantTerrainDrivers": ["DIMENSIONAL_RESOLUTION", "INVERSE_MODEL_QUALITY", "ROUTE_OPTIMIZATION", "TEMPORAL_FORECAST"]
+    },
+    {
+      "family": "fold-jump",
+      "status": "MIXED",
+      "terrainRole": "controls adjacency burden and endpoint compatibility",
+      "expression": "B_F=K_F*M^alpha*V^beta*(1+lambda_s*DeltaS^2+lambda_k*DeltaK^2+lambda_u*U_endpoint)",
+      "routeEffect": "terrain-compatible endpoints require less corrective topological/field work",
+      "dominantTerrainDrivers": ["INVERSE_MODEL_QUALITY", "FIELD_TERRAIN_COUPLING", "UNCERTAINTY_REDUCTION"],
+      "safeguard": "Toroidal control-volume geometry remains DERIVED and is not a confirmed universal T^3 topology."
+    },
+    {
+      "family": "wormhole-gate",
+      "status": "DERIVED",
+      "terrainRole": "anchor siting and throat-support burden",
+      "expression": "B_G=B_throat*C_anchor(S_A,S_B)*C_sync*C_flow",
+      "routeEffect": "persistent saddles/knots/low-drift terrain can improve anchor stability and reduce support burden",
+      "dominantTerrainDrivers": ["OBSERVATION_DEPTH", "ROUTE_OPTIMIZATION", "TEMPORAL_FORECAST", "FIELD_TERRAIN_COUPLING"]
+    },
+    {
+      "family": "phase-displacement",
+      "status": "DERIVED",
+      "terrainRole": "reference-state stability and destination compatibility drift",
+      "expression": "J_P=w_s*D_B^2+w_o*P_occupation+w_r*P_reference(S)+w_c*P_conservation+w_i*P_identity",
+      "routeEffect": "references embedded in rapidly evolving terrain lose validity more quickly",
+      "dominantTerrainDrivers": ["TEMPORAL_FORECAST", "UNCERTAINTY_REDUCTION", "INVERSE_MODEL_QUALITY"]
+    },
+    {
+      "family": "inertial-torch",
+      "status": "DERIVED",
+      "terrainRole": "ordinary trajectory/navigation environment only",
+      "expression": "D u^mu/dtau=a_thrust^mu under g_eff including projected dark-matter terrain",
+      "routeEffect": "better terrain maps improve causal navigation/hazard prediction but do not create FTL route gain",
+      "dominantTerrainDrivers": ["OBSERVATION_DEPTH", "TEMPORAL_FORECAST", "UNCERTAINTY_REDUCTION"]
+    }
+  ],
+  "solutionCertificateExtension": {
+    "requiredWhenMathematicalDetailRequested": true,
+    "fields": [
+      "modelId",
+      "epoch",
+      "ordinaryGravityModel",
+      "effectiveDarkMatterModel",
+      "higherDimensionalShearModel",
+      "terrainCovariance",
+      "observations",
+      "inferenceMethod",
+      "routeFeatures",
+      "driveInducedPerturbation",
+      "provenance"
+    ]
+  },
+  "navigationAlarms": [
+    "TERRAIN_EPOCH_EXPIRED",
+    "LENSING_MODEL_RESIDUAL",
+    "RIDGE_FORECAST_DIVERGENCE",
+    "DIMENSIONAL_ALIAS",
+    "SELF_PERTURBATION_UNBOUNDED",
+    "ANCHOR_DRIFT",
+    "COVARIANCE_LIMIT"
+  ],
+  "generatorRules": [
+    "All true FTL families consume the shared terrain model as an environmental/reference input even when terrain is not their primary operator.",
+    "The inertial-torch family consumes the effective gravitational terrain for navigation only and receives no FTL route-gain term.",
+    "Terrain state must retain model epoch and uncertainty; stale but numerically precise solutions are invalid.",
+    "Higher Path capability may result from improved terrain mathematics, field coupling, materials, structure, navigation, control, recovery, or energy efficiency rather than gross power alone.",
+    "Family-specific equations remain authoritative over the shared terrain layer when defining what the drive actually does.",
+    "Uncalibrated terrain constants remain PROPOSED and must not be emitted as recovered setting constants."
+  ]
+}
