@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-family-basis-embodiment.schema.json",
+  "title": "Black Light FTL Family by Technology Basis Embodiment Registry",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "authority", "families"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlFamilyBasisEmbodimentRegistry"},
+    "registryVersion": {"type": "string"},
+    "authority": {
+      "type": "object",
+      "required": ["primary", "technologyBasis", "legacyDesignSource", "canonRule"],
+      "properties": {
+        "primary": {"type": "string"},
+        "technologyBasis": {"type": "string"},
+        "legacyDesignSource": {"type": "object"},
+        "canonRule": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "families": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["family", "operator", "status", "basisEmbodiments"],
+        "properties": {
+          "family": {"type": "string"},
+          "operator": {"type": "string"},
+          "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED"]},
+          "basisEmbodiments": {
+            "type": "array",
+            "minItems": 7,
+            "items": {
+              "type": "object",
+              "required": ["basis", "fieldMachine", "navigationControl", "maintenance", "signature", "failure", "scaleRule", "upgradeVector", "status"],
+              "properties": {
+                "basis": {"type": "string"},
+                "fieldMachine": {"type": "string"},
+                "navigationControl": {"type": "string"},
+                "maintenance": {"type": "string"},
+                "signature": {"type": "string"},
+                "failure": {"type": "string"},
+                "scaleRule": {"type": "string"},
+                "upgradeVector": {"type": "array", "items": {"type": "string"}},
+                "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED"]}
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
