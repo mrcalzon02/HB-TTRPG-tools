@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-propulsion-transit.schema.json",
+  "title": "Black Light EXO Vessel Propulsion and Transit Installation",
+  "description": "Canon-safe record for conventional propulsion context and Black Light transit/FTL installation resolution. Conventional propulsion band and transit construction maturity are separate axes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordType","schemaVersion","authoritySnapshot","supplementMode","identity","vessel","conventionalPropulsion","transit","machineChain","routes","navigation","operations","maintenance","signatures","failureModes","infrastructure","validation","provenance"],
+  "properties": {
+    "recordType": {"const":"exoVesselPropulsionTransitInstallation"},
+    "schemaVersion": {"const":"1.0.0"},
+    "authoritySnapshot": {"$ref":"#/$defs/authoritySnapshot"},
+    "supplementMode": {"enum":["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"]},
+    "identity": {
+      "type":"object","additionalProperties":false,
+      "required":["speciesId","organizationId","manufacturerId","technologyBasis","hybridBasis","canonStatus"],
+      "properties":{
+        "speciesId":{"type":["string","null"]},
+        "organizationId":{"type":["string","null"]},
+        "manufacturerId":{"type":["string","null"]},
+        "technologyBasis":{"$ref":"#/$defs/basisKey"},
+        "hybridBasis":{"type":"array","uniqueItems":true,"items":{"$ref":"#/$defs/basisKey"}},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "vessel": {
+      "type":"object","additionalProperties":false,
+      "required":["scaleClass","massKg","protectedVolumeM3","mission","hullState"],
+      "properties":{
+        "scaleClass":{"enum":["UNCREWED_PROBE","FIGHTER_STRIKE_CRAFT","SHUTTLE_COURIER","CORVETTE","FRIGATE_MERCHANT","CRUISER","CAPITAL_CARRIER","GATEWORK_MEGASTRUCTURE","OTHER"]},
+        "massKg":{"type":["number","null"],"exclusiveMinimum":0},
+        "protectedVolumeM3":{"type":["number","null"],"exclusiveMinimum":0},
+        "mission":{"type":["string","null"]},
+        "hullState":{"type":["string","null"]}
+      }
+    },
+    "conventionalPropulsion": {
+      "type":"object","additionalProperties":false,
+      "required":["technologyBand","family","exhaustVelocityMps","baseStrategicDeltaVMps","source"],
+      "properties":{
+        "technologyBand":{"enum":["P0","P1","P2","P3","P4","P5","P6",null]},
+        "family":{"type":["string","null"]},
+        "exhaustVelocityMps":{"type":["number","null"],"minimum":0},
+        "baseStrategicDeltaVMps":{"type":["number","null"],"minimum":0},
+        "source":{"type":"string","minLength":1}
+      }
+    },
+    "transit": {
+      "type":"object","additionalProperties":false,
+      "required":["family","trueFtl","constructionMaturity","pathImplementation","infrastructureClass","energyArchitecture","canonStatus"],
+      "properties":{
+        "family":{"$ref":"#/$defs/transitFamily"},
+        "trueFtl":{"type":["boolean","null"]},
+        "constructionMaturity":{"enum":["P0","P1","P2","P3","P4","P5","P6",null]},
+        "pathImplementation":{"type":["string","null"]},
+        "infrastructureClass":{"$ref":"#/$defs/infrastructureClass"},
+        "energyArchitecture":{"type":["string","null"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "machineChain": {
+      "type":"object","additionalProperties":false,
+      "required":["energyConditioning","primeMover","fieldFormation","transitControl","navigationSensing","terminationRecovery","wholeEffectCoverage","backbone"],
+      "properties":{
+        "energyConditioning":{"$ref":"#/$defs/machineBlock"},
+        "primeMover":{"$ref":"#/$defs/machineBlock"},
+        "fieldFormation":{"$ref":"#/$defs/machineBlock"},
+        "transitControl":{"$ref":"#/$defs/machineBlock"},
+        "navigationSensing":{"$ref":"#/$defs/machineBlock"},
+        "terminationRecovery":{"$ref":"#/$defs/machineBlock"},
+        "wholeEffectCoverage":{"$ref":"#/$defs/machineBlock"},
+        "backbone":{"$ref":"#/$defs/machineBlock"}
+      }
+    },
+    "routes": {
+      "type":"object","additionalProperties":false,
+      "required":["structural","power","cooling","data","atmosphere","access"],
+      "properties":{
+        "structural":{"$ref":"#/$defs/route"},
+        "power":{"$ref":"#/$defs/route"},
+        "cooling":{"$ref":"#/$defs/route"},
+        "data":{"$ref":"#/$defs/route"},
+        "atmosphere":{"$ref":"#/$defs/route"},
+        "access":{"$ref":"#/$defs/route"}
+      }
+    },
+    "navigation": {
+      "type":"object","additionalProperties":false,
+      "required":["referenceModel","requiredInputs","solutionStatus","uncertainty","canonStatus"],
+      "properties":{
+        "referenceModel":{"type":["string","null"]},
+        "requiredInputs":{"type":"array","uniqueItems":true,"items":{"type":"string"}},
+        "solutionStatus":{"enum":["UNRESOLVED","UNSOLVED","SOLUTION_CANDIDATE","VALIDATED_PRECOMMIT","COMMITTED","RECOVERY","REQUIRES_CANON_AUTHORITY"]},
+        "uncertainty":{"type":["object","null"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "operations": {
+      "type":"object","additionalProperties":false,
+      "required":["operatorModel","operatingState","spool","commitBoundary","abortState","activeTransit","termination","postTransit"],
+      "properties":{
+        "operatorModel":{"type":["string","null"]},
+        "operatingState":{"enum":["DORMANT","CONDITIONING","CALIBRATING","SPOOLING","PRECOMMIT","ACTIVE","TERMINATING","RECOVERING","FAULTED","ISOLATED"]},
+        "spool":{"$ref":"#/$defs/procedure"},
+        "commitBoundary":{"$ref":"#/$defs/procedure"},
+        "abortState":{"enum":["SAFE_ABORT","DEGRADED_ABORT","COMMIT_BOUNDARY","NO_ABORT","RECOVERY_ONLY"]},
+        "activeTransit":{"$ref":"#/$defs/procedure"},
+        "termination":{"$ref":"#/$defs/procedure"},
+        "postTransit":{"$ref":"#/$defs/procedure"}
+      }
+    },
+    "maintenance": {
+      "type":"object","additionalProperties":false,
+      "required":["inspectionTriggers","calibrationReferences","consumables","lifeLimitedElements","degradationIndicators","recertificationTriggers","emergencyIsolation","depotOnlyTasks","serviceEnvironment","canonStatus"],
+      "properties":{
+        "inspectionTriggers":{"type":"array","items":{"type":"string"}},
+        "calibrationReferences":{"type":"array","items":{"type":"string"}},
+        "consumables":{"type":"array","items":{"type":"string"}},
+        "lifeLimitedElements":{"type":"array","items":{"type":"string"}},
+        "degradationIndicators":{"type":"array","items":{"type":"string"}},
+        "recertificationTriggers":{"type":"array","items":{"type":"string"}},
+        "emergencyIsolation":{"type":["string","null"]},
+        "depotOnlyTasks":{"type":"array","items":{"type":"string"}},
+        "serviceEnvironment":{"type":["string","null"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "signatures":{"type":"array","items":{"$ref":"#/$defs/signature"}},
+    "failureModes":{"type":"array","items":{"$ref":"#/$defs/failureMode"}},
+    "infrastructure": {
+      "type":"object","additionalProperties":false,
+      "required":["class","dependencies","routeAuthority","throughputLimits","serviceDependencies","politicalControlNotes","canonStatus"],
+      "properties":{
+        "class":{"$ref":"#/$defs/infrastructureClass"},
+        "dependencies":{"type":"array","items":{"type":"string"}},
+        "routeAuthority":{"type":["string","null"]},
+        "throughputLimits":{"type":["string","null"]},
+        "serviceDependencies":{"type":"array","items":{"type":"string"}},
+        "politicalControlNotes":{"type":["string","null"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "validation": {
+      "type":"object","additionalProperties":false,
+      "required":["valid","sourceStatus","warnings","unresolved","chronologyAuthorized","axisSeparationVerified","machineChainComplete","routesComplete"],
+      "properties":{
+        "valid":{"type":"boolean"},
+        "sourceStatus":{"$ref":"#/$defs/canonStatus"},
+        "warnings":{"type":"array","items":{"type":"string"}},
+        "unresolved":{"type":"array","items":{"type":"string"}},
+        "chronologyAuthorized":{"type":"boolean"},
+        "axisSeparationVerified":{"const":true},
+        "machineChainComplete":{"type":"boolean"},
+        "routesComplete":{"type":"boolean"}
+      }
+    },
+    "provenance":{"type":"array","items":{"$ref":"#/$defs/provenance"}}
+  },
+  "$defs": {
+    "canonStatus":{"enum":["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"]},
+    "basisKey":{"enum":["TERRESTRIAL_ELECTROMECHANICAL","AQUATIC_ELECTROCHEMICAL_HYDRAULIC","CRYOGENIC_AMMONIA_HALOCARBON","GAS_GIANT_FLUIDIC_ELECTROSTATIC","BIOLOGICAL_SYMBIOTIC","MINERAL_PIEZOELECTRIC_PHOTONIC","FIELD_MEDIATED_POSTMATERIAL"]},
+    "transitFamily":{"enum":["metric-envelope","gravitic-plane","slipstream-shear","q-lattice","n-manifold","fold-jump","wormhole-gate","phase-displacement","inertial-torch",null]},
+    "infrastructureClass":{"enum":["SELF_CONTAINED_SHIP_DRIVE","BEACON_ASSISTED_NAVIGATION","PREPARED_TRANSIT_CORRIDOR","PAIRED_MOBILE_ORBITAL_GATES","FIXED_STELLAR_GATEWORKS",null]},
+    "authoritySnapshot": {
+      "type":"object","additionalProperties":false,
+      "required":["repository","branch","sourceCommit","authorityDocument","registryVersion","generatorId","generatorVersion","seed"],
+      "properties":{
+        "repository":{"const":"mrcalzon02/HB-TTRPG-tools"},
+        "branch":{"const":"main"},
+        "sourceCommit":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+        "authorityDocument":{"const":"docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md"},
+        "registryVersion":{"const":"1.0.0"},
+        "generatorId":{"type":"string","minLength":1},
+        "generatorVersion":{"type":"string","minLength":1},
+        "seed":{"type":["string","null"]}
+      }
+    },
+    "machineBlock": {
+      "type":"object","additionalProperties":false,
+      "required":["endEffect","embodiment","carrier","controlMethod","serviceMethod","dependencies","failureModes","canonStatus"],
+      "properties":{
+        "endEffect":{"type":"string","minLength":1},
+        "embodiment":{"type":["string","null"]},
+        "carrier":{"type":["string","null"]},
+        "controlMethod":{"type":["string","null"]},
+        "serviceMethod":{"type":["string","null"]},
+        "dependencies":{"type":"array","items":{"type":"string"}},
+        "failureModes":{"type":"array","items":{"type":"string"}},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "route": {
+      "type":"object","additionalProperties":false,
+      "required":["endEffect","carrier","interface","tolerance","interoperability","canonStatus"],
+      "properties":{
+        "endEffect":{"type":"string","minLength":1},
+        "carrier":{"type":["string","null"]},
+        "interface":{"type":["string","null"]},
+        "tolerance":{"type":["string","null"]},
+        "interoperability":{"enum":["DIRECT","ADAPTER_REQUIRED","HOSTILE_WITHOUT_CONVERSION","UNRESOLVED"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "procedure": {
+      "type":"object","additionalProperties":false,
+      "required":["objective","prerequisites","checks","prohibitions","canonStatus"],
+      "properties":{
+        "objective":{"type":"string","minLength":1},
+        "prerequisites":{"type":"array","items":{"type":"string"}},
+        "checks":{"type":"array","items":{"type":"string"}},
+        "prohibitions":{"type":"array","items":{"type":"string"}},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "signature": {
+      "type":"object","additionalProperties":false,
+      "required":["phase","channel","strengthClass","geometry","duration","detectability","persistence","canonStatus"],
+      "properties":{
+        "phase":{"enum":["PRE_ENTRY_SPOOL","ACTIVE_TRANSIT","EMERGENCE_TERMINATION","AFTERMATH_RECOVERY"]},
+        "channel":{"enum":["ELECTROMAGNETIC","THERMAL","OPTICAL","GRAVITATIONAL","NEUTRINO","Q_EXOTIC","ACOUSTIC_STRUCTURAL","CHEMICAL","BIOLOGICAL"]},
+        "strengthClass":{"type":["string","null"]},
+        "geometry":{"type":["string","null"]},
+        "duration":{"type":["string","null"]},
+        "detectability":{"type":["string","null"]},
+        "persistence":{"enum":["NONE","TRANSIENT","RESIDUAL","UNRESOLVED"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "failureMode": {
+      "type":"object","additionalProperties":false,
+      "required":["id","layer","trigger","observableEffects","consequences","abortInteraction","maintenanceResponse","canonStatus"],
+      "properties":{
+        "id":{"type":"string","minLength":1},
+        "layer":{"enum":["MECHANISM","TECHNOLOGY_BASIS","INTEGRATION","INFRASTRUCTURE","NAVIGATION","POWER","CONTROL","MAINTENANCE"]},
+        "trigger":{"type":["string","null"]},
+        "observableEffects":{"type":"array","items":{"type":"string"}},
+        "consequences":{"type":"array","items":{"type":"string"}},
+        "abortInteraction":{"type":["string","null"]},
+        "maintenanceResponse":{"type":["string","null"]},
+        "canonStatus":{"$ref":"#/$defs/canonStatus"}
+      }
+    },
+    "provenance": {
+      "type":"object","additionalProperties":false,
+      "required":["field","status","sourcePath","sourceRevision","resolverRule","parentInputs","notes"],
+      "properties":{
+        "field":{"type":"string","minLength":1},
+        "status":{"$ref":"#/$defs/canonStatus"},
+        "sourcePath":{"type":"string","minLength":1},
+        "sourceRevision":{"type":["string","null"]},
+        "resolverRule":{"type":["string","null"]},
+        "parentInputs":{"type":"array","items":{"type":"string"}},
+        "notes":{"type":"string"}
+      }
+    }
+  }
+}
