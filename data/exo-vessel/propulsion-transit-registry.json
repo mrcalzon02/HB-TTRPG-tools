@@ -1,23 +1,29 @@
 {
   "projectId": "blacklight-exo-vessel-design-system",
   "registryType": "exoVesselPropulsionTransitRegistry",
-  "registryVersion": "1.1.1",
+  "registryVersion": "1.2.0",
   "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
   "reconciliationBaseCommit": "2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf",
   "authoritySources": [
     {"path":"docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md","role":"recovered-ftl-archive","status":"CONFIRMED"},
-    {"path":"docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md","role":"historical-operative-technology-governing-supplement","status":"UNRESOLVED","note":"Referenced by legacy integration material but absent from the inspected current main tree; content attributable only to this missing path must not be treated as confirmed."},
+    {"path":"EXO_OPERATIVE_TECHNOLOGY_BASIS.md","role":"operative-technology-governing-supplement","status":"CONFIRMED","note":"Recovered at repository root; this corrects the obsolete docs/blacklight path formerly retained in the registry."},
     {"path":"EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md","role":"vessel-engineering-governing-guide","status":"CONFIRMED"},
     {"path":"data/exo-vessel/technology-basis-registry.json","role":"technology-basis-machine-registry","status":"CONFIRMED"},
     {"path":"data/exo-vessel/engineering-registry.json","role":"conventional-propulsion-registry","status":"CONFIRMED"},
     {"path":"blacklight-exo-ftl-physics-definitions.js","role":"live-shared-transit-capability-runtime","status":"CONFIRMED"},
     {"path":"blacklight-exo-ftl-path-level-core.js","role":"live-family-path-level-runtime","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-path-level-paths-physical.js","role":"live-physical-path-performance-runtime","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-path-level-paths-dimensional.js","role":"live-dimensional-path-performance-runtime","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-path-level-paths-discrete.js","role":"live-discrete-path-performance-runtime","status":"CONFIRMED"},
     {"path":"blacklight-exo-ftl-path-level-runtime.js","role":"live-path-capability-coupling-runtime","status":"CONFIRMED"},
     {"path":"blacklight-exo-ftl-path-level-controller.js","role":"live-path-precedence-resolver","status":"CONFIRMED"},
     {"path":"BLACKLIGHT_EXO_SOURCE_AUTHORITY.md","role":"cross-domain-provenance-policy","status":"CONFIRMED"},
     {"path":"data/blacklight-continuum/wiki/foundation-lore.json","role":"race-and-setting-source","status":"CONFIRMED"},
     {"path":"docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md","role":"derived-embodiment-workshop","status":"DERIVED"},
-    {"path":"docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md","role":"subordinate-practical-engineering-manual","status":"MIXED"}
+    {"path":"docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md","role":"subordinate-practical-engineering-manual","status":"MIXED"},
+    {"path":"docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md","role":"subordinate-mathematical-transit-contract","status":"MIXED"},
+    {"path":"data/exo-vessel/ftl-mathematical-model-registry.json","role":"machine-readable-mathematical-model-and-path-upgrade-registry","status":"MIXED"},
+    {"path":"data/schemas/exo-vessel-ftl-mathematical-model-registry.schema.json","role":"mathematical-model-registry-validation-contract","status":"DERIVED"}
   ],
   "canonLabels": ["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"],
   "supplementModes": ["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"],
@@ -32,7 +38,9 @@
       "source": "blacklight-exo-ftl-path-level-core.js",
       "values": ["P0","P1","P2","P3","P4","P5","P6"],
       "labels": ["Monumental Precursor","Industrial Demonstrator","Fixed Operational System","Capital-Scale Mobile Prototype","Fleet Operational Standard","Compact Strategic System","Mature Path Apex"],
-      "meaning": "family-specific transit Path maturity/implementation level; governs installation scale, path-specific performance envelope, charge/recovery behavior, reliability, and construction maturity"
+      "meaning": "family-specific transit Path maturity/implementation level; governs installation scale, path-specific performance envelope, charge/recovery behavior, reliability, and construction maturity",
+      "mathematicalUpgradeRegistry": "data/exo-vessel/ftl-mathematical-model-registry.json",
+      "mathematicalRule": "Every Path stage must identify the mathematical/operator capability, changed terms, and physical upgrade drivers that explain its confirmed performance progression."
     },
     "sharedTransitCapabilityTier": {
       "source": "blacklight-exo-ftl-physics-definitions.js",
@@ -50,20 +58,25 @@
   "runtimeCompatibility": {
     "detailedSharedTierPerformanceSource": "blacklight-exo-ftl-physics-definitions.js",
     "detailedPathPerformanceSource": "blacklight-exo-ftl-path-level-core.js plus family path definition files",
+    "mathematicalExplanationSource": "data/exo-vessel/ftl-mathematical-model-registry.json",
+    "mathematicalReference": "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
     "couplingSource": "blacklight-exo-ftl-path-level-runtime.js and blacklight-exo-ftl-path-level-controller.js",
-    "migrationRule": "Do not duplicate detailed live performance arrays into this registry until the runtime is migrated to consume the registry directly; this registry records authority relationships and schema semantics to prevent divergence."
+    "migrationRule": "Do not duplicate detailed live performance arrays into this registry or the mathematical registry until the runtime is migrated to consume a unified registry directly; the mathematical layer explains the existing progression without silently replacing the live numeric source."
   },
   "transitFamilies": [
-    {"id":"metric-envelope","name":"Metric Compression Envelope","trueFtl":true,"physicalAction":"4D local metric deformation","status":"CONFIRMED"},
-    {"id":"gravitic-plane","name":"Gravitational-Plane Skimmer","trueFtl":true,"physicalAction":"4D geodesic-plane transit with higher-order gradient correction","status":"CONFIRMED"},
-    {"id":"slipstream-shear","name":"Hyperspatial Slipstream Shear","trueFtl":true,"physicalAction":"Q-space boundary-layer coupling","status":"CONFIRMED"},
-    {"id":"q-lattice","name":"Q-Lattice Phase Translation","trueFtl":true,"physicalAction":"indexed quantized Q-state translation","status":"CONFIRMED"},
-    {"id":"n-manifold","name":"N-Dimensional Manifold Drive","trueFtl":true,"physicalAction":"higher-dimensional geodesic projected to 3+1 dimensions","status":"CONFIRMED"},
-    {"id":"fold-jump","name":"Discrete Fold-Jump Drive","trueFtl":true,"physicalAction":"temporary topological adjacency of origin and destination volumes","status":"CONFIRMED"},
-    {"id":"wormhole-gate","name":"Anchored Wormhole / Gate Transit","trueFtl":true,"physicalAction":"maintained multiply connected spacetime topology","status":"CONFIRMED"},
-    {"id":"phase-displacement","name":"Quantum Phase Displacement","trueFtl":true,"physicalAction":"macroscopic nonlocal state displacement","status":"CONFIRMED"},
-    {"id":"inertial-torch","name":"Relativistic Inertial Torch","trueFtl":false,"physicalAction":"continuous causal ordinary-spacetime propulsion","status":"CONFIRMED"}
+    {"id":"metric-envelope","name":"Metric Compression Envelope","trueFtl":true,"physicalAction":"4D local metric deformation","status":"CONFIRMED","equationSetId":"blacklight.ftl.metric-envelope.v1"},
+    {"id":"gravitic-plane","name":"Gravitational-Plane Skimmer","trueFtl":true,"physicalAction":"4D geodesic-plane transit with higher-order gradient correction","status":"CONFIRMED","equationSetId":"blacklight.ftl.gravitic-plane.v1"},
+    {"id":"slipstream-shear","name":"Hyperspatial Slipstream Shear","trueFtl":true,"physicalAction":"Q-space boundary-layer coupling","status":"CONFIRMED","equationSetId":"blacklight.ftl.slipstream-shear.v1"},
+    {"id":"q-lattice","name":"Q-Lattice Phase Translation","trueFtl":true,"physicalAction":"indexed quantized Q-state translation","status":"CONFIRMED","equationSetId":"blacklight.ftl.q-lattice.v1"},
+    {"id":"n-manifold","name":"N-Dimensional Manifold Drive","trueFtl":true,"physicalAction":"higher-dimensional geodesic projected to 3+1 dimensions","status":"CONFIRMED","equationSetId":"blacklight.ftl.n-manifold.v1"},
+    {"id":"fold-jump","name":"Discrete Fold-Jump Drive","trueFtl":true,"physicalAction":"temporary topological adjacency of origin and destination volumes","status":"CONFIRMED","equationSetId":"blacklight.ftl.fold-jump.v1"},
+    {"id":"wormhole-gate","name":"Anchored Wormhole / Gate Transit","trueFtl":true,"physicalAction":"maintained multiply connected spacetime topology","status":"CONFIRMED","equationSetId":"blacklight.ftl.wormhole-gate.v1"},
+    {"id":"phase-displacement","name":"Quantum Phase Displacement","trueFtl":true,"physicalAction":"macroscopic nonlocal state displacement","status":"CONFIRMED","equationSetId":"blacklight.ftl.phase-displacement.v1"},
+    {"id":"inertial-torch","name":"Relativistic Inertial Torch","trueFtl":false,"physicalAction":"continuous causal ordinary-spacetime propulsion","status":"CONFIRMED","equationSetId":"blacklight.ftl.inertial-torch.v1"}
   ],
+  "mathematicalModelRegistry": "data/exo-vessel/ftl-mathematical-model-registry.json",
+  "mathematicalModelSchema": "data/schemas/exo-vessel-ftl-mathematical-model-registry.schema.json",
+  "mathematicalUpgradeDrivers": ["MATHEMATICS","FIELD_CONTROL","ACTIVE_MATERIALS","STRUCTURE","ENERGY","NAVIGATION","DRIVE_SCALE_DISTRIBUTION","CONTROL_BANDWIDTH","RECOVERY"],
   "universalMachineBlocks": ["energyConditioning","primeMover","fieldFormation","transitControl","navigationSensing","terminationRecovery","wholeEffectCoverage","backbone"],
   "technologyBasisRegistry": "data/exo-vessel/technology-basis-registry.json",
   "technologyBasisFamilies": ["TERRESTRIAL_ELECTROMECHANICAL","AQUATIC_ELECTROCHEMICAL_HYDRAULIC","CRYOGENIC_AMMONIA_HALOCARBON","GAS_GIANT_FLUIDIC_ELECTROSTATIC","BIOLOGICAL_SYMBIOTIC","MINERAL_PIEZOELECTRIC_PHOTONIC","FIELD_MEDIATED_POSTMATERIAL"],
@@ -81,6 +94,9 @@
     "DERIVED content requires a traceable rule and parent inputs.",
     "PROPOSED content requires explicit proposal mode and cannot be promoted to canon by repetition.",
     "The live T0-T8 shared capability tier and P0-P6 Path level are distinct; an explicit Path level controls the shared-tier baseline through the live mapping rather than being overwritten by it.",
+    "Every Transit Path stage must identify the mathematical/operator capability and physical upgrade drivers that explain its capability change; gross energy alone is not a valid default explanation.",
+    "Equivalent transit speed is not local hull velocity for nonlocal or discontinuous mechanisms.",
+    "The Fold-Jump toroidal control-volume model is DERIVED and must not be mislabeled as confirmed T^3 topology.",
     "A generated vessel instance may become authoritative for that instance only when its authority snapshot, resolver choices, complete scale coordinates, seed, and generator version are retained.",
     "Generated instance authority never silently rewrites setting-wide race, technology, or transit canon.",
     "FTL does not authorize chronology violation or time travel without explicit source authority."
@@ -103,5 +119,6 @@
       "generatorRule": "These traits may constrain embodiment and maintenance of an Ar'nock installation, but MUST NOT select or name an Ar'nock transit family."
     }
   ],
-  "schema": "data/schemas/exo-vessel-propulsion-transit.schema.json"
+  "schema": "data/schemas/exo-vessel-propulsion-transit.schema.json",
+  "engineeringAnnexSchema": "data/schemas/exo-vessel-propulsion-transit-engineering-annex.schema.json"
 }
