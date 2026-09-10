@@ -107,5 +107,28 @@ if (!production.includes("'unresolved-parent-preservation-failed'")) {
   fail('Production recovery does not expose failed unresolved-parent preservation as an actionable diagnostic.');
 }
 
+const provenanceStart = production.indexOf('function refreshProvenance(adapter, panel)');
+const provenanceEnd = production.indexOf('\n  function renderLifecycleState', provenanceStart);
+if (provenanceStart < 0 || provenanceEnd < 0) {
+  fail('Could not locate the active editor provenance presentation.');
+}
+const provenancePresentation = production.slice(provenanceStart, provenanceEnd);
+for (const phrase of [
+  'generation',
+  'lineageComplete',
+  'parent',
+  'lineage'
+]) {
+  if (!provenancePresentation.includes(phrase)) {
+    fail(
+      `Active editor provenance presentation is missing '${phrase}'. ` +
+      'The production shell must expose the same generation, root/parent, and lineage-health concepts as the Saved Record Library.'
+    );
+  }
+}
+if (!provenancePresentation.includes('revision')) {
+  fail('Active editor provenance presentation must retain revision information alongside generation so the two concepts remain distinct.');
+}
+
 console.log('Editor provenance integration validation passed.');
-console.log('Verified kernel authority, repository metadata, visible provenance UI, pinned unresolved-parent identity, validation-before-persistence, and caller-visible preservation failure.');
+console.log('Verified kernel authority, repository metadata, visible library provenance, canonical unresolved-parent recovery, and matching active-editor generation/lineage visibility.');
