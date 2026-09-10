@@ -1,0 +1,106 @@
+{
+  "registryType": "exoVesselFtlFoldJumpTechnicalVolume",
+  "registryVersion": "1.0.0",
+  "family": "fold-jump",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "legacyDesignSource": {"title":"The different lightspeed methods","provider":"google-drive","id":"1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y","revisionId":"ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0","status":"CONFIRMED"},
+    "lineageSource": "data/exo-vessel/ftl-development-lineage-registry.json",
+    "statusRule": "Recovered family action and P0-P6 implementation names are CONFIRMED within their source scope. Mathematical machinery and operating doctrine introduced here are DERIVED unless separately adopted; numeric constants are PROPOSED unless sourced."
+  },
+  "mathematics": {
+    "topologyState": "Represent a candidate fold as T_f={Omega_o,Omega_d,Phi_f,Gamma_f,tau_c}, where origin and destination protected volumes are mapped to temporary adjacency by Phi_f over commit interval tau_c.",
+    "routeObjective": "J_F=w_d*d_Mprime(A,B)+w_c*C_cov+w_o*C_occ+w_g*C_grav+w_u*C_unc+w_r*C_rec, minimized only across admissible topology solutions.",
+    "endpointCovariance": "Sigma_end=J_x Sigma_nav J_x^T + Sigma_grav + Sigma_ref + Sigma_model. Candidate solutions are rejected when projected endpoint confidence intersects excluded geometry or exceeds authority thresholds.",
+    "occupancyExclusion": "E_occ=integral_Omega_d rho_occ(x)*w(x) dV. Any confirmed occupied protected-volume intersection is a hard veto, not a weighted inconvenience.",
+    "commitBoundary": "Before t_commit, candidate topology may be re-solved, rejected, or aborted. After topology execution begins, meaningful steering is negligible by recovered canon; control authority shifts to completion, isolation, and recovery.",
+    "safetyHorizon": "T_precommit >= t_detect+t_auth+t_solve+t_crosscheck+t_command+t_field+t_margin. Higher Path improves the last safe correction instant but never guarantees safety."
+  },
+  "pathStages": [
+    {"path":"P0","name":"Adjacency Test Monolith","breakthrough":"Microscopic temporary adjacency between nearby bounded regions.","utility":"Laboratory topology proof.","limit":"No practical payload transfer.","engineeringAdvance":"Monumental fixed aperture rings, topology supports and sacrificial waveguides.","status":"MIXED"},
+    {"path":"P1","name":"Cargo Fold Chamber","breakthrough":"Finite protected-volume adjacency.","utility":"Local macroscopic cargo transfer.","limit":"Fixed chamber geometry and short baselines.","engineeringAdvance":"Closed fold-volume panels, boundary references and dedicated sinks.","status":"MIXED"},
+    {"path":"P2","name":"Orbital Fold Gate","breakthrough":"Stable correspondence between separated prepared endpoint volumes.","utility":"Long-range fixed-point folding.","limit":"Requires paired infrastructure.","engineeringAdvance":"Authenticated ranging, dual endpoint certification and paired reference alignment.","status":"MIXED"},
+    {"path":"P3","name":"Capital Fold-Jump Core","breakthrough":"Moving-origin shipboard topology with remote adjacency.","utility":"First autonomous interstellar fold-jumps.","limit":"Hard commit boundary and high machinery burden.","engineeringAdvance":"Topology waveguides, aperture rings, gravimetry and recovery dampers.","status":"MIXED"},
+    {"path":"P4","name":"Fleet Fold Drive","breakthrough":"Generate and rank multiple admissible endpoint solutions under uncertainty.","utility":"Fleet-reliable unprepared-destination operation.","limit":"Destination covariance and exclusion geometry remain binding.","engineeringAdvance":"Redundant solvers, endpoint sensors and sectional field hardware.","status":"MIXED"},
+    {"path":"P5","name":"Strategic Long-Fold Engine","breakthrough":"Gravity-conditioned long-baseline topology solving with explicit covariance.","utility":"Strategic-range folding across worse-conditioned endpoints.","limit":"Reference provenance, structural authority and endpoint uncertainty still constrain range.","engineeringAdvance":"Higher-authority field media, stronger support structure and deep-range reference networks.","status":"MIXED"},
+    {"path":"P6","name":"Compact Tactical Fold Core","breakthrough":"Continuous compact adjacency re-solve until the last safe commit instant.","utility":"Capital-quality fold selection from much smaller platforms.","limit":"Not unlimited range; topology and recovery authority remain finite.","engineeringAdvance":"Dense field media, local gravimetry and fast recovery architecture.","status":"MIXED"}
+  ],
+  "machinery": [
+    {"block":"energy-conditioning","function":"Accumulate, isolate and shape the fold event energy while protecting abort reserve.","embodimentRule":"Must expose charge, isolation and recovery reserve separately.","failureExposure":"Bus collapse, asymmetric delivery, reserve theft."},
+    {"block":"prime-mover","function":"Initiate the exotic/topological state needed for adjacency.","embodimentRule":"Technology basis changes physical actuator but not the required topology action.","failureExposure":"Failed nucleation, unstable topology onset."},
+    {"block":"field-formation","function":"Define the protected origin volume and fold boundary.","embodimentRule":"Coverage must include every payload element intended to transfer.","failureExposure":"Coverage hole, boundary asymmetry, clipped appendage."},
+    {"block":"transit-control","function":"Shape and hold the selected adjacency solution through commit.","embodimentRule":"Precommit control is high-value; postcommit steering authority is minimal.","failureExposure":"Late solution drift, sector disagreement, premature commit."},
+    {"block":"navigation-sensing","function":"Resolve destination state, gravity environment, occupancy and covariance.","embodimentRule":"Independent reference chains must remain distinguishable in provenance.","failureExposure":"Endpoint bias, stale gravimetry, reference poisoning."},
+    {"block":"termination-recovery","function":"Collapse topology cleanly and absorb residual fold ringing.","embodimentRule":"Recovery reserve is protected from discretionary range use.","failureExposure":"Closure rebound, ringing damage, sink saturation."},
+    {"block":"whole-effect-coverage","function":"Maintain complete protected-volume inclusion.","embodimentRule":"Use minimum local coverage rather than vessel-wide average.","failureExposure":"Partial transfer geometry, structural discontinuity."},
+    {"block":"control-thermal-abort-backbone","function":"Provide independent timing, structural health, thermal sinks and abort path.","embodimentRule":"Abort authority may not share a single failure domain with the primary fold controller.","failureExposure":"Common-mode timing fault, abort denial, thermal overrun."}
+  ],
+  "powerModel": {
+    "expression": "E_event=E_nucleate+E_shape+E_hold+E_close+E_ring+E_reserve",
+    "rule": "A longer fold is not modeled as a simple linear energy multiplier; topology conditioning, endpoint covariance, gravity burden, protected volume and recovery reserve alter event cost.",
+    "reserve": "E_reserve is protected until safe closure/recovery and cannot be consumed to extend nominal range."
+  },
+  "navigationControl": {
+    "candidatePipeline": ["resolve authority snapshot","propagate endpoint state","map gravity-conditioned topology","construct exclusion geometry","generate candidate folds","rank covariance and recovery burden","cross-check independent references","arm commit","continue re-solve until last safe commit instant"],
+    "hardVetoes": ["confirmed occupied destination volume","insufficient protected-volume coverage","insufficient recovery reserve","invalid reference authentication","structural authority below required fold boundary load","commit horizon exhausted"],
+    "postCommitRule": "After fold execution begins, navigation does not pretend to steer the ship through an intermediate path; machinery completes or safely collapses the topology event."
+  },
+  "operations": [
+    {"id":"FJ-01","title":"Pre-Fold Certification","steps":["verify source provenance","cross-check endpoint solution","confirm occupancy exclusion","certify whole-volume coverage","confirm structural margin","lock recovery reserve","arm but do not cross commit boundary until all independent channels agree"]},
+    {"id":"FJ-02","title":"Endpoint Covariance Growth","steps":["freeze range extension","identify covariance source","refresh gravity/reference solution","generate alternate candidates","reject any candidate whose confidence volume intersects exclusion geometry","abort spool if commit margin falls below certified minimum"]},
+    {"id":"FJ-03","title":"Controlled Precommit Abort","steps":["inhibit topology nucleation","dump shaped field into recovery sinks","maintain boundary coverage until residual gradient falls below service limit","log final candidate and rejection cause"]},
+    {"id":"FJ-04","title":"Post-Fold Recovery","steps":["verify ordinary-space topology restored","survey structural strain and boundary sectors","measure ringing decay","reconcile endpoint against expected covariance","quarantine drive if closure residuals exceed certified envelope"]}
+  ],
+  "maintenance": [
+    {"id":"FJ-M11","title":"Topology Waveguide Geometry Certification","method":"Compare surveyed microgeometry against reference state and trend drift by sector."},
+    {"id":"FJ-M12","title":"Endpoint Reference Audit","method":"Verify clock, gravimetric, astrometric and infrastructure provenance independently; do not average contradictory sources into one confidence score."},
+    {"id":"FJ-M13","title":"Ringing Damper Test","method":"Inject bounded diagnostic impulse and compare decay spectrum against certified baseline."},
+    {"id":"FJ-M14","title":"Coverage Continuity Test","method":"Exercise the complete protected-volume boundary including docking structures, repaired panels, deployed appendages and temporary modules."}
+  ],
+  "signatures": {
+    "components": ["spool-field precursor","paired/topological adjacency impulse","gravity-conditioned local distortion","closure transient","post-fold ringing tail","thermal recovery signature"],
+    "rule": "Improved technology may shorten or clean signatures but does not erase the topology event without higher authority explicitly establishing stealth behavior."
+  },
+  "failureModels": [
+    {"name":"endpoint-covariance-exceedance","cause":"Destination uncertainty exceeds certified arrival volume.","response":"Reject before commit."},
+    {"name":"occupancy-conflict","cause":"Protected destination volume intersects confirmed matter/traffic/structure.","response":"Hard veto; choose another solution."},
+    {"name":"coverage-discontinuity","cause":"Part of intended payload lies outside certified fold boundary.","response":"Inhibit commit and repair/reconfigure coverage."},
+    {"name":"topology-solution-bifurcation","cause":"Two or more adjacency solutions become comparably plausible near commit.","response":"Increase proof burden or abort; do not average endpoints."},
+    {"name":"premature-commit","cause":"Topology execution begins before independent certification finishes.","response":"Recovery system attempts controlled completion/closure; root cause treated as control-safety failure."},
+    {"name":"closure-ringing-overload","cause":"Residual topology energy exceeds damping authority.","response":"Isolate sectors, extend recovery, inspect structure before reuse."},
+    {"name":"reference-poisoning","cause":"Authenticated-looking but stale/corrupted endpoint data biases solution.","response":"Invalidate affected reference chain and recompute from independent sources."},
+    {"name":"gravity-conditioning-error","cause":"Unmodeled nearby mass/shear distorts the fold solution.","response":"Rebuild gravity model and reduce admissible range until covariance closes."}
+  ],
+  "infrastructure": [
+    {"type":"endpoint-beacon","benefit":"Improves authenticated endpoint state and covariance.","limit":"Cannot override occupied-volume exclusion or shipboard field limits."},
+    {"type":"deep-gravimetry-network","benefit":"Reduces long-baseline gravity-model uncertainty.","limit":"Does not make rapidly changing local conditions deterministic."},
+    {"type":"fold-calibration-range","benefit":"Provides surveyed test volumes for alignment, ringing and recovery certification.","limit":"Certification ages with machinery and reference drift."},
+    {"type":"traffic-exclusion-service","benefit":"Publishes reserved arrival volumes and movement windows.","limit":"Administrative clearance is not physical proof that the endpoint is empty."}
+  ],
+  "scaling": {
+    "protectedVolume": "Field-forming burden grows with both boundary extent and internal geometry; irregular hulls and appendages can dominate coverage complexity.",
+    "structuralSpan": "Larger ships require stronger distributed support and tighter differential-boundary control rather than merely a larger central core.",
+    "sensorBaseline": "Longer baselines can improve endpoint and gravity estimation but increase synchronization and structural metrology burden.",
+    "multipleCores": "Multiple fold cores are not additive range multipliers unless a higher-authority design defines coherent sectoring, staging or redundancy."
+  },
+  "technologyBasisEmbodiments": [
+    {"basis":"TERRESTRIAL_ELECTROMECHANICAL","embodiment":"Phased aperture rings, superconducting field buses, distributed gravimeters and digital topology solvers.","maintenanceLanguage":"alignment, insulation, clock discipline, coolant, structural survey","status":"DERIVED"},
+    {"basis":"AQUATIC_ELECTROCHEMICAL_HYDRAULIC","embodiment":"Pressure-balanced fold membranes, wet photonic ranging, ionic power cells and hydraulic geometry actuators.","maintenanceLanguage":"fouling, osmolality, wet-reference calibration, pressure equalization","status":"DERIVED"},
+    {"basis":"CRYOGENIC_AMMONIA_HALOCARBON","embodiment":"Superconductive topology loops, cryogenic reference cavities and phase-change recovery reservoirs.","maintenanceLanguage":"quench history, cooldown symmetry, contraction metrology, cryofluid purity","status":"DERIVED"},
+    {"basis":"GAS_GIANT_FLUIDIC_ELECTROSTATIC","embodiment":"Tensioned field membranes, electrostatic topology nodes and pressure-logic synchronization distributed through buoyant structure.","maintenanceLanguage":"membrane tension, charge leakage, pressure stratification, acoustic timing","status":"DERIVED"},
+    {"basis":"BIOLOGICAL_SYMBIOTIC","embodiment":"Cultivated field-bearing tissue, neural topology organs, vascular energy buffers and regenerative boundary membranes.","maintenanceLanguage":"perfusion, tissue coherence, immune balance, graft integrity, neural timing","status":"DERIVED"},
+    {"basis":"MINERAL_PIEZOELECTRIC_PHOTONIC","embodiment":"Prestressed crystal aperture volumes, photonic endpoint references and piezoelectric geometry control.","maintenanceLanguage":"lattice flaws, crystal-axis alignment, optical cleanliness, preload, resonance","status":"DERIVED"},
+    {"basis":"FIELD_MEDIATED_POSTMATERIAL","embodiment":"Distributed coherent topology nodes, programmable boundaries and state-authenticated reference meshes.","maintenanceLanguage":"coherence, reference trust, fallback geometry, hostile-state resistance","status":"DERIVED"}
+  ],
+  "generatorContract": {
+    "inputs": ["authority snapshot","family=fold-jump","Transit Path","shared T-tier where applicable","technology basis","vessel protected volume","structural state","power/recovery state","endpoint observations","gravity environment","occupancy/exclusion map","infrastructure observations","seed and generator version"],
+    "outputs": ["candidate topology set","selected/rejected solution reasons","endpoint covariance","occupancy verdict","coverage margin","commit margin","energy and recovery budget","signature forecast","maintenance flags","field-level provenance"],
+    "hardGuards": ["never infer race/manufacturer ownership from technology basis","never convert fold distance reduction into generic speed multiplier","never permit postcommit steering that contradicts recovered family action","never average an occupied endpoint into acceptability","never spend protected recovery reserve for nominal range","never promote DERIVED or PROPOSED details through repeated generation"]
+  },
+  "provenance": {
+    "confirmed": ["family name and physical action","P0-P6 implementation names","hard commit/no meaningful postcommit steering characteristic","legacy requirement for gravity-dependent error/efficiency and finite safety margins"],
+    "derived": ["route objective","covariance decomposition","occupancy integral","machinery decomposition","procedures","basis embodiments","failure taxonomy"],
+    "proposed": ["all unsourced numeric coefficients and thresholds"],
+    "unresolved": ["inventor identities","first-use dates","race ownership","manufacturer ownership","setting-wide prevalence","specific patent holders unless recovered elsewhere"]
+  }
+}
