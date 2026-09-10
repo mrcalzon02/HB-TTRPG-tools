@@ -1,8 +1,21 @@
 (() => {
   'use strict';
   const HANDOFF_KEY='blacklight-exo-government-source-v1';
-  function ensureLink(){const nav=document.querySelector('.bli-nav');if(nav&&!nav.querySelector('a[href="blacklight-exo-stellar-government.html"]')){const link=document.createElement('a');link.href='blacklight-exo-stellar-government.html';link.textContent='Stellar Government';nav.append(link);}}
-  function ensureButton(id,label,parentSelector,primary=false){let button=document.getElementById(id);if(button)return button;const parent=document.querySelector(parentSelector);if(!parent)return null;button=document.createElement('button');button.id=id;button.type='button';button.className=`bli-action${primary?' primary':''}`;button.textContent=label;parent.append(button);return button;}
+
+  function ensureLink(){
+    const href='blacklight-exo-stellar-government.html';
+    if(document.querySelector(`a[href="${href}"]`))return;
+    const nav=document.querySelector('.bli-system-nav')||document.querySelector('.bli-nav');
+    if(!nav)return;
+    const link=document.createElement('a');link.href=href;link.textContent='Stellar Government';nav.append(link);
+  }
+
+  function ensureButton(id,label,parentSelector,primary=false){
+    let button=document.getElementById(id);if(button)return button;
+    const parent=document.querySelector(parentSelector);if(!parent)return null;
+    button=document.createElement('button');button.id=id;button.type='button';button.className=`bli-action${primary?' primary':''}`;button.textContent=label;parent.append(button);return button;
+  }
+
   function navigate(type,payload){
     if(!payload)return;
     try{
@@ -12,6 +25,7 @@
       console.error('Unable to create stellar-government handoff.',error);
     }
   }
+
   function clusterFromPage(){
     const supplied=globalThis.BlacklightExoGetClusterSystems?.();
     const systems=Array.isArray(supplied)&&supplied.length?supplied:[...document.querySelectorAll('.exo-cluster-card')].map(card=>{
@@ -38,6 +52,7 @@
     });
     return{seed:globalThis.BlacklightExoGetClusterSeed?.()||document.getElementById('exo-cluster-seed')?.value.trim()||null,systems};
   }
+
   ensureLink();
   if(document.body.classList.contains('exo-system-body')){
     ensureButton('exo-develop-system-government','Develop Current System Government','.exo-system-actions');
