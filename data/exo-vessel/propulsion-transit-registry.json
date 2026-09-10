@@ -1,7 +1,7 @@
 {
   "projectId": "blacklight-exo-vessel-design-system",
   "registryType": "exoVesselPropulsionTransitRegistry",
-  "registryVersion": "1.2.0",
+  "registryVersion": "1.3.0",
   "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
   "reconciliationBaseCommit": "2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf",
   "authoritySources": [
@@ -19,6 +19,9 @@
     {"path":"blacklight-exo-ftl-path-level-controller.js","role":"live-path-precedence-resolver","status":"CONFIRMED"},
     {"path":"BLACKLIGHT_EXO_SOURCE_AUTHORITY.md","role":"cross-domain-provenance-policy","status":"CONFIRMED"},
     {"path":"data/blacklight-continuum/wiki/foundation-lore.json","role":"race-and-setting-source","status":"CONFIRMED"},
+    {"path":"docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md","role":"author-directed-dark-matter-higher-dimensional-gravitational-terrain-authority","status":"CONFIRMED"},
+    {"path":"data/exo-vessel/ftl-gravitational-terrain-registry.json","role":"machine-readable-gravitational-terrain-model","status":"MIXED"},
+    {"path":"data/schemas/exo-vessel-ftl-gravitational-terrain-registry.schema.json","role":"gravitational-terrain-validation-contract","status":"DERIVED"},
     {"path":"docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md","role":"derived-embodiment-workshop","status":"DERIVED"},
     {"path":"docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md","role":"subordinate-practical-engineering-manual","status":"MIXED"},
     {"path":"docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md","role":"subordinate-mathematical-transit-contract","status":"MIXED"},
@@ -60,8 +63,10 @@
     "detailedPathPerformanceSource": "blacklight-exo-ftl-path-level-core.js plus family path definition files",
     "mathematicalExplanationSource": "data/exo-vessel/ftl-mathematical-model-registry.json",
     "mathematicalReference": "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+    "gravitationalTerrainSource": "data/exo-vessel/ftl-gravitational-terrain-registry.json",
+    "gravitationalTerrainReference": "docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md",
     "couplingSource": "blacklight-exo-ftl-path-level-runtime.js and blacklight-exo-ftl-path-level-controller.js",
-    "migrationRule": "Do not duplicate detailed live performance arrays into this registry or the mathematical registry until the runtime is migrated to consume a unified registry directly; the mathematical layer explains the existing progression without silently replacing the live numeric source."
+    "migrationRule": "Do not duplicate detailed live performance arrays into this registry or the mathematical registry until the runtime is migrated to consume a unified registry directly; mathematical and terrain layers explain and constrain the existing progression without silently replacing live numeric sources."
   },
   "transitFamilies": [
     {"id":"metric-envelope","name":"Metric Compression Envelope","trueFtl":true,"physicalAction":"4D local metric deformation","status":"CONFIRMED","equationSetId":"blacklight.ftl.metric-envelope.v1"},
@@ -77,6 +82,16 @@
   "mathematicalModelRegistry": "data/exo-vessel/ftl-mathematical-model-registry.json",
   "mathematicalModelSchema": "data/schemas/exo-vessel-ftl-mathematical-model-registry.schema.json",
   "mathematicalUpgradeDrivers": ["MATHEMATICS","FIELD_CONTROL","ACTIVE_MATERIALS","STRUCTURE","ENERGY","NAVIGATION","DRIVE_SCALE_DISTRIBUTION","CONTROL_BANDWIDTH","RECOVERY"],
+  "gravitationalTerrainModel": {
+    "modelId": "blacklight.cosmology.dark-matter-shear-terrain.v1",
+    "status": "MIXED",
+    "authority": "docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md",
+    "registry": "data/exo-vessel/ftl-gravitational-terrain-registry.json",
+    "schema": "data/schemas/exo-vessel-ftl-gravitational-terrain-registry.schema.json",
+    "confirmedPremise": "Dark matter is partly the projected cause and partly the projected effect of higher-dimensional gravitational shear structure; these shear bands are the underlying universal terrain for advanced Black Light transit mathematics.",
+    "integrationRule": "All transit-family mathematical solvers consume the shared terrain state as an environmental/reference input. The family operator remains distinct and controls how terrain affects effective distance, burden, route validity, or reference stability.",
+    "terrainUpgradeDrivers": ["OBSERVATION_DEPTH","INVERSE_MODEL_QUALITY","TEMPORAL_FORECAST","DIMENSIONAL_RESOLUTION","ROUTE_OPTIMIZATION","FIELD_TERRAIN_COUPLING","TERRAIN_DISTURBANCE_COMPENSATION","UNCERTAINTY_REDUCTION"]
+  },
   "universalMachineBlocks": ["energyConditioning","primeMover","fieldFormation","transitControl","navigationSensing","terminationRecovery","wholeEffectCoverage","backbone"],
   "technologyBasisRegistry": "data/exo-vessel/technology-basis-registry.json",
   "technologyBasisFamilies": ["TERRESTRIAL_ELECTROMECHANICAL","AQUATIC_ELECTROCHEMICAL_HYDRAULIC","CRYOGENIC_AMMONIA_HALOCARBON","GAS_GIANT_FLUIDIC_ELECTROSTATIC","BIOLOGICAL_SYMBIOTIC","MINERAL_PIEZOELECTRIC_PHOTONIC","FIELD_MEDIATED_POSTMATERIAL"],
@@ -95,6 +110,9 @@
     "PROPOSED content requires explicit proposal mode and cannot be promoted to canon by repetition.",
     "The live T0-T8 shared capability tier and P0-P6 Path level are distinct; an explicit Path level controls the shared-tier baseline through the live mapping rather than being overwritten by it.",
     "Every Transit Path stage must identify the mathematical/operator capability and physical upgrade drivers that explain its capability change; gross energy alone is not a valid default explanation.",
+    "All transit calculations must preserve the author-directed dark-matter/higher-dimensional gravitational-terrain premise and retain terrain model epoch plus uncertainty when terrain inference affects route validity.",
+    "The shared gravitational terrain does not replace family-specific drive operators; each family must state how terrain changes its effective distance, burden, route constraints, or reference state.",
+    "Black Light dark matter must not be silently reduced to one exclusive real-world particle model, and not all dark matter is required to be exclusively higher-dimensional shear.",
     "Equivalent transit speed is not local hull velocity for nonlocal or discontinuous mechanisms.",
     "The Fold-Jump toroidal control-volume model is DERIVED and must not be mislabeled as confirmed T^3 topology.",
     "A generated vessel instance may become authoritative for that instance only when its authority snapshot, resolver choices, complete scale coordinates, seed, and generator version are retained.",
