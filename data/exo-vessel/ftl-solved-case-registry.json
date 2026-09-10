@@ -1,0 +1,113 @@
+{
+  "registryType":"blackLightFtlSolvedTransitCaseRegistry",
+  "registryVersion":"1.0.0",
+  "status":"PROPOSED_SCENARIO_FIXTURES",
+  "authority":{
+    "primary":"docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "fieldManual":"docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md",
+    "calibration":"data/exo-vessel/ftl-calibration-registry.json",
+    "upgradeCausality":"data/exo-vessel/ftl-upgrade-causality-registry.json",
+    "designSource":"The different lightspeed methods (legacy design source; exact repository path currently UNRESOLVED)"
+  },
+  "canonPolicy":{
+    "scenarioGeometry":"PROPOSED",
+    "coefficients":"PROPOSED",
+    "equations":"DERIVED",
+    "interpretation":"DERIVED_FROM_CONFIRMED_FAMILY_BEHAVIOR",
+    "rule":"Fixtures demonstrate how different transit mathematics respond to identical geometry. They do not establish canonical speeds, ranges, constants, or historical events."
+  },
+  "sharedScenario":{
+    "id":"SOLVED-001-GRAVITY-FORK",
+    "description":"A 12.0 ly origin-destination baseline with a massive stellar obstacle offset from the direct line, a broad low-gradient saddle, one unresolved companion-mass perturbation and a beacon-assisted alternate route.",
+    "ordinaryDistanceLy":12.0,
+    "vessel":{"scaleClass":"frigate-merchant","massTonnes":60000,"protectedVolumeRelative":1.0,"hullState":"nominal"},
+    "environment":{"gravitySeverityDirect":0.62,"tidalSeverityDirect":0.44,"gravitySeverityDetour":0.28,"tidalSeverityDetour":0.18,"referenceUncertainty":0.12,"forkRiskDirect":0.22,"forkRiskDetour":0.07,"infrastructureAssistance":0.35},
+    "candidateRoutes":[
+      {"id":"DIRECT","ordinaryLengthLy":12.0,"character":"shortest geometric line; strongest curvature and shear"},
+      {"id":"SADDLE","ordinaryLengthLy":12.8,"character":"longer normal-space path through broad low-gradient gravitational saddle"},
+      {"id":"BEACON_ARC","ordinaryLengthLy":13.4,"character":"longest normal-space route; strongest reference quality and lowest fork ambiguity"}
+    ]
+  },
+  "familyCases":[
+    {
+      "family":"metric-envelope","tier":"P4","selectedRoute":"SADDLE",
+      "inputs":{"routeLengthLy":12.8,"chi_g":0.28,"chi_t":0.18,"u_r":0.12,"mu_c":0.20,"mu_r":0.18,"mu_s":0.25,"b_c":1.10,"eta_f":0.72},
+      "model":{"effectiveDistanceExpression":"D_M=integral_Gamma sqrt(gamma_eff_ij dx^i dx^j)","illustrativeCompressionGain":18.0,"effectiveDistanceLy":0.711},
+      "decision":"Reject DIRECT despite shorter ordinary distance because curvature/tidal penalties consume field and recovery authority. P4 multi-sector solving makes the low-gradient saddle cheaper to deform coherently.",
+      "machineryConsequence":"distributed tensor sectors carry lower peak differential load but remain active longer; heat/recovery sizing follows integrated route burden rather than straight-line length",
+      "abort":"degraded abort remains available while sector closure and recovery reserve stay positive"
+    },
+    {
+      "family":"gravitic-plane","tier":"P4","selectedRoute":"SADDLE",
+      "inputs":{"routeLengthLy":12.8,"chi_g":0.28,"chi_t":0.18,"u_r":0.12,"p_fork":0.07,"b_c":1.15},
+      "model":{"routeFunctional":"J_g=integral[1+a_g chi_g+a_t chi_t+a_u u_r+a_f p_fork]ds","illustrativePlaneGain":24.0,"effectiveDistanceEquivalentLy":0.533},
+      "decision":"Prefer the broad saddle because gravity is the roadway. The direct line crosses a ridge/fork region that is short geometrically but poor dynamically.",
+      "machineryConsequence":"gradiometer and plane-transition bandwidth dominate improvement; additional raw drive power cannot substitute for missing route observability",
+      "abort":"reroute to adjacent plane is preferred before full ejection while graph connectivity remains valid"
+    },
+    {
+      "family":"slipstream-shear","tier":"P4","selectedRoute":"BEACON_ARC",
+      "inputs":{"routeLengthLy":13.4,"u_r":0.07,"p_fork":0.05,"adhesionMargin":0.31,"qWeatherSeverity":0.22,"b_c":1.12},
+      "model":{"effectiveDistanceExpression":"D_S=integral sigma_Q ds","illustrativeShearGain":31.0,"effectiveDistanceEquivalentLy":0.432},
+      "decision":"Choose the beacon arc because Q-boundary correspondence and exit certainty outweigh normal-space path length.",
+      "machineryConsequence":"larger phase-reference stores and distributed adhesion control improve usable range by preserving exit windows, not by increasing normal-space acceleration",
+      "abort":"multiple predicted release windows remain available until shear correspondence falls below recovery threshold"
+    },
+    {
+      "family":"q-lattice","tier":"P4","selectedRoute":"BEACON_ARC",
+      "inputs":{"graphHops":7,"phaseError":0.035,"epochError":0.025,"referenceUncertainty":0.06,"occupancyRisk":0.01},
+      "model":{"routeCostExpression":"C_Q(pi)=sum_k[c_k+a_phi e_phi,k+a_tau e_tau,k+a_o P_occ,k+a_u u_r,k]","illustrativeGraphCost":1.84,"ordinaryDistanceLy":12.0},
+      "decision":"Distance is secondary to the discrete address graph. Beacon assistance lowers alias and epoch uncertainty enough that a seven-hop route beats a shorter but weakly referenced address sequence.",
+      "machineryConsequence":"memory integrity, phase clocks, tomography and defect-correction capacity determine strategic usefulness",
+      "abort":"abort ends at indivisible address-transition commit; pre-commit anti-alias validation is therefore dominant"
+    },
+    {
+      "family":"n-manifold","tier":"P4","selectedRoute":"SADDLE",
+      "inputs":{"ordinaryLengthLy":12.8,"activeDimensions":6,"embeddingUncertainty":0.09,"returnMapCondition":0.16,"chi_g":0.28},
+      "model":{"geodesicExpression":"D_N=min_Gamma_N integral sqrt(g_AB dX^A dX^B)","illustrativeProjectedGeodesicLy":0.384,"gain":33.33},
+      "decision":"Select a six-axis geodesic whose normal-space projection follows the saddle because lower curvature improves embedding and return-map conditioning.",
+      "machineryConsequence":"additional axis resonators and topology sensors buy route freedom only if control and projection structures can maintain a well-conditioned return map",
+      "abort":"return-to-3+1D remains possible while at least one certified projection solution retains positive recovery margin"
+    },
+    {
+      "family":"fold-jump","tier":"P4","selectedRoute":"BEACON_ARC",
+      "inputs":{"ordinarySeparationLy":12.0,"endpointUncertainty":0.055,"destinationExclusionConfidence":0.995,"topologyBranchRisk":0.04,"mu_s":0.24,"mu_r":0.21},
+      "model":{"foldRatioExpression":"G_F=d_M(A,B)/d_Mprime(A,B)","illustrativeManipulatedAdjacencyDistanceKm":2.4,"foldRatioApprox":4.73e13},
+      "decision":"Route shape is mostly irrelevant after endpoint definition; beacon arc is selected because its reference network improves destination-state certainty and suppresses topology branch ambiguity.",
+      "machineryConsequence":"topology waveguides, aperture rings, recoil framing and endpoint metrology scale with protected volume and adjacency conditioning rather than cruise duration",
+      "abort":"once adjacency commit is crossed there is no meaningful steering; recovery-only logic applies"
+    },
+    {
+      "family":"wormhole-gate","tier":"P4","selectedRoute":"BEACON_ARC",
+      "inputs":{"approachDistanceLy":0.015,"queueHours":1.6,"syncHours":0.25,"apertureStability":0.94,"throughputFraction":0.71},
+      "model":{"totalTimeExpression":"T_gate=T_approach+T_queue+T_sync+T_cross+T_depart","effectiveDistance":"network-defined rather than ship-drive-defined"},
+      "decision":"The dominant cost is infrastructure access, aperture scheduling and synchronization, not interstellar geometric distance.",
+      "machineryConsequence":"extreme topology machinery is concentrated in the gate complex; transiting ships primarily require compatibility, traffic control and safe approach systems",
+      "abort":"gate controller can hold, close or reject before throat entry; after entry recovery belongs to gate throat control"
+    },
+    {
+      "family":"phase-displacement","tier":"P4","selectedRoute":"BEACON_ARC",
+      "inputs":{"stateCompatibility":0.987,"occupationConfidence":0.998,"continuityConfidence":0.982,"referenceAuthenticity":0.995,"mutableStateBurden":0.14},
+      "model":{"stateCostExpression":"C_Phi=w_s(1-S)+w_o P_occ+w_c(1-C)+w_r(1-R)+w_m M_mut","illustrativeStateCost":0.083},
+      "decision":"Ordinary separation does not dominate. The best destination is the most compatible, unoccupied, authenticated state target with acceptable continuity burden.",
+      "machineryConsequence":"tomography, immutable continuity records, biological/software state handling and quarantine capacity dominate system maturity",
+      "abort":"translation commit is discrete; unresolved identity/reference ambiguity blocks initiation rather than becoming an in-flight steering problem"
+    },
+    {
+      "family":"inertial-torch","tier":"P4","selectedRoute":"DIRECT",
+      "inputs":{"ordinaryDistanceLy":12.0,"exhaustVelocityMps":3000000,"baseStrategicDeltaVMps":400000,"relativisticModelRequired":true},
+      "model":{"trajectoryExpression":"integrate relativistic acceleration/coast/deceleration subject to propellant and thermal constraints","effectiveDistanceLy":12.0},
+      "decision":"No space manipulation occurs; shortest safe causal trajectory remains preferred unless gravity assists or hazards justify a detour.",
+      "machineryConsequence":"performance comes from exhaust velocity, mass ratio, power, thermal rejection and structural acceleration limits",
+      "abort":"ordinary propulsion shutdown/revectoring applies; there is no exotic no-abort topology boundary"
+    }
+  ],
+  "generatorRules":[
+    "All families must be evaluated against the same environment snapshot before comparison.",
+    "A family may optimize a different quantity than geometric distance; comparisons must expose that quantity explicitly.",
+    "A shorter ordinary route may be rejected because gravity, shear, phase, topology, reference, structure, coverage, recovery or infrastructure makes it more expensive or unsafe.",
+    "Tier improvements must identify the changed mathematical capability and physical enabler; unexplained scalar multipliers are invalid.",
+    "Runtime canonical speed/range data, when present, outranks fixture values.",
+    "Every numeric fixture must retain status PROPOSED unless separately adopted as canon."
+  ]
+}
