@@ -35,6 +35,26 @@
     target.setItem(INDEX_KEY, JSON.stringify(entries));
   }
 
+  function provenanceIndex(envelope) {
+    const provenance = envelope?.provenance || {};
+    const lineage = Array.isArray(provenance.lineage) ? provenance.lineage : [];
+    const root = provenance.generation === 0
+      ? {
+          profileId: envelope.profileId,
+          revision: envelope.revision,
+          name: envelope.name || envelope.data?.name || 'Unnamed Profile'
+        }
+      : lineage[0] || null;
+    return {
+      generation: Number.isInteger(provenance.generation) ? provenance.generation : null,
+      lineageComplete: provenance.lineageComplete === true,
+      parentProfileId: provenance.parent?.profileId || provenance.clonedFromProfileId || null,
+      parentRevision: Number.isInteger(provenance.parent?.revision) ? provenance.parent.revision : null,
+      rootProfileId: root?.profileId || null,
+      rootRevision: Number.isInteger(root?.revision) ? root.revision : null
+    };
+  }
+
   function metadata(envelope) {
     return {
       profileId: envelope.profileId,
@@ -43,7 +63,8 @@
       revision: envelope.revision,
       updatedAt: envelope.updatedAt || new Date().toISOString(),
       editorId: envelope.provenance?.editorId || 'unknown-editor',
-      moduleId: envelope.provenance?.moduleId || 'unknown-module'
+      moduleId: envelope.provenance?.moduleId || 'unknown-module',
+      ...provenanceIndex(envelope)
     };
   }
 
@@ -51,16 +72,29 @@
     return [...entries].sort((left, right) => {
       const typeOrder = String(left.profileType).localeCompare(String(right.profileType));
       if (typeOrder) return typeOrder;
-      return String(left.name).localeCompare(String(right.name));
+      const nameOrder = String(left.name).localeCompare(String(right.name));
+      if (nameOrder) return nameOrder;
+      const leftGeneration = Number.isInteger(left.generation) ? left.generation : Number.MAX_SAFE_INTEGER;
+      const rightGeneration = Number.isInteger(right.generation) ? right.generation : Number.MAX_SAFE_INTEGER;
+      if (leftGeneration !== rightGeneration) return leftGeneration - rightGeneration;
+      return Number(left.revision || 0) - Number(right.revision || 0);
     });
   }
 
   function recordFingerprint(envelope) {
+    const provenance = envelope?.provenance || {};
     return JSON.stringify({
       profileType: envelope?.profileType || '',
       data: envelope?.data || {},
       locks: Array.isArray(envelope?.locks) ? [...envelope.locks].sort() : [],
-      inheritance: envelope?.inheritance || []
+      inheritance: envelope?.inheritance || [],
+      provenance: {
+        generation: Object.prototype.hasOwnProperty.call(provenance, 'generation') ? provenance.generation : null,
+        parent: provenance.parent || null,
+        lineage: Array.isArray(provenance.lineage) ? provenance.lineage : [],
+        lineageComplete: provenance.lineageComplete === true,
+        clonedFromProfileId: provenance.clonedFromProfileId || null
+      }
     });
   }
 
@@ -95,7 +129,7 @@
       return `A newer saved revision ${existing.revision} already exists. Reload it before saving revision ${incoming.revision}.`;
     }
     if (existing.revision === incoming.revision && recordFingerprint(existing) !== recordFingerprint(incoming)) {
-      return `Saved record ${incoming.profileId} has different content at revision ${incoming.revision}. Reload it or save your work as a new clone.`;
+      return `Saved record ${incoming.profileId} has different content or provenance at revision ${incoming.revision}. Reload it or save your work as a new clone.`;
     }
     return null;
   }
@@ -208,6 +242,22 @@
     return sortEntries(liveEntries.filter(item => {
       if (options.profileType && item.profileType !== options.profileType) return false;
       if (options.editorId && item.editorId !== options.editorId) return false;
+      if (Number.isInteger(options.generation) && item.generation !== options.generation) return false;
+      if (typeof options.lineageComplete === 'boolean' && item.lineageComplete !== options.lineageComplete) return false;
+      if (options.query) {
+        const query = String(options.query).trim().toLowerCase();
+        const searchable = [
+          item.name,
+          item.profileId,
+          item.profileType,
+          item.editorId,
+          item.moduleId,
+          Number.isInteger(item.generation) ? `g${item.generation}` : 'generation unknown',
+          item.parentProfileId,
+          item.rootProfileId
+        ].filter(Boolean).join(' ').toLowerCase();
+        if (query && !searchable.includes(query)) return false;
+      }
       return true;
     }));
   }
