@@ -2,13 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-propulsion-transit-engineering-annex.schema.json",
   "title": "Black Light Propulsion Transit Engineering Annex",
-  "description": "Additive engineering/provenance extension for generated Black Light propulsion and transit installation records. Subordinate to BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md and specific named canon.",
+  "description": "Additive engineering/provenance extension for generated Black Light propulsion and transit installation records. Subordinate to BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md and specific named canon. Includes the optional mathematical/operator model and Path-stage upgrade-cause record defined by BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md.",
   "type": "object",
   "additionalProperties": true,
   "$defs": {
     "canonStatus": {
       "type": "string",
       "enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]
+    },
+    "upgradeDriver": {
+      "type": "string",
+      "enum": ["MATHEMATICS", "FIELD_CONTROL", "ACTIVE_MATERIALS", "STRUCTURE", "ENERGY", "NAVIGATION", "DRIVE_SCALE_DISTRIBUTION", "CONTROL_BANDWIDTH", "RECOVERY"]
     },
     "provenanceField": {
       "type": "object",
@@ -19,18 +23,7 @@
         "sourceRefs": { "type": "array", "items": { "type": "string" } },
         "sourceScope": {
           "type": "string",
-          "enum": [
-            "named-installation",
-            "named-vessel",
-            "manufacturer",
-            "species",
-            "authority",
-            "archive",
-            "runtime",
-            "registry",
-            "derivation",
-            "proposal"
-          ]
+          "enum": ["named-installation", "named-vessel", "manufacturer", "species", "authority", "archive", "runtime", "registry", "derivation", "proposal"]
         },
         "resolverRule": { "type": ["string", "null"] },
         "parents": { "type": "array", "items": { "type": "string" } },
@@ -89,6 +82,68 @@
         }
       },
       "additionalProperties": true
+    },
+    "equationModel": {
+      "type": "object",
+      "required": ["id", "status", "expression"],
+      "properties": {
+        "id": {"type":"string","minLength":1},
+        "status": {"$ref":"#/$defs/canonStatus"},
+        "expression": {"type":"string","minLength":1},
+        "parameters": {"type":"object","additionalProperties":true},
+        "constraints": {"type":"array","items":{"type":"string"}},
+        "sourceRefs": {"type":"array","items":{"type":"string"}},
+        "notes": {"type":["string","null"]}
+      },
+      "additionalProperties": true
+    },
+    "mathematicalModel": {
+      "type": "object",
+      "required": ["equationSetId", "status", "operatorClass", "actedSpace", "distanceModelType", "models", "stateVariables", "constraints", "upgradeDrivers"],
+      "properties": {
+        "equationSetId": {"type":"string","minLength":1},
+        "status": {"$ref":"#/$defs/canonStatus"},
+        "operatorClass": {"type":"string","minLength":1},
+        "actedSpace": {"type":"string","minLength":1},
+        "distanceModelType": {"type":"string","minLength":1},
+        "models": {"type":"array","items":{"$ref":"#/$defs/equationModel"},"minItems":1},
+        "stateVariables": {"type":"array","items":{"type":"string"}},
+        "constraints": {"type":"array","items":{"type":"string"}},
+        "uncertaintyModel": {"type":"object","additionalProperties":true},
+        "efficiencyModel": {"type":"object","additionalProperties":true},
+        "upgradeDrivers": {"type":"array","uniqueItems":true,"items":{"$ref":"#/$defs/upgradeDriver"}},
+        "provenance": {"type":"array","items":{"type":"object","additionalProperties":true}}
+      },
+      "additionalProperties": true
+    },
+    "pathMathStage": {
+      "type": "object",
+      "required": ["pathLevel", "implementationName", "mathematicalCapability", "upgradeDrivers", "changedTerms", "capabilityDelta", "status"],
+      "properties": {
+        "pathLevel": {"enum":["p0","p1","p2","p3","p4","p5","p6"]},
+        "implementationName": {"type":"string","minLength":1},
+        "confirmedSpeedC": {"type":["array","null"],"items":{"type":"number"},"minItems":2,"maxItems":2},
+        "confirmedRangeAU": {"type":["array","null"],"items":{"type":"number"},"minItems":2,"maxItems":2},
+        "mathematicalCapability": {"type":"string","minLength":1},
+        "upgradeDrivers": {"type":"array","uniqueItems":true,"items":{"$ref":"#/$defs/upgradeDriver"},"minItems":1},
+        "changedTerms": {"type":"array","items":{"type":"string"},"minItems":1},
+        "capabilityDelta": {
+          "type":"object",
+          "properties": {
+            "routeGain": {},
+            "range": {},
+            "equivalentSpeed": {},
+            "uncertainty": {},
+            "energyBurden": {},
+            "recovery": {},
+            "machineScale": {}
+          },
+          "additionalProperties": true
+        },
+        "status": {"$ref":"#/$defs/canonStatus"},
+        "provenance": {"type":"array","items":{"type":"object","additionalProperties":true}}
+      },
+      "additionalProperties": true
     }
   },
   "properties": {
@@ -106,6 +161,13 @@
         "infrastructure": { "$ref": "#/$defs/stateComponent" }
       },
       "additionalProperties": false
+    },
+    "mathematicalModel": {"$ref":"#/$defs/mathematicalModel"},
+    "pathMathematicalProgression": {
+      "type":"array",
+      "items":{"$ref":"#/$defs/pathMathStage"},
+      "minItems":1,
+      "maxItems":7
     },
     "scaling": {
       "type": "object",
