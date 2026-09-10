@@ -2,7 +2,7 @@
 
 **Status:** authoritative integration reference for Black Light propulsion, FTL/transit engineering, generator semantics, EXO vessel handoff, provenance, and presentation views.  
 **Authority scope:** consolidates surviving repository authority without retroactively inventing missing race-, manufacturer-, or mechanism-specific canon.  
-**Reconciliation base:** `main` at `2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf`, plus the registry/schema/manual integration created from that reconciliation.  
+**Reconciliation base:** `main` at `2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf`, the concurrently landed `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md`, and the registry/schema/generator integration created during this reconciliation.  
 **Canon labels:** `CONFIRMED` = directly recovered from repository authority; `DERIVED` = engineering consequence constrained by confirmed canon; `PROPOSED` = useful extension not independently established as canon; `UNRESOLVED` = source or claim cannot currently be recovered; `MIXED` = structured result contains more than one status and must preserve field-level provenance.
 
 ---
@@ -56,7 +56,7 @@ A generated vessel instance can become authoritative **for that generated instan
 - `data/exo-vessel/propulsion-transit-registry.json` — machine-readable mirror of confirmed families, invariants, source chain, and canon safeguards.
 - `data/schemas/exo-vessel-propulsion-transit.schema.json` — generated-installation validation contract.
 - `docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` — subordinate resolver/generator implementation reference.
-- `docs/blacklight/PROPULSION_TRANSIT_FIELD_MANUAL.md` — subordinate practical equipment/training view.
+- `docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` — canonical subordinate practical equipment, engineering, training, chart, and mathematical reference.
 
 ### 2.2 Repaired authority-chain gap
 
@@ -70,7 +70,13 @@ It explicitly declares itself a Charles-authored Blacklight EXO engineering fram
 
 This correction closes the gap without promoting any inferred race-specific FTL content. Material previously marked unresolved solely because of the bad path is restored to the authority chain; genuinely missing race/manufacturer transit assignments remain unresolved.
 
-### 2.3 Canon-safe overwrite policy
+### 2.3 Concurrent field-manual reconciliation
+
+`docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` landed on `main` after the initial reconciliation base and before the machine-readable integration commits. It is retained as the canonical subordinate field manual because it is the deeper existing engineering/manual treatment. A smaller subsequently created `PROPULSION_TRANSIT_FIELD_MANUAL.md` was removed rather than allowing two competing manuals to diverge.
+
+The field manual remains subordinate to this authority and to higher-priority specific race/manufacturer/named-system source material. Its equations and extrapolated operating practices retain their own `DERIVED`, `PROPOSED`, or `UNRESOLVED` labels.
+
+### 2.4 Canon-safe overwrite policy
 
 The propulsion/transit resolver adopts the repository's existing published-first source discipline as a cross-domain provenance rule:
 
@@ -454,7 +460,7 @@ The common state vocabulary does not make all drives operationally identical.
 
 ## 14. Practical equipment-manual framework
 
-The practical companion is `PROPULSION_TRANSIT_FIELD_MANUAL.md`. It is a derived presentation view, not a second authority source.
+The practical companion is `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md`. It is a subordinate presentation/engineering view, not a second authority source.
 
 Every installation manual should be rendered from the same structured record and include:
 
@@ -731,6 +737,8 @@ A valid propulsion/transit installation proves that:
 
 `RESOLVED:` the operative-technology authority is not missing; it is the root `EXO_OPERATIVE_TECHNOLOGY_BASIS.md`. The stale-path authority gap is closed by this revision.
 
+`RESOLVED:` the concurrent field-manual branch is reconciled. `BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` is the surviving subordinate manual; the smaller duplicate manual was removed.
+
 `UNRESOLVED:` Ar'nock and other race/manufacturer-specific named FTL assignments must be added only when surviving source records establish them.
 
 `UNRESOLVED:` canonical numerical range, speed, spool time, detection range, failure probability, energy cost, and scaling exponents cannot be inferred uniformly across the recovered transit families. Where numbers do not survive, the system retains qualitative constraints or labeled design estimators.
@@ -749,7 +757,7 @@ A valid propulsion/transit installation proves that:
 
 `PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` explains how to resolve the structured installation without becoming a competing lore authority.
 
-`PROPULSION_TRANSIT_FIELD_MANUAL.md` demonstrates how practical equipment manuals and educational text are rendered from that structured installation.
+`BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md` is the canonical subordinate field-engineering, practical equipment, mathematical, and educational manual. It must remain a view/technical expansion of the authority rather than a competing authority chain.
 
 `propulsion-transit-registry.json` and `exo-vessel-propulsion-transit.schema.json` make the core vocabulary and validation rules machine-readable.
 
