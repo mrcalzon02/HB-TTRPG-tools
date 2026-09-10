@@ -1,12 +1,12 @@
 {
   "projectId": "blacklight-exo-vessel-design-system",
   "registryType": "exoVesselPropulsionTransitRegistry",
-  "registryVersion": "1.1.0",
+  "registryVersion": "1.1.1",
   "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
   "reconciliationBaseCommit": "2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf",
   "authoritySources": [
     {"path":"docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md","role":"recovered-ftl-archive","status":"CONFIRMED"},
-    {"path":"EXO_OPERATIVE_TECHNOLOGY_BASIS.md","role":"operative-technology-governing-supplement","status":"CONFIRMED"},
+    {"path":"docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md","role":"historical-operative-technology-governing-supplement","status":"UNRESOLVED","note":"Referenced by legacy integration material but absent from the inspected current main tree; content attributable only to this missing path must not be treated as confirmed."},
     {"path":"EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md","role":"vessel-engineering-governing-guide","status":"CONFIRMED"},
     {"path":"data/exo-vessel/technology-basis-registry.json","role":"technology-basis-machine-registry","status":"CONFIRMED"},
     {"path":"data/exo-vessel/engineering-registry.json","role":"conventional-propulsion-registry","status":"CONFIRMED"},
