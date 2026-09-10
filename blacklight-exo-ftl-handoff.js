@@ -4,7 +4,7 @@
 
   function ensureLink(){
     const nav=document.querySelector('.bli-nav');
-    if(nav&&![...nav.links].some(link=>link.getAttribute('href')==='blacklight-exo-ftl.html')){
+    if(nav&&!nav.querySelector('a[href="blacklight-exo-ftl.html"]')){
       const link=document.createElement('a');
       link.href='blacklight-exo-ftl.html';
       link.textContent='FTL Hierarchy';
