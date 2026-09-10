@@ -5,6 +5,7 @@
   const Repository = window.KaysenderEditorRepository;
   const Lifecycle = window.KaysenderEditorLifecycle;
   const Production = () => window.KaysenderMainlineEditorProduction;
+  let lastContextSignature = '';
   if (!Kernel || !Repository || !Lifecycle) {
     console.error('Kaysender editor record library could not start: kernel, repository, or lifecycle is missing.');
     return;
@@ -20,6 +21,18 @@
     const adapter = editorId ? production?.getAdapter?.(editorId) : null;
     const envelope = production?.getActiveEnvelope?.() || null;
     return { production, editorId, adapter, envelope };
+  }
+
+  function contextSignature(context = activeContext()) {
+    const provenance = context.envelope?.provenance || {};
+    return [
+      context.editorId || '',
+      context.adapter?.profileType || '',
+      context.envelope?.profileId || '',
+      context.envelope?.revision || '',
+      Number.isInteger(provenance.generation) ? provenance.generation : '',
+      provenance.lineageComplete === false ? 'incomplete' : provenance.lineageComplete === true ? 'complete' : ''
+    ].join('|');
   }
 
   function setStatus(message, severity = 'info') {
@@ -138,7 +151,9 @@
     const select = document.getElementById('mainline-editor-record-library');
     if (!select) return;
     const previous = select.value;
-    const { adapter, envelope } = activeContext();
+    const context = activeContext();
+    const { adapter, envelope } = context;
+    lastContextSignature = contextSignature(context);
     const filters = libraryFilters();
     const healthSummary = repositoryHealthSummary();
     const allRecords = adapter ? Repository.list({ profileType: adapter.profileType }) : [];
@@ -175,6 +190,10 @@
     renderResultSummary(records.length, allRecords.length, healthSummary);
     renderIdentity(envelope);
     refreshButtons();
+  }
+
+  function refreshIfContextChanged() {
+    if (contextSignature() !== lastContextSignature) refresh();
   }
 
   async function rebuildEnvelope() {
@@ -421,7 +440,7 @@
     observer.observe(document.body, { childList: true, subtree: true });
     window.addEventListener('storage', refresh);
     window.addEventListener('kaysender-editor-lifecycle-change', refresh);
-    window.setInterval(refresh, 1000);
+    window.setInterval(refreshIfContextChanged, 1000);
   }
 
   window.KaysenderEditorRecordLibrary = Object.freeze({
