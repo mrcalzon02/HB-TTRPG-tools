@@ -1,0 +1,129 @@
+{
+  "registryType": "exoVesselFtlResearchTraditionRegistry",
+  "registryVersion": "1.0.0",
+  "schema": "data/schemas/exo-vessel-ftl-research-tradition.schema.json",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "lineage": "data/exo-vessel/ftl-development-lineage-registry.json",
+    "familyBasis": "data/exo-vessel/ftl-family-basis-embodiment-registry.json",
+    "calibration": "data/exo-vessel/ftl-calibration-registry.json",
+    "legacyDesignSource": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    },
+    "rule": "Family physics and named canon outrank this registry. Research-school names, equations, patent classes, curricula, and histories here are DERIVED unless independently sourced. Named inventor, race, polity, manufacturer, date, or first-use attribution is UNRESOLVED unless supplied by higher authority."
+  },
+  "sharedResearchRecord": {
+    "requiredFields": ["family", "researchTradition", "coreProblem", "objectiveFunction", "mathematicalDisciplines", "instrumentTradition", "patentClasses", "machineryConsequence", "failureReview", "educationSequence", "provenance"],
+    "attributionRule": "Never infer ownership from technology basis, morphology, environment, generated prevalence, or stylistic fit.",
+    "upgradeCausality": "old solvable model -> mathematical proof/algorithm -> instrument or material enabler -> changed limit -> measurable range/safety/efficiency effect"
+  },
+  "technologyBasisTranslation": [
+    {"basis":"TERRESTRIAL_MECHANICAL","researchMedium":"formal symbolic models, digital simulation, metrology laboratories and modular test hardware","publicationForm":"standards, test reports, patents, service bulletins","status":"DERIVED"},
+    {"basis":"AQUATIC_PRESSURE","researchMedium":"pressure-stable wet laboratories, fluid-borne sensing, hydraulic/acoustic control models","publicationForm":"pressure-qualified design ledgers, flow maps and hydroacoustic records","status":"DERIVED"},
+    {"basis":"CRYOGENIC","researchMedium":"low-noise cryogenic metrology, superconducting references and thermal-budget proofs","publicationForm":"coherence ledgers, cooldown qualification records and failure-temperature maps","status":"DERIVED"},
+    {"basis":"GAS_GIANT_FLOATING","researchMedium":"distributed buoyant observatories, long-baseline atmospheric sensing and flexible field structures","publicationForm":"layered atmospheric charts, fleet calibration ephemerides and distributed design records","status":"DERIVED"},
+    {"basis":"BIOLOGICAL_SYMBIOTIC","researchMedium":"cultivated sensory organs, trained neural models, grown calibration standards and living test tissues","publicationForm":"growth lineages, training codices, phenotypic design records and physiological service manuals","status":"DERIVED"},
+    {"basis":"MINERAL_CRYSTALLINE","researchMedium":"crystal-domain experiments, photonic defect metrology, resonance mathematics and prestress mapping","publicationForm":"lattice inscriptions, defect atlases, resonance catalogs and domain-growth specifications","status":"DERIVED"},
+    {"basis":"POSTMATERIAL","researchMedium":"continuous self-modeling fields, reference meshes and dynamically reconfigurable experimental bodies","publicationForm":"versioned state proofs, executable models and authenticated reconstruction histories","status":"DERIVED"}
+  ],
+  "families": [
+    {
+      "family":"metric-envelope","researchSchool":"Metric Geometry School","tradition":"Variational metric engineering","coreProblem":"Minimize effective proper route length while preserving closure, causal exit, structural margin and recoverability.","objectiveFunction":"J_M=int_Gamma sqrt(gamma_eff_ij dx^i dx^j)+lambda_h H+lambda_s S+lambda_r R","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["tensor-field metrology","closed-volume boundary solving","causal-horizon proofs","multi-sector optimal control"],
+      "instrumentTradition":["P0 fixed weak-field interferometry","P1-P2 repeatable closed-volume apparatus","P3 mobile horizon-aware metrology","P4-P5 distributed probabilistic field sensing","P6 continuous self-calibrating tensor control"],
+      "patentClasses":[{"name":"weak-field perturbation interferometer","status":"DERIVED"},{"name":"closed-volume metric cage","status":"DERIVED"},{"name":"horizon-aware envelope controller","status":"DERIVED"},{"name":"gravity-conditioned tensor optimizer","status":"DERIVED"}],
+      "machineryConsequence":"Field symmetry, clock quality, active-material authority, load paths and recovery sinks determine whether a mathematically valid metric solution can be held.",
+      "failureReview":{"mandatoryQuestion":"Was the solution mathematically invalid, reference-corrupted, physically under-authoritative, structurally unsound, control-late, recovery-limited, or outside the certified environment?","antiPattern":"Do not classify every failure as drive overload or repair every failure by adding power."},
+      "educationSequence":["phenomenology","mathematical representation","laboratory error propagation","mobile structural integration","navigation and abort theory","forensic reconstruction","strategic optimization"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"gravitic-plane","researchSchool":"Natural Geometry Navigation School","tradition":"Geodesic inference and branch topology","coreProblem":"Find survivable favorable gravitational/shear routes rather than manufacture the entire transit geometry.","objectiveFunction":"J_G=int_Gamma(1+a_g chi_g+a_t chi_t+a_u u_r+a_f p_fork) ds","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["precision gravimetry","barycentric dynamics","weak-shear reconstruction","probabilistic fork discrimination"],
+      "instrumentTradition":["P0 fixed gradient observatory","P1-P2 moving local gradient arrays","P3 long-baseline interstellar gravimetry","P4-P5 redundant fork-probability sensing","P6 adaptive geodesic rewrite sensing"],
+      "patentClasses":[{"name":"gradient-lock coupler","status":"DERIVED"},{"name":"barycentric prediction array","status":"DERIVED"},{"name":"fork-discriminating gradiometer","status":"DERIVED"},{"name":"adaptive plane recoupler","status":"DERIVED"}],
+      "machineryConsequence":"Improvement comes mainly from detecting and solving weak gravitational structure farther ahead and coupling or decoupling quickly enough to exploit it.",
+      "failureReview":{"mandatoryQuestion":"Was the route model wrong, the mass map stale, the fork unresolved, coupling authority insufficient, or decoupling too late?","antiPattern":"Do not assume rising power draw proves a reactor defect before checking route geometry."},
+      "educationSequence":["gravimetry","barycentric geometry","shear topology","fork probability","coupler engineering","incident reconstruction","adaptive routing"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"slipstream-shear","researchSchool":"Boundary Dynamics School","tradition":"Metastable shear tracking","coreProblem":"Estimate a moving Q-boundary, match phase velocity, maintain adhesion and preserve viable exit correspondence.","objectiveFunction":"J_S=w_q e_q+w_v e_v+w_a(1-A_adh)+w_x e_exit","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["Q-boundary spectroscopy","phase-velocity estimation","distributed adhesion control","Q-weather forecasting"],
+      "instrumentTradition":["P0 boundary observatory","P1 probe phase sensing","P2 captive tunnel metrology","P3 shipwide Q-weather and phase skin","P4-P6 distributed joint boundary estimators"],
+      "patentClasses":[{"name":"phase-locked adhesion resonator","status":"DERIVED"},{"name":"distributed Q-skin controller","status":"DERIVED"},{"name":"forward shear-weather interferometer","status":"DERIVED"},{"name":"health-aware wake exit solver","status":"DERIVED"}],
+      "machineryConsequence":"Range and safety improve when prediction horizon, adhesion reserve and correction bandwidth rise together; stronger adhesion alone can worsen emergency release.",
+      "failureReview":{"mandatoryQuestion":"Was adhesion loss caused by boundary-state error, phase-reference disagreement, Q-weather, actuator loss, or recovery saturation?","antiPattern":"Do not increase adhesion authority without checking detachment and recovery margin."},
+      "educationSequence":["Q phenomenology","phase matching","adhesion dynamics","weather sensing","exit correspondence","maintenance forensics","strategic forecasting"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"q-lattice","researchSchool":"Discrete State Topology School","tradition":"Address and epoch graph theory","coreProblem":"Translate protected state through valid Q addresses while maintaining epoch, coverage and anti-alias constraints.","objectiveFunction":"J_Q(P)=sum_e(c_e+lambda_u u_e+lambda_a a_e)+lambda_c(1-C_coverage)","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["address discovery","epoch synchronization","graph reachability","anti-alias state estimation"],
+      "instrumentTradition":["P0 address resonator","P1 epoch clock cage","P2 macroscopic coverage arrays","P3 beacon authentication","P4-P6 autonomous graph and anti-alias estimators"],
+      "patentClasses":[{"name":"stable-address resonator","status":"DERIVED"},{"name":"epoch clock cage","status":"DERIVED"},{"name":"authenticated beacon index","status":"DERIVED"},{"name":"continuous anti-alias estimator","status":"DERIVED"}],
+      "machineryConsequence":"Distance improvement is graph-theoretic: better mathematics exposes safer address paths while clocks, cages, references and beacons make those paths executable.",
+      "failureReview":{"mandatoryQuestion":"Was the target wrong in coordinate, address, epoch, coverage, authentication, or alias state?","antiPattern":"Never substitute a spatial coordinate for a Q address."},
+      "educationSequence":["Q addressing","epoch theory","graph reachability","payload coverage","authentication","alias forensics","network optimization"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"n-manifold","researchSchool":"Embedding Geometry School","tradition":"Higher-dimensional geodesics with return conditioning","coreProblem":"Minimize higher-dimensional route length subject to a well-conditioned return projection into ordinary spacetime.","objectiveFunction":"J_N=D_N+lambda_k kappa(R_return)+lambda_g C_g+lambda_u U","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["extra-axis detection","embedding construction","return-map conditioning","multi-axis constrained optimization"],
+      "instrumentTradition":["P0 topology observatory","P1 controlled extra-axis volume","P2 captive manifold cage","P3 remote return-map arrays","P4-P6 multi-axis adaptive projectors"],
+      "patentClasses":[{"name":"dimensional interferometer","status":"DERIVED"},{"name":"captive manifold cage","status":"DERIVED"},{"name":"return-map reference array","status":"DERIVED"},{"name":"multi-axis adaptive projector","status":"DERIVED"}],
+      "machineryConsequence":"The central upgrade is not merely accessing more dimensions but proving that shorter routes also have stable accurately recoverable return maps.",
+      "failureReview":{"mandatoryQuestion":"Was the geodesic valid but the return map ill-conditioned, the embedding wrong, the reference uncertain, or the projector physically unable to hold the chosen route?","antiPattern":"Do not choose the shortest manifold geodesic without return conditioning."},
+      "educationSequence":["extra-dimensional detection","embedding geometry","geodesic optimization","return conditioning","projector mechanics","projection forensics","multi-axis strategy"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"fold-jump","researchSchool":"Adjacency Topology School","tradition":"Finite-volume topological adjacency","coreProblem":"Construct a temporary topology in which protected origin and destination volumes become sufficiently adjacent for transfer.","objectiveFunction":"J_F=w_d d_Mprime(A,B)+w_c Sigma_end+w_o O+w_g G+w_r R","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["local adjacency proofs","finite-volume topology","paired endpoint covariance","multi-solution adjacency optimization"],
+      "instrumentTradition":["P0 microscopic adjacency cage","P1-P2 finite-volume and paired endpoint rigs","P3 moving-origin reference arrays","P4-P5 covariance-ranked multi-solution solvers","P6 continuous precommit optimization"],
+      "patentClasses":[{"name":"adjacency test cage","status":"DERIVED"},{"name":"closed fold-volume boundary","status":"DERIVED"},{"name":"paired endpoint authenticator","status":"DERIVED"},{"name":"adaptive precommit topology solver","status":"DERIVED"}],
+      "machineryConsequence":"Higher tiers solve larger protected volumes, more distant endpoints, stronger gravity covariance and more candidate topologies before commit.",
+      "failureReview":{"mandatoryQuestion":"Was endpoint covariance, occupancy, gravimetric distortion, origin closure, topology support, authentication or recovery margin invalid before commit?","antiPattern":"Do not describe post-commit Fold-Jump control as ordinary steering."},
+      "educationSequence":["adjacency proofs","finite-volume topology","endpoint covariance","moving-origin solving","occupancy and gravity exclusion","commit forensics","strategic topology optimization"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"wormhole-gate","researchSchool":"Aperture Topology School","tradition":"Maintained multiply connected transport","coreProblem":"Create and stabilize a traversable throat whose geometry, chronology, throughput and mouth states remain jointly admissible.","objectiveFunction":"J_W=w_r sigma_r+w_t sigma_t+w_c C_chron+w_q Q_queue+w_e E_loss","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["microscopic throat formation","finite aperture stabilization","mouth synchronization","network throughput optimization"],
+      "instrumentTradition":["P0 microscopic throat foundry","P1 finite cargo aperture rigs","P2 paired mouth clocks","P3-P5 network telemetry and traffic laboratories","P6 self-stabilizing aperture control"],
+      "patentClasses":[{"name":"throat foundry","status":"DERIVED"},{"name":"aperture support lattice","status":"DERIVED"},{"name":"chronology-safe mouth clock","status":"DERIVED"},{"name":"adaptive throat traffic controller","status":"DERIVED"}],
+      "machineryConsequence":"Strategic improvement migrates toward infrastructure: throat material, mouth telemetry, synchronization, reserve energy, traffic control and deep-space siting.",
+      "failureReview":{"mandatoryQuestion":"Was the failure local throat geometry, mouth synchronization, chronology constraint, structural support, energy recovery, traffic loading, or environment?","antiPattern":"Do not describe gate performance solely as ship velocity."},
+      "educationSequence":["throat physics","aperture structure","mouth synchronization","chronology constraints","traffic engineering","failure forensics","network strategy"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    },
+    {
+      "family":"phase-displacement","researchSchool":"State Correspondence School","tradition":"Nonlocal compatibility and continuity mapping","coreProblem":"Map a protected macroscopic state onto a valid remote state while bounding continuity, identity and reference error.","objectiveFunction":"J_P=sum_k w_k C_k(Psi_A,Psi_B)+lambda_r U_ref+lambda_o O_target","objectiveStatus":"DERIVED",
+      "mathematicalDisciplines":["prepared-state transfer","macroscopic continuity invariants","remote target authentication","uncertain-state inference"],
+      "instrumentTradition":["P0 prepared-state conveyor","P1-P2 macroscopic phase chambers","P3 authenticated remote target arrays","P4-P5 uncertain-target inference systems","P6 continuous identity-safe validation"],
+      "patentClasses":[{"name":"state conveyor","status":"DERIVED"},{"name":"macroscopic phase chamber","status":"DERIVED"},{"name":"continuity verifier","status":"DERIVED"},{"name":"adaptive target-state solver","status":"DERIVED"}],
+      "machineryConsequence":"Better systems know the remote state more completely, represent the payload more faithfully and reject ambiguous mappings earlier rather than merely applying more energy.",
+      "failureReview":{"mandatoryQuestion":"Was target state incompatible, continuity tolerance exceeded, reference provenance weak, occupancy ambiguous, or representation incomplete?","antiPattern":"Do not treat additional energy as a substitute for state knowledge."},
+      "educationSequence":["state representation","compatibility invariants","continuity theory","target authentication","uncertainty rejection","mapping forensics","strategic remote-state inference"],
+      "provenance":{"familyOperator":"CONFIRMED_OR_HIGHER_AUTHORITY","researchSchool":"DERIVED","objectiveFunction":"DERIVED","numericCoefficients":"PROPOSED","namedOwnership":"UNRESOLVED"}
+    }
+  ],
+  "namedAttributionGuard": {
+    "status": "CONFIRMED_POLICY",
+    "requirements": [
+      "Attach a named race, polity or manufacturer only when higher authority explicitly connects that entity to the family, implementation, institution, inventor, patent or research tradition.",
+      "Technology basis may alter embodiment and research medium but does not prove possession or invention.",
+      "Generated instances may record instance-local provenance but may not promote repeated generated associations to setting canon.",
+      "When attribution is absent, render a generic DERIVED school and expose named ownership as UNRESOLVED."
+    ]
+  },
+  "apiProjection": {
+    "resolverInputs": ["family", "pathLevel", "sharedTier", "technologyBasis", "namedEntityAuthority?", "environment", "vesselScale"],
+    "resolverOutputs": ["researchSchool", "objectiveFunction", "mathematicalDisciplines", "instrumentTradition", "patentClasses", "educationSequence", "failureReview", "provenance"],
+    "modes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"]
+  }
+}
