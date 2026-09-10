@@ -6,6 +6,7 @@ import vm from 'node:vm';
 const root = process.cwd();
 const kernelSource = await fs.readFile(path.join(root, 'kaysender-editor-kernel.js'), 'utf8');
 const repositorySource = await fs.readFile(path.join(root, 'kaysender-editor-repository.js'), 'utf8');
+const recordLibrarySource = await fs.readFile(path.join(root, 'kaysender-editor-record-library.js'), 'utf8');
 const fail = message => { throw new Error(message); };
 const assert = (condition, message) => { if (!condition) fail(message); };
 
@@ -132,5 +133,17 @@ assert(repair.ok && repair.repaired === true, 'Repository did not rebuild stale 
 const repairedG2 = Repository.list({ query: 'G2' }).find(item => item.profileId === g2.profileId);
 assert(repairedG2?.generation === 2 && repairedG2?.rootProfileId === g0r2.profileId && repairedG2?.parentProfileId === g1.profileId, 'Index repair did not restore generation/root/parent metadata or findability.');
 
-console.log('Editor generational provenance and repository roundtrip validation passed.');
-console.log(`Verified ${g0.profileId} r1 -> r2 without generation change, clone to G1/G2, repository save/index/search/load, same-revision provenance conflict rejection, and stale-index repair from canonical records.`);
+// Presentation contract: keep repository metadata visible and searchable without reopening
+// canonical records during ordinary library refresh. This keeps the library fast and makes
+// provenance understandable at the point where users select records.
+assert(recordLibrarySource.includes("return `${record.name} · ${generationLabel(record)} · r${record.revision}${lineageWarning}`;"), 'Saved Record Library no longer presents name, generation, and revision together.');
+assert(recordLibrarySource.includes("const lineageWarning = record.lineageComplete === false ? ' · lineage incomplete' : '';"), 'Saved Record Library no longer exposes incomplete lineage in record labels.');
+assert(recordLibrarySource.includes("query: filters.query") && recordLibrarySource.includes("lineageComplete: filters.lineageComplete"), 'Saved Record Library no longer forwards findability filters to repository metadata search.');
+assert(recordLibrarySource.includes("const parent = record.parentProfileId ?") && recordLibrarySource.includes("const root = record.rootProfileId ?"), 'Saved Record Library no longer exposes parent/root provenance in record discovery metadata.');
+const refreshSource = recordLibrarySource.slice(recordLibrarySource.indexOf('function refresh()'), recordLibrarySource.indexOf('async function rebuildEnvelope()'));
+assert(refreshSource.length > 0, 'Could not isolate Saved Record Library refresh implementation for integration validation.');
+assert(!refreshSource.includes('Repository.load('), 'Saved Record Library refresh reopens canonical records instead of using indexed metadata.');
+assert(refreshSource.includes('Repository.ensureIndexCurrent') || recordLibrarySource.includes('function repositoryHealthSummary()'), 'Saved Record Library no longer integrates repository index-health recovery into refresh.');
+
+console.log('Editor generational provenance, repository roundtrip, and library findability contract validation passed.');
+console.log(`Verified ${g0.profileId} r1 -> r2 without generation change, clone to G1/G2, repository save/index/search/load, same-revision provenance conflict rejection, stale-index repair, and library metadata/findability integration.`);
