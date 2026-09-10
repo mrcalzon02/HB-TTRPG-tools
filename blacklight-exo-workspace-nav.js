@@ -19,6 +19,14 @@
     return pathname.split('?')[0].split('#')[0];
   }
 
+  function ensureStyle() {
+    if (document.getElementById('exo-workspace-nav-style')) return;
+    const style = document.createElement('style');
+    style.id = 'exo-workspace-nav-style';
+    style.textContent = '.exo-workspace-nav{width:calc(100% - 24px);margin:8px auto 0}@media(max-width:760px){.exo-workspace-nav{width:calc(100% - 12px);margin-top:6px}}';
+    document.head.append(style);
+  }
+
   function markCurrent(nav) {
     const current = pageName();
     for (const link of nav.querySelectorAll('a[href]')) {
@@ -63,6 +71,7 @@
   }
 
   function install() {
+    ensureStyle();
     normalizeGlobalTopbar();
     const existing = document.querySelector('.bli-system-nav');
     if (existing) {
