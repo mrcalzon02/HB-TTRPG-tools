@@ -229,8 +229,9 @@
     const data = deepClone(unwrap(dataInput));
     const profileType = options.profileType || inferProfileType(data);
     if (profileType && !data.profileType) data.profileType = profileType;
-    const previous = options.existingEnvelope && isEnvelope(options.existingEnvelope) ? options.existingEnvelope : null;
-    if (previous) normalizeGenerationalProvenance(previous);
+    const previous = options.existingEnvelope && isEnvelope(options.existingEnvelope)
+      ? normalizeGenerationalProvenance(deepClone(options.existingEnvelope))
+      : null;
     const timestamp = nowIso();
     const inheritance = deepClone(options.inheritance || previous?.inheritance || []);
     const locks = Array.from(new Set(options.locks || previous?.locks || [])).sort();
@@ -243,10 +244,14 @@
       ...(previous?.provenance?.migrationLog || []),
       ...(options.migrationLog || [])
     ];
-    const generation = previous?.provenance?.generation ?? (Object.prototype.hasOwnProperty.call(options, 'generation') ? options.generation : 0);
-    const parent = deepClone(previous?.provenance?.parent ?? options.parent ?? null);
-    const lineage = deepClone(previous?.provenance?.lineage ?? options.lineage ?? []);
-    const lineageComplete = previous?.provenance?.lineageComplete ?? (typeof options.lineageComplete === 'boolean' ? options.lineageComplete : generation !== null);
+    const generation = previous
+      ? previous.provenance.generation
+      : (Object.prototype.hasOwnProperty.call(options, 'generation') ? options.generation : 0);
+    const parent = deepClone(previous ? previous.provenance.parent : (options.parent ?? null));
+    const lineage = deepClone(previous ? previous.provenance.lineage : (options.lineage ?? []));
+    const lineageComplete = previous
+      ? previous.provenance.lineageComplete
+      : (typeof options.lineageComplete === 'boolean' ? options.lineageComplete : generation !== null);
     const diagnostics = validateDomainData(canonicalData, profileType ? [profileType] : []);
     return {
       editorEnvelopeVersion: ENVELOPE_VERSION,
