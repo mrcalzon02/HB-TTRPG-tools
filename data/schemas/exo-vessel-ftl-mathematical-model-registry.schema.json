@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-mathematical-model-registry.schema.json",
+  "title": "Black Light FTL Mathematical Model Registry",
+  "description": "Validation contract for the subordinate mathematical/operator layer that explains confirmed Black Light FTL Path capability progression without promoting derived equations or uncalibrated coefficients to setting canon.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectId","registryType","registryVersion","authorityDocument","mathematicalReference","schema","statusRule","runtimePerformanceSources","upgradeDrivers","commonModels","families","canonSafeguards"],
+  "properties": {
+    "projectId": {"const":"blacklight-exo-vessel-design-system"},
+    "registryType": {"const":"blackLightFtlMathematicalModelRegistry"},
+    "registryVersion": {"type":"string","minLength":1},
+    "authorityDocument": {"const":"docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md"},
+    "mathematicalReference": {"const":"docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md"},
+    "schema": {"const":"data/schemas/exo-vessel-ftl-mathematical-model-registry.schema.json"},
+    "statusRule": {"type":"string","minLength":1},
+    "runtimePerformanceSources": {
+      "type":"object",
+      "additionalProperties": true,
+      "required":["sharedTier","physicalPaths","dimensionalPaths","discretePaths","pathTierCoupling","rule"]
+    },
+    "upgradeDrivers": {
+      "type":"array",
+      "uniqueItems":true,
+      "items":{"$ref":"#/$defs/upgradeDriver"},
+      "minItems":9
+    },
+    "commonModels": {
+      "type":"object",
+      "additionalProperties":{"$ref":"#/$defs/equationModel"}
+    },
+    "families": {
+      "type":"array",
+      "minItems":9,
+      "maxItems":9,
+      "items":{"$ref":"#/$defs/familyModel"}
+    },
+    "canonSafeguards": {"type":"array","items":{"type":"string","minLength":1},"minItems":1}
+  },
+  "$defs": {
+    "canonStatus": {"enum":["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"]},
+    "upgradeDriver": {"enum":["MATHEMATICS","FIELD_CONTROL","ACTIVE_MATERIALS","STRUCTURE","ENERGY","NAVIGATION","DRIVE_SCALE_DISTRIBUTION","CONTROL_BANDWIDTH","RECOVERY"]},
+    "transitFamily": {"enum":["metric-envelope","gravitic-plane","slipstream-shear","q-lattice","n-manifold","fold-jump","wormhole-gate","phase-displacement","inertial-torch"]},
+    "pathLevel": {"enum":["p0","p1","p2","p3","p4","p5","p6"]},
+    "operatorClass": {"enum":["METRIC_DEFORMATION","CONSTRAINED_GEODESIC_SELECTION","BOUNDARY_LAYER_COUPLING","DISCRETE_STATE_TRANSLATION","HIGHER_DIMENSIONAL_GEODESIC","TOPOLOGICAL_ADJACENCY","MAINTAINED_MULTIPLY_CONNECTED_TOPOLOGY","NONLOCAL_STATE_DISPLACEMENT","RELATIVISTIC_CONTINUOUS_TRAJECTORY"]},
+    "distanceModelType": {"enum":["EFFECTIVE_METRIC_GEODESIC","WEIGHTED_GEODESIC_PLANE","BOUNDARY_FLOW_WEIGHTED_DISTANCE","WEIGHTED_PHASE_GRAPH","N_DIMENSIONAL_GEODESIC","TOPOLOGICAL_ADJACENCY_DISTANCE","THROAT_PROPER_DISTANCE_PLUS_ACCESS","STATE_SPACE_DISTANCE","ORDINARY_TRAJECTORY"]},
+    "equationModel": {
+      "type":"object",
+      "additionalProperties":true,
+      "required":["id","status","expression"],
+      "properties":{
+        "id":{"type":"string","minLength":1},
+        "status":{"$ref":"#/$defs/canonStatus"},
+        "expression":{"type":"string","minLength":1},
+        "note":{"type":"string"},
+        "safeguard":{"type":"string"}
+      }
+    },
+    "pathStage": {
+      "type":"object",
+      "additionalProperties":false,
+      "required":["pathLevel","implementationName","mathematicalCapability","upgradeDrivers","changedTerms"],
+      "properties":{
+        "pathLevel":{"$ref":"#/$defs/pathLevel"},
+        "implementationName":{"type":"string","minLength":1},
+        "mathematicalCapability":{"type":"string","minLength":1},
+        "upgradeDrivers":{"type":"array","uniqueItems":true,"items":{"$ref":"#/$defs/upgradeDriver"},"minItems":1},
+        "changedTerms":{"type":"array","items":{"type":"string","minLength":1},"minItems":1}
+      }
+    },
+    "familyModel": {
+      "type":"object",
+      "additionalProperties":false,
+      "required":["id","equationSetId","operatorClass","actedSpace","distanceModelType","status","models","pathStages"],
+      "properties":{
+        "id":{"$ref":"#/$defs/transitFamily"},
+        "equationSetId":{"type":"string","pattern":"^blacklight\\.ftl\\.[a-z-]+\\.v[0-9]+$"},
+        "operatorClass":{"$ref":"#/$defs/operatorClass"},
+        "actedSpace":{"type":"string","minLength":1},
+        "distanceModelType":{"$ref":"#/$defs/distanceModelType"},
+        "status":{"$ref":"#/$defs/canonStatus"},
+        "models":{"type":"array","items":{"$ref":"#/$defs/equationModel"},"minItems":1},
+        "pathStages":{
+          "type":"array",
+          "minItems":7,
+          "maxItems":7,
+          "items":{"$ref":"#/$defs/pathStage"}
+        }
+      }
+    }
+  }
+}
