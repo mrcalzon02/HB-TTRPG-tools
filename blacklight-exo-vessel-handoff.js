@@ -3,10 +3,11 @@
   const HANDOFF_KEY='blacklight-exo-vessel-source-v1';
 
   function ensureLink() {
-    const nav=document.querySelector('.bli-nav');
-    if(nav&&![...nav.links].some(link=>link.getAttribute('href')==='blacklight-exo-vessel.html')){
-      const link=document.createElement('a');link.href='blacklight-exo-vessel.html';link.textContent='Vessel Engineering';nav.append(link);
-    }
+    const href='blacklight-exo-vessel.html';
+    if(document.querySelector(`a[href="${href}"]`))return;
+    const nav=document.querySelector('.bli-system-nav')||document.querySelector('.bli-nav');
+    if(!nav)return;
+    const link=document.createElement('a');link.href=href;link.textContent='Vessel Engineering';nav.append(link);
   }
 
   function button(id,label,parent) {
@@ -26,12 +27,14 @@
   ensureLink();
 
   if(document.body.classList.contains('exo-ftl-body')){
-    const item=button('exo-develop-vessel','Develop Vessel Around This Drive',document.querySelector('.exo-ftl-hero .bli-actions'));
+    const parent=document.querySelector('.exo-ftl-actions')||document.querySelector('.exo-ftl-hero .bli-actions');
+    const item=button('exo-develop-vessel','Develop Vessel Around This Drive',parent);
     item?.addEventListener('click',()=>navigate('ftl',{ftl:globalThis.BlacklightExoGetActiveFTL?.()}));
   }
 
   if(document.body.classList.contains('exo-species-body')){
-    const item=button('exo-develop-species-vessel','Develop Vessel for This Biology',document.querySelector('.exo-species-hero .bli-actions'));
+    const parent=document.querySelector('.exo-species-actions')||document.querySelector('.exo-species-hero .bli-actions');
+    const item=button('exo-develop-species-vessel','Develop Vessel for This Biology',parent);
     item?.addEventListener('click',()=>navigate('biology',{dossier:globalThis.BlacklightExoGetActiveDossier?.()}));
   }
 
