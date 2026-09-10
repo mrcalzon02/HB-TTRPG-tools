@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0.0",
+  "family": "slipstream-shear",
+  "authority": {
+    "status": "MIXED",
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "legacy_design_source": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    },
+    "family_sources": [
+      "docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md",
+      "data/exo-vessel/ftl-development-lineage-registry.json",
+      "data/exo-vessel/ftl-calibration-registry.json",
+      "data/exo-vessel/ftl-environment-regression-registry.json",
+      "data/exo-vessel/ftl-family-basis-embodiment-registry.json",
+      "data/exo-vessel/ftl-technical-corpus-registry.json",
+      "EXO_OPERATIVE_TECHNOLOGY_BASIS.md"
+    ],
+    "rule": "Confirmed family identity, physical action and recovered Path implementation names outrank this derived technical deepening. Equations and unsourced machinery consequences are DERIVED; illustrative constants, thresholds, incidents, institutions, inventors and ownership remain PROPOSED or UNRESOLVED unless separately adopted."
+  },
+  "mathematics": {
+    "status": "DERIVED",
+    "boundary_state": {
+      "definition": "Represent a locally usable Q-boundary as a time-dependent level surface Sigma_Q(t) = {x | q(x,t)=q_c} with local normal n_Q = grad(q)/||grad(q)||, tangential shear velocity u_Q, boundary curvature K_Q, shear-gradient tensor S_Q, temporal drift dq/dt, environmental covariance Sigma_Qenv and wake state W_Q.",
+      "interpretation": "The drive does not make ordinary distance disappear. It attaches a protected vessel state to a metastable boundary-layer flow adjacent to normal spacetime and must remain phase matched to that moving layer.",
+      "canon_boundary": "The Q-boundary/shear action is CONFIRMED. This differential-geometric representation is DERIVED for engineering consistency."
+    },
+    "adhesion_margin": {
+      "equation": "mu_A = A_available - A_required(Q, gradQ, K_Q, S_Q, v_rel, vessel_geometry, disturbance)",
+      "normalized_form": "m_A = mu_A / max(A_available, epsilon)",
+      "validity": "A commanded ride segment is invalid when mu_A <= 0; low positive margin requires correction or planned detachment.",
+      "status": "DERIVED"
+    },
+    "route_functional": {
+      "equation": "Gamma* = argmin_Gamma integral[(w_t/v_adv) + w_a C_adh + w_w C_weather + w_k C_curv + w_u C_unc + w_e C_exit + w_r C_recovery + w_x C_crossing] ds",
+      "terms": {
+        "v_adv": "usable tangential boundary advection after phase-match losses",
+        "C_adh": "required adhesion authority and margin consumption",
+        "C_weather": "forecast Q-weather/transient cost",
+        "C_curv": "boundary curvature and hull-conformity burden",
+        "C_unc": "state-estimation and forecast covariance",
+        "C_exit": "exit correspondence and destination-state burden",
+        "C_recovery": "reserve required to detach, settle and re-enter normal operation",
+        "C_crossing": "cost of wake intersections, boundary discontinuities or competing shear bands"
+      },
+      "guard": "A faster local shear band is not automatically the preferred route if it consumes adhesion or exit margin faster than the vessel can recover.",
+      "status": "DERIVED"
+    },
+    "weather_forecast": {
+      "state": "X_Q(t) = [q, gradq, K_Q, S_Q, dS_Q/dt, W_Q, Sigma_Qenv]",
+      "forecast": "Xhat_Q(t+tau) = F_Q(X_Q(t), observations, model, tau)",
+      "uncertainty_rule": "Forecast covariance must grow with unobserved horizon and model mismatch; higher Path maturity improves sensing/model assimilation but never makes Q-weather perfectly deterministic.",
+      "status": "DERIVED"
+    },
+    "exit_correspondence": {
+      "definition": "E_exit maps the current boundary-attached vessel state to a candidate normal-space exit state and carries position, velocity, orientation, phase, protected-volume continuity, local occupancy and recovery covariance.",
+      "validity": "An exit is admissible only when the mapped state is locally physical, unoccupied, within structural/thermal limits and inside recovery authority.",
+      "status": "DERIVED"
+    },
+    "safety_horizon": {
+      "equation": "L_sensor >= v_eff * (t_detect + t_forecast + t_solve + t_command + t_detach + t_exit) + D_margin",
+      "meaning": "A slipstream system must see and predict Q-boundary changes far enough ahead to choose, command and physically execute a safe detachment/exit before the dangerous region reaches the vessel.",
+      "legacy_alignment": "Implements the legacy design requirement that more advanced transit capability carries proportionally more capable safety sensing, redundancy and emergency de-transit while never becoming perfectly safe.",
+      "status": "DERIVED"
+    }
+  },
+  "path_progression": [
+    {
+      "path": "P0",
+      "implementation": "Boundary-Shear Observatory",
+      "mathematical_capability": "Identify repeatable Q-boundary states, estimate local normals and measure shear flow without transporting a protected payload.",
+      "physical_enablers": ["fixed resonators", "remote sacrificial probes", "baseline Q interferometry", "stationary reference clocks"],
+      "changed_limits": ["boundary observability", "repeatability", "local shear measurement"],
+      "operational_result": "Observation only; establishes that a metastable shear boundary can be characterized and deliberately excited.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P1",
+      "implementation": "Q-Boundary Probe Launcher",
+      "mathematical_capability": "Solve short-lived phase match and timed detachment for small instrument packages on locally characterized boundary segments.",
+      "physical_enablers": ["fast phase vanes", "expendable adhesion coils", "timed dropout controller", "small protected-state cage"],
+      "changed_limits": ["phase-lock duration", "payload scale", "controlled detachment"],
+      "operational_result": "Short unmanned translations become repeatable but remain consumable-heavy and strongly constrained by local boundary conditions.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P2",
+      "implementation": "Captive Slipstream Tunnel",
+      "mathematical_capability": "Stabilize a bounded artificial shear segment between fixed infrastructure endpoints and hold a macroscopic protected volume inside it.",
+      "physical_enablers": ["fixed tunnel emitters", "continuous boundary skins", "endpoint reference arrays", "large recovery sinks"],
+      "changed_limits": ["macroscopic coverage", "segment lifetime", "endpoint certainty"],
+      "operational_result": "Reliable local macroscopic transfer becomes possible where infrastructure controls entry, boundary support and exit.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P3",
+      "implementation": "Shipboard Slipstream Coupler",
+      "mathematical_capability": "Predict moving boundary flow, maintain ship-scale phase continuity and solve normal-space exit correspondence during autonomous motion.",
+      "physical_enablers": ["shipwide phase skin", "Q-weather sensors", "distributed adhesion formers", "recovery dampers", "forward exit-state solver"],
+      "changed_limits": ["autonomy", "interstellar ride duration", "exit solvability", "weather response"],
+      "operational_result": "First autonomous interstellar slipstream transit with mandatory forward Q-weather sensing and emergency de-transit planning.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P4",
+      "implementation": "Operational Shear Drive",
+      "mathematical_capability": "Continuously regulate adhesion margin across multiple hull zones while estimating local boundary curvature, phase mismatch and sector health.",
+      "physical_enablers": ["distributed local controllers", "redundant phase references", "sectional recovery buses", "zone-isolated field formers"],
+      "changed_limits": ["local fault tolerance", "variable-Q tolerance", "sectional control", "ride continuity"],
+      "operational_result": "Longer rides through variable Q conditions; a local adhesion fault can be unloaded or detached without immediate whole-vessel loss.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P5",
+      "implementation": "Strategic Slipstream Drive",
+      "mathematical_capability": "Optimize routes through forecast Q-weather and candidate shear bands rather than reacting only to local measurements.",
+      "physical_enablers": ["long-look Q sensors", "higher-authority adhesion system", "predictive ensemble solvers", "larger isolated energy/recovery buffers", "route observatory data assimilation"],
+      "changed_limits": ["forecast horizon", "route choice", "shear-band selection", "adhesion reserve"],
+      "operational_result": "Strategic routes exploit stable fast shear while rejecting apparently fast bands whose forecast weather or exit geometry consumes safety margin.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P6",
+      "implementation": "Compact Wake-Riding Drive",
+      "mathematical_capability": "Jointly estimate boundary state, adhesion demand, phase velocity, wake environment, vessel load and exit/recovery state in a receding-horizon control loop.",
+      "physical_enablers": ["dense smart phase materials", "compact recovery hardware", "self-calibrating Q tomography", "distributed health-aware control", "high-bandwidth reference mesh"],
+      "changed_limits": ["machinery volume", "continuous recalibration", "wake utilization", "exit margin", "distributed survivability"],
+      "operational_result": "Apex systems achieve high performance in smaller hulls and can deliberately use well-characterized wakes without treating wake riding as universally safe or free.",
+      "status": "MIXED"
+    }
+  ],
+  "machinery": {
+    "blocks": [
+      {"id":"energy-conditioning","function":"Provide isolated high-rate energy for boundary acquisition, adhesion corrections and emergency detachment.","embodiment_rule":"Must include normal operating supply plus independent detachment/recovery reserve."},
+      {"id":"prime-mover","function":"Excite or couple to the usable Q-boundary state.","embodiment_rule":"May be rings, membranes, resonant lattices, organs or distributed coherent nodes according to technology basis; function is invariant."},
+      {"id":"field-formation","function":"Form the protected phase/adhesion skin over the entire required vessel volume.","embodiment_rule":"Coverage geometry follows hull shape, appendages and required protected volume rather than engine-room footprint."},
+      {"id":"transit-control","function":"Regulate phase velocity, local adhesion margin, boundary curvature accommodation and sector load sharing.","embodiment_rule":"P4+ requires sectional control rather than one undifferentiated global command."},
+      {"id":"navigation-sensing","function":"Estimate Q-boundary state, forward weather, wake intersections and candidate exit correspondence.","embodiment_rule":"Sensor baseline and forecast horizon must scale with usable transit performance."},
+      {"id":"termination-recovery","function":"Detach from the shear, map to admissible normal-space state, settle residual phase error and absorb transition energy.","embodiment_rule":"Recovery is not optional auxiliary equipment; it is part of route validity."},
+      {"id":"whole-effect-coverage","function":"Keep all protected mass, field-sensitive appendages and critical external structures inside coherent phase coverage.","embodiment_rule":"Uncovered geometry is a failure source, not cosmetic variance."},
+      {"id":"control-thermal-abort-backbone","function":"Carry timing, health, heat, isolation and emergency commands independently enough to survive local sector faults.","embodiment_rule":"No single control or energy bus may be assumed safe merely because the primary boundary remains attached."}
+    ],
+    "layout_invariants": [
+      "The field-forming/adhesion architecture must geometrically cover the protected vessel volume.",
+      "Forward Q sensing requires a baseline or distributed aperture appropriate to the selected Path capability.",
+      "Emergency detachment energy and control must remain available after plausible primary-drive failures.",
+      "P4+ installations require independently observable local zones so partial adhesion loss is detectable before whole-boundary collapse.",
+      "Race/manufacturer layout authority overrides generic embodiments when a specific source exists."
+    ]
+  },
+  "power": {
+    "model": "P_total(t) = P_acquire + P_hold + P_correct + P_sense + P_compute + P_thermal + P_recovery_reserve_charge. Boundary acquisition is normally the highest transient; steady riding may be lower when the local shear is favorable, while turbulence and curvature demand correction power.",
+    "reserves": [
+      "detachment reserve sized to complete a commanded exit without primary bus contribution",
+      "sector correction reserve for transient adhesion deficits",
+      "thermal headroom for repeated acquisition/abort cycles",
+      "reference/sensor backup power independent of prime mover where physically possible"
+    ],
+    "guards": [
+      "Favorable shear may reduce hold/correction demand but does not create energy from nowhere.",
+      "Infrastructure or wakes may reduce acquisition/forecast burden but cannot replace insufficient vessel adhesion authority.",
+      "A route is rejected when projected recovery reserve falls below the certified exit requirement."
+    ]
+  },
+  "navigation_control": {
+    "state_estimation": "Fuse local Q tomography, phase-reference sensors, forward boundary observations, route infrastructure and vessel response into Xhat_Q with explicit covariance; stale or contradictory sources increase uncertainty rather than being averaged into false confidence.",
+    "control_objective": "Maintain positive distributed adhesion margin, bounded phase error and structural/thermal loads while minimizing route cost and preserving at least one admissible exit trajectory.",
+    "abort_logic": [
+      "forecast mu_A <= certified minimum before next safe exit",
+      "exit correspondence covariance exceeds Path-specific acceptance envelope",
+      "multiple adjacent sectors show correlated phase divergence",
+      "forward Q-weather evolves faster than forecast/control horizon",
+      "recovery reserve or thermal margin falls below certified minimum",
+      "occupancy/reference evidence invalidates the planned normal-space exit"
+    ]
+  },
+  "operation": {
+    "pre_transit": [
+      "Authenticate route, Q-weather and exit-reference sources and retain their provenance snapshot.",
+      "Survey phase-skin continuity and compare sector calibration against last certified baseline.",
+      "Compute candidate shear routes with uncertainty, adhesion and exit costs; do not choose by nominal speed alone.",
+      "Prove at least one planned exit and one earlier emergency detachment solution within reserve.",
+      "Verify independent detachment power, recovery capacity and thermal margin.",
+      "Acquire boundary only after navigation, machinery and recovery votes agree within certified tolerance."
+    ],
+    "transit_watch": [
+      "Track distributed adhesion margin rather than a single global percentage.",
+      "Track Q-weather forecast innovation: persistent model error is itself a hazard signal.",
+      "Re-solve exit correspondence whenever route, wake, boundary curvature or reference covariance materially changes.",
+      "Treat repeated correction bursts as evidence of a deteriorating boundary model even when average speed remains acceptable.",
+      "Preserve an exit reserve; do not spend the last recovery authority maintaining schedule."
+    ],
+    "emergency_detachment": [
+      "Freeze nonessential route optimization and select the nearest certified admissible exit state.",
+      "Unload threatened adhesion zones into healthy sectors only within structural and coverage limits.",
+      "Command controlled phase-velocity reduction and boundary detachment rather than instantaneous power removal unless the family-specific emergency model demands it.",
+      "Map and verify normal-space occupancy immediately before re-entry.",
+      "Absorb transition energy, isolate unstable sectors and enter post-detachment recovery mode.",
+      "Do not re-acquire until the triggering uncertainty or hardware fault has been identified."
+    ]
+  },
+  "maintenance": {
+    "routine": [
+      "Q-reference calibration and drift history",
+      "phase-skin continuity survey across seams, appendages and repaired hull zones",
+      "adhesion former transfer-function test by sector",
+      "forward Q-sensor baseline verification",
+      "recovery damper/sink capacity test",
+      "independent abort-bus discharge test",
+      "thermal cycling and field-active material state inspection"
+    ],
+    "diagnostic_isolation": [
+      "If predicted boundary and measured vessel response disagree coherently across all sectors, suspect environment/reference/model before replacing every field former.",
+      "If one sector diverges while adjacent sensors agree on environment, isolate local field former, phase reference, structure and cabling/carrier path.",
+      "If exit solutions drift while adhesion remains healthy, isolate destination references, timing and correspondence solver.",
+      "If correction energy rises with unchanged boundary estimate, inspect field-active material aging, geometry change, contamination and thermal state.",
+      "If wake encounters produce oscillatory faults, separate environmental wake-model error from controller bandwidth and structural resonance."
+    ],
+    "return_to_service": "Return to transit service only after the failed quantity is reproduced or bounded, repaired at its authoritative source, re-calibrated against a known reference, and a full acquisition-hold-detach-recovery test passes without spending emergency reserve.",
+    "status": "DERIVED"
+  },
+  "signatures": {
+    "intrinsic": ["Q-boundary excitation transient", "coherent shear wake", "entry/exit phase flash or boundary relaxation", "family-specific Q-spectrum modulation"],
+    "operational": ["correction-burst cadence", "sector control modulation", "recovery settling transient", "route-dependent wake geometry"],
+    "scaling_rule": "Signature strength and persistence depend on acquired boundary area, correction work, wake lifetime, vessel scale and local Q conditions; lower waste or cleaner control does not make the underlying Q disturbance disappear.",
+    "forensics": "A wake may preserve route direction, correction cadence or class-scale clues, but manufacturer/race attribution requires separately established signature authority.",
+    "status": "DERIVED"
+  },
+  "failures": {
+    "classes": [
+      {"id":"adhesion-deficit","cause":"Required boundary coupling exceeds available authority.","progression":"margin erosion -> correction saturation -> local detachment -> cascading coverage loss if not isolated"},
+      {"id":"phase-runaway","cause":"Vessel/field phase velocity ceases to match usable shear.","progression":"phase error -> asymmetric load -> exit-map degradation -> uncontrolled dropout or structural damage"},
+      {"id":"q-weather-front","cause":"Boundary state changes outside forecast/control capability.","progression":"forecast innovation -> correction demand -> shrinking safety horizon -> mandatory early detachment"},
+      {"id":"boundary-curvature-pinch","cause":"Local boundary curvature exceeds hull/field conformity authority.","progression":"sector compression -> differential loads -> protected-volume intrusion -> sectional or global dropout"},
+      {"id":"wake-resonance","cause":"Existing Q wake couples destructively to the vessel's control/structural modes.","progression":"oscillatory corrections -> heating/fatigue -> sensor corruption -> adhesion instability"},
+      {"id":"exit-correspondence-loss","cause":"No candidate normal-space exit remains inside uncertainty, occupancy and recovery constraints.","progression":"exit rejection -> reserve consumption -> horizon exhaustion -> forced high-risk detachment"},
+      {"id":"reference-corruption","cause":"Timing, boundary or destination reference becomes stale, aliased or unauthenticated.","progression":"biased state estimate -> incorrect route/exit solution -> coherent but wrong control commands"},
+      {"id":"recovery-exhaustion","cause":"Drive spends the energy/thermal/field authority reserved for safe detachment.","progression":"reduced exit set -> delayed abort -> inability to settle transition without damage"}
+    ],
+    "investigation_rule": "Do not record 'drive overload' as root cause. Classify environmental model, reference integrity, mathematical solution, field/material authority, structure, control latency, power, thermal state, recovery or infrastructure contribution separately.",
+    "status": "DERIVED"
+  },
+  "infrastructure": {
+    "classes": [
+      {"name":"Q-weather observatory","effect":"Improves remote boundary-state observations and forecast covariance.","limit":"Does not guarantee future weather or provide vessel field authority."},
+      {"name":"surveyed slip corridor","effect":"Provides accumulated route, wake and exit-correspondence history.","limit":"A historically stable corridor can become unsafe when current measurements disagree."},
+      {"name":"phase/reference beacon","effect":"Improves timing, localization and authenticated exit references.","limit":"Cannot make an occupied or physically invalid exit acceptable."},
+      {"name":"boundary acquisition station","effect":"Provides fixed high-authority machinery for easier/cleaner entry or captive shear formation.","limit":"Shipboard survival still requires adequate autonomous hold, detachment and recovery capability unless operation remains fully captive."},
+      {"name":"wake traffic service","effect":"Publishes recent transit wakes, decay estimates and lane-crossing hazards.","limit":"Wake riding remains a vessel-specific control decision, not a universal performance bonus."}
+    ],
+    "status": "DERIVED"
+  },
+  "scaling": {
+    "drivers": ["protected surface/volume", "maximum hull span", "boundary curvature required around geometry", "number of independently controlled adhesion zones", "sensor baseline", "energy/recovery reserve", "thermal rejection", "timing/reference distribution distance"],
+    "qualitative_model": "M_drive is not proportional to vessel mass alone. Larger vessels gain room for sensors and buffers but pay in phase-skin area, synchronization path length, structural differential loads and boundary-conformity burden.",
+    "multiple_drive_rule": "Multiple slipstream machines are not additive speed multipliers. They must resolve as coherent sectors, redundant channels, staged acquisition/hold systems or separately isolated transit systems with explicit synchronization and failure behavior.",
+    "compact_apex_rule": "P6 compactness comes from better field-active material, sensing, estimation, sectional control and recovery density, not from deleting the whole-vessel coverage requirement.",
+    "status": "DERIVED"
+  },
+  "technology_basis_translation": {
+    "terrestrial_mechanical": "Phased rings or hull plates, electromagnetic/field buses, precision clocks, distributed digital controllers, replaceable sensor apertures and engineered thermal/recovery sinks.",
+    "aquatic_pressure_native": "Pressure-qualified resonant membranes, wet photonic timing/control, fluid-compatible field surfaces, distributed hydroacoustic/Q sensing and chemistry-sensitive maintenance of boundary carriers.",
+    "cryogenic_superconducting": "Superconducting phase loops, ultra-low-noise Q interferometers, cryogenic timing references, quench-isolated adhesion sectors and large cold energy/recovery buffers.",
+    "gas_giant_aerostat": "Large distributed buoyant resonator webs, long-baseline atmospheric sensor arrays, flexible field membranes and sectional control adapted to continuously deforming pressure structures.",
+    "biological_symbiotic": "Cultivated field-bearing tissues, sensory ganglia for Q-state estimation, distributed neural phase coordination, regenerative adhesion organs and metabolic/chemical recovery stores; all DERIVED unless a race source confirms the embodiment.",
+    "mineral_crystalline": "Coherent lattice shells, defect-engineered Q resonators, optical/phononic timing paths, prestressed structural coupling and repair by lattice replacement/re-annealing.",
+    "postmaterial_distributed": "Distributed coherent field nodes, executable control proofs, dense self-observation, dynamically reassigned adhesion zones and authenticated reconstruction/recovery state.",
+    "ownership_guard": "Technology basis describes embodiment only. It does not establish which race invented, owns or commonly uses slipstream transit.",
+    "status": "DERIVED"
+  },
+  "generator_contract": {
+    "inputs": ["family=slipstream-shear", "Transit Path P0-P6", "shared T-tier where runtime requires it", "technology basis", "vessel geometry/mass/condition", "energy and recovery capability", "Q-boundary/weather state with uncertainty", "route infrastructure", "destination/exit references", "specific race/manufacturer/named-installation canon if available"],
+    "outputs": ["resolved implementation name", "boundary/route solution summary", "adhesion and safety margins", "whole-vessel machinery layout", "power/recovery model", "navigation/control doctrine", "maintenance and failure model", "signatures", "infrastructure dependencies", "provenance/status per claim"],
+    "hard_guards": [
+      "Do not merge slipstream-shear with gravitic-plane hyperlane transit; their confirmed physical actions differ.",
+      "Do not treat Q-Lattice discrete addressing as Slipstream boundary riding.",
+      "Do not express derived route gain as an arbitrary generic FTL speed multiplier.",
+      "Do not allow favorable Q shear to erase adhesion, exit, recovery, gravity or uncertainty constraints.",
+      "Do not promote derived equations, thresholds, training incidents, patent concepts or basis translations to CONFIRMED canon.",
+      "Do not infer race, manufacturer, inventor or historical ownership from technology basis.",
+      "Specific named authority always outranks generic generated embodiment within its scope."
+    ],
+    "api_shape": {
+      "request": {"family":"slipstream-shear","path":"P0-P6","technologyBasis":"operative basis key","vessel":"geometry/condition reference","environment":"Q/gravity/reference state","infrastructure":"optional authority-backed aids","mode":"AUTHORITY_ONLY | LABELED_DERIVATION | LABELED_PROPOSAL"},
+      "response": {"implementation":"resolved recovered Path name","solution":"boundary route and exit state","margins":"adhesion/safety/recovery/uncertainty","machinery":"eight-block embodiment","provenance":"source/status chain","warnings":"authority conflicts and rejected assumptions"}
+    }
+  },
+  "provenance": {
+    "canon_rule": "Family identity, recovered Path names and higher-priority specific canon are preserved. Mathematical formalization, generalized machinery and procedures in this volume are explanatory DERIVED material unless a cited authority says otherwise. Numerical examples require PROPOSED status until separately adopted.",
+    "field_status_required": true,
+    "source_chain": [
+      "specific named race/manufacturer/vessel/installation authority when present",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "recovered FTL archive and live family Path definitions",
+      "The different lightspeed methods (Google Drive current revision recorded above)",
+      "operative technology basis and existing FTL engineering registries",
+      "this family technical volume for labeled derived engineering depth"
+    ],
+    "unresolved": ["canonical inventor", "canonical first-use date", "canonical race ownership", "canonical manufacturer lineages", "setting-wide numeric Q constants and safety thresholds"]
+  }
+}
