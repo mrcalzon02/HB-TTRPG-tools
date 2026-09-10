@@ -17,6 +17,8 @@
     'rootProfileId',
     'rootRevision'
   ]);
+  let automaticIndexCheckComplete = false;
+  let automaticIndexCheckResult = null;
 
   function storage() {
     return window.localStorage || null;
@@ -145,6 +147,7 @@
   function save(envelope) {
     const target = storage();
     if (!target) return { ok: false, message: 'Local storage is unavailable.' };
+    ensureIndexCurrent();
     const diagnostics = Kernel.validateEnvelope(envelope, envelope?.profileType ? [envelope.profileType] : []);
     const errors = diagnostics.filter(item => item.severity === 'error');
     if (errors.length) {
@@ -368,15 +371,33 @@
     }
   }
 
-  function ensureIndexCurrent() {
+  function ensureIndexCurrent(options = {}) {
+    const force = options.force === true;
+    if (automaticIndexCheckComplete && !force) {
+      return automaticIndexCheckResult || {
+        ok: true,
+        repaired: false,
+        skipped: true,
+        message: 'Automatic saved record index check already completed for this page session.'
+      };
+    }
     const health = indexHealth();
-    if (!health.ok || !health.stale) return { ...health, repaired: false };
-    const repair = repairIndex();
-    return {
-      ...repair,
-      repaired: repair.ok,
-      previousHealth: health
-    };
+    let result;
+    if (!health.ok || !health.stale) {
+      result = { ...health, repaired: false };
+    } else {
+      const repair = repairIndex();
+      result = {
+        ...repair,
+        repaired: repair.ok,
+        previousHealth: health
+      };
+    }
+    if (!force) {
+      automaticIndexCheckComplete = true;
+      automaticIndexCheckResult = result;
+    }
+    return result;
   }
 
   window.KaysenderEditorRepository = Object.freeze({
