@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://blacklight.local/schemas/exo-vessel-ftl-environment-regression-registry.schema.json",
+  "title":"Black Light FTL Environment Regression Registry",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["registryType","registryVersion","status","authority","canonPolicy","environmentModel","environments","familyResponseMatrix","regressionInvariants","generatorRules"],
+  "properties":{
+    "registryType":{"const":"blackLightFtlEnvironmentRegressionRegistry"},
+    "registryVersion":{"type":"string"},
+    "status":{"enum":["PROPOSED_SCENARIO_FIXTURES","MIXED_AUTHORITY"]},
+    "authority":{"type":"object","additionalProperties":{"type":"string"}},
+    "canonPolicy":{"type":"object","additionalProperties":true},
+    "environmentModel":{"type":"object","required":["stateVector","variables"],"properties":{"stateVector":{"type":"string"},"variables":{"type":"object","additionalProperties":{"type":"object","required":["meaning","status"],"properties":{"meaning":{"type":"string"},"status":{"enum":["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED"]}},"additionalProperties":true}}},"additionalProperties":true},
+    "environments":{"type":"array","minItems":9,"items":{"type":"object","required":["id","name","purpose","status","state","expectedDiscriminators"],"properties":{"id":{"type":"string"},"name":{"type":"string"},"purpose":{"type":"string"},"status":{"enum":["PROPOSED","DERIVED"]},"state":{"type":"object"},"expectedDiscriminators":{"type":"array","items":{"type":"string"}}},"additionalProperties":true}},
+    "familyResponseMatrix":{"type":"array","minItems":9,"maxItems":9,"items":{"type":"object","required":["family","optimizationTarget","environmentCoupling","responses"],"properties":{"family":{"enum":["metric-envelope","gravitic-plane","slipstream-shear","q-lattice","n-manifold","fold-jump","wormhole-gate","phase-displacement","inertial-torch"]},"optimizationTarget":{"type":"string"},"environmentCoupling":{"type":"string"},"responses":{"type":"array","minItems":9,"items":{"type":"object","required":["environment","mathematicalEffect","routeBehavior","tierScaling","abortBehavior","signatures","failureTriggers","maintenanceTriggers"],"properties":{"environment":{"type":"string"},"mathematicalEffect":{"type":"string"},"routeBehavior":{"type":"string"},"tierScaling":{"type":"string"},"abortBehavior":{"type":"string"},"signatures":{"type":"array","items":{"type":"string"}},"failureTriggers":{"type":"array","items":{"type":"string"}},"maintenanceTriggers":{"type":"array","items":{"type":"string"}}},"additionalProperties":true}}},"additionalProperties":true}},
+    "regressionInvariants":{"type":"array","minItems":9,"items":{"type":"object","required":["id","assertion","status"],"properties":{"id":{"type":"string"},"assertion":{"type":"string"},"status":{"enum":["CONFIRMED","DERIVED","PROPOSED"]}},"additionalProperties":true}},
+    "generatorRules":{"type":"array","items":{"type":"string"}},
+    "provenance":{"type":"array","items":{"type":"object","additionalProperties":true}}
+  }
+}
