@@ -1,0 +1,189 @@
+{
+  "schema_version": "1.0.0",
+  "family": "metric-envelope",
+  "authority": {
+    "status": "MIXED",
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "legacy_design_source": {
+      "title": "The different lightspeed methods",
+      "file_id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revision_id": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    },
+    "confirmed_family_action": "4D local metric deformation around a protected local vessel volume, changing effective external geometry without reclassifying the installation as a Fold, Manifold, Slipstream, Lattice, Gate, Phase, or Gravitic system.",
+    "subordinate_sources": [
+      "docs/blacklight/BLACK_LIGHT_FTL_TECHNICAL_CORPUS_MANUAL.md",
+      "data/exo-vessel/ftl-technical-corpus-registry.json",
+      "data/exo-vessel/ftl-development-lineage-registry.json",
+      "data/exo-vessel/ftl-calibration-registry.json",
+      "data/exo-vessel/ftl-environment-regression-registry.json",
+      "data/exo-vessel/ftl-family-basis-embodiment-registry.json"
+    ]
+  },
+  "mathematics": {
+    "status": "DERIVED",
+    "state": "Represent the controlled local geometry by an effective spatial metric gamma_eff_ij(x,t), a protected-volume boundary Omega(t), and a route Gamma. The installation solves for a bounded deformation field rather than assigning a scalar FTL speed.",
+    "effective_distance": "D_eff(Gamma)=integral_Gamma sqrt(gamma_eff_ij dx^i dx^j); route gain G_M=D_0/D_eff.",
+    "route_objective": "J_M=D_eff + lambda_h H_causal + lambda_g B_gravity + lambda_t B_tidal + lambda_s B_structure + lambda_u U_reference + lambda_r B_recovery.",
+    "gravity_burden": "B_gravity = integral_Omega [a_phi |Phi|/Phi_* + a_grad |grad Phi|/g_* + a_R ||R||/R_*] dV/V_Omega. Normalization constants are PROPOSED calibration values, not canon constants.",
+    "structural_margin": "mu_struct = 1 - max_x(sigma_equiv(x)/sigma_allow(x)); mu_struct <= 0 forbids commit.",
+    "safety_horizon": "L_sensor >= v_eff(t_detect+t_solve+t_command+t_field+t_exit)+D_margin; H_s=L_sensor/L_safe. H_s>1 is positive modeled margin, not perfect safety.",
+    "field_efficiency": "eta_metric = D0/[D_eff(1+B_gravity+B_tidal+B_control)]; used comparatively only until calibrated.",
+    "hard_constraints": [
+      "protected-volume closure must remain valid",
+      "causal-horizon term must remain inside certified limits",
+      "structural and field-forming margins must remain positive",
+      "sensor/solver/actuator horizon must exceed abort requirement",
+      "gravity burden may make otherwise valid deformation unaffordable or unsolvable"
+    ]
+  },
+  "path_progression": [
+    {
+      "path": "P0",
+      "implementation": "Metric Stress-Test Monolith",
+      "mathematical_capability": "Solve small, approximately static perturbations in a tightly surveyed laboratory volume.",
+      "physical_enablers": ["fixed metrology frame","massive external field-forming structure","low-bandwidth synchronized emitters"],
+      "changed_limits": ["demonstrable metric perturbation","measurement precision"],
+      "operational_result": "No useful vessel transit; establishes repeatable local deformation and calibration mathematics.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P1",
+      "implementation": "Inertial Relief Envelope",
+      "mathematical_capability": "Solve directed anisotropic compression/expansion around a stationary protected test volume.",
+      "physical_enablers": ["improved emitter symmetry","faster timing distribution","field-active materials with lower hysteresis"],
+      "changed_limits": ["field directionality","protected-volume size","waste-mode suppression"],
+      "operational_result": "Controlled directional metric bias and measurable inertial/route effects without operational superluminal transit.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P2",
+      "implementation": "Subluminal Compression Bubble",
+      "mathematical_capability": "Close a moving three-dimensional deformation shell around a finite vessel-scale volume and continuously update boundary conditions.",
+      "physical_enablers": ["distributed field sectors","higher-rate gravimetry","reinforced load paths","reserve field energy"],
+      "changed_limits": ["moving-volume closure","continuous control","vessel integration"],
+      "operational_result": "Practical moving compression envelope below causal-horizon operating limits.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P3",
+      "implementation": "First Causal-Horizon Envelope",
+      "mathematical_capability": "Include horizon formation, forward solution validity, abort horizon, and asymmetric field propagation in the route solve.",
+      "physical_enablers": ["longer-range forward sensing","redundant solver channels","faster sectional field collapse","dedicated recovery reserve"],
+      "changed_limits": ["causal-horizon management","first supra-light certification","abort survivability"],
+      "operational_result": "Prototype FTL operation in low-curvature, highly surveyed conditions with large exclusion radii.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P4",
+      "implementation": "Operational Warp Envelope",
+      "mathematical_capability": "Solve a dynamically segmented tensor field in realistic stellar gravitational terrain and reallocate deformation authority among sectors.",
+      "physical_enablers": ["multi-sector field controller","structural load redistribution","improved active materials","continuous reference fusion"],
+      "changed_limits": ["gravity tolerance","field asymmetry","route flexibility","fault isolation"],
+      "operational_result": "Fleet-operational interstellar metric transit with family-specific gravity exclusion and route planning.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P5",
+      "implementation": "Strategic Metric Drive",
+      "mathematical_capability": "Optimize the full route through predicted gravity/curvature terrain rather than maximizing local compression at each instant.",
+      "physical_enablers": ["predictive mass-field models","larger sensor baselines","denser solver fabric","higher-strength field-support structure","more efficient energy conditioning"],
+      "changed_limits": ["strategic range","energy per effective distance","gravity-weather avoidance","recovery margin"],
+      "operational_result": "Deep-range strategic transit by choosing mathematically efficient deformation histories, not merely stronger fields.",
+      "status": "MIXED"
+    },
+    {
+      "path": "P6",
+      "implementation": "Compact Dynamic Metric Engine",
+      "mathematical_capability": "Continuously re-solve route, field tensor, structural loading, sensing horizon, and recovery state as one constrained receding-horizon optimization.",
+      "physical_enablers": ["compact high-bandwidth field sectors","self-calibrating metrology","high-performance field materials","distributed reserve and recovery","fault-tolerant solver mesh"],
+      "changed_limits": ["machine compactness","adaptive gravity tolerance","control latency","fault containment","usable safe envelope"],
+      "operational_result": "Mature compact metric transit with greater safety margin and efficiency, while retaining finite gravity, sensing, structure, and recovery limits.",
+      "status": "MIXED"
+    }
+  ],
+  "machinery": {
+    "blocks": {
+      "energy_conditioning": "Prime power, pulse storage, isolation, and a separately protected recovery reserve.",
+      "prime_mover": "Mechanism that creates the locally controllable metric-stress state; embodiment depends on technology basis.",
+      "field_formation": "Distributed sectors/rings/membranes/lattice regions that shape the deformation tensor around the protected volume.",
+      "transit_control": "High-bandwidth controller allocating field authority among sectors while enforcing closure and horizon limits.",
+      "navigation_sensing": "Forward gravimetry, curvature estimation, clocks/reference fusion, object exclusion, and route prediction.",
+      "termination_recovery": "Sectional collapse, controlled re-expansion to ordinary geometry, reserve-powered stabilization, and post-transit metrology.",
+      "whole_effect_coverage": "A certified protected volume enclosing vessel, appendages, field-critical plumbing, and required margin.",
+      "backbone": "Control timing, thermal transport, structural load path, safety interlocks, and abort distribution."
+    },
+    "layout_invariants": [
+      "field-forming geometry must be physically distributed around or through the protected volume",
+      "sensor baseline cannot be wholly hidden inside a causally blind field state",
+      "recovery energy and control cannot share a single unprotected failure point with maximum-transit power",
+      "structural paths must carry asymmetric field-sector loads during faults and aborts"
+    ]
+  },
+  "operation": {
+    "precommit": ["authenticate route/reference epoch","solve ordinary and effective distance","evaluate gravity/tidal burden","verify protected-volume closure","verify structural/thermal/energy margins","verify safety horizon","reserve recovery authority"],
+    "in_transit": ["track tensor residuals","compare predicted versus observed gravity state","maintain sensor horizon","rebalance field sectors","keep abort solution current"],
+    "termination": ["reduce effective gain before entering forbidden gravity volume when required","collapse sectors in certified sequence","re-establish ordinary reference solution","verify hull/load-path and metrology residuals"],
+    "operator_rule": "A higher commanded effective gain is not accepted when it consumes required sensing, structural, control, or recovery margin."
+  },
+  "maintenance": {
+    "daily_or_turnaround": ["sector phase/timing check","reference-clock agreement","field-former residual scan","recovery reserve verification","structural sensor zero check"],
+    "periodic": ["survey field-former geometry","calibrate gravimetric baseline","proof sectional abort","inspect active-material hysteresis/drift","load-test structural transfer paths"],
+    "diagnostic_order": "reference/sensor error -> timing/control error -> field-former geometry/material drift -> structural deformation -> energy conditioning -> prime mover defect",
+    "return_to_service": "Repeated certified low-gain envelope tests must reproduce tensor residual, closure, structural margin, sensing horizon, and recovery reserve within approved bounds."
+  },
+  "signatures": {
+    "precommit": ["power-buffer charging","synchronized field-former excitation","gravimetric survey activity","thermal conditioning"],
+    "transit": ["family-specific metric/curvature disturbance","anisotropic field leakage","control-sidebands","thermal rejection where embodiment permits"],
+    "termination": ["field-collapse transient","reference reacquisition emissions","recovery-system thermal/power transient"],
+    "generator_rule": "Signatures derive from family plus physical embodiment; technology basis may alter carrier and spectrum but not erase the underlying metric disturbance without higher authority."
+  },
+  "failures": {
+    "classes": [
+      "route-model error",
+      "gravity/curvature under-modeling",
+      "protected-volume closure loss",
+      "field-sector desynchronization",
+      "active-material saturation or hysteresis",
+      "structural overload from asymmetric field loading",
+      "sensor-horizon insufficiency",
+      "controller latency",
+      "recovery-reserve depletion",
+      "termination sequencing failure"
+    ],
+    "catastrophic_chain_example": "unexpected curvature rise -> route residual growth -> sector authority saturation -> closure distortion -> structural asymmetric load -> abort demand; if recovery horizon is already exhausted, survivable termination may no longer exist.",
+    "root_cause_rule": "Do not report generic drive overload where telemetry can distinguish mathematics, references, field authority, structure, control, power, or recovery."
+  },
+  "scaling": {
+    "protected_volume": "Field surface/volume, structural span, timing skew, and stored/recovery energy all grow with installation size; scaling is not a single mass multiplier.",
+    "drive_size": "Larger distributed arrays may gain field authority and sensor baseline but accumulate synchronization, structural, and thermal burdens.",
+    "compactness": "Higher Path compactness must be explained by better field-active materials, solver/control density, structure, energy conditioning, and recovery integration.",
+    "multi_drive": "Multiple metric engines do not automatically add linearly. Generator must specify whether they are sectors of one coherent envelope, redundant channels, staged systems, or independently unusable overlapping fields."
+  },
+  "technology_basis_translation": {
+    "TERRESTRIAL_MECHANICAL": "Coils/rings/field plates, precision clocks, photonic/electronic controls, structural trusses, pumped thermal loops.",
+    "AQUATIC_FLUIDIC": "Pressure-qualified distributed field membranes, wet photonic timing, fluid-compatible structural shells, cavitation-aware thermal/energy routing.",
+    "CRYOGENIC_SUPERCONDUCTING": "Persistent-current field structures, cryogenic metrology, low-loss timing/distribution, quench-driven abort doctrine.",
+    "GAS_GIANT_BUOYANT": "Large distributed buoyant field organs/structures, atmospheric baselines, flexible load paths, convective thermal management.",
+    "BIOLOGICAL_SYMBIOTIC": "Cultivated field-bearing tissues/organs, neural timing networks, regenerative service paths, metabolic/auxiliary energy conditioning; race ownership remains unresolved absent source.",
+    "MINERAL_CRYSTALLINE": "Coherent lattice volumes, resonant defect control, prestressed load paths, optical/acoustic metrology, fracture-domain maintenance.",
+    "POSTMATERIAL_DISTRIBUTED": "Distributed reference/field nodes, executable control proofs, topology-preserving reconstruction, coherence/fallback state management.",
+    "status": "DERIVED"
+  },
+  "generator_contract": {
+    "inputs": ["family=metric-envelope","Transit Path P0-P6","shared T-tier when runtime-resolved","technology basis","vessel protected volume and geometry","mass/load paths","power and recovery reserve","environment gravity/curvature/tidal state","reference quality","mission route","condition state","authority snapshot"],
+    "outputs": ["ordinary route distance","effective metric distance","route gain","gravity/tidal burden","field-sector layout","structural margin","sensor/abort horizon","energy/recovery allocation","signatures","maintenance burden","failure risks","provenance for every inferred field"],
+    "hard_guards": [
+      "never substitute Fold-Jump, N-Manifold, Slipstream, Q-Lattice, Gate, Phase, or Gravitic mathematics",
+      "never infer race/manufacturer ownership from technology basis",
+      "never promote DERIVED equations or PROPOSED coefficients to CONFIRMED canon",
+      "never describe Path improvement solely as a speed multiplier",
+      "never permit a route whose certified sensing, structure, field, or recovery constraints fail",
+      "preserve explicit named-source values even when current generic runtime cannot represent them; report the conflict"
+    ]
+  },
+  "provenance": {
+    "canon_rule": "Confirmed family identity and recovered Path implementation names are preserved. Mathematical equations, generalized procedures, embodiment translations, and calibration coefficients retain explicit DERIVED/PROPOSED status unless a higher source adopts them.",
+    "field_status_required": true,
+    "origin_note": "This volume implements the legacy requirement for mathematically credible, vigorously documented, family-specific transit development while avoiding fabricated inventors, races, manufacturers, dates, or historical incidents."
+  }
+}
