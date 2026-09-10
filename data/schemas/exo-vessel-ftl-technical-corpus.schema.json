@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "data/schemas/exo-vessel-ftl-technical-corpus.schema.json",
+  "title": "Black Light FTL Technical Corpus Registry",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "authority", "documentClasses", "families", "generatorContract"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlTechnicalCorpusRegistry"},
+    "registryVersion": {"type": "string"},
+    "authority": {
+      "type": "object",
+      "required": ["primary", "researchTraditions", "legacyDesignSource", "canonRule"],
+      "properties": {
+        "primary": {"type": "string"},
+        "researchTraditions": {"type": "string"},
+        "legacyDesignSource": {
+          "type": "object",
+          "required": ["title", "provider", "id", "revisionId", "status"],
+          "properties": {
+            "title": {"const": "The different lightspeed methods"},
+            "provider": {"const": "google-drive"},
+            "id": {"type": "string"},
+            "revisionId": {"type": "string"},
+            "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED"]}
+          },
+          "additionalProperties": true
+        },
+        "canonRule": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "documentClasses": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "audience", "requiredSections", "provenanceMinimum"],
+        "properties": {
+          "id": {"enum": ["proof-note", "textbook-section", "advanced-lecture", "operator-handbook", "maintenance-bulletin", "accident-investigation", "thesis-proposal", "patent-record"]},
+          "audience": {"type": "string"},
+          "requiredSections": {"type": "array", "items": {"type": "string"}},
+          "provenanceMinimum": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["family", "familyStatus", "operatorInvariant", "mathematicalKernel", "documents", "generationSafeguards"],
+        "properties": {
+          "family": {"enum": ["metric-envelope", "gravitic-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement"]},
+          "familyStatus": {"type": "string"},
+          "operatorInvariant": {"type": "string"},
+          "mathematicalKernel": {"type": "object"},
+          "documents": {
+            "type": "array",
+            "minItems": 8,
+            "items": {
+              "type": "object",
+              "required": ["class", "title", "origin", "purpose", "technicalContent", "provenance"],
+              "properties": {
+                "class": {"enum": ["proof-note", "textbook-section", "advanced-lecture", "operator-handbook", "maintenance-bulletin", "accident-investigation", "thesis-proposal", "patent-record"]},
+                "title": {"type": "string"},
+                "origin": {"type": "object"},
+                "purpose": {"type": "string"},
+                "technicalContent": {"type": "object"},
+                "provenance": {"type": "object"}
+              },
+              "additionalProperties": true
+            }
+          },
+          "generationSafeguards": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "generatorContract": {
+      "type": "object",
+      "required": ["resolutionOrder", "forbiddenPromotions", "requiredOutputProvenance"],
+      "properties": {
+        "resolutionOrder": {"type": "array", "items": {"type": "string"}},
+        "forbiddenPromotions": {"type": "array", "items": {"type": "string"}},
+        "requiredOutputProvenance": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
