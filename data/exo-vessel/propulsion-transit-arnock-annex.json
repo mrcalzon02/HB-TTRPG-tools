@@ -1,0 +1,281 @@
+{
+  "$schema": "../schemas/exo-vessel-propulsion-transit-engineering-annex.schema.json",
+  "recordType": "exoVesselPropulsionTransitEngineeringAnnex",
+  "recordVersion": "1.0.0",
+  "speciesOrCulture": "Ar'nock",
+  "authorityMode": "LABELED_DERIVATION",
+  "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+  "speciesProfile": "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+  "technologyBasis": {
+    "value": "BIOLOGICAL_SYMBIOTIC",
+    "status": "DERIVED",
+    "rule": "Resolve the closest current operative basis from confirmed Ar'nock biological fabrication and cultivated computation without claiming that the historical source used the modern registry identifier."
+  },
+  "transitFamily": {
+    "value": null,
+    "status": "UNRESOLVED",
+    "rule": "Ar'nock embodiment constraints MUST NOT select, name, or imply a transit family. A scenario may supply a family explicitly, in which case the resulting Ar'nock association remains MIXED rather than confirmed species canon."
+  },
+  "manufacturer": {"value": null, "status": "UNRESOLVED"},
+  "transitPathLevel": {"value": null, "status": "UNRESOLVED"},
+  "sharedTransitCapabilityTier": {"value": null, "status": "UNRESOLVED"},
+  "confirmedSpeciesConstraints": {
+    "status": "CONFIRMED",
+    "source": "data/blacklight-continuum/wiki/foundation-lore.json",
+    "traits": [
+      "biological fabrication from instruction sets and versatile feedstock",
+      "cultivated neural computation",
+      "elongated segmented body plan",
+      "flexible interfaces",
+      "vibration-based controls",
+      "unfamiliar identity controls",
+      "survivable pressure and oxygen-equivalent exchange with acidic compounds and unfamiliar trace gases"
+    ]
+  },
+  "engineeringState": {
+    "energy": {
+      "status": "DERIVED",
+      "state": "Biological-symbiotic energy conditioning constrained toward metabolic, electrochemical, ionic, cultivated, or biologically integrated conversion paths; exact transit-energy carrier is mechanism dependent and unresolved.",
+      "limits": ["No Ar'nock-specific canonical FTL energy law or power figure is recovered."],
+      "sensors": ["chemical reserve", "ionic state", "vascular flow", "thermal burden", "tissue health"]
+    },
+    "geometry": {
+      "status": "DERIVED",
+      "state": "Whole-effect coverage should resolve as distributed grown/cultivated geometry compatible with flexible hull regions and sectional biological isolation rather than as one indefinitely scaled organ.",
+      "limits": ["Exact geometry depends on caller-selected or later-recovered transit family."],
+      "sensors": ["coverage boundary state", "hull deformation", "appendage state", "regional tissue integrity"]
+    },
+    "navigation": {
+      "status": "MIXED",
+      "state": "Transit-family sensing requirements remain physically authoritative; Ar'nock presentation and interpretation are constrained toward cultivated neural and vibration/acoustic interfaces with unfamiliar reference conventions.",
+      "limits": ["Navigator caste, bridge doctrine, native coordinate representation, and Ar'nock transit family are unresolved."],
+      "sensors": ["mechanism-required route sensors", "vibration state", "neural synchronization", "translation confidence"]
+    },
+    "control": {
+      "status": "DERIVED",
+      "state": "Distributed cultivated controllers may coordinate through neural, vibratory, acoustic, ionic, optical, or other compatible biological carriers, with sectional gating and isolation.",
+      "limits": ["Exact carrier and protocol remain mechanism/manufacturer dependent."],
+      "sensors": ["controller synchronization", "identity/authentication state", "local response latency", "propagation integrity"]
+    },
+    "recovery": {
+      "status": "DERIVED",
+      "state": "Recovery combines transit-family state disposal with metabolic, thermal, neural, tissue, and regenerative recovery debt.",
+      "limits": ["No canonical Ar'nock thresholds or recovery times are recovered."],
+      "sensors": ["metabolic debt", "thermal debt", "neural desynchronization", "tissue strain", "regeneration reserve"]
+    },
+    "health": {
+      "status": "DERIVED",
+      "state": "Condition-based biological service state rather than a purely elapsed-hours maintenance state.",
+      "limits": ["Biological fabrication does not prove every Ar'nock subsystem is biological."],
+      "sensors": ["scar burden", "vascular integrity", "contamination", "microbiological state", "interface elasticity", "regeneration capacity"]
+    },
+    "signature": {
+      "status": "DERIVED",
+      "state": "Selected transit-family signatures are supplemented where physically justified by metabolism, chemistry, vascular flow, thermal change, neural synchronization, vibration, inflammatory activity, and regeneration evidence.",
+      "limits": ["Basis signatures may not replace or contradict family-specific physical signatures."],
+      "sensors": ["thermal", "chemical", "biological", "acoustic/vibration", "mechanism-specific exotic channels"]
+    },
+    "infrastructure": {
+      "status": "UNRESOLVED",
+      "state": "No Ar'nock-specific beacon, corridor, gatework, or fixed transit infrastructure class is currently confirmed.",
+      "limits": ["Do not infer gate use or ecosystem-scale transit infrastructure from biological fabrication alone."],
+      "sensors": []
+    }
+  },
+  "machineChain": {
+    "status": "DERIVED",
+    "energyConditioning": "branching biological supply anatomy, conversion organs, electrochemical reservoirs, conductive tissue, and/or cultivated active inclusions where compatible with selected mechanism",
+    "primeMover": "mechanism-specific exotic initiating end effect embodied through grown/cultivated machinery only where compatible; physical action remains defined by selected family",
+    "fieldFormation": "distributed field-bearing tissues, grown conductive lattices, vascularly supplied emitter structures, or mineralized biological arrays",
+    "transitControl": "local cultivated controllers with sectional coordination, gating, and isolation",
+    "navigationSensing": "mechanism-required sensors interpreted through Ar'nock neural/vibratory control conventions",
+    "terminationRecovery": "mechanism-specific termination plus biological heat, chemistry, neural, tissue, and regenerative recovery",
+    "wholeEffectCoverage": "distributed hull-integrated coverage anatomy measuring actual appendages, flexible surfaces, cargo, damage, and translated volume",
+    "backbone": "vascular isolation, neural gating, local metabolic inhibition, sacrificial shedding, chemical inhibition, and/or hard isolation boundaries as derived options"
+  },
+  "scaling": {
+    "translatedMass": {"status":"UNRESOLVED","value":null},
+    "coverageGeometry": {
+      "status": "DERIVED",
+      "rule": "Scale by segmentation, regional field organs, local control ganglia, vascular zoning, and independent recovery capacity rather than by linear enlargement of one organ."
+    },
+    "distribution": {
+      "probe": "compact cultivated core with limited regeneration and possible external support dependence",
+      "fighterOrShuttle": "tightly merged organs, low redundancy, high regeneration/replacement burden",
+      "corvette": "sectional vascular and control isolation begins",
+      "frigateOrMerchant": "multiple serviceable field organs, cargo-state compensation, redundant circulation",
+      "cruiser": "distributed controller ganglia, sectional coverage, battle-damage isolation",
+      "capital": "hierarchical biological network with regional field organs and independent emergency metabolism/recovery",
+      "gatework": "UNRESOLVED; if future canon establishes Ar'nock gate use, resolve as infrastructure rather than simply enlarging a ship organ"
+    },
+    "recoveryBurden": {
+      "status": "PROPOSED",
+      "formula": "D_r = w_E*d_E + w_M*d_M + w_T*d_T + w_N*d_N + w_G*d_G",
+      "meaning": "bookkeeping for energy, metabolic, thermal, neural/control, and regenerative/tissue debt; weights are uncalibrated"
+    },
+    "estimators": [
+      {
+        "name": "Ar'nock segmentation pressure",
+        "status": "PROPOSED",
+        "formula": "Pi_A = (L/(v_c*t_r))*(1 + sigma_f + sigma_i)",
+        "version": "1.0",
+        "parameters": {
+          "L": "characteristic installation span",
+          "v_c": "effective control-carrier propagation speed",
+          "t_r": "required response time",
+          "sigma_f": "hull-flex/damage disturbance",
+          "sigma_i": "biological state inhomogeneity"
+        }
+      }
+    ]
+  },
+  "powerModel": {
+    "status": "DERIVED",
+    "chain": ["source or vessel energy ecology", "biological/electrochemical conditioning", "reserve/buffer", "transit mechanism load", "vascular/thermal return", "recovery/regeneration"],
+    "safeguard": "Gross available power alone never establishes transit readiness; tissue, chemistry, cooling, control coherence, and recovery reserve are independent predicates."
+  },
+  "navigationModel": {
+    "status": "MIXED",
+    "nativePipeline": ["native sensed state", "cultivated/neural interpretation", "native control representation", "translation adapter", "human engineering quantities"],
+    "safeguard": "A translation adapter must retain uncertainty and may not present tentative semantic mappings as exact terrestrial gauges."
+  },
+  "controlModel": {
+    "status": "DERIVED",
+    "spatialRules": [
+      "controls may occupy vertical, circumferential, or multi-reach surfaces suited to elongated segmented limbs",
+      "vibration-based input makes mechanically coupled control surfaces meaningful",
+      "cultivated computation may be physically distributed rather than cabinet-centered",
+      "service clearances must reflect posture, contamination, biological boundaries, and unfamiliar safety assumptions"
+    ],
+    "abortSemantics": ["SAFE_ABORT", "DEGRADED_ABORT", "COMMIT_BOUNDARY", "NO_ABORT", "RECOVERY_ONLY"],
+    "abortRule": "Mechanism-specific abort semantics outrank basis style; biological isolation methods cannot manufacture an abort after a family-specific no-abort commit boundary."
+  },
+  "maintenanceModel": {
+    "status": "DERIVED",
+    "philosophy": "condition-based service with event-triggered recertification",
+    "healthIndicators": ["tissue integrity", "scar burden", "vascular flow", "nutrient/chemical reserve", "contamination", "microbiological state", "neural synchronization", "vibration response", "interface elasticity", "regeneration capacity", "environmental chemistry"],
+    "repairVerbs": ["feed", "flush", "graft", "excise", "culture", "regenerate", "inhibit", "stimulate", "isolate", "reinnervate", "reseed", "rebalance", "cleanse", "align", "brace", "seal", "translate", "recertify"],
+    "humanSalvageProcedure": [
+      "classify living/structural/neural/vascular/control function before contact",
+      "sample atmosphere and surface chemistry",
+      "observe vibration, pressure, temperature, ionic/electrical potential, chemical flow, and spontaneous response",
+      "locate cultivated neural structures before cutting, shocking, sedating, starving, or restraining components",
+      "map local supply and return routes",
+      "establish isolation before attaching human power or data equipment",
+      "preserve samples, logs, and provenance",
+      "wake sectionally from dormant to surveyed to supported to local-awake to diagnostic to sectional to integrated before any transit-ready state"
+    ]
+  },
+  "signatureModel": {
+    "preTransit": {"status":"DERIVED","evidence":["rising metabolic demand","vascular flow change","thermal/chemical shift","synchronization vibration"]},
+    "activeTransit": {"status":"MIXED","evidence":["family-specific transit signature","sustained biological load when the local process persists"]},
+    "routeRemote": {"status":"UNRESOLVED","evidence":[]},
+    "termination": {"status":"DERIVED","evidence":["family-specific emergence/recovery signature","heat","chemical waste","tissue strain","control resynchronization"]},
+    "postTransit": {"status":"DERIVED","evidence":["metabolites","inflammatory/regenerative activity","damaged tissue","altered microbiological state","family-specific residuals"]},
+    "forensic": {"status":"DERIVED","rule":"Biological/chemical traces supplement rather than replace mechanism-specific forensic evidence."},
+    "modalities": {
+      "thermal": "DERIVED",
+      "electromagnetic": "family-dependent",
+      "gravitational": "family-dependent",
+      "optical": "family- and tissue-dependent",
+      "particle": "family-dependent",
+      "acousticFluidic": "DERIVED Ar'nock-specific supporting channel",
+      "phaseOrQ": "family-dependent; never infer Q use from species alone",
+      "topological": "family-dependent; never infer fold/gate use from species alone",
+      "biochemical": "DERIVED",
+      "forensicPersistence": "condition-, environment-, and mechanism-dependent"
+    }
+  },
+  "failureModel": {
+    "status": "DERIVED",
+    "composition": "F_instance = F_family tensor F_basis tensor F_species tensor F_condition",
+    "basisSpeciesFailures": ["vascular occlusion", "vascular leakage", "nutrient starvation", "chemical/osmotic imbalance", "infection", "contamination", "immune rejection", "necrosis", "scar interference", "neural desynchronization", "vibration/reference corruption", "flexible-interface tearing", "loss of closure", "loss of regeneration reserve", "cultivated-controller pathology", "alien identity/safety response to human repair action"],
+    "rule": "Combine each applicable biological/species failure with the selected transit family's actual hazard mechanism; never emit one generic drive-malfunction consequence across all families."
+  },
+  "infrastructureModel": {
+    "status": "UNRESOLVED",
+    "allowedGenericClasses": ["SELF_CONTAINED_SHIP_DRIVE", "BEACON_ASSISTED_NAVIGATION", "PREPARED_TRANSIT_CORRIDOR", "PAIRED_MOBILE_ORBITAL_GATES", "FIXED_STELLAR_GATEWORKS"],
+    "speciesAssignment": null,
+    "safeguard": "Generic Black Light infrastructure classes are available to a caller/scenario but are not Ar'nock canon without a source assignment."
+  },
+  "documentationViews": {
+    "status": "MIXED",
+    "principle": "One structured resolved installation should drive every textual or diagrammatic view so manuals, education, intelligence reporting, narrative description, and API output cannot silently diverge.",
+    "availableViews": ["crew primer", "technician manual", "engineering data sheet", "salvage procedure", "failure tree", "signature/intelligence profile", "diagram source", "educational text", "provenance report"],
+    "diagramModels": [
+      "species evidence -> derived basis -> route semantics -> eight-block embodiment -> selected family",
+      "command/interpretation -> local cultivated controllers -> regional field organs -> recovery reserve with vascular supply and isolation",
+      "dormant -> surveyed -> supported -> local-awake -> diagnostic -> sectional -> integrated -> transit-ready, with quarantine branches"
+    ]
+  },
+  "canonSafeguards": [
+    "Do not assign an Ar'nock transit family from biological fabrication evidence.",
+    "Do not claim all Ar'nock machinery is biological.",
+    "Do not invent manufacturer names, Path level, T-tier, performance, range, spool time, recovery time, energy consumption, connector standards, or chronology capability.",
+    "A caller-selected confirmed Black Light transit family creates a MIXED hypothetical Ar'nock embodiment, not confirmed Ar'nock species canon.",
+    "Mechanism requirements remain physically authoritative when embodied through Ar'nock technology.",
+    "FTL does not authorize chronology violation or time travel without explicit source authority.",
+    "Missing historical authority remains missing; repetition of a legacy reference cannot promote it to CONFIRMED."
+  ],
+  "provenance": {
+    "sourceSnapshot": [
+      "mrcalzon02/HB-TTRPG-tools@5a48af8564cdf46a9bf8eab3b33c432f4c4ae369",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+      "data/blacklight-continuum/wiki/foundation-lore.json",
+      "data/exo-vessel/technology-basis-registry.json",
+      "data/exo-vessel/propulsion-transit-registry.json@1.1.1",
+      "docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md",
+      "data/schemas/exo-vessel-propulsion-transit-engineering-annex.schema.json"
+    ],
+    "resolverVersion": "arnock-annex-resolver-1.0.0",
+    "generatorVersion": null,
+    "fields": {
+      "speciesOrCulture": {
+        "status": "CONFIRMED",
+        "value": "Ar'nock",
+        "sourceRefs": ["data/blacklight-continuum/wiki/foundation-lore.json#arnock-species", "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict"],
+        "sourceScope": "species",
+        "resolverRule": null,
+        "parents": [],
+        "notes": "Species identity and recovered vessel context survive in foundation lore."
+      },
+      "technologyBasis": {
+        "status": "DERIVED",
+        "value": "BIOLOGICAL_SYMBIOTIC",
+        "sourceRefs": ["data/blacklight-continuum/wiki/foundation-lore.json", "data/exo-vessel/technology-basis-registry.json", "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md#provisional-technology-basis-binding"],
+        "sourceScope": "derivation",
+        "resolverRule": "basis-from-species-machinery-ancestry-v1",
+        "parents": ["confirmedSpeciesConstraints.biological fabrication", "confirmedSpeciesConstraints.cultivated neural computation"],
+        "notes": "Modern registry identifier is derived from older species evidence; it is not claimed as historical Ar'nock terminology."
+      },
+      "transitFamily": {
+        "status": "UNRESOLVED",
+        "value": null,
+        "sourceRefs": ["docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md#canon-boundary", "data/exo-vessel/propulsion-transit-registry.json#raceConstraints"],
+        "sourceScope": "species",
+        "resolverRule": null,
+        "parents": [],
+        "notes": "No surviving source assignment located."
+      },
+      "machineChain": {
+        "status": "DERIVED",
+        "value": "family-neutral Ar'nock embodiment grammar",
+        "sourceRefs": ["docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md#universal-machine-chain-model", "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md#eight-block-arnock-machinery-embodiment"],
+        "sourceScope": "derivation",
+        "resolverRule": "embody-eight-block-chain-from-species-basis-v1",
+        "parents": ["technologyBasis", "confirmedSpeciesConstraints", "transitFamily"],
+        "notes": "Embodiment remains mechanism-neutral until a transit family is supplied or recovered."
+      },
+      "historicalOperativeBasisDocument": {
+        "status": "UNRESOLVED",
+        "value": "docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md",
+        "sourceRefs": ["docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md#repaired-authority-gap", "data/exo-vessel/propulsion-transit-registry.json@1.1.1"],
+        "sourceScope": "authority",
+        "resolverRule": null,
+        "parents": [],
+        "notes": "Historical path is referenced by working/profile material but absent from current main; no content attributable solely to it is promoted to confirmed authority."
+      }
+    }
+  }
+}
