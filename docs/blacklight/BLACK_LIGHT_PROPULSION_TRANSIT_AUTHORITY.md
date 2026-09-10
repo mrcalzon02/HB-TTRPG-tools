@@ -1,23 +1,28 @@
 # Black Light Propulsion & Transit Authority
 
-**Status:** authoritative integration reference for Black Light propulsion, FTL/transit engineering, generator semantics, and EXO vessel handoff.  
-**Authority scope:** this document consolidates surviving repository authority; it does not retroactively invent missing race-specific canon.  
-**Revision basis:** recovered FTL archive + current EXO technology-basis registry.  
-**Canon labels:** `CONFIRMED` = directly recovered from repository authority; `DERIVED` = engineering consequence constrained by confirmed canon; `PROPOSED` = useful extension not yet independently established as canon; `UNRESOLVED` = source or claim cannot currently be recovered.
+**Status:** authoritative integration reference for Black Light propulsion, FTL/transit engineering, generator semantics, EXO vessel handoff, provenance, and presentation views.  
+**Authority scope:** consolidates surviving repository authority without retroactively inventing missing race-, manufacturer-, or mechanism-specific canon.  
+**Reconciliation base:** `main` at `2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf`, plus the registry/schema/manual integration created from that reconciliation.  
+**Canon labels:** `CONFIRMED` = directly recovered from repository authority; `DERIVED` = engineering consequence constrained by confirmed canon; `PROPOSED` = useful extension not independently established as canon; `UNRESOLVED` = source or claim cannot currently be recovered; `MIXED` = structured result contains more than one status and must preserve field-level provenance.
 
 ---
 
-## 1. Purpose
+## 1. Purpose and domain boundary
 
-Black Light separates **how a vessel moves in ordinary spacetime** from **how it achieves nonlocal or effectively superluminal transit**. Conventional and relativistic propulsion remain within the EXO vessel propulsion engineering domain. FTL/transit is an adjacent capability domain with its own physical action, machinery, infrastructure, navigation, operating hazards, maintenance requirements, and provenance.
+Black Light separates **how a vessel moves through ordinary spacetime** from **how it achieves nonlocal or effectively superluminal transit**. Conventional and relativistic propulsion remain part of EXO vessel propulsion engineering. FTL/transit is an adjacent capability domain with its own physical action, machinery, infrastructure, navigation, operating hazards, maintenance, signatures, failure modes, and provenance.
 
-FTL is therefore **not P7**. The recovered P0–P6 FTL construction sequence is a maturity/construction axis within the archived FTL system and must not be confused with an unrelated propulsion tier or with the current EXO technology-basis vocabulary.
+FTL is therefore **not P7**. Two repository systems use P0-P6 terminology, but they describe different axes:
 
-The governing generator rule is:
+- `data/exo-vessel/engineering-registry.json` uses P0-P6 for ordinary-spacetime propulsion technology bands.
+- the recovered FTL archive uses P0-P6 for **construction maturity within a transit path**, from monumental precursor machinery through mature compact/adaptive implementation.
 
-> **Comparable end effects do not imply comparable machines.** A species' environment, organization, manufacturer, maturity, vessel scale, mission, and selected transit mechanism resolve the actual installation.
+Those axes may correlate in a particular civilization only when source material says they do. They MUST NOT be merged into one `Path`, `technologyLevel`, or performance number.
 
-A biological drive is not a terrestrial drive with organic nouns substituted for mechanical ones. A mineral drive is not a metal drive with crystals glued to the console. The physical carrier, manufacturing logic, service method, failure vocabulary, sensory architecture, and spatial arrangement must all emerge from the technology basis.
+The governing rule is:
+
+> **Comparable end effects do not imply comparable machines.**
+
+Species environment, body plan, senses, civilization, organization, manufacturer, technology basis, maturity, vessel scale, mission, condition, and selected transit mechanism determine the installation. A biological drive is not a terrestrial drive with organic nouns substituted for mechanical ones. A mineral drive is not a terrestrial drive with crystals glued to a console. The carrier, manufacturing logic, service method, spatial arrangement, control assumptions, failure vocabulary, and signatures must emerge from the operative technology basis and any higher-authority race/manufacturer source.
 
 ---
 
@@ -25,56 +30,102 @@ A biological drive is not a terrestrial drive with organic nouns substituted for
 
 When two records disagree, resolve them in this order:
 
-1. **Specific surviving race/species, organization, manufacturer, and named-technology source material.**
-2. **This Propulsion & Transit Authority** for domain boundaries, shared vocabulary, generation order, provenance, and integration rules.
-3. **Recovered FTL archive definitions** represented by `FTL_ENGINEERING_CATALOG_WORKING.md` for named transit families, Path progression, scale, infrastructure, energy, and construction doctrine.
-4. **Current EXO registries**, especially `data/exo-vessel/technology-basis-registry.json` and `data/exo-vessel/engineering-registry.json`, for operative engineering language and vessel subsystem integration.
-5. **`FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md`** as a derived physical-implementation adapter.
-6. **Mathematical/physics analogies** as validation and explanatory tools only.
-7. **Model inference** only when explicitly labeled `DERIVED` or `PROPOSED`.
+1. **Specific surviving race/species, organization, manufacturer, named vessel, named installation, and named-technology source material.**
+2. **This Propulsion & Transit Authority** for domain boundaries, common vocabulary, generation order, source/status discipline, and integration rules.
+3. **Recovered FTL archive definitions** represented by `docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md` for confirmed transit families, Path implementations, construction maturity, scale, infrastructure, energy families, and recovered machinery doctrine.
+4. **`EXO_OPERATIVE_TECHNOLOGY_BASIS.md`** for species/environment/organization/manufacturer-derived operative machinery, route carriers, controls, service environments, hybridization, interoperability, and failure language.
+5. **`EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md`** for deterministic vessel-source layers, seed hierarchy, engineering/layout auditability, load-path rules, condition state, and vessel integration.
+6. **Current EXO registries**, especially `data/exo-vessel/technology-basis-registry.json` and `data/exo-vessel/engineering-registry.json`, for machine-readable basis identifiers and ordinary-spacetime propulsion values.
+7. **`docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md`** as a `DERIVED` embodiment workshop mapping confirmed mechanism functions through operative technology bases.
+8. **Mathematical and real-physics analogies** as consistency/education tools only unless separately adopted into setting canon.
+9. **Model inference** only when explicitly labeled `DERIVED` or `PROPOSED` and accompanied by parent inputs and a resolver rule.
 
-A generated vessel instance becomes authoritative for that generated vessel only after its input authority, resolver choices, and generator version have been recorded. Generated output never silently rewrites setting-wide canon.
+A generated vessel instance can become authoritative **for that generated instance** only when its input authority snapshot, resolver choices, seed hierarchy, generator version, and provenance are retained. Generated output never silently rewrites setting-wide canon.
 
 ### 2.1 Source index
 
-- `docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md` — this consolidated authority entrypoint.
-- `docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md` — recovered FTL archive and supporting physics appendix.
-- `docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` — technology-basis embodiment work.
-- `data/exo-vessel/technology-basis-registry.json` — current seven operative technology families and routing principles.
-- `data/exo-vessel/engineering-registry.json` — current EXO engineering implementation registry, including conventional/relativistic propulsion context.
-- `data/schemas/exo-vessel-technology-basis.schema.json` — machine-readable technology-basis validation.
+- `docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md` — consolidated authority entrypoint.
+- `docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md` — recovered FTL archive spine and provisional mathematical workshop.
+- `EXO_OPERATIVE_TECHNOLOGY_BASIS.md` — live governing operative-technology supplement.
+- `EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md` — governing EXO vessel design/integration guide.
+- `data/exo-vessel/technology-basis-registry.json` — seven operative technology families and six invariant route semantics.
+- `data/exo-vessel/engineering-registry.json` — ordinary-spacetime P0-P6 propulsion registry.
+- `BLACKLIGHT_EXO_SOURCE_AUTHORITY.md` — cross-domain published-first/provenance precedent used here for canon-safe supplement behavior.
+- `data/blacklight-continuum/wiki/foundation-lore.json` — surviving Black Light campaign/race source including Ar'nock engineering constraints.
+- `docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` — derived family-by-basis machinery embodiment workshop.
+- `data/exo-vessel/propulsion-transit-registry.json` — machine-readable mirror of confirmed families, invariants, source chain, and canon safeguards.
+- `data/schemas/exo-vessel-propulsion-transit.schema.json` — generated-installation validation contract.
+- `docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` — subordinate resolver/generator implementation reference.
+- `docs/blacklight/PROPULSION_TRANSIT_FIELD_MANUAL.md` — subordinate practical equipment/training view.
 
-### 2.2 Repaired authority gap
+### 2.2 Repaired authority-chain gap
 
-`FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` historically cites `docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md`. That path is not present on the currently inspected `main` authority tree and must therefore be treated as `UNRESOLVED`, not as a live higher authority. The surviving machine-readable authority for the seven operative technology families is `data/exo-vessel/technology-basis-registry.json`. This document supersedes the missing path **as the integration entrypoint**, while preserving the possibility that older source history may later recover additional material.
+An earlier revision of this authority incorrectly treated the operative-technology prose source as missing because it searched for the obsolete path `docs/blacklight/EXO_OPERATIVE_TECHNOLOGY_BASIS.md`.
 
-No content attributed solely to the missing document may be treated as confirmed unless it also survives elsewhere.
+The source is live at repository root as:
+
+`EXO_OPERATIVE_TECHNOLOGY_BASIS.md`
+
+It explicitly declares itself a Charles-authored Blacklight EXO engineering framework and a **governing supplement to `EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md`**. The current technology-basis registry is therefore its machine-readable companion, not a replacement invented to fill a missing source.
+
+This correction closes the gap without promoting any inferred race-specific FTL content. Material previously marked unresolved solely because of the bad path is restored to the authority chain; genuinely missing race/manufacturer transit assignments remain unresolved.
+
+### 2.3 Canon-safe overwrite policy
+
+The propulsion/transit resolver adopts the repository's existing published-first source discipline as a cross-domain provenance rule:
+
+| Source condition | Allowed resolver behavior |
+|---|---|
+| Confirmed value | Preserve. A lower layer may specialize within explicit constraints but may not replace it. |
+| Confirmed lower bound/classification | Preserve the bound/classification; any refinement remains separately labeled. |
+| Candidate/disputed record | Keep separate from confirmed values and conclusions. |
+| Explicit unknown | Remain unknown in `AUTHORITY_ONLY`. |
+| Gap with sufficient confirmed parents | May become `DERIVED` only in `LABELED_DERIVATION`, with rule and provenance. |
+| Gap lacking sufficient authority | May become `PROPOSED` only in `LABELED_PROPOSAL`. |
+
+Repeated generation, documentation, UI display, or model confidence cannot promote `DERIVED` or `PROPOSED` material to `CONFIRMED`.
 
 ---
 
 ## 3. Confirmed transit families
 
-The recovered FTL archive establishes the following named families.
+The recovered archive establishes these mechanism families:
 
 | Archive key | Confirmed family | Physical action | Principal operational character |
 |---|---|---|---|
 | `metric-envelope` | Metric Compression Envelope | 4D local metric deformation | protected local volume; contracted/expanded external geometry |
-| `gravitic-plane` | Gravitational-Plane Skimmer | 4D geodesic-plane transit with gradient correction | rides favorable gravitational/equipotential geometry |
+| `gravitic-plane` | Gravitational-Plane Skimmer | 4D geodesic-plane transit with higher-order gradient correction | follows favorable gravitational/equipotential geometry |
 | `slipstream-shear` | Hyperspatial Slipstream Shear | Q-space boundary-layer coupling | rides a metastable shear adjacent to normal spacetime |
-| `q-lattice` | Q-Lattice Phase Translation | indexed Q-state translation | address/epoch-sensitive discrete translation |
+| `q-lattice` | Q-Lattice Phase Translation | indexed quantized Q-state translation | address/epoch-sensitive discrete translation |
 | `n-manifold` | N-Dimensional Manifold Drive | higher-dimensional geodesic projected to 3+1D | shortened route through valid embedding/return map |
-| `fold-jump` | Discrete Fold-Jump Drive | temporary topological adjacency | origin/destination volumes made adjacent; little post-commit correction |
+| `fold-jump` | Discrete Fold-Jump Drive | temporary topological adjacency | origin/destination volumes made adjacent; little meaningful post-commit correction |
 | `wormhole-gate` | Anchored Wormhole / Gate Transit | maintained multiply connected topology | infrastructure-heavy aperture network |
-| `phase-displacement` | Quantum Phase Displacement | macroscopic nonlocal state displacement | compatible-state transfer with continuity/identity burdens |
+| `phase-displacement` | Quantum Phase Displacement | macroscopic nonlocal state displacement | compatible-state transfer with continuity/reference burdens |
 | `inertial-torch` | Relativistic Inertial Torch | ordinary continuous causal travel | precursor/comparison baseline; **not true FTL** |
 
-These names and mechanisms outrank generic descriptive buckets such as “warp,” “jump,” “subspace,” or “gate” when generating Black Light equipment.
+These names and actions outrank generic buckets such as `warp`, `jump`, `subspace`, `hyperspace`, `teleport`, or `gate` when producing a resolved Black Light installation.
+
+### 3.1 Recovered Path implementations
+
+The archive preserves a seven-stage implementation progression for each family. Representative named implementations include:
+
+- Metric: Metric Stress-Test Monolith -> Inertial Relief Envelope -> Subluminal Compression Bubble -> First Causal-Horizon Envelope -> Operational Warp Envelope -> Strategic Metric Drive -> Compact Dynamic Metric Engine.
+- Gravitic: Gravitational Rail Monolith -> Equipotential Skim Array -> Barycentric Plane Rider -> Interstellar Plane Skimmer -> Multi-Plane Transit Drive -> Deep-Gradient Skimmer -> Adaptive Geodesic Drive.
+- Slipstream: Boundary-Shear Observatory -> Q-Boundary Probe Launcher -> Captive Slipstream Tunnel -> Shipboard Slipstream Coupler -> Operational Shear Drive -> Strategic Slipstream Drive -> Compact Wake-Riding Drive.
+- Q-Lattice: Q-Cell Addressing Monolith -> Molecular Phase Conveyor -> Macroscopic Lattice Translator -> Beacon-Indexed Jump Array -> Autonomous Q-Lattice Drive -> Strategic Phase Network -> Compact State-Translation Core.
+- N-Manifold: Dimensional Topology Observatory -> Five-Axis Test Volume -> Captive Manifold Transit Array -> Shipboard N-Manifold Drive -> Adaptive Higher-Dimensional Drive -> Deep-Range Manifold Engine -> Compact Multi-Axis Drive.
+- Fold: Adjacency Test Monolith -> Cargo Fold Chamber -> Orbital Fold Gate -> Capital Fold-Jump Core -> Fleet Fold Drive -> Strategic Long-Fold Engine -> Compact Tactical Fold Core.
+- Gate: Microscopic Throat Foundry -> Cargo Aperture Gate -> Orbital Paired Gate -> Stellar Gate Complex -> Corridor Gate Network -> Strategic Deep Gate -> Self-Stabilizing Gate Lattice.
+- Phase displacement: Quantum State Conveyor -> Gram-to-Tonne Displacement Vault -> Macroscopic Phase Chamber -> Beacon-Coupled Vessel Displacement -> Autonomous Phase Drive -> Strategic Nonlocal Transit Core -> Compact Identity-Preserving Displacer.
+- Inertial torch: Beamed Reaction Launch Monolith -> Fusion-Pulse Acceleration Spine -> Antimatter-Catalyzed Torch Array -> Relativistic Courier Torch -> Fleet Inertial Torch -> Near-Light Strategic Torch -> Asymptotic Relativistic Drive.
+
+The supporting recovery catalog remains authoritative for the complete recovered component lists and path details.
 
 ---
 
-## 4. Universal machine-chain model
+## 4. Universal eight-block transit machine
 
-Every confirmed FTL family resolves through eight end-effect blocks. Their functions are stable; their physical embodiment is not.
+Every transit family resolves through eight stable end-effect blocks. Their function is shared; their physical embodiment is not.
 
 ```mermaid
 flowchart LR
@@ -90,26 +141,24 @@ flowchart LR
     E -. correction .-> D
 ```
 
-The blocks mean:
-
-| Block | Required end effect | Examples of questions the generator must answer |
+| Block | Required end effect | Mandatory generator question |
 |---|---|---|
-| Energy conditioning | make usable drive-state energy available | source, buffer, pulse/continuous delivery, isolation, reserve |
-| Prime mover | create the initiating exotic/field/topological condition | what actually changes the physical state? |
-| Field formation | shape the transit effect around payload/route | ring, dermis, lattice, membrane, distributed field, aperture |
-| Transit control | modulate and hold the effect | rate, vector, adhesion, embedding, address, throat geometry |
-| Navigation & sensing | solve route/reference/condition | clocks, gravimetry, Q-weather, beacons, topology, biological senses |
-| Termination & recovery | return to safe ordinary state | collapse, reinsertion, momentum matching, quench, ringing disposal |
-| Whole-effect coverage | ensure the complete payload is inside valid effect | hull envelope, chamber boundary, skin, aperture, translated volume |
-| Backbone | keep all blocks synchronized and survivable | control, thermal, abort, diagnostics, isolation, emergency reserves |
+| Energy conditioning | make usable drive-state energy available | source, conditioning, buffer, delivery, isolation, reserve? |
+| Prime mover | create the initiating exotic/field/topological condition | what physically changes state? |
+| Field formation | shape the effect around payload/route | what surface, lattice, organ, membrane, ring, aperture, or field defines it? |
+| Transit control | modulate and hold the effect | what quantities are actively controlled and by what actuator/carrier? |
+| Navigation & sensing | solve route/reference/condition | what must be measured and authenticated? |
+| Termination & recovery | return to an admissible ordinary state | what energy/momentum/phase/topology/radiation state must be disposed or reconciled? |
+| Whole-effect coverage | include the complete intended payload | what boundary proves the entire vessel/cargo/occupants are inside the valid effect? |
+| Backbone | synchronize and protect all blocks | control, thermal, abort, diagnostics, reserve, isolation, fallback? |
 
-A generator that produces a drive name without resolving all eight blocks has produced a label, not an engineering installation.
+A generator that emits a drive name but does not resolve or explicitly mark all eight blocks unresolved has generated a label, not an engineering installation.
 
 ---
 
-## 5. Current operative technology bases — CONFIRMED
+## 5. Operative technology bases — CONFIRMED
 
-The current EXO technology-basis registry establishes seven environment-rooted machinery languages:
+The live root operative-technology authority and its registry jointly establish seven current machinery languages:
 
 1. `TERRESTRIAL_ELECTROMECHANICAL`
 2. `AQUATIC_ELECTROCHEMICAL_HYDRAULIC`
@@ -119,441 +168,442 @@ The current EXO technology-basis registry establishes seven environment-rooted m
 6. `MINERAL_PIEZOELECTRIC_PHOTONIC`
 7. `FIELD_MEDIATED_POSTMATERIAL`
 
-The registry additionally fixes invariant route semantics — structural, power, cooling, data, atmosphere, access — and declares that species environment supplies the primary technological pressure while organization, manufacturer focus, and Path level may create bounded hybrids.
+They also establish the invariant route semantics `structural`, `power`, `cooling`, `data`, `atmosphere`, and `access`; the end effects are stable while their carrier, interface, tolerance, controller, seal/boundary, service environment, and human interoperability vary.
 
-### 5.1 Machine-language crosswalk — DERIVED from confirmed bases
+### 5.1 Technology-basis machine languages — DERIVED crosswalk
 
-| Basis | Energy / power carrier | Control language | Typical physical structure | Maintenance language |
+| Basis | Power/energy language | Control/sensing language | Typical embodiment | Maintenance language |
 |---|---|---|---|---|
-| Terrestrial electromechanical | electrical, thermal, stored-field, chemical/nuclear plant interfaces | electronic/optical computation, actuators | pressure vessels, coils, buses, frames, cryostats | inspection, replacement, calibration, insulation, coolant service |
-| Aquatic electrochemical-hydraulic | ionic gradients, electrochemistry, pressure stores, wet superconductive elements | hydraulic/pressure logic + optical/electrochemical control | immersed manifolds, pressure cells, wet field surfaces | chemistry, fouling, cavitation, seals, dissolved gas, corrosion |
-| Cryogenic ammonia-halocarbon | cryogenic superconductive networks, phase-change stores | photonic timing, cold electronics, cryofluid actuation | vacuum jackets, contraction frames, cold loops | contamination control, contraction alignment, seals, fluid purity |
-| Gas-giant fluidic-electrostatic | pressure gradients, charge separation, electrostatic/ionic flow | fluidic/acoustic/electrostatic logic | membranes, tension webs, charged skins, buoyancy cells | pressure integrity, membrane repair, charge control, resonance tuning |
-| Biological symbiotic | metabolic/electrochemical organs, mineral inclusions, symbionts | neural, hormonal, distributed biological sensing | organs, vascular loops, field-bearing tissues, grown inclusions | feeding, surgery, grafting, microbiome/electrolyte control, regeneration |
-| Mineral piezoelectric-photonic | strain, polarization, thermal gradients, photonic/phononic transfer | stress, light, resonance, lattice state | crystal bodies, resonant domains, optical defect channels | flaw mapping, annealing, re-growth, preload and axis restoration |
-| Field-mediated postmaterial | controlled persistent field state with material reserves | state-authenticated distributed control | field nodes, programmable surfaces, adaptive anchor matter | coherence/reference restoration, state validation, safe fallback reconstruction |
+| Terrestrial electromechanical | electrical, thermal, chemical/nuclear interfaces, stored fields | electronic/optical computation, actuators | buses, vessels, coils, frames, cryostats, pumps | inspect, isolate, replace, calibrate, coolant/insulation service |
+| Aquatic electrochemical-hydraulic | ionic gradients, electrochemistry, pressure stores, wet superconductive elements | pressure/fluidic logic + optical/electrochemical sensing | immersed manifolds, membranes, pressure cells, wet field surfaces | chemistry, dissolved gas, fouling, cavitation, valves, seals, corrosion |
+| Cryogenic ammonia-halocarbon | cold superconductive networks, ionic cryofluid, phase-change stores | photonic timing, cold control, cryofluid actuation | vacuum jackets, contraction frames, cold loops, bellows | contamination, contraction alignment, seals, fluid purity, thermal history |
+| Gas-giant fluidic-electrostatic | pressure gradients, charge separation, electrostatic/ionic flow | acoustic/fluidic/electrostatic logic | charged skins, membranes, tension webs, buoyancy cells | pressure integrity, membrane/tension repair, charge and resonance tuning |
+| Biological symbiotic | metabolic/electrochemical organs, symbionts, mineral inclusions | neural, hormonal, distributed sensory biology | organs, vascular routes, field-bearing tissue, grown inclusions | feeding, husbandry, surgery, grafting, microbiome/electrolyte control, regeneration |
+| Mineral piezoelectric-photonic | strain, polarization, thermal gradients, photonic/phononic transfer | stress, light, resonance, lattice state | crystal bodies, resonant domains, defect channels | flaw mapping, preload/axis restoration, annealing, cleaning, regrowth |
+| Field-mediated postmaterial | persistent controlled field state with material reserve | state-authenticated distributed control | adaptive anchor matter, field nodes, programmable surfaces | coherence/reference restoration, authorization audit, known-safe fallback reconstruction |
+
+The crosswalk is not a declaration that every species fits neatly into exactly seven boxes. It is the current deterministic starting framework. Specific source material can refine or override it within the authority chain.
 
 ---
 
-## 6. Generator resolution order
+## 6. Race- and culture-specific authority
 
-The installation resolver must not begin with a component list. It begins with authority.
+### 6.1 Ar'nock — confirmed engineering constraints
+
+The surviving Black Light foundation record establishes several Ar'nock engineering facts without establishing their FTL family:
+
+- their civilization possessed instruction-driven biological fabrication capable of producing complete organisms from versatile feedstock;
+- vessel computation includes cultivated neural components and unfamiliar identity controls;
+- controls can be vibration-based;
+- architecture supports upright tool use but reflects elongated segmented reach and flexible interfaces;
+- the vessel atmosphere is survivable to humans at useful pressure/oxygen-equivalent exchange while containing acidic compounds and unfamiliar trace gases;
+- the observed derelict contains biological printers, medical systems, cultivated computation, environmental controls, storage, fabrication feedstock, damaged networks, and inaccessible compartments.
+
+These are `CONFIRMED` constraints on any Ar'nock machinery explanation.
+
+### 6.2 Ar'nock transit assignment — UNRESOLVED
+
+No currently reconciled source establishes a named Ar'nock transit family. Therefore:
+
+`Ar'nock transitFamily = UNRESOLVED`
+
+A generator MAY derive service/interface consequences from the confirmed Ar'nock facts: cultivated control substrates, vibration feedback, flexible nonhuman service geometry, biological fabrication compatibility, nonhuman identity/authentication boundaries, and atmosphere/material compatibility. It MUST NOT choose Metric, Q-Lattice, Slipstream, Fold, or any other family simply because one seems aesthetically compatible.
+
+This is the template for all future race-specific integration: recover facts first, constrain embodiment second, leave mechanism unknown until sourced.
+
+---
+
+## 7. Generator resolution order
 
 ```mermaid
 flowchart TD
-    S[Species / Race Environment] --> O[Organization / Polity]
+    S[Species / Race source] --> O[Organization / Polity]
     O --> M[Manufacturer / Builder]
     M --> B[Technology Basis / Bounded Hybrid]
-    B --> P[Path / Construction Maturity]
-    P --> V[Vessel Scale + Hull + Mission]
-    V --> C[Conventional Propulsion Context]
-    V --> F[Selected FTL / Transit Family]
+    B --> TM[Transit Construction Maturity]
+    TM --> V[Vessel Scale + Hull + Mission + Condition]
+    V --> CP[Conventional Propulsion Context]
+    V --> F[Selected Transit Family]
     F --> E[Energy Architecture]
     F --> N[Navigation / Operator Model]
     E --> X[Resolve 8 Machine Blocks]
     N --> X
-    X --> I[Infrastructure Dependencies]
-    X --> R[Signatures + Failure + Maintenance]
+    X --> U[Resolve 6 Utility Routes]
+    U --> I[Infrastructure Dependencies]
+    U --> R[Signatures + Failure + Maintenance]
     I --> G[Generated Installation]
     R --> G
-    G --> Q[Validation + Provenance Record]
+    G --> Q[Schema Validation + Field Provenance]
 ```
 
-Conceptually:
+Canon-safe precedence is:
 
-`installation = resolve(species, organization, manufacturer, technologyBasis, maturity, vesselScale, hullState, mission, transitFamily, energyArchitecture, infrastructure)`
+`explicit named canon > race/species constraint > organization constraint > manufacturer doctrine > technology basis > transit construction maturity > vessel/mission/condition > family default > labeled derived engineering > labeled proposal`
 
-The resolver should be deterministic when supplied with an explicit seed and authority snapshot, while still permitting bounded procedural variation.
+Unknowns are allowed. Silent invention is not.
 
-### 6.1 Canon-safe generation precedence
+### 7.1 Supplement modes
 
-A generated value is selected in this order:
+The registry establishes three generation modes:
 
-`explicit named canon > race/species constraint > organization constraint > manufacturer doctrine > technology basis > Path/maturity > vessel/mission constraint > family default > labeled derived engineering > labeled proposal`
-
-A lower layer may specialize a higher layer but cannot contradict it without an explicit compatibility or exception record.
+- `AUTHORITY_ONLY` — no procedural gap filling. Unknown stays unknown.
+- `LABELED_DERIVATION` — permits engineering consequences when confirmed parents and an explicit resolver rule exist.
+- `LABELED_PROPOSAL` — permits clearly labeled design proposals for exploration; proposals cannot masquerade as recovered setting truth.
 
 ---
 
-## 7. Vessel scale and embodiment
+## 8. Scale and embodiment
 
-The recovered FTL archive uses approximate scale bands from uncrewed probes through gatework/megastructures. Scale changes what the installation must physically become.
+Recovered scale bands are:
 
-| Scale | Approximate recovered mass band | Dominant FTL engineering pressure |
+| Scale | Approximate recovered mass band | Dominant engineering pressure |
 |---|---:|---|
-| Uncrewed probe | 1–40 t | minimum viable field coverage; no crew servicing; thermal reserve |
-| Fighter / strike craft | 18–180 t | extreme miniaturization; limited redundancy; violent duty cycle |
-| Shuttle / courier | 120–2,200 t | compact autonomous navigation; rapid turnaround |
-| Corvette | 1,800–18,000 t | distributed redundancy begins; hull-flex compensation |
-| Frigate / merchant | 15,000–180,000 t | endurance, cargo-state variation, serviceability |
-| Cruiser | 160,000–1,800,000 t | multiple field sectors; battle damage; large internal mass changes |
-| Capital / carrier | 1.5–24 million t | coherent effect around enormous dynamic mass; networked emitters |
-| Gatework / megastructure | 24 million–24 billion t | stationary geometry, throughput, stellar-scale infrastructure, route politics |
+| Uncrewed probe | 1-40 t | minimum viable coverage, autonomous operation, little thermal/redundancy reserve |
+| Fighter / strike craft | 18-180 t | extreme miniaturization, violent duty cycle, limited redundancy |
+| Shuttle / courier | 120-2,200 t | compact navigation, rapid turnaround |
+| Corvette | 1,800-18,000 t | distributed redundancy and hull-flex compensation begin |
+| Frigate / merchant | 15,000-180,000 t | endurance, cargo-state variation, serviceability |
+| Cruiser | 160,000-1,800,000 t | field sectors, battle damage, large internal mass changes |
+| Capital / carrier | 1.5-24 million t | coherent effect around enormous dynamic mass and distributed machinery |
+| Gatework / megastructure | 24 million-24 billion t | stationary geometry, aperture/throughput, route infrastructure, strategic geography |
 
-**Derived scaling rule:** ship size modifies **embodiment**, not technological identity. A larger biological installation grows more/distributed tissue and support circulation; a mineral installation requires greater resonant volume, segmented crystal domains, or hierarchical lattice control; terrestrial installations distribute rings/nodes and service trunks; postmaterial installations expand authenticated field volume and reserve/fallback capacity.
+Scale changes embodiment rather than technological identity. A larger biological system grows/distributes additional tissue and circulation; a mineral system expands or segments resonant domains; a terrestrial system distributes field nodes/rings, buses, coolant, service trunks, and supports; a gas-giant system expands membrane/tension architecture; a postmaterial system expands authenticated field volume, anchor density, reserve, and fallback capability.
 
-A useful non-canon design estimator is:
+### 8.1 Non-canon burden estimator
+
+A useful design-only relationship remains:
 
 `B_effect = k_family * M^alpha * V_effect^beta * C_geometry * C_environment * C_damage`
 
-where `B_effect` is engineering burden rather than literal energy, `M` is translated mass, `V_effect` is protected volume, and correction coefficients capture geometry, local environment, and degraded hull state. The exponents are **not canonical constants** and must be calibrated per recovered family if quantitative tables are later adopted.
+`B_effect` is an engineering-burden comparison, not literal drive energy. `M`, `V_effect`, and correction factors make explicit that mass, protected volume, geometry, environment, and damage matter. `k_family`, `alpha`, and `beta` are **not canonical constants**.
+
+Useful normalized diagnostics are:
+
+`M_coverage = V_valid_effect / V_required_payload`
+
+`M_recovery = recovery_available / recovery_required`
+
+`M_power = P_available_at_drive / P_required_at_drive`
+
+Values below 1 represent an unmet modeled requirement. Thresholds beyond that statement remain installation/generator policy unless canon supplies them.
 
 ---
 
-## 8. Energy architecture
+## 9. Power and thermal architecture
 
-Recovered supporting energy plants include fusion pulse banks, antimatter-catalyzed field plants, contained micro-singularity accumulators, metastable vacuum-polarization cells, Q-state condensate reservoirs, and direct stellar power/mass taps for fixed gateworks.
+Recovered FTL-supporting plant families include fusion pulse banks, antimatter-catalyzed field plants, contained micro-singularity accumulators, metastable vacuum-polarization cells, Q-state condensate reservoirs, and direct stellar power/mass taps for fixed gateworks.
 
-Power plant and FTL mechanism are independent generator dimensions. The same transit family can therefore have different valid energy embodiments at different maturity levels or cultures, subject to the family’s archive constraints.
+Power plant and transit mechanism are independent axes. The same family can admit different energy embodiments where the recovered Path permits them.
 
-The generator must resolve at least:
+Every installation must resolve:
 
-`source -> conditioning -> storage/buffer -> pulse or continuous delivery -> drive block -> recovery/dump -> emergency isolation`
+`source -> conditioning -> buffer/storage -> pulse or continuous delivery -> drive block -> recovery/dump -> emergency isolation`
 
-A drive that has an energy source but no delivery, isolation, dump, or recovery path is mechanically incomplete.
+A power source without delivery, isolation, recovery/dump, and thermal/working-medium consequences is mechanically incomplete.
 
----
+For **ordinary reaction propulsion only**, physical validation may use:
 
-## 9. Navigation, operators, and reference authority
+`Delta_v = v_e * ln(m_0 / m_1)`
 
-Navigation is mechanism-specific. A coordinate is not enough.
+This is not an FTL range/speed equation.
 
-### Metric Compression Envelope
-Requires external-field knowledge, route hazard prediction, envelope geometry, internal horizon avoidance, and safe emergence conditions.
+A generic non-canon thermal audit may express:
 
-### Gravitational-Plane Skimmer
-Requires barycentric mass models, gradient maps, certified ephemerides, and continuous detection of ridges/plane departure.
+`Q_dot_reject >= Q_dot_waste_power + Q_dot_transit_residual + Q_dot_environment - Q_dot_stored`
 
-### Hyperspatial Slipstream Shear
-Requires Q-weather, boundary shear, adhesion state, phase velocity, and normal-space correspondence.
-
-### Q-Lattice Phase Translation
-Requires destination Q-address, phase epoch, protected route/address records, and anti-aliasing validation.
-
-### N-Dimensional Manifold Drive
-Requires topology sensing, selected dimensional axes, embedding integrity, higher-dimensional geodesic solution, and valid return projection.
-
-### Fold-Jump
-Requires origin and destination empty-volume certification, precision gravimetry/ranging, authenticated destination reference, and pre-commit solution confidence.
-
-### Wormhole / Gate
-Requires mouth identity, synchronization, aperture/throughput state, gate scheduling, mass-flow limits, and chronology-safe operating state.
-
-### Quantum Phase Displacement
-Requires compatible state target, occupation exclusion, reference authenticity, continuity bookkeeping, and biological/software mutability handling.
-
-Operator models may be bridge-directed, specialist-navigator, distributed AI, bonded organism, collective biological sensing, resonant crystalline controller/caste, gate traffic control, or postmaterial authenticated state-control. The generator must preserve source-specific operator practice when one exists.
+The equation is an accounting prompt: the actual heat/disorder carrier may be pumped fluid, cryogenic phase change, vascular circulation, mineral conduction/phononics, radiating surfaces, sacrificial storage, or postmaterial state management according to basis.
 
 ---
 
-## 10. Signatures and observability
+## 10. Navigation, reference authority, and controls
 
-Every generated installation must expose signatures over four operational phases:
+A coordinate is not enough. Each family requires different state:
 
-1. **pre-entry/spool**;
-2. **transit/active state**;
-3. **emergence/termination**;
-4. **aftermath/recovery**.
+| Family | Required navigation/reference state |
+|---|---|
+| Metric envelope | external-field knowledge, route hazards, envelope geometry, horizon/radiation emergence conditions |
+| Gravitic plane | barycentric mass models, gradient maps, ephemerides, ridge/plane-departure detection |
+| Slipstream | Q-weather, shear/adhesion state, phase velocity, normal-space correspondence |
+| Q-lattice | destination Q-address, phase epoch, protected address/route records, anti-aliasing validation |
+| N-manifold | topology, active axes, embedding integrity, higher-dimensional geodesic, valid return projection |
+| Fold-jump | origin/destination exclusion, precision gravimetry/ranging, authenticated destination reference, precommit confidence |
+| Wormhole/gate | mouth identity/synchronization, aperture/throughput, schedule/mass-flow, chronology-safe state |
+| Phase displacement | compatible target state, occupation exclusion, reference authenticity, continuity and mutable-state handling |
+| Inertial torch | ordinary astrogation, thrust/reaction-mass state, acceleration/thermal limits |
 
-Each phase may emit or perturb:
+Operator models may be bridge-directed, specialist navigator, distributed automation, bonded organism, collective biological sensing, resonant crystalline controller/caste, gate traffic control, or postmaterial authenticated state control where supported by source and basis.
 
-`electromagnetic | thermal | optical | gravitational | neutrino | Q/exotic | acoustic/structural | chemical | biological`
+A useful engineering abstraction is:
 
-Signatures are not flavor-only. They support detection, intelligence, tactical warning, maintenance, forensic reconstruction, and worldbuilding.
+`S1 = T(S0, E, theta)`
 
-### Signature record
-
-```json
-{
-  "phase": "pre-entry",
-  "channel": "gravitational",
-  "strengthClass": "contextual",
-  "geometry": "annular/distributed/localized",
-  "duration": "generator-resolved",
-  "detectability": "sensor-and-range-dependent",
-  "persistence": "none|transient|residual",
-  "source": "CONFIRMED|DERIVED|PROPOSED"
-}
-```
-
-Biological systems should produce biological/chemical/thermal consequences where appropriate; mineral systems should expose resonant, phononic, polarization, fracture, and optical consequences; field-mediated systems should emphasize state/coherence/reference artifacts rather than being magically signatureless.
+`S0` is measured initial vessel state, `E` is measured environment/reference state, `theta` is the solved control set, and `S1` is an admissible terminal state. The machine must be able to measure/bound inputs, solve control, realize the mechanism, reject unsafe solutions, and recover afterward.
 
 ---
 
-## 11. Failure model
+## 11. Signatures and observability
 
-Failures derive from the mechanism **and** the technology basis.
+Every generated installation exposes signatures across four phases:
 
-The common hazard equation is descriptive rather than canonically numerical:
+1. `PRE_ENTRY_SPOOL`
+2. `ACTIVE_TRANSIT`
+3. `EMERGENCE_TERMINATION`
+4. `AFTERMATH_RECOVERY`
+
+Possible channels are electromagnetic, thermal, optical, gravitational, neutrino, Q/exotic, acoustic/structural, chemical, and biological.
+
+Each signature entry records phase, channel, strength class, geometry, duration, detectability, persistence, canon status, and provenance. `contextual` or `UNRESOLVED` is preferable to an invented numerical detection range.
+
+Technology basis changes signature language. Biological systems may produce metabolic, chemical, thermal, neural, tissue, or symbiont changes. Mineral systems may expose resonant, phononic, polarization, fracture, or optical artifacts. Gas-giant systems may reveal membrane motion, electrostatic discharge, pressure/acoustic state, or ionic flow. Postmaterial systems can reveal coherence/reference/state effects. Unfamiliar does not mean invisible.
+
+---
+
+## 12. Failure model
+
+Failures combine mechanism, basis, integration, vessel condition, navigation, power margin, coverage, infrastructure, and recovery.
 
 `risk = f(mechanismState, technologyHealth, environment, navigationConfidence, energyMargin, coverageIntegrity, recoveryMargin)`
 
-### Mechanism failures
+This relation is descriptive, not a canonical probability function.
 
-- Metric envelope: closure asymmetry, horizon formation, bow-radiation handling failure, ringing, field collapse.
-- Gravitational-plane: plane loss, ridge encounter, ephemeris error, gradient overload, emergence-vector error.
+### 12.1 Confirmed/recovered mechanism failure vocabulary
+
+- Metric: closure asymmetry, horizon formation, bow-radiation handling failure, ringing, field collapse.
+- Gravitic: plane loss, gravity-ridge encounter, ephemeris error, gradient overload, emergence-vector error.
 - Slipstream: adhesion loss, Q-weather upset, shear excursion, phase-velocity mismatch, wake shock.
-- Q-lattice: address alias, epoch mismatch, corrupted reference, partial-state/coverage error, quarantine-triggering residual.
+- Q-lattice: address alias, epoch mismatch, corrupted reference, partial-state/coverage error, residual anomaly/quarantine condition.
 - N-manifold: embedding loss, axis-order error, topology trap, invalid return map, projection distortion.
-- Fold-jump: occupied destination, aperture asymmetry, bad adjacency solution, recoil/metric ringing, abort-after-commit impossibility.
-- Wormhole/gate: throat instability, asymmetric mass-flow excursion, mouth desynchronization, aperture shear, chronology protection trip.
-- Phase displacement: occupied target state, reference spoof, residual/duplicate-state anomaly, conservation mismatch, continuity certification failure.
+- Fold-jump: occupied destination, aperture asymmetry, bad adjacency solution, recoil/metric ringing, attempted abort after commit.
+- Gate: throat instability, asymmetric mass-flow excursion, mouth desynchronization, aperture shear, chronology-protection trip.
+- Phase displacement: occupied target state, reference spoof, residual/duplicate-state anomaly, conservation mismatch, continuity-certification failure.
 
-### Basis failures
+### 12.2 Basis failure vocabulary
 
 - Terrestrial: breaker/isolation faults, conductor quench, cryostat/coolant failure, alignment, sensor/control fault.
-- Aquatic: cavitation, contamination, osmotic/chemical drift, valve/manifold failure, galvanic attack, dissolved gas excursion.
+- Aquatic: cavitation, contamination, osmotic/chemical drift, valve/manifold failure, galvanic attack, dissolved-gas excursion.
 - Cryogenic: warm contamination, contraction misalignment, superconductive transition, seal failure, phase-change buffer exhaustion.
 - Gas-giant: membrane rupture, pressure imbalance, electrostatic discharge, tension-web instability, acoustic timing corruption.
 - Biological: rejection, necrosis, infection, electrolyte/hormone drift, neural desynchronization, scar/tumor interference, exhausted regeneration.
-- Mineral: crack growth, domain inversion, preload loss, modal detuning, optical defect contamination, lattice annealing failure.
-- Field-mediated: coherence collapse, reference loss, authorization corruption, state drift, hostile state injection, reserve depletion, fallback reconstruction failure.
+- Mineral: crack growth, domain inversion, preload loss, modal detuning, optical-defect contamination, failed annealing/regrowth.
+- Field-mediated: coherence collapse, reference loss, authorization corruption, state drift, hostile state injection, reserve depletion, failed fallback reconstruction.
 
-The failure generator combines these layers rather than drawing from one universal “drive malfunction” table.
+### 12.3 Failure propagation
+
+```mermaid
+flowchart LR
+    M[Mechanism hazard] --> X[Local drive fault]
+    B[Basis hazard] --> X
+    P[Power / thermal fault] --> X
+    N[Navigation / reference fault] --> X
+    H[Hull / coverage damage] --> X
+    I[Infrastructure fault] --> X
+    X --> C{Commit boundary crossed?}
+    C -->|No| A[Abort / isolate / recertify]
+    C -->|Yes| R[Recovery-only response]
+    R --> E[Emergence consequences]
+    E --> Q[Quarantine + forensics + maintenance]
+```
+
+The generator combines layers; it does not draw one generic “FTL malfunction.”
 
 ---
 
-## 12. Maintenance and lifecycle
+## 13. Maintenance and lifecycle
 
-Every drive instance requires a maintenance record with:
+Every installation must carry:
 
-- inspection interval and event-triggered checks;
-- calibration references;
-- consumables/working media;
-- life-limited components or tissues;
-- acceptable degradation envelope;
+- inspection and event-triggered checks;
+- calibration/reference requirements;
+- consumables or working media;
+- life-limited components, tissues, lattice domains, membranes, or state resources;
+- acceptable degradation indicators;
 - field/route recertification triggers;
 - post-transit inspection requirements;
 - emergency isolation method;
 - depot/manufacturer-only operations;
-- environmental servicing requirements;
+- service environment;
 - evidence/signatures of latent failure.
 
-**Derived lifecycle principle:** advanced technology may reduce manual component replacement without eliminating maintenance. Maintenance changes form. A self-healing biological or postmaterial system still requires nutrition/reserve, reference integrity, validation, pathology or state-drift management, and known-safe recovery states.
+Advanced technology can reduce manual replacement without eliminating maintenance. Maintenance may become husbandry, surgery, annealing, state authentication, coherence restoration, membrane/tension management, chemistry control, automated metrology, or fallback reconstruction.
+
+### 13.1 Lifecycle state machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> DORMANT
+    DORMANT --> CONDITIONING
+    CONDITIONING --> CALIBRATING
+    CALIBRATING --> SPOOLING
+    SPOOLING --> PRECOMMIT
+    PRECOMMIT --> ACTIVE: commit
+    PRECOMMIT --> ISOLATED: abort
+    ACTIVE --> TERMINATING
+    TERMINATING --> RECOVERING
+    RECOVERING --> DORMANT
+    CONDITIONING --> FAULTED
+    CALIBRATING --> FAULTED
+    SPOOLING --> FAULTED
+    ACTIVE --> FAULTED
+    FAULTED --> ISOLATED
+    FAULTED --> RECOVERING: mechanism permits recovery
+```
+
+The common state vocabulary does not make all drives operationally identical.
 
 ---
 
-## 13. Practical equipment manual framework
+## 14. Practical equipment-manual framework
 
-This section defines the **minimum practical manual** a generated FTL installation should be able to emit. Procedures below are `DERIVED` templates unless a specific race/manufacturer source supplies authoritative procedure.
+The practical companion is `PROPULSION_TRANSIT_FIELD_MANUAL.md`. It is a derived presentation view, not a second authority source.
 
-### 13.1 Operator quick-reference sequence
+Every installation manual should be rendered from the same structured record and include:
 
-**A. Cold / dormant inspection**
+1. installation identity, source snapshot, and canon-status key;
+2. physical machinery identification and locations;
+3. six utility-route carriers/interfaces/tolerances;
+4. cold/dormant inspection;
+5. basis-specific conditioning;
+6. vessel/route calibration;
+7. spool and precommit checks;
+8. explicit commit boundary and abort state;
+9. family-specific active-transit quantities;
+10. termination/recovery procedure;
+11. post-transit inspection and forensic preservation;
+12. maintenance procedures, consumables, service environment, and depot-only work;
+13. failure symptom -> owning block -> dependency -> repair -> proof-of-restoration tracing;
+14. provenance appendix.
 
-Verify hull/effect coverage state, isolation boundaries, energy reserve, thermal/working-medium state, navigation references, destination/route authority, control synchronization, recovery capacity, and abort chain. Any unresolved coverage or reference fault blocks commitment.
+The standard derived operating progression is:
 
-**B. Conditioning**
+`DORMANT -> CONDITIONING -> CALIBRATING -> SPOOLING -> PRECOMMIT -> ACTIVE -> TERMINATING -> RECOVERING -> DORMANT`
 
-Bring the installation into its basis-specific operating state: energize and cool terrestrial field hardware; equalize chemistry and pressure for aquatic systems; reach contraction geometry for cryogenic plants; tension/inflate charged gas-giant surfaces; synchronize metabolism and field tissue for biological systems; establish preload/resonance for mineral systems; authenticate and stabilize persistent state for postmaterial systems.
+with fault/isolation branches as the family permits.
 
-**C. Calibration**
-
-Measure the actual vessel, not the design drawing. Reconcile mass distribution, protected volume, hull deformation, cargo movement, active appendages, local curvature/topology/Q conditions, clocks/references, and destination state. Record covariance/uncertainty.
-
-**D. Spool**
-
-Charge the prime mover while the coverage system establishes a complete valid boundary. Navigation and transit control continuously compare predicted and observed state. Abort remains available only within the family-specific pre-commit envelope.
-
-**E. Commit / entry**
-
-Require independent agreement between navigation solution, drive-state health, effect coverage, recovery reserve, and route/destination exclusion checks. The exact number and form of human/alien approvals is organization/manufacturer doctrine, not universal canon.
-
-**F. Active transit**
-
-Monitor family-specific control quantities rather than generic “FTL speed.” Examples include envelope symmetry, skim-plane error, shear adhesion, Q-address integrity, embedding/return-map condition, gate throat state, or displacement continuity state.
-
-**G. Termination**
-
-Recover normal vessel state while managing momentum, field energy, recoil, stored radiation, ringing, phase mismatch, topology, or residual state according to family.
-
-**H. Post-transit**
-
-Quarantine any residual anomaly, compare expected versus measured emergence state, inspect basis-specific damage, preserve immutable event logs, and recertify references before another transit.
-
-### 13.2 Abort doctrine
-
-The generator must explicitly mark:
+Abort vocabulary remains:
 
 `SAFE_ABORT -> DEGRADED_ABORT -> COMMIT_BOUNDARY -> NO_ABORT -> RECOVERY_ONLY`
 
-A fold jump and a continuous metric envelope must not be given identical abort semantics. “Emergency stop” is not an acceptable generic answer.
-
-### 13.3 Maintenance manual examples by basis
-
-**Biological-symbiotic — DERIVED:** establish metabolic baseline; assay electrolytes/hormones/symbiont activity; image field-bearing tissue; map scar/necrotic regions; test sensory-phase organs; verify vascular cooling; induce low-power coherence; permit regeneration; quarantine anomalous tissue before full spool.
-
-**Mineral piezoelectric-photonic — DERIVED:** map cracks and inclusions; compare crystallographic axes to certified reference; measure preload; clean/revalidate optical defect channels; perform low-amplitude modal sweep; anneal permitted defects; re-grow service faces; repeat resonance map before high-energy operation.
-
-**Aquatic electrochemical-hydraulic — DERIVED:** sample working-fluid chemistry; check dissolved gases; inspect wet-mate seals and pressure cells; flush contamination; characterize cavitation margin; test isolation valves; verify ionic reference gradients; pressure-cycle field surfaces before drive certification.
-
-**Field-mediated postmaterial — DERIVED:** authenticate state references; compare active topology with signed known-safe model; measure coherence reserve; simulate fallback reconstruction; isolate unauthorized state changes; restore missing anchor nodes; prove material fallback before strategic transit.
+A fold jump and a continuous metric envelope MUST NOT receive identical emergency-stop semantics.
 
 ---
 
-## 14. Educational text: how to understand a Black Light FTL drive
+## 15. Educational model
 
-### 14.1 Crew level
+### 15.1 Crew level
 
-Do not ask first, “How fast does it go?” Ask, “What must be true for this system to make the ship arrive somewhere it could not ordinarily reach in that time?” A metric drive changes local geometry. A skimmer exploits gravitational geometry. A slipstream drive couples to a Q-boundary. Q-lattice translation and fold-jump are discrete in different ways. A manifold drive solves a shorter higher-dimensional route. A gate maintains a path in infrastructure. Phase displacement treats the vessel as a state to be nonlocally displaced.
+Do not begin with “how fast is it?” Begin with “what must remain true for this mechanism to deliver the complete vessel to an admissible endpoint?” Different families manipulate geometry, gravitational paths, Q-boundaries, indexed states, higher-dimensional embeddings, topology, maintained apertures, or nonlocal state.
 
-### 14.2 Technician level
+### 15.2 Technician level
 
-The drive is eight coupled machines/functions. A fault in navigation can be just as fatal as a failed energy plant because navigation defines the state the field controller is trying to create. Coverage matters because the entire intended payload must lie inside the valid effect. Recovery matters because creating an exotic condition is only half the engineering problem; returning the ship, its momentum, heat, fields, information, and occupants to a valid state is the other half.
+Learn the eight machine blocks and six route end effects. Find which end effect failed, then identify the native carrier and interface. An alien `power` route can be ionic, fluidic, biological, photonic, field-mediated, or otherwise non-terrestrial; the word `power` describes the required result, not a copper cable.
 
-### 14.3 Engineer level
+### 15.3 Engineer level
 
-Treat transit as a constrained state transformation. Define the admissible initial state `S0`, the mechanism operator `T`, the required environmental/reference state `E`, and admissible terminal state `S1`:
+Transit is a constrained state transformation. Mathematical availability is not engineering viability. The installation must measure state, build a solution under uncertainty, physically realize it, keep the complete payload inside the valid effect, maintain structural and utility dependencies, and recover afterward.
 
-`S1 = T(S0, E, theta)`
+### 15.4 Intelligence level
 
-where `theta` is the solved control parameter set. Engineering validity requires more than a mathematically solvable `T`; it requires machinery to measure `S0` and `E`, construct `theta`, physically realize the operator, bound uncertainty, reject unsafe solutions, and recover afterward.
+Observe signatures by phase and attach confidence/provenance. A vibration-control culture, cultivated computation, biological machinery, or crystalline resonance may constrain hypotheses without proving a specific drive family. Do not promote visual resemblance into mechanism identity.
 
-### 14.4 Generator/API designer level
+### 15.5 API/generator level
 
-Never encode “driveType = warp” as sufficient state. The canonical drive family is only one axis. A complete generator result must retain source provenance and resolve machinery through the species/organization/manufacturer technology basis.
+`driveType = warp` is insufficient. A valid record retains source snapshot, separate propulsion/transit axes, race/manufacturer/basis, vessel state, all eight blocks, all six routes, navigation, operations, maintenance, signatures, failures, infrastructure, validation, and field provenance.
 
 ---
 
-## 15. Mathematical validation appendix — non-canon unless separately adopted
+## 16. Mathematical validation appendix — non-canon unless separately adopted
 
-The mathematics here is a vocabulary for consistency checks, not an assertion that Black Light archive machinery literally implements a modern published metric.
-
-### 15.1 Shared spacetime vocabulary
+The mathematics here provides consistency vocabulary. It does not assert that archive machinery literally implements a contemporary published metric.
 
 Einstein field relation:
 
-`G_{mu nu} + Lambda g_{mu nu} = (8 pi G / c^4) T_{mu nu}`
+`G_mu_nu + Lambda g_mu_nu = (8 pi G / c^4) T_mu_nu`
 
 Spacetime interval:
 
-`ds^2 = g_{mu nu} dx^mu dx^nu`
+`ds^2 = g_mu_nu dx^mu dx^nu`
 
-These are useful because several archive families manipulate or exploit geometry, stress-energy, geodesics, topology, or effective dimensional paths.
-
-### 15.2 Metric-envelope analogy
-
-A useful conceptual comparison is an Alcubierre-like line element:
+Metric-envelope conceptual analogy:
 
 `ds^2 = -c^2 dt^2 + [dx - v_s f(r_s)dt]^2 + dy^2 + dz^2`
 
-Black Light canon constraints — field closure, negative/effectively negative stress-energy control, horizon avoidance, and bow-radiation disposal — outrank the analogy.
-
-### 15.3 State-translation abstraction
-
-Discrete systems can be validated as mappings:
+State/nonlocal translation abstraction:
 
 `J : (x^mu, p^mu, Psi, I) -> (x'^mu, p'^mu, Psi', I')`
 
-where `I` includes identity/reference/continuity state when relevant. This makes momentum mismatch, destination occupation, mutable biological state, software state, and continuity certification explicit rather than hand-waved.
+Tidal/geodesic-deviation audit:
 
-### 15.4 Tidal safety
+`D^2 xi^mu / D tau^2 = -R^mu_(nu alpha beta) u^nu xi^alpha u^beta`
 
-A generic relativistic tidal check uses geodesic deviation:
+Endpoint uncertainty may be represented by covariance `Sigma_endpoint`; a UI-oriented confidence illustration is:
 
-`D^2 xi^mu / D tau^2 = -R^mu_{ nu alpha beta} u^nu xi^alpha u^beta`
+`C_nav = 1 - clamp(trace(W * Sigma_endpoint), 0, 1)`
 
-This is especially useful for envelope, gravitic, gate, and emergence validation: a mathematically available route can still be mechanically lethal if differential acceleration across the protected volume exceeds its allowed envelope.
+`W` and thresholds are `PROPOSED` until calibrated.
 
-### 15.5 Uncertainty and solution margin
+For compatible ordinary reaction propulsion:
 
-A generator may expose a covariance matrix `Sigma_endpoint` and normalized margins:
+`Delta_v = v_e ln(m0/m1)`
 
-`C_nav = 1 - clamp(trace(W Sigma_endpoint), 0, 1)`
-
-`M_recovery = reserve_recovery / required_recovery`
-
-`M_coverage = valid_effect_volume / required_payload_volume`
-
-The exact weighting matrix `W` and thresholds are `PROPOSED` until calibrated by canonical data. The important engineering rule is confirmed in spirit: uncertainty must be represented rather than hidden behind a single perfect coordinate.
+This is explicitly an ordinary-space propulsion audit and MUST NOT be used to manufacture FTL performance.
 
 ---
 
-## 16. API and machine-readable contract
+## 17. API and machine-readable contract
 
-A future authoritative schema should expose at minimum:
+The authoritative machine-readable integration now consists of:
+
+- `data/exo-vessel/propulsion-transit-registry.json`
+- `data/schemas/exo-vessel-propulsion-transit.schema.json`
+
+The schema requires these top-level domains:
 
 ```json
 {
-  "schemaVersion": "0.x",
-  "authoritySnapshot": {
-    "repository": "mrcalzon02/HB-TTRPG-tools",
-    "branch": "main",
-    "sourceCommit": "<sha>",
-    "generatorVersion": "<version>",
-    "seed": "<seed>"
-  },
-  "identity": {
-    "species": "<id>",
-    "organization": "<id>",
-    "manufacturer": "<id>",
-    "technologyBasis": "<registry id>",
-    "hybridBasis": []
-  },
-  "vessel": {
-    "scaleClass": "<class>",
-    "mass": "<resolved>",
-    "protectedVolume": "<resolved>",
-    "mission": "<role>",
-    "hullState": "<state>"
-  },
-  "transit": {
-    "family": "<archive key>",
-    "pathImplementation": "<resolved>",
-    "infrastructureClass": "<resolved>",
-    "energyPlant": "<resolved>"
-  },
-  "machineChain": {
-    "energyConditioning": {},
-    "primeMover": {},
-    "fieldFormation": {},
-    "transitControl": {},
-    "navigationSensing": {},
-    "terminationRecovery": {},
-    "wholeEffectCoverage": {},
-    "backbone": {}
-  },
-  "operations": {
-    "operatorModel": "<resolved>",
-    "spool": {},
-    "commitBoundary": {},
-    "abortStates": [],
-    "recovery": {}
-  },
+  "recordType": "exoVesselPropulsionTransitInstallation",
+  "schemaVersion": "1.0.0",
+  "authoritySnapshot": {},
+  "supplementMode": "AUTHORITY_ONLY|LABELED_DERIVATION|LABELED_PROPOSAL",
+  "identity": {},
+  "vessel": {},
+  "conventionalPropulsion": {},
+  "transit": {},
+  "machineChain": {},
+  "routes": {},
+  "navigation": {},
+  "operations": {},
   "maintenance": {},
   "signatures": [],
   "failureModes": [],
-  "validation": {
-    "sourceStatus": "CONFIRMED|DERIVED|PROPOSED|MIXED",
-    "warnings": [],
-    "unresolved": []
-  },
+  "infrastructure": {},
+  "validation": {},
   "provenance": []
 }
 ```
 
-### 16.1 Provenance entry
+The schema intentionally allows `null` for unresolved values where fabricating an answer would be worse than an incomplete record.
 
-Every nontrivial generated property should be traceable:
+### 17.1 Provenance entry
+
+Every nontrivial field should be traceable:
 
 ```json
 {
   "field": "machineChain.fieldFormation.embodiment",
-  "value": "<resolved value>",
-  "status": "CONFIRMED|DERIVED|PROPOSED",
-  "sourcePath": "<repository path or generator rule>",
-  "sourceRevision": "<commit/schema version>",
-  "resolverRule": "<rule id>",
-  "parentInputs": ["technologyBasis", "transit.family", "vessel.scaleClass"],
-  "notes": "<why this value follows>"
+  "status": "CONFIRMED|DERIVED|PROPOSED|UNRESOLVED|MIXED",
+  "sourcePath": "<repository path>",
+  "sourceRevision": "<blob/commit/schema version or null>",
+  "resolverRule": "<rule id or null>",
+  "parentInputs": ["<input field>", "<input field>"],
+  "notes": "<why this value is justified>"
 }
 ```
 
-This is essential for readable procedural canon: a user should be able to ask **why this ship has this machine** and receive an answer grounded in its generating sources.
+A user should be able to ask **why this ship has this machine** and receive the source chain, not a post-hoc narrative.
 
 ---
 
-## 17. Infrastructure and strategic geography
+## 18. Infrastructure and strategic geography
 
 Confirmed infrastructure configurations are:
 
@@ -563,21 +613,43 @@ Confirmed infrastructure configurations are:
 - paired mobile/orbital gates;
 - fixed stellar gateworks.
 
-These are configuration layers, not additional physics families. They may alter range, solution quality, energy burden, speed, route dependence, throughput, spool time, emergence accuracy, and political control.
+They are configuration layers, not additional physics families.
 
-A generator should therefore emit both `transitFamily` and `infrastructureClass`. A wormhole/gate civilization can centralize extreme technology into gateworks and allow comparatively ordinary ships to cross strategic distances. A beacon-assisted Q-lattice or fold network can create navigational geography even where no physical road exists. Prepared corridors and gate networks can become customs points, military chokepoints, trade monopolies, surveying projects, and failure cascades.
+```mermaid
+flowchart LR
+    S[Self-contained] --> B[Beacon-assisted]
+    B --> C[Prepared corridor]
+    C --> G[Paired mobile/orbital gates]
+    G --> F[Fixed stellar gateworks]
+```
+
+The diagram illustrates increasing external infrastructure; it is **not** a mandatory developmental progression.
+
+Infrastructure can change range, solution quality, energy burden, spool behavior, emergence accuracy, throughput, scheduling, route dependence, service geography, customs control, military chokepoints, survey requirements, and political monopoly. These consequences are derived only where the infrastructure exists.
 
 ---
 
-## 18. Chronology and causality safeguards
+## 19. Interoperability
+
+Current EXO authority recognizes `DIRECT`, `ADAPTER_REQUIRED`, and `HOSTILE_WITHOUT_CONVERSION`.
+
+FTL integration applies the same principle across **power, control/reference, structural load transfer, cooling/working medium, atmosphere/environment, access/service assumptions, authentication, and safety semantics**.
+
+A terrestrial connector that can physically mate with an aquatic pressure-logic system is not direct interoperability if reference potential, chemistry, pressure, or control meaning differs. A biological neural reference cannot be treated as ordinary digital data without a defined translation boundary. A postmaterial state interface cannot be reduced to a plug shape.
+
+The most dangerous adapter is one that converts the connector while failing to convert the underlying reference model.
+
+---
+
+## 20. Chronology and causality safeguards
 
 No generator may infer time travel merely from superluminal or exotic transit.
 
 `FTL != chronology violation`
 
-Chronology effects require a source that explicitly authorizes them. Gate synchronization, manifold routing, tachyonic analogy, phase displacement, or spacelike separation may trigger **validation warnings**, but must not create historical alteration, closed timelike curves, backwards messaging, or duplicate timelines by default.
+Chronology effects require explicit source authority. Gate synchronization, manifold routing, phase displacement, spacelike separation, or mathematical analogy may trigger a validation warning but MUST NOT create historical alteration, backwards messaging, closed timelike curves, duplicate timelines, or retrocausal gameplay by default.
 
-If a candidate solution implies a chronology issue, the API should return something like:
+A candidate route that intersects chronology-sensitive conditions returns a state such as:
 
 ```json
 {
@@ -588,45 +660,97 @@ If a candidate solution implies a chronology issue, the API should return someth
 
 ---
 
-## 19. Interoperability
+## 21. Layout and vessel integration
 
-Current EXO authority recognizes `DIRECT`, `ADAPTER_REQUIRED`, and `HOSTILE_WITHOUT_CONVERSION` interoperability states. FTL integration must use the same principle.
+The governing EXO vessel guide requires machinery-first generation and a continuous structural load path connecting ordinary thrust, FTL foundations/coverage anchors, major fuel/reaction-mass loads, docking/landing loads, habitat acceleration support, weapons recoil/launch forces, and major external modules.
 
-A terrestrial ship cannot assume that an aquatic pressure-logic navigation feed, biological neural reference, mineral photonic lattice, or postmaterial state bus is electrically meaningful. Adapters must explicitly convert **power, data/reference, structure, cooling/working medium, atmosphere/environment, access/service assumptions, and safety semantics**.
+Transit generation therefore hands the vessel assembler at least:
 
-The most dangerous adapter is one that converts a connector while failing to convert the underlying reference model.
+- machine-block bounding/clearance requirements;
+- structural foundation and load-path requirements;
+- protected effect volume/coverage geometry;
+- power, cooling, data/reference, atmosphere/environment, and access routes;
+- catastrophic-risk segregation requirements;
+- navigation sensor baselines and low-noise placement needs;
+- radiator/exchange/deployment requirements;
+- service environment and replace/grow/anneal/reconstruct access;
+- infrastructure interfaces;
+- condition/failure propagation dependencies.
 
----
-
-## 20. Readability and origin requirements for future expansion
-
-Every future FTL expansion should answer four audiences simultaneously:
-
-- **setting reader:** what is it and why does this civilization use it?
-- **crew/technician:** what do I physically see, touch, feed, align, tune, replace, or avoid?
-- **engineer/designer:** what end effects and constraints make it work, scale, fail, and recover?
-- **generator/API:** which authoritative inputs caused each output and how can the result be reproduced?
-
-Each new entry should therefore contain: origin/source, canon status, physical principle, eight-block machine chain, physical layout, materials/working medium, construction method, scale behavior, energy architecture, navigation, controls/operators, startup/spool/commit/transit/recovery, abort boundaries, maintenance, signatures, hazards/failures, infrastructure dependencies, interoperability, maturity progression, validation criteria, and provenance.
+Current closed mass/volume references are not silently recalculated merely because a richer technology methodology exists. A methodology-aware rebalance must explicitly reopen the appropriate engineering ledger and preserve/reconcile prior reference records.
 
 ---
 
-## 21. Known gaps and next expansion targets
+## 22. Single-record, multiple-view rule
 
-`UNRESOLVED:` the historical `EXO_OPERATIVE_TECHNOLOGY_BASIS.md` path referenced by the working adapter is absent from the inspected current `main` tree. Source history may later recover additional prose, but the current registry is the surviving authority for basis-family names and principles.
+One validated installation record feeds all presentations:
 
-`UNRESOLVED:` race-specific and manufacturer-specific named FTL implementations must be added only as their surviving source records are located. This document intentionally does not manufacture names for them.
+```mermaid
+flowchart TD
+    R[Validated installation] --> D[Engineering data sheet]
+    R --> O[Operator checklist]
+    R --> M[Maintenance manual]
+    R --> E[Educational text]
+    R --> I[Intelligence/signature profile]
+    R --> N[Narrative description]
+    R --> V[Vessel/module viewer]
+```
 
-`PROPOSED:` formal JSON schemas for FTL solutions, machinery blocks, signatures, maintenance, failure modes, and provenance should be added under `data/schemas/` after their fields are reconciled against all surviving generator source records.
+A renderer, manual writer, viewer, or narrative generator may change language and detail level. It may not independently re-resolve canon or invent a different drive.
 
-`PROPOSED:` educational/manual generation should become a view over the same structured installation record rather than a second independent lore generator. One resolved machine should be capable of emitting a technical data sheet, operator checklist, maintenance manual, classroom explanation, intelligence profile, and narrative description without contradicting itself.
+This is the practical meaning of readable procedural canon: every view can be more or less detailed without contradicting the same source object.
 
 ---
 
-## 22. Supporting-document roles
+## 23. Validation invariants
 
-`FTL_ENGINEERING_CATALOG_WORKING.md` remains the archive-recovery ledger and mathematical workshop. It is not deleted because its recovered commit provenance and detailed family reconstruction remain useful.
+A valid propulsion/transit installation proves that:
 
-`FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` remains the detailed embodiment workshop. Its references to the missing operative-basis prose document are subordinate to the current registry and this authority document.
+1. ordinary propulsion band and transit construction maturity remain separate axes;
+2. confirmed source values have not been overwritten by procedural values;
+3. every `DERIVED` or `PROPOSED` value carries provenance and parent inputs;
+4. all eight machine blocks are present or explicitly unresolved;
+5. all six invariant EXO route semantics have carrier/interface/tolerance state;
+6. whole-effect coverage includes the intended payload or reports the shortfall;
+7. navigation/reference inputs match the selected mechanism;
+8. energy architecture includes delivery, isolation, recovery/dump, and thermal/working-medium consequences;
+9. structural integration supplies a continuous load/foundation path;
+10. abort state respects the family-specific commit boundary;
+11. technology-basis embodiment changes actual carrier/control/service/failure language rather than merely vocabulary;
+12. race-specific constraints outrank generic basis assumptions;
+13. no race-specific transit family is invented from aesthetic or technological compatibility;
+14. alien compatibility is not assumed from identical end effects;
+15. no chronology effect is created without explicit canon authority;
+16. output views consume the same validated record;
+17. identical source snapshot, complete seed hierarchy, generator version, and deterministic inputs reproduce the same result;
+18. unresolved material remains visible rather than being silently normalized away.
 
-This document is the **single authoritative integration entrypoint** tying those supporting works to current EXO engineering. Future refinements should update or extend this authority deliberately rather than creating another competing top-level FTL authority.
+---
+
+## 24. Known gaps and next expansion targets
+
+`RESOLVED:` the operative-technology authority is not missing; it is the root `EXO_OPERATIVE_TECHNOLOGY_BASIS.md`. The stale-path authority gap is closed by this revision.
+
+`UNRESOLVED:` Ar'nock and other race/manufacturer-specific named FTL assignments must be added only when surviving source records establish them.
+
+`UNRESOLVED:` canonical numerical range, speed, spool time, detection range, failure probability, energy cost, and scaling exponents cannot be inferred uniformly across the recovered transit families. Where numbers do not survive, the system retains qualitative constraints or labeled design estimators.
+
+`PROPOSED:` software resolver implementation should consume `propulsion-transit-registry.json` and validate output against `exo-vessel-propulsion-transit.schema.json` rather than duplicating family/basis lists in renderer code.
+
+`PROPOSED:` manufacturer-specific manuals, conversion-bay engineering, mixed-technology salvage/refit rules, damage propagation into transit capability, infrastructure traffic models, and transit-signature intelligence tools should be generated as views/extensions of the same structured installation record.
+
+---
+
+## 25. Supporting-document roles
+
+`FTL_ENGINEERING_CATALOG_WORKING.md` remains the archive-recovery ledger and mathematical workshop. Its recovered commit provenance, path implementations, component families, scale, infrastructure, and energy reconstruction remain important.
+
+`FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md` remains the detailed `DERIVED` embodiment workshop. It is subordinate to confirmed race/manufacturer source material, the live root operative-technology authority, and this consolidated authority.
+
+`PROPULSION_TRANSIT_GENERATOR_REFERENCE.md` explains how to resolve the structured installation without becoming a competing lore authority.
+
+`PROPULSION_TRANSIT_FIELD_MANUAL.md` demonstrates how practical equipment manuals and educational text are rendered from that structured installation.
+
+`propulsion-transit-registry.json` and `exo-vessel-propulsion-transit.schema.json` make the core vocabulary and validation rules machine-readable.
+
+This document remains the **single authoritative integration entrypoint**. Future refinements should extend or correct this authority deliberately rather than creating another competing top-level propulsion/FTL authority.
