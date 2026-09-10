@@ -1,7 +1,7 @@
 {
   "projectId": "blacklight-exo-vessel-design-system",
   "registryType": "exoVesselPropulsionTransitRegistry",
-  "registryVersion": "1.0.0",
+  "registryVersion": "1.1.0",
   "authorityDocument": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
   "reconciliationBaseCommit": "2ff9f2af0aa86962dadc51bb7a7346c87a0e9aaf",
   "authoritySources": [
@@ -10,24 +10,48 @@
     {"path":"EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md","role":"vessel-engineering-governing-guide","status":"CONFIRMED"},
     {"path":"data/exo-vessel/technology-basis-registry.json","role":"technology-basis-machine-registry","status":"CONFIRMED"},
     {"path":"data/exo-vessel/engineering-registry.json","role":"conventional-propulsion-registry","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-physics-definitions.js","role":"live-shared-transit-capability-runtime","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-path-level-core.js","role":"live-family-path-level-runtime","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-path-level-runtime.js","role":"live-path-capability-coupling-runtime","status":"CONFIRMED"},
+    {"path":"blacklight-exo-ftl-path-level-controller.js","role":"live-path-precedence-resolver","status":"CONFIRMED"},
     {"path":"BLACKLIGHT_EXO_SOURCE_AUTHORITY.md","role":"cross-domain-provenance-policy","status":"CONFIRMED"},
     {"path":"data/blacklight-continuum/wiki/foundation-lore.json","role":"race-and-setting-source","status":"CONFIRMED"},
-    {"path":"docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md","role":"derived-embodiment-workshop","status":"DERIVED"}
+    {"path":"docs/blacklight/FTL_TECHNOLOGY_BASIS_INTEGRATION_WORKING.md","role":"derived-embodiment-workshop","status":"DERIVED"},
+    {"path":"docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md","role":"subordinate-practical-engineering-manual","status":"MIXED"}
   ],
   "canonLabels": ["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"],
   "supplementModes": ["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"],
-  "axisSeparation": {
+  "scaleSystem": {
     "conventionalPropulsionBand": {
       "source": "data/exo-vessel/engineering-registry.json",
       "values": ["P0","P1","P2","P3","P4","P5","P6"],
-      "meaning": "ordinary-spacetime propulsion technology band"
+      "meaning": "ordinary-spacetime propulsion technology band",
+      "relationship": "independent of the transit path/capability scales unless a specific source establishes a correlation"
     },
-    "transitConstructionMaturity": {
-      "source": "docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md",
+    "transitPathLevel": {
+      "source": "blacklight-exo-ftl-path-level-core.js",
       "values": ["P0","P1","P2","P3","P4","P5","P6"],
-      "meaning": "FTL/transit construction maturity within a recovered transit path"
+      "labels": ["Monumental Precursor","Industrial Demonstrator","Fixed Operational System","Capital-Scale Mobile Prototype","Fleet Operational Standard","Compact Strategic System","Mature Path Apex"],
+      "meaning": "family-specific transit Path maturity/implementation level; governs installation scale, path-specific performance envelope, charge/recovery behavior, reliability, and construction maturity"
     },
-    "rule": "The labels are separate axes and MUST NOT be merged, inferred equivalent, or exposed as a single P-level."
+    "sharedTransitCapabilityTier": {
+      "source": "blacklight-exo-ftl-physics-definitions.js",
+      "values": ["T0","T1","T2","T3","T4","T5","T6","T7","T8"],
+      "labels": ["Relativistic Precursor","Near-Light Compression","Supra-Light Prototype","System-Jump Capability","Operational Interstellar Drive","Strategic Corridor Drive","Deep-Range Manifold Drive","Compact Multisystem Drive","Post-Material Transit Architecture"],
+      "meaning": "shared cross-family capability/performance envelope used by the live base FTL generator"
+    },
+    "pathToSharedTierDefault": {
+      "source": "blacklight-exo-ftl-path-level-runtime.js#STAGE_TO_TIER",
+      "mapping": {"P0":"T0","P1":"T1","P2":"T2","P3":"T3","P4":"T4","P5":"T6","P6":"T8"},
+      "resolverRule": "When a Path level is explicitly requested, the Path level controls the maturity baseline and resolves/corrects the shared T-tier; family availability may clamp the mapped tier to the selected family's certified runtime window."
+    },
+    "rule": "Never merge conventional propulsion P-band, transit Path P-level, or shared transit T-tier into one generic technology level. Preserve their names, source, and coupling provenance."
+  },
+  "runtimeCompatibility": {
+    "detailedSharedTierPerformanceSource": "blacklight-exo-ftl-physics-definitions.js",
+    "detailedPathPerformanceSource": "blacklight-exo-ftl-path-level-core.js plus family path definition files",
+    "couplingSource": "blacklight-exo-ftl-path-level-runtime.js and blacklight-exo-ftl-path-level-controller.js",
+    "migrationRule": "Do not duplicate detailed live performance arrays into this registry until the runtime is migrated to consume the registry directly; this registry records authority relationships and schema semantics to prevent divergence."
   },
   "transitFamilies": [
     {"id":"metric-envelope","name":"Metric Compression Envelope","trueFtl":true,"physicalAction":"4D local metric deformation","status":"CONFIRMED"},
@@ -48,15 +72,16 @@
   "signaturePhases": ["PRE_ENTRY_SPOOL","ACTIVE_TRANSIT","EMERGENCE_TERMINATION","AFTERMATH_RECOVERY"],
   "signatureChannels": ["ELECTROMAGNETIC","THERMAL","OPTICAL","GRAVITATIONAL","NEUTRINO","Q_EXOTIC","ACOUSTIC_STRUCTURAL","CHEMICAL","BIOLOGICAL"],
   "abortStates": ["SAFE_ABORT","DEGRADED_ABORT","COMMIT_BOUNDARY","NO_ABORT","RECOVERY_ONLY"],
-  "generatorPrecedence": ["explicitNamedCanon","raceSpeciesConstraint","organizationConstraint","manufacturerDoctrine","technologyBasis","transitConstructionMaturity","vesselMissionConstraint","familyDefault","labeledDerivedEngineering","labeledProposal"],
+  "generatorPrecedence": ["explicitNamedCanon","raceSpeciesConstraint","organizationConstraint","manufacturerDoctrine","technologyBasis","transitPathLevel","sharedTransitCapabilityTier","vesselMissionConstraint","familyDefault","labeledDerivedEngineering","labeledProposal"],
   "canonSafeguards": [
     "Never overwrite a confirmed source value with generated content.",
-    "Never replace a confirmed lower bound, classification, or explicit unknown with an unlabeled procedural value.",
+    "Never replace a confirmed lower bound, classification, explicit unknown, or live runtime constraint with an unlabeled procedural value.",
     "Keep candidate or disputed source records separate from confirmed records.",
     "Unknown remains unknown in AUTHORITY_ONLY mode.",
     "DERIVED content requires a traceable rule and parent inputs.",
     "PROPOSED content requires explicit proposal mode and cannot be promoted to canon by repetition.",
-    "A generated vessel instance may become authoritative for that instance only when its authority snapshot, resolver choices, seed, and generator version are retained.",
+    "The live T0-T8 shared capability tier and P0-P6 Path level are distinct; an explicit Path level controls the shared-tier baseline through the live mapping rather than being overwritten by it.",
+    "A generated vessel instance may become authoritative for that instance only when its authority snapshot, resolver choices, complete scale coordinates, seed, and generator version are retained.",
     "Generated instance authority never silently rewrites setting-wide race, technology, or transit canon.",
     "FTL does not authorize chronology violation or time travel without explicit source authority."
   ],
