@@ -63,13 +63,49 @@ if (manuallyBuildsEnvelope && !unresolvedImplementation.includes('Kernel.createE
   );
 }
 
-if (!unresolvedImplementation.includes('Kernel.createEnvelope(')) {
-  fail('Unresolved parent recovery is not visibly routed through the canonical Kernel.createEnvelope() authority.');
+for (const phrase of [
+  'Kernel.createEnvelope(',
+  'profileId: reference.profileId',
+  'profileType: reference.profileType',
+  "origin: 'unresolved-inheritance-reference'",
+  'placeholder.revision = reference.revision',
+  'placeholder.createdAt = timestamp',
+  'placeholder.updatedAt = timestamp'
+]) {
+  if (!unresolvedImplementation.includes(phrase)) {
+    fail(`Unresolved parent construction is missing pinned canonical behavior '${phrase}'.`);
+  }
 }
 
-if (!production.includes('Kernel.validateEnvelope(placeholder')) {
-  fail('Unresolved parent placeholder is not explicitly validated before being persisted into editor dataset state.');
+const preserveStart = production.indexOf('function preserveUnresolvedParent(panel, definition, reference)');
+const preserveEnd = production.indexOf('\n  function applyEnvelope', preserveStart);
+if (preserveStart < 0 || preserveEnd < 0) {
+  fail('Could not locate unresolved parent persistence behavior.');
+}
+const preserveImplementation = production.slice(preserveStart, preserveEnd);
+const validatePosition = preserveImplementation.indexOf('Kernel.validateEnvelope(placeholder');
+const persistPosition = preserveImplementation.indexOf('panel.dataset[definition.envelopeDatasetKey] = JSON.stringify(placeholder)');
+if (validatePosition < 0) {
+  fail('Unresolved parent placeholder is not explicitly validated before persistence.');
+}
+if (persistPosition < 0) {
+  fail('Could not locate unresolved parent placeholder persistence.');
+}
+if (validatePosition > persistPosition) {
+  fail('Unresolved parent placeholder is persisted before canonical validation runs.');
+}
+if (!preserveImplementation.includes("item.severity === 'error'")) {
+  fail('Unresolved parent persistence does not test canonical validation for blocking errors.');
+}
+if (!preserveImplementation.includes('return false;') || !preserveImplementation.includes('return true;')) {
+  fail('Unresolved parent persistence does not expose success/failure to its caller.');
+}
+if (!production.includes('const preserved = preserveUnresolvedParent(')) {
+  fail('Production recovery does not observe unresolved parent preservation success/failure.');
+}
+if (!production.includes("'unresolved-parent-preservation-failed'")) {
+  fail('Production recovery does not expose failed unresolved-parent preservation as an actionable diagnostic.');
 }
 
 console.log('Editor provenance integration validation passed.');
-console.log('Verified kernel authority, repository metadata, visible provenance UI, canonical unresolved-parent construction, and placeholder validation.');
+console.log('Verified kernel authority, repository metadata, visible provenance UI, pinned unresolved-parent identity, validation-before-persistence, and caller-visible preservation failure.');
