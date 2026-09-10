@@ -25,6 +25,11 @@ const finite = (value, label) => {
   if (!Number.isFinite(Number(value))) fail(`${label} is not finite: ${value}`);
   return Number(value);
 };
+const deterministicReplay = value => {
+  const copy = structuredClone(value);
+  if (copy?.rating && typeof copy.rating === 'object') delete copy.rating.generatedAt;
+  return copy;
+};
 
 globalThis.document = {
   getElementById:() => null,
@@ -99,7 +104,7 @@ for (const family of calculator.families) {
     finite(result.exit.certaintyPercent, `${family.key}/${level.key} exit certainty`);
     if (!result.timing.completeText || !result.energy.energyMedium || !result.status) fail(`${family.key}/${level.key} is missing display records.`);
     if (result.entry.systemSeed !== input.startSeed || result.exit.systemSeed !== input.endSeed) fail(`${family.key}/${level.key} reversed the route endpoints.`);
-    if (JSON.stringify(result) !== JSON.stringify(replay)) fail(`${family.key}/${level.key} is not deterministic.`);
+    if (JSON.stringify(deterministicReplay(result)) !== JSON.stringify(deterministicReplay(replay))) fail(`${family.key}/${level.key} is not deterministic outside volatile generation metadata.`);
   }
 }
 
@@ -131,4 +136,4 @@ if (!bootstrap.includes("loadStyle('blacklight-exo-jump-calculator.css')")) fail
 
 console.log('EXO cluster jump calculator validation passed.');
 console.log(`Validated ${cases} canonical combinations: ${calculator.families.length} FTL families × ${calculator.pathLevels.length} Path levels.`);
-console.log('Validated published/procedural endpoints, deterministic replay, finite timing-energy-fuel-geometry records, endpoint direction, same-system rejection, and bootstrap load order.');
+console.log('Validated published/procedural endpoints, deterministic replay outside volatile generation metadata, finite timing-energy-fuel-geometry records, endpoint direction, same-system rejection, and bootstrap load order.');
