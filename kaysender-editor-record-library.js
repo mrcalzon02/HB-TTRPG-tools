@@ -43,13 +43,52 @@
     if (target) target.textContent = value;
   }
 
+  function provenanceIdentity(envelope) {
+    if (!envelope) {
+      return {
+        generation: '—',
+        root: '—',
+        parent: '—',
+        lineageState: '—'
+      };
+    }
+    const provenance = envelope.provenance || {};
+    const generation = Number.isInteger(provenance.generation) ? `G${provenance.generation}` : 'Unknown';
+    const lineage = Array.isArray(provenance.lineage) ? provenance.lineage : [];
+    const root = provenance.generation === 0
+      ? `${envelope.name || envelope.data?.name || 'Unnamed Profile'} · r${envelope.revision}`
+      : lineage[0]
+        ? `${lineage[0].name || lineage[0].profileId} · r${lineage[0].revision}`
+        : 'Unknown';
+    const parent = provenance.parent
+      ? `${provenance.parent.name || provenance.parent.profileId} · r${provenance.parent.revision}`
+      : provenance.generation === 0
+        ? 'Root record'
+        : provenance.clonedFromProfileId
+          ? `${provenance.clonedFromProfileId} · revision unknown`
+          : 'Unknown';
+    const lineageState = provenance.lineageComplete === false
+      ? 'Incomplete legacy lineage'
+      : provenance.lineageComplete === true
+        ? 'Complete'
+        : 'Unknown';
+    return { generation, root, parent, lineageState };
+  }
+
   function renderIdentity(envelope) {
     const saved = savedMetadata(envelope?.profileId);
+    const provenance = provenanceIdentity(envelope);
     setIdentityField('mainline-editor-identity-id', envelope?.profileId || 'No active record');
     setIdentityField('mainline-editor-identity-type', envelope?.profileType || '—');
     setIdentityField('mainline-editor-identity-schema', envelope?.profileSchemaVersion || envelope?.data?.schemaVersion || '—');
     setIdentityField('mainline-editor-identity-revision', envelope?.revision ? String(envelope.revision) : '—');
+    setIdentityField('mainline-editor-identity-generation', provenance.generation);
+    setIdentityField('mainline-editor-identity-root', provenance.root);
+    setIdentityField('mainline-editor-identity-parent', provenance.parent);
+    setIdentityField('mainline-editor-identity-lineage', provenance.lineageState);
     setIdentityField('mainline-editor-identity-storage', envelope ? saved ? 'Saved record' : 'Not yet saved' : '—');
+    const lineage = document.getElementById('mainline-editor-identity-lineage');
+    if (lineage) lineage.dataset.complete = String(envelope?.provenance?.lineageComplete === true);
     const storage = document.getElementById('mainline-editor-identity-storage');
     if (storage) storage.dataset.saved = String(Boolean(saved));
     const saveButton = document.getElementById('mainline-editor-record-save');
@@ -230,18 +269,22 @@
       <div class="mainline-editor-record-library-heading">
         <div>
           <h3 id="mainline-editor-record-library-title">Saved Record Library</h3>
-          <p id="mainline-editor-library-status" class="helper-note" data-severity="info">Saving updates the current stable profile ID. Cloning always creates a new profile ID.</p>
+          <p id="mainline-editor-library-status" class="helper-note" data-severity="info">Update keeps the same profile and generation. Clone creates a new profile and advances generation.</p>
         </div>
         <div class="mainline-editor-record-library-primary-actions">
           <button id="mainline-editor-record-save" class="primary-action" type="button">Save New Record</button>
           <button id="mainline-editor-record-clone-save" class="secondary-action" type="button">Save as New Clone</button>
         </div>
       </div>
-      <dl class="mainline-editor-record-identity" aria-label="Active record identity">
+      <dl class="mainline-editor-record-identity" aria-label="Active record identity and provenance">
         <div><dt>Profile ID</dt><dd id="mainline-editor-identity-id">No active record</dd></div>
         <div><dt>Profile Type</dt><dd id="mainline-editor-identity-type">—</dd></div>
         <div><dt>Schema</dt><dd id="mainline-editor-identity-schema">—</dd></div>
         <div><dt>Revision</dt><dd id="mainline-editor-identity-revision">—</dd></div>
+        <div><dt>Generation</dt><dd id="mainline-editor-identity-generation">—</dd></div>
+        <div><dt>Root</dt><dd id="mainline-editor-identity-root">—</dd></div>
+        <div><dt>Immediate Parent</dt><dd id="mainline-editor-identity-parent">—</dd></div>
+        <div><dt>Lineage</dt><dd id="mainline-editor-identity-lineage" data-complete="false">—</dd></div>
         <div><dt>Library State</dt><dd id="mainline-editor-identity-storage" data-saved="false">—</dd></div>
       </dl>
       <div class="mainline-editor-record-library-row">
@@ -282,18 +325,17 @@
       .mainline-editor-record-library-heading h3{margin:0;color:var(--accent)}
       .mainline-editor-record-library-heading p{margin:.35rem 0 0}
       .mainline-editor-record-library-primary-actions{display:flex;gap:8px;flex-wrap:wrap}
-      .mainline-editor-record-identity{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:8px;margin:12px 0}
+      .mainline-editor-record-identity{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
       .mainline-editor-record-identity div{padding:8px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025);min-width:0}
       .mainline-editor-record-identity dt{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
       .mainline-editor-record-identity dd{margin:.25rem 0 0;overflow-wrap:anywhere;font-weight:700}
-      #mainline-editor-identity-storage[data-saved="true"]{color:#9ed6a4}
-      #mainline-editor-identity-storage[data-saved="false"]{color:#e7bf73}
+      #mainline-editor-identity-storage[data-saved="true"],#mainline-editor-identity-lineage[data-complete="true"]{color:#9ed6a4}
+      #mainline-editor-identity-storage[data-saved="false"],#mainline-editor-identity-lineage[data-complete="false"]{color:#e7bf73}
       .mainline-editor-record-library-row{display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,auto);gap:8px;align-items:end;margin-top:12px}
       .mainline-editor-record-library-row label{grid-column:1/-1;color:var(--muted);font-weight:700}
       #mainline-editor-library-status[data-severity="error"]{color:#ff8b8b}
       #mainline-editor-library-status[data-severity="warning"]{color:#e7bf73}
       #mainline-editor-library-status[data-severity="success"]{color:#9ed6a4}
-      @media(max-width:1100px){.mainline-editor-record-identity{grid-template-columns:repeat(2,minmax(160px,1fr))}}
       @media(max-width:900px){.mainline-editor-record-library-row,.mainline-editor-record-identity{grid-template-columns:1fr}.mainline-editor-record-library-row label{grid-column:auto}.mainline-editor-record-library-row button,.mainline-editor-record-library-primary-actions button{width:100%}.mainline-editor-record-library-primary-actions{width:100%}}
     `;
     document.head.appendChild(style);
