@@ -46,11 +46,19 @@
     /* Observer mode belongs with the page controls, not inside a decorative hero. */
     .exo-crew-body .bli-topbar .bli-nav { margin-left:auto; }
     .exo-observer-topbar-toggle { flex:0 0 31px; margin-left:2px; }
+
+    /* Crew operations is an application surface. Give the console the desktop
+       viewport and keep EXO navigation separate from the physical station tabs. */
+    .exo-crew-shell{width:calc(100% - 24px);max-width:none;margin:10px auto 36px;padding-bottom:70px}
+    .exo-crew-shell>.bli-system-nav{margin:0 0 8px}
+    .exo-crew-shell>.exo-stations{margin:0}
+    .exo-crew-shell>.exo-dm-relay-section{margin:10px 0 0}
     @media (max-width:860px) {
       .exo-crew-body .bli-topbar { flex-direction:row; align-items:center; flex-wrap:wrap; }
       .exo-crew-body .bli-nav { order:3; width:100%; margin-left:0; justify-content:flex-start; }
       .exo-observer-topbar-toggle { margin-left:auto; }
     }
+    @media(max-width:760px){.exo-crew-shell{width:calc(100% - 12px);margin-top:6px}}
   </style>
   <script src="blacklight-exo-control-audio.js?v=20260811-2147" defer></script>
   <script src="blacklight-exo-crew-operations.js?v=20260812-0055" defer></script>
@@ -70,19 +78,29 @@
       <span class="bli-mark" aria-hidden="true"></span>
       <span class="bli-brand-text"><span>Blacklight</span><span>EXO Crew Operations</span></span>
     </a>
-    <nav class="bli-nav" aria-label="EXO crew operations navigation">
-      <a href="blacklight-exo-operations.html">EXO Operations</a>
-      <a href="blacklight-exo-vessel.html">Vessel Engineering</a>
-      <a href="blacklight-exo-ftl.html">FTL Dossier</a>
-      <a href="blacklight-exo-solar-system.html">Cartography</a>
+    <nav class="bli-nav" aria-label="Blacklight global navigation">
       <a href="blacklight-systems-black.html">Black Archive</a>
+      <a href="blacklight-corporate-systems.html">Systems Gateway</a>
     </nav>
     <button id="crew-observer-toggle" class="exo-observer-toggle exo-observer-topbar-toggle" type="button" aria-pressed="false" aria-label="Enable observer mode" title="Observer mode — autonomous crew demonstration">
       <svg viewBox="0 0 24 14" aria-hidden="true"><path class="eye-outline" d="M1 7C4.2 2.8 7.8 1 12 1s7.8 1.8 11 6c-3.2 4.2-6.8 6-11 6S4.2 11.2 1 7Z"/><circle class="eye-pupil" cx="12" cy="7" r="2.5"/></svg>
     </button>
   </header>
 
-  <main class="bli-shell exo-crew-shell">
+  <main class="bli-app-shell exo-crew-shell">
+    <nav class="bli-system-nav" aria-label="EXO subsystem navigation">
+      <a href="blacklight-exo-operations.html">Overview</a>
+      <a href="blacklight-exo-stellar-sector.html">Sector</a>
+      <a href="blacklight-exo-solar-system.html">System</a>
+      <a href="blacklight-exo-species-civilization.html">Dossier</a>
+      <a href="blacklight-exo-alien-ecology.html">Ecology</a>
+      <a href="blacklight-exo-stellar-government.html">Governments</a>
+      <a href="blacklight-exo-ftl.html">FTL</a>
+      <a href="blacklight-exo-vessel.html">Vessel Engineering</a>
+      <a href="blacklight-exo-crew-operations.html" aria-current="page">Crew Operations</a>
+      <a href="blacklight-exo-deployment-health.html">Deployment Health</a>
+    </nav>
+
     <div hidden aria-hidden="true">
       <input id="crew-master-difficulty" type="range" min="0" max="5" step="1" value="0" tabindex="-1">
       <div id="power-controls"></div>
