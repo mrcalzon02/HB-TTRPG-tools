@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0.0",
+  "family": "gravitic-plane",
+  "authority": {
+    "status": "MIXED",
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "terrain_authority": "docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md",
+    "legacy_design_source": {
+      "title": "The different lightspeed methods",
+      "file_id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revision_id": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    },
+    "confirmed_family_action": "4D geodesic-plane transit with higher-order gradient correction that preferentially follows favorable gravitational/equipotential and higher-dimensional shear terrain rather than imposing a Metric, Fold, Manifold, Slipstream, Lattice, Gate, or Phase solution.",
+    "subordinate_sources": [
+      "docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md",
+      "data/exo-vessel/ftl-calibration-registry.json",
+      "data/exo-vessel/ftl-environment-regression-registry.json",
+      "data/exo-vessel/ftl-development-lineage-registry.json",
+      "data/exo-vessel/ftl-family-basis-embodiment-registry.json"
+    ]
+  },
+  "mathematics": {
+    "status": "DERIVED",
+    "state": "Represent transit-relevant gravity as a time-dependent terrain reconstructed from visible mass, effective dark-matter projection, local tidal Hessian, higher-dimensional shear, branch topology, and uncertainty. The skimmer solves for an admissible moving route through that terrain rather than creating an arbitrary scalar speed.",
+    "terrain_state": "T_g={Phi_eff, grad Phi_eff, H(Phi_eff), S_AB, grad S_AB, dS_AB/dt, K_branch, Sigma_terrain}.",
+    "route_functional": "Gamma*=argmin_Gamma integral_Gamma [w0 + wg C_grad + wt C_tidal + ws C_shear + wu C_uncertainty + wf C_fork + wx C_switch] ds, subject to coupling, structure, sensing, and abort constraints.",
+    "route_gain": "chi_g=D0/D_g where D_g is the generalized terrain-weighted route cost; chi_g is not a literal velocity multiplier.",
+    "fork_ambiguity": "A_f=1-max_i p_i for branch probabilities p_i. A fork is unsafe when ambiguity, branch divergence rate, remaining decision time, and recoupling authority jointly exceed certified bounds.",
+    "branch_separation": "D_branch(t)=||x_1(t)-x_2(t)|| in the locally reconstructed transit geometry; a rising dD_branch/dt increases commitment urgency.",
+    "switch_cost": "C_switch penalizes transitions between shear/equipotential branches according to required recoupling impulse, field realignment, structural load, and reference covariance.",
+    "safety_horizon": "L_sensor >= v_eff(t_detect+t_solve+t_command+t_recouple+t_exit)+D_margin; sensor horizon must cover branch detection and safe de-transit/recoupling, not merely obstacle detection.",
+    "structural_margin": "mu_struct=1-max_x(sigma_equiv/sigma_allow); positive margin is required during nominal coupling, branch transfer, and emergency de-transit.",
+    "efficiency_model": "eta_g is comparatively improved by favorable terrain alignment and degraded by hostile gradients, branch switching, uncertainty, and excessive corrective coupling; coefficients remain PROPOSED until calibrated.",
+    "hard_constraints": [
+      "the selected branch must remain reconstructable at the required epoch",
+      "branch ambiguity and predicted divergence must remain below certified commitment thresholds",
+      "whole-vessel coupling and structural margins must stay positive",
+      "sensor/solver/recoupling horizon must exceed the emergency decision horizon",
+      "gravity may be useful terrain but proximity to severe gravity can still make a route impossible",
+      "a favorable gradient may reduce route burden while a fork or steep Hessian simultaneously increases hazard"
+    ]
+  },
+  "path_progression": [
+    {"path":"P0","implementation":"Gravitational Rail Monolith","mathematical_capability":"Follow one fixed, heavily surveyed scalar-potential corridor with no meaningful branch autonomy.","physical_enablers":["monumental fixed gravimetry","precomputed ephemerides","rigid external coupling structure"],"changed_limits":["repeatable coupling to one known rail","local gradient measurement"],"operational_result":"Demonstrates terrain-assisted transit only on a narrowly certified fixed route.","status":"MIXED"},
+    {"path":"P1","implementation":"Equipotential Skim Array","mathematical_capability":"Estimate local gradient direction and remain coupled to one changing equipotential/shear feature.","physical_enablers":["vector gradiometry","faster field steering","continuous timing/reference updates"],"changed_limits":["local steering","curvature following","reduced dependence on fixed external geometry"],"operational_result":"Can actively skim a local gravitational feature rather than merely traverse a precomputed rail.","status":"MIXED"},
+    {"path":"P2","implementation":"Barycentric Plane Rider","mathematical_capability":"Solve the coupled terrain of multiple major bodies and maintain a vessel-scale branch solution through barycentric geometry.","physical_enablers":["distributed whole-hull sensing","volumetric tidal reconstruction","reinforced asymmetric load paths"],"changed_limits":["multi-body operation","full-vessel coupling","tidal tolerance"],"operational_result":"Operates through complex system-scale gravitational geometry with bounded branch choices.","status":"MIXED"},
+    {"path":"P3","implementation":"Interstellar Plane Skimmer","mathematical_capability":"Predict the time evolution of interstellar shear planes and carry a branch solution beyond immediate local sensing.","physical_enablers":["far-field gravimetry","long-baseline clocks","redundant branch solvers","dedicated de-transit reserve"],"changed_limits":["interstellar reach","prediction horizon","emergency fork handling"],"operational_result":"First practical interstellar terrain-following transit under large safety margins and conservative fork rejection.","status":"MIXED"},
+    {"path":"P4","implementation":"Multi-Plane Transit Drive","mathematical_capability":"Represent the route as a graph of admissible terrain branches and optimize transfers among them under dynamic uncertainty.","physical_enablers":["multi-plane coupling sectors","high-rate branch classifiers","load-redistribution structure","reference fusion"],"changed_limits":["dynamic rerouting","branch transfer","fleet-operational reliability"],"operational_result":"Routine interstellar service across heterogeneous gravitational terrain rather than a single corridor.","status":"MIXED"},
+    {"path":"P5","implementation":"Deep-Gradient Skimmer","mathematical_capability":"Infer weakly observed higher-dimensional channels/ridges from lensing, residual gravity, historical route data, and remote references.","physical_enablers":["inverse terrain reconstruction","longer sensor baselines","probabilistic covariance tracking","higher-efficiency recoupling hardware"],"changed_limits":["deep-range route discovery","hidden-channel use","energy per effective distance","fork prediction"],"operational_result":"Extends strategic range by understanding and exploiting more of the gravitational terrain, not simply by increasing power.","status":"MIXED"},
+    {"path":"P6","implementation":"Adaptive Geodesic Drive","mathematical_capability":"Continuously co-solve higher-dimensional terrain, branch probabilities, vessel disturbance, structural state, and receding-horizon route choice in real time.","physical_enablers":["self-calibrating distributed gravimetry","fault-tolerant solver mesh","fast sectional recoupling","high-performance structural/field materials","distributed abort authority"],"changed_limits":["adaptive terrain use","decision latency","compactness","fault containment","safe usable envelope"],"operational_result":"Mature gravitic transit capable of exploiting transient channels and avoiding developing forks while retaining finite sensing, structure, and gravity limits.","status":"MIXED"}
+  ],
+  "machinery": {
+    "blocks": {
+      "energy_conditioning": "Supplies coupling, steering, recoupling, sensor, and reserve energy; favorable terrain lowers corrective burden but never removes reserve requirements.",
+      "prime_mover": "Creates controllable coupling between vessel and selected gravitational/shear terrain mode.",
+      "field_formation": "Distributed coupling surfaces, rings, membranes, organs, lattice regions, or nodes that keep the whole protected vessel attached to one admissible branch.",
+      "transit_control": "Allocates coupling authority, predicts branch evolution, and executes branch transfer or de-transit before ambiguity becomes catastrophic.",
+      "navigation_sensing": "Gradiometry, lensing/timing observations, terrain inversion, branch classification, reference fusion, and occupancy/exclusion sensing.",
+      "termination_recovery": "Controlled decoupling from transit terrain, ordinary-space reacquisition, load relaxation, and reserve-powered stabilization.",
+      "whole_effect_coverage": "Certified coupling envelope must cover the complete vessel and all appendages whose differential response could tear the structure apart.",
+      "backbone": "Timing, structural load distribution, thermal transport, sensor fusion, branch voting, safety interlocks, and distributed abort command."
+    },
+    "layout_invariants": [
+      "gravitic coupling must be spatially distributed enough to prevent destructive differential acceleration across the vessel",
+      "navigation sensing requires physically meaningful baselines and cannot be reduced to a cockpit computer",
+      "branch voting and de-transit authority require protected redundancy",
+      "structural paths must tolerate transient asymmetric loads during fork rejection and branch transfer"
+    ]
+  },
+  "operation": {
+    "precommit": ["authenticate terrain epoch and source covariance","solve at least one safe route plus escape solution","classify known branch points","verify coupling/structural margins","verify sensor and recoupling horizon","reserve de-transit authority"],
+    "in_transit": ["update terrain inversion","track branch probabilities","monitor divergence rate and tidal Hessian","compare predicted versus observed terrain","maintain alternate branch/de-transit solution","preserve reserve coupling authority"],
+    "fork_procedure": ["freeze nonessential route optimization","rank branches by posterior probability and survival margin","reject branches with insufficient recoupling time","transfer only while whole-vessel coupling remains certified","de-transit when no branch meets minimum confidence and recovery margin"],
+    "termination": ["move toward low-burden ordinary-space reacquisition volume","reduce coupling gain","equalize differential loads","decouple in certified sequence","verify ordinary gravity solution and structural residuals"],
+    "operator_rule": "Do not chase a locally favorable gradient when branch confidence, tidal load, or remaining abort horizon has fallen below certification."
+  },
+  "maintenance": {
+    "daily_or_turnaround": ["gradiometer baseline agreement","clock/reference coherence","coupling-sector symmetry","branch-voter disagreement test","de-transit reserve verification","structural strain-sensor zero check"],
+    "periodic": ["survey sensor baseline geometry","calibrate gradient/Hessian reconstruction","proof sectional recoupling","inspect field/coupling material drift","load-test branch-transfer structure","validate terrain-model residuals against independent observations"],
+    "diagnostic_order": "reference/ephemeris error -> gravimetry/lensing disagreement -> terrain-inversion error -> branch-classification/solver error -> coupling-sector mismatch -> structural deformation -> energy/recovery defect -> prime mover defect",
+    "return_to_service": "A repaired installation must reproduce certified terrain reconstruction, branch classification, coupling symmetry, structural margin, sensor horizon, and emergency de-transit on independent test geometry."
+  },
+  "signatures": {
+    "precommit": ["wide-baseline gravimetric/lensing survey activity","coupling-sector excitation","reference synchronization","reserve charging"],
+    "transit": ["gravitational/shear coupling disturbance","anisotropic corrective sidebands","branch-transfer transients","technology-basis-specific thermal/control leakage"],
+    "termination": ["decoupling transient","ordinary-reference reacquisition","structural/load relaxation signature","recovery-system power/thermal pulse"],
+    "generator_rule": "The universal signature is interaction with gravitational/shear terrain; carrier, spectrum, observability, and thermal expression depend on embodiment and Path level."
+  },
+  "failures": {
+    "classes": ["terrain-model error","epoch/reference error","hidden-mass reconstruction error","fork misclassification","late branch divergence detection","coupling-sector desynchronization","differential structural overload","sensor-horizon insufficiency","recoupling actuator latency","de-transit reserve depletion","termination into hostile gravity terrain"],
+    "catastrophic_chain_example": "unmodeled terrain knot -> posterior splits across two branches -> branch divergence rises faster than solver convergence -> sectors begin following inconsistent solutions -> differential load grows -> hull/coupling geometry departs certification -> if recoupling/de-transit horizon is exhausted, structural disassembly follows.",
+    "root_cause_rule": "A fork loss must distinguish bad source data, inadequate sensing, wrong terrain inversion, solver/classifier defect, coupling hardware, structure, command latency, and recovery shortage rather than reporting generic navigation error."
+  },
+  "scaling": {
+    "vessel_size": "Larger vessels gain sensor baseline but face larger differential gravity, structural span, synchronization delay, coupling area, and abort energy; scaling is therefore non-monotonic.",
+    "drive_size": "Larger coupling arrays can follow weaker or more complex terrain but increase branch-transfer inertia, timing complexity, and structural burden.",
+    "sensor_baseline": "Longer baselines generally improve gradient/shear reconstruction until timing, structural flexure, and calibration errors dominate.",
+    "multi_drive": "Multiple gravitic drives must be classified as coherent sectors, redundant couplers, branch-transfer auxiliaries, or independent installations; their route authority does not add linearly."
+  },
+  "technology_basis_translation": {
+    "TERRESTRIAL_MECHANICAL": "Distributed gravimeters/lensing sensors, precision clocks, field/coupling rings or plates, electronic/photonic branch solvers, reinforced trusses and pumped thermal loops.",
+    "AQUATIC_FLUIDIC": "Pressure-qualified gradient membranes, wet-photonic timing, hydroacoustic/optical baseline metrology, fluid-compatible distributed coupling and cavitation-aware load routing.",
+    "CRYOGENIC_SUPERCONDUCTING": "Persistent-current coupling structures, ultra-stable cryogenic gravimetry, superconducting timing distribution, quench-isolated recoupling reserve.",
+    "GAS_GIANT_BUOYANT": "Large buoyant sensor baselines, distributed flexible coupling structures, atmospheric reference arrays, convective thermal management and tension-dominant load paths.",
+    "BIOLOGICAL_SYMBIOTIC": "Cultivated gradient-sensing organs, distributed neural branch voting, compliant field-bearing tissue and regenerative coupling structures; no race ownership is implied.",
+    "MINERAL_CRYSTALLINE": "Resonant crystalline gradiometers, coherent lattice coupling volumes, optical/acoustic branch sensing, prestressed fracture-tolerant load paths.",
+    "POSTMATERIAL_DISTRIBUTED": "Distributed reference nodes, continuous terrain tomography, executable branch proofs, topology-preserving state transfer among coupling nodes and authenticated fallback states.",
+    "status": "DERIVED"
+  },
+  "generator_contract": {
+    "inputs": ["family=gravitic-plane","Transit Path P0-P6","shared T-tier when runtime-resolved","technology basis","vessel geometry/mass/load paths","terrain authority snapshot and epoch","visible and inferred gravity observations","terrain covariance","mission origin/destination","available branch graph","power and de-transit reserve","condition state"],
+    "outputs": ["terrain-weighted route cost","route gain","selected branch/alternates","branch confidence and fork ambiguity","gradient/tidal/shear burden","coupling-sector layout","structural margin","sensor/recoupling horizon","energy/recovery allocation","signatures","maintenance burden","failure risks","field-level provenance"],
+    "hard_guards": ["never substitute Metric, Fold, Manifold, Slipstream, Q-Lattice, Gate, or Phase mathematics","never infer race/manufacturer ownership from technology basis","never promote DERIVED terrain inversion equations or PROPOSED coefficients to CONFIRMED canon","never collapse a fork into a generic speed penalty","never claim that stronger gravity is universally better for the skimmer","never permit a branch whose sensing, coupling, structure, or de-transit constraints fail","preserve higher-authority named source values and report runtime conflicts rather than silently normalizing them"]
+  },
+  "provenance": {
+    "canon_rule": "Confirmed family identity, recovered Path implementation names, and the adopted higher-dimensional gravitational-terrain premise are preserved. Exact estimators, coefficients, branch thresholds, procedures, and technology translations remain DERIVED or PROPOSED unless higher authority adopts them.",
+    "field_status_required": true,
+    "origin_note": "This volume implements the legacy requirement for gravity-sensitive, family-distinct transit with explicit fork danger, safety lookahead, mathematics, equipment, training, maintenance, and incremental technical development while avoiding fabricated races, manufacturers, inventors, dates, or historical incidents."
+  }
+}
