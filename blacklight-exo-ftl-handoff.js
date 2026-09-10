@@ -3,13 +3,14 @@
   const HANDOFF_KEY='blacklight-exo-ftl-source-v1';
 
   function ensureLink(){
-    const nav=document.querySelector('.bli-nav');
-    if(nav&&!nav.querySelector('a[href="blacklight-exo-ftl.html"]')){
-      const link=document.createElement('a');
-      link.href='blacklight-exo-ftl.html';
-      link.textContent='FTL Hierarchy';
-      nav.append(link);
-    }
+    const href='blacklight-exo-ftl.html';
+    if(document.querySelector(`a[href="${href}"]`))return;
+    const nav=document.querySelector('.bli-system-nav')||document.querySelector('.bli-nav');
+    if(!nav)return;
+    const link=document.createElement('a');
+    link.href=href;
+    link.textContent='FTL Hierarchy';
+    nav.append(link);
   }
 
   function ensureButton(id,label,parentSelector){
@@ -74,10 +75,10 @@
   ensureLink();
 
   if(document.body.classList.contains('exo-government-body')){
-    ensureButton('exo-develop-ftl','Develop FTL Technology Hierarchy','.exo-government-hero .bli-actions');
+    ensureButton('exo-develop-ftl','Develop FTL Technology Hierarchy','.exo-government-actions, .exo-government-hero .bli-actions');
   }
   if(document.body.classList.contains('exo-species-body')){
-    ensureButton('exo-develop-dossier-ftl','Develop FTL Technology Hierarchy','.exo-species-hero .bli-actions');
+    ensureButton('exo-develop-dossier-ftl','Develop FTL Technology Hierarchy','.exo-species-actions, .exo-species-hero .bli-actions');
   }
   if(document.body.classList.contains('exo-system-body')){
     ensureButton('exo-develop-system-ftl','Develop Current System FTL','.exo-system-actions');
