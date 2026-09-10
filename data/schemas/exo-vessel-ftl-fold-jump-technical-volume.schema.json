@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "exo-vessel-ftl-fold-jump-technical-volume.schema.json",
+  "title": "Black Light Discrete Fold-Jump Technical Volume",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "family", "authority", "mathematics", "pathStages", "machinery", "powerModel", "navigationControl", "operations", "maintenance", "signatures", "failureModels", "infrastructure", "scaling", "technologyBasisEmbodiments", "generatorContract", "provenance"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlFoldJumpTechnicalVolume"},
+    "registryVersion": {"type": "string"},
+    "family": {"const": "fold-jump"},
+    "authority": {"type": "object", "required": ["primary", "legacyDesignSource", "lineageSource", "statusRule"]},
+    "mathematics": {"type": "object", "required": ["topologyState", "routeObjective", "endpointCovariance", "occupancyExclusion", "commitBoundary", "safetyHorizon"]},
+    "pathStages": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "object", "required": ["path", "name", "breakthrough", "utility", "limit", "engineeringAdvance", "status"]}},
+    "machinery": {"type": "array", "minItems": 8, "items": {"type": "object", "required": ["block", "function", "embodimentRule", "failureExposure"]}},
+    "powerModel": {"type": "object"},
+    "navigationControl": {"type": "object"},
+    "operations": {"type": "array", "minItems": 4},
+    "maintenance": {"type": "array", "minItems": 4},
+    "signatures": {"type": "object"},
+    "failureModels": {"type": "array", "minItems": 7},
+    "infrastructure": {"type": "array", "minItems": 4},
+    "scaling": {"type": "object"},
+    "technologyBasisEmbodiments": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "object", "required": ["basis", "embodiment", "maintenanceLanguage", "status"]}},
+    "generatorContract": {"type": "object", "required": ["inputs", "outputs", "hardGuards"]},
+    "provenance": {"type": "object", "required": ["confirmed", "derived", "proposed", "unresolved"]}
+  },
+  "additionalProperties": true
+}
