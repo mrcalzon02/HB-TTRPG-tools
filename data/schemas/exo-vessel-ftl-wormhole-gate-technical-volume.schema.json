@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "exo-vessel-ftl-wormhole-gate-technical-volume.schema.json",
+  "title": "Black Light Anchored Wormhole / Gate Transit Technical Volume",
+  "type": "object",
+  "required": ["registryType", "registryVersion", "family", "authority", "mathematics", "pathStages", "machinery", "powerModel", "navigationControl", "operations", "maintenance", "signatures", "failureModels", "infrastructure", "scaling", "technologyBasisEmbodiments", "generatorContract", "provenance"],
+  "properties": {
+    "registryType": {"const": "exoVesselFtlWormholeGateTechnicalVolume"},
+    "registryVersion": {"type": "string"},
+    "family": {"const": "wormhole-gate"},
+    "authority": {"type": "object", "required": ["primary", "legacyDesignSource", "lineageSource", "embodimentSource", "statusRule"]},
+    "mathematics": {"type": "object", "required": ["throatGeometry", "stabilityMargin", "massFlux", "chronologyMargin", "synchronizationError", "networkFlow", "safetyHorizon"]},
+    "pathStages": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "object", "required": ["path", "name", "breakthrough", "utility", "limit", "engineeringAdvance", "status"]}},
+    "machinery": {"type": "array", "minItems": 8, "items": {"type": "object", "required": ["block", "function", "embodimentRule", "failureExposure"]}},
+    "powerModel": {"type": "object"},
+    "navigationControl": {"type": "object"},
+    "operations": {"type": "array", "minItems": 4},
+    "maintenance": {"type": "array", "minItems": 4},
+    "signatures": {"type": "object"},
+    "failureModels": {"type": "array", "minItems": 7},
+    "infrastructure": {"type": "array", "minItems": 5},
+    "scaling": {"type": "object"},
+    "technologyBasisEmbodiments": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "object", "required": ["basis", "embodiment", "maintenanceLanguage", "status"]}},
+    "generatorContract": {"type": "object", "required": ["inputs", "outputs", "hardGuards"]},
+    "provenance": {"type": "object", "required": ["confirmed", "derived", "proposed", "unresolved"]}
+  },
+  "additionalProperties": true
+}
