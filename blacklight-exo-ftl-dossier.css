@@ -1,58 +1,70 @@
 .exo-ftl-dossier-preface {
-  margin-top: 1.25rem;
+  margin-top: .55rem;
 }
 
 .exo-ftl-dossier-preface-inner {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(17rem, .75fr);
-  gap: 1.25rem;
-  padding: clamp(1rem, 2.5vw, 1.75rem);
+  gap: .7rem;
+  padding: .8rem .9rem;
   border: 1px solid rgba(126, 218, 255, .24);
   background:
     linear-gradient(135deg, rgba(10, 24, 34, .96), rgba(8, 13, 22, .92)),
     repeating-linear-gradient(0deg, transparent 0 2.4rem, rgba(126, 218, 255, .035) 2.4rem 2.45rem);
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, .2);
+  box-shadow: 0 .75rem 1.8rem rgba(0, 0, 0, .18);
 }
 
 .exo-ftl-dossier-preface h2 {
-  margin: .25rem 0 .7rem;
-  max-width: 22ch;
+  margin: .15rem 0 .35rem;
+  max-width: none;
+  font-size: 1rem;
 }
 
 .exo-ftl-dossier-preface p {
-  max-width: 82ch;
+  max-width: none;
+  margin: .28rem 0;
+  font-size: .69rem;
+  line-height: 1.42;
+}
+
+.exo-ftl-dossier-preface .bli-eyebrow {
+  margin: 0 0 .15rem;
+  font-size: .56rem;
 }
 
 .exo-ftl-dossier-authority {
   display: grid;
-  gap: .65rem;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: .4rem;
   align-content: start;
-  padding: 1rem;
+  padding: .55rem;
   border-left: 2px solid rgba(126, 218, 255, .38);
   background: rgba(0, 0, 0, .18);
 }
 
 .exo-ftl-dossier-authority div {
   display: grid;
-  gap: .15rem;
+  gap: .08rem;
+  min-width: 0;
 }
 
 .exo-ftl-dossier-authority strong,
 .charles-section-meta,
 .exo-ftl-dossier-index-title {
-  font-size: .72rem;
-  letter-spacing: .11em;
+  font-size: .58rem;
+  letter-spacing: .08em;
   text-transform: uppercase;
 }
 
 .exo-ftl-dossier-authority span {
-  line-height: 1.45;
+  line-height: 1.35;
   opacity: .86;
+  font-size: .64rem;
 }
 
 .exo-ftl-dossier-index {
-  margin-top: 1rem;
-  padding: .9rem 1rem;
+  margin-top: .45rem;
+  padding: .5rem .65rem;
   border: 1px solid rgba(126, 218, 255, .18);
   background: rgba(7, 14, 22, .82);
 }
@@ -61,13 +73,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: .75rem;
+  gap: .5rem;
   flex-wrap: wrap;
 }
 
 .exo-ftl-dossier-index-actions {
   display: flex;
-  gap: .5rem;
+  gap: .35rem;
   flex-wrap: wrap;
 }
 
@@ -77,9 +89,9 @@
   border: 1px solid rgba(126, 218, 255, .28);
   background: rgba(126, 218, 255, .07);
   color: inherit;
-  padding: .42rem .68rem;
+  padding: .3rem .5rem;
   font: inherit;
-  font-size: .78rem;
+  font-size: .66rem;
   cursor: pointer;
 }
 
@@ -94,12 +106,12 @@
 .exo-ftl-dossier-index-links {
   display: flex;
   flex-wrap: wrap;
-  gap: .45rem .75rem;
-  margin-top: .75rem;
+  gap: .28rem .55rem;
+  margin-top: .4rem;
 }
 
 .exo-ftl-dossier-index-links a {
-  font-size: .78rem;
+  font-size: .65rem;
   text-decoration: none;
   opacity: .82;
 }
@@ -121,22 +133,23 @@
 
 .charles-section-meta {
   display: flex;
-  gap: .5rem;
+  gap: .35rem;
   flex-wrap: wrap;
-  margin-bottom: .45rem;
+  margin-bottom: .25rem;
   opacity: .72;
 }
 
 .charles-section-meta span + span::before {
   content: "//";
-  margin-right: .5rem;
+  margin-right: .35rem;
   opacity: .6;
 }
 
 .charles-section-brief {
-  max-width: 86ch;
-  margin-top: .6rem;
-  line-height: 1.58;
+  max-width: none;
+  margin-top: .35rem;
+  font-size: .72rem;
+  line-height: 1.45;
   opacity: .9;
 }
 
@@ -144,7 +157,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  min-width: 8.5rem;
+  min-width: 7.2rem;
 }
 
 .charles-collapsed > :not(.bli-section-head) {
@@ -161,14 +174,21 @@
 .charles-confidence-theoretical .charles-section-meta { color: #e4d1ff; }
 .charles-confidence-archival .charles-section-meta { color: #d6d6d6; }
 
-@media (max-width: 820px) {
+@media (max-width: 1100px) {
   .exo-ftl-dossier-preface-inner {
     grid-template-columns: 1fr;
   }
 
   .exo-ftl-dossier-authority {
+    grid-template-columns: repeat(4,minmax(0,1fr));
     border-left: 0;
     border-top: 2px solid rgba(126, 218, 255, .38);
+  }
+}
+
+@media (max-width: 820px) {
+  .exo-ftl-dossier-authority {
+    grid-template-columns: 1fr;
   }
 
   .charles-dossier-section > .bli-section-head {
@@ -177,6 +197,6 @@
 
   .charles-chapter-toggle {
     position: static;
-    margin-top: .75rem;
+    margin-top: .55rem;
   }
 }
