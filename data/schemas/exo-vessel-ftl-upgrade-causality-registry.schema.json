@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-upgrade-causality-registry.schema.json",
+  "title": "Black Light FTL Upgrade Causality Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectId", "registryType", "registryVersion", "authorityDocument", "mathematicalModelRegistry", "sourceRequirements", "upgradeAxes", "families"],
+  "properties": {
+    "projectId": {"const": "blacklight-exo-vessel-design-system"},
+    "registryType": {"const": "blackLightFtlUpgradeCausalityRegistry"},
+    "registryVersion": {"type": "string", "minLength": 1},
+    "authorityDocument": {"type": "string", "minLength": 1},
+    "mathematicalModelRegistry": {"type": "string", "minLength": 1},
+    "sourceRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceTitle", "status", "requirements"],
+      "properties": {
+        "sourceTitle": {"type": "string", "minLength": 1},
+        "status": {"enum": ["CONFIRMED_DESIGN_REQUIREMENT", "DERIVED", "PROPOSED"]},
+        "requirements": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "upgradeAxes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["MATHEMATICS", "FIELD_CONTROL", "ACTIVE_MATERIALS", "STRUCTURE", "ENERGY", "NAVIGATION", "DRIVE_SCALE_DISTRIBUTION", "CONTROL_BANDWIDTH", "RECOVERY", "INFRASTRUCTURE"]}
+    },
+    "families": {
+      "type": "array",
+      "minItems": 9,
+      "items": {"$ref": "#/$defs/family"}
+    }
+  },
+  "$defs": {
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["output", "direction", "cause"],
+      "properties": {
+        "output": {"enum": ["ROUTE_GAIN", "SAFE_RANGE", "EQUIVALENT_SPEED", "SOLVE_TIME", "SPOOL_TIME", "ACTIVE_TIME", "RECOVERY_TIME", "SOURCE_BURDEN", "ENDPOINT_UNCERTAINTY", "GRAVITY_TOLERANCE", "SENSOR_HORIZON", "LOSS_RISK", "PAYLOAD_CAPACITY", "ROUTE_FREEDOM", "CYCLE_RATE", "MACHINERY_DENSITY"]},
+        "direction": {"enum": ["INCREASE", "DECREASE", "EXPAND", "CONTRACT", "IMPROVE"]},
+        "cause": {"type": "string", "minLength": 1}
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "mathematicalAdvance", "physicalAdvance", "drivers", "changedTerms", "effects", "status"],
+      "properties": {
+        "from": {"pattern": "^p[0-6]$", "type": "string"},
+        "to": {"pattern": "^p[0-6]$", "type": "string"},
+        "mathematicalAdvance": {"type": "string", "minLength": 1},
+        "physicalAdvance": {"type": "string", "minLength": 1},
+        "drivers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["MATHEMATICS", "FIELD_CONTROL", "ACTIVE_MATERIALS", "STRUCTURE", "ENERGY", "NAVIGATION", "DRIVE_SCALE_DISTRIBUTION", "CONTROL_BANDWIDTH", "RECOVERY", "INFRASTRUCTURE"]}},
+        "changedTerms": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "effects": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/effect"}},
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED"]},
+        "notes": {"type": "string"}
+      }
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "operatorClass", "distanceModelType", "primitiveLimitation", "matureObjective", "modelRefs", "transitions"],
+      "properties": {
+        "id": {"enum": ["inertial-torch", "metric-envelope", "gravitic-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement"]},
+        "operatorClass": {"type": "string", "minLength": 1},
+        "distanceModelType": {"type": "string", "minLength": 1},
+        "primitiveLimitation": {"type": "string", "minLength": 1},
+        "matureObjective": {"type": "string", "minLength": 1},
+        "modelRefs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "transitions": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"$ref": "#/$defs/transition"}}
+      }
+    }
+  }
+}
