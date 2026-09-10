@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const HANDOFF_KEY='blacklight-exo-government-source-v1';
-  function ensureLink(){const nav=document.querySelector('.bli-nav');if(nav&&![...nav.links].some(link=>link.getAttribute('href')==='blacklight-exo-stellar-government.html')){const link=document.createElement('a');link.href='blacklight-exo-stellar-government.html';link.textContent='Stellar Government';nav.append(link);}}
+  function ensureLink(){const nav=document.querySelector('.bli-nav');if(nav&&!nav.querySelector('a[href="blacklight-exo-stellar-government.html"]')){const link=document.createElement('a');link.href='blacklight-exo-stellar-government.html';link.textContent='Stellar Government';nav.append(link);}}
   function ensureButton(id,label,parentSelector,primary=false){let button=document.getElementById(id);if(button)return button;const parent=document.querySelector(parentSelector);if(!parent)return null;button=document.createElement('button');button.id=id;button.type='button';button.className=`bli-action${primary?' primary':''}`;button.textContent=label;parent.append(button);return button;}
   function navigate(type,payload){
     if(!payload)return;
