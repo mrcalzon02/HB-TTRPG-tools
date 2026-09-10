@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.0.0",
+  "family": "q-lattice",
+  "authority": {
+    "status": "MIXED",
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "legacy_design_source": {
+      "title": "The different lightspeed methods",
+      "provider": "google-drive",
+      "id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "status": "CONFIRMED"
+    },
+    "family_sources": [
+      "data/exo-vessel/ftl-development-lineage-registry.json",
+      "data/exo-vessel/ftl-calibration-registry.json",
+      "data/exo-vessel/ftl-environment-regression-registry.json",
+      "data/exo-vessel/ftl-family-basis-embodiment-registry.json",
+      "data/exo-vessel/ftl-technical-corpus-registry.json",
+      "EXO_OPERATIVE_TECHNOLOGY_BASIS.md"
+    ],
+    "rule": "Confirmed family identity, physical action, recovered Path implementation names, named race/manufacturer systems and adopted setting facts outrank this derived volume. New equations and generic machinery consequences are DERIVED. Illustrative thresholds, incidents, institutions, dates, inventors and ownership are PROPOSED or UNRESOLVED."
+  },
+  "mathematics": {
+    "status": "DERIVED",
+    "lattice_state": {
+      "definition": "Represent the traversable Q structure as a directed time-indexed graph G_Q(t)=(V_Q,E_Q), where each vertex alpha is a quantized Q address and each edge e(alpha,beta,t) is an admissible protected-state translation during a valid phase epoch.",
+      "address": "A_Q=(alpha,epoch,frame,reference_set,covariance)",
+      "interpretation": "Q-Lattice does not ride a continuous shear and does not shorten a metric. It commits a protected vessel state through one or more indexed discrete Q-address transitions."
+    },
+    "epoch_validity": {
+      "equation": "V_e(alpha,beta,t)=I[address_authenticated]*I[epoch_open]*I[state_coverage_valid]*I[exit_admissible]",
+      "rule": "An edge whose epoch closes before commit completion is not partially valid; the solver must reject it or choose a certified fallback.",
+      "status": "DERIVED"
+    },
+    "address_uncertainty": {
+      "equation": "Sigma_A=Sigma_ref+Sigma_clock+Sigma_model+Sigma_gravity+Sigma_infrastructure",
+      "alias_probability": "P_alias=P(candidate_address maps to unintended physically admissible state | observations,epoch)",
+      "guard": "Address confidence must never be represented by one unqualified accuracy percentage; alias structure and covariance remain visible.",
+      "status": "DERIVED"
+    },
+    "route_graph": {
+      "equation": "pi*=argmin_pi sum_e[w_t*T_e+w_a*C_address+w_p*C_phase+w_u*C_unc+w_c*C_coverage+w_x*C_exit+w_r*C_recovery]",
+      "guard": "Geometric closeness does not imply graph adjacency; a longer ordinary-space route may be a shorter valid lattice path.",
+      "status": "DERIVED"
+    },
+    "phase_clock": {
+      "equation": "Delta_phi(t)=integral(omega_drive-omega_epoch)dt+phi_ref_error",
+      "validity": "Commit requires |Delta_phi| below the certified family/path envelope for the entire protected volume.",
+      "status": "DERIVED"
+    },
+    "coverage": {
+      "equation": "C_Q=min_{x in protected_volume} c(x); valid iff C_Q>=C_min",
+      "meaning": "The whole protected state must be addressable coherently. Local uncovered or weakly covered mass is a state-integrity failure, not merely reduced efficiency.",
+      "status": "DERIVED"
+    },
+    "gravity_interaction": {
+      "equation": "C_g=f(Phi,gradPhi,curvature,reference_frame_error,address_model)",
+      "legacy_alignment": "Strong gravity distorts reference frames, clock solutions and endpoint/address inference, increasing calculation and power burden. Coefficients remain family-specific and are not copied from metric, gravitic or slipstream systems.",
+      "status": "DERIVED"
+    },
+    "safety_horizon": {
+      "equation": "N_safe>=N_detect+N_auth+N_solve+N_commit+N_reject+N_recovery",
+      "alternate_time_form": "T_lookahead>=t_detect+t_auth+t_solve+t_commit+t_reject+t_recovery+t_margin",
+      "meaning": "Because the lattice is discrete, safety is naturally expressed in valid future address/epoch opportunities as well as physical distance.",
+      "status": "DERIVED"
+    }
+  },
+  "path_progression": [
+    {"path":"P0","implementation":"Q-Cell Addressing Monolith","status":"MIXED","mathematical_capability":"Prove repeatable stable discrete Q addresses exist and can be distinguished from continuous Q-boundary behavior.","physical_enablers":["monumental address resonator","precision clocks","fixed reference lattice"],"operational_result":"No payload translation; establishes discrete address physics."},
+    {"path":"P1","implementation":"Molecular Phase Conveyor","status":"MIXED","mathematical_capability":"Map and schedule adjacent address transitions for simple matter states through known phase epochs.","physical_enablers":["small phase cages","epoch clocks","known-address whitelist"],"operational_result":"Microscopic-to-small payload translation."},
+    {"path":"P2","implementation":"Macroscopic Lattice Translator","status":"MIXED","mathematical_capability":"Maintain protected-state coverage and identity constraints across complex macroscopic payloads.","physical_enablers":["synchronized cage arrays","state buffers","coverage tomography"],"operational_result":"Macroscopic local jumps with mandatory coverage and identity checks."},
+    {"path":"P3","implementation":"INHERIT_FROM_DEVELOPMENT_LINEAGE","status":"DERIVED","mathematical_capability":"Solve autonomous ship-scale address chains across moving reference frames, including destination occupancy and valid future epochs.","physical_enablers":["shipwide address cage","long-baseline reference sensors","authenticated address computer","independent reject reserve"],"operational_result":"First autonomous interstellar Q-Lattice translation. Exact recovered implementation name remains controlled by the lineage registry."},
+    {"path":"P4","implementation":"INHERIT_FROM_DEVELOPMENT_LINEAGE","status":"DERIVED","mathematical_capability":"Rank multiple candidate lattice paths under alias, epoch, coverage and failure uncertainty while maintaining sectional protected-state observability.","physical_enablers":["distributed cage sectors","redundant epoch clocks","address-voting mesh","sectional recovery"],"operational_result":"Operational fleet use with graceful rejection of bad address branches."},
+    {"path":"P5","implementation":"INHERIT_FROM_DEVELOPMENT_LINEAGE","status":"DERIVED","mathematical_capability":"Use strategic address atlases, beacon histories and predictive epoch models across sparse or changing lattice connectivity.","physical_enablers":["long-look references","authenticated beacon federation","large address cache","predictive graph solver"],"operational_result":"Strategic routing chooses reliable graph connectivity rather than minimum geometric distance."},
+    {"path":"P6","implementation":"INHERIT_FROM_DEVELOPMENT_LINEAGE","status":"DERIVED","mathematical_capability":"Continuously co-solve address graph, epoch schedule, protected-state health, vessel frame, destination admissibility and rollback options in a receding-horizon controller.","physical_enablers":["self-calibrating address media","distributed coherent clocks","continuous coverage tomography","fast multi-candidate solvers"],"operational_result":"Apex systems maintain several authenticated future address chains and discard invalidating branches before commit."}
+  ],
+  "machinery": {
+    "blocks": [
+      {"id":"address-resonator","function":"Excite, identify and lock a selected quantized Q address without confusing neighboring or aliased states."},
+      {"id":"epoch-clock","function":"Maintain phase/time reference for valid translation windows; redundancy must be independently comparable."},
+      {"id":"protected-state-cage","function":"Provide coherent address coverage for all translated vessel mass and required fields."},
+      {"id":"state-buffer","function":"Hold certified precommit state descriptors, coverage maps and rollback information through commit."},
+      {"id":"address-navigation","function":"Authenticate references, construct G_Q, rank candidate paths and reject aliases or closed epochs."},
+      {"id":"translation-controller","function":"Sequence address lock, phase alignment, coverage proof, commit, exit verification and recovery."},
+      {"id":"termination-recovery","function":"Reject an uncommitted edge or settle post-translation state according to certified family behavior."},
+      {"id":"control-thermal-abort-backbone","function":"Maintain clocks, isolation, heat rejection, health voting and emergency commands independently of primary translation energy."}
+    ],
+    "layout_invariants": [
+      "Protected-state coverage follows translated volume, not prime-mover footprint.",
+      "Clock/reference paths must be independently testable; one common clock is not redundancy.",
+      "P4+ systems require sectional cage health visibility and isolation.",
+      "Address authentication and destination occupancy checking are safety machinery, not optional navigation software.",
+      "Named race/manufacturer machinery authority overrides generic embodiments when present."
+    ]
+  },
+  "power": {
+    "model": "E_commit=E_lock+E_phase+E_coverage+E_translation+E_exit+E_recovery; peak load is dominated by address-lock/commit transients while sensing, clocking and state maintenance persist.",
+    "rules": [
+      "A beacon may reduce address uncertainty or synchronization burden but cannot supply missing protected-state coverage.",
+      "A short graph path is not energy-free; difficult addresses can cost more to authenticate, phase-lock or recover from.",
+      "Independent reject/recovery reserve is excluded from discretionary route energy.",
+      "Near strong gravity, additional reference and field authority can raise total cost even when the lattice edge remains mathematically available."
+    ]
+  },
+  "navigation_control": {
+    "state_estimation": "Fuse local Q spectroscopy, clocks, gravimetry, stellar references, authenticated beacons, address history, vessel-frame state and destination occupancy into candidate address posteriors with covariance.",
+    "commit_gates": ["address authenticated","epoch open through commit plus margin","full protected-volume coverage certified","destination admissible and unoccupied","rollback/recovery funded","reference disagreement within certified bounds"],
+    "abort_logic": ["alias probability excessive","epoch closes inside commit/recovery horizon","coverage minimum lost","destination evidence changes","clock/reference quorum lost","recovery reserve inadequate"]
+  },
+  "operation": {
+    "pre_transit": ["authenticate address atlas, beacon, clock and destination sources","build candidate graph without inferring adjacency from ordinary distance","certify cage coverage for exact vessel configuration","prove destination and fallback correspondence","reserve recovery energy","require independent navigation, machinery and clock votes"],
+    "commit_sequence": ["lock source and destination descriptors","synchronize epoch clocks","raise and verify protected-state cage","perform final alias and occupancy check","commit only while edge remains valid","verify exit and archive provenance snapshot"],
+    "emergency": ["reject before commit when possible","use only certified partial-commit recovery modes","preserve clock/reference logs","isolate unexplained cage divergence","do not retry an unresolved address"]
+  },
+  "maintenance": {
+    "routine": ["cross-compare independent epoch clocks","sweep resonators for shifted or split address peaks","tomographically verify cage coverage","challenge authentication with stale/revoked references","test recovery reserve under primary-bus loss","compare local gravity/reference solution against route atlas"],
+    "diagnostic_rule": "Coherent errors across all sectors implicate shared clock, reference, address model or environment before local hardware; isolated errors implicate local resonator, cage, sensor or carrier path.",
+    "return_to_service": ["root cause identified","clock quorum restored","address leakage within certified limit","coverage baseline recovered","recovery reserve proven","corrective action archived"]
+  },
+  "signatures": {
+    "model": "S_Q(t)=S_lock+S_epoch+S_commit+S_exit+S_recovery",
+    "observables": ["discrete Q resonance lines","address-lock pulse train","phase-clock sidebands","commit transient","exit/settling burst"],
+    "rule": "Higher Path may reduce waste and shorten exposed transients but cannot erase family-intrinsic discrete address/phase activity without separate canon."
+  },
+  "failures": {
+    "classes": [
+      {"id":"address-alias","cause":"unintended Q address matches observations too closely","response":"quarantine address and reconstruct posterior"},
+      {"id":"epoch-miss","cause":"phase window closes before commit","response":"reject before commit and inspect clocks/prediction/latency"},
+      {"id":"coverage-hole","cause":"part of protected volume falls outside coherent cage","response":"abort, isolate sector and resurvey geometry"},
+      {"id":"reference-poisoning","cause":"stale or corrupted beacon/atlas data","response":"raise covariance and fall back to independent references"},
+      {"id":"destination-conflict","cause":"target state becomes occupied or inadmissible","response":"reject edge or select certified alternate"},
+      {"id":"clock-split","cause":"epoch references disagree","response":"no commit until quorum restored"},
+      {"id":"recovery-exhaustion","cause":"route consumes reject/settling reserve","response":"terminate at earlier admissible address"}
+    ],
+    "forensic_rule": "Accident reports must separate mathematics, provenance, clocks, coverage, power/recovery, gravity environment, destination occupancy and operator decisions; generic drive overload is insufficient."
+  },
+  "infrastructure": {
+    "assets": [
+      {"type":"address-beacon","benefit":"authenticated address reference and epoch synchronization","limit":"cannot create a lattice edge or guarantee destination occupancy"},
+      {"type":"lattice-atlas-service","benefit":"historical edge validity and alias notes","limit":"stale history increases uncertainty"},
+      {"type":"epoch-observatory","benefit":"improves future phase-window forecasts","limit":"forecast remains uncertain"},
+      {"type":"translation-station","benefit":"large fixed cage/reference support for lower-Path systems","limit":"does not imply shipboard autonomy"},
+      {"type":"traffic-occupancy-service","benefit":"reduces destination conflict risk","limit":"latency and authentication remain explicit"}
+    ]
+  },
+  "scaling": {
+    "variables": ["protected mass","protected volume","cage sector count","clock distribution length","reference aperture","graph branching","commit energy","recovery reserve"],
+    "rules": ["larger ships require more coherent protected-state coverage, not merely a larger central resonator","long hulls increase clock-distribution/simultaneity error","more candidate edges increase computation, authentication and provenance burden","multiple translators do not add linearly unless cage, clock and address solutions are coherent"]
+  },
+  "technology_basis": [
+    {"basis":"TERRESTRIAL_MECHANICAL","embodiment":"resonant rings/cavities, precision clocks, distributed field plates and hardened compute","status":"DERIVED"},
+    {"basis":"AQUATIC_PRESSURE_NATIVE","embodiment":"pressure-qualified resonant membranes, wet photonic clocks and fluid-isolated cage nodes","status":"DERIVED"},
+    {"basis":"CRYOGENIC_SUPERCONDUCTING","embodiment":"superconducting resonators, cryogenic clocks and quench-isolated cage sectors","status":"DERIVED"},
+    {"basis":"GAS_GIANT_AEROSTAT","embodiment":"distributed buoyant resonator cells, atmospheric clock baselines and flexible cage webs","status":"DERIVED"},
+    {"basis":"BIOLOGICAL_SYMBIOTIC","embodiment":"cultivated address-sensitive tissues, synchronized biological oscillators and living coverage membranes","status":"DERIVED"},
+    {"basis":"MINERAL_CRYSTALLINE","embodiment":"address-selective lattice domains, resonant defect clocks and coherent crystal cage volumes","status":"DERIVED"},
+    {"basis":"POSTMATERIAL_DISTRIBUTED","embodiment":"distributed coherent nodes, executable address proofs and self-validating reference meshes","status":"DERIVED"}
+  ],
+  "generator_api": {
+    "input": {"required":["family=q-lattice","path","technology_basis","vessel_geometry","protected_mass","origin_state","destination_state","reference_set","epoch_state","gravity_environment"]},
+    "output": {"required":["address_graph_summary","candidate_path","epoch_windows","alias_risk","coverage_margin","destination_admissibility","power_and_recovery_budget","signatures","failure_risks","provenance"]},
+    "hard_guards": ["do not convert ordinary-space distance directly into lattice adjacency","do not invent race ownership from technology basis","do not treat beacons as creating edges or coverage authority","do not suppress alias/clock/coverage/destination/recovery uncertainty","do not overwrite recovered Path names with derived labels","do not report derived equations as CONFIRMED"]
+  },
+  "provenance": {
+    "statuses": ["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"],
+    "notes": ["Family action and recovered P0-P2 labels are inherited from the live development-lineage registry.","P3-P6 exact implementation names are intentionally inherited by reference rather than guessed in this volume.","Graph, covariance, phase-clock, coverage and safety equations are DERIVED consistency models.","No numerical calibration constants are adopted here.","No race, inventor, manufacturer, institution, historical incident or ownership claim is created by this volume."]
+  }
+}
