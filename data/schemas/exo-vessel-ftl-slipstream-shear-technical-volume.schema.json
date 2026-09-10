@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-slipstream-shear-technical-volume.schema.json",
+  "title": "Black Light Hyperspatial Slipstream Shear Technical Volume",
+  "type": "object",
+  "required": ["schema_version","family","authority","mathematics","path_progression","machinery","power","navigation_control","operation","maintenance","signatures","failures","infrastructure","scaling","technology_basis_translation","generator_contract","provenance"],
+  "properties": {
+    "schema_version": {"type":"string"},
+    "family": {"const":"slipstream-shear"},
+    "authority": {"type":"object","required":["status","primary","legacy_design_source","family_sources"],"additionalProperties":true},
+    "mathematics": {"type":"object","required":["status","boundary_state","adhesion_margin","route_functional","weather_forecast","exit_correspondence","safety_horizon"],"additionalProperties":true},
+    "path_progression": {"type":"array","minItems":7,"maxItems":7,"items":{"type":"object","required":["path","implementation","mathematical_capability","physical_enablers","changed_limits","operational_result","status"],"additionalProperties":true}},
+    "machinery": {"type":"object","required":["blocks","layout_invariants"],"additionalProperties":true},
+    "power": {"type":"object","required":["model","reserves","guards"],"additionalProperties":true},
+    "navigation_control": {"type":"object","required":["state_estimation","control_objective","abort_logic"],"additionalProperties":true},
+    "operation": {"type":"object","additionalProperties":true},
+    "maintenance": {"type":"object","additionalProperties":true},
+    "signatures": {"type":"object","additionalProperties":true},
+    "failures": {"type":"object","additionalProperties":true},
+    "infrastructure": {"type":"object","additionalProperties":true},
+    "scaling": {"type":"object","additionalProperties":true},
+    "technology_basis_translation": {"type":"object","additionalProperties":true},
+    "generator_contract": {"type":"object","required":["inputs","outputs","hard_guards","api_shape"],"additionalProperties":true},
+    "provenance": {"type":"object","required":["canon_rule","field_status_required","source_chain"],"additionalProperties":true}
+  },
+  "additionalProperties": false
+}
