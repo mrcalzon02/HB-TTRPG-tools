@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-propulsion-transit-engineering-annex.schema.json",
+  "title": "Black Light Propulsion Transit Engineering Annex",
+  "description": "Additive engineering/provenance extension for generated Black Light propulsion and transit installation records. Subordinate to BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md and specific named canon.",
+  "type": "object",
+  "additionalProperties": true,
+  "$defs": {
+    "canonStatus": {
+      "type": "string",
+      "enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]
+    },
+    "provenanceField": {
+      "type": "object",
+      "required": ["status", "sourceRefs", "sourceScope"],
+      "properties": {
+        "status": { "$ref": "#/$defs/canonStatus" },
+        "value": {},
+        "sourceRefs": { "type": "array", "items": { "type": "string" } },
+        "sourceScope": {
+          "type": "string",
+          "enum": [
+            "named-installation",
+            "named-vessel",
+            "manufacturer",
+            "species",
+            "authority",
+            "archive",
+            "runtime",
+            "registry",
+            "derivation",
+            "proposal"
+          ]
+        },
+        "resolverRule": { "type": ["string", "null"] },
+        "parents": { "type": "array", "items": { "type": "string" } },
+        "generatorVersion": { "type": ["string", "null"] },
+        "generatedAt": { "type": ["string", "null"], "format": "date-time" },
+        "notes": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "DERIVED" } }, "required": ["status"] },
+          "then": { "required": ["resolverRule", "parents"] }
+        },
+        {
+          "if": { "properties": { "status": { "const": "PROPOSED" } }, "required": ["status"] },
+          "then": { "required": ["notes"] }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "stateComponent": {
+      "type": "object",
+      "properties": {
+        "status": { "$ref": "#/$defs/canonStatus" },
+        "state": {},
+        "limits": {},
+        "margin": {},
+        "sensors": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "signatureModel": {
+      "type": "object",
+      "properties": {
+        "preTransit": { "type": "object", "additionalProperties": true },
+        "activeTransit": { "type": "object", "additionalProperties": true },
+        "routeRemote": { "type": "object", "additionalProperties": true },
+        "termination": { "type": "object", "additionalProperties": true },
+        "postTransit": { "type": "object", "additionalProperties": true },
+        "forensic": { "type": "object", "additionalProperties": true },
+        "modalities": {
+          "type": "object",
+          "properties": {
+            "thermal": {},
+            "electromagnetic": {},
+            "gravitational": {},
+            "optical": {},
+            "particle": {},
+            "acousticFluidic": {},
+            "phaseOrQ": {},
+            "topological": {},
+            "biochemical": {},
+            "forensicPersistence": {}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "properties": {
+    "engineeringState": {
+      "type": "object",
+      "required": ["energy", "geometry", "navigation", "control", "recovery", "health", "signature", "infrastructure"],
+      "properties": {
+        "energy": { "$ref": "#/$defs/stateComponent" },
+        "geometry": { "$ref": "#/$defs/stateComponent" },
+        "navigation": { "$ref": "#/$defs/stateComponent" },
+        "control": { "$ref": "#/$defs/stateComponent" },
+        "recovery": { "$ref": "#/$defs/stateComponent" },
+        "health": { "$ref": "#/$defs/stateComponent" },
+        "signature": { "$ref": "#/$defs/stateComponent" },
+        "infrastructure": { "$ref": "#/$defs/stateComponent" }
+      },
+      "additionalProperties": false
+    },
+    "scaling": {
+      "type": "object",
+      "properties": {
+        "translatedMass": {},
+        "coverageGeometry": { "type": "object", "additionalProperties": true },
+        "distribution": { "type": "object", "additionalProperties": true },
+        "recoveryBurden": { "type": "object", "additionalProperties": true },
+        "estimators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "$ref": "#/$defs/canonStatus" },
+              "formula": { "type": ["string", "null"] },
+              "version": { "type": ["string", "null"] },
+              "parameters": { "type": "object", "additionalProperties": true }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "powerModel": { "type": "object", "additionalProperties": true },
+    "navigationModel": { "type": "object", "additionalProperties": true },
+    "controlModel": { "type": "object", "additionalProperties": true },
+    "maintenanceModel": { "type": "object", "additionalProperties": true },
+    "signatureModel": { "$ref": "#/$defs/signatureModel" },
+    "failureModel": { "type": "object", "additionalProperties": true },
+    "infrastructureModel": { "type": "object", "additionalProperties": true },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceSnapshot", "fields"],
+      "properties": {
+        "sourceSnapshot": { "type": "array", "items": { "type": "string" } },
+        "resolverVersion": { "type": ["string", "null"] },
+        "generatorVersion": { "type": ["string", "null"] },
+        "fields": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/provenanceField" }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
