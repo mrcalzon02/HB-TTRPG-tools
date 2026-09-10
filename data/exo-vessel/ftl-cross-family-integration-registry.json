@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "authority": {
+    "status": "MIXED",
+    "primary_authority": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "source_document": "The different lightspeed methods",
+    "source_document_id": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "canon_labels": ["CONFIRMED","DERIVED","PROPOSED","UNRESOLVED","MIXED"],
+    "rule": "Specific named race, manufacturer, vessel, installation, or technology canon outranks this comparative layer. This registry compares established families; it does not assign ownership, prevalence, dates, inventors, or universal numeric constants."
+  },
+  "comparison_dimensions": [
+    "physical_action","gravity_tolerance","environmental_prediction_burden","navigation_reference_burden","whole-vessel_coverage","infrastructure_dependence","energy_character","recovery_character","post_commit_control","signature_character","failure_locality","failure_reversibility","scale_penalty","throughput_character","maintenance_burden","traffic_dependence"
+  ],
+  "families": [
+    {
+      "family_id":"metric-envelope","name":"Metric Compression Envelope","physical_action":"4D local metric deformation","status":"CONFIRMED",
+      "gravity_behavior":"Strong gradients and curvature increase deformation, sensing, and structural burden; tolerance depends on field authority and prediction quality.",
+      "infrastructure_dependence":"LOW_TO_MODERATE","signature_profile":"distributed field deformation, power/thermal transients, gravimetric disturbance","failure_character":"field asymmetry, horizon/recovery deficit, structural overrun","scaling_character":"nonlinear with protected volume, field surface, timing span, structure, and recovery reserve","recovery_character":"continuous field unwind and controlled de-transit","post_commit_control":"HIGH_RELATIVE",
+      "derived_selection_strengths":["mobile autonomy","continuous route correction","route flexibility"],"derived_selection_weaknesses":["high continuous control burden","gravity/curvature penalties","whole-vessel field symmetry"]
+    },
+    {
+      "family_id":"gravitic-plane","name":"Gravitational-Plane Skimmer","physical_action":"4D geodesic-plane transit with higher-order gradient correction","status":"CONFIRMED",
+      "gravity_behavior":"Gravity is both usable terrain and hazard; gradients, tides, shear forks, and hidden higher-dimensional terrain require route prediction rather than simple avoidance.",
+      "infrastructure_dependence":"LOW_TO_MODERATE","signature_profile":"gravimetric coupling, route-following corrections, recoupling events","failure_character":"branch ambiguity, divergent shear solution, differential vessel coupling","scaling_character":"strongly affected by sensor baseline, structural coherence, sectional coupling, and terrain-model covariance","recovery_character":"branch recoupling or de-transit","post_commit_control":"MODERATE_TO_HIGH",
+      "derived_selection_strengths":["efficient use of natural geometry","low brute-force field demand on favorable terrain"],"derived_selection_weaknesses":["route availability depends on terrain","fork prediction and hidden-terrain uncertainty"]
+    },
+    {
+      "family_id":"slipstream-shear","name":"Hyperspatial Slipstream Shear","physical_action":"Q-space boundary-layer coupling","status":"CONFIRMED",
+      "gravity_behavior":"Gravity and higher-dimensional terrain alter Q-boundary geometry, weather, exit correspondence, and shear stability without making this a gravitic-plane system.",
+      "infrastructure_dependence":"LOW_TO_MODERATE","signature_profile":"Q-boundary adhesion, wake disturbance, detach/exit transient","failure_character":"adhesion loss, Q-weather front, boundary curvature pinch, wake resonance","scaling_character":"whole-hull adhesion authority, sensor lookahead, sector timing, wake interaction, and detach reserve scale nonlinearly","recovery_character":"controlled detachment and exit reconciliation","post_commit_control":"MODERATE",
+      "derived_selection_strengths":["high performance on favorable shear","wake exploitation at mature Path levels"],"derived_selection_weaknesses":["forecast-heavy","environmentally variable","safe exit geometry is a first-class constraint"]
+    },
+    {
+      "family_id":"q-lattice","name":"Q-Lattice Phase Translation","physical_action":"indexed quantized Q-state translation","status":"CONFIRMED",
+      "gravity_behavior":"Gravity contributes to address/epoch uncertainty and reference error rather than acting as a simple drag coefficient.",
+      "infrastructure_dependence":"MODERATE","signature_profile":"address lock, phase-clock activity, discrete translation transient","failure_character":"address alias, epoch miss, coverage hole, clock split, destination conflict","scaling_character":"protected-state coverage, clock coherence, address solution complexity, and state-buffer burden dominate","recovery_character":"reject invalid future state or recover from incomplete/failed translation state","post_commit_control":"LOW",
+      "derived_selection_strengths":["discrete route semantics","strong compatibility with indexed navigation infrastructure"],"derived_selection_weaknesses":["address authentication","epoch validity","coverage discontinuities"]
+    },
+    {
+      "family_id":"n-manifold","name":"N-Dimensional Manifold Drive","physical_action":"higher-dimensional geodesic projected to 3+1D","status":"CONFIRMED",
+      "gravity_behavior":"Gravity conditions embedding and return-map stability; ordinary-space neighbors can have unrelated manifold routes.",
+      "infrastructure_dependence":"LOW_TO_MODERATE","signature_profile":"embedding-field activity, topology/axis control, re-embedding transient","failure_character":"axis inversion, hidden higher-dimensional obstacle, return-map corruption, topology change","scaling_character":"computation/sensing grow sharply with active dimensions; whole-vessel embedding coverage and return conditioning dominate","recovery_character":"re-embed and certify return map","post_commit_control":"MODERATE",
+      "derived_selection_strengths":["deep-range route shortening","route classes unavailable to 4D-only methods"],"derived_selection_weaknesses":["hidden obstacle inference","return-map conditioning","active-dimensionality complexity"]
+    },
+    {
+      "family_id":"fold-jump","name":"Discrete Fold-Jump Drive","physical_action":"temporary topological adjacency","status":"CONFIRMED",
+      "gravity_behavior":"Gravity conditions candidate topology and endpoint covariance; near-gravity folds become increasingly difficult to certify.",
+      "infrastructure_dependence":"LOW_TO_MODERATE","signature_profile":"precommit topology formation, abrupt adjacency event, closure ringing","failure_character":"endpoint covariance exceedance, occupancy conflict, topology bifurcation, premature commit","scaling_character":"protected-volume geometry, endpoint covariance, topology field extent, and closure/recovery energy dominate","recovery_character":"precommit abort is primary; post-event closure/ringing recovery","post_commit_control":"VERY_LOW",
+      "derived_selection_strengths":["discrete long-baseline transfer","little need for continuous en-route steering"],"derived_selection_weaknesses":["hard commit","endpoint proof burden","occupancy exclusion"]
+    },
+    {
+      "family_id":"wormhole-gate","name":"Anchored Wormhole / Gate Transit","physical_action":"maintained multiply connected topology","status":"CONFIRMED",
+      "gravity_behavior":"Anchor geometry, mouth state, local curvature, and chronology constraints condition safe aperture operation.",
+      "infrastructure_dependence":"VERY_HIGH","signature_profile":"persistent aperture field, anchor power, traffic transients, synchronization emissions","failure_character":"throat instability, mouth desynchronization, asymmetric mass flux, chronology trip, anchor drift, network cascade","scaling_character":"aperture cross-section, anchor structure, mouth synchronization, thermal/recovery plant, and traffic flux dominate","recovery_character":"stabilize, isolate, or close throat; paired-mouth response required","post_commit_control":"ROUTE_FIXED_BY_NETWORK",
+      "derived_selection_strengths":["high network throughput","ship carries little or no dedicated FTL machinery","repeatable corridors"],"derived_selection_weaknesses":["capital infrastructure","paired-mouth maintenance","network failure propagation"]
+    },
+    {
+      "family_id":"phase-displacement","name":"Quantum Phase Displacement","physical_action":"macroscopic nonlocal state displacement","status":"CONFIRMED",
+      "gravity_behavior":"Gravity contributes to target-state model uncertainty, reference validity, and target compatibility rather than en-route drag.",
+      "infrastructure_dependence":"MODERATE","signature_profile":"state preparation, target lock, displacement transient, reconciliation activity","failure_character":"target aliasing, continuity proof failure, coverage hole, reference poisoning, reconciliation divergence","scaling_character":"state mapping, whole-object coverage, invariant certification, reference independence, and recovery proof dominate","recovery_character":"post-arrival state reconciliation and continuity verification","post_commit_control":"VERY_LOW",
+      "derived_selection_strengths":["nonlocal transfer without maintained corridor","potentially compact mature installations"],"derived_selection_weaknesses":["target-state proof","continuity certification","strong provenance dependence"]
+    }
+  ],
+  "selection_contract": {
+    "rule":"Apply hard admissibility vetoes first. Rank only surviving families/installations. Do not convert ordinal comparison labels into setting-wide numeric performance facts.",
+    "hard_vetoes":["family unavailable at resolved Path/shared tier","named canon forbids or contradicts family","whole-vessel/effect coverage invalid","navigation/target/reference proof invalid","recovery reserve below required threshold","environment exceeds family admissibility","required infrastructure absent","installation cannot fit vessel/environment/technology basis"],
+    "ranking_inputs":["mission profile","distance class","departure and arrival environment","gravity/shear/Q/manifold conditions","vessel scale and geometry","traffic throughput","available infrastructure","technology basis","Path maturity","shared T-tier","stealth/signature requirement","maintenance doctrine","recovery tolerance","schedule pressure"],
+    "required_outputs":["admissible families","rejected families with veto reason","ranked candidates","comparison factors","status per factor","source ancestry","unresolved fields","selected family if selection permitted"],
+    "unknown_policy":"Unknowns remain unknown in AUTHORITY_ONLY. LABELED_DERIVATION may compute constrained consequences from confirmed parents. LABELED_PROPOSAL may suggest alternatives but may not overwrite canon."
+  },
+  "mixed_installation_rules": {
+    "allowed_relationships":["independent primary and emergency transit systems","gate-compatible vessel carrying separate shipboard drive","shared power conditioning where physically compatible","shared sensing/reference infrastructure with independent verification channels","staged local-propulsion plus FTL architecture","explicitly sourced hybrid mechanism"],
+    "forbidden_inferences":["two installed families automatically combine performance","shared power bus makes mechanisms interoperable","same Q vocabulary means Q-Lattice and Slipstream are the same system","Fold-Jump can steer after commit because Metric can","Gate infrastructure grants shipboard gate capability","technology basis establishes family ownership"],
+    "shared_support_rules":"Shared sensors, clocks, power, cooling, structure, and command systems must preserve family-specific independence requirements. A common-mode failure introduced by sharing must be represented in failure analysis and provenance."
+  },
+  "technology_basis_translation": {
+    "status":"DERIVED",
+    "basis_ids":["TERRESTRIAL_ELECTROMECHANICAL","AQUATIC_ELECTROCHEMICAL_HYDRAULIC","CRYOGENIC_AMMONIA_HALOCARBON","GAS_GIANT_FLUIDIC_ELECTROSTATIC","BIOLOGICAL_SYMBIOTIC","MINERAL_PIEZOELECTRIC_PHOTONIC","FIELD_MEDIATED_POSTMATERIAL"],
+    "rule":"Translate end effects into carrier, manufacturing, service, control, thermal, structural, sensing, and failure embodiments. Never use basis identity as evidence that a race invented, owns, or commonly uses a transit family."
+  },
+  "education_and_manual_requirements": {
+    "operator":"teach family-specific commit/abort boundaries, admissibility alarms, recovery reserves, environmental vetoes, and traffic/infrastructure dependencies",
+    "maintainer":"teach whole-installation topology, shared-support common-mode failures, calibration ancestry, signature baselines, and return-to-service proof",
+    "engineer":"teach equations as family-specific models, not universal constants; distinguish confirmed operator from derived mathematical representation",
+    "generator_author":"retain status and provenance at field level; never rank an unknown as though it were a measured value"
+  },
+  "api_contract": {
+    "resolver":"resolveFtlCrossFamilyCandidates(context)",
+    "inputs":["authoritySnapshot","mission","vessel","environment","technologyBasis","pathLevel","sharedTier","infrastructure","constraints","mode"],
+    "outputs":["candidates","vetoes","ranking","selected","provenance","warnings"],
+    "selection_modes":["AUTHORITY_ONLY","LABELED_DERIVATION","LABELED_PROPOSAL"],
+    "determinism":"For identical authority snapshot, generator version, complete inputs, and seed where stochastic tie-breaking is allowed, output must be reproducible."
+  },
+  "provenance_guards": [
+    "Specific named canon outranks comparative defaults.",
+    "Derived ordinal comparisons are not universal numeric constants.",
+    "Technology basis does not establish race ownership or invention.",
+    "Runtime prevalence does not promote generated content to setting canon.",
+    "Multiple observations sharing one source ancestor are not independent confirmations.",
+    "Training accidents, sample patents, equations, coefficients, and diagrams retain their own status.",
+    "Family-specific hard vetoes cannot be averaged away by a global score.",
+    "A generated vessel instance may be authoritative only for that instance when complete authority snapshot, resolver choices, scale coordinates, seed hierarchy, generator version, and provenance are retained."
+  ]
+}
