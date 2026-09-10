@@ -11,6 +11,26 @@ const library = await readText('kaysender-editor-record-library.js');
 const repository = await readText('kaysender-editor-repository.js');
 const kernel = await readText('kaysender-editor-kernel.js');
 
+function assertBrowserScriptSyntax(name, source) {
+  try {
+    // These runtime files are classic browser scripts, not ES modules. Compiling
+    // their complete source catches truncation, brace/template-literal damage,
+    // and other syntax regressions without executing application side effects.
+    new Function(source);
+  } catch (error) {
+    fail(`${name} does not parse as a classic browser script: ${error.message}`);
+  }
+}
+
+for (const [name, source] of [
+  ['kaysender-editor-production.js', production],
+  ['kaysender-editor-record-library.js', library],
+  ['kaysender-editor-repository.js', repository],
+  ['kaysender-editor-kernel.js', kernel]
+]) {
+  assertBrowserScriptSyntax(name, source);
+}
+
 for (const phrase of [
   'validateGenerationalProvenance',
   'normalizeGenerationalProvenance',
@@ -131,4 +151,4 @@ if (!provenancePresentation.includes('revision')) {
 }
 
 console.log('Editor provenance integration validation passed.');
-console.log('Verified kernel authority, repository metadata, visible library provenance, canonical unresolved-parent recovery, and matching active-editor generation/lineage visibility.');
+console.log('Verified parseable browser scripts, kernel authority, repository metadata, visible library provenance, canonical unresolved-parent recovery, and matching active-editor generation/lineage visibility.');
