@@ -91,7 +91,8 @@
     "docs/blacklight/BLACK_LIGHT_FTL_UPGRADE_CAUSALITY_CALCULUS.md",
     "docs/blacklight/BLACK_LIGHT_FTL_SOLVED_TRANSIT_CASES.md",
     "data/exo-vessel/ftl-control-embodiment-registry.json",
-    "data/schemas/exo-vessel-ftl-control-embodiment.schema.json"
+    "data/schemas/exo-vessel-ftl-control-embodiment.schema.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_LIVE_CONTROL_EMBODIMENT_DOSSIER_MANUAL.md"
   ],
   "raceAndVesselSpecific": [
     "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
@@ -136,7 +137,10 @@
     "The safety-envelope presentation must expose gravity retention, calculation retention, actionable lookahead, recovery reserve, and hazard observability as separate constraints rather than averaging them into a synthetic safety percentage.",
     "Control/navigation/maintenance embodiment may change how safety information is sensed, represented, actuated and serviced, but it may not discard any invariant safety channel required by the transit family.",
     "Named race and vessel control embodiments must retain unresolved transit-family status unless a higher-authority source establishes the association.",
-    "Alien-to-human interface translation must preserve native-state provenance and may not convert unresolved state into safe/default values."
+    "Alien-to-human interface translation must preserve native-state provenance and may not convert unresolved state into safe/default values.",
+    "The live EXO FTL dossier must not default an unspecified operative technology basis to terrestrial machinery; unspecified basis is an explicit UNRESOLVED embodiment state.",
+    "Changing operative technology basis may change navigation representation, sensing, control, abort, maintenance, service environment and failure signatures, but may not change the generated or certified FTL family.",
+    "Complete dossier exports must keep generated performance, route certification, route matrix and control embodiment as distinguishable records with provenance rather than destructively merging them."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, and control-embodiment additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, and live embodiment-dossier additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
