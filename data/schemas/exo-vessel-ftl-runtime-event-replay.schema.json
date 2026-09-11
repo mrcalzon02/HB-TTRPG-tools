@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-runtime-event-replay.schema.json",
+  "title": "Black Light FTL Runtime Event Replay Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "authority", "eventContract", "replayContract", "stateContract", "familySafeguards", "api", "canonGuards"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "upstream", "downstream"],
+      "additionalProperties": true
+    },
+    "eventContract": {
+      "type": "object",
+      "required": ["appendOnly", "requiredFields", "eventTypes", "ordering"],
+      "properties": {
+        "appendOnly": { "const": true },
+        "requiredFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 8,
+          "uniqueItems": true
+        },
+        "eventTypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 8,
+          "uniqueItems": true
+        },
+        "ordering": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "replayContract": {
+      "type": "object",
+      "required": ["deterministic", "initialState", "transition", "supersession", "integrity"],
+      "properties": {
+        "deterministic": { "const": true },
+        "initialState": { "type": "string" },
+        "transition": { "type": "string" },
+        "supersession": { "type": "string" },
+        "integrity": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "stateContract": {
+      "type": "object",
+      "required": ["requiredStateFields", "derivedOnlyFields", "prohibitedMutations"],
+      "additionalProperties": true
+    },
+    "familySafeguards": {
+      "type": "object",
+      "required": ["familyAutoSelection", "admissibleFamilies", "unknownFamilyRule", "familySpecificCommitRules"],
+      "properties": {
+        "familyAutoSelection": { "const": false },
+        "admissibleFamilies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 8,
+          "uniqueItems": true
+        },
+        "unknownFamilyRule": { "type": "string" },
+        "familySpecificCommitRules": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "api": {
+      "type": "object",
+      "required": ["appendEvent", "replayEvents", "deriveCaseState", "compareEpochs", "exportEvidencePacket"],
+      "additionalProperties": true
+    },
+    "canonGuards": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 8,
+      "uniqueItems": true
+    }
+  }
+}
