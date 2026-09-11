@@ -1,25 +1,40 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-forensic-identification.schema.json",
-  "title": "Black Light FTL Forensic Identification Record",
+  "title": "Black Light FTL Forensic Identification Registry",
   "type": "object",
   "required": [
     "schemaVersion",
+    "registryKey",
+    "title",
     "authority",
     "subject",
-    "evidence",
-    "hypotheses",
-    "classification",
+    "evidenceModel",
+    "mathematics",
+    "familyFingerprints",
+    "currentArNockDerelictCase",
+    "api",
     "provenance",
     "canonGuards"
   ],
   "properties": {
     "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.forensic-identification"},
+    "title": {"type": "string"},
     "authority": {"type": "object", "required": ["status", "sourceOrder", "designSource"]},
-    "subject": {"type": "object", "required": ["subjectKey", "species", "vessel", "knownFamily"]},
-    "evidence": {"type": "array", "items": {"type": "object", "required": ["id", "channel", "observation", "status", "source", "independenceGroup", "reliability"]}},
-    "hypotheses": {"type": "array", "minItems": 9, "items": {"type": "object", "required": ["familyKey", "familyName", "class", "predictedMarkers", "contradictions", "score", "status"]}},
-    "classification": {"type": "object", "required": ["state", "bestHypothesis", "confidenceClass", "familyAssignmentAllowed", "nextDiscriminatingTests"]},
+    "subject": {"type": "object", "required": ["subjectKey", "species", "vessel", "knownFamily", "familyAssignmentAllowed", "confirmedContext"]},
+    "evidenceModel": {"type": "object", "required": ["channels", "statusValues", "independenceRule", "negativeEvidenceRule", "damageRule"]},
+    "mathematics": {"type": "object", "required": ["evidenceWeight", "familySupport", "normalizedHypothesis", "informationGain", "promotionRule", "hardVeto"]},
+    "familyFingerprints": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "required": ["familyKey", "familyName", "class", "predictedMarkers", "strongDiscriminators", "commonFalseFriends"]
+      }
+    },
+    "currentArNockDerelictCase": {"type": "object", "required": ["state", "bestHypothesis", "confidenceClass", "reason", "familyAssignmentAllowed", "doNotInferFrom", "nextDiscriminatingTests"]},
+    "api": {"type": "object", "required": ["resolver", "inputs", "outputs", "authorityModes", "classificationStates", "noAutoPromotion"]},
     "provenance": {"type": "object", "required": ["sourceGraph", "designDocumentId", "designDocumentRevision"]},
     "canonGuards": {"type": "array", "minItems": 8, "items": {"type": "string"}}
   },
