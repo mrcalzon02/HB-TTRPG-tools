@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-forensic-identification.schema.json",
+  "title": "Black Light FTL Forensic Identification Record",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "authority",
+    "subject",
+    "evidence",
+    "hypotheses",
+    "classification",
+    "provenance",
+    "canonGuards"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "authority": {"type": "object", "required": ["status", "sourceOrder", "designSource"]},
+    "subject": {"type": "object", "required": ["subjectKey", "species", "vessel", "knownFamily"]},
+    "evidence": {"type": "array", "items": {"type": "object", "required": ["id", "channel", "observation", "status", "source", "independenceGroup", "reliability"]}},
+    "hypotheses": {"type": "array", "minItems": 9, "items": {"type": "object", "required": ["familyKey", "familyName", "class", "predictedMarkers", "contradictions", "score", "status"]}},
+    "classification": {"type": "object", "required": ["state", "bestHypothesis", "confidenceClass", "familyAssignmentAllowed", "nextDiscriminatingTests"]},
+    "provenance": {"type": "object", "required": ["sourceGraph", "designDocumentId", "designDocumentRevision"]},
+    "canonGuards": {"type": "array", "minItems": 8, "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
