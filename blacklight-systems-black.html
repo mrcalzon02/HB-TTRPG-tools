@@ -105,7 +105,6 @@
       'use strict';
 
       const REPOSITORY_TREE = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/git/trees/main?recursive=1';
-      const GITHUB_BLOB_ROOT = 'https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/';
       const grid = document.getElementById('blacklight-resource-grid');
 
       const explicitBlacklightResources = new Set([
@@ -114,6 +113,10 @@
         'EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md',
         'alien-vessel-generator.js',
         'alien-vessel-generator-entry.js'
+      ]);
+
+      const excludedResources = new Set([
+        'blacklight-resource-viewer.html'
       ]);
 
       // Development-only validation and CI material is not a page, site asset, or archive resource.
@@ -129,9 +132,11 @@
 
       // Image files are presentation assets, not Black-tier navigation destinations.
       const resourceExtension = /\.(?:html?|md|txt|json|ya?ml|csv|xml|pdf|css|js|mjs|cjs|map|mp3|ogg|wav|flac|mp4|webm|woff2?|ttf|otf|wasm|glb|gltf|obj|mtl|bin)$/i;
+      const textResourceExtension = /\.(?:md|txt|json|ya?ml|csv|xml|css|js|mjs|cjs|map)$/i;
 
       const isBlacklightResource = (path) => {
         const lower = path.toLowerCase();
+        if (excludedResources.has(path)) return false;
         if (excludedPrefixes.some(prefix => lower.startsWith(prefix))) return false;
         if (!resourceExtension.test(lower)) return false;
         if (explicitBlacklightResources.has(path)) return true;
@@ -158,7 +163,9 @@
         if (/\.md$/i.test(path)) {
           const siblingHtml = path.replace(/\.md$/i, '.html');
           if (treePaths.has(siblingHtml)) return encodeURI(siblingHtml);
-          return GITHUB_BLOB_ROOT + path.split('/').map(encodeURIComponent).join('/');
+        }
+        if (textResourceExtension.test(path)) {
+          return `blacklight-resource-viewer.html?src=${encodeURIComponent(path)}`;
         }
         return encodeURI(path);
       };
