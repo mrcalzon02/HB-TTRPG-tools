@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.control-embodiment",
+  "status": "MIXED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "technologyBasis": "EXO_OPERATIVE_TECHNOLOGY_BASIS.md",
+    "specificSourcePrecedence": true
+  },
+  "invariantSafetyChannels": [
+    {"key": "gravity_environment", "meaning": "Family-relevant gravity, curvature, shear and environmental state must remain observable or bounded.", "cannotBeDiscarded": true},
+    {"key": "calculation_uncertainty", "meaning": "Navigation and endpoint/state uncertainty must remain explicit rather than being hidden by interface abstraction.", "cannotBeDiscarded": true},
+    {"key": "actionable_lookahead", "meaning": "The interface must expose enough future state to complete detection, validation, command, actuation and safe exit before irreversible hazard entry.", "cannotBeDiscarded": true},
+    {"key": "protected_recovery", "meaning": "Recovery/abort authority must remain physically and procedurally reserved from nominal performance optimization.", "cannotBeDiscarded": true},
+    {"key": "hazard_observability", "meaning": "Required hazards must have a direct or independently validated guard channel; sensor silence is not positive safety evidence.", "cannotBeDiscarded": true}
+  ],
+  "technologyBases": {
+    "TERRESTRIAL_ELECTROMECHANICAL_INDUSTRIAL": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["orthographic tactical plots", "vector and covariance overlays", "numeric route certificates", "separate alarm and abort annunciation"],
+      "sensorArchitecture": ["electromagnetic and gravimetric instruments", "digital timing references", "redundant independent guard channels", "recorded calibration ancestry"],
+      "controlArchitecture": ["digital flight-control computers", "hardwired or isolated safety interlocks", "electromechanical and fluid-power actuators", "human-readable status hierarchy"],
+      "abortEmbodiment": ["independent emergency power", "physically separate de-transit/closure command path", "guarded manual and automatic abort initiation"],
+      "maintenanceDoctrine": ["scheduled inspection", "replaceable line-replaceable units", "calibration certificates", "connector/reference standard verification", "fault isolation by subsystem"],
+      "failureSignatures": ["timing drift", "bus faults", "sensor disagreement", "actuator lag", "thermal overload", "connector/reference mismatch"],
+      "serviceEnvironment": ["dry or controlled-access machinery spaces", "electrical isolation", "instrumented test points"],
+      "humanInteroperability": "DIRECT",
+      "generatorRules": ["Do not reduce the interface to a single speed number.", "Show uncertainty and recovery reserve as first-class controls.", "Use familiar industrial form only when the manufacturer basis actually resolves to this family."]
+    },
+    "AQUATIC_ELECTROCHEMICAL_HYDRAULIC": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["flow-field maps", "pressure/current gradients", "immersed optical or acoustic overlays", "hazard state expressed through turbulence/interference analogues where culturally appropriate"],
+      "sensorArchitecture": ["wet-rated gravimetric and electrochemical arrays", "acoustic baselines", "pressure-balanced reference packages", "galvanically isolated guard channels"],
+      "controlArchitecture": ["hydraulic muscles or pressure cells", "fluidic valves", "electroactive polymers", "wet optical/electrochemical logic"],
+      "abortEmbodiment": ["pressure-isolated emergency accumulator", "fast hydraulic field-release manifold", "independent acoustic/electrochemical abort channel"],
+      "maintenanceDoctrine": ["fouling control", "osmolality and chemistry checks", "wet-mate connector inspection", "galvanic compatibility audit", "pressure equalization before service"],
+      "failureSignatures": ["bubble formation", "electrolysis", "fouling", "pressure lag", "ionic-reference drift", "galvanic corrosion"],
+      "serviceEnvironment": ["continuous immersion or pressure-balanced wet bay", "chemistry-controlled service medium"],
+      "humanInteroperability": "ADAPTER_REQUIRED",
+      "generatorRules": ["Represent route safety through native wet machinery rather than dry terrestrial consoles.", "Do not treat pressure or chemistry alarms as cosmetic; they can directly collapse control authority."]
+    },
+    "CRYOGENIC_AMMONIA_HALOCARBON": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["phase-stable photonic plots", "cryogenic reference-state bands", "timing and thermal-contraction margins", "route certificate tied to cooldown state"],
+      "sensorArchitecture": ["superconductive loops", "photonic metrology", "cryogenic inertial references", "temperature-compensated gravimetric instruments"],
+      "controlArchitecture": ["superconductive or photonic logic", "cryofluid actuation", "phase-change mechanisms", "contraction-tolerant mechanical references"],
+      "abortEmbodiment": ["stored cold-state reserve", "independent quench-safe command path", "thermal isolation and rapid state dump"],
+      "maintenanceDoctrine": ["controlled cooldown/warmup", "vacuum-jacket integrity checks", "contraction alignment survey", "frozen-interface inspection", "optical cleanliness"],
+      "failureSignatures": ["quench", "thermal shock", "reference drift during phase transition", "seal fracture", "misalignment from contraction"],
+      "serviceEnvironment": ["cryogenic pressure/temperature control", "vacuum-jacketed service boundaries"],
+      "humanInteroperability": "HOSTILE_WITHOUT_CONVERSION",
+      "generatorRules": ["Transit readiness must include thermal state and contraction alignment.", "Do not depict warm human-access service as routine without a conversion bay."]
+    },
+    "GAS_GIANT_FLUIDIC_ELECTROSTATIC": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["stratification volumes", "pressure-layer route corridors", "electrostatic field topology", "acoustic/turbulence hazard maps"],
+      "sensorArchitecture": ["pressure and density tomography", "electrostatic field sensing", "long-baseline acoustic arrays", "buoyancy/reference-cell metrology"],
+      "controlArchitecture": ["pressure logic", "ionic wind/electrostatic actuation", "flexible pressure boundaries", "distributed membrane controllers"],
+      "abortEmbodiment": ["reserve buoyancy/pressure authority", "field-collapse compartments", "independent pressure-logic guard path"],
+      "maintenanceDoctrine": ["membrane inspection", "tether/preload survey", "pressure-cell leak localization", "charge-distribution checks", "turbulence damage inspection"],
+      "failureSignatures": ["membrane flutter", "pressure-logic race", "charge leakage", "buoyancy loss", "tether failure", "acoustic multipath corruption"],
+      "serviceEnvironment": ["dense reactive high-pressure atmosphere", "pressure-balanced maintenance envelope"],
+      "humanInteroperability": "HOSTILE_WITHOUT_CONVERSION",
+      "generatorRules": ["Do not translate the architecture into rigid dry cabinets.", "Show pressure and buoyancy state as part of navigation/control readiness."]
+    },
+    "BIOLOGICAL_SYMBIOTIC": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["neural or sensory-state maps", "chemical/biological readiness indicators", "distributed organ-state representation", "species-native multimodal cues"],
+      "sensorArchitecture": ["cultivated sensory organs", "bioelectric/ionic transducers", "distributed local ganglia", "independent guard tissue or physically isolated fallback sensors"],
+      "controlArchitecture": ["cultivated neural computation", "contractile/vascular actuation", "chemical gating", "regional control ganglia"],
+      "abortEmbodiment": ["neural gating", "vascular isolation", "metabolic starvation of unsafe regions", "sacrificial shedding or hard biological isolation where appropriate"],
+      "maintenanceDoctrine": ["feeding and culture care", "surgery/grafting", "microbial balancing", "immune management", "geometry recertification after regrowth"],
+      "failureSignatures": ["necrosis", "infection", "metabolic depletion", "neural desynchronization", "rejection", "regrowth geometry drift"],
+      "serviceEnvironment": ["species-compatible biological service medium", "contamination-controlled husbandry or surgical access"],
+      "humanInteroperability": "ADAPTER_REQUIRED",
+      "generatorRules": ["Biological machinery remains machinery with measurable tolerances and failure states.", "Healing never implies automatic recertification.", "Preserve physical independence for the last abort/guard channel."]
+    },
+    "MINERAL_PIEZOELECTRIC_PHOTONIC": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["resonance maps", "crystal-axis geometry", "photonic interference volumes", "mode-lock and phase-margin displays"],
+      "sensorArchitecture": ["piezoelectric gravimetric elements", "photonic interferometry", "phononic resonators", "thermoelectric state references"],
+      "controlArchitecture": ["solid-state resonant switching", "photonic/phononic buses", "prestressed mineral actuators", "alignment-authenticated interfaces"],
+      "abortEmbodiment": ["detuned sacrificial resonator bank", "independent optical guard path", "rapid preload release or mode collapse"],
+      "maintenanceDoctrine": ["flaw mapping", "crystal-axis survey", "surface cleanliness", "preload measurement", "thermal-cycle history review"],
+      "failureSignatures": ["microfracture", "mode splitting", "optical contamination", "preload loss", "axis misalignment", "thermal cycling fatigue"],
+      "serviceEnvironment": ["clean alignment-controlled spaces", "vibration and thermal stability"],
+      "humanInteroperability": "ADAPTER_REQUIRED",
+      "generatorRules": ["Do not represent resonance state as ordinary electrical voltage alone.", "Navigation/control failures should emerge from alignment, mode purity and reference drift as well as power loss."]
+    },
+    "FIELD_MEDIATED_ADAPTIVE": {
+      "status": "DERIVED",
+      "navigationRepresentation": ["live field topology", "state-authenticated route volumes", "reference-frame coherence maps", "fallback-geometry preview"],
+      "sensorArchitecture": ["distributed metrology", "contactless state interrogation", "coherence/reference sensors", "physically independent fallback metrology"],
+      "controlArchitecture": ["programmable matter", "field-coupled actuation", "state-authenticated commands", "distributed adaptive control"],
+      "abortEmbodiment": ["safe fallback geometry", "independent reference anchor", "hard state rollback", "energy escrow for field collapse"],
+      "maintenanceDoctrine": ["reference-frame calibration", "state-integrity audit", "hostile-state resistance testing", "fallback-geometry proof", "authorization-chain verification"],
+      "failureSignatures": ["coherence loss", "reference poisoning", "state-authentication conflict", "adaptive runaway", "fallback-geometry failure"],
+      "serviceEnvironment": ["metrology-controlled volume", "reference-stable commissioning zone"],
+      "humanInteroperability": "ADAPTER_REQUIRED",
+      "generatorRules": ["Advanced adaptive machinery does not erase engineering constraints.", "Never equate self-configuration with self-certification.", "Retain a mechanically or physically independent last-resort recovery path when the named source allows one."]
+    }
+  },
+  "namedProfiles": {
+    "ZWLEI_MURREK": {
+      "status": "MIXED",
+      "sourceStatus": "CONFIRMED named hardware plus DERIVED integration",
+      "transitFamilyStatus": "UNRESOLVED",
+      "sourcePaths": ["blacklight-archive-zwlei-murrek-no-return-signal-derelict.html", "docs/blacklight/ZWLEI_MURREK_PROPULSION_TRANSIT_ENGINEERING_MANUAL.md"],
+      "navigationRepresentation": ["CONFIRMED Navigation Current Well expresses course solutions as moving currents", "CONFIRMED current speed, depth and interference encode vector, gravity and transit risk", "DERIVED safety overlays must preserve uncertainty, abort margin and sensor ancestry without replacing the native current representation"],
+      "sensorArchitecture": ["CONFIRMED Sensor Choir Alcove fuses electromagnetic, gravitic, chemical, acoustic and exotic observations", "CONFIRMED Forward Sensor Ampulla provides long-baseline observation, ranging, spectroscopy and passive listening", "DERIVED independent guard ancestry must be explicit because shared fusion can create common-cause agreement"],
+      "controlArchitecture": ["CONFIRMED Gravitic Slipstream Regulator uses flexible field vanes immersed in dielectric fluid", "CONFIRMED Navigation Current Well supports gravitic reference, slipstream prediction and inertial control", "DERIVED high-authority control must couple vane symmetry, wet-system condition and reference integrity"],
+      "abortEmbodiment": ["DERIVED rapid vane de-authority/isolation", "DERIVED protected wet-system control reserve", "DERIVED independent hazard-observation path", "family-specific emergency de-transit remains UNRESOLVED until the family is identified"],
+      "maintenanceDoctrine": ["CONFIRMED wet coupled machinery requires dielectric, coolant, bio-reactive power-fluid, nutrient and hydraulic state management", "CONFIRMED mixed fluids can form corrosive electrically active foam", "DERIVED vane geometry and sensor-reference recertification after repair/regrowth"],
+      "failureSignatures": ["CONFIRMED asymmetric vane response can rotate the local inertial frame", "CONFIRMED Forward Sensor Ampulla is comparatively fragile and isolates first under fire", "CONFIRMED mixed-fluid corrosive conductive foam", "DERIVED common-cause Current Well ancestry can produce false multi-display agreement"],
+      "serviceEnvironment": ["CONFIRMED warm humid wet-deck environment", "CONFIRMED dielectric-fluid vane system", "CONFIRMED coupled vital-fluid manifold"],
+      "humanInteroperability": "ADAPTER_REQUIRED",
+      "generatorRules": ["Never normalize source-local gravitic slipstream terminology into a consolidated family automatically.", "Use the Current Well as a real multidimensional control representation, not decorative UI.", "Do not infer FTL invisibility from low-signature cruise doctrine.", "Healing or fluid restoration does not restore certification by itself."]
+    },
+    "ARNOCK": {
+      "status": "MIXED",
+      "sourceStatus": "CONFIRMED species/interface evidence plus DERIVED embodiment",
+      "transitFamilyStatus": "UNRESOLVED",
+      "sourcePaths": ["data/blacklight-continuum/wiki/foundation-lore.json#arnock-species", "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict", "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md"],
+      "navigationRepresentation": ["DERIVED vibration/acoustic and cultivated-neural control representation", "DERIVED species-native multimodal route-state expression", "UNRESOLVED exact transit-family display semantics"],
+      "sensorArchitecture": ["DERIVED cultivated sensory organs and neural fusion where compatible with recovered evidence", "DERIVED vibration/acoustic diagnostics", "family-required sensor physics remain mechanism-specific and cannot be replaced by species style"],
+      "controlArchitecture": ["CONFIRMED flexible and vibration-based interfaces occur", "CONFIRMED cultivated neural computation exists", "DERIVED distributed biological-symbiotic controllers compatible with elongated segmented reach"],
+      "abortEmbodiment": ["DERIVED neural gating", "DERIVED vascular isolation", "DERIVED chemical inhibition or sacrificial regional shutdown", "UNRESOLVED family-specific emergency de-transit mechanism"],
+      "maintenanceDoctrine": ["DERIVED feeding/culture care", "DERIVED grafting and surgery", "DERIVED microbial/immune management", "DERIVED vibration-state diagnostics", "recertification after biological geometry change"],
+      "failureSignatures": ["DERIVED neural desynchronization", "DERIVED tissue strain or necrosis", "DERIVED chemical imbalance", "DERIVED identity rejection", "DERIVED attachment or coverage drift"],
+      "serviceEnvironment": ["CONFIRMED Ar'nock-compatible atmosphere with acidic/unfamiliar traces", "DERIVED contamination-controlled biological service envelope"],
+      "humanInteroperability": "ADAPTER_REQUIRED",
+      "generatorRules": ["Do not assign an Ar'nock FTL family from biological ancestry.", "Do not declare all Ar'nock technology biological.", "A caller-selected family may be embodied in Ar'nock style only with explicit MIXED provenance.", "Human-readable translations must retain the alien source state and uncertainty rather than replacing it."]
+    }
+  },
+  "scalingModel": {
+    "status": "PROPOSED",
+    "principle": "Control and maintenance complexity scales with protected volume, distribution span, coordination delay, independent sensor ancestry, actuator count, recovery segmentation and service-environment burden rather than with vessel mass alone.",
+    "variables": ["protectedVolume", "installationSpan", "coordinationDelay", "sensorAncestryCount", "actuatorRegions", "recoverySegments", "serviceEnvironmentBurden", "maintenanceAccessLatency"]
+  },
+  "api": {
+    "resolver": "resolveFTLControlEmbodiment",
+    "inputs": ["technologyBasis", "namedProfile", "transitFamily", "pathLevel", "vesselScale", "condition", "manufacturerContext", "authorityMode"],
+    "outputs": ["resolvedBasis", "namedProfileStatus", "navigationRepresentation", "sensorArchitecture", "controlArchitecture", "abortEmbodiment", "maintenanceDoctrine", "failureSignatures", "serviceEnvironment", "humanInteroperability", "provenance", "canonWarnings"]
+  },
+  "canonGuards": [
+    "Specific named race, vessel, manufacturer, installation and technology sources outrank generic technology-basis embodiment.",
+    "Technology-basis embodiment changes physical implementation, not the invariant safety information required by the selected transit family.",
+    "No technology basis may erase gravity/environment state, uncertainty, actionable lookahead, protected recovery or hazard observability.",
+    "No unresolved named profile may acquire a transit-family assignment from vocabulary similarity, technology basis or generator convenience.",
+    "A human-readable translation layer must not overwrite the alien/native control state or its provenance.",
+    "Biological healing, adaptive self-reconfiguration and automated repair do not imply recertification.",
+    "Redundant displays sharing one upstream sensor/fusion root do not count as independent hazard observation.",
+    "Maintenance doctrine must preserve the service environment and contamination/reference constraints of the resolved basis.",
+    "More advanced Path level increases metrology, automation and margins but does not convert a species/manufacturer basis into terrestrial machinery.",
+    "PROPOSED scaling mathematics and generic embodiments are generator aids, not retroactive historical canon."
+  ]
+}
