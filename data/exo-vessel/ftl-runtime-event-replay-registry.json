@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "1.0.0",
+  "authority": {
+    "status": "DERIVED",
+    "scope": "Deterministic runtime handling for Black Light FTL exploration, measurement, archaeology, and forensic case-state events. This registry does not establish any transit family's ownership, historical inventor, prevalence, or the Ar'nock derelict's unresolved drive family.",
+    "upstream": [
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_MEASUREMENT_INSTRUMENTATION_FIELD_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_EVIDENCE_INSTANCE_FIELD_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_ARCHAEOLOGY_FIELD_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_FORENSIC_TRANSIT_IDENTIFICATION_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_EXPLORATION_EVENT_TEST_PROGRAM_FIELD_MANUAL.md",
+      "Google Drive: The different lightspeed methods"
+    ],
+    "downstream": [
+      "blacklight-exo-ftl-event-replay-runtime.js",
+      "resolveTransitMeasurementPacket",
+      "resolveTransitEvidenceInstance",
+      "resolveTransitInstallationArchaeology",
+      "resolveTransitForensics"
+    ],
+    "precedence": "Named canon and family operator physics outrank this runtime integration layer; this layer governs event persistence, replay, provenance, and derived case state only."
+  },
+  "eventContract": {
+    "appendOnly": true,
+    "requiredFields": [
+      "eventId",
+      "caseId",
+      "epoch",
+      "sequence",
+      "eventType",
+      "observedAt",
+      "authoritySnapshot",
+      "provenanceRoots",
+      "payload",
+      "status"
+    ],
+    "eventTypes": [
+      "CASE_INITIALIZED",
+      "PASSIVE_MEASUREMENT",
+      "CALIBRATION_RECORDED",
+      "ACCESS_CHANGED",
+      "SAMPLE_COLLECTED",
+      "LOW_AUTHORITY_TEST",
+      "ABORT_TRIGGERED",
+      "REPAIR_OR_REGROWTH",
+      "TRANSLATION_REVISED",
+      "EVIDENCE_SUPERSEDED",
+      "FAMILY_HYPOTHESIS_UPDATED",
+      "RECERTIFICATION_RECORDED"
+    ],
+    "ordering": "Events are ordered first by epoch, then monotonic integer sequence. Equal sequence values in one epoch are invalid. observedAt is evidence metadata and never overrides sequence ordering.",
+    "statusVocabulary": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]
+  },
+  "replayContract": {
+    "deterministic": true,
+    "initialState": "S_0 is an explicit case initialization object. Missing fields remain unknown; replay must not synthesize convenient defaults for canon-bearing values.",
+    "transition": "S_(n+1) = F(S_n, E_n, A_n), where A_n is the authority/provenance snapshot carried by event E_n.",
+    "supersession": "Corrections append a new event that cites supersedesEventId. Earlier events remain immutable and visible in replay history.",
+    "integrity": "Each normalized event receives a deterministic canonical digest chained to the previous accepted event digest. The digest detects local mutation/reordering; it is an engineering integrity mechanism, not setting physics or cryptographic canon proof.",
+    "replayModes": ["STRICT", "AUDIT", "NARRATIVE_SAFE"],
+    "modeSemantics": {
+      "STRICT": "Reject malformed order, duplicate IDs, broken supersession references, or authority-chain violations.",
+      "AUDIT": "Replay valid events while surfacing invalid records, provenance collisions, and unresolved dependencies without silently repairing them.",
+      "NARRATIVE_SAFE": "Replay only disclosure-safe state; suppress labels or conclusions not earned by the current evidence state."
+    }
+  },
+  "stateContract": {
+    "requiredStateFields": [
+      "caseId",
+      "currentEpoch",
+      "lastSequence",
+      "eventCount",
+      "eventDigest",
+      "observations",
+      "instrumentInstances",
+      "compartments",
+      "serviceEdges",
+      "unknownVolumes",
+      "telemetry",
+      "interventions",
+      "familyHypotheses",
+      "familyState",
+      "provenanceGraph",
+      "warnings"
+    ],
+    "derivedOnlyFields": [
+      "familyHypotheses",
+      "familyState",
+      "evidenceWeights",
+      "negativeEvidenceAdmissibility",
+      "testUtility",
+      "epochComparisons",
+      "disclosureState"
+    ],
+    "prohibitedMutations": [
+      "Deleting historical events to remove contradictory evidence",
+      "Changing an earlier observation after a later interpretation changes",
+      "Assigning manufacturer, inventor, race ownership, Path, T-tier, or historical date without upstream authority",
+      "Treating inaccessible volume as positive family evidence",
+      "Treating multiple descendants of one provenance root as independent confirmations",
+      "Promoting a family because it is narratively convenient"
+    ]
+  },
+  "mathematics": {
+    "stateTransition": "S_(n+1)=F(S_n,E_n,A_n)",
+    "eventIntegrity": "h_n=H(h_(n-1)||canon(E_n))",
+    "observationWeight": "W_o=R_o*D_o*P_o*S_o",
+    "negativeEvidence": "A_minus=I*V*R*B*S*(1-D)",
+    "testUtility": "U_T=IG(T)/(1+lambda_h H_T+lambda_c C_T+lambda_s S_T+lambda_d D_T+lambda_r R_T)",
+    "unknownFamilySafeEnvelope": "A_unknown subseteq intersection(A_f for f in F_admissible)",
+    "abortHorizon": "T_abort >= t_detect+t_validate+t_command+t_actuate+t_decay+t_margin",
+    "reserveConstraint": "R_available_test=R_total-R_protected > 0",
+    "epochResidual": "Delta_y=y_post-M(y_pre,Delta_t,E_environment)"
+  },
+  "familySafeguards": {
+    "familyAutoSelection": false,
+    "admissibleFamilies": [
+      "metric-compression",
+      "gravitational-plane-skimmer",
+      "slipstream-shear",
+      "q-lattice",
+      "n-manifold",
+      "fold-jump",
+      "wormhole-gate",
+      "phase-displacement"
+    ],
+    "unknownFamilyRule": "If the installation family is unresolved, active-test authority is limited to the intersection of currently admissible families' safe envelopes. An empty intersection forbids active energization.",
+    "familySpecificCommitRules": {
+      "metric-compression": "No high-authority test without verified unwind reserve, curvature/tidal observability, and whole-volume field coverage.",
+      "gravitational-plane-skimmer": "No coupling increase without shear/fork sensing and verified recoupling margin.",
+      "slipstream-shear": "No adhesion authority increase without detachment reserve and Q-boundary/wake observability.",
+      "q-lattice": "No address commit without epoch/reference ancestry validation and rejection capacity.",
+      "n-manifold": "No deep embedding without return-map admissibility and independently observable re-embedding authority.",
+      "fold-jump": "No transit commit from forensic testing; endpoint proof, coverage, closure authority, and protected recovery remain mandatory.",
+      "wormhole-gate": "No throat opening beyond reversible test authority without paired-mouth synchronization, chronology protection, anchor margin, and closure reserve.",
+      "phase-displacement": "No displacement commit from forensic testing; whole-object coverage, target admissibility, continuity invariants, and reconciliation reserve remain mandatory."
+    }
+  },
+  "api": {
+    "appendEvent": {
+      "signature": "appendTransitEvent(caseState, event, options?)",
+      "returns": "{state,event,accepted,warnings,errors}",
+      "rules": "Normalize, validate order, preserve provenance roots, compute digest, then apply the event. Never mutate the input state."
+    },
+    "replayEvents": {
+      "signature": "replayTransitEvents(initialState, events, options?)",
+      "returns": "{state,acceptedEvents,rejectedEvents,warnings}",
+      "rules": "Stable sort is forbidden as a repair. STRICT mode rejects out-of-order input; AUDIT reports it."
+    },
+    "deriveCaseState": {
+      "signature": "deriveTransitCaseState(state, registries?)",
+      "returns": "Derived evidence, hypotheses, disclosure state, and unresolved fields without modifying historical events."
+    },
+    "compareEpochs": {
+      "signature": "compareTransitEpochs(state, epochA, epochB, model?)",
+      "returns": "Pre/post residuals with shared-reference covariance and intervention warnings."
+    },
+    "exportEvidencePacket": {
+      "signature": "exportTransitEvidencePacket(state, options?)",
+      "returns": "A provenance-preserving packet suitable for archaeology and forensic resolvers."
+    }
+  },
+  "canonGuards": [
+    "The different lightspeed methods document constrains family-specific gravity, failure, sensing, and emergency behavior but does not name universal numeric constants unless explicitly stated.",
+    "Runtime replay cannot create canon; it can only preserve observations and derive labeled engineering consequences.",
+    "CONFIRMED family physics does not imply CONFIRMED species ownership or installation identity.",
+    "Ar'nock biological engineering does not establish an Ar'nock FTL family.",
+    "Q-MAP terminology must not be silently equated with Quantum Phase Displacement.",
+    "Generated probabilities or scores are hypothesis-ranking aids, not canon probabilities.",
+    "Unknown values remain unknown unless a deliberate PROPOSED supplement is requested.",
+    "Narrative-safe exports must not reveal a family name before the evidence state earns that conclusion.",
+    "Repeated observations sharing a provenance root are correlated evidence.",
+    "Intervention-generated residue must not be backdated into the untouched evidence epoch.",
+    "A repaired or regrown living machine requires recertification before prior geometry-dependent calibration can be reused.",
+    "Protected recovery authority is not available to mission optimization or experimental information gain."
+  ]
+}
