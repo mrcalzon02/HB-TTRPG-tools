@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.forensic-identification",
+  "title": "Black Light FTL Forensic Transit Identification Registry",
+  "authority": {
+    "status": "MIXED",
+    "scope": "DERIVED forensic resolver constrained by CONFIRMED family physics and CONFIRMED Ar'nock derelict observations; it does not assign the derelict an FTL family.",
+    "sourceOrder": [
+      "named vessel/species/manufacturer/installation sources",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "family-specific FTL technical volumes",
+      "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+      "docs/blacklight/ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md",
+      "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
+      "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
+      "Google Drive: The different lightspeed methods",
+      "labeled derivation"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "subject": {
+    "subjectKey": "arnock-derelict",
+    "species": "Ar'nock [CONFIRMED association with vessel/archive; term scope remains translation-uncertain]",
+    "vessel": "unidentified damaged Ar'nock vessel [CONFIRMED]",
+    "knownFamily": "UNRESOLVED",
+    "familyAssignmentAllowed": false,
+    "confirmedContext": [
+      "No immediately readable name, registry, destination, or surviving historical explanation.",
+      "Biological printers, medical systems, cultivated computation, environmental controls, storage, fabrication feedstock, damaged networks, and inaccessible compartments are present.",
+      "Architecture encodes nonhuman ergonomic and sensory assumptions but remains navigable by human-scale occupants.",
+      "Biological fabrication and cultivated computation do not establish an FTL family."
+    ]
+  },
+  "evidenceModel": {
+    "channels": ["GEOMETRY", "FIELD_RESIDUAL", "GRAVIMETRY", "Q_STATE", "TOPOLOGY", "TIMING", "THERMAL", "POWER", "CHEMICAL_BIOLOGICAL", "VIBRATION_ACOUSTIC", "DATA_TELEMETRY", "STRUCTURAL_LOAD", "WAKE_DEPOSIT", "INFRASTRUCTURE_INTERFACE", "DAMAGE_PATTERN", "ARCHIVE_RECORD"],
+    "statusValues": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"],
+    "reliabilityRange": [0.0, 1.0],
+    "independenceRule": "Evidence sharing a sensor, clock, archive ancestor, model, translation chain, or derived record belongs to one independenceGroup until proven otherwise.",
+    "negativeEvidenceRule": "Absence of a predicted marker counts only when the instrument, geometry, condition, and observation window were capable of detecting it.",
+    "damageRule": "Damage can erase positive markers and create false analogues; damaged absence is weak evidence unless detectability survives the damage model."
+  },
+  "mathematics": {
+    "evidenceWeight": "w_i = r_i * d_i * p_i, where reliability r_i, detectability d_i, and provenance-independence factor p_i are all in [0,1].",
+    "familySupport": "S_f = sum_i w_i * l_if - sum_j w_j * c_jf, where l_if is marker support and c_jf is contradiction strength.",
+    "normalizedHypothesis": "P*_f = exp(S_f) / sum_k exp(S_k). This is a DERIVED engineering ranking, not a canonical probability of historical ownership.",
+    "informationGain": "IG(test) = H(F | E) - E_o[H(F | E, outcome_o)]. Prefer safe tests with high expected information gain per hazard/resource cost.",
+    "promotionRule": "A family may move from UNRESOLVED only when at least two provenance-independent family-discriminating evidence groups survive contradiction, damage, and detectability review, unless one higher-authority named record directly identifies the installation.",
+    "hardVeto": "A confirmed contradiction to the physical operator sets that family hypothesis inadmissible for the observed installation; similarity of machinery appearance cannot override it."
+  },
+  "familyFingerprints": [
+    {
+      "familyKey": "metric-envelope",
+      "familyName": "Metric Compression Envelope",
+      "class": "true-ftl",
+      "predictedMarkers": ["distributed metric/curvature residuals", "whole-vessel effect-boundary geometry", "unwind/recovery structures", "gravity/tidal compensation sensing"],
+      "strongDiscriminators": ["measured local metric deformation linked to machinery", "field geometry enclosing protected volume"],
+      "commonFalseFriends": ["structural inertial compensation", "gravity sensors used by other families"]
+    },
+    {
+      "familyKey": "gravitic-plane",
+      "familyName": "Gravitational-Plane Skimmer",
+      "class": "true-ftl",
+      "predictedMarkers": ["long-baseline gravimetry", "distributed differential-load coupling", "route models keyed to gradients/tidal tensors/shear forks"],
+      "strongDiscriminators": ["navigation records explicitly following gravitational shear/equipotential route terrain", "coupling response correlated with mapped gravitational branch geometry"],
+      "commonFalseFriends": ["ordinary gravimetric navigation", "metric-drive gravity compensation"]
+    },
+    {
+      "familyKey": "slipstream-shear",
+      "familyName": "Hyperspatial Slipstream Shear",
+      "class": "true-ftl",
+      "predictedMarkers": ["Q-boundary sensing", "distributed adhesion/coupling sectors", "detach/recovery reserve", "wake or boundary-weather records"],
+      "strongDiscriminators": ["measured Q-boundary adhesion response", "wake-conditioned route telemetry with controlled detachment"],
+      "commonFalseFriends": ["generic Q-state sensors", "distributed hull field emitters"]
+    },
+    {
+      "familyKey": "q-lattice",
+      "familyName": "Q-Lattice Phase Translation",
+      "class": "true-ftl",
+      "predictedMarkers": ["discrete address/epoch references", "synchronized clock mesh", "whole-state cage", "address alias rejection logic"],
+      "strongDiscriminators": ["repeatable discrete Q-address locking", "epoch-valid translation records or beacon-index relations"],
+      "commonFalseFriends": ["phase clocks for other Q systems", "state-cage-like containment"]
+    },
+    {
+      "familyKey": "n-manifold",
+      "familyName": "N-Dimensional Manifold Drive",
+      "class": "true-ftl",
+      "predictedMarkers": ["multi-axis topology/tomography sensors", "separate return-map certification", "axis/parity control", "hidden-obstacle inference"],
+      "strongDiscriminators": ["higher-dimensional route solution paired with return-map conditioning", "measured axis inversion or re-embedding control"],
+      "commonFalseFriends": ["3D navigation tomography", "fold topology solvers"]
+    },
+    {
+      "familyKey": "fold-jump",
+      "familyName": "Discrete Fold-Jump Drive",
+      "class": "true-ftl",
+      "predictedMarkers": ["origin/destination protected-volume modeling", "endpoint covariance and occupancy exclusion", "hard precommit logic", "closure/ringing recovery"],
+      "strongDiscriminators": ["temporary adjacency signature between certified finite volumes", "topology solution with little/no post-commit steering authority"],
+      "commonFalseFriends": ["gate aperture geometry", "generic endpoint navigation"]
+    },
+    {
+      "familyKey": "wormhole-gate",
+      "familyName": "Anchored Wormhole / Gate Transit",
+      "class": "true-ftl",
+      "predictedMarkers": ["persistent or repeatedly stabilized throat/aperture structures", "paired-mouth synchronization", "anchor systems", "mass-flux/traffic controls", "chronology protection"],
+      "strongDiscriminators": ["maintained multiply connected topology with remote-mouth state", "paired-mouth authentication/synchronization records"],
+      "commonFalseFriends": ["annular fold machinery", "large docking apertures", "industrial field rings"]
+    },
+    {
+      "familyKey": "phase-displacement",
+      "familyName": "Quantum Phase Displacement",
+      "class": "true-ftl",
+      "predictedMarkers": ["macroscopic state mapping", "continuity-invariant certification", "target-state compatibility solver", "reconciliation/recovery systems"],
+      "strongDiscriminators": ["state-transfer records using explicit continuity/target-state invariants", "whole-object state mapping linked to nonlocal displacement"],
+      "commonFalseFriends": ["Q-MAP records", "Q-Lattice state addressing", "medical/fabrication state scanners"]
+    },
+    {
+      "familyKey": "inertial-torch",
+      "familyName": "Relativistic Inertial Torch",
+      "class": "non-ftl-control",
+      "predictedMarkers": ["reaction/beam/plasma momentum exchange", "high thermal/reaction mass handling", "continuous thrust load paths"],
+      "strongDiscriminators": ["measured causal momentum exchange sufficient to explain propulsion without nonlocal operator"],
+      "commonFalseFriends": ["high-energy conditioning shared with FTL support plant"]
+    }
+  ],
+  "currentArNockDerelictCase": {
+    "state": "UNRESOLVED",
+    "bestHypothesis": null,
+    "confidenceClass": "INSUFFICIENT_FAMILY_DISCRIMINATING_EVIDENCE",
+    "reason": "Current confirmed archive evidence constrains species engineering and vessel condition but does not expose a family-discriminating transit operator.",
+    "familyAssignmentAllowed": false,
+    "doNotInferFrom": ["biological construction", "cultivated neural computation", "annular appearance alone", "vibration controls", "damaged networks", "deep-space location", "Q-MAP presence"],
+    "nextDiscriminatingTests": [
+      {"priority": 1, "test": "Passive residual-field and topology survey while all suspect machinery remains unpowered.", "hazard": "LOW", "goal": "Find persistent metric, Q-state, topology, dimensional, or throat residuals without stimulating unknown machinery."},
+      {"priority": 2, "test": "Map power/cooling/nutrient/data routes into inaccessible propulsion-scale compartments.", "hazard": "LOW_TO_MODERATE", "goal": "Determine whole-vessel versus local machinery geometry and identify isolated recovery reserves."},
+      {"priority": 3, "test": "Recover navigation and timing records with ancestry-preserving translation.", "hazard": "LOW", "goal": "Look for route vocabulary: gravity planes, Q-address epochs, manifold axes, endpoint volumes, paired mouths, or target-state compatibility."},
+      {"priority": 4, "test": "Low-authority reversible stimulation of already isolated candidate field structures.", "hazard": "MODERATE", "goal": "Measure operator-specific response without entering a commit-capable state."},
+      {"priority": 5, "test": "Family-specific certification only after at least one operator-level discriminator is observed.", "hazard": "VARIABLE", "goal": "Confirm or falsify the leading hypothesis with an independent evidence lineage."}
+    ]
+  },
+  "api": {
+    "resolver": "resolveTransitForensics",
+    "inputs": ["subject", "observations", "damageModel", "instrumentCapabilities", "sourceSnapshot", "authorityMode"],
+    "outputs": ["classificationState", "admissibleHypotheses", "rankedHypotheses", "contradictions", "evidenceGroups", "nextDiscriminatingTests", "hazardWarnings", "provenanceGraph", "canonWarnings"],
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"],
+    "classificationStates": ["UNRESOLVED", "CANDIDATE_SET", "PROVISIONAL_FAMILY", "CONFIRMED_BY_NAMED_SOURCE", "CONFIRMED_BY_OPERATOR_EVIDENCE"],
+    "noAutoPromotion": true
+  },
+  "provenance": {
+    "sourceGraph": [
+      "foundation-lore.json#arnock-derelict -> confirmed vessel observations",
+      "foundation-lore.json#arnock-species -> confirmed species constraints",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md -> family operators and authority order",
+      "ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md -> family-neutral Ar'nock embodiment constraints",
+      "ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md -> family-conditioned hypothetical embodiments",
+      "The different lightspeed methods -> design requirement for family-specific hazards, sensors, safety margins, mathematics, and documentation",
+      "forensic resolver -> labeled discrimination logic"
+    ],
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "canonGuards": [
+    "Do not assign the Ar'nock derelict an FTL family from species style, biological construction, or visual resemblance.",
+    "Do not equate Q-MAP with Quantum Phase Displacement without a source establishing that identity.",
+    "Do not treat generated embodiment records as evidence that the derelict actually contains that family.",
+    "Do not count descendants of one evidence source as independent confirmation.",
+    "Do not treat missing markers as contradictions unless detectability under the current damage state is demonstrated.",
+    "Do not stimulate unknown machinery past a reversible low-authority state merely to improve classification.",
+    "Do not invent manufacturer, inventor, age, Path level, T-tier, range, speed, or historical ownership.",
+    "Do not collapse family-specific signatures into one generic FTL signature score.",
+    "Preserve UNRESOLVED when evidence is insufficient.",
+    "A higher-authority named vessel or installation source overrides this derived resolver within its scope."
+  ]
+}
