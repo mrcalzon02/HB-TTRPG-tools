@@ -9,6 +9,9 @@
     'protected_recovery',
     'hazard_observability'
   ];
+  const BASIS_ALIASES = Object.freeze({
+    TERRESTRIAL_ELECTROMECHANICAL: 'TERRESTRIAL_ELECTROMECHANICAL_INDUSTRIAL'
+  });
 
   let registryPromise = null;
 
@@ -23,6 +26,11 @@
       .toUpperCase()
       .replace(/[^A-Z0-9]+/g, '_')
       .replace(/^_+|_+$/g, '');
+  }
+
+  function technologyBasisKey(value) {
+    const key = normalizedKey(value);
+    return BASIS_ALIASES[key] || key;
   }
 
   async function loadRegistry() {
@@ -204,7 +212,7 @@
 
   async function resolveFTLControlEmbodiment(context = {}) {
     const registry = await loadRegistry();
-    const basisKey = normalizedKey(context.technologyBasis);
+    const basisKey = technologyBasisKey(context.technologyBasis);
     const namedKey = normalizedKey(context.namedProfile);
     const base = registry.technologyBases[basisKey];
     const named = namedKey ? registry.namedProfiles[namedKey] : null;
@@ -263,7 +271,7 @@
       return {
         ...result,
         status: 'UNRESOLVED',
-        technologyBasis: result.resolvedBasis || normalizedKey(context.technologyBasis) || null,
+        technologyBasis: result.resolvedBasis || technologyBasisKey(context.technologyBasis) || null,
         basisClass: null,
         provenanceClass: 'UNRESOLVED',
         transitFamily: typeof result.transitFamily === 'object' ? result.transitFamily.family : (context.transitFamily || 'UNRESOLVED'),
