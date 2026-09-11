@@ -22,7 +22,7 @@
 
   const NONLOCAL_DECISION_FAMILIES = new Set(['fold-jump', 'q-lattice', 'phase-displacement']);
 
-  const finite = (value) => Number.isFinite(Number(value));
+  const finite = (value) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
   const num = (value) => Number(value);
   const clamp01 = (value) => Math.max(0, Math.min(1, num(value)));
 
