@@ -79,12 +79,9 @@
       const state = module.mapEditorState || null;
       document.dispatchEvent(new CustomEvent('module-map-editor-new-module',{detail:{module,state,title:module.title || module.id}}));
       if(state){
-        const importBox = document.querySelector('#mme-import');
-        const importButton = document.querySelector('#mme-import-json');
-        if(importBox && importButton){
-          importBox.value = JSON.stringify(state,null,2);
-          importButton.click();
-        }
+        if(typeof window.loadModuleMapEditorState !== 'function') throw new Error('Map editor state loader is unavailable.');
+        const loaded = window.loadModuleMapEditorState(state,{message:`Loaded editable map for ${module.title || module.id}.`});
+        if(!loaded) throw new Error('Editable map state could not be loaded.');
       }
       importStatus(`Restored session draft · ${module.title || module.id}`);
     }catch(error){
