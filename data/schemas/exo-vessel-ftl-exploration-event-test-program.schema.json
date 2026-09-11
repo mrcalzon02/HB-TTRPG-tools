@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-exploration-event-test-program.schema.json",
+  "title": "Black Light FTL Exploration Event and Test Program Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "registryKey",
+    "title",
+    "authority",
+    "eventLedger",
+    "instrumentInstances",
+    "testProgram",
+    "hazardModel",
+    "abortModel",
+    "comparisonModel",
+    "replayModel",
+    "familySpecificSafeguards",
+    "api",
+    "provenance",
+    "canonGuards"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.exploration-event-test-program"},
+    "title": {"type": "string"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "eventLedger": {"$ref": "#/$defs/eventLedger"},
+    "instrumentInstances": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/instrumentInstance"}
+    },
+    "testProgram": {"$ref": "#/$defs/testProgram"},
+    "hazardModel": {"$ref": "#/$defs/hazardModel"},
+    "abortModel": {"$ref": "#/$defs/abortModel"},
+    "comparisonModel": {"$ref": "#/$defs/comparisonModel"},
+    "replayModel": {"$ref": "#/$defs/replayModel"},
+    "familySpecificSafeguards": {
+      "type": "object",
+      "minProperties": 8,
+      "additionalProperties": {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    },
+    "api": {"$ref": "#/$defs/api"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "canonGuards": {
+      "type": "array",
+      "minItems": 8,
+      "items": {"type": "string"}
+    }
+  },
+  "$defs": {
+    "authority": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["status", "scope", "sourceOrder", "designSource"],
+      "properties": {
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]},
+        "scope": {"type": "string"},
+        "sourceOrder": {"type": "array", "items": {"type": "string"}},
+        "designSource": {
+          "type": "object",
+          "required": ["title", "documentId", "revisionId"],
+          "properties": {
+            "title": {"type": "string"},
+            "documentId": {"type": "string"},
+            "revisionId": {"type": "string"}
+          }
+        }
+      }
+    },
+    "eventLedger": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["immutabilityRule", "eventTypes", "requiredFields", "supersessionRule", "epochRule"],
+      "properties": {
+        "immutabilityRule": {"type": "string"},
+        "eventTypes": {"type": "array", "minItems": 8, "items": {"type": "string"}},
+        "requiredFields": {"type": "array", "minItems": 12, "items": {"type": "string"}},
+        "supersessionRule": {"type": "string"},
+        "epochRule": {"type": "string"}
+      }
+    },
+    "instrumentInstance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["instanceId", "instrumentClass", "status", "calibrationState", "referenceAncestry", "damageState"],
+      "properties": {
+        "instanceId": {"type": "string"},
+        "instrumentClass": {"type": "string"},
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]},
+        "calibrationState": {"type": "string"},
+        "referenceAncestry": {"type": "array", "items": {"type": "string"}},
+        "damageState": {"type": "string"}
+      }
+    },
+    "testProgram": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["states", "admissionRule", "objectiveFunction", "requiredPlanFields", "executionRule", "completionRule"],
+      "properties": {
+        "states": {"type": "array", "minItems": 6, "items": {"type": "string"}},
+        "admissionRule": {"type": "string"},
+        "objectiveFunction": {"type": "string"},
+        "requiredPlanFields": {"type": "array", "minItems": 10, "items": {"type": "string"}},
+        "executionRule": {"type": "string"},
+        "completionRule": {"type": "string"}
+      }
+    },
+    "hazardModel": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["hazardVector", "riskExpression", "unknownHazardRule", "contaminationRule"],
+      "properties": {
+        "hazardVector": {"type": "string"},
+        "riskExpression": {"type": "string"},
+        "unknownHazardRule": {"type": "string"},
+        "contaminationRule": {"type": "string"}
+      }
+    },
+    "abortModel": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["abortEnvelope", "hardAbortRule", "latencyRule", "recoveryReserveRule"],
+      "properties": {
+        "abortEnvelope": {"type": "string"},
+        "hardAbortRule": {"type": "string"},
+        "latencyRule": {"type": "string"},
+        "recoveryReserveRule": {"type": "string"}
+      }
+    },
+    "comparisonModel": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["prePostRule", "differenceExpression", "covarianceRule", "causalityRule"],
+      "properties": {
+        "prePostRule": {"type": "string"},
+        "differenceExpression": {"type": "string"},
+        "covarianceRule": {"type": "string"},
+        "causalityRule": {"type": "string"}
+      }
+    },
+    "replayModel": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["stateTransition", "determinismRule", "correctionRule", "branchRule"],
+      "properties": {
+        "stateTransition": {"type": "string"},
+        "determinismRule": {"type": "string"},
+        "correctionRule": {"type": "string"},
+        "branchRule": {"type": "string"}
+      }
+    },
+    "api": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["planner", "executor", "replayer", "familyAutoSelection", "authorityModes"],
+      "properties": {
+        "planner": {"type": "string"},
+        "executor": {"type": "string"},
+        "replayer": {"type": "string"},
+        "familyAutoSelection": {"const": false},
+        "authorityModes": {
+          "type": "array",
+          "items": {"enum": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"]}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["requiredChain", "independenceRule", "generatorRule"],
+      "properties": {
+        "requiredChain": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+        "independenceRule": {"type": "string"},
+        "generatorRule": {"type": "string"}
+      }
+    }
+  }
+}
