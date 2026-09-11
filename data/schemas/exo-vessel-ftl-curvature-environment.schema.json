@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-curvature-environment.schema.json",
+  "title": "Black Light FTL Physical Gravity and Curvature Environment Packet",
+  "description": "SI-unit validation boundary for weak-field gravitational environment packets used by Black Light transit safety models. It does not establish fictional FTL physics or convert derived environmental metrics into setting canon.",
+  "type": "object",
+  "required": ["schemaVersion", "status", "referenceFrame", "fieldPoint", "sources", "metrics", "validity", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"type": "string", "enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+    "referenceFrame": {"type": "string", "minLength": 1},
+    "fieldPoint": {"$ref": "#/$defs/vector3"},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "metrics": {"$ref": "#/$defs/metrics"},
+    "validity": {
+      "type": "object",
+      "required": ["weakFieldApproximation", "slowSourceMotion", "pointMassApproximation", "notes"],
+      "properties": {
+        "weakFieldApproximation": {"type": ["boolean", "null"]},
+        "slowSourceMotion": {"type": ["boolean", "null"]},
+        "pointMassApproximation": {"type": ["boolean", "null"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "uncertainty": {
+      "type": ["object", "null"],
+      "description": "Covariance or bounded uncertainty supplied by the measurement/model authority. Missing uncertainty remains missing rather than zero.",
+      "additionalProperties": true
+    },
+    "provenance": {"type": "array", "items": {"type": "object"}}
+  },
+  "$defs": {
+    "vector3": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": {"type": "number"},
+        "y": {"type": "number"},
+        "z": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["sourceId", "massKg", "positionM"],
+      "properties": {
+        "sourceId": {"type": "string", "minLength": 1},
+        "massKg": {"type": "number", "exclusiveMinimum": 0},
+        "positionM": {"$ref": "#/$defs/vector3"},
+        "angularMomentumKgM2PerS": {"$ref": "#/$defs/vector3"},
+        "physicalRadiusM": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "provenanceStatus": {"type": "string", "enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED"]}
+      },
+      "additionalProperties": true
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["potentialM2PerS2", "accelerationMPerS2", "tidalTensorPerS2", "tidalFrobeniusPerS2", "maxTidalEigenvaluePerS2", "minimumSchwarzschildRadiusRatio", "maxSingleSourceKretschmannPerM4"],
+      "properties": {
+        "potentialM2PerS2": {"type": ["number", "null"]},
+        "accelerationMPerS2": {"$ref": "#/$defs/vector3nullable"},
+        "accelerationMagnitudeMPerS2": {"type": ["number", "null"], "minimum": 0},
+        "tidalTensorPerS2": {
+          "oneOf": [
+            {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+            {"type": "null"}
+          ]
+        },
+        "tidalFrobeniusPerS2": {"type": ["number", "null"], "minimum": 0},
+        "maxTidalEigenvaluePerS2": {"type": ["number", "null"]},
+        "minimumSchwarzschildRadiusRatio": {"type": ["number", "null"], "minimum": 0},
+        "maxSingleSourceKretschmannPerM4": {"type": ["number", "null"], "minimum": 0},
+        "maxSingleSourceCurvatureScalePerM2": {"type": ["number", "null"], "minimum": 0},
+        "lenseThirringRadPerS": {"$ref": "#/$defs/vector3nullable"},
+        "dimensionlessPotentialDepth": {"type": ["number", "null"], "minimum": 0}
+      },
+      "additionalProperties": true
+    },
+    "vector3nullable": {
+      "oneOf": [
+        {"$ref": "#/$defs/vector3"},
+        {"type": "null"}
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-blacklight-authority": {
+    "status": "DERIVED",
+    "physicsRule": "Newtonian potential/acceleration and point-mass tidal tensors are weak-field approximations. Schwarzschild Kretschmann curvature is evaluated per isolated source and is not linearly summed as an exact multi-body invariant.",
+    "canonRule": "This packet describes a physically based environment model. It cannot establish a transit family, racial capability, fictional coupling constant, or safe route by itself.",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  }
+}
