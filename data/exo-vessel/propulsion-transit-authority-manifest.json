@@ -49,7 +49,9 @@
     "data/schemas/exo-vessel-ftl-route-safety-integration.schema.json",
     "blacklight-exo-ftl-route-safety-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_SAFETY_INTEGRATION_MANUAL.md",
-    "docs/blacklight/BLACK_LIGHT_FTL_LIVE_ROUTE_CERTIFICATION_INTERFACE_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_LIVE_ROUTE_CERTIFICATION_INTERFACE_MANUAL.md",
+    "data/schemas/exo-vessel-ftl-live-route-certification.schema.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_SELECTION_SAFETY_ENVELOPE_MANUAL.md"
   ],
   "familyTechnicalVolumes": [
     "docs/blacklight/BLACK_LIGHT_FTL_METRIC_COMPRESSION_TECHNICAL_VOLUME.md",
@@ -112,7 +114,8 @@
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
-    "blacklight-exo-ftl-certification-ui.js"
+    "blacklight-exo-ftl-certification-ui.js",
+    "blacklight-exo-ftl-dossier-chapters-certification.js"
   ],
   "integrationRules": [
     "This manifest indexes authority; it does not reorder it.",
@@ -124,7 +127,9 @@
     "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon.",
     "Calibration profile identity and version must be retained by any numerical safety certificate that depends on it.",
     "Generated capability and route safety certification are separate outputs; REJECTED, UNRESOLVED, and CONFLICT states may not be flattened into ordinary certified performance.",
-    "The live EXO FTL certification UI must preserve the generated family when the family selector is random and must embed the route-safety certificate in exported dossiers."
+    "The live EXO FTL certification UI must preserve the generated family when the family selector is random and must embed the route-safety certificate in exported dossiers.",
+    "The live EXO FTL route selector must visibly retain certification state for every evaluated route and guard blocked alternatives without erasing the failed selected route needed for diagnosis.",
+    "The safety-envelope presentation must expose gravity retention, calculation retention, actionable lookahead, recovery reserve, and hazard observability as separate constraints rather than averaging them into a synthetic safety percentage."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, and live route-certification additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, and selector-envelope additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
