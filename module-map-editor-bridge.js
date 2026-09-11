@@ -116,6 +116,13 @@
       return false;
     }
     const x=Number(selected.dataset.x), y=Number(selected.dataset.y);
+    const current=window.getModuleMapEditorState?.()?.cells?.[y]?.[x];
+    if(!Number.isInteger(x)||!Number.isInteger(y)||!current){
+      fillerStatus('Selected tile coordinates are invalid or no longer exist in the current map.');
+      return false;
+    }
+    const originalNotes=notes.value;
+    const originalType=typeSelect.value;
     const appended=String(notesAppend || '').trim();
     if(appended) notes.value=[notes.value.trim(),appended].filter(Boolean).join('\n\n');
     if(type) typeSelect.value=type;
@@ -124,7 +131,9 @@
     apply.click();
     const updated=window.getModuleMapEditorState?.()?.cells?.[y]?.[x];
     if(!updated || updated.type!==expectedType || String(updated.meta?.notes || '')!==expectedNotes){
-      fillerStatus('Selected tile update could not be verified.');
+      notes.value=originalNotes;
+      typeSelect.value=originalType;
+      fillerStatus('Selected tile update could not be verified; pending inspector changes were restored.');
       return false;
     }
     return true;
