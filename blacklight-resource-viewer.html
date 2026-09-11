@@ -64,6 +64,8 @@
       text-align: left;
       vertical-align: top;
     }
+    .resource-document [data-align="center"] { text-align: center; }
+    .resource-document [data-align="right"] { text-align: right; }
     .resource-error {
       color: #ffb4b4;
       font-weight: 800;
@@ -117,6 +119,47 @@
           return `<a href="${escapeHtml(safeHref)}">${label}</a>`;
         });
 
+      const splitTableRow = value => value.trim()
+        .replace(/^\|/, '')
+        .replace(/\|$/, '')
+        .split('|')
+        .map(cell => cell.trim());
+
+      const tableAlignment = divider => {
+        const left = divider.startsWith(':');
+        const right = divider.endsWith(':');
+        if (left && right) return 'center';
+        if (right) return 'right';
+        return 'left';
+      };
+
+      const isTableDivider = value => {
+        const cells = splitTableRow(value);
+        return cells.length > 0 && cells.every(cell => /^:?-{3,}:?$/.test(cell));
+      };
+
+      const renderMarkdownTable = (headerLine, dividerLine, bodyLines) => {
+        const headers = splitTableRow(headerLine);
+        const dividers = splitTableRow(dividerLine);
+        const width = headers.length;
+        if (width < 1 || dividers.length !== width) return null;
+
+        const alignments = dividers.map(tableAlignment);
+        const renderCell = (tag, value, index) => {
+          const alignment = alignments[index] || 'left';
+          const attribute = alignment === 'left' ? '' : ` data-align="${alignment}"`;
+          return `<${tag}${attribute}>${inlineMarkdown(value || '')}</${tag}>`;
+        };
+
+        const head = `<thead><tr>${headers.map((cell, index) => renderCell('th', cell, index)).join('')}</tr></thead>`;
+        const rows = bodyLines.map(line => {
+          const cells = splitTableRow(line);
+          const normalized = Array.from({ length: width }, (_unused, index) => cells[index] || '');
+          return `<tr>${normalized.map((cell, index) => renderCell('td', cell, index)).join('')}</tr>`;
+        }).join('');
+        return `<table>${head}<tbody>${rows}</tbody></table>`;
+      };
+
       const renderMarkdown = source => {
         const lines = source.replace(/\r\n?/g, '\n').split('\n');
         const output = [];
@@ -142,7 +185,8 @@
           code = [];
         };
 
-        for (const line of lines) {
+        for (let index = 0; index < lines.length; index += 1) {
+          const line = lines[index];
           if (/^```/.test(line)) {
             flushParagraph();
             closeList();
@@ -162,6 +206,23 @@
             const level = heading[1].length;
             output.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
             continue;
+          }
+
+          if (line.includes('|') && index + 1 < lines.length && isTableDivider(lines[index + 1])) {
+            const bodyLines = [];
+            let cursor = index + 2;
+            while (cursor < lines.length && lines[cursor].includes('|') && !/^\s*$/.test(lines[cursor])) {
+              bodyLines.push(lines[cursor]);
+              cursor += 1;
+            }
+            const table = renderMarkdownTable(line, lines[index + 1], bodyLines);
+            if (table) {
+              flushParagraph();
+              closeList();
+              output.push(table);
+              index = cursor - 1;
+              continue;
+            }
           }
 
           const unordered = line.match(/^\s*[-*+]\s+(.+)$/);
