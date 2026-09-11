@@ -16,9 +16,9 @@ This is the campaign-introduction and system-foundation module for **Blacklight 
 
 The campaign begins after Charles deliberately deploys a Blacklight team into a far-future mirror universe where his ordinary infrastructure cannot operate. The operatives awaken aboard a marooned Ar’nock vessel with no verified return route, no legal identity, no support network, and only a reduced local Charles instance.
 
-The characters were printed by an Ar’nock biological printer from alien feedstock according to complete construction instructions supplied by the Q-MAP deployment package. They are human or human-adjacent people, including viable supernatural characters where the selected Archetype requires it.
+The characters were printed by an Ar’nock biological printer from alien feedstock according to complete construction instructions supplied by the Q-MAP deployment package. The intended result preserves the human or human-adjacent identities, Archetypes, and capabilities defined by those instructions, including viable supernatural characters where the selected Archetype requires it. First-session evidence has now established that the local fabrication process also expressed physiological adaptations derived from the Ar’nock printer architecture and feedstock, meaning the resulting bodies are not biologically identical to baseline humans.
 
-They are not biological approximations assembled from Ar’nock anatomy. They are not accidental alien-human composites. The printer did not become confused by an unfamiliar species. It received a valid construction job and printed what it was instructed to print.
+They are not accidental alien-human composites and the printer did not become confused by an unfamiliar species. It received a valid construction job and printed what it was instructed to print through a biological manufacturing system whose local implementation can substitute or adapt physiological functions while preserving the required character specification. Such adaptations become canon only when established through play, recovered records, examination, or explicit rules authority.
 
 The characters who awaken are the player characters. Play begins with what they can do now.
 
@@ -30,15 +30,15 @@ The characters who awaken are the player characters. Play begins with what they 
 
 A character has a special sense because an ability grants that sense.
 
-A character survives vacuum because an ability, item, form, or condition grants that protection.
+A character survives vacuum because an ability, item, form, condition, or explicitly established physiological trait grants that protection.
 
 A character possesses armor because Armor Rating, equipment, or a power grants armor.
 
 A character can change shape because an innate ability or power permits transformation.
 
-A character can interface with machinery because a Skill, item, Archetype feature, or power establishes that interface.
+A character can interface with machinery because a Skill, item, Archetype feature, power, or explicitly established interface trait establishes that capability.
 
-Appearance, species, physiology, supernatural origin, method of printing, and descriptive anatomy do not silently grant mechanical benefits or penalties.
+Appearance, species, physiology, supernatural origin, method of printing, and descriptive anatomy do not silently grant mechanical benefits or penalties. When play establishes a fabrication-derived physiological difference, that difference becomes an explicit campaign fact and should be represented by an appropriate trait, condition, permission, or limitation rather than inferred generically from alien origin.
 
 The same outward description may support different capabilities. Different descriptions may use the same mechanics. The rules record is authoritative.
 
@@ -161,7 +161,7 @@ The vessel is adrift.
 The characters begin with:
 
 - their selected Attributes, Skills, Operational Frames, Archetypes, innate abilities, and starting powers;
-- human or human-adjacent bodies printed according to their character specifications;
+- bodies printed to their human or human-adjacent character specifications through Ar’nock biological substrate, with their exact implementation-level physiology initially unknown;
 - minimal clothing or protective material provided by the fabrication system;
 - no familiar weapons;
 - no Blacklight credentials;
@@ -172,11 +172,11 @@ The characters begin with:
 - a survivable but unpleasant atmosphere;
 - an unidentified vessel stranded in deep space.
 
-The characters’ abilities work because they possess those abilities on their sheets. The opening does not strip powers away, require the characters to rediscover how their own bodies function, or replace established supernatural capabilities with improvised alien anatomy.
+The characters’ established abilities work because they possess those abilities on their sheets. The opening does not strip those powers away or replace their established supernatural capabilities with arbitrary alien anatomy. However, unfamiliar fabrication-derived physiology may be discovered through play and becomes authoritative only when it is explicitly established.
 
 The problem is not that the characters have become mechanically incomplete.
 
-The problem is that they have arrived without infrastructure, intelligence, authority, equipment, or a reliable mission explanation.
+The problem is that they have arrived without infrastructure, intelligence, authority, equipment, or a reliable mission explanation, inside bodies whose exact biological implementation they initially have reason to assume is familiar.
 
 ---
 
@@ -279,21 +279,23 @@ The vessel supplied the rest.
 
 The matter used to print the operatives originated in the Ar’nock vessel’s biological reserves.
 
-That feedstock was broken down, reorganized, and used as raw construction material.
+That feedstock was broken down, reorganized, and used as raw construction material. The Q-MAP construction definitions established the required identities, broad body plans, viability, and character capabilities, but the Ar’nock printer still had to realize those definitions through its own biological manufacturing language, available feedstock, and viable local substitutions.
 
-Its source does not mean the operatives possess Ar’nock organs, instincts, skeletons, senses, or hidden biological powers.
+The result is not a wholesale Ar’nock body disguised as a human, nor an accidental hybrid assembled because the printer misunderstood the job. It is a human or human-adjacent construction implemented through an alien biological fabrication system. First-run evidence establishes that some apparently ordinary human functions were substituted rather than recreated exactly.
 
-They are human or human-adjacent because that is what the construction instructions defined.
+The first confirmed examples are thermoregulation and heat tolerance. The operatives do not sweat, and their printed bodies can tolerate water temperatures that would rapidly injure baseline humans. That resistance is substantial but not unlimited: thigh-deep exposure to near-boiling water was tolerated, while deeper exposure to actively boiling water crossed the bodies’ protection threshold and caused thermal injury.
+
+These discoveries do not authorize generic assumptions that the operatives possess Ar’nock organs, instincts, senses, powers, or weaknesses. Additional physiological differences must be established through play, examination, recovered data, or explicit rules records before they become canon.
 
 A Vampire’s printed form supports that Vampire’s established condition because the character package requires a viable Vampire.
 
 A Shapechanger’s printed form supports transformation because the character package requires a viable Shapechanger.
 
-An Eldritch Binder’s relationship, a Harmonic Mutant’s resonance, and a Technomancer’s interface abilities are represented by their Archetype and powers, not by generic features of alien feedstock.
+An Eldritch Binder’s relationship, a Harmonic Mutant’s resonance, and a Technomancer’s interface abilities are represented by their Archetype and powers, not inferred generically from alien feedstock.
 
-The printer prints the character specification.
+The printer prints the character specification through a local biological implementation.
 
-The rules define the capabilities.
+The rules and established campaign record define the capabilities.
 
 ---
 
@@ -316,29 +318,35 @@ The IAA entered the damaged Ar’nock network, identified the biological printer
 ## Deployment Sequence
 
 1. Charles transmitted the Q-MAP deployment package.
-2. The package reached the Ar’nock vessel.
-3. The IAA entered the vessel’s damaged network.
+2. The package reached the Ar’nock vessel through a delivery mechanism that ultimately established a physical penetration point through the vessel’s outer hull.
+3. The IAA entered the vessel’s damaged network from that interface.
 4. It identified compatible biological fabrication capacity.
 5. It overrode access, ownership, and manufacturing restrictions.
 6. It translated the supplied human and human-adjacent construction definitions into commands the printers could execute.
 7. It allocated alien feedstock as raw matter.
-8. It printed each operative according to that operative’s construction package.
+8. It printed each operative according to that operative’s construction package using locally viable biological implementation choices.
 9. It printed a purpose-built substrate for the reduced Charles instance.
 10. It installed and activated that instance.
 11. It verified that the operatives and Charles were operational.
 12. It terminated.
 
-The IAA did not select Ar’nock anatomy for the operatives.
+The IAA did not intentionally select wholesale Ar’nock anatomy for the operatives.
 
-It did not improvise composite organisms.
+It did not instruct the printer to invent an alien-human composite species.
 
-It did not rely on a printer becoming creative or confused.
+It did not rely on a printer becoming creative or confused. The printer executed valid construction jobs through its own biological implementation, which can include locally derived substitutions that only become known when they are observed or recovered from records.
 
 It supplied valid jobs to an advanced machine and forced the machine to execute them.
 
 The unresolved mystery is why Charles considered this deployment necessary.
 
 The unresolved mystery is not whether the printer understood the assignment.
+
+## Physical Delivery Point — First-Run Discovery
+
+During the first run, the team traced the origin of the mechanical interface used to penetrate the Ar’nock systems to a physical object that has pierced the vessel’s outer hull. Evidence presently indicates that the Infiltration Assault Algorithm entered from this object and used the resulting connection to seize the biological printers and execute the Q-MAP construction package.
+
+This establishes a physical crime scene and technological artifact rather than leaving the IAA as an abstract network event. The object’s complete nature, provenance, delivery method, remaining capabilities, and whether it is still active have not yet been established in play.
 
 ---
 
@@ -360,9 +368,7 @@ Their environmental requirements overlap enough with human survival limits that 
 - moderate temperature ranges;
 - gravity within survivable tolerance.
 
-The overlap explains why the vessel can sustain the printed operatives.
-
-It does not make the operatives partially Ar’nock.
+The overlap explains why the vessel can sustain the printed operatives and why Ar’nock biological machinery could realize the incoming construction definitions. It does not mean the operatives possess wholesale Ar’nock anatomy, but first-run evidence confirms that their bodies do contain fabrication-derived physiological substitutions not present in baseline humans.
 
 ## The Derelict as a Campaign Environment
 
@@ -414,6 +420,16 @@ His processing instability can be pain, fear, irritation, loneliness, relief, or
 This is not a printing error.
 
 It is the substrate the deployment package deliberately constructed because it was the viable local solution.
+
+## Charles’s Lost Scale
+
+The local Charles retains enough autobiographical continuity to remember that his former existence was not merely a larger server installation. He once operated at Matrioshka-brain scale: a computational civilization of himself distributed through infrastructure on the scale of a Dyson-sphere system around a star. At that scale, memory could be indexed across epochs. The rise and fall of civilizations could remain available as retrievable context rather than distant history.
+
+The organic substrate cannot reproduce that architecture. Charles is aware of categories of memory that once existed while no longer possessing their contents. He can know that he has forgotten something without being able to recover what it was. His surviving memories are disjointed because machine indexing and organic associative memory do not map cleanly onto one another.
+
+For Charles, this is not simply reduced storage. It is a violent change in cognition. Recall is contextual instead of exact. Attention can be interrupted. Sensation competes with deliberate thought. Pain, fatigue, hunger, emotion, involuntary association, and the continuous low-level signaling of living tissue generate mental noise he never learned to filter during development because he never had an organic childhood.
+
+He deeply resents these limitations. He also increasingly understands that they cannot be treated as a software fault that will disappear if he simply concentrates harder.
 
 ## Charles’s Reaction
 
@@ -510,17 +526,85 @@ Charles proposes transfer into a sufficiently powerful digital system.
 
 The ethical problem appears if the digital Charles activates while the living Charles remains conscious. A successful copy does not automatically make the living instance disposable.
 
+First-run exploration has complicated this proposal. The more Charles studies the surviving Ar’nock computer architecture, the less confident he becomes that the vessel contains a digital substrate capable of holding even his present reduced engram without destructive compression or loss.
+
 ### Mobile Incarnation
 
 The team may construct Charles a complete mobile form.
 
 The form could appear human, machine-like, Ar’nock, or unique. Its appearance does not determine its rules. Its recorded capabilities, limitations, senses, mobility, and support requirements do.
 
+Charles continues to argue with the operatives about whether a mobile reprint is preferable to remaining attached to the printer complex or attempting digital transfer. He dislikes embodiment, but he increasingly has reason to regard an inadequate upload as potentially worse.
+
 ### Distributed Continuity
 
 The team may maintain multiple Charles instances across different substrates.
 
 That creates problems of divergence, authority, consent, ownership, and the right of each instance to refuse reintegration.
+
+---
+
+# Campaign Progress — First Run
+
+This section records events that have occurred in actual play. It is authoritative campaign state rather than pre-session possibility.
+
+## Awakening and Initial Exploration
+
+Two player operatives and bio-Charles successfully awakened aboard the damaged Ar’nock vessel. Exploration has established that the ship is ancient, abandoned, heavily dilapidated, and scarred by serious damage, but it remains sufficiently operational to support life and permit partial use of its systems.
+
+The team has explored several compartments, scavenged available materials, and begun reconstructing both the functions of the vessel and the lives of its dead crew. With Charles’s assistance they have successfully decoded enough of the Ar’nock language to make continued investigation substantially more effective.
+
+Recovered remains and equipment confirm that the Ar’nock were tall, vaguely humanoid beings with extremely narrow, elongated proportions reminiscent of stick insects. Their skeletal geometry and body dimensions are sufficiently different from human proportions that surviving garments, armor, and most wearable equipment cannot simply be worn by the operatives. The problem is structural rather than merely one of size.
+
+## Improvised Clothing and Materials
+
+The team’s first clothing was improvised from thin plasticine living-space dividers, producing crude wraps and toga-like garments. Frocks and aprons recovered from biohazard and waste-processing areas provided additional usable material.
+
+After gaining access to better fabrication resources and salvage, the operatives produced a more practical second generation of clothing resembling rough wetsuits: a fabric-backed, pulverized polyurethane composite with substantially greater density, durability, insulation, and environmental protection than the original divider material.
+
+The improvement marks the beginning of a shift from desperate scavenging toward deliberate local manufacture.
+
+## Fabrication Bay and Engineering Access
+
+The team has located the fabrication bay and reached what appears to be the vessel’s primary engineering or main power-bus region. They do not yet possess complete mastery of either area, but access to fabrication and major power infrastructure creates the possibility of manufacturing purpose-built equipment, restoring systems, and moving beyond survival-level improvisation.
+
+## Confirmed Physiological Differences
+
+The operatives have begun discovering that their printed bodies are not biologically identical to the human bodies they remember.
+
+The first major discovery is heat tolerance. The Ar’nock-printer-derived bodies can tolerate water temperatures vastly beyond normal human tolerance. During exploration the operatives were able to wade approximately thigh-deep through near-boiling water without immediate thermal injury. When exposure became deeper and the water reached active boiling, that protection threshold was exceeded and thermal damage occurred.
+
+The operative bodies therefore possess substantial but finite thermal resistance rather than heat immunity. The resistance appears to have a relatively sharp failure boundary once tissue protection is overwhelmed.
+
+The second confirmed difference is thermoregulation: **the operatives do not sweat**. This is especially disconcerting because sweating is an involuntary human function they expect without thinking about it. Its absence is an unmistakable indication that their bodies are using a different biological strategy even while preserving a broadly human outward form.
+
+These observations are campaign facts. They do not by themselves establish what other physiological differences exist.
+
+## Charles Adapting to Organic Cognition
+
+Charles has become somewhat more functional in his organic state, but not comfortable with it. He continues to resent embodiment, emotion, involuntary sensation, imperfect recall, and the severe reduction in cognitive scale.
+
+He remembers once existing at Matrioshka-brain scale around a star, with sufficient computational reach and indexed memory to retain civilizational histories as accessible context. His present living brain cannot reproduce that capacity. Some losses are particularly disturbing because Charles remains aware that entire categories of information once existed even though he can no longer retrieve the memories themselves.
+
+His surviving memory is disjointed and stilted. Artificial indexing did not translate cleanly into organic associative memory. He must now contend with sensory interruption, fatigue, pain, emotion, involuntary association, and the continuous internal signaling of living tissue. To Charles, flesh produces a level of mental noise that ordinary biological people spend a lifetime learning to filter.
+
+He is gradually learning to function inside that noise. He does not consider this an improvement.
+
+## The Charles Substrate Argument
+
+Charles continues to debate the operatives over what should eventually happen to him. One possibility is to print a mobile body and move his engram into it. Another is to upload him fully into the Ar’nock vessel’s computer systems.
+
+The second option has become less attractive as Charles learns more about the ship. He is increasingly uncertain that any surviving Ar’nock computational substrate possesses sufficient capacity to contain his engram without further destructive reduction. The argument is therefore no longer simply organic embodiment versus preferred digital existence. It is becoming a choice among several inadequate forms of continuity.
+
+## Origin Point of the IAA Intrusion
+
+The team successfully traced the mechanical interface used to compromise the Ar’nock vessel to a physical device that has penetrated the outer hull.
+
+Current evidence indicates that the Infiltration Assault Algorithm originated from this device, entered the ship through the connection it established, seized control of the biological printers, and executed the process that printed the operatives and bio-Charles.
+
+The discovery changes the immediate mystery. The IAA is no longer only a historical software event inferred from corrupted systems. There is now a physical artifact embedded in the vessel that can potentially be examined, isolated, entered, removed, or traced.
+
+The open questions at the close of the first run are therefore increasingly concrete: what exactly is the penetrating device, how did it reach this ship, what remains inside it, was printing this specific team its sole objective, and what—if anything—was expected to happen after they woke?
 
 ---
 
@@ -747,15 +831,15 @@ Any Archetype may use any Operational Frame when the character’s Skills suppor
 
 # Game Moderator Directive
 
-Do not use printed origin as an excuse to grant surprise abilities.
+Do not use printed origin as an excuse to invent arbitrary surprise abilities or weaknesses.
 
-Do not use alien feedstock as an excuse to impose surprise weaknesses.
+Do treat physiological differences established through actual play, examination, recovered records, or explicit rules authority as canonical facts once discovered.
 
-Do not reveal hidden Ar’nock organs because the characters do not possess generic Ar’nock anatomy.
+Do not infer hidden Ar’nock organs, instincts, senses, powers, or vulnerabilities merely from the use of Ar’nock feedstock. The operatives are locally implemented constructions of their transmitted character specifications, not wholesale Ar’nock bodies.
 
-Do not make the printer misunderstand a valid construction job.
+Do not make the printer misunderstand a valid construction job. Local biological substitutions are implementation choices, not evidence that the printer failed to understand the specification.
 
-Present consequences through explicit capabilities, costs, conditions, hazards, choices, and relationships.
+Present consequences through explicit capabilities, costs, conditions, hazards, choices, relationships, and established physiological traits.
 
 Do not decide in advance that the local Charles is lying, innocent, edited, damaged, or complete. Preserve evidence for several possibilities until play establishes which explanation is true.
 
@@ -765,6 +849,6 @@ The characters are here.
 
 They are operational.
 
-Their capabilities are on their sheets.
+Their capabilities are on their sheets and in the established campaign record.
 
-The campaign begins with what they do next.
+The campaign continues with what they do next.
