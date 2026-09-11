@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-control-embodiment.schema.json",
+  "title": "Black Light FTL Control, Navigation & Maintenance Embodiment Registry",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registryKey",
+    "status",
+    "designIntentSource",
+    "authority",
+    "invariantSafetyChannels",
+    "technologyBases",
+    "namedProfiles",
+    "scalingModel",
+    "api",
+    "canonGuards"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.control-embodiment"},
+    "status": {"enum": ["DERIVED", "PROPOSED", "MIXED"]},
+    "designIntentSource": {
+      "type": "object",
+      "required": ["title", "documentId", "revisionId"],
+      "properties": {
+        "title": {"type": "string"},
+        "documentId": {"type": "string"},
+        "revisionId": {"type": "string"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["primary", "technologyBasis", "specificSourcePrecedence"],
+      "properties": {
+        "primary": {"type": "string"},
+        "technologyBasis": {"type": "string"},
+        "specificSourcePrecedence": {"type": "boolean"}
+      }
+    },
+    "invariantSafetyChannels": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["key", "meaning", "cannotBeDiscarded"],
+        "properties": {
+          "key": {"type": "string"},
+          "meaning": {"type": "string"},
+          "cannotBeDiscarded": {"const": true}
+        }
+      }
+    },
+    "technologyBases": {
+      "type": "object",
+      "minProperties": 7,
+      "additionalProperties": {"$ref": "#/$defs/embodiment"}
+    },
+    "namedProfiles": {
+      "type": "object",
+      "additionalProperties": {
+        "allOf": [
+          {"$ref": "#/$defs/embodiment"},
+          {
+            "type": "object",
+            "required": ["sourceStatus", "transitFamilyStatus", "sourcePaths"]
+          }
+        ]
+      }
+    },
+    "scalingModel": {
+      "type": "object",
+      "required": ["status", "principle", "variables"],
+      "properties": {
+        "status": {"enum": ["DERIVED", "PROPOSED"]},
+        "principle": {"type": "string"},
+        "variables": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "api": {
+      "type": "object",
+      "required": ["resolver", "inputs", "outputs"],
+      "properties": {
+        "resolver": {"const": "resolveFTLControlEmbodiment"},
+        "inputs": {"type": "array", "items": {"type": "string"}},
+        "outputs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "canonGuards": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "embodiment": {
+      "type": "object",
+      "required": [
+        "status",
+        "navigationRepresentation",
+        "sensorArchitecture",
+        "controlArchitecture",
+        "abortEmbodiment",
+        "maintenanceDoctrine",
+        "failureSignatures",
+        "serviceEnvironment",
+        "humanInteroperability",
+        "generatorRules"
+      ],
+      "properties": {
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED", "UNRESOLVED"]},
+        "sourceStatus": {"type": "string"},
+        "transitFamilyStatus": {"type": "string"},
+        "sourcePaths": {"type": "array", "items": {"type": "string"}},
+        "navigationRepresentation": {"type": "array", "items": {"type": "string"}},
+        "sensorArchitecture": {"type": "array", "items": {"type": "string"}},
+        "controlArchitecture": {"type": "array", "items": {"type": "string"}},
+        "abortEmbodiment": {"type": "array", "items": {"type": "string"}},
+        "maintenanceDoctrine": {"type": "array", "items": {"type": "string"}},
+        "failureSignatures": {"type": "array", "items": {"type": "string"}},
+        "serviceEnvironment": {"type": "array", "items": {"type": "string"}},
+        "humanInteroperability": {"enum": ["DIRECT", "ADAPTER_REQUIRED", "HOSTILE_WITHOUT_CONVERSION", "UNRESOLVED"]},
+        "generatorRules": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}
