@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.installation-archaeology",
+  "title": "Black Light FTL Installation Archaeology and Compartment Evidence Registry",
+  "authority": {
+    "status": "MIXED",
+    "scope": "DERIVED installation-archaeology authority constrained by CONFIRMED propulsion-family physics, forensic-identification rules, and named vessel/species evidence. It converts physical spaces and surviving installation evidence into provenance-safe observations without preselecting a transit family.",
+    "sourceOrder": [
+      "named vessel / installation / manufacturer sources",
+      "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
+      "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/ftl-forensic-identification-registry.json",
+      "docs/blacklight/BLACK_LIGHT_FTL_FORENSIC_TRANSIT_IDENTIFICATION_MANUAL.md",
+      "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+      "data/exo-vessel/arnock-ftl-family-embodiment-matrix.json",
+      "Google Drive: The different lightspeed methods",
+      "labeled derivation"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "archaeologyModel": {
+    "principles": [
+      "A room name is a conclusion, not an observation. Record geometry, connections, residues, machinery, damage, and surviving data before assigning function.",
+      "Installation topology is evidence: power, cooling, nutrient, structural, data, timing, field, and maintenance connections constrain what machinery could have done.",
+      "Damage modifies detectability and can create misleading analogues. A missing expected component is not a contradiction unless the relevant volume and evidence channel survived well enough to reveal it.",
+      "Inaccessible volumes remain explicit unknowns. The generator may not fill them with the component needed to rescue a preferred hypothesis.",
+      "Repeated displays derived from one sensor or archive ancestor remain one provenance lineage.",
+      "Reversible passive observations outrank destructive inspection when both can answer the same question.",
+      "Function labels promote only when independent evidence supports the physical role. Family labels require the separate forensic resolver's standards."
+    ],
+    "evidenceDomains": [
+      "GEOMETRY",
+      "STRUCTURAL_LOAD",
+      "POWER_DISTRIBUTION",
+      "THERMAL_COOLING",
+      "NUTRIENT_FLUIDIC",
+      "DATA_CONTROL",
+      "TIMING_REFERENCE",
+      "FIELD_RESIDUAL",
+      "GRAVIMETRY",
+      "Q_STATE",
+      "TOPOLOGY",
+      "VIBRATION_ACOUSTIC",
+      "CHEMICAL_BIOLOGICAL",
+      "MAINTENANCE_ACCESS",
+      "ARCHIVE_TELEMETRY",
+      "DAMAGE_PATTERN",
+      "EXTERNAL_INTERFACE",
+      "WAKE_DEPOSIT"
+    ],
+    "damageStates": ["INTACT", "DEGRADED", "PARTIALLY_REMOVED", "BREACHED", "BURNED_OR_DENATURED", "COLLAPSED", "UNKNOWN"],
+    "accessStates": ["DIRECT", "REMOTE_SENSOR", "PARTIAL_VIEW", "SEALED", "BLOCKED", "DESTROYED", "UNLOCATED"]
+  },
+  "compartmentModel": {
+    "nodeFields": [
+      "compartmentId",
+      "observedLabel",
+      "functionalHypotheses",
+      "geometry",
+      "accessState",
+      "damageState",
+      "machineryObjects",
+      "residueObservations",
+      "structuralInterfaces",
+      "serviceInterfaces",
+      "archiveObjects",
+      "instrumentCoverage",
+      "provenanceRefs",
+      "unknowns"
+    ],
+    "edgeFields": [
+      "from",
+      "to",
+      "edgeType",
+      "directionality",
+      "capacityClass",
+      "survivalState",
+      "observedOrInferred",
+      "provenanceRefs"
+    ],
+    "edgeTypes": ["STRUCTURAL", "POWER", "THERMAL", "FLUIDIC", "NUTRIENT", "DATA", "TIMING", "FIELD", "MAINTENANCE", "CREW_ACCESS", "CARGO", "EXTERNAL"],
+    "installationGraphRule": "Model a suspected transit installation as a multiplex graph G_I=(V,E_1...E_n). Different edge layers must not be collapsed into generic adjacency because field, power, structural, timing, and cooling topology carry different diagnostic meaning.",
+    "unknownVolumeRule": "A sealed, destroyed, blocked, or unlocated volume may hold unknown components, but no generated component inside it may be treated as observed evidence. It contributes uncertainty, not support."
+  },
+  "evidenceLifecycle": {
+    "states": ["OBSERVED_RAW", "NORMALIZED", "DEPENDENCY_TRACED", "DAMAGE_ADJUSTED", "FUNCTION_INTERPRETED", "FORENSIC_EXPORTED", "SUPERSEDED"],
+    "promotionRule": "An observation may be promoted to FUNCTION_INTERPRETED only when geometry or behavior plus at least one independent service/dependency, residue, telemetry, or load-path lineage supports the proposed role.",
+    "contaminationRule": "Opening, energizing, moving, cutting, flushing, healing, regrowing, or reconfiguring alien machinery can change residues and geometry. Pre-intervention state must be captured before mutation and later observations must identify the intervention ancestor.",
+    "destructiveTestRule": "Destructive inspection is admissible only when lower-hazard methods cannot answer a materially important question and the expected information gain justifies loss of future evidence."
+  },
+  "mathematics": {
+    "compartmentEvidenceWeight": "W_c = R_c * D_c * P_c * S_c, where R is observation reliability, D is damage-adjusted detectability, P is provenance independence, and S is spatial specificity in [0,1].",
+    "dependencyCentrality": "C_d(v) = sum_l alpha_l * C_l(v), where C_l is centrality in a service layer such as power, timing, field, thermal, structural, or data. Coefficients are DERIVED and scenario-specific.",
+    "geometryConsistency": "G_f = exp(-0.5 * delta_g^T Sigma_g^-1 delta_g), a DERIVED fit measure between observed installation geometry and the family-conditioned geometry predicted by confirmed operator physics. It is a ranking aid, not canon probability.",
+    "damageAdjustedAbsence": "A^-_m = I_m * V_m * S_m * (1-D_m), where instrument capability I, observed-volume coverage V, expected marker survivability S, and destructive damage fraction D determine whether absence is meaningful.",
+    "informationGain": "U_T = IG(T) / (1 + lambda_h H_T + lambda_d D_T + lambda_c C_T), balancing expected family/function information gain against hazard, evidence destruction, and contamination.",
+    "familyEvidenceExport": "E_export = {channel, observation, reliability, detectability, provenanceGroup, spatialRef, damageContext, familyLikelihoodVector, contradictions}. Family promotion remains the responsibility of resolveTransitForensics()."
+  },
+  "inspectionProgram": [
+    {"id": "IA-01", "name": "Pre-Entry Exterior and Residual Survey", "mode": "PASSIVE", "purpose": "Capture external geometry, hull discontinuities, field residues, thermal state, structural scars, and possible external apertures before internal intervention."},
+    {"id": "IA-02", "name": "Compartment Geometry Census", "mode": "PASSIVE", "purpose": "Assign neutral compartment IDs, measure dimensions, interfaces, equipment distribution, inaccessible boundaries, and whole-vessel spatial relationships without assuming room function."},
+    {"id": "IA-03", "name": "Multiplex Dependency Mapping", "mode": "PASSIVE_TO_LOW_AUTHORITY", "purpose": "Trace power, cooling, nutrient, timing, data, field, structural, and maintenance routes to identify installation-scale clusters and independent recovery reserves."},
+    {"id": "IA-04", "name": "Residue and Damage Stratigraphy", "mode": "PASSIVE", "purpose": "Separate operating residues, accident products, post-accident decay, later repairs, biological regrowth, and investigator contamination."},
+    {"id": "IA-05", "name": "Archive and Telemetry Ancestry Recovery", "mode": "PASSIVE", "purpose": "Recover route, maintenance, timing, control, alarm, and configuration records while preserving source ancestry and translation uncertainty."},
+    {"id": "IA-06", "name": "Functional Hypothesis Review", "mode": "ANALYTIC", "purpose": "Assign bounded machinery-role hypotheses only after geometry and dependency evidence support them; export operator-level observations to the family forensic resolver."},
+    {"id": "IA-07", "name": "Low-Authority Reversible Excitation", "mode": "CONTROLLED", "purpose": "Stimulate isolated components below commit-capable authority to measure response where passive evidence is insufficient."},
+    {"id": "IA-08", "name": "Post-Intervention Recertification", "mode": "ANALYTIC", "purpose": "Re-measure geometry and dependencies after cutting, repair, biological healing, regrowth, relocation, or energization so altered evidence is never mistaken for original state."}
+  ],
+  "equipmentClasses": [
+    {"name": "installation geometry mapper", "status": "DERIVED", "function": "Creates compartment and interface geometry with uncertainty bounds."},
+    {"name": "multiplex service tracer", "status": "DERIVED", "function": "Separates and traces power, thermal, fluidic, nutrient, data, timing, and field networks."},
+    {"name": "structural load-path imager", "status": "DERIVED", "function": "Maps reinforcement, cyclic loading scars, mounting reactions, and force transfer into the hull."},
+    {"name": "residual field spectrometer", "status": "DERIVED", "function": "Records metric, gravitic, Q-state, topology, electromagnetic, and other field residues without assuming family identity."},
+    {"name": "damage stratigraphy workstation", "status": "DERIVED", "function": "Orders fractures, burns, denaturation, regrowth, corrosion, repairs, and contamination into a relative sequence."},
+    {"name": "archive ancestry recorder", "status": "DERIVED", "function": "Maintains source, translation, clock, checksum, and derivative ancestry for recovered data."},
+    {"name": "biological machinery viability scanner", "status": "DERIVED", "function": "Separates living, dormant, necrotic, repaired, and regrown regions without equating biological state with function."},
+    {"name": "reversible stimulus controller", "status": "DERIVED", "function": "Applies bounded energy or control inputs to isolated machinery while enforcing family-independent abort limits."},
+    {"name": "evidence contamination logger", "status": "DERIVED", "function": "Records every investigator action capable of changing geometry, chemistry, field residues, or data state."}
+  ],
+  "currentArNockCase": {
+    "state": "INSTALLATION_ARCHAEOLOGY_ACTIVE__FTL_FAMILY_UNRESOLVED",
+    "familyAssignment": null,
+    "knownInstallationFacts": [
+      "The vessel is an unidentified damaged Ar'nock vessel in deep space.",
+      "It contains biological printers, medical systems, cultivated computation, environmental controls, storage, fabrication feedstock, damaged networks, and inaccessible compartments.",
+      "Architecture reflects nonhuman ergonomic and sensory assumptions while remaining navigable by human-scale occupants.",
+      "The vessel lacks an immediately readable name, registry, destination, or complete surviving historical explanation.",
+      "Biological construction and cultivated computation do not identify an FTL family.",
+      "Inaccessible compartments are confirmed to exist but their contents are unresolved."
+    ],
+    "prioritySurveyProgram": [
+      "Freeze a neutral compartment numbering scheme before naming suspected propulsion spaces.",
+      "Build a whole-vessel map of high-capacity power, thermal, nutrient, data, timing, field, and structural routes.",
+      "Identify compartments with unusually high multiplex dependency centrality, isolated reserves, or whole-hull field connections.",
+      "Record pre-entry residues and damage state around every inaccessible propulsion-scale volume before breaching it.",
+      "Recover maintenance and route telemetry with provenance ancestry before attempting translation-driven functional naming.",
+      "Export only operator-level discriminators into resolveTransitForensics(); retain the family as UNRESOLVED until its promotion rule is met."
+    ],
+    "prohibitedShortcuts": [
+      "Do not call a room a Fold chamber, gate room, phase core, manifold bay, slipstream coupler, or lattice vault from appearance alone.",
+      "Do not place the preferred missing component inside an inaccessible compartment as if it were observed.",
+      "Do not use biological architecture as evidence for any specific transit family.",
+      "Do not treat Q-MAP presence as evidence for Quantum Phase Displacement.",
+      "Do not interpret post-investigation regrowth or reconfiguration as original geometry without a pre-intervention comparison."
+    ]
+  },
+  "api": {
+    "resolver": "resolveTransitInstallationArchaeology",
+    "inputs": ["subject", "compartments", "interfaces", "observations", "damageModel", "instrumentCapabilities", "interventionLog", "sourceSnapshot", "authorityMode"],
+    "outputs": ["installationGraph", "compartmentHypotheses", "dependencyClusters", "evidenceRecords", "damageStratigraphy", "unknownVolumes", "recommendedInspections", "forensicExports", "provenanceGraph", "canonWarnings"],
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"],
+    "familyResolver": "resolveTransitForensics",
+    "familyAutoSelection": false,
+    "mutationLoggingRequired": true
+  },
+  "provenance": {
+    "sourceGraph": [
+      "foundation-lore.json#arnock-derelict -> confirmed vessel condition, inaccessible compartments, damaged networks and known systems",
+      "foundation-lore.json#arnock-species -> confirmed biological fabrication, cultivated computation, architecture and interface constraints",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md -> confirmed transit-family operator boundaries",
+      "ftl-forensic-identification-registry.json -> evidence channels, family fingerprints, damage-aware absence and promotion rules",
+      "arnock-ftl-family-embodiment-matrix.json -> labeled hypothetical family-conditioned Ar'nock embodiments only",
+      "The different lightspeed methods -> family-specific gravity hazards, safety margins, sensor growth, emergency behavior, mathematical and educational depth",
+      "installation archaeology registry -> labeled compartment/dependency/residue evidence model"
+    ],
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "canonGuards": [
+    "A compartment label generated by this layer is not historical canon unless a named source independently establishes it.",
+    "Do not assign the Ar'nock derelict an FTL family from biological machinery, room shape, annular structures, cultivated computation, or visual resemblance.",
+    "Do not count inaccessible volume as positive evidence for any family.",
+    "Do not treat absence as contradiction unless instrument capability, observed-volume coverage, marker survivability, and damage state support detectability.",
+    "Do not count multiple displays, translations, or derived records from one source ancestor as independent evidence.",
+    "Do not erase investigation contamination; every intervention capable of altering evidence must remain in provenance.",
+    "Do not treat repaired or regrown biological machinery as geometrically identical to its pre-damage state without measurement.",
+    "Do not energize unknown machinery to commit-capable authority solely to improve classification.",
+    "Do not invent manufacturer, inventor, date, range, speed, Path level, T-tier, or original mission from installation archaeology.",
+    "Do not equate Q-MAP with Quantum Phase Displacement without a higher-authority source.",
+    "Do not collapse power, timing, field, thermal, structural, and data topology into one generic connection graph.",
+    "Do not promote a functional machinery hypothesis to family identification; export evidence to the forensic resolver instead.",
+    "Preserve contradictions and unresolved alternatives rather than averaging them away.",
+    "Higher-authority named vessel or installation canon overrides this derived model within its scope."
+  ]
+}
