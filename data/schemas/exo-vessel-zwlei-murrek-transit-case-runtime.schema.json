@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-zwlei-murrek-transit-case-runtime.schema.json",
+  "title": "Zwlei Mur'rek Transit Runtime Case Record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "recordType",
+    "recordVersion",
+    "authority",
+    "caseId",
+    "epochModel",
+    "measurementAdmission",
+    "activeTestAdmission",
+    "discriminationExport",
+    "api",
+    "provenance",
+    "canonGuards"
+  ],
+  "properties": {
+    "recordType": {"const": "zwleiMurrekTransitCaseRuntimeContract"},
+    "recordVersion": {"const": "1.0.0"},
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "precedence", "designSource"]
+    },
+    "caseId": {"const": "NRS-MURREK-TRANSIT-CASE"},
+    "epochModel": {
+      "type": "object",
+      "required": [
+        "E0_ARCHIVE_BASELINE",
+        "E1_UNTOUCHED_PHYSICAL_SURVEY",
+        "E2_POST_ACCESS_STATE",
+        "E3_POST_STIMULATION_STATE",
+        "E4_POST_REPAIR_OR_REGROWTH"
+      ]
+    },
+    "measurementAdmission": {
+      "type": "object",
+      "required": ["requiresObservedTrue", "placeholderForbidden", "requiredFields", "negativeEvidenceRule"]
+    },
+    "activeTestAdmission": {
+      "type": "object",
+      "required": ["unknownFamilySafeEnvelopeRule", "requiredGates", "lossOfObservabilityRule"]
+    },
+    "discriminationExport": {
+      "type": "object",
+      "required": ["classificationState", "consolidatedFamily", "familyAutoSelection", "promotionRule"]
+    },
+    "api": {
+      "type": "object",
+      "required": ["runtime", "dependency", "functions", "familyAutoSelection"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceGraph", "designDocumentId", "designDocumentRevision", "replayRule"]
+    },
+    "canonGuards": {
+      "type": "array",
+      "minItems": 12,
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    }
+  }
+}
