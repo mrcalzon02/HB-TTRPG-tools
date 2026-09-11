@@ -257,9 +257,49 @@
     };
   }
 
-  root.BlackLightFTLControlEmbodiment = Object.freeze({
+  async function resolveLiveFTLControlEmbodiment(context = {}) {
+    const result = await resolveFTLControlEmbodiment(context);
+    if (result.status === 'UNRESOLVED') {
+      return {
+        ...result,
+        status: 'UNRESOLVED',
+        technologyBasis: result.resolvedBasis || normalizedKey(context.technologyBasis) || null,
+        basisClass: null,
+        provenanceClass: 'UNRESOLVED',
+        transitFamily: typeof result.transitFamily === 'object' ? result.transitFamily.family : (context.transitFamily || 'UNRESOLVED'),
+        transitFamilyProvenance: typeof result.transitFamily === 'object' ? `${result.transitFamily.source} / ${result.transitFamily.status}` : 'UNRESOLVED',
+        infrastructure: []
+      };
+    }
+
+    const family = result.transitFamily || {};
+    return {
+      ...result,
+      status: 'READY',
+      technologyBasis: result.resolvedBasis,
+      basisClass: result.resolvedBasis,
+      provenanceClass: result.status,
+      transitFamily: family.family || context.transitFamily || 'UNRESOLVED',
+      transitFamilyProvenance: `${family.source || 'unresolved'} / ${family.status || 'UNRESOLVED'}${family.hypotheticalAssociation ? ' / hypothetical-association' : ''}`,
+      infrastructure: copy(result.scaling && result.scaling.requirements || []),
+      originalStatus: result.status,
+      familyAssociation: copy(family)
+    };
+  }
+
+  const coreApi = Object.freeze({
     registryUrl: REGISTRY_URL,
     loadRegistry,
     resolveFTLControlEmbodiment
   });
+
+  const liveApi = Object.freeze({
+    registryUrl: REGISTRY_URL,
+    loadRegistry,
+    resolveFTLControlEmbodiment: resolveLiveFTLControlEmbodiment,
+    resolveCoreFTLControlEmbodiment: resolveFTLControlEmbodiment
+  });
+
+  root.BlackLightFTLControlEmbodiment = coreApi;
+  root.BlacklightExoFTLControlEmbodiment = liveApi;
 })(typeof window !== 'undefined' ? window : globalThis);
