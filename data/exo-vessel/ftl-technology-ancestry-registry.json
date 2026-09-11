@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.technology-ancestry",
+  "status": "MIXED",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "technologyBasis": "EXO_OPERATIVE_TECHNOLOGY_BASIS.md",
+    "controlEmbodiment": "data/exo-vessel/ftl-control-embodiment-registry.json",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    },
+    "precedence": [
+      "named installation/vessel/manufacturer/race source",
+      "consolidated propulsion/transit authority",
+      "explicit technology-basis source field",
+      "machine-readable registry",
+      "labeled derivation",
+      "labeled proposal"
+    ]
+  },
+  "originModes": {
+    "NATIVE": {"meaning": "Designed and manufactured inside the owning engineering tradition.", "provenanceRequirements": ["source naming the builder/manufacturer, or explicit native manufacture statement"]},
+    "LICENSED": {"meaning": "Built locally from an external design or production license.", "provenanceRequirements": ["licensor identity when known", "license/transfer evidence or explicit source statement"]},
+    "IMPORTED": {"meaning": "Externally manufactured hardware installed without implying local design origin.", "provenanceRequirements": ["external manufacturer/origin evidence", "installation provenance"]},
+    "CAPTURED": {"meaning": "Hardware obtained from an adversarial or nonconsensual source and retained in service or study.", "provenanceRequirements": ["capture/recovery evidence", "original origin if known"]},
+    "SALVAGED": {"meaning": "Recovered hardware whose original ownership or service history may be incomplete.", "provenanceRequirements": ["recovery provenance", "original origin retained separately when known"]},
+    "REVERSE_ENGINEERED": {"meaning": "Locally reproduced or adapted from studied external machinery.", "provenanceRequirements": ["source technology ancestry", "local redesign/reproduction evidence", "derived portions labeled"]},
+    "HYBRID": {"meaning": "One installation intentionally combines multiple engineering traditions or technology bases.", "provenanceRequirements": ["at least two retained origin records", "interface responsibilities and source ancestry remain distinct"]},
+    "UNKNOWN": {"meaning": "Origin cannot yet be established.", "provenanceRequirements": ["do not substitute owner, operator, species or visual style as origin"]}
+  },
+  "resolutionRules": {
+    "autoResolveTechnologyBasis": [
+      "Auto-resolution is allowed only from an explicit authoritative technology-basis field or an exact named-source mapping whose basis status is CONFIRMED.",
+      "A race/species name, polity, hull owner, operator, visual style, atmosphere or biology is not sufficient by itself.",
+      "If two or more CONFIRMED basis records materially participate in the installation, return MULTI_BASIS rather than selecting a majority basis.",
+      "DERIVED mappings may suggest candidate bases but may not populate a live selector as confirmed provenance.",
+      "UNRESOLVED evidence remains unresolved."
+    ],
+    "multiOriginPolicy": [
+      "Keep every origin record and its roles independently addressable.",
+      "Do not average provenance status across origins.",
+      "Do not replace a captured/imported subsystem's manufacturer with the current vessel owner.",
+      "Do not collapse reverse-engineered descendants into the source civilization once local redesign is documented.",
+      "Hybrid installations require explicit interface certification across power, timing, control, thermal/service, structural/field and recovery boundaries."
+    ],
+    "namedRacePolicy": [
+      "ZWLEI_MURREK remains without an automatic generic technology-basis assignment in this registry; its named hardware profile outranks generic basis styling.",
+      "ARNOCK remains without an automatic FTL-family assignment and without a universal all-technology biological-basis assumption.",
+      "Future named-race auto-resolution requires a source-backed exact mapping entered explicitly rather than pattern matching on names."
+    ]
+  },
+  "integrationModel": {
+    "status": "PROPOSED",
+    "purpose": "Physically grounded compatibility checks for mixed-origin transit installations without pretending that provenance alone determines performance.",
+    "interfaces": ["power", "timing_reference", "control_data", "thermal_or_service_environment", "structural_or_field_reference", "navigation_metrology", "recovery_abort"],
+    "equations": {
+      "controlCoordination": "Pi_c = L_interface / (v_signal * tau_response)",
+      "clockCoherence": "Pi_t = sigma_t / tau_phase",
+      "thermalCompatibility": "M_T = min_i((T_max_i - T_oper_i)/DeltaT_ref, (T_oper_i - T_min_i)/DeltaT_ref)",
+      "powerMargin": "M_P = (P_available - P_nominal - P_recovery_reserved) / max(P_nominal, epsilon)",
+      "recoveryCutSet": "R_survive = min_k R_k over every required recovery cut-set k"
+    },
+    "interpretation": [
+      "Pi_c << 1 indicates interface propagation delay is small relative to control response time; Pi_c near or above 1 demands regional autonomy or slower authority loops.",
+      "Pi_t << 1 indicates timing jitter is small relative to the phase/coherence window; rising Pi_t consumes calculation and control margin.",
+      "M_T <= 0 means at least one coupled subsystem is outside its certified thermal/service envelope.",
+      "M_P <= 0 means nominal operation consumes power needed for protected recovery or exceeds available supply.",
+      "R_survive is a weakest-cut-set quantity; abundant reserve in one origin cannot replace a missing recovery path in another."
+    ]
+  },
+  "generatorContract": {
+    "requiredOutput": ["ancestryClass", "origins", "basisResolution", "interfaceBoundaries", "provenance", "canonWarnings"],
+    "ancestryClasses": ["SINGLE_ORIGIN", "MULTI_ORIGIN", "MULTI_BASIS", "REVERSE_ENGINEERED_LINEAGE", "UNRESOLVED"],
+    "basisResolutionStates": ["CONFIRMED_SINGLE", "CONFIRMED_MULTI", "DERIVED_CANDIDATE", "UNRESOLVED", "CONFLICT"],
+    "prohibitedShortcuts": [
+      "owner equals manufacturer",
+      "race equals technology basis",
+      "operator equals inventor",
+      "captured hardware becomes native by continued use",
+      "reverse engineering erases source ancestry",
+      "majority component count determines safety authority"
+    ]
+  },
+  "canonGuards": [
+    "Preserve named-source canon over generic technology-basis inference.",
+    "Never assign an FTL family from technology ancestry alone.",
+    "Never assign a technology basis from race/species identity alone unless a higher-authority source explicitly establishes that mapping.",
+    "Mixed-origin and hybrid installations must retain every material ancestry record in exports.",
+    "Proposed compatibility mathematics are engineering models, not setting-wide measured constants.",
+    "Missing interface data must produce UNRESOLVED rather than zero or assumed compatibility.",
+    "A compatible interface does not imply common origin; an incompatible interface does not disprove historical integration if an adapter is documented.",
+    "Human-readable translation may not replace native control state or provenance.",
+    "Manufacturer, operator, owner, inventor and maintainer are separate roles unless a source explicitly unifies them."
+  ]
+}
