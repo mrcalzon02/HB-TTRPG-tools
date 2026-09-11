@@ -45,6 +45,54 @@
     URL.revokeObjectURL(url);
   }
 
+  function importStatus(message, isError=false){
+    const status = document.querySelector('#module-persistence-status');
+    if(!status) return;
+    status.textContent = message;
+    status.dataset.importState = isError ? 'error' : 'ok';
+  }
+
+  function normalizeImportedModule(value){
+    if(!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Expected a full module JSON object.');
+    if(Array.isArray(value.cells) || Array.isArray(value.rows)) throw new Error('This is map-only JSON. Import a full module draft exported from the Viewer.');
+    if(!value.id && !value.title) throw new Error('Module draft is missing both id and title.');
+    if(value.rooms != null && !Array.isArray(value.rooms)) throw new Error('Module rooms must be an array.');
+    if(value.doors != null && !Array.isArray(value.doors)) throw new Error('Module doors must be an array.');
+    if(value.mapEditorState && !Array.isArray(value.mapEditorState.cells)) throw new Error('Module mapEditorState is not a valid editable map.');
+    const module = structuredClone(value);
+    const key = String(module.id || module.title || `session-${Date.now()}`)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'') || `session-${Date.now()}`;
+    module.id = module.id || key;
+    module.path = `memory:${key}`;
+    module.rooms = Array.isArray(module.rooms) ? module.rooms : [];
+    module.doors = Array.isArray(module.doors) ? module.doors : [];
+    module.hotspots = Array.isArray(module.hotspots) ? module.hotspots : [];
+    return module;
+  }
+
+  async function importSessionModuleFile(file){
+    try{
+      const module = normalizeImportedModule(JSON.parse(await file.text()));
+      const state = module.mapEditorState || null;
+      document.dispatchEvent(new CustomEvent('module-map-editor-new-module',{detail:{module,state,title:module.title || module.id}}));
+      if(state){
+        const importBox = document.querySelector('#mme-import');
+        const importButton = document.querySelector('#mme-import-json');
+        if(importBox && importButton){
+          importBox.value = JSON.stringify(state,null,2);
+          importButton.click();
+        }
+      }
+      importStatus(`Restored session draft · ${module.title || module.id}`);
+    }catch(error){
+      console.error('Module draft import failed',error);
+      importStatus(`Draft import failed · ${error.message}`,true);
+    }
+  }
+
   function renderPersistenceStatus(detail){
     const root = document.getElementById('module-viewer-root');
     const toolbar = root?.querySelector('.module-viewer-toolbar');
@@ -67,6 +115,7 @@
     status.title = inMemory
       ? 'This module exists only in the current browser session until you export or otherwise persist it.'
       : 'This module was loaded from the project module index rather than created only in this browser session.';
+    delete status.dataset.importState;
 
     let exportButton = toolbar.querySelector('#module-session-export');
     if(!exportButton){
@@ -80,6 +129,33 @@
       toolbar.appendChild(exportButton);
     }
     exportButton.hidden = !inMemory || !state.module;
+
+    let importInput = toolbar.querySelector('#module-session-import-file');
+    if(!importInput){
+      importInput = document.createElement('input');
+      importInput.id = 'module-session-import-file';
+      importInput.type = 'file';
+      importInput.accept = '.json,application/json';
+      importInput.hidden = true;
+      importInput.addEventListener('change',async event=>{
+        const file = event.target.files?.[0];
+        if(file) await importSessionModuleFile(file);
+        event.target.value = '';
+      });
+      toolbar.appendChild(importInput);
+    }
+
+    let importButton = toolbar.querySelector('#module-session-import');
+    if(!importButton){
+      importButton = document.createElement('button');
+      importButton.id = 'module-session-import';
+      importButton.type = 'button';
+      importButton.className = 'secondary-action';
+      importButton.textContent = 'Import Draft JSON';
+      importButton.title = 'Restore a full module draft previously exported from the Viewer, including room, door, source, and editable map data.';
+      importButton.addEventListener('click',()=>importInput.click());
+      toolbar.appendChild(importButton);
+    }
   }
 
   function resolveRoom(cell, module){
