@@ -5,6 +5,7 @@
   const RECORD_BRIDGE_SCRIPT = 'module-viewer-record-bridge.js';
   const REFERENCE_LIBRARY_SCRIPT = 'module-reference-library.js';
   const PRIMARY_GENERATOR_BRIDGE_SCRIPT = 'module-generator-primary-bridge.js';
+  const VALID_TILE_TYPES = new Set(['void','floor','wall','door','secret-door','trap','stairs','label']);
   let injected = false;
   let fillerButtonInjected = false;
   let pendingPdfModule = null;
@@ -50,9 +51,27 @@
   function fillerStatus(message){ const el=document.querySelector('#mcf-status'); if(el) el.textContent=message; }
   function resultText(result){ const lines=[result.title,result.description]; if(result.mechanics) lines.push(`Mechanics: ${result.mechanics}`); if(result.occupant) lines.push(`Occupancy: ${result.occupant}`); if(Array.isArray(result.tags)&&result.tags.length) lines.push(`Tags: ${result.tags.join(', ')}`); return lines.filter(Boolean).join('\n'); }
 
+  function validateEditorState(mapState){
+    if(!mapState || typeof mapState!=='object') return 'Editable map state is missing or invalid.';
+    const width=Number(mapState.width), height=Number(mapState.height);
+    if(!Number.isInteger(width) || width<1 || width>200 || !Number.isInteger(height) || height<1 || height>200) return 'Editable map state has invalid map dimensions.';
+    if(!Array.isArray(mapState.cells) || mapState.cells.length!==height) return 'Editable map state row count does not match its height.';
+    for(let y=0;y<height;y++){
+      const row=mapState.cells[y];
+      if(!Array.isArray(row) || row.length!==width) return `Editable map state row ${y+1} does not match its width.`;
+      for(let x=0;x<width;x++){
+        const cell=row[x];
+        if(!cell || typeof cell!=='object') return `Editable map state cell ${x}, ${y} is invalid.`;
+        if(!VALID_TILE_TYPES.has(String(cell.type||''))) return `Editable map state cell ${x}, ${y} has unsupported tile type "${String(cell.type||'')}".`;
+      }
+    }
+    return null;
+  }
+
   function loadEditorState(mapState,{message='Imported editable map state.'}={}){
-    if(!mapState || !Array.isArray(mapState.cells)){
-      status('Editable map state is missing or invalid.');
+    const validationError=validateEditorState(mapState);
+    if(validationError){
+      status(validationError);
       return false;
     }
     const importBox = document.querySelector('#mme-import');
@@ -117,8 +136,9 @@
     if(!String(current.path || '').startsWith('memory:')) return false;
     if(event){ event.preventDefault(); event.stopImmediatePropagation(); }
     const mapState = current.editorState || current.module?.mapEditorState || null;
-    if(!mapState || !Array.isArray(mapState.cells)){
-      status('Current session module has no editable map state to load.');
+    const validationError=validateEditorState(mapState);
+    if(validationError){
+      status(validationError==='Editable map state is missing or invalid.'?'Current session module has no editable map state to load.':validationError);
       return true;
     }
     loadEditorState(mapState,{message:`Loaded session map for ${current.module?.title || current.module?.id || 'current module'}.`});
