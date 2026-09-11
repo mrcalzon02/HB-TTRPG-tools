@@ -3,7 +3,7 @@
 
   function esc(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'
     }[char]));
   }
 
@@ -20,6 +20,30 @@
 
   function currentModule(){
     return window.getCurrentModuleViewerModule?.().module || null;
+  }
+
+  function renderPersistenceStatus(detail){
+    const root = document.getElementById('module-viewer-root');
+    const toolbar = root?.querySelector('.module-viewer-toolbar');
+    if(!toolbar) return;
+    const state = detail || window.getCurrentModuleViewerModule?.() || {};
+    const path = String(state.path || '');
+    const inMemory = path.startsWith('memory:');
+    let status = toolbar.querySelector('#module-persistence-status');
+    if(!status){
+      status = document.createElement('span');
+      status.id = 'module-persistence-status';
+      status.className = 'helper-note';
+      status.setAttribute('role','status');
+      status.setAttribute('aria-live','polite');
+      toolbar.appendChild(status);
+    }
+    status.textContent = inMemory
+      ? 'Session draft · not saved to the project module library'
+      : 'Indexed module · repository-backed project data';
+    status.title = inMemory
+      ? 'This module exists only in the current browser session until you export or otherwise persist it.'
+      : 'This module was loaded from the project module index rather than created only in this browser session.';
   }
 
   function resolveRoom(cell, module){
@@ -130,10 +154,16 @@
     setTimeout(refreshSelected,0);
   });
 
+  document.addEventListener('module-viewer-module-changed', event => {
+    setTimeout(()=>renderPersistenceStatus(event.detail),0);
+  });
+
   document.addEventListener('click', event => {
     const point = event.target.closest?.('.module-hotspot.editor-point');
     if(!point) return;
     const match = String(point.title || '').match(/tile\s+(\d+)\s*,\s*(\d+)/i);
     if(match) setTimeout(()=>renderMergedTile(Number(match[1]),Number(match[2])),0);
   });
+
+  setTimeout(()=>renderPersistenceStatus(),0);
 })();
