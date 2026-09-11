@@ -82,16 +82,26 @@
       if(!file){ status('Choose a PDF first.'); return; }
       if(!(file.type==='application/pdf'||file.name.toLowerCase().endsWith('.pdf'))){ status('Extract New Module From PDF requires a PDF file. Use Create From PDF / Image for normal image extraction.'); return; }
       const page=document.querySelector('#mme-pdf-page')?.value||'1';
-      pendingPdfModule={fileName:file.name,page,title:file.name.replace(/\.pdf$/i,'')+` — page ${page}`};
-      status('Extracting PDF page into a new module draft…'); extractor.click();
+      const previousState=window.getModuleMapEditorState ? window.getModuleMapEditorState() : null;
+      pendingPdfModule={fileName:file.name,page,title:file.name.replace(/\.pdf$/i,'')+` — page ${page}`,previousState,expectedSource:`uploaded-PDF page ${page}-extraction`,triggeringExtractor:true};
+      status('Extracting PDF page into a new module draft…');
+      extractor.click();
+      if(pendingPdfModule) pendingPdfModule.triggeringExtractor=false;
     });
+    extractor.addEventListener('click',()=>{
+      if(pendingPdfModule && !pendingPdfModule.triggeringExtractor) pendingPdfModule=null;
+    });
+    fileInput.addEventListener('change',()=>{ pendingPdfModule=null; });
     actionRow.insertBefore(button,actionRow.firstChild); injected=true;
   }
 
   document.addEventListener('module-content-filler-generated',event=>{ generatedResults=event.detail?.results||[]; injectFillerButton(); });
   document.addEventListener('module-map-editor-output',event=>{
     if(!pendingPdfModule) return;
-    const detail=event.detail||{}; const module=makeModule(detail);
+    const detail=event.detail||{};
+    if(!detail.state || detail.state===pendingPdfModule.previousState) return;
+    if(detail.state.source!==pendingPdfModule.expectedSource) return;
+    const module=makeModule(detail);
     document.dispatchEvent(new CustomEvent('module-map-editor-new-module',{detail:{module,svg:detail.svg,state:detail.state,title:module.title}}));
     status(`Created new module from PDF: ${module.title}`); pendingPdfModule=null;
   });
