@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-route-segment-certification.schema.json",
+  "title": "Black Light FTL Route Segment Certification Packet",
+  "type": "object",
+  "required": ["schemaVersion", "status", "route", "segments", "routeDisposition", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+    "route": {"type": "object"},
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "fractionStart", "fractionEnd", "lengthM", "status", "environmentEnvelope", "provenance"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 0},
+          "fractionStart": {"type": "number", "minimum": 0, "maximum": 1},
+          "fractionEnd": {"type": "number", "minimum": 0, "maximum": 1},
+          "lengthM": {"type": "number", "exclusiveMinimum": 0},
+          "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+          "environmentEnvelope": {"type": "object"},
+          "gradientDiagnostics": {"type": "object"},
+          "uncertainty": {"type": ["object", "null"]},
+          "reasons": {"type": "array", "items": {"type": "string"}},
+          "provenance": {"type": "array", "items": {}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "routeDisposition": {
+      "type": "object",
+      "required": ["conjunctive", "worstStatus", "blockingSegmentIndices"],
+      "properties": {
+        "conjunctive": {"const": true},
+        "worstStatus": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+        "blockingSegmentIndices": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "marginalSegmentIndices": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "minimumMargin": {"type": ["number", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "sampling": {"type": "object"},
+    "uncertainty": {"type": ["object", "null"]},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
