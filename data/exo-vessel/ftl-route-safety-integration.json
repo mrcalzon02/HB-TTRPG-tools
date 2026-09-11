@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "registryKey": "blacklight.ftl.route-safety-integration",
   "title": "Black Light FTL Route Safety Integration Registry",
   "status": "MIXED",
-  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved SI gravity/curvature inputs take precedence when supplied; PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
+  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
@@ -15,6 +15,9 @@
       "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
       "data/exo-vessel/ftl-curvature-environment-registry.json",
       "data/exo-vessel/ftl-physical-route-environment-bridge.json",
+      "data/exo-vessel/ftl-physical-route-path-registry.json",
+      "data/exo-vessel/ftl-route-segment-certification-registry.json",
+      "data/exo-vessel/ftl-family-segment-certification-registry.json",
       "blacklight-exo-ftl-operational-definitions.js",
       "data/exo-vessel/ftl-safety-calibration-profiles.json",
       "data/exo-vessel/ftl-safety-certification-registry.json"
@@ -22,11 +25,19 @@
     "runtime": [
       "blacklight-exo-ftl-curvature-environment-runtime.js",
       "blacklight-exo-ftl-physical-route-environment-runtime.js",
+      "blacklight-exo-ftl-physical-route-path-runtime.js",
+      "blacklight-exo-ftl-route-segment-certification-runtime.js",
+      "blacklight-exo-ftl-family-segment-certification-runtime.js",
       "blacklight-exo-ftl-safety-calibration-runtime.js",
       "blacklight-exo-ftl-safety-certification-runtime.js",
       "blacklight-exo-ftl-route-safety-runtime.js"
     ],
-    "statusRule": "Supplied physical environments outrank route archetypes for gravity/curvature state. Route archetype packets are PROPOSED simulation mappings used only when no physicalEnvironmentContext is supplied."
+    "supportingDocumentation": [
+      "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_SAFETY_INTEGRATION_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_SEGMENT_CERTIFICATION_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_PATH_SAFETY_INTEGRATION_MANUAL.md"
+    ],
+    "statusRule": "Supplied physical route paths outrank single-point physical environments; supplied single-point physical environments outrank route archetypes. Invalid or unresolved supplied physical evidence blocks fallback. Route archetype packets are PROPOSED simulation mappings used only when no physical route/path environment is supplied."
   },
   "familyMap": {
     "inertial-torch": "inertial-torch",
@@ -112,14 +123,18 @@
   },
   "integrationRules": [
     "The adapter must preserve the generated family and must never use certification to auto-select a different family.",
-    "When physicalEnvironmentContext is supplied, gravity/curvature terms must be resolved by the physical environment bridge and must not be replaced by route archetype numbers.",
+    "When physicalRoutePathContext, pathPacket, or segmentPacket is supplied, route safety must use family-segment certification and must not collapse the route back into a single-point certificate.",
+    "Family-certified route disposition is conjunctive across required intervals; later benign intervals cannot erase an earlier blocker.",
+    "The first blocking interval, distance/time to blocker, and intervention reachability must survive into the route-level result.",
+    "For exotic families, missing family-boundary hazard remains unresolved unless explicitly established as known absent; route archetype boundary values may not be injected into a physical route path as though measured.",
+    "When physicalEnvironmentContext is supplied without a physical route path, gravity/curvature terms must be resolved by the physical environment bridge and must not be replaced by route archetype numbers.",
     "A supplied physical packet that is PARTIAL, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY is a blocking result; fallback is prohibited.",
-    "Only absence of a physicalEnvironmentContext permits use of PROPOSED normalized route archetypes.",
+    "Only absence of physical route-path and physicalEnvironmentContext inputs permits use of PROPOSED normalized route archetypes.",
     "Route archetype values are PROPOSED normalized simulation inputs, not measured astrophysical constants.",
     "Physical SI values with unlike dimensions must be normalized by an explicit versioned profile before entering the dimensionless family-severity function.",
     "Family-boundary hazard remains fictional/operator-specific and is additive to the real-physics environment rather than derived from ordinary gravity alone.",
     "Calibration profile identity/version and physical-normalization profile identity/version must be copied into any certificate that depends on them.",
-    "REJECTED, UNRESOLVED, and CONFLICT states must survive into presentation and export.",
+    "REJECTED, UNRESOLVED, OUTSIDE_MODEL_VALIDITY, and CONFLICT states must survive into presentation and export.",
     "A generated speed/range value is capability modeling, not proof that the selected route is certified safe.",
     "Family-specific required hazards are additive to route hazards.",
     "Higher maturity may improve lookahead, covariance, redundancy, and recovery margins but cannot suppress a governing hard hazard.",
@@ -127,16 +142,18 @@
   ],
   "api": {
     "resolver": "resolveGeneratedFTLRouteSafety",
-    "inputs": ["rating", "request", "registry", "calibrationRegistry", "physicalEnvironmentContext", "namedOverrideIds", "provenance"],
-    "outputs": ["status", "family", "path", "route", "environmentSource", "physicalEnvironment", "calibration", "certificate", "presentation", "warnings", "provenance"],
-    "statusValues": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "CONFLICT"]
+    "inputs": ["rating", "request", "registry", "calibrationRegistry", "physicalRoutePathContext", "pathPacket", "segmentPacket", "physicalEnvironmentContext", "familyBoundaryHazard", "familyBoundaryHazardKnownAbsent", "projectedProgressRate", "currentRouteFraction", "measurementPacket", "safetyState", "recoveryState", "namedOverrideIds", "provenance"],
+    "outputs": ["status", "family", "path", "route", "environmentSource", "physicalEnvironment", "familySegmentCertification", "firstBlockingSegment", "calibration", "certificate", "presentation", "warnings", "provenance"],
+    "statusValues": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]
   },
   "canonGuards": [
     "Do not describe PROPOSED route archetype numbers as real astrophysical measurements.",
     "Do not describe versioned normalization references as constants of nature.",
     "Do not convert route difficulty into a universal FTL constant.",
+    "Do not collapse a physically sampled route into one representative point when interval evidence is available.",
+    "Do not invent a family-boundary hazard from ordinary gravity or from a generic route archetype for a physical path.",
     "Do not certify a route when calibration or supplied physical validity is unresolved or conflicting.",
-    "Do not hide REJECTED or UNRESOLVED behind a generated performance number.",
+    "Do not hide REJECTED, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY behind a generated performance number.",
     "Do not infer a named civilization or installation limit from the generic simulation baseline.",
     "Do not turn a selected UI family into evidence for an unresolved archaeological family.",
     "Do not claim perfect safety at any path maturity.",

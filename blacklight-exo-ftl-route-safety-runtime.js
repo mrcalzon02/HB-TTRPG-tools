@@ -3,7 +3,7 @@
 
   const REGISTRY_URL='data/exo-vessel/ftl-route-safety-integration.json';
   const CALIBRATION_URL='data/exo-vessel/ftl-safety-calibration-profiles.json';
-  const STATUS=Object.freeze({ADMISSIBLE:'ADMISSIBLE',MARGINAL:'MARGINAL',REJECTED:'REJECTED',UNRESOLVED:'UNRESOLVED',CONFLICT:'CONFLICT'});
+  const STATUS=Object.freeze({ADMISSIBLE:'ADMISSIBLE',MARGINAL:'MARGINAL',REJECTED:'REJECTED',UNRESOLVED:'UNRESOLVED',OUTSIDE_MODEL_VALIDITY:'OUTSIDE_MODEL_VALIDITY',CONFLICT:'CONFLICT'});
   let cachePromise=null;
 
   const finite=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value));
@@ -81,9 +81,12 @@
     return {predictionTime,sensorTime,solverTime,decisionTime,commandTime,actuationTime,exitTime,clearTime,marginTime};
   }
 
-  function buildRecovery(maturity={},route={}){
+  function buildRecovery(maturity={},route={},options={}){
     const recoveryFactor=finite(maturity.recoveryFactor)?Number(maturity.recoveryFactor):1;
-    const burden=1+Math.max(0,Number(route.environment?.familyBoundaryHazard)||0)*0.28+Math.max(0,Number(route.uncertaintyBase)||0)*0.22;
+    const routeBoundary=options.useRouteBoundary===false?null:route.environment?.familyBoundaryHazard;
+    const explicitBoundary=finite(options.familyBoundaryHazard)?Number(options.familyBoundaryHazard):null;
+    const boundaryBurden=explicitBoundary!==null?Math.max(0,explicitBoundary):(finite(routeBoundary)?Math.max(0,Number(routeBoundary)):0);
+    const burden=1+boundaryBurden*0.28+Math.max(0,Number(route.uncertaintyBase)||0)*0.22;
     const totalAuthority=1.8*recoveryFactor;
     const requiredRecoveryAuthority=0.82*burden;
     const protectedReserve=Math.min(totalAuthority,1.05*recoveryFactor);
@@ -117,10 +120,11 @@
       MARGINAL:'Marginal — reduce authority or improve margin',
       REJECTED:'Rejected — no certified transit solution',
       UNRESOLVED:'Unresolved — insufficient certification evidence',
+      OUTSIDE_MODEL_VALIDITY:'Rejected — physical model outside validity domain',
       CONFLICT:'Conflict — calibration authority disagreement'
     };
     const reasons=certificate?.reasons||calibration?.warnings||[];
-    return {label:labels[status]||status,blocking:[STATUS.REJECTED,STATUS.UNRESOLVED,STATUS.CONFLICT].includes(status),reasons:[...reasons]};
+    return {label:labels[status]||status,blocking:[STATUS.REJECTED,STATUS.UNRESOLVED,STATUS.OUTSIDE_MODEL_VALIDITY,STATUS.CONFLICT].includes(status),reasons:[...reasons]};
   }
 
   function blockedPhysicalResult({physical,status,family,path,routeId,calibration}){
@@ -129,11 +133,97 @@
       status,family,path,route:routeId,
       environmentSource:'PHYSICAL_SI',
       physicalEnvironment:physical||null,
+      familySegmentCertification:null,
+      firstBlockingSegment:null,
       calibration:calibration?{status:calibration.status,profileIdentity:calibration.profileIdentity,warnings:calibration.warnings}:null,
       certificate:null,
       presentation:presentationFor(status,null,{warnings}),
       warnings,
       provenance:unique([...(physical?.provenance||[]),...(calibration?.provenance||[])])
+    });
+  }
+
+  function representativeSegment(segmentSafety){
+    const segments=Array.isArray(segmentSafety?.segments)?segmentSafety.segments:[];
+    const firstIndex=segmentSafety?.routeDisposition?.firstBlockingSegmentIndex;
+    if(firstIndex!==null&&firstIndex!==undefined){
+      const first=segments.find(segment=>segment.index===firstIndex);
+      if(first)return first;
+    }
+    const marginal=segments.find(segment=>segment.status==='MARGINAL');
+    if(marginal)return marginal;
+    return segments[0]||null;
+  }
+
+  async function resolvePhysicalPathSafety({context,rating,registry,route,routeId,family,path,calibration}){
+    const FamilySegments=globalThis.BlacklightExoFTLFamilySegmentCertificationRuntime;
+    if(!FamilySegments?.resolveFTLFamilySegmentCertification){
+      const warnings=['A physical route path was supplied but the family-segment certification runtime is not loaded. Route-level fallback is prohibited.'];
+      return deepFreeze({
+        status:STATUS.UNRESOLVED,family,path,route:routeId,environmentSource:'PHYSICAL_ROUTE_PATH',
+        physicalEnvironment:null,familySegmentCertification:null,firstBlockingSegment:null,
+        calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,warnings:calibration.warnings},certificate:null,
+        presentation:presentationFor(STATUS.UNRESOLVED,null,{warnings}),warnings,
+        provenance:unique([registry.registryKey,...(calibration.provenance||[])])
+      });
+    }
+
+    const maturity=calibration.maturityModifier||{};
+    const measurement=buildMeasurement(route,family,registry,maturity,null);
+    const timing={...(context.safetyState||buildTiming(path,maturity,route))};
+    if(['fold-jump','q-lattice','phase-displacement'].includes(family)&&!timing.decisionHorizonMode)timing.decisionHorizonMode='PRECOMMIT';
+    const recovery=context.recoveryState||buildRecovery(maturity,route,{useRouteBoundary:false,familyBoundaryHazard:context.familyBoundaryHazard});
+    const segmentSafety=await FamilySegments.resolveFTLFamilySegmentCertification({
+      family,path,
+      pathPacket:context.pathPacket||null,
+      segmentPacket:context.segmentPacket||null,
+      pathContext:context.physicalRoutePathContext||context.pathContext||context,
+      requestedProfileId:context.requestedProfileId,
+      requestedProfileVersion:context.requestedProfileVersion,
+      namedOverrideIds:Array.isArray(context.namedOverrideIds)?context.namedOverrideIds:[],
+      subjectId:rating.identity?.name||null,
+      sharedTier:rating.identity?.tierKey||null,
+      projectedProgressRate:finite(context.projectedProgressRate)?Number(context.projectedProgressRate):null,
+      currentRouteFraction:finite(context.currentRouteFraction)?Number(context.currentRouteFraction):0,
+      familyBoundaryHazard:context.familyBoundaryHazard,
+      familyBoundaryHazardKnownAbsent:context.familyBoundaryHazardKnownAbsent===true,
+      requiredHazards:measurement.requiredHazards,
+      measurementPacket:measurement.packet,
+      safetyState:timing,
+      recoveryState:recovery,
+      provenance:unique([registry.registryKey,routeId,...(Array.isArray(context.provenance)?context.provenance:[])])
+    });
+    const representative=representativeSegment(segmentSafety);
+    const firstIndex=segmentSafety?.routeDisposition?.firstBlockingSegmentIndex;
+    const firstBlocking=firstIndex===null||firstIndex===undefined?null:(segmentSafety.segments||[]).find(segment=>segment.index===firstIndex)||null;
+    const status=segmentSafety.status||STATUS.UNRESOLVED;
+    const warnings=unique([
+      ...(segmentSafety.warnings||[]),
+      'Route disposition is conjunctive across family-certified physical intervals; benign intervals cannot average away a blocker.',
+      !finite(context.familyBoundaryHazard)&&context.familyBoundaryHazardKnownAbsent!==true&&family!=='inertial-torch'?'No explicit family-boundary hazard was supplied for this physical path; exotic-family intervals remain unresolved rather than inheriting a route archetype boundary value.':null,
+      firstBlocking?`First blocking interval ${firstBlocking.index} begins at route fraction ${Number(firstBlocking.fractionStart).toFixed(6)}.`:null
+    ]);
+    const presentation=presentationFor(status,representative?.certificate,{warnings});
+    if(firstBlocking){
+      const distance=segmentSafety.routeDisposition?.distanceToFirstBlockingSegmentM;
+      const reachable=segmentSafety.routeDisposition?.interventionReachable;
+      presentation.reasons=unique([
+        ...(presentation.reasons||[]),
+        `First blocker: interval ${firstBlocking.index}.`,
+        finite(distance)?`Distance to first blocker: ${Number(distance).toExponential(6)} m.`:null,
+        reachable===false?'Modeled intervention cannot clear the first blocker in time.':reachable===true?'Modeled intervention remains reachable before the first blocker.':'Intervention reachability is unresolved.'
+      ]);
+    }
+    return deepFreeze({
+      status,family,path,route:routeId,environmentSource:'PHYSICAL_ROUTE_PATH',
+      physicalEnvironment:null,
+      familySegmentCertification:segmentSafety,
+      firstBlockingSegment:firstBlocking,
+      calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,appliedOverrides:calibration.appliedOverrides,ignoredOverrides:calibration.ignoredOverrides,warnings:calibration.warnings},
+      certificate:representative?.certificate||null,
+      presentation,
+      warnings,
+      provenance:unique([registry.registryKey,...(segmentSafety.provenance||[]),...(calibration.provenance||[])])
     });
   }
 
@@ -167,6 +257,10 @@
       return deepFreeze({status,family,path,route:routeId,calibration,certificate:null,presentation:presentationFor(status,null,calibration),warnings:calibration.warnings||[],provenance:calibration.provenance||[]});
     }
 
+    if(context.physicalRoutePathContext||context.pathPacket||context.segmentPacket){
+      return resolvePhysicalPathSafety({context,rating,registry,route,routeId,family,path,calibration});
+    }
+
     let physical=null;
     let environmentPacket={epoch:'GENERATED_ROUTE_ARCHETYPE',...route.environment,provenance:[`${registry.registryKey}:${routeId}`]};
     let uncertaintyOverride=null;
@@ -186,7 +280,7 @@
         provenance:[registry.registryKey,routeId,...(Array.isArray(context.provenance)?context.provenance:[])]
       });
       if(physical.status==='OUTSIDE_MODEL_VALIDITY'){
-        return blockedPhysicalResult({physical,status:STATUS.REJECTED,family,path,routeId,calibration});
+        return blockedPhysicalResult({physical,status:STATUS.OUTSIDE_MODEL_VALIDITY,family,path,routeId,calibration});
       }
       if(physical.status!=='READY'){
         return blockedPhysicalResult({physical,status:STATUS.UNRESOLVED,family,path,routeId,calibration});
@@ -244,6 +338,8 @@
     return deepFreeze({
       status,family,path,route:routeId,environmentSource,
       physicalEnvironment:physical,
+      familySegmentCertification:null,
+      firstBlockingSegment:null,
       calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,appliedOverrides:calibration.appliedOverrides,ignoredOverrides:calibration.ignoredOverrides,warnings:calibration.warnings},
       certificate,
       presentation:presentationFor(status,certificate,calibration),

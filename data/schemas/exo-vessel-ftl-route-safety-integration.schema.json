@@ -17,6 +17,15 @@
         "revisionId": {"type": "string"}
       }
     },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "upstream": {"type": "array", "items": {"type": "string"}},
+        "runtime": {"type": "array", "items": {"type": "string"}},
+        "supportingDocumentation": {"type": "array", "items": {"type": "string"}},
+        "statusRule": {"type": "string"}
+      }
+    },
     "familyMap": {
       "type": "object",
       "additionalProperties": {"type": "string"}
@@ -40,13 +49,19 @@
         }
       }
     },
+    "familyHazards": {
+      "type": "object",
+      "additionalProperties": {"type": "array", "items": {"type": "string"}}
+    },
     "integrationRules": {"type": "array", "items": {"type": "string"}},
     "api": {
       "type": "object",
       "required": ["resolver", "statusValues"],
       "properties": {
         "resolver": {"const": "resolveGeneratedFTLRouteSafety"},
-        "statusValues": {"type": "array", "items": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "CONFLICT"]}}
+        "inputs": {"type": "array", "items": {"type": "string"}},
+        "outputs": {"type": "array", "items": {"type": "string"}},
+        "statusValues": {"type": "array", "items": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]}}
       }
     },
     "canonGuards": {"type": "array", "items": {"type": "string"}}
