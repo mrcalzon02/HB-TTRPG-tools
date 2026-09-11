@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-safety-certification.schema.json",
+  "title": "Black Light FTL Environmental Safety Certification",
+  "type": "object",
+  "required": ["schemaVersion", "registryKey", "authority", "environmentTerms", "familyHazards", "pathSafetyLadder", "certificate", "api", "canonGuards"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.safety-certification"},
+    "title": {"type": "string"},
+    "authority": {
+      "type": "object",
+      "required": ["status", "sourceOrder", "designSource"],
+      "properties": {
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "MIXED"]},
+        "sourceOrder": {"type": "array", "items": {"type": "string"}},
+        "designSource": {
+          "type": "object",
+          "required": ["title", "documentId", "revisionId"],
+          "properties": {
+            "title": {"type": "string"},
+            "documentId": {"type": "string"},
+            "revisionId": {"type": "string"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "environmentTerms": {
+      "type": "object",
+      "required": ["severityVector", "uncertaintyVector", "admissibility", "negativeEvidence"],
+      "properties": {
+        "severityVector": {"type": "array", "items": {"type": "string"}, "minItems": 4},
+        "uncertaintyVector": {"type": "array", "items": {"type": "string"}, "minItems": 3},
+        "admissibility": {"type": "string"},
+        "negativeEvidence": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "familyHazards": {
+      "type": "object",
+      "required": ["metric-compression", "gravitational-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement", "inertial-torch"],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["primaryObservables", "abortSemantics", "recoveryRequirement", "characteristicFailure"],
+        "properties": {
+          "primaryObservables": {"type": "array", "items": {"type": "string"}},
+          "abortSemantics": {"type": "string"},
+          "recoveryRequirement": {"type": "string"},
+          "characteristicFailure": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "pathSafetyLadder": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["path", "modelAuthority", "lookaheadClass", "responseClass", "redundancyClass"],
+        "properties": {
+          "path": {"enum": ["p0", "p1", "p2", "p3", "p4", "p5", "p6"]},
+          "modelAuthority": {"type": "string"},
+          "lookaheadClass": {"type": "string"},
+          "responseClass": {"type": "string"},
+          "redundancyClass": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "certificate": {
+      "type": "object",
+      "required": ["requiredFields", "statusValues", "invariants"],
+      "properties": {
+        "requiredFields": {"type": "array", "items": {"type": "string"}},
+        "statusValues": {"type": "array", "items": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED"]}},
+        "invariants": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "api": {
+      "type": "object",
+      "required": ["resolver", "inputs", "outputs", "familyAutoSelection"],
+      "properties": {
+        "resolver": {"const": "resolveTransitSafetyCertificate"},
+        "inputs": {"type": "array", "items": {"type": "string"}},
+        "outputs": {"type": "array", "items": {"type": "string"}},
+        "familyAutoSelection": {"const": false}
+      },
+      "additionalProperties": true
+    },
+    "canonGuards": {"type": "array", "minItems": 8, "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
