@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-safety-calibration-profile.schema.json",
+  "title": "Black Light FTL Safety Calibration Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "profileVersion",
+    "status",
+    "scope",
+    "authority",
+    "referenceScales",
+    "severityWeights",
+    "familyCoefficients",
+    "thresholds",
+    "maturityModifiers",
+    "scalingModel",
+    "provenance",
+    "canonGuards"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "profileId": {"type": "string", "minLength": 1},
+    "profileVersion": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PROPOSED", "DERIVED", "CONFIRMED"]},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "runtimeUse", "canonReach"],
+      "properties": {
+        "purpose": {"type": "string"},
+        "runtimeUse": {"type": "string"},
+        "canonReach": {"type": "string"},
+        "technologyBasis": {"type": ["string", "null"]},
+        "civilization": {"type": ["string", "null"]},
+        "manufacturer": {"type": ["string", "null"]},
+        "installation": {"type": ["string", "null"]}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceOrder", "designSource", "coefficientPolicy"],
+      "properties": {
+        "sourceOrder": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "designSource": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "documentId", "revisionId"],
+          "properties": {
+            "title": {"type": "string"},
+            "documentId": {"type": "string"},
+            "revisionId": {"type": "string"}
+          }
+        },
+        "coefficientPolicy": {"type": "string"}
+      }
+    },
+    "referenceScales": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["potential", "acceleration", "tidal", "curvature", "massUncertainty"],
+      "properties": {
+        "potential": {"type": "number", "exclusiveMinimum": 0},
+        "acceleration": {"type": "number", "exclusiveMinimum": 0},
+        "tidal": {"type": "number", "exclusiveMinimum": 0},
+        "curvature": {"type": "number", "exclusiveMinimum": 0},
+        "massUncertainty": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "severityWeights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["potential", "acceleration", "tidal", "curvature", "massUncertainty"],
+      "properties": {
+        "potential": {"type": "number", "minimum": 0},
+        "acceleration": {"type": "number", "minimum": 0},
+        "tidal": {"type": "number", "minimum": 0},
+        "curvature": {"type": "number", "minimum": 0},
+        "massUncertainty": {"type": "number", "minimum": 0}
+      }
+    },
+    "familyCoefficients": {
+      "type": "object",
+      "minProperties": 9,
+      "additionalProperties": {"$ref": "#/$defs/familyCoefficientSet"}
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumGravityEfficiency", "minimumCalculationEfficiency", "marginalLookaheadMargin", "minimumRecoveryMargin"],
+      "properties": {
+        "minimumGravityEfficiency": {"type": "number", "minimum": 0, "maximum": 1},
+        "minimumCalculationEfficiency": {"type": "number", "minimum": 0, "maximum": 1},
+        "marginalLookaheadMargin": {"type": "number", "minimum": 0},
+        "minimumRecoveryMargin": {"type": "number", "minimum": 0}
+      }
+    },
+    "maturityModifiers": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/maturityModifier"},
+      "required": ["p0", "p1", "p2", "p3", "p4", "p5", "p6"]
+    },
+    "scalingModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy", "variables", "equations"],
+      "properties": {
+        "policy": {"type": "string"},
+        "variables": {"type": "array", "items": {"type": "string"}},
+        "equations": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      }
+    },
+    "namedOverrides": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/namedOverride"}
+    },
+    "provenance": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "canonGuards": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "familyCoefficientSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["a", "b", "c", "n", "d", "e", "k", "miscalculationAmplification", "status", "rationale"],
+      "properties": {
+        "a": {"type": "number", "minimum": 0},
+        "b": {"type": "number", "minimum": 0},
+        "c": {"type": "number", "minimum": 0},
+        "n": {"type": "number", "minimum": 1},
+        "d": {"type": "number", "minimum": 0},
+        "e": {"type": "number", "minimum": 0},
+        "k": {"type": "number", "minimum": 0},
+        "miscalculationAmplification": {"type": "number", "minimum": 0},
+        "status": {"enum": ["PROPOSED", "DERIVED", "CONFIRMED"]},
+        "rationale": {"type": "string"}
+      }
+    },
+    "maturityModifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lookaheadFactor", "covarianceFactor", "recoveryFactor", "redundancyFactor", "status"],
+      "properties": {
+        "lookaheadFactor": {"type": "number", "exclusiveMinimum": 0},
+        "covarianceFactor": {"type": "number", "exclusiveMinimum": 0},
+        "recoveryFactor": {"type": "number", "exclusiveMinimum": 0},
+        "redundancyFactor": {"type": "number", "exclusiveMinimum": 0},
+        "status": {"enum": ["PROPOSED", "DERIVED", "CONFIRMED"]}
+      }
+    },
+    "namedOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["overrideId", "scope", "status", "values", "provenance", "rule"],
+      "properties": {
+        "overrideId": {"type": "string"},
+        "scope": {"type": "string"},
+        "status": {"enum": ["PROPOSED", "DERIVED", "CONFIRMED", "UNRESOLVED"]},
+        "values": {"type": "object"},
+        "provenance": {"type": "array", "items": {"type": "string"}},
+        "rule": {"type": "string"}
+      }
+    }
+  }
+}
