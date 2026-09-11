@@ -63,7 +63,8 @@
     "docs/blacklight/BLACK_LIGHT_FTL_WORMHOLE_GATE_TECHNICAL_VOLUME.md",
     "docs/blacklight/BLACK_LIGHT_FTL_PHASE_DISPLACEMENT_TECHNICAL_VOLUME.md",
     "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_BASIS_ENGINEERING_ATLAS.md",
-    "docs/blacklight/BLACK_LIGHT_FTL_CROSS_FAMILY_INTEGRATION_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_CROSS_FAMILY_INTEGRATION_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_CONTROL_NAVIGATION_MAINTENANCE_EMBODIMENT_MANUAL.md"
   ],
   "measurementEvidenceForensics": [
     "docs/blacklight/BLACK_LIGHT_FTL_MEASUREMENT_INSTRUMENTATION_FIELD_MANUAL.md",
@@ -88,7 +89,9 @@
     "docs/blacklight/BLACK_LIGHT_FTL_DEVELOPMENT_LINEAGE_MANUAL.md",
     "docs/blacklight/BLACK_LIGHT_FTL_RESEARCH_TRADITIONS_MANUAL.md",
     "docs/blacklight/BLACK_LIGHT_FTL_UPGRADE_CAUSALITY_CALCULUS.md",
-    "docs/blacklight/BLACK_LIGHT_FTL_SOLVED_TRANSIT_CASES.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_SOLVED_TRANSIT_CASES.md",
+    "data/exo-vessel/ftl-control-embodiment-registry.json",
+    "data/schemas/exo-vessel-ftl-control-embodiment.schema.json"
   ],
   "raceAndVesselSpecific": [
     "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
@@ -114,6 +117,7 @@
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
+    "blacklight-exo-ftl-control-embodiment-runtime.js",
     "blacklight-exo-ftl-certification-ui.js",
     "blacklight-exo-ftl-dossier-chapters-certification.js"
   ],
@@ -129,7 +133,10 @@
     "Generated capability and route safety certification are separate outputs; REJECTED, UNRESOLVED, and CONFLICT states may not be flattened into ordinary certified performance.",
     "The live EXO FTL certification UI must preserve the generated family when the family selector is random and must embed the route-safety certificate in exported dossiers.",
     "The live EXO FTL route selector must visibly retain certification state for every evaluated route and guard blocked alternatives without erasing the failed selected route needed for diagnosis.",
-    "The safety-envelope presentation must expose gravity retention, calculation retention, actionable lookahead, recovery reserve, and hazard observability as separate constraints rather than averaging them into a synthetic safety percentage."
+    "The safety-envelope presentation must expose gravity retention, calculation retention, actionable lookahead, recovery reserve, and hazard observability as separate constraints rather than averaging them into a synthetic safety percentage.",
+    "Control/navigation/maintenance embodiment may change how safety information is sensed, represented, actuated and serviced, but it may not discard any invariant safety channel required by the transit family.",
+    "Named race and vessel control embodiments must retain unresolved transit-family status unless a higher-authority source establishes the association.",
+    "Alien-to-human interface translation must preserve native-state provenance and may not convert unresolved state into safe/default values."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, and selector-envelope additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, and control-embodiment additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
