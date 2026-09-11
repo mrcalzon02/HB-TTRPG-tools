@@ -53,6 +53,10 @@
     "data/schemas/exo-vessel-ftl-route-segment-certification.schema.json",
     "blacklight-exo-ftl-route-segment-certification-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_SEGMENT_CERTIFICATION_MANUAL.md",
+    "data/exo-vessel/ftl-family-segment-certification-registry.json",
+    "data/schemas/exo-vessel-ftl-family-segment-certification.schema.json",
+    "blacklight-exo-ftl-family-segment-certification-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_SEGMENT_CERTIFICATION_MANUAL.md",
     "data/exo-vessel/ftl-calibration-registry.json",
     "data/exo-vessel/ftl-safety-certification-registry.json",
     "data/schemas/exo-vessel-ftl-safety-certification.schema.json",
@@ -138,6 +142,7 @@
     "blacklight-exo-ftl-physical-route-environment-runtime.js",
     "blacklight-exo-ftl-physical-route-path-runtime.js",
     "blacklight-exo-ftl-route-segment-certification-runtime.js",
+    "blacklight-exo-ftl-family-segment-certification-runtime.js",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
@@ -166,6 +171,10 @@
     "Each required physical route interval must retain its own environment envelope, finite-difference diagnostics, model-validity state, uncertainty and provenance; a route-level summary may not replace interval evidence.",
     "PARTIAL physical interval evidence remains unresolved for certification unless a higher-fidelity source closes the missing fields; missing evidence is not zero uncertainty.",
     "Finite-difference route gradients are numerical diagnostics rather than exact spatial derivatives unless convergence or analytic reasoning establishes the derivative interpretation.",
+    "Each physically valid route interval must pass through the selected family-specific normalization, uncertainty, efficiency, observability, lookahead and recovery gates before the route is family-certified; a route-level family average is prohibited.",
+    "For exotic families, an absent family-boundary hazard is unresolved unless the channel is explicitly established as known absent; ordinary gravitational metrics may not manufacture or silently zero an operator-specific boundary term.",
+    "The earliest blocking family-specific interval must remain visible together with distance/time-to-block and intervention reachability; later benign intervals cannot hide it.",
+    "Continuous projected-progress reachability and PRECOMMIT decision-horizon reachability are distinct models and may not be collapsed by inventing a local superluminal velocity for nonlocal operators.",
     "Physical quantities with unlike dimensions must be divided by explicit versioned reference scales before they enter a combined dimensionless family-severity model; those reference scales are calibration, not constants of nature.",
     "Coordinate gravitational acceleration, proper acceleration, tidal loading, and spacetime curvature are distinct quantities and may not be silently substituted for one another.",
     "Weak-field potential, acceleration, and Newtonian tidal tensors may be superposed within their approximation; exact general-relativistic curvature invariants may not be linearly superposed and presented as an exact multi-body spacetime.",
@@ -189,5 +198,5 @@
     "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
     "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, physical-route certification, physical route-path sampling, and route-segment certification additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, physical-route certification, physical route-path sampling, route-segment certification, and family-segment certification additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
