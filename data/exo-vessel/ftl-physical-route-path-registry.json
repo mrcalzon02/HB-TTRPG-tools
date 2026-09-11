@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.physical-route-path",
+  "title": "Black Light Physical FTL Route Path Sampling Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "authorityInputs": [
+    "BLACKLIGHT_EXO_SOURCE_AUTHORITY.md",
+    "blacklight-exo-source-authority.js",
+    "data/exo-vessel/ftl-curvature-environment-registry.json",
+    "blacklight-exo-ftl-curvature-environment-runtime.js",
+    "data/exo-vessel/ftl-physical-route-environment-bridge.json"
+  ],
+  "samplingPolicy": {
+    "defaultStrategy": "ENDPOINT_CLUSTERED_COSINE",
+    "defaultSampleCount": 65,
+    "minimumSampleCount": 9,
+    "maximumSampleCount": 1024,
+    "reason": "A cosine-spaced open interval concentrates samples near departure and arrival gravity wells while still covering the interstellar interior. Endpoints themselves are excluded because a system authority position is a barycentric/catalog position, not a safe emergence point or stellar surface coordinate.",
+    "adaptiveRefinement": {
+      "status": "PROPOSED",
+      "rule": "Refine intervals when adjacent tidal Frobenius values, principal tidal eigenvalues, or acceleration vectors change faster than configured relative tolerances.",
+      "defaultRelativeMetricTolerance": 0.20,
+      "defaultDirectionChangeRad": 0.08726646259971647,
+      "maximumRefinementDepth": 5
+    }
+  },
+  "unitConstants": {
+    "astronomicalUnitM": 149597870700,
+    "lightYearM": 9460730472580800,
+    "solarMassKg": 1.98847e30,
+    "earthMassKg": 5.9722e24
+  },
+  "sourcePolicy": {
+    "publishedFirst": true,
+    "includeConfirmedStellarMass": true,
+    "includeConfirmedOrbitingMassOnlyWhenAuthorityCountsIt": true,
+    "excludeCandidatesAndDisputedMass": true,
+    "unknownKinematicsRemainUnknown": true,
+    "unknownPhysicalRadiusRemainUnknown": true,
+    "noProceduralReplacementForMissingPublishedFields": true
+  },
+  "pathMetrics": [
+    "dimensionlessPotentialDepth",
+    "accelerationMagnitudeMPerS2",
+    "tidalFrobeniusPerS2",
+    "principalTidalEigenvaluesPerS2",
+    "maxSingleSourceCurvatureScalePerM2",
+    "minimumSchwarzschildRadiusRatio"
+  ],
+  "physicalNotes": [
+    "Potential, acceleration, tidal tensor and curvature diagnostics are distinct quantities and are never added before dimensionless normalization.",
+    "Newtonian weak-field potential, acceleration and tidal tensors may be superposed within their approximation; exact multi-body GR invariants are not constructed by summing single-source invariants.",
+    "Route extrema are sampled extrema. They are not a mathematical proof that an unsampled interior point is less severe unless convergence/refinement criteria are satisfied.",
+    "A catalog system coordinate identifies the system reference position. It is not a canonical FTL emergence point.",
+    "The runtime may identify a route as PARTIAL because source velocity, physical radius, covariance, or epoch data are absent. PARTIAL is evidence, not failure to calculate."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish that any FTL method is physically realizable.",
+    "This registry does not assign a transit family to any civilization, race, vessel or manufacturer.",
+    "Route sampling derives ordinary gravitational environment only; family-boundary hazards remain operator-specific fictional variables.",
+    "Published EXAMPLE-sector values outrank generated supplements.",
+    "Candidate/disputed bodies remain excluded from confirmed route mass unless a higher authority changes their status.",
+    "Missing ephemeris, source velocity, source radius or covariance may not be silently replaced with zero.",
+    "A sampled path may inform certification only with its sampling strategy, epoch, uncertainty, model-validity state and provenance attached."
+  ]
+}
