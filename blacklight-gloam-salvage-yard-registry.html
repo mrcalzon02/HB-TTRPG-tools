@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gloam Salvage Yard Registry | Blacklight Continuum</title>
+  <meta name="description" content="Complete 463-object historical registry of the Gloam Derelict Custody Anchorage salvage yard in the No Return Signal campaign.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .gloam-shell{width:calc(100% - 28px);margin:14px auto 56px}
+    .gloam-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;padding:14px 16px;border:1px solid var(--bli-line);border-radius:14px;background:rgba(5,5,4,.88)}
+    .gloam-head h1{margin:0;font-size:clamp(1.35rem,2vw,2rem);line-height:1}.gloam-head p{max-width:110ch;margin:7px 0 0;line-height:1.45;color:var(--bli-muted)}
+    .gloam-count{font-size:2.4rem;font-weight:950;line-height:.9;color:#f1c66f;text-align:right}.gloam-count span{display:block;margin-top:6px;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bli-muted)}
+    .gloam-summary{display:grid;grid-template-columns:repeat(12,minmax(108px,1fr));gap:6px;margin-top:8px}
+    .gloam-summary button{min-width:0;padding:8px 9px;border:1px solid rgba(217,168,79,.2);border-radius:10px;background:rgba(217,168,79,.045);color:#ded6c7;text-align:left;font:inherit;cursor:pointer}
+    .gloam-summary button:hover,.gloam-summary button:focus-visible{border-color:rgba(217,168,79,.55);outline:none}
+    .gloam-summary strong{display:block;color:#f1c66f;font-size:1rem}.gloam-summary span{display:block;margin-top:2px;font-size:.65rem;line-height:1.2}
+    .gloam-tools{display:grid;grid-template-columns:minmax(240px,2fr) minmax(180px,1fr) minmax(180px,1fr) auto;gap:8px;margin:10px 0}
+    .gloam-tools input,.gloam-tools select,.gloam-tools button{min-height:38px;border:1px solid rgba(217,168,79,.28);border-radius:9px;background:#0d0d0b;color:#eee6d8;padding:7px 10px;font:inherit}
+    .gloam-tools button{cursor:pointer;font-weight:900}.gloam-tools button:hover{border-color:rgba(217,168,79,.65)}
+    .gloam-state{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:6px 2px 8px;color:var(--bli-muted);font-size:.78rem}
+    .gloam-state strong{color:#f1c66f}
+    .gloam-table-wrap{overflow:auto;max-height:calc(100vh - 190px);border:1px solid var(--bli-line);border-radius:12px;background:rgba(0,0,0,.18)}
+    table{width:100%;min-width:1760px;border-collapse:separate;border-spacing:0;font-size:.76rem}
+    thead th{position:sticky;top:0;z-index:2;padding:9px 10px;border-bottom:1px solid rgba(217,168,79,.35);background:#10100e;color:#f1c66f;text-align:left;letter-spacing:.055em;text-transform:uppercase;font-size:.67rem}
+    tbody td{padding:9px 10px;border-bottom:1px solid rgba(217,168,79,.09);vertical-align:top;line-height:1.35}
+    tbody tr:hover{background:rgba(217,168,79,.045)}tbody tr[data-bex="true"]{background:rgba(160,83,48,.13);box-shadow:inset 3px 0 0 #d9a84f}
+    .rid{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.ship-name{font-weight:950;color:#f2ede3;font-size:.83rem}.legacy{display:block;margin-top:2px;color:#a79b88;font-size:.68rem}
+    .status{display:inline-block;border:1px solid rgba(217,168,79,.24);border-radius:999px;padding:3px 7px;white-space:nowrap;font-size:.67rem}
+    .status.restricted{border-color:rgba(222,102,76,.55);color:#ffb39c}.status.hazard{border-color:rgba(219,169,74,.55);color:#f4ce7a}
+    .status.memorial{border-color:rgba(136,158,204,.45);color:#b9c9ef}.subtle{color:#aaa08f}.orbit{white-space:nowrap}
+    .gloam-note{margin:9px 2px;color:#aaa08f;font-size:.74rem;line-height:1.45}
+    @media(max-width:1450px){.gloam-summary{grid-template-columns:repeat(6,minmax(110px,1fr))}}
+    @media(max-width:850px){.gloam-shell{width:calc(100% - 12px);margin-top:8px}.gloam-head{grid-template-columns:1fr}.gloam-count{text-align:left}.gloam-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.gloam-tools{grid-template-columns:1fr 1fr}.gloam-tools input{grid-column:1/-1}.gloam-table-wrap{max-height:none}}
+  </style>
+</head>
+<body class="blacklight-corp-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-no-return-signal-campaign.html"><span class="bli-mark"></span><span class="bli-brand-text"><span>Blacklight</span><span>Gloam Registry</span></span></a>
+    <nav class="bli-nav"><a href="blacklight-no-return-signal-campaign.html">No Return Signal</a><a href="blacklight-exo-stellar-sector.html">Helios Vale</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
+  </header>
+
+  <main class="gloam-shell">
+    <section class="gloam-head" aria-labelledby="gloam-title">
+      <div>
+        <p class="bli-eyebrow">Gloam Derelict Custody Anchorage · last complete major-object inventory</p>
+        <h1 id="gloam-title">Gloam Salvage Yard — 463-Hull Registry</h1>
+        <p>Every major registered hull or hull-equivalent structure in Grave Orbit. Detached modules, lifeboats, drones, cargo canisters, fragments, and unregistered debris are excluded. This is a historical custody index, not live telemetry; present condition can differ from the last reconciled registry.</p>
+      </div>
+      <div class="gloam-count">463<span>major registry objects</span></div>
+    </section>
+
+    <div class="gloam-summary" id="category-summary" aria-label="Registry category totals"></div>
+
+    <div class="gloam-tools" aria-label="Registry filters">
+      <input id="registry-search" type="search" placeholder="Find vessel, registry tag, subtype, origin, condition, hazard, or note…" autocomplete="off">
+      <select id="category-filter"><option value="">All hull families</option></select>
+      <select id="status-filter"><option value="">All custody states</option></select>
+      <button id="reset-filters" type="button">Reset</button>
+    </div>
+    <div class="gloam-state"><span><strong id="visible-count">463</strong> records visible</span><span>Historical authority · Gloam Concord System A · Cairn Minor grave orbit</span></div>
+
+    <div class="gloam-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Registry</th><th>Vessel / object</th><th>Hull family / subtype</th><th>Origin / registry era</th><th>Legacy custody</th><th>Last plotted orbit</th><th>Condition</th><th>Hazard / salvage economics</th><th>Archive note</th>
+          </tr>
+        </thead>
+        <tbody id="registry-body"></tbody>
+      </table>
+    </div>
+    <p class="gloam-note">Registry invariant: category totals are 176 freight, 84 industrial, 59 auxiliary, 43 passenger/transport, 21 naval, 20 exploration/science, 17 colony/habitat/ark, 15 security/patrol/courier, 9 medical/quarantine, 4 diplomatic/state/archive, 9 unknown, and 6 yard/station structures. Legacy custody totals are 251 released/abandoned, 96 disputed, 53 memorial/evidence, 38 quarantine/hazard, and 25 restricted strategic exceptions.</p>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · No Return Signal GM archive · Gloam Derelict Custody Anchorage.</footer>
+  <script src="blacklight-background-audio.js"></script>
+  <script>
+  (() => {
+    'use strict';
+
+    const STATUSES = [
+      'Released or abandoned salvage',
+      'Disputed or unresolved title',
+      'Memorial or evidence',
+      'Quarantine or hazard',
+      'Restricted strategic exception'
+    ];
+
+    const DEFS = [
+      {key:'commercial_freight',label:'Commercial freight and bulk cargo',count:176,prefix:'FRT',q:[140,20,7,5,4],sub:['container freighter','bulk carrier','ore hauler','cryogenic tanker','agricultural feedstock carrier','heavy-lift freighter','parcel carrier','modular barge carrier','general cargo hauler','volatile-gas tanker','refrigerated carrier','automated freight sled carrier']},
+      {key:'industrial',label:'Industrial, mining, construction, and refinery',count:84,prefix:'IND',q:[60,10,6,7,1],sub:['mobile refinery','asteroid processor','strip-mining tender','construction fabricator','smelter carrier','gas harvester','foundry ship','deep-core boring platform','orbital assembly ship','slag processor','materials cracking vessel','resource-separation plant']},
+      {key:'fleet_auxiliary',label:'Fleet auxiliaries, tugs, tenders, tankers, and repair',count:59,prefix:'AUX',q:[24,18,7,4,6],sub:['fleet tanker','heavy tug','repair tender','stores ship','munitions support vessel','salvage tender','drone tender','reactor service ship','mobile machine shop','tow carrier','depot tender','fleet recovery vessel']},
+      {key:'passenger_transport',label:'Passenger liners, migrant carriers, and general transport',count:43,prefix:'PAX',q:[13,14,13,3,0],sub:['interstellar liner','migrant carrier','general passenger transport','sleeper transport','pilgrim transport','evacuation carrier','contract-worker transport','family transport','regional packet liner']},
+      {key:'naval_combatant',label:'Naval combatants',count:21,prefix:'NAV',q:[0,7,5,2,7],sub:['escort','destroyer','light cruiser','monitor','missile ship','picket','arsenal craft','patrol frigate','strike corvette','carrier escort','line combatant']},
+      {key:'exploration_science',label:'Exploration, science, and survey',count:20,prefix:'SRV',q:[5,3,4,6,2],sub:['deep-range surveyor','xenobiology vessel','gravimetry ship','stellar cartography vessel','archaeology expedition ship','materials surveyor','boundary-science vessel','biosphere survey ship','dark-mass observatory ship','long-baseline sensor vessel']},
+      {key:'colony_habitat_ark',label:'Colony, habitat, and ark',count:17,prefix:'ARK',q:[3,7,4,3,0],sub:['colony ark','seedship','habitat carrier','agro-habitat vessel','terraforming support ship','settlement construction carrier','generation transport','ecological reserve ship']},
+      {key:'security_patrol_courier',label:'Customs, security, patrol, and courier',count:15,prefix:'SEC',q:[2,7,3,1,2],sub:['customs cutter','security patrol craft','government courier','interdiction cutter','evidence transport','prisoner transport','inspection vessel','revenue patrol ship']},
+      {key:'medical_quarantine',label:'Medical, quarantine, and decontamination',count:9,prefix:'MED',q:[0,1,2,6,0],sub:['hospital ship','quarantine tender','decontamination vessel','casualty transport','pathogen-control ship','continuity medicine vessel','medical evacuation carrier']},
+      {key:'diplomatic_state_archive',label:'Diplomatic, state, continuity, and archival',count:4,prefix:'STA',q:[0,2,1,0,1],sub:['plenipotentiary yacht','state archive carrier','treaty vessel','continuity archive ship']},
+      {key:'unknown',label:'Unknown or incompletely catalogued',count:9,prefix:'UNK',q:[2,3,1,1,2],sub:['unresolved major vessel','unclassified pre-Ossian hull','foreign-pattern hull','fragmented-registry vessel','unidentified biological ship','unidentified military-pattern vessel','unclassified civilian-pattern vessel']},
+      {key:'yard_structure',label:'Mobile-yard, station, and large modular structures',count:6,prefix:'YRD',q:[2,4,0,0,0],sub:['mobile drydock','modular refinery frame','tug-control platform','registry annex','orbital depot frame','station service spine']}
+    ];
+
+    const ADJ=['Quiet','Ashen','Cold','Last','Far','Still','Iron','Glass','Cinder','Pale','Grey','Red','Blue','White','Black','Open','Deep','Long','Broken','Patient','Silent','Hollow','Distant','Fallen','Burning','Empty','Third','Ninth','Fortunate','Honest','Common','Measured','Steady','Outer','Inner','Small','Heavy','Bright','Dark','Late','Good','Wandering','Anchored','Lost','Returning','Unpaid','Deferred','Final','Second','First','Reliable','Modest','Useful','Plain','Unclaimed'];
+    const NOUN=['Ledger','Meridian','Promise','Measure','Transit','Harbor','Anchor','Road','Quota','Bridge','Cairn','Hearth','Witness','Tally','Contract','Archive','Stone','Current','Voyage','Return','Margin','Freight','Exchange','Duty','Season','Signal','Lantern','Foundry','Gate','Balance','Charter','Inheritance','Venture','Route','Crossing','Line','Accord','Compact','Record','Vector','Wake','Needle','Drift','Beacon','Orbit','Claim','Burden','Pact','Consignment','Reserve','Horizon','Haven','Threshold','Market','Assignment','Manifest','Portage','Scale'];
+    const ORIGINS=['Independent intersystem concern','Dissolved commercial combine','Ar’nock Concord of Holds','Ossian successor registrant','Kaith registrant','Unresolved successor ownership'];
+    const ERAS=['Late Concord period','Settlement-war period','Early Ossian settlement','Mandate-era registry','Late active-anchorage period','Uncertain; registry chronology damaged'];
+    const BANDS=[['Inner Custody Ring',1800,3800],['Cairn Shadow',3800,6500],['Middle Grave',6500,9800],['Old Commercial Belt',9800,13500],['Outer Custody Ring',13500,17500],['Far Grave',17500,22000]];
+    const CONDITIONS=['stripped to pressure shell; reactor cold','major collision fracture; internal decks exposed','externally intact; machinery extensively cannibalized','bow structure missing; surviving stern cold','aft engineering section gutted by early salvage','pressure hull breached in multiple compartments','stationkeeping dead; hull slowly tumbling','surface ablated; internal structure mostly present','docking spine torn away; cargo spaces open to vacuum','old fire damage; life-support plant removed','core machinery present but incompatible with modern standards','partially pressurized pockets remain behind sealed bulkheads','micrometeoroid and debris erosion; no active power','reactor compartment sealed under legacy hazard tag','structurally stable but economically worthless'];
+    const HAZARDS=['none beyond ordinary derelict conditions','unmapped pressure pockets','residual reactor contamination','unstable structural members','legacy propellant residue','unexploded separation charges','autonomous maintenance hardware','unknown sealed cargo','biofilm contamination','damaged power-storage banks','fragmentation debris','obsolete encrypted control systems'];
+    const NOTES=['Most standardized components were removed before abandonment.','Recovery estimates have remained below tow and certification cost for generations.','The registry contains at least one unresolved insurance annotation.','Several compartments were sealed by the last custodial crew.','A previous scavenger survey marked the hull as low-yield.','Original transponder records survive only in fragmentary form.','The ship is used as a visual navigation landmark by occasional scavengers.','Old salvage chalk and cut marks cover accessible service spaces.','One legacy beacon still answers intermittently when illuminated by external power.','The surviving manifest is incomplete and may describe cargo removed centuries ago.','No verified living occupants are recorded in the last complete inventory.','The hull’s value is primarily compatibility with obsolete systems rather than raw material.','A former claim was opened and abandoned without final adjudication.','The exterior name is more legible than the ownership registry.','A debris collision after deposition changed the original damage pattern.','The object has not justified a dedicated recovery expedition since the registry was reconciled.'];
+
+    const SPECIAL_NAMES = {
+      naval_combatant:['Boundary Spear','Patient Fire','Unbroken Witness','Seventh Barrier','Cold Arbitration','Holdfast Vector','Final Argument','Measured Force','Night Picket','Quiet Deterrent','Third Response','Long Vigil','Accord’s Edge','Custodian of Ash','Red Boundary','Last Escort','Silent Majority','Hearth Defense','Closed Hand','Line of Witness','No Further Claim'],
+      exploration_science:['Far Measure','Parallax Witness','Cold Lens','Deep Survey Nine','Unknown Meridian','Patient Question','Boundary Reader','Silent Baseline','Long Spectrum','Gravimetric Petition','Archive of Dust','Small Horizon','Outer Inquiry','Noon Without Sun','Sample Return','Distant Instrument','Redshift Ledger','Theorem Vessel','Cairn Observer','Twenty-Seven Signals'],
+      colony_habitat_ark:['New Hearth','Seed of Veyr','Long Soil','Common Garden','Third Dawn','Homestead Vector','Rain Reserve','Open Sky Petition','Household Twelve','Green Margin','Patient Settlement','Future Orchard','First Weather','Civic Seed','Founders’ Burden','Habitat Kesh','Second Shore'],
+      security_patrol_courier:['Revenue Cutter 19','Courier of Record','Inspection Vessel Four','Boundary Notice','Claim Runner Seven','Custody Patrol 12','Fast Witness','Interdiction Six','Evidence Courier Nine','Quiet Summons','Outer Warrant','Customs Cutter 44','Registry Runner','Patrol of the Third Hold','Immediate Service'],
+      medical_quarantine:['Mercy Without Port','Pale Lantern','Clean Room','Second Breath','Quiet Ward','Closed Clinic','Vigil of Names','Sanitary Horizon','Continuity Ward'],
+      diplomatic_state_archive:['Witness of the Ninth Accord','Quiet Embassy','Continuity of Claims','State Archive Vessel Seven'],
+      unknown:['Name unresolved — BEX-17','Unmarked Six-Spine Hull','The Bent Glyph','Dead Vessel 04','Foreign Hull K-771','Unnamed Bioframe','Registry Ghost 22','Hull Without Provenance','Fragment Object M-9'],
+      yard_structure:['Cairn Yard Drydock One','Registry Annex Kappa','Shepherd Tug Control Spine','Outer Depot Frame Twelve','Cold Refinery Frame Seven','Cairn Service Spine Delta']
+    };
+
+    const hash32 = (s) => {
+      let h=2166136261;
+      for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+      return h>>>0;
+    };
+    const pick=(arr,seed)=>arr[seed%arr.length];
+    const pad=(n,w=3)=>String(n).padStart(w,'0');
+
+    function statusFor(def,i){
+      if(def.key==='unknown'){
+        return ['Restricted strategic exception','Released or abandoned salvage','Disputed or unresolved title','Disputed or unresolved title','Memorial or evidence','Quarantine or hazard','Released or abandoned salvage','Disputed or unresolved title','Restricted strategic exception'][i-1];
+      }
+      const rank=((i-1)*37)%def.count;
+      let edge=0;
+      for(let s=0;s<def.q.length;s++){edge+=def.q[s];if(rank<edge)return STATUSES[s];}
+      throw new Error('Status allocation overflow');
+    }
+
+    function originFor(def,i,seed){
+      if(def.key==='unknown'){
+        if(i===1)return 'Ar’nock Concord of Holds; exact owner unresolved';
+        return pick(['Unknown','Foreign registry not resolved','Unresolved successor ownership','Ar’nock-era registry damaged'],seed);
+      }
+      if(def.key==='yard_structure')return 'Gloam Derelict Custody Anchorage';
+      if(['naval_combatant','fleet_auxiliary','security_patrol_courier'].includes(def.key)){
+        return pick(['Ar’nock Concord of Holds','Ossian successor registrant','Kaith registrant','Dissolved military authority','Unresolved successor ownership'],seed);
+      }
+      if(def.key==='diplomatic_state_archive'){
+        return pick(['Ar’nock Concord of Holds','Ossian successor registrant','Kaith registrant','Dissolved state authority'],seed);
+      }
+      return pick(ORIGINS,seed);
+    }
+
+    function eraFor(origin,seed){
+      if(origin.includes('Ar’nock'))return pick(['Late Concord period','Settlement-war period','Pre-Ossian Concord; exact date unresolved'],seed);
+      if(origin.includes('Ossian'))return pick(['Early Ossian settlement','Mandate-era registry','Late active-anchorage period'],seed);
+      if(origin.includes('Kaith'))return pick(['Settlement-war period','Mandate-era registry','Late active-anchorage period'],seed);
+      if(origin.includes('Unknown')||origin.includes('Unresolved')||origin.includes('Foreign'))return 'Uncertain; registry chronology damaged';
+      return pick(ERAS,seed);
+    }
+
+    function nameFor(def,i){
+      if(SPECIAL_NAMES[def.key])return SPECIAL_NAMES[def.key][i-1];
+      if(def.key==='commercial_freight')return `${ADJ[(i*5+1)%ADJ.length]} ${NOUN[(i*7+2)%NOUN.length]} ${pad(i)}`;
+      if(def.key==='industrial')return `${['Foundry','Works','Extractor','Refinery','Fabricator','Processor','Bore','Assembly'][i%8]} ${ADJ[(i*5)%ADJ.length]} ${NOUN[(i*13+2)%NOUN.length]} ${pad(i,2)}`;
+      if(def.key==='fleet_auxiliary')return `${['Tender','Tug','Storeship','Tanker','Workshop','Recovery','Depot'][i%7]} ${ADJ[(i*9+4)%ADJ.length]} ${NOUN[(i*17+1)%NOUN.length]} ${pad(i,2)}`;
+      if(def.key==='passenger_transport')return `${ADJ[(i*7+3)%ADJ.length]} ${NOUN[(i*11+5)%NOUN.length]} ${pad(i,2)}`;
+      return `Hull ${pad(i)}`;
+    }
+
+    function statusClass(status){
+      if(status.startsWith('Restricted'))return 'restricted';
+      if(status.startsWith('Quarantine'))return 'hazard';
+      if(status.startsWith('Memorial'))return 'memorial';
+      return '';
+    }
+
+    function conditionFor(def,i,status,seed){
+      if(def.key==='unknown'&&i===1)return 'Ancient combat-killed hull; severe battle damage; historical registry incomplete';
+      if(def.key==='yard_structure')return pick(['cold structural frame; utility trunks mostly dead','partial power islands survive; pressure integrity fragmentary','docking machinery seized; external truss stable','administrative shell dark; registry storage partly recoverable','service frame stripped; autonomous subsystems intermittently active'],seed);
+      if(status==='Quarantine or hazard')return pick(['sealed hazardous compartments; condition inside unverified','reactor compartment contaminated and structurally compromised','biological contamination markers survive on multiple locks','volatile stores and damaged containment systems','unknown active chemistry in sealed process spaces','radiological hot zones around engineering'],seed);
+      if(status==='Restricted strategic exception')return pick(['externally stable; sensitive internal systems remain unverified','battle-damaged but unusually complete for the yard','multiple strategic compartments sealed under legacy authority','core machinery appears less stripped than surrounding hulks','registry marks internal systems as non-routine recovery'],seed);
+      return pick(CONDITIONS,seed);
+    }
+
+    function hazardFor(def,i,status,seed){
+      if(def.key==='unknown'&&i===1)return 'potential live strategic systems';
+      if(status==='Quarantine or hazard')return pick(['radiological contamination','biological contamination','unstable reactor products','unknown sealed chemistry','active autonomous containment','volatile propellant residue','unmapped computational hazard'],seed);
+      if(status==='Restricted strategic exception')return pick(['potential live strategic systems','protected cognition or identity archive','restricted weapons or control technology','unverified transit hardware','sovereign archive / continuity systems'],seed);
+      if(def.key==='naval_combatant')return pick(['possible unexploded ordnance','armored inaccessible compartments','damaged weapon capacitors'],seed);
+      if(def.key==='medical_quarantine')return pick(['protected medical records','sealed sample lockers','legacy isolation zones'],seed);
+      return pick(HAZARDS,seed);
+    }
+
+    function economicsFor(status,seed){
+      if(status==='Released or abandoned salvage')return pick(['negative','negative','marginal','marginal','situational'],seed);
+      if(status==='Disputed or unresolved title')return pick(['negative','marginal','situational'],seed);
+      if(status==='Memorial or evidence')return pick(['low material / high archival','situational','legally negative'],seed);
+      if(status==='Quarantine or hazard')return pick(['negative until hazard cleared','specialist only','unknown'],seed);
+      return pick(['potentially strategic','specialist high-value','unknown; politically sensitive'],seed);
+    }
+
+    function noteFor(def,i,status,seed){
+      if(def.key==='unknown'&&i===1)return 'BEX-17 — Black Exception 17. Current No Return Signal campaign vessel. Original vessel name, exact class, mission, owner, destination, and ancient FTL family remain unresolved. The black-exception tag is historical and does not imply active monitoring.';
+      let note=pick(NOTES,seed);
+      if(def.key==='naval_combatant')note+=' '+pick(['Weapons spaces were nominally demilitarized, but the completeness of the work is disputed.','Battle damage predates deposition in Gloam.','Fire-control archives are listed as removed; the registry never verified the removal.','Armor and structural mass make towing more expensive than replacement construction.','The hull is associated with a war record modern claimants rarely discuss.'],seed>>>3);
+      else if(def.key==='medical_quarantine')note+=' '+pick(['Medical isolation boundaries remain legally significant despite the dead power state.','Sample lockers were never fully reconciled against the quarantine manifest.','Protected patient or casualty records are the principal reason the hull remains untouched.','Decontamination status is older than the current biological safety standard.'],seed>>>3);
+      else if(def.key==='passenger_transport')note+=' '+pick(['Passenger identity records complicate otherwise straightforward salvage.','The vessel is tied to unresolved estates and continuity claims.','Casualty memorial markers remain on at least one accessible airlock.','Cabin blocks were stripped unevenly; personal effects may remain in sealed sections.'],seed>>>3);
+      else if(status==='Restricted strategic exception')note+=' A high-value recovery could reactivate dormant government claims.';
+      else if(status==='Memorial or evidence')note+=' Destructive salvage could create legal or cultural consequences if discovered.';
+      return note;
+    }
+
+    const records=[];
+    let global=1;
+    for(const def of DEFS){
+      for(let i=1;i<=def.count;i++){
+        const id=`GDC-${pad(global)}`;
+        const seed=hash32(`${id}:${def.key}:${i}`);
+        const status=statusFor(def,i);
+        const origin=originFor(def,i,seed);
+        const era=(def.key==='unknown'&&i===1)?'Pre-Ossian Concord; exact date unresolved':eraFor(origin,seed>>>1);
+        const band=BANDS[seed%BANDS.length];
+        const radius=Math.round((band[1]+((seed%10000)/10000)*(band[2]-band[1]))*10)/10;
+        const subtype=(def.key==='unknown'&&i===1)?'unresolved major vessel':def.sub[(i*3+global)%def.sub.length];
+        const legacy=(def.key==='unknown'&&i===1)?'BEX-17':`${def.prefix}-${pad(i)}`;
+        records.push({
+          registryId:id,legacyTag:legacy,name:nameFor(def,i),family:def.label,familyKey:def.key,subtype,
+          originOrLastRegistrant:origin,registryEra:era,legacyCustodyStatus:status,
+          orbitBand:band[0],lastPlottedRadiusKm:radius,
+          condition:conditionFor(def,i,status,seed>>>2),
+          principalHazard:hazardFor(def,i,status,seed>>>4),
+          salvageEconomics:economicsFor(status,seed>>>5),
+          registryNote:noteFor(def,i,status,seed>>>6),
+          bex:def.key==='unknown'&&i===1
+        });
+        global++;
+      }
+    }
+
+    const expectedFamilies=Object.fromEntries(DEFS.map(d=>[d.key,d.count]));
+    const expectedStatuses={'Released or abandoned salvage':251,'Disputed or unresolved title':96,'Memorial or evidence':53,'Quarantine or hazard':38,'Restricted strategic exception':25};
+    const familyCounts={}; const statusCounts={};
+    for(const r of records){familyCounts[r.familyKey]=(familyCounts[r.familyKey]||0)+1;statusCounts[r.legacyCustodyStatus]=(statusCounts[r.legacyCustodyStatus]||0)+1;}
+    if(records.length!==463)throw new Error(`Registry count invariant failed: ${records.length}`);
+    for(const [k,v] of Object.entries(expectedFamilies))if(familyCounts[k]!==v)throw new Error(`Family invariant failed: ${k}`);
+    for(const [k,v] of Object.entries(expectedStatuses))if(statusCounts[k]!==v)throw new Error(`Status invariant failed: ${k} ${statusCounts[k]} != ${v}`);
+
+    window.GLOAM_SALVAGE_YARD_REGISTRY=Object.freeze(records);
+
+    const body=document.getElementById('registry-body');
+    const search=document.getElementById('registry-search');
+    const category=document.getElementById('category-filter');
+    const status=document.getElementById('status-filter');
+    const visible=document.getElementById('visible-count');
+    const summary=document.getElementById('category-summary');
+
+    for(const def of DEFS){
+      const opt=document.createElement('option');opt.value=def.key;opt.textContent=`${def.label} (${def.count})`;category.append(opt);
+      const btn=document.createElement('button');btn.type='button';btn.dataset.family=def.key;btn.innerHTML=`<strong>${def.count}</strong><span>${def.label}</span>`;btn.addEventListener('click',()=>{category.value=def.key;render();});summary.append(btn);
+    }
+    for(const s of STATUSES){const opt=document.createElement('option');opt.value=s;opt.textContent=`${s} (${expectedStatuses[s]})`;status.append(opt);}
+
+    const esc=(v)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function render(){
+      const q=search.value.trim().toLowerCase(), cf=category.value, sf=status.value;
+      const rows=records.filter(r=>{
+        if(cf&&r.familyKey!==cf)return false;
+        if(sf&&r.legacyCustodyStatus!==sf)return false;
+        if(!q)return true;
+        return Object.values(r).join(' ').toLowerCase().includes(q);
+      });
+      visible.textContent=rows.length;
+      body.innerHTML=rows.map(r=>`<tr data-bex="${r.bex?'true':'false'}">
+        <td class="rid">${esc(r.registryId)}<span class="legacy">${esc(r.legacyTag)}</span></td>
+        <td><span class="ship-name">${esc(r.name)}</span></td>
+        <td>${esc(r.family)}<span class="legacy">${esc(r.subtype)}</span></td>
+        <td>${esc(r.originOrLastRegistrant)}<span class="legacy">${esc(r.registryEra)}</span></td>
+        <td><span class="status ${statusClass(r.legacyCustodyStatus)}">${esc(r.legacyCustodyStatus)}</span></td>
+        <td class="orbit">${esc(r.orbitBand)}<span class="legacy">${r.lastPlottedRadiusKm.toLocaleString()} km</span></td>
+        <td>${esc(r.condition)}</td>
+        <td>${esc(r.principalHazard)}<span class="legacy">${esc(r.salvageEconomics)}</span></td>
+        <td>${esc(r.registryNote)}</td>
+      </tr>`).join('');
+    }
+
+    search.addEventListener('input',render);category.addEventListener('change',render);status.addEventListener('change',render);
+    document.getElementById('reset-filters').addEventListener('click',()=>{search.value='';category.value='';status.value='';render();search.focus();});
+    render();
+  })();
+  </script>
+</body>
+</html>
