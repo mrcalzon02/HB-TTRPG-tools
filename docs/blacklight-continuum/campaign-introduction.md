@@ -579,6 +579,16 @@ The improvement marks the beginning of a shift from desperate scavenging toward 
 
 The team has located the fabrication bay and reached what appears to be the vessel’s primary engineering or main power-bus region. They do not yet possess complete mastery of either area, but access to fabrication and major power infrastructure creates the possibility of manufacturing purpose-built equipment, restoring systems, and moving beyond survival-level improvisation.
 
+## Session Three — Primary Reactor Coolant Repair
+
+During Session Three, the operatives encountered a jet of superheated coolant escaping from damaged vessel plumbing in or near the engineering and power-distribution systems. They were able to identify the fault, repair the damaged coolant path, and stop the uncontrolled discharge.
+
+The current Game Moderator engineering inference is that this coolant circuit is associated with the vessel’s primary nuclear reactor, or with a thermal-control loop that ultimately serves that reactor. The players have not yet confirmed that relationship through recovered schematics, system labels, or direct reactor inspection, so the reactor linkage remains **GM inference rather than an established in-character fact**.
+
+Under that inference, the repair restored sufficient coolant circulation for the primary reactor to shed heat correctly. This removed one of the derelict’s catastrophic failure states: continued loss of cooling progressing to an uncontrolled reactor failure severe enough to destroy the vessel, including the possibility of the reactor itself exploding.
+
+The repair does not establish that the reactor is fully restored, stable in every respect, or safe indefinitely. It establishes that this specific active coolant-loss failure was repaired and that the immediate reactor-destruction trajectory associated with that failure is no longer active.
+
 ## Print-State Health Baseline
 
 The operatives have also established an important fact about the way their bodies were reconstructed. They were not printed in whatever health condition they happened to be in when their original scans were taken.
