@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-measurement-instrumentation.schema.json",
+  "title": "Black Light FTL Measurement, Instrumentation, and Observation Packet Registry",
+  "type": "object",
+  "required": ["schemaVersion", "registryKey", "authority", "instrumentClasses", "measurementModel", "observationPacket", "damageSurvivability", "eventModel", "resolverContract", "provenance", "canonGuards"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.measurement-instrumentation"},
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "sourceOrder", "designSource"],
+      "properties": {
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]},
+        "scope": {"type": "string"},
+        "sourceOrder": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+        "designSource": {"type": "object", "required": ["title", "documentId", "revisionId"]}
+      }
+    },
+    "instrumentClasses": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["instrumentClass", "status", "observables", "limitations", "calibrationModel", "familyNeutral"]
+      }
+    },
+    "measurementModel": {
+      "type": "object",
+      "required": ["measurementEquation", "uncertaintyState", "covarianceRule", "resolutionRule", "saturationRule", "calibrationRule"]
+    },
+    "observationPacket": {
+      "type": "object",
+      "required": ["requiredFields", "lifecycle", "qualityTerms", "provenanceRule", "negativeEvidenceRule"]
+    },
+    "damageSurvivability": {
+      "type": "object",
+      "required": ["classes", "survivalRule", "missingMarkerRule"]
+    },
+    "eventModel": {
+      "type": "object",
+      "required": ["eventTypes", "epochRule", "interventionBoundary", "replayRule"]
+    },
+    "resolverContract": {
+      "type": "object",
+      "required": ["resolver", "inputs", "outputs", "familyAutoSelection", "authorityModes"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceGraph", "designDocumentId", "designDocumentRevision", "generationRule"]
+    },
+    "canonGuards": {"type": "array", "minItems": 8, "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
