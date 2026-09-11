@@ -49,10 +49,17 @@
   }
 
   function requestFromPage(rating){
+    const selectedFamily=$('exo-ftl-family')?.value||null;
     return {
-      family:$('exo-ftl-family')?.value||rating?.identity?.familyKey||null,
+      family:selectedFamily&&selectedFamily!=='random'?selectedFamily:null,
       route:$('exo-ftl-route')?.value||null
     };
+  }
+
+  function profileLabel(profileIdentity){
+    if(!profileIdentity)return'unresolved';
+    if(typeof profileIdentity==='string')return profileIdentity;
+    return [profileIdentity.profileId,profileIdentity.profileVersion].filter(Boolean).join('@')||'unresolved';
   }
 
   function renderSafety(rating,safety){
@@ -64,14 +71,13 @@
       const reasons=safety?.presentation?.reasons||safety?.warnings||[];
       const certificate=safety?.certificate||{};
       const response=certificate.familyResponse||{};
-      const horizon=certificate.lookahead||certificate.safetyHorizon||{};
       const recovery=certificate.recovery||certificate.recoveryState||{};
       const calibration=safety?.calibration||{};
       const top=document.createElement('div');top.className='exo-ftl-grid';
       top.append(
         card('Route certificate',safety?.presentation?.label||safety?.status||'UNRESOLVED',reasons.length?reasons.join(' · '):'No blocking reason was returned by the modeled certificate.',state(safety?.status)),
         card('Family / route',`${safety?.family||'unresolved'} · ${safety?.route||'unresolved'}`,`Safety path ${safety?.path||'unresolved'}. Generated architecture remains ${rating?.identity?.name||'unnamed'}.`),
-        card('Calibration provenance',calibration.profileIdentity||'unresolved',`Calibration status ${calibration.status||'UNRESOLVED'}. Numerical profiles are simulation calibration, not setting constants.`,state(calibration.status)),
+        card('Calibration provenance',profileLabel(calibration.profileIdentity),`Calibration status ${calibration.status||'UNRESOLVED'}. Numerical profiles are simulation calibration, not setting constants.`,state(calibration.status)),
         card('Gravity efficiency',Number.isFinite(Number(response.gravityEfficiency))?`${(Number(response.gravityEfficiency)*100).toFixed(2)}%`:'unresolved','Family-specific route efficiency after modeled gravitational/environmental penalty.'),
         card('Calculation efficiency',Number.isFinite(Number(response.calculationEfficiency))?`${(Number(response.calculationEfficiency)*100).toFixed(2)}%`:'unresolved','Efficiency retained after uncertainty and family-specific miscalculation amplification.'),
         card('Recovery protection',Number.isFinite(Number(recovery.protectedReserve))?String(recovery.protectedReserve):'modeled by certificate','Protected recovery authority is not available for nominal performance optimization.')
