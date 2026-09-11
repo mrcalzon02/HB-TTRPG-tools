@@ -434,6 +434,179 @@ Cultivated neural components are common in control systems because they are adap
 
 Ar’nock machinery should continue to follow the existing engineering authority: grown composite structures, flexible service geometry, vibration/acoustic signaling, cultivated neural control, chemistry-resistant wet boundaries, vascular cooling, and distributed segmentation are characteristic. No specific ancient Ar’nock FTL family is established by this biological workup. The modern successor civilization’s present transit technology does not establish what drive family is installed aboard this much older derelict.
 
+## Game Moderator Authority — Ar’nock Electromechanical Systems
+
+Ar’nock machinery is alien in architecture, manufacture, interface language, and maintenance philosophy, but it is not built from a different universe of physics. That distinction is the reason the Infiltration Assault Algorithm could commandeer portions of the derelict at all.
+
+At the lowest useful engineering level, both human and Ar’nock machines still have to manage charge, current, electromagnetic fields, heat, mechanical load, signal propagation, switching, energy storage, sensing, actuation, feedback, and material limits. An Ar’nock controller does not speak Ethernet, PCI Express, USB, CAN bus, SATA, or any other human standard. Its voltage ranges, timing, encoding, logic states, connector geometry, bus arbitration, memory organization, and security model are alien. Nevertheless, a powered conductor still exhibits potential. A switching element still changes a downstream state. A motor or field actuator still responds to controlled energy. A sensor still produces a state correlated with something outside itself. A storage element still has measurable write and read behavior.
+
+The IAA was designed to exploit exactly that layer of technological convergence. It did not require the target civilization to use human software. It required the target to contain physically interrogable machinery.
+
+### Human Assembly Versus Ar’nock Functional Substrates
+
+A familiar human printed-circuit assembly normally separates the *board* from most of the *components mounted on the board*. Conductive traces are printed or deposited onto an insulating substrate. Packaged processors, memory chips, regulators, capacitors, resistors, inductors, transistors, oscillators, connectors, and other devices are then soldered or otherwise attached. Even when human technology integrates enormous complexity into a system-on-chip, the service-level board still usually looks like an assembly of visibly distinct manufactured objects.
+
+Ar’nock engineering moves that integration boundary one level outward.
+
+What a human technician would call a circuit board is commonly manufactured by the Ar’nock as a **single monolithic functional substrate**. Conductive paths, dielectric separation, charge-storage structures, resistive elements, inductive geometries, switching regions, signal-conditioning structures, shielding, thermal paths, and many low-level sensing functions are fabricated into the body of the substrate itself. The finished object may resemble a dense ceramic, glassy composite, dark mineral plate, or laminated solid-state tile more than a human motherboard.
+
+The apparent uniformity does not mean the material is literally chemically identical throughout. The Ar’nock use controlled phase changes, doped regions, embedded conductive meshes, dielectric layers, semiconductor domains, ceramic inclusions, microvoids, printed metallic paths, and geometric field structures inside a comparatively uniform structural body. Function is created by composition, microstructure, and three-dimensional geometry rather than by attaching a forest of separate packages to the surface.
+
+A capacitor on a human board may be a discrete can or multilayer package soldered between two pads. Its Ar’nock equivalent may simply be two interleaved conductive volumes separated by a dielectric region inside the substrate. An inductor may be a buried spiral or toroidal path. A resistor may be a deliberately narrow or compositionally altered region. Switching arrays may be patterned directly through semiconductor domains inside the tile. Current limiting may be accomplished through sacrificial internal necks or phase-change regions. Signal isolation and shielding may be structural features of the board itself.
+
+There is therefore often **nothing to desolder**.
+
+If an Ar’nock control substrate fails internally, an ordinary field technician does not replace one capacitor, one transistor, or one packaged integrated circuit. The entire substrate is the component.
+
+This makes the system look paradoxical to a human engineer: extremely integrated at the board level and extremely modular at the equipment level.
+
+| Engineering boundary | Common human practice | Common Ar’nock practice |
+|---|---|---|
+| Board construction | Substrate plus printed conductors, later populated with packaged parts | Three-dimensional functional substrate with conductors, passives, switching, shielding, and thermal structures fabricated into one body |
+| Capacitors, resistors, inductors | Often discrete replaceable packages or chip components | Frequently embedded geometries or material regions inside the substrate |
+| Processing logic | Packaged ICs mounted to a PCB, sometimes with separate support chips | Logic regions may be integrated into a substrate or concentrated inside a larger replaceable function module |
+| Field repair | Replace a component, rework a joint, or replace a board | Isolate the failed functional substrate or module and replace the whole unit |
+| Motherboard role | Hosts many individually manufactured components and daughter devices | Provides a rugged system lattice into which complete functional modules are slotted or permanently bonded |
+| Service modularity | Often component-, card-, drive-, and peripheral-level | Primarily function-block-level: storage, communications, control, amplification, sensor aggregation, power conditioning, neural interface, actuation |
+
+### Functional Modules Instead of Replaceable Board Components
+
+Ar’nock modularity begins where human technicians would often start talking about expansion cards, drives, controller assemblies, or complete line-replaceable units.
+
+A primary Ar’nock control lattice may contain no individually replaceable capacitors, regulators, memory packages, or processors at all. Instead, it accepts complete **function modules**. A storage module is a self-contained hard-drive-equivalent memory assembly. A communications module contains the signal generation, filtering, translation, encryption support, and amplification required for one communications family. A visual or sensor-processing module may contain the entire amplification and interpretation chain for a display or sensor cluster. A motion-control module may include feedback conditioning, drive logic, power gating, and actuator supervision as one removable block.
+
+Common modular families include:
+
+- persistent storage and archival memory;
+- volatile working-state storage;
+- communications generation and reception;
+- visual, thermal, vibration, and other sensor amplification;
+- signal translation between different shipboard bus families;
+- power conditioning and local energy buffering;
+- motor, servo, field-coil, valve, and actuator control;
+- environmental sensing and life-support regulation;
+- cryptographic and identity-control functions;
+- cultivated-neural interface and biological process control;
+- navigation, timing, and inertial-reference processing;
+- local fault management and emergency isolation.
+
+The exact list varies by era and vessel, but the philosophy remains recognizable: **the replaceable part is a complete useful function, not a microscopic electronic ingredient**.
+
+This architecture is strongly related to Ar’nock manufacturing economics. A civilization with mature additive fabrication can print or sinter an exact replacement function substrate more easily than it can support a vast inventory of separately packaged microscopic components. Their technicians are expected to diagnose the failing block, isolate it, replace it, and return the damaged block to a manufactury capable of rebuilding or recycling it.
+
+It also produces exceptional ruggedness. There are fewer exposed solder joints, fewer package leads, fewer mechanically vulnerable component bodies, fewer contamination traps, and fewer microscopic interfaces between separately manufactured parts. A sealed solid-state tile can tolerate vibration, thermal cycling, chemical contamination, pressure changes, and long service intervals better than a board covered in hundreds of delicate exposed packages.
+
+The system is not indestructible. A cracked substrate can sever many buried functions at once. Internal delamination, phase damage, radiation injury, thermal overstress, dielectric breakdown, or conductor migration can convert a visually intact tile into a dead object. The very integration that makes a module durable also makes fine field repair difficult.
+
+### Wiring, Attachment Points, and Service Geometry
+
+Ar’nock ships still contain wires, conductor bundles, power trunks, signal paths, bus structures, optical paths, fluid lines, and mechanical attachment systems. Their modular electronics do not eliminate the need to move energy and information between physically separated machines.
+
+The difference is again one of service philosophy.
+
+Many low-energy signal connections terminate in rigidly keyed contact blocks or planar multipoint interfaces built directly into a function substrate. High-current paths may use heavy conductive tongues, laminated bus bars, clamped metallic spines, or bonded conductor webs. Some signal families use optical or vibration-bearing paths alongside electrical conductors. Biological systems may add fluidic and nutrient connections to the same service interface.
+
+Where a human board might expose rows of headers, sockets, screw terminals, or solder pads, an Ar’nock module often presents a small number of **hard attachment points** designed to lock into a known service geometry. The interface can carry power, data, synchronization, diagnostic states, and in some applications thermal or biological support at the same physical junction.
+
+Connections that are not intended for routine replacement may be permanently bonded. Ar’nock engineers are perfectly willing to hard-wire a subsystem when its expected service life exceeds the surrounding structure. Their fabrication culture does not assume that every internal component must remain individually hand-serviceable.
+
+That fact matters aboard BEX-17. A human engineer opening an Ar’nock panel may discover a beautifully modular machine whose modules are themselves almost impossible to repair without the correct fabrication equipment.
+
+### Actuators and Electromechanical Machinery
+
+The Ar’nock use machinery that is conceptually legible to human engineering even when its embodiment is unfamiliar. Pumps move fluids. Motors or field drives produce rotation. Linear actuators move doors and valves. Electromagnetic, electrostatic, piezoelectric, magnetostrictive, thermal, hydraulic, and biological mechanisms convert controlled energy into physical motion. Sensors provide feedback. Control systems compare desired state with measured state and adjust output.
+
+Human-trained personnel can therefore often infer *what class of thing a device is doing* long before they can read its labels.
+
+A thick power path leading into a repeated set of switching modules beside a rotating machine strongly suggests motor control. Paired sensor lines returning from a pressure boundary suggest a feedback loop. Heavy energy storage beside a pulsed field assembly suggests a system that draws more instantaneous power than its feeder can continuously supply. Repeated actuator blocks around a hatch identify a door-control architecture even if the operator cannot yet distinguish open, close, lock, seal, and emergency-release commands.
+
+This is the level at which the Ar’nock ship feels alien but not magical. The engineering problem is translation and topology, not abandonment of cause and effect.
+
+### Computation, Storage, and Communications
+
+Ar’nock computation is heterogeneous. Purely solid-state controllers coexist with cultivated neural processors, specialized analog systems, signal-processing substrates, and larger distributed computational assemblies. The civilization did not converge on one universal processor architecture any more than humanity uses one circuit design for every device.
+
+Many ordinary shipboard controllers nevertheless expose recognizable engineering behaviors: they maintain state, receive inputs, produce outputs, arbitrate access to shared resources, store configuration, execute repeated control sequences, report faults, and enter maintenance or recovery modes. Some are effectively digital even if their logic representation is not binary in the human sense. Others combine discrete-state control with continuous analog processing or adaptive cultivated tissue.
+
+Storage likewise exists at multiple levels. A removable archive module may be closer in operational role to a human solid-state drive than to a CPU. A local controller may contain configuration state embedded directly in its substrate. A cultivated neural module may retain adaptive state biologically. A high-security system may distribute authorization state across several physical modules so that replacing one does not recreate a trusted identity.
+
+Ar’nock communications equipment also still has transmitters, receivers, filters, oscillators, amplifiers, modulators, antennas or field couplers, timing references, and power stages. None of those facts make the protocol human-readable. They make the signal chain physically discoverable.
+
+### The Biological Boundary
+
+Cultivated neural components are the point at which direct technological similarity becomes least useful.
+
+The IAA did not possess a universal ability to “hack a brain” merely because that brain was attached to a machine. Instead, Ar’nock designers surrounded cultivated components with electromechanical interface machinery: power regulation, nutrient control, stimulation grids, readout layers, signal translators, fault isolation, memory-support structures, and conventional control electronics. Those boundary systems allowed nonliving machinery to communicate with living processors.
+
+The IAA could attack the boundary without fully understanding the cultivated tissue inside it.
+
+Where a neural component behaved as a black-box coprocessor, the assault system could observe inputs and outputs, manipulate the trusted electronics around it, isolate it, reset it, deprive it of certain channels, replay accepted states, or route around it. Where subjective cognition, adaptive learning, or unfamiliar biological state became essential to the function, intrusion became much harder and sometimes not worth pursuing.
+
+This is one reason the IAA could seize enough of the fabrication system to print the team without acquiring effortless mastery of every Ar’nock system aboard the vessel.
+
+### Why the Infiltration Assault Algorithm Could Take Control
+
+The IAA’s success should be understood as a **physical endpoint compromise followed by adaptive systems identification**, not as ordinary software compatibility.
+
+The penetrating device gave the assault system direct access to shipboard conductors and machinery. That access allowed it to move beneath many of the assumptions on which normal Ar’nock security depended. Encryption protects a message moving between trusted endpoints. It does not protect a controller whose power rails, service lines, memory state, or actuator interfaces have been physically seized by hostile hardware attached inside the security boundary.
+
+A plausible intrusion sequence is:
+
+1. **Electrical reference acquisition.** The assault hardware identifies local ground equivalents, safe potential ranges, power rails, shielding, and protected signal paths without immediately destroying the target.
+2. **Topology mapping.** It measures impedance, timing, coupling, signal repetition, and response to controlled perturbations to determine which conductors carry power, synchronization, state, telemetry, or commands.
+3. **Functional classification.** It correlates changes on candidate lines with observable machine responses: relays changing state, pumps activating, valves moving, processors resetting, diagnostic traffic appearing, or downstream modules waking.
+4. **Bus and state inference.** It records recurring symbol patterns, handshakes, timing relationships, error responses, and maintenance traffic until it can infer enough of the local control grammar to emulate a legitimate participant.
+5. **Endpoint seizure.** Where cryptographic or identity controls cannot be defeated economically, the IAA bypasses them by taking control of the trusted controller below the authentication layer, forcing maintenance states, altering volatile configuration, or directly driving the outputs that the authenticated controller would normally command.
+6. **Network traversal.** It uses compromised local controllers as observation points to map adjacent segments rather than assuming one universal shipwide protocol.
+7. **Fabricator identification.** It locates machinery with the resource flows, command structures, biological telemetry, and job-control behavior expected of a high-complexity fabrication system.
+8. **Local grammar acquisition.** Rather than inventing Ar’nock biological control from nothing, it steals the printer’s own templates, validation routines, material dictionaries, and job structures. The printer already knows how to turn valid construction definitions into biological manufacturing operations.
+9. **Job translation.** The IAA maps the transmitted Q-MAP body specifications into the printer’s native job language, repeatedly using the printer’s own error checks and simulation responses to correct invalid mappings.
+10. **Authority override.** It suppresses or bypasses ownership, identity, consent, quota, and provenance checks at the controller level while preserving the manufacturing safeguards required to produce viable organisms.
+11. **Execution and verification.** It allocates feedstock, orders construction, monitors activation, installs the Charles substrate, and verifies that the requested personnel are operational.
+12. **Termination.** Having achieved its bounded mission objective, it stops rather than continuing to explore and occupy an entire alien vessel.
+
+This sequence explains why the intrusion was possible without reducing Ar’nock cybersecurity to incompetence. The target was an ancient, battle-damaged, partially abandoned vessel. The attacker possessed invasive physical access, purpose-built adaptive hardware, a narrow objective, and no requirement to preserve normal administrative trust. Those advantages are catastrophically different from a remote outsider attempting to guess a password.
+
+It also preserves the significance of Ar’nock security. A healthy modern Ossian ship with intact segmentation, monitored physical boundaries, active operators, redundant identity hardware, contemporary counter-intrusion systems, and no hostile object physically embedded inside its hull would be a radically more difficult target.
+
+### Why the IAA Did Not Simply Own the Entire Ship
+
+The IAA was not sent to conquer BEX-17. It was sent to create the operatives and make their immediate survival possible.
+
+Mapping an alien vessel completely would have consumed time, energy, memory, and attack surface for no mission benefit. Damaged network partitions, dead modules, obsolete protocols, isolated safety systems, cultivated neural controllers, hardwired local machinery, and inaccessible compartments all increased the cost of universal control. The IAA therefore took the shortest functional path from physical entry to fabrication, support power, environmental requirements, Charles installation, and activation verification.
+
+That limited objective is why the local Charles can interact with selected ship systems while still struggling with doors, navigation, propulsion, security, and other subsystems. The IAA left behind **access**, not omniscience. It compromised the infrastructure necessary for deployment and terminated before converting the entire ship into a fully translated Blacklight platform.
+
+The remaining vessel must still be learned.
+
+### Practical Engineering Consequences for the Operatives
+
+A character with human engineering knowledge should not look at Ar’nock machinery and become helpless merely because it is alien. They can reason from power flow, thermal behavior, mechanical linkage, conductor size, repeated topology, sensor placement, actuator geometry, shielding, and failure response. Once enough glyphs and diagnostic conventions are translated, that recognition accelerates quickly.
+
+What they cannot do is assume service compatibility.
+
+A human multimeter-equivalent concept is useful; a human meter connected blindly to an unknown Ar’nock power bus may be destroyed. A human engineer may recognize that a module performs storage; that does not mean it presents a SATA-like interface. A familiar motor-control topology does not make the control words familiar. A cracked function substrate cannot necessarily be repaired with solder and a spare capacitor because the capacitor may be an internal geometric feature of the substrate itself.
+
+Field repair therefore tends to follow a different hierarchy:
+
+- verify power, signal, cooling, and mechanical continuity;
+- identify the failed functional block;
+- isolate whether the fault is in the module, its attachment point, or the surrounding service lattice;
+- substitute a compatible module from another location when possible;
+- bridge or reroute external conductors when the module itself remains sound;
+- use fabrication equipment to reproduce a damaged monolithic substrate when the design record and materials are available;
+- treat true internal substrate repair as specialized manufactury work rather than ordinary hand servicing.
+
+This makes the derelict exceptionally suitable for salvage gameplay. BEX-17 contains many systems that are individually difficult to repair but potentially recoverable by cannibalizing other damaged systems of the same technological era. An intact storage module, actuator controller, communications amplifier, power-conditioning tile, or environmental regulator can be more valuable than kilograms of generic electronic scrap because its internal complexity is already sealed into a working block.
+
+It also gives the penetrating IAA artifact unusual importance. That device represents a functioning **cross-technology bridge** between Blacklight engineering assumptions and Ar’nock electromechanical reality. If the team can understand how it performed adaptive bus discovery, voltage translation, state inference, and endpoint seizure, it may become the basis for safer interface tools, diagnostic equipment, translation hardware, or future attempts to connect human-designed systems to Ar’nock machinery.
+
+The core technological rule is therefore straightforward:
+
+> **Ar’nock machinery is alien in implementation, but physically legible. Their modules do not speak human standards; their machines still obey engineering.**
+
+That is enough for a sufficiently sophisticated intrusive assault system to force a foothold. It is not enough to make the rest of the ship easy.
+
 ## Game Moderator Authority — Ar’nock Political Continuity
 
 The Ar’nock are **alive and politically present in Helios Vale**. They did not vanish, become extinct, or leave behind an orphan civilization. The confusion comes from historical naming.
