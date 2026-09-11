@@ -50,6 +50,27 @@
   function fillerStatus(message){ const el=document.querySelector('#mcf-status'); if(el) el.textContent=message; }
   function resultText(result){ const lines=[result.title,result.description]; if(result.mechanics) lines.push(`Mechanics: ${result.mechanics}`); if(result.occupant) lines.push(`Occupancy: ${result.occupant}`); if(Array.isArray(result.tags)&&result.tags.length) lines.push(`Tags: ${result.tags.join(', ')}`); return lines.filter(Boolean).join('\n'); }
 
+  function restoreCurrentSessionMap(event){
+    const current = window.getCurrentModuleViewerModule?.() || {};
+    if(!String(current.path || '').startsWith('memory:')) return false;
+    if(event){ event.preventDefault(); event.stopImmediatePropagation(); }
+    const mapState = current.editorState || current.module?.mapEditorState || null;
+    if(!mapState || !Array.isArray(mapState.cells)){
+      status('Current session module has no editable map state to load.');
+      return true;
+    }
+    const importBox = document.querySelector('#mme-import');
+    const importButton = document.querySelector('#mme-import-json');
+    if(!importBox || !importButton){
+      status('Map editor import controls are unavailable.');
+      return true;
+    }
+    importBox.value = JSON.stringify(mapState,null,2);
+    importButton.click();
+    status(`Loaded session map for ${current.module?.title || current.module?.id || 'current module'}.`);
+    return true;
+  }
+
   function insertGeneratedIntoSelectedTile(){
     if(!generatedResults.length){ fillerStatus('Generate content first.'); return; }
     const notes=document.querySelector('#mme-inspector-notes'); const type=document.querySelector('#mme-inspector-type'); const apply=document.querySelector('#mme-inspector-apply');
@@ -95,6 +116,10 @@
     actionRow.insertBefore(button,actionRow.firstChild); injected=true;
   }
 
+  document.addEventListener('click',event=>{
+    if(!event.target.closest?.('#mme-load-current')) return;
+    restoreCurrentSessionMap(event);
+  },true);
   document.addEventListener('module-content-filler-generated',event=>{ generatedResults=event.detail?.results||[]; injectFillerButton(); });
   document.addEventListener('module-map-editor-output',event=>{
     if(!pendingPdfModule) return;
