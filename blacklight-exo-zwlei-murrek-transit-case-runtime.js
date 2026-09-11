@@ -244,8 +244,11 @@
     if (!record.recordedAt) errors.push('recordedAt is required.');
     if (!record.epoch) errors.push('epoch is required.');
     if (!Array.isArray(record.provenanceRoots) || !record.provenanceRoots.length) errors.push('provenanceRoots are required.');
+    if (record.instrumentId && (!state.instrumentInstances || !state.instrumentInstances[record.instrumentId])) errors.push('Unknown instrumentId for this case: ' + record.instrumentId);
     if (errors.length) return { accepted: false, state: clone(state), errors: errors, warnings: [] };
     var epoch = normalizeEpoch(record.epoch);
+    var priorInstrument = clone(state.instrumentInstances[record.instrumentId] || {});
+    var calibrationPayload = Object.assign({}, priorInstrument, clone(record), { calibrationState: 'CERTIFIED_FOR_CASE' });
     var event = {
       eventId: record.eventId || ('MRK-E-CAL-' + record.calibrationId),
       caseId: state.caseId || CASE_ID,
@@ -255,7 +258,7 @@
       observedAt: String(record.recordedAt),
       authoritySnapshot: clone(authoritySnapshot || { status: 'DERIVED', familyConclusion: 'UNRESOLVED' }),
       provenanceRoots: clone(record.provenanceRoots),
-      payload: clone(record),
+      payload: calibrationPayload,
       status: record.status || 'DERIVED'
     };
     return Replay.appendTransitEvent(state, event, { narrativeSafe: true });
