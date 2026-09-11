@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-route-safety-integration.schema.json",
+  "title": "Black Light FTL Route Safety Integration Registry",
+  "type": "object",
+  "required": ["schemaVersion", "registryKey", "status", "designIntentSource", "familyMap", "routeArchetypes", "integrationRules", "api", "canonGuards"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.route-safety-integration"},
+    "status": {"enum": ["DERIVED", "PROPOSED", "MIXED"]},
+    "designIntentSource": {
+      "type": "object",
+      "required": ["title", "documentId", "revisionId"],
+      "properties": {
+        "title": {"type": "string"},
+        "documentId": {"type": "string"},
+        "revisionId": {"type": "string"}
+      }
+    },
+    "familyMap": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "routeArchetypes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "environment", "uncertaintyBase", "requiredHazards"],
+        "properties": {
+          "status": {"enum": ["DERIVED", "PROPOSED"]},
+          "environment": {
+            "type": "object",
+            "required": ["potentialMagnitude", "accelerationMagnitude", "tidalTensorNorm", "curvatureNorm", "massModelUncertainty", "hiddenMassProbability", "familyBoundaryHazard"],
+            "additionalProperties": {"type": ["number", "string", "array", "object", "null"]}
+          },
+          "uncertaintyBase": {"type": "number", "minimum": 0},
+          "requiredHazards": {"type": "array", "items": {"type": "string"}},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "integrationRules": {"type": "array", "items": {"type": "string"}},
+    "api": {
+      "type": "object",
+      "required": ["resolver", "statusValues"],
+      "properties": {
+        "resolver": {"const": "resolveGeneratedFTLRouteSafety"},
+        "statusValues": {"type": "array", "items": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "CONFLICT"]}}
+      }
+    },
+    "canonGuards": {"type": "array", "items": {"type": "string"}}
+  }
+}
