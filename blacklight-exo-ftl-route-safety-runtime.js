@@ -7,7 +7,6 @@
   let cachePromise=null;
 
   const finite=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value));
-  const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)));
   const unique=items=>[...new Set(items.filter(Boolean))];
 
   function deepFreeze(value){
@@ -91,7 +90,7 @@
     return {totalAuthority,protectedReserve,requiredRecoveryAuthority};
   }
 
-  function buildMeasurement(route={},family,registry={},maturity={}){
+  function buildMeasurement(route={},family,registry={},maturity={},uncertaintyOverride=null){
     const redundancy=finite(maturity.redundancyFactor)?Number(maturity.redundancyFactor):1;
     const routeHazards=Array.isArray(route.requiredHazards)?route.requiredHazards:[];
     const familyHazards=Array.isArray(registry.familyHazards?.[family])?registry.familyHazards[family]:[];
@@ -107,7 +106,7 @@
       packet:{
         observableHazards,
         independentGuardHazards,
-        uncertainty:buildUncertainty(Number(route.uncertaintyBase)||0.1,maturity)
+        uncertainty:uncertaintyOverride||buildUncertainty(Number(route.uncertaintyBase)||0.1,maturity)
       }
     };
   }
@@ -122,6 +121,20 @@
     };
     const reasons=certificate?.reasons||calibration?.warnings||[];
     return {label:labels[status]||status,blocking:[STATUS.REJECTED,STATUS.UNRESOLVED,STATUS.CONFLICT].includes(status),reasons:[...reasons]};
+  }
+
+  function blockedPhysicalResult({physical,status,family,path,routeId,calibration}){
+    const warnings=physical?.warnings||['Physical route environment could not be certified.'];
+    return deepFreeze({
+      status,family,path,route:routeId,
+      environmentSource:'PHYSICAL_SI',
+      physicalEnvironment:physical||null,
+      calibration:calibration?{status:calibration.status,profileIdentity:calibration.profileIdentity,warnings:calibration.warnings}:null,
+      certificate:null,
+      presentation:presentationFor(status,null,{warnings}),
+      warnings,
+      provenance:unique([...(physical?.provenance||[]),...(calibration?.provenance||[])])
+    });
   }
 
   async function resolveGeneratedFTLRouteSafety(context={}){
@@ -154,8 +167,37 @@
       return deepFreeze({status,family,path,route:routeId,calibration,certificate:null,presentation:presentationFor(status,null,calibration),warnings:calibration.warnings||[],provenance:calibration.provenance||[]});
     }
 
+    let physical=null;
+    let environmentPacket={epoch:'GENERATED_ROUTE_ARCHETYPE',...route.environment,provenance:[`${registry.registryKey}:${routeId}`]};
+    let uncertaintyOverride=null;
+    let environmentSource='PROPOSED_ROUTE_ARCHETYPE';
+    if(context.physicalEnvironmentContext){
+      const Physical=globalThis.BlacklightExoFTLPhysicalRouteEnvironmentRuntime;
+      if(!Physical?.resolveFTLPhysicalRouteEnvironment){
+        return blockedPhysicalResult({
+          physical:{warnings:['A physicalEnvironmentContext was supplied but the physical-route bridge runtime is not loaded. Proposed route fallback is prohibited.'],provenance:[]},
+          status:STATUS.UNRESOLVED,family,path,routeId,calibration
+        });
+      }
+      physical=await Physical.resolveFTLPhysicalRouteEnvironment({
+        physicalEnvironmentContext:context.physicalEnvironmentContext,
+        familyBoundaryHazard:route.environment?.familyBoundaryHazard,
+        epoch:context.physicalEnvironmentContext.epoch||'PHYSICAL_ROUTE_ENVIRONMENT',
+        provenance:[registry.registryKey,routeId,...(Array.isArray(context.provenance)?context.provenance:[])]
+      });
+      if(physical.status==='OUTSIDE_MODEL_VALIDITY'){
+        return blockedPhysicalResult({physical,status:STATUS.REJECTED,family,path,routeId,calibration});
+      }
+      if(physical.status!=='READY'){
+        return blockedPhysicalResult({physical,status:STATUS.UNRESOLVED,family,path,routeId,calibration});
+      }
+      environmentPacket=physical.environmentPacket;
+      uncertaintyOverride=physical.uncertaintyPacket;
+      environmentSource='PHYSICAL_SI';
+    }
+
     const maturity=calibration.maturityModifier||{};
-    const measurement=buildMeasurement(route,family,registry,maturity);
+    const measurement=buildMeasurement(route,family,registry,maturity,uncertaintyOverride);
     const timing=buildTiming(path,maturity,route);
     if(['fold-jump','q-lattice','phase-displacement'].includes(family))timing.decisionHorizonMode='PRECOMMIT';
     const certificate=Certification.resolveTransitSafetyCertificate({
@@ -164,15 +206,24 @@
       family,
       path,
       sharedTier:rating.identity?.tierKey||null,
-      authoritySnapshot:{routeIntegrationRegistry:registry.schemaVersion,calibrationProfile:calibration.profileIdentity},
-      environmentPacket:{epoch:'GENERATED_ROUTE_ARCHETYPE',...route.environment,provenance:[`${registry.registryKey}:${routeId}`]},
+      authoritySnapshot:{
+        routeIntegrationRegistry:registry.schemaVersion,
+        calibrationProfile:calibration.profileIdentity,
+        environmentSource,
+        physicalNormalizationProfile:physical?.normalizationProfile?`${physical.normalizationProfile.profileId}@${physical.normalizationProfile.profileVersion}`:null
+      },
+      environmentPacket,
       measurementPacket:measurement.packet,
       calibrationProfile:calibration.profile,
       routeCandidate:{projectedProgressRate:1},
       safetyState:timing,
       requiredHazards:measurement.requiredHazards,
       recoveryState:buildRecovery(maturity,route),
-      provenance:[registry.registryKey,calibration.profile.profileId+'@'+calibration.profile.profileVersion]
+      provenance:unique([
+        registry.registryKey,
+        calibration.profile.profileId+'@'+calibration.profile.profileVersion,
+        ...(physical?.provenance||[])
+      ])
     });
 
     let status=certificate.status;
@@ -183,15 +234,21 @@
     }
     const warnings=[];
     if(status!==certificate.status)warnings.push('Family efficiency fell below the active profile threshold; route admission promoted to REJECTED.');
-    warnings.push('Route environment values are PROPOSED normalized simulation inputs, not measured astrophysical constants.');
+    if(environmentSource==='PHYSICAL_SI'){
+      warnings.push(...(physical?.warnings||[]));
+      warnings.push('Route gravity/curvature burden is sourced from a supplied SI physical environment packet; fictional family response and calibration remain DERIVED/PROPOSED.');
+    }else{
+      warnings.push('No physical environment packet was supplied; route environment values are PROPOSED normalized simulation inputs, not measured astrophysical constants.');
+    }
 
     return deepFreeze({
-      status,family,path,route:routeId,
+      status,family,path,route:routeId,environmentSource,
+      physicalEnvironment:physical,
       calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,appliedOverrides:calibration.appliedOverrides,ignoredOverrides:calibration.ignoredOverrides,warnings:calibration.warnings},
       certificate,
       presentation:presentationFor(status,certificate,calibration),
       warnings,
-      provenance:unique([registry.registryKey,...(certificate.provenance||[]),...(calibration.provenance||[])])
+      provenance:unique([registry.registryKey,...(certificate.provenance||[]),...(calibration.provenance||[]),...(physical?.provenance||[])])
     });
   }
 
