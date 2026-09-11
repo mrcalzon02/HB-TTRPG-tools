@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.safety-certification",
+  "title": "Black Light FTL Environmental Safety, Lookahead, Abort, and Recovery Certification Registry",
+  "authority": {
+    "status": "MIXED",
+    "scope": "Machine-readable safety certification layer for gravity/environment penalties, lookahead sufficiency, family-specific hazard observability, abortability, recovery reserve, and route admission. It operationalizes existing propulsion/transit mathematics without inventing new family canon or race ownership.",
+    "sourceOrder": [
+      "named race / vessel / manufacturer / installation source",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_MEASUREMENT_INSTRUMENTATION_FIELD_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_EXPLORATION_EVENT_TEST_PROGRAM_FIELD_MANUAL.md",
+      "data/exo-vessel/ftl-measurement-instrumentation-registry.json",
+      "Google Drive: The different lightspeed methods",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+      "confirmedDesignRequirements": [
+        "transit families have different gravity and miscalculation efficiency losses",
+        "large gravity wells impose rapidly rising burden and can prohibit emergence/commit",
+        "gravitational-plane travel is especially sensitive to shear geometry and forks",
+        "each family requires its own safety sensor package and emergency de-transit semantics",
+        "higher technology increases prediction horizon, redundancy, and intervention margin rather than granting perfect safety",
+        "mathematics should be internally coherent while invented coefficients remain clearly non-canon"
+      ]
+    }
+  },
+  "environmentTerms": {
+    "severityVector": ["potentialMagnitude", "accelerationMagnitude", "tidalTensorNorm", "curvatureNorm", "massModelUncertainty", "hiddenMassProbability", "familyBoundaryHazard"],
+    "uncertaintyVector": ["ephemerisCovariance", "massModelCovariance", "clockCovariance", "sensorCovariance", "registrationCovariance", "modelCovariance", "commonCauseCovariance"],
+    "gravitySeverity": "G = wPhi*|Phi/Phi_ref| + wg*|grad(Phi)|/g_ref + wT*||T||/T_ref + wR*||R||/R_ref + wU*U_mass. Coefficients remain DERIVED/PROPOSED calibration quantities.",
+    "familyPenalty": "P_f = a_f G + b_f G^2 + c_f G^(n_f) + d_f U_mass + e_f B_f; eta_g,f = exp(-P_f). Exact coefficients are not setting canon unless a higher-authority source establishes them.",
+    "miscalculationAmplification": "A_f = ||J_f,E||; eta_calc,f = exp(-k_f A_f^2 tr(Sigma_E)). This preserves family-specific sensitivity to the same environmental uncertainty.",
+    "admissibility": "Omega_f = {x : eta_g,f >= eta_min,f AND U_f <= U_max,f AND recoveryMargin_f > 0 AND lookaheadMargin_f > 0}.",
+    "negativeEvidence": "An absent hazard marker is usable only when instrument capability, spatial/temporal coverage, resolution, dynamic range, survivability, and damage history support detectability."
+  },
+  "lookaheadModel": {
+    "predictionDistance": "H_s = v_projected * t_predict",
+    "interventionTime": "t_int = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
+    "interventionDistance": "D_int = v_projected * t_int where projected speed is meaningful; nonlocal/commit systems use an equivalent decision-horizon representation instead of pretending local hull speed exists.",
+    "margin": "M_H = H_s - D_int",
+    "admissionRule": "M_H must be positive for the worst credible observable route hazard, except for family states whose commit semantics make post-commit intervention impossible; those families must certify the complete precommit envelope instead.",
+    "observabilityRule": "Loss of required hazard observability causes authority reduction, abort, or route rejection unless an independently validated guard channel preserves the relevant hazard class.",
+    "perfectSafetyForbidden": true
+  },
+  "familyHazards": {
+    "metric-compression": {
+      "primaryObservables": ["background curvature", "tidal gradient", "envelope closure residual", "horizon geometry", "field symmetry", "unwind reserve"],
+      "abortSemantics": "Continuous or staged unwind while envelope closure and protected-volume integrity remain controllable; loss of closure observability triggers conservative authority reduction.",
+      "recoveryRequirement": "Protected unwind energy, thermal sink, field-collapse symmetry, and post-unwind inertial stabilization remain outside ordinary cruise expenditure.",
+      "characteristicFailure": "Metric mismatch or asymmetric collapse loads the protected volume, grows source burden, and can make safe closure impossible near severe curvature.",
+      "sensorPackage": ["multi-baseline metric interferometry", "tidal tensor array", "envelope boundary metrology", "independent clock/reference lattice"]
+    },
+    "gravitational-plane": {
+      "primaryObservables": ["gravity gradient tensor", "tidal eigendirections", "lane curvature", "fork separation", "hidden-mass residual", "recoupling geometry"],
+      "abortSemantics": "Decouple from the hazardous plane before incompatible branch coupling exceeds structural/field limits, then recouple only to a certified local solution.",
+      "recoveryRequirement": "Independent gravimetric guard channel, plane-decoupling authority, inertial stabilization, and a valid recoupling solution.",
+      "characteristicFailure": "A fork can couple different parts of the maintained transit state toward incompatible gravitational branches, producing catastrophic field and structural loading.",
+      "sensorPackage": ["long-baseline gravimetric array", "tidal eigensolver", "mass-model residual mapper", "fork predictor", "independent branch guard"]
+    },
+    "slipstream-shear": {
+      "primaryObservables": ["normal/Q correspondence conditioning", "boundary adhesion", "Q-weather proxy", "wake/shear state", "exit mapping", "detachment authority"],
+      "abortSemantics": "Reduce coupling and detach from the boundary layer while a valid normal-space exit correspondence remains available.",
+      "recoveryRequirement": "Protected detachment energy, boundary-state sensing, exit-map validation, and post-detachment stabilization.",
+      "characteristicFailure": "Correspondence drift or unstable adhesion can move the exit solution faster than the control system can safely follow.",
+      "sensorPackage": ["boundary-state interferometry", "Q-weather proxy array", "adhesion metrology", "exit correspondence solver", "wake detector"]
+    },
+    "q-lattice": {
+      "primaryObservables": ["address residual", "phase residual", "epoch coherence", "reference authenticity", "destination-state covariance", "route rejection margin"],
+      "abortSemantics": "Reject the translation before commit or select a previously certified alternate address graph; post-commit semantics remain family/operator specific.",
+      "recoveryRequirement": "Independent reference ancestry, protected address solution, rejection authority, and destination authentication.",
+      "characteristicFailure": "Address aliasing, epoch drift, or corrupted reference ancestry can make the mathematically nearest solution the wrong physical state.",
+      "sensorPackage": ["reference ancestry analyzer", "phase/epoch clock lattice", "address covariance monitor", "destination authentication channel"]
+    },
+    "n-manifold": {
+      "primaryObservables": ["embedding condition", "higher-dimensional route residual", "return-map condition number", "axis availability", "projection covariance", "re-embedding reserve"],
+      "abortSemantics": "Collapse to a certified lower-dimensional embedding or re-embed through a validated return map before conditioning becomes singular.",
+      "recoveryRequirement": "Protected return-map solution, axis reserve, dimensional stabilization, and ordinary-space re-registration.",
+      "characteristicFailure": "A shortcut can remain mathematically short while its return projection becomes ill-conditioned or ceases to map safely into the destination volume.",
+      "sensorPackage": ["manifold tomography proxy", "axis-state monitors", "return-map condition estimator", "ordinary-space registration array"]
+    },
+    "fold-jump": {
+      "primaryObservables": ["origin protected-volume geometry", "endpoint covariance", "occupancy exclusion", "topology residual", "commit boundary", "closure/ringing state"],
+      "abortSemantics": "Precommit rejection only once fold closure becomes causally/nonlocally committed; no invented mid-fold steering is permitted.",
+      "recoveryRequirement": "Protected closure authority, destination-clearance proof, endpoint reference integrity, and post-fold ringing sink.",
+      "characteristicFailure": "A formally valid adjacency solution can still intersect occupied, distorted, or uncertain destination volume if endpoint covariance exceeds clearance.",
+      "sensorPackage": ["endpoint covariance mapper", "occupancy exclusion array", "topology residual monitor", "commit-state guard", "closure metrology"]
+    },
+    "wormhole-gate": {
+      "primaryObservables": ["throat geometry", "mouth synchronization", "external tidal loading", "mass flux", "anchor state", "closure margin"],
+      "abortSemantics": "Throttle, stabilize, or close the aperture while throat and mouth synchronization remain inside the certified closure envelope.",
+      "recoveryRequirement": "Independent mouth references, throat stabilization reserve, closure actuators, structural load path, and post-flow thermal/field sink.",
+      "characteristicFailure": "External tides, asymmetric flow, or synchronization error can drive throat asymmetry and anchor loading beyond stable aperture limits.",
+      "sensorPackage": ["throat geometry array", "paired-mouth clock/reference system", "tidal load sensors", "mass-flux metrology", "anchor strain network"]
+    },
+    "phase-displacement": {
+      "primaryObservables": ["whole-object state coverage", "target-state compatibility", "reference authenticity", "continuity invariant", "occupation exclusion", "reconciliation residual"],
+      "abortSemantics": "Reject before state commit when coverage, target compatibility, reference identity, or continuity checks fail; post-commit recovery is reconciliation, not fictional steering through transit.",
+      "recoveryRequirement": "Protected continuity record, target authentication, reconciliation capacity, and post-arrival state audit.",
+      "characteristicFailure": "An incomplete or incompatible target-state solution can preserve an apparently valid transfer while violating coverage, occupancy, or continuity constraints.",
+      "sensorPackage": ["whole-object state tomography", "target reference authenticator", "continuity ledger", "occupation exclusion sensing", "reconciliation monitor"]
+    },
+    "inertial-torch": {
+      "primaryObservables": ["ordinary trajectory", "proper acceleration", "propellant/energy reserve", "thermal load", "collision horizon", "relativistic navigation covariance"],
+      "abortSemantics": "Throttle, rotate, burn, or coast according to ordinary causal propulsion constraints; no exotic de-transit state exists.",
+      "recoveryRequirement": "Maneuver reserve, thermal margin, structure, navigation solution, and collision avoidance.",
+      "characteristicFailure": "Ordinary high-energy trajectory failure, not exotic field collapse.",
+      "sensorPackage": ["relativistic navigation suite", "collision lookahead", "thermal/propulsion telemetry", "independent attitude and inertial reference"]
+    }
+  },
+  "pathSafetyLadder": [
+    {"path": "p0", "modelAuthority": "static or pre-surveyed geometry", "lookaheadClass": "local / test-volume", "responseClass": "abort before commitment", "redundancyClass": "single certified chain with manual oversight", "safetyMeaning": "tiny known envelope; unknown terrain generally rejected"},
+    {"path": "p1", "modelAuthority": "local dynamic first-order model", "lookaheadClass": "immediate route segment", "responseClass": "automatic shutdown or decoupling", "redundancyClass": "basic duplicate guard", "safetyMeaning": "repeatable demonstration under controlled conditions"},
+    {"path": "p2", "modelAuthority": "full local multi-body / field model", "lookaheadClass": "route-scale", "responseClass": "controlled family-specific termination", "redundancyClass": "separate safety sensor chain begins", "safetyMeaning": "operational captive/fixed system"},
+    {"path": "p3", "modelAuthority": "mobile long-baseline model", "lookaheadClass": "beyond immediate transit segment", "responseClass": "shipboard emergency exit where operator permits", "redundancyClass": "independent guard channel and protected recovery reserve", "safetyMeaning": "independent vessel operation"},
+    {"path": "p4", "modelAuthority": "probabilistic multi-sector environment", "lookaheadClass": "multiple intervention windows", "responseClass": "layered family-specific escape/recovery", "redundancyClass": "diverse sensing physics and redundant control paths", "safetyMeaning": "fleet operational standard"},
+    {"path": "p5", "modelAuthority": "predictive hidden-terrain / remote inference", "lookaheadClass": "strategic predictive horizon", "responseClass": "preemptive reroute, alternate address/topology, or protected shunt where physically allowed", "redundancyClass": "common-cause analysis and remote reference diversity", "safetyMeaning": "unknown terrain becomes quantifiable rather than automatically safe"},
+    {"path": "p6", "modelAuthority": "continuous adaptive probabilistic field solution", "lookaheadClass": "maximum useful observable horizon", "responseClass": "rapid autonomous re-solve plus layered recovery", "redundancyClass": "diverse independent channels with degraded-mode certification", "safetyMeaning": "large safety margins; never absolute safety"}
+  ],
+  "certificate": {
+    "requiredFields": ["certificateId", "subjectId", "family", "path", "sharedTier", "authoritySnapshot", "environmentEpoch", "environmentState", "uncertaintyState", "familyResponse", "routeTerrain", "sensorLookahead", "abortState", "recoveryReserve", "commonCauseRisk", "status", "reasons", "provenance"],
+    "statusValues": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED"],
+    "invariants": [
+      "REJECTED cannot be promoted by presentation/UI code",
+      "UNRESOLVED inputs cannot be silently coerced to safe defaults",
+      "loss of a required hazard-observability channel invalidates the certificate unless a validated independent guard covers that hazard",
+      "protected recovery reserve cannot be consumed to improve nominal range or speed",
+      "common-mode sensors do not multiply as independent redundancy",
+      "post-commit correction may only exist where the family operator explicitly supports it",
+      "equivalent speed cannot substitute for physical response time in nonlocal families",
+      "named manufacturer/race safety limits override generic derived defaults within their scope"
+    ]
+  },
+  "generatorRules": {
+    "order": ["resolve authority", "resolve family and Path", "load environment epoch", "bind measured covariance", "apply family environmental response", "solve nominal route", "compute family hazards", "compute sensor lookahead", "prove abort/recovery authority", "audit common causes", "emit certificate", "only then expose route as selectable"],
+    "downgradePolicy": "If a requested route is unsafe, the generator may reduce speed/range, select another route, or return REJECTED. It may not lower environmental severity, erase uncertainty, or grant an unsupported emergency capability to satisfy the request.",
+    "numericPolicy": "Gameplay coefficients may be supplied only as labeled calibration profiles. They are not setting-wide canon and must retain profile identity/version.",
+    "raceSpecificPolicy": "Race/manufacturer embodiments customize sensors, controls, maintenance, materials, cognition, and failure handling without changing operator physics unless a higher source explicitly establishes a distinct mechanism."
+  },
+  "api": {
+    "resolver": "resolveTransitSafetyCertificate",
+    "inputs": ["authoritySnapshot", "family", "path", "sharedTier", "installationState", "environmentPacket", "routeCandidate", "measurementPacket", "recoveryState", "calibrationProfile"],
+    "outputs": ["environmentSeverity", "familyEfficiency", "calculationEfficiency", "miscalculationAmplification", "lookaheadMargin", "hazardObservability", "abortState", "recoveryMargin", "commonCauseWarnings", "routeAdjustments", "certificate", "provenance"],
+    "familyAutoSelection": false,
+    "sideEffects": "none; this resolver certifies supplied state and does not mutate canon, measurements, or event history"
+  },
+  "canonGuards": [
+    "Do not infer a civilization's transit family from possession of a safety sensor class.",
+    "Do not infer exact coefficients from the Drive design document.",
+    "Do not convert a family-specific gravity penalty into one universal exclusion radius.",
+    "Do not treat high Path or T-tier as immunity to gravity, uncertainty, sensor loss, or operator failure.",
+    "Do not invent mid-commit steering for Fold, displacement, or any other operator whose established semantics do not permit it.",
+    "Do not treat redundant displays sharing one sensor/reference root as independent safety channels.",
+    "Do not consume protected recovery reserve to make a nominal route pass certification.",
+    "Do not classify unresolved measurements as zero.",
+    "Do not use equivalent speed as a physical local velocity where the family is nonlocal.",
+    "Do not canonize generated gameplay calibration values through repetition.",
+    "Preserve named race/manufacturer/vessel safety doctrine over generic derived defaults.",
+    "Every certificate must retain the authority snapshot and environment epoch that produced it."
+  ]
+}
