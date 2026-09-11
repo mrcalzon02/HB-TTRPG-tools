@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.route-segment-certification",
+  "title": "Black Light FTL Route Segment Certification Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/ftl-physical-route-path-registry.json",
+    "blacklight-exo-ftl-physical-route-path-runtime.js",
+    "data/exo-vessel/ftl-physical-route-environment-bridge.json",
+    "blacklight-exo-ftl-physical-route-environment-runtime.js",
+    "data/exo-vessel/ftl-route-safety-integration.json",
+    "blacklight-exo-ftl-route-safety-runtime.js"
+  ],
+  "segmentPolicy": {
+    "construction": "ADJACENT_PHYSICAL_SAMPLES",
+    "routeDisposition": "CONJUNCTIVE_WORST_SEGMENT",
+    "statusOrder": ["ADMISSIBLE", "MARGINAL", "UNRESOLVED", "REJECTED", "OUTSIDE_MODEL_VALIDITY"],
+    "physicalEnvelope": "Use the more severe endpoint value independently for each physical metric; never dimensionally average unlike metrics.",
+    "gradientDiagnostics": "Use finite differences across the segment only as local engineering diagnostics, not analytic derivative proofs.",
+    "uncertaintyRule": "Missing uncertainty remains unresolved. Segment certification may not substitute zero covariance or perfect ephemerides.",
+    "invalidModelRule": "If either endpoint is OUTSIDE_MODEL_VALIDITY, the segment is OUTSIDE_MODEL_VALIDITY and blocks the route.",
+    "unresolvedRule": "If either endpoint is UNRESOLVED, the segment is UNRESOLVED and blocks route certification.",
+    "partialRule": "PARTIAL physical evidence is retained as unresolved certification evidence unless a higher-fidelity packet closes the missing fields."
+  },
+  "gradientMetrics": {
+    "potentialGradientAlongPathS2": {
+      "definition": "|Delta Phi| / Delta s",
+      "units": "m s^-2",
+      "note": "Directional finite-difference potential gradient along the sampled route chord; it is not a replacement for the full acceleration vector."
+    },
+    "accelerationGradientAlongPathPerS2": {
+      "definition": "|Delta |g|| / Delta s",
+      "units": "s^-2",
+      "note": "Scalar magnitude gradient only. Direction rotation is tracked separately."
+    },
+    "tidalGradientAlongPathPerMS2": {
+      "definition": "|Delta ||T||_F| / Delta s",
+      "units": "m^-1 s^-2",
+      "note": "Finite-difference change in tidal Frobenius norm along the route segment."
+    },
+    "accelerationDirectionChangeRad": {
+      "definition": "acos(g0 dot g1 / (|g0||g1|))",
+      "units": "rad",
+      "note": "A changing acceleration direction can mark saddle or multi-source geometry even when scalar acceleration is modest."
+    }
+  },
+  "mathematicalRules": [
+    "Route safety is C_route = AND_i C_segment,i. One blocking interval rejects the route regardless of the number of benign intervals.",
+    "Segment length is Delta s_i = (f_{i+1}-f_i)L for route fraction f and route chord length L.",
+    "A sampled segment envelope is a numerical bound only over its sampled endpoints unless adaptive refinement or analytic analysis supplies stronger evidence.",
+    "Potential, acceleration, tidal loading and curvature retain their native dimensions through the physical layer and are normalized only by the versioned physical-to-family bridge.",
+    "Finite-difference gradients are convergence diagnostics and hazard-localization aids; they are not exact spatial derivatives without an appropriate limiting/convergence argument."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish that FTL is physically realizable.",
+    "This registry does not assign an FTL family to any race, civilization, vessel or manufacturer.",
+    "Ordinary gravitational segmentation constrains fictional transit models but does not invent family-boundary hazards.",
+    "A blocked physical segment may not be erased by averaging it with benign route segments.",
+    "PARTIAL, UNRESOLVED and OUTSIDE_MODEL_VALIDITY remain visible evidence states and may not be converted into ordinary finite safe scores.",
+    "Segment thresholds or numerical margins introduced by downstream calibration remain DERIVED or PROPOSED unless a higher authority establishes them."
+  ]
+}
