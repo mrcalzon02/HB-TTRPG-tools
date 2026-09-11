@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-zwlei-murrek-transit-case-seed.schema.json",
+  "title": "Zwlei Mur'rek Transit Investigation Case Seed",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "recordType",
+    "authority",
+    "subject",
+    "caseState",
+    "sourceAssertions",
+    "compartmentSeeds",
+    "instrumentInstances",
+    "eventSeed",
+    "measurementPackets",
+    "hypothesisLedger",
+    "api",
+    "provenance",
+    "canonGuards"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "recordType": {"const": "zwleiMurrekTransitCaseSeed"},
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "precedence", "designSource"]
+    },
+    "subject": {
+      "type": "object",
+      "required": ["species", "vesselClass", "campaignInstance", "consolidatedFamily", "familyAutoSelection"]
+    },
+    "caseState": {
+      "type": "object",
+      "required": ["state", "epoch", "observedMeasurementsPresent", "sourceAssertionsPresent", "familyConclusion"]
+    },
+    "sourceAssertions": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["assertionId", "status", "claim", "source", "sourceLocation", "evidenceClass", "familyDiscriminating", "allowedUse"]
+      }
+    },
+    "compartmentSeeds": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["compartmentId", "sourceName", "sourceStatus", "knownBaselineFunction", "derelictState", "transitRelevance", "observationState"]
+      }
+    },
+    "instrumentInstances": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["instrumentId", "instrumentClass", "authority", "purpose", "calibrationState", "referenceIndependence", "allowedBeforeFamilyResolution"]
+      }
+    },
+    "eventSeed": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["eventId", "eventType", "epoch", "status", "meaning", "provenanceRoots", "mutatesPhysicalEvidence"]
+      }
+    },
+    "measurementPackets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["packetId", "packetType", "status", "observed", "values", "uncertainty", "covarianceGroup", "interpretationBoundary"]
+      }
+    },
+    "hypothesisLedger": {
+      "type": "object",
+      "required": ["state", "admissibleHypotheses", "currentSupport", "promotionRule", "automaticPromotion"]
+    },
+    "api": {
+      "type": "object",
+      "required": ["resolver", "inputs", "outputs", "familyAutoSelection"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceGraph", "designDocumentId", "designDocumentRevision", "generationRule"]
+    },
+    "canonGuards": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    }
+  }
+}
