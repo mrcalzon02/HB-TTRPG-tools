@@ -37,9 +37,14 @@
     "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md",
     "docs/blacklight/BLACK_LIGHT_FTL_ENVIRONMENT_REGRESSION_MANUAL.md",
     "docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md",
+    "data/exo-vessel/ftl-calibration-registry.json",
     "data/exo-vessel/ftl-safety-certification-registry.json",
     "data/schemas/exo-vessel-ftl-safety-certification.schema.json",
-    "blacklight-exo-ftl-safety-certification-runtime.js"
+    "blacklight-exo-ftl-safety-certification-runtime.js",
+    "data/exo-vessel/ftl-safety-calibration-profiles.json",
+    "data/schemas/exo-vessel-ftl-safety-calibration-profile.schema.json",
+    "blacklight-exo-ftl-safety-calibration-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_SAFETY_CALIBRATION_PROFILE_MANUAL.md"
   ],
   "familyTechnicalVolumes": [
     "docs/blacklight/BLACK_LIGHT_FTL_METRIC_COMPRESSION_TECHNICAL_VOLUME.md",
@@ -99,6 +104,7 @@
     "blacklight-exo-ftl-path-level-paths-discrete.js",
     "blacklight-exo-ftl-path-level-runtime.js",
     "blacklight-exo-ftl-path-level-controller.js",
+    "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js"
   ],
   "integrationRules": [
@@ -108,7 +114,8 @@
     "Generator/runtime code may use this manifest for discoverability but must still obey field-level provenance/status.",
     "DERIVED and PROPOSED documents remain subordinate even when listed here.",
     "Race/vessel-specific material outranks generic embodiment only within its documented scope.",
-    "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon."
+    "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon.",
+    "Calibration profile identity and version must be retained by any numerical safety certificate that depends on it."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, and Mur'rek additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, and calibration additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
