@@ -68,6 +68,21 @@
   }
   window.loadModuleMapEditorState = loadEditorState;
 
+  function applySelectedTileContent({notesAppend='',type=null}={}){
+    const notes=document.querySelector('#mme-inspector-notes');
+    const typeSelect=document.querySelector('#mme-inspector-type');
+    const apply=document.querySelector('#mme-inspector-apply');
+    if(!notes||!typeSelect||!apply){
+      fillerStatus('Select a tile in the map editor first.');
+      return false;
+    }
+    if(notesAppend) notes.value=[notes.value.trim(),String(notesAppend).trim()].filter(Boolean).join('\n\n');
+    if(type && [...typeSelect.options].some(option=>option.value===type)) typeSelect.value=type;
+    apply.click();
+    return true;
+  }
+  window.applyModuleMapEditorSelectedTileContent = applySelectedTileContent;
+
   function restoreCurrentSessionMap(event){
     const current = window.getCurrentModuleViewerModule?.() || {};
     if(!String(current.path || '').startsWith('memory:')) return false;
@@ -83,13 +98,10 @@
 
   function insertGeneratedIntoSelectedTile(){
     if(!generatedResults.length){ fillerStatus('Generate content first.'); return; }
-    const notes=document.querySelector('#mme-inspector-notes'); const type=document.querySelector('#mme-inspector-type'); const apply=document.querySelector('#mme-inspector-apply');
-    if(!notes||!type||!apply){ fillerStatus('Select a tile in the map editor first.'); return; }
     const text=generatedResults.map(resultText).join('\n\n---\n\n');
-    notes.value=[notes.value.trim(),text].filter(Boolean).join('\n\n');
     const primary=generatedResults[0]?.type;
-    if(primary==='room') type.value='label'; if(primary==='door') type.value='door'; if(primary==='trap') type.value='trap';
-    apply.click();
+    const tileType=primary==='room'?'label':primary==='door'?'door':primary==='trap'?'trap':null;
+    if(!applySelectedTileContent({notesAppend:text,type:tileType})) return;
     fillerStatus(`Inserted ${generatedResults.length} generated entr${generatedResults.length===1?'y':'ies'} into the selected tile.`);
   }
 
