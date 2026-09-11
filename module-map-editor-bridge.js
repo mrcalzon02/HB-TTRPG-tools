@@ -50,6 +50,24 @@
   function fillerStatus(message){ const el=document.querySelector('#mcf-status'); if(el) el.textContent=message; }
   function resultText(result){ const lines=[result.title,result.description]; if(result.mechanics) lines.push(`Mechanics: ${result.mechanics}`); if(result.occupant) lines.push(`Occupancy: ${result.occupant}`); if(Array.isArray(result.tags)&&result.tags.length) lines.push(`Tags: ${result.tags.join(', ')}`); return lines.filter(Boolean).join('\n'); }
 
+  function loadEditorState(mapState,{message='Imported editable map state.'}={}){
+    if(!mapState || !Array.isArray(mapState.cells)){
+      status('Editable map state is missing or invalid.');
+      return false;
+    }
+    const importBox = document.querySelector('#mme-import');
+    const importButton = document.querySelector('#mme-import-json');
+    if(!importBox || !importButton){
+      status('Map editor import controls are unavailable.');
+      return false;
+    }
+    importBox.value = JSON.stringify(mapState,null,2);
+    importButton.click();
+    status(message);
+    return true;
+  }
+  window.loadModuleMapEditorState = loadEditorState;
+
   function restoreCurrentSessionMap(event){
     const current = window.getCurrentModuleViewerModule?.() || {};
     if(!String(current.path || '').startsWith('memory:')) return false;
@@ -59,15 +77,7 @@
       status('Current session module has no editable map state to load.');
       return true;
     }
-    const importBox = document.querySelector('#mme-import');
-    const importButton = document.querySelector('#mme-import-json');
-    if(!importBox || !importButton){
-      status('Map editor import controls are unavailable.');
-      return true;
-    }
-    importBox.value = JSON.stringify(mapState,null,2);
-    importButton.click();
-    status(`Loaded session map for ${current.module?.title || current.module?.id || 'current module'}.`);
+    loadEditorState(mapState,{message:`Loaded session map for ${current.module?.title || current.module?.id || 'current module'}.`});
     return true;
   }
 
