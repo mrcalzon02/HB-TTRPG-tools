@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-zwlei-murrek-transit-discrimination.schema.json",
+  "title": "Zwlei Mur'rek Transit Family Discrimination Registry",
+  "description": "Validation contract for evidence-led discrimination of the confirmed Mur'rek 'bio-reactive gravitic slipstream system' against consolidated Black Light transit-family operators without normalizing source terminology by keyword.",
+  "type": "object",
+  "required": [
+    "recordType",
+    "recordVersion",
+    "authority",
+    "subject",
+    "classificationState",
+    "hypotheses",
+    "measurementProgram",
+    "mathematics",
+    "testProgram",
+    "evidenceExport",
+    "generationRules",
+    "apiContract",
+    "provenance",
+    "canonSafeguards"
+  ],
+  "properties": {
+    "recordType": {"const": "zwleiMurrekTransitDiscriminationRegistry"},
+    "recordVersion": {"type": "string", "minLength": 1},
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "precedence", "sources", "designSource"],
+      "additionalProperties": true
+    },
+    "subject": {
+      "type": "object",
+      "required": ["species", "vesselClass", "sourceTerm", "consolidatedFamily", "familyAutoSelection"],
+      "properties": {
+        "consolidatedFamily": {"const": "UNRESOLVED"},
+        "familyAutoSelection": {"const": false}
+      },
+      "additionalProperties": true
+    },
+    "classificationState": {
+      "type": "object",
+      "required": ["state", "admissibleHypotheses", "promotionRule", "keywordNormalizationForbidden"],
+      "properties": {
+        "state": {"enum": ["UNRESOLVED", "CANDIDATE_SET", "PROVISIONAL_FAMILY", "CONFIRMED_BY_NAMED_SOURCE", "CONFIRMED_BY_OPERATOR_EVIDENCE"]},
+        "keywordNormalizationForbidden": {"const": true}
+      },
+      "additionalProperties": true
+    },
+    "hypotheses": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["hypothesisId", "status", "claimBoundary", "predictedDiscriminators", "predictedContradictions", "safeTests"],
+        "additionalProperties": true
+      }
+    },
+    "measurementProgram": {
+      "type": "object",
+      "required": ["channels", "instrumentClasses", "covariancePolicy", "negativeEvidencePolicy", "damagePolicy"],
+      "additionalProperties": true
+    },
+    "mathematics": {
+      "type": "object",
+      "required": ["evidenceWeight", "hypothesisSupport", "informationGain", "safeEnvelope", "abortability", "gravityInteraction"],
+      "additionalProperties": true
+    },
+    "testProgram": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "authority", "hazardClass", "preconditions", "procedure", "observables", "interpretationLimits", "abortConditions"],
+        "additionalProperties": true
+      }
+    },
+    "evidenceExport": {
+      "type": "object",
+      "required": ["targets", "requiredFields", "noConclusionLeak"],
+      "additionalProperties": true
+    },
+    "generationRules": {
+      "type": "object",
+      "required": ["authorityOnly", "labeledDerivation", "labeledProposal", "narrativeDisclosure", "unresolvedRule"],
+      "additionalProperties": true
+    },
+    "apiContract": {
+      "type": "object",
+      "required": ["resolver", "inputs", "outputs", "authorityModes", "noAutoPromotion"],
+      "properties": {"noAutoPromotion": {"const": true}},
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceGraph", "designDocumentId", "designDocumentRevision"],
+      "additionalProperties": true
+    },
+    "canonSafeguards": {
+      "type": "array",
+      "minItems": 10,
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}
