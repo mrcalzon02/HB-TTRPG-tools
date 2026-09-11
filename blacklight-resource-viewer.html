@@ -119,11 +119,38 @@
           return `<a href="${escapeHtml(safeHref)}">${label}</a>`;
         });
 
-      const splitTableRow = value => value.trim()
-        .replace(/^\|/, '')
-        .replace(/\|$/, '')
-        .split('|')
-        .map(cell => cell.trim());
+      const splitTableRow = value => {
+        const source = value.trim();
+        const cells = [];
+        let cell = '';
+
+        for (let index = 0; index < source.length; index += 1) {
+          const character = source[index];
+          if (character !== '|') {
+            cell += character;
+            continue;
+          }
+
+          let slashCount = 0;
+          for (let cursor = index - 1; cursor >= 0 && source[cursor] === '\\'; cursor -= 1) slashCount += 1;
+          if (slashCount % 2 === 1) {
+            cell = `${cell.slice(0, -1)}|`;
+            continue;
+          }
+
+          cells.push(cell.trim());
+          cell = '';
+        }
+        cells.push(cell.trim());
+
+        if (source.startsWith('|')) cells.shift();
+        if (source.endsWith('|')) {
+          let trailingSlashes = 0;
+          for (let cursor = source.length - 2; cursor >= 0 && source[cursor] === '\\'; cursor -= 1) trailingSlashes += 1;
+          if (trailingSlashes % 2 === 0) cells.pop();
+        }
+        return cells;
+      };
 
       const tableAlignment = divider => {
         const left = divider.startsWith(':');
