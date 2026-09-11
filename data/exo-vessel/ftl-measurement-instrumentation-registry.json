@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.measurement-instrumentation",
+  "title": "Black Light FTL Measurement, Instrumentation, Observation Packet, and Exploration Event Registry",
+  "authority": {
+    "status": "MIXED",
+    "scope": "Defines how propulsion/transit observations are measured, calibrated, timestamped, damage-adjusted, correlated, packaged, and admitted into the evidence-instance layer without allowing an instrument or generator to invent a transit-family conclusion.",
+    "sourceOrder": [
+      "named vessel / installation / manufacturer source",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/ftl-evidence-instance-registry.json",
+      "data/exo-vessel/ftl-installation-archaeology-registry.json",
+      "data/exo-vessel/ftl-forensic-identification-registry.json",
+      "data/exo-vessel/ftl-environment-regression-registry.json",
+      "BLACKLIGHT_EXO_SOURCE_AUTHORITY.md",
+      "Google Drive: The different lightspeed methods",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "instrumentClasses": [
+    {
+      "instrumentClass": "PASSIVE_MULTI_CHANNEL_FIELD_RECORDER",
+      "status": "DERIVED",
+      "observables": ["electromagnetic spectrum", "thermal flux", "gravitational gradient", "Q-domain residual where detectable", "topology transient where detectable", "wake/residual field change"],
+      "limitations": ["does not identify a family by itself", "bandwidth and dynamic range are finite", "strong local machinery can mask weak residues"],
+      "calibrationModel": "Requires traceable zero, gain, bandwidth, timing, and orientation calibration before evidentiary use.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "GRAVIMETRIC_GRADIENT_ARRAY",
+      "status": "DERIVED",
+      "observables": ["local gravitational acceleration", "gradient tensor", "time-varying tidal field", "mass-motion residual"],
+      "limitations": ["local mass redistribution can imitate transit-related residuals", "saturation near severe gradients reduces negative-evidence value"],
+      "calibrationModel": "Reference masses, baseline tensor, sensor geometry, and clock coherence must be recorded.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "TOPOLOGY_AND_METRIC_RESIDUAL_INTERFEROMETER",
+      "status": "DERIVED",
+      "observables": ["metric strain residual", "path-length anomaly", "phase-coherent topology disturbance", "boundary discontinuity candidate"],
+      "limitations": ["family interpretation requires geometry and timing context", "instrument cannot distinguish historical operation from unrelated exotic-field damage without additional evidence"],
+      "calibrationModel": "Multi-baseline reference path calibration with independent clock ancestry.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "SERVICE_NETWORK_TRACER",
+      "status": "DERIVED",
+      "observables": ["power continuity", "data continuity", "timing continuity", "thermal path", "fluidic/nutrient path", "field-carrier continuity"],
+      "limitations": ["physical adjacency is not continuity", "active injection can contaminate evidence", "destroyed edges may be unrecoverable"],
+      "calibrationModel": "Port impedance, tracer attenuation, injection amplitude, and intervention epoch must be logged.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "REFERENCE_AND_CLOCK_ANCESTRY_ANALYZER",
+      "status": "DERIVED",
+      "observables": ["clock offsets", "reference-source graph", "shared ancestors", "drift", "epoch boundaries"],
+      "limitations": ["agreement among descendants of one clock is not independent confirmation", "corrupted timebases can preserve internally consistent but wrong order"],
+      "calibrationModel": "Compare against at least one independently sourced local reference when available.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "CHEMICAL_BIOLOGICAL_RESIDUE_ANALYZER",
+      "status": "DERIVED",
+      "observables": ["metabolic activity", "tissue viability", "chemical gradients", "ablation products", "coolant/nutrient residue", "repair/regrowth markers"],
+      "limitations": ["biological construction is not a transit-family discriminator", "post-accident decay and regrowth can overwrite original state"],
+      "calibrationModel": "Sample handling, contamination blank, age estimate, environmental exposure, and chain of custody are mandatory.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "GEOMETRY_AND_COVERAGE_SCANNER",
+      "status": "DERIVED",
+      "observables": ["compartment geometry", "field-former placement", "whole-volume coverage candidate", "structural alignment", "occluded volume"],
+      "limitations": ["inaccessible volume remains unknown", "geometry similarity does not establish operator physics"],
+      "calibrationModel": "Coordinate frame, registration uncertainty, occlusion mask, and post-repair epoch must be recorded.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "LOW_AUTHORITY_STIMULUS_AND_RESPONSE_RIG",
+      "status": "DERIVED",
+      "observables": ["linear response", "resonance", "latency", "service dependency", "recovery behavior"],
+      "limitations": ["active tests alter the evidence state", "unknown machinery may respond nonlinearly or dangerously", "test result cannot be treated as pre-test residue"],
+      "calibrationModel": "Stimulus waveform, amplitude, duration, coupling point, abort threshold, and before/after baselines are required.",
+      "familyNeutral": true
+    },
+    {
+      "instrumentClass": "ARCHIVE_SIGNAL_AND_TRANSLATION_WORKSTATION",
+      "status": "DERIVED",
+      "observables": ["raw signal", "symbol sequence", "semantic translation", "technical term candidates", "clock metadata", "source ancestry"],
+      "limitations": ["semantic confidence and clock confidence are independent", "similar terminology cannot establish shared technology", "generated glosses are not original records"],
+      "calibrationModel": "Decoder version, lexicon version, source hash, translation transform, confidence components, and human/AI interventions must be retained.",
+      "familyNeutral": true
+    }
+  ],
+  "measurementModel": {
+    "measurementEquation": "y = H(x) + b + n + c, where y is the recorded observation, H(x) the instrument response to the physical state, b calibrated bias, n stochastic noise, and c contamination or unmodeled coupling.",
+    "uncertaintyState": "U = {Sigma_random, Sigma_cal, Sigma_clock, Sigma_registration, Sigma_damage, Sigma_model, Sigma_contamination}. These terms remain separately auditable even if a downstream resolver combines them.",
+    "covarianceRule": "For an observation vector z, Sigma_z = J Sigma_x J^T + Sigma_instr + Sigma_model. Shared clocks, sensors, models, archives, or calibrations create off-diagonal covariance and must not be treated as independent confirmations.",
+    "resolutionRule": "A marker smaller than spatial, temporal, spectral, or amplitude resolution is UNRESOLVED, not absent.",
+    "saturationRule": "Saturated, clipped, aliased, or bandwidth-exceeded intervals cannot provide strong negative evidence for phenomena inside the lost measurement region.",
+    "calibrationRule": "Every evidentiary measurement binds instrument identity, calibration epoch, calibration source, uncertainty, dynamic range, orientation/registration, timing source, and known damage state."
+  },
+  "observationPacket": {
+    "requiredFields": [
+      "packetId", "eventId", "subjectId", "instrumentClass", "instrumentInstanceId", "epochId", "spatialRef", "timeRef", "rawObservation", "normalizedObservable", "units", "uncertainty", "resolution", "dynamicRangeState", "calibrationRef", "provenanceGroup", "damageContext", "interventionContext", "status"
+    ],
+    "lifecycle": ["ACQUIRED_RAW", "CALIBRATION_BOUND", "TIME_REGISTERED", "SPATIAL_REGISTERED", "DAMAGE_ADJUSTED", "COVARIANCE_ANNOTATED", "NORMALIZED", "EVIDENCE_INSTANCE_ADMITTED", "SUPERSEDED"],
+    "qualityTerms": {
+      "measurementUtility": "Q_m = C_cal * C_time * C_space * C_dyn * C_survive * C_prov",
+      "interpretation": "Each C term is in [0,1] and must remain inspectable; Q_m is an editorial/engineering utility, not a universal physical constant.",
+      "warning": "High Q_m does not establish a transit family."
+    },
+    "provenanceRule": "Raw signal, calibration, normalization, interpretation, and forensic family mapping remain separate nodes in the provenance graph.",
+    "negativeEvidenceRule": "Absence may be exported only when instrument capability, coverage, resolution, dynamic range, expected marker survivability, and damage history support detectability."
+  },
+  "damageSurvivability": {
+    "classes": [
+      {"markerClass": "GEOMETRIC", "examples": ["reinforced volume", "ring/cavity", "whole-hull coverage route"], "dominantLossModes": ["structural destruction", "scavenging", "regrowth/rebuild"]},
+      {"markerClass": "ELECTROMAGNETIC", "examples": ["magnetization", "burn pattern", "persistent bus damage"], "dominantLossModes": ["thermal cycling", "demagnetization", "later energization"]},
+      {"markerClass": "THERMAL", "examples": ["heat-affected zone", "phase change", "annealing"], "dominantLossModes": ["long-term equilibration", "repair"]},
+      {"markerClass": "GRAVITATIONAL_FIELD_RESIDUAL", "examples": ["mass-motion signature", "persistent calibration offset"], "dominantLossModes": ["mass redistribution", "sensor loss", "time decay where applicable"]},
+      {"markerClass": "TOPOLOGY_METRIC_RESIDUAL", "examples": ["interferometric residual", "boundary discontinuity candidate"], "dominantLossModes": ["relaxation", "later exotic-field operation", "reference drift"]},
+      {"markerClass": "CHEMICAL_BIOLOGICAL", "examples": ["metabolite plume", "necrosis", "regrowth interface"], "dominantLossModes": ["decay", "metabolism", "contamination", "healing"]},
+      {"markerClass": "DIGITAL_ARCHIVAL", "examples": ["telemetry", "route record", "controller log"], "dominantLossModes": ["corruption", "overwrite", "translation error", "shared-source duplication"]}
+    ],
+    "survivalRule": "P_survive(m,t,d,e) is a derived evidence term conditioned on marker class m, elapsed time t, damage/decay d, and environment e. No universal numeric coefficient is canonized here.",
+    "missingMarkerRule": "A missing marker may count against a hypothesis only when P_survive and instrument detectability are both sufficiently bounded by evidence."
+  },
+  "eventModel": {
+    "eventTypes": ["SURVEY", "PASSIVE_MEASUREMENT", "SAMPLE_COLLECTION", "SERVICE_TRACE", "ARCHIVE_READ", "TRANSLATION", "LOW_AUTHORITY_TEST", "ACCESS_CHANGE", "CUTTING_OR_DISASSEMBLY", "ENERGIZATION", "REPAIR_OR_REGROWTH", "CALIBRATION", "REFERENCE_SYNC", "EXPORT_TO_FORENSICS"],
+    "epochRule": "Every event that can change geometry, chemistry, biological viability, field residue, data state, service continuity, calibration, or timing creates a new epoch or explicitly declares itself non-mutating.",
+    "interventionBoundary": "Pre-intervention and post-intervention observations cannot be merged as if simultaneous. The event graph must preserve causal order and contamination ancestry.",
+    "replayRule": "A scenario may be reconstructed by replaying immutable events into an evidence instance; corrections append superseding events rather than silently rewriting historical acquisition records."
+  },
+  "familySpecificMeasurementRequirements": {
+    "metric-compression": ["multi-baseline metric residual", "whole-volume field geometry", "curvature/tidal environment", "unwind/recovery evidence"],
+    "gravitational-plane": ["high-resolution gravity tensor", "shear/fork mapping", "coupling state", "recoupling signature"],
+    "slipstream-shear": ["Q-boundary/weather proxy where available", "adhesion/coverage state", "detachment signature", "wake/residual trace"],
+    "q-lattice": ["address/reference ancestry", "epoch/clock coherence", "discrete-state evidence", "rejection/recovery behavior"],
+    "n-manifold": ["higher-dimensional tomography proxy", "route-state residuals", "return-map conditioning evidence", "re-embedding/recovery evidence"],
+    "fold-jump": ["finite-volume topology geometry", "endpoint/reference covariance", "commit-boundary timing", "closure/ringing signature"],
+    "wormhole-gate": ["paired-mouth synchronization", "throat geometry", "anchor/reference state", "mass-flux and closure signature"],
+    "phase-displacement": ["whole-object state coverage", "target-state reference ancestry", "continuity-invariant evidence", "post-arrival reconciliation signature"]
+  },
+  "scalingAndPerformance": {
+    "samplingBurden": "N_sample >= V_effective / V_resolution is a derived lower-bound intuition for volumetric coverage; actual sample topology depends on field geometry and correlation length.",
+    "timingBurden": "Delta_t_sample must resolve the shortest safety-relevant transient after accounting for instrument response and clock uncertainty.",
+    "dataRate": "R_data = sum_i N_i * b_i * f_i, with channel count, bit depth, and sampling frequency kept explicit; compression may not discard evidentiary features without recording the transform.",
+    "arrayGeometry": "Improved baseline increases some spatial/phase discrimination but also increases synchronization and registration burden. There is no universal best array size.",
+    "technologyScaling": "Higher Path/T-tier installations may support larger look-ahead and redundancy, but instrumentation claims remain bounded by the specific installation and source evidence."
+  },
+  "powerNavigationControlMaintenance": {
+    "power": "Evidence instruments receive protected clean power or explicitly record contamination from shared propulsion buses. Active-test power is isolated from observation power when possible.",
+    "navigation": "Coordinate, clock, ephemeris, and reference ancestry are recorded as evidence dependencies rather than treated as invisible metadata.",
+    "control": "Safety interlocks prevent an observation request from escalating into uncontrolled energization of unknown transit machinery.",
+    "maintenance": "Calibration drift, sensor replacement, biological healing, cable rerouting, software/lexicon updates, and clock changes create maintenance events with new calibration ancestry.",
+    "signature": "Instrumentation has its own emitted signature; active probing may reveal the investigator and may overwrite weak residues, so passive acquisition precedes active tests.",
+    "infrastructure": "Large gate, fleet, station, or laboratory arrays may provide external references, longer baselines, clean clocks, and higher dynamic range; lack of such infrastructure does not authorize invented certainty."
+  },
+  "practicalEquipment": [
+    {"manualId": "MI-01", "name": "Passive Baseline Acquisition", "purpose": "Capture environmental and installation state before touch, power injection, sampling, cutting, translation rewrite, or repair."},
+    {"manualId": "MI-02", "name": "Instrument Calibration and Ancestry Audit", "purpose": "Bind zero/gain, clock, geometry, reference source, software/decoder version, and uncertainty before evidence admission."},
+    {"manualId": "MI-03", "name": "Dynamic-Range and Saturation Survey", "purpose": "Identify clipped, aliased, masked, or bandwidth-limited regions before using absence as evidence."},
+    {"manualId": "MI-04", "name": "Service-Trace Measurement", "purpose": "Trace power/data/timing/field/thermal/nutrient continuity while preserving injection amplitude and intervention history."},
+    {"manualId": "MI-05", "name": "Low-Authority Stimulus Test", "purpose": "Acquire response only after passive baselines and with bounded energy, abort thresholds, contamination logging, and epoch separation."},
+    {"manualId": "MI-06", "name": "Post-Intervention Rebaseline", "purpose": "Create a new evidence epoch after access changes, repair, regrowth, energization, or component relocation."},
+    {"manualId": "MI-07", "name": "Telemetry Translation Packet", "purpose": "Preserve raw symbol/signal, lexical transform, semantics, clock mapping, technical interpretation, and provenance independently."},
+    {"manualId": "MI-08", "name": "Forensic Export Review", "purpose": "Export only measurement-supported observations with covariance, detectability, damage, and provenance metadata intact."}
+  ],
+  "education": {
+    "undergraduate": ["measurement versus interpretation", "calibration and traceability", "resolution and dynamic range", "error propagation", "covariance and shared ancestors", "damage-aware negative evidence"],
+    "advanced": ["Bayesian/likelihood evidence without canon promotion", "inverse problems in damaged installations", "sensor fusion with correlated sources", "optimal experiment design under contamination cost", "nonhuman instrumentation ergonomics and embodiment"],
+    "thesisDirections": ["damage-conditioned marker survivability", "covariance-aware transit-family discrimination", "optimal passive array placement", "living-machine calibration drift", "chronology-safe gate metrology", "return-map tomography observability"],
+    "patentStyleProposals": ["self-auditing calibration lattice", "intervention-aware residue recorder", "provenance-carrying alien telemetry decoder", "damage-adaptive distributed gravimeter", "whole-hull coverage tomography mesh"]
+  },
+  "resolverContract": {
+    "resolver": "resolveTransitMeasurementPacket",
+    "inputs": ["subjectAuthoritySnapshot", "instrumentInventory", "calibrationRecords", "rawMeasurements", "eventHistory", "damageModel", "spatialRegistration", "clockReferences", "authorityMode"],
+    "outputs": ["normalizedObservationPackets", "covarianceGroups", "detectabilityBounds", "saturationWarnings", "calibrationWarnings", "interventionEpochs", "evidenceInstanceUpdates", "canonWarnings"],
+    "familyAutoSelection": false,
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"],
+    "handoff": "Normalized packets may update resolveTransitEvidenceInstance(); only downstream archaeology/forensic resolvers may interpret family support, and only their established promotion rules may change classification state."
+  },
+  "provenance": {
+    "sourceGraph": [
+      "The different lightspeed methods -> family-specific hazards, gravity sensitivity, increasing safety sensing, emergency de-transit, mathematical and educational depth",
+      "BLACKLIGHT_EXO_SOURCE_AUTHORITY.md -> published-first precedence and explicit labeling of generated supplements",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md -> transit family/operator boundaries and canon precedence",
+      "ftl-environment-regression-registry.json -> environment-dependent measurement and hazard context",
+      "ftl-installation-archaeology-registry.json -> compartment, service-network, damage, and residue evidence semantics",
+      "ftl-evidence-instance-registry.json -> normalized progressive exploration state and resolver handoff",
+      "ftl-measurement-instrumentation-registry.json -> instrument capability, calibration, packet, covariance, and event semantics"
+    ],
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "generationRule": "Generated instruments and measurements may specialize an explicitly hypothetical scenario, but may not invent named manufacturers, race ownership, exact performance constants, or historical facts and may not promote a family classification merely because an instrument was designed to test it."
+  },
+  "canonGuards": [
+    "Preserve published or named canon over generated values and labeled derivation.",
+    "The Ar'nock derelict FTL family remains UNRESOLVED until existing forensic promotion rules are satisfied by evidence or a higher named source establishes it.",
+    "An instrument designed to detect a family-specific marker is not evidence that the subject possesses that family.",
+    "A measurement below resolution is UNRESOLVED, not zero.",
+    "A saturated or clipped channel cannot support strong negative evidence within the lost range.",
+    "Shared clocks, sensors, calibrations, models, archives, or translation roots create correlated evidence and cannot be counted as independent confirmations.",
+    "Active tests create intervention epochs and cannot be retroactively treated as passive pre-accident residue.",
+    "Biological or crystalline machinery embodiment cannot establish race ownership or transit-family identity.",
+    "Do not invent exact universal coefficients for marker survival, family detection thresholds, gravity tolerance, range, or safety radius where canon does not supply them.",
+    "Do not equate Q-domain measurements or Q-MAP terminology with Quantum Phase Displacement without explicit authority.",
+    "Do not fill inaccessible volume, missing telemetry, or destroyed sensor intervals with the value most convenient to a preferred hypothesis.",
+    "All generated educational, patent, equipment, and test material remains DERIVED or PROPOSED unless promoted by an authoritative setting source."
+  ]
+}
