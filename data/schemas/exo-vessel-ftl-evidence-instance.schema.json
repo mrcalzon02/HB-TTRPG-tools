@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-evidence-instance.schema.json",
+  "title": "Black Light FTL Evidence Instance and Exploration Record",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registryKey",
+    "authority",
+    "subject",
+    "compartments",
+    "serviceEdges",
+    "observations",
+    "unknownVolumes",
+    "telemetryFragments",
+    "interventions",
+    "mathematics",
+    "resolverContract",
+    "provenance",
+    "canonGuards"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.evidence-instance"},
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "sourceOrder", "designSource"]
+    },
+    "subject": {
+      "type": "object",
+      "required": ["subjectId", "name", "caseState", "familyAssignment", "sourceStatus"]
+    },
+    "compartments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["compartmentId", "observedLabel", "accessState", "damageState", "geometry", "functionalHypotheses", "provenanceRefs", "unknowns"]
+      }
+    },
+    "serviceEdges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["edgeId", "from", "to", "edgeType", "directionality", "survivalState", "observationStatus", "provenanceRefs"]
+      }
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["observationId", "channel", "spatialRef", "statement", "status", "reliability", "detectability", "provenanceGroup", "damageContext", "familyLikelihoodVector", "contradictions"]
+      }
+    },
+    "unknownVolumes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["volumeId", "boundaryState", "reasonUnknown", "allowedInference", "provenanceRefs"]
+      }
+    },
+    "telemetryFragments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fragmentId", "sourceNode", "translationState", "clockState", "contentClass", "textOrSummary", "sourceAncestry", "status"]
+      }
+    },
+    "interventions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["interventionId", "target", "action", "evidenceImpact", "reversible", "timestampState", "provenanceRefs"]
+      }
+    },
+    "mathematics": {
+      "type": "object",
+      "required": ["observationWeight", "negativeEvidenceAdmissibility", "provenanceIndependence", "compartmentCompleteness", "familyExportRule"]
+    },
+    "resolverContract": {
+      "type": "object",
+      "required": ["resolver", "archaeologyResolver", "forensicResolver", "inputs", "outputs", "familyAutoSelection", "authorityModes"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceGraph", "designDocumentId", "designDocumentRevision", "generationRule"]
+    },
+    "canonGuards": {"type": "array", "minItems": 12}
+  },
+  "additionalProperties": true
+}
