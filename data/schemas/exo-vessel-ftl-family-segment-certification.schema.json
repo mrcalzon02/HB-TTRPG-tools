@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-family-segment-certification.schema.json",
+  "title": "Black Light FTL Family Segment Certification",
+  "type": "object",
+  "required": ["schemaVersion", "status", "family", "path", "segments", "routeDisposition", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "family": {"type": "string"},
+    "path": {"type": ["string", "null"]},
+    "calibration": {"type": ["object", "null"]},
+    "normalization": {"type": ["object", "null"]},
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "fractionStart", "fractionEnd", "lengthM", "status", "environmentPacket", "certificate"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 0},
+          "fractionStart": {"type": "number", "minimum": 0, "maximum": 1},
+          "fractionEnd": {"type": "number", "minimum": 0, "maximum": 1},
+          "lengthM": {"type": "number", "exclusiveMinimum": 0},
+          "distanceFromRouteStartM": {"type": "number", "minimum": 0},
+          "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+          "environmentPacket": {"type": ["object", "null"]},
+          "uncertaintyPacket": {"type": ["object", "null"]},
+          "certificate": {"type": ["object", "null"]},
+          "interventionReach": {"type": ["object", "null"]},
+          "reasons": {"type": "array", "items": {"type": "string"}},
+          "provenance": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "routeDisposition": {
+      "type": "object",
+      "required": ["conjunctive", "worstStatus", "blockingSegmentIndices", "firstBlockingSegmentIndex"],
+      "properties": {
+        "conjunctive": {"const": true},
+        "worstStatus": {"type": "string"},
+        "blockingSegmentIndices": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "firstBlockingSegmentIndex": {"type": ["integer", "null"], "minimum": 0},
+        "distanceToFirstBlockingSegmentM": {"type": ["number", "null"], "minimum": 0},
+        "timeToFirstBlockingSegmentS": {"type": ["number", "null"], "minimum": 0},
+        "interventionReachable": {"type": ["boolean", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
