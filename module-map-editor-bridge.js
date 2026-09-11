@@ -61,8 +61,23 @@
       status('Map editor import controls are unavailable.');
       return false;
     }
+    let serialized;
+    try{
+      serialized = JSON.stringify(mapState);
+    }catch(error){
+      status(`Editable map state could not be serialized: ${error.message}`);
+      return false;
+    }
     importBox.value = JSON.stringify(mapState,null,2);
     importButton.click();
+    const loadedState = window.getModuleMapEditorState?.();
+    let loadedSerialized = null;
+    try{ loadedSerialized = loadedState ? JSON.stringify(loadedState) : null; }catch(error){ loadedSerialized = null; }
+    if(!loadedState || loadedSerialized !== serialized){
+      const editorMessage = document.querySelector('#mme-status')?.textContent || '';
+      if(!/^Import failed:/i.test(editorMessage)) status('Map editor did not accept the requested editable state.');
+      return false;
+    }
     status(message);
     return true;
   }
@@ -72,13 +87,27 @@
     const notes=document.querySelector('#mme-inspector-notes');
     const typeSelect=document.querySelector('#mme-inspector-type');
     const apply=document.querySelector('#mme-inspector-apply');
-    if(!notes||!typeSelect||!apply){
+    const selected=document.querySelector('.module-tile.selected');
+    if(!notes||!typeSelect||!apply||!selected){
       fillerStatus('Select a tile in the map editor first.');
       return false;
     }
-    if(notesAppend) notes.value=[notes.value.trim(),String(notesAppend).trim()].filter(Boolean).join('\n\n');
-    if(type && [...typeSelect.options].some(option=>option.value===type)) typeSelect.value=type;
+    if(type && ![...typeSelect.options].some(option=>option.value===type)){
+      fillerStatus(`Unsupported tile type: ${type}.`);
+      return false;
+    }
+    const x=Number(selected.dataset.x), y=Number(selected.dataset.y);
+    const appended=String(notesAppend || '').trim();
+    if(appended) notes.value=[notes.value.trim(),appended].filter(Boolean).join('\n\n');
+    if(type) typeSelect.value=type;
+    const expectedNotes=notes.value;
+    const expectedType=typeSelect.value;
     apply.click();
+    const updated=window.getModuleMapEditorState?.()?.cells?.[y]?.[x];
+    if(!updated || updated.type!==expectedType || String(updated.meta?.notes || '')!==expectedNotes){
+      fillerStatus('Selected tile update could not be verified.');
+      return false;
+    }
     return true;
   }
   window.applyModuleMapEditorSelectedTileContent = applySelectedTileContent;
