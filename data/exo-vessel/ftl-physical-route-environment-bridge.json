@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.physical-route-environment-bridge",
+  "title": "Black Light Physical Route Environment to Safety Certification Bridge",
+  "status": "MIXED",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "physicalEnvironment": "data/exo-vessel/ftl-curvature-environment-registry.json",
+    "safetyCertification": "data/exo-vessel/ftl-safety-certification-registry.json",
+    "routeIntegration": "data/exo-vessel/ftl-route-safety-integration.json",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "purpose": "Prefer physically evaluated SI gravity/curvature state over proposed normalized route archetypes whenever authoritative mass/ephemeris inputs are supplied, while preserving a strict boundary between real environmental physics and fictional transit-family response.",
+  "sourceSelection": {
+    "physicalSupplied": "A supplied physicalEnvironmentContext MUST be resolved through blacklight-exo-ftl-curvature-environment-runtime.js.",
+    "physicalReady": "Use the physical packet after versioned dimensionless normalization.",
+    "physicalPartial": "Block certification as UNRESOLVED unless a later higher-authority policy explicitly permits the missing validity fields.",
+    "physicalInvalid": "Block certification as OUTSIDE_MODEL_VALIDITY. Do not fall back to a route archetype.",
+    "physicalMissing": "Only when no physicalEnvironmentContext is supplied may the route-safety runtime use its existing PROPOSED normalized route archetype."
+  },
+  "normalizationProfile": {
+    "profileId": "blacklight.physical-route-normalization.solar-neighborhood-engineering",
+    "profileVersion": "1.0.0",
+    "status": "PROPOSED",
+    "purpose": "Dimensionally lawful engineering normalization for combining unlike SI gravity/curvature terms before fictional family response is evaluated. Values are calibration references, not constants of nature or setting canon.",
+    "referenceScales": {
+      "dimensionlessPotentialDepth": 1e-8,
+      "accelerationMPerS2": 0.01,
+      "tidalFrobeniusPerS2": 1e-10,
+      "curvatureScalePerM2": 1e-24,
+      "massModelFractional1Sigma": 0.01
+    },
+    "equations": [
+      "G_Phi = epsilon_Phi / epsilon_ref",
+      "G_g = |g| / g_ref",
+      "G_T = ||T||_F / T_ref",
+      "G_R = R_* / R_ref",
+      "U_m = sigma_mass,model / sigma_ref",
+      "sigma_mass,model = sqrt(sigma_mass^2 + sigma_ephemeris^2 + sigma_model^2)"
+    ]
+  },
+  "uncertaintyContract": {
+    "requiredForCertification": [
+      "massFractional1Sigma",
+      "ephemerisFractional1Sigma",
+      "modelFractional1Sigma",
+      "clockFractional1Sigma",
+      "sensorFractional1Sigma",
+      "registrationFractional1Sigma",
+      "commonCauseFractional1Sigma"
+    ],
+    "optional": ["hiddenMassProbability"],
+    "rule": "Missing uncertainty is not zero. A physical environment without bounded uncertainty may be physically computable but is not route-certification-ready.",
+    "covarianceProxy": "Until full covariance matrices are supplied, squared 1-sigma fractional terms are transported as nonnegative diagonal covariance proxies and labeled DERIVED."
+  },
+  "physicalToSafetyMapping": {
+    "potentialMagnitude": "dimensionlessPotentialDepth / normalizationProfile.referenceScales.dimensionlessPotentialDepth",
+    "accelerationMagnitude": "accelerationMagnitudeMPerS2 / normalizationProfile.referenceScales.accelerationMPerS2",
+    "tidalTensorNorm": "tidalFrobeniusPerS2 / normalizationProfile.referenceScales.tidalFrobeniusPerS2",
+    "curvatureNorm": "maxSingleSourceCurvatureScalePerM2 / normalizationProfile.referenceScales.curvatureScalePerM2",
+    "massModelUncertainty": "RSS(massFractional1Sigma, ephemerisFractional1Sigma, modelFractional1Sigma) / normalizationProfile.referenceScales.massModelFractional1Sigma",
+    "hiddenMassProbability": "uncertainty.hiddenMassProbability when explicitly supplied",
+    "familyBoundaryHazard": "remains a fictional/operator-specific route-family term and is not derived from ordinary gravity alone"
+  },
+  "canonGuards": [
+    "A physical SI packet constrains the fictional operator model; it does not prove the operator exists in real physics.",
+    "Do not add raw potential, acceleration, tidal and curvature values together before normalization because their dimensions differ.",
+    "Do not convert a supplied but invalid physical packet into a proposed archetype merely to keep a route selectable.",
+    "PARTIAL physical validity is not equivalent to zero risk.",
+    "The physical curvature diagnostic remains maximum single-source Schwarzschild-reference curvature unless a higher-fidelity multi-body relativistic model is supplied.",
+    "Family-boundary hazard remains operator-specific and may not be inferred solely from Newtonian/relativistic gravity metrics.",
+    "Normalization references are versioned PROPOSED engineering calibration, not physical constants.",
+    "Named race, manufacturer, vessel and installation limits remain higher authority within their documented scope."
+  ],
+  "api": {
+    "resolver": "resolveFTLPhysicalRouteEnvironment",
+    "inputs": ["physicalEnvironmentContext", "familyBoundaryHazard", "epoch", "provenance"],
+    "outputs": ["status", "sourceMode", "physicalEnvironment", "environmentPacket", "uncertaintyPacket", "normalizationProfile", "warnings", "provenance"],
+    "statusValues": ["READY", "NOT_SUPPLIED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]
+  }
+}
