@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Q-MAP Scanner Development History | Blacklight Continuum</title>
+  <meta name="description" content="Black-level technical history of the compact Q-MAP scanner, reception-plate data problem, state-decoding breakthroughs, and its eventual evolution into reconstruction-capable Q-MAP deployment technology.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="blacklight-corporate-assets.css">
+  <style>
+    .qmap-shell{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:28px 0 72px}.qmap-section{margin-top:28px}.qmap-section>h2{margin:.1rem 0 .7rem}.qmap-section>p,.qmap-card p,.qmap-card li,.qmap-note{line-height:1.68}.qmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.qmap-card{border:1px solid rgba(217,168,79,.24);border-radius:16px;background:linear-gradient(145deg,rgba(27,26,24,.96),rgba(7,7,6,.98));padding:18px}.qmap-card h3{margin-top:0}.qmap-table-wrap{overflow-x:auto;border:1px solid rgba(217,168,79,.22);border-radius:14px}.qmap-table{width:100%;border-collapse:collapse;min-width:760px;background:rgba(0,0,0,.16)}.qmap-table th,.qmap-table td{padding:12px 14px;border-bottom:1px solid rgba(217,168,79,.15);vertical-align:top;text-align:left;line-height:1.5}.qmap-table th{color:#f1c66f;font-size:.75rem;letter-spacing:.07em;text-transform:uppercase}.qmap-table tr:last-child td{border-bottom:0}.qmap-callout{border-left:4px solid #d9a84f;border-radius:0 14px 14px 0;background:rgba(217,168,79,.08);padding:17px 19px;line-height:1.7}.qmap-code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#f1c66f}.qmap-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.qmap-flow div{border:1px solid rgba(217,168,79,.2);border-radius:12px;padding:12px;background:rgba(0,0,0,.2);text-align:center}.qmap-flow strong{display:block;color:#f1c66f;margin-bottom:4px}.qmap-kicker{display:inline-block;border:1px solid rgba(217,168,79,.45);border-radius:999px;padding:5px 9px;color:#f1c66f;background:rgba(217,168,79,.08);font-size:.7rem;font-weight:950;letter-spacing:.1em;text-transform:uppercase}.qmap-small{color:#aa9f8c;font-size:.86rem}.qmap-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.qmap-two>div{min-width:0}@media(max-width:820px){.qmap-flow{grid-template-columns:1fr 1fr}.qmap-two{grid-template-columns:1fr}}@media(max-width:520px){.qmap-shell{width:calc(100% - 18px);padding-top:18px}.qmap-flow{grid-template-columns:1fr}}
+  </style>
+</head>
+<body class="blacklight-corp-body">
+  <header class="bli-topbar">
+    <a class="bli-brand" href="blacklight-systems-black.html" aria-label="Return to Blacklight archive systems"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Q-MAP Archive</span></span></a>
+    <nav class="bli-nav" aria-label="Q-MAP archive navigation"><a href="#origin">Origin</a><a href="#hardware">Hardware</a><a href="#data">Reception Plate</a><a href="#lineage">Development</a><a href="#reconstruction">Reconstruction</a><a href="#canon">Canon Rules</a><a href="blacklight-systems-black.html">Black Archive</a></nav>
+  </header>
+
+  <section class="bli-hero" aria-labelledby="qmap-title">
+    <div>
+      <span class="qmap-kicker">Black clearance · technology lineage authority</span>
+      <p class="bli-eyebrow">Early Blacklight applied imaging program</p>
+      <h1 id="qmap-title">The Scanner That Wasn't Supposed to Copy Anyone</h1>
+      <p class="bli-lede">Q-MAP began as an unusually compact medical and materials scanner: a hybrid of X-ray tomography and experimental exotic-particle interrogation built to map a living body without the enormous mechanical footprint of a hospital CT installation. For years it was useful mainly because it was small. The machine was collecting far more information than anyone knew how to read.</p>
+    </div>
+    <aside class="bli-directory-panel" aria-label="Q-MAP historical summary">
+      <div class="bli-directory-title">Historical State</div>
+      <div class="bli-directory-list" role="list">
+        <div class="bli-directory-item" role="listitem"><strong>Original purpose</strong><span class="bli-arrow">compact tomography</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Primary readable output</strong><span class="bli-arrow">anatomical density map</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Primary problem</strong><span class="bli-arrow">unreadable detector volume</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Later discovery</strong><span class="bli-arrow">state information in the residuals</span></div>
+        <div class="bli-directory-item" role="listitem"><strong>Mature descendant</strong><span class="bli-arrow">Q-MAP reconstruction package</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main class="qmap-shell">
+    <section class="qmap-section" id="authority">
+      <div class="qmap-callout"><strong>Authority statement.</strong> This page establishes the technological lineage of Q-MAP scanning in the Blacklight Continuum. It governs how early scans were produced, why their raw data was initially almost useless, why surviving early scan archives later became extraordinarily valuable, and how the scanning program eventually became one component of reconstruction and deployment technology. It does not establish a metaphysical answer to whether a soul, original consciousness, or unique essence is captured by the process.</div>
+    </section>
+
+    <section class="qmap-section" id="origin">
+      <p class="bli-eyebrow">Origin</p>
+      <h2>A field-imaging problem, not an immortality project.</h2>
+      <p>The first Q-MAP instrument emerged from a practical Blacklight problem. Conventional computed tomography was powerful, mature, and clinically useful, but the surrounding equipment was inconvenient for the kind of places Blacklight expected to work. A standard scanner assumed a prepared room, heavy shielding, a large rotating gantry, dependable mains power, trained support staff, and a patient who could be brought to the machine. Blacklight wanted much of the same internal anatomical information in a package that could be installed in a hardened clinic, a mobile laboratory, a disaster facility, a ship, a covert medical site, or a temporary field hospital.</p>
+      <p>The program did not begin by attempting to read memory. It did not begin as teleportation research. It did not begin with a proposal to duplicate a person. Its initial specification was almost disappointingly ordinary: produce a useful three-dimensional map of a living body with substantially less machinery, less moving mass, less site preparation, and less dependence on a purpose-built imaging suite.</p>
+      <p>The project name <strong>Q-MAP</strong> predates the later reconstruction program. Internal documents from different periods expand the initials differently, and by the time Blacklight standardized the technology the letters had ceased to function as a meaningful acronym. Q-MAP became the name of the instrument family, then the scan format, then the reconstruction model, and eventually the deployment architecture descended from all three.</p>
+
+      <div class="qmap-grid">
+        <article class="qmap-card"><h3>Why X-rays stayed</h3><p>X-ray attenuation was already well understood, inexpensive relative to more exotic channels, and excellent at giving the machine an immediate structural reference. Bones, dense foreign bodies, fluid boundaries, gross tissue density, hemorrhage, voids, and many ordinary pathologies could be reconstructed from this channel without understanding anything novel about the experimental detector.</p></article>
+        <article class="qmap-card"><h3>Why the exotic channel existed</h3><p>Blacklight's applied-physics group had access to a weakly interacting probe flux generated during unrelated high-energy and Q-field experiments. These probe quanta crossed ordinary matter readily but occasionally scattered, converted, or delayed according to local conditions conventional radiography could not distinguish. The hope was simply better material discrimination and better imaging through dense or heterogeneous objects.</p></article>
+        <article class="qmap-card"><h3>What made it compact</h3><p>Instead of spinning a massive detector ring around the patient, the scanner used electronically steered emitter assemblies facing a dense reception plate. Beam direction, pulse timing, and detector-side event localization produced many virtual viewing angles without requiring a ton-scale rotating gantry. The mechanical problem became a synchronization problem.</p></article>
+      </div>
+    </section>
+
+    <section class="qmap-section" id="hardware">
+      <p class="bli-eyebrow">First-generation instrument</p>
+      <h2>Emitter mast, patient volume, reception plate.</h2>
+      <p>The characteristic early Q-MAP scanner looked less like a modern medical doughnut and more like an upright diagnostic alcove. One side housed the emitter stack. The opposite wall was the reception plate. The subject occupied the narrow volume between them, standing, seated, or lying on a lightweight support depending on injury and scanner generation. Later models added paired plates, curved secondary detectors, and additional emitter shutters, but the basic geometry remained recognizable.</p>
+
+      <div class="qmap-flow" aria-label="Q-MAP scan signal path">
+        <div><strong>1 · Emit</strong>X-ray spectra and Q-probe packets are fired in precisely timed sequences.</div>
+        <div><strong>2 · Interact</strong>Ordinary attenuation and rare exotic interactions occur throughout the subject.</div>
+        <div><strong>3 · Receive</strong>The plate records where, when, and how each detectable event arrives.</div>
+        <div><strong>4 · Reconstruct</strong>Conventional software builds anatomical density volumes from the tractable channels.</div>
+        <div><strong>5 · Archive</strong>The incomprehensible residual event stream is either discarded, reduced, or preserved.</div>
+      </div>
+
+      <div class="qmap-two" style="margin-top:16px">
+        <div class="qmap-card"><h3>The emitter stack</h3><p>Early units combined several independently gated sources. Broad dual-energy X-ray pulses supplied conventional attenuation data. Narrower phase-sensitive X-ray modes improved edge and soft-tissue reconstruction. The experimental source produced Q-probe packets in extremely short synchronized bursts. Electronic steering and pulse sequencing changed apparent projection angle faster than a mechanical gantry could rotate.</p><p>The source was not continuously firing. A scan was a timed interrogation sequence: pulse, receive, quench, recalibrate, change geometry, pulse again. This produced a stack of partially overlapping observations that could be solved as a tomographic inverse problem.</p></div>
+        <div class="qmap-card"><h3>The reception plate</h3><p>The plate was the machine's real technological accident. It was built as a layered detector rather than a simple radiographic panel. Different layers registered ionization, scintillation, induced charge, delayed conversion events, phase offset, local timing, polarization behavior, and rare coincident hits across neighboring cells.</p><p>A normal imaging system would collapse most of those values immediately into useful pixel intensity. Q-MAP's experimental software retained them because nobody knew which measurements would matter. That decision created the data problem that defined the technology for decades.</p></div>
+      </div>
+    </section>
+
+    <section class="qmap-section" id="data">
+      <p class="bli-eyebrow">The reception-plate problem</p>
+      <h2>The scanner produced one image people understood and another dataset they did not.</h2>
+      <p>For each useful reconstructed voxel, the early instrument could generate thousands to millions of lower-level detector events. An individual event might include detector-cell position, arrival time, deposited energy, source pulse identity, estimated incoming vector, polarization response, delayed after-events, neighboring-cell coincidence, source phase, detector temperature, and calibration state. The exotic channel added interaction classes nobody could name, much less interpret.</p>
+      <p>The hospital-style image was therefore a tiny derived product sitting on top of an absurd raw record. The first software pipeline threw most of that record away after extracting attenuation and a few experimental contrast maps. Engineers referred to the remainder as <strong>plate residuals</strong>, <strong>ghost channels</strong>, or simply <strong>unclassified reception data</strong>.</p>
+      <p>The common assumption was that the plate had been over-instrumented. Researchers believed they were preserving nuisance variables, detector cross-talk, scattering garbage, thermal drift, timing jitter, and physical interactions interesting to a particle physicist but useless to medicine.</p>
+
+      <div class="qmap-callout"><strong>The central historical mistake:</strong> early Q-MAP was judged by the quality of the image it could render. The mature technology emerged only after researchers stopped asking what picture the plate was trying to make and began asking what physical state the event cloud was statistically describing.</div>
+
+      <div class="qmap-table-wrap" style="margin-top:18px">
+        <table class="qmap-table">
+          <thead><tr><th>Early data product</th><th>Typical raw size per full-body scan</th><th>What technicians could actually use</th><th>What usually happened</th></tr></thead>
+          <tbody>
+            <tr><td>Clinical reconstruction package</td><td>Hundreds of GB to a few TB</td><td>CT-like anatomy, density, obvious foreign material, gross pathology</td><td>Kept routinely</td></tr>
+            <tr><td>Extended detector record</td><td>Several PB to tens of PB</td><td>Experimental material contrast and calibration studies</td><td>Often reduced after validation</td></tr>
+            <tr><td>Full reception-event archive</td><td>Roughly 20–90 PB in early high-fidelity systems</td><td>Almost nothing beyond research diagnostics</td><td>Usually discarded unless a research or legal hold existed</td></tr>
+            <tr><td>Later correlation-preserving archive</td><td>Hundreds of PB; occasionally low-EB scale</td><td>Required for deep state reconstruction</td><td>Preserved only after the importance of correlations was understood</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="qmap-small">These are setting-scale orders of magnitude, not claims about real-world medical devices. Q-MAP's fictional exotic-particle channel and event-retention model are the source of the extreme storage requirement.</p>
+    </section>
+
+    <section class="qmap-section" id="failure">
+      <p class="bli-eyebrow">Why the early scans were not useful for reconstruction</p>
+      <h2>Having the data was not the same thing as knowing what it meant.</h2>
+      <div class="qmap-grid">
+        <article class="qmap-card"><h3>No detector grammar</h3><p>The plate reported stable classes of events for which physics models had no meaningful labels. An unexplained cluster could be a molecular-state signature, an electronic interaction, a detector artifact, or six unrelated effects occurring at once. Researchers could not construct a body from measurements they could not semantically classify.</p></article>
+        <article class="qmap-card"><h3>No tractable storage model</h3><p>The event stream was too large for routine retention. Conventional image compression was actively destructive because it preserved appearance while throwing away the weak timing and cross-channel correlations that later proved important. A scan could be medically perfect and reconstruction-useless.</p></article>
+        <article class="qmap-card"><h3>No temporal model</h3><p>A living body is not static. Blood moves, ion channels open, cells change metabolic state, proteins bind and release, neurons fire, and the subject breathes during the scan. Early reconstruction treated motion as error. Mature Q-MAP eventually treated carefully measured change through the scan interval as information.</p></article>
+        <article class="qmap-card"><h3>No calibration provenance</h3><p>The raw plate output depended on exact source timing, plate temperature, detector aging, field conditions, emitter waveform, and calibration history. If those records were missing, decades-later software could not reliably distinguish subject state from instrument state.</p></article>
+        <article class="qmap-card"><h3>No causal biological model</h3><p>Even a flawless map of what existed at one instant did not tell a fabricator what had to be built first, what could self-organize later, which state was temporary injury, or what configuration was required for a viable living continuation. Imaging and construction are different problems.</p></article>
+        <article class="qmap-card"><h3>The brain was uniquely difficult</h3><p>Neural identity could not be reduced to one visible wiring diagram. Synaptic strength, short-lived molecular state, glial regulation, active network dynamics, endocrine context, and ongoing electrical patterns all mattered. Early Q-MAP had no model capable of deciding which of those measurements carried durable identity information.</p></article>
+      </div>
+    </section>
+
+    <section class="qmap-section" id="lineage">
+      <p class="bli-eyebrow">Development lineage</p>
+      <h2>The scanner existed for decades before anyone understood the whole plate.</h2>
+      <p>The technological history is intentionally slow. Q-MAP did not leap from improved X-ray machine to person copier after one laboratory discovery. Each breakthrough made old data newly legible, and each newly legible layer revealed another problem beneath it.</p>
+      <div class="qmap-table-wrap">
+        <table class="qmap-table">
+          <thead><tr><th>Relative era</th><th>Breakthrough</th><th>What became possible</th><th>What remained impossible</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Year 0</strong></td><td>First integrated Q-MAP prototype</td><td>Compact whole-body tomography with a useful X-ray-derived anatomical volume and experimental material contrast.</td><td>The exotic reception stream was effectively unreadable.</td></tr>
+            <tr><td><strong>+3 to +6</strong></td><td>Field deployment generation</td><td>Reliable Blacklight use in remote clinics, mobile laboratories, disaster sites, and hardened facilities. The scanner's small footprint became its selling point.</td><td>Raw detector archives were still considered research waste after clinical reconstruction.</td></tr>
+            <tr><td><strong>+8</strong></td><td>The Repeatability Anomaly</td><td>Independent teams noticed that supposedly random residual patterns partially repeated when the same subject was scanned under matched conditions.</td><td>No one could tell whether the repeatability described the person, the machine, or both.</td></tr>
+            <tr><td><strong>+12</strong></td><td>Coincidence-ledger format</td><td>Raw hits could be preserved with enough timing, source, detector, and calibration provenance to support later re-analysis without pre-deciding which variables mattered.</td><td>The cost of keeping a large scan archive was still absurd.</td></tr>
+            <tr><td><strong>+17</strong></td><td>Longitudinal residual studies</td><td>Residual features were shown to follow tissue state, metabolism, medication response, injury, and neural activity rather than remaining fixed detector artifacts.</td><td>The data was predictive in narrow domains but still not invertible into a body definition.</td></tr>
+            <tr><td><strong>+21</strong></td><td>Cross-channel state estimator</td><td>Machine analysis could combine X-ray structure, exotic scattering, timing, and repeated subpasses into coherent local state estimates below the resolution of the visible image.</td><td>Large portions of the event taxonomy were still labeled only statistically.</td></tr>
+            <tr><td><strong>+26</strong></td><td>Reception-plate grammar completed</td><td>For the first time engineers possessed a stable map of what the major readable event families meant and which correlations had to be retained. Old full archives could be reprocessed into much richer state maps.</td><td>Readable did not yet mean manufacturable.</td></tr>
+            <tr><td><strong>+31</strong></td><td>Dynamic biological state model</td><td>Scans could be interpreted as a time-dependent biological system rather than a frozen image. Temporary injury and transient physiology could be separated from longer-term construction requirements.</td><td>Reconstruction of complex neural identity remained unreliable.</td></tr>
+            <tr><td><strong>+35</strong></td><td>Closed-loop tissue reconstruction</td><td>Scan-derived definitions successfully drove fabrication of simple tissues and then complete organs while preserving individual anatomical variation.</td><td>Producing a body did not prove recovery of the person's cognitive continuity.</td></tr>
+            <tr><td><strong>+41</strong></td><td>Neural-state inference architecture</td><td>Repeated high-fidelity scans plus causal neural models could estimate the durable and transient state needed to reconstruct memory, learned behavior, and personality with measurable fidelity.</td><td>Identity philosophy, legal continuity, and metaphysical interpretation remained unresolved.</td></tr>
+            <tr><td><strong>Later Blacklight era</strong></td><td>Q-MAP reconstruction package</td><td>The scan became one input to a larger package containing decoded body state, identity information, medical tolerances, capability constraints, construction instructions, validation data, and error bounds.</td><td>A scan alone still was not a deployable person.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="qmap-section" id="discovery">
+      <p class="bli-eyebrow">The discovery that changed the project</p>
+      <h2>The "noise" changed when the person changed.</h2>
+      <p>The decisive evidence did not come from one spectacular scan. It came from boring repeat work. Researchers scanned the same calibration volunteers over months and years because they were trying to understand detector drift. They expected the reception residuals to remain random after correcting for instrument state.</p>
+      <p>They did not.</p>
+      <p>Some residual structures followed the scanner. Others followed the individual. Still others followed the individual's present condition. A recurring pattern would weaken after a medication change, move after tissue repair, alter during fever, or shift with measured neural activity while remaining recognizably related to earlier captures from the same person.</p>
+      <p>That result reframed the entire archive. The plate was not merely failing to make a clean picture. It was detecting physical interactions sensitive to local biological state at scales and through channels the visible reconstruction discarded.</p>
+      <p>The next two decades were largely an exercise in learning how not to destroy that information. Investigators learned that a useful late-era decode required the original event sequence, source waveform, exact plate timing, calibration frames, thermal state, dead-cell map, local field measurements, subject motion solution, and preferably every unhelpful-looking coincidence record the first generation of software wanted to summarize away.</p>
+      <div class="qmap-callout"><strong>Archive consequence:</strong> a beautifully preserved early medical Q-MAP image may be nearly useless for later reconstruction, while an ugly box of raw plate archives, calibration logs, and synchronization records can be priceless. The difference is not visual quality. It is whether the underlying measurement history survived.</div>
+    </section>
+
+    <section class="qmap-section" id="reconstruction">
+      <p class="bli-eyebrow">From imaging to reconstruction</p>
+      <h2>A Q-MAP reconstruction package is an interpretation of a scan, not the scan itself.</h2>
+      <p>The mature system does not send a fabricator petabytes of raw detector hits and tell it to "make this person." It performs an enormous inference step first. Raw measurements are reconciled against physical models, longitudinal medical history where available, genetic data, known anatomy, instrument calibration, and the subject's capability requirements. The result is a construction model with explicit confidence and constraint information.</p>
+      <div class="qmap-grid">
+        <article class="qmap-card"><h3>Structural layer</h3><p>Macroscopic anatomy, organ geometry, vasculature, skeletal form, major neural pathways, scars, implants, and stable physical variation.</p></article>
+        <article class="qmap-card"><h3>Biochemical layer</h3><p>Cell populations, receptor distributions, persistent epigenetic state, immune configuration, metabolic settings, endocrine baselines, and material compositions required for viable function.</p></article>
+        <article class="qmap-card"><h3>Dynamic layer</h3><p>State estimates describing how the living system evolves through time: electrical activity, regulatory loops, neural activation, circulation, temporary chemistry, and which measured states should be reproduced or allowed to re-equilibrate.</p></article>
+        <article class="qmap-card"><h3>Identity layer</h3><p>Learned neural organization, memory-bearing state, durable behavioral structure, and the inferred information required to reproduce the subject's cognitive continuity to the fidelity standard accepted by the deployment authority.</p></article>
+        <article class="qmap-card"><h3>Construction policy</h3><p>Instructions telling a printer which recorded states are authoritative and which should be repaired, normalized, substituted, or regenerated. This is why a subject scanned while exhausted or injured does not have to be printed exhausted or injured.</p></article>
+        <article class="qmap-card"><h3>Capability constraints</h3><p>Late Blacklight personnel packages contain explicit requirements for exceptional and supernatural conditions. The printer must produce a viable instance satisfying those requirements rather than merely cloning the average-looking anatomy in the scan.</p></article>
+      </div>
+    </section>
+
+    <section class="qmap-section" id="brain">
+      <p class="bli-eyebrow">The neural problem</p>
+      <h2>The breakthrough was learning to infer a moving system from a finite scan.</h2>
+      <p>A brain cannot be captured by treating it like a skull full of fixed wiring. By the time Q-MAP became reconstruction-capable, Blacklight's neural models treated the scan interval as a constrained observation of a dynamic system. Thousands of precisely timed subpasses did not produce one frozen neural frame; they produced a sequence of overlapping measurements from which a likely underlying state trajectory could be inferred.</p>
+      <p>This is one reason the reception plate produced such disproportionate data. A conventional image can average events that occur a millisecond apart if they contribute to the same voxel. A neural reconstruction may care that those events occurred in a particular order, under a particular source pulse, while several neighboring channels changed together. The correlation history becomes part of the measurement.</p>
+      <p>Even in the mature era, Q-MAP therefore remains probabilistic at the lowest level. It carries confidence bounds and reconstructs a viable state that satisfies the evidence rather than claiming the detector directly observed every atom at one impossible universal instant.</p>
+    </section>
+
+    <section class="qmap-section" id="archives">
+      <p class="bli-eyebrow">Legacy scan archaeology</p>
+      <h2>The invention created valuable people-records before anyone knew they were people-records.</h2>
+      <p>Once the reception grammar was understood, old Blacklight storage vaults became research sites. A person scanned twenty years before reconstruction technology existed might possess a surprisingly complete late-decodable record if the original full event archive survived. Another person scanned on the same day might have only a compact medical reconstruction because an administrator deleted the plate data to recover storage capacity.</p>
+      <p>Three broad survival classes emerged:</p>
+      <div class="qmap-grid">
+        <article class="qmap-card"><h3>Image-only legacy scan</h3><p>Useful as medical history. Nearly worthless for cognitive reconstruction because almost all low-level timing and correlation data has been destroyed.</p></article>
+        <article class="qmap-card"><h3>Partial raw archive</h3><p>Potentially useful for anatomy, genetics-adjacent inference, organ fabrication, and selected biochemical reconstruction. Cognitive fidelity depends on which channels and timing metadata survived.</p></article>
+        <article class="qmap-card"><h3>Full evidentiary archive</h3><p>Raw events plus calibration and source provenance. These early archives can sometimes be decoded decades later at a fidelity their original operators would have considered impossible.</p></article>
+      </div>
+      <p>This created one of the earliest continuity-law disputes inside Blacklight. Nobody consented to an immortality scan because no immortality scan existed when the measurement was taken. Later technology changed what old medical data was capable of becoming.</p>
+    </section>
+
+    <section class="qmap-section" id="deployment">
+      <p class="bli-eyebrow">How this becomes the later Q-MAP used in No Return Signal</p>
+      <h2>The scanner is the ancestor of the package, not the package itself.</h2>
+      <p>The No Return Signal deployment uses a mature descendant of this technology. The personnel package Charles transmits is not a raw reception-plate archive. It is a deliberately prepared reconstruction package containing interpreted identity and body information, construction requirements, viability tolerances, capability records, mission data, and the information required to make a foreign fabrication system build a viable local instance.</p>
+      <p>That distinction explains several established campaign facts at once. The package can instruct an Ar'nock printer without the printer understanding humans as a native species. The construction process can repair incidental injury rather than reproduce scan-time damage. It can preserve a supernatural or otherwise exceptional condition because that condition is part of the required capability specification. And local fabrication can substitute compatible biological mechanisms where the package defines a required outcome rather than one mandatory molecular implementation.</p>
+      <p>The original scanner solved the problem of <em>measurement</em>. Decades of research solved <em>interpretation</em>. Fabrication science solved <em>construction</em>. Identity engineering solved enough of <em>continuity</em> to make operational use possible. Q-MAP deployment exists only because all four disciplines were eventually joined.</p>
+    </section>
+
+    <section class="qmap-section" id="canon">
+      <p class="bli-eyebrow">Canon safeguards</p>
+      <h2>What this history establishes—and what it deliberately does not.</h2>
+      <div class="qmap-table-wrap">
+        <table class="qmap-table">
+          <thead><tr><th>Question</th><th>Authoritative answer</th></tr></thead>
+          <tbody>
+            <tr><td>Was Q-MAP originally invented to copy consciousness?</td><td>No. It began as compact multimodal body imaging and materials characterization.</td></tr>
+            <tr><td>Were the first scans useful?</td><td>Yes, chiefly as compact CT-like medical imaging. Their deeper raw data was mostly uninterpretable.</td></tr>
+            <tr><td>Did engineers understand the reception plate when the scanner was invented?</td><td>No. Major event families and correlation structures were not fully mapped into a readable physical grammar until roughly a quarter-century later.</td></tr>
+            <tr><td>Why were early archives so large?</td><td>The plate retained low-level event timing, energy, direction, coincidence, source, and calibration data rather than only reconstructed pixels.</td></tr>
+            <tr><td>Can any old Q-MAP image reconstruct a person?</td><td>No. Image-only archives have discarded most of the information required for deep reconstruction.</td></tr>
+            <tr><td>Does a raw scan equal a construction blueprint?</td><td>No. Mature Q-MAP requires extensive interpretation, causal modeling, construction policy, and validation before fabrication.</td></tr>
+            <tr><td>Does Q-MAP prove a metaphysical soul was copied?</td><td>No. Operational continuity can be modeled and validated without settling metaphysics.</td></tr>
+            <tr><td>Why can No Return Signal operatives awaken healthy rather than in their scan-time condition?</td><td>The late reconstruction package distinguishes identity-defining state from transient injury, illness, exhaustion, and deconditioning and provides a construction policy for the healthiest viable age-appropriate body consistent with the recorded person.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="qmap-section">
+      <div class="qmap-callout"><strong>Blacklight historical interpretation:</strong> Q-MAP did not become extraordinary because somebody invented a machine that could see a soul. It became extraordinary because Blacklight spent decades refusing to treat unexplained measurement as meaningless, eventually learned what its own detector had been recording all along, and then built an entire stack of inference, fabrication, and continuity engineering on top of that discovery.</div>
+    </section>
+  </main>
+
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Q-MAP technology lineage · Black-level technical archive.</footer>
+  <script src="blacklight-background-audio.js"></script>
+</body>
+</html>
