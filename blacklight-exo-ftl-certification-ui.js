@@ -7,12 +7,27 @@
     'blacklight-exo-ftl-safety-certification-runtime.js',
     'blacklight-exo-ftl-route-safety-runtime.js'
   ];
+  const EMBODIMENT_SCRIPT = 'blacklight-exo-ftl-control-embodiment-runtime.js';
   const BLOCKING_STATES = new Set(['REJECTED', 'UNRESOLVED', 'CONFLICT']);
+  const TECHNOLOGY_BASES = [
+    ['', 'Not specified — preserve unresolved'],
+    ['terrestrial-electromechanical', 'Terrestrial electromechanical / industrial'],
+    ['aquatic-electrochemical-hydraulic', 'Aquatic electrochemical / hydraulic'],
+    ['cryogenic-ammonia-halocarbon', 'Cryogenic ammonia / halocarbon'],
+    ['gas-giant-fluidic-electrostatic', 'Gas-giant fluidic / electrostatic'],
+    ['biological-symbiotic', 'Biological / symbiotic'],
+    ['mineral-piezoelectric-photonic', 'Mineral piezoelectric / photonic'],
+    ['field-mediated-adaptive', 'Field-mediated / adaptive']
+  ];
+
   let safetyLoadPromise = null;
+  let embodimentLoadPromise = null;
   let activeSafety = null;
+  let activeEmbodiment = null;
   let activeRating = null;
   let generationToken = 0;
   let routeMatrixToken = 0;
+  let embodimentToken = 0;
   let activeRouteMatrix = new Map();
 
   function anchor(id) {
@@ -76,7 +91,7 @@
   }
 
   function state(value) {
-    return value === 'refused' || value === 'restricted' || ['REJECTED', 'UNRESOLVED', 'CONFLICT', 'MARGINAL'].includes(value) ? 'warning' : value === 'authorized' || value === 'ADMISSIBLE' ? 'ok' : 'resolved';
+    return value === 'refused' || value === 'restricted' || ['REJECTED', 'UNRESOLVED', 'CONFLICT', 'MARGINAL'].includes(value) ? 'warning' : value === 'authorized' || value === 'ADMISSIBLE' || value === 'READY' ? 'ok' : 'resolved';
   }
 
   function badge(a) {
@@ -97,6 +112,17 @@
     const s = document.createElement('span');
     s.dataset.routeSafetyBadge = 'true';
     s.textContent = `Route certificate · ${safety.status}`;
+    b.append(s);
+  }
+
+  function embodimentBadge(embodiment) {
+    const b = $('exo-ftl-badges');
+    if (!b) return;
+    b.querySelector('[data-control-embodiment-badge="true"]')?.remove();
+    if (!embodiment) return;
+    const s = document.createElement('span');
+    s.dataset.controlEmbodimentBadge = 'true';
+    s.textContent = `Control embodiment · ${embodiment.status}`;
     b.append(s);
   }
 
@@ -156,13 +182,13 @@
     return [...document.scripts].some(node => node.getAttribute('src') === src || node.src.endsWith(`/${src}`));
   }
 
-  function loadScript(src) {
+  function loadScript(src, datasetKey = 'routeSafetyRuntime') {
     if (scriptLoaded(src)) return Promise.resolve();
     return new Promise((resolve, reject) => {
       const node = document.createElement('script');
       node.src = src;
       node.async = false;
-      node.dataset.routeSafetyRuntime = 'true';
+      node.dataset[datasetKey] = 'true';
       node.addEventListener('load', resolve, {once: true});
       node.addEventListener('error', () => reject(new Error(`Unable to load ${src}`)), {once: true});
       document.head.append(node);
@@ -185,12 +211,53 @@
     return safetyLoadPromise;
   }
 
+  function ensureEmbodimentRuntime() {
+    if (globalThis.BlacklightExoFTLControlEmbodiment) return Promise.resolve(globalThis.BlacklightExoFTLControlEmbodiment);
+    if (!embodimentLoadPromise) {
+      embodimentLoadPromise = loadScript(EMBODIMENT_SCRIPT, 'controlEmbodimentRuntime')
+        .then(() => {
+          if (!globalThis.BlacklightExoFTLControlEmbodiment) throw new Error('FTL control-embodiment runtime failed to initialize.');
+          return globalThis.BlacklightExoFTLControlEmbodiment;
+        })
+        .catch(error => {
+          embodimentLoadPromise = null;
+          throw error;
+        });
+    }
+    return embodimentLoadPromise;
+  }
+
+  function ensureTechnologyBasisControl() {
+    let select = $('exo-ftl-technology-basis');
+    if (select) return select;
+    const grid = document.querySelector('.grid.controls');
+    if (!grid) return null;
+    const label = document.createElement('label');
+    label.setAttribute('for', 'exo-ftl-technology-basis');
+    label.append(document.createTextNode('Operative technology basis'));
+    select = document.createElement('select');
+    select.id = 'exo-ftl-technology-basis';
+    for (const [value, text] of TECHNOLOGY_BASES) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = text;
+      select.append(option);
+    }
+    label.append(select);
+    grid.append(label);
+    return select;
+  }
+
   function requestFromPage() {
     const selectedFamily = $('exo-ftl-family')?.value || null;
     return {
       family: selectedFamily && selectedFamily !== 'random' ? selectedFamily : null,
       route: $('exo-ftl-route')?.value || null
     };
+  }
+
+  function technologyBasisFromPage() {
+    return $('exo-ftl-technology-basis')?.value || null;
   }
 
   function profileLabel(profileIdentity) {
@@ -297,6 +364,45 @@
     }
   }
 
+  function textItems(value) {
+    if (Array.isArray(value)) return value.map(item => String(item));
+    if (value && typeof value === 'object') return Object.entries(value).map(([key, item]) => `${key}: ${Array.isArray(item) ? item.join(', ') : String(item)}`);
+    return value === null || value === undefined || value === '' ? [] : [String(value)];
+  }
+
+  function renderEmbodiment(rating, embodiment) {
+    activeEmbodiment = embodiment;
+    globalThis.BlacklightExoGetActiveFTLControlEmbodiment = () => activeEmbodiment;
+    embodimentBadge(embodiment);
+    const c = section('exo-ftl-control-embodiment-live', 'Charles // native control embodiment', 'The same transit physics, built and operated through this technology basis rather than a universal human dashboard.', 'exo-ftl-route-safety-envelope', 'exo-ftl-calculation-stack');
+    if (!c) return;
+    const basis = embodiment?.technologyBasis || technologyBasisFromPage() || 'unresolved';
+    const warnings = textItems(embodiment?.canonWarnings);
+    const top = document.createElement('div');
+    top.className = 'exo-ftl-grid';
+    top.append(
+      card('Embodiment state', embodiment?.status || 'UNRESOLVED', embodiment?.status === 'READY' ? 'Technology-basis machinery is resolved for this generated dossier.' : 'The technology basis is unresolved or the embodiment runtime cannot safely resolve it.', state(embodiment?.status)),
+      card('Technology basis', basis, `Basis class ${embodiment?.basisClass || 'unresolved'}; provenance ${embodiment?.provenanceClass || 'unresolved'}.`),
+      card('Transit-family relationship', embodiment?.transitFamily || activeSafety?.family || rating?.identity?.family || 'unresolved', `Family provenance ${embodiment?.transitFamilyProvenance || 'unresolved'}. Control style never assigns an unresolved named-race FTL family.`),
+      card('Human interoperability', embodiment?.humanInteroperability || 'unresolved', 'Translation/adaptation may expose native state, but it may not replace or silently normalize that state.'),
+      card('Scale context', rating?.identity?.scale || 'unresolved', textItems(embodiment?.scaling).join(' · ') || 'No basis-specific scale guidance returned.'),
+      card('Service environment', textItems(embodiment?.serviceEnvironment)[0] || 'unresolved', textItems(embodiment?.serviceEnvironment).slice(1).join(' · ') || 'No additional service-environment constraint returned.')
+    );
+    const details = document.createElement('div');
+    details.className = 'exo-ftl-list-grid';
+    details.append(
+      list('Native navigation representation', textItems(embodiment?.navigationRepresentation).length ? textItems(embodiment.navigationRepresentation) : ['Unresolved.']),
+      list('Sensor architecture', textItems(embodiment?.sensorArchitecture).length ? textItems(embodiment.sensorArchitecture) : ['Unresolved.']),
+      list('Control architecture', textItems(embodiment?.controlArchitecture).length ? textItems(embodiment.controlArchitecture) : ['Unresolved.']),
+      list('Abort embodiment', textItems(embodiment?.abortEmbodiment).length ? textItems(embodiment.abortEmbodiment) : ['Unresolved.']),
+      list('Maintenance doctrine', textItems(embodiment?.maintenanceDoctrine).length ? textItems(embodiment.maintenanceDoctrine) : ['Unresolved.']),
+      list('Failure signatures', textItems(embodiment?.failureSignatures).length ? textItems(embodiment.failureSignatures) : ['Unresolved.']),
+      list('Infrastructure / service burden', textItems(embodiment?.infrastructure).length ? textItems(embodiment.infrastructure) : ['No additional infrastructure guidance returned.']),
+      list('Canon safeguards', warnings.length ? warnings : ['No additional canon warning returned.'])
+    );
+    c.replaceChildren(top, details);
+  }
+
   function resetRouteOption(option) {
     if (!option.dataset.routeSafetyBaseLabel) option.dataset.routeSafetyBaseLabel = option.textContent;
     option.textContent = option.dataset.routeSafetyBaseLabel;
@@ -332,6 +438,51 @@
     applyRouteMatrix(activeRouteMatrix);
   }
 
+  async function resolveEmbodiment(rating, safety = activeSafety) {
+    if (!rating) return;
+    const token = ++embodimentToken;
+    const technologyBasis = technologyBasisFromPage();
+    if (!technologyBasis) {
+      renderEmbodiment(rating, {
+        status: 'UNRESOLVED',
+        technologyBasis: null,
+        transitFamily: safety?.family || rating?.identity?.family || null,
+        transitFamilyProvenance: 'generated-family-preserved; technology-basis-unresolved',
+        canonWarnings: ['No operative technology basis was selected. The dossier remains unresolved rather than defaulting to terrestrial machinery.']
+      });
+      return;
+    }
+    try {
+      const runtime = await ensureEmbodimentRuntime();
+      const result = await runtime.resolveFTLControlEmbodiment({
+        technologyBasis,
+        transitFamily: safety?.family || rating?.identity?.family || null,
+        pathLevel: rating?.identity?.tierRank ?? null,
+        vesselScale: rating?.identity?.scale || null,
+        manufacturer: rating?.identity?.manufacturer || null,
+        sourceContext: {
+          source: 'blacklight-exo-ftl-certification-ui.js',
+          generatedFamily: rating?.identity?.family || null,
+          certifiedFamily: safety?.family || null,
+          designIntentDocumentId: '1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y',
+          designIntentRevisionId: 'ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0'
+        }
+      });
+      if (token !== embodimentToken || rating !== activeRating) return;
+      renderEmbodiment(rating, result);
+    } catch (error) {
+      if (token !== embodimentToken || rating !== activeRating) return;
+      console.error('Unable to resolve FTL control embodiment.', error);
+      renderEmbodiment(rating, {
+        status: 'UNRESOLVED',
+        technologyBasis,
+        transitFamily: safety?.family || rating?.identity?.family || null,
+        transitFamilyProvenance: 'runtime-unavailable',
+        canonWarnings: [error.message]
+      });
+    }
+  }
+
   async function certifyGeneratedRating(rating) {
     if (!rating) return;
     activeRating = rating;
@@ -342,11 +493,14 @@
       const safety = await runtime.resolveGeneratedFTLRouteSafety({rating, request: requestFromPage()});
       if (token !== generationToken || rating !== activeRating) return;
       renderSafety(rating, safety);
+      resolveEmbodiment(rating, safety);
       certifyRouteMatrix(rating, runtime, matrixToken).catch(error => console.error('Unable to resolve FTL route safety matrix.', error));
     } catch (error) {
       if (token !== generationToken || rating !== activeRating) return;
       console.error('Unable to resolve FTL route safety certificate.', error);
-      renderSafety(rating, {status: 'UNRESOLVED', presentation: {label: 'Unresolved — certification runtime unavailable', blocking: true, reasons: [error.message]}, warnings: [error.message], provenance: []});
+      const unresolved = {status: 'UNRESOLVED', presentation: {label: 'Unresolved — certification runtime unavailable', blocking: true, reasons: [error.message]}, warnings: [error.message], provenance: []};
+      renderSafety(rating, unresolved);
+      resolveEmbodiment(rating, unresolved);
     }
   }
 
@@ -372,13 +526,17 @@
       ...rating,
       routeSafetyCertificate: activeSafety,
       routeSafetyMatrix: Object.fromEntries(activeRouteMatrix),
+      controlEmbodiment: activeEmbodiment,
       certificationExport: {
-        schemaVersion: '1.1.0',
+        schemaVersion: '1.2.0',
         generatedCapabilityIsNotRouteCertification: true,
         blocked: Boolean(activeSafety.presentation?.blocking),
         status: activeSafety.status,
         routeSelectorGuarded: $('exo-ftl-route')?.dataset.routeSafetyGuarded === 'true',
-        provenance: [...(activeSafety.provenance || [])]
+        technologyBasisExplicit: Boolean(technologyBasisFromPage()),
+        controlEmbodimentStatus: activeEmbodiment?.status || 'UNRESOLVED',
+        generatedFamilyPreserved: true,
+        provenance: [...new Set([...(activeSafety.provenance || []), 'blacklight-exo-ftl-control-embodiment-runtime.js'])]
       }
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
@@ -397,6 +555,13 @@
     if (rating) certifyGeneratedRating(rating);
   }
 
+  function reembodyFromControl() {
+    const rating = globalThis.BlacklightExoGetActiveFTL?.();
+    if (rating) resolveEmbodiment(rating, activeSafety);
+  }
+
+  const technologyBasisControl = ensureTechnologyBasisControl();
+  technologyBasisControl?.addEventListener('change', reembodyFromControl);
   document.addEventListener('blacklight:exo-ftl-generated', event => render(event.detail?.rating));
   $('exo-ftl-export')?.addEventListener('click', exportCertifiedDossier, true);
   $('exo-ftl-route')?.addEventListener('change', recertifyFromControls);
