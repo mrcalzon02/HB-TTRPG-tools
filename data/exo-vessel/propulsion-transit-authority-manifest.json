@@ -41,6 +41,10 @@
     "data/schemas/exo-vessel-ftl-curvature-environment.schema.json",
     "blacklight-exo-ftl-curvature-environment-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_PHYSICAL_GRAVITY_CURVATURE_ENVIRONMENT_MANUAL.md",
+    "data/exo-vessel/ftl-physical-route-environment-bridge.json",
+    "data/schemas/exo-vessel-ftl-physical-route-environment.schema.json",
+    "blacklight-exo-ftl-physical-route-environment-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_PHYSICAL_ROUTE_ENVIRONMENT_CERTIFICATION_MANUAL.md",
     "data/exo-vessel/ftl-calibration-registry.json",
     "data/exo-vessel/ftl-safety-certification-registry.json",
     "data/schemas/exo-vessel-ftl-safety-certification.schema.json",
@@ -123,6 +127,7 @@
     "blacklight-exo-ftl-path-level-runtime.js",
     "blacklight-exo-ftl-path-level-controller.js",
     "blacklight-exo-ftl-curvature-environment-runtime.js",
+    "blacklight-exo-ftl-physical-route-environment-runtime.js",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
@@ -140,11 +145,15 @@
     "Race/vessel-specific material outranks generic embodiment only within its documented scope.",
     "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon.",
     "Physical gravity and curvature packets must preserve SI units, reference-frame identity, potential reference, model validity, uncertainty, and provenance before versioned normalization or family-specific transit response is applied.",
+    "When an authoritative physicalEnvironmentContext is supplied, route safety must use the physical gravity/curvature bridge; a PARTIAL, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY physical result may not be replaced by a PROPOSED route archetype fallback.",
+    "Only absence of a physicalEnvironmentContext permits the existing PROPOSED route archetype environment fallback.",
+    "Physical quantities with unlike dimensions must be divided by explicit versioned reference scales before they enter a combined dimensionless family-severity model; those reference scales are calibration, not constants of nature.",
     "Coordinate gravitational acceleration, proper acceleration, tidal loading, and spacetime curvature are distinct quantities and may not be silently substituted for one another.",
     "Weak-field potential, acceleration, and Newtonian tidal tensors may be superposed within their approximation; exact general-relativistic curvature invariants may not be linearly superposed and presented as an exact multi-body spacetime.",
     "OUTSIDE_MODEL_VALIDITY is a blocking modelling result. It may not be converted into an ordinary finite gravity-severity score merely to keep a route selectable.",
     "Real-physics environmental calculations constrain fictional operator models but do not prove an FTL family is physically realizable or assign that family to a named race, vessel, or manufacturer.",
-    "Calibration profile identity and version must be retained by any numerical safety certificate that depends on it.",
+    "Family-boundary hazard remains an operator-specific fictional term and may not be inferred from ordinary gravity metrics alone.",
+    "Calibration profile identity and version and any physical-normalization profile identity/version must be retained by a numerical safety certificate that depends on them.",
     "Generated capability and route safety certification are separate outputs; REJECTED, UNRESOLVED, and CONFLICT states may not be flattened into ordinary certified performance.",
     "The live EXO FTL certification UI must preserve the generated family when the family selector is random and must embed the route-safety certificate in exported dossiers.",
     "The live EXO FTL route selector must visibly retain certification state for every evaluated route and guard blocked alternatives without erasing the failed selected route needed for diagnosis.",
@@ -161,5 +170,5 @@
     "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
     "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, and physical gravity/curvature environment additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, and physical-route certification additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
