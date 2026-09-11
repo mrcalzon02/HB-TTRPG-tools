@@ -1,150 +1,405 @@
 (() => {
   'use strict';
-  const $=id=>document.getElementById(id);
-  const SAFETY_SCRIPTS=[
+
+  const $ = id => document.getElementById(id);
+  const SAFETY_SCRIPTS = [
     'blacklight-exo-ftl-safety-calibration-runtime.js',
     'blacklight-exo-ftl-safety-certification-runtime.js',
     'blacklight-exo-ftl-route-safety-runtime.js'
   ];
-  let safetyLoadPromise=null;
-  let activeSafety=null;
-  let generationToken=0;
+  const BLOCKING_STATES = new Set(['REJECTED', 'UNRESOLVED', 'CONFLICT']);
+  let safetyLoadPromise = null;
+  let activeSafety = null;
+  let activeRating = null;
+  let generationToken = 0;
+  let routeMatrixToken = 0;
+  let activeRouteMatrix = new Map();
 
-  function anchor(id){return $(id)?.closest('.bli-section')||$('exo-ftl-route-envelope')?.closest('.bli-section')||$('exo-ftl-reliability')?.closest('.bli-section');}
-  function section(id,eyebrow,title,anchorId,className='exo-ftl-grid'){let box=$(id);if(box)return box;const a=anchor(anchorId);if(!a)return null;const s=document.createElement('section');s.className='bli-section exo-ftl-certification-section';const h=document.createElement('div');h.className='bli-section-head';const e=document.createElement('p');e.className='bli-eyebrow';e.textContent=eyebrow;const t=document.createElement('h2');t.textContent=title;box=document.createElement('div');box.id=id;box.className=className;h.append(e,t);s.append(h,box);a.after(s);return box;}
-  function card(label,title,text,state=''){const a=document.createElement('article');a.className='exo-ftl-card exo-ftl-certification-card';if(state)a.dataset.certificationState=state;const s=document.createElement('small'),h=document.createElement('h3'),p=document.createElement('p');s.textContent=label;h.textContent=title;p.textContent=text;a.append(s,h,p);return a;}
-  function list(title,items){const a=document.createElement('article');a.className='exo-ftl-calculation-list';const h=document.createElement('h3'),ul=document.createElement('ul');h.textContent=title;for(const item of items){const li=document.createElement('li');li.textContent=item;ul.append(li);}a.append(h,ul);return a;}
-  function calculation(item){return card('Calculation and operational meaning',item.label,`${item.expression}. Values entered: ${item.substitution}. Result: ${item.resultText}. Charles's interpretation: ${item.meaning}`);}
-  function state(value){return value==='refused'||value==='restricted'||['REJECTED','UNRESOLVED','CONFLICT','MARGINAL'].includes(value)?'warning':value==='authorized'||value==='ADMISSIBLE'?'ok':'resolved';}
-  function badge(a){const b=$('exo-ftl-badges');if(!b)return;b.querySelector('[data-certification-audit-badge="true"]')?.remove();const s=document.createElement('span');s.dataset.certificationAuditBadge='true';s.textContent=`Charles authorization · ${a.status}`;b.append(s);}
-  function safetyBadge(safety){const b=$('exo-ftl-badges');if(!b)return;b.querySelector('[data-route-safety-badge="true"]')?.remove();if(!safety)return;const s=document.createElement('span');s.dataset.routeSafetyBadge='true';s.textContent=`Route certificate · ${safety.status}`;b.append(s);}
-  function overview(a){const c=section('exo-ftl-certification-overview','Charles // authorization finding','What I would authorize, restrict, or refuse before anyone energizes the machine.','exo-ftl-calculation-consistency');if(!c)return;c.replaceChildren(card('Current dossier disposition',a.statusLabel,a.reason,state(a.status)),card('Authority limit','A dossier is not live clearance',a.standingLimit,'warning'),card('Preservation record','Original operational records retained',a.preservationRecord.method),card('Route finding',a.route.status,a.route.standingFinding,state(a.route.status)),card('Reliability finding',a.reliability.status,a.reliability.standingFinding,state(a.reliability.status)));}
-  function route(a){const r=a.route,c=section('exo-ftl-certification-route','Charles // route authorization','The route geometry, traffic burden, mass-map tolerance, and live evidence I require.','exo-ftl-route-envelope','exo-ftl-calculation-stack');if(!c)return;const top=document.createElement('div');top.className='exo-ftl-grid';top.append(card('Route-model confidence',r.confidenceText,'Confidence describes the generated route model. Live clearance remains unestablished.'),card('Live route state',r.liveClearance,r.standingFinding,state(r.status)),card('Required evidence',`${r.liveDataRequired.length} live records`,r.liveDataRequired.join(' · ')));const assumptions=document.createElement('div');assumptions.className='exo-ftl-list-grid';assumptions.append(list('Assumptions I inherited',r.assumptions),list('Conditions that stop authorization',r.refusalConditions));const calculations=document.createElement('div');calculations.className='exo-ftl-grid';calculations.append(...r.calculations.map(calculation));c.replaceChildren(top,assumptions,calculations);}
-  function reliability(a){const r=a.reliability,c=section('exo-ftl-certification-reliability','Charles // reliability authorization','The repeated-use risk, calibration burden, abort authority, and redundancy standard.','exo-ftl-reliability','exo-ftl-calculation-stack');if(!c)return;const top=document.createElement('div');top.className='exo-ftl-grid';top.append(card('Reliability disposition',r.status,r.standingFinding,state(r.status)),card('Installation policy',r.policy.class,`${r.policy.minimumSuccessText}. ${r.policy.note}`),card('Reliability-model confidence',r.confidenceText,'This remains a generated engineering estimate rather than field-service statistics.'));const assumptions=document.createElement('div');assumptions.className='exo-ftl-list-grid';assumptions.append(list('Assumptions I inherited',r.assumptions),list('Conditions that stop certification',r.refusalConditions));const calculations=document.createElement('div');calculations.className='exo-ftl-grid';calculations.append(...r.calculations.map(calculation));c.replaceChildren(top,assumptions,calculations);}
+  function anchor(id) {
+    return $(id)?.closest('.bli-section') || $('exo-ftl-route-envelope')?.closest('.bli-section') || $('exo-ftl-reliability')?.closest('.bli-section');
+  }
 
-  function scriptLoaded(src){return [...document.scripts].some(node=>node.getAttribute('src')===src||node.src.endsWith(`/${src}`));}
-  function loadScript(src){
-    if(scriptLoaded(src))return Promise.resolve();
-    return new Promise((resolve,reject)=>{
-      const node=document.createElement('script');
-      node.src=src;
-      node.async=false;
-      node.dataset.routeSafetyRuntime='true';
-      node.addEventListener('load',resolve,{once:true});
-      node.addEventListener('error',()=>reject(new Error(`Unable to load ${src}`)),{once:true});
+  function section(id, eyebrow, title, anchorId, className = 'exo-ftl-grid') {
+    let box = $(id);
+    if (box) return box;
+    const a = anchor(anchorId);
+    if (!a) return null;
+    const s = document.createElement('section');
+    s.className = 'bli-section exo-ftl-certification-section';
+    const h = document.createElement('div');
+    h.className = 'bli-section-head';
+    const e = document.createElement('p');
+    e.className = 'bli-eyebrow';
+    e.textContent = eyebrow;
+    const t = document.createElement('h2');
+    t.textContent = title;
+    box = document.createElement('div');
+    box.id = id;
+    box.className = className;
+    h.append(e, t);
+    s.append(h, box);
+    a.after(s);
+    return box;
+  }
+
+  function card(label, title, text, stateValue = '') {
+    const a = document.createElement('article');
+    a.className = 'exo-ftl-card exo-ftl-certification-card';
+    if (stateValue) a.dataset.certificationState = stateValue;
+    const s = document.createElement('small');
+    const h = document.createElement('h3');
+    const p = document.createElement('p');
+    s.textContent = label;
+    h.textContent = title;
+    p.textContent = text;
+    a.append(s, h, p);
+    return a;
+  }
+
+  function list(title, items) {
+    const a = document.createElement('article');
+    a.className = 'exo-ftl-calculation-list';
+    const h = document.createElement('h3');
+    const ul = document.createElement('ul');
+    h.textContent = title;
+    for (const item of items) {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.append(li);
+    }
+    a.append(h, ul);
+    return a;
+  }
+
+  function calculation(item) {
+    return card('Calculation and operational meaning', item.label, `${item.expression}. Values entered: ${item.substitution}. Result: ${item.resultText}. Charles's interpretation: ${item.meaning}`);
+  }
+
+  function state(value) {
+    return value === 'refused' || value === 'restricted' || ['REJECTED', 'UNRESOLVED', 'CONFLICT', 'MARGINAL'].includes(value) ? 'warning' : value === 'authorized' || value === 'ADMISSIBLE' ? 'ok' : 'resolved';
+  }
+
+  function badge(a) {
+    const b = $('exo-ftl-badges');
+    if (!b) return;
+    b.querySelector('[data-certification-audit-badge="true"]')?.remove();
+    const s = document.createElement('span');
+    s.dataset.certificationAuditBadge = 'true';
+    s.textContent = `Charles authorization · ${a.status}`;
+    b.append(s);
+  }
+
+  function safetyBadge(safety) {
+    const b = $('exo-ftl-badges');
+    if (!b) return;
+    b.querySelector('[data-route-safety-badge="true"]')?.remove();
+    if (!safety) return;
+    const s = document.createElement('span');
+    s.dataset.routeSafetyBadge = 'true';
+    s.textContent = `Route certificate · ${safety.status}`;
+    b.append(s);
+  }
+
+  function overview(a) {
+    const c = section('exo-ftl-certification-overview', 'Charles // authorization finding', 'What I would authorize, restrict, or refuse before anyone energizes the machine.', 'exo-ftl-calculation-consistency');
+    if (!c) return;
+    c.replaceChildren(
+      card('Current dossier disposition', a.statusLabel, a.reason, state(a.status)),
+      card('Authority limit', 'A dossier is not live clearance', a.standingLimit, 'warning'),
+      card('Preservation record', 'Original operational records retained', a.preservationRecord.method),
+      card('Route finding', a.route.status, a.route.standingFinding, state(a.route.status)),
+      card('Reliability finding', a.reliability.status, a.reliability.standingFinding, state(a.reliability.status))
+    );
+  }
+
+  function route(a) {
+    const r = a.route;
+    const c = section('exo-ftl-certification-route', 'Charles // route authorization', 'The route geometry, traffic burden, mass-map tolerance, and live evidence I require.', 'exo-ftl-route-envelope', 'exo-ftl-calculation-stack');
+    if (!c) return;
+    const top = document.createElement('div');
+    top.className = 'exo-ftl-grid';
+    top.append(
+      card('Route-model confidence', r.confidenceText, 'Confidence describes the generated route model. Live clearance remains unestablished.'),
+      card('Live route state', r.liveClearance, r.standingFinding, state(r.status)),
+      card('Required evidence', `${r.liveDataRequired.length} live records`, r.liveDataRequired.join(' · '))
+    );
+    const assumptions = document.createElement('div');
+    assumptions.className = 'exo-ftl-list-grid';
+    assumptions.append(list('Assumptions I inherited', r.assumptions), list('Conditions that stop authorization', r.refusalConditions));
+    const calculations = document.createElement('div');
+    calculations.className = 'exo-ftl-grid';
+    calculations.append(...r.calculations.map(calculation));
+    c.replaceChildren(top, assumptions, calculations);
+  }
+
+  function reliability(a) {
+    const r = a.reliability;
+    const c = section('exo-ftl-certification-reliability', 'Charles // reliability authorization', 'The repeated-use risk, calibration burden, abort authority, and redundancy standard.', 'exo-ftl-reliability', 'exo-ftl-calculation-stack');
+    if (!c) return;
+    const top = document.createElement('div');
+    top.className = 'exo-ftl-grid';
+    top.append(
+      card('Reliability disposition', r.status, r.standingFinding, state(r.status)),
+      card('Installation policy', r.policy.class, `${r.policy.minimumSuccessText}. ${r.policy.note}`),
+      card('Reliability-model confidence', r.confidenceText, 'This remains a generated engineering estimate rather than field-service statistics.')
+    );
+    const assumptions = document.createElement('div');
+    assumptions.className = 'exo-ftl-list-grid';
+    assumptions.append(list('Assumptions I inherited', r.assumptions), list('Conditions that stop certification', r.refusalConditions));
+    const calculations = document.createElement('div');
+    calculations.className = 'exo-ftl-grid';
+    calculations.append(...r.calculations.map(calculation));
+    c.replaceChildren(top, assumptions, calculations);
+  }
+
+  function scriptLoaded(src) {
+    return [...document.scripts].some(node => node.getAttribute('src') === src || node.src.endsWith(`/${src}`));
+  }
+
+  function loadScript(src) {
+    if (scriptLoaded(src)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const node = document.createElement('script');
+      node.src = src;
+      node.async = false;
+      node.dataset.routeSafetyRuntime = 'true';
+      node.addEventListener('load', resolve, {once: true});
+      node.addEventListener('error', () => reject(new Error(`Unable to load ${src}`)), {once: true});
       document.head.append(node);
     });
   }
-  function ensureSafetyRuntime(){
-    if(globalThis.BlacklightExoFTLRouteSafetyRuntime)return Promise.resolve(globalThis.BlacklightExoFTLRouteSafetyRuntime);
-    if(!safetyLoadPromise){
-      safetyLoadPromise=SAFETY_SCRIPTS.reduce((chain,src)=>chain.then(()=>loadScript(src)),Promise.resolve())
-        .then(()=>{
-          if(!globalThis.BlacklightExoFTLRouteSafetyRuntime)throw new Error('FTL route-safety runtime failed to initialize.');
+
+  function ensureSafetyRuntime() {
+    if (globalThis.BlacklightExoFTLRouteSafetyRuntime) return Promise.resolve(globalThis.BlacklightExoFTLRouteSafetyRuntime);
+    if (!safetyLoadPromise) {
+      safetyLoadPromise = SAFETY_SCRIPTS.reduce((chain, src) => chain.then(() => loadScript(src)), Promise.resolve())
+        .then(() => {
+          if (!globalThis.BlacklightExoFTLRouteSafetyRuntime) throw new Error('FTL route-safety runtime failed to initialize.');
           return globalThis.BlacklightExoFTLRouteSafetyRuntime;
         })
-        .catch(error=>{safetyLoadPromise=null;throw error;});
+        .catch(error => {
+          safetyLoadPromise = null;
+          throw error;
+        });
     }
     return safetyLoadPromise;
   }
 
-  function requestFromPage(rating){
-    const selectedFamily=$('exo-ftl-family')?.value||null;
+  function requestFromPage() {
+    const selectedFamily = $('exo-ftl-family')?.value || null;
     return {
-      family:selectedFamily&&selectedFamily!=='random'?selectedFamily:null,
-      route:$('exo-ftl-route')?.value||null
+      family: selectedFamily && selectedFamily !== 'random' ? selectedFamily : null,
+      route: $('exo-ftl-route')?.value || null
     };
   }
 
-  function profileLabel(profileIdentity){
-    if(!profileIdentity)return'unresolved';
-    if(typeof profileIdentity==='string')return profileIdentity;
-    return [profileIdentity.profileId,profileIdentity.profileVersion].filter(Boolean).join('@')||'unresolved';
+  function profileLabel(profileIdentity) {
+    if (!profileIdentity) return 'unresolved';
+    if (typeof profileIdentity === 'string') return profileIdentity;
+    return [profileIdentity.profileId, profileIdentity.profileVersion].filter(Boolean).join('@') || 'unresolved';
   }
 
-  function renderSafety(rating,safety){
-    activeSafety=safety;
-    globalThis.BlacklightExoGetActiveFTLSafety=()=>activeSafety;
+  function pct(value) {
+    return value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value)) ? `${(Math.max(0, Math.min(1, Number(value))) * 100).toFixed(1)}%` : 'unresolved';
+  }
+
+  function normalizedMargin(margin, reference) {
+    if (![margin, reference].every(value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value))) || Number(reference) <= 0) return null;
+    return Math.max(0, Math.min(1, Number(margin) / Number(reference)));
+  }
+
+  function meterCard(label, title, value, explanation, stateValue = '') {
+    const a = card(label, title, explanation, stateValue);
+    const meter = document.createElement('meter');
+    meter.min = 0;
+    meter.max = 1;
+    meter.low = 0.25;
+    meter.high = 0.65;
+    meter.optimum = 1;
+    if (value !== null && value !== undefined && Number.isFinite(Number(value))) meter.value = Math.max(0, Math.min(1, Number(value)));
+    meter.setAttribute('aria-label', `${label}: ${title}`);
+    a.append(meter);
+    return a;
+  }
+
+  function renderEngineeringEnvelope(certificate = {}, safety = {}) {
+    const c = section('exo-ftl-route-safety-envelope', 'Charles // engineering safety envelope', 'Why this route remains usable, marginal, or impossible.', 'exo-ftl-route-safety-live');
+    if (!c) return;
+    const response = certificate.familyResponse || {};
+    const lookahead = certificate.sensorLookahead || {};
+    const recovery = certificate.recoveryReserve || {};
+    const observability = certificate.hazardObservability || {};
+    const requiredCount = Array.isArray(observability.required) ? observability.required.length : 0;
+    const lostCount = Array.isArray(observability.lost) ? observability.lost.length : 0;
+    const coverage = requiredCount ? Math.max(0, (requiredCount - lostCount) / requiredCount) : null;
+    const lookaheadRatio = normalizedMargin(lookahead.margin, lookahead.predictionTime || lookahead.predictionDistance);
+    const recoveryRatio = normalizedMargin(recovery.margin, recovery.protectedReserve);
+    const severity = certificate.environmentSeverity || {};
+    const status = safety.status || certificate.status || 'UNRESOLVED';
+
+    c.replaceChildren(
+      meterCard('Gravity retention', pct(response.gravityEfficiency), response.gravityEfficiency, 'Retained modeled route efficiency after family-specific gravitational/environmental penalty.', state(status)),
+      meterCard('Calculation retention', pct(response.calculationEfficiency), response.calculationEfficiency, 'Retained solution quality after covariance and family-specific miscalculation amplification.', state(status)),
+      meterCard('Actionable lookahead', lookaheadRatio === null ? 'unresolved' : pct(lookaheadRatio), lookaheadRatio, Number.isFinite(Number(lookahead.margin)) ? `Intervention margin ${Number(lookahead.margin).toFixed(2)} against a prediction horizon of ${Number(lookahead.predictionTime || lookahead.predictionDistance).toFixed(2)}.` : 'Prediction/intervention timing is unresolved.', state(lookahead.status)),
+      meterCard('Recovery reserve', recoveryRatio === null ? 'unresolved' : pct(recoveryRatio), recoveryRatio, Number.isFinite(Number(recovery.margin)) ? `Protected recovery margin ${Number(recovery.margin).toFixed(2)} after the required recovery authority is escrowed.` : 'Protected recovery authority is unresolved.', state(recovery.status)),
+      meterCard('Hazard observability', coverage === null ? 'unresolved' : pct(coverage), coverage, requiredCount ? `${requiredCount - lostCount} of ${requiredCount} required hazard channels remain directly observable or independently guarded.` : 'No bounded hazard set was returned.', state(observability.status)),
+      card('Environment severity', Number.isFinite(Number(severity.value)) ? Number(severity.value).toFixed(3) : 'unresolved', 'Normalized severity is a versioned simulation/calibration quantity, not an astrophysical constant.', state(severity.status))
+    );
+  }
+
+  function mergedReasons(safety) {
+    return [...new Set([
+      ...(Array.isArray(safety?.presentation?.reasons) ? safety.presentation.reasons : []),
+      ...(Array.isArray(safety?.warnings) ? safety.warnings : [])
+    ])];
+  }
+
+  function renderSafety(rating, safety) {
+    activeSafety = safety;
+    globalThis.BlacklightExoGetActiveFTLSafety = () => activeSafety;
+    globalThis.BlacklightExoGetActiveFTLRouteMatrix = () => new Map(activeRouteMatrix);
     safetyBadge(safety);
-    const c=section('exo-ftl-route-safety-live','Charles // modeled route safety certificate','Generated performance is not certification. This gate applies family-specific environment, uncertainty, observability, intervention, and recovery rules before a route is presented as usable.','exo-ftl-certification-route','exo-ftl-calculation-stack');
-    if(c){
-      const reasons=safety?.presentation?.reasons||safety?.warnings||[];
-      const certificate=safety?.certificate||{};
-      const response=certificate.familyResponse||{};
-      const recovery=certificate.recovery||certificate.recoveryState||{};
-      const calibration=safety?.calibration||{};
-      const top=document.createElement('div');top.className='exo-ftl-grid';
+    const c = section('exo-ftl-route-safety-live', 'Charles // modeled route safety certificate', 'Generated performance is not certification. This gate applies family-specific environment, uncertainty, observability, intervention, and recovery rules before a route is presented as usable.', 'exo-ftl-certification-route', 'exo-ftl-calculation-stack');
+    if (c) {
+      const reasons = mergedReasons(safety);
+      const certificate = safety?.certificate || {};
+      const response = certificate.familyResponse || {};
+      const recovery = certificate.recoveryReserve || certificate.recovery || certificate.recoveryState || {};
+      const calibration = safety?.calibration || {};
+      const top = document.createElement('div');
+      top.className = 'exo-ftl-grid';
       top.append(
-        card('Route certificate',safety?.presentation?.label||safety?.status||'UNRESOLVED',reasons.length?reasons.join(' · '):'No blocking reason was returned by the modeled certificate.',state(safety?.status)),
-        card('Family / route',`${safety?.family||'unresolved'} · ${safety?.route||'unresolved'}`,`Safety path ${safety?.path||'unresolved'}. Generated architecture remains ${rating?.identity?.name||'unnamed'}.`),
-        card('Calibration provenance',profileLabel(calibration.profileIdentity),`Calibration status ${calibration.status||'UNRESOLVED'}. Numerical profiles are simulation calibration, not setting constants.`,state(calibration.status)),
-        card('Gravity efficiency',Number.isFinite(Number(response.gravityEfficiency))?`${(Number(response.gravityEfficiency)*100).toFixed(2)}%`:'unresolved','Family-specific route efficiency after modeled gravitational/environmental penalty.'),
-        card('Calculation efficiency',Number.isFinite(Number(response.calculationEfficiency))?`${(Number(response.calculationEfficiency)*100).toFixed(2)}%`:'unresolved','Efficiency retained after uncertainty and family-specific miscalculation amplification.'),
-        card('Recovery protection',Number.isFinite(Number(recovery.protectedReserve))?String(recovery.protectedReserve):'modeled by certificate','Protected recovery authority is not available for nominal performance optimization.')
+        card('Route certificate', safety?.presentation?.label || safety?.status || 'UNRESOLVED', reasons.length ? reasons.join(' · ') : 'No blocking reason was returned by the modeled certificate.', state(safety?.status)),
+        card('Family / route', `${safety?.family || 'unresolved'} · ${safety?.route || 'unresolved'}`, `Safety path ${safety?.path || 'unresolved'}. Generated architecture remains ${rating?.identity?.name || 'unnamed'}.`),
+        card('Calibration provenance', profileLabel(calibration.profileIdentity), `Calibration status ${calibration.status || 'UNRESOLVED'}. Numerical profiles are simulation calibration, not setting constants.`, state(calibration.status)),
+        card('Gravity efficiency', pct(response.gravityEfficiency), 'Family-specific route efficiency after modeled gravitational/environmental penalty.'),
+        card('Calculation efficiency', pct(response.calculationEfficiency), 'Efficiency retained after uncertainty and family-specific miscalculation amplification.'),
+        card('Recovery protection', Number.isFinite(Number(recovery.protectedReserve)) ? String(recovery.protectedReserve) : 'modeled by certificate', 'Protected recovery authority is not available for nominal performance optimization.')
       );
-      const details=document.createElement('div');details.className='exo-ftl-list-grid';
+      const details = document.createElement('div');
+      details.className = 'exo-ftl-list-grid';
       details.append(
-        list('Certificate reasons / warnings',reasons.length?reasons:['No blocking warnings returned.']),
-        list('Provenance',safety?.provenance?.length?safety.provenance:['No provenance roots returned.'])
+        list('Certificate reasons / warnings', reasons.length ? reasons : ['No blocking warnings returned.']),
+        list('Provenance', safety?.provenance?.length ? safety.provenance : ['No provenance roots returned.'])
       );
-      c.replaceChildren(top,details);
+      c.replaceChildren(top, details);
+      renderEngineeringEnvelope(certificate, safety);
     }
 
-    const summary=$('exo-ftl-summary-speed');
-    if(summary){
-      const blocked=safety?.presentation?.blocking;
-      if(blocked)summary.textContent=safety.presentation.label;
-      else if(safety?.status==='MARGINAL')summary.textContent=`${rating?.performance?.cStatus?.label||'Generated rate'} · MARGINAL`;
-      else if(safety?.status==='ADMISSIBLE')summary.textContent=`${rating?.performance?.cStatus?.label||'Generated rate'} · CERTIFIED`;
-      else summary.textContent=safety?.presentation?.label||'Certification unresolved';
-      summary.dataset.routeCertification=safety?.status||'UNRESOLVED';
-    }
-  }
-
-  async function certifyGeneratedRating(rating){
-    if(!rating)return;
-    const token=++generationToken;
-    try{
-      const runtime=await ensureSafetyRuntime();
-      const safety=await runtime.resolveGeneratedFTLRouteSafety({rating,request:requestFromPage(rating)});
-      if(token!==generationToken)return;
-      renderSafety(rating,safety);
-    }catch(error){
-      if(token!==generationToken)return;
-      console.error('Unable to resolve FTL route safety certificate.',error);
-      renderSafety(rating,{status:'UNRESOLVED',presentation:{label:'Unresolved — certification runtime unavailable',blocking:true,reasons:[error.message]},warnings:[error.message],provenance:[]});
+    const summary = $('exo-ftl-summary-speed');
+    if (summary) {
+      const blocked = safety?.presentation?.blocking;
+      if (blocked) summary.textContent = safety.presentation.label;
+      else if (safety?.status === 'MARGINAL') summary.textContent = `${rating?.performance?.cStatus?.label || 'Generated rate'} · MARGINAL`;
+      else if (safety?.status === 'ADMISSIBLE') summary.textContent = `${rating?.performance?.cStatus?.label || 'Generated rate'} · CERTIFIED`;
+      else summary.textContent = safety?.presentation?.label || 'Certification unresolved';
+      summary.dataset.routeCertification = safety?.status || 'UNRESOLVED';
     }
   }
 
-  function render(rating){const a=rating?.certificationAudit;if(a){badge(a);overview(a);route(a);reliability(a);}certifyGeneratedRating(rating);}
+  function resetRouteOption(option) {
+    if (!option.dataset.routeSafetyBaseLabel) option.dataset.routeSafetyBaseLabel = option.textContent;
+    option.textContent = option.dataset.routeSafetyBaseLabel;
+    option.disabled = false;
+    delete option.dataset.routeSafetyStatus;
+    option.removeAttribute('aria-label');
+  }
 
-  function exportCertifiedDossier(event){
-    const rating=globalThis.BlacklightExoGetActiveFTL?.();
-    if(!rating||!activeSafety)return;
+  function applyRouteMatrix(matrix) {
+    const selector = $('exo-ftl-route');
+    if (!selector) return;
+    const current = selector.value;
+    [...selector.options].forEach(option => {
+      resetRouteOption(option);
+      const result = matrix.get(option.value);
+      if (!result) return;
+      option.dataset.routeSafetyStatus = result.status;
+      option.textContent = `${option.dataset.routeSafetyBaseLabel} · ${result.status}`;
+      option.setAttribute('aria-label', `${option.dataset.routeSafetyBaseLabel}; modeled certificate ${result.status}`);
+      if (BLOCKING_STATES.has(result.status) && option.value !== current) option.disabled = true;
+    });
+    selector.dataset.routeSafetyGuarded = 'true';
+  }
+
+  async function certifyRouteMatrix(rating, runtime, token) {
+    const selector = $('exo-ftl-route');
+    if (!selector) return;
+    const family = requestFromPage().family;
+    const routeIds = [...selector.options].map(option => option.value);
+    const results = await Promise.all(routeIds.map(routeId => runtime.resolveGeneratedFTLRouteSafety({rating, request: {family, route: routeId}})));
+    if (token !== routeMatrixToken || rating !== activeRating) return;
+    activeRouteMatrix = new Map(routeIds.map((routeId, index) => [routeId, results[index]]));
+    applyRouteMatrix(activeRouteMatrix);
+  }
+
+  async function certifyGeneratedRating(rating) {
+    if (!rating) return;
+    activeRating = rating;
+    const token = ++generationToken;
+    const matrixToken = ++routeMatrixToken;
+    try {
+      const runtime = await ensureSafetyRuntime();
+      const safety = await runtime.resolveGeneratedFTLRouteSafety({rating, request: requestFromPage()});
+      if (token !== generationToken || rating !== activeRating) return;
+      renderSafety(rating, safety);
+      certifyRouteMatrix(rating, runtime, matrixToken).catch(error => console.error('Unable to resolve FTL route safety matrix.', error));
+    } catch (error) {
+      if (token !== generationToken || rating !== activeRating) return;
+      console.error('Unable to resolve FTL route safety certificate.', error);
+      renderSafety(rating, {status: 'UNRESOLVED', presentation: {label: 'Unresolved — certification runtime unavailable', blocking: true, reasons: [error.message]}, warnings: [error.message], provenance: []});
+    }
+  }
+
+  function render(rating) {
+    if (!rating) return;
+    activeRating = rating;
+    const a = rating.certificationAudit;
+    if (a) {
+      badge(a);
+      overview(a);
+      route(a);
+      reliability(a);
+    }
+    certifyGeneratedRating(rating);
+  }
+
+  function exportCertifiedDossier(event) {
+    const rating = globalThis.BlacklightExoGetActiveFTL?.();
+    if (!rating || !activeSafety) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    const payload={
+    const payload = {
       ...rating,
-      routeSafetyCertificate:activeSafety,
-      certificationExport:{
-        schemaVersion:'1.0.0',
-        generatedCapabilityIsNotRouteCertification:true,
-        blocked:Boolean(activeSafety.presentation?.blocking),
-        status:activeSafety.status,
-        provenance:[...(activeSafety.provenance||[])]
+      routeSafetyCertificate: activeSafety,
+      routeSafetyMatrix: Object.fromEntries(activeRouteMatrix),
+      certificationExport: {
+        schemaVersion: '1.1.0',
+        generatedCapabilityIsNotRouteCertification: true,
+        blocked: Boolean(activeSafety.presentation?.blocking),
+        status: activeSafety.status,
+        routeSelectorGuarded: $('exo-ftl-route')?.dataset.routeSafetyGuarded === 'true',
+        provenance: [...(activeSafety.provenance || [])]
       }
     };
-    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-    const url=URL.createObjectURL(blob),link=document.createElement('a');
-    link.href=url;
-    link.download=rating.fileName||'blacklight-ftl-dossier.json';
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = rating.fileName || 'blacklight-ftl-dossier.json';
     document.body.append(link);
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
   }
 
-  document.addEventListener('blacklight:exo-ftl-generated',event=>render(event.detail?.rating));
-  $('exo-ftl-export')?.addEventListener('click',exportCertifiedDossier,true);
-  queueMicrotask(()=>render(globalThis.BlacklightExoGetActiveFTL?.()));
+  function recertifyFromControls() {
+    const rating = globalThis.BlacklightExoGetActiveFTL?.();
+    if (rating) certifyGeneratedRating(rating);
+  }
+
+  document.addEventListener('blacklight:exo-ftl-generated', event => render(event.detail?.rating));
+  $('exo-ftl-export')?.addEventListener('click', exportCertifiedDossier, true);
+  $('exo-ftl-route')?.addEventListener('change', recertifyFromControls);
+  $('exo-ftl-family')?.addEventListener('change', recertifyFromControls);
+  queueMicrotask(() => render(globalThis.BlacklightExoGetActiveFTL?.()));
 })();
