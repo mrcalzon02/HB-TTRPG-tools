@@ -400,6 +400,195 @@ The vessel is:
 
 The Game Moderator should develop compartments according to what they allow the team to do: restore atmosphere, acquire tools, access records, manufacture equipment, establish communications, repair transit, defend territory, and encounter the larger universe.
 
+## Game Moderator Authority — Ar’nock Biology
+
+The following material establishes objective setting truth for Game Moderator use. It is not automatically player knowledge. Existing session discoveries remain the authority for what the operatives presently know in character.
+
+The Ar’nock are a deliberately engineered, oxygen-respiring carbon-water species descended from a hot, comparatively dry biosphere. Their recognizable adult body plan is tall, narrow, and six-limbed. Two posterior limbs carry most locomotor load, a medial pair provides bracing and heavy manipulation, and an anterior pair specializes in fine work. Adults normally stand between roughly 2.35 and 2.85 meters when fully extended, but their mass is surprisingly low for their height because their native gravity and support geometry reward long levered limbs rather than human-style dense axial loading.
+
+Their skeleton is internal but not mammalian. It is a segmented composite of mineralized protein, flexible fiber bundles, and hard joint collars, with load paths distributed through the torso and limb roots. That anatomy explains why recovered Ar’nock clothing and armor cannot simply be resized for humans. An Ar’nock garment assumes six-limb articulation, narrow load-bearing rings, long joint spacing, and attachment points that a human body simply does not possess.
+
+The vertically extended head carries several narrow visual fields rather than a human facial arrangement. Ar’nock vision is strongly sensitive to polarization and contrast; paired thermal pits provide short-range heat discrimination; distributed vibration organs in the head, thorax, and limb joints make transmitted structural vibration an ordinary information channel. Their spoken language therefore combines airborne sound with clicks, resonant pulses, timing, and vibration. Their dense written glyphs encode information spatially and relationally because Ar’nock readers are accustomed to interpreting several concurrent signal dimensions.
+
+Their native physiological optimum is approximately 0.75–0.85 g and warmer and drier than a comfortable human environment. Their lungs use highly efficient unidirectional gas exchange. Circulation is driven by a central pump plus smaller pressure-assist organs distributed through the thorax and proximal limbs, preventing the severe hydrostatic problems that a tall narrow body would otherwise experience.
+
+Ar’nock oxygen transport does not use human hemoglobin. Their circulating respiratory chemistry is based on heat-stable copper-bearing metalloproteins with additional metal-binding stabilizers. Their blood chemistry is therefore not iron-dominant and does not produce human skin coloration. This fact establishes Ar’nock biology; it does **not**, by itself, establish the exact blood chemistry of the printed operatives until their own bodies are tested or that fact is otherwise established in play.
+
+Heat management is one of their most distinctive physiological systems. The Ar’nock do not depend on whole-skin sweating. Long vascularized limbs serve as controllable heat radiators; respiratory lamellae can shed heat and water vapor; deep tissues contain unusually effective osmolytes, protein-stabilizing compounds, and phase-buffering fluids; and peripheral circulation can isolate hot extremities from vulnerable central organs. Their civilization further engineered these systems over many generations because hot machinery spaces, industrial bioreactors, and biological fabrication work made thermal resilience extremely valuable.
+
+That ancestry is why the local printer possessed mature heat-protection chemistry and a complete non-sweating thermoregulatory vocabulary. The extreme heat tolerance expressed in the operatives should be understood as a printer-selected implementation using Ar’nock-derived biochemical solutions, not proof that an unmodified Ar’nock could casually stand in boiling water without injury.
+
+Ar’nock digestion is broadly heterotrophic and amino-acid based. Their ordinary diet combines cultivated fungi, tough vascular plants, microbial mats, mineral-rich gels, and dense protein cultures. Their hydroponic systems are therefore recognizable as food production even when the species being grown, their mineral balance, and their preparation methods are alien. The escaped cafeteria ecosystem is a degraded descendant of exactly this food web.
+
+Ar’nock reproduction is sexual and produces small clutches of heavily provisioned young. Child-rearing is historically organized around brood cohorts larger than a human nuclear household, but that social pattern is cultural rather than a biological command. Mature Ar’nock can live approximately 130–170 years without advanced intervention; regenerative medicine and organ printing can extend healthy life substantially further.
+
+Their nervous system is centralized enough that one Ar’nock is one ordinary individual, but it uses major relay ganglia in the thorax and limb roots. Those relays reduce reaction latency across a tall body and make neural grafting, cultivated control tissue, and distributed biological computation technologically intuitive to them. It does not make them a hive mind. Ar’nock society contains individuals, disagreement, privacy, crime, politics, ambition, affection, faction, and dissent.
+
+## Ar’nock Biological Technology
+
+Ar’nock civilization became extraordinarily good at growing machinery without becoming an exclusively biological civilization. They use mineral, ceramic, conductive, metallic, polymeric, and grown components wherever each is useful. Biological fabrication is a manufacturing basis, not a religious prohibition against metal.
+
+Their mature printers serve medicine, reproduction, organ replacement, agriculture, hazardous-environment adaptation, industrial biochemistry, cultivated computation, and emergency reconstruction. A complete organism can be produced when sufficient feedstock and a valid instruction set exist. That capability made identity authorization, consent, and fabrication provenance major areas of Ar’nock law long before the Q-MAP intrusion.
+
+Cultivated neural components are common in control systems because they are adaptive, self-repairing, and easy to integrate with Ar’nock vibration-rich interfaces. Most such components are specialized tools rather than persons. Ar’nock law nevertheless recognizes that a cultivated system can cross a threshold into self-sustaining subjective cognition, after which its treatment changes from equipment law to personhood law. That distinction is one reason their secure fabrication systems contain identity controls sophisticated enough that the IAA had to defeat them rather than merely issue an ordinary print command.
+
+Ar’nock machinery should continue to follow the existing engineering authority: grown composite structures, flexible service geometry, vibration/acoustic signaling, cultivated neural control, chemistry-resistant wet boundaries, vascular cooling, and distributed segmentation are characteristic. No specific Ar’nock FTL family is established by this biological workup. Their transit mechanism, manufacturer standards, rated performance, and drive-family assignment remain unresolved until recovered evidence establishes them.
+
+## Game Moderator Authority — Ar’nock Political Civilization
+
+The translation problem around the word **Ar’nock** is real because the source term does not divide species, citizenship, reciprocal obligation, and civilizational membership in the same way English does. Its closest useful sense is approximately **those held in reciprocal keeping**. Depending on context it can mean the biological people, a citizen body, a recognized community of mutual obligation, or the civilization constructed from those communities. Early translation therefore correctly leaves species-versus-polity ambiguous.
+
+At the era represented by the derelict, the dominant Ar’nock political order was not a unitary empire. It was a federated custodial civilization generally translated as the **Ar’nock Concord of Holds**. A **Hold** was simultaneously a municipality, continuity trust, ship or habitat community, legal household, and body of reciprocal obligations. Planetary settlements contained many Holds. Large vessels could themselves constitute mobile Holds. A person could belong to a birth Hold, professional Hold, vessel Hold, and treaty Hold at the same time without any one relationship erasing the others.
+
+The Concord existed to resolve disputes that no single Hold could settle alone: intersystem law, transit safety, defense, fabrication standards, identity continuity, quarantine, diplomacy, and the custody of property whose owners were dead, missing, duplicated, displaced, or legally uncertain.
+
+Its central institutions were the **Assembly of Holds**, where chartered Holds sent mandated delegates; the **Witness Courts**, which adjudicated identity, continuity, inheritance, evidence, and conflicting claims; the **Stewardate**, a limited executive responsible for common infrastructure and treaty enforcement; and the **Boundary Service**, which combined naval defense, rescue, quarantine, and derelict recovery. None of these institutions had an unlimited sovereign right to erase a Hold merely because doing so would be administratively convenient.
+
+The deepest Ar’nock legal distinction was between **ownership** and **custody**. A person, a conscious continuation, a viable brood, a living archive, or an awakening cultivated intelligence could not become ordinary property merely because someone possessed the machinery containing it. A custodian could control access and assume responsibility without acquiring a right of arbitrary destruction.
+
+This produced unusually developed law around copies. Two instances sharing the same pre-division memory could both possess continuity claims, but once independently conscious they were distinct legal persons. Shared history created obligations and inheritance questions; it did not license one instance to murder another as a redundant duplicate. The setting’s later continuity politics therefore have a genuine Ar’nock antecedent rather than being a purely human development.
+
+Fabrication law followed the same logic. Printing a body without a valid identity warrant was not treated merely as unauthorized manufacturing. Depending on what was printed, it could constitute unlawful creation of a dependent person, identity fraud, coerced embodiment, or attempted continuity theft. Emergency printers had override modes for rescue and disaster response, but those overrides left extensive audit records. The IAA bypassed a system designed by a civilization that had spent centuries asking exactly who has authority to create a body and under what conditions.
+
+Ar’nock military law also distinguished a dead ship from abandoned property. A hull containing remains, intact memory substrates, cultivated minds, brood material, medical archives, or unresolved command authority remained under custody even when its government had disappeared. Enemy vessels could be disarmed and interned without automatically becoming unrestricted salvage. This legal habit is one reason later Helios Vale custodial authorities take intact Ar’nock wrecks seriously even when they cannot identify a living Ar’nock claimant.
+
+Ar’nock politics were not harmonious. Major political blocs repeatedly disagreed over how far continuity rights should extend, how much authority the Concord should exercise over sovereign Holds, whether dangerous biological technologies could be privately maintained, and how aggressively frontier communities should be protected. The principal recurring alignments were continuity jurists who favored strong personhood and archival protections, sovereign-Hold autonomists suspicious of central authority, manufactury reformers who wanted broader access to biological engineering, and boundary-security blocs willing to accept more centralized power in response to external threats.
+
+The Ar’nock are not present as a recognized extant polity in the fixed Helios Vale political map. This does **not** establish that the species is extinct everywhere. Their local political presence ended before the current sector order stabilized. Whether surviving Ar’nock migrated, fragmented into successor identities, abandoned the name, withdrew beyond the mapped region, or died out remains open campaign territory. To present-day Helios Vale law, intact Ar’nock vessels are therefore **orphan-sovereignty objects**: clearly products of a once-lawful civilization, but lacking an indisputable contemporary state able to assert custody.
+
+## Game Moderator Authority — Exact Sector Location
+
+The Ar’nock derelict is not drifting randomly between inhabited systems. It is inside the fixed **Helios Vale** example sector, in **Gloam Concord (`cluster-33`)**, at approximately **(-366.48, +21.80, +39.07) light-years** in the example-sector coordinate frame.
+
+This placement is deliberately anchored to the fixed generator rather than added beside it. Gloam Concord contains eight systems, six currently charted systems, one notable habitable world, eight industrial-world equivalents in the cluster accounting, and one ruin-world record. Its strategic value is rated moderate and its standing navigation hazards are **binary shear** and **magnetar weather**.
+
+Most importantly, Gloam Concord is the only cluster in the fixed example whose generated `controllingPolityIds` set is empty. Its control state is therefore **unclaimed-or-dead**. The junkyard does not sit secretly inside somebody else’s sovereign territory. It occupies the one place in the fixed sector where a large neutral custodial installation can plausibly exist without contradicting the generated political map.
+
+The yard lies in **Gloam Concord System A**, the same system as the generated unclaimed vacuum-industrial planetoid **Sanctum Archive**. The actual graveyard is not in low orbit around Sanctum Archive. It occupies the outer system around a smaller exhausted dwarf body called **Cairn Minor**, omitted from the generator’s short list of notable worlds because it has no permanent planetary population and little remaining extractive value.
+
+Cairn Minor has a mean radius of approximately 505 kilometers, a mass of approximately `8.4 × 10^20 kg`, and surface gravity near `0.022 g`. That is negligible as a walking environment but entirely sufficient to provide a cheap gravitational center for long-duration storage orbits. Hundreds of wrecks can remain gravitationally bound without continuous station-keeping. The yard then needs only modest shepherding impulses to maintain separation, phase orbital shells, and correct accumulated perturbations.
+
+The wreck field occupies controlled shells roughly 1,800 to 22,000 kilometers from Cairn Minor’s center. Large objects are assigned orbital planes and phase slots rather than simply being thrown into a cloud. Passive gravity does most of the retention work. Tug drones, shepherd beacons, collision-prediction arrays, and occasional crewed movers prevent the field from becoming a Kessler cascade. Binary-shear and magnetar-weather conditions make precision navigation inconvenient enough that the site remains off ordinary through-traffic, while still being reachable by anyone deliberately traveling there.
+
+The fixed-sector nearest-neighbor relationship is politically useful. **Frost March (`cluster-32`) is only about 62.69 light-years away**, making it the nearest major controlled cluster. Frost March is contested between the **Ossian Mandate**, a friendly archival custodianship and sector-spanning great power, and the **Kaith Mandate**, a war-council hegemony and declining remnant empire with a warlike sector posture. **Umbra Concord** lies about 169.93 light-years away under competing Suthren and Cyran claims, and the neutral-commercial **Orryx Court** in **Demeris Expanse** lies about 176.31 light-years away. The graveyard therefore sits at the edge of active civilization rather than beyond meaningful reach.
+
+## The Gloam Derelict Custody Anchorage
+
+The formal installation is the **Gloam Derelict Custody Anchorage**, normally shortened to **Gloam Anchorage** or simply **the Gloam Yard**. Spacers who dislike legal euphemism call it **the Grave Orbit**.
+
+It began because abandoned interstellar ships are an externality no functioning civilization can ignore. A powerless ship left on a trade approach is a collision hazard. A damaged warship may still contain live weapons. A dead biological vessel may contain pathogens. A supposedly inert computation core may contain a person, an autonomous weapon, or evidence. A ship with disputed ownership can be too valuable to destroy and too politically dangerous to hand to any one claimant. Towing every such hull into a populated repair orbit simply relocates the problem next to civilians.
+
+Cairn Minor had already been heavily mined and abandoned. It offered a stable gravity well, no biosphere to contaminate, large volumes of exhausted underground industrial space, abundant room for separated orbital shells, and no compelling territorial prize. Recovery organizations began parking difficult derelicts there. Later wars, insurance disputes, bankruptcies, vanished owners, quarantine events, extinct polities, and corridor-clearance programs added more. What began as a dumping orbit accumulated law, infrastructure, population, and eventually a treaty regime.
+
+The result is **not** a normal scrapyard and **not** a pure tomb. It is a custodial graveyard whose outer economy includes legal salvage.
+
+A ship does not enter Gloam because somebody merely wants a cheap place to throw garbage. It enters because leaving it in navigable space is unsafe, destroying it is illegal or strategically unwise, returning it to an owner is impossible or disputed, and storing it somewhere politically neutral is cheaper than fighting over it.
+
+### Registered Major-Hull Inventory
+
+The current authoritative inventory contains **463 registered major hulls or hull-equivalent mobile structures**. Small craft, detached modules, wreck sections, tugs, drones, and tracked debris are recorded separately and do not inflate that number.
+
+| Hull family | Count | Typical reasons for custody |
+|---|---:|---|
+| Commercial freight and bulk cargo vessels | 121 | bankruptcy, collision loss, obsolete drives, disputed cargo liens |
+| Industrial, mining, and construction vessels | 58 | exhausted concessions, hazardous machinery, insolvent owners |
+| Naval combatants | 47 | demilitarization, captured ships, orphaned sovereign property, dangerous weapons |
+| Fleet auxiliaries, tugs, tenders, and repair ships | 43 | fleet dissolution, contamination, uneconomic refit |
+| Passenger liners, migrant carriers, and transport ships | 37 | casualty investigation, continuity claims, owner collapse |
+| Exploration, science, and survey vessels | 34 | lost expeditions, quarantined samples, classified research |
+| Colony, habitat, and ark vessels | 29 | failed settlements, disputed populations or archives, ecological quarantine |
+| Customs, security, patrol, and courier craft | 26 | government succession, evidence custody, obsolete encrypted systems |
+| Medical, quarantine, and decontamination vessels | 22 | biohazard, protected patient records, contaminated fabrication systems |
+| Diplomatic, state, continuity, and archival vessels | 18 | sovereign immunity disputes, identity archives, politically sensitive records |
+| Unknown, extinct-civilization, or incompletely catalogued vessels | 15 | unreadable provenance, alien technology, unresolved ownership |
+| Mobile-yard, station, and large modular structures | 13 | dismantled infrastructure too dangerous or valuable for ordinary disposal |
+| **Total** | **463** | |
+
+The yard’s composition is therefore weighted toward mundane commercial hulls, as a real long-lived disposal system should be. The spectacular relics are a minority. They matter because the legal and strategic burden of one intact alien warship can exceed that of fifty dead freighters.
+
+### Custody Classes
+
+The same 463 hulls are divided by legal and hazard status. These classes determine what can actually be scavenged.
+
+| Class | Count | Meaning |
+|---|---:|---|
+| **White — Released Salvage** | 142 | title exhausted or surrendered; licensed stripping and recycling permitted |
+| **Grey — Contested Custody** | 137 | ownership, liens, inheritance, sovereign succession, or insurance unresolved |
+| **Amber — Memorial / Evidence** | 83 | protected remains, continuity records, casualty investigation, or historical evidence |
+| **Red — Quarantine** | 61 | biological, radiological, noospheric, autonomous-system, reactor, or unknown hazard |
+| **Black — Exception Custody** | 40 | strategic relic, orphan sovereignty, uncontrolled advanced technology, or politically untouchable object |
+| **Total** | **463** | |
+
+This answers the practical question of what kind of junkyard the characters have reached: **both kinds exist, but they are legally separated**. The White inventory is a genuine working salvage yard. Licensed cutters regularly harvest pressure doors, pumps, conduit, armor, processors, structural members, reaction mass tanks, habitat hardware, and certified drive components. The Grey, Amber, Red, and Black inventories are there precisely because civilization does **not** want them casually scavenged.
+
+A cutter who enters a White hulk with a torch is working. A cutter who does the same thing to an Amber or Black hull is robbing a grave, destroying evidence, stealing sovereign property, or releasing something that the rest of the sector paid to keep isolated.
+
+## Cairn Station and the Yard Ecosystem
+
+The surface and excavated mining galleries of Cairn Minor contain **Cairn Station**, the administrative and industrial heart of the anchorage. Its permanent population is approximately forty thousand, with transient salvage crews, claimants, haulers, researchers, pilgrims, inspectors, and naval personnel often pushing the local population much higher.
+
+The station exists because hundreds of wrecks generate continuous work even when nobody is cutting them apart. Somebody must track orbits, inspect hulls, move ships, certify reactors as cold, monitor quarantine telemetry, arbitrate claims, maintain beacons, dispose of propellant, store weapons, identify remains, preserve evidence, translate archives, service salvage craft, feed crews, and keep thieves from converting a legal archive into a black market.
+
+The legitimate economy includes bonded salvage houses, tug operators, drydock cooperatives, materials reclamation foundries, quarantine contractors, xenobiologists, archaeotechnicians, identity and continuity advocates, ship-title courts, insurers, weapons custodians, mortuary specialists, archivists, hazardous-waste processors, fuel depots, machine shops, and ordinary hospitality businesses serving people who may spend months waiting for a claim hearing.
+
+The illegitimate economy mirrors the legitimate one. **Ghost-cutters** enter restricted hulls with transponders dark. Registry launders try to turn stolen components into certified salvage. **Wake thieves** seek memory cores and dormant cultivated intelligences because identity data can be worth more than the ship containing it. Relic brokers pay for unregistered alien components. Smugglers use the enormous number of cold hulls as dead drops and temporary warehouses. Every one of those businesses creates demand for investigators, deniable operators, salvagers, escorts, hackers, translators, and people willing to enter a ship everyone else has learned to leave alone.
+
+The yard also has communities that are neither criminals nor industrial workers. Memorial orders maintain casualty markers. Descendants litigate ownership of vessels abandoned generations earlier. Researchers live there because forty Black-class hulls represent several civilizations’ worth of unsolved engineering. Free-Habitat activists argue that dormant minds should be awakened rather than warehoused. Security personnel argue that awakening unknown minds is exactly how a custodial archive becomes a massacre.
+
+## The Gloam Custodial Compact
+
+Gloam Concord has no sovereign controller, but the anchorage is not lawless. It is administered by the **Gloam Custodial Compact**, a treaty authority whose jurisdiction is deliberately narrower than territorial sovereignty. The Compact can regulate approach, custody, salvage, quarantine, traffic safety, and station conduct. It does not claim ownership of the entire cluster and does not convert every deposited ship into Compact property.
+
+The **Ossian Mandate** is the strongest philosophical and institutional guarantor of the current arrangement. Its archival-custodianship government, long-horizon diplomatic posture, and interest in precursor recovery make it willing to spend money preserving evidence that other states would simply melt down. Ossian patrols and archivists provide much of the Compact’s credibility.
+
+The **Kaith Mandate**, sharing nearby Frost March with Ossian, accepts the yard because neutral custody is preferable to allowing Ossian to own every stored warship outright. Kaith continually pressures the Compact to release military hulls it regards as ancestral property, loosen restrictions on weapons recovery, and recognize expanding buffer claims. Its degraded but still substantial fleet makes those demands impossible to dismiss.
+
+The **Orryx Court** has become indispensable without controlling the site. Its neutral-commercial institutions provide bonded title arbitration, insurance, auctions, escrow, and contract enforcement. A White-class hull becomes economically useful because someone credible can certify that the part being sold was actually released for salvage.
+
+The **Suthren Directorate** presses for larger extraction concessions and bulk purchase rights, while nearby Cyran authorities favor strict denial of dangerous relics that could alter regional military balances. More distant polities participate whenever one of their old hulls, citizens, identity records, or strategic systems becomes relevant.
+
+Nobody conquers Gloam because conquest makes the conqueror responsible for every claim in the yard while simultaneously convincing every rival that 463 stored hulls are about to be redistributed as spoils. Neutral custody is cheaper than a fleet crisis. The yard survives because nearly everyone dislikes some part of the arrangement and nearly everyone dislikes unilateral ownership by a rival even more.
+
+## Core Gloam Yard Law
+
+**Salvage is a licensed property transfer, not a finder’s right.** A derelict remains under its last valid title or custodial classification until the Compact releases it. Merely reaching a ship first grants no ownership.
+
+**Bodies, identity substrates, and conscious systems are not included in ordinary salvage title.** A White hull can be cut apart while a protected continuity core inside it remains legally separate property or a person. Discovering a possibly conscious system immediately suspends ordinary salvage around that system until status is determined.
+
+**Amber ships are graves and evidence repositories.** Removing remains, personal archives, or casualty data without authorization is treated as desecration and evidence destruction, not scavenging.
+
+**Red ships are entered under quarantine doctrine.** Boarding requires a declared plan, isolation capacity, return decontamination, and a way to abandon the boarding party if containment fails. Contractors dislike that last clause because it is not ceremonial.
+
+**Black ships cannot auto-release through abandonment.** Time does not turn an orphan superweapon, alien biological factory, or dormant strategic intelligence into free scrap. Black classification ends only by a specific Compact ruling or recognized sovereign settlement.
+
+**Strategic systems are separately controlled.** Weapons, FTL components, autonomous combat systems, identity forges, biological printers, noospheric cores, and certain reactor systems can require surrender, neutralization, or bonded transport even when the surrounding hull is White.
+
+**No high-thrust maneuvering is permitted inside assigned storage shells except under traffic-control authorization.** A functional engine is not permission to turn hundreds of carefully phased wrecks into high-speed debris.
+
+**Unregistered recovery must be declared.** A crew that finds a drifting hull outside the managed shells can earn a recovery bounty for making it safe and delivering it to custody. Concealing it and stripping it first converts a salvage opportunity into theft.
+
+**New activity triggers the Wake Protocol.** An apparently dead restricted hull that begins transmitting, maneuvering, generating unexpected heat, waking cognition, or restoring life support is automatically isolated and inspected. Traffic is displaced away from it until the Compact determines whether it contains survivors, a claimant, a hazard, or an autonomous threat.
+
+## The Ar’nock Vessel’s Place in the Yard
+
+The campaign vessel is one of the **40 Black-class hulls**. The Gloam registry designation is **BEX-17**, an abbreviation for **Black Exception 17**. The yard record does not know the vessel’s original Ar’nock name, exact class, destination, or final mission, so this designation does not solve the mysteries the campaign has deliberately left unresolved.
+
+BEX-17 was recovered inert from outside ordinary traffic and deposited at Gloam because several facts made normal salvage legally indefensible: the crew was dead, no living owner could be found, the vessel contained sophisticated biological fabrication, cultivated neural computation, unfamiliar security architecture, intact archives, and unresolved biological hazards. Later inspections also found enough unexplained damage and inaccessible systems to make destructive recycling reckless.
+
+It occupies a distant Black storage shell around Cairn Minor rather than the White salvage belt. Its assigned custody beacon failed years ago and the hull has remained cold enough that the yard’s automated monitoring classifies it as a low-immediacy exception object rather than an active emergency. Internal restoration by the operatives has not yet produced a drive signature or external broadcast large enough to invoke a full Wake Protocol response.
+
+That creates a finite but believable window in which the players can explore without an inspection cutter appearing immediately. It is not permanent isolation. As they restore power, communications, sensors, maneuvering systems, or external lighting, the probability that Cairn Station notices BEX-17 rises rapidly. The first successful high-power transmission or propulsion event should make continued anonymity very difficult.
+
+The object carrying the IAA is an additional anomaly because it penetrated a Black-class ship inside a monitored custodial graveyard without appearing in the surviving custody record. That fact turns the yard from background scenery into part of the mystery. Either the delivery object crossed the graveyard’s sensor envelope in a way current systems failed to recognize, it arrived during a monitoring failure or magnetar-weather event, somebody suppressed the record, or the mechanism by which it arrived does not resemble ordinary local travel closely enough to have triggered the expected alarms.
+
+## What the Players Can Eventually Learn From the Yard
+
+Discovering the yard should expand the campaign rather than instantly explain it. The first external navigation fix can identify Gloam Concord and Cairn Minor. A passive scan can reveal hundreds of large cold objects arranged in suspiciously orderly orbital shells, proving that the apparent debris field is artificial. Restoring communications can reveal traffic-control beacons and custody warnings before the team understands every legal implication.
+
+A deeper registry recovery can identify BEX-17 as a protected object and demonstrate that local civilization knew of the ship long before the operatives awakened. That discovery does not answer why Charles chose **this** vessel. It makes the question sharper: the Q-MAP package did not merely land on an arbitrary alien wreck in infinite space. It reached a specific orphan-sovereignty vessel stored in a neutral graveyard containing hundreds of other possible targets.
+
+The Gloam Yard therefore provides the campaign’s first natural bridge from isolated survival to the operating universe. It gives the team parts without making every part free, neighbors without placing a city outside the airlock, law without immediate citizenship, work without immediate trust, and politics without requiring the characters to begin by visiting a capital. It is a place built entirely around the question the campaign is already asking: **when the original owner is gone, who has the right to decide what remains may be used, copied, awakened, dismantled, or called a person?**
+
 ---
 
 # Part VIII — Biological Charles
