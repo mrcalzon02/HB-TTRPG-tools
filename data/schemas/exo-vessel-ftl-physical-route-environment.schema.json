@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-physical-route-environment.schema.json",
+  "title": "Black Light FTL Physical Route Environment Bridge",
+  "type": "object",
+  "required": ["schemaVersion", "status", "sourceMode", "normalizationProfile", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["READY", "NOT_SUPPLIED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+    "sourceMode": {"enum": ["PHYSICAL_SI", "NONE"]},
+    "normalizationProfile": {
+      "type": ["object", "null"],
+      "properties": {
+        "profileId": {"type": "string"},
+        "profileVersion": {"type": "string"},
+        "status": {"enum": ["PROPOSED"]}
+      },
+      "required": ["profileId", "profileVersion", "status"],
+      "additionalProperties": true
+    },
+    "physicalEnvironment": {"type": ["object", "null"]},
+    "environmentPacket": {
+      "type": ["object", "null"],
+      "properties": {
+        "epoch": {"type": ["string", "null"]},
+        "potentialMagnitude": {"type": ["number", "null"], "minimum": 0},
+        "accelerationMagnitude": {"type": ["number", "null"], "minimum": 0},
+        "tidalTensorNorm": {"type": ["number", "null"], "minimum": 0},
+        "curvatureNorm": {"type": ["number", "null"], "minimum": 0},
+        "massModelUncertainty": {"type": ["number", "null"], "minimum": 0},
+        "hiddenMassProbability": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "familyBoundaryHazard": {"type": ["number", "null"], "minimum": 0},
+        "provenance": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "uncertaintyPacket": {
+      "type": ["object", "null"],
+      "properties": {
+        "ephemerisCovariance": {"type": ["number", "null"], "minimum": 0},
+        "massModelCovariance": {"type": ["number", "null"], "minimum": 0},
+        "clockCovariance": {"type": ["number", "null"], "minimum": 0},
+        "sensorCovariance": {"type": ["number", "null"], "minimum": 0},
+        "registrationCovariance": {"type": ["number", "null"], "minimum": 0},
+        "modelCovariance": {"type": ["number", "null"], "minimum": 0},
+        "commonCauseCovariance": {"type": ["number", "null"], "minimum": 0},
+        "provenance": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true,
+  "x-blacklight-authority": {
+    "status": "DERIVED",
+    "rule": "This schema transports a physical SI environment into a versioned dimensionless certification interface. It does not make fictional FTL coupling physically real.",
+    "invalidInputRule": "If a physical packet is supplied but unresolved or outside model validity, certification must block. The system may not silently fall back to a proposed route archetype."
+  }
+}
