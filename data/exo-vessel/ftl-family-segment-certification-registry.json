@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.family-segment-certification",
+  "title": "Black Light FTL Family-Specific Route Segment Certification Registry",
+  "status": "MIXED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Different transit methods require different gravity/miscalculation loss, safety lookahead, emergency de-transit behavior and non-perfect safety margins."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/ftl-route-segment-certification-registry.json",
+    "blacklight-exo-ftl-route-segment-certification-runtime.js",
+    "data/exo-vessel/ftl-physical-route-environment-bridge.json",
+    "data/exo-vessel/ftl-safety-calibration-profiles.json",
+    "blacklight-exo-ftl-safety-calibration-runtime.js",
+    "blacklight-exo-ftl-safety-certification-runtime.js",
+    "data/exo-vessel/ftl-route-safety-integration.json"
+  ],
+  "policy": {
+    "routeRule": "C_route = AND_i C_family,segment,i. No benign segment may average away one blocking family-specific interval.",
+    "physicalRule": "Physical segment envelopes remain ordinary gravity/curvature evidence. They are normalized before being passed to fictional family response.",
+    "normalizationRule": "Potential depth, acceleration, tidal norm and curvature scale retain their native dimensions until divided by the versioned physical normalization references.",
+    "uncertaintyRule": "Segment uncertainty must remain explicit. Missing covariance/1-sigma evidence produces UNRESOLVED, never zero uncertainty.",
+    "familyBoundaryRule": "Family-boundary hazard is fictional/operator-specific and is never inferred from ordinary gravitational metrics alone.",
+    "interventionRule": "Continuous-progress families may compare distance/time to the first blocking interval against the full intervention chain. PRECOMMIT families use a decision horizon instead of a fabricated local superluminal velocity.",
+    "recoveryRule": "Protected recovery reserve is evaluated independently of nominal drive authority and may not be spent to improve advertised route performance.",
+    "invalidModelRule": "OUTSIDE_MODEL_VALIDITY blocks the interval and route until a higher-fidelity physical model resolves it."
+  },
+  "normalization": {
+    "source": "data/exo-vessel/ftl-physical-route-environment-bridge.json#normalizationProfile",
+    "equations": [
+      "G_Phi = epsilon_Phi / epsilon_ref",
+      "G_g = |g| / g_ref",
+      "G_T = ||T||_F / T_ref",
+      "G_R = R_* / R_ref",
+      "U_m = sqrt(sigma_mass^2 + sigma_ephemeris^2 + sigma_model^2) / sigma_ref"
+    ],
+    "dimensionalSafeguard": "Never add epsilon_Phi, |g|, ||T|| and R_* before normalization; their dimensions differ."
+  },
+  "familyResponse": {
+    "equations": [
+      "G = w_Phi G_Phi + w_g G_g + w_T G_T + w_R G_R + w_U U_m",
+      "P_f = a_f G + b_f G^2 + c_f G^(n_f) + d_f U_m + e_f B_f",
+      "eta_g,f = exp(-max(0,P_f))",
+      "eta_calc,f = exp(-k_f A_f^2 tr(Sigma_E))"
+    ],
+    "status": "PROPOSED calibration over physically based environmental inputs",
+    "note": "The ordinary-gravity inputs are physical. Coefficients and operator response are fictional/derived simulation models unless a higher authority establishes otherwise."
+  },
+  "intervention": {
+    "continuous": [
+      "t_int = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
+      "D_int = v_progress t_int",
+      "M_D = D_first_block - D_int",
+      "M_D > 0 is necessary for a continuously correctable projected-progress representation."
+    ],
+    "precommit": [
+      "M_T = t_prediction - t_int",
+      "Fold, Q-Lattice and Phase Displacement use PRECOMMIT logic unless a higher authority supplies a physically meaningful local progress representation."
+    ],
+    "safeguard": "Projected progress rate is a route/control representation, not a claim that real-world local motion exceeds c."
+  },
+  "segmentClassification": {
+    "ADMISSIBLE": "All physical evidence is valid and the family-specific certificate passes with positive required margins.",
+    "MARGINAL": "No hard gate fails, but a versioned calibration threshold identifies small remaining margin.",
+    "REJECTED": "A family-specific safety, observability, lookahead, recovery or efficiency condition fails.",
+    "UNRESOLVED": "Required evidence, calibration, family association or uncertainty is missing.",
+    "OUTSIDE_MODEL_VALIDITY": "The active ordinary-physics approximation is invalid for the segment.",
+    "CONFLICT": "Equal/higher authority inputs conflict and deterministic resolution is refused."
+  },
+  "canonSafeguards": [
+    "This registry does not claim any FTL family is physically realizable.",
+    "Physical gravity calculations constrain fictional transit response but cannot establish a race or vessel's FTL family.",
+    "Named race, vessel, manufacturer and installation sources outrank this generic registry within their documented scope.",
+    "A family selection used for simulation is not archaeological evidence of family identity.",
+    "PROPOSED coefficients, thresholds, normalization references and maturity modifiers are not constants of nature or universal setting constants.",
+    "A rejected interval remains rejected even if every other interval is admissible.",
+    "Missing uncertainty, radius, ephemeris or model validity may not be silently replaced by zero.",
+    "Emergency de-transit, shunt, closure, recoupling, detachment, return, reconciliation and braking are family-specific machinery obligations, not generic flavor text."
+  ],
+  "api": {
+    "resolver": "resolveFTLFamilySegmentCertification",
+    "inputs": ["family", "path", "segmentPacket", "pathContext", "calibrationRegistry", "requestedProfileId", "requestedProfileVersion", "namedOverrideIds", "safetyState", "measurementPacket", "recoveryState", "familyBoundaryHazard", "requiredHazards", "projectedProgressRate", "provenance"],
+    "outputs": ["status", "family", "path", "calibration", "normalization", "segments", "routeDisposition", "warnings", "provenance", "canonSafeguards"]
+  }
+}
