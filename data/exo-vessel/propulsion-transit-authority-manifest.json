@@ -45,6 +45,10 @@
     "data/schemas/exo-vessel-ftl-physical-route-environment.schema.json",
     "blacklight-exo-ftl-physical-route-environment-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_PHYSICAL_ROUTE_ENVIRONMENT_CERTIFICATION_MANUAL.md",
+    "data/exo-vessel/ftl-physical-route-path-registry.json",
+    "data/schemas/exo-vessel-ftl-physical-route-path.schema.json",
+    "blacklight-exo-ftl-physical-route-path-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_PHYSICAL_ROUTE_PATH_SAMPLING_MANUAL.md",
     "data/exo-vessel/ftl-calibration-registry.json",
     "data/exo-vessel/ftl-safety-certification-registry.json",
     "data/schemas/exo-vessel-ftl-safety-certification.schema.json",
@@ -128,6 +132,7 @@
     "blacklight-exo-ftl-path-level-controller.js",
     "blacklight-exo-ftl-curvature-environment-runtime.js",
     "blacklight-exo-ftl-physical-route-environment-runtime.js",
+    "blacklight-exo-ftl-physical-route-path-runtime.js",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
@@ -147,6 +152,12 @@
     "Physical gravity and curvature packets must preserve SI units, reference-frame identity, potential reference, model validity, uncertainty, and provenance before versioned normalization or family-specific transit response is applied.",
     "When an authoritative physicalEnvironmentContext is supplied, route safety must use the physical gravity/curvature bridge; a PARTIAL, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY physical result may not be replaced by a PROPOSED route archetype fallback.",
     "Only absence of a physicalEnvironmentContext permits the existing PROPOSED route archetype environment fallback.",
+    "A physical route path must preserve every sampled field-point result and its provenance; route-wide extrema are sampled extrema unless a convergence or analytic bound proves otherwise.",
+    "Published-first EXAMPLE route sampling must consume blacklight-exo-source-authority.js rather than maintaining a competing mass/position table; candidate and disputed bodies remain excluded from confirmed gravitational totals.",
+    "Catalog/system coordinates are reference positions, not canonical FTL emergence points; path sampling must not evaluate an endpoint singularity and relabel it as route physics.",
+    "Missing source velocity, physical radius, route epoch, or covariance remains missing. Physical route sampling may return PARTIAL and may not silently substitute zero or perfect certainty.",
+    "Adaptive path refinement thresholds are numerical engineering parameters, not constants of nature, and their identity must remain attached to any route result that depends on them.",
+    "Route-wide safety is conjunctive across required path segments; averaging benign samples may not erase a blocked or catastrophic segment.",
     "Physical quantities with unlike dimensions must be divided by explicit versioned reference scales before they enter a combined dimensionless family-severity model; those reference scales are calibration, not constants of nature.",
     "Coordinate gravitational acceleration, proper acceleration, tidal loading, and spacetime curvature are distinct quantities and may not be silently substituted for one another.",
     "Weak-field potential, acceleration, and Newtonian tidal tensors may be superposed within their approximation; exact general-relativistic curvature invariants may not be linearly superposed and presented as an exact multi-body spacetime.",
@@ -170,5 +181,5 @@
     "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
     "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, and physical-route certification additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, physical-route certification, and physical route-path sampling additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
