@@ -1,0 +1,126 @@
+{
+  "recordType": "zwleiMurrekTransitCaseRuntimeContract",
+  "recordVersion": "1.0.0",
+  "authority": {
+    "status": "MIXED",
+    "scope": "DERIVED executable adapter connecting the CONFIRMED/MIXED Mur'rek case seed to the generic FTL event replay runtime. It may admit real observations and produce provenance-safe downstream packets; it may not fabricate observations or select a transit family.",
+    "precedence": [
+      "specific named Mur'rek vessel/class source",
+      "specific confirmed family/operator evidence",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/zwlei-murrek-transit-case-seed.json",
+      "data/exo-vessel/zwlei-murrek-transit-discrimination-registry.json",
+      "data/exo-vessel/ftl-runtime-event-replay-registry.json",
+      "blacklight-exo-ftl-event-replay-runtime.js",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "caseId": "NRS-MURREK-TRANSIT-CASE",
+  "epochModel": {
+    "E0_ARCHIVE_BASELINE": 0,
+    "E1_UNTOUCHED_PHYSICAL_SURVEY": 1,
+    "E2_POST_ACCESS_STATE": 2,
+    "E3_POST_STIMULATION_STATE": 3,
+    "E4_POST_REPAIR_OR_REGROWTH": 4
+  },
+  "measurementAdmission": {
+    "requiresObservedTrue": true,
+    "placeholderForbidden": "MRK-M000",
+    "requiredFields": [
+      "packetId",
+      "observed=true",
+      "instrumentId",
+      "compartmentId",
+      "channel",
+      "non-empty values",
+      "uncertainty",
+      "calibrationRef",
+      "provenanceRoots",
+      "observedAt",
+      "epoch"
+    ],
+    "negativeEvidenceRule": "Absence is admissible only when capability, coverage, resolution, bandwidth/dynamic range, survivability, and damage establish detectability. NOT_OBSERVED, below-resolution, saturated, inaccessible, and destroyed-channel states are not zero measurements."
+  },
+  "activeTestAdmission": {
+    "unknownFamilySafeEnvelopeRule": "A_unknown must be a subset of the intersection of safe active-test envelopes for every admissible Mur'rek hypothesis; an empty or unproven intersection rejects active testing.",
+    "requiredGates": [
+      "passive baseline complete",
+      "vane geometry surveyed",
+      "dielectric and vital-fluid hazards bounded",
+      "independent abort authority available",
+      "common safe-envelope intersection non-empty",
+      "protected recovery reserve excluded from test budget",
+      "hazard observability maintained on independent channels"
+    ],
+    "lossOfObservabilityRule": "Loss of a hazard-observation channel requires abort unless an independently validated guard channel survives."
+  },
+  "discriminationExport": {
+    "classificationState": "CANDIDATE_SET",
+    "consolidatedFamily": "UNRESOLVED",
+    "familyAutoSelection": false,
+    "admissibleHypotheses": [
+      "H1_SLIPSTREAM_OPERATOR_WITH_GRAVITIC_CONTROL",
+      "H2_GRAVITIC_PLANE_OPERATOR_WITH_LOCAL_SLIPSTREAM_TERMINOLOGY",
+      "H3_HYBRID_CONTROL_ARCHITECTURE",
+      "H4_LOCAL_TRANSITIONAL_OR_SUBFTL_EFFECT"
+    ],
+    "promotionRule": "At least two provenance-independent operator-level discriminator groups surviving damage, detectability, covariance, and contradiction review, unless a higher-authority named source directly identifies the mechanism."
+  },
+  "mathematics": {
+    "measurement": "y = H(x) + b + n + c",
+    "uncertainty": "U = {Sigma_random, Sigma_cal, Sigma_clock, Sigma_reg, Sigma_damage, Sigma_model, Sigma_contam}",
+    "evidenceWeight": "w_i = r_i * d_i * p_i * s_i",
+    "negativeEvidence": "A_minus = I * V * R * B * S * (1-D)",
+    "safeEnvelope": "A_unknown subseteq intersection_h A_h",
+    "abortability": "T_abort >= t_detect + t_validate + t_command + t_actuate + t_decay + t_margin",
+    "powerReadiness": "R_P = min(P_bio/P_req, Q_cool/Q_req, H_hyd/H_req, N_met/N_req, D_diel/D_req)",
+    "vaneAsymmetry": "epsilon_v = ||u_commanded - u_observed||_W"
+  },
+  "api": {
+    "runtime": "blacklight-exo-zwlei-murrek-transit-case-runtime.js",
+    "dependency": "blacklight-exo-ftl-event-replay-runtime.js",
+    "functions": [
+      "createMurrekInitialState(seed)",
+      "buildCaseInitializationEvent(seed, meta)",
+      "initializeMurrekCase(seed, meta)",
+      "validateMeasurementPacket(packet)",
+      "appendMeasurement(state, packet, authoritySnapshot)",
+      "appendCalibration(state, record, authoritySnapshot)",
+      "passiveSurveyAdmission(state)",
+      "lowAuthorityTestAdmission(state, context)",
+      "deriveDiscriminationInput(state)",
+      "exportMurrekEvidence(state, options)"
+    ],
+    "familyAutoSelection": false,
+    "timestampPolicy": "Caller must supply recordedAt/observedAt. The runtime refuses to invent investigation timestamps."
+  },
+  "provenance": {
+    "sourceGraph": "The different lightspeed methods -> named Mur'rek archive -> Mur'rek engineering/discrimination authorities -> case seed -> Mur'rek case runtime adapter -> generic immutable event replay -> evidence instance -> installation archaeology -> transit forensics -> Mur'rek discrimination.",
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "replayRule": "Events append; later interpretations supersede by reference and never rewrite historical observations. Source assertions remain source constraints rather than synthetic measurement packets."
+  },
+  "canonGuards": [
+    "Do not map gravitic slipstream to a consolidated family by keyword.",
+    "Do not turn source assertions into field observations.",
+    "Do not instantiate MRK-M000 as evidence.",
+    "Do not fabricate observedAt, recordedAt, calibration, values, uncertainty, damage state, or covariance groups.",
+    "Do not treat NOT_OBSERVED, inaccessible, below-resolution, saturated, clipped, or destroyed-channel states as zero.",
+    "Do not count shared Current Well, clock, sensor, calibration, archive, or translation ancestry as independent evidence.",
+    "Do not auto-promote a transit family from the candidate set.",
+    "Do not energize the regulator before all active-test admission gates pass.",
+    "Do not consume protected recovery authority for information gain.",
+    "Do not continue a test after loss of hazard observability unless an independent certified guard channel remains.",
+    "Do not treat biological healing or regrowth as recertification.",
+    "Do not silently mutate historical replay events; supersede them with a new event.",
+    "Do not reveal unresolved family names in narrative-safe export.",
+    "Do not convert derived investigator equipment into historical Zwlei products.",
+    "Do not infer operational state from intact-class documentation when surveying the derelict."
+  ]
+}
