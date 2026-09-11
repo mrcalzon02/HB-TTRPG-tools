@@ -48,7 +48,8 @@
     "data/exo-vessel/ftl-route-safety-integration.json",
     "data/schemas/exo-vessel-ftl-route-safety-integration.schema.json",
     "blacklight-exo-ftl-route-safety-runtime.js",
-    "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_SAFETY_INTEGRATION_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_SAFETY_INTEGRATION_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_LIVE_ROUTE_CERTIFICATION_INTERFACE_MANUAL.md"
   ],
   "familyTechnicalVolumes": [
     "docs/blacklight/BLACK_LIGHT_FTL_METRIC_COMPRESSION_TECHNICAL_VOLUME.md",
@@ -110,7 +111,8 @@
     "blacklight-exo-ftl-path-level-controller.js",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
-    "blacklight-exo-ftl-route-safety-runtime.js"
+    "blacklight-exo-ftl-route-safety-runtime.js",
+    "blacklight-exo-ftl-certification-ui.js"
   ],
   "integrationRules": [
     "This manifest indexes authority; it does not reorder it.",
@@ -121,7 +123,8 @@
     "Race/vessel-specific material outranks generic embodiment only within its documented scope.",
     "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon.",
     "Calibration profile identity and version must be retained by any numerical safety certificate that depends on it.",
-    "Generated capability and route safety certification are separate outputs; REJECTED, UNRESOLVED, and CONFLICT states may not be flattened into ordinary certified performance."
+    "Generated capability and route safety certification are separate outputs; REJECTED, UNRESOLVED, and CONFLICT states may not be flattened into ordinary certified performance.",
+    "The live EXO FTL certification UI must preserve the generated family when the family selector is random and must embed the route-safety certificate in exported dossiers."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, and route-safety additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, and live route-certification additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
