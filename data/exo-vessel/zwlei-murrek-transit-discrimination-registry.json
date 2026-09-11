@@ -1,0 +1,393 @@
+{
+  "recordType": "zwleiMurrekTransitDiscriminationRegistry",
+  "recordVersion": "1.0.0",
+  "authority": {
+    "status": "MIXED",
+    "scope": "DERIVED discrimination and test-program layer constrained by CONFIRMED Mur'rek installation facts and CONFIRMED Black Light family operators. It may classify evidence but may not assign a family by terminology alone.",
+    "precedence": [
+      "specific named Mur'rek vessel/class source",
+      "specific confirmed family/operator evidence",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+      "data/exo-vessel/ftl-measurement-instrumentation-registry.json",
+      "data/exo-vessel/ftl-evidence-instance-registry.json",
+      "data/exo-vessel/ftl-installation-archaeology-registry.json",
+      "data/exo-vessel/ftl-forensic-identification-registry.json",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "sources": [
+      "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "docs/blacklight/ZWLEI_MURREK_PROPULSION_TRANSIT_ENGINEERING_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+      "data/exo-vessel/ftl-forensic-identification-registry.json"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "subject": {
+    "species": "Zwlei Frog Men",
+    "vesselClass": "Mur'rek-class patrol frigate",
+    "sourceTerm": "bio-reactive gravitic slipstream system",
+    "consolidatedFamily": "UNRESOLVED",
+    "familyAutoSelection": false,
+    "confirmedFacts": [
+      "Flexible field vanes are immersed in dielectric fluid.",
+      "The regulator shapes inertial and gravitic conditions for maneuvering and short-range slipstream operation.",
+      "The Navigation Current Well provides gravitic reference, slipstream prediction, and inertial control.",
+      "The sensor suite includes gravitic and exotic observations.",
+      "Asymmetric vane response can rotate the local inertial frame.",
+      "Short-range slipstream wording does not establish interstellar range or a consolidated family key."
+    ]
+  },
+  "classificationState": {
+    "state": "CANDIDATE_SET",
+    "admissibleHypotheses": [
+      "H1_SLIPSTREAM_OPERATOR_WITH_GRAVITIC_CONTROL",
+      "H2_GRAVITIC_PLANE_OPERATOR_WITH_LOCAL_SLIPSTREAM_TERMINOLOGY",
+      "H3_HYBRID_CONTROL_ARCHITECTURE",
+      "H4_LOCAL_TRANSITIONAL_OR_SUBFTL_EFFECT"
+    ],
+    "promotionRule": "Do not move to PROVISIONAL_FAMILY without at least two provenance-independent operator-level discriminator groups surviving damage, detectability, covariance, and contradiction review, unless a higher-authority named source directly identifies the mechanism.",
+    "keywordNormalizationForbidden": true,
+    "currentConclusion": "The source confirms a Mur'rek gravitic-slipstream installation but not its mapping to a consolidated family."
+  },
+  "hypotheses": [
+    {
+      "hypothesisId": "H1_SLIPSTREAM_OPERATOR_WITH_GRAVITIC_CONTROL",
+      "status": "DERIVED",
+      "claimBoundary": "The transit operator is Hyperspatial Slipstream Shear while gravitic/inertial shaping serves acquisition, stabilization, steering support, or local vessel control.",
+      "predictedDiscriminators": [
+        "Q-boundary or equivalent boundary-layer response correlated with transit-capable vane states",
+        "distributed adhesion/coupling sectors or their functional analogue",
+        "distinct detachment/recovery reserve",
+        "wake, shear-weather, or boundary-condition route telemetry",
+        "transition records that distinguish ordinary gravitic shaping from entry into a separate transit medium"
+      ],
+      "predictedContradictions": [
+        "navigation and propulsion records fully explained by geodesic/equipotential riding with no boundary-layer operator",
+        "repeatable transit response tracks gravitational route geometry directly without independent boundary state"
+      ],
+      "safeTests": ["MRTD-01", "MRTD-02", "MRTD-04", "MRTD-05"]
+    },
+    {
+      "hypothesisId": "H2_GRAVITIC_PLANE_OPERATOR_WITH_LOCAL_SLIPSTREAM_TERMINOLOGY",
+      "status": "DERIVED",
+      "claimBoundary": "The transit operator is Gravitational-Plane Skimmer and 'slipstream' is source-local terminology for motion along gravitationally favorable shear/equipotential structures.",
+      "predictedDiscriminators": [
+        "route solutions explicitly keyed to gravitational shear planes, focal nodes, equipotentials, tidal tensors, or branch/fork geometry",
+        "regulator response that changes predictably with mapped gravitational terrain even without a separate boundary state",
+        "recoupling or plane-exit logic rather than boundary detachment logic",
+        "hazard models dominated by forks, shear divergence, and differential gravitational loading"
+      ],
+      "predictedContradictions": [
+        "independent Q-boundary adhesion and detachment signatures",
+        "wake-conditioned route records that remain predictive after controlling for gravitational geometry"
+      ],
+      "safeTests": ["MRTD-01", "MRTD-03", "MRTD-04", "MRTD-06"]
+    },
+    {
+      "hypothesisId": "H3_HYBRID_CONTROL_ARCHITECTURE",
+      "status": "DERIVED",
+      "claimBoundary": "The confirmed regulator performs gravitic/inertial conditioning while another transit operator or coupled layer performs the actual nonlocal transition.",
+      "predictedDiscriminators": [
+        "two separable state transitions with different sensors, reserves, or control authorities",
+        "service-network topology showing regulator support feeding a distinct transit prime mover or field-former",
+        "telemetry distinguishing gravitic alignment state from a second commit/entry state",
+        "failure isolation that can disable one layer while preserving the other"
+      ],
+      "predictedContradictions": [
+        "all observed transit-capable effects arise from one operator with no separable second state",
+        "no independent machinery, reserve, timing, or telemetry path survives exhaustive accessible-volume survey"
+      ],
+      "safeTests": ["MRTD-02", "MRTD-04", "MRTD-05", "MRTD-07"]
+    },
+    {
+      "hypothesisId": "H4_LOCAL_TRANSITIONAL_OR_SUBFTL_EFFECT",
+      "status": "DERIVED",
+      "claimBoundary": "The named short-range slipstream function is a local maneuver/transition effect and the vessel's true interstellar FTL mechanism, if any, is not identified by the surviving source text.",
+      "predictedDiscriminators": [
+        "regulator effects remain local to inertial/gravitic control with no operator-level evidence for superluminal transit",
+        "range or duration records remain bounded to local maneuver scales",
+        "a separate undocumented installation or external infrastructure is required for interstellar transit",
+        "navigation-current data separates local regulator use from strategic route planning"
+      ],
+      "predictedContradictions": [
+        "operator-level evidence directly links the regulator to confirmed superluminal family behavior",
+        "named source or surviving archive explicitly identifies the regulator as the primary FTL drive"
+      ],
+      "safeTests": ["MRTD-01", "MRTD-02", "MRTD-07", "MRTD-08"]
+    }
+  ],
+  "measurementProgram": {
+    "channels": [
+      "GRAVIMETRY",
+      "FIELD_RESIDUAL",
+      "Q_STATE",
+      "TOPOLOGY",
+      "TIMING",
+      "POWER",
+      "THERMAL",
+      "CHEMICAL_BIOLOGICAL",
+      "STRUCTURAL_LOAD",
+      "DATA_TELEMETRY",
+      "WAKE_DEPOSIT",
+      "INFRASTRUCTURE_INTERFACE",
+      "DAMAGE_PATTERN"
+    ],
+    "instrumentClasses": [
+      "passive multi-channel field recorder",
+      "gravitimetric gradient array",
+      "metric/topology residual interferometer",
+      "service-network tracer",
+      "reference/clock ancestry analyzer",
+      "chemical-biological residue analyzer",
+      "geometry/coverage scanner",
+      "low-authority stimulus-and-response rig",
+      "archive/translation workstation"
+    ],
+    "covariancePolicy": "Measurements sharing a sensor root, gravitic reference, clock, calibration model, translated archive block, Current Well reconstruction, or vane-control state belong to one covariance/independence group until proven independent.",
+    "negativeEvidencePolicy": "Absence counts only when instrument capability, coverage, resolution, dynamic range, marker survivability, and damage state show that the predicted marker should have been observable.",
+    "damagePolicy": "Derelict damage may erase Q-boundary markers, gravitational reference topology, vane alignment, fluid state, or telemetry. Damaged absence cannot by itself eliminate a hypothesis."
+  },
+  "mathematics": {
+    "evidenceWeight": "w_i = r_i * d_i * p_i * s_i, with reliability, damage-adjusted detectability, provenance independence, and spatial specificity each in [0,1].",
+    "hypothesisSupport": "S_h = sum_i(w_i * l_ih) - sum_j(w_j * c_jh). Rankings are engineering aids only; they are not canon probabilities.",
+    "informationGain": "IG(T) = H(Hypotheses | E) - E_o[H(Hypotheses | E,o)]. Prefer safe tests with high discrimination per hazard and contamination cost.",
+    "safeEnvelope": "A_unknown is a subset of the intersection of safe active-test envelopes for every still-admissible hypothesis. If the intersection is empty, active testing is rejected.",
+    "abortability": "T_abort >= t_detect + t_validate + t_command + t_actuate + t_decay + t_margin.",
+    "gravityInteraction": "C_g,M = F(Phi, grad(Phi), H(Phi), shear, sigma_sensor, sigma_model, vane_authority, medium_state). Numeric coefficients remain UNRESOLVED until family mapping and calibrated observations exist.",
+    "vaneAsymmetry": "epsilon_v = ||u_commanded - u_observed||_W. Crossing a validated abort bound requires authority reduction or termination; no universal numeric epsilon_abort is asserted.",
+    "routeDiscrimination": "D_route = I(route; gravity_geometry | boundary_state) - I(route; boundary_state | gravity_geometry). This is a PROPOSED information-theoretic discriminator, not setting canon.",
+    "couplingDiscrimination": "K_couple = cov(response, gravity_features) versus cov(response, boundary_features), evaluated only after common-reference covariance is removed."
+  },
+  "testProgram": [
+    {
+      "id": "MRTD-01",
+      "title": "Passive Regulator Residual Survey",
+      "authority": "DERIVED",
+      "hazardClass": "LOW",
+      "preconditions": ["suspect regulator remains unpowered", "instrument clocks and gravitic references independently certified"],
+      "procedure": [
+        "record EM, thermal, gravitic, topology, Q-state, chemical, acoustic, and biological baselines",
+        "map residuals spatially against vane geometry and dielectric-fluid volumes",
+        "separate shipwide background from regulator-local signatures",
+        "record saturation and inaccessible coverage explicitly"
+      ],
+      "observables": ["persistent gravitic bias", "boundary-like residual", "topology residual", "sector asymmetry", "biological maintenance activity"],
+      "interpretationLimits": "A passive residual can support an operator hypothesis only if its physical channel is discriminating. Gravitic residuals alone do not prove Gravitational-Plane; Q-like residuals alone do not prove Slipstream.",
+      "abortConditions": ["unexpected active field growth", "sensor saturation on hazard channel", "fluid pressure excursion"]
+    },
+    {
+      "id": "MRTD-02",
+      "title": "Service-Network and Reserve Topology Trace",
+      "authority": "DERIVED",
+      "hazardClass": "LOW_TO_MODERATE",
+      "preconditions": ["network tracing can be performed without energizing unknown prime movers"],
+      "procedure": [
+        "trace power, coolant, dielectric, nutrient, hydraulic, timing, data, structural, and field routes",
+        "identify physically isolated reserves and recovery branches",
+        "test whether the regulator is the terminal prime mover or a support layer feeding another installation",
+        "retain unknown inaccessible branches as unknown rather than inferred machinery"
+      ],
+      "observables": ["distinct recovery reserve", "second prime-mover cluster", "whole-hull coupling sectors", "regulator-only local network"],
+      "interpretationLimits": "A network relationship constrains architecture but cannot identify a transit family unless it exposes operator-specific machinery or recovery semantics.",
+      "abortConditions": ["trace current exceeds passive limit", "living manifold changes state", "unknown isolation boundary opens"]
+    },
+    {
+      "id": "MRTD-03",
+      "title": "Gravity-Terrain Correlation Audit",
+      "authority": "DERIVED",
+      "hazardClass": "LOW",
+      "preconditions": ["historical navigation/telemetry records available", "clock ancestry bounded"],
+      "procedure": [
+        "reconstruct local and route-scale gravitational potential, gradients, tidal tensors, and shear geometry for recorded events",
+        "compare Current Well route states against gravitational branch/focal-node geometry",
+        "control for ordinary navigation use of gravimetry",
+        "look for fork, recoupling, plane-lock, or equipotential semantics"
+      ],
+      "observables": ["route lock to gravity terrain", "fork avoidance", "plane recoupling", "gravity-conditioned efficiency changes"],
+      "interpretationLimits": "Correlation with gravity is expected across multiple families. Strong support requires operator-level dependence, not merely navigation awareness.",
+      "abortConditions": ["none for offline analysis; quarantine corrupted source blocks instead of forcing interpolation"]
+    },
+    {
+      "id": "MRTD-04",
+      "title": "Boundary-State / Shear-Wake Archive Audit",
+      "authority": "DERIVED",
+      "hazardClass": "LOW",
+      "preconditions": ["surviving telemetry or residue record exists", "translation provenance retained"],
+      "procedure": [
+        "search for state transitions distinct from gravitic alignment",
+        "identify adhesion, detachment, boundary weather, shear, wake, or medium-entry semantics",
+        "compare route prediction error to reconstructed gravity state and candidate boundary state independently",
+        "separate source-local word 'slipstream' from operator evidence"
+      ],
+      "observables": ["independent boundary variable", "detach reserve", "wake-conditioned route planning", "entry/exit state distinct from gravity shaping"],
+      "interpretationLimits": "Translated vocabulary is not an operator discriminator unless backed by telemetry, state transitions, or machinery behavior.",
+      "abortConditions": ["none for offline analysis; mark translation uncertainty instead of filling missing terms"]
+    },
+    {
+      "id": "MRTD-05",
+      "title": "Low-Authority Vane Response Test",
+      "authority": "DERIVED",
+      "hazardClass": "MODERATE",
+      "preconditions": ["passive surveys complete", "safe-envelope intersection non-empty", "abort authority independently powered", "fluid chemistry certified", "vane geometry surveyed"],
+      "procedure": [
+        "stimulate one isolated vane sector below any known commit threshold",
+        "measure gravitic, inertial, Q-state, topology, structural, and fluid response",
+        "compare commanded and observed vane vectors",
+        "repeat only where covariance and recovery margins remain valid"
+      ],
+      "observables": ["local inertial rotation", "gravitic deformation", "boundary-state response", "whole-installation coupling", "sector recovery behavior"],
+      "interpretationLimits": "Low-authority behavior may expose support physics without reproducing the transit operator. No family promotion from vane motion alone.",
+      "abortConditions": ["epsilon_v exceeds validated bound", "hazard observability lost", "unexpected Q/topology transition", "recovery reserve falls below protected minimum", "fluid isolation fault"]
+    },
+    {
+      "id": "MRTD-06",
+      "title": "Controlled Gravity-Gradient Response Test",
+      "authority": "PROPOSED",
+      "hazardClass": "MODERATE_TO_HIGH",
+      "preconditions": ["external controllable gravity-gradient test environment or validated simulator", "no vessel-scale transit commit possible", "independent guard sensors"],
+      "procedure": [
+        "vary known gravity gradient and shear across a bounded envelope",
+        "measure regulator authority, prediction residual, vane asymmetry, and recovery margin",
+        "test for branch/fork-sensitive response distinct from generic inertial compensation"
+      ],
+      "observables": ["geodesic/equipotential lock tendency", "fork-sensitive instability", "recoupling-like recovery", "generic compensation only"],
+      "interpretationLimits": "This can discriminate gravitic-plane-like operator behavior only if the response exceeds ordinary gravitic navigation and compensation requirements.",
+      "abortConditions": ["frame rotation above test bound", "structural differential load above test bound", "navigation-current instability", "loss of independent gravity reference"]
+    },
+    {
+      "id": "MRTD-07",
+      "title": "Prime-Mover Separation and Commit-State Audit",
+      "authority": "DERIVED",
+      "hazardClass": "LOW_TO_MODERATE",
+      "preconditions": ["service topology mapped", "archives and control-state records available"],
+      "procedure": [
+        "enumerate all state transitions between station keeping, maneuvering, short-range slipstream, and any strategic transit mode",
+        "identify whether another prime mover, field-former, beacon relation, or infrastructure handshake appears",
+        "map which recovery system corresponds to each state",
+        "distinguish support conditioning from actual commit authority"
+      ],
+      "observables": ["single-operator chain", "two-stage commit", "external infrastructure dependency", "local-only regulator mode"],
+      "interpretationLimits": "Absence of a second stage is not conclusive where relevant compartments or archives are destroyed or inaccessible.",
+      "abortConditions": ["do not energize a suspected commit-stage device merely to identify it"]
+    },
+    {
+      "id": "MRTD-08",
+      "title": "Range / Mission Semantics Provenance Audit",
+      "authority": "DERIVED",
+      "hazardClass": "LOW",
+      "preconditions": ["mission logs, route records, maintenance records, or translated operating instructions available"],
+      "procedure": [
+        "separate short-range maneuver terminology from strategic transit terminology",
+        "trace each translated distance/range concept to its source and clock/reference frame",
+        "look for external refueling, gate, beacon, carrier, or rendezvous dependencies",
+        "do not infer light-speed capability from mission geography alone"
+      ],
+      "observables": ["local slipstream-only usage", "strategic use of same regulator", "separate strategic drive", "external transit infrastructure"],
+      "interpretationLimits": "Mission role and voyage distance constrain capability but do not by themselves identify the physical operator.",
+      "abortConditions": ["none; unresolved translations remain unresolved"]
+    }
+  ],
+  "evidenceExport": {
+    "targets": [
+      "resolveTransitMeasurementPacket",
+      "resolveTransitEvidenceInstance",
+      "resolveTransitInstallationArchaeology",
+      "resolveTransitForensics",
+      "appendTransitEvent"
+    ],
+    "requiredFields": [
+      "caseId",
+      "eventId",
+      "epochId",
+      "observationChannel",
+      "instrumentInstance",
+      "calibrationAncestry",
+      "spatialRegistration",
+      "damageState",
+      "detectability",
+      "covarianceGroup",
+      "provenanceRoots",
+      "rawObservation",
+      "derivedInterpretation",
+      "status"
+    ],
+    "noConclusionLeak": true,
+    "rule": "Player-facing or narrative-safe output may describe measured current patterns, gravitic response, vane motion, boundary residuals, or uncertainty but must not name a consolidated family until the resolver reaches an authorized classification state."
+  },
+  "generationRules": {
+    "authorityOnly": "Preserve the source term 'bio-reactive gravitic slipstream system', the confirmed Mur'rek machinery and hazards, and consolidated family UNRESOLVED.",
+    "labeledDerivation": "May compare observed Mur'rek behavior against family invariants, construct test plans, rank hypotheses, derive failure/safety envelopes, and produce measurement/evidence packets with full provenance.",
+    "labeledProposal": "May propose test facilities, instrument generations, education, patents, and experimental methods, but may not backfill them into Zwlei history or claim they were used aboard the named vessel.",
+    "narrativeDisclosure": "Describe observations before conclusions. Do not call the regulator a Slipstream-Shear drive, Gravitational-Plane drive, or hybrid drive in narrative-safe output until classification authority supports that label.",
+    "unresolvedRule": "If discriminating evidence is destroyed, inaccessible, covariant, or contradictory, preserve UNRESOLVED rather than selecting the most aesthetically plausible family."
+  },
+  "apiContract": {
+    "resolver": "resolveZwleiMurrekTransitDiscrimination",
+    "inputs": [
+      "murrekEngineeringProfile",
+      "measurementPackets",
+      "evidenceInstance",
+      "installationGraph",
+      "damageModel",
+      "sourceSnapshot",
+      "authorityMode"
+    ],
+    "outputs": [
+      "classificationState",
+      "admissibleHypotheses",
+      "rankedHypotheses",
+      "operatorDiscriminators",
+      "contradictions",
+      "covarianceWarnings",
+      "nextTests",
+      "hazardEnvelope",
+      "evidenceExports",
+      "provenanceGraph",
+      "canonWarnings"
+    ],
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"],
+    "noAutoPromotion": true,
+    "hardFailures": [
+      "attempted keyword-only family assignment",
+      "attempted family promotion from fewer than two independent operator-level discriminator groups without a named source",
+      "active test requested outside the intersection safe envelope",
+      "negative evidence asserted without detectability proof",
+      "shared Current Well / gravitic reference descendants counted as independent confirmations",
+      "derelict damage ignored while eliminating a hypothesis"
+    ]
+  },
+  "provenance": {
+    "sourceGraph": [
+      "named Mur'rek archive -> confirmed local machinery, terminology, mission and hazards",
+      "zwlei-murrek-transit-engineering-registry.json -> canon-safe Mur'rek engineering reconstruction",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md -> consolidated family operators and authority order",
+      "The different lightspeed methods -> family-specific gravity, efficiency, sensing, safety and documentation requirements",
+      "ftl measurement/evidence/archaeology/forensic authorities -> observation and classification discipline",
+      "this registry -> Mur'rek-specific discriminators and bounded test program"
+    ],
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "canonSafeguards": [
+    "Do not normalize 'gravitic slipstream' to slipstream-shear because it contains 'slipstream'.",
+    "Do not normalize 'gravitic slipstream' to gravitic-plane because it contains 'gravitic'.",
+    "Do not infer interstellar range from the confirmed phrase 'short-range slipstream operation'.",
+    "Do not treat gravitic sensing as a family discriminator unless it participates in the transit operator rather than ordinary navigation or compensation.",
+    "Do not treat Q-state or topology residuals as family proof without operator linkage and independent confirmation.",
+    "Do not count observations descending from the same Current Well, sensor ampulla, clock, calibration, archive, or translation lineage as independent evidence.",
+    "Do not eliminate a hypothesis from missing markers unless detectability survives damage and access review.",
+    "Do not stimulate unknown machinery beyond a reversible safe state merely to improve classification.",
+    "Do not invent Zwlei manufacturers, inventors, dates, Path levels, T-tiers, transit ranges, beacons, gates, or traffic infrastructure.",
+    "Do not convert DERIVED test mathematics into universal setting constants.",
+    "Do not let player-facing prose reveal a family conclusion before the authoritative resolver does.",
+    "Preserve UNRESOLVED when the evidence does not earn promotion.",
+    "A higher-authority named source establishing the Mur'rek family overrides this discrimination layer within its scope."
+  ]
+}
