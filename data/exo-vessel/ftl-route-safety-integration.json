@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.route-safety-integration",
+  "title": "Black Light FTL Route Safety Integration Registry",
+  "status": "MIXED",
+  "purpose": "Bridge the existing EXO FTL route environment generator to versioned safety calibration and certification without promoting gameplay-normalized route packets into setting canon.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Family-specific gravity/miscalculation behavior, safety lookahead, emergency de-transit, increasing maturity margins, and non-perfect safety."
+  },
+  "authority": {
+    "upstream": [
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "blacklight-exo-ftl-operational-definitions.js",
+      "data/exo-vessel/ftl-safety-calibration-profiles.json",
+      "data/exo-vessel/ftl-safety-certification-registry.json"
+    ],
+    "runtime": [
+      "blacklight-exo-ftl-safety-calibration-runtime.js",
+      "blacklight-exo-ftl-safety-certification-runtime.js",
+      "blacklight-exo-ftl-route-safety-runtime.js"
+    ],
+    "statusRule": "Route archetype packets are PROPOSED simulation mappings unless a named source explicitly provides measured environmental values."
+  },
+  "familyMap": {
+    "inertial-torch": "inertial-torch",
+    "metric-envelope": "metric-compression",
+    "metric-compression": "metric-compression",
+    "gravitic-plane": "gravitational-plane",
+    "gravitational-plane": "gravitational-plane",
+    "slipstream-shear": "slipstream-shear",
+    "q-lattice": "q-lattice",
+    "n-manifold": "n-manifold",
+    "fold-jump": "fold-jump",
+    "wormhole-gate": "wormhole-gate",
+    "phase-displacement": "phase-displacement"
+  },
+  "routeArchetypes": {
+    "deep-space": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.12, "accelerationMagnitude": 0.08, "tidalTensorNorm": 0.08, "curvatureNorm": 0.08, "massModelUncertainty": 0.10, "hiddenMassProbability": 0.03, "familyBoundaryHazard": 0.08},
+      "uncertaintyBase": 0.06,
+      "requiredHazards": ["gravity-gradient", "route-model-drift", "destination-occupancy"],
+      "notes": "Clean comparison environment; still not hazard-free."
+    },
+    "planetary-well": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.80, "accelerationMagnitude": 0.92, "tidalTensorNorm": 0.72, "curvatureNorm": 0.62, "massModelUncertainty": 0.22, "hiddenMassProbability": 0.08, "familyBoundaryHazard": 0.32},
+      "uncertaintyBase": 0.14,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "mass-shadow", "destination-occupancy"],
+      "notes": "Represents the existing planetary-well route penalty in normalized safety space, not a universal planetary constant."
+    },
+    "gas-giant": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 1.10, "accelerationMagnitude": 1.15, "tidalTensorNorm": 1.08, "curvatureNorm": 0.94, "massModelUncertainty": 0.30, "hiddenMassProbability": 0.10, "familyBoundaryHazard": 0.46},
+      "uncertaintyBase": 0.20,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "magnetosphere", "plasma-noise", "mass-shadow"],
+      "notes": "Adds magnetic/plasma observability burden to gravity-driven difficulty."
+    },
+    "binary": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 1.02, "accelerationMagnitude": 1.20, "tidalTensorNorm": 1.42, "curvatureNorm": 1.18, "massModelUncertainty": 0.38, "hiddenMassProbability": 0.14, "familyBoundaryHazard": 0.62},
+      "uncertaintyBase": 0.26,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "shear-fork", "moving-barycenter", "route-model-drift"],
+      "notes": "Time-varying competing gradients are emphasized over raw potential."
+    },
+    "compact-object": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 2.40, "accelerationMagnitude": 2.80, "tidalTensorNorm": 3.60, "curvatureNorm": 4.20, "massModelUncertainty": 0.44, "hiddenMassProbability": 0.08, "familyBoundaryHazard": 1.25},
+      "uncertaintyBase": 0.30,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "curvature-limit", "mass-shadow", "emergence-exclusion"],
+      "notes": "Intended to drive frequent rejection rather than normalize compact-object proximity as routine transit."
+    },
+    "nebula": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.24, "accelerationMagnitude": 0.20, "tidalTensorNorm": 0.18, "curvatureNorm": 0.16, "massModelUncertainty": 0.32, "hiddenMassProbability": 0.18, "familyBoundaryHazard": 0.36},
+      "uncertaintyBase": 0.28,
+      "requiredHazards": ["plasma-noise", "sensor-scattering", "route-model-drift", "destination-occupancy"],
+      "notes": "Sensor/model uncertainty dominates over gravity severity."
+    },
+    "uncharted": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.30, "accelerationMagnitude": 0.28, "tidalTensorNorm": 0.30, "curvatureNorm": 0.28, "massModelUncertainty": 0.86, "hiddenMassProbability": 0.62, "familyBoundaryHazard": 0.54},
+      "uncertaintyBase": 0.56,
+      "requiredHazards": ["hidden-mass", "route-model-drift", "destination-occupancy", "reference-integrity"],
+      "notes": "Unknown mass and model incompleteness are intentionally the primary hazard channels."
+    },
+    "q-disturbed": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.42, "accelerationMagnitude": 0.38, "tidalTensorNorm": 0.52, "curvatureNorm": 0.72, "massModelUncertainty": 0.72, "hiddenMassProbability": 0.24, "familyBoundaryHazard": 1.60},
+      "uncertaintyBase": 0.68,
+      "requiredHazards": ["q-boundary", "manifold-topology", "reference-integrity", "route-model-drift", "emergence-exclusion"],
+      "notes": "Higher-dimensional boundary/model uncertainty dominates the route."
+    }
+  },
+  "familyHazards": {
+    "metric-compression": ["curvature-limit", "field-symmetry", "unwind-path"],
+    "gravitational-plane": ["shear-fork", "tidal-shear", "recoupling-path"],
+    "slipstream-shear": ["q-boundary", "adhesion-loss", "detachment-path"],
+    "q-lattice": ["reference-integrity", "address-epoch", "rejection-path"],
+    "n-manifold": ["manifold-topology", "return-map", "embedding-condition"],
+    "fold-jump": ["destination-occupancy", "endpoint-covariance", "closure-path"],
+    "wormhole-gate": ["throat-stability", "mouth-synchronization", "closure-path"],
+    "phase-displacement": ["reference-integrity", "whole-object-coverage", "reconciliation-path"],
+    "inertial-torch": ["collision-course", "thermal-margin", "deceleration-reserve"]
+  },
+  "integrationRules": [
+    "The adapter must preserve the generated family and must never use certification to auto-select a different family.",
+    "Route archetype values are PROPOSED normalized simulation inputs, not measured astrophysical constants.",
+    "Calibration profile identity/version must be copied into every generated route safety result.",
+    "REJECTED, UNRESOLVED, and CONFLICT states must survive into presentation and export.",
+    "A generated speed/range value is capability modeling, not proof that the selected route is certified safe.",
+    "Family-specific required hazards are additive to route hazards.",
+    "Higher maturity may improve lookahead, covariance, redundancy, and recovery margins but cannot suppress a governing hard hazard.",
+    "Named-source unresolved overrides remain unresolved and may not inherit the generic family baseline as named canon."
+  ],
+  "api": {
+    "resolver": "resolveGeneratedFTLRouteSafety",
+    "inputs": ["rating", "request", "registry", "calibrationRegistry", "namedOverrideIds", "provenance"],
+    "outputs": ["status", "family", "path", "route", "calibration", "certificate", "presentation", "warnings", "provenance"],
+    "statusValues": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "CONFLICT"]
+  },
+  "canonGuards": [
+    "Do not describe PROPOSED route archetype numbers as real astrophysical measurements.",
+    "Do not convert route difficulty into a universal FTL constant.",
+    "Do not certify a route when calibration is unresolved or conflicting.",
+    "Do not hide REJECTED or UNRESOLVED behind a generated performance number.",
+    "Do not infer a named civilization or installation limit from the generic simulation baseline.",
+    "Do not turn a selected UI family into evidence for an unresolved archaeological family.",
+    "Do not claim perfect safety at any path maturity.",
+    "Do not spend protected recovery reserve to improve nominal advertised performance."
+  ]
+}
