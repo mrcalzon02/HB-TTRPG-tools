@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.propulsion-transit.authority-manifest",
+  "title": "Black Light Propulsion & Transit Authority Manifest",
+  "status": "DERIVED",
+  "purpose": "Machine-readable discoverability bridge for the propulsion/transit authority chain. This manifest repairs the stale human-readable source index without changing authority order or promoting subordinate documents above BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md.",
+  "primaryAuthority": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Design intent for family-specific gravity/miscalculation penalties, shear-lane hazards, safety lookahead, emergency de-transit, maturity-scaled redundancy, realistic mathematics, and generations-deep educational/technical documentation."
+  },
+  "authorityOrder": [
+    "specific named race/species, organization, manufacturer, vessel, installation, and named technology sources",
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "recovered FTL archive definitions and current explicit operator physics",
+    "EXO operative-technology and vessel-design governing sources",
+    "current runtime behavior within implementation scope",
+    "machine-readable registries and schemas",
+    "subordinate engineering/manual/educational references",
+    "labeled DERIVED models",
+    "labeled PROPOSED extensions"
+  ],
+  "core": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "docs/blacklight/FTL_ENGINEERING_CATALOG_WORKING.md",
+    "EXO_OPERATIVE_TECHNOLOGY_BASIS.md",
+    "EXO_VESSEL_SYSTEM_DESIGN_GUIDE.md",
+    "data/exo-vessel/propulsion-transit-registry.json",
+    "data/schemas/exo-vessel-propulsion-transit.schema.json",
+    "docs/blacklight/PROPULSION_TRANSIT_GENERATOR_REFERENCE.md",
+    "docs/blacklight/PROPULSION_TRANSIT_ENGINEERING_ANNEX.md"
+  ],
+  "familyMathematicsAndEnvironment": [
+    "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_ENVIRONMENT_REGRESSION_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_DARK_MATTER_GRAVITATIONAL_TERRAIN.md",
+    "data/exo-vessel/ftl-safety-certification-registry.json",
+    "data/schemas/exo-vessel-ftl-safety-certification.schema.json",
+    "blacklight-exo-ftl-safety-certification-runtime.js"
+  ],
+  "familyTechnicalVolumes": [
+    "docs/blacklight/BLACK_LIGHT_FTL_METRIC_COMPRESSION_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_GRAVITATIONAL_PLANE_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_HYPERSPATIAL_SLIPSTREAM_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_Q_LATTICE_PHASE_TRANSLATION_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_N_MANIFOLD_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_FOLD_JUMP_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_WORMHOLE_GATE_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_PHASE_DISPLACEMENT_TECHNICAL_VOLUME.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_BASIS_ENGINEERING_ATLAS.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_CROSS_FAMILY_INTEGRATION_MANUAL.md"
+  ],
+  "measurementEvidenceForensics": [
+    "docs/blacklight/BLACK_LIGHT_FTL_MEASUREMENT_INSTRUMENTATION_FIELD_MANUAL.md",
+    "data/exo-vessel/ftl-measurement-instrumentation-registry.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_EVIDENCE_INSTANCE_FIELD_MANUAL.md",
+    "data/exo-vessel/ftl-evidence-instance-registry.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_ARCHAEOLOGY_FIELD_MANUAL.md",
+    "data/exo-vessel/ftl-installation-archaeology-registry.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_FORENSIC_TRANSIT_IDENTIFICATION_MANUAL.md",
+    "data/exo-vessel/ftl-forensic-identification-registry.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_EXPLORATION_EVENT_TEST_PROGRAM_FIELD_MANUAL.md",
+    "data/exo-vessel/ftl-exploration-event-test-program-registry.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_RUNTIME_EVENT_REPLAY_MANUAL.md",
+    "data/exo-vessel/ftl-runtime-event-replay-registry.json",
+    "blacklight-exo-ftl-event-replay-runtime.js"
+  ],
+  "developmentEducationAndLineage": [
+    "docs/blacklight/BLACK_LIGHT_FTL_ENGINEERING_FIELD_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_TECHNICAL_CORPUS_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_TECHNOLOGY_BASIS_RESPONSE_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_CIVILIZATION_ENGINEERING_DOCTRINE.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_DEVELOPMENT_LINEAGE_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_RESEARCH_TRADITIONS_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_UPGRADE_CAUSALITY_CALCULUS.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_SOLVED_TRANSIT_CASES.md"
+  ],
+  "raceAndVesselSpecific": [
+    "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+    "docs/blacklight/ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md",
+    "docs/blacklight/ZWLEI_MURREK_PROPULSION_TRANSIT_ENGINEERING_MANUAL.md",
+    "docs/blacklight/ZWLEI_MURREK_TRANSIT_DISCRIMINATION_TEST_MANUAL.md",
+    "docs/blacklight/ZWLEI_MURREK_TRANSIT_CASE_SEED_AND_SURVEY_MANUAL.md",
+    "docs/blacklight/ZWLEI_MURREK_TRANSIT_RUNTIME_SURVEY_OPERATIONS_MANUAL.md",
+    "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+    "data/exo-vessel/zwlei-murrek-transit-discrimination-registry.json",
+    "data/exo-vessel/zwlei-murrek-transit-case-seed.json",
+    "data/exo-vessel/zwlei-murrek-transit-case-runtime-contract.json",
+    "blacklight-exo-zwlei-murrek-transit-case-runtime.js"
+  ],
+  "liveRuntimeSpine": [
+    "blacklight-exo-ftl-physics-definitions.js",
+    "blacklight-exo-ftl-path-level-core.js",
+    "blacklight-exo-ftl-path-level-paths-physical.js",
+    "blacklight-exo-ftl-path-level-paths-dimensional.js",
+    "blacklight-exo-ftl-path-level-paths-discrete.js",
+    "blacklight-exo-ftl-path-level-runtime.js",
+    "blacklight-exo-ftl-path-level-controller.js",
+    "blacklight-exo-ftl-safety-certification-runtime.js"
+  ],
+  "integrationRules": [
+    "This manifest indexes authority; it does not reorder it.",
+    "A missing entry in this manifest does not demote a higher-authority named source.",
+    "The primary authority remains the human-readable integration entrypoint until explicitly superseded.",
+    "Generator/runtime code may use this manifest for discoverability but must still obey field-level provenance/status.",
+    "DERIVED and PROPOSED documents remain subordinate even when listed here.",
+    "Race/vessel-specific material outranks generic embodiment only within its documented scope.",
+    "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon."
+  ],
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, and Mur'rek additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+}
