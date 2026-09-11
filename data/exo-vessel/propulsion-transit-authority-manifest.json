@@ -92,7 +92,10 @@
     "docs/blacklight/BLACK_LIGHT_FTL_SOLVED_TRANSIT_CASES.md",
     "data/exo-vessel/ftl-control-embodiment-registry.json",
     "data/schemas/exo-vessel-ftl-control-embodiment.schema.json",
-    "docs/blacklight/BLACK_LIGHT_FTL_LIVE_CONTROL_EMBODIMENT_DOSSIER_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_LIVE_CONTROL_EMBODIMENT_DOSSIER_MANUAL.md",
+    "data/exo-vessel/ftl-technology-ancestry-registry.json",
+    "data/schemas/exo-vessel-ftl-technology-ancestry.schema.json",
+    "docs/blacklight/BLACK_LIGHT_FTL_TECHNOLOGY_ANCESTRY_AND_HYBRID_INTEGRATION_MANUAL.md"
   ],
   "raceAndVesselSpecific": [
     "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
@@ -119,6 +122,7 @@
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
     "blacklight-exo-ftl-control-embodiment-runtime.js",
+    "blacklight-exo-ftl-technology-ancestry-runtime.js",
     "blacklight-exo-ftl-certification-ui.js",
     "blacklight-exo-ftl-dossier-chapters-certification.js"
   ],
@@ -140,7 +144,12 @@
     "Alien-to-human interface translation must preserve native-state provenance and may not convert unresolved state into safe/default values.",
     "The live EXO FTL dossier must not default an unspecified operative technology basis to terrestrial machinery; unspecified basis is an explicit UNRESOLVED embodiment state.",
     "Changing operative technology basis may change navigation representation, sensing, control, abort, maintenance, service environment and failure signatures, but may not change the generated or certified FTL family.",
-    "Complete dossier exports must keep generated performance, route certification, route matrix and control embodiment as distinguishable records with provenance rather than destructively merging them."
+    "Complete dossier exports must keep generated performance, route certification, route matrix and control embodiment as distinguishable records with provenance rather than destructively merging them.",
+    "Technology ancestry must keep owner, operator, manufacturer, inventor and engineering origin distinct unless an authoritative source explicitly unifies them.",
+    "A race/species or polity name alone may not auto-populate an operative technology basis; live auto-resolution requires exactly one materially participating CONFIRMED basis or a higher-authority exact mapping.",
+    "Multiple materially participating CONFIRMED technology bases must remain CONFIRMED_MULTI/MULTI_BASIS rather than being collapsed to a majority basis.",
+    "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
+    "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, and live embodiment-dossier additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, and technology-ancestry additions. This manifest provides a complete current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
