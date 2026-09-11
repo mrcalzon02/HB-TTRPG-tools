@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.curvature-environment",
+  "title": "Black Light Physical Gravity and Curvature Environment Registry",
+  "status": "MIXED",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "mathematics": [
+      "docs/blacklight/BLACK_LIGHT_FTL_MATHEMATICAL_TRANSIT_MODELS.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md"
+    ],
+    "safety": "data/exo-vessel/ftl-safety-certification-registry.json",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "purpose": "Define SI-unit physical environment quantities and validity boundaries that feed family-specific transit penalties. It separates real weak-field/relativistic physics from fictional family coupling and gameplay calibration.",
+  "constants": {
+    "G_m3KgS2": 6.6743e-11,
+    "c_mPerS": 299792458
+  },
+  "quantities": {
+    "potential": {
+      "symbol": "Phi",
+      "unit": "m^2 s^-2",
+      "model": "Phi(x) = -sum_a G M_a / r_a",
+      "status": "REAL_PHYSICS_WEAK_FIELD",
+      "use": "Use relative to a declared reference, normally asymptotic infinity for an isolated system or a route/reference point for local navigation. Absolute Newtonian potential is not a general-coordinate invariant in GR."
+    },
+    "dimensionlessPotentialDepth": {
+      "symbol": "epsilon_Phi",
+      "unit": "1",
+      "model": "epsilon_Phi = |Delta Phi| / c^2",
+      "status": "REAL_PHYSICS_WEAK_FIELD",
+      "use": "Primary weak-field validity indicator and gravitational time-dilation scale."
+    },
+    "acceleration": {
+      "symbol": "g",
+      "unit": "m s^-2",
+      "model": "g(x) = -sum_a G M_a (x-x_a)/|x-x_a|^3",
+      "status": "REAL_PHYSICS_WEAK_FIELD",
+      "use": "Local coordinate acceleration in the selected weak-field frame. A freely falling craft can have near-zero proper acceleration while still experiencing strong tides."
+    },
+    "tidalTensor": {
+      "symbol": "T_ij",
+      "unit": "s^-2",
+      "model": "T_ij = sum_a G M_a (3 n_i n_j - delta_ij)/r_a^3",
+      "status": "REAL_PHYSICS_POINT_MASS_WEAK_FIELD",
+      "use": "Hessian-derived differential gravity. Its eigenvectors/eigenvalues are the physically relevant local stretching/compression directions for gravitational-plane and structural hazard work."
+    },
+    "tidalFrobenius": {
+      "symbol": "||T||_F",
+      "unit": "s^-2",
+      "model": "sqrt(sum_ij T_ij^2)",
+      "status": "REAL_MATHEMATICS_ON_DERIVED_TENSOR",
+      "use": "Coordinate-frame scalar norm for engineering comparison in a declared orthonormal local frame; not a full spacetime curvature invariant."
+    },
+    "schwarzschildRadius": {
+      "symbol": "r_s",
+      "unit": "m",
+      "model": "r_s = 2 G M / c^2",
+      "status": "REAL_PHYSICS_SPHERICAL_VACUUM_REFERENCE",
+      "use": "Compactness reference for an isolated nonrotating source. Point-mass weak-field models should be rejected as r/r_s approaches unity."
+    },
+    "kretschmann": {
+      "symbol": "K",
+      "unit": "m^-4",
+      "model": "K = 48 G^2 M^2 / (c^4 r^6)",
+      "status": "REAL_PHYSICS_SCHWARZSCHILD_ONLY",
+      "use": "Exact vacuum curvature invariant for a single Schwarzschild source. Multi-body K is not obtained by summing individual K values; registry/runtime therefore reports the maximum per-source value only as a conservative local compactness/curvature indicator."
+    },
+    "lenseThirring": {
+      "symbol": "Omega_LT",
+      "unit": "rad s^-1",
+      "model": "Omega_LT = 2 G J / (c^2 r^3) in the weak-field axial approximation",
+      "status": "REAL_PHYSICS_WEAK_FIELD_ROTATING_REFERENCE",
+      "use": "Optional frame-dragging estimate when source angular momentum is known. It is not inferred from mass alone."
+    }
+  },
+  "validity": {
+    "weakFieldCriterion": "epsilon_Phi << 1 and r/r_s >> 1 for every source materially contributing to a point-mass packet.",
+    "slowMotionCriterion": "Source velocities should be small compared with c unless a post-Newtonian or numerical-relativity model replaces this packet.",
+    "extendedBodyCriterion": "Do not evaluate a point-mass field inside a source's declared physical radius; use an interior/extended-body model or mark OUTSIDE_MODEL_VALIDITY.",
+    "multiBodyCurvatureCriterion": "Potential, acceleration and Newtonian tidal tensors may be linearly superposed in the weak-field approximation. Exact GR curvature invariants may not be linearly superposed.",
+    "electromagneticCriterion": "Magnetic fields, plasma density and radiation can dominate sensor and material behavior but are separate environmental channels; do not disguise them as gravitational curvature."
+  },
+  "safetyBridge": {
+    "potentialMagnitude": "Use |Delta Phi| or epsilon_Phi with a declared reference; do not use an unreferenced absolute potential as a universal invariant.",
+    "accelerationMagnitude": "Use |g| only as a coordinate-frame environment quantity; never substitute it for tidal loading.",
+    "tidalTensorNorm": "Use ||T||_F or a specified eigenvalue metric in a declared local frame.",
+    "curvatureNorm": "Use exact/validated relativistic curvature when available. Under the weak-field point-source packet, maxSingleSourceKretschmannPerM4 is a reference indicator, not the exact multi-body curvature invariant.",
+    "uncertainty": "Mass, ephemeris, clock, registration and model uncertainty remain independent covariance terms. Missing uncertainty is not zero.",
+    "normalization": "Quantities with unlike dimensions may enter one severity score only after explicit division by versioned reference scales. Reference scales are calibration, not physical constants."
+  },
+  "familyInterpretation": {
+    "metric-compression": "Prioritize spacetime curvature, tidal gradients, envelope boundary residuals and horizon/closure geometry. Strong curvature is not equivalent to high coordinate acceleration.",
+    "gravitational-plane": "Prioritize the tidal tensor eigensystem, its spatial/temporal derivatives, barycentric topology and uncertainty in hidden masses. A lane fork is modeled as competing admissible eigendirection/route basins, not as a literal material rail splitting in space.",
+    "slipstream-shear": "Use ordinary gravity/curvature as boundary conditions on the normal-space/Q correspondence model; the exotic coupling remains fictional/derived.",
+    "q-lattice": "Ordinary gravity influences clocks, ephemerides, reference state and endpoint covariance; address-space operator physics remains fictional/derived.",
+    "n-manifold": "Ordinary curvature constrains embedding/return maps but does not establish the higher-dimensional metric by itself.",
+    "fold-jump": "Curvature and endpoint tidal state enter precommit endpoint admissibility. Equivalent c is not local hull velocity.",
+    "wormhole-gate": "External tidal loading and mouth synchronization are ordinary physical boundary conditions; exotic stress-energy supporting a traversable throat remains fictional/derived unless named canon specifies it.",
+    "phase-displacement": "Ordinary gravity contributes clock/reference and target-state covariance; macroscopic displacement operator physics remains fictional/derived.",
+    "inertial-torch": "Use ordinary relativistic trajectory, proper acceleration, collision horizon, radiation and thermal physics; no exotic de-transit operator exists."
+  },
+  "canonGuards": [
+    "Real equations used for environmental context do not prove that any fictional FTL family is physically realizable.",
+    "Do not assign fictional stress-energy tensors, negative energy densities, coupling constants or superluminal solutions as REAL_PHYSICS.",
+    "Do not add potential, acceleration, tides and curvature numerically until each term has been normalized by an explicit reference scale.",
+    "Do not treat coordinate acceleration as proper acceleration or as tidal stress.",
+    "Do not linearly sum Schwarzschild Kretschmann scalars and call the result an exact multi-body curvature invariant.",
+    "Do not infer angular momentum or frame dragging from mass alone.",
+    "Do not convert missing covariance, missing mass or missing ephemeris information into zero uncertainty.",
+    "Named race/manufacturer/vessel limits outrank this generic environment model within their documented scope."
+  ],
+  "api": {
+    "resolver": "resolveFTLCurvatureEnvironment",
+    "inputs": ["referenceFrame", "fieldPoint", "sources", "potentialReference", "uncertainty"],
+    "outputs": ["status", "metrics", "validity", "uncertainty", "provenance"],
+    "downstream": ["ftl-safety-certification-registry", "ftl-route-safety-runtime", "family-specific navigation and maintenance models"]
+  }
+}
