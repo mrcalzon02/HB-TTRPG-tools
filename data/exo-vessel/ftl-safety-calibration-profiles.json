@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.safety-calibration-profiles",
+  "title": "Black Light FTL Safety Calibration Profile Registry",
+  "authority": {
+    "status": "MIXED",
+    "purpose": "Versioned numerical calibration packages for the FTL safety-certification runtime. These profiles translate established family distinctions into bounded runtime/gameplay coefficients without promoting the coefficients to setting canon.",
+    "sourceOrder": [
+      "named race / vessel / manufacturer / installation source",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md",
+      "data/exo-vessel/ftl-calibration-registry.json",
+      "data/exo-vessel/ftl-safety-certification-registry.json",
+      "Google Drive: The different lightspeed methods",
+      "labeled DERIVED model",
+      "labeled PROPOSED calibration"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    },
+    "repairNote": "The older ftl-calibration-registry.json still describes the design source path as unresolved. This registry binds the exact current Drive document ID/revision and must be preferred for safety-calibration provenance without rewriting the older mathematical registry wholesale."
+  },
+  "profiles": [
+    {
+      "schemaVersion": "1.0.0",
+      "profileId": "blacklight.safety-calibration.baseline-simulation",
+      "profileVersion": "1.0.0",
+      "status": "PROPOSED",
+      "scope": {
+        "purpose": "Neutral simulation baseline for comparing family-specific gravity, uncertainty, lookahead, and recovery behavior.",
+        "runtimeUse": "Permitted for generator simulation, encounter preparation, engineering exercises, and UI safety-state previews when no higher-authority named calibration exists.",
+        "canonReach": "None. Numerical values are game/simulation calibration only and must never be quoted as universal Black Light constants.",
+        "technologyBasis": null,
+        "civilization": null,
+        "manufacturer": null,
+        "installation": null
+      },
+      "authority": {
+        "sourceOrder": [
+          "named source override",
+          "propulsion/transit authority",
+          "family gravity/safety model",
+          "safety certification registry",
+          "this profile"
+        ],
+        "designSource": {
+          "title": "The different lightspeed methods",
+          "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+          "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+        },
+        "coefficientPolicy": "All values below are PROPOSED dimensionless runtime calibration. They preserve relative family behavior from authority but do not establish physical constants, historical capabilities, or named-race limits."
+      },
+      "referenceScales": {
+        "potential": 1.0,
+        "acceleration": 1.0,
+        "tidal": 1.0,
+        "curvature": 1.0,
+        "massUncertainty": 1.0
+      },
+      "severityWeights": {
+        "potential": 0.14,
+        "acceleration": 0.18,
+        "tidal": 0.27,
+        "curvature": 0.26,
+        "massUncertainty": 0.15
+      },
+      "familyCoefficients": {
+        "metric-compression": {
+          "a": 0.54, "b": 0.22, "c": 0.06, "n": 3.0, "d": 0.30, "e": 0.18, "k": 0.44, "miscalculationAmplification": 1.10,
+          "status": "PROPOSED",
+          "rationale": "External curvature directly competes with engineered metric freedom; error sensitivity is substantial but continuous unwind can exist before commit boundaries."
+        },
+        "gravitational-plane": {
+          "a": 0.68, "b": 0.34, "c": 0.10, "n": 3.2, "d": 0.42, "e": 0.55, "k": 0.62, "miscalculationAmplification": 1.45,
+          "status": "PROPOSED",
+          "rationale": "Gravity is both roadway and hazard. Shear forks, hidden mass, and lane ambiguity justify the strongest baseline environmental and route-model sensitivity."
+        },
+        "slipstream-shear": {
+          "a": 0.43, "b": 0.18, "c": 0.05, "n": 2.8, "d": 0.33, "e": 0.48, "k": 0.52, "miscalculationAmplification": 1.28,
+          "status": "PROPOSED",
+          "rationale": "Gravity perturbs normal/Q correspondence and safe exits, while Q-boundary state remains a separate dominant hazard channel."
+        },
+        "q-lattice": {
+          "a": 0.28, "b": 0.12, "c": 0.04, "n": 2.5, "d": 0.46, "e": 0.31, "k": 0.78, "miscalculationAmplification": 1.62,
+          "status": "PROPOSED",
+          "rationale": "Direct gravity burden is lower than gravitic-plane operation, but reference, address, epoch, and covariance errors amplify strongly near distorted environments."
+        },
+        "n-manifold": {
+          "a": 0.36, "b": 0.16, "c": 0.05, "n": 2.7, "d": 0.39, "e": 0.35, "k": 0.70, "miscalculationAmplification": 1.52,
+          "status": "PROPOSED",
+          "rationale": "Ordinary-space gravity matters through embedding and return-map conditioning; projection uncertainty can dominate before raw field burden does."
+        },
+        "fold-jump": {
+          "a": 0.40, "b": 0.20, "c": 0.07, "n": 3.0, "d": 0.47, "e": 0.39, "k": 0.82, "miscalculationAmplification": 1.72,
+          "status": "PROPOSED",
+          "rationale": "Endpoint covariance and occupancy clearance make precommit uncertainty severe; postcommit correction must not be invented."
+        },
+        "wormhole-gate": {
+          "a": 0.48, "b": 0.25, "c": 0.08, "n": 3.1, "d": 0.30, "e": 0.42, "k": 0.48, "miscalculationAmplification": 1.18,
+          "status": "PROPOSED",
+          "rationale": "External tides and mouth synchronization impose substantial environmental burden, moderated by large fixed infrastructure and independent closure authority."
+        },
+        "phase-displacement": {
+          "a": 0.31, "b": 0.14, "c": 0.04, "n": 2.6, "d": 0.50, "e": 0.36, "k": 0.90, "miscalculationAmplification": 1.80,
+          "status": "PROPOSED",
+          "rationale": "Whole-object coverage, target authenticity, and reconciliation make model/reference error more dangerous than simple local gravity burden."
+        },
+        "inertial-torch": {
+          "a": 0.08, "b": 0.02, "c": 0.00, "n": 2.0, "d": 0.08, "e": 0.00, "k": 0.10, "miscalculationAmplification": 0.55,
+          "status": "PROPOSED",
+          "rationale": "Ordinary causal propulsion remains affected by gravity and navigation uncertainty but has no exotic field-collapse penalty."
+        }
+      },
+      "thresholds": {
+        "minimumGravityEfficiency": 0.34,
+        "minimumCalculationEfficiency": 0.42,
+        "marginalLookaheadMargin": 1.0,
+        "minimumRecoveryMargin": 0.0
+      },
+      "maturityModifiers": {
+        "p0": {"lookaheadFactor": 0.35, "covarianceFactor": 1.80, "recoveryFactor": 0.55, "redundancyFactor": 0.50, "status": "PROPOSED"},
+        "p1": {"lookaheadFactor": 0.52, "covarianceFactor": 1.55, "recoveryFactor": 0.68, "redundancyFactor": 0.65, "status": "PROPOSED"},
+        "p2": {"lookaheadFactor": 0.72, "covarianceFactor": 1.30, "recoveryFactor": 0.82, "redundancyFactor": 0.82, "status": "PROPOSED"},
+        "p3": {"lookaheadFactor": 1.00, "covarianceFactor": 1.00, "recoveryFactor": 1.00, "redundancyFactor": 1.00, "status": "PROPOSED"},
+        "p4": {"lookaheadFactor": 1.35, "covarianceFactor": 0.78, "recoveryFactor": 1.20, "redundancyFactor": 1.35, "status": "PROPOSED"},
+        "p5": {"lookaheadFactor": 1.75, "covarianceFactor": 0.60, "recoveryFactor": 1.45, "redundancyFactor": 1.75, "status": "PROPOSED"},
+        "p6": {"lookaheadFactor": 2.25, "covarianceFactor": 0.45, "recoveryFactor": 1.75, "redundancyFactor": 2.20, "status": "PROPOSED"}
+      },
+      "scalingModel": {
+        "policy": "Scaling modifies burden, sensing geometry, synchronization, thermal rejection, structural reserve, and recovery authority separately. It must not be collapsed to power proportional to vessel mass.",
+        "variables": ["protectedVolume", "characteristicLength", "fieldBoundaryArea", "sensorBaseline", "synchronizationSpan", "thermalSink", "structuralReserve", "recoveryReserve", "crewOrControllerLatency"],
+        "equations": [
+          "B_scale = C_V*(V/V_ref)^alpha_V + C_A*(A/A_ref)^alpha_A + C_L*(L/L_ref)^alpha_L + C_sync*(L_sync/L_sync_ref)^alpha_sync",
+          "M_sensor = (B_sensor/B_required)*(T_prediction/T_intervention)",
+          "M_recovery = R_protected/R_required",
+          "A_operational = min(M_sensor, M_recovery, M_structure, M_thermal, M_control)"
+        ]
+      },
+      "namedOverrides": [
+        {
+          "overrideId": "zwlei-murrek-gravitic-slipstream",
+          "scope": "Zwlei Mur'rek patrol-frigate transit installation",
+          "status": "UNRESOLVED",
+          "values": {},
+          "provenance": ["data/exo-vessel/zwlei-murrek-transit-engineering-registry.json", "data/exo-vessel/zwlei-murrek-transit-discrimination-registry.json"],
+          "rule": "Do not apply a family-specific coefficient override until the source-local gravitic-slipstream terminology is resolved to a consolidated operator family by evidence or higher authority."
+        },
+        {
+          "overrideId": "arnock-derelict-family",
+          "scope": "Ar'nock derelict transit installation",
+          "status": "UNRESOLVED",
+          "values": {},
+          "provenance": ["data/exo-vessel/ftl-evidence-instance-registry.json", "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md"],
+          "rule": "Do not fabricate family coefficients for the Ar'nock derelict while its actual FTL family remains unresolved."
+        }
+      ],
+      "provenance": [
+        "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+        "docs/blacklight/BLACK_LIGHT_FTL_GRAVITY_SAFETY_EFFICIENCY_MODELS.md",
+        "data/exo-vessel/ftl-calibration-registry.json",
+        "data/exo-vessel/ftl-safety-certification-registry.json",
+        "Google Drive document 1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y revision ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+      ],
+      "canonGuards": [
+        "Profile numbers are not universal physical constants.",
+        "Profile numbers are not historical capability claims.",
+        "Named-source limits override this profile within their documented scope.",
+        "An unresolved named installation cannot inherit a family merely because a profile exists.",
+        "P0-P6 modifiers describe calibration behavior, not automatic historical progression dates.",
+        "Higher maturity increases safety margin and prediction authority but never guarantees perfect safety.",
+        "Gravity proximity remains hazardous across all exotic families; relative tolerance differs by operator.",
+        "Large-well emergence/commit restrictions remain authority-driven and cannot be removed by favorable tuning.",
+        "Protected recovery reserve cannot be spent to improve advertised nominal performance.",
+        "UI code cannot convert REJECTED or UNRESOLVED certification into selectable-safe state.",
+        "Scaling may worsen geometry, timing, heat, and observability even when power supply scales adequately.",
+        "Any named-race coefficient requires explicit source provenance or must remain DERIVED/PROPOSED."
+      ]
+    }
+  ],
+  "selectionRules": {
+    "defaultProfileId": "blacklight.safety-calibration.baseline-simulation",
+    "requiredMatchOrder": ["named installation override", "named manufacturer override", "named civilization override", "technology-basis override", "explicit requested profile", "default proposed baseline"],
+    "conflictRule": "Higher-authority narrower scope wins. Conflicting lower-authority numeric values are ignored and reported, not averaged.",
+    "missingRule": "If required family or threshold data remain unresolved after authority resolution, return UNRESOLVED rather than inserting zero or the baseline value.",
+    "versionRule": "Certificates must record profileId and profileVersion; replay uses the historical version unless explicitly recertified."
+  },
+  "api": {
+    "resolver": "resolveFTLSafetyCalibrationProfile",
+    "inputs": ["requestedProfileId", "requestedProfileVersion", "family", "path", "technologyBasis", "civilization", "manufacturer", "installation", "authoritySnapshot", "namedOverrides"],
+    "outputs": ["profile", "profileIdentity", "appliedOverrides", "ignoredOverrides", "maturityModifier", "warnings", "provenance", "status"],
+    "statusValues": ["READY", "UNRESOLVED", "CONFLICT"]
+  }
+}
