@@ -1,0 +1,406 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "zwleiMurrekTransitCaseSeed",
+  "authority": {
+    "status": "MIXED",
+    "scope": "Canon-safe investigation seed for the No Return Signal Mur'rek derelict. CONFIRMED source assertions are separated from DERIVED investigation structure. No measurement value is invented and no FTL family is selected by this record.",
+    "precedence": [
+      "specific named Mur'rek vessel/class source",
+      "specific confirmed family/operator evidence",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+      "data/exo-vessel/zwlei-murrek-transit-discrimination-registry.json",
+      "data/exo-vessel/ftl-measurement-instrumentation-registry.json",
+      "data/exo-vessel/ftl-runtime-event-replay-registry.json",
+      "data/exo-vessel/ftl-evidence-instance-registry.json",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "subject": {
+    "species": "Zwlei Frog Men",
+    "vesselClass": "Mur'rek-class patrol frigate",
+    "campaignInstance": "No Return Signal derelict",
+    "sourceTerm": "bio-reactive gravitic slipstream system",
+    "consolidatedFamily": "UNRESOLVED",
+    "familyAutoSelection": false
+  },
+  "caseState": {
+    "state": "SOURCE_SEEDED__NO_FIELD_MEASUREMENTS",
+    "epoch": "E0_ARCHIVE_BASELINE",
+    "observedMeasurementsPresent": false,
+    "sourceAssertionsPresent": true,
+    "familyConclusion": "UNRESOLVED",
+    "interpretation": "The case contains named-source facts and investigation scaffolding only. It does not assert that investigators have physically measured the derelict."
+  },
+  "sourceAssertions": [
+    {
+      "assertionId": "MRK-SA-001",
+      "status": "CONFIRMED",
+      "claim": "The Mur'rek-class baseline drive is described as a bio-reactive gravitic slipstream system.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Baseline class / Drive",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May establish source-local terminology and existence of a transit-related system; may not normalize the phrase to a consolidated family."
+    },
+    {
+      "assertionId": "MRK-SA-002",
+      "status": "CONFIRMED",
+      "claim": "The Navigation Current Well encodes course solutions as moving currents whose speed, depth, and interference represent vector, gravity, and transit risk.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 02",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May constrain navigation embodiment and measurement targets; does not by itself identify the transit operator."
+    },
+    {
+      "assertionId": "MRK-SA-003",
+      "status": "CONFIRMED",
+      "claim": "The Navigation Current Well provides gravitic reference, slipstream prediction, and inertial control.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 02 / Primary systems",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May define expected reference and telemetry dependencies."
+    },
+    {
+      "assertionId": "MRK-SA-004",
+      "status": "CONFIRMED",
+      "claim": "The Sensor Choir combines electromagnetic, gravitic, chemical, acoustic, and exotic observations.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 03",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May seed expected sensor channels and provenance ancestry; channel labels alone are not operator evidence."
+    },
+    {
+      "assertionId": "MRK-SA-005",
+      "status": "CONFIRMED",
+      "claim": "The Vital Fluids / Power Manifold distributes conductive coolant, bio-reactive power fluids, nutrient media, and hydraulic control pressure.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 08",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May define power, cooling, nutrient, and hydraulic service-network priors."
+    },
+    {
+      "assertionId": "MRK-SA-006",
+      "status": "CONFIRMED",
+      "claim": "Cross-mixed vital fluids can produce corrosive electrically active foam.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 08 / Known hazard",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May establish contamination and energization hazards."
+    },
+    {
+      "assertionId": "MRK-SA-007",
+      "status": "CONFIRMED",
+      "claim": "The Forward Sensor Ampulla supports long-baseline observation, ranging, spectroscopy, and passive listening and is comparatively fragile.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 11",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May define expected forward sensing and damage-survivability concerns."
+    },
+    {
+      "assertionId": "MRK-SA-008",
+      "status": "CONFIRMED",
+      "claim": "The Gravitic Slipstream Regulator uses flexible field vanes immersed in dielectric fluid to shape inertial and gravitic conditions for maneuvering and short-range slipstream operation.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 12",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May establish machinery embodiment and test targets; the wording does not identify the consolidated FTL family."
+    },
+    {
+      "assertionId": "MRK-SA-009",
+      "status": "CONFIRMED",
+      "claim": "Asymmetric vane response can rotate the local inertial frame.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Compartment 12 / Known hazard",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "May establish abort and low-authority test constraints."
+    },
+    {
+      "assertionId": "MRK-SA-010",
+      "status": "CONFIRMED",
+      "claim": "The No Return Signal vessel is abandoned and ruined, and normal shipboard functions are not assumed available merely because hardware remains present.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Present disposition",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "Requires direct state verification before treating any subsystem as active, inert, safe, calibrated, or connected."
+    },
+    {
+      "assertionId": "MRK-SA-011",
+      "status": "CONFIRMED",
+      "claim": "Power, pressure, stored energy, munitions, biological media, and automatic isolation remain locally unknown until tested.",
+      "source": "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "sourceLocation": "Present disposition / Survey rule",
+      "evidenceClass": "NAMED_SOURCE_ASSERTION",
+      "familyDiscriminating": false,
+      "allowedUse": "Requires an unknown-state default for hazard and service-network nodes."
+    }
+  ],
+  "compartmentSeeds": [
+    {
+      "compartmentId": "MRK-C02",
+      "sourceName": "Navigation Current Well",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Gravitic reference, slipstream prediction, inertial control, and current-form course visualization.",
+      "derelictState": "Still; surviving calibration or vector state is historical residue rather than a valid course solution.",
+      "transitRelevance": "HIGH",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    },
+    {
+      "compartmentId": "MRK-C03",
+      "sourceName": "Sensor Choir Alcove",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Multichannel sensor fusion including gravitic and exotic observations.",
+      "derelictState": "Unified operation is not assumed; individual transducers may survive without coherent fusion.",
+      "transitRelevance": "HIGH",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    },
+    {
+      "compartmentId": "MRK-C08",
+      "sourceName": "Vital Fluids / Power Manifold",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Coolant, bio-reactive power fluid, nutrient media, and hydraulic control distribution.",
+      "derelictState": "Media may be stagnant, separated, leaked, or locally trapped.",
+      "transitRelevance": "HIGH",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    },
+    {
+      "compartmentId": "MRK-C09",
+      "sourceName": "Mission Planning / Ancestral Archive",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Archive access and mission simulation with ancestral records.",
+      "derelictState": "Planning functions offline; surviving records may remain evidentiary material.",
+      "transitRelevance": "MEDIUM_TO_HIGH",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    },
+    {
+      "compartmentId": "MRK-C11",
+      "sourceName": "Forward Sensor Ampulla",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Long-baseline observation, ranging, spectroscopy, and passive listening.",
+      "derelictState": "Gel and transducers may be degraded, exposed, or isolated.",
+      "transitRelevance": "HIGH",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    },
+    {
+      "compartmentId": "MRK-C12",
+      "sourceName": "Gravitic Slipstream Regulator",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Flexible field vanes in dielectric fluid shape inertial and gravitic conditions for maneuvering and short-range slipstream operation.",
+      "derelictState": "Not operational by archive description; charged, stressed, or isolated hardware must be ruled out by direct testing.",
+      "transitRelevance": "CRITICAL",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    },
+    {
+      "compartmentId": "MRK-C15",
+      "sourceName": "Bio-Reactive Power Reservoir",
+      "sourceStatus": "CONFIRMED_NAME_AND_BASELINE_FUNCTION",
+      "knownBaselineFunction": "Principal bio-reactive energy medium, reserve storage, and load leveling.",
+      "derelictState": "Unknown-energy and biological-containment space; dormancy or depletion cannot be inferred from vessel-wide ruin.",
+      "transitRelevance": "HIGH",
+      "observationState": "NOT_FIELD_SURVEYED_BY_THIS_DATASET"
+    }
+  ],
+  "instrumentInstances": [
+    {
+      "instrumentId": "MRK-I01",
+      "instrumentClass": "passive multi-channel field recorder",
+      "authority": "DERIVED_EXTERNAL_SURVEY_EQUIPMENT",
+      "purpose": "Acquire synchronized EM, thermal, gravitic, topology/Q-proxy, chemical, acoustic, and biological baseline channels.",
+      "calibrationState": "REQUIRES_CASE_CALIBRATION",
+      "referenceIndependence": "Must use an investigator-owned clock/reference independent of Mur'rek ship systems.",
+      "allowedBeforeFamilyResolution": true
+    },
+    {
+      "instrumentId": "MRK-I02",
+      "instrumentClass": "gravitimetric gradient array",
+      "authority": "DERIVED_EXTERNAL_SURVEY_EQUIPMENT",
+      "purpose": "Resolve local gradients, tidal terms, vane-induced gravitic response, and gravity-terrain correlations.",
+      "calibrationState": "REQUIRES_CASE_CALIBRATION",
+      "referenceIndependence": "Independent of Navigation Current Well gravitic reference.",
+      "allowedBeforeFamilyResolution": true
+    },
+    {
+      "instrumentId": "MRK-I03",
+      "instrumentClass": "service-network tracer",
+      "authority": "DERIVED_EXTERNAL_SURVEY_EQUIPMENT",
+      "purpose": "Trace power, dielectric, coolant, nutrient, hydraulic, timing, data, structural, and field connections without energizing unknown prime movers.",
+      "calibrationState": "PASSIVE_LIMIT_REQUIRED",
+      "referenceIndependence": "Trace injection must not depend on Mur'rek control authority.",
+      "allowedBeforeFamilyResolution": true
+    },
+    {
+      "instrumentId": "MRK-I04",
+      "instrumentClass": "reference/clock ancestry analyzer",
+      "authority": "DERIVED_EXTERNAL_SURVEY_EQUIPMENT",
+      "purpose": "Determine whether apparently independent records share one Current Well, sensor root, clock, calibration table, or archive lineage.",
+      "calibrationState": "REQUIRES_CASE_CALIBRATION",
+      "referenceIndependence": "Investigator master clock required.",
+      "allowedBeforeFamilyResolution": true
+    },
+    {
+      "instrumentId": "MRK-I05",
+      "instrumentClass": "chemical-biological residue analyzer",
+      "authority": "DERIVED_EXTERNAL_SURVEY_EQUIPMENT",
+      "purpose": "Characterize dielectric, bio-reactive power fluid, coolant, nutrient media, repair tissue, and contamination without assigning function by chemistry alone.",
+      "calibrationState": "STERILE_BASELINE_REQUIRED",
+      "referenceIndependence": "External standards required.",
+      "allowedBeforeFamilyResolution": true
+    },
+    {
+      "instrumentId": "MRK-I06",
+      "instrumentClass": "low-authority stimulus-and-response rig",
+      "authority": "DERIVED_EXTERNAL_SURVEY_EQUIPMENT",
+      "purpose": "Perform bounded MRTD-05 or MRTD-06 tests only after passive admission gates pass.",
+      "calibrationState": "LOCKED_PENDING_SAFE_ENVELOPE",
+      "referenceIndependence": "Abort authority and hazard sensing must be externally powered and independent.",
+      "allowedBeforeFamilyResolution": false
+    }
+  ],
+  "eventSeed": [
+    {
+      "eventId": "MRK-E000",
+      "eventType": "CASE_INITIALIZED",
+      "epoch": "E0_ARCHIVE_BASELINE",
+      "status": "DERIVED_RECORD_EVENT",
+      "meaning": "Create investigation state from the named derelict archive without asserting a physical survey has occurred.",
+      "provenanceRoots": ["blacklight-archive-zwlei-murrek-no-return-signal-derelict.html"],
+      "mutatesPhysicalEvidence": false
+    },
+    {
+      "eventId": "MRK-E001",
+      "eventType": "EVIDENCE_SUPERSEDED",
+      "epoch": "E0_ARCHIVE_BASELINE",
+      "status": "TEMPLATE_NOT_EXECUTED",
+      "meaning": "Reserved event form for later correction of source interpretation; inactive until an actual supersession is recorded.",
+      "provenanceRoots": [],
+      "mutatesPhysicalEvidence": false
+    }
+  ],
+  "measurementPackets": [
+    {
+      "packetId": "MRK-M000",
+      "packetType": "MEASUREMENT_PLACEHOLDER",
+      "status": "NOT_OBSERVED",
+      "observed": false,
+      "values": {},
+      "uncertainty": {
+        "random": null,
+        "calibration": null,
+        "clock": null,
+        "registration": null,
+        "damage": null,
+        "model": null,
+        "contamination": null
+      },
+      "covarianceGroup": null,
+      "interpretationBoundary": "This packet exists to make the absence of field measurements explicit. It must never be scored as evidence."
+    }
+  ],
+  "testAdmissionGates": {
+    "passiveSurvey": [
+      "external instrument calibration recorded",
+      "survey epoch opened before intervention",
+      "saturation and dynamic-range limits declared",
+      "compartment access state recorded",
+      "source assertions separated from observations"
+    ],
+    "lowAuthorityActiveTest": [
+      "passive baseline complete",
+      "vane geometry surveyed",
+      "dielectric and vital-fluid hazards bounded",
+      "independent abort authority available",
+      "safe-envelope intersection non-empty across all admissible hypotheses",
+      "protected recovery reserve excluded from test budget",
+      "hazard observability maintained on independent channels"
+    ]
+  },
+  "hypothesisLedger": {
+    "state": "CANDIDATE_SET",
+    "admissibleHypotheses": [
+      "H1_SLIPSTREAM_OPERATOR_WITH_GRAVITIC_CONTROL",
+      "H2_GRAVITIC_PLANE_OPERATOR_WITH_LOCAL_SLIPSTREAM_TERMINOLOGY",
+      "H3_HYBRID_CONTROL_ARCHITECTURE",
+      "H4_LOCAL_TRANSITIONAL_OR_SUBFTL_EFFECT"
+    ],
+    "currentSupport": {
+      "H1_SLIPSTREAM_OPERATOR_WITH_GRAVITIC_CONTROL": "NO_OPERATOR_LEVEL_MEASUREMENT_EVIDENCE",
+      "H2_GRAVITIC_PLANE_OPERATOR_WITH_LOCAL_SLIPSTREAM_TERMINOLOGY": "NO_OPERATOR_LEVEL_MEASUREMENT_EVIDENCE",
+      "H3_HYBRID_CONTROL_ARCHITECTURE": "NO_OPERATOR_LEVEL_MEASUREMENT_EVIDENCE",
+      "H4_LOCAL_TRANSITIONAL_OR_SUBFTL_EFFECT": "NO_OPERATOR_LEVEL_MEASUREMENT_EVIDENCE"
+    },
+    "promotionRule": "At least two provenance-independent operator-level discriminator groups surviving damage, detectability, covariance, and contradiction review, unless a higher-authority named source directly identifies the mechanism.",
+    "automaticPromotion": false
+  },
+  "mathematics": {
+    "sourceEvidenceWeight": "Named source assertions enter the case as authority constraints, not synthetic sensor measurements; do not assign them fabricated numerical likelihood weights.",
+    "observationWeight": "w_i = r_i * d_i * p_i * s_i only after a real observation packet exists.",
+    "negativeEvidence": "A_minus = I * V * R * B * S * (1-D); a missing marker has evidentiary force only when capability, coverage, resolution, bandwidth/dynamic range, survivability, and damage support detectability.",
+    "covariance": "Shared Current Well, Sensor Choir, clock, archive, calibration, translation, or service root creates covariance until independence is demonstrated.",
+    "safeEnvelope": "A_unknown is a subset of the intersection of safe active-test envelopes for all admissible hypotheses.",
+    "abortability": "T_abort >= t_detect + t_validate + t_command + t_actuate + t_decay + t_margin.",
+    "powerReadiness": "R_P = min(P_bio/P_req, Q_cool/Q_req, H_hyd/H_req, N_met/N_req, D_diel/D_req).",
+    "vaneAsymmetry": "epsilon_v = ||u_commanded - u_observed||_W; no universal numeric abort threshold is canonized."
+  },
+  "api": {
+    "resolver": "resolveZwleiMurrekTransitCaseSeed(context)",
+    "inputs": [
+      "named source assertions",
+      "instrument calibration records",
+      "measurement packets",
+      "runtime event ledger",
+      "compartment access state",
+      "damage model",
+      "authority mode"
+    ],
+    "outputs": [
+      "source constraints",
+      "typed compartment seeds",
+      "admissible instrument instances",
+      "event append proposals",
+      "measurement packet validation",
+      "hypothesis support inputs",
+      "covariance warnings",
+      "safe next tests",
+      "canon warnings"
+    ],
+    "familyAutoSelection": false,
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"]
+  },
+  "provenance": {
+    "sourceGraph": "Google Drive design source -> named Mur'rek archive -> Mur'rek engineering/discrimination authorities -> case seed -> future measurement/event packets -> evidence/archaeology/forensic resolvers.",
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "generationRule": "Generated records must preserve the distinction between source assertion, field observation, derived interpretation, and proposal. No generated packet may invent a measurement to satisfy a hypothesis."
+  },
+  "canonGuards": [
+    "Do not map the source phrase gravitic slipstream to a consolidated FTL family by keyword.",
+    "Do not treat source assertions as if investigators measured them on the derelict.",
+    "Do not fabricate numerical sensor values, uncertainty, calibration, timestamps, or residue strengths.",
+    "Do not infer that a documented intact-class subsystem remains operational in the derelict.",
+    "Do not infer that abandoned means unpowered, depressurized, discharged, sterile, or inert.",
+    "Do not count multiple displays sharing one sensor/reference root as independent evidence.",
+    "Do not use inaccessible volume as positive support for a preferred hypothesis.",
+    "Do not use damaged absence as hypothesis-eliminating evidence without detectability proof.",
+    "Do not promote a family from source-local terminology or one non-discriminating gravity response.",
+    "Do not energize unknown-family machinery when the common safe envelope is empty or unproven.",
+    "Do not consume protected recovery authority for information gain.",
+    "Do not treat biological healing or regrowth as recertification.",
+    "Do not convert DERIVED external survey equipment into Zwlei historical products or inventions.",
+    "Do not leak an unresolved family through player-facing compartment names or narrative labels."
+  ]
+}
