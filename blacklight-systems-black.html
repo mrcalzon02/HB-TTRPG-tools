@@ -153,11 +153,26 @@
         return false;
       };
 
-      const displayName = (path) => path
-        .split('/').pop()
+      const humanize = (value) => value
         .replace(/\.[^.]+$/, '')
         .replace(/[_-]+/g, ' ')
-        .replace(/\b\w/g, letter => letter.toUpperCase());
+        .replace(/\b\w/g, letter => letter.toUpperCase())
+        .replace(/\bApi\b/g, 'API')
+        .replace(/\bExo\b/g, 'EXO')
+        .replace(/\bFtl\b/g, 'FTL')
+        .replace(/\bJson\b/g, 'JSON')
+        .replace(/\bNrs\b/g, 'NRS')
+        .replace(/\bNpc\b/g, 'NPC')
+        .replace(/\bUi\b/g, 'UI');
+
+      const displayName = (path) => humanize(path.split('/').pop());
+
+      const parentContext = (path) => {
+        const segments = path.split('/').slice(0, -1);
+        if (!segments.length) return 'Root';
+        const meaningful = segments.filter(segment => !['docs', 'data', 'assets', 'artifacts', 'api', 'schemas'].includes(segment.toLowerCase()));
+        return humanize((meaningful.length ? meaningful : segments).slice(-2).join(' · '));
+      };
 
       const hrefFor = (path, treePaths) => {
         if (/\.md$/i.test(path)) {
@@ -188,9 +203,22 @@
           const treePaths = new Set(data.tree.filter(item => item.type === 'blob').map(item => item.path));
           const resources = data.tree
             .filter(item => item.type === 'blob' && isBlacklightResource(item.path))
-            .map(item => ({ path: item.path, name: displayName(item.path), href: hrefFor(item.path, treePaths) }))
-            .filter(item => !existingPaths.has(item.path) && !existingPaths.has(item.href))
-            .sort((a, b) => a.name.localeCompare(b.name) || a.path.localeCompare(b.path));
+            .map(item => ({ path: item.path, baseName: displayName(item.path), href: hrefFor(item.path, treePaths) }))
+            .filter(item => !existingPaths.has(item.path) && !existingPaths.has(item.href));
+
+          const nameCounts = resources.reduce((counts, item) => {
+            const key = item.baseName.toLocaleLowerCase();
+            counts.set(key, (counts.get(key) || 0) + 1);
+            return counts;
+          }, new Map());
+
+          resources.forEach(item => {
+            item.name = nameCounts.get(item.baseName.toLocaleLowerCase()) > 1
+              ? `${item.baseName} — ${parentContext(item.path)}`
+              : item.baseName;
+          });
+
+          resources.sort((a, b) => a.name.localeCompare(b.name) || a.path.localeCompare(b.path));
 
           grid.append(...resources.map(item => {
             const link = document.createElement('a');
