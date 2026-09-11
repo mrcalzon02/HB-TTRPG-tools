@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.exploration-event-test-program",
+  "title": "Black Light FTL Exploration Event, Test Program, Hazard, Abort, and Replay Registry",
+  "authority": {
+    "status": "MIXED",
+    "scope": "Defines how live exploration measurements and controlled propulsion/transit tests are planned, executed, aborted, replayed, compared, and exported into the measurement/evidence chain without promoting a hypothesis into canon or allowing a test to rewrite its own pre-test history.",
+    "sourceOrder": [
+      "named vessel / installation / manufacturer source",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/ftl-measurement-instrumentation-registry.json",
+      "data/exo-vessel/ftl-evidence-instance-registry.json",
+      "data/exo-vessel/ftl-installation-archaeology-registry.json",
+      "data/exo-vessel/ftl-forensic-identification-registry.json",
+      "BLACKLIGHT_EXO_SOURCE_AUTHORITY.md",
+      "Google Drive: The different lightspeed methods",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "eventLedger": {
+    "status": "DERIVED",
+    "immutabilityRule": "Acquisition and intervention events are append-only. A later correction may supersede an earlier interpretation or metadata binding, but it may not erase that the original observation or intervention occurred.",
+    "eventTypes": [
+      "CASE_INITIALIZED",
+      "PASSIVE_BASELINE_STARTED",
+      "PASSIVE_BASELINE_COMPLETED",
+      "INSTRUMENT_CALIBRATED",
+      "REFERENCE_SYNCHRONIZED",
+      "ACCESS_CHANGED",
+      "SAMPLE_COLLECTED",
+      "SERVICE_TRACE_PERFORMED",
+      "ARCHIVE_READ",
+      "TRANSLATION_PERFORMED",
+      "TEST_PLANNED",
+      "TEST_AUTHORIZED",
+      "TEST_STARTED",
+      "TEST_CHECKPOINT",
+      "TEST_ABORT_REQUESTED",
+      "TEST_ABORTED",
+      "TEST_COMPLETED",
+      "RECOVERY_STARTED",
+      "RECOVERY_COMPLETED",
+      "REPAIR_OR_REGROWTH",
+      "EVIDENCE_EXPORTED",
+      "EVENT_SUPERSEDED"
+    ],
+    "requiredFields": [
+      "eventId",
+      "caseId",
+      "subjectId",
+      "eventType",
+      "epochBefore",
+      "epochAfter",
+      "timeReference",
+      "spatialReference",
+      "actorOrController",
+      "instrumentRefs",
+      "inputRefs",
+      "rawOutcome",
+      "stateMutation",
+      "provenanceGroup",
+      "status"
+    ],
+    "supersessionRule": "A correction event references the event it supersedes and preserves both records. It may change interpretation, calibration binding, translation, or metadata; it may not fabricate a different acquisition history.",
+    "epochRule": "Any event capable of changing geometry, chemistry, biological viability, field state, thermal state, stored data, reference state, calibration, service continuity, or residue creates a new epoch unless explicitly proven non-mutating.",
+    "chainRule": "eventHash[n] = H(eventHash[n-1] || canonicalEvent[n]) is a DERIVED integrity mechanism suitable for detecting silent reordering or deletion. It is not setting physics."
+  },
+  "instrumentInstances": [
+    {
+      "instanceId": "example-passive-field-recorder-01",
+      "instrumentClass": "PASSIVE_MULTI_CHANNEL_FIELD_RECORDER",
+      "status": "PROPOSED",
+      "calibrationState": "UNBOUND_EXAMPLE",
+      "referenceAncestry": [],
+      "damageState": "UNRESOLVED",
+      "canonRule": "Example instance identifiers are documentation fixtures only and do not assert equipment present on any named vessel."
+    },
+    {
+      "instanceId": "example-clock-ancestry-analyzer-01",
+      "instrumentClass": "REFERENCE_AND_CLOCK_ANCESTRY_ANALYZER",
+      "status": "PROPOSED",
+      "calibrationState": "UNBOUND_EXAMPLE",
+      "referenceAncestry": [],
+      "damageState": "UNRESOLVED",
+      "canonRule": "Example instance identifiers are documentation fixtures only and do not assert equipment present on any named vessel."
+    }
+  ],
+  "testProgram": {
+    "status": "DERIVED",
+    "states": [
+      "DRAFT",
+      "PASSIVE_BASELINE_REQUIRED",
+      "HAZARD_REVIEW",
+      "AUTHORIZATION_PENDING",
+      "ARMED",
+      "RUNNING",
+      "ABORTING",
+      "RECOVERING",
+      "COMPLETED",
+      "REJECTED",
+      "QUARANTINED"
+    ],
+    "admissionRule": "A test may enter ARMED only when its purpose, expected discriminating value, baseline evidence, instrument calibration, hazard envelope, hard abort conditions, recovery reserve, contamination cost, and provenance plan are explicit.",
+    "objectiveFunction": "U_T = IG(T) / (1 + lambda_h H_T + lambda_c C_T + lambda_s S_T + lambda_d D_T + lambda_r R_T), where information gain is balanced against personnel hazard, evidentiary contamination, emitted signature, destructive cost, and recovery burden. Coefficients are scenario parameters, not universal canon constants.",
+    "requiredPlanFields": [
+      "testId",
+      "caseId",
+      "question",
+      "hypothesesAffected",
+      "expectedObservables",
+      "instrumentPlan",
+      "baselineRefs",
+      "stimulusEnvelope",
+      "hazardEnvelope",
+      "hardAbortConditions",
+      "recoveryPlan",
+      "protectedReserve",
+      "contaminationForecast",
+      "signatureForecast",
+      "authorityMode",
+      "provenancePlan"
+    ],
+    "executionRule": "The executing controller may reduce stimulus or abort but may not silently expand the authorized envelope. A larger or qualitatively different test requires a new authorization event.",
+    "completionRule": "Completion requires post-test measurements, recovery-state verification, event closure, contamination annotation, pre/post comparison, and export of new observation packets. 'Test finished' is not equivalent to 'system safe'.",
+    "reversibilityRule": "Prefer tests whose expected state transition can be returned to the pre-test admissible set. Irreversible tests require explicit evidence value and cannot be the default response to uncertainty."
+  },
+  "hazardModel": {
+    "status": "DERIVED",
+    "hazardVector": "h = [personnel, structural, thermal, field, gravitational, topology, reference, biological, contamination, evidence-loss, signature, infrastructure]",
+    "riskExpression": "R_T = sum_i P_i * C_i * X_i, where P_i is bounded likelihood, C_i consequence, and X_i exposure/recoverability modifier. Unknown terms remain UNKNOWN rather than numerically replaced with zero.",
+    "unknownHazardRule": "An unresolved hazard dimension cannot be treated as safe. The planner either constrains the test so that the unknown dimension is not energized, obtains additional passive evidence, or rejects the test.",
+    "contaminationRule": "Evidence contamination is itself a hazard. Heating, energization, cutting, translation rewrites, nutrient injection, regrowth, clock synchronization, or active field probing can destroy the evidentiary value of pre-test residue.",
+    "familyUnknownRule": "When transit family is unresolved, the active-test envelope is the intersection of safe envelopes supported by all still-admissible families plus installation-specific evidence. If that intersection is empty, active family-discriminating testing is not admitted."
+  },
+  "abortModel": {
+    "status": "DERIVED",
+    "abortEnvelope": "A(t) is the set of states from which commanded shutdown plus passive decay/recovery is expected to remain inside structural, thermal, field, biological, and evidence-preservation limits.",
+    "hardAbortRule": "If any hard limit is crossed, or if observability needed to verify a hard limit is lost, the controller enters ABORTING unless abort itself is proven more hazardous than continuing to a designated recovery point.",
+    "latencyRule": "T_abort_required >= t_detect + t_validate + t_command + t_actuate + t_decay + t_margin. Tests whose physical growth time can outrun the verified abort horizon are not admitted at that stimulus level.",
+    "recoveryReserveRule": "Protected recovery reserve may not be consumed to improve information gain, test duration, route quality, or apparent completion. Reserve belongs to termination and recovery first.",
+    "sensorLossRule": "Loss, clipping, desynchronization, or saturation of the sensor channel used to guard a hazard threshold is itself an abort condition unless a validated independent guard remains.",
+    "manualAuthorityRule": "Human or supervisory abort authority is independent of the hypothesis optimizer; the system may recommend continuation but cannot veto a hard safety abort."
+  },
+  "comparisonModel": {
+    "status": "DERIVED",
+    "prePostRule": "Pre-test and post-test observations remain separate packets bound to distinct epochs and intervention history.",
+    "differenceExpression": "Delta y = y_post - M(y_pre, Delta t, environment), where M predicts expected passive evolution between epochs. A raw difference is not automatically caused by the test.",
+    "covarianceRule": "Sigma_Delta = Sigma_post + J_M Sigma_pre J_M^T - 2 Cov(post, M(pre)) where shared references or processing create correlation. Independence must not be assumed merely because timestamps differ.",
+    "causalityRule": "A change supports test causality only after competing environmental drift, repair/regrowth, clock change, contamination, sensor replacement, and unrelated machinery state changes are represented.",
+    "nullResultRule": "A null result is informative only when the expected response was inside instrument resolution and dynamic range and the test actually reached the authorized stimulus state."
+  },
+  "replayModel": {
+    "status": "DERIVED",
+    "stateTransition": "S[n+1] = F(S[n], E[n], A[n]), where S is case state, E immutable event content, and A the authority/provenance snapshot applicable at that event.",
+    "determinismRule": "Given the same initial case snapshot, event sequence, resolver version, authority snapshot, and deterministic seeds, replay must reproduce the same evidence-instance state. Non-deterministic inference outputs must be persisted as event payloads rather than regenerated silently.",
+    "correctionRule": "Corrections append superseding events and replay forward. Historical raw packets are never rewritten in place merely because a later interpretation improved.",
+    "branchRule": "Counterfactual or planning branches are explicitly SANDBOX and cannot be merged into the authoritative event chain without a real execution event.",
+    "generatorRule": "Narrative generation may consume replay state but must not reveal later events, hidden family labels, or superseded conclusions to an earlier epoch."
+  },
+  "familySpecificSafeguards": {
+    "metric-compression": [
+      "Guard local metric strain, curvature, tidal load, field asymmetry, and unwind reserve independently.",
+      "Abort planning must account for field decay/unwind rather than assuming instantaneous stop.",
+      "Gravity-well proximity can increase field burden and calculation error; no universal coefficient is asserted."
+    ],
+    "gravitational-plane": [
+      "Map local gradient tensor and shear forks before coupling tests.",
+      "A fork or rapidly changing gravitational plane can create destructive divergent load paths.",
+      "Recoupling/de-transit margin must exist before any plane-riding excitation is admitted."
+    ],
+    "slipstream-shear": [
+      "Verify boundary adhesion coverage, environmental Q-weather proxy, detachment margin, and wake contamination risk.",
+      "The test must preserve a verified detachment path before increasing coupling authority.",
+      "Active probing may overwrite weak boundary residue and must be epoch-separated."
+    ],
+    "q-lattice": [
+      "Treat address, epoch, and clock ancestry as hard test dependencies rather than metadata.",
+      "Do not energize translation authority on an unverified or multiply aliased address state.",
+      "Rejection/recovery behavior must be observed at low authority before higher-energy testing."
+    ],
+    "n-manifold": [
+      "Guard route-state inference, embedding validity, return-map conditioning, and re-embedding reserve separately.",
+      "A test that opens access to a hidden-state solution without verified return authority is inadmissible.",
+      "Tomography residuals below model resolution remain unresolved rather than absent."
+    ],
+    "fold-jump": [
+      "Keep all tests below hard commit unless the destination proof, protected-volume coverage, recovery reserve, and authorization chain are complete.",
+      "Endpoint covariance and topology-solution bifurcation are independent hazards.",
+      "Once a real commit boundary is crossed, invented post-commit steering is forbidden."
+    ],
+    "wormhole-gate": [
+      "Guard paired-mouth synchronization, throat margin, anchoring, mass flux, chronology protection, and closure reserve independently.",
+      "Single-mouth observations cannot certify pair synchronization.",
+      "Traffic scheduling cannot trade away chronology or closure hard limits."
+    ],
+    "phase-displacement": [
+      "Verify whole-object coverage, target-state compatibility, continuity invariants, target authorization, and reconciliation reserve independently.",
+      "Engineering continuity certification must not be reported as metaphysical proof of identity.",
+      "Do not allow a target alias or occupied target to be outweighed by efficiency scoring."
+    ]
+  },
+  "scalingBehavior": {
+    "status": "DERIVED",
+    "principle": "Exploration and test burden scales with both machine extent and causal dependency count, not vessel mass alone.",
+    "measurementScaling": "N_obs grows with spatial coverage, channel count, resolution, transient bandwidth, and number of independently guarded hazard dimensions.",
+    "abortScaling": "Larger installations can increase t_detect, t_command, t_actuate, and stored field/thermal energy, so safe test authority may scale sublinearly even when prime-mover power scales upward.",
+    "networkScaling": "Distributed gate, fleet, biological, or whole-hull systems require synchronization and provenance across nodes; node count alone is not redundancy if nodes share one reference or controller.",
+    "infrastructureScaling": "External laboratories, clean clocks, long-baseline arrays, prepared gates, or range infrastructure may improve observability and recovery, but their absence cannot be replaced by generator certainty."
+  },
+  "powerNavigationControlMaintenanceSignatureInfrastructure": {
+    "power": "Test power is separately metered from recovery reserve and observation power. Brownout or bus contamination during a test invalidates any claim that assumes the commanded waveform was actually delivered.",
+    "navigation": "Navigation references, endpoint models, gravity maps, clocks, address roots, and target references enter the event ledger as dependencies with ancestry and validity epochs.",
+    "control": "The test controller is envelope-limited, checkpointed, and unable to silently increase stimulus beyond authorization. Hard abort paths remain independent where practical.",
+    "maintenance": "Instrument replacement, recalibration, tissue repair, field-former regrowth, clock replacement, software/lexicon changes, and rerouted services create new calibration or installation epochs.",
+    "signature": "Active testing can emit EM, thermal, gravitational, topology, Q-domain, biological, chemical, wake, traffic, or recovery signatures. Signature cost is part of planning, especially for clandestine or unknown installations.",
+    "failure": "Test failures are classified by initiating cause, detection failure, control response, abort response, recovery response, evidence contamination, and remaining uncertainty rather than by generic 'overload'.",
+    "infrastructure": "Prepared test ranges provide exclusion volume, independent clocks, external power isolation, remote shutdown, long-baseline sensors, casualty containment, and recovery assets. Unprepared field investigation uses correspondingly smaller admissible envelopes."
+  },
+  "practicalEquipment": [
+    {"manualId": "ET-01", "name": "Immutable Event Ledger Initialization", "purpose": "Create the case event chain, authority snapshot, clock/reference roots, and epoch zero before intervention."},
+    {"manualId": "ET-02", "name": "Transit Test Plan Admission", "purpose": "Convert an engineering question into an evidence-valued test with explicit hazards, abort conditions, contamination cost, reserve, and provenance."},
+    {"manualId": "ET-03", "name": "Abort Envelope Certification", "purpose": "Prove that sensing, command latency, actuator authority, decay, and recovery reserve can terminate the proposed test before hard limits are crossed."},
+    {"manualId": "ET-04", "name": "Instrument Instance Calibration Record", "purpose": "Bind the exact hardware or biological sensor instance, calibration state, reference ancestry, damage state, software/decoder version, and usable dynamic range to the event chain."},
+    {"manualId": "ET-05", "name": "Pre/Post State Comparison", "purpose": "Separate true test response from drift, regrowth, contamination, clock changes, and shared processing covariance."},
+    {"manualId": "ET-06", "name": "Test Abort and Recovery", "purpose": "Record the initiating threshold, detection channel, command latency, shutdown path, residual state, recovery consumption, and post-abort evidence quality."},
+    {"manualId": "ET-07", "name": "Replay and Supersession Audit", "purpose": "Reconstruct case state from immutable events and verify that corrections changed interpretation without rewriting acquisition history."},
+    {"manualId": "ET-08", "name": "Forensic Export Gate", "purpose": "Export only epoch-valid, calibration-bound, provenance-annotated packets to the evidence and family-classification layers."}
+  ],
+  "education": {
+    "status": "DERIVED",
+    "undergraduateTopics": [
+      "event sourcing and scientific chain of custody",
+      "measurement versus intervention",
+      "hazard envelopes and fail-safe design",
+      "abort latency and stored-energy decay",
+      "pre/post experimental design",
+      "covariance and shared-source evidence",
+      "gravity-sensitive transit safety",
+      "provenance-preserving replay"
+    ],
+    "advancedTopics": [
+      "partially observed state estimation during active exotic-field tests",
+      "optimal experiment design under evidence-contamination constraints",
+      "reachability analysis for abort envelopes",
+      "causal inference with intervention-induced sensor drift",
+      "distributed reference ancestry and common-mode failure",
+      "safe adaptive testing when transit family is unresolved"
+    ],
+    "thesisDirections": [
+      "robust test scheduling under family uncertainty",
+      "formal reachability proofs for multi-physics abort envelopes",
+      "covariance-aware evidence replay across damaged distributed installations",
+      "information gain per unit evidence destruction",
+      "gravity-field forecast horizons for emergency de-transit planning"
+    ]
+  },
+  "proposedDevelopmentArtifacts": [
+    {
+      "status": "PROPOSED",
+      "artifactClass": "PATENT_STYLE",
+      "title": "Reference-Ancestry-Isolated Abort Controller",
+      "claim": "A transit test controller whose hard abort channel uses an independently clocked and calibrated sensor path so that the same reference failure cannot simultaneously corrupt the experiment estimate and suppress shutdown."
+    },
+    {
+      "status": "PROPOSED",
+      "artifactClass": "PATENT_STYLE",
+      "title": "Evidence-Preserving Low-Authority Excitation Sequencer",
+      "claim": "A stimulus controller that maximizes discriminating information while constraining thermal, field, biological, and residue contamination against a recorded pre-test evidentiary budget."
+    },
+    {
+      "status": "PROPOSED",
+      "artifactClass": "TEACHING_ACCIDENT",
+      "title": "The Silent Saturation Incident",
+      "claim": "A training case in which a test appears safe because the primary guard channel clips before the hazard excursion; the event is used to teach that loss of hazard observability is itself an abort trigger."
+    }
+  ],
+  "api": {
+    "planner": "planTransitExplorationTest(context)",
+    "executor": "applyTransitExplorationEvent(context, event)",
+    "replayer": "replayTransitExplorationCase(context)",
+    "comparator": "compareTransitTestEpochs(context, preEpoch, postEpoch)",
+    "exporter": "exportTransitEvidencePackets(context)",
+    "familyAutoSelection": false,
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"],
+    "requiredPlannerOutputs": ["admissionState", "testPlan", "hazardEnvelope", "abortEnvelope", "instrumentPlan", "expectedInformationGain", "contaminationForecast", "canonWarnings"],
+    "requiredExecutorOutputs": ["eventRecord", "newEpoch", "stateMutation", "observationPackets", "abortState", "recoveryState", "provenanceUpdates", "canonWarnings"],
+    "requiredReplayOutputs": ["reconstructedCaseState", "eventIntegrityWarnings", "supersessionMap", "authoritySnapshotHistory", "evidenceInstanceState"]
+  },
+  "provenance": {
+    "requiredChain": [
+      "source authority snapshot",
+      "test question and authorization",
+      "instrument instance and calibration",
+      "immutable execution event",
+      "raw observation packet",
+      "normalization / comparison transform",
+      "evidence-instance admission",
+      "forensic interpretation"
+    ],
+    "independenceRule": "Repeated measurements, multiple displays, copied logs, or parallel analyses sharing the same physical sensor, clock, archive, calibration, or model ancestor do not become independent merely because they produce separate event records.",
+    "generatorRule": "Generated manuals, teaching examples, patent concepts, test plans, and simulated events remain DERIVED or PROPOSED. Repetition, realism, or runtime use does not promote them to setting-wide CONFIRMED canon.",
+    "historicalPromotionRule": "A generated test or accident becomes historical setting canon only through an explicit higher-authority source update."
+  },
+  "canonGuards": [
+    "Preserve named and published canon over generated test logic.",
+    "Do not select an FTL family merely because one planned test targets that family.",
+    "Do not treat biological, crystalline, aquatic, cryogenic, gas-giant, terrestrial, or field-mediated embodiment as race ownership evidence.",
+    "Do not infer absence from a saturated, clipped, uncalibrated, damaged, or out-of-coverage guard channel.",
+    "Do not let an active test rewrite the pre-test evidence epoch.",
+    "Do not consume protected recovery reserve for additional information gain.",
+    "Do not invent exact universal gravity coefficients, safe radii, abort times, range constants, or failure probabilities.",
+    "Do not merge Q-domain terminology with Phase Displacement without explicit authority.",
+    "Do not count shared-source measurements as independent confirmations.",
+    "Do not reveal later replay knowledge or hidden family labels in earlier narrative epochs.",
+    "Do not report test completion as safe return to service without recovery verification.",
+    "Do not convert a derived equation, training accident, equipment class, or patent example into historical canon."
+  ]
+}
