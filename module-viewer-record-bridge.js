@@ -3,7 +3,7 @@
 
   function esc(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'
     }[char]));
   }
 
@@ -264,6 +264,7 @@
   });
 
   document.addEventListener('module-viewer-module-changed', event => {
+    latestState = event.detail?.editorState || event.detail?.module?.mapEditorState || null;
     setTimeout(()=>renderPersistenceStatus(event.detail),0);
   });
 
