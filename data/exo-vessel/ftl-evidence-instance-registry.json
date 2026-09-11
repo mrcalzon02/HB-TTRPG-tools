@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.evidence-instance",
+  "title": "Black Light FTL Evidence Instance, Exploration, and Forensic Handoff Registry",
+  "authority": {
+    "status": "MIXED",
+    "scope": "Machine-readable evidence-instance authority for propulsion/transit archaeology. It records what was observed, where it was observed, how damage and provenance affect interpretation, and what may be exported to archaeology/forensic resolvers without inventing a transit family.",
+    "sourceOrder": [
+      "named vessel / installation / manufacturer source",
+      "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
+      "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/ftl-installation-archaeology-registry.json",
+      "data/exo-vessel/ftl-forensic-identification-registry.json",
+      "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_ARCHAEOLOGY_FIELD_MANUAL.md",
+      "Google Drive: The different lightspeed methods",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "designSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    }
+  },
+  "subject": {
+    "subjectId": "NRS-ARNOCK-DERELICT-001",
+    "name": "Unidentified Ar'nock Derelict",
+    "caseState": "SURVEY_INITIALIZED__FTL_FAMILY_UNRESOLVED",
+    "familyAssignment": null,
+    "sourceStatus": "MIXED",
+    "confirmedFacts": [
+      "The subject is an unidentified damaged Ar'nock vessel stranded in deep space.",
+      "The operatives awakened in a biological fabrication and medical compartment aboard the vessel.",
+      "The vessel contains biological printers, medical systems, cultivated computation, environmental controls, storage, fabrication feedstock, damaged networks, and inaccessible compartments.",
+      "The vessel has no immediately readable name, registry, destination, or complete surviving historical explanation.",
+      "Ar'nock machinery includes biological fabrication, cultivated neural computation, flexible interfaces, vibration-based controls, and unfamiliar identity controls.",
+      "No surviving authority currently identifies the vessel's FTL family."
+    ]
+  },
+  "compartments": [
+    {
+      "compartmentId": "ARK-C000",
+      "observedLabel": "biological fabrication and medical compartment",
+      "labelStatus": "CONFIRMED",
+      "accessState": "DIRECT",
+      "damageState": "DEGRADED",
+      "geometry": {
+        "status": "UNRESOLVED",
+        "shape": null,
+        "dimensions": null,
+        "coordinateFrame": "UNMAPPED",
+        "notes": "Existence and function class are confirmed by the foundation archive; exact geometry is not established by that source."
+      },
+      "functionalHypotheses": [
+        {"function": "biological fabrication", "status": "CONFIRMED"},
+        {"function": "medical support", "status": "CONFIRMED"},
+        {"function": "transit machinery", "status": "UNRESOLVED"}
+      ],
+      "machineryObjects": [
+        {"objectClass": "biological printer", "status": "CONFIRMED", "count": null, "transitRelevance": "NONE_ESTABLISHED"},
+        {"objectClass": "medical system", "status": "CONFIRMED", "count": null, "transitRelevance": "NONE_ESTABLISHED"}
+      ],
+      "serviceInterfaces": [],
+      "residueObservations": [],
+      "archiveObjects": [],
+      "instrumentCoverage": [],
+      "provenanceRefs": ["foundation-lore.json#blacklight-continuum-overview", "foundation-lore.json#arnock-derelict"],
+      "unknowns": [
+        "exact dimensions and deck position",
+        "service-network topology",
+        "relationship to propulsion/transit installation",
+        "pre-accident configuration"
+      ]
+    }
+  ],
+  "serviceEdges": [],
+  "observations": [
+    {
+      "observationId": "ARK-O001",
+      "channel": "ARCHIVE_TELEMETRY",
+      "spatialRef": "VESSEL_GLOBAL",
+      "statement": "The vessel contains damaged networks and cultivated computation.",
+      "status": "CONFIRMED",
+      "reliability": 0.85,
+      "detectability": 1.0,
+      "provenanceGroup": "FOUNDATION_ARCHIVE_ARN_DERELICT",
+      "damageContext": "Networks are explicitly damaged; surviving topology is not assumed complete.",
+      "familyLikelihoodVector": {},
+      "contradictions": [],
+      "interpretation": "Supports a need for damage-aware dependency tracing; does not discriminate among FTL families."
+    },
+    {
+      "observationId": "ARK-O002",
+      "channel": "CHEMICAL_BIOLOGICAL",
+      "spatialRef": "VESSEL_GLOBAL",
+      "statement": "Ar'nock vessel technology includes biological fabrication and cultivated neural computation.",
+      "status": "CONFIRMED",
+      "reliability": 0.8,
+      "detectability": 1.0,
+      "provenanceGroup": "FOUNDATION_ARCHIVE_ARN_SPECIES",
+      "damageContext": "Species/civilization engineering basis is confirmed at broad scope; installation-specific transit implementation remains unknown.",
+      "familyLikelihoodVector": {},
+      "contradictions": [],
+      "interpretation": "Constrains machinery embodiment but cannot select a transit family."
+    },
+    {
+      "observationId": "ARK-O003",
+      "channel": "GEOMETRY",
+      "spatialRef": "VESSEL_GLOBAL",
+      "statement": "Inaccessible compartments exist aboard the derelict.",
+      "status": "CONFIRMED",
+      "reliability": 0.9,
+      "detectability": 1.0,
+      "provenanceGroup": "FOUNDATION_ARCHIVE_ARN_DERELICT",
+      "damageContext": "Contents, number, dimensions, and functions of inaccessible compartments are unresolved.",
+      "familyLikelihoodVector": {},
+      "contradictions": [],
+      "interpretation": "Creates explicit unknown volume; it is not positive evidence for any missing transit component."
+    },
+    {
+      "observationId": "ARK-O004",
+      "channel": "ARCHIVE_TELEMETRY",
+      "spatialRef": "VESSEL_GLOBAL",
+      "statement": "No immediately readable vessel name, registry, destination, or complete historical explanation is available.",
+      "status": "CONFIRMED",
+      "reliability": 0.9,
+      "detectability": 1.0,
+      "provenanceGroup": "FOUNDATION_ARCHIVE_ARN_DERELICT",
+      "damageContext": "Absence is limited to immediately readable information; it does not prove records never existed.",
+      "familyLikelihoodVector": {},
+      "contradictions": [],
+      "interpretation": "Prevents identity, manufacturer, mission, and transit-family attribution from metadata alone."
+    }
+  ],
+  "unknownVolumes": [
+    {
+      "volumeId": "ARK-U001",
+      "boundaryState": "MULTIPLE_INACCESSIBLE_COMPARTMENTS_CONFIRMED__INDIVIDUAL_BOUNDARIES_UNMAPPED",
+      "reasonUnknown": "The foundation archive establishes inaccessible compartments but does not establish their count, positions, contents, geometry, or surviving services.",
+      "allowedInference": "UNCERTAINTY_ONLY",
+      "provenanceRefs": ["foundation-lore.json#arnock-derelict"],
+      "forbiddenUses": [
+        "placing a preferred FTL component inside the volume as observed fact",
+        "counting the volume as support for a family hypothesis",
+        "treating absent survey evidence inside the volume as negative evidence"
+      ]
+    }
+  ],
+  "telemetryFragments": [],
+  "interventions": [],
+  "evidenceVocabulary": {
+    "status": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"],
+    "observationLifecycle": ["OBSERVED_RAW", "NORMALIZED", "DEPENDENCY_TRACED", "DAMAGE_ADJUSTED", "FUNCTION_INTERPRETED", "FORENSIC_EXPORTED", "SUPERSEDED"],
+    "translationState": ["RAW", "PARTIAL", "SEMANTIC_ONLY", "TECHNICAL", "VERIFIED", "DISPUTED", "UNREADABLE"],
+    "clockState": ["SYNCHRONIZED", "OFFSET_ESTIMATED", "RELATIVE_ORDER_ONLY", "CORRUPTED", "UNKNOWN"],
+    "edgeObservationStatus": ["OBSERVED", "TRACED", "DERIVED", "PROPOSED", "UNKNOWN"],
+    "edgeTypes": ["STRUCTURAL", "POWER", "THERMAL", "FLUIDIC", "NUTRIENT", "DATA", "TIMING", "FIELD", "MAINTENANCE", "CREW_ACCESS", "CARGO", "EXTERNAL"]
+  },
+  "mathematics": {
+    "observationWeight": "W_o = R_o * D_o * P_o * S_o, where reliability, damage-adjusted detectability, provenance independence, and spatial specificity remain separately auditable in [0,1].",
+    "negativeEvidenceAdmissibility": "A^- = I * V * S * (1-D). Absence is family-discriminating only when instrument capability I, observed coverage V, expected marker survivability S, and non-destructive survival fraction (1-D) make the marker reasonably observable.",
+    "provenanceIndependence": "P_o = 1 / n_a for observations sharing one ultimate source ancestor unless a stronger correlation model is available. Repeated screens or translations do not multiply evidence.",
+    "compartmentCompleteness": "C_c = sum_k w_k q_k / sum_k w_k for measured geometry, service, residue, archive, damage, and access dimensions. C_c describes survey completeness, not confidence in a functional label.",
+    "familyExportRule": "E_f = {channel, statement, W_o, provenanceGroup, spatialRef, damageContext, familyLikelihoodVector, contradictions, sourceStatus}. Only resolveTransitForensics() may promote a family hypothesis.",
+    "serviceContinuity": "Q_e = O_e * S_e * T_e, where observation confidence O, survival estimate S, and trace completeness T determine whether a service edge is usable in dependency analysis.",
+    "translationConfidence": "C_tr = C_lex * C_sem * C_clock * C_context. Translation confidence cannot exceed the weakest required semantic/clock context for the claim being made."
+  },
+  "generationRules": {
+    "compartmentCreation": [
+      "Create a compartment instance only when a source, observation, or explicit scenario seed establishes a spatial volume.",
+      "Use neutral IDs before functional names unless a named source supplies the function.",
+      "Unknown geometry remains null/UNRESOLVED rather than being filled for presentation convenience.",
+      "A machinery object inherits the status of the observation that establishes it, not the confidence of a later functional hypothesis."
+    ],
+    "serviceNetwork": [
+      "Never create a service edge because two rooms are adjacent in a map.",
+      "Observed, traced, derived, and proposed edges must remain distinguishable.",
+      "Destroyed or interrupted edges retain their former hypothesis only when evidence supports that history.",
+      "Power, thermal, nutrient, timing, data, field, structural, and maintenance layers remain separate."
+    ],
+    "telemetry": [
+      "Preserve raw text or signal summary separately from translation and interpretation.",
+      "Every translated fragment records its ultimate source node and derivative ancestry.",
+      "Clock uncertainty is independent of semantic translation confidence.",
+      "A technical noun resembling a known FTL term cannot establish family identity without operator-consistent evidence."
+    ],
+    "progressiveDisclosure": [
+      "Player-facing descriptions may reveal observations that have been earned without revealing GM-only family rankings.",
+      "A CANDIDATE_SET may be described through observed machinery and signatures without naming a preferred family.",
+      "Generated room titles must not leak a family classification that the evidence state has not promoted."
+    ]
+  },
+  "resolverContract": {
+    "resolver": "resolveTransitEvidenceInstance",
+    "archaeologyResolver": "resolveTransitInstallationArchaeology",
+    "forensicResolver": "resolveTransitForensics",
+    "inputs": [
+      "subjectAuthoritySnapshot",
+      "newObservations",
+      "compartmentUpdates",
+      "serviceTraceUpdates",
+      "telemetryFragments",
+      "instrumentCapabilities",
+      "damageModel",
+      "interventions",
+      "authorityMode"
+    ],
+    "outputs": [
+      "normalizedEvidenceInstance",
+      "archaeologyPacket",
+      "forensicEvidenceExports",
+      "unknownVolumes",
+      "provenanceGraph",
+      "contaminationWarnings",
+      "disclosureView",
+      "canonWarnings"
+    ],
+    "familyAutoSelection": false,
+    "authorityModes": ["AUTHORITY_ONLY", "LABELED_DERIVATION", "LABELED_PROPOSAL"],
+    "mutationRule": "Every intervention that can change geometry, chemistry, biological viability, field residue, data state, or service topology must create an intervention record before post-action evidence is admitted."
+  },
+  "provenance": {
+    "sourceGraph": [
+      "foundation-lore.json#blacklight-continuum-overview -> confirmed awakening compartment and campaign situation",
+      "foundation-lore.json#arnock-derelict -> confirmed vessel condition, known system classes, damaged networks, inaccessible compartments, missing readable identity/history",
+      "foundation-lore.json#arnock-species -> confirmed broad machinery basis and interface constraints",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md -> family/operator boundaries and source precedence",
+      "ftl-installation-archaeology-registry.json -> compartment/dependency/damage evidence semantics",
+      "ftl-forensic-identification-registry.json -> family evidence and promotion semantics",
+      "The different lightspeed methods -> family-specific hazards, safety margins, sensing, mathematics, and education requirements",
+      "ftl-evidence-instance-registry.json -> normalized progressive exploration record"
+    ],
+    "designDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "designDocumentRevision": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "generationRule": "Generated evidence may specialize a scenario instance but may not promote DERIVED or PROPOSED content into setting canon. Every externally asserted claim retains source, status, transform, and ancestry."
+  },
+  "canonGuards": [
+    "The Ar'nock derelict FTL family remains UNRESOLVED.",
+    "Do not infer a transit family from biological construction, cultivated neural computation, flexible interfaces, vibration controls, or unfamiliar identity systems.",
+    "Do not treat Q-MAP as Quantum Phase Displacement unless a higher authority explicitly connects them.",
+    "Do not turn inaccessible volume into positive evidence for a missing component.",
+    "Do not turn an unobserved service edge into an observed one because it would make an installation diagram cleaner.",
+    "Do not invent exact compartment geometry, deck location, machinery count, capacity, Path level, T-tier, range, speed, manufacturer, inventor, mission, or date from the current foundation archive.",
+    "Do not count multiple displays or translated derivatives of one source node as independent evidence.",
+    "Do not use absence as contradiction without damage-adjusted detectability.",
+    "Do not erase investigator contamination, cutting, energization, healing, regrowth, relocation, or repair from evidence ancestry.",
+    "Do not equate a functional room hypothesis with historical room naming.",
+    "Do not allow player-facing prose to reveal a family conclusion that the authoritative evidence state has not earned.",
+    "Do not energize unknown machinery to commit-capable authority solely to improve classification.",
+    "Do not allow generated numeric coefficients to become setting-wide constants unless separately adopted as canon.",
+    "Do not let a later convenience description overwrite a raw observation; preserve both and link the transform."
+  ]
+}
