@@ -182,12 +182,15 @@
     const lengthM=magnitude(subtract(end,start));
     if(!(lengthM>0))return unresolved('Route endpoints collapse to the same physical position.',registry,context);
 
-    const sampleCount=clamp(Math.trunc(Number(context.sampleCount)||Number(registry.samplingPolicy?.defaultSampleCount)||65),Number(registry.samplingPolicy?.minimumSampleCount)||9,Number(registry.samplingPolicy?.maximumSampleCount)||1024);
+    const minimumSamples=Number(registry.samplingPolicy?.minimumSampleCount)||9;
+    const maximumSamples=Number(registry.samplingPolicy?.maximumSampleCount)||1024;
+    const sampleCount=clamp(Math.trunc(Number(context.sampleCount)||Number(registry.samplingPolicy?.defaultSampleCount)||65),minimumSamples,maximumSamples);
     const endpointGuardM=finite(context.endpointGuardM)?Math.max(0,Number(context.endpointGuardM)):0;
     const guardFraction=endpointGuardM/lengthM;
     if(guardFraction>=0.5)return unresolved('Endpoint guard consumes the entire route; no interior physical path remains.',registry,{...context,referenceFrame:'approximate heliocentric J2000 equatorial Cartesian'});
     const strategy=context.strategy||registry.samplingPolicy?.defaultStrategy||'ENDPOINT_CLUSTERED_COSINE';
-    const fractions=Array.isArray(context.fractions)&&context.fractions.length
+    const callerFractions=Array.isArray(context.fractions)&&context.fractions.length>0;
+    const fractions=callerFractions
       ?unique(context.fractions.map(Number).filter(value=>value>guardFraction&&value<1-guardFraction)).sort((a,b)=>a-b)
       :cosineFractions(sampleCount,guardFraction);
     if(fractions.length<3)return unresolved('At least three interior path fractions are required.',registry,context);
@@ -208,8 +211,10 @@
     const maxDepth=clamp(Math.trunc(Number(context.maximumRefinementDepth)||Number(refinement.maximumRefinementDepth)||5),0,8);
     if(refinementEnabled&&maxDepth>0){
       for(let depth=0;depth<maxDepth;depth+=1){
+        const remaining=maximumSamples-samples.length;
+        if(remaining<=0)break;
         const additions=[];
-        for(let index=0;index<samples.length-1;index+=1){
+        for(let index=0;index<samples.length-1&&additions.length<remaining;index+=1){
           const left=samples[index],right=samples[index+1];
           if(intervalNeedsRefinement(left,right,tolerance,directionTolerance)){
             const mid=(left.fraction+right.fraction)/2;
@@ -218,10 +223,6 @@
         }
         if(!additions.length)break;
         samples=[...samples,...additions].sort((a,b)=>a.fraction-b.fraction);
-        if(samples.length>=Number(registry.samplingPolicy?.maximumSampleCount||1024)){
-          samples=samples.slice(0,Number(registry.samplingPolicy?.maximumSampleCount||1024));
-          break;
-        }
       }
     }
     samples.forEach((sample,index)=>{sample.index=index;});
@@ -242,7 +243,7 @@
         from:{seed:fromRecord.seed,name:fromRecord.name},to:{seed:toRecord.seed,name:toRecord.name},
         referenceFrame,lengthM,epoch:context.epoch||null,authorityVersion:authority.version
       },
-      sampling:{strategy:context.fractions?'CALLER_SUPPLIED':strategy,sampleCount:samples.length,requestedSampleCount:fractions.length,endpointGuardM,fractions:samples.map(sample=>sample.fraction),adaptiveRefinement:refinementEnabled,relativeMetricTolerance:tolerance,directionChangeRad:directionTolerance,maxRefinementDepth:maxDepth},
+      sampling:{strategy:callerFractions?'CALLER_SUPPLIED':strategy,sampleCount:samples.length,requestedSampleCount:fractions.length,endpointGuardM,fractions:samples.map(sample=>sample.fraction),adaptiveRefinement:refinementEnabled,relativeMetricTolerance:tolerance,directionChangeRad:directionTolerance,maxRefinementDepth:maxDepth},
       samples,
       extrema:buildExtrema(samples),
       uncertainty:context.uncertainty||null,
