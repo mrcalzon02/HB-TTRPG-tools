@@ -22,6 +22,29 @@
     return window.getCurrentModuleViewerModule?.().module || null;
   }
 
+  function moduleFilename(module){
+    const base = String(module?.id || module?.title || 'session-module')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'') || 'session-module';
+    return `${base}.json`;
+  }
+
+  function exportSessionModule(){
+    const state = window.getCurrentModuleViewerModule?.() || {};
+    if(!String(state.path || '').startsWith('memory:') || !state.module) return;
+    const blob = new Blob([JSON.stringify(state.module,null,2)],{type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = moduleFilename(state.module);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
   function renderPersistenceStatus(detail){
     const root = document.getElementById('module-viewer-root');
     const toolbar = root?.querySelector('.module-viewer-toolbar');
@@ -44,6 +67,19 @@
     status.title = inMemory
       ? 'This module exists only in the current browser session until you export or otherwise persist it.'
       : 'This module was loaded from the project module index rather than created only in this browser session.';
+
+    let exportButton = toolbar.querySelector('#module-session-export');
+    if(!exportButton){
+      exportButton = document.createElement('button');
+      exportButton.id = 'module-session-export';
+      exportButton.type = 'button';
+      exportButton.className = 'secondary-action';
+      exportButton.textContent = 'Export Draft JSON';
+      exportButton.title = 'Download this session-only module as JSON so it can be preserved outside the current browser session.';
+      exportButton.addEventListener('click', exportSessionModule);
+      toolbar.appendChild(exportButton);
+    }
+    exportButton.hidden = !inMemory || !state.module;
   }
 
   function resolveRoom(cell, module){
