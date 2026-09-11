@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-physical-route-path.schema.json",
+  "title": "Black Light FTL Physical Route Path Packet",
+  "type": "object",
+  "required": ["schemaVersion", "status", "route", "sampling", "samples", "extrema", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+    "route": {
+      "type": "object",
+      "required": ["from", "to", "referenceFrame", "lengthM"],
+      "properties": {
+        "from": {"type": "object"},
+        "to": {"type": "object"},
+        "referenceFrame": {"type": "string"},
+        "lengthM": {"type": "number", "exclusiveMinimum": 0},
+        "epoch": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "sampling": {
+      "type": "object",
+      "required": ["strategy", "sampleCount", "endpointGuardM"],
+      "properties": {
+        "strategy": {"enum": ["ENDPOINT_CLUSTERED_COSINE", "CALLER_SUPPLIED"]},
+        "sampleCount": {"type": "integer", "minimum": 3, "maximum": 1024},
+        "endpointGuardM": {"type": "number", "minimum": 0},
+        "fractions": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1}}
+      },
+      "additionalProperties": true
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "fraction", "distanceFromStartM", "fieldPointM", "environment"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 0},
+          "fraction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+          "distanceFromStartM": {"type": "number", "minimum": 0},
+          "fieldPointM": {"type": "object"},
+          "environment": {"type": "object"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "extrema": {
+      "type": "object",
+      "required": ["maxDimensionlessPotentialDepth", "maxAccelerationMPerS2", "maxTidalFrobeniusPerS2", "maxSingleSourceCurvatureScalePerM2", "minimumSchwarzschildRadiusRatio"],
+      "properties": {
+        "maxDimensionlessPotentialDepth": {"type": ["number", "null"], "minimum": 0},
+        "maxAccelerationMPerS2": {"type": ["number", "null"], "minimum": 0},
+        "maxTidalFrobeniusPerS2": {"type": ["number", "null"], "minimum": 0},
+        "maxSingleSourceCurvatureScalePerM2": {"type": ["number", "null"], "minimum": 0},
+        "minimumSchwarzschildRadiusRatio": {"type": ["number", "null"], "minimum": 0},
+        "worstSampleByMetric": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "uncertainty": {"type": ["object", "null"]},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
