@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-technology-ancestry.schema.json",
+  "title": "Black Light FTL Technology Ancestry",
+  "type": "object",
+  "required": ["schemaVersion", "registryKey", "authority", "originModes", "resolutionRules", "integrationModel", "canonGuards"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "registryKey": {"const": "blacklight.ftl.technology-ancestry"},
+    "status": {"enum": ["CONFIRMED", "MIXED", "DERIVED", "PROPOSED"]},
+    "authority": {
+      "type": "object",
+      "required": ["primary", "designIntentSource"],
+      "properties": {
+        "primary": {"type": "string"},
+        "designIntentSource": {
+          "type": "object",
+          "required": ["title", "documentId", "revisionId"],
+          "properties": {
+            "title": {"type": "string"},
+            "documentId": {"type": "string"},
+            "revisionId": {"type": "string"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "originModes": {
+      "type": "object",
+      "minProperties": 6,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["meaning", "provenanceRequirements"],
+        "properties": {
+          "meaning": {"type": "string"},
+          "provenanceRequirements": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "resolutionRules": {
+      "type": "object",
+      "required": ["autoResolveTechnologyBasis", "multiOriginPolicy", "namedRacePolicy"],
+      "properties": {
+        "autoResolveTechnologyBasis": {"type": "array", "items": {"type": "string"}},
+        "multiOriginPolicy": {"type": "array", "items": {"type": "string"}},
+        "namedRacePolicy": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "integrationModel": {
+      "type": "object",
+      "required": ["status", "interfaces", "equations"],
+      "properties": {
+        "status": {"enum": ["DERIVED", "PROPOSED", "MIXED"]},
+        "interfaces": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+        "equations": {
+          "type": "object",
+          "required": ["controlCoordination", "clockCoherence", "thermalCompatibility", "powerMargin", "recoveryCutSet"],
+          "additionalProperties": {"type": "string"}
+        }
+      },
+      "additionalProperties": true
+    },
+    "canonGuards": {"type": "array", "minItems": 5, "items": {"type": "string"}}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "originRecord": {
+      "type": "object",
+      "required": ["originId", "originMode", "provenanceStatus"],
+      "properties": {
+        "originId": {"type": "string"},
+        "originMode": {"type": "string"},
+        "technologyBasis": {"type": ["string", "null"]},
+        "namedSource": {"type": ["string", "null"]},
+        "manufacturer": {"type": ["string", "null"]},
+        "provenanceStatus": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED"]},
+        "sourceRefs": {"type": "array", "items": {"type": "string"}},
+        "roles": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  }
+}
