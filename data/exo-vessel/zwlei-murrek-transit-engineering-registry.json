@@ -1,0 +1,348 @@
+{
+  "recordType": "zwleiMurrekTransitEngineeringProfile",
+  "recordVersion": "1.0.0",
+  "authority": {
+    "status": "MIXED",
+    "precedence": [
+      "specific named Mur'rek vessel/class source",
+      "specific confirmed Black Light family/operator canon",
+      "BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "ftl-civilization-engineering-doctrine.json",
+      "cross-family comparative authority",
+      "labeled derivation",
+      "labeled proposal"
+    ],
+    "sources": [
+      "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/ftl-civilization-engineering-doctrine.json",
+      "data/exo-vessel/ftl-cross-family-integration-registry.json"
+    ],
+    "sourceDocument": "The different lightspeed methods",
+    "sourceDocumentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "rule": "The named Mur'rek source outranks generic generator assumptions. Its wording is preserved exactly enough to support engineering reconstruction, but 'gravitic slipstream' is not automatically normalized to either the gravitic-plane or slipstream-shear Black Light family without an explicit source establishing that equivalence."
+  },
+  "subject": {
+    "civilizationOrSpecies": "Zwlei Frog Men",
+    "vesselClass": "Mur'rek-class patrol frigate",
+    "role": [
+      "reconnaissance",
+      "border monitoring",
+      "ecological observation",
+      "diplomacy",
+      "controlled defensive withdrawal"
+    ],
+    "environment": "warm humid wet-deck mixed atmosphere with shallow circulation channels",
+    "sourceStatus": "CONFIRMED"
+  },
+  "confirmedInstallation": {
+    "sourceTerm": "bio-reactive gravitic slipstream system",
+    "sourceStatus": "CONFIRMED",
+    "documentedFunctions": [
+      "non-FTL cruise",
+      "station keeping optimized for low signature",
+      "efficient maneuvering",
+      "short-range slipstream operation",
+      "inertial and gravitic condition shaping"
+    ],
+    "documentedComponents": [
+      {
+        "name": "Gravitic Slipstream Regulator",
+        "status": "CONFIRMED",
+        "embodiment": "flexible field vanes immersed in dielectric fluid",
+        "function": "shapes inertial and gravitic conditions for maneuvering and short-range slipstream operation"
+      },
+      {
+        "name": "Navigation Current Well",
+        "status": "CONFIRMED",
+        "embodiment": "course solutions represented as moving currents whose speed, depth, and interference encode vector, gravity, and transit risk",
+        "function": "gravitic reference, slipstream prediction, inertial control"
+      },
+      {
+        "name": "Vital Fluids / Power Manifold",
+        "status": "CONFIRMED",
+        "embodiment": "distribution nexus for conductive coolant, bio-reactive power fluids, nutrient media, and hydraulic control pressure",
+        "function": "power and working-media distribution"
+      },
+      {
+        "name": "Forward Sensor Ampulla",
+        "status": "CONFIRMED",
+        "embodiment": "clear gel and organic transducers",
+        "function": "long-baseline observation, target ranging, spectroscopy, and passive listening"
+      },
+      {
+        "name": "Sensor Choir Alcove",
+        "status": "CONFIRMED",
+        "embodiment": "relational multisensor station",
+        "function": "electromagnetic, gravitic, chemical, acoustic, and exotic sensor fusion"
+      },
+      {
+        "name": "Communications Bladder",
+        "status": "CONFIRMED",
+        "embodiment": "pressure-regulated resonant wall membranes",
+        "function": "subspace and conventional communications"
+      }
+    ],
+    "documentedControls": [
+      "pressure-sensitive communal command basin",
+      "shared tactical and stellar model",
+      "moving-current navigation representation",
+      "flexible field-vane control",
+      "command arbitration",
+      "emergency lockout and isolation mechanisms"
+    ],
+    "documentedSensors": [
+      "electromagnetic",
+      "gravitic",
+      "chemical",
+      "acoustic",
+      "exotic observations",
+      "long-baseline ranging",
+      "spectroscopy",
+      "passive listening"
+    ],
+    "documentedPowerAndMedia": [
+      "conductive coolant",
+      "bio-reactive power fluids",
+      "nutrient media",
+      "hydraulic control pressure",
+      "dielectric fluid around field vanes"
+    ],
+    "documentedFailureHazards": [
+      "asymmetric vane response can rotate the local inertial frame",
+      "mixed vital fluids can create corrosive electrically active foam",
+      "forward sensor ampulla is comparatively fragile and isolates first under fire",
+      "abandoned hardware cannot be assumed inert merely because shipwide functions are offline"
+    ]
+  },
+  "familyResolution": {
+    "status": "UNRESOLVED",
+    "reason": "The named source confirms a 'bio-reactive gravitic slipstream system' and 'short-range slipstream operation' but does not explicitly identify the consolidated Black Light family key. The phrase combines gravitic and slipstream vocabulary that belong to distinct confirmed family operators elsewhere in the corpus; normalization would therefore be an attribution, not transcription.",
+    "admissibleComparisons": [
+      "slipstream-shear: compare boundary/shear coupling, adhesion, detachment, Q-space/weather and wake evidence",
+      "gravitic-plane: compare geodesic/equipotential riding, shear forks, recoupling, gravitational terrain and gradient evidence",
+      "hybrid or installation-local control layer: consider that gravitic/inertial shaping may support a slipstream operator without being the transit operator itself",
+      "short-range non-FTL or transitional effect: preserve the possibility that 'slipstream' in this source is a local vessel term rather than the full interstellar FTL family"
+    ],
+    "forbiddenPromotion": [
+      "Do not set familyId to slipstream-shear solely because the source contains the word slipstream.",
+      "Do not set familyId to gravitic-plane solely because the source describes gravitic shaping.",
+      "Do not claim the Zwlei invented either family.",
+      "Do not infer classwide interstellar range from short-range slipstream wording.",
+      "Do not turn the derelict variant's surviving compartments into proof that every intact Mur'rek has identical damage-state behavior."
+    ]
+  },
+  "engineeringModel": {
+    "machinery": {
+      "status": "MIXED",
+      "confirmed": [
+        "flexible field vanes immersed in dielectric fluid",
+        "wet-deck living-polymer composite and flexible synthetic load frames",
+        "bio-reactive fluid distribution",
+        "gravitic/inertial regulator",
+        "navigation current well",
+        "organic sensor ampulla",
+        "multimodal sensor choir"
+      ],
+      "derived": [
+        "The installation should be modeled as a coupled fluidic-field machine rather than a dry electromechanical engine.",
+        "Field-vane health, dielectric condition, fluid chemistry, gravitic reference quality, and structural alignment are independent readiness dimensions.",
+        "The machinery likely requires distributed isolation because a local vane asymmetry can alter the local inertial frame before whole-drive failure occurs."
+      ]
+    },
+    "power": {
+      "status": "MIXED",
+      "confirmed": "Bio-reactive power fluids, conductive coolant, nutrient media, and hydraulic pressure share the documented vital-fluids distribution nexus.",
+      "derivedEquation": "R_P = min(P_bio/P_req, Q_cool/Q_req, H_hyd/H_req, N_met/N_req)",
+      "derivedRule": "A high energy reserve does not certify the regulator if cooling, hydraulic authority, or biological/metabolic support is below its required margin."
+    },
+    "navigation": {
+      "status": "MIXED",
+      "confirmed": "The Navigation Current Well represents course solutions as moving currents whose speed, depth, and interference encode vector, gravity, and transit risk; its primary systems include gravitic reference, slipstream prediction, and inertial control.",
+      "derivedModel": "C_nav = F(v, g, grad_g, sigma_sensor, sigma_model, vane_state, medium_state)",
+      "sourceAlignment": "This directly supports the 'different lightspeed methods' requirement that transit safety margins depend on gravity, prediction quality, and family-specific sensor packages, but it does not by itself establish which consolidated FTL family performs the transit."
+    },
+    "control": {
+      "status": "MIXED",
+      "confirmed": "Control is embodied through pressure-sensitive communal interfaces, moving-current navigation representation, flexible field vanes, command arbitration, and isolation/lockout systems.",
+      "derivedRule": "Control authority should be modeled as distributed state regulation across vane geometry, working-fluid state, inertial reference, gravitic reference, and command authorization rather than as a single throttle scalar."
+    },
+    "maintenance": {
+      "status": "DERIVED",
+      "serviceClasses": [
+        "field-vane geometry and compliance inspection",
+        "dielectric-fluid contamination and breakdown testing",
+        "bio-reactive power-fluid chemistry",
+        "conductive coolant isolation",
+        "nutrient-media viability",
+        "hydraulic pressure proof",
+        "gravitic-reference calibration",
+        "sensor-ampulla integrity",
+        "navigation-current calibration",
+        "living repair-film and membrane condition"
+      ],
+      "rule": "Repair that restores living material does not automatically restore regulator calibration; geometry, dielectric state, reference alignment, and vane symmetry require recertification."
+    },
+    "signature": {
+      "status": "MIXED",
+      "confirmed": "The vessel's non-FTL cruise and station keeping are optimized for low signature.",
+      "derivedVector": "S_M = [S_EM,S_thermal,S_grav,S_chem,S_acoustic,S_subspace,S_wake,S_bio]",
+      "derivedRule": "Low-signature cruise is not equivalent to zero signature and must not be generalized to undocumented transit modes. Fluid chemistry, biological metabolism, gravitic modulation, thermal rejection, communications membranes, and any actual slipstream/wake phenomenon remain separate observable channels."
+    },
+    "failure": {
+      "status": "MIXED",
+      "confirmed": [
+        "asymmetric vane response can rotate the local inertial frame",
+        "mixed vital fluids can create corrosive electrically active foam",
+        "sensor ampulla isolation can remove forward sensing"
+      ],
+      "derivedFailureTree": [
+        "vane asymmetry -> inertial-frame error -> navigation/control disagreement -> isolation or abort",
+        "dielectric contamination -> field-vane leakage/breakdown -> asymmetric response -> inertial/gravitic excursion",
+        "sensor degradation -> reduced lookahead -> lower admissible maneuver/transit envelope",
+        "fluid cross-contamination -> electrical/corrosive hazard -> distribution isolation -> loss of power/cooling/control margin"
+      ]
+    },
+    "infrastructure": {
+      "status": "MIXED",
+      "confirmed": "The source establishes onboard machinery and mission roles but does not establish external FTL infrastructure, beacons, gates, traffic-control networks, or service-yard requirements.",
+      "unresolved": [
+        "external navigation infrastructure",
+        "slipstream beacons",
+        "gravitic-route infrastructure",
+        "range-extension facilities",
+        "Zwlei transit traffic control",
+        "manufacturer-specific service infrastructure"
+      ]
+    },
+    "scaling": {
+      "status": "DERIVED",
+      "model": "B_M = F(A_vane, V_protected, L_reference, Q_fluid, M_ship, tau_response, sigma_alignment, G_environment)",
+      "interpretation": "Larger installations increase vane area, working-fluid volume, structural span, sensor-baseline and synchronization burdens. Scaling should therefore be nonlinear and cannot be reduced to drive output proportional to vessel mass.",
+      "unknowns": [
+        "exact coefficient values",
+        "maximum class scale",
+        "transit range scaling",
+        "gravity-tolerance coefficients",
+        "family-specific efficiency exponent"
+      ]
+    },
+    "mathematics": {
+      "readinessVector": "R_M = [m_vane,m_dielectric,m_power,m_cool,m_hyd,m_sensor,m_grav,m_nav,m_struct]^T",
+      "admissionRule": "A_op = AND_i(m_i > 0)",
+      "vaneSymmetryMetric": "epsilon_v = ||u_commanded - u_observed||_W",
+      "derivedAbortCondition": "epsilon_v >= epsilon_abort OR m_grav <= 0 OR m_sensor <= 0 => leave the high-authority operating envelope",
+      "gravityCostPlaceholder": "C_g,M = F_M(Phi,grad(Phi),H(Phi),shear,sensor_uncertainty,vane_authority); coefficients UNRESOLVED until family mapping is established",
+      "efficiencyPlaceholder": "eta_M = eta_0 * f_medium * f_alignment * f_gravity * f_sensor; each factor is DERIVED structure, not a canon numeric law"
+    },
+    "procedures": [
+      {
+        "id": "MR-01",
+        "title": "Regulator Pre-Operation Certification",
+        "steps": [
+          "verify compartment pressure, wet-deck chemistry, and isolation state",
+          "sample dielectric, coolant, power-fluid, nutrient, and hydraulic media independently",
+          "survey field-vane geometry and compliance",
+          "calibrate gravitic and inertial references",
+          "exercise vanes at low authority and compare commanded versus observed symmetry",
+          "validate navigation-current representation against independent sensor solution",
+          "confirm protected abort and isolation authority before increasing field load"
+        ]
+      },
+      {
+        "id": "MR-02",
+        "title": "Asymmetric Vane Response",
+        "steps": [
+          "freeze increase in field authority",
+          "compare vane response by sector and independent inertial references",
+          "isolate fluid and command channels feeding the divergent sector",
+          "reduce to the last verified symmetric state if still reachable",
+          "treat frame rotation as a navigation and structural hazard, not merely a drive-efficiency loss",
+          "recertify geometry, dielectric state, and references after repair"
+        ]
+      },
+      {
+        "id": "MR-03",
+        "title": "Vital-Fluids Cross-Contamination",
+        "steps": [
+          "isolate the affected manifold branch",
+          "remove electrical authority where safe",
+          "sample and identify mixed media before flushing",
+          "treat electrically active foam as both corrosion and shock/field-coupling hazard",
+          "inspect downstream membranes, vanes, coolant passages, and sensor references",
+          "restore one fluid class at a time and document chemistry baselines"
+        ]
+      },
+      {
+        "id": "MR-04",
+        "title": "Derelict Regulator Survey",
+        "steps": [
+          "assume no subsystem is inert solely because the vessel is abandoned",
+          "acquire passive gravitic, electromagnetic, chemical, acoustic, thermal, and field baselines",
+          "map trapped pressure and surviving fluid volumes before opening membranes",
+          "trace field-vane feeds and isolation boundaries without energization",
+          "treat surviving navigation-current or archive states as historical evidence rather than valid commands",
+          "export observations into the FTL evidence-instance and forensic chain without auto-selecting a family"
+        ]
+      }
+    ]
+  },
+  "generationRules": {
+    "authorityOnly": "Emit the source term 'bio-reactive gravitic slipstream system', the confirmed component names/functions, confirmed mission/environment facts, and confirmed hazards. Leave consolidated familyId UNRESOLVED.",
+    "labeledDerivation": "May derive fluidic-field machinery behavior, readiness dimensions, maintenance procedures, scaling burdens, failure propagation, and sensor/control relationships from the confirmed installation facts, with every derived result retaining source ancestry.",
+    "labeledProposal": "May propose Zwlei training material, patent classes, test rigs, refits, or improved regulator generations only when explicitly PROPOSED; invented names, dates, organizations, manufacturers, ranges, or family assignments may not be imported as canon.",
+    "terminologyFirewall": "Preserve 'gravitic slipstream' as a named-source term until an authority explicitly maps it to a consolidated family. The generator may compare it against family invariants but must not normalize by keyword.",
+    "derelictRule": "Derelict-condition observations are installation-instance evidence. They do not redefine intact class behavior unless a higher source generalizes them."
+  },
+  "apiContract": {
+    "resolver": "resolveZwleiMurrekTransitEngineering(context)",
+    "inputs": [
+      "authoritySnapshot",
+      "vesselInstance",
+      "conditionState",
+      "requestedDetail",
+      "evidenceMode",
+      "measurementPackets",
+      "familyHypotheses"
+    ],
+    "outputs": [
+      "confirmedInstallation",
+      "familyResolution",
+      "machinery",
+      "power",
+      "navigation",
+      "control",
+      "maintenance",
+      "signature",
+      "failure",
+      "infrastructure",
+      "scaling",
+      "procedures",
+      "provenanceGraph",
+      "canonWarnings"
+    ],
+    "hardFailures": [
+      "keyword-based family assignment",
+      "unsupported inventor or manufacturer attribution",
+      "unsupported interstellar range claim",
+      "unlabeled extrapolation",
+      "derelict state promoted to classwide canon",
+      "loss of named-source terminology",
+      "collapsed provenance"
+    ]
+  },
+  "canonSafeguards": [
+    "The named Mur'rek source outranks generic generator defaults for this class.",
+    "The source phrase 'bio-reactive gravitic slipstream system' is CONFIRMED and must be preserved.",
+    "The consolidated FTL family mapping is UNRESOLVED until explicit authority establishes it.",
+    "Gravitic vocabulary alone does not establish the gravitic-plane family.",
+    "Slipstream vocabulary alone does not establish the slipstream-shear family.",
+    "Confirmed short-range slipstream operation does not establish undocumented interstellar range.",
+    "Low-signature non-FTL cruise does not establish zero-signature transit.",
+    "Confirmed biological or fluidic embodiment does not establish inventor, manufacturer, date, or civilization-wide prevalence beyond the named class/source scope.",
+    "Derived equations express engineering structure and constraints, not recovered numeric canon.",
+    "Derelict observations remain scoped to the No Return Signal specimen unless separately generalized.",
+    "Repeated generated descriptions cannot promote UNRESOLVED family mapping to CONFIRMED.",
+    "Future explicit named canon may resolve the family and must then replace the unresolved mapping without erasing the original source wording."
+  ]
+}
