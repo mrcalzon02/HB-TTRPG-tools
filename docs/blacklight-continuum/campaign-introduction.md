@@ -162,6 +162,7 @@ The characters begin with:
 
 - their selected Attributes, Skills, Operational Frames, Archetypes, innate abilities, and starting powers;
 - bodies printed to their human or human-adjacent character specifications through Ar’nock biological substrate, with their exact implementation-level physiology initially unknown;
+- bodies reconstructed at the peak physiologically viable condition indicated by their DNA for their present age range rather than whatever temporary health state existed at the moment of scanning;
 - minimal clothing or protective material provided by the fabrication system;
 - no familiar weapons;
 - no Blacklight credentials;
@@ -274,6 +275,16 @@ It needs:
 The Q-MAP package and IAA supplied the first two.
 
 The vessel supplied the rest.
+
+## Physiological Reconstruction Baseline
+
+The Q-MAP body definition preserves the person’s age, genetic identity, required body plan, character-defining conditions, and encoded capabilities. It does **not** require the printer to reproduce whatever incidental health state happened to exist when that person was scanned.
+
+An operative scanned while injured, sick, exhausted, malnourished, physically deconditioned, recovering from surgery, suffering a temporary metabolic disturbance, or otherwise below their healthy baseline is not printed back into that same transient condition unless the condition is specifically encoded as part of the required character state.
+
+Instead, the printer reconstructs the body at the peak physiologically viable condition indicated by that person’s DNA for their current age range. This is not rejuvenation and does not make an older operative biologically young. It produces the healthiest, best-functioning version of that person that their genetics and present age reasonably permit while preserving identity and age.
+
+This optimization establishes the starting health baseline. It does not prevent later injury, disease, deconditioning, starvation, exhaustion, or other consequences after awakening.
 
 ## Alien Feedstock
 
@@ -544,7 +555,7 @@ That creates problems of divergence, authority, consent, ownership, and the righ
 
 ---
 
-# Campaign Progress — First Run
+# Campaign Progress — Sessions 1–3
 
 This section records events that have occurred in actual play. It is authoritative campaign state rather than pre-session possibility.
 
@@ -568,6 +579,14 @@ The improvement marks the beginning of a shift from desperate scavenging toward 
 
 The team has located the fabrication bay and reached what appears to be the vessel’s primary engineering or main power-bus region. They do not yet possess complete mastery of either area, but access to fabrication and major power infrastructure creates the possibility of manufacturing purpose-built equipment, restoring systems, and moving beyond survival-level improvisation.
 
+## Print-State Health Baseline
+
+The operatives have also established an important fact about the way their bodies were reconstructed. They were not printed in whatever health condition they happened to be in when their original scans were taken.
+
+The printer used their genetic data and encoded age as the baseline and produced bodies at the peak physiological condition reasonably supported by that DNA for their present age range. Injuries, temporary illness, exhaustion, deconditioning, poor nutrition, and other incidental scan-time conditions were not reproduced merely because they existed at the moment of scanning.
+
+This does not make the operatives younger than their recorded age and does not provide immunity from subsequent harm. It means they awakened as the healthiest viable versions of themselves appropriate to that age, before the hazards of the derelict began affecting them.
+
 ## Confirmed Physiological Differences
 
 The operatives have begun discovering that their printed bodies are not biologically identical to the human bodies they remember.
@@ -579,6 +598,16 @@ The operative bodies therefore possess substantial but finite thermal resistance
 The second confirmed difference is thermoregulation: **the operatives do not sweat**. This is especially disconcerting because sweating is an involuntary human function they expect without thinking about it. Its absence is an unmistakable indication that their bodies are using a different biological strategy even while preserving a broadly human outward form.
 
 These observations are campaign facts. They do not by themselves establish what other physiological differences exist.
+
+## Security Compartment — Acidic Death Scene
+
+Exploration of the vessel’s security compartment revealed evidence of another violent death that does not match the Ar’nock crew remains encountered elsewhere.
+
+An unidentified acidic-blooded alien organism appears to have died inside the compartment after being thrown or driven bodily against the primary radiation-rated security door from the interior side. The impact ruptured the organism badly enough that its acidic blood attacked the door itself.
+
+The resulting chemical damage was catastrophic. A substantial portion of the security door was liquefied or eaten through from the inside, leaving a breach and a preserved record of the violence that occurred there.
+
+The team has not yet established what the organism was, why it was inside the secured compartment, what threw it against the door, whether it was attacking or attempting to escape, or whether related organisms remain aboard the vessel.
 
 ## Charles Adapting to Organic Cognition
 
@@ -604,7 +633,25 @@ Current evidence indicates that the Infiltration Assault Algorithm originated fr
 
 The discovery changes the immediate mystery. The IAA is no longer only a historical software event inferred from corrupted systems. There is now a physical artifact embedded in the vessel that can potentially be examined, isolated, entered, removed, or traced.
 
-The open questions at the close of the first run are therefore increasingly concrete: what exactly is the penetrating device, how did it reach this ship, what remains inside it, was printing this specific team its sole objective, and what—if anything—was expected to happen after they woke?
+The questions raised by that discovery remain concrete: what exactly is the penetrating device, how did it reach this ship, what remains inside it, was printing this specific team its sole objective, and what—if anything—was expected to happen after they woke?
+
+## Cafeteria and Escaped Hydroponics
+
+The team has located the vessel’s cafeteria and food-preparation area. The compartment is no longer a controlled galley or dining space. It has become an accidental enclosed ecosystem.
+
+Hydroponic planter trays that once supported the Ar’nock food supply have continued operating in dormant automatic mode. Their heaters and humidifiers remained functional long after ordinary crew activity ceased. With no one left to prune, harvest, clean, or contain the growth, plants, fungi, mushrooms, and other organic material escaped the trays and spread through the cafeteria and adjoining kitchen spaces.
+
+The result is dense, rampant organic overgrowth sustained by failing but persistent life-support machinery: a pocket biome growing inside an otherwise ancient derelict. The exact ecology, edibility, hazards, and degree to which the surviving growth has changed from its original cultivated forms have not yet been established.
+
+## Session Three Endpoint
+
+The third session ended inside this overgrown cafeteria/kitchen complex.
+
+While investigating the escaped hydroponics and the organic growth that now fills the compartment, the operatives heard noises coming from somewhere within the kitchen/cafeteria area.
+
+They have not yet identified the source.
+
+That sound is the current edge of played campaign state.
 
 ---
 
@@ -838,6 +885,8 @@ Do treat physiological differences established through actual play, examination,
 Do not infer hidden Ar’nock organs, instincts, senses, powers, or vulnerabilities merely from the use of Ar’nock feedstock. The operatives are locally implemented constructions of their transmitted character specifications, not wholesale Ar’nock bodies.
 
 Do not make the printer misunderstand a valid construction job. Local biological substitutions are implementation choices, not evidence that the printer failed to understand the specification.
+
+Do not reproduce incidental scan-time injury, illness, exhaustion, or deconditioning as the default printed state. Unless explicitly encoded otherwise, the operatives begin at the peak physiologically viable health their DNA supports for their current age range.
 
 Present consequences through explicit capabilities, costs, conditions, hazards, choices, relationships, and established physiological traits.
 
