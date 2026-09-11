@@ -141,7 +141,8 @@
         'node_modules/'
       ];
 
-      const resourceExtension = /\.(?:html?|md|txt|json|ya?ml|csv|xml|pdf|css|js|mjs|cjs|map|png|jpe?g|gif|webp|svg|ico|avif|mp3|ogg|wav|flac|mp4|webm|woff2?|ttf|otf|wasm|glb|gltf|obj|mtl|bin)$/i;
+      // Image files are presentation assets, not Black-tier navigation destinations.
+      const resourceExtension = /\.(?:html?|md|txt|json|ya?ml|csv|xml|pdf|css|js|mjs|cjs|map|mp3|ogg|wav|flac|mp4|webm|woff2?|ttf|otf|wasm|glb|gltf|obj|mtl|bin)$/i;
 
       const isBlacklightResource = (path) => {
         const lower = path.toLowerCase();
