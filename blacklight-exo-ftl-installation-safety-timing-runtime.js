@@ -66,6 +66,29 @@
     return out;
   }
 
+  async function resolveCoupledReadiness(readiness,context={},provenance=[]){
+    if(context.coupledDegradationPacket&&typeof context.coupledDegradationPacket==='object'){
+      const packet=context.coupledDegradationPacket;
+      return {packet,readiness:packet.effectiveReadiness?{...readiness,...packet.effectiveReadiness}:{...readiness}};
+    }
+    const hasTransient=context.transientState&&typeof context.transientState==='object';
+    const hasProfile=context.couplingProfileId||context.couplingProfile;
+    if(!hasTransient&&!hasProfile)return {packet:null,readiness:{...readiness}};
+    const Runtime=globalThis.BlacklightExoFTLCoupledDegradationRuntime;
+    if(!Runtime?.resolveFTLCoupledDegradation){
+      return {packet:deepFreeze({status:STATUS.UNRESOLVED,warnings:['Coupled-degradation evidence was supplied but the coupled-degradation runtime is not loaded.'],provenance:unique(provenance)}),readiness:{...readiness}};
+    }
+    const packet=await Runtime.resolveFTLCoupledDegradation({
+      readiness,
+      transientState:context.transientState||{},
+      profileId:context.couplingProfileId||undefined,
+      couplingProfile:context.couplingProfile||undefined,
+      interventionHorizon:context.interventionHorizon,
+      provenance
+    });
+    return {packet,readiness:packet?.effectiveReadiness?{...readiness,...packet.effectiveReadiness}:{...readiness}};
+  }
+
   function blockedChannels(readiness){
     return CHANNELS.filter(channel=>!finite(readiness[channel])||Number(readiness[channel])<=0);
   }
@@ -123,15 +146,23 @@
     const registry=context.registry||await loadRegistry();
     const selected=selectRecord(registry,context);
     const record=selected.record;
-    const readiness=mergeReadiness(record,context);
-    const blocked=blockedChannels(readiness);
+    const baselineReadiness=mergeReadiness(record,context);
     const baselineTiming={...(context.baselineTiming||{})};
     const baselineRecovery=context.baselineRecovery?{...context.baselineRecovery}:null;
+    const provenance=unique([registry.registryKey,...(record?.provenance||[]),...(context.provenance||[])]);
+    const coupled=await resolveCoupledReadiness(baselineReadiness,context,provenance);
+    const readiness=coupled.readiness;
+    const blocked=blockedChannels(readiness);
     const penalty=maintenancePenalty(context,record||{});
-    const warnings=[...(selected.warnings||[])];
+    const warnings=[...(selected.warnings||[]),...(coupled.packet?.warnings||[])];
 
-    if(blocked.length){
-      warnings.push(`Blocking readiness channel(s): ${blocked.join(', ')}.`);
+    if(coupled.packet?.status===STATUS.CONFLICT){
+      warnings.push('Coupled-degradation authority conflicts; installation timing certification cannot average contradictory common-cause models.');
+      return deepFreeze({status:STATUS.CONFLICT,baselineTiming,baselineRecovery,timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,selectedRecord:record||null,readiness,coupledDegradation:coupled.packet,appliedFactors:{maintenancePenalty:1},warnings,provenance:unique([...provenance,...(coupled.packet.provenance||[])])});
+    }
+
+    if(blocked.length||coupled.packet?.status===STATUS.BLOCKED){
+      warnings.push(`Blocking readiness channel(s): ${blocked.join(', ')||coupled.packet?.blockedChannels?.join(', ')||'common-cause transient limit'}.`);
       return deepFreeze({
         status:STATUS.BLOCKED,
         baselineTiming,
@@ -140,9 +171,10 @@
         recovery:baselineRecovery?{...baselineRecovery}:null,
         selectedRecord:record||null,
         readiness,
+        coupledDegradation:coupled.packet,
         appliedFactors:{maintenancePenalty:penalty},
         warnings,
-        provenance:unique([registry.registryKey,...(record?.provenance||[]),...(context.provenance||[])])
+        provenance:unique([...provenance,...(coupled.packet?.provenance||[])])
       });
     }
 
@@ -156,16 +188,18 @@
         recovery:baselineRecovery?{...baselineRecovery}:null,
         selectedRecord:record||null,
         readiness,
+        coupledDegradation:coupled.packet,
         appliedFactors:{maintenancePenalty:1},
         warnings,
-        provenance:unique([registry.registryKey,...(record?.provenance||[]),...(context.provenance||[])])
+        provenance:unique([...provenance,...(coupled.packet?.provenance||[])])
       });
     }
 
     const adjusted=adjustTiming(baselineTiming,readiness,penalty);
     const recovery=adjustRecovery(baselineRecovery,readiness);
     if(penalty>1)warnings.push(`Maintenance degradation factor ${penalty.toFixed(4)} lengthens intervention timing.`);
-    if(CHANNELS.some(channel=>readiness[channel]<1))warnings.push('Measured installation readiness reduces one or more timing/recovery margins; no family equation was changed.');
+    if(CHANNELS.some(channel=>readiness[channel]<baselineReadiness[channel]))warnings.push('Common-cause power/thermal/infrastructure evidence reduces one or more readiness channels before timing adjustment.');
+    else if(CHANNELS.some(channel=>readiness[channel]<1))warnings.push('Measured installation readiness reduces one or more timing/recovery margins; no family equation was changed.');
     if(record?.familyId===null&&context.family)warnings.push('Selected installation timing record does not establish transit-family identity; supplied family remains independently authoritative.');
 
     return deepFreeze({
@@ -176,9 +210,10 @@
       recovery,
       selectedRecord:record,
       readiness,
+      coupledDegradation:coupled.packet,
       appliedFactors:{...adjusted.factors,maintenancePenalty:penalty},
       warnings,
-      provenance:unique([registry.registryKey,...(record?.provenance||[]),...(context.provenance||[])])
+      provenance:unique([...provenance,...(coupled.packet?.provenance||[])])
     });
   }
 
