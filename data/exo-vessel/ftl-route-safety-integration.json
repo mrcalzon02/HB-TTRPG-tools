@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "registryKey": "blacklight.ftl.route-safety-integration",
   "title": "Black Light FTL Route Safety Integration Registry",
   "status": "MIXED",
-  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; uncertainty-aware conservative blocker envelopes are preserved when explicitly linked to the certified family hazard. Single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
+  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; uncertainty-aware conservative blocker envelopes are preserved only when a provenance-bearing topology-hazard applicability authority links the physical precursor to the certified family hazard. Single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
@@ -19,6 +19,7 @@
       "data/exo-vessel/ftl-route-segment-certification-registry.json",
       "data/exo-vessel/ftl-family-segment-certification-registry.json",
       "data/exo-vessel/ftl-uncertainty-aware-boundary-refinement-registry.json",
+      "data/exo-vessel/ftl-topology-hazard-applicability-registry.json",
       "blacklight-exo-ftl-operational-definitions.js",
       "data/exo-vessel/ftl-safety-calibration-profiles.json",
       "data/exo-vessel/ftl-safety-certification-registry.json"
@@ -29,6 +30,7 @@
       "blacklight-exo-ftl-physical-route-path-runtime.js",
       "blacklight-exo-ftl-route-segment-certification-runtime.js",
       "blacklight-exo-ftl-uncertainty-aware-boundary-refinement-runtime.js",
+      "blacklight-exo-ftl-topology-hazard-applicability-runtime.js",
       "blacklight-exo-ftl-family-segment-certification-runtime.js",
       "blacklight-exo-ftl-safety-calibration-runtime.js",
       "blacklight-exo-ftl-safety-certification-runtime.js",
@@ -40,7 +42,8 @@
       "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_SEGMENT_CERTIFICATION_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_PATH_SAFETY_INTEGRATION_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_BOUNDARY_REFINEMENT_AND_INTERVENTION_MANUAL.md",
-      "docs/blacklight/BLACK_LIGHT_FTL_CONSERVATIVE_BLOCKER_CERTIFICATION_AND_PRESENTATION_MANUAL.md"
+      "docs/blacklight/BLACK_LIGHT_FTL_CONSERVATIVE_BLOCKER_CERTIFICATION_AND_PRESENTATION_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md"
     ],
     "statusRule": "Supplied physical route paths outrank single-point physical environments; supplied single-point physical environments outrank route archetypes. Invalid or unresolved supplied physical evidence blocks fallback. Route archetype packets are PROPOSED simulation mappings used only when no physical route/path environment is supplied."
   },
@@ -126,12 +129,20 @@
     "phase-displacement": ["reference-integrity", "whole-object-coverage", "reconciliation-path"],
     "inertial-torch": ["collision-course", "thermal-margin", "deceleration-reserve"]
   },
+  "topologyHazardApplicability": {
+    "registry": "data/exo-vessel/ftl-topology-hazard-applicability-registry.json",
+    "runtime": "blacklight-exo-ftl-topology-hazard-applicability-runtime.js",
+    "physicalEvidenceType": "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY",
+    "genericBlockerAuthorizingRelationship": "REQUIRED_PHYSICAL_PRECURSOR",
+    "rule": "Applicability must resolve from canon/provenance. No match is UNRESOLVED, contradiction is CONFLICT, SUPPORTING_PHYSICAL_PRECURSOR is non-blocking, and raw caller booleans are not authority."
+  },
   "integrationRules": [
     "The adapter must preserve the generated family and must never use certification to auto-select a different family.",
     "When physicalRoutePathContext, pathPacket, or segmentPacket is supplied, route safety must use family-segment certification and must not collapse the route back into a single-point certificate.",
     "Family-certified route disposition is conjunctive across required intervals; later benign intervals cannot erase an earlier blocker.",
-    "The first blocking interval, nominal distance/time to blocker, authorized conservative distance/time to blocker, and intervention reachability must survive into the route-level result.",
-    "A normalized-degeneracy or topology boundary may move the conservative planning edge earlier only when topologyBoundaryAppliesToFirstBlocker is supported by an explicit named/family authority. Otherwise it remains displayable evidence but cannot alter route certification.",
+    "The first blocking interval, nominal distance/time to blocker, authorized conservative distance/time to blocker, intervention reachability, and topology-hazard applicability provenance must survive into the route-level result.",
+    "A normalized-degeneracy or topology boundary may move the conservative planning edge earlier only when the topology-hazard applicability authority resolves a matching REQUIRED_PHYSICAL_PRECURSOR relationship to the already-certified hazard. Otherwise it remains displayable evidence but cannot alter route certification.",
+    "A SUPPORTING_PHYSICAL_PRECURSOR may influence sensing, maintenance, diagnostics and confidence but does not generically move a certified blocker earlier.",
     "For PRECOMMIT families, a topology boundary may constrain endpoint/location evidence but may not create an intermediate local FTL velocity; prediction-time authority remains governing.",
     "For exotic families, missing family-boundary hazard remains unresolved unless explicitly established as known absent; route archetype boundary values may not be injected into a physical route path as though measured.",
     "When physicalEnvironmentContext is supplied without a physical route path, gravity/curvature terms must be resolved by the physical environment bridge and must not be replaced by route archetype numbers.",
@@ -149,7 +160,7 @@
   ],
   "api": {
     "resolver": "resolveGeneratedFTLRouteSafety",
-    "inputs": ["rating", "request", "registry", "calibrationRegistry", "physicalRoutePathContext", "pathPacket", "segmentPacket", "physicalEnvironmentContext", "familyBoundaryHazard", "familyBoundaryHazardKnownAbsent", "projectedProgressRate", "currentRouteFraction", "uncertaintyAwareBoundaryRefinement", "topologyBoundaryAppliesToFirstBlocker", "measurementPacket", "safetyState", "recoveryState", "namedOverrideIds", "provenance"],
+    "inputs": ["rating", "request", "registry", "calibrationRegistry", "physicalRoutePathContext", "pathPacket", "segmentPacket", "physicalEnvironmentContext", "familyBoundaryHazard", "familyBoundaryHazardKnownAbsent", "projectedProgressRate", "currentRouteFraction", "uncertaintyAwareBoundaryRefinement", "topologyHazardKey", "topologyHazardApplicabilityResolution", "namedTechnologyId", "vesselId", "installationId", "raceId", "manufacturerId", "canonicalResolutionRequired", "topologyApplicabilitySimulationOverride", "measurementPacket", "safetyState", "recoveryState", "namedOverrideIds", "provenance"],
     "outputs": ["status", "family", "path", "route", "environmentSource", "physicalEnvironment", "familySegmentCertification", "firstBlockingSegment", "conservativeBlocker", "calibration", "certificate", "presentation", "warnings", "provenance"],
     "statusValues": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]
   },
@@ -159,7 +170,8 @@
     "Do not convert route difficulty into a universal FTL constant.",
     "Do not collapse a physically sampled route into one representative point when interval evidence is available.",
     "Do not invent a family-boundary hazard from ordinary gravity or from a generic route archetype for a physical path.",
-    "Do not promote a physical topology boundary into an FTL blocker without explicit family or named-technology authority connecting it to the certified hazard.",
+    "Do not promote a physical topology boundary into an FTL blocker without a provenance-bearing REQUIRED_PHYSICAL_PRECURSOR authority connecting it to the certified hazard.",
+    "Do not substitute a raw boolean for canonical topology-hazard applicability.",
     "Do not certify a route when calibration or supplied physical validity is unresolved or conflicting.",
     "Do not hide REJECTED, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY behind a generated performance number.",
     "Do not infer a named civilization or installation limit from the generic simulation baseline.",
