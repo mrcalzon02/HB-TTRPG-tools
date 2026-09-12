@@ -5,10 +5,11 @@
   const STATUS=Object.freeze({READY:'READY',UNRESOLVED:'UNRESOLVED',CONFLICT:'CONFLICT',BLOCKED:'BLOCKED'});
   const CHANNELS=Object.freeze(['sensor','navigation','reference','solver','command','actuator','exit','clearance','recovery','thermal','structure']);
   const PRECEDENCE=Object.freeze({GENERIC:0,RACE:1,MANUFACTURER:2,NAMED_TECHNOLOGY:3,VESSEL:4,INSTALLATION:5});
+  const LATENCY_STAGE=Object.freeze({sensor:'sensorTime',solver:'solverTime',command:'commandTime',actuator:'actuationTime',exit:'exitTime',clearance:'clearTime'});
   let cachePromise=null;
 
   const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
-  const clampReadiness=v=>finite(v)?Math.min(1,Number(v)):1;
+  const clampReadiness=v=>finite(v)?Math.min(1,Math.max(0,Number(v))):1;
   const unique=items=>[...new Set((items||[]).filter(Boolean))];
 
   function deepFreeze(value){
@@ -66,51 +67,6 @@
     return out;
   }
 
-  function hasMeasuredConditionEvidence(context={},coupledPacket=null){
-    const readiness=context.readiness||{};
-    const measuredReadiness=CHANNELS.some(channel=>readiness[channel]!==undefined);
-    const explicitMaintenance=finite(context.maintenancePenalty)&&Number(context.maintenancePenalty)>1;
-    const coupledEvidence=!!coupledPacket&&coupledPacket.status===STATUS.READY&&(
-      Object.values(coupledPacket.driverStress||{}).some(value=>finite(value)&&Number(value)>0)||
-      Object.keys(coupledPacket.transientProjection||{}).length>0||
-      CHANNELS.some(channel=>finite(coupledPacket.effectiveReadiness?.[channel])&&Number(coupledPacket.effectiveReadiness[channel])<1)
-    );
-    return measuredReadiness||explicitMaintenance||coupledEvidence;
-  }
-
-  async function resolveCoupledReadiness(readiness,context={},provenance=[]){
-    if(context.coupledDegradationPacket&&typeof context.coupledDegradationPacket==='object'){
-      const packet=context.coupledDegradationPacket;
-      return {packet,readiness:packet.effectiveReadiness?{...readiness,...packet.effectiveReadiness}:{...readiness}};
-    }
-    const hasTransient=context.transientState&&typeof context.transientState==='object';
-    const hasProfile=context.couplingProfileId||context.couplingProfile;
-    const hasSectional=context.sectionalNetwork||context.sectionalTopologyPacket||context.sectionalProfileId||context.sectionalProfile;
-    if(!hasTransient&&!hasProfile&&!hasSectional)return {packet:null,readiness:{...readiness}};
-    const Runtime=globalThis.BlacklightExoFTLCoupledDegradationRuntime;
-    if(!Runtime?.resolveFTLCoupledDegradation){
-      return {packet:deepFreeze({status:STATUS.UNRESOLVED,warnings:['Coupled-degradation or sectional evidence was supplied but the coupled-degradation runtime is not loaded.'],provenance:unique(provenance)}),readiness:{...readiness}};
-    }
-    const packet=await Runtime.resolveFTLCoupledDegradation({
-      readiness,
-      sectionalNetwork:context.sectionalNetwork,
-      sectionalTopologyPacket:context.sectionalTopologyPacket,
-      sectionalProfileId:context.sectionalProfileId,
-      sectionalProfile:context.sectionalProfile,
-      serviceChannelMap:context.serviceChannelMap,
-      transientState:context.transientState||{},
-      profileId:context.couplingProfileId||undefined,
-      couplingProfile:context.couplingProfile||undefined,
-      interventionHorizon:context.interventionHorizon,
-      provenance
-    });
-    return {packet,readiness:packet?.effectiveReadiness?{...readiness,...packet.effectiveReadiness}:{...readiness}};
-  }
-
-  function blockedChannels(readiness){
-    return CHANNELS.filter(channel=>!finite(readiness[channel])||Number(readiness[channel])<=0);
-  }
-
   function maintenancePenalty(context={},record={}){
     const raw=context.maintenancePenalty!==undefined?context.maintenancePenalty:(record.defaultMaintenancePenalty!==undefined?record.defaultMaintenancePenalty:1);
     return finite(raw)?Math.max(1,Number(raw)):1;
@@ -160,6 +116,99 @@
     };
   }
 
+  function aggregateSectionalLatencies(coupledPacket=null){
+    const groups=coupledPacket?.sectionalTopology?.groupResults;
+    const out={};
+    if(!Array.isArray(groups))return out;
+    groups.forEach(group=>{
+      const channel=group?.channel;
+      if(!CHANNELS.includes(channel))return;
+      const latency=finite(group.latency)?Math.max(0,Number(group.latency)):null;
+      if(!(channel in out)){out[channel]=latency;return;}
+      if(out[channel]===null||latency===null){out[channel]=null;return;}
+      out[channel]=Math.max(out[channel],latency);
+    });
+    return out;
+  }
+
+  function resolveSectionalLatency(coupledPacket=null,baselineByChannel={}){
+    const currentByChannel=aggregateSectionalLatencies(coupledPacket);
+    const normalizedBaseline={};
+    const excessByChannel={};
+    const appliedByStage={};
+    const unresolvedChannels=[];
+    Object.entries(currentByChannel).forEach(([channel,current])=>{
+      const base=finite(baselineByChannel?.[channel])?Math.max(0,Number(baselineByChannel[channel])):null;
+      normalizedBaseline[channel]=base;
+      if(current===null){excessByChannel[channel]=null;unresolvedChannels.push(channel);return;}
+      if(current<=0){excessByChannel[channel]=0;return;}
+      if(base===null){excessByChannel[channel]=null;unresolvedChannels.push(channel);return;}
+      const excess=Math.max(0,current-base);
+      excessByChannel[channel]=excess;
+      const stage=LATENCY_STAGE[channel];
+      if(stage&&excess>0)appliedByStage[stage]=(appliedByStage[stage]||0)+excess;
+    });
+    return {currentByChannel,baselineByChannel:normalizedBaseline,excessByChannel,appliedByStage,unresolvedChannels:unique(unresolvedChannels)};
+  }
+
+  function applySectionalLatency(timing={},latency={}){
+    const out={...timing};
+    Object.entries(latency.appliedByStage||{}).forEach(([stage,delta])=>{
+      if(finite(out[stage])&&finite(delta))out[stage]=Math.max(0,Number(out[stage])+Number(delta));
+    });
+    return out;
+  }
+
+  function hasMeasuredConditionEvidence(context={},coupledPacket=null,sectionalLatency=null){
+    const readiness=context.readiness||{};
+    const measuredReadiness=CHANNELS.some(channel=>readiness[channel]!==undefined);
+    const explicitMaintenance=finite(context.maintenancePenalty)&&Number(context.maintenancePenalty)>1;
+    const coupledEvidence=!!coupledPacket&&coupledPacket.status===STATUS.READY&&(
+      Object.values(coupledPacket.driverStress||{}).some(value=>finite(value)&&Number(value)>0)||
+      Object.keys(coupledPacket.transientProjection||{}).length>0||
+      CHANNELS.some(channel=>finite(coupledPacket.effectiveReadiness?.[channel])&&Number(coupledPacket.effectiveReadiness[channel])<1)
+    );
+    const latencyEvidence=Object.values(sectionalLatency?.appliedByStage||{}).some(value=>finite(value)&&Number(value)>0);
+    return measuredReadiness||explicitMaintenance||coupledEvidence||latencyEvidence;
+  }
+
+  async function resolveCoupledReadiness(readiness,context={},provenance=[]){
+    if(context.coupledDegradationPacket&&typeof context.coupledDegradationPacket==='object'){
+      const packet=context.coupledDegradationPacket;
+      return {packet,readiness:packet.effectiveReadiness?{...readiness,...packet.effectiveReadiness}:{...readiness}};
+    }
+    const hasTransient=context.transientState&&typeof context.transientState==='object';
+    const hasProfile=context.couplingProfileId||context.couplingProfile;
+    const hasSectional=context.sectionalNetwork||context.sectionalTopologyPacket||context.sectionalProfileId||context.sectionalProfile;
+    if(!hasTransient&&!hasProfile&&!hasSectional)return {packet:null,readiness:{...readiness}};
+    const Runtime=globalThis.BlacklightExoFTLCoupledDegradationRuntime;
+    if(!Runtime?.resolveFTLCoupledDegradation){
+      return {packet:deepFreeze({status:STATUS.UNRESOLVED,warnings:['Coupled-degradation or sectional evidence was supplied but the coupled-degradation runtime is not loaded.'],provenance:unique(provenance)}),readiness:{...readiness}};
+    }
+    const packet=await Runtime.resolveFTLCoupledDegradation({
+      readiness,
+      sectionalNetwork:context.sectionalNetwork,
+      sectionalTopologyPacket:context.sectionalTopologyPacket,
+      sectionalProfileId:context.sectionalProfileId,
+      sectionalProfile:context.sectionalProfile,
+      serviceChannelMap:context.serviceChannelMap,
+      transientState:context.transientState||{},
+      profileId:context.couplingProfileId||undefined,
+      couplingProfile:context.couplingProfile||undefined,
+      interventionHorizon:context.interventionHorizon,
+      provenance
+    });
+    return {packet,readiness:packet?.effectiveReadiness?{...readiness,...packet.effectiveReadiness}:{...readiness}};
+  }
+
+  function blockedChannels(readiness){
+    return CHANNELS.filter(channel=>!finite(readiness[channel])||Number(readiness[channel])<=0);
+  }
+
+  function packet({status,baselineTiming,baselineRecovery,timing,recovery,record,readiness,coupled,sectionalLatency,appliedFactors,warnings,provenance}){
+    return deepFreeze({status,baselineTiming,baselineRecovery,timing,recovery,selectedRecord:record||null,readiness,coupledDegradation:coupled||null,sectionalLatency,appliedFactors,warnings,provenance});
+  }
+
   async function resolveFTLInstallationSafetyTiming(context={}){
     const registry=context.registry||await loadRegistry();
     const selected=selectRecord(registry,context);
@@ -172,72 +221,55 @@
     const readiness=coupled.readiness;
     const blocked=blockedChannels(readiness);
     const penalty=maintenancePenalty(context,record||{});
+    const baselineSectionalLatency=context.baselineSectionalLatency||record?.baselineSectionalLatency||{};
+    const sectionalLatency=resolveSectionalLatency(coupled.packet,baselineSectionalLatency);
     const warnings=[...(selected.warnings||[]),...(coupled.packet?.warnings||[])];
+
+    if(sectionalLatency.unresolvedChannels.length){
+      warnings.push(`Sectional latency evidence exists without a usable certified baseline for: ${sectionalLatency.unresolvedChannels.join(', ')}; full current path delay is not added because nominal latency may already be embedded in baseline timing.`);
+    }
 
     if(coupled.packet?.status===STATUS.CONFLICT){
       warnings.push('Coupled-degradation or sectional dependency authority conflicts; installation timing certification cannot average contradictory infrastructure models.');
-      return deepFreeze({status:STATUS.CONFLICT,baselineTiming,baselineRecovery,timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,selectedRecord:record||null,readiness,coupledDegradation:coupled.packet,appliedFactors:{maintenancePenalty:1},warnings,provenance:unique([...provenance,...(coupled.packet.provenance||[])])});
+      return packet({status:STATUS.CONFLICT,baselineTiming,baselineRecovery,timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,record,readiness,coupled:coupled.packet,sectionalLatency,appliedFactors:{maintenancePenalty:1},warnings,provenance:unique([...provenance,...(coupled.packet.provenance||[])])});
     }
 
     if(blocked.length||coupled.packet?.status===STATUS.BLOCKED){
       warnings.push(`Blocking readiness channel(s): ${blocked.join(', ')||coupled.packet?.blockedChannels?.join(', ')||'sectional/common-cause limit'}.`);
-      return deepFreeze({
-        status:STATUS.BLOCKED,
-        baselineTiming,
-        baselineRecovery,
-        timing:{...baselineTiming},
-        recovery:baselineRecovery?{...baselineRecovery}:null,
-        selectedRecord:record||null,
-        readiness,
-        coupledDegradation:coupled.packet,
-        appliedFactors:{maintenancePenalty:penalty},
-        warnings,
-        provenance:unique([...provenance,...(coupled.packet?.provenance||[])])
-      });
+      return packet({status:STATUS.BLOCKED,baselineTiming,baselineRecovery,timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,record,readiness,coupled:coupled.packet,sectionalLatency,appliedFactors:{maintenancePenalty:penalty},warnings,provenance:unique([...provenance,...(coupled.packet?.provenance||[])])});
     }
 
-    const measuredCondition=hasMeasuredConditionEvidence(context,coupled.packet);
+    const measuredCondition=hasMeasuredConditionEvidence(context,coupled.packet,sectionalLatency);
     if(selected.status!==STATUS.READY&&!measuredCondition){
       warnings.push('Named timing authority did not authorize numeric adjustment and no measured degradation evidence was supplied; baseline timing is preserved rather than guessed.');
-      return deepFreeze({
-        status:selected.status,
-        baselineTiming,
-        baselineRecovery,
-        timing:{...baselineTiming},
-        recovery:baselineRecovery?{...baselineRecovery}:null,
-        selectedRecord:record||null,
-        readiness,
-        coupledDegradation:coupled.packet,
-        appliedFactors:{maintenancePenalty:1},
-        warnings,
-        provenance:unique([...provenance,...(coupled.packet?.provenance||[])])
-      });
+      return packet({status:selected.status,baselineTiming,baselineRecovery,timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,record,readiness,coupled:coupled.packet,sectionalLatency,appliedFactors:{maintenancePenalty:1},warnings,provenance:unique([...provenance,...(coupled.packet?.provenance||[])])});
     }
 
     const adjusted=adjustTiming(baselineTiming,readiness,penalty);
+    const timing=applySectionalLatency(adjusted.timing,sectionalLatency);
     const recovery=adjustRecovery(baselineRecovery,readiness);
-    if(selected.status!==STATUS.READY){
-      warnings.push('Named canonical timing remains unresolved; only explicitly measured/declared degradation is applied to the generic baseline, and no named performance bonus is inferred.');
-    }
+    if(selected.status!==STATUS.READY)warnings.push('Named canonical timing remains unresolved; only explicitly measured/declared degradation is applied to the generic baseline, and no named performance bonus is inferred.');
     if(penalty>1)warnings.push(`Maintenance degradation factor ${penalty.toFixed(4)} lengthens intervention timing.`);
+    if(Object.values(sectionalLatency.appliedByStage).some(value=>Number(value)>0))warnings.push('Sectional rerouting consumes intervention margin only by delay above the supplied certified sectional baseline; nominal path delay is not counted twice.');
     if(CHANNELS.some(channel=>readiness[channel]<baselineReadiness[channel]))warnings.push('Sectional/common-cause infrastructure evidence reduces one or more readiness channels before timing adjustment.');
     else if(CHANNELS.some(channel=>readiness[channel]<1))warnings.push('Measured installation readiness reduces one or more timing/recovery margins; no family equation was changed.');
     if(record?.familyId===null&&context.family)warnings.push('Selected installation timing record does not establish transit-family identity; supplied family remains independently authoritative.');
 
-    return deepFreeze({
+    return packet({
       status:selected.status===STATUS.READY?STATUS.READY:selected.status,
       baselineTiming,
       baselineRecovery,
-      timing:adjusted.timing,
+      timing,
       recovery,
-      selectedRecord:record,
+      record,
       readiness,
-      coupledDegradation:coupled.packet,
+      coupled:coupled.packet,
+      sectionalLatency,
       appliedFactors:{...adjusted.factors,maintenancePenalty:penalty},
       warnings,
       provenance:unique([...provenance,...(coupled.packet?.provenance||[])])
     });
   }
 
-  globalThis.BlacklightExoFTLInstallationSafetyTimingRuntime=deepFreeze({STATUS,CHANNELS,resolveFTLInstallationSafetyTiming});
+  globalThis.BlacklightExoFTLInstallationSafetyTimingRuntime=deepFreeze({STATUS,CHANNELS,LATENCY_STAGE,resolveFTLInstallationSafetyTiming});
 })();
