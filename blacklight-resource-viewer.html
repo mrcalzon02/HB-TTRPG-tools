@@ -350,6 +350,17 @@
         documentNode.replaceChildren(pre);
       };
 
+      const activateFragment = () => {
+        const encodedFragment = location.hash.slice(1);
+        if (!encodedFragment) return;
+
+        let fragment = encodedFragment;
+        try { fragment = decodeURIComponent(encodedFragment); } catch (_error) { /* use encoded fragment */ }
+        const target = document.getElementById(fragment);
+        if (!target) return;
+        requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+      };
+
       if (!sourcePath || !allowedPath.test(sourcePath) || !allowedExtension.test(sourcePath) || sourcePath.includes('..')) {
         pathNode.textContent = 'Invalid resource path';
         rawLink.hidden = true;
@@ -367,7 +378,10 @@
           if (!response.ok) throw new Error(`Resource request returned ${response.status}`);
           return response.text();
         })
-        .then(source => render(source, sourcePath))
+        .then(source => {
+          render(source, sourcePath);
+          activateFragment();
+        })
         .catch(error => {
           documentNode.innerHTML = `<p class="resource-error">Unable to load this resource: ${escapeHtml(error.message)}</p>`;
         });
