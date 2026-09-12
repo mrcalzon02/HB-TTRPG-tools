@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.propulsion-transit.authority-corrections",
+  "status": "AUTHORITATIVE_CORRECTION_BRIDGE",
+  "purpose": "Machine-readable correction layer for stale lower-authority propulsion/transit registry claims that have been superseded by narrower authoritative sources but remain present in legacy registries pending a safe full-file normalization.",
+  "authorityOrder": [
+    "specific named race/species, vessel, installation, manufacturer, and technology authority",
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "this correction bridge",
+    "legacy generic propulsion/transit registry",
+    "generator defaults"
+  ],
+  "corrections": [
+    {
+      "id": "arnock-general-technology-basis-2026-09",
+      "target": "data/exo-vessel/propulsion-transit-registry.json#raceConstraints[id=arnock-recovered-engineering-constraints]",
+      "supersedingAuthority": "data/blacklight-continuum/wiki/arnock-technology-authority.json",
+      "status": "SUPERSEDED",
+      "staleClaims": [
+        "cultivated neural computation as a general Ar'nock technology trait",
+        "biological/symbiotic machinery as a default Ar'nock propulsion/transit technology basis"
+      ],
+      "replacement": {
+        "primaryTechnologyBasis": "SOLID_STATE_ELECTROMECHANICAL_MODULAR",
+        "computeSubstrate": "solid-state silicon",
+        "characteristicEngineering": [
+          "highly integrated replaceable functional modules",
+          "piezoelectric sensing and actuation",
+          "ruggedized solid-state/electromechanical machinery",
+          "module-bound identity and calibration",
+          "deterministic safety interlocks and sectional service architecture"
+        ],
+        "biotechnology": "advanced secondary technology used principally for feedstock, medical, environmental/ecological, waste-processing, and life-support functions unless a narrower source establishes a biological machinery exception",
+        "transitFamily": "UNRESOLVED"
+      },
+      "generatorRule": "When the legacy race constraint and the Ar'nock technology authority disagree, use the Ar'nock technology authority. Do not emit cultivated neural computation, living field organs, vascular power trunks, metabolic drives, sensory tissue, or actuator organisms as generic Ar'nock machinery.",
+      "provenance": "Project-owner correction retained in data/blacklight-continuum/wiki/arnock-technology-authority.json version 1.1.0."
+    }
+  ],
+  "integration": {
+    "maintenanceEvidenceContract": "data/exo-vessel/ftl-maintenance-evidence-contract.json",
+    "maintenanceEvidenceAdapter": "data/exo-vessel/ftl-maintenance-evidence-integration-registry.json",
+    "adapterRuntime": "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_MAINTENANCE_EVIDENCE_INTEGRATION_AND_RECERTIFICATION_MANUAL.md"
+  },
+  "safeguards": [
+    "A correction bridge does not promote unresolved Ar'nock FTL-family identity.",
+    "Historical source text may remain archived, but generators must use the superseding authority for current general technology claims.",
+    "Biological machinery remains valid where a subsystem-specific source explicitly establishes it; the correction removes only the biological default.",
+    "The correction layer must not be used to overwrite unrelated named-source race or vessel canon."
+  ]
+}
