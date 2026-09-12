@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-arnock-maintenance-fabrication.schema.json",
+  "title": "Ar'nock Maintenance, Fabrication, and Service Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "species",
+    "systemIdentity",
+    "technologyBasis",
+    "serviceBoundary",
+    "interfaces",
+    "tools",
+    "inspectionEvidence",
+    "calibration",
+    "acceptance",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "1.0.0"},
+    "species": {"type": "string", "const": "Ar'nock"},
+    "systemIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["systemId", "name", "function", "status"],
+      "properties": {
+        "systemId": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "function": {"type": "string", "minLength": 1},
+        "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MIXED"]},
+        "manufacturer": {"type": ["string", "null"]},
+        "installationId": {"type": ["string", "null"]},
+        "hardwareRevision": {"type": ["string", "null"]},
+        "logicRevision": {"type": ["string", "null"]}
+      }
+    },
+    "technologyBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryBasis", "computeSubstrate", "serviceModel"],
+      "properties": {
+        "primaryBasis": {"type": "string", "const": "SOLID_STATE_ELECTROMECHANICAL_MODULAR"},
+        "computeSubstrate": {"type": "string", "const": "solid-state silicon"},
+        "serviceModel": {"type": "string", "const": "functional-module"},
+        "piezoelectricRoles": {"type": "array", "items": {"type": "string"}},
+        "biologicalException": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["source", "scope"],
+          "properties": {
+            "source": {"type": "string", "minLength": 1},
+            "scope": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "serviceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "bay", "depot", "foundry"],
+      "properties": {
+        "field": {"type": "array", "items": {"type": "string"}},
+        "bay": {"type": "array", "items": {"type": "string"}},
+        "depot": {"type": "array", "items": {"type": "string"}},
+        "foundry": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "interfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mechanicalDatum", "power", "dataControl", "thermal", "environmentalBoundary", "calibrationIdentity"],
+      "properties": {
+        "mechanicalDatum": {"type": ["string", "null"]},
+        "power": {"type": ["string", "null"]},
+        "dataControl": {"type": ["string", "null"]},
+        "thermal": {"type": ["string", "null"]},
+        "environmentalBoundary": {"type": ["string", "null"]},
+        "calibrationIdentity": {"type": ["string", "null"]},
+        "fluid": {"type": ["string", "null"]},
+        "referenceTiming": {"type": ["string", "null"]}
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["class", "required"],
+        "properties": {
+          "class": {"enum": ["identity-provenance", "electrical-characterization", "piezo-resonance", "thermal", "mechanical-metrology", "bus-timing-protocol", "fabrication-joining", "clean-handling", "biological-support"]},
+          "required": {"type": "boolean"},
+          "notes": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "inspectionEvidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["measurement", "status", "provenance"],
+        "properties": {
+          "measurement": {"type": "string", "minLength": 1},
+          "value": {},
+          "unit": {"type": ["string", "null"]},
+          "status": {"enum": ["MEASURED", "CERTIFIED_BOUND", "DERIVED", "PROPOSED", "UNRESOLVED"]},
+          "provenance": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "identity", "epoch", "referenceState"],
+      "properties": {
+        "status": {"enum": ["VALID", "EXPIRED", "MISMATCH", "UNRESOLVED"]},
+        "identity": {"type": ["string", "null"]},
+        "epoch": {"type": ["string", "null"]},
+        "referenceState": {"type": ["string", "null"]},
+        "crossCovarianceStatus": {"enum": ["KNOWN", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE"]}
+      }
+    },
+    "transitRecertification": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["required", "familyStatus", "affectedDomains"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "familyStatus": {"enum": ["RESOLVED", "UNRESOLVED", "NOT_APPLICABLE"]},
+        "family": {"type": ["string", "null"]},
+        "affectedDomains": {"type": "array", "items": {"type": "string"}},
+        "timingImpactSeconds": {"type": ["number", "null"], "minimum": 0},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidenceComplete", "staticTests", "dynamicTests", "thermalSoak", "timingTests"],
+      "properties": {
+        "status": {"enum": ["ACCEPTED", "REJECTED", "CONDITIONAL", "UNRESOLVED"]},
+        "evidenceComplete": {"type": "boolean"},
+        "staticTests": {"type": "boolean"},
+        "dynamicTests": {"type": "boolean"},
+        "thermalSoak": {"type": "boolean"},
+        "timingTests": {"type": "boolean"},
+        "recertificationComplete": {"type": ["boolean", "null"]}
+      }
+    },
+    "failureSignatures": {"type": "array", "items": {"type": "string"}},
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "status"],
+        "properties": {
+          "source": {"type": "string", "minLength": 1},
+          "status": {"enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED", "MEASURED"]},
+          "scope": {"type": ["string", "null"]},
+          "notes": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}
