@@ -176,7 +176,7 @@
   async function resolveFTLFamilyEncounterTime(context={}){
     const registry = context.registry || await loadRegistry();
     const SourceState = context.sourceStateRuntime || globalThis.BlacklightExoFTLTimeDependentSourceStateRuntime;
-    const Curvature = context.curvatureRuntime || globalThis.BlacklightExoFTLCurvatureEnvironmentRuntime;
+    const Curvature = context.curvatureRuntime || globalThis.BlacklightExoFTLCurvatureEnvironment;
     const familyId = String(context.familyId || '').trim();
     const encounterModel = FAMILY_MODEL[familyId] || MODEL.UNRESOLVED;
     const from = vector(context.from?.positionM || context.from);
