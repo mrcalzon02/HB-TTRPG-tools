@@ -4,9 +4,11 @@
   "title": "Black Light FTL Installation Safety Timing Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["status", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
+  "required": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
   "properties": {
     "status": {"enum": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]},
+    "baselineTiming": {"$ref": "#/$defs/timing"},
+    "baselineRecovery": {"type": ["object", "null"]},
     "timing": {"$ref": "#/$defs/timing"},
     "recovery": {"type": ["object", "null"]},
     "selectedRecord": {"type": ["object", "null"]},
