@@ -43,14 +43,15 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["branchId", "eigenvaluePerS2", "eigenvalueSigmaPerS2", "orientationSigmaRad", "orientationStatus"],
+              "required": ["branchId", "eigenvaluePerS2", "eigenvalueSigmaPerS2", "orientationSigmaRad", "orientationStatus", "degenerate", "sensitivity"],
               "properties": {
                 "branchId": {"type": "string"},
                 "eigenvaluePerS2": {"type": "number"},
                 "eigenvalueSigmaPerS2": {"type": ["number", "null"], "minimum": 0},
                 "orientationSigmaRad": {"type": ["number", "null"], "minimum": 0},
                 "orientationStatus": {"enum": ["LINEARIZED", "DEGENERATE_SUBSPACE", "OUTSIDE_LINEAR_MODEL", "UNRESOLVED"]},
-                "degenerate": {"type": "boolean"}
+                "degenerate": {"type": "boolean"},
+                "sensitivity": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "number"}}
               }
             }
           },
@@ -63,7 +64,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["leftSampleIndex", "rightSampleIndex", "branchPair", "status", "gapAtLeftPerS2", "gapAtRightPerS2", "gapSigmaLeftPerS2", "gapSigmaRightPerS2", "boundaryFraction", "boundaryFractionSigma"],
+        "required": ["leftSampleIndex", "rightSampleIndex", "branchPair", "status", "gapAtLeftPerS2", "gapAtRightPerS2", "gapSigmaLeftPerS2", "gapSigmaRightPerS2", "boundaryFraction", "boundaryFractionSigma", "notes"],
         "properties": {
           "leftSampleIndex": {"type": "integer", "minimum": 0},
           "rightSampleIndex": {"type": "integer", "minimum": 0},
