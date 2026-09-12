@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.propulsion-transit.authority-manifest",
   "title": "Black Light Propulsion & Transit Authority Manifest",
   "status": "DERIVED",
@@ -83,6 +83,10 @@
     "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md",
     "docs/blacklight/BLACK_LIGHT_FTL_CONSERVATIVE_BLOCKER_CERTIFICATION_AND_PRESENTATION_MANUAL.md",
     "docs/blacklight/BLACK_LIGHT_FTL_NAMED_IDENTITY_APPLICABILITY_HANDOFF_MANUAL.md",
+    "data/exo-vessel/ftl-sectional-dependency-topology-registry.json",
+    "data/schemas/exo-vessel-ftl-sectional-dependency-topology.schema.json",
+    "blacklight-exo-ftl-sectional-dependency-topology-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_SECTIONAL_DEPENDENCY_TOPOLOGY_AND_LARGE_VESSEL_RESILIENCE_MANUAL.md",
     "data/exo-vessel/ftl-installation-safety-timing-registry.json",
     "data/schemas/exo-vessel-ftl-installation-safety-timing.schema.json",
     "blacklight-exo-ftl-installation-safety-timing-runtime.js",
@@ -92,6 +96,8 @@
     "data/schemas/exo-vessel-ftl-coupled-degradation.schema.json",
     "blacklight-exo-ftl-coupled-degradation-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_COUPLED_DEGRADATION_POWER_THERMAL_TRANSIENT_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_SECTIONAL_PROPAGATION_LATENCY_AND_MODULAR_REFIT_TIMING_MANUAL.md",
+    "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_ADAPTER_SECTIONAL_CERTIFICATION_CONTRACT.md",
     "data/exo-vessel/ftl-physical-route-path-registry.json",
     "data/schemas/exo-vessel-ftl-physical-route-path.schema.json",
     "blacklight-exo-ftl-physical-route-path-runtime.js",
@@ -169,6 +175,7 @@
     "docs/blacklight/BLACK_LIGHT_FTL_TECHNOLOGY_ANCESTRY_AND_HYBRID_INTEGRATION_MANUAL.md"
   ],
   "raceAndVesselSpecific": [
+    "data/blacklight-continuum/wiki/arnock-technology-authority.json",
     "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
     "docs/blacklight/ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md",
     "docs/blacklight/ZWLEI_MURREK_PROPULSION_TRANSIT_ENGINEERING_MANUAL.md",
@@ -206,6 +213,7 @@
     "blacklight-exo-ftl-first-blocker-presentation-runtime.js",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
+    "blacklight-exo-ftl-sectional-dependency-topology-runtime.js",
     "blacklight-exo-ftl-coupled-degradation-runtime.js",
     "blacklight-exo-ftl-installation-safety-timing-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
@@ -235,10 +243,14 @@
     "Near repeated tidal eigenvalues, individual eigenvectors inside the degenerate eigenspace are not physically unique. The degenerate subspace must be preserved as such rather than promoted to an arbitrary canonical direction.",
     "Tidal eigenaxes and their rotations are ordinary gravitational evidence; they may inform a versioned Gravitational Plane or Slipstream/Shear response model but do not themselves prove that a fictional lane, fork, or boundary exists.",
     "Tidal covariance, eigenvalue uncertainty, eigenaxis uncertainty, normalized-degeneracy uncertainty and operational-boundary uncertainty remain ordinary-physics evidence. They may refine sampling and conservative planning but cannot manufacture a fictional family hazard without provenance-bearing applicability authority.",
-    "Installation readiness, maintenance, power, thermal, cooling, hydraulic, dielectric and metabolic state may alter sensing, computation, actuation, exit and recovery timing but may not alter G, external tidal geometry, family identity or fictional hazard existence.",
+    "Sectional reachability, sectional timing and route certification are distinct. A surviving path does not establish that the path is fast enough, and timely machinery does not by itself establish route certification.",
+    "Current sectional propagation latency may consume intervention margin only through an excess-delay comparison against a matching certified baseline; a missing certified baseline remains UNRESOLVED rather than zero.",
+    "Installation readiness, maintenance, power, thermal, cooling, hydraulic, dielectric and other sourced support state may alter sensing, computation, actuation, exit and recovery timing but may not alter G, external tidal geometry, family identity or fictional hazard existence.",
     "Correlated machinery degradation must be modeled as shared infrastructure evidence rather than by multiplying channel penalties as independent failure probabilities unless an explicit stochastic authority supplies the joint model.",
     "Hard declared power-buffer or thermal operating limits are blocking machinery states when the supplied telemetry and intervention horizon establish that the installation cannot sustain the certified exit sequence.",
     "Measured degradation may worsen a generic timing baseline even when named technology timing remains canonically unresolved; unresolved identity may not be used to invent a performance bonus or to suppress observed physical degradation.",
+    "The general Ar'nock technology baseline is solid-state electromechanical, silicon-computational, strongly modular and extensively piezoelectric in sensing/actuation. Biotechnology/bioprinting is secondary for feedstock, medicine, environmental support and life support unless a specific subsystem authority establishes an exception.",
+    "Ar'nock identity does not select an FTL family, and generic Ar'nock machinery must not be rewritten as cultivated neural, symbiotic or metabolic technology without subsystem-specific authority.",
     "When an authoritative physicalEnvironmentContext is supplied, route safety must use the physical gravity/curvature bridge; a PARTIAL, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY physical result may not be replaced by a PROPOSED route archetype fallback.",
     "Only absence of a physicalEnvironmentContext permits the existing PROPOSED route archetype environment fallback.",
     "A physical route path must preserve every sampled field-point result and its provenance; route-wide extrema are sampled extrema unless a convergence or analytic bound proves otherwise.",
@@ -280,5 +292,5 @@
     "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
     "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index still predates several machine-readable safety, uncertainty, applicability, installation-timing, and common-cause degradation additions. This manifest now indexes those layers and the current runtime spine without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index still predates several machine-readable safety, uncertainty, applicability, sectional-topology, sectional-latency, installation-timing and common-cause degradation additions. This manifest now indexes those layers, the corrected Ar'nock technology authority, and the current runtime spine without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
