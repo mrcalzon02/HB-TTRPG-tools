@@ -31,7 +31,7 @@
   "executionModel": {
     "origin": "github-pages-static",
     "rule": "Mirrored calls, not mirrored logic.",
-    "bootstrapRule": "entrypoints.bootstrap is a compact routing contract; current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions.",
+    "bootstrapRule": "entrypoints.bootstrap is the canonical routing contract. This manifest provides discovery and transport facts; load only the additional machine authorities the bootstrap requires for the selected task.",
     "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
     "remoteRpcAvailable": false,
     "remoteMcpAvailable": false,
@@ -138,15 +138,12 @@
     }
   ],
   "agentGuidance": [
-    "Start with entrypoints.aiIndex and read entrypoints.bootstrap before constructing or invoking capabilities; do not reconstruct capabilities from page prose.",
-    "Read entrypoints.statusVocabulary before interpreting capability availability or execution state.",
-    "Read entrypoints.agentSkills and load its defaultPersonality binding before selected task skills.",
-    "Load the selected SKILL.md before resolving referenced capabilities, helpers, resources, or portable companion metadata.",
-    "Use entrypoints.charlesSkillInterface when Charles is the conversational interface or the request spans multiple tabletop skills.",
-    "Use the canonical capability registry for identity, status, runtime scripts, invocation style, source paths, and limitations.",
-    "Use operationContracts for exact operation names and argument schemas.",
-    "If the current host cannot retrieve agentSkills or SKILL.md raw resources, use agentSkillsHtml to enumerate the exact registered skill names and follow its GitHub HTML fallbacks; do not treat the HTML projection as a replacement authority.",
-    "For portable browser-JavaScript packages, require the companion runtime script set to match the capability registry exactly and preserve declared order before using the same-origin loader/self-test chain.",
-    "Check selected-skill execution requirements, execution mode, runtime context, and transport status before claiming invocation, persistence, rendering, randomness, or execution."
+    "After reading this discovery manifest, follow entrypoints.bootstrap as the canonical orchestration sequence; do not independently replay a second fixed loading sequence from this manifest.",
+    "Load only authorities required by the selected task: statusVocabulary only before interpreting status or acceptance state, capabilityRegistry only when the selected skill references capabilities, operationContracts only before constructing executable calls, and resourceCollections only when the task requires registered static, campaign, or lore material.",
+    "Select the minimum-capability task skill from entrypoints.agentSkills, load the canonical Charles engram once for the orchestration context, then load that skill's SKILL.md and follow its exact references. Reuse unchanged authorities already loaded in the same task.",
+    "Use entrypoints.charlesSkillInterface when Charles is the conversational interface or the request spans multiple tabletop skill families.",
+    "If the current host cannot retrieve raw agentSkills or SKILL.md resources, use agentSkillsHtml for discovery and its GitHub HTML fallbacks; the HTML projection is not replacement authority.",
+    "Check only the selected skill's execution requirements, runtime context, declared self-tests, and transport requirements before making execution, persistence, rendering, randomness, readiness, or deployment claims.",
+    "Do not infer a remote POST, RPC, MCP, browser-control, or other execution service unless this manifest explicitly declares it deployed and the current host verifies it."
   ]
 }
