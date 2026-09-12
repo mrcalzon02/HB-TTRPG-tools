@@ -6,6 +6,8 @@
   let registryPromise=null;
 
   const unique=items=>[...new Set((items||[]).filter(Boolean))];
+  const FAMILY_ALIAS=Object.freeze({'gravitic-plane':'gravitational-plane'});
+  const canonicalFamily=value=>FAMILY_ALIAS[String(value||'').trim()]||String(value||'').trim();
   function deepFreeze(value){
     if(!value||typeof value!=='object'||Object.isFrozen(value))return value;
     Object.freeze(value);
@@ -30,7 +32,7 @@
   const SCOPE_RANK=Object.freeze({FAMILY:10,RACE:20,MANUFACTURER:30,NAMED_TECHNOLOGY:40,VESSEL:50,INSTALLATION:60});
 
   function recordMatches(record,context){
-    if(record.family&&record.family!==context.family)return false;
+    if(record.family&&canonicalFamily(record.family)!==context.family)return false;
     if(record.hazardKey&&record.hazardKey!==context.hazardKey)return false;
     if(record.physicalEvidenceType&&record.physicalEvidenceType!==context.physicalEvidenceType)return false;
     const tests=[['namedTechnologyId','NAMED_TECHNOLOGY'],['vesselId','VESSEL'],['installationId','INSTALLATION'],['raceId','RACE'],['manufacturerId','MANUFACTURER']];
@@ -55,7 +57,7 @@
   async function resolveFTLTopologyHazardApplicability(context={}){
     const registry=context.registry||await loadRegistry();
     const normalized={
-      family:String(context.family||'').trim()||null,
+      family:canonicalFamily(context.family)||null,
       hazardKey:String(context.hazardKey||'').trim()||null,
       physicalEvidenceType:String(context.physicalEvidenceType||'NORMALIZED_TIDAL_DEGENERACY_BOUNDARY').trim(),
       namedTechnologyId:context.namedTechnologyId||null,
@@ -101,6 +103,6 @@
   }
 
   globalThis.BlacklightExoFTLTopologyHazardApplicabilityRuntime=deepFreeze({
-    STATUS,REGISTRY_URL,resolveFTLTopologyHazardApplicability
+    STATUS,REGISTRY_URL,canonicalFamily,resolveFTLTopologyHazardApplicability
   });
 })();
