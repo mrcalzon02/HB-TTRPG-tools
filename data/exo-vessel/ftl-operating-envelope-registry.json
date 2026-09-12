@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.operating-envelope",
+  "status": "DERIVED",
+  "purpose": "Defines how a propulsion/transit installation certificate expresses the bounded operating conditions under which return-to-service evidence remains valid. Route admission may not treat CERTIFIED as an unlimited capability claim.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "role": "Governing design intent for differentiated gravity sensitivity, miscalculation penalties, predictive safety sensing, emergency de-transit, and maturity-scaled safety engineering."
+  },
+  "coreInvariant": "A maintenance certificate is valid only inside the operating envelope for which its evidence was collected or analytically bounded.",
+  "scalarBandModel": {
+    "certified": "x_c in [L_c,U_c]",
+    "requested": "x_r in [L_r,U_r]",
+    "inside": "L_r >= L_c AND U_r <= U_c",
+    "signedMargin": "m = min(L_r-L_c, U_c-U_r)",
+    "normalizedMargin": "mu = m/(U_c-L_c) when U_c>L_c",
+    "pointRequest": "A point request is represented by L_r=U_r=x_r.",
+    "safeguard": "Partial overlap is not certification. If any portion of the requested interval lies outside the certified interval, the dimension blocks admission."
+  },
+  "coupledConstraintModel": {
+    "linearForm": "a^T x <= b",
+    "intervalConservativeTest": "sum_i max(a_i*L_i, a_i*U_i) <= b",
+    "purpose": "Supports coupled limits such as power-versus-cooling, acceleration-versus-payload, or simultaneous field-sector demand without pretending dimensions are independent.",
+    "safeguard": "A coupled constraint is evaluated only when all referenced variables and compatible units are supplied. Missing variables remain UNRESOLVED."
+  },
+  "standardDimensions": [
+    {"key":"inputPower","physicalMeaning":"electrical/fluid/other prime power admitted to the transit installation","typicalUnit":"W"},
+    {"key":"protectedPower","physicalMeaning":"instantaneous protected emergency power available to required intervention machinery","typicalUnit":"W"},
+    {"key":"protectedEnergy","physicalMeaning":"usable protected emergency energy reserve","typicalUnit":"J"},
+    {"key":"heatGeneration","physicalMeaning":"installation heat generation under the requested operating point","typicalUnit":"W"},
+    {"key":"heatRejection","physicalMeaning":"available heat rejection under the requested environmental state","typicalUnit":"W"},
+    {"key":"coolantFlow","physicalMeaning":"cooling-medium flow available to certified machinery","typicalUnit":"kg/s"},
+    {"key":"fieldAuthority","physicalMeaning":"normalized or physically parameterized ability of the installed field-forming/control system to produce the commanded state","typicalUnit":"authority-specific"},
+    {"key":"commandLatency","physicalMeaning":"command propagation contribution relevant to emergency intervention","typicalUnit":"s"},
+    {"key":"actuationLatency","physicalMeaning":"actuator response contribution relevant to emergency intervention","typicalUnit":"s"},
+    {"key":"interventionTime","physicalMeaning":"complete certified emergency intervention time","typicalUnit":"s"},
+    {"key":"vesselMass","physicalMeaning":"current certified vessel mass or bounded mass interval","typicalUnit":"kg"},
+    {"key":"protectedMass","physicalMeaning":"mass enclosed by or dependent on the transit effect when distinct from vessel mass","typicalUnit":"kg"},
+    {"key":"linearAcceleration","physicalMeaning":"ordinary-space linear acceleration relevant to machinery/alignment/load certification","typicalUnit":"m/s^2"},
+    {"key":"angularRate","physicalMeaning":"vessel rotational rate relevant to alignment/control limits","typicalUnit":"rad/s"},
+    {"key":"tidalTensorNorm","physicalMeaning":"environmental gravity-gradient demand when the installation certificate explicitly includes an environmental limit","typicalUnit":"s^-2"},
+    {"key":"curvatureMetric","physicalMeaning":"family/authority-specific curvature demand only where a defined metric exists","typicalUnit":"authority-specific"},
+    {"key":"plasmaDensity","physicalMeaning":"ambient plasma loading/noise limit where relevant to installed sensors or field hardware","typicalUnit":"authority-specific"}
+  ],
+  "requiredEnvelopeMetadata": [
+    "certificateId",
+    "installationId",
+    "technologyBasis",
+    "familyStatus",
+    "dimensions",
+    "provenance"
+  ],
+  "dimensionRule": {
+    "unitCompatibility": "Certified and requested units must match exactly unless an explicit trusted conversion has already normalized them before evaluation.",
+    "missingRequiredDimension": "UNRESOLVED",
+    "malformedBounds": "CONFLICT",
+    "outsideBand": "BLOCK",
+    "insideBand": "PASS",
+    "boundaryAdvisory": "CONDITIONAL only when the certificate explicitly supplies advisoryMarginFraction and the request remains fully inside the certified band."
+  },
+  "familySafeguards": [
+    "Operating-envelope dimensions do not select FTL family.",
+    "PRECOMMIT families may certify timing/prediction/state envelopes without fabricating local FTL velocity.",
+    "Anchored portal systems may certify mouth power, synchronization, aperture/throat, admission, exit, clearance, and recovery envelopes rather than free-flight velocity.",
+    "Continuous projected-progress families may certify projected-progress demand only when the applicable family authority defines that quantity.",
+    "Environmental dimensions are certificate limits, not replacements for family-specific route physics. Passing an installation gravity/tidal limit does not by itself make a route safe."
+  ],
+  "raceTechnologySafeguards": {
+    "arnock": "Express ordinary envelope evidence through modular solid-state power/control, silicon timing, piezoelectric alignment/condition evidence, cooling, protected stores, and field/actuator modules. Do not substitute biological machinery by default.",
+    "zwleiMurrek": "May express envelope evidence through bio-reactive power fluid, hydraulic vane authority, dielectric-fluid condition, conductive coolant, Navigation Current reference state, and sensor machinery while preserving unresolved consolidated FTL-family identity."
+  },
+  "provenanceRule": "Every envelope dimension must retain source, measurement/model status, epoch when relevant, units, and whether the bound is measured, inferred, manufacturer/design authority, post-refit certified, simulation-only, or unresolved."
+}
