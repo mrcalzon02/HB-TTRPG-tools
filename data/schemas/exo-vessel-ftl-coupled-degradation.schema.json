@@ -4,12 +4,13 @@
   "title": "Black Light FTL Coupled Degradation Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["status", "profile", "inputReadiness", "effectiveReadiness", "driverStress", "transientProjection", "dominantContributions", "blockedChannels", "signatures", "warnings", "provenance"],
+  "required": ["status", "profile", "inputReadiness", "effectiveReadiness", "sectionalTopology", "driverStress", "transientProjection", "dominantContributions", "blockedChannels", "signatures", "warnings", "provenance"],
   "properties": {
     "status": {"enum": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]},
     "profile": {"type": ["object", "null"]},
     "inputReadiness": {"$ref": "#/$defs/readiness"},
     "effectiveReadiness": {"$ref": "#/$defs/readiness"},
+    "sectionalTopology": {"type": ["object", "null"]},
     "driverStress": {
       "type": "object",
       "additionalProperties": false,
