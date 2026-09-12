@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.uncertainty-aware-boundary-refinement",
+  "title": "Black Light FTL Uncertainty-Aware Boundary Refinement and Intervention Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Refine poorly localized operational tidal branch-identity boundaries, preserve covariance/non-smoothness, and hand the earliest plausible ordinary-physics blocker location into family-appropriate intervention reasoning without manufacturing fictional hazard probability or local FTL velocity."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/ftl-adaptive-spatiotemporal-refinement-registry.json",
+    "blacklight-exo-ftl-adaptive-spatiotemporal-refinement-runtime.js",
+    "data/exo-vessel/ftl-normalized-degeneracy-uncertainty-registry.json",
+    "blacklight-exo-ftl-normalized-degeneracy-uncertainty-runtime.js",
+    "data/exo-vessel/ftl-family-encounter-time-registry.json",
+    "blacklight-exo-ftl-family-encounter-time-runtime.js"
+  ],
+  "defaultControls": {
+    "maximumBoundarySigmaFraction": 0.0025,
+    "maximumBoundarySigmaToIntervalRatio": 0.25,
+    "sigmaMultiplier": 2,
+    "maximumBoundaryRefinementDepth": 4,
+    "maximumSampleCount": 1536
+  },
+  "mathematics": {
+    "operationalBoundary": "h=gamma-gamma_min=0",
+    "boundaryEstimate": "f*=f_a-(f_b-f_a)h_a/(h_b-h_a)",
+    "boundarySigmaUpper": "sigma_f,upper ~= sigma_h,upper/|dh/df| when cross-sample covariance is unavailable",
+    "earliestPlausibleBoundary": "f_early=clamp(f*-k sigma_f,upper,0,1)",
+    "latestPlausibleBoundary": "f_late=clamp(f*+k sigma_f,upper,0,1)",
+    "distanceToEarlyBoundary": "D_B,early=max(0,(f_early-f_current)L)",
+    "continuousInterventionTime": "t_int=t_sensor+t_solver+t_decision+t_command+t_actuate+t_exit+t_clear+t_margin",
+    "continuousInterventionDistance": "D_int=v_progress t_int",
+    "continuousDistanceMargin": "M_D,early=D_B,early-D_int",
+    "continuousTimeMargin": "M_T,early=D_B,early/v_progress-t_int when v_progress>0",
+    "reachability": "continuous intervention is reachable only when M_D,early>0; equality is not positive clearance"
+  },
+  "engineeringInterpretation": [
+    "A nominally localized gamma_min boundary with a broad covariance envelope remains operationally poorly localized.",
+    "Uncertainty-driven midpoint insertion is a numerical evidence-density operation, not a fictional danger multiplier.",
+    "NONSMOOTH_SCALE and NONSMOOTH_GAP are mathematical states that request more local evidence where possible; they may not be replaced by cosmetically finite uncertainties.",
+    "The earliest plausible boundary is a conservative navigation planning location built from the normalized-boundary uncertainty authority.",
+    "For continuous families, intervention reachability may use projected route progress. Projected progress is not automatically local hull velocity.",
+    "For PRECOMMIT_ENDPOINT and ANCHORED_PORTAL families, continuous corridor intervention distance is not applicable; family timing-margin authorities remain authoritative."
+  ],
+  "familyUse": {
+    "gravitic-plane": "PRIMARY: refine and conservatively localize ordinary tidal branch-identity loss before family-specific shear/fork response and emergency detransit certification.",
+    "slipstream-shear": "PRIMARY: refine the uncertainty envelope around candidate shear-topology transitions without equating those transitions to confirmed exotic lanes.",
+    "metric-envelope": "SECONDARY: uncertainty-aware tidal topology and abort-planning evidence.",
+    "n-manifold": "SECONDARY: topology-confidence evidence where the family model consumes ordinary curvature structure.",
+    "inertial-torch": "STRUCTURAL/NAVIGATION: conservative tidal-topology clearance and maneuver timing.",
+    "q-lattice": "PRECOMMIT: endpoint/timing evidence only; no fabricated corridor speed.",
+    "fold-jump": "PRECOMMIT: endpoint/timing evidence only; no fabricated corridor speed.",
+    "phase-displacement": "PRECOMMIT: endpoint/timing evidence only; no fabricated corridor speed.",
+    "wormhole-gate": "ANCHOR: mouth-state/timing evidence only; no fabricated ordinary-space corridor."
+  },
+  "generatorRules": [
+    "Begin from the existing adaptive route packet; do not duplicate the ordinary gravity, ephemeris, or encounter-time models.",
+    "Recompute normalized degeneracy uncertainty on the current sorted sample set at each uncertainty-refinement depth.",
+    "Refine BOUNDARY_UNCERTAIN and NONSMOOTH_ENDPOINT intervals while family semantics and resource bounds allow.",
+    "Refine BOUNDARY_ESTIMATED intervals when sigma_f exceeds the absolute fraction control or the sigma-to-interval-span control.",
+    "Every inserted midpoint must be recomputed through the family encounter-time authority; never interpolate tidal tensors, covariance, gamma, or boundary state.",
+    "Numerical convergence requires no operational-boundary interval to remain above the configured uncertainty controls.",
+    "Sample/depth ceilings are compute limits, not evidence of safety or convergence.",
+    "The earliest plausible boundary uses a declared sigma multiplier and the conservative boundary-fraction upper bound. It is not a physical confidence interval unless a stronger covariance model establishes that interpretation.",
+    "A negative or zero continuous intervention distance margin means the modeled intervention chain lacks positive clearance to the conservative boundary.",
+    "Do not apply continuous distance-margin equations to PRECOMMIT_ENDPOINT or ANCHORED_PORTAL families."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish physical realizability of any FTL family.",
+    "Ordinary gravitational branch identity, gamma_min, covariance, and boundary uncertainty cannot prove or create an exotic shear lane, fold corridor, manifold, lattice, phase volume, or gate topology.",
+    "A selected simulation family does not establish that a named race, polity, inventor, manufacturer, owner, or vessel uses that technology.",
+    "A broad boundary envelope means the ordinary-physics transition is poorly localized; it is unresolved knowledge, not automatically high fictional danger.",
+    "A narrow boundary envelope means the ordinary-physics transition is well localized; it is not proof of an exotic hazard.",
+    "Missing covariance, source motion, boundary-state evidence, route length, intervention timing, or progress semantics remain missing rather than zero.",
+    "Projected progress greater than c does not establish local hull velocity greater than c.",
+    "PRECOMMIT and anchored-portal families may not acquire fabricated intermediate route states merely to reuse continuous intervention mathematics."
+  ],
+  "machineryEmbodimentGuidance": {
+    "terrestrial-electromechanical": "Render nominal and conservative-boundary corridors, covariance envelopes, distance/time margin, independent abort-bus latency, and provenance identifiers.",
+    "aquatic-electrochemical-hydraulic": "Encode localization confidence as pressure/current manifold width and emergency shunt timing rather than requiring Cartesian display conventions.",
+    "biological-symbiotic": "Represent localization confidence as distributed directional salience, uncertainty broadening, and reflex-chain timing while preserving the same mathematical packet underneath.",
+    "mineral-piezoelectric-photonic": "Map branch identity and uncertainty to resonance/polarization-domain separation and phase-coherence margins.",
+    "gas-giant-pressure-electrostatic": "Use volumetric pressure/electrostatic confidence surfaces and regional abort-authority timing.",
+    "hybrid-salvaged": "Preserve sensor ancestry, solver ancestry, control retrofit provenance, and operator representation as distinct fields."
+  },
+  "api": {
+    "resolver": "resolveFTLUncertaintyAwareBoundaryRefinement",
+    "inputs": ["familyId", "from", "to", "sourceStates", "referenceFrame", "routeStartEpoch", "projectedProgressMPerS", "progressSemantic", "currentFraction", "routeLengthM", "interventionTimeS", "interventionComponentsS", "maximumBoundarySigmaFraction", "maximumBoundarySigmaToIntervalRatio", "sigmaMultiplier", "maximumBoundaryRefinementDepth", "maximumSampleCount"],
+    "outputs": ["status", "familyId", "encounterModel", "controls", "sampling", "samples", "refinementEvents", "normalizedDegeneracyUncertainty", "operationalBoundaries", "earliestPlausibleBoundary", "intervention", "warnings", "provenance", "canonSafeguards"],
+    "schema": "data/schemas/exo-vessel-ftl-uncertainty-aware-boundary-refinement.schema.json",
+    "runtime": "blacklight-exo-ftl-uncertainty-aware-boundary-refinement-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_BOUNDARY_REFINEMENT_AND_INTERVENTION_MANUAL.md"
+  }
+}
