@@ -125,8 +125,8 @@
     const record=selected.record;
     const readiness=mergeReadiness(record,context);
     const blocked=blockedChannels(readiness);
-    const baselineTiming=context.baselineTiming||{};
-    const baselineRecovery=context.baselineRecovery||null;
+    const baselineTiming={...(context.baselineTiming||{})};
+    const baselineRecovery=context.baselineRecovery?{...context.baselineRecovery}:null;
     const penalty=maintenancePenalty(context,record||{});
     const warnings=[...(selected.warnings||[])];
 
@@ -134,6 +134,8 @@
       warnings.push(`Blocking readiness channel(s): ${blocked.join(', ')}.`);
       return deepFreeze({
         status:STATUS.BLOCKED,
+        baselineTiming,
+        baselineRecovery,
         timing:{...baselineTiming},
         recovery:baselineRecovery?{...baselineRecovery}:null,
         selectedRecord:record||null,
@@ -148,6 +150,8 @@
       warnings.push('Named timing authority did not authorize numeric adjustment; baseline timing is preserved rather than guessed.');
       return deepFreeze({
         status:selected.status,
+        baselineTiming,
+        baselineRecovery,
         timing:{...baselineTiming},
         recovery:baselineRecovery?{...baselineRecovery}:null,
         selectedRecord:record||null,
@@ -166,6 +170,8 @@
 
     return deepFreeze({
       status:STATUS.READY,
+      baselineTiming,
+      baselineRecovery,
       timing:adjusted.timing,
       recovery,
       selectedRecord:record,
@@ -176,7 +182,5 @@
     });
   }
 
-  globalThis.BlacklightExoFTLInstallationSafetyTimingRuntime=deepFreeze({
-    STATUS,CHANNELS,resolveFTLInstallationSafetyTiming
-  });
+  globalThis.BlacklightExoFTLInstallationSafetyTimingRuntime=deepFreeze({STATUS,CHANNELS,resolveFTLInstallationSafetyTiming});
 })();
