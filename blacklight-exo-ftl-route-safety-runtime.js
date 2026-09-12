@@ -122,6 +122,12 @@
       couplingProfileId:context.installationCouplingProfileId||context.couplingProfileId||null,
       couplingProfile:context.installationCouplingProfile||context.couplingProfile||null,
       interventionHorizon:context.installationInterventionHorizon??context.interventionHorizon,
+      sectionalNetwork:context.installationSectionalNetwork||context.sectionalNetwork||null,
+      sectionalTopologyPacket:context.installationSectionalTopologyPacket||context.sectionalTopologyPacket||null,
+      sectionalProfileId:context.installationSectionalProfileId||context.sectionalProfileId||null,
+      sectionalProfile:context.installationSectionalProfile||context.sectionalProfile||null,
+      serviceChannelMap:context.installationServiceChannelMap||context.serviceChannelMap||null,
+      baselineSectionalLatency:context.installationBaselineSectionalLatency||context.baselineSectionalLatency||null,
       coupledDegradationPacket:context.coupledDegradationPacket||null,
       provenance
     };
