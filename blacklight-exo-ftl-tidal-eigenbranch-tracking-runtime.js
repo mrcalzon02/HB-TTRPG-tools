@@ -172,7 +172,9 @@
         eigensystemStatus:degenerate?'DEGENERATE_SUBSPACE':'RESOLVED',
         eigenbranches:tracked
       });
-      previous=tracked;
+      // A degenerate eigenspace does not provide unique branch identity. Do not
+      // carry arbitrary solver basis vectors across it as though they were physical.
+      previous=degenerate?null:tracked;
     }
 
     const transitions=[];
@@ -206,7 +208,7 @@
       });
     }
 
-    if(anyDegenerate) warnings.push('One or more tidal eigensystems contain near-degenerate eigenvalues; individual axes inside those subspaces are not physically unique.');
+    if(anyDegenerate) warnings.push('One or more tidal eigensystems contain near-degenerate eigenvalues; individual axes inside those subspaces are not physically unique and branch identity is not carried through the degeneracy.');
     if(anyUnresolved) warnings.push('One or more samples lack a finite symmetric tidal tensor; eigenbranch continuity is unresolved across those gaps.');
     warnings.push('Eigenvector sign is gauge freedom; tracked vectors are sign-aligned only for continuity and do not define an arrow direction.');
     warnings.push('Tidal eigenbranch behavior is ordinary gravitational evidence and does not by itself establish a fictional shear-lane fork.');
