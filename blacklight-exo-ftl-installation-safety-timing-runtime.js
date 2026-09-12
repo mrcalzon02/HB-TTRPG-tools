@@ -85,13 +85,19 @@
     }
     const hasTransient=context.transientState&&typeof context.transientState==='object';
     const hasProfile=context.couplingProfileId||context.couplingProfile;
-    if(!hasTransient&&!hasProfile)return {packet:null,readiness:{...readiness}};
+    const hasSectional=context.sectionalNetwork||context.sectionalTopologyPacket||context.sectionalProfileId||context.sectionalProfile;
+    if(!hasTransient&&!hasProfile&&!hasSectional)return {packet:null,readiness:{...readiness}};
     const Runtime=globalThis.BlacklightExoFTLCoupledDegradationRuntime;
     if(!Runtime?.resolveFTLCoupledDegradation){
-      return {packet:deepFreeze({status:STATUS.UNRESOLVED,warnings:['Coupled-degradation evidence was supplied but the coupled-degradation runtime is not loaded.'],provenance:unique(provenance)}),readiness:{...readiness}};
+      return {packet:deepFreeze({status:STATUS.UNRESOLVED,warnings:['Coupled-degradation or sectional evidence was supplied but the coupled-degradation runtime is not loaded.'],provenance:unique(provenance)}),readiness:{...readiness}};
     }
     const packet=await Runtime.resolveFTLCoupledDegradation({
       readiness,
+      sectionalNetwork:context.sectionalNetwork,
+      sectionalTopologyPacket:context.sectionalTopologyPacket,
+      sectionalProfileId:context.sectionalProfileId,
+      sectionalProfile:context.sectionalProfile,
+      serviceChannelMap:context.serviceChannelMap,
       transientState:context.transientState||{},
       profileId:context.couplingProfileId||undefined,
       couplingProfile:context.couplingProfile||undefined,
@@ -169,12 +175,12 @@
     const warnings=[...(selected.warnings||[]),...(coupled.packet?.warnings||[])];
 
     if(coupled.packet?.status===STATUS.CONFLICT){
-      warnings.push('Coupled-degradation authority conflicts; installation timing certification cannot average contradictory common-cause models.');
+      warnings.push('Coupled-degradation or sectional dependency authority conflicts; installation timing certification cannot average contradictory infrastructure models.');
       return deepFreeze({status:STATUS.CONFLICT,baselineTiming,baselineRecovery,timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,selectedRecord:record||null,readiness,coupledDegradation:coupled.packet,appliedFactors:{maintenancePenalty:1},warnings,provenance:unique([...provenance,...(coupled.packet.provenance||[])])});
     }
 
     if(blocked.length||coupled.packet?.status===STATUS.BLOCKED){
-      warnings.push(`Blocking readiness channel(s): ${blocked.join(', ')||coupled.packet?.blockedChannels?.join(', ')||'common-cause transient limit'}.`);
+      warnings.push(`Blocking readiness channel(s): ${blocked.join(', ')||coupled.packet?.blockedChannels?.join(', ')||'sectional/common-cause limit'}.`);
       return deepFreeze({
         status:STATUS.BLOCKED,
         baselineTiming,
@@ -214,7 +220,7 @@
       warnings.push('Named canonical timing remains unresolved; only explicitly measured/declared degradation is applied to the generic baseline, and no named performance bonus is inferred.');
     }
     if(penalty>1)warnings.push(`Maintenance degradation factor ${penalty.toFixed(4)} lengthens intervention timing.`);
-    if(CHANNELS.some(channel=>readiness[channel]<baselineReadiness[channel]))warnings.push('Common-cause power/thermal/infrastructure evidence reduces one or more readiness channels before timing adjustment.');
+    if(CHANNELS.some(channel=>readiness[channel]<baselineReadiness[channel]))warnings.push('Sectional/common-cause infrastructure evidence reduces one or more readiness channels before timing adjustment.');
     else if(CHANNELS.some(channel=>readiness[channel]<1))warnings.push('Measured installation readiness reduces one or more timing/recovery margins; no family equation was changed.');
     if(record?.familyId===null&&context.family)warnings.push('Selected installation timing record does not establish transit-family identity; supplied family remains independently authoritative.');
 
