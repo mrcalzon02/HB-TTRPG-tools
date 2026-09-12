@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.9.0",
+  "schemaVersion": "1.10.0",
   "protocol": "hb-ai-discovery/1",
   "service": "Calzon's TTRPG Foundry",
   "canonicalUrl": "https://mrcalzon02.github.io/HB-TTRPG-tools/",
@@ -34,7 +34,7 @@
     "human": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html",
     "skillContextLoader": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js"
   },
-  "bootstrapRule": "api/ai/bootstrap.txt is a compact routing contract. Current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions when they change.",
+  "bootstrapRule": "api/ai/bootstrap.txt is the canonical compact routing contract. Start there, load only the authorities required by the selected task, and reuse unchanged authorities already loaded in the current orchestration context. Current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions when they change.",
   "canonicalRule": "Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, tabletop-state, or battlespace logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.",
   "compatibilityRule": "HTML compatibility views may mirror discovery metadata for restricted model browsers, but authoritative JSON registries, Charles engram resources, helper scripts, and SKILL.md files remain the source of truth.",
   "personalityBinding": {
@@ -86,17 +86,12 @@
     }
   },
   "quickStart": [
-    {"step":1,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","purpose":"Confirm machine-discovery entrypoints and transport status; read its bootstrap entrypoint before acting on capabilities."},
-    {"step":2,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json","purpose":"Use the canonical status meanings and distinguish static availability from host-observed execution state."},
-    {"step":3,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","fallback":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","purpose":"Enumerate Agent Skills, read defaultPersonality, and select the smallest task-skill set."},
-    {"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once as the inherited personality layer before selected task skills."},
-    {"step":5,"action":"GET","target":"skills/{selected-skill}/SKILL.md","purpose":"Load the selected skill workflow, execution requirements, helper paths, capability references, resource references, and portable companion path where one exists."},
-    {"step":6,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json","purpose":"When the selected skill references a Foundry capability, resolve its canonical identity, execution mode, runtime scripts, invocation descriptor, sources, and limitations."},
-    {"step":7,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json","purpose":"Resolve exact operation names and argument schemas before constructing an executable capability call."},
-    {"step":8,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json","purpose":"Resolve registered campaign, lore, personality, laboratory, and other static resources when the selected skill references them."},
-    {"step":9,"action":"CHECK_REQUIREMENTS","target":"selected skill","purpose":"Check executionRequirements, registered helpers, companion runtime scripts, writable-sandbox requirements, cryptographic RNG, Python/Pillow, file access, and other declared host-local dependencies."},
-    {"step":10,"action":"CHECK_HOST","target":"selected skill or capability","purpose":"Confirm the required browser runtime, page/device context, host sandbox, and deployed transport before claiming execution."},
-    {"step":11,"action":"SELF_TEST","target":"declared deterministic self-test","purpose":"When a portable package declares a deterministic non-destructive self-test, run it before promoting host state to self-test-passed or ready."}
+    {"step":1,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json","purpose":"Confirm machine-discovery entrypoints and transport status."},
+    {"step":2,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt","purpose":"Load the canonical minimum-authority routing contract before selecting or executing capabilities."},
+    {"step":3,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json","fallback":"https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html","purpose":"Select the minimum-capability skill set required for the task."},
+    {"step":4,"action":"GET","target":"https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json","purpose":"Load blacklight.charles once for the orchestration context before selected task skills."},
+    {"step":5,"action":"GET","target":"skills/{selected-skill}/SKILL.md","purpose":"Load only the selected skill workflow and follow its explicit capability, operation, resource, helper, and executionRequirements references."},
+    {"step":6,"action":"FOLLOW_BOOTSTRAP_ON_DEMAND","target":"selected skill references","purpose":"Load status vocabulary, capability registry, operation contracts, resource collections, runtime requirements, and self-tests only when the selected task actually requires them; reuse unchanged authorities already loaded in this orchestration context."}
   ],
   "portableSkillProof": {
     "loader": "../../ai-skill-loader.js",
