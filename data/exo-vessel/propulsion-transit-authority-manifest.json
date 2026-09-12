@@ -45,6 +45,10 @@
     "data/schemas/exo-vessel-ftl-physical-route-environment.schema.json",
     "blacklight-exo-ftl-physical-route-environment-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_PHYSICAL_ROUTE_ENVIRONMENT_CERTIFICATION_MANUAL.md",
+    "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
+    "data/schemas/exo-vessel-ftl-time-dependent-source-state.schema.json",
+    "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_TIME_DEPENDENT_EPHEMERIS_AND_COVARIANCE_MANUAL.md",
     "data/exo-vessel/ftl-physical-route-path-registry.json",
     "data/schemas/exo-vessel-ftl-physical-route-path.schema.json",
     "blacklight-exo-ftl-physical-route-path-runtime.js",
@@ -144,6 +148,7 @@
     "blacklight-exo-ftl-path-level-controller.js",
     "blacklight-exo-ftl-curvature-environment-runtime.js",
     "blacklight-exo-ftl-physical-route-environment-runtime.js",
+    "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
     "blacklight-exo-ftl-physical-route-path-runtime.js",
     "blacklight-exo-ftl-route-segment-certification-runtime.js",
     "blacklight-exo-ftl-family-segment-certification-runtime.js",
@@ -165,6 +170,11 @@
     "Race/vessel-specific material outranks generic embodiment only within its documented scope.",
     "Current runtime behavior is authoritative for implementation behavior, not automatically for setting-wide historical canon.",
     "Physical gravity and curvature packets must preserve SI units, reference-frame identity, potential reference, model validity, uncertainty, and provenance before versioned normalization or family-specific transit response is applied.",
+    "When time-dependent authoritative source states are supplied, their source epoch, target epoch, reference frame, velocity, covariance ancestry and propagation-model identity must be preserved before the physical route sampler consumes their propagated positions.",
+    "Missing source velocity is unresolved motion rather than zero velocity, and missing covariance is unresolved uncertainty rather than perfect certainty.",
+    "Linear or constant-acceleration source propagation must carry an explicit approximation-validity bound; exceeding a declared position/velocity tolerance is OUTSIDE_MODEL_VALIDITY and requires higher-fidelity dynamics rather than a larger finite route-severity score.",
+    "Forward white-acceleration process-noise formulas may not be naively reused for backward propagation; reverse-time stochastic propagation requires an explicit model or process-noise covariance.",
+    "Independent per-source covariance packets do not establish independent source errors; known cross-source or barycentric covariance must remain explicit.",
     "When an authoritative physicalEnvironmentContext is supplied, route safety must use the physical gravity/curvature bridge; a PARTIAL, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY physical result may not be replaced by a PROPOSED route archetype fallback.",
     "Only absence of a physicalEnvironmentContext permits the existing PROPOSED route archetype environment fallback.",
     "A physical route path must preserve every sampled field-point result and its provenance; route-wide extrema are sampled extrema unless a convergence or analytic bound proves otherwise.",
@@ -206,5 +216,5 @@
     "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
     "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, physical-route certification, physical route-path sampling, route-segment certification, family-segment certification, and first-blocker presentation additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, time-dependent ephemeris/covariance, physical-route certification, physical route-path sampling, route-segment certification, family-segment certification, and first-blocker presentation additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
