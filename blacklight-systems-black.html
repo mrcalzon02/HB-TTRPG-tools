@@ -187,9 +187,44 @@
         return encodeURI(path);
       };
 
-      const existingPaths = new Set(
-        Array.from(grid.querySelectorAll('a[href]'), link => link.getAttribute('href'))
-      );
+      const resourcePathFromHref = (href) => {
+        const value = String(href || '').trim();
+        if (!value || value.startsWith('#') || value.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(value)) return '';
+
+        if (/^(?:\.\/|\/)?blacklight-resource-viewer\.html(?:[?#]|$)/i.test(value)) {
+          try {
+            const viewerUrl = new URL(value, window.location.href);
+            return (viewerUrl.searchParams.get('src') || '').replace(/^\/+/, '');
+          } catch (_) {
+            return '';
+          }
+        }
+
+        const path = value.split(/[?#]/, 1)[0].replace(/^\.\//, '').replace(/^\/+/, '');
+        try {
+          return decodeURI(path);
+        } catch (_) {
+          return path;
+        }
+      };
+
+      const validateStaticResources = (treePaths) => {
+        grid.querySelectorAll('a[href]').forEach(link => {
+          const path = resourcePathFromHref(link.getAttribute('href'));
+          if (path && !treePaths.has(path)) link.remove();
+        });
+      };
+
+      const currentResourcePaths = () => {
+        const paths = new Set();
+        grid.querySelectorAll('a[href]').forEach(link => {
+          const href = link.getAttribute('href');
+          const path = resourcePathFromHref(href);
+          if (href) paths.add(href);
+          if (path) paths.add(path);
+        });
+        return paths;
+      };
 
       fetch(REPOSITORY_TREE, {
         headers: { 'Accept': 'application/vnd.github+json' }
@@ -203,6 +238,8 @@
           if (data.truncated) throw new Error('GitHub returned a truncated repository tree; refusing to present an incomplete Blacklight directory.');
 
           const treePaths = new Set(data.tree.filter(item => item.type === 'blob').map(item => item.path));
+          validateStaticResources(treePaths);
+          const existingPaths = currentResourcePaths();
           const resources = data.tree
             .filter(item => item.type === 'blob' && isBlacklightResource(item.path))
             .map(item => ({ path: item.path, baseName: displayName(item.path), href: hrefFor(item.path, treePaths) }))
