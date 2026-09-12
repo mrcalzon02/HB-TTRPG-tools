@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-tidal-eigenbranch-tracking.schema.json",
+  "title": "Black Light FTL Tidal Eigenbranch Tracking Packet",
+  "type": "object",
+  "required": ["schemaVersion", "status", "samples", "transitions", "warnings", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "familyId": {"type": ["string", "null"]},
+    "encounterModel": {"type": ["string", "null"]},
+    "tracking": {
+      "type": "object",
+      "required": ["degeneracyRelativeGap", "maximumBranchRotationRad"],
+      "properties": {
+        "degeneracyRelativeGap": {"type": "number", "minimum": 0},
+        "maximumBranchRotationRad": {"type": "number", "minimum": 0, "maximum": 3.141592653589793}
+      },
+      "additionalProperties": true
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sampleIndex", "fraction", "eigensystemStatus", "eigenbranches"],
+        "properties": {
+          "sampleIndex": {"type": "integer", "minimum": 0},
+          "fraction": {"type": "number"},
+          "encounterEpoch": {"type": ["string", "null"]},
+          "eigensystemStatus": {"enum": ["RESOLVED", "DEGENERATE_SUBSPACE", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+          "eigenbranches": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["branchId", "eigenvaluePerS2", "eigenvector"],
+              "properties": {
+                "branchId": {"type": "string"},
+                "eigenvaluePerS2": {"type": "number"},
+                "eigenvector": {
+                  "type": "object",
+                  "required": ["x", "y", "z"],
+                  "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}},
+                  "additionalProperties": false
+                },
+                "degenerate": {"type": "boolean"}
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["leftSampleIndex", "rightSampleIndex", "status", "branchRotationsRad"],
+        "properties": {
+          "leftSampleIndex": {"type": "integer", "minimum": 0},
+          "rightSampleIndex": {"type": "integer", "minimum": 0},
+          "status": {"enum": ["RESOLVED", "DEGENERATE_SUBSPACE", "UNRESOLVED"]},
+          "branchRotationsRad": {"type": "object"},
+          "maximumResolvedBranchRotationRad": {"type": ["number", "null"]},
+          "degenerateSubspaceRotationRad": {"type": ["number", "null"]},
+          "refinementRequested": {"type": "boolean"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array"},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
