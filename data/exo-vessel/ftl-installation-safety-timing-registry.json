@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.installation-safety-timing",
+  "title": "Black Light FTL Installation Safety Timing and Readiness Registry",
+  "status": "MIXED",
+  "purpose": "Translate named installation sensor, control, actuation, maintenance and recovery evidence into provenance-bearing timing modifiers without inventing canonical seconds, transit-family identity, or universal race coefficients.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Sensor lookahead, emergency de-transit, family-specific safety margins, failure sensitivity, and the principle that more advanced systems reduce risk without making transit perfectly safe."
+  },
+  "mathematicalModel": {
+    "baselineIntervention": "t_int,0 = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
+    "channelScaling": "t_i = t_i,0 * m_i / max(r_i, epsilon)",
+    "readinessRange": "0 < r_i <= 1 for certified operation; r_i <= 0 blocks use of that channel rather than producing infinite or negative time",
+    "maintenancePenalty": "m_i >= 1 is a multiplicative degradation factor derived from measured condition or explicitly PROPOSED simulation calibration",
+    "lookaheadScaling": "t_prediction = t_prediction,0 * r_sensor * r_navigation * r_reference / m_prediction",
+    "reserveScaling": "R_protected,eff = R_protected,0 * r_recovery",
+    "continuousMargin": "M_T = D_B/v_progress - t_int for continuous projected-progress families where v_progress has an authoritative route-progress semantic",
+    "precommitMargin": "M_T = t_prediction - t_int for PRECOMMIT families; no intermediate local FTL velocity may be fabricated",
+    "controlSpan": "Pi_c = L_c/(v_c*tau_r)",
+    "interpretation": "Readiness changes the installation's ability to observe, decide, actuate and recover. It does not alter G, the external tidal tensor, or the underlying family equations."
+  },
+  "readinessChannels": [
+    "sensor",
+    "navigation",
+    "reference",
+    "solver",
+    "command",
+    "actuator",
+    "exit",
+    "clearance",
+    "recovery",
+    "thermal",
+    "structure"
+  ],
+  "scopePrecedence": ["INSTALLATION", "VESSEL", "NAMED_TECHNOLOGY", "MANUFACTURER", "RACE", "GENERIC"],
+  "records": [
+    {
+      "recordId": "blacklight.installation-timing.generic-derived",
+      "scopeType": "GENERIC",
+      "scopeId": "blacklight.generic",
+      "status": "DERIVED",
+      "timingPolicy": "Use the route-safety baseline timing unchanged when no narrower sourced readiness record is available. Runtime condition measurements may still reduce readiness, but generic identity alone contributes no invented bonus.",
+      "defaultReadiness": {
+        "sensor": 1.0,
+        "navigation": 1.0,
+        "reference": 1.0,
+        "solver": 1.0,
+        "command": 1.0,
+        "actuator": 1.0,
+        "exit": 1.0,
+        "clearance": 1.0,
+        "recovery": 1.0,
+        "thermal": 1.0,
+        "structure": 1.0
+      },
+      "defaultMaintenancePenalty": 1.0,
+      "provenance": [
+        "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+        "data/exo-vessel/ftl-safety-calibration-profiles.json"
+      ]
+    },
+    {
+      "recordId": "blacklight.installation-timing.arnock-derelict",
+      "scopeType": "RACE",
+      "scopeId": "arnock",
+      "status": "UNRESOLVED",
+      "familyId": null,
+      "confirmedEvidence": [
+        "cultivated neural computation",
+        "vibration-based controls and interfaces",
+        "biological instruction-driven fabrication",
+        "distributed biological/symbiotic machinery ancestry"
+      ],
+      "derivedTimingImplications": [
+        "sensor, control and recovery paths may be distributed through cultivated neural, vibratory, ionic, optical or biological carriers",
+        "biological state inhomogeneity, damage isolation, tissue viability and coordination span are relevant timing/readiness dimensions",
+        "a repaired biological component requires recalibration before it can be assumed to have restored timing authority"
+      ],
+      "numericPolicy": "No canonical Ar'nock sensor latency, solver latency, actuation latency, exit time, recovery reserve or family-specific coefficient is currently established. Do not auto-apply numeric bonuses or penalties from race identity alone.",
+      "provenance": [
+        "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+        "data/blacklight-continuum/wiki/foundation-lore.json"
+      ]
+    },
+    {
+      "recordId": "blacklight.installation-timing.zwlei-murrek",
+      "scopeType": "NAMED_TECHNOLOGY",
+      "scopeId": "zwlei-murrek-gravitic-slipstream",
+      "status": "DERIVED",
+      "familyId": null,
+      "confirmedEvidence": [
+        "Gravitic Slipstream Regulator with flexible field vanes immersed in dielectric fluid",
+        "Navigation Current Well encoding vector, gravity and transit risk",
+        "Forward Sensor Ampulla for long-baseline observation and ranging",
+        "Sensor Choir Alcove for multimodal sensor fusion",
+        "command arbitration and emergency lockout/isolation",
+        "asymmetric vane response can rotate the local inertial frame"
+      ],
+      "readinessBindings": {
+        "sensor": ["forward sensor ampulla integrity", "sensor choir availability"],
+        "navigation": ["navigation current calibration", "slipstream prediction consistency"],
+        "reference": ["gravitic reference calibration", "inertial reference agreement"],
+        "actuator": ["field-vane symmetry", "dielectric-fluid condition", "hydraulic control pressure"],
+        "recovery": ["protected isolation authority", "bio-reactive power-fluid reserve", "coolant reserve"],
+        "thermal": ["conductive coolant availability"],
+        "structure": ["field-vane geometry and alignment"]
+      },
+      "numericPolicy": "The source establishes which machinery states matter but not canonical seconds. Runtime may map measured readiness fractions into timing penalties using the generic equations; source identity alone supplies no invented absolute latency.",
+      "familyFirewall": "The source term 'bio-reactive gravitic slipstream system' remains unresolved against consolidated family IDs. Timing/readiness evidence must not select gravitational-plane or slipstream-shear by keyword.",
+      "provenance": [
+        "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+        "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html"
+      ]
+    }
+  ],
+  "runtimeRules": [
+    "Narrower matching scope outranks broader scope; equal-precedence contradictions return CONFLICT rather than averaging.",
+    "UNRESOLVED named records preserve their evidence but do not create numeric timing modifiers.",
+    "Measured readiness may only worsen or preserve a baseline unless a sourced named record explicitly provides a certified improvement factor.",
+    "A zero or negative readiness channel is a blocking condition, not a division-by-zero workaround.",
+    "Maintenance state affects timing/readiness and recovery authority; it does not change external gravity or transit-family identity.",
+    "Named technology, vessel, installation, manufacturer or race identity is never a family selector.",
+    "PRECOMMIT families remain timing-based and may not be assigned a fabricated local transit velocity.",
+    "Protected recovery reserve may not be consumed to improve advertised nominal timing.",
+    "All adjusted timing packets must preserve baseline values, applied factors, source record IDs and provenance."
+  ],
+  "api": {
+    "resolver": "resolveFTLInstallationSafetyTiming",
+    "inputs": ["baselineTiming", "baselineRecovery", "family", "namedTechnologyId", "vesselId", "installationId", "manufacturerId", "raceId", "readiness", "maintenancePenalty", "provenance"],
+    "outputs": ["status", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
+    "statusValues": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]
+  },
+  "canonGuards": [
+    "No absolute timing number in this registry is historical or universal canon unless a named source explicitly says so.",
+    "The Ar'nock record does not establish a transit family or canonical timing performance.",
+    "The Mur'rek record establishes machinery dependencies but not a normalized FTL family or canonical timing in seconds.",
+    "Readiness equations are engineering models, not evidence that a fictional hazard exists.",
+    "Race/species identity may constrain machinery embodiment but may not create family identity, manufacturer identity, or performance canon.",
+    "Simulation calibration must remain labeled PROPOSED or DERIVED as applicable."
+  ]
+}
