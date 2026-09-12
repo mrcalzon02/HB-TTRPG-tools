@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-arnock-ftl-family-embodiment-matrix.schema.json",
   "title": "Ar'nock FTL Family Embodiment Matrix",
-  "description": "Canon-safe scenario embodiment matrix. It applies confirmed Ar'nock constraints to confirmed Black Light transit families without asserting that any family is canonically Ar'nock.",
+  "description": "Canon-safe scenario embodiment matrix applying the authoritative Ar'nock solid-state modular technology basis to all consolidated Black Light transit families without asserting that any family is canonically Ar'nock.",
   "type": "object",
   "required": ["recordType", "recordVersion", "species", "authorityMode", "familyAssociationStatus", "sourceChain", "families", "generatorContract", "canonSafeguards"],
   "properties": {
@@ -12,19 +12,21 @@
     "authorityMode": {"enum": ["LABELED_DERIVATION", "LABELED_PROPOSAL"]},
     "familyAssociationStatus": {"const": "MIXED"},
     "sourceChain": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+    "basisCorrection": {"type": "object", "additionalProperties": true},
     "families": {
       "type": "object",
-      "required": ["metric-envelope", "gravitic-plane", "slipstream-shear", "q-lattice", "n-manifold", "fold-jump", "wormhole-gate", "phase-displacement"],
+      "required": ["metric-envelope", "gravitic-plane", "slipstream-shear", "n-manifold", "inertial-torch", "q-lattice", "fold-jump", "phase-displacement", "wormhole-gate"],
       "additionalProperties": false,
       "properties": {
         "metric-envelope": {"$ref": "#/$defs/family"},
         "gravitic-plane": {"$ref": "#/$defs/family"},
         "slipstream-shear": {"$ref": "#/$defs/family"},
-        "q-lattice": {"$ref": "#/$defs/family"},
         "n-manifold": {"$ref": "#/$defs/family"},
+        "inertial-torch": {"$ref": "#/$defs/family"},
+        "q-lattice": {"$ref": "#/$defs/family"},
         "fold-jump": {"$ref": "#/$defs/family"},
-        "wormhole-gate": {"$ref": "#/$defs/family"},
-        "phase-displacement": {"$ref": "#/$defs/family"}
+        "phase-displacement": {"$ref": "#/$defs/family"},
+        "wormhole-gate": {"$ref": "#/$defs/family"}
       }
     },
     "generatorContract": {"type": "object", "required": ["selectionRule", "outputStatus", "provenanceRule", "unknownRule"], "additionalProperties": true},
