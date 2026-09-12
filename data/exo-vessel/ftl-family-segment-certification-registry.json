@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.family-segment-certification",
   "title": "Black Light FTL Family-Specific Route Segment Certification Registry",
   "status": "MIXED",
@@ -17,7 +17,9 @@
     "data/exo-vessel/ftl-safety-calibration-profiles.json",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
-    "data/exo-vessel/ftl-route-safety-integration.json"
+    "data/exo-vessel/ftl-route-safety-integration.json",
+    "data/exo-vessel/ftl-uncertainty-aware-boundary-refinement-registry.json",
+    "blacklight-exo-ftl-uncertainty-aware-boundary-refinement-runtime.js"
   ],
   "policy": {
     "routeRule": "C_route = AND_i C_family,segment,i. No benign segment may average away one blocking family-specific interval.",
@@ -25,7 +27,8 @@
     "normalizationRule": "Potential depth, acceleration, tidal norm and curvature scale retain their native dimensions until divided by the versioned physical normalization references.",
     "uncertaintyRule": "Segment uncertainty must remain explicit. Missing covariance/1-sigma evidence produces UNRESOLVED, never zero uncertainty.",
     "familyBoundaryRule": "Family-boundary hazard is fictional/operator-specific and is never inferred from ordinary gravitational metrics alone.",
-    "interventionRule": "Continuous-progress families may compare distance/time to the first blocking interval against the full intervention chain. PRECOMMIT families use a decision horizon instead of a fabricated local superluminal velocity.",
+    "conservativeBoundaryRule": "An uncertainty-aware normalized-degeneracy boundary may move the planning edge earlier than a certified blocking-segment start only when an explicit named/family authority states that the topology boundary applies to that blocker. Without that link it remains evidence, not a blocker.",
+    "interventionRule": "Continuous-progress families may compare distance/time to the first conservative blocking edge against the full intervention chain. PRECOMMIT families use a decision horizon instead of a fabricated local superluminal velocity.",
     "recoveryRule": "Protected recovery reserve is evaluated independently of nominal drive authority and may not be spent to improve advertised route performance.",
     "invalidModelRule": "OUTSIDE_MODEL_VALIDITY blocks the interval and route until a higher-fidelity physical model resolves it."
   },
@@ -54,12 +57,15 @@
     "continuous": [
       "t_int = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
       "D_int = v_progress t_int",
-      "M_D = D_first_block - D_int",
+      "f_eff = min(f_nominal_blocker, f_early_topology) only when explicit authority links that topology boundary to the certified blocker",
+      "D_eff = max(0, (f_eff - f_current)L)",
+      "M_D = D_eff - D_int",
       "M_D > 0 is necessary for a continuously correctable projected-progress representation."
     ],
     "precommit": [
       "M_T = t_prediction - t_int",
-      "Fold, Q-Lattice and Phase Displacement use PRECOMMIT logic unless a higher authority supplies a physically meaningful local progress representation."
+      "Fold, Q-Lattice and Phase Displacement use PRECOMMIT logic unless a higher authority supplies a physically meaningful local progress representation.",
+      "Topology-boundary location may constrain endpoint evidence but may not create a fabricated local FTL travel time."
     ],
     "safeguard": "Projected progress rate is a route/control representation, not a claim that real-world local motion exceeds c."
   },
@@ -79,11 +85,12 @@
     "PROPOSED coefficients, thresholds, normalization references and maturity modifiers are not constants of nature or universal setting constants.",
     "A rejected interval remains rejected even if every other interval is admissible.",
     "Missing uncertainty, radius, ephemeris or model validity may not be silently replaced by zero.",
+    "A physical normalized-degeneracy boundary is not automatically an FTL shear fork, lane edge, or blocker; explicit family/named-technology authority is required before it changes a certified blocker location.",
     "Emergency de-transit, shunt, closure, recoupling, detachment, return, reconciliation and braking are family-specific machinery obligations, not generic flavor text."
   ],
   "api": {
     "resolver": "resolveFTLFamilySegmentCertification",
-    "inputs": ["family", "path", "segmentPacket", "pathContext", "calibrationRegistry", "requestedProfileId", "requestedProfileVersion", "namedOverrideIds", "safetyState", "measurementPacket", "recoveryState", "familyBoundaryHazard", "requiredHazards", "projectedProgressRate", "provenance"],
-    "outputs": ["status", "family", "path", "calibration", "normalization", "segments", "routeDisposition", "warnings", "provenance", "canonSafeguards"]
+    "inputs": ["family", "path", "segmentPacket", "pathContext", "calibrationRegistry", "requestedProfileId", "requestedProfileVersion", "namedOverrideIds", "safetyState", "measurementPacket", "recoveryState", "familyBoundaryHazard", "requiredHazards", "projectedProgressRate", "uncertaintyAwareBoundaryRefinement", "topologyBoundaryAppliesToFirstBlocker", "provenance"],
+    "outputs": ["status", "family", "path", "calibration", "normalization", "segments", "routeDisposition.nominalDistanceToFirstBlockingSegmentM", "routeDisposition.nominalTimeToFirstBlockingSegmentS", "routeDisposition.conservativeBlocker", "routeDisposition.distanceToFirstBlockingSegmentM", "routeDisposition.timeToFirstBlockingSegmentS", "warnings", "provenance", "canonSafeguards"]
   }
 }
