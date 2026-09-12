@@ -66,6 +66,18 @@
     return out;
   }
 
+  function hasMeasuredConditionEvidence(context={},coupledPacket=null){
+    const readiness=context.readiness||{};
+    const measuredReadiness=CHANNELS.some(channel=>readiness[channel]!==undefined);
+    const explicitMaintenance=finite(context.maintenancePenalty)&&Number(context.maintenancePenalty)>1;
+    const coupledEvidence=!!coupledPacket&&coupledPacket.status===STATUS.READY&&(
+      Object.values(coupledPacket.driverStress||{}).some(value=>finite(value)&&Number(value)>0)||
+      Object.keys(coupledPacket.transientProjection||{}).length>0||
+      CHANNELS.some(channel=>finite(coupledPacket.effectiveReadiness?.[channel])&&Number(coupledPacket.effectiveReadiness[channel])<1)
+    );
+    return measuredReadiness||explicitMaintenance||coupledEvidence;
+  }
+
   async function resolveCoupledReadiness(readiness,context={},provenance=[]){
     if(context.coupledDegradationPacket&&typeof context.coupledDegradationPacket==='object'){
       const packet=context.coupledDegradationPacket;
@@ -178,8 +190,9 @@
       });
     }
 
-    if(selected.status!==STATUS.READY){
-      warnings.push('Named timing authority did not authorize numeric adjustment; baseline timing is preserved rather than guessed.');
+    const measuredCondition=hasMeasuredConditionEvidence(context,coupled.packet);
+    if(selected.status!==STATUS.READY&&!measuredCondition){
+      warnings.push('Named timing authority did not authorize numeric adjustment and no measured degradation evidence was supplied; baseline timing is preserved rather than guessed.');
       return deepFreeze({
         status:selected.status,
         baselineTiming,
@@ -197,13 +210,16 @@
 
     const adjusted=adjustTiming(baselineTiming,readiness,penalty);
     const recovery=adjustRecovery(baselineRecovery,readiness);
+    if(selected.status!==STATUS.READY){
+      warnings.push('Named canonical timing remains unresolved; only explicitly measured/declared degradation is applied to the generic baseline, and no named performance bonus is inferred.');
+    }
     if(penalty>1)warnings.push(`Maintenance degradation factor ${penalty.toFixed(4)} lengthens intervention timing.`);
     if(CHANNELS.some(channel=>readiness[channel]<baselineReadiness[channel]))warnings.push('Common-cause power/thermal/infrastructure evidence reduces one or more readiness channels before timing adjustment.');
     else if(CHANNELS.some(channel=>readiness[channel]<1))warnings.push('Measured installation readiness reduces one or more timing/recovery margins; no family equation was changed.');
     if(record?.familyId===null&&context.family)warnings.push('Selected installation timing record does not establish transit-family identity; supplied family remains independently authoritative.');
 
     return deepFreeze({
-      status:STATUS.READY,
+      status:selected.status===STATUS.READY?STATUS.READY:selected.status,
       baselineTiming,
       baselineRecovery,
       timing:adjusted.timing,
