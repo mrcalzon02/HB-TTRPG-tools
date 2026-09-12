@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.family-encounter-time",
+  "title": "Black Light FTL Family Encounter-Time Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Family-specific route error, gravitational sensitivity, predictive sensing and emergency de-transit require the physical environment to be evaluated at the epochs that the selected family actually commits to or encounters each route state."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/propulsion-transit-registry.json",
+    "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
+    "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
+    "data/exo-vessel/ftl-curvature-environment-registry.json",
+    "blacklight-exo-ftl-curvature-environment-runtime.js",
+    "data/exo-vessel/ftl-time-aware-route-path-registry.json"
+  ],
+  "familyEncounterPolicies": {
+    "CONTINUOUS_PROJECTED_PROGRESS": {
+      "families": ["metric-envelope", "gravitic-plane", "slipstream-shear", "n-manifold", "inertial-torch"],
+      "rule": "Evaluate each physical route sample at t(s)=t0+sL/v_progress when the family/controller provides a defensible projected-progress representation.",
+      "safeguard": "v_progress is a route/control parameter. For true-FTL families it is not automatically local real-space hull velocity."
+    },
+    "PRECOMMIT_ENDPOINT": {
+      "families": ["q-lattice", "fold-jump", "phase-displacement"],
+      "rule": "Evaluate commitment and emergence environments at explicit epochs. Do not fabricate intermediate encounter epochs or a local FTL speed.",
+      "requiredEpochs": ["commitmentEpoch", "emergenceEpoch"]
+    },
+    "ANCHORED_PORTAL": {
+      "families": ["wormhole-gate"],
+      "rule": "Evaluate entry-mouth and exit-mouth physical states at their anchor encounter epochs. The intervening topological connection is not represented as an ordinary-space traversed corridor.",
+      "requiredEpochs": ["entryEpoch", "exitEpoch"]
+    }
+  },
+  "mathematics": {
+    "routeGeometry": "r(s)=r_A+s(r_B-r_A)",
+    "routeLength": "L=|r_B-r_A|",
+    "continuousEncounterTime": "t(s)=t0+sL/v_progress",
+    "statePropagation": "z(t)=[r(t),v(t)]^T",
+    "covariancePropagation": "Sigma(t)=F Sigma0 F^T+Q",
+    "environment": [
+      "Phi(x,t)=-sum_i G M_i/|x-r_i(t)|",
+      "g(x,t)=-sum_i G M_i [x-r_i(t)]/|x-r_i(t)|^3",
+      "T_jk(x,t)=sum_i G M_i/r_i^3 (3 n_j n_k-delta_jk)"
+    ],
+    "retardedGravityCaveat": "The current weak-field engineering model evaluates source states at the declared coordinate epoch and is not a full relativistic retarded-field solution. High-beta sources, compact objects, strong fields or precision regimes outside that approximation require a higher-fidelity model."
+  },
+  "statusRules": {
+    "sourceConflict": "CONFLICT",
+    "sourceOutsideModel": "OUTSIDE_MODEL_VALIDITY",
+    "missingRequiredEpochOrProgressMapping": "UNRESOLVED",
+    "missingCovarianceOrValidityEvidence": "PARTIAL",
+    "allRequiredSamplesResolved": "RESOLVED"
+  },
+  "generatorRules": [
+    "Select encounter policy from the explicit transit family id; a race or technology basis may not silently choose a family.",
+    "Continuous families require a positive projectedProgressMPerS and an explicit progressSemantic; equivalent speed alone is insufficient unless the selected family authority defines it as the route/control progress mapping.",
+    "PRECOMMIT_ENDPOINT families require explicit commitment and emergence epochs; missing epochs remain unresolved.",
+    "ANCHORED_PORTAL requires entry and exit mouth epochs and preserves anchor provenance.",
+    "Every sample propagates every authoritative gravitational source independently to its encounter epoch before evaluating ordinary gravity and curvature.",
+    "A failed or out-of-domain source propagation blocks that sample; benign neighboring samples may not average it away.",
+    "The resulting physical environment is evidence supplied to family certification. It does not itself establish operator-specific boundary state."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish that any FTL method is physically realizable.",
+    "Encounter-time propagation changes the epoch of physical source evidence; it does not rewrite the historical or species canon of those sources.",
+    "Named race, vessel, manufacturer, installation and technology sources outrank this generic timing layer within their documented scope.",
+    "A selected family used for simulation does not establish that a named civilization uses that family.",
+    "Missing source velocity, covariance, epoch, acceleration, portal-anchor state or model-validity evidence may not be silently replaced by zero.",
+    "True-FTL projected progress is an engineering/control representation unless higher authority explicitly identifies it with a local physical velocity.",
+    "Fold Jump, Q-Lattice Phase Translation and Phase Displacement may not be assigned fabricated intermediate encounter epochs derived from an invented corridor velocity.",
+    "Anchored Wormhole/Gate transit evaluates mouth states and does not imply ordinary-space traversal between mouths.",
+    "Ordinary gravity/curvature evidence may not manufacture an exotic family-boundary hazard or silently set that hazard to zero.",
+    "OUTSIDE_MODEL_VALIDITY is a model-domain refusal, not an extreme finite danger score."
+  ],
+  "api": {
+    "resolver": "resolveFTLFamilyEncounterTime",
+    "inputs": ["familyId", "from", "to", "sourceStates", "referenceFrame", "routeStartEpoch", "fractions", "projectedProgressMPerS", "progressSemantic", "commitmentEpoch", "emergenceEpoch", "entryEpoch", "exitEpoch", "sourcePropagation", "uncertainty"],
+    "outputs": ["status", "familyId", "encounterModel", "routeStartEpoch", "routeLengthM", "projectedProgressMPerS", "progressSemantic", "samples", "warnings", "provenance", "canonSafeguards"]
+  }
+}
