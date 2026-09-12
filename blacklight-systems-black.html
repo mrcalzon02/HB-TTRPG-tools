@@ -115,6 +115,10 @@
       const REPOSITORY_TREE = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/git/trees/main?recursive=1';
       const grid = document.getElementById('blacklight-resource-grid');
       const status = document.getElementById('blacklight-resource-status');
+      const loadingStatusTimer = window.setTimeout(() => {
+        status.textContent = 'Loading additional archive resources…';
+        status.hidden = false;
+      }, 250);
 
       const explicitBlacklightResources = new Set([
         'BLACKLIGHT_EXO_SOURCE_AUTHORITY.md',
@@ -300,8 +304,13 @@
             link.setAttribute('aria-label', `${item.name} — ${item.path}`);
             return link;
           }));
+
+          window.clearTimeout(loadingStatusTimer);
+          status.textContent = '';
+          status.hidden = true;
         })
         .catch(() => {
+          window.clearTimeout(loadingStatusTimer);
           status.textContent = 'Live archive indexing is unavailable. Core resources remain available below; use Blacklight Archive for the full repository index.';
           status.hidden = false;
 
