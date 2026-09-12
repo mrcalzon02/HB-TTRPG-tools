@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-operating-envelope.schema.json",
+  "title": "Black Light FTL Certified Operating Envelope Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "certificateId", "installationId", "technologyBasis", "familyStatus", "dimensions", "coupledConstraints", "warnings", "provenance"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "certificateId": {"type": ["string", "null"]},
+    "installationId": {"type": ["string", "null"]},
+    "technologyBasis": {"type": ["string", "null"]},
+    "familyStatus": {"type": ["string", "null"]},
+    "family": {"type": ["string", "null"]},
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "required", "unit", "certified", "requested", "status", "signedMargin", "normalizedMargin", "provenance"],
+        "properties": {
+          "key": {"type": "string"},
+          "required": {"type": "boolean"},
+          "unit": {"type": ["string", "null"]},
+          "certified": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["lower", "upper"],
+            "properties": {
+              "lower": {"type": ["number", "null"]},
+              "upper": {"type": ["number", "null"]}
+            }
+          },
+          "requested": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["lower", "upper"],
+            "properties": {
+              "lower": {"type": ["number", "null"]},
+              "upper": {"type": ["number", "null"]}
+            }
+          },
+          "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "NOT_REQUESTED"]},
+          "signedMargin": {"type": ["number", "null"]},
+          "normalizedMargin": {"type": ["number", "null"]},
+          "advisoryMarginFraction": {"type": ["number", "null"], "minimum": 0},
+          "reason": {"type": ["string", "null"]},
+          "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+        }
+      }
+    },
+    "coupledConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "lhsWorstCase", "limit", "reason", "variables", "provenance"],
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT"]},
+          "lhsWorstCase": {"type": ["number", "null"]},
+          "limit": {"type": ["number", "null"]},
+          "reason": {"type": ["string", "null"]},
+          "variables": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+        }
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+  }
+}
