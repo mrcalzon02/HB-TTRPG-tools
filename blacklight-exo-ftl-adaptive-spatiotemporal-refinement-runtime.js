@@ -14,6 +14,7 @@
   const vector = value => value && ['x','y','z'].every(axis => finite(value[axis])) ? {x:Number(value.x),y:Number(value.y),z:Number(value.z)} : null;
   const subtract = (a,b) => ({x:a.x-b.x,y:a.y-b.y,z:a.z-b.z});
   const magnitude = v => Math.hypot(v.x,v.y,v.z);
+  const intervalKey = (left,right) => `${Number(left).toPrecision(16)}:${Number(right).toPrecision(16)}`;
 
   function deepFreeze(value){
     if(!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
@@ -129,11 +130,51 @@
     return reasons;
   }
 
+  async function resolveEigenbranchPacket(Eigen,samples,context,tolerances,provenance=[]){
+    return Eigen.resolveFTLTidalEigenbranchTracking({
+      familyId:context.familyId,
+      encounterModel:'CONTINUOUS_PROJECTED_PROGRESS',
+      samples,
+      degeneracyRelativeGap:tolerances.tidalEigenvalueDegeneracyRelativeGap,
+      maximumBranchRotationRad:tolerances.tidalEigenbranchRotationRad,
+      provenance
+    });
+  }
+
+  function topologyReasonMap(packet,tolerances){
+    const map = new Map();
+    if(!packet?.transitions?.length) return map;
+    for(const transition of packet.transitions){
+      const leftSample = packet.samples?.[transition.leftSampleIndex];
+      const rightSample = packet.samples?.[transition.rightSampleIndex];
+      if(!leftSample || !rightSample) continue;
+      const reasons = [];
+      if(transition.status === 'UNRESOLVED') reasons.push('tidal-eigensystem-unresolved');
+      if(transition.degeneracyBoundary) reasons.push('tidal-degeneracy-boundary');
+      if(finite(transition.maximumResolvedBranchRotationRad) && Number(transition.maximumResolvedBranchRotationRad) > tolerances.tidalEigenbranchRotationRad){
+        reasons.push(`tidal-eigenbranch-rotation:${Number(transition.maximumResolvedBranchRotationRad)}`);
+      }
+      if(finite(transition.degenerateSubspaceRotationRad) && Number(transition.degenerateSubspaceRotationRad) > tolerances.tidalEigenbranchRotationRad){
+        reasons.push(`tidal-degenerate-subspace-rotation:${Number(transition.degenerateSubspaceRotationRad)}`);
+      }
+      if(transition.refinementRequested && !reasons.length) reasons.push('tidal-topology-refinement-request');
+      if(reasons.length) map.set(intervalKey(leftSample.fraction,rightSample.fraction),reasons);
+    }
+    return map;
+  }
+
+  function intervalReasons(left,right,tolerances,topologyMap){
+    return unique([
+      ...physicalMetricReasons(left,right,tolerances),
+      ...(topologyMap.get(intervalKey(left.fraction,right.fraction)) || [])
+    ]);
+  }
+
   function unresolved(reason,registry,context={}){
     return deepFreeze({
-      schemaVersion:'1.0.0',status:STATUS.UNRESOLVED,familyId:context.familyId || null,encounterModel:'UNRESOLVED',
-      sampling:{adaptive:false,initialSampleCount:0,finalSampleCount:0,maximumSampleCount:Number(registry?.defaultTolerances?.maximumSampleCount)||1024,maximumDepth:Number(registry?.defaultTolerances?.maximumDepth)||6,tolerances:registry?.defaultTolerances || {}},
-      samples:[],refinementEvents:[],warnings:[reason],provenance:[REGISTRY_URL],canonSafeguards:registry?.canonSafeguards || []
+      schemaVersion:'1.1.0',status:STATUS.UNRESOLVED,familyId:context.familyId || null,encounterModel:'UNRESOLVED',
+      sampling:{adaptive:false,convergenceEstablished:false,unresolvedIntervalCount:0,initialSampleCount:0,finalSampleCount:0,maximumSampleCount:Number(registry?.defaultTolerances?.maximumSampleCount)||1024,maximumDepth:Number(registry?.defaultTolerances?.maximumDepth)||6,tolerances:registry?.defaultTolerances || {}},
+      samples:[],refinementEvents:[],eigenbranchTracking:null,warnings:[reason],provenance:[REGISTRY_URL],canonSafeguards:registry?.canonSafeguards || []
     });
   }
 
@@ -149,6 +190,8 @@
       relativePhysicalMetricChange: finite(requested.relativePhysicalMetricChange) ? Number(requested.relativePhysicalMetricChange) : Number(defaults.relativePhysicalMetricChange)||0.20,
       relativePrincipalTidalEigenvalueChange: finite(requested.relativePrincipalTidalEigenvalueChange) ? Number(requested.relativePrincipalTidalEigenvalueChange) : Number(defaults.relativePrincipalTidalEigenvalueChange)||0.20,
       accelerationDirectionChangeRad: finite(requested.accelerationDirectionChangeRad) ? Number(requested.accelerationDirectionChangeRad) : Number(defaults.accelerationDirectionChangeRad)||0.08726646259971647,
+      tidalEigenbranchRotationRad: finite(requested.tidalEigenbranchRotationRad) ? Number(requested.tidalEigenbranchRotationRad) : Number(defaults.tidalEigenbranchRotationRad)||0.08726646259971647,
+      tidalEigenvalueDegeneracyRelativeGap: finite(requested.tidalEigenvalueDegeneracyRelativeGap) ? Number(requested.tidalEigenvalueDegeneracyRelativeGap) : Number(defaults.tidalEigenvalueDegeneracyRelativeGap)||0.02,
       relativeCovarianceTraceChange: finite(requested.relativeCovarianceTraceChange) ? Number(requested.relativeCovarianceTraceChange) : Number(defaults.relativeCovarianceTraceChange)||0.20,
       sourceMotionToRangeRatio: finite(requested.sourceMotionToRangeRatio) ? Number(requested.sourceMotionToRangeRatio) : Number(defaults.sourceMotionToRangeRatio)||0.02,
       maximumEncounterSpanFraction: finite(requested.maximumEncounterSpanFraction) ? Number(requested.maximumEncounterSpanFraction) : Number(defaults.maximumEncounterSpanFraction)||0.05
@@ -163,19 +206,25 @@
     if(base.encounterModel !== 'CONTINUOUS_PROJECTED_PROGRESS'){
       warnings.push('Adaptive corridor refinement was not applied because this family uses explicit endpoint/mouth encounter semantics rather than a continuously sampled ordinary-space corridor.');
       return deepFreeze({
-        schemaVersion:'1.0.0',status:base.status,familyId:base.familyId,encounterModel:base.encounterModel,
-        sampling:{adaptive:false,initialSampleCount,finalSampleCount:samples.length,maximumSampleCount,maximumDepth,tolerances},
-        samples,refinementEvents,warnings:unique(warnings),provenance:unique([REGISTRY_URL,...(base.provenance || [])]),canonSafeguards:registry.canonSafeguards || []
+        schemaVersion:'1.1.0',status:base.status,familyId:base.familyId,encounterModel:base.encounterModel,
+        sampling:{adaptive:false,convergenceEstablished:true,unresolvedIntervalCount:0,initialSampleCount,finalSampleCount:samples.length,maximumSampleCount,maximumDepth,tolerances},
+        samples,refinementEvents,eigenbranchTracking:null,warnings:unique(warnings),provenance:unique([REGISTRY_URL,...(base.provenance || [])]),canonSafeguards:registry.canonSafeguards || []
       });
     }
 
+    const Eigen = context.eigenbranchRuntime || globalThis.BlacklightExoFTLTidalEigenbranchTrackingRuntime;
+    if(!Eigen?.resolveFTLTidalEigenbranchTracking) return unresolved('Tidal eigenbranch tracking runtime is not loaded; topology-aware adaptive refinement cannot establish convergence.',registry,context);
+
     let ceilingReached = false;
+    let lastEigenPacket = null;
     for(let depth=0;depth<maximumDepth;depth+=1){
+      lastEigenPacket = await resolveEigenbranchPacket(Eigen,samples,context,tolerances,[REGISTRY_URL,...(base.provenance || [])]);
+      const topologyMap = topologyReasonMap(lastEigenPacket,tolerances);
       const additions = [];
       const knownFractions = new Set(samples.map(sample => Number(sample.fraction).toPrecision(16)));
       for(let index=0;index<samples.length-1;index+=1){
         const left = samples[index], right = samples[index+1];
-        const reasons = physicalMetricReasons(left,right,tolerances);
+        const reasons = intervalReasons(left,right,tolerances,topologyMap);
         if(!reasons.length) continue;
         if(samples.length + additions.length >= maximumSampleCount){ ceilingReached = true; break; }
         const midFraction = (Number(left.fraction)+Number(right.fraction))/2;
@@ -197,16 +246,32 @@
     }
 
     samples = samples.map((sample,index) => ({...sample,sampleIndex:index}));
-    const status = worstStatus([base.status,...samples.flatMap(sample => [sample.sourceStateStatus,sample.environmentStatus])]);
+    lastEigenPacket = await resolveEigenbranchPacket(Eigen,samples,context,tolerances,[REGISTRY_URL,...(base.provenance || [])]);
+    const finalTopologyMap = topologyReasonMap(lastEigenPacket,tolerances);
+    const pending = [];
+    for(let index=0;index<samples.length-1;index+=1){
+      const reasons = intervalReasons(samples[index],samples[index+1],tolerances,finalTopologyMap);
+      if(reasons.length) pending.push({leftFraction:Number(samples[index].fraction),rightFraction:Number(samples[index+1].fraction),reasons});
+    }
+    const convergenceEstablished = pending.length === 0;
     if(ceilingReached) warnings.push('Adaptive refinement reached the declared maximum sample count before all requesting intervals were subdivided; numerical convergence is not established.');
+    if(!convergenceEstablished && !ceilingReached) warnings.push('Adaptive refinement ended with one or more intervals still requesting subdivision; the depth/resource envelope did not establish numerical convergence.');
     if(refinementEvents.length && samples.length >= maximumSampleCount) warnings.push('Sample ceiling is an engineering resource bound, not evidence of route smoothness or safety.');
     warnings.push('Adaptive refinement improves numerical evidence density but does not prove that no sharper unsampled extremum exists.');
+    warnings.push('Stable broad degeneracy is preserved as a physical subspace state; only degeneracy boundaries, unresolved eigensystems, or excessive resolved/subspace rotation force additional subdivision.');
+
+    const status = worstStatus([
+      base.status,
+      lastEigenPacket?.status,
+      ...samples.flatMap(sample => [sample.sourceStateStatus,sample.environmentStatus]),
+      convergenceEstablished ? STATUS.RESOLVED : STATUS.PARTIAL
+    ]);
 
     return deepFreeze({
-      schemaVersion:'1.0.0',status,familyId:base.familyId,encounterModel:base.encounterModel,
-      sampling:{adaptive:true,initialSampleCount,finalSampleCount:samples.length,maximumSampleCount,maximumDepth,tolerances},
-      samples,refinementEvents,warnings:unique(warnings),
-      provenance:unique([REGISTRY_URL,'blacklight-exo-ftl-family-encounter-time-runtime.js',...(base.provenance || [])]),
+      schemaVersion:'1.1.0',status,familyId:base.familyId,encounterModel:base.encounterModel,
+      sampling:{adaptive:true,convergenceEstablished,unresolvedIntervalCount:pending.length,initialSampleCount,finalSampleCount:samples.length,maximumSampleCount,maximumDepth,tolerances},
+      samples,refinementEvents,eigenbranchTracking:lastEigenPacket,warnings:unique(warnings),
+      provenance:unique([REGISTRY_URL,'blacklight-exo-ftl-family-encounter-time-runtime.js','blacklight-exo-ftl-tidal-eigenbranch-tracking-runtime.js',...(base.provenance || [])]),
       canonSafeguards:registry.canonSafeguards || []
     });
   }
