@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.topology-hazard-applicability",
+  "title": "Black Light FTL Physical-Topology to Family-Hazard Applicability Registry",
+  "status": "MIXED",
+  "purpose": "Provides provenance-bearing canon links between ordinary gravitational/topological evidence and fictional family-specific hazards. It replaces caller-supplied boolean applicability with explicit family/named-technology records while preserving the rule that ordinary gravity cannot manufacture exotic FTL canon.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Gravitational shear-plane/hyperlane methods are especially sensitive to underlying gravitational geometry; forks in a shear lane may catastrophically divide the transiting vessel; safety systems require predictive sensing and emergency de-transit with increasing but never perfect margins."
+  },
+  "authorityOrder": [
+    "specific named technology/vessel/installation applicability record",
+    "specific race/species/manufacturer applicability record",
+    "family applicability record",
+    "generic family engineering authority",
+    "caller simulation context only when explicitly marked non-canonical"
+  ],
+  "physicalEvidenceTypes": {
+    "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY": {
+      "definition": "Operational boundary where gamma_ij = |lambda_i-lambda_j| / max(|lambda_i|,|lambda_j|,||T||_F,epsilon) reaches the versioned branch-identity threshold.",
+      "physicalStatus": "DERIVED from ordinary weak-field tidal geometry and propagated measurement uncertainty",
+      "canonLimit": "Evidence of changing/degenerate tidal topology, not itself evidence of an exotic lane, fork, wall, manifold defect, or transit boundary."
+    }
+  },
+  "records": [
+    {
+      "recordId": "family-gravitic-plane-shear-fork-topology-v1",
+      "scopeType": "FAMILY",
+      "family": "gravitic-plane",
+      "hazardKey": "SHEAR_FORK_OR_BRANCH_LOSS",
+      "physicalEvidenceType": "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY",
+      "relationship": "REQUIRED_PHYSICAL_PRECURSOR",
+      "applicability": "APPLICABLE",
+      "canonStatus": "DERIVED_FROM_DESIGN_INTENT",
+      "source": {
+        "title": "The different lightspeed methods",
+        "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+        "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+        "basis": "The source explicitly describes transit along gravitational shear planes, extreme sensitivity to underlying gravitational conditions, and catastrophic destruction when a gravity-shear lane forks."
+      },
+      "scope": "The normalized tidal-degeneracy boundary may be used as a conservative physical precursor to a separately certified gravitic-plane shear-fork/branch-loss blocker. It may move an already-authorized blocker earlier but may not create a blocker when no family hazard has been certified.",
+      "machineryObligations": [
+        "tidal tensor/eigenbranch sensing",
+        "branch-continuity solver",
+        "uncertainty-aware topology localization",
+        "predictive fork detector",
+        "emergency de-transit or safe-plane shunt authority",
+        "protected recovery reserve"
+      ]
+    },
+    {
+      "recordId": "family-slipstream-shear-branch-topology-v1",
+      "scopeType": "FAMILY",
+      "family": "slipstream-shear",
+      "hazardKey": "SHEAR_FORK_OR_BRANCH_LOSS",
+      "physicalEvidenceType": "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY",
+      "relationship": "REQUIRED_PHYSICAL_PRECURSOR",
+      "applicability": "APPLICABLE",
+      "canonStatus": "DERIVED_FROM_DESIGN_INTENT",
+      "source": {
+        "title": "The different lightspeed methods",
+        "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+        "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+        "basis": "Slipstream/shear operation consumes the same gravitational-shear design intent but remains a distinct family implementation with its own hazard calibration and machinery response."
+      },
+      "scope": "The physical topology boundary may tighten a separately certified slipstream/shear branch-loss blocker. It cannot prove that a slipstream exists or convert ordinary tidal degeneracy into an exotic wall/fork by itself.",
+      "machineryObligations": [
+        "distributed gradiometry",
+        "eigenbranch tracking",
+        "slipstream wall/fork discriminator",
+        "uncertainty-aware lookahead",
+        "shear release/decoupling system",
+        "protected recovery reserve"
+      ]
+    }
+  ],
+  "resolutionRules": [
+    "Named technology/vessel/installation records outrank family records within their documented scope.",
+    "Two equal-precedence contradictory records produce CONFLICT; the resolver must not guess.",
+    "No matching record produces UNRESOLVED, not NOT_APPLICABLE and not false.",
+    "APPLICABLE means the physical evidence may condition or conservatively move a separately certified fictional hazard; it does not create that hazard.",
+    "NOT_APPLICABLE requires an explicit authority record; absence of a record is unresolved.",
+    "A simulation-only caller override may be returned only when canonicalResolutionRequired is false and must remain visibly SIMULATION_ONLY."
+  ],
+  "canonSafeguards": [
+    "Ordinary tidal geometry cannot establish that any FTL family is physically real.",
+    "A physical normalized-degeneracy boundary is not automatically a shear fork, lane edge, slipstream wall, manifold defect, or blocker.",
+    "Applicability changes how already-authorized fictional hazards consume physical evidence; it does not authorize the fictional hazard itself.",
+    "Race/species identity does not imply family identity without a race/named technology source.",
+    "Missing applicability authority is UNRESOLVED rather than false, zero, or benign.",
+    "Operator, manufacturer, archaeological inference, and machinery ancestry must remain separate provenance fields when known."
+  ],
+  "api": {
+    "resolver": "resolveFTLTopologyHazardApplicability",
+    "inputs": ["family", "hazardKey", "physicalEvidenceType", "namedTechnologyId", "vesselId", "installationId", "raceId", "manufacturerId", "canonicalResolutionRequired", "simulationOverride", "provenance"],
+    "outputs": ["status", "applicable", "relationship", "record", "matchedRecordIds", "scopeResolution", "warnings", "provenance", "canonSafeguards"]
+  },
+  "supportingManual": "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md"
+}
