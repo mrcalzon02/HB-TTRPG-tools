@@ -1,105 +1,97 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.ftl.installation-safety-timing",
   "title": "Black Light FTL Installation Safety Timing and Readiness Registry",
   "status": "MIXED",
-  "purpose": "Translate named installation sensor, control, actuation, maintenance, recovery and common-cause infrastructure evidence into provenance-bearing timing modifiers without inventing canonical seconds, transit-family identity, universal race coefficients, or independent failure probabilities. The adjusted packet is consumed directly by route certification while preserving pre-adjustment timing and recovery baselines for audit.",
+  "purpose": "Translate installation sensor, control, actuation, maintenance, recovery, common-cause and sectional-topology evidence into provenance-bearing timing modifiers without inventing canonical seconds, family identity, race coefficients, or independent failure probabilities.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
-    "scope": "Sensor lookahead, emergency de-transit, family-specific safety margins, failure sensitivity, and the principle that more advanced systems reduce risk without making transit perfectly safe."
+    "scope": "Predictive sensing, emergency de-transit, family-specific safety margins, machinery failure sensitivity, and the principle that technological maturity lowers risk without abolishing it."
   },
   "integration": {
     "consumerRuntime": "blacklight-exo-ftl-route-safety-runtime.js",
     "runtime": "blacklight-exo-ftl-installation-safety-timing-runtime.js",
     "schema": "data/schemas/exo-vessel-ftl-installation-safety-timing.schema.json",
+    "sectionalRuntime": "blacklight-exo-ftl-sectional-dependency-topology-runtime.js",
+    "sectionalRegistry": "data/exo-vessel/ftl-sectional-dependency-topology-registry.json",
     "coupledDegradationRuntime": "blacklight-exo-ftl-coupled-degradation-runtime.js",
     "coupledDegradationRegistry": "data/exo-vessel/ftl-coupled-degradation-registry.json",
-    "coupledDegradationSchema": "data/schemas/exo-vessel-ftl-coupled-degradation.schema.json",
     "manuals": [
       "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_SAFETY_TIMING_AND_MAINTENANCE_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_TIMING_ROUTE_CERTIFICATION_INTEGRATION_MANUAL.md",
-      "docs/blacklight/BLACK_LIGHT_FTL_COUPLED_DEGRADATION_POWER_THERMAL_TRANSIENT_MANUAL.md"
+      "docs/blacklight/BLACK_LIGHT_FTL_COUPLED_DEGRADATION_POWER_THERMAL_TRANSIENT_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_SECTIONAL_DEPENDENCY_TOPOLOGY_AND_LARGE_VESSEL_RESILIENCE_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_SECTIONAL_PROPAGATION_LATENCY_AND_MODULAR_REFIT_TIMING_MANUAL.md"
     ],
-    "flow": "Route safety constructs or accepts baseline timing/recovery, resolves installation identity/readiness, optionally resolves common-cause power/thermal/support degradation into effective readiness, preserves baseline packets, applies readiness/maintenance adjustment, and supplies adjusted timing/recovery to family-segment or fallback certification.",
-    "blockingRule": "BLOCKED readiness, hard declared power/thermal transient limits, and conflicting timing/coupling authority stop certification before family safety evaluation; unresolved named numeric authority preserves baseline values rather than guessing performance."
+    "flow": "Baseline route timing -> sectional service topology -> channel readiness and current path latency -> common-cause transient degradation -> readiness timing scaling -> excess sectional reroute latency -> family/route certification.",
+    "blockingRule": "Blocked readiness, hard declared limits and conflicting authority stop certification. Missing certified sectional latency baselines do not authorize adding the full current latency, because nominal path delay may already be included in baseline stage timing."
   },
   "mathematicalModel": {
     "baselineIntervention": "t_int,0 = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
-    "channelScaling": "t_i = t_i,0 * m_i / max(r_i, epsilon)",
-    "readinessRange": "0 < r_i <= 1 for certified operation; r_i <= 0 blocks use of that channel rather than producing infinite or negative time",
-    "maintenancePenalty": "m_i >= 1 is a multiplicative degradation factor derived from measured condition or explicitly PROPOSED simulation calibration",
+    "channelScaling": "t_i,conditioned = t_i,0 * m_i / max(r_i, epsilon)",
     "lookaheadScaling": "t_prediction = t_prediction,0 * r_sensor * r_navigation * r_reference / m_prediction",
     "reserveScaling": "R_protected,eff = R_protected,0 * r_recovery",
-    "coupledDeficit": "d_i,eff = max(d_i, max_k(c_ki*s_k)); r_i,eff = 1-d_i,eff under the default MAX_ENVELOPE common-cause model",
-    "continuousMargin": "M_T = D_B/v_progress - t_int for continuous projected-progress families where v_progress has an authoritative route-progress semantic",
+    "coupledDeficit": "d_i,eff = max(d_i, max_k(c_ki*s_k)); r_i,eff = 1-d_i,eff under deterministic MAX_ENVELOPE",
+    "sectionalPathLatency": "tau_p = sum_e tau_e",
+    "kOfNLatency": "for a k-of-n safety group, completion latency is the kth-smallest finite latency among eligible members",
+    "excessSectionalLatency": "Delta_tau_i = max(0, tau_i,current - tau_i,certifiedBaseline)",
+    "effectiveStageTime": "t_i,eff = t_i,conditioned + Delta_tau_i",
+    "baselineMissingRule": "If tau_i,certifiedBaseline is unknown, Delta_tau_i remains unresolved; do not substitute zero and do not add the full current path latency automatically.",
+    "continuousMargin": "M_T = D_B/v_progress - t_int for continuous projected-progress families where v_progress has authoritative route-progress semantics",
     "precommitMargin": "M_T = t_prediction - t_int for PRECOMMIT families; no intermediate local FTL velocity may be fabricated",
     "controlSpan": "Pi_c = L_c/(v_c*tau_r)",
-    "interpretation": "Readiness changes the installation's ability to observe, decide, actuate and recover. Common-cause infrastructure can degrade several readiness channels together. Neither mechanism alters G, the external tidal tensor, or the underlying family equations."
+    "interpretation": "Readiness changes ability to observe, decide, actuate and recover. Sectional latency changes how long those actions take when service paths reroute. Neither alters G, the external tidal tensor or the selected family's physical equations."
   },
-  "readinessChannels": [
-    "sensor",
-    "navigation",
-    "reference",
-    "solver",
-    "command",
-    "actuator",
-    "exit",
-    "clearance",
-    "recovery",
-    "thermal",
-    "structure"
-  ],
-  "scopePrecedence": ["INSTALLATION", "VESSEL", "NAMED_TECHNOLOGY", "MANUFACTURER", "RACE", "GENERIC"],
+  "readinessChannels": ["sensor","navigation","reference","solver","command","actuator","exit","clearance","recovery","thermal","structure"],
+  "sectionalLatencyStageBindings": {
+    "sensor": "sensorTime",
+    "solver": "solverTime",
+    "command": "commandTime",
+    "actuator": "actuationTime",
+    "exit": "exitTime",
+    "clearance": "clearTime"
+  },
+  "scopePrecedence": ["INSTALLATION","VESSEL","NAMED_TECHNOLOGY","MANUFACTURER","RACE","GENERIC"],
   "records": [
     {
       "recordId": "blacklight.installation-timing.generic-derived",
       "scopeType": "GENERIC",
       "scopeId": "blacklight.generic",
       "status": "DERIVED",
-      "timingPolicy": "Use the route-safety baseline timing unchanged when no narrower sourced readiness record is available. Runtime condition measurements and explicitly modeled common-cause transients may reduce readiness, but generic identity alone contributes no invented bonus.",
-      "defaultReadiness": {
-        "sensor": 1.0,
-        "navigation": 1.0,
-        "reference": 1.0,
-        "solver": 1.0,
-        "command": 1.0,
-        "actuator": 1.0,
-        "exit": 1.0,
-        "clearance": 1.0,
-        "recovery": 1.0,
-        "thermal": 1.0,
-        "structure": 1.0
-      },
+      "timingPolicy": "Use route-safety baseline timing unchanged when no narrower sourced record exists. Measured condition, common-cause transients and certified sectional reroute evidence may only preserve or worsen the baseline unless a narrower authority explicitly certifies improvement.",
+      "defaultReadiness": {"sensor":1.0,"navigation":1.0,"reference":1.0,"solver":1.0,"command":1.0,"actuator":1.0,"exit":1.0,"clearance":1.0,"recovery":1.0,"thermal":1.0,"structure":1.0},
       "defaultMaintenancePenalty": 1.0,
-      "provenance": [
-        "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
-        "data/exo-vessel/ftl-safety-calibration-profiles.json"
-      ]
+      "provenance": ["docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md","data/exo-vessel/ftl-safety-calibration-profiles.json"]
     },
     {
-      "recordId": "blacklight.installation-timing.arnock-derelict",
+      "recordId": "blacklight.installation-timing.arnock",
       "scopeType": "RACE",
       "scopeId": "arnock",
       "status": "UNRESOLVED",
       "familyId": null,
       "confirmedEvidence": [
-        "cultivated neural computation",
-        "vibration-based controls and interfaces",
-        "biological instruction-driven fabrication",
-        "distributed biological/symbiotic machinery ancestry"
+        "general machinery is solid-state/electromechanical and strongly modular",
+        "general computation is primarily solid-state silicon",
+        "piezoelectric sensing, actuation, vibration analysis and resonant functions are characteristic",
+        "complete functional assemblies are the normal field-service boundary",
+        "bioprinting is advanced secondary technology primarily used for feedstock, medicine, environmental support and life support",
+        "vibration-oriented controls and nonhuman interface geometry are compatible with mechanically coupled piezoelectric interfaces"
       ],
       "derivedTimingImplications": [
-        "sensor, control and recovery paths may be distributed through cultivated neural, vibratory, ionic, optical or biological carriers",
-        "biological state inhomogeneity, damage isolation, tissue viability and coordination span are relevant timing/readiness dimensions",
-        "a repaired biological component requires recalibration before it can be assumed to have restored timing authority",
-        "metabolic or biological-support degradation may be common-cause across multiple functional channels and must not be treated as independent channel failures"
+        "sensor paths combine family-required exotic sensors with solid-state conditioning and piezoelectric machinery-state diagnostics",
+        "solver latency belongs primarily to silicon compute modules and their timing, cooling, data and power service paths",
+        "command latency belongs to deterministic buses, arbitration modules, sectional routing and interlocks",
+        "actuation latency belongs to electromechanical or family-specific field modules plus their local controllers",
+        "recovery depends on protected electrical energy, cooling, structural alignment, control continuity and verified recovery modules",
+        "a replacement module may fit and boot while still changing latency, calibration or transfer function, so family-specific recertification is required"
       ],
-      "numericPolicy": "No canonical Ar'nock sensor latency, solver latency, actuation latency, exit time, recovery reserve or family-specific coefficient is currently established. Do not auto-apply numeric bonuses, penalties or coupling coefficients from race identity alone.",
+      "numericPolicy": "No canonical Ar'nock sensor latency, solver latency, actuator latency, exit time, recovery reserve, sectional baseline delay or family-specific coefficient is established. Do not auto-apply race bonuses or penalties.",
       "provenance": [
+        "data/blacklight-continuum/wiki/arnock-technology-authority.json",
         "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
-        "data/blacklight-continuum/wiki/foundation-lore.json"
+        "data/exo-vessel/propulsion-transit-arnock-annex.json"
       ]
     },
     {
@@ -117,11 +109,11 @@
         "asymmetric vane response can rotate the local inertial frame"
       ],
       "readinessBindings": {
-        "sensor": ["forward sensor ampulla integrity", "sensor choir availability"],
-        "navigation": ["navigation current calibration", "slipstream prediction consistency"],
-        "reference": ["gravitic reference calibration", "inertial reference agreement"],
-        "actuator": ["field-vane symmetry", "dielectric-fluid condition", "hydraulic control pressure"],
-        "recovery": ["protected isolation authority", "bio-reactive power-fluid reserve", "coolant reserve"],
+        "sensor": ["forward sensor ampulla integrity","sensor choir availability"],
+        "navigation": ["navigation current calibration","slipstream prediction consistency"],
+        "reference": ["gravitic reference calibration","inertial reference agreement"],
+        "actuator": ["field-vane symmetry","dielectric-fluid condition","hydraulic control pressure"],
+        "recovery": ["protected isolation authority","bio-reactive power-fluid reserve","coolant reserve"],
         "thermal": ["conductive coolant availability"],
         "structure": ["field-vane geometry and alignment"]
       },
@@ -130,41 +122,42 @@
         "hydraulic pressure and dielectric condition can affect multiple field-vane functions together",
         "bio-reactive power-fluid depletion can reduce ordinary actuation and protected recovery authority simultaneously"
       ],
-      "numericPolicy": "The source establishes which machinery states matter but not canonical seconds or coupling coefficients. Runtime may map measured readiness fractions and explicitly labeled engineering transient profiles into timing penalties using the generic equations; source identity alone supplies no invented absolute latency.",
-      "familyFirewall": "The source term 'bio-reactive gravitic slipstream system' remains unresolved against consolidated family IDs. Timing/readiness/common-cause evidence must not select gravitational-plane or slipstream-shear by keyword.",
-      "provenance": [
-        "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
-        "blacklight-archive-zwlei-murrek-no-return-signal-derelict.html"
-      ]
+      "numericPolicy": "The source establishes machinery dependencies but not canonical seconds, sectional baselines or coupling coefficients. Measured values may be evaluated with generic equations while identity alone supplies no invented latency.",
+      "familyFirewall": "The source term 'bio-reactive gravitic slipstream system' remains unresolved against consolidated family IDs; it does not select gravitational-plane or slipstream-shear by keyword.",
+      "provenance": ["data/exo-vessel/zwlei-murrek-transit-engineering-registry.json","blacklight-archive-zwlei-murrek-no-return-signal-derelict.html"]
     }
   ],
   "runtimeRules": [
     "Narrower matching scope outranks broader scope; equal-precedence contradictions return CONFLICT rather than averaging.",
-    "UNRESOLVED named records preserve their evidence but do not create numeric timing modifiers.",
-    "Measured readiness may only worsen or preserve a baseline unless a sourced named record explicitly provides a certified improvement factor.",
-    "Common-cause transient resolution occurs before timing scaling so shared infrastructure cannot masquerade as independent channel health.",
-    "The default common-cause aggregation is deterministic MAX_ENVELOPE; do not multiply coupling penalties as independent failure probabilities.",
-    "A zero or negative readiness channel is a blocking condition, not a division-by-zero workaround.",
-    "A declared hard power-buffer or thermal limit may block certification when the relevant telemetry and limit are supplied; missing telemetry must not be guessed.",
-    "Maintenance state affects timing/readiness and recovery authority; it does not change external gravity or transit-family identity.",
+    "UNRESOLVED named records preserve evidence but do not create numeric timing modifiers.",
+    "Measured readiness may only worsen or preserve a baseline unless a sourced record explicitly certifies improvement.",
+    "Sectional topology is resolved before common-cause degradation so physically disconnected services cannot masquerade as healthy.",
+    "Common-cause transient resolution occurs before readiness timing scaling.",
+    "Current sectional group latency is preserved as evidence even when a certified baseline is missing.",
+    "Only Delta_tau=max(0,tau_current-tau_certifiedBaseline) is added to a timing stage when both values are known.",
+    "Never assume a missing certified sectional latency baseline is zero; that would double-count nominal path delay already embedded in baseline timing.",
+    "The default common-cause aggregation is deterministic MAX_ENVELOPE, not independent failure-probability multiplication.",
+    "A zero or negative readiness channel is blocking, not a division-by-zero workaround.",
+    "Maintenance state and sectional routing affect timing/readiness; they do not change external gravity or family identity.",
     "Named technology, vessel, installation, manufacturer or race identity is never a family selector.",
     "PRECOMMIT families remain timing-based and may not be assigned a fabricated local transit velocity.",
     "Protected recovery reserve may not be consumed to improve advertised nominal timing.",
-    "All adjusted timing packets preserve baselineTiming, baselineRecovery, coupledDegradation, applied factors, source record IDs and provenance.",
-    "Route certification consumes adjusted timing and recovery packets directly; condition evidence must not remain an informational side channel."
+    "Adjusted packets preserve baselineTiming, baselineRecovery, coupledDegradation, sectionalLatency, factors, source record IDs and provenance."
   ],
   "api": {
     "resolver": "resolveFTLInstallationSafetyTiming",
-    "inputs": ["baselineTiming", "baselineRecovery", "family", "namedTechnologyId", "vesselId", "installationId", "manufacturerId", "raceId", "readiness", "maintenancePenalty", "transientState", "couplingProfileId", "couplingProfile", "interventionHorizon", "coupledDegradationPacket", "provenance"],
-    "outputs": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "coupledDegradation", "appliedFactors", "warnings", "provenance"],
-    "statusValues": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]
+    "inputs": ["baselineTiming","baselineRecovery","baselineSectionalLatency","family","namedTechnologyId","vesselId","installationId","manufacturerId","raceId","readiness","maintenancePenalty","sectionalNetwork","sectionalTopologyPacket","sectionalProfileId","sectionalProfile","serviceChannelMap","transientState","couplingProfileId","couplingProfile","interventionHorizon","coupledDegradationPacket","provenance"],
+    "outputs": ["status","baselineTiming","baselineRecovery","timing","recovery","selectedRecord","readiness","coupledDegradation","sectionalLatency","appliedFactors","warnings","provenance"],
+    "statusValues": ["READY","UNRESOLVED","CONFLICT","BLOCKED"]
   },
   "canonGuards": [
-    "No absolute timing number or coupling coefficient in this registry is historical or universal canon unless a named source explicitly says so.",
-    "The Ar'nock record does not establish a transit family, canonical timing performance, or canonical common-cause coefficients.",
-    "The Mur'rek record establishes machinery dependencies but not a normalized FTL family, canonical timing in seconds, or universal coupling coefficients.",
-    "Readiness and common-cause equations are engineering models, not evidence that a fictional hazard exists.",
-    "Race/species identity may constrain machinery embodiment but may not create family identity, manufacturer identity, or performance canon.",
-    "Simulation calibration must remain labeled PROPOSED or DERIVED as applicable."
+    "No absolute timing number, sectional baseline or coupling coefficient is historical/universal canon unless a named source explicitly establishes it.",
+    "The Ar'nock record establishes solid-state modular machinery constraints but not an FTL family or canonical timing performance.",
+    "Bioprinting is not evidence for biological Ar'nock computation, propulsion or control machinery.",
+    "The Mur'rek record establishes machinery dependencies but not a normalized FTL family or canonical timing in seconds.",
+    "Sectional availability and latency are deterministic engineering state, not failure probability.",
+    "Readiness/common-cause equations are engineering models, not evidence that a fictional hazard exists.",
+    "Race/species identity constrains machinery embodiment but may not create family, manufacturer or performance canon.",
+    "Simulation calibration remains labeled PROPOSED or DERIVED as applicable."
   ]
 }
