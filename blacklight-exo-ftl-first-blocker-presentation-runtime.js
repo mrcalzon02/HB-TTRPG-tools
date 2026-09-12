@@ -97,9 +97,18 @@
   function conservativeSummary(disposition) {
     const source = disposition?.conservativeBlocker;
     if (!source || typeof source !== 'object') return null;
+    const applicability = source.applicabilityResolution || null;
     return {
       source: source.source || null,
+      hazardKey: source.hazardKey || null,
       applicableToCertifiedBlocker: source.applicableToCertifiedBlocker === true,
+      applicabilityStatus: source.applicabilityStatus || applicability?.status || null,
+      applicabilityRelationship: source.applicabilityRelationship || applicability?.relationship || null,
+      applicabilityRecordId: source.applicabilityRecordId || applicability?.record?.recordId || null,
+      applicabilityScopeType: applicability?.scopeResolution?.selectedScopeType || null,
+      applicabilitySourceTitle: applicability?.record?.source?.title || null,
+      applicabilitySourceDocumentId: applicability?.record?.source?.documentId || null,
+      applicabilitySourceRevisionId: applicability?.record?.source?.revisionId || null,
       familyMatch: source.familyMatch === true,
       nominalBlockingFraction: numberOrNull(source.nominalBlockingFraction),
       nominalTopologyBoundaryFraction: numberOrNull(source.nominalTopologyBoundaryFraction),
@@ -112,7 +121,7 @@
       effectiveTimeS: numberOrNull(disposition.timeToFirstBlockingSegmentS),
       interventionReachable: disposition.interventionReachable ?? source.interventionReachable ?? null,
       reason: source.reason || null,
-      provenance: unique(source.provenance)
+      provenance: unique([...(source.provenance || []), ...(applicability?.provenance || [])])
     };
   }
 
@@ -128,7 +137,9 @@
     const warnings = unique([
       ...(packet.warnings || []),
       first.conflict ? 'Route disposition and segment ordering disagree about the first blocking interval. Presentation is marked CONFLICT rather than choosing silently.' : null,
-      conservative && !conservative.applicableToCertifiedBlocker ? 'Topology-boundary uncertainty is shown as evidence only; it has not been authorized to move the certified blocker.' : null
+      conservative && conservative.applicabilityStatus === 'CONFLICT' ? 'Topology-hazard applicability authority is conflicting; presentation retains the nominal blocker.' : null,
+      conservative && conservative.applicabilityStatus === 'UNRESOLVED' ? 'Topology-hazard applicability is unresolved; topology evidence is displayed without blocker promotion.' : null,
+      conservative && !conservative.applicableToCertifiedBlocker ? 'Topology-boundary uncertainty is shown as evidence only; it has not been authorized by a REQUIRED_PHYSICAL_PRECURSOR relationship to move the certified blocker.' : null
     ]);
     const status = first.conflict ? 'CONFLICT' : (packet.status || disposition.worstStatus || 'UNRESOLVED');
     const firstBlocker = first.selected ? {
@@ -150,7 +161,7 @@
     } : null;
 
     return deepFreeze({
-      schemaVersion: '1.1.0',
+      schemaVersion: '1.2.0',
       status,
       family: packet.family || null,
       path: packet.path || null,
