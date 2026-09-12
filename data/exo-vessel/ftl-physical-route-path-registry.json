@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.physical-route-path",
   "title": "Black Light Physical FTL Route Path Sampling Registry",
   "status": "DERIVED",
@@ -44,6 +44,16 @@
     "unknownPhysicalRadiusRemainUnknown": true,
     "noProceduralReplacementForMissingPublishedFields": true
   },
+  "timeAwareIntegration": {
+    "status": "DERIVED",
+    "registry": "data/exo-vessel/ftl-time-aware-route-path-registry.json",
+    "schema": "data/schemas/exo-vessel-ftl-time-aware-route-path.schema.json",
+    "runtime": "blacklight-exo-ftl-time-aware-route-path-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_TIME_AWARE_ROUTE_PATH_INTEGRATION_MANUAL.md",
+    "currentEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
+    "rule": "When authoritative source states with source epoch and velocity are available, propagate them through the time-dependent source-state runtime before invoking this physical route sampler. A common route-epoch snapshot is not equivalent to family-dependent per-interval encounter timing.",
+    "nextFidelity": "Family-dependent t(s) source propagation is PROPOSED and must distinguish continuous projected-progress representations from PRECOMMIT commitment/emergence timing."
+  },
   "pathMetrics": [
     "dimensionlessPotentialDepth",
     "accelerationMagnitudeMPerS2",
@@ -57,7 +67,8 @@
     "Newtonian weak-field potential, acceleration and tidal tensors may be superposed within their approximation; exact multi-body GR invariants are not constructed by summing single-source invariants.",
     "Route extrema are sampled extrema. They are not a mathematical proof that an unsampled interior point is less severe unless convergence/refinement criteria are satisfied.",
     "A catalog system coordinate identifies the system reference position. It is not a canonical FTL emergence point.",
-    "The runtime may identify a route as PARTIAL because source velocity, physical radius, covariance, or epoch data are absent. PARTIAL is evidence, not failure to calculate."
+    "The runtime may identify a route as PARTIAL because source velocity, physical radius, covariance, or epoch data are absent. PARTIAL is evidence, not failure to calculate.",
+    "A source geometry propagated to one route epoch is a higher-fidelity snapshot than a frozen catalog geometry, but it is not a fully time-resolved moving-source corridor."
   ],
   "canonSafeguards": [
     "This registry does not establish that any FTL method is physically realizable.",
@@ -66,6 +77,8 @@
     "Published EXAMPLE-sector values outrank generated supplements.",
     "Candidate/disputed bodies remain excluded from confirmed route mass unless a higher authority changes their status.",
     "Missing ephemeris, source velocity, source radius or covariance may not be silently replaced with zero.",
-    "A sampled path may inform certification only with its sampling strategy, epoch, uncertainty, model-validity state and provenance attached."
+    "A sampled path may inform certification only with its sampling strategy, epoch, uncertainty, model-validity state and provenance attached.",
+    "A route-epoch snapshot may not be presented as family-dependent per-interval encounter-time propagation.",
+    "PRECOMMIT transit families may not be assigned a fabricated local superluminal velocity merely to reuse continuous route timing mathematics."
   ]
 }
