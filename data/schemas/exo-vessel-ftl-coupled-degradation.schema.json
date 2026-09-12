@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-coupled-degradation.schema.json",
+  "title": "Black Light FTL Coupled Degradation Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "profile", "inputReadiness", "effectiveReadiness", "driverStress", "transientProjection", "dominantContributions", "blockedChannels", "signatures", "warnings", "provenance"],
+  "properties": {
+    "status": {"enum": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]},
+    "profile": {"type": ["object", "null"]},
+    "inputReadiness": {"$ref": "#/$defs/readiness"},
+    "effectiveReadiness": {"$ref": "#/$defs/readiness"},
+    "driverStress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["power", "thermal", "cooling", "hydraulic", "dielectric", "metabolic"],
+      "properties": {
+        "power": {"type": "number", "minimum": 0, "maximum": 1},
+        "thermal": {"type": "number", "minimum": 0, "maximum": 1},
+        "cooling": {"type": "number", "minimum": 0, "maximum": 1},
+        "hydraulic": {"type": "number", "minimum": 0, "maximum": 1},
+        "dielectric": {"type": "number", "minimum": 0, "maximum": 1},
+        "metabolic": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "transientProjection": {"type": "object", "additionalProperties": {"type": "number"}},
+    "dominantContributions": {"type": "object", "additionalProperties": {"type": "object"}},
+    "blockedChannels": {"type": "array", "items": {"type": "string"}},
+    "signatures": {"type": "object", "additionalProperties": {"type": "number"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sensor", "navigation", "reference", "solver", "command", "actuator", "exit", "clearance", "recovery", "thermal", "structure"],
+      "properties": {
+        "sensor": {"type": "number", "minimum": 0, "maximum": 1},
+        "navigation": {"type": "number", "minimum": 0, "maximum": 1},
+        "reference": {"type": "number", "minimum": 0, "maximum": 1},
+        "solver": {"type": "number", "minimum": 0, "maximum": 1},
+        "command": {"type": "number", "minimum": 0, "maximum": 1},
+        "actuator": {"type": "number", "minimum": 0, "maximum": 1},
+        "exit": {"type": "number", "minimum": 0, "maximum": 1},
+        "clearance": {"type": "number", "minimum": 0, "maximum": 1},
+        "recovery": {"type": "number", "minimum": 0, "maximum": 1},
+        "thermal": {"type": "number", "minimum": 0, "maximum": 1},
+        "structure": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}
