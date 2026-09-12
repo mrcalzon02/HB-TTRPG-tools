@@ -61,10 +61,12 @@
           "type": ["object", "null"],
           "properties": {
             "neglectedAccelerationBoundMPerS2": {"type": ["number", "null"], "minimum": 0},
+            "neglectedJerkBoundMPerS3": {"type": ["number", "null"], "minimum": 0},
             "positionRemainderBoundM": {"type": ["number", "null"], "minimum": 0},
             "velocityRemainderBoundMPerS": {"type": ["number", "null"], "minimum": 0},
             "positionToleranceM": {"type": ["number", "null"], "exclusiveMinimum": 0},
-            "velocityToleranceMPerS": {"type": ["number", "null"], "exclusiveMinimum": 0}
+            "velocityToleranceMPerS": {"type": ["number", "null"], "exclusiveMinimum": 0},
+            "status": {"enum": ["RESOLVED", "PARTIAL", "OUTSIDE_MODEL_VALIDITY"]}
           },
           "additionalProperties": false
         },
