@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "registryKey": "blacklight.ftl.physical-route-path",
   "title": "Black Light Physical FTL Route Path Sampling Registry",
   "status": "DERIVED",
@@ -23,7 +23,7 @@
     "reason": "A cosine-spaced open interval concentrates samples near departure and arrival gravity wells while still covering the interstellar interior. Endpoints themselves are excluded because a system authority position is a barycentric/catalog position, not a safe emergence point or stellar surface coordinate.",
     "adaptiveRefinement": {
       "status": "PROPOSED",
-      "rule": "Refine intervals when adjacent tidal Frobenius values, principal tidal eigenvalues, or acceleration vectors change faster than configured relative tolerances.",
+      "rule": "Refine intervals when adjacent tidal Frobenius values, principal tidal eigenvalues, acceleration vectors, encounter-time change, or propagated uncertainty change faster than configured tolerances.",
       "defaultRelativeMetricTolerance": 0.20,
       "defaultDirectionChangeRad": 0.08726646259971647,
       "maximumRefinementDepth": 5
@@ -46,13 +46,18 @@
   },
   "timeAwareIntegration": {
     "status": "DERIVED",
-    "registry": "data/exo-vessel/ftl-time-aware-route-path-registry.json",
-    "schema": "data/schemas/exo-vessel-ftl-time-aware-route-path.schema.json",
-    "runtime": "blacklight-exo-ftl-time-aware-route-path-runtime.js",
-    "manual": "docs/blacklight/BLACK_LIGHT_FTL_TIME_AWARE_ROUTE_PATH_INTEGRATION_MANUAL.md",
-    "currentEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
-    "rule": "When authoritative source states with source epoch and velocity are available, propagate them through the time-dependent source-state runtime before invoking this physical route sampler. A common route-epoch snapshot is not equivalent to family-dependent per-interval encounter timing.",
-    "nextFidelity": "Family-dependent t(s) source propagation is PROPOSED and must distinguish continuous projected-progress representations from PRECOMMIT commitment/emergence timing."
+    "snapshotRegistry": "data/exo-vessel/ftl-time-aware-route-path-registry.json",
+    "snapshotSchema": "data/schemas/exo-vessel-ftl-time-aware-route-path.schema.json",
+    "snapshotRuntime": "blacklight-exo-ftl-time-aware-route-path-runtime.js",
+    "snapshotManual": "docs/blacklight/BLACK_LIGHT_FTL_TIME_AWARE_ROUTE_PATH_INTEGRATION_MANUAL.md",
+    "familyEncounterRegistry": "data/exo-vessel/ftl-family-encounter-time-registry.json",
+    "familyEncounterSchema": "data/schemas/exo-vessel-ftl-family-encounter-time.schema.json",
+    "familyEncounterRuntime": "blacklight-exo-ftl-family-encounter-time-runtime.js",
+    "familyEncounterManual": "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_ENCOUNTER_TIME_ENGINEERING_MANUAL.md",
+    "snapshotEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
+    "snapshotRule": "When authoritative source states with source epoch and velocity are available, propagate them through the time-dependent source-state runtime before invoking this physical route sampler. A common route-epoch snapshot remains available as a bounded comparison mode.",
+    "familyEncounterRule": "When the selected transit family supplies a defensible encounter policy, evaluate source states at family-dependent encounter epochs: continuous t(s), explicit PRECOMMIT commitment/emergence epochs, or explicit anchored-portal mouth epochs.",
+    "nextFidelity": "Adaptive time-aware refinement and higher-fidelity source dynamics remain future work; family-dependent encounter timing is now implemented as a separate auditable runtime rather than silently changing snapshot semantics."
   },
   "pathMetrics": [
     "dimensionlessPotentialDepth",
@@ -68,7 +73,8 @@
     "Route extrema are sampled extrema. They are not a mathematical proof that an unsampled interior point is less severe unless convergence/refinement criteria are satisfied.",
     "A catalog system coordinate identifies the system reference position. It is not a canonical FTL emergence point.",
     "The runtime may identify a route as PARTIAL because source velocity, physical radius, covariance, or epoch data are absent. PARTIAL is evidence, not failure to calculate.",
-    "A source geometry propagated to one route epoch is a higher-fidelity snapshot than a frozen catalog geometry, but it is not a fully time-resolved moving-source corridor."
+    "A source geometry propagated to one route epoch is a higher-fidelity snapshot than a frozen catalog geometry, but it is not a fully time-resolved moving-source corridor.",
+    "The family encounter-time runtime supplies time-resolved physical samples without changing the ordinary gravity equations or manufacturing fictional operator-boundary state."
   ],
   "canonSafeguards": [
     "This registry does not establish that any FTL method is physically realizable.",
@@ -79,6 +85,8 @@
     "Missing ephemeris, source velocity, source radius or covariance may not be silently replaced with zero.",
     "A sampled path may inform certification only with its sampling strategy, epoch, uncertainty, model-validity state and provenance attached.",
     "A route-epoch snapshot may not be presented as family-dependent per-interval encounter-time propagation.",
-    "PRECOMMIT transit families may not be assigned a fabricated local superluminal velocity merely to reuse continuous route timing mathematics."
+    "For true-FTL continuous families, projected route/control progress may not be relabeled local real-space hull velocity without higher authority.",
+    "PRECOMMIT transit families may not be assigned fabricated intermediate ordinary-space encounter times or a continuous superluminal velocity merely to reuse continuous route timing mathematics.",
+    "Anchored wormhole/gate transit may not be represented as ordinary-space corridor traversal merely to reuse continuous sampling."
   ]
 }
