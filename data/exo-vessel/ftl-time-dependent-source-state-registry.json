@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.time-dependent-source-state",
+  "title": "Black Light FTL Time-Dependent Gravitational Source State Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "purpose": "Propagate authoritative source positions, velocities and uncertainty to a requested route epoch before physical route sampling. This registry does not assign transit families, does not replace high-fidelity astrodynamics, and does not turn absent motion or covariance into zero.",
+  "authorityIntegration": {
+    "upstream": [
+      "specific published/named source astrometry and dynamical records",
+      "BLACKLIGHT_EXO_SOURCE_AUTHORITY.md",
+      "blacklight-exo-source-authority.js",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "data/exo-vessel/propulsion-transit-authority-manifest.json"
+    ],
+    "downstream": [
+      "blacklight-exo-ftl-physical-route-path-runtime.js",
+      "blacklight-exo-ftl-curvature-environment-runtime.js",
+      "blacklight-exo-ftl-route-segment-certification-runtime.js",
+      "blacklight-exo-ftl-family-segment-certification-runtime.js"
+    ],
+    "handoff": "The runtime emits ordinary SI source-state packets suitable for caller-supplied sources in the existing physical route sampler. The physical route sampler remains the authority for route geometry and gravity sampling."
+  },
+  "models": {
+    "LINEAR_KINEMATIC": {
+      "status": "DERIVED",
+      "state": "z=[r,v]^T",
+      "equations": [
+        "r(t)=r0+v0*dt",
+        "v(t)=v0",
+        "F(dt)=[[I,dt I],[0,I]]",
+        "Sigma(t)=F Sigma0 F^T + Q"
+      ],
+      "validity": "Requires explicit source velocity and a declared neglected-acceleration bound or a caller-declared bounded time horizon. If the remainder bound exceeds tolerance, the result is OUTSIDE_MODEL_VALIDITY rather than coerced into a large uncertainty score."
+    },
+    "CONSTANT_ACCELERATION": {
+      "status": "DERIVED",
+      "state": "z=[r,v]^T with deterministic supplied acceleration",
+      "equations": [
+        "r(t)=r0+v0*dt+0.5*a*dt^2",
+        "v(t)=v0+a*dt"
+      ],
+      "validity": "Acceleration must be explicitly supplied and identified by provenance. This model is not an orbital integrator and cannot be used to infer an acceleration vector from mass alone. Covariance is still propagated over [r,v]; uncertainty in acceleration requires process noise or a higher-order state model."
+    }
+  },
+  "processNoise": {
+    "whiteAccelerationPSD": {
+      "status": "DERIVED",
+      "description": "For isotropic continuous white acceleration noise spectral density q_a with units m^2 s^-3, the 1-axis process-noise block over |dt| is q_a[[dt^3/3,dt^2/2],[dt^2/2,dt]]. The 3D Q matrix applies that block independently to x,y,z unless a full process-noise covariance is supplied.",
+      "warning": "Independent-axis white acceleration noise is a model assumption, not a physical constant and not a substitute for known correlated source dynamics."
+    }
+  },
+  "remainderBounds": {
+    "linearPosition": "|delta r| <= 0.5*a_bound*dt^2",
+    "linearVelocity": "|delta v| <= a_bound*|dt|",
+    "meaning": "These are conservative Taylor-remainder bounds when a caller can bound neglected acceleration magnitude over the propagation interval. They are not orbital-error guarantees if the bound itself is invalid."
+  },
+  "statusPolicy": {
+    "RESOLVED": "All required state, epoch, model-validity and uncertainty fields needed by the requested propagation are present and within declared bounds.",
+    "PARTIAL": "A state can be propagated numerically but uncertainty, neglected-dynamics bound, or other certification-relevant evidence is incomplete.",
+    "UNRESOLVED": "Required source position, velocity, epoch, or model selection is absent.",
+    "OUTSIDE_MODEL_VALIDITY": "The declared approximation exceeds its error/tolerance bound or the caller requests use outside the model's documented domain.",
+    "CONFLICT": "Authoritative source records disagree in a way that cannot be reconciled without choosing one silently."
+  },
+  "canonSafeguards": [
+    "Missing velocity is unresolved motion, not zero velocity.",
+    "Missing covariance is unresolved uncertainty, not perfect certainty.",
+    "A catalog coordinate is an epoch-tagged reference state, not an eternally fixed source position.",
+    "Kinematic propagation is ordinary physics support; it does not prove or assign an FTL family.",
+    "A named race, manufacturer or vessel does not inherit a source-dynamics model merely from species identity.",
+    "Process-noise parameters and tolerances are engineering calibration inputs, not constants of nature or setting canon.",
+    "Independent per-source covariance does not represent cross-source correlation; barycentric/common-reference covariance must remain explicit when known.",
+    "OUTSIDE_MODEL_VALIDITY blocks certification until a higher-fidelity dynamical model is supplied.",
+    "Constant acceleration may be used only when the acceleration vector is explicitly established; mass alone does not determine the source acceleration without the rest of the dynamical system.",
+    "High-fidelity N-body, post-Newtonian or relativistic propagation outranks these local kinematic approximations when authoritative data support it."
+  ],
+  "education": {
+    "course": "Transit Environment Physics 570 — Ephemerides, State Transition Matrices and Covariance",
+    "topics": [
+      "reference epochs and frames",
+      "Cartesian state vectors",
+      "linear state transition matrices",
+      "covariance propagation",
+      "white-acceleration process noise",
+      "Taylor remainder bounds",
+      "model validity and refusal",
+      "cross-source covariance",
+      "route recertification after ephemeris updates"
+    ]
+  }
+}
