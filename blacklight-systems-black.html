@@ -157,6 +157,7 @@
 
       const humanize = (value) => value
         .replace(/\.[^.]+$/, '')
+        .replace(/\./g, ' ')
         .replace(/[_-]+/g, ' ')
         .replace(/\b\w/g, letter => letter.toUpperCase())
         .replace(/\bApi\b/g, 'API')
@@ -168,6 +169,10 @@
         .replace(/\bUi\b/g, 'UI');
 
       const displayName = (path) => humanize(path.split('/').pop());
+      const resourceFormat = (path) => {
+        const match = path.match(/\.([^.\/]+)$/);
+        return match ? match[1].toUpperCase() : 'FILE';
+      };
 
       const parentContext = (path) => {
         const segments = path.split('/').slice(0, -1);
@@ -261,6 +266,18 @@
             item.name = nameCounts.get(item.baseName.toLocaleLowerCase()) > 1
               ? `${item.baseName} — ${parentContext(item.path)}`
               : item.baseName;
+          });
+
+          const contextualNameCounts = resources.reduce((counts, item) => {
+            const key = item.name.toLocaleLowerCase();
+            counts.set(key, (counts.get(key) || 0) + 1);
+            return counts;
+          }, new Map());
+
+          resources.forEach(item => {
+            if (contextualNameCounts.get(item.name.toLocaleLowerCase()) > 1) {
+              item.name = `${item.name} [${resourceFormat(item.path)}]`;
+            }
           });
 
           resources.sort((a, b) => a.name.localeCompare(b.name) || a.path.localeCompare(b.path));
