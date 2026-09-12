@@ -26,10 +26,10 @@
   },
   "records": [
     {
-      "recordId": "family-gravitic-plane-shear-fork-topology-v1",
+      "recordId": "family-gravitational-plane-shear-fork-topology-v1",
       "scopeType": "FAMILY",
-      "family": "gravitic-plane",
-      "hazardKey": "SHEAR_FORK_OR_BRANCH_LOSS",
+      "family": "gravitational-plane",
+      "hazardKey": "shear-fork",
       "physicalEvidenceType": "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY",
       "relationship": "REQUIRED_PHYSICAL_PRECURSOR",
       "applicability": "APPLICABLE",
@@ -40,7 +40,7 @@
         "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
         "basis": "The source explicitly describes transit along gravitational shear planes, extreme sensitivity to underlying gravitational conditions, and catastrophic destruction when a gravity-shear lane forks."
       },
-      "scope": "The normalized tidal-degeneracy boundary may be used as a conservative physical precursor to a separately certified gravitic-plane shear-fork/branch-loss blocker. It may move an already-authorized blocker earlier but may not create a blocker when no family hazard has been certified.",
+      "scope": "The normalized tidal-degeneracy boundary may be used as a conservative physical precursor to a separately certified gravitational-plane shear-fork blocker. It may move an already-authorized blocker earlier but may not create a blocker when no family hazard has been certified.",
       "machineryObligations": [
         "tidal tensor/eigenbranch sensing",
         "branch-continuity solver",
@@ -51,25 +51,25 @@
       ]
     },
     {
-      "recordId": "family-slipstream-shear-branch-topology-v1",
+      "recordId": "family-slipstream-shear-adhesion-topology-v1",
       "scopeType": "FAMILY",
       "family": "slipstream-shear",
-      "hazardKey": "SHEAR_FORK_OR_BRANCH_LOSS",
+      "hazardKey": "adhesion-loss",
       "physicalEvidenceType": "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY",
-      "relationship": "REQUIRED_PHYSICAL_PRECURSOR",
+      "relationship": "SUPPORTING_PHYSICAL_PRECURSOR",
       "applicability": "APPLICABLE",
-      "canonStatus": "DERIVED_FROM_DESIGN_INTENT",
+      "canonStatus": "PROPOSED_ENGINEERING_RELATIONSHIP",
       "source": {
         "title": "The different lightspeed methods",
         "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
         "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
-        "basis": "Slipstream/shear operation consumes the same gravitational-shear design intent but remains a distinct family implementation with its own hazard calibration and machinery response."
+        "basis": "The source establishes gravity-sensitive shear transit generally, but does not by itself establish that every slipstream adhesion-loss event is a tidal branch fork. This record therefore remains supporting rather than blocker-authorizing."
       },
-      "scope": "The physical topology boundary may tighten a separately certified slipstream/shear branch-loss blocker. It cannot prove that a slipstream exists or convert ordinary tidal degeneracy into an exotic wall/fork by itself.",
+      "scope": "Tidal topology may inform slipstream/shear sensing, maintenance and route confidence for adhesion loss, but this generic relationship does not move a certified blocker earlier. A named technology source may strengthen or reject it.",
       "machineryObligations": [
         "distributed gradiometry",
         "eigenbranch tracking",
-        "slipstream wall/fork discriminator",
+        "slipstream wall/adhesion discriminator",
         "uncertainty-aware lookahead",
         "shear release/decoupling system",
         "protected recovery reserve"
@@ -80,7 +80,8 @@
     "Named technology/vessel/installation records outrank family records within their documented scope.",
     "Two equal-precedence contradictory records produce CONFLICT; the resolver must not guess.",
     "No matching record produces UNRESOLVED, not NOT_APPLICABLE and not false.",
-    "APPLICABLE means the physical evidence may condition or conservatively move a separately certified fictional hazard; it does not create that hazard.",
+    "APPLICABLE means the physical evidence may condition a separately certified fictional hazard; only REQUIRED_PHYSICAL_PRECURSOR authorizes conservative blocker tightening in the generic certification chain.",
+    "SUPPORTING_PHYSICAL_PRECURSOR preserves evidence for sensing/maintenance/confidence but does not move a blocker earlier without a stronger named authority.",
     "NOT_APPLICABLE requires an explicit authority record; absence of a record is unresolved.",
     "A simulation-only caller override may be returned only when canonicalResolutionRequired is false and must remain visibly SIMULATION_ONLY."
   ],
