@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-tidal-uncertainty-propagation.schema.json",
+  "title": "Black Light FTL Tidal Uncertainty Propagation Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "samples", "boundaryIntervals", "warnings", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "familyId": {"type": ["string", "null"]},
+    "encounterModel": {"type": ["string", "null"]},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "finiteDifferenceScaleSigma": {"type": "number", "exclusiveMinimum": 0},
+        "minimumFiniteDifferenceM": {"type": "number", "exclusiveMinimum": 0},
+        "maximumFiniteDifferenceM": {"type": "number", "exclusiveMinimum": 0},
+        "degeneracyRelativeGap": {"type": "number", "minimum": 0},
+        "maximumLinearizedOrientationSigmaRad": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sampleIndex", "fraction", "status", "tensorCovariance6x6", "eigenbranches", "warnings"],
+        "properties": {
+          "sampleIndex": {"type": "integer", "minimum": 0},
+          "fraction": {"type": "number"},
+          "encounterEpoch": {},
+          "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+          "tensorCovariance6x6": {
+            "anyOf": [
+              {"type": "null"},
+              {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"type": "number"}}}
+            ]
+          },
+          "eigenbranches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["branchId", "eigenvaluePerS2", "eigenvalueSigmaPerS2", "orientationSigmaRad", "orientationStatus"],
+              "properties": {
+                "branchId": {"type": "string"},
+                "eigenvaluePerS2": {"type": "number"},
+                "eigenvalueSigmaPerS2": {"type": ["number", "null"], "minimum": 0},
+                "orientationSigmaRad": {"type": ["number", "null"], "minimum": 0},
+                "orientationStatus": {"enum": ["LINEARIZED", "DEGENERATE_SUBSPACE", "OUTSIDE_LINEAR_MODEL", "UNRESOLVED"]},
+                "degenerate": {"type": "boolean"}
+              }
+            }
+          },
+          "warnings": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "boundaryIntervals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["leftSampleIndex", "rightSampleIndex", "branchPair", "status", "gapAtLeftPerS2", "gapAtRightPerS2", "gapSigmaLeftPerS2", "gapSigmaRightPerS2", "boundaryFraction", "boundaryFractionSigma"],
+        "properties": {
+          "leftSampleIndex": {"type": "integer", "minimum": 0},
+          "rightSampleIndex": {"type": "integer", "minimum": 0},
+          "branchPair": {"type": "string"},
+          "status": {"enum": ["NO_CROSSING", "BOUNDARY_ESTIMATED", "BOUNDARY_UNCERTAIN", "UNRESOLVED"]},
+          "gapAtLeftPerS2": {"type": ["number", "null"]},
+          "gapAtRightPerS2": {"type": ["number", "null"]},
+          "gapSigmaLeftPerS2": {"type": ["number", "null"], "minimum": 0},
+          "gapSigmaRightPerS2": {"type": ["number", "null"], "minimum": 0},
+          "boundaryFraction": {"type": ["number", "null"]},
+          "boundaryFractionSigma": {"type": ["number", "null"], "minimum": 0},
+          "notes": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  }
+}
