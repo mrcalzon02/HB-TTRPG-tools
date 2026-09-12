@@ -5,7 +5,7 @@
   "type": "object",
   "required": ["schemaVersion", "status", "samples", "transitions", "warnings", "provenance", "canonSafeguards"],
   "properties": {
-    "schemaVersion": {"const": "1.0.0"},
+    "schemaVersion": {"const": "1.1.0"},
     "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
     "familyId": {"type": ["string", "null"]},
     "encounterModel": {"type": ["string", "null"]},
@@ -56,11 +56,14 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["leftSampleIndex", "rightSampleIndex", "status", "branchRotationsRad"],
+        "required": ["leftSampleIndex", "rightSampleIndex", "status", "leftEigensystemStatus", "rightEigensystemStatus", "degeneracyBoundary", "branchRotationsRad", "refinementRequested"],
         "properties": {
           "leftSampleIndex": {"type": "integer", "minimum": 0},
           "rightSampleIndex": {"type": "integer", "minimum": 0},
           "status": {"enum": ["RESOLVED", "DEGENERATE_SUBSPACE", "UNRESOLVED"]},
+          "leftEigensystemStatus": {"enum": ["RESOLVED", "DEGENERATE_SUBSPACE", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+          "rightEigensystemStatus": {"enum": ["RESOLVED", "DEGENERATE_SUBSPACE", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY"]},
+          "degeneracyBoundary": {"type": "boolean"},
           "branchRotationsRad": {"type": "object"},
           "maximumResolvedBranchRotationRad": {"type": ["number", "null"]},
           "degenerateSubspaceRotationRad": {"type": ["number", "null"]},
