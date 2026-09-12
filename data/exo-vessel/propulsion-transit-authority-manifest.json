@@ -57,6 +57,10 @@
     "data/schemas/exo-vessel-ftl-family-segment-certification.schema.json",
     "blacklight-exo-ftl-family-segment-certification-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_SEGMENT_CERTIFICATION_MANUAL.md",
+    "data/exo-vessel/ftl-first-blocker-presentation-registry.json",
+    "data/schemas/exo-vessel-ftl-first-blocker-presentation.schema.json",
+    "blacklight-exo-ftl-first-blocker-presentation-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_FIRST_BLOCKER_CORRIDOR_PRESENTATION_MANUAL.md",
     "data/exo-vessel/ftl-calibration-registry.json",
     "data/exo-vessel/ftl-safety-certification-registry.json",
     "data/schemas/exo-vessel-ftl-safety-certification.schema.json",
@@ -143,6 +147,7 @@
     "blacklight-exo-ftl-physical-route-path-runtime.js",
     "blacklight-exo-ftl-route-segment-certification-runtime.js",
     "blacklight-exo-ftl-family-segment-certification-runtime.js",
+    "blacklight-exo-ftl-first-blocker-presentation-runtime.js",
     "blacklight-exo-ftl-safety-calibration-runtime.js",
     "blacklight-exo-ftl-safety-certification-runtime.js",
     "blacklight-exo-ftl-route-safety-runtime.js",
@@ -174,6 +179,9 @@
     "Each physically valid route interval must pass through the selected family-specific normalization, uncertainty, efficiency, observability, lookahead and recovery gates before the route is family-certified; a route-level family average is prohibited.",
     "For exotic families, an absent family-boundary hazard is unresolved unless the channel is explicitly established as known absent; ordinary gravitational metrics may not manufacture or silently zero an operator-specific boundary term.",
     "The earliest blocking family-specific interval must remain visible together with distance/time-to-block and intervention reachability; later benign intervals cannot hide it.",
+    "The first-blocker presentation layer is downstream of certification and may format or visualize certified interval evidence, but it may not recompute gravity, normalization, family response, observability, recovery, or intervention reach.",
+    "The first-blocker presentation must verify the certified firstBlockingSegmentIndex against ordered blocking intervals; disagreement is CONFLICT and may not be silently repaired by UI code.",
+    "Corridor interval display width represents route-fraction span rather than hazard severity, and no presentation-only synthetic safety percentage may replace conjunctive certification.",
     "Continuous projected-progress reachability and PRECOMMIT decision-horizon reachability are distinct models and may not be collapsed by inventing a local superluminal velocity for nonlocal operators.",
     "Physical quantities with unlike dimensions must be divided by explicit versioned reference scales before they enter a combined dimensionless family-severity model; those reference scales are calibration, not constants of nature.",
     "Coordinate gravitational acceleration, proper acceleration, tidal loading, and spacetime curvature are distinct quantities and may not be silently substituted for one another.",
@@ -198,5 +206,5 @@
     "Captured, imported, licensed, salvaged and reverse-engineered machinery must retain source ancestry through export and maintenance/certification workflows.",
     "Technology ancestry cannot assign an FTL family; family authority remains independent."
   ],
-  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, physical-route certification, physical route-path sampling, route-segment certification, and family-segment certification additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
+  "repairNote": "The primary authority's embedded source index predates several measurement, evidence, archaeology, forensic, runtime, Mur'rek, safety-certification, calibration, route-safety, live route-certification, selector-envelope, control-embodiment, live embodiment-dossier, technology-ancestry, physical gravity/curvature environment, physical-route certification, physical route-path sampling, route-segment certification, family-segment certification, and first-blocker presentation additions. This manifest provides the current machine-readable chain without rewriting or silently superseding the primary authority. A future targeted human-readable index edit should mirror this manifest."
 }
