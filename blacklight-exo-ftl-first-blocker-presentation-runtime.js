@@ -94,6 +94,28 @@
     return {named, calculated, selected: named || calculated, conflict};
   }
 
+  function conservativeSummary(disposition) {
+    const source = disposition?.conservativeBlocker;
+    if (!source || typeof source !== 'object') return null;
+    return {
+      source: source.source || null,
+      applicableToCertifiedBlocker: source.applicableToCertifiedBlocker === true,
+      familyMatch: source.familyMatch === true,
+      nominalBlockingFraction: numberOrNull(source.nominalBlockingFraction),
+      nominalTopologyBoundaryFraction: numberOrNull(source.nominalTopologyBoundaryFraction),
+      earliestPlausibleTopologyBoundaryFraction: numberOrNull(source.earliestPlausibleTopologyBoundaryFraction),
+      boundaryFractionSigmaUpperBound: numberOrNull(source.boundaryFractionSigmaUpperBound),
+      effectiveBlockingFraction: numberOrNull(source.effectiveBlockingFraction),
+      nominalDistanceM: numberOrNull(disposition.nominalDistanceToFirstBlockingSegmentM),
+      effectiveDistanceM: numberOrNull(disposition.distanceToFirstBlockingSegmentM),
+      nominalTimeS: numberOrNull(disposition.nominalTimeToFirstBlockingSegmentS),
+      effectiveTimeS: numberOrNull(disposition.timeToFirstBlockingSegmentS),
+      interventionReachable: disposition.interventionReachable ?? source.interventionReachable ?? null,
+      reason: source.reason || null,
+      provenance: unique(source.provenance)
+    };
+  }
+
   async function resolveFTLFirstBlockerPresentation(context = {}) {
     const registry = context.registry || await loadRegistry();
     const packet = context.familySegmentCertification || context.packet;
@@ -102,9 +124,11 @@
     const segments = packet.segments.map(normalizedSegment).sort((a, b) => a.fractionStart - b.fractionStart || a.index - b.index);
     const first = certifiedFirstBlocker(packet, segments);
     const disposition = packet.routeDisposition || {};
+    const conservative = conservativeSummary(disposition);
     const warnings = unique([
       ...(packet.warnings || []),
-      first.conflict ? 'Route disposition and segment ordering disagree about the first blocking interval. Presentation is marked CONFLICT rather than choosing silently.' : null
+      first.conflict ? 'Route disposition and segment ordering disagree about the first blocking interval. Presentation is marked CONFLICT rather than choosing silently.' : null,
+      conservative && !conservative.applicableToCertifiedBlocker ? 'Topology-boundary uncertainty is shown as evidence only; it has not been authorized to move the certified blocker.' : null
     ]);
     const status = first.conflict ? 'CONFLICT' : (packet.status || disposition.worstStatus || 'UNRESOLVED');
     const firstBlocker = first.selected ? {
@@ -114,7 +138,10 @@
       status: first.selected.status,
       distanceM: numberOrNull(disposition.distanceToFirstBlockingSegmentM),
       timeS: numberOrNull(disposition.timeToFirstBlockingSegmentS),
+      nominalDistanceM: numberOrNull(disposition.nominalDistanceToFirstBlockingSegmentM ?? disposition.distanceToFirstBlockingSegmentM),
+      nominalTimeS: numberOrNull(disposition.nominalTimeToFirstBlockingSegmentS ?? disposition.timeToFirstBlockingSegmentS),
       interventionReachable: disposition.interventionReachable ?? first.selected.interventionReachable ?? null,
+      conservativeEnvelope: conservative,
       reasons: first.selected.reasons,
       gravityEfficiency: first.selected.gravityEfficiency,
       calculationEfficiency: first.selected.calculationEfficiency,
@@ -123,7 +150,7 @@
     } : null;
 
     return deepFreeze({
-      schemaVersion: '1.0.0',
+      schemaVersion: '1.1.0',
       status,
       family: packet.family || null,
       path: packet.path || null,
@@ -136,7 +163,7 @@
       firstBlocker,
       presentationRules: registry.presentationRules || [],
       warnings,
-      provenance: unique([REGISTRY_URL, ...(packet.provenance || [])]),
+      provenance: unique([REGISTRY_URL, ...(conservative?.provenance || []), ...(packet.provenance || [])]),
       canonSafeguards: registry.canonSafeguards || []
     });
   }
