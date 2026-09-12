@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.sectional-dependency-topology",
+  "title": "Black Light FTL Sectional Infrastructure Dependency Topology Registry",
+  "status": "MIXED",
+  "purpose": "Represent large-vessel safety infrastructure as explicit service graphs so local failures propagate only through physically connected power, cooling, command, recovery, hydraulic, dielectric, metabolic and reference paths rather than through one vessel-wide readiness scalar.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Drive-specific safety lookahead, emergency de-transit, increasing but imperfect redundancy, gravity-sensitive failure and physically defensible engineering mathematics."
+  },
+  "mathematicalModel": {
+    "pathAvailability": "For service path p, A_p = min(A_source, min_e A_e).",
+    "bestServiceAvailability": "A_s = max_p A_p over physically connected source-to-section paths. This is a deterministic widest-path bottleneck measure, not a probability.",
+    "pathLatency": "tau_p = sum_e tau_e. Among paths whose bottleneck availability equals the selected best availability within tolerance, use the minimum latency as the service-response latency.",
+    "channelReadiness": "r_section,channel = min(r_local, A_service) for each declared required service.",
+    "kOfNGroup": "For a safety group requiring k of n members, group readiness is the kth-largest member readiness; group latency is the kth-smallest finite latency among members meeting the readiness floor.",
+    "aggregateReadiness": "Installation channel readiness is the minimum of all declared mandatory group readiness values for that channel; undeclared channels retain incoming readiness.",
+    "controlSpan": "Pi_c = L_c/(v_c*tau_r). Sectional topology changes which regions remain reachable and how quickly, not the external spacetime field."
+  },
+  "serviceTypes": ["power", "cooling", "command", "recovery", "hydraulic", "dielectric", "metabolic", "reference", "sensor-data", "navigation-data"],
+  "profiles": [
+    {
+      "profileId": "generic-sectional-safety-v1",
+      "status": "PROPOSED_ENGINEERING_MODEL",
+      "description": "Generic graph semantics for large installations. It provides no vessel layout, race-specific topology, historical capacities or failure probabilities.",
+      "defaultServiceChannelMap": {
+        "sensor": ["power", "cooling", "sensor-data"],
+        "navigation": ["power", "cooling", "navigation-data", "reference"],
+        "reference": ["power", "reference"],
+        "solver": ["power", "cooling", "navigation-data"],
+        "command": ["power", "command"],
+        "actuator": ["power", "command"],
+        "exit": ["power", "command", "recovery"],
+        "clearance": ["sensor-data", "command"],
+        "recovery": ["power", "recovery"],
+        "thermal": ["cooling"],
+        "structure": []
+      },
+      "canonPolicy": "Graph layout, supplies, edge availability, latency and redundancy groups must come from named engineering evidence, measured state, or explicitly labeled simulation input."
+    }
+  ],
+  "technologyEmbodiments": [
+    {
+      "identity": "terrestrial-electromechanical",
+      "examples": ["zonal DC or superconducting buses", "independent coolant trunks", "fiber/optical command rings", "local abort capacitors or flywheels", "sectional valve and breaker isolation"],
+      "guard": "Examples are engineering embodiments, not claims that every terrestrial vessel uses this exact architecture."
+    },
+    {
+      "identity": "arnock",
+      "examples": ["metabolic circulation provinces", "cultivated neural relay trunks", "distributed sensory tissue", "biological isolation sphincters", "local energy-storage organs"],
+      "guard": "Ar'nock topology may constrain machinery embodiment but does not establish an FTL family or unsourced numeric performance."
+    },
+    {
+      "identity": "zwlei-murrek-gravitic-slipstream",
+      "examples": ["bio-reactive power-fluid trunks", "conductive coolant loops", "hydraulic vane-control circuits", "Navigation Current reference paths", "sensor choir distribution", "local emergency isolation"],
+      "guard": "Mur'rek machinery evidence remains family-unresolved; sectional dependencies do not normalize the phrase gravitic slipstream into a consolidated family ID."
+    }
+  ],
+  "runtimeRules": [
+    "Never infer an edge merely because two systems share a functional label; graph connectivity must be supplied by authority, measurement or labeled simulation state.",
+    "Widest-path availability is deterministic service reachability, not reliability probability.",
+    "Serial path latency is additive; parallel-path redundancy does not make latency negative or erase propagation delay.",
+    "A section isolated from a required service receives zero availability for that service.",
+    "k-of-n safety groups must declare k explicitly; do not assume all sections are mandatory or mutually redundant.",
+    "Sectional degradation may preserve or worsen incoming readiness but may not improve it without a separately sourced repair/calibration authority.",
+    "External gravity, transit-family identity and fictional hazard existence remain upstream and unchanged."
+  ],
+  "api": {
+    "resolver": "resolveFTLSectionalDependencyTopology",
+    "inputs": ["readiness", "network", "profileId", "serviceChannelMap", "provenance"],
+    "outputs": ["status", "profile", "inputReadiness", "aggregateReadiness", "sectionResults", "groupResults", "serviceDiagnostics", "warnings", "provenance"],
+    "statusValues": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]
+  },
+  "canonGuards": [
+    "No topology record creates a transit-family assignment.",
+    "No path availability value is a historical failure probability.",
+    "No disconnected section proves an exotic FTL hazard exists; it proves only that declared infrastructure support is unavailable.",
+    "Race/species identity constrains possible embodiment, not universal layout or performance.",
+    "Simulation layouts and coefficients remain labeled PROPOSED_ENGINEERING_MODEL."
+  ]
+}
