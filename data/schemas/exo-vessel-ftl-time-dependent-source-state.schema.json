@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-time-dependent-source-state.schema.json",
+  "title": "Black Light FTL Time-Dependent Source State Packet",
+  "description": "Physically based source-state propagation packet used to move authoritative gravitational source positions, velocities, and covariance from their source epoch to a requested route epoch without treating missing motion or uncertainty as zero.",
+  "type": "object",
+  "required": ["schemaVersion", "status", "targetEpoch", "sources", "warnings", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "targetEpoch": {"type": ["string", "number", "null"]},
+    "referenceFrame": {"type": ["string", "null"]},
+    "propagationModel": {"enum": ["LINEAR_KINEMATIC", "CONSTANT_ACCELERATION", "MIXED", "UNRESOLVED"]},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/sourceState"}
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "vector3": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": {"type": "number"},
+        "y": {"type": "number"},
+        "z": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "matrix6": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "array",
+        "minItems": 6,
+        "maxItems": 6,
+        "items": {"type": "number"}
+      }
+    },
+    "sourceState": {
+      "type": "object",
+      "required": ["sourceId", "status", "sourceEpoch", "targetEpoch", "deltaTimeS", "model", "positionM", "velocityMPerS", "warnings", "provenance"],
+      "properties": {
+        "sourceId": {"type": "string"},
+        "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+        "sourceEpoch": {"type": ["string", "number", "null"]},
+        "targetEpoch": {"type": ["string", "number", "null"]},
+        "deltaTimeS": {"type": ["number", "null"]},
+        "model": {"enum": ["LINEAR_KINEMATIC", "CONSTANT_ACCELERATION", "UNRESOLVED"]},
+        "massKg": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "positionM": {"anyOf": [{"$ref": "#/$defs/vector3"}, {"type": "null"}]},
+        "velocityMPerS": {"anyOf": [{"$ref": "#/$defs/vector3"}, {"type": "null"}]},
+        "accelerationMPerS2": {"anyOf": [{"$ref": "#/$defs/vector3"}, {"type": "null"}]},
+        "covariance6x6": {"anyOf": [{"$ref": "#/$defs/matrix6"}, {"type": "null"}]},
+        "processNoise6x6": {"anyOf": [{"$ref": "#/$defs/matrix6"}, {"type": "null"}]},
+        "errorBounds": {
+          "type": ["object", "null"],
+          "properties": {
+            "neglectedAccelerationBoundMPerS2": {"type": ["number", "null"], "minimum": 0},
+            "positionRemainderBoundM": {"type": ["number", "null"], "minimum": 0},
+            "velocityRemainderBoundMPerS": {"type": ["number", "null"], "minimum": 0},
+            "positionToleranceM": {"type": ["number", "null"], "exclusiveMinimum": 0},
+            "velocityToleranceMPerS": {"type": ["number", "null"], "exclusiveMinimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "warnings": {"type": "array", "items": {"type": "string"}},
+        "provenance": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
