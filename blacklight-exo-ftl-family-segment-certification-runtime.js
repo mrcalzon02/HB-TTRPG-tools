@@ -5,9 +5,9 @@
   const CALIBRATION_URL='data/exo-vessel/ftl-safety-calibration-profiles.json';
   const PHYSICAL_BRIDGE_URL='data/exo-vessel/ftl-physical-route-environment-bridge.json';
   const ROUTE_INTEGRATION_URL='data/exo-vessel/ftl-route-safety-integration.json';
+  const BOUNDARY_REFINEMENT_URL='data/exo-vessel/ftl-uncertainty-aware-boundary-refinement-registry.json';
   const STATUS=Object.freeze({ADMISSIBLE:'ADMISSIBLE',MARGINAL:'MARGINAL',REJECTED:'REJECTED',UNRESOLVED:'UNRESOLVED',OUTSIDE_MODEL_VALIDITY:'OUTSIDE_MODEL_VALIDITY',CONFLICT:'CONFLICT'});
   const PRECOMMIT=new Set(['fold-jump','q-lattice','phase-displacement']);
-  const EXOTIC=new Set(['metric-compression','gravitational-plane','slipstream-shear','q-lattice','n-manifold','fold-jump','wormhole-gate','phase-displacement']);
   let supportPromise=null;
 
   const finite=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v));
@@ -51,8 +51,8 @@
 
   function unresolved(reason,registry,family=null,path=null,segmentPacket=null,status=STATUS.UNRESOLVED){
     return deepFreeze({
-      schemaVersion:'1.0.0',status,family,path,calibration:null,normalization:null,segments:[],
-      routeDisposition:{conjunctive:true,worstStatus:status,blockingSegmentIndices:[],firstBlockingSegmentIndex:null,distanceToFirstBlockingSegmentM:null,timeToFirstBlockingSegmentS:null,interventionReachable:null},
+      schemaVersion:'1.1.0',status,family,path,calibration:null,normalization:null,segments:[],
+      routeDisposition:{conjunctive:true,worstStatus:status,blockingSegmentIndices:[],firstBlockingSegmentIndex:null,distanceToFirstBlockingSegmentM:null,timeToFirstBlockingSegmentS:null,interventionReachable:null,conservativeBlocker:null},
       warnings:[reason],provenance:unique([REGISTRY_URL,...(segmentPacket?.provenance||[])]),canonSafeguards:registry?.canonSafeguards||[]
     });
   }
@@ -142,6 +142,46 @@
     return {mode:'CONTINUOUS',distanceAheadM:distanceAhead,interventionTimeS:tInt,projectedProgressRate:rate,interventionDistanceM:interventionDistance,marginM:distanceAhead-interventionDistance,reachable:distanceAhead>interventionDistance};
   }
 
+  function conservativeBlocker(context,family,firstBlocking,routeLengthM){
+    const packet=context.uncertaintyAwareBoundaryRefinement||context.boundaryRefinementPacket||null;
+    if(!packet)return null;
+    const evidence=packet.earliestPlausibleBoundary||null;
+    const applicable=context.topologyBoundaryAppliesToFirstBlocker===true;
+    const currentFraction=finite(context.currentRouteFraction)?clamp01(context.currentRouteFraction):0;
+    const nominalFraction=firstBlocking?clamp01(firstBlocking.fractionStart):null;
+    const earlyFraction=evidence&&finite(evidence.earliestPlausibleFraction)?clamp01(evidence.earliestPlausibleFraction):null;
+    const sigma= evidence&&finite(evidence.boundaryFractionSigmaUpperBound)?Math.max(0,n(evidence.boundaryFractionSigmaUpperBound)):null;
+    const record={
+      source:'UNCERTAINTY_AWARE_NORMALIZED_DEGENERACY_BOUNDARY',applicableToCertifiedBlocker:applicable,
+      familyMatch:!packet.familyId||packet.familyId===family,nominalBlockingFraction:nominalFraction,
+      nominalTopologyBoundaryFraction:evidence&&finite(evidence.nominalBoundaryFraction)?clamp01(evidence.nominalBoundaryFraction):null,
+      earliestPlausibleTopologyBoundaryFraction:earlyFraction,boundaryFractionSigmaUpperBound:sigma,
+      effectiveBlockingFraction:nominalFraction,distanceToEffectiveBlockerM:null,timeToEffectiveBlockerS:null,interventionReachable:null,
+      reason:null,provenance:unique([BOUNDARY_REFINEMENT_URL,...(packet.provenance||[])])
+    };
+    if(!record.familyMatch){record.reason='Boundary-refinement packet family does not match the family under certification.';return record;}
+    if(!firstBlocking){record.reason='No certified blocking segment exists; ordinary topology evidence is not promoted into an FTL blocker.';return record;}
+    if(!applicable){record.reason='No explicit named/family authority links this topology boundary to the certified blocker; nominal blocker retained.';return record;}
+    if(earlyFraction===null){record.reason='Topology boundary applicability is authorized but its earliest plausible fraction is unresolved; nominal blocker retained.';return record;}
+    record.effectiveBlockingFraction=Math.min(nominalFraction,earlyFraction);
+    record.distanceToEffectiveBlockerM=Math.max(0,(record.effectiveBlockingFraction-currentFraction)*routeLengthM);
+    if(PRECOMMIT.has(family)){
+      record.timeToEffectiveBlockerS=finite(firstBlocking.interventionReach?.predictionTimeS)?n(firstBlocking.interventionReach.predictionTimeS):null;
+      record.interventionReachable=firstBlocking.interventionReach?.reachable??null;
+      record.reason='PRECOMMIT family retains prediction-time authority; boundary fraction constrains location evidence but does not create a local FTL velocity.';
+      return record;
+    }
+    const rate=finite(context.projectedProgressRate)&&n(context.projectedProgressRate)>0?n(context.projectedProgressRate):null;
+    const tInt=finite(firstBlocking.interventionReach?.interventionTimeS)?n(firstBlocking.interventionReach.interventionTimeS):null;
+    record.timeToEffectiveBlockerS=rate?record.distanceToEffectiveBlockerM/rate:null;
+    if(rate&&tInt!==null){
+      const interventionDistance=rate*tInt;
+      record.interventionReachable=record.distanceToEffectiveBlockerM>interventionDistance;
+    }
+    record.reason=record.effectiveBlockingFraction<nominalFraction?'Explicitly applicable topology uncertainty moves the conservative planning edge earlier than the nominal blocking-segment start.':'The applicable topology uncertainty does not move the planning edge earlier than the nominal blocker.';
+    return record;
+  }
+
   async function resolveFTLFamilySegmentCertification(context={}){
     const support=context.support||await loadSupport();
     const registry=support.registry;
@@ -206,7 +246,7 @@
       });
       const gate=efficiencyGate(certificate,calibrationResolution.profile.thresholds||{});
       const reach=interventionReach(segment,certificate,routeLengthM,context,family);
-      let status=worstStatus(segment.status,gate.status);
+      const status=worstStatus(segment.status,gate.status);
       const reasons=unique([...(segment.reasons||[]),...(certificate.reasons||[]),...gate.reasons]);
       segments.push({...segment,status,environmentPacket:normalized.environmentPacket,uncertaintyPacket:normalized.uncertaintyPacket,certificate,interventionReach:reach,reasons,provenance:unique([...(segment.provenance||[]),...(certificate.provenance||[])])});
     }
@@ -214,28 +254,38 @@
     const blocking=segments.filter(s=>[STATUS.REJECTED,STATUS.UNRESOLVED,STATUS.OUTSIDE_MODEL_VALIDITY,STATUS.CONFLICT].includes(s.status));
     const firstBlocking=blocking.length?blocking.reduce((a,b)=>a.fractionStart<=b.fractionStart?a:b):null;
     const worst=segments.reduce((state,s)=>worstStatus(state,s.status),STATUS.ADMISSIBLE);
-    const distanceToFirst=firstBlocking?Math.max(0,n(firstBlocking.fractionStart)*routeLengthM-(finite(context.currentRouteFraction)?n(context.currentRouteFraction)*routeLengthM:0)):null;
+    const currentFraction=finite(context.currentRouteFraction)?clamp01(context.currentRouteFraction):0;
+    const distanceToFirst=firstBlocking?Math.max(0,n(firstBlocking.fractionStart)*routeLengthM-currentFraction*routeLengthM):null;
     let timeToFirst=null,reachable=null;
     if(firstBlocking){
       reachable=firstBlocking.interventionReach?.reachable??null;
       if(!PRECOMMIT.has(family)&&finite(context.projectedProgressRate)&&n(context.projectedProgressRate)>0)timeToFirst=distanceToFirst/n(context.projectedProgressRate);
       if(PRECOMMIT.has(family)&&finite(firstBlocking.interventionReach?.predictionTimeS))timeToFirst=firstBlocking.interventionReach.predictionTimeS;
     }
+    const conservative=conservativeBlocker(context,family,firstBlocking,routeLengthM);
+    const effectiveDistance=conservative?.applicableToCertifiedBlocker&&conservative.familyMatch&&finite(conservative.distanceToEffectiveBlockerM)?conservative.distanceToEffectiveBlockerM:distanceToFirst;
+    const effectiveTime=conservative?.applicableToCertifiedBlocker&&conservative.familyMatch&&finite(conservative.timeToEffectiveBlockerS)?conservative.timeToEffectiveBlockerS:timeToFirst;
+    const effectiveReach=conservative?.applicableToCertifiedBlocker&&conservative.familyMatch&&conservative.interventionReachable!==null?conservative.interventionReachable:reachable;
     const warnings=unique([
       ...(calibrationResolution.warnings||[]),
       ...(segmentPacket.warnings||[]),
       'Physical interval metrics constrain the fictional family model; they do not make the FTL mechanism real.',
       'Endpoint-derived segment envelopes remain sampled numerical envelopes, not analytic bounds on the unsampled interior.',
-      firstBlocking&&reachable===false?'The first blocking interval is inside the modeled intervention reach requirement; abort/reject before transit authority is committed.':null
+      conservative&&!conservative.applicableToCertifiedBlocker?'Topology-boundary uncertainty is preserved as evidence but is not allowed to become a blocker without explicit authority linking it to the certified family hazard.':null,
+      firstBlocking&&effectiveReach===false?'The first conservative blocking edge is inside the modeled intervention reach requirement; abort/reject before transit authority is committed.':null
     ]);
 
     return deepFreeze({
-      schemaVersion:'1.0.0',status:worst,family,path,
+      schemaVersion:'1.1.0',status:worst,family,path,
       calibration:{profileIdentity:calibrationResolution.profileIdentity,appliedOverrides:calibrationResolution.appliedOverrides,ignoredOverrides:calibrationResolution.ignoredOverrides},
       normalization:{profileId:normalization.profileId,profileVersion:normalization.profileVersion,status:normalization.status},
       segments,
-      routeDisposition:{conjunctive:true,worstStatus:worst,blockingSegmentIndices:blocking.map(s=>s.index),firstBlockingSegmentIndex:firstBlocking?.index??null,distanceToFirstBlockingSegmentM:distanceToFirst,timeToFirstBlockingSegmentS:timeToFirst,interventionReachable:reachable},
-      warnings,provenance:unique([REGISTRY_URL,CALIBRATION_URL,PHYSICAL_BRIDGE_URL,ROUTE_INTEGRATION_URL,...(segmentPacket.provenance||[]),...(calibrationResolution.provenance||[])]),canonSafeguards:registry.canonSafeguards||[]
+      routeDisposition:{
+        conjunctive:true,worstStatus:worst,blockingSegmentIndices:blocking.map(s=>s.index),firstBlockingSegmentIndex:firstBlocking?.index??null,
+        nominalDistanceToFirstBlockingSegmentM:distanceToFirst,nominalTimeToFirstBlockingSegmentS:timeToFirst,
+        distanceToFirstBlockingSegmentM:effectiveDistance,timeToFirstBlockingSegmentS:effectiveTime,interventionReachable:effectiveReach,conservativeBlocker:conservative
+      },
+      warnings,provenance:unique([REGISTRY_URL,CALIBRATION_URL,PHYSICAL_BRIDGE_URL,ROUTE_INTEGRATION_URL,...(conservative?.provenance||[]),...(segmentPacket.provenance||[]),...(calibrationResolution.provenance||[])]),canonSafeguards:registry.canonSafeguards||[]
     });
   }
 
