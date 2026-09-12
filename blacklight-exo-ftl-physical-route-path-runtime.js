@@ -170,7 +170,7 @@
   async function resolveFTLPhysicalRoutePath(context={}){
     const registry=context.registry||await loadRegistry();
     const authority=context.authority||globalThis.BlacklightExoAuthority;
-    const Curvature=context.curvatureRuntime||globalThis.BlacklightExoFTLCurvatureEnvironmentRuntime;
+    const Curvature=context.curvatureRuntime||globalThis.BlacklightExoFTLCurvatureEnvironment;
     if(!authority?.getExampleClusterEntries||!authority?.equatorialPosition)return unresolved('Blacklight EXAMPLE source authority is not loaded.',registry,context);
     if(!Curvature?.resolveFTLCurvatureEnvironment)return unresolved('FTL curvature environment runtime is not loaded.',registry,context);
 
