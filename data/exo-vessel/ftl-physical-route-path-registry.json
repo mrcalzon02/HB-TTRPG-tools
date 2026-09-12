@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.ftl.physical-route-path",
   "title": "Black Light Physical FTL Route Path Sampling Registry",
   "status": "DERIVED",
@@ -23,7 +23,7 @@
     "reason": "A cosine-spaced open interval concentrates samples near departure and arrival gravity wells while still covering the interstellar interior. Endpoints themselves are excluded because a system authority position is a barycentric/catalog position, not a safe emergence point or stellar surface coordinate.",
     "adaptiveRefinement": {
       "status": "PROPOSED",
-      "rule": "Refine intervals when adjacent tidal Frobenius values, principal tidal eigenvalues, acceleration vectors, encounter-time change, or propagated uncertainty change faster than configured tolerances.",
+      "rule": "The snapshot sampler refines intervals from spatial physical-metric and acceleration-direction changes. Family-dependent moving-source routes use the separate adaptive spatiotemporal authority so covariance growth, encounter timing, source motion and tidal-eigenspectrum change are not silently collapsed into snapshot behavior.",
       "defaultRelativeMetricTolerance": 0.20,
       "defaultDirectionChangeRad": 0.08726646259971647,
       "maximumRefinementDepth": 5
@@ -57,7 +57,15 @@
     "snapshotEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
     "snapshotRule": "When authoritative source states with source epoch and velocity are available, propagate them through the time-dependent source-state runtime before invoking this physical route sampler. A common route-epoch snapshot remains available as a bounded comparison mode.",
     "familyEncounterRule": "When the selected transit family supplies a defensible encounter policy, evaluate source states at family-dependent encounter epochs: continuous t(s), explicit PRECOMMIT commitment/emergence epochs, or explicit anchored-portal mouth epochs.",
-    "nextFidelity": "Adaptive time-aware refinement and higher-fidelity source dynamics remain future work; family-dependent encounter timing is now implemented as a separate auditable runtime rather than silently changing snapshot semantics."
+    "nextFidelity": "Family-dependent encounter timing and adaptive spatiotemporal refinement are implemented. Stable tidal eigenvector/eigenbranch tracking, joint-source covariance and higher-fidelity source dynamics remain future work."
+  },
+  "adaptiveSpatiotemporalIntegration": {
+    "status": "DERIVED",
+    "registry": "data/exo-vessel/ftl-adaptive-spatiotemporal-refinement-registry.json",
+    "schema": "data/schemas/exo-vessel-ftl-adaptive-spatiotemporal-refinement.schema.json",
+    "runtime": "blacklight-exo-ftl-adaptive-spatiotemporal-refinement-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_ADAPTIVE_SPATIOTEMPORAL_REFINEMENT_MANUAL.md",
+    "rule": "For CONTINUOUS_PROJECTED_PROGRESS families, recursively insert encounter-time midpoint samples when physical metrics, principal tidal eigenvalues, acceleration direction, propagated covariance, source motion relative to range, or encounter-span controls exceed versioned tolerances. Midpoints are recomputed through the encounter-time authority rather than interpolated. PRECOMMIT_ENDPOINT and ANCHORED_PORTAL remain endpoint/mouth models."
   },
   "pathMetrics": [
     "dimensionlessPotentialDepth",
@@ -74,7 +82,8 @@
     "A catalog system coordinate identifies the system reference position. It is not a canonical FTL emergence point.",
     "The runtime may identify a route as PARTIAL because source velocity, physical radius, covariance, or epoch data are absent. PARTIAL is evidence, not failure to calculate.",
     "A source geometry propagated to one route epoch is a higher-fidelity snapshot than a frozen catalog geometry, but it is not a fully time-resolved moving-source corridor.",
-    "The family encounter-time runtime supplies time-resolved physical samples without changing the ordinary gravity equations or manufacturing fictional operator-boundary state."
+    "The family encounter-time runtime supplies time-resolved physical samples without changing the ordinary gravity equations or manufacturing fictional operator-boundary state.",
+    "Adaptive spatiotemporal refinement increases evidence density where moving-source geometry or uncertainty changes too rapidly; hitting a numerical ceiling does not prove convergence or safety."
   ],
   "canonSafeguards": [
     "This registry does not establish that any FTL method is physically realizable.",
@@ -87,6 +96,7 @@
     "A route-epoch snapshot may not be presented as family-dependent per-interval encounter-time propagation.",
     "For true-FTL continuous families, projected route/control progress may not be relabeled local real-space hull velocity without higher authority.",
     "PRECOMMIT transit families may not be assigned fabricated intermediate ordinary-space encounter times or a continuous superluminal velocity merely to reuse continuous route timing mathematics.",
-    "Anchored wormhole/gate transit may not be represented as ordinary-space corridor traversal merely to reuse continuous sampling."
+    "Anchored wormhole/gate transit may not be represented as ordinary-space corridor traversal merely to reuse continuous sampling.",
+    "A sample or depth ceiling is a numerical resource bound rather than evidence that a route is converged, physically smooth, or safe."
   ]
 }
