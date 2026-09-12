@@ -135,6 +135,7 @@
       physicalEnvironment:physical||null,
       familySegmentCertification:null,
       firstBlockingSegment:null,
+      conservativeBlocker:null,
       calibration:calibration?{status:calibration.status,profileIdentity:calibration.profileIdentity,warnings:calibration.warnings}:null,
       certificate:null,
       presentation:presentationFor(status,null,{warnings}),
@@ -161,7 +162,7 @@
       const warnings=['A physical route path was supplied but the family-segment certification runtime is not loaded. Route-level fallback is prohibited.'];
       return deepFreeze({
         status:STATUS.UNRESOLVED,family,path,route:routeId,environmentSource:'PHYSICAL_ROUTE_PATH',
-        physicalEnvironment:null,familySegmentCertification:null,firstBlockingSegment:null,
+        physicalEnvironment:null,familySegmentCertification:null,firstBlockingSegment:null,conservativeBlocker:null,
         calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,warnings:calibration.warnings},certificate:null,
         presentation:presentationFor(STATUS.UNRESOLVED,null,{warnings}),warnings,
         provenance:unique([registry.registryKey,...(calibration.provenance||[])])
@@ -187,6 +188,8 @@
       currentRouteFraction:finite(context.currentRouteFraction)?Number(context.currentRouteFraction):0,
       familyBoundaryHazard:context.familyBoundaryHazard,
       familyBoundaryHazardKnownAbsent:context.familyBoundaryHazardKnownAbsent===true,
+      uncertaintyAwareBoundaryRefinement:context.uncertaintyAwareBoundaryRefinement||context.boundaryRefinementPacket||null,
+      topologyBoundaryAppliesToFirstBlocker:context.topologyBoundaryAppliesToFirstBlocker===true,
       requiredHazards:measurement.requiredHazards,
       measurementPacket:measurement.packet,
       safetyState:timing,
@@ -196,22 +199,27 @@
     const representative=representativeSegment(segmentSafety);
     const firstIndex=segmentSafety?.routeDisposition?.firstBlockingSegmentIndex;
     const firstBlocking=firstIndex===null||firstIndex===undefined?null:(segmentSafety.segments||[]).find(segment=>segment.index===firstIndex)||null;
+    const conservative=segmentSafety?.routeDisposition?.conservativeBlocker||null;
     const status=segmentSafety.status||STATUS.UNRESOLVED;
     const warnings=unique([
       ...(segmentSafety.warnings||[]),
       'Route disposition is conjunctive across family-certified physical intervals; benign intervals cannot average away a blocker.',
       !finite(context.familyBoundaryHazard)&&context.familyBoundaryHazardKnownAbsent!==true&&family!=='inertial-torch'?'No explicit family-boundary hazard was supplied for this physical path; exotic-family intervals remain unresolved rather than inheriting a route archetype boundary value.':null,
-      firstBlocking?`First blocking interval ${firstBlocking.index} begins at route fraction ${Number(firstBlocking.fractionStart).toFixed(6)}.`:null
+      firstBlocking?`First blocking interval ${firstBlocking.index} begins at route fraction ${Number(firstBlocking.fractionStart).toFixed(6)}.`:null,
+      conservative?.applicableToCertifiedBlocker&&finite(conservative.effectiveBlockingFraction)&&finite(conservative.nominalBlockingFraction)&&Number(conservative.effectiveBlockingFraction)<Number(conservative.nominalBlockingFraction)?`Explicit topology authority moves the conservative planning edge to route fraction ${Number(conservative.effectiveBlockingFraction).toFixed(6)}; the nominal blocking interval remains unchanged.`:null
     ]);
     const presentation=presentationFor(status,representative?.certificate,{warnings});
     if(firstBlocking){
-      const distance=segmentSafety.routeDisposition?.distanceToFirstBlockingSegmentM;
-      const reachable=segmentSafety.routeDisposition?.interventionReachable;
+      const disposition=segmentSafety.routeDisposition||{};
+      const distance=disposition.distanceToFirstBlockingSegmentM;
+      const nominalDistance=disposition.nominalDistanceToFirstBlockingSegmentM;
+      const reachable=disposition.interventionReachable;
       presentation.reasons=unique([
         ...(presentation.reasons||[]),
         `First blocker: interval ${firstBlocking.index}.`,
-        finite(distance)?`Distance to first blocker: ${Number(distance).toExponential(6)} m.`:null,
-        reachable===false?'Modeled intervention cannot clear the first blocker in time.':reachable===true?'Modeled intervention remains reachable before the first blocker.':'Intervention reachability is unresolved.'
+        finite(nominalDistance)?`Nominal distance to first blocker: ${Number(nominalDistance).toExponential(6)} m.`:null,
+        finite(distance)&&(!finite(nominalDistance)||Number(distance)!==Number(nominalDistance))?`Conservative distance to first blocker: ${Number(distance).toExponential(6)} m.`:finite(distance)?`Distance to first blocker: ${Number(distance).toExponential(6)} m.`:null,
+        reachable===false?'Modeled intervention cannot clear the conservative first-blocker edge in time.':reachable===true?'Modeled intervention remains reachable before the conservative first-blocker edge.':'Intervention reachability is unresolved.'
       ]);
     }
     return deepFreeze({
@@ -219,11 +227,12 @@
       physicalEnvironment:null,
       familySegmentCertification:segmentSafety,
       firstBlockingSegment:firstBlocking,
+      conservativeBlocker:conservative,
       calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,appliedOverrides:calibration.appliedOverrides,ignoredOverrides:calibration.ignoredOverrides,warnings:calibration.warnings},
       certificate:representative?.certificate||null,
       presentation,
       warnings,
-      provenance:unique([registry.registryKey,...(segmentSafety.provenance||[]),...(calibration.provenance||[])])
+      provenance:unique([registry.registryKey,...(conservative?.provenance||[]),...(segmentSafety.provenance||[]),...(calibration.provenance||[])])
     });
   }
 
@@ -340,6 +349,7 @@
       physicalEnvironment:physical,
       familySegmentCertification:null,
       firstBlockingSegment:null,
+      conservativeBlocker:null,
       calibration:{status:calibration.status,profileIdentity:calibration.profileIdentity,appliedOverrides:calibration.appliedOverrides,ignoredOverrides:calibration.ignoredOverrides,warnings:calibration.warnings},
       certificate,
       presentation:presentationFor(status,certificate,calibration),
