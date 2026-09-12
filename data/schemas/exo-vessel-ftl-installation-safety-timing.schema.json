@@ -4,7 +4,7 @@
   "title": "Black Light FTL Installation Safety Timing Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
+  "required": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "coupledDegradation", "appliedFactors", "warnings", "provenance"],
   "properties": {
     "status": {"enum": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]},
     "baselineTiming": {"$ref": "#/$defs/timing"},
@@ -13,6 +13,7 @@
     "recovery": {"type": ["object", "null"]},
     "selectedRecord": {"type": ["object", "null"]},
     "readiness": {"$ref": "#/$defs/readiness"},
+    "coupledDegradation": {"type": ["object", "null"]},
     "appliedFactors": {
       "type": "object",
       "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
@@ -42,17 +43,17 @@
       "additionalProperties": false,
       "required": ["sensor", "navigation", "reference", "solver", "command", "actuator", "exit", "clearance", "recovery", "thermal", "structure"],
       "properties": {
-        "sensor": {"type": "number", "maximum": 1},
-        "navigation": {"type": "number", "maximum": 1},
-        "reference": {"type": "number", "maximum": 1},
-        "solver": {"type": "number", "maximum": 1},
-        "command": {"type": "number", "maximum": 1},
-        "actuator": {"type": "number", "maximum": 1},
-        "exit": {"type": "number", "maximum": 1},
-        "clearance": {"type": "number", "maximum": 1},
-        "recovery": {"type": "number", "maximum": 1},
-        "thermal": {"type": "number", "maximum": 1},
-        "structure": {"type": "number", "maximum": 1}
+        "sensor": {"type": "number", "minimum": 0, "maximum": 1},
+        "navigation": {"type": "number", "minimum": 0, "maximum": 1},
+        "reference": {"type": "number", "minimum": 0, "maximum": 1},
+        "solver": {"type": "number", "minimum": 0, "maximum": 1},
+        "command": {"type": "number", "minimum": 0, "maximum": 1},
+        "actuator": {"type": "number", "minimum": 0, "maximum": 1},
+        "exit": {"type": "number", "minimum": 0, "maximum": 1},
+        "clearance": {"type": "number", "minimum": 0, "maximum": 1},
+        "recovery": {"type": "number", "minimum": 0, "maximum": 1},
+        "thermal": {"type": "number", "minimum": 0, "maximum": 1},
+        "structure": {"type": "number", "minimum": 0, "maximum": 1}
       }
     }
   }
