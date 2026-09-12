@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "exo-vessel-ftl-normalized-degeneracy-uncertainty.schema.json",
+  "title": "Black Light FTL Normalized Degeneracy Boundary Uncertainty Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "familyId", "encounterModel", "controls", "samples", "boundaryIntervals", "warnings", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "familyId": {"type": ["string", "null"]},
+    "encounterModel": {"type": ["string", "null"]},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["degeneracyRelativeGap", "minimumScalePerS2", "activeScaleTieRelativeTolerance", "gapCuspSigmaMultiplier", "maximumLinearizedGammaSigma"],
+      "properties": {
+        "degeneracyRelativeGap": {"type": "number", "exclusiveMinimum": 0},
+        "minimumScalePerS2": {"type": "number", "exclusiveMinimum": 0},
+        "activeScaleTieRelativeTolerance": {"type": "number", "minimum": 0},
+        "gapCuspSigmaMultiplier": {"type": "number", "minimum": 0},
+        "maximumLinearizedGammaSigma": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sampleIndex", "fraction", "status", "pairs", "warnings"],
+        "properties": {
+          "sampleIndex": {"type": "integer", "minimum": 0},
+          "fraction": {"type": "number"},
+          "encounterEpoch": {},
+          "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+          "pairs": {"type": "array", "items": {"$ref": "#/$defs/pair"}},
+          "warnings": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "boundaryIntervals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["leftSampleIndex", "rightSampleIndex", "pair", "status", "leftH", "rightH", "boundaryFraction", "boundaryFractionSigmaUpperBound", "notes"],
+        "properties": {
+          "leftSampleIndex": {"type": "integer", "minimum": 0},
+          "rightSampleIndex": {"type": "integer", "minimum": 0},
+          "pair": {"type": "array", "prefixItems": [{"type": "integer", "minimum": 0, "maximum": 2}, {"type": "integer", "minimum": 0, "maximum": 2}], "items": false, "minItems": 2, "maxItems": 2},
+          "status": {"enum": ["NO_CROSSING", "BOUNDARY_ESTIMATED", "BOUNDARY_UNCERTAIN", "NONSMOOTH_ENDPOINT"]},
+          "leftH": {"type": ["number", "null"]},
+          "rightH": {"type": ["number", "null"]},
+          "boundaryFraction": {"type": ["number", "null"]},
+          "boundaryFractionSigmaUpperBound": {"type": ["number", "null"]},
+          "notes": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pair", "status", "gapPerS2", "gapSigmaPerS2", "normalizationScalePerS2", "normalizationSource", "gamma", "gammaSigma", "h", "degenerateByThreshold", "sensitivity"],
+      "properties": {
+        "pair": {"type": "array", "prefixItems": [{"type": "integer", "minimum": 0, "maximum": 2}, {"type": "integer", "minimum": 0, "maximum": 2}], "items": false, "minItems": 2, "maxItems": 2},
+        "status": {"enum": ["LINEARIZED", "NONSMOOTH_SCALE", "NONSMOOTH_GAP", "OUTSIDE_LINEAR_MODEL", "UNRESOLVED"]},
+        "gapPerS2": {"type": ["number", "null"]},
+        "gapSigmaPerS2": {"type": ["number", "null"]},
+        "normalizationScalePerS2": {"type": ["number", "null"]},
+        "normalizationSource": {"type": ["string", "null"]},
+        "gamma": {"type": ["number", "null"]},
+        "gammaSigma": {"type": ["number", "null"]},
+        "h": {"type": ["number", "null"]},
+        "degenerateByThreshold": {"type": ["boolean", "null"]},
+        "sensitivity": {"type": ["array", "null"], "items": {"type": "number"}, "minItems": 6, "maxItems": 6}
+      }
+    }
+  }
+}
