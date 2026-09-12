@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.tidal-eigenbranch-tracking",
   "title": "Black Light FTL Tidal Eigenbasis and Eigenbranch Tracking Registry",
   "status": "DERIVED",
@@ -16,7 +16,8 @@
     "data/exo-vessel/ftl-family-encounter-time-registry.json",
     "blacklight-exo-ftl-family-encounter-time-runtime.js",
     "data/exo-vessel/ftl-adaptive-spatiotemporal-refinement-registry.json",
-    "blacklight-exo-ftl-adaptive-spatiotemporal-refinement-runtime.js"
+    "blacklight-exo-ftl-adaptive-spatiotemporal-refinement-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_EIGENBRANCH_ADAPTIVE_REFINEMENT_INTEGRATION_MANUAL.md"
   ],
   "defaultControls": {
     "degeneracyRelativeGap": 0.02,
@@ -30,6 +31,7 @@
     "branchRotation": "Delta_psi_k = acos(clamp(|e_k,a dot e_k,b|,-1,1))",
     "relativeEigenvalueGap": "gamma_ij = |lambda_i-lambda_j|/max(|lambda_i|,|lambda_j|,||T||_F,epsilon)",
     "degenerateSubspace": "gamma_ij < gamma_min implies individual eigenvector identity is not physically unique",
+    "degeneracyBoundary": "D_ab = XOR(a is DEGENERATE_SUBSPACE, b is DEGENERATE_SUBSPACE)",
     "twoPlaneRotation": "Delta_psi_subspace = acos(clamp(|n_a dot n_b|,-1,1)) where n is the non-degenerate normal to the repeated-eigenvalue plane"
   },
   "physicalInterpretation": [
@@ -37,16 +39,21 @@
     "Eigenvector sign is a gauge freedom: e and -e represent the same physical axis.",
     "Sorting eigenvalues by magnitude or numerical value is not enough to establish branch identity through time; continuity must be matched using eigenvector overlap.",
     "Near repeated eigenvalues, individual vectors inside the degenerate eigenspace are not uniquely defined. The physical object is the subspace, not an arbitrary basis chosen by the numerical solver.",
+    "A transition into or out of a degenerate subspace is a numerical-localization event because the location of lost/restored branch identity matters.",
+    "A broad stable degenerate subspace is not automatically a refinement failure: if its unique normal is stable and both endpoints remain degenerate, the subspace may be represented without recursive midpoint explosion.",
     "A large eigendirection rotation with modest eigenvalue change can indicate changing tidal topology even when scalar tidal strength appears nearly constant.",
     "A shear/fork precursor may use tidal eigensystem behavior as ordinary-physics evidence, but ordinary gravity does not itself prove that a fictional FTL shear lane exists."
   ],
   "trackingRules": [
     "At every sample, diagonalize the symmetric 3x3 tidal tensor and retain both eigenvalues and normalized eigenvectors.",
     "Between adjacent non-degenerate samples, choose the permutation of the three new eigenvectors that maximizes total absolute overlap with the prior tracked branches.",
-    "After branch assignment, flip vector signs as necessary so adjacent branch dot products are non-negative; this removes the arbitrary eigenvector sign discontinuity.",
+    "After branch assignment, flip vector signs as necessary so adjacent branch dot products are non-negative; this removes arbitrary eigenvector sign discontinuity.",
     "If any relevant relative eigenvalue gap falls below the declared degeneracy threshold, mark the affected branch identity as DEGENERATE_SUBSPACE rather than reporting a fictitious large rotation.",
-    "For a two-dimensional degenerate subspace, track the subspace orientation through its unique non-degenerate normal when available.",
-    "For a three-way degeneracy, orientation is physically undefined and must remain unresolved.",
+    "Break individual branch continuity across a degenerate eigenspace; do not carry arbitrary solver basis vectors through it.",
+    "For a two-dimensional degenerate subspace, track subspace orientation through its unique non-degenerate normal when available.",
+    "For a three-way degeneracy, orientation is physically undefined and remains unresolved.",
+    "Set degeneracyBoundary when one endpoint is degenerate and the adjacent endpoint is not; this boundary requests adaptive subdivision.",
+    "Do not request unlimited refinement merely because both endpoints lie inside the same stable degenerate subspace. Require a boundary, unresolved tensor, or excessive resolved/subspace rotation.",
     "Branch-rotation thresholds are adaptive numerical controls, not constants of nature and not automatic FTL danger thresholds."
   ],
   "familyUse": {
@@ -61,22 +68,25 @@
     "wormhole-gate": "PORTAL_MOUTH_INPUT_ONLY"
   },
   "generatorRules": [
-    "The generator may expose tracked tidal axes, branch rotations, degeneracy flags, and subspace rotations as physical evidence.",
+    "The generator may expose tracked tidal axes, branch rotations, degeneracy flags, degeneracy boundaries, and subspace rotations as physical evidence.",
     "The generator may not convert an eigendirection rotation directly into a fictional shear-lane fork probability without a separately versioned family-response model.",
     "Named-race or named-civilization drive ownership may not be inferred from the selected family used in a simulation.",
     "Missing or degenerate branch identity remains missing or degenerate; it may not be stabilized by silently carrying the previous vector forward.",
-    "Charts and diagrams should distinguish eigenvalue strength, axis orientation, branch identity, and fictional family-boundary response as separate layers."
+    "Charts and diagrams should distinguish eigenvalue strength, axis orientation, branch identity, degeneracy-boundary localization, and fictional family-boundary response as separate layers.",
+    "The adaptive sampler may consume refinementRequested, but the tracker remains an ordinary-physics geometry authority rather than a route-safety certifier."
   ],
   "canonSafeguards": [
     "This registry does not establish that any FTL method is physically realizable.",
     "Tidal eigenvectors are ordinary weak-field gravitational evidence; a fictional shear lane or gravitational lensing plane remains a separate setting model.",
     "Numerical eigenbasis orientation inside a degenerate eigenspace is not canon and must not be treated as a physical axis.",
+    "Stable degeneracy is not itself evidence of a fictional fork or danger.",
     "A simulation family selection does not establish race, inventor, owner, manufacturer, or technology ancestry.",
     "A derived fork indicator must retain provenance back to the actual tidal tensor, eigensystem, source states, epochs, covariance, and family-response version."
   ],
   "api": {
     "resolver": "resolveFTLTidalEigenbranchTracking",
     "inputs": ["familyId", "samples", "degeneracyRelativeGap", "maximumBranchRotationRad"],
-    "outputs": ["status", "familyId", "encounterModel", "tracking", "samples", "transitions", "warnings", "provenance", "canonSafeguards"]
+    "outputs": ["status", "familyId", "encounterModel", "tracking", "samples", "transitions", "warnings", "provenance", "canonSafeguards"],
+    "transitionFields": ["leftEigensystemStatus", "rightEigensystemStatus", "degeneracyBoundary", "branchRotationsRad", "maximumResolvedBranchRotationRad", "degenerateSubspaceRotationRad", "refinementRequested"]
   }
 }
