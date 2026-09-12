@@ -68,7 +68,6 @@
     const ids=sectionIds(network);
     const valid=new Set(ids);
     const state=Object.fromEntries(ids.map(id=>[id,null]));
-    const frontier=[];
     const warnings=[];
     (network.sources||[]).filter(src=>src.service===service).forEach(src=>{
       if(!valid.has(src.sectionId)){
@@ -77,7 +76,6 @@
       }
       const candidate={availability:finite(src.availability)?clamp01(src.availability):1,latency:0,sourceId:src.sourceId||src.sectionId,path:[src.sectionId]};
       if(better(candidate,state[src.sectionId]))state[src.sectionId]=candidate;
-      frontier.push(src.sectionId);
     });
 
     const edges=(network.edges||[]).filter(edge=>edge.service===service&&valid.has(edge.from)&&valid.has(edge.to));
@@ -191,7 +189,8 @@
       const floor=finite(group.readinessFloor)?clamp01(group.readinessFloor):Number.EPSILON;
       const eligible=known.filter(section=>CHANNELS.includes(channel)&&section.effectiveReadiness[channel]>=Math.max(floor,readiness-1e-12));
       const latency=kthSmallestFinite(eligible.map(section=>section.channelLatencies[channel]),k);
-      const blocked=known.length<k||readiness<=0;
+      const blocked=known.length<k||readiness<floor;
+      if(blocked&&readiness>0&&readiness<floor)warnings.push(`Group ${groupId} readiness ${readiness.toFixed(6)} is below declared floor ${floor.toFixed(6)}.`);
       results.push({groupId,channel,kRequired:k,members,readiness:clamp01(readiness),latency,blocked});
     });
     return {results,warnings};
