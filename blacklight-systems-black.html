@@ -181,7 +181,11 @@
         .replace(/\bNpc\b/g, 'NPC')
         .replace(/\bUi\b/g, 'UI');
 
-      const displayName = (path) => humanize(path.split('/').pop());
+      const displayName = (path) => {
+        const fileName = path.split('/').pop();
+        const archiveScopedName = fileName.replace(/^(?:black[_-]?light|blacklight)[_-]+/i, '');
+        return humanize(archiveScopedName || fileName);
+      };
       const resourceFormat = (path) => {
         const match = path.match(/\.([^.\/]+)$/);
         return match ? match[1].toUpperCase() : 'FILE';
