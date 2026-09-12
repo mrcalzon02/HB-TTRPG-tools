@@ -141,13 +141,24 @@
         return `${encodeURI(resolved)}${suffix}`;
       };
 
-      const inlineMarkdown = value => escapeHtml(value)
+      const inlineLinkPattern = /\[([^\]]+)\]\((?:<([^>\n]+)>|((?:[^()\s]|\([^()\n]*\))+))\)/g;
+      const inlineText = value => escapeHtml(value)
         .replace(/`([^`]+)`/g, '<code>$1</code>')
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-        .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_match, label, href) => {
-          return `<a href="${escapeHtml(resolveMarkdownHref(href))}">${label}</a>`;
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+      const inlineMarkdown = value => {
+        const links = [];
+        const protectedLinks = String(value).replace(inlineLinkPattern, (_match, label, bracketedHref, href) => {
+          const index = links.push({ label, href: bracketedHref || href || '' }) - 1;
+          return `\u0000BLACKLIGHT_LINK_${index}\u0000`;
         });
+        return inlineText(protectedLinks).replace(/\u0000BLACKLIGHT_LINK_(\d+)\u0000/g, (_match, index) => {
+          const link = links[Number(index)];
+          if (!link) return '';
+          return `<a href="${escapeHtml(resolveMarkdownHref(link.href))}">${inlineText(link.label)}</a>`;
+        });
+      };
 
       const splitTableRow = value => {
         const source = value.trim();
