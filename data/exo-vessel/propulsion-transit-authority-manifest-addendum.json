@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.propulsion-transit.authority-manifest.addendum",
+  "status": "DERIVED",
+  "parentManifest": "data/exo-vessel/propulsion-transit-authority-manifest.json",
+  "parentManifestVersionObserved": "1.3.0",
+  "purpose": "Non-competing discoverability addendum for authority layers added after the current large manifest revision. The parent manifest remains authoritative for its indexed corpus; this file supplies only missing references and corrections until a safe full-file manifest normalization is performed.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "maintenanceEvidenceIntegration": [
+    "data/exo-vessel/ftl-maintenance-evidence-contract.json",
+    "data/schemas/exo-vessel-ftl-maintenance-evidence-contract.schema.json",
+    "blacklight-exo-ftl-maintenance-evidence-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_MAINTENANCE_EVIDENCE_AND_RETURN_TO_SERVICE_MANUAL.md",
+    "data/exo-vessel/ftl-maintenance-evidence-integration-registry.json",
+    "data/schemas/exo-vessel-ftl-maintenance-evidence-integration.schema.json",
+    "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_MAINTENANCE_EVIDENCE_INTEGRATION_AND_RECERTIFICATION_MANUAL.md"
+  ],
+  "raceTechnologyServiceAuthorities": [
+    "data/blacklight-continuum/wiki/arnock-technology-authority.json",
+    "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
+    "data/schemas/exo-vessel-arnock-maintenance-fabrication.schema.json",
+    "blacklight-exo-arnock-service-documentation-runtime.js",
+    "docs/blacklight/ARNOCK_SYSTEMS_MAINTENANCE_FABRICATION_STANDARD.md",
+    "docs/blacklight/ARNOCK_SYSTEMS_DOCUMENTATION_INDEX.md",
+    "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_SERVICE_EQUIPMENT_AND_RECERTIFICATION_MANUAL.md",
+    "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json"
+  ],
+  "corrections": [
+    "data/exo-vessel/propulsion-transit-authority-corrections.json"
+  ],
+  "liveRuntimeAdditions": [
+    "blacklight-exo-arnock-service-documentation-runtime.js",
+    "blacklight-exo-ftl-maintenance-evidence-runtime.js",
+    "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js"
+  ],
+  "safeguards": [
+    "This addendum does not reorder the parent authority chain.",
+    "The Ar'nock technology correction authority outranks stale lower-authority biological-default descriptors.",
+    "Maintenance evidence adapters do not select transit family.",
+    "Technology-specific source packets remain preserved beside normalized evidence.",
+    "Unknown evidence remains unresolved rather than being replaced by zero or a nominal default."
+  ]
+}
