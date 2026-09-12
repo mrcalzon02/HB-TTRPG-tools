@@ -143,6 +143,15 @@
 
       const inlineLinkPattern = /\[([^\]]+)\]\((?:<([^>\n]+)>|((?:[^()\s]|\([^()\n]*\))+))\)/g;
       const stripInlineLinks = value => String(value).replace(inlineLinkPattern, (_match, label) => label);
+      const headingSlug = value => stripInlineLinks(value)
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/[\*_~]/g, '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '') || 'section';
       const inlineText = value => escapeHtml(value)
         .replace(/`([^`]+)`/g, '<code>$1</code>')
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -239,15 +248,7 @@
         let code = [];
 
         const headingId = value => {
-          const base = stripInlineLinks(value)
-            .replace(/`([^`]+)`/g, '$1')
-            .replace(/[\*_~]/g, '')
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '') || 'section';
+          const base = headingSlug(value);
           const count = (headingIds.get(base) || 0) + 1;
           headingIds.set(base, count);
           return count === 1 ? base : `${base}-${count}`;
@@ -368,7 +369,7 @@
 
         let fragment = encodedFragment;
         try { fragment = decodeURIComponent(encodedFragment); } catch (_error) { /* use encoded fragment */ }
-        const target = document.getElementById(fragment);
+        const target = document.getElementById(fragment) || document.getElementById(headingSlug(fragment));
         if (!target) return;
         requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
       };
