@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.normalized-degeneracy-uncertainty",
   "title": "Black Light FTL Normalized Tidal Degeneracy Boundary Uncertainty Registry",
   "status": "DERIVED",
@@ -7,7 +7,7 @@
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
-    "scope": "Quantify uncertainty in the operational near-degeneracy function used by tidal eigenbranch tracking so Gravitational Plane and Slipstream/Shear navigation can distinguish a physically localized loss of branch identity from an astrometrically uncertain transition."
+    "scope": "Quantify uncertainty in the operational near-degeneracy function used by tidal eigenbranch tracking so Gravitational Plane and Slipstream/Shear navigation can distinguish a physically localized loss of branch identity from an astrometrically uncertain transition, then hand that evidence to uncertainty-aware boundary refinement without promoting it into fictional hazard canon."
   },
   "authorityInputs": [
     "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
@@ -59,7 +59,8 @@
     "If |g| is within the configured gap-cusp multiple of sigma_g, return NONSMOOTH_GAP rather than pretending the derivative of |g| is unique.",
     "If inherited branch orientation/tensor uncertainty is outside its linear model, the normalized-boundary result cannot upgrade it to RESOLVED.",
     "Report the actual gamma_min boundary used by the eigenbranch tracker separately from exact lambda_i=lambda_j coalescence.",
-    "Do not interpret a narrow gamma-boundary uncertainty envelope as proof that a fictional FTL shear fork exists."
+    "Do not interpret a narrow gamma-boundary uncertainty envelope as proof that a fictional FTL shear fork exists.",
+    "Downstream uncertainty-aware refinement may request additional physically recomputed midpoint evidence when this authority reports a broad, uncertain, or non-smooth operational boundary; it may not rewrite gamma or covariance to force convergence."
   ],
   "canonSafeguards": [
     "This registry does not establish physical realizability of any FTL family.",
@@ -75,6 +76,12 @@
     "outputs": ["status", "controls", "samples", "boundaryIntervals", "warnings", "provenance", "canonSafeguards"],
     "schema": "data/schemas/exo-vessel-ftl-normalized-degeneracy-uncertainty.schema.json",
     "runtime": "blacklight-exo-ftl-normalized-degeneracy-uncertainty-runtime.js",
-    "manual": "docs/blacklight/BLACK_LIGHT_FTL_NORMALIZED_DEGENERACY_BOUNDARY_UNCERTAINTY_MANUAL.md"
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_NORMALIZED_DEGENERACY_BOUNDARY_UNCERTAINTY_MANUAL.md",
+    "downstreamUncertaintyAwareRefinement": {
+      "registry": "data/exo-vessel/ftl-uncertainty-aware-boundary-refinement-registry.json",
+      "schema": "data/schemas/exo-vessel-ftl-uncertainty-aware-boundary-refinement.schema.json",
+      "runtime": "blacklight-exo-ftl-uncertainty-aware-boundary-refinement-runtime.js",
+      "manual": "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_BOUNDARY_REFINEMENT_AND_INTERVENTION_MANUAL.md"
+    }
   }
 }
