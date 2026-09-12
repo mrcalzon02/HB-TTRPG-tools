@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.ftl.tidal-eigenbranch-tracking",
   "title": "Black Light FTL Tidal Eigenbasis and Eigenbranch Tracking Registry",
   "status": "DERIVED",
@@ -7,7 +7,7 @@
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
-    "scope": "Track the orientation and continuity of principal tidal directions so gravitational-plane and shear-based transit can distinguish scalar tidal-strength change from rotating or bifurcating field topology, while exposing a downstream uncertainty authority for confidence in those directions."
+    "scope": "Track the orientation and continuity of principal tidal directions so gravitational-plane and shear-based transit can distinguish scalar tidal-strength change from rotating or bifurcating field topology, while exposing downstream uncertainty authorities for confidence in those directions and in the operational normalized degeneracy boundary."
   },
   "authorityInputs": [
     "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
@@ -32,7 +32,8 @@
     "relativeEigenvalueGap": "gamma_ij = |lambda_i-lambda_j|/max(|lambda_i|,|lambda_j|,||T||_F,epsilon)",
     "degenerateSubspace": "gamma_ij < gamma_min implies individual eigenvector identity is not physically unique",
     "degeneracyBoundary": "D_ab = XOR(a is DEGENERATE_SUBSPACE, b is DEGENERATE_SUBSPACE)",
-    "twoPlaneRotation": "Delta_psi_subspace = acos(clamp(|n_a dot n_b|,-1,1)) where n is the non-degenerate normal to the repeated-eigenvalue plane"
+    "twoPlaneRotation": "Delta_psi_subspace = acos(clamp(|n_a dot n_b|,-1,1)) where n is the non-degenerate normal to the repeated-eigenvalue plane",
+    "normalizedBoundaryUncertainty": "sigma_gamma^2=(grad gamma)^T Sigma_T (grad gamma); operational boundary h=gamma-gamma_min=0"
   },
   "physicalInterpretation": [
     "For a real symmetric tidal tensor, principal eigenvectors define mutually orthogonal instantaneous stretching/compression directions.",
@@ -43,7 +44,7 @@
     "A broad stable degenerate subspace is not automatically a refinement failure: if its unique normal is stable and both endpoints remain degenerate, the subspace may be represented without recursive midpoint explosion.",
     "A large eigendirection rotation with modest eigenvalue change can indicate changing tidal topology even when scalar tidal strength appears nearly constant.",
     "A shear/fork precursor may use tidal eigensystem behavior as ordinary-physics evidence, but ordinary gravity does not itself prove that a fictional FTL shear lane exists.",
-    "Nominal branch direction and confidence in that direction are separate evidence. The downstream tidal-uncertainty authority propagates source covariance into eigenvalue and orientation uncertainty."
+    "Nominal branch direction and confidence in that direction are separate evidence. The tidal-uncertainty authority propagates source covariance into eigenvalue and orientation uncertainty, and the normalized-degeneracy authority propagates the same tensor covariance into confidence in the actual gamma_min branch-identity boundary."
   ],
   "trackingRules": [
     "At every sample, diagonalize the symmetric 3x3 tidal tensor and retain both eigenvalues and normalized eigenvectors.",
@@ -55,7 +56,8 @@
     "For a three-way degeneracy, orientation is physically undefined and remains unresolved.",
     "Set degeneracyBoundary when one endpoint is degenerate and the adjacent endpoint is not; this boundary requests adaptive subdivision.",
     "Do not request unlimited refinement merely because both endpoints lie inside the same stable degenerate subspace. Require a boundary, unresolved tensor, or excessive resolved/subspace rotation.",
-    "Branch-rotation thresholds are adaptive numerical controls, not constants of nature and not automatic FTL danger thresholds."
+    "Branch-rotation thresholds and gamma_min are adaptive numerical controls, not constants of nature and not automatic FTL danger thresholds.",
+    "When covariance is available, confidence in the gamma_min operational boundary is supplied by the normalized-degeneracy uncertainty authority rather than inferred from nominal branch labels alone."
   ],
   "familyUse": {
     "gravitic-plane": "PRIMARY_PHYSICAL_PRECURSOR_INPUT",
@@ -70,12 +72,12 @@
   },
   "generatorRules": [
     "The generator may expose tracked tidal axes, branch rotations, degeneracy flags, degeneracy boundaries, subspace rotations, and separately sourced uncertainty envelopes as physical evidence.",
-    "The generator may not convert an eigendirection rotation directly into a fictional shear-lane fork probability without a separately versioned family-response model.",
+    "The generator may not convert an eigendirection rotation or narrow normalized-degeneracy boundary directly into a fictional shear-lane fork probability without a separately versioned family-response model.",
     "Named-race or named-civilization drive ownership may not be inferred from the selected family used in a simulation.",
     "Missing or degenerate branch identity remains missing or degenerate; it may not be stabilized by silently carrying the previous vector forward.",
-    "Charts and diagrams should distinguish eigenvalue strength, axis orientation, branch identity, degeneracy-boundary localization, uncertainty, and fictional family-boundary response as separate layers.",
+    "Charts and diagrams should distinguish eigenvalue strength, axis orientation, branch identity, gamma_min boundary localization, uncertainty, and fictional family-boundary response as separate layers.",
     "The adaptive sampler may consume refinementRequested, but the tracker remains an ordinary-physics geometry authority rather than a route-safety certifier.",
-    "Uncertainty in a tracked branch must be obtained from the downstream uncertainty authority rather than inferred from visual smoothness of the nominal eigenvectors."
+    "Uncertainty in a tracked branch must be obtained from the downstream uncertainty authorities rather than inferred from visual smoothness of the nominal eigenvectors."
   ],
   "canonSafeguards": [
     "This registry does not establish that any FTL method is physically realizable.",
@@ -83,8 +85,8 @@
     "Numerical eigenbasis orientation inside a degenerate eigenspace is not canon and must not be treated as a physical axis.",
     "Stable degeneracy is not itself evidence of a fictional fork or danger.",
     "A simulation family selection does not establish race, inventor, owner, manufacturer, or technology ancestry.",
-    "A derived fork indicator must retain provenance back to the actual tidal tensor, eigensystem, source states, epochs, covariance, and family-response version.",
-    "A narrow or broad uncertainty envelope around ordinary tidal geometry does not create an exotic family-boundary state."
+    "A derived fork indicator must retain provenance back to the actual tidal tensor, eigensystem, source states, epochs, covariance, normalized-boundary authority, and family-response version.",
+    "A narrow or broad uncertainty envelope around ordinary tidal geometry or the gamma_min identity boundary does not create an exotic family-boundary state."
   ],
   "api": {
     "resolver": "resolveFTLTidalEigenbranchTracking",
@@ -96,6 +98,12 @@
       "schema": "data/schemas/exo-vessel-ftl-tidal-uncertainty-propagation.schema.json",
       "runtime": "blacklight-exo-ftl-tidal-uncertainty-propagation-runtime.js",
       "manual": "docs/blacklight/BLACK_LIGHT_FTL_TIDAL_UNCERTAINTY_PROPAGATION_AND_BOUNDARY_LOCALIZATION_MANUAL.md"
+    },
+    "normalizedDegeneracyUncertaintyAuthority": {
+      "registry": "data/exo-vessel/ftl-normalized-degeneracy-uncertainty-registry.json",
+      "schema": "data/schemas/exo-vessel-ftl-normalized-degeneracy-uncertainty.schema.json",
+      "runtime": "blacklight-exo-ftl-normalized-degeneracy-uncertainty-runtime.js",
+      "manual": "docs/blacklight/BLACK_LIGHT_FTL_NORMALIZED_DEGENERACY_BOUNDARY_UNCERTAINTY_MANUAL.md"
     }
   }
 }
