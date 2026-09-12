@@ -142,6 +142,7 @@
       };
 
       const inlineLinkPattern = /\[([^\]]+)\]\((?:<([^>\n]+)>|((?:[^()\s]|\([^()\n]*\))+))\)/g;
+      const stripInlineLinks = value => String(value).replace(inlineLinkPattern, (_match, label) => label);
       const inlineText = value => escapeHtml(value)
         .replace(/`([^`]+)`/g, '<code>$1</code>')
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -238,9 +239,8 @@
         let code = [];
 
         const headingId = value => {
-          const base = value
+          const base = stripInlineLinks(value)
             .replace(/`([^`]+)`/g, '$1')
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
             .replace(/[\*_~]/g, '')
             .trim()
             .toLowerCase()
