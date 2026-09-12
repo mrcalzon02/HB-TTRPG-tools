@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.topology-hazard-applicability",
   "title": "Black Light FTL Physical-Topology to Family-Hazard Applicability Registry",
   "status": "MIXED",
@@ -24,6 +24,27 @@
       "canonLimit": "Evidence of changing/degenerate tidal topology, not itself evidence of an exotic lane, fork, wall, manifold defect, or transit boundary."
     }
   },
+  "namedSourceConstraints": [
+    {
+      "constraintId": "arnock-family-unresolved-v1",
+      "subjectType": "RACE_SPECIES",
+      "subjectLabel": "Ar'nock",
+      "source": "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+      "status": "UNRESOLVED_FAMILY",
+      "rule": "Current Ar'nock sources constrain machinery ancestry and interface/maintenance embodiment but explicitly do not establish an Ar'nock FTL family. No race-scoped topology-hazard applicability record may be created from biological-symbiotic machinery ancestry alone.",
+      "allowedUse": "When a scenario independently supplies a confirmed or explicitly simulation-selected family, Ar'nock identity may modify machinery embodiment and maintenance doctrine without becoming evidence for that family or its hazards."
+    },
+    {
+      "constraintId": "zwlei-murrek-family-unresolved-v1",
+      "subjectType": "NAMED_INSTALLATION_CLASS",
+      "subjectLabel": "Zwlei Mur'rek-class bio-reactive gravitic slipstream system",
+      "source": "docs/blacklight/ZWLEI_MURREK_PROPULSION_TRANSIT_ENGINEERING_MANUAL.md",
+      "machineReadableSource": "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+      "status": "UNRESOLVED_FAMILY",
+      "rule": "The named source confirms a bio-reactive gravitic slipstream installation, field vanes, gravitic reference, slipstream prediction and transit-risk sensing, but does not map that source term to either consolidated gravitational-plane or slipstream-shear. No named-technology applicability record may normalize the family by keyword.",
+      "allowedUse": "The confirmed sensors, fluidic-field machinery, vane-asymmetry failure and maintenance obligations may be carried into engineering embodiment and forensic discrimination while family-specific topology applicability remains unresolved."
+    }
+  ],
   "records": [
     {
       "recordId": "family-gravitational-plane-shear-fork-topology-v1",
@@ -78,6 +99,7 @@
   ],
   "resolutionRules": [
     "Named technology/vessel/installation records outrank family records within their documented scope.",
+    "A named source constraint that says family identity is unresolved forbids creating a more-specific applicability record until an authority resolves the family; it does not suppress an independently supplied family-level record when that family is separately authoritative for the scenario.",
     "Two equal-precedence contradictory records produce CONFLICT; the resolver must not guess.",
     "No matching record produces UNRESOLVED, not NOT_APPLICABLE and not false.",
     "APPLICABLE means the physical evidence may condition a separately certified fictional hazard; only REQUIRED_PHYSICAL_PRECURSOR authorizes conservative blocker tightening in the generic certification chain.",
@@ -90,6 +112,7 @@
     "A physical normalized-degeneracy boundary is not automatically a shear fork, lane edge, slipstream wall, manifold defect, or blocker.",
     "Applicability changes how already-authorized fictional hazards consume physical evidence; it does not authorize the fictional hazard itself.",
     "Race/species identity does not imply family identity without a race/named technology source.",
+    "Source terminology containing words such as gravitic, slipstream, fold, phase, gate or shear is not by itself a consolidated family assignment.",
     "Missing applicability authority is UNRESOLVED rather than false, zero, or benign.",
     "Operator, manufacturer, archaeological inference, and machinery ancestry must remain separate provenance fields when known."
   ],
