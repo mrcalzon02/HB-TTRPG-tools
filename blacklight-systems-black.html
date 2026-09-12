@@ -130,16 +130,18 @@
         'node_modules/'
       ];
 
-      // Image files are presentation assets, not Black-tier navigation destinations.
-      const resourceExtension = /\.(?:html?|md|txt|json|ya?ml|csv|xml|pdf|css|js|mjs|cjs|map|mp3|ogg|wav|flac|mp4|webm|woff2?|ttf|otf|wasm|glb|gltf|obj|mtl|bin)$/i;
+      // Black Tier is a directory of usable resources, not implementation dependencies.
+      // Keep pages, readable authorities/data, documents, and intentionally navigable media.
+      const resourceExtension = /\.(?:html?|md|txt|json|ya?ml|csv|xml|pdf|mp3|ogg|wav|flac|mp4|webm)$/i;
       const textResourceExtension = /\.(?:md|txt|json|ya?ml|csv|xml|css|js|mjs|cjs|map)$/i;
 
       const isBlacklightResource = (path) => {
         const lower = path.toLowerCase();
         if (excludedResources.has(path)) return false;
         if (excludedPrefixes.some(prefix => lower.startsWith(prefix))) return false;
-        if (!resourceExtension.test(lower)) return false;
+        // Explicit exceptions remain available even when they are implementation-format files.
         if (explicitBlacklightResources.has(path)) return true;
+        if (!resourceExtension.test(lower)) return false;
         if (lower.includes('blacklight') || lower.includes('black-light') || lower.includes('black_light')) return true;
         if (lower.startsWith('docs/blacklight/')) return true;
         if (lower.startsWith('assets/blacklight/')) return true;
