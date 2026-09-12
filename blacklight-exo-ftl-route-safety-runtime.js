@@ -118,6 +118,11 @@
       raceId:context.raceId||null,
       readiness:context.installationReadiness||context.readiness||{},
       maintenancePenalty:context.installationMaintenancePenalty??context.maintenancePenalty,
+      transientState:context.installationTransientState||context.transientState||null,
+      couplingProfileId:context.installationCouplingProfileId||context.couplingProfileId||null,
+      couplingProfile:context.installationCouplingProfile||context.couplingProfile||null,
+      interventionHorizon:context.installationInterventionHorizon??context.interventionHorizon,
+      coupledDegradationPacket:context.coupledDegradationPacket||null,
       provenance
     };
   }
@@ -125,7 +130,7 @@
   async function resolveInstallationTiming(context,family,baselineTiming,baselineRecovery,provenance=[]){
     const Runtime=globalThis.BlacklightExoFTLInstallationSafetyTimingRuntime;
     if(!Runtime?.resolveFTLInstallationSafetyTiming){
-      return deepFreeze({status:'UNRESOLVED',timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,selectedRecord:null,readiness:null,appliedFactors:null,warnings:['Installation safety timing runtime is not loaded; named readiness/maintenance evidence cannot be applied.'],provenance:unique(provenance)});
+      return deepFreeze({status:'UNRESOLVED',timing:{...baselineTiming},recovery:baselineRecovery?{...baselineRecovery}:null,selectedRecord:null,readiness:null,coupledDegradation:null,appliedFactors:null,warnings:['Installation safety timing runtime is not loaded; named readiness/maintenance/transient evidence cannot be applied.'],provenance:unique(provenance)});
     }
     return Runtime.resolveFTLInstallationSafetyTiming(timingIdentityContext(context,family,baselineTiming,baselineRecovery,provenance));
   }
