@@ -374,6 +374,15 @@
         requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
       };
 
+      const showLoadError = error => {
+        rawLink.hidden = true;
+        const status = Number(error && error.status);
+        const message = status === 404
+          ? 'This Blacklight resource no longer exists at the requested path. It may have been renamed or moved. Return to Black Tier to open the current resource.'
+          : `Unable to load this resource${status ? ` (HTTP ${status})` : ''}. Return to Black Tier and retry from the current directory.`;
+        documentNode.innerHTML = `<p class="resource-error">${escapeHtml(message)}</p>`;
+      };
+
       if (!sourcePath || !allowedPath.test(sourcePath) || !allowedExtension.test(sourcePath) || sourcePath.includes('..')) {
         pathNode.textContent = 'Invalid resource path';
         rawLink.hidden = true;
@@ -388,16 +397,18 @@
 
       fetch(sourceUrl, { cache: 'no-cache' })
         .then(response => {
-          if (!response.ok) throw new Error(`Resource request returned ${response.status}`);
+          if (!response.ok) {
+            const error = new Error(`Resource request returned ${response.status}`);
+            error.status = response.status;
+            throw error;
+          }
           return response.text();
         })
         .then(source => {
           render(source, sourcePath);
           activateFragment();
         })
-        .catch(error => {
-          documentNode.innerHTML = `<p class="resource-error">Unable to load this resource: ${escapeHtml(error.message)}</p>`;
-        });
+        .catch(showLoadError);
     })();
   </script>
 </body>
