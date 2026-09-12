@@ -35,6 +35,24 @@
         "structure": {"type": "number", "minimum": 0, "maximum": 1}
       }
     },
+    "channelLatency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sensor", "navigation", "reference", "solver", "command", "actuator", "exit", "clearance", "recovery", "thermal", "structure"],
+      "properties": {
+        "sensor": {"type": ["number", "null"], "minimum": 0},
+        "navigation": {"type": ["number", "null"], "minimum": 0},
+        "reference": {"type": ["number", "null"], "minimum": 0},
+        "solver": {"type": ["number", "null"], "minimum": 0},
+        "command": {"type": ["number", "null"], "minimum": 0},
+        "actuator": {"type": ["number", "null"], "minimum": 0},
+        "exit": {"type": ["number", "null"], "minimum": 0},
+        "clearance": {"type": ["number", "null"], "minimum": 0},
+        "recovery": {"type": ["number", "null"], "minimum": 0},
+        "thermal": {"type": ["number", "null"], "minimum": 0},
+        "structure": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
     "serviceState": {
       "type": "object",
       "additionalProperties": false,
@@ -49,12 +67,13 @@
     "sectionResult": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sectionId", "localReadiness", "effectiveReadiness", "services", "blockedChannels"],
+      "required": ["sectionId", "localReadiness", "effectiveReadiness", "services", "channelLatencies", "blockedChannels"],
       "properties": {
         "sectionId": {"type": "string"},
         "localReadiness": {"$ref": "#/$defs/readiness"},
         "effectiveReadiness": {"$ref": "#/$defs/readiness"},
         "services": {"type": "object", "additionalProperties": {"$ref": "#/$defs/serviceState"}},
+        "channelLatencies": {"$ref": "#/$defs/channelLatency"},
         "blockedChannels": {"type": "array", "items": {"type": "string"}}
       }
     },
