@@ -4,23 +4,39 @@
   "title": "Black Light FTL Adaptive Spatiotemporal Refinement Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "status", "familyId", "encounterModel", "sampling", "samples", "refinementEvents", "warnings", "provenance", "canonSafeguards"],
+  "required": ["schemaVersion", "status", "familyId", "encounterModel", "sampling", "samples", "refinementEvents", "eigenbranchTracking", "warnings", "provenance", "canonSafeguards"],
   "properties": {
-    "schemaVersion": {"const": "1.0.0"},
+    "schemaVersion": {"const": "1.1.0"},
     "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
     "familyId": {"type": ["string", "null"]},
     "encounterModel": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT_ENDPOINT", "ANCHORED_PORTAL", "UNRESOLVED"]},
     "sampling": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["adaptive", "initialSampleCount", "finalSampleCount", "maximumSampleCount", "maximumDepth", "tolerances"],
+      "required": ["adaptive", "convergenceEstablished", "unresolvedIntervalCount", "initialSampleCount", "finalSampleCount", "maximumSampleCount", "maximumDepth", "tolerances"],
       "properties": {
         "adaptive": {"type": "boolean"},
+        "convergenceEstablished": {"type": "boolean"},
+        "unresolvedIntervalCount": {"type": "integer", "minimum": 0},
         "initialSampleCount": {"type": "integer", "minimum": 0},
         "finalSampleCount": {"type": "integer", "minimum": 0},
         "maximumSampleCount": {"type": "integer", "minimum": 2},
         "maximumDepth": {"type": "integer", "minimum": 0},
-        "tolerances": {"type": "object"}
+        "tolerances": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["relativePhysicalMetricChange", "relativePrincipalTidalEigenvalueChange", "accelerationDirectionChangeRad", "tidalEigenbranchRotationRad", "tidalEigenvalueDegeneracyRelativeGap", "relativeCovarianceTraceChange", "sourceMotionToRangeRatio", "maximumEncounterSpanFraction"],
+          "properties": {
+            "relativePhysicalMetricChange": {"type": "number", "minimum": 0},
+            "relativePrincipalTidalEigenvalueChange": {"type": "number", "minimum": 0},
+            "accelerationDirectionChangeRad": {"type": "number", "minimum": 0},
+            "tidalEigenbranchRotationRad": {"type": "number", "minimum": 0},
+            "tidalEigenvalueDegeneracyRelativeGap": {"type": "number", "minimum": 0},
+            "relativeCovarianceTraceChange": {"type": "number", "minimum": 0},
+            "sourceMotionToRangeRatio": {"type": "number", "minimum": 0},
+            "maximumEncounterSpanFraction": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
       }
     },
     "samples": {"type": "array", "items": {"type": "object"}},
@@ -39,6 +55,7 @@
         }
       }
     },
+    "eigenbranchTracking": {"type": ["object", "null"]},
     "warnings": {"type": "array", "items": {"type": "string"}},
     "provenance": {"type": "array", "items": {"type": "string"}},
     "canonSafeguards": {"type": "array", "items": {"type": "string"}}
