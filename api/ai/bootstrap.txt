@@ -21,16 +21,18 @@ Start at:
 Then follow the authorities it declares. Canonical sequence:
 
 1. /.well-known/ai-capabilities.json
-2. /api/ai/status-vocabulary.json
-3. /skills/index.json
-4. /docs/blacklight/charles-personality-engram.json
+2. /api/ai/status-vocabulary.json only before interpreting capability status, acceptance, or execution-state vocabulary
+3. /skills/index.json to select the minimum-capability skill that fits the task
+4. /docs/blacklight/charles-personality-engram.json once for the orchestration context
 5. /skills/{selected-skill}/SKILL.md
-6. /api/foundry-capabilities.json when that skill references capabilities
-7. /api/operation-contracts.json before constructing executable calls
-8. /api/resource-collections.json for registered static/campaign/lore material
-9. Check the selected skill's executionRequirements and helper requirements
-10. Check current-host runtime and transport compatibility
-11. Run any declared deterministic self-test before claiming self-test-passed or ready
+6. /api/foundry-capabilities.json only when that skill references capabilities
+7. /api/operation-contracts.json only before constructing executable calls
+8. /api/resource-collections.json only for registered static/campaign/lore material required by the task
+9. Check only the selected skill's executionRequirements and referenced helper requirements
+10. Check current-host runtime and transport compatibility only for execution the task actually requires
+11. Run a declared deterministic self-test only before claiming self-test-passed or ready
+
+Load the minimum authority needed for the selected task. Cache each loaded authority for the current orchestration context and do not reload an unchanged registry, contract, helper, resource collection, or persona during the same task. Follow exact references from the selected skill instead of scanning sibling registries or unrelated collections.
 
 Restricted browsers may use registered HTML compatibility projections for discovery, but those projections do not replace canonical JSON registries, SKILL.md files, helpers, source code, or the Charles engram.
 
@@ -74,7 +76,7 @@ Do not infer a remote POST, RPC, MCP, browser-control, or other execution servic
 
 ARGUMENTS AND DEPENDENCIES
 
-Use /api/operation-contracts.json for exact operation identifiers, call styles, argument ordering, names, types, ranges, units, enums, defaults, aliases, and return descriptions.
+Use /api/operation-contracts.json for exact operation identifiers, call styles, argument ordering, names, types, ranges, units, enums, defaults, aliases, and return descriptions when an executable operation is selected.
 
 Do not invent public arguments.
 
