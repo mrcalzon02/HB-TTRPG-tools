@@ -1,575 +1,589 @@
 # Ar'nock Propulsion & Transit Engineering Profile
 
-**Status:** race/species-specific engineering integration profile with field-level canon labels.  
-**Authority relationship:** subordinate to `docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md`, `EXO_OPERATIVE_TECHNOLOGY_BASIS.md`, and surviving Ar'nock campaign/archive records. This profile does **not** assign an unrecovered FTL family to the Ar'nock.  
-**Primary source:** `data/blacklight-continuum/wiki/foundation-lore.json` (`arnock-species`, `arnock-derelict`).  
-**Canon labels:** `CONFIRMED`, `DERIVED`, `PROPOSED`, and `UNRESOLVED` have the meanings defined by the consolidated propulsion/transit authority.
+**Status:** authoritative race/species-specific engineering integration profile with field-level canon labels.  
+**Authority relationship:** subordinate to `docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md` and the governing FTL-family physics, but authoritative for the **general Ar'nock machinery basis** used by propulsion/transit generators.  
+**Design source:** *The different lightspeed methods* remains the governing family-physics source.  
+**Association rule:** this profile does **not** assign a recovered FTL family to the Ar'nock.  
+**Correction notice:** this revision supersedes earlier descriptions that treated biological/symbiotic machinery, cultivated neural computation, metabolic power distribution, living field organs, or vascular control networks as the default Ar'nock technological basis.
 
 ---
 
 ## 1. Canon boundary
 
-The surviving Ar'nock record establishes a nonhuman civilization associated with a damaged vessel in the *No Return Signal* foundation archive. The archive confirms biological fabrication capable of constructing complete organisms from instruction sets and versatile feedstock; cultivated neural computation; nonhuman ergonomic and sensory assumptions; elongated segmented limbs; flexible interfaces; vibration-based controls; survivable but chemically unpleasant atmospheric overlap with humans; and Ar'nock-specific materials and safety conventions.
+The Ar'nock are a technologically mature nonhuman civilization whose surviving vessel demonstrates advanced biological fabrication, but biological fabrication is **not** the foundation of their general technological stack.
 
-The archive does **not** currently establish:
+The corrected baseline is:
 
-- a named Ar'nock FTL/transit family;
-- an Ar'nock manufacturer name or connector standard;
-- transit Path level or shared T-tier;
-- canonical transit performance, range, spool time, recovery time, or energy consumption;
-- a canonical drive-room layout;
-- a statement that all Ar'nock machinery is biological;
-- a chronology capability.
+> **Ar'nock general technology is primarily solid-state and electromechanical, with extensive silicon computation, piezoelectric sensing/actuation, high functional integration, rugged construction, and an unusually strong design commitment to modular replacement.**
 
-Those fields remain `UNRESOLVED` until a higher-authority source is recovered. A generator may derive an operative machinery style from confirmed Ar'nock evidence, but it must not convert that derived style into an invented transit-family assignment.
+Bioprinting remains an important but secondary technology. Its ordinary domains are feedstock conversion, food and nutrient production, medicine, replacement tissue, environmental management, waste processing, ecological support, and life support. A biological printer aboard an Ar'nock vessel no more implies that the navigation computer is alive than a human medical bioreactor implies that a reactor-control PLC is grown tissue.
 
-### 1.1 Status matrix
+The following are therefore `CONFIRMED` or current authoritative design constraints for generation:
 
-| Property | Status | Current record |
+| Property | Status | Engineering interpretation |
 |---|---|---|
-| Ar'nock are a nonhuman technological civilization | `CONFIRMED` | foundation archive |
-| Biological instruction-driven fabrication exists | `CONFIRMED` | foundation archive |
-| Cultivated neural computation exists aboard the vessel | `CONFIRMED` | derelict/archive records |
-| Flexible and vibration-based interfaces occur | `CONFIRMED` | environmental assumptions table |
-| Human-survivable atmospheric overlap with acidic/unfamiliar traces | `CONFIRMED` | environmental assumptions table |
-| Primary EXO operative basis maps most closely to `BIOLOGICAL_SYMBIOTIC` | `DERIVED` | operative-basis resolver applied to confirmed machinery ancestry |
-| Vibration/acoustic control is a likely secondary implementation pressure | `DERIVED` | confirmed interface/sensory evidence |
-| Ar'nock use any particular FTL family | `UNRESOLVED` | no surviving assignment located |
-| Ar'nock FTL is inherently organic | `UNRESOLVED` | biological fabrication alone does not establish every subsystem's carrier |
-| Ar'nock transit performance | `UNRESOLVED` | no recovered numbers |
+| Ar'nock are a nonhuman technological civilization | `CONFIRMED` | Species/polity archive |
+| Biological fabrication / bioprinting exists | `CONFIRMED` | Secondary fabrication, medical, feedstock and environmental technology |
+| General computation is solid-state silicon | `AUTHORITATIVE_CORRECTION` | Default compute substrate for ordinary machinery |
+| Piezoelectric functions are technologically important | `AUTHORITATIVE_CORRECTION` | Sensing, precision actuation, vibration analysis, resonant timing and diagnostics |
+| General machinery is solid-state/electromechanical | `AUTHORITATIVE_CORRECTION` | Default basis unless a source establishes an exception |
+| Strong modularity is characteristic | `AUTHORITATIVE_CORRECTION` | Complete functional assemblies are the normal service boundary |
+| Flexible/vibration-oriented interfaces occur | `CONFIRMED` | Compatible with segmented anatomy and piezoelectric technology |
+| Ar'nock use any particular FTL family | `UNRESOLVED` | Species identity never selects family |
+| Ar'nock FTL performance/range/spool time | `UNRESOLVED` | No recovered canonical numbers |
+
+### 1.1 Canon safeguard
+
+\[
+\boxed{\text{bioprinting capability}\not\Rightarrow\text{biological technological base}}
+\]
+
+and
+
+\[
+\boxed{\text{Ar'nock identity}\not\Rightarrow\text{FTL family identity}}
+\]
+
+Both implications are prohibited in generators and prose.
 
 ---
 
-## 2. Engineering ancestry
+## 2. Ar'nock engineering ancestry
 
-`EXO_OPERATIVE_TECHNOLOGY_BASIS.md` requires operative technology to resolve through species environment and chemistry, body plan and senses, civilization/organization, manufacturer identity, Path maturity, and subsystem purpose. Applied to the confirmed Ar'nock archive, this produces the following constrained machinery ancestry.
+The corrected technology ancestry is:
 
 ```mermaid
 flowchart TD
-    A[Confirmed Ar'nock biology and environment] --> B[Instruction-driven biological fabrication]
-    A --> C[Elongated segmented body plan]
-    A --> D[Vibration-based interfaces]
-    A --> E[Acidic / unfamiliar trace atmosphere]
-    B --> F[DERIVED biological-symbiotic primary basis]
-    C --> G[DERIVED distributed reach and service geometry]
-    D --> H[DERIVED acoustic / vibration control and diagnostics]
-    E --> I[DERIVED chemistry-resistant wet/biological boundaries]
-    F --> J[Transit machinery embodiment resolver]
-    G --> J
-    H --> J
-    I --> J
-    K[UNRESOLVED transit family] --> J
+    A[Ar'nock materials science] --> B[Solid-state integrated fabrication]
+    A --> C[Electromechanical machinery]
+    A --> D[Piezoelectric materials / transducers]
+    B --> E[Silicon computation]
+    B --> F[Highly integrated functional modules]
+    C --> F
+    D --> G[Precision sensing + actuation]
+    E --> H[Distributed control / estimation]
+    F --> I[Standardized replaceable assemblies]
+    G --> H
+    H --> I
+    J[Bioprinting / biological fabrication] --> K[Food + feedstock]
+    J --> L[Medical + tissue support]
+    J --> M[Environmental + life support]
+    I --> N[Propulsion / transit machinery embodiment]
+    O[UNRESOLVED FTL family] --> N
 ```
 
-The diagram deliberately leaves the transit family unresolved. Machinery ancestry can be constrained without pretending the archive has told us whether the vessel folds space, rides a Q-boundary, translates through a lattice, follows a manifold, or uses some other confirmed Black Light family.
+Biotechnology is deliberately shown as a parallel support branch rather than as the trunk from which computation and propulsion descend.
 
 ---
 
-## 3. Provisional technology-basis binding
+## 3. Modularity: the defining Ar'nock engineering habit
 
-### 3.1 Primary basis — `DERIVED`
+Human machinery commonly places many separately manufactured components on a serviceable board or chassis. Ar'nock fabrication pushes integration downward into the module itself.
 
-The strongest current resolver result is:
-
-`BIOLOGICAL_SYMBIOTIC`
-
-This is not because “alien equals organic.” It follows from direct evidence of biological printers, cultivated computation, versatile biological feedstock, and machinery explicitly described as biologically unfamiliar. The binding remains `DERIVED`, not `CONFIRMED`, because the foundation archive predates and does not itself use the modern registry identifier.
-
-### 3.2 Secondary pressures — `DERIVED`
-
-The generator should apply secondary Ar'nock-specific pressures without declaring an unsupported second registry family:
-
-- vibration/acoustic signalling and controls;
-- flexible interfaces compatible with segmented reach;
-- cultivated neural control components;
-- chemical tolerance appropriate to acidic trace compounds;
-- maintenance assumptions that may involve feeding, culture care, grafting, cleaning, isolation, and biological state management;
-- unfamiliar identity/authentication rules for computation and machinery access.
-
-These pressures modify the physical implementation of route semantics. They do not change what the route semantics mean.
-
----
-
-## 4. Six invariant route semantics in Ar'nock form
-
-The EXO operative authority requires `structural`, `power`, `cooling`, `data`, `atmosphere`, and `access`. The following embodiments are constrained derivations rather than named Ar'nock components.
-
-| Route | Ar'nock-constrained embodiment | Status | Failure questions |
-|---|---|---|---|
-| `structural` | grown composite members, flexible interfaces, internal/external support compatible with elongated users | `DERIVED` | tearing, delamination, fatigue, necrosis, attachment drift? |
-| `power` | bioelectric/ionic/metabolic carrier or converted energy feeding active tissues and cultivated machinery | `DERIVED` | starvation, ionic imbalance, conduction loss, conversion failure? |
-| `cooling` | vascular or circulated working medium with exchange surfaces and biological heat buffering | `DERIVED` | occlusion, contamination, flow loss, exchanger death? |
-| `data` | cultivated neural signalling combined with vibration/acoustic interfaces and other unresolved carriers | `DERIVED` | desynchronization, sensory corruption, identity rejection, damaged pathways? |
-| `atmosphere` | regulation of a human-survivable but Ar'nock-normal chemistry containing unfamiliar/acidic traces | `CONFIRMED` end condition / `DERIVED` machinery | scrubber ecology loss, chemical imbalance, boundary incompatibility? |
-| `access` | reach geometry for segmented limbs plus biological service surfaces and unfamiliar safety boundaries | `DERIVED` | human inaccessibility, contamination, rejection, unavailable interface posture? |
-
-The generator must preserve the distinction between a confirmed environmental fact and the derived machinery needed to maintain it.
-
----
-
-## 5. Transit installation resolver
-
-Until an Ar'nock transit-family source is recovered, generation should use a two-stage process.
-
-### Stage A — resolve what is known
-
-```text
-species = ARNOCK
-speciesSource = foundation-lore.json#arnock-species
-vesselSource = foundation-lore.json#arnock-derelict
-technologyBasis = BIOLOGICAL_SYMBIOTIC [DERIVED]
-controlPressure = vibration/acoustic + cultivated neural [DERIVED]
-workingEnvironment = Ar'nock vessel atmosphere [CONFIRMED]
-transitFamily = UNRESOLVED
-manufacturer = UNRESOLVED
-transitPath = UNRESOLVED
-sharedTier = UNRESOLVED
-```
-
-### Stage B — if an external caller deliberately selects a transit family
-
-The generator may produce an **Ar'nock-style hypothetical implementation**, but its provenance must say that the family selection came from the caller/scenario rather than species canon.
-
-```text
-resolvedInstallation = embody(
-  callerSelectedTransitFamily,
-  Ar'nockSpeciesConstraints,
-  derivedBiologicalSymbioticBasis,
-  vesselScale,
-  mission,
-  condition,
-  selectedPathOrTier
-)
-```
-
-The result is `MIXED`: the family may be confirmed Black Light physics, the Ar'nock ancestry is source-constrained, but the association between them is not confirmed Ar'nock canon.
-
----
-
-## 6. Eight-block Ar'nock machinery embodiment
-
-The following is a **family-neutral `DERIVED` embodiment grammar**. It says how required transit functions should look when instantiated through current Ar'nock evidence; it does not say which transit mechanism the Ar'nock possess.
-
-### 6.1 Energy conditioning
-
-Likely embodiment: metabolically maintained conversion organs, electrochemical reservoirs, conductive tissue, mineralized or specialized active inclusions, and isolated high-output structures that convert vessel power into the state demanded by the selected transit mechanism.
-
-Visible/service characteristics should favor branching supply anatomy over human busbars. High-energy interfaces may be chemically or biologically hostile even when they perform an equivalent engineering function.
-
-### 6.2 Prime mover
-
-The prime mover must remain mechanism-specific. For a hypothetical metric system it would create the required metric-driving state; for a Q-lattice system it would establish state coupling; for a fold system it would initiate adjacency. The Ar'nock-specific constraint is that the initiator should be realized through grown/cultivated machinery where compatible with the mechanism rather than defaulting to a terrestrial metal cylinder.
-
-### 6.3 Field formation
-
-A biologically derived Ar'nock implementation should preferentially form distributed effect surfaces: field-bearing tissue, grown conductive lattices, vascularly supplied emitter structures, or mineralized biological arrays integrated into the hull. Capital-scale craft should segment these into independently diagnosable regions rather than scale one organ indefinitely.
-
-### 6.4 Transit control
-
-Cultivated computation and vibration-based controls imply a control architecture in which local biological controllers can exchange state through neural, acoustic, vibratory, ionic, optical, or other compatible carriers. Exact carrier remains mechanism/manufacturer dependent.
-
-### 6.5 Navigation and sensing
-
-Navigation must use the sensors required by the selected transit family. The Ar'nock profile modifies interface and interpretation, not the physical information requirement. A fold solution still needs endpoint exclusion and geometry; a skimmer still needs mass-gradient information; a Q system still needs Q-state references.
-
-Human characters should not automatically understand the control representation. Translation may require mapping vibration patterns, cultivated neural state, biological indicators, and alien reference conventions into human-readable instrumentation.
-
-### 6.6 Termination and recovery
-
-Recovery should include both mechanism-specific energy/state disposal and organism-level recovery debt. A biologically embodied field system may leave metabolic depletion, tissue strain, chemical imbalance, local cell death, neural desynchronization, or regenerative demand in addition to the family-specific physics burden.
-
-### 6.7 Whole-effect coverage
-
-Coverage anatomy should be treated as a distributed hull organ/system. Appendages, flexible surfaces, temporary structures, cargo and damage can invalidate the certified envelope. Biological self-awareness does not eliminate the need to measure what must be carried through the effect.
-
-### 6.8 Control / thermal / abort backbone
-
-The safety backbone should be physically separable enough to arrest propagation from diseased, damaged, desynchronized or contaminated regions. Plausible mechanisms include vascular isolation, neural gating, tissue contraction, local metabolic starvation, sacrificial shedding, chemical inhibition, and hard isolation boundaries. These are `DERIVED` options, not confirmed Ar'nock named procedures.
-
----
-
-## 7. Scaling behavior
-
-Ar'nock scaling must preserve biological and distributed identity rather than enlarging a single organ linearly.
-
-A useful `PROPOSED` segmentation estimator is:
+A human electrical assembly may be approximated as:
 
 \[
-\Pi_A = \frac{L}{v_c t_r}\left(1+\sigma_f+\sigma_i\right)
+A_H = \sum_j C_j + P + K
 \]
 
-where:
+where \(C_j\) are discrete components, \(P\) is the board/interconnect substrate and \(K\) represents connectors and packaging.
 
-- \(L\) is characteristic installation span;
-- \(v_c\) is effective coordination propagation speed through the installed control carrier;
-- \(t_r\) is required response time;
-- \(\sigma_f\) is hull-flex/damage disturbance;
-- \(\sigma_i\) is biological state inhomogeneity.
+An Ar'nock functional module is more usefully treated as a fabricated functional volume:
 
-Increasing \(\Pi_A\) should push the generator toward more local ganglia, isolated vascular zones, distributed field organs, regional sensors, and local recovery capacity. No numerical threshold is canonically established.
+\[
+M_A = \mathcal{F}(S, D, C, R, X, P, I)
+\]
 
-### 7.1 Scale morphology
+where the manufactured structure may integrate switching \(S\), conductive paths \(D\), capacitive structures \(C\), resistive functions \(R\), transducers \(X\), local processing \(P\), and interface geometry \(I\) into one replaceable object.
 
-| Vessel scale | Preferred derived morphology |
+This is an engineering description, not a claim that every module is literally monolithic silicon. The important service distinction is:
+
+\[
+\boxed{\text{Human modularity}\approx\text{components on assemblies}}
+\]
+
+\[
+\boxed{\text{Ar'nock modularity}\approx\text{complete functional assemblies as components}}
+\]
+
+A damaged Human control board may invite component-level repair. A damaged Ar'nock control module is more likely to be diagnosed, isolated, removed, replaced and recertified. Internal repair may require fabrication capabilities well beyond an ordinary shipboard workshop.
+
+### 3.1 Consequence for derelict salvage
+
+Ar'nock wreckage should therefore contain many objects that appear deceptively self-contained. A palm-sized or torso-sized unit may incorporate what a Human engineer expects to find spread across several boards, sensor interfaces, power conditioners and timing circuits.
+
+This creates the characteristic archaeological experience:
+
+> Everything looks like a component until examination reveals that each component is an entire subsystem.
+
+---
+
+## 4. Silicon computation
+
+General Ar'nock computation defaults to solid-state silicon or closely related semiconductor implementations. The exact doping methods, lithography, three-dimensional integration, packaging, clocking and device geometries may be alien, but the conceptual substrate is electronic solid-state computation rather than cultivated nervous tissue.
+
+Expected traits include:
+
+- high local integration;
+- distributed compute near sensors and actuators;
+- strong module identity/versioning;
+- deterministic hardware interlocks for safety-critical functions;
+- redundant timing/reference chains;
+- aggressive packaging against vibration, chemistry and radiation;
+- replaceable compute modules rather than loose serviceable chips;
+- local nonvolatile calibration state attached to module identity.
+
+A transit installation should consequently be generated with **regional computing modules** rather than biological ganglia.
+
+For distributed control, retain the physically useful ratio
+
+\[
+\Pi_c = \frac{L_c}{v_c\tau_r},
+\]
+
+where \(L_c\) is control span, \(v_c\) is signal propagation speed in the installed carrier and \(\tau_r\) is required response time.
+
+As \(\Pi_c\) grows, the architecture should move toward local estimation, local interlocks and sectional abort authority. This is ordinary finite-propagation engineering; it does not require organic computation.
+
+---
+
+## 5. Piezoelectric technology
+
+Piezoelectric and related electromechanical transduction is a characteristic Ar'nock strength.
+
+The direct piezoelectric relation may be represented in linear form as
+
+\[
+\mathbf{D}=\mathbf{d}\,\mathbf{T}+\boldsymbol{\epsilon}^{T}\mathbf{E},
+\]
+
+and the converse effect as
+
+\[
+\mathbf{S}=\mathbf{s}^{E}\mathbf{T}+\mathbf{d}^{T}\mathbf{E},
+\]
+
+where \(\mathbf{D}\) is electric displacement, \(\mathbf{T}\) stress, \(\mathbf{E}\) electric field, \(\mathbf{S}\) strain, \(\mathbf{d}\) the piezoelectric coupling tensor, \(\boldsymbol{\epsilon}^{T}\) permittivity at constant stress and \(\mathbf{s}^{E}\) compliance at constant field.
+
+This supports a coherent Ar'nock family of devices:
+
+| Function | Typical use |
 |---|---|
-| Probe | one compact cultivated core with minimal regeneration and external support dependence |
-| Fighter / shuttle | tightly merged organs, low redundancy, rapid replacement or regeneration burden |
-| Corvette | first meaningful sectional vascular/control isolation |
-| Frigate / merchant | multiple serviceable field organs, cargo-state compensation, redundant circulation |
-| Cruiser | distributed controller ganglia and sectional coverage with battle-damage isolation |
-| Capital | hierarchical biological network; regional field organs; independent emergency metabolism/recovery |
-| Gatework | if Ar'nock gate use is ever sourced, treat as ecological/industrial infrastructure rather than merely a ship organ enlarged to megastructure size |
+| Structural strain sensing | hull load, field-mount alignment, fatigue detection |
+| Vibration spectroscopy | bearing health, pump state, loose interfaces, resonance mapping |
+| Precision actuation | valves, optical elements, field-former alignment, micropositioning |
+| Pressure sensing | fluid, atmosphere, hydraulic and process monitoring |
+| Resonant timing | local oscillator/reference functions |
+| Acoustic communication | mechanically coupled controls and maintenance signaling |
+| Material characterization | crack detection and bond/interface inspection |
+| Inertial support | accelerometer/gyro-related transduction where appropriate |
 
-The final row is explicitly conditional; no Ar'nock gate use is presently confirmed.
-
----
-
-## 8. Power and recovery mathematics
-
-No Ar'nock-specific canonical energy law survives in the inspected source. The following are engineering bookkeeping aids.
-
-### 8.1 Resource-state vector — `PROPOSED`
-
-\[
-\mathbf{R}_A = [E_u, O_m, C_h, F_n, H_t, R_g]^T
-\]
-
-with:
-
-- \(E_u\): usable conditioned energy;
-- \(O_m\): metabolic/chemical reserve;
-- \(C_h\): cooling/heat-transport reserve;
-- \(F_n\): functional neural/control coherence;
-- \(H_t\): field-bearing tissue health;
-- \(R_g\): regenerative reserve.
-
-A drive may have sufficient gross power and still be unfit for transit if tissue health, cooling, control coherence or recovery reserve are below the family/manufacturer requirement.
-
-### 8.2 Recovery debt — `PROPOSED`
-
-\[
-D_r = w_E d_E + w_M d_M + w_T d_T + w_N d_N + w_G d_G
-\]
-
-where the individual debts represent energy reserve depletion, metabolic debt, thermal burden, neural/control desynchronization and regenerative/tissue damage. Weights remain uncalibrated and cannot be presented as setting constants.
+Piezoelectric instrumentation supplements rather than replaces family-required gravimetry, Q-state sensing, endpoint evidence or topological measurement.
 
 ---
 
-## 9. Control-room and machinery-space design language
+## 6. Six invariant route semantics in Ar'nock form
 
-A generated Ar'nock space should not default to human deck plans with biological texture applied afterward.
+| Route | Corrected Ar'nock embodiment | Status | Typical faults |
+|---|---|---|---|
+| `structural` | metallic/ceramic/composite load paths with integrated piezoelectric health sensing | `DERIVED` | fracture, delamination, fastener/interface shift, transducer drift |
+| `power` | modular converters, buses, buffers, protection and local energy-conditioning assemblies | `DERIVED` | bus isolation, converter failure, connector resistance, reserve depletion |
+| `cooling` | pumps, heat exchangers, cold plates, fluid trunks and sectional valves | `DERIVED` | flow loss, fouling, leakage, pump failure, exchanger saturation |
+| `data` | solid-state silicon compute, deterministic buses, timing/reference links and local nonvolatile state | `DERIVED` | bit corruption, clock drift, bus partition, module-version mismatch |
+| `atmosphere` | electromechanical environmental plant supplemented by biological/chemical processing where useful | `MIXED` | scrubber failure, chemical imbalance, feedstock exhaustion |
+| `access` | modular bays and mechanically coupled interfaces suited to elongated segmented operators | `DERIVED` | inaccessible geometry, damaged latches, incompatible service adapters |
 
-`DERIVED` spatial rules:
+The same abstract route semantics can be implemented by another species through entirely different machinery.
 
-- controls may occupy vertical, circumferential or multi-reach surfaces suited to elongated segmented limbs;
-- vibration-based input makes mechanically coupled control surfaces meaningful;
-- machinery boundaries may be living membranes, sphincter-like access points, graft ports, flexible sealed surfaces or cultivated interfaces;
-- cultivated computation may be physically distributed rather than cabinet-centered;
-- service clearances should include body-posture and contamination assumptions, not only tool swing radius;
-- diagnostic state may be expressed through motion, vibration, tissue tone, chemical markers, luminescence, temperature, pressure or neural activity rather than a screen alone;
-- human access may require adapters, protective atmosphere, translation equipment, sterilization, anesthesia/inhibition, remote manipulation or physical modification of service routes.
+---
+
+## 7. Family-neutral transit machinery grammar
+
+Until Ar'nock FTL-family identity is sourced, generated transit machinery uses the following eight-block grammar.
+
+### 7.1 Energy conditioning
+
+Default to replaceable solid-state power conversion, switching, energy buffering, isolation and measurement modules. Energy storage may use whatever setting-appropriate chemistry or field storage is established for the installation, but it should not become metabolic merely because the ship also contains bioprinters.
+
+### 7.2 Prime mover
+
+The prime mover remains family-specific. The Ar'nock contribution is packaging and control: modular field-producing assemblies, integrated power electronics, local silicon control and replaceable interfaces.
+
+### 7.3 Field/effect formation
+
+Use repeated field-former modules, emitter sectors, resonant structures, coupling assemblies or geometry-control units appropriate to the selected family. Large installations should segment rather than scale one central assembly without limit.
+
+### 7.4 Transit control
+
+Use distributed solid-state controllers with local feedback, independent references, deterministic interlocks and sectional isolation.
+
+### 7.5 Navigation and sensing
+
+Use the sensors demanded by the selected family, augmented by Ar'nock piezoelectric structural/actuator diagnostics and vibration-based interfaces.
+
+### 7.6 Termination and recovery
+
+Recovery means disposing of the family-specific field/state safely while retaining protected electrical, thermal, control and structural margin. It does **not** generically mean tissue regeneration.
+
+### 7.7 Whole-effect coverage
+
+Coverage is maintained by surveyed module geometry and actual vessel configuration. Refit, cargo, appendage changes and battle damage require recertification where they alter the protected region.
+
+### 7.8 Safety backbone
+
+Use hard isolation, independent abort buses, protected stores, local interlocks, sectional breakers/valves and mechanically independent emergency controls.
+
+---
+
+## 8. Scaling behavior
+
+The useful generic control ratio remains
+
+\[
+\Pi_c=\frac{L_c}{v_c\tau_r}.
+\]
+
+A second useful modularity measure is the proportion of installation function that can survive loss of one service region. For service graph \(G=(V,E)\), path availability remains deterministic:
+
+\[
+A_p=\min\left(A_{source},\min_{e\in p}A_e\right),
+\qquad
+A_s=\max_p A_p.
+\]
+
+This is a normalized support state, not a probability.
+
+Ar'nock capital systems should therefore become **more sectional and modular**, not more biological:
+
+| Scale | Typical morphology |
+|---|---|
+| Probe | one or a few compact integrated modules; little redundancy |
+| Shuttle/fighter | tightly packaged modules; rapid line replacement |
+| Corvette | first strong sectional power/data/cooling isolation |
+| Frigate/merchant | redundant functional bays and cross-ties |
+| Cruiser | regional compute/control, local buffers and field sectors |
+| Capital | hierarchical modular provinces with local safety authority and protected reserves |
+| Fixed infrastructure | replaceable industrial sectors, remote service access and deep redundancy |
+
+---
+
+## 9. Power, thermal and recovery engineering
+
+Gross power never establishes transit readiness.
+
+For instantaneous load \(P_L\) and available generation \(P_a\),
+
+\[
+P_d=\max(0,P_L-P_a).
+\]
+
+With protected buffer energy \(E_b\), if \(P_L>P_a\),
+
+\[
+t_{hold}=\frac{E_b}{P_L-P_a}.
+\]
+
+If the required emergency sequence is \(t_{int}\), then
+
+\[
+\boxed{t_{hold}<t_{int}\Rightarrow\text{unsafe for that emergency state}.}
+\]
+
+For short thermal transients,
+
+\[
+C_{th}\frac{dT}{dt}=P_{heat}-P_{reject},
+\]
+
+or, over a sufficiently short interval with approximately constant terms,
+
+\[
+T(t)=T_0+\frac{P_{heat}-P_{reject}}{C_{th}}t.
+\]
+
+Ar'nock machinery should express these burdens through converter modules, bus state, protected stores, coolant loops, thermal interfaces and local isolation hardware.
+
+Biological life-support loads remain ordinary consumers in the vessel energy budget rather than the drive's default working medium.
+
+---
+
+## 10. Control and safety timing
+
+The installation intervention chain remains
+
+\[
+t_{int}=t_{sensor}+t_{solver}+t_{decision}+t_{command}+t_{actuate}+t_{exit}+t_{clear}+t_{margin}.
+\]
+
+Ar'nock implementation channels map naturally to:
+
+- `sensor`: family-specific sensors plus piezoelectric condition sensors;
+- `solver`: silicon estimation/route modules;
+- `decision`: supervisory logic/operator arbitration;
+- `command`: deterministic buses and sectional links;
+- `actuate`: electromechanical or field-control modules;
+- `exit`: family-specific termination hardware;
+- `clear`: post-exit stabilization/clearance machinery;
+- `margin`: certification reserve.
+
+For PRECOMMIT systems, use timing margin rather than a fabricated local FTL speed:
+
+\[
+M_T=t_{prediction}-t_{int}.
+\]
+
+For continuous projected-progress families,
+
+\[
+M_T=\frac{D_B}{v_p}-t_{int}.
+\]
+
+Here \(v_p\) is route-progress semantics; it does not assert local hull velocity greater than \(c\).
+
+---
+
+## 11. Maintenance doctrine
+
+Ar'nock maintenance is **module-centered condition maintenance**.
+
+### 11.1 Normal service loop
 
 ```mermaid
 flowchart LR
-    C[Command / interpretation zone]
-    N1[Local cultivated controller]
-    N2[Local cultivated controller]
-    F1[Field / transit organ sector]
-    F2[Field / transit organ sector]
-    V[Vascular energy + cooling trunk]
-    R[Recovery / regeneration reserve]
-    A[Isolation / abort tissue]
-
-    C --> N1
-    C --> N2
-    N1 --> F1
-    N2 --> F2
-    V --> F1
-    V --> F2
-    F1 --> R
-    F2 --> R
-    A -. isolates .-> F1
-    A -. isolates .-> F2
+    A[Detect anomaly] --> B[Localize module / service path]
+    B --> C[Compare reference + calibration]
+    C --> D{Module trustworthy?}
+    D -->|yes| E[Return / monitor]
+    D -->|no| F[Isolate]
+    F --> G[Remove complete functional module]
+    G --> H[Install verified replacement]
+    H --> I[Load / verify identity + calibration]
+    I --> J[Sectional test]
+    J --> K[System recertification]
 ```
 
-This diagram is an embodiment model, not a recovered Ar'nock deck plan.
+### 11.2 Important maintenance consequence
+
+The internal integration that makes modules compact also makes improvised component-level repair difficult. A Human technician may recognize power input, signal paths and output behavior while still being unable to identify a separately replaceable capacitor, resistor or ADC because those functions are fabricated into the module structure.
+
+The correct salvage question is often not “which component is burned?” but:
+
+> “Which module owns the failed function, what services does it require, what interfaces does it expose, and can another verified module replace it?”
+
+### 11.3 Refit provenance
+
+Every replacement should preserve:
+
+- original module identity if known;
+- replacement identity;
+- hardware revision;
+- firmware/solver revision where applicable;
+- calibration epoch;
+- calibration environment;
+- vessel/refit authority;
+- changed service paths;
+- changed latency;
+- changed protected reserve requirement.
+
+A replacement that fits mechanically but changes timing is not automatically certified.
 
 ---
 
-## 10. Practical field manual — human salvage crew
+## 12. Signatures and forensics
 
-**Procedure status:** `DERIVED` survival/maintenance doctrine based on confirmed environment and operative-technology rules. It is not a recovered Ar'nock manual translation.
+Ar'nock technology should generally leave **solid-state/electromechanical** signatures:
 
-### 10.1 Before touching unfamiliar transit machinery
+| Condition | Likely evidence |
+|---|---|
+| standby | clock/reference emissions, low converter load, maintenance polling |
+| spool/preparation | converter harmonics, buffer charging, compute load, calibration sweeps |
+| actuation | switching transients, electromechanical motion, resonant/piezoelectric activity |
+| high load | thermal rejection, current redistribution, coolant/pump changes |
+| fault isolation | abrupt bus topology changes, module dropout, breaker/valve operation |
+| post-event | heat, residual field evidence, error logs, changed resonance/alignment state |
 
-1. Establish whether the surface is structural, neural, vascular, respiratory, control, reproductive/regenerative, or unknown. Do not assume a panel is inert because it is stationary.
-2. Sample atmosphere and surface chemistry. Confirm protection against acidic/unfamiliar trace compounds and biological contamination in both directions.
-3. Observe vibration, pressure, temperature, electrical/ionic potential, chemical flow and spontaneous tissue response before making contact.
-4. Identify cultivated neural structures before cutting, shocking, sedating, starving, isolating or mechanically restraining a component.
-5. Map local supply and return routes. A tube that looks like coolant may also transport nutrients, signalling molecules or immune chemistry.
-6. Establish an isolation boundary before attaching human power/data equipment. Default interoperability is not `DIRECT`.
-7. Preserve samples and provenance. Unknown does not mean disposable.
-
-### 10.2 Low-power wake-up
-
-Do not jump directly from dormant to strategic transit state.
-
-```mermaid
-stateDiagram-v2
-    [*] --> Dormant
-    Dormant --> Surveyed: chemistry / anatomy / routes mapped
-    Surveyed --> Supported: compatible environment and feed established
-    Supported --> LocalAwake: one isolated controller/organ
-    LocalAwake --> Diagnostic: observe native response
-    Diagnostic --> Sectional: adjacent support zones enabled
-    Sectional --> Integrated: cross-zone synchronization verified
-    Integrated --> TransitReady: mechanism-specific predicates pass
-    Diagnostic --> Quarantine: abnormal response
-    Sectional --> Quarantine: propagation / rejection / contamination
-    TransitReady --> [*]
-```
-
-A human team should prefer sectional awakening because a living or cultivated system can propagate faults through chemistry, control state, vascular routes and immune responses that ordinary electrical isolation would not stop.
-
-### 10.3 Post-operation checks
-
-Record tissue tone/health, chemical balance, vascular flow, thermal condition, neural/control synchronization, field-organ structural state, regeneration demand, and family-specific residual effects. Compare against the pre-operation baseline. Do not erase abnormal behavior by immediately forcing a second cycle.
+Biochemical signatures should be associated primarily with crew/environmental support or explicitly biological equipment, not automatically with the transit drive.
 
 ---
 
-## 11. Maintenance model
+## 13. Failure model
 
-### 11.1 Preventive maintenance — `DERIVED`
+The corrected generic Ar'nock failure set includes:
 
-Ar'nock-derived machinery should favor condition-based service over a purely hour-based human schedule. The generator should emit measurable health indicators such as:
+- solid-state module failure;
+- semiconductor aging or radiation damage;
+- clock/reference drift;
+- local nonvolatile calibration corruption;
+- connector/contact degradation;
+- bus partition;
+- converter failure;
+- protected-store depletion;
+- cooling-loop isolation or flow loss;
+- piezoelectric cracking, depoling or calibration drift;
+- actuator seizure/misalignment;
+- structural interface shift;
+- incompatible module revision;
+- stale refit topology;
+- correlated software/model error;
+- family-specific exotic failure.
 
-- tissue integrity and scar burden;
-- vascular flow and pressure;
-- nutrient/chemical reserve;
-- contamination and microbiological state;
-- neural synchronization;
-- vibration/resonance response;
-- interface elasticity and closure;
-- field-bearing inclusion alignment or integrity where present;
-- regeneration capacity;
-- environmental chemistry.
-
-### 11.2 Repair vocabulary
-
-Valid repair verbs should include more than `replace` and `calibrate`:
-
-`feed | flush | graft | excise | culture | regenerate | inhibit | stimulate | isolate | reinnervate | reseed | rebalance | cleanse | align | brace | seal | translate | recertify`
-
-The exact verb depends on the component. A generator should not describe surgery on a purely mineral element or electrical recalibration of an endocrine control loop unless an explicit hybrid interface warrants it.
-
----
-
-## 12. Signatures and observability
-
-An Ar'nock-style transit installation should inherit the selected family's signatures and add basis-specific channels where physically justified.
-
-| Operational phase | Mechanism signature | Ar'nock-derived additional evidence |
-|---|---|---|
-| dormant | family-dependent residuals | metabolism, chemistry, low neural/vibration activity |
-| spool | family-specific field/exotic precursor | rising metabolic demand, vascular flow, thermal/chemical shift, synchronization vibration |
-| commit | mechanism-specific discontinuity/field state | abrupt neural/control lock, organ contraction/pressure changes, resource draw |
-| transit | family-specific observable state | sustained biological load where local process persists |
-| termination | emergence/recovery signature | heat, chemical waste, tissue strain, control resynchronization |
-| aftermath | residual field/topology/Q evidence | metabolites, inflammatory/regenerative activity, damaged tissue, altered microbiological state |
-
-These additional channels are `DERIVED`; they must not be emitted when a future recovered Ar'nock source explicitly establishes a different implementation.
-
----
-
-## 13. Failure construction
-
-A useful generator relationship is:
+The instance failure remains a composition:
 
 \[
-F_{instance}=F_{family}\otimes F_{basis}\otimes F_{species}\otimes F_{condition}
+F_{instance}=F_{family}\otimes F_{basis}\otimes F_{species}\otimes F_{condition}.
 \]
 
-This is categorical composition, not numerical multiplication.
-
-For an Ar'nock-constrained hypothetical installation, basis/species failures may include:
-
-- vascular occlusion or leakage;
-- nutrient starvation;
-- chemical/osmotic imbalance;
-- infection or contamination;
-- immune rejection;
-- necrosis or scar interference;
-- neural desynchronization;
-- vibration/reference corruption;
-- flexible-interface tearing or loss of closure;
-- loss of regeneration reserve;
-- cultivated-controller pathology;
-- human repair action triggering an alien safety/identity response.
-
-These must then be combined with the selected transit family's actual failure modes. For example, a biological control failure in a fold system is dangerous because it can corrupt endpoint/adjacency control; in a slipstream system it may threaten adhesion; in a metric system it may destabilize field symmetry. The same biological defect should not produce an identical generic “drive malfunction” in every family.
+A solid-state Ar'nock module failure does not replace a gravitational-plane shear fork, Q-address error, fold endpoint conflict or wormhole throat instability. It modifies how the installation reaches or responds to that family-specific failure.
 
 ---
 
-## 14. Navigation and operator interpretation
+## 14. Biotechnology boundary
 
-The Ar'nock archive gives us unfamiliar identity controls and vibration-based interfaces, but not a canonical navigator caste or bridge doctrine. Those remain `UNRESOLVED`.
+Bioprinting is technologically important and should remain visible in the vessel without swallowing the rest of its engineering identity.
 
-A human-readable translation layer should therefore separate:
+Appropriate default domains include:
+
+- food and nutrient feedstock;
+- medical tissue production;
+- replacement organs/prosthetic biological structures;
+- recycling and waste conversion;
+- atmospheric/ecological processing;
+- microbial/chemical support systems;
+- crew life support;
+- emergency biological fabrication.
+
+The generator rule is:
 
 ```text
-native sensed state
-    -> native cultivated/neural interpretation
-    -> native control representation
-    -> translation adapter
-    -> human engineering quantities
+if subsystem in {food, medicine, tissue, ecology, life-support, biological feedstock}:
+    biotechnology is plausible by default
+else:
+    default to solid-state/electromechanical modular machinery
+    unless a named source explicitly establishes a biological exception
 ```
 
-The adapter must preserve uncertainty. If a vibration pattern is only tentatively mapped to “field symmetry,” the UI should display that translation confidence rather than silently presenting a perfect terrestrial gauge.
+---
 
-### 14.1 Translation-confidence model — `PROPOSED`
+## 15. Practical field manual — Human salvage crew
+
+### ASM-01 — Unknown Ar'nock module
+
+1. Photograph and map the module before removal.
+2. Measure voltage, current, impedance, thermal state, vibration and signal activity without assuming Human connector conventions.
+3. Identify mechanical latch/retention geometry before cutting the housing.
+4. Search for piezoelectric or mechanically coupled service points; a surface that appears inert may be a pressure/vibration interface.
+5. Map power, data, cooling and structural connections independently.
+6. Do not open a sealed integrated module merely because its external function is understood.
+7. Record module identity marks, geometry, neighboring modules and bus position.
+8. Isolate and remove at the functional-module boundary where possible.
+9. Substitute only after checking pin/function mapping, power conditioning, timing and cooling compatibility.
+10. Recertify the affected service graph after replacement.
+
+### ASM-02 — Piezoelectric diagnostic array
+
+1. Establish unloaded baseline resonance.
+2. Apply a bounded excitation sweep below known damage thresholds.
+3. Record amplitude and phase response.
+4. Compare against neighboring/reference transducers.
+5. Treat abrupt resonance shifts as possible bond fracture, geometry change, preload change or material damage.
+6. Do not infer exotic field damage until mechanical causes are bounded.
+
+For a simple damped resonance,
 
 \[
-C_t=C_s C_m C_r C_x
+H(\omega)=\frac{1}{\sqrt{(1-(\omega/\omega_n)^2)^2+(2\zeta\omega/\omega_n)^2}},
 \]
 
-where the factors represent sensor confidence, semantic-map confidence, reference-frame confidence and cross-check confidence. The product is useful as a reasoning aid but has no canonical calibration.
+where \(\omega_n\) is natural frequency and \(\zeta\) damping ratio. Changes in \(\omega_n\) or \(\zeta\) can provide useful structural evidence without pretending that the relationship uniquely identifies a fault.
+
+### ASM-03 — Transit compute replacement
+
+`identify -> isolate -> preserve old calibration -> install replacement -> verify revision -> restore references -> sectional test -> compare latency -> family-specific recertification`
+
+Never treat successful boot as proof of transit certification.
 
 ---
 
-## 15. Interoperability
+## 16. Generator contract
 
-Until a specific conversion interface is recovered, human-to-Ar'nock transit machinery should default to:
+A valid Ar'nock propulsion/transit generator MUST:
 
-`ADAPTER_REQUIRED`
+1. Default general machinery to solid-state/electromechanical modular construction.
+2. Default computation to solid-state silicon or an explicitly sourced equivalent semiconductor implementation.
+3. Prefer piezoelectric transduction where vibration, strain, pressure, precision actuation or resonant timing are useful.
+4. Treat complete functional assemblies as the normal modular/service boundary.
+5. Keep biotechnology primarily in feedstock, medical, environmental and life-support roles unless a source explicitly establishes another use.
+6. Never infer FTL family from species identity.
+7. Never infer FTL family from words such as gravitic, slipstream, phase, fold or gate without authority mapping.
+8. Preserve family mathematics unchanged by machinery style.
+9. Preserve per-field provenance for family, machinery, module/refit identity and any biological exception.
+10. Preserve `UNRESOLVED` values instead of filling them with genre assumptions.
 
-and escalate to:
+### 16.1 Forbidden default phrases
 
-`HOSTILE_WITHOUT_CONVERSION`
+Without a specific source, do not describe generic Ar'nock propulsion or control using:
 
-where chemistry, biology, pressure, temperature, identity/authentication, control reference, or living-system safety makes direct attachment dangerous.
+- cultivated neural controller;
+- living field organ;
+- vascular power trunk;
+- metabolic drive;
+- sensory tissue;
+- actuator organism;
+- biological ganglion;
+- regenerative field machinery;
+- tissue-based transit computer.
 
-A proper conversion bay may need all of the following simultaneously: energy conversion, isolated sensing, protocol/semantic translation, chemical separation, atmosphere transition, sterilization, mechanical reach adaptation, biological containment, and a safe method for servicing living components. A cable with two different plugs is not sufficient.
-
----
-
-## 16. Generator/API binding
-
-A race-specific profile should be represented separately from a transit-family record so that absence of an FTL assignment remains expressible.
-
-```json
-{
-  "speciesId": "arnock",
-  "sourceStatus": "MIXED",
-  "sources": [
-    "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
-    "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
-    "EXO_OPERATIVE_TECHNOLOGY_BASIS.md"
-  ],
-  "technologyBasis": {
-    "value": "BIOLOGICAL_SYMBIOTIC",
-    "status": "DERIVED",
-    "resolverRule": "species-environment-bodyplan-operative-basis"
-  },
-  "speciesPressures": {
-    "fabrication": {"value": "instruction-driven biological fabrication", "status": "CONFIRMED"},
-    "computation": {"value": "cultivated neural components", "status": "CONFIRMED"},
-    "interface": {"value": "flexible and vibration-based", "status": "CONFIRMED"},
-    "atmosphere": {"value": "human-survivable overlap with acidic/unfamiliar traces", "status": "CONFIRMED"}
-  },
-  "transitAssignment": {
-    "family": null,
-    "pathLevel": null,
-    "sharedTier": null,
-    "status": "UNRESOLVED"
-  }
-}
-```
-
-A caller-selected transit family must be stored as scenario/runtime input, not rewritten into `transitAssignment` as confirmed species canon.
+Those descriptions require explicit subsystem-level authority.
 
 ---
 
-## 17. Educational text
+## 17. Educational text — Transit Engineering 715
 
-### Crew explanation
+### **Ar'nock Modular Solid-State Systems, Piezoelectric Diagnostics, and Alien Service Boundaries**
 
-Ar'nock machinery may be alive, cultivated, or partly biological, but “alive” does not mean mysterious. It still requires energy, cooling, signals, structure, working chemistry, access and a safe way to fail. The difficulty is that the routes are implemented in ways human technicians did not evolve alongside.
+Learning objectives:
 
-### Technician explanation
+- distinguish biological fabrication capability from a biological technological base;
+- identify the Ar'nock functional-module service boundary;
+- analyze distributed solid-state control with finite propagation delay;
+- apply piezoelectric constitutive relations to diagnostics and actuation;
+- construct power, cooling, data and abort dependency graphs;
+- preserve family-specific FTL mathematics while changing machinery embodiment;
+- distinguish a replaceable module from an internally repairable assembly;
+- preserve refit provenance and timing certification after module replacement.
 
-Treat each living component as both machine and environment. Before repair, identify what it consumes, what it excretes, what controls it, what it supports, which other tissues depend on it, and what response damage will trigger. Cutting a supply vessel can be the equivalent of opening a power bus, coolant main, data trunk and alarm circuit simultaneously.
+### Worked question
 
-### Engineer explanation
+A regional controller is 420 m from a supervisory node. Its optical/electrical link has effective propagation speed \(v_c=1.8\times10^8\,\mathrm{m/s}\), while the required regional control response is \(\tau_r=3.0\times10^{-4}\,\mathrm{s}\).
 
-Do not infer transit physics from machinery appearance. A cultivated biological field former could implement any transit family whose physical requirements the civilization can meet. Determine mechanism from measured effect and source evidence; determine embodiment from operative technology ancestry.
+\[
+\Pi_c=\frac{420}{(1.8\times10^8)(3.0\times10^{-4})}\approx7.78\times10^{-3}.
+\]
 
-### Generator-designer explanation
+Propagation alone is therefore a small fraction of the allowed response interval. That does **not** prove the loop is fast enough: sensor integration, solver latency, arbitration, actuator response and margins remain in
 
-Species profile and transit family are orthogonal records joined by a resolver. This preserves both canon safety and procedural diversity. It also means the same Ar'nock machinery ancestry can generate visibly coherent but physically different implementations if a campaign explicitly chooses different valid transit families.
+\[
+t_{int}=\sum_i t_i.
+\]
 
----
-
-## 18. Provenance grammar
-
-Every Ar'nock-specific field should preserve three questions:
-
-1. **What did the archive actually say?**
-2. **What does the operative engineering framework let us derive from it?**
-3. **What did the scenario/generator choose because the archive was silent?**
-
-Recommended trace:
-
-```json
-{
-  "field": "machineChain.navigationSensing.interface",
-  "value": "cultivated neural controller with vibration-based local interface",
-  "status": "DERIVED",
-  "sourceRefs": [
-    "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
-    "EXO_OPERATIVE_TECHNOLOGY_BASIS.md#2-source-authority"
-  ],
-  "resolverRule": "preserve confirmed species interface and computation pressures when embodying invariant data/control semantics",
-  "parents": [
-    "speciesPressures.computation",
-    "speciesPressures.interface",
-    "routeSemantics.data"
-  ]
-}
-```
-
-A statement such as “Ar'nock ships use Q-Lattice Phase Translation” cannot receive `CONFIRMED` or `DERIVED` status from the currently inspected sources. It would be a caller-selected/proposed association until a source is recovered.
+The educational point is that physically small propagation pressure does not authorize ignoring the rest of the timing chain.
 
 ---
 
-## 19. Recovery targets
+## 18. Provenance and supersession
 
-The next source-recovery pass should search specifically for:
+This profile is the current authority for general Ar'nock technology embodiment inside propulsion/transit generation. Older references that derive `BIOLOGICAL_SYMBIOTIC` as the primary Ar'nock technology basis are superseded where they conflict with this document.
 
-- Ar'nock vessel propulsion or transit terminology;
-- named Ar'nock manufacturers, lineages, polities, castes or shipyards;
-- drive-room, navigation or power-system archive entries;
-- route maps, beacon/gate references or historical travel records;
-- transit-related failure/damage evidence on the derelict;
-- native maintenance or medical/engineering procedures;
-- evidence distinguishing species-wide practice from one vessel's design.
+The foundation archive remains useful evidence that Ar'nock biological fabrication exists. Its older wording about cultivated computation is not to be generalized into the civilization's primary computing substrate. Current engineering authority resolves the general substrate as solid-state silicon and treats any genuinely biological compute component as a **specific exception requiring its own provenance**.
 
-Until those records are found, this profile is intentionally useful without pretending to know more than the archive does.
+The final invariant is:
 
----
+\[
+\boxed{\text{same family physics}\neq\text{same machinery}}
+\]
 
-## 20. Validation rules
+and, specifically for the Ar'nock:
 
-An Ar'nock propulsion/transit output is invalid if it:
-
-- silently assigns an FTL family from species identity alone;
-- labels `BIOLOGICAL_SYMBIOTIC` as directly quoted Ar'nock canon rather than a modern derived registry binding;
-- describes all controls as human screens/switches while ignoring confirmed vibration/flexible-interface evidence;
-- assumes cultivated neural machinery is ordinary digital electronics;
-- assumes biological fabrication grants every subsystem a biological carrier;
-- erases the acidic/unfamiliar working-environment implications;
-- assumes direct human compatibility;
-- gives the Ar'nock chronology manipulation without explicit authority;
-- presents proposed numerical equations as recovered physics;
-- drops provenance when a scenario supplies otherwise unresolved transit choices.
-
-The profile passes when the generated installation is recognizably Ar'nock because of source-constrained engineering ancestry, while its transit physics remains exactly as confirmed—or exactly as unresolved—as the source record permits.
+\[
+\boxed{\text{advanced biotechnology}\neq\text{biotechnology-first civilization}.}
+\]
