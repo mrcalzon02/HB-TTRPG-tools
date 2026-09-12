@@ -58,14 +58,62 @@
     "phase-displacement": "phase-displacement"
   },
   "routeArchetypes": {
-    "deep-space": {"status":"PROPOSED","environment":{"potentialMagnitude":0.12,"accelerationMagnitude":0.08,"tidalTensorNorm":0.08,"curvatureNorm":0.08,"massModelUncertainty":0.10,"hiddenMassProbability":0.03,"familyBoundaryHazard":0.08},"uncertaintyBase":0.06,"requiredHazards":["gravity-gradient","route-model-drift","destination-occupancy"],"notes":"Fallback comparison environment only; not a physical deep-space measurement."},
-    "planetary-well": {"status":"PROPOSED","environment":{"potentialMagnitude":0.80,"accelerationMagnitude":0.92,"tidalTensorNorm":0.72,"curvatureNorm":0.62,"massModelUncertainty":0.22,"hiddenMassProbability":0.08,"familyBoundaryHazard":0.32},"uncertaintyBase":0.14,"requiredHazards":["gravity-gradient","tidal-shear","mass-shadow","destination-occupancy"],"notes":"Fallback normalized planetary-well model, not a universal planetary constant."},
-    "gas-giant": {"status":"PROPOSED","environment":{"potentialMagnitude":1.10,"accelerationMagnitude":1.15,"tidalTensorNorm":1.08,"curvatureNorm":0.94,"massModelUncertainty":0.30,"hiddenMassProbability":0.10,"familyBoundaryHazard":0.46},"uncertaintyBase":0.20,"requiredHazards":["gravity-gradient","tidal-shear","magnetosphere","plasma-noise","mass-shadow"],"notes":"Fallback route model; magnetic/plasma observability remains separate from gravity."},
-    "binary": {"status":"PROPOSED","environment":{"potentialMagnitude":1.02,"accelerationMagnitude":1.20,"tidalTensorNorm":1.42,"curvatureNorm":1.18,"massModelUncertainty":0.38,"hiddenMassProbability":0.14,"familyBoundaryHazard":0.62},"uncertaintyBase":0.26,"requiredHazards":["gravity-gradient","tidal-shear","shear-fork","moving-barycenter","route-model-drift"],"notes":"Fallback binary model emphasizing time-varying competing gradients over raw potential."},
-    "compact-object": {"status":"PROPOSED","environment":{"potentialMagnitude":2.40,"accelerationMagnitude":2.80,"tidalTensorNorm":3.60,"curvatureNorm":4.20,"massModelUncertainty":0.44,"hiddenMassProbability":0.08,"familyBoundaryHazard":1.25},"uncertaintyBase":0.30,"requiredHazards":["gravity-gradient","tidal-shear","curvature-limit","mass-shadow","emergence-exclusion"],"notes":"Fallback-only. If real compact-object inputs violate weak-field validity, OUTSIDE_MODEL_VALIDITY blocks certification rather than using this finite archetype."},
-    "nebula": {"status":"PROPOSED","environment":{"potentialMagnitude":0.24,"accelerationMagnitude":0.20,"tidalTensorNorm":0.18,"curvatureNorm":0.16,"massModelUncertainty":0.32,"hiddenMassProbability":0.18,"familyBoundaryHazard":0.36},"uncertaintyBase":0.28,"requiredHazards":["plasma-noise","sensor-scattering","route-model-drift","destination-occupancy"],"notes":"Fallback sensor/model uncertainty archetype."},
-    "uncharted": {"status":"PROPOSED","environment":{"potentialMagnitude":0.30,"accelerationMagnitude":0.28,"tidalTensorNorm":0.30,"curvatureNorm":0.28,"massModelUncertainty":0.86,"hiddenMassProbability":0.62,"familyBoundaryHazard":0.54},"uncertaintyBase":0.56,"requiredHazards":["hidden-mass","route-model-drift","destination-occupancy","reference-integrity"],"notes":"Fallback unknown-mass/model archetype."},
-    "q-disturbed": {"status":"PROPOSED","environment":{"potentialMagnitude":0.42,"accelerationMagnitude":0.38,"tidalTensorNorm":0.52,"curvatureNorm":0.72,"massModelUncertainty":0.72,"hiddenMassProbability":0.24,"familyBoundaryHazard":1.60},"uncertaintyBase":0.68,"requiredHazards":["q-boundary","manifold-topology","reference-integrity","route-model-drift","emergence-exclusion"],"notes":"Fallback higher-dimensional boundary/model uncertainty archetype; exotic boundary terms remain fictional/derived."}
+    "deep-space": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.12, "accelerationMagnitude": 0.08, "tidalTensorNorm": 0.08, "curvatureNorm": 0.08, "massModelUncertainty": 0.10, "hiddenMassProbability": 0.03, "familyBoundaryHazard": 0.08},
+      "uncertaintyBase": 0.06,
+      "requiredHazards": ["gravity-gradient", "route-model-drift", "destination-occupancy"],
+      "notes": "Fallback comparison environment only; not a physical deep-space measurement."
+    },
+    "planetary-well": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.80, "accelerationMagnitude": 0.92, "tidalTensorNorm": 0.72, "curvatureNorm": 0.62, "massModelUncertainty": 0.22, "hiddenMassProbability": 0.08, "familyBoundaryHazard": 0.32},
+      "uncertaintyBase": 0.14,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "mass-shadow", "destination-occupancy"],
+      "notes": "Fallback normalized planetary-well model, not a universal planetary constant."
+    },
+    "gas-giant": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 1.10, "accelerationMagnitude": 1.15, "tidalTensorNorm": 1.08, "curvatureNorm": 0.94, "massModelUncertainty": 0.30, "hiddenMassProbability": 0.10, "familyBoundaryHazard": 0.46},
+      "uncertaintyBase": 0.20,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "magnetosphere", "plasma-noise", "mass-shadow"],
+      "notes": "Fallback route model; magnetic/plasma observability remains separate from gravity."
+    },
+    "binary": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 1.02, "accelerationMagnitude": 1.20, "tidalTensorNorm": 1.42, "curvatureNorm": 1.18, "massModelUncertainty": 0.38, "hiddenMassProbability": 0.14, "familyBoundaryHazard": 0.62},
+      "uncertaintyBase": 0.26,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "shear-fork", "moving-barycenter", "route-model-drift"],
+      "notes": "Fallback binary model emphasizing time-varying competing gradients over raw potential."
+    },
+    "compact-object": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 2.40, "accelerationMagnitude": 2.80, "tidalTensorNorm": 3.60, "curvatureNorm": 4.20, "massModelUncertainty": 0.44, "hiddenMassProbability": 0.08, "familyBoundaryHazard": 1.25},
+      "uncertaintyBase": 0.30,
+      "requiredHazards": ["gravity-gradient", "tidal-shear", "curvature-limit", "mass-shadow", "emergence-exclusion"],
+      "notes": "Fallback-only. If real compact-object inputs violate weak-field validity, OUTSIDE_MODEL_VALIDITY blocks certification rather than using this finite archetype."
+    },
+    "nebula": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.24, "accelerationMagnitude": 0.20, "tidalTensorNorm": 0.18, "curvatureNorm": 0.16, "massModelUncertainty": 0.32, "hiddenMassProbability": 0.18, "familyBoundaryHazard": 0.36},
+      "uncertaintyBase": 0.28,
+      "requiredHazards": ["plasma-noise", "sensor-scattering", "route-model-drift", "destination-occupancy"],
+      "notes": "Fallback sensor/model uncertainty archetype."
+    },
+    "uncharted": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.30, "accelerationMagnitude": 0.28, "tidalTensorNorm": 0.30, "curvatureNorm": 0.28, "massModelUncertainty": 0.86, "hiddenMassProbability": 0.62, "familyBoundaryHazard": 0.54},
+      "uncertaintyBase": 0.56,
+      "requiredHazards": ["hidden-mass", "route-model-drift", "destination-occupancy", "reference-integrity"],
+      "notes": "Fallback unknown-mass/model archetype."
+    },
+    "q-disturbed": {
+      "status": "PROPOSED",
+      "environment": {"potentialMagnitude": 0.42, "accelerationMagnitude": 0.38, "tidalTensorNorm": 0.52, "curvatureNorm": 0.72, "massModelUncertainty": 0.72, "hiddenMassProbability": 0.24, "familyBoundaryHazard": 1.60},
+      "uncertaintyBase": 0.68,
+      "requiredHazards": ["q-boundary", "manifold-topology", "reference-integrity", "route-model-drift", "emergence-exclusion"],
+      "notes": "Fallback higher-dimensional boundary/model uncertainty archetype; exotic boundary terms remain fictional/derived."
+    }
   },
   "familyHazards": {
     "metric-compression": ["curvature-limit", "field-symmetry", "unwind-path"],
