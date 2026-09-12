@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.adaptive-spatiotemporal-refinement",
+  "title": "Black Light FTL Adaptive Spatiotemporal Refinement Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Prevent a short-lived moving saddle, shear fork, covariance bloom, or rapidly changing gravitational interval from falling between otherwise adequate route samples."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/ftl-family-encounter-time-registry.json",
+    "blacklight-exo-ftl-family-encounter-time-runtime.js",
+    "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
+    "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
+    "data/exo-vessel/ftl-curvature-environment-registry.json",
+    "blacklight-exo-ftl-curvature-environment-runtime.js"
+  ],
+  "applicability": {
+    "CONTINUOUS_PROJECTED_PROGRESS": "ADAPTIVE",
+    "PRECOMMIT_ENDPOINT": "NO_INTERMEDIATE_CORRIDOR_REFINEMENT",
+    "ANCHORED_PORTAL": "NO_INTERMEDIATE_CORRIDOR_REFINEMENT"
+  },
+  "defaultTolerances": {
+    "relativePhysicalMetricChange": 0.20,
+    "relativePrincipalTidalEigenvalueChange": 0.20,
+    "accelerationDirectionChangeRad": 0.08726646259971647,
+    "relativeCovarianceTraceChange": 0.20,
+    "sourceMotionToRangeRatio": 0.02,
+    "maximumEncounterSpanFraction": 0.05,
+    "maximumDepth": 6,
+    "maximumSampleCount": 1024
+  },
+  "mathematics": {
+    "relativeChange": "Delta_q=|q2-q1|/max(|q1|,|q2|,epsilon)",
+    "directionChange": "Delta_theta=acos(clamp(g1 dot g2/(|g1||g2|),-1,1))",
+    "covarianceTrace": "tr(Sigma_r)=Sigma_xx+Sigma_yy+Sigma_zz",
+    "covarianceChange": "Delta_Sigma=|tr(Sigma_r,2)-tr(Sigma_r,1)|/max(tr(Sigma_r,1),tr(Sigma_r,2),epsilon)",
+    "sourceMotionRatio": "mu=max_a |r_a(t2)-r_a(t1)|/max(min(R_a1,R_a2),epsilon)",
+    "continuousEncounterTime": "t(s)=t0+sL/v_progress",
+    "midpoint": "s_m=(s_left+s_right)/2"
+  },
+  "refinementRules": [
+    "Refine a continuous interval when any configured physical, temporal, covariance, source-motion, or direction criterion exceeds its tolerance.",
+    "Principal tidal eigenvalues remain separate physical quantities; their changes are compared component-wise after the curvature runtime orders them consistently by value.",
+    "Encounter-time span is a sampling-control criterion, not a physical hazard score.",
+    "Covariance growth is evidence about uncertainty, not a substitute for gravitational severity.",
+    "Source motion is normalized by source-to-field-point range only to form a dimensionless refinement trigger; it is not an FTL penalty coefficient.",
+    "Adaptive refinement stops at the declared depth or sample ceiling and must report that ceiling if unresolved intervals still request subdivision.",
+    "Sampled extrema and finite-difference behavior remain numerical evidence rather than proof that no sharper interior extremum exists."
+  ],
+  "generatorRules": [
+    "The refinement runtime consumes the family encounter-time runtime; it does not duplicate source propagation or gravity equations.",
+    "Only CONTINUOUS_PROJECTED_PROGRESS receives intermediate midpoint samples.",
+    "PRECOMMIT_ENDPOINT and ANCHORED_PORTAL retain their explicit endpoint/mouth timing semantics and may not gain fabricated corridor samples.",
+    "Every inserted midpoint is recomputed through the authoritative encounter-time resolver so source propagation, covariance, model validity, and physical environment are all evaluated at the new epoch.",
+    "A CONFLICT, OUTSIDE_MODEL_VALIDITY, or UNRESOLVED midpoint remains blocking evidence and may not be replaced by interpolation.",
+    "Refinement tolerances are versioned engineering controls rather than constants of nature."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish that any FTL method is physically realizable.",
+    "Adaptive sampling improves numerical evidence density; it does not create new race, civilization, manufacturer, or historical canon.",
+    "A selected family used for route simulation does not establish that a named civilization uses that family.",
+    "Missing source velocity, covariance, epoch, family-boundary state, or model-validity evidence remains missing.",
+    "Ordinary gravity and covariance may not manufacture an exotic family-boundary hazard or silently set it to zero.",
+    "PRECOMMIT and anchored-portal families may not receive fabricated intermediate ordinary-space encounter epochs.",
+    "Hitting a numerical sample ceiling is not evidence that the underlying route is safe or converged."
+  ],
+  "api": {
+    "resolver": "resolveFTLAdaptiveSpatiotemporalRefinement",
+    "inputs": ["familyId", "from", "to", "sourceStates", "referenceFrame", "routeStartEpoch", "fractions", "projectedProgressMPerS", "progressSemantic", "sourcePropagation", "uncertainty", "tolerances", "maximumDepth", "maximumSampleCount"],
+    "outputs": ["status", "familyId", "encounterModel", "sampling", "samples", "refinementEvents", "warnings", "provenance", "canonSafeguards"]
+  }
+}
