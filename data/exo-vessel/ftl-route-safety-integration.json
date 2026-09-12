@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "1.4.0",
+  "schemaVersion": "1.5.0",
   "registryKey": "blacklight.ftl.route-safety-integration",
   "title": "Black Light FTL Route Safety Integration Registry",
   "status": "MIXED",
-  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; uncertainty-aware conservative blocker envelopes are preserved only when a provenance-bearing topology-hazard applicability authority links the physical precursor to the certified family hazard. Single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
+  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; uncertainty-aware conservative blocker envelopes are preserved only when a provenance-bearing topology-hazard applicability authority links the physical precursor to the certified family hazard. Identity context for named technology, vessel, installation, race/species and manufacturer is forwarded into that applicability authority rather than reduced to caller booleans. Single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
@@ -43,7 +43,8 @@
       "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_PATH_SAFETY_INTEGRATION_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_BOUNDARY_REFINEMENT_AND_INTERVENTION_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_CONSERVATIVE_BLOCKER_CERTIFICATION_AND_PRESENTATION_MANUAL.md",
-      "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md"
+      "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_NAMED_IDENTITY_APPLICABILITY_HANDOFF_MANUAL.md"
     ],
     "statusRule": "Supplied physical route paths outrank single-point physical environments; supplied single-point physical environments outrank route archetypes. Invalid or unresolved supplied physical evidence blocks fallback. Route archetype packets are PROPOSED simulation mappings used only when no physical route/path environment is supplied."
   },
@@ -61,62 +62,14 @@
     "phase-displacement": "phase-displacement"
   },
   "routeArchetypes": {
-    "deep-space": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 0.12, "accelerationMagnitude": 0.08, "tidalTensorNorm": 0.08, "curvatureNorm": 0.08, "massModelUncertainty": 0.10, "hiddenMassProbability": 0.03, "familyBoundaryHazard": 0.08},
-      "uncertaintyBase": 0.06,
-      "requiredHazards": ["gravity-gradient", "route-model-drift", "destination-occupancy"],
-      "notes": "Fallback comparison environment only; not a physical deep-space measurement."
-    },
-    "planetary-well": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 0.80, "accelerationMagnitude": 0.92, "tidalTensorNorm": 0.72, "curvatureNorm": 0.62, "massModelUncertainty": 0.22, "hiddenMassProbability": 0.08, "familyBoundaryHazard": 0.32},
-      "uncertaintyBase": 0.14,
-      "requiredHazards": ["gravity-gradient", "tidal-shear", "mass-shadow", "destination-occupancy"],
-      "notes": "Fallback normalized planetary-well model, not a universal planetary constant."
-    },
-    "gas-giant": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 1.10, "accelerationMagnitude": 1.15, "tidalTensorNorm": 1.08, "curvatureNorm": 0.94, "massModelUncertainty": 0.30, "hiddenMassProbability": 0.10, "familyBoundaryHazard": 0.46},
-      "uncertaintyBase": 0.20,
-      "requiredHazards": ["gravity-gradient", "tidal-shear", "magnetosphere", "plasma-noise", "mass-shadow"],
-      "notes": "Fallback route model; magnetic/plasma observability remains separate from gravity."
-    },
-    "binary": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 1.02, "accelerationMagnitude": 1.20, "tidalTensorNorm": 1.42, "curvatureNorm": 1.18, "massModelUncertainty": 0.38, "hiddenMassProbability": 0.14, "familyBoundaryHazard": 0.62},
-      "uncertaintyBase": 0.26,
-      "requiredHazards": ["gravity-gradient", "tidal-shear", "shear-fork", "moving-barycenter", "route-model-drift"],
-      "notes": "Fallback binary model emphasizing time-varying competing gradients over raw potential."
-    },
-    "compact-object": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 2.40, "accelerationMagnitude": 2.80, "tidalTensorNorm": 3.60, "curvatureNorm": 4.20, "massModelUncertainty": 0.44, "hiddenMassProbability": 0.08, "familyBoundaryHazard": 1.25},
-      "uncertaintyBase": 0.30,
-      "requiredHazards": ["gravity-gradient", "tidal-shear", "curvature-limit", "mass-shadow", "emergence-exclusion"],
-      "notes": "Fallback-only. If real compact-object inputs violate weak-field validity, OUTSIDE_MODEL_VALIDITY blocks certification rather than using this finite archetype."
-    },
-    "nebula": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 0.24, "accelerationMagnitude": 0.20, "tidalTensorNorm": 0.18, "curvatureNorm": 0.16, "massModelUncertainty": 0.32, "hiddenMassProbability": 0.18, "familyBoundaryHazard": 0.36},
-      "uncertaintyBase": 0.28,
-      "requiredHazards": ["plasma-noise", "sensor-scattering", "route-model-drift", "destination-occupancy"],
-      "notes": "Fallback sensor/model uncertainty archetype."
-    },
-    "uncharted": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 0.30, "accelerationMagnitude": 0.28, "tidalTensorNorm": 0.30, "curvatureNorm": 0.28, "massModelUncertainty": 0.86, "hiddenMassProbability": 0.62, "familyBoundaryHazard": 0.54},
-      "uncertaintyBase": 0.56,
-      "requiredHazards": ["hidden-mass", "route-model-drift", "destination-occupancy", "reference-integrity"],
-      "notes": "Fallback unknown-mass/model archetype."
-    },
-    "q-disturbed": {
-      "status": "PROPOSED",
-      "environment": {"potentialMagnitude": 0.42, "accelerationMagnitude": 0.38, "tidalTensorNorm": 0.52, "curvatureNorm": 0.72, "massModelUncertainty": 0.72, "hiddenMassProbability": 0.24, "familyBoundaryHazard": 1.60},
-      "uncertaintyBase": 0.68,
-      "requiredHazards": ["q-boundary", "manifold-topology", "reference-integrity", "route-model-drift", "emergence-exclusion"],
-      "notes": "Fallback higher-dimensional boundary/model uncertainty archetype; exotic boundary terms remain fictional/derived."
-    }
+    "deep-space": {"status":"PROPOSED","environment":{"potentialMagnitude":0.12,"accelerationMagnitude":0.08,"tidalTensorNorm":0.08,"curvatureNorm":0.08,"massModelUncertainty":0.10,"hiddenMassProbability":0.03,"familyBoundaryHazard":0.08},"uncertaintyBase":0.06,"requiredHazards":["gravity-gradient","route-model-drift","destination-occupancy"],"notes":"Fallback comparison environment only; not a physical deep-space measurement."},
+    "planetary-well": {"status":"PROPOSED","environment":{"potentialMagnitude":0.80,"accelerationMagnitude":0.92,"tidalTensorNorm":0.72,"curvatureNorm":0.62,"massModelUncertainty":0.22,"hiddenMassProbability":0.08,"familyBoundaryHazard":0.32},"uncertaintyBase":0.14,"requiredHazards":["gravity-gradient","tidal-shear","mass-shadow","destination-occupancy"],"notes":"Fallback normalized planetary-well model, not a universal planetary constant."},
+    "gas-giant": {"status":"PROPOSED","environment":{"potentialMagnitude":1.10,"accelerationMagnitude":1.15,"tidalTensorNorm":1.08,"curvatureNorm":0.94,"massModelUncertainty":0.30,"hiddenMassProbability":0.10,"familyBoundaryHazard":0.46},"uncertaintyBase":0.20,"requiredHazards":["gravity-gradient","tidal-shear","magnetosphere","plasma-noise","mass-shadow"],"notes":"Fallback route model; magnetic/plasma observability remains separate from gravity."},
+    "binary": {"status":"PROPOSED","environment":{"potentialMagnitude":1.02,"accelerationMagnitude":1.20,"tidalTensorNorm":1.42,"curvatureNorm":1.18,"massModelUncertainty":0.38,"hiddenMassProbability":0.14,"familyBoundaryHazard":0.62},"uncertaintyBase":0.26,"requiredHazards":["gravity-gradient","tidal-shear","shear-fork","moving-barycenter","route-model-drift"],"notes":"Fallback binary model emphasizing time-varying competing gradients over raw potential."},
+    "compact-object": {"status":"PROPOSED","environment":{"potentialMagnitude":2.40,"accelerationMagnitude":2.80,"tidalTensorNorm":3.60,"curvatureNorm":4.20,"massModelUncertainty":0.44,"hiddenMassProbability":0.08,"familyBoundaryHazard":1.25},"uncertaintyBase":0.30,"requiredHazards":["gravity-gradient","tidal-shear","curvature-limit","mass-shadow","emergence-exclusion"],"notes":"Fallback-only. If real compact-object inputs violate weak-field validity, OUTSIDE_MODEL_VALIDITY blocks certification rather than using this finite archetype."},
+    "nebula": {"status":"PROPOSED","environment":{"potentialMagnitude":0.24,"accelerationMagnitude":0.20,"tidalTensorNorm":0.18,"curvatureNorm":0.16,"massModelUncertainty":0.32,"hiddenMassProbability":0.18,"familyBoundaryHazard":0.36},"uncertaintyBase":0.28,"requiredHazards":["plasma-noise","sensor-scattering","route-model-drift","destination-occupancy"],"notes":"Fallback sensor/model uncertainty archetype."},
+    "uncharted": {"status":"PROPOSED","environment":{"potentialMagnitude":0.30,"accelerationMagnitude":0.28,"tidalTensorNorm":0.30,"curvatureNorm":0.28,"massModelUncertainty":0.86,"hiddenMassProbability":0.62,"familyBoundaryHazard":0.54},"uncertaintyBase":0.56,"requiredHazards":["hidden-mass","route-model-drift","destination-occupancy","reference-integrity"],"notes":"Fallback unknown-mass/model archetype."},
+    "q-disturbed": {"status":"PROPOSED","environment":{"potentialMagnitude":0.42,"accelerationMagnitude":0.38,"tidalTensorNorm":0.52,"curvatureNorm":0.72,"massModelUncertainty":0.72,"hiddenMassProbability":0.24,"familyBoundaryHazard":1.60},"uncertaintyBase":0.68,"requiredHazards":["q-boundary","manifold-topology","reference-integrity","route-model-drift","emergence-exclusion"],"notes":"Fallback higher-dimensional boundary/model uncertainty archetype; exotic boundary terms remain fictional/derived."}
   },
   "familyHazards": {
     "metric-compression": ["curvature-limit", "field-symmetry", "unwind-path"],
@@ -134,11 +87,15 @@
     "runtime": "blacklight-exo-ftl-topology-hazard-applicability-runtime.js",
     "physicalEvidenceType": "NORMALIZED_TIDAL_DEGENERACY_BOUNDARY",
     "genericBlockerAuthorizingRelationship": "REQUIRED_PHYSICAL_PRECURSOR",
-    "rule": "Applicability must resolve from canon/provenance. No match is UNRESOLVED, contradiction is CONFLICT, SUPPORTING_PHYSICAL_PRECURSOR is non-blocking, and raw caller booleans are not authority."
+    "identityPrecedence": ["INSTALLATION","VESSEL","NAMED_TECHNOLOGY","MANUFACTURER","RACE","FAMILY"],
+    "identityInputs": ["namedTechnologyId","vesselId","installationId","raceId","manufacturerId"],
+    "rule": "Applicability must resolve from canon/provenance. The route-safety adapter forwards identity fields unchanged to family-segment certification; it does not infer them from presentation labels and does not substitute a boolean. No match is UNRESOLVED, contradiction is CONFLICT, SUPPORTING_PHYSICAL_PRECURSOR is non-blocking, and raw caller booleans are not authority."
   },
   "integrationRules": [
     "The adapter must preserve the generated family and must never use certification to auto-select a different family.",
     "When physicalRoutePathContext, pathPacket, or segmentPacket is supplied, route safety must use family-segment certification and must not collapse the route back into a single-point certificate.",
+    "Route safety must forward namedTechnologyId, vesselId, installationId, raceId, manufacturerId, canonicalResolutionRequired, topologyHazardKey, any pre-resolved applicability packet, and any explicitly simulation-only applicability override into family-segment certification without replacing those fields with a caller boolean.",
+    "Identity fields are provenance selectors, not family selectors: race/species, vessel, manufacturer or installation identity may select a more specific applicability record only after the transit family/hazard is independently established.",
     "Family-certified route disposition is conjunctive across required intervals; later benign intervals cannot erase an earlier blocker.",
     "The first blocking interval, nominal distance/time to blocker, authorized conservative distance/time to blocker, intervention reachability, and topology-hazard applicability provenance must survive into the route-level result.",
     "A normalized-degeneracy or topology boundary may move the conservative planning edge earlier only when the topology-hazard applicability authority resolves a matching REQUIRED_PHYSICAL_PRECURSOR relationship to the already-certified hazard. Otherwise it remains displayable evidence but cannot alter route certification.",
@@ -172,6 +129,7 @@
     "Do not invent a family-boundary hazard from ordinary gravity or from a generic route archetype for a physical path.",
     "Do not promote a physical topology boundary into an FTL blocker without a provenance-bearing REQUIRED_PHYSICAL_PRECURSOR authority connecting it to the certified hazard.",
     "Do not substitute a raw boolean for canonical topology-hazard applicability.",
+    "Do not infer family identity from named technology terminology, race/species identity, machinery ancestry, manufacturer, vessel class or installation identity unless an authority explicitly establishes that mapping.",
     "Do not certify a route when calibration or supplied physical validity is unresolved or conflicting.",
     "Do not hide REJECTED, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY behind a generated performance number.",
     "Do not infer a named civilization or installation limit from the generic simulation baseline.",
