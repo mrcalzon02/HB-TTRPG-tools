@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-installation-safety-timing.schema.json",
+  "title": "Black Light FTL Installation Safety Timing Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
+  "properties": {
+    "status": {"enum": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]},
+    "timing": {"$ref": "#/$defs/timing"},
+    "recovery": {"type": ["object", "null"]},
+    "selectedRecord": {"type": ["object", "null"]},
+    "readiness": {"$ref": "#/$defs/readiness"},
+    "appliedFactors": {
+      "type": "object",
+      "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "timing": {
+      "type": ["object", "null"],
+      "additionalProperties": true,
+      "properties": {
+        "predictionTime": {"type": "number", "minimum": 0},
+        "sensorTime": {"type": "number", "minimum": 0},
+        "solverTime": {"type": "number", "minimum": 0},
+        "decisionTime": {"type": "number", "minimum": 0},
+        "commandTime": {"type": "number", "minimum": 0},
+        "actuationTime": {"type": "number", "minimum": 0},
+        "exitTime": {"type": "number", "minimum": 0},
+        "clearTime": {"type": "number", "minimum": 0},
+        "marginTime": {"type": "number", "minimum": 0},
+        "decisionHorizonMode": {"type": "string"}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sensor", "navigation", "reference", "solver", "command", "actuator", "exit", "clearance", "recovery", "thermal", "structure"],
+      "properties": {
+        "sensor": {"type": "number", "maximum": 1},
+        "navigation": {"type": "number", "maximum": 1},
+        "reference": {"type": "number", "maximum": 1},
+        "solver": {"type": "number", "maximum": 1},
+        "command": {"type": "number", "maximum": 1},
+        "actuator": {"type": "number", "maximum": 1},
+        "exit": {"type": "number", "maximum": 1},
+        "clearance": {"type": "number", "maximum": 1},
+        "recovery": {"type": "number", "maximum": 1},
+        "thermal": {"type": "number", "maximum": 1},
+        "structure": {"type": "number", "maximum": 1}
+      }
+    }
+  }
+}
