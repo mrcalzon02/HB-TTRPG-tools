@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-time-aware-route-path.schema.json",
+  "title": "Black Light Time-Aware FTL Route Path Packet",
+  "type": "object",
+  "required": ["schemaVersion", "status", "routeEpoch", "encounterModel", "warnings", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "routeEpoch": {"type": ["string", "number", "null"]},
+    "encounterModel": {"enum": ["ROUTE_EPOCH_SNAPSHOT", "CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT_ENDPOINT"]},
+    "sourceStatePacket": {"type": ["object", "null"]},
+    "pathPacket": {"type": ["object", "null"]},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
