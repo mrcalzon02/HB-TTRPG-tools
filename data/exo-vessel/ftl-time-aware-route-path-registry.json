@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.time-aware-route-path",
+  "title": "Black Light Time-Aware Physical FTL Route Path Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Family-specific gravity sensitivity, route miscalculation, predictive safety and realistic mathematical underlays require gravitational source positions to carry epoch and uncertainty rather than remain frozen forever at a catalog snapshot."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "BLACKLIGHT_EXO_SOURCE_AUTHORITY.md",
+    "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
+    "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
+    "data/exo-vessel/ftl-physical-route-path-registry.json",
+    "blacklight-exo-ftl-physical-route-path-runtime.js"
+  ],
+  "integrationPolicy": {
+    "currentEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
+    "currentRule": "Propagate every supplied authoritative gravitational source from its source epoch to one declared route epoch before physical route sampling.",
+    "sourceRequirement": "A source used for time-aware propagation requires position, velocity and source epoch. Missing velocity is unresolved motion, not zero motion.",
+    "covarianceRule": "Propagated covariance and process-noise ancestry remain attached to the source-state packet. Missing covariance keeps the result PARTIAL rather than implying perfect certainty.",
+    "validityRule": "OUTSIDE_MODEL_VALIDITY from source propagation blocks route sampling. It is not converted into a large finite route-severity score.",
+    "nextFidelity": "Family-dependent encounter-time sampling t(s) remains PROPOSED until the route representation provides a defensible mapping from route fraction to encounter epoch."
+  },
+  "physicalMathematics": {
+    "state": "z = [r, v]^T",
+    "linearPropagation": "r(t)=r0+v0*Delta_t; v(t)=v0",
+    "constantAccelerationPropagation": "r(t)=r0+v0*Delta_t+0.5*a*Delta_t^2; v(t)=v0+a*Delta_t",
+    "covariance": "Sigma(t)=F Sigma0 F^T + Q",
+    "routeSampling": "r_path(s)=r_A+s(r_B-r_A), 0<s<1",
+    "safeguard": "Source-state propagation changes the gravitational source geometry supplied to ordinary gravity calculations; it does not establish any fictional FTL family as physically real."
+  },
+  "futureEncounterModels": {
+    "CONTINUOUS_PROJECTED_PROGRESS": {
+      "status": "PROPOSED",
+      "equation": "t(s)=t0+s*L/v_progress only when v_progress is a defined route/control representation for that family",
+      "warning": "v_progress is not a claim of local real-space superluminal motion."
+    },
+    "PRECOMMIT_ENDPOINT": {
+      "status": "PROPOSED",
+      "families": ["Fold Jump", "Q-Lattice Phase Translation", "Phase Displacement"],
+      "rule": "Use commitment and emergence epochs rather than fabricate a local progress speed."
+    }
+  },
+  "canonSafeguards": [
+    "This registry does not establish that any FTL method is physically realizable.",
+    "Propagated source states are derived engineering estimates at a target epoch, not new historical canon.",
+    "Named race, vessel, manufacturer and installation sources outrank this generic integration layer within their documented scope.",
+    "A simulation-selected family does not establish that a named civilization uses that family.",
+    "Missing source velocity, covariance, epoch, acceleration or model-validity evidence may not be silently replaced by zero.",
+    "A route-epoch snapshot is not equivalent to a fully time-resolved encounter model; the distinction must remain visible in provenance and user-facing documentation.",
+    "Fold, Q-Lattice and Phase Displacement may not be assigned a fabricated continuous superluminal progress velocity merely to simplify encounter-time mathematics."
+  ],
+  "api": {
+    "resolver": "resolveFTLTimeAwareRoutePath",
+    "inputs": ["from", "to", "routeEpoch", "sourceStates", "sourcePropagation", "referenceFrame", "sampleCount", "endpointGuardM", "fractions", "adaptiveRefinement", "uncertainty"],
+    "outputs": ["status", "routeEpoch", "encounterModel", "sourceStatePacket", "pathPacket", "warnings", "provenance", "canonSafeguards"]
+  }
+}
