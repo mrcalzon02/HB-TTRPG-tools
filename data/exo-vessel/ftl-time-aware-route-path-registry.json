@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.time-aware-route-path",
   "title": "Black Light Time-Aware Physical FTL Route Path Registry",
   "status": "DERIVED",
@@ -15,15 +15,20 @@
     "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
     "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
     "data/exo-vessel/ftl-physical-route-path-registry.json",
-    "blacklight-exo-ftl-physical-route-path-runtime.js"
+    "blacklight-exo-ftl-physical-route-path-runtime.js",
+    "data/exo-vessel/ftl-family-encounter-time-registry.json",
+    "data/schemas/exo-vessel-ftl-family-encounter-time.schema.json",
+    "blacklight-exo-ftl-family-encounter-time-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_ENCOUNTER_TIME_ENGINEERING_MANUAL.md"
   ],
   "integrationPolicy": {
-    "currentEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
-    "currentRule": "Propagate every supplied authoritative gravitational source from its source epoch to one declared route epoch before physical route sampling.",
+    "snapshotEncounterModel": "ROUTE_EPOCH_SNAPSHOT",
+    "snapshotRule": "The existing resolveFTLTimeAwareRoutePath runtime remains a bounded route-epoch snapshot: propagate every supplied authoritative gravitational source to one declared route epoch before physical route sampling.",
+    "familyEncounterAuthority": "Family-dependent encounter timing is implemented by blacklight-exo-ftl-family-encounter-time-runtime.js and does not silently change the semantics of the snapshot resolver.",
     "sourceRequirement": "A source used for time-aware propagation requires position, velocity and source epoch. Missing velocity is unresolved motion, not zero motion.",
     "covarianceRule": "Propagated covariance and process-noise ancestry remain attached to the source-state packet. Missing covariance keeps the result PARTIAL rather than implying perfect certainty.",
-    "validityRule": "OUTSIDE_MODEL_VALIDITY from source propagation blocks route sampling. It is not converted into a large finite route-severity score.",
-    "nextFidelity": "Family-dependent encounter-time sampling t(s) remains PROPOSED until the route representation provides a defensible mapping from route fraction to encounter epoch."
+    "validityRule": "OUTSIDE_MODEL_VALIDITY from source propagation blocks physical evaluation. It is not converted into a large finite route-severity score.",
+    "nextFidelity": "Adaptive encounter-time path refinement and higher-fidelity N-body/post-Newtonian source dynamics remain future work; the family encounter-time layer now supplies distinct continuous, precommit and anchored-portal timing policies."
   },
   "physicalMathematics": {
     "state": "z = [r, v]^T",
@@ -31,18 +36,28 @@
     "constantAccelerationPropagation": "r(t)=r0+v0*Delta_t+0.5*a*Delta_t^2; v(t)=v0+a*Delta_t",
     "covariance": "Sigma(t)=F Sigma0 F^T + Q",
     "routeSampling": "r_path(s)=r_A+s(r_B-r_A), 0<s<1",
+    "continuousEncounterTime": "t(s)=t0+s*L/v_progress when the selected family/controller provides a defensible projected-progress representation",
     "safeguard": "Source-state propagation changes the gravitational source geometry supplied to ordinary gravity calculations; it does not establish any fictional FTL family as physically real."
   },
-  "futureEncounterModels": {
+  "encounterModels": {
     "CONTINUOUS_PROJECTED_PROGRESS": {
-      "status": "PROPOSED",
+      "status": "DERIVED",
+      "implementation": "blacklight-exo-ftl-family-encounter-time-runtime.js",
+      "families": ["metric-envelope", "gravitic-plane", "slipstream-shear", "n-manifold", "inertial-torch"],
       "equation": "t(s)=t0+s*L/v_progress only when v_progress is a defined route/control representation for that family",
-      "warning": "v_progress is not a claim of local real-space superluminal motion."
+      "warning": "For true-FTL families, v_progress is not automatically a claim of local real-space superluminal hull motion."
     },
     "PRECOMMIT_ENDPOINT": {
-      "status": "PROPOSED",
-      "families": ["Fold Jump", "Q-Lattice Phase Translation", "Phase Displacement"],
-      "rule": "Use commitment and emergence epochs rather than fabricate a local progress speed."
+      "status": "DERIVED",
+      "implementation": "blacklight-exo-ftl-family-encounter-time-runtime.js",
+      "families": ["q-lattice", "fold-jump", "phase-displacement"],
+      "rule": "Use explicit commitment and emergence epochs rather than fabricate intermediate ordinary-space encounter times or a local FTL speed."
+    },
+    "ANCHORED_PORTAL": {
+      "status": "DERIVED",
+      "implementation": "blacklight-exo-ftl-family-encounter-time-runtime.js",
+      "families": ["wormhole-gate"],
+      "rule": "Evaluate entry-mouth and exit-mouth environments at explicit anchor encounter epochs; do not imply ordinary-space traversal between mouths."
     }
   },
   "canonSafeguards": [
@@ -51,12 +66,16 @@
     "Named race, vessel, manufacturer and installation sources outrank this generic integration layer within their documented scope.",
     "A simulation-selected family does not establish that a named civilization uses that family.",
     "Missing source velocity, covariance, epoch, acceleration or model-validity evidence may not be silently replaced by zero.",
-    "A route-epoch snapshot is not equivalent to a fully time-resolved encounter model; the distinction must remain visible in provenance and user-facing documentation.",
-    "Fold, Q-Lattice and Phase Displacement may not be assigned a fabricated continuous superluminal progress velocity merely to simplify encounter-time mathematics."
+    "A route-epoch snapshot is not equivalent to a family-dependent encounter model; the distinction remains visible in API identity, provenance and documentation.",
+    "Fold, Q-Lattice and Phase Displacement may not be assigned a fabricated continuous superluminal progress velocity merely to simplify encounter-time mathematics.",
+    "Anchored wormhole/gate transit may not be represented as ordinary-space corridor traversal solely to reuse continuous route equations.",
+    "Ordinary gravity/curvature packets remain separate from operator-specific exotic boundary state."
   ],
   "api": {
-    "resolver": "resolveFTLTimeAwareRoutePath",
-    "inputs": ["from", "to", "routeEpoch", "sourceStates", "sourcePropagation", "referenceFrame", "sampleCount", "endpointGuardM", "fractions", "adaptiveRefinement", "uncertainty"],
-    "outputs": ["status", "routeEpoch", "encounterModel", "sourceStatePacket", "pathPacket", "warnings", "provenance", "canonSafeguards"]
+    "snapshotResolver": "resolveFTLTimeAwareRoutePath",
+    "familyEncounterResolver": "resolveFTLFamilyEncounterTime",
+    "snapshotInputs": ["from", "to", "routeEpoch", "sourceStates", "sourcePropagation", "referenceFrame", "sampleCount", "endpointGuardM", "fractions", "adaptiveRefinement", "uncertainty"],
+    "familyEncounterInputs": ["familyId", "from", "to", "sourceStates", "referenceFrame", "routeStartEpoch", "fractions", "projectedProgressMPerS", "progressSemantic", "commitmentEpoch", "emergenceEpoch", "entryEpoch", "exitEpoch", "sourcePropagation", "uncertainty"],
+    "outputs": ["status", "encounterModel", "source-state evidence", "physical environment evidence", "warnings", "provenance", "canonSafeguards"]
   }
 }
