@@ -46,6 +46,36 @@
     return out;
   }
 
+  async function resolveSectionalReadiness(inputReadiness,context={},provenance=[]){
+    if(context.sectionalTopologyPacket&&typeof context.sectionalTopologyPacket==='object'){
+      const packet=context.sectionalTopologyPacket;
+      const aggregate=packet.aggregateReadiness||{};
+      const readiness={...inputReadiness};
+      CHANNELS.forEach(channel=>{
+        if(finite(aggregate[channel]))readiness[channel]=Math.min(readiness[channel],clamp01(aggregate[channel]));
+      });
+      return {packet,readiness};
+    }
+    if(!context.sectionalNetwork)return {packet:null,readiness:{...inputReadiness}};
+    const Runtime=globalThis.BlacklightExoFTLSectionalDependencyTopologyRuntime;
+    if(!Runtime?.resolveFTLSectionalDependencyTopology){
+      return {packet:deepFreeze({status:STATUS.UNRESOLVED,warnings:['Sectional network evidence was supplied but the sectional dependency topology runtime is not loaded.'],provenance:unique(provenance)}),readiness:{...inputReadiness}};
+    }
+    const packet=await Runtime.resolveFTLSectionalDependencyTopology({
+      readiness:inputReadiness,
+      network:context.sectionalNetwork,
+      profileId:context.sectionalProfileId,
+      profile:context.sectionalProfile,
+      serviceChannelMap:context.serviceChannelMap,
+      provenance
+    });
+    const readiness={...inputReadiness};
+    CHANNELS.forEach(channel=>{
+      if(finite(packet?.aggregateReadiness?.[channel]))readiness[channel]=Math.min(readiness[channel],clamp01(packet.aggregateReadiness[channel]));
+    });
+    return {packet,readiness};
+  }
+
   function normalizedHighStress(value,nominal,limit){
     if(!finite(value)||!finite(nominal)||!finite(limit)||Number(limit)<=Number(nominal))return null;
     return clamp01((Number(value)-Number(nominal))/(Number(limit)-Number(nominal)));
@@ -73,7 +103,7 @@
       signatures.powerDeficitW=deficit;
       stress.power=load>0?clamp01(deficit/load):0;
       if(deficit>0&&finite(transient.bufferEnergyJ)){
-        projection.powerHoldTime= Math.max(0,Number(transient.bufferEnergyJ))/deficit;
+        projection.powerHoldTime=Math.max(0,Number(transient.bufferEnergyJ))/deficit;
         if(horizon!==null&&projection.powerHoldTime<horizon){
           stress.power=1;
           hardBlock=true;
@@ -132,35 +162,50 @@
   async function resolveFTLCoupledDegradation(context={}){
     const registry=context.registry||await loadRegistry();
     const selected=selectProfile(registry,context);
-    const inputReadiness=normalizeReadiness(context.readiness||{});
-    const warnings=[...(selected.warnings||[])];
+    const rawInputReadiness=normalizeReadiness(context.readiness||{});
+    const provenance=unique([registry.registryKey,...(context.provenance||[])]);
+    const sectional=await resolveSectionalReadiness(rawInputReadiness,context,provenance);
+    const inputReadiness=sectional.readiness;
+    const warnings=[...(selected.warnings||[]),...(sectional.packet?.warnings||[])];
+
+    if(sectional.packet?.status===STATUS.CONFLICT){
+      warnings.push('Sectional dependency authority conflicts; coupled degradation cannot safely average contradictory infrastructure topology.');
+      return deepFreeze({status:STATUS.CONFLICT,profile:selected.profile,inputReadiness:rawInputReadiness,effectiveReadiness:{...rawInputReadiness},sectionalTopology:sectional.packet,driverStress:Object.fromEntries(DRIVERS.map(d=>[d,0])),transientProjection:{},dominantContributions:{},blockedChannels:[],signatures:{},warnings,provenance:unique([...provenance,...(sectional.packet.provenance||[])])});
+    }
+
     if(selected.status!==STATUS.READY){
-      return deepFreeze({status:selected.status,profile:selected.profile,inputReadiness,effectiveReadiness:{...inputReadiness},driverStress:Object.fromEntries(DRIVERS.map(d=>[d,0])),transientProjection:{},dominantContributions:{},blockedChannels:[],signatures:{},warnings,provenance:unique([registry.registryKey,...(context.provenance||[])])});
+      return deepFreeze({status:selected.status,profile:selected.profile,inputReadiness:rawInputReadiness,effectiveReadiness:{...inputReadiness},sectionalTopology:sectional.packet,driverStress:Object.fromEntries(DRIVERS.map(d=>[d,0])),transientProjection:{},dominantContributions:{},blockedChannels:CHANNELS.filter(channel=>inputReadiness[channel]<=0),signatures:{},warnings,provenance:unique([...provenance,...(sectional.packet?.provenance||[])])});
     }
 
     const transient=evaluateTransient(context.transientState||{},context.interventionHorizon);
     warnings.push(...transient.warnings);
     const coupled=applyCouplings(inputReadiness,transient.stress,selected.profile);
     const blockedChannels=CHANNELS.filter(channel=>coupled.effective[channel]<=0);
+    if(sectional.packet?.status===STATUS.BLOCKED){
+      const sectionalBlocked=CHANNELS.filter(channel=>finite(sectional.packet.aggregateReadiness?.[channel])&&Number(sectional.packet.aggregateReadiness[channel])<=0);
+      sectionalBlocked.forEach(channel=>{coupled.effective[channel]=0;if(!blockedChannels.includes(channel))blockedChannels.push(channel);});
+      warnings.push('One or more declared sectional safety groups are blocked; their affected readiness channels remain blocked downstream.');
+    }
     if(transient.hardBlock&&!blockedChannels.length){
       ['solver','actuator','exit','recovery','thermal'].forEach(channel=>{coupled.effective[channel]=0;if(!blockedChannels.includes(channel))blockedChannels.push(channel);});
       warnings.push('A declared hard power/thermal limit was crossed; safety-critical dependent channels are blocked rather than assigned an arbitrary finite penalty.');
     }
-    const degraded=CHANNELS.filter(channel=>coupled.effective[channel]<inputReadiness[channel]-1e-12);
-    if(degraded.length)warnings.push(`Common-cause transient evidence reduces readiness in: ${degraded.join(', ')}.`);
+    const degraded=CHANNELS.filter(channel=>coupled.effective[channel]<rawInputReadiness[channel]-1e-12);
+    if(degraded.length)warnings.push(`Sectional/common-cause evidence reduces readiness in: ${degraded.join(', ')}.`);
     const status=blockedChannels.length?STATUS.BLOCKED:STATUS.READY;
     return deepFreeze({
       status,
       profile:selected.profile,
-      inputReadiness,
+      inputReadiness:rawInputReadiness,
       effectiveReadiness:coupled.effective,
+      sectionalTopology:sectional.packet,
       driverStress:transient.stress,
       transientProjection:transient.projection,
       dominantContributions:coupled.contributions,
       blockedChannels,
       signatures:transient.signatures,
       warnings,
-      provenance:unique([registry.registryKey,selected.profile.profileId,...(context.provenance||[])])
+      provenance:unique([...provenance,selected.profile.profileId,...(sectional.packet?.provenance||[])])
     });
   }
 
