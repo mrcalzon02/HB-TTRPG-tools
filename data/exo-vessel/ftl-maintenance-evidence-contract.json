@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.maintenance-evidence-contract",
+  "status": "DERIVED",
+  "scope": "Cross-civilization maintenance, repair, refit, and return-to-service evidence contract for propulsion/transit systems. Defines evidence semantics without prescribing a universal machinery embodiment.",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "scope": "Family-specific gravity and miscalculation penalties, predictive safety sensing, emergency de-transit, maturity-scaled redundancy, physically plausible mathematics, and deep technical documentation."
+    },
+    "speciesSpecificExamples": [
+      "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
+      "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json"
+    ]
+  },
+  "coreInvariant": "Comparable certification questions do not imply comparable tools, materials, service boundaries, or machinery.",
+  "evidenceClasses": {
+    "IDENTITY": "What exact installation, module, refit, software/logic revision, calibration state, and ancestry are being certified?",
+    "INTERFACE": "Are mechanical, electrical, fluid, thermal, data, reference, and environmental interfaces within their declared service contracts?",
+    "STATIC_HEALTH": "Does the repaired system pass non-transient checks appropriate to its technology basis?",
+    "DYNAMIC_HEALTH": "Does the system remain within limits under representative load, timing, motion, field, flow, pressure, thermal, or biological demand?",
+    "CALIBRATION": "Are measurement, timing, alignment, reference, and control-state calibrations traceable and current?",
+    "TIMING": "Does the complete safety intervention chain remain within certified bounds after repair or refit?",
+    "POWER_RESERVE": "Can protected power/energy stores sustain the required emergency sequence, including peak-power constraints?",
+    "THERMAL_RESERVE": "Can the installation survive and reject heat through the complete emergency sequence without exceeding certified limits?",
+    "SECTIONAL_TOPOLOGY": "Do required power, cooling, command, sensor, recovery, hydraulic, dielectric, metabolic, or other service paths still reach their consumers with sufficient readiness and latency?",
+    "FAMILY_SPECIFIC": "Does the selected transit family still satisfy its own route, sensing, topology, endpoint, field, mouth, or de-transit requirements?",
+    "PROVENANCE": "Can each conclusion be traced to source evidence, engineering controls, calibration records, refit records, or explicitly labeled simulation assumptions?"
+  },
+  "returnToServiceStates": {
+    "CERTIFIED": "All required evidence classes are satisfied for the intended operating envelope.",
+    "CONDITIONALLY_CERTIFIED": "Operation is allowed only inside a narrower explicitly recorded envelope.",
+    "BLOCKED": "One or more required safety conditions fail.",
+    "UNRESOLVED": "Evidence is insufficient to establish safety; unknown is not treated as pass.",
+    "CONFLICT": "Equal-authority evidence disagrees and cannot be resolved by precedence.",
+    "SIMULATION_ONLY": "The packet is valid only for a labeled simulation or generator scenario and is not setting canon."
+  },
+  "universalEquations": {
+    "interventionTime": {
+      "equation": "t_int = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
+      "status": "DERIVED_ENGINEERING"
+    },
+    "protectedEnergyMargin": {
+      "equation": "M_E = E_available,protected,lower - E_required,upper",
+      "status": "DERIVED_ENGINEERING"
+    },
+    "peakPowerConstraint": {
+      "equation": "P_available,lower(t) >= P_required,upper(t) for every safety-critical interval",
+      "status": "DERIVED_ENGINEERING"
+    },
+    "shortThermalTransient": {
+      "equation": "C_th dT/dt = P_heat - P_reject",
+      "status": "DERIVED_PHYSICS"
+    },
+    "distributedControl": {
+      "equation": "Pi_c = L_c/(v_c tau_r)",
+      "status": "DERIVED_ENGINEERING"
+    },
+    "continuousMargin": {
+      "equation": "M_T = D_B/v_p - t_int",
+      "status": "DERIVED_ENGINEERING",
+      "safeguard": "v_p is projected route progress, not local hull velocity."
+    },
+    "precommitMargin": {
+      "equation": "M_T = t_prediction - t_int",
+      "status": "DERIVED_ENGINEERING",
+      "safeguard": "Do not invent along-route local velocity for PRECOMMIT families."
+    }
+  },
+  "technologyBasisEmbodiments": {
+    "terrestrial-electromechanical": {
+      "typicalEvidence": ["electrical characterization", "bus timing", "component/module thermal response", "mechanical alignment", "software/firmware identity", "protected electrical reserve"],
+      "prohibitedShortcut": "Do not assume PCB/component-level repair applies to non-terrestrial machinery."
+    },
+    "arnock-solid-state-modular": {
+      "authority": "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
+      "typicalEvidence": ["module identity and ancestry", "solid-state electrical characterization", "piezoelectric resonance/impedance", "datum/alignment", "timing/protocol validation", "thermal soak"],
+      "serviceBoundary": "Complete functional module by default; internal foundry-level reconstruction is a separate capability.",
+      "prohibitedShortcut": "Do not default Ar'nock repair to biotechnology, cultivated computation, or biological field organs."
+    },
+    "zwlei-murrek-fluid-vane": {
+      "typicalEvidence": ["field-vane symmetry", "dielectric-fluid condition", "hydraulic authority", "bio-reactive power-fluid state", "coolant flow", "navigation-current reference agreement", "sensor-choir/ampulla evidence"],
+      "prohibitedShortcut": "Do not infer gravitational-plane or slipstream-shear family identity merely from the phrase gravitic slipstream."
+    },
+    "mineral-piezo-photonic": {
+      "typicalEvidence": ["resonance linewidth", "polarization/domain state", "optical phase/reference integrity", "fracture mapping", "thermal drift"],
+      "prohibitedShortcut": "Do not treat resonance evidence as a unique exotic-field measurement without an explicit sensor mapping."
+    },
+    "biological-symbiotic-exception": {
+      "typicalEvidence": ["tissue or organism health", "signal latency", "metabolic reserve", "transport/perfusion", "biochemical isolation", "control-state reproducibility"],
+      "prohibitedShortcut": "Use only when a specific source actually establishes biological machinery."
+    },
+    "gas-giant-volumetric": {
+      "typicalEvidence": ["pressure-field state", "electrostatic confinement", "volumetric reference agreement", "flow/stratification state", "distributed timing"],
+      "prohibitedShortcut": "Do not force discrete terrestrial module boundaries onto volumetric machinery."
+    },
+    "hybrid-salvage": {
+      "typicalEvidence": ["native subsystem evidence", "adapter evidence", "cross-domain timing", "interface load", "calibration ancestry", "refit authority"],
+      "prohibitedShortcut": "Operator identity does not erase original manufacturer, species, or subsystem ancestry."
+    }
+  },
+  "familySemanticAdapters": {
+    "CONTINUOUS_PROJECTED_PROGRESS": {
+      "families": ["metric-envelope", "gravitational-plane", "slipstream-shear", "n-manifold", "inertial-torch"],
+      "rule": "Intervention timing may be compared to remaining projected route progress."
+    },
+    "PRECOMMIT_ENDPOINT": {
+      "families": ["q-lattice", "fold-jump", "phase-displacement"],
+      "rule": "Use endpoint prediction and precommit timing margin; do not create an along-route intervention distance."
+    },
+    "ANCHORED_PORTAL": {
+      "families": ["wormhole-gate"],
+      "rule": "Use mouth admission, synchronization, throat/aperture state, exit, clearance, and recovery evidence."
+    }
+  },
+  "provenanceRules": [
+    "Every accepted field retains source, evidence class, scope, epoch/revision, and status.",
+    "Missing covariance is not zero covariance.",
+    "Missing latency is not zero latency.",
+    "Missing calibration is not zero error.",
+    "Unknown reserve is not adequate reserve.",
+    "Simulation defaults remain SIMULATION_ONLY and never promote themselves to canon.",
+    "A repair can worsen an unresolved named baseline, but unresolved identity cannot create a performance bonus.",
+    "Machinery signature is not sufficient to infer FTL family unless a higher authority explicitly maps it."
+  ],
+  "generatorRules": [
+    "Resolve technology basis before choosing tools or maintenance vocabulary.",
+    "Resolve transit family independently from species and machinery style.",
+    "Emit required evidence classes before producing a CERTIFIED result.",
+    "Preserve baseline and post-service measurements separately.",
+    "Represent uncertainty explicitly with bounds/status rather than fabricated precision.",
+    "Use species/manufacturer-specific service doctrine when it exists; otherwise remain generic and labeled.",
+    "Do not collapse power, stored energy, thermal capacity, actuator authority, and route sensing into one readiness scalar in presentation.",
+    "Do not allow a successful subsystem self-test to substitute for family-specific transit recertification."
+  ]
+}
