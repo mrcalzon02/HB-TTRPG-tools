@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.arnock.maintenance-fabrication",
+  "species": "Ar'nock",
+  "status": "AUTHORITATIVE_CORRECTION",
+  "scope": "General Ar'nock solid-state electromechanical maintenance, fabrication, service documentation, propulsion/transit refit, and recertification grammar.",
+  "authority": {
+    "technologyBasis": "data/blacklight-continuum/wiki/arnock-technology-authority.json",
+    "serviceStandard": "docs/blacklight/ARNOCK_SYSTEMS_MAINTENANCE_FABRICATION_STANDARD.md",
+    "documentationIndex": "docs/blacklight/ARNOCK_SYSTEMS_DOCUMENTATION_INDEX.md",
+    "propulsionProfile": "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+    "transitAuthority": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "scope": "Family-specific gravity sensitivity, predictive safety sensing, emergency de-transit, maturity-scaled redundancy, realistic mathematical limits, and generations-deep technical documentation."
+    }
+  },
+  "technologyInvariants": [
+    "General Ar'nock machinery defaults to solid-state electromechanical modular construction.",
+    "General computation defaults to solid-state silicon.",
+    "Piezoelectric sensing and actuation are characteristic but do not substitute for family-specific exotic sensors.",
+    "Complete functional assemblies are the normal field-service boundary.",
+    "Bioprinting is secondary support technology unless a subsystem-level source establishes a biological exception.",
+    "Species identity does not select an FTL family.",
+    "Service documentation never promotes DERIVED or PROPOSED values to CONFIRMED canon."
+  ],
+  "serviceLevels": {
+    "L0": {"name": "operator-inspection", "allowed": ["external inspection", "indicator review", "basic self-test", "safe shutdown"]},
+    "L1": {"name": "field-module-exchange", "allowed": ["isolate", "identity capture", "complete module exchange", "basic return-to-service checks"]},
+    "L2": {"name": "bay-service", "allowed": ["precision alignment", "calibration", "thermal soak", "timing validation", "load simulation"]},
+    "L3": {"name": "depot-rebuild", "allowed": ["deep characterization", "controlled module opening", "internal reconstruction", "controlled refabrication"]},
+    "L4": {"name": "foundry-remanufacture", "allowed": ["integrated substrate reconstruction", "material-process recreation", "full module remanufacture"]}
+  },
+  "toolClasses": {
+    "identity-provenance": {"requiredEvidence": ["module identity", "hardware revision", "logic revision", "calibration revision", "installation ancestry", "service history"]},
+    "electrical-characterization": {"measurements": ["continuity", "insulation resistance", "leakage", "controlled IV response", "bus termination", "load response"]},
+    "piezo-resonance": {"measurements": ["impedance magnitude", "impedance phase", "resonance frequency", "antiresonance frequency", "quality factor", "drive-response symmetry"]},
+    "thermal": {"measurements": ["temperature", "temperature rise rate", "heat rejection", "coolant interface state", "thermal soak stability"]},
+    "mechanical-metrology": {"measurements": ["datum position", "alignment", "gap", "flatness", "preload evidence", "vibration response"]},
+    "bus-timing-protocol": {"measurements": ["propagation delay", "clock agreement", "error counters", "arbitration", "deterministic endpoint response"]},
+    "fabrication-joining": {"capabilities": ["precision deposition", "controlled-atmosphere joining", "surface preparation", "encapsulation", "dimensional verification"]},
+    "clean-handling": {"controls": ["electrostatic control", "contamination control", "moisture/chemistry control", "connector protection"]},
+    "biological-support": {"defaultDomains": ["feedstock", "food", "medical", "environmental", "life support"], "prohibitedAsDefaultFor": ["compute repair", "power repair", "propulsion repair", "FTL field machinery repair"]}
+  },
+  "measurementModels": {
+    "contactHeating": {"equation": "P_contact = I^2 R_c", "status": "DERIVED_PHYSICS", "use": "interface heating and connector degradation"},
+    "thermalTransient": {"equation": "C_th dT/dt = P_in - P_reject", "status": "DERIVED_PHYSICS", "use": "short-duration thermal acceptance"},
+    "thermalExpansion": {"equation": "DeltaL = alpha L DeltaT", "status": "DERIVED_PHYSICS", "use": "temperature-dependent alignment"},
+    "simpleResonance": {"equation": "f_n = (1/(2 pi)) sqrt(k/m)", "status": "DERIVED_PHYSICS", "use": "first-order resonance interpretation"},
+    "qualityFactor": {"equation": "Q approximately f_0/Deltaf", "status": "DERIVED_PHYSICS", "use": "damping/resonance characterization"},
+    "smallResonanceShift": {"equation": "Deltaf/f approximately 0.5(Delta k/k - Delta m/m)", "status": "DERIVED_PHYSICS", "use": "small perturbation interpretation; not unique fault identification"},
+    "controlDistribution": {"equation": "Pi_c = L_c/(v_c tau_r)", "status": "DERIVED_ENGINEERING", "use": "distributed-control scaling"}
+  },
+  "requiredDocumentationBlocks": [
+    "purpose-and-identity",
+    "technology-basis-and-module-architecture",
+    "interfaces-and-dependencies",
+    "operation-and-control",
+    "maintenance-service",
+    "required-tools-fixtures",
+    "inspection-diagnostic-evidence",
+    "calibration-reference-state",
+    "replacement-refit-procedure",
+    "acceptance-recertification",
+    "failure-signatures-ambiguity",
+    "provenance-origin-revision",
+    "related-documentation"
+  ],
+  "moduleInterfaceContract": {
+    "required": [
+      "mechanicalDatum",
+      "powerInterface",
+      "dataControlInterface",
+      "thermalInterface",
+      "environmentalBoundary",
+      "calibrationIdentity",
+      "serviceBoundary"
+    ],
+    "safeguards": [
+      "physical fit does not imply functional compatibility",
+      "functional compatibility does not imply calibration equivalence",
+      "missing calibration does not mean zero error",
+      "unknown service history does not mean serviceable"
+    ]
+  },
+  "propulsionTransitRecertification": {
+    "triggerDomains": [
+      "family-required sensing",
+      "solver timing",
+      "command propagation",
+      "actuator response",
+      "effect-former geometry",
+      "exit or de-transit machinery",
+      "protected recovery reserve",
+      "sectional power or cooling",
+      "structural alignment",
+      "reference/calibration state"
+    ],
+    "interventionEquation": "t_int = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
+    "continuousMarginEquation": "M_T = D_B/v_p - t_int",
+    "precommitMarginEquation": "M_T = t_prediction - t_int",
+    "portalRule": "Use mouth admission, synchronization, exit, and recovery timing; do not invent along-route hull velocity.",
+    "familyRule": "Recertification is adapted to the selected family only after family identity is independently resolved."
+  },
+  "returnToService": {
+    "minimumSequence": [
+      "capture pre-disturbance evidence",
+      "isolate and safe",
+      "record removed-module identity and calibration",
+      "inspect interfaces and datums",
+      "verify replacement compatibility",
+      "install to controlled geometry/preload",
+      "perform static electrical and insulation tests",
+      "perform piezo/resonance/alignment tests where applicable",
+      "perform staged power-up",
+      "perform thermal soak",
+      "perform timing/protocol tests",
+      "perform functional loopback",
+      "perform system-specific recertification",
+      "record installed and removed module ancestry"
+    ],
+    "acceptanceRule": "Return to service requires evidence, not absence of an alarm."
+  },
+  "generatorRules": [
+    "Emit a discoverable Maintenance / Service block for every substantial Ar'nock system.",
+    "List service boundary before repair procedure.",
+    "List required tools and evidence before declaring a module repairable.",
+    "Prefer module exchange over speculative component repair unless depot/foundry capability is explicitly present.",
+    "Preserve original module identity, replacement identity, calibration ancestry, and refit authority separately.",
+    "Do not generate numeric tolerances, torque values, resonance bands, latency limits, or service intervals without source or explicit labeled engineering control.",
+    "Do not use piezoelectric observations as unique fault diagnoses without corroborating evidence.",
+    "Do not treat a successful self-test as equivalent to thermal, timing, or family-specific transit certification.",
+    "Do not use biological repair tooling for general solid-state machinery unless subsystem provenance requires it.",
+    "Do not infer FTL family from Ar'nock machinery style."
+  ],
+  "provenance": {
+    "origin": "Project-owner correction and subsequent authoritative Ar'nock maintenance/fabrication expansion.",
+    "createdFrom": [
+      "data/blacklight-continuum/wiki/arnock-technology-authority.json",
+      "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+      "docs/blacklight/ARNOCK_SYSTEMS_MAINTENANCE_FABRICATION_STANDARD.md",
+      "docs/blacklight/ARNOCK_SYSTEMS_DOCUMENTATION_INDEX.md",
+      "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+      "Google Drive: The different lightspeed methods"
+    ]
+  }
+}
