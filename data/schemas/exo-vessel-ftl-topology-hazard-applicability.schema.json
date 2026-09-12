@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-topology-hazard-applicability.schema.json",
+  "title": "Black Light FTL Topology Hazard Applicability Resolution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","status","applicable","relationship","record","matchedRecordIds","scopeResolution","warnings","provenance","canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED","UNRESOLVED","CONFLICT"]},
+    "applicable": {"type": ["boolean","null"]},
+    "relationship": {"type": ["string","null"], "enum": ["REQUIRED_PHYSICAL_PRECURSOR","SUPPORTING_PHYSICAL_PRECURSOR","NOT_APPLICABLE","SIMULATION_ONLY",null]},
+    "record": {
+      "type": ["object","null"],
+      "additionalProperties": true
+    },
+    "matchedRecordIds": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "scopeResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedFamily","requestedHazardKey","physicalEvidenceType","selectedScopeType","selectedRecordId","canonicalResolutionRequired"],
+      "properties": {
+        "requestedFamily": {"type": ["string","null"]},
+        "requestedHazardKey": {"type": ["string","null"]},
+        "physicalEvidenceType": {"type": ["string","null"]},
+        "selectedScopeType": {"type": ["string","null"]},
+        "selectedRecordId": {"type": ["string","null"]},
+        "canonicalResolutionRequired": {"type": "boolean"}
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  }
+}
