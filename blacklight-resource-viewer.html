@@ -119,8 +119,9 @@
         const suffix = suffixIndex >= 0 ? href.slice(suffixIndex) : '';
         if (!target) return suffix || '#';
 
-        const segments = sourcePath.split('/').slice(0, -1);
-        const incoming = target.replace(/^\.\//, '').split('/');
+        const repositoryRootTarget = target.startsWith('/');
+        const segments = repositoryRootTarget ? [] : sourcePath.split('/').slice(0, -1);
+        const incoming = target.replace(/^\/+/, '').replace(/^\.\//, '').split('/');
         for (const segment of incoming) {
           if (!segment || segment === '.') continue;
           if (segment === '..') {
