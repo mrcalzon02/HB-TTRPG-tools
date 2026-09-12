@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.first-blocker-presentation",
+  "status": "DERIVED",
+  "purpose": "Presentation-only bridge from family-specific physical route interval certificates to operator-readable corridor and first-blocker displays. It never recalculates physical or fictional safety state.",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "designIntent": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    },
+    "inputRuntime": "blacklight-exo-ftl-family-segment-certification-runtime.js",
+    "inputSchema": "data/schemas/exo-vessel-ftl-family-segment-certification.schema.json",
+    "outputSchema": "data/schemas/exo-vessel-ftl-first-blocker-presentation.schema.json"
+  },
+  "blockingStates": ["REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"],
+  "presentationRules": [
+    "The presentation layer consumes the certified interval packet; it does not recompute gravity, normalization, family response, observability, recovery, or intervention reach.",
+    "The corridor width of an interval is proportional to its route-fraction span, not its hazard severity.",
+    "The first blocker is the certified blocking segment with the smallest fractionStart. If routeDisposition names a first blocker, the presentation must verify that it matches the segment list rather than silently replacing either record.",
+    "ADMISSIBLE and MARGINAL intervals remain visible because route context matters even when they are not blockers.",
+    "Physical quantities with unlike dimensions remain separate labels. No presentation safety percentage may be formed by adding potential, acceleration, tidal loading, curvature, uncertainty, efficiency, or reachability.",
+    "Distance/time-to-block values are displayed only when supplied by the certification runtime. Presentation code may format units but may not infer a local FTL velocity for PRECOMMIT operators.",
+    "Missing evidence is rendered as unresolved, never as zero.",
+    "A visualization is not a route certificate and may not establish a named race's FTL family, boundary hazard, or historical technology use."
+  ],
+  "canonSafeguards": [
+    "Owner, operator, manufacturer, inventor, technology ancestry, and transit family remain independent provenance dimensions unless a named source explicitly unifies them.",
+    "Mur'rek gravitic slipstream remains unresolved against consolidated transit families unless higher authority resolves it.",
+    "Ar'nock transit family remains unresolved unless higher authority resolves it.",
+    "Ordinary gravitational evidence constrains a fictional family model but does not demonstrate that FTL is physically realizable.",
+    "OUTSIDE_MODEL_VALIDITY remains a blocking modelling state and is never rendered as an ordinary finite hazard score.",
+    "PROPOSED calibration and family-response parameters remain visibly subordinate to confirmed canon and physical evidence."
+  ],
+  "origin": "Derived to expose the already-authoritative interval certification chain to live engineering interfaces without allowing UI code to become an accidental second physics or canon engine."
+}
