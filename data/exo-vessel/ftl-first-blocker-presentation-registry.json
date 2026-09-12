@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "registryKey": "blacklight.ftl.first-blocker-presentation",
   "status": "DERIVED",
-  "purpose": "Presentation-only bridge from family-specific physical route interval certificates to operator-readable corridor and first-blocker displays, including authorized uncertainty-aware conservative blocker envelopes. It never recalculates physical or fictional safety state.",
+  "purpose": "Presentation-only bridge from family-specific physical route interval certificates to operator-readable corridor and first-blocker displays, including authorized uncertainty-aware conservative blocker envelopes and the provenance-bearing topology-hazard applicability record that authorizes or refuses blocker tightening. It never recalculates physical or fictional safety state.",
   "authority": {
     "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
     "designIntent": {
@@ -13,18 +13,22 @@
     "inputRuntime": "blacklight-exo-ftl-family-segment-certification-runtime.js",
     "inputSchema": "data/schemas/exo-vessel-ftl-family-segment-certification.schema.json",
     "uncertaintyInput": "blacklight-exo-ftl-uncertainty-aware-boundary-refinement-runtime.js",
+    "applicabilityInput": "data/exo-vessel/ftl-topology-hazard-applicability-registry.json",
+    "applicabilityRuntime": "blacklight-exo-ftl-topology-hazard-applicability-runtime.js",
     "supportingManual": "docs/blacklight/BLACK_LIGHT_FTL_CONSERVATIVE_BLOCKER_CERTIFICATION_AND_PRESENTATION_MANUAL.md",
+    "applicabilityManual": "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md",
     "outputSchema": "data/schemas/exo-vessel-ftl-first-blocker-presentation.schema.json"
   },
   "blockingStates": ["REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"],
   "presentationRules": [
-    "The presentation layer consumes the certified interval packet; it does not recompute gravity, normalization, family response, observability, recovery, uncertainty localization, or intervention reach.",
+    "The presentation layer consumes the certified interval packet; it does not recompute gravity, normalization, family response, observability, recovery, uncertainty localization, applicability, or intervention reach.",
     "The corridor width of an interval is proportional to its route-fraction span, not its hazard severity.",
     "The first blocker is the certified blocking segment with the smallest fractionStart. If routeDisposition names a first blocker, the presentation must verify that it matches the segment list rather than silently replacing either record.",
-    "Nominal blocker location and conservative effective blocker location are separate displayed quantities. The conservative location may move earlier only when the certification packet records explicit authority linking the topology boundary to that certified blocker.",
-    "An unlinked normalized-degeneracy boundary may be displayed as physical/navigation evidence but may not be labeled as an FTL blocker, shear fork, lane edge, or family hazard.",
+    "Nominal blocker location and conservative effective blocker location are separate displayed quantities. The conservative location may move earlier only when the certification packet contains a RESOLVED applicability record with the REQUIRED_PHYSICAL_PRECURSOR relationship to that certified hazard.",
+    "Applicability status, relationship, record id, selected scope, source document and source revision must survive into the conservative-envelope presentation when present.",
+    "An unresolved, conflicting, supporting-only, or absent applicability link may be displayed as physical/navigation evidence but may not be labeled as authority to move an FTL blocker, shear fork, lane edge, or family hazard.",
     "ADMISSIBLE and MARGINAL intervals remain visible because route context matters even when they are not blockers.",
-    "Physical quantities with unlike dimensions remain separate labels. No presentation safety percentage may be formed by adding potential, acceleration, tidal loading, curvature, uncertainty, efficiency, or reachability.",
+    "Physical quantities with unlike dimensions remain separate labels. No presentation safety percentage may be formed by adding potential, acceleration, tidal loading, curvature, uncertainty, efficiency, applicability, or reachability.",
     "Distance/time-to-block values are displayed only when supplied by the certification runtime. Presentation code may format units but may not infer a local FTL velocity for PRECOMMIT operators.",
     "Missing evidence is rendered as unresolved, never as zero.",
     "A visualization is not a route certificate and may not establish a named race's FTL family, boundary hazard, or historical technology use."
@@ -36,7 +40,8 @@
     "Ordinary gravitational evidence constrains a fictional family model but does not demonstrate that FTL is physically realizable.",
     "OUTSIDE_MODEL_VALIDITY remains a blocking modelling state and is never rendered as an ordinary finite hazard score.",
     "PROPOSED calibration and family-response parameters remain visibly subordinate to confirmed canon and physical evidence.",
-    "A conservative topology envelope is provenance-bearing planning evidence; it becomes blocker authority only through an explicit family or named-technology link already present in the certification packet."
+    "A conservative topology envelope is provenance-bearing planning evidence; it becomes blocker authority only through a matching REQUIRED_PHYSICAL_PRECURSOR family or named-technology record already present in the certification packet.",
+    "Presentation may expose applicability provenance but may not create, strengthen, weaken, or substitute that authority."
   ],
-  "origin": "Derived to expose the already-authoritative interval certification chain to live engineering interfaces without allowing UI code to become an accidental second physics or canon engine. Version 1.1 adds provenance-preserving nominal-versus-conservative blocker presentation."
+  "origin": "Derived to expose the already-authoritative interval certification chain to live engineering interfaces without allowing UI code to become an accidental second physics or canon engine. Version 1.2 carries topology-hazard applicability provenance from certification into presentation."
 }
