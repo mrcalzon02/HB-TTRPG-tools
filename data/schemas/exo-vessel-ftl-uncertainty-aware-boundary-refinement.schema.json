@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-uncertainty-aware-boundary-refinement.schema.json",
+  "title": "Black Light FTL Uncertainty-Aware Boundary Refinement Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "familyId", "encounterModel", "controls", "sampling", "samples", "refinementEvents", "normalizedDegeneracyUncertainty", "operationalBoundaries", "earliestPlausibleBoundary", "intervention", "warnings", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "familyId": {"type": ["string", "null"]},
+    "encounterModel": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT_ENDPOINT", "ANCHORED_PORTAL", "UNRESOLVED"]},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maximumBoundarySigmaFraction", "maximumBoundarySigmaToIntervalRatio", "sigmaMultiplier"],
+      "properties": {
+        "maximumBoundarySigmaFraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "maximumBoundarySigmaToIntervalRatio": {"type": "number", "minimum": 0},
+        "sigmaMultiplier": {"type": "number", "minimum": 0}
+      }
+    },
+    "sampling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adaptive", "convergenceEstablished", "initialSampleCount", "finalSampleCount", "maximumDepth", "maximumSampleCount"],
+      "properties": {
+        "adaptive": {"type": "boolean"},
+        "convergenceEstablished": {"type": "boolean"},
+        "initialSampleCount": {"type": "integer", "minimum": 0},
+        "finalSampleCount": {"type": "integer", "minimum": 0},
+        "maximumDepth": {"type": "integer", "minimum": 0},
+        "maximumSampleCount": {"type": "integer", "minimum": 0}
+      }
+    },
+    "samples": {"type": "array", "items": {"type": "object"}},
+    "refinementEvents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["depth", "leftFraction", "rightFraction", "midFraction", "reasons"],
+        "properties": {
+          "depth": {"type": "integer", "minimum": 0},
+          "leftFraction": {"type": "number", "minimum": 0, "maximum": 1},
+          "rightFraction": {"type": "number", "minimum": 0, "maximum": 1},
+          "midFraction": {"type": "number", "minimum": 0, "maximum": 1},
+          "reasons": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "normalizedDegeneracyUncertainty": {"type": ["object", "null"]},
+    "operationalBoundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["pair", "leftSampleIndex", "rightSampleIndex", "status", "nominalBoundaryFraction", "boundaryFractionSigmaUpperBound", "earliestPlausibleFraction", "latestPlausibleFraction", "uncertaintyConstruction"],
+        "properties": {
+          "pair": {"type": "array", "prefixItems": [{"type": "integer", "minimum": 0, "maximum": 2}, {"type": "integer", "minimum": 0, "maximum": 2}], "minItems": 2, "maxItems": 2},
+          "leftSampleIndex": {"type": "integer", "minimum": 0},
+          "rightSampleIndex": {"type": "integer", "minimum": 0},
+          "status": {"const": "BOUNDARY_ESTIMATED"},
+          "nominalBoundaryFraction": {"type": "number", "minimum": 0, "maximum": 1},
+          "boundaryFractionSigmaUpperBound": {"type": ["number", "null"], "minimum": 0},
+          "earliestPlausibleFraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "latestPlausibleFraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "uncertaintyConstruction": {"const": "CONSERVATIVE_LINEAR_UPPER_BOUND"}
+        }
+      }
+    },
+    "earliestPlausibleBoundary": {"type": ["object", "null"]},
+    "intervention": {
+      "type": ["object", "null"],
+      "properties": {
+        "mode": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT_OR_ENDPOINT"]},
+        "status": {"type": "string"},
+        "currentFraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "earliestPlausibleBoundaryFraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "distanceToEarliestPlausibleBoundaryM": {"type": ["number", "null"], "minimum": 0},
+        "interventionDistanceM": {"type": ["number", "null"], "minimum": 0},
+        "distanceMarginM": {"type": ["number", "null"]},
+        "interventionTimeS": {"type": ["number", "null"], "minimum": 0},
+        "timeMarginS": {"type": ["number", "null"]},
+        "reachable": {"type": ["boolean", "null"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["mode", "status", "currentFraction", "earliestPlausibleBoundaryFraction", "distanceToEarliestPlausibleBoundaryM", "interventionDistanceM", "distanceMarginM", "interventionTimeS", "timeMarginS", "reachable", "notes"],
+      "additionalProperties": false
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  }
+}
