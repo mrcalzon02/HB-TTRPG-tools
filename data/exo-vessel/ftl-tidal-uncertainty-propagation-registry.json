@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.tidal-uncertainty-propagation",
+  "title": "Black Light FTL Tidal Tensor and Eigenbasis Uncertainty Propagation Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Quantify how astrometric/source-state uncertainty limits confidence in tidal strength, principal eigenvalues, eigendirections, and localized shear/degeneracy transitions without turning ordinary gravitational uncertainty into fictional FTL hazard canon."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
+    "blacklight-exo-ftl-time-dependent-source-state-runtime.js",
+    "data/exo-vessel/ftl-family-encounter-time-registry.json",
+    "blacklight-exo-ftl-family-encounter-time-runtime.js",
+    "data/exo-vessel/ftl-tidal-eigenbranch-tracking-registry.json",
+    "blacklight-exo-ftl-tidal-eigenbranch-tracking-runtime.js",
+    "data/exo-vessel/ftl-adaptive-spatiotemporal-refinement-registry.json",
+    "blacklight-exo-ftl-adaptive-spatiotemporal-refinement-runtime.js"
+  ],
+  "defaultControls": {
+    "finiteDifferenceScaleSigma": 1,
+    "minimumFiniteDifferenceM": 1,
+    "maximumFiniteDifferenceM": 1000000000,
+    "degeneracyRelativeGap": 0.02,
+    "maximumLinearizedOrientationSigmaRad": 0.17453292519943295
+  },
+  "mathematics": {
+    "tensorCovariance": "Sigma_T = sum_a J_a Sigma_r,a J_a^T, where J_a = partial vec_s(T)/partial r_a",
+    "symmetricTensorVectorization": "vec_s(T)=[Txx,Tyy,Tzz,Txy,Txz,Tyz]^T",
+    "centralDifferenceJacobian": "J[:,j] ~= [vec_s(T(r_j+h))-vec_s(T(r_j-h))]/(2h)",
+    "eigenvalueSensitivity": "delta lambda_k = e_k^T delta T e_k",
+    "eigenvalueVariance": "sigma_lambda,k^2 = a_k^T Sigma_T a_k",
+    "eigenvectorPerturbation": "delta e_k = sum_{j!=k} e_j (e_j^T delta T e_k)/(lambda_k-lambda_j)",
+    "orientationVariance": "sigma_psi,k^2 ~= sum_{j!=k} Var(e_j^T delta T e_k)/(lambda_k-lambda_j)^2",
+    "gapVariance": "Var(lambda_i-lambda_j)=Var(lambda_i)+Var(lambda_j)-2Cov(lambda_i,lambda_j)",
+    "boundaryLocation": "sigma_s ~= sigma_g/|dg/ds| under a local first-order crossing model"
+  },
+  "physicalAssumptions": [
+    "The implemented tensor-uncertainty model is weak-field and uses the same point-mass tidal tensor already accepted by the physical environment authority.",
+    "Source-position covariance is propagated; mass uncertainty, field-point uncertainty, source cross-covariance, and higher-order dynamical covariance require explicit future or caller-supplied authority and are not silently assumed zero if known to matter.",
+    "Linear covariance propagation is a local approximation. Large uncertainty, highly nonlinear close approaches, strong-field conditions, or eigenvalue near-degeneracy can invalidate first-order orientation uncertainty.",
+    "Eigenvector orientation is an axis quantity with sign gauge e equivalent to -e. Near a degenerate eigenspace, individual-axis orientation is not physically identifiable."
+  ],
+  "familyUse": {
+    "gravitic-plane": "PRIMARY: distinguishes a resolved rotating tidal geometry from an astrometrically uncertain one before fictional shear-fork response is evaluated.",
+    "slipstream-shear": "PRIMARY: supplies uncertainty envelopes for shear-topology precursors without defining the exotic shear state itself.",
+    "metric-envelope": "SECONDARY: field-distortion and structural orientation uncertainty.",
+    "n-manifold": "SECONDARY: physical-environment uncertainty remains distinct from manifold topology.",
+    "inertial-torch": "STRUCTURAL/NAVIGATION: tidal-load orientation uncertainty and route-state confidence.",
+    "q-lattice": "PRECOMMIT endpoint uncertainty only.",
+    "fold-jump": "PRECOMMIT endpoint uncertainty only.",
+    "phase-displacement": "PRECOMMIT endpoint uncertainty only.",
+    "wormhole-gate": "ANCHOR mouth-state uncertainty only."
+  },
+  "generatorRules": [
+    "Consume propagated source-state covariance from encounter samples; do not synthesize missing covariance as a zero matrix.",
+    "Use the tracked eigensystem rather than raw independently sorted eigenvectors when assigning branch uncertainty.",
+    "Do not report a linearized individual-axis orientation uncertainty through a degenerate eigenspace.",
+    "If orientation uncertainty exceeds the configured linear-model limit, report OUTSIDE_LINEAR_MODEL rather than clipping it to an attractive finite confidence value.",
+    "Boundary-location uncertainty is numerical/physical evidence for route refinement and certification. It is not itself a fictional FTL danger probability.",
+    "Known joint/correlated source covariance must be represented by a future joint-source authority or explicit caller model; independent per-source covariance packets do not prove statistical independence."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish physical realizability of any FTL family.",
+    "Ordinary gravitational covariance cannot create, prove, or silently zero an exotic family-boundary hazard.",
+    "A narrow uncertainty envelope around a tidal rotation does not prove that a fictional shear lane or fork exists there.",
+    "A broad uncertainty envelope is unresolved knowledge, not automatically high danger.",
+    "A selected simulation family does not establish that a named race, civilization, manufacturer, vessel, or archaeological installation uses that family.",
+    "Near-degenerate eigenspaces do not possess canonical individual eigenvector directions; machinery or UI layers may not promote a solver-selected basis inside that subspace into setting fact.",
+    "DERIVED finite-difference controls and confidence limits are engineering choices, not constants of nature."
+  ],
+  "api": {
+    "resolver": "resolveFTLTidalUncertaintyPropagation",
+    "inputs": ["samples", "familyId", "encounterModel", "eigenbranchTracking", "finiteDifferenceScaleSigma", "minimumFiniteDifferenceM", "maximumFiniteDifferenceM", "degeneracyRelativeGap", "maximumLinearizedOrientationSigmaRad", "eigenbranchRuntime"],
+    "outputs": ["status", "controls", "samples", "boundaryIntervals", "warnings", "provenance", "canonSafeguards"],
+    "schema": "data/schemas/exo-vessel-ftl-tidal-uncertainty-propagation.schema.json",
+    "runtime": "blacklight-exo-ftl-tidal-uncertainty-propagation-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_TIDAL_UNCERTAINTY_PROPAGATION_AND_BOUNDARY_LOCALIZATION_MANUAL.md"
+  }
+}
