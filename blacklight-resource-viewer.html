@@ -110,13 +110,42 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
+      const resolveMarkdownHref = href => {
+        if (/^https?:/i.test(href) || /^mailto:/i.test(href) || href.startsWith('#')) return href;
+        if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('//')) return '#';
+
+        const suffixIndex = href.search(/[?#]/);
+        const target = suffixIndex >= 0 ? href.slice(0, suffixIndex) : href;
+        const suffix = suffixIndex >= 0 ? href.slice(suffixIndex) : '';
+        if (!target) return suffix || '#';
+
+        const segments = sourcePath.split('/').slice(0, -1);
+        const incoming = target.replace(/^\.\//, '').split('/');
+        for (const segment of incoming) {
+          if (!segment || segment === '.') continue;
+          if (segment === '..') {
+            if (!segments.length) return '#';
+            segments.pop();
+            continue;
+          }
+          segments.push(segment);
+        }
+
+        const resolved = segments.join('/');
+        if (!resolved || resolved.includes('..')) return '#';
+        if (allowedExtension.test(resolved)) {
+          const viewerHref = `blacklight-resource-viewer.html?src=${encodeURIComponent(resolved)}`;
+          return `${viewerHref}${suffix.startsWith('#') ? suffix : ''}`;
+        }
+        return `${encodeURI(resolved)}${suffix}`;
+      };
+
       const inlineMarkdown = value => escapeHtml(value)
         .replace(/`([^`]+)`/g, '<code>$1</code>')
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
         .replace(/\*([^*]+)\*/g, '<em>$1</em>')
         .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_match, label, href) => {
-          const safeHref = /^(?:https?:|\.\.?\/|#)/i.test(href) ? href : '#';
-          return `<a href="${escapeHtml(safeHref)}">${label}</a>`;
+          return `<a href="${escapeHtml(resolveMarkdownHref(href))}">${label}</a>`;
         });
 
       const splitTableRow = value => {
