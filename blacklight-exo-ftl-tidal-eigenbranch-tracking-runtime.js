@@ -74,9 +74,9 @@
       }
     }
     const raw=[0,1,2].map(index => {
-      const vector=vectorFromColumn(v,index);
-      const norm=magnitude(vector);
-      return {eigenvaluePerS2:a[index][index],eigenvector:norm>0?scale(vector,1/norm):vector};
+      const eigenvector=vectorFromColumn(v,index);
+      const norm=magnitude(eigenvector);
+      return {eigenvaluePerS2:a[index][index],eigenvector:norm>0?scale(eigenvector,1/norm):eigenvector};
     });
     return raw.sort((left,right)=>right.eigenvaluePerS2-left.eigenvaluePerS2);
   }
@@ -131,7 +131,7 @@
 
   function unresolved(reason,registry,context={}){
     return deepFreeze({
-      schemaVersion:'1.0.0',status:STATUS.UNRESOLVED,familyId:context.familyId||null,encounterModel:context.encounterModel||null,
+      schemaVersion:'1.1.0',status:STATUS.UNRESOLVED,familyId:context.familyId||null,encounterModel:context.encounterModel||null,
       tracking:{degeneracyRelativeGap:Number(registry?.defaultControls?.degeneracyRelativeGap)||0.02,maximumBranchRotationRad:Number(registry?.defaultControls?.maximumBranchRotationRad)||0.08726646259971647},
       samples:[],transitions:[],warnings:[reason],provenance:[REGISTRY_URL],canonSafeguards:registry?.canonSafeguards||[]
     });
@@ -165,23 +165,17 @@
       const degenerate=entries.some(entry=>entry.degenerate);
       anyDegenerate ||= degenerate;
       const tracked=entries.map((entry,branchIndex)=>({branchId:`T${branchIndex+1}`,eigenvaluePerS2:entry.eigenvaluePerS2,eigenvector:entry.eigenvector,degenerate:entry.degenerate}));
-      samples.push({
-        sampleIndex:index,
-        fraction:Number(source.fraction??index),
-        encounterEpoch:source.encounterEpoch||null,
-        eigensystemStatus:degenerate?'DEGENERATE_SUBSPACE':'RESOLVED',
-        eigenbranches:tracked
-      });
-      // A degenerate eigenspace does not provide unique branch identity. Do not
-      // carry arbitrary solver basis vectors across it as though they were physical.
+      samples.push({sampleIndex:index,fraction:Number(source.fraction??index),encounterEpoch:source.encounterEpoch||null,eigensystemStatus:degenerate?'DEGENERATE_SUBSPACE':'RESOLVED',eigenbranches:tracked});
       previous=degenerate?null:tracked;
     }
 
     const transitions=[];
     for(let index=0;index<samples.length-1;index+=1){
       const left=samples[index], right=samples[index+1];
+      const leftStatus=left.eigensystemStatus;
+      const rightStatus=right.eigensystemStatus;
       if(left.eigenbranches.length!==3 || right.eigenbranches.length!==3){
-        transitions.push({leftSampleIndex:left.sampleIndex,rightSampleIndex:right.sampleIndex,status:'UNRESOLVED',branchRotationsRad:{},maximumResolvedBranchRotationRad:null,degenerateSubspaceRotationRad:null,refinementRequested:true});
+        transitions.push({leftSampleIndex:left.sampleIndex,rightSampleIndex:right.sampleIndex,status:'UNRESOLVED',leftEigensystemStatus:leftStatus,rightEigensystemStatus:rightStatus,degeneracyBoundary:false,branchRotationsRad:{},maximumResolvedBranchRotationRad:null,degenerateSubspaceRotationRad:null,refinementRequested:true});
         continue;
       }
       const rotations={};
@@ -197,28 +191,22 @@
       const rightNormal=nonDegenerateNormal(right.eigenbranches);
       const subspaceRotation=(leftNormal&&rightNormal)?axisAngle(leftNormal,rightNormal):null;
       const maxResolved=resolved.length?Math.max(...resolved):null;
-      const degenerate=left.eigensystemStatus==='DEGENERATE_SUBSPACE'||right.eigensystemStatus==='DEGENERATE_SUBSPACE';
-      transitions.push({
-        leftSampleIndex:left.sampleIndex,rightSampleIndex:right.sampleIndex,
-        status:degenerate?'DEGENERATE_SUBSPACE':'RESOLVED',
-        branchRotationsRad:rotations,
-        maximumResolvedBranchRotationRad:maxResolved,
-        degenerateSubspaceRotationRad:subspaceRotation,
-        refinementRequested:(maxResolved!==null&&maxResolved>maximumBranchRotationRad)||(subspaceRotation!==null&&subspaceRotation>maximumBranchRotationRad)||degenerate
-      });
+      const leftDegenerate=leftStatus==='DEGENERATE_SUBSPACE';
+      const rightDegenerate=rightStatus==='DEGENERATE_SUBSPACE';
+      const degeneracyBoundary=leftDegenerate!==rightDegenerate;
+      const degenerate=leftDegenerate||rightDegenerate;
+      const refinementRequested=degeneracyBoundary || (maxResolved!==null&&maxResolved>maximumBranchRotationRad) || (subspaceRotation!==null&&subspaceRotation>maximumBranchRotationRad);
+      transitions.push({leftSampleIndex:left.sampleIndex,rightSampleIndex:right.sampleIndex,status:degenerate?'DEGENERATE_SUBSPACE':'RESOLVED',leftEigensystemStatus:leftStatus,rightEigensystemStatus:rightStatus,degeneracyBoundary,branchRotationsRad:rotations,maximumResolvedBranchRotationRad:maxResolved,degenerateSubspaceRotationRad:subspaceRotation,refinementRequested});
     }
 
     if(anyDegenerate) warnings.push('One or more tidal eigensystems contain near-degenerate eigenvalues; individual axes inside those subspaces are not physically unique and branch identity is not carried through the degeneracy.');
     if(anyUnresolved) warnings.push('One or more samples lack a finite symmetric tidal tensor; eigenbranch continuity is unresolved across those gaps.');
+    warnings.push('A broad stable degenerate subspace is preserved as physical evidence but does not by itself request infinite midpoint subdivision; refinement is requested at degeneracy boundaries or when the resolved subspace orientation rotates beyond tolerance.');
     warnings.push('Eigenvector sign is gauge freedom; tracked vectors are sign-aligned only for continuity and do not define an arrow direction.');
     warnings.push('Tidal eigenbranch behavior is ordinary gravitational evidence and does not by itself establish a fictional shear-lane fork.');
 
     const status=anyUnresolved?STATUS.PARTIAL:STATUS.RESOLVED;
-    return deepFreeze({
-      schemaVersion:'1.0.0',status,familyId:context.familyId||null,encounterModel:context.encounterModel||null,
-      tracking:{degeneracyRelativeGap,maximumBranchRotationRad},samples,transitions,warnings:unique(warnings),
-      provenance:unique([REGISTRY_URL,...(context.provenance||[])]),canonSafeguards:registry.canonSafeguards||[]
-    });
+    return deepFreeze({schemaVersion:'1.1.0',status,familyId:context.familyId||null,encounterModel:context.encounterModel||null,tracking:{degeneracyRelativeGap,maximumBranchRotationRad},samples,transitions,warnings:unique(warnings),provenance:unique([REGISTRY_URL,...(context.provenance||[])]),canonSafeguards:registry.canonSafeguards||[]});
   }
 
   globalThis.BlacklightExoFTLTidalEigenbranchTrackingRuntime=deepFreeze({STATUS,REGISTRY_URL,loadRegistry,resolveFTLTidalEigenbranchTracking});
