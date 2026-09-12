@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.ftl.adaptive-spatiotemporal-refinement",
   "title": "Black Light FTL Adaptive Spatiotemporal Refinement Registry",
   "status": "DERIVED",
@@ -7,7 +7,7 @@
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
-    "scope": "Prevent short-lived moving saddles, shear-fork precursors, covariance blooms, degeneracy boundaries, rapidly rotating tidal eigensystems, or rapidly changing gravitational intervals from falling between otherwise adequate route samples."
+    "scope": "Prevent short-lived moving saddles, shear-fork precursors, covariance blooms, degeneracy boundaries, rapidly rotating tidal eigensystems, or rapidly changing gravitational intervals from falling between otherwise adequate route samples, while preserving uncertainty in the recovered tidal geometry."
   },
   "authorityInputs": [
     "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
@@ -20,7 +20,11 @@
     "data/exo-vessel/ftl-tidal-eigenbranch-tracking-registry.json",
     "blacklight-exo-ftl-tidal-eigenbranch-tracking-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_TIDAL_EIGENBASIS_AND_EIGENBRANCH_TRACKING_MANUAL.md",
-    "docs/blacklight/BLACK_LIGHT_FTL_EIGENBRANCH_ADAPTIVE_REFINEMENT_INTEGRATION_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_EIGENBRANCH_ADAPTIVE_REFINEMENT_INTEGRATION_MANUAL.md",
+    "data/exo-vessel/ftl-tidal-uncertainty-propagation-registry.json",
+    "data/schemas/exo-vessel-ftl-tidal-uncertainty-propagation.schema.json",
+    "blacklight-exo-ftl-tidal-uncertainty-propagation-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_TIDAL_UNCERTAINTY_PROPAGATION_AND_BOUNDARY_LOCALIZATION_MANUAL.md"
   ],
   "applicability": {
     "CONTINUOUS_PROJECTED_PROGRESS": "ADAPTIVE_CLOSED_LOOP",
@@ -50,7 +54,11 @@
     "covarianceChange": "Delta_Sigma=|tr(Sigma_r,2)-tr(Sigma_r,1)|/max(tr(Sigma_r,1),tr(Sigma_r,2),epsilon)",
     "sourceMotionRatio": "mu=max_a |r_a(t2)-r_a(t1)|/max(min(R_a1,R_a2),epsilon)",
     "continuousEncounterTime": "t(s)=t0+sL/v_progress",
-    "midpoint": "s_m=(s_left+s_right)/2"
+    "midpoint": "s_m=(s_left+s_right)/2",
+    "tidalTensorCovariance": "Sigma_T=sum_a J_a Sigma_r,a J_a^T",
+    "eigenvalueVariance": "sigma_lambda,k^2=a_k^T Sigma_T a_k",
+    "eigenaxisVariance": "sigma_psi,k^2~=sum_j!=k Var(e_j^T deltaT e_k)/(lambda_k-lambda_j)^2",
+    "coalescenceLocationUncertainty": "sigma_s~=sigma_g/|dg/ds|"
   },
   "refinementRules": [
     "Refine a continuous interval when any configured physical, temporal, covariance, source-motion, acceleration-direction, tracked tidal-eigenbasis, or degeneracy-boundary criterion requests more resolution.",
@@ -61,7 +69,9 @@
     "A broad stable degenerate subspace does not recursively request midpoint insertion solely because it is degenerate; the physical subspace is preserved while boundary location and resolvable subspace rotation control refinement.",
     "Unresolved eigensystem transitions request subdivision while resource bounds permit because missing tensor evidence cannot be treated as smooth topology.",
     "Encounter-time span is a sampling-control criterion, not a physical hazard score.",
-    "Adaptive refinement stops at the declared depth or sample ceiling and reports unresolved intervals explicitly; numerical convergence is true only when no interval still requests subdivision."
+    "Adaptive refinement stops at the declared depth or sample ceiling and reports unresolved intervals explicitly; numerical convergence is true only when no interval still requests subdivision.",
+    "Tidal-uncertainty propagation is downstream evidence: a narrow nominal transition with broad covariance remains poorly localized even if the adaptive grid itself has converged.",
+    "Exact eigenvalue coalescence uncertainty and the versioned near-degeneracy threshold boundary are separate evidence products until uncertainty is propagated through the full normalized gamma_ij criterion."
   ],
   "generatorRules": [
     "The refinement runtime consumes the family encounter-time runtime; it does not duplicate source propagation or gravity equations.",
@@ -71,16 +81,18 @@
     "PRECOMMIT_ENDPOINT and ANCHORED_PORTAL retain explicit endpoint/mouth timing semantics and may not gain fabricated corridor samples.",
     "A CONFLICT, OUTSIDE_MODEL_VALIDITY, UNRESOLVED midpoint, or unresolved eigensystem remains blocking evidence and may not be replaced by interpolation.",
     "Refinement events retain their physical and topology reasons so later certification can reconstruct why each sample was added.",
-    "Refinement tolerances are versioned engineering controls rather than constants of nature."
+    "Refinement tolerances are versioned engineering controls rather than constants of nature.",
+    "The tidal uncertainty runtime may consume the final adaptive samples and eigenbranch packet, but must not rewrite the converged physical samples or manufacture missing covariance."
   ],
   "canonSafeguards": [
     "This registry does not establish that any FTL method is physically realizable.",
-    "Adaptive sampling and tidal eigenbranch tracking improve numerical evidence density; they do not create new race, civilization, manufacturer, or historical canon.",
+    "Adaptive sampling, tidal eigenbranch tracking, and tidal uncertainty propagation improve numerical evidence; they do not create new race, civilization, manufacturer, or historical canon.",
     "A selected family used for route simulation does not establish that a named civilization uses that family.",
     "Missing source velocity, covariance, epoch, family-boundary state, or model-validity evidence remains missing.",
-    "Ordinary gravity, tidal eigenvectors, and covariance may not manufacture an exotic family-boundary hazard or silently set it to zero.",
+    "Ordinary gravity, tidal eigenvectors, covariance, and uncertainty envelopes may not manufacture an exotic family-boundary hazard or silently set it to zero.",
     "A numerical eigenbasis inside a degenerate eigenspace is not a canonical physical direction.",
     "Stable degeneracy is not equivalent to danger and is not equivalent to convergence failure; a degeneracy boundary is a numerical-refinement event, while fictional fork danger remains a separate family-response question.",
+    "A broad uncertainty envelope means the ordinary gravitational geometry is poorly constrained; it is not automatically a high fictional hazard probability.",
     "PRECOMMIT and anchored-portal families may not receive fabricated intermediate ordinary-space encounter epochs.",
     "Hitting a numerical sample ceiling or depth limit is not evidence that the underlying route is safe or converged."
   ],
@@ -93,6 +105,12 @@
       "schema": "data/schemas/exo-vessel-ftl-tidal-eigenbranch-tracking.schema.json",
       "runtime": "blacklight-exo-ftl-tidal-eigenbranch-tracking-runtime.js",
       "manual": "docs/blacklight/BLACK_LIGHT_FTL_EIGENBRANCH_ADAPTIVE_REFINEMENT_INTEGRATION_MANUAL.md"
+    },
+    "downstreamUncertaintyAuthority": {
+      "registry": "data/exo-vessel/ftl-tidal-uncertainty-propagation-registry.json",
+      "schema": "data/schemas/exo-vessel-ftl-tidal-uncertainty-propagation.schema.json",
+      "runtime": "blacklight-exo-ftl-tidal-uncertainty-propagation-runtime.js",
+      "manual": "docs/blacklight/BLACK_LIGHT_FTL_TIDAL_UNCERTAINTY_PROPAGATION_AND_BOUNDARY_LOCALIZATION_MANUAL.md"
     }
   }
 }
