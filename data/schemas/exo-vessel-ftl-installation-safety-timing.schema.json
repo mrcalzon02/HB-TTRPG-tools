@@ -4,7 +4,7 @@
   "title": "Black Light FTL Installation Safety Timing Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "coupledDegradation", "appliedFactors", "warnings", "provenance"],
+  "required": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "coupledDegradation", "sectionalLatency", "appliedFactors", "warnings", "provenance"],
   "properties": {
     "status": {"enum": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]},
     "baselineTiming": {"$ref": "#/$defs/timing"},
@@ -14,10 +14,8 @@
     "selectedRecord": {"type": ["object", "null"]},
     "readiness": {"$ref": "#/$defs/readiness"},
     "coupledDegradation": {"type": ["object", "null"]},
-    "appliedFactors": {
-      "type": "object",
-      "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
-    },
+    "sectionalLatency": {"$ref": "#/$defs/sectionalLatency"},
+    "appliedFactors": {"type": "object", "additionalProperties": {"type": "number", "exclusiveMinimum": 0}},
     "warnings": {"type": "array", "items": {"type": "string"}},
     "provenance": {"type": "array", "items": {"type": "string"}}
   },
@@ -54,6 +52,18 @@
         "recovery": {"type": "number", "minimum": 0, "maximum": 1},
         "thermal": {"type": "number", "minimum": 0, "maximum": 1},
         "structure": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "sectionalLatency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currentByChannel", "baselineByChannel", "excessByChannel", "appliedByStage", "unresolvedChannels"],
+      "properties": {
+        "currentByChannel": {"type": "object", "additionalProperties": {"type": ["number", "null"], "minimum": 0}},
+        "baselineByChannel": {"type": "object", "additionalProperties": {"type": ["number", "null"], "minimum": 0}},
+        "excessByChannel": {"type": "object", "additionalProperties": {"type": ["number", "null"], "minimum": 0}},
+        "appliedByStage": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+        "unresolvedChannels": {"type": "array", "items": {"type": "string"}}
       }
     }
   }
