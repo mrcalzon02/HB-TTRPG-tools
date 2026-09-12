@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-first-blocker-presentation.schema.json",
+  "title": "Black Light FTL First-Blocker Presentation Model",
+  "description": "Presentation-only contract for rendering family-specific physical route interval certificates without recomputing or replacing the underlying safety evidence.",
+  "type": "object",
+  "required": ["schemaVersion", "status", "family", "corridor", "firstBlocker", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "family": {"type": ["string", "null"]},
+    "path": {"type": ["string", "null"]},
+    "corridor": {
+      "type": "object",
+      "required": ["conjunctive", "segments"],
+      "properties": {
+        "conjunctive": {"const": true},
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["index", "fractionStart", "fractionEnd", "status", "blocking", "reasons"],
+            "properties": {
+              "index": {"type": "integer", "minimum": 0},
+              "fractionStart": {"type": "number", "minimum": 0, "maximum": 1},
+              "fractionEnd": {"type": "number", "minimum": 0, "maximum": 1},
+              "status": {"type": "string"},
+              "blocking": {"type": "boolean"},
+              "reasons": {"type": "array", "items": {"type": "string"}},
+              "gravityEfficiency": {"type": ["number", "null"]},
+              "calculationEfficiency": {"type": ["number", "null"]},
+              "interventionReachable": {"type": ["boolean", "null"]},
+              "environment": {"type": ["object", "null"]},
+              "uncertainty": {"type": ["object", "null"]}
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "firstBlocker": {
+      "type": ["object", "null"],
+      "properties": {
+        "segmentIndex": {"type": "integer", "minimum": 0},
+        "fractionStart": {"type": "number", "minimum": 0, "maximum": 1},
+        "fractionEnd": {"type": "number", "minimum": 0, "maximum": 1},
+        "status": {"type": "string"},
+        "distanceM": {"type": ["number", "null"], "minimum": 0},
+        "timeS": {"type": ["number", "null"], "minimum": 0},
+        "interventionReachable": {"type": ["boolean", "null"]},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "presentationRules": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
