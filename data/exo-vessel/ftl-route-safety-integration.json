@@ -1,14 +1,14 @@
 {
-  "schemaVersion": "1.5.0",
+  "schemaVersion": "1.6.0",
   "registryKey": "blacklight.ftl.route-safety-integration",
   "title": "Black Light FTL Route Safety Integration Registry",
   "status": "MIXED",
-  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; uncertainty-aware conservative blocker envelopes are preserved only when a provenance-bearing topology-hazard applicability authority links the physical precursor to the certified family hazard. Identity context for named technology, vessel, installation, race/species and manufacturer is forwarded into that applicability authority rather than reduced to caller booleans. Single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
+  "purpose": "Bridge EXO FTL route environments to versioned safety calibration and certification. Physically resolved route paths take precedence when supplied and are certified interval-by-interval through the selected family; uncertainty-aware conservative blocker envelopes are preserved only when a provenance-bearing topology-hazard applicability authority links the physical precursor to the certified family hazard. Identity context, installation readiness, maintenance state, and common-cause power/thermal/support transients are forwarded into installation timing authority before certification. Single-point SI gravity/curvature inputs are secondary, while PROPOSED normalized route archetypes remain fallback-only when no physical packet exists.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
-    "scope": "Family-specific gravity/miscalculation behavior, safety lookahead, emergency de-transit, increasing maturity margins, non-perfect safety, and mathematically credible environmental underlays."
+    "scope": "Family-specific gravity/miscalculation behavior, safety lookahead, emergency de-transit, increasing maturity margins, non-perfect safety, and mathematically credible environmental and machinery underlays."
   },
   "authority": {
     "upstream": [
@@ -20,6 +20,8 @@
       "data/exo-vessel/ftl-family-segment-certification-registry.json",
       "data/exo-vessel/ftl-uncertainty-aware-boundary-refinement-registry.json",
       "data/exo-vessel/ftl-topology-hazard-applicability-registry.json",
+      "data/exo-vessel/ftl-installation-safety-timing-registry.json",
+      "data/exo-vessel/ftl-coupled-degradation-registry.json",
       "blacklight-exo-ftl-operational-definitions.js",
       "data/exo-vessel/ftl-safety-calibration-profiles.json",
       "data/exo-vessel/ftl-safety-certification-registry.json"
@@ -34,6 +36,8 @@
       "blacklight-exo-ftl-family-segment-certification-runtime.js",
       "blacklight-exo-ftl-safety-calibration-runtime.js",
       "blacklight-exo-ftl-safety-certification-runtime.js",
+      "blacklight-exo-ftl-coupled-degradation-runtime.js",
+      "blacklight-exo-ftl-installation-safety-timing-runtime.js",
       "blacklight-exo-ftl-route-safety-runtime.js",
       "blacklight-exo-ftl-first-blocker-presentation-runtime.js"
     ],
@@ -44,9 +48,12 @@
       "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_BOUNDARY_REFINEMENT_AND_INTERVENTION_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_CONSERVATIVE_BLOCKER_CERTIFICATION_AND_PRESENTATION_MANUAL.md",
       "docs/blacklight/BLACK_LIGHT_FTL_TOPOLOGY_HAZARD_APPLICABILITY_AND_PROVENANCE_MANUAL.md",
-      "docs/blacklight/BLACK_LIGHT_FTL_NAMED_IDENTITY_APPLICABILITY_HANDOFF_MANUAL.md"
+      "docs/blacklight/BLACK_LIGHT_FTL_NAMED_IDENTITY_APPLICABILITY_HANDOFF_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_SAFETY_TIMING_AND_MAINTENANCE_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_TIMING_ROUTE_CERTIFICATION_INTEGRATION_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_COUPLED_DEGRADATION_POWER_THERMAL_TRANSIENT_MANUAL.md"
     ],
-    "statusRule": "Supplied physical route paths outrank single-point physical environments; supplied single-point physical environments outrank route archetypes. Invalid or unresolved supplied physical evidence blocks fallback. Route archetype packets are PROPOSED simulation mappings used only when no physical route/path environment is supplied."
+    "statusRule": "Supplied physical route paths outrank single-point physical environments; supplied single-point physical environments outrank route archetypes. Invalid or unresolved supplied physical evidence blocks fallback. Route archetype packets are PROPOSED simulation mappings used only when no physical route/path environment is supplied. Installation condition modifies timing/readiness/recovery authority downstream of environmental physics and may not alter family identity or external gravity."
   },
   "familyMap": {
     "inertial-torch": "inertial-torch",
@@ -139,13 +146,24 @@
     "identityInputs": ["namedTechnologyId", "vesselId", "installationId", "raceId", "manufacturerId"],
     "rule": "Applicability must resolve from canon/provenance. The route-safety adapter forwards identity fields unchanged to family-segment certification; it does not infer them from presentation labels and does not substitute a boolean. No match is UNRESOLVED, contradiction is CONFLICT, SUPPORTING_PHYSICAL_PRECURSOR is non-blocking, and raw caller booleans are not authority."
   },
+  "installationConditionAuthority": {
+    "timingRegistry": "data/exo-vessel/ftl-installation-safety-timing-registry.json",
+    "timingRuntime": "blacklight-exo-ftl-installation-safety-timing-runtime.js",
+    "couplingRegistry": "data/exo-vessel/ftl-coupled-degradation-registry.json",
+    "couplingRuntime": "blacklight-exo-ftl-coupled-degradation-runtime.js",
+    "conditionInputs": ["installationReadiness", "installationMaintenancePenalty", "installationTransientState", "installationCouplingProfileId", "installationCouplingProfile", "installationInterventionHorizon", "coupledDegradationPacket"],
+    "rule": "Installation condition is resolved before family/segment certification. Shared power, thermal, cooling, hydraulic, dielectric or metabolic evidence may reduce multiple readiness channels together. Blocking or conflicting condition authority stops certification; condition evidence never selects an FTL family or changes external gravity."
+  },
   "integrationRules": [
     "The adapter must preserve the generated family and must never use certification to auto-select a different family.",
     "When physicalRoutePathContext, pathPacket, or segmentPacket is supplied, route safety must use family-segment certification and must not collapse the route back into a single-point certificate.",
     "Route safety must forward namedTechnologyId, vesselId, installationId, raceId, manufacturerId, canonicalResolutionRequired, topologyHazardKey, any pre-resolved applicability packet, and any explicitly simulation-only applicability override into family-segment certification without replacing those fields with a caller boolean.",
+    "Route safety must forward measured installation readiness, maintenance state and common-cause transient/coupling evidence into installation timing authority before certification.",
     "Identity fields are provenance selectors, not family selectors: race/species, vessel, manufacturer or installation identity may select a more specific applicability record only after the transit family/hazard is independently established.",
+    "Common-cause readiness aggregation is deterministic machinery modeling rather than a failure-probability calculation; correlated deficits may not be multiplied as though independent.",
+    "A declared hard power-buffer or thermal operating limit may block safety-critical channels when supported by supplied telemetry and limit/horizon data; missing telemetry must remain missing rather than guessed.",
     "Family-certified route disposition is conjunctive across required intervals; later benign intervals cannot erase an earlier blocker.",
-    "The first blocking interval, nominal distance/time to blocker, authorized conservative distance/time to blocker, intervention reachability, and topology-hazard applicability provenance must survive into the route-level result.",
+    "The first blocking interval, nominal distance/time to blocker, authorized conservative distance/time to blocker, intervention reachability, topology-hazard applicability provenance, and installation timing provenance must survive into the route-level result.",
     "A normalized-degeneracy or topology boundary may move the conservative planning edge earlier only when the topology-hazard applicability authority resolves a matching REQUIRED_PHYSICAL_PRECURSOR relationship to the already-certified hazard. Otherwise it remains displayable evidence but cannot alter route certification.",
     "A SUPPORTING_PHYSICAL_PRECURSOR may influence sensing, maintenance, diagnostics and confidence but does not generically move a certified blocker earlier.",
     "For PRECOMMIT families, a topology boundary may constrain endpoint/location evidence but may not create an intermediate local FTL velocity; prediction-time authority remains governing.",
@@ -165,19 +183,21 @@
   ],
   "api": {
     "resolver": "resolveGeneratedFTLRouteSafety",
-    "inputs": ["rating", "request", "registry", "calibrationRegistry", "physicalRoutePathContext", "pathPacket", "segmentPacket", "physicalEnvironmentContext", "familyBoundaryHazard", "familyBoundaryHazardKnownAbsent", "projectedProgressRate", "currentRouteFraction", "uncertaintyAwareBoundaryRefinement", "topologyHazardKey", "topologyHazardApplicabilityResolution", "namedTechnologyId", "vesselId", "installationId", "raceId", "manufacturerId", "canonicalResolutionRequired", "topologyApplicabilitySimulationOverride", "measurementPacket", "safetyState", "recoveryState", "namedOverrideIds", "provenance"],
-    "outputs": ["status", "family", "path", "route", "environmentSource", "physicalEnvironment", "familySegmentCertification", "firstBlockingSegment", "conservativeBlocker", "calibration", "certificate", "presentation", "warnings", "provenance"],
+    "inputs": ["rating", "request", "registry", "calibrationRegistry", "physicalRoutePathContext", "pathPacket", "segmentPacket", "physicalEnvironmentContext", "familyBoundaryHazard", "familyBoundaryHazardKnownAbsent", "projectedProgressRate", "currentRouteFraction", "uncertaintyAwareBoundaryRefinement", "topologyHazardKey", "topologyHazardApplicabilityResolution", "namedTechnologyId", "vesselId", "installationId", "raceId", "manufacturerId", "canonicalResolutionRequired", "topologyApplicabilitySimulationOverride", "measurementPacket", "safetyState", "recoveryState", "installationReadiness", "installationMaintenancePenalty", "installationTransientState", "installationCouplingProfileId", "installationCouplingProfile", "installationInterventionHorizon", "coupledDegradationPacket", "namedOverrideIds", "provenance"],
+    "outputs": ["status", "family", "path", "route", "environmentSource", "physicalEnvironment", "familySegmentCertification", "firstBlockingSegment", "conservativeBlocker", "installationSafetyTiming", "calibration", "certificate", "presentation", "warnings", "provenance"],
     "statusValues": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]
   },
   "canonGuards": [
     "Do not describe PROPOSED route archetype numbers as real astrophysical measurements.",
-    "Do not describe versioned normalization references as constants of nature.",
+    "Do not describe versioned normalization references or generic coupling coefficients as constants of nature.",
     "Do not convert route difficulty into a universal FTL constant.",
     "Do not collapse a physically sampled route into one representative point when interval evidence is available.",
     "Do not invent a family-boundary hazard from ordinary gravity or from a generic route archetype for a physical path.",
     "Do not promote a physical topology boundary into an FTL blocker without a provenance-bearing REQUIRED_PHYSICAL_PRECURSOR authority connecting it to the certified hazard.",
     "Do not substitute a raw boolean for canonical topology-hazard applicability.",
     "Do not infer family identity from named technology terminology, race/species identity, machinery ancestry, manufacturer, vessel class or installation identity unless an authority explicitly establishes that mapping.",
+    "Do not infer independent failure probabilities from readiness or common-cause coupling values.",
+    "Do not use machinery thermal/power stress as evidence that a fictional FTL hazard exists.",
     "Do not certify a route when calibration or supplied physical validity is unresolved or conflicting.",
     "Do not hide REJECTED, UNRESOLVED, or OUTSIDE_MODEL_VALIDITY behind a generated performance number.",
     "Do not infer a named civilization or installation limit from the generic simulation baseline.",
