@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-maintenance-evidence-contract.schema.json",
+  "title": "Black Light FTL Maintenance Evidence Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "identity", "technologyBasis", "serviceEvent", "evidence", "family", "certification", "provenance"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["CERTIFIED", "CONDITIONALLY_CERTIFIED", "BLOCKED", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "identity": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["installationId"],
+      "properties": {
+        "installationId": {"type": "string", "minLength": 1},
+        "vesselId": {"type": ["string", "null"]},
+        "manufacturerId": {"type": ["string", "null"]},
+        "speciesId": {"type": ["string", "null"]},
+        "namedTechnologyId": {"type": ["string", "null"]},
+        "hardwareRevision": {"type": ["string", "null"]},
+        "softwareRevision": {"type": ["string", "null"]},
+        "refitId": {"type": ["string", "null"]}
+      }
+    },
+    "technologyBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "status"],
+      "properties": {
+        "key": {"type": "string", "minLength": 1},
+        "status": {"enum": ["CONFIRMED", "AUTHORITATIVE_CORRECTION", "DERIVED", "PROPOSED", "UNRESOLVED", "SIMULATION_ONLY"]},
+        "authority": {"type": ["string", "null"]}
+      }
+    },
+    "serviceEvent": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["kind"],
+      "properties": {
+        "kind": {"enum": ["INSPECTION", "REPAIR", "MODULE_EXCHANGE", "REFIT", "CALIBRATION", "SALVAGE_RECONSTRUCTION", "UNKNOWN"]},
+        "epoch": {"type": ["string", "number", "null"]},
+        "changedDomains": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["IDENTITY", "INTERFACE", "STATIC_HEALTH", "DYNAMIC_HEALTH", "CALIBRATION", "TIMING", "POWER_RESERVE", "THERMAL_RESERVE", "SECTIONAL_TOPOLOGY", "FAMILY_SPECIFIC", "PROVENANCE"],
+      "properties": {
+        "IDENTITY": {"$ref": "#/$defs/evidenceItem"},
+        "INTERFACE": {"$ref": "#/$defs/evidenceItem"},
+        "STATIC_HEALTH": {"$ref": "#/$defs/evidenceItem"},
+        "DYNAMIC_HEALTH": {"$ref": "#/$defs/evidenceItem"},
+        "CALIBRATION": {"$ref": "#/$defs/evidenceItem"},
+        "TIMING": {"$ref": "#/$defs/evidenceItem"},
+        "POWER_RESERVE": {"$ref": "#/$defs/evidenceItem"},
+        "THERMAL_RESERVE": {"$ref": "#/$defs/evidenceItem"},
+        "SECTIONAL_TOPOLOGY": {"$ref": "#/$defs/evidenceItem"},
+        "FAMILY_SPECIFIC": {"$ref": "#/$defs/evidenceItem"},
+        "PROVENANCE": {"$ref": "#/$defs/evidenceItem"}
+      }
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "semantic"],
+      "properties": {
+        "status": {"enum": ["RESOLVED", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+        "family": {"type": ["string", "null"]},
+        "semantic": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT_ENDPOINT", "ANCHORED_PORTAL", "UNRESOLVED"]},
+        "authority": {"type": ["string", "null"]}
+      }
+    },
+    "timing": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "reserves": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "certification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "reasons"],
+      "properties": {
+        "disposition": {"enum": ["CERTIFIED", "CONDITIONALLY_CERTIFIED", "BLOCKED", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+        "reasons": {"type": "array", "items": {"type": "string"}},
+        "operatingEnvelope": {"type": ["object", "null"], "additionalProperties": true}
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["sourceId", "status"],
+        "properties": {
+          "sourceId": {"type": "string"},
+          "status": {"type": "string"},
+          "scope": {"type": ["string", "null"]},
+          "revision": {"type": ["string", "null"]},
+          "epoch": {"type": ["string", "number", "null"]}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidenceItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["PASS", "CONDITIONAL", "FAIL", "UNRESOLVED", "CONFLICT", "NOT_APPLICABLE", "SIMULATION_ONLY"]},
+        "summary": {"type": ["string", "null"]},
+        "sourceIds": {"type": "array", "items": {"type": "string"}},
+        "measurements": {"type": ["object", "null"], "additionalProperties": true},
+        "bounds": {"type": ["object", "null"], "additionalProperties": true}
+      }
+    }
+  }
+}
