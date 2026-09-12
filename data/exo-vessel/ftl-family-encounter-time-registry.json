@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.family-encounter-time",
   "title": "Black Light FTL Family Encounter-Time Registry",
   "status": "DERIVED",
@@ -35,6 +35,14 @@
       "requiredEpochs": ["entryEpoch", "exitEpoch"]
     }
   },
+  "adaptiveRefinementIntegration": {
+    "status": "DERIVED",
+    "registry": "data/exo-vessel/ftl-adaptive-spatiotemporal-refinement-registry.json",
+    "schema": "data/schemas/exo-vessel-ftl-adaptive-spatiotemporal-refinement.schema.json",
+    "runtime": "blacklight-exo-ftl-adaptive-spatiotemporal-refinement-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_ADAPTIVE_SPATIOTEMPORAL_REFINEMENT_MANUAL.md",
+    "rule": "Continuous projected-progress samples may be recursively refined when physical metrics, principal tidal eigenvalues, acceleration direction, propagated covariance, source motion relative to range, or encounter-time span exceed versioned numerical tolerances. PRECOMMIT_ENDPOINT and ANCHORED_PORTAL remain endpoint/mouth models and do not receive fabricated corridor samples."
+  },
   "mathematics": {
     "routeGeometry": "r(s)=r_A+s(r_B-r_A)",
     "routeLength": "L=|r_B-r_A|",
@@ -62,6 +70,7 @@
     "ANCHORED_PORTAL requires entry and exit mouth epochs and preserves anchor provenance.",
     "Every sample propagates every authoritative gravitational source independently to its encounter epoch before evaluating ordinary gravity and curvature.",
     "A failed or out-of-domain source propagation blocks that sample; benign neighboring samples may not average it away.",
+    "Continuous encounter samples may be densified only through the adaptive refinement authority; midpoint evidence must be recomputed through this resolver rather than interpolated.",
     "The resulting physical environment is evidence supplied to family certification. It does not itself establish operator-specific boundary state."
   ],
   "canonSafeguards": [
@@ -74,10 +83,12 @@
     "Fold Jump, Q-Lattice Phase Translation and Phase Displacement may not be assigned fabricated intermediate encounter epochs derived from an invented corridor velocity.",
     "Anchored Wormhole/Gate transit evaluates mouth states and does not imply ordinary-space traversal between mouths.",
     "Ordinary gravity/curvature evidence may not manufacture an exotic family-boundary hazard or silently set that hazard to zero.",
+    "Adaptive sampling changes numerical evidence density rather than setting canon or proving convergence.",
     "OUTSIDE_MODEL_VALIDITY is a model-domain refusal, not an extreme finite danger score."
   ],
   "api": {
     "resolver": "resolveFTLFamilyEncounterTime",
+    "adaptiveResolver": "resolveFTLAdaptiveSpatiotemporalRefinement",
     "inputs": ["familyId", "from", "to", "sourceStates", "referenceFrame", "routeStartEpoch", "fractions", "projectedProgressMPerS", "progressSemantic", "commitmentEpoch", "emergenceEpoch", "entryEpoch", "exitEpoch", "sourcePropagation", "uncertainty"],
     "outputs": ["status", "familyId", "encounterModel", "routeStartEpoch", "routeLengthM", "projectedProgressMPerS", "progressSemantic", "samples", "warnings", "provenance", "canonSafeguards"]
   }
