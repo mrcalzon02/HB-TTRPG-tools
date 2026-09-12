@@ -1,0 +1,113 @@
+{
+  "recordType": "blacklightAr'nockTechnologyAuthority",
+  "recordVersion": "1.0.0",
+  "species": "Ar'nock",
+  "status": "AUTHORITATIVE_CORRECTION",
+  "scope": "General Ar'nock technology basis, including propulsion/transit machinery embodiment and generator defaults.",
+  "supersedes": [
+    {
+      "source": "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
+      "legacyClaim": "cultivated computation as a generic vessel technology descriptor",
+      "replacementRule": "General vessel computation defaults to solid-state silicon. Biological computation requires a specific subsystem-level source."
+    },
+    {
+      "source": "data/blacklight-continuum/wiki/foundation-lore.json#arnock-species",
+      "legacyClaim": "cultivated neural components as the generic difference for Ar'nock computation",
+      "replacementRule": "General Ar'nock computation is primarily solid-state silicon; characteristic differences include high integration, module-level service boundaries, unfamiliar identity/control conventions and extensive piezoelectric transduction."
+    },
+    {
+      "source": "legacy propulsion/transit derivations",
+      "legacyClaim": "BIOLOGICAL_SYMBIOTIC as the default Ar'nock operative technology basis",
+      "replacementRule": "Default to SOLID_STATE_ELECTROMECHANICAL_MODULAR. Biotechnology is a secondary support technology unless a named subsystem source establishes an exception."
+    }
+  ],
+  "generalTechnology": {
+    "primaryBasis": "SOLID_STATE_ELECTROMECHANICAL_MODULAR",
+    "computation": {
+      "primarySubstrate": "solid-state silicon",
+      "characteristics": [
+        "high functional integration",
+        "distributed local computation",
+        "redundant timing and reference chains",
+        "module-bound calibration and identity",
+        "ruggedized packaging",
+        "deterministic safety interlocks where required"
+      ]
+    },
+    "modularity": {
+      "serviceBoundary": "complete functional assemblies",
+      "description": "Ar'nock modules commonly integrate conductive paths, switching, capacitance, resistance, sensing, signal conditioning, local computation and interface geometry into replaceable functional volumes. Internal component repair may require fabrication infrastructure unavailable to ordinary field technicians.",
+      "maintenanceDoctrine": "diagnose -> isolate -> replace module -> restore identity/calibration -> sectional test -> recertify"
+    },
+    "piezoelectricTechnology": {
+      "importance": "characteristic",
+      "roles": [
+        "vibration sensing",
+        "structural health monitoring",
+        "precision actuation",
+        "pressure sensing",
+        "resonant timing/reference functions",
+        "acoustic or mechanically coupled interfaces",
+        "material characterization",
+        "alignment diagnostics",
+        "inertial-support instrumentation where appropriate"
+      ],
+      "safeguard": "Piezoelectric channels supplement but do not replace the exotic sensing required by a selected FTL family."
+    }
+  },
+  "biotechnology": {
+    "status": "ADVANCED_SECONDARY_TECHNOLOGY",
+    "defaultDomains": [
+      "biological feedstock processing",
+      "food and nutrient production",
+      "medicine",
+      "replacement tissue and organs",
+      "environmental support",
+      "atmospheric/ecological processing",
+      "waste processing",
+      "life support"
+    ],
+    "nonDefaultDomains": [
+      "general computation",
+      "propulsion prime movers",
+      "FTL field machinery",
+      "general control systems",
+      "general power distribution",
+      "general structural machinery"
+    ],
+    "exceptionRule": "A biological implementation outside the default biotechnology domains requires explicit subsystem-level provenance."
+  },
+  "propulsionTransit": {
+    "familyIdentity": "UNRESOLVED",
+    "familySelectionRule": "Ar'nock species identity, bioprinting capability, vibration-oriented interfaces, piezoelectric technology or solid-state modularity do not select an FTL family.",
+    "defaultMachineryGrammar": [
+      "modular solid-state power conditioning",
+      "silicon control and estimation modules",
+      "piezoelectric structural and actuator diagnostics",
+      "family-specific sensors and effect-former modules",
+      "deterministic command/interlock networks",
+      "sectional power, cooling and recovery",
+      "replaceable functional modules with preserved refit provenance"
+    ]
+  },
+  "generatorRules": [
+    "Default general Ar'nock machinery to solid-state electromechanical modular construction.",
+    "Default general Ar'nock computation to solid-state silicon.",
+    "Prefer piezoelectric sensing/actuation where mechanically appropriate without substituting it for family-required exotic measurement.",
+    "Treat complete functional assemblies as the normal Ar'nock service boundary.",
+    "Use biotechnology by default for feedstock, medical, environmental and life-support functions, not as the civilization-wide technological substrate.",
+    "Do not emit cultivated neural controllers, living field organs, vascular power trunks, metabolic drives, sensory tissue or actuator organisms without explicit subsystem-level authority.",
+    "Do not infer an FTL family from species or technology basis.",
+    "Preserve family physics, mathematical semantics and provenance independently of machinery embodiment."
+  ],
+  "provenance": {
+    "origin": "Authoritative setting correction supplied by project owner during propulsion/transit reconciliation.",
+    "governingFamilyDesignSource": "Google Drive: The different lightspeed methods / 1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "integratedProfiles": [
+      "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
+      "data/exo-vessel/arnock-ftl-family-embodiment-matrix.json",
+      "data/exo-vessel/propulsion-transit-arnock-annex.json",
+      "docs/blacklight/ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md"
+    ]
+  }
+}
