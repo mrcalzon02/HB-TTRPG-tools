@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.propulsion-transit.authority-manifest.addendum",
   "status": "DERIVED",
   "parentManifest": "data/exo-vessel/propulsion-transit-authority-manifest.json",
@@ -20,6 +20,12 @@
     "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_MAINTENANCE_EVIDENCE_INTEGRATION_AND_RECERTIFICATION_MANUAL.md"
   ],
+  "routeAdmissionIntegration": [
+    "data/exo-vessel/ftl-route-admission-registry.json",
+    "data/schemas/exo-vessel-ftl-route-admission.schema.json",
+    "blacklight-exo-ftl-route-admission-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_ROUTE_ADMISSION_MAINTENANCE_GATE_MANUAL.md"
+  ],
   "raceTechnologyServiceAuthorities": [
     "data/blacklight-continuum/wiki/arnock-technology-authority.json",
     "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
@@ -36,13 +42,17 @@
   "liveRuntimeAdditions": [
     "blacklight-exo-arnock-service-documentation-runtime.js",
     "blacklight-exo-ftl-maintenance-evidence-runtime.js",
-    "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js"
+    "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
+    "blacklight-exo-ftl-route-admission-runtime.js"
   ],
   "safeguards": [
     "This addendum does not reorder the parent authority chain.",
     "The Ar'nock technology correction authority outranks stale lower-authority biological-default descriptors.",
     "Maintenance evidence adapters do not select transit family.",
     "Technology-specific source packets remain preserved beside normalized evidence.",
-    "Unknown evidence remains unresolved rather than being replaced by zero or a nominal default."
+    "Unknown evidence remains unresolved rather than being replaced by zero or a nominal default.",
+    "Operational route admission is conjunctive: favorable route physics cannot erase blocking maintenance evidence, and healthy machinery cannot erase a route blocker.",
+    "A conditional maintenance certificate may downgrade an otherwise ADMISSIBLE route to MARGINAL but may never be silently promoted to full admission.",
+    "No universal maintenance-certificate lifetime is invented; freshness is enforced only when an explicit validity interval is supplied by the applicable authority."
   ]
 }
