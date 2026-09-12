@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.coupled-degradation",
+  "title": "Black Light FTL Coupled Subsystem Degradation and Power/Thermal Transient Registry",
+  "status": "MIXED",
+  "purpose": "Model deterministic common-cause degradation across sensing, navigation, computation, actuation, exit, recovery, thermal and structural safety channels without treating those channels as statistically independent and without inventing failure probabilities.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Sensor lookahead, emergency de-transit, increasing but imperfect safety margins, gravity-sensitive failure, and physically defensible mathematical underlays."
+  },
+  "mathematicalModel": {
+    "thermalLumpedCapacity": "dT/dt = (P_heat - P_reject)/C_th; for constant powers over a short horizon, T(t) = T0 + (P_heat-P_reject)t/C_th",
+    "powerHoldTime": "t_hold = E_buffer/(P_load-P_available) when P_load>P_available",
+    "thermalStress": "s_T = clamp((T_eval-T_nom)/(T_limit-T_nom),0,1)",
+    "flowStress": "s_Q = clamp((Q_nom-Q)/(Q_nom-Q_min),0,1)",
+    "qualityStress": "s_q = clamp(1-q,0,1)",
+    "coupledDeficit": "d_i,eff = max(d_i, max_k(c_ki*s_k)); r_i,eff = 1-d_i,eff",
+    "aggregationReason": "MAX_ENVELOPE is deterministic and deliberately avoids multiplying correlated subsystem penalties as if they were independent probabilities.",
+    "controlSpan": "Pi_c = L_c/(v_c*tau_r)",
+    "interpretation": "Shared infrastructure can reduce several safety functions simultaneously. The model changes installation readiness and timing authority only; it does not change G, the external tidal tensor, transit-family identity, or fictional hazard existence."
+  },
+  "drivers": ["power", "thermal", "cooling", "hydraulic", "dielectric", "metabolic"],
+  "channels": ["sensor", "navigation", "reference", "solver", "command", "actuator", "exit", "clearance", "recovery", "thermal", "structure"],
+  "profiles": [
+    {
+      "profileId": "generic-shared-infrastructure-v1",
+      "status": "PROPOSED_ENGINEERING_MODEL",
+      "aggregationMode": "MAX_ENVELOPE",
+      "couplings": {
+        "power": {"sensor":0.55,"navigation":0.65,"reference":0.45,"solver":0.80,"command":0.70,"actuator":0.75,"exit":0.75,"clearance":0.45,"recovery":0.85,"thermal":0.35,"structure":0.05},
+        "thermal": {"sensor":0.45,"navigation":0.35,"reference":0.30,"solver":0.75,"command":0.35,"actuator":0.65,"exit":0.65,"clearance":0.25,"recovery":0.70,"thermal":1.00,"structure":0.25},
+        "cooling": {"sensor":0.25,"navigation":0.20,"reference":0.20,"solver":0.65,"command":0.20,"actuator":0.55,"exit":0.55,"clearance":0.15,"recovery":0.65,"thermal":0.90,"structure":0.15},
+        "hydraulic": {"sensor":0.05,"navigation":0.10,"reference":0.15,"solver":0.05,"command":0.35,"actuator":0.90,"exit":0.80,"clearance":0.20,"recovery":0.45,"thermal":0.10,"structure":0.35},
+        "dielectric": {"sensor":0.10,"navigation":0.20,"reference":0.35,"solver":0.05,"command":0.10,"actuator":0.85,"exit":0.75,"clearance":0.15,"recovery":0.55,"thermal":0.25,"structure":0.30},
+        "metabolic": {"sensor":0.55,"navigation":0.65,"reference":0.35,"solver":0.75,"command":0.65,"actuator":0.50,"exit":0.55,"clearance":0.35,"recovery":0.70,"thermal":0.35,"structure":0.20}
+      },
+      "canonPolicy": "Coefficients are versioned engineering calibration, not universal physical constants or historical canon. A narrower named profile may replace them when sourced."
+    }
+  ],
+  "raceAndTechnologyEmbodiments": [
+    {
+      "identity": "terrestrial-electromechanical",
+      "status": "DERIVED",
+      "sharedInfrastructure": ["power conversion buses", "coolant loops", "solver/ranging racks", "actuator power electronics", "protected abort energy stores"],
+      "signatureImplications": ["waste-heat rise", "bus sag or converter current rise", "coolant pump transients", "increased radiator load", "actuator desynchronization"]
+    },
+    {
+      "identity": "arnock",
+      "status": "DERIVED_WITH_UNRESOLVED_NUMERICS",
+      "sharedInfrastructure": ["cultivated neural coordination", "metabolic support", "biological isolation", "distributed sensory tissue", "vibratory/ionic/optical signal carriers"],
+      "canonGuard": "Ar'nock embodiment does not establish an FTL family or canonical coupling coefficients. Use measured readiness or explicitly labeled simulation calibration."
+    },
+    {
+      "identity": "zwlei-murrek-gravitic-slipstream",
+      "status": "DERIVED_WITH_UNRESOLVED_FAMILY",
+      "sharedInfrastructure": ["bio-reactive power-fluid network", "conductive coolant", "hydraulic control pressure", "dielectric field-vane bath", "Navigation Current Well", "Forward Sensor Ampulla and Sensor Choir"],
+      "failureLinks": ["cooling loss can degrade solver, actuator and recovery margins together", "hydraulic or dielectric degradation can produce asymmetric vane response", "power-fluid depletion can reduce actuation and protected recovery authority simultaneously"],
+      "canonGuard": "The source phrase gravitic slipstream remains unresolved against consolidated FTL family IDs. Machinery coupling does not select a family by keyword."
+    }
+  ],
+  "runtimeRules": [
+    "Use measured transient state when supplied; do not invent temperatures, powers, flows, buffer energy or probabilities.",
+    "A named sourced profile outranks the generic proposed profile; equal-precedence conflicting profiles return CONFLICT.",
+    "MAX_ENVELOPE is the default correlated-stress aggregation and must not be reinterpreted as a probability model.",
+    "Temperature at or above a declared equipment limit, or power-hold time shorter than a declared intervention horizon, may block affected channels when the caller explicitly supplies those limits/horizons.",
+    "Missing transient telemetry preserves the incoming readiness rather than guessing degradation.",
+    "Coupled degradation can only preserve or reduce incoming readiness unless a separately sourced repair/calibration authority explicitly improves the baseline.",
+    "External spacetime mathematics and fictional hazard canon remain upstream and unchanged."
+  ],
+  "api": {
+    "resolver": "resolveFTLCoupledDegradation",
+    "inputs": ["readiness", "transientState", "profileId", "couplingProfile", "interventionHorizon", "provenance"],
+    "outputs": ["status", "profile", "inputReadiness", "effectiveReadiness", "driverStress", "transientProjection", "blockedChannels", "signatures", "warnings", "provenance"],
+    "statusValues": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]
+  },
+  "canonGuards": [
+    "No coupling coefficient is a historical fact unless a named source explicitly establishes it.",
+    "No failure probability is inferred from readiness or stress values.",
+    "A thermal or power transient is evidence about machinery condition, not evidence that a fictional FTL hazard exists.",
+    "Race/species identity constrains embodiment only and never creates family identity or universal performance canon.",
+    "Simulation coefficients remain labeled PROPOSED_ENGINEERING_MODEL."
+  ]
+}
