@@ -1,14 +1,25 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.installation-safety-timing",
   "title": "Black Light FTL Installation Safety Timing and Readiness Registry",
   "status": "MIXED",
-  "purpose": "Translate named installation sensor, control, actuation, maintenance and recovery evidence into provenance-bearing timing modifiers without inventing canonical seconds, transit-family identity, or universal race coefficients.",
+  "purpose": "Translate named installation sensor, control, actuation, maintenance and recovery evidence into provenance-bearing timing modifiers without inventing canonical seconds, transit-family identity, or universal race coefficients. The adjusted packet is now consumed directly by route certification while preserving the pre-adjustment timing and recovery baselines for audit.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
     "scope": "Sensor lookahead, emergency de-transit, family-specific safety margins, failure sensitivity, and the principle that more advanced systems reduce risk without making transit perfectly safe."
+  },
+  "integration": {
+    "consumerRuntime": "blacklight-exo-ftl-route-safety-runtime.js",
+    "runtime": "blacklight-exo-ftl-installation-safety-timing-runtime.js",
+    "schema": "data/schemas/exo-vessel-ftl-installation-safety-timing.schema.json",
+    "manuals": [
+      "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_SAFETY_TIMING_AND_MAINTENANCE_MANUAL.md",
+      "docs/blacklight/BLACK_LIGHT_FTL_INSTALLATION_TIMING_ROUTE_CERTIFICATION_INTEGRATION_MANUAL.md"
+    ],
+    "flow": "Route safety constructs or accepts baseline timing/recovery, resolves installation timing authority, preserves baseline packets, applies readiness/maintenance adjustment, and supplies adjusted timing/recovery to family-segment or fallback certification.",
+    "blockingRule": "BLOCKED readiness and conflicting timing authority stop certification before family safety evaluation; unresolved named numeric authority preserves baseline values rather than guessing performance."
   },
   "mathematicalModel": {
     "baselineIntervention": "t_int,0 = t_sensor + t_solver + t_decision + t_command + t_actuate + t_exit + t_clear + t_margin",
@@ -125,12 +136,13 @@
     "Named technology, vessel, installation, manufacturer or race identity is never a family selector.",
     "PRECOMMIT families remain timing-based and may not be assigned a fabricated local transit velocity.",
     "Protected recovery reserve may not be consumed to improve advertised nominal timing.",
-    "All adjusted timing packets must preserve baseline values, applied factors, source record IDs and provenance."
+    "All adjusted timing packets preserve baselineTiming, baselineRecovery, applied factors, source record IDs and provenance.",
+    "Route certification consumes adjusted timing and recovery packets directly; condition evidence must not remain an informational side channel."
   ],
   "api": {
     "resolver": "resolveFTLInstallationSafetyTiming",
     "inputs": ["baselineTiming", "baselineRecovery", "family", "namedTechnologyId", "vesselId", "installationId", "manufacturerId", "raceId", "readiness", "maintenancePenalty", "provenance"],
-    "outputs": ["status", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
+    "outputs": ["status", "baselineTiming", "baselineRecovery", "timing", "recovery", "selectedRecord", "readiness", "appliedFactors", "warnings", "provenance"],
     "statusValues": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]
   },
   "canonGuards": [
