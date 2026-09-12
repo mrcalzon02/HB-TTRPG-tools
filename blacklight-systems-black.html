@@ -240,10 +240,16 @@
           const treePaths = new Set(data.tree.filter(item => item.type === 'blob').map(item => item.path));
           validateStaticResources(treePaths);
           const existingPaths = currentResourcePaths();
+          const discoveredHrefs = new Set();
           const resources = data.tree
             .filter(item => item.type === 'blob' && isBlacklightResource(item.path))
             .map(item => ({ path: item.path, baseName: displayName(item.path), href: hrefFor(item.path, treePaths) }))
-            .filter(item => !existingPaths.has(item.path) && !existingPaths.has(item.href));
+            .filter(item => !existingPaths.has(item.path) && !existingPaths.has(item.href))
+            .filter(item => {
+              if (discoveredHrefs.has(item.href)) return false;
+              discoveredHrefs.add(item.href);
+              return true;
+            });
 
           const nameCounts = resources.reduce((counts, item) => {
             const key = item.baseName.toLocaleLowerCase();
