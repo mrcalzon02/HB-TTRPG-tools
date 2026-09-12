@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-route-admission.schema.json",
+  "title": "Black Light FTL Route Admission Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "maintenanceRequired", "maintenance", "routeSafety", "admission", "warnings", "provenance"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT", "SIMULATION_ONLY"]},
+    "maintenanceRequired": {"type": "boolean"},
+    "maintenance": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "maintenanceFreshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "ageSeconds", "validitySeconds"],
+      "properties": {
+        "status": {"enum": ["NOT_APPLICABLE", "PASS", "UNRESOLVED", "EXPIRED"]},
+        "ageSeconds": {"type": ["number", "null"], "minimum": 0},
+        "validitySeconds": {"type": ["number", "null"], "minimum": 0},
+        "evaluationEpochSeconds": {"type": ["number", "null"]},
+        "evidenceEpochSeconds": {"type": ["number", "null"]}
+      }
+    },
+    "routeSafety": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maintenanceClass", "routeClass", "disposition", "reasons"],
+      "properties": {
+        "maintenanceClass": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "CONFLICT", "UNRESOLVED", "SIMULATION_ONLY", "NOT_REQUIRED"]},
+        "routeClass": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "CONFLICT", "UNRESOLVED", "NOT_EVALUATED"]},
+        "disposition": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT", "SIMULATION_ONLY"]},
+        "reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+  }
+}
