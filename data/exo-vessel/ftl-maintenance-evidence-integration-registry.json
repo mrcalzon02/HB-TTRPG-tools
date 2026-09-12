@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.maintenance-evidence-integration",
+  "status": "DERIVED",
+  "purpose": "Translate technology-specific service evidence into the cross-civilization FTL maintenance evidence contract without erasing machinery ancestry or inferring transit family identity.",
+  "authority": {
+    "primary": "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "contract": "data/exo-vessel/ftl-maintenance-evidence-contract.json",
+    "designIntentSource": {
+      "title": "The different lightspeed methods",
+      "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+      "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+    },
+    "sources": [
+      "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
+      "blacklight-exo-arnock-service-documentation-runtime.js",
+      "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+      "blacklight-exo-ftl-maintenance-evidence-runtime.js"
+    ]
+  },
+  "invariants": [
+    "Technology basis selects evidence embodiment, not transit family.",
+    "The adapter may worsen or leave unresolved a certification state; it may not manufacture a performance bonus from missing evidence.",
+    "Original technology-specific packets are preserved in sourceEvidence rather than flattened away.",
+    "Unknown evidence remains UNRESOLVED; missing latency, calibration, covariance, reserve, or family identity is never replaced with zero.",
+    "A machinery self-test is not family-specific transit recertification.",
+    "Mur'rek 'gravitic slipstream' terminology is preserved as named-source terminology and does not normalize to gravitational-plane or slipstream-shear.",
+    "Ar'nock machinery defaults to solid-state electromechanical modular technology; biotechnology is not a generic compute/control/propulsion basis."
+  ],
+  "technologyAdapters": {
+    "arnock-solid-state-modular": {
+      "sourcePacket": "resolveArnockServicePacket(context)",
+      "technologyBasis": "SOLID_STATE_ELECTROMECHANICAL_MODULAR",
+      "evidenceMapping": {
+        "IDENTITY": ["systemIdentity", "technologyBasis", "provenance"],
+        "INTERFACE": ["interfaces", "serviceBoundary"],
+        "STATIC_HEALTH": ["acceptance.staticTests", "inspectionEvidence"],
+        "DYNAMIC_HEALTH": ["acceptance.dynamicTests", "inspectionEvidence"],
+        "CALIBRATION": ["calibration"],
+        "TIMING": ["acceptance.timingTests", "transitRecertification.timingImpactSeconds"],
+        "POWER_RESERVE": ["inspectionEvidence", "transitRecertification.affectedDomains"],
+        "THERMAL_RESERVE": ["acceptance.thermalSoak", "inspectionEvidence"],
+        "SECTIONAL_TOPOLOGY": ["interfaces", "transitRecertification.affectedDomains"],
+        "FAMILY_SPECIFIC": ["transitRecertification.familyStatus", "transitRecertification.family"],
+        "PROVENANCE": ["provenance", "calibration"]
+      }
+    },
+    "zwlei-murrek-fluid-vane": {
+      "sourceAuthority": "data/exo-vessel/zwlei-murrek-transit-engineering-registry.json",
+      "technologyBasis": "ZWLEI_MURREK_FLUID_VANE",
+      "evidenceMapping": {
+        "IDENTITY": ["installation identity", "named vessel/class source", "service/refit record"],
+        "INTERFACE": ["vital-fluid manifold", "field-vane interfaces", "sensor/reference interfaces"],
+        "STATIC_HEALTH": ["vane geometry", "dielectric-fluid condition", "fluid isolation", "sensor-ampulla integrity"],
+        "DYNAMIC_HEALTH": ["vane command-response symmetry", "hydraulic authority", "navigation-current agreement"],
+        "CALIBRATION": ["gravitic/inertial reference calibration", "navigation-current calibration"],
+        "TIMING": ["sensor lookahead", "command/arbitration latency", "vane response", "isolation/abort timing"],
+        "POWER_RESERVE": ["bio-reactive power-fluid state", "protected recovery authority"],
+        "THERMAL_RESERVE": ["conductive coolant state", "heat rejection margin"],
+        "SECTIONAL_TOPOLOGY": ["fluid distribution reachability", "isolation boundaries", "command/reference reachability"],
+        "FAMILY_SPECIFIC": ["explicit family authority only; named-source phrase alone is insufficient"],
+        "PROVENANCE": ["named source", "derived engineering model", "service/refit record"]
+      }
+    },
+    "generic": {
+      "technologyBasis": "caller supplied",
+      "rule": "Pass already classified evidence through without changing machinery vocabulary or family identity."
+    }
+  },
+  "statusMapping": {
+    "acceptedToPass": ["ACCEPTED", "PASS", "RESOLVED", "CERTIFIED"],
+    "conditional": ["CONDITIONAL", "CONDITIONALLY_CERTIFIED"],
+    "failure": ["FAIL", "FAILED", "REJECTED", "BLOCKED"],
+    "conflict": ["CONFLICT"],
+    "unknown": ["UNRESOLVED", "UNKNOWN", "NOT_MEASURED"]
+  },
+  "api": {
+    "runtime": "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
+    "resolver": "resolveIntegratedFTLMaintenanceEvidence(context)",
+    "schema": "data/schemas/exo-vessel-ftl-maintenance-evidence-integration.schema.json",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_MAINTENANCE_EVIDENCE_INTEGRATION_AND_RECERTIFICATION_MANUAL.md"
+  }
+}
