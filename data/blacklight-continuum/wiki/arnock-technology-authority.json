@@ -1,9 +1,9 @@
 {
   "recordType": "blacklightAr'nockTechnologyAuthority",
-  "recordVersion": "1.0.0",
+  "recordVersion": "1.1.0",
   "species": "Ar'nock",
   "status": "AUTHORITATIVE_CORRECTION",
-  "scope": "General Ar'nock technology basis, including propulsion/transit machinery embodiment and generator defaults.",
+  "scope": "General Ar'nock technology basis, including propulsion/transit machinery embodiment, maintenance/fabrication doctrine, service documentation, and generator defaults.",
   "supersedes": [
     {
       "source": "data/blacklight-continuum/wiki/foundation-lore.json#arnock-derelict",
@@ -37,7 +37,7 @@
     "modularity": {
       "serviceBoundary": "complete functional assemblies",
       "description": "Ar'nock modules commonly integrate conductive paths, switching, capacitance, resistance, sensing, signal conditioning, local computation and interface geometry into replaceable functional volumes. Internal component repair may require fabrication infrastructure unavailable to ordinary field technicians.",
-      "maintenanceDoctrine": "diagnose -> isolate -> replace module -> restore identity/calibration -> sectional test -> recertify"
+      "maintenanceDoctrine": "capture evidence -> diagnose -> isolate -> preserve identity/calibration -> replace or escalate service level -> sectional test -> thermal/timing validation -> recertify -> close provenance"
     },
     "piezoelectricTechnology": {
       "importance": "characteristic",
@@ -77,6 +77,38 @@
     ],
     "exceptionRule": "A biological implementation outside the default biotechnology domains requires explicit subsystem-level provenance."
   },
+  "maintenanceFabrication": {
+    "registry": "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
+    "schema": "data/schemas/exo-vessel-arnock-maintenance-fabrication.schema.json",
+    "runtime": "blacklight-exo-arnock-service-documentation-runtime.js",
+    "serviceStandard": "docs/blacklight/ARNOCK_SYSTEMS_MAINTENANCE_FABRICATION_STANDARD.md",
+    "documentationIndex": "docs/blacklight/ARNOCK_SYSTEMS_DOCUMENTATION_INDEX.md",
+    "propulsionServiceManual": "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_SERVICE_EQUIPMENT_AND_RECERTIFICATION_MANUAL.md",
+    "serviceLevels": ["L0", "L1", "L2", "L3", "L4"],
+    "requiredDocumentationBlocks": [
+      "purpose-and-identity",
+      "technology-basis-and-module-architecture",
+      "interfaces-and-dependencies",
+      "operation-and-control",
+      "maintenance-service",
+      "required-tools-fixtures",
+      "inspection-diagnostic-evidence",
+      "calibration-reference-state",
+      "replacement-refit-procedure",
+      "acceptance-recertification",
+      "failure-signatures-ambiguity",
+      "provenance-origin-revision",
+      "related-documentation"
+    ],
+    "bestPractices": [
+      "Capture intermittent and pre-disturbance evidence before reseating, cycling, heating, or disassembling a suspect module.",
+      "Identify the owning functional module and all service dependencies before selecting a repair action.",
+      "Treat module identity, revision, calibration, and refit ancestry as part of the engineering state.",
+      "Do not infer repairability below the functional-module boundary without depot/foundry process evidence.",
+      "Require static, dynamic, thermal, timing, and family-specific acceptance evidence when the affected system demands it.",
+      "Return to service requires positive evidence, not merely the absence of an alarm."
+    ]
+  },
   "propulsionTransit": {
     "familyIdentity": "UNRESOLVED",
     "familySelectionRule": "Ar'nock species identity, bioprinting capability, vibration-oriented interfaces, piezoelectric technology or solid-state modularity do not select an FTL family.",
@@ -88,7 +120,8 @@
       "deterministic command/interlock networks",
       "sectional power, cooling and recovery",
       "replaceable functional modules with preserved refit provenance"
-    ]
+    ],
+    "serviceRule": "Any service action affecting family-required sensing, solver timing, command propagation, actuator response, effect-former geometry, de-transit/exit machinery, protected recovery reserve, sectional power/cooling, structural alignment, or reference/calibration state triggers the applicable propulsion/transit recertification path."
   },
   "generatorRules": [
     "Default general Ar'nock machinery to solid-state electromechanical modular construction.",
@@ -97,17 +130,25 @@
     "Treat complete functional assemblies as the normal Ar'nock service boundary.",
     "Use biotechnology by default for feedstock, medical, environmental and life-support functions, not as the civilization-wide technological substrate.",
     "Do not emit cultivated neural controllers, living field organs, vascular power trunks, metabolic drives, sensory tissue or actuator organisms without explicit subsystem-level authority.",
+    "Emit a discoverable Maintenance / Service block for substantial Ar'nock machinery, including service boundary, tools, evidence, calibration, acceptance, and provenance.",
+    "Do not invent precise service tolerances, timing limits, torque values, resonance bands, or maintenance intervals merely to complete a generated record.",
     "Do not infer an FTL family from species or technology basis.",
     "Preserve family physics, mathematical semantics and provenance independently of machinery embodiment."
   ],
   "provenance": {
-    "origin": "Authoritative setting correction supplied by project owner during propulsion/transit reconciliation.",
+    "origin": "Authoritative setting correction supplied by project owner during propulsion/transit reconciliation, expanded with an authoritative maintenance/fabrication and service-documentation layer.",
     "governingFamilyDesignSource": "Google Drive: The different lightspeed methods / 1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "integratedProfiles": [
       "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_ENGINEERING_PROFILE.md",
       "data/exo-vessel/arnock-ftl-family-embodiment-matrix.json",
       "data/exo-vessel/propulsion-transit-arnock-annex.json",
-      "docs/blacklight/ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md"
+      "docs/blacklight/ARNOCK_FTL_FAMILY_EMBODIMENT_FIELD_MANUAL.md",
+      "docs/blacklight/ARNOCK_SYSTEMS_MAINTENANCE_FABRICATION_STANDARD.md",
+      "docs/blacklight/ARNOCK_SYSTEMS_DOCUMENTATION_INDEX.md",
+      "data/exo-vessel/arnock-maintenance-fabrication-registry.json",
+      "data/schemas/exo-vessel-arnock-maintenance-fabrication.schema.json",
+      "blacklight-exo-arnock-service-documentation-runtime.js",
+      "docs/blacklight/ARNOCK_PROPULSION_TRANSIT_SERVICE_EQUIPMENT_AND_RECERTIFICATION_MANUAL.md"
     ]
   }
 }
