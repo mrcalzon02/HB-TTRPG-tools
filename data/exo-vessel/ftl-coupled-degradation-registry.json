@@ -1,25 +1,31 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.coupled-degradation",
   "title": "Black Light FTL Coupled Subsystem Degradation and Power/Thermal Transient Registry",
   "status": "MIXED",
-  "purpose": "Model deterministic common-cause degradation across sensing, navigation, computation, actuation, exit, recovery, thermal and structural safety channels without treating those channels as statistically independent and without inventing failure probabilities.",
+  "purpose": "Model deterministic common-cause degradation across sensing, navigation, computation, actuation, exit, recovery, thermal and structural safety channels without treating those channels as statistically independent and without inventing failure probabilities. When sectional topology is supplied, local support loss is resolved first so common-cause stress is applied to the physically reachable installation state rather than to a fictitious vessel-wide monolith.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
     "scope": "Sensor lookahead, emergency de-transit, increasing but imperfect safety margins, gravity-sensitive failure, and physically defensible mathematical underlays."
   },
+  "upstreamAuthorities": [
+    "data/exo-vessel/ftl-sectional-dependency-topology-registry.json",
+    "data/schemas/exo-vessel-ftl-sectional-dependency-topology.schema.json",
+    "blacklight-exo-ftl-sectional-dependency-topology-runtime.js"
+  ],
   "mathematicalModel": {
     "thermalLumpedCapacity": "dT/dt = (P_heat - P_reject)/C_th; for constant powers over a short horizon, T(t) = T0 + (P_heat-P_reject)t/C_th",
     "powerHoldTime": "t_hold = E_buffer/(P_load-P_available) when P_load>P_available",
     "thermalStress": "s_T = clamp((T_eval-T_nom)/(T_limit-T_nom),0,1)",
     "flowStress": "s_Q = clamp((Q_nom-Q)/(Q_nom-Q_min),0,1)",
     "qualityStress": "s_q = clamp(1-q,0,1)",
+    "sectionalPrecondition": "r_i,sectional = min(r_i,incoming, r_i,topology) when a provenance-bearing sectional topology packet supplies aggregate readiness.",
     "coupledDeficit": "d_i,eff = max(d_i, max_k(c_ki*s_k)); r_i,eff = 1-d_i,eff",
     "aggregationReason": "MAX_ENVELOPE is deterministic and deliberately avoids multiplying correlated subsystem penalties as if they were independent probabilities.",
     "controlSpan": "Pi_c = L_c/(v_c*tau_r)",
-    "interpretation": "Shared infrastructure can reduce several safety functions simultaneously. The model changes installation readiness and timing authority only; it does not change G, the external tidal tensor, transit-family identity, or fictional hazard existence."
+    "interpretation": "Sectional connectivity determines which safety regions still receive support; shared infrastructure stress then reduces those reachable functions. Neither layer changes G, the external tidal tensor, transit-family identity, or fictional hazard existence."
   },
   "drivers": ["power", "thermal", "cooling", "hydraulic", "dielectric", "metabolic"],
   "channels": ["sensor", "navigation", "reference", "solver", "command", "actuator", "exit", "clearance", "recovery", "thermal", "structure"],
@@ -61,6 +67,7 @@
     }
   ],
   "runtimeRules": [
+    "Resolve supplied sectional infrastructure topology before installation-wide common-cause stresses so local isolation is not flattened into a whole-vessel failure.",
     "Use measured transient state when supplied; do not invent temperatures, powers, flows, buffer energy or probabilities.",
     "A named sourced profile outranks the generic proposed profile; equal-precedence conflicting profiles return CONFLICT.",
     "MAX_ENVELOPE is the default correlated-stress aggregation and must not be reinterpreted as a probability model.",
@@ -71,15 +78,15 @@
   ],
   "api": {
     "resolver": "resolveFTLCoupledDegradation",
-    "inputs": ["readiness", "transientState", "profileId", "couplingProfile", "interventionHorizon", "provenance"],
-    "outputs": ["status", "profile", "inputReadiness", "effectiveReadiness", "driverStress", "transientProjection", "blockedChannels", "signatures", "warnings", "provenance"],
+    "inputs": ["readiness", "sectionalNetwork", "sectionalTopologyPacket", "sectionalProfileId", "serviceChannelMap", "transientState", "profileId", "couplingProfile", "interventionHorizon", "provenance"],
+    "outputs": ["status", "profile", "inputReadiness", "effectiveReadiness", "sectionalTopology", "driverStress", "transientProjection", "dominantContributions", "blockedChannels", "signatures", "warnings", "provenance"],
     "statusValues": ["READY", "UNRESOLVED", "CONFLICT", "BLOCKED"]
   },
   "canonGuards": [
     "No coupling coefficient is a historical fact unless a named source explicitly establishes it.",
-    "No failure probability is inferred from readiness or stress values.",
-    "A thermal or power transient is evidence about machinery condition, not evidence that a fictional FTL hazard exists.",
+    "No failure probability is inferred from readiness, sectional availability or stress values.",
+    "A sectional disconnection, thermal transient or power transient is evidence about machinery condition, not evidence that a fictional FTL hazard exists.",
     "Race/species identity constrains embodiment only and never creates family identity or universal performance canon.",
-    "Simulation coefficients remain labeled PROPOSED_ENGINEERING_MODEL."
+    "Simulation coefficients and unsourced network layouts remain labeled PROPOSED_ENGINEERING_MODEL."
   ]
 }
