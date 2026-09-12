@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.route-admission",
+  "status": "DERIVED",
+  "purpose": "Authoritative top-level admission policy joining maintenance/return-to-service evidence to family-specific route safety. A favorable route calculation may not erase a blocking maintenance state, and machinery condition may not select transit family.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "role": "Governing design intent for differentiated FTL hazards, gravity sensitivity, predictive sensing, emergency de-transit, maturity-scaled safety, and technical depth."
+  },
+  "authorityInputs": [
+    "data/exo-vessel/ftl-maintenance-evidence-contract.json",
+    "data/exo-vessel/ftl-maintenance-evidence-integration-registry.json",
+    "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
+    "data/exo-vessel/ftl-route-safety-integration.json",
+    "blacklight-exo-ftl-route-safety-runtime.js"
+  ],
+  "admissionOrder": [
+    "resolve maintenance evidence when required or supplied",
+    "validate maintenance evidence freshness when an explicit validity interval is supplied",
+    "block on maintenance BLOCKED or CONFLICT",
+    "block as UNRESOLVED when required maintenance evidence is absent or unresolved",
+    "evaluate family-specific route safety",
+    "combine results conjunctively so neither side can average away the other",
+    "downgrade otherwise-ADMISSIBLE route results when maintenance certification is conditional"
+  ],
+  "maintenanceRequirement": {
+    "explicit": "maintenanceEvidenceRequired === true",
+    "implicitTriggers": [
+      "maintenanceEvidencePacket supplied",
+      "maintenanceEvidenceContext supplied",
+      "serviceEvent supplied",
+      "serviceEventKind supplied",
+      "technologyAdapter supplied for a service/re-certification request"
+    ],
+    "noTriggerBehavior": "Route safety may proceed using existing installation timing/readiness authority; no recent maintenance event is invented."
+  },
+  "statusMapping": {
+    "CERTIFIED": "PASS",
+    "CONDITIONALLY_CERTIFIED": "CONDITIONAL",
+    "BLOCKED": "BLOCK",
+    "CONFLICT": "CONFLICT",
+    "UNRESOLVED": "UNRESOLVED",
+    "SIMULATION_ONLY": "SIMULATION_ONLY"
+  },
+  "routeStatusMapping": {
+    "ADMISSIBLE": "PASS",
+    "MARGINAL": "CONDITIONAL",
+    "REJECTED": "BLOCK",
+    "UNRESOLVED": "UNRESOLVED",
+    "OUTSIDE_MODEL_VALIDITY": "BLOCK",
+    "CONFLICT": "CONFLICT"
+  },
+  "conjunctivePolicy": [
+    "CONFLICT outranks every non-conflict state.",
+    "Any BLOCK state produces REJECTED admission.",
+    "Required UNRESOLVED evidence produces UNRESOLVED admission.",
+    "A conditional maintenance state downgrades an otherwise ADMISSIBLE route to MARGINAL.",
+    "A route MARGINAL state remains MARGINAL even when maintenance is CERTIFIED.",
+    "SIMULATION_ONLY can never become operationally ADMISSIBLE."
+  ],
+  "freshnessPolicy": {
+    "equation": "age = max(0, evaluationEpochSeconds - maintenanceEvidenceEpochSeconds)",
+    "validityRule": "When maintenanceEvidenceValiditySeconds is explicitly supplied, age greater than the validity interval makes required maintenance evidence UNRESOLVED.",
+    "safeguard": "No universal certificate lifetime is invented. Omitted validity remains governed by the underlying technology/service authority."
+  },
+  "physicalSafeguards": [
+    "Maintenance health is not route-environment health.",
+    "Route-environment safety is not proof of machinery health.",
+    "Stored energy adequacy is distinct from instantaneous power delivery adequacy.",
+    "Reachable infrastructure is distinct from timely infrastructure and both are distinct from certification.",
+    "PRECOMMIT families use prediction/intervention timing rather than fabricated local FTL velocity.",
+    "Anchored portal systems use admission, synchronization, aperture/throat, exit, clearance, and recovery semantics rather than free-flight velocity.",
+    "Species or technology basis never selects FTL family."
+  ],
+  "raceTechnologySafeguards": {
+    "arnock": "Default to solid-state electromechanical modular machinery, silicon computation, and piezoelectric diagnostics. Biotechnology remains secondary unless a narrower source establishes an exception.",
+    "zwleiMurrek": "Preserve field-vane, dielectric-fluid, hydraulic, bio-reactive power-fluid, coolant, Navigation Current, and sensor evidence without normalizing the source term 'gravitic slipstream' into a consolidated family."
+  },
+  "provenanceRule": "The route-admission packet must retain the complete maintenance packet, the complete route-safety result, authority references, warnings, and the reason for any disposition downgrade or block."
+}
