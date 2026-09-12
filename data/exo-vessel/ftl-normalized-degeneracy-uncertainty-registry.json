@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.normalized-degeneracy-uncertainty",
+  "title": "Black Light FTL Normalized Tidal Degeneracy Boundary Uncertainty Registry",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "scope": "Quantify uncertainty in the operational near-degeneracy function used by tidal eigenbranch tracking so Gravitational Plane and Slipstream/Shear navigation can distinguish a physically localized loss of branch identity from an astrometrically uncertain transition."
+  },
+  "authorityInputs": [
+    "docs/blacklight/BLACK_LIGHT_PROPULSION_TRANSIT_AUTHORITY.md",
+    "data/exo-vessel/ftl-tidal-eigenbranch-tracking-registry.json",
+    "blacklight-exo-ftl-tidal-eigenbranch-tracking-runtime.js",
+    "data/exo-vessel/ftl-tidal-uncertainty-propagation-registry.json",
+    "blacklight-exo-ftl-tidal-uncertainty-propagation-runtime.js",
+    "data/exo-vessel/ftl-adaptive-spatiotemporal-refinement-registry.json"
+  ],
+  "defaultControls": {
+    "degeneracyRelativeGap": 0.02,
+    "minimumScalePerS2": 1e-30,
+    "activeScaleTieRelativeTolerance": 0.001,
+    "gapCuspSigmaMultiplier": 1,
+    "maximumLinearizedGammaSigma": 0.25
+  },
+  "mathematics": {
+    "relativeGap": "gamma_ij=|g_ij|/S where g_ij=lambda_i-lambda_j and S=max(|lambda_i|,|lambda_j|,||T||_F,epsilon)",
+    "tensorNorm": "||T||_F=sqrt(Txx^2+Tyy^2+Tzz^2+2Txy^2+2Txz^2+2Tyz^2)",
+    "gapSensitivity": "d g_ij = (a_i-a_j)^T d vec_s(T)",
+    "activeScaleSensitivity": "dS is sign(lambda_i)a_i, sign(lambda_j)a_j, d||T||_F, or 0 depending on the unique active max branch",
+    "gammaSensitivity": "d gamma = sign(g)(a_i-a_j)^T dT/S - |g| dS/S^2 for a smooth active branch and nonzero g",
+    "gammaVariance": "sigma_gamma^2 = q_gamma^T Sigma_T q_gamma",
+    "operationalBoundary": "h_ij=gamma_ij-gamma_min; h=0 is the operational loss/restoration boundary used by the eigenbranch tracker",
+    "boundaryFraction": "f*=f_a-(f_b-f_a) h_a/(h_b-h_a) under a local linear crossing model",
+    "boundaryUncertaintyBound": "sigma_f,upper ~= [(1-w)sigma_gamma,a + w sigma_gamma,b]/|dh/df|; the linear sum is conservative when cross-sample covariance is unavailable"
+  },
+  "physicalAssumptions": [
+    "The model is first-order and piecewise differentiable. It is invalid at an exact eigenvalue-gap cusp g=0, at ambiguous max-function ties in S, or when the inherited tensor-covariance linearization is outside its model domain.",
+    "The operational gamma boundary is an engineering identity-loss threshold, not a new law of gravity and not a fictional FTL hazard probability.",
+    "Cross-sample covariance is not presently carried, so boundary-location uncertainty is reported as a conservative upper-bound construction rather than a statistically exact one-sigma interval.",
+    "The normalization scale is itself uncertain and correlated with the numerator because both derive from the same tidal tensor; the implementation propagates them through a single gradient rather than treating them as independent."
+  ],
+  "familyUse": {
+    "gravitic-plane": "PRIMARY: operational confidence in where a tidal branch becomes non-identifiable before family-specific shear/fork response is evaluated.",
+    "slipstream-shear": "PRIMARY: uncertainty-aware localization of the ordinary-physics topology transition that can feed a separately sourced shear-lane model.",
+    "metric-envelope": "SECONDARY: confidence in principal tidal-axis continuity near strong normalization competition.",
+    "n-manifold": "SECONDARY: physical topology-confidence input only.",
+    "inertial-torch": "STRUCTURAL/NAVIGATION: branch-identity confidence for tidal-load attitude planning.",
+    "q-lattice": "PRECOMMIT endpoint evidence only.",
+    "fold-jump": "PRECOMMIT endpoint evidence only.",
+    "phase-displacement": "PRECOMMIT endpoint evidence only.",
+    "wormhole-gate": "ANCHOR mouth-state evidence only."
+  },
+  "generatorRules": [
+    "Consume tensor covariance and tracked eigenbranch sensitivities from the existing uncertainty authority; do not duplicate source propagation or gravity equations.",
+    "Compute gamma uncertainty from the full quotient gradient so numerator and normalization-scale correlation are preserved.",
+    "If the active max-function scale is tied within the configured tolerance, return NONSMOOTH_SCALE rather than selecting an arbitrary derivative branch.",
+    "If |g| is within the configured gap-cusp multiple of sigma_g, return NONSMOOTH_GAP rather than pretending the derivative of |g| is unique.",
+    "If inherited branch orientation/tensor uncertainty is outside its linear model, the normalized-boundary result cannot upgrade it to RESOLVED.",
+    "Report the actual gamma_min boundary used by the eigenbranch tracker separately from exact lambda_i=lambda_j coalescence.",
+    "Do not interpret a narrow gamma-boundary uncertainty envelope as proof that a fictional FTL shear fork exists."
+  ],
+  "canonSafeguards": [
+    "This registry does not establish physical realizability of any FTL family.",
+    "gamma_min is a versioned navigation/identity engineering control, not a universal constant of nature.",
+    "Ordinary tidal geometry and its uncertainty cannot create, prove, or silently zero an exotic family-boundary hazard.",
+    "A selected family used for simulation does not establish race, inventor, manufacturer, owner, vessel, or technology ancestry.",
+    "A broad boundary envelope means the operational topology transition is poorly localized; it is unresolved knowledge, not automatically high fictional danger.",
+    "A max-function tie or exact-gap cusp is a mathematical non-smoothness and must remain explicit rather than being hidden behind a cosmetically finite error bar."
+  ],
+  "api": {
+    "resolver": "resolveFTLNormalizedDegeneracyUncertainty",
+    "inputs": ["samples", "tidalUncertaintyPacket", "familyId", "encounterModel", "degeneracyRelativeGap", "minimumScalePerS2", "activeScaleTieRelativeTolerance", "gapCuspSigmaMultiplier", "maximumLinearizedGammaSigma"],
+    "outputs": ["status", "controls", "samples", "boundaryIntervals", "warnings", "provenance", "canonSafeguards"],
+    "schema": "data/schemas/exo-vessel-ftl-normalized-degeneracy-uncertainty.schema.json",
+    "runtime": "blacklight-exo-ftl-normalized-degeneracy-uncertainty-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_NORMALIZED_DEGENERACY_BOUNDARY_UNCERTAINTY_MANUAL.md"
+  }
+}
