@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-family-encounter-time.schema.json",
+  "title": "Black Light FTL Family Encounter-Time Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "familyId", "encounterModel", "samples", "warnings", "provenance", "canonSafeguards"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+    "familyId": {"type": ["string", "null"]},
+    "encounterModel": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT_ENDPOINT", "ANCHORED_PORTAL", "UNRESOLVED"]},
+    "routeStartEpoch": {"type": ["string", "number", "null"]},
+    "routeLengthM": {"type": ["number", "null"], "minimum": 0},
+    "projectedProgressMPerS": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "progressSemantic": {"type": ["string", "null"]},
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sampleIndex", "role", "fraction", "encounterEpoch", "fieldPointM", "sourceStateStatus", "environmentStatus"],
+        "properties": {
+          "sampleIndex": {"type": "integer", "minimum": 0},
+          "role": {"enum": ["PATH_SAMPLE", "COMMITMENT", "EMERGENCE", "ENTRY_MOUTH", "EXIT_MOUTH"]},
+          "fraction": {"type": "number", "minimum": 0, "maximum": 1},
+          "encounterEpoch": {"type": ["string", "number", "null"]},
+          "fieldPointM": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["x", "y", "z"],
+            "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}}
+          },
+          "sourceStateStatus": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+          "environmentStatus": {"enum": ["RESOLVED", "PARTIAL", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT"]},
+          "sourceStatePacket": {"type": ["object", "null"]},
+          "environmentPacket": {"type": ["object", "null"]}
+        }
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "canonSafeguards": {"type": "array", "items": {"type": "string"}}
+  }
+}
