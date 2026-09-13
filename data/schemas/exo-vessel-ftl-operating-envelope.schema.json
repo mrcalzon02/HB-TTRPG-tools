@@ -4,7 +4,7 @@
   "title": "Black Light FTL Certified Operating Envelope Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "status", "certificateId", "installationId", "technologyBasis", "familyStatus", "dimensions", "coupledConstraints", "warnings", "provenance"],
+  "required": ["schemaVersion", "status", "certificateId", "installationId", "technologyBasis", "familyStatus", "dimensions", "coupledConstraints", "uncertainty", "warnings", "provenance"],
   "properties": {
     "schemaVersion": {"type": "string"},
     "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
@@ -66,6 +66,9 @@
           "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
         }
       }
+    },
+    "uncertainty": {
+      "$ref": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-operating-envelope-uncertainty.schema.json"
     },
     "warnings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
