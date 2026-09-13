@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-dynamic-escape-envelope.schema.json",
+  "title": "Black Light FTL Dynamic Escape Envelope Packet",
+  "type": "object",
+  "required": ["schemaVersion", "status", "interventionTimeUpper", "stageResults", "reserveHorizons", "warnings", "provenance"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "family": {"type": ["string", "null"]},
+    "installationId": {"type": ["string", "null"]},
+    "technologyBasis": {"type": ["string", "null"]},
+    "interventionTimeUpper": {"type": ["number", "null"], "minimum": 0},
+    "baselineInterventionTimeUpper": {"type": ["number", "null"], "minimum": 0},
+    "dynamicPenaltySeconds": {"type": ["number", "null"], "minimum": 0},
+    "stageResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stage", "status", "baselineUpper", "dynamicUpper", "model", "provenance"],
+        "properties": {
+          "stage": {"enum": ["sensor", "solver", "decision", "command", "actuate", "exit", "clear", "margin"]},
+          "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+          "baselineUpper": {"type": ["number", "null"], "minimum": 0},
+          "dynamicUpper": {"type": ["number", "null"], "minimum": 0},
+          "addedDelay": {"type": ["number", "null"], "minimum": 0},
+          "model": {"type": ["string", "null"]},
+          "reason": {"type": ["string", "null"]},
+          "provenance": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "reserveHorizons": {
+      "type": "object",
+      "properties": {
+        "energyHoldSeconds": {"type": ["number", "null"], "minimum": 0},
+        "thermalHoldSeconds": {"type": ["number", "null"], "minimum": 0},
+        "minimumHoldSeconds": {"type": ["number", "null"], "minimum": 0},
+        "requiredInterventionSeconds": {"type": ["number", "null"], "minimum": 0},
+        "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]}
+      },
+      "required": ["energyHoldSeconds", "thermalHoldSeconds", "minimumHoldSeconds", "requiredInterventionSeconds", "status"],
+      "additionalProperties": true
+    },
+    "limitingConstraint": {"type": ["object", "null"]},
+    "operatingEnvelope": {"type": ["object", "null"]},
+    "maintenanceEvidence": {"type": ["object", "null"]},
+    "simulationOnly": {"type": "boolean"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
