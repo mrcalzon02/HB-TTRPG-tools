@@ -1,19 +1,22 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.route-predictive-closure",
   "status": "DERIVED",
   "designIntentSource": {
     "title": "The different lightspeed methods",
-    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y"
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
   },
-  "purpose": "Join family-specific route blocker localization to predictive intervention timing without allowing either authority to invent the other's physics.",
+  "purpose": "Join family-specific route blocker localization to predictive intervention timing while allowing current physically derived dynamic escape timing to replace stale certified baseline timing when degraded-state evidence requires it.",
   "invariants": [
     "Route safety owns blocker localization and route-family hazard semantics.",
-    "Predictive safety owns whether certified intervention can complete before the conservative blocker or commitment boundary.",
+    "Predictive safety owns whether intervention can complete before the conservative blocker or commitment boundary.",
+    "Dynamic escape authority owns the current machinery response burden when degraded-state evidence is supplied.",
     "A route blocker distance may be consumed as predictive input only when route safety marks it as applicable to the certified blocker.",
-    "Missing blocker geometry, progress rate, timing, or family evidence remains UNRESOLVED rather than becoming zero.",
+    "Dynamic escape timing may increase the intervention burden from physically modeled degraded state but may not invent generic damage or technology multipliers.",
+    "Missing blocker geometry, progress rate, timing, power, thermal, actuation or family evidence remains UNRESOLVED rather than becoming zero.",
     "PRECOMMIT and PORTAL_ADMISSION families do not receive fabricated continuous route velocities.",
-    "Predictive PASS does not erase a route REJECTED disposition; route ADMISSIBLE does not erase predictive BLOCK."
+    "Predictive PASS does not erase a route REJECTED disposition; route ADMISSIBLE does not erase predictive or dynamic-escape BLOCK."
   ],
   "continuousFamilies": ["inertial-torch", "metric-compression", "gravitational-plane", "slipstream-shear"],
   "precommitFamilies": ["q-lattice", "n-manifold", "fold-jump", "phase-displacement"],
@@ -23,12 +26,20 @@
     "routeSafety.familySegmentCertification.routeDisposition.distanceToFirstBlockingSegmentM",
     "routeSafety.familySegmentCertification.routeDisposition.nominalDistanceToFirstBlockingSegmentM"
   ],
+  "dynamicEscapeAuthority": [
+    "data/exo-vessel/ftl-dynamic-escape-envelope-registry.json",
+    "data/schemas/exo-vessel-ftl-dynamic-escape-envelope.schema.json",
+    "blacklight-exo-ftl-dynamic-escape-envelope-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_DYNAMIC_ESCAPE_ENVELOPE_AND_DEGRADED_RESPONSE_MANUAL.md"
+  ],
   "dispositions": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"],
   "provenanceRequirements": [
     "Preserve the complete route-safety packet.",
+    "Preserve the complete dynamic-escape packet when required.",
     "Preserve the complete predictive-horizon packet.",
     "Record which blocker field supplied the predictive distance.",
     "Record whether the distance was conservative, nominal, or unavailable.",
+    "Record whether intervention time came from current dynamic escape evidence or the certified static baseline.",
     "Record all explicit overrides separately from route-derived evidence."
   ]
 }
