@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-family-dynamic-response.schema.json",
+  "title": "Black Light FTL Family Dynamic Response Packet",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schemaVersion", "status", "family", "horizonMode", "responseConcept", "stageModels", "unresolvedRequirements", "warnings", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "family": {"type": ["string", "null"]},
+    "horizonMode": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT", "PORTAL_ADMISSION", null]},
+    "responseConcept": {"type": ["string", "null"]},
+    "technologyBasis": {"type": ["string", "null"]},
+    "stageModels": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {"type": "object"},
+          {"type": "array", "items": {"type": "object"}}
+        ]
+      }
+    },
+    "selectedEvidence": {"type": "object"},
+    "familyProfile": {"type": ["object", "null"]},
+    "unresolvedRequirements": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "simulationOnly": {"type": "boolean"},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "dynamicEscapeContext": {
+      "type": "object",
+      "required": ["family", "stageModels"],
+      "properties": {
+        "family": {"type": ["string", "null"]},
+        "stageModels": {"type": "object"},
+        "requiredStages": {"type": "array", "items": {"type": "string"}},
+        "simulationOnly": {"type": "boolean"},
+        "provenance": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

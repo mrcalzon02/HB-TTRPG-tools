@@ -1,0 +1,220 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.family-dynamic-response",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "role": "Governing design intent for differentiated gravity sensitivity, miscalculation loss, predictive sensing, emergency de-transit, maturity-scaled safety, and separate technical development for nine transit methods."
+  },
+  "purpose": "Define family-specific emergency response machinery, stage ownership, physically admissible response models, signatures, scaling questions, failure cascades and generator requirements that can be translated into the generic dynamic escape envelope without flattening the nine transit families into one abort mechanism.",
+  "familyMap": {
+    "inertial-torch": "inertial-torch",
+    "metric-envelope": "metric-compression",
+    "metric-compression": "metric-compression",
+    "gravitic-plane": "gravitational-plane",
+    "gravitational-plane": "gravitational-plane",
+    "slipstream-shear": "slipstream-shear",
+    "q-lattice": "q-lattice",
+    "n-manifold": "n-manifold",
+    "fold-jump": "fold-jump",
+    "phase-displacement": "phase-displacement",
+    "wormhole-gate": "wormhole-gate"
+  },
+  "invariants": [
+    "Transit family is supplied by family authority and never inferred from species, manufacturer, machinery style or source adjective.",
+    "Family response profiles define what physical machinery may control an emergency stage; they do not invent current measurements or numerical performance.",
+    "A family profile may supply an equation form only when its variables correspond to an explicitly modeled physical state.",
+    "No family receives a universal damage multiplier, technology-tier multiplier, species multiplier or fixed abort duration.",
+    "Continuous projected-progress, PRECOMMIT and PORTAL_ADMISSION families retain distinct route semantics.",
+    "Stored field energy, available sink power, deliverable bus power, thermal reserve and actuator slew are independent constraints.",
+    "A family response packet may increase a certified stage time or render it unresolved/blocked; it may not improve a certified stage time without stronger recertification authority.",
+    "Signatures are consequences of modeled machinery state and energy flow; they are not arbitrary stealth modifiers.",
+    "Race-specific embodiments may change hardware realization and evidence channels without changing family equations unless a narrower authority says otherwise."
+  ],
+  "commonModels": {
+    "energyTransfer": "t >= E_required / P_available for E_required > 0 and P_available > 0",
+    "linearSlew": "t >= abs(delta_q) / qdot_available for an explicitly defined bounded-rate state variable q",
+    "translationImpulse": "t >= m * abs(delta_v) / F_available under an approximately constant available force",
+    "rotationImpulse": "t >= I * abs(delta_omega) / tau_available under an approximately constant available torque",
+    "networkReroute": "t_command,current = t_command,certified + max(0, tau_path,current - tau_path,certified)",
+    "thermalHold": "t_hold = C_th * (T_limit - T_0) / (P_heat - P_reject) only for positive net heating and a valid lumped short-transient approximation",
+    "brakingDistance": "d_required >= v_upper * t_latency_upper + v_upper^2 / (2 * a_available_lower) for approximately constant positive deceleration authority",
+    "explicitBound": "Use an explicitly measured/certified upper response time when internal state-variable modeling is unavailable or inappropriate."
+  },
+  "familyProfiles": {
+    "inertial-torch": {
+      "horizonMode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "responseConcept": "Detect, decide, cut or redirect thrust, establish available deceleration/avoidance authority, execute ordinary-space impulse, clear the collision or thermal/structural hazard, and stabilize the vehicle.",
+      "stageOwnership": {
+        "sensor": ["collision tracking", "relative-state estimation", "thermal/structural monitoring"],
+        "solver": ["braking solution", "avoidance solution", "thrust-vector solution"],
+        "command": ["engine cutoff/vector command network"],
+        "actuate": ["throttle response", "gimbal/vector response", "attitude-control response"],
+        "exit": ["velocity change or trajectory separation"],
+        "clear": ["hazard miss distance or stopping clearance"]
+      },
+      "admissibleModels": ["networkReroute", "translationImpulse", "rotationImpulse", "linearSlew", "thermalHold", "brakingDistance", "explicitBound"],
+      "scalingQuestions": ["vessel mass", "available thrust", "specific thermal rejection", "moment of inertia", "crew/structure acceleration limit", "propellant or reaction-mass reserve where applicable"],
+      "signatures": ["engine plume or exhaust change", "radiator load excursion", "attitude-control firing", "high structural acceleration", "power-bus transient"],
+      "failureModes": ["insufficient deceleration authority", "vector actuator saturation", "thermal rejection exhaustion", "structural acceleration limit exceeded", "command-path delay", "propellant/reaction-mass insufficiency"]
+    },
+    "metric-compression": {
+      "horizonMode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "responseConcept": "Stop increasing the metric field, rebalance field-former sectors, remove stored field energy through certified sinks, restore a traversable unwind geometry, collapse or relax the compression state, then verify local-space recovery.",
+      "stageOwnership": {
+        "sensor": ["field symmetry", "curvature burden", "unwind-path state"],
+        "solver": ["sector rebalance", "unwind trajectory", "sink loading"],
+        "command": ["distributed field-former command network"],
+        "actuate": ["field-sector slew", "converter/sink switching"],
+        "exit": ["compression-field unwind"],
+        "clear": ["local metric recovery and field-energy decay"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "thermalHold", "explicitBound"],
+      "scalingQuestions": ["protected volume", "number and spacing of field-former sectors", "stored field energy under the selected model", "sink/converter power", "field-symmetry tolerance", "heat rejection"],
+      "signatures": ["field-former phase excursion", "converter load transient", "sink heating", "rapid external lensing/metric-signature change if established by route physics"],
+      "failureModes": ["asymmetric unwind", "sink saturation", "sector command loss", "thermal hold shorter than unwind time", "field-slew authority loss", "unwind path no longer valid"]
+    },
+    "gravitational-plane": {
+      "horizonMode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "responseConcept": "Localize the shear fork or tidal-branch loss, reduce or redirect coupling to the active gravitational plane, slew/cancel coupling machinery within certified authority, detach before branch separation becomes destructive, and recover in a locally admissible state.",
+      "stageOwnership": {
+        "sensor": ["tidal tensor estimate", "eigenbranch continuity", "fork localization"],
+        "solver": ["detach boundary", "coupling reduction", "recoupling option"],
+        "command": ["plane-coupler command network"],
+        "actuate": ["coupling-vector slew", "field cancellation or release"],
+        "exit": ["plane detachment"],
+        "clear": ["separation from divergent shear branches"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "thermalHold", "explicitBound"],
+      "scalingQuestions": ["coupled vessel mass/volume if family authority requires it", "number and geometry of coupling stations", "tidal-gradient burden", "coupling-state slew authority", "release-energy sink capacity", "sensor baseline"],
+      "signatures": ["coupler phase/amplitude excursion", "release-energy transient", "tidal-sensor saturation", "attitude or structural-load transient during imperfect detach"],
+      "failureModes": ["fork localized too late", "coupling cannot slew before branch separation", "release sink saturated", "sensor branch ambiguity", "recoupling path unavailable", "differential loading exceeds structure"]
+    },
+    "slipstream-shear": {
+      "horizonMode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "responseConcept": "Detect boundary/adhesion deterioration, reduce or redistribute adhesion, open a certified detachment path, shed or sink stored coupling energy, cross the boundary under controlled authority, and clear the unstable shear region.",
+      "stageOwnership": {
+        "sensor": ["boundary localization", "adhesion state", "shear state"],
+        "solver": ["detachment path", "boundary-crossing solution", "energy-sink allocation"],
+        "command": ["adhesion/coupler command network"],
+        "actuate": ["adhesion slew", "field/coupler release"],
+        "exit": ["controlled detachment"],
+        "clear": ["boundary separation and local-state recovery"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "thermalHold", "explicitBound"],
+      "scalingQuestions": ["contact/coupling area", "boundary-state uncertainty", "release-energy sink capacity", "distributed actuator count", "protected volume", "thermal reserve"],
+      "signatures": ["adhesion-field collapse transient", "boundary interaction emission if established", "sink heating", "distributed actuator load spike"],
+      "failureModes": ["adhesion loss before controlled detach", "boundary crossing not reachable", "release-energy bottleneck", "distributed actuator asymmetry", "thermal exhaustion"]
+    },
+    "q-lattice": {
+      "horizonMode": "PRECOMMIT",
+      "responseConcept": "Freeze or invalidate the pending address/reference state before commitment, halt lattice transition sequencing, discharge or quarantine transition machinery, preserve a certified local reference, and verify that no partially committed address state remains active.",
+      "stageOwnership": {
+        "sensor": ["reference integrity", "address epoch validity", "commit-state monitoring"],
+        "solver": ["address rejection", "local-reference preservation", "rollback validity"],
+        "command": ["commit interlock network"],
+        "actuate": ["transition-sequence halt", "reference isolation"],
+        "exit": ["precommit rejection or rollback"],
+        "clear": ["local reference revalidation"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "explicitBound"],
+      "scalingQuestions": ["reference distribution latency", "number of synchronized transition elements", "commit-window duration", "stored transition energy if explicitly modeled", "rollback-state complexity"],
+      "signatures": ["reference-network desynchronization transient", "transition-energy dump if modeled", "large synchronized compute/control load"],
+      "failureModes": ["commit occurs before rejection", "reference split-brain", "rollback state unresolved", "transition elements disagree on epoch", "energy isolation incomplete"]
+    },
+    "n-manifold": {
+      "horizonMode": "PRECOMMIT",
+      "responseConcept": "Reject an invalid embedding before commitment, preserve the local chart/reference, close or unwind the embedding machinery through an authority-defined sequence, verify a valid return map, and prevent partial topology state from being treated as a completed transit.",
+      "stageOwnership": {
+        "sensor": ["embedding-condition state", "manifold/topology observables", "return-map evidence"],
+        "solver": ["embedding validity", "return-map solution", "abort-state selection"],
+        "command": ["embedding-control network"],
+        "actuate": ["embedding parameter slew or closure"],
+        "exit": ["precommit unwind or rejection"],
+        "clear": ["local-chart/reference revalidation"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "explicitBound"],
+      "scalingQuestions": ["number of controlled embedding degrees of freedom", "solver complexity", "reference-network latency", "stored field energy if defined", "return-map validity horizon"],
+      "signatures": ["embedding-control phase/load transient", "reference-network excursion", "energy-sink transient where physically modeled"],
+      "failureModes": ["invalid return map", "commit before unwind", "partial embedding state", "solver fails to converge within commit window", "distributed control disagreement"]
+    },
+    "fold-jump": {
+      "horizonMode": "PRECOMMIT",
+      "responseConcept": "Reject the endpoint solution before fold commitment, stop closure sequencing, unload or sink fold-former energy through certified paths, reopen or retain the local geometry as required by the family authority, and confirm endpoint/emergence state never became committed.",
+      "stageOwnership": {
+        "sensor": ["endpoint occupancy", "endpoint covariance", "closure-state monitoring"],
+        "solver": ["endpoint rejection", "closure cancellation", "local recovery state"],
+        "command": ["fold-former interlock network"],
+        "actuate": ["closure-rate slew", "energy-sink switching"],
+        "exit": ["fold abort before commitment"],
+        "clear": ["local geometry and endpoint-state revalidation"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "thermalHold", "explicitBound"],
+      "scalingQuestions": ["fold-former count/geometry", "protected volume", "stored field energy if established", "closure-rate authority", "endpoint solver latency", "sink and cooling capacity"],
+      "signatures": ["fold-former load collapse", "energy-sink heating", "endpoint-solver burst", "field-phase transient"],
+      "failureModes": ["endpoint becomes committed before rejection", "closure cannot be arrested", "sink overload", "endpoint covariance unresolved", "asymmetric former shutdown"]
+    },
+    "phase-displacement": {
+      "horizonMode": "PRECOMMIT",
+      "responseConcept": "Preserve whole-object reference integrity, halt additional displacement before commitment, reverse or reconcile only through an explicitly certified family sequence, restore all protected components to one compatible reference state, and verify complete object coverage.",
+      "stageOwnership": {
+        "sensor": ["whole-object coverage", "reference integrity", "reconciliation state"],
+        "solver": ["coverage validation", "reconciliation solution", "abort-state selection"],
+        "command": ["distributed displacement-control network"],
+        "actuate": ["displacement-state slew only where explicitly modeled"],
+        "exit": ["precommit halt/reconciliation"],
+        "clear": ["whole-object reference confirmation"]
+      },
+      "admissibleModels": ["networkReroute", "linearSlew", "energyTransfer", "explicitBound"],
+      "scalingQuestions": ["protected object count/extent", "reference distribution latency", "coverage verification complexity", "reconciliation bandwidth", "energy transfer only where source authority defines it"],
+      "signatures": ["distributed reference excursion", "synchronized control transient", "reconciliation energy transient only if physically established"],
+      "failureModes": ["partial-object coverage", "reference disagreement", "commit before reconciliation", "unresolved component state", "control-network partition"]
+    },
+    "wormhole-gate": {
+      "horizonMode": "PORTAL_ADMISSION",
+      "responseConcept": "Stop new admission, preserve mouth synchronization long enough for occupied aperture clearance, reject or hold traffic according to certified policy, reduce or close aperture through bounded machinery, dispose of throat/field energy through certified sinks, and verify both mouths and exit volume are safe.",
+      "stageOwnership": {
+        "sensor": ["mouth synchronization", "throat stability", "aperture occupancy", "exit clearance"],
+        "solver": ["admission reject/hold decision", "closure sequencing", "occupied-aperture clearance"],
+        "command": ["gate interlock and remote-mouth coordination"],
+        "actuate": ["aperture/throat control slew", "traffic barrier/interlock response"],
+        "exit": ["admission termination or controlled aperture closure"],
+        "clear": ["occupied-volume clearance and mouth recovery"]
+      },
+      "admissibleModels": ["networkReroute", "energyTransfer", "linearSlew", "thermalHold", "explicitBound"],
+      "scalingQuestions": ["aperture area", "occupied transit volume", "mouth separation communication/reference method", "closure authority", "stored field/throat energy if modeled", "sink and cooling capacity"],
+      "signatures": ["aperture size change", "mouth synchronization transient", "field-energy dump", "barrier/interlock activity", "thermal load excursion"],
+      "failureModes": ["closure while occupied", "mouth desynchronization", "throat instability", "closure actuator saturation", "sink overload", "exit volume not clear"]
+    }
+  },
+  "raceTechnologyEmbodiment": {
+    "arnock": {
+      "baseline": "Solid-state electromechanical modular technology with silicon computation, deterministic sectional control, integrated functional modules and piezoelectric condition/alignment instrumentation.",
+      "implementationNotes": [
+        "Map family response functions onto replaceable field, converter, actuator, sensor and control modules rather than generic biological organs.",
+        "Piezoelectric instrumentation may establish actuator/alignment/structural response but does not become gravity, topology, endpoint or Q-state sensing without specific sensor authority.",
+        "Module replacement may alter timing, calibration, heat load or field response and therefore can invalidate a previous family-response certificate."
+      ]
+    },
+    "zwlei-murrek": {
+      "baseline": "Fluidic/vane transit machinery using field vanes, hydraulic authority, dielectric fluid, bio-reactive power fluid, conductive coolant, Navigation Current reference systems and Sensor Choir/Forward Sensor Ampulla evidence where source authority supports them.",
+      "implementationNotes": [
+        "Translate family response into vane slew, fluid delivery, hydraulic pressure/flow, dielectric integrity, coolant reserve and reference/sensor response when those variables are actually applicable.",
+        "The source phrase gravitic slipstream is preserved as source terminology and does not select gravitational-plane or slipstream-shear family identity."
+      ]
+    }
+  },
+  "generatorRules": [
+    "Resolve canonical family first through familyMap.",
+    "Select the family profile but do not synthesize missing physical measurements.",
+    "For each required emergency stage, prefer current measured bounds, then certified family-response bounds, then explicit unresolved status.",
+    "Emit generic dynamic-escape stageModels only from an admissible family model whose variables are present and dimensionally compatible.",
+    "Preserve raw family evidence and provenance beside normalized stageModels.",
+    "Never assign a continuous projected velocity to PRECOMMIT or PORTAL_ADMISSION families.",
+    "Never convert a descriptive failure probability into time, distance, power, energy or actuator authority without an explicit physical mapping.",
+    "Never convert technology maturity directly into a numerical response multiplier; maturity may justify additional sensors, redundancy or narrower certified uncertainty only through evidence."
+  ],
+  "provenanceRule": "Every generated family-response packet must preserve the canonical family, profile version, raw machinery evidence, selected response equations, generated dynamic-escape stage models, unresolved requirements, warnings and upstream authority references."
+}
