@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "blacklight://schemas/exo-vessel-ftl-route-predictive-closure.schema.json",
+  "title": "Black Light FTL Route Predictive Closure Packet",
+  "type": "object",
+  "required": ["schemaVersion", "status", "family", "routeSafety", "predictiveSafetyHorizon", "blockerBinding", "provenance"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "family": {"type": ["string", "null"]},
+    "routeSafety": {"type": ["object", "null"]},
+    "predictiveSafetyHorizon": {"type": ["object", "null"]},
+    "blockerBinding": {
+      "type": "object",
+      "required": ["source", "distanceM", "kind", "derivedFromRouteSafety"],
+      "properties": {
+        "source": {"type": ["string", "null"]},
+        "distanceM": {"type": ["number", "null"], "minimum": 0},
+        "kind": {"enum": ["CONSERVATIVE", "NOMINAL", "NOT_APPLICABLE", "UNAVAILABLE"]},
+        "derivedFromRouteSafety": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "admissionContext": {"type": "object"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
