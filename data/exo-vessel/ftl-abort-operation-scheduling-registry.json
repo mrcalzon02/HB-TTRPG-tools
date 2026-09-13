@@ -1,0 +1,201 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.abort-operation-scheduling",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "role": "Governing design intent for family-specific emergency de-transit, predictive safety, differentiated machinery, and mathematically credible transit engineering."
+  },
+  "purpose": "Define dependency-graph and shared-resource scheduling rules for FTL abort operations so emergency duration is derived from explicit precedence, bounded operation times, resource capacities and declared arbitration rather than guessed sum/max behavior.",
+  "invariants": [
+    "Operation duration, precedence and resource demand are independent evidence classes.",
+    "Precedence-only schedules use the longest directed path through the operation DAG.",
+    "Two operations may overlap only when precedence permits overlap and every modeled renewable resource remains within certified capacity.",
+    "When concurrent demand exceeds capacity, an explicit authority must provide serialization/arbitration or the schedule is UNRESOLVED; the runtime does not invent priority.",
+    "A shared-resource conflict is not repaired by averaging demand over the full abort interval.",
+    "Consumable energy and instantaneous renewable power are separate constraints.",
+    "Unknown task duration, missing required dependency, missing required capacity, cyclic dependency, or invalid resource demand is never converted to zero.",
+    "A derived schedule may increase the current intervention upper bound; it may not reduce the certified baseline without explicit recertification authority.",
+    "PRECOMMIT and PORTAL_ADMISSION families retain their own route semantics; this authority schedules machinery operations only.",
+    "Race-specific hardware may realize abstract resources differently without changing dependency mathematics."
+  ],
+  "mathematics": {
+    "precedenceEarliestStart": "ES_i = max(EF_j) for all j in predecessors(i), with ES_i = 0 for source operations",
+    "earliestFinish": "EF_i = ES_i + d_i",
+    "precedenceMakespan": "T_DAG = max_i EF_i",
+    "criticalPath": "Any source-to-sink directed path whose summed bounded durations equals T_DAG",
+    "renewableCapacity": "For every modeled renewable resource r and all t: sum_{i active at t} q_{i,r} <= C_r",
+    "consumableReserve": "For consumable resource e: sum_i E_{i,e} <= E_available,e unless an explicit replenishment model is supplied",
+    "energyFromPower": "E_i = integral(P_i(t) dt); constant bounded power approximation E_i <= P_i,upper * d_i,upper only when that approximation is explicitly valid",
+    "scheduledIntervention": "T_int,current >= max(T_stage,current, T_schedule) unless explicit recertification authorizes a smaller baseline"
+  },
+  "resourceClasses": {
+    "commandNetwork": {
+      "kind": "renewable",
+      "unit": "normalized-channel or explicit bandwidth",
+      "notes": "Routing continuity alone does not prove latency or simultaneous command capacity."
+    },
+    "solverCompute": {
+      "kind": "renewable",
+      "unit": "normalized-compute or explicit operations/s",
+      "notes": "Use only when a compute-capacity authority exists."
+    },
+    "protectedPower": {
+      "kind": "renewable",
+      "unit": "W",
+      "notes": "Instantaneous deliverable electrical/mechanical equivalent power; separate from stored energy."
+    },
+    "energySinkPower": {
+      "kind": "renewable",
+      "unit": "W",
+      "notes": "Certified rate at which stored field/transition energy can be accepted or dissipated."
+    },
+    "coolingRejection": {
+      "kind": "renewable",
+      "unit": "W",
+      "notes": "Heat rejection or transport capacity during the modeled short transient."
+    },
+    "actuatorAuthority": {
+      "kind": "renewable",
+      "unit": "family-defined",
+      "notes": "May represent thrust-vector, field-former, vane, aperture, coupling or other bounded actuator capacity."
+    },
+    "hydraulicFlow": {
+      "kind": "renewable",
+      "unit": "m3/s or authority-defined flow",
+      "notes": "Especially relevant to Mur'rek vane/control machinery when established by source authority."
+    },
+    "referenceBus": {
+      "kind": "renewable",
+      "unit": "authority-defined reference channels",
+      "notes": "Q-lattice, manifold, fold, phase and gate reference/synchronization networks."
+    },
+    "protectedEnergy": {
+      "kind": "consumable",
+      "unit": "J",
+      "notes": "Stored emergency reserve. Do not use as an instantaneous power certificate."
+    }
+  },
+  "familyOperationTemplates": {
+    "inertial-torch": [
+      "detect-relative-state",
+      "solve-braking-or-avoidance",
+      "issue-thrust-command",
+      "slew-thrust-vector",
+      "execute-delta-v",
+      "clear-hazard",
+      "stabilize"
+    ],
+    "metric-compression": [
+      "detect-field-or-route-fault",
+      "solve-unwind-state",
+      "freeze-field-growth",
+      "rebalance-field-sectors",
+      "connect-certified-sinks",
+      "unwind-field",
+      "verify-local-metric"
+    ],
+    "gravitational-plane": [
+      "detect-shear-fork",
+      "solve-detach-boundary",
+      "reduce-plane-coupling",
+      "slew-coupling-vector",
+      "sink-release-energy",
+      "detach-plane",
+      "clear-divergent-branches"
+    ],
+    "slipstream-shear": [
+      "detect-boundary-instability",
+      "solve-detachment-path",
+      "redistribute-adhesion",
+      "open-detachment-window",
+      "sink-coupling-energy",
+      "detach-boundary",
+      "clear-shear-region"
+    ],
+    "q-lattice": [
+      "detect-reference-or-address-fault",
+      "freeze-address-state",
+      "solve-rejection",
+      "halt-transition-sequence",
+      "isolate-transition-energy",
+      "rollback-or-reject",
+      "revalidate-local-reference"
+    ],
+    "n-manifold": [
+      "detect-embedding-fault",
+      "freeze-commit",
+      "solve-return-map",
+      "slew-embedding-state",
+      "unwind-or-reject",
+      "restore-local-chart",
+      "verify-return-map"
+    ],
+    "fold-jump": [
+      "detect-endpoint-or-closure-fault",
+      "freeze-commit",
+      "reject-endpoint",
+      "arrest-closure",
+      "connect-fold-sinks",
+      "dump-or-recover-field-energy",
+      "verify-local-geometry"
+    ],
+    "phase-displacement": [
+      "detect-coverage-or-reference-fault",
+      "freeze-additional-displacement",
+      "solve-reconciliation",
+      "slew-displacement-state",
+      "reconcile-protected-object",
+      "verify-whole-object-reference"
+    ],
+    "wormhole-gate": [
+      "detect-mouth-or-occupancy-fault",
+      "stop-new-admission",
+      "coordinate-mouths",
+      "hold-or-clear-occupied-aperture",
+      "slew-aperture",
+      "sink-throat-energy",
+      "close-or-stabilize-throat",
+      "verify-both-mouths"
+    ]
+  },
+  "technologyEmbodiments": {
+    "arnock": [
+      "deterministic sectional command/data links",
+      "solid-state silicon estimators and interlocks",
+      "integrated converter/sink modules",
+      "piezoelectric alignment and actuator-condition instrumentation",
+      "modular cooling and protected-power assemblies"
+    ],
+    "zwlei-murrek": [
+      "Sensor Choir / Forward Sensor Ampulla evidence",
+      "Navigation Current reference coordination",
+      "hydraulic vane-control distribution",
+      "bio-reactive power-fluid delivery",
+      "dielectric field fluid and conductive coolant networks"
+    ]
+  },
+  "generatorRequirements": [
+    "Emit a stable operation id, bounded duration or duration source, predecessor ids, resource demand and provenance for every scheduled operation.",
+    "Emit every modeled resource capacity with unit, lower certified capacity bound and provenance.",
+    "Do not infer an operation order from object enumeration, narrative order, species, technology tier or file order.",
+    "When a resource conflict requires serialization, emit the authoritative serialization edges or named arbitration policy that created them.",
+    "Preserve unscheduled/UNRESOLVED status when multiple legal orderings exist and no authority selects one.",
+    "Carry the schedule makespan and limiting/critical operations into dynamic escape evidence.",
+    "Preserve source terminology and family identity separately from scheduling mechanics."
+  ],
+  "failureCodes": {
+    "AOS-CYCLE": "Dependency graph contains a directed cycle.",
+    "AOS-DURATION-UNKNOWN": "A required operation lacks a bounded duration.",
+    "AOS-DEPENDENCY-MISSING": "An operation references a predecessor not present in the packet.",
+    "AOS-CAPACITY-MISSING": "A required renewable resource lacks certified capacity.",
+    "AOS-CAPACITY-EXCEEDED": "A single operation exceeds certified resource capacity.",
+    "AOS-CONTENTION-UNRESOLVED": "Otherwise concurrent operations exceed capacity and no authority provides arbitration/serialization.",
+    "AOS-ENERGY-RESERVE": "Consumable reserve is insufficient.",
+    "AOS-ORDER-CONFLICT": "Declared serialization contradicts existing precedence or creates a cycle.",
+    "AOS-UNIT-CONFLICT": "Resource demand/capacity units are incompatible.",
+    "AOS-PROVENANCE-GAP": "Required scheduling evidence lacks source provenance."
+  }
+}
