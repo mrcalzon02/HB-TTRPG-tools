@@ -12,6 +12,7 @@ import json
 import re
 import sys
 from collections import Counter
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -76,6 +77,57 @@ def normalized_text(value: str) -> str:
     return value.replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")
 
 
+def skill_frontmatter_value(skill_text: str, field: str) -> str | None:
+    """Read one top-level scalar from the simple Agent Skill YAML frontmatter."""
+    if not skill_text.startswith("---\n"):
+        return None
+    end = skill_text.find("\n---\n", 4)
+    if end < 0:
+        return None
+    frontmatter = skill_text[4:end]
+    match = re.search(rf"^{re.escape(field)}:\s*(.+?)\s*$", frontmatter, re.MULTILINE)
+    if match is None:
+        return None
+    return match.group(1).strip().strip('"\'')
+
+
+def skill_frontmatter_version(skill_text: str) -> str | None:
+    """Read metadata.version from Agent Skill frontmatter without a YAML dependency."""
+    if not skill_text.startswith("---\n"):
+        return None
+    end = skill_text.find("\n---\n", 4)
+    if end < 0:
+        return None
+    frontmatter = skill_text[4:end]
+    match = re.search(r"^\s{2}version:\s*(.+?)\s*$", frontmatter, re.MULTILINE)
+    if match is None:
+        return None
+    return match.group(1).strip().strip('"\'')
+
+
+def projected_metadata_values(page: str, label: str) -> list[str] | None:
+    """Read the ordered code values rendered for one compatibility metadata field."""
+    match = re.search(
+        rf"<p><strong>{re.escape(label)}:</strong>(.*?)</p>", page,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if match is None:
+        return None
+    return [unescape(value) for value in re.findall(r"<code>([^<]+)</code>", match.group(1))]
+
+
+def projected_compatibility(page: str) -> str | None:
+    """Read the rendered compatibility sentence from a compatibility page."""
+    match = re.search(
+        r"<p><strong>Compatibility:</strong>\s*(.*?)</p>", page,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if match is None:
+        return None
+    value = re.sub(r"<[^>]+>", "", match.group(1))
+    return unescape(value).strip()
+
+
 def compatibility_page_identity_error(name: str) -> str | None:
     """Return an error when a compatibility page does not identify its authority."""
     relative_page = f"agent-skills/{name}.html"
@@ -99,6 +151,64 @@ def compatibility_page_identity_error(name: str) -> str | None:
             f"expected {name!r}"
         )
     return None
+
+
+def compatibility_metadata_errors(name: str, registry_skill: dict[str, object]) -> list[str]:
+    """Return errors when rendered routing/frontmatter metadata has drifted."""
+    relative_page = f"agent-skills/{name}.html"
+    skill_path = f"skills/{name}/SKILL.md"
+    try:
+        page = (ROOT / relative_page).read_text(encoding="utf-8")
+        skill_text = (ROOT / skill_path).read_text(encoding="utf-8")
+    except OSError as exc:
+        return [f"{relative_page}: cannot compare integration metadata: {exc}"]
+
+    errors: list[str] = []
+    expected_status = registry_skill.get("status")
+    status_match = re.search(
+        r'<strong>Status:</strong>\s*<code>([^<]+)</code>', page, re.IGNORECASE
+    )
+    actual_status = unescape(status_match.group(1)) if status_match else None
+    if actual_status != expected_status:
+        errors.append(
+            f"{relative_page}: rendered Status is {actual_status!r}, expected {expected_status!r}"
+        )
+
+    field_map = {
+        "Capability IDs": "capabilityIds",
+        "Resource IDs": "resourceIds",
+        "Laboratory IDs": "laboratoryIds",
+    }
+    for label, registry_key in field_map.items():
+        actual_values = projected_metadata_values(page, label)
+        expected_values = registry_skill.get(registry_key)
+        if actual_values is None:
+            errors.append(f"{relative_page}: missing rendered {label}")
+        elif actual_values != expected_values:
+            errors.append(
+                f"{relative_page}: rendered {label} are {actual_values!r}, "
+                f"expected {expected_values!r}"
+            )
+
+    expected_version = skill_frontmatter_version(skill_text)
+    version_match = re.search(
+        r'<strong>Version:</strong>\s*<code>([^<]+)</code>', page, re.IGNORECASE
+    )
+    actual_version = unescape(version_match.group(1)) if version_match else None
+    if actual_version != expected_version:
+        errors.append(
+            f"{relative_page}: rendered Version is {actual_version!r}, "
+            f"expected {expected_version!r} from {skill_path}"
+        )
+
+    expected_compatibility = skill_frontmatter_value(skill_text, "compatibility")
+    actual_compatibility = projected_compatibility(page)
+    if actual_compatibility != expected_compatibility:
+        errors.append(
+            f"{relative_page}: rendered Compatibility is {actual_compatibility!r}, "
+            f"expected {expected_compatibility!r} from {skill_path}"
+        )
+    return errors
 
 
 def compatibility_projection_error(name: str) -> str | None:
@@ -143,6 +253,7 @@ def main() -> int:
         return 2
 
     registry_names: list[str] = []
+    registry_by_name: dict[str, dict[str, object]] = {}
     malformed_entries: list[str] = []
     missing_skill_files: list[str] = []
     for index, skill in enumerate(skills):
@@ -155,6 +266,7 @@ def main() -> int:
             malformed_entries.append(f"skills[{index}] has no valid name")
             continue
         registry_names.append(name)
+        registry_by_name.setdefault(name, skill)
         expected_path = f"skills/{name}/SKILL.md"
         if path != expected_path:
             malformed_entries.append(f"{name}: path is {path!r}, expected {expected_path!r}")
@@ -181,6 +293,10 @@ def main() -> int:
         error for name in existing_projected_names
         for error in [compatibility_page_identity_error(name)] if error is not None
     ]
+    compatibility_metadata_error_list = [
+        error for name in existing_projected_names if name in registry_by_name
+        for error in compatibility_metadata_errors(name, registry_by_name[name])
+    ]
     compatibility_projection_errors = [
         error for name in existing_projected_names
         for error in [compatibility_projection_error(name)] if error is not None
@@ -204,6 +320,8 @@ def main() -> int:
         fail("projected compatibility pages missing or case-mismatched: " + ", ".join(missing_compatibility_pages)); problems = True
     for error in compatibility_identity_errors:
         fail(error); problems = True
+    for error in compatibility_metadata_error_list:
+        fail(error); problems = True
     for error in compatibility_projection_errors:
         fail(error); problems = True
     if missing:
@@ -219,8 +337,9 @@ def main() -> int:
         f"{len(registry_names)} registered Agent Skills exactly once, every "
         "registered SKILL.md target exists with exact path casing, and every "
         "projected compatibility page exists with exact path casing, identifies "
-        "and links its matching authoritative skill, and embeds the current "
-        "authoritative SKILL.md text."
+        "and links its matching authoritative skill, mirrors current registry and "
+        "frontmatter integration metadata, and embeds the current authoritative "
+        "SKILL.md text."
     )
     return 0
 
