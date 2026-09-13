@@ -43,12 +43,23 @@
     const skills = Array.isArray(index && index.skills) ? index.skills : [];
     const skill = skills.find(item => item && item.name === skillName);
     if (!skill) throw new Error(`Skill is not registered in skills/index.json: ${skillName}`);
+    if (typeof skill.path !== 'string' || !/^skills\/[^/]+\/SKILL\.md$/.test(skill.path)) {
+      throw new Error(`Registered skill has an invalid authoritative path: ${skillName}`);
+    }
     return skill;
   }
 
   function validatePersonalityBinding(index) {
     const binding = index && index.defaultPersonality;
-    if (!binding || binding.engramId !== 'blacklight.charles' || !binding.authorityPath) {
+    if (
+      !binding ||
+      binding.engramId !== 'blacklight.charles' ||
+      typeof binding.authorityPath !== 'string' ||
+      !binding.authorityPath ||
+      binding.binding !== 'inherited' ||
+      binding.scope !== 'all-registered-skills' ||
+      binding.loadPolicy !== 'load-once-before-selected-skills'
+    ) {
       throw new Error('The Agent Skills registry does not expose the canonical blacklight.charles defaultPersonality binding.');
     }
     return binding;
