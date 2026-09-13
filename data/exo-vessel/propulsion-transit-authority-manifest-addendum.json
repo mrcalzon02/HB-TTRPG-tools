@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.propulsion-transit.authority-manifest.addendum",
   "status": "DERIVED",
   "parentManifest": "data/exo-vessel/propulsion-transit-authority-manifest.json",
@@ -24,7 +24,11 @@
     "data/exo-vessel/ftl-operating-envelope-registry.json",
     "data/schemas/exo-vessel-ftl-operating-envelope.schema.json",
     "blacklight-exo-ftl-operating-envelope-runtime.js",
-    "docs/blacklight/BLACK_LIGHT_FTL_CERTIFIED_OPERATING_ENVELOPE_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_CERTIFIED_OPERATING_ENVELOPE_MANUAL.md",
+    "data/exo-vessel/ftl-operating-envelope-uncertainty-registry.json",
+    "data/schemas/exo-vessel-ftl-operating-envelope-uncertainty.schema.json",
+    "blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_OPERATING_ENVELOPE_MANUAL.md"
   ],
   "routeAdmissionIntegration": [
     "data/exo-vessel/ftl-route-admission-registry.json",
@@ -47,19 +51,25 @@
     "blacklight-exo-arnock-service-documentation-runtime.js",
     "blacklight-exo-ftl-maintenance-evidence-runtime.js",
     "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
+    "blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js",
     "blacklight-exo-ftl-operating-envelope-runtime.js",
     "blacklight-exo-ftl-route-admission-runtime.js"
   ],
   "safeguards": [
     "This addendum does not reorder the parent authority chain.",
     "The Ar'nock technology correction authority outranks stale lower-authority biological-default descriptors.",
-    "Maintenance evidence adapters and operating-envelope evidence do not select transit family.",
+    "Maintenance evidence adapters, operating-envelope evidence, and uncertainty evidence do not select transit family.",
     "Technology-specific source packets remain preserved beside normalized evidence.",
     "Unknown evidence remains unresolved rather than being replaced by zero or a nominal default.",
-    "Operational route admission is conjunctive: favorable route physics cannot erase blocking maintenance or operating-envelope evidence, and healthy machinery cannot erase a route blocker.",
-    "A request must lie fully inside its certified scalar operating intervals; partial overlap is not certification.",
-    "Coupled operating constraints are conservatively evaluated from requested interval bounds where supplied.",
+    "Unknown uncertainty remains unresolved when an authority requires uncertainty evidence; it is not silently replaced by zero uncertainty.",
+    "Standard uncertainty is not a hard safety bound without an explicit coverage factor and declared statistical/model semantics.",
+    "Missing covariance is not zero covariance and is not proof of independence.",
+    "Operational route admission is conjunctive: favorable route physics cannot erase blocking maintenance or uncertainty-aware operating-envelope evidence, and healthy machinery cannot erase a route blocker.",
+    "A request must lie fully inside its uncertainty-adjusted certified scalar operating intervals; partial overlap is not certification.",
+    "Coupled operating constraints are conservatively evaluated from requested interval bounds unless a justified covariance-aware model is explicitly supplied.",
+    "Covariance-aware linear constraints require a valid normalized covariance matrix, declared variable order, distribution/model semantics, and coverage factor.",
+    "Operating-envelope confidence or coverage is not a probability of successful transit.",
     "A conditional maintenance or operating-envelope certificate may downgrade an otherwise ADMISSIBLE route to MARGINAL but may never be silently promoted to full admission.",
-    "No universal maintenance-certificate lifetime or operating-envelope limit is invented; bounds and freshness rules require explicit authority."
+    "No universal maintenance-certificate lifetime, operating-envelope limit, uncertainty coverage factor, correlation model, or statistical distribution is invented; each requires explicit authority."
   ]
 }
