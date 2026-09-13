@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.predictive-safety-horizon",
+  "status": "DERIVED",
+  "purpose": "Family-specific authority for deciding whether navigation and hazard-sensing evidence provides enough conservative predictive horizon to complete the certified intervention sequence before a modeled transit hazard becomes unavoidable. This authority does not invent hazard probabilities, does not infer transit family from species or machinery basis, and does not replace family route certification.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "role": "Governing design intent for differentiated gravity/miscalculation response, look-ahead sensing, emergency de-transit, shear-lane hazards, maturity-scaled safety, and non-perfect predictive certainty."
+  },
+  "authorityInputs": [
+    "data/exo-vessel/ftl-route-safety-integration.json",
+    "data/exo-vessel/ftl-installation-safety-timing-registry.json",
+    "data/exo-vessel/ftl-physical-route-path-registry.json",
+    "data/exo-vessel/ftl-time-aware-route-path-registry.json",
+    "data/exo-vessel/ftl-time-dependent-source-state-registry.json",
+    "data/exo-vessel/ftl-tidal-uncertainty-propagation-registry.json",
+    "data/exo-vessel/ftl-uncertainty-aware-boundary-refinement-registry.json",
+    "data/exo-vessel/ftl-topology-hazard-applicability-registry.json",
+    "data/exo-vessel/ftl-operating-envelope-uncertainty-registry.json"
+  ],
+  "statuses": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"],
+  "horizonModes": {
+    "CONTINUOUS_PROJECTED_PROGRESS": {
+      "description": "A hazard is encountered along an evolving route and the system must preserve enough conservative detection/forecast time to execute the intervention chain before the blocker is reached.",
+      "requiredEvidence": ["interventionTimeUpper", "predictionHorizonLower"],
+      "optionalEvidence": ["hazardDistanceLower", "projectedProgressRateUpper", "advisoryMarginSeconds"],
+      "equations": [
+        "t_encounter_lower = hazardDistanceLower / projectedProgressRateUpper when both are known and projectedProgressRateUpper > 0",
+        "t_available_lower = min(predictionHorizonLower, t_encounter_lower) when both are known; otherwise predictionHorizonLower",
+        "M_T_lower = t_available_lower - interventionTimeUpper"
+      ]
+    },
+    "PRECOMMIT": {
+      "description": "The route/endpoint/topology decision becomes effectively committed before traversal; safety is governed by the conservative prediction interval available before commitment rather than a fabricated local FTL hull velocity.",
+      "requiredEvidence": ["interventionTimeUpper", "predictionHorizonLower"],
+      "optionalEvidence": ["commitWindowLower", "advisoryMarginSeconds"],
+      "equations": [
+        "t_available_lower = min(predictionHorizonLower, commitWindowLower) when commitWindowLower is known",
+        "M_T_lower = t_available_lower - interventionTimeUpper"
+      ]
+    },
+    "PORTAL_ADMISSION": {
+      "description": "Gate/portal safety is governed by conservative admission-state validity, synchronization/aperture/throat prediction, closure/rejection response, exit clearance and recovery rather than free-flight velocity.",
+      "requiredEvidence": ["interventionTimeUpper", "predictionHorizonLower"],
+      "optionalEvidence": ["admissionValidityLower", "closureHorizonLower", "advisoryMarginSeconds"],
+      "equations": [
+        "t_available_lower = minimum of supplied predictionHorizonLower, admissionValidityLower and closureHorizonLower",
+        "M_T_lower = t_available_lower - interventionTimeUpper"
+      ]
+    }
+  },
+  "familyProfiles": {
+    "inertial-torch": {
+      "mode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "primaryPredictiveQuestions": ["collision-course localization", "braking/deceleration reserve horizon", "thermal and structural state forecast"],
+      "requiredHazardEvidence": ["collision-course", "deceleration-reserve"]
+    },
+    "metric-compression": {
+      "mode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "primaryPredictiveQuestions": ["curvature-limit forecast", "field-symmetry degradation", "unwind-path availability"],
+      "requiredHazardEvidence": ["curvature-limit", "unwind-path"]
+    },
+    "gravitational-plane": {
+      "mode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "primaryPredictiveQuestions": ["shear-fork localization", "tidal eigenbranch continuity", "recoupling-path availability"],
+      "requiredHazardEvidence": ["shear-fork", "tidal-shear", "recoupling-path"]
+    },
+    "slipstream-shear": {
+      "mode": "CONTINUOUS_PROJECTED_PROGRESS",
+      "primaryPredictiveQuestions": ["boundary localization", "adhesion-loss forecast", "detachment-path availability"],
+      "requiredHazardEvidence": ["q-boundary", "adhesion-loss", "detachment-path"]
+    },
+    "q-lattice": {
+      "mode": "PRECOMMIT",
+      "primaryPredictiveQuestions": ["reference integrity", "address epoch validity", "rejection-path availability"],
+      "requiredHazardEvidence": ["reference-integrity", "address-epoch", "rejection-path"]
+    },
+    "n-manifold": {
+      "mode": "PRECOMMIT",
+      "primaryPredictiveQuestions": ["manifold-topology validity", "return-map validity", "embedding-condition stability"],
+      "requiredHazardEvidence": ["manifold-topology", "return-map", "embedding-condition"]
+    },
+    "fold-jump": {
+      "mode": "PRECOMMIT",
+      "primaryPredictiveQuestions": ["endpoint occupancy", "endpoint covariance", "closure/rejection path"],
+      "requiredHazardEvidence": ["destination-occupancy", "endpoint-covariance", "closure-path"]
+    },
+    "phase-displacement": {
+      "mode": "PRECOMMIT",
+      "primaryPredictiveQuestions": ["reference integrity", "whole-object coverage", "reconciliation-path validity"],
+      "requiredHazardEvidence": ["reference-integrity", "whole-object-coverage", "reconciliation-path"]
+    },
+    "wormhole-gate": {
+      "mode": "PORTAL_ADMISSION",
+      "primaryPredictiveQuestions": ["throat stability", "mouth synchronization", "aperture/admission validity", "exit clearance"],
+      "requiredHazardEvidence": ["throat-stability", "mouth-synchronization", "closure-path"]
+    }
+  },
+  "uncertaintyPolicy": {
+    "deterministicBounds": [
+      "A lower-bound predictive horizon is reduced by its declared lower-side uncertainty or bounded model error.",
+      "An upper-bound intervention time is increased by its declared upper-side uncertainty or bounded timing error.",
+      "A lower-bound hazard distance is reduced by localization/model uncertainty.",
+      "An upper-bound projected progress rate is increased by its declared upper-side uncertainty."
+    ],
+    "statisticalSafeguards": [
+      "Standard deviation is not a guaranteed bound.",
+      "A confidence/coverage factor may be used only when its statistical/model semantics are explicitly declared.",
+      "Missing covariance is not zero covariance and is not proof of independence.",
+      "Hidden-mass probability is not converted into a safety distance without an explicit physical/model mapping.",
+      "Endpoint occupancy probability is not treated as an empty-volume certificate."
+    ],
+    "unknownRule": "Required unknown predictive evidence remains UNRESOLVED; it is never silently replaced by zero uncertainty, zero latency, infinite lookahead, or nominal route conditions."
+  },
+  "conjunctivePolicy": [
+    "A predictive-horizon BLOCK may not be averaged away by favorable route geometry, machinery health, or operating-envelope evidence.",
+    "Predictive-horizon PASS does not certify the route by itself; family-specific route certification still applies.",
+    "CONFLICT outranks PASS, CONDITIONAL and UNRESOLVED.",
+    "A negative conservative timing margin is BLOCK.",
+    "A nonnegative margin inside an explicitly authority-defined advisory margin is CONDITIONAL; no universal advisory margin is invented.",
+    "Simulation-only predictive evidence cannot produce operational PASS."
+  ],
+  "raceTechnologySafeguards": {
+    "arnock": "Ar'nock silicon compute, deterministic buses, modular sensor packages and piezoelectric condition instrumentation may affect sensor/solver/command timing and calibration, but ordinary piezoelectric machinery evidence does not become gravity, topology, endpoint or Q-state evidence without a specific sensor authority.",
+    "zwleiMurrek": "Mur'rek Sensor Choir/Ampulla, Navigation Current and field-vane evidence may contribute only through explicitly mapped measurement functions; the source term 'gravitic slipstream' must not select gravitational-plane or slipstream-shear family identity."
+  },
+  "provenanceRule": "Every predictive packet must preserve the family, horizon mode, raw supplied bounds, applied uncertainty adjustments, derived conservative available time, intervention upper bound, signed timing margin, unresolved inputs, warnings, and source provenance."
+}
