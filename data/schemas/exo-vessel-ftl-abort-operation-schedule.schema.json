@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-abort-operation-schedule.schema.json",
+  "title": "Black Light FTL Abort Operation Schedule Packet",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "status",
+    "makespanUpperSeconds",
+    "operations",
+    "resourceChecks",
+    "criticalOperationIds",
+    "unresolvedRequirements",
+    "warnings",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "family": {"type": ["string", "null"]},
+    "makespanUpperSeconds": {"type": ["number", "null"], "minimum": 0},
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "durationUpperSeconds", "predecessors", "resourceDemand", "provenance"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "durationUpperSeconds": {"type": ["number", "null"], "minimum": 0},
+          "predecessors": {"type": "array", "items": {"type": "string"}},
+          "resourceDemand": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+          "consumableDemand": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+          "earliestStartSeconds": {"type": ["number", "null"], "minimum": 0},
+          "earliestFinishSeconds": {"type": ["number", "null"], "minimum": 0},
+          "provenance": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "resourceChecks": {"type": "array", "items": {"type": "object", "additionalProperties": true}},
+    "criticalOperationIds": {"type": "array", "items": {"type": "string"}},
+    "unresolvedRequirements": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "simulationOnly": {"type": "boolean"},
+    "provenance": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
