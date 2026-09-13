@@ -103,6 +103,16 @@ Then open:
 http://localhost:8000/
 ```
 
+### Agent Skill compatibility verification
+
+When changing `skills/index.json`, any `skills/<name>/SKILL.md`, `agent-skills.html`, or an `agent-skills/<name>.html` compatibility page, run the dedicated static integrity check from the repository root:
+
+```bash
+python scripts/validate_agent_skills_projection.py
+```
+
+This validator checks the complete Agent Skill discovery chain without rebuilding any runtime assets: registry membership and uniqueness, exact-case authoritative `SKILL.md` targets, compatibility-page existence, page identity and authority links, rendered routing/frontmatter metadata, and the embedded complete `SKILL.md` projection. A nonzero exit status means the static compatibility layer has drifted and should be repaired at its authoritative source before publication.
+
 The automated browser gate can also be run locally after installing Playwright and Chromium:
 
 ```bash
