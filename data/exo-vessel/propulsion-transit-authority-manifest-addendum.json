@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.6.0",
+  "schemaVersion": "1.7.0",
   "registryKey": "blacklight.propulsion-transit.authority-manifest.addendum",
   "status": "DERIVED",
   "parentManifest": "data/exo-vessel/propulsion-transit-authority-manifest.json",
@@ -34,7 +34,11 @@
     "data/exo-vessel/ftl-dynamic-escape-envelope-registry.json",
     "data/schemas/exo-vessel-ftl-dynamic-escape-envelope.schema.json",
     "blacklight-exo-ftl-dynamic-escape-envelope-runtime.js",
-    "docs/blacklight/BLACK_LIGHT_FTL_DYNAMIC_ESCAPE_ENVELOPE_AND_DEGRADED_RESPONSE_MANUAL.md"
+    "docs/blacklight/BLACK_LIGHT_FTL_DYNAMIC_ESCAPE_ENVELOPE_AND_DEGRADED_RESPONSE_MANUAL.md",
+    "data/exo-vessel/ftl-family-dynamic-response-registry.json",
+    "data/schemas/exo-vessel-ftl-family-dynamic-response.schema.json",
+    "blacklight-exo-ftl-family-dynamic-response-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_DYNAMIC_RESPONSE_AND_ABORT_MACHINERY_MANUAL.md"
   ],
   "predictiveSafetyIntegration": [
     "data/exo-vessel/ftl-predictive-safety-horizon-registry.json",
@@ -69,6 +73,7 @@
     "blacklight-exo-ftl-maintenance-evidence-integration-runtime.js",
     "blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js",
     "blacklight-exo-ftl-operating-envelope-runtime.js",
+    "blacklight-exo-ftl-family-dynamic-response-runtime.js",
     "blacklight-exo-ftl-dynamic-escape-envelope-runtime.js",
     "blacklight-exo-ftl-predictive-safety-horizon-runtime.js",
     "blacklight-exo-ftl-route-predictive-closure-runtime.js",
@@ -77,7 +82,7 @@
   "safeguards": [
     "This addendum does not reorder the parent authority chain.",
     "The Ar'nock technology correction authority outranks stale lower-authority biological-default descriptors.",
-    "Maintenance evidence adapters, operating-envelope evidence, dynamic-escape evidence, predictive-horizon evidence, uncertainty evidence, and route-predictive closure do not select transit family.",
+    "Maintenance evidence adapters, operating-envelope evidence, family-response evidence, dynamic-escape evidence, predictive-horizon evidence, uncertainty evidence, and route-predictive closure do not select transit family.",
     "Technology-specific source packets remain preserved beside normalized evidence.",
     "Unknown evidence remains unresolved rather than being replaced by zero or a nominal default.",
     "Unknown uncertainty remains unresolved when an authority requires uncertainty evidence; it is not silently replaced by zero uncertainty.",
@@ -86,21 +91,24 @@
     "Hidden-mass probability is not a conservative distance-to-hazard without an explicit physical/model mapping.",
     "Endpoint-occupancy probability is not an empty-volume or emergence-clearance certificate.",
     "Route safety owns blocker localization; predictive safety may consume that blocker but may not reinterpret or invent its family physics.",
+    "Family dynamic-response authority owns the physical meaning and admissible machinery models for each abort sequence; the generic dynamic escape authority owns conservative stage-time and reserve combination.",
     "Dynamic escape authority owns present machinery response burden when degraded-state evidence is supplied; route safety does not invent that timing.",
     "A certified intervention time is not an immutable constant under arbitrary damage, rerouting, thermal saturation or reduced actuator/power authority.",
     "No generic damage percentage, species multiplier, technology-tier response multiplier or unsupported degradation factor may be converted into emergency response time.",
     "Stored energy and instantaneous deliverable power remain separate certificates.",
+    "Family-specific energy-transfer, slew, impulse or thermal equations may be used only when a family or machinery authority establishes the corresponding physical variable and required operation.",
+    "Concurrent versus sequential abort operations require explicit scheduling authority; the generator may not choose max or sum merely for convenience.",
     "A continuous-family blocker distance must be traced to family-certified route geometry or an explicit stronger authority; no generic hazard distance is fabricated.",
     "PRECOMMIT and portal families retain commitment/admission deadline semantics and do not receive fabricated continuous projected velocities.",
-    "Predictive PASS cannot promote a route REJECTED disposition and route ADMISSIBLE cannot erase predictive or dynamic-escape BLOCK.",
-    "Operational route admission is conjunctive: favorable route physics cannot erase blocking maintenance, uncertainty-aware operating-envelope, dynamic-escape, predictive-horizon, or route-predictive closure evidence, and healthy machinery cannot erase a route blocker.",
+    "Predictive PASS cannot promote a route REJECTED disposition and route ADMISSIBLE cannot erase predictive, family-response or dynamic-escape BLOCK.",
+    "Operational route admission is conjunctive: favorable route physics cannot erase blocking maintenance, uncertainty-aware operating-envelope, family-response, dynamic-escape, predictive-horizon, or route-predictive closure evidence, and healthy machinery cannot erase a route blocker.",
     "A request must lie fully inside its uncertainty-adjusted certified scalar operating intervals; partial overlap is not certification.",
     "Coupled operating constraints are conservatively evaluated from requested interval bounds unless a justified covariance-aware model is explicitly supplied.",
     "Covariance-aware linear constraints require a valid normalized covariance matrix, declared variable order, distribution/model semantics, and coverage factor.",
     "Predictive available time is conservative: lower-bound prediction/distance may only decrease under bounded uncertainty while upper-bound intervention/progress burden may only increase.",
     "Continuous projected-progress, PRECOMMIT, and portal admission horizons retain distinct semantics; no local superluminal hull velocity is fabricated for PRECOMMIT or gate families.",
     "Operating-envelope confidence or predictive coverage is not a probability of successful transit.",
-    "A conditional maintenance, operating-envelope, dynamic-escape, predictive-horizon, or route-predictive closure certificate may downgrade an otherwise ADMISSIBLE route to MARGINAL but may never be silently promoted to full admission.",
-    "No universal maintenance-certificate lifetime, operating-envelope limit, predictive advisory margin, dynamic-escape reserve margin, uncertainty coverage factor, correlation model, statistical distribution, blocker distance, or route-progress rate is invented; each requires explicit authority."
+    "A conditional maintenance, operating-envelope, family-response, dynamic-escape, predictive-horizon, or route-predictive closure certificate may downgrade an otherwise ADMISSIBLE route to MARGINAL but may never be silently promoted to full admission.",
+    "No universal maintenance-certificate lifetime, operating-envelope limit, predictive advisory margin, dynamic-escape reserve margin, family abort duration, uncertainty coverage factor, correlation model, statistical distribution, blocker distance, or route-progress rate is invented; each requires explicit authority."
   ]
 }

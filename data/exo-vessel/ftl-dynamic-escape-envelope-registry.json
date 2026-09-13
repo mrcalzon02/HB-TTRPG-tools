@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.dynamic-escape-envelope",
   "status": "DERIVED",
   "designIntentSource": {
@@ -7,7 +7,12 @@
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
     "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
   },
-  "purpose": "Resolve the current physically achievable emergency intervention time from certified stage timing plus present power, energy, thermal, actuation, field-authority, structural and network evidence. This authority does not invent family physics or generic degradation multipliers.",
+  "purpose": "Resolve the current physically achievable emergency intervention time from certified stage timing plus present power, energy, thermal, actuation, field-authority, structural and network evidence. Family-specific response meaning and admissible family machinery models are supplied by the dedicated family dynamic-response authority rather than inferred here.",
+  "authorityInputs": [
+    "data/exo-vessel/ftl-family-dynamic-response-registry.json",
+    "data/schemas/exo-vessel-ftl-family-dynamic-response.schema.json",
+    "blacklight-exo-ftl-family-dynamic-response-runtime.js"
+  ],
   "invariants": [
     "A certified intervention time is a baseline operating-state certificate, not an immutable constant under damage, rerouting, overload or thermal saturation.",
     "Dynamic escape timing may increase from physically modeled constraints but may not be reduced below a certified stage timing without a stronger recertification authority.",
@@ -16,6 +21,7 @@
     "Energy sufficiency and instantaneous power sufficiency are independent certificates.",
     "A reachable backup path is not necessarily timely enough for emergency control.",
     "Family identity is supplied by family authority; this registry never infers a family from species, manufacturer or machinery style.",
+    "Family-specific abort machinery and stage meaning are supplied by blacklight.ftl.family-dynamic-response; this registry conservatively combines the emitted stage models with installation timing and reserve evidence.",
     "PRECOMMIT and portal families retain commitment/admission deadline semantics; this authority only supplies machinery response burden.",
     "Simulation-only estimates may inform analysis but may not become operational certification."
   ],
@@ -31,6 +37,13 @@
     "energyHold": "energyHold = protectedEnergy / max(0, emergencyLoad - protectedGeneration)",
     "explicitFamilyResponse": "A family authority may provide a physically derived upper stage time and provenance without exposing its internal state variable here."
   },
+  "familyResponseIntegration": {
+    "registry": "data/exo-vessel/ftl-family-dynamic-response-registry.json",
+    "schema": "data/schemas/exo-vessel-ftl-family-dynamic-response.schema.json",
+    "runtime": "blacklight-exo-ftl-family-dynamic-response-runtime.js",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_FAMILY_DYNAMIC_RESPONSE_AND_ABORT_MACHINERY_MANUAL.md",
+    "contract": "resolveFTLFamilyDynamicResponse(context) returns dynamicEscapeContext.stageModels compatible with this authority. Family-specific evidence remains preserved in the family-response packet; this registry does not reinterpret that evidence."
+  },
   "dispositions": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"],
   "requiredOutput": [
     "interventionTimeUpper",
@@ -44,16 +57,19 @@
   "raceTechnologyNotes": {
     "arnock": [
       "Prefer measured deterministic bus delay, silicon-controller timing, module power limits, piezoelectric alignment/actuator evidence and thermal-interface state.",
-      "Do not substitute biological machinery assumptions for missing solid-state evidence."
+      "Do not substitute biological machinery assumptions for missing solid-state evidence.",
+      "Use the family dynamic-response authority to determine what field, actuator, converter, sensor or control module participates in the selected family abort."
     ],
     "zwlei-murrek": [
       "Relevant present-state evidence may include field-vane authority, hydraulic pressure/flow, dielectric-fluid condition, bio-reactive power-fluid delivery and conductive-coolant reserve.",
-      "Source term gravitic slipstream does not select a consolidated FTL family."
+      "Source term gravitic slipstream does not select a consolidated FTL family.",
+      "Use the family dynamic-response authority before mapping vane/fluid evidence into generic stage timing."
     ]
   },
   "provenanceRequirements": [
     "Preserve the certified baseline timing source.",
     "Preserve every current-state measurement used to derive a slower response stage.",
+    "Preserve the family-response packet that establishes why a physical model belongs to a particular emergency stage.",
     "Record the equation/model used for every derived stage bound.",
     "Record whether each bound is measured, certified, inferred, simulated or unresolved.",
     "Preserve operating-envelope, maintenance and family-specific source packets beside normalized output when available."
