@@ -3,105 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blacklight Intelligence | Charles Secure Operations</title>
+  <title>Blacklight Intelligence | Charles Edge Suite</title>
+  <meta name="description" content="Charles Edge Suite secure local AI integration levels from private voice and knowledge assistance through facility operations, power control, campus command, and government-restricted protective security integration.">
+  <meta name="keywords" content="Blacklight Intelligence, Charles Edge Suite, secure local AI, voice operations, facilities integration, building automation, power management, government secure facilities">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/blacklight-charles-interface.html">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blacklight-corporate-assets.css">
   <style>
     .charles-page{display:grid;gap:24px;padding-bottom:32px}
     .charles-hero{grid-template-columns:minmax(0,1.42fr) minmax(290px,.68fr);align-items:stretch;padding:clamp(28px,4vw,52px)}
-    .charles-hero-copy{align-self:center;max-width:760px}
-    .charles-hero h1{max-width:13ch;font-size:clamp(2.65rem,4.45vw,4.8rem);line-height:.98;letter-spacing:-.045em;text-wrap:balance}
-    .charles-hero .bli-lede{max-width:680px;font-size:clamp(1rem,1.25vw,1.14rem)}
+    .charles-hero-copy{align-self:center;max-width:800px}
+    .charles-hero h1{max-width:15ch;font-size:clamp(2.65rem,4.45vw,4.8rem);line-height:.98;letter-spacing:-.045em;text-wrap:balance}
+    .charles-hero .bli-lede{max-width:740px;font-size:clamp(1rem,1.25vw,1.14rem)}
     .charles-hero .bli-directory-panel{min-height:0;height:100%;align-content:start}
     .charles-hero .bli-metric-grid{grid-template-columns:1fr 1fr}
     .charles-hero .bli-stat{min-height:94px}
     .charles-console{border:1px solid rgba(217,168,79,.34);border-radius:24px;background:radial-gradient(circle at 20% 0%,rgba(217,168,79,.11),transparent 32%),linear-gradient(135deg,rgba(18,16,13,.97),rgba(3,3,3,.99));box-shadow:0 28px 70px rgba(0,0,0,.38);padding:clamp(18px,3vw,28px);display:grid;gap:16px}
-    .charles-status{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-    .charles-orb{width:62px;height:62px;border-radius:999px;border:1px solid rgba(217,168,79,.55);background:radial-gradient(circle,rgba(217,168,79,.44),rgba(217,168,79,.08) 52%,rgba(0,0,0,.9));box-shadow:0 0 34px rgba(217,168,79,.24),inset 0 0 24px rgba(244,239,229,.1)}
-    .charles-status-text strong{display:block;color:#f4efe5;font-size:1.15rem}
-    .charles-status-text span{color:#bdb4a4}
-    .charles-transcript{display:grid;gap:12px;min-height:172px}
-    .charles-line{border:1px solid rgba(217,168,79,.18);border-radius:18px;background:rgba(0,0,0,.22);padding:14px}
-    .charles-line b{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;margin-bottom:6px}
-    .charles-line p{margin:0;color:#f4efe5;line-height:1.55}
-    .charles-command-row{display:grid;grid-template-columns:1fr auto;gap:10px}
-    .charles-command-row input{border:1px solid rgba(217,168,79,.28);border-radius:999px;background:rgba(0,0,0,.3);color:#f4efe5;padding:12px 14px}
-    .charles-button,.charles-pill{border:1px solid rgba(217,168,79,.62);border-radius:999px;background:rgba(217,168,79,.13);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer;text-decoration:none}
-    .charles-button:hover,.charles-pill:hover{background:rgba(217,168,79,.23)}
-    .charles-button:disabled{cursor:wait;opacity:.62}
-    .charles-prompt-buttons{display:flex;flex-wrap:wrap;gap:9px}
-    .charles-seal{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;border-left:3px solid rgba(217,168,79,.62);background:rgba(217,168,79,.07);padding:14px 16px;border-radius:0 16px 16px 0}
-    .charles-seal strong{color:#d9a84f}
-    .charles-seal p{margin:0}
-    .charles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-    .charles-card{border:1px solid rgba(217,168,79,.2);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:18px;display:grid;gap:10px}
-    .charles-card h3,.charles-card h4{margin:0}
-    .charles-card p{margin:0}
-    .charles-card .number{color:#d9a84f;font-size:1.9rem;font-weight:900;line-height:1}
-    .charles-card ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}
-    .charles-address{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.28);border-radius:24px;background:radial-gradient(circle at 85% 15%,rgba(217,168,79,.12),transparent 20rem),linear-gradient(145deg,rgba(26,25,24,.96),rgba(4,4,3,.98));padding:clamp(22px,4vw,38px)}
-    .charles-address::after{content:"03";position:absolute;right:18px;bottom:-34px;color:rgba(217,168,79,.07);font-size:11rem;font-weight:950;line-height:1}
-    .charles-address blockquote{position:relative;z-index:1;margin:18px 0 0;max-width:980px;color:#f4efe5;font-size:clamp(1.06rem,1.45vw,1.28rem);line-height:1.68}
-    .charles-address footer{position:relative;z-index:1;margin-top:18px;color:#d9a84f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
-    .charles-layer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-    .charles-layer{border:1px solid rgba(217,168,79,.22);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:16px;display:grid;gap:10px}
-    .charles-layer h3{margin:0}
-    .charles-layer ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}
-    .charles-layer .bli-badge-row{margin-top:0}
-    .charles-scenario{display:grid;gap:12px}
-    .charles-scenario-head{display:flex;justify-content:space-between;gap:12px;align-items:start}
-    .charles-scenario-tag{color:#d9a84f;text-transform:uppercase;font-size:.72rem;font-weight:900;letter-spacing:.12em}
-    .charles-scenario dl{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;margin:0}
-    .charles-scenario dt{color:#d9a84f;font-weight:900}
-    .charles-scenario dd{margin:0;color:#bdb4a4}
-    .charles-table-wrap{overflow:auto;border:1px solid rgba(217,168,79,.2);border-radius:20px;background:rgba(0,0,0,.18)}
-    .charles-table{width:100%;border-collapse:collapse;min-width:780px}
-    .charles-table th,.charles-table td{border-bottom:1px solid rgba(217,168,79,.16);padding:14px;text-align:left;vertical-align:top}
-    .charles-table th{color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}
-    .charles-table td{color:#f4efe5}
-    .charles-table tr:last-child td{border-bottom:0}
-    .charles-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-    .charles-stage{position:relative;border-top:2px solid rgba(217,168,79,.45);padding:18px 14px 14px;background:rgba(0,0,0,.18);border-radius:0 0 16px 16px}
-    .charles-stage::before{content:"";position:absolute;top:-7px;left:14px;width:12px;height:12px;border-radius:50%;background:#d9a84f;box-shadow:0 0 18px rgba(217,168,79,.48)}
-    .charles-stage strong{display:block;color:#f4efe5}
-    .charles-stage span{display:block;color:#bdb4a4;margin-top:6px;line-height:1.45}
-    .charles-faq{display:grid;gap:10px}
-    .charles-faq details{border:1px solid rgba(217,168,79,.18);border-radius:16px;background:rgba(0,0,0,.2);padding:14px 16px}
-    .charles-faq summary{cursor:pointer;color:#f4efe5;font-weight:900}
-    .charles-faq p{margin:10px 0 0}
-    .charles-cta{display:grid;grid-template-columns:1.2fr auto;gap:24px;align-items:center;border:1px solid rgba(217,168,79,.3);border-radius:26px;padding:clamp(24px,4vw,42px);background:radial-gradient(circle at 85% 20%,rgba(217,168,79,.15),transparent 20rem),linear-gradient(130deg,rgba(26,25,24,.95),rgba(4,4,3,.98))}
-    .charles-cta h2{margin:0 0 10px}
-    .charles-cta p{margin:0}
-    .charles-cta .bli-actions{margin:0;justify-content:flex-end}
-    @media(max-width:960px){.charles-hero{grid-template-columns:1fr}.charles-hero h1{max-width:16ch}.charles-timeline{grid-template-columns:1fr 1fr}.charles-cta{grid-template-columns:1fr}.charles-cta .bli-actions{justify-content:flex-start}}
+    .charles-status{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.charles-orb{width:62px;height:62px;border-radius:999px;border:1px solid rgba(217,168,79,.55);background:radial-gradient(circle,rgba(217,168,79,.44),rgba(217,168,79,.08) 52%,rgba(0,0,0,.9));box-shadow:0 0 34px rgba(217,168,79,.24),inset 0 0 24px rgba(244,239,229,.1)}
+    .charles-status-text strong{display:block;color:#f4efe5;font-size:1.15rem}.charles-status-text span{color:#bdb4a4}.charles-transcript{display:grid;gap:12px;min-height:172px}.charles-line{border:1px solid rgba(217,168,79,.18);border-radius:18px;background:rgba(0,0,0,.22);padding:14px}.charles-line b{display:block;color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;margin-bottom:6px}.charles-line p{margin:0;color:#f4efe5;line-height:1.55}
+    .charles-command-row{display:grid;grid-template-columns:1fr auto;gap:10px}.charles-command-row input{border:1px solid rgba(217,168,79,.28);border-radius:999px;background:rgba(0,0,0,.3);color:#f4efe5;padding:12px 14px}.charles-button,.charles-pill{border:1px solid rgba(217,168,79,.62);border-radius:999px;background:rgba(217,168,79,.13);color:#f4efe5;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;cursor:pointer;text-decoration:none}.charles-button:hover,.charles-pill:hover{background:rgba(217,168,79,.23)}.charles-button:disabled{cursor:wait;opacity:.62}.charles-prompt-buttons{display:flex;flex-wrap:wrap;gap:9px}
+    .charles-seal{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;border-left:3px solid rgba(217,168,79,.62);background:rgba(217,168,79,.07);padding:14px 16px;border-radius:0 16px 16px 0}.charles-seal strong{color:#d9a84f}.charles-seal p{margin:0}
+    .charles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.charles-card{border:1px solid rgba(217,168,79,.2);border-radius:20px;background:linear-gradient(180deg,rgba(20,18,15,.92),rgba(4,4,4,.98));padding:18px;display:grid;gap:10px}.charles-card h3,.charles-card h4{margin:0}.charles-card p{margin:0}.charles-card .number{color:#d9a84f;font-size:1.9rem;font-weight:900;line-height:1}.charles-card ul{margin:0;padding-left:18px;color:#bdb4a4;line-height:1.55}
+    .charles-address{position:relative;overflow:hidden;border:1px solid rgba(217,168,79,.28);border-radius:24px;background:radial-gradient(circle at 85% 15%,rgba(217,168,79,.12),transparent 20rem),linear-gradient(145deg,rgba(26,25,24,.96),rgba(4,4,3,.98));padding:clamp(22px,4vw,38px)}.charles-address::after{content:"03";position:absolute;right:18px;bottom:-34px;color:rgba(217,168,79,.07);font-size:11rem;font-weight:950;line-height:1}.charles-address blockquote{position:relative;z-index:1;margin:18px 0 0;max-width:1040px;color:#f4efe5;font-size:clamp(1.06rem,1.45vw,1.28rem);line-height:1.68}.charles-address footer{position:relative;z-index:1;margin-top:18px;color:#d9a84f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
+    .integration-stack{display:grid;gap:14px}.integration-level{display:grid;grid-template-columns:minmax(120px,.23fr) minmax(0,1fr);gap:22px;border:1px solid rgba(217,168,79,.22);border-radius:22px;background:linear-gradient(180deg,rgba(20,18,15,.94),rgba(4,4,4,.98));padding:clamp(18px,3vw,28px)}.integration-id{display:grid;align-content:start;gap:7px}.integration-number{font-size:clamp(2.7rem,5vw,5.2rem);font-weight:950;line-height:.86;color:#d9a84f;letter-spacing:-.05em}.integration-label{font-size:.72rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#bdb4a4}.integration-copy h3{margin:0 0 8px;font-size:clamp(1.3rem,2vw,1.85rem)}.integration-copy p{margin:0 0 10px}.integration-copy p:last-child{margin-bottom:0}.integration-restricted{border-color:rgba(217,168,79,.62);background:radial-gradient(circle at 84% 0%,rgba(217,168,79,.13),transparent 25rem),linear-gradient(180deg,rgba(25,20,13,.98),rgba(3,3,3,.99));box-shadow:0 24px 60px rgba(0,0,0,.28)}.restricted-banner{display:inline-flex;width:max-content;align-items:center;border:1px solid rgba(217,168,79,.58);border-radius:999px;padding:7px 10px;color:#f4efe5;background:rgba(217,168,79,.1);font-size:.7rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase}
+    .authority-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.authority-grid article{border:1px solid rgba(217,168,79,.18);border-radius:18px;background:rgba(0,0,0,.2);padding:16px}.authority-grid h3{margin:0 0 7px}.authority-grid p{margin:0}
+    .charles-table-wrap{overflow:auto;border:1px solid rgba(217,168,79,.2);border-radius:20px;background:rgba(0,0,0,.18)}.charles-table{width:100%;border-collapse:collapse;min-width:820px}.charles-table th,.charles-table td{border-bottom:1px solid rgba(217,168,79,.16);padding:14px;text-align:left;vertical-align:top}.charles-table th{color:#d9a84f;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}.charles-table td{color:#f4efe5}.charles-table tr:last-child td{border-bottom:0}
+    .charles-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.charles-stage{position:relative;border-top:2px solid rgba(217,168,79,.45);padding:18px 14px 14px;background:rgba(0,0,0,.18);border-radius:0 0 16px 16px}.charles-stage::before{content:"";position:absolute;top:-7px;left:14px;width:12px;height:12px;border-radius:50%;background:#d9a84f;box-shadow:0 0 18px rgba(217,168,79,.48)}.charles-stage strong{display:block;color:#f4efe5}.charles-stage span{display:block;color:#bdb4a4;margin-top:6px;line-height:1.45}
+    .charles-cta{display:grid;grid-template-columns:1.2fr auto;gap:24px;align-items:center;border:1px solid rgba(217,168,79,.3);border-radius:26px;padding:clamp(24px,4vw,42px);background:radial-gradient(circle at 85% 20%,rgba(217,168,79,.15),transparent 20rem),linear-gradient(130deg,rgba(26,25,24,.95),rgba(4,4,3,.98))}.charles-cta h2{margin:0 0 10px}.charles-cta p{margin:0}.charles-cta .bli-actions{margin:0;justify-content:flex-end}
+    @media(max-width:960px){.charles-hero{grid-template-columns:1fr}.charles-hero h1{max-width:16ch}.charles-timeline{grid-template-columns:1fr 1fr}.charles-cta{grid-template-columns:1fr}.charles-cta .bli-actions{justify-content:flex-start}.integration-level{grid-template-columns:1fr}.integration-number{font-size:3.5rem}}
     @media(max-width:680px){.charles-command-row{grid-template-columns:1fr}.charles-orb{width:52px;height:52px}.charles-hero .bli-metric-grid{grid-template-columns:1fr}.charles-timeline{grid-template-columns:1fr}.charles-hero h1{font-size:clamp(2.45rem,13vw,3.7rem)}}
   </style>
 </head>
 <body class="blacklight-corp-body">
   <header class="bli-topbar">
-    <a class="bli-brand" href="blacklight-corporate.html" aria-label="Blacklight Intelligence corporate homepage"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Charles</span></span></a>
-    <nav class="bli-nav" aria-label="Charles navigation"><a href="#interface">Interface</a><a href="#capabilities">Capabilities</a><a href="#support-address">Support Address</a><a href="#layers">Architecture</a><a href="#deployments">Deployments</a><a href="#assurance">Assurance</a></nav>
+    <a class="bli-brand" href="blacklight-corporate.html" aria-label="Blacklight Intelligence corporate homepage"><span class="bli-mark" aria-hidden="true"></span><span class="bli-brand-text"><span>Blacklight</span><span>Charles Edge</span></span></a>
+    <nav class="bli-nav" aria-label="Charles navigation"><a href="blacklight-corporate.html">Corporate Home</a><a href="#interface">Interface</a><a href="#support-address">Support</a><a href="#integration-levels">Levels 0–8</a><a href="#authority">Authority</a><a href="#deployments">Deployments</a><a href="#assurance">Assurance</a></nav>
   </header>
 
   <section class="bli-hero charles-hero" aria-labelledby="charles-title">
     <div class="charles-hero-copy">
-      <p class="bli-eyebrow">Charles secure voice operations</p>
-      <h1 id="charles-title">Local intelligence that stays inside your walls.</h1>
-      <p class="bli-lede">Charles gives secure facilities a single operational voice for policy, records, logistics, maintenance, continuity, and controlled internal routing. It is installed around the institution you already operate, bounded by the authority you assign, and supported by Blacklight personnel who remain accountable after commissioning.</p>
-      <div class="bli-actions"><a class="bli-action primary" href="#interface">Enter Evaluation Console</a><a class="bli-action" href="#support-address">Field Support Commitment</a><a class="bli-action" href="#deployments">Review Deployment Classes</a></div>
-      <div class="bli-warning"><strong>Public evaluation channel:</strong> production credentials, client records, and live facility controls are not connected to this surface.</div>
+      <p class="bli-eyebrow">Charles Edge Suite · secure local operations</p>
+      <h1 id="charles-title">Local intelligence that can grow with the facility.</h1>
+      <p class="bli-lede">Charles Edge begins as a private on-site voice and knowledge system and can expand, under explicit contract and authority, into workflow automation, facility awareness, building control, electrical management, campus command, and government-restricted protective security integration.</p>
+      <div class="bli-actions"><a class="bli-action primary" href="#integration-levels">Review Integration Levels</a><a class="bli-action" href="#interface">Enter Evaluation Console</a><a class="bli-action" href="#support-address">Field Support Commitment</a><a class="bli-action" href="blacklight-corporate.html">Blacklight Corporate Home</a></div>
+      <div class="bli-warning"><strong>Public evaluation channel:</strong> production credentials, client records, physical actuators, security controls, and live facility systems are not connected to this surface.</div>
     </div>
     <aside class="bli-directory-panel" aria-label="Charles Edge Suite operating posture">
       <div class="bli-directory-title">Charles Edge Suite</div>
       <div class="bli-directory-list">
-        <div class="bli-directory-item"><span class="bli-icon" data-icon="voice"></span><strong>Voice Operations</strong><span class="bli-arrow">ready</span></div>
-        <div class="bli-directory-item"><span class="bli-icon" data-icon="lock"></span><strong>Client Boundary</strong><span class="bli-arrow">sealed</span></div>
-        <div class="bli-directory-item"><span class="bli-icon" data-icon="analytics"></span><strong>Audit Record</strong><span class="bli-arrow">active</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="voice"></span><strong>Voice + Knowledge</strong><span class="bli-arrow">0–1</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="ops"></span><strong>Workflow + Facilities</strong><span class="bli-arrow">2–5</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="analytics"></span><strong>Power + Command</strong><span class="bli-arrow">6–7</span></div>
+        <div class="bli-directory-item"><span class="bli-icon" data-icon="security"></span><strong>Government Protective</strong><span class="bli-arrow">8</span></div>
       </div>
       <div class="bli-metric-grid">
-        <div class="bli-stat"><strong>7</strong><span>separable operating layers</span></div>
+        <div class="bli-stat"><strong>9</strong><span>integration levels</span></div>
         <div class="bli-stat"><strong>Local</strong><span>default processing posture</span></div>
-        <div class="bli-stat"><strong>Scoped</strong><span>role and department authority</span></div>
+        <div class="bli-stat"><strong>Scoped</strong><span>endpoint-by-endpoint authority</span></div>
         <div class="bli-stat"><strong>Human</strong><span>final accountable owner</span></div>
       </div>
     </aside>
@@ -109,118 +68,94 @@
 
   <main class="bli-shell charles-page">
     <section id="interface" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Public evaluation console</p><h2>Ask Charles how the work should move.</h2><p>This sealed evaluation channel demonstrates the language, routing discipline, and escalation posture used by Charles installations. Each response is drawn from an approved training library; the console has no production credentials and no authority over a building.</p></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Public evaluation console</p><h2>Ask Charles how the work should move.</h2><p>This sealed evaluation channel demonstrates the language, routing discipline, and escalation posture used by Charles installations. It has no production credentials and no authority over a building.</p></div>
       <div class="charles-console">
         <div class="charles-status"><div class="charles-orb" aria-hidden="true"></div><div class="charles-status-text"><strong>Charles · Public Evaluation Channel</strong><span id="charles-status-line">Evaluation channel standing by. No production authority assigned.</span></div></div>
         <div class="charles-transcript" id="charles-transcript" aria-live="polite"><div class="charles-line"><b>Charles</b><p>Good afternoon. Give me a facility condition, policy question, intake need, or continuity problem. I will show you how I would frame the work, identify its owner, and preserve the boundary between assistance and authority.</p></div></div>
         <div class="charles-command-row"><input id="charles-command" type="text" autocomplete="off" placeholder="Describe a facility workflow, policy question, incident, or handoff."><button class="charles-button" type="button" id="charles-send">Submit</button></div>
-        <div class="charles-prompt-buttons" aria-label="Sample Charles prompts">
-          <button class="charles-pill" type="button" data-prompt="Prepare a secure intake workflow for a regional medical records office.">Medical intake</button>
-          <button class="charles-pill" type="button" data-prompt="Route a facility alarm, locked door report, and maintenance ticket without exposing restricted controls.">Facility alarm</button>
-          <button class="charles-pill" type="button" data-prompt="Explain how Charles should adapt to a low-power remote courthouse deployment.">Continuity mode</button>
-          <button class="charles-pill" type="button" data-prompt="Describe how an audit officer reviews a Charles answer after a client complaint.">Audit review</button>
-          <button class="charles-pill" type="button" data-prompt="Route a confidential employee complaint without sending it through the employee's manager.">Protected HR route</button>
-          <button class="charles-pill" type="button" data-prompt="Find the current approved emergency evacuation procedure without using an expired copy.">Emergency policy</button>
-          <button class="charles-pill" type="button" data-prompt="Prepare a visitor and delivery intake route for the front lobby.">Visitor intake</button>
-        </div>
-        <div class="charles-seal"><strong>Channel seal</strong><p>This surface is isolated from Blacklight and client production systems. Responses remain inside the current browser session and are replaced by the next exchange.</p></div>
-      </div>
-    </section>
-
-    <section id="capabilities" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Operational coverage</p><h2>One voice across the work your institution already performs.</h2><p>Charles does not replace departmental ownership. It reduces the distance between a question, the governing record, the correct workflow, and the person who remains responsible for the outcome.</p></div>
-      <div class="charles-grid">
-        <article class="charles-card"><span class="number">01</span><h3>Policy and records</h3><p>Find the current controlled document, state its owner and effective date, and identify when the record does not answer the question.</p></article>
-        <article class="charles-card"><span class="number">02</span><h3>Workflow routing</h3><p>Turn spoken requests into complete maintenance, records, HR, procurement, compliance, or support handoffs.</p></article>
-        <article class="charles-card"><span class="number">03</span><h3>Facility awareness</h3><p>Summarize approved telemetry and incident reports while keeping observation separate from control authority.</p></article>
-        <article class="charles-card"><span class="number">04</span><h3>Continuity operations</h3><p>Preserve emergency references, cached procedures, and essential routing when power or connectivity is constrained.</p></article>
-        <article class="charles-card"><span class="number">05</span><h3>Role-aware communication</h3><p>Adapt terminology, detail, and visibility to the operator's department without allowing conversation to override permission.</p></article>
-        <article class="charles-card"><span class="number">06</span><h3>Reviewable decisions</h3><p>Keep a clear record of the request, source, response, limitation, refusal, escalation, and accountable human owner.</p></article>
+        <div class="charles-prompt-buttons" aria-label="Sample Charles prompts"><button class="charles-pill" type="button" data-prompt="Prepare a secure intake workflow for a regional medical records office.">Medical intake</button><button class="charles-pill" type="button" data-prompt="Route a facility alarm, locked door report, and maintenance ticket without exposing restricted controls.">Facility alarm</button><button class="charles-pill" type="button" data-prompt="Explain how Charles should adapt to a low-power remote courthouse deployment.">Continuity mode</button><button class="charles-pill" type="button" data-prompt="Describe how an audit officer reviews a Charles answer after a client complaint.">Audit review</button><button class="charles-pill" type="button" data-prompt="Find the current approved emergency evacuation procedure without using an expired copy.">Emergency policy</button></div>
+        <div class="charles-seal"><strong>Channel seal</strong><p>This surface is isolated from Blacklight and client production systems. Responses remain inside the current browser session.</p></div>
       </div>
     </section>
 
     <section id="support-address" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Proxy Charles public address 03</p><h2>We do not abandon the installation.</h2><p>Blacklight’s product commitment includes the people responsible for commissioning, maintaining, reviewing, and supporting the system after it enters service.</p></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Proxy Charles public address 03 · commissioning and support</p><h2>The installation is not a box Blacklight leaves behind.</h2><p>Every Charles deployment is treated as a continuing operational relationship. Blacklight surveys the site, defines the authority map, commissions only approved capabilities, maintains the installed system, supports controlled changes, and remains part of the escalation path throughout the service life of the deployment.</p></div>
       <article class="charles-address">
-        <div class="bli-badge-row"><span class="bli-badge">Speech 03</span><span class="bli-badge">field support</span></div>
-        <blockquote>“Charles does not arrive in a crate and ask your organization to rearrange itself around a machine. Blacklight assigns technical personnel to learn the site, map the approved workflows, identify escalation owners, and establish the operating boundary before the first production session. Your local technician remains connected to Blacklight headquarters for maintenance, controlled updates, audit assistance, and continuity support. The system is adapted to the institution. The institution is not handed over to the system.”</blockquote>
+        <div class="bli-badge-row"><span class="bli-badge">Speech 03</span><span class="bli-badge">field support</span><span class="bli-badge">lifecycle ownership</span></div>
+        <blockquote>“Charles does not arrive in a crate and ask your organization to rearrange itself around a machine. We learn the facility first. We identify who owns each system, who may see each record, who may authorize each action, which functions must remain independent, and what the organization expects to happen when something fails. Then we commission only the level of integration you have actually approved. A Level 1 knowledge installation and a Level 7 command installation may share the same voice, but they do not share the same authority. Blacklight remains attached after commissioning for maintenance, controlled updates, audit assistance, incident review, expansion work, and continuity support. The system is adapted to the institution. The institution is not handed over to the system.”</blockquote>
         <footer>Proxy Charles · Public Address 03</footer>
+        <div class="bli-actions"><a class="bli-action primary" href="#integration-levels">Review Levels 0–8</a><a class="bli-action" href="blacklight-corporate.html">Return to Blacklight Intelligence</a></div>
       </article>
     </section>
 
-    <section id="layers" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Deployment architecture</p><h2>Seven separable operating layers.</h2><p>Every Charles site is assembled from controlled layers. A client may field only what the facility needs, keep sensitive functions physically separate, and expand without quietly broadening authority.</p></div>
-      <div class="charles-layer-grid">
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 01</span><span class="bli-badge">voice</span></div><h3>Room Voice Console</h3><p>Reception, dispatch, secure conference, executive, and operations-room interfaces.</p><ul><li>Wake phrase or push-to-talk</li><li>Local speech recognition and voice</li><li>Session labels and operator records</li></ul></article>
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 02</span><span class="bli-badge">documents</span></div><h3>Document and Policy Vault</h3><p>Controlled retrieval for manuals, SOPs, forms, contract packets, and institutional records.</p><ul><li>Versioned indexes</li><li>Source-first answers</li><li>Redaction and citation rules</li></ul></article>
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 03</span><span class="bli-badge">workflow</span></div><h3>Workflow and Ticket Router</h3><p>Routes requests into maintenance, HR, security, compliance, payroll, records, and support queues.</p><ul><li>Complete handoff packets</li><li>Department queues</li><li>Approval gates</li></ul></article>
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 04</span><span class="bli-badge">facility</span></div><h3>Facility Systems Bridge</h3><p>Permission-separated access to schedules, visitor intake, room status, and approved telemetry.</p><ul><li>Read-only commissioning</li><li>Escalation-first design</li><li>Incident summaries</li></ul></article>
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 05</span><span class="bli-badge">identity</span></div><h3>Role and Department Profiles</h3><p>Changes language and visibility according to the operator without changing the governing permission.</p><ul><li>Department vocabularies</li><li>Role-scoped context</li><li>Need-to-know display rules</li></ul></article>
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 06</span><span class="bli-badge">continuity</span></div><h3>Continuity and Power Envelope</h3><p>Maintains essential service during degraded network, limited-power, or emergency staffing conditions.</p><ul><li>Low-power response modes</li><li>Local cache discipline</li><li>Emergency procedure priority</li></ul></article>
-        <article class="charles-layer"><div class="bli-badge-row"><span class="bli-badge">Layer 07</span><span class="bli-badge">governance</span></div><h3>Command and Audit</h3><p>Gives client leadership a review surface for changes, incidents, refusals, source use, and cross-site posture.</p><ul><li>Audit officer review</li><li>Incident replay</li><li>Multisite reporting</li></ul></article>
+    <section id="integration-levels" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Charles Edge Suite · capability ladder</p><h2>Nine integration levels, from voice assistance to sovereign facility protection.</h2><p>The levels describe increasing integration depth and authority. Higher levels do not simply make Charles “smarter.” They connect additional approved data sources, workflows, sensors, actuators, electrical endpoints, security domains, and operational systems. Every capability remains permission-bounded by user, role, location, device, time, incident state, and contract.</p></div>
+      <div class="integration-stack">
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">0</div><div class="integration-label">Charles Voice</div></div><div class="integration-copy"><h3>Private on-site voice assistant</h3><p>Local conversational assistance, reminders, announcements, meeting support, room information, and ordinary low-risk requests. Level 0 does not require access to sensitive enterprise data or physical building controls.</p><p>It is the simplest deployment for organizations that want a private local assistant before connecting institutional records or operational systems.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">1</div><div class="integration-label">Charles Knowledge</div></div><div class="integration-copy"><h3>Institutional data and document management</h3><p>Adds approved manuals, policies, directories, procedures, controlled documents, equipment records, training material, records indexes, and version-aware retrieval. Charles becomes an interface to the organization’s own knowledge while remaining read-only if required.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">2</div><div class="integration-label">Charles Workflow</div></div><div class="integration-copy"><h3>Bounded digital workflow authority</h3><p>Adds separately permissioned writes into approved business systems. Charles can create work orders, prepare reports, populate forms, assemble shift turnover, update selected logs, schedule tasks, and route administrative requests without gaining unrelated authority.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">3</div><div class="integration-label">Facility Awareness</div></div><div class="integration-copy"><h3>Read-only building and equipment visibility</h3><p>Adds approved telemetry from HVAC, environmental sensors, lighting, water systems, generators, UPS equipment, energy meters, maintenance systems, room state, access events, and equipment alarms. Charles can explain facility conditions without actuating them.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">4</div><div class="integration-label">Charles Facilities</div></div><div class="integration-copy"><h3>Governed building automation</h3><p>Adds authorized control of ordinary non-life-safety systems such as HVAC zones, policy-bounded setpoints, lighting, shades, schedules, signage, selected pumps and fans, irrigation, room systems, and other supported automation endpoints.</p><p>Manual override, equipment interlocks, building-code requirements, and dedicated life-safety controls remain independent.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">5</div><div class="integration-label">Facilities Secure</div></div><div class="integration-copy"><h3>High-trust access and security integration</h3><p>Adds controlled doors, secure-room state, elevator permissions, intrusion monitoring, surveillance routing, visitor control, after-hours posture, and incident coordination. These functions use stronger authentication, role separation, confirmation, and audit requirements than convenience automation.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">6</div><div class="integration-label">Charles Power</div></div><div class="integration-copy"><h3>Electrical visibility and approved endpoint control</h3><p>Adds mains and submeter visibility, UPS and generator state, transfer equipment, distribution panels, branch circuits, intelligent PDUs, approved smart breakers, controlled relays, and individually managed receptacles.</p><p>Where appropriately rated hardware and customer policy permit remote actuation, an authorized operator may control a particular circuit, relay, equipment feed, rack outlet, or named receptacle through Charles. Blacklight’s integration work supplies the controllable infrastructure; software does not magically make an ordinary mechanical breaker or wall outlet remotely operable.</p></div></article>
+        <article class="integration-level"><div class="integration-id"><div class="integration-number">7</div><div class="integration-label">Charles Command</div></div><div class="integration-copy"><h3>Federated campus and mission-critical operations</h3><p>Combines approved knowledge, workflow, facility, security, energy, maintenance, telemetry, and equipment-control domains into one governed operational interface for campuses, complex industrial sites, remote infrastructure, and multi-building institutions.</p><p>Charles can coordinate pre-approved multi-system sequences, but Level 7 is not an unrestricted master key. Authority remains explicit at every layer.</p></div></article>
+        <article class="integration-level integration-restricted"><div class="integration-id"><div class="integration-number">8</div><div class="integration-label">Charles Sovereign</div><span class="restricted-banner">Government Entities Only</span></div><div class="integration-copy"><h3>Protective security integration for government facilities</h3><p>Level 8 is available only to authorized government entities. It extends Level 7 into hardened protective infrastructure designed around the specific facility’s mission, threat model, legal authority, architecture, and security requirements.</p><p>Integrations can include baffled or ballistic-resistant glazing, hardened architectural elements, automated bollards and vehicle barriers, protected vestibules, compartmentalized lockdown zones, controlled shutters and closures, redundant surveillance and sensor fusion, protected communications, secure emergency routing, hardened control rooms, shelter-in-place systems, and automatic facility-state changes tied to approved incident procedures.</p><p>Government customers with separate legal authority for armed protective systems may commission restricted integration with fixed or remotely operated defensive response apparatus designed for that facility by the responsible security and engineering authorities. Charles does not independently make use-of-force decisions. Armed response remains a separately governed subsystem requiring human authorization, applicable legal authority, agency policy, positive identification, and the customer’s rules of engagement.</p><p>The purpose of Level 8 is coherent protective response under pressure: one operational picture, rapid facility hardening, resilient communications, auditable security-state changes, and explicit human authority over consequential action.</p></div></article>
       </div>
     </section>
 
-    <section class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Representative operations</p><h2>What a Charles handoff looks like in practice.</h2><p>The same operating doctrine is applied differently across departments, facilities, and risk environments.</p></div>
-      <div class="charles-grid">
-        <article class="charles-card charles-scenario"><div class="charles-scenario-head"><h3>Regional medical records office</h3><span class="charles-scenario-tag">privacy first</span></div><dl><dt>Request</dt><dd>Prepare a new-patient records intake.</dd><dt>Charles</dt><dd>Finds the approved packet, limits displayed identifiers, identifies missing forms, and routes clinical questions to qualified staff.</dd><dt>Owner</dt><dd>Records supervisor or designated care administrator.</dd></dl></article>
-        <article class="charles-card charles-scenario"><div class="charles-scenario-head"><h3>Remote courthouse</h3><span class="charles-scenario-tag">continuity</span></div><dl><dt>Request</dt><dd>Maintain service through unstable power and bandwidth.</dd><dt>Charles</dt><dd>Prioritizes cached procedures, short responses, emergency references, and local queues while suspending nonessential work.</dd><dt>Owner</dt><dd>Site administrator and Blacklight field technician.</dd></dl></article>
-        <article class="charles-card charles-scenario"><div class="charles-scenario-head"><h3>Industrial campus</h3><span class="charles-scenario-tag">facility mesh</span></div><dl><dt>Request</dt><dd>Combine an alarm, locked-door report, and maintenance ticket.</dd><dt>Charles</dt><dd>Creates one incident record, distinguishes confirmed status from reports, and separates security authority from repair work.</dd><dt>Owner</dt><dd>Security controller and facilities duty manager.</dd></dl></article>
-        <article class="charles-card charles-scenario"><div class="charles-scenario-head"><h3>Enterprise compliance office</h3><span class="charles-scenario-tag">reviewable</span></div><dl><dt>Request</dt><dd>Review an answer after a client complaint.</dd><dt>Charles</dt><dd>Produces the prompt, displayed answer, source path, route classification, limitation, handoff, and disposition owner.</dd><dt>Owner</dt><dd>Client audit officer with Blacklight support.</dd></dl></article>
+    <section id="authority" class="bli-section">
+      <div class="bli-section-head"><p class="bli-eyebrow">Authority architecture</p><h2>Connection never becomes permission by implication.</h2><p>Every integrated system and endpoint declares exactly how far Charles may go. The same device can expose different authority to different roles, and high-consequence functions can require stronger confirmation than ordinary voice interaction.</p></div>
+      <div class="authority-grid">
+        <article><h3>Observe</h3><p>Read state, documents, history, alarms, and telemetry without changing the system.</p></article>
+        <article><h3>Recommend</h3><p>Diagnose conditions and propose an action while execution remains outside Charles’s authority.</p></article>
+        <article><h3>Prepare</h3><p>Construct a command, workflow, or change set for an authorized human to review.</p></article>
+        <article><h3>Confirmed Actuation</h3><p>Execute an approved action only after suitably authenticated human confirmation.</p></article>
+        <article><h3>Policy Automation</h3><p>Perform pre-authorized routine actions within defined limits, schedules, and operating envelopes.</p></article>
+        <article><h3>Emergency Procedure</h3><p>Expose narrowly defined incident actions to designated emergency roles under pre-engineered procedures.</p></article>
       </div>
+      <div class="bli-warning"><strong>Safety boundary:</strong> protective relays, breaker trip functions, emergency stops, lockout/tagout, equipment interlocks, fire systems, emergency egress, and other independent life-safety mechanisms remain authoritative. High-consequence commands may require badges, authenticated consoles, hardware credentials, local presence, second-person approval, or other controls beyond voice.</div>
     </section>
 
     <section id="deployments" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Deployment classes</p><h2>Fielded to match the institution—not the sales brochure.</h2><p>Blacklight sizes the cabinet, document estate, support arrangement, and continuity posture around actual rooms, departments, power ceilings, and operating obligations.</p></div>
-      <div class="charles-table-wrap"><table class="charles-table"><thead><tr><th>Package</th><th>Designed for</th><th>Operating posture</th><th>Blacklight support</th><th>Continuity objective</th></tr></thead><tbody>
-        <tr><td><strong>Charles Edge Standard</strong></td><td>One facility and one to three controlled rooms.</td><td>Voice, approved documents, reception, and internal procedure routing.</td><td>Commissioning technician, scheduled health review, remote headquarters support.</td><td>Orderly local shutdown and rapid restoration on protected power.</td></tr>
-        <tr><td><strong>Charles Department Suite</strong></td><td>HR, legal administration, medical administration, records, security, or emergency operations.</td><td>Department vocabulary, role boundaries, workflow connectors, and review surface.</td><td>Named deployment owner, department tuning, controlled update window.</td><td>Department records and essential routes remain locally available.</td></tr>
-        <tr><td><strong>Charles Facility Mesh</strong></td><td>Multibuilding campuses, operations centers, visitor services, and facility teams.</td><td>Multiple room consoles, queue coordination, approved telemetry, and separated permissions.</td><td>On-site service plan, change-control review, incident support.</td><td>Read-only status and emergency procedure service during degraded operation.</td></tr>
-        <tr><td><strong>Charles Enterprise Continuity</strong></td><td>Multisite organizations with executive, compliance, and disaster-continuity obligations.</td><td>Regional or clustered service, cross-site audit, staged updates, and failover document mirrors.</td><td>Dedicated account team, continuity exercises, executive reporting, priority response.</td><td>Defined site failover with preserved institutional records and audit continuity.</td></tr>
+      <div class="bli-section-head"><p class="bli-eyebrow">Deployment profiles</p><h2>Capability and deployment security are separate purchasing decisions.</h2><p>A capability level defines what Charles may do. A deployment profile defines where it runs, how resilient it is, and how tightly it is segmented.</p></div>
+      <div class="charles-table-wrap"><table class="charles-table"><thead><tr><th>Profile</th><th>Designed for</th><th>Operating posture</th><th>Typical scale</th><th>Support model</th></tr></thead><tbody>
+        <tr><td><strong>Charles Edge</strong></td><td>Single facilities and mid-market organizations.</td><td>Private inference, voice, identity, audit, approved knowledge, and selected integrations.</td><td>One building or bounded operating unit.</td><td>Commissioning owner plus scheduled Blacklight support.</td></tr>
+        <tr><td><strong>Charles Enterprise</strong></td><td>Multi-department and multi-site institutions.</td><td>Redundancy, centralized administration, federated knowledge, coordinated upgrades, and cross-site governance.</td><td>Campus, region, or enterprise portfolio.</td><td>Dedicated account and lifecycle team.</td></tr>
+        <tr><td><strong>Charles Secure</strong></td><td>Sensitive or restricted environments.</td><td>Hardened, segmented, disconnected, or highly audited deployment according to contract.</td><td>Secure rooms through hardened facilities.</td><td>Controlled maintenance windows and specialized support procedures.</td></tr>
+        <tr><td><strong>Charles Field</strong></td><td>Ships, remote industrial sites, research stations, disaster operations, and unreliable-connectivity environments.</td><td>Ruggedized local operation with resilient cached knowledge and bounded field integrations.</td><td>Remote site, vessel, expedition, or mobile facility.</td><td>Field-service plan plus headquarters escalation.</td></tr>
       </tbody></table></div>
     </section>
 
     <section class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Fielding sequence</p><h2>Commissioned under control from the first survey.</h2><p>No production connector is introduced merely because it is technically available.</p></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Commissioning sequence</p><h2>Authority grows only after the site proves ready for it.</h2></div>
       <div class="charles-timeline">
-        <article class="charles-stage"><strong>01 · Survey</strong><span>Rooms, power, networks, records, departments, and continuity obligations are mapped.</span></article>
+        <article class="charles-stage"><strong>01 · Survey</strong><span>Rooms, systems, networks, power, documents, departments, and operating obligations are mapped.</span></article>
         <article class="charles-stage"><strong>02 · Authority map</strong><span>Owners, prohibited actions, approvals, escalation paths, and audit requirements are documented.</span></article>
-        <article class="charles-stage"><strong>03 · Sealed build</strong><span>The local environment is installed with no production write authority.</span></article>
-        <article class="charles-stage"><strong>04 · Controlled proving</strong><span>Documents, voice, queues, refusals, and degraded modes are exercised with client staff.</span></article>
-        <article class="charles-stage"><strong>05 · Commissioning</strong><span>Only approved services enter production, with a named Blacklight and client owner.</span></article>
+        <article class="charles-stage"><strong>03 · Sealed build</strong><span>The environment is installed with the minimum authority required for proving.</span></article>
+        <article class="charles-stage"><strong>04 · Controlled proving</strong><span>Voice, documents, workflows, telemetry, refusals, and degraded modes are exercised with client staff.</span></article>
+        <article class="charles-stage"><strong>05 · Commissioning</strong><span>Only approved capabilities enter production, each with named Blacklight and client ownership.</span></article>
       </div>
     </section>
 
     <section id="assurance" class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Assurance doctrine</p><h2>Assistance without invisible authority.</h2><p>A useful operations system must be able to explain what it knows, what it does not know, and who must decide what happens next.</p></div>
+      <div class="bli-section-head"><p class="bli-eyebrow">Assurance doctrine</p><h2>Assistance without invisible authority.</h2><p>A useful operational system must be able to explain what it knows, what it does not know, what it is permitted to do, and who remains responsible for the outcome.</p></div>
       <div class="charles-grid">
-        <article class="charles-card"><h3>Local by default</h3><p>Client records and routine interaction remain within the commissioned environment unless the contract establishes a specific external service.</p></article>
-        <article class="charles-card"><h3>Read-only before control</h3><p>Facility and business connectors begin in observation or retrieval mode. Write authority is treated as a separate governed decision.</p></article>
-        <article class="charles-card"><h3>Human ownership</h3><p>Every consequential workflow has a named person or department responsible for approval and disposition.</p></article>
-        <article class="charles-card"><h3>Review after the fact</h3><p>Authorized reviewers can see the request, source basis, response, refusal, limitation, and handoff path.</p></article>
-        <article class="charles-card"><h3>Degraded behavior is designed</h3><p>Power loss, unavailable indexes, network isolation, and partial staffing are planned operating states—not surprises.</p></article>
-        <article class="charles-card"><h3>Support remains attached</h3><p>The installation keeps a defined relationship with Blacklight field personnel and headquarters support throughout its service life.</p></article>
-      </div>
-    </section>
-
-    <section class="bli-section">
-      <div class="bli-section-head"><p class="bli-eyebrow">Client questions</p><h2>Questions Blacklight expects before procurement.</h2></div>
-      <div class="charles-faq">
-        <details><summary>Does Charles require a constant external connection?</summary><p>No. The normal fielding posture is local operation with client-approved records and services available inside the commissioned boundary. External support channels are separately governed.</p></details>
-        <details><summary>Can Charles unlock doors or operate equipment?</summary><p>Not by default. Observation, workflow routing, and physical control are separate authorities. A client must deliberately approve any write-capable connector, and Blacklight commissions it under explicit human ownership.</p></details>
-        <details><summary>What happens when Charles cannot answer?</summary><p>It states the limitation, preserves the request, identifies the closest approved source or workflow, and routes the matter to the accountable human owner rather than fabricating certainty.</p></details>
-        <details><summary>Who maintains the installation?</summary><p>A named Blacklight deployment owner coordinates local technical service, controlled updates, audit support, and escalation to Blacklight headquarters.</p></details>
+        <article class="charles-card"><h3>Local by default</h3><p>Client records and routine interaction remain inside the commissioned environment unless the contract establishes a specific external service.</p></article>
+        <article class="charles-card"><h3>Read-only before control</h3><p>Facility and business connectors begin in observation or retrieval mode. Write authority is separately commissioned.</p></article>
+        <article class="charles-card"><h3>Human ownership</h3><p>Every consequential workflow has a named person, role, or department responsible for authorization and disposition.</p></article>
+        <article class="charles-card"><h3>Review after the fact</h3><p>Authorized reviewers can inspect requests, source basis, responses, refusals, limitations, commands, approvals, and handoff paths.</p></article>
+        <article class="charles-card"><h3>Degraded behavior is designed</h3><p>Power loss, unavailable indexes, network isolation, partial staffing, and failed endpoints are planned operating states rather than surprises.</p></article>
+        <article class="charles-card"><h3>Support remains attached</h3><p>The installation keeps a defined relationship with Blacklight field personnel and headquarters throughout its service life.</p></article>
       </div>
     </section>
 
     <section class="charles-cta" aria-labelledby="charles-contact-title">
-      <div><p class="bli-eyebrow">Secure systems consultation</p><h2 id="charles-contact-title">Bring the facility, the operating obligations, and the limits.</h2><p>Blacklight will return a fielding posture built around the work that must continue, the records that must remain controlled, and the people who must remain accountable.</p></div>
-      <div class="bli-actions"><a class="bli-action primary" href="blacklight-corporate.html#contact">Request a Site Review</a><a class="bli-action" href="blacklight-corporate-systems.html">Review Blacklight Systems</a></div>
+      <div><p class="bli-eyebrow">Blacklight Intelligence</p><h2 id="charles-contact-title">Start with the facility, the obligations, and the limits.</h2><p>Blacklight builds the Charles deployment around what must continue, what must remain controlled, which systems may be observed, and which people remain authorized to act.</p></div>
+      <div class="bli-actions"><a class="bli-action primary" href="blacklight-corporate.html">Return to Corporate Home</a><a class="bli-action" href="blacklight-corporate-systems.html">Review Blacklight Systems</a></div>
     </section>
   </main>
 
-  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Charles secure voice operations · Local systems, controlled authority, accountable support.</footer>
+  <footer class="bli-footer"><strong>Blacklight Intelligence</strong> · Charles Edge Suite · Local systems, graduated integration, controlled authority, accountable support.</footer>
   <script src="blacklight-charles-pseudo-interface.js"></script>
   <script src="blacklight-background-audio.js"></script>
 </body>
