@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-operating-envelope-uncertainty.schema.json",
+  "title": "Black Light FTL Operating Envelope Uncertainty Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "dimensions", "covarianceConstraints", "warnings", "provenance"],
+  "$defs": {
+    "band": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["lower", "upper"],
+      "properties": {
+        "lower": {"type": ["number", "null"]},
+        "upper": {"type": ["number", "null"]}
+      }
+    },
+    "uncertainty": {
+      "type": ["object", "null"],
+      "additionalProperties": true,
+      "properties": {
+        "type": {"enum": ["deterministicBound", "standardUncertainty"]},
+        "absolute": {"type": "number", "minimum": 0},
+        "lower": {"type": "number", "minimum": 0},
+        "upper": {"type": "number", "minimum": 0},
+        "standardUncertainty": {"type": "number", "minimum": 0},
+        "coverageFactor": {"type": "number", "minimum": 0},
+        "distributionModel": {"type": "string", "minLength": 1},
+        "unit": {"type": ["string", "null"]},
+        "epoch": {"type": ["string", "number", "null"]},
+        "source": {"type": ["string", "object", "null"]}
+      }
+    },
+    "dimensionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "unit", "certifiedNominal", "requestedNominal", "certifiedEffective", "requestedEffective", "certifiedUncertainty", "requestedUncertainty", "status", "signedMargin", "reason", "provenance"],
+      "properties": {
+        "key": {"type": "string"},
+        "unit": {"type": ["string", "null"]},
+        "certifiedNominal": {"$ref": "#/$defs/band"},
+        "requestedNominal": {"$ref": "#/$defs/band"},
+        "certifiedEffective": {"$ref": "#/$defs/band"},
+        "requestedEffective": {"$ref": "#/$defs/band"},
+        "certifiedUncertainty": {"$ref": "#/$defs/uncertainty"},
+        "requestedUncertainty": {"$ref": "#/$defs/uncertainty"},
+        "status": {"enum": ["PASS", "BLOCK", "UNRESOLVED", "CONFLICT", "NOT_REQUESTED"]},
+        "signedMargin": {"type": ["number", "null"]},
+        "reason": {"type": ["string", "null"]},
+        "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+      }
+    },
+    "covarianceConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "modelId", "variables", "status", "meanDemand", "directionalVariance", "directionalSigma", "coverageFactor", "confidenceDemand", "limit", "margin", "reason", "provenance"],
+      "properties": {
+        "id": {"type": "string"},
+        "modelId": {"type": ["string", "null"]},
+        "variables": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "status": {"enum": ["PASS", "BLOCK", "UNRESOLVED", "CONFLICT"]},
+        "meanDemand": {"type": ["number", "null"]},
+        "directionalVariance": {"type": ["number", "null"]},
+        "directionalSigma": {"type": ["number", "null"]},
+        "coverageFactor": {"type": ["number", "null"], "minimum": 0},
+        "confidenceDemand": {"type": ["number", "null"]},
+        "limit": {"type": ["number", "null"]},
+        "margin": {"type": ["number", "null"]},
+        "reason": {"type": ["string", "null"]},
+        "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["PASS", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "dimensions": {"type": "array", "items": {"$ref": "#/$defs/dimensionResult"}},
+    "covarianceConstraints": {"type": "array", "items": {"$ref": "#/$defs/covarianceConstraint"}},
+    "warnings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+  }
+}
