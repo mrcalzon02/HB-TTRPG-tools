@@ -12,6 +12,7 @@ import json
 import re
 import sys
 from collections import Counter
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,6 +22,35 @@ PROJECTION_PATH = ROOT / "agent-skills.html"
 SKILL_LINK_RE = re.compile(
     r'href=["\']agent-skills/([^/"\']+)\.html["\']', re.IGNORECASE,
 )
+
+
+class SkillProjectionParser(HTMLParser):
+    """Extract the escaped SKILL.md payload from a compatibility page."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self._capturing = False
+        self._chunks: list[str] = []
+        self.projections: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() != "pre" or self._capturing:
+            return
+        attr_map = dict(attrs)
+        classes = (attr_map.get("class") or "").split()
+        if "module-card" in classes:
+            self._capturing = True
+            self._chunks = []
+
+    def handle_data(self, data: str) -> None:
+        if self._capturing:
+            self._chunks.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() == "pre" and self._capturing:
+            self.projections.append("".join(self._chunks))
+            self._capturing = False
+            self._chunks = []
 
 
 def fail(message: str) -> None:
@@ -39,6 +69,11 @@ def exact_file_exists(relative_path: str) -> bool:
             return False
         current = match
     return current.is_file()
+
+
+def normalized_text(value: str) -> str:
+    """Normalize transport line endings while ignoring presentation-only EOF newlines."""
+    return value.replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")
 
 
 def compatibility_page_identity_error(name: str) -> str | None:
@@ -63,6 +98,29 @@ def compatibility_page_identity_error(name: str) -> str | None:
             f"{relative_page}: registered Name is {projected_name.group(1)!r}, "
             f"expected {name!r}"
         )
+    return None
+
+
+def compatibility_projection_error(name: str) -> str | None:
+    """Return an error when embedded SKILL.md text has drifted from its authority."""
+    relative_page = f"agent-skills/{name}.html"
+    skill_path = f"skills/{name}/SKILL.md"
+    try:
+        page = (ROOT / relative_page).read_text(encoding="utf-8")
+        authoritative = (ROOT / skill_path).read_text(encoding="utf-8")
+    except OSError as exc:
+        return f"{relative_page}: cannot compare SKILL.md projection: {exc}"
+
+    parser = SkillProjectionParser()
+    parser.feed(page)
+    parser.close()
+    if len(parser.projections) != 1:
+        return (
+            f"{relative_page}: expected exactly one <pre class='module-card'> SKILL.md "
+            f"projection, found {len(parser.projections)}"
+        )
+    if normalized_text(parser.projections[0]) != normalized_text(authoritative):
+        return f"{relative_page}: embedded SKILL.md projection differs from {skill_path}"
     return None
 
 
@@ -114,10 +172,18 @@ def main() -> int:
         f"agent-skills/{name}.html" for name in set(projected_names)
         if not exact_file_exists(f"agent-skills/{name}.html")
     )
-    compatibility_identity_errors = [
-        error for name in sorted(set(projected_names))
+    existing_projected_names = sorted(
+        name for name in set(projected_names)
         if exact_file_exists(f"agent-skills/{name}.html")
+        and exact_file_exists(f"skills/{name}/SKILL.md")
+    )
+    compatibility_identity_errors = [
+        error for name in existing_projected_names
         for error in [compatibility_page_identity_error(name)] if error is not None
+    ]
+    compatibility_projection_errors = [
+        error for name in existing_projected_names
+        for error in [compatibility_projection_error(name)] if error is not None
     ]
 
     registry_set = set(registry_names)
@@ -138,6 +204,8 @@ def main() -> int:
         fail("projected compatibility pages missing or case-mismatched: " + ", ".join(missing_compatibility_pages)); problems = True
     for error in compatibility_identity_errors:
         fail(error); problems = True
+    for error in compatibility_projection_errors:
+        fail(error); problems = True
     if missing:
         fail("skills missing from agent-skills.html: " + ", ".join(missing)); problems = True
     if extra:
@@ -150,8 +218,9 @@ def main() -> int:
         "OK: agent-skills.html projects all "
         f"{len(registry_names)} registered Agent Skills exactly once, every "
         "registered SKILL.md target exists with exact path casing, and every "
-        "projected compatibility page exists with exact path casing and identifies "
-        "and links its matching authoritative skill."
+        "projected compatibility page exists with exact path casing, identifies "
+        "and links its matching authoritative skill, and embeds the current "
+        "authoritative SKILL.md text."
     )
     return 0
 
