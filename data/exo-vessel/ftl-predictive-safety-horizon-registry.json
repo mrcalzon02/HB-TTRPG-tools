@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.0.1",
   "registryKey": "blacklight.ftl.predictive-safety-horizon",
   "status": "DERIVED",
   "purpose": "Family-specific authority for deciding whether navigation and hazard-sensing evidence provides enough conservative predictive horizon to complete the certified intervention sequence before a modeled transit hazard becomes unavoidable. This authority does not invent hazard probabilities, does not infer transit family from species or machinery basis, and does not replace family route certification.",
@@ -20,6 +20,19 @@
     "data/exo-vessel/ftl-operating-envelope-uncertainty-registry.json"
   ],
   "statuses": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"],
+  "familyMap": {
+    "inertial-torch": "inertial-torch",
+    "metric-envelope": "metric-compression",
+    "metric-compression": "metric-compression",
+    "gravitic-plane": "gravitational-plane",
+    "gravitational-plane": "gravitational-plane",
+    "slipstream-shear": "slipstream-shear",
+    "q-lattice": "q-lattice",
+    "n-manifold": "n-manifold",
+    "fold-jump": "fold-jump",
+    "wormhole-gate": "wormhole-gate",
+    "phase-displacement": "phase-displacement"
+  },
   "horizonModes": {
     "CONTINUOUS_PROJECTED_PROGRESS": {
       "description": "A hazard is encountered along an evolving route and the system must preserve enough conservative detection/forecast time to execute the intervention chain before the blocker is reached.",
@@ -125,5 +138,5 @@
     "arnock": "Ar'nock silicon compute, deterministic buses, modular sensor packages and piezoelectric condition instrumentation may affect sensor/solver/command timing and calibration, but ordinary piezoelectric machinery evidence does not become gravity, topology, endpoint or Q-state evidence without a specific sensor authority.",
     "zwleiMurrek": "Mur'rek Sensor Choir/Ampulla, Navigation Current and field-vane evidence may contribute only through explicitly mapped measurement functions; the source term 'gravitic slipstream' must not select gravitational-plane or slipstream-shear family identity."
   },
-  "provenanceRule": "Every predictive packet must preserve the family, horizon mode, raw supplied bounds, applied uncertainty adjustments, derived conservative available time, intervention upper bound, signed timing margin, unresolved inputs, warnings, and source provenance."
+  "provenanceRule": "Every predictive packet must preserve the canonical family, horizon mode, raw supplied bounds, applied uncertainty adjustments, derived conservative available time, intervention upper bound, signed timing margin, unresolved inputs, warnings, and source provenance. Family aliases are normalized only through familyMap and never inferred from species or technology identity."
 }
