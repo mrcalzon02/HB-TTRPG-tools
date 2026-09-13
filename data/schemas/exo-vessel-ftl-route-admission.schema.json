@@ -4,14 +4,16 @@
   "title": "Black Light FTL Route Admission Packet",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "status", "maintenanceRequired", "operatingEnvelopeRequired", "maintenance", "operatingEnvelope", "routeSafety", "admission", "warnings", "provenance"],
+  "required": ["schemaVersion", "status", "maintenanceRequired", "operatingEnvelopeRequired", "predictiveSafetyHorizonRequired", "maintenance", "operatingEnvelope", "predictiveSafetyHorizon", "routeSafety", "admission", "warnings", "provenance"],
   "properties": {
     "schemaVersion": {"type": "string"},
     "status": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT", "SIMULATION_ONLY"]},
     "maintenanceRequired": {"type": "boolean"},
     "operatingEnvelopeRequired": {"type": "boolean"},
+    "predictiveSafetyHorizonRequired": {"type": "boolean"},
     "maintenance": {"type": ["object", "null"], "additionalProperties": true},
     "operatingEnvelope": {"type": ["object", "null"], "additionalProperties": true},
+    "predictiveSafetyHorizon": {"type": ["object", "null"], "additionalProperties": true},
     "maintenanceFreshness": {
       "type": "object",
       "additionalProperties": false,
@@ -28,10 +30,11 @@
     "admission": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["maintenanceClass", "operatingEnvelopeClass", "routeClass", "disposition", "reasons"],
+      "required": ["maintenanceClass", "operatingEnvelopeClass", "predictiveHorizonClass", "routeClass", "disposition", "reasons"],
       "properties": {
         "maintenanceClass": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "CONFLICT", "UNRESOLVED", "SIMULATION_ONLY", "NOT_REQUIRED"]},
         "operatingEnvelopeClass": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "CONFLICT", "UNRESOLVED", "SIMULATION_ONLY", "NOT_REQUIRED"]},
+        "predictiveHorizonClass": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "CONFLICT", "UNRESOLVED", "SIMULATION_ONLY", "NOT_REQUIRED"]},
         "routeClass": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "CONFLICT", "UNRESOLVED", "NOT_EVALUATED"]},
         "disposition": {"enum": ["ADMISSIBLE", "MARGINAL", "REJECTED", "UNRESOLVED", "OUTSIDE_MODEL_VALIDITY", "CONFLICT", "SIMULATION_ONLY"]},
         "reasons": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
