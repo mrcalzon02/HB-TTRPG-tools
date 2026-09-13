@@ -46,14 +46,10 @@
     return skill;
   }
 
-  function validatePersonalityBinding(index, skill) {
+  function validatePersonalityBinding(index) {
     const binding = index && index.defaultPersonality;
     if (!binding || binding.engramId !== 'blacklight.charles' || !binding.authorityPath) {
       throw new Error('The Agent Skills registry does not expose the canonical blacklight.charles defaultPersonality binding.');
-    }
-    const declared = Array.isArray(skill && skill.personalityEngramIds) ? skill.personalityEngramIds : [];
-    if (skill && skill.personalityPolicy === 'inherit-default' && declared.length && !declared.includes(binding.engramId)) {
-      throw new Error(`Skill personality declaration does not include the registry default: ${skill.name}`);
     }
     return binding;
   }
@@ -62,7 +58,7 @@
     const baseUrl = normalizeBaseUrl(options.baseUrl);
     const index = await fetchResource('skills/index.json', baseUrl, 'json');
     const skill = findSkill(index, skillName);
-    const personalityBinding = validatePersonalityBinding(index, skill);
+    const personalityBinding = validatePersonalityBinding(index);
     const [personality, skillText] = await Promise.all([
       fetchResource(personalityBinding.authorityPath, baseUrl, 'json'),
       fetchResource(skill.path, baseUrl, 'text')
@@ -87,8 +83,7 @@
     const baseUrl = normalizeBaseUrl(options.baseUrl);
     const index = await fetchResource('skills/index.json', baseUrl, 'json');
     const skills = names.map(name => findSkill(index, name));
-    const personalityBinding = validatePersonalityBinding(index, skills[0]);
-    for (const skill of skills.slice(1)) validatePersonalityBinding(index, skill);
+    const personalityBinding = validatePersonalityBinding(index);
     const personality = await fetchResource(personalityBinding.authorityPath, baseUrl, 'json');
     if (personality.engram_id !== personalityBinding.engramId) {
       throw new Error(`Loaded personality engram id does not match registry binding: ${personality.engram_id}`);
