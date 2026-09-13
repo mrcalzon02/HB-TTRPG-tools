@@ -1,10 +1,16 @@
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = factory(require('./data/exo-vessel/ftl-operating-envelope-registry.json'));
+    module.exports = factory(
+      require('./data/exo-vessel/ftl-operating-envelope-registry.json'),
+      require('./blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js')
+    );
   } else {
-    root.BlacklightExoFTLOperatingEnvelopeRuntime = factory(root.BLACKLIGHT_FTL_OPERATING_ENVELOPE_REGISTRY || null);
+    root.BlacklightExoFTLOperatingEnvelopeRuntime = factory(
+      root.BLACKLIGHT_FTL_OPERATING_ENVELOPE_REGISTRY || null,
+      root.BlacklightExoFTLOperatingEnvelopeUncertaintyRuntime || null
+    );
   }
-}(typeof self !== 'undefined' ? self : this, function (registry) {
+}(typeof self !== 'undefined' ? self : this, function (registry, uncertaintyRuntime) {
   'use strict';
 
   const STATUS = Object.freeze({
@@ -153,37 +159,70 @@
     };
   }
 
-  function reduceStatus(dimensionResults, coupledResults, simulationOnly) {
+  function reduceStatus(dimensionResults, coupledResults, simulationOnly, uncertaintyStatus) {
     const states = [...dimensionResults, ...coupledResults].map((x) => x.status);
-    if (states.includes(STATUS.CONFLICT)) return STATUS.CONFLICT;
-    if (states.includes(STATUS.BLOCK)) return STATUS.BLOCK;
-    if (states.includes(STATUS.UNRESOLVED)) return STATUS.UNRESOLVED;
-    if (simulationOnly) return STATUS.SIMULATION_ONLY;
+    if (uncertaintyStatus === STATUS.CONFLICT || states.includes(STATUS.CONFLICT)) return STATUS.CONFLICT;
+    if (uncertaintyStatus === STATUS.BLOCK || states.includes(STATUS.BLOCK)) return STATUS.BLOCK;
+    if (uncertaintyStatus === STATUS.UNRESOLVED || states.includes(STATUS.UNRESOLVED)) return STATUS.UNRESOLVED;
+    if (simulationOnly || uncertaintyStatus === STATUS.SIMULATION_ONLY) return STATUS.SIMULATION_ONLY;
     if (states.includes(STATUS.CONDITIONAL)) return STATUS.CONDITIONAL;
     return STATUS.PASS;
+  }
+
+  function buildEffectiveInputs(certificate, request, uncertaintyPacket) {
+    const certificateDimensions = certificate.dimensions || {};
+    const requestDimensions = request.dimensions || request;
+    const effectiveCertificate = {};
+    const effectiveRequest = {};
+    const uncertaintyByKey = new Map(((uncertaintyPacket && uncertaintyPacket.dimensions) || []).map((x) => [x.key, x]));
+    const keys = unique([...Object.keys(certificateDimensions), ...Object.keys(requestDimensions || {})]);
+
+    for (const key of keys) {
+      const spec = Object.assign({}, certificateDimensions[key] || {});
+      const req = Object.assign({}, requestDimensions[key] || {});
+      const uncertainty = uncertaintyByKey.get(key);
+      if (uncertainty && uncertainty.certifiedEffective) spec.certified = uncertainty.certifiedEffective;
+      if (uncertainty && uncertainty.requestedEffective) req.requested = uncertainty.requestedEffective;
+      spec.provenance = unique([...(spec.provenance || []), uncertainty ? 'uncertainty-adjusted-certified-band' : null]);
+      req.provenance = unique([...(req.provenance || []), uncertainty ? 'uncertainty-adjusted-request-band' : null]);
+      effectiveCertificate[key] = spec;
+      effectiveRequest[key] = req;
+    }
+    return { certificateDimensions: effectiveCertificate, requestDimensions: effectiveRequest, keys };
   }
 
   function resolveFTLOperatingEnvelope(context) {
     context = context || {};
     const certificate = context.operatingEnvelopeCertificate || context.certificate || {};
     const request = context.operatingDemand || context.requestedOperatingPoint || context.request || {};
-    const certificateDimensions = certificate.dimensions || {};
-    const requestDimensions = request.dimensions || request;
-    const keys = unique([...Object.keys(certificateDimensions), ...Object.keys(requestDimensions || {})]);
-    const dimensions = keys.map((key) => normalizeDimension(key, certificateDimensions[key], requestDimensions[key]));
+    const uncertaintyPacket = uncertaintyRuntime && typeof uncertaintyRuntime.resolveFTLOperatingEnvelopeUncertainty === 'function'
+      ? uncertaintyRuntime.resolveFTLOperatingEnvelopeUncertainty(context)
+      : {
+          schemaVersion: '0.0.0',
+          status: STATUS.UNRESOLVED,
+          dimensions: [],
+          covarianceConstraints: [],
+          warnings: ['Uncertainty runtime unavailable; operating-envelope uncertainty cannot be certified.'],
+          provenance: []
+        };
+
+    const effective = buildEffectiveInputs(certificate, request, uncertaintyPacket);
+    const dimensions = effective.keys.map((key) => normalizeDimension(key, effective.certificateDimensions[key], effective.requestDimensions[key]));
     const dimensionMap = Object.fromEntries(dimensions.map((x) => [x.key, x]));
     const coupledSpecs = certificate.coupledConstraints || [];
-    const coupledConstraints = coupledSpecs.map((spec) => evaluateCoupledConstraint(spec, dimensionMap));
-    const status = reduceStatus(dimensions, coupledConstraints, certificate.simulationOnly === true);
+    const intervalCoupledSpecs = coupledSpecs.filter((spec) => !spec || spec.uncertaintyMethod !== 'covariance');
+    const coupledConstraints = intervalCoupledSpecs.map((spec) => evaluateCoupledConstraint(spec, dimensionMap));
+    const status = reduceStatus(dimensions, coupledConstraints, certificate.simulationOnly === true, uncertaintyPacket.status);
     const warnings = unique([
       ...dimensions.filter((x) => x.status !== STATUS.PASS && x.status !== 'NOT_REQUESTED').map((x) => x.key + ': ' + x.reason),
       ...coupledConstraints.filter((x) => x.status !== STATUS.PASS).map((x) => x.id + ': ' + x.reason),
+      ...(uncertaintyPacket.warnings || []),
       status === STATUS.PASS ? null : 'Certified operating-envelope compatibility is not a full family-specific route-safety determination.',
       'Environmental envelope checks constrain installation certification and do not replace family-specific route physics.'
     ]);
 
     return {
-      schemaVersion: '1.0.0',
+      schemaVersion: '1.1.0',
       status,
       certificateId: certificate.certificateId || null,
       installationId: certificate.installationId || context.installationId || null,
@@ -192,9 +231,11 @@
       family: certificate.family || context.family || null,
       dimensions,
       coupledConstraints,
+      uncertainty: uncertaintyPacket,
       warnings,
       provenance: unique([
-        'blacklight.ftl.operating-envelope@1.0.0',
+        'blacklight.ftl.operating-envelope@1.1.0',
+        ...(uncertaintyPacket.provenance || []),
         ...(certificate.provenance || []),
         ...(request.provenance || []),
         ...(context.provenance || [])
@@ -207,7 +248,9 @@
     normalizeBand,
     normalizeDimension,
     evaluateCoupledConstraint,
+    buildEffectiveInputs,
     resolveFTLOperatingEnvelope,
-    registry: registry || null
+    registry: registry || null,
+    uncertaintyRuntime: uncertaintyRuntime || null
   };
 }));
