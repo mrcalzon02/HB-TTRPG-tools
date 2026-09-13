@@ -9,6 +9,7 @@
     "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
     "family": {"type": ["string", "null"]},
     "routeSafety": {"type": ["object", "null"]},
+    "dynamicEscapeEnvelope": {"type": ["object", "null"]},
     "predictiveSafetyHorizon": {"type": ["object", "null"]},
     "blockerBinding": {
       "type": "object",
@@ -21,7 +22,16 @@
       },
       "additionalProperties": true
     },
-    "admissionContext": {"type": "object"},
+    "admissionContext": {
+      "type": "object",
+      "properties": {
+        "routeSafetyPacket": {"type": ["object", "null"]},
+        "dynamicEscapeEnvelopePacket": {"type": ["object", "null"]},
+        "predictiveSafetyHorizonPacket": {"type": ["object", "null"]},
+        "predictiveSafetyHorizonRequired": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
     "warnings": {"type": "array", "items": {"type": "string"}},
     "provenance": {"type": "array", "items": {"type": "string"}}
   },
