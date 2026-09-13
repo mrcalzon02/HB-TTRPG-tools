@@ -45,7 +45,10 @@
 
   function dynamicEscapeIsRequired(context) {
     if (context.dynamicEscapeRequired === true) return true;
-    const directKeys = ['stageModels','responseModels','protectedEnergyJ','emergencyLoadW','protectedGenerationW','thermalCapacitanceJK','temperatureLimitK','temperatureInitialK','heatGenerationW','heatRejectionW'];
+    if (context.requireEnergyReserve === true || context.requireThermalReserve === true) return true;
+    if (Array.isArray(context.requiredDynamicEscapeStages)) return true;
+    if (context.dynamicEscapeSimulationOnly === true) return true;
+    const directKeys = ['stageModels','responseModels','protectedEnergyJ','emergencyLoadW','protectedGenerationW','thermalCapacitanceJK','temperatureLimitK','temperatureInitialK','heatGenerationW','heatRejectionW','dynamicEscapeAdvisoryReserveSeconds'];
     return !!(context.dynamicEscapeEnvelopePacket || context.dynamicEscapeContext || directKeys.some((k)=>context[k] !== undefined && context[k] !== null));
   }
 
