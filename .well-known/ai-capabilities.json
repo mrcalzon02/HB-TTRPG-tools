@@ -36,13 +36,10 @@
     "remoteRpcAvailable": false,
     "remoteMcpAvailable": false,
     "notes": [
-      "Static JSON, text, HTML, and JavaScript resources are remotely GET-addressable when the current host permits that content type.",
-      "Registered Agent Skills inherit the registry default personality blacklight.charles. Load the canonical Charles engram once before selected task skills unless higher-priority host/system policy or an explicit OOC/system presentation request suppresses persona presentation.",
-      "Restricted model browsers that cannot retrieve raw JSON or Markdown should use agentSkillsHtml as an HTML compatibility projection; skills/index.json remains authoritative.",
-      "Browser-JavaScript and host-sandbox capabilities begin at runtime-required and may be promoted by the current host only after observed runtime evidence; deterministic self-tests are required where declared before ready.",
-      "Portable browser-JavaScript companion manifests may declare one or more canonical same-origin runtime scripts; when multiple scripts are declared their registry order is authoritative and must be preserved exactly.",
-      "Page-context, live-device, and UI-bound capabilities require the declared browser/device context.",
-      "No external model should infer a remote POST/RPC/MCP execution service unless a transport is explicitly deployed and verified."
+      "Registered Agent Skills inherit the registry default personality blacklight.charles; load the canonical engram once per orchestration context unless higher-priority policy or an explicit OOC presentation request suppresses persona presentation.",
+      "Restricted model browsers may use agentSkillsHtml when raw JSON or Markdown is unavailable; skills/index.json remains authoritative.",
+      "Runtime-required capabilities need observed host evidence before promotion; page-context, live-device, and UI-bound capabilities require their declared context.",
+      "Static GET discovery does not imply a deployed POST, RPC, MCP, browser-control, or other execution service."
     ]
   },
   "transportStatus": [
@@ -138,12 +135,8 @@
     }
   ],
   "agentGuidance": [
-    "After reading this discovery manifest, follow entrypoints.bootstrap as the canonical orchestration sequence; do not independently replay a second fixed loading sequence from this manifest.",
-    "Load only authorities required by the selected task: statusVocabulary only before interpreting status or acceptance state, capabilityRegistry only when the selected skill references capabilities, operationContracts only before constructing executable calls, and resourceCollections only when the task requires registered static, campaign, or lore material.",
-    "Select the minimum-capability task skill from entrypoints.agentSkills, load the canonical Charles engram once for the orchestration context, then load that skill's SKILL.md and follow its exact references. Reuse unchanged authorities already loaded in the same task.",
-    "Use entrypoints.charlesSkillInterface when Charles is the conversational interface or the request spans multiple tabletop skill families.",
-    "If the current host cannot retrieve raw agentSkills or SKILL.md resources, use agentSkillsHtml for discovery and its GitHub HTML fallbacks; the HTML projection is not replacement authority.",
-    "Check only the selected skill's execution requirements, runtime context, declared self-tests, and transport requirements before making execution, persistence, rendering, randomness, readiness, or deployment claims.",
-    "Do not infer a remote POST, RPC, MCP, browser-control, or other execution service unless this manifest explicitly declares it deployed and the current host verifies it."
+    "Follow entrypoints.bootstrap as the canonical orchestration sequence and load only authorities required by the selected task.",
+    "Use entrypoints.charlesSkillInterface for Charles-facing or multi-skill requests; use agentSkillsHtml only as a compatibility fallback when raw skill resources are unavailable.",
+    "Never claim execution, persistence, rendering, randomness, readiness, deployment, or transport without observed evidence."
   ]
 }
