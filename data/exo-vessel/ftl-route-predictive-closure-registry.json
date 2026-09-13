@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.route-predictive-closure",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y"
+  },
+  "purpose": "Join family-specific route blocker localization to predictive intervention timing without allowing either authority to invent the other's physics.",
+  "invariants": [
+    "Route safety owns blocker localization and route-family hazard semantics.",
+    "Predictive safety owns whether certified intervention can complete before the conservative blocker or commitment boundary.",
+    "A route blocker distance may be consumed as predictive input only when route safety marks it as applicable to the certified blocker.",
+    "Missing blocker geometry, progress rate, timing, or family evidence remains UNRESOLVED rather than becoming zero.",
+    "PRECOMMIT and PORTAL_ADMISSION families do not receive fabricated continuous route velocities.",
+    "Predictive PASS does not erase a route REJECTED disposition; route ADMISSIBLE does not erase predictive BLOCK."
+  ],
+  "continuousFamilies": ["inertial-torch", "metric-compression", "gravitational-plane", "slipstream-shear"],
+  "precommitFamilies": ["q-lattice", "n-manifold", "fold-jump", "phase-displacement"],
+  "portalFamilies": ["wormhole-gate"],
+  "blockerSources": [
+    "routeSafety.conservativeBlocker.effectiveDistanceToBlockingSegmentM",
+    "routeSafety.familySegmentCertification.routeDisposition.distanceToFirstBlockingSegmentM",
+    "routeSafety.familySegmentCertification.routeDisposition.nominalDistanceToFirstBlockingSegmentM"
+  ],
+  "dispositions": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"],
+  "provenanceRequirements": [
+    "Preserve the complete route-safety packet.",
+    "Preserve the complete predictive-horizon packet.",
+    "Record which blocker field supplied the predictive distance.",
+    "Record whether the distance was conservative, nominal, or unavailable.",
+    "Record all explicit overrides separately from route-derived evidence."
+  ]
+}
