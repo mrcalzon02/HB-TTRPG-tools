@@ -78,6 +78,11 @@ def main() -> int:
     projection_duplicates = sorted(
         name for name, count in projection_counts.items() if count > 1
     )
+    missing_compatibility_pages = sorted(
+        f"agent-skills/{name}.html"
+        for name in set(projected_names)
+        if not (ROOT / "agent-skills" / f"{name}.html").is_file()
+    )
 
     registry_set = set(registry_names)
     projection_set = set(projected_names)
@@ -97,6 +102,12 @@ def main() -> int:
     if projection_duplicates:
         fail("duplicate projected skill links: " + ", ".join(projection_duplicates))
         problems = True
+    if missing_compatibility_pages:
+        fail(
+            "projected compatibility pages missing: "
+            + ", ".join(missing_compatibility_pages)
+        )
+        problems = True
     if missing:
         fail("skills missing from agent-skills.html: " + ", ".join(missing))
         problems = True
@@ -109,8 +120,9 @@ def main() -> int:
 
     print(
         "OK: agent-skills.html projects all "
-        f"{len(registry_names)} registered Agent Skills exactly once, and every "
-        "registered SKILL.md target exists."
+        f"{len(registry_names)} registered Agent Skills exactly once, every "
+        "registered SKILL.md target exists, and every projected compatibility "
+        "page exists."
     )
     return 0
 
