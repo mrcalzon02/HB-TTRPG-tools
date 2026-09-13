@@ -28,6 +28,24 @@ def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
 
 
+def exact_file_exists(relative_path: str) -> bool:
+    """Require every path component to match repository casing exactly.
+
+    GitHub Pages paths are case-sensitive even when this validator is run from a
+    case-insensitive development filesystem such as default Windows or macOS.
+    """
+    current = ROOT
+    for part in Path(relative_path).parts:
+        try:
+            match = next((child for child in current.iterdir() if child.name == part), None)
+        except OSError:
+            return False
+        if match is None:
+            return False
+        current = match
+    return current.is_file()
+
+
 def main() -> int:
     try:
         registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
@@ -65,7 +83,7 @@ def main() -> int:
                 f"{name}: path is {path!r}, expected {expected_path!r}"
             )
             continue
-        if not (ROOT / expected_path).is_file():
+        if not exact_file_exists(expected_path):
             missing_skill_files.append(expected_path)
 
     registry_counts = Counter(registry_names)
@@ -81,7 +99,7 @@ def main() -> int:
     missing_compatibility_pages = sorted(
         f"agent-skills/{name}.html"
         for name in set(projected_names)
-        if not (ROOT / "agent-skills" / f"{name}.html").is_file()
+        if not exact_file_exists(f"agent-skills/{name}.html")
     )
 
     registry_set = set(registry_names)
@@ -94,7 +112,7 @@ def main() -> int:
         fail(entry)
         problems = True
     if missing_skill_files:
-        fail("registered skill files missing: " + ", ".join(sorted(missing_skill_files)))
+        fail("registered skill files missing or case-mismatched: " + ", ".join(sorted(missing_skill_files)))
         problems = True
     if registry_duplicates:
         fail("duplicate registry skill names: " + ", ".join(registry_duplicates))
@@ -104,7 +122,7 @@ def main() -> int:
         problems = True
     if missing_compatibility_pages:
         fail(
-            "projected compatibility pages missing: "
+            "projected compatibility pages missing or case-mismatched: "
             + ", ".join(missing_compatibility_pages)
         )
         problems = True
@@ -121,8 +139,8 @@ def main() -> int:
     print(
         "OK: agent-skills.html projects all "
         f"{len(registry_names)} registered Agent Skills exactly once, every "
-        "registered SKILL.md target exists, and every projected compatibility "
-        "page exists."
+        "registered SKILL.md target exists with exact path casing, and every "
+        "projected compatibility page exists with exact path casing."
     )
     return 0
 
