@@ -48,6 +48,7 @@ def main() -> int:
 
     registry_names: list[str] = []
     malformed_entries: list[str] = []
+    missing_skill_files: list[str] = []
     for index, skill in enumerate(skills):
         if not isinstance(skill, dict):
             malformed_entries.append(f"skills[{index}] is not an object")
@@ -63,6 +64,9 @@ def main() -> int:
             malformed_entries.append(
                 f"{name}: path is {path!r}, expected {expected_path!r}"
             )
+            continue
+        if not (ROOT / expected_path).is_file():
+            missing_skill_files.append(expected_path)
 
     registry_counts = Counter(registry_names)
     registry_duplicates = sorted(
@@ -84,6 +88,9 @@ def main() -> int:
     for entry in malformed_entries:
         fail(entry)
         problems = True
+    if missing_skill_files:
+        fail("registered skill files missing: " + ", ".join(sorted(missing_skill_files)))
+        problems = True
     if registry_duplicates:
         fail("duplicate registry skill names: " + ", ".join(registry_duplicates))
         problems = True
@@ -102,7 +109,8 @@ def main() -> int:
 
     print(
         "OK: agent-skills.html projects all "
-        f"{len(registry_names)} registered Agent Skills exactly once."
+        f"{len(registry_names)} registered Agent Skills exactly once, and every "
+        "registered SKILL.md target exists."
     )
     return 0
 
