@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "1.2.0",
+  "schemaVersion": "1.3.0",
   "registryKey": "blacklight.ftl.route-admission",
   "status": "DERIVED",
-  "purpose": "Authoritative top-level admission policy joining maintenance/return-to-service evidence, uncertainty-aware certified operating-envelope compatibility, and family-specific route safety. A favorable route calculation may not erase a blocking maintenance or envelope state, and machinery condition may not select transit family.",
+  "purpose": "Authoritative top-level admission policy joining maintenance/return-to-service evidence, uncertainty-aware certified operating-envelope compatibility, family-specific predictive safety horizon, and family-specific route safety. A favorable route calculation may not erase a blocking maintenance, operating-envelope, or predictive-horizon state, and machinery condition may not select transit family.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
@@ -20,6 +20,10 @@
     "data/schemas/exo-vessel-ftl-operating-envelope-uncertainty.schema.json",
     "blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js",
     "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_OPERATING_ENVELOPE_MANUAL.md",
+    "data/exo-vessel/ftl-predictive-safety-horizon-registry.json",
+    "data/schemas/exo-vessel-ftl-predictive-safety-horizon.schema.json",
+    "blacklight-exo-ftl-predictive-safety-horizon-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_PREDICTIVE_SAFETY_HORIZON_AND_ERROR_BUDGET_MANUAL.md",
     "data/exo-vessel/ftl-route-safety-integration.json",
     "blacklight-exo-ftl-route-safety-runtime.js"
   ],
@@ -29,12 +33,14 @@
     "resolve certified operating-envelope compatibility when required or supplied",
     "apply declared measurement/model uncertainty by contracting certified bounds and expanding requested-state bounds",
     "evaluate covariance-aware coupled constraints only when an explicit valid joint model, normalized units, distribution semantics, and coverage factor are supplied",
-    "block on maintenance, envelope, uncertainty, or provenance conflict",
-    "block as UNRESOLVED when required maintenance, envelope, or uncertainty evidence is absent or unresolved",
-    "block before route evaluation when the uncertainty-adjusted requested operating point lies outside the uncertainty-adjusted certified envelope",
+    "resolve family-specific predictive safety horizon when required or supplied",
+    "reduce conservative prediction/encounter time for bounded lower-side uncertainty and enlarge intervention time for bounded upper-side uncertainty",
+    "block on maintenance, envelope, predictive-horizon, uncertainty, or provenance conflict",
+    "block as UNRESOLVED when required maintenance, envelope, predictive, or uncertainty evidence is absent or unresolved",
+    "block before family route evaluation when an earlier engineering gate proves the requested transit cannot be operated or escaped safely",
     "evaluate family-specific route safety",
     "combine all gates conjunctively so no favorable gate can average away another blocker",
-    "downgrade otherwise-ADMISSIBLE route results when maintenance or envelope certification is conditional"
+    "downgrade otherwise-ADMISSIBLE route results when maintenance, envelope, or predictive-horizon certification is conditional"
   ],
   "maintenanceRequirement": {
     "explicit": "maintenanceEvidenceRequired === true",
@@ -46,10 +52,18 @@
     "implicitTriggers": ["operatingEnvelopePacket supplied", "operatingEnvelopeCertificate supplied", "operatingDemand supplied", "requestedOperatingPoint supplied"],
     "noTriggerBehavior": "No certified capability envelope is invented when no envelope authority or requested operating point is supplied."
   },
+  "predictiveHorizonRequirement": {
+    "explicit": "predictiveSafetyHorizonRequired === true",
+    "implicitTriggers": ["predictiveSafetyHorizonPacket supplied", "predictiveSafetyContext supplied", "predictionHorizonLower or predictionTimeLower supplied", "hazardDistanceLower supplied", "commitWindowLower supplied", "admissionValidityLower or closureHorizonLower supplied"],
+    "noTriggerBehavior": "No predictive look-ahead or intervention margin is invented when no predictive authority or request is supplied. Family route safety remains responsible for its existing certification semantics."
+  },
   "statusMapping": {
     "CERTIFIED": "PASS", "CONDITIONALLY_CERTIFIED": "CONDITIONAL", "BLOCKED": "BLOCK", "CONFLICT": "CONFLICT", "UNRESOLVED": "UNRESOLVED", "SIMULATION_ONLY": "SIMULATION_ONLY"
   },
   "operatingEnvelopeStatusMapping": {
+    "PASS": "PASS", "CONDITIONAL": "CONDITIONAL", "BLOCK": "BLOCK", "CONFLICT": "CONFLICT", "UNRESOLVED": "UNRESOLVED", "SIMULATION_ONLY": "SIMULATION_ONLY"
+  },
+  "predictiveHorizonStatusMapping": {
     "PASS": "PASS", "CONDITIONAL": "CONDITIONAL", "BLOCK": "BLOCK", "CONFLICT": "CONFLICT", "UNRESOLVED": "UNRESOLVED", "SIMULATION_ONLY": "SIMULATION_ONLY"
   },
   "routeStatusMapping": {
@@ -57,9 +71,9 @@
   },
   "conjunctivePolicy": [
     "CONFLICT outranks every non-conflict state.",
-    "Any maintenance, uncertainty-aware operating-envelope, or route BLOCK state produces rejected admission.",
-    "Required UNRESOLVED maintenance or operating-envelope uncertainty evidence produces UNRESOLVED admission.",
-    "A conditional maintenance or envelope state downgrades an otherwise ADMISSIBLE route to MARGINAL.",
+    "Any maintenance, uncertainty-aware operating-envelope, predictive-horizon, or route BLOCK state produces rejected admission.",
+    "Required UNRESOLVED maintenance, operating-envelope uncertainty, or predictive-horizon evidence produces UNRESOLVED admission.",
+    "A conditional maintenance, envelope, or predictive-horizon state downgrades an otherwise ADMISSIBLE route to MARGINAL.",
     "A route MARGINAL state remains MARGINAL even when prior engineering gates fully pass.",
     "SIMULATION_ONLY evidence can never become operationally ADMISSIBLE."
   ],
@@ -82,20 +96,33 @@
     "conditionalBoundary": "Near-boundary CONDITIONAL status is permitted only when an applicable certificate explicitly supplies an advisory margin.",
     "unitRule": "No implicit unit conversion is performed by route admission. Unnormalized unit mismatch remains UNRESOLVED."
   },
+  "predictiveHorizonPolicy": {
+    "coreMargin": "M_T_lower = t_available_lower - t_intervention_upper.",
+    "continuous": "For a continuous projected-progress family, t_available_lower is the minimum of the conservative prediction horizon and, when established, conservative distance-to-blocker divided by upper-bound projected progress rate.",
+    "precommit": "For PRECOMMIT families, use conservative prediction and commitment windows; do not fabricate a local FTL hull velocity.",
+    "portal": "For portal systems, use the minimum applicable prediction, admission-state, closure/rejection, synchronization or aperture validity interval rather than free-flight velocity.",
+    "uncertainty": "Bounded prediction and distance uncertainty reduce available time; bounded intervention and projected-progress-rate uncertainty enlarge the burden.",
+    "negativeMargin": "A negative conservative predictive timing margin is a route-admission BLOCK.",
+    "conditionalMargin": "A nonnegative timing margin is CONDITIONAL only when an applicable authority explicitly supplies an advisory margin.",
+    "statisticalSafeguard": "Standard deviation, hidden-mass probability, endpoint-occupancy probability, or missing covariance may not be converted into hard safety bounds without an explicit physical/statistical mapping authority."
+  },
   "physicalSafeguards": [
     "Maintenance health is not route-environment health.",
     "Uncertainty-aware certified operating-envelope compatibility is not family-specific route safety.",
+    "Predictive-horizon sufficiency is not family route certification; it establishes whether a certified intervention can still be executed before the modeled hazard becomes unavoidable.",
     "Operating-envelope confidence or coverage is not probability of successful transit.",
+    "Predictive statistical confidence is not probability of successful transit.",
     "Route-environment safety is not proof of machinery health or unlimited capability.",
     "Stored energy adequacy is distinct from instantaneous power delivery adequacy.",
     "Reachable infrastructure is distinct from timely infrastructure and both are distinct from certification.",
+    "Observable is distinct from predictable, actionable, and certified.",
     "PRECOMMIT families use prediction/intervention timing rather than fabricated local FTL velocity.",
     "Anchored portal systems use admission, synchronization, aperture/throat, exit, clearance, and recovery semantics rather than free-flight velocity.",
     "Species or technology basis never selects FTL family."
   ],
   "raceTechnologySafeguards": {
-    "arnock": "Default to solid-state electromechanical modular machinery, silicon computation, piezoelectric diagnostics/metrology, explicit module/interface bounds, calibration-transfer uncertainty, thermal qualification, timing, and protected stores. Biotechnology remains secondary unless a narrower source establishes an exception.",
-    "zwleiMurrek": "Preserve field-vane, dielectric-fluid, hydraulic, bio-reactive power-fluid, coolant, Navigation Current, sensor, and calibration uncertainty evidence without normalizing the source term 'gravitic slipstream' into a consolidated family."
+    "arnock": "Default to solid-state electromechanical modular machinery, silicon computation, piezoelectric diagnostics/metrology, explicit module/interface bounds, calibration-transfer uncertainty, thermal qualification, deterministic timing, and protected stores. Piezoelectric machinery-health evidence is not gravity/topology/endpoint/Q-state evidence without an explicit sensor mapping. Biotechnology remains secondary unless a narrower source establishes an exception.",
+    "zwleiMurrek": "Preserve field-vane, dielectric-fluid, hydraulic, bio-reactive power-fluid, coolant, Navigation Current, Sensor Choir/Ampulla, and calibration uncertainty evidence without normalizing the source term 'gravitic slipstream' into a consolidated family."
   },
-  "provenanceRule": "The route-admission packet must retain the complete maintenance packet, uncertainty-aware operating-envelope packet, complete route-safety result, authority references, warnings, and the reason for any disposition downgrade or block."
+  "provenanceRule": "The route-admission packet must retain the complete maintenance packet, uncertainty-aware operating-envelope packet, predictive-safety-horizon packet, complete route-safety result, authority references, warnings, and the reason for any disposition downgrade or block."
 }
