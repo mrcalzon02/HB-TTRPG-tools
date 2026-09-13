@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-predictive-safety-horizon.schema.json",
+  "title": "Black Light FTL Predictive Safety Horizon Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "family", "mode", "inputs", "effective", "marginSeconds", "unresolvedInputs", "warnings", "provenance"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "status": {"enum": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"]},
+    "family": {"type": ["string", "null"]},
+    "mode": {"enum": ["CONTINUOUS_PROJECTED_PROGRESS", "PRECOMMIT", "PORTAL_ADMISSION", "UNRESOLVED"]},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "predictionHorizonLower": {"type": ["number", "null"], "minimum": 0},
+        "predictionHorizonUncertaintyLower": {"type": ["number", "null"], "minimum": 0},
+        "interventionTimeUpper": {"type": ["number", "null"], "minimum": 0},
+        "interventionTimeUncertaintyUpper": {"type": ["number", "null"], "minimum": 0},
+        "hazardDistanceLower": {"type": ["number", "null"], "minimum": 0},
+        "hazardDistanceUncertaintyLower": {"type": ["number", "null"], "minimum": 0},
+        "projectedProgressRateUpper": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "projectedProgressRateUncertaintyUpper": {"type": ["number", "null"], "minimum": 0},
+        "commitWindowLower": {"type": ["number", "null"], "minimum": 0},
+        "admissionValidityLower": {"type": ["number", "null"], "minimum": 0},
+        "closureHorizonLower": {"type": ["number", "null"], "minimum": 0},
+        "advisoryMarginSeconds": {"type": ["number", "null"], "minimum": 0},
+        "simulationOnly": {"type": "boolean"}
+      }
+    },
+    "effective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predictionHorizonLower", "interventionTimeUpper", "hazardDistanceLower", "projectedProgressRateUpper", "encounterTimeLower", "availableTimeLower"],
+      "properties": {
+        "predictionHorizonLower": {"type": ["number", "null"], "minimum": 0},
+        "interventionTimeUpper": {"type": ["number", "null"], "minimum": 0},
+        "hazardDistanceLower": {"type": ["number", "null"], "minimum": 0},
+        "projectedProgressRateUpper": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "encounterTimeLower": {"type": ["number", "null"], "minimum": 0},
+        "availableTimeLower": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "marginSeconds": {"type": ["number", "null"]},
+    "requiredHazardEvidence": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "observedHazardEvidence": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "unresolvedInputs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "warnings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "provenance": {"type": "array", "items": {"type": ["string", "object"]}}
+  }
+}
