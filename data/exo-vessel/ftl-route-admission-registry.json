@@ -1,12 +1,13 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "registryKey": "blacklight.ftl.route-admission",
   "status": "DERIVED",
-  "purpose": "Authoritative top-level admission policy joining maintenance/return-to-service evidence, certified operating-envelope compatibility, and family-specific route safety. A favorable route calculation may not erase a blocking maintenance or envelope state, and machinery condition may not select transit family.",
+  "purpose": "Authoritative top-level admission policy joining maintenance/return-to-service evidence, uncertainty-aware certified operating-envelope compatibility, and family-specific route safety. A favorable route calculation may not erase a blocking maintenance or envelope state, and machinery condition may not select transit family.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
-    "role": "Governing design intent for differentiated FTL hazards, gravity sensitivity, predictive sensing, emergency de-transit, maturity-scaled safety, and technical depth."
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "role": "Governing design intent for differentiated FTL hazards, gravity sensitivity, predictive sensing, emergency de-transit, maturity-scaled safety, explicit error margins, and technical depth."
   },
   "authorityInputs": [
     "data/exo-vessel/ftl-maintenance-evidence-contract.json",
@@ -15,6 +16,10 @@
     "data/exo-vessel/ftl-operating-envelope-registry.json",
     "data/schemas/exo-vessel-ftl-operating-envelope.schema.json",
     "blacklight-exo-ftl-operating-envelope-runtime.js",
+    "data/exo-vessel/ftl-operating-envelope-uncertainty-registry.json",
+    "data/schemas/exo-vessel-ftl-operating-envelope-uncertainty.schema.json",
+    "blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js",
+    "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_OPERATING_ENVELOPE_MANUAL.md",
     "data/exo-vessel/ftl-route-safety-integration.json",
     "blacklight-exo-ftl-route-safety-runtime.js"
   ],
@@ -22,9 +27,11 @@
     "resolve maintenance evidence when required or supplied",
     "validate maintenance evidence freshness when an explicit validity interval is supplied",
     "resolve certified operating-envelope compatibility when required or supplied",
-    "block on maintenance, envelope, or provenance conflict",
-    "block as UNRESOLVED when required maintenance or envelope evidence is absent or unresolved",
-    "block before route evaluation when the requested operating point lies outside the certified envelope",
+    "apply declared measurement/model uncertainty by contracting certified bounds and expanding requested-state bounds",
+    "evaluate covariance-aware coupled constraints only when an explicit valid joint model, normalized units, distribution semantics, and coverage factor are supplied",
+    "block on maintenance, envelope, uncertainty, or provenance conflict",
+    "block as UNRESOLVED when required maintenance, envelope, or uncertainty evidence is absent or unresolved",
+    "block before route evaluation when the uncertainty-adjusted requested operating point lies outside the uncertainty-adjusted certified envelope",
     "evaluate family-specific route safety",
     "combine all gates conjunctively so no favorable gate can average away another blocker",
     "downgrade otherwise-ADMISSIBLE route results when maintenance or envelope certification is conditional"
@@ -50,8 +57,8 @@
   },
   "conjunctivePolicy": [
     "CONFLICT outranks every non-conflict state.",
-    "Any maintenance, operating-envelope, or route BLOCK state produces rejected admission.",
-    "Required UNRESOLVED maintenance or operating-envelope evidence produces UNRESOLVED admission.",
+    "Any maintenance, uncertainty-aware operating-envelope, or route BLOCK state produces rejected admission.",
+    "Required UNRESOLVED maintenance or operating-envelope uncertainty evidence produces UNRESOLVED admission.",
     "A conditional maintenance or envelope state downgrades an otherwise ADMISSIBLE route to MARGINAL.",
     "A route MARGINAL state remains MARGINAL even when prior engineering gates fully pass.",
     "SIMULATION_ONLY evidence can never become operationally ADMISSIBLE."
@@ -62,16 +69,23 @@
     "safeguard": "No universal certificate lifetime is invented. Omitted validity remains governed by the underlying technology/service authority."
   },
   "operatingEnvelopePolicy": {
-    "scalarContainment": "For certified [L_c,U_c] and requested [L_r,U_r], require L_r >= L_c and U_r <= U_c.",
-    "signedMargin": "m = min(L_r-L_c, U_c-U_r)",
-    "coupledConstraint": "For a^T x <= b and interval variables, evaluate worst case sum_i max(a_i L_i, a_i U_i) <= b.",
+    "scalarContainment": "For exact certified [L_c,U_c] and requested [L_r,U_r], require L_r >= L_c and U_r <= U_c.",
+    "uncertaintyAdjustedCertificate": "For deterministic certified-bound uncertainty, evaluate [L_c+u_cL, U_c-u_cU].",
+    "uncertaintyAdjustedRequest": "For deterministic requested-state uncertainty, evaluate [L_r-u_rL, U_r+u_rU].",
+    "uncertaintyAdjustedContainment": "Require the expanded requested interval to lie fully inside the contracted certified interval.",
+    "signedMargin": "m* = min((L_r-u_rL)-(L_c+u_cL), (U_c-u_cU)-(U_r+u_rU)) when uncertainty bounds exist.",
+    "coupledConstraint": "For a^T x <= b and bounded interval variables, evaluate worst case sum_i max(a_i L_i, a_i U_i) <= b.",
+    "covarianceConstraint": "When an explicit normalized joint model is supplied, evaluate a^T mu + k sqrt(a^T Sigma a) <= b using its declared variable order, distribution model, and coverage factor.",
+    "standardUncertainty": "A standard uncertainty is not a hard bound. It requires explicit coverageFactor and distributionModel before conversion to an engineering safety band.",
+    "covarianceSafeguard": "Missing covariance is not zero covariance and does not establish statistical independence. Invalid covariance matrices are CONFLICT; missing required models are UNRESOLVED.",
     "partialOverlap": "Partial overlap does not constitute certification and blocks the requested operating interval.",
     "conditionalBoundary": "Near-boundary CONDITIONAL status is permitted only when an applicable certificate explicitly supplies an advisory margin.",
     "unitRule": "No implicit unit conversion is performed by route admission. Unnormalized unit mismatch remains UNRESOLVED."
   },
   "physicalSafeguards": [
     "Maintenance health is not route-environment health.",
-    "Certified operating-envelope compatibility is not family-specific route safety.",
+    "Uncertainty-aware certified operating-envelope compatibility is not family-specific route safety.",
+    "Operating-envelope confidence or coverage is not probability of successful transit.",
     "Route-environment safety is not proof of machinery health or unlimited capability.",
     "Stored energy adequacy is distinct from instantaneous power delivery adequacy.",
     "Reachable infrastructure is distinct from timely infrastructure and both are distinct from certification.",
@@ -80,8 +94,8 @@
     "Species or technology basis never selects FTL family."
   ],
   "raceTechnologySafeguards": {
-    "arnock": "Default to solid-state electromechanical modular machinery, silicon computation, piezoelectric diagnostics, explicit module/interface bounds, thermal qualification, timing, and protected stores. Biotechnology remains secondary unless a narrower source establishes an exception.",
-    "zwleiMurrek": "Preserve field-vane, dielectric-fluid, hydraulic, bio-reactive power-fluid, coolant, Navigation Current, and sensor evidence without normalizing the source term 'gravitic slipstream' into a consolidated family."
+    "arnock": "Default to solid-state electromechanical modular machinery, silicon computation, piezoelectric diagnostics/metrology, explicit module/interface bounds, calibration-transfer uncertainty, thermal qualification, timing, and protected stores. Biotechnology remains secondary unless a narrower source establishes an exception.",
+    "zwleiMurrek": "Preserve field-vane, dielectric-fluid, hydraulic, bio-reactive power-fluid, coolant, Navigation Current, sensor, and calibration uncertainty evidence without normalizing the source term 'gravitic slipstream' into a consolidated family."
   },
-  "provenanceRule": "The route-admission packet must retain the complete maintenance packet, operating-envelope packet, complete route-safety result, authority references, warnings, and the reason for any disposition downgrade or block."
+  "provenanceRule": "The route-admission packet must retain the complete maintenance packet, uncertainty-aware operating-envelope packet, complete route-safety result, authority references, warnings, and the reason for any disposition downgrade or block."
 }
