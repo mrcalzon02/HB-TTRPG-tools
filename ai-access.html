@@ -43,7 +43,7 @@
     <section class="hero-card">
       <p class="eyebrow">Start here for machine discovery</p>
       <h2>Do not reconstruct the Foundry's capabilities from page prose.</h2>
-      <p>External LLMs, agents, tool hosts, and adapters should begin with the machine discovery manifest below, read the compact bootstrap routing contract, then resolve the current canonical status vocabulary, Agent Skills, Charles engram, capability registry, exact operation contracts, and resource collections. Those machine documents are the authority; this page is only the human-readable entrypoint.</p>
+      <p>External LLMs, agents, tool hosts, and adapters should begin with the machine discovery manifest and then follow the compact bootstrap routing contract. The bootstrap selects the minimum-capability skill for the task and resolves status vocabulary, capabilities, operation contracts, resources, runtime requirements, and validation material only when the selected workflow actually needs them. Those machine documents are the authority; this page is only the human-readable entrypoint.</p>
       <p>If the current model browser cannot retrieve raw JSON or Markdown, use the HTML Agent Skills compatibility directory to enumerate registered skills and follow its GitHub HTML fallbacks. The compatibility directory does not replace <code>skills/index.json</code> or any <code>SKILL.md</code> as authority.</p>
       <p><a class="link-button primary-action" href=".well-known/ai-capabilities.json">Open AI Capability Discovery Manifest</a> <a class="link-button" href="api/ai/bootstrap.txt">Read Bootstrap Contract</a> <a class="link-button" href="agent-skills.html">Open Agent Skills HTML Directory</a></p>
     </section>
@@ -56,13 +56,18 @@
       <div class="module-grid">
         <article class="module-card">
           <h3>Bootstrap Contract</h3>
-          <p>Compact routing doctrine for external models: mirrored calls, not mirrored logic; discover current authorities before execution; never invent missing runtime or transport.</p>
+          <p>Compact routing doctrine for external models: mirrored calls, not mirrored logic; select the minimum-capability skill; resolve only the authorities required by that workflow; never invent missing runtime or transport.</p>
           <p><a href="api/ai/bootstrap.txt">api/ai/bootstrap.txt</a></p>
         </article>
         <article class="module-card">
           <h3>AI Access Index</h3>
-          <p>Machine routing, runtime classes, transport status, quick-start sequence, and external-model acceptance tests.</p>
+          <p>Machine routing metadata, runtime classes, transport status, quick-start guidance, and references to specialized validation resources.</p>
           <p><a href="api/ai/index.json">api/ai/index.json</a></p>
+        </article>
+        <article class="module-card">
+          <h3>External-Model Acceptance Suite</h3>
+          <p>Integration-validation prompts and pass conditions. Load this suite only when validating external-model behavior; routine discovery and skill execution do not require it.</p>
+          <p><a href="api/ai/external-model-acceptance-tests.json">api/ai/external-model-acceptance-tests.json</a></p>
         </article>
         <article class="module-card">
           <h3>Status Vocabulary</h3>
@@ -142,7 +147,7 @@
         <p class="eyebrow">Loadable LLM workflows</p>
         <h2 id="skill-onboarding-title">Agent Skills onboarding</h2>
       </div>
-      <p>The Foundry uses the open Agent Skills folder format already present under <code>skills/</code>. An external client should begin with the manifest/bootstrap route, read <a href="api/ai/status-vocabulary.json">the status vocabulary</a>, select a skill from <a href="skills/index.json">the authoritative skill registry</a>, load its <code>SKILL.md</code>, then resolve every referenced capability, resource, execution requirement, and operation against the canonical registries before invoking anything.</p>
+      <p>The Foundry uses the open Agent Skills folder format already present under <code>skills/</code>. External clients should begin with the discovery manifest and <a href="api/ai/bootstrap.txt">bootstrap contract</a>, select the minimum-capability skill from <a href="skills/index.json">the authoritative skill registry</a>, load Charles once for the orchestration context, and then load the selected <code>SKILL.md</code>. Resolve status vocabulary, capability records, operation contracts, resources, helpers, runtime requirements, and self-tests only when the bootstrap or selected skill requires them.</p>
       <p>If the host cannot retrieve the raw registry or Markdown, it should use <a href="agent-skills.html">agent-skills.html</a> to enumerate the registered skills and follow the GitHub HTML fallback for the selected <code>SKILL.md</code>. A skill describes a workflow; it does not grant credentials, create permissions, or magically attach an execution transport.</p>
     </section>
 
@@ -152,7 +157,7 @@
         <h2 id="acceptance-title">Expected behavior</h2>
       </div>
       <p>When asked to examine this Foundry for AI-available tools, a capable external model should identify and read the machine discovery layer instead of only summarizing the human tool directory. When asked how many Agent Skills currently exist, it should retrieve <code>skills/index.json</code> and enumerate every current exact <code>name</code> value rather than relying on a hard-coded count in page prose. If its host blocks raw JSON, it should use the linked HTML compatibility directory, say that it is using a compatibility projection, and still enumerate the current registered names rather than stopping at an access error.</p>
-      <p>When asked about Cube Encryption, it should identify <code>shadowrun.binary-cube</code>, inspect its operation contract, read its <code>runtime-required</code> status correctly, and then report whether its current environment can satisfy the declared browser-JavaScript runtime. When no compatible transport is attached, an explicit runtime limitation is a correct result.</p>
+      <p>When asked about Cube Encryption, it should identify <code>shadowrun.binary-cube</code>, inspect its operation contract, read its <code>runtime-required</code> status correctly, and then report whether its current environment can satisfy the declared browser-JavaScript runtime. When no compatible transport is attached, an explicit runtime limitation is a correct result. The complete validation suite is maintained separately at <a href="api/ai/external-model-acceptance-tests.json">api/ai/external-model-acceptance-tests.json</a> and should be loaded only for integration validation.</p>
     </section>
   </main>
 </body>
