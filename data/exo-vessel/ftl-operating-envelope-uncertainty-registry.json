@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.operating-envelope.uncertainty",
+  "status": "DERIVED",
+  "purpose": "Defines conservative uncertainty treatment for certified FTL operating envelopes without inventing probability models, independence, covariance, confidence levels, or missing measurements.",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
+    "role": "Governing design intent for differentiated FTL safety, prediction, error margins, gravity sensitivity, and increasingly rigorous technical treatment."
+  },
+  "coreInvariants": [
+    "Unknown uncertainty is not zero uncertainty.",
+    "Missing covariance is not zero covariance.",
+    "A standard deviation is not a hard bound unless an explicit statistical coverage model converts it into one.",
+    "Certified-bound uncertainty contracts the guaranteed certified region; requested-state uncertainty expands the state that must be shown safe.",
+    "Probabilistic confidence semantics require an explicit distribution/model family and explicit coverage factor or threshold.",
+    "The uncertainty layer constrains installation certification and does not replace family-specific route physics."
+  ],
+  "uncertaintyRepresentations": {
+    "deterministicBound": {
+      "meaning": "A guaranteed or authority-declared absolute error interval.",
+      "scalarRequestExpansion": "[L_r-u_L, U_r+u_U]",
+      "scalarCertificateContraction": "[L_c+u_L, U_c-u_U]",
+      "probabilityClaimAllowed": false
+    },
+    "standardUncertainty": {
+      "meaning": "A standard uncertainty or standard deviation-like quantity that is not itself a hard safety bound.",
+      "requiredMetadata": ["standardUncertainty", "coverageFactor", "distributionModel"],
+      "scalarConversion": "u_effective = coverageFactor * standardUncertainty",
+      "safeguard": "No default coverageFactor, confidence percentage, or Gaussian assumption is permitted."
+    },
+    "covariance": {
+      "meaning": "Joint uncertainty for a declared ordered variable vector.",
+      "requiredMetadata": ["variables", "matrix", "coverageFactor", "distributionModel"],
+      "linearDirectionalSigma": "sigma_a = sqrt(a^T Sigma a)",
+      "linearConfidenceDemand": "a^T mu + coverageFactor * sigma_a <= b",
+      "safeguard": "The full covariance matrix must be supplied and dimensionally compatible. Missing cross-covariance terms are not silently set to zero when covariance-aware certification is requested."
+    }
+  },
+  "scalarConservativeModel": {
+    "certifiedNominal": "X_c = [L_c,U_c]",
+    "requestedNominal": "X_r = [L_r,U_r]",
+    "certifiedEffective": "X_c* = [L_c+u_cL, U_c-u_cU]",
+    "requestedEffective": "X_r* = [L_r-u_rL, U_r+u_rU]",
+    "pass": "lower(X_r*) >= lower(X_c*) AND upper(X_r*) <= upper(X_c*)",
+    "signedMargin": "m* = min(lower(X_r*)-lower(X_c*), upper(X_c*)-upper(X_r*))",
+    "conflict": "lower(X_c*) > upper(X_c*) means the claimed uncertainty consumes the entire certified interval and certification is internally inconsistent."
+  },
+  "covarianceAwareLinearConstraint": {
+    "nominalForm": "a^T x <= b",
+    "meanDemand": "d_mu = a^T mu",
+    "directionalVariance": "sigma_a^2 = a^T Sigma a",
+    "confidenceDemand": "d_k = d_mu + k * sqrt(a^T Sigma a)",
+    "pass": "d_k <= b",
+    "applicability": "Only when the authority explicitly supplies a covariance model, variable order, compatible units, distributionModel, and coverageFactor k.",
+    "fallback": "Without a justified covariance model, use deterministic interval arithmetic when bounded uncertainties exist; otherwise return UNRESOLVED rather than assuming independence."
+  },
+  "matrixSafeguards": [
+    "Covariance matrices must be square and match the declared variable order.",
+    "Covariance matrices must be symmetric within declared numerical tolerance.",
+    "Diagonal terms must be nonnegative.",
+    "A materially non-positive-semidefinite matrix is CONFLICT rather than silently repaired.",
+    "Unit normalization must occur before covariance evaluation; mixed unnormalized units are UNRESOLVED."
+  ],
+  "agingAndDrift": {
+    "rule": "Aging, calibration drift, radiation damage, contamination, thermal cycling, and refit uncertainty may be represented only when a source supplies a drift model or bounded allowance.",
+    "linearBoundedDrift": "u_age(t) = u_0 + r_max * Delta t may be used only when r_max is an authority-provided worst-case drift rate.",
+    "stochasticDrift": "Random-walk or process-noise models require their own stated stochastic assumptions and may not be inferred from elapsed time alone."
+  },
+  "technologyEmbodimentNotes": {
+    "arnock": [
+      "Typical uncertainty sources include module calibration transfer, piezoelectric alignment, deterministic bus timing, thermal datum shift, converter metrology, and refit interface tolerances.",
+      "Ordinary Ar'nock uncertainty evidence remains solid-state/electromechanical and silicon-computational; biotechnology is not the default metrology substrate."
+    ],
+    "zwleiMurrek": [
+      "Typical uncertainty sources may include field-vane geometry, hydraulic response, dielectric-fluid state, conductive-coolant state, Navigation Current reference stability, and sensor-machinery calibration.",
+      "Source terminology such as gravitic slipstream does not select a consolidated FTL family."
+    ]
+  },
+  "generatorRules": [
+    "Prefer deterministic guaranteed bounds when the source provides them.",
+    "Preserve nominal value, uncertainty representation, epoch, calibration/source identity, units, and confidence semantics separately.",
+    "Never convert precision display digits into measurement accuracy.",
+    "Never infer covariance from shared machinery merely because correlation seems plausible; record the possible common cause and leave covariance unresolved until quantified.",
+    "Never infer independence because measurements came from different sensors.",
+    "Do not generate a probability of safe transit from normalized readiness or operating-envelope margin."
+  ],
+  "provenanceRule": "Every uncertainty value must retain origin, representation type, units, epoch where relevant, calibration/model authority, transformation history, and whether it is measured, guaranteed bound, model-derived, simulation-only, or unresolved."
+}
