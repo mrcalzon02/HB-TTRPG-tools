@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Calzon's TTRPG Foundry Machine Discovery",
-    "version": "1.0.0",
-    "description": "Static machine-discovery surface for the Foundry's canonical capability, operation, resource, and Agent Skills registries. This document describes public GET discovery resources; it does not claim a remote execution RPC service."
+    "version": "1.1.0",
+    "description": "Static machine-discovery surface for the Foundry's canonical bootstrap, status, capability, operation, resource, acceptance-test, and Agent Skills authorities. This document describes public GET discovery resources; it does not claim a remote execution RPC service."
   },
   "servers": [
     {
@@ -15,6 +15,11 @@
     "remoteMcp": "not-deployed",
     "browserJs": "available-in-compatible-host",
     "staticResources": "available"
+  },
+  "x-hb-routing": {
+    "bootstrap": "/api/ai/bootstrap.txt",
+    "policy": "demand-driven",
+    "rule": "Use the bootstrap contract for orchestration and minimum-authority loading. This OpenAPI document only enumerates public discovery GET resources."
   },
   "paths": {
     "/.well-known/ai-capabilities.json": {
@@ -35,6 +40,24 @@
         }
       }
     },
+    "/api/ai/bootstrap.txt": {
+      "get": {
+        "operationId": "getAiBootstrapContract",
+        "summary": "Get the canonical demand-driven AI bootstrap routing contract",
+        "responses": {
+          "200": {
+            "description": "Compact orchestration and minimum-authority loading contract",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/ai/index.json": {
       "get": {
         "operationId": "getAiAccessIndex",
@@ -42,6 +65,24 @@
         "responses": {
           "200": {
             "description": "AI access index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ai/status-vocabulary.json": {
+      "get": {
+        "operationId": "getAiStatusVocabulary",
+        "summary": "Get canonical AI discovery and execution-state vocabulary",
+        "responses": {
+          "200": {
+            "description": "Status and acceptance vocabulary",
             "content": {
               "application/json": {
                 "schema": {
@@ -132,6 +173,24 @@
         "responses": {
           "200": {
             "description": "Skill onboarding profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ai/external-model-acceptance-tests.json": {
+      "get": {
+        "operationId": "getExternalModelAcceptanceTests",
+        "summary": "Get the external-model integration acceptance suite when validation is required",
+        "responses": {
+          "200": {
+            "description": "External-model acceptance tests; not required for routine discovery or execution",
             "content": {
               "application/json": {
                 "schema": {
