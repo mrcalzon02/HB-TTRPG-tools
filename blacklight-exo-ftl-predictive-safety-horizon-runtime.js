@@ -24,8 +24,13 @@
     return Number(base) + u;
   }
 
+  function canonicalFamily(family) {
+    if (!family) return null;
+    return registry && registry.familyMap ? registry.familyMap[family] || null : family;
+  }
+
   function familyProfile(family) {
-    const key = family || null;
+    const key = canonicalFamily(family);
     return key && registry && registry.familyProfiles ? registry.familyProfiles[key] || null : null;
   }
 
@@ -53,14 +58,15 @@
 
   function resolvePredictiveSafetyHorizon(context) {
     context = context || {};
-    const family = context.family || context.request?.family || null;
-    const profile = familyProfile(family);
+    const requestedFamily = context.family || context.request?.family || null;
+    const family = canonicalFamily(requestedFamily);
+    const profile = familyProfile(requestedFamily);
     const mode = inferMode(context, profile);
     const unresolved = [];
     const warnings = [];
 
-    if (!family) unresolved.push('family');
-    else if (!profile) unresolved.push('familyProfile');
+    if (!requestedFamily) unresolved.push('family');
+    else if (!family || !profile) unresolved.push('familyProfile');
     if (mode === 'UNRESOLVED') unresolved.push('mode');
 
     const rawPrediction = numberOrNull(context.predictionHorizonLower ?? context.predictionTimeLower ?? context.predictionTime);
@@ -134,12 +140,10 @@
     if (status === STATUS.BLOCK) warnings.push('Conservative predictive time is shorter than the certified intervention upper bound.');
     if (status === STATUS.CONDITIONAL) warnings.push('Predictive margin is nonnegative but lies inside an explicitly supplied advisory margin.');
     if (status === STATUS.UNRESOLVED) warnings.push('Required predictive-horizon evidence is incomplete; no nominal or zero substitute was invented.');
+    if (requestedFamily && family && requestedFamily !== family) warnings.push(`Family alias ${requestedFamily} was normalized to canonical family ${family} through predictive-horizon authority.`);
 
     return {
-      schemaVersion: '1.0.0',
-      status,
-      family,
-      mode,
+      schemaVersion: '1.0.1', status, family, mode,
       inputs: {
         predictionHorizonLower: rawPrediction,
         predictionHorizonUncertaintyLower: predictionU,
@@ -168,9 +172,9 @@
       observedHazardEvidence: observedHazards,
       unresolvedInputs: effectiveUnresolved,
       warnings: unique(warnings),
-      provenance: unique(['blacklight.ftl.predictive-safety-horizon@1.0.0', ...(context.provenance || [])])
+      provenance: unique(['blacklight.ftl.predictive-safety-horizon@1.0.1', ...(context.provenance || [])])
     };
   }
 
-  return { STATUS, resolvePredictiveSafetyHorizon, registry: registry || null };
+  return { STATUS, resolvePredictiveSafetyHorizon, canonicalFamily, registry: registry || null };
 }));
