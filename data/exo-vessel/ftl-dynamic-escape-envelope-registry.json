@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryKey": "blacklight.ftl.dynamic-escape-envelope",
+  "status": "DERIVED",
+  "designIntentSource": {
+    "title": "The different lightspeed methods",
+    "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0"
+  },
+  "purpose": "Resolve the current physically achievable emergency intervention time from certified stage timing plus present power, energy, thermal, actuation, field-authority, structural and network evidence. This authority does not invent family physics or generic degradation multipliers.",
+  "invariants": [
+    "A certified intervention time is a baseline operating-state certificate, not an immutable constant under damage, rerouting, overload or thermal saturation.",
+    "Dynamic escape timing may increase from physically modeled constraints but may not be reduced below a certified stage timing without a stronger recertification authority.",
+    "Missing power, force, torque, field-energy, thermal, geometry or timing evidence remains UNRESOLVED when that evidence is required by the selected response model.",
+    "No universal damage percentage, technology-tier multiplier or race multiplier is permitted.",
+    "Energy sufficiency and instantaneous power sufficiency are independent certificates.",
+    "A reachable backup path is not necessarily timely enough for emergency control.",
+    "Family identity is supplied by family authority; this registry never infers a family from species, manufacturer or machinery style.",
+    "PRECOMMIT and portal families retain commitment/admission deadline semantics; this authority only supplies machinery response burden.",
+    "Simulation-only estimates may inform analysis but may not become operational certification."
+  ],
+  "stageOrder": ["sensor", "solver", "decision", "command", "actuate", "exit", "clear", "margin"],
+  "supportedModels": {
+    "explicitUpperTime": "Use an explicitly certified or measured upper stage time.",
+    "networkPath": "commandTime = certifiedCommandTime + max(0, currentPathDelay - certifiedPathDelay)",
+    "energyLimitedRamp": "time >= requiredEnergy / availableNetPower for positive availableNetPower",
+    "forceLimitedTranslation": "time >= mass * requiredDeltaV / availableForce for an approximately constant-force maneuver",
+    "torqueLimitedRotation": "time >= inertia * requiredDeltaOmega / availableTorque for an approximately constant-torque maneuver",
+    "slewLimited": "time >= requiredStateChange / availableSlewRate",
+    "thermalWindow": "thermalHold = Cth * (Tlimit - T0) / max(0, Pheat - Preject) under a valid lumped short-transient approximation",
+    "energyHold": "energyHold = protectedEnergy / max(0, emergencyLoad - protectedGeneration)",
+    "explicitFamilyResponse": "A family authority may provide a physically derived upper stage time and provenance without exposing its internal state variable here."
+  },
+  "dispositions": ["PASS", "CONDITIONAL", "BLOCK", "UNRESOLVED", "CONFLICT", "SIMULATION_ONLY"],
+  "requiredOutput": [
+    "interventionTimeUpper",
+    "stageResults",
+    "reserveHorizons",
+    "limitingConstraint",
+    "status",
+    "warnings",
+    "provenance"
+  ],
+  "raceTechnologyNotes": {
+    "arnock": [
+      "Prefer measured deterministic bus delay, silicon-controller timing, module power limits, piezoelectric alignment/actuator evidence and thermal-interface state.",
+      "Do not substitute biological machinery assumptions for missing solid-state evidence."
+    ],
+    "zwlei-murrek": [
+      "Relevant present-state evidence may include field-vane authority, hydraulic pressure/flow, dielectric-fluid condition, bio-reactive power-fluid delivery and conductive-coolant reserve.",
+      "Source term gravitic slipstream does not select a consolidated FTL family."
+    ]
+  },
+  "provenanceRequirements": [
+    "Preserve the certified baseline timing source.",
+    "Preserve every current-state measurement used to derive a slower response stage.",
+    "Record the equation/model used for every derived stage bound.",
+    "Record whether each bound is measured, certified, inferred, simulated or unresolved.",
+    "Preserve operating-envelope, maintenance and family-specific source packets beside normalized output when available."
+  ]
+}
