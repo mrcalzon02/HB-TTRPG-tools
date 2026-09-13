@@ -186,23 +186,41 @@
     if (!predictiveSafetyRuntime || typeof predictiveSafetyRuntime.resolvePredictiveSafetyHorizon !== 'function') {
       return { schemaVersion: '1.0.0', status: 'UNRESOLVED', family: context.family || context.request?.family || null, mode: 'UNRESOLVED', warnings: ['Predictive-safety-horizon runtime is unavailable.'], provenance: [] };
     }
-    return predictiveSafetyRuntime.resolvePredictiveSafetyHorizon(Object.assign({}, context.predictiveSafetyContext || {}, {
-      family: context.family || context.request?.family || context.predictiveSafetyContext?.family || null,
-      predictionHorizonLower: context.predictionHorizonLower ?? context.predictiveSafetyContext?.predictionHorizonLower,
-      predictionTimeLower: context.predictionTimeLower ?? context.predictiveSafetyContext?.predictionTimeLower,
-      interventionTimeUpper: context.interventionTimeUpper ?? context.predictiveSafetyContext?.interventionTimeUpper,
-      interventionTimeUncertaintyUpper: context.interventionTimeUncertaintyUpper ?? context.predictiveSafetyContext?.interventionTimeUncertaintyUpper,
-      hazardDistanceLower: context.hazardDistanceLower ?? context.predictiveSafetyContext?.hazardDistanceLower,
-      hazardDistanceUncertaintyLower: context.hazardDistanceUncertaintyLower ?? context.predictiveSafetyContext?.hazardDistanceUncertaintyLower,
-      projectedProgressRateUpper: context.projectedProgressRateUpper ?? context.projectedProgressRate ?? context.predictiveSafetyContext?.projectedProgressRateUpper,
-      projectedProgressRateUncertaintyUpper: context.projectedProgressRateUncertaintyUpper ?? context.predictiveSafetyContext?.projectedProgressRateUncertaintyUpper,
-      commitWindowLower: context.commitWindowLower ?? context.predictiveSafetyContext?.commitWindowLower,
-      admissionValidityLower: context.admissionValidityLower ?? context.predictiveSafetyContext?.admissionValidityLower,
-      closureHorizonLower: context.closureHorizonLower ?? context.predictiveSafetyContext?.closureHorizonLower,
-      advisoryMarginSeconds: context.predictiveAdvisoryMarginSeconds ?? context.predictiveSafetyContext?.advisoryMarginSeconds,
-      observedHazardEvidence: context.observedHazardEvidence || context.predictiveSafetyContext?.observedHazardEvidence,
-      requireHazardEvidence: context.requirePredictiveHazardEvidence === true || context.predictiveSafetyContext?.requireHazardEvidence === true,
-      provenance: unique([...(context.predictiveSafetyContext?.provenance || []), ...(context.provenance || [])])
+    const nested = context.predictiveSafetyContext || {};
+    return predictiveSafetyRuntime.resolvePredictiveSafetyHorizon(Object.assign({}, nested, {
+      family: context.family || context.request?.family || nested.family || null,
+      mode: context.predictiveHorizonMode || nested.mode,
+      decisionHorizonMode: context.decisionHorizonMode || nested.decisionHorizonMode,
+      predictionHorizonLower: context.predictionHorizonLower ?? nested.predictionHorizonLower,
+      predictionTimeLower: context.predictionTimeLower ?? nested.predictionTimeLower,
+      predictionHorizonUncertaintyLower: context.predictionHorizonUncertaintyLower ?? nested.predictionHorizonUncertaintyLower,
+      predictionHorizonStatisticalUncertainty: context.predictionHorizonStatisticalUncertainty ?? nested.predictionHorizonStatisticalUncertainty,
+      predictionCoverageFactor: context.predictionCoverageFactor ?? nested.predictionCoverageFactor,
+      predictionDistributionModel: context.predictionDistributionModel ?? nested.predictionDistributionModel,
+      interventionTimeUpper: context.interventionTimeUpper ?? nested.interventionTimeUpper,
+      interventionTimeUncertaintyUpper: context.interventionTimeUncertaintyUpper ?? nested.interventionTimeUncertaintyUpper,
+      installationSafetyTiming: context.installationSafetyTiming || nested.installationSafetyTiming,
+      timingPacket: context.timingPacket || nested.timingPacket,
+      safetyState: context.safetyState || nested.safetyState,
+      timing: context.timing || nested.timing,
+      routeSafetyContext: context.routeSafetyContext || nested.routeSafetyContext,
+      hazardDistanceLower: context.hazardDistanceLower ?? nested.hazardDistanceLower,
+      hazardDistanceUncertaintyLower: context.hazardDistanceUncertaintyLower ?? nested.hazardDistanceUncertaintyLower,
+      projectedProgressRateUpper: context.projectedProgressRateUpper ?? context.projectedProgressRate ?? nested.projectedProgressRateUpper,
+      projectedProgressRateUncertaintyUpper: context.projectedProgressRateUncertaintyUpper ?? nested.projectedProgressRateUncertaintyUpper,
+      commitWindowLower: context.commitWindowLower ?? nested.commitWindowLower,
+      admissionValidityLower: context.admissionValidityLower ?? nested.admissionValidityLower,
+      closureHorizonLower: context.closureHorizonLower ?? nested.closureHorizonLower,
+      advisoryMarginSeconds: context.predictiveAdvisoryMarginSeconds ?? nested.advisoryMarginSeconds,
+      observedHazardEvidence: context.observedHazardEvidence || nested.observedHazardEvidence,
+      requireHazardEvidence: context.requirePredictiveHazardEvidence === true || nested.requireHazardEvidence === true,
+      hiddenMassProbability: context.hiddenMassProbability ?? nested.hiddenMassProbability,
+      hiddenMassDistanceBound: context.hiddenMassDistanceBound ?? nested.hiddenMassDistanceBound,
+      endpointOccupancyProbability: context.endpointOccupancyProbability ?? nested.endpointOccupancyProbability,
+      endpointClearanceCertified: context.endpointClearanceCertified === true || nested.endpointClearanceCertified === true,
+      simulationOnly: context.predictiveSimulationOnly === true || nested.simulationOnly === true,
+      conflict: context.predictiveConflict === true || nested.conflict === true,
+      provenance: unique([...(nested.provenance || []), ...(context.provenance || [])])
     }));
   }
 
