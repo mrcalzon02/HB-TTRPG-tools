@@ -1,14 +1,15 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "registryKey": "blacklight.ftl.operating-envelope",
   "status": "DERIVED",
-  "purpose": "Defines how a propulsion/transit installation certificate expresses the bounded operating conditions under which return-to-service evidence remains valid. Route admission may not treat CERTIFIED as an unlimited capability claim.",
+  "purpose": "Defines how a propulsion/transit installation certificate expresses the bounded operating conditions under which return-to-service evidence remains valid, including conservative treatment of measurement/model uncertainty. Route admission may not treat CERTIFIED as an unlimited or exact capability claim.",
   "designIntentSource": {
     "title": "The different lightspeed methods",
     "documentId": "1e0Xp71EFubBZgXWjjvPxAqPoJIZNwqS6nu1-r7Kil7Y",
+    "revisionId": "ANLCKQllC5h6dLaX5H1RpK8aUFVWsi-IV7gbMHUd0Qq7mIe5uGsLFi5_Hrsr8B6dl8t_ezB0fTSygxrnIBtifAHW79bgSbswp1zF3NaEil0",
     "role": "Governing design intent for differentiated gravity sensitivity, miscalculation penalties, predictive safety sensing, emergency de-transit, and maturity-scaled safety engineering."
   },
-  "coreInvariant": "A maintenance certificate is valid only inside the operating envelope for which its evidence was collected or analytically bounded.",
+  "coreInvariant": "A maintenance certificate is valid only inside the operating envelope for which its evidence was collected or analytically bounded, after any declared uncertainty has conservatively contracted the certified region and expanded the requested state.",
   "scalarBandModel": {
     "certified": "x_c in [L_c,U_c]",
     "requested": "x_r in [L_r,U_r]",
@@ -18,11 +19,27 @@
     "pointRequest": "A point request is represented by L_r=U_r=x_r.",
     "safeguard": "Partial overlap is not certification. If any portion of the requested interval lies outside the certified interval, the dimension blocks admission."
   },
+  "uncertaintyModel": {
+    "authority": "data/exo-vessel/ftl-operating-envelope-uncertainty-registry.json",
+    "runtime": "blacklight-exo-ftl-operating-envelope-uncertainty-runtime.js",
+    "schema": "data/schemas/exo-vessel-ftl-operating-envelope-uncertainty.schema.json",
+    "manual": "docs/blacklight/BLACK_LIGHT_FTL_UNCERTAINTY_AWARE_OPERATING_ENVELOPE_MANUAL.md",
+    "certifiedEffective": "[L_c+u_cL, U_c-u_cU]",
+    "requestedEffective": "[L_r-u_rL, U_r+u_rU]",
+    "safeguards": [
+      "Unknown uncertainty is not zero uncertainty when uncertainty evidence is required.",
+      "Standard uncertainty requires an explicit coverage factor and distribution/model declaration before conversion to a safety band.",
+      "Missing covariance is not zero covariance or proof of independence.",
+      "Covariance-aware linear constraints use a^T mu + k sqrt(a^T Sigma a) <= b only under an explicitly supplied joint model.",
+      "Uncertainty-aware certification does not output a probability of successful transit."
+    ]
+  },
   "coupledConstraintModel": {
     "linearForm": "a^T x <= b",
     "intervalConservativeTest": "sum_i max(a_i*L_i, a_i*U_i) <= b",
-    "purpose": "Supports coupled limits such as power-versus-cooling, acceleration-versus-payload, or simultaneous field-sector demand without pretending dimensions are independent.",
-    "safeguard": "A coupled constraint is evaluated only when all referenced variables and compatible units are supplied. Missing variables remain UNRESOLVED."
+    "covarianceAwareTest": "a^T mu + k*sqrt(a^T Sigma a) <= b when an explicit normalized covariance model and coverage factor are supplied",
+    "purpose": "Supports coupled limits such as power-versus-cooling, acceleration-versus-payload, simultaneous field-sector demand, or correlated timing/thermal burdens without pretending dimensions are independent.",
+    "safeguard": "A coupled constraint is evaluated only when all referenced variables and compatible units are supplied. Missing variables remain UNRESOLVED. Missing covariance is not invented."
   },
   "standardDimensions": [
     {"key":"inputPower","physicalMeaning":"electrical/fluid/other prime power admitted to the transit installation","typicalUnit":"W"},
@@ -57,18 +74,18 @@
     "malformedBounds": "CONFLICT",
     "outsideBand": "BLOCK",
     "insideBand": "PASS",
-    "boundaryAdvisory": "CONDITIONAL only when the certificate explicitly supplies advisoryMarginFraction and the request remains fully inside the certified band."
+    "boundaryAdvisory": "CONDITIONAL only when the certificate explicitly supplies advisoryMarginFraction and the uncertainty-adjusted request remains fully inside the uncertainty-adjusted certified band."
   },
   "familySafeguards": [
-    "Operating-envelope dimensions do not select FTL family.",
+    "Operating-envelope dimensions and uncertainty evidence do not select FTL family.",
     "PRECOMMIT families may certify timing/prediction/state envelopes without fabricating local FTL velocity.",
     "Anchored portal systems may certify mouth power, synchronization, aperture/throat, admission, exit, clearance, and recovery envelopes rather than free-flight velocity.",
     "Continuous projected-progress families may certify projected-progress demand only when the applicable family authority defines that quantity.",
     "Environmental dimensions are certificate limits, not replacements for family-specific route physics. Passing an installation gravity/tidal limit does not by itself make a route safe."
   ],
   "raceTechnologySafeguards": {
-    "arnock": "Express ordinary envelope evidence through modular solid-state power/control, silicon timing, piezoelectric alignment/condition evidence, cooling, protected stores, and field/actuator modules. Do not substitute biological machinery by default.",
-    "zwleiMurrek": "May express envelope evidence through bio-reactive power fluid, hydraulic vane authority, dielectric-fluid condition, conductive coolant, Navigation Current reference state, and sensor machinery while preserving unresolved consolidated FTL-family identity."
+    "arnock": "Express ordinary envelope and uncertainty evidence through modular solid-state power/control, silicon timing, piezoelectric alignment/condition evidence, cooling, protected stores, calibration transfer, and field/actuator modules. Do not substitute biological machinery by default.",
+    "zwleiMurrek": "May express envelope and uncertainty evidence through bio-reactive power fluid, hydraulic vane authority, dielectric-fluid condition, conductive coolant, Navigation Current reference state, and sensor machinery while preserving unresolved consolidated FTL-family identity."
   },
-  "provenanceRule": "Every envelope dimension must retain source, measurement/model status, epoch when relevant, units, and whether the bound is measured, inferred, manufacturer/design authority, post-refit certified, simulation-only, or unresolved."
+  "provenanceRule": "Every envelope dimension and uncertainty value must retain source, measurement/model status, epoch when relevant, units, calibration/model authority, transformation history, and whether the bound is measured, guaranteed, inferred, manufacturer/design authority, post-refit certified, simulation-only, or unresolved."
 }
