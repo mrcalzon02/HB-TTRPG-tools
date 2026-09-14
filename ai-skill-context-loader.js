@@ -8,6 +8,7 @@
     if (typeof location !== 'undefined' && location.href) return new URL('./', location.href).href;
     return null;
   })();
+  const RESOURCE_CACHE = new Map();
 
   function currentBaseUrl() {
     if (INSTALL_BASE_URL) return INSTALL_BASE_URL;
@@ -34,9 +35,19 @@
 
   async function fetchResource(path, baseUrl, mode) {
     const url = resolveFirstPartyUrl(path, baseUrl);
-    const response = await fetch(url.href, { credentials: 'same-origin', cache: 'no-cache' });
-    if (!response.ok) throw new Error(`Failed to fetch ${url.pathname}: HTTP ${response.status}.`);
-    return mode === 'json' ? response.json() : response.text();
+    const cacheKey = `${mode}:${url.href}`;
+    if (RESOURCE_CACHE.has(cacheKey)) return RESOURCE_CACHE.get(cacheKey);
+    const request = fetch(url.href, { credentials: 'same-origin', cache: 'no-cache' }).then(response => {
+      if (!response.ok) throw new Error(`Failed to fetch ${url.pathname}: HTTP ${response.status}.`);
+      return mode === 'json' ? response.json() : response.text();
+    });
+    RESOURCE_CACHE.set(cacheKey, request);
+    try {
+      return await request;
+    } catch (error) {
+      RESOURCE_CACHE.delete(cacheKey);
+      throw error;
+    }
   }
 
   function findSkill(index, skillName) {
