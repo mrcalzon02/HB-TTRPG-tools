@@ -58,6 +58,12 @@
     }
   }
 
+  function clearCache() {
+    const cleared = RESOURCE_CACHE.size;
+    RESOURCE_CACHE.clear();
+    return cleared;
+  }
+
   function findSkill(index, skillName) {
     const skills = Array.isArray(index && index.skills) ? index.skills : [];
     const skill = skills.find(item => item && item.name === skillName);
@@ -133,6 +139,7 @@
   root.HBFoundrySkillContextLoader = Object.freeze({
     load,
     loadMany,
+    clearCache,
     resolveFirstPartyUrl
   });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
