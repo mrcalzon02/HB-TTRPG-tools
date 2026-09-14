@@ -33,13 +33,21 @@
     return resolved;
   }
 
+  function deepFreeze(value) {
+    if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
+    Object.freeze(value);
+    for (const nested of Object.values(value)) deepFreeze(nested);
+    return value;
+  }
+
   async function fetchResource(path, baseUrl, mode) {
     const url = resolveFirstPartyUrl(path, baseUrl);
     const cacheKey = `${mode}:${url.href}`;
     if (RESOURCE_CACHE.has(cacheKey)) return RESOURCE_CACHE.get(cacheKey);
-    const request = fetch(url.href, { credentials: 'same-origin', cache: 'no-cache' }).then(response => {
+    const request = fetch(url.href, { credentials: 'same-origin', cache: 'no-cache' }).then(async response => {
       if (!response.ok) throw new Error(`Failed to fetch ${url.pathname}: HTTP ${response.status}.`);
-      return mode === 'json' ? response.json() : response.text();
+      const value = mode === 'json' ? await response.json() : await response.text();
+      return mode === 'json' ? deepFreeze(value) : value;
     });
     RESOURCE_CACHE.set(cacheKey, request);
     try {
