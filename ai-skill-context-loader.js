@@ -43,8 +43,9 @@
     const skills = Array.isArray(index && index.skills) ? index.skills : [];
     const skill = skills.find(item => item && item.name === skillName);
     if (!skill) throw new Error(`Skill is not registered in skills/index.json: ${skillName}`);
-    if (typeof skill.path !== 'string' || !/^skills\/[^/]+\/SKILL\.md$/.test(skill.path)) {
-      throw new Error(`Registered skill has an invalid authoritative path: ${skillName}`);
+    const expectedPath = `skills/${skillName}/SKILL.md`;
+    if (skill.path !== expectedPath) {
+      throw new Error(`Registered skill path does not match its authoritative skill name: ${skillName}`);
     }
     return skill;
   }
