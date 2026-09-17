@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-ftl-theory-ledger.schema.json",
+  "title": "Black Light FTL Theory Ledger",
+  "type": "object",
+  "required": [
+    "registryType",
+    "registryVersion",
+    "authority",
+    "sourceProvenance",
+    "canonDiscipline",
+    "sharedTheory",
+    "familyTheoryIndex",
+    "upgradeTheory",
+    "qMapRelationship",
+    "unresolvedQuestions",
+    "preservationRules"
+  ],
+  "properties": {
+    "registryType": {
+      "const": "exoVesselFtlTheoryLedger"
+    },
+    "registryVersion": {
+      "type": "string"
+    },
+    "schema": {
+      "type": "string"
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "primary",
+        "mathematicalModels",
+        "gravitySafety",
+        "technicalCorpus"
+      ],
+      "additionalProperties": {
+        "type": [
+          "string",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "sourceProvenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "status"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "canonDiscipline": {
+      "type": "object",
+      "required": [
+        "labels",
+        "promotionRule"
+      ],
+      "additionalProperties": true
+    },
+    "sharedTheory": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "familyTheoryIndex": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "required": [
+          "family",
+          "status",
+          "operator",
+          "distanceModel",
+          "principalLimits",
+          "equations",
+          "upgradePrinciple"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "upgradeTheory": {
+      "type": "object",
+      "required": [
+        "vector",
+        "rule",
+        "drivers"
+      ],
+      "additionalProperties": true
+    },
+    "qMapRelationship": {
+      "type": "object",
+      "required": [
+        "status",
+        "boundary"
+      ],
+      "additionalProperties": true
+    },
+    "unresolvedQuestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "question"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "preservationRules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}
