@@ -1,0 +1,283 @@
+{
+  "projectId": "blacklight-continuum",
+  "registryType": "qMapTechnologyRegistry",
+  "registryVersion": "1.0.0",
+  "schema": "data/schemas/blacklight-q-map.schema.json",
+  "authority": {
+    "statusRule": "CONFIRMED claims come from the current project directive or surviving repository authority; engineering consequences are DERIVED; new mechanism details are PROPOSED; absent physical identities or constants are UNRESOLVED.",
+    "designOrigin": "Project directive, 2026-09-17: Q-map is a hybrid MRI-like, penetrating-radiographic, and unknown quantum/atomic interrogation technology whose output is a remarkably compact map of physical and quantum state, including neural matter.",
+    "physicsBoundary": "Current real-world physics does not establish nondestructive arbitrary many-body quantum-state tomography or this storage behavior. Q-channel carrier identity and its reconstruction physics are Black Light setting technology and may not be presented as contemporary science."
+  },
+  "designation": {
+    "canonicalName": "Q-map",
+    "aliases": ["Q mapping", "queue mapping"],
+    "definition": "A bounded multi-channel quantum tomography product and the scanner architecture that produces it: structural matter imaging plus a setting-specific relational Q-state interrogation compiled into a compact reconstructable state description."
+  },
+  "coreArchitecture": {
+    "channels": [
+      {
+        "id": "resonance",
+        "name": "Resonance Tomography Channel",
+        "status": "DERIVED",
+        "role": "MRI-like volumetric interrogation of soft matter, local electromagnetic response, spin/resonance behavior, chemistry-sensitive tissue state, and time-varying internal fields.",
+        "observables": ["resonance response", "composition-dependent relaxation", "local field response", "soft-tissue volumetry", "time-correlated molecular environment"],
+        "limits": ["motion smear", "field inhomogeneity", "material-dependent blind regions", "temporal resolution burden"]
+      },
+      {
+        "id": "penetrating",
+        "name": "Penetrating Structural Channel",
+        "status": "DERIVED",
+        "role": "X-ray-like or diffraction-like penetrating structural imaging used to constrain density, lattice geometry, high-density inclusions, internal boundaries, and deep structural registration.",
+        "observables": ["attenuation", "density", "diffraction or scattering response", "internal boundary geometry", "material inclusions"],
+        "limits": ["dose or energy deposition", "shadowing", "dense-material saturation", "resolution-depth tradeoff"]
+      },
+      {
+        "id": "q-channel",
+        "name": "Q-state Interrogation Channel",
+        "status": "CONFIRMED",
+        "role": "Setting-specific interrogation of relational quantum state, correlation, entanglement boundary conditions, phase relationships, and microscopic state constraints within the scan volume.",
+        "observables": ["relational phase constraints", "correlation structure", "entanglement dependencies", "Q-reference compatibility", "state uncertainty"],
+        "limits": ["carrier or interaction identity is UNRESOLVED", "measurement back-action is nonzero", "outside-volume entanglement becomes an open boundary", "strong exotic fields can decorrelate the reference"]
+      }
+    ],
+    "fusionPipeline": [
+      "field and timing preparation",
+      "synchronized resonance acquisition",
+      "penetrating structural acquisition",
+      "Q-reference lock and relational interrogation",
+      "cross-channel spatial registration",
+      "constraint and entanglement graph construction",
+      "generative state compilation",
+      "test-volume reconstruction",
+      "fidelity and covariance validation",
+      "provenance and integrity sealing"
+    ]
+  },
+  "scanDomain": {
+    "domainEquation": "Omega_R = { x : ||x - x0|| <= R }",
+    "resolutionAxes": ["spatial resolution", "temporal resolution", "Q-relational resolution", "material penetration", "reference fidelity", "measurement back-action"],
+    "boundaryRule": "The Q-map is a bounded state description. Correlations whose partner state extends beyond Omega_R are stored as open-edge dependencies with uncertainty/reference metadata rather than falsely represented as completely known internal state."
+  },
+  "stateRepresentation": {
+    "principle": "The Q-map file is a generative relational description, not an explicit classical table containing an independent amplitude/value for every atomic or subatomic degree of freedom. It stores reconstructive constraints, correlations, local generators, boundary conditions, uncertainty, cross-channel structure, and a Q-reference key.",
+    "relationalGraph": {
+      "symbol": "G_Q",
+      "equation": "G_Q = (V, E, Theta, Sigma, B)",
+      "components": {
+        "V": "resolved local modes, cells, particles, structures, or compressed state domains",
+        "E": "correlation and entanglement dependencies",
+        "Theta": "phase, generator, and relational parameters",
+        "Sigma": "uncertainty and covariance state",
+        "B": "scan-boundary conditions and open-edge dependencies"
+      }
+    },
+    "reconstructionEquation": "rho_hat_Omega = R(Q0, G_Q, C_structural, B, Q_reference)",
+    "compressionParadox": {
+      "status": "PROPOSED",
+      "naiveScaling": "For N generic d-level subsystems, a naive arbitrary state description grows approximately as d^N in state-space burden.",
+      "qMapScaling": "S_Q is modeled as scaling with the number of resolved relational domains, graph edges, constraint rank, boundary complexity, and residual entropy rather than with a naive exhaustive enumeration of the full Hilbert-space basis.",
+      "compressionRatio": "C_Q = S_naive / S_Q",
+      "informationAccounting": "I_reconstruction = I_file + I_Q-reference + I_constraints/laws. The disturbing feature is that I_Q-reference appears to be physically available to the reconstruction process rather than stored as an ordinary external dictionary of comparable size.",
+      "scientificProblem": "Conventional computer scientists expect the apparently missing information to exist in a hidden dictionary, oracle, decoder state, training corpus, or lossy approximation. Mature Q-maps can pass reconstruction and covariance tests without exposing such a conventional side-information reservoir. The unresolved question is whether the file is extraordinarily compressed or whether Q-physics itself supplies part of the decompression basis."
+    }
+  },
+  "neuralMapping": {
+    "status": "CONFIRMED",
+    "capturedLayers": [
+      "gross neural anatomy and vascular/support structure",
+      "cell and synaptic geometry to the resolved scan scale",
+      "membrane, ionic, molecular, and neurotransmitter state to instrument resolution",
+      "time-correlated electrical and chemical activity",
+      "setting-specific Q correlations and entanglement dependencies associated with scanned neural matter",
+      "uncertainty, unresolved state, and outside-volume open-edge dependencies"
+    ],
+    "notAutomaticallyEstablished": [
+      "that consciousness is reducible to the Q-map",
+      "that a Q-map is a soul",
+      "that reconstruction creates legal or metaphysical identity continuity",
+      "that every Q correlation in neural tissue is cognition-relevant",
+      "that a scan is a perfect timeless copy",
+      "that duplication, resurrection, or mind execution is authorized by this registry"
+    ],
+    "temporalRule": "Neural Q-mapping requires a substantially tighter acquisition-time covariance than static machinery mapping because a brain is a rapidly changing electrochemical system. A neural map records a bounded temporal state estimate, not an eternal exact object."
+  },
+  "constraints": [
+    {"status": "DERIVED", "text": "Increasing scan radius, penetration depth, spatial resolution, temporal resolution, and Q-relational resolution cannot all be improved independently without increasing energy, aperture, sensor count, time, control bandwidth, or uncertainty burden."},
+    {"status": "DERIVED", "text": "Entanglement across the scan boundary creates open relational edges. The scanner must preserve them as unresolved dependencies rather than claiming omniscience outside the scan volume."},
+    {"status": "DERIVED", "text": "Measurement back-action must be represented. Higher technology can reduce, characterize, reverse, or compensate portions of the disturbance but does not make measurement consequence-free by declaration."},
+    {"status": "DERIVED", "text": "A compact stored map can still require a sophisticated reconstruction engine and a valid Q-reference environment. File size and reconstruction complexity are separate engineering quantities."},
+    {"status": "PROPOSED", "text": "Q-reference compatibility may behave as a physical key: a map can be structurally intact yet unreconstructable at full fidelity if its reference relationship cannot be reproduced or translated."},
+    {"status": "UNRESOLVED", "text": "The exact particle, field, interaction, or carrier used by the Q-state interrogation channel is not currently named by surviving authority and must not be fabricated as recovered canon."}
+  ],
+  "failureModes": [
+    {"status": "DERIVED", "text": "Reference drift: phase/reference state changes during acquisition, producing a map that is internally precise but registered to the wrong Q basis."},
+    {"status": "DERIVED", "text": "Boundary truncation: significant outside-volume dependencies are omitted or underweighted, creating false confidence in a locally reconstructed state."},
+    {"status": "DERIVED", "text": "Temporal decoherence: target evolution exceeds acquisition synchronization, especially in neural or active-machine scans, producing mutually incompatible temporal slices."},
+    {"status": "DERIVED", "text": "Cross-channel misregistration: resonance, penetrating, and Q channels are spatially or temporally offset and compile into a self-consistent but physically wrong reconstruction."},
+    {"status": "DERIVED", "text": "Dense-material or shielding shadow: one or more classical structural channels become poorly conditioned, increasing the burden placed on relational reconstruction."},
+    {"status": "PROPOSED", "text": "Q-reference spoof: a hostile or corrupted reference can cause valid measurements to compile against an incorrect relational basis."},
+    {"status": "PROPOSED", "text": "False-low entropy solution: the compiler finds an extremely compact relational model that satisfies sampled checks but discards physically significant unresolved structure."},
+    {"status": "DERIVED", "text": "Back-action excursion: probe interaction perturbs the target beyond the certified post-scan disturbance envelope."}
+  ],
+  "operations": {
+    "phases": [
+      "identify target and authoritative reference frame",
+      "define scan center, radius, exclusions, and required fidelity",
+      "stabilize target motion and local electromagnetic/exotic environment",
+      "calibrate resonance channel",
+      "calibrate penetrating structural channel",
+      "establish and authenticate Q-reference lock",
+      "perform synchronized multi-channel acquisition",
+      "audit open entanglement/correlation boundaries",
+      "compile relational constraint graph and structural priors",
+      "reconstruct independent test volumes",
+      "compare reconstruction against withheld measurements and covariance budget",
+      "seal file, reference metadata, uncertainty, back-action record, and provenance"
+    ],
+    "neuralSpecialProcedure": [
+      "minimize total acquisition window and record temporal covariance explicitly",
+      "apply stricter tissue energy/deposition and back-action limits",
+      "flag all unresolved open-edge dependencies crossing the neural scan boundary",
+      "retain electrochemical state timing alongside Q-state timing",
+      "perform no identity, consciousness, resurrection, or continuity inference as part of scanner certification"
+    ]
+  },
+  "technologyBasisEmbodiments": [
+    {
+      "basis": "TERRESTRIAL_ELECTROMECHANICAL",
+      "status": "DERIVED",
+      "scannerBody": "superconducting/resonant field rings, penetrating emitter-detector arcs, distributed Q-detector tiles, precision mechanical metrology, shielded service gantry",
+      "qReference": "cryogenic reference package with optical-clock timing and isolated calibration standards",
+      "timingControl": "electronic/photonic deterministic timing network with redundant clock comparison",
+      "thermalOrWorkingMedium": "cryogenic loops, heat stores, vacuum insulation, conventional facility cooling",
+      "maintenance": ["field-coil alignment", "detector gain calibration", "clock comparison", "cryostat service", "radiation/penetration source certification", "Q-reference cross-check"],
+      "signatures": ["strong controlled magnetic/electromagnetic fields", "penetrating radiation pulse signature", "cryogenic thermal rejection", "Q-channel transient"],
+      "failures": ["conductor quench", "timing skew", "detector saturation", "mechanical alignment drift", "reference-package contamination"]
+    },
+    {
+      "basis": "AQUATIC_ELECTROCHEMICAL_HYDRAULIC",
+      "status": "DERIVED",
+      "scannerBody": "pressure-equalized sensor mantle, ionic field cells, wet photonic windows, hydraulic positioning surfaces, immersed penetrating detector layers",
+      "qReference": "sealed electrochemical/Q reference cells distributed around the pressure volume",
+      "timingControl": "wet optical timing with pressure-logic local control and electrochemical reference comparison",
+      "thermalOrWorkingMedium": "circulating liquid working medium used for cooling, pressure stability, chemistry control, and acoustic damping",
+      "maintenance": ["fluid chemistry assay", "dissolved gas control", "biofouling removal", "pressure-cell calibration", "wet-optic cleaning", "reference-cell exchange/cross-check"],
+      "signatures": ["pressure transients", "ionic-field changes", "fluid heating", "optical timing flashes", "Q-channel transient"],
+      "failures": ["cavitation", "chemistry drift", "pressure misregistration", "wet-window scattering", "electrochemical reference drift"]
+    },
+    {
+      "basis": "CRYOGENIC_AMMONIA_HALOCARBON",
+      "status": "DERIVED",
+      "scannerBody": "deep-cold resonant shell, superconductive detector stack, vacuum-jacketed penetrating array, contraction-compensated optical metrology",
+      "qReference": "ultra-stable cold reference lattice maintained below operational phase thresholds",
+      "timingControl": "cold photonic timing and superconductive local synchronization",
+      "thermalOrWorkingMedium": "ammonia/halocarbon cryofluid circuits, phase-change buffers, vacuum jackets",
+      "maintenance": ["cold contamination control", "contraction geometry verification", "superconductive transition testing", "cryofluid purity", "seal inspection", "reference-lattice anneal/check"],
+      "signatures": ["cryogenic plume/heat rejection", "superconductive field changes", "penetrating pulse", "Q-channel transient"],
+      "failures": ["warm contamination", "contraction misalignment", "superconductive transition", "phase-buffer exhaustion", "reference-lattice defect"]
+    },
+    {
+      "basis": "GAS_GIANT_FLUIDIC_ELECTROSTATIC",
+      "status": "DERIVED",
+      "scannerBody": "charged membrane envelope, pressure-tension detector web, electrostatic interrogation surfaces, distributed scattering sensors",
+      "qReference": "phase-locked charged reference nodes suspended in the membrane/tension architecture",
+      "timingControl": "fluidic, acoustic, and electrostatic timing propagated through redundant membrane paths",
+      "thermalOrWorkingMedium": "bulk atmospheric/working gas circulation with pressure and charge management",
+      "maintenance": ["membrane integrity inspection", "charge equalization", "pressure-map calibration", "acoustic timing characterization", "reference-node spacing verification"],
+      "signatures": ["electrostatic field excursions", "membrane acoustic modes", "pressure redistribution", "Q-channel transient"],
+      "failures": ["membrane rupture", "electrostatic discharge", "pressure-mode aliasing", "acoustic timing corruption", "reference-node drift"]
+    },
+    {
+      "basis": "BIOLOGICAL_SYMBIOTIC",
+      "status": "DERIVED",
+      "scannerBody": "grown resonant sensory organs, mineralized penetrating-emission structures, phase-sensitive ganglia, distributed sensory cilia/tissue, vascular support beds",
+      "qReference": "cultivated reference organ or symbiotic tissue whose Q-state response is continuously compared against known biological baselines",
+      "timingControl": "neural/electrochemical pulse synchronization with local ganglia performing fast correlation before higher cognition/control layers",
+      "thermalOrWorkingMedium": "vascular heat transport, metabolic buffering, electrolyte and gas exchange",
+      "maintenance": ["nutrition and electrolyte control", "pathology screening", "sensory-tissue regeneration", "reference-organ biopsy/assay", "scar mapping", "symbiont population control"],
+      "signatures": ["metabolic heat rise", "electrochemical bursts", "hormonal/metabolic preparation state", "Q-channel transient"],
+      "failures": ["neural desynchronization", "reference-organ pathology", "scar-induced blind domains", "metabolic exhaustion", "immune/rejection response"]
+    },
+    {
+      "basis": "MINERAL_PIEZOELECTRIC_PHOTONIC",
+      "status": "DERIVED",
+      "scannerBody": "preloaded crystal tomography body, piezoelectric excitation domains, photonic defect-channel interferometers, resonant penetrating-emission facets",
+      "qReference": "certified crystallographic reference domains with known phase and defect topology",
+      "timingControl": "photonic timing distributed through defect channels and synchronized by phononic/resonant domain response",
+      "thermalOrWorkingMedium": "conductive mineral heat paths, thermal-gradient management, annealing reservoirs",
+      "maintenance": ["crack mapping", "preload measurement", "crystal-axis certification", "defect-channel cleaning", "modal sweep", "annealing/regrowth"],
+      "signatures": ["phononic ringing", "polarization shifts", "photonic emissions", "piezoelectric stress field", "Q-channel transient"],
+      "failures": ["crack growth", "domain inversion", "modal detuning", "preload loss", "reference-domain defect"]
+    },
+    {
+      "basis": "FIELD_MEDIATED_POSTMATERIAL",
+      "status": "DERIVED",
+      "scannerBody": "distributed programmable field shell with sparse anchor matter, adaptive interrogation surfaces, persistent reference mesh, reconfigurable sensing volume",
+      "qReference": "authenticated distributed state-reference mesh continuously checked against signed known-safe configurations",
+      "timingControl": "state-synchronous distributed control with continuous tomography of the scanner itself",
+      "thermalOrWorkingMedium": "field-state energy management with material reserve/fallback sinks rather than one fixed coolant architecture",
+      "maintenance": ["reference authentication", "coherence audit", "anchor-node restoration", "fallback reconstruction test", "unauthorized-state isolation", "known-safe state comparison"],
+      "signatures": ["coherence/reference transients", "anchor-field perturbation", "adaptive shell geometry changes", "Q-channel transient"],
+      "failures": ["reference loss", "state drift", "hostile state injection", "anchor depletion", "fallback reconstruction failure"]
+    }
+  ],
+  "apiContract": {
+    "requiredOutputFields": [
+      "scanId",
+      "scannerBasis",
+      "scannerRevision",
+      "scanCenter",
+      "scanRadius",
+      "acquisitionWindow",
+      "channelStates",
+      "spatialResolution",
+      "temporalResolution",
+      "qRelationalResolution",
+      "qReferenceId",
+      "relationalGraphSummary",
+      "openBoundaryEdges",
+      "reconstructionFidelity",
+      "covarianceSummary",
+      "backActionEstimate",
+      "fileSize",
+      "compressionAccounting",
+      "integritySeal",
+      "provenance",
+      "warnings"
+    ],
+    "canonSafeguards": [
+      "Do not invent a named Q particle or carrier when source authority does not provide one.",
+      "Do not describe a neural Q-map as automatically proving consciousness, soul, personhood, legal continuity, or resurrection.",
+      "Do not claim perfect knowledge beyond the scan boundary; preserve open-edge dependencies and uncertainty.",
+      "Do not erase measurement back-action merely because the scanner is advanced.",
+      "Do not convert PROPOSED storage scaling or compression mathematics into setting-wide canonical constants without explicit adoption.",
+      "Generated race/manufacturer embodiments must inherit specific source canon before this generic basis registry."
+    ]
+  },
+  "provenance": [
+    {
+      "status": "CONFIRMED",
+      "sourceType": "project_directive",
+      "source": "Black Light development directive, 2026-09-17",
+      "claim": "Q-map combines MRI-like, X-ray-like/penetrating, and unknown quantum/atomic scanning; it maps a scanned object including neural quantum state and produces unexpectedly compact data."
+    },
+    {
+      "status": "DERIVED",
+      "sourceType": "engineering_integration",
+      "source": "Current Black Light technology-basis framework",
+      "claim": "The Q-map is resolved through the same seven technology-basis machinery languages used elsewhere in current EXO/Black Light engineering."
+    },
+    {
+      "status": "PROPOSED",
+      "sourceType": "information_model",
+      "source": "Q-map development architecture 1.0.0",
+      "claim": "The storage paradox is modeled as a generative relational graph plus a physically available Q-reference contribution rather than exhaustive per-particle classical storage."
+    },
+    {
+      "status": "UNRESOLVED",
+      "sourceType": "physics_identity",
+      "source": "No surviving named carrier source located in current repository search",
+      "claim": "The exact Q-channel particle, field, carrier, or microscopic interaction remains intentionally unnamed."
+    }
+  ]
+}
