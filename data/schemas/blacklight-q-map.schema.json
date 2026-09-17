@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/blacklight-q-map.schema.json",
+  "title": "Black Light Q-map Technology Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "projectId",
+    "registryType",
+    "registryVersion",
+    "authority",
+    "designation",
+    "coreArchitecture",
+    "scanDomain",
+    "stateRepresentation",
+    "neuralMapping",
+    "constraints",
+    "failureModes",
+    "operations",
+    "technologyBasisEmbodiments",
+    "apiContract",
+    "provenance"
+  ],
+  "$defs": {
+    "canonStatus": {
+      "type": "string",
+      "enum": ["CONFIRMED", "DERIVED", "PROPOSED", "UNRESOLVED"]
+    },
+    "statusText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "text"],
+      "properties": {
+        "status": {"$ref": "#/$defs/canonStatus"},
+        "text": {"type": "string", "minLength": 1}
+      }
+    },
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "status", "role", "observables", "limits"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "status": {"$ref": "#/$defs/canonStatus"},
+        "role": {"type": "string", "minLength": 1},
+        "observables": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "limits": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "basisEmbodiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basis", "status", "scannerBody", "qReference", "timingControl", "thermalOrWorkingMedium", "maintenance", "signatures", "failures"],
+      "properties": {
+        "basis": {"type": "string", "minLength": 1},
+        "status": {"$ref": "#/$defs/canonStatus"},
+        "scannerBody": {"type": "string"},
+        "qReference": {"type": "string"},
+        "timingControl": {"type": "string"},
+        "thermalOrWorkingMedium": {"type": "string"},
+        "maintenance": {"type": "array", "items": {"type": "string"}},
+        "signatures": {"type": "array", "items": {"type": "string"}},
+        "failures": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "properties": {
+    "projectId": {"const": "blacklight-continuum"},
+    "registryType": {"const": "qMapTechnologyRegistry"},
+    "registryVersion": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "schema": {"type": "string"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statusRule", "designOrigin", "physicsBoundary"],
+      "properties": {
+        "statusRule": {"type": "string"},
+        "designOrigin": {"type": "string"},
+        "physicsBoundary": {"type": "string"}
+      }
+    },
+    "designation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonicalName", "aliases", "definition"],
+      "properties": {
+        "canonicalName": {"const": "Q-map"},
+        "aliases": {"type": "array", "items": {"type": "string"}},
+        "definition": {"type": "string"}
+      }
+    },
+    "coreArchitecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channels", "fusionPipeline"],
+      "properties": {
+        "channels": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/channel"}},
+        "fusionPipeline": {"type": "array", "minItems": 5, "items": {"type": "string"}}
+      }
+    },
+    "scanDomain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domainEquation", "resolutionAxes", "boundaryRule"],
+      "properties": {
+        "domainEquation": {"type": "string"},
+        "resolutionAxes": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+        "boundaryRule": {"type": "string"}
+      }
+    },
+    "stateRepresentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principle", "relationalGraph", "reconstructionEquation", "compressionParadox"],
+      "properties": {
+        "principle": {"type": "string"},
+        "relationalGraph": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["symbol", "equation", "components"],
+          "properties": {
+            "symbol": {"type": "string"},
+            "equation": {"type": "string"},
+            "components": {"type": "object", "additionalProperties": {"type": "string"}}
+          }
+        },
+        "reconstructionEquation": {"type": "string"},
+        "compressionParadox": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "naiveScaling", "qMapScaling", "compressionRatio", "informationAccounting", "scientificProblem"],
+          "properties": {
+            "status": {"$ref": "#/$defs/canonStatus"},
+            "naiveScaling": {"type": "string"},
+            "qMapScaling": {"type": "string"},
+            "compressionRatio": {"type": "string"},
+            "informationAccounting": {"type": "string"},
+            "scientificProblem": {"type": "string"}
+          }
+        }
+      }
+    },
+    "neuralMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "capturedLayers", "notAutomaticallyEstablished", "temporalRule"],
+      "properties": {
+        "status": {"$ref": "#/$defs/canonStatus"},
+        "capturedLayers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "notAutomaticallyEstablished": {"type": "array", "items": {"type": "string"}},
+        "temporalRule": {"type": "string"}
+      }
+    },
+    "constraints": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/statusText"}},
+    "failureModes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/statusText"}},
+    "operations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phases", "neuralSpecialProcedure"],
+      "properties": {
+        "phases": {"type": "array", "minItems": 8, "items": {"type": "string"}},
+        "neuralSpecialProcedure": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "technologyBasisEmbodiments": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/basisEmbodiment"}
+    },
+    "apiContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requiredOutputFields", "canonSafeguards"],
+      "properties": {
+        "requiredOutputFields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "canonSafeguards": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["status", "sourceType", "source", "claim"],
+        "properties": {
+          "status": {"$ref": "#/$defs/canonStatus"},
+          "sourceType": {"type": "string"},
+          "source": {"type": "string"},
+          "claim": {"type": "string"}
+        }
+      }
+    }
+  }
+}
