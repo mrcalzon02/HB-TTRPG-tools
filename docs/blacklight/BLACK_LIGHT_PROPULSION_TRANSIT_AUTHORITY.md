@@ -872,3 +872,20 @@ The live FTL runtime files remain authoritative for current generator behavior u
 `propulsion-transit-registry.json` and `exo-vessel-propulsion-transit.schema.json` make the core vocabulary, scale relationships, provenance, and validation rules machine-readable.
 
 This document remains the **single authoritative integration entrypoint**. Future refinements should extend or correct this authority deliberately rather than creating another competing top-level propulsion/FTL authority.
+
+
+## 23. Industrial replication and propulsion/transit fabrication
+
+The general industrial consequence authority is `docs/blacklight/BLACK_LIGHT_REPLICATOR_INDUSTRIAL_AUTOMATION_AUTHORITY.md`.
+
+Where a civilization is independently established to possess mature physicalized replicators, propulsion and FTL hardware inside the certified replication envelope may be reproduced from complete patterns without recreating the historical product-specific manufacturing chain. This affects fabrication, spares, depot practice, and logistics; it does **not** alter the transit family mathematics.
+
+The integration distinction is:
+
+[
+\boxed{\text{replicated hardware} \neq \text{commissioned transit state}}
+]
+
+A replicator can reproduce dormant coils, emitters, resonators, topology waveguides, control modules, structures, thermal hardware, and other physical components if their relevant state is captured. It does not by that fact supply a missing beacon network, authenticate a destination address, create a live wormhole throat, solve a Fold-Jump endpoint, establish a Q-phase epoch, bond a biological navigator, or certify a rebuilt installation.
+
+Generated FTL documentation should therefore report fabrication reproducibility, installation reproducibility, calibration reproducibility, operational-state reproducibility, and authority/infrastructure reproducibility separately. This prevents mature fabrication from being mistaken for universal operational compatibility while still respecting the setting-level industrial consequence of replication.

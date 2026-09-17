@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "setting": "Blacklight Continuum",
   "description": "Authoritative public campaign, rules, wiki, entity, faction, character, personality-engram, and setting routes exposed for agent retrieval and search.",
   "resources": [
@@ -36,6 +36,9 @@
     "data/blacklight-continuum/rules/alien-technology-templates.json",
     "data/blacklight-continuum/generators/random-character-content.json",
     "data/blacklight-continuum/wiki/supernatural-factions.json",
-    "data/blacklight-continuum/wiki/internal-adversaries.json"
+    "data/blacklight-continuum/wiki/internal-adversaries.json",
+    "docs/blacklight/BLACK_LIGHT_REPLICATOR_INDUSTRIAL_AUTOMATION_AUTHORITY.md",
+    "data/exo-vessel/industrial-replication-doctrine.json",
+    "data/schemas/exo-vessel-industrial-replication-doctrine.schema.json"
   ]
 }

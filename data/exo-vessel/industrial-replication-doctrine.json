@@ -1,0 +1,122 @@
+{
+  "projectId": "blacklight-exo-vessel-design-system",
+  "registryType": "industrialReplicationDoctrine",
+  "registryVersion": "1.0.0",
+  "authority": "docs/blacklight/BLACK_LIGHT_REPLICATOR_INDUSTRIAL_AUTOMATION_AUTHORITY.md",
+  "canonStatus": {
+    "premise": "CONFIRMED_AUTHORIAL_DIRECTIVE",
+    "industrialConsequence": "CONFIRMED_DERIVED",
+    "quantitativeModels": "PROPOSED"
+  },
+  "governingPremise": "Once a physicalized replicator volume is large enough for a product, a sufficiently complete scan/pattern permits reproduction without recreating the product's conventional manufacturing chain.",
+  "antiRetconRule": "Do not reintroduce conventional product-specific factories as necessities for goods inside a mature replicator's certified envelope unless an explicit physical, cultural, security, regulatory, throughput, state-domain, or scale reason is recorded.",
+  "admissibility": {
+    "conditions": [
+      "object fits certified replication volume or has a certified segmented/continuous fabrication plan",
+      "pattern/scan resolves all physically relevant states needed for intended function",
+      "replicator supports the captured matter/state domain",
+      "sufficient matter/feedstock and energy are available",
+      "pattern provenance and authorization pass",
+      "post-fabrication certification is available"
+    ],
+    "distinction": [
+      "copyable",
+      "operable",
+      "maintainable",
+      "understood",
+      "redesignable"
+    ]
+  },
+  "industrialTransformation": {
+    "displacedDefaults": [
+      "product-specific tooling",
+      "routine machining/casting/forming chains for known replicable goods",
+      "component assembly lines for known replicable goods",
+      "large physical spare-part catalogs",
+      "finished-goods warehousing where local replication is cheaper/faster"
+    ],
+    "retainedFunctions": [
+      "energy generation",
+      "feedstock extraction/reclamation/conditioning",
+      "scan and metrology",
+      "pattern engineering/storage/security",
+      "replicator construction and maintenance",
+      "certification and inspection",
+      "first-of-kind research and design",
+      "oversize or exceptional fabrication",
+      "active-state commissioning",
+      "logistics of energy, feedstock, patterns and replication capacity"
+    ]
+  },
+  "planningModels": {
+    "objectState": "O={V_O,M_O,R_O,S_O,I_O}",
+    "replicatorState": "R={V_R,Mdot_R,P_R,R_R,S_R,B_R}",
+    "admissibility": [
+      "V_O<=V_R",
+      "R_R<=R_O",
+      "S_O subseteq S_R"
+    ],
+    "replicationTime": "t_rep=t_setup+max(M_O/Mdot_R,E_O/P_R,I_O/B_R,V_O/Vdot_R)+t_cert"
+  },
+  "logistics": {
+    "physicalInventoryShift": "Routine spare diversity migrates from stocked physical parts to pattern libraries plus generalized feedstock.",
+    "criticalReadySpareRule": "Critical hardware may remain physically stocked when replication/restoration latency exceeds allowed casualty response time.",
+    "strategicDependencies": [
+      "replicator availability",
+      "feedstock",
+      "energy",
+      "pattern integrity",
+      "pattern authorization",
+      "certification capacity",
+      "replicator self-repair"
+    ]
+  },
+  "propulsionTransitIntegration": {
+    "rule": "Replication changes drive fabrication and maintenance, not transit mathematics.",
+    "reproducibilityLayers": [
+      "fabricationReproducibility",
+      "installationReproducibility",
+      "calibrationReproducibility",
+      "operationalStateReproducibility",
+      "authorityReproducibility"
+    ],
+    "activeStateCaution": "A replicated dormant drive does not automatically reproduce a live field, topology, Q-address, wormhole throat, bonded navigator, authenticated state, or external infrastructure."
+  },
+  "generatorRules": [
+    "Never infer replication capability solely from FTL Path, age, or narrative sophistication.",
+    "When replication exists, remove redundant conventional manufacturing requirements inside its certified envelope unless an explicit exception applies.",
+    "Preserve species and manufacturer technology-basis embodiment.",
+    "Record every source-specific replication limitation and its provenance.",
+    "Keep replication, understanding, commissioning, certification, and redesign as separate claims."
+  ],
+  "proposedMaturity": [
+    {
+      "level": "R0",
+      "capability": "laboratory microfabrication"
+    },
+    {
+      "level": "R1",
+      "capability": "part-scale physical replication"
+    },
+    {
+      "level": "R2",
+      "capability": "module/appliance scale"
+    },
+    {
+      "level": "R3",
+      "capability": "room/vehicle scale"
+    },
+    {
+      "level": "R4",
+      "capability": "hull-section/heavy-equipment scale"
+    },
+    {
+      "level": "R5",
+      "capability": "shipyard-scale replication volume"
+    },
+    {
+      "level": "R6",
+      "capability": "extended/continuous replication fields"
+    }
+  ]
+}

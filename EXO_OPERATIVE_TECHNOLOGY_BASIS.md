@@ -136,3 +136,22 @@ A valid technology-basis application must prove that:
 10. Current mass and volume closures remain unchanged until an explicit methodology-aware engineering revision occurs.
 
 This is the foundation for later mixed-technology salvage, refit, conversion bays, incompatible spare parts, alien damage control, and species-specific combat vulnerability. It is not decorative worldbuilding. It determines what equipment can connect, what can be repaired, what fails together, what environments maintenance crews require, and why two machines that both “produce power” may be mutually unusable without an entire translation plant between them.
+
+
+## 11. Industrial replication discontinuity
+
+**Authority:** `docs/blacklight/BLACK_LIGHT_REPLICATOR_INDUSTRIAL_AUTOMATION_AUTHORITY.md`.
+
+When a civilization is independently established to possess mature physicalized industrial replication, the operative-technology model must apply the industrial consequences rather than continuing to generate product-specific conventional factories by default.
+
+The governing distinction is:
+
+[
+\boxed{\text{replication capability} \neq \text{technology-basis identity}}
+]
+
+A terrestrial, aquatic, cryogenic, gas-giant, biological, mineral, or field-mediated civilization may embody replication in completely different machinery. The end effect is generalized reproduction from a sufficiently complete physical pattern; the carrier, fabrication medium, service environment, control method, energy interface, and certification practice remain basis-specific.
+
+For objects inside the certified replication volume/state envelope, conventional tooling, dedicated part-production lines, routine component assembly chains, and broad physical spare inventories cease to be required by default. Industry instead concentrates on energy, feedstock, pattern capture and governance, replication infrastructure, metrology, certification, first-of-kind design, oversize construction, active-state commissioning, and exception handling.
+
+This rule must not be used to grant replication technology from Path level alone. Conversely, once replication is source-authorized, generators must not silently restore pre-replicator industrial scarcity without an explicit physical, cultural, security, regulatory, throughput, or scale reason.

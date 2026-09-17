@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/data/schemas/exo-vessel-industrial-replication-doctrine.schema.json",
+  "title": "Black Light Industrial Replication Doctrine",
+  "type": "object",
+  "required": [
+    "projectId",
+    "registryType",
+    "registryVersion",
+    "authority",
+    "canonStatus",
+    "governingPremise",
+    "admissibility",
+    "industrialTransformation",
+    "planningModels",
+    "logistics",
+    "propulsionTransitIntegration",
+    "generatorRules",
+    "proposedMaturity"
+  ],
+  "properties": {
+    "projectId": {
+      "type": "string"
+    },
+    "registryType": {
+      "const": "industrialReplicationDoctrine"
+    },
+    "registryVersion": {
+      "type": "string"
+    },
+    "authority": {
+      "type": "string"
+    },
+    "canonStatus": {
+      "type": "object",
+      "required": [
+        "premise",
+        "industrialConsequence",
+        "quantitativeModels"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "governingPremise": {
+      "type": "string"
+    },
+    "antiRetconRule": {
+      "type": "string"
+    },
+    "admissibility": {
+      "type": "object",
+      "required": [
+        "conditions",
+        "distinction"
+      ],
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "distinction": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "industrialTransformation": {
+      "type": "object",
+      "required": [
+        "displacedDefaults",
+        "retainedFunctions"
+      ],
+      "properties": {
+        "displacedDefaults": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "retainedFunctions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "planningModels": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "logistics": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "propulsionTransitIntegration": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "generatorRules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "proposedMaturity": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": [
+          "level",
+          "capability"
+        ],
+        "properties": {
+          "level": {
+            "pattern": "^R[0-6]$"
+          },
+          "capability": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
