@@ -6,6 +6,7 @@
     'semantic-spatial-engine.js',
     'semantic-content-populator.js',
     'module-map-generator.js',
+    'vessel-condition-model.js',
     'vessel-hull-envelope.js',
     'alien-vessel-generator.js',
     'kaysender-airship-generator.js',
@@ -58,6 +59,10 @@
 #modules .dungeon-action{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:11px 0}
 #modules .dungeon-preview{border:1px solid var(--line);border-radius:9px;padding:10px;min-height:520px;display:flex;flex-direction:column;background:rgba(0,0,0,.14)}
 #modules .dungeon-preview h4{text-align:center;margin:0 0 10px}
+#modules .smm-deck-tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:0 0 10px}
+#modules .smm-deck-tabs[hidden]{display:none!important}
+#modules .smm-deck-tab{border:1px solid var(--line);border-radius:7px;padding:5px 9px;background:rgba(0,0,0,.12);color:var(--ink);font:inherit;cursor:pointer}
+#modules .smm-deck-tab.active{border-color:var(--accent);color:var(--accent)}
 #modules #smm-preview{flex:1;min-height:390px;display:grid;place-items:center;overflow:auto;background:#fff;border-radius:4px;padding:8px}
 #modules #smm-preview svg{display:block;max-width:100%;height:auto}
 #modules #smm-preview-meta{margin-top:8px;color:var(--muted);font-size:.82rem;line-height:1.45}
@@ -150,6 +155,7 @@
       if (src === 'semantic-spatial-engine.js' && window.HBSemanticSpatialEngine) continue;
       if (src === 'semantic-content-populator.js' && window.HBSemanticContentPopulator) continue;
       if (src === 'module-map-generator.js' && window.generator?.module_map) continue;
+      if (src === 'vessel-condition-model.js' && window.HBVesselConditionModel) continue;
       if (src === 'vessel-hull-envelope.js' && window.HBVesselHullEnvelope) continue;
       if (src === 'alien-vessel-generator.js' && window.generator?.alien_vessel) continue;
       if (src === 'kaysender-airship-generator.js' && window.generator?.kaysender_airship) continue;
@@ -204,7 +210,7 @@
           </fieldset>
           <fieldset class="dungeon-group"><legend>Variant Options</legend><div id="smm-variant-fields" class="advanced-grid"></div></fieldset>
         </div>
-        <section class="dungeon-preview"><h4>Preview</h4><div id="smm-preview"><span class="helper-note">Construct a dungeon to preview the layout.</span></div><div id="smm-preview-meta">No module generated yet.</div></section>
+        <section class="dungeon-preview"><h4>Preview</h4><div id="smm-deck-tabs" class="smm-deck-tabs" hidden></div><div id="smm-preview"><span class="helper-note">Construct a dungeon to preview the layout.</span></div><div id="smm-preview-meta">No module generated yet.</div></section>
       </div>
       <div class="dungeon-action"><button id="smm-generate" class="primary-action" type="button">Construct Dungeon</button><button id="smm-edit-generated" class="secondary-action" type="button" hidden>Edit Generated Map</button><button id="smm-view-generated" class="secondary-action" type="button" hidden>View Generated Module</button></div>
       <details><summary>Generated module data</summary><pre id="smm-output" class="module-source-text"></pre></details>
@@ -215,7 +221,7 @@
     const variant = val(root, 'smm-variant');
     const box = root.querySelector('#smm-variant-fields');
     if (variant === 'alien') {
-      box.innerHTML = `${row('Vessel Profile', '<select id="smm-vessel-profile"><option value="recon">Recon</option><option value="damaged_recon">Damaged Recon</option></select>')}${row('Faction', '<input id="smm-faction" value="Alpthon">')}${row('Hull Shape', '<select id="smm-hull-shape"><option value="connected-skin">Connected Skin</option><option value="capsule">Capsule</option><option value="oval">Oval</option><option value="rectangle">Rectangle</option></select>')}${row('Damage Severity', '<input id="smm-damage" type="number" min="0" max="1" step="0.05" value="0.2">')}`;
+      box.innerHTML = `${row('Vessel Profile', '<select id="smm-vessel-profile"><option value="recon">Recon</option><option value="science">Scientific survey</option><option value="freighter">Freighter</option><option value="command_cruiser">Command cruiser</option><option value="carrier">External-dock carrier</option></select>')}${row('Faction / Civilization', '<input id="smm-faction" value="Alpthon">')}${row('Species', '<input id="smm-species" value="Alpthon">')}${row('Body Plan', '<input id="smm-body-plan" placeholder="bipedal, arachnid, aquatic, radial">')}${row('Technology Basis', '<input id="smm-technology" placeholder="quantum crystalline strand, modular solid-state">')}${row('Condition', '<select id="smm-vessel-condition"><option>OPERATIONAL</option><option>WORN_SERVICE</option><option>ABANDONED</option><option>PARTIALLY_SALVAGED</option><option>DAMAGED</option><option>CRIPPLED</option><option>WRECKED</option><option>DESTROYED</option><option>MOTHBALLED</option><option>PARTIALLY_TORN_DOWN</option><option>PARTIALLY_COMPLETED</option><option>COMMISSIONING</option><option>NEWLY_MANUFACTURED</option></select>')}${row('Destruction % Override', '<input id="smm-destruction" type="number" min="0" max="100" step="1" placeholder="template default">')}${row('Salvage Removal %', '<input id="smm-salvage" type="number" min="0" max="100" step="1" placeholder="template default">')}${row('Contamination %', '<input id="smm-vessel-contamination" type="number" min="0" max="100" step="1" placeholder="template default">')}${row('Hull Shape', '<select id="smm-hull-shape"><option value="connected-skin">Connected Skin</option><option value="capsule">Capsule</option><option value="oval">Oval</option><option value="rectangle">Rectangle</option></select>')}`;
     } else if (variant === 'airship') {
       box.innerHTML = `${row('Vessel Class', '<select id="smm-airship-class"><option>frigate patrol craft</option><option>corvette</option><option>merchant sloop</option><option>galleon cruiser</option><option>dreadnought</option></select>')}${row('Hull Culture', '<select id="smm-airship-culture"><option value="human">Human</option><option value="dwarven">Dwarven</option><option value="elven">Elven</option><option value="gnomish">Gnomish</option><option value="halfling">Halfling</option><option value="pirate">Pirate</option><option value="military">Military</option><option value="ancient">Ancient</option></select>')}${row('Purpose', '<input id="smm-airship-purpose" value="escort and patrol">')}${row('Condition', '<select id="smm-airship-condition"><option>well maintained</option><option selected>worn but serviceable</option><option>battle-scarred</option><option>storm damaged</option><option>patched</option><option>unsafe</option></select>')}`;
     } else {
@@ -249,7 +255,7 @@
     };
   }
 
-  function drawPreview(root, result) {
+  function drawPreview(root, result, deckOverride) {
     const layout = result.spatialLayout || result;
     const rooms = layout.rooms || [];
     const preview = root.querySelector('#smm-preview');
@@ -257,7 +263,9 @@
       preview.innerHTML = '<span class="helper-note">This generator returned no rooms.</span>';
       return '';
     }
-    const deck = Math.min(...rooms.map(room => Number(room.deck) || 0));
+    const decks = [...new Set(rooms.map(room => Number(room.deck) || 0))].sort((a,b) => a-b);
+    const requested = Number(deckOverride);
+    const deck = decks.includes(requested) ? requested : decks[0];
     const shown = rooms.filter(room => (Number(room.deck) || 0) === deck);
     const maxX = Math.max(...shown.map(room => room.x + room.width), 30);
     const maxY = Math.max(...shown.map(room => room.y + room.height), 30);
@@ -266,24 +274,51 @@
     const corridors = (layout.corridors || []).filter(corridor => (Number(corridor.deck) || 0) === deck).map(corridor => {
       const points = corridor.points || corridor.path || [];
       if (!points.length) return '';
-      return `<polyline points="${points.map(point => `${pad + point.x * scale},${pad + point.y * scale}`).join(' ')}" fill="none" stroke="black" stroke-width="5" stroke-linecap="square"/>`;
+      const broken = corridor.condition && corridor.condition.functional === false;
+      return `<polyline points="${points.map(point => `${pad + point.x * scale},${pad + point.y * scale}`).join(' ')}" fill="none" stroke="black" stroke-width="${broken ? 2 : 5}" stroke-dasharray="${broken ? '7 5' : 'none'}" stroke-linecap="square"/>`;
     }).join('');
-    const rects = shown.map((room, index) => `<g><rect x="${pad + room.x * scale}" y="${pad + room.y * scale}" width="${room.width * scale}" height="${room.height * scale}" fill="white" stroke="black" stroke-width="3"/><text x="${pad + (room.x + room.width / 2) * scale}" y="${pad + (room.y + room.height / 2) * scale}" text-anchor="middle" dominant-baseline="central" fill="black" font-size="12">${index + 1}</text></g>`).join('');
+    const rects = shown.map((room, index) => {
+      const condition = room.condition || {};
+      const broken = ['DESTROYED','REMOVED','MISSING'].includes(condition.installationState) || condition.damagePercent >= 70;
+      return `<g><rect x="${pad + room.x * scale}" y="${pad + room.y * scale}" width="${room.width * scale}" height="${room.height * scale}" fill="white" stroke="black" stroke-width="${broken ? 5 : 3}" stroke-dasharray="${broken ? '8 5' : 'none'}"/><text x="${pad + (room.x + room.width / 2) * scale}" y="${pad + (room.y + room.height / 2) * scale}" text-anchor="middle" dominant-baseline="central" fill="black" font-size="12">${index + 1}</text></g>`;
+    }).join('');
     const svg = `<svg viewBox="0 0 ${pad * 2 + maxX * scale} ${pad * 2 + maxY * scale}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="white"/>${corridors}${rects}</svg>`;
     preview.innerHTML = svg;
-    root.querySelector('#smm-preview-meta').textContent = `${result.displayName} · level ${result.level} · ${result.generator || layout.engine || 'module generator'} · seed ${result.seed || layout.seed} · deck ${deck + 1}/${result.deckCount || layout.deckCount || 1} · ${rooms.length} rooms total`;
+    const condition = result.condition?.template ? ` · ${result.condition.template}` : '';
+    root.querySelector('#smm-preview-meta').textContent = `${result.displayName} · level ${result.level} · ${result.generator || layout.engine || 'module generator'} · seed ${result.seed || layout.seed} · deck ${deck + 1}/${result.deckCount || layout.deckCount || 1} · ${rooms.length} rooms total${condition}`;
     return svg;
   }
 
-  function editorStateFromResult(result) {
+  function installDeckTabs(root, result) {
+    const tabs = root.querySelector('#smm-deck-tabs');
+    const rooms = result.spatialLayout?.rooms || [];
+    const decks = [...new Set(rooms.map(room => Number(room.deck) || 0))].sort((a,b) => a-b);
+    tabs.innerHTML = '';
+    if (decks.length <= 1) { tabs.hidden = true; return; }
+    tabs.hidden = false;
+    decks.forEach((deck,index) => {
+      const button=document.createElement('button');
+      button.type='button';button.className='smm-deck-tab'+(index===0?' active':'');button.textContent=`Deck ${deck+1}`;button.dataset.deck=String(deck);
+      button.addEventListener('click',()=>{
+        tabs.querySelectorAll('.smm-deck-tab').forEach(item=>item.classList.toggle('active',item===button));
+        const generated=root._lastGenerated;if(!generated)return;
+        generated.activeDeck=deck;
+        generated.svg=drawPreview(root,generated.result,deck);
+        generated.state=generated.states.find(item=>item.deck===deck)?.state||generated.state;
+      });
+      tabs.appendChild(button);
+    });
+  }
+
+  function editorStateFromResult(result, deck = 0) {
     const layout = result.spatialLayout || result;
     const rooms = layout.rooms || [];
     const bounds = layout.bounds || {};
     const width = Math.max(1, Math.min(240, Number(bounds.width) || Math.max(39, ...rooms.map(room => room.x + room.width + 2))));
     const height = Math.max(1, Math.min(240, Number(bounds.height) || Math.max(39, ...rooms.map(room => room.y + room.height + 2))));
-    const state = { schemaVersion:'0.1.0', tool:'module-map-editor', width, height, tileSize:1, title:result.displayName, cells:Array.from({length:height}, () => Array.from({length:width}, () => ({type:'void',label:''}))) };
+    const state = { schemaVersion:'0.2.0', tool:'module-map-editor', width, height, tileSize:1, deck, deckCount:result.deckCount || layout.deckCount || 1, title:`${result.displayName} — Deck ${deck + 1}`, cells:Array.from({length:height}, () => Array.from({length:width}, () => ({type:'void',label:''}))) };
     const set = (x, y, type, label = '', meta = {}) => { if (state.cells[y]?.[x]) state.cells[y][x] = { type, label, meta }; };
-    rooms.filter(room => (Number(room.deck) || 0) === 0).forEach((room, index) => {
+    rooms.filter(room => (Number(room.deck) || 0) === deck).forEach((room, index) => {
       for (let y = room.y; y < room.y + room.height; y += 1) for (let x = room.x; x < room.x + room.width; x += 1) {
         const wall = x === room.x || y === room.y || x === room.x + room.width - 1 || y === room.y + room.height - 1;
         set(x, y, wall ? 'wall' : 'floor');
@@ -292,33 +327,45 @@
       const cy = Math.max(room.y + 1, Math.min(room.y + room.height - 2, room.y + Math.floor(room.height / 2)));
       set(cx, cy, 'label', String(index + 1), { id: room.nodeId || room.id, role: room.role, title: room.label });
     });
-    (layout.corridors || []).filter(corridor => (Number(corridor.deck) || 0) === 0).forEach(corridor => (corridor.points || []).forEach(point => set(point.x, point.y, 'floor')));
-    (layout.doors || []).filter(door => (Number(door.deck) || 0) === 0).forEach(door => set(door.x, door.y, 'door', '', { id: door.id, roomId: door.roomId }));
-    (layout.connectors || []).filter(connector => (Number(connector.deck) || 0) === 0).forEach(connector => set(connector.x, connector.y, 'stairs', '', { id: connector.id }));
+    (layout.corridors || []).filter(corridor => (Number(corridor.deck) || 0) === deck).forEach(corridor => (corridor.points || []).forEach(point => set(point.x, point.y, corridor.condition?.functional === false ? 'wall' : 'floor', '', { id:corridor.id, condition:corridor.condition || null })));
+    (layout.doors || []).filter(door => (Number(door.deck) || 0) === deck).forEach(door => set(door.x, door.y, door.condition?.functional === false ? 'wall' : 'door', '', { id: door.id, roomId: door.roomId, condition:door.condition || null }));
+    (layout.connectors || []).filter(connector => (Number(connector.deck) || 0) === deck).forEach(connector => set(connector.x, connector.y, connector.condition?.functional === false ? 'wall' : 'stairs', '', { id: connector.id, condition:connector.condition || null }));
     return state;
   }
 
-  function memoryModuleFromResult(result, state) {
+  function editorStatesFromResult(result) {
+    const layout=result.spatialLayout || result;
+    const decks=[...new Set((layout.rooms||[]).map(room=>Number(room.deck)||0))].sort((a,b)=>a-b);
+    return decks.map(deck=>({deck,state:editorStateFromResult(result,deck)}));
+  }
+
+  function memoryModuleFromResult(result, states, activeDeck) {
     const layout = result.spatialLayout || result;
     const rooms = layout.rooms || [];
     const doors = layout.doors || [];
+    const active = states.find(item=>item.deck===activeDeck)?.state || states[0]?.state || editorStateFromResult(result,0);
     const id = `generated-${String(result.seed || layout.seed || Date.now()).replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${Date.now()}`;
     return {
-      schemaVersion:'0.1.0', id, path:`memory:${id}`, title:result.displayName || 'Generated Module',
-      subtitle:`Level ${result.level || 1} generated module`, system:result.generator || layout.engine || 'Procedural module',
-      source:{notes:'Generated in-browser by the authoritative Modules Dungeon Generator.'},
-      map:{image:'', width:state.width, height:state.height, grid:`${state.width} x ${state.height}`},
+      schemaVersion:'0.2.0', id, path:`memory:${id}`, title:result.displayName || 'Generated Module',
+      subtitle:`Level ${result.level || 1} generated module · ${result.deckCount || layout.deckCount || 1} deck(s)`, system:result.generator || layout.engine || 'Procedural module',
+      source:{notes:'Generated in-browser by the authoritative Modules generator. Intact vessel geometry and condition history remain embedded when present.'},
+      general:{generated:true,level:result.level || 1,deckCount:result.deckCount || layout.deckCount || 1,activeDeck,conditionTemplate:result.condition?.template || null},
+      map:{image:'', width:active.width, height:active.height, grid:`${active.width} x ${active.height}`},
       hotspots:[],
-      rooms:rooms.map((room, index) => ({ id:room.nodeId || room.id, number:index + 1, title:room.label || room.role || `Room ${index + 1}`, summary:room.role || '', tags:room.tags || [], deck:room.deck })),
-      doors:doors.map((door, index) => ({ id:door.id || `door-${index + 1}`, label:`Door ${index + 1}`, kind:'generated', roomId:door.roomId, deck:door.deck })),
-      mapEditorState:state,
+      rooms:rooms.map((room, index) => ({ id:room.nodeId || room.id, number:index + 1, title:room.label || room.role || `Room ${index + 1}`, summary:room.role || '', tags:room.tags || [], deck:room.deck, pressureZone:room.pressureZone || null, condition:room.condition || null, metadata:room.metadata || {} })),
+      doors:doors.map((door, index) => ({ id:door.id || `door-${index + 1}`, label:`Door ${index + 1}`, kind:'generated', roomId:door.roomId, deck:door.deck, condition:door.condition || null })),
+      mapEditorState:active,
+      mapEditorStates:states,
+      spatial:{deckCount:result.deckCount || layout.deckCount || 1,layout},
+      condition:result.condition || null,
+      provenance:result.provenance || null,
       generatedResult:result
     };
   }
 
-  function sendToViewer(result, svg, state) {
-    const module = memoryModuleFromResult(result, state);
-    document.dispatchEvent(new CustomEvent('module-map-editor-new-module', { detail:{ module, svg, state, title:module.title } }));
+  function sendToViewer(result, svg, states, activeDeck) {
+    const module = memoryModuleFromResult(result, states, activeDeck);
+    document.dispatchEvent(new CustomEvent('module-map-editor-new-module', { detail:{ module, svg, state:module.mapEditorState, states, title:module.title } }));
     activatePanel('viewer');
   }
 
@@ -339,11 +386,13 @@
     const editButton = root.querySelector('#smm-edit-generated');
     const viewButton = root.querySelector('#smm-view-generated');
     const output = root.querySelector('#smm-output');
+    const tabs = root.querySelector('#smm-deck-tabs');
     const preview = root.querySelector('#smm-preview');
     const meta = root.querySelector('#smm-preview-meta');
     if (editButton) editButton.hidden = true;
     if (viewButton) viewButton.hidden = true;
     if (output) output.textContent = '';
+    if (tabs) { tabs.innerHTML=''; tabs.hidden=true; }
     if (preview) preview.innerHTML = `<span class="helper-note">${esc(message)}</span>`;
     if (meta) meta.textContent = message;
   }
@@ -369,7 +418,14 @@
     try {
       let result;
       if (variant === 'alien') {
-        result = window.generator.alien_vessel.generate({ seed:val(root,'smm-seed'), profile:val(root,'smm-vessel-profile'), faction:val(root,'smm-faction'), hullShape:val(root,'smm-hull-shape'), damageSeverity:num(root,'smm-damage'), width:num(root,'smm-width'), height:num(root,'smm-height') });
+        result = window.generator.alien_vessel.generate({
+          seed:val(root,'smm-seed'), profile:val(root,'smm-vessel-profile'), faction:val(root,'smm-faction'),
+          speciesProfile:{name:val(root,'smm-species') || val(root,'smm-faction'),bodyPlan:val(root,'smm-body-plan') || null},
+          technologyProfile:{name:val(root,'smm-technology') || 'Unspecified technology basis'},
+          conditionTemplate:val(root,'smm-vessel-condition'), destructionPercent:num(root,'smm-destruction'),
+          salvageRemovalPercent:num(root,'smm-salvage'), contaminationPercent:num(root,'smm-vessel-contamination'),
+          hullShape:val(root,'smm-hull-shape'), width:num(root,'smm-width'), height:num(root,'smm-height')
+        });
       } else if (variant === 'airship') {
         result = window.generator.kaysender_airship.generate({ seed:val(root,'smm-seed'), name:val(root,'smm-name'), vesselClass:val(root,'smm-airship-class'), hullCulture:val(root,'smm-airship-culture'), purpose:val(root,'smm-airship-purpose'), condition:val(root,'smm-airship-condition'), width:num(root,'smm-width'), height:num(root,'smm-height') });
       } else {
@@ -378,11 +434,14 @@
       if (!result || typeof result !== 'object') throw new Error('Generator returned no usable module result.');
       result.displayName = val(root, 'smm-name');
       result.level = Number(val(root, 'smm-level') || 1);
-      const svg = drawPreview(root, result);
-      const state = editorStateFromResult(result);
-      root._lastGenerated = { result, svg, state };
+      const states = editorStatesFromResult(result);
+      const activeDeck = states[0]?.deck || 0;
+      const svg = drawPreview(root, result, activeDeck);
+      const state = states[0]?.state || editorStateFromResult(result, activeDeck);
+      root._lastGenerated = { result, svg, state, states, activeDeck };
+      installDeckTabs(root, result);
       const rooms = result.spatialLayout?.rooms || [];
-      root.querySelector('#smm-output').textContent = JSON.stringify({ name:result.displayName, level:result.level, generator:result.generator, seed:result.seed, deckCount:result.deckCount, rooms:rooms.map(room => ({id:room.nodeId || room.id,label:room.label,role:room.role,deck:room.deck,x:room.x,y:room.y,width:room.width,height:room.height,tags:room.tags})), content:result.content || null, compatibility:result.compatibility || null, validation:result.validation }, null, 2);
+      root.querySelector('#smm-output').textContent = JSON.stringify({ name:result.displayName, level:result.level, generator:result.generator, seed:result.seed, deckCount:result.deckCount, profile:result.profile || null, condition:result.condition || null, rooms:rooms.map(room => ({id:room.nodeId || room.id,label:room.label,role:room.role,deck:room.deck,x:room.x,y:room.y,width:room.width,height:room.height,tags:room.tags,condition:room.condition || null})), content:result.content || null, compatibility:result.compatibility || null, validation:result.validation }, null, 2);
       root.querySelector('#smm-edit-generated').hidden = false;
       root.querySelector('#smm-view-generated').hidden = false;
       document.dispatchEvent(new CustomEvent('module-map-generator-output', { detail:result }));
@@ -422,7 +481,7 @@
     root.querySelector('#smm-generate').addEventListener('click', () => generate(root));
     root.querySelector('#smm-random').addEventListener('click', () => randomize(root));
     root.querySelector('#smm-edit-generated').addEventListener('click', () => { const generated = root._lastGenerated; if (generated) sendToEditor(generated.state); });
-    root.querySelector('#smm-view-generated').addEventListener('click', () => { const generated = root._lastGenerated; if (generated) sendToViewer(generated.result, generated.svg, generated.state); });
+    root.querySelector('#smm-view-generated').addEventListener('click', () => { const generated = root._lastGenerated; if (generated) sendToViewer(generated.result, generated.svg, generated.states, generated.activeDeck); });
     window.initModuleViewer?.();
     window.initModuleMapEditor?.();
     if (!mountEditor()) setTimeout(() => { window.initModuleMapEditor?.(); mountEditor(); }, 80);

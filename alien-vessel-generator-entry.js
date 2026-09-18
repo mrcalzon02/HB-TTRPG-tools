@@ -2,7 +2,7 @@
   'use strict';
   const ROOT_ID = 'alien-vessel-generator-root';
   const STYLE_ID = 'alien-vessel-generator-workspace-style';
-  const scripts = ['semantic-spatial-engine.js', 'vessel-hull-envelope.js', 'alien-vessel-generator.js'];
+  const scripts = ['semantic-spatial-engine.js', 'vessel-condition-model.js', 'vessel-hull-envelope.js', 'alien-vessel-generator.js'];
 
   function loadScript(src) {
     if ([...document.scripts].some(s => (s.getAttribute('src') || '').split('?')[0].endsWith(src))) return Promise.resolve();
@@ -12,6 +12,7 @@
   async function ensureRuntime() {
     for (const src of scripts) {
       if (src.includes('semantic') && window.HBSemanticSpatialEngine) continue;
+      if (src.includes('condition-model') && window.HBVesselConditionModel) continue;
       if (src.includes('hull-envelope') && window.HBVesselHullEnvelope) continue;
       if (src.includes('alien-vessel-generator') && window.generator?.alien_vessel) continue;
       await loadScript(src);
@@ -55,7 +56,14 @@
         <div class="module-card alien-vessel-controls">
           <div class="section-heading"><p class="eyebrow">Modules Interface · shared semantic spatial engine</p><h2>Alien Vessel Generator</h2><p>Configure the vessel here; generated structure stays visible alongside the controls on desktop.</p></div>
           <label class="control-label">Seed<input id="avg-seed" value="alpthon-recon-01"></label>
-          <label class="control-label">Profile<select id="avg-profile"><option value="recon">Recon vessel</option><option value="damaged_recon">Damaged recon vessel</option></select></label>
+          <label class="control-label">Profile<select id="avg-profile"><option value="recon">Recon vessel</option><option value="science">Scientific survey vessel</option><option value="freighter">Freighter</option><option value="command_cruiser">Command cruiser</option><option value="carrier">External-dock carrier</option></select></label>
+          <label class="control-label">Faction / civilization<input id="avg-faction" value="Alpthon"></label>
+          <label class="control-label">Species<input id="avg-species" value="Alpthon"></label>
+          <label class="control-label">Body plan<input id="avg-body-plan" placeholder="arachnid, bipedal, aquatic, radial"></label>
+          <label class="control-label">Technology basis<input id="avg-technology" placeholder="quantum crystalline strand, modular solid-state"></label>
+          <label class="control-label">Condition<select id="avg-condition"><option>OPERATIONAL</option><option>WORN_SERVICE</option><option>ABANDONED</option><option>PARTIALLY_SALVAGED</option><option>DAMAGED</option><option>CRIPPLED</option><option>WRECKED</option><option>DESTROYED</option><option>MOTHBALLED</option></select></label>
+          <label class="control-label">Destruction % override<input id="avg-destruction" type="number" min="0" max="100" step="1" placeholder="template default"></label>
+          <label class="control-label">Salvage removal %<input id="avg-salvage" type="number" min="0" max="100" step="1" placeholder="template default"></label>
           <label class="control-label">Hull shape<select id="avg-hull-shape"><option value="connected-skin">Connected skin / organic wrap</option><option value="oval">Oval / elliptical</option><option value="capsule">Capsule / pill</option><option value="rectangle">Rectangular / box</option><option value="square">Square / cube</option><option value="circle">Circular / cylindrical</option></select></label>
           <label class="control-label">Hull tightness<select id="avg-hull-tightness"><option value="skin-tight">Skin-tight · 1 cell</option><option value="tight">Tight · 2 cells</option><option value="close">Close · 3 cells</option><option value="standard" selected>Standard · 4 cells</option><option value="loose">Loose · 7 cells</option><option value="very-loose">Very loose · 10 cells</option></select></label>
           <div class="alien-vessel-actions"><button id="avg-generate" class="primary-action" type="button">Generate Alien Vessel</button></div>
@@ -67,16 +75,24 @@
       </div>`;
     host.appendChild(section);
     section.querySelector('#avg-generate').onclick=()=>{
+      const num=id=>{const value=section.querySelector(id)?.value;return value===''||value==null?undefined:Number(value);};
+      const faction=section.querySelector('#avg-faction').value;
       const result=window.generator.alien_vessel.generate({
         seed:section.querySelector('#avg-seed').value,
         profile:section.querySelector('#avg-profile').value,
+        faction,
+        speciesProfile:{name:section.querySelector('#avg-species').value||faction,bodyPlan:section.querySelector('#avg-body-plan').value||null},
+        technologyProfile:{name:section.querySelector('#avg-technology').value||'Unspecified technology basis'},
+        conditionTemplate:section.querySelector('#avg-condition').value,
+        destructionPercent:num('#avg-destruction'),
+        salvageRemovalPercent:num('#avg-salvage'),
         hullShape:section.querySelector('#avg-hull-shape').value,
         hullTightness:section.querySelector('#avg-hull-tightness').value
       });
       section.querySelector('#avg-output').textContent=JSON.stringify({
-        faction:result.faction,vesselType:result.vesselType,profile:result.profile,seed:result.seed,decks:result.deckCount,
+        faction:result.faction,species:result.species,technologyBasis:result.technologyBasis,vesselType:result.vesselType,profile:result.profile,referenceProfile:result.referenceProfile,seed:result.seed,decks:result.deckCount,
         hull:{shape:result.hull.shape,tightness:result.hull.tightness,clearance:result.hull.clearance,bounds:result.hull.bounds,surface:result.hull.surface,validation:result.hull.validation},
-        compartments:result.semanticSummary,connectors:result.spatialLayout.connectors,damage:result.damage,validation:result.validation
+        condition:result.condition,compartments:result.semanticSummary,connectors:result.spatialLayout.connectors,damage:result.damage,referenceAuthority:result.referenceVessel.authority,provenance:result.provenance,validation:result.validation
       },null,2);
       document.dispatchEvent(new CustomEvent('alien-vessel-generator-output',{detail:result}));
     };

@@ -4,13 +4,15 @@
   "capabilityId": "spatial.alien-vessel.generate",
   "runtimeScripts": [
     "semantic-spatial-engine.js",
+    "vessel-condition-model.js",
     "vessel-hull-envelope.js",
     "alien-vessel-generator.js"
   ],
   "runtimeBlobShas": {
     "semantic-spatial-engine.js": "a21aad5405120063e53cd54cbad2790ac33a2cb5",
+    "vessel-condition-model.js": "5f2715f5358067da548e3c1a70025840c3f07073",
     "vessel-hull-envelope.js": "81320099033a856a7574a75c58e9ea707c285f2f",
-    "alien-vessel-generator.js": "9db9d35685a766637dc4b2666c8527bb3357fcbb"
+    "alien-vessel-generator.js": "92bad88eda72e1f65ca02879ff3033bd28d8448d"
   },
   "runtimeExport": "generator.alien_vessel",
   "operationContractAuthority": "api/operation-contracts.json",
@@ -44,6 +46,35 @@
       "hullTightness": "standard",
       "damageSeverity": 0.65,
       "pruneDeadEnds": true,
+      "strict": true,
+      "conditionTemplate": "DAMAGED"
+    },
+    "commandWreckRequest": {
+      "seed": "hb-alien-vessel-command-wreck-self-test-v1",
+      "profile": "command_cruiser",
+      "vesselType": "portable-proof command cruiser wreck",
+      "faction": "Kharvaxi",
+      "speciesProfile": {
+        "name": "Kharvaxi",
+        "bodyPlan": "arachnid",
+        "architectureTags": [
+          "arachnid-access",
+          "factional-compartmentation"
+        ]
+      },
+      "technologyProfile": {
+        "name": "quantum crystalline strand",
+        "architectureTags": [
+          "quantum-fiber",
+          "crystal-compute"
+        ]
+      },
+      "conditionTemplate": "WRECKED",
+      "width": 130,
+      "height": 96,
+      "hullShape": "connected-skin",
+      "hullTightness": "standard",
+      "pruneDeadEnds": true,
       "strict": true
     }
   },
@@ -51,7 +82,11 @@
     {
       "id": "deterministic-hull-normalization",
       "operation": "generate",
-      "args": [{"$fixture": "normalizedHullRequest"}],
+      "args": [
+        {
+          "$fixture": "normalizedHullRequest"
+        }
+      ],
       "repeat": 2,
       "expect": {
         "repeatDeepEqual": true,
@@ -66,21 +101,30 @@
           "hull.validation.ok": true,
           "hull.shape": "oval",
           "hull.tightness": 0.5,
-          "hull.clearance": 6
+          "hull.clearance": 6,
+          "schemaVersion": "2.0.0",
+          "condition.template": "OPERATIONAL"
         },
         "pathExists": [
           "semanticSummary",
           "spatialLayout.rooms",
           "hull.footprintCells",
           "hull.shellCells",
-          "damage"
+          "damage",
+          "referenceVessel.spatialLayout",
+          "conditionHistory",
+          "provenance"
         ]
       }
     },
     {
       "id": "deterministic-damaged-profile",
       "operation": "generate",
-      "args": [{"$fixture": "damagedRequest"}],
+      "args": [
+        {
+          "$fixture": "damagedRequest"
+        }
+      ],
       "repeat": 2,
       "expect": {
         "repeatDeepEqual": true,
@@ -93,14 +137,52 @@
           "hull.validation.ok": true,
           "hull.shape": "connected-skin",
           "hull.tightness": "standard",
-          "hull.clearance": 4
+          "hull.clearance": 4,
+          "schemaVersion": "2.0.0",
+          "referenceProfile": "recon",
+          "condition.template": "DAMAGED"
         },
         "pathExists": [
           "semanticSummary",
           "damage",
           "spatialLayout",
           "hull",
-          "validation"
+          "validation",
+          "referenceVessel.spatialLayout",
+          "conditionHistory",
+          "condition.survivingGraph"
+        ]
+      }
+    },
+    {
+      "id": "deterministic-command-wreck-preserves-reference",
+      "operation": "generate",
+      "args": [
+        {
+          "$fixture": "commandWreckRequest"
+        }
+      ],
+      "repeat": 2,
+      "expect": {
+        "repeatDeepEqual": true,
+        "pathEquals": {
+          "schemaVersion": "2.0.0",
+          "profile": "command_cruiser",
+          "referenceProfile": "command_cruiser",
+          "condition.template": "WRECKED",
+          "deckCount": 5,
+          "validation.ok": true,
+          "condition.validation.ok": true,
+          "provenance.referenceLayoutPreserved": true,
+          "provenance.conditionAppliedAfterReference": true
+        },
+        "pathExists": [
+          "referenceVessel.semanticSummary",
+          "referenceVessel.spatialLayout",
+          "conditionHistory.events",
+          "condition.survivingGraph.largestComponentRoomIds",
+          "condition.salvageCandidates",
+          "damage"
         ]
       }
     }
