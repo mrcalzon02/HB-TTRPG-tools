@@ -206,6 +206,7 @@
       button.dataset.view = 'warhammer-40k';
       button.textContent = 'Enter Restricted Archive';
       card.append(title, copy, button);
+      menuGrid.appendChild(card);
     }
 
     let view = document.getElementById('warhammer-40k');
