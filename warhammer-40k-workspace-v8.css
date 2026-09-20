@@ -734,6 +734,7 @@ body.warhammer-archive-active #warhammer-40k{min-height:100vh;padding:0}
   text-transform:uppercase;
 }
 #warhammer-40k .wh-vigil-fact dd{color:#a4d9af;font-size:.8rem;line-height:1.42}
+#warhammer-40k .wh-vigil-countdown{margin:.72rem 0 .35rem;color:#b9e6c2;font-size:.82rem;font-weight:700;letter-spacing:.055em;text-transform:uppercase;font-variant-numeric:tabular-nums}
 #warhammer-40k .wh-vigil-meter{height:.22rem;margin-top:.7rem;overflow:hidden;background:rgba(77,255,128,.07)}
 #warhammer-40k .wh-vigil-progress{
   display:block;
@@ -743,7 +744,7 @@ body.warhammer-archive-active #warhammer-40k{min-height:100vh;padding:0}
   background:linear-gradient(90deg,#bb4740,#58ff88);
   box-shadow:0 0 8px rgba(71,255,126,.22);
 }
-#warhammer-40k .wh-vigil-progress.active{animation:wh-vigil-countdown var(--vigil-dwell,26000ms) linear forwards}
+#warhammer-40k .wh-vigil-progress.active{animation:wh-vigil-countdown var(--vigil-dwell,60000ms) linear forwards}
 
 #warhammer-40k .wh-map-details{
   position:sticky;
