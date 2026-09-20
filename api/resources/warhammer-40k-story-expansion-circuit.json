@@ -44,13 +44,6 @@
       "status": "active"
     },
     {
-      "id": "antegra-station",
-      "title": "Antegra Station",
-      "source": "migrated-long-form",
-      "path": "assets/warhammer-40k/lore/antegra-station-continuation-29.md",
-      "status": "active"
-    },
-    {
       "id": "project-vigilant-shade",
       "title": "Project VIGILANT SHADE",
       "source": "migrated-long-form",
