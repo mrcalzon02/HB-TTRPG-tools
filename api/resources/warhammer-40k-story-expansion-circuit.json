@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "setting": "Warhammer 40K",
+  "purpose": "Durable rotation registry for recovered and active long-form Warhammer 40K chronicles. Recovery backlog takes priority over new continuation work. Once recovered material is indexed and verified, rotate between distinct existing story lines rather than repeatedly extending one arc.",
+  "policy": {
+    "recoveryFirst": true,
+    "alternateStories": true,
+    "noSilentReconstruction": true,
+    "preserveToneAndLength": true,
+    "requireVerifiedMainCommit": true,
+    "requireLoreIndexEntry": true,
+    "requireRelevantCrossIndex": true
+  },
+  "active": [
+    {
+      "id": "long-patrol-broussard",
+      "title": "The Long Patrol of Broussard",
+      "source": "conversation-recovered",
+      "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-recovered-01.md",
+      "status": "recovered-active",
+      "priority": "recovery-complete-enter-rotation",
+      "currentEndpoint": "Jerrik and two riggers have failed to return from the Hesperant Vale forward cargo holds; Broussard is preparing the search. Forward cargo is loose bins of fruit and vegetables.",
+      "nextSlice": "Search the forward holds; preserve the missing telemetry, repair operation, High Presidio ice-convoy conditions, Broussard/Jalesthesian dynamic, and the recovered cargo correction."
+    },
+    {
+      "id": "house-vallimere-sons",
+      "title": "House Vallimere’s Sons",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+      "status": "active"
+    },
+    {
+      "id": "matron-lagas-atrovald",
+      "title": "Matron Lagas Atrovald",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+      "status": "active"
+    },
+    {
+      "id": "on-the-fuzzy-edge",
+      "title": "On the Fuzzy Edge",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+      "status": "active"
+    },
+    {
+      "id": "antegra-station",
+      "title": "Antegra Station",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/antegra-station-continuation-29.md",
+      "status": "active"
+    },
+    {
+      "id": "project-vigilant-shade",
+      "title": "Project VIGILANT SHADE",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+      "status": "eligible-next"
+    },
+    {
+      "id": "tenelja-station",
+      "title": "Of Blood and Wires: The Litanies of Tenelja Station",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+      "status": "eligible-next"
+    },
+    {
+      "id": "house-drenal",
+      "title": "Scion of the Warp-Born Blood",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+      "status": "eligible-next"
+    }
+  ]
+}
