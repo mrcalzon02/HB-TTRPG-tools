@@ -17,10 +17,19 @@
       "title": "The Long Patrol of Broussard",
       "source": "conversation-recovered",
       "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-recovered-01.md",
-      "status": "recovered-active",
-      "priority": "recovery-complete-enter-rotation",
-      "currentEndpoint": "Jerrik and two riggers have failed to return from the Hesperant Vale forward cargo holds; Broussard is preparing the search. Forward cargo is loose bins of fruit and vegetables.",
-      "nextSlice": "Search the forward holds; preserve the missing telemetry, repair operation, High Presidio ice-convoy conditions, Broussard/Jalesthesian dynamic, and the recovered cargo correction."
+      "status": "recovery-incomplete",
+      "priority": "reconcile-surviving-google-source-before-expansion",
+      "currentEndpoint": "Current repository recovery stops before the complete original plot has been restored. Authoritative correction: the short pre-impact telemetry irregularity is not the central clue; a deep index of older telemetry reveals deliberate falsification concealing the Hesperant Vale's true port of origin. The crew is secretly compromised by Genestealer influence, with hybrids hidden among loose produce bins. Broussard's detachment later fights off additional High Presidio predators and successfully escorts the damaged freighter back to the convoy while the reader glimpses that the Xenos infiltration has survived.",
+      "nextSlice": "Do not write new continuation prose yet. First ingest and reconcile the user's surviving Google document, restoring the original forward-hold search, deep-index telemetry falsification discovery, predator attack, successful return to convoy, and reader-only Genestealer reveal. Then update this endpoint to the true end of recovered prose and resume normal rotation.",
+      "constraints": [
+        "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
+        "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
+        "Hesperant Vale crew is secretly compromised by Genestealer influence.",
+        "Genestealer hybrids are hidden among loose produce bins in the forward holds.",
+        "Broussard's detachment successfully returns the damaged freighter to the convoy after fighting additional High Presidio predators.",
+        "The reader sees the hidden Xenos travesty continuing beneath the apparent successful rescue.",
+        "Reconcile exact sequencing and prose from the surviving Google document before fresh expansion."
+      ]
     },
     {
       "id": "house-vallimere-sons",
