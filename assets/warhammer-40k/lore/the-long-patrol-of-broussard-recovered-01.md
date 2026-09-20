@@ -6,6 +6,9 @@
 
 *An original non-commercial Warhammer 40,000 fan chronicle. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This fan work is not endorsed by or affiliated with Games Workshop.*
 
+
+> **Authoritative recovery correction — 2026-09-20:** The fourteen-second telemetry gap is **not** the central mystery or the true evidence of sabotage. The important anomaly is only discoverable through a deep index of older pre-crash telemetry: earlier telemetry has been deliberately falsified to conceal the *Hesperant Vale*'s true port of origin. The freighter's crew is secretly compromised by Genestealer influence, with hybrids concealed among the loose produce bins. Broussard's detachment ultimately succeeds in returning the damaged freighter safely to the convoy after fighting off additional High Presidio predators; the reader receives a glimpse of the hidden Xenos travesty continuing beneath that apparent success. Exact original scene prose and sequencing beyond the presently recovered material are pending reconciliation against the user's surviving Google document and must be restored from that source before new continuation prose is written.
+
 High Presidio spent half the year pretending its oceans were roads.
 
 For long months the seas froze hard enough that commerce stopped sailing and began crawling. Personal skimmers crossed the white in quick, low arcs. Freight carriers dragged themselves over the ice in convoys visible for kilometers. Tankers moved like patient iron whales, broad-bellied and slow, carrying fuel and industrial liquids between the few great cities clinging to High Presidio's coasts.
@@ -204,15 +207,7 @@ Broussard wanted the ship to remain a ship after they finished rescuing it.
 
 Then they found the telemetry gap.
 
-The surviving conversation record preserves the figure as fourteen seconds in the later and repeated account, though one earlier summary rendered the interval as eight. Broussard's recovered chronicle therefore carries fourteen seconds as the command figure while preserving the archival discrepancy here rather than silently correcting history.
-
-Fourteen seconds before impact were simply missing.
-
-No clean sensor degradation.
-
-No ordinary file corruption explanation.
-
-No useful record of what the ship had been doing immediately before the ice tore her open.
+The surviving conversation record preserves a short pre-impact telemetry irregularity, including a later repeated figure of fourteen seconds and one earlier summary rendering eight. That discrepancy is now explicitly classified as a **surface anomaly, not the major plot clue**. The deeper fraud lies farther back in the ship's telemetry history and can only be exposed by indexing older records against one another: the *Hesperant Vale*'s pre-crash telemetry was deliberately falsified to conceal its true port of origin.
 
 Broussard looked at Kelm.
 
@@ -292,7 +287,9 @@ Sella looked at the indicator.
 
 On High Presidio that qualified as optimism.
 
-Broussard kept returning to the missing telemetry.
+Broussard kept returning to the telemetry.
+
+Not merely the short irregularity nearest the impact. Something in the ship's older record did not sit cleanly beneath it, though the recovered material does not yet preserve the deep-index discovery scene in full.
 
 So did Jalesthesian.
 
@@ -422,7 +419,7 @@ Three men were missing.
 
 The repair remained underway.
 
-The *Hesperant Vale* still had a hole in its recent history.
+The *Hesperant Vale* still had a falsified history waiting to be uncovered.
 
 And outside, beneath kilometers of winter road, High Presidio's frozen ocean continued making the slow sounds of something enormous turning in its sleep.
 
@@ -436,7 +433,7 @@ The following continuity is verified from the surviving August 15–16 conversat
 - Broussard's recovery detachment was assigned from the *Saint Malderson*: four Chimeras, a utility recovery hauler with manipulator equipment, and Mechanicus/Magos support.
 - The stranded surface freighter is the *Hesperant Vale*, commanded by Captain Derrovan Kelm.
 - The freighter suffered lower forward-starboard damage across two gravitic grids, with an exposed distributor bank and catastrophic power-storage discharge.
-- Surviving telemetry has a missing interval immediately before impact; the later/repeated recovered figure is fourteen seconds, with one earlier summary preserving eight seconds.
+- A short pre-impact telemetry irregularity exists, but it is **not** the story's major mystery. A later deep index of older telemetry reveals deliberate falsification of the freighter's pre-crash history intended to conceal its true port of origin.
 - Broussard chose the slower 36–54 hour repair in order to preserve the auxiliary power bus.
 - Commissar Gabriel Hamden Jalesthesian is a High Presidio native, approximately 200 km southeast of the capital; first full graduating class of the Regilian Third Continental Schola; intake 186, 23 full graduates, 31 training deaths.
 - Jalesthesian's final qualification required executing trusted partner Josef Arlen on fabricated compromise charges; he obeyed quickly and cleanly. His surviving maxim is: "Life is hard. The Imperium is harder."
@@ -445,5 +442,6 @@ The following continuity is verified from the surviving August 15–16 conversat
 - Holt is the junior Second Bridge Officer who led Broussard aboard and hesitated around Captain Kelm.
 - Jerrik and two riggers disappeared while inspecting the forward cargo holds.
 - Holt said Jerrik's vox was unreliable but he knew to check in. Jalesthesian replied: "Unreliable vox does not explain feet failing to return."
-- The forward cargo is loose bins of fruit and vegetables. It is specifically **not** a hold of stacked/netted crates.
-- The next expansion slice begins with Broussard organizing the search of the forward holds and determining why Jerrik and the two riggers failed to return. It must not retroactively replace the recovered events above.
+- The forward cargo is loose bins of fruit and vegetables. It is specifically **not** a hold of stacked/netted crates. Genestealer hybrids are secretly concealed among those produce bins.
+- The *Hesperant Vale* crew is secretly compromised by Genestealer influence. The recovered plot ultimately returns the damaged freighter safely to the convoy after Broussard's detachment fights off additional High Presidio predators, while the reader receives a glimpse that the Xenos infiltration has survived the rescue.
+- **Recovery remains incomplete.** Before any new continuation prose is written, reconcile the user's surviving Google document and restore the original forward-hold search, deep-index telemetry discovery, predator attack, successful convoy return, and reader-only Genestealer reveal in their original sequence and wording as far as the source permits.
