@@ -42,7 +42,7 @@
   "characterCount": 59,
   "seededFrom": {
     "file": "assets/warhammer-40k/imperial-dramatis-personae-v1.js",
-    "version": "1.14.0",
+    "version": "1.15.0",
     "note": "Baseline identity, temperament, doctrine, relationship names, and story beats are mirrored for read efficiency only. Identity-level corrections belong in Dramatis Personae first."
   },
   "characters": {
@@ -3854,6 +3854,23 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "broussard-kb-forward-electrocution-01",
+          "information": "Jerrik Noll, Edren Vale and Pallas Dorn died in the forward service corridor from an intermittent energized cross-feed. Jerrik was first; Edren and Pallas died in sequence while trying to help the casualty ahead of them.",
+          "epistemicStatus": "confirmed",
+          "belief": "treats the deaths as a genuine industrial accident, not evidence that resolves the separate telemetry mystery",
+          "certainty": "high",
+          "sourceCharacter": "Direct scene reconstruction with Sella Varn and search team",
+          "actionTaken": "Ordered the line isolated, recovered the bodies, and retained suspicion about the missing telemetry as a separate unresolved issue.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3939,7 +3956,23 @@
           }
         }
       ],
-      "temperamentPerformance": [],
+      "temperamentPerformance": [
+        {
+          "id": "broussard-performance-casualty-control-01",
+          "domain": "hazard command / casualty recovery",
+          "context": "Prevented Sella from rushing to Jerrik, recognized ozone as an active electrical hazard, ordered controlled retreat during arcing, demanded repeated de-energization checks and used insulated recovery procedures.",
+          "demonstratedLevel": "disciplined and safety-focused under emotional pressure",
+          "limitations": "Does not establish technical electrical expertise beyond operational hazard recognition.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
+        }
+      ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
@@ -3999,6 +4032,17 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Confirmed the three missing cargo crew died in a cascading electrocution accident, kept the search team from becoming additional casualties, and separated the solved immediate accident from the still-unresolved telemetry anomaly.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
           }
         }
       ]
@@ -4082,6 +4126,22 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "jalesthesian-kb-forward-electrocution-01",
+          "information": "The three missing Hesperant Vale cargo crew died accidentally at an intermittently energized service junction; the second and third casualties were killed while attempting to help the men already down.",
+          "epistemicStatus": "confirmed",
+          "belief": "accepts the deaths as a mundane but brutal accident rather than proof of the larger concealed cause aboard the ship",
+          "certainty": "high",
+          "sourceCharacter": "Direct observation",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
           }
         }
       ],
@@ -4185,6 +4245,20 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "jalesthesian-performance-casualty-restraint-01",
+          "domain": "commissarial conduct around grief",
+          "context": "Withheld sermonizing or doctrinal commentary while Sella and Kelm confronted the deaths, helped carry Pallas during recovery, and used dry humor only after the immediate danger passed.",
+          "demonstratedLevel": "restrained and socially perceptive",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
       ],
       "preferencesAversions": [],
@@ -4246,6 +4320,17 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Confirmed the electrocution chain, helped recover Pallas Dorn, and demonstrated restraint around crew grief while preserving the distinction between the solved accident and the unresolved shipboard mystery.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
           }
         }
       ]
@@ -4338,6 +4423,22 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "kelm-kb-forward-casualties-01",
+          "information": "Jerrik Noll, Edren Vale and Pallas Dorn were found dead at an intermittent electrical fault in the forward hold service corridor.",
+          "epistemicStatus": "confirmed",
+          "belief": "accepts the deaths as an electrical accident and understands the sequential rescue chain",
+          "certainty": "high",
+          "sourceCharacter": "Broussard and search team",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
       ],
       "secretsKnown": [],
@@ -4392,7 +4493,22 @@
           }
         }
       ],
-      "temperamentPerformance": [],
+      "temperamentPerformance": [
+        {
+          "id": "kelm-performance-crew-loss-01",
+          "domain": "command under crew loss",
+          "context": "Waited at Broussard's imposed cargo-spine boundary, received confirmation of all three deaths, briefly showed grief, then resumed captaincy and ordered the bodies brought home.",
+          "demonstratedLevel": "controlled grief with immediate command recovery",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
+        }
+      ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
@@ -4444,6 +4560,17 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Learned that the missing crew were dead from accidental electrocution, accepted Broussard's search boundary, and shifted immediately into captaincy after a brief visible grief response.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
           }
         }
       ]
@@ -4735,7 +4862,7 @@
           "High Presidio winter freight network"
         ],
         "currentLocation": "High Presidio · aboard the Hesperant Vale",
-        "status": "Active through Chapter X; volunteering to accompany the search for the missing forward-hold team.",
+        "status": "Active through Chapter XI; accompanied Broussard’s search team, identified the intermittent electrical fault that killed Jerrik Noll, Edren Vale and Pallas Dorn, and helped isolate the dangerous cross-feed.",
         "standing": "Source-recovered Hesperant Vale cargo engineer",
         "temperament": [
           "Practical",
@@ -4751,7 +4878,7 @@
           "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
           "status": "authorial"
         },
-        "sourceAuthority": "Directly recovered from the surviving Google working draft. Sella’s full name, engineering role, repair conduct, “Still flying” line and concern for the missing crew are explicit.",
+        "sourceAuthority": "Directly recovered from the surviving Google working draft through Chapter X, then advanced by user-directed Chapter XI continuation. Sella’s engineering competence, “Still flying” line, concern for the missing crew, identification of the fatal electrical fault and grief response are explicit.",
         "baselineRelationshipNames": [
           "Captain Broussard",
           "Meren Holt",
@@ -4773,7 +4900,24 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "sella-kb-electrical-casualties-01",
+          "information": "Jerrik Noll was the first electrocution casualty; Edren Vale and Pallas Dorn were killed in succession while trying to help. The fault came from an intermittent emergency cross-feed that bypassed the local breaker.",
+          "epistemicStatus": "confirmed",
+          "belief": "understands the deaths as an electrical accident compounded by rescue attempts",
+          "certainty": "high",
+          "sourceCharacter": "Direct technical assessment and body identification",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [
@@ -4806,6 +4950,21 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "sella-skill-live-fault-isolation-01",
+          "domain": "electrical hazard diagnosis / emergency isolation",
+          "proficiency": "demonstrated strong practical competence",
+          "context": "Detected field leakage, identified the emergency cross-feed bypassing local isolation, coordinated upstream shutdown with the Magos and verified de-energization repeatedly before body recovery.",
+          "limitations": "Exact upstream failure mechanism remains for Mechanicus inspection.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
       ],
       "relationshipsTrust": [],
@@ -4822,6 +4981,21 @@
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "sella-performance-grief-work-01",
+          "domain": "grief under technical emergency",
+          "context": "Recognized Jerrik, nearly moved toward him before Broussard stopped her, then converted grief into precise fault-tracing and later identified Edren and Pallas.",
+          "demonstratedLevel": "highly functional under acute personal loss",
+          "emotionalAftermath": "Explicitly not all right; accepts a forced short rest only after arguing with Broussard.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
           }
         }
       ],
@@ -4852,6 +5026,17 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Identified the three dead crewmates, diagnosed and helped isolate the intermittent cross-feed, and demonstrated acute grief constrained by technical discipline.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
       ]
     },
@@ -4867,9 +5052,9 @@
         "affiliations": [
           "Hesperant Vale"
         ],
-        "currentLocation": "Hesperant Vale · forward cargo holds · missing",
-        "status": "Missing through Chapter X after failing to return from a forward-hold inspection sweep.",
-        "standing": "Source-recovered missing Hesperant Vale cargo crew",
+        "currentLocation": "Hesperant Vale · recovered from forward hold service corridor · deceased",
+        "status": "Deceased in Chapter XI; electrocuted at an intermittently energized service-deck junction while conducting the forward-hold inspection.",
+        "standing": "Hesperant Vale cargo casualty · accidental electrocution",
         "temperament": [],
         "doctrine": "Not yet established in source prose.",
         "source": {
@@ -4877,7 +5062,7 @@
           "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
           "status": "authorial"
         },
-        "sourceAuthority": "Directly recovered from Chapter X of the surviving Google working draft. No personality, fate or cause of disappearance should be inferred beyond the source.",
+        "sourceAuthority": "Chapter X source recovery establishes Jerrik’s disappearance; user-directed Chapter XI continuation explicitly establishes accidental electrocution at the damaged service junction and recovery of his body.",
         "baselineRelationshipNames": [
           "Sella Varn",
           "Edren Vale and Pallas Dorn"
@@ -4928,7 +5113,20 @@
           }
         }
       ],
-      "physicalMedicalState": [],
+      "physicalMedicalState": [
+        {
+          "id": "jerrik-noll-fatal-electrocution-01",
+          "state": "Fatal electrocution in the Hesperant Vale forward hold service corridor.",
+          "status": "terminal",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
+        }
+      ],
       "equipmentResources": [],
       "chapterTouchLog": [
         {
@@ -4941,8 +5139,24 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Confirmed dead as the first casualty at the energized service junction.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
-      ]
+      ],
+      "currentState": {
+        "lifeStatus": "deceased",
+        "cause": "accidental electrocution at intermittent energized forward-hold service junction",
+        "segment": "XI. THE THIRD MAN"
+      }
     },
     "edren-vale-hesperant": {
       "personaId": "edren-vale-hesperant",
@@ -4956,9 +5170,9 @@
         "affiliations": [
           "Hesperant Vale"
         ],
-        "currentLocation": "Hesperant Vale · forward cargo holds · missing",
-        "status": "Missing through Chapter X after failing to return from a forward-hold inspection sweep.",
-        "standing": "Source-recovered missing Hesperant Vale cargo crew",
+        "currentLocation": "Hesperant Vale · recovered from forward hold service corridor · deceased",
+        "status": "Deceased in Chapter XI; electrocuted while attempting to rouse or pull Jerrik Noll away from an energized service junction.",
+        "standing": "Hesperant Vale cargo casualty · accidental electrocution during attempted rescue",
         "temperament": [],
         "doctrine": "Not yet established in source prose.",
         "source": {
@@ -4966,7 +5180,7 @@
           "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
           "status": "authorial"
         },
-        "sourceAuthority": "Directly recovered from Chapter X. No traits or fate beyond the disappearance are established.",
+        "sourceAuthority": "Chapter X source recovery establishes Edren’s disappearance; user-directed Chapter XI continuation establishes that he died attempting to help Jerrik at the energized service junction.",
         "baselineRelationshipNames": [
           "Jerrik Noll and Pallas Dorn"
         ],
@@ -5016,7 +5230,20 @@
           }
         }
       ],
-      "physicalMedicalState": [],
+      "physicalMedicalState": [
+        {
+          "id": "edren-vale-hesperant-fatal-electrocution-01",
+          "state": "Fatal electrocution in the Hesperant Vale forward hold service corridor.",
+          "status": "terminal",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
+        }
+      ],
       "equipmentResources": [],
       "chapterTouchLog": [
         {
@@ -5029,8 +5256,24 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Confirmed dead after attempting to help Jerrik Noll and receiving the same electrical fault.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
-      ]
+      ],
+      "currentState": {
+        "lifeStatus": "deceased",
+        "cause": "accidental electrocution at intermittent energized forward-hold service junction",
+        "segment": "XI. THE THIRD MAN"
+      }
     },
     "pallas-dorn-hesperant": {
       "personaId": "pallas-dorn-hesperant",
@@ -5044,9 +5287,9 @@
         "affiliations": [
           "Hesperant Vale"
         ],
-        "currentLocation": "Hesperant Vale · forward cargo holds · missing",
-        "status": "Missing through Chapter X after failing to return from a forward-hold inspection sweep.",
-        "standing": "Source-recovered missing Hesperant Vale cargo crew",
+        "currentLocation": "Hesperant Vale · recovered from forward hold service corridor · deceased",
+        "status": "Deceased in Chapter XI; electrocuted after finding Jerrik Noll and Edren Vale down and attempting to help them.",
+        "standing": "Hesperant Vale cargo casualty · accidental electrocution during attempted rescue",
         "temperament": [],
         "doctrine": "Not yet established in source prose.",
         "source": {
@@ -5054,7 +5297,7 @@
           "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
           "status": "authorial"
         },
-        "sourceAuthority": "Directly recovered from Chapter X. No traits or fate beyond the disappearance are established.",
+        "sourceAuthority": "Chapter X source recovery establishes Pallas’s disappearance; user-directed Chapter XI continuation establishes that he died attempting to help the first two casualties at the energized service junction.",
         "baselineRelationshipNames": [
           "Jerrik Noll and Edren Vale"
         ],
@@ -5104,7 +5347,20 @@
           }
         }
       ],
-      "physicalMedicalState": [],
+      "physicalMedicalState": [
+        {
+          "id": "pallas-dorn-hesperant-fatal-electrocution-01",
+          "state": "Fatal electrocution in the Hesperant Vale forward hold service corridor.",
+          "status": "terminal",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
+        }
+      ],
       "equipmentResources": [],
       "chapterTouchLog": [
         {
@@ -5117,8 +5373,24 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "segment": "XI. THE THIRD MAN",
+          "changeSummary": "Confirmed dead after attempting to help Edren Vale and becoming the third casualty in the electrocution chain.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "XI. THE THIRD MAN",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md",
+            "sourceType": "continuation",
+            "authority": "user-explicit"
+          }
         }
-      ]
+      ],
+      "currentState": {
+        "lifeStatus": "deceased",
+        "cause": "accidental electrocution at intermittent energized forward-hold service junction",
+        "segment": "XI. THE THIRD MAN"
+      }
     }
   }
 }
