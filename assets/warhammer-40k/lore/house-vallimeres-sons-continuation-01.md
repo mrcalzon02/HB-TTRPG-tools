@@ -2,6 +2,8 @@
 
 ## Continuation I — The First Lecture
 
+**Based on the work of: House Vallimere's Sons.**
+
 *An original Cafarron Corridor chronicle continuation. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This non-commercial fan work is not endorsed by or affiliated with Games Workshop.*
 
 Professor Prite had been a professor for eleven hours when somebody tried to kill him with a syllabus.
