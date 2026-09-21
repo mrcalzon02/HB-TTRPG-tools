@@ -238,11 +238,13 @@ function boot(){
     if(location.hash==='#chapter-index'||requested){activatePanel('chapter-index',false);if(initial)openChapter(initial,false,ui)}else activatePanel('story-bible',false);
   }).catch(()=>{
     const fallback=[
+      {name:'01-THE-LAST-SEVEN.md',path:'docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md',size:33000,type:'file'},
+      {name:'02-THE-COST-OF-SILK.md',path:'docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md',size:32000,type:'file'},
       {name:'03-SEVEN-DOORS.md',path:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:34885,type:'file'},
       {name:'04-NECESSARY-TRUTH.md',path:'docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md',size:38387,type:'file'}
     ];
-    renderIndex(fallback,ui);applyFilter(ui);ui.state.textContent+=' Live GitHub directory refresh is temporarily unavailable; embedded Chapter Three and Chapter Four fallbacks are active.';
-    if(location.hash==='#chapter-index'||requested){activatePanel('chapter-index',false);const initialFallback=(requested===3||requested===4)?requested:3;openChapter(initialFallback,false,ui)}else activatePanel('story-bible',false);
+    renderIndex(fallback,ui);applyFilter(ui);ui.state.textContent+=' Live GitHub directory refresh is temporarily unavailable; embedded Chapters One through Four fallbacks are active.';
+    if(location.hash==='#chapter-index'||requested){activatePanel('chapter-index',false);const initialFallback=(requested>=1&&requested<=4)?requested:1;openChapter(initialFallback,false,ui)}else activatePanel('story-bible',false);
   });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
