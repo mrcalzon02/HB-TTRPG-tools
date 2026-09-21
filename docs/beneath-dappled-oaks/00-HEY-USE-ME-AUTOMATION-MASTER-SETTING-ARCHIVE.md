@@ -876,6 +876,10 @@ Current 282 S.M. anchor: unusual wild-boar migration is being reported from the 
 
 This deployment is an example of the setting rule that military, professional, and civic duties can interrupt romance abruptly. A lover may sincerely prefer to stay and still have to ride before midnight.
 
+Ecological crises may be deliberate political attacks. Rival Houses or factions may poison shared livestock water, damage forage, manipulate migration pressures, or deliberately create conditions that increase dangerous beast activity around a rival district. Slow effects may make the present emergency solvable while the original perpetrator remains impossible to identify with confidence.
+
+Do not require every ecological mystery to end with a clean culprit. Stopping further harm, understanding the present mechanism, and navigating the political consequences can be a complete story outcome even when attribution remains uncertain.
+
 ## 13. Continuation priorities for the hourly story runner
 
 Prefer the following kinds of advancement:
