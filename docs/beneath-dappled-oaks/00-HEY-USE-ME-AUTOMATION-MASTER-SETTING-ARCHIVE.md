@@ -28,16 +28,17 @@ When an hourly or scheduled story-continuation task runs:
 5. Read **docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md** and retrieve the persistent Excel workbook **Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx** from the connected Google Drive for long-memory character state.
 6. Read **docs/beneath-dappled-oaks/05-LITTLE-COURT-REGIONAL-CUSTOMS-FOLK-PRACTICES.md** for local festivals, roadside shrines, household rites, village superstitions, lovers' places, minor saints and spirits, regional food customs, and the culturally dense "Little Year."
 7. Read **docs/beneath-dappled-oaks/06-SETTLEMENT-GAZETTEER-HOUSE-SPHERES.md** for cities, towns, villages, population scale, House spheres, institutional control, contested settlements, fringe communities, imports, exports, and local political gravity.
-8. Reconcile all seven controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-9. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-10. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
-11. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-12. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-13. Keep every romantic or sexualized character an adult.
-14. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-15. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-16. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-17. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+8. Read **docs/beneath-dappled-oaks/07-CULINARY-ATLAS-ROMANCE-GIFTS-COURTSHIP-FOOD-CULTURE.md** for cuisine, ingredients, delicacies, confectionery, seasonal food, romantic gift grammar, courtship practices, legal culinary magic, illicit philters, poisoned or enchanted food, and kitchen-contamination plot logic.
+9. Reconcile all eight controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+10. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+11. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+12. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+13. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+14. Keep every romantic or sexualized character an adult.
+15. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+16. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+17. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+18. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -781,6 +782,34 @@ Principal established House seats include:
 Established fringe anchors include **Cedra Delby** and **Kallioused**.
 
 When creating or using a settlement, determine what it imports, what it exports, which road or river sustains it, who finances that infrastructure, which local bloc dominates, which rivals remain present, and what happens when seasonal conditions interrupt the settlement's economic reason for existing.
+
+## 12E. Culinary and romantic-food control
+
+For enduring food, confectionery, courtship, and illicit culinary-magic continuity, always read:
+
+**docs/beneath-dappled-oaks/07-CULINARY-ATLAS-ROMANCE-GIFTS-COURTSHIP-FOOD-CULTURE.md**
+
+Elaranth possesses a mature earthlike culinary civilization with magical preservation and presentation layered onto real agriculture, seasonality, trade, labor, and class.
+
+Food is an active social language of romance, family, diplomacy, apology, seduction, memory, and political intention.
+
+The setting also possesses a large illicit parallel tradition of:
+
+- love philters;
+- attraction draughts;
+- truth preparations;
+- sleep and dream drugs;
+- memory fogs;
+- reproductive preparations;
+- curse-laced sweets;
+- poisons;
+- magical food contamination.
+
+These are important plot tools.
+
+A common illicit keyed love philter may last roughly **seventy-two hours**. Delivery errors, kitchen cross-contamination, swapped trays, mislabeled bottles, and serving mistakes can redirect the effect to unintended adults. The enchantment may expire while contracts, scandals, accusations, romantic damage, and political consequences persist.
+
+Do not treat secret magical coercion as legitimate romance, but do not erase it from the setting. It is precisely the kind of crime, mistake, conspiracy, or social catastrophe that investigators, nobles, lovers, servants, physicians, and political rivals may need to untangle.
 
 ## 13. Continuation priorities for the hourly story runner
 
