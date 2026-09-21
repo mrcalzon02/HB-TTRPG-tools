@@ -450,6 +450,24 @@ The setting may explore:
 
 Treat these consequences as character drama, not merely plot machinery. Humiliation, suspicion, tenderness, anger, guilt, and misplaced blame can persist even after a fetish is removed.
 
+
+## 10A. POV desire continuity and courtship norms
+
+Recurring viewpoint characters must develop a stable, evolving **attraction grammar**.
+
+Over repeated chapters, internal monologue should establish what each POV character notices first, which adult body types and presentations draw their eye, what voices or speech patterns affect them, which gestures or mannerisms repeatedly catch them, what emotional or power dynamics they gravitate toward, what kind of person reliably damages their judgment, and what exceptions surprise them.
+
+Preferences should persist across chapters and be allowed to grow. They may broaden, become more specific, contradict earlier self-understanding, or change through experience, but they must not reset simply because the scene changed.
+
+Use **docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md** to record established attraction patterns once prose has demonstrated them.
+
+Adult attraction is not restricted to one sex. Same-sex relationships are socially recognized and not inherently scandalous. Court scandal attaches primarily to house, marriage, succession, secrecy, betrayal, coercion, divided loyalty, and political consequence.
+
+Great Houses nevertheless care strongly about succession and bloodline continuity. Same-sex dynastic couples may therefore require a negotiated heir compact, cadet-line succession, designation of a blood relative as heir, a prior child, or another explicitly agreed reproductive arrangement. That practical complication should create additional relationships and obligations rather than invalidate the couple.
+
+The useful story question is: **who becomes part of the heir arrangement, what are they promised, and what new loyalty does that create?**
+
+
 ## 11. Book One dramatic trajectory
 
 The first book is about the seven leaving the relative enclosure of academy life and discovering what adulthood inside their houses actually means.
