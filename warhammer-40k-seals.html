@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archivum Seals | Cafarron Corridor Strategic Archive</title>
+  <meta name="description" content="Standalone Archivum Veritatis seals, source concordances, and archive ordinances for the Cafarron Corridor Warhammer 40,000 fan-campaign.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/warhammer-40k-seals.html">
+  <meta property="og:title" content="Archivum Seals | Cafarron Corridor Strategic Archive">
+  <meta property="og:description" content="Standalone Archivum Veritatis seals, source concordances, and archive ordinances for the Cafarron Corridor Warhammer 40,000 fan-campaign.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrcalzon02.github.io/HB-TTRPG-tools/warhammer-40k-seals.html">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <section id="warhammer-40k" class="view active" aria-labelledby="warhammer-40k-loading-title">
+      <div class="module-empty">
+        <h1 id="warhammer-40k-loading-title">Invoking Cafarron Corridor archive…</h1>
+        <p>Opening the requested Warhammer 40,000 register.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.HBTTRPGApp = Object.freeze({
+      activateView(viewId) {
+        if (viewId === 'tools') window.location.href = 'index.html#warhammer-40k';
+      }
+    });
+  </script>
+  <script src="warhammer-40k-wiki-v6.js?v=6"></script>
+  <script src="assets/warhammer-40k/shaders/planet-profile-v1.js?v=8"></script>
+  <script src="assets/warhammer-40k/shaders/planet-compositor-v1.js?v=10"></script>
+  <script src="assets/warhammer-40k/imperial-chronology-v1.js?v=1"></script>
+  <script src="assets/warhammer-40k/imperial-dramatis-personae-v1.js?v=11"></script>
+  <script src="assets/warhammer-40k/imperial-logistics-v1.js?v=2"></script>
+  <script src="assets/warhammer-40k/imperial-mercatura-house-ledger-v1.js?v=2"></script>
+  <script src="assets/warhammer-40k/imperial-component-lineage-v1.js?v=2"></script>
+  <script src="assets/warhammer-40k/imperial-vessel-history-v1.js?v=7"></script>
+  <script src="assets/warhammer-40k/imperial-personnel-lineage-v1.js?v=5"></script>
+  <script src="assets/warhammer-40k/imperial-sector-events-v1.js?v=5"></script>
+  <script src="assets/warhammer-40k/imperial-medicae-catalog-v1.js?v=1"></script>
+  <script src="assets/warhammer-40k/imperial-medicae-institutions-v1.js?v=3"></script>
+  <script src="warhammer-40k-workspace-v8.js?v=33"></script>
+  <script>
+    (() => {
+      'use strict';
+      async function openRegister() {
+        const workspace = window.Warhammer40KWorkspace;
+        if (!workspace?.initialize || !workspace?.setActiveTab) throw new Error('The Cafarron Corridor cogitator did not expose standalone register navigation.');
+        await workspace.initialize();
+        workspace.setActiveTab('seals');
+      }
+      openRegister().catch(error => {
+        console.error('Cafarron Corridor standalone register invocation failed.', error);
+        const view = document.getElementById('warhammer-40k');
+        if (!view) return;
+        const failure = document.createElement('div');
+        failure.className = 'module-empty';
+        failure.textContent = 'Archive seal withheld: ' + error.message;
+        view.replaceChildren(failure);
+      });
+    })();
+  </script>
+</body>
+</html>
