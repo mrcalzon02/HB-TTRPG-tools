@@ -1,0 +1,106 @@
+
+/* Beneath Dappled Oaks chapter archive / reader.
+   Mirrors the Warhammer 40K archive ergonomics: persistent index, in-page reader,
+   and per-chapter downloads. */
+#chapter-index .chapter-archive-layout{
+  display:grid;
+  grid-template-columns:minmax(260px,360px) minmax(0,1fr);
+  gap:24px;
+  align-items:start;
+  width:100%;
+  margin-top:1.1rem;
+}
+#chapter-index .chapter-toc{
+  position:sticky;
+  top:12px;
+  height:calc(100dvh - 24px);
+  max-height:calc(100dvh - 24px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  border:1px solid rgba(127,127,127,.28);
+  border-radius:14px;
+  background:rgba(14,18,19,.97);
+  padding:16px;
+}
+#chapter-index .chapter-filter{display:grid;gap:.4rem;margin:0 0 .9rem;font-size:.82rem;font-weight:700}
+#chapter-index .chapter-filter input{
+  width:100%;padding:.72rem .78rem;border:1px solid rgba(127,127,127,.38);
+  border-radius:9px;background:#0b0e0f;color:inherit;font:inherit
+}
+#chapter-index .chapter-index-list{display:grid;gap:.55rem;margin-top:0}
+#chapter-index .chapter-index-entry{
+  display:block;border:1px solid rgba(127,127,127,.28);border-radius:10px;
+  padding:.82rem;background:rgba(127,127,127,.05);text-decoration:none;color:inherit;cursor:pointer
+}
+#chapter-index .chapter-index-entry:hover,
+#chapter-index .chapter-index-entry:focus-within{
+  border-color:rgba(127,127,127,.58);background:rgba(127,127,127,.1)
+}
+#chapter-index .chapter-index-entry.is-active{
+  border-color:currentColor;background:rgba(127,127,127,.14)
+}
+#chapter-index .chapter-index-entry.is-filtered{display:none}
+#chapter-index .chapter-index-entry.is-recovery{opacity:.78;cursor:default}
+#chapter-index .chapter-index-number{
+  font-weight:800;white-space:nowrap;font-size:.8rem;opacity:.8;
+  text-transform:uppercase;letter-spacing:.045em
+}
+#chapter-index .chapter-index-entry.is-recovery .chapter-index-number::after{
+  content:" · recovery";font-size:.72em;font-weight:600;opacity:.7
+}
+#chapter-index .chapter-index-title{margin:.12rem 0 0;font-size:1rem}
+#chapter-index .chapter-index-meta{margin:.3rem 0 0;opacity:.72;font-size:.81rem;line-height:1.38}
+#chapter-index .chapter-index-link{display:inline-block;margin-top:.55rem;font-size:.82rem;font-weight:700}
+#chapter-index .chapter-recovery-note{
+  display:inline-flex;align-items:center;margin-top:.55rem;border:1px dashed currentColor;
+  border-radius:999px;padding:.24rem .55rem;font-size:.76rem;opacity:.72
+}
+#chapter-index .chapter-index-state{margin:.85rem 0 0;opacity:.7;font-size:.8rem;line-height:1.4}
+#chapter-index .chapter-reader-shell{min-width:0;width:100%}
+#chapter-index .chapter-reader-toolbar{
+  display:flex;gap:.7rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin:0 0 .8rem
+}
+#chapter-index .chapter-reader-nav{display:flex;gap:.55rem;flex-wrap:wrap}
+#chapter-index .chapter-reader-prose{
+  border:1px solid rgba(127,127,127,.25);border-radius:16px;padding:clamp(1.15rem,3vw,2.7rem);
+  background:rgba(127,127,127,.035);line-height:1.78;font-size:1.05rem;min-height:18rem
+}
+#chapter-index .chapter-reader-prose h1{font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.12;margin:.2rem 0 1.4rem}
+#chapter-index .chapter-reader-prose h2,
+#chapter-index .chapter-reader-prose h3{margin:1.7rem 0 .8rem}
+#chapter-index .chapter-reader-prose p{margin:0 0 1.15rem}
+#chapter-index .chapter-reader-prose hr{border:0;border-top:1px solid rgba(127,127,127,.28);margin:2rem auto;width:45%}
+#chapter-index .chapter-reader-prose blockquote{margin:1.2rem 0;padding:.2rem 1rem;border-left:3px solid currentColor;opacity:.86}
+#chapter-index .chapter-reader-meta{display:flex;gap:.45rem;flex-wrap:wrap;margin:.7rem 0 1rem}
+#chapter-index .chapter-reader-meta span{
+  border:1px solid rgba(127,127,127,.32);border-radius:999px;padding:.22rem .55rem;font-size:.82rem;opacity:.8
+}
+#chapter-index .chapter-reader-error{border-left:4px solid currentColor;padding:1rem;margin:1rem 0}
+#chapter-index .chapter-download{position:relative;display:inline-block;margin-top:.25rem;font-family:system-ui,sans-serif}
+#chapter-index .chapter-download summary{
+  list-style:none;display:inline-flex;align-items:center;gap:.45rem;padding:.58rem .78rem;
+  border:1px solid currentColor;border-radius:9px;background:rgba(127,127,127,.08);
+  color:inherit;cursor:pointer;font-weight:700;font-size:.82rem;user-select:none
+}
+#chapter-index .chapter-download summary::-webkit-details-marker{display:none}
+#chapter-index .chapter-download summary::after{content:"▾";opacity:.75}
+#chapter-index .chapter-download[open] summary::after{content:"▴"}
+#chapter-index .chapter-download-menu{
+  position:absolute;z-index:30;left:0;top:calc(100% + 6px);min-width:220px;padding:7px;
+  border:1px solid rgba(127,127,127,.4);border-radius:10px;background:#0b0e0f;
+  box-shadow:0 12px 30px rgba(0,0,0,.45)
+}
+#chapter-index .chapter-download-menu button{
+  display:block;width:100%;padding:9px 10px;border:0;border-bottom:1px solid rgba(127,127,127,.18);
+  background:transparent;color:#f1eee7;text-align:left;font:600 .82rem/1.25 system-ui,sans-serif;cursor:pointer
+}
+#chapter-index .chapter-download-menu button:last-child{border-bottom:0}
+#chapter-index .chapter-download-menu button:hover,
+#chapter-index .chapter-download-menu button:focus-visible{background:rgba(255,255,255,.09);outline:none}
+#chapter-index .chapter-reader-note{margin:.55rem 0 0;opacity:.68;font-size:.78rem}
+@media(max-width:900px){
+  #chapter-index .chapter-archive-layout{grid-template-columns:1fr}
+  #chapter-index .chapter-toc{position:relative;top:auto;height:min(46dvh,32rem);max-height:min(46dvh,32rem)}
+}
