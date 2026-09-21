@@ -75,7 +75,7 @@ function rebuildArchiveShell(){
     const eyebrow=hero.querySelector('.eyebrow'); if(eyebrow)eyebrow.textContent='Released canon prose';
     const h2=hero.querySelector('h2'); if(h2)h2.textContent='Chapter Archive & Reader';
     const p=hero.querySelector('p:last-child');
-    if(p)p.innerHTML='The chapter archive uses the same reader pattern as the Warhammer 40K fiction archive: a persistent chapter register beside the in-page reader, previous/next navigation, and per-chapter downloads. Canonical files are discovered directly from <code>docs/beneath-dappled-oaks/chapters/</code> on <code>main</code>.';
+    if(p)p.innerHTML='Canonical chapter files are discovered directly from <code>docs/beneath-dappled-oaks/chapters/</code> on <code>main</code> and opened directly in the archive reading pane.';
   }
   let list=byId('chapter-index-list');
   let state=byId('chapter-index-state');
@@ -90,9 +90,6 @@ function rebuildArchiveShell(){
 
   const reader=document.createElement('section'); reader.className='chapter-reader-shell'; reader.id='chapter-reader'; reader.setAttribute('aria-label','Chapter reader');
   reader.innerHTML=
-    '<div class="chapter-reader-toolbar"><span class="story-pill">In-page chapter reader</span><div class="chapter-reader-nav">'+
-    '<button class="story-subtab" type="button" id="chapter-reader-prev" disabled>← Previous</button>'+
-    '<button class="story-subtab" type="button" id="chapter-reader-next" disabled>Next →</button></div></div>'+
     '<div class="hero-card"><p class="eyebrow">Beneath Dappled Oaks · Canon prose</p>'+
     '<h2 id="chapter-reader-title">Select a released chapter</h2><div class="chapter-reader-meta" id="chapter-reader-meta"></div>'+
     '<details class="chapter-download" id="chapter-download" hidden><summary>Download chapter</summary><div class="chapter-download-menu" id="chapter-download-menu"></div></details>'+
@@ -211,7 +208,7 @@ function configureDownloads(){
 async function openChapter(number,updateHistory,ui){
   const chapter=released.find(item=>item.number===Number(number));if(!chapter)return;
   activatePanel('chapter-index',false);markActive(chapter.number,ui);
-  const title=byId('chapter-reader-title'),meta=byId('chapter-reader-meta'),prose=byId('chapter-reader-prose'),prev=byId('chapter-reader-prev'),next=byId('chapter-reader-next'),downloads=byId('chapter-download');
+  const title=byId('chapter-reader-title'),meta=byId('chapter-reader-meta'),prose=byId('chapter-reader-prose'),downloads=byId('chapter-download');
   title.textContent='Loading Chapter '+chapter.number+'…';meta.replaceChildren();prose.innerHTML='<p>Loading canon prose…</p>';downloads.hidden=true;
   try{
     const response=await fetch(chapter.href,{cache:'no-store'});if(!response.ok)throw new Error('Chapter request failed: '+response.status);
@@ -222,8 +219,6 @@ async function openChapter(number,updateHistory,ui){
     meta.replaceChildren(...metadata.map(value=>{const s=document.createElement('span');s.textContent=value;return s}));
     const body=parsed.body.replace(/^\s*#\s+[^\n]+\n+/,'');
     prose.innerHTML=renderMarkdown(body);configureDownloads();
-    const index=released.findIndex(item=>item.number===chapter.number),p=released[index-1],n=released[index+1];
-    prev.disabled=!p;next.disabled=!n;prev.dataset.chapterNumber=p?String(p.number):'';next.dataset.chapterNumber=n?String(n.number):'';
     if(updateHistory){const url=new URL(location.href);url.searchParams.set('chapter',String(chapter.number));url.hash='chapter-index';history.replaceState(null,'',url.pathname+url.search+url.hash)}
   }catch(error){
     current=null;currentMarkdown='';title.textContent='Chapter '+chapter.number+' — '+chapter.title;
@@ -236,8 +231,6 @@ function boot(){
   document.querySelectorAll('[data-story-panel]').forEach(tab=>tab.addEventListener('click',()=>activatePanel(tab.dataset.storyPanel)));
   ui.list.addEventListener('click',event=>{const link=event.target.closest('[data-open-chapter]');if(!link)return;event.preventDefault();openChapter(link.dataset.openChapter,true,ui)});
   ui.filter.addEventListener('input',()=>applyFilter(ui));
-  byId('chapter-reader-prev').addEventListener('click',()=>{const n=byId('chapter-reader-prev').dataset.chapterNumber;if(n)openChapter(n,true,ui)});
-  byId('chapter-reader-next').addEventListener('click',()=>{const n=byId('chapter-reader-next').dataset.chapterNumber;if(n)openChapter(n,true,ui)});
   const requested=Number(new URLSearchParams(location.search).get('chapter'));
   fetch(api,{headers:{Accept:'application/vnd.github+json'}}).then(r=>{if(!r.ok)throw new Error('GitHub directory request failed');return r.json()}).then(files=>{
     renderIndex(files,ui);applyFilter(ui);
