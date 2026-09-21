@@ -1943,6 +1943,32 @@ House politics must therefore account for living ancestors, extremely old parent
 
 ---
 
+# XIV-E. Courtly Households, Mistresses, and Surrogacy
+
+The authoritative courtly-household corpus is:
+
+**docs/beneath-dappled-oaks/12-COURTLY-HOUSEHOLDS-MISTRESSES-PARAMOURS-SURROGACY-SUCCESSION.md**
+
+Noble and wealthy households may maintain acknowledged companions, discreet paramours, secondary households, surrogacy contracts, donor arrangements, and children whose status is defined by House law rather than a single universal rule.
+
+Courtly scandal usually turns on:
+
+- deception;
+- broken agreements;
+- money;
+- parentage;
+- inheritance;
+- public humiliation;
+- political influence.
+
+The existence of a mistress, secondary companion, or surrogate is not inherently disqualifying.
+
+A child born through surrogacy or a secondary relationship may be acknowledged, legitimized, excluded from the main line, placed in a cadet branch, or granted a separate inheritance.
+
+Same-sex dynastic couples are socially ordinary; succession questions concern recognized lineage and legal parentage rather than the sex of the couple.
+
+---
+
 # XV. Story Use Rules
 
 The annual calendar should influence prose.
