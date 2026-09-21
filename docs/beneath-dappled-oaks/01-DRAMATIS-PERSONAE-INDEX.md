@@ -30,6 +30,37 @@ This rule applies at every level of the setting:
 
 The setting should therefore treat a family tree as an **operational map**, not decorative genealogy.
 
+## Character dimensionality rule
+
+Recurring characters are not romance-delivery mechanisms.
+
+Each major character should develop a durable profile of:
+
+- non-romantic ambitions;
+- professional or institutional concerns;
+- economic interests;
+- magical interests;
+- mundane skills;
+- martial abilities;
+- hobbies;
+- personal tastes;
+- practical strengths;
+- foibles;
+- blind spots;
+- risk tolerance;
+- recurring annoyances;
+- planning habits.
+
+Most adults should be reasonably competent within the limits of their education and experience.
+
+A flaw should make a person distinct.
+
+It should not automatically make them incapable of understanding obvious consequences.
+
+When a character does something genuinely foolish, the surrounding social world should usually recognize it as foolish rather than silently lowering everyone else's intelligence to make the decision seem normal.
+
+---
+
 ## Canon leads already in use
 
 ### Court / succession generation
