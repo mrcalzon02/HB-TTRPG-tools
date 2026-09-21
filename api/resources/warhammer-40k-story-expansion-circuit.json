@@ -24,14 +24,14 @@
       "title": "The Long Patrol of Broussard",
       "source": "google-working-draft-recovery",
       "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-01.md",
-      "status": "recovery-in-progress",
-      "priority": "continue-verbatim-google-source-recovery-before-expansion",
+      "status": "source-recovery-complete",
+      "priority": "recovery-complete-enter-normal-rotation",
       "sourceDocument": "The Long Patrol of Broussard — Working Draft",
       "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
-      "recoveredThrough": "VI. THE IMPERIAL ART OF SLEEPING BADLY — complete through Broussard's two-hour-twelve-minute rest cycle, visual contact with the Hesperant Vale, and his renewed unease on approach.",
-      "sourceObservedThrough": "X. THE FORWARD HOLDS — ending with Broussard: Let's go find them.",
-      "currentEndpoint": "Verbatim Google-source recovery now includes Chapters I–VI in full. Chapter VI establishes Broussard's explicit fatigue-management doctrine, practical delegation, veteran ability to sleep under poor field conditions, Jalesthesian's support for functional command rather than performative zeal, and visual contact with the damaged Hesperant Vale. Chapters VII–X remain present in the Google source but uncommitted. The later deep-index telemetry falsification, predator attack, convoy return and reader-only Genestealer reveal remain authoritative authorial continuity beyond the currently observed Google draft and must not be invented as recovered prose.",
-      "nextSlice": "Recover Chapter VII verbatim from the Google working draft. Before fresh prose, continue sequentially through Chapters VII–X and maintain character-state updates after each substantial recovered slice.",
+      "recoveredThrough": "X. THE FORWARD HOLDS — complete through Broussard organizing the search for Jerrik Noll, Edren Vale and Pallas Dorn and ending: “Let’s go find them.”",
+      "sourceObservedThrough": "X. THE FORWARD HOLDS — complete; the connected Google working draft contains no later chapter.",
+      "currentEndpoint": "All prose presently contained in the surviving Google working draft has been committed through Chapter X. Chapter VII establishes the physical hull wound and Meren Holt's repeated hesitation; Chapter VIII establishes Kelm's protective attachment to the Hesperant Vale, the eleven-hour high-risk versus 36–54 hour slow repair choice, Kelm's six-second helm-failure account and the approximately fourteen-second telemetry absence; Chapter IX establishes the crew's demonstrated integrity, Sella Varn, Torren, and repair progress; Chapter X names the missing forward-hold inspection team as Jerrik Noll, Edren Vale and Pallas Dorn and ends with Broussard ordering the search. Conversation-history review found no additional post-X prose: only earlier variants of the same missing-team/loose-bin setup. The deep-index telemetry falsification, predator battle, successful convoy return and reader-only Genestealer reveal remain authorial continuity for future new prose, not recovered source text.",
+      "nextSlice": "No source-recovery backlog remains in the observed Google working draft. When this story next becomes rotation-eligible for new prose, begin immediately after “Let’s go find them,” preserve the established missing-team search plan and character-state ledger, and build toward the authorial continuity constraints without prematurely granting Broussard or Jalesthesian reader-only knowledge.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -54,7 +54,14 @@
         ],
         "forbiddenDrift": "Do not introduce post-source famous canon figures or future-history knowledge not established by the Broussard source."
       },
-      "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: The Long Patrol of Broussard."
+      "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: The Long Patrol of Broussard.",
+      "recoveryAudit": {
+        "sourceDocumentComplete": true,
+        "conversationHistoryChecked": true,
+        "postChapterXVerbatimProseFound": false,
+        "overlappingEarlierVariants": "Earlier conversation prose exists for the missing-team report and grain-silo-sized loose produce bins, but those beats are already fully represented by the higher-authority Google Chapter X and should not be duplicated as a second published chapter.",
+        "remainingMaterialType": "authorial continuity / planning constraints, not recoverable verbatim prose"
+      }
     },
     {
       "id": "house-vallimere-sons",
