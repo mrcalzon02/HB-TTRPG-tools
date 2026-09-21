@@ -1322,6 +1322,37 @@ They are part of civilization, not decorative armor.
 
 ---
 
+# XXXV. Crown Field Formations and the Midtrash Seventh
+
+Knightly orders are not the only professional military institutions in Elaranth.
+
+The Crown also maintains field formations, garrisons, engineers, logistics units, and standing or semi-standing legions.
+
+An established formation is the **Midtrash Seventh Legion**, commonly called the **Midtrash Seventh** or simply **the Seventh** in appropriate northern military contexts.
+
+The Seventh can provide:
+
+- scouts;
+- infantry;
+- engineers;
+- camp security;
+- logistics;
+- road protection;
+- support for regional orders;
+- manpower for large ecological-threat investigations.
+
+In 282 S.M., the Seventh is ordered north after the Northern Orders report abnormal wild-boar migration from the **Felridge Forests**.
+
+The deployment is precautionary because the boars may be symptoms rather than the primary threat.
+
+Detailed ecological canon is maintained in:
+
+**docs/beneath-dappled-oaks/10-ECOLOGY-WILDLIFE-DOMESTIC-ANIMALS-LEGENDARY-THREATS.md**
+
+Military assignments can interrupt romantic or household scenes without making the romance unimportant. A competent officer can genuinely want to remain with a lover while also understanding that a King's order to ride before midnight is not optional.
+
+---
+
 # XXXIV. Canon Anchors
 
 Established enduring martial institutions now include:
