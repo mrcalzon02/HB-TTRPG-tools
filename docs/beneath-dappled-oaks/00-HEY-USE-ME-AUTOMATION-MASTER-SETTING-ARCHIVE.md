@@ -32,16 +32,17 @@ When an hourly or scheduled story-continuation task runs:
 9. Read **docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md** for reusable in-universe romantic cautionary tales, household legends, comic courtship disasters, Adraderis lore, and proverb-level cultural references.
 10. Read **docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md** for knightly orders, military fellowships, wardens, martial religious traditions, engineer-knights, river orders, bodyguards, hospitallers, oath structures, rivalries, and military social mobility.
 11. Read **docs/beneath-dappled-oaks/10-ECOLOGY-WILDLIFE-DOMESTIC-ANIMALS-LEGENDARY-THREATS.md** for wildlife, beasts of burden, livestock, domestic animals, magical species, predator-prey logic, migration, ecological intelligence, legendary creatures, and regional or national ecological threats.
-12. Reconcile all eleven controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-13. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, ecological continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-14. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
-15. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-16. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-17. Keep every romantic or sexualized character an adult.
-18. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-19. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-20. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-21. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+12. Read **docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md** for adulthood, lifespan, age stages, senescence, fertility, magical impotence, elder care, Spring Children, Winter Children, Winter Blossoms, and multigenerational House demographics.
+13. Reconcile all twelve controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+14. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, ecological continuity, age and demographic continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+15. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+16. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+17. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+18. Keep every romantic or sexualized character an adult.
+19. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+20. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+21. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+22. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -879,6 +880,26 @@ This deployment is an example of the setting rule that military, professional, a
 Ecological crises may be deliberate political attacks. Rival Houses or factions may poison shared livestock water, damage forage, manipulate migration pressures, or deliberately create conditions that increase dangerous beast activity around a rival district. Slow effects may make the present emergency solvable while the original perpetrator remains impossible to identify with confidence.
 
 Do not require every ecological mystery to end with a clean culprit. Stopping further harm, understanding the present mechanism, and navigating the political consequences can be a complete story outcome even when attribution remains uncertain.
+
+## 12J. Elven lifespan, aging, and demographic control
+
+For enduring age, fertility, senescence, and demographic continuity, always read:
+
+**docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md**
+
+Elves mature on a broadly human-like developmental timetable and become legal/social adults around twenty. A twenty-year-old is culturally comparable to a modern eighteen-year-old adult: fully adult but very young and inexperienced.
+
+Elven life then extends across roughly three human lifespans. High two hundreds constitute genuine ancient age; three hundred or more is possible but increasingly uncommon.
+
+Age must be visibly and socially consequential. Ancient elves may show receding or lost hair, white and frizzled hair, wrinkles, fading eyes, stooping, frailty, pronounced ear droop, and dependence on canes or assistance.
+
+Magical impotence commonly emerges somewhere around the two fifties but is distinct from sexual impotence, infertility, and general physical decline. These may occur on different schedules.
+
+Fertility can persist into the mid or late two hundreds. **Spring Children** are born comparatively early in parental adulthood; **Winter Children** are born late; **Winter Blossoms** are children born near the final edge of maternal fertility.
+
+Winter Blossom relationships can carry powerful family emotion: some elderly parents see the child as a last chance to do things right, while others unfairly associate the child with the loss of magic, fertility, beauty, mobility, or public life that happened around the same period.
+
+Long lifespan should affect inheritance, House authority, career history, political memory, elder care, and the number of living generations in a family.
 
 ## 13. Continuation priorities for the hourly story runner
 
