@@ -168,7 +168,7 @@ function normalizePdfText(value){return String(value).replace(/[\u2018\u2019]/g,
 function wrapPdfLines(text,width=88){
   const out=[];for(const raw of normalizePdfText(text).split('\n')){const line=raw.trimEnd();if(!line){out.push('');continue}const words=line.split(/\s+/);let cur='';for(const word of words){if(!cur)cur=word;else if((cur+' '+word).length<=width)cur+=' '+word;else{out.push(cur);cur=word}}if(cur)out.push(cur)}return out
 }
-function pdfEscape(value){return value.replace(/\/g,'\\').replace(/\(/g,'\(').replace(/\)/g,'\)')}
+function pdfEscape(value){return value.replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
 function pdfBlob(){
   const lines=wrapPdfLines(currentText(),88),perPage=50,pages=[];for(let i=0;i<lines.length;i+=perPage)pages.push(lines.slice(i,i+perPage));if(!pages.length)pages.push(['']);
   const objects=[];objects[1]='<< /Type /Catalog /Pages 2 0 R >>';objects[3]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';const kids=[];
