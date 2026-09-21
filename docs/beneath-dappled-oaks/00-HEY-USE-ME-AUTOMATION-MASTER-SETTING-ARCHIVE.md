@@ -30,16 +30,17 @@ When an hourly or scheduled story-continuation task runs:
 7. Read **docs/beneath-dappled-oaks/06-SETTLEMENT-GAZETTEER-HOUSE-SPHERES.md** for cities, towns, villages, population scale, House spheres, institutional control, contested settlements, fringe communities, imports, exports, and local political gravity.
 8. Read **docs/beneath-dappled-oaks/07-CULINARY-ATLAS-ROMANCE-GIFTS-COURTSHIP-FOOD-CULTURE.md** for cuisine, ingredients, delicacies, confectionery, seasonal food, romantic gift grammar, courtship practices, legal culinary magic, illicit philters, poisoned or enchanted food, and kitchen-contamination plot logic.
 9. Read **docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md** for reusable in-universe romantic cautionary tales, household legends, comic courtship disasters, Adraderis lore, and proverb-level cultural references.
-10. Reconcile all nine controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-11. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-12. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
-13. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-14. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-15. Keep every romantic or sexualized character an adult.
-16. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-17. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-18. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-19. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+10. Read **docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md** for knightly orders, military fellowships, wardens, martial religious traditions, engineer-knights, river orders, bodyguards, hospitallers, oath structures, rivalries, and military social mobility.
+11. Reconcile all ten controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+12. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+13. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+14. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+15. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+16. Keep every romantic or sexualized character an adult.
+17. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+18. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+19. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+20. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -825,6 +826,20 @@ The incident creates the cultural phrase **"to disband Bellweather"** for romant
 Adraderis petals are a well-known adult aphrodisiac ingredient with consensual legitimate uses and illicit coercive uses. Older adults generally recognize the ingredient and are not culturally naive about romance merely because younger lovers imagine themselves inventive.
 
 This generational pattern should recur: young adults may possess grand theories about seduction only to discover that mothers, grandmothers, widows, unmarried elders, old servants, and respectable matrons have seen the same foolishness before.
+
+## 12G. Knightly orders and military-institution control
+
+For enduring military and knightly continuity, always read:
+
+**docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md**
+
+The Realm contains a dense network of martial institutions beyond House guards, Crown armies, magical organizations, and clerical bodies.
+
+Existing martial anchors include the **Royal Martial Fellowship**, **Western Wardens**, and **Red Hart wilderness vigil**, now joined by major orders such as the **Sundered Shield**, **Dawn Circlet**, **Broken Spear**, **Iron Hart**, **Stone Banner**, **Ember Anvil**, **White Stag Riders**, **Green Lance**, **Silver Heron**, **Seven Roads**, **Argent Thorn**, **Quiet Blade**, **Starward Aegis**, **Moonward**, **Lantern Hospitallers**, **Black Oak**, **Grey Mantle**, **Open Hand**, and others.
+
+Do not treat "knights" as a generic social category with identical cavalry traditions. Orders have different oaths, funding, recruitment, specialties, House influence, gods, chapterhouses, uniforms, rivalries, veterans, widows, pensions, scandals, and political weight.
+
+A House may strongly influence an order without formally commanding it. Conflicts between blood loyalty and institutional oath are valid recurring story engines.
 
 ## 13. Continuation priorities for the hourly story runner
 
