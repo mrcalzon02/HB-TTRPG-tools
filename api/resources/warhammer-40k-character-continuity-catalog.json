@@ -39,10 +39,10 @@
     "forgotten-explicitly",
     "memory-altered"
   ],
-  "characterCount": 53,
+  "characterCount": 54,
   "seededFrom": {
     "file": "assets/warhammer-40k/imperial-dramatis-personae-v1.js",
-    "version": null,
+    "version": "1.13.0",
     "note": "Baseline identity, temperament, doctrine, relationship names, and story beats are mirrored for read efficiency only. Identity-level corrections belong in Dramatis Personae first."
   },
   "characters": {
@@ -3769,19 +3769,98 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "broussard-kb-jalesthesian-schola-01",
+          "information": "Gabriel Hamden Jalesthesian graduated in the first full Regilian Third Continental Schola cohort: 186 entered, 23 received full graduation seals, and 31 died during the program.",
+          "epistemicStatus": "confirmed",
+          "belief": "accepted as Jalesthesian's firsthand account",
+          "certainty": "high",
+          "sourceCharacter": "Gabriel Hamden Jalesthesian",
+          "actionTaken": "None required; retained as personal understanding of his assigned Commissar.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "broussard-kb-josef-arlen-01",
+          "information": "Jalesthesian's closest Schola partner Josef Arlen was falsely declared compromised as the final commissariat loyalty test; Jalesthesian obeyed the execution order and learned immediately afterward that Arlen was innocent.",
+          "epistemicStatus": "confirmed",
+          "belief": "accepts the account and is angered by the deliberate construction and destruction of trust",
+          "certainty": "high",
+          "sourceCharacter": "Gabriel Hamden Jalesthesian",
+          "actionTaken": "Reinterprets Jalesthesian's friendliness as compatible with severe conditioning rather than softness.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
+      "plansGoals": [
+        {
+          "id": "broussard-goal-recovery-01",
+          "goal": "Reach the Hesperant Vale, secure the disabled freighter, protect its crew, recover or repair the vessel if possible, and return his detachment to the convoy with the same number of people it left with.",
+          "horizon": "immediate-mission",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "III. DETACHED COMMAND / IV. THE COMMISSAR ARRIVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-04b.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "relationshipsTrust": [
+        {
+          "id": "broussard-rel-jalesthesian-01",
+          "counterpartPersonaId": "commissar-gabriel-hamden-jalesthesian",
+          "direction": "Broussard → Jalesthesian",
+          "trust": "cautious-positive",
+          "respect": "increased",
+          "fear": "residual institutional caution",
+          "currentInterpretation": "Pleasant company, socially observant, competent, and severely conditioned; Broussard finds the shared practical view of soldiers and the Commissar's lack of theatrical severity reassuring without forgetting what his office means.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IV. THE COMMISSAR ARRIVES / V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "V. HARD LESSONS",
+          "changeSummary": "Learned Jalesthesian's Schola cohort losses and final loyalty-test history; knowledge of Josef Arlen changed Broussard's interpretation of the Commissar from potentially easygoing to deliberately compassionate despite proven severity. Respect and cautious trust increased.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
     },
     "commissar-gabriel-hamden-jalesthesian": {
       "personaId": "commissar-gabriel-hamden-jalesthesian",
@@ -3848,17 +3927,94 @@
       "memoriesEvents": [],
       "knowledgeBeliefs": [],
       "secretsKnown": [],
-      "secretsHeld": [],
+      "secretsHeld": [
+        {
+          "id": "jalesthesian-secret-josef-01",
+          "secret": "His final commissariat loyalty qualification required him to execute his closest partner Josef Arlen on a fabricated compromise charge; he learned immediately afterward that Arlen was innocent.",
+          "exposure": "disclosed voluntarily to Broussard's command Chimera crew and listeners on the vehicle network during the outbound recovery journey",
+          "risk": "personal-vulnerability rather than formal operational secret",
+          "status": "transformed",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "plansGoals": [],
-      "skillsCompetence": [],
-      "relationshipsTrust": [],
-      "temperamentPerformance": [],
+      "skillsCompetence": [
+        {
+          "id": "jalesthesian-skill-social-observation-01",
+          "domain": "social observation / deception detection",
+          "proficiency": "demonstrated strong situational reading",
+          "context": "Identified the precise point where Hessel's story about a woman in South Regilia became false and used casual conversation to map crew personalities and relationships.",
+          "limitations": "Not established as infallible; evidence is one social scene.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "jalesthesian-rel-broussard-01",
+          "counterpartPersonaId": "captain-broussard",
+          "direction": "Jalesthesian → Broussard",
+          "trust": "professional-positive",
+          "respect": "high for survival-focused competence",
+          "currentInterpretation": "Regards Broussard's record of returning soldiers alive as a virtue and sees waste of the Emperor's soldiers through stupidity as contrary to duty.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IV. THE COMMISSAR ARRIVES",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-04b.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "temperamentPerformance": [
+        {
+          "id": "jalesthesian-performance-schola-disclosure-01",
+          "domain": "social pressure / vulnerable disclosure",
+          "context": "Discussed Schola deaths, conditioning, Josef Arlen, and his own obedience before ordinary soldiers without theatrical bravado or euphemism.",
+          "demonstratedLevel": "calm and unusually candid",
+          "limitations": "Emotional aftermath of Arlen's death remains largely private and must not be inferred.",
+          "emotionalAftermath": "He does not volunteer whether he cried, how Arlen reacted, or later private grief.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "V. HARD LESSONS",
+          "changeSummary": "Voluntarily disclosed Regilian cohort losses and the Josef Arlen loyalty test; demonstrated social observation, humor, candor about institutional brutality, and a doctrine that compassion must remain known rather than erased.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
     },
     "captain-derrovan-kelm": {
       "personaId": "captain-derrovan-kelm",
@@ -3929,6 +4085,130 @@
       "physicalMedicalState": [],
       "equipmentResources": [],
       "chapterTouchLog": []
+    },
+    "trooper-hessel-broussard": {
+      "personaId": "trooper-hessel-broussard",
+      "referenceId": "PERSONA-054",
+      "name": "Hessel",
+      "baseline": {
+        "title": "Trooper Hessel",
+        "rank": "Trooper",
+        "role": "Long-serving member of Captain Broussard’s High Presidio convoy command; recurring command-Chimera soldier and unit wit",
+        "branch": "Astra Militarum",
+        "affiliations": [
+          "High Presidio winter convoy service",
+          "Captain Broussard’s long-serving unit",
+          "Hesperant Vale recovery detachment"
+        ],
+        "currentLocation": "High Presidio frozen-ocean route · Broussard recovery column",
+        "status": "Active through Source Recovery 05; traveling with Broussard’s recovery detachment toward the Hesperant Vale.",
+        "standing": "Recovered recurring Broussard-unit soldier",
+        "temperament": [
+          "Irreverent",
+          "Talkative",
+          "Comfortable joking with familiar authority",
+          "Prone to embellishment",
+          "Socially observant",
+          "Capable of sobering quickly when circumstances turn serious"
+        ],
+        "doctrine": "Use humor to survive boredom, hierarchy and fear, but pay attention when the situation stops being funny. Hessel habitually tests command boundaries verbally while continuing to follow Broussard’s practical discipline.",
+        "source": {
+          "label": "The Long Patrol of Broussard — Source Recovery 05",
+          "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+          "status": "authorial"
+        },
+        "sourceAuthority": "Directly recovered from the surviving Google working draft. Hessel’s long-standing association with Broussard, humor, tendency to embellish, participation in the recovery detachment and direct exposure to Jalesthesian’s Schola testimony are explicit.",
+        "baselineRelationshipNames": [
+          "Captain Broussard",
+          "Commissar Gabriel Hamden Jalesthesian"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Saint Malderson · vehicle deck",
+            "beat": "Reacted to Broussard receiving independent recovery orders with the blunt question of whether the detachment was administratively doomed."
+          },
+          {
+            "place": "High Presidio · command Chimera",
+            "beat": "Traded jokes with Jalesthesian, had an embellished story about a woman in South Regilia immediately exposed, and later questioned the commissar directly about the final loyalty test and Josef Arlen."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "hessel-kb-jalesthesian-schola-01",
+          "information": "Heard Jalesthesian's firsthand account of Regilian Schola attrition, the final commissariat loyalty test, Josef Arlen's false compromise charge, execution, and innocence.",
+          "epistemicStatus": "confirmed",
+          "belief": "takes the account seriously despite his normal joking demeanor",
+          "certainty": "high",
+          "sourceCharacter": "Gabriel Hamden Jalesthesian",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [],
+      "skillsCompetence": [],
+      "relationshipsTrust": [
+        {
+          "id": "hessel-rel-jalesthesian-01",
+          "counterpartPersonaId": "commissar-gabriel-hamden-jalesthesian",
+          "direction": "Hessel → Jalesthesian",
+          "trust": "warming but institutionally cautious",
+          "respect": "increased through candid conversation",
+          "currentInterpretation": "Treats Jalesthesian as socially approachable enough to joke with and question directly, while the loyalty-test account reinforces how dangerous his office can be.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "temperamentPerformance": [
+        {
+          "id": "hessel-performance-humor-01",
+          "domain": "humor / social pressure",
+          "context": "Uses exaggeration and joking with Broussard and Jalesthesian; his South Regilia story is immediately identified as embellished, but he becomes quiet and direct when the Schola testimony turns serious.",
+          "demonstratedLevel": "confident comic pressure-release with capacity to sober quickly",
+          "limitations": "Not evidence of general dishonesty outside casual storytelling.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "V. HARD LESSONS",
+          "changeSummary": "Had casual exaggeration exposed by Jalesthesian, then learned the Commissar's Schola casualty figures and Josef Arlen history; moved from comic engagement into serious questioning without losing his established unit-wit role.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "V. HARD LESSONS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
     }
   }
 }
