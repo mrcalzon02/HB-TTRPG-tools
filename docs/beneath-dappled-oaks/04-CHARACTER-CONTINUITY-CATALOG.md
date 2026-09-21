@@ -195,6 +195,243 @@ Another may return immediately to ordinary conversation, courtship, food, or int
 
 Neither profile should be inferred without prose evidence.
 
+## 5A. Baseline adult competence, foibles, and non-romantic life
+
+Most recurring adult characters should be **reasonably sane and functional in ordinary life**.
+
+They may be:
+
+- arrogant;
+- bullheaded;
+- priggish;
+- naïve;
+- impatient;
+- vain;
+- fussy;
+- stubborn;
+- overconfident;
+- risk-averse;
+- status-conscious;
+- provincial;
+- pedantic;
+- jealous;
+- socially awkward;
+- emotionally avoidant;
+- overly dutiful;
+- overly trusting;
+- suspicious;
+- bad at admitting uncertainty.
+
+These are personality flaws.
+
+They are not an instruction to make the character incapable of ordinary reasoning.
+
+A trained adult should generally understand the mundane consequences of:
+
+- traveling without supplies;
+- abandoning stable employment;
+- entering debt;
+- crossing dangerous country;
+- signing a contract;
+- angering a magistrate;
+- threatening someone stronger;
+- attempting magic they do not understand;
+- fighting a trained opponent;
+- insulting a House patron;
+- ignoring winter roads;
+- beginning a business without capital, customers, equipment, or a place to work.
+
+Characters can still make bad decisions.
+
+The bad decision should emerge from something legible:
+
+- pride;
+- grief;
+- love;
+- ambition;
+- ideology;
+- desperation;
+- misinformation;
+- overconfidence;
+- youth;
+- social pressure;
+- inexperience in the particular domain;
+- emotional tunnel vision.
+
+Do not use arbitrary stupidity as a plot mechanism.
+
+### Recognized foolishness rule
+
+If a character truly does make a flagrantly impractical decision, other competent people should normally be able to recognize that fact.
+
+Example:
+
+An adult announces:
+
+> "I am setting out for the next town. I have always dreamed of becoming a baker."
+
+If that person has:
+
+- no money;
+- no apprenticeship;
+- no tools;
+- no lodging;
+- no introduction;
+- no knowledge of the town;
+- no plan for the winter road;
+
+the surrounding characters should not all nod as though this is an ordinary professional transition.
+
+A parent, friend, sibling, steward, innkeeper, guild baker, or sensible stranger may respond in substance:
+
+> "Dear child, what exactly is your plan?"
+
+The would-be baker may go anyway.
+
+That is valid characterization.
+
+What matters is that the setting recognizes the recklessness.
+
+### Domain competence
+
+Competence is domain-specific.
+
+A brilliant mage may be poor with money.
+
+A capable cavalry officer may misunderstand agriculture.
+
+A merchant may be helpless in the wilderness.
+
+A skilled diplomat may know nothing about mining.
+
+A wilderness scout may find formal court procedure baffling.
+
+Do not convert one area of expertise into universal genius.
+
+Do not convert one area of ignorance into universal stupidity.
+
+### Non-romantic focuses
+
+Every recurring major character should possess concerns that remain important even when no romance is occurring.
+
+Track, where established:
+
+- profession;
+- vocation;
+- craft;
+- scholarship;
+- religion;
+- magical discipline;
+- military duty;
+- finances;
+- inheritance;
+- estate management;
+- family responsibility;
+- friendships;
+- civic obligations;
+- artistic interests;
+- hobbies;
+- food preferences;
+- physical training;
+- travel;
+- political goals;
+- personal ethics;
+- fears unrelated to lovers;
+- ambitions unrelated to marriage;
+- things they are proud of;
+- things they find tedious;
+- things they are unusually good at;
+- things they consistently neglect.
+
+Romance should intersect with a life.
+
+It should not replace the life.
+
+### Advantages as character state
+
+Characters should also possess genuine advantages.
+
+Examples include:
+
+- excellent memory;
+- patience;
+- physical courage;
+- mathematical skill;
+- political instinct;
+- emotional insight;
+- social charm;
+- magical precision;
+- riding ability;
+- household management;
+- languages;
+- practical craft;
+- financial discipline;
+- willingness to ask for help;
+- strong family support;
+- reliable friends;
+- unusual stamina;
+- careful planning.
+
+Advantages matter because competent people with flaws are more interesting than people who fail only because the plot temporarily removes their common sense.
+
+### Internal reasoning rule
+
+Internal monologue should usually reflect what the character reasonably knows.
+
+A character may rationalize.
+
+A character may lie to themselves.
+
+A character may deliberately ignore advice.
+
+A character may badly misjudge a person.
+
+But the prose should distinguish:
+
+- ignorance;
+- bad information;
+- emotional reasoning;
+- conscious risk;
+- actual foolishness.
+
+Do not make a character forget obvious facts merely to create a scene.
+
+### Continuity-catalog fields
+
+For major recurring characters, preserve durable state for:
+
+- non-romantic goals;
+- occupational focus;
+- economic concerns;
+- magical interests;
+- mundane skills;
+- martial ability;
+- civic or institutional obligations;
+- hobbies;
+- foibles;
+- pet annoyances;
+- prejudices or assumptions;
+- planning style;
+- risk tolerance;
+- strongest practical advantages;
+- known blind spots;
+- domains of competence;
+- domains of inexperience;
+- recurring bad habits;
+- how readily they accept correction.
+
+These should evolve through story experience.
+
+A naïve graduate can become more practical.
+
+A proud officer can learn to delegate.
+
+A poor planner can remain a poor planner while becoming very aware that everyone else knows it.
+
+That is character development.
+
+---
+
 ## 6. Student protection and graduation threshold
 
 The opening generation should generally begin as eager, comparatively naive students.
