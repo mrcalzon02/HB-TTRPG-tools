@@ -26,16 +26,17 @@ When an hourly or scheduled story-continuation task runs:
 3. Read **docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md** for the current rolling N+1 through N+5 forward plan.
 4. Read **docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md** for the active calendar, season, lunar phase, festivals, economic cycle, pantheon, food culture, travel conditions, and political year.
 5. Read **docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md** and retrieve the persistent Excel workbook **Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx** from the connected Google Drive for long-memory character state.
-6. Reconcile all five controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-7. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-8. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, or reset long-memory character state without a continuity reason.
-8. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-9. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-10. Keep every romantic or sexualized character an adult.
-11. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-12. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-13. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-14. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+6. Read **docs/beneath-dappled-oaks/05-LITTLE-COURT-REGIONAL-CUSTOMS-FOLK-PRACTICES.md** for local festivals, roadside shrines, household rites, village superstitions, lovers' places, minor saints and spirits, regional food customs, and the culturally dense "Little Year."
+7. Reconcile all six controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+8. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+9. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, or flatten established local culture without a continuity reason.
+10. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+11. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+12. Keep every romantic or sexualized character an adult.
+13. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+14. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+15. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+16. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -729,6 +730,25 @@ Do not overwrite history simply because a newer feeling is stronger.
 A recent memory can cool without ceasing to exist.
 
 A deeply ingrained preference can coexist with a powerful recent lover-specific association.
+
+## 12C. Little Year and local-culture control
+
+For enduring regional culture, always read:
+
+**docs/beneath-dappled-oaks/05-LITTLE-COURT-REGIONAL-CUSTOMS-FOLK-PRACTICES.md**
+
+The Realm contains **thousands** of small local observances beyond the great civic festivals: roadside shrines, village saints, harvest superstitions, household protections, mine rites, bridge customs, lovers' places, food traditions, seasonal taboos, and festivals known only within a few communities.
+
+The setting must therefore never imply that the Great Gods and thirteen national months exhaust religious or cultural life.
+
+Two explicit canon anchors are:
+
+- **Cedra Delby:** during the harvest span, households reserve a finger-width piece of morning bread dough and leave it outside the door at night as a small offering of life and food to protective spirits. Poor households use dough; wealthier houses may leave fruit. Adults may mock the superstition while continuing to perform it.
+- **Kallioused Lake:** a famous local lovers' retreat associated with secluded willows and bushes, first kisses, glowbugs, colorful aquatic plants, little floating lights, full-moon courtship, and occasional skinny dipping by adults as well as younger adult lovers. Nearby elders habitually disapprove despite often knowing the secluded coves extremely well.
+
+Local custom is continuity, not disposable decoration. Once a recurring character, household, village, estate, road, shrine, mine, bridge, or district acquires a custom, food, taboo, local saint, lovers' place, or seasonal observance, preserve it and record it when it becomes plot-relevant or character-defining.
+
+Harmless folk practices should also complicate Dark Arts investigations because thresholds, knots, food offerings, carved tokens, ribbons, and hidden household objects may resemble the physical vocabulary of forbidden sympathetic magic.
 
 ## 13. Continuation priorities for the hourly story runner
 
