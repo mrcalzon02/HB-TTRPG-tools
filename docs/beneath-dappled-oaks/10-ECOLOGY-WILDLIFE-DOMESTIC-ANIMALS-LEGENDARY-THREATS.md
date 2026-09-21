@@ -1255,6 +1255,210 @@ These clues should be used logically rather than mystically by default.
 
 ---
 
+# XXVIII-A. Ecological Sabotage and Environmental Warfare
+
+Ecology can be attacked deliberately.
+
+A rival House, merchant bloc, military faction, criminal organization, land syndicate, cult, or corrupt local official may manipulate the environment to weaken an opponent without attacking them openly.
+
+These plots are especially dangerous because environmental harm often looks accidental at first.
+
+## Slow livestock poisoning
+
+A classic rural sabotage plot involves a shared watering source used by multiple ranchers or herding families.
+
+A mild, slow-acting contaminant may produce:
+
+- reduced appetite;
+- weakness;
+- reproductive decline;
+- poor weight gain;
+- illness appearing across several herds;
+- eventual deaths.
+
+The important mystery is often not **whether** the water is contaminated.
+
+It is **when, by whom, and why**.
+
+Because the effects emerge slowly, the contamination may have begun:
+
+- weeks ago;
+- months ago;
+- before the current political dispute;
+- before the current steward or magistrate took office.
+
+It may also have been renewed periodically.
+
+That makes attribution difficult.
+
+By the time investigators recognize the pattern:
+
+- the original container is gone;
+- rain and inflow have diluted evidence;
+- dozens of people have accessed the shore;
+- livestock have moved between pastures;
+- multiple households have drawn water;
+- the perpetrator may no longer be nearby.
+
+The heroes may be able to stop further deaths without ever proving who began the attack.
+
+That is a valid outcome.
+
+## Political purpose
+
+Destroying livestock can weaken a rival without killing a single noble.
+
+Consequences may include:
+
+- bankrupt ranchers;
+- loss of cavalry remounts;
+- meat shortages;
+- leather shortages;
+- cheese and milk shortages;
+- unpaid debts;
+- emergency grain purchases;
+- migration away from damaged land;
+- collapse of House patronage;
+- political blame directed at local magistrates.
+
+A rival House may benefit simply by appearing more competent during the crisis.
+
+## Repeated contamination
+
+A long-running incident may involve repeated small renewals rather than one dramatic act.
+
+This creates several possibilities:
+
+- the original saboteur is still active;
+- different agents are following old instructions;
+- a local collaborator has continued the work;
+- a second faction discovered the scheme and decided to exploit it.
+
+Investigators may stop the present contamination while the historical origin remains unknowable.
+
+## Deliberately provoking beasts
+
+Environmental sabotage can also manipulate wildlife.
+
+A faction may deliberately create conditions that cause a dangerous species to become more active around:
+
+- roads;
+- farms;
+- city outskirts;
+- rival estates;
+- trade corridors.
+
+The goal may be:
+
+- economic disruption;
+- public fear;
+- forced military deployment;
+- damage to crops;
+- weakened patrol coverage elsewhere;
+- loss of confidence in a House or magistrate.
+
+The beast itself is not necessarily controlled like a puppet.
+
+The saboteur may simply alter the conditions around it.
+
+This distinction matters because the resulting animal behavior may look natural.
+
+## Manufactured vulnerability
+
+An ecological crisis can be used to expose a political weakness.
+
+Examples:
+
+- predators drive livestock away from a House-controlled district;
+- repeated boar raids make a magistrate look incompetent;
+- a disrupted fish run damages a river faction's food supply;
+- a magical predator closes a trade road;
+- pollinator collapse destroys orchards belonging to one coalition.
+
+The objective may be less about immediate destruction and more about creating the public impression:
+
+**They cannot protect you.**
+
+That can be politically devastating.
+
+## False ecological explanations
+
+Saboteurs may deliberately encourage investigators to blame:
+
+- natural migration;
+- drought;
+- disease;
+- magical instability;
+- ordinary predators;
+- poor husbandry.
+
+Conversely, innocent ecological events may be blamed on rivals because politics makes conspiracy more emotionally satisfying than bad luck.
+
+The setting should preserve both possibilities.
+
+## Investigation logic
+
+Ecological sabotage investigations may involve:
+
+- comparing affected and unaffected herds;
+- mapping water access;
+- examining feed;
+- reviewing land and grazing disputes;
+- identifying who benefits economically;
+- tracing recent purchases or unusual visitors;
+- interviewing shepherds, ranchers, ferrymen, hunters, and veterinarians;
+- reconstructing when symptoms first appeared.
+
+A perfect answer is not required.
+
+Sometimes investigators can establish:
+
+- the current cause;
+- the likely period when it began;
+- the political beneficiary;
+- the method category;
+- the continuing access point;
+
+without proving the identity of the original perpetrator.
+
+That uncertainty is useful.
+
+## Strategic beast incitement
+
+A deliberate effort to increase beast activity can create a secondary crisis.
+
+If a city suddenly faces more attacks, the resulting response may pull:
+
+- wardens;
+- cavalry;
+- healers;
+- engineers;
+- food stores;
+
+away from another region.
+
+The apparent ecological problem can therefore be part of a larger strategy.
+
+A rival does not need to defeat a House directly.
+
+They may only need to make the House spend money, lose prestige, exhaust soldiers, and neglect another obligation.
+
+## Story principle
+
+Environmental sabotage should create layered plots:
+
+1. immediate harm;
+2. ecological diagnosis;
+3. emergency response;
+4. political consequences;
+5. attribution problem;
+6. possible retaliation;
+7. unresolved historical uncertainty.
+
+Stopping the damage and solving the crime are not always the same thing.
+
+---
+
 # XXVIII. Story-Runner Ecology Rules
 
 Before using an animal or ecological event, consider:
