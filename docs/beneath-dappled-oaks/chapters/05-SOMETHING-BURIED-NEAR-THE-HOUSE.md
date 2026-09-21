@@ -1001,3 +1001,1414 @@ Judge Vaun sealed the case.
 The east doors opened.
 
 Reedglass House waited beyond them, warm and elegant and full of people who had keys.
+
+
+---
+
+The room Judge Vaun chose had once been a breakfast parlor.
+
+Damaris knew this because her grandmother had hated it.
+
+Too little morning sun, Grandmother Ilyra had complained. Too much canal glare. The table was the wrong height. The fireplace smoked whenever the eastern wind turned. The ceiling roses looked like cabbages.
+
+The family had eventually surrendered and converted the room into a household accounting chamber.
+
+That made it ideal for forbidden magic.
+
+Not aesthetically.
+
+Administratively.
+
+It had one door, two tall windows, a stone floor, a broad central table and enough shelving that Judge Vaun could make half the room look official simply by putting numbered evidence slips on it.
+
+Lord Aereth had not been invited.
+
+He had objected.
+
+They heard him objecting now from somewhere beyond the door.
+
+"I am perfectly capable of attending an examination concerning my own household."
+
+A man's voice answered too quietly to distinguish.
+
+Then Aereth again.
+
+"My memory is not failing."
+
+Damaris looked at her aunt.
+
+Meris looked at the evidence case.
+
+Rhyl looked at the door.
+
+Mireth looked at Damaris.
+
+Judge Vaun did not look at anything except her clerk.
+
+"Time?"
+
+"Third bell and seventeen."
+
+"Record Lord Aereth's request to attend and my refusal pending preliminary examination."
+
+The clerk wrote.
+
+Damaris folded her arms.
+
+"You could have told him yourself."
+
+"I did."
+
+"Then why is he still arguing?"
+
+"Because hearing and accepting are different legal categories."
+
+Rhyl coughed into his fist.
+
+Vaun looked at him.
+
+"Do you disagree?"
+
+"No, Judge."
+
+"Good."
+
+The outer argument ended with the unmistakable sound of someone walking away while trying to make every footstep legally actionable.
+
+Damaris closed her eyes.
+
+"He is usually charming."
+
+Meris said, "He believes he still is."
+
+That hurt more than it should have.
+
+Judge Vaun opened the evidence case.
+
+Inside, the grey silk bundle rested on white cloth.
+
+The copper transit token had been placed in a separate shallow tray. Soil samples stood in sealed paper packets beside it.
+
+Vaun did not touch the bundle.
+
+Instead she removed a folded square of dark mesh from her own case.
+
+The mesh looked disappointingly ordinary.
+
+Damaris had expected forbidden-magic law to involve more silver.
+
+Mireth leaned forward.
+
+"Cold iron?"
+
+"No."
+
+"Lead thread?"
+
+"No."
+
+"What is it?"
+
+"Expensive."
+
+Mireth stared.
+
+Vaun unfolded it over the table.
+
+"Silver, ash fiber, undyed linen, powdered glass fixed in gum, and a legally tedious amount of work by people who charge by the inch."
+
+"Sympathetic screen?"
+
+"Passive isolation screen."
+
+"Difference?"
+
+"A sympathetic screen is a category. This is one design within it. Do not let barristers teach you that nouns are mechanisms."
+
+Mireth nodded.
+
+She would remember that.
+
+Damaris suspected Judge Vaun knew she would.
+
+The mesh was pinned at four corners around the evidence bundle, leaving the object visible through a faint dark grid.
+
+Vaun placed three small ceramic markers around it.
+
+No glow appeared.
+
+No ominous whisper filled the room.
+
+Nothing turned green.
+
+Rhyl glanced at Mireth.
+
+Mireth shrugged.
+
+Vaun noticed.
+
+"You are disappointed."
+
+"No."
+
+"You are both disappointed."
+
+Rhyl said, "I expected at least one candle."
+
+"That is theater."
+
+"Does theater never help?"
+
+"In court? Constantly. In evidence handling? Rarely."
+
+She put on gloves.
+
+"Now. The wrapping."
+
+The black thread crossed the grey silk seven times, each turn reversing direction.
+
+Vaun examined the final knot through a small magnifying lens.
+
+"Not a closing knot."
+
+Mireth moved nearer.
+
+"What is it?"
+
+"A counting knot."
+
+Damaris felt something tighten behind her ribs.
+
+"Seven?"
+
+"Seven turns. The knot itself is not seven."
+
+Vaun indicated the tiny structure where the waxed thread ended.
+
+"Three loops. One closed. Two open."
+
+"What does that signify?" Meris asked.
+
+"It signifies three loops, one closed and two open."
+
+Meris gave her a look.
+
+Vaun returned it.
+
+"I am not being difficult for pleasure, Lady Meris."
+
+Damaris doubted that.
+
+"I am refusing to invent meaning because the object has successfully made us nervous."
+
+She cut the thread.
+
+Everyone in the room stopped breathing.
+
+Nothing happened.
+
+Judge Vaun waited.
+
+Then she cut the second crossing.
+
+Then the third.
+
+Each severed length went into its own numbered envelope.
+
+Mireth frowned.
+
+"Separate?"
+
+"If the wax differs between lengths, I want to know."
+
+The fourth.
+
+The fifth.
+
+The sixth.
+
+The seventh.
+
+The silk loosened.
+
+Beneath it was another wrapping.
+
+Not silk.
+
+Linen.
+
+White once, now stained brown at one corner.
+
+A smell entered the room.
+
+Not rot.
+
+Lavender.
+
+Damaris knew it immediately.
+
+Her stomach dropped.
+
+"No."
+
+Judge Vaun froze.
+
+"What?"
+
+Damaris stepped closer.
+
+"That is house linen."
+
+Meris's eyes narrowed.
+
+"You cannot know that from color."
+
+"Not the cloth. The scent."
+
+Mireth inhaled carefully.
+
+Lavender, yes.
+
+Under it something sharper.
+
+Soap.
+
+Rosemary ash.
+
+Damaris looked at her aunt.
+
+"Our laundry stores use lavender water in the final rinse for family bed linen."
+
+Meris said, "So do many houses."
+
+"Not like that."
+
+Damaris pointed.
+
+"Smell beneath it."
+
+Rhyl did.
+
+His face changed.
+
+"Smoke?"
+
+"Rosemary ash," Damaris said. "The laundry mistress adds it to white linen in wet weather. She says canal damp makes cloth smell dead."
+
+Meris looked toward the door.
+
+"Maela."
+
+Damaris's pulse quickened.
+
+"Do not summon her like a suspect."
+
+"I was going to summon her as the woman responsible for the laundry."
+
+"Your voice disagreed."
+
+Judge Vaun held up one finger.
+
+Meris stopped.
+
+Again.
+
+Damaris was beginning to consider hiring the judge for family dinners.
+
+Vaun said, "Who has access to family bed linen?"
+
+Damaris answered.
+
+"Maela Sorn, the laundry mistress. Four laundresses. Two linen maids. Chamber attendants can collect clean sets. Dressers sometimes enter the linen rooms for pressing cloths. Housekeepers have master keys."
+
+"Family?"
+
+"Technically we can go anywhere."
+
+"Practically?"
+
+"We don't."
+
+Rhyl looked at her.
+
+"Why not?"
+
+"Because entering the laundry to prove you can is how you discover thirty employees think you are an ass."
+
+Mireth smiled.
+
+"Healthy institution."
+
+"Occasionally."
+
+Vaun looked at Meris.
+
+"Tradespeople?"
+
+"Soap merchant. Lavender supplier. Furnace sweep. Seamstress when repairs overflow the household staff."
+
+"Outside washerwomen?"
+
+"During major receptions."
+
+Damaris thought of the Hall of Seven Lamps reception two nights away.
+
+Not here.
+
+Still.
+
+Households expanded their access networks around ceremonies.
+
+More temporary hands.
+
+More borrowed staff.
+
+More deliveries.
+
+More reasons for someone to belong.
+
+Vaun peeled the linen open.
+
+Inside lay five objects.
+
+A narrow strip of blue cloth.
+
+Three strands of pale hair tied together.
+
+A sliver of sealing wax impressed with half a crest.
+
+A tiny folded paper packet.
+
+And a shirt button.
+
+Damaris stared.
+
+The button was mother-of-pearl with a silver rim.
+
+Caladren household formalwear.
+
+Meris whispered something very impolite.
+
+Judge Vaun looked at her.
+
+"I will omit that from the formal record."
+
+"Thank you."
+
+"Unless it becomes relevant."
+
+"Of course."
+
+Mireth leaned toward the blue cloth.
+
+"Blood?"
+
+A dark brown stain crossed one edge.
+
+Vaun did not answer.
+
+She used forceps to lift the cloth into a shallow glass dish.
+
+Then the hairs.
+
+Then the wax.
+
+Then the packet.
+
+Then the button.
+
+Each separated.
+
+Each numbered.
+
+Rhyl looked at the arrangement.
+
+"That seems almost too obvious."
+
+Vaun nodded.
+
+"Good."
+
+Damaris looked at him.
+
+"Good?"
+
+"He noticed."
+
+Vaun pointed with the forceps.
+
+"If someone wished merely to establish sympathetic contact with Lord Aereth, why include five recognizable household-linked objects?"
+
+"Redundancy?" Mireth asked.
+
+"Possible."
+
+"Strength?"
+
+"Possible."
+
+"To make sure we identify him?"
+
+"Possible."
+
+Damaris looked at the half crest.
+
+"Or to make sure we identify this house."
+
+Vaun nodded.
+
+"Also possible."
+
+Meris's face had become unreadable again.
+
+"What is in the packet?"
+
+"We find out."
+
+The paper was folded into a tiny square and sealed with grease rather than wax.
+
+Vaun opened it over a clean dish.
+
+Grey powder fell out.
+
+Mireth stared.
+
+"Memory salt?"
+
+Judge Vaun's gaze moved to her.
+
+Damaris felt the entire room contract.
+
+Six witness screens.
+
+Thirteen black-glass mnemonic plates.
+
+Two cases memory salt.
+
+West Tower.
+
+Three nights before Silver Night.
+
+Now grey powder inside a sympathetic bundle under Reedglass House.
+
+Vaun touched none of it.
+
+"What makes you say that?"
+
+"Appearance."
+
+"Anything else?"
+
+"No."
+
+"Then?"
+
+Mireth swallowed.
+
+"It resembles memory salt."
+
+"Good."
+
+Rhyl leaned against the table edge, then immediately noticed the judge's expression and stopped leaning against the table edge.
+
+"Can it be tested?"
+
+"Yes."
+
+"Here?"
+
+"No."
+
+"Why?"
+
+"Because I am a judge, not an alchemical laboratory."
+
+Damaris looked at the powder.
+
+"Would ordinary people have access to it?"
+
+Vaun considered.
+
+"Licensed memory workers. Certain healers. tribunal evidence offices. Hall archives. Some undertakers. Some religious houses. Several alchemical suppliers under record. Illicit practitioners through theft, diversion or resale."
+
+"River freight?"
+
+"Everything becomes river freight eventually."
+
+That was sufficiently Caladren that Damaris almost resented her for saying it.
+
+Meris touched the back of an empty chair.
+
+"If it is memory salt—"
+
+"It is not yet memory salt."
+
+"If it is."
+
+Vaun waited.
+
+Meris looked toward the closed door.
+
+"Could it cause Aereth's lapses?"
+
+"Not by being salt."
+
+"With a working."
+
+"Potentially."
+
+"Could someone make him believe objects were moved?"
+
+"Potentially."
+
+"Could someone make him suspicious of particular people?"
+
+Vaun's expression hardened.
+
+"Potentially."
+
+Damaris heard the change.
+
+Not uncertainty disappearing.
+
+Something else.
+
+Recognition of a category.
+
+"What kind of curse is this?" she asked.
+
+Vaun was silent for several seconds.
+
+"A sympathetic agitation working can do many things depending on construction. Pain. Sleeplessness. fixation. aversion. Compulsion is harder and legally treated differently. Memory interference is harder still."
+
+"Harder means possible."
+
+"Yes."
+
+Mireth looked at the five objects.
+
+"But this isn't built like a simple agitation?"
+
+Vaun glanced at her.
+
+"Why?"
+
+"The variety."
+
+"Continue."
+
+Mireth pointed without touching.
+
+"Hair gives a body link if it is Aereth's. Clothing gives repeated-contact link if it is his. Button may give ownership or household association. Seal wax could link office or authority. Linen wrapping links household access."
+
+Damaris saw it.
+
+"And the transit token."
+
+Rhyl looked at the copper disk in its separate tray.
+
+"Movement?"
+
+Vaun's eyes narrowed slightly.
+
+"Perhaps."
+
+Damaris's thoughts accelerated.
+
+"Not just movement. Authority over movement."
+
+Meris looked at her.
+
+Damaris continued.
+
+"An assay token is not cargo. It is proof that cargo crossed a controlled handoff."
+
+Mireth looked from the token to the half-seal.
+
+"Authority."
+
+"Custody," Damaris said.
+
+The word landed.
+
+Judge Vaun went very still.
+
+Rhyl looked at her.
+
+"What?"
+
+Vaun removed her gloves.
+
+Slowly.
+
+"I want the Hall material comparison requested immediately."
+
+Her clerk looked up.
+
+"Thread?"
+
+"Thread. Wax. Salt if the powder confirms. Any registered supplier overlap that can be lawfully disclosed."
+
+Damaris's mouth went dry.
+
+"Because of Silver Night?"
+
+"Because we now have a second context involving custody symbolism, possible memory material and institutional sealing supplies."
+
+"That sounds like yes."
+
+"It sounds like exactly what I said."
+
+Mireth understood first.
+
+"This isn't proof the same people did both."
+
+"No."
+
+"But it could be the same professional grammar."
+
+Vaun looked at her.
+
+"Yes."
+
+The room became quiet.
+
+That was worse.
+
+A villain could be arrested.
+
+A grammar could be taught.
+
+A method could travel.
+
+A supplier could sell to dozens of institutions.
+
+A corrupt clerk could move material without knowing what it would become.
+
+A laundress could carry linen.
+
+A courier could carry salt.
+
+A lover could carry hair.
+
+A judge could recognize the finished shape and still not know whose hands had assembled it.
+
+Damaris looked at Reedglass House differently.
+
+Again.
+
+The first time had been in the garden.
+
+This was worse.
+
+The house was not a fortress someone had penetrated.
+
+It was a living system.
+
+People came through it every day because houses needed people.
+
+People who washed.
+
+People who cooked.
+
+People who repaired.
+
+People who delivered.
+
+People who loved.
+
+People who slept in beds and left hair on pillows.
+
+People who signed receipts and forgot who had carried the parcel upstairs.
+
+Mireth said softly, "We need the chamber attendant."
+
+Meris's eyes flashed.
+
+"The one Aereth dismissed?"
+
+"Especially her."
+
+"Why?"
+
+"Because if he is being made suspicious, then the person he accused may be the person who noticed something."
+
+Damaris looked at Mireth.
+
+There.
+
+The lesson from the Covenant archive had become flesh.
+
+Not who could defeat the wards.
+
+Who changed the sheets.
+
+Judge Vaun nodded.
+
+"Name?"
+
+Meris hesitated.
+
+Damaris answered.
+
+"Talia Venn."
+
+"Where is she?"
+
+"Servants' hall, probably."
+
+Meris said, "She was given the morning off after being reinstated."
+
+Damaris stared at her.
+
+"After being falsely accused of theft."
+
+"Yes."
+
+"Without an apology."
+
+"Damaris."
+
+"No. If we're about to ask whether she noticed something while doing her work, we might begin by acknowledging that the family member she served humiliated her for doing it."
+
+Rhyl looked down.
+
+Not away from Damaris.
+
+Down.
+
+A small courtesy, giving the anger privacy without pretending not to hear it.
+
+Meris's jaw tightened.
+
+"You are enjoying having a judge present."
+
+"Immensely."
+
+Judge Vaun said, "I charge by the hour."
+
+Rhyl made the mistake of laughing.
+
+It escaped him once, sharp and surprised.
+
+Damaris looked at him.
+
+He tried to become serious.
+
+Failed.
+
+Her anger cracked.
+
+Not vanished.
+
+Cracked enough to let air through.
+
+Meris stared at all three of them.
+
+Then, impossibly, the corner of her mouth moved.
+
+"Fine," she said. "Bring Talia. Ask her to come voluntarily. Tell her she is not accused of anything."
+
+Judge Vaun looked at her clerk.
+
+"Record that."
+
+Meris sighed.
+
+"Of course."
+
+---
+
+Talia Venn was twenty-eight, furious, and wearing a borrowed kitchen shawl because she had been halfway through eating honey bread when a footman found her.
+
+Damaris liked her immediately.
+
+Not because she was furious.
+
+Because she did not hide it.
+
+"My lady."
+
+She curtsied to Meris.
+
+Then to Damaris.
+
+Then to Judge Vaun.
+
+She looked at Rhyl and Mireth, decided neither required a curtsy, and sat only after Vaun explicitly offered the chair.
+
+"You are not accused of theft," Vaun said.
+
+Talia's face tightened.
+
+"Today?"
+
+Damaris closed her eyes.
+
+Meris absorbed the blow.
+
+To her credit, she did not object.
+
+Vaun said, "Today or yesterday, so far as this inquiry is concerned."
+
+"Lord Aereth disagreed yesterday."
+
+"Lord Aereth was wrong."
+
+Talia looked at the judge.
+
+Then at Meris.
+
+"Am I permitted to enjoy hearing that?"
+
+Vaun considered.
+
+"Quietly."
+
+Talia nodded.
+
+"Thank you."
+
+Damaris decided she liked Judge Vaun too.
+
+This was becoming inconvenient.
+
+Vaun placed no evidence in front of Talia.
+
+"Tell me about Lord Aereth's rooms from the morning he arrived."
+
+Talia frowned.
+
+"Why?"
+
+"Because something has been recovered from the east garden and we are establishing household access."
+
+Fear replaced anger.
+
+Not guilt.
+
+Damaris watched carefully.
+
+Talia's hands closed around the kitchen shawl.
+
+"Is someone hurt?"
+
+"Not that we know."
+
+"His lordship?"
+
+"Not that we know."
+
+That answer did not comfort her.
+
+Good, Damaris thought.
+
+It should not.
+
+Talia took a breath.
+
+"He arrived after late bell. Two trunks, one document chest, one small valise. His own man came with him, but Master Corren had taken ill on the road."
+
+"His valet?" Damaris asked.
+
+"Yes."
+
+"Who attended him instead?"
+
+"Me for chamber. Pellin for clothes."
+
+Meris frowned.
+
+"Pellin?"
+
+"Second dresser."
+
+"I know who Pellin is."
+
+Talia's mouth flattened.
+
+Of course she did.
+
+Vaun intervened.
+
+"Continue."
+
+"His lordship asked for the blue guest room. We changed the bed before he came."
+
+"Who is we?"
+
+"Me and Sera."
+
+"Full name."
+
+"Sera Leth."
+
+"Where did the clean linen come from?"
+
+"East linen press."
+
+Damaris looked at Mireth.
+
+Mireth noticed.
+
+Vaun noticed both.
+
+"Who collected it?"
+
+Talia thought.
+
+"Sera."
+
+"Did you see her collect it?"
+
+"No."
+
+"Then what do you know?"
+
+Talia blinked.
+
+"She brought it."
+
+"Good."
+
+The judge's precision was contagious.
+
+Talia sat straighter.
+
+"We made the bed. I aired the room. Pellin unpacked his lordship's formal clothes. The document chest stayed locked."
+
+"Anything unusual?"
+
+"No."
+
+"Anything merely annoying?"
+
+Talia almost smiled.
+
+"His lordship disliked the pillow."
+
+Damaris remembered Aereth's lifelong war against pillows.
+
+That, at least, was normal.
+
+"He said it smelled too strongly of lavender. I changed it."
+
+"Where did the rejected pillowcase go?"
+
+"Laundry return."
+
+"Who carried it?"
+
+"I did."
+
+"Directly?"
+
+Talia paused.
+
+"No."
+
+The room sharpened.
+
+"Where?"
+
+"I left it in the east service basket."
+
+Damaris knew the basket.
+
+A wicker hamper in the servants' corridor where used linens accumulated before a laundry runner collected them.
+
+Accessible to every chamber attendant on the east floor.
+
+Also to dressers.
+
+Housemaids.
+
+Footmen who cut through the passage.
+
+Anyone delivering hot water.
+
+Anyone with a reason to be there.
+
+Vaun said, "How long?"
+
+"I don't know. Half an hour? Maybe more."
+
+"Did you see who collected it?"
+
+"No."
+
+"Anything else?"
+
+Talia looked uncomfortable.
+
+"His lordship cut himself."
+
+Meris straightened.
+
+"When?"
+
+"First morning."
+
+"How?"
+
+"Shaving."
+
+Rhyl looked at the stained blue cloth in the evidence dish.
+
+Damaris did too.
+
+Vaun did not.
+
+"What happened to the cloth?"
+
+Talia swallowed.
+
+"Which cloth?"
+
+"The cloth used for the blood."
+
+"Pellin gave him a face cloth."
+
+"Color?"
+
+Talia thought.
+
+"Blue."
+
+No one spoke.
+
+Vaun's voice remained level.
+
+"What happened to it?"
+
+"I put it in the wash basin."
+
+"Then?"
+
+"I don't know."
+
+"You did not remove it?"
+
+"No. Pellin was still in the room when I left."
+
+Meris's face changed.
+
+Barely.
+
+Damaris saw it.
+
+"Where is Pellin now?" Vaun asked.
+
+Talia looked at Meris.
+
+"My lady?"
+
+Meris answered.
+
+"He should be in the dressing rooms."
+
+Talia shook her head.
+
+"No."
+
+Damaris felt cold.
+
+"No?"
+
+"He asked to leave after breakfast."
+
+"Why?"
+
+"Said his sister had taken sick."
+
+Meris stood.
+
+The chair legs scraped stone.
+
+"When?"
+
+"Before second bell."
+
+The garden had been discovered yesterday.
+
+Judge Vaun had arrived this morning.
+
+Pellin had left before second bell.
+
+Damaris looked at the evidence.
+
+Blue cloth.
+
+Possible blood.
+
+House linen.
+
+A formal button.
+
+Hair.
+
+Seal wax.
+
+Memory-salt-like powder.
+
+All of it assembled from things a dresser, chamber attendant, laundry worker, clerk, lover, or thief might touch without ever forcing a door.
+
+Rhyl spoke quietly.
+
+"Did Pellin know the judge was coming?"
+
+Meris looked at him.
+
+"Household staff knew we expected a judicial visitor."
+
+"Did they know why?"
+
+"No."
+
+Talia hesitated.
+
+"People talk."
+
+Damaris almost laughed.
+
+Of course they did.
+
+Great Houses spent fortunes on cipher clerks while kitchens achieved strategic intelligence dominance before breakfast.
+
+Vaun looked at Talia.
+
+"What would they have known?"
+
+"That Master Oren found something in the east garden. That Lady Meris sent for a judge. That nobody was to touch the rosemary bed."
+
+"Would Pellin know?"
+
+"Probably."
+
+Meris turned toward the door.
+
+Judge Vaun's voice stopped her.
+
+"Do not send guards."
+
+Meris turned back.
+
+"He may be fleeing."
+
+"He may be visiting a sick sister."
+
+"He handled Aereth's clothes."
+
+"That is his employment."
+
+"He was alone with the bloody cloth."
+
+"We do not know that the cloth in my evidence dish is the same cloth."
+
+Meris's anger rose.
+
+Damaris recognized it because it looked like her own.
+
+Vaun stood.
+
+"If you send armed house guards after a servant on the strength of coincidence, you may frighten an innocent man, contaminate testimony, alert a guilty one, or give whoever built this thing exactly the household panic they intended."
+
+"What do you suggest?"
+
+"Find out whether he has a sister."
+
+Talia raised one hand slightly.
+
+Everyone looked at her.
+
+"He does."
+
+Vaun nodded.
+
+"Is she sick?"
+
+Talia's face became apologetic.
+
+"She is always sick."
+
+Rhyl frowned.
+
+"Always?"
+
+"She has marsh lung."
+
+Damaris knew the illness.
+
+Not usually fatal.
+
+Often miserable.
+
+Conveniently recurrent.
+
+Vaun looked at Rhyl.
+
+"Can the Red Hart locate a city dresser without announcing a manhunt?"
+
+Rhyl considered.
+
+"Probably."
+
+"That was not confidence."
+
+"I am trained to find people who are lost in forests."
+
+"This one may be lost in Aurelith."
+
+"Cities are badly organized forests."
+
+Damaris looked at him.
+
+He shrugged.
+
+"Too many paths."
+
+Vaun almost smiled.
+
+"Find him. Observe first. Do not detain him. Do not accuse him. If he is with his sister, confirm it without climbing through a window."
+
+Rhyl nodded.
+
+Damaris said, "I'm coming."
+
+Meris said, "No."
+
+Damaris turned.
+
+There it was.
+
+Family.
+
+Not evidence.
+
+Not law.
+
+Family.
+
+"You do not get to order me away from this after giving me a cipher to walk into Silver Night."
+
+Talia looked very carefully at the floor.
+
+Meris's face hardened.
+
+"This is my house."
+
+"And apparently somebody else has been using it."
+
+The words struck.
+
+Damaris regretted them immediately.
+
+Not because they were false.
+
+Because Meris looked hurt.
+
+Only for a heartbeat.
+
+Then the court face returned.
+
+Rhyl stepped closer to Damaris.
+
+Not touching.
+
+Still.
+
+Always that maddening half-distance.
+
+Judge Vaun looked between aunt and niece.
+
+"Damaris stays here."
+
+Damaris stared at her.
+
+"What?"
+
+"Rhyl can find a dresser without you."
+
+"I know the city."
+
+"So does he."
+
+"I know Pellin."
+
+"Which makes you more visible."
+
+Damaris opened her mouth.
+
+Vaun continued.
+
+"You are also the person in this room best positioned to map household access without requiring Lady Meris to pretend she remembers which footman carries bathwater to which floor."
+
+Meris said, "I know my household."
+
+Talia looked at the floor again.
+
+Damaris almost admired her survival instincts.
+
+Vaun ignored Meris.
+
+"Damaris, you wanted your knowledge of this house treated as a skill. I am treating it as one."
+
+That ended the argument.
+
+Not pleasantly.
+
+But completely.
+
+Rhyl picked up his coat.
+
+At the door he looked back at Damaris.
+
+She wanted to tell him to be careful.
+
+That felt absurd.
+
+He was going to find a dresser.
+
+Then she remembered forty-two dead people and six witness screens and a silk bundle beneath rosemary.
+
+"Rhyl."
+
+He waited.
+
+"Do not be heroic."
+
+His mouth tilted.
+
+"I work outside. It happens."
+
+She stared at him.
+
+He left before she could throw anything.
+
+Talia looked at Damaris.
+
+"Is that—"
+
+"No."
+
+Talia nodded.
+
+"Of course."
+
+Mireth covered her mouth.
+
+Meris looked suddenly, viciously amused.
+
+Damaris pointed at all of them.
+
+"Evidence."
+
+Judge Vaun sat back down.
+
+"An excellent suggestion."
+
+Outside, somewhere beyond the green glass and rain-dark stone, the front door of Reedglass House opened.
+
+Rhyl went into Aurelith looking for a man who might be innocent.
+
+Inside, Damaris turned toward the household she had known all her life and began, for the first time, to count how many people could touch a nobleman without ever laying a hand on him.
