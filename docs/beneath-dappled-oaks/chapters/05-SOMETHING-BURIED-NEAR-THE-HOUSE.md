@@ -4078,7 +4078,7 @@ The cipher.
 
 The audit.
 
-The order to gain Ilyan's trust.
+Meris's instruction to stay close enough to understand Valeric instability.
 
 Family access.
 
@@ -4174,7 +4174,7 @@ Rhyl waited.
 
 Damaris felt the other truth behind her teeth.
 
-They ordered me to gain Ilyan's trust.
+Meris asked me to stay close to Ilyan and understand what is happening inside his family.
 
 Not yet.
 
@@ -4403,3 +4403,857 @@ Vaun's face had gone hard.
 She pointed to the Academy line.
 
 "Or the eighth."
+
+
+---
+
+The certified copy arrived on paper too expensive to lie comfortably.
+
+Damaris watched the River Ledger clerk press the final verification seal into blue wax, lift it, inspect the impression, and then inspect Damaris as though she personally had invented fraud to make his afternoon difficult.
+
+He was an elderly elf with narrow shoulders, immaculate cuffs and the exhausted expression of a man who had spent a century discovering that other people's emergencies always arrived five minutes before he intended to go home.
+
+"Seven deliveries," he said.
+
+"That is what the record says."
+
+"I can read."
+
+Damaris looked at the seal.
+
+"Then we have both had a productive day."
+
+Rhyl made a small sound beside her.
+
+The clerk ignored him.
+
+Judge Vaun did not.
+
+Her eyes moved once toward Rhyl, then back to the certified route sheet.
+
+"Original credential creation record?"
+
+"Preserved."
+
+"Audit notice?"
+
+"Preserved."
+
+"Token issue ledger?"
+
+"Preserved."
+
+"Delivery receipts?"
+
+The clerk's expression worsened.
+
+"Being collected."
+
+"All seven."
+
+"I understood the number the first time."
+
+"Good."
+
+Damaris liked him too.
+
+This investigation was becoming crowded with unpleasant people she respected.
+
+The clerk slid the certified copy across the desk.
+
+Vaun did not take it immediately.
+
+"Who can alter the route ledger after certification?"
+
+"No one without leaving an amendment trail."
+
+"Who can create a temporary runner credential?"
+
+"Bond office, transfer office, emergency dispatch supervisor, senior route clerk."
+
+"Who can sponsor one?"
+
+"Same, depending on class."
+
+"Who can issue copper assay tokens?"
+
+"Bond stores."
+
+"Who can remove them?"
+
+"Anyone with hands."
+
+Vaun looked up.
+
+The clerk shrugged.
+
+"You asked who can remove them."
+
+Rhyl's mouth twitched.
+
+Damaris thought of the dead assessor whose seal had been copied.
+
+"Eren Vale."
+
+"No such employee," the clerk said.
+
+"No such person?"
+
+He gave her the look reserved for nobles who had asked a clerk to prove philosophy.
+
+"No such employee. I cannot certify that the person wearing the credential does not exist."
+
+"Fair."
+
+"We have the image plate from the credential office."
+
+Damaris straightened.
+
+Rhyl did too.
+
+Vaun said, "Do not show it to Pellin yet."
+
+The clerk blinked.
+
+"I wasn't going to."
+
+"Good."
+
+Damaris understood.
+
+Pellin had described a young courier, a green-stone ring, clove scent, River Ledger grey. If they put a portrait in front of him now, memory might obligingly improve itself.
+
+"What does the plate show?" Rhyl asked.
+
+The clerk opened a narrow file.
+
+A young elf looked out from the grey glass.
+
+Unremarkable at first.
+
+Dark hair cut close around the ears. Narrow face. Plain courier collar. No smile.
+
+Then Damaris saw the hand resting against the credential board.
+
+A silver ring.
+
+Green stone.
+
+Rhyl exhaled through his nose.
+
+"That matches Pellin's description."
+
+Vaun's head turned.
+
+"Matches one element."
+
+"Two. Age."
+
+"Approximate age."
+
+"Three. Sex."
+
+"Do not become ambitious."
+
+Rhyl surrendered.
+
+Damaris leaned closer.
+
+The ring was turned inward enough that no crest showed.
+
+If there was a crest.
+
+The young man's eyes were light.
+
+Grey, perhaps.
+
+Or green.
+
+The old plate had flattened them into something between.
+
+"Can we copy this?"
+
+"With judicial order."
+
+Vaun produced one.
+
+The clerk stared at her.
+
+"You brought that prepared."
+
+"I have met institutions."
+
+He took it.
+
+A knock sounded at the office door.
+
+One of Vaun's court runners entered carrying a narrow red dispatch case.
+
+"Tribunal laboratory."
+
+Everything else in the room stopped mattering.
+
+Vaun broke the dispatch seal herself.
+
+The report inside was only two pages.
+
+She read both before speaking.
+
+Damaris watched her face and learned nothing.
+
+"Well?" Meris asked from the doorway.
+
+Damaris had not heard her enter.
+
+Vaun looked up.
+
+"The grey powder contains refined mnemonic salt."
+
+No one moved.
+
+Mireth's eyes closed briefly.
+
+Damaris thought of the two cases delivered to the Academy west tower.
+
+Not the same salt.
+
+Not yet.
+
+Not the same batch.
+
+Not yet.
+
+Vaun continued.
+
+"It also contains gum ash and a binding mineral commonly used to keep mnemonic salt stable in damp storage."
+
+Rhyl looked toward the route sheet.
+
+"Warehouses."
+
+"Do not."
+
+"Right."
+
+Vaun turned the page.
+
+"The tincture is correctly compounded."
+
+Aereth, who had insisted on coming despite everyone's objections and had finally been allowed to wait under supervision in the adjoining room, appeared in the doorway.
+
+"My medicine is clean?"
+
+"Within the limits of the laboratory test, yes."
+
+His shoulders dropped.
+
+For a moment he looked younger.
+
+Then the implication reached him.
+
+"If it isn't the medicine."
+
+"No," Vaun said.
+
+"Then it is me."
+
+Damaris moved before she thought.
+
+She stopped in front of him.
+
+"No."
+
+Aereth's expression sharpened.
+
+"You have another explanation?"
+
+"We have evidence someone buried a constructed object beneath your windows containing things associated with you and mnemonic salt."
+
+"Associated with me."
+
+"Possibly."
+
+"Possibly."
+
+His anger returned because anger was easier to hold than fear.
+
+Damaris knew the mechanism now.
+
+She had seen it all morning.
+
+"I am not going to tell you we know more than we know."
+
+"How comforting."
+
+"It should be."
+
+He stared at her.
+
+She stared back.
+
+Behind them, Vaun folded the laboratory report.
+
+"The clean tincture removes one mundane explanation. It does not prove the buried object caused Lord Aereth's symptoms."
+
+Aereth laughed once.
+
+"Of course."
+
+Mireth came to stand beside Damaris.
+
+"Judge."
+
+"Yes?"
+
+"The stabilizer."
+
+Vaun looked at her.
+
+Mireth's attention had gone distant in the way it did when she was fitting pieces together.
+
+"Is gum ash used by the Hall?"
+
+"Sometimes."
+
+"Tribunal?"
+
+"Sometimes."
+
+"Green Covenant?"
+
+"Sometimes."
+
+"So it tells us nothing."
+
+"It tells us the material was prepared to survive damp."
+
+Mireth looked at the clove-scented packet.
+
+"Like something meant to travel through river storage."
+
+Vaun nodded.
+
+"That is a defensible inference."
+
+Damaris looked at the seven addresses.
+
+"What were the other deliveries?"
+
+The River Ledger clerk returned with a stack of receipt slips.
+
+"Not all contents are declared."
+
+"Of course not."
+
+"Two are."
+
+He laid them down.
+
+The first was a council office delivery: replacement seal blanks and archive cord.
+
+The second was the physician's cooperative: three cases of sterile glass ampoules.
+
+"Declared by whom?" Vaun asked.
+
+"Sender."
+
+"Sender identity?"
+
+The clerk checked.
+
+"Lower Reed bonded consolidator."
+
+"Real?"
+
+"Real company. The dispatch account was opened eight days ago."
+
+"By?"
+
+"Clerk authorization."
+
+"Name?"
+
+He read it.
+
+"Joren Tal."
+
+Damaris waited.
+
+The clerk's expression changed.
+
+"That clerk retired six years ago."
+
+Rhyl leaned back.
+
+"Dead?"
+
+"No."
+
+Vaun looked at him.
+
+Rhyl raised both hands.
+
+"I asked."
+
+"Good."
+
+The clerk continued sorting.
+
+"The Academy receipt has no declared contents. Institutional sealed parcel."
+
+Damaris felt the old fear return.
+
+"Recipient?"
+
+"Receiving office."
+
+"Name."
+
+The clerk read the signature.
+
+Then frowned.
+
+"That cannot be right."
+
+Vaun's attention sharpened.
+
+"Why?"
+
+"Signed by Mara Venn."
+
+Damaris looked at Talia.
+
+Talia, who had accompanied Meris because nobody at Reedglass was interested in leaving household testimony unattended anymore, went pale.
+
+"My mother."
+
+Silence.
+
+Damaris looked at her.
+
+"Your mother worked at the Academy?"
+
+"For twenty-three years."
+
+"What department?"
+
+"Receiving and stores."
+
+Talia's mouth had gone dry.
+
+"She died on Silver Night."
+
+Nobody spoke.
+
+The receipt lay between them.
+
+Four days before the massacre.
+
+A fraudulent courier.
+
+A dead woman's signature.
+
+Not dead when she signed it.
+
+Dead four days later.
+
+Judge Vaun touched one finger to the edge of the paper.
+
+"Do you recognize the signature?"
+
+Talia did not reach for it.
+
+She leaned close.
+
+Her eyes moved over the strokes.
+
+"Yes."
+
+"Certain?"
+
+"No."
+
+Vaun nodded.
+
+Talia swallowed.
+
+"It looks like hers."
+
+"Better."
+
+"She made the M too large when she was tired."
+
+Damaris looked.
+
+The first letter rose above the others.
+
+"Was she tired?"
+
+Talia laughed, and the sound broke halfway through.
+
+"She worked Academy receiving."
+
+No one corrected her.
+
+Vaun said, "We will obtain known samples."
+
+Talia nodded.
+
+Then stared at the receipt again.
+
+"She would have remembered."
+
+Damaris felt the room tighten.
+
+"Remembered what?"
+
+"A false courier."
+
+"Would she know it was false?"
+
+"No. But if something was wrong. She noticed everything."
+
+Talia looked ashamed of the certainty.
+
+Then angry at herself for being ashamed.
+
+"She used to come home and complain about parcels with bad corners."
+
+Rhyl said softly, "Bad corners?"
+
+"Crushed. Wet. Retied. Wrong cord. She hated lazy packing."
+
+Talia looked at him.
+
+"She would remember a seal that was wrong."
+
+Vaun's voice stayed gentle.
+
+"Perhaps."
+
+Talia nodded.
+
+Perhaps hurt.
+
+It was still kinder than false certainty.
+
+Damaris looked again at the Academy receipt.
+
+"Where would a sealed institutional parcel go after receiving?"
+
+Talia answered automatically.
+
+"Depends on routing mark."
+
+"Is there one?"
+
+The clerk turned the receipt.
+
+A routing notation had been written along the bottom.
+
+Not a department name.
+
+A code.
+
+Mireth leaned in.
+
+"WT-3."
+
+Damaris stopped breathing.
+
+Ilyan was not there.
+
+Caelen was not there.
+
+None of the others were there to make the connection for them.
+
+They did not need them.
+
+West Tower.
+
+Rhyl said it first.
+
+"West Tower."
+
+Vaun looked at him.
+
+"Likely."
+
+Damaris almost snapped at her.
+
+Likely.
+
+Always likely.
+
+Always possible.
+
+Always not enough.
+
+Then she remembered what certainty had done to Aereth.
+
+What suspicion had done to Talia.
+
+What a frightened family could do with a convenient servant and half a fact.
+
+She let the anger pass.
+
+"Can we establish the code?"
+
+"Yes," Vaun said. "From Academy receiving procedure."
+
+Talia spoke.
+
+"I can."
+
+Everyone looked at her.
+
+She rubbed her palms against the borrowed shawl.
+
+"WT was west tower. The number was floor."
+
+"Three?"
+
+"Third-floor internal receiving cage."
+
+Mireth went very still.
+
+"What was kept there?"
+
+Talia shook her head.
+
+"Whatever departments on three were expecting. It wasn't one office."
+
+Vaun nodded.
+
+"Good."
+
+Talia looked offended.
+
+"Good?"
+
+"You did not improve the answer to make it useful."
+
+That landed.
+
+Talia's face changed.
+
+Damaris saw pride arrive through grief.
+
+Small.
+
+Real.
+
+Vaun turned to the clerk.
+
+"Certified copy of this receipt. Preserve the credential plate. Preserve all seven route receipts. No contact with the other delivery sites until I issue instructions."
+
+Meris frowned.
+
+"Why wait?"
+
+"Because if the same fraudulent credential was used to place material at several locations, sending seven nervous households into the streets at once may destroy exactly what we need."
+
+"And if someone is in danger?"
+
+Vaun looked at the laboratory report.
+
+"Then we do not wait long."
+
+She pointed to the noble townhouse and the physician's cooperative.
+
+"Those two receive quiet welfare checks first. No accusation. No mention of cursecraft unless there is evidence."
+
+Then the council offices.
+
+"Administrative preservation orders."
+
+Then the tribunal annex.
+
+Her mouth tightened.
+
+"I will handle that one."
+
+Damaris looked at Reedglass on the route list.
+
+"And us?"
+
+Vaun looked toward Aereth.
+
+"Protective containment. Voluntary if Lord Aereth agrees."
+
+Aereth folded his arms.
+
+"I dislike that phrase."
+
+"So do I."
+
+"What does it mean?"
+
+"It means you remain at Reedglass tonight, you do not attend council, you do not sign levy papers, you do not dismiss servants, and you do not make irreversible decisions while we determine whether your memory is being interfered with."
+
+His face hardened.
+
+"You are asking me to declare myself incompetent."
+
+"No."
+
+"That is what the council will hear."
+
+Meris stepped forward.
+
+Damaris expected her to argue.
+
+Instead her aunt said, "The council can hear that you developed a fever."
+
+Aereth stared at her.
+
+"You want me to lie."
+
+"I want you to postpone one meeting."
+
+"With a lie."
+
+Meris's expression softened.
+
+"With privacy."
+
+That stopped him.
+
+Damaris watched them.
+
+Another room she had never entered.
+
+Another history between adults who had known one another longer than she had been alive.
+
+Aereth looked at the route receipt.
+
+At the laboratory report.
+
+At Talia.
+
+His shame appeared when he looked at her.
+
+That mattered.
+
+"Talia."
+
+She stiffened.
+
+"My lord."
+
+"I accused you."
+
+"Yes."
+
+"I was wrong."
+
+The room went very quiet.
+
+Talia looked at him for a long time.
+
+"Yes."
+
+Aereth swallowed.
+
+"I am sorry."
+
+She did not rescue him.
+
+Damaris loved her for that.
+
+Finally Talia said, "Thank you."
+
+Not forgiveness.
+
+Not yet.
+
+Enough.
+
+Aereth turned back to Vaun.
+
+"One night."
+
+"One night," Vaun agreed.
+
+"And tomorrow?"
+
+"We know more tomorrow."
+
+He looked exhausted.
+
+"Everyone keeps saying that."
+
+"Because tomorrow is useful."
+
+Aereth almost smiled.
+
+Almost.
+
+Damaris felt Rhyl beside her before he touched her.
+
+His knuckles brushed the back of her hand.
+
+This time she caught his fingers.
+
+No one pretended not to notice.
+
+No one made it important either.
+
+That was better.
+
+The clerk gathered the papers.
+
+Mireth stood over the Academy receipt.
+
+Four days before Silver Night.
+
+West Tower, third floor.
+
+A woman who noticed bad corners had signed for it.
+
+Then died with thirty-five students and five other servants.
+
+Mireth said, "Ilyan needs to see this."
+
+Damaris nodded.
+
+"So do the others."
+
+Vaun looked at them.
+
+"After certification."
+
+"Of course."
+
+"Together, if possible."
+
+Rhyl glanced toward the rain-streaked windows.
+
+"The seven of us haven't managed together since yesterday."
+
+"Welcome to adulthood," Meris said.
+
+Damaris looked at her aunt.
+
+Meris looked back.
+
+There was affection there.
+
+And calculation.
+
+And worry.
+
+All at once.
+
+Damaris was beginning to understand that loving someone did not simplify them.
+
+It only made the complications expensive.
+
+Judge Vaun closed the red laboratory case.
+
+"Get the certified records."
+
+She looked at the route list again.
+
+"Then find me the other six doors."
+
