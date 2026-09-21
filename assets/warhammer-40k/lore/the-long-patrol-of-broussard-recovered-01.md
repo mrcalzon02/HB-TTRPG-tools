@@ -414,6 +414,7 @@ Not because anything was funny.
 Because some men smiled when they were angry and some when they were afraid, and Commissar Gabriel Hamden Jalesthesian had been trained too thoroughly to offer strangers either expression honestly.
 
 Broussard looked toward the forward bulkhead.
+
 Three men were missing.
 
 The repair remained underway.
