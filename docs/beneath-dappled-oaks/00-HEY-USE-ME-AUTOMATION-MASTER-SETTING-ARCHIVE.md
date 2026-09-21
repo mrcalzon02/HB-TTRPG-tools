@@ -583,6 +583,24 @@ Durable Chapter Three handoffs include:
 The immediate dependency-valid next chapter is **Chapter Four: Necessary Truth**, governed by the rolled-forward five-chapter lookahead.
 
 
+### Chapter One / Chapter Two recovery backlog
+
+**Repository state is incomplete and must not be mistaken for story state.**
+
+Prior conversation history contains completed prose for:
+- **Chapter One — The Last Seven**, opening: *“There should have been forty-three of them. Seven stood beneath the flowering arch.”*
+- **Chapter Two — The Cost of Silk**, opening: *“By dawn, the Academy had become beautiful enough to make murder seem ceremonial.”*
+
+Those chapters were written before Chapter Three but were not persisted as canonical numbered chapter files. Their absence from `docs/beneath-dappled-oaks/chapters/` is a recovery defect, not evidence that the chapters were never written.
+
+Recovery rules:
+- Prioritize exact recovery of the original conversation prose before writing Chapter Four or later new prose.
+- Do not silently reconstruct missing passages and label them recovered.
+- Restore Chapter One as `docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md` and Chapter Two as `docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md` once the original prose is recoverable.
+- Preserve the known original openings and established endings/scene facts during recovery.
+- After each restoration, verify the public Chapter Index and in-page Chapter Reader expose the restored chapter in numeric order.
+- Until restored, the web index should visibly mark Chapters One and Two as conversation-complete / repository recovery pending rather than omitting them.
+
 ### Public chapter-index invariant
 
 The reader-facing site **must maintain a separate Chapter Index sub-tab** on `beneath-dappled-oaks.html`.
