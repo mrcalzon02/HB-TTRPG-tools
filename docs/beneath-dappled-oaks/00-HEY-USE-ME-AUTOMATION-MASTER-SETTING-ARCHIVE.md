@@ -841,6 +841,24 @@ Do not treat "knights" as a generic social category with identical cavalry tradi
 
 A House may strongly influence an order without formally commanding it. Conflicts between blood loyalty and institutional oath are valid recurring story engines.
 
+## 12H. Character competence, foibles, and independent concerns
+
+Most recurring adults should be reasonably sane and functional in ordinary economic, magical, mundane, civic, and martial matters appropriate to their background.
+
+They may still be arrogant, priggish, naïve, bullheaded, vain, stubborn, irritating, emotionally avoidant, overly trusting, excessively cautious, status-conscious, or wrong.
+
+Do not turn personality flaws into unexplained incompetence.
+
+Bad decisions should arise from character, incomplete information, emotion, pressure, inexperience, ambition, ideology, desperation, or conscious risk rather than the temporary disappearance of obvious reasoning.
+
+If a character does something flagrantly impractical, other competent people should generally recognize it. A young adult setting off for another town with only "I want to become a baker" and no money, apprenticeship, lodging, tools, contacts, or travel plan should encounter somebody capable of saying, in effect, **"What exactly do you think you are doing?"**
+
+Major characters must also have durable lives beyond romance: professions, crafts, magical interests, finances, family obligations, hobbies, civic duties, martial competencies, political goals, personal ethics, irritations, advantages, blind spots, and practical concerns.
+
+Romance intersects with those lives. It does not replace them.
+
+The detailed control is maintained in **docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md**.
+
 ## 13. Continuation priorities for the hourly story runner
 
 Prefer the following kinds of advancement:
