@@ -1877,6 +1877,36 @@ The tension between family loyalty, Crown duty, religious obligation, regional l
 
 ---
 
+# XIV-C. Ecology, Animal Life, and Environmental Intelligence
+
+The authoritative ecology corpus is:
+
+**docs/beneath-dappled-oaks/10-ECOLOGY-WILDLIFE-DOMESTIC-ANIMALS-LEGENDARY-THREATS.md**
+
+Elaranth possesses a coherent ecology of ordinary wildlife, livestock, beasts of burden, domestic animals, working magical creatures, magical predators, scavengers, monsters, legendary species, and national-scale ecological threats.
+
+Animal behavior is information.
+
+A migration, abandoned territory, failed fish run, pollinator collapse, unusual predator movement, or herd disturbance may indicate a larger environmental, magical, military, or biological change.
+
+The current major ecological concern in 282 S.M. is unusual wild-boar migration from the northern **Felridge Forests**. Northern Orders report that the pattern looks less like normal range expansion and more like displacement. The Crown has therefore ordered the **Midtrash Seventh Legion** north to investigate what is pushing the boars from established territory.
+
+Ecological disturbance may affect:
+
+- roads;
+- agriculture;
+- hunting;
+- livestock;
+- trade;
+- military deployment;
+- local politics;
+- food prices;
+- romance and household plans.
+
+The setting should treat ecological knowledge as practical expertise rather than decorative wilderness lore.
+
+---
+
 # XV. Story Use Rules
 
 The annual calendar should influence prose.
