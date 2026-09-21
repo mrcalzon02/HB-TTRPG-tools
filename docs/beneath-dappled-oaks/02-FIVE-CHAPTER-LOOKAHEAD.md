@@ -8,6 +8,18 @@ last_reconciled: "2026-09-20"
 
 > **FIRST-PRINCIPLES REWRITE OVERRIDE — 2026-09-21:** Existing numbered chapter prose and the legacy N+1 through N+5 execution state below are now **scaffolding/reference**, not the active drafting position. Active prose restarts at **Chapter One**. Preserve durable canon, events, character facts, setting architecture, relationship trajectories, mystery/evidence architecture, locations, and useful pacing discoveries, but rebuild narration, dialogue, scene construction, transitions, and developments naturally under the master archive's Section 3A. Do not resume Chapter Five merely because it was the previous active endpoint. As rewritten Chapter One advances, rebuild this rolling window from the new prose rather than forcing the new draft to reproduce the old chapter sequence.
 
+> **REWRITE EXECUTION STATE — CHAPTER ONE COMMITTED:** The active Chapter One is now the first-principles rewrite at commit `68674ff6266736a0abc041d385d2d97f9301a410`. It establishes the Seven through ordinary shared behavior before political machinery takes over: graduation rehearsal, Silver Night absence, Ilyan's breakdown during the remembrance names, his disclosure beneath the oldest oak, and the group's quiet decision to keep the secret among themselves while they learn more. The chapter ends on their final night as students. Later legacy chapter events remain scaffolding until rewritten.
+>
+> **Active N+1 — rewritten Chapter Two:** Graduation day and the first hours after the protected-student threshold. Keep the ceremony emotionally specific rather than explanatory. Let families, orders, clothing, seating, invitations, private requests, and who intercepts whom demonstrate the political transition. Begin the old *Cost of Silk* pressures naturally: Damaris's family interest in Ilyan, Caelen/Mireth courtship politicization, Ilyan's Truth Beyond the Veil path, and the first hints that Silver Night's dead altered succession arithmetic. Do not have characters explain the entire system to one another. No later investigative evidence is known yet unless newly established in the rewrite.
+>
+> **N+2:** The Seven begin separating into adult institutions while deliberately maintaining contact. Pressure should arrive through concrete tasks and relationships, not exposition about what adulthood means.
+>
+> **N+3:** First independently followable Silver Night irregularity can emerge from ordinary institutional work. Preserve uncertainty; do not jump directly to the mature Chapter Four evidence chain.
+>
+> **N+4:** Personal relationships begin colliding with house expectations. Rebuild any useful legacy romantic beats from character choice rather than reproducing their old staging.
+>
+> **N+5:** A concrete consequence of the Seven's quiet inquiry should force the first meaningful choice between friendship, institutional duty, and family instruction.
+
 # Beneath Dappled Oaks — Five-Chapter Lookahead System
 
 This file prevents chapter-by-chapter tunnel vision.
