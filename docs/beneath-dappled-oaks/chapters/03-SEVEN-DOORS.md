@@ -2,1770 +2,2747 @@
 series: "Beneath Dappled Oaks"
 chapter: 3
 title: "Seven Doors"
-status: "CANON PROSE"
+status: "CANON PROSE — FIRST-PRINCIPLES REVISION"
 era: "282 S.M."
 season: "Bloomtide"
 continuity_parent: "Chapter Two — The Cost of Silk"
+rewrite_note: "Rebuilt from rewritten Chapters One and Two. Earlier Chapter Three remains scaffolding only."
 ---
 
 # Chapter Three — Seven Doors
 
-The morning after graduation, the Academy began giving them away.
+Thessa woke with Lyrion's shirt under her cheek.
 
-It did so politely.
+She knew it was his because it smelled faintly of cedar soap and because her own shirt was still on her.
 
-There were no chains. No magistrates beneath the dappled oaks with writs of possession. No herald stood upon the eastern steps to announce that seven young adults who had spent years eating at the same refectory tables, borrowing one another's books, arguing over tutors, hiding bruises after dueling practice, sharing examination notes and mourning the same dead were now available for useful deployment by the adult world.
+That narrowed the possibilities.
 
-Instead there were envelopes.
+She opened one eye.
 
-Cream for Mireth.
+Lyrion was asleep on the rug.
 
-White for Caelen.
+One arm lay over his face. One boot remained on. The other was under the chair.
 
-Grey edged in red for Thessa.
+Thessa stared at him.
 
-Silver-blue for Lyrion.
+Memory returned in pieces.
 
-River-green for Damaris.
+The oak.
 
-Brown for Rhyl.
+The bottle.
 
-Black for Ilyan.
+Another bottle.
 
-Seven doors disguised as stationery.
+Lyrion announcing that the Academy's flower cakes were evidence that civilization had gone too far.
 
-Bloomtide had washed the Academy overnight. Rain still clung beneath the oak leaves and trembled whenever a breeze moved through the quadrangles. The gardens smelled of wet earth, crushed petals and the faint sweetness of early flowering vines. Somewhere below the eastern kitchens someone had begun baking the soft flower cakes traditionally served after graduation: cream, candied petals, sweet cheese and enough sugar to persuade the newly adult that adulthood had rewards.
+Her informing him that civilization had gone too far when it admitted him.
 
-Mireth suspected this was propaganda.
+The two of them coming back to her room because neither wanted to go home to relatives.
 
-Her own envelope leaned against the silver coffee pot in House Vael-Aesryn's temporary dining room.
+Talking.
 
-She stared at it while an attendant placed warm seed bread beside her plate.
+More talking.
 
-"Must it be there?"
+His shirt coming off because she had spilled wine down it.
 
-The attendant followed her gaze. "My lady?"
+Nothing else.
 
-"The letter."
+Mostly.
 
-"I was instructed to place it where you would see it."
+Thessa looked at his bare chest.
 
-"I see many things. I do not necessarily want them beside breakfast."
+Mostly was doing a great deal of work.
 
-The attendant possessed the discipline not to smile.
+Someone knocked.
 
-Mireth admired her.
+Lyrion did not move.
 
-Across the table Aunt Selyra was already dressed in moss-dark velvet, her black hair gathered into a severe braid pierced by two old gold pins. There was something offensive about relatives who looked politically prepared before the first cup of tea.
+Thessa pulled the blanket over her head.
 
-"You should open it," Selyra said.
+The knock came again.
 
-"I was hoping neglect might weaken its resolve."
+"Go away."
 
-"It is an institution."
-
-"Institutions are surprisingly delicate when ignored."
-
-"Open it."
-
-Mireth broke the seal.
-
-The wax bore the Green Covenant's branching tree around an open seed pod. Rosemary and juniper had been pressed into it while warm, and the scent came free beneath her thumb.
-
-The letter was short.
-
-That worried her.
-
-Long letters explained themselves.
-
-Short letters assumed obedience.
-
-**Initiate Mireth Vael-Aesryn will present herself at the House of Rooted Memory at second bell. Formal greens. No family attendants. Bring no written notes.**
-
-Below it:
-
-**Instruction: remembrance, obligation, living testimony.**
-
-Mireth read the final two words twice.
-
-Selyra buttered toast.
-
-"What?"
-
-"Nothing."
-
-"That is your lying face."
-
-"I have a lying face?"
-
-"Several."
-
-Mireth folded the letter. "Apparently I am being taught remembrance."
-
-Her aunt stopped buttering the toast.
-
-Only for a heartbeat.
-
-Mireth noticed.
-
-"What?"
-
-"Nothing."
-
-"My lying face is hereditary."
-
-Selyra's mouth moved faintly at one corner.
-
-Then she looked toward the rain-bright windows.
-
-"The Covenant remembers promises."
-
-"I know."
+A woman's voice answered.
 
 "No."
 
-Mireth waited.
+Thessa recognized it.
 
-Selyra looked back at her.
+She sat up so quickly the room tilted.
 
-"You know the school version."
-
-Mireth shut her eyes.
-
-Yesterday she had discovered that adulthood contained an apparently inexhaustible supply of people eager to explain that whatever she had learned at the Academy was the school version.
-
-"If one more relative says that to me, I will return the graduation certificate."
-
-"That would create paperwork."
-
-"Then the Crown would finally fear me."
-
-Selyra almost smiled.
-
-Almost.
-
-Then she nodded toward Mireth's plate.
-
-"Eat."
-
-"I am not hungry."
-
-"You have no idea when they will feed you."
-
-"It is the Green Covenant, not a siege."
-
-"Those are not mutually exclusive conditions."
-
-Mireth tore the bread.
-
-Honey seeped into the warm center.
-
-For a moment she thought of Ilyan at yesterday's breakfast, pale and hollow-eyed, taking food only after Damaris threatened him with such sincere irritation that all seven of them had laughed.
-
-Thirty-six students and six servants were dead.
-
-Yesterday the seven survivors had graduated.
-
-This morning there were appointments.
-
-Civilization, Mireth thought, possessed remarkable administrative stamina.
-
----
-
-The House of Rooted Memory stood beyond the Academy's northern wall in a grove so old that the city had curved around it rather than force a road through.
-
-Mireth had passed the outer gardens hundreds of times.
-
-Students were allowed beneath the ash arches. They attended public rites, studied botanical law, conservation agreements, living wards and the theory of remembered vows. They learned which groves held charter rights older than several noble families and why judges became nervous when an ancient oak had witnessed a promise.
-
-Students did not enter the inner house.
-
-Graduates did.
-
-Adults did.
-
-The distinction was apparently one wet Bloomtide morning.
-
-Mireth climbed moss-dark steps between banks of blue starflowers. A maid emerged carrying a wicker basket of wilted night-votive sprigs from the private rooms above.
-
-Mireth stepped aside.
-
-The maid bowed.
-
-Behind her came a gardener carrying a ring of little brass keys and three fresh pots of white blossom.
-
-Mireth glanced at the keys.
-
-The gardener noticed.
-
-"Chamber greens, my lady. Bloomtide rotation."
-
-"He enters the rooms?"
-
-The man blinked.
-
-"Gardeners, chamber attendants, shrine women when requested. The private planters need hands."
-
-He said it as though explaining that rain was wet.
-
-Mireth nodded and continued inward.
-
-A mundane thing.
-
-A servant with keys.
-
-Fresh plants changed inside noble bedrooms every few days.
-
-She would not have noticed yesterday.
-
-That realization irritated her.
-
-Scholar Silae Vael-Aesryn waited beneath the living doorway.
-
-Mireth stopped.
-
-"Silae."
-
-"Initiate."
-
-"You could have warned me."
-
-"I could have."
-
-"You did not."
-
-"No."
-
-"I liked you better before graduation."
-
-"That is because you knew the school version of me."
-
-Mireth stared.
-
-Silae laughed and embraced her.
-
-She smelled of cedar oil, parchment and rain.
-
-Of all Mireth's older cousins, Silae had always been the easiest to love because she had never appeared interested in improving Mireth. She simply knew things and expected other people to survive the consequences.
-
-Unfortunately, Mireth was discovering that knowing things was itself political.
-
-Silae led her through the inner house.
-
-There were no straight walls.
-
-Roots emerged from floors and curved into benches, shelves and doorframes. Light entered through green glass and living gaps in the canopy. Hundreds of clay tablets rested in root niches.
-
-No paper.
-
-Mireth noticed immediately.
-
-"No written notes."
-
-Silae nodded. "Paper can be altered."
-
-"So can memory."
-
-"Yes."
-
-"Comforting."
-
-"That is why there are witnesses."
-
-The central chamber contained three trees.
-
-One pale-barked.
-
-One nearly black.
-
-One red.
-
-Their trunks rose through the floor and vanished through the ceiling.
-
-Three simple chairs stood between them.
-
-Mireth sat.
-
-Silae did not.
-
-"Tell me what happened in the west tower."
-
-Everything inside Mireth went still.
-
-There was no gentle approach.
-
-No condolences.
-
-No tea.
-
-She looked toward the trees.
-
-"Which version?"
-
-Silae's expression sharpened.
-
-"Interesting."
-
-Mireth regretted answering.
-
-Too late.
-
-"What versions do you know?" Silae asked.
-
-"The public one."
-
-"And?"
-
-Mireth said nothing.
-
-The pale tree rustled.
-
-There was no wind.
-
-Mireth looked up.
-
-Silae followed her gaze.
-
-"It is not reading your thoughts."
-
-"That is a low standard for reassurance."
-
-"It remembers speech."
-
-"For how long?"
-
-"The oldest testimony in this house that remains legally useful is two hundred and seventeen years old."
-
-Mireth looked at her cousin.
-
-Silae finally sat.
-
-"Living-memory testimony does not decide whether a speaker told the truth. It preserves the statement: voice, cadence, magical resonance, the witnessed circumstances. Jurists compare testimony. Investigators compare contradictions. Memory is evidence. Not judgment."
-
-Ilyan's confession moved through Mireth's mind.
-
-His father.
-
-His uncle.
-
-Necessary sacrifice.
-
-Thirty-six students.
-
-Six servants.
-
-"Why am I learning this now?"
-
-"Because yesterday you were protected."
-
-Mireth's irritation rose.
-
-Silae lifted a hand.
-
-"Not a child. Protected. There is a difference."
-
-The irritation receded slightly.
-
-"Elaranthi society tolerates many ugly things," Silae continued. "But openly using students in dynastic warfare is still considered obscene. Families prepare you. They educate you. They maneuver around you. But they are supposed to wait until graduation before they openly recruit, task, court, marry, pressure and deploy."
-
-Mireth stared toward the red-barked tree.
-
-"And Silver Night?"
-
-"Was a violation of that shield."
-
-The words landed quietly.
-
-That made them worse.
-
-Silae's voice softened.
-
-"You were supposed to have more time."
-
-Mireth looked at her hands.
-
-Thirty-six classmates never received their envelopes.
-
-Never discovered which relatives intended to weaponize their friendships.
-
-Never complained about institutional breakfasts.
-
-Never learned the adult version.
-
-She swallowed.
-
-"Why kill students before graduation?"
-
-"Because sometimes people fear not what a person is now, but what their generation becomes in twenty years."
-
-Mireth looked up.
-
-"Dmitrigical chairs."
-
-"Possibly."
-
-"Licenses. Tribunals."
-
-"Yes."
-
-Silae hesitated.
-
-"And children."
-
-Mireth frowned.
-
-Her cousin watched her carefully.
-
-"Some houses count generations the way Caladren counts barges. A marriage is not merely two people. An unusually successful family line can become ten cousins, then twenty adult votes, appointments, marriages, licenses and claims."
-
-"Which family?"
-
-"I do not know."
-
-"You suspect."
-
-"I have heard demographic arguments. Not names I would repeat before three remembering trees."
-
-Mireth almost laughed from frustration.
-
-"You brought me into a room that remembers everything and now refuse to speak."
-
-"That is one reason this room still has legal authority."
-
-Silae leaned forward.
-
-"Do not make the mistake of choosing one motive too early. The Valeric interest in the Dmitrigical Arts may be real and still overlap with another faction's fear of an expanding line. The person who ordered one part of a crime, the person who performed it and the person who benefited from it need not be identical."
-
-Mireth thought of the maid's basket.
-
-The gardener's keys.
-
-People moved through noble rooms constantly while nobles imagined themselves private.
-
-A household was not a locked box.
-
-It was a hundred trusted hands.
-
-Silae saw her looking toward the door.
+Lyrion woke.
 
 "What?"
 
-"The gardeners enter private chambers."
+"My grandmother."
 
-Silae blinked.
+He stared at the door.
 
-"Yes."
+"Oh."
 
-"So do maids. shrine attendants. valets. physicians."
+"Get up."
 
-"Yes."
+"Why?"
 
-"Students are taught to think of noble privacy as guarded."
+"Because I would like to live."
 
-Silae smiled without humor.
+"She knows I exist."
 
-"The wealthy have less privacy than anyone. They merely employ the witnesses."
+"Not like this."
 
-Mireth remembered that.
+Lyrion looked at himself.
 
-She would remember it much later, and wish she had understood sooner how dangerous a ring of little brass keys could become.
+Then at Thessa.
 
----
+Then at the shirt under her cheek.
 
-Caelen's door was steel.
+"Ah."
 
-Literally.
+The door opened.
 
-The Royal Martial Fellowship occupied an old Crown barracks on the eastern rise where the roads climbed steeply enough that horses disliked them and military architects regarded this as a character defect in horses.
+Marshal Avera Eris-Vey entered.
 
-Caelen arrived before third bell wearing formal service black.
+Thessa's grandmother was two hundred and eleven years old, silver-haired, straight-backed and built with the compact economy of someone who had spent most of her life wearing armor. She looked at Thessa.
 
-Commander Ysran Avariel-Caith was waiting in the yard.
+Then Lyrion.
 
-Caelen recognized his older cousin immediately. Everyone did.
+Then the shirt.
 
-Ysran stood tall and broad in midnight-blue uniform, one ear notched by an old blade wound, grey beginning at his temples despite the rest of him looking capable of personally objecting to age.
+Then the boot beneath the chair.
 
-A real sword hung at his hip.
+"Breakfast is downstairs."
 
-Caelen looked at it.
+Thessa waited.
 
-Ysran noticed.
+Avera waited.
 
-"Still checking weapons before faces?"
+Lyrion sat up.
 
-"Faces are slower."
+"Good morning, Marshal."
 
-"Court will cure you of thinking that."
+"Is it?"
 
-They embraced.
+"Potentially."
 
-Ysran gripped his shoulder, stepped back and looked at his chin.
+Avera's gaze dropped to his bare chest.
 
-"Keep the stubble."
+"Put something on. The cook is seventy-four and distractible."
 
-Caelen closed his eyes.
+She left.
 
-"No."
+The door closed.
 
-"What?"
+Thessa stared after her.
 
-"I have received enough commentary about my face."
+Lyrion began laughing.
 
-"Woman?"
+"Shut up."
 
-"Several."
+"Your grandmother likes me."
 
-"Same woman?"
+"She threatened the cook with your nipples."
 
-Caelen walked past him.
+"Protectively."
 
-Ysran followed.
+Thessa threw his shirt at him.
 
-"Vael-Aesryn?"
+He caught it.
 
-"Why does everyone know?"
+"You're wearing wine."
 
-"Because you have been looking at Mireth as though she personally invented shoulders since you were old enough to become embarrassing."
+"So are you."
 
-Caelen stopped.
+She looked down.
 
-"I do not do that."
+A dark stain crossed the front of her sleeping shift.
 
-"Of course."
+Lyrion's gaze followed it.
 
-"I don't."
+Then stayed.
 
-"Your mother owes me two crowns."
+Thessa looked at him.
 
-"What?"
+His eyes came back to hers.
 
-"Nothing."
+Neither spoke.
 
-Caelen stared at him.
+The room changed.
 
-Ysran smiled.
+That was the irritating thing about him. He could be ridiculous until suddenly he wasn't.
 
-The training hall beyond smelled of oil, leather, old wood and sweat. Caelen relaxed before he could stop himself.
-
-Weapons were honest.
-
-A blade either reached you or did not.
-
-A shield held or failed.
-
-There were no seating arrangements whose precise angle constituted a comment on one's grandmother.
-
-Captain Arven Tal waited beside a practice circle.
-
-He was smaller than Ysran, older, scarred across one cheek and missing the last joint of his left little finger.
-
-"Graduate."
-
-"Captain."
-
-"Yesterday you were an Academy duelist."
-
-"Occasionally."
-
-"Today you are Crown service."
-
-"So everyone keeps telling me."
-
-Arven tossed him a practice sword.
-
-Caelen caught it.
-
-"Then learn the difference."
-
-The lesson began with Caelen on the floor.
-
-It improved from there.
-
-By the fifth exchange he had stopped expecting ceremony and started fighting.
-
-By the tenth, sweat ran beneath his collar.
-
-By the fifteenth, the careful tie holding his dark hair had loosened.
-
-Arven struck his shoulder.
-
-Caelen stepped inside the blow, turned and nearly took the captain's feet from under him.
-
-Nearly.
-
-Arven recovered.
-
-"Better."
-
-Caelen breathed hard.
-
-"What was wrong before?"
-
-"You wanted to win."
-
-"That remains a common objective."
-
-"Crown service wants the person behind you alive."
-
-Arven nodded toward the empty space beyond Caelen's shoulder.
-
-"That changes everything."
-
-They worked another half hour.
-
-When it ended, Caelen sat on the edge of the training platform with his shirt damp against his back and a bruise beginning along his jaw.
-
-Ysran brought water.
-
-"Now the unpleasant lesson."
-
-"Marriage?"
-
-"Service."
-
-"Worse."
-
-Ysran handed him a white packet sealed in silver wax.
-
-Caelen opened it.
-
-**Escort detail. Second bell tomorrow. Academy Ward to Hall of Veils. Sealed archival courier.**
-
-He read it again.
-
-Truth Beyond the Veil.
-
-His pulse changed.
-
-Ysran watched him.
-
-"Problem?"
-
-Caelen folded the paper.
-
-"No."
-
-The lie came too quickly.
-
-Ysran's expression did not change.
-
-"Do not open the courier packet."
-
-"I know."
-
-"Do not ask its contents."
-
-"I know."
-
-"Do not allow anyone else to handle it."
-
-"I know."
-
-"You may encounter friends."
-
-There it was.
-
-Caelen looked up.
-
-Ysran leaned against the wall.
-
-"Royal service will occasionally put something in your hands that someone you love wants."
-
-The word love was too large.
-
-Too early.
-
-It struck anyway.
-
-Caelen thought immediately of Mireth.
-
-Of green silk.
-
-Of the little scar in his own palm where her thumbnail had pressed beneath yesterday's dinner table.
-
-Of the way she had pretended not to stare at his chin and then stared again.
-
-He hated the ease with which his family could guess.
-
-"Do not use her," Caelen said.
-
-Ysran's eyebrows rose.
-
-"I did not name anyone."
-
-"You did not have to."
-
-"No."
-
-Ysran's expression became serious.
-
-"Caelen, there is a difference between using a feeling and acknowledging that a feeling creates obligations."
-
-"That is exactly what people say before using it."
-
-"Sometimes."
-
-The honesty irritated him more than denial would have.
-
-Ysran took the empty cup.
-
-"Your first duty is simple. Deliver the courier safely. If Mireth asks what is inside, tell her you do not know."
-
-"I won't know."
-
-"Good."
-
-"And if she asks whether I would tell her if I did?"
-
-Ysran smiled faintly.
-
-"Then congratulations. You have entered politics."
-
-Caelen left with the assignment in his coat and the uncomfortable realization that he had not lied well.
-
-Not to Ysran.
-
-He wondered whether he could lie to Mireth at all.
-
-That question followed him all the way back to the Academy.
-
----
-
-Thessa entered the Western Wardens through a red door.
-
-Lyrion entered the Silver Bough through a silver one.
-
-By afternoon they met beneath a covered arcade between the Academy gardens and the diplomatic quarter, both carrying entirely different instructions that amounted to the same insult.
-
-"Friendship is access," Lyrion said.
-
-Thessa stopped walking.
-
-Rainwater dripped from carved stone leaves overhead.
-
-"What?"
-
-"That was the phrase."
-
-"Who said it?"
-
-"Mistress of Dispatches."
-
-"Alenor Syle?"
-
-"The very one."
-
-Thessa knew of her. Everyone did. Alenor was reputed to remember which ambassador perfumed his letters, which attaché folded corners when anxious and which envoys lied by becoming excessively grammatical.
-
-"What exactly did she tell you?"
-
-"That the seven of us constitute an unusual cross-institutional network."
-
-"That sounds diseased."
-
-"In diplomacy, it is almost a compliment."
-
-"And?"
-
-Lyrion looked toward the garden.
-
-Thessa folded her arms.
-
-"And?"
-
-"She advised me to remain attentive to what my friends hear."
-
-"Spy on us."
-
-"That was not the word."
-
-"Of course not. You people own better dictionaries."
-
-Lyrion laughed.
-
-Thessa wanted to remain angry.
-
-Unfortunately his laugh had always been unfair.
-
-His silver-blue coat was open at the throat. One pale lock of hair had fallen forward over his brow, and there was something about the way diplomatic tailoring narrowed at his waist that made her resent the entire Silver Bough for having eyes.
-
-He noticed her looking.
-
-Naturally.
-
-"You are staring."
-
-"I am considering whether diplomacy has ruined you."
-
-"Visually?"
-
-"Morally."
-
-"Tragic."
-
-He stepped closer.
-
-Thessa did not move.
-
-She could smell rain on his coat and something faintly citrus from whatever absurd soap Silver Bough laundries used to convince foreign delegations they were civilized.
-
-"What did the Wardens tell you?" he asked.
-
-"To learn which western dispatches the Silver Bough is delaying."
-
-Lyrion blinked.
-
-"From me?"
-
-"They did not say your name."
-
-"How delicate."
-
-"I told them I would see what I could learn."
-
-His smile faded.
-
-Thessa hated that.
-
-"I meant through official channels."
-
-"Of course."
-
-"Do not."
-
-"Do not what?"
-
-"Become wounded and beautiful. It is manipulative."
-
-His eyebrows rose.
-
-"Beautiful?"
-
-She swore.
-
-Lyrion smiled again.
-
-Better.
-
-Then his hand lifted.
+He stood.
 
 Slowly.
 
-A loose strand of copper hair had escaped Thessa's braid. His fingers caught it near her cheek.
+Thessa remained on the bed.
 
-Not her skin.
+He came close enough that her knees touched his thighs.
 
-Almost.
+"Morning," he said.
 
-The difference felt enormous.
+"You said that already."
 
-Thessa's breath changed.
+"Not to you."
 
-He tucked the strand behind her ear.
+His fingers touched the loose hair at her temple.
 
-His fingertips lingered just below it.
+Thessa caught his wrist.
 
-Warm.
+Not to stop him.
 
-She knew his hands.
+Lyrion knew.
 
-She had known them for years: ink-stained during examinations, bloodied after foolish training bets, gesturing theatrically over bad wine, steady when tying a bandage around her wrist.
-
-This should not have felt new.
-
-It did.
-
-Graduation had done something vulgar to familiarity.
-
-It had told the world that every private thing could now be useful.
-
-Lyrion's thumb rested beneath her jaw.
-
-Thessa looked at his mouth.
-
-He saw.
-
-The smile disappeared.
-
-His gaze dropped to hers.
-
-The arcade seemed to quiet around them.
-
-Rain tapped against leaves.
-
-Thessa could hear his breathing.
-
-She wanted him closer.
-
-She also wanted to know whether someone had told him closeness was useful.
-
-The thought arrived like cold water.
-
-"Were you told to do this?"
-
-Lyrion stopped.
-
-His hand fell.
-
-The hurt on his face was immediate and controlled.
-
-That was worse than anger.
-
-"No."
-
-Thessa regretted the question before the word finished leaving him.
-
-"Lyrion—"
-
-"No. You had to ask."
-
-"I hate that I had to."
-
-"So do I."
-
-She caught his wrist.
-
-He looked at her hand.
-
-Then at her.
-
-"I am sorry."
-
-He turned his hand beneath hers until their palms met.
-
-"Good."
-
-Thessa breathed out.
-
-He squeezed once.
-
-"Three nights from now," he said.
-
-"What?"
-
-"The Silver Bough holds a Flowered Sunder reception at the Hall of Seven Lamps."
-
-"That sounds intolerable."
-
-"It usually is."
-
-"Why are you telling me?"
-
-"I put your name on the guest list."
-
-Thessa stared.
-
-"Without asking?"
-
-"I have known you for years. Asking would allow you to refuse."
-
-"That is terrible diplomacy."
-
-"It is excellent friendship."
-
-She tried not to smile.
-
-Failed.
-
-"Who else?"
-
-"The Seven, if they come."
-
-"All of us?"
-
-"I thought we might need a room our institutions expect us to enter."
-
-There it was.
-
-A plan.
-
-His.
-
-Not his family's.
-
-Not Alenor Syle's.
-
-His.
-
-Thessa squeezed his hand.
-
-"Good."
-
-Lyrion's gaze moved over her face.
-
-Then down the red Warden coat fitted close around her waist.
-
-Slowly enough that she noticed.
-
-Deliberately enough that he knew she noticed.
-
-"Also," he said, "I want to see what you wear."
-
-Heat rose into her face.
-
-"Idiot."
-
-"Yes."
-
-She kissed his cheek.
-
-Barely.
-
-Close enough to the corner of his mouth that both of them knew it could have been something else.
-
-Then she walked away before courage or stupidity could improve upon it.
-
-Behind her, Lyrion did not move for several seconds.
-
-That pleased her enormously.
-
----
-
-Damaris entered adulthood through a ledger.
-
-She considered this insulting mainly because it was predictable.
-
-The River Ledger's Academy office overlooked the eastern canal, where barges passed beneath willow branches carrying flour, timber, wine, lamp oil, flower baskets for Bloomtide markets and all the other things aristocrats preferred to imagine simply appeared.
-
-Lady Meris Caladren-Ilyra sat behind a desk of black walnut.
-
-Damaris's aunt wore river-blue silk and a chain of linked silver coins around her throat.
-
-Three books lay open before her.
-
-"You were instructed yesterday," Meris said.
-
-Damaris sat.
-
-"I remember."
-
-"Good."
-
-"I was not likely to forget being told to manipulate a grieving friend."
-
-Meris looked up.
-
-"I did not use that wording."
-
-"It was hiding beneath yours."
-
-Her aunt's expression remained irritatingly calm.
-
-"Ilyan Valeric possesses access we do not."
-
-"He possesses trauma."
-
-"He possesses both."
-
-Damaris hated that the sentence was true.
-
-Meris turned one ledger toward her.
-
-"Your job is not to make him love you."
-
-"Comforting."
-
-"Do not be childish."
-
-"I graduated yesterday. Apparently that condition has expired."
-
-Meris ignored the remark.
-
-"You are to remain close enough that if he discovers whether the altered oath language represents factional capture inside Truth Beyond the Veil, you hear of it before the rest of the market does."
-
-"The market?"
-
-"Information has a market whether or not respectable people admit it."
-
-Damaris looked down at the ledger.
-
-Shipping codes.
-
-Insurance marks.
-
-Warehouse symbols.
-
-Columns of figures marching obediently across the page.
-
-"Why me?"
-
-"Because he trusts you."
-
-The answer hurt precisely because it was not flattering.
-
-Damaris thought of Ilyan's exhausted face.
-
-The way he had eaten when she told him to.
-
-The way friendship had once been enough explanation.
-
-"And if I refuse?"
-
-"Then you refuse."
-
-Damaris looked up sharply.
-
-Meris folded her hands.
-
-"There will be consequences. Family displeasure. Lost access. Perhaps a different posting. But no one is going to chain you to him."
-
-"How generous."
-
-"Freedom is rarely the absence of price."
-
-Another adult sentence.
-
-Damaris was collecting them against her will.
-
-Meris pushed a smaller card across the table.
-
-A River Ledger authorization cipher.
-
-Temporary.
-
-Limited.
-
-Valid for transport abstracts relating to Academy district deliveries during the weeks surrounding Silver Night.
-
-Damaris's pulse changed.
-
-"What is this?"
-
-"Something Ilyan may need."
-
-There it was.
-
-The trap made useful.
-
-"If I give him this, I am following your order."
-
-"Yes."
-
-"If I do not, I may obstruct the investigation."
-
-"Yes."
-
-Damaris stared at her aunt.
-
-Meris's face softened by a fraction.
-
-"You wanted adulthood."
-
-"I wanted autonomy."
-
-"They are not synonyms."
-
-Damaris stood.
-
-She took the card.
-
-At the door Meris spoke again.
-
-"Damaris."
-
-She stopped.
-
-"Do not lie to the boy about everything."
-
-Damaris looked back.
-
-"Only the important parts?"
-
-"No."
-
-For the first time, her aunt looked tired.
-
-"Know which lie you are telling. That is harder than it sounds."
-
-Damaris left with the cipher hidden inside her glove.
-
-She did not tell Rhyl.
-
-She told herself this was because she had not yet decided what to do.
-
-That was true.
-
-It was also not the whole truth.
-
----
-
-Rhyl's first adult assignment came with a horse.
-
-This immediately improved his opinion of adulthood.
-
-The mare was dark chestnut, narrow-faced and deeply suspicious.
-
-"She dislikes me," Rhyl said.
-
-Mara Orthell-Faen leaned against the stable door.
-
-"She has standards."
-
-"What is her name?"
-
-"Bracken."
-
-"Original."
-
-"She bit the last man who suggested changing it."
-
-Rhyl stroked the mare's neck.
-
-"Bracken is a magnificent name."
-
-One ear flicked toward him.
-
-Progress.
-
-Mara handed him a leather route packet.
-
-"The Red Hart does not care who you flirt with."
-
-Rhyl opened the packet.
-
-"Good."
-
-"It cares whether you can find a washed-out road before a grain wagon breaks an axle."
-
-"Even better."
-
-His route ran through the Academy Ward, along the western service road and out toward the woodland approaches.
-
-One line had been marked.
-
-**Inspect retaining wall and drainage below west-tower service road. Recent emergency repair.**
-
-Rhyl looked up.
-
-"Why this?"
-
-"Because the rain keeps eating the slope."
-
-"Near the tower?"
-
-"Below it."
-
-Mara studied him.
-
-"You know something?"
-
-"Everyone knows something now."
-
-"That sounded unhelpful."
-
-"It was meant to."
-
-She nodded as if satisfied.
-
-The Red Hart assignment looked less political than the others.
-
-That did not make it useless.
-
-Mobility was access too.
-
-Rhyl folded the packet.
-
-Bracken tried to bite his sleeve.
-
-He pulled back.
-
-Mara grinned.
-
-"She likes you."
-
-"How can you tell?"
-
-"She missed."
-
----
-
-Ilyan's envelope contained no greeting.
-
-Only a time.
-
-Fourth bell.
-
-Hall of Veils.
-
-Examiner Sael Ithrenn waited in a narrow chamber lined with oath-books.
-
-Ilyan knew him from yesterday's ceremony: spare, grey-eyed, neither young nor particularly old, with the controlled stillness of a person accustomed to hearing truths people regretted immediately afterward.
-
-"You altered the oath," Sael said.
-
-Ilyan sat.
-
-"Yes."
-
-"Why?"
-
-"Because the version I was given contained language I had never heard before."
-
-"Necessary truth."
-
-Ilyan's pulse tightened.
-
-"You noticed."
-
-"I examine oaths."
-
-"Is it new?"
-
-Sael looked at the shelves.
-
-"New is imprecise."
-
-Ilyan nearly laughed.
-
-"How old?"
-
-"I am not permitted to answer that yet."
-
-"Then why bring me here?"
-
-"Because you asked the right question publicly."
-
-Sael placed two closed volumes on the table.
-
-One was bound in faded black leather.
-
-The other newer.
-
-He did not open either.
-
-"Tomorrow morning a sealed archival transfer arrives under Moon-Crown escort."
-
-Ilyan held still.
-
-"Why tell me?"
-
-"You will assist with registration."
-
-"Why?"
-
-"Because if you intend to accuse an institution of changing its language, you should first learn how institutional language changes."
-
-Ilyan looked at him.
-
-"Do you believe it changed deliberately?"
-
-Sael's face revealed nothing.
-
-"I believe someone changed it."
-
-That was more than Ilyan had expected.
-
-"Who?"
-
-"Learn the archive."
-
-Sael rose.
-
-The lesson was apparently over.
-
-Ilyan stood.
-
-At the door he paused.
-
-"My uncle knows I am asking."
-
-Sael's expression tightened almost invisibly.
-
-"Your uncle knows many things."
-
-"That is not reassuring."
-
-"It was not intended to be."
-
-Ilyan left with no proof.
-
-But tomorrow there would be an archival transfer.
-
-And somewhere between old oath forms and new ones lay a date.
-
-A hand.
-
-A reason.
-
-Something outside his family's confession.
-
-Something testable.
-
-For the first time since Silver Night, hope frightened him nearly as much as despair.
-
----
-
-They met beneath the oldest oak after dark.
-
-No invitation had been sent.
-
-That made it the only meeting of the day that felt like theirs.
-
-The moon was climbing toward the Flowered Sunder, not yet full, its wounded face pale between dripping leaves. Bloomtide lanterns burned along the Academy paths. Somewhere in the lower court students from younger cohorts were singing badly over the remains of a graduation flower cake.
-
-Mireth arrived first.
-
-Caelen second.
-
-His hair was still damp from washing after training.
-
-A bruise darkened one side of his jaw.
-
-Mireth stared.
-
-Caelen noticed.
-
-"Not the scar tonight?"
-
-"Who hit you?"
-
-"Captain Arven. Then Ysran. I may have joined an organization based largely on cousins striking me."
-
-She stepped closer.
-
-Her fingers rose before she decided to move them.
-
-Two fingertips touched the bruise.
-
-Caelen went very still.
-
-So did she.
-
-Stubble roughened his jaw beneath her fingers.
-
-The pale scar along his chin sat just below, familiar now in a way it had no right to be.
-
-Mireth should have withdrawn.
-
-She did not.
-
-Caelen's eyes moved over her face.
-
-Then down to her mouth.
-
-Her pulse changed.
-
-His hand lifted and stopped beside her waist.
-
-Not touching.
-
-Waiting.
-
-That almost-touch was worse.
-
-Mireth could feel the heat of him without contact.
-
-"Caelen."
-
-"Yes?"
-
-She had forgotten the sentence.
-
-Infuriating.
-
-His fingers finally rested against the fabric at her waist.
-
-Barely enough pressure to count.
-
-Her breath caught.
-
-He heard it.
-
-The smugness vanished from his expression.
-
-That made the moment suddenly dangerous.
-
-Not because he intended anything.
-
-Because he did not.
-
-Because the desire between them was real enough to be inconvenient without anyone ordering it.
+Of course he knew.
 
 He leaned down.
 
-Mireth lifted her face.
+The knock came again.
 
-Footsteps sounded on wet gravel.
+Avera's voice passed through the door.
 
-They separated.
+"The eggs are dying."
 
-Thessa emerged from the path.
+Lyrion closed his eyes.
 
-Lyrion beside her.
+Thessa pressed her forehead against his stomach and laughed until it hurt.
 
-They were not holding hands.
+---
 
-Suspiciously.
+Marshal Avera did not mention the bedroom.
 
-Damaris came next.
+That was worse.
 
-Rhyl after her.
+She ate eggs, black bread and stewed apples while Thessa and Lyrion sat opposite one another pretending neither had been interrupted ten minutes earlier.
 
-Ilyan last.
+Avera's house in the Academy quarter was narrow, old and aggressively practical. Maps hung where other families might have hung portraits. A rack beside the door held three walking sticks, two swords and an umbrella with a silver duck's head.
 
-Seven.
+Thessa had loved this house since childhood.
 
-For now.
+She had also spent most of childhood being corrected in it.
 
-They settled beneath the oak on roots, low stones and damp grass.
+Avera buttered bread.
 
-No ceremonial chairs.
+"Lyrion."
 
-No house hierarchy.
+"Marshal."
 
-Mireth told them about living-memory testimony.
+"Silver Bough today?"
 
-Not everything Silae had implied.
+"First bell."
 
-Enough.
-
-She also told them about the gardener's keys.
-
-Rhyl frowned.
-
-"Why does that matter?"
-
-"I don't know yet."
-
-"Then why remember it?"
-
-"Because yesterday I would not have noticed."
-
-Lyrion nodded.
-
-"That seems worth remembering."
-
-Caelen disclosed his escort assignment.
-
-Ilyan looked up sharply.
-
-"Hall of Veils?"
-
-"Second bell."
-
-"I am registering an archive transfer at second bell."
-
-Silence.
-
-There.
-
-A connection.
-
-Not proof.
-
-A door.
-
-Thessa told them the Wardens wanted information on western diplomatic dispatches.
-
-Lyrion admitted the Silver Bough had explicitly described their friendship as access.
-
-Then he produced seven silver-edged invitations.
-
-"The Flowered Sunder reception. Three nights."
-
-Rhyl groaned.
-
-"I have to dress?"
-
-"Tragically."
-
-Thessa took hers.
-
-"So that is how we come back together."
-
-Damaris accepted the invitation and slipped it into her sleeve.
-
-She did not mention the cipher hidden in her glove.
-
-Instead she said, carefully, "My family wants me to stay close to Ilyan while River Ledger reviews Academy-related trade."
-
-True.
-
-Incomplete.
-
-Rhyl looked at her.
-
-Only for a moment.
-
-Damaris met his eyes and smiled.
-
-He smiled back.
-
-But his gaze lingered.
-
-Something in her wording had caught him.
-
-Not enough to accuse.
-
-Enough to remember.
-
-Ilyan spoke last.
-
-"Examiner Sael agrees the oath language changed."
-
-Damaris's attention snapped toward him.
-
-"He said that?"
-
-"He said someone changed it."
-
-"Can he show you when?"
-
-"Not yet."
-
-Caelen leaned forward.
-
-"But tomorrow's transfer may include older archive material."
-
-"Or records connected to the change."
-
-Mireth looked around the circle.
-
-Yesterday, they had been students.
-
-Today, every institution had given them a different piece of machinery.
-
-Memory.
-
-Military access.
-
-Diplomatic observation.
-
-Commercial records.
-
-Field mobility.
-
-Order archives.
-
-Warden authority.
-
-No one had intended those pieces to fit together.
-
-That interested Mireth.
-
-"We do not steal the courier packet," she said.
-
-Caelen looked offended.
-
-"I was hoping that went without saying."
-
-"With this group?"
-
-"Fair."
-
-"We do not compromise Caelen's first duty. We do not ask Ilyan to remove restricted material if the absence would expose him."
-
-Ilyan nodded.
-
-"Damaris?"
-
-She looked up.
-
-Mireth hesitated.
-
-Damaris had offered the least.
-
-Not nothing.
-
-But less.
-
-"Find out whether River Ledger can tell us what kinds of documents move between the Academy and Hall of Veils."
-
-Damaris felt the authorization cipher inside her glove like a hot coin.
-
-"I can try."
-
-Rhyl watched her again.
-
-Damn him.
-
-"Thessa, Lyrion—"
-
-"Already offended," Lyrion said.
-
-"Can either of your institutions tell us who authorizes cross-order archive transfers?"
-
-Thessa nodded.
-
-"Possibly."
-
-Lyrion smiled.
-
-"Almost certainly."
-
-"Rhyl."
-
-"I have a horse."
-
-Everyone looked at him.
-
-He shrugged.
-
-"Apparently that is my institutional power."
-
-Damaris laughed.
-
-The others followed.
-
-Even Ilyan.
-
-The sound rose beneath the oak branches where their class had once gathered in numbers large enough that seven people would have seemed an incomplete tutorial group.
-
-The laughter faded.
-
-The absence remained.
-
-It always would.
-
-Thirty-six students.
-
-Six servants.
-
-Forty-two people who would never learn what waited beyond graduation.
-
-Mireth looked at her friends.
-
-"Ilyan?"
-
-He met her eyes.
-
-"Tomorrow, we learn what the archive transfer actually is."
-
-"Without stealing it," Caelen said.
+"Dispatch?"
 
 "Yes."
 
+"Alenor?"
+
+"I believe so."
+
+Avera made a sound.
+
+Lyrion smiled.
+
+"You know her?"
+
+"Unfortunately."
+
+Thessa looked between them.
+
+"How?"
+
+Neither answered.
+
+That was interesting.
+
+Avera looked at Thessa.
+
+"Wardens. Third bell."
+
+"I know."
+
+"West room."
+
+"I know."
+
+"Don't be late."
+
+"I have never been late."
+
+Lyrion coughed into his tea.
+
+Thessa kicked him under the table.
+
+He kicked back.
+
+Avera continued eating.
+
+Then, without looking up, she said, "If you two are going to keep doing that, sit beside each other."
+
+Thessa nearly inhaled apple.
+
+Lyrion moved his chair.
+
+The traitor.
+
+Avera looked satisfied.
+
+Thessa glared at both of them.
+
+Her grandmother finally smiled.
+
+It transformed her face.
+
+For a moment she looked less like the Marshal who had commanded the western crossings for thirty years and more like the woman who had taught Thessa to swim by walking into the river fully dressed and waiting until pride overcame fear.
+
+"Children," she said.
+
+"We graduated."
+
+"Yesterday."
+
+"Adults."
+
+"Yes."
+
+Avera drank her tea.
+
+"Young ones."
+
+Lyrion put his hand on Thessa's knee beneath the table.
+
+Thessa's entire body noticed.
+
+Her grandmother's eyes flicked down.
+
+Thessa wanted to die.
+
+Avera did not.
+
+She merely reached for the preserves.
+
+"I have had lovers older than both of you put together."
+
+Lyrion choked.
+
+Thessa stared.
+
+"Grandmother."
+
+"What?"
+
+"I did not ask."
+
+"No. You were behaving as though desire had been invented in your room last night."
+
+"We didn't—"
+
+Avera held up one hand.
+
+"I do not require a report."
+
 "Good."
+
+"Neither does the Warden office."
+
+Thessa stopped.
+
+There it was.
+
+The turn.
+
+Avera's face had not changed.
+
+"The Wardens will ask about your friends."
+
+Thessa looked at Lyrion.
+
+He was watching Avera now.
+
+No smile.
+
+"They know we're close," Thessa said.
+
+"Everyone knows you're close."
+
+"I meant the Seven."
+
+"So did I."
+
+Avera spread preserves over her bread.
+
+"They are not wrong to care. Seven new adults. Seven Houses or institutions. One shared grief. One dead cohort. One Valeric son with a family problem everyone can smell even if they cannot name it."
+
+Thessa's hand tightened around her fork.
+
+Avera noticed.
+
+Of course.
+
+"Do they know?"
+
+"Know what?"
+
+Thessa hated the question.
+
+Avera's expression softened by almost nothing.
+
+"I don't know what you know."
+
+Thessa believed her.
+
+That did not mean Avera knew nothing.
+
+Lyrion's thumb moved once against Thessa's knee.
+
+A reminder.
+
+She did not owe an answer because silence had become uncomfortable.
+
+Avera looked at him.
+
+Then at Thessa.
+
+"Good."
+
+Thessa frowned.
+
+"What?"
+
+"You have learned something."
+
+"What?"
+
+"When not to fill a silence."
+
+Lyrion smiled.
+
+Thessa kicked him again.
+
+This time Avera ignored it.
+
+---
+
+Ilyan reached the Hall of Veils before first bell.
+
+Examiner Sael was already there.
+
+Naturally.
+
+The Hall occupied a long black-stone building west of the Academy, severe enough that generations of architects had tried to soften it with gardens. The gardens had lost.
+
+Inside, the air smelled of wax, old paper and whatever bitter oil the clerks used on the black-glass cabinets.
+
+Ilyan had expected a private archive.
+
+Instead Sael handed him a cart.
+
+Ilyan looked at it.
+
+"What's this?"
+
+"A cart."
+
+"I can see that."
+
+"Good."
+
+Sael turned.
+
+Ilyan followed him into a records room where six clerks were already working.
+
+Boxes filled the tables.
+
+Nothing looked secret.
+
+That surprised him too.
+
+Sael pointed.
+
+"Returned student oath materials. Sort by year. Damaged copies there. Duplicates there. Anything with an altered seal, give it to Venn."
+
+A clerk raised one hand without looking up.
+
+Ilyan stared at Sael.
+
+"You told me to find the older form."
+
+"Yes."
+
+"This is filing."
+
+"Yes."
+
+Ilyan waited.
+
+Sael waited better.
+
+Ilyan took the cart.
+
+For the first half hour he hated him.
+
+For the second, he began to understand.
+
+Oaths were not born on lecterns.
+
+They were copied.
+
+Stamped.
+
+Distributed.
+
+Returned.
+
+Corrected.
+
+Reissued.
+
+Archived by people with ink on their fingers who complained when someone used the wrong shelf.
+
+The student form he remembered appeared eleven times.
+
+Same language.
+
+Same final line.
+
+Truth must be preserved even when dangerous.
+
+He found one from four years earlier.
+
+Same.
+
+Nine years.
+
+Same.
+
+Then the stack ended.
+
+Ilyan looked toward Sael.
+
+The examiner was arguing quietly with a clerk about mildew.
+
+Ilyan returned to the boxes.
+
+There were gaps.
+
+Not suspicious gaps.
+
+Ordinary ones.
+
+A year misfiled.
+
+A bundle sent for conservation.
+
+Three volumes checked out.
+
+He wrote nothing.
+
+Sael had not told him he couldn't.
+
+He simply found himself unwilling to put questions on paper yet.
+
+At the bottom of the third box lay a graduate oath packet.
+
+Not his year.
+
+Last year.
+
+He opened it.
+
+Necessary truth.
+
+His fingers stopped.
+
+He checked the seal.
+
+Truth Beyond the Veil.
+
+Nothing strange.
+
+"Sael."
+
+The examiner came over.
+
+Ilyan held out the page.
+
+Sael read it.
+
+"Last year."
+
+"Yes."
+
+"So it wasn't changed for us."
+
+"No."
+
+Ilyan looked at the older student forms.
+
+"How far back?"
+
+Sael glanced toward the shelves.
+
+"Keep going."
+
+That was all.
+
+Ilyan wanted to shake him.
+
+Instead he kept going.
+
+Near midday Clerk Venn arrived with a tray of tea and put one cup beside him.
+
+"You look like you're losing an argument with paper."
+
+"I am."
+
+"Paper usually wins."
+
+She walked away.
+
+Ilyan drank.
+
+Then found the first thing that made him stop breathing.
+
+A graduate oath from three years earlier.
+
+The line was different.
+
+Truth must be preserved even when dangerous.
+
+He checked the date.
+
+Then last year's.
+
+Then this year's.
+
+Three years ago: old wording.
+
+Last year: necessary truth.
+
+The year between was missing.
+
+Ilyan looked up.
+
+Sael was across the room.
+
+Their eyes met.
+
+Ilyan lifted the two pages.
+
+Sael came over.
+
+He read them.
+
+"Now you have a question."
+
+"I had one yesterday."
+
+"Now you know which question."
+
+Ilyan hated him slightly less.
+
+"When did this change?"
+
+Sael nodded once.
+
+"Good."
+
+"Can we find out?"
+
+"Probably."
+
+"Probably?"
+
+"The Hall keeps revision registers."
+
+"Where?"
+
+Sael looked toward a locked black-glass door.
+
+"Not in this room."
+
+---
+
+Caelen spent the morning learning how to stand beside a door.
+
+He had expected swords.
+
+There were swords.
+
+They were simply less important than doors.
+
+Captain Arven walked him through the east barracks, the Crown reception rooms, two archive corridors and a carriage court while explaining where a guard stood when the person being protected was right-handed, where to place oneself when stairs narrowed, and why ceremonial crowds were more dangerous than hostile ones because everyone believed they belonged there.
+
+Caelen listened.
+
+Mostly.
+
+His shoulder hurt from yesterday.
+
+Mireth had touched the bruise beneath the oak.
+
+He had thought about that an unreasonable number of times.
+
+Arven stopped.
+
+Caelen nearly walked into him.
+
+"Where's your principal?"
+
+Caelen blinked.
+
+"What?"
+
+Arven pointed.
+
+A junior officer they had been shadowing was gone.
+
+Caelen looked down the corridor.
+
+"Shit."
+
+"Dead."
+
+"That's dramatic."
+
+"So is failure."
+
+They found the officer around the corner, laughing.
+
+Caelen scowled.
+
+The officer bowed.
+
+Arven said, "Again."
+
+By noon Caelen had killed six imaginary principals.
+
+His opinion of adulthood declined.
+
+At the midday meal Ysran sat across from him.
+
+"How many?"
+
+"Six."
+
+"Excellent."
+
+"Excellent?"
+
+"I killed nine."
+
+Caelen stared.
+
+"That is not reassuring."
+
+"It isn't supposed to be."
+
+Ysran tore bread.
+
+Caelen watched him.
+
+His cousin was eighty-three, old enough to have been a Royal Martial officer longer than Caelen had been alive and young enough to still enjoy humiliating him in a training yard.
+
+Caelen had always thought of him as simple.
+
+Not stupid.
+
+Simple in the sense that Ysran seemed to know what he believed.
+
+Duty.
+
+Crown.
+
+Family.
+
+Don't leave someone behind.
+
+Hit first if the other person has already drawn.
+
+Caelen trusted that model.
+
+Yesterday, his mother had warned him people were talking about the Seven.
+
+He wondered what Ysran had heard.
+
+"Why did you join?"
+
+Ysran looked up.
+
+"The Fellowship?"
+
+"Yes."
+
+"Women."
+
+Caelen stared.
+
+Ysran continued eating.
+
+"You're joking."
+
+"Mostly."
+
+"Mostly?"
+
+"I was twenty-two. The uniform was excellent."
+
+Caelen laughed.
+
+"Mother would hate that answer."
+
+"Your mother knows. She was there."
+
+That raised questions Caelen decided not to ask.
+
+Ysran smiled.
+
+"Later I found better reasons."
+
+"How much later?"
+
+"About fifteen minutes after someone tried to kill a magistrate I was standing beside."
+
+Caelen looked at him.
+
+Ysran's smile faded.
+
+"Reasons change."
+
+Caelen thought about Mireth.
+
+About the Seven.
+
+About a sealed packet he had not yet been assigned to carry in this version of his life.
+
+He had expected adulthood to reveal everyone's real motives.
+
+Instead it seemed to reveal that people had several.
+
+A bell rang.
+
+Ysran stood.
+
+"Come on."
+
+"Another dead principal?"
+
+"Archive escort."
+
+Caelen paused.
+
+Ysran noticed.
+
+"Problem?"
+
+"Where?"
+
+"Hall of Veils."
+
+There it was.
+
+Caelen's pulse moved.
+
+He kept his face still.
+
+Ysran saw something anyway.
+
+"Friend there?"
+
+"Maybe."
+
+"Then behave."
+
+"That's your advice?"
+
+"Yes."
+
+"Remarkably sophisticated."
+
+"I'm saving the expensive wisdom for when you earn it."
+
+---
+
+Damaris's first morning at the River Ledger began with invoices for onions.
+
+She was delighted.
+
+Lady Meris was not present.
+
+That helped.
+
+The office overlooked the eastern canal, where barges slid past beneath wet willow branches. Clerks moved through the long room carrying ledgers, manifests and cups of tea. Nobody cared that Damaris had graduated yesterday. A senior clerk named Pell handed her a stack of toll abstracts and told her to find three duplicated charges before lunch.
+
+She found four.
+
+Pell looked at the page.
+
+"Fourth is legitimate."
+
+"No."
+
+He looked at her.
+
+Damaris tapped the code.
+
+"Different warehouse, same unloading crew, same hour. They billed the crew twice."
+
+Pell looked again.
+
+Then grunted.
+
+"Good."
+
+That was all.
+
+Damaris loved him immediately.
+
+By midday she had learned more about the River Ledger from one room of irritated clerks than from three years of formal instruction.
+
+Trade was not numbers.
+
+Trade was somebody's wet boots.
+
+A torn sack.
+
+A boat arriving after dark.
+
+A warehouse owner insisting thirty barrels had become twenty-eight through evaporation.
+
+A clerk knowing exactly which ferryman lied about fog.
+
+The door opened.
+
+Meris entered.
+
+Damaris's mood worsened.
+
+Her aunt spoke to Pell, then came over.
+
+"Walk with me."
+
+"No."
+
+Meris looked at her.
+
+Damaris finished the line she was checking.
+
+"Now."
+
+They went to the balcony.
+
+Rain had stopped. The canal below carried flower petals from yesterday's ceremony.
+
+Meris leaned on the rail.
+
+"How is Ilyan?"
+
+Damaris looked at her.
+
+"Angry."
+
+"At you?"
+
+"Somewhat."
+
+"Good."
+
+Damaris blinked.
+
+Meris looked toward the canal.
+
+"If he weren't, I'd worry about him."
+
+That did not fit the version of Meris Damaris had been preparing to fight.
+
+Annoying.
+
+"He found something."
+
+Meris did not look at her.
+
+Damaris watched the side of her face.
+
+"What?"
+
+"That's all you get."
+
+Meris nodded.
+
+No pressure.
+
+No demand.
+
+Damaris distrusted that too.
+
+"You asked me to tell you."
+
+"I asked you to stay close and understand whether the Valerics were fracturing."
+
+"You said you wanted to know what he knew."
+
+"Yes."
+
+"Now I say he found something and you don't ask?"
+
+Meris looked at her.
+
+"Would you answer?"
+
+"No."
+
+"Then I would learn only that I can make you defensive."
+
+Damaris hated experienced adults.
+
+Meris smiled faintly.
+
+"Useful lesson?"
+
+"No."
+
+"Keep it anyway."
+
+She turned to go.
+
+Damaris caught her sleeve.
+
+Meris stopped.
+
+"Why are you doing this?"
+
+"Which part?"
+
+"Any of it."
+
+Her aunt considered.
+
+Then, unexpectedly, answered.
+
+"Because the Valerics control people I cannot see. Because Silver Night killed children from Houses that trade with us, marry us and hate us. Because if their family fractures, contracts fracture with it. Because I love you. Because I am curious. Because I dislike not knowing."
+
+Damaris stared.
+
+Meris touched her cheek.
+
+"Several reasons can survive in the same person."
+
+Then she left.
+
+Damaris remained on the balcony.
+
+She had known that.
+
+Of course she had known that.
+
+Knowing it abstractly was easier than loving someone who proved it.
+
+---
+
+Rhyl spent the morning in mud.
+
+This also improved his opinion of adulthood.
+
+Bracken disliked puddles but loved ditches.
+
+Rhyl discovered this when she stepped into one up to the knee with the serene confidence of a horse certain that consequences belonged to riders.
+
+"Wonderful."
+
+Bracken flicked an ear.
+
+The Red Hart route took them along the western service road below the Academy, past retaining walls black with rain and down toward the lower gardens.
+
+Mara rode ahead.
+
+She was his father's younger sister and had spent most of Rhyl's childhood teaching him things his father later pretended he had taught first.
+
+She stopped near a repaired culvert.
+
+"What do you see?"
+
+Rhyl dismounted.
+
+"Mud."
+
+"Brilliant."
+
+"Water."
+
+"Exceptional."
+
+He crouched.
+
+The culvert had been cleared recently. Fresh stone sat beneath older masonry. Cart tracks cut the road.
+
+Rhyl followed them with his eyes.
+
+One set had come from the Academy service gate.
+
+Another from the lower road.
+
+"Repair wagons."
+
+"Probably."
+
+He looked closer.
+
+A narrow wheel had crossed the heavier tracks.
+
+"Courier?"
+
+"Could be."
+
+Mara waited.
+
+Rhyl touched the edge of the impression.
+
+Old.
+
+Several days at least.
+
+Rain had softened it.
+
+He stood.
+
+"Nothing useful."
+
+"That's an answer."
+
+They moved on.
+
+At the west-tower service road, Rhyl stopped.
+
+The tower rose above them behind repair cloth.
+
+He had seen it every day since Silver Night.
+
+From here it looked different.
+
+Not grand.
+
+A service wall.
+
+Drainage.
+
+A gate wide enough for carts.
+
+Two gardeners arguing over a broken wheelbarrow.
+
+A laundress carrying folded cloth.
+
+A mason eating cheese.
+
+People.
+
+He thought of Mireth talking about gardeners' keys in the old scaffolded version of events that had not happened yet—no, not memory. He had no such memory.
+
+What he had was simpler.
+
+He had spent years walking through the front of the Academy.
+
+He had rarely thought about what came through the back.
+
+"Rhyl."
+
+He turned.
+
+Mara was watching him.
+
+"What?"
+
+"You've gone somewhere."
+
+"Just looking."
+
+"At?"
+
+"The gate."
+
+She followed his gaze.
+
+"Ugly thing."
+
+"Who uses it?"
+
+"Everyone who doesn't need the front one."
+
+He looked at her.
+
+Mara shrugged.
+
+"Food. coal. laundry. repairs. deliveries. dead furniture. live goats when the kitchens are feeling ambitious."
+
+"Records?"
+
+"Ask the Academy."
+
+Rhyl mounted.
+
+Mara's eyes narrowed.
+
+"You're looking for something."
+
+"I don't know what."
+
+"Good."
+
+He frowned.
+
+"Good?"
+
+"If you knew before you looked, you'd only find what you expected."
+
+Rhyl thought about that.
+
+Then Bracken tried to eat a memorial ribbon from a low branch.
+
+He pulled her away.
+
+"Absolutely not."
+
+Mara laughed.
+
+---
+
+Lyrion met Mistress Alenor Syle at a desk with no papers on it.
+
+That worried him immediately.
+
+The Silver Bough's rooms occupied the upper floors of an old embassy house where every chair looked comfortable and none actually were.
+
+Alenor was perhaps one hundred and ninety. Her hair was white-blond, her clothes pale grey, her face pleasant in the manner of a knife with a polished handle.
+
+Lyrion had admired her since he was sixteen.
+
+He was reconsidering.
+
+"Sit."
+
+He sat.
+
+She looked at him.
+
+He waited.
+
+She waited.
+
+Thessa's grandmother had apparently been right about silence.
+
+Lyrion smiled.
+
+Alenor smiled back.
+
+"Better."
+
+"What?"
+
+"You didn't start performing."
+
+"I am wounded."
+
+"No, you're not."
+
+"Now I am."
+
+"Your friends like this?"
+
+"Some."
+
+"Thessa?"
+
+He stopped.
+
+Alenor's smile did not change.
+
+There it was.
+
+He could answer.
+
+He could joke.
+
+He could ask how she knew.
+
+All of those would give her something.
+
+So he said, "What am I doing today?"
+
+Her smile widened.
+
+"Dispatch triage."
+
+She gave him twelve sealed covers.
+
+"Sort by urgency."
+
+"I can't open them."
+
+"No."
+
+"Then?"
+
+"Look."
+
+He did.
+
+Wax.
+
+Paper.
+
+Fold.
+
+Hand.
+
+Route marks.
+
+One had rain damage.
+
+One had been resealed badly.
+
+Three came from western posts.
+
+Two from trade missions.
+
+One smelled faintly of perfume.
+
+He sorted.
+
+Alenor moved two.
+
+"Why?"
+
+"Because you're wrong."
+
+"Helpful."
+
+"Ask better."
+
+Lyrion picked up one of the moved letters.
+
+"Why is this urgent?"
+
+"The envoy uses blue wax only for domestic matters."
+
+He looked at the blue seal.
+
+"How would I know that?"
+
+"You wouldn't."
+
+"So this is memory."
+
+"Yes."
+
+He picked up the other.
+
+"Why this?"
+
+"The fold."
+
+He saw nothing.
+
+Alenor did not rescue him.
+
+After a moment she said, "You will."
+
+Hours passed.
+
+By afternoon Lyrion's head hurt.
+
+He liked it.
+
+That surprised him.
+
+At the end, Alenor took back the covers.
+
+"Your cohort."
+
+Lyrion's shoulders tightened.
+
+"Seven."
+
+"Yes."
+
+"What about us?"
+
+"Useful."
+
+He looked at her.
+
+Alenor leaned back.
+
+"Don't look offended. Friendship is useful. So is marriage. So is hatred. So is a man who owes you twelve crowns and thinks you forgot."
+
+"Are you asking me to spy on them?"
+
+"No."
+
+That answer came too quickly to be a trap.
+
+Lyrion waited.
+
+Alenor continued.
+
+"I'm telling you other people will assume you do."
+
+That was different.
+
+He thought of Thessa in bed that morning, hair everywhere, his shirt under her cheek.
+
+He thought of Avera saying the Wardens would ask.
+
+"What do I do with that?"
+
+"Whatever you like."
+
+"That's not instruction."
+
+"Correct."
+
+Lyrion looked at her.
+
+Alenor's expression softened.
+
+Barely.
+
+"You're young. Not stupid. I would prefer not to ruin the second quality while correcting the first."
+
+He laughed.
+
+She handed him a cream invitation.
+
+Hall of Seven Lamps.
+
+Flowered Sunder.
+
+Two nights.
+
+"Work?"
+
+"Reception."
+
+"Same thing."
+
+"Now you're learning."
+
+He opened it.
+
+Guests permitted.
+
+He thought of Thessa.
+
+Alenor watched him think of Thessa.
+
+He knew she did.
+
+That was fine.
+
+Let her.
+
+"Seven guests?"
+
+"Ambitious."
+
+"Possible?"
+
+"Yes."
+
+He smiled.
+
+"Good."
+
+---
+
+Mireth's Green Covenant morning began in a greenhouse.
+
+She had expected vows.
+
+Instead Scholar Silae handed her pruning shears.
+
+Mireth looked at them.
+
+"Is this symbolic?"
+
+"No."
+
+"Good."
+
+"Why?"
+
+"I am tired of symbolism."
+
+Silae laughed.
+
+They worked among winter rosemary and white bellflowers while rain ticked against the glass.
+
+Mireth had known Silae most of her life. Older cousin. Scholar. The person who had once told Mireth at twelve that if she was going to lie about stealing peaches she should at least remove the leaf from her hair.
+
+Silae had never seemed political.
+
+That probably meant Mireth had been twelve.
+
+"Mother says everyone is watching Caelen and me."
+
+Silae snipped a dead stem.
+
+"Yes."
+
+Mireth glared.
+
+"You could pretend surprise."
+
+"I could."
+
+"You won't."
+
+"No."
+
+Mireth cut too much from a rosemary branch.
+
+Silae took the shears from her.
+
+"You're murdering it."
+
+"It knows what it did."
+
+"Poor Caelen."
+
+Mireth laughed despite herself.
+
+Silae handed the shears back.
+
+They worked.
+
+After a while Silae said, "Your first actual lesson is upstairs."
+
+"Finally."
+
+"Don't sound eager."
+
+"Why?"
+
+"It encourages teachers."
+
+Upstairs, the House of Rooted Memory changed.
+
+The public greenhouse gave way to quiet rooms built around living trunks. Clay tablets sat in root niches. Green glass softened the light.
+
+A gardener passed them carrying three pots.
+
+A maid came the other way with wilted flowers.
+
+Mireth stepped aside.
+
+The gardener unlocked a side room.
+
+She looked at the keys.
+
+Then at Silae.
+
+"How many people have those?"
+
+"Those keys?"
+
+"Keys to private rooms."
+
+Silae glanced back.
+
+"Depends on the room."
+
+"Gardeners?"
+
+"Sometimes."
+
+"Maids."
+
+"Obviously."
+
+"Shrine attendants."
+
+"Yes."
+
+Mireth frowned.
+
+Silae stopped.
+
+"What?"
+
+"Nothing."
+
+"That's rarely true."
+
+Mireth looked toward the maid disappearing down the stairs.
+
+"Just never thought about it."
+
+"About servants?"
+
+"About access."
+
+Silae's expression changed.
+
+Not much.
+
+"Good."
+
+Mireth waited.
+
+Silae resumed walking.
+
+That was apparently the entire lesson.
+
+In the inner chamber three old trees rose through the floor.
+
+Silae sat.
+
+Mireth sat opposite her.
+
+"Tell me something true."
+
+Mireth stared.
+
+"Caelen has a nice ass."
+
+Silae closed her eyes.
 
 Mireth smiled.
 
-Caelen's hand found hers in the darkness.
+"You asked."
 
-No family was watching.
+"I did."
 
-No aunt had arranged the seating.
+"Do the trees agree?"
 
-No mother could call it advantageous.
+"The trees do not care."
 
-His fingers closed gently around hers.
+"Then they lack judgment."
 
-Mireth let them.
+Silae laughed.
 
-Across the circle, Thessa leaned close enough that her shoulder rested against Lyrion's.
+Mireth relaxed.
 
-Damaris sat beside Rhyl but kept one gloved hand folded in her lap.
+Then Silae said, "Again."
 
-Ilyan watched all of them and wondered, not for the first time, how long friendship could survive once everyone possessed a secret.
+Mireth's smile faded.
 
-Above them, the wounded moon shone through Bloomtide leaves.
+She looked at the pale trunk.
 
-Seven doors had opened.
+"I miss them."
 
-Behind each waited a different institution, a different obligation, a different adult lesson.
+The room remained quiet.
 
-But tomorrow two of those doors would open onto the same corridor.
+Silae did not ask who.
 
-And for the first time since Ilyan had told them what his family had done, the Seven possessed something more useful than outrage.
+Mireth loved her for that.
 
-They possessed a place to look next.
+"Again."
+
+"I'm angry."
+
+"Again."
+
+"I don't know who I'm angry at."
+
+The leaves above moved.
+
+No wind.
+
+Mireth looked up.
+
+Silae waited.
+
+"Does it know?"
+
+"No."
+
+"What does it do?"
+
+"Remembers."
+
+Mireth looked at her.
+
+"Exactly?"
+
+"Close enough to be dangerous."
+
+That was the first thing Silae said that sounded like a warning.
+
+Mireth sat back.
+
+"Can it tell if I lie?"
+
+"No."
+
+"Can you?"
+
+"Sometimes."
+
+"Comforting."
+
+"Living memory preserves testimony. It does not make testimony true."
+
+Mireth thought of Ilyan.
+
+She did not say his name.
+
+Silae did not ask.
+
+Instead she showed Mireth how a statement was marked, witnessed and later recalled.
+
+No grand secret.
+
+No lecture about the murder.
+
+Work.
+
+Mireth preferred that.
+
+At the end Silae touched the clay marker beside the pale tree.
+
+"People trust remembered words too much."
+
+"Because the tree remembers?"
+
+"Because people hear a preserved voice and confuse accuracy of preservation with accuracy of belief."
+
+Mireth nodded.
+
+That she understood.
+
+She thought of her own certainty about people.
+
+Her mother.
+
+Caelen.
+
+Ilyan.
+
+Silae.
+
+All of them built from memories she trusted.
+
+None of those memories guaranteed she knew everything.
+
+On the way out, the gardener with the keys passed again.
+
+Mireth noticed him this time.
+
+---
+
+By late afternoon, the Hall of Veils received three black cases from the Academy archive.
+
+Caelen walked beside them.
+
+Ilyan saw him first.
+
+Caelen saw Ilyan second.
+
+Neither reacted.
+
+That almost made Ilyan laugh.
+
+Captain Arven had the lead. Another Royal Martial officer followed the cart.
+
+The cases were sealed.
+
+Ilyan did not know what was inside.
+
+He wanted to.
+
+Caelen's face said nothing.
+
+That was new.
+
+Or perhaps Ilyan had simply never watched him on duty before.
+
+Clerk Venn checked the seals.
+
+"Good."
+
+Arven signed.
+
+Caelen signed as witness.
+
+Ilyan stood at the registration desk.
+
+One case carried a return label from the Academy's west records annex.
+
+His pulse moved.
+
+He looked at Sael.
+
+Sael was reading another tag.
+
+No signal.
+
+No meaningful glance.
+
+Nothing.
+
+Good.
+
+Ilyan copied the case number into the register.
+
+The old-fashioned way.
+
+Ink.
+
+Date.
+
+Origin.
+
+Destination.
+
+Custody.
+
+The case went through the black-glass door.
+
+He watched it disappear.
+
+Caelen remained beside the cart.
+
+For half a second their eyes met.
+
+Ilyan did not ask.
+
+Caelen did not offer.
+
+Something in that felt better than trust declared aloud.
+
+Arven turned.
+
+The escort left.
+
+Sael came beside Ilyan.
+
+"What did you see?"
+
+Ilyan looked at the register.
+
+"Three cases."
+
+"Yes."
+
+"One from west records."
+
+"Yes."
+
+"You're asking because you want to know whether I'll invent the rest."
+
+Sael looked at him.
+
+"Am I?"
+
+Ilyan hated him again.
+
+Then Venn returned.
+
+"Revision register's available."
+
+Ilyan forgot Caelen.
+
+They went through the black-glass door.
+
+The register was smaller than he expected.
+
+Sael opened it to the relevant years.
+
+There.
+
+A line.
+
+Not hidden.
+
+Not dramatic.
+
+A revision entry between the oath he had found from three years ago and the altered version from last year.
+
+Ilyan read it.
+
+Emergency substitution language.
+
+Filed seventeen days before Silver Night.
+
+He stopped.
+
+Sael's finger remained on the page.
+
+Ilyan read the date again.
+
+Seventeen days.
+
+His mouth went dry.
+
+"Who filed it?"
+
+The personal signatory field was restricted.
+
+But the routing line was visible.
+
+Joint Order Liaison — Dmitrigical Review.
+
+Ilyan did not speak.
+
+His uncle's voice came back.
+
+Necessary sacrifice.
+
+He could hear the exact cadence.
+
+Sael closed the register.
+
+Ilyan looked at him.
+
+"Why did you close it?"
+
+"Because you're shaking."
+
+"I can read while shaking."
+
+"Probably."
+
+"Open it."
+
+Sael did.
+
+No argument.
+
+Ilyan appreciated that.
+
+He read the line again.
+
+Nothing else changed.
+
+The words remained ink.
+
+His understanding did.
+
+"Can I copy this?"
+
+"Not from memory."
+
+Ilyan frowned.
+
+Sael pointed toward Venn.
+
+"Certified extract."
+
+Of course.
+
+Paperwork.
+
+Ilyan nearly laughed.
+
+"How long?"
+
+"Tomorrow."
+
+"Why?"
+
+"Because Venn has seventeen requests ahead of you."
+
+Venn, across the room, raised a finger without looking up.
+
+"Sixteen."
+
+Sael corrected himself.
+
+"Sixteen."
+
+Ilyan sat down.
+
+Seventeen days.
+
+Dmitrigical Review.
+
+Not proof of who killed anyone.
+
+Not proof of why.
+
+But not his uncle's confession either.
+
+Something outside the family.
+
+Something that had existed before Silver Night.
+
+His hands still shook.
+
+Sael put tea beside him.
+
+Ilyan drank it.
+
+It was terrible.
+
+He drank the rest.
+
+---
+
+Caelen found Mireth behind the greenhouse.
+
+She was sitting on a low wall with her shoes off.
+
+He stopped.
+
+She looked up.
+
+"You look official."
+
+"I am official."
+
+"Tragic."
+
+He came closer.
+
+Her bare feet were muddy.
+
+"Why?"
+
+"Green Covenant."
+
+"That explains nothing."
+
+"Correct."
+
+He stood between her knees.
+
+Neither commented on that.
+
+Mireth looked at his uniform.
+
+The white sash.
+
+The sword.
+
+The close black coat.
+
+Her eyes moved slowly enough that he noticed.
+
+"Careful."
+
+She looked up.
+
+"Hot?"
+
+"Very."
+
+She smiled.
+
+He put his hands on the wall beside her hips.
+
+"That was cruel."
+
+"You survived."
+
+"Barely."
+
+Mireth touched the white sash.
+
+"What did you do?"
+
+"Escorted archive cases."
+
+Her hand stopped.
+
+He watched her understand.
+
+"Ilyan?"
+
+"Was there."
+
+"Did you talk?"
+
+"No."
+
+"Good."
+
+Caelen blinked.
+
+Mireth's fingers slid along the edge of the sash.
+
+"I mean—good."
+
+"I know."
+
+He did.
+
+That pleased her.
+
+She looked at his mouth.
+
+Caelen noticed that too.
+
+Everything about the afternoon suddenly became less institutional.
+
+He leaned closer.
+
+Mireth's knees shifted around him.
+
+Not trapping.
+
+Inviting.
+
+His hand settled at her waist.
+
+She breathed in.
+
+"Caelen."
+
+"Mm?"
+
+"We keep getting interrupted."
+
+"Then stop talking."
+
+She laughed against his mouth.
+
+The kiss landed badly because of it.
+
+Teeth.
+
+A startled sound.
+
+Then they tried again.
+
+That one worked.
+
+Mireth's hand went into his hair.
+
+Caelen forgot the greenhouse.
+
+The Hall.
+
+The entire concept of archives.
+
+She kissed him with the impatience of someone who had been thinking about it for longer than she intended to admit.
+
+He had been too.
+
+His other hand found her waist.
+
+She pulled him closer.
+
+A window opened above them.
+
+Silae's voice drifted out.
+
+"Not against the rosemary."
+
+Mireth froze.
+
+Caelen pressed his forehead to hers.
+
+Silae continued.
+
+"It's a difficult cultivar."
+
+The window shut.
+
+Mireth buried her face against his shoulder.
+
+Caelen laughed silently until she hit him.
+
+"Everyone knows."
+
+"Apparently."
+
+"This is hell."
+
+He kissed her temple.
+
+"Good hell."
+
+She looked up.
+
+He kissed her again.
+
+Shorter.
+
+Softer.
+
+This time she smiled afterward.
+
+Then her expression changed.
+
+"I learned something today."
+
+He waited.
+
+She touched his collar.
+
+"Not about Silver Night."
+
+"All right."
+
+"About memory."
+
+He waited again.
+
+Mireth looked at him.
+
+"You don't have to ask."
+
+"I know."
+
+That did something to her face.
+
+She kissed him once more.
+
+Then said, "Ilyan will tell us tonight."
+
+Caelen nodded.
+
+They stayed where they were until the rosemary's safety became a legitimate concern.
+
+---
+
+Damaris met Rhyl by the eastern canal.
+
+He was muddy.
+
+She approved.
+
+Bracken was tied nearby, eating something that was probably not intended for horses.
+
+Damaris stopped in front of him.
+
+"You smell like a ditch."
+
+"Thank you."
+
+"Compliment."
+
+"I know."
+
+She kissed him.
+
+Rhyl went still.
+
+Damaris had intended something brief.
+
+A declaration, perhaps.
+
+A correction to yesterday's almost.
+
+Then his hand came to her waist.
+
+The plan deteriorated.
+
+She backed him into the willow rail.
+
+He made a surprised sound against her mouth.
+
+Good.
+
+She liked surprising him.
+
+When they separated, his eyes were unfocused.
+
+Damaris felt extremely pleased with herself.
+
+"Hello."
+
+Rhyl stared.
+
+"Hello."
+
+She leaned beside him on the rail.
+
+He looked at her.
+
+Then at the canal.
+
+Then back.
+
+"Are we going to discuss that?"
+
+"No."
+
+"Good."
+
+She smiled.
+
+He smiled too.
+
+Bracken tore a mouthful from a flower basket.
+
+"Your horse is committing a crime."
+
+"She's institutional now."
+
+Damaris laughed.
+
+Rhyl told her about the west service gate.
+
+Not as a clue.
+
+Just what he had seen.
+
+Food.
+
+Laundry.
+
+Repairs.
+
+Couriers.
+
+People moving through a place they had always imagined from the front.
+
+Damaris listened.
+
+Then told him about Meris.
+
+Not everything her aunt had ever been.
+
+Just today.
+
+"She asked about Ilyan."
+
+Rhyl's expression sharpened.
+
+"I told her he was angry and that he'd found something."
+
+"Anything else?"
+
+"No."
+
+He nodded.
+
+Damaris looked at him.
+
+"That's all?"
+
+"What?"
+
+"No interrogation?"
+
+"You want one?"
+
+"No."
+
+"Then no."
+
+She bumped his shoulder.
+
+He bumped back.
+
+"I hate how reasonable you are."
+
+"I'm not."
+
+"I know. That's what makes it worse."
+
+Rhyl looked toward the water.
+
+"Do you trust her?"
+
+Damaris did not need to ask who.
+
+"Yes."
+
+He waited.
+
+"And no."
+
+He nodded.
+
+That was enough.
+
+Damaris watched his profile.
+
+"What about your aunt?"
+
+"Mara?"
+
+"Do you trust her?"
+
+"Yes."
+
+"Entirely?"
+
+Rhyl thought.
+
+"No."
+
+Damaris smiled.
+
+"Good."
+
+"Why good?"
+
+"Because I was starting to think I was uniquely defective."
+
+He turned.
+
+"You are."
+
+She hit him.
+
+He caught her wrist.
+
+Their eyes met.
+
+Damaris looked at his hand around her.
+
+Rhyl released it.
+
+She caught his hand before it fell.
+
+"Later," she said.
+
+He knew what she meant this time.
+
+His mouth curved.
+
+"Later."
+
+---
+
+They met beneath the oak after dark.
+
+Thessa and Lyrion arrived together.
+
+Mireth looked at Thessa.
+
+Then at Lyrion.
+
+Then at the same crease in both their clothes.
+
+Thessa pointed.
+
+"Don't."
+
+Mireth smiled.
+
+"Didn't say anything."
+
+"You were about to."
+
+Caelen arrived behind Mireth.
+
+Thessa looked at his mouth.
+
+Then Mireth's.
+
+Her expression became viciously delighted.
+
+Mireth pointed back.
+
+"Don't."
+
+Thessa sat.
+
+"Didn't say anything."
+
+Damaris and Rhyl arrived holding hands.
+
+Ilyan came last.
+
+He had a page folded inside his coat.
+
+Nobody teased him.
+
+He sat.
+
+For a moment he said nothing.
+
+Then:
+
+"Seventeen days."
+
+Caelen's face changed.
+
+Mireth leaned forward.
+
+Ilyan unfolded his own notes—not a copy of the register, only the date and routing he was permitted to retain until the certified extract arrived.
+
+"The wording was changed seventeen days before Silver Night."
+
+No one spoke.
+
+"Dmitrigical Review was in the routing."
+
+Thessa swore.
+
+Lyrion's hand closed around hers.
+
+Damaris asked, "Personal signatory?"
+
+"Restricted."
+
+"Certified copy?"
+
+"Tomorrow."
+
+Rhyl looked at Ilyan.
+
+"Does your family know you found it?"
+
+"I don't know."
+
+That was the whole answer.
+
+Mireth did not ask whether it proved anything.
+
+It obviously did not prove everything.
+
+It proved the line had changed when Ilyan said it had.
+
+It gave them somewhere to look.
+
+Caelen sat beside Mireth.
+
+"I escorted three cases there today."
+
+Ilyan nodded.
+
+"I saw you."
+
+"One was west records."
+
+"I saw that too."
+
+They looked at each other.
+
+Nothing more needed saying.
+
+Thessa leaned back against the oak.
+
+"The Wardens asked about all of you."
+
+Lyrion laughed once.
+
+"Silver Bough too."
+
+"Asked what?" Damaris said.
+
+"Not much yet."
+
+Thessa looked at Lyrion.
+
+He took over.
+
+"They know we're useful to each other."
+
+"Charming," Damaris said.
+
+"They also know everyone else knows."
+
+Rhyl frowned.
+
+"That's worse."
+
+"Yes."
+
+Lyrion produced the cream invitation.
+
+"Flowered Sunder. Hall of Seven Lamps. Two nights."
+
+Thessa took it from him.
+
+"He wants all seven."
+
+"I want all seven."
+
+"That's what I said."
+
+Damaris looked at the card.
+
+"Why?"
+
+Lyrion shrugged.
+
+"Because we're going to be watched anyway."
+
+That was not the whole reason.
+
+Thessa knew.
+
+She could tell from the way he held the invitation.
+
+He wanted them together.
+
+He wanted a room none of their institutions could object to them entering.
+
+She liked that.
+
+She did not say so.
+
+Rhyl looked at Ilyan's folded notes.
+
+"What next?"
+
+Ilyan rubbed his thumb along the paper.
+
+"The revision."
+
+"Who requested it?" Mireth asked.
+
+"Who approved it," Damaris added.
+
+"Who received it," Lyrion said.
+
+Thessa looked at him.
+
+He shrugged.
+
+"Dispatch."
+
+Caelen said, "And what moved through the west service gate."
+
+Everyone looked at Rhyl.
+
+He blinked.
+
+"What?"
+
+"You spent all day looking at roads," Damaris said.
+
+"One road."
+
+"Still."
+
+Rhyl thought about the gate.
+
+The carts.
+
+The narrow wheel track.
+
+"Maybe."
+
+Mireth looked around them.
+
+Nobody had been assigned to investigate Silver Night.
+
+That mattered.
+
+Their institutions had given them ordinary work.
+
+Oaths.
+
+Roads.
+
+Dispatches.
+
+Ledgers.
+
+Memory.
+
+Guard duty.
+
+The world had not handed them a conspiracy.
+
+It had handed them jobs.
+
+The jobs touched things.
+
+That was enough.
+
+For tonight.
+
+Thessa leaned into Lyrion.
+
+Damaris rested her head on Rhyl's shoulder.
+
+Mireth sat close to Caelen.
+
+Ilyan noticed.
+
+He looked at Mireth's mouth.
+
+Then Caelen's.
+
+"Oh."
+
+Mireth closed her eyes.
+
+"Don't."
+
+Damaris sat up.
+
+"What?"
+
+Ilyan smiled.
+
+Thessa understood first.
+
+"No."
+
+Mireth pointed at all of them.
+
+"We are discussing murder."
+
+"People contain multitudes," Lyrion said.
+
+Thessa kissed his cheek.
+
+"Shut up."
+
+Caelen's hand found Mireth's.
+
+Damaris looked at Rhyl.
+
+Rhyl looked suddenly interested in the moon.
+
+She smiled.
+
+Ilyan laughed.
+
+It surprised all of them.
+
+The sound broke strangely at the end, grief still inside it.
+
+Mireth squeezed Caelen's hand.
+
+Thessa's smile faded but she did not look away from Ilyan.
+
+Nobody asked if he was all right.
+
+He wasn't.
+
+They knew.
+
+After a moment he breathed out.
+
+"Sorry."
+
+Rhyl said, "For what?"
+
+Ilyan looked around the circle.
+
+Then shook his head.
+
+"Nothing."
+
+The moon shone through the leaves.
+
+Below them, younger students crossed the Academy paths, still protected for a little longer.
+
+Beyond the walls, Aurelith went on working.
+
+Barges moved.
+
+Clerks filed papers.
+
+Guards stood beside doors.
+
+Gardeners carried keys.
+
+Couriers used service gates.
+
+Old women noticed young lovers and mostly had the decency to be amused.
+
+Seventeen days before Silver Night, someone had changed an oath.
+
+Tomorrow Ilyan would have the certified line in his hands.
+
+Tonight the Seven had each learned something smaller.
+
+Adulthood had not opened one door.
+
+It had opened hundreds.
+
+Most led to work.
+
+Some led to beds.
+
+A few, if they were unlucky, led back toward the dead.
