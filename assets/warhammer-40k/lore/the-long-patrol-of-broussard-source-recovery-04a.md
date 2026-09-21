@@ -1,12 +1,11 @@
 # The Long Patrol of Broussard
 
-## Source Recovery 04A — IV. THE COMMISSAR ARRIVES
+## IV. THE COMMISSAR ARRIVES — Part I
 
-*Verbatim recovery from the surviving Google working draft, revision `ANLCKQks_1HOpj04bvvmE-hr8pTTS1BbzZK8DWdQZe3r-pegWrkMwGGK69pysuBl8yAho4TCGX5HoOqIgo5G7yvtiJpgEGWyDTVKjokLPg4`. This bounded slice preserves the opening of Chapter IV through Broussard's order concerning strange noises under the ice. Chapter IV continues in the source and remains recovery backlog.*
+**Author:** Mrcalzon02 / Christopher Vardeman  
+**Based on the work of:** *The Long Patrol of Broussard*
 
 *An original non-commercial Warhammer 40,000 fan chronicle. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This fan work is not endorsed by or affiliated with Games Workshop.*
-
-IV. THE COMMISSAR ARRIVES
 
 The equipment deck had become a cathedral of complaints.
 
