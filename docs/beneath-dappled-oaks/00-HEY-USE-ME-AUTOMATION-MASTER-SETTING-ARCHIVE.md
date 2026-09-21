@@ -3,7 +3,7 @@ series: "Beneath Dappled Oaks"
 document_role: "AUTHORITATIVE AUTOMATION MASTER SETTING ARCHIVE"
 automation_priority: 100
 status: "ACTIVE CANON ANCHOR"
-last_reconciled: "2026-09-20"
+last_reconciled: "2026-09-21"
 read_first: true
 ---
 
@@ -253,11 +253,17 @@ Do not assume these pairings are mechanically exclusive or guaranteed endgames. 
 
 ## 7. Institutions and locations already established
 
-### The Academy
+### Concord Academy of Aurelith
 
-The shared institution where the seven studied and where their graduating cohort was destroyed.
+**Formal name:** Concord Academy of Aurelith.  
+**Common usage:** the Academy.  
+**Location:** Academy Ward, Aurelith.
 
-The Academy should continue to carry physical reminders of absence: empty places, truncated ceremonies, mourning customs, sealed or repaired spaces, faculty discomfort, and the grotesque administrative fact that seven survivors still have graduations to attend.
+This is the shared autonomous institution where the seven studied and where their graduating cohort was destroyed. Its chartered independence from any single Great House is politically important, particularly after Silver Night.
+
+Do not confuse it with the **Academy of the Nine Lamps**, a separate high-magic academy associated with Nymrael patronage.
+
+The Concord Academy should continue to carry physical reminders of absence: empty places, truncated ceremonies, mourning customs, sealed or repaired spaces, faculty discomfort, and the grotesque administrative fact that seven survivors still have graduations to attend.
 
 ### West Tower
 
