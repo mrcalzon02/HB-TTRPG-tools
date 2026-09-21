@@ -24,9 +24,10 @@ When an hourly or scheduled story-continuation task runs:
 1. Read this file first.
 2. Read **docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md** for active kinship, institutional, and attraction continuity.
 3. Read **docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md** for the current rolling N+1 through N+5 forward plan.
-4. Reconcile all three against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-5. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, and forward setup obligations.
-6. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, or ignore active forward plans without a continuity reason.
+4. Read **docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md** for the active calendar, season, lunar phase, festivals, economic cycle, pantheon, food culture, travel conditions, and political year.
+5. Reconcile all four against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+6. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, and seasonal/calendar constraints.
+7. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, or ignore active forward plans without a continuity reason.
 5. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
 6. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
 7. Keep every romantic or sexualized character an adult.
@@ -586,6 +587,52 @@ After a completed chapter:
 
 The next story run should therefore always know both **where the story has been** and **where it is deliberately going**.
 
+
+## 12B. World calendar, religion, economy, and political-year control
+
+For time-of-year continuity, always read:
+
+**docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md**
+
+The current era is **282 S.M.**, the two hundred eighty-second year of the Epoch of the Sunder Moon, reckoned from the post-Delphimi settlement that overthrew the prior tyrannical royal order and established the present Concord of Crown and Commonwealth.
+
+The civil year has **13 months of 28 days each**, exactly matching thirteen lunar cycles:
+
+1. Thawcall
+2. Seedwake
+3. Leafrise
+4. Bloomtide
+5. Sunsreach
+6. Haycrest
+7. Deepdelve
+8. Goldgrain
+9. Amberfall
+10. Casktide
+11. Frostgate
+12. Longnight
+13. Hearthwane
+
+The Moon, commonly called **Saelith**, has a 28-day cycle. The full moon on day 14 is called **Bright Sunder**, when the ancient fracture across its face is most visible.
+
+The story runner must not treat season as decorative. Before producing a chapter, determine or preserve the current month, approximate week, moon phase, weather, road conditions, fresh versus preserved food availability, active agricultural or industrial work, political calendar, and approaching festival or deadline.
+
+The yearly economic rhythm matters:
+
+- late winter and thaw are dominated by survival, bridge and road repair, flood control, and seed protection;
+- spring determines whether first produce can reach market;
+- summer fresh-food caravans allow mine camps to support larger crews and substantially increase mineral output;
+- late summer and autumn compress grain, ore, fruit, timber, livestock, taxes, fuel, and winter stores onto the same road network;
+- winter shifts activity indoors toward stored-food management, smelting, craft work, legal cases, political negotiation, marriage arrangements, and household intrigue.
+
+The government is intentionally divided between **Crown and Commonwealth**. Local magistrates control many practical matters, Regional Councils certify larger measures, and the National Council is split into equal Crown and Civic constitutional halves. National measures are famously difficult to pass because they must survive multiple levels of sponsorship, committee, dual-bench approval, and royal constitutional procedure.
+
+Local politics therefore matter enormously. A Great House may possess national prestige and still fail to move a road, market, water, or licensing measure if it has lost the relevant magistrate bloc.
+
+The pantheon includes the major Concordant Gods — Aurel, Maereth, Kharun, Selvara, Eiravel, Faelor, and Lysara — the recognized Dark Gods or adversarial powers — Korvath, Vesha, Morghan, Nhal, the Ash Magistrate, and Gharad Red-Hand — and a broad Little Court of local deities, saints, spirits, and regional patrons.
+
+Festival food is cultural evidence. Meals should reflect month, region, organization, wealth, transport, preservation, and ritual meaning rather than appearing randomly.
+
+When a scene uses fresh food out of season, difficult travel during Frostgate, a major council vote during inaccessible winter, a mine operating at summer intensity without summer provisioning, or a festival without its associated social and political consequences, the prose should explain why.
 
 ## 13. Continuation priorities for the hourly story runner
 
