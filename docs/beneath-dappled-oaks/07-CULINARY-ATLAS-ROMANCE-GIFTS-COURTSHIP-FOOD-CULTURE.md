@@ -155,6 +155,24 @@ The paradox is familiar:
 
 **to detect dangerous food magic, somebody must understand how dangerous food magic behaves.**
 
+## Adraderis petals and the Bellweather tale
+
+**Adraderis petals** are a famous adult aphrodisiac herb used legally in consensual marital, honeymoon, fertility, and private romantic preparations.
+
+Secret administration is illicit.
+
+The ingredient is culturally well known rather than an obscure forbidden secret. Experienced adults, especially older women, apothecaries, physicians, servants, and professional cooks, may recognize it immediately.
+
+A canonical comic tale concerning the herb is preserved in:
+
+**docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md**
+
+The story, **The Biscuits That Emptied Bellweather Green**, concerns a twenty-one-year-old betrothed woman whose secretly prepared Adraderis biscuits are accidentally taken by her grandmother to a sewing circle.
+
+The resulting village-wide romantic chaos creates the proverb **"to disband Bellweather"**, meaning to cause such widespread domestic or romantic disorder that ordinary business temporarily becomes impossible.
+
+The tale is humorous, but its moral remains consistent with setting law: consensual adult use is one thing; secretly dosing another person is foolish, coercive, and potentially criminal.
+
 ## Love philters
 
 "Love potion" is a broad folk term rather than one single formula.
