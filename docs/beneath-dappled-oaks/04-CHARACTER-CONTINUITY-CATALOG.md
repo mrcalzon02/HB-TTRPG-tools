@@ -448,7 +448,9 @@ For recurring characters, track where relevant:
 - number of prior careers;
 - living generations above and below;
 - elder-care obligations;
-- whether they are a Spring Child, Winter Child, or Winter Blossom.
+- whether they are a Spring Child, Summer Child, Fall Child, Winter Child, or Winter Blossom;
+- what their family believes that category means;
+- whether caregiving, inheritance, or household expectations have been attached to that category.
 
 Do not apply human old-age assumptions to elves.
 
@@ -461,6 +463,8 @@ A 50-year-old should not be written as adolescent merely because the species may
 If a character's magical ability has declined with age, preserve that decline as continuity rather than allowing full youthful magical output in a later scene without explanation.
 
 If a Winter Blossom family dynamic is established, track whether the elderly parent treats the child with gratitude, overprotection, resentment, guilt, or some mixture thereof.
+
+Do not infer parental love, inheritance priority, or caregiving duty from the seasonal label alone. Track the actual household interpretation. A Spring Child may be adored or dismissed; a Fall Child may embrace or resent elder-care expectations; a later-born child may displace an older presumed heir after decades of family planning.
 
 ## 6. Student protection and graduation threshold
 
