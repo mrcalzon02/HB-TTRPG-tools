@@ -4,10 +4,6 @@
 const api='https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
 const chapterPattern=/^(\d+)-(.+)\.md$/i;
 const smallWords=new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
-const recoveryBacklog=[
-  {number:1,title:'The Last Seven',opening:'There should have been forty-three of them. Seven stood beneath the flowering arch.'},
-  {number:2,title:'The Cost of Silk',opening:'By dawn, the Academy had become beautiful enough to make murder seem ceremonial.'}
-];
 const encoder=new TextEncoder();
 let released=[],current=null,currentMarkdown='';
 
@@ -106,35 +102,26 @@ function renderIndex(files,ui){
     return {number:Number(m[1]),title:titleFromSlug(m[2]),href:file.path,size:file.size||0};
   }).sort((a,b)=>a.number-b.number);
 
-  const byNumber=new Map(released.map(ch=>[ch.number,ch]));
-  const rows=[
-    ...recoveryBacklog.map(item=>byNumber.get(item.number)||Object.assign({},item,{recovery:true})),
-    ...released.filter(ch=>ch.number>2)
-  ].sort((a,b)=>a.number-b.number);
+  const rows=[...released];
 
   ui.list.replaceChildren();
   rows.forEach(ch=>{
     const article=document.createElement('article');
-    article.className='chapter-index-entry'+(ch.recovery?' is-recovery':'');
+    article.className='chapter-index-entry';
     article.dataset.chapterNumber=String(ch.number);
     article.dataset.chapterTitle=ch.title.toLowerCase();
     article.innerHTML='<div class="chapter-index-number">Chapter '+ch.number+'</div><h3 class="chapter-index-title">'+esc(ch.title)+'</h3>';
     const meta=document.createElement('p'); meta.className='chapter-index-meta';
-    meta.textContent=ch.recovery?'Conversation-complete · repository recovery pending':'Released canon prose · '+Math.max(1,Math.round(ch.size/1024))+' KB';
+    meta.textContent='Released canon prose · '+Math.max(1,Math.round(ch.size/1024))+' KB';
     article.append(meta);
-    if(ch.recovery){
-      const anchor=document.createElement('p');anchor.className='chapter-index-meta';anchor.textContent='Recovered anchor: “'+ch.opening+'”';article.append(anchor);
-      const note=document.createElement('span');note.className='chapter-recovery-note';note.textContent='Recovery pending';article.append(note);
-    }else{
-      const link=document.createElement('a');link.className='chapter-index-link';link.href='?chapter='+ch.number+'#chapter-index';link.dataset.openChapter=String(ch.number);link.textContent='Read chapter';article.append(link);
-      article.addEventListener('click',event=>{if(event.target.closest('a'))return;openChapter(ch.number,true,ui)});
-    }
+    const link=document.createElement('a');link.className='chapter-index-link';link.href='?chapter='+ch.number+'#chapter-index';link.dataset.openChapter=String(ch.number);link.textContent='Read chapter';article.append(link);
+    article.addEventListener('click',event=>{if(event.target.closest('a'))return;openChapter(ch.number,true,ui)});
     ui.list.append(article);
   });
   const count=released.length;
   const countEl=byId('chapter-index-count'); if(countEl)countEl.textContent=count===1?'1 released chapter on main':count+' released chapters on main';
   const badge=byId('chapter-count-badge'); if(badge){badge.textContent=String(count);badge.setAttribute('aria-label',count+' released chapters')}
-  ui.state.textContent='Released files are synchronized from the canonical chapter directory on main. Recovery placeholders remain visible only until their numbered canonical files exist.';
+  ui.state.textContent='Released files are synchronized from the canonical chapter directory on main.';
 }
 function applyFilter(ui){
   const q=(ui.filter.value||'').trim().toLowerCase();
@@ -145,7 +132,7 @@ function applyFilter(ui){
 }
 function markActive(number,ui){
   ui.list.querySelectorAll('.chapter-index-entry').forEach(entry=>{
-    entry.classList.toggle('is-active',Number(entry.dataset.chapterNumber)===Number(number)&&!entry.classList.contains('is-recovery'));
+    entry.classList.toggle('is-active',Number(entry.dataset.chapterNumber)===Number(number));
   });
 }
 function safeName(value){return String(value||'chapter').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase()||'chapter'}
