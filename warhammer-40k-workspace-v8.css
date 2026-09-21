@@ -239,6 +239,7 @@ body.warhammer-archive-active #warhammer-40k{min-height:100vh;padding:0}
   box-shadow:inset 0 0 10px rgba(255,76,63,.05),0 0 8px rgba(255,80,70,.04);
 }
 #warhammer-40k .wh-tab[aria-selected=true],
+#warhammer-40k .wh-tab[aria-current="page"],
 #warhammer-40k .wh-filter[aria-pressed=true],
 #warhammer-40k .wh-mode-button[aria-pressed=true],
 #warhammer-40k .wh-vigil-toggle[aria-pressed=true]{
