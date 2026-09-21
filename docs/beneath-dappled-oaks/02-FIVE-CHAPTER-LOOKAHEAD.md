@@ -6,6 +6,8 @@ planning_horizon: 5
 last_reconciled: "2026-09-20"
 ---
 
+> **FIRST-PRINCIPLES REWRITE OVERRIDE — 2026-09-21:** Existing numbered chapter prose and the legacy N+1 through N+5 execution state below are now **scaffolding/reference**, not the active drafting position. Active prose restarts at **Chapter One**. Preserve durable canon, events, character facts, setting architecture, relationship trajectories, mystery/evidence architecture, locations, and useful pacing discoveries, but rebuild narration, dialogue, scene construction, transitions, and developments naturally under the master archive's Section 3A. Do not resume Chapter Five merely because it was the previous active endpoint. As rewritten Chapter One advances, rebuild this rolling window from the new prose rather than forcing the new draft to reproduce the old chapter sequence.
+
 # Beneath Dappled Oaks — Five-Chapter Lookahead System
 
 This file prevents chapter-by-chapter tunnel vision.
