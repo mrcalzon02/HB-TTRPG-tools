@@ -244,9 +244,12 @@ function boot(){
     const initial=requested&&released.some(ch=>ch.number===requested)?requested:released[0]?.number;
     if(location.hash==='#chapter-index'||requested){activatePanel('chapter-index',false);if(initial)openChapter(initial,false,ui)}else activatePanel('story-bible',false);
   }).catch(()=>{
-    const fallback=[{name:'03-SEVEN-DOORS.md',path:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:34885,type:'file'}];
-    renderIndex(fallback,ui);applyFilter(ui);ui.state.textContent+=' Live GitHub directory refresh is temporarily unavailable; the embedded Chapter Three fallback is active.';
-    if(location.hash==='#chapter-index'||requested){activatePanel('chapter-index',false);if(requested===3||!requested)openChapter(3,false,ui)}else activatePanel('story-bible',false);
+    const fallback=[
+      {name:'03-SEVEN-DOORS.md',path:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:34885,type:'file'},
+      {name:'04-NECESSARY-TRUTH.md',path:'docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md',size:38387,type:'file'}
+    ];
+    renderIndex(fallback,ui);applyFilter(ui);ui.state.textContent+=' Live GitHub directory refresh is temporarily unavailable; embedded Chapter Three and Chapter Four fallbacks are active.';
+    if(location.hash==='#chapter-index'||requested){activatePanel('chapter-index',false);const initialFallback=(requested===3||requested===4)?requested:3;openChapter(initialFallback,false,ui)}else activatePanel('story-bible',false);
   });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
