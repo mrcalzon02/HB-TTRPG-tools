@@ -432,6 +432,36 @@ That is character development.
 
 ---
 
+## 5B. Age, life-stage, and senescence continuity
+
+Chronological age must remain meaningful character state.
+
+For recurring characters, track where relevant:
+
+- exact or approximate age;
+- social life-stage;
+- visible age presentation;
+- physical vigor;
+- magical endurance;
+- fertility status;
+- age-related impairments;
+- number of prior careers;
+- living generations above and below;
+- elder-care obligations;
+- whether they are a Spring Child, Winter Child, or Winter Blossom.
+
+Do not apply human old-age assumptions to elves.
+
+Do not make long life erase aging.
+
+A 290-year-old should generally read as ancient unless explicit exceptional vigor has been established.
+
+A 50-year-old should not be written as adolescent merely because the species may live three centuries.
+
+If a character's magical ability has declined with age, preserve that decline as continuity rather than allowing full youthful magical output in a later scene without explanation.
+
+If a Winter Blossom family dynamic is established, track whether the elderly parent treats the child with gratitude, overprotection, resentment, guilt, or some mixture thereof.
+
 ## 6. Student protection and graduation threshold
 
 The opening generation should generally begin as eager, comparatively naive students.
