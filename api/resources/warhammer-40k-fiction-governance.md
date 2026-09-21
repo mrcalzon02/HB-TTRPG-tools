@@ -489,6 +489,18 @@ The archive contains different voices on purpose.
 
 ---
 
+## 14A. Authorship / continuation attribution
+
+For every recovered continuation or newly written piece created from an existing story line going forward, include an authorship attribution near the title block that reads:
+
+**Based on the work of:** *<source story title>*
+
+Use the title of the story being recovered or continued, not the current chapter subtitle and not the repository filename.
+
+This attribution is additive to the existing author/disclaimer language. It does not replace authorship credit to Mrcalzon02 / Christopher Vardeman and does not imply third-party authorship.
+
+If a piece is a direct source recovery from the same story, it still receives the attribution so the archive makes lineage explicit.
+
 ## 15. Approximate segment length and bounded advancement
 
 One automated run should materially advance **one bounded dependency-valid slice**.
