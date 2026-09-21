@@ -6,6 +6,7 @@ status: "CANON PROSE"
 era: "282 S.M."
 season: "Bloomtide"
 continuity_parent: "Chapter One — The Last Seven"
+provenance: "canonical reevaluation; preserves known original opening; not claimed as verbatim recovery of lost conversation prose"
 ---
 
 # Chapter Two — The Cost of Silk
@@ -21,6 +22,20 @@ Silk softened stone.
 Silk hid scaffolding.
 
 Silk turned mourning into color.
+
+The Academy had always understood ceremony as a kind of practical magic. Put enough polished brass around grief and grief became remembrance. Put enough flowers around absence and absence became honor. Put enough silk over damaged masonry and respectable people could stand beside it without being forced to look directly at what had happened there.
+
+The west tower remained visible from almost every important window.
+
+That, at least, no decorator had managed to solve.
+
+Its upper galleries were still wrapped in mourning cloth and repair canvas. Scaffolds climbed the broken stone in thin black ribs. From this distance the damage looked almost orderly, which was an obscenity of perspective. Mireth knew what those rooms had smelled like afterward. Wet ash. Burned reagents. Stone dust. The metallic tang of ruptured wards.
+
+Thirty-six students had died there.
+
+Six servants had died because servants were always close enough to other people's disasters to be included in them and rarely important enough to be named in the first sentence.
+
+Today the Academy would graduate seven.
 
 Mireth Vael-Aesryn stood before a mirror while an attendant fastened the last green clasp at her shoulder and wondered how many crimes in the history of Elaranth had benefited from excellent tailoring.
 
@@ -102,6 +117,26 @@ Selyra sat on the edge of the dressing table.
 
 "No. Listen carefully. You were protected."
 
+Mireth almost laughed.
+
+The word felt grotesque in a room overlooking a tower where protected students had been murdered.
+
+Selyra saw the thought cross her face.
+
+"Imperfectly protected," she said. "Social rules are not walls. They are promises people are punished for breaking."
+
+"Thirty-six people are dead."
+
+"Yes."
+
+"And the punishment?"
+
+Selyra's jaw tightened.
+
+"That is one of the questions adulthood is about to make yours."
+
+Mireth hated the sentence because it was not theatrical. It was worse than theatrical. It was practical.
+
 The word echoed yesterday.
 
 "Ilyan said the same thing."
@@ -173,6 +208,26 @@ Seven graduates.
 Dozens of relatives.
 
 Hundreds of interests.
+
+Below, the relatives of the dead were arriving too.
+
+Some wore formal mourning. Some wore House colors. A few wore both, which produced the peculiar visual effect of grief being required to respect heraldry. Mireth recognized parents who had spent the previous weeks arguing with Academy clerks over sealed effects, damaged rooms, inheritance inventories and whether a dead child's unfinished research belonged to the family, the Academy or whichever professional order had expected to receive them after graduation.
+
+That was another cruelty of the day.
+
+The dead had been on the threshold.
+
+A few more weeks and they would have ceased to be protected students and become junior adults with appointments, marriages, licenses, patrons, votes, apprenticeships and obligations. Their Houses had invested decades in them. Their orders had planned around them. Their siblings had expected them to stand in future councils.
+
+Someone had killed them before all those futures could become legally real.
+
+Seven graduates.
+
+Dozens of relatives.
+
+Hundreds of interests.
+
+And thirty-six missing pieces of the next generation.
 
 "Caelen?" Mireth asked.
 
@@ -402,6 +457,16 @@ He left before the conversation could improve itself into strategy.
 
 Breakfast for the Last Seven was held in a private refectory because someone had finally realized that seating them beside thirty-six memorial places before graduation might be considered cruel even by Academy standards.
 
+The room had once been used for visiting examiners. It contained a long oak table designed for twelve, three windows overlooking the rain-dark herb court, and a sideboard so aggressively stocked that the kitchen had apparently decided seven grieving graduates could be repaired with preserves.
+
+There were plum cakes, soft eggs, white cheese, honey, two kinds of bread, stewed pears and a silver pot of tea large enough to drown a minor official.
+
+No one sat at the head of the table.
+
+They had done that unconsciously.
+
+Mireth noticed only after everyone was seated and decided not to mention it.
+
 Damaris arrived with a plate.
 
 Rhyl arrived with two.
@@ -526,6 +591,26 @@ Seven names were called.
 
 Thirty-six were remembered.
 
+The six servants were named as well, though separately, after the student memorial and before the formal conferral. Mireth watched three noble families bow their heads with exquisite solemnity while remaining seated for the servants' names. She filed that away beside all the other things adulthood was apparently going to require her not to scream about.
+
+The Hall of Falling Light had been built to make young people feel small in the presence of institutions. Its roof arched in pale ribs above them, catching morning light and breaking it into long bars across the floor. The seven graduates stood in a space designed for a full cohort. Empty distance surrounded them.
+
+It was impossible not to imagine where everyone else should have been.
+
+A shoulder beside Thessa.
+
+A laugh behind Rhyl.
+
+Someone whispering something obscene to Lyrion during the master's address.
+
+A cluster of Dmitrigical students trying to look solemn and failing.
+
+Mireth could remember enough individual habits to populate every empty place.
+
+That was the problem with memorial numbers.
+
+Thirty-six sounded manageable until one remembered thirty-six faces.
+
 The masters spoke of resilience.
 
 No one used the word murder.
@@ -561,6 +646,16 @@ Not dramatically.
 Politely.
 
 That was how power preferred to work when it had time.
+
+No one seized an arm. No one issued a command. Instead, relatives appeared with smiles, order representatives offered congratulations, attendants opened doors at precisely useful moments, and each graduate discovered that the next ten paces of corridor had somehow been arranged in advance.
+
+Yesterday they had still been students, and an elder asking too directly about another student's House affairs would have looked vulgar.
+
+Today the same question could be called professional interest.
+
+The transformation required no spell.
+
+Only a certificate.
 
 Mireth went toward the Green Covenant chamber.
 
@@ -685,6 +780,14 @@ Ilyan looked at him.
 "You are an adult."
 
 The sentence struck harder than it should have.
+
+Yesterday, the words would have sounded like freedom.
+
+Today they sounded like jurisdiction.
+
+Adult meant he could alter an oath he could not honestly swear.
+
+Adult also meant no instructor was required to stand between him and the consequences.
 
 Ilyan took a breath.
 
@@ -926,6 +1029,16 @@ Their families had spent years calling these bonds charming.
 
 Graduation had made them useful.
 
+The change was not that their elders had suddenly become schemers at noon. The change was permission.
+
+For years, the Houses had been expected to keep a respectable distance from the political utility of students. They could arrange tutors, invite suitable families to dinner, encourage friendships and make predictions about future marriages in rooms where the children were not supposed to hear. But there had been a line between preparing a young adult for the House and deploying one.
+
+The Last Seven had crossed it that morning.
+
+The thirty-six had been murdered before they could.
+
+That thought came differently to each survivor, but by dusk all of them carried some version of it.
+
 ---
 
 They met again at dusk.
@@ -936,9 +1049,15 @@ Perhaps that was why they all came.
 
 The oldest oak stood wet and dark beneath a clearing sky. Sunset turned the Academy windows gold.
 
+The courtyard smelled of wet bark, bruised grass and the faint mineral breath of old wards cooling after rain. Beyond the cloister, servants were taking down some of the graduation ribbons already. Ceremony had a remarkably short half-life once the guests began leaving.
+
 Seven graduates sat where seven students had sat the day before.
 
 The difference was absurd.
+
+Their certificates were barely dry.
+
+Their families had nevertheless managed to convert them into assets before supper.
 
 Caelen arrived last.
 
@@ -1088,6 +1207,14 @@ Availability.
 
 "We need rules," Mireth said.
 
+The others looked at her.
+
+She had not planned the sentence. Perhaps that was why it felt important.
+
+The Academy had given them rules for laboratory safety, citation, formal dueling, ward maintenance, dormitory fires, examination conduct and the correct procedure for reporting a dangerous familiar loose in a residence hall.
+
+It had given them remarkably little instruction for what to do when their families began treating affection as infrastructure.
+
 Lyrion groaned.
 
 "Already?"
@@ -1189,6 +1316,16 @@ The Academy had protected them imperfectly.
 The Houses would love them imperfectly.
 
 Perhaps that was worse.
+
+Silver Night had broken the old social bargain in the ugliest possible way. Someone had decided that students could not be permitted to reach the age at which their friendships, appointments, marriages, licenses and eventual children would begin changing the balance of power. Ilyan knew one part of the reason: Valeric fear over Dmitrigical chairs, licenses and tribunals. There were already too many whispers around the dead about succession arithmetic as well—about the coming generation being inconveniently numerous in directions powerful people disliked.
+
+No one among the Seven yet knew enough to put names or numbers to that part of the pattern.
+
+They knew enough not to dismiss it.
+
+Thirty-six dead students were not merely thirty-six lives ended.
+
+They were thirty-six adult futures prevented.
 
 Because love was harder to defend against than hatred.
 
