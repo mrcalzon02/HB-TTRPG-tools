@@ -23,6 +23,22 @@ The continuity catalog answers:
 
 **What does this person still remember, know, want, fear, prefer, owe, hide, believe, and know how to do after the five-chapter window has moved on?**
 
+## 0A. Rewrite-era provenance rule
+
+The September 2026 first-principles rewrite restarts active prose at **Chapter One**.
+
+Existing chapter-derived workbook/catalog entries are **not deleted**. Preserve them as historical/scaffolding state so useful discoveries are not lost, but do not automatically treat every later-chapter development as already experienced by the characters in the rewritten timeline.
+
+During the rewrite:
+
+- setting rules, stable identities, established pre-story history, and explicit user canon remain available according to the normal canon hierarchy;
+- an event, relationship development, clue discovery, skill demonstration, confession, kiss, warning, or new knowledge that originated in superseded chapter prose is **scaffolding until the rewrite establishes it again**;
+- do not preload a rewritten Chapter One character with knowledge or emotional development they only acquired in old Chapters Two through Five;
+- when the rewrite re-establishes, changes, delays, or discards a scaffolded development, append the new state and record its provenance in Chapter_Touch_Log rather than erasing the older record;
+- distinguish **character continuity** from **authorial planning knowledge**. The author may know a later mystery architecture that the Chapter One character does not.
+
+This protects long memory without forcing the rewritten story to reenact old prose mechanically.
+
 ## 1. Long-memory rule
 
 Important character state does not expire because it has not appeared recently.
