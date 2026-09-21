@@ -526,6 +526,80 @@ Do not treat this as replacing the existing Valeric motive.
 
 The intended structure is that future heirs, Dmitrigical chairs, licenses, tribunals, marriages, and the coming generation's coalition strength were overlapping political concerns.
 
+## 7A. Directional personality web / theory-of-mind ledger
+
+The continuity system must track **subjective person-models**, not only objective relationships.
+
+For each consequential directional pair **Observer → Subject**, maintain durable state for:
+
+- observer's current model of the subject's personality;
+- remembered evidence supporting that model;
+- inferred motives;
+- expected behavior;
+- perceived virtues;
+- perceived faults;
+- perceived danger;
+- perceived kindness or cruelty;
+- perceived competence;
+- perceived honesty;
+- trust by domain;
+- affection/friendship;
+- attraction or lack of attraction;
+- jealousy, envy, resentment, fear, admiration, protectiveness, contempt, curiosity, or rivalry where demonstrated;
+- observer's belief about how the subject feels about them;
+- secrets the observer knows;
+- secrets the observer does not know;
+- known contradictions;
+- uncertainty/confidence;
+- recognized masks or performance;
+- blind spots, idealization, prejudice, projection, and mistaken assumptions;
+- the memories/events the observer uses when thinking about the subject.
+
+**A → B and B → A are separate records.**
+
+Do not infer reciprocity.
+
+Do not replace subjective perception with objective truth.
+
+If A remembers B repeatedly behaving generously, A may reasonably model B as generous even when the author knows B is secretly ruthless. The hidden ruthlessness belongs in objective/secret continuity until A has evidence for it.
+
+When later prose overturns an old model, preserve both layers. Record the earlier belief, the disconfirming event, and the new belief. Emotional residue from the old model may persist after intellectual correction.
+
+### Recommended workbook ledger: Personality_Web
+
+Maintain or add a **Personality_Web** worksheet with one row per meaningful directional relationship state or revision. Recommended fields:
+
+- Web ID
+- Observer Character ID
+- Observer
+- Subject Character ID
+- Subject
+- Chapter / Time
+- Observer's Personality Model
+- Evidence / Memories Used
+- Inferred Motives
+- Expected Behavior
+- Trust Domains
+- Attraction / Desire
+- Affection / Attachment
+- Fear / Threat Model
+- Resentment / Jealousy / Envy
+- Admiration / Respect
+- Observer Believes Subject Feels...
+- Known Secrets
+- Unknown-to-Observer Authorial Contradictions
+- Confidence
+- Blind Spots / Biases / Projection
+- Mask / Performance Suspected?
+- Previous Model Reference
+- Status
+- Source / Evidence
+- Notes
+
+Unknown fields remain **Unknown / Unrated / Needs prose evidence**.
+
+This ledger should be consulted before writing important interactions and updated whenever prose materially changes how one character understands another.
+
 ## 8. Workbook ledgers
 
 The workbook currently contains:
