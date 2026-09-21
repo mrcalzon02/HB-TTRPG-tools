@@ -25,9 +25,10 @@ When an hourly or scheduled story-continuation task runs:
 2. Read **docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md** for active kinship, institutional, and attraction continuity.
 3. Read **docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md** for the current rolling N+1 through N+5 forward plan.
 4. Read **docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md** for the active calendar, season, lunar phase, festivals, economic cycle, pantheon, food culture, travel conditions, and political year.
-5. Reconcile all four against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-6. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, and seasonal/calendar constraints.
-7. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, or ignore active forward plans without a continuity reason.
+5. Read **docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md** and retrieve the persistent Excel workbook **Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx** from the connected Google Drive for long-memory character state.
+6. Reconcile all five controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+7. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+8. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, or reset long-memory character state without a continuity reason.
 8. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
 9. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
 10. Keep every romantic or sexualized character an adult.
@@ -128,6 +129,28 @@ Do not casually resurrect the dead students.
 Do not change the casualty count without an explicit canon correction.
 
 The seven survivors are bound together not merely because they were classmates, but because they are the remnants of a generation that someone decided was politically inconvenient.
+
+## 4A. Student protection, graduation, and the danger of Silver Night
+
+The Last Seven begin the series as eager, comparatively naive students.
+
+Academy competence does not mean they are already practiced adult political operators.
+
+Elaranthi society broadly frowns upon involving children or protected students in the greater dynastic schemes of adults. Families may educate, prepare, groom, favor, or quietly pressure younger members, but the open use of students as operatives in adult house warfare is socially dangerous.
+
+**Graduation is the cultural and legal threshold into the adult political world.**
+
+Once the Last Seven graduate, the houses and orders can openly recruit, task, court, marry, pressure, deploy, and entrust them with adult political secrets.
+
+This makes the Silver Night massacre more dangerous than an ordinary political killing.
+
+Someone chose to pre-emptively murder protected students before their generation had fully entered adult politics.
+
+An additional motive now exists alongside the established Valeric interest in Dmitrigical chairs, licenses, and tribunals: one noble family had been unusually vigorous and successful in producing heirs. That expanding next generation threatened future political arithmetic strongly enough that a rival faction regarded the family as becoming too successful at siring future influence.
+
+The exact expanding family, opposing family or faction, and number of threatened heirs remain unresolved until later canon fixes them.
+
+Do not replace the established Valeric motive with this demographic motive. They are intended to overlap: future heirs, professional chairs, licenses, tribunals, marriages, and coalition strength were all part of the coming generation's political threat.
 
 ## 5. The Last Seven: core cast index
 
@@ -634,6 +657,79 @@ Festival food is cultural evidence. Meals should reflect month, region, organiza
 
 When a scene uses fresh food out of season, difficult travel during Frostgate, a major council vote during inaccessible winter, a mine operating at summer intensity without summer provisioning, or a festival without its associated social and political consequences, the prose should explain why.
 
+## 12C. Long-memory character continuity control
+
+For durable character state beyond the five-chapter horizon, read:
+
+**docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md**
+
+and retrieve the persistent Excel workbook:
+
+**Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx**
+
+from the connected Google Drive.
+
+The workbook is the rolling long-memory catalog for:
+
+- enduring and recent memories;
+- important events;
+- hopes and dreams;
+- long-term plans;
+- attraction patterns and recent lover-specific imprints;
+- skills and educational history;
+- spells and magical knowledge;
+- curse knowledge;
+- secrets and warnings;
+- vulnerable disclosures and witnesses;
+- relationships and trust;
+- contextual deception and social performance;
+- violence tolerance and emotional aftermath;
+- obligations, oaths, debts, leverage, and family orders.
+
+### Knowledge-belief-action rule
+
+What a character knows, what they believe, whom they trust, and what they choose to do are separate continuity state.
+
+A character may possess strong evidence that a beloved person is dangerous and still consciously trust that person.
+
+Do not erase warnings merely because a character ignored them.
+
+### Skill persistence rule
+
+If prose establishes that a character learned a skill, spell, magical discipline, curse sign, language, social technique, historical subject, military lesson, or other competence through school, family, tutors, orders, field experience, or secret study, preserve it.
+
+Track ability, reliability under pressure, secrecy, limits, and whether the skill has actually been demonstrated.
+
+### Contextual performance rule
+
+Do not reduce deception or violence response to one generic trait.
+
+A character may lie convincingly to a court and fail completely when lying to a lover.
+
+A character may kill when necessary, remain functional during the crisis, and grieve for days afterward.
+
+Only promote such traits from unknown/unrated status when prose provides evidence.
+
+### Post-chapter catalog update
+
+After each completed chapter or substantial committed story segment:
+
+1. update important memories;
+2. update active plans and hopes;
+3. add newly demonstrated skills or knowledge;
+4. add warnings, secrets, confessions, and vulnerable moments;
+5. update attraction continuity where prose demonstrates it;
+6. update trust and relationship changes;
+7. update contextual performance traits where demonstrated;
+8. update obligations and leverage;
+9. record a Chapter_Touch_Log entry.
+
+Do not overwrite history simply because a newer feeling is stronger.
+
+A recent memory can cool without ceasing to exist.
+
+A deeply ingrained preference can coexist with a powerful recent lover-specific association.
+
 ## 13. Continuation priorities for the hourly story runner
 
 Prefer the following kinds of advancement:
@@ -709,6 +805,7 @@ Before finalizing a Beneath Dappled Oaks continuation, verify:
 - Did recurring characters preserve active intentions from earlier chapters?
 - Does the completed chapter hand the next one a concrete reason to occur?
 - Was the rolling N+1 through N+5 window reconciled against what actually happened?
+- Were durable memories, skills, warnings, secrets, relationship changes, attraction changes, performance traits, and obligations written back to the long-memory catalog where appropriate?
 - Did anything new contradict this archive or a newer committed canon file?
 
 If a new durable fact is established, update this archive or create a clearly linked canon supplement so the next automated run can inherit it.
