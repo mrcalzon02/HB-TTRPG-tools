@@ -430,7 +430,7 @@
     const readerBack = document.getElementById('chapter-reader-back');
 
     const api = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
-    const chapterPattern = /^(\\d+)-(.+)\\.md$/i;
+    const chapterPattern = /^(\d+)-(.+)\.md$/i;
     const smallWords = new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
     const recoveryBacklog = [
       {number:1,title:'The Last Seven',opening:'There should have been forty-three of them. Seven stood beneath the flowering arch.'},
@@ -465,18 +465,18 @@
 
     function inlineMarkdown(text) {
       let value = escapeHtml(text);
-      value = value.replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>');
-      value = value.replace(/(^|[^*])\\*([^*]+)\\*(?!\\*)/g, '$1<em>$2</em>');
+      value = value.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      value = value.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, '$1<em>$2</em>');
       value = value.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
       return value;
     }
 
     function parseFrontMatter(markdown) {
       const result = {meta:{}, body:markdown};
-      if (!markdown.startsWith('---\\n')) return result;
-      const end = markdown.indexOf('\\n---\\n', 4);
+      if (!markdown.startsWith('---\n')) return result;
+      const end = markdown.indexOf('\n---\n', 4);
       if (end < 0) return result;
-      const raw = markdown.slice(4, end).split('\\n');
+      const raw = markdown.slice(4, end).split('\n');
       for (const line of raw) {
         const split = line.indexOf(':');
         if (split < 0) continue;
@@ -490,7 +490,7 @@
     }
 
     function renderMarkdown(markdown) {
-      const lines = markdown.replace(/\\r\\n?/g, '\\n').split('\\n');
+      const lines = markdown.replace(/\r\n?/g, '\n').split('\n');
       const out = [];
       let paragraph = [];
       const flush = () => {
@@ -502,7 +502,7 @@
         const line = raw.trimEnd();
         if (!line.trim()) { flush(); continue; }
         if (/^---+$/.test(line.trim())) { flush(); out.push('<hr>'); continue; }
-        const heading = line.match(/^(#{1,6})\\s+(.+)$/);
+        const heading = line.match(/^(#{1,6})\s+(.+)$/);
         if (heading) {
           flush();
           const level = Math.min(6, heading[1].length);
@@ -517,7 +517,7 @@
         paragraph.push(line.trim());
       }
       flush();
-      return out.join('\\n');
+      return out.join('\n');
     }
 
     function renderIndex(files) {
