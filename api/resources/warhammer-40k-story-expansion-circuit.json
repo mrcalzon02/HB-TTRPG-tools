@@ -32,8 +32,8 @@
       "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
       "recoveredThrough": "X. THE FORWARD HOLDS — complete through Broussard organizing the search for Jerrik Noll, Edren Vale and Pallas Dorn and ending: “Let’s go find them.”",
       "sourceObservedThrough": "X. THE FORWARD HOLDS — complete; the connected Google working draft contains no later chapter.",
-      "currentEndpoint": "XI. THE THIRD MAN — Broussard’s search team follows the smell of charred flesh and ozone into the forward hold service corridor and finds Jerrik Noll, Edren Vale and Pallas Dorn dead at an intermittently energized deck junction. Evidence shows Jerrik was electrocuted first, Edren died trying to help him, and Pallas became the third casualty when he tried to help Edren. Sella Varn identifies and helps isolate the emergency cross-feed; the bodies are recovered. Broussard accepts this as a genuine industrial accident while explicitly keeping the separate missing-telemetry mystery unresolved.",
-      "nextSlice": "When Broussard next becomes rotation-eligible, continue after the bodies are recovered. The immediate missing-person problem is solved. Preserve that the electrocution was a real accident, not a disguised Genestealer attack. The next dependency-valid investigation can return to repair progress and the unresolved historical telemetry inconsistencies, but do not reveal the full falsified-origin/Genestealer truth before the narrative earns it. The book may contain no more than 40 chapters; if the narrative reaches Chapter XL, close the current book and continue any remaining arc in a subsequent book.",
+      "currentEndpoint": "XII. THE WORK AFTER — the three dead crewmen are moved aft and the Hesperant Vale returns immediately to survival work. Repair estimates improve to roughly thirty-one-to-forty-six hours from the Magos and about thirty-six hours from Sella if pressure tests hold. Broussard deliberately leaves the unresolved fourteen-second telemetry gap separate from the genuine electrocution accident and prioritizes ship, crew and perimeter survival. After roughly six quiet hours, a large movement is detected beneath the ice beyond the perimeter marker line; Broussard orders vehicles warmed and personnel under cover.",
+      "nextSlice": "When Broussard next becomes rotation-eligible, continue from the large under-ice movement beyond the perimeter. Preserve the existing outcome lock that Broussard's detachment fights additional High Presidio predators and ultimately escorts the repaired freighter back to the convoy. The electrocution remains a genuine accident. The telemetry gap remains unresolved and separate; do not expose the deeper falsified-origin/Genestealer truth before it is earned. Apply the human-conversation governance: shared facts shape behavior and shorthand rather than being repeatedly restated. The book may contain no more than 40 chapters; if the narrative reaches Chapter XL, close the current book and continue any remaining arc in a subsequent book.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -69,7 +69,12 @@
         "overlappingEarlierVariants": "Earlier conversation prose exists for the missing-team report and grain-silo-sized loose produce bins, but those beats are already fully represented by the higher-authority Google Chapter X and should not be duplicated as a second published chapter.",
         "remainingMaterialType": "authorial continuity / planning constraints, not recoverable verbatim prose"
       },
-      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md"
+      "characterContinuityAssessment": {
+        "segment": "XII. THE WORK AFTER",
+        "durableCharacterStateChanged": false,
+        "reason": "Chapter XII intentionally advances ship repair and perimeter pressure without changing established character knowledge, relationships, injuries, obligations, skills, or plans. Broussard's telemetry suspicion, Sella's grief/technical competence, Kelm's captaincy, and Jalesthesian's restraint remain continuations of already cataloged state rather than new durable states. No catalog entries were manufactured merely to restate them."
+      },
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-02.md"
     },
     {
       "id": "house-vallimere-sons",
