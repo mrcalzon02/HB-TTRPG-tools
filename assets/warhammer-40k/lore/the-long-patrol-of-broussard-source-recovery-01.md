@@ -1,8 +1,9 @@
 # The Long Patrol of Broussard
 
-## Source Recovery 01 — I. THE LONG PATROL
+## I. THE LONG PATROL
 
-*Verbatim recovery from the surviving Google working draft, reconciled 2026-09-20. This file preserves source prose rather than reconstructing it. Recovery continues sequentially from the same document before any new Broussard continuation is permitted.*
+**Author:** Mrcalzon02 / Christopher Vardeman  
+**Based on the work of:** *The Long Patrol of Broussard*
 
 *An original non-commercial Warhammer 40,000 fan chronicle. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This fan work is not endorsed by or affiliated with Games Workshop.*
 
