@@ -240,6 +240,98 @@ The continuity catalog should remain exhaustive.
 
 ---
 
+## 3B. Character theory-of-mind and personality-web control
+
+Every recurring character must possess an **internal theory of mind** about the people around them.
+
+This is not the same thing as the author's objective character sheet.
+
+For every important relationship, preserve separately:
+
+- what A knows about B from direct experience;
+- what A has been told about B and by whom;
+- what A believes B is like;
+- what A believes B wants;
+- what A believes B feels about A;
+- what A trusts B to do or not do;
+- what A likes, dislikes, envies, fears, admires, resents, desires, or finds irritating about B;
+- what memories A uses as evidence for those judgments;
+- what behavior A tends to predict from B;
+- what A does **not** know about B;
+- where A's model is accurate, incomplete, idealized, prejudiced, outdated, manipulated, or catastrophically wrong.
+
+A character may sincerely believe another person is kind because they remember years of kindness. The other person may privately be ruthless enough to murder them the moment they cease to be useful. Do **not** leak the author's objective knowledge into the observing character's internal model.
+
+Likewise, attraction belongs inside theory of mind. A character may know that someone is physically their type, believe that person is dangerous, trust them professionally, distrust them romantically, remember a moment of unexpected tenderness, and still want them badly. Those states can coexist.
+
+### Relationship-specific models
+
+Do not reduce this to global labels such as "Damaris trusts Rhyl."
+
+The useful state is directional:
+
+**Damaris → Rhyl** may differ sharply from **Rhyl → Damaris**.
+
+Each direction can contain different memories, assumptions, blind spots, attraction, confidence, expectations, and private interpretations.
+
+The same person may also present differently in different contexts. A character can believe someone is:
+
+- generous with servants;
+- merciless in business;
+- patient with children;
+- vain at court;
+- trustworthy with money;
+- dangerous when humiliated;
+- sexually confident;
+- emotionally evasive with lovers.
+
+These are not contradictions that need flattening. They are a human model of another complicated person.
+
+### Theory-of-mind changes require causes
+
+A relationship model should change because the observer experiences something:
+
+- witnesses behavior;
+- receives credible information;
+- catches a lie;
+- is betrayed;
+- is defended;
+- shares intimacy;
+- sees how the person treats someone weaker;
+- discovers a secret;
+- realizes an old memory meant something different;
+- is deliberately manipulated.
+
+Do not silently update a character's opinion merely because the reader or author has learned the truth.
+
+### Dialogue must emerge from the model
+
+Before an important conversation, ask:
+
+**Who does this character believe they are talking to?**
+
+That belief should affect tone, shorthand, vulnerability, flirtation, caution, lies, jokes, requests, silences, and what the character assumes does not need explanation.
+
+People do not converse with objective character sheets. They converse with the person they *think* is standing in front of them.
+
+### Long-life personality knowledge
+
+Older elves should often have exceptionally developed social pattern recognition simply because they have known people for a very long time. This does not make them omniscient.
+
+A two-hundred-year-old may know exactly what kind of lover usually attracts them, recognize a familiar kind of liar, or spot a young couple's mutual interest immediately—and still be completely wrong about a particular person's hidden loyalty, private cruelty, secret fear, or carefully maintained mask.
+
+Experience improves the model. It does not eliminate deception.
+
+### Continuity requirement
+
+The persistent character workbook must maintain this personality web as directional long-memory state. Do not overwrite earlier perceptions when later truth emerges. Preserve the temporal sequence:
+
+**what they believed → what challenged it → what they believe now.**
+
+The old belief remains part of the character's history and may matter emotionally even after it has been disproven.
+
+---
+
 ## 4. Book One: fixed premise
 
 Book One begins with the final surviving members of an academy class preparing to graduate into the adult orders, houses, and political structures that have been waiting for them.
