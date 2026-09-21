@@ -7,8 +7,6 @@
 
 *An original non-commercial Warhammer 40,000 fan chronicle. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This fan work is not endorsed by or affiliated with Games Workshop.*
 
-VI. THE IMPERIAL ART OF SLEEPING BADLY
-
 The damaged freighter was far enough away that Broussard could justify a short rest cycle.
 
 Not a proper one.
