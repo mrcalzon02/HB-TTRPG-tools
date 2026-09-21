@@ -325,6 +325,129 @@ A Spring Child is not biologically different.
 
 ---
 
+# IX-A. Summer Children
+
+A **Summer Child** is born during the long settled middle of a parent's adult life.
+
+The term commonly carries associations of:
+
+- established household;
+- stable marriage or partnership;
+- settled profession;
+- accumulated property;
+- mature social position;
+- parents who already understand what sort of family they are building.
+
+Summer Children are often described as the **settled result of a stable family**.
+
+That does not mean they are always favored.
+
+In some Houses, Summer Children are treated as the most predictable heirs because the family structure, estate, alliances, and parental reputation are already established.
+
+In others, they are simply one part of a large sibling generation.
+
+A Summer Child may benefit from:
+
+- experienced parents;
+- greater household wealth;
+- stable servants;
+- clearer inheritance structures;
+- older siblings able to mentor them.
+
+They may also suffer from:
+
+- being compared constantly with older siblings;
+- being born after major inheritance expectations are already set;
+- entering a family whose routines leave little room for them to redefine anything.
+
+---
+
+# IX-B. Fall Children
+
+A **Fall Child** is born later in a parent's adult life, but before the extreme lateness associated with Winter Children.
+
+Fall Children are culturally associated with **taking up the reins**.
+
+They are often assumed to be the generation who will:
+
+- assume estate responsibilities;
+- care for aging parents;
+- manage elder households;
+- escort elderly relatives;
+- supervise medicine and magical care;
+- inherit practical authority before formal inheritance occurs.
+
+This expectation can be affectionate.
+
+It can also become a burden.
+
+A Fall Child may grow up hearing:
+
+> "You will be the one here when we are old."
+
+That can create:
+
+- strong family loyalty;
+- resentment;
+- guilt;
+- delayed independence;
+- unusually practical adulthood;
+- resentment toward older siblings who escaped caregiving expectations.
+
+Some Houses deliberately educate Fall Children for administration and elder care.
+
+Other families make no such assumption at all.
+
+---
+
+# IX-C. Seasonal Child Categories Are Cultural, Not Destiny
+
+The seasonal terms are descriptive social categories.
+
+They are **not fixed rankings of worth**.
+
+Attitudes vary wildly by:
+
+- House;
+- region;
+- class;
+- inheritance structure;
+- number of siblings;
+- parental temperament;
+- marriage history;
+- fertility history;
+- political circumstances.
+
+A noble House may adore Spring Children as proof that a new marriage is fertile and politically promising.
+
+Another House may dismiss them as:
+
+> "Just Spring Children. There will be time to see who matters."
+
+Because parents may have centuries in which to have more children, the firstborn is not automatically the final or obvious inheritor.
+
+A child born first may spend a hundred years as presumed heir and later be displaced by:
+
+- a more politically useful sibling;
+- a child of a later marriage;
+- a more competent sibling;
+- a sibling with stronger magical talent;
+- a changed succession compact.
+
+Likewise:
+
+- a Summer Child may be seen as the ideal stable heir;
+- a Fall Child may be prized as the dependable child who will care for elders;
+- a Winter Child may be cherished as a late miracle;
+- a Winter Blossom may be adored as a final chance;
+- any of them may instead be resented, ignored, instrumentalized, or burdened.
+
+There is no universal emotional script.
+
+The same category can mean love in one household and dismissal in another.
+
+---
+
 # IX. Winter Children
 
 A **Winter Child** is born late in a parent's life, usually when one or both parents are already elderly by elven standards.
@@ -652,8 +775,11 @@ Established enduring facts:
 - Magical impotence is distinct from sexual impotence.
 - Fertility may persist into the mid or late two hundreds.
 - Spring Children are born comparatively early in parental adulthood.
+- Summer Children are born during the settled middle of parental adult life and are often associated with stable family formation.
+- Fall Children are born later and are culturally associated in many families with taking up practical responsibility for aging parents and household continuity.
 - Winter Children are born late in parental life.
 - Winter Blossoms are children born near the final edge of maternal fertility.
+- Seasonal child categories are cultural expectations rather than fixed ranks of worth, inheritance, or parental love.
 - Parents may cherish or resent Winter Blossom children depending on how they interpret their own aging.
 - Some elves remain vigorous into the two sixties or two seventies and then decline rapidly.
 - The final century can be the harshest stage of elven life.
