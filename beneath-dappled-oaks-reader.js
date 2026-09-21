@@ -9,7 +9,8 @@ const fallbackFiles=[
   {name:'01-THE-LAST-SEVEN.md',path:'docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md',size:33000,type:'file'},
   {name:'02-THE-COST-OF-SILK.md',path:'docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md',size:32000,type:'file'},
   {name:'03-SEVEN-DOORS.md',path:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:34885,type:'file'},
-  {name:'04-NECESSARY-TRUTH.md',path:'docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md',size:38387,type:'file'}
+  {name:'04-NECESSARY-TRUTH.md',path:'docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md',size:38387,type:'file'},
+  {name:'05-SOMETHING-BURIED-NEAR-THE-HOUSE.md',path:'docs/beneath-dappled-oaks/chapters/05-SOMETHING-BURIED-NEAR-THE-HOUSE.md',size:25000,type:'file'}
 ];
 let released=[];
 
