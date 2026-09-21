@@ -556,6 +556,49 @@ Adults insist they do not.
 
 ---
 
+# VIII-A. Settlement Control and House Spheres
+
+The authoritative settlement corpus is:
+
+**docs/beneath-dappled-oaks/06-SETTLEMENT-GAZETTEER-HOUSE-SPHERES.md**
+
+The Realm contains hundreds of towns and thousands of villages, but political attention follows economic value.
+
+The broad rule is:
+
+> **Once a permanent settlement grows much beyond roughly one thousand residents, somebody important usually cares enough to dominate its political or economic life.**
+
+That power may be a Great House, Crown institution, guild coalition, sacred order, merchant consortium, mine syndicate, temple bloc, or other organized interest.
+
+This does **not** mean settlements are simply feudal property. A House-controlled city may still elect magistrates, maintain guild liberties, contain opposition blocs, and repeatedly vote against the House on particular matters. Control means the dominant power possesses enough land, credit, infrastructure, employment, patronage, military presence, commercial access, or institutional weight that local politics naturally orbit it.
+
+True neutral and fringe settlements are most common below one thousand permanent residents. They tend to remain independent because they are too small, too remote, too poor, too difficult to reach, or simply not valuable enough to justify the administrative effort.
+
+The population rule is secondary to strategic value. A hamlet of three hundred may abruptly become contested if someone discovers enchanted ore beneath it, a bridge collapse redirects a trade road through it, a rare disease-resistant crop survives there, or a medicinal spring becomes commercially credible.
+
+## Principal established House seats
+
+- **House Avariel — Aurelith:** royal capital, National Council, high courts, national administration.
+- **House Vael — Vaelwood:** ancient managed groves, orchard wealth, living wood, Green Covenant influence.
+- **House Eris — Westgate:** fortress city, western roads, military administration, caravan defense.
+- **House Sylvaren — Silvercourt:** diplomatic schools, salons, theaters, embassies, ceremonial culture.
+- **House Caladren — Caladris:** inland river port, banking, grain exchange, commercial courts.
+- **House Nymrael — Starfall:** observatories, magical adjudication, scholarship, precision instruments.
+- **House Orthell — Hartspire:** upland markets, forest administration, hunting law, frontier roads.
+- **House Valeric — Valeron:** Dmitrigical administration, specialized magical workshops, tribunal patronage.
+
+These are not the only controlled settlements. Each Great House possesses multiple secondary towns and cadet-branch centers detailed in the gazetteer.
+
+## Established neutral/fringe anchors
+
+- **Cedra Delby:** roughly 740 people in the village proper; locally governed farming community with a wider scattered farm district.
+- **Kallioused:** roughly 430 residents around the lake and nearby road hamlets; economically modest despite the lake's cultural notoriety.
+- Additional fringe settlements include Mossbell, Whitebarrow, Reedwake, Honeycross, Bracken Hollow, Last Lantern, and Saint Veyren's Chair.
+
+Settlement identity must include an economic reason to exist. Cities and villages should have recognizable imports, exports, roads, river access, seasonal vulnerabilities, dominant institutions, and local customs.
+
+---
+
 # IX. Cultural Regions and Festival Foods
 
 These are **cultural-economic regions**, not final map borders. Exact cartography remains open for later setting development.
