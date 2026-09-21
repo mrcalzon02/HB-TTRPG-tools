@@ -29,16 +29,17 @@ When an hourly or scheduled story-continuation task runs:
 6. Read **docs/beneath-dappled-oaks/05-LITTLE-COURT-REGIONAL-CUSTOMS-FOLK-PRACTICES.md** for local festivals, roadside shrines, household rites, village superstitions, lovers' places, minor saints and spirits, regional food customs, and the culturally dense "Little Year."
 7. Read **docs/beneath-dappled-oaks/06-SETTLEMENT-GAZETTEER-HOUSE-SPHERES.md** for cities, towns, villages, population scale, House spheres, institutional control, contested settlements, fringe communities, imports, exports, and local political gravity.
 8. Read **docs/beneath-dappled-oaks/07-CULINARY-ATLAS-ROMANCE-GIFTS-COURTSHIP-FOOD-CULTURE.md** for cuisine, ingredients, delicacies, confectionery, seasonal food, romantic gift grammar, courtship practices, legal culinary magic, illicit philters, poisoned or enchanted food, and kitchen-contamination plot logic.
-9. Reconcile all eight controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-10. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-11. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
-12. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-13. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-14. Keep every romantic or sexualized character an adult.
-15. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-16. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-17. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-18. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+9. Read **docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md** for reusable in-universe romantic cautionary tales, household legends, comic courtship disasters, Adraderis lore, and proverb-level cultural references.
+10. Reconcile all nine controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+11. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+12. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+13. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+14. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+15. Keep every romantic or sexualized character an adult.
+16. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+17. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+18. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+19. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -810,6 +811,20 @@ These are important plot tools.
 A common illicit keyed love philter may last roughly **seventy-two hours**. Delivery errors, kitchen cross-contamination, swapped trays, mislabeled bottles, and serving mistakes can redirect the effect to unintended adults. The enchantment may expire while contracts, scandals, accusations, romantic damage, and political consequences persist.
 
 Do not treat secret magical coercion as legitimate romance, but do not erase it from the setting. It is precisely the kind of crime, mistake, conspiracy, or social catastrophe that investigators, nobles, lovers, servants, physicians, and political rivals may need to untangle.
+
+## 12F. In-universe courtship literature and comic lore
+
+For reusable popular tales and household romantic folklore, read:
+
+**docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md**
+
+Established canon includes **The Biscuits That Emptied Bellweather Green**, in which an adult twenty-one-year-old betrothed woman prepares Adraderis-laced biscuits for her intended, only for her grandmother to carry the tray to a sewing circle instead.
+
+The incident creates the cultural phrase **"to disband Bellweather"** for romantic or domestic chaos severe enough to interrupt ordinary civic life.
+
+Adraderis petals are a well-known adult aphrodisiac ingredient with consensual legitimate uses and illicit coercive uses. Older adults generally recognize the ingredient and are not culturally naive about romance merely because younger lovers imagine themselves inventive.
+
+This generational pattern should recur: young adults may possess grand theories about seduction only to discover that mothers, grandmothers, widows, unmarried elders, old servants, and respectable matrons have seen the same foolishness before.
 
 ## 13. Continuation priorities for the hourly story runner
 
