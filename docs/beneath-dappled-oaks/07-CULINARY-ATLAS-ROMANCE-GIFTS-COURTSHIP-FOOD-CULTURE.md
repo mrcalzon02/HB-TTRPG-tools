@@ -112,6 +112,384 @@ It may not magically overwrite their choice.
 
 ---
 
+# I-A. Illicit Culinary Magic, Poisoning, and the Dangerous Table
+
+Illicit culinary magic is as important to Elaranth's political and romantic culture as legal culinary enchantment.
+
+Food is intimate.
+
+It enters the body willingly.
+
+It passes through kitchens, servants' corridors, bakeries, confectioners' shops, family tables, court banquets, lovers' picnics, diplomatic dinners, festival stalls, and private bedrooms.
+
+That makes it an ideal delivery system for both affection and treachery.
+
+The result is a civilization with centuries of accumulated knowledge about:
+
+- love philters;
+- attraction draughts;
+- obsession charms;
+- truth syrups;
+- sleep tinctures;
+- dream tonics;
+- memory fogs;
+- courage and fear concoctions;
+- fertility tonics;
+- anti-fertility workings;
+- curse-laced sweets;
+- poisons;
+- antidotes;
+- masking flavors;
+- diagnostic charms;
+- kitchen chain-of-custody;
+- contamination;
+- swapped trays;
+- mislabeled bottles;
+- enchanted serving ware.
+
+This knowledge is not confined to criminals.
+
+Noble kitchens, royal tasters, physicians, Dark Arts investigators, confectioners' guilds, senior servants, military quartermasters, diplomatic households, and wealthy merchants all study enough of the problem to protect themselves from it.
+
+The paradox is familiar:
+
+**to detect dangerous food magic, somebody must understand how dangerous food magic behaves.**
+
+## Love philters
+
+"Love potion" is a broad folk term rather than one single formula.
+
+Known classes include:
+
+### Keyed attraction philters
+
+These are prepared around a particular intended person.
+
+The drinker becomes unnaturally preoccupied with or attracted toward that keyed individual for the duration of the effect.
+
+A common illicit commercial grade lasts roughly **seventy-two hours**.
+
+It does not create a permanent relationship.
+
+It can, however, produce three days of disastrous judgment, misplaced affection, public embarrassment, contractual vulnerability, and political confusion.
+
+### First-focus philters
+
+These intensify attraction toward the first suitable person the drinker strongly notices after the effect takes hold.
+
+They are considered especially reckless because delivery errors can redirect the effect unpredictably.
+
+### Warmth draughts
+
+These do not create love outright but artificially intensify trust, comfort, fascination, or emotional openness.
+
+They are sometimes sold dishonestly as harmless "mood enhancers."
+
+Secret administration remains coercive.
+
+### Fixation confections
+
+These produce repetitive thoughts about a person, place, promise, or interaction.
+
+A victim may know the fixation is irrational and still struggle to disengage from it.
+
+## Heat-stable kitchen philters
+
+Some illicit preparations are designed to survive:
+
+- baking;
+- boiling;
+- reduction;
+- chocolate tempering;
+- sugar cooking;
+- freezing.
+
+This makes accidental kitchen incorporation possible.
+
+A vial intended for one cup of chocolate might instead be mistaken for:
+
+- flavor concentrate;
+- syrup;
+- vanilla-like extract;
+- fruit essence;
+- glaze;
+- medicinal cordial.
+
+If mixed into batter or filling, the active working may distribute through an entire batch.
+
+This is one reason professional kitchens separate medicinal, magical, and culinary concentrates.
+
+It is also one reason crimes still happen when somebody ignores the rule.
+
+## The First Tray Problem
+
+A classic household catastrophe occurs when a magically contaminated batch is divided from a clean batch and the serving instructions are reversed.
+
+For example:
+
+A secret seventy-two-hour keyed love philter is meant to be delivered to one adult through a batch of breakfast muffins.
+
+The philter is mistakenly mixed only into the **first tray**.
+
+A second tray is clean.
+
+Someone in the kitchen then receives an unrelated instruction:
+
+> Take the first tray to her father's table. The second goes upstairs.
+
+The father is in the middle of trade negotiations.
+
+The intended recipient never touches the potion.
+
+The negotiating patriarch eats from the enchanted tray.
+
+For the next seventy-two hours, he may become absurdly and dangerously preoccupied with the person to whom the philter was keyed.
+
+The consequences can include:
+
+- disastrous trade concessions;
+- invitations that make no political sense;
+- sudden gifts;
+- inexplicable defense of the wrong person;
+- jealousy;
+- family suspicion;
+- accusations of bribery;
+- accusations of magical assault;
+- efforts to hide the exposure until the effect passes;
+- frantic attempts to identify which pastries were contaminated;
+- servants being questioned;
+- rivals noticing that something is wrong;
+- the intended conspirator realizing the wrong target was dosed;
+- the actual intended target wondering why nothing happened.
+
+This is exactly the kind of chain-reaction plot Elaranthine kitchens are feared for.
+
+The enchantment may expire in seventy-two hours.
+
+The contracts signed, insults delivered, rumors started, kisses attempted, trade secrets revealed, and relationships damaged during those hours do not expire with it.
+
+## Truth preparations
+
+Truth magic in food or drink exists in several forms.
+
+Some lower inhibitions around truthful speech.
+
+Others make deliberate lying uncomfortable.
+
+More aggressive forms compel disclosure.
+
+Use without knowledge or lawful authority is heavily restricted or criminal in many jurisdictions.
+
+Diplomatic households are particularly vigilant because "a surprisingly honest dinner" can be an act of espionage.
+
+## Sleep and dream preparations
+
+These may cause:
+
+- drowsiness;
+- unusually deep sleep;
+- vivid dreams;
+- dream susceptibility;
+- difficulty waking.
+
+Legitimate medicinal versions exist.
+
+Secret administration is another matter entirely.
+
+A noble who falls asleep unexpectedly at the wrong banquet may wake to discover that everyone else has already decided what happened.
+
+## Memory fogs
+
+Some illicit preparations interfere with short-term recall or produce uncertainty around recent events.
+
+They are highly feared in:
+
+- sexual assault investigations;
+- espionage;
+- theft;
+- blackmail;
+- treaty manipulation;
+- staged scandals.
+
+A victim's uncertainty does not mean nothing happened.
+
+Elaranthine investigators know this.
+
+## Fertility and reproductive preparations
+
+Legitimate fertility medicine exists.
+
+So do criminal preparations intended to:
+
+- reduce conception;
+- interfere with fertility;
+- manipulate reproductive cycles;
+- sabotage a marriage;
+- conceal or imitate symptoms;
+- create misleading evidence of infertility.
+
+These overlap legally and culturally with the forbidden sympathetic fertility curses described elsewhere in the setting.
+
+A potion and a hidden fetish may produce similar political consequences through different magical methods.
+
+## Curse-laced foods
+
+Sympathetic workings may be attached to:
+
+- cakes;
+- sweets;
+- preserved fruit;
+- wine;
+- bread;
+- spice packets;
+- serving vessels.
+
+Sometimes the food is the carrier.
+
+Sometimes consuming it creates a link.
+
+Sometimes the food is innocent and the plate, ribbon, box, or gift wrapping contains the actual working.
+
+Therefore investigators do not merely ask:
+
+**What did the victim eat?**
+
+They ask:
+
+**Who prepared it, who packed it, who carried it, who served it, what touched it, what was substituted, and who had access at every stage?**
+
+## Mundane poison and magical poison
+
+Elaranth distinguishes between ordinary toxic substances and magical poisoning, but political households fear both.
+
+High-status kitchens use:
+
+- ingredient logs;
+- sealed storage;
+- trusted tasters;
+- serving assignments;
+- marked trays;
+- locked magical concentrates;
+- witness procedures for major banquets.
+
+These precautions are imperfect.
+
+That imperfection creates stories.
+
+## Kitchen chain-of-custody
+
+In important households, the journey from pantry to plate can itself be politically meaningful.
+
+A formal banquet may involve:
+
+1. ingredient receipt;
+2. pantry storage;
+3. preparation;
+4. magical finishing;
+5. plating;
+6. tray assignment;
+7. corridor handoff;
+8. table placement;
+9. final service.
+
+Every step creates an access point.
+
+A poisoner does not necessarily need to enter the kitchen.
+
+A love philter may be introduced at the serving corridor.
+
+A clean plate may be swapped after tasting.
+
+A box of chocolates may be repacked.
+
+A labeled tray may be sent to the wrong room.
+
+A servant may be bribed.
+
+A servant may make an innocent mistake.
+
+The distinction between conspiracy and accident is often the mystery.
+
+## Detection
+
+No single test catches every illicit preparation.
+
+Investigators may use:
+
+- scent and residue examination;
+- magical trace work;
+- comparison with clean food;
+- witness interviews;
+- serving records;
+- kitchen inventory;
+- container examination;
+- symptom timing;
+- known duration;
+- identification of who had access.
+
+Some philters are designed to mimic ordinary emotional behavior.
+
+That makes social evidence as important as magical evidence.
+
+## Antidotes and countermeasures
+
+Countermeasures exist, but they are not universally effective.
+
+Treatment depends on:
+
+- the class of potion;
+- how much was consumed;
+- how long ago;
+- whether the effect is chemical, magical, sympathetic, or mixed.
+
+Royal and wealthy households retain physicians familiar with such exposures.
+
+A major plot may therefore revolve around whether anyone realizes a character is enchanted early enough to intervene.
+
+## Criminal and political consequences
+
+Secret love magic is not socially treated as a cute shortcut.
+
+If proven, it can become:
+
+- assault;
+- poisoning;
+- fraud;
+- marriage interference;
+- succession interference;
+- diplomatic sabotage;
+- blackmail;
+- grounds for annulment;
+- a House scandal;
+- evidence in a Dark Arts proceeding.
+
+The fact that people still use it does not make it acceptable.
+
+It makes it useful for fiction.
+
+## The essential plot principle
+
+Illicit culinary magic should create consequences beyond the duration of the spell.
+
+A seventy-two-hour love philter is interesting not because someone behaves strangely for three days.
+
+It is interesting because by the fourth day:
+
+- a treaty may have been signed;
+- a lover may have seen something unforgivable;
+- a rival may have acquired leverage;
+- a parent may have publicly courted the wrong person;
+- a servant may have been blamed;
+- a marriage may be in question;
+- an investigator may suspect deliberate poisoning;
+- the original conspirator may now be desperate to keep anyone from finding the first mixing bowl.
+
+The magic ends.
+
+The plot remains.
+
+---
+
 # II. Foundational Ingredients
 
 ## Grains
@@ -2024,3 +2402,5 @@ The enduring culinary principles are:
 - Family recipes and preserved foods imply household continuity.
 - Seduction through cuisine should depend on attention, hospitality, privacy, symbolism, and taste rather than magical compulsion.
 - Secret enchantment intended to manufacture desire or consent is criminal coercion, not romance.
+- Illicit culinary magic nevertheless exists in abundance and is a major source of mystery, scandal, poisoning, accidental contamination, blackmail, diplomatic disaster, and romantic catastrophe.
+- A potion's magical duration may be brief while the social, legal, political, and emotional consequences remain permanent.
