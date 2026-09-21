@@ -13,7 +13,10 @@
     "requireGovernanceRead": true,
     "requireEraLock": true,
     "requireCanonCharacterGate": true,
-    "requireStoryIndexDiscoverability": true
+    "requireStoryIndexDiscoverability": true,
+    "requireCharacterContinuityRead": true,
+    "requireCharacterContinuityUpdate": true,
+    "requireCharacterTouchLog": true
   },
   "active": [
     {
@@ -82,5 +85,7 @@
       "status": "eligible-next"
     }
   ],
-  "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md"
+  "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md",
+  "characterContinuityControl": "api/resources/warhammer-40k-character-continuity-control.md",
+  "characterContinuityCatalog": "api/resources/warhammer-40k-character-continuity-catalog.json"
 }
