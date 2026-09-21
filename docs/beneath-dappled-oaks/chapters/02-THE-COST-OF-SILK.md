@@ -2,1347 +2,2133 @@
 series: "Beneath Dappled Oaks"
 chapter: 2
 title: "The Cost of Silk"
-status: "CANON PROSE"
+status: "CANON PROSE — FIRST-PRINCIPLES REVISION"
 era: "282 S.M."
 season: "Bloomtide"
 continuity_parent: "Chapter One — The Last Seven"
-provenance: "canonical reevaluation; preserves known original opening; not claimed as verbatim recovery of lost conversation prose"
+rewrite_note: "Rebuilt from first principles after Chapter One theory-of-mind revision. Earlier Chapter Two prose remains scaffolding only."
 ---
 
 # Chapter Two — The Cost of Silk
 
-By dawn, the Academy had become beautiful enough to make murder seem ceremonial.
+Mireth woke with Caelen's hand around her wrist.
 
-White flowers had been wired along the Hall of Falling Light. Blue banners hung from the east arcade. Every lamp chimney had been polished. The thirty-six empty student chairs were still there, but fresh ribbons had been tied to them overnight, and six smaller ribbons remained along the servants' rail.
+For several warm, stupid seconds she thought she was still beneath the oak.
 
-Silk covered everything.
+Then she opened her eyes.
 
-Silk softened stone.
+Mistress Olyra stood beside the bed.
 
-Silk hid scaffolding.
+Caelen was nowhere in sight.
 
-Silk turned mourning into color.
+Mireth looked at her own wrist.
 
-The Academy had always understood ceremony as a kind of practical magic. Put enough polished brass around grief and grief became remembrance. Put enough flowers around absence and absence became honor. Put enough silk over damaged masonry and respectable people could stand beside it without being forced to look directly at what had happened there.
+Olyra followed her gaze.
 
-The west tower remained visible from almost every important window.
+"Interesting morning?"
 
-That, at least, no decorator had managed to solve.
+Mireth pulled her hand out from under the blanket.
 
-Its upper galleries were still wrapped in mourning cloth and repair canvas. Scaffolds climbed the broken stone in thin black ribs. From this distance the damage looked almost orderly, which was an obscenity of perspective. Mireth knew what those rooms had smelled like afterward. Wet ash. Burned reagents. Stone dust. The metallic tang of ruptured wards.
+"I was dreaming."
 
-Thirty-six students had died there.
+"Mm."
 
-Six servants had died because servants were always close enough to other people's disasters to be included in them and rarely important enough to be named in the first sentence.
+"You knocked?"
 
-Today the Academy would graduate seven.
+"Repeatedly."
 
-Mireth Vael-Aesryn stood before a mirror while an attendant fastened the last green clasp at her shoulder and wondered how many crimes in the history of Elaranth had benefited from excellent tailoring.
+Mireth sat up.
 
-"A little higher," Aunt Selyra said.
+Sunlight filled the narrow graduate room. Her formal mantle hung from the wardrobe. A tray had appeared on the desk with tea, bread, honey and a folded note bearing her mother's seal.
 
-The attendant adjusted the clasp.
+Olyra had already opened the curtains.
 
-Mireth continued looking at herself.
+"How late?"
 
-The graduation mantle was Green Covenant green at the shoulders fading toward black at the hem, embroidered with narrow branching lines that seemed almost plain until the light caught them.
+"Not."
 
-It was beautiful.
+"Then why are you here?"
 
-She resented it.
+"Your aunt asked me to make sure you were awake."
 
-"You look unhappy," Selyra said.
+"I am."
 
-"Observant."
+"I can see that."
 
-"Your mother paid a ridiculous amount for that silk."
+Olyra turned toward the door.
 
-"Then I am expensive and unhappy."
+Mireth reached for the tea.
 
-"More respectable."
+"How old are you?"
 
-Mireth turned.
+Olyra stopped.
 
-"Did you know?"
-
-Selyra did not pretend ignorance.
-
-That, at least, Mireth appreciated.
-
-"About Silver Night?"
-
-"About Ilyan's family."
-
-"No."
-
-"Would you tell me if you had?"
-
-"Yes."
-
-Mireth watched her.
-
-Selyra's expression remained steady.
-
-Mireth had known her aunt long enough to understand that steady did not mean simple.
-
-"Do you believe him?"
-
-"I believe he believes what he told you."
-
-"That is not the same answer."
-
-"No."
-
-The attendant stepped back.
-
-Selyra waited until she had left the room.
-
-Then she closed the door.
-
-"Today matters for another reason."
+"Two hundred and sixty-eight."
 
 Mireth stared.
-
-"Please tell me adulthood contains at least one reason that is not another reason."
-
-"No."
-
-"Wonderful."
-
-Selyra sat on the edge of the dressing table.
-
-"Until today, you were a student."
-
-"I am aware."
-
-"No. Listen carefully. You were protected."
-
-Mireth almost laughed.
-
-The word felt grotesque in a room overlooking a tower where protected students had been murdered.
-
-Selyra saw the thought cross her face.
-
-"Imperfectly protected," she said. "Social rules are not walls. They are promises people are punished for breaking."
-
-"Thirty-six people are dead."
-
-"Yes."
-
-"And the punishment?"
-
-Selyra's jaw tightened.
-
-"That is one of the questions adulthood is about to make yours."
-
-Mireth hated the sentence because it was not theatrical. It was worse than theatrical. It was practical.
-
-The word echoed yesterday.
-
-"Ilyan said the same thing."
-
-"Then Valeric education occasionally produces useful results."
-
-Mireth ignored that.
-
-Selyra continued.
-
-"Families maneuver around students. They encourage friendships. They arrange tutors. They place you near people they hope you will like. They may even quietly discuss future marriages."
-
-"Quietly?"
-
-"We are elves, not saints."
-
-"But?"
-
-"But openly deploying students into dynastic conflict is considered beyond the line."
-
-"Silver Night crossed it."
-
-"Yes."
-
-Mireth looked at herself again.
-
-Green silk.
-
-Silver clasps.
-
-Adult colors.
-
-"And graduation ends the protection."
-
-"It changes it."
-
-"That is family language for yes."
-
-Selyra smiled faintly.
-
-"After today, Houses may recruit you openly. Assign you. Court you. pressure you. offer you appointments. ask you to use friendships. ask you to secure alliances."
-
-"Ask?"
-
-"Sometimes."
-
-Mireth's mouth tightened.
-
-"Who are you going to ask me to use?"
-
-For the first time, Selyra looked uncomfortable.
-
-That frightened her more than a prepared speech would have.
-
-"Not today."
-
-"That is not an answer."
-
-"It is the answer I have."
-
-Mireth walked toward the window.
-
-Below, coaches were already arriving.
-
-Students' families crossed the courtyards beneath umbrellas.
-
-Seven graduates.
-
-Dozens of relatives.
-
-Hundreds of interests.
-
-Below, the relatives of the dead were arriving too.
-
-Some wore formal mourning. Some wore House colors. A few wore both, which produced the peculiar visual effect of grief being required to respect heraldry. Mireth recognized parents who had spent the previous weeks arguing with Academy clerks over sealed effects, damaged rooms, inheritance inventories and whether a dead child's unfinished research belonged to the family, the Academy or whichever professional order had expected to receive them after graduation.
-
-That was another cruelty of the day.
-
-The dead had been on the threshold.
-
-A few more weeks and they would have ceased to be protected students and become junior adults with appointments, marriages, licenses, patrons, votes, apprenticeships and obligations. Their Houses had invested decades in them. Their orders had planned around them. Their siblings had expected them to stand in future councils.
-
-Someone had killed them before all those futures could become legally real.
-
-Seven graduates.
-
-Dozens of relatives.
-
-Hundreds of interests.
-
-And thirty-six missing pieces of the next generation.
-
-"Caelen?" Mireth asked.
-
-Selyra did not answer quickly enough.
-
-Mireth closed her eyes.
-
-"Oh, for the love of every god."
-
-"No arrangement has been made."
-
-"That is somehow worse."
-
-"Your friendship is known."
-
-"My friendship."
-
-"Yes."
-
-"And his interest?"
-
-Selyra's silence became answer.
-
-Heat climbed Mireth's throat.
-
-Not because she was surprised.
-
-Caelen had never possessed the subtlety he believed he possessed.
-
-But because suddenly every glance she remembered had acquired witnesses.
-
-"What about my interest?"
-
-"That remains yours."
-
-"How generous."
-
-"Mireth."
-
-She turned.
-
-Selyra's face softened.
-
-"This is the problem. Genuine affection is more useful than fabricated affection. Houses know that."
-
-Mireth stared.
-
-"So I should distrust him?"
-
-"No."
-
-"Trust him?"
-
-"I did not say that either."
-
-"Wonderful advice."
-
-"I am telling you the world you are entering will try to convert anything real into leverage."
-
-Mireth looked down at the green silk.
-
-"Then perhaps I should wear cheaper fabric."
-
-"It would still be you inside it."
-
-There was no answer to that.
-
----
-
-Caelen's mother adjusted his collar for the third time.
-
-"I can dress myself."
-
-"Evidence suggests otherwise."
-
-"Mother."
-
-Lady Sereth Avariel-Caith stepped back.
-
-Caelen endured inspection.
-
-His graduation coat was black with silver piping and a white sash representing his coming affiliation with the Royal Martial Fellowship. A narrow ceremonial sword hung at his hip, blunted by law and polished within an inch of its dignity.
-
-His mother touched his jaw.
-
-"You missed a patch."
-
-He moved away.
-
-"I am keeping it."
-
-"The stubble?"
-
-"Yes."
-
-"Why?"
-
-"Principle."
-
-"Which principle?"
-
-"Mine."
-
-She smiled.
-
-Caelen immediately distrusted the smile.
 
 "What?"
 
 "Nothing."
 
-"Mother."
+"That was plainly not nothing."
 
-"Your cousin Ysran owes me two crowns."
+Mireth poured tea.
 
-Caelen stared.
+Olyra waited.
+
+Mireth hated patient people.
+
+"Did you know?"
+
+"About?"
+
+"Yesterday."
+
+Olyra's face remained perfectly innocent.
+
+Mireth pointed at her.
+
+"That."
+
+"Child, I have been employed by this Academy for one hundred and twelve years."
+
+"That is not an answer."
+
+"I watched your mother hide behind the north conservatory with a harpist."
+
+Mireth froze.
+
+Olyra opened the door.
+
+"You may decide how much more you wish to know."
+
+The door closed.
+
+Mireth sat very still.
+
+Then she started laughing.
+
+It came out at exactly the wrong volume.
+
+Someone knocked on the wall from the next room.
+
+"Sorry."
+
+The knocking stopped.
+
+Her mother's note waited beside the breakfast tray.
+
+Mireth looked at it.
+
+Yesterday, before Ilyan spoke beneath the oak, she would have opened it without thinking.
+
+Now she recognized the seal first.
+
+Her mother.
+
+House Vael-Aesryn.
+
+Both things were true.
+
+That was irritating.
+
+She broke it.
+
+*Mireth—*
+
+*Your aunt will help with the mantle. I will see you in the court. Eat before you come down. You become unbearable when hungry.*
+
+*And stop touching your hair when nervous. You have done it since you were eight.*
+
+*Mother.*
+
+Mireth's hand was in her hair.
+
+She dropped it.
+
+There was a second line at the bottom.
+
+*The Avariel-Caith party arrived before dawn. Yes, I noticed. No, I am not discussing it before the ceremony.*
+
+Mireth folded the note.
+
+Then unfolded it.
+
+Read the line again.
+
+"Gods."
+
+Her mother knew.
+
+Of course her mother knew.
+
+Apparently everyone over a hundred had spent the last several months watching Mireth and Caelen circle one another with the exhausted patience of adults waiting for children to discover weather.
+
+She drank the tea.
+
+It was cold.
+
+---
+
+Damaris had been awake for an hour.
+
+Her aunt was in her room.
+
+That was never a good sign.
+
+Lady Meris Caladren-Ilyra sat by the window while a maid fastened the back of Damaris's dress. River-blue silk fell from Damaris's waist in narrow pleats, dark enough to look almost black away from the light. The graduation mantle would go over it later.
+
+Meris had brought no congratulations.
+
+She had brought earrings.
+
+Damaris looked at them in the mirror.
 
 "No."
+
+Meris lifted one eyebrow.
+
+"They're beautiful."
 
 "Yes."
 
-"You wagered on my face?"
+"That's why I don't want them."
 
-"Not your face."
+The maid stopped fastening.
 
-He closed his eyes.
+Meris smiled.
 
-"Mireth."
+"Continue, Sella."
 
-"I didn't say her name."
+The maid continued.
 
-"Everyone says that immediately after not needing to say her name."
+Damaris watched her aunt through the mirror.
 
-Sereth laughed.
+Meris was one hundred and seventy-three and had spent enough of those years in rooms like this that she could weaponize silence without appearing to notice she was doing it.
 
-Caelen did not.
+Damaris knew that about her.
 
-The laugh faded.
+She also knew Meris had once spent three nights beside Damaris's bed during a fever, had taught her to keep accounts, had smuggled her sweet buns during a disastrous summer diet imposed by a tutor, and had slapped a council secretary hard enough to split his lip when he insulted Damaris's mother.
 
-"Very well."
+People were inconvenient that way.
 
-"Very well what?"
+"Who sent them?"
 
-"We will speak plainly."
+"Your mother."
 
-"An innovation."
+Damaris relaxed.
 
-"House Vael-Aesryn would be a respectable alliance."
+Meris saw it.
 
-Caelen's stomach tightened.
+Damn.
 
-"There it is."
+"Put them on."
 
-"Your interest appears genuine."
+Sella finished the dress and stepped away.
 
-"Which means it is not yours."
+Damaris picked up the earrings.
 
-"Feelings are never entirely private once they affect public people."
+Small river pearls hung beneath hammered silver leaves.
 
-"That is an obscene sentence."
+"She couldn't come?"
 
-"It is also true."
+"She'll be at the ceremony."
 
-He turned away.
-
-The window overlooked the graduation court. Green Covenant banners moved among the trees.
-
-Mireth was somewhere below.
-
-He thought of the pressure of her thumbnail against his palm under the table two nights ago.
-
-Private.
-
-Or it had felt private.
-
-"Do not turn her into a negotiation," he said.
-
-Sereth's voice softened.
-
-"I cannot promise other people will not."
-
-"You."
-
-"I will not ask you to counterfeit affection."
-
-"That is an elegantly narrow promise."
-
-"Caelen."
-
-He faced her.
-
-She looked older than she had five minutes earlier.
-
-"Your father and I want you to be happy."
-
-"And useful."
-
-"Those things are not always enemies."
-
-"No. That is what frightens me."
-
-The bell rang.
-
-First call.
-
-Sereth reached for his shoulder.
-
-He let her.
-
-"If you pursue Mireth," she said, "pursue her because you choose her."
-
-He studied her.
-
-"And if the House benefits?"
-
-"It will notice."
-
-"That is not permission."
+"That's not what I asked."
 
 "No."
+
+Damaris met Meris's eyes in the mirror.
+
+Meris looked away first.
+
+There.
+
+Something.
+
+Not enough to name.
+
+Damaris put on the earrings.
+
+"Rhyl?"
+
+Damaris nearly stabbed herself through the ear.
+
+Meris's mouth curved.
+
+"What about him?"
+
+"Nothing."
+
+"Then why did you say his name?"
+
+"I wondered whether he'd found formal clothes."
+
+Damaris stared at her.
+
+"You're lying."
+
+"Yes."
+
+That was worse.
+
+Meris stood.
+
+She came behind Damaris and adjusted one pearl.
+
+"He watches you."
+
+"I know."
 
 "Good."
 
-He left before the conversation could improve itself into strategy.
+Damaris turned.
 
----
+"Is there a point?"
 
-Breakfast for the Last Seven was held in a private refectory because someone had finally realized that seating them beside thirty-six memorial places before graduation might be considered cruel even by Academy standards.
+"Not yet."
 
-The room had once been used for visiting examiners. It contained a long oak table designed for twelve, three windows overlooking the rain-dark herb court, and a sideboard so aggressively stocked that the kitchen had apparently decided seven grieving graduates could be repaired with preserves.
+Meris kissed her forehead.
 
-There were plum cakes, soft eggs, white cheese, honey, two kinds of bread, stewed pears and a silver pot of tea large enough to drown a minor official.
+It was an old gesture.
 
-No one sat at the head of the table.
+Damaris hated that it still worked.
 
-They had done that unconsciously.
+"Graduate first."
 
-Mireth noticed only after everyone was seated and decided not to mention it.
+"Then?"
 
-Damaris arrived with a plate.
+"Then we talk."
 
-Rhyl arrived with two.
+Meris left.
 
-Thessa stole fruit from Lyrion's.
+Damaris watched the closed door.
 
-Ilyan arrived with nothing.
+Sella picked up the mantle.
 
-Damaris looked at him.
-
-"No."
-
-Ilyan stopped.
-
-"What?"
-
-"You are eating."
-
-"I am not hungry."
-
-"That condition has been tested and rejected."
-
-"I don't—"
-
-Damaris put half a roll on his plate.
-
-Then cheese.
-
-Then an egg.
-
-"Eat."
-
-He looked at the food.
-
-"Is this friendship or commercial coercion?"
-
-"River policy."
-
-Rhyl sat beside her.
-
-"She has seized your assets."
-
-"Apparently."
-
-For a moment they sounded like themselves.
-
-That hurt.
-
-Mireth took the chair across from Caelen.
-
-He looked at her mantle.
-
-She looked at his stubble.
-
-Both looked away.
-
-Thessa noticed.
-
-Lyrion noticed Thessa noticing.
-
-Damaris noticed everyone.
-
-Rhyl concentrated heroically on breakfast.
-
-"After today," Lyrion said, "how quickly do we all become unbearable?"
-
-"Some of us began early," Thessa said.
-
-"Thank you."
-
-Ilyan pushed the food around his plate.
-
-Caelen watched him.
-
-"Anything from your family?"
-
-"Too much."
-
-"What does that mean?"
-
-"Letters."
-
-"Threats?"
-
-"No."
-
-"Instructions?"
-
-Ilyan's mouth twisted.
-
-"Advice."
-
-Damaris said, "Worse."
-
-Ilyan looked at her.
-
-She met his gaze.
-
-There was something in the look.
-
-Mireth saw it.
-
-Not romance.
-
-Concern.
-
-Calculation.
-
-Then guilt about calculation.
-
-Mireth filed it away.
-
-Yesterday they had agreed to listen.
-
-Today the world had begun talking.
-
----
-
-The graduation ceremony lasted just under two hours.
-
-Seven names were called.
-
-Thirty-six were remembered.
-
-The six servants were named as well, though separately, after the student memorial and before the formal conferral. Mireth watched three noble families bow their heads with exquisite solemnity while remaining seated for the servants' names. She filed that away beside all the other things adulthood was apparently going to require her not to scream about.
-
-The Hall of Falling Light had been built to make young people feel small in the presence of institutions. Its roof arched in pale ribs above them, catching morning light and breaking it into long bars across the floor. The seven graduates stood in a space designed for a full cohort. Empty distance surrounded them.
-
-It was impossible not to imagine where everyone else should have been.
-
-A shoulder beside Thessa.
-
-A laugh behind Rhyl.
-
-Someone whispering something obscene to Lyrion during the master's address.
-
-A cluster of Dmitrigical students trying to look solemn and failing.
-
-Mireth could remember enough individual habits to populate every empty place.
-
-That was the problem with memorial numbers.
-
-Thirty-six sounded manageable until one remembered thirty-six faces.
-
-The masters spoke of resilience.
-
-No one used the word murder.
-
-Families filled the witness benches in House colors.
-
-The Last Seven crossed beneath the oculus one by one.
-
-Thessa Eris-Vey accepted her certificate and turned toward the Western Warden delegation.
-
-Lyrion accepted his beneath a drift of silver-blue silk.
-
-Damaris Caladren-Ilyra bowed to three relatives from the River Ledger.
-
-Rhyl Orthell-Faen looked almost embarrassed by applause.
-
-Caelen's mother cried exactly once and then behaved as though nothing had happened.
-
-Mireth's Green Covenant witnesses wore no jewels.
-
-Ilyan's family did not attend in force.
-
-That was noticed.
-
-Of course it was noticed.
-
-Everything was noticed now.
-
-Afterward the Seven were separated.
-
-Not dramatically.
-
-Politely.
-
-That was how power preferred to work when it had time.
-
-No one seized an arm. No one issued a command. Instead, relatives appeared with smiles, order representatives offered congratulations, attendants opened doors at precisely useful moments, and each graduate discovered that the next ten paces of corridor had somehow been arranged in advance.
-
-Yesterday they had still been students, and an elder asking too directly about another student's House affairs would have looked vulgar.
-
-Today the same question could be called professional interest.
-
-The transformation required no spell.
-
-Only a certificate.
-
-Mireth went toward the Green Covenant chamber.
-
-Caelen was intercepted by Royal Martial relatives.
-
-Thessa by the Wardens.
-
-Lyrion by Silver Bough attachés.
-
-Rhyl by Red Hart representatives.
-
-Damaris by her aunt.
-
-Ilyan by a black-robed examiner from Truth Beyond the Veil.
-
-Seven paths.
-
-Seven doors.
-
-Not yet entered.
-
-But visible.
-
----
-
-Truth Beyond the Veil held its graduation oath in a narrow chamber beneath the western side of the Hall of Falling Light.
-
-Ilyan had been inside as a student.
-
-Students stood at the rear.
-
-Graduates stood before the black glass.
-
-That was apparently the difference.
-
-Examiner Sael Ithrenn waited beside the oath lectern.
-
-Ilyan recognized him only by reputation.
-
-Grey eyes.
-
-Spare build.
-
-A face that seemed designed to make liars add unnecessary details.
-
-"Read," Sael said.
-
-The oath lay beneath a pane of clear crystal.
-
-Ilyan began.
-
-"I bind myself to witness without ornament, to record without—"
-
-He stopped.
-
-Sael said nothing.
-
-The phrase sat halfway down the text.
-
-Necessary truth.
-
-Not plain truth.
-
-Not preserved truth.
-
-Not witnessed truth.
-
-Necessary truth.
-
-Ilyan heard his uncle.
-
-Necessary sacrifice.
-
-His stomach turned.
-
-"This is wrong."
-
-Several witnesses shifted.
-
-Sael looked at the text.
-
-"Explain."
-
-"I learned the student oath."
-
-"This is not the student oath."
-
-"The archival form we studied did not say this."
-
-"What did it say?"
-
-"That truth must be preserved even when dangerous."
-
-Sael watched him.
-
-Ilyan pointed.
-
-"This says truth may be ordered according to necessity."
-
-One of the senior witnesses frowned.
-
-"That is an uncharitable interpretation."
-
-"Then it should not permit it."
-
-Silence.
-
-Ilyan's father had taught him never to challenge a ritual unless he already controlled the room.
-
-His uncle had taught him that institutions respected certainty.
-
-Apparently Ilyan had learned enough from both men to become inconvenient.
-
-Sael said, "Continue with the wording you can swear."
-
-A murmur.
-
-Ilyan looked at him.
-
-"Am I permitted?"
-
-"You are an adult."
-
-The sentence struck harder than it should have.
-
-Yesterday, the words would have sounded like freedom.
-
-Today they sounded like jurisdiction.
-
-Adult meant he could alter an oath he could not honestly swear.
-
-Adult also meant no instructor was required to stand between him and the consequences.
-
-Ilyan took a breath.
-
-He read the oath again.
-
-When he reached necessary truth, he altered it.
-
-"Truth that remains truth under necessity."
-
-Someone inhaled sharply behind him.
-
-Sael's expression did not change.
-
-Ilyan completed the oath.
-
-The black glass accepted his handprint.
-
-No lightning.
-
-No divine rebuke.
-
-No arrest.
-
-Just ink.
-
-That was almost disappointing.
-
-When the witnesses dispersed, Sael stopped him.
-
-"Where did you see the older form?"
-
-"Academy archive."
-
-"How old?"
-
-"I don't know."
-
-"Find out."
-
-Ilyan stared.
-
-"Why?"
-
-Sael glanced toward the closed door.
-
-"Because you noticed."
-
----
-
-Damaris's aunt received her in river-blue silk.
-
-Lady Meris Caladren-Ilyra had the serene face of a woman capable of announcing bankruptcy as though offering tea.
-
-Damaris sat across from her.
-
-"You graduated well," Meris said.
-
-"Was there a score?"
-
-"There is always a score."
-
-"Of course."
-
-Meris slid a cup toward her.
-
-Damaris did not drink.
-
-"Say it."
-
-Her aunt's eyebrows rose.
-
-"Say what?"
-
-"The thing you did not say while I was a student."
-
-A pause.
-
-Then Meris smiled without amusement.
-
-"Good."
-
-Damaris wished she had been wrong.
-
-Meris folded her hands.
-
-"Ilyan Valeric trusts you."
-
-There it was.
-
-Damaris felt the room change.
-
-"He trusts all of us."
-
-"Not equally."
-
-"What do you want?"
-
-"Information."
-
-"No."
-
-"I have not told you what information."
-
-"That rarely improves the word."
-
-Meris leaned back.
-
-"The Valeric position is unstable. If Ilyan's rupture with his family becomes public, every commercial council in the city will want to know whether it touches Dmitrigical licenses, tribunal appointments or Academy liability."
-
-Damaris thought of Ilyan yesterday under the oak.
-
-My father and my uncle murdered our classmates.
-
-"I am his friend."
-
-"Yes."
-
-The answer came too easily.
-
-Damaris hated it.
-
-"That is why you are asking."
-
-"Yes."
-
-No euphemism.
-
-No mercy.
-
-"What exactly are you ordering me to do?"
-
-"Gain his trust."
-
-"He already trusts me."
-
-"Then do not lose it."
-
-Damaris stared.
-
-Meris's face remained calm.
-
-"You are not being ordered to seduce him."
-
-"How generous."
-
-"You are not being ordered to betray him."
-
-"Yet."
-
-"Damaris."
-
-"No. Say what this is."
-
-Meris looked toward the window.
-
-Rain had begun again.
-
-"This is adulthood."
+"She's frightening."
 
 Damaris laughed.
 
-It sounded ugly.
+"You have no idea."
 
-"No. Adulthood is paying taxes and knowing when the roof needs repair. This is espionage with family stationery."
+Sella draped the mantle over her shoulders.
 
-Meris's mouth tightened.
+Damaris looked at herself.
 
-"Your choices remain yours."
+She thought of Rhyl going red yesterday because she had asked him what she looked like.
 
-"With consequences."
+Beautiful.
 
-"All choices have consequences."
+He had said it as though dragged from him by hostile magic.
 
-Another adult sentence.
+She smiled.
 
-Damaris was beginning to collect them against her will.
+Sella caught it in the mirror.
 
-"What if I refuse?"
+Damaris stopped.
 
-"Then you refuse."
+Sella said nothing.
 
-"And?"
-
-"Your access narrows. Certain appointments go elsewhere. Your father becomes disappointed in an operatic fashion. I endure several dinners."
-
-Damaris almost smiled.
-
-Almost.
-
-Meris reached across the table.
-
-"Listen to me. You may love your friends and still serve your family."
-
-"And when those conflict?"
-
-"Then you discover who you are."
-
-Damaris looked down at the untouched tea.
-
-"That is a terrible answer."
-
-"Most true ones are."
+The entire world was apparently infested with people who noticed things.
 
 ---
 
-Thessa's induction into the Western Wardens involved fewer philosophical crimes and more boots.
+Rhyl had formal clothes.
 
-She preferred it.
+They were simply not the formal clothes everyone expected.
 
-A Warden quartermaster measured her shoulders, issued a red-edged field coat and informed her that Academy sword technique was decorative nonsense.
+His coat was Red Hart brown, almost plain, with dark green stitching at the shoulders and cuffs. The collar was soft. The boots were polished but had clearly been made for walking farther than a ceremonial corridor.
 
-Thessa liked him immediately.
+His father looked him over.
 
-Then a Warden captain asked which of her six surviving classmates had diplomatic access.
+"Fine."
 
-She liked him less.
+Rhyl looked down at himself.
 
-Lyrion's Silver Bough reception involved wine at noon, which he considered evidence of civilization until an attaché asked him which of his friends frightened easily under family pressure.
+"Fine?"
 
-He put the glass down.
-
-Rhyl's Red Hart representative asked what roads he knew best.
-
-That sounded harmless until the second question.
-
-Which estates?
-
-Which servants?
-
-Which gates were left open during rain?
-
-By afternoon, all seven had discovered versions of the same thing.
-
-Their friendships had become information.
-
-Their attractions had become routes.
-
-Their families had spent years calling these bonds charming.
-
-Graduation had made them useful.
-
-The change was not that their elders had suddenly become schemers at noon. The change was permission.
-
-For years, the Houses had been expected to keep a respectable distance from the political utility of students. They could arrange tutors, invite suitable families to dinner, encourage friendships and make predictions about future marriages in rooms where the children were not supposed to hear. But there had been a line between preparing a young adult for the House and deploying one.
-
-The Last Seven had crossed it that morning.
-
-The thirty-six had been murdered before they could.
-
-That thought came differently to each survivor, but by dusk all of them carried some version of it.
-
----
-
-They met again at dusk.
-
-Not by plan.
-
-Perhaps that was why they all came.
-
-The oldest oak stood wet and dark beneath a clearing sky. Sunset turned the Academy windows gold.
-
-The courtyard smelled of wet bark, bruised grass and the faint mineral breath of old wards cooling after rain. Beyond the cloister, servants were taking down some of the graduation ribbons already. Ceremony had a remarkably short half-life once the guests began leaving.
-
-Seven graduates sat where seven students had sat the day before.
-
-The difference was absurd.
-
-Their certificates were barely dry.
-
-Their families had nevertheless managed to convert them into assets before supper.
-
-Caelen arrived last.
-
-Mireth noticed the white edge of a Royal Martial packet inside his coat.
-
-He noticed her noticing.
-
-Neither asked.
-
-Not yet.
-
-Thessa dropped backward against the trunk.
-
-"I have been an adult for six hours and already dislike the management."
-
-"Which management?" Lyrion asked.
-
-"All of it."
-
-Damaris sat beside Rhyl.
-
-Too close to be accidental.
-
-Not close enough to admit anything.
-
-Ilyan looked exhausted.
-
-Mireth turned to him.
-
-"The oath?"
-
-He told them.
-
-Necessary truth.
-
-The altered language.
-
-The examiner who told him to find out when it changed.
-
-Caelen's face hardened.
-
-"Your uncle used the same word."
-
-"Yes."
-
-No one had to say why that mattered.
-
-Not proof.
-
-A pattern.
-
-Damaris told them less.
-
-"My family wants information about Valeric instability."
-
-Ilyan looked at her.
-
-"Through you?"
-
-"Yes."
-
-She held his gaze.
-
-That was true.
-
-Not all of it.
-
-Something in her expression made Rhyl look over.
-
-Damaris felt it.
-
-Mireth noticed.
-
-Seven people learning to become suspicious of the people they loved was going to become exhausting.
-
-Caelen spoke next.
-
-"My family knows I am interested in Mireth."
-
-Mireth stared at him.
-
-Thessa smiled.
-
-Lyrion tried very hard not to.
-
-"Thank you," Mireth said. "I was hoping this could become public."
-
-"I am making a point."
-
-"A courageous one."
-
-Caelen looked at the others.
-
-"They consider it potentially useful."
-
-The humor died.
-
-Mireth folded her arms.
-
-"My aunt implied the same."
-
-Caelen looked at her.
-
-"Did she ask you to do anything?"
+"Would you prefer pretty?"
 
 "No."
 
-"Mine didn't either."
+"Fine, then."
 
-"Yet," Damaris said.
+His father, Hareth Orthell-Faen, was one hundred and fifty-six and built like a man who had spent most of them outdoors. Grey had begun at his temples. His hands were scarred. He had arrived at the Academy with one travel case, no attendants and a sprig of flowering hawthorn tucked through the clasp of his coat because Rhyl's mother had told him not to forget it.
 
-No one liked the word.
+He had forgotten it.
 
-Lyrion rubbed one hand over his face.
+She had sent a courier after him.
 
-"Silver Bough asked which of you become frightened under pressure."
+Hareth touched the sprig.
 
-Thessa looked at him sharply.
+"Your mother says this makes me festive."
 
-"What did you say?"
+"It makes you pollinated."
 
-"That none of you are worth the paperwork."
+"She didn't ask you."
 
-She laughed despite herself.
+Rhyl smiled.
 
-Then she sobered.
+Hareth sat on the edge of the desk.
 
-"The Wardens asked which of you have diplomatic access."
+"How is Damaris?"
 
-Rhyl sighed.
+Rhyl looked at him.
 
-"Red Hart asked which estates I know."
+His father waited.
+
+"Fine."
+
+Hareth nodded.
+
+"Pretty?"
+
+Rhyl closed his eyes.
+
+"You too?"
+
+"Me too what?"
+
+"Nothing."
+
+"Fine, then."
+
+Rhyl picked up his mantle.
+
+Hareth laughed.
+
+Rhyl had never known whether his father was particularly good at reading him or simply willing to wait until Rhyl betrayed himself.
+
+Probably both.
+
+At the door, Hareth said, "Your mother likes her."
+
+"They've met twice."
+
+"Your mother decided she liked me in six minutes."
+
+"How long did it take you?"
+
+"Three."
+
+Rhyl looked back.
+
+His father shrugged.
+
+"Sometimes you're lucky."
+
+There was nothing strategic in his face.
+
+Rhyl trusted that.
+
+He also knew his father disliked the Caladren-Ilyra habit of turning every dinner into a negotiation and had said so often enough that Rhyl could recite the complaints.
+
+Both things could be true.
+
+Rhyl left before Hareth found another question.
+
+---
+
+The Last Seven met in the private refectory.
+
+Nobody had arranged it.
+
+Again.
+
+Mireth arrived second and found Caelen standing by the window with a cup of tea.
+
+He turned.
+
+She stopped.
+
+He had shaved properly.
+
+She was disappointed.
+
+That was ridiculous.
+
+Caelen's gaze moved over her mantle, down the line of her dress, then back to her face.
+
+He forgot to drink.
+
+Mireth smiled.
+
+"Careful."
+
+He looked at the cup.
+
+"Right."
+
+"Hot?"
+
+"No."
+
+"Shame."
+
+He set it down.
+
+"You look—"
+
+The door opened.
+
+Thessa entered.
+
+"Don't mind me."
+
+Caelen stared at her.
+
+Thessa crossed to the table.
+
+"Continue."
+
+"No."
+
+"Why?"
+
+"Because you're here."
+
+"That has never stopped you before."
+
+"It is stopping me now."
+
+Mireth took a seat.
+
+Thessa looked at her.
+
+"What was he going to say?"
+
+"Something devastatingly original."
+
+Caelen sat across from her.
+
+"You'll never know."
+
+"I'll survive."
+
+His eyes stayed on her.
+
+She looked away first.
+
+Damaris arrived wearing the river pearls.
+
+Rhyl arrived behind her.
+
+He saw them.
+
+His expression changed.
+
+Only slightly.
+
+Damaris noticed.
+
+"Say it."
+
+Rhyl blinked.
+
+"Say what?"
+
+"Whatever that was."
+
+"What was what?"
+
+She touched one earring.
+
+"Oh."
+
+Damaris waited.
+
+Rhyl looked at the pearl.
+
+Then at her.
+
+"They suit you."
+
+She seemed disappointed.
+
+"That's all?"
+
+He leaned closer.
+
+"They'd look better on my floor."
 
 Silence.
 
-Mireth looked around the circle.
+Rhyl froze.
 
-Yesterday Ilyan had told them their classmates were murdered.
+Mireth stopped breathing.
 
-Today every institution around them had begun asking what the survivors could do for it.
+Thessa's mouth fell open.
 
-Perhaps that was what the houses believed adulthood meant.
+Caelen turned his head very slowly.
 
-Not freedom.
+Damaris stared at Rhyl.
 
-Availability.
+Rhyl looked as if he had just watched himself step off a cliff.
 
-"We need rules," Mireth said.
+Lyrion walked in.
 
-The others looked at her.
+"What happened?"
 
-She had not planned the sentence. Perhaps that was why it felt important.
+Nobody answered.
 
-The Academy had given them rules for laboratory safety, citation, formal dueling, ward maintenance, dormitory fires, examination conduct and the correct procedure for reporting a dangerous familiar loose in a residence hall.
+He looked around.
 
-It had given them remarkably little instruction for what to do when their families began treating affection as infrastructure.
+"I missed something."
 
-Lyrion groaned.
+Damaris stood.
 
-"Already?"
+Rhyl did not move.
 
-"Especially already."
+She crossed the small distance between them.
 
-"What kind?"
+His eyes followed her.
 
-"No lying to each other about direct orders involving each other."
+She put one hand against his chest.
 
-Damaris went still.
+Then leaned to his ear.
 
-Not visibly enough for anyone but Rhyl.
+Mireth could not hear what she said.
 
-He looked at her.
+Rhyl's face went scarlet.
 
-She looked away.
+Damaris stepped back and sat down.
 
-Caelen said, "Agreed."
+Lyrion looked wounded.
+
+"What did she say?"
+
+Rhyl picked up the nearest cup and drank.
+
+It was empty.
+
+Thessa folded over the table laughing.
+
+Ilyan entered last.
+
+He took in Thessa, Rhyl, Damaris, the empty cup and Lyrion's offended expression.
+
+"No."
+
+Mireth looked at him.
+
+"No what?"
+
+"I don't want to know."
+
+"Wise," Caelen said.
+
+Ilyan sat.
+
+For a few minutes they ate.
+
+It was almost easy.
+
+Then Ilyan's hand shook when he reached for the butter.
+
+Rhyl slid it closer without looking at him.
+
+Ilyan took it.
+
+No one said anything.
+
+Mireth watched the others.
+
+Yesterday's secret sat among them without needing to be named.
+
+Damaris was more attentive to Ilyan than usual.
+
+Caelen checked the doors whenever footsteps passed.
+
+Thessa kept finding reasons to touch somebody.
+
+Lyrion was joking more.
+
+Rhyl watched all of them.
+
+And Ilyan knew.
+
+He knew they were doing it.
+
+That was probably why he allowed it.
+
+The first bell rang.
+
+Nobody moved.
+
+The second rang.
+
+Caelen stood.
+
+"Well."
+
+Thessa looked at him.
+
+"That's inspiring."
+
+"I trained for years."
+
+Lyrion rose and offered her his hand.
+
+She ignored it and stood on her own.
+
+Then took his hand anyway.
+
+Mireth fastened her mantle.
+
+Caelen came around the table.
+
+"Your collar."
+
+She looked at him.
+
+He reached toward it, then stopped.
+
+"May I?"
+
+That did something unpleasantly warm to her.
+
+"Yes."
+
+His fingers slipped beneath the edge of the mantle.
+
+Mireth could feel his knuckles against her throat.
+
+He straightened the clasp.
+
+Neither spoke.
+
+Across the room, Mistress Olyra appeared in the doorway.
+
+"Oh, good. Still dressed."
+
+Mireth shut her eyes.
+
+Caelen laughed against his teeth.
+
+Olyra pointed down the corridor.
+
+"Go graduate."
+
+---
+
+The Hall of Falling Light had never held so many flowers.
+
+Mireth thought that first.
+
+Then she saw the families.
+
+Her mother sat with Aunt Selyra beneath the Green Covenant banners.
+
+Lady Sereth Avariel-Caith sat three sections away.
+
+She looked at Caelen.
+
+Then at Mireth.
+
+Mireth knew immediately.
+
+Not what Sereth thought.
+
+Only that she knew.
+
+Mireth resisted the urge to adjust her hair.
+
+Damaris's family occupied enough seats to constitute a small legislative problem.
+
+Rhyl's father sat among them by accident or design, apparently untroubled by either possibility.
+
+Thessa saw someone in the Warden section and muttered, "Fuck."
+
+Lyrion followed her gaze.
+
+"Your mother?"
+
+"Worse."
+
+"Grandmother?"
 
 Thessa nodded.
 
-"Agreed."
+Lyrion straightened his coat.
 
-Lyrion: "Yes."
+Mireth looked at him.
 
-Rhyl: "Yes."
+"Afraid?"
 
-Ilyan looked at Damaris.
-
-She forced herself to meet his eyes.
-
-"Agreed."
-
-The word tasted complicated.
-
-Mireth continued.
-
-"No asking someone to violate an oath just because we're friends."
-
-Caelen nodded.
+"Terrified."
 
 "Good."
 
-"No assuming every request from a family is evil."
+Ilyan's family section was sparse.
 
-Thessa frowned.
+His father was not there.
 
-"Why not?"
+His uncle was not there.
 
-"Because that would be easy."
+Three lesser Valeric relatives sat together near the aisle.
 
-Lyrion sighed.
+Ilyan saw them.
 
-"She is right."
+His face emptied.
 
-"I dislike when that happens."
+Mireth wanted to take his hand.
+
+They were already moving.
+
+The ceremony began.
+
+The speeches were mercifully short.
+
+The remembrance was not.
+
+This time Ilyan stayed.
+
+When his cousins' names were spoken, Thessa's hand found his behind the line of their mantles.
+
+The gesture was invisible from the benches.
+
+Mireth saw it.
+
+So did Damaris.
+
+When the six servants' names were read, Damaris's chin lifted.
+
+One of her relatives noticed.
+
+Mireth wondered what he thought it meant.
+
+Probably something different from what Mireth knew it meant.
+
+That was going to happen often now.
+
+The graduates were called.
+
+Rhyl first among them.
+
+He crossed the light, accepted the folio and looked vaguely embarrassed by the applause.
+
+His father whistled.
+
+Rhyl stopped.
+
+Half the hall turned.
+
+Hareth sat perfectly straight.
+
+Damaris covered her mouth.
+
+Rhyl's expression promised murder.
+
+The provost tried not to smile.
+
+Damaris went next.
+
+She crossed with the calm, exact grace she had practiced since childhood.
+
+Rhyl watched her.
+
+Mireth watched Rhyl.
+
+Damaris reached the turn beneath the oculus.
+
+Her eyes found him.
+
+For the smallest instant her formal expression broke.
+
+There.
+
+Then she faced the hall.
+
+Thessa graduated under the gaze of her grandmother, who did not clap.
+
+She struck one fist against her own chest.
+
+Thessa saw.
+
+Her whole posture changed.
+
+Pride.
+
+Mireth knew that one.
+
+Lyrion received enough applause from the Silver Bough section to make him visibly suspicious.
+
+Caelen went beneath the oculus.
+
+Lady Sereth did not cry.
+
+Not yet.
+
+Mireth watched him accept the folio.
+
+He turned.
+
+His eyes found hers before his family.
+
+That frightened her.
+
+Not because she disliked it.
+
+Because her mother saw.
+
+Aunt Selyra saw.
+
+Lady Sereth saw.
+
+Half the Moon-Crown delegation probably saw.
+
+Caelen seemed not to care.
+
+Or perhaps he had not yet learned to care.
+
+Mireth wasn't sure which was worse.
+
+Then her own name was called.
+
+She walked.
+
+The hall became light and color and faces.
+
+Her mother.
+
+Her aunt.
+
+Her friends.
+
+Thirty-six ribbons.
+
+The west doors.
+
+Caelen.
+
+The provost placed the folio in her hands.
+
+"Welcome, Mireth."
+
+Not child.
+
+Not student.
+
+Mireth.
+
+She bowed.
+
+When she turned, her mother was crying.
+
+So was Lady Sereth.
+
+Apparently they had coordinated.
+
+Mireth almost laughed.
+
+Ilyan went last.
+
+The hall quieted.
+
+He crossed alone.
+
+The Valeric relatives stood.
+
+Ilyan did not look at them.
+
+He accepted the folio.
+
+For one terrible second Mireth thought he might throw it.
+
+Instead he turned.
+
+Looked at the six of them.
+
+And smiled.
+
+The applause came.
+
+Mireth clapped until her hands hurt.
+
+---
+
+Afterward, the Academy dissolved them.
+
+Not by force.
+
+By relatives.
+
+Mireth had just enough time to touch Ilyan's shoulder before her mother appeared.
+
+"Come."
+
+"Hello to you too."
+
+Her mother kissed both cheeks.
+
+"Come."
+
+"Where?"
+
+"Somewhere your aunt cannot hear me."
+
+Aunt Selyra, directly behind her, said, "Rude."
+
+"Accurate."
+
+Mireth was swept into a small retiring room overlooking the east court.
+
+Her mother shut the door.
+
+Then hugged her.
+
+Hard.
+
+Mireth's irritation vanished.
+
+She put her arms around her.
+
+For a while neither spoke.
+
+Her mother smelled of rose oil and rain.
+
+When they separated, she touched Mireth's face.
+
+"You did it."
+
+Mireth nodded.
+
+"So did seven of us."
+
+Her mother's eyes changed.
+
+"I know."
+
+That was enough.
+
+She sat.
+
+Mireth remained standing.
+
+Her mother looked at the mantle.
+
+"Beautiful."
+
+"Expensive."
+
+"Extremely."
+
+"Why?"
+
+"Because your grandmother insisted."
+
+"That explains nothing."
+
+"It explains most things."
+
+Mireth sat opposite her.
+
+Her mother smiled.
+
+Then looked toward the door.
+
+"Caelen."
+
+Mireth groaned.
+
+"We had a deal."
+
+"We had no deal."
+
+"You wrote that you weren't discussing him before the ceremony."
+
+"The ceremony is over."
+
+Mireth stared.
+
+Her mother smiled.
+
+"You are impossible."
+
+"You are attracted to a handsome man who likes you. I have survived worse family crises."
+
+"Mother."
+
+"What?"
+
+Mireth folded her arms.
+
+Her mother leaned back.
+
+"Do you want him?"
+
+Heat climbed Mireth's face.
+
+"That is none of your business."
+
+"Excellent."
+
+Mireth blinked.
+
+Her mother nodded.
+
+"Keep that answer."
+
+"What?"
+
+"For anyone who asks."
+
+Mireth's irritation faded.
+
+Her mother looked at her for a long moment.
+
+"Sereth knows."
+
+"I noticed."
+
+"She likes you."
+
+"She barely knows me."
+
+"She has watched you for years."
+
+"That's worse."
+
+"Probably."
+
+Mireth rubbed her forehead.
+
+"Are you arranging something?"
+
+"No."
+
+"Would you tell me?"
+
+"Yes."
+
+Mireth believed her.
+
+Mostly.
+
+That was the difficulty.
+
+Her mother was kind. Fiercely so. She had spent Mireth's childhood turning household crises into games so the children would not be frightened. She remembered servants' birthdays. She cried at terrible plays. She also understood House politics far better than Mireth did and could keep a secret for decades when she believed she had reason.
+
+Mireth loved her.
+
+Love was not the same as knowing everything.
+
+Her mother reached across and took her hand.
+
+"If you want him, want him."
+
+Mireth looked up.
+
+"If you don't, don't. If you want him for a year, take the year. If you want him for fifty, see what fifty becomes. If you want to drag him into a linen closet before supper, at least choose one with a lock."
+
+Mireth choked.
+
+Her mother continued calmly.
+
+"You are not the first adult in this family to possess a body."
+
+"Please stop."
+
+"I am nearly finished."
+
+"Please be finished now."
+
+"The House will have opinions. So will his. Opinions are cheap."
+
+Mireth stared at her.
+
+Her mother's thumb moved over her knuckles.
+
+"Choice is expensive."
+
+There it was.
+
+Not a lecture.
+
+A warning.
+
+Mireth squeezed her hand.
+
+"All right."
+
+"Good."
+
+Her mother stood.
+
+At the door she paused.
+
+"Your father says the west linen closets are better."
+
+Mireth made a sound of horror.
+
+Her mother escaped before the cushion hit the door.
+
+---
+
+Caelen's mother waited until they were alone.
+
+Then she handed him two crowns.
+
+He looked at the coins.
+
+"No."
+
+"Take them."
+
+"You bet on me?"
+
+"Ysran bet you would kiss her before graduation."
+
+Caelen stared.
+
+Sereth placed the coins in his palm.
+
+"I said after."
+
+He closed his hand.
+
+"You are all monsters."
+
+"Experienced."
+
+"That is not better."
+
+"It is from here."
+
+Caelen put the coins on the table.
+
+His mother watched him.
+
+"You looked at her first."
+
+He knew what she meant.
+
+"When?"
+
+"After your name."
+
+Caelen said nothing.
+
+Sereth did not need him to.
+
+She walked to the window.
+
+"I like Mireth."
 
 "So do I."
 
-"And no one acts alone on Silver Night."
+"I had gathered."
 
-Ilyan opened his mouth.
+"Mother."
 
-Mireth pointed at him.
+She looked back.
 
-"Especially you."
+He knew her face.
 
-He closed it.
+This one was not teasing.
 
-Caelen smiled faintly.
+Caelen straightened.
 
-"There. Democracy."
+"What?"
 
-"Seven people is not a democracy," Damaris said.
+"Nothing yet."
 
-"It is if everyone is equally irritating."
+He disliked the word immediately.
 
-Rhyl said, "Then we are exceptionally legitimate."
+Sereth saw that too.
 
-They laughed.
+"Your father has heard people talking."
 
-Not long.
+"About Mireth?"
+
+"About all seven of you."
+
+That was worse.
+
+Caelen leaned against the table.
+
+"What kind of talking?"
+
+"The kind that begins with sympathy and ends with arithmetic."
+
+His stomach tightened.
+
+Yesterday under the oak.
+
+Heirs.
+
+Too many.
+
+Crowded.
+
+"Who?"
+
+"I don't know enough to give you names."
+
+"Then why tell me?"
+
+"Because you'll notice eventually."
+
+Caelen looked toward the door.
+
+His mother came closer.
+
+"Do not start a war in the graduation court."
+
+"I wasn't going to."
+
+"You were thinking about it."
+
+"I was thinking about finding Mireth."
+
+"That is frequently how wars begin."
+
+He laughed despite himself.
+
+Sereth touched his cheek.
+
+Then her hand dropped.
+
+"Go."
+
+He stopped at the door.
+
+"Mother."
+
+"Yes?"
+
+"If someone asks about her?"
+
+"Tell them whatever you want."
+
+"That's your advice?"
+
+"You're twenty-three. If I still have to teach you how to lie about kissing, I have failed."
+
+Caelen grinned.
+
+"I haven't kissed her."
+
+Sereth's expression became deeply unimpressed.
+
+"Yes. I owe Ysran two crowns because of your lack of initiative."
+
+Caelen left.
+
+---
+
+Damaris found Meris in a small chamber full of blue glass.
+
+There was tea.
+
+Of course there was tea.
+
+Damaris remained standing.
+
+Meris looked at the empty chair.
+
+"No."
+
+"Damaris."
+
+"Say it."
+
+Meris sighed.
+
+Then she did.
+
+"Stay close to Ilyan."
+
+Damaris did not move.
+
+"Why?"
+
+"You know why."
+
+"I know several reasons. I want yours."
+
+Meris poured tea for herself.
+
+"The Valerics are frightened."
+
+"Good."
+
+"Frightened families are dangerous."
+
+"So are comfortable ones."
+
+Meris smiled faintly.
+
+"You did graduate."
+
+Damaris waited.
+
+Meris set the pot down.
+
+"I want to know what he knows."
+
+There it was.
+
+Simple.
+
+Ugly because it was simple.
+
+Damaris thought of Ilyan beneath the oak with his face against Thessa's shoulder.
+
+She thought of his ruined attempt to keep Damaris's handkerchief.
+
+She thought of his hand shaking over the butter this morning.
+
+"He trusts me."
+
+"Yes."
+
+The word landed badly.
+
+Meris knew it.
+
+Damaris could see that she knew it.
+
+That made it worse.
+
+"Don't."
+
+Meris's face softened.
+
+"Damaris."
+
+"No."
+
+"I am not asking you to hurt him."
+
+"You don't know that."
+
+Silence.
+
+Meris looked down at her tea.
+
+Damaris knew this woman.
+
+Or believed she did.
+
+Meris had protected her. Loved her. Lied to her when the lie was gentle. Told her the truth when it hurt. Damaris had watched her ruin a merchant for cheating dock workers and spend the next week making sure the merchant's children still had tutors.
+
+Meris was not cruel.
+
+Damaris believed that.
+
+She needed to believe that.
+
+But Meris was asking her to use a grieving friend's trust.
+
+"How much?"
+
+Meris looked up.
+
+"How much do you want?"
+
+"Enough to know whether the Valerics are about to fracture."
+
+"And Silver Night?"
+
+A pause.
+
+"Anything he chooses to tell you."
+
+Damaris laughed once.
+
+"You know what that means."
+
+"Yes."
+
+"Do you?"
+
+Meris's eyes hardened.
+
+"Do not mistake my age for absence of conscience."
+
+"Then use it."
+
+Meris stood.
+
+They faced each other.
+
+For a moment Damaris was eight again, furious over some injustice she could no longer remember, certain Meris could fix the world if only she would agree that Damaris was right.
+
+Meris had seemed enormous then.
+
+She did not now.
+
+That frightened Damaris too.
+
+"Stay close to him," Meris said.
+
+Damaris's throat tightened.
+
+"I already am."
+
+"I know."
+
+"That's the problem."
+
+Meris said nothing.
+
+Damaris left.
+
+---
+
+Rhyl found her in the east arcade.
+
+He had been looking.
+
+Damaris knew because he was bad at pretending otherwise.
+
+He stopped beside her.
+
+"How bad?"
+
+She looked at him.
+
+"Why does everyone think something happened?"
+
+"You walk faster when you're angry."
+
+"I always walk fast."
+
+"Faster."
+
+She leaned against the stone rail.
+
+Below them, families filled the garden.
+
+Rhyl waited.
+
+He was good at that.
+
+Damaris hated him for it sometimes.
+
+Not much.
+
+Just enough to matter.
+
+"My aunt wants something."
+
+He nodded.
+
+"What?"
+
+Damaris looked toward the court.
+
+Ilyan was crossing it with a black-robed examiner.
+
+She could have told Rhyl.
+
+Not everything.
 
 Enough.
 
-The sound moved beneath the oak branches.
+The words reached the back of her teeth.
 
-Tomorrow, Mireth thought, there would be letters.
+Then stopped.
 
-Appointments.
+"Later."
 
-New uniforms.
+Rhyl watched her.
 
-Adult doors.
+Damaris expected the question.
 
-The Academy had protected them imperfectly.
+It did not come.
 
-The Houses would love them imperfectly.
+"All right."
 
-Perhaps that was worse.
+That was somehow worse.
 
-Silver Night had broken the old social bargain in the ugliest possible way. Someone had decided that students could not be permitted to reach the age at which their friendships, appointments, marriages, licenses and eventual children would begin changing the balance of power. Ilyan knew one part of the reason: Valeric fear over Dmitrigical chairs, licenses and tribunals. There were already too many whispers around the dead about succession arithmetic as well—about the coming generation being inconveniently numerous in directions powerful people disliked.
+She turned toward him.
 
-No one among the Seven yet knew enough to put names or numbers to that part of the pattern.
+"That's it?"
 
-They knew enough not to dismiss it.
+"You said later."
 
-Thirty-six dead students were not merely thirty-six lives ended.
+"I know what I said."
 
-They were thirty-six adult futures prevented.
+Rhyl rested his forearms on the rail.
 
-Because love was harder to defend against than hatred.
+"So do I."
 
-Hatred announced itself.
+Damaris looked at his profile.
 
-Love brought silk.
+He trusted her.
 
-Love adjusted your collar.
+Not blindly.
 
-Love paid for your education.
+That would have been easier.
 
-Love remembered your favorite food.
+He trusted her to tell him when she was ready.
 
-Love knew whom you wanted.
+Her aunt wanted her to exploit Ilyan's trust.
 
-Love could place a hand on your shoulder and ask you, very gently, to betray someone for the good of the family.
+And here was Rhyl giving her his without asking for anything.
 
-Among the Great Houses of Elaranth, love was not the opposite of politics.
+Damaris wanted to kiss him.
 
-It was the most expensive reason for betrayal.
+The thought arrived with enough force to make her angry.
+
+Rhyl glanced over.
+
+"What?"
+
+"Nothing."
+
+"You're staring."
+
+She smiled.
+
+"Am I?"
+
+He knew that smile.
+
+His eyes narrowed.
+
+"Don't."
+
+"Don't what?"
+
+"Whatever you're about to do."
+
+Damaris stepped closer.
+
+Rhyl did not move.
+
+"Afraid?"
+
+"Yes."
+
+That stopped her.
+
+She laughed.
+
+He smiled.
+
+The distance between them became ridiculous.
+
+Damaris could see the tiny nick along his chin where he had shaved. Apparently no man in her life could manage a razor this week.
+
+Rhyl's gaze dropped to her mouth.
+
+There.
+
+He did know.
+
+Of course he knew.
+
+She touched the front of his coat.
+
+"Your father whistled."
+
+Rhyl groaned.
+
+"I'll never recover."
+
+"I liked him."
+
+"He likes you."
+
+"He's met me twice."
+
+"That's what I said."
+
+Damaris blinked.
+
+Then smiled.
+
+"Did he ask about me?"
+
+Rhyl's expression betrayed him.
+
+She laughed softly.
+
+"Rhyl."
+
+"No."
+
+"What did he say?"
+
+"Nothing."
+
+"Rhyl."
+
+He looked toward the garden.
+
+She caught his chin and turned him back.
+
+His breath changed.
+
+So did hers.
+
+The arcade suddenly seemed much quieter than it was.
+
+Damaris knew exactly what she wanted.
+
+That was not the same as knowing whether she should take it.
+
+Her aunt's words were still in her head.
+
+Stay close to Ilyan.
+
+Use trust.
+
+She did not want that ugliness touching this.
+
+Not yet.
+
+She let go.
+
+Rhyl's expression shifted.
+
+Not disappointment exactly.
+
+He understood enough to know she had stopped for a reason.
+
+Not enough to know the reason.
+
+"Later?" he asked.
+
+Damaris swallowed.
+
+"Yes."
+
+He nodded.
+
+She wanted to shake him.
+
+Instead she slipped her hand into his.
+
+He looked down.
+
+Then closed his fingers around hers.
+
+They stayed at the rail.
+
+---
+
+Ilyan's oath chamber was beneath the western hall.
+
+He had known that for years.
+
+It felt different walking there with a graduation folio under his arm.
+
+Examiner Sael Ithrenn waited beside the black glass.
+
+Ilyan knew him by reputation: quiet, unpleasantly attentive, almost impossible to impress.
+
+Good.
+
+Ilyan had no energy for impressive people.
+
+Sael indicated the oath.
+
+"Read."
+
+Ilyan read.
+
+The first lines were familiar.
+
+Then they weren't.
+
+He stopped.
+
+Sael waited.
+
+Ilyan read the phrase again.
+
+Necessary truth.
+
+His uncle's voice came back so clearly that his stomach turned.
+
+Necessary.
+
+He looked at Sael.
+
+"This isn't the student form."
+
+"No."
+
+Ilyan glanced at the witnesses.
+
+Nobody looked surprised.
+
+"When did it change?"
+
+Sael's eyes sharpened.
+
+"You know the old form?"
+
+"I studied it."
+
+"Clearly."
+
+Ilyan looked down.
+
+He could hear his father telling him not to make a scene.
+
+He could hear his uncle congratulating him for understanding necessity.
+
+He was suddenly very tired of both voices.
+
+"I won't swear this."
+
+One of the witnesses shifted.
+
+Sael did not.
+
+"Then don't."
+
+Ilyan looked up.
+
+That was not the response he had expected.
+
+Sael tapped the crystal.
+
+"Swear what you can defend."
+
+Ilyan stared at him.
+
+"Is that allowed?"
+
+Sael's mouth moved slightly.
+
+"You're not a student anymore."
+
+There it was.
+
+Not celebration.
+
+Not threat.
+
+Fact.
+
+Ilyan looked at the oath again.
+
+Then he began from the top.
+
+When he reached the altered line, he changed it.
+
+"Truth that remains truth under necessity."
+
+A witness inhaled.
+
+Ilyan continued.
+
+The black glass took his handprint.
+
+Nothing dramatic happened.
+
+Ink darkened beneath his palm.
+
+Sael dismissed the witnesses.
+
+Ilyan turned to leave.
+
+"Valeric."
+
+He stopped.
+
+Sael was looking at the oath.
+
+"Find the version you learned."
+
+Ilyan's pulse quickened.
+
+"Why?"
+
+Sael looked at him.
+
+"Because I want to see it."
+
+That was all.
+
+Ilyan understood the gift.
+
+Sael had not told him what it meant.
+
+Had not told him what to think.
+
+Had simply asked for the older paper.
+
+Ilyan nodded.
+
+"All right."
+
+---
+
+By sunset the Seven had found one another again.
+
+This time it took effort.
+
+That was new.
+
+They met beneath the oak in pieces.
+
+Thessa first, furious about something her grandmother had said and refusing to repeat it.
+
+Lyrion came next with two bottles.
+
+"Where did you get those?"
+
+Thessa asked.
+
+"Graduated."
+
+"That isn't an answer."
+
+"It is now."
+
+She kissed him.
+
+He nearly dropped one bottle.
+
+Rhyl and Damaris arrived holding hands.
+
+They stopped when they saw everyone looking.
+
+Damaris did not release him.
+
+Rhyl looked as though he might.
+
+She tightened her fingers.
+
+He stayed.
+
+Mireth arrived with Caelen.
+
+Not holding hands.
+
+That felt conspicuous now.
+
+Ilyan came last.
+
+He dropped onto the root.
+
+"Something changed."
+
+Everyone looked at him.
+
+He pulled a folded copy of the oath from his coat.
+
+Mireth took it.
+
+She read the marked line.
+
+Her expression hardened.
+
+"Necessary."
+
+Ilyan nodded.
+
+Nobody needed the rest explained.
+
+Damaris sat beside him.
+
+"My aunt talked to me."
+
+Rhyl looked at her.
+
+She did not look back.
+
+Mireth handed the oath to Caelen.
+
+"What did she want?" Ilyan asked.
+
+Damaris's fingers tightened around Rhyl's.
+
+"She wants me close to you."
+
+Ilyan stared.
+
+Damaris made herself continue.
+
+"She wants to know what happens with your family."
+
+Rhyl went still.
+
+There.
+
+The truth.
+
+Part of it.
+
+Enough to hurt.
+
+Ilyan looked down.
+
+Damaris hated herself.
+
+"I told her you're my friend."
+
+"Did she care?"
+
+Damaris thought of Meris's face.
+
+"Yes."
+
+Ilyan looked up.
+
+That surprised him.
+
+"It didn't stop her."
+
+"No."
+
+He nodded slowly.
+
+Damaris waited.
+
+Ilyan leaned back against the oak.
+
+"All right."
+
+She stared.
+
+"That's all?"
+
+"What do you want me to do?"
+
+"Be angry."
+
+"I am."
+
+"Oh."
+
+"Very."
+
+"Good."
+
+He looked at her.
+
+Damaris almost laughed.
+
+"That sounded wrong."
+
+"A little."
+
+Rhyl's hand remained around hers.
+
+Ilyan looked at it.
+
+Then at Rhyl.
+
+Then back to Damaris.
+
+His eyebrows rose.
+
+Damaris felt heat climb her face.
+
+"Don't."
+
+Ilyan smiled.
+
+It was the first uncomplicated expression she had seen on him all day.
+
+"Oh."
+
+"Don't."
+
+Thessa leaned forward.
+
+"What?"
+
+Lyrion whispered something to her.
+
+Thessa's eyes widened.
+
+"Oh."
+
+"All of you can die."
+
+Mireth started laughing.
+
+Damaris pointed at her.
+
+"You are in no position."
+
+Mireth stopped.
+
+Everyone turned toward Caelen.
+
+Caelen looked around.
+
+"What?"
+
+Lyrion raised the bottle.
+
+"To subtlety."
+
+They drank.
+
+The sun went down over Aurelith.
+
+Families waited below.
+
+Orders waited.
+
+Houses waited.
+
+Tomorrow there would be meetings, fittings, appointments, introductions and all the other ways adults disguised the fact that they wanted things from one another.
+
+Tonight the Seven sat beneath the oak.
+
+Thessa's head rested on Lyrion's shoulder.
+
+Damaris kept Rhyl's hand.
+
+Mireth sat close enough to Caelen that their knees touched.
+
+Ilyan held the altered oath.
+
+After a while Caelen said, "My mother says people are talking about us."
+
+"Us who?" Rhyl asked.
+
+"All seven."
+
+Nobody joked.
+
+That was answer enough.
+
+Mireth looked around the circle.
+
+Yesterday they had been students.
+
+Today everyone had congratulated them for becoming adults.
+
+By afternoon, their families had already begun asking for pieces.
+
+Information.
+
+Loyalty.
+
+Access.
+
+Affection.
+
+Future.
+
+Silk had covered the court, the chairs, the banners and the damaged stone.
+
+It had not hidden much.
+
+Ilyan folded the oath and put it away.
+
+Thessa took the bottle from Lyrion.
+
+Damaris leaned against Rhyl.
+
+Caelen's hand found Mireth's in the grass.
+
+She let him keep it.
+
+Tomorrow, they would find out what everyone else thought graduation had made them.
+
+Tonight, they still knew who they were to one another.
