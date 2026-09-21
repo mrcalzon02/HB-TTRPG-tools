@@ -1,16 +1,11 @@
 # The Long Patrol of Broussard
 
-## Source Recovery 05 — V. HARD LESSONS
+## V. HARD LESSONS
 
 **Author:** Mrcalzon02 / Christopher Vardeman  
 **Based on the work of:** *The Long Patrol of Broussard*
 
-*Verbatim recovery from the surviving Google working draft. No new continuation prose is introduced here.*
-
 *An original non-commercial Warhammer 40,000 fan chronicle. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This fan work is not endorsed by or affiliated with Games Workshop.*
-
-V. HARD LESSONS
-
 
 The next several hours were, to Broussard's mild surprise, rather pleasant.
 
