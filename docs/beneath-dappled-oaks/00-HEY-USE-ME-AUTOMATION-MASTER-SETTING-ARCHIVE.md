@@ -895,9 +895,11 @@ Age must be visibly and socially consequential. Ancient elves may show receding 
 
 Magical impotence commonly emerges somewhere around the two fifties but is distinct from sexual impotence, infertility, and general physical decline. These may occur on different schedules.
 
-Fertility can persist into the mid or late two hundreds. **Spring Children** are born comparatively early in parental adulthood; **Winter Children** are born late; **Winter Blossoms** are children born near the final edge of maternal fertility.
+Fertility can persist into the mid or late two hundreds. **Spring Children** are born comparatively early in parental adulthood; **Summer Children** during the settled middle of family life; **Fall Children** later, often with cultural expectations of taking up household responsibility and elder care; **Winter Children** are born late; **Winter Blossoms** are children born near the final edge of maternal fertility.
 
 Winter Blossom relationships can carry powerful family emotion: some elderly parents see the child as a last chance to do things right, while others unfairly associate the child with the loss of magic, fertility, beauty, mobility, or public life that happened around the same period.
+
+Seasonal child categories are not fixed rankings. One House may prize Spring Children as proof of a fertile new union, while another may dismiss them as provisional because the parents still have centuries in which later siblings may alter inheritance. Summer, Fall, Winter, and Winter Blossom children can likewise be cherished, burdened, ignored, or politicized differently by different families.
 
 Long lifespan should affect inheritance, House authority, career history, political memory, elder care, and the number of living generations in a family.
 
