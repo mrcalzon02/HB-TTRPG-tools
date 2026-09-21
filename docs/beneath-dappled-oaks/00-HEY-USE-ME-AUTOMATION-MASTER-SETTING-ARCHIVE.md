@@ -22,9 +22,11 @@ Stable repository path:
 When an hourly or scheduled story-continuation task runs:
 
 1. Read this file first.
-2. Reconcile it against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-3. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, and prose conventions below.
-4. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, or retell the outline.
+2. Read **docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md** for active kinship, institutional, and attraction continuity.
+3. Read **docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md** for the current rolling N+1 through N+5 forward plan.
+4. Reconcile all three against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+5. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, and forward setup obligations.
+6. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, or ignore active forward plans without a continuity reason.
 5. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
 6. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
 7. Keep every romantic or sexualized character an adult.
@@ -527,6 +529,64 @@ It advances graduation/induction pressures, Ilyan's altered Truth Beyond the Vei
 
 Future continuation should move forward from these consequences rather than reintroducing them from scratch.
 
+
+## 12A. Five-chapter forward planning control
+
+For forward continuity, read and maintain:
+
+**docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md**
+
+The story runner must maintain a rolling planning horizon of **up to five unwritten chapters**.
+
+This is not merely an outline. It tracks:
+
+- what each coming chapter is for;
+- which POVs and characters are expected to carry it;
+- what characters currently intend to do across chapter boundaries;
+- which relationships are moving toward trust, jealousy, intimacy, betrayal, alliance, or fracture;
+- which political, institutional, magical, commercial, or family pressures are advancing;
+- which clues and evidence chains must remain coherent;
+- which future events require earlier setup;
+- which earlier setup now requires payoff;
+- what concrete exit state causes the following chapter to happen.
+
+### Seed-debt rule
+
+Before writing Chapter N, inspect planned Chapters N+1 through N+4 and ask what those future chapters need seeded now.
+
+Important later events should not appear from nowhere.
+
+A betrayal may require an earlier promise.
+A romance may require repeated observation or prior access.
+A curse discovery may require earlier household access or physical symptoms.
+A legal or political move may require lobbying before the appointment.
+A family sacrifice must first establish why the family bond matters.
+
+Plant only what fits naturally into the present chapter.
+
+### Character-plan persistence
+
+Recurring characters should carry intentions across chapters.
+
+If a character intends to obtain a record, attend a ceremony, court someone, protect someone, obey or evade a family instruction, conceal evidence, pursue an appointment, answer a letter, expose a rival, or maintain a lie, that intention persists until it is completed, abandoned for an explicit reason, or made impossible by events.
+
+Do not reset characters to passive availability at the start of every chapter.
+
+### Post-chapter roll-forward
+
+After a completed chapter:
+
+1. reconcile the actual chapter against its planned forward card;
+2. promote what actually happened into canon;
+3. carry unresolved intentions and promises forward;
+4. remove the completed slot;
+5. shift the remaining forward cards one position closer;
+6. add a new fifth-chapter horizon card;
+7. recalculate seed debt and payoff debt.
+
+The next story run should therefore always know both **where the story has been** and **where it is deliberately going**.
+
+
 ## 13. Continuation priorities for the hourly story runner
 
 Prefer the following kinds of advancement:
@@ -598,6 +658,10 @@ Before finalizing a Beneath Dappled Oaks continuation, verify:
 - Were all romantic characters adults?
 - Did sensuality remain intense but non-explicit?
 - Did the run advance the story rather than summarize future intentions?
+- Did the chapter pay or plant any seed debt required by the five-chapter lookahead?
+- Did recurring characters preserve active intentions from earlier chapters?
+- Does the completed chapter hand the next one a concrete reason to occur?
+- Was the rolling N+1 through N+5 window reconciled against what actually happened?
 - Did anything new contradict this archive or a newer committed canon file?
 
 If a new durable fact is established, update this archive or create a clearly linked canon supplement so the next automated run can inherit it.
