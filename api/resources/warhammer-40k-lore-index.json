@@ -4,6 +4,8 @@
   "description": "Warhammer 40K archive routes currently exposed by the Foundry, including the migrated long-form story archive and active Cafarron Corridor chronicle continuations.",
   "resources": [
     "warhammer-40k-lore.html",
+    "warhammer-40k-seals.html",
+    "warhammer-40k-archive.html",
     "warhammer-40k-map.html",
     "assets/warhammer-40k/lore/reddit-story-archive.json",
     "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-01.md",
