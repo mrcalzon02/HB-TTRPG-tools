@@ -31,16 +31,17 @@ When an hourly or scheduled story-continuation task runs:
 8. Read **docs/beneath-dappled-oaks/07-CULINARY-ATLAS-ROMANCE-GIFTS-COURTSHIP-FOOD-CULTURE.md** for cuisine, ingredients, delicacies, confectionery, seasonal food, romantic gift grammar, courtship practices, legal culinary magic, illicit philters, poisoned or enchanted food, and kitchen-contamination plot logic.
 9. Read **docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md** for reusable in-universe romantic cautionary tales, household legends, comic courtship disasters, Adraderis lore, and proverb-level cultural references.
 10. Read **docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md** for knightly orders, military fellowships, wardens, martial religious traditions, engineer-knights, river orders, bodyguards, hospitallers, oath structures, rivalries, and military social mobility.
-11. Reconcile all ten controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-12. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-13. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
-14. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-15. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-16. Keep every romantic or sexualized character an adult.
-17. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-18. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-19. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-20. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+11. Read **docs/beneath-dappled-oaks/10-ECOLOGY-WILDLIFE-DOMESTIC-ANIMALS-LEGENDARY-THREATS.md** for wildlife, beasts of burden, livestock, domestic animals, magical species, predator-prey logic, migration, ecological intelligence, legendary creatures, and regional or national ecological threats.
+12. Reconcile all eleven controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+13. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, ecological continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+14. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+15. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+16. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+17. Keep every romantic or sexualized character an adult.
+18. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+19. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+20. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+21. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -858,6 +859,22 @@ Major characters must also have durable lives beyond romance: professions, craft
 Romance intersects with those lives. It does not replace them.
 
 The detailed control is maintained in **docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md**.
+
+## 12I. Ecology and animal-life control
+
+For enduring ecology, wildlife, livestock, domestic-animal, magical-species, and environmental-threat continuity, always read:
+
+**docs/beneath-dappled-oaks/10-ECOLOGY-WILDLIFE-DOMESTIC-ANIMALS-LEGENDARY-THREATS.md**
+
+Wildlife behavior is legitimate setting intelligence.
+
+Migration, prey displacement, abandoned nesting grounds, livestock refusing water, predator movement, pollinator collapse, fish die-offs, and unusual silence can all indicate broader ecological or magical change.
+
+Do not use monsters as random encounters detached from ecology. Large predators require prey and territory. Magical disturbances should leave ecological evidence. Farmers, hunters, wardens, shepherds, foresters, and rural magistrates should notice patterns appropriate to their expertise.
+
+Current 282 S.M. anchor: unusual wild-boar migration is being reported from the northern **Felridge Forests**. The **Northern Orders** consider the pattern abnormal enough that the **Midtrash Seventh Legion** has been ordered north to investigate.
+
+This deployment is an example of the setting rule that military, professional, and civic duties can interrupt romance abruptly. A lover may sincerely prefer to stay and still have to ride before midnight.
 
 ## 13. Continuation priorities for the hourly story runner
 
