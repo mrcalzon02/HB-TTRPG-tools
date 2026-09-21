@@ -791,6 +791,31 @@ Use the established:
 
 ---
 
+## 28A. Reader-facing story-file hygiene
+
+Every Markdown story file surfaced through the Warhammer 40K **Stories** reader is a reader-facing publication surface.
+
+Do **not** place internal production material in those files, including:
+
+- recovery boundaries;
+- continuity checklists;
+- next-slice instructions;
+- authorial correction notes that reveal future plot;
+- hidden antagonist identities before the prose reveals them;
+- unrevealed character secrets;
+- planning notes;
+- automation instructions;
+- source-reconciliation status;
+- unresolved-backlog notes;
+- editorial explanations of which clue is or is not the "real" mystery;
+- spoilers for later chapters or endings.
+
+Internal continuity truth belongs in the expansion circuit, character continuity catalog, Dramatis Personae, governance/control files, or other non-reader-facing registries.
+
+A story may contain ordinary reader-facing author attribution, lineage attribution, chapter labels, and legal/disclaimer language.
+
+When archival provenance must be retained for automation, store it outside the published story body. The reader should encounter the story, not the production notebook.
+
 ## 29. Story-index discoverability
 
 Every committed recovered or continuation story must be directly discoverable under the Warhammer 40K **Stories** reader/index.
