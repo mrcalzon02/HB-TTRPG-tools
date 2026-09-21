@@ -76,7 +76,24 @@
       "title": "House Vallimere’s Sons",
       "source": "migrated-long-form",
       "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
-      "status": "active"
+      "status": "active",
+      "currentEndpoint": "Continuation II — The Practical Examination. The Three Admirals conduct a seventy-two-hour system-defense exercise that forces cadets—and themselves—to distinguish tactical victory from acceptable consequence. Prite adds Lesson Two to the replacement syllabus; Darcelle demonstrates confident maintenance-realism instruction; Renault explicitly recognizes that their old sacrificial simulation victories were play. Noble duel pressure remains active.",
+      "nextSlice": "On the next House Vallimere rotation, continue from the developing replacement syllabus and the political consequences of the professors' practical doctrine. Preserve Prite's Lesson One and Lesson Two, Darcelle's growing confidence when anchored in technical instruction, Renault's calm humor under pressure, the Headmaster's protective institutional strategy, and Vane's Priority Omega protection. Do not reduce the arc to repeated duel jokes; political, doctrinal, and teaching consequences should advance.",
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+      "eraLock": {
+        "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
+        "allowedInstitutions": [
+          "Imperial Navy",
+          "Imperial Navy Academy",
+          "Adeptus Mechanicus",
+          "Administratum",
+          "Inquisition",
+          "Imperial noble Houses"
+        ],
+        "forbiddenDrift": "Do not introduce famous canon figures, later-history knowledge, or institutions unsupported by this mature-Imperium story line."
+      },
+      "authorshipLineageRule": "All future continued pieces in this line must include: Based on the work of: House Vallimere's Sons.",
+      "chapterCapRule": "Hard cap of 40 chapters per book; Chapter XL is the latest permissible chapter number within a book."
     },
     {
       "id": "matron-lagas-atrovald",
