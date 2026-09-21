@@ -75,6 +75,28 @@ Recurring characters should therefore not be described with generic "ageless elf
 
 ---
 
+## Courtly household and succession network
+
+The full courtly relationship and surrogacy canon is maintained in:
+
+**docs/beneath-dappled-oaks/12-COURTLY-HOUSEHOLDS-MISTRESSES-PARAMOURS-SURROGACY-SUCCESSION.md**
+
+When recurring mistresses, paramours, spouses, surrogates, donor relatives, acknowledged natural children, household stewards, family physicians, or succession lawyers appear, promote them into the recurring personae network rather than treating them as disposable background.
+
+Track:
+
+- relationship status;
+- acknowledgment;
+- financial support;
+- legal promises;
+- parentage;
+- inheritance position;
+- House attitude;
+- personal agenda;
+- knowledge of family secrets.
+
+---
+
 ## Canon leads already in use
 
 ### Court / succession generation
