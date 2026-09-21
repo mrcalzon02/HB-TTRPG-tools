@@ -1849,6 +1849,34 @@ Major kitchens therefore treat ingredient custody, magical concentrates, tray as
 
 ---
 
+# XIV-B. Knightly Orders and Martial Institutions
+
+The authoritative martial-order corpus is:
+
+**docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md**
+
+Elaranth's military culture extends beyond noble House guards and Crown armies. The Realm supports Crown-chartered knightly orders, constitutional guards, regional wardens, religious warriors, engineer-knights, riverine orders, frontier fellowships, monster hunters, hospitallers, bodyguard orders, military judges, truce escorts, and specialist anti-magic formations.
+
+Knighthood is not synonymous with nobility. Common-born veterans, engineers, scouts, healers, and professional soldiers may enter knightly orders through service, examination, sponsorship, or battlefield promotion.
+
+The major orders have their own:
+
+- oaths;
+- chapterhouses;
+- rank structures;
+- military doctrine;
+- recruitment culture;
+- political patrons;
+- House relationships;
+- rivalries;
+- institutional memory.
+
+House influence does not necessarily equal direct control.
+
+The tension between family loyalty, Crown duty, religious obligation, regional loyalty, and order oath is an important source of political and romantic conflict.
+
+---
+
 # XV. Story Use Rules
 
 The annual calendar should influence prose.
