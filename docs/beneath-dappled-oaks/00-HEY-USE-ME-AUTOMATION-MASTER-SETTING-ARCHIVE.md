@@ -607,26 +607,21 @@ Durable Chapter Four handoffs include:
 
 The rolled-forward next chapter is **Chapter Five: Something Buried Near the House**. Its immediate story handoff is the Reedglass House east-garden anomaly, Judge Vaun's expected arrival, and the unresolved question of whether the buried object is sympathetic cursework, a decoy, or another kind of household evidence.
 
-The Chapter One / Chapter Two recovery defect remains open and is not reclassified merely because later chapters have now been committed.
+The Chapter One / Chapter Two recovery defect is **resolved on main**.
 
+### Chapter One / Chapter Two recovery resolution
 
-### Chapter One / Chapter Two recovery backlog
+Canonical numbered chapter files now exist at:
 
-**Repository state is incomplete and must not be mistaken for story state.**
+- **docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md**
+- **docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md**
 
-Prior conversation history contains completed prose for:
-- **Chapter One — The Last Seven**, opening: *“There should have been forty-three of them. Seven stood beneath the flowering arch.”*
-- **Chapter Two — The Cost of Silk**, opening: *“By dawn, the Academy had become beautiful enough to make murder seem ceremonial.”*
+Their fixed recovered openings remain:
 
-Those chapters were written before Chapter Three but were not persisted as canonical numbered chapter files. Their absence from `docs/beneath-dappled-oaks/chapters/` is a recovery defect, not evidence that the chapters were never written.
+- Chapter One — **The Last Seven**: *“There should have been forty-three of them. Seven stood beneath the flowering arch.”*
+- Chapter Two — **The Cost of Silk**: *“By dawn, the Academy had become beautiful enough to make murder seem ceremonial.”*
 
-Recovery rules:
-- Prioritize exact recovery of the original conversation prose before writing Chapter Four or later new prose.
-- Do not silently reconstruct missing passages and label them recovered.
-- Restore Chapter One as `docs/beneath-dappled-oaks/chapters/01-THE-LAST-SEVEN.md` and Chapter Two as `docs/beneath-dappled-oaks/chapters/02-THE-COST-OF-SILK.md` once the original prose is recoverable.
-- Preserve the known original openings and established endings/scene facts during recovery.
-- After each restoration, verify the public Chapter Index and in-page Chapter Reader expose the restored chapter in numeric order.
-- Until restored, the web index should visibly mark Chapters One and Two as conversation-complete / repository recovery pending rather than omitting them.
+The repository must now treat Chapters One through Four as released numbered canon prose in numeric order. Do not recreate a recovery-pending state for Chapters One or Two while these files remain present on `main`.
 
 ### Public chapter-index invariant
 
