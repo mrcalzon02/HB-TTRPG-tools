@@ -15,11 +15,13 @@ Every run must reconcile `main` and load, in this order:
 1. `api/resources/warhammer-40k-fiction-governance.md` — this governing document.
 2. `api/resources/warhammer-40k-lore-index.json` — what the archive currently exposes.
 3. `api/resources/warhammer-40k-story-expansion-circuit.json` — recovery state, active rotation, next dependency-valid slice.
-4. `assets/warhammer-40k/imperial-dramatis-personae-v1.js` — authoritative character/personage registry.
-5. The relevant committed story file(s), recovered source file(s), or matching record inside `assets/warhammer-40k/lore/reddit-story-archive.json`.
-6. Relevant location, vessel, chronology, logistics, personnel, medicae, or event cross-indexes if the story touches them.
-7. Prior conversation history or connected source documents when the circuit says recovery is incomplete.
-8. External Warhammer 40K setting research only where the above sources do not settle an era/canon question.
+4. `assets/warhammer-40k/imperial-dramatis-personae-v1.js` — authoritative character/personage identity and biography registry.
+5. `api/resources/warhammer-40k-character-continuity-control.md` — rules for durable temporal character state.
+6. `api/resources/warhammer-40k-character-continuity-catalog.json` — authoritative evolving character-state ledger.
+7. The relevant committed story file(s), recovered source file(s), or matching record inside `assets/warhammer-40k/lore/reddit-story-archive.json`.
+8. Relevant location, vessel, chronology, logistics, personnel, medicae, or event cross-indexes if the story touches them.
+9. Prior conversation history or connected source documents when the circuit says recovery is incomplete.
+10. External Warhammer 40K setting research only where the above sources do not settle an era/canon question.
 
 Do not begin drafting prose before the era, source story, active cast, and unresolved continuity locks are known.
 
@@ -289,6 +291,21 @@ Do **not** copy the full register into this document. This document governs use;
 When a story introduces a durable new named character, update the registry only when that character is important enough to recur or materially affects archive continuity. Do not flood the registry with every bartender, deckhand, clerk, or casualty.
 
 ---
+
+## 8A. Temporal character-state authority
+
+The Dramatis Personae register is not sufficient by itself for long-running fiction because biography does not encode what a character learned, believed, hid, suffered, promised, or changed in a particular chapter.
+
+The automation must therefore also maintain:
+
+- `api/resources/warhammer-40k-character-continuity-control.md`
+- `api/resources/warhammer-40k-character-continuity-catalog.json`
+
+Before writing a recurring character, read both their Dramatis Personae entry and their temporal continuity-catalog record.
+
+A character who learned a fact in an earlier chapter retains access to it unless later prose explicitly changes that state. Reader knowledge must not be granted to characters who have not learned it. Relationships are directional, knowledge/belief/action are separate, skills persist, injuries recover over time rather than disappearing, and prior emotional/behavioral states remain historically recorded even when superseded.
+
+After every substantial recovered or newly written segment, reconcile durable character-state changes into the catalog and add a Chapter Touch Log entry. A run that materially changes a recurring character is incomplete until that catalog maintenance is committed and verified.
 
 ## 9. Famous / named canon character gate
 
@@ -707,7 +724,9 @@ State internally what one bounded thing this run will recover or advance.
 - establish era lock;
 - verify famous-character gate;
 - write/recover one bounded slice;
-- update index/circuit/personae/location records only as justified.
+- update index/circuit/personae/location records only as justified;
+- read relevant character continuity records before prose;
+- update the character continuity catalog and Chapter Touch Log when durable character state changes.
 
 ### OBSERVE
 
