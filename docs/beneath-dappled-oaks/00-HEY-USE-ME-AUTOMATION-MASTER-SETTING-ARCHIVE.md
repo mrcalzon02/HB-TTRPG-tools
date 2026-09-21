@@ -28,13 +28,13 @@ When an hourly or scheduled story-continuation task runs:
 5. Reconcile all four against any newer explicit Beneath Dappled Oaks canon committed in the repository.
 6. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, and seasonal/calendar constraints.
 7. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, or ignore active forward plans without a continuity reason.
-5. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-6. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-7. Keep every romantic or sexualized character an adult.
-8. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-9. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-10. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-11. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+8. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+9. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+10. Keep every romantic or sexualized character an adult.
+11. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+12. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+13. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+14. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
