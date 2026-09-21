@@ -24,14 +24,14 @@
       "title": "The Long Patrol of Broussard",
       "source": "google-working-draft-recovery",
       "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-01.md",
-      "status": "source-recovery-complete",
-      "priority": "recovery-complete-enter-normal-rotation",
+      "status": "active",
+      "priority": "normal-rotation",
       "sourceDocument": "The Long Patrol of Broussard — Working Draft",
       "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
       "recoveredThrough": "X. THE FORWARD HOLDS — complete through Broussard organizing the search for Jerrik Noll, Edren Vale and Pallas Dorn and ending: “Let’s go find them.”",
       "sourceObservedThrough": "X. THE FORWARD HOLDS — complete; the connected Google working draft contains no later chapter.",
-      "currentEndpoint": "All prose presently contained in the surviving Google working draft has been committed through Chapter X. Chapter VII establishes the physical hull wound and Meren Holt's repeated hesitation; Chapter VIII establishes Kelm's protective attachment to the Hesperant Vale, the eleven-hour high-risk versus 36–54 hour slow repair choice, Kelm's six-second helm-failure account and the approximately fourteen-second telemetry absence; Chapter IX establishes the crew's demonstrated integrity, Sella Varn, Torren, and repair progress; Chapter X names the missing forward-hold inspection team as Jerrik Noll, Edren Vale and Pallas Dorn and ends with Broussard ordering the search. Conversation-history review found no additional post-X prose: only earlier variants of the same missing-team/loose-bin setup. The deep-index telemetry falsification, predator battle, successful convoy return and reader-only Genestealer reveal remain authorial continuity for future new prose, not recovered source text.",
-      "nextSlice": "No source-recovery backlog remains in the observed Google working draft. When this story next becomes rotation-eligible for new prose, begin immediately after “Let’s go find them,” preserve the established missing-team search plan and character-state ledger, and build toward the authorial continuity constraints without prematurely granting Broussard or Jalesthesian reader-only knowledge.",
+      "currentEndpoint": "XI. THE THIRD MAN — Broussard’s search team follows the smell of charred flesh and ozone into the forward hold service corridor and finds Jerrik Noll, Edren Vale and Pallas Dorn dead at an intermittently energized deck junction. Evidence shows Jerrik was electrocuted first, Edren died trying to help him, and Pallas became the third casualty when he tried to help Edren. Sella Varn identifies and helps isolate the emergency cross-feed; the bodies are recovered. Broussard accepts this as a genuine industrial accident while explicitly keeping the separate missing-telemetry mystery unresolved.",
+      "nextSlice": "When Broussard next becomes rotation-eligible, continue after the bodies are recovered. The immediate missing-person problem is solved. Preserve that the electrocution was a real accident, not a disguised Genestealer attack. The next dependency-valid investigation can return to repair progress and the unresolved historical telemetry inconsistencies, but do not reveal the full falsified-origin/Genestealer truth before the narrative earns it.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -39,7 +39,11 @@
         "Genestealer hybrids are hidden among loose produce bins in the forward holds.",
         "Broussard's detachment successfully returns the damaged freighter to the convoy after fighting additional High Presidio predators.",
         "The reader sees the hidden Xenos travesty continuing beneath the apparent successful rescue.",
-        "Recover Google source sequentially and verbatim before fresh expansion."
+        "Recover Google source sequentially and verbatim before fresh expansion.",
+        "Jerrik Noll, Edren Vale and Pallas Dorn died by accidental electrocution at an intermittent damaged service-junction cross-feed.",
+        "Jerrik was the first casualty; Edren and Pallas died in sequence while trying to help the man ahead of them.",
+        "The electrocution is a genuine mundane accident inside the larger mystery and must not be retroactively rewritten as a Genestealer kill.",
+        "Broussard still remembers the unexplained telemetry discrepancy after the bodies are recovered."
       ],
       "eraLock": {
         "era": "Mature Imperium / late-era Astra Militarum setting; exact millennium not yet explicitly fixed in recovered prose",
@@ -61,7 +65,8 @@
         "postChapterXVerbatimProseFound": false,
         "overlappingEarlierVariants": "Earlier conversation prose exists for the missing-team report and grain-silo-sized loose produce bins, but those beats are already fully represented by the higher-authority Google Chapter X and should not be duplicated as a second published chapter.",
         "remainingMaterialType": "authorial continuity / planning constraints, not recoverable verbatim prose"
-      }
+      },
+      "lastAdvancedSegment": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-continuation-01.md"
     },
     {
       "id": "house-vallimere-sons",
