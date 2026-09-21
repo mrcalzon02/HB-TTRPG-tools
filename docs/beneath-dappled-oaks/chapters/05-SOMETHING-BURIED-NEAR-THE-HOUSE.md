@@ -2412,3 +2412,1994 @@ Outside, somewhere beyond the green glass and rain-dark stone, the front door of
 Rhyl went into Aurelith looking for a man who might be innocent.
 
 Inside, Damaris turned toward the household she had known all her life and began, for the first time, to count how many people could touch a nobleman without ever laying a hand on him.
+
+
+---
+
+Rhyl found Pellin in a room that smelled of boiled onions, damp plaster, and the particular medicinal bitterness of people who had been poor for long enough to become experts at being ill cheaply.
+
+The building stood three streets back from the Lower Reed canal, where respectable warehouses gave way to cooperages, rope lofts, rented rooms and little shops whose signs had been repainted so often the wood had become thicker than the letters.
+
+He had not needed to ask many questions.
+
+A dresser in Caladren-Ilyra service dressed better than most men in the district even on his day away, and Pellin had been seen carrying a basket into number fourteen less than an hour earlier.
+
+Rhyl had watched the building first.
+
+Judge Vaun had said observe.
+
+So he observed.
+
+A woman leaned from the second-floor window twice to shake crumbs from a cloth. A boy delivered coal. An old man came out carrying a chamber pot with the solemnity of a priest bearing relics. Pellin appeared once at the upstairs window, sleeves rolled, hair loose, and poured something steaming into a basin.
+
+No flight.
+
+No hidden carriage.
+
+No meeting in an alley.
+
+No immediate proof of anything except that people continued to have lives while investigators wished they would arrange themselves into cleaner categories.
+
+Rhyl waited another ten minutes.
+
+Then he knocked.
+
+The woman who answered was perhaps thirty, perhaps fifty. Illness made arithmetic unreliable.
+
+She was thin enough that the bones of her hands showed clearly beneath the skin. A wool blanket had been wrapped around her shoulders despite the mild Bloomtide morning. Her breath carried a faint wet rasp.
+
+"Yes?"
+
+"Is Pellin here?"
+
+Her eyes narrowed.
+
+"Who wants him?"
+
+"Rhyl Orthell-Faen."
+
+That meant nothing to her.
+
+Good.
+
+"Red Hart."
+
+That meant something.
+
+Not necessarily good.
+
+Her shoulders tightened.
+
+"He's done nothing."
+
+Rhyl leaned against neither door nor frame.
+
+"I didn't say he had."
+
+"You people don't come to this street because someone has done well."
+
+Fair.
+
+"I need to ask him a question."
+
+"About the House?"
+
+Rhyl noted the capital letter in her voice.
+
+People who served Great Houses often spoke of them the way sailors spoke of weather.
+
+"Yes."
+
+She looked over her shoulder.
+
+Pellin appeared behind her.
+
+He had changed from household formal black into a plain brown shirt and dark trousers. His hands were wet.
+
+He saw Rhyl.
+
+Stopped.
+
+Not dramatically.
+
+Just enough.
+
+Rhyl filed it away.
+
+"Pellin?"
+
+"Master Rhyl."
+
+So he knew him.
+
+Also useful.
+
+"Can we speak?"
+
+Pellin looked at his sister.
+
+She said, "If they want to drag you back because some lord misplaced his cufflinks again—"
+
+"They don't."
+
+Rhyl paused.
+
+"Not about cufflinks, anyway."
+
+Pellin's mouth tightened.
+
+"Come in."
+
+The room was small.
+
+Not miserable.
+
+That distinction mattered.
+
+Someone had scrubbed the floor. Herbs dried from a line beside the window. A narrow bed had been made with patched but clean sheets. A kettle sat near the stove. On the table stood a bowl of onions, a jar of rendered fat, two chipped cups and a folded paper packet from a physician.
+
+Pellin's sister sat.
+
+Pellin remained standing.
+
+Rhyl did too.
+
+"You left Reedglass before second bell."
+
+"Yes."
+
+"Because your sister is ill."
+
+"Yes."
+
+Rhyl looked at her.
+
+She lifted one eyebrow.
+
+"Marsh lung. Since I was fourteen. If you'd like me to cough for official purposes, I can."
+
+Rhyl almost smiled.
+
+"No."
+
+"Shame. I'm excellent at it."
+
+Pellin said, "Lessa."
+
+"What? I practice."
+
+Rhyl decided immediately that Damaris would like her.
+
+That thought arrived with an image of Damaris pointing at him in the accounting room and saying, Do not be heroic.
+
+He pushed it aside.
+
+Mostly.
+
+"When did you learn she was worse?"
+
+"Last night," Pellin said.
+
+"How?"
+
+"Message from her neighbor."
+
+"Name?"
+
+Pellin's expression hardened.
+
+"Why?"
+
+"Because if I don't ask, someone less patient may."
+
+Lessa snorted.
+
+"He's telling you the truth."
+
+Rhyl looked at her.
+
+"You received the message?"
+
+"I sent it."
+
+"Through?"
+
+"The baker's youngest. Nemi."
+
+Pellin said, "She's eleven."
+
+Rhyl nodded.
+
+A traceable explanation.
+
+Not proof.
+
+But traceable.
+
+"Did you know something had been found in the east garden before you left?"
+
+Pellin went still again.
+
+"Yes."
+
+"How?"
+
+"Everyone knew."
+
+"What did everyone know?"
+
+"That Oren found dead plants. That Lady Meris sent for a judge. That the east garden was closed."
+
+"Did you know something had been buried?"
+
+Pellin hesitated.
+
+Lessa looked at him.
+
+That was the first moment Rhyl became truly interested.
+
+"Yes," Pellin said.
+
+"How?"
+
+"I heard Oren arguing with Tessa from kitchens."
+
+"About?"
+
+"He wanted everyone kept off the east path. Said there was cloth in the ground."
+
+"When?"
+
+"Yesterday."
+
+"Before you received your sister's message?"
+
+"Yes."
+
+"Did that make you want to leave?"
+
+"No."
+
+Rhyl let the silence sit.
+
+Pellin looked away.
+
+Lessa's gaze moved between them.
+
+Rhyl said, "You attended Lord Aereth."
+
+"Yes."
+
+"You handled his clothes."
+
+"That's what dresser means."
+
+"Did you handle a blue face cloth after he cut himself shaving?"
+
+Pellin's face changed.
+
+Not guilt.
+
+Recognition.
+
+"Yes."
+
+"What happened to it?"
+
+"I put it with the wash."
+
+"Where?"
+
+"East service basket."
+
+"Immediately?"
+
+"No."
+
+"Why?"
+
+Pellin rubbed one thumb against the side of his forefinger.
+
+"There was blood on it."
+
+"I gathered."
+
+"We don't throw blood-soaked linen into the general basket."
+
+"Why?"
+
+Pellin looked at him as though this should be obvious.
+
+"Because blood marks transfer."
+
+Rhyl waited.
+
+"And because household superstition says you don't leave noble blood lying around."
+
+That mattered.
+
+"Superstition?"
+
+"Old servant rule."
+
+"Magic?"
+
+"I don't know."
+
+"Who taught you?"
+
+"My first dresser."
+
+"Name?"
+
+"Master Edrin. Dead twelve years."
+
+Rhyl filed that away.
+
+"What did you do with the cloth?"
+
+"Rinsed it."
+
+"Where?"
+
+"Service basin."
+
+"Then?"
+
+"Left it over the rail to dry enough that it wouldn't stain everything else."
+
+"How long?"
+
+"Maybe an hour."
+
+"Who could reach it?"
+
+Pellin laughed once.
+
+There was no humor in it.
+
+"Everyone."
+
+"Everyone is not useful."
+
+"Chamber staff. Dressers. housemaids. Water runners. Anyone carrying coal to the guest rooms. Anyone going to the linen press. Anyone who knew the service corridors."
+
+Rhyl thought of the fetish.
+
+Access.
+
+Not intrusion.
+
+"Was it still there when you returned?"
+
+Pellin frowned.
+
+"No."
+
+"Who moved it?"
+
+"I assumed laundry."
+
+"Did you see laundry take it?"
+
+"No."
+
+"Did you ask?"
+
+"Why would I?"
+
+Exactly.
+
+The most dangerous gaps were often built from things nobody had any reason to notice.
+
+"Lord Aereth's button."
+
+Pellin's eyes narrowed.
+
+"What about it?"
+
+"Did he lose one?"
+
+"Two."
+
+Rhyl's pulse shifted.
+
+"When?"
+
+"First night."
+
+"Two?"
+
+"One from his dark river coat. One from a formal shirt."
+
+"Where?"
+
+"I don't know."
+
+"Did you replace them?"
+
+"Yes."
+
+"Did you keep the originals?"
+
+"If I had them, I would have."
+
+"Who supplied replacements?"
+
+"House stores."
+
+"Who knew?"
+
+"The stores clerk. Me. Maybe Talia. Lord Aereth complained."
+
+"About missing buttons?"
+
+"About the quality of the replacements."
+
+Rhyl stared.
+
+Pellin's mouth twitched despite himself.
+
+"His lordship has opinions."
+
+"So I've heard."
+
+Lessa coughed.
+
+Not performatively.
+
+The sound bent her forward until Pellin crossed the room and put a hand between her shoulders.
+
+Rhyl waited.
+
+When she could breathe again, she waved him away.
+
+"I'm not dying today."
+
+"You said that yesterday."
+
+"And I was right."
+
+Pellin poured her water.
+
+His hands were steady.
+
+Rhyl watched him.
+
+A guilty man could love his sister.
+
+An innocent man could flee.
+
+A frightened man could look guilty because fear had poor manners.
+
+Judge Vaun would approve of none of those sentences being used as evidence.
+
+Good.
+
+"One more question," Rhyl said.
+
+Pellin looked at him.
+
+"Did you touch Lord Aereth's seal wax?"
+
+"Which seal?"
+
+"Any."
+
+"Of course."
+
+Rhyl waited.
+
+Pellin frowned.
+
+"I'm a dresser. I pack correspondence cases. I clean wax crumbs from desks. I carry clothes to council chambers. Half the staff touches sealing wax."
+
+"Did Aereth break a seal recently?"
+
+"Several."
+
+"Anything unusual?"
+
+Pellin thought.
+
+Then stopped.
+
+"What?"
+
+"His transit packet."
+
+Rhyl felt the room narrow.
+
+"What transit packet?"
+
+"Council papers. River Transit Assessment Council. Came the morning after he arrived."
+
+"Who delivered it?"
+
+"Ledger courier."
+
+"Name?"
+
+"I don't know."
+
+"Uniform?"
+
+"River grey. Blue piping."
+
+"Man or woman?"
+
+"Man."
+
+"Age?"
+
+"Young. Twenty? Twenty-five?"
+
+"Elf?"
+
+Pellin looked offended.
+
+"We are all elves."
+
+"Fair."
+
+Lessa laughed and immediately regretted it.
+
+Pellin waited until her coughing stopped.
+
+Rhyl said, "What was unusual?"
+
+"The seal was already cracked."
+
+"Before Aereth opened it?"
+
+"Yes."
+
+"Did he notice?"
+
+"No."
+
+"Why not?"
+
+Pellin's expression became troubled.
+
+"He thought he had opened it."
+
+Rhyl did not speak.
+
+Pellin continued.
+
+"He was reading at the window. Asked me why I'd moved the packet. I hadn't. Then he broke the remaining wax and said—"
+
+He stopped.
+
+"Said what?"
+
+"That he must be tired."
+
+Rhyl felt the hairs rise along his arms.
+
+"When?"
+
+"Second morning."
+
+"Before the missing signet?"
+
+"Yes."
+
+"Before he accused Talia?"
+
+"Yes."
+
+"Did you tell anyone?"
+
+"No."
+
+"Why?"
+
+Pellin looked at him.
+
+Because he was a servant.
+
+The answer was so obvious Rhyl almost hated himself for asking.
+
+Pellin said it anyway.
+
+"Because telling Lady Meris that her cousin doesn't remember opening his own council packet is how a dresser becomes unemployed."
+
+Rhyl nodded.
+
+Then he saw something on the shelf beside the stove.
+
+A coil of black thread.
+
+Waxed.
+
+He looked at it.
+
+Pellin followed his gaze.
+
+Everything changed.
+
+Not because the thread proved anything.
+
+Because Pellin knew exactly what Rhyl was looking at.
+
+His face went white.
+
+Lessa said, "What?"
+
+Rhyl did not move.
+
+"Where did you get that?"
+
+Pellin stared at the coil.
+
+"Work."
+
+"Reedglass?"
+
+"Yes."
+
+"Why is it here?"
+
+Pellin swallowed.
+
+"I mend Lessa's brace straps."
+
+Lessa pulled the blanket aside.
+
+Around her ribs, beneath her shift, a leather support harness held a small warming charm plate against her chest.
+
+The straps were repaired with black waxed thread.
+
+Rhyl looked at the coil.
+
+Then at Pellin.
+
+"Who supplies it?"
+
+"House stores."
+
+"Which supplier?"
+
+"I don't know."
+
+"Does everyone use it?"
+
+"For leather. Formal repairs. Luggage."
+
+"Evidence sealing?"
+
+Pellin blinked.
+
+"What?"
+
+Good.
+
+Maybe.
+
+Or very good acting.
+
+Rhyl had no way to know.
+
+He stepped away from the shelf.
+
+"Don't destroy it."
+
+Pellin stared.
+
+"I wasn't going to."
+
+"Don't take it back to Reedglass either."
+
+"Why?"
+
+"I can't tell you yet."
+
+Lessa looked from one man to the other.
+
+"That means something horrible."
+
+Rhyl sighed.
+
+"Usually."
+
+"Is Pellin in trouble?"
+
+"He's a witness."
+
+Pellin looked at him.
+
+"Only?"
+
+"For now."
+
+The words frightened him.
+
+Rhyl hated that.
+
+But lying would be worse.
+
+He went to the door.
+
+Pellin said, "Master Rhyl."
+
+Rhyl turned.
+
+"The courier."
+
+"What about him?"
+
+"He had a ring."
+
+"What kind?"
+
+"Green stone. Silver setting."
+
+"House crest?"
+
+"No."
+
+"Order?"
+
+"I don't know."
+
+"Why remember it?"
+
+Pellin looked embarrassed.
+
+"Because it was too expensive for a courier."
+
+That was useful.
+
+Dangerously useful.
+
+"Anything else?"
+
+"He smelled like cloves."
+
+Rhyl stopped.
+
+Cloves.
+
+Not proof.
+
+A smell.
+
+A ring.
+
+A young man in legitimate-looking River Ledger colors carrying a council packet whose seal had already been broken to a nobleman who later could not remember opening it.
+
+"Would you recognize him?"
+
+Pellin thought.
+
+"Probably."
+
+Rhyl nodded.
+
+"Stay with your sister."
+
+Pellin gave him a bitter look.
+
+"I was planning to."
+
+"Good."
+
+Rhyl stepped into the hall.
+
+Lessa called after him.
+
+"Red Hart."
+
+He looked back.
+
+"If your people arrest him, tell them he owes me soup first."
+
+Rhyl looked at Pellin.
+
+Pellin looked exhausted.
+
+"I'll put it in the warrant."
+
+Lessa smiled.
+
+Rhyl left before the joke could become a promise.
+
+---
+
+At Reedglass House, Damaris had discovered that counting access was worse than counting suspects.
+
+Suspects ended.
+
+Access multiplied.
+
+The east-floor service map covered half the accounting table.
+
+Damaris had drawn it from memory first.
+
+Then Talia corrected it.
+
+Then Meris corrected Talia.
+
+Then Maela Sorn, the laundry mistress, arrived and corrected everyone.
+
+"No," Maela said, tapping the paper with one thick finger. "Hot water does not come up the east stair."
+
+Damaris stared.
+
+"I've seen it."
+
+"You've seen empty cans go down the east stair."
+
+"What's the difference?"
+
+"Weight."
+
+Mireth leaned over the map.
+
+"Full cans come through the central service lift?"
+
+"Yes."
+
+"Who operates it?"
+
+"Whoever is nearest and unfortunate."
+
+Judge Vaun looked up.
+
+"Names."
+
+Maela sighed.
+
+"Usually Bren. Sometimes Osa. Sometimes kitchen boys. Sometimes chamber staff if they're impatient."
+
+Damaris added three more lines.
+
+The map looked diseased.
+
+Blue ink for household staff.
+
+Green for family.
+
+Brown for trades.
+
+Black for unsupervised crossover points.
+
+There were too many black marks.
+
+The linen press.
+
+The service basket.
+
+The wash basin.
+
+The dressing room.
+
+The guest-room desk.
+
+The central service lift.
+
+The east garden tool door.
+
+The receiving corridor.
+
+The River Ledger courier entrance.
+
+Damaris stared at the last one.
+
+"Couriers don't use the front hall."
+
+Meris looked at her.
+
+"No."
+
+"Why?"
+
+"Because clerks deliver things all day."
+
+"Where do they go?"
+
+"Receiving corridor."
+
+"Who signs?"
+
+"Depends."
+
+"On what?"
+
+"Department. Family recipient. urgency."
+
+Damaris put the pen down.
+
+"Aunt."
+
+Meris looked tired now.
+
+Not old.
+
+Elves had the irritating habit of making age aesthetically negotiable for decades.
+
+But tired.
+
+Damaris had rarely seen it.
+
+"How many people can accept a River Ledger packet for this house?"
+
+Meris considered.
+
+"Six."
+
+Maela laughed.
+
+Everyone looked at her.
+
+"Begging pardon."
+
+"You disagree?" Vaun asked.
+
+"Six can sign."
+
+Damaris felt cold.
+
+"How many can receive?"
+
+Maela shrugged.
+
+"Anyone standing in receiving when a courier is impatient."
+
+There it was.
+
+The entire investigation in one sentence.
+
+Rules existed.
+
+Practice had feet.
+
+Mireth sat back.
+
+"The Academy taught us wards as if access were a line."
+
+Vaun looked at her.
+
+"It often is."
+
+"No. I mean conceptually. Inside. Outside. Authorized. Unauthorized."
+
+"And now?"
+
+Mireth looked at the map.
+
+"Now I think a house is made of permissions people lend each other."
+
+Judge Vaun nodded.
+
+"Better."
+
+Damaris rubbed her eyes.
+
+"What about the powder?"
+
+"Courier has taken the sample to the tribunal laboratory."
+
+"How long?"
+
+"Several hours."
+
+"Several?"
+
+"Alchemy does not improve when shouted at."
+
+"I could test—"
+
+"No."
+
+"I wasn't going to say me."
+
+"You were thinking it loudly."
+
+Mireth smiled.
+
+Damaris did not.
+
+She looked at the map again.
+
+"Who knew Aereth was coming?"
+
+Meris answered.
+
+"Family. Senior household staff. River Ledger scheduling office."
+
+"Council?"
+
+"Presumably."
+
+"His own household?"
+
+"Yes."
+
+"How long before arrival?"
+
+"Three days."
+
+"Public?"
+
+"No."
+
+"Secret?"
+
+"No."
+
+Vaun said, "Important distinction."
+
+Damaris nodded.
+
+Not public.
+
+Not secret.
+
+The category where most useful information lived.
+
+She circled the receiving corridor.
+
+"What came for him?"
+
+Talia counted.
+
+"Two clothing parcels. Council packet. Physician's tonic."
+
+Meris looked up.
+
+"Physician?"
+
+"He travels with it."
+
+"What tonic?"
+
+Talia looked uncertain.
+
+"Sleep draught, I think."
+
+Mireth and Vaun spoke together.
+
+"Where is it?"
+
+They looked at each other.
+
+Talia pointed upstairs.
+
+"His room."
+
+Judge Vaun stood.
+
+"No one touches it."
+
+Damaris was already standing.
+
+"That seems relevant."
+
+"It seems relevant. Which is not the same thing as being relevant."
+
+"Yes, Judge."
+
+Vaun looked at her.
+
+"Do not become sarcastic merely because you have learned my sentences."
+
+"I would never."
+
+Meris coughed.
+
+Maela suddenly found the service map fascinating.
+
+They went upstairs.
+
+Lord Aereth's rooms had been closed under Meris's authority after the garden discovery.
+
+The blue guest chamber overlooked the dead rosemary.
+
+Morning light came through green glass and laid watery color across the carpet.
+
+The room looked lived in.
+
+Not ransacked.
+
+A coat over the chair.
+
+Three books on the window seat.
+
+Council papers stacked beside the writing desk.
+
+One pillow on the bed.
+
+Damaris noticed that immediately.
+
+The tonic stood on the washstand.
+
+Dark glass.
+
+Corked.
+
+A paper label tied around the neck.
+
+Mireth stopped several feet away.
+
+"That's Green Covenant script."
+
+Vaun looked at her.
+
+"Can you read it?"
+
+"Yes."
+
+"Without touching."
+
+Mireth leaned closer.
+
+"Restorative sleep tincture. Hawthorn. moonmint. low-dose dreamleaf. Prescribed by Healer Teren Voss."
+
+Damaris looked at her.
+
+"Normal?"
+
+"For an adult elf with persistent sleeplessness? Yes."
+
+"Memory effects?"
+
+"Dreamleaf can make waking recall fuzzy if overdosed."
+
+Judge Vaun looked at the bottle.
+
+"How much should he take?"
+
+Mireth read.
+
+"Eight drops in water."
+
+Damaris looked at the liquid level.
+
+"Can you tell how much he took?"
+
+"No."
+
+Vaun said, "We can ask."
+
+Aereth was waiting in the corridor.
+
+Of course he was.
+
+He stood with his arms folded, silver hair loose at the collar, handsome in the polished way Caladren men tended to be handsome when they were furious about being inconvenienced.
+
+"What are you doing in my room?"
+
+Meris answered.
+
+"Investigating."
+
+"My medicine?"
+
+"Possibly."
+
+His eyes moved to Damaris.
+
+"You."
+
+Damaris blinked.
+
+"What about me?"
+
+"You told them."
+
+The corridor went quiet.
+
+"Told them what?"
+
+"That I have been forgetting things."
+
+Damaris stared at him.
+
+"I didn't know until this morning."
+
+"You were at breakfast yesterday."
+
+"No, I wasn't."
+
+"Yes."
+
+"No."
+
+Aereth's certainty frightened her more than anger would have.
+
+"I ate at the Academy yesterday."
+
+"You sat there."
+
+He pointed toward the small dining room.
+
+"Blue dress. You asked about the canal levy."
+
+Damaris's skin went cold.
+
+Meris said softly, "Aereth."
+
+He looked at her.
+
+"What?"
+
+"Damaris was not here."
+
+His face changed.
+
+Not much.
+
+Enough.
+
+"Of course she was."
+
+"No."
+
+"Then who—"
+
+He stopped.
+
+Mireth looked at Vaun.
+
+Vaun looked at Aereth.
+
+"When did you take your sleep tincture last night?"
+
+Aereth's jaw tightened.
+
+"I don't know."
+
+"Did you take it?"
+
+"Yes."
+
+"How much?"
+
+"Eight drops."
+
+"Do you remember measuring them?"
+
+"Yes."
+
+A beat.
+
+"No."
+
+His face emptied.
+
+Then filled with anger.
+
+"Stop doing that."
+
+Vaun's voice remained gentle.
+
+"Doing what?"
+
+"Making me doubt every answer."
+
+"I am asking questions."
+
+"You are making the questions sound like accusations."
+
+"No."
+
+"You all are."
+
+Damaris saw it.
+
+Not merely irritability.
+
+Fear wearing authority as armor.
+
+She stepped toward him.
+
+Aereth recoiled.
+
+Only half a step.
+
+It hurt anyway.
+
+Damaris stopped.
+
+"Cousin."
+
+His eyes fixed on her.
+
+"I am not trying to take anything from you."
+
+"Everyone says that before they decide you're incapable."
+
+Meris inhaled.
+
+There was history there.
+
+Damaris did not know it.
+
+Another family room she had never entered.
+
+Vaun said, "Lord Aereth, I need your permission to secure the tonic for testing."
+
+"No."
+
+Meris stiffened.
+
+Vaun did not.
+
+"It is your medicine. You may refuse."
+
+Everyone looked at her.
+
+Aereth did too.
+
+Suspicion faltered.
+
+"You aren't going to order it?"
+
+"I can seek authority if evidence supports it. At present I am asking."
+
+"Why?"
+
+"Because you have memory disturbance. The tincture contains an ingredient that can contribute to memory fuzziness at excessive dose. That does not mean the tincture caused your symptoms. It means testing it may remove one possibility."
+
+Aereth looked at the bottle.
+
+Then at Mireth.
+
+"Green Covenant?"
+
+"Yes."
+
+"Do you know Teren?"
+
+"No."
+
+"Do you know the tincture?"
+
+"I know the formula family."
+
+"Could someone alter it?"
+
+"Yes."
+
+Mireth did not soften the answer.
+
+"Could you tell?"
+
+"Possibly. A laboratory could tell more."
+
+Aereth looked at Damaris again.
+
+She did nothing.
+
+No reaching.
+
+No persuasion.
+
+No family voice.
+
+His shoulders lowered.
+
+"Take it."
+
+Vaun nodded.
+
+"Thank you."
+
+Aereth looked away.
+
+Then he said, "I remember Damaris at breakfast."
+
+Damaris's throat tightened.
+
+"I believe that you remember it."
+
+His eyes snapped back to her.
+
+Not anger this time.
+
+Something worse.
+
+Relief.
+
+Because she had not told him he was lying.
+
+Mireth looked at her.
+
+Damaris knew that look.
+
+Remember this.
+
+The tonic was sealed.
+
+Then the council papers.
+
+Vaun did not seize them.
+
+She asked Aereth to identify the packet Pellin had described.
+
+He found it himself.
+
+River Transit Assessment Council.
+
+Emergency canal levy.
+
+The wax seal had been broken.
+
+Aereth stared at it.
+
+"I opened this."
+
+"When?" Vaun asked.
+
+"Second morning."
+
+"Do you remember opening it?"
+
+"Yes."
+
+Pellin had said Aereth thought he had already opened it before breaking the remaining wax.
+
+Two memories could not both be right.
+
+Unless the first was not memory.
+
+Damaris looked at the packet.
+
+"May I?"
+
+Aereth hesitated.
+
+Then handed it to her.
+
+The paper smelled faintly of wax.
+
+Ink.
+
+Dust.
+
+And something warm.
+
+Spiced.
+
+Damaris lifted it closer.
+
+Cloves.
+
+Her pulse jumped.
+
+Rhyl was not there to tell her what he had learned.
+
+She did not know that Pellin remembered cloves.
+
+But she knew Reedglass correspondence.
+
+They did not scent council packets.
+
+"Do you smell that?" she asked.
+
+Mireth leaned closer.
+
+"Clove."
+
+Meris frowned.
+
+"Why would council paper smell of cloves?"
+
+Maela, standing at the end of the corridor because apparently the entire household investigation had acquired her permanently, said, "Moths."
+
+Everyone turned.
+
+She shrugged.
+
+"Clove oil keeps moths out of document chests."
+
+Damaris felt the lead collapse.
+
+Then Maela added:
+
+"But not ours."
+
+Vaun looked at her.
+
+"Whose?"
+
+"Old river warehouses use it. Cheap ones. Damp places."
+
+Damaris looked at the packet again.
+
+Not proof.
+
+Never proof.
+
+But a route.
+
+River warehouse.
+
+Transit token.
+
+Council packet.
+
+Custody.
+
+Movement.
+
+Someone had built a curse—or something very much like one—out of the language of Aereth's office.
+
+Not merely his body.
+
+His authority.
+
+A knock sounded downstairs.
+
+Fast.
+
+Three beats.
+
+Pause.
+
+Two.
+
+Damaris knew it.
+
+Red Hart field knock.
+
+She was moving before anyone spoke.
+
+Rhyl stood in the receiving hall, damp from rain and breathing harder than the walk from Lower Reed justified.
+
+He saw Damaris.
+
+For one moment the investigation vanished from his face.
+
+Relief.
+
+Then discipline returned.
+
+"I found Pellin."
+
+Damaris stopped one step from him.
+
+"Is he guilty?"
+
+"No."
+
+The speed of the answer mattered.
+
+"Is he innocent?"
+
+"I don't know."
+
+Also mattered.
+
+Judge Vaun came down behind her.
+
+"Report."
+
+Rhyl did.
+
+The sick sister.
+
+The message.
+
+The shaving cloth.
+
+The missing buttons.
+
+The cracked council seal.
+
+Aereth believing he had opened the packet before he actually broke it.
+
+The black waxed repair thread from Reedglass stores.
+
+The young courier.
+
+The expensive green-stone ring.
+
+The cloves.
+
+At that, Damaris held up the council packet.
+
+"Cloves."
+
+Rhyl stared.
+
+"You have it."
+
+"We have a packet that smells of them."
+
+Maela said, "And old river warehouses use clove oil against moths."
+
+Rhyl looked at Damaris.
+
+The excitement between them was not romantic.
+
+Not exactly.
+
+But it carried the same dangerous intimacy: two separate paths arriving at the same door.
+
+Judge Vaun took control before either could mistake convergence for proof.
+
+"Stop."
+
+They stopped.
+
+"We have a courier described by one witness. We have a scent on one packet. We have a common preservative practice associated with damp storage. We have a transit token buried with a possible sympathetic object. We have a council packet whose custody may have been compromised."
+
+She looked at each of them.
+
+"That is an evidence chain worth pursuing."
+
+Then:
+
+"It is not a culprit."
+
+Damaris nodded.
+
+Rhyl nodded.
+
+Mireth nodded.
+
+Meris looked less pleased, which was probably why the reminder was necessary.
+
+Vaun turned to Rhyl.
+
+"The thread at Pellin's sister's rooms?"
+
+"From Reedglass stores."
+
+"According to?"
+
+"Pellin."
+
+"Good."
+
+She looked at Meris.
+
+"Supplier records."
+
+Meris said, "I can have them within the hour."
+
+"Do so."
+
+Damaris looked at the council packet.
+
+"And courier registry."
+
+Meris looked at her.
+
+"River Ledger."
+
+The words carried weight between them.
+
+The cipher.
+
+The audit.
+
+The order to gain Ilyan's trust.
+
+Family access.
+
+Family observation.
+
+Damaris could use the system.
+
+The system would know she had used it.
+
+Again.
+
+Rhyl saw her expression.
+
+Not the secret.
+
+Not all of it.
+
+Enough.
+
+"You don't have to," he said.
+
+Meris looked at him.
+
+Damaris looked at him too.
+
+"What?"
+
+"Use whatever you're thinking about using."
+
+The room went quiet in the way rooms did when someone accidentally touched the hidden part of a conversation.
+
+Damaris felt the temporary cipher card against her inner pocket.
+
+She had brought it.
+
+Of course she had.
+
+Lady Meris had left it open.
+
+That had been permission.
+
+Or bait.
+
+Or trust.
+
+Or all three.
+
+Damaris said, "If a River Ledger courier delivered this packet, the registry can identify the assigned runner."
+
+Rhyl's gaze stayed on her.
+
+"And the cost?"
+
+There it was.
+
+The question from the west gate.
+
+Tell me what it costs before I have to guess.
+
+Damaris could lie.
+
+Not fully.
+
+She had already learned that partial truth could be arranged elegantly enough to resemble honesty from across a room.
+
+She was good at it.
+
+Perhaps becoming better.
+
+That frightened her.
+
+She looked at Meris.
+
+Her aunt said nothing.
+
+Damaris looked back at Rhyl.
+
+"The query will be audited."
+
+"By?"
+
+"My family."
+
+"Will they know what you searched?"
+
+"Yes."
+
+"Will they know why?"
+
+"Not unless I tell them."
+
+Rhyl waited.
+
+Damaris felt the other truth behind her teeth.
+
+They ordered me to gain Ilyan's trust.
+
+Not yet.
+
+Cowardice?
+
+Maybe.
+
+Timing?
+
+Also maybe.
+
+Human beings and elves had invented a remarkable number of respectable nouns for fear.
+
+Rhyl nodded once.
+
+"Then decide knowing that."
+
+No accusation.
+
+No demand.
+
+Again.
+
+Damaris wanted to kiss him.
+
+It was profoundly inconvenient.
+
+Instead she pulled the cipher card from her coat.
+
+Meris's eyes lowered to it.
+
+"Receiving office," Damaris said.
+
+Her aunt nodded.
+
+"Use my desk."
+
+Rhyl looked at Meris.
+
+Then at Damaris.
+
+Family permission.
+
+Family surveillance.
+
+Family leverage.
+
+Nothing simple.
+
+Damaris passed him close enough that her sleeve brushed his hand.
+
+Neither of them pretended it was accidental.
+
+---
+
+The River Ledger knew exactly who had delivered Lord Aereth Caladren's council packet.
+
+That was the good news.
+
+The bad news was that the man did not exist.
+
+Damaris stared at the registry line.
+
+Courier assignment: **Eren Vale.**
+
+Credential: temporary bonded runner.
+
+Sponsor: Lower Reed Transfer Office.
+
+Token series: 8-Copper-441 through 8-Copper-460.
+
+Damaris looked at the transit token recovered from the garden.
+
+8-Copper-447.
+
+Her mouth went dry.
+
+Rhyl stood behind her.
+
+Not touching.
+
+Mireth at the other side.
+
+Judge Vaun had insisted on witnesses for the query.
+
+Damaris opened the personnel credential.
+
+The record returned:
+
+**VOID — DUPLICATE SPONSOR SEAL.**
+
+Date of voiding:
+
+This morning.
+
+"Someone caught it," Mireth whispered.
+
+Damaris scrolled.
+
+The credential had been created nine days ago.
+
+Used for seven deliveries.
+
+Voided after an audit clerk noticed the Lower Reed Transfer Office sponsor mark duplicated a seal number already assigned to a freight assessor who had been dead for eighteen months.
+
+Rhyl said, "Seven deliveries."
+
+Damaris felt the number.
+
+Again.
+
+She refused it.
+
+"Where?"
+
+She opened the route ledger.
+
+Seven addresses.
+
+Reedglass House was one.
+
+Two council offices.
+
+A tribunal annex.
+
+A physician's cooperative.
+
+A noble townhouse.
+
+And the Concord Academy of Aurelith.
+
+Nobody spoke.
+
+The room became very small.
+
+Mireth's hand found the edge of the desk.
+
+Damaris looked at the date.
+
+The Academy delivery had been four days before Silver Night.
+
+Rhyl breathed out.
+
+Judge Vaun, behind them, said the most important thing anyone could have said.
+
+"We do not know what was delivered."
+
+The sentence hurt.
+
+It also saved them.
+
+Damaris looked at the line again.
+
+Concord Academy of Aurelith.
+
+Four days before thirty-six students and six servants died.
+
+A fraudulent courier credential.
+
+The same token series as the copper disk buried beneath Reedglass rosemary.
+
+Not proof of the murders.
+
+Not proof of the curse.
+
+Not proof that one person had done either.
+
+But no longer merely a resemblance of thread or wax.
+
+A route.
+
+A credential.
+
+A numbered token.
+
+A date.
+
+Something that could be followed.
+
+Damaris became aware that Rhyl's hand had moved near hers on the desk.
+
+Not over it.
+
+Near.
+
+She turned her palm upward.
+
+He looked at her.
+
+Then placed two fingers against hers.
+
+Small contact.
+
+Warm.
+
+Steady.
+
+Judge Vaun saw.
+
+Of course she saw.
+
+She had the decency to look back at the registry.
+
+"Preserve the query," she said.
+
+Damaris swallowed.
+
+"Yes."
+
+"Certified copy."
+
+"Yes."
+
+"Then no one touches the original record."
+
+"Yes."
+
+Mireth looked at the other six addresses.
+
+"What about them?"
+
+Vaun's face had gone hard.
+
+"Now," she said, "we find out whether Reedglass House is the second crime scene."
+
+She pointed to the Academy line.
+
+"Or the eighth."
