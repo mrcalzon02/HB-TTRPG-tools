@@ -32,17 +32,18 @@ When an hourly or scheduled story-continuation task runs:
 9. Read **docs/beneath-dappled-oaks/08-IN-UNIVERSE-COURTSHIP-TALES-AND-ROMANTIC-MISADVENTURES.md** for reusable in-universe romantic cautionary tales, household legends, comic courtship disasters, Adraderis lore, and proverb-level cultural references.
 10. Read **docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md** for knightly orders, military fellowships, wardens, martial religious traditions, engineer-knights, river orders, bodyguards, hospitallers, oath structures, rivalries, and military social mobility.
 11. Read **docs/beneath-dappled-oaks/10-ECOLOGY-WILDLIFE-DOMESTIC-ANIMALS-LEGENDARY-THREATS.md** for wildlife, beasts of burden, livestock, domestic animals, magical species, predator-prey logic, migration, ecological intelligence, legendary creatures, and regional or national ecological threats.
-12. Read **docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md** for adulthood, lifespan, age stages, senescence, fertility, magical impotence, elder care, Spring Children, Winter Children, Winter Blossoms, and multigenerational House demographics.
-13. Reconcile all twelve controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-14. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, ecological continuity, age and demographic continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-15. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
-16. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-17. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-18. Keep every romantic or sexualized character an adult.
-19. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-20. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-21. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-22. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+12. Read **docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md** for adulthood, lifespan, age stages, senescence, fertility, magical impotence, elder care, Spring, Summer, Fall, Winter, and Winter-Blossom children, and multigenerational House demographics.
+13. Read **docs/beneath-dappled-oaks/12-COURTLY-HOUSEHOLDS-MISTRESSES-PARAMOURS-SURROGACY-SUCCESSION.md** for acknowledged companions, mistresses, secret affairs, secondary households, surrogacy, donor arrangements, parentage contracts, legitimization, cadet placement, and succession intrigue.
+14. Reconcile all thirteen controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+15. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, ecological continuity, age and demographic continuity, courtly-household and succession continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+16. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+17. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+18. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+19. Keep every romantic or sexualized character an adult.
+20. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+21. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+22. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+23. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -902,6 +903,20 @@ Winter Blossom relationships can carry powerful family emotion: some elderly par
 Seasonal child categories are not fixed rankings. One House may prize Spring Children as proof of a fertile new union, while another may dismiss them as provisional because the parents still have centuries in which later siblings may alter inheritance. Summer, Fall, Winter, and Winter Blossom children can likewise be cherished, burdened, ignored, or politicized differently by different families.
 
 Long lifespan should affect inheritance, House authority, career history, political memory, elder care, and the number of living generations in a family.
+
+## 12K. Courtly households, mistresses, and surrogacy control
+
+For enduring courtly relationship, parentage, and succession continuity, always read:
+
+**docs/beneath-dappled-oaks/12-COURTLY-HOUSEHOLDS-MISTRESSES-PARAMOURS-SURROGACY-SUCCESSION.md**
+
+Mistresses, acknowledged lovers, discreet paramours, secondary households, and surrogacy arrangements are established parts of courtly society.
+
+The presence of a mistress or surrogate is not automatically scandalous. The decisive questions are acknowledgment, consent, promises, money, parentage, inheritance, secrecy, and whether the arrangement violates an existing compact.
+
+Same-sex dynastic households may use surrogacy, donor arrangements, adoption, designated relatives, cadet heirs, existing children, or succession contracts.
+
+Surrogates and secondary companions are independent political actors rather than decorative plot devices. They may possess property, knowledge, leverage, family interests, emotional attachments, and long-lived relationships with the household.
 
 ## 13. Continuation priorities for the hourly story runner
 
