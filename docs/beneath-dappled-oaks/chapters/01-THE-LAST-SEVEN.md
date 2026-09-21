@@ -10,13 +10,95 @@ continuity_parent: "Book One opening"
 
 # Chapter One — The Last Seven
 
+## Foreword — Beneath the Sunder Moon
+
+In the year **282 S.M.**, the moon above Elaranth still carried the wound for which the age had been named.
+
+Saelith crossed the night sky with a dark fracture through its face, a scar left from the last convulsions of the Delphimi Wars. Priests called it judgment. Astronomers called it a phenomenon awaiting better instruments. Poets, having never considered restraint a professional obligation, called it almost everything else.
+
+The political settlement beneath that wounded moon was only slightly less disputed.
+
+For nearly three centuries the **Concord of Crown and Commonwealth** had governed the Realm by refusing to let either monarchy or republic win completely. The Moon-Crown endured. So did elected councils, chartered cities, tribunals, guild rights, ministries and the awkward constitutional machinery intended to ensure that no single throne, faction or family ever again possessed enough authority to become the old tyranny by another name.
+
+It worked.
+
+Mostly.
+
+The fact that the system remained standing was often offered as proof of its elegance. People who actually had to make it function tended to use different words.
+
+Seven Great Houses supplied much of the Realm's political gravity. Avariel held the Crown. Vael carried old woodland power and Green Covenant influence. Eris guarded western roads and fortresses. Sylvaren cultivated diplomacy, reputation and court ceremony. Caladren moved grain, credit and river commerce. Nymrael guarded high magic, scholarship and dangerous expertise. Orthell held forests, scouts and the kind of independence every coalition eventually discovered it needed.
+
+Around them moved hundreds of lesser families, guilds, orders, municipalities, temples, military fellowships and professional bodies, all insisting that they were not pieces on a board while behaving with admirable consistency like pieces on a board.
+
+At the center of that argument stood **Aurelith**, the royal capital.
+
+Aurelith was a city of palace roofs, council chambers, river barges, tiled courtyards, ministry offices, crowded markets, private gardens and neighborhoods whose social boundaries were often clearer than their streets. Every Great House maintained property there. Every institution of consequence wanted a door there. Every faction claimed not to care what the capital thought while employing people whose entire profession was finding out.
+
+Among Aurelith's more unusual districts was the **Academy Ward**, governed not by a House but by an old educational charter whose autonomy had survived changes of dynasty, ministry and fashion.
+
+Its heart was the **Concord Academy of Aurelith**.
+
+Everyone in the capital simply called it **the Academy**.
+
+The shorter name carried enough weight.
+
+The Academy trained the children of great families beside students bound for orders, tribunals, scholarship, Crown service, diplomacy, military fellowships, commercial councils and other adult institutions that preferred their recruits educated before they began using them. Its halls included laboratories, lecture courts, gardens, archives, residence wings, ceremonial chambers and a west-tower complex whose specialized facilities served several of the Realm's more politically sensitive magical disciplines.
+
+The Academy also possessed something less tangible than buildings or prestige.
+
+Protection.
+
+Elaranthi elves lived long lives, but they did not spend a century as children. They matured on a timetable only somewhat slower than humans, and by their early twenties they could be physically adult, educated, skilled, romantic, ambitious and perfectly capable of making terrible decisions without assistance.
+
+Society nevertheless drew a hard cultural line around students.
+
+Families could prepare them. Tutors could shape them. Houses could encourage friendships, observe romances, arrange introductions, discuss future placements and make private calculations about marriages that everyone involved pretended were merely hypothetical.
+
+What respectable adults were not supposed to do was openly use protected students as pieces in full dynastic warfare.
+
+Graduation ended that shelter.
+
+A graduate could be recruited, assigned, courted, married, deployed, entrusted with restricted information, pressured into alliances and asked—politely, lovingly, patriotically—to do things that would have been considered obscene to demand of a student the day before.
+
+That was why Bloomtide graduations mattered.
+
+Bloomtide was already the season of beginnings. Orchards flowered. Roads reopened. guild appointments and charters were finalized. Families traveled. Courts filled. Academies and military schools sent their graduates into the institutions waiting for them.
+
+At the Concord Academy of Aurelith, the graduating class of 282 S.M. should have contained forty-three students.
+
+Three months before commencement, on a night that became known simply as **Silver Night**, the west tower failed.
+
+Wards collapsed in sequence. Laboratories burned. Stone broke. The alchemical court, residence wing and Dmitrigical annex were torn apart by cascading magical failure.
+
+Thirty-six students died.
+
+Six servants died with them.
+
+The official reports called it an accident.
+
+They were detailed reports. They had diagrams, seals, signatures, carefully measured intervals and enough technical language to make catastrophe sound almost orderly.
+
+Seven students survived.
+
+They were young adults on the last edge of protected life, old enough to understand that their friends were dead and still sheltered enough to believe, for a little while longer, that the adult world would consider that fact more important than what could be gained from it.
+
+They were about to graduate.
+
+After that, everyone would be allowed to ask things of them.
+
+---
+
 There should have been forty-three of them. Seven stood beneath the flowering arch.
 
-The arch had been grown rather than built, two white-barked trees coaxed toward one another across the eastern court until their branches met overhead and learned to stay that way. Bloomtide flowers hung from the living span in pale blue and cream. Rain from the night before still jeweled the leaves. The Academy gardeners had swept the flagstones twice, polished the brass dedication plaques and replaced every blossom bruised by weather.
+The arch had been grown rather than built, two white-barked trees coaxed toward one another across the eastern graduation court of the Concord Academy until their branches met overhead and learned to stay that way. Bloomtide flowers hung from the living span in pale blue and cream. Rain from the night before still jeweled the leaves. The Academy gardeners had swept the flagstones twice, polished the brass dedication plaques and replaced every blossom bruised by weather.
 
 They had done excellent work.
 
 From the lower terrace the courtyard looked ready for celebration.
+
+Beyond the eastern wall, Aurelith had already begun its morning. Petition bells sounded faintly from the civic quarter. Barges moved along the canal roads below the Academy Ward. The pale roofs of ministries and House residences climbed toward the Moon-Crown district, where flags from the seven Great Houses hung in a city that had spent centuries insisting that no one family ruled it alone.
+
+The Academy stood inside that city and slightly apart from it, chartered to educate the people who would eventually inherit its arguments.
 
 Up close, there were thirty-six empty chairs.
 
