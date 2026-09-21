@@ -580,7 +580,34 @@ Durable Chapter Three handoffs include:
 - Rhyl receives a Red Hart inspection route through the west-tower service-road area and begins to suspect that Damaris withheld relevant context without yet knowing what she concealed.
 - Mireth's reciprocal attraction to Caelen becomes explicit in POV through touch, near-kiss, and voluntary hand-holding, while broader enduring attraction preferences remain unresolved.
 
-The immediate dependency-valid next chapter is **Chapter Four: Necessary Truth**, governed by the rolled-forward five-chapter lookahead.
+The Chapter Three handoff was paid by committed Chapter Four canon.
+
+### Chapter Four: Necessary Truth
+
+Committed canon on `main` at:
+
+**docs/beneath-dappled-oaks/chapters/04-NECESSARY-TRUTH.md**
+
+Chapter Four establishes the Seven's first independently testable contradiction of the official Silver Night narrative while preserving strict evidentiary limits.
+
+Durable Chapter Four handoffs include:
+- Truth Beyond the Veil's **Revision Seventeen — Emergency Substitution Language** was filed seventeen days before Silver Night, took effect twelve days before, and passed through **Joint Order Liaison — Dmitrigical Review**; the personal signatory remains restricted.
+- A Hall of Veils **emergency custody hold** involving west-tower witness material opened six days before Silver Night.
+- River Ledger records independently show **six witness screens, thirteen black-glass mnemonic plates, and two cases of memory salt** delivered to the west-tower service gate three nights before Silver Night under a Dmitrigical Tribunal contingency account.
+- Caelen lawfully witnessed return of the corresponding west-tower witness materials during his first Royal Martial archival escort and did not exceed his custody authority.
+- Judge Lethra Vaun establishes the governing evidence principle: a fact must not be made to carry more weight than it can survive; living-memory attestation may preserve what a witness actually experienced but does not reveal sealed contents.
+- Damaris uses Lady Meris's temporary River Ledger cipher, making herself materially useful to Ilyan while creating an auditable family trail. She partially reveals family interest to Ilyan and the cipher's origin to Rhyl, but the explicit order to **gain Ilyan's trust** remains secret.
+- Rhyl's concern about Damaris becomes concrete but restrained; he asks her to explain what the access costs before he has to guess.
+- Caelen explicitly distinguishes his mother's politically coded courtship ribbon from his own feelings. Mireth then kisses him and identifies that act as her own choice, establishing reciprocal attraction without resolving the political problem around it.
+- Thessa and Lyrion remain genuinely close while retaining the new need to distinguish personal intimacy from institutional tasking.
+- The Flowered Sunder reception at the Hall of Seven Lamps is now **two nights away**.
+- **Reedglass House**, the Caladren-Ilyra city residence along the eastern canal, is established as the next physical evidence site.
+- Lady Meris receives the audit of Damaris's Silver Night query and deliberately leaves the cipher open.
+- At Reedglass House, a gardener finds a perfect circle of dead rosemary beside the old foundation and reports that **something is buried there**, wrapped in silk.
+
+The rolled-forward next chapter is **Chapter Five: Something Buried Near the House**. Its immediate story handoff is the Reedglass House east-garden anomaly, Judge Vaun's expected arrival, and the unresolved question of whether the buried object is sympathetic cursework, a decoy, or another kind of household evidence.
+
+The Chapter One / Chapter Two recovery defect remains open and is not reclassified merely because later chapters have now been committed.
 
 
 ### Chapter One / Chapter Two recovery backlog
