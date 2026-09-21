@@ -1933,7 +1933,11 @@ The high two hundreds are considered genuine ancient age. Some individuals retai
 
 Age-related magical impotence commonly appears around the two fifties but does not necessarily coincide with sexual impotence, infertility, or physical frailty.
 
-Fertility can persist into late life, producing culturally recognized **Spring Children**, **Winter Children**, and **Winter Blossoms**.
+Fertility can persist into late life, producing culturally recognized **Spring Children**, **Summer Children**, **Fall Children**, **Winter Children**, and **Winter Blossoms**.
+
+These labels describe timing and expectation, not fixed worth. Spring Children may be celebrated as the first proof of a marriage or dismissed as provisional heirs; Summer Children may represent a settled household; Fall Children may be expected to take up estate and elder-care responsibilities; Winter and Winter Blossom children may be treated as miracles, burdens, political surprises, or final chances.
+
+Because parents may continue having children for centuries, firstborn status does not automatically settle inheritance.
 
 House politics must therefore account for living ancestors, extremely old parents, much younger late-born siblings, delayed inheritance, and elders whose political memory may reach back more than a century.
 
