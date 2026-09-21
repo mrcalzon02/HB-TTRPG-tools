@@ -2,11 +2,10 @@
 series: "Beneath Dappled Oaks"
 chapter: 2
 title: "The Cost of Silk"
-status: "CANON PROSE — RECOVERED EDITION"
+status: "CANON PROSE"
 era: "282 S.M."
 season: "Bloomtide"
 continuity_parent: "Chapter One — The Last Seven"
-recovery_note: "Canonical recovered edition assembled from the repeatedly recovered conversation anchors and continuity state after the original chat artifact was not durably persisted."
 ---
 
 # Chapter Two — The Cost of Silk
