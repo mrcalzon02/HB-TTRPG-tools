@@ -61,6 +61,20 @@ When a character does something genuinely foolish, the surrounding social world 
 
 ---
 
+## Age and demographic character rule
+
+Elven ages are governed by:
+
+**docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md**
+
+Around age twenty, elves are adults but still culturally very young.
+
+Ages in the high two hundreds indicate genuine ancient age.
+
+Recurring characters should therefore not be described with generic "ageless elf" shorthand. Age should influence appearance, authority, family position, living ancestors and descendants, magical endurance, fertility expectations, and accumulated experience.
+
+---
+
 ## Canon leads already in use
 
 ### Court / succession generation
