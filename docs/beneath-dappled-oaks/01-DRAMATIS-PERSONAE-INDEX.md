@@ -258,6 +258,44 @@ Each named institution should have at least one recurring human face.
 
 ---
 
+## Martial order network
+
+The full military-order canon is maintained in:
+
+**docs/beneath-dappled-oaks/09-KNIGHTLY-ORDERS-MARTIAL-INSTITUTIONS-MILITARY-TRADITIONS.md**
+
+Important recurring institutions include:
+
+- Royal Martial Fellowship;
+- Order of the Sundered Shield;
+- Dawn Circlet;
+- Broken Spear;
+- Western Wardens;
+- Iron Hart;
+- Stone Banner;
+- Ember Anvil;
+- Red Hart wilderness vigil;
+- White Stag Riders;
+- Green Lance;
+- Thornwall Companions;
+- Silver Heron;
+- Bridgewardens of Nera;
+- Seven Roads;
+- Argent Thorn;
+- Quiet Blade;
+- Starward Aegis;
+- Moonward;
+- Lantern Hospitallers;
+- Black Oak;
+- Crimson Pennon;
+- Grey Mantle;
+- Order of the Open Hand;
+- Ash Riders.
+
+When recurring named knights, marshals, preceptors, chapter captains, squires, veterans, order physicians, or military judges are introduced, add them to this personae network rather than leaving them as disposable institutional placeholders.
+
+---
+
 # Court Economy, Guilds, Companies, and Professional Networks
 
 These organizations create operatives, witnesses, romance targets, informants, and conspirators outside the direct bloodlines.
