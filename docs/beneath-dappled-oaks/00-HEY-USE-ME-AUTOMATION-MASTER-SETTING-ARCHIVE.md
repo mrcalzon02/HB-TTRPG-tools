@@ -27,16 +27,17 @@ When an hourly or scheduled story-continuation task runs:
 4. Read **docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md** for the active calendar, season, lunar phase, festivals, economic cycle, pantheon, food culture, travel conditions, and political year.
 5. Read **docs/beneath-dappled-oaks/04-CHARACTER-CONTINUITY-CATALOG.md** and retrieve the persistent Excel workbook **Beneath_Dappled_Oaks_Character_Continuity_Catalog.xlsx** from the connected Google Drive for long-memory character state.
 6. Read **docs/beneath-dappled-oaks/05-LITTLE-COURT-REGIONAL-CUSTOMS-FOLK-PRACTICES.md** for local festivals, roadside shrines, household rites, village superstitions, lovers' places, minor saints and spirits, regional food customs, and the culturally dense "Little Year."
-7. Reconcile all six controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
-8. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
-9. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, or flatten established local culture without a continuity reason.
-10. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
-11. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
-12. Keep every romantic or sexualized character an adult.
-13. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
-14. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
-15. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
-16. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
+7. Read **docs/beneath-dappled-oaks/06-SETTLEMENT-GAZETTEER-HOUSE-SPHERES.md** for cities, towns, villages, population scale, House spheres, institutional control, contested settlements, fringe communities, imports, exports, and local political gravity.
+8. Reconcile all seven controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+9. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
+10. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
+11. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
+12. When writing a full chapter, target roughly **4,000 to 5,000+ words** unless the active request specifies otherwise.
+13. Keep every romantic or sexualized character an adult.
+14. Sensuality may be intense and frequent, but prose should remain non-explicit: attraction, glances, scars, stubble, exposed skin, posture, clothing, breath, proximity, hands nearly touching, flirtation, seduction, interrupted intimacy, implication, and aftermath are all valid. Do not turn scenes into explicit pornographic descriptions or anatomical play-by-play.
+15. Interweave romance with politics. Attraction should have consequences for houses, orders, alliances, inheritance, intelligence work, loyalties, and betrayal.
+16. Preserve uncertainty where canon has not yet fixed a detail. Do not silently invent a definitive surname, age, office, genealogy, map fact, or magical rule and then treat it as old canon.
+17. If a newer explicit user instruction conflicts with this file, the newer explicit instruction wins. Update this archive when the change becomes durable canon.
 
 ## 1. Canon hierarchy
 
@@ -749,6 +750,37 @@ Two explicit canon anchors are:
 Local custom is continuity, not disposable decoration. Once a recurring character, household, village, estate, road, shrine, mine, bridge, or district acquires a custom, food, taboo, local saint, lovers' place, or seasonal observance, preserve it and record it when it becomes plot-relevant or character-defining.
 
 Harmless folk practices should also complicate Dark Arts investigations because thresholds, knots, food offerings, carved tokens, ribbons, and hidden household objects may resemble the physical vocabulary of forbidden sympathetic magic.
+
+## 12D. Settlement and House-sphere control
+
+For enduring political geography, always read:
+
+**docs/beneath-dappled-oaks/06-SETTLEMENT-GAZETTEER-HOUSE-SPHERES.md**
+
+The default settlement rule is:
+
+**Permanent settlements much above roughly one thousand people are usually important enough that a Great House, Crown institution, guild coalition, order, temple bloc, mine syndicate, merchant consortium, or other organized power has become the dominant local influence.**
+
+"Control" means political and economic gravity, not automatic private ownership. Local magistrates, charters, guilds, rival Houses, temples, voters, creditors, and neighborhood blocs still matter.
+
+True fringe neutrality is most common below one thousand residents, where a community may be too remote, poor, small, or inconvenient to justify sustained outside attention.
+
+Population is not the only trigger. A village of three hundred with a rare ore vein, strategic bridge, important shrine, medicinal spring, unusual crop, mountain pass, or critical ferry may attract more political pressure than a town ten times its size.
+
+Principal established House seats include:
+
+- House Avariel: **Aurelith**
+- House Vael: **Vaelwood**
+- House Eris: **Westgate**
+- House Sylvaren: **Silvercourt**
+- House Caladren: **Caladris**
+- House Nymrael: **Starfall**
+- House Orthell: **Hartspire**
+- House Valeric: **Valeron**
+
+Established fringe anchors include **Cedra Delby** and **Kallioused**.
+
+When creating or using a settlement, determine what it imports, what it exports, which road or river sustains it, who finances that infrastructure, which local bloc dominates, which rivals remain present, and what happens when seasonal conditions interrupt the settlement's economic reason for existing.
 
 ## 13. Continuation priorities for the hourly story runner
 
