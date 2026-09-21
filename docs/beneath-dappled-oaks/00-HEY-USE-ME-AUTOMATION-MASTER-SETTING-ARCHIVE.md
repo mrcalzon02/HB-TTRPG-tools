@@ -561,6 +561,27 @@ It advances graduation/induction pressures, Ilyan's altered Truth Beyond the Vei
 
 Future continuation should move forward from these consequences rather than reintroducing them from scratch.
 
+### Chapter Three: Seven Doors
+
+Committed canon on `main` at:
+
+**docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md**
+
+It completes the immediate protected-student → adult-institution transition. The Seven receive their first practical institutional duties and discover that their friendship is already being modeled as access by the adult organizations around them.
+
+Durable Chapter Three handoffs include:
+- Mireth learns the evidentiary limits and uses of Green Covenant living-memory testimony and notices ordinary household-access channels through gardeners, chamber attendants, shrine staff, and other trusted workers.
+- Scholar Silae warns that the known Valeric/Dmitrigical motive may overlap with unresolved demographic-succession pressure and that perpetrators, beneficiaries, and allied factions need not be identical.
+- Caelen receives his first Royal Martial duty: escorting a sealed archival transfer to the Hall of Veils at second bell.
+- Ilyan learns from Examiner Sael Ithrenn that someone changed the "necessary truth" oath language and is assigned to help register the same incoming archival transfer.
+- Lyrion and Thessa learn that their new institutions regard friendship as potential access; their genuine intimacy now carries explicit suspicion about whether a gesture is personal or assigned.
+- Lyrion invites all Seven to a Flowered Sunder reception at the Hall of Seven Lamps in three nights, creating a durable reunion appointment.
+- Damaris receives a temporary River Ledger authorization cipher for Academy-district transport abstracts around Silver Night and conceals both that resource and the full extent of her family tasking.
+- Rhyl receives a Red Hart inspection route through the west-tower service-road area and begins to suspect that Damaris withheld relevant context without yet knowing what she concealed.
+- Mireth's reciprocal attraction to Caelen becomes explicit in POV through touch, near-kiss, and voluntary hand-holding, while broader enduring attraction preferences remain unresolved.
+
+The immediate dependency-valid next chapter is **Chapter Four: Necessary Truth**, governed by the rolled-forward five-chapter lookahead.
+
 
 ## 12A. Five-chapter forward planning control
 
