@@ -108,6 +108,135 @@ A dress, uniform, cloak, scar, insignia, seating arrangement, shared meal, priva
 
 Dry wit may appear where appropriate, particularly around aristocratic hypocrisy and institutions that insist their contradictions are perfectly reasonable.
 
+## 3A. First-principles rewrite and natural-prose control
+
+**Current Book One prose status: SCAFFOLDING / REFERENCE MATERIAL.**
+
+Beginning with the September 2026 first-principles rewrite, existing numbered Beneath Dappled Oaks chapter prose is **not a sentence-level authority for future drafting**. Existing chapters remain valuable scaffolding for established events, setting facts, architecture, personalities, relationships, locations, atmosphere, scene ideas, useful pacing discoveries, and continuity constraints, but the story is to be rebuilt from **Chapter One forward**.
+
+The rewrite starts from the durable setting and character canon, not from an obligation to preserve existing wording, scene construction, dialogue, narration, transitions, jokes, legalistic phrasing, or explanatory habits.
+
+When a rewritten chapter reaches an event represented in old prose:
+
+- preserve durable facts that remain canon;
+- freely redesign how the event is approached, staged, paced, perceived, discussed, or emotionally processed;
+- do not reproduce awkward dialogue merely because it previously carried necessary information;
+- do not assume an old scene must exist in the same location, order, or conversational form if the same continuity can be expressed more naturally;
+- treat later existing chapters as **forward scaffolding**, not completed prose that Chapter One must mechanically steer toward sentence by sentence.
+
+### Natural conversation rule
+
+Characters speak to one another from **shared context**.
+
+They do not normally repeat names, dates, institutional titles, provenance, physical attributes, legal categories, or backstory that everyone present already knows merely so the reader can remain perfectly synchronized.
+
+Prefer the shortest natural reference the speakers would actually use:
+
+- "the packet";
+- "your aunt";
+- "Pellin";
+- "that thing in the garden";
+- "the Academy";
+- "yesterday";
+- "him";
+- silence, a look, a gesture, or simply handing someone the requested object.
+
+A conversation is not a continuity-record synchronization operation.
+
+Do not make characters sound as though they are dictating database entries to one another.
+
+When two people share history, allow ellipsis, shorthand, interruptions, unfinished thoughts, assumptions, callbacks, private jokes, irritation, silence, misunderstanding, and references whose full meaning is supplied by surrounding narration or prior scenes.
+
+### No reader-facing redundancy disguised as dialogue
+
+Do not have a character explain information solely because the reader might have forgotten it.
+
+Do not deliver the same story beat through:
+
+1. physical action;
+2. dialogue explaining the action;
+3. another character interpreting the dialogue;
+4. narration summarizing what it means.
+
+Choose the strongest delivery mechanism and trust it.
+
+If clarification is genuinely necessary, give only the missing piece.
+
+### Physical reality does not change when its legal or intellectual category changes
+
+A physical object does not become materially different because a character learns what it is, because a judge classifies it, because it becomes admissible evidence, or because the characters gain a new political understanding of it.
+
+Avoid forced transitions such as:
+
+- "it had now become evidence";
+- "the situation was different now because legally...";
+- "the object had acquired witnesses";
+- "now that they understood its legal status...";
+- equivalent constructions that treat classification as a physical transformation.
+
+Instead, show the practical consequence.
+
+A character stops touching it. Someone sends for a judge. A door is locked. A servant is questioned. A family member becomes frightened. A document is hidden. Someone changes plans.
+
+Understanding changes **people's behavior, options, beliefs, risks, and obligations**. It does not rewrite the physical properties of the world.
+
+### Restrain institutional aphorisms and authorial quips
+
+Do not repeatedly turn law, evidence, bureaucracy, rain, gardens, magic, or aristocratic procedure into neat narrator aphorisms.
+
+Example of the unwanted pattern:
+
+> "By morning, the dead rosemary had acquired three witnesses, two legal seals, one offended gardener, and a small canvas awning because rain, unlike the law, did not respect evidence."
+
+This is clever at the expense of the scene. Prefer concrete observation: rain on the awning, mud around the rosemary, the gardener's irritation, people stepping around disturbed soil.
+
+Dry wit remains welcome when it grows naturally from **character, social contradiction, or circumstance**. It should not become a compulsory narrator punch line.
+
+### Established principles should become behavior
+
+Once a character's professional or moral principle has been established, stop making them restate it every few paragraphs.
+
+Judge Vaun does not need to continually announce that suspicion is not proof. She can demonstrate evidentiary discipline by refusing an arrest, asking a narrower question, separating samples, or saying simply, "Not enough."
+
+Likewise, characters do not need to repeatedly state the exact limits of what they know. Preserve epistemic discipline in the underlying continuity records and let prose express it naturally.
+
+### Description carries description
+
+When characters can see an object, room, person, wound, garment, document, meal, or landscape, let narration provide useful sensory detail.
+
+Do not force dialogue to enumerate visible attributes for the reader.
+
+"Hand me my wine" is ordinarily enough. The crystal, color, provenance, birthday history, vineyard, giver, and emotional associations belong in narration **only if they matter to the moment**.
+
+### Trust the reader
+
+Momentary ambiguity is acceptable.
+
+Not every pronoun requires immediate disambiguation. Not every callback requires a recap. Not every institutional reference needs its full formal title. Not every clue needs an immediate explanation of why it matters.
+
+Readers can remember, infer, wonder, and discover.
+
+### Revision diagnostic
+
+During every prose revision, actively search for:
+
+- characters telling each other things both already know;
+- repeated legal/evidentiary qualifiers;
+- narrator aphorisms built around institutional terminology;
+- classification presented as physical transformation;
+- dialogue overloaded with names, dates, titles, provenance, or visual description;
+- the same conclusion stated multiple times;
+- transitions that announce that "everything is different now" instead of showing changed behavior;
+- characters speaking for an absent reader rather than to the person in front of them.
+
+When found, rewrite from the characters' lived perspective.
+
+The continuity catalog should remain exhaustive.
+
+**The prose should not sound like the continuity catalog.**
+
+---
+
 ## 4. Book One: fixed premise
 
 Book One begins with the final surviving members of an academy class preparing to graduate into the adult orders, houses, and political structures that have been waiting for them.
