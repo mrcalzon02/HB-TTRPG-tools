@@ -31,6 +31,21 @@
     .chapter-index-meta{margin:.2rem 0 0;opacity:.78;font-size:.9rem}
     .chapter-index-link{white-space:nowrap}
     .chapter-index-state{margin-top:1rem;opacity:.75;font-size:.9rem}
+    .chapter-index-entry.is-recovery{opacity:.82}
+    .chapter-index-entry.is-recovery .chapter-index-number::after{content:" · recovery";font-size:.72em;font-weight:600;opacity:.7}
+    .chapter-recovery-note{display:inline-flex;align-items:center;border:1px dashed currentColor;border-radius:999px;padding:.28rem .65rem;font-size:.82rem;opacity:.75}
+    .chapter-reader-shell{max-width:860px;margin:0 auto}
+    .chapter-reader-toolbar{display:flex;gap:.7rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin:0 0 1rem}
+    .chapter-reader-nav{display:flex;gap:.55rem;flex-wrap:wrap}
+    .chapter-reader-prose{border:1px solid rgba(127,127,127,.25);border-radius:16px;padding:clamp(1.1rem,3vw,2.5rem);background:rgba(127,127,127,.035);line-height:1.78;font-size:1.05rem}
+    .chapter-reader-prose h1{font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.12;margin:.2rem 0 1.4rem}
+    .chapter-reader-prose h2,.chapter-reader-prose h3{margin:1.7rem 0 .8rem}
+    .chapter-reader-prose p{margin:0 0 1.15rem}
+    .chapter-reader-prose hr{border:0;border-top:1px solid rgba(127,127,127,.28);margin:2rem auto;width:45%}
+    .chapter-reader-prose blockquote{margin:1.2rem 0;padding:.2rem 1rem;border-left:3px solid currentColor;opacity:.86}
+    .chapter-reader-meta{display:flex;gap:.45rem;flex-wrap:wrap;margin:.7rem 0 1.2rem}
+    .chapter-reader-meta span{border:1px solid rgba(127,127,127,.32);border-radius:999px;padding:.22rem .55rem;font-size:.82rem;opacity:.8}
+    .chapter-reader-error{border-left:4px solid currentColor;padding:1rem;margin:1rem 0}
     @media (max-width:700px){.chapter-index-entry{grid-template-columns:1fr}.chapter-index-link{justify-self:start}}
   </style>
 </head>
@@ -57,6 +72,7 @@
     <nav class="story-subtabs" aria-label="Beneath Dappled Oaks sections">
       <button class="story-subtab is-active" type="button" data-story-panel="story-bible" aria-controls="story-bible" aria-selected="true">Story Bible</button>
       <button class="story-subtab" type="button" data-story-panel="chapter-index" aria-controls="chapter-index" aria-selected="false">Chapter Index <span class="story-subtab-count" id="chapter-count-badge" aria-label="released chapters">1</span></button>
+      <button class="story-subtab" type="button" data-story-panel="chapter-reader" aria-controls="chapter-reader" aria-selected="false" hidden>Chapter Reader</button>
     </nav>
 
     <div id="story-bible" class="story-tab-panel" data-story-tab-panel>
@@ -370,10 +386,30 @@
             <h3 class="chapter-index-title">Seven Doors</h3>
             <p class="chapter-index-meta">CANON PROSE · 282 S.M. · Bloomtide</p>
           </div>
-          <a class="primary-action chapter-index-link" href="docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md">Read chapter</a>
+          <a class="primary-action chapter-index-link" data-chapter-number="3" href="?chapter=3#chapter-reader">Read in viewer</a>
         </article>
       </div>
       <p class="chapter-index-state" id="chapter-index-state">Loading the live chapter directory from <code>main</code>…</p>
+    </section>
+
+    <section id="chapter-reader" class="story-tab-panel" data-story-tab-panel hidden>
+      <div class="chapter-reader-shell">
+        <div class="chapter-reader-toolbar">
+          <button class="story-subtab" type="button" id="chapter-reader-back">← Chapter Index</button>
+          <div class="chapter-reader-nav">
+            <button class="story-subtab" type="button" id="chapter-reader-prev" disabled>← Previous</button>
+            <button class="story-subtab" type="button" id="chapter-reader-next" disabled>Next →</button>
+          </div>
+        </div>
+        <div class="hero-card">
+          <p class="eyebrow">Beneath Dappled Oaks · Canon prose</p>
+          <h2 id="chapter-reader-title">Chapter Reader</h2>
+          <div class="chapter-reader-meta" id="chapter-reader-meta"></div>
+        </div>
+        <article class="chapter-reader-prose" id="chapter-reader-prose" aria-live="polite">
+          <p>Select a released chapter from the Chapter Index.</p>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -381,6 +417,26 @@
   (() => {
     const panels = [...document.querySelectorAll('[data-story-tab-panel]')];
     const tabs = [...document.querySelectorAll('[data-story-panel]')];
+    const readerTab = document.querySelector('[data-story-panel="chapter-reader"]');
+    const chapterList = document.getElementById('chapter-index-list');
+    const chapterCount = document.getElementById('chapter-index-count');
+    const badge = document.getElementById('chapter-count-badge');
+    const state = document.getElementById('chapter-index-state');
+    const readerTitle = document.getElementById('chapter-reader-title');
+    const readerMeta = document.getElementById('chapter-reader-meta');
+    const readerProse = document.getElementById('chapter-reader-prose');
+    const readerPrev = document.getElementById('chapter-reader-prev');
+    const readerNext = document.getElementById('chapter-reader-next');
+    const readerBack = document.getElementById('chapter-reader-back');
+
+    const api = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
+    const chapterPattern = /^(\\d+)-(.+)\\.md$/i;
+    const smallWords = new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
+    const recoveryBacklog = [
+      {number:1,title:'The Last Seven',opening:'There should have been forty-three of them. Seven stood beneath the flowering arch.'},
+      {number:2,title:'The Cost of Silk',opening:'By dawn, the Academy had become beautiful enough to make murder seem ceremonial.'}
+    ];
+    let releasedChapters = [];
 
     function activatePanel(id, updateHash = true) {
       if (!panels.some(panel => panel.id === id)) id = 'story-bible';
@@ -390,19 +446,10 @@
         tab.classList.toggle('is-active', active);
         tab.setAttribute('aria-selected', active ? 'true' : 'false');
       });
-      if (updateHash) history.replaceState(null, '', id === 'story-bible' ? location.pathname + location.search : '#' + id);
+      if (updateHash && id !== 'chapter-reader') {
+        history.replaceState(null, '', id === 'story-bible' ? location.pathname : '#' + id);
+      }
     }
-
-    tabs.forEach(tab => tab.addEventListener('click', () => activatePanel(tab.dataset.storyPanel)));
-    activatePanel(location.hash === '#chapter-index' ? 'chapter-index' : 'story-bible', false);
-
-    const chapterList = document.getElementById('chapter-index-list');
-    const chapterCount = document.getElementById('chapter-index-count');
-    const badge = document.getElementById('chapter-count-badge');
-    const state = document.getElementById('chapter-index-state');
-    const api = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
-    const chapterPattern = /^(\d+)-(.+)\.md$/i;
-    const smallWords = new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
 
     function titleFromSlug(slug) {
       return slug.split('-').map((word, index) => {
@@ -412,8 +459,69 @@
       }).join(' ');
     }
 
-    function render(files) {
-      const chapters = files
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    function inlineMarkdown(text) {
+      let value = escapeHtml(text);
+      value = value.replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>');
+      value = value.replace(/(^|[^*])\\*([^*]+)\\*(?!\\*)/g, '$1<em>$2</em>');
+      value = value.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+      return value;
+    }
+
+    function parseFrontMatter(markdown) {
+      const result = {meta:{}, body:markdown};
+      if (!markdown.startsWith('---\\n')) return result;
+      const end = markdown.indexOf('\\n---\\n', 4);
+      if (end < 0) return result;
+      const raw = markdown.slice(4, end).split('\\n');
+      for (const line of raw) {
+        const split = line.indexOf(':');
+        if (split < 0) continue;
+        const key = line.slice(0, split).trim();
+        let value = line.slice(split + 1).trim();
+        value = value.replace(/^["']|["']$/g, '');
+        result.meta[key] = value;
+      }
+      result.body = markdown.slice(end + 5);
+      return result;
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.replace(/\\r\\n?/g, '\\n').split('\\n');
+      const out = [];
+      let paragraph = [];
+      const flush = () => {
+        if (!paragraph.length) return;
+        out.push('<p>' + inlineMarkdown(paragraph.join(' ')) + '</p>');
+        paragraph = [];
+      };
+      for (const raw of lines) {
+        const line = raw.trimEnd();
+        if (!line.trim()) { flush(); continue; }
+        if (/^---+$/.test(line.trim())) { flush(); out.push('<hr>'); continue; }
+        const heading = line.match(/^(#{1,6})\\s+(.+)$/);
+        if (heading) {
+          flush();
+          const level = Math.min(6, heading[1].length);
+          out.push('<h' + level + '>' + inlineMarkdown(heading[2]) + '</h' + level + '>');
+          continue;
+        }
+        if (line.startsWith('> ')) {
+          flush();
+          out.push('<blockquote><p>' + inlineMarkdown(line.slice(2)) + '</p></blockquote>');
+          continue;
+        }
+        paragraph.push(line.trim());
+      }
+      flush();
+      return out.join('\\n');
+    }
+
+    function renderIndex(files) {
+      releasedChapters = files
         .filter(file => file && file.type === 'file' && chapterPattern.test(file.name))
         .map(file => {
           const match = file.name.match(chapterPattern);
@@ -426,12 +534,14 @@
         })
         .sort((a, b) => a.number - b.number);
 
-      if (!chapters.length) throw new Error('No released chapter files found');
+      const byNumber = new Map(releasedChapters.map(chapter => [chapter.number, chapter]));
+      const rows = [...recoveryBacklog.map(item => byNumber.get(item.number) || {...item,recovery:true}), ...releasedChapters.filter(ch => ch.number > 2)]
+        .sort((a,b) => a.number - b.number);
 
       chapterList.replaceChildren();
-      for (const chapter of chapters) {
+      for (const chapter of rows) {
         const article = document.createElement('article');
-        article.className = 'chapter-index-entry';
+        article.className = 'chapter-index-entry' + (chapter.recovery ? ' is-recovery' : '');
 
         const number = document.createElement('div');
         number.className = 'chapter-index-number';
@@ -443,33 +553,124 @@
         heading.textContent = chapter.title;
         const meta = document.createElement('p');
         meta.className = 'chapter-index-meta';
-        meta.textContent = 'Released canon prose · ' + Math.max(1, Math.round(chapter.size / 1024)) + ' KB';
+        meta.textContent = chapter.recovery
+          ? 'Conversation-complete · repository recovery pending'
+          : 'Released canon prose · ' + Math.max(1, Math.round(chapter.size / 1024)) + ' KB';
         copy.append(heading, meta);
 
-        const link = document.createElement('a');
-        link.className = 'primary-action chapter-index-link';
-        link.href = chapter.href;
-        link.textContent = 'Read chapter';
+        if (chapter.recovery && chapter.opening) {
+          const recovery = document.createElement('p');
+          recovery.className = 'chapter-index-meta';
+          recovery.textContent = 'Recovered anchor: “' + chapter.opening + '”';
+          copy.append(recovery);
+        }
 
-        article.append(number, copy, link);
+        let action;
+        if (chapter.recovery) {
+          action = document.createElement('span');
+          action.className = 'chapter-recovery-note';
+          action.textContent = 'Recovery pending';
+        } else {
+          action = document.createElement('a');
+          action.className = 'primary-action chapter-index-link';
+          action.dataset.chapterNumber = String(chapter.number);
+          action.href = '?chapter=' + chapter.number + '#chapter-reader';
+          action.textContent = 'Read in viewer';
+        }
+
+        article.append(number, copy, action);
         chapterList.append(article);
       }
 
-      const label = chapters.length === 1 ? '1 chapter on main' : chapters.length + ' chapters on main';
-      chapterCount.textContent = label;
-      badge.textContent = String(chapters.length);
-      badge.setAttribute('aria-label', chapters.length + ' released chapters');
-      state.textContent = 'Live index synchronized from the canonical chapters directory on main. New numbered Markdown chapter files appear here automatically after publication.';
+      const count = releasedChapters.length;
+      chapterCount.textContent = count === 1 ? '1 released chapter on main' : count + ' released chapters on main';
+      badge.textContent = String(count);
+      badge.setAttribute('aria-label', count + ' released chapters');
+      state.textContent = 'Released files are synchronized from the canonical chapter directory on main. Chapters One and Two are explicitly tracked as conversation-complete recovery backlog until their original prose is restored to repository files.';
     }
+
+    async function openChapter(number, updateHistory = true) {
+      const chapter = releasedChapters.find(item => item.number === Number(number));
+      if (!chapter) return;
+      if (readerTab) readerTab.hidden = false;
+      activatePanel('chapter-reader', false);
+      readerTitle.textContent = 'Loading Chapter ' + chapter.number + '…';
+      readerMeta.replaceChildren();
+      readerProse.innerHTML = '<p>Loading canon prose…</p>';
+
+      try {
+        const response = await fetch(chapter.href, {cache:'no-store'});
+        if (!response.ok) throw new Error('Chapter request failed: ' + response.status);
+        const markdown = await response.text();
+        const parsed = parseFrontMatter(markdown);
+        const title = parsed.meta.title || chapter.title;
+        readerTitle.textContent = 'Chapter ' + chapter.number + ' — ' + title;
+
+        const metadata = [];
+        if (parsed.meta.status) metadata.push(parsed.meta.status);
+        if (parsed.meta.era) metadata.push(parsed.meta.era);
+        if (parsed.meta.season) metadata.push(parsed.meta.season);
+        readerMeta.replaceChildren(...metadata.map(value => {
+          const span = document.createElement('span');
+          span.textContent = value;
+          return span;
+        }));
+
+        readerProse.innerHTML = renderMarkdown(parsed.body);
+
+        const index = releasedChapters.findIndex(item => item.number === chapter.number);
+        const previous = releasedChapters[index - 1];
+        const next = releasedChapters[index + 1];
+        readerPrev.disabled = !previous;
+        readerNext.disabled = !next;
+        readerPrev.dataset.chapterNumber = previous ? String(previous.number) : '';
+        readerNext.dataset.chapterNumber = next ? String(next.number) : '';
+
+        if (updateHistory) {
+          const url = new URL(location.href);
+          url.searchParams.set('chapter', String(chapter.number));
+          url.hash = 'chapter-reader';
+          history.replaceState(null, '', url.pathname + url.search + url.hash);
+        }
+        document.getElementById('chapter-reader').scrollIntoView({block:'start'});
+      } catch (error) {
+        readerTitle.textContent = 'Chapter ' + chapter.number + ' — ' + chapter.title;
+        readerProse.innerHTML = '<div class="chapter-reader-error"><strong>Reader load failed.</strong> The canonical Markdown file remains in the repository, but this page could not render it in place.</div>';
+      }
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => activatePanel(tab.dataset.storyPanel)));
+    chapterList.addEventListener('click', event => {
+      const link = event.target.closest('[data-chapter-number]');
+      if (!link) return;
+      event.preventDefault();
+      openChapter(link.dataset.chapterNumber);
+    });
+    readerBack.addEventListener('click', () => activatePanel('chapter-index'));
+    readerPrev.addEventListener('click', () => readerPrev.dataset.chapterNumber && openChapter(readerPrev.dataset.chapterNumber));
+    readerNext.addEventListener('click', () => readerNext.dataset.chapterNumber && openChapter(readerNext.dataset.chapterNumber));
+
+    const requestedChapter = Number(new URLSearchParams(location.search).get('chapter'));
 
     fetch(api, {headers: {'Accept': 'application/vnd.github+json'}})
       .then(response => {
         if (!response.ok) throw new Error('GitHub directory request failed');
         return response.json();
       })
-      .then(render)
+      .then(files => {
+        renderIndex(files);
+        if (requestedChapter && releasedChapters.some(ch => ch.number === requestedChapter)) {
+          openChapter(requestedChapter, false);
+        } else {
+          activatePanel(location.hash === '#chapter-index' ? 'chapter-index' : 'story-bible', false);
+        }
+      })
       .catch(() => {
-        state.textContent = 'Live directory refresh is temporarily unavailable. Showing the last committed fallback index embedded in this page.';
+        releasedChapters = [{number:3,title:'Seven Doors',href:'docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md',size:34885}];
+        renderIndex(releasedChapters.map(ch => ({name:'03-SEVEN-DOORS.md',path:ch.href,size:ch.size,type:'file'})));
+        if (requestedChapter === 3) openChapter(3, false);
+        else activatePanel(location.hash === '#chapter-index' ? 'chapter-index' : 'story-bible', false);
+        state.textContent += ' Live GitHub directory refresh is temporarily unavailable; the embedded Chapter Three fallback is active.';
       });
   })();
   </script>
