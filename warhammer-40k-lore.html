@@ -11,6 +11,7 @@
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top,#202526 0,#0d1011 38rem,#080a0b 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.6}
 a{color:var(--link)}a:hover{text-decoration-thickness:2px}.shell{width:100%;max-width:none;min-height:100dvh;margin:0;padding:24px}.archive-header{border:1px solid var(--line);background:linear-gradient(180deg,rgba(34,39,40,.98),rgba(16,20,21,.98));padding:28px;box-shadow:0 12px 40px rgba(0,0,0,.38)}.kicker{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;font:700 12px/1.3 system-ui,sans-serif}h1,h2,h3{line-height:1.15}h1{margin:.35rem 0 .75rem;font-size:clamp(2rem,4vw,4rem);letter-spacing:.015em}.notice{border-left:4px solid var(--gold);padding:12px 16px;background:rgba(201,170,97,.08);font-size:1.05rem}.third-party{border-left-color:var(--red)}.controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;margin:22px 0}.controls input{width:100%;padding:13px 14px;border:1px solid var(--line);background:#0b0e0f;color:var(--ink);font:inherit}.controls button{padding:10px 16px;border:1px solid var(--gold);background:#171b1c;color:var(--ink);cursor:pointer}.layout{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:24px;align-items:start;width:100%}.toc{position:sticky;top:12px;height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;border:1px solid var(--line);background:rgba(14,18,19,.97);padding:18px}.toc h2{margin-top:0}.toc-group{padding-top:8px;border-top:1px solid rgba(201,170,97,.18)}.toc-group h3{font-size:.92rem;color:var(--gold)}.toc ol{padding-left:1.7rem}.toc li{margin:.35rem 0;color:var(--muted)}.stories{min-width:0;width:100%}.story{scroll-margin-top:16px;border:1px solid var(--line);background:var(--panel);margin:0 0 26px;padding:clamp(18px,3vw,34px);box-shadow:0 8px 26px rgba(0,0,0,.24)}.story-header{border-bottom:1px solid rgba(201,170,97,.25);margin-bottom:22px;padding-bottom:15px}.story-meta,.byline,.story-return{font-family:system-ui,sans-serif;color:var(--muted);font-size:.88rem}.story-header h2{margin:.35rem 0;font-size:clamp(1.55rem,3vw,2.45rem)}.story-text{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.72;color:var(--ink)}.story[hidden]{display:none}.legal{margin-top:30px;border:1px solid var(--line);background:var(--panel2);padding:24px}.legal summary{cursor:pointer;color:var(--gold);font-weight:700}.legal-body{max-width:1000px}.archive-footer{padding:24px 0;color:var(--muted);font-family:system-ui,sans-serif;font-size:.9rem}
 .archive-nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}.archive-nav a{display:inline-block;padding:8px 11px;border:1px solid var(--line);background:#0b0e0f;color:var(--ink);text-decoration:none;font:700 .82rem/1.2 system-ui,sans-serif}.archive-nav a:hover,.archive-nav a[aria-current="page"]{border-color:var(--gold);color:var(--link)}.indexed-markdown{max-width:1100px}.indexed-markdown blockquote{margin:1rem 0;padding:.7rem 1rem;border-left:3px solid var(--gold);background:rgba(201,170,97,.06)}
+.story-download{position:relative;display:inline-block;margin-top:10px;font-family:system-ui,sans-serif}.story-download summary{list-style:none;display:inline-flex;align-items:center;gap:.45rem;padding:8px 12px;border:1px solid var(--gold);background:#111617;color:var(--ink);cursor:pointer;font-weight:700;font-size:.84rem;user-select:none}.story-download summary::-webkit-details-marker{display:none}.story-download summary::after{content:"▾";color:var(--gold)}.story-download[open] summary::after{content:"▴"}.story-download-menu{position:absolute;z-index:30;left:0;top:calc(100% + 6px);min-width:220px;padding:7px;border:1px solid var(--line);background:#0b0e0f;box-shadow:0 12px 30px rgba(0,0,0,.45)}.story-download-menu button{display:block;width:100%;padding:9px 10px;border:0;border-bottom:1px solid rgba(201,170,97,.12);background:transparent;color:var(--ink);text-align:left;font:600 .82rem/1.25 system-ui,sans-serif;cursor:pointer}.story-download-menu button:last-child{border-bottom:0}.story-download-menu button:hover,.story-download-menu button:focus-visible{background:rgba(201,170,97,.12);color:var(--link);outline:none}.story-download-note{margin:.55rem 0 0;color:var(--muted);font:400 .72rem/1.35 system-ui,sans-serif;max-width:34rem}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:relative;top:auto;height:min(46dvh,32rem);max-height:min(46dvh,32rem);overflow-y:auto}.controls{grid-template-columns:1fr}}
 @media print{body{background:white;color:black}.toc,.controls,.story-return,.archive-footer{display:none}.story{break-before:page;border:0;box-shadow:none;background:white}a{color:black}}
 </style>
@@ -23370,6 +23371,8 @@ By accessing this Platform, the user acknowledges that the Platform’s primary 
         article.id = id;
         article.dataset.storyTitle = entry.identity.title;
         article.dataset.storySection = 'VII. Recovered & Continuing Chronicles';
+        article.dataset.sourcePath = entry.path;
+        article.__sourceMarkdown = entry.markdown;
 
         const header = document.createElement('header');
         header.className = 'story-header';
@@ -23420,6 +23423,295 @@ By accessing this Platform, the user acknowledges that the Platform’s primary 
   input.addEventListener('input', applySearch);
   clear.addEventListener('click', () => { input.value = ''; applySearch(); input.focus(); });
   void loadIndexedChronicles();
+})();
+</script>
+<script>
+(() => {
+  'use strict';
+
+  const encoder = new TextEncoder();
+
+  function safeName(value) {
+    return String(value || 'story')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase() || 'story';
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  function bodyText(article) {
+    const body = article.querySelector('.story-text');
+    return (body?.innerText || body?.textContent || '').replace(/\r\n/g, '\n').trim();
+  }
+
+  function bylineText(article) {
+    return (article.querySelector('.byline')?.innerText || article.querySelector('.byline')?.textContent || '').trim();
+  }
+
+  function sourceLink(article) {
+    const link = article.querySelector('.byline a[href]');
+    return link?.href || '';
+  }
+
+  function articleTitle(article) {
+    return (article.dataset.storyTitle || article.querySelector('.story-header h2')?.textContent || 'Story').trim();
+  }
+
+  function markdownFor(article) {
+    if (article.__sourceMarkdown) return String(article.__sourceMarkdown).trim() + '\n';
+    const title = articleTitle(article);
+    const byline = bylineText(article);
+    const link = sourceLink(article);
+    const parts = ['# ' + title];
+    if (byline) parts.push(byline.replace(/\s+/g, ' '));
+    if (link) parts.push('[Source](' + link + ')');
+    parts.push(bodyText(article));
+    return parts.filter(Boolean).join('\n\n') + '\n';
+  }
+
+  function textFor(article) {
+    const title = articleTitle(article);
+    const byline = bylineText(article);
+    return [title, byline, bodyText(article)].filter(Boolean).join('\n\n') + '\n';
+  }
+
+  function htmlEscape(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
+  function standaloneHtml(article) {
+    const title = articleTitle(article);
+    const byline = bylineText(article);
+    const paragraphs = bodyText(article).split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' +
+      htmlEscape(title) +
+      '</title><style>body{max-width:52rem;margin:3rem auto;padding:0 1.2rem;font:18px/1.65 Georgia,serif;color:#191919;background:#fff}h1{line-height:1.15}.byline{color:#555;font:14px/1.4 system-ui,sans-serif;border-bottom:1px solid #bbb;padding-bottom:1rem;margin-bottom:2rem}p{white-space:pre-wrap}</style></head><body><h1>' +
+      htmlEscape(title) + '</h1><p class="byline">' + htmlEscape(byline) + '</p>' +
+      paragraphs.map(p => '<p>' + htmlEscape(p).replace(/\n/g,'<br>') + '</p>').join('') +
+      '</body></html>';
+  }
+
+  function normalizePdfText(value) {
+    return String(value)
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, '-')
+      .replace(/\u2026/g, '...')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\x20-\x7E\n]/g, '?');
+  }
+
+  function wrapPdfLines(text, width = 88) {
+    const out = [];
+    for (const raw of normalizePdfText(text).split('\n')) {
+      const line = raw.trimEnd();
+      if (!line) { out.push(''); continue; }
+      const words = line.split(/\s+/);
+      let current = '';
+      for (const word of words) {
+        if (!current) current = word;
+        else if ((current + ' ' + word).length <= width) current += ' ' + word;
+        else { out.push(current); current = word; }
+      }
+      if (current) out.push(current);
+    }
+    return out;
+  }
+
+  function pdfEscape(value) {
+    return value.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
+  }
+
+  function pdfBlob(article) {
+    const lines = wrapPdfLines(textFor(article), 88);
+    const perPage = 50;
+    const pages = [];
+    for (let i = 0; i < lines.length; i += perPage) pages.push(lines.slice(i, i + perPage));
+    if (!pages.length) pages.push(['']);
+
+    const objects = [];
+    objects[1] = '<< /Type /Catalog /Pages 2 0 R >>';
+    objects[3] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';
+    const kids = [];
+
+    pages.forEach((pageLines, i) => {
+      const contentId = 4 + i * 2;
+      const pageId = 5 + i * 2;
+      kids.push(pageId + ' 0 R');
+      const commands = ['BT', '/F1 10 Tf', '48 744 Td', '13 TL'];
+      for (const line of pageLines) commands.push('(' + pdfEscape(line) + ') Tj', 'T*');
+      commands.push('ET');
+      const stream = commands.join('\n');
+      objects[contentId] = '<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream';
+      objects[pageId] = '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents ' + contentId + ' 0 R >>';
+    });
+    objects[2] = '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + pages.length + ' >>';
+
+    let pdf = '%PDF-1.4\n% HB-TTRPG-tools story export\n';
+    const offsets = [0];
+    for (let i = 1; i < objects.length; i++) {
+      offsets[i] = pdf.length;
+      pdf += i + ' 0 obj\n' + objects[i] + '\nendobj\n';
+    }
+    const xref = pdf.length;
+    pdf += 'xref\n0 ' + objects.length + '\n';
+    pdf += '0000000000 65535 f \n';
+    for (let i = 1; i < objects.length; i++) pdf += String(offsets[i]).padStart(10, '0') + ' 00000 n \n';
+    pdf += 'trailer\n<< /Size ' + objects.length + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n';
+    return new Blob([pdf], {type:'application/pdf'});
+  }
+
+  const crcTable = (() => {
+    const table = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      table[n] = c >>> 0;
+    }
+    return table;
+  })();
+
+  function crc32(bytes) {
+    let c = 0xFFFFFFFF;
+    for (const b of bytes) c = crcTable[(c ^ b) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function le16(n) { return Uint8Array.of(n & 255, (n >>> 8) & 255); }
+  function le32(n) { return Uint8Array.of(n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255); }
+  function catBytes(parts) {
+    const size = parts.reduce((n,p) => n + p.length, 0);
+    const out = new Uint8Array(size);
+    let off = 0;
+    for (const p of parts) { out.set(p, off); off += p.length; }
+    return out;
+  }
+
+  function zipStore(entries) {
+    const locals = [];
+    const centrals = [];
+    let offset = 0;
+
+    for (const entry of entries) {
+      const name = encoder.encode(entry.name);
+      const data = entry.data instanceof Uint8Array ? entry.data : encoder.encode(entry.data);
+      const crc = crc32(data);
+      const local = catBytes([
+        le32(0x04034b50), le16(20), le16(0), le16(0), le16(0), le16(0),
+        le32(crc), le32(data.length), le32(data.length), le16(name.length), le16(0), name, data
+      ]);
+      locals.push(local);
+
+      const central = catBytes([
+        le32(0x02014b50), le16(20), le16(20), le16(0), le16(0), le16(0), le16(0),
+        le32(crc), le32(data.length), le32(data.length), le16(name.length), le16(0), le16(0),
+        le16(0), le16(0), le32(0), le32(offset), name
+      ]);
+      centrals.push(central);
+      offset += local.length;
+    }
+
+    const centralBlob = catBytes(centrals);
+    const end = catBytes([
+      le32(0x06054b50), le16(0), le16(0), le16(entries.length), le16(entries.length),
+      le32(centralBlob.length), le32(offset), le16(0)
+    ]);
+    return catBytes([...locals, centralBlob, end]);
+  }
+
+  function epubBlob(article) {
+    const title = articleTitle(article);
+    const creator = 'Mrcalzon02 / Christopher Vardeman';
+    const id = 'urn:hb-ttrpg-tools:' + safeName(title);
+    const paragraphs = bodyText(article).split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    const chapter = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta charset="utf-8"/><title>' +
+      htmlEscape(title) + '</title><style>body{font-family:serif;line-height:1.5}p{margin:0 0 1em}</style></head><body><h1>' +
+      htmlEscape(title) + '</h1><p><em>' + htmlEscape(bylineText(article)) + '</em></p>' +
+      paragraphs.map(p => '<p>' + htmlEscape(p).replace(/\n/g,'<br/>') + '</p>').join('') +
+      '</body></html>';
+    const toc = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en"><head><title>Contents</title></head><body><nav epub:type="toc"><h1>Contents</h1><ol><li><a href="chapter.xhtml">' + htmlEscape(title) + '</a></li></ol></nav></body></html>';
+    const opf = '<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="bookid" version="3.0"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">' +
+      htmlEscape(id) + '</dc:identifier><dc:title>' + htmlEscape(title) + '</dc:title><dc:creator>' + htmlEscape(creator) +
+      '</dc:creator><dc:language>en</dc:language></metadata><manifest><item id="nav" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/></manifest><spine><itemref idref="chapter"/></spine></package>';
+    const container = '<?xml version="1.0" encoding="UTF-8"?>\n<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>';
+    const bytes = zipStore([
+      {name:'mimetype', data:encoder.encode('application/epub+zip')},
+      {name:'META-INF/container.xml', data:encoder.encode(container)},
+      {name:'OEBPS/content.opf', data:encoder.encode(opf)},
+      {name:'OEBPS/toc.xhtml', data:encoder.encode(toc)},
+      {name:'OEBPS/chapter.xhtml', data:encoder.encode(chapter)}
+    ]);
+    return new Blob([bytes], {type:'application/epub+zip'});
+  }
+
+  function addButton(menu, label, action) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      action();
+      menu.closest('details')?.removeAttribute('open');
+    });
+    menu.append(button);
+  }
+
+  function install(article) {
+    if (!(article instanceof HTMLElement) || article.dataset.downloadReady === 'true') return;
+    const header = article.querySelector('.story-header');
+    if (!header) return;
+    article.dataset.downloadReady = 'true';
+
+    const details = document.createElement('details');
+    details.className = 'story-download';
+    const summary = document.createElement('summary');
+    summary.textContent = 'Download chapter';
+    summary.setAttribute('aria-label', 'Download ' + articleTitle(article));
+    const menu = document.createElement('div');
+    menu.className = 'story-download-menu';
+
+    const stem = () => safeName(articleTitle(article));
+    addButton(menu, 'Raw Markdown (.md)', () => downloadBlob(new Blob([markdownFor(article)], {type:'text/markdown;charset=utf-8'}), stem() + '.md'));
+    addButton(menu, 'Plain text (.txt)', () => downloadBlob(new Blob([textFor(article)], {type:'text/plain;charset=utf-8'}), stem() + '.txt'));
+    addButton(menu, 'PDF (.pdf)', () => downloadBlob(pdfBlob(article), stem() + '.pdf'));
+    addButton(menu, 'EPUB e-reader (.epub)', () => downloadBlob(epubBlob(article), stem() + '.epub'));
+    addButton(menu, 'Standalone HTML (.html)', () => downloadBlob(new Blob([standaloneHtml(article)], {type:'text/html;charset=utf-8'}), stem() + '.html'));
+
+    details.append(summary, menu);
+    header.append(details);
+
+    const note = document.createElement('p');
+    note.className = 'story-download-note';
+    note.textContent = 'Downloads are generated from this completed reader section.';
+    header.append(note);
+  }
+
+  document.querySelectorAll('.story').forEach(install);
+
+  const observer = new MutationObserver(records => {
+    for (const record of records) {
+      for (const node of record.addedNodes) {
+        if (!(node instanceof HTMLElement)) continue;
+        if (node.matches?.('.story')) install(node);
+        node.querySelectorAll?.('.story').forEach(install);
+      }
+    }
+  });
+  observer.observe(document.getElementById('stories'), {childList:true, subtree:true});
 })();
 </script>
 </body>
