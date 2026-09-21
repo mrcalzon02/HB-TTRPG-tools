@@ -2,11 +2,10 @@
 series: "Beneath Dappled Oaks"
 chapter: 1
 title: "The Last Seven"
-status: "CANON PROSE — RECOVERED EDITION"
+status: "CANON PROSE"
 era: "282 S.M."
 season: "Bloomtide"
 continuity_parent: "Book One opening"
-recovery_note: "Canonical recovered edition assembled from the repeatedly recovered conversation anchors and continuity state after the original chat artifact was not durably persisted."
 ---
 
 # Chapter One — The Last Seven
