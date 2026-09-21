@@ -356,7 +356,89 @@ Every principal or recurring noble should eventually receive a proper genealogic
 
 Not every node needs to be introduced in prose immediately. The purpose is to make every major character stand inside a dense web of people who can plausibly become romance targets, allies, rivals, agents, witnesses, conspirators, victims, or betrayers.
 
-## Story-use test
+#
+# POV Attraction, Desire, and Relationship Continuity
+
+Recurring viewpoint characters should develop a recognizable **attraction grammar**.
+
+The reader should gradually learn what catches a character's attention without needing the story to announce a checklist every time. One character may repeatedly notice dark hair, another broad shoulders, another a huge height difference, another a full figure, another a narrow bookish frame, another scarred hands, another immaculate gloves, another the turn of a wrist while pouring wine, another a particular cadence of speech, another the quiet competence of somebody who never raises their voice.
+
+By the end of repeated chapters from a character's internal point of view, the reader should have a strong intuitive sense of:
+
+- the physical features they notice first;
+- body types that reliably attract them;
+- voices, accents, speech patterns, or verbal habits they find compelling;
+- gestures, posture, clothing, scents, professions, uniforms, scars, or habits that draw their eye;
+- whether they are attracted to confidence, vulnerability, authority, gentleness, danger, intellect, humor, competence, obedience, defiance, or some contradiction among them;
+- whether they favor the strong silent soldier, the physically imposing and commanding lover, the slight and ethereal scholar, the soft-spoken bookish intellectual, the elegant courtier, the hardened veteran, the reckless adventurer, or some entirely different type;
+- which traits make them feel safe;
+- which traits make them feel challenged;
+- which traits make them make bad decisions;
+- what kind of affection they crave but would be embarrassed to admit;
+- what kind of person they repeatedly tell themselves they are not attracted to immediately before proving otherwise.
+
+These preferences are continuity, not immutable game statistics. Characters may discover new attractions, grow out of adolescent assumptions, become more or less comfortable with dominance or vulnerability, develop an unexpected weakness because of one particular person, or learn that the trait they thought they wanted is not the emotional need beneath it.
+
+However, they should not reset between chapters.
+
+If Caelen has spent three chapters being visibly susceptible to a particular kind of confidence, the fourth chapter should remember it. If Damaris notices hands before faces, that becomes part of her narrative eye. If Mireth is repeatedly drawn to a particular cadence of speech, that should recur. If Rhyl has an embarrassing inability to look away from a certain physical type, his internal monologue should eventually make that obvious even if he would rather die than say it aloud.
+
+## Desire profile fields for recurring POV characters
+
+As a recurring character receives enough prose to establish the answers, record:
+
+1. **Attraction range** — genders or kinds of people they have demonstrated attraction toward. Do not infer a permanent identity label from one scene unless the character or canon establishes it.
+2. **Visual type** — build, height, hair, eyes, age presentation among adults, dress, scars, hands, posture, or other recurring physical attractions.
+3. **Behavioral type** — confidence, tenderness, command, reserve, wit, danger, scholarship, athleticism, court polish, roughness, competence, etc.
+4. **Sensory hooks** — voice, scent, fabric, jewelry, armor, handwriting, music, touch, or small gestures.
+5. **Power-dynamic preference** — whether the character tends to enjoy leading, being led, being challenged, being cared for, caring for someone, playful rivalry, protective dynamics, or shifting control.
+6. **Emotional need beneath the attraction** — safety, admiration, challenge, validation, trust, surrender of responsibility, being needed, being understood, being surprised, and so forth.
+7. **Known weakness** — the type of person or behavior most likely to damage the character's judgment.
+8. **Known aversion** — traits that reliably kill attraction, even when politically inconvenient.
+9. **Exceptions** — people who violate the character's normal type and therefore matter.
+10. **Growth record** — how experience changes the character's understanding of their own desires.
+
+Do not front-load these as encyclopedia trivia. Reveal them through repeated observation, inner monologue, jealousy, attraction, embarrassment, comparison, remembered lovers, clothing choices, jokes, and the kinds of people a character cannot stop watching.
+
+## Sexuality and courtly norms
+
+Adult attraction in Elaranth is not restricted to one sex.
+
+Same-sex relationships are socially recognized and are not inherently treated as shameful or disqualifying. They are less common than opposite-sex pairings in the wider population, but the court's serious political concern is normally **dynasty, alliance, succession, legitimacy, and obligation**, not the gender composition of the relationship itself.
+
+A same-sex affair may therefore be scandalous because it crosses houses, violates a betrothal, compromises an ambassador, exposes a secret, creates divided loyalty, or threatens succession planning—but not simply because it is same-sex.
+
+Likewise, bisexuality or attraction that does not fit a neat social label should be unremarkable enough that characters may care far more about *which person* someone wants than about which sex they are.
+
+## Heirs, bloodlines, and same-sex dynastic couples
+
+Great Houses often prefer succession arrangements capable of producing or preserving a recognized bloodline heir. This creates practical complications for same-sex dynastic couples without making the relationship itself politically invalid.
+
+Recognized solutions may include:
+
+- a negotiated **heir compact** with a consenting third party whose reproductive role, status, inheritance rights, confidentiality, and obligations are contractually defined;
+- use of a trusted cadet branch to continue the bloodline while the principal couple remains politically and romantically primary;
+- designation and adoption of a niece, nephew, cousin, or other blood relative as recognized heir;
+- a prior child or acknowledged child from an earlier relationship;
+- a carefully negotiated reproductive marriage or limited dynastic union that exists alongside the principal romantic partnership;
+- future magical or medical solutions only where separately established by canon rather than assumed for convenience.
+
+The politically interesting question is not whether a same-sex couple is "allowed." It is **who provides the heir, what that person or family receives, what promises were made, who knows the private terms, and what happens when genuine affection develops where the contract expected none.**
+
+An heir arrangement may introduce another lover, another family, another set of grandparents, another creditor, another claimant, another secret, and another person whose safety becomes politically important.
+
+## Romance continuity rule
+
+Attraction should be allowed to become inconveniently specific.
+
+Characters may have weaknesses for brunettes, redheads, silver eyes, broad backs, enormous height, diminutive stature, voluptuous figures, wiry frames, soft hands, callused hands, deep voices, lilting voices, military posture, scholarly distraction, commanding women, gentle men, dangerous charmers, incorruptible idealists, wounded veterans, or any other adult type the prose establishes.
+
+The purpose is not to reduce people to anatomy. The purpose is for each internal voice to become **selective**.
+
+A character should eventually notice the world in a way that tells the reader what they desire before they consciously admit it.
+
+
+# Story-use test
 
 When introducing any new character, ask:
 
