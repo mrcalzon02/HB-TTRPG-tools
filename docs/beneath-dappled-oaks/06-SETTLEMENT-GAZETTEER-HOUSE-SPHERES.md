@@ -3,7 +3,7 @@ series: "Beneath Dappled Oaks"
 document_role: "SETTLEMENT GAZETTEER / HOUSE SPHERES / URBAN ECONOMY"
 status: "ACTIVE CANON"
 current_year: "282 S.M."
-last_reconciled: "2026-09-20"
+last_reconciled: "2026-09-21"
 ---
 
 # Beneath Dappled Oaks — Settlement Gazetteer and House Spheres
@@ -675,12 +675,12 @@ This mutual dislike is the town's best defense.
 Population: approximately **3,300** outside the resident student body.
 
 Controller:
-The Academy charter.
+The charter of the **Concord Academy of Aurelith**.
 
 Primary value:
 education, laboratories, books, student services, specialist crafts.
 
-The Academy's autonomy is politically important after Silver Night.
+The Concord Academy is commonly shortened to **the Academy** throughout Aurelith. Its autonomy from any single Great House is politically important after Silver Night. The Academy of the Nine Lamps is a separate institution and must not be conflated with it.
 
 ---
 
