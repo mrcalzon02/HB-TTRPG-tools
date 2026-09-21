@@ -16,7 +16,9 @@
     "requireStoryIndexDiscoverability": true,
     "requireCharacterContinuityRead": true,
     "requireCharacterContinuityUpdate": true,
-    "requireCharacterTouchLog": true
+    "requireCharacterTouchLog": true,
+    "maxChaptersPerBook": 40,
+    "chapterCapRule": "Hard cap of 40 chapters per book. A continuing story that reaches Chapter XL must close that book at or before Chapter XL; further narrative continues as a subsequent book rather than Chapter XLI."
   },
   "active": [
     {
@@ -31,7 +33,7 @@
       "recoveredThrough": "X. THE FORWARD HOLDS — complete through Broussard organizing the search for Jerrik Noll, Edren Vale and Pallas Dorn and ending: “Let’s go find them.”",
       "sourceObservedThrough": "X. THE FORWARD HOLDS — complete; the connected Google working draft contains no later chapter.",
       "currentEndpoint": "XI. THE THIRD MAN — Broussard’s search team follows the smell of charred flesh and ozone into the forward hold service corridor and finds Jerrik Noll, Edren Vale and Pallas Dorn dead at an intermittently energized deck junction. Evidence shows Jerrik was electrocuted first, Edren died trying to help him, and Pallas became the third casualty when he tried to help Edren. Sella Varn identifies and helps isolate the emergency cross-feed; the bodies are recovered. Broussard accepts this as a genuine industrial accident while explicitly keeping the separate missing-telemetry mystery unresolved.",
-      "nextSlice": "When Broussard next becomes rotation-eligible, continue after the bodies are recovered. The immediate missing-person problem is solved. Preserve that the electrocution was a real accident, not a disguised Genestealer attack. The next dependency-valid investigation can return to repair progress and the unresolved historical telemetry inconsistencies, but do not reveal the full falsified-origin/Genestealer truth before the narrative earns it.",
+      "nextSlice": "When Broussard next becomes rotation-eligible, continue after the bodies are recovered. The immediate missing-person problem is solved. Preserve that the electrocution was a real accident, not a disguised Genestealer attack. The next dependency-valid investigation can return to repair progress and the unresolved historical telemetry inconsistencies, but do not reveal the full falsified-origin/Genestealer truth before the narrative earns it. The book may contain no more than 40 chapters; if the narrative reaches Chapter XL, close the current book and continue any remaining arc in a subsequent book.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -43,7 +45,8 @@
         "Jerrik Noll, Edren Vale and Pallas Dorn died by accidental electrocution at an intermittent damaged service-junction cross-feed.",
         "Jerrik was the first casualty; Edren and Pallas died in sequence while trying to help the man ahead of them.",
         "The electrocution is a genuine mundane accident inside the larger mystery and must not be retroactively rewritten as a Genestealer kill.",
-        "Broussard still remembers the unexplained telemetry discrepancy after the bodies are recovered."
+        "Broussard still remembers the unexplained telemetry discrepancy after the bodies are recovered.",
+        "Hard cap: no book may exceed 40 chapters; Chapter XL is the latest permissible chapter number within a book."
       ],
       "eraLock": {
         "era": "Mature Imperium / late-era Astra Militarum setting; exact millennium not yet explicitly fixed in recovered prose",
