@@ -475,6 +475,17 @@ Symbols: a red handprint over a broken spear.
 
 # VIII. The Little Court — Regional and Minor Deities
 
+The authoritative expanded corpus for minor regional practice is:
+
+**docs/beneath-dappled-oaks/05-LITTLE-COURT-REGIONAL-CUSTOMS-FOLK-PRACTICES.md**
+
+This larger body of practice is called the **Little Year**: thousands of local rites, roadside shrines, household protections, village festivals, lovers' places, work customs, minor saints and spirits, food traditions, and inherited superstitions layered beneath the Great Year.
+
+The Little Court is therefore not a closed list. The named examples below are representative anchors inside a much larger religious and cultural landscape.
+
+**Established regional anchors include Cedra Delby's Finger of Dough harvest threshold custom and Kallioused Lake's long-standing reputation as a full-moon lovers' retreat.**
+
+
 Alongside the High Gods exists an enormous body of local divinities, saints, river spirits, household patrons, deified ancestors, old forest beings, mine guardians, and civic cults collectively called **the Little Court**.
 
 The Sunder Compact generally tolerates local worship provided the cult does not demand criminal practice, human sacrifice, sedition, or allegiance to one of the recognized Dark Gods.
@@ -1791,6 +1802,7 @@ Before writing a chapter, determine:
 8. current political season;
 9. upcoming festival or deadline;
 10. whether a character's plan is constrained by travel, harvest, council session, mine production, seed, inheritance, marriage timing, or winter.
+11. what local Little Year custom, roadside shrine, household practice, minor festival, regional dish, saint, spirit, taboo, or lovers' place would naturally exist in the scene's community.
 
 A chapter set in Deepdelve should not behave like Longnight.
 
