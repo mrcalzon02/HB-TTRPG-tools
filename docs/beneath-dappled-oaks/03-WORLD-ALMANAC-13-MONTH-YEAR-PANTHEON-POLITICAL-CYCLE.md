@@ -1905,6 +1905,10 @@ Ecological disturbance may affect:
 
 The setting should treat ecological knowledge as practical expertise rather than decorative wilderness lore.
 
+Environmental sabotage is also a recognized political threat. Slow contamination of shared livestock water, repeated damage to forage, manipulation of animal movement, or deliberate creation of conditions that increase dangerous beast activity can weaken a House, bankrupt ranchers, disrupt trade, force military deployments, and undermine confidence in local government.
+
+Such incidents may be detected long after the original act. The Realm therefore accepts that ecological investigators may stop ongoing harm and identify the political pattern without ever proving exactly who began it.
+
 ---
 
 # XV. Story Use Rules
