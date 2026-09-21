@@ -1829,6 +1829,26 @@ truth concealed, truth revealed, disciplined observation.
 
 ---
 
+# XIV-A. Culinary Atlas and Romantic Table
+
+The authoritative culinary corpus is:
+
+**docs/beneath-dappled-oaks/07-CULINARY-ATLAS-ROMANCE-GIFTS-COURTSHIP-FOOD-CULTURE.md**
+
+The Realm possesses a developed culinary civilization of breads, cheeses, meats, fish, fruits, vegetables, tea, blackseed coffee, sable chocolate, candies, pastries, cakes, custards, ice creams, sorbets, parfaits, cordials, wine, preserves, regional delicacies, and magical presentation techniques.
+
+Food also carries a mature romantic and political grammar. A favorite pastry, regional fruit, family recipe, chocolate box, preserved jar, private supper, or remembered coffee preference may communicate courtship, reconciliation, desire, apology, domestic intention, or political knowledge.
+
+Legal culinary magic affects preservation, temperature, texture, appearance, scent, and presentation.
+
+Illicit culinary magic is equally important to setting conflict. Love philters, truth preparations, sleep draughts, memory fogs, reproductive preparations, curse-laced foods, poison, contamination, swapped trays, and deliberately enchanted gifts are recurring risks in noble and political households.
+
+A common illicit keyed love philter may last approximately seventy-two hours. The magical effect ending does not erase agreements, scandals, secrets, insults, declarations, or political damage caused while it was active.
+
+Major kitchens therefore treat ingredient custody, magical concentrates, tray assignment, tasting, corridor handoff, and final service as potential security concerns.
+
+---
+
 # XV. Story Use Rules
 
 The annual calendar should influence prose.
