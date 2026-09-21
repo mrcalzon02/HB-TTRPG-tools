@@ -583,6 +583,18 @@ Durable Chapter Three handoffs include:
 The immediate dependency-valid next chapter is **Chapter Four: Necessary Truth**, governed by the rolled-forward five-chapter lookahead.
 
 
+### Public chapter-index invariant
+
+The reader-facing site **must maintain a separate Chapter Index sub-tab** on `beneath-dappled-oaks.html`.
+
+Publication rules:
+- A chapter is considered publicly released only when its canonical prose exists as a numbered Markdown file under `docs/beneath-dappled-oaks/chapters/` on `main`.
+- The public Chapter Index must enumerate those numbered chapter files in numeric order and link directly to the released prose.
+- Continuity anchors, outlines, summaries, and lookahead entries are not substitutes for chapter files and must not be presented as completed chapters.
+- Every chapter-release cycle must verify that the new numbered chapter file appears in the public Chapter Index after commit.
+- The page performs live directory discovery from the public GitHub `main` chapter directory, so newly released numbered chapter files become visible without a separate hand-maintained list. The embedded fallback entry should still be kept current whenever the site page itself is revised.
+- Do **not** add GitHub Actions merely to maintain this index; chapter publication itself is the update event.
+
 ## 12A. Five-chapter forward planning control
 
 For forward continuity, read and maintain:
