@@ -130,7 +130,7 @@ For this archive, **even where a later Warhammer technology may have ancient roo
 
 ### B. Age of Technology — approximately M15 to M25
 
-Humanity has reached extraordinary scientific and interstellar capability. Warp-capable human interstellar civilisation develops during this broad era. The later Imperium does not yet exist. cite placeholder: Warhammer 40K Wiki, Age of Technology
+Humanity has reached extraordinary scientific and interstellar capability. Warp-capable human interstellar civilisation develops during this broad era. The later Imperium does not yet exist.
 
 Era-appropriate concepts may include advanced automation, artificial intelligence, sophisticated robotics, genetic engineering, interstellar colonisation, Standard Template Construct technology where source-appropriate, and technology far beyond later Imperial replication.
 
@@ -176,7 +176,7 @@ Appropriate terms include:
 - Primarchs only when source continuity actually requires them;
 - Compliance as a major political/military term.
 
-The Emperor created the Space Marine Legions for the Great Crusade, and the Mechanicum supported Imperial expansion after alliance with Terra. cite placeholder: Warhammer 40K Wiki, Great Crusade
+The Emperor created the Space Marine Legions for the Great Crusade, and the Mechanicum supported Imperial expansion after alliance with Terra.
 
 **Do not describe future Traitor Legions as "Traitor Legions" before their betrayal is known.** Before the Heresy, they are Imperial Legions with their contemporary names and reputations.
 
@@ -194,13 +194,13 @@ Era awareness must remain local:
 - Dark Mechanicum terminology belongs to the actual fracture of the Mechanicum, not centuries earlier;
 - Imperial institutions are in violent transition.
 
-The Horus Heresy ends the Great Crusade, wounds the Emperor, and drives the Traitor Legions into the Eye of Terror. cite placeholder: Warhammer 40K Wiki, Horus Heresy
+The Horus Heresy ends the Great Crusade, wounds the Emperor, and drives the Traitor Legions into the Eye of Terror.
 
 ### G. Scouring / early post-Heresy Imperium — M31 onward
 
 Do not assume every mature M41 institution appears fully formed the day Horus dies.
 
-The Second Founding and post-Heresy reorganisation create the Chapter system that later defines the Adeptus Astartes. Before that reorganisation, the Legions are the correct frame. cite placeholder: Warhammer 40K Wiki, Founding / Chapter
+The Second Founding and post-Heresy reorganisation create the Chapter system that later defines the Adeptus Astartes. Before that reorganisation, the Legions are the correct frame.
 
 Military, religious, inquisitorial, and bureaucratic structures should be checked against the specific date before being used.
 
@@ -268,7 +268,7 @@ The automation must separate:
 - what the Imperium officially teaches;
 - what has been censored, mythologised, or forgotten.
 
-Example: by M41, the Horus Heresy is ancient and often distorted or mythologised for ordinary citizens. Detailed historical knowledge should belong to characters or institutions with a reason to possess it, not every dockworker or Guardsman. cite placeholder: Warhammer 40K Wiki, Horus Heresy
+Example: by M41, the Horus Heresy is ancient and often distorted or mythologised for ordinary citizens. Detailed historical knowledge should belong to characters or institutions with a reason to possess it, not every dockworker or Guardsman.
 
 Do not use omniscient canon knowledge to make ordinary characters unrealistically well informed.
 
