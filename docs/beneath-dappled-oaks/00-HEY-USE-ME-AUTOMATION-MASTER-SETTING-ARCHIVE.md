@@ -17,14 +17,11 @@ Stable repository path:
 
 **docs/beneath-dappled-oaks/00-HEY-USE-ME-AUTOMATION-MASTER-SETTING-ARCHIVE.md**
 
-**CURRENT CHAPTER EXISTENCE STATUS:** Chapters One through Four are present canon on `main`. The authoritative existence registry is `docs/beneath-dappled-oaks/chapters/00-CANON-CHAPTER-REGISTRY.md`. Any older statement that Chapters One or Two are missing or recovery-pending is obsolete.
-
 ## 0. Automation command contract
 
 When an hourly or scheduled story-continuation task runs:
 
 1. Read this file first.
-1A. Read **docs/beneath-dappled-oaks/chapters/00-CANON-CHAPTER-REGISTRY.md** and use direct current-`main` chapter fetches to resolve chapter existence. Never let an older recovery backlog, cached summary, or search-index miss override a successful direct fetch of a canonical chapter file.
 2. Read **docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md** for active kinship, institutional, and attraction continuity.
 3. Read **docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md** for the current rolling N+1 through N+5 forward plan.
 4. Read **docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md** for the active calendar, season, lunar phase, festivals, economic cycle, pantheon, food culture, travel conditions, and political year.
