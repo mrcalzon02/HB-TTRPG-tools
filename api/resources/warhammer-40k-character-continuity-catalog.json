@@ -3411,6 +3411,18 @@
             "sourceType": "continuation",
             "legacyBackfill": true
           }
+        },
+        {
+          "id": "prite-victory-cost-01",
+          "knowledge": "A tactically successful solution can still be a bad command decision when its consequences destroy the system, population, or future being defended.",
+          "certainty": "demonstrated reflection",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3427,6 +3439,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "id": "prite-syllabus-lesson-two-01",
+          "goal": "Incorporate Lesson Two — winning is a condition; cost is a consequence; do not confuse them — into the replacement syllabus.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -3477,6 +3501,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "segment": "Continuation II — The Practical Examination",
+          "changeSummary": "Led the second lecture, learned to distinguish tactical victory from acceptable consequence, and added Lesson Two to the emerging syllabus.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -3560,7 +3594,20 @@
           }
         }
       ],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "darcelle-simulation-consequence-01",
+          "knowledge": "The trio's former elegant sacrificial simulation victories were possible partly because simulated casualties could be reset; real command imposes consequences beyond the win condition.",
+          "certainty": "explicit realization",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
@@ -3576,6 +3623,18 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "id": "darcelle-maintenance-teaching-02",
+          "skill": "Teaching readiness uncertainty and equipment-failure realism",
+          "demonstratedLevel": "confident and effective once discussing maintenance probabilities",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -3611,6 +3670,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "segment": "Continuation II — The Practical Examination",
+          "changeSummary": "Demonstrated increased confidence teaching maintenance uncertainty and recognized the moral difference between simulation play and command consequence.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -3694,7 +3763,20 @@
           }
         }
       ],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "renault-simulation-consequence-01",
+          "knowledge": "The Three Admirals' former simulation behavior was play; professional instruction and command require accounting for consequences that a reset button once erased.",
+          "certainty": "explicit",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
@@ -3745,6 +3827,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "segment": "Continuation II — The Practical Examination",
+          "changeSummary": "Supported the practical exercise with calm humor and explicitly recognized that the trio's former destructive simulation choices had been play rather than command.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -3844,6 +3936,19 @@
             "sourceType": "continuation",
             "legacyBackfill": true
           }
+        },
+        {
+          "id": "headmaster-professor-development-02",
+          "targetPersonaId": "technician-prite-vallimere",
+          "direction": "Headmaster toward the Three Admirals",
+          "state": "Continues protective sponsorship while deliberately forcing the trio to learn from teaching rather than merely display tactical cleverness.",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "temperamentPerformance": [],
@@ -3876,6 +3981,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "segment": "Continuation II — The Practical Examination",
+          "changeSummary": "Authorized and observed the practical examination, continuing to evaluate the trio by asking what they themselves learned.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -3949,7 +4064,20 @@
           }
         }
       ],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "vane-duel-pressure-02",
+          "knowledge": "House Merovin withdrew its duel petition while House Caldrake submitted two, producing a net increase of one active challenge at the close of the second lecture.",
+          "certainty": "direct operational report",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
+          }
+        }
+      ],
       "secretsKnown": [
         {
           "id": "vane-edward-cover-01",
@@ -4012,6 +4140,16 @@
             "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
             "sourceType": "continuation",
             "legacyBackfill": true
+          }
+        },
+        {
+          "segment": "Continuation II — The Practical Examination",
+          "changeSummary": "Maintained Priority Omega protection and monitored changing noble duel pressure; reported one withdrawal and two new Caldrake petitions.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation II — The Practical Examination",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
+            "sourceType": "continuation"
           }
         }
       ]
