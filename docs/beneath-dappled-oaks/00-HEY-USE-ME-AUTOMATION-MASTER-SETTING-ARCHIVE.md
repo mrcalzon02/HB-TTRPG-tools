@@ -471,6 +471,28 @@ The question is not only whether the seven believe him.
 
 The deeper question is what they are willing to lose once believing him requires them to oppose the institutions that raised them.
 
+
+## 11A. Dramatis personae and kinship network
+
+For expanded character continuity, also read:
+
+**docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md**
+
+That index is the active supporting roster for the Seven Great Houses, their cadet branches, House Valeric, the major orders, guilds, companies, household staffs, covert services, criminal markets, judges, adjudicators, guards, soldiers, ambassadors, traders, craftsmen, and other recurring social machinery.
+
+### Governing relationship rule
+
+**The bonds of love and the bonds of family are lethal political weapons in this setting.**
+
+No burden is heavier than loyalty to family. No vulnerability is more exploitable than genuine love.
+
+Family trees are therefore operational maps rather than decorative genealogy. Siblings, cousins, aunts, uncles, nieces, nephews, lovers, servants, household officers, guards, physicians, teachers, creditors, merchants, and institutional patrons can all become channels of pressure, rescue, betrayal, intelligence, blackmail, divided loyalty, or political consequence.
+
+When expanding a major character, build outward toward parents or guardians, siblings, aunts and uncles, cousins, nieces and nephews where chronologically plausible, former and potential romantic attachments, closest friends, household staff, sworn guards, commercial contacts, institutional patrons, and at least one relationship the character would protect at real political cost.
+
+Do not make these networks mechanically evil. Their dramatic force comes from the fact that affection may be sincere, loyalty may be honorable, and either can still be exploited.
+
+
 ## 12. Current story anchors
 
 ### Chapter One: The Last Seven
