@@ -3,6 +3,7 @@
   "setting": "Warhammer 40K",
   "description": "Warhammer 40K archive routes currently exposed by the Foundry, including the migrated long-form story archive and active Cafarron Corridor chronicle continuations.",
   "resources": [
+    "api/resources/warhammer-40k-fiction-governance.md",
     "warhammer-40k-lore.html",
     "warhammer-40k-seals.html",
     "warhammer-40k-archive.html",
