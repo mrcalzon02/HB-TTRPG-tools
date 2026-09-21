@@ -310,7 +310,7 @@ The Valerics are not one of the Seven Great Houses in the current setting index,
 
 Each named institution should have at least one recurring human face.
 
-- **The Academy** — **Rector Neris Calon**, adult rector trying to preserve an institution whose graduating class has been reduced to seven survivors.
+- **Concord Academy of Aurelith** (commonly **the Academy**) — **Rector Neris Calon**, adult rector trying to preserve the autonomous Aurelith institution whose graduating class has been reduced to seven survivors.
 - **Truth Beyond the Veil** — **Examiner Sael Ithrenn**, adult oath examiner who noticed the phrase "necessary truth" entering induction language and has started comparing old ceremonies to new ones.
 - **Moon-Crown Household / Royal Service** — **Keeper Althien Merel**, adult Keeper of the Moon Seal and gatekeeper for routine royal paperwork.
 - **Royal Martial Fellowship** — **Captain Arven Tal**, adult fellowship captain responsible for assigning young martial nobles.
