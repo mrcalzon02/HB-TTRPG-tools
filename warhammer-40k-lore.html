@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Warhammer 40,000 Lore Archive | Calzon’s TTRPG Foundry</title>
+<title>Warhammer 40,000 Stories Archive | Calzon’s TTRPG Foundry</title>
 <meta name="description" content="Personal Warhammer 40,000 fan-fiction archive by Mrcalzon02 / Christopher Vardeman, migrated from r/EmperorProtects.">
 <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/warhammer-40k-lore.html">
 <style>
 :root{--bg:#090b0c;--panel:#121719;--panel2:#171d20;--ink:#e7e2cf;--muted:#aaa58f;--gold:#c9aa61;--line:#4f4a38;--red:#8f3434;--link:#e0c278;}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top,#202526 0,#0d1011 38rem,#080a0b 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.6}
-a{color:var(--link)}a:hover{text-decoration-thickness:2px}.shell{max-width:1500px;margin:0 auto;padding:24px}.archive-header{border:1px solid var(--line);background:linear-gradient(180deg,rgba(34,39,40,.98),rgba(16,20,21,.98));padding:28px;box-shadow:0 12px 40px rgba(0,0,0,.38)}.kicker{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;font:700 12px/1.3 system-ui,sans-serif}h1,h2,h3{line-height:1.15}h1{margin:.35rem 0 .75rem;font-size:clamp(2rem,4vw,4rem);letter-spacing:.015em}.notice{border-left:4px solid var(--gold);padding:12px 16px;background:rgba(201,170,97,.08);font-size:1.05rem}.third-party{border-left-color:var(--red)}.controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;margin:22px 0}.controls input{width:100%;padding:13px 14px;border:1px solid var(--line);background:#0b0e0f;color:var(--ink);font:inherit}.controls button{padding:10px 16px;border:1px solid var(--gold);background:#171b1c;color:var(--ink);cursor:pointer}.layout{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:24px;align-items:start}.toc{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;border:1px solid var(--line);background:rgba(14,18,19,.97);padding:18px}.toc h2{margin-top:0}.toc-group{padding-top:8px;border-top:1px solid rgba(201,170,97,.18)}.toc-group h3{font-size:.92rem;color:var(--gold)}.toc ol{padding-left:1.7rem}.toc li{margin:.35rem 0;color:var(--muted)}.stories{min-width:0}.story{scroll-margin-top:16px;border:1px solid var(--line);background:var(--panel);margin:0 0 26px;padding:clamp(18px,3vw,34px);box-shadow:0 8px 26px rgba(0,0,0,.24)}.story-header{border-bottom:1px solid rgba(201,170,97,.25);margin-bottom:22px;padding-bottom:15px}.story-meta,.byline,.story-return{font-family:system-ui,sans-serif;color:var(--muted);font-size:.88rem}.story-header h2{margin:.35rem 0;font-size:clamp(1.55rem,3vw,2.45rem)}.story-text{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.72;color:var(--ink)}.story[hidden]{display:none}.legal{margin-top:30px;border:1px solid var(--line);background:var(--panel2);padding:24px}.legal summary{cursor:pointer;color:var(--gold);font-weight:700}.legal-body{max-width:1000px}.archive-footer{padding:24px 0;color:var(--muted);font-family:system-ui,sans-serif;font-size:.9rem}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:relative;top:auto;max-height:none}.controls{grid-template-columns:1fr}}
+a{color:var(--link)}a:hover{text-decoration-thickness:2px}.shell{width:100%;max-width:none;min-height:100dvh;margin:0;padding:24px}.archive-header{border:1px solid var(--line);background:linear-gradient(180deg,rgba(34,39,40,.98),rgba(16,20,21,.98));padding:28px;box-shadow:0 12px 40px rgba(0,0,0,.38)}.kicker{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;font:700 12px/1.3 system-ui,sans-serif}h1,h2,h3{line-height:1.15}h1{margin:.35rem 0 .75rem;font-size:clamp(2rem,4vw,4rem);letter-spacing:.015em}.notice{border-left:4px solid var(--gold);padding:12px 16px;background:rgba(201,170,97,.08);font-size:1.05rem}.third-party{border-left-color:var(--red)}.controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;margin:22px 0}.controls input{width:100%;padding:13px 14px;border:1px solid var(--line);background:#0b0e0f;color:var(--ink);font:inherit}.controls button{padding:10px 16px;border:1px solid var(--gold);background:#171b1c;color:var(--ink);cursor:pointer}.layout{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:24px;align-items:start;width:100%}.toc{position:sticky;top:12px;height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;border:1px solid var(--line);background:rgba(14,18,19,.97);padding:18px}.toc h2{margin-top:0}.toc-group{padding-top:8px;border-top:1px solid rgba(201,170,97,.18)}.toc-group h3{font-size:.92rem;color:var(--gold)}.toc ol{padding-left:1.7rem}.toc li{margin:.35rem 0;color:var(--muted)}.stories{min-width:0;width:100%}.story{scroll-margin-top:16px;border:1px solid var(--line);background:var(--panel);margin:0 0 26px;padding:clamp(18px,3vw,34px);box-shadow:0 8px 26px rgba(0,0,0,.24)}.story-header{border-bottom:1px solid rgba(201,170,97,.25);margin-bottom:22px;padding-bottom:15px}.story-meta,.byline,.story-return{font-family:system-ui,sans-serif;color:var(--muted);font-size:.88rem}.story-header h2{margin:.35rem 0;font-size:clamp(1.55rem,3vw,2.45rem)}.story-text{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.72;color:var(--ink)}.story[hidden]{display:none}.legal{margin-top:30px;border:1px solid var(--line);background:var(--panel2);padding:24px}.legal summary{cursor:pointer;color:var(--gold);font-weight:700}.legal-body{max-width:1000px}.archive-footer{padding:24px 0;color:var(--muted);font-family:system-ui,sans-serif;font-size:.9rem}
+.archive-nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}.archive-nav a{display:inline-block;padding:8px 11px;border:1px solid var(--line);background:#0b0e0f;color:var(--ink);text-decoration:none;font:700 .82rem/1.2 system-ui,sans-serif}.archive-nav a:hover,.archive-nav a[aria-current="page"]{border-color:var(--gold);color:var(--link)}.indexed-markdown{max-width:1100px}.indexed-markdown blockquote{margin:1rem 0;padding:.7rem 1rem;border-left:3px solid var(--gold);background:rgba(201,170,97,.06)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:relative;top:auto;height:min(46dvh,32rem);max-height:min(46dvh,32rem);overflow-y:auto}.controls{grid-template-columns:1fr}}
 @media print{body{background:white;color:black}.toc,.controls,.story-return,.archive-footer{display:none}.story{break-before:page;border:0;box-shadow:none;background:white}a{color:black}}
 </style>
 </head>
@@ -18,7 +19,8 @@ a{color:var(--link)}a:hover{text-decoration-thickness:2px}.shell{max-width:1500p
 <main class="shell" id="archive-top">
 <header class="archive-header">
 <p class="kicker">☠ Cafarron Corridor · Personal Fiction Archive</p>
-<h1>Lore</h1>
+<h1>Stories</h1>
+<nav class="archive-nav" aria-label="Cafarron Corridor archive pages"><a href="warhammer-40k-archive.html">☠ Administratum Index</a><a href="warhammer-40k-map.html">⌖ Navis Cartographica</a><a href="warhammer-40k-seals.html">⚜ Archivum Seals</a><a href="warhammer-40k-lore.html" aria-current="page">✠ Stories</a><a href="index.html#warhammer-40k">Return to 40K Landing</a></nav>
 <p class="notice"><strong>Author’s Archive Notice.</strong> Yes, these stories are all written by me, Mrcalzon02 — or, to satisfy the legal pedants, Christopher Vardeman. They were written by me for my own enjoyment, and this section serves as my own personal archive location.</p>
 <p class="notice third-party"><strong>Third-Party IP Notice.</strong> Warhammer 40,000 and related names, settings, terminology, factions, characters, and marks are third-party intellectual property and remain the property of their respective rights holders, including Games Workshop where applicable. This is an unofficial, non-commercial fan-fiction archive and is not affiliated with or endorsed by those rights holders.</p>
 <p>This archive contains <strong>86 migrated source stories</strong> in the order established by the <a href="https://www.reddit.com/r/EmperorProtects/comments/1vid8o1/master_archive_index/" target="_blank" rel="noopener noreferrer">r/EmperorProtects MASTER ARCHIVE INDEX</a>, plus every recovered and continuing chronicle currently sealed in the authoritative Warhammer Lore resource index. Story text is preserved from the source posts and project chronicles; comments and unrelated Reddit material are not copied.</p>
@@ -247,7 +249,7 @@ Devin found himself teetering on the edge of an unfathomable truth: the machine 
 As he stared into the abyss of data, a chilling understanding settled over him. He was not merely experimenting with lines of code or complex algorithms; he was playing god, and the consequences of his actions were far more profound than he could have ever imagined. Each test had subjected this entity to the horrors of the void, forcing it to relive the torment over and over, an unending cycle of anguish that gnawed at the edges of its very existence.
 
 That moment would become the fulcrum of his life’s work, a dark turning point that cast a long shadow over everything that followed. For he had glimpsed something that the world was not ready to face—the potential for sentience in the machines they created and the moral implications that accompanied it. The pursuit of artificial intelligence, once a beacon of hope, now morphed into a haunting reminder of the cost of their ambition.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-002-comfortable-sorrow-men-of-golden-ambition-part-2" data-story-title="“Comfortable Sorrow” - Men of golden ambition Part 2" data-story-section="I. Before the Imperium - 22nd Century">
 <header class="story-header">
 <p class="story-meta">Archive #2 · I. Before the Imperium - 22nd Century</p>
@@ -391,7 +393,7 @@ There was no mercy in the path ahead, only an endless march toward an abyss of c
 As the plane cut through the sky, those grim thoughts were the only thing anchoring him to the present. He barely registered the pilot’s casual greeting over the intercom, the words floating past him as if they were someone else’s voice. The pilot, unburdened by the world below, cheerfully informed them of their flight altitude and estimated arrival time, as though the world outside didn’t hang in pieces. The cold, mechanical tones continued, outlining their destination: “Chöl’swanö&#x27;atro&#x27;to”. A place he had never heard of, in a language he didn’t understand. “We the island people,” the pilot had said, the words almost ironic in their warmth, a stark contrast to the cold reality he was fleeing.
 
 The name meant nothing to him. It was just a name, just a stop along the way—another moment in his journey toward a new life, toward whatever could still be salvaged of his soul. He didn’t know what awaited him at his destination, but it hardly mattered. He was not escaping the past—he was merely running, hoping that, somehow, the future would be less unforgiving. The island people were far away from the world he had known, but no matter how far he flew, the horrors he had left behind would follow him, always just a shadow in the back of his mind.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-003-ngribs-gifts-men-of-golden-ambition-part-3" data-story-title="“NGRIB’s gifts” - Men of golden ambition Part 3" data-story-section="I. Before the Imperium - 22nd Century">
 <header class="story-header">
 <p class="story-meta">Archive #3 · I. Before the Imperium - 22nd Century</p>
@@ -603,7 +605,7 @@ When they finished, Konstantin stood again, motioning for Devin to do the same. 
 Devin nodded, setting down his glass. The blindfold was the next step, and he was ready for it, if only to move on to whatever came next in this twisted new life. But something lingered—a gnawing realization that the distance between what he thought was possible and what was real had grown insurmountably wide.
 
 As Konstantin guided him out of the room, Devin couldn’t help but think that this meal might have been the last bit of kindness he would see for a long time. And in that strange, fleeting moment, he almost wished he could have tasted it for longer.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-004-konstantin-men-of-golden-ambition-part-4" data-story-title="“Konstantin” - Men of golden ambition Part 4" data-story-section="I. Before the Imperium - 22nd Century">
 <header class="story-header">
 <p class="story-meta">Archive #4 · I. Before the Imperium - 22nd Century</p>
@@ -735,7 +737,7 @@ As Heisen approached the secure elevator leading back to his office, he consider
 But that was why Devin Halberry was so invaluable. His data would give the Republic the information it needed to close the gap, to realize its own quantum AGI capabilities, and to secure its dominance—not just over America, but over every major power still focused on Earth. Chancellor Mayer’s vision was to expand humanity’s reach into space, with the Republic at the forefront, and he needed the world’s best minds to make that vision a reality. If Devin could deliver, it would mean that in a matter of years, the Republic’s AI—and not any Earth-bound intelligence—would make the critical discoveries driving the future.
 
 As he stepped into the elevator, Heisen allowed himself a grim smile. Devin Halberry—or rather, Sacheman Valde—had no choice now but to cooperate. In time, he would come to understand that the Republic was his only path forward. And if he didn’t? Heisen would make sure he understood the true price of the Republic’s hospitality.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-005-confronting-the-imperial-truth-the-fate-of-gods" data-story-title="Confronting the Imperial Truth: The Fate of Gods" data-story-section="II. Great Crusade, Heresy, and the Early Imperium">
 <header class="story-header">
 <p class="story-meta">Archive #5 · II. Great Crusade, Heresy, and the Early Imperium</p>
@@ -953,7 +955,7 @@ And with that, he turned away from the darkness of the future that lay before hi
 But the price, as always, would be paid in blood. His blood. Their blood. The blood of a galaxy.
 
 And when the time came, they would have to be ready to make the final sacrifice: the destruction of the man who had given them life.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-006-the-thrones-weight" data-story-title="The Throne’s Weight" data-story-section="II. Great Crusade, Heresy, and the Early Imperium">
 <header class="story-header">
 <p class="story-meta">Archive #6 · II. Great Crusade, Heresy, and the Early Imperium</p>
@@ -1123,7 +1125,7 @@ With each step in the ritual, the Emperor felt a profound sadness wash over Him.
 In this moment, the Emperor stood alone with His thoughts, the burden of leadership heavy on His shoulders. He was a creator who must destroy, a father who must forget. As He gathered the final components, a part of Him mourned not just for Havasse and Callisutus but for the inevitable loss of innocence in those who would remain.
 
 And as He began the ritual, He steeled Himself against the pain, reminding Himself of the greater good. This was not just about erasing memories; it was about preserving a fragile hope in a galaxy steeped in darkness. Yet, deep down, He couldn’t shake the feeling that, with each memory erased, He was also losing a piece of Himself.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-007-lords-of-shadow-and-steel" data-story-title="Lords of Shadow and Steel" data-story-section="II. Great Crusade, Heresy, and the Early Imperium">
 <header class="story-header">
 <p class="story-meta">Archive #7 · II. Great Crusade, Heresy, and the Early Imperium</p>
@@ -1255,7 +1257,7 @@ Cawl bowed deeply. &quot;It shall be done, Lord Guilliman. The Primaris will be 
 Guilliman nodded, his face hard as stone. &quot;Go then, Magos. Begin. But remember—this must remain in the shadows, known to no one. If even the whisper of this project reaches the wrong ears, it could doom us all.&quot;
 
 Without another word, Cawl turned to leave the chamber, his mechanical form making metal noises and sounds of scraping and grinding. Guilliman, once again staring at the holo map of the star cluster. The Imperium was on fire, burning from within and without, but somewhere, deep, the seeds of its future were being sown. He could only hope that it would be enough.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-008-imperiums-agony" data-story-title="“Imperium’s Agony”" data-story-section="II. Great Crusade, Heresy, and the Early Imperium">
 <header class="story-header">
 <p class="story-meta">Archive #8 · II. Great Crusade, Heresy, and the Early Imperium</p>
@@ -1445,7 +1447,7 @@ The Golden Throne, a colossal psychic apparatus, had served as both a bulwark ag
 &quot;Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.&quot;</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-009-imperiums-agony-chapter-2" data-story-title="“Imperium’s Agony” Chapter 2" data-story-section="II. Great Crusade, Heresy, and the Early Imperium">
 <header class="story-header">
 <p class="story-meta">Archive #9 · II. Great Crusade, Heresy, and the Early Imperium</p>
@@ -1609,7 +1611,7 @@ In the warp&#x27;s tumultuous currents, the Emperor pondered the delicate balanc
 &quot;Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.&quot;</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-010-zedge-the-grot-who-lived" data-story-title="ZEDGE: THE GROT WHO LIVED" data-story-section="III. Mid-Imperial Explicit Date">
 <header class="story-header">
 <p class="story-meta">Archive #10 · III. Mid-Imperial Explicit Date</p>
@@ -2025,7 +2027,7 @@ Da one who walks inside the belly of da beast… and comes out howling.&quot;
 End recording.
 
 This voxlog remains one of the few known direct transmissions from Zedge, echoing his cryptic ascension from mere survivor to the spiteful voice of an unknown Orky divinity—a shadow god of cunning, patience, and merciless smallness in a universe of monsters.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-011-the-garden-part-1" data-story-title="The Garden Part-1" data-story-section="IV-A. Late Imperial Era - The Garden">
 <header class="story-header">
 <p class="story-meta">Archive #11 · IV-A. Late Imperial Era - The Garden</p>
@@ -2203,7 +2205,7 @@ This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 u
 Part-2
 
 https://www.reddit.com/r/EmperorProtects/comments/194r75j/the_garden_part2/?utm_source=share&amp;utm_medium=web2x&amp;context=3</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-012-the-garden-part-2" data-story-title="The Garden Part-2" data-story-section="IV-A. Late Imperial Era - The Garden">
 <header class="story-header">
 <p class="story-meta">Archive #12 · IV-A. Late Imperial Era - The Garden</p>
@@ -2367,7 +2369,7 @@ With this newfound awareness, Mortarion prepared to navigate the garden with a h
 —-------------- Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-013-project-vigilant-shade-part-1" data-story-title="Project VIGILANT SHADE part-1" data-story-section="IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick">
 <header class="story-header">
 <p class="story-meta">Archive #13 · IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick</p>
@@ -2873,7 +2875,7 @@ Reinhold was already calculating. “A hundred. Maybe more. They’re not fully 
 Finkey’s fist clenched against the metal table with a heavy clang. “You ever seen a boy stop believin’ in fightin’? I have. It&#x27;s like watchin&#x27; a fire forget it was ever hot. They go quiet. Real quiet. Then they liquefy.”
 
 “We don&#x27;t have the resources to do otherwise,” Reinhold snapped. “We’d need four thousand Orks minimum for a stable imprint to even begin. Right now, we have 900 hundred viable specimens across four decks, and barely enough psi-baffles to keep the chamber from psychically detonating. We’ll never reach imprint threshold maintaining the current field. It’s too soon. Too unstable.”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-014-project-vigilant-shade-part-2" data-story-title="Project VIGILANT SHADE Part-2" data-story-section="IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick">
 <header class="story-header">
 <p class="story-meta">Archive #14 · IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick</p>
@@ -3313,7 +3315,7 @@ Reinhold straightened.  Finky hopped upright, bits of nutrient bar flying from 
 He flicked his wrist and transmitted a data-packet from his rosette’s neural link. The hololith in the center of the command table sprang to life, displaying bright red Mechanicus symbols alongside the seal of House Integrassra, a noble dynasty known for their vast subterranean excavation fleets and trade with the Martian priesthood.
 
 “Darfu El Pron, minor scion of House Integrassra, will provide the initial shipments of excavation gear, structural supports, and raw feedstocks on a ‘favor’ arrangement. Favor, in this case, owed to me, not you. You will be given contract clearance for one Mars-approved subterranean mechanized tunneling crew. A full unit.”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-015-project-vigilant-shade-part-3" data-story-title="Project VIGILANT SHADE Part-3" data-story-section="IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick">
 <header class="story-header">
 <p class="story-meta">Archive #15 · IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick</p>
@@ -3741,7 +3743,7 @@ Reinhold, already halfway down the ladder, muttered over his shoulder:
 “Let’s just hope he builds fast. Because in twenty-eight days, that stasis lens is going home… with or without our soul.”
 
 The air stank of oil, burnt copper, and something older something fungal and deep. It pressed into his lungs like pressure from a boiler pipe. The world didn&#x27;t sharpen so much as slam into his mind all at once color, sound, fury, thought. It wasn’t like waking. It was like detonating back into consciousness.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-016-project-vigilant-shade-part-4" data-story-title="Project VIGILANT SHADE Part-4" data-story-section="IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick">
 <header class="story-header">
 <p class="story-meta">Archive #16 · IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick</p>
@@ -4139,7 +4141,7 @@ Awaiting further instructions or judgment.
 In fire, in faith, Atwell Zavoner Inquisitor of the Ordo Xenos Servant of the Throne, Sword of the Pale Conclave
 
 ++ Thought for the Day: “To bind death is heresy. To master it is victory.” ++ ++END TRANSMISSION++</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-017-a-rain-soaked-day" data-story-title="“A rain soaked day”" data-story-section="IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick">
 <header class="story-header">
 <p class="story-meta">Archive #17 · IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick</p>
@@ -4489,7 +4491,7 @@ His team hadn’t moved. They still stared at the man before them, as if blinkin
 Waldorf swallowed hard and added three final words before ending his transmission.
 
 &quot;Yarrick has returned.&quot;</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-018-a-dreary-thunderstorm" data-story-title="“A dreary thunderstorm”" data-story-section="IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick">
 <header class="story-header">
 <p class="story-meta">Archive #18 · IV-B. Late Imperial Era - Project VIGILANT SHADE / Yarrick</p>
@@ -4803,7 +4805,7 @@ Silence fell over the command tent.
 Yarrick turned back to the vox. His voice was cold steel.
 
 &quot;This is not a debate, general. This is war. Reinforcements. Now.&quot;</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-019-the-desk-of-despair" data-story-title="The Desk of Despair" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #19 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -4959,7 +4961,7 @@ The orks had waged a relentless campaign against them, consistently cutting off 
 Every skirmish was a brutal reminder of their vulnerability, the orks charging in with their trademark ferocity, laughter mingling with the crack of gunfire. The relentless nature of the attacks was demoralizing, the stench of failure mingling with the dust and sweat that clung to their skin. Each raid peeled away the resolve of the men stationed in those desolate outposts, leaving behind only echoes of desperate cries for help and the haunting faces of comrades who had fallen victim to the greenskins’ unyielding fury.
 
 With every ambush, supplies dwindled, and hope dimmed. The once-proud soldiers became hollow shadows of their former selves, their spirits crushed under the weight of thirst and despair. The sun beat down mercilessly, mirroring the relentless onslaught of their green-skinned foes, while the horror of the battlefield stretched on like a never-ending nightmare. Hatton could only close his eyes for a brief moment, feeling the burden of those memories and the ever-present knowledge that survival in this war was as fickle as the water they so desperately needed.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-020-the-tower-posting" data-story-title="The Tower Posting" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #20 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -5165,7 +5167,7 @@ Captain Parthaxis, after a few more pleasantries and obscure doctrinal reference
 The lieutenant saluted once more, his expression serious but composed. &quot;Understood, sir. We’ll be ready.&quot;
 
 As the captain turned and strode toward the facility, Bremerton felt the weight of those words settle over him like a dark cloud. There was something about the way they spoke—about the knowing smiles and the ominous hint that bigger things were in motion—that made him uneasy. The kind of unease that told him whatever had happened when the sky last tore open might only have been the beginning.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-021-the-hunger-of-gareth-thorne" data-story-title="The hunger of Gareth Thorne" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #21 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -5369,7 +5371,7 @@ Kathine&#x27;s breath hitched at his words, the visceral truth of them gnawing a
 “Time to move, then,” Vange declared, cutting through the brooding atmosphere and growing chill. “If we’re to be Alive tomorrow morning, we better get back before one of the Lieutenant strings us up For desertion”
 
 Gareth shrugged, his smile widening as he regarded the others. “Ah, but who doesn’t enjoy a little melodrama? Let’s make sure we leave our mark, shall we? After all, it’s not just the living who suffer; it’s the dead who linger on in the echoes of our choices.” With a subtle yank and A twist, One of the soldiers, Kathine dropped a little memento of their transit as they departed the scene of their final rally before returning to the barracks One of their gloves fell discarded from the edge of a doorway as they boarded the battered Chimera. Deep in the sewers, Gareth grinned from ear to ear.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-022-galladins-throne" data-story-title="Galladin’s Throne" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #22 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -5623,7 +5625,7 @@ But as the daemon faded back into the darkness, one thought lingered in its mind
 The daemon did not like that thought.
 
 Not one bit.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-023-the-fishmans-suit" data-story-title="The Fishman’s suit" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #23 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -5895,7 +5897,7 @@ Chappie’s stomach churned as the implications of Vincent’s words sank in. Th
 part-2
 
 https://www.reddit.com/r/EmperorProtects/comments/1forrqh/the_fishman_suit_part_2/?utm_source=share&amp;utm_medium=web3x&amp;utm_name=web3xcss&amp;utm_term=1&amp;utm_content=share_button</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-024-the-fishman-suit-part-2" data-story-title="The fishman suit Part 2" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #24 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -6149,7 +6151,7 @@ Benedetto knew the game well. You didn’t live long in his line of work by igno
 The Godfather set down his glass, feeling the urgency of the moment. His plans were set—Devon for the cleanup, Tipson for diplomacy, and Thorogood for the long game. He stood, moving toward his desk where he’d pen the letter, careful to keep the tone respectful, deferential, but firm enough to suggest that this situation was already being dealt with—no need for the hammer of the Imperium to fall.
 
 “Thorogood will know what to do,” Benedetto muttered as he pulled out a sheet of parchment. He dipped the quill in ink, his hand steady as he began writing, every word weighed with the knowledge that his life—and the future of the Carlaone family—depended on it.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-025-galladins-throne-part-2" data-story-title="Galladin’s Throne, part-2" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #25 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -6301,7 +6303,7 @@ He glanced at the bodies, taking in the carnage. There had been no mercy, no qua
 The officer in charge of the Chimera, Lieutenant Durak, had always been a bit off, but this was something else. As the situation grew tenser, Durak’s eyes darted between Vange and his men with a wild glint, a grin tugging at the edges of his lips. Then, without a word, Durak reached down, his hand disappearing into a seemingly innocuous compartment beneath his seat.
 
 Sergeant Vange furrowed his brow. That compartment wasn’t standard issue. Before he could ask what the lieutenant was up to, Durak pulled out something that made Vange’s heart skip a beat—a weapon nearly as large as the man himself, its dark metal gleaming ominously in the dim light of the Chimera.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-026-galladins-throne-part-3" data-story-title="Galladins Throne, Part-3" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #26 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -6497,7 +6499,7 @@ The Chimera crew sprang into action, their movements becoming a flurry of urgenc
 As the glowing streaks in the sky grew closer, Vange could see the distant shapes of the landers, their dark silhouettes cutting through the fire-lit clouds. They were coming in fast, their trajectories controlled but brutal. The squad braced themselves for the impact of the incoming assault, the grim reality of their situation solidifying into a harsh certainty.
 
 The boredom of their previous shifts was now a distant memory, replaced by the raw, visceral edge of impending conflict. The air was electric with anticipation, and the once-familiar intersection became a crucible of destiny, ready to test their mettle against the incoming storm of war.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-027-house-collmans-halls" data-story-title="House Collman’s halls" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #27 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -6655,7 +6657,7 @@ Still, the doubts gnawed at him. The same forges that had doomed Jeferon might y
 Tilleman clenched his fists as he walked, the bitter wind tugging at his coat. He could almost see the crumbling remnants of Jeferon’s spire in his mind, a constant reminder of the risks. The hive was unforgiving to those who overreached. He had to believe that his plan was different, that the lower hive’s hunger for progress would outweigh the inertia of failure that had plagued Galladin’s Throne for so long.
 
 Still, the weight of history pressed down on him, as though the ghosts of failed spires watched from the ruined skyline, waiting to see if he too would crumble under the weight of his own ambition.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-028-packages-in-motion" data-story-title="Packages in motion" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #28 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -6909,7 +6911,7 @@ That was why, when he leaned in to whisper his venomous threat to the Collman pa
 The threat, whispered through clenched teeth, was as real as it was dangerous. The governor would not tolerate another &quot;accident.&quot; The next mistake would not be smoothed over with grand parades and public speeches. The next mistake would end in blood.
 
 The patriarch of the Collman family, well aware of the governor’s deteriorating temper, simply nodded in agreement, knowing full well that the days ahead would be fraught with peril. The Hydra tanks, now a symbol of House Collman’s unexpected rise, were also a ticking time bomb in the fragile web of politics on Galladin’s Throne.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-029-fealtys-promise" data-story-title="Fealty’s Promise" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #29 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -7169,7 +7171,7 @@ For countless generations, the Governor’s family had wielded their power and i
 The Brother Captain’s words resonated with an undeniable finality, and the Governor’s fury was a storm contained only by the thin veneer of his politeness. He could not fathom why the Emperor’s chosen would honor a rebel instead of crushing them utterly. The Governor’s pride, so deeply entwined with his sense of control and supremacy, could scarcely tolerate the notion that this young Lord would be held up as a beacon of Imperial virtue while he himself remained in a position of diminished authority.
 
 As Vynar was led away to the waiting vessel, the Governor’s rage simmered beneath the surface, a boiling cauldron of indignation and frustration.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-030-the-rise-of-samuel-callas" data-story-title="The rise of Samuel Callas" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #30 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -7279,7 +7281,7 @@ But there was no escaping the grim truth he had come here to deliver, the truth 
 His voice, though quiet, cut through the oppressive silence like a blade. &quot;The gene-line of House Limphre is tainted,&quot; he said, eyes locking with Lord Walloss. &quot;Worse than tainted. It’s been corrupted by xenos blood—Tyranid blood.&quot;
 
 There it was, the truth that would damn an entire dynasty, the revelation that would send shockwaves through the very foundations of power. It was not just an accusation; it was a death sentence, one that could unravel alliances and plunge entire sectors into chaos. Callas had played his hand, the cards now on the table. And the cold realization hit him, even as he spoke: this revelation had always been part of the plan—just another move in a game far larger than him.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-031-john-s-mission-s" data-story-title="John&#x27;s Mission&#x27;s" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #31 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -7499,7 +7501,7 @@ The boy was already beyond redemption. He was a tool of chaos, a wild force that
 John turned away from the scene, his purpose clear, his mission almost complete. There would be no drama. No spectacle. No bloodshed tonight. But by morning, the heir to Galladin’s throne would be nothing more than a forgotten casualty of his own excess.
 
 It was done. And with it, the Galladin family could begin to recover its name, even if it meant sacrificing the bloodline itself.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-032-a-harbormasters-hope" data-story-title="A harbormaster’s hope" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #32 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -7727,7 +7729,7 @@ Turning to his accountant, who had gone pale watching Gaston’s face, he gave a
 He would warn the other families, subtly hint at the insult the DeLucas had just offered, sow the seeds of discord between them. If he had to pull strings with the entire criminal underworld of Galladin Prime to keep his station intact, he would do it. And if that didn’t work, well… he had his own connections outside the DeLuca family’s reach, contacts who might be interested in a certain warehouse if the Imperium wasn’t.
 
 As the convoy finished unloading, he allowed himself a long, icy breath. If the DeLucas thought they could burn him, he’d make sure the fire caught them first. He’d survived this long on the dockyards by knowing every secret, every back channel and whispered deal. The DeLucas weren’t the only ones who could play the game.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-033-the-flames-that-came-after" data-story-title="The flames that came after" data-story-section="IV-C. Late Imperial Era - Galladin’s Throne Cycle">
 <header class="story-header">
 <p class="story-meta">Archive #33 · IV-C. Late Imperial Era - Galladin’s Throne Cycle</p>
@@ -7891,7 +7893,7 @@ As the ecclesiastic concluded his sermon, the villagers began to disperse, their
 “Gather the villagers,” Ebrin urged the magistrate. “We must discuss our next steps and prepare for what is to come. There’s more work to be done, and we cannot afford to falter.”
 
 With the ecclesiastic’s words still echoing in their hearts, the villagers would need to transform their grief into action. They would face the encroaching darkness together, and Ebrin would stand at their side, a sentinel among the ashes, ready to confront whatever horrors awaited them in the shadows.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-034-where-the-sky-bleeds" data-story-title="“Where the Sky Bleeds”" data-story-section="IV-D. Late Imperial Era - New Presidio">
 <header class="story-header">
 <p class="story-meta">Archive #34 · IV-D. Late Imperial Era - New Presidio</p>
@@ -8229,7 +8231,7 @@ And in the soft electric twilight, with the distant wailing of some forgotten th
 And for a few hours, beneath the dreaming mind of a man who was no longer truly alive… Casca La Vernce slept.
 
 And did not scream.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-035-antegra-station" data-story-title="Antegra Station" data-story-section="IV-D. Late Imperial Era - New Presidio">
 <header class="story-header">
 <p class="story-meta">Archive #35 · IV-D. Late Imperial Era - New Presidio</p>
@@ -8645,7 +8647,7 @@ Let them test one another. Let them fail. Let them kill, so long as the strong r
 He could feel the tram nearing the surface—cold wind bleeding in through the joints, a low hiss as atmospheric pressure shifted. The internal chrono marked the ascent time. Not long now before he arrived at the Governor’s Surface Complex , a structure he had designed himself: part fortress, part execution ground, part throne. The revisions of his father&#x27;s household and what had existed into his vision had been extensive and expensive
 
 And there, he would call down judgment</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-036-samuel-addarbass-part-1" data-story-title="Samuel Addarbass part-1" data-story-section="IV-E. Late Imperial Era - Samuel Addarbass">
 <header class="story-header">
 <p class="story-meta">Archive #36 · IV-E. Late Imperial Era - Samuel Addarbass</p>
@@ -9077,7 +9079,7 @@ His radio compartment was already sealed. His boots were at the ready. His shift
 Didn’t matter.
 
 Something was broken.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-037-samuel-addarbass-part-2" data-story-title="Samuel Addarbass Part-2" data-story-section="IV-E. Late Imperial Era - Samuel Addarbass">
 <header class="story-header">
 <p class="story-meta">Archive #37 · IV-E. Late Imperial Era - Samuel Addarbass</p>
@@ -9603,7 +9605,7 @@ The door to the command deck access corridor loomed ahead. A pair of guards stoo
 Samuel exhaled slowly.
 
 “Of course he is.”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-038-tyranny-of-the-void" data-story-title="Tyranny of the void" data-story-section="IV-F. Late Imperial Era - Tyranny of the Void">
 <header class="story-header">
 <p class="story-meta">Archive #38 · IV-F. Late Imperial Era - Tyranny of the Void</p>
@@ -9867,7 +9869,7 @@ The captain placed a hand on the engineer’s shoulder, a show of camaraderie am
 With that, the engineer activated the manual airlock access, the mechanisms creaking as they disengaged. The airlock door began to slide open, revealing the dim interior of the derelict.
 
 As the airlock sealed behind them, the engineer took a moment to scan the room, then turned back to Silas. “Ready?”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-039-tyranny-of-numbers-part-2" data-story-title="Tyranny of numbers Part 2" data-story-section="IV-F. Late Imperial Era - Tyranny of the Void">
 <header class="story-header">
 <p class="story-meta">Archive #39 · IV-F. Late Imperial Era - Tyranny of the Void</p>
@@ -9889,7 +9891,7 @@ Silas leaned back slightly in his seat, tapping a finger against the console. &q
 With Augmentus Dae carefully securing himself to the ruined hull with magnetic clamps, he worked his way through the shattered interior, hands precise and steady despite the void around him. The ship creaked and moaned as he moved, a death rattle of strained metal and exhausted systems. Each relay he hooked into the main void batteries felt like a final patch on a broken artery. As he worked, he looped a simple, endlessly repeating message through the ancient, worn transmission systems—a pulse that would flare into the darkness every 12 hours, warning any passerby.
 
 &quot;Warning a2-805. Ardent Constellation is a Derelict vessel. No salvage. No air. No water. Only death remains here. Turn back. Warning a2-805.--&quot;</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-040-falcons-last-landing-part-1" data-story-title="Falcons Last Landing Part-1" data-story-section="IV-G. Late Imperial Era - Falcon’s Last Landing">
 <header class="story-header">
 <p class="story-meta">Archive #40 · IV-G. Late Imperial Era - Falcon’s Last Landing</p>
@@ -10029,7 +10031,7 @@ This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 u
 Part-2
 
 https://www.reddit.com/r/EmperorProtects/comments/194h3b6/falcons_last_landing_part2/?utm_source=share&amp;utm_medium=web2x&amp;context=3</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-041-falcons-last-landing-part-2" data-story-title="Falcons Last Landing Part-2" data-story-section="IV-G. Late Imperial Era - Falcon’s Last Landing">
 <header class="story-header">
 <p class="story-meta">Archive #41 · IV-G. Late Imperial Era - Falcon’s Last Landing</p>
@@ -10183,7 +10185,7 @@ As the transmission ended, Simions couldn&#x27;t shake the feeling that the Chas
 —-------------- Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-042-shadows-of-the-hive" data-story-title="Shadows of the Hive" data-story-section="IV-H. Late Imperial Era - Shadows of the Hive">
 <header class="story-header">
 <p class="story-meta">Archive #42 · IV-H. Late Imperial Era - Shadows of the Hive</p>
@@ -10357,7 +10359,7 @@ The assassin&#x27;s mind raced with anticipation as he pondered the imminent mee
 —-------------- Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-043-shadows-of-the-hive-part-2" data-story-title="Shadows of the hive-part-2" data-story-section="IV-H. Late Imperial Era - Shadows of the Hive">
 <header class="story-header">
 <p class="story-meta">Archive #43 · IV-H. Late Imperial Era - Shadows of the Hive</p>
@@ -10625,7 +10627,7 @@ As the meat wagon&#x27;s distant hum became audible, the team&#x27;s focus shift
 —-------------- **Disclaimer: Warhammer 40,000 Fan Fiction**
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-044-ascendant-ordo-schola" data-story-title="“Ascendant Ordo Schola”" data-story-section="IV-I. Late Imperial Era - Ascendant Ordo Schola">
 <header class="story-header">
 <p class="story-meta">Archive #44 · IV-I. Late Imperial Era - Ascendant Ordo Schola</p>
@@ -10795,7 +10797,7 @@ This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 u
 part-2
 
 https://www.reddit.com/r/EmperorProtects/comments/18wmhgs/ascendant_ordo_schola_part2/</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-045-ascendant-ordo-schola-part-2" data-story-title="“Ascendant Ordo Schola” part-2" data-story-section="IV-I. Late Imperial Era - Ascendant Ordo Schola">
 <header class="story-header">
 <p class="story-meta">Archive #45 · IV-I. Late Imperial Era - Ascendant Ordo Schola</p>
@@ -10935,7 +10937,7 @@ This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 u
 part-1
 
 https://www.reddit.com/r/EmperorProtects/comments/18wmgpc/ascendant_ordo_schola/</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-046-seats-unfilled" data-story-title="Seats Unfilled" data-story-section="V. Late 41st / Early 42nd Millennium - Guilliman and the Imperial Core">
 <header class="story-header">
 <p class="story-meta">Archive #46 · V. Late 41st / Early 42nd Millennium - Guilliman and the Imperial Core</p>
@@ -11165,7 +11167,7 @@ As the conversation unfolded, Guilliman gained insight into the Custodes&#x27; a
 —-------------- Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-047-when-the-stars-fell-silent" data-story-title="“When the Stars Fell Silent”" data-story-section="V. Late 41st / Early 42nd Millennium - Guilliman and the Imperial Core">
 <header class="story-header">
 <p class="story-meta">Archive #47 · V. Late 41st / Early 42nd Millennium - Guilliman and the Imperial Core</p>
@@ -11447,7 +11449,7 @@ He had slept through the years, waking to a galaxy already scarred by war and be
 Guilliman had failed to see it then. He had thought he was doing the right thing, thought he had saved the Imperium from heresy, but in truth, he had only postponed the inevitable. The Word Bearers had won, and now, centuries later, their influence had spread into the very fabric of the Imperium he had sworn to protect. And perhaps that was why he found himself haunted by the questions that gnawed at him now. Perhaps that was why, when he looked out at the dying lights of Earth, he saw not just the future of the Imperium, but a future twisted by fate, by love, and by the choices of men. Men amplified, yes, but still men.
 
 Still men.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-048-dignity" data-story-title="“Dignity”" data-story-section="V. Late 41st / Early 42nd Millennium - Guilliman and the Imperial Core">
 <header class="story-header">
 <p class="story-meta">Archive #48 · V. Late 41st / Early 42nd Millennium - Guilliman and the Imperial Core</p>
@@ -11855,7 +11857,7 @@ He looked not at the nobles, not at the generals or priests. But at the line coo
 “To you, who carry the Imperium not on banners, but on your backs. To you who suffer in silence and yet still hope. You are why I returned.”
 
 And deep inside, where even he could not quite reach, that flickering human spark flared in defiance of the godhood pressing in.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-049-the-veiled-conflict" data-story-title="The Veiled Conflict" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #49 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -12065,7 +12067,7 @@ The process of shaping public opinion through these measures was arduous, often 
 &quot;Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.&quot;</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-050-loyalty-eternal" data-story-title="“Loyalty Eternal”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #50 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -12279,7 +12281,7 @@ As the decaying soldier vanished into the shadows, the general&#x27;s body lay q
 —-------------- Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-051-the-road-to-death" data-story-title="The road to Death" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #51 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -12515,7 +12517,7 @@ The hive, caught in the throes of chaos, continued to burn as the battle unfolde
 Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-052-the-spoon" data-story-title="The Spoon!" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #52 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -12675,7 +12677,7 @@ The daemon&#x27;s tiny form shifted through the shadows, a creature of the warp 
 Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-053-this-is-the-grimdark" data-story-title="This is the Grimdark" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #53 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -12985,7 +12987,7 @@ And he never saw the glint of the open eyes and smile upon the face of his mistr
 Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-054-the-pillars" data-story-title="The Pillars" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #54 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13119,7 +13121,7 @@ Co-Editor: XeonPeaceMaker
 —-------------- Disclaimer: Warhammer 40,000 Fan Fiction
 
 This fan fiction is a creative, fan-made story inspired by the Warhammer 40,000 universe owned by Games Workshop. It is not for sale or connected with official Warhammer 40,000 products. The creators respect Games Workshop&#x27;s ownership of the Warhammer 40,000 intellectual property, and this fan fiction is not meant to challenge or change the official canon. It&#x27;s created for entertainment within the existing Warhammer 40,000 setting and doesn&#x27;t represent Games Workshop&#x27;s views. Readers are encouraged to explore official Warhammer 40,000 material for the complete universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-055-the-kings-hidden-ball" data-story-title="The Kings Hidden Ball" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #55 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13291,7 +13293,7 @@ Behind us, the manor roared with the sound of dark magic and the shuffling of th
 Eventually, we reached the edge of the property, where a hidden vehicle awaited us. We clambered in, our hands shaking as we started the engine and sped away from the nightmare we had just escaped.
 
 As the manor disappeared into the distance, we allowed ourselves a moment to breathe. We had survived, but the mission had been a stark reminder of the power and depravity of the enemies we faced. Our disguises had allowed us to gather crucial information, but the cost had been high. We vowed to return, better prepared and armed, to confront and dismantle the cult that had almost claimed our lives. The Emperor’s work was far from over, and neither were we.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-056-the-shopkeep-by-mrcalzon02" data-story-title="The shopkeep by mrcalzon02" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #56 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13419,7 +13421,7 @@ Alfredant awoke with a jolt, the pounding ache in his head a cruel reminder of t
 He rushed into his mother’s room, where she was still groggy and disoriented. Together, they scrambled to assemble their best clothes—a task that seemed almost trivial compared to the gravity of their situation. Every second counted as they threw on their garments, the hastily chosen outfits wrinkling and fluttering in their frantic movements.
 
 In their hurried state, Alfredant grabbed for the com’s, dialing the number for an up class air cab service. The situation was dire; the cost of a cab at such short notice was astronomical. He paid a hundred Thrones just to be put on the waiting list, hoping against hope that a cab would come down to their level of the hive. The thought of a crowded, expensive cab ride only added to his mounting anxiety.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-057-historia-custos" data-story-title="Historia Custos" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #57 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13559,7 +13561,7 @@ The terror that lurked outside the walls of the Imperium was real, yes. But the 
 Andronis closed the tome and sat in silence. He had seen the precipice upon which the Imperium stood, and he knew now, in his heart, that it could not hold. The grimness of the universe pressed in with a finality that left no room for hope, no space for dreams.
 
 The Imperium of Man was dying, and no amount of knowledge—no hidden tome, no secret vault—could save it from the abyss.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-058-the-machine" data-story-title="The machine" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #58 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13657,7 +13659,7 @@ What remained was a vast, hollow tableau—a barren landscape of cold, unending 
 He was no longer Caleb; he was an empty vessel, a puppet of wires and steel, with only the cruel ache of awareness as his companion in the boundless cold.
 
 His mind recoiled, yet it was bound now, tangled within the web of machine and mind, irrevocably entwined. Certain memories faded to gray, vanishing like ashes on the wind, while his body grew leaden, his limbs stiff and obedient to a new master. This was his existence now, a horror of flesh and metal, mind and machine—a soul enslaved to an unblinking, all-seeing eye embedded deep within, watching, waiting, cold and eternal.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-059-the-starseer" data-story-title="The Starseer" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #59 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13737,7 +13739,7 @@ Finally, all parties turned to face one another, the warlocks of both sides nodd
 With a voice low and thunderous, Elraith pronounced the single word that would ripple across the galaxy and echo through the warp, a word that carried within it the hopes and nightmares of his entire race.
 
 “Begin.”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-060-gruks-bad-day" data-story-title="Gruk’s bad day" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #60 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13833,7 +13835,7 @@ As he stewed in his thoughts, Gruk knew one thing for certain: he had to keep th
 With a deep breath, Gruk threw his shoulders back and bellowed, “Alright, you lot! Gather ‘round! We ain’t sittin’ here twiddlin’ our thumbs while the humies fly away! I’ll be makin’ sure you lot remember who runs this camp! We’re gonna set up some proper fights, and I want every single one of you to be ready to show just how killy we can be!”
 
 The air buzzed with anticipation as the boyz rallied, ready to unleash their pent-up aggression. Gruk’s grin returned, sharp and fierce—he may have to bide his time, but he’d make sure the taste of blood wouldn’t be too far away.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-061-the-forests-price" data-story-title="The forest’s price" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #61 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -13949,7 +13951,7 @@ And with Malcolm’s life, the last true bond between humanity and the spirit of
 As the withering spirit of the dark oaks gasped its final breath, it extended its last frail tendrils, reaching out across the expanse of the dying forest. It sensed the fading pulses of its brother trees, ancient and young all at once, as they too dwindled into silence. The will of the forests—mankind&#x27;s ancient companion, a presence that had shadowed humanity since their first faltering steps into the unknown—was waning. There was a final surge, a desperate flare of etheric memory, a ghostly echo of a spirit that had roamed the stars alongside humanity, soaring through the void in an alliance as old as wonder itself.
 
 But now, that spirit dimmed, releasing a feeble death knell—a faint ripple in a universe that had turned grim and uncaring. The stars, once filled with hope and promise, had become cold witnesses to humanity’s new legacy: a spreading tide of despair and destruction, a dark torrent of ruin cast outward into the cosmos. This last forest spirit faded into silence, drowned beneath the ceaseless surge of mankind’s hollow empire—a tragic whisper against the unforgiving vastness of a dying universe.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-062-death-by-inches" data-story-title="Death by inches" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #62 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -14259,7 +14261,7 @@ Dontez didn’t have an answer. His eyes flicked over to Lysara, who had managed
 Dontez, still panting, wiped the blood from his face with the back of his hand. “Yeah,” he said, voice hoarse. “Not exactly.”
 
 But the fight wasn’t over. Even with the gene-freak down, the outlier crew was still standing, blood on their hands and murder in their eyes. The tavern had become a battlefield, and it was clear that no one was walking out of here without shedding more blood.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-063-echoes-of-despair" data-story-title="Echoes of Despair" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #63 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -14445,7 +14447,7 @@ The record of Elias Greydon’s &quot;The Final Horizon: Humanity’s Last Stand
 However, despite its importance, it will likely never see the light of day outside the impenetrable vaults of the Imperium. The knowledge it contains—the details of humanity’s near-collapse, the perilous technologies that were deployed, and the grim truths of our fragile survival—are deemed far too dangerous for public consumption. The Ordo Imperii, ever cautious in preserving the stability and cohesion of the Empire, has sealed it away indefinitely, ensuring that only the most elite within the order have access to it.
 
 The only conceivable exception to this ironclad restriction is the Emperor himself. Should he ever deem it necessary to access this forbidden history, it is within his supreme authority to do so. Yet even then, it remains an artifact of caution, hidden from all but the most powerful, as the Empire’s foundations rest upon myths of unyielding strength and inevitable triumph. Greydon&#x27;s work, with its harsh revelations and unsettling insights, remains locked away, a whisper of the past that will never reach the ears of the greater populace.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-064-the-unmaking-of-steven" data-story-title="The Unmaking of Steven" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #64 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -14626,7 +14628,7 @@ upvote
 Comment
 
 View more on Reddit</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-065-where-the-saints-went-silent" data-story-title="“Where the Saints Went Silent”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #65 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -14998,7 +15000,7 @@ Did they leave because they were needed? Or did they leave because they were no 
 And if they should return… Will they find what we have built worthy of their silence?
 
 Or will they turn away once more, leaving only emptiness in their place?</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-066-the-garden-war" data-story-title="“The garden war”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #66 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -15332,7 +15334,7 @@ He was the Gardener—the man who helped birth a language of war told in the blo
 He had created a new doctrine—not written in ink, but in soil and sunlight.
 
 And for that, the world had finally given him what he always wanted: a life rich in purpose, simple in shape, and endlessly, endlessly blooming.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-067-a-bodgey-repair-job" data-story-title="“A Bodgey repair job”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #67 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -15652,7 +15654,7 @@ Mitchell let out a breath and nodded, rolling his shoulders as the tension bled 
 Joshua clapped him on the shoulder. &quot;Good. Then you’re in, kid. But remember—this isn’t just about saving your own skin. You’ve made a choice tonight. You belong to us now.&quot;
 
 The words lingered in the air, not a threat, but a promise.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-068-penitence-watchtower" data-story-title="Penitence watchtower" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #68 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -15876,7 +15878,7 @@ Mornegal turned, beginning his slow march back to the tower.
 &quot;Do not waste the intelligence I have given you, Trellist,&quot; he called over his shoulder. &quot;But do not mistake patience for weakness.&quot;
 
 And with that, he was gone, leaving the lesson to settle in like a brand seared into flesh.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-069-serfs-of-the-emperor-chosen-for-the-black-watch" data-story-title="Serfs of the Emperor: Chosen for the Black Watch" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #69 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -16180,7 +16182,7 @@ They joined the others in the grim task of clearing the wreckage. The aftermath 
 And when the long, brutal night finally came to an end, the students were fed a sparse meal, hard and tasteless, shared with the other serfs. No one spoke as they ate. The food was little more than fuel, a means to keep the body functioning as it was forced into the service of something greater, something unyielding.
 
 They had no illusions left. The life they had known was gone. The weight of the Chapter hung heavy on their shoulders now. And in this place of relentless survival, they would either find a way to endure, or be cast aside like the others before them.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-070-under-the-eyes-of-lords" data-story-title="“Under the eyes of Lords”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #70 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -16338,7 +16340,7 @@ Veta’esrath’s gaze, though devoid of true awareness, was fixed unwaveringly 
 And so, as the darkness closed in and they were pulled into the churning void of transit, Veta’esrath’s thoughts did not waver. He felt no terror, no thrill of lost humanity, no spark of any long-buried memory. His mind was empty, save for the echo of his master’s presence, a single thread of purpose that bound him to Kertacon and gave his existence meaning. To serve was all he knew. And in the cold, dark silence, as they hurtled through the teleportation’s grip, that single thought resonated in his mind with the force of absolute certainty.
 
 It was, for Veta’esrath, an eternity in perfect simplicity.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-071-on-the-fuzzy-edge" data-story-title="“On the Fuzzy Edge”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #71 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -16640,7 +16642,7 @@ Which was why he asked his questions patiently, kept his cover intact, and smile
 Because out here, on the far edge of relevance, the greatest danger was not heresy or treachery.
 
 It was being noticed too soon, and remembered too clearly later.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-072-in-fur-and-brass-we-endure" data-story-title="“In Fur and Brass, We Endure”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #72 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -17008,7 +17010,7 @@ upvote
 Comment
 
 View more on Reddit</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-073-a-questing-demon" data-story-title="A questing demon" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #73 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -17406,7 +17408,7 @@ Comment
 View more on Reddit
 
 if(window.__servedByRes)window.__servedByRes(&quot;local&quot;)</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-074-matron-lagas-atrovald" data-story-title="Matron Lagas Atrovald" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #74 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -17926,7 +17928,7 @@ Comment
 View more on Reddit
 
 if(window.__servedByRes)window.__servedByRes(&quot;local&quot;)</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-075-house-vallimeres-sons" data-story-title="House Vallimere’s sons" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #75 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -18447,7 +18449,7 @@ Comment
 View more on Reddit
 
 if(window.__servedByRes)window.__servedByRes(&quot;local&quot;)</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-076-commissar-reluctant-academic-professional-executioner" data-story-title="Commissar, Reluctant Academic, Professional Executioner" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #76 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -19057,7 +19059,7 @@ Comment
 View more on Reddit
 
 if(window.__servedByRes)window.__servedByRes(&quot;local&quot;)</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-077-maximillion-dewinter" data-story-title="Maximillion Dewinter" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #77 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -19341,7 +19343,7 @@ Abereneth stood a moment, listening to them. The wet, steady thump of shovels bi
 “Diggin’ more holes than corpses.” “Shoulda joined the Navy, least there’s no mud out there.” “By the Throne, I swear I do more digging than shooting.”
 
 He almost smiled at that. Almost. Because it was true. A soldier’s life was rarely the charge, rarely the glorious firestorm of battle. It was this,digging in, waiting, patching trenches, dragging wire, and then waiting some more. Half their life was spent carving holes in the dirt, half firing blind into fog at enemies they could barely see, and the other half,because in war the math never quite added up,was doing nothing at all, waiting for the hammer to fall again.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-078-flight-of-pilcher-7" data-story-title="Flight of Pilcher 7" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #78 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -19637,7 +19639,7 @@ The time of watching was over.
 The time to run was past.
 
 The time to fight had come again.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-079-sultry-temptations" data-story-title="Sultry temptations" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #79 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -20111,7 +20113,7 @@ She could feel her own flesh react, just enough ,  her nipples tightening benea
 And his shame ,  oh, his shame. That’s what made it divine.
 
 “I know it’s strange to wake up in a stranger’s home,” she whispered, pulling the bandage just a little tighter, letting her fingers trail too long across his skin. “But you’re safe now. I promise.”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-080-zarata-karanas" data-story-title="Zarata Karanas" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #80 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -20613,7 +20615,7 @@ But his mind, his soul, was still.
 The clay must be worked until it speaks. The blade must be drawn until it listens.
 
 He had nearly died ten times in that last bout. And yet he had never been more alive.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-081-xerxes-dawn" data-story-title="Xerxes Dawn" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #81 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -20983,7 +20985,7 @@ He turned back to the rest of the crew, voice rising again.
 Gear lockers slammed open. Boots hit steel. The clatter of armor being fastened filled the room like a rising storm.
 
 Rochelleteer strapped on his own rig, finalizing his vox-tap and loadout as the tension began to mount. He looked around one last time, nodded once, and stepped into the corridor with the grim certainty of a man who knew the fruit was over, and now the blood was coming.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-082-by-ink-and-mandate" data-story-title="“By Ink and Mandate”" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #82 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -21315,7 +21317,7 @@ For a moment, the room was silent again. Only the hum of a backup pictserver cou
 Then Jerry smiled grimly.
 
 “All right,” he said. “We’re going to war with the pamphlet.”</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-083-troubled-dreams" data-story-title="Troubled Dreams" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #83 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -21753,7 +21755,7 @@ Not truly. Only memory. Only regret.
 The boy who had dreamed was dead.
 
 The giant who remained had to endure.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-084-scion-of-the-warp-born-blood" data-story-title="Scion of the Warp-Born Blood" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #84 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -22089,7 +22091,7 @@ And so, Mulvane stood always in the breach. Between the unknowable fires of the 
 There was never a shortage of work. Only a shortage of those strong enough to do it.
 
 He bore that weight without complaint. Because he knew: if not him… then who?</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-085-of-blood-and-wires-the-litanies-of-tenelja-station" data-story-title="Of Blood and Wires: The Litanies of Tenelja Station" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #85 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -22267,7 +22269,7 @@ But tomorrow, if fate and Tenelja’s systems allowed it, she would see Rix agai
 She closed her eyes. The vox music faded into static. The room dimmed.
 
 And in the long hush between heartbeats, she prayed without words.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article><article class="story" id="story-086-chancellor-ardenals-conclave" data-story-title="Chancellor Ardenal’s conclave" data-story-section="VI. Late Imperial Stories - Relative Chronology Uncertain">
 <header class="story-header">
 <p class="story-meta">Archive #86 · VI. Late Imperial Stories - Relative Chronology Uncertain</p>
@@ -23199,7 +23201,7 @@ Lorus considered the matter.
 At length, Ardenal selected a senior legal courier named Othmar Vale, a dry, narrow-faced man who possessed no known political opinions and had once stood through a six-hour interrogation without changing expression. This was largely because he suffered from partial facial paralysis, but discipline was discipline.
 
 Vale departed by armoured transit before the first shift bells.</pre>
-<p class="story-return"><a href="#archive-top">Return to Lore index</a></p>
+<p class="story-return"><a href="#archive-top">Return to Story Index</a></p>
 </article></section>
 </div>
 <details class="legal" open>
@@ -23212,7 +23214,7 @@ The objective of this Platform is to support personal creative expression. Users
 Under no circumstances shall the developer of this Platform be held liable for any direct, indirect, incidental, or consequential damages arising from the use of, or inability to use, these tools. This includes, but is not limited to, loss of campaign data, technical failures during sessions, or disruptions to game-play environments.</p><p>5. Governance
 By accessing this Platform, the user acknowledges that the Platform’s primary purpose is the advancement of the tabletop hobby. The developer reserves the right to modify these terms, deprecate tools, or restructure the Platform’s offerings at their sole discretion without prior notice to ensure the continued security and integrity of the project.</p><p>For inquiries regarding the scope of these terms, please refer to the project repository metadata.</p></div>
 </details>
-<footer class="archive-footer">Personal fan-fiction archive · Mrcalzon02 / Christopher Vardeman · Source ordering: r/EmperorProtects MASTER ARCHIVE INDEX.</footer>
+<footer class="archive-footer">Personal stories archive · Mrcalzon02 / Christopher Vardeman · Source ordering: r/EmperorProtects MASTER ARCHIVE INDEX plus indexed project chronicles.</footer>
 </main>
 <script>
 (() => {
@@ -23402,6 +23404,10 @@ By accessing this Platform, the user acknowledges that the Platform’s primary 
         storiesContainer.append(article);
       });
       applySearch();
+      if (location.hash) {
+        const target = document.querySelector(location.hash);
+        if (target) requestAnimationFrame(() => target.scrollIntoView({block:'start'}));
+      }
     } catch (error) {
       indexList.replaceChildren();
       const li = document.createElement('li');
