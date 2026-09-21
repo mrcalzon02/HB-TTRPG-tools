@@ -2,10 +2,12 @@
 series: "Beneath Dappled Oaks"
 chapter: 1
 title: "The Last Seven"
-status: "CANON PROSE"
+status: "CANON PROSE — REVISED SETTING-AWARE EDITION"
 era: "282 S.M."
 season: "Bloomtide"
 continuity_parent: "Book One opening"
+academy: "Concord Academy of Aurelith"
+revision_note: "Back-seeded with setting foreword, Aurelith context, the Academy's formal identity, and the protected-student graduation threshold."
 ---
 
 # Chapter One — The Last Seven
@@ -62,7 +64,7 @@ A graduate could be recruited, assigned, courted, married, deployed, entrusted w
 
 That was why Bloomtide graduations mattered.
 
-Bloomtide was already the season of beginnings. Orchards flowered. Roads reopened. guild appointments and charters were finalized. Families traveled. Courts filled. Academies and military schools sent their graduates into the institutions waiting for them.
+Bloomtide was already the season of beginnings. Orchards flowered. Roads reopened. Guild appointments and charters were finalized. Families traveled. Courts filled. Academies and military schools sent their graduates into the institutions waiting for them.
 
 At the Concord Academy of Aurelith, the graduating class of 282 S.M. should have contained forty-three students.
 
@@ -96,7 +98,7 @@ They had done excellent work.
 
 From the lower terrace the courtyard looked ready for celebration.
 
-Beyond the eastern wall, Aurelith had already begun its morning. Petition bells sounded faintly from the civic quarter. Barges moved along the canal roads below the Academy Ward. The pale roofs of ministries and House residences climbed toward the Moon-Crown district, where flags from the seven Great Houses hung in a city that had spent centuries insisting that no one family ruled it alone.
+Beyond the eastern wall, Aurelith had already begun its morning. Petition bells sounded faintly from the civic quarter. Barges moved along the canal roads below the Academy Ward. The pale roofs of ministries and House residences climbed toward the Moon-Crown district, where the banners of the seven Great Houses hung above streets belonging, officially and argumentatively, to the Concord as a whole.
 
 The Academy stood inside that city and slightly apart from it, chartered to educate the people who would eventually inherit its arguments.
 
