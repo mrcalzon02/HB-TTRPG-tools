@@ -2,7 +2,7 @@
 'use strict';
 
 const api='https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
-const chapterPattern=/^(\\d+)-(.+)\\.md$/i;
+const chapterPattern=/^(\d+)-(.+)\.md$/i;
 const smallWords=new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
 const recoveryBacklog=[
   {number:1,title:'The Last Seven',opening:'There should have been forty-three of them. Seven stood beneath the flowering arch.'},
@@ -22,17 +22,17 @@ function titleFromSlug(slug){
 function esc(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function inlineMarkdown(text){
   let value=esc(text);
-  value=value.replace(/\\*\\*([^*]+)\\*\\*/g,'<strong>$1</strong>');
-  value=value.replace(/(^|[^*])\\*([^*]+)\\*(?!\\*)/g,'$1<em>$2</em>');
+  value=value.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  value=value.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g,'$1<em>$2</em>');
   value=value.replace(/`([^`]+)`/g,'<code>$1</code>');
   return value;
 }
 function parseFrontMatter(markdown){
   const result={meta:{},body:markdown};
-  if(!markdown.startsWith('---\\n'))return result;
-  const end=markdown.indexOf('\\n---\\n',4);
+  if(!markdown.startsWith('---\n'))return result;
+  const end=markdown.indexOf('\n---\n',4);
   if(end<0)return result;
-  for(const line of markdown.slice(4,end).split('\\n')){
+  for(const line of markdown.slice(4,end).split('\n')){
     const split=line.indexOf(':'); if(split<0)continue;
     const key=line.slice(0,split).trim();
     let value=line.slice(split+1).trim().replace(/^["']|["']$/g,'');
@@ -42,19 +42,19 @@ function parseFrontMatter(markdown){
   return result;
 }
 function renderMarkdown(markdown){
-  const lines=markdown.replace(/\\r\\n?/g,'\\n').split('\\n');
+  const lines=markdown.replace(/\r\n?/g,'\n').split('\n');
   const out=[]; let paragraph=[];
   const flush=()=>{if(!paragraph.length)return;out.push('<p>'+inlineMarkdown(paragraph.join(' '))+'</p>');paragraph=[]};
   for(const raw of lines){
     const line=raw.trimEnd();
     if(!line.trim()){flush();continue}
     if(/^---+$/.test(line.trim())){flush();out.push('<hr>');continue}
-    const heading=line.match(/^(#{1,6})\\s+(.+)$/);
+    const heading=line.match(/^(#{1,6})\s+(.+)$/);
     if(heading){flush();const level=Math.min(6,heading[1].length);out.push('<h'+level+'>'+inlineMarkdown(heading[2])+'</h'+level+'>');continue}
     if(line.startsWith('> ')){flush();out.push('<blockquote><p>'+inlineMarkdown(line.slice(2))+'</p></blockquote>');continue}
     paragraph.push(line.trim());
   }
-  flush(); return out.join('\\n');
+  flush(); return out.join('\n');
 }
 function activatePanel(id,updateHash=true){
   const panels=[...document.querySelectorAll('[data-story-tab-panel]')];
@@ -151,29 +151,29 @@ function markActive(number,ui){
     entry.classList.toggle('is-active',Number(entry.dataset.chapterNumber)===Number(number)&&!entry.classList.contains('is-recovery'));
   });
 }
-function safeName(value){return String(value||'chapter').normalize('NFKD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase()||'chapter'}
+function safeName(value){return String(value||'chapter').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase()||'chapter'}
 function downloadBlob(blob,filename){
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
 }
 function currentText(){
   const prose=byId('chapter-reader-prose'); if(!current||!prose)return'';
-  return 'Chapter '+current.number+' — '+current.title+'\\n\\n'+(prose.innerText||prose.textContent||'').trim()+'\\n';
+  return 'Chapter '+current.number+' — '+current.title+'\n\n'+(prose.innerText||prose.textContent||'').trim()+'\n';
 }
 function standaloneHtml(){
   const prose=byId('chapter-reader-prose'),title='Chapter '+current.number+' — '+current.title;
-  const paragraphs=(prose?.innerText||'').split(/\\n\\s*\\n/).map(p=>p.trim()).filter(Boolean);
-  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{max-width:52rem;margin:3rem auto;padding:0 1.2rem;font:18px/1.65 Georgia,serif;color:#191919;background:#fff}h1{line-height:1.15}p{white-space:pre-wrap}</style></head><body><h1>'+esc(title)+'</h1>'+paragraphs.map(p=>'<p>'+esc(p).replace(/\\n/g,'<br>')+'</p>').join('')+'</body></html>';
+  const paragraphs=(prose?.innerText||'').split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>body{max-width:52rem;margin:3rem auto;padding:0 1.2rem;font:18px/1.65 Georgia,serif;color:#191919;background:#fff}h1{line-height:1.15}p{white-space:pre-wrap}</style></head><body><h1>'+esc(title)+'</h1>'+paragraphs.map(p=>'<p>'+esc(p).replace(/\n/g,'<br>')+'</p>').join('')+'</body></html>';
 }
-function normalizePdfText(value){return String(value).replace(/[\\u2018\\u2019]/g,"'").replace(/[\\u201C\\u201D]/g,'"').replace(/[\\u2013\\u2014]/g,'-').replace(/\\u2026/g,'...').normalize('NFKD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^\\x20-\\x7E\\n]/g,'?')}
+function normalizePdfText(value){return String(value).replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[\u2013\u2014]/g,'-').replace(/\u2026/g,'...').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7E\n]/g,'?')}
 function wrapPdfLines(text,width=88){
-  const out=[];for(const raw of normalizePdfText(text).split('\\n')){const line=raw.trimEnd();if(!line){out.push('');continue}const words=line.split(/\\s+/);let cur='';for(const word of words){if(!cur)cur=word;else if((cur+' '+word).length<=width)cur+=' '+word;else{out.push(cur);cur=word}}if(cur)out.push(cur)}return out
+  const out=[];for(const raw of normalizePdfText(text).split('\n')){const line=raw.trimEnd();if(!line){out.push('');continue}const words=line.split(/\s+/);let cur='';for(const word of words){if(!cur)cur=word;else if((cur+' '+word).length<=width)cur+=' '+word;else{out.push(cur);cur=word}}if(cur)out.push(cur)}return out
 }
-function pdfEscape(value){return value.replace(/\\/g,'\\\\').replace(/\\(/g,'\\(').replace(/\\)/g,'\\)')}
+function pdfEscape(value){return value.replace(/\/g,'\\').replace(/\(/g,'\(').replace(/\)/g,'\)')}
 function pdfBlob(){
   const lines=wrapPdfLines(currentText(),88),perPage=50,pages=[];for(let i=0;i<lines.length;i+=perPage)pages.push(lines.slice(i,i+perPage));if(!pages.length)pages.push(['']);
   const objects=[];objects[1]='<< /Type /Catalog /Pages 2 0 R >>';objects[3]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';const kids=[];
-  pages.forEach((pageLines,i)=>{const contentId=4+i*2,pageId=5+i*2;kids.push(pageId+' 0 R');const commands=['BT','/F1 10 Tf','48 744 Td','13 TL'];for(const line of pageLines)commands.push('('+pdfEscape(line)+') Tj','T*');commands.push('ET');const stream=commands.join('\\n');objects[contentId]='<< /Length '+stream.length+' >>\\nstream\\n'+stream+'\\nendstream';objects[pageId]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents '+contentId+' 0 R >>'});
-  objects[2]='<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+pages.length+' >>';let pdf='%PDF-1.4\\n% HB-TTRPG-tools chapter export\\n';const offsets=[0];for(let i=1;i<objects.length;i++){offsets[i]=pdf.length;pdf+=i+' 0 obj\\n'+objects[i]+'\\nendobj\\n'}const xref=pdf.length;pdf+='xref\\n0 '+objects.length+'\\n0000000000 65535 f \\n';for(let i=1;i<objects.length;i++)pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \\n';pdf+='trailer\\n<< /Size '+objects.length+' /Root 1 0 R >>\\nstartxref\\n'+xref+'\\n%%EOF\\n';return new Blob([pdf],{type:'application/pdf'})
+  pages.forEach((pageLines,i)=>{const contentId=4+i*2,pageId=5+i*2;kids.push(pageId+' 0 R');const commands=['BT','/F1 10 Tf','48 744 Td','13 TL'];for(const line of pageLines)commands.push('('+pdfEscape(line)+') Tj','T*');commands.push('ET');const stream=commands.join('\n');objects[contentId]='<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream';objects[pageId]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents '+contentId+' 0 R >>'});
+  objects[2]='<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+pages.length+' >>';let pdf='%PDF-1.4\n% HB-TTRPG-tools chapter export\n';const offsets=[0];for(let i=1;i<objects.length;i++){offsets[i]=pdf.length;pdf+=i+' 0 obj\n'+objects[i]+'\nendobj\n'}const xref=pdf.length;pdf+='xref\n0 '+objects.length+'\n0000000000 65535 f \n';for(let i=1;i<objects.length;i++)pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';pdf+='trailer\n<< /Size '+objects.length+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';return new Blob([pdf],{type:'application/pdf'})
 }
 const crcTable=(()=>{const table=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);table[n]=c>>>0}return table})();
 function crc32(bytes){let c=0xFFFFFFFF;for(const b of bytes)c=crcTable[(c^b)&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
@@ -187,11 +187,11 @@ function zipStore(entries){
 }
 function epubBlob(){
   const prose=byId('chapter-reader-prose'),title='Chapter '+current.number+' — '+current.title,creator='Mrcalzon02 / Christopher Vardeman',id='urn:hb-ttrpg-tools:beneath-dappled-oaks:'+safeName(title);
-  const paragraphs=(prose?.innerText||'').split(/\\n\\s*\\n/).map(p=>p.trim()).filter(Boolean);
-  const chapter='<?xml version="1.0" encoding="UTF-8"?>\\n<!DOCTYPE html>\\n<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta charset="utf-8"/><title>'+esc(title)+'</title><style>body{font-family:serif;line-height:1.5}p{margin:0 0 1em}</style></head><body><h1>'+esc(title)+'</h1>'+paragraphs.map(p=>'<p>'+esc(p).replace(/\\n/g,'<br/>')+'</p>').join('')+'</body></html>';
-  const toc='<?xml version="1.0" encoding="UTF-8"?>\\n<!DOCTYPE html>\\n<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en"><head><title>Contents</title></head><body><nav epub:type="toc"><h1>Contents</h1><ol><li><a href="chapter.xhtml">'+esc(title)+'</a></li></ol></nav></body></html>';
-  const opf='<?xml version="1.0" encoding="UTF-8"?>\\n<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="bookid" version="3.0"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">'+esc(id)+'</dc:identifier><dc:title>'+esc(title)+'</dc:title><dc:creator>'+esc(creator)+'</dc:creator><dc:language>en</dc:language></metadata><manifest><item id="nav" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/></manifest><spine><itemref idref="chapter"/></spine></package>';
-  const container='<?xml version="1.0" encoding="UTF-8"?>\\n<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>';
+  const paragraphs=(prose?.innerText||'').split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+  const chapter='<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta charset="utf-8"/><title>'+esc(title)+'</title><style>body{font-family:serif;line-height:1.5}p{margin:0 0 1em}</style></head><body><h1>'+esc(title)+'</h1>'+paragraphs.map(p=>'<p>'+esc(p).replace(/\n/g,'<br/>')+'</p>').join('')+'</body></html>';
+  const toc='<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en"><head><title>Contents</title></head><body><nav epub:type="toc"><h1>Contents</h1><ol><li><a href="chapter.xhtml">'+esc(title)+'</a></li></ol></nav></body></html>';
+  const opf='<?xml version="1.0" encoding="UTF-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="bookid" version="3.0"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">'+esc(id)+'</dc:identifier><dc:title>'+esc(title)+'</dc:title><dc:creator>'+esc(creator)+'</dc:creator><dc:language>en</dc:language></metadata><manifest><item id="nav" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/></manifest><spine><itemref idref="chapter"/></spine></package>';
+  const container='<?xml version="1.0" encoding="UTF-8"?>\n<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>';
   const bytes=zipStore([{name:'mimetype',data:encoder.encode('application/epub+zip')},{name:'META-INF/container.xml',data:encoder.encode(container)},{name:'OEBPS/content.opf',data:encoder.encode(opf)},{name:'OEBPS/toc.xhtml',data:encoder.encode(toc)},{name:'OEBPS/chapter.xhtml',data:encoder.encode(chapter)}]);return new Blob([bytes],{type:'application/epub+zip'})
 }
 function configureDownloads(){
@@ -216,11 +216,11 @@ async function openChapter(number,updateHistory,ui){
   try{
     const response=await fetch(chapter.href,{cache:'no-store'});if(!response.ok)throw new Error('Chapter request failed: '+response.status);
     const markdown=await response.text(),parsed=parseFrontMatter(markdown),actualTitle=parsed.meta.title||chapter.title;
-    current=Object.assign({},chapter,{title:actualTitle});currentMarkdown=markdown.endsWith('\\n')?markdown:markdown+'\\n';
+    current=Object.assign({},chapter,{title:actualTitle});currentMarkdown=markdown.endsWith('\n')?markdown:markdown+'\n';
     title.textContent='Chapter '+chapter.number+' — '+actualTitle;
     const metadata=[];if(parsed.meta.status)metadata.push(parsed.meta.status);if(parsed.meta.era)metadata.push(parsed.meta.era);if(parsed.meta.season)metadata.push(parsed.meta.season);
     meta.replaceChildren(...metadata.map(value=>{const s=document.createElement('span');s.textContent=value;return s}));
-    const body=parsed.body.replace(/^\\s*#\\s+[^\\n]+\\n+/,'');
+    const body=parsed.body.replace(/^\s*#\s+[^\n]+\n+/,'');
     prose.innerHTML=renderMarkdown(body);configureDownloads();
     const index=released.findIndex(item=>item.number===chapter.number),p=released[index-1],n=released[index+1];
     prev.disabled=!p;next.disabled=!n;prev.dataset.chapterNumber=p?String(p.number):'';next.dataset.chapterNumber=n?String(n.number):'';
