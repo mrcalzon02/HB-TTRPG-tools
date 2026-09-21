@@ -2,28 +2,85 @@
   "schemaVersion": "1.0.0",
   "setting": "Warhammer 40K",
   "purpose": "Durable rotation registry for recovered and active long-form Warhammer 40K chronicles. Recovery backlog takes priority over new continuation work. Once recovered material is indexed and verified, rotate between distinct existing story lines rather than repeatedly extending one arc.",
-  "policy": {"recoveryFirst":true,"alternateStories":true,"noSilentReconstruction":true,"preserveToneAndLength":true,"requireVerifiedMainCommit":true,"requireLoreIndexEntry":true,"requireRelevantCrossIndex":true},
+  "policy": {
+    "recoveryFirst": true,
+    "alternateStories": true,
+    "noSilentReconstruction": true,
+    "preserveToneAndLength": true,
+    "requireVerifiedMainCommit": true,
+    "requireLoreIndexEntry": true,
+    "requireRelevantCrossIndex": true,
+    "requireGovernanceRead": true,
+    "requireEraLock": true,
+    "requireCanonCharacterGate": true,
+    "requireStoryIndexDiscoverability": true
+  },
   "active": [
     {
-      "id":"long-patrol-broussard",
-      "title":"The Long Patrol of Broussard",
-      "source":"google-working-draft-recovery",
-      "path":"assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-01.md",
-      "status":"recovery-in-progress",
-      "priority":"continue-verbatim-google-source-recovery-before-expansion",
-      "sourceDocument":"The Long Patrol of Broussard — Working Draft",
-      "sourceDocumentId":"1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
-      "recoveredThrough":"IV. THE COMMISSAR ARRIVES — complete through Jalesthesian's assignment to Broussard's Chimera and 'Murphy remained undefeated.'",
-      "sourceObservedThrough":"X. THE FORWARD HOLDS — ending with Broussard: Let's go find them.",
-      "currentEndpoint":"Verbatim source recovery now includes Chapters I–IV in full. Chapter IV establishes the four-Chimera command assignments, Broussard's practical command philosophy, the apparent absence of commissariat oversight, Gabriel Hamden Jalesthesian's physical arrival and Regilian Third Continental Schola introduction, his native High Presidio origin, pragmatic view of discipline, respect for Broussard's survival record, and assignment to Broussard's own Chimera. Chapters V–X remain present in the Google source but uncommitted. The later deep-index telemetry falsification, predator attack, convoy return and reader-only Genestealer reveal remain authoritative authorial continuity beyond the currently observed Google draft and must not be invented as recovered prose.",
-      "nextSlice":"Recover Chapter V, HARD LESSONS, verbatim from the Google working draft. Continue sequentially through Chapters VI–X before writing any new Broussard prose.",
-      "constraints":["Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.","Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.","Hesperant Vale crew is secretly compromised by Genestealer influence.","Genestealer hybrids are hidden among loose produce bins in the forward holds.","Broussard's detachment successfully returns the damaged freighter to the convoy after fighting additional High Presidio predators.","The reader sees the hidden Xenos travesty continuing beneath the apparent successful rescue.","Recover Google source sequentially and verbatim before fresh expansion."]
+      "id": "long-patrol-broussard",
+      "title": "The Long Patrol of Broussard",
+      "source": "google-working-draft-recovery",
+      "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-01.md",
+      "status": "recovery-in-progress",
+      "priority": "continue-verbatim-google-source-recovery-before-expansion",
+      "sourceDocument": "The Long Patrol of Broussard — Working Draft",
+      "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
+      "recoveredThrough": "IV. THE COMMISSAR ARRIVES — complete through Jalesthesian's assignment to Broussard's Chimera and 'Murphy remained undefeated.'",
+      "sourceObservedThrough": "X. THE FORWARD HOLDS — ending with Broussard: Let's go find them.",
+      "currentEndpoint": "Verbatim source recovery now includes Chapters I–IV in full. Chapter IV establishes the four-Chimera command assignments, Broussard's practical command philosophy, the apparent absence of commissariat oversight, Gabriel Hamden Jalesthesian's physical arrival and Regilian Third Continental Schola introduction, his native High Presidio origin, pragmatic view of discipline, respect for Broussard's survival record, and assignment to Broussard's own Chimera. Chapters V–X remain present in the Google source but uncommitted. The later deep-index telemetry falsification, predator attack, convoy return and reader-only Genestealer reveal remain authoritative authorial continuity beyond the currently observed Google draft and must not be invented as recovered prose.",
+      "nextSlice": "Recover Chapter V, HARD LESSONS, verbatim from the Google working draft. Continue sequentially through Chapters VI–X before writing any new Broussard prose.",
+      "constraints": [
+        "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
+        "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
+        "Hesperant Vale crew is secretly compromised by Genestealer influence.",
+        "Genestealer hybrids are hidden among loose produce bins in the forward holds.",
+        "Broussard's detachment successfully returns the damaged freighter to the convoy after fighting additional High Presidio predators.",
+        "The reader sees the hidden Xenos travesty continuing beneath the apparent successful rescue.",
+        "Recover Google source sequentially and verbatim before fresh expansion."
+      ]
     },
-    {"id":"house-vallimere-sons","title":"House Vallimere’s Sons","source":"migrated-long-form","path":"assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md","status":"active"},
-    {"id":"matron-lagas-atrovald","title":"Matron Lagas Atrovald","source":"migrated-long-form","path":"assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md","status":"active"},
-    {"id":"on-the-fuzzy-edge","title":"On the Fuzzy Edge","source":"migrated-long-form","path":"assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md","status":"active"},
-    {"id":"project-vigilant-shade","title":"Project VIGILANT SHADE","source":"migrated-long-form","path":"assets/warhammer-40k/lore/reddit-story-archive.json","status":"eligible-next"},
-    {"id":"tenelja-station","title":"Of Blood and Wires: The Litanies of Tenelja Station","source":"migrated-long-form","path":"assets/warhammer-40k/lore/reddit-story-archive.json","status":"eligible-next"},
-    {"id":"house-drenal","title":"Scion of the Warp-Born Blood","source":"migrated-long-form","path":"assets/warhammer-40k/lore/reddit-story-archive.json","status":"eligible-next"}
-  ]
+    {
+      "id": "house-vallimere-sons",
+      "title": "House Vallimere’s Sons",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+      "status": "active"
+    },
+    {
+      "id": "matron-lagas-atrovald",
+      "title": "Matron Lagas Atrovald",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+      "status": "active"
+    },
+    {
+      "id": "on-the-fuzzy-edge",
+      "title": "On the Fuzzy Edge",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/on-the-fuzzy-edge-continuation-02.md",
+      "status": "active"
+    },
+    {
+      "id": "project-vigilant-shade",
+      "title": "Project VIGILANT SHADE",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+      "status": "eligible-next"
+    },
+    {
+      "id": "tenelja-station",
+      "title": "Of Blood and Wires: The Litanies of Tenelja Station",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+      "status": "eligible-next"
+    },
+    {
+      "id": "house-drenal",
+      "title": "Scion of the Warp-Born Blood",
+      "source": "migrated-long-form",
+      "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+      "status": "eligible-next"
+    }
+  ],
+  "governanceDocument": "api/resources/warhammer-40k-fiction-governance.md"
 }
