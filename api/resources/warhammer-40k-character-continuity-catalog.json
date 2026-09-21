@@ -39,10 +39,10 @@
     "forgotten-explicitly",
     "memory-altered"
   ],
-  "characterCount": 54,
+  "characterCount": 59,
   "seededFrom": {
     "file": "assets/warhammer-40k/imperial-dramatis-personae-v1.js",
-    "version": "1.13.0",
+    "version": "1.14.0",
     "note": "Baseline identity, temperament, doctrine, relationship names, and story beats are mirrored for read efficiency only. Identity-level corrections belong in Dramatis Personae first."
   },
   "characters": {
@@ -3803,6 +3803,57 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "broussard-kb-holt-hesitation-01",
+          "information": "Meren Holt twice hesitated when asked where Captain Kelm was, and the Hesperant Vale crew appeared nervous beyond what ordinary accident embarrassment seemed to explain.",
+          "epistemicStatus": "observed",
+          "belief": "suspects there is additional information aboard the ship but does not assume guilt or identify a cause",
+          "certainty": "moderate",
+          "sourceCharacter": "Direct observation",
+          "actionTaken": "Boards with Jalesthesian, continues observation, and avoids premature accusation.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VII. THE WOUND IN THE HULL",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-07.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "broussard-kb-telemetry-14-01",
+          "information": "Kelm reports helm response failed perhaps six seconds before impact; the Magos reports approximately fourteen seconds of pre-impact telemetry absent, leaving about eight seconds not explained by Kelm's account.",
+          "epistemicStatus": "confirmed",
+          "belief": "regards the absence as suspicious but not proof of sabotage",
+          "certainty": "high regarding the observed discrepancy; unresolved regarding cause",
+          "sourceCharacter": "Captain Kelm and recovery Magos",
+          "actionTaken": "Keeps the crew alive first, defers harder questions, and continues watching for corroboration.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "broussard-kb-crew-integrity-01",
+          "information": "During repairs, multiple Hesperant Vale crew demonstrate conscientious work, self-reporting, careful maintenance and refusal to leave questionable repairs, even while Broussard remains convinced they are afraid of something.",
+          "epistemicStatus": "observed",
+          "belief": "distinguishes possible concealed wrongdoing from the crew's demonstrated decency and commitment to shipmates",
+          "certainty": "high for observed conduct; unresolved for hidden cause",
+          "sourceCharacter": "Direct observation",
+          "actionTaken": "Continues cooperative recovery rather than treating the crew as presumed guilty.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3820,9 +3871,38 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "broussard-goal-forward-search-01",
+          "goal": "Find Jerrik Noll, Edren Vale and Pallas Dorn in the damaged forward holds using a controlled recovery team, ship guides, marked junctions and hard-line vox relays while avoiding unstable cargo routes.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
         }
       ],
-      "skillsCompetence": [],
+      "skillsCompetence": [
+        {
+          "id": "broussard-skill-crew-reading-01",
+          "domain": "command observation / crew assessment",
+          "proficiency": "demonstrated",
+          "context": "Reads pauses, work habits, fear responses and maintenance conduct across the Hesperant Vale rather than relying only on formal reports.",
+          "limitations": "Observations support suspicion but do not reveal the hidden cause.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VII–IX",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "relationshipsTrust": [
         {
           "id": "broussard-rel-jalesthesian-01",
@@ -3837,6 +3917,23 @@
             "story": "The Long Patrol of Broussard",
             "segment": "IV. THE COMMISSAR ARRIVES / V. HARD LESSONS",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "broussard-rel-kelm-01",
+          "counterpartPersonaId": "captain-derrovan-kelm",
+          "direction": "Broussard → Kelm",
+          "trust": "cautious and unresolved",
+          "respect": "increased after seeing Kelm protect the ship and crew and correctly oppose the high-risk power gamble",
+          "suspicion": "retained because of the unexplained telemetry and repeated hesitation around the accident",
+          "currentInterpretation": "Kelm is an experienced captain deeply attached to the Hesperant Vale and its people; that sincerity does not resolve the missing telemetry.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII–IX",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
@@ -3856,6 +3953,50 @@
             "story": "The Long Patrol of Broussard",
             "segment": "V. HARD LESSONS",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "VII. THE WOUND IN THE HULL",
+          "changeSummary": "Boarded the Hesperant Vale, observed severe hull damage, noticed Holt's repeated hesitation and a faint organic odor, and began treating the crew's nervousness as an unresolved operational concern.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VII. THE WOUND IN THE HULL",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-07.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "VIII. A CAPTAIN'S SHAME",
+          "changeSummary": "Learned the six-second helm-failure account and fourteen-second telemetry absence, accepted Kelm's slower repair logic, and retained suspicion without converting it into accusation.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "IX. REPAIRS",
+          "changeSummary": "Observed strong crew integrity and Sella Varn's repair discipline, increasing his respect for the Hesperant Vale crew while preserving concern about what they fear.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Learned Jerrik Noll, Edren Vale and Pallas Dorn were more than two hours overdue in the forward produce holds and organized a controlled search.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
@@ -3925,7 +4066,25 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "jalesthesian-kb-telemetry-14-01",
+          "information": "Kelm says helm response failed about six seconds before impact while approximately fourteen seconds of telemetry are absent.",
+          "epistemicStatus": "confirmed",
+          "belief": "considers deliberate deletion possible but explicitly agrees not to condemn anyone before evidence",
+          "certainty": "moderate regarding sabotage hypothesis",
+          "sourceCharacter": "Kelm, recovery Magos, direct observation",
+          "actionTaken": "Continues observing crew behavior while prioritizing survival.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII–IX",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [
         {
@@ -3977,6 +4136,22 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "jalesthesian-rel-hesperant-crew-01",
+          "counterpartGroup": "Hesperant Vale crew",
+          "direction": "Jalesthesian → Hesperant Vale crew",
+          "trust": "unresolved but warming through observed conduct",
+          "respect": "increased as crew continue working under pressure",
+          "currentInterpretation": "Frightened and concealing something or fearing discovery, yet demonstrably committed to keeping one another and the ship alive.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
         }
       ],
       "temperamentPerformance": [
@@ -3995,6 +4170,21 @@
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
+        },
+        {
+          "id": "jalesthesian-performance-crew-integration-01",
+          "domain": "commissarial social integration / observation",
+          "context": "Helps move equipment, holds a work lamp, listens to family stories and allows the black coat to become part of the scenery while continuing to observe.",
+          "demonstratedLevel": "highly effective non-theatrical authority",
+          "limitations": "Does not imply harmlessness or that crew cease respecting his institutional power.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
         }
       ],
       "preferencesAversions": [],
@@ -4010,6 +4200,50 @@
             "story": "The Long Patrol of Broussard",
             "segment": "V. HARD LESSONS",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "VII. THE WOUND IN THE HULL",
+          "changeSummary": "Accompanied Broussard aboard, independently noticed Holt's hesitation and the crew's nervousness, and supported observation without premature accusation.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VII. THE WOUND IN THE HULL",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-07.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "VIII. A CAPTAIN'S SHAME",
+          "changeSummary": "Witnessed the fourteen-second telemetry absence and Kelm's six-second helm-failure account; shared Broussard's suspicion while withholding judgment.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "IX. REPAIRS",
+          "changeSummary": "Integrated into the freighter crew through practical help and listening while maintaining commissarial authority and observation.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Shifted immediately from affability to focused search posture when the three missing cargo crew were identified.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
@@ -4039,13 +4273,13 @@
           "Operationally experienced",
           "Associated with unresolved crew tension"
         ],
-        "doctrine": "Restore the Hesperant Vale to movement as quickly as practical. The recovered story places that instinct in conflict with Broussard’s preference for preserving auxiliary redundancy and fully understanding the pre-impact anomaly.",
+        "doctrine": "Preserve the Hesperant Vale as a functioning ship rather than gamble its auxiliary distribution spine for a faster convoy recovery. Kelm relies heavily on long experience with the vessel’s undocumented modifications and treats the crew and ship as a long-lived community rather than replaceable freight infrastructure.",
         "source": {
           "label": "The Long Patrol of Broussard — recovered conversation edition",
           "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-recovered-01.md",
           "status": "authorial"
         },
-        "sourceAuthority": "Recovered from the August 15–16, 2026 conversation record with 2026-09-20 authorial correction. His command, damaged vessel and repair dispute are explicit; the crew’s Genestealer compromise and falsified historical telemetry are authoritative, while Kelm’s individual knowledge or infection status must not be invented before source-document reconciliation.",
+        "sourceAuthority": "Direct Google-source recovery now confirms Kelm’s command, twenty-one-plus local standard years of experience with the Hesperant Vale, undocumented Meredian regulator modifications, opposition to the risky fast repair, and his protective attachment to the ship and its eighty-seven crew. Later authorial continuity establishes crew-wide Genestealer compromise and falsified historical telemetry, but Kelm’s individual knowledge or infection status remains unresolved and must not be invented.",
         "baselineRelationshipNames": [
           "Captain Broussard",
           "Second Bridge Officer Holt",
@@ -4063,7 +4297,7 @@
           },
           {
             "place": "Hesperant Vale · engineering",
-            "beat": "Disputed the slower repair strategy before Broussard ordered the 36–54 hour option preserving the auxiliary bus."
+            "beat": "Opposed the Mechanicus eleven-hour high-risk restoration and supported the slower 36–54 hour repair that preserved the auxiliary distribution spine; Broussard accepted that approach."
           },
           {
             "place": "Hesperant Vale · latest recovered testimony",
@@ -4072,19 +4306,147 @@
         ]
       },
       "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "kelm-kb-helm-failure-01",
+          "information": "The Hesperant Vale's helm stopped responding perhaps six seconds before impact; the cause remains unknown in the recovered source.",
+          "epistemicStatus": "confirmed",
+          "belief": "treats the steering failure as an unresolved accident precursor",
+          "certainty": "high regarding loss of response; unresolved regarding cause",
+          "sourceCharacter": "Firsthand",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "id": "kelm-kb-telemetry-absence-01",
+          "information": "Approximately fourteen seconds of telemetry immediately preceding impact are absent.",
+          "epistemicStatus": "confirmed",
+          "belief": "reaction is guarded; exact interpretation is not established",
+          "certainty": "high regarding missing record",
+          "sourceCharacter": "Recovery Magos",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
-      "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "plansGoals": [
+        {
+          "id": "kelm-goal-preserve-ship-01",
+          "goal": "Keep the Hesperant Vale alive as a functioning vessel and protect its eighty-seven crew rather than gamble the auxiliary distribution spine for a faster return.",
+          "horizon": "immediate-mission",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "skillsCompetence": [
+        {
+          "id": "kelm-skill-ship-intuition-01",
+          "domain": "long-term Hesperant Vale command / engineering intuition",
+          "proficiency": "highly experienced",
+          "context": "Knows undocumented Meredian regulator modifications, correctly identifies risk to the auxiliary spine, and listens to hull/grid vibration through the bulkhead to diagnose 'Grid Four hunting.'",
+          "limitations": "Experiential knowledge does not automatically explain the missing telemetry or hidden cause of the accident.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII–IX",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "kelm-rel-broussard-01",
+          "counterpartPersonaId": "captain-broussard",
+          "direction": "Kelm → Broussard",
+          "trust": "conditional professional cooperation",
+          "respect": "increased when Broussard rejects the risky fast restoration and prioritizes ship/crew survival",
+          "conflict": "Broussard retains evacuation authority and may abandon the vessel if it becomes indefensible",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
-      "physicalMedicalState": [],
+      "physicalMedicalState": [
+        {
+          "id": "kelm-physical-post-impact-01",
+          "state": "Visible dried blood on one side of forehead and burned left sleeve when Broussard first meets him in engineering; remains active and mobile.",
+          "severity": "apparently minor or tolerated; exact diagnosis not established",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "VIII. A CAPTAIN'S SHAME",
+          "changeSummary": "Revealed deep technical familiarity with the Hesperant Vale, opposed the high-risk fast restoration, disclosed the six-second helm failure, learned of the fourteen-second telemetry absence and accepted Broussard's evacuation authority.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VIII. A CAPTAIN'S SHAME",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-08.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "IX. REPAIRS",
+          "changeSummary": "Demonstrated embodied familiarity with the ship by listening to grid vibration and remained continuously engaged in crew welfare and repair work.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Insisted on joining the response to his missing crew and accepted Broussard's limit that he could accompany only as far as the cargo spine without further order.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
     },
     "trooper-hessel-broussard": {
       "personaId": "trooper-hessel-broussard",
@@ -4204,6 +4566,554 @@
             "story": "The Long Patrol of Broussard",
             "segment": "V. HARD LESSONS",
             "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-05.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
+    },
+    "meren-holt": {
+      "personaId": "meren-holt",
+      "referenceId": "PERSONA-055",
+      "name": "Meren Holt",
+      "baseline": {
+        "title": "Second Bridge Officer Meren Holt",
+        "rank": "Second Bridge Officer",
+        "role": "Junior bridge officer aboard the Hesperant Vale and principal liaison to Broussard’s recovery detachment",
+        "branch": "Imperial civilian freight / surface convoy service",
+        "affiliations": [
+          "Hesperant Vale",
+          "High Presidio winter freight network"
+        ],
+        "currentLocation": "High Presidio · aboard the Hesperant Vale",
+        "status": "Active through Chapter X; coordinating shipboard information while three cargo crew remain missing in the forward holds.",
+        "standing": "Source-recovered Hesperant Vale junior bridge officer",
+        "temperament": [
+          "Young",
+          "Nervous under command scrutiny",
+          "Operationally competent",
+          "Responsive",
+          "Careful with answers around sensitive subjects"
+        ],
+        "doctrine": "Keep the damaged freighter functioning and answer recovery command accurately enough to preserve crew safety, even when senior-officer questions are uncomfortable.",
+        "source": {
+          "label": "The Long Patrol of Broussard — VII–X",
+          "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+          "status": "authorial"
+        },
+        "sourceAuthority": "Directly recovered from the surviving Google working draft through Chapter X. Holt’s full name, rank, liaison role, competence and missing-person report are explicit.",
+        "baselineRelationshipNames": [
+          "Captain Derrovan Kelm",
+          "Captain Broussard",
+          "Sella Varn"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Hesperant Vale · personnel gantry",
+            "beat": "Identified himself as Second Bridge Officer Meren Holt and reluctantly agreed to lead Broussard and Jalesthesian to Captain Kelm."
+          },
+          {
+            "place": "Hesperant Vale · recovery operation",
+            "beat": "Proved increasingly useful by supplying updated duty lists, power reports and crew assignments before Broussard needed to ask."
+          },
+          {
+            "place": "Hesperant Vale · cargo control",
+            "beat": "Confirmed that Jerrik Noll, Edren Vale and Pallas Dorn had been missing from a forward-hold inspection sweep for more than two hours."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [
+        {
+          "id": "holt-kb-missing-team-01",
+          "information": "Jerrik Noll, Edren Vale and Pallas Dorn were sent to inspect forward holds and have failed to check in or return for more than two hours.",
+          "epistemicStatus": "confirmed",
+          "belief": "recognizes unreliable vox does not fully explain their absence",
+          "certainty": "high",
+          "sourceCharacter": "Duty records and Sella Varn",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [],
+      "skillsCompetence": [
+        {
+          "id": "holt-skill-recovery-liaison-01",
+          "domain": "shipboard coordination / recovery liaison",
+          "proficiency": "demonstrated competent",
+          "context": "Provides corrected duty lists, updated power reports and crew assignments before Broussard needs to ask.",
+          "limitations": "Young and visibly uncomfortable under sensitive command questioning.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "holt-rel-broussard-01",
+          "counterpartPersonaId": "captain-broussard",
+          "direction": "Holt → Broussard",
+          "trust": "professional and cautious",
+          "respect": "accepts recovery authority and supplies operational information",
+          "fear": "sensitive questioning visibly unsettles him",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VII–X",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "VII. THE WOUND IN THE HULL",
+          "changeSummary": "Received Broussard and Jalesthesian aboard, hesitated when asked about Kelm, then led them inward.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "VII. THE WOUND IN THE HULL",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-07.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "IX. REPAIRS",
+          "changeSummary": "Demonstrated stronger operational competence than his junior title initially suggested by supplying updated recovery information proactively.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Confirmed the three missing cargo crew, their assignment and overdue duration, and supplied the forward-hold schematic.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
+    },
+    "sella-varn": {
+      "personaId": "sella-varn",
+      "referenceId": "PERSONA-056",
+      "name": "Sella Varn",
+      "baseline": {
+        "title": "Sella Varn",
+        "rank": "Cargo Engineer",
+        "role": "Hesperant Vale cargo engineer and practical repair hand",
+        "branch": "Imperial civilian freight / surface convoy service",
+        "affiliations": [
+          "Hesperant Vale",
+          "High Presidio winter freight network"
+        ],
+        "currentLocation": "High Presidio · aboard the Hesperant Vale",
+        "status": "Active through Chapter X; volunteering to accompany the search for the missing forward-hold team.",
+        "standing": "Source-recovered Hesperant Vale cargo engineer",
+        "temperament": [
+          "Practical",
+          "Alert",
+          "Technically conscientious",
+          "Direct",
+          "Protective of crew",
+          "Unwilling to leave questionable work for the next watch"
+        ],
+        "doctrine": "If a repair cannot be trusted, rebuild it properly. Keep the ship flying and account for the people who make that possible.",
+        "source": {
+          "label": "The Long Patrol of Broussard — IX–X",
+          "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+          "status": "authorial"
+        },
+        "sourceAuthority": "Directly recovered from the surviving Google working draft. Sella’s full name, engineering role, repair conduct, “Still flying” line and concern for the missing crew are explicit.",
+        "baselineRelationshipNames": [
+          "Captain Broussard",
+          "Meren Holt",
+          "Jerrik Noll"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Hesperant Vale · repair spaces",
+            "beat": "Rejected a questionable bypass and rebuilt the run herself rather than leave unreliable work for the next watch."
+          },
+          {
+            "place": "Hesperant Vale · power reroute",
+            "beat": "Marked a successful reroute with the understated assessment “Still flying.”"
+          },
+          {
+            "place": "Hesperant Vale · cargo control",
+            "beat": "Realized Jerrik and the two crew with him had been gone for hours and volunteered to join the search."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [
+        {
+          "id": "sella-goal-find-missing-01",
+          "goal": "Join the controlled search for Jerrik Noll, Edren Vale and Pallas Dorn in the forward holds.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "skillsCompetence": [
+        {
+          "id": "sella-skill-repair-discipline-01",
+          "domain": "cargo engineering / electrical repair",
+          "proficiency": "demonstrated strong practical competence",
+          "context": "Rejects a questionable bypass, rebuilds it herself, and participates in successful rerouting under emergency conditions.",
+          "limitations": "No broad formal engineering rank beyond cargo-engineer role is inferred.",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [
+        {
+          "id": "sella-performance-accountability-01",
+          "domain": "crew accountability / crisis response",
+          "context": "Notices the missing inspection team by mentally counting people, immediately raises the discrepancy, gathers tools and volunteers to search.",
+          "demonstratedLevel": "alert and action-oriented",
+          "status": "active",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "IX. REPAIRS",
+          "changeSummary": "Established as a conscientious cargo engineer who rebuilds questionable work and marks successful rerouting with 'Still flying.'",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "IX. REPAIRS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-09.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        },
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Detected the missing inspection team and volunteered to accompany the search.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
+    },
+    "jerrik-noll": {
+      "personaId": "jerrik-noll",
+      "referenceId": "PERSONA-057",
+      "name": "Jerrik Noll",
+      "baseline": {
+        "title": "Jerrik Noll",
+        "rank": "Cargo Crew",
+        "role": "Hesperant Vale cargo crew member assigned to forward-hold inspection",
+        "branch": "Imperial civilian freight / surface convoy service",
+        "affiliations": [
+          "Hesperant Vale"
+        ],
+        "currentLocation": "Hesperant Vale · forward cargo holds · missing",
+        "status": "Missing through Chapter X after failing to return from a forward-hold inspection sweep.",
+        "standing": "Source-recovered missing Hesperant Vale cargo crew",
+        "temperament": [],
+        "doctrine": "Not yet established in source prose.",
+        "source": {
+          "label": "The Long Patrol of Broussard — X. The Forward Holds",
+          "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+          "status": "authorial"
+        },
+        "sourceAuthority": "Directly recovered from Chapter X of the surviving Google working draft. No personality, fate or cause of disappearance should be inferred beyond the source.",
+        "baselineRelationshipNames": [
+          "Sella Varn",
+          "Edren Vale and Pallas Dorn"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Hesperant Vale · forward holds",
+            "beat": "Entered the forward bulk-produce hold complex with Edren Vale and Pallas Dorn for a secondary-damage inspection and failed to return by Chapter X."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [
+        {
+          "id": "jerrik-noll-goal-inspect-forward-01",
+          "goal": "Inspect the forward bulk-produce holds for secondary collision damage.",
+          "horizon": "immediate assignment",
+          "status": "unresolved",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "skillsCompetence": [],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "jerrik-noll-order-forward-inspection-01",
+          "order": "Conduct forward-hold secondary-damage inspection as part of Hesperant Vale recovery operations.",
+          "issuingAuthority": "Hesperant Vale duty chain (specific issuer not established)",
+          "status": "active-at-disappearance",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Entered the forward bulk-produce hold complex as part of a three-person inspection team and failed to return or check in for more than two hours.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
+    },
+    "edren-vale-hesperant": {
+      "personaId": "edren-vale-hesperant",
+      "referenceId": "PERSONA-058",
+      "name": "Edren Vale",
+      "baseline": {
+        "title": "Edren Vale",
+        "rank": "Cargo Crew",
+        "role": "Hesperant Vale cargo crew member assigned to forward-hold inspection",
+        "branch": "Imperial civilian freight / surface convoy service",
+        "affiliations": [
+          "Hesperant Vale"
+        ],
+        "currentLocation": "Hesperant Vale · forward cargo holds · missing",
+        "status": "Missing through Chapter X after failing to return from a forward-hold inspection sweep.",
+        "standing": "Source-recovered missing Hesperant Vale cargo crew",
+        "temperament": [],
+        "doctrine": "Not yet established in source prose.",
+        "source": {
+          "label": "The Long Patrol of Broussard — X. The Forward Holds",
+          "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+          "status": "authorial"
+        },
+        "sourceAuthority": "Directly recovered from Chapter X. No traits or fate beyond the disappearance are established.",
+        "baselineRelationshipNames": [
+          "Jerrik Noll and Pallas Dorn"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Hesperant Vale · forward holds",
+            "beat": "Entered the forward hold complex with Jerrik Noll and Pallas Dorn and failed to return by Chapter X."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [
+        {
+          "id": "edren-vale-hesperant-goal-inspect-forward-01",
+          "goal": "Inspect the forward bulk-produce holds for secondary collision damage.",
+          "horizon": "immediate assignment",
+          "status": "unresolved",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "skillsCompetence": [],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "edren-vale-hesperant-order-forward-inspection-01",
+          "order": "Conduct forward-hold secondary-damage inspection as part of Hesperant Vale recovery operations.",
+          "issuingAuthority": "Hesperant Vale duty chain (specific issuer not established)",
+          "status": "active-at-disappearance",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Entered the forward bulk-produce hold complex as part of a three-person inspection team and failed to return or check in for more than two hours.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ]
+    },
+    "pallas-dorn-hesperant": {
+      "personaId": "pallas-dorn-hesperant",
+      "referenceId": "PERSONA-059",
+      "name": "Pallas Dorn",
+      "baseline": {
+        "title": "Pallas Dorn",
+        "rank": "Cargo Crew",
+        "role": "Hesperant Vale cargo crew member assigned to forward-hold inspection",
+        "branch": "Imperial civilian freight / surface convoy service",
+        "affiliations": [
+          "Hesperant Vale"
+        ],
+        "currentLocation": "Hesperant Vale · forward cargo holds · missing",
+        "status": "Missing through Chapter X after failing to return from a forward-hold inspection sweep.",
+        "standing": "Source-recovered missing Hesperant Vale cargo crew",
+        "temperament": [],
+        "doctrine": "Not yet established in source prose.",
+        "source": {
+          "label": "The Long Patrol of Broussard — X. The Forward Holds",
+          "url": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+          "status": "authorial"
+        },
+        "sourceAuthority": "Directly recovered from Chapter X. No traits or fate beyond the disappearance are established.",
+        "baselineRelationshipNames": [
+          "Jerrik Noll and Edren Vale"
+        ],
+        "baselineStoryBeats": [
+          {
+            "place": "Hesperant Vale · forward holds",
+            "beat": "Entered the forward hold complex with Jerrik Noll and Edren Vale and failed to return by Chapter X."
+          }
+        ]
+      },
+      "memoriesEvents": [],
+      "knowledgeBeliefs": [],
+      "secretsKnown": [],
+      "secretsHeld": [],
+      "plansGoals": [
+        {
+          "id": "pallas-dorn-hesperant-goal-inspect-forward-01",
+          "goal": "Inspect the forward bulk-produce holds for secondary collision damage.",
+          "horizon": "immediate assignment",
+          "status": "unresolved",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "skillsCompetence": [],
+      "relationshipsTrust": [],
+      "temperamentPerformance": [],
+      "preferencesAversions": [],
+      "faithIdeologyLoyalty": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "pallas-dorn-hesperant-order-forward-inspection-01",
+          "order": "Conduct forward-hold secondary-damage inspection as part of Hesperant Vale recovery operations.",
+          "issuingAuthority": "Hesperant Vale duty chain (specific issuer not established)",
+          "status": "active-at-disappearance",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
+            "sourceType": "recovered-prose",
+            "recoveryStatus": "verbatim-google-source"
+          }
+        }
+      ],
+      "physicalMedicalState": [],
+      "equipmentResources": [],
+      "chapterTouchLog": [
+        {
+          "segment": "X. THE FORWARD HOLDS",
+          "changeSummary": "Entered the forward bulk-produce hold complex as part of a three-person inspection team and failed to return or check in for more than two hours.",
+          "provenance": {
+            "story": "The Long Patrol of Broussard",
+            "segment": "X. THE FORWARD HOLDS",
+            "path": "assets/warhammer-40k/lore/the-long-patrol-of-broussard-source-recovery-10.md",
             "sourceType": "recovered-prose",
             "recoveryStatus": "verbatim-google-source"
           }
