@@ -1911,6 +1911,34 @@ Such incidents may be detected long after the original act. The Realm therefore 
 
 ---
 
+# XIV-D. Elven Lifespan, Aging, and Demography
+
+The authoritative demographic corpus is:
+
+**docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md**
+
+Elves mature only modestly later than humans and are socially/legal adults around age twenty, while their total lifespan extends to roughly three human lifespans.
+
+This creates a civilization with unusually long:
+
+- marriages;
+- careers;
+- inheritances;
+- political memories;
+- family grudges;
+- elder-care obligations;
+- multigenerational households.
+
+The high two hundreds are considered genuine ancient age. Some individuals retain considerable vigor into their two sixties or two seventies and then decline rapidly.
+
+Age-related magical impotence commonly appears around the two fifties but does not necessarily coincide with sexual impotence, infertility, or physical frailty.
+
+Fertility can persist into late life, producing culturally recognized **Spring Children**, **Winter Children**, and **Winter Blossoms**.
+
+House politics must therefore account for living ancestors, extremely old parents, much younger late-born siblings, delayed inheritance, and elders whose political memory may reach back more than a century.
+
+---
+
 # XV. Story Use Rules
 
 The annual calendar should influence prose.
