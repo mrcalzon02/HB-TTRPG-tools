@@ -673,6 +673,26 @@ It expands the social infrastructure required to live through it.
 
 ---
 
+# XIV-A. Mistresses, Surrogates, and Long-Lived Households
+
+The full courtly-household canon is maintained in:
+
+**docs/beneath-dappled-oaks/12-COURTLY-HOUSEHOLDS-MISTRESSES-PARAMOURS-SURROGACY-SUCCESSION.md**
+
+Long elven lifespans make secondary households, acknowledged companions, surrogate arrangements, late-born children, and disputed succession especially consequential.
+
+A mistress, paramour, or surrogate may remain politically relevant for many decades.
+
+A surrogate-born child participates in the same Spring / Summer / Fall / Winter / Winter-Blossom vocabulary as any other child.
+
+The social category does not determine inheritance by itself.
+
+A House may recognize, legitimize, exclude, pension, place in a cadet branch, or otherwise structure the child's status according to its law and political needs.
+
+Because parents can remain fertile for centuries, succession arrangements may be rewritten repeatedly across a lifetime.
+
+---
+
 # XV. Romantic and Sexual Adulthood
 
 Romantic and sexual relationships in this setting involve adults.
