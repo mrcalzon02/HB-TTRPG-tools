@@ -28,10 +28,10 @@
       "priority": "continue-verbatim-google-source-recovery-before-expansion",
       "sourceDocument": "The Long Patrol of Broussard — Working Draft",
       "sourceDocumentId": "1Ga_Zy3--AxyCTgzE8C5yokEeD5VTRUv-js58bm3Vnxo",
-      "recoveredThrough": "IV. THE COMMISSAR ARRIVES — complete through Jalesthesian's assignment to Broussard's Chimera and 'Murphy remained undefeated.'",
+      "recoveredThrough": "V. HARD LESSONS — complete through Jalesthesian's Regilian Schola history, Josef Arlen loyalty-test disclosure, and Broussard's revised understanding of the Commissar.",
       "sourceObservedThrough": "X. THE FORWARD HOLDS — ending with Broussard: Let's go find them.",
-      "currentEndpoint": "Verbatim source recovery now includes Chapters I–IV in full. Chapter IV establishes the four-Chimera command assignments, Broussard's practical command philosophy, the apparent absence of commissariat oversight, Gabriel Hamden Jalesthesian's physical arrival and Regilian Third Continental Schola introduction, his native High Presidio origin, pragmatic view of discipline, respect for Broussard's survival record, and assignment to Broussard's own Chimera. Chapters V–X remain present in the Google source but uncommitted. The later deep-index telemetry falsification, predator attack, convoy return and reader-only Genestealer reveal remain authoritative authorial continuity beyond the currently observed Google draft and must not be invented as recovered prose.",
-      "nextSlice": "Recover Chapter V, HARD LESSONS, verbatim from the Google working draft. Continue sequentially through Chapters VI–X before writing any new Broussard prose.",
+      "currentEndpoint": "Verbatim Google-source recovery now includes Chapters I–V in full. Chapter V establishes Jalesthesian's first full Schola cohort figures (186 intake, 23 full graduates, 31 deaths), the final commissariat loyalty-test architecture, Josef Arlen's fabricated compromise charge and innocence, Jalesthesian's obedience, and Broussard's growing respect for the Commissar's combination of compassion and discipline. Chapters VI–X remain present in the Google source but uncommitted. The later deep-index telemetry falsification, predator attack, convoy return and reader-only Genestealer reveal remain authoritative authorial continuity beyond the currently observed Google draft and must not be invented as recovered prose.",
+      "nextSlice": "Recover Chapter VI verbatim from the Google working draft. Before fresh prose, continue sequentially through Chapters VI–X and maintain character-state updates after each substantial recovered slice.",
       "constraints": [
         "Fourteen-second telemetry gap is a surface anomaly, not the main plot hole.",
         "Deep-indexed older telemetry was falsified to conceal the freighter's true port of origin.",
@@ -40,7 +40,21 @@
         "Broussard's detachment successfully returns the damaged freighter to the convoy after fighting additional High Presidio predators.",
         "The reader sees the hidden Xenos travesty continuing beneath the apparent successful rescue.",
         "Recover Google source sequentially and verbatim before fresh expansion."
-      ]
+      ],
+      "eraLock": {
+        "era": "Mature Imperium / late-era Astra Militarum setting; exact millennium not yet explicitly fixed in recovered prose",
+        "allowedInstitutions": [
+          "Astra Militarum / Imperial Guard",
+          "Officio Prefectus / Commissariat",
+          "Adeptus Mechanicus",
+          "Ecclesiarchy",
+          "Administratum",
+          "Arbites",
+          "Schola Progenium"
+        ],
+        "forbiddenDrift": "Do not introduce post-source famous canon figures or future-history knowledge not established by the Broussard source."
+      },
+      "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: The Long Patrol of Broussard."
     },
     {
       "id": "house-vallimere-sons",
