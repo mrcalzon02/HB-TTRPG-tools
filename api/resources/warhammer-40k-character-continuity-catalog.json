@@ -3384,20 +3384,102 @@
           }
         ]
       },
-      "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "memoriesEvents": [
+        {
+          "id": "technician-prite-vallimere-legacy-first-lecture-01",
+          "event": "Participated in or directly observed the Three Admirals' first formal Academy lecture after House Vallimere induction and professorial appointment.",
+          "status": "known",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
+      "knowledgeBeliefs": [
+        {
+          "id": "prite-curriculum-doctrine-01",
+          "knowledge": "The approved introductory curriculum is institutionally entrenched and strategically inadequate; the Headmaster expects the trio to replace it quickly with their own doctrine.",
+          "certainty": "direct",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
-      "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "plansGoals": [
+        {
+          "id": "prite-write-syllabus-01",
+          "goal": "Write the trio's replacement strategic syllabus beginning with the principle that the enemy is not obliged to respect Imperial doctrine.",
+          "horizon": "immediate",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
+      "skillsCompetence": [
+        {
+          "id": "prite-teaching-01",
+          "skill": "Strategic instruction before hostile mixed audiences",
+          "demonstratedLevel": "effective despite institutional pressure",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
+      "relationshipsTrust": [
+        {
+          "id": "prite-headmaster-trust-01",
+          "targetPersonaId": "academy-headmaster-vallimere",
+          "direction": "Prite toward Headmaster",
+          "state": "accepts Headmaster's protection and doctrinal mandate while recognizing the political danger around it",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The First Lecture",
+          "changeSummary": "Legacy backfill: preserved durable state from the first formal lecture after House induction and professorial appointment.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ]
     },
     "technician-darcelle-vallimere": {
       "personaId": "technician-darcelle-vallimere",
@@ -3464,20 +3546,74 @@
           }
         ]
       },
-      "memoriesEvents": [],
+      "memoriesEvents": [
+        {
+          "id": "technician-darcelle-vallimere-legacy-first-lecture-01",
+          "event": "Participated in or directly observed the Three Admirals' first formal Academy lecture after House Vallimere induction and professorial appointment.",
+          "status": "known",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "knowledgeBeliefs": [],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
-      "skillsCompetence": [],
+      "skillsCompetence": [
+        {
+          "id": "darcelle-teaching-01",
+          "skill": "Technical strategic instruction through simulation controls",
+          "demonstratedLevel": "initially anxious, then confident and effective once operating the simulation",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "relationshipsTrust": [],
-      "temperamentPerformance": [],
+      "temperamentPerformance": [
+        {
+          "id": "darcelle-social-pressure-01",
+          "context": "First lecture before cadets, officers, nobles and curriculum officials",
+          "performance": "Voice shook initially; fear receded once he moved into technical explanation and simulator operation.",
+          "demonstratedLevel": "functional under high social pressure when anchored in technical expertise",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The First Lecture",
+          "changeSummary": "Legacy backfill: preserved durable state from the first formal lecture after House induction and professorial appointment.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ]
     },
     "technician-renault-vallimere": {
       "personaId": "technician-renault-vallimere",
@@ -3544,20 +3680,74 @@
           }
         ]
       },
-      "memoriesEvents": [],
+      "memoriesEvents": [
+        {
+          "id": "technician-renault-vallimere-legacy-first-lecture-01",
+          "event": "Participated in or directly observed the Three Admirals' first formal Academy lecture after House Vallimere induction and professorial appointment.",
+          "status": "known",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "knowledgeBeliefs": [],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
-      "skillsCompetence": [],
+      "skillsCompetence": [
+        {
+          "id": "renault-teaching-01",
+          "skill": "Strategic instruction using bait, deception and logistics examples",
+          "demonstratedLevel": "confident and persuasive before a hostile audience",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "relationshipsTrust": [],
-      "temperamentPerformance": [],
+      "temperamentPerformance": [
+        {
+          "id": "renault-pressure-humor-01",
+          "context": "Hostile first lecture and noble scrutiny",
+          "performance": "Maintained dry humor without abandoning the tactical lesson.",
+          "demonstratedLevel": "calm under social pressure",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
       "ordersObligationsLeverage": [],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The First Lecture",
+          "changeSummary": "Legacy backfill: preserved durable state from the first formal lecture after House induction and professorial appointment.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ]
     },
     "academy-headmaster-vallimere": {
       "personaId": "academy-headmaster-vallimere",
@@ -3621,20 +3811,74 @@
           }
         ]
       },
-      "memoriesEvents": [],
+      "memoriesEvents": [
+        {
+          "id": "academy-headmaster-vallimere-legacy-first-lecture-01",
+          "event": "Participated in or directly observed the Three Admirals' first formal Academy lecture after House Vallimere induction and professorial appointment.",
+          "status": "known",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "knowledgeBeliefs": [],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
       "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "relationshipsTrust": [
+        {
+          "id": "headmaster-three-admirals-01",
+          "targetPersonaId": "technician-prite-vallimere",
+          "direction": "Headmaster toward the Three Admirals",
+          "state": "Protective institutional confidence; backs their unorthodox doctrine against curriculum and noble resistance.",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "headmaster-syllabus-order-01",
+          "order": "Withdraw the old approved curriculum and replace it with the Three Admirals' doctrine before political interests can reshape it.",
+          "issuingAuthority": "Academy Headmaster / House Vallimere",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The First Lecture",
+          "changeSummary": "Legacy backfill: preserved durable state from the first formal lecture after House induction and professorial appointment.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ]
     },
     "interrogator-iral-vane": {
       "personaId": "interrogator-iral-vane",
@@ -3691,20 +3935,86 @@
           }
         ]
       },
-      "memoriesEvents": [],
+      "memoriesEvents": [
+        {
+          "id": "interrogator-iral-vane-legacy-first-lecture-01",
+          "event": "Participated in or directly observed the Three Admirals' first formal Academy lecture after House Vallimere induction and professorial appointment.",
+          "status": "known",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "knowledgeBeliefs": [],
-      "secretsKnown": [],
+      "secretsKnown": [
+        {
+          "id": "vane-edward-cover-01",
+          "secret": "Vane knows the real Academy guard Edward is alive and recovering after being incapacitated so Vane could assume his identity.",
+          "status": "held",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "secretsHeld": [],
       "plansGoals": [],
-      "skillsCompetence": [],
+      "skillsCompetence": [
+        {
+          "id": "vane-protective-cover-01",
+          "skill": "Undercover protective presence and threat monitoring",
+          "demonstratedLevel": "maintains cover and tracks incoming duel challenges during public lecture",
+          "status": "demonstrated",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "relationshipsTrust": [],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "vane-priority-omega-01",
+          "order": "Keep Prite, Darcelle and Renault alive under Priority Omega protection.",
+          "issuingAuthority": "Lord Inquisitor Belfran Hellfrost / Inquisitorial protection detail",
+          "status": "active",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Original + Continuation I",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "migrated-original",
+            "legacyBackfill": true
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The First Lecture",
+          "changeSummary": "Legacy backfill: preserved durable state from the first formal lecture after House induction and professorial appointment.",
+          "provenance": {
+            "story": "House Vallimere's Sons",
+            "segment": "Continuation I — The First Lecture",
+            "path": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-01.md",
+            "sourceType": "continuation",
+            "legacyBackfill": true
+          }
+        }
+      ]
     },
     "captain-broussard": {
       "personaId": "captain-broussard",
