@@ -7,7 +7,7 @@
   <meta name="description" content="Working framework for Beneath Dappled Oaks, an adult elven romantic fantasy of court intrigue, betrayal, magic, royalty, and dangerous desire.">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="workspace-landing.css">
-  <link rel="stylesheet" href="beneath-dappled-oaks-reader.css?v=2">
+  <link rel="stylesheet" href="beneath-dappled-oaks-reader.css?v=3">
   <style>
     .story-shell{max-width:1100px;margin:0 auto;padding:0 1rem 4rem}
     .story-status{display:flex;gap:.65rem;flex-wrap:wrap;margin:.8rem 0 0}
@@ -71,11 +71,11 @@
 
   <main class="story-shell">
     <nav class="story-subtabs" aria-label="Beneath Dappled Oaks sections">
-      <button class="story-subtab is-active" type="button" data-story-panel="story-bible" aria-controls="story-bible" aria-selected="true">Story Bible</button>
-      <button class="story-subtab" type="button" data-story-panel="chapter-index" aria-controls="chapter-index" aria-selected="false">Chapter Index <span class="story-subtab-count" id="chapter-count-badge" aria-label="released chapters">4</span></button>
+      <button class="story-subtab is-active" type="button" data-story-panel="chapter-index" aria-controls="chapter-index" aria-selected="true">Stories <span class="story-subtab-count" id="chapter-count-badge" aria-label="released chapters">4</span></button>
+      <button class="story-subtab" type="button" data-story-panel="story-bible" aria-controls="story-bible" aria-selected="false">Story Bible</button>
     </nav>
 
-    <div id="story-bible" class="story-tab-panel" data-story-tab-panel>
+    <div id="story-bible" class="story-tab-panel" data-story-tab-panel hidden>
     <section class="hero-card">
       <p class="eyebrow">Working story framework</p>
       <h2>Core Promise</h2>
@@ -367,16 +367,16 @@
 
     </div>
 
-    <section id="chapter-index" class="story-tab-panel" data-story-tab-panel hidden>
+    <section id="chapter-index" class="story-tab-panel" data-story-tab-panel>
       <div class="hero-card">
         <div class="chapter-index-head">
           <div>
             <p class="eyebrow">Released canon prose</p>
-            <h2>Chapter Index</h2>
+            <h2>Chapter Archive &amp; Reader</h2>
           </div>
           <span class="story-pill" id="chapter-index-count">4 chapters on main</span>
         </div>
-        <p>This is the literal publication index for completed <em>Beneath Dappled Oaks</em> chapter prose. It mirrors canonical chapter files committed under <code>docs/beneath-dappled-oaks/chapters/</code> on the repository’s <code>main</code> branch. Continuity anchors and planning notes are deliberately excluded until they exist as released chapter files.</p>
+        <p>Read from Chapter One straight down through the archive. The chapter index remains available at left for instant jumps, and every chapter carries its own download menu.</p>
       </div>
 
       <div id="chapter-index-list" class="chapter-index-list" aria-live="polite">
@@ -419,6 +419,6 @@
 
   </main>
 
-  <script src="beneath-dappled-oaks-reader.js?v=4"></script>
+  <script src="beneath-dappled-oaks-reader.js?v=5"></script>
 </body>
 </html>
