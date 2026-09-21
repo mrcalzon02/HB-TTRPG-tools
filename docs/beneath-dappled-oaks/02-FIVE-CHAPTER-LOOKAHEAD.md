@@ -279,6 +279,19 @@ The forward window below is reconciled to those actual events.
 
 ## N+1 — Chapter Five: "Something Buried Near the House"
 
+**Certainty:** IN PROGRESS — OPENING SEGMENT COMMITTED
+
+**Current execution state (commit 53173ea9350195ad2d46ee0e0dd898d73b30c566):**
+- Reedglass House east garden is now an active judicial evidence site under Judge Lethra Vaun.
+- Rhyl establishes a recent ground-disturbance window without overstating what the partial heel mark proves.
+- Mireth lawfully demonstrates bounded Green Covenant contamination screening; preservation residue and protein material are present, but she explicitly cannot infer blood or identify the full working.
+- The silk-wrapped object is recovered without opening it. It carries seven alternating/reversed black-waxed thread crossings; a bonded-transit assay token was placed beneath it.
+- Mireth recognizes the sealing material only as similar in appearance/odor to a class used around Hall/tribunal/archive custody. This is a method/access-network lead, **not** proof of a Silver Night connection.
+- Lady Meris discloses that Lord Aereth Caladren arrived three nights earlier and has recently shown memory lapses, suspicion, misplaced-object accusations, and volatility. He is politically relevant through the River Transit Assessment Council and the emergency canal levy, but he is **not yet proven to be the curse target**.
+- Damaris learns Meris withheld Aereth's arrival from her and must confront her own residence as a compromised trust environment.
+- Rhyl directly observes Damaris under family pressure and does not force disclosure, preserving the existing trust strain without resolving it.
+- Segment exit: the sealed object is moved indoors under evidence control for screened examination; household-access investigation is the next dependency-valid movement.
+
 **Certainty:** LOCKED INTENT / PLANNED
 
 **Purpose:** Pay the Chapter Four Reedglass House hook and Chapter Three household-access seed by turning a socially dangerous household anomaly into the first substantial sympathetic-curse investigation.
