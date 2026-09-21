@@ -248,141 +248,173 @@ If finished prose establishes that a character would not plausibly execute the p
 
 However, do not abandon a planned arc because writing the setup requires effort. First ask whether the existing character plan, family pressure, attraction, fear, debt, or institutional obligation can credibly carry them there.
 
-## 9. Current rolling window after Chapter Two
+## 9. Current rolling window after Chapter Three
 
 The current committed story anchors are:
 
 - Chapter One — **The Last Seven**
 - Chapter Two — **The Cost of Silk**
+- Chapter Three — **Seven Doors**
 
-The following is the initial forward window. Titles are working titles until committed in chapter prose.
+Chapter Three completed the protected-student → adult institutional transition and established several durable handoffs:
 
----
+- Mireth learned the legal mechanics of living-memory testimony and noticed that gardeners, chamber attendants, shrine staff, and other trusted household workers routinely possess intimate physical access to noble rooms.
+- Scholar Silae warned that Silver Night may involve overlapping motives: Valeric/Dmitrigical control remains canon, while demographic succession pressure may have benefited another or overlapping faction.
+- Caelen received his first Royal Martial escort assignment: a sealed archival courier transfer to the Hall of Veils at second bell.
+- Ilyan learned from Examiner Sael Ithrenn that the "necessary truth" oath language was indeed changed by someone and was assigned to assist with registration of the same archival transfer.
+- Lyrion learned that Silver Bough explicitly views the Seven's friendships as access; Thessa received a parallel Western Warden information demand.
+- Lyrion placed all Seven on the guest list for a Flowered Sunder reception at the Hall of Seven Lamps in three nights.
+- Damaris received a temporary River Ledger authorization cipher for Academy-district transport abstracts surrounding Silver Night but concealed that resource and the full family instruction from the others.
+- Rhyl received a Red Hart route through the west-tower service-road area and began noticing that Damaris was wording her disclosures carefully.
+- The Seven agreed to investigate without forcing Caelen to violate his first duty or Ilyan to steal restricted records.
 
-## N+1 — Chapter Three: "Seven Doors"
-
-**Certainty:** PLANNED
-
-**Purpose:** Complete the immediate movement from academy survivors into separate adult institutions and show that the seven are receiving different versions of the same lesson: affection, friendship, and reputation are resources their elders expect them to use.
-
-**Likely structure:** rotating viewpoints or tightly linked scenes across several inductions.
-
-**Character movement:**
-- Mireth encounters the Green Covenant as an institution with memory and political expectations, not merely reverent nature magic.
-- Caelen receives practical Royal Martial / family expectations regarding Mireth and royal service.
-- Thessa is confronted with the difference between Western Warden duty and Eris family strategy.
-- Lyrion enters Silver Bough diplomatic discipline and learns how friendship becomes access.
-- Damaris receives a more concrete version of the instruction to gain Ilyan's trust.
-- Rhyl receives a Red Hart task that looks less political than the others but gives him useful mobility and observation.
-- Ilyan begins testing whether Truth Beyond the Veil's "necessary truth" language is institutional drift or deliberate corruption.
-
-**Seed debt for later chapters:**
-- Introduce the person or paper trail through which altered oath language can later be traced.
-- Establish at least one mundane household-access detail that could support a later proximity-based curse plot.
-- Establish a future social gathering, meal, ceremony, or appointment that can naturally bring separated members of the seven back together.
-- Give at least two characters active plans extending beyond this chapter.
-
-**Exit handoff:** the seven are no longer simply classmates about to graduate. They now occupy institutions that have begun issuing incompatible instructions.
+The forward window below is reconciled to those actual events.
 
 ---
 
-## N+2 — Chapter Four: "Necessary Truth"
+## N+1 — Chapter Four: "Necessary Truth"
 
-**Certainty:** PLANNED
+**Certainty:** LOCKED INTENT / PLANNED
 
-**Purpose:** Move the Silver Night investigation from Ilyan's family confession into independently testable institutional evidence.
+**Purpose:** Convert the linked Hall of Veils transfer into the first independently testable contradiction of the official Silver Night narrative without requiring an implausible theft or instant confession.
 
-**Likely focus:** Ilyan plus one or two trusted friends rather than all seven equally.
+**Likely focus:** Ilyan, Caelen, and Damaris, with Mireth or another member providing a second evidentiary method rather than all Seven sharing equal page time.
 
-**Character movement:**
-- Ilyan attempts to establish whether old Truth Beyond the Veil oath forms differ from the one used on him.
-- A friend must decide whether helping him constitutes disloyalty to their new order or family.
-- Damaris's instruction to gain Ilyan's trust becomes morally active because she now has access to something he actually needs.
+**Character intentions entering:**
+- Ilyan intends to identify when the altered oath language entered official use and who authorized or handled the relevant forms.
+- Caelen intends to perform his escort duty correctly while still helping his friends notice lawful or incidental information surrounding the transfer.
+- Damaris intends to use the River Ledger cipher without revealing the full extent of her family order or the fact that her aunt deliberately put the tool in her hands.
+- Mireth intends to determine whether any testimony or institutional statement can later be preserved through living-memory procedure.
+- Rhyl intends to inspect the west-tower service-road retaining wall on his assigned route and remains mildly suspicious that Damaris withheld something under the oak.
 
 **Mystery movement:**
-- Produce a documentary, ceremonial, accounting, ward-maintenance, witness, or archive discrepancy that does not by itself prove the entire Silver Night conspiracy but proves the official story cannot be complete.
-- Preserve chain of access: who could obtain the record, who could alter it, who notices it has been requested.
+- Establish a dated record, registry discrepancy, transfer notation, transport abstract, oath-form sequence, witness-screen requisition, or other document that proves the official account is incomplete.
+- Preserve the evidence chain: who sees it, who is permitted to copy it, who merely remembers it, and who notices the request.
+- Do not yet reveal the entire conspiracy.
+- The altered phrase must have a traceable administrative history rather than existing as free-floating sinister wording.
+
+**Relationship movement:**
+- Caelen/Mireth sincerity should remain distinct from family strategy; helping with the investigation should not magically resolve that ambiguity.
+- Damaris/Ilyan friendship becomes practically valuable because she has access he may need.
+- Rhyl/Damaris strain begins as observation rather than confrontation.
+- Thessa/Lyrion retain the aftereffect of the arcade question: intimacy is real, but both now know they may need to ask whether a gesture was personally or institutionally motivated.
 
 **Seed debt for later chapters:**
-- Begin visible strain in Damaris/Rhyl caused by Damaris concealing the full nature of her assignment.
-- Establish someone inside an enforcement or investigative institution who knows prohibited sympathetic magic well enough to recognize it later.
-- Establish one household or estate location with intimate access and a reason the cast will visit it.
+- Establish an enforcement or forensic practitioner who can later identify sympathetic cursecraft.
+- Revisit the household-access fact from Chapter Three naturally, preferably through a location or person rather than exposition.
+- Establish the household/estate that will host the Chapter Five curse case.
+- Keep the Hall of Seven Lamps reception three nights away and make at least one character prepare for it.
 
-**Exit handoff:** the seven possess, or know how to obtain, their first independent contradiction of the official Silver Night narrative.
+**Exit handoff:** the Seven possess their first independently testable contradiction of the official Silver Night narrative, and someone outside the Seven becomes aware that records are being compared.
 
 ---
 
-## N+3 — Chapter Five: "Something Buried Near the House"
+## N+2 — Chapter Five: "Something Buried Near the House"
 
 **Certainty:** PLANNED
 
-**Purpose:** Introduce the first substantial sympathetic-curse investigation as a household mystery and demonstrate the setting rule that active cursecraft implies nearby physical access.
+**Purpose:** Introduce the first substantial sympathetic-curse investigation as a household mystery and pay the Chapter Three access seed: active cursecraft requires nearby physical access.
 
 **Case shape:** a socially devastating but initially nonlethal curse affecting an adult noble or politically relevant household member.
 
 **Required function:**
-- Do not make the mystery a detached side quest.
-- Tie the victim, suspected planter, investigator, or evidence to one of the seven's houses, orders, or family networks.
-- Force characters to search rooms, gardens, clothing, shrines, walls, foundations, or personal possessions where intimacy and household hierarchy matter.
+- Tie the victim, suspected planter, investigator, or evidence directly to one of the Seven's houses, orders, or newly established adult duties.
+- Search bedrooms, dressing rooms, household shrines, planters, walls, foundations, clothing, carriage compartments, or private gardens where servants and trusted staff routinely have legitimate access.
+- Make the gardener/chamber-attendant/shrine-access logic matter.
+- The curse should create political and emotional consequences, not merely a puzzle.
 
 **Character movement:**
-- At least one member of the seven discovers that servants and household officers possess political knowledge nobles routinely ignore.
-- At least one attraction or relationship preference becomes more legible through internal POV observation under stress.
-- Someone must choose between immediate legal reporting and preserving evidence for leverage.
+- At least one member of the Seven learns that household servants and tradespeople can possess more actionable knowledge than noble relatives.
+- At least one character's attraction grammar becomes more specific under stress without being treated as a permanent universal type.
+- Someone must decide whether to report forbidden magic immediately or preserve proof for leverage.
+- A professional investigator, judge, alchemist, examiner, or order specialist must demonstrate knowledge of prohibited magic without automatically implying illegal practical casting.
 
 **Payoff debt:**
-- Pay at least one mundane access detail planted in Chapter Three.
-- Pay the enforcement-knowledge setup from Chapter Four.
+- Pay Chapter Three's mundane household-access seed.
+- Pay Chapter Four's enforcement-knowledge seed.
+- Carry the Silver Night contradiction forward even if the curse case occupies the foreground.
 
-**Exit handoff:** the cast now knows forbidden magic is not theoretical, and someone close enough to a household to plant the object is compromised.
+**Exit handoff:** the Seven now know forbidden sympathetic magic is an active political tool, and at least one household's trust structure has been compromised.
 
 ---
 
-## N+4 — Chapter Six: "The Price of Trust"
+## N+3 — Chapter Six: "The Price of Trust"
 
-**Certainty:** DIRECTIONAL / PLANNED
+**Certainty:** PLANNED
 
-**Purpose:** Make Damaris's assignment regarding Ilyan impossible to keep morally abstract.
+**Purpose:** Make Damaris's covert family order regarding Ilyan impossible to keep morally abstract.
+
+**Character intentions entering:**
+- Damaris intends to protect Ilyan enough to remain his friend while still preserving her standing within Caladren-Ilyra.
+- Ilyan intends to follow the new documentary lead without becoming dependent on a single house's interpretation.
+- Rhyl intends to learn what Damaris is withholding rather than accuse her without evidence.
 
 **Character movement:**
-- Ilyan gives Damaris access, confidence, evidence, or vulnerability because of real friendship.
-- Damaris must decide what to report, distort, omit, or protect.
-- Rhyl notices enough to understand that Damaris is carrying an obligation she has not explained.
-- The tension should not be solved by one confession. It should deepen the triangle of friendship, romance, and intelligence work.
+- Ilyan gives Damaris access, confidence, evidence, or a vulnerable disclosure because of real friendship.
+- Damaris must decide what to report, distort, omit, delay, or protect.
+- Rhyl recognizes that her concealment is institutional rather than merely romantic.
+- The conflict must not resolve through one clean confession.
 
 **Relationship movement:**
 - Damaris/Rhyl attraction acquires a concrete trust problem.
-- Damaris/Ilyan friendship acquires genuine stakes beyond her assignment.
-- A recurring attraction preference or emotional need for at least one POV should meaningfully affect judgment.
+- Damaris/Ilyan friendship gains genuine stakes beyond her assignment.
+- Damaris's behavior should preserve separate states for what she knows, what she believes, what she tells her family, and what she chooses to do.
 
 **Political movement:**
-- Caladren-Ilyra receives information or notices the absence of information.
-- Someone begins asking whether Ilyan can be isolated from the other six.
+- Caladren-Ilyra notices either the information Damaris sends or the information she withholds.
+- Someone begins testing whether Ilyan can be separated from the other six.
+- Evidence from the curse case may become leverage that a house wants to trade rather than report.
 
-**Exit handoff:** a private choice by Damaris has created consequences that will reach both her family and the seven.
+**Exit handoff:** Damaris makes a private choice that creates consequences for both her family and the Seven, and Rhyl can no longer treat his unease as imagination.
 
 ---
 
-## N+5 — Chapter Seven: "A Table Set for Seven"
+## N+4 — Chapter Seven: "A Table Set for Seven"
+
+**Certainty:** PLANNED / DIRECTIONAL
+
+**Purpose:** Pay the Flowered Sunder reception setup by bringing the Seven into one deliberately observable social space after several days of separate adult service.
+
+**Primary frame:** the Hall of Seven Lamps reception established in Chapter Three, with the possibility of a private supper or side room becoming the literal "table set for seven."
+
+**Desired payoff:**
+- Each arrives carrying an institutional instruction, active plan, or secret.
+- Thessa/Lyrion must navigate real intimacy in a space where their orders are watching.
+- Caelen/Mireth courtship pressure becomes visible to outsiders rather than remaining mostly family-private.
+- Damaris/Rhyl strain should be legible to friends before either fully explains it.
+- Ilyan's access to Truth Beyond the Veil makes him socially valuable and personally vulnerable.
+- Silver Night evidence, the curse investigation, and house instructions begin touching the same social network.
+
+**Political function:**
+- An older power explicitly recognizes that the Seven may be functioning as an informal cross-institutional bloc.
+- The event should show the difference between friendship as the Seven experience it and friendship as institutions model it.
+
+**Exit handoff:** at least one house or order begins planning how to recruit, divide, isolate, marry, promote, compromise, or otherwise manage the Seven as a network rather than as individuals.
+
+---
+
+## N+5 — Chapter Eight: "Separate Invitations"
 
 **Certainty:** HORIZON / EXPLORATORY DIRECTION
 
-**Purpose:** Bring the seven back into one deliberately arranged social space after their initial separation and let the reader feel how much has already changed.
+**Purpose:** Show the adult world responding to the realization that the Seven still choose one another.
 
-**Possible frame:** reunion supper, post-induction dinner, memorial observance, family-sponsored banquet, or other event established in earlier chapters.
+**Directional movement:**
+- Several members receive attractive opportunities that would physically or politically separate them from the group: postings, travel, private patronage, a courtship invitation, order advancement, commercial access, or confidential work.
+- At least one offer should be genuinely beneficial rather than obviously sinister.
+- At least one character must consider accepting for a reason unrelated to romance.
+- A family or institution tests whether individual ambition can fracture the Seven more effectively than overt threats.
+- The curse evidence and Silver Night evidence should begin revealing overlapping intermediaries, administrative habits, or access networks without collapsing into one omnipotent conspiracy.
 
-**Desired payoff:**
-- Every member arrives carrying an institutional instruction or secret.
-- Several characters have plans that cross without their knowledge.
-- Attraction patterns are now visible enough that friends can notice and tease, warn, or exploit them.
-- Someone realizes one of the seven is withholding material information.
-- Silver Night evidence, the curse investigation, and house instructions begin touching the same network rather than remaining separate plot lanes.
+**Relationship function:**
+- A relationship under pressure should confront the fact that love and friendship cannot require permanent physical proximity without becoming another form of control.
+- A character may knowingly choose a dangerous person, post, or obligation despite credible warnings; the warning must remain remembered even if ignored.
 
-**Political function:**
-- The seven's friendship itself becomes observable to older powers.
-- A house, order, or intelligence actor recognizes that the survivors may operate as an informal cross-institutional bloc.
+**Seed debt beyond the window:**
+- Prepare a future choice over whether explosive evidence is more valuable as justice, blackmail, protection, or bargaining leverage.
+- Seed the first serious consequence of an institution attempting to separate one of the Seven from the others.
 
-**Exit handoff:** the story moves from "seven friends individually being recruited by the adult world" toward "the adult world realizing the seven may still choose one another."
+**Exit handoff:** the Seven's unity becomes a choice that must be repeatedly remade, not a default inherited from school.
 
 ---
 
