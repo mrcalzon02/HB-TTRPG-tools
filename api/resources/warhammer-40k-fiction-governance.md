@@ -489,6 +489,121 @@ The archive contains different voices on purpose.
 
 ---
 
+## 14B. Human conversation, shared context, and exposition discipline
+
+Dialogue must behave like conversation between people who inhabit the same world, not like database synchronization performed for the reader.
+
+### Shared-context rule
+
+Characters do not normally restate information that everyone in the exchange already knows, can plainly see, just witnessed, routinely handles, or has already discussed. Their speech should assume the shared context that actual human conversation assumes.
+
+If Alfred dyed his hair blue to red last week and both speakers know Alfred, they do not need to recap the dye job, his history of audacity, and the personality significance of the act every time his hair is mentioned. If a soldier asks a comrade for his bolter, he normally says, "Hand me my bolter," not a catalog description of its colour, attachments, ownership marks, barrel, ammunition, and history.
+
+The narrator may supply description the reader genuinely needs. The characters are not obliged to narrate their own field of vision.
+
+### Dialogue is not a continuity ledger
+
+The character-continuity catalog exists for the automation, not for the characters.
+
+Do not make characters verbally synchronize:
+
+- what each person already knows;
+- established relationships;
+- visible injuries, clothing, equipment, or surroundings;
+- the full history of an object they all recognize;
+- personality traits already demonstrated;
+- plans or orders they have already agreed upon;
+- facts learned together in the immediately preceding scene;
+- motivations whose repetition adds no new pressure, disagreement, uncertainty, or decision.
+
+Continuity must constrain dialogue without being dumped into dialogue.
+
+A character remembering something means the writer should let that knowledge shape what the character notices, omits, assumes, fears, chooses, lies about, or acts upon. It does **not** mean the character must explain the remembered fact again.
+
+### Narrator/dialogue division of labour
+
+Use narration for description, spatial clarity, sensory information, object appearance, relevant history, and reader-facing context when those things are needed.
+
+Use dialogue primarily for human purposes: requests, decisions, disagreement, persuasion, evasion, reassurance, humour, threat, affection, status negotiation, discovery, misunderstanding, confession, concealment, coordination, and reaction.
+
+A character may naturally describe an object when description itself has a conversational purpose: identifying an unfamiliar item, distinguishing between genuinely ambiguous choices, reporting something another character cannot see, diagnosing a fault, teaching a novice, giving evidence, or drawing attention to a meaningful change. Otherwise let people use the ordinary name they would actually use.
+
+### Ellipsis and ordinary shorthand
+
+People routinely omit what their companions can infer. Preserve that.
+
+"Hand me my bolter."
+"Which one?"
+"Mine."
+"The heavy bastard?"
+"Yes."
+
+may be appropriate where two similar weapons create actual ambiguity. Without that ambiguity, the clarification should disappear.
+
+Likewise, characters who work together develop shorthand, unfinished sentences, gestures, looks, professional jargon, habitual assumptions, and references whose meaning is clear inside the relationship. Do not expand every utterance until it is independently understandable to a reader with no context. The surrounding prose supplies context.
+
+### No ad-nauseam clarification
+
+Once a fact is established and understood, do not repeatedly re-prove, re-label, re-summarize, or philosophically restate it merely because it becomes relevant again.
+
+A new conversation about an old fact should normally concern what is **new now**: its consequence, changed stakes, disagreement, decision, emotional effect, newly discovered evidence, or a character whose understanding genuinely differs.
+
+Do not make every mention trigger a miniature encyclopedia entry.
+
+### Character development through behavior
+
+Do not have characters continually announce each other's defining traits or summarize their development for the reader.
+
+Development should emerge from changed choices, altered conversational habits, new confidence or hesitation, what a character now notices, what they no longer need explained, what they can finally say, what they avoid saying, whom they trust, whom they interrupt, whose orders they question, and what they do under pressure.
+
+Established principles should become behavior rather than recurring speeches about the principle.
+
+### Knowledge changes interpretation, not physical reality
+
+A new legal, institutional, evidentiary, historical, or personal understanding can change what a character believes, what options they perceive, and how they act. It does not retroactively change the physical properties of an object or event.
+
+Avoid forced transitions of the form "now that he understood the legal status, the room/object/weather/physical evidence was different" unless something physical actually changed. The character's **interpretation** may change. The thing itself does not.
+
+### Reader knowledge is not a reason for unnatural speech
+
+Exposition needed by the reader must still pass an in-world plausibility test.
+
+Do not make two experts explain their own profession to one another for the reader. Do not make old friends recount shared childhood history unless the present conversation gives them a human reason to revisit it. Do not make crew members describe machinery they use every day merely so its appearance reaches the page.
+
+When the reader needs information that the characters would not naturally say, use narration, viewpoint thought, a genuinely uninformed participant, a document/interface where appropriate to the story, or allow the information to emerge gradually.
+
+### Pre-write conversation test
+
+Before retaining an expository line of dialogue, ask:
+
+1. Does the listener already know this?
+2. Can the listener simply see this?
+3. Did both characters just experience this?
+4. Is the speaker saying it for an actual in-world reason, or only to update the reader?
+5. Could narration carry the necessary information more naturally?
+6. What is the conversational action of the line—what is the speaker trying to obtain, change, hide, test, or express?
+
+If the only answer is "the reader needs to know," rewrite the passage.
+
+### Pre-commit dialogue drift audit
+
+Reject or revise the draft when:
+
+- characters repeatedly explain shared knowledge to each other;
+- dialogue catalogs visible objects without an in-world need;
+- characters recap their own traits or relationship history for exposition;
+- every reference to an established fact reintroduces its complete context;
+- professional peers speak like introductory manuals;
+- conversation exists mainly to transmit lore rather than pursue human goals;
+- narration that belongs in the narrator's voice has been disguised as dialogue;
+- character long-memory produces repeated verbal reminders instead of informed behavior;
+- multiple characters reach the same conclusion aloud in slightly different wording;
+- clarification continues after the participants would realistically understand one another.
+
+The target is not cryptic dialogue. The target is **contextual dialogue**: people speaking with the amount of explanation those people would actually need.
+
+---
+
 ## 14A. Authorship / continuation attribution
 
 For every recovered continuation or newly written piece created from an existing story line going forward, include an authorship attribution near the title block that reads:
