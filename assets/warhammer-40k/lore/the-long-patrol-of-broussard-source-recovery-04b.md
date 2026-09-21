@@ -1,8 +1,11 @@
 # The Long Patrol of Broussard
 
-## Source Recovery 04B — IV. THE COMMISSAR ARRIVES (remainder)
+## IV. THE COMMISSAR ARRIVES — Part II
 
-*Verbatim recovery from the surviving Google working draft, continuing immediately after “Especially then.” No new continuation prose is introduced here.*
+**Author:** Mrcalzon02 / Christopher Vardeman  
+**Based on the work of:** *The Long Patrol of Broussard*
+
+*An original non-commercial Warhammer 40,000 fan chronicle. Warhammer 40,000 and associated marks and setting elements are the property of Games Workshop. This fan work is not endorsed by or affiliated with Games Workshop.*
 
 The briefing continued.
 
