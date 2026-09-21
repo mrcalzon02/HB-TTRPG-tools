@@ -621,6 +621,40 @@ The catalog is an authority **because it refuses to guess**.
 
 ---
 
+## 20A. Legacy backfill-on-first-touch
+
+The catalog was introduced after many stories already existed.
+
+Therefore, when an established story line is selected for recovery or continuation and its recurring characters do not yet have sufficient temporal state recorded, the automation must **backfill current state from the authoritative source before writing new prose**.
+
+Backfill in this order:
+
+1. recovered/original source prose;
+2. committed continuation prose;
+3. migrated long-form archive text;
+4. Dramatis Personae story beats and source-authority notes;
+5. explicit user corrections.
+
+Backfill only what the source actually establishes.
+
+At minimum, reconcile any state that is likely to affect the next segment:
+
+- knowledge and suspicions;
+- active secrets;
+- current plans;
+- current orders;
+- injuries and recovery;
+- demonstrated skills;
+- relationship trust/conflict;
+- unresolved promises or debts;
+- emotional aftermath;
+- important equipment/resources;
+- current location and immediate objective.
+
+Mark backfilled entries with source type `legacy-backfill` plus the actual story/prose provenance they were derived from.
+
+Do not generate new fiction until the active recurring cast has enough catalog state to prevent obvious rediscovery, knowledge leakage, forgotten injuries, reset relationships, or abandoned plans.
+
 ## 21. Automated run completion requirement
 
 A story run that materially changes a recurring character is incomplete until the catalog is reconciled.
