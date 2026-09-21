@@ -291,6 +291,12 @@ The forward window below is reconciled to those actual events.
 - Damaris learns Meris withheld Aereth's arrival from her and must confront her own residence as a compromised trust environment.
 - Rhyl directly observes Damaris under family pressure and does not force disclosure, preserving the existing trust strain without resolving it.
 - Segment exit: the sealed object is moved indoors under evidence control for screened examination; household-access investigation is the next dependency-valid movement.
+- **Continuation commit cd89454a4467b8425e0c143a476b7c7c3f70f8dc:** the object has now been opened under Judge Vaun's passive isolation screen. Contents include Caladren laundry linen, a stained blue cloth consistent with Aereth's reported shaving cut, pale hair, half-crested sealing wax, a formalwear button, and grey powder that resembles but is not yet confirmed as memory salt.
+- The construction now suggests a professional **custody/authority/access grammar** rather than a single obvious magical signature. Hall/tribunal material overlap remains a comparison lead, not proof of one conspiracy.
+- Talia Venn's testimony establishes that ordinary east-floor service routines could expose Aereth's linen and shaving cloth without forced entry. Second dresser **Pellin** remained around Aereth's clothing after Talia left and departed Reedglass before second bell after household gossip about the garden discovery. He is a person-of-interest lead only; his sister genuinely suffers recurrent marsh lung.
+- Judge Vaun sends Rhyl to locate and observe Pellin without detention or accusation. Damaris remains at Reedglass to map household access, turning her lived household knowledge into an explicit investigative competence.
+- Damaris/Rhyl tension advances through restraint rather than confession: Rhyl gives her room during direct conflict with Meris, and Damaris's attraction sharpens around that restraint.
+- **Next dependency-valid movement:** parallel the household access map against Rhyl's observation of Pellin, confirm or exclude the grey powder as memory salt, and determine whether Aereth is actually the sympathetic target before deciding disclosure versus protective containment.
 
 **Certainty:** LOCKED INTENT / PLANNED
 
