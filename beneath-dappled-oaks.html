@@ -18,6 +18,20 @@
     .story-card p:last-child{margin-bottom:0}
     .draft-note{border-left:4px solid currentColor;padding:.8rem 1rem;margin:1rem 0;opacity:.9}
     .scene-ladder li{margin:.45rem 0}
+    .story-subtabs{display:flex;gap:.55rem;flex-wrap:wrap;margin:1rem 0 1.2rem;padding:.45rem;border:1px solid rgba(127,127,127,.28);border-radius:14px;background:rgba(127,127,127,.05)}
+    .story-subtab{appearance:none;border:1px solid transparent;border-radius:10px;padding:.65rem .9rem;background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
+    .story-subtab:hover,.story-subtab:focus-visible{border-color:rgba(127,127,127,.45);outline:none}
+    .story-subtab.is-active{background:rgba(127,127,127,.15);border-color:rgba(127,127,127,.38)}
+    .story-subtab-count{display:inline-block;min-width:1.7em;margin-left:.35rem;padding:.05rem .38rem;border:1px solid currentColor;border-radius:999px;font-size:.78em;text-align:center;opacity:.8}
+    .chapter-index-head{display:flex;gap:1rem;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+    .chapter-index-list{display:grid;gap:.8rem;margin-top:1rem}
+    .chapter-index-entry{display:grid;grid-template-columns:minmax(4.5rem,auto) 1fr auto;gap:1rem;align-items:center;border:1px solid rgba(127,127,127,.28);border-radius:14px;padding:1rem;background:rgba(127,127,127,.05)}
+    .chapter-index-number{font-weight:800;white-space:nowrap}
+    .chapter-index-title{margin:0;font-size:1.05rem}
+    .chapter-index-meta{margin:.2rem 0 0;opacity:.78;font-size:.9rem}
+    .chapter-index-link{white-space:nowrap}
+    .chapter-index-state{margin-top:1rem;opacity:.75;font-size:.9rem}
+    @media (max-width:700px){.chapter-index-entry{grid-template-columns:1fr}.chapter-index-link{justify-self:start}}
   </style>
 </head>
 <body>
@@ -40,6 +54,12 @@
   </header>
 
   <main class="story-shell">
+    <nav class="story-subtabs" aria-label="Beneath Dappled Oaks sections">
+      <button class="story-subtab is-active" type="button" data-story-panel="story-bible" aria-controls="story-bible" aria-selected="true">Story Bible</button>
+      <button class="story-subtab" type="button" data-story-panel="chapter-index" aria-controls="chapter-index" aria-selected="false">Chapter Index <span class="story-subtab-count" id="chapter-count-badge" aria-label="released chapters">1</span></button>
+    </nav>
+
+    <div id="story-bible" class="story-tab-panel" data-story-tab-panel>
     <section class="hero-card">
       <p class="eyebrow">Working story framework</p>
       <h2>Core Promise</h2>
@@ -328,6 +348,130 @@
       <h2>Open Development Questions</h2>
       <p>The next pass should name and define the fourth major romantic/political lead—preferably from Sylvaren, Caladren, Nymrael, or Orthell—then expand the named senior relatives inside all seven Great Houses so the family trees can sustain marriages, cousins, widows, rivals, cadet heirs, and recurring lovers. It should also establish the royal succession rules, define the magic of vows and living memory, decide the exact cause of the king's death, identify which attempted four-house coalition triggered the murder, and convert the opening scene ladder into chapter prose.</p>
     </section>
+
+    </div>
+
+    <section id="chapter-index" class="story-tab-panel" data-story-tab-panel hidden>
+      <div class="hero-card">
+        <div class="chapter-index-head">
+          <div>
+            <p class="eyebrow">Released canon prose</p>
+            <h2>Chapter Index</h2>
+          </div>
+          <span class="story-pill" id="chapter-index-count">1 chapter on main</span>
+        </div>
+        <p>This is the literal publication index for completed <em>Beneath Dappled Oaks</em> chapter prose. It mirrors canonical chapter files committed under <code>docs/beneath-dappled-oaks/chapters/</code> on the repository’s <code>main</code> branch. Continuity anchors and planning notes are deliberately excluded until they exist as released chapter files.</p>
+      </div>
+
+      <div id="chapter-index-list" class="chapter-index-list" aria-live="polite">
+        <article class="chapter-index-entry">
+          <div class="chapter-index-number">Chapter 3</div>
+          <div>
+            <h3 class="chapter-index-title">Seven Doors</h3>
+            <p class="chapter-index-meta">CANON PROSE · 282 S.M. · Bloomtide</p>
+          </div>
+          <a class="primary-action chapter-index-link" href="docs/beneath-dappled-oaks/chapters/03-SEVEN-DOORS.md">Read chapter</a>
+        </article>
+      </div>
+      <p class="chapter-index-state" id="chapter-index-state">Loading the live chapter directory from <code>main</code>…</p>
+    </section>
   </main>
+
+  <script>
+  (() => {
+    const panels = [...document.querySelectorAll('[data-story-tab-panel]')];
+    const tabs = [...document.querySelectorAll('[data-story-panel]')];
+
+    function activatePanel(id, updateHash = true) {
+      if (!panels.some(panel => panel.id === id)) id = 'story-bible';
+      panels.forEach(panel => { panel.hidden = panel.id !== id; });
+      tabs.forEach(tab => {
+        const active = tab.dataset.storyPanel === id;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      if (updateHash) history.replaceState(null, '', id === 'story-bible' ? location.pathname + location.search : '#' + id);
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => activatePanel(tab.dataset.storyPanel)));
+    activatePanel(location.hash === '#chapter-index' ? 'chapter-index' : 'story-bible', false);
+
+    const chapterList = document.getElementById('chapter-index-list');
+    const chapterCount = document.getElementById('chapter-index-count');
+    const badge = document.getElementById('chapter-count-badge');
+    const state = document.getElementById('chapter-index-state');
+    const api = 'https://api.github.com/repos/mrcalzon02/HB-TTRPG-tools/contents/docs/beneath-dappled-oaks/chapters?ref=main';
+    const chapterPattern = /^(\d+)-(.+)\.md$/i;
+    const smallWords = new Set(['a','an','and','as','at','but','by','for','from','in','of','on','or','the','to','with']);
+
+    function titleFromSlug(slug) {
+      return slug.split('-').map((word, index) => {
+        const lower = word.toLowerCase();
+        if (index > 0 && smallWords.has(lower)) return lower;
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }).join(' ');
+    }
+
+    function render(files) {
+      const chapters = files
+        .filter(file => file && file.type === 'file' && chapterPattern.test(file.name))
+        .map(file => {
+          const match = file.name.match(chapterPattern);
+          return {
+            number: Number(match[1]),
+            title: titleFromSlug(match[2]),
+            href: file.path,
+            size: file.size || 0
+          };
+        })
+        .sort((a, b) => a.number - b.number);
+
+      if (!chapters.length) throw new Error('No released chapter files found');
+
+      chapterList.replaceChildren();
+      for (const chapter of chapters) {
+        const article = document.createElement('article');
+        article.className = 'chapter-index-entry';
+
+        const number = document.createElement('div');
+        number.className = 'chapter-index-number';
+        number.textContent = 'Chapter ' + chapter.number;
+
+        const copy = document.createElement('div');
+        const heading = document.createElement('h3');
+        heading.className = 'chapter-index-title';
+        heading.textContent = chapter.title;
+        const meta = document.createElement('p');
+        meta.className = 'chapter-index-meta';
+        meta.textContent = 'Released canon prose · ' + Math.max(1, Math.round(chapter.size / 1024)) + ' KB';
+        copy.append(heading, meta);
+
+        const link = document.createElement('a');
+        link.className = 'primary-action chapter-index-link';
+        link.href = chapter.href;
+        link.textContent = 'Read chapter';
+
+        article.append(number, copy, link);
+        chapterList.append(article);
+      }
+
+      const label = chapters.length === 1 ? '1 chapter on main' : chapters.length + ' chapters on main';
+      chapterCount.textContent = label;
+      badge.textContent = String(chapters.length);
+      badge.setAttribute('aria-label', chapters.length + ' released chapters');
+      state.textContent = 'Live index synchronized from the canonical chapters directory on main. New numbered Markdown chapter files appear here automatically after publication.';
+    }
+
+    fetch(api, {headers: {'Accept': 'application/vnd.github+json'}})
+      .then(response => {
+        if (!response.ok) throw new Error('GitHub directory request failed');
+        return response.json();
+      })
+      .then(render)
+      .catch(() => {
+        state.textContent = 'Live directory refresh is temporarily unavailable. Showing the last committed fallback index embedded in this page.';
+      });
+  })();
+  </script>
 </body>
 </html>
