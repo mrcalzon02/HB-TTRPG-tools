@@ -50,7 +50,15 @@
       ],
       "eraLock": {
         "era": "Mature Imperium / late-era Astra Militarum setting; exact millennium not yet explicitly fixed in recovered prose",
-        "allowedInstitutions": ["Astra Militarum / Imperial Guard","Officio Prefectus / Commissariat","Adeptus Mechanicus","Ecclesiarchy","Administratum","Arbites","Schola Progenium"],
+        "allowedInstitutions": [
+          "Astra Militarum / Imperial Guard",
+          "Officio Prefectus / Commissariat",
+          "Adeptus Mechanicus",
+          "Ecclesiarchy",
+          "Administratum",
+          "Arbites",
+          "Schola Progenium"
+        ],
         "forbiddenDrift": "Do not introduce post-source famous canon figures or future-history knowledge not established by the Broussard source."
       },
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: The Long Patrol of Broussard.",
@@ -79,7 +87,14 @@
       "lastAdvancedSegment": "assets/warhammer-40k/lore/house-vallimeres-sons-continuation-02.md",
       "eraLock": {
         "era": "Mature Imperium / late-era Imperial Navy Academy setting; exact millennium not fixed by the attached chronicle",
-        "allowedInstitutions": ["Imperial Navy","Imperial Navy Academy","Adeptus Mechanicus","Administratum","Inquisition","Imperial noble Houses"],
+        "allowedInstitutions": [
+          "Imperial Navy",
+          "Imperial Navy Academy",
+          "Adeptus Mechanicus",
+          "Administratum",
+          "Inquisition",
+          "Imperial noble Houses"
+        ],
         "forbiddenDrift": "Do not introduce famous canon figures, later-history knowledge, or institutions unsupported by this mature-Imperium story line."
       },
       "authorshipLineageRule": "All future continued pieces in this line must include: Based on the work of: House Vallimere's Sons.",
@@ -100,7 +115,14 @@
       },
       "eraLock": {
         "era": "Mature Imperium; exact millennium not fixed by the attached chronicle",
-        "allowedInstitutions": ["Interlocutum","Imperial Inquisition","Ordo Signora Temportum","Logos Historica Verita","Senatorum Imperialis archival chain","Adeptus Mechanicus / Cognito-Mechanics where source-established"],
+        "allowedInstitutions": [
+          "Interlocutum",
+          "Imperial Inquisition",
+          "Ordo Signora Temportum",
+          "Logos Historica Verita",
+          "Senatorum Imperialis archival chain",
+          "Adeptus Mechanicus / Cognito-Mechanics where source-established"
+        ],
         "forbiddenDrift": "Do not explain the provenance fracture with later or unsupported canon mechanisms, do not introduce famous canon figures, and do not collapse the unresolved archival/chronometric anomaly into a generic Warp or daemon explanation."
       },
       "authorshipLineageRule": "All future recovered/continued pieces in this line must include: Based on the work of: Matron Lagas Atrovald.",
