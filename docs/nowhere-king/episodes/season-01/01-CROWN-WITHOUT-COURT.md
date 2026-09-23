@@ -1,1306 +1,914 @@
 # Nowhere King — Season One, Episode One
 ## Crown Without Court
 
-**Status:** Committed episode prose  
+**Status:** Committed episode prose — revised to current canon  
 **Season:** One — The Return to Edselsto  
 **Episode:** 01 of 32  
 **Reveal ceiling:** Political fantasy first. No confirmed supernatural event, no candle failure, no undercroft truth.  
-**Primary dramatic purpose:** Establish the young king's legal security and practical weakness; establish grief, the occupied nature of the inherited capital, and several independent lives around the throne; make relocation to Castle Edselsto a deliberate political strategy rather than a flight into mystery.
+**Primary dramatic purpose:** Establish the king's grief, exhaustion, suspicion, and total loss of privacy inside a court saturated by rival information networks; establish that his father abdicated shortly before both parents died; make the decision to return the imperial court to Castle Edselsto an angry but rational sovereign act; dispatch living people to inspect and prepare the ancestral seat rather than importing modern bureaucratic planning logic.
 
 ---
 
-The first thing King Luceran learned after his parents died was that grief had a schedule.
+The first report of the morning concerned what the king had eaten.
 
-It began before dawn with the washing of his face in cold water because swollen eyes photographed badly in memory and painted badly in history. Then came the black coat with its silver-threaded collar, the sash no one had thought to shorten after his father's last fitting, the mourning gloves, the state sword, the prayer in the eastern chapel, the procession down the Hall of Lineage, the public silence, the bells, the petitions suspended for exactly three hours, the foreign envoys admitted in order of precedence, and the private family observance which had not been private since the reign of his great-grandmother.
+Luceran learned this because the second report concerned who had learned it first.
 
-By noon, three people had already argued over who would sit closest to him at supper.
+He had broken his fast with black bread, soft cheese, two pears and watered wine in the small solar adjoining his father's old study. He had eaten one pear and half the bread. The cheese had gone untouched. He had sent the wine away after one cup because it tasted sour, although the cupbearer swore it was the same cask served the previous evening.
 
-Luceran knew this because Sabine Pell had written it in the margin of his briefing book.
+By the time Luceran crossed the inner gallery for morning prayers, House Damaris knew he had refused the cheese, House Nerezza knew he had returned the wine, someone attached to the Velvet Exchange had apparently decided that the king's appetite was failing, and a Lethayne secretary had asked one of the royal physicians whether grief might make a young man unusually susceptible to suggestion.
 
-She had not intended him to see the sentence.
+The physician had declined to answer.
 
-The book lay open on the long black table in the antechamber outside the mourning hall, one page folded under another while Lord Chancellor Aurel Avarren explained why the ambassador from Ustran could not be moved two chairs down without creating what he called "an interpretive difficulty."
+That refusal had become a report of its own.
 
-Luceran had stopped listening at interpretive.
+Luceran stood in the chapel doorway while Brother Calven Orsanne explained this in the careful tone used by men who wished to deliver bad news without becoming part of it.
 
-His eyes went instead to the narrow hand in brown ink.
+"How," Luceran asked, "does House Damaris know what I had for breakfast?"
 
-**Lethayne objects to Ustran precedence. Ustran threatens departure. Sorelle says either departure would improve the music. Recommend separating all three by clergy.**
+Calven looked toward the altar as though divine intervention remained possible.
 
-Below that, in a darker stroke:
+"One of the kitchen clerks has a sister married to a Damaris factor."
 
-**They are fighting over chairs while the bodies are still upstairs. This may be normal. I dislike that it is normal.**
+"And Nerezza?"
 
-Luceran put one gloved finger over the sentence.
+"The wine steward's nephew is employed in the customs office."
 
-"Who wrote this?"
+"Lethayne?"
 
-Avarren paused.
+"I do not know."
 
-The Lord Chancellor was fifty-eight, square-shouldered despite a scholar's stoop, with silver at his temples and the exhausted expression of a man who had spent thirty years preventing other people from accidentally beginning civil wars through seating arrangements.
+"Excellent. At least one mystery remains in the world."
 
-"Your Majesty?"
+Calven did not laugh.
 
-"This."
+Luceran regretted the joke immediately. He had begun regretting jokes before he finished making them. People watched his humor now. They watched whether he smiled too soon after his parents' deaths, whether he smiled too little, whether he prayed long enough, whether he slept, whether he drank, whether he looked tired, whether he looked relieved.
 
-He turned the book.
+Especially whether he looked relieved.
 
-Avarren looked down. His mouth compressed.
+His father had abdicated eleven weeks before his death.
 
-Behind him, one of the junior clerks went very still.
+That fact had transformed grief into evidence.
 
-Luceran noticed.
+King Othmar had stepped down after a winter of worsening pain, shaking hands, sleeplessness and the humiliating parade of physicians who had all agreed that the burden of government was killing him while disagreeing about how. Luceran had been crowned while both parents still lived. His mother had stood beside Othmar during the ceremony, one hand beneath his elbow when she thought nobody was looking.
 
-She was not dressed like a court favorite. No diamonds. No jeweled family clasp. No elaborate mourning lace. She wore a plain dark court gown cut well enough to prove she was noble and simply enough to prove she was not rich enough to waste cloth pretending otherwise. A narrow silver badge marked the Office of Petitions.
+For thirty-seven days afterward, Luceran had been king with parents.
 
-Avarren followed the king's gaze.
+Then his mother sickened.
 
-"Lady Sabine Pell."
+Then his father worsened.
 
-The young woman stepped forward.
+Then, within nine days of one another, both were dead.
 
-"Your Majesty."
+Every faction at court had an explanation.
 
-"Did you write this?"
+No faction called it murder where Luceran could hear.
 
-"Yes."
+They were more civilized than that.
 
-"Was I meant to read it?"
+House Valcere wondered aloud whether the royal physicians had been selected for medical skill or political reliability. House Orsanne regretted that certain alchemical treatments had been permitted. The Glass Choir found traces in a tonic bottle and then spent three days arguing whether the traces were medicinal. A Bellisar cousin remembered that an Ustran merchant had supplied citrus peel used in one of his mother's draughts. Ustran's ambassador responded by producing invoices proving that the peel had been purchased from a Damaris warehouse. Damaris discovered that the warehouse inspector's brother belonged to a Nerezza tax office. Nerezza replied with six years of customs records and an accusation so carefully phrased that it was technically a request for clarification.
 
-"No."
+Nobody accused anyone.
 
-Avarren closed his eyes for half a second.
+Everybody accused everyone.
 
-Luceran almost smiled.
+And every explanation ended, somehow, with the young king being advised to trust the person explaining it.
 
-Almost.
+"Your Majesty?" Calven said.
 
-"Why write it in my book?"
+Luceran realized he had been staring at the memorial candles.
 
-"It was not your book when I wrote it."
-
-"Whose was it?"
-
-"Mine."
-
-That did make him smile.
-
-Avarren did not.
-
-Sabine seemed to decide that she had survived the first answer and might as well continue being honest.
-
-"The briefing copies were changed after the Lethayne delegation added three people this morning. Mine became yours. I had not expected the Chancellor's office to recycle working annotations upward."
-
-Avarren said, "Lady Sabine."
-
-She bowed her head.
-
-Luceran looked again at the sentence.
-
-"This may be normal."
-
-"Yes, Your Majesty."
-
-"You dislike that it is normal."
-
-"Yes."
-
-"Do you still recommend separating them by clergy?"
-
-"More strongly than before."
-
-Brother Calven Orsanne, waiting by the doors in the green-black robes of his order, made a wounded sound.
-
-Sabine glanced at him.
-
-"No offense intended, Brother."
-
-"That is how people begin every offense involving clergy."
-
-"The houses are unlikely to throw wine across a priest."
-
-"They have before."
-
-"Then put two priests between them."
-
-Luceran laughed.
-
-It came out wrong.
-
-Too sharp. Too sudden. Too alive for a building still draped in black.
-
-Everyone in the antechamber remembered themselves at once.
-
-Luceran felt it happen. The room tightened around him.
-
-His parents were dead.
-
-He was king.
-
-Nothing funny could happen unless he permitted it.
-
-He handed the book back.
-
-"Do what she says."
-
-Avarren's brows rose.
-
-"The seating, Your Majesty?"
-
-"The seating."
-
-Brother Calven sighed.
-
-"I shall inform my colleagues that the priesthood has been reassigned as diplomatic upholstery."
-
-"Your sacrifice will be remembered."
-
-"That is what worries me."
-
-This time, the laughter was quieter.
-
-It belonged to the room rather than the king.
-
-Luceran found he preferred it.
-
----
-
-The palace had always seemed enormous when he was a child.
-
-After the funeral, it seemed occupied.
-
-Not full. Occupied.
-
-There was a difference.
-
-Full meant people. Occupied meant claims.
-
-The corridor outside his father's old council room belonged to House Avarren because Avarren clerks had controlled its document tables for twenty years. The western staircase belonged to the Guard Office because Captain Tovan Rhyse had placed three generations of trusted sergeants there. The east gallery belonged to House Sorelle in practice because every musician worth hearing passed through their patronage before performing at court. The servants' entrance nearest the river kitchens belonged to no noble house officially, which meant four houses competed over the appointment of the man who controlled its keys.
-
-Luceran had grown up inside all of this without understanding it.
-
-As prince, a door opened.
-
-As king, he had begun asking who held the handle.
-
-He spent the afternoon in the small council chamber because the large one was still arranged for condolences.
-
-Lord Chancellor Avarren sat to his right. Marshal Dame Ysolde Harrowmere sat opposite him, one hand resting on a cane she hated anyone noticing. Comptroller Mereth Nerezza had arrived with six account books and the manner of a man attending an execution he had personally budgeted. Brother Calven represented the temple interests. Captain Tovan Rhyse represented the palace guard and looked as though he had not slept since the king's parents entered their final illness.
-
-Sabine Pell sat at the far end because no one had invited her to the table and no one had told her to leave.
-
-Luceran noticed that too.
-
-"How many people in this palace answer directly to the Crown?" he asked.
-
-Silence.
-
-Nerezza lifted his eyes from the ledger.
-
-"Define directly."
-
-Luceran leaned back.
-
-"That bad?"
-
-"No, Your Majesty. Merely complicated."
-
-"How many?"
-
-"On payroll?"
-
-"Yes."
-
-"One thousand three hundred and twelve attached to the palace complex, not including temporary labor, visiting household retainers, provincial delegations, military detachments or contract workers."
-
-"And how many were appointed by my father?"
-
-Avarren said, "Most appointments are made through offices rather than personally."
-
-"How many were appointed by offices controlled by people who are not me?"
-
-Another silence.
-
-Marshal Harrowmere looked at Avarren.
-
-Avarren looked at Nerezza.
-
-Nerezza looked delighted to have been excluded from the question.
-
-Captain Rhyse finally said, "All of them, if we are being strict."
-
-Luceran stared.
-
-Rhyse continued.
-
-"Your father inherited his officers. His officers inherited clerks. The clerks hired cousins, sons, widows, apprentices and people recommended by patrons. The same is true of my guard. I chose men I trusted. Some were recommended to me. Those men recommended others."
-
-"So the palace is compromised."
-
-"No," Rhyse said.
-
-The answer came fast enough that Luceran's temper rose.
-
-Then the captain added, "It is networked."
-
-That was different.
-
-Luceran let him explain.
-
-"A compromised guard is one paid to betray you. A networked guard is one in which a sergeant's brother-in-law works for House Bellisar and a corporal's mother keeps accounts for House Damaris and a lieutenant married a woman whose uncle is in the Red Script. They may be perfectly loyal. They still have lives."
-
-"Which means information travels."
-
-"Yes."
-
-"Orders travel."
-
-"Sometimes."
-
-"Influence travels."
-
-"Always."
-
-Avarren folded his hands.
-
-"Your Majesty, this is not a disease unique to your household. It is how states function."
-
-"Then why did my father complain constantly that he could not change a lamp without three houses learning where he intended to put it?"
-
-"Because your father disliked being observed."
-
-"He was king."
-
-"So are you."
-
-The words were respectful.
-
-They still landed like a slap.
-
-Luceran stood and walked to the window.
-
-Below, the palace courtyards had turned into black rivers of mourning cloth. Messengers ran between buildings. Stableboys moved horses. Kitchen wagons queued at the service gate because the funeral had doubled the number of mouths in the palace. Three noble carriages blocked one another beneath an arch while their drivers argued about precedence with considerably more honesty than their masters did upstairs.
-
-The state had not paused for death.
-
-That irritated him.
-
-It also kept everyone fed.
-
-"Can I replace them?" he asked.
-
-Nerezza answered this time.
-
-"Yes."
-
-Everyone looked at him.
-
-The comptroller shrugged.
-
-"You can dismiss thirteen hundred people by sunset. You are king."
-
-"And tomorrow?"
-
-"No breakfast. No fires in half the apartments. No clean linens. No one knows which roof leaks above the northern archive until the rain begins. The horses will be fed incorrectly. Petitions will vanish because the two men who know the current docket system will be gone. The foreign office will lose three translators. The treasury will spend six months proving which keys belong to which boxes. The kitchens will probably poison someone through incompetence rather than conspiracy."
-
-Harrowmere added, "And every dismissed servant will go home to a family that now hates you."
-
-"So I am king," Luceran said, "provided I do not touch anything."
-
-"No," Avarren said. "You are king provided you understand that touching one thing touches twelve others."
-
-Sabine Pell looked down at her notes.
-
-Luceran caught the movement.
+Not the seven old candles at Edselsto. These were ordinary wax, newly lit, already shortening.
 
 "What?"
 
-She froze.
+"The prayers."
 
-"Your Majesty?"
+"Yes."
 
-"You had a thought."
+He entered the chapel.
 
-"I frequently do."
-
-Avarren said, "Pell."
-
-Luceran pointed at her.
-
-"That. What was that?"
-
-Sabine took a slow breath.
-
-"Your Majesty, the palace is not your problem."
-
-The room went still again.
-
-He felt the familiar impulse to punish insolence simply because he could.
-
-His father had warned him about that impulse.
-
-Not in words.
-
-Luceran had learned it by watching him regret people.
-
-"Explain."
-
-"The palace is a symptom."
-
-"Of what?"
-
-"Of governing from a city where every institution has had two centuries to grow roots around the throne."
-
-Avarren watched her more closely now.
-
-Sabine continued.
-
-"Dismiss the kitchen and House Damaris supplies replacements. Replace the guard and House Harrowmere finds officers. Replace the clerks and House Avarren trains new ones. Replace the locksmiths and the Guild of Keys sends cousins of the same men. None of that is necessarily conspiracy. It is simply continuity."
-
-Nerezza smiled faintly.
-
-"She has discovered civilization."
-
-Sabine ignored him.
-
-Luceran asked, "What do you suggest?"
-
-She hesitated.
-
-Then her eyes moved, not to Luceran, but to a pile of old papers on the side table.
-
-He followed the look.
-
-A roll of faded architectural plans lay beneath the current security maps.
-
-He had ordered them brought that morning because one of his father's last notebooks mentioned an ancestral property survey.
-
-He knew what the plans were.
-
-So did Avarren.
-
-The chancellor said, "No."
-
-Luceran looked at him.
-
-"I haven't asked."
-
-"I recognize the direction of the conversation."
-
-Harrowmere turned in her chair.
-
-"What plans?"
-
-Sabine said nothing.
-
-Luceran walked to the side table and pulled the old roll free.
-
-The ribbon broke when he touched it.
-
-Dust lifted.
-
-Across the top, in ink faded nearly brown, was written:
-
-**PROVISIONAL STUDY: RELOCATION OF THE IMPERIAL HOUSEHOLD AND SELECT CROWN OFFICES TO CASTLE EDSELSTO**
-
-Harrowmere stared.
-
-Then she laughed once.
-
-"Absolutely not."
+By luncheon, three separate courtiers would know how long he had knelt.
 
 ---
 
-By evening, half the palace knew.
+His father had loved the western study because it had only one public door.
 
-No order had been issued.
+Luceran loved it because the windows were too high for anyone in the courtyard to see inside.
 
-No announcement had been drafted.
+He painted there in the afternoon.
 
-No messenger had officially departed.
+Not well.
 
-Half the palace still knew.
+That had never mattered when he was a prince.
 
-Frederick Doss learned from a silver-polisher who learned from a pantry clerk who learned from a junior copyist who had been ordered to find an old road survey without being told why.
+He painted mountains from memory because mountains did not ask him for offices.
 
-Frederick was nineteen, technically a footman and practically whatever the upper household required when someone important needed a young man to move quickly without being noticed.
+The canvas on the easel showed a black ridge beneath a pale winter sky. He had been working on the same line of pines for nearly an hour when the door opened without a knock.
 
-He was carrying a tray of untouched funeral cakes back to the kitchens when the silver-polisher caught him near the west service stair.
+Luceran turned with the brush raised like a dagger.
 
-"They're moving us."
+Montegrain stopped in the doorway.
 
-Frederick nearly dropped the tray.
+"If that is how you receive foreign nobility now, I can come back wearing armor."
 
-"Who?"
+Luceran lowered the brush.
 
-"Everyone."
+"You are not foreign nobility."
 
-"Where?"
+"The Elbren court will be devastated to hear it."
 
-"Edselsto."
+"You are a parasite I have known since I was twelve."
 
-Frederick stopped walking.
+"Ah. Then diplomacy survives."
 
-The silver-polisher grinned at his face.
+Montegrain closed the door behind him.
 
-"Mountain castle."
+He was dressed too well for mourning and too badly for formal court, which was exactly how he had dressed when they were boys and precisely why Luceran had liked him. His coat was Elbren blue, his boots muddy, and one cuff had been repaired with thread that did not match.
 
-"I know where Edselsto is."
+He looked at the canvas.
 
-"You've never been farther north than Bell Bridge."
+"That tree is leaning."
 
-"I know maps exist."
+"It is a mountain pine."
 
-"So do wolves."
+"It is trying to escape the painting."
 
-"There are no wolves in the palace?"
+"It has the right idea."
 
-"There are. They wear perfume."
+Montegrain's smile vanished.
 
-Frederick kicked the man's shin.
+There were very few people before whom Luceran could watch a smile vanish without wondering who would be told.
 
-The cakes rattled.
+"How bad?" Montegrain asked.
 
-"How do you know?"
+Luceran set down the brush.
 
-"My sister heard."
+"I had a pear this morning."
 
-"Your sister is in laundry."
+"Monster."
 
-"Exactly."
+"Damaris knows."
 
-That was not an answer, but in the palace it was almost as good as one.
-
-Frederick continued downstairs.
-
-The kitchen corridor was hotter than the public apartments and smelled of roasting onions, soap, damp wool and the sweet spice used in mourning cakes. Nobody there seemed to be grieving in the same way as upstairs because three hundred guests still required supper.
-
-Mara Kest, assistant housekeeper for the royal apartments, was arguing with a butcher over missing delivery tags.
-
-She saw Frederick.
-
-"Why are those back?"
-
-"No one ate them."
-
-"Then cut them for the night staff."
-
-"They've got black sugar on them."
-
-"The night staff has teeth."
-
-"They're funeral cakes."
-
-"The dead won't be offended."
-
-Frederick set the tray down.
-
-"Are we moving to Edselsto?"
-
-Mara stopped.
-
-The butcher stopped.
-
-Two scullions stopped.
-
-A cook said, "Who told you?"
-
-"So we are."
-
-"That is not what I said."
-
-"You asked who told me."
-
-Mara swore.
-
-Frederick leaned closer.
-
-"Is there a moving allowance?"
-
-The butcher barked a laugh.
-
-Mara looked at Frederick for a long moment.
-
-"You've heard the king may uproot the household to a leaking ruin in the mountains and your first question is whether there's money in it?"
-
-"My mother owes six crowns to the cooper."
-
-"Your mother always owes six crowns to someone."
-
-"Seven now."
-
-"That is not improvement."
-
-"If they pay relocation, I could clear it."
-
-"And then?"
-
-Frederick picked a flake of black sugar from the tray and ate it.
-
-"Then maybe save."
-
-"For what?"
-
-He shrugged, but the shrug came late.
-
-Mara knew him well enough to wait.
-
-"A shop," he said.
-
-"What kind?"
-
-"Does it matter?"
-
-"Usually."
-
-"Something with a room above it."
-
-Mara's face softened.
-
-Frederick hated when it did that.
-
-He ate another piece of sugar.
-
-"A proper room. Mine."
-
-"That costs more than relocation money."
-
-"I know."
-
-"So?"
-
-"So you start somewhere."
-
-Mara returned to the butcher.
-
-"Nothing has been decided. If anything is decided, you will hear it from the household office."
-
-Frederick grinned.
-
-"After everyone else."
-
-"Obviously."
-
-He picked up the cakes and carried them toward the night kitchen.
-
-Behind him, the rumor continued moving.
-
-No conspiracy required.
-
-Only people.
-
----
-
-The Edselsto proposal was older than Luceran.
-
-Older than his father.
-
-Older, perhaps, than the carpet on which the council spent the next two hours trying to kill it.
-
-The plans occupied the center of the table.
-
-Castle Edselsto had been drawn in severe black lines upon a mountain mass shaded in charcoal. Towers. Curtain walls. Lower courtyards. An old village beneath. Roads that may or may not still exist. A notation indicating roof failure in the western residence wing dated twenty-nine years earlier.
-
-Harrowmere stabbed the map with one finger.
-
-"Militarily, magnificent. Administratively, absurd."
-
-Avarren said, "Thank you."
-
-"I wasn't agreeing with you."
-
-"You used one of my words."
-
-"The road cannot support a full court."
-
-Nerezza said, "Neither can the treasury."
-
-Brother Calven leaned over the plan.
-
-"The family chapel?"
-
-"Old nave," Sabine said.
-
-Everyone looked at her.
-
-She had been reading the appendices.
-
-Calven asked, "Consecrated?"
-
-"Probably."
-
-"Probably is not a condition recognized by the temple."
-
-"It was recognized in the reign of Arasten II."
-
-"Arasten II recognized a talking horse as a legal witness."
-
-"The horse was correct."
-
-Calven considered that.
-
-"Unhelpful precedent."
-
-Luceran had been silent for several minutes.
-
-The more they argued, the more interested he became.
-
-Not because Edselsto sounded good.
-
-It sounded terrible.
-
-The road was poor. The roofs leaked. The village had shrunk to a fraction of its old population. The nearest major market town was two days away in favorable weather. Moving the full machinery of the state would cost a staggering amount of money and create exactly the kind of visible disruption his enemies could portray as panic.
-
-But the argument had revealed something.
-
-Every objection began with the same assumption.
-
-That the whole court had to move.
-
-"How many?" he asked.
-
-Harrowmere stopped.
-
-"Your Majesty?"
-
-"How many people does this plan move?"
-
-Nerezza flipped pages.
-
-"One thousand eight hundred in the earliest version. Two thousand one hundred in the revised—"
-
-"No. The first phase."
-
-Sabine was already turning pages.
-
-"Four hundred and eighty."
-
-Avarren looked at her.
-
-She pointed to an annex.
-
-"Royal household core, Privy Seal, Petition Office, selected treasury staff, military secretariat, diplomatic reception staff, archive detachment, kitchen and stable minimums."
-
-"Minimums?" Nerezza said.
-
-"The author underlined it twice."
-
-"Who authored it?"
-
-Sabine checked.
-
-"Lord Chamberlain Oren Vass, reign of Luceran's grandfather."
-
-Avarren frowned.
-
-Luceran noticed that too.
-
-"Problem?"
-
-"My predecessor's predecessor."
-
-"Was he an idiot?"
-
-"No."
-
-"Corrupt?"
-
-"Probably in small ways. Not in large ones."
-
-"Then why wasn't this done?"
-
-Avarren looked at the map.
-
-"Because the king changed his mind."
-
-"Why?"
-
-"We would need the archive."
-
-Sabine said quietly, "The archive note is missing."
-
-Now everyone looked at her.
-
-She lifted one sheet.
-
-"There is a registry line for a rejection memorandum. The shelf reference is blank."
-
-Luceran felt something cold move through his grief.
-
-Not magic.
-
-Interest.
-
-His father had mentioned Edselsto twice in the last year of his life. Once while feverish. Once while dictating changes to an estate survey.
-
-Luceran had assumed nostalgia.
-
-"What about my father?"
-
-Sabine turned another page.
-
-"There was a feasibility update seven years ago."
-
-Avarren went very still.
-
-Luceran saw it.
-
-"You knew."
-
-"I knew a survey was ordered."
-
-"Why?"
-
-"Your father ordered hundreds of surveys."
-
-"Of ancestral castles?"
-
-"Of anything he feared might become useful."
-
-That sounded like him.
-
-Luceran almost hated the comfort of it.
-
-Harrowmere tapped the road.
-
-"A partial move is less ridiculous."
-
-Avarren stared at her.
-
-"You are not helping."
-
-"I am not here to help you."
-
-Nerezza began doing sums in the margin of a ledger.
-
-Luceran said, "If four hundred and eighty people moved, what happens here?"
-
-Avarren answered carefully.
-
-"The capital remains the capital."
-
-"Does it?"
-
-"The ministries remain."
-
-"Most of them."
-
-"Parliamentary and provincial delegations remain."
-
-"Unless summoned."
-
-"The courts remain."
-
-"They can."
-
-"Foreign missions remain."
-
-"They can send representatives."
-
-Avarren looked at him.
-
-"You are describing two governments."
-
-"No. One government with two centers."
-
-"That is often how two governments begin."
-
-"Then we make the hierarchy explicit."
-
-Sabine said, "And the appointments at Edselsto would be new."
-
-Silence.
-
-There it was.
-
-Not escape.
-
-Space.
-
-Luceran looked around the table.
-
-Avarren understood first.
-
-His face changed.
-
-"You want a clean household."
-
-"I want one where I know who appointed the man holding my keys."
-
-"That will last six months."
-
-"Then six months is more than I have here."
-
-Harrowmere leaned back.
-
-"New guard posts."
-
-"Yes."
-
-"New supply contracts."
-
-"Yes."
-
-Nerezza said, "New expense."
-
-"Yes."
-
-Brother Calven said, "New chapel authority."
-
-"Apparently."
-
-Sabine added, "New room assignments."
-
-Avarren's eyes moved toward her.
-
-Luceran saw an entire political map form in the chancellor's mind.
-
-Every room.
-
-Every office.
-
-Every contract.
-
-Every key.
-
-Every appointment.
-
-A blank board only in the sense that nobody had yet placed pieces on it.
-
-Avarren said, "The great houses will fight you over every chair."
-
-"They already do."
-
-"They will fight harder."
-
-"Good."
-
-That answer surprised even Luceran.
-
-He stood.
-
-Grief had made him tired of things already decided.
-
-Edselsto would be a disaster.
-
-But it might be his disaster.
-
-"I want a feasibility order by morning."
-
-Avarren opened his mouth.
-
-Luceran kept going.
-
-"Not an announcement. Not a decree to move. A real study. Phase one only. Roads. roof condition. water. kitchens. stable capacity. archives. defense. village labor. winter access. cost. staff count. I want every office to tell me what it absolutely cannot function without and I want Nerezza to assume they are lying by thirty percent."
-
-Nerezza nodded.
-
-"Forty."
-
-"Thirty-five."
-
-"Done."
-
-"Harrowmere, security."
-
-She nodded once.
-
-"Rhyse, identify which guard appointments could move without stripping the capital."
-
-"Yes, Your Majesty."
-
-"Calven, tell me whether the old nave is consecrated, cursed, illegal, or merely damp."
-
-Calven sighed.
-
-"I shall attempt to distinguish among them."
-
-Luceran looked at Sabine.
-
-She straightened.
-
-"Lady Pell."
-
-"Your Majesty."
-
-"You found the four hundred and eighty."
-
-"It was written down."
-
-"Most useful things are. Someone still has to read them."
-
-Avarren's expression became unreadable.
-
-Luceran said, "You are attached to the study."
-
-Sabine blinked.
-
-"My current office—"
-
-"Can survive without you?"
-
-Avarren answered before she could.
-
-"Yes."
-
-She looked at him.
-
-He permitted himself the smallest smile.
-
-Luceran saw then that whatever patronage had brought Sabine Pell into the Petition Office, she wanted something from her work that had very little to do with House Pell.
-
-Good.
-
-Everyone wanted something.
-
-He was beginning to understand that as a tool rather than an insult.
-
-"Then you're attached."
-
-Sabine bowed.
-
-"Yes, Your Majesty."
-
-The meeting broke after midnight.
-
-No one called the decision wise.
-
-That reassured him.
-
----
-
-Sabine found him later in the Hall of Lineage.
-
-She had not been looking for him.
-
-That was what she claimed.
-
-Luceran believed her because she was carrying three archive boxes and swearing softly at a footstool.
-
-He took one box.
-
-She nearly dropped the other two.
-
-"Your Majesty."
-
-"If you kneel, you'll lose those."
-
-She did not kneel.
-
-That seemed to distress her more than kneeling would have.
-
-"What are these?"
-
-"Edselsto references from your father's estate files."
+Montegrain stared.
 
 "Already?"
 
-"The archive does not sleep."
+"Before prayers."
 
-"People in it do."
+"Efficient."
 
-"Not if Avarren is angry."
+"Nerezza knows I refused the wine. Lethayne wants to know whether grief has made me suggestible."
 
-They walked beneath portraits of dead kings.
+"Has it?"
 
-Luceran had always hated the hall.
+"Apparently everyone intends to find out."
 
-Everyone painted there looked certain.
+Montegrain walked to the sideboard and poured himself water without asking.
 
-His father had not yet joined them.
+Luceran watched him do it and felt, absurdly, grateful.
 
-His mother's portrait had been begun three years earlier and remained unfinished because the painter kept insisting her eyes were wrong.
+"My mother used to come in here," Luceran said. "She would sit there and complain that Father's chairs were designed by a man who hated backs."
 
-Sabine carried the boxes awkwardly.
+Montegrain did not say he was sorry.
 
-Luceran said, "Put them down."
+Everyone else was sorry.
 
-They set them on a bench beneath Luceran II, who had conquered three provinces and died because he refused to let a physician cut open an infected toe.
-
-For a while neither spoke.
-
-Sabine finally said, "There is something you should see before the morning meeting."
-
-She opened the upper box and removed a thin folder.
-
-His father's hand appeared on the first page.
-
-Luceran knew it before he read a word.
-
-The handwriting had become smaller in the last years. More compressed. As though even ink needed discipline.
-
-**Edselsto phase study. Update structural and route figures. Do not circulate.**
-
-Below it:
-
-**Too expensive at present. Revisit only if capital access becomes intolerably compromised.**
-
-Luceran read the line twice.
-
-Sabine watched the floor.
-
-"He considered it."
-
-"Yes."
-
-"He never told me."
-
-"No."
-
-Luceran almost asked why.
-
-That would have been childish.
-
-Sabine could not know.
-
-The dead were uniquely resistant to interrogation.
-
-"What does 'capital access' mean?"
-
-"I don't know."
-
-"What do you think it means?"
-
-She glanced up.
-
-"You asked me what I think."
-
-"Yes."
-
-"I think he was worried about who could reach him."
-
-"Assassination?"
-
-"Perhaps."
-
-"Or politics."
-
-"Politics is often the slower form."
-
-He looked at her.
-
-"You're very cheerful."
-
-"I'm tired."
-
-"Is that when you become honest?"
-
-"No. It is when I lose the energy to disguise it."
-
-That was useful information too.
-
-He closed the folder.
-
-"Why do you want this assignment?"
-
-Sabine's face changed.
-
-Not much.
-
-Enough.
-
-"My house has seventeen people in this palace."
-
-"That many?"
-
-"Twenty-three if you count married daughters. Forty-one if you count people who insist they are cousins."
-
-"And?"
-
-"I would like, once in my life, to hold an office because I am good at it and not because House Pell breeds like field mice."
+"They were," he said instead. "I sat in one once. Your dynasty has committed crimes."
 
 Luceran laughed.
 
-She winced.
+Then his throat closed.
 
-"Should I not have said that?"
+He sat down hard on the window bench.
 
-"I don't know. I am discovering the rules."
+Montegrain waited.
 
-"So am I."
+"I think they killed them," Luceran said.
 
-That was the first moment he liked her.
+There it was.
 
-Not trusted.
+He had not said it aloud.
 
-Not needed.
+Not to the physicians. Not to the chancellor. Not to the court wizard. Not at the funerals. Not even alone.
 
-Liked.
+Montegrain's face did not change quickly enough to be reassuring.
 
-It was smaller than all those things and therefore easier.
+"Who?"
 
-He looked toward the unfinished space where his father's portrait would hang.
+"I don't know."
 
-"Everyone keeps telling me this is how states work."
+"That is an important part of an accusation."
 
-Sabine followed his gaze.
+"I know."
 
-"They are right."
-
-"I hate that."
-
-"They are still right."
-
-"What if I move the court?"
-
-"Then states will work that way somewhere else."
-
-He looked at her sharply.
-
-She did not retreat.
-
-"Edselsto will not stay clean," she said. "If you move there because you think people will stop having patrons and cousins and lovers and debts, you will be disappointed."
-
-"Then why help?"
-
-"Because for a little while, everyone will have to declare where they stand."
-
-He considered that.
-
-"Will they?"
+"Do you have evidence?"
 
 "No."
 
-"That contradicts what you just said."
+"Then what do you have?"
 
-"They will have to work harder to hide it."
+Luceran looked at the unfinished mountain.
 
-There.
+"Timing."
 
-Competence.
+"Timing is not poison."
 
-Not loyalty.
+"Father abdicates. I become king. Thirty-seven days later Mother is ill. Then Father worsens. Then both are dead. And before their rooms are cold every house in this fucking palace has a theory explaining why one of the other houses did it and why I should place myself in their hands for protection."
 
-Not yet.
+Montegrain sat opposite him.
 
-Something better for the moment.
+"That proves they are vultures."
 
-Luceran handed her the folder.
+"I knew that already."
 
-"Bring this tomorrow."
+"It does not prove one of them killed your parents."
 
-"Yes, Your Majesty."
+"I know."
 
-"And Lady Sabine?"
+"Do you?"
 
-She paused.
+Luceran looked up.
 
-"Do not stop writing what you actually think in the margins."
+Montegrain held his gaze.
 
-A horrified silence.
+This was why he had been admitted.
 
-"Not in the copy you give me," he added.
+Not because he was safe. Luceran no longer believed anyone was safe.
 
-She exhaled.
+Because Montegrain would say the thing that made him angriest if he thought it true.
 
-"Thank you."
+"Yes," Luceran said finally. "I know."
 
-"But keep a copy."
+"Good. Be suspicious. Do not become stupid."
 
-Now she smiled.
+"A stirring speech from Elbren."
 
-"I already do."
+"We charge extra for stirring."
+
+A knock sounded.
+
+Both men went silent.
+
+The door opened after permission this time.
+
+The Court Wizard entered carrying a leather folio under one arm and looking irritated with the existence of corridors.
+
+Magister Vael Teren was old enough that nobody knew whether the title Court Wizard described his office, his profession, or simply what everyone had called him for so long that correcting them had become pointless.
+
+He looked at Montegrain.
+
+"Still here?"
+
+"The king enjoys me."
+
+"The king is grieving. His judgment is impaired."
+
+Luceran said, "You see? Everyone agrees."
+
+Vael looked at him.
+
+"On what?"
+
+"That grief makes me easy to manipulate."
+
+"Grief makes everyone easy to manipulate. So does hunger. So does lust. So does fear. So does being twenty-three and wearing a crown. This is not an arcane discovery."
+
+Montegrain lifted his cup.
+
+"I missed him."
+
+Vael dropped the folio on the table.
+
+"Your mother's final alchemical assays. Nothing in them proves poisoning. Nothing in them disproves it either. Half the compounds used by physicians become poisonous if the dose is wrong. The other half become poisonous if the patient is unlucky."
+
+Luceran opened the folio.
+
+"And my father?"
+
+"Dying for months before he abdicated."
+
+"Could someone have hurried it?"
+
+"Yes."
+
+"Could someone have hurried Mother's?"
+
+"Yes."
+
+"Could you tell?"
+
+"Not with certainty."
+
+Luceran shut the folio.
+
+"Wonderful."
+
+Vael sat.
+
+"Certainty is a luxury."
+
+"So I am told by people who then ask me to sign things."
+
+"Do not sign them."
+
+"Avarren says government requires signatures."
+
+"Avarren is correct."
+
+"I hate how often people I dislike are correct."
+
+Montegrain said, "That is government."
+
+For almost an hour, the three of them spoke privately.
+
+Or Luceran believed they did.
+
+They discussed the physicians. They discussed his father's abdication. Vael refused to accuse the Glass Choir. Montegrain refused to accuse Ustran. Luceran accused everyone in rotation and was contradicted by both of them. Eventually the conversation wandered into Elbren horses, a vulgar story about an ambassador's wig, and whether Luceran's mountain pine was anatomically possible.
+
+When Montegrain left, he clasped Luceran's shoulder.
+
+When Vael left after him, he told Luceran to sleep.
+
+Luceran remained in the study until dusk.
+
+He painted three more trees.
+
+By supper, House Valcere knew that Montegrain had remained with him for fifty-three minutes.
+
+By evening prayers, House Lethayne knew Vael had visited afterward carrying a folio.
+
+By midnight, someone had circulated the conclusion that Elbren and the Court Wizard were jointly advising the king on the investigation into his parents' deaths.
+
+There was no investigation.
+
+That did not matter.
 
 ---
 
-Before dawn, Luceran returned alone to the small council chamber.
+Mara Kest knew the rumor was wrong because she knew exactly how long the king had been alone.
 
-The Edselsto plans remained spread across the table.
+That was not because she spied on him.
 
-Someone had placed weights on the corners.
+It was because she was assistant housekeeper for the royal apartments, and if the king occupied a room for four hours then somebody had to know whether to send in wood, lamps, water, food, chamber pots, clean cloths, and the boy whose job it was to remove ashes without setting fire to the carpet.
 
-No one had ordered it.
+The distinction between service and surveillance had become increasingly theoretical.
 
-Some clerk had simply understood that old paper curled in damp weather and that kings were careless with things other people later had to preserve.
+"He ate?" Mara asked.
 
-Luceran rested both hands on the table.
+Frederick Doss nodded.
 
-The castle was drawn from above.
+"Half the bread. Pear."
 
-Black mountain.
+"Later."
 
-Old walls.
+"Nothing."
 
-Empty rooms.
+"You offered?"
 
-A village shrinking at its feet.
+"Twice."
 
-His family's oldest home.
+"And?"
 
-A place almost no faction had bothered to capture because almost nothing important happened there anymore.
+"He told me if I asked a third time he would have me hanged."
 
-He thought of his father's note.
+Mara looked up sharply.
 
-**Revisit only if capital access becomes intolerably compromised.**
+Frederick grinned.
 
-Outside the chamber, servants changed the lamps.
+"Then he said not really."
 
-One of them whispered.
+"Do not repeat that."
 
-Another laughed.
+"I wasn't going to."
 
-A guard coughed.
+"You just repeated it to me."
 
-A cart rolled through the lower court.
+"You're you."
 
-Somewhere, someone already knew he was here.
+Mara stared at him.
 
-Someone always knew.
+Frederick's grin faded.
 
-Luceran looked at the empty spaces marked inside Edselsto's walls.
+That was how it happened.
 
-Then he rang for the clerk.
+Not spies in black cloaks. Not secret tunnels. A footman told a housekeeper because she was the person who needed to know whether the king had eaten. The housekeeper told a kitchen clerk to prepare something plain. The kitchen clerk told a cook why. The cook complained to a supplier that the king was not eating the elaborate mourning dishes. The supplier belonged to a merchant league. By morning, somebody with money had learned something true.
 
-When the door opened, he said:
+Then somebody made it useful.
 
-"Prepare the order."
+Mara rubbed her forehead.
 
-The clerk bowed.
+"No more questions about his meals unless I ask."
 
-"What order, Your Majesty?"
+"People ask me."
 
-Luceran looked again at the mountain.
+"Who?"
 
-"The feasibility study."
+Frederick hesitated.
 
-He paused.
+"People."
 
-Then, because saying it mattered:
+"Names."
 
-"We are going to see whether a court can be built somewhere it does not already belong to everyone else."
+"Lord Pell's man asked whether His Majesty was drinking. A Bellisar groom asked whether he was sleeping. One of the Nerezza clerks offered me two silvers to tell him whether the king had vomited after breakfast."
 
-The clerk did not understand.
+Mara's face hardened.
 
-That was fine.
+"Did you take it?"
 
-By breakfast, half the palace would.
+"No."
 
-By noon, all of it would.
+"Why not?"
 
-And every person who heard would begin deciding what the move might cost them, what it might offer them, and what they intended to do about it.
+Frederick looked offended.
 
-That, Luceran was beginning to understand, was what a kingdom was.
+"Because I'm not an idiot."
 
-Not a crown.
+"That was not my question."
 
-Not a room.
+He glanced down the corridor.
 
-Not even a king.
+"Two silvers isn't enough to become the man who sells the king's vomit."
 
-A thousand people hearing the same decision and making a thousand different plans.
+Mara almost laughed.
+
+Then she realized he had answered honestly.
+
+"How much would be?"
+
+Frederick looked at her.
+
+For a moment, neither of them spoke.
+
+"I don't know," he said.
+
+That answer worried her more than a lie would have.
+
+---
+
+The court used Luceran's exhaustion because courts used everything.
+
+Nobody said, **The king is tired; now is the time to make him give us what we want.**
+
+They were subtler.
+
+House Bellisar requested an audience after supper because the horse levies could not possibly wait until morning. House Nerezza sent a revenue memorandum at dawn because the eastern customs dispute was urgent. The Red Script requested clarification of an oath formula. The River Factors sent a gift of rare fruit accompanied by a petition. House Lethayne sent a widowed cousin to express condolences in person; she was beautiful, intelligent, and very careful not to flirt until Luceran was tired enough to notice that she had not been flirting.
+
+House Edevane sent family.
+
+That was worse.
+
+His cousin Oren Edevane found him outside the council chamber on the fourth day after the funerals and embraced him before Luceran could decide whether he wanted to be embraced.
+
+"You look exhausted."
+
+"Everyone tells me."
+
+"Then you should rest."
+
+"Everyone tells me that too. Usually immediately before asking for something."
+
+Oren smiled sadly.
+
+"I ask nothing."
+
+Luceran waited.
+
+Oren lasted eight seconds.
+
+"Except that you consider appointing someone you trust to manage the daily petitions."
+
+"Someone like you?"
+
+"Someone like family."
+
+"You are like family because you are family."
+
+"Exactly."
+
+Luceran walked away.
+
+Oren followed.
+
+"Luceran."
+
+The use of his name stopped him.
+
+"Your parents are dead. Your father placed the crown on you before he died because he knew this would be difficult. You do not need to prove strength by doing everything yourself."
+
+There was kindness in it.
+
+That was the problem.
+
+Luceran believed Oren loved him.
+
+He also believed Oren wanted the petitions office.
+
+Both things could be true.
+
+The court had become unbearable because both things were always true.
+
+Affection had a faction.
+
+Concern had a patron.
+
+Grief had a constituency.
+
+Even privacy had witnesses.
+
+"No," Luceran said.
+
+Oren's expression tightened.
+
+"No to what?"
+
+"Whatever comes after the kindness."
+
+"That is unfair."
+
+"Yes."
+
+Luceran walked away before fairness could become another negotiation.
+
+---
+
+The decision came two nights later.
+
+Not in council.
+
+Not after a vote.
+
+Not because an archivist discovered a forgotten memorandum.
+
+It came because Luceran tried to take a shit in peace.
+
+The royal privy adjoined his bedchamber behind two doors and a narrow dressing room. It was, by any reasonable definition, private.
+
+When he emerged, Captain Tovan Rhyse was waiting outside the dressing room with the expression of a man who would rather fight cavalry.
+
+"What?"
+
+Rhyse hesitated.
+
+"Your Majesty, there is a rumor that you were ill this evening."
+
+Luceran stared at him.
+
+"I was not."
+
+"I know."
+
+"How do you know?"
+
+Rhyse's face became worse.
+
+Luceran closed his eyes.
+
+"No."
+
+"Your valet asked for hot water. Someone assumed—"
+
+"Hot water."
+
+"Yes."
+
+"My valet asked for hot water."
+
+"Yes."
+
+"And now the court thinks I am ill."
+
+"Part of it."
+
+"Which part?"
+
+"It is difficult to say."
+
+Luceran began laughing.
+
+Rhyse did not.
+
+The laughter kept coming until Luceran had to lean against the wall.
+
+Then, without warning, it became rage.
+
+"Get Avarren."
+
+"Your Majesty—"
+
+"Get Avarren. Get Harrowmere. Get Nerezza. Get Vael. Wake Calven. Wake every miserable bastard who will tell me why I cannot do what I am about to do."
+
+Rhyse went.
+
+Luceran dressed himself.
+
+By the time the council assembled, he had dragged an old map from his father's study and spread it across the table.
+
+Castle Edselsto stood in black ink in the northern mountains.
+
+The room smelled of lamp oil, sleep and irritation.
+
+Avarren arrived first, robe thrown over his nightshirt.
+
+He saw the map.
+
+"No."
+
+Luceran almost admired him.
+
+"I have not spoken."
+
+"Your father used to look at that map when he was angry with us."
+
+"Then perhaps he had the right idea."
+
+Harrowmere entered fastening her sword belt. Nerezza arrived wrapped in a fur-lined coat and carrying no ledgers, which made him look naked. Vael came last and did not apologize.
+
+Luceran waited until the doors closed.
+
+"I am leaving."
+
+Avarren rubbed both hands over his face.
+
+"For the night?"
+
+"The capital."
+
+Nobody spoke.
+
+Luceran put his finger on Edselsto.
+
+"We have talked about returning the imperial household here for years. My father talked about it. His father talked about it. Every time the court becomes impossible, someone says Edselsto would give the Crown room to breathe, and every time somebody else explains that the road is poor, the roofs are old, diplomats will complain, merchants will complain, half the court will complain, and it will cost too much."
+
+Nerezza said, "All of those things remain true."
+
+"I don't care."
+
+"You will when I show you the bill."
+
+"Then show it to me in Edselsto."
+
+Avarren leaned forward.
+
+"Your Majesty, moving the imperial court is not the same as changing houses."
+
+"I know."
+
+"Do you? Archives. Seals. Treasury. Kitchens. Horses. Guards. Messengers. Ambassadors. Judges. Clerks. Craftsmen. Servants. Warehouses. Roads—"
+
+"Yes."
+
+"You cannot simply arrive at a ruined castle with a crown and declare it a capital."
+
+"Watch me."
+
+Harrowmere laughed.
+
+Avarren glared at her.
+
+"Do not encourage him."
+
+"I am not. I am enjoying you."
+
+Luceran planted both hands on the map.
+
+"I am not asking whether Edselsto is convenient. I am asking whether it is still standing."
+
+That changed the room.
+
+Vael looked at the map.
+
+"The old steward still sends winter letters."
+
+Avarren nodded reluctantly.
+
+"A caretaker's account reaches the household office twice a year."
+
+"Then someone goes tomorrow."
+
+Nerezza frowned.
+
+"Someone?"
+
+"An emissary. A diplomat. A man with eyes. I do not care what title makes everyone comfortable. He rides to Edselsto with a mason, a carpenter, enough soldiers not to be robbed on the road, and a letter under my seal. He looks at the walls. He looks at the roofs. He asks the steward what is habitable. He asks the village what can be supplied. If there are enough rooms left standing for me, my household, guards and the first work crews, he tells the steward the king is returning and to prepare for us."
+
+Avarren said, "And if there are not?"
+
+"Then the mason tells me what has to be made safe before I sleep there."
+
+"And if it takes a year?"
+
+"Then we begin in tents."
+
+"Luceran."
+
+It was Vael.
+
+Not Your Majesty.
+
+Luceran looked at him.
+
+The old wizard's face was unreadable.
+
+"Are you leaving because you think someone here murdered your parents?"
+
+The room became perfectly still.
+
+So that was how the secret would begin.
+
+Not leaked by a servant.
+
+Spoken by the one man old enough to risk it.
+
+Luceran considered lying.
+
+"Partly."
+
+Avarren's face changed.
+
+Harrowmere swore under her breath.
+
+Nerezza said nothing.
+
+Luceran continued before they could start.
+
+"I have no proof. I am not accusing a house. I am not arresting physicians. I am not beginning a purge. I am not going to let every faction use my suspicion to murder its rivals for me."
+
+Vael nodded once.
+
+"Good."
+
+"But I am also not going to sit in a palace where everyone knows who visits my rooms, how long they stay, whether I eat, whether I sleep, whether I drink, whether I fuck, whether I shit, whether I cry, and then pretend this is merely the natural weather of monarchy."
+
+Avarren opened his mouth.
+
+Luceran cut him off.
+
+"I know Edselsto will not stay clean. I know the houses will send people. The guilds will send people. Merchants will build inns before we finish the roofs. Every bastard in this room will bring his own network with him. Fine. But they will have to build it again. They will have to show themselves doing it. They will have to travel to my court instead of living in its walls before I was born."
+
+Harrowmere looked down at the map.
+
+"The road is defensible."
+
+Avarren turned on her.
+
+"Stop helping."
+
+"It is."
+
+Nerezza said, "It will be ruinously expensive."
+
+"Yes."
+
+"You cannot say yes as though that makes money appear."
+
+"No. But I can decide what money is for."
+
+That silenced him.
+
+Luceran straightened.
+
+He was tired enough that the room moved slightly when he did.
+
+He did not care.
+
+"Send the emissary at dawn. Send masons. Send carpenters. Send soldiers. Send someone from the household who knows what a king actually needs to sleep, eat and hold audience without dying of cold. They are not to write me a treatise. They are to look at the fucking castle and tell me whether it is still there."
+
+Avarren exhaled through his nose.
+
+"And if it is?"
+
+Luceran looked at Edselsto.
+
+"Then I am going home."
+
+---
+
+The man chosen to go was Sir Edran Vey, a minor royal diplomat whose greatest qualification was that no great house could claim him without provoking three others to object.
+
+His second qualification was that he could ride.
+
+His third was that Avarren trusted him to describe a collapsed roof as a collapsed roof rather than an opportunity for constitutional reform.
+
+By dawn, Edran had a sealed royal letter, twelve mounted guards, Master Corren Bale of the Stone and Beam League, carpenter Iven Marr, and Mistress Mara Kest, who had been selected after loudly insisting that no collection of men should be permitted to decide whether a residence was habitable without asking where the water came from, where the bedding would dry, and whether the kitchens could feed more than six people.
+
+Frederick watched them assemble in the lower court.
+
+"You're going?" he asked Mara.
+
+"Apparently."
+
+"To Edselsto?"
+
+"That is where the castle is."
+
+"Is the king moving?"
+
+Mara looked at him.
+
+"The king has decided he is moving. Whether the rest of creation cooperates remains to be seen."
+
+Frederick grinned.
+
+"Will there be extra pay?"
+
+"For me? There had better be."
+
+"For everyone."
+
+"Why?"
+
+"Mountain hardship."
+
+"You invented that."
+
+"It sounds official."
+
+"You have never seen a mountain."
+
+"Exactly. Hardship."
+
+Mara shook her head and mounted badly.
+
+Frederick steadied the stirrup.
+
+"Bring back something expensive."
+
+"I will bring back a list of everything broken."
+
+"Same thing."
+
+The gates opened.
+
+Edran Vey rode north carrying the first direct royal command Castle Edselsto had received in years:
+
+**The King considers his return. Receive our servant. Show him the house entire where it may safely be shown. Prepare those chambers that remain sound. Summon such labor as may be had without coercion. Make ready for masons, carpenters, soldiers and household officers. If the old royal apartments cannot receive us, make ready whatever can. We will not be delayed for ceremony.**
+
+Below it, in Luceran's own hand, was a shorter instruction to the steward.
+
+**Tell me what still stands. Do not flatter me.**
+
+---
+
+By breakfast, the court knew an armed royal party had left by the northern gate.
+
+By midmorning, House Bellisar knew there were twelve guards.
+
+By noon, the River Factors knew a mason had gone.
+
+By afternoon, House Lethayne had learned that Mara Kest was among the party and concluded, correctly, that the question was not military alone.
+
+By supper, three ambassadors had requested clarification of rumors that the imperial court intended to relocate.
+
+Avarren sent all three the same answer.
+
+**His Majesty is considering arrangements for the proper exercise of the Crown. You will be informed of matters affecting your mission when they are settled.**
+
+It was the diplomatic form of go to hell.
+
+Luceran read it twice and approved it without alteration.
+
+Then he returned to the western study.
+
+His painting was still on the easel.
+
+The mountain pine still leaned as if trying to escape.
+
+Montegrain had left a note beneath the palette.
+
+**If you flee to a mountain, I am still visiting. Elbren possesses horses. — M.**
+
+Luceran sat alone for almost an hour.
+
+Nobody entered.
+
+Nobody asked him to eat.
+
+Nobody asked him to sign anything.
+
+He knew perfectly well that someone outside the door was recording how long he remained inside.
+
+For once, he let them.
+
+Soon, if Edselsto still stood, they could come report on him there.
+
+They could complain about the road while they did it.
+
+That thought gave him more pleasure than it should have.
+
+He picked up the brush and painted another black pine.
 
 ---
 
 ## Episode-end state
 
-The Crown has **not yet ordered the relocation**. King Luceran has ordered a formal phase-one feasibility study for moving a core household and selected Crown offices to Castle Edselsto.
+King Luceran is already the lawful reigning king because his father Othmar abdicated shortly before both Othmar and Luceran's mother died in close succession. Luceran privately suspects their deaths may have been hastened or arranged, but he has no proof and explicitly refuses to let suspicion become a factional purge.
 
-The move is now a live political possibility. The existing capital is established as functional but saturated with inherited human networks rather than cartoonishly corrupt. Luceran has learned that replacing everyone is neither practical nor necessarily desirable.
+The capital court is established as a dense information market. Ordinary service relationships create surveillance without requiring every servant to be a spy. Factions exploit Luceran's grief, fatigue, appetite, visitors, family relationships, private hours, and suspected vulnerability. His central grievance is not merely that courtiers are corrupt; it is that nothing about his human life remains outside somebody's political model.
 
-Lady Sabine Pell has moved from junior Petition Office clerk to direct participant in the Edselsto study after demonstrating document discipline, political perception, and willingness to disagree. Luceran likes her candor and recognizes her competence; neither trust nor deep emotional dependence has yet been earned.
+Montegrain of the Elbren court is established as Luceran's longstanding best friend and one of the few people willing to contradict him privately. Court Wizard Magister Vael Teren is established as another trusted but independent voice who refuses to manufacture certainty about the royal deaths.
 
-Lord Chancellor Aurel Avarren opposes careless relocation but is not an antagonist. Marshal Dame Ysolde Harrowmere considers partial relocation strategically plausible. Comptroller Mereth Nerezza is established as financially severe and useful. Brother Calven Orsanne must investigate the old nave. Captain Tovan Rhyse must map guard transfer without pretending ordinary human networks equal treason.
+Luceran has made the sovereign decision to return the imperial court to Castle Edselsto if the ancestral seat remains physically capable of receiving an initial royal household. He does not request a modern feasibility study. Sir Edran Vey has been dispatched with a mason, carpenter, twelve soldiers, and assistant housekeeper Mara Kest to inspect the castle directly, speak with its steward, determine what still stands, and begin immediate preparation if enough of it is habitable.
 
-Frederick Doss is established as a nineteen-year-old palace footman with family debt and a concrete dream of enough money to secure a room and small independent livelihood. No betrayal has occurred and none is predetermined; the vulnerability now exists in continuity.
+Frederick Doss remains a young footman with financial ambition and a demonstrated awareness that private information can be sold. He has not betrayed the king. Mara has noticed that his price-based joke contains a real vulnerability.
 
 No supernatural event has been confirmed. No candle has failed. The buried truth remains completely outside character knowledge.
