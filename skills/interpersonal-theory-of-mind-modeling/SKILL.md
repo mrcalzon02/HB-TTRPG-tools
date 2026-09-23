@@ -4,7 +4,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: "1.6.0"
+  version: "1.7.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -1563,6 +1563,145 @@ Do not infer that every member of an institution shares the institution's appare
 For significant new evidence, prefer the following sequence:
 
 **prior relationship state → evidence provenance → diagnosticity → historical path dependence → role/person/institution frame → observer uncertainty → model update → signal interpretation → shared-knowledge change → relationship consequence**
+
+## Representational mediation and biographical-source contamination
+
+Secondary portrayals of real people are not direct access to those people's internal states.
+
+Biographies, documentaries, biopics, dramatizations, memoirs, retrospective interviews, edited archival compilations, prestige television, podcasts, and historical films often contain one or more additional theory-of-mind layers created by authors, directors, editors, interviewers, surviving witnesses, institutions, estates, publishers, or later commentators.
+
+Treat these sources as **mediated representations**, not transparent evidence.
+
+### Mediation chain
+
+When using a secondary portrayal, preserve the chain:
+
+**historical event/person → source material available to creator → creator interpretation → selection/framing/editing → published portrayal → analyst interpretation**
+
+If a dramatization reconstructs dialogue or motive, record that the apparent internal state may reflect the creator's theory of mind rather than the subject's.
+
+### Source classes
+
+Distinguish at minimum:
+
+- contemporaneous primary record;
+- contemporaneous self-report;
+- contemporaneous third-party observation;
+- later self-report;
+- later third-party recollection;
+- institutional record;
+- biography;
+- memoir;
+- documentary;
+- edited archival compilation;
+- dramatized biography/biopic;
+- historical fiction based on real people;
+- journalistic reconstruction;
+- scholarly historical analysis;
+- unsourced popular retelling.
+
+These classes differ in evidentiary value and in the kinds of claims they can support.
+
+### Creator-model contamination
+
+Flag **creator-model contamination** when a source presents inferred motives, emotions, intentions, private dialogue, or causal explanations that are not directly evidenced by primary material.
+
+Examples include:
+
+- reconstructed private conversations;
+- composite characters;
+- compressed timelines;
+- invented dialogue;
+- inferred internal monologue;
+- scene ordering chosen for thematic effect;
+- omission of contradictory evidence;
+- retrospective framing that privileges one survivor's account;
+- dramatic simplification of institutional causes into personal motives.
+
+Such material may still be useful for studying how later observers model the subject, but it must not be silently promoted into the subject's historical internal state.
+
+### Memoir and retrospective self-report
+
+Memoir is a special case.
+
+A memoir is simultaneously evidence about:
+
+- the author's later self-model;
+- the author's later model of other people;
+- the author's remembered past;
+- the author's current narrative priorities;
+- and, sometimes, the historical events being remembered.
+
+Do not treat it as direct unfiltered access to the author's earlier state.
+
+Store:
+
+**author-at-writing-time → model of author-at-event-time / other-person-at-event-time**
+
+unless contemporaneous evidence independently supports transfer into the earlier snapshot.
+
+### Documentary editing
+
+Documentary footage can contain primary material while the documentary itself remains interpretive.
+
+Separate:
+
+- raw footage or audio;
+- chronology of the underlying event;
+- editing order;
+- narration;
+- musical framing;
+- omitted context;
+- interview selection;
+- captions and explanatory claims.
+
+A documentary may therefore contain both high-value primary evidence and low-confidence interpretive framing in the same artifact.
+
+### Dramatizations and biopics
+
+Do not use invented dialogue, actor performance, cinematic blocking, or dramatized private scenes as evidence of historical internal states unless independently corroborated.
+
+A biopic may be useful as evidence of:
+
+- the filmmakers' theory of the person;
+- popular cultural interpretation;
+- estate-approved or family-approved narrative;
+- a later public myth.
+
+It is not equivalent to a primary record.
+
+### Source-independence rule
+
+Two secondary works repeating the same interpretation are not independent confirmation if both derive from the same memoir, interview, archive, or earlier biography.
+
+Trace upstream provenance where practical.
+
+### Representational confidence rule
+
+Every mediated-source claim should distinguish:
+
+- **historical fact claim**;
+- **source's interpretation**;
+- **creator's inferred internal-state claim**;
+- **analyst inference**.
+
+Do not collapse these levels.
+
+### Real-person default priority
+
+For real-person IToM modeling, prefer evidence in roughly this order when available:
+
+1. contemporaneous direct records and behavior;
+2. contemporaneous self-report;
+3. contemporaneous third-party records with clear provenance;
+4. institutional records;
+5. later self-report and later recollection;
+6. scholarly historical synthesis;
+7. biography/documentary interpretation;
+8. dramatized portrayal;
+9. unsourced popular retelling.
+
+This ordering is not absolute. Reliability, incentives, access, corroboration, and context may change the weight of any individual source.
 
 ## Political and public-figure mode
 
