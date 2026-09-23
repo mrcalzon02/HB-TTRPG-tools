@@ -37,6 +37,7 @@ Use `charles-foundry-interface` when the user addresses Charles directly or when
 The generic system-neutral design family currently includes:
 
 - `npc-and-faction-development`
+- `interpersonal-theory-of-mind-modeling` — directional actor-to-actor belief, trust, motive-hypothesis, and decision modeling bound to the Character Information System.
 - `encounter-design`
 - `creature-and-monster-design`
 - `item-and-loot-design`
@@ -99,6 +100,12 @@ Use stable entity IDs; a display name is never the sole key. Preserve imported s
 The baseline path requires no fonts, labels, sprites, textures, SVG, browser canvas, WebGL, network resources, or antialiasing. Larger previews use nearest-neighbor scaling so the same source cell raster remains exact. Separate `terrain`, `effects`, and `occupancy` rasters are supported when one composite pixel cannot represent overlapping semantics. A sidecar legend maps token IDs and structured coordinates to colors.
 
 Human corrections mutate structured positions first. “Left two” is `dx=-2`; “up one” is `dy=-1`. The renderer then regenerates from state. Never move tokens by editing the prior PNG.
+
+### Interpersonal theory-of-mind state
+
+`interpersonal-theory-of-mind-modeling` treats relationship understanding as directional state: A → B and B → A are separate records. It binds to the Character Information System's durable distinctions between knowledge, belief, behavior, memory, performance, trust, obligations, plans, and contradiction rather than creating a parallel personality store. Its portable record projection lives at `skills/interpersonal-theory-of-mind-modeling/record-schema.json`.
+
+For current real-world political or public figures, current reliable public-source retrieval is a precondition for substantive factual modeling. Inferred motives remain labeled hypotheses, and the skill is explanatory rather than persuasive.
 
 ## Status classes
 
