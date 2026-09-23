@@ -22,7 +22,7 @@
 <p><a class="link-button primary-action" href="../skills/interpersonal-theory-of-mind-modeling/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../skills/interpersonal-theory-of-mind-modeling/record-schema.json">Record schema</a> <a class="link-button" href="../skills/interpersonal-theory-of-mind-modeling/pipeline-spec.json">Pipeline spec</a></p>
 </section>
 <section class="registry-section"><h2>Registered integration metadata</h2>
-<p><strong>Name:</strong> <code>interpersonal-theory-of-mind-modeling</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.7.0</code></p>
+<p><strong>Name:</strong> <code>interpersonal-theory-of-mind-modeling</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.8.0</code></p>
 <p><strong>Machine contracts:</strong> <code>record-schema.json</code>, <code>pipeline-spec.json</code></p>
 </section>
 <section class="registry-section"><h2>Complete SKILL.md projection</h2>
@@ -32,7 +32,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: &quot;1.7.0&quot;
+  version: &quot;1.8.0&quot;
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -1730,6 +1730,221 @@ For real-person IToM modeling, prefer evidence in roughly this order when availa
 9. unsourced popular retelling.
 
 This ordering is not absolute. Reliability, incentives, access, corroboration, and context may change the weight of any individual source.
+
+## Authorial theory of mind and creator intent
+
+Fiction permits an additional layer that does not exist in ordinary real-person modeling: a creator may deliberately construct a character's internal state and may also use that character to communicate, test, demonstrate, warn against, complicate, satirize, or challenge a viewpoint for the audience.
+
+Do not collapse this layer into the character's diegetic mind.
+
+Maintain at least these distinct states:
+
+- **S_d(A,t)** — best-supported diegetic state of character A at time t;
+- **M(A→A,t)** — character A's self-model;
+- **M(A→B,t)** — character A's model of character B;
+- **C_k(A,t)** — creator k's intended model of character A at the relevant creation point;
+- **T_k(work,t)** — creator k's thematic, moral, political, philosophical, or personal thesis operating through the work;
+- **U(k→audience,t)** — the audience update or question the creator appears to intend;
+- **R(work,A,t)** — the characterization actually realized in the text/performance;
+- **A_u(work,A,t)** — a particular audience or critic's interpretation.
+
+These may agree, partially agree, or conflict.
+
+### Authorial intent is evidence, not automatic identity with realized character state
+
+A creator's explicit statement about what they intended is strong evidence of **creator intent**.
+
+It is not automatically proof that the work successfully realizes that intent.
+
+Likewise, a textual pattern may strongly support an interpretation that the creator never explicitly articulated.
+
+Track both.
+
+Use distinctions such as:
+
+**creator intended X → text realized X strongly**
+
+**creator intended X → text realized X ambiguously**
+
+**creator intended X → later material revised X**
+
+**creator intended X → collaborative production altered X**
+
+**creator claimed X retrospectively → contemporaneous drafts/text provide mixed support**
+
+Do not force these into one answer.
+
+### Creator theory of mind
+
+A creator necessarily carries a model of the character they are writing.
+
+That model may include:
+
+- what the character knows;
+- what the character believes;
+- what the character misunderstands;
+- what the character wants;
+- what values are in conflict;
+- what the character would or would not do;
+- what experiences are intended to change them;
+- what contradictions are deliberate;
+- what contradictions are accidental;
+- what the creator wants the audience to notice before the character notices it.
+
+When reliable creator notes, interviews, correspondence, drafts, outlines, commentaries, or production records exist, store this as a distinct **creator model of character**.
+
+Do not silently substitute it for the diegetic model.
+
+### Didactic and argumentative character functions
+
+A character may be used partly as an instrument in an argument.
+
+Track supported functions such as:
+
+- demonstration;
+- cautionary example;
+- aspirational example;
+- foil;
+- counterexample;
+- dialectical opponent;
+- ideological advocate;
+- ideological critic;
+- satire;
+- tragic demonstration;
+- reductio through consequences;
+- epistemic proof-by-consequence;
+- moral complication;
+- ambiguity carrier;
+- audience surrogate;
+- deliberate provocation;
+- mixed or unknown.
+
+Do not assume that a character who voices an author's belief is a simple authorial mouthpiece.
+
+The creator may give a belief to:
+
+- a sympathetic character;
+- an unsympathetic character;
+- several characters with competing partial truths;
+- a character whose later consequences challenge that belief;
+- a character who is correct for the wrong reasons;
+- a character who is wrong for understandable reasons.
+
+### Intended audience update
+
+Where evidence supports it, model what the creator appears to want the audience to reconsider.
+
+Examples:
+
+- believe proposition X;
+- doubt proposition X;
+- notice a tradeoff;
+- experience sympathy for a previously rejected position;
+- recognize that two apparently opposed values can coexist;
+- observe consequences of a political, moral, institutional, or personal choice;
+- remain uncertain rather than receive a single conclusion.
+
+Keep **intended audience update** separate from **actual audience response**.
+
+A work may fail to persuade, persuade for unintended reasons, or produce several defensible interpretations.
+
+### Narrative pressure and characterization pressure
+
+Creators can shape circumstances so that characters encounter particular dilemmas or demonstrate particular consequences.
+
+Track:
+
+- **narrative pressure** — plot/world conditions arranged to force a relevant choice;
+- **didactic pressure** — conditions arranged to test or illustrate a thesis;
+- **characterization pressure** — the degree to which an intended thematic result appears to constrain the character's available behavior;
+- **character-state continuity** — whether the resulting action remains consistent with accumulated diegetic state;
+- **characterization strain** — evidence that the narrative requires behavior poorly supported by prior characterization.
+
+Do not label an unwanted outcome &quot;out of character&quot; merely because it is surprising.
+
+Require a documented mismatch between prior state, available information, values, constraints, and the new action.
+
+### Consequence is not automatically endorsement
+
+When a creator gives a character success, failure, punishment, reward, death, vindication, humiliation, or redemption, do not automatically infer the creator's endorsement or rejection of the character's beliefs.
+
+Test competing possibilities:
+
+- direct endorsement;
+- cautionary consequence;
+- dramatic irony;
+- tragic inevitability;
+- structural consequence of the world;
+- genre convention;
+- ambiguity;
+- mixed intent;
+- insufficient evidence.
+
+### Collaborative authorship
+
+For television, film, comics, games, franchises, and other collaborative works, &quot;the author&quot; may not be singular.
+
+Track relevant creator layers separately:
+
+- original creator;
+- showrunner;
+- episode or script writer;
+- novelist;
+- director;
+- actor/performance contribution;
+- editor;
+- producer;
+- network/studio;
+- adaptation writer;
+- franchise steward;
+- later continuation author.
+
+One layer may intend a characterization that another modifies.
+
+Do not attribute a scene-level choice to the showrunner or original creator when the available evidence only establishes an episode writer, director, performer, editor, or production constraint.
+
+### Temporal creator state
+
+Creators themselves change.
+
+A creator's 1995 explanation of a character may differ from their 1992 planning notes or 2005 retrospective interpretation.
+
+Treat creator intent temporally:
+
+**creator-at-draft-time → intended character**
+
+**creator-at-release-time → explanation of character**
+
+**creator-years-later → retrospective model of earlier character/work**
+
+Do not automatically back-project later commentary into the earlier creation state.
+
+### Authorial-thesis provenance
+
+Rank creator-intent evidence by provenance rather than fame or repetition.
+
+Useful evidence includes:
+
+1. contemporaneous outlines, drafts, notes, correspondence, and production documents;
+2. contemporaneous creator commentary or interviews;
+3. the realized work and repeated structural patterns;
+4. later creator commentary and retrospective interviews;
+5. collaborators with direct production access;
+6. scholarly reconstruction;
+7. biography/documentary interpretation;
+8. fan or popular interpretation.
+
+This order is defeasible by access, reliability, contradictions, and known production history.
+
+### Fiction analysis sequence with creator layer
+
+For creator-aware fiction analysis, prefer:
+
+**diegetic prior state → new in-world stimulus → character interpretation → action → consequence → character update → observer update → creator-intent evidence → intended thematic/audience function → realized textual effect → continuity check**
+
+The creator layer explains why the work may have been constructed that way.
+
+It does not replace the in-world causal explanation for why the character acts.
 
 ## Political and public-figure mode
 
