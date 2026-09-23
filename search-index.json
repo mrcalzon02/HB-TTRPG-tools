@@ -29,6 +29,85 @@
     "url": "utilities.html"
   },
   {
+    "id": "table-clocks-randomizers",
+    "title": "Counters, Clocks, Random Tables, Token Bag, Cards and Timer",
+    "workspace": "Utilities",
+    "description": "Session aids for counters, segmented progress clocks, weighted random tables, no-replacement token draws, a standard card deck, timing, and autosaved notes.",
+    "keywords": [
+      "progress clock",
+      "counter tracker",
+      "random table roller",
+      "token bag",
+      "card deck",
+      "turn timer",
+      "session notes"
+    ],
+    "url": "index.html?view=utilities"
+  },
+  {
+    "id": "party-crew-resource-tracker",
+    "title": "Draggable Party and Crew Tracker",
+    "workspace": "Utilities",
+    "description": "System-neutral draggable character cards for party, crew, marching order, stations, HP, defenses, speed, and custom resources.",
+    "keywords": [
+      "party tracker",
+      "crew tracker",
+      "character cards",
+      "drag drop character tracker",
+      "marching order",
+      "resource tracker"
+    ],
+    "url": "index.html?view=utilities"
+  },
+  {
+    "id": "initiative-combat-tracker",
+    "title": "Initiative and Combat Tracker",
+    "workspace": "Utilities",
+    "description": "Round and turn tracker with draggable initiative order, HP, defense, conditions, sorting, manual reordering, and local persistence.",
+    "keywords": [
+      "initiative tracker",
+      "combat tracker",
+      "round tracker",
+      "turn order",
+      "hit point tracker",
+      "condition tracker"
+    ],
+    "url": "index.html?view=utilities"
+  },
+  {
+    "id": "advanced-dice-roller",
+    "title": "Advanced Dice Roller",
+    "workspace": "Utilities",
+    "description": "Browser dice roller with roll history, additive expressions, keep-high and keep-low dice, exploding dice, advantage and disadvantage, d100, and Fate/Fudge dice.",
+    "keywords": [
+      "dice roller",
+      "d20 roller",
+      "advantage roller",
+      "exploding dice",
+      "4d6kh3",
+      "2d20kh1",
+      "fudge dice",
+      "fate dice"
+    ],
+    "url": "index.html?view=utilities"
+  },
+  {
+    "id": "tabletop-session-toolkit",
+    "title": "Tabletop Session Toolkit",
+    "workspace": "Utilities",
+    "description": "System-neutral live table console combining advanced dice, combat and initiative, draggable party cards, counters, clocks, randomizers, cards, timing, and notes.",
+    "keywords": [
+      "tabletop toolkit",
+      "game master screen",
+      "session console",
+      "GM tools",
+      "live table tools",
+      "party tracker",
+      "combat tracker"
+    ],
+    "url": "index.html?view=utilities"
+  },
+  {
     "id": "character-sheet-library",
     "title": "Master TTRPG Character Sheet PDF Index",
     "workspace": "Utilities",

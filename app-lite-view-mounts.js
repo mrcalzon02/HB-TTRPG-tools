@@ -5,6 +5,7 @@
   if (!base) return;
 
   let sheetPromise = null;
+  let tabletopToolkitPromise = null;
   let moduleSpatialEntryPromise = null;
   let barotraumaEntryPromise = null;
   let shadowrunEntryPromise = null;
@@ -242,8 +243,10 @@
     }
     if (viewId === 'utilities') {
       sheetPromise ||= loadScript('character-sheet-view.js');
-      await sheetPromise;
+      tabletopToolkitPromise ||= loadScript('tabletop-toolkit.js?v=1');
+      await Promise.all([sheetPromise, tabletopToolkitPromise]);
       base.initializeSheet();
+      window.HBTabletopToolkit?.mount?.();
       return;
     }
     if (viewId === 'barotrauma') {
