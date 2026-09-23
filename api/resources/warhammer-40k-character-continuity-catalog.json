@@ -3224,20 +3224,180 @@
           }
         ]
       },
-      "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "memoriesEvents": [
+        {
+          "id": "atrovald-harmonization-discovery",
+          "event": "Confirmed that the Interlocutum itself historically altered The Precipice of Thought through undocumented contextual harmonization.",
+          "status": "observed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation I — The Authorized Original",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-01.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
+      "knowledgeBeliefs": [
+        {
+          "id": "atrovald-custody-needs-witnesses",
+          "knowledge": "Archival custody remains necessary but custodians themselves require scrutiny; institutional consistency cannot be treated as proof of historical accuracy.",
+          "certainty": "demonstrated conclusion",
+          "status": "believed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation I — The Authorized Original",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-01.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "id": "atrovald-sixth-witness",
+          "knowledge": "The pre-Unification physical volume identifies itself in an early Imperial translation as the sixth surviving witness and directs comparison with witnesses two, four, and seven before correction.",
+          "certainty": "directly observed",
+          "status": "confirmed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "id": "atrovald-custody-discrepancy",
+          "knowledge": "Atrovald and Pell remember fifty-three transfer guards, while official records and refreshed slates contain only fifty-two; a manual note preserving fifty-three remains.",
+          "certainty": "direct memory plus surviving manual note; mechanism unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "id": "atrovald-witness-four-tomorrow",
+          "knowledge": "Witness Four is present in Null-Seven under an accession bearing Atrovald's valid authority, seal, cipher and biometric hash timestamped tomorrow, despite her not having issued it yet.",
+          "certainty": "directly observed record",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
-      "plansGoals": [],
+      "plansGoals": [
+        {
+          "id": "atrovald-s-rank-provenance-search",
+          "goal": "Run the S-Rank provenance fracture across all witnesses, derivatives, quotations, condemnations, destruction orders and contextual harmonizations; locate references to witnesses two, four and seven without assuming survival.",
+          "horizon": "active investigation",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "skillsCompetence": [],
-      "relationshipsTrust": [],
-      "temperamentPerformance": [],
+      "relationshipsTrust": [
+        {
+          "id": "atrovald-predulum-methodological",
+          "targetPersonaId": "lord-inquisitor-predulum-termuth",
+          "direction": "Atrovald toward Predulum",
+          "state": "Methodological conflict persists, but his repeated return and future-memory claim are now treated as evidence requiring verification rather than mere nuisance.",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
+      "temperamentPerformance": [
+        {
+          "id": "atrovald-anomaly-pressure",
+          "context": "Custody-record disappearance and tomorrow-dated accession",
+          "performance": "Maintains procedural precision under genuine fear; preserves contradictory evidence instead of correcting it away.",
+          "demonstratedLevel": "high control under anomalous institutional pressure",
+          "status": "observed",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "atrovald-null-seven-confinement",
+          "order": "Keep Predulum and Witness Four sealed inside Null-Seven pending verification; do not reconcile the witnesses merely to force consistency.",
+          "issuingAuthority": "Matron Lagas Atrovald",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "physicalMedicalState": [],
-      "equipmentResources": [],
-      "chapterTouchLog": []
+      "equipmentResources": [
+        {
+          "id": "atrovald-manual-53-note",
+          "resource": "Pell's surviving manual note recording FIFTY-THREE GUARDS PRESENT.",
+          "status": "active evidence",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation I — The Authorized Original",
+          "changeSummary": "Legacy backfill: discovered internal contextual harmonization, withdrew sole-authority designation, denied destruction, and accepted physical comparison with an older witness.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation I — The Authorized Original",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-01.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "segment": "Continuation II — The Third Witness",
+          "changeSummary": "Legacy backfill: opened S-Rank provenance fracture, preserved the 53/52 custody discrepancy, discovered Witness Four accessioned tomorrow under her identity, and confined Predulum with it pending verification.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ]
     },
     "lord-inquisitor-predulum-termuth": {
       "personaId": "lord-inquisitor-predulum-termuth",
@@ -3303,20 +3463,101 @@
           }
         ]
       },
-      "memoriesEvents": [],
-      "knowledgeBeliefs": [],
+      "memoriesEvents": [
+        {
+          "id": "predulum-repeated-sanitization",
+          "event": "Has undergone at least seven prior memory sanitizations after repeatedly rediscovering the Interlocutum; exact count remains uncertain.",
+          "status": "reported",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Original chronicle / baseline testimony",
+            "path": "assets/warhammer-40k/lore/reddit-story-archive.json",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "Dramatis Personae source-sealed original-story record"
+          }
+        }
+      ],
+      "knowledgeBeliefs": [
+        {
+          "id": "predulum-seven-attempts",
+          "knowledge": "Predulum claims to remember that there are seven attempts at making one original, not merely seven ordinary copies/witnesses.",
+          "certainty": "claimed memory; mechanism and accuracy unresolved",
+          "status": "reported",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "id": "predulum-remembers-tomorrow",
+          "knowledge": "Predulum claims to remember tomorrow and says he wrote the duplicated page tomorrow.",
+          "certainty": "claimed memory supported by anomalous duplicate page but not independently explained",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "secretsKnown": [],
       "secretsHeld": [],
       "plansGoals": [],
       "skillsCompetence": [],
-      "relationshipsTrust": [],
+      "relationshipsTrust": [
+        {
+          "id": "predulum-atrovald-conflict",
+          "targetPersonaId": "matron-lagas-atrovald",
+          "direction": "Predulum toward Atrovald",
+          "state": "Longstanding preservation-versus-destruction conflict now includes resentment at confinement and his belief that Atrovald/Interlocutum repeatedly erase or sanitize him.",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "temperamentPerformance": [],
       "preferencesAversions": [],
       "faithIdeologyLoyalty": [],
-      "ordersObligationsLeverage": [],
+      "ordersObligationsLeverage": [
+        {
+          "id": "predulum-confined-null-seven",
+          "order": "Remain confined inside Null-Seven with Witness Four pending Atrovald's verification.",
+          "issuingAuthority": "Matron Lagas Atrovald",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ],
       "physicalMedicalState": [],
       "equipmentResources": [],
-      "chapterTouchLog": []
+      "chapterTouchLog": [
+        {
+          "segment": "Continuation II — The Third Witness",
+          "changeSummary": "Legacy backfill: failed to leave the spire, appeared in Null-Seven beside Witness Four, claimed memory of tomorrow and seven attempts to manufacture one original, and was confined pending verification.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation II — The Third Witness",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
+            "sourceType": "legacy-backfill",
+            "derivedFrom": "committed continuation prose"
+          }
+        }
+      ]
     },
     "technician-prite-vallimere": {
       "personaId": "technician-prite-vallimere",
