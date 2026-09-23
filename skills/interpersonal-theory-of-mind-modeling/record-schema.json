@@ -256,6 +256,36 @@
         "high",
         "unknown"
       ]
+    },
+    "actorStateTransitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/actorStateTransition"
+      }
+    },
+    "observerModelTransitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/observerModelTransition"
+      }
+    },
+    "feedbackLoops": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/feedbackLoop"
+      }
+    },
+    "exogenousUpdates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exogenousUpdate"
+      }
+    },
+    "temporalMarkers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/temporalMarker"
+      }
     }
   },
   "$defs": {
@@ -1510,6 +1540,476 @@
             "low",
             "medium",
             "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "actorStateTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "fromStateRef",
+        "stimuli",
+        "transitionEffect",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fromStateRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "toStateRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stimuli": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stimulus"
+          }
+        },
+        "priorStateSummary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "immediateInterpretation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actionEmission": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "feedbackReceived": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transitionEffect": {
+          "enum": [
+            "transient",
+            "reinforcing",
+            "destabilizing",
+            "structurally-revising",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "revisionMagnitude": {
+          "enum": [
+            "none",
+            "reinforcement",
+            "minor-adjustment",
+            "domain-specific-revision",
+            "threshold-model-rupture",
+            "role-frame-rupture",
+            "broad-person-model-revision",
+            "near-total-model-collapse",
+            "unknown"
+          ]
+        },
+        "selfModelChange": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "stimulus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "description"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "direct-interaction",
+            "new-information",
+            "betrayal",
+            "confirmation",
+            "success",
+            "failure",
+            "reward",
+            "punishment",
+            "grief",
+            "fear",
+            "humiliation",
+            "relief",
+            "hope",
+            "loss",
+            "institutional-pressure",
+            "role-change",
+            "third-party-action",
+            "environmental-crisis",
+            "public-reaction",
+            "private-reflection",
+            "memory-reactivation",
+            "repeated-reinforcement",
+            "contradiction",
+            "coercion",
+            "capability-change",
+            "alternative-set-change",
+            "other"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "knowledgeTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "observerModelTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "observerActorId",
+        "targetActorId",
+        "priorConfidence",
+        "revisionMagnitude",
+        "resultingConfidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observerActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetActorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priorModelRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observedEvidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "knownContext": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceReliability": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "contextualAmbiguity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "alternativeExplanations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priorConfidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "revisionMagnitude": {
+          "enum": [
+            "none",
+            "reinforcement",
+            "minor-adjustment",
+            "domain-specific-revision",
+            "threshold-model-rupture",
+            "role-frame-rupture",
+            "broad-person-model-revision",
+            "near-total-model-collapse"
+          ]
+        },
+        "resultingConfidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "updateClass": {
+          "enum": [
+            "target-changed-observer-updated",
+            "target-changed-observer-not-updated",
+            "target-unchanged-observer-updated",
+            "neither-changed",
+            "unknown"
+          ]
+        },
+        "updatedModelSummary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "laterValidationStatus": {
+          "enum": [
+            "supported",
+            "partially-supported",
+            "contradicted",
+            "unresolved",
+            "not-yet-testable"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "feedbackLoop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "internalState",
+        "action",
+        "response",
+        "interpretedFeedback",
+        "stateUpdate"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "internalState": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "response": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consequence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "interpretedFeedback": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stateUpdate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observerUpdates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loopCharacter": {
+          "enum": [
+            "self-reinforcing",
+            "self-correcting",
+            "escalating",
+            "stabilizing",
+            "mutually-distorting",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "exogenousUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actorId",
+        "sourceDomain",
+        "change",
+        "relevanceToRelationship",
+        "confidence"
+      ],
+      "properties": {
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceDomain": {
+          "enum": [
+            "other-relationship",
+            "institutional-event",
+            "loss-or-victory",
+            "discovery",
+            "role-change",
+            "moral-injury",
+            "public-consequence",
+            "prior-decision",
+            "capability-change",
+            "self-concept-change",
+            "other"
+          ]
+        },
+        "sourceActorIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "eventTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "knowledgeTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "change": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relevanceToRelationship": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "temporalMarker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventDescription"
+      ],
+      "properties": {
+        "eventDescription": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eventTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "knowledgeTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reinterpretationTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "originalInterpretation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revisedInterpretation": {
+          "type": [
+            "string",
+            "null"
           ]
         },
         "evidenceRefs": {
