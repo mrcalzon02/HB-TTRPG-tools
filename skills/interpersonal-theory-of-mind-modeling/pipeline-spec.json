@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.6.0",
+  "schemaVersion": "1.8.0",
   "id": "interpersonal-theory-of-mind-processing-pipeline",
   "skillId": "interpersonal-theory-of-mind-modeling",
   "title": "Interpersonal Theory of Mind Processing Pipeline",
@@ -922,5 +922,91 @@
       "unsourced-popular-retelling"
     ],
     "note": "Priority is defeasible by reliability, access, incentives, corroboration, and context."
+  },
+  "creatorIntentControls": {
+    "principle": "Fiction analysis may model creator intent, creator theory-of-character, thematic thesis, and intended audience effect, but these remain distinct from the character's diegetic state.",
+    "stateNotation": {
+      "diegeticState": "S_d(A,t)",
+      "characterSelfModel": "M(A→A,t)",
+      "interpersonalModel": "M(A→B,t)",
+      "creatorCharacterModel": "C_k(A,t)",
+      "creatorThesis": "T_k(work,t)",
+      "intendedAudienceUpdate": "U(k→audience,t)",
+      "realizedCharacterization": "R(work,A,t)",
+      "audienceInterpretation": "A_u(work,A,t)"
+    },
+    "rules": [
+      "Creator statements are evidence of creator intent, not automatic proof that the realized work successfully embodies that intent.",
+      "Do not infer that a character who voices a creator's belief is a simple mouthpiece.",
+      "Keep intended audience update separate from actual audience response.",
+      "Narrative success, punishment, reward, death, or redemption is not automatic evidence of creator endorsement or rejection.",
+      "Treat creator commentary temporally; later retrospective explanation must not be silently back-projected into earlier creation state.",
+      "For collaborative media, attribute scene-level intent only to creator layers supported by evidence."
+    ],
+    "didacticFunctions": [
+      "demonstration",
+      "cautionary-example",
+      "aspirational-example",
+      "foil",
+      "counterexample",
+      "dialectical-opponent",
+      "ideological-advocate",
+      "ideological-critic",
+      "satire",
+      "tragic-demonstration",
+      "reductio-through-consequences",
+      "epistemic-proof-by-consequence",
+      "moral-complication",
+      "ambiguity-carrier",
+      "audience-surrogate",
+      "deliberate-provocation",
+      "mixed",
+      "unknown"
+    ],
+    "pressureControls": {
+      "narrativePressure": "Plot/world conditions arranged to force a relevant choice.",
+      "didacticPressure": "Conditions arranged to test or illustrate a thesis.",
+      "characterizationPressure": "Degree to which thematic outcome constrains plausible character behavior.",
+      "characterizationStrain": "Documented mismatch between accumulated character state and behavior apparently required by narrative or thesis."
+    },
+    "collaborativeAuthorshipLayers": [
+      "original-creator",
+      "showrunner",
+      "episode-writer",
+      "screenwriter",
+      "novelist",
+      "director",
+      "actor-performance",
+      "editor",
+      "producer",
+      "network-studio",
+      "adaptation-writer",
+      "franchise-steward",
+      "continuation-author",
+      "other"
+    ],
+    "creatorEvidencePriority": [
+      "contemporaneous-outlines-drafts-notes-correspondence-production-documents",
+      "contemporaneous-creator-commentary",
+      "realized-work-and-repeated-structural-patterns",
+      "later-creator-commentary",
+      "direct-collaborator-testimony",
+      "scholarly-reconstruction",
+      "biography-documentary-interpretation",
+      "fan-or-popular-interpretation"
+    ],
+    "analysisSequence": [
+      "diegetic-prior-state",
+      "in-world-stimulus",
+      "character-interpretation",
+      "character-action",
+      "consequence",
+      "character-update",
+      "observer-update",
+      "creator-intent-evidence",
+      "intended-thematic-or-audience-function",
+      "realized-textual-effect",
+      "continuity-check"
+    ]
   }
 }
