@@ -3,15 +3,41 @@
 <title>Nowhere King — Story Bible | Calzon’s TTRPG Foundry</title>
 <meta name="description" content="Authoritative Nowhere King story arc and series plot bible: Castle Edselsto, the seven candles, the ancient prison, prophecy, characterization, and season structure.">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="beneath-dappled-oaks-reader.css?v=3">
 <style>
-body{max-width:1100px;margin:0 auto;padding:2rem;background:#0b0b0f;color:#e8e4dc;line-height:1.72}
+body{margin:0;background:#0b0b0f;color:#e8e4dc;line-height:1.72}.nowhere-shell{max-width:1180px;margin:0 auto;padding:0 1rem 4rem}
 .story-bible{max-width:900px;margin:auto}.story-bible h1,.story-bible h2,.story-bible h3{line-height:1.2}
 .story-bible h2{margin-top:3rem;border-bottom:1px solid #49424f;padding-bottom:.5rem}.story-bible h3{margin-top:2rem}
 .story-bible p{margin:1rem 0}.story-nav{position:sticky;top:0;background:rgba(11,11,15,.96);padding:1rem 0;z-index:2;border-bottom:1px solid #333}
-.story-nav a{margin-right:1rem}.source-note{opacity:.75}
+.story-nav{max-width:1180px;margin:0 auto}.story-nav a{margin-right:1rem}.source-note{opacity:.75}
+.story-subtabs{display:flex;gap:.55rem;flex-wrap:wrap;margin:1rem 0 1.2rem;padding:.45rem;border:1px solid rgba(127,127,127,.28);border-radius:14px;background:rgba(127,127,127,.05)}
+.story-subtab{appearance:none;border:1px solid transparent;border-radius:10px;padding:.65rem .9rem;background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
+.story-subtab:hover,.story-subtab:focus-visible{border-color:rgba(127,127,127,.45);outline:none}
+.story-subtab.is-active{background:rgba(127,127,127,.15);border-color:rgba(127,127,127,.38)}
+.story-subtab-count{display:inline-block;min-width:1.7em;margin-left:.35rem;padding:.05rem .38rem;border:1px solid currentColor;border-radius:999px;font-size:.78em;text-align:center;opacity:.8}
+.reader-hero{border:1px solid rgba(127,127,127,.28);border-radius:14px;padding:1rem 1.15rem;background:rgba(127,127,127,.05);margin-bottom:1rem}
+.reader-hero h1{margin:.15rem 0 .55rem;line-height:1.15}.reader-hero p{margin:.45rem 0}
+.story-tab-panel[hidden]{display:none!important}
 </style></head><body>
 <nav class="story-nav"><a class="link-button" href="./#tools">← Tool Library</a><a class="link-button" href="https://docs.google.com/document/d/12h58-u3VPiv_5e-ZmXDsyLu9M4n2bx3ulm6pvZOUTU8/edit">Open Google Doc Source</a></nav>
-<main class="story-bible"><h1>NOWHERE KING</h1>
+<main class="nowhere-shell">
+<nav class="story-subtabs" aria-label="Nowhere King sections">
+  <button class="story-subtab is-active" type="button" data-story-panel="chapter-index" aria-controls="chapter-index" aria-selected="true">Episodes <span class="story-subtab-count" id="chapter-count-badge" aria-label="released episodes">2</span></button>
+  <button class="story-subtab" type="button" data-story-panel="story-bible" aria-controls="story-bible" aria-selected="false">Story Bible</button>
+</nav>
+
+<section id="chapter-index" class="story-tab-panel" data-story-tab-panel>
+  <div class="reader-hero">
+    <p class="eyebrow">Released Nowhere King prose</p>
+    <h1>Episode Archive &amp; Reader</h1>
+    <p>Read continuously from Season One, Episode One onward. The left index jumps directly to any released episode, and each entry provides its own download menu.</p>
+    <p><strong id="chapter-index-count">2 episodes on main</strong></p>
+  </div>
+  <div id="chapter-index-list" class="chapter-index-list" aria-live="polite"></div>
+  <p class="chapter-index-state" id="chapter-index-state">Loading the live episode directory from <code>main</code>…</p>
+</section>
+
+<article id="story-bible" class="story-bible story-tab-panel" data-story-tab-panel hidden><h1>NOWHERE KING</h1>
 <p class="subtitle">Story Arc &amp; Series Plot Bible</p>
 <h2>Title Irony and Series Promise</h2>
 <p>For the first several seasons, the title Nowhere King is intended to appear to describe the young monarch himself. He inherits a kingdom without secure authority, abandons the established capital for a nearly forgotten ancestral seat, loses old allies, becomes politically isolated, and repeatedly discovers that a crown is meaningless without people willing to follow it. He is, in the political sense, a king of nowhere: a sovereign surrounded by factions, ruling from an abandoned mountain castle while the institutions of his kingdom question whether he can hold the realm together.</p>
@@ -326,5 +352,7 @@ body{max-width:1100px;margin:0 auto;padding:2rem;background:#0b0b0f;color:#e8e4d
 <p>that even Nothing</p>
 <p>may come</p>
 <p>to an end.</p>
+</article>
 </main>
+<script src="nowhere-king-reader.js?v=1"></script>
 </body></html>
