@@ -4,7 +4,7 @@ description: Model how one actor understands another actor over time using evide
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
   author: mrcalzon02
-  version: "1.5.0"
+  version: "1.6.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -1340,6 +1340,229 @@ Never use the agent's own apparent wording preferences, simulated persona, or ge
 The purpose of the skill is precisely to preserve divergence among:
 
 **target state ≠ target self-model ≠ target normative guidance ≠ observer's target-model ≠ analyst/model hypothesis**
+
+## Relationship path dependence, signaling, and shared epistemic ground
+
+### Relationship hysteresis and path dependence
+
+The same present-day evidence may produce different model updates depending on the relationship history that precedes it.
+
+Track:
+
+- **relationshipHistoryWeight** — how strongly accumulated history influences interpretation;
+- **priorPositiveReserve** — accumulated evidence that supports charitable or trusting interpretation;
+- **priorScar** — durable negative evidence that makes later ambiguity more threatening;
+- **relationshipInertia** — resistance to major update from isolated contradictory evidence;
+- **repairHistory** — whether previous ruptures were repaired and how completely.
+
+Returning external circumstances to an earlier state does not restore the earlier relationship state automatically.
+
+A repaired relationship may still contain durable knowledge such as:
+
+> I trust you again, but I now know that under condition X you are capable of Y.
+
+### Model lag, latent alignment, and latent conflict
+
+Distinguish actual state change from observer recognition.
+
+Track:
+
+- **stateChangeTime** — when goals, values, strategy, or role actually changed;
+- **observerRecognitionTime** — when another actor updated their model;
+- **modelLag** — the period during which observer model and target state materially diverge.
+
+Flag:
+
+- **latent alignment** — actors' actual goals, assessments, or interests become compatible before their interpersonal models recognize it;
+- **latent conflict** — actors continue believing themselves aligned after their actual goals or value priorities have diverged.
+
+### Shared epistemic ground and common knowledge
+
+Recursive belief is not the same thing as shared epistemic ground.
+
+Track the status of important propositions as applicable:
+
+- private;
+- privately suspected by multiple actors;
+- mutually suspected;
+- mutually known;
+- openly acknowledged;
+- common knowledge;
+- publicly denied despite privately shared knowledge;
+- deliberately ambiguous.
+
+A negotiation may change when a fact moves from "both privately know" to "both openly know that the knowledge is shared."
+
+### Signaling and impression management
+
+Observed behavior may be partly intended to alter another person's model.
+
+Track:
+
+- **signalingIntent** — whether the actor appears to want an observer to update;
+- **intendedAudience** — who the signal is for;
+- **desiredObserverUpdate** — what model change the actor appears to want;
+- **masking** — behavior intended to hide relevant state;
+- **strategicAmbiguity** — behavior intended to support multiple interpretations;
+- **plausibleDeniability** — preserving an interpretation that can later be denied;
+- **actualObserverUpdate** — what the observer actually inferred.
+
+Use:
+
+**internal state → chosen signal → intended observer inference → actual observer inference → divergence**
+
+Do not assume every public behavior is signaling. Require evidence or a clear strategic context.
+
+### Evidence diagnosticity and costly signals
+
+Evidence should not update every model equally.
+
+For important observations, track:
+
+- **diagnosticity** — how strongly the evidence discriminates between competing hypotheses;
+- **costToActor** — material, reputational, relational, moral, physical, or strategic cost accepted by the actor;
+- **alternativeExplanationCount** — how many plausible states could have produced the same behavior;
+- **behavioralCommitmentStrength** — how difficult the action is to reverse, fake, or explain away.
+
+A low-cost statement such as "trust me" is usually weaker evidence than an action that exposes the speaker to substantial loss if the claim is false.
+
+Costly behavior is not automatically virtuous or truthful, but it may be more diagnostically informative.
+
+### Relationship repair and residual scars
+
+Keep separate:
+
+- apology;
+- acknowledgment;
+- restitution;
+- forgiveness;
+- reconciliation;
+- renewed cooperation;
+- restored affection;
+- trust recovery by domain;
+- restored predictability;
+- residual scar.
+
+Do not use "forgiven" as shorthand for "trust fully restored."
+
+A relationship can recover while retaining altered thresholds, caution, boundaries, or durable memory of prior harm.
+
+### Value hierarchy and active value conflict
+
+Actors often retain the same values while changing which value wins under pressure.
+
+Track:
+
+- **activeValues**;
+- **valuePriority**;
+- **activeValueConflict**;
+- **winningValue** for a specific decision;
+- **suppressedValue**;
+- **priorityShift** over time.
+
+Do not infer that a value disappeared merely because another value overrode it in one decision.
+
+### Ex ante decision quality versus ex post outcome
+
+Prevent outcome bias.
+
+Before considering outcome, reconstruct the decision using:
+
+- information available at decision time;
+- perceived alternatives;
+- actual alternatives supported by evidence;
+- known risks;
+- foreseeable harms;
+- actor's goals and values;
+- time pressure and constraints.
+
+Track separately:
+
+- **exAnteDecisionQuality** — evidence-bounded assessment of reasoning at decision time;
+- **exPostOutcome** — what actually happened;
+- **actorOutcomeInterpretation** — how the actor interprets success or failure;
+- **observerOutcomeBias** — whether observers retrospectively equate outcome with decision quality.
+
+A good-faith well-reasoned decision may end badly. A reckless decision may succeed.
+
+### Provenance-dependent uncertainty
+
+When information travels through other people's models, preserve the dependency chain.
+
+Represent:
+
+**source event → source interpretation → source report → recipient interpretation → recipient model update**
+
+Track:
+
+- source reliability;
+- source access;
+- source incentives;
+- transformation at each step;
+- uncertainty introduced or removed;
+- whether multiple reports are genuinely independent.
+
+Do not count repeated reports from the same underlying source as independent confirmation.
+
+### Metacognitive calibration and uncertainty awareness
+
+Track not only what an actor believes, but whether they understand the limits of their own model.
+
+Use:
+
+- **modelConfidence** — confidence in the specific model;
+- **uncertaintyAwareness** — recognition that important uncertainty exists;
+- **calibrationQuality** — whether confidence matches later predictive performance;
+- **unknownUnknownsFlag** — whether the actor recognizes that missing categories of information may exist.
+
+Accurate uncertainty can be a better model than confident error.
+
+### Memory availability and salience
+
+A memory can exist without being behaviorally active in the current decision.
+
+Track:
+
+- **memoryExists**;
+- **memoryAvailability**;
+- **currentSalience**;
+- **triggeredRecall**;
+- **decisionRelevanceAtTime**;
+- **laterReactivation**.
+
+Do not assume that because an actor once learned something, that information was equally salient during every later decision.
+
+This does not erase long-memory continuity; it distinguishes retained memory from active retrieval.
+
+### Institutional theory of mind
+
+People model institutions as if they have intentions, constraints, habits, and likely responses.
+
+Keep separate:
+
+- **person model** — beliefs about an individual;
+- **role model** — beliefs about the individual acting in an office or social role;
+- **institution model** — beliefs about what an organization, government, military, family, court, movement, or other collective will do.
+
+Track:
+
+- institutional incentives;
+- decision procedures;
+- factions;
+- public doctrine;
+- observed behavior;
+- leadership dependence;
+- inertia;
+- internal disagreement;
+- uncertainty over whether institutional behavior reflects individual intent.
+
+Do not infer that every member of an institution shares the institution's apparent motive.
+
+### Relationship-update rule
+
+For significant new evidence, prefer the following sequence:
+
+**prior relationship state → evidence provenance → diagnosticity → historical path dependence → role/person/institution frame → observer uncertainty → model update → signal interpretation → shared-knowledge change → relationship consequence**
 
 ## Political and public-figure mode
 
