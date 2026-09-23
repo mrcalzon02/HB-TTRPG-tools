@@ -29,6 +29,23 @@
     "url": "utilities.html"
   },
   {
+    "id": "tabletop-dice-pool-probability",
+    "title": "Dice Pool, Probability, Grid Distance and Share Calculators",
+    "workspace": "Utilities",
+    "description": "Table math utilities for success-counting dice pools, target-number probabilities, diagonal grid distance, and equal treasure or XP splits with remainders.",
+    "keywords": [
+      "dice pool",
+      "success counter",
+      "probability calculator",
+      "d20 probability",
+      "grid distance",
+      "diagonal movement",
+      "loot split",
+      "xp split"
+    ],
+    "url": "index.html?view=utilities"
+  },
+  {
     "id": "table-clocks-randomizers",
     "title": "Counters, Clocks, Random Tables, Token Bag, Cards and Timer",
     "workspace": "Utilities",

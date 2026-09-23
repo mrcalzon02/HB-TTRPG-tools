@@ -372,3 +372,58 @@
 @media print {
   #tabletop-toolkit-mount { display: none !important; }
 }
+.ttk-header-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+.ttk-file-action {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255,255,255,.055);
+  color: var(--ink) !important;
+  padding: 9px 11px;
+  min-height: 40px;
+  cursor: pointer;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: inherit !important;
+}
+.ttk-math-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 18px;
+}
+.ttk-math-grid > section {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 15px;
+  background: rgba(255,255,255,.02);
+}
+.ttk-math-fields {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 8px;
+  margin-bottom: 9px;
+}
+.ttk-check {
+  display: flex !important;
+  grid-template-columns: none !important;
+  align-items: center;
+  gap: 8px !important;
+  margin: 9px 0;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+.ttk-check input { width: auto !important; }
+@media (max-width: 800px) {
+  .ttk-math-grid { grid-template-columns: 1fr; }
+  .ttk-math-fields { grid-template-columns: 1fr; }
+  .ttk-header-actions { justify-content: flex-start; margin-top: 10px; }
+}

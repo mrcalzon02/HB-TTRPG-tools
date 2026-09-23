@@ -746,6 +746,15 @@
       if (event.target.closest('#ttk-timer-start')) return startTimer();
       if (event.target.closest('#ttk-timer-pause')) return pauseTimer();
       if (event.target.closest('#ttk-timer-reset')) return resetTimer();
+      if (event.target.closest('#ttk-export-toolkit')) return exportToolkitJson();
+      if (event.target.closest('#ttk-reset-all')) {
+        if (confirm('Reset the entire tabletop session console and its local autosave?')) resetAll();
+        return;
+      }
+      if (event.target.closest('#ttk-pool-roll')) return rollSuccessPool();
+      if (event.target.closest('#ttk-prob-calc')) return calculateProbability();
+      if (event.target.closest('#ttk-grid-calc')) return calculateGridDistance();
+      if (event.target.closest('#ttk-split-calc')) return calculateSplit();
     });
 
     root.addEventListener('input', function(event) {
@@ -810,6 +819,13 @@
       }
     });
 
+    root.addEventListener('change', function(event) {
+      if (event.target.id === 'ttk-import-toolkit') {
+        importToolkitJson(event.target.files && event.target.files[0]);
+        event.target.value = '';
+      }
+    });
+
     const diceInput = document.getElementById('ttk-dice-expression');
     if (diceInput) diceInput.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
@@ -820,6 +836,125 @@
 
     bindDrag('ttk-initiative-list', 'initiative', renderInitiative);
     bindDrag('ttk-roster', 'roster', renderRoster);
+  }
+
+  function exportToolkitJson() {
+    const payload = {
+      schema: 'hb-ttrpg-tabletop-toolkit',
+      schemaVersion: VERSION,
+      exportedAt: new Date().toISOString(),
+      state: getState()
+    };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'tabletop-session-toolkit.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setStatus('Tabletop console exported as JSON.');
+  }
+
+  function importToolkitJson(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+      try {
+        const parsed = JSON.parse(String(reader.result || ''));
+        const incoming = parsed && parsed.state && typeof parsed.state === 'object' ? parsed.state : parsed;
+        if (!incoming || typeof incoming !== 'object') throw new Error('The selected JSON does not contain toolkit state.');
+        const replacement = freshState();
+        Object.assign(replacement, incoming);
+        replacement.initiative = Object.assign(freshState().initiative, incoming.initiative || {});
+        replacement.random = Object.assign(freshState().random, incoming.random || {});
+        replacement.deck = Object.assign(freshState().deck, incoming.deck || {});
+        replacement.timer = Object.assign(freshState().timer, incoming.timer || {});
+        replacement.timer.running = false;
+        replacement.timer.endAt = null;
+        replacement.roster = Array.isArray(incoming.roster) ? incoming.roster : [];
+        replacement.counters = Array.isArray(incoming.counters) ? incoming.counters : [];
+        replacement.clocks = Array.isArray(incoming.clocks) ? incoming.clocks : [];
+        replacement.diceHistory = Array.isArray(incoming.diceHistory) ? incoming.diceHistory.slice(0, HISTORY_LIMIT) : [];
+        Object.keys(state).forEach(function(key) { delete state[key]; });
+        Object.assign(state, replacement);
+        stopTimerLoop();
+        saveState();
+        renderAll();
+        setStatus('Toolkit JSON imported and saved locally.');
+      } catch (error) {
+        setStatus('Import failed: ' + error.message);
+      }
+    };
+    reader.onerror = function() { setStatus('Import failed: the selected file could not be read.'); };
+    reader.readAsText(file);
+  }
+
+  function rollSuccessPool() {
+    const count = clampNumber(document.getElementById('ttk-pool-count').value, 1, 500, 6);
+    const sides = clampNumber(document.getElementById('ttk-pool-sides').value, 2, 100000, 10);
+    const target = clampNumber(document.getElementById('ttk-pool-target').value, 1, sides, Math.ceil(sides * 0.7));
+    const explode = Boolean(document.getElementById('ttk-pool-explode').checked);
+    const rolls = [];
+    let successes = 0;
+    let queue = count;
+    let safety = 0;
+    while (queue > 0 && safety < 2000) {
+      safety += 1;
+      queue -= 1;
+      const roll = randomInt(sides) + 1;
+      rolls.push(roll);
+      if (roll >= target) successes += 1;
+      if (explode && roll === sides) queue += 1;
+    }
+    const output = document.getElementById('ttk-pool-result');
+    if (output) output.textContent = successes + ' success' + (successes === 1 ? '' : 'es') + ' · [' + rolls.join(', ') + ']';
+    setStatus('Dice pool rolled ' + successes + ' success' + (successes === 1 ? '' : 'es') + '.');
+  }
+
+  function calculateProbability() {
+    const sides = clampNumber(document.getElementById('ttk-prob-sides').value, 2, 100000, 20);
+    const target = clampNumber(document.getElementById('ttk-prob-target').value, -999999, 999999, 15);
+    const modifier = clampNumber(document.getElementById('ttk-prob-mod').value, -999999, 999999, 0);
+    const mode = document.getElementById('ttk-prob-mode').value;
+    const minimumFace = Math.ceil(target - modifier);
+    let single = 0;
+    if (minimumFace <= 1) single = 1;
+    else if (minimumFace > sides) single = 0;
+    else single = (sides - minimumFace + 1) / sides;
+    let probability = single;
+    if (mode === 'advantage') probability = 1 - Math.pow(1 - single, 2);
+    if (mode === 'disadvantage') probability = Math.pow(single, 2);
+    const output = document.getElementById('ttk-prob-result');
+    if (output) output.textContent = (probability * 100).toFixed(2) + '% chance · ' + Math.round(probability * sides * 100) / 100 + ' effective successful faces on one die before mode adjustment';
+    setStatus('Probability calculated.');
+  }
+
+  function calculateGridDistance() {
+    const dx = Math.abs(clampNumber(document.getElementById('ttk-grid-x').value, 0, 100000, 0));
+    const dy = Math.abs(clampNumber(document.getElementById('ttk-grid-y').value, 0, 100000, 0));
+    const unit = clampNumber(document.getElementById('ttk-grid-unit').value, 0.0001, 1000000, 5);
+    const rule = document.getElementById('ttk-grid-rule').value;
+    const diagonal = Math.min(dx, dy);
+    const straight = Math.max(dx, dy) - diagonal;
+    let squares;
+    if (rule === 'euclidean') squares = Math.sqrt((dx * dx) + (dy * dy));
+    else if (rule === 'alternating') squares = straight + diagonal + Math.floor(diagonal / 2);
+    else squares = Math.max(dx, dy);
+    const distance = squares * unit;
+    const output = document.getElementById('ttk-grid-result');
+    if (output) output.textContent = (Number.isInteger(squares) ? squares : squares.toFixed(2)) + ' grid units · ' + (Number.isInteger(distance) ? distance : distance.toFixed(2)) + ' distance units';
+    setStatus('Grid distance calculated.');
+  }
+
+  function calculateSplit() {
+    const total = Math.floor(clampNumber(document.getElementById('ttk-split-total').value, 0, Number.MAX_SAFE_INTEGER, 0));
+    const members = Math.floor(clampNumber(document.getElementById('ttk-split-members').value, 1, 100000, 1));
+    const each = Math.floor(total / members);
+    const remainder = total - (each * members);
+    const output = document.getElementById('ttk-split-result');
+    if (output) output.textContent = each.toLocaleString() + ' each · ' + remainder.toLocaleString() + ' remainder';
+    setStatus('Share split calculated.');
   }
 
   function renderAll() {
@@ -848,7 +983,7 @@
       '<section class="ttk-shell" aria-labelledby="ttk-title">',
         '<header class="ttk-header">',
           '<div><p class="eyebrow">Live table console · local autosave</p><h2 id="ttk-title">Tabletop Session Toolkit</h2><p>System-neutral session machinery for dice, combat, party resources, clocks, randomizers, cards, timing, and notes. Everything stays in this browser.</p></div>',
-          '<div class="ttk-version">v' + VERSION + '</div>',
+          '<div class="ttk-header-actions"><span class="ttk-version">v' + VERSION + '</span><button type="button" id="ttk-export-toolkit">Export JSON</button><label class="ttk-file-action" for="ttk-import-toolkit">Import JSON</label><input id="ttk-import-toolkit" type="file" accept="application/json" hidden><button type="button" id="ttk-reset-all">Reset Console</button></div>',
         '</header>',
         '<nav class="ttk-tabs" role="tablist" aria-label="Tabletop utility categories">',
           '<button type="button" class="active" role="tab" aria-selected="true" data-tool-tab="dice">Dice</button>',
@@ -857,6 +992,7 @@
           '<button type="button" role="tab" aria-selected="false" data-tool-tab="trackers">Trackers</button>',
           '<button type="button" role="tab" aria-selected="false" data-tool-tab="random">Random</button>',
           '<button type="button" role="tab" aria-selected="false" data-tool-tab="cards">Cards</button>',
+          '<button type="button" role="tab" aria-selected="false" data-tool-tab="math">Math</button>',
           '<button type="button" role="tab" aria-selected="false" data-tool-tab="session">Session</button>',
         '</nav>',
         '<p id="ttk-status" class="ttk-status" role="status" aria-live="polite">Toolkit ready. State autosaves locally after changes.</p>',
@@ -900,6 +1036,15 @@
           '<div class="ttk-card-deck"><div><p class="eyebrow">Standard 52-card deck</p><h3>Card Draw</h3><p>Useful for games with card initiative, encounter pacing, fortune, or ordinary card mechanics.</p><div class="ttk-row-actions"><button type="button" class="ttk-primary" id="ttk-deck-draw">Draw Card</button><button type="button" id="ttk-deck-reset">Shuffle / Reset</button></div></div><div class="ttk-playing-card" id="ttk-card-drawn">—</div><div class="ttk-deck-meta"><span>Cards remaining</span><strong id="ttk-card-count">52</strong><span>Recent discard</span><p id="ttk-card-discard">No cards drawn.</p></div></div>',
         '</section>',
 
+        '<section class="ttk-panel" data-tool-panel="math" hidden>',
+          '<div class="ttk-math-grid">' +
+            '<section><p class="eyebrow">Pool systems</p><h3>Success-Pool Roller</h3><div class="ttk-math-fields"><label>Dice<input id="ttk-pool-count" type="number" min="1" max="500" value="6"></label><label>Sides<input id="ttk-pool-sides" type="number" min="2" value="10"></label><label>Success On<input id="ttk-pool-target" type="number" min="1" value="7"></label></div><label class="ttk-check"><input id="ttk-pool-explode" type="checkbox"> Explode maximum results</label><button type="button" class="ttk-primary" id="ttk-pool-roll">Roll Pool</button><output id="ttk-pool-result" class="ttk-output">—</output></section>' +
+            '<section><p class="eyebrow">Single-roll target math</p><h3>Target Probability</h3><div class="ttk-math-fields"><label>Die Sides<input id="ttk-prob-sides" type="number" min="2" value="20"></label><label>Target<input id="ttk-prob-target" type="number" value="15"></label><label>Modifier<input id="ttk-prob-mod" type="number" value="5"></label></div><label>Mode<select id="ttk-prob-mode"><option value="normal">Normal</option><option value="advantage">Advantage / keep high</option><option value="disadvantage">Disadvantage / keep low</option></select></label><button type="button" id="ttk-prob-calc">Calculate</button><output id="ttk-prob-result" class="ttk-output">—</output></section>' +
+            '<section><p class="eyebrow">Maps and movement</p><h3>Grid Distance</h3><div class="ttk-math-fields"><label>X Squares<input id="ttk-grid-x" type="number" min="0" value="3"></label><label>Y Squares<input id="ttk-grid-y" type="number" min="0" value="4"></label><label>Units / Square<input id="ttk-grid-unit" type="number" min="0.0001" value="5"></label></div><label>Diagonal Rule<select id="ttk-grid-rule"><option value="chebyshev">Every diagonal = 1 square</option><option value="alternating">Alternating 1 / 2 squares</option><option value="euclidean">Euclidean / true distance</option></select></label><button type="button" id="ttk-grid-calc">Calculate</button><output id="ttk-grid-result" class="ttk-output">—</output></section>' +
+            '<section><p class="eyebrow">Treasure · XP · supplies</p><h3>Share Splitter</h3><div class="ttk-math-fields"><label>Total<input id="ttk-split-total" type="number" min="0" value="1000"></label><label>Members<input id="ttk-split-members" type="number" min="1" value="4"></label></div><button type="button" id="ttk-split-calc">Split Evenly</button><output id="ttk-split-result" class="ttk-output">—</output></section>' +
+          '</div>',
+        '</section>',
+
         '<section class="ttk-panel" data-tool-panel="session" hidden>',
           '<div class="ttk-session-grid"><section><p class="eyebrow">Pacing aid</p><h3>Turn / Scene Timer</h3><div class="ttk-timer-setup"><label>Minutes<input id="ttk-timer-minutes" type="number" min="0" max="999" value="5"></label><label>Seconds<input id="ttk-timer-seconds" type="number" min="0" max="59" value="0"></label></div><div id="ttk-timer-display" class="ttk-timer-display">05:00</div><div class="ttk-row-actions"><button type="button" class="ttk-primary" id="ttk-timer-start">Start</button><button type="button" id="ttk-timer-pause">Pause</button><button type="button" id="ttk-timer-reset">Reset</button></div></section>',
           '<section><p class="eyebrow">Autosaved scratchpad</p><h3>Session Notes</h3><textarea id="ttk-notes" rows="12" placeholder="NPC names, clues, damage to the furniture, increasingly implausible promises made to local nobility…"></textarea><p class="ttk-help">Saved locally with the rest of the tabletop console.</p></section></div>',
@@ -931,7 +1076,8 @@
     mount: mount,
     rollExpression: rollExpression,
     getState: getState,
-    resetAll: resetAll
+    resetAll: resetAll,
+    exportJson: exportToolkitJson
   });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
