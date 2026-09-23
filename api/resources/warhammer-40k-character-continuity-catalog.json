@@ -3290,6 +3290,30 @@
             "sourceType": "legacy-backfill",
             "derivedFrom": "committed continuation prose"
           }
+        },
+        {
+          "id": "atrovald-possible-witness-two",
+          "knowledge": "A Mortuary-Seventeen container indexed as cremated remains is physically marked PROVISIONAL SECOND; its destruction record claims a textual witness was destroyed by furnace, but the sealed box retains the certified mass and a hidden instruction says not to destroy it until the first is present.",
+          "certainty": "directly observed container and records; contents remain unopened",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
+        },
+        {
+          "id": "atrovald-hesk-venn",
+          "knowledge": "The missing fifty-third transfer position now has a paper-only name, Custody Auxiliar Hesk Venn, with no ordinary personnel history; Pell remembers the man by position, chin scar, and complaint about cold. A future-dated unsigned routing instruction orders Venn returned to Null-Seven.",
+          "certainty": "paper evidence plus Pell memory; identity and present status unresolved",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3306,6 +3330,18 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
             "sourceType": "legacy-backfill",
             "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "id": "atrovald-find-venn",
+          "goal": "Determine whether Hesk Venn is dead in present records and in the future-dated chain without collapsing the contradiction.",
+          "horizon": "immediate investigation",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
           }
         }
       ],
@@ -3357,6 +3393,18 @@
             "sourceType": "legacy-backfill",
             "derivedFrom": "committed continuation prose"
           }
+        },
+        {
+          "id": "atrovald-future-order-rule",
+          "order": "Do not execute future-dated instructions merely because they bear or anticipate Atrovald's authority; treat them as evidence until their issuing event occurs in ordinary sequence. Do not correct discrepancies solely to make tomorrow agree with today.",
+          "issuingAuthority": "Matron Lagas Atrovald",
+          "status": "active",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "physicalMedicalState": [],
@@ -3395,6 +3443,16 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
             "sourceType": "legacy-backfill",
             "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "segment": "Continuation III — The Record That Waited",
+          "changeSummary": "Located a possible Witness Two destruction/remains container without opening it, identified the missing fifty-third guard as paper-only Custody Auxiliar Hesk Venn, refused to sign or execute a tomorrow-dated return order, and formalized preservation of contradiction as investigative procedure.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
           }
         }
       ]
@@ -3503,6 +3561,18 @@
             "sourceType": "legacy-backfill",
             "derivedFrom": "committed continuation prose"
           }
+        },
+        {
+          "id": "predulum-furnace-memory",
+          "knowledge": "While confined in Null-Seven, Predulum reports an uncertain sensory memory of a furnace, ash on someone's gloves, and the sentence 'Wait until the first is present.' He cannot identify place, time, or whose gloves.",
+          "certainty": "uncertain self-reported memory; independently resembles hidden wording on the possible Witness Two container but Predulum was not told that wording",
+          "status": "unresolved",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
+          }
         }
       ],
       "secretsKnown": [],
@@ -3555,6 +3625,16 @@
             "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-02.md",
             "sourceType": "legacy-backfill",
             "derivedFrom": "committed continuation prose"
+          }
+        },
+        {
+          "segment": "Continuation III — The Record That Waited",
+          "changeSummary": "While still confined, reported a fragmentary furnace/ash memory and the phrase 'Wait until the first is present' before Atrovald disclosed the matching container inscription; confinement and future-memory uncertainty continue.",
+          "provenance": {
+            "story": "Matron Lagas Atrovald",
+            "segment": "Continuation III — The Record That Waited",
+            "path": "assets/warhammer-40k/lore/matron-lagas-atrovald-continuation-03.md",
+            "sourceType": "continuation"
           }
         }
       ]
