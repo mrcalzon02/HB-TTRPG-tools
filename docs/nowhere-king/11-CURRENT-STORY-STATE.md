@@ -1,134 +1,114 @@
 # Nowhere King — Current Story State
 
 **Status:** Active temporal continuity ledger  
-**Last completed unit:** Season One, Episode 01 — *Crown Without Court*  
-**Updated:** after corrected Episode 01
+**Last completed unit:** Season One, Episode 02 — *Packing the Monarchy*  
+**Updated:** after Episode 02
 
 ## Current timeline state
 
-Luceran is already the lawful reigning king. His father, King Othmar, abdicated because of declining health; Luceran was crowned while both parents still lived. Thirty-seven days later his mother became ill, his father worsened, and both parents died within nine days of one another.
+Luceran is on the northern road with the first royal convoy. He has left the inherited capital before receiving final word from Sir Edran Vey's advance party.
 
-Luceran has no proof of assassination. He nevertheless considers the timing suspicious, especially because rival factions immediately began implying that other factions, physicians, suppliers, magical orders, or foreign interests might be responsible. He explicitly refuses to convert suspicion into a purge without evidence.
+The move is no longer a proposal, threat, or administrative possibility. It is physically underway.
 
-The capital is functional but intolerably saturated with information networks. Luceran's food, sleep, visitors, private hours, health, grief, jokes, bodily functions, and emotional state become political intelligence through ordinary household relationships as well as deliberate factional collection.
+Luceran still believes distance from the old capital and control over a new household can allow him to escape much of the court's invasive politics. Episode 02 has begun disproving that belief materially: guilds, nobles, merchants, servants, workers, guards, family networks, and ambitions are already rearranging themselves around his movement.
 
-Luceran has decided that, if Castle Edselsto remains physically capable of receiving him and an initial household, he **will move the imperial court there**. This is no longer a feasibility debate. Sir Edran Vey has already departed under royal seal to inspect the ancestral seat directly and prepare it for the king's return if enough survives.
+## King Luceran
 
-## Active characters
+- Adult lawful king, newly bereaved and inexperienced in lived court politics.
+- Parents' deaths remain suspicious to him but unproven as assassination.
+- Active strategy: leave first, solve problems in motion rather than wait for institutional readiness.
+- New behavioral evidence: when told skilled labor could not be found on his timetable, he personally entered the city and recruited workers from an active private construction site.
+- Blind spot exposed: initially underestimated how coercive a royal "offer" feels when delivered personally by a king with armed guards.
+- Correction made in episode: after Avarren challenged him, Luceran explicitly converted the act from ambiguous conscription into highly paid royal employment with family support and a stated right to refuse.
+- Still naïve enough to believe decisive personal intervention can simplify the political system rather than merely change its shape.
+- Has now learned one useful lesson: institutions that claim impossibility may discover capacity quickly when bypassed.
 
-### King Luceran
-- Young adult lawful king; crowned before his parents died because Othmar abdicated.
-- Grieving both parents while newly exercising sovereign authority.
-- Privately suspects their deaths may have been hastened or arranged; possesses no proof.
-- Refuses to let factions weaponize his suspicion into evidence-free purges.
-- Exhausted by the fact that ordinary service and factional intelligence have erased meaningful privacy.
-- Court experience: educated in titles, houses, protocol, diplomacy, and formal politics, but deeply inexperienced in the lived ambiguity of rule—especially the fact that affection, concern, duty, ambition, surveillance, and patronage can coexist in the same person.
-- Active intention: leave the inherited capital and re-establish his imperial household at Edselsto.
-- Political belief: Edselsto feels like escape. Luceran believes distance, a smaller hand-picked household, and control over rooms/gates will strip away much of the court's invasive political machinery. He understands in the abstract that politics will continue, but materially underestimates how quickly patronage, family, guild, diplomatic, romantic, and service networks will reform around the Crown. This naivety is active character state, not authorial error.
-- Theory of Montegrain: trusted old friend because he contradicts rather than flatters; not assumed infallible.
-- Theory of Vael Teren: trusted elder/court wizard who refuses false certainty.
-- Knowledge of Edselsto: ancestral seat, neglected, still served by an elderly steward, condition uncertain.
-- Knowledge of supernatural truth: none.
+## New recurring tradespeople
 
-### Montegrain of the Elbren court
-- Luceran's longstanding best friend from youth.
-- Has personal access during Luceran's grief.
-- Tells Luceran that suspicious timing is not evidence and explicitly warns him not to become stupid through suspicion.
-- His visits are themselves tracked and politically interpreted by the capital court.
+### Jory Fell
+- Journeyman carpenter.
+- Previously fitting window casements at Lord Edmund Moncler's residence.
+- Family: wife Ellyn and children.
+- Accepted royal service after being offered unusually strong wages and family support.
+- Emotional state: astonished, excited, afraid; recognizes his life changed in a single morning.
+- Knowledge: no supernatural information; knows only that he is traveling north to rebuild a neglected royal castle.
 
-### Magister Vael Teren
-- Court Wizard and old royal advisor.
-- Examined available alchemical evidence around the royal deaths.
-- Can neither prove nor disprove poisoning/hastening.
-- Refuses to manufacture certainty or accuse magical institutions without evidence.
-- Directly asks Luceran whether the Edselsto decision is driven by assassination fears.
+### Ellyn Fell
+- Jory's wife.
+- Immediately translates royal opportunity into household arithmetic: rent, coal, shoes, apprenticeship costs, debt.
+- Understands the danger/separation side of the offer as clearly as the money.
+- Did not treat refusal as economically realistic even after Luceran made it legally permissible.
 
-### Lord Chancellor Aurel Avarren
-- Senior institutionalist.
-- Knows moving a court means archives, seals, treasury, kitchens, horses, guards, messengers, diplomats, judges, clerks, craftsmen, servants, warehouses, and roads.
-- Opposes romanticizing the move but obeys the sovereign decision.
-- Chose Sir Edran Vey as a relatively faction-neutral emissary.
+### Derrin Voss
+- Working mason.
+- Supports mother, sister, and nephews.
+- Accepted royal service alongside Jory.
+- Practical, sardonic, already functioning as a grounded trades perspective.
+- Carries extensive stone tools because Edselsto's material condition is unknown.
 
-### Marshal Dame Ysolde Harrowmere
-- Senior military authority.
-- Recognizes the Edselsto road and seat have defensible qualities even while others object to relocation.
+### Derrin's mother
+- Suspicious of royal generosity and proximity to kings.
+- Recognizes the offered money as both life-changing and dangerous.
+- Her maxim after the fact: never take money set by an angry king.
 
-### Comptroller Mereth Nerezza
-- Treasury authority.
-- Warns that the move will be ruinously expensive.
-- Luceran accepts the cost as a sovereign priority rather than pretending it does not exist.
+## Lord Edmund Moncler
 
-### Brother Calven Orsanne
-- Temple representative.
-- Has already observed how household facts become factional intelligence.
-- No supernatural conclusion about Edselsto.
+- Noble whose active city residence construction lost workers to Luceran's recruitment.
+- Angry but not irrational.
+- Correctly tells Luceran: a king does not possess an ordinary voice.
+- Forces Luceran to confront the coercive ambiguity of personal royal requests.
+- Seeks compensation and possible future contract priority rather than immediate personal revenge.
+- His unfinished west gallery is now a visible downstream consequence of the king's decision.
 
-### Captain Tovan Rhyse
-- Palace guard authority.
-- The immediate trigger for Luceran's break is Rhyse having to report that a request for hot water produced a rumor that the king was ill.
-- Understands that service networks are not identical to treason.
+## Institutional / labor state
 
-### Sir Edran Vey
-- Minor royal diplomat/emissary selected because no great house can comfortably claim him.
-- Has departed for Edselsto with the king's sealed command.
-- Party includes twelve mounted guards, a mason, a carpenter, and Mara Kest.
-- Orders: see the castle directly; speak to the steward and village; identify safe/habitable chambers; begin preparation if possible; report physical truth without flattery.
+- Guild of Stone and Beam initially claimed sufficient skilled crews could not be released on the king's notice.
+- After Luceran personally recruited from a private work site, guild officers rapidly produced additional available crews.
+- Crown/public works craftsmen who were supposedly unavailable are now assembling wagons and joining the movement to preserve royal privilege and relevance.
+- Luceran's improvised wage offer has altered expectations around royal field pay.
+- Avarren intends to establish rules for future royal recruitment.
+- Nerezza is tracking an expanding cost problem and remains opposed to pretending royal will creates money.
+- Private works in the capital will be delayed or repriced as labor is pulled north.
 
-### Mara Kest
-- Assistant housekeeper for the royal apartments.
-- Sent with Edran because habitability includes water, kitchens, bedding, heating, service circulation, and household labor rather than walls alone.
-- Recognizes the difference between ordinary service knowledge and deliberate spying.
-- Has noticed Frederick's financial vulnerability.
+## Court / faction state
+
+- Nobles are already deciding whether to follow the Crown immediately, delay, or divide households between the old capital and Edselsto.
+- House Edevane explicitly understands that selection for the new court will itself become a new form of power.
+- Merchants are beginning to position around the northern road and predicted supply shortages.
+- Montegrain is traveling with Luceran.
+- His letter home characterizes Luceran as grieving and angry, not mad, and asks Elbren contacts not to mock his belief that Edselsto offers escape.
+
+## Low-status information state
 
 ### Frederick Doss
-- 19-year-old royal footman.
-- Financially ambitious and interested in whether relocation brings extra pay.
-- Refused two silvers for information about the king's health, partly because the price was beneath the reputational risk.
-- When asked what price would be enough, answered that he did not know.
-- This is a vulnerability, not a predetermined betrayal.
+- Has been placed on a provisional transfer list.
+- Learns that Luceran intends to depart before Edselsto's condition is fully confirmed.
+- Continues to see relocation as possible advancement.
+- Financial vulnerability remains active but no betrayal has occurred.
 
-## Institutional state
+## Advance party
 
-- The old capital remains the functioning administrative center at the end of Episode 01.
-- The king intends to move his imperial court, not instantly transplant every institution of the empire.
-- Edselsto advance party is already on the road.
-- The court knows an armed royal party went north and is rapidly inferring the king's intent.
-- Ambassadors have begun requesting clarification.
-- Avarren's official answer deliberately reveals little.
+Sir Edran Vey remains ahead of the royal convoy with:
+- Mara Kest;
+- mason Corren Bale;
+- carpenter Iven Marr;
+- twelve guards;
+- royal authority to inspect and begin preparing Edselsto.
 
-## Evidence / mystery state
-
-- No conclusive evidence proves either royal death was murder.
-- The mother's alchemical assays contain nothing that proves poisoning and nothing that fully excludes deliberate misuse of medicinal compounds.
-- Othmar was already seriously ill before abdication, but deliberate hastening cannot be excluded.
-- Factional accusations remain self-interested and mutually contradictory.
-- No character possesses evidence of the buried prison, castle intelligence, seven defenses, or true Nowhere King.
-
-## Relationship state
-
-- Luceran → Montegrain: longstanding personal trust and relief at contradiction without immediate political ask.
-- Montegrain → Luceran: affection plus willingness to challenge paranoid inference.
-- Luceran → Vael: trust in expertise specifically because Vael admits uncertainty.
-- Luceran ↔ Avarren: legitimate institutional friction; Avarren is not reduced to obstructionist antagonist.
-- Luceran ↔ Oren Edevane: real familial affection contaminated by Oren's simultaneous desire for office/influence.
-- Frederick ↔ Mara: working familiarity; Mara becomes more alert to Frederick's relationship with money and information.
-
-## Status-quo lesson established by Episode 01
-
-Luceran's central Episode 01 experience is **not** that he has solved court politics. It is that he cannot tell where ordinary human care ends and political use begins, and he wants to escape the entire ambiguity. Edselsto is currently his imagined answer: fewer people, controllable gates, chosen rooms, physical distance. Future episodes must let reality erode that belief through experience rather than instantly lecturing it away.
+Direct confirmation from Edran has not yet reached Luceran.
 
 ## Open obligations
 
-1. Edran's party must reach Edselsto and determine what still stands.
-2. The elderly steward must receive the royal command and prepare for a possible immediate return.
-3. If sufficient chambers survive, repairs and advance provisioning begin before Luceran arrives.
-4. The capital household must begin packing without modern feasibility-study logic.
-5. Decide what parts of the imperial court travel first and what institutions remain temporarily in the old capital.
-6. Establish road, wagon, horse, food, guard, archive, seal, treasury, and messenger requirements through people doing the work.
-7. Preserve uncertainty around the parents' deaths; suspicion is canon, assassination is not yet established fact.
-8. Preserve Montegrain and Vael as independent minds, not automatic loyal mouthpieces.
-9. Preserve Frederick's financial vulnerability without predetermining betrayal.
-10. Preserve all seven candles and supernatural reveal ceiling.
+1. Receive Edran's first direct report on Edselsto.
+2. Establish whether the castle can physically receive Luceran and the first household.
+3. Put the moving court through actual road conditions.
+4. Resolve convoy food, horse, wagon, and lodging constraints.
+5. Track consequences of Luceran's labor recruitment on guilds, wages, private construction, and noble resentment.
+6. Preserve Moncler's legitimate grievance without flattening him into villainy.
+7. Keep Jory, Derrin, Ellyn, and worker families alive as independent continuity rather than disposable texture.
+8. Continue eroding Luceran's belief that geography can remove politics.
+9. Preserve uncertainty around the royal deaths.
+10. Preserve seven lit candles and supernatural reveal ceiling.
 
 ## Candle state
 
@@ -137,7 +117,7 @@ Seven of seven remain lit. No failure has occurred in prose.
 ## Hard exclusions
 
 - No Magenheim Nowhere King material.
-- No modern feasibility-study bureaucracy imposed on this medieval imperial court.
-- No confirmed haunting or sentient-castle behavior yet.
+- No modern corporate/project-management bureaucracy.
+- No confirmed supernatural Edselsto behavior yet.
 - No undercroft truth.
-- No character may know the series bible's buried facts.
+- No character may know buried series-bible facts.
