@@ -813,7 +813,7 @@ Caelen thought about Mireth.
 
 About the Seven.
 
-About a sealed packet he had not yet been assigned to carry in this version of his life.
+About a sealed packet he had not yet been assigned to carry.
 
 He had expected adulthood to reveal everyone's real motives.
 
@@ -953,7 +953,7 @@ Meris looked toward the canal.
 
 "If he weren't, I'd worry about him."
 
-That did not fit the version of Meris Damaris had been preparing to fight.
+That did not fit the Meris Damaris had been preparing to fight.
 
 Annoying.
 
@@ -1135,7 +1135,7 @@ A mason eating cheese.
 
 People.
 
-He thought of Mireth talking about gardeners' keys in the old scaffolded version of events that had not happened yet—no, not memory. He had no such memory.
+For an instant he almost supplied an answer from instinct, then stopped himself. Mireth had never told him anything about gardeners' keys. He had no memory of such a conversation.
 
 What he had was simpler.
 
