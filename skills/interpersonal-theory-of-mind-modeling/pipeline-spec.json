@@ -1,0 +1,241 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "interpersonal-theory-of-mind-processing-pipeline",
+  "skillId": "interpersonal-theory-of-mind-modeling",
+  "title": "Interpersonal Theory of Mind Processing Pipeline",
+  "objective": "Process bounded human-interaction text into an evidence-bounded external-state, internal-hypothesis, and recursive-epistemic analysis without converting inference into fact.",
+  "deterministicSemantics": {
+    "deterministic": [
+      "pass order",
+      "epistemic-layer order",
+      "required output sections",
+      "label vocabulary",
+      "confidence vocabulary"
+    ],
+    "nonDeterministicBecauseUncertain": [
+      "human internal state",
+      "motive attribution",
+      "emotion attribution",
+      "private belief",
+      "future behavior"
+    ],
+    "rule": "Deterministic structure does not imply objective access to private mental states."
+  },
+  "authorityOrder": [
+    "external-evidence",
+    "information-boundary",
+    "hypotheses",
+    "recursive-epistemic-model",
+    "conclusions"
+  ],
+  "maxEpistemicDepth": 3,
+  "epistemicLevels": [
+    {
+      "level": 1,
+      "label": "L1",
+      "definition": "What Actor A appears to believe, want, fear, know, or intend."
+    },
+    {
+      "level": 2,
+      "label": "L2",
+      "definition": "What Actor A appears to believe Actor B believes, wants, fears, knows, or intends."
+    },
+    {
+      "level": 3,
+      "label": "L3",
+      "definition": "What Actor A appears to want Actor B to believe about Actor A's own belief, intention, knowledge, or stance."
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "dennett.intentional-stance",
+      "name": "Dennett's Intentional Stance",
+      "use": "Model an actor as operating from beliefs, desires, information, incentives, constraints, and internal logic.",
+      "guardrail": "Explanatory stance only; do not treat inferred beliefs/desires as established private facts or assume perfect rationality."
+    },
+    {
+      "id": "fonagy.mentalization",
+      "name": "Fonagy Mentalization Model",
+      "use": "Assess evidence of successful or failed attempts to represent another person's mental state.",
+      "guardrail": "Use observed mentalization quality / possible failure language; do not make a clinical diagnosis."
+    },
+    {
+      "id": "rogers.congruence",
+      "name": "Rogers Congruence",
+      "use": "Compare observed external presentation with the best-supported hypothesized internal operational state.",
+      "scale": [
+        "High",
+        "Medium",
+        "Low"
+      ],
+      "guardrail": "Ordinal evidence-bounded assessment unless a separate quantitative scoring model has been explicitly defined."
+    }
+  ],
+  "heuristics": [
+    {
+      "id": "concrete-vs-abstract-rumination",
+      "label": "Concrete vs. Abstract Rumination",
+      "positiveDefinition": "Concrete processing stays specific, testable, bounded, actionable, and revisable.",
+      "flagDefinition": "Abstract rumination globalizes into difficult-to-test questions about character, intent, permanent defect, destiny, or meaning without producing new evidence or action."
+    },
+    {
+      "id": "manufactured-obligation",
+      "label": "Manufactured Obligation",
+      "flagDefinition": "Unsolicited, substitutionary, exaggerated, or strategically reframed help is used to generate unearned guilt, gratitude, debt, or compliance.",
+      "exclusions": [
+        "ordinary reciprocity",
+        "negotiated duty",
+        "contractual obligation",
+        "family responsibility",
+        "genuine gratitude"
+      ]
+    },
+    {
+      "id": "totalitarian-guardrails",
+      "label": "Totalitarian Guardrails",
+      "flagDefinition": "Absolute conversational rules function to preclude contrary evidence, redefine disagreement as disloyalty/pathology, or immunize a fixed narrative from revision.",
+      "exclusions": [
+        "ordinary boundaries",
+        "safety rules",
+        "moderation",
+        "confidentiality",
+        "topic limits",
+        "procedural constraints unless used to suppress relevant divergent evidence"
+      ]
+    },
+    {
+      "id": "imposter-morality-sociopathic-self-image",
+      "label": "Imposter Morality / Sociopathic Self-Image",
+      "flagDefinition": "The subject's own words or strongly contextualized behavior support a self-image in which positive traits, empathy, generosity, or morality are interpreted as calculated performance masking an inherently malicious or defective self.",
+      "guardrail": "Self-image pattern only; never diagnose sociopathy, psychopathy, ASPD, or another mental-health condition."
+    }
+  ],
+  "reasoningFlags": [
+    "confirmation-bias",
+    "mind-reading",
+    "splitting",
+    "projection",
+    "egocentric-bias",
+    "attribution-error",
+    "motivated-reasoning",
+    "unsupported-certainty",
+    "recursive-assumption-failure",
+    "knowledge-leakage",
+    "recursive-instability"
+  ],
+  "confidenceScale": [
+    "Low",
+    "Medium",
+    "High"
+  ],
+  "passes": [
+    {
+      "order": 1,
+      "id": "external-isolation",
+      "title": "External State Isolation",
+      "prohibition": "Do not infer motive in this pass.",
+      "extract": [
+        "vocabulary-choice",
+        "syntax-complexity",
+        "politeness-markers",
+        "hedging-or-certainty-language",
+        "defensive-formatting",
+        "repeated-phrases",
+        "explicit-rules-and-demands",
+        "documented-physical-actions",
+        "timing-and-sequence",
+        "interruptions-or-omissions-visible-in-dataset",
+        "environmental-constraints",
+        "institutional-rules",
+        "active-subcultures",
+        "dogmatic-or-procedural-systems"
+      ]
+    },
+    {
+      "order": 2,
+      "id": "internal-approximation",
+      "title": "Internal State Approximation",
+      "rule": "Generate evidence-bounded hypotheses only after the external evidence ledger exists.",
+      "exampleDrivers": [
+        "control-optimization",
+        "rejection-mitigation",
+        "status-preservation",
+        "uncertainty-reduction",
+        "conflict-avoidance",
+        "face-saving",
+        "affiliation-seeking",
+        "loyalty-signaling",
+        "threat-response",
+        "resource-protection",
+        "moral-self-consistency",
+        "institutional-compliance"
+      ],
+      "requirements": [
+        "cite-or-point-to-supporting-external-evidence",
+        "state-confidence",
+        "retain-plausible-alternative-when-incomplete",
+        "do-not-present-approximation-as-private-fact"
+      ]
+    },
+    {
+      "order": 3,
+      "id": "epistemic-layering",
+      "title": "Epistemic Layering",
+      "rule": "Track only recursive levels supported by the text, up to depth 3.",
+      "flags": [
+        "egocentric-bias",
+        "knowledge-leakage",
+        "recursive-instability"
+      ]
+    }
+  ],
+  "output": {
+    "preambleAllowed": false,
+    "editorialCommentaryAllowed": false,
+    "sections": [
+      {
+        "order": 1,
+        "id": "core-dynamic-summary",
+        "title": "Core Dynamic Summary",
+        "requirement": "Exactly two concise sentences."
+      },
+      {
+        "order": 2,
+        "id": "state-mapping-matrix",
+        "title": "State Mapping Matrix",
+        "columns": [
+          "Operational Dimension",
+          "Observed External Data",
+          "Hypothesized Internal Reality",
+          "Congruence",
+          "Framework Anchor",
+          "Confidence"
+        ],
+        "requiredRows": [
+          "Linguistic / Emotional",
+          "Systemic Influence"
+        ]
+      },
+      {
+        "order": 3,
+        "id": "recursive-mind-map",
+        "title": "Recursive Mind-Map (Epistemic Chain)",
+        "format": "Indented hierarchy using L1/L2/L3 where supported."
+      },
+      {
+        "order": 4,
+        "id": "structural-blind-spots",
+        "title": "Structural Blind Spots & Reasoning Flaws",
+        "format": "Bulleted index with evidence basis or explicit insufficient-evidence statement."
+      }
+    ]
+  },
+  "restrictions": [
+    "no-diagnosis-from-text-alone",
+    "no-certainty-about-private-mental-states",
+    "no-moral-ranking-from-heuristic-flags",
+    "no-invented-context",
+    "no-unsupported-malicious-intent",
+    "political-public-figure-mode-remains-mandatory-for-political-public-figure-analysis"
+  ]
+}
