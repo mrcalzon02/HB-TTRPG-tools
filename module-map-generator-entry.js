@@ -138,31 +138,46 @@
     });
   }
 
+  const RUNTIME_VERSION = '20260923-modules-runtime-3';
+  const runtimeChecks = Object.freeze({
+    'semantic-spatial-engine.js': () => Boolean(window.HBSemanticSpatialEngine),
+    'semantic-content-populator.js': () => Boolean(window.HBSemanticContentPopulator),
+    'module-map-generator.js': () => Boolean(window.generator?.module_map?.SITE_OPTION_CATALOG),
+    'vessel-condition-model.js': () => Boolean(window.HBVesselConditionModel),
+    'vessel-hull-envelope.js': () => Boolean(window.HBVesselHullEnvelope),
+    'alien-vessel-generator.js': () => Boolean(window.generator?.alien_vessel),
+    'kaysender-airship-generator.js': () => Boolean(window.generator?.kaysender_airship),
+    'module-viewer.js': () => typeof window.initModuleViewer === 'function',
+    'module-map-editor.js': () => typeof window.initModuleMapEditor === 'function'
+  });
+  function runtimeReady(src) { const check=runtimeChecks[src]; return check ? check() : false; }
+  function existingScript(src) { return [...document.scripts].find(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src)) || null; }
   function loadScript(src) {
-    if ([...document.scripts].some(script => (script.getAttribute('src') || '').split('?')[0].endsWith(src))) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = false;
-      script.onload = resolve;
-      script.onerror = () => reject(new Error(`${src} could not be loaded.`));
+    if (runtimeReady(src)) return Promise.resolve();
+    const existing=existingScript(src);
+    if (existing) existing.remove();
+    return new Promise((resolve,reject)=>{
+      const script=document.createElement('script');
+      script.src=`${src}?v=${RUNTIME_VERSION}`;
+      script.async=false;
+      script.onload=()=>{
+        script.dataset.hbLoaded='true';
+        const check=runtimeChecks[src];
+        if(check && !check()){ reject(new Error(`${src} loaded but did not initialize its expected runtime.`)); return; }
+        resolve();
+      };
+      script.onerror=()=>reject(new Error(`${src} could not be loaded.`));
       document.body.appendChild(script);
     });
   }
-
   async function ensureRuntime() {
     for (const src of scripts) {
-      if (src === 'semantic-spatial-engine.js' && window.HBSemanticSpatialEngine) continue;
-      if (src === 'semantic-content-populator.js' && window.HBSemanticContentPopulator) continue;
-      if (src === 'module-map-generator.js' && window.generator?.module_map) continue;
-      if (src === 'vessel-condition-model.js' && window.HBVesselConditionModel) continue;
-      if (src === 'vessel-hull-envelope.js' && window.HBVesselHullEnvelope) continue;
-      if (src === 'alien-vessel-generator.js' && window.generator?.alien_vessel) continue;
-      if (src === 'kaysender-airship-generator.js' && window.generator?.kaysender_airship) continue;
-      if (src === 'module-viewer.js' && window.initModuleViewer) continue;
-      if (src === 'module-map-editor.js' && window.initModuleMapEditor) continue;
+      if (runtimeReady(src)) continue;
       await loadScript(src);
+      const check=runtimeChecks[src];
+      if(check && !check()) throw new Error(`${src} did not initialize its expected runtime.`);
     }
+    if(!window.generator?.module_map?.SITE_OPTION_CATALOG) throw new Error('module-map-generator initialized without SITE_OPTION_CATALOG.');
   }
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
@@ -352,6 +367,15 @@
       general:{generated:true,level:result.level || 1,deckCount:result.deckCount || layout.deckCount || 1,activeDeck,conditionTemplate:result.condition?.template || null},
       map:{image:'', width:active.width, height:active.height, grid:`${active.width} x ${active.height}`},
       hotspots:[],
+      mapKey:[
+        {id:'generated-room',label:'Keyed room',category:'location',symbol:'#',description:'A numbered generated room. Select its room record for role, content, tags, and deck information.'},
+        {id:'generated-door',label:'Door / passage',category:'access',symbol:'D',description:'A generated access point between spaces. Viewer records should expose its connections and access details rather than only a map mark.'},
+        {id:'generated-stairs',label:'Stairs / level transition',category:'vertical-route',symbol:'↕',description:'A connector between decks or elevations. The linked record should identify its destination when known.'},
+        {id:'generated-trap',label:'Trap / hazard',category:'hazard',symbol:'T',description:'A hazard marker whose useful record includes trigger, detection, disable, consequence, and source notes when present.'},
+        {id:'generated-encounter',label:'Encounter / creature',category:'encounter',symbol:'E',description:'An encounter marker whose viewer record should expose creatures, disposition, difficulty context, and encounter notes.'},
+        {id:'generated-treasure',label:'Treasure / reward',category:'treasure',symbol:'$',description:'A reward marker whose viewer record should expose the actual loot, container or concealment, and access conditions.'},
+        {id:'generated-feature',label:'Special feature',category:'feature',symbol:'★',description:'A point of interest whose map symbol must resolve to descriptive or rules-facing information.'}
+      ],
       rooms:rooms.map((room, index) => ({ id:room.nodeId || room.id, number:index + 1, title:room.label || room.role || `Room ${index + 1}`, summary:room.role || '', tags:room.tags || [], deck:room.deck, pressureZone:room.pressureZone || null, condition:room.condition || null, metadata:room.metadata || {} })),
       doors:doors.map((door, index) => ({ id:door.id || `door-${index + 1}`, label:`Door ${index + 1}`, kind:'generated', roomId:door.roomId, deck:door.deck, condition:door.condition || null })),
       mapEditorState:active,
@@ -489,9 +513,10 @@
 
   styleOnce();
   installThreeToolShell();
-  ensureRuntime().then(mountRuntime).catch(error => {
+  window.HBModuleWorkbenchReady = ensureRuntime().then(mountRuntime).catch(error => {
     console.error('Modules workbench failed to initialize.', error);
     const generator = document.getElementById('module-generator-root');
     if (generator) generator.innerHTML = `<p class="helper-note">The three-tool Modules shell loaded, but the generator runtime failed to initialize: ${esc(error.message)}</p>`;
+    throw error;
   });
 })();
