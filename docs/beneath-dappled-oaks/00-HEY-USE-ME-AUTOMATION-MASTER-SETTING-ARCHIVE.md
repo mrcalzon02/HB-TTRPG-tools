@@ -3,7 +3,7 @@ series: "Beneath Dappled Oaks"
 document_role: "AUTHORITATIVE AUTOMATION MASTER SETTING ARCHIVE"
 automation_priority: 100
 status: "ACTIVE CANON ANCHOR"
-last_reconciled: "2026-09-21"
+last_reconciled: "2026-09-22"
 read_first: true
 ---
 
@@ -22,6 +22,7 @@ Stable repository path:
 When an hourly or scheduled story-continuation task runs:
 
 1. Read this file first.
+1A. Read **api/resources/foundational-fiction-ordering-commands.md** as the mandatory shared prose-governance layer for causality, character flaws and development, theory of mind, institutional logic, earned escalation, consequence propagation, dialogue discipline, and scene construction. This file governs how canon becomes prose; it never overrides higher-authority Beneath Dappled Oaks canon or continuity.
 2. Read **docs/beneath-dappled-oaks/01-DRAMATIS-PERSONAE-INDEX.md** for active kinship, institutional, and attraction continuity.
 3. Read **docs/beneath-dappled-oaks/02-FIVE-CHAPTER-LOOKAHEAD.md** for the current rolling N+1 through N+5 forward plan.
 4. Read **docs/beneath-dappled-oaks/03-WORLD-ALMANAC-13-MONTH-YEAR-PANTHEON-POLITICAL-CYCLE.md** for the active calendar, season, lunar phase, festivals, economic cycle, pantheon, food culture, travel conditions, and political year.
@@ -35,7 +36,7 @@ When an hourly or scheduled story-continuation task runs:
 12. Read **docs/beneath-dappled-oaks/11-ELVEN-LIFESPAN-AGING-FERTILITY-DEMOGRAPHY.md** for adulthood, lifespan, age stages, senescence, fertility, magical impotence, elder care, Spring, Summer, Fall, Winter, and Winter-Blossom children, and multigenerational House demographics.
 13. Read **docs/beneath-dappled-oaks/12-COURTLY-HOUSEHOLDS-MISTRESSES-PARAMOURS-SURROGACY-SUCCESSION.md** for acknowledged companions, mistresses, secret affairs, secondary households, surrogacy, donor arrangements, parentage contracts, legitimization, cadet placement, and succession intrigue.
 13A. Read **docs/beneath-dappled-oaks/13-CARTOGRAPHY-STORY-LEDGER.md** for durable map source plates, cartographic continuity, approved geography baselines, and exact artifact recovery information before generating or revising setting maps.
-14. Reconcile all fourteen controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
+14. Reconcile all listed controls plus the workbook against any newer explicit Beneath Dappled Oaks canon committed in the repository.
 15. Preserve the established cast, relationships, institutions, casualties, political conflicts, magical rules, prose conventions, active character intentions, forward setup obligations, seasonal/calendar constraints, local cultural practices, settlement control, economic geography, culinary continuity, in-universe cultural tales, martial-order continuity, ecological continuity, age and demographic continuity, courtly-household and succession continuity, memories, knowledge, skills, secrets, warnings, attraction continuity, contextual performance, obligations, and long-term plans.
 16. Continue from the latest dependency-valid story state. Do not restart the series, replace the cast, retell the outline, ignore active forward plans, reset long-memory character state, flatten established local culture, or place major settlements outside their established political-economic spheres without a continuity reason.
 17. Materially advance the fiction. A run should create usable story development, not merely summarize plans.
@@ -69,6 +70,18 @@ Use sources in this order:
 **Tier 4: invention**
 - New material is allowed when necessary to advance the story, but new invention must fit the setting and must not overwrite established facts.
 - Prefer extending an existing faction, house pressure, relationship, order, or mystery over adding unrelated lore.
+
+### Writing authority chain
+
+Once canon and continuity are resolved, generate or revise prose in this order:
+
+1. **Newest explicit user instruction and active Beneath Dappled Oaks canon.**
+2. **This master archive and the setting-specific continuity controls it requires.**
+3. **`api/resources/foundational-fiction-ordering-commands.md`** for causal reality, character knowledge and flaws, theory of mind, institutional logic, earned escalation, consequences, dialogue, and scene construction.
+4. **Established story-specific voice and usable prior scene scaffolding** where they remain compatible with the first three levels.
+5. **New stylistic invention.**
+
+The shared foundational file is mandatory writing governance, not a license to rewrite canon. If a dramatic beat only works by violating established knowledge, logistics, institutional behavior, relationship state, or physical causality, repair the dramatic beat.
 
 ## 2. Series identity
 
